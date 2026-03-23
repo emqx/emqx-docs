@@ -70,6 +70,19 @@ MFA 默认为禁用状态。要为用户启用 MFA，管理员必须配置系统
 
 :::
 
+### 通过 Dashboard 停用 MFA
+
+管理员可为任意用户禁用 MFA。禁用后，用户只需使用用户名和密码即可登录。
+
+1. 在**通用** -> **用户**页面中，找到目标用户，点击其旁边的 **MFA 设置**。
+2. 在 **MFA 设置**对话框中，点击**禁用 MFA**。
+
+:::tip
+
+即使 SAML 模块设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA。该设置在用户后续登录时生效。
+
+:::
+
 ### 重置 TOTP 密钥
 
 设置了 MFA 后，如果用户需要重置其 TOTP 设置（例如，如果身份验证应用程序被卸载或密钥被泄露），管理员可以通过 **MFA 设置**对话框重置该用户的 TOTP 密钥。
@@ -84,148 +97,9 @@ MFA 默认为禁用状态。要为用户启用 MFA，管理员必须配置系统
 
 3. 点击**确定**以继续重置。重置后，用户将在下次登录时需要遵循首次 MFA 设置过程（扫描新的二维码或将新密钥输入到身份验证应用程序中）。
 
-### 通过 REST API 启用和管理 MFA
+### 查看 MFA 状态
 
-管理员可以通过 REST API 启用或管理用户的 MFA。
-
-::: tip
-
-在 `/users/{username}/mfa` 端点上使用 POST 和 DELETE 方法时，仅管理员或当前身份验证令牌（即 “Bearer token”）的所有者可以使用此接口。也就是说，具有“查看者”角色的用户无法修改其他用户的 MFA 设置。只有与当前身份验证令牌关联的用户（“Bearer token” 拥有者）才能修改自己的 MFA 设置。
-
-有关基于角色的访问控制（RBAC）的更多信息，请参见[角色说明](./dashboard-users.md)。
-
-:::
-
-#### 启用特定用户的 MFA
-
-要为特定用户启用 MFA，管理员可以向 `/users/{username}/mfa` API 端点发送 POST 请求：
-
-**请求：**
-
-```bash
-POST /api/v4/users/:username/mfa/enable
-```
-
-**示例：**
-
-```bash
-curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/enable
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "message": "MFA setup required on next login"
-  }
-}
-```
-
-管理员为其他用户启用 MFA 后，该用户下次登录时会看到 **MFA 设置提示**，必须完成设置流程才能访问 Dashboard。
-
-若管理员为自己启用 MFA，API 响应中会直接包含 QR 码 URI 和密钥，无需等到下次登录。
-
-:::tip
-
-可随时通过 `GET /api/v4/users/:username/mfa` 查询用户的 MFA 状态，详见[查询 MFA 状态](#查询-mfa-状态)。
-
-:::
-
-#### 停用特定用户的 MFA
-
-管理员可为任意用户禁用 MFA。禁用后，用户只需使用用户名和密码即可登录。管理员可以向 `/users/{username}/mfa` API 端点发送 DELETE 请求。
-
-**请求**：
-
-```bash
-POST /api/v4/users/:username/mfa/disable
-```
-
-**示例**：
-
-```bash
-curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/disable
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "message": "MFA disabled"
-  }
-}
-```
-
-:::tip
-
-即使 SAML 模块设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA。该设置在用户后续登录时生效。
-
-:::
-
-#### 重置 TOTP 密钥
-
-管理员可使用以下请求重置 TOTP 密钥。旧密钥立即失效，用户下次登录时将重新进入设置流程。
-
-```bash
-POST /api/v4/users/:username/mfa/enable
-```
-
-加入 `reset=true` 参数：
-
-```bash
-curl -u admin:public \
-     -H "Content-Type: application/json" \
-     -X POST http://localhost:18083/api/v4/users/alice/mfa/enable \
-     -d '{"reset": true}'
-```
-
-若管理员重置自己的密钥，响应中会立即包含新的 QR 码 URI 和密钥。
-
-若管理员重置其他用户的密钥，该用户将回到**需要设置**状态，下次登录时须重新完成设置流程。
-
-#### 查询 MFA 状态
-
-管理员可查询任意用户的 MFA 状态。
-
-```bash
-GET /api/v4/users/:username/mfa
-```
-
-```bash
-curl -u admin:public http://localhost:18083/api/v4/users/alice/mfa
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "enabled": true,
-    "setup_required": false
-  }
-}
-```
-
-用户列表接口也会为每个账户包含 MFA 相关字段：
-
-```bash
-GET /api/v4/users/
-```
-
-响应中每个用户对象包含：
-
-```json
-{
-  "username": "alice",
-  "mfa_enabled": true,
-  "mfa_setup_required": false
-}
-```
+管理员可在**通用** -> **用户**页面查看任意用户的 MFA 状态。每个用户条目会显示 MFA 是否已启用以及是否需要设置。
 
 ## 使用 MFA 登录
 
@@ -271,7 +145,7 @@ SSO 用户的设置流程和挑战流程与 [首次设置](#首次设置)和[使
 
 :::tip
 
-即使模块级别设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA，详见[停用特定用户的 MFA](#停用特定用户的-mfa)。
+即使模块级别设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA，详见[通过 Dashboard 停用 MFA](#通过-dashboard-停用-mfa)。
 
 :::
 
@@ -286,15 +160,3 @@ SSO 用户的设置流程和挑战流程与 [首次设置](#首次设置)和[使
 TOTP 码在其 30 秒周期前后的短暂时间窗口内有效。请确保服务器时钟与认证设备时钟同步，避免验证失败。
 
 :::
-
-## API 参考
-
-| 接口 | 方法 | 鉴权 | 说明 |
-|---|---|---|---|
-| `/api/v4/auth` | POST | Basic | 登录。若 MFA 已启用，返回 `mfa_required` 或 `mfa_setup_required`。 |
-| `/api/v4/auth/mfa_challenge` | POST | Bearer（MFA 状态令牌） | 提交 TOTP 码以完成登录。 |
-| `/api/v4/mfa/setup` | POST | Bearer（MFA 状态令牌） | 获取初始 MFA 设置所需的 QR 码和密钥。 |
-| `/api/v4/mfa/setup/verify` | POST | Bearer（验证令牌） | 通过验证 TOTP 码完成 MFA 设置。 |
-| `/api/v4/users/:username/mfa/enable` | POST | Basic | 为用户启用 MFA。传入 `reset=true` 可重新生成密钥。 |
-| `/api/v4/users/:username/mfa/disable` | POST | Basic | 为用户禁用 MFA。 |
-| `/api/v4/users/:username/mfa` | GET | Basic | 查询用户的 MFA 状态。 |

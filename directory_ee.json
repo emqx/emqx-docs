@@ -1427,7 +1427,7 @@
     {
       "title": "HTTP API",
       "path": "advanced/http-api",
-      "children":[
+      "children": [
         {
           "title": "API Key",
           "path": "advanced/api-key"

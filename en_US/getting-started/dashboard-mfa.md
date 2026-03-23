@@ -68,6 +68,19 @@ If an admin enables MFA for another user, the setup step is deferred until that 
 
 :::
 
+### Disable MFA via the Dashboard
+
+Admins can disable MFA for any user. Once disabled, the user can log in with username and password alone.
+
+1. On the **General** -> **Users** page, click **MFA Settings** next to the target user.
+2. In the **MFA Settings** dialog, click **Disable MFA**.
+
+:::tip
+
+Even when the SAML module has `force_mfa=true`, an admin can still disable MFA for an individual SSO user. The setting takes effect on that user's subsequent logins.
+
+:::
+
 ### Reset the TOTP Secret
 
 If a user needs to reset their TOTP setup (for example, if the authenticator app is uninstalled or the secret is compromised), the admin can reset their TOTP secret via the **MFA Settings** dialog.
@@ -81,148 +94,9 @@ If a user needs to reset their TOTP setup (for example, if the authenticator app
 
 3. Click **OK** to confirm. After the reset, the user must follow the first-time MFA setup process again (scan a new QR code or enter the new secret into their authenticator app).
 
-### Enable and Manage MFA via REST API
+### Check MFA Status
 
-Admins can enable or manage MFA for any user through the REST API.
-
-:::tip
-
-For the `POST` and `DELETE` methods on `/users/{username}/mfa` endpoints, only an administrator or the owner of the current Bearer token can use these endpoints. Users with the `viewer` role cannot modify another user's MFA settings. Only the user associated with the current Bearer token can modify their own MFA settings.
-
-For more information on role-based access control, see [Roles](./dashboard-users.md#roles).
-
-:::
-
-#### Enable MFA for a Specific User
-
-To enable MFA for a user, send a `POST` request to the `/users/{username}/mfa/enable` endpoint:
-
-**Request:**
-
-```bash
-POST /api/v4/users/:username/mfa/enable
-```
-
-**Example:**
-
-```bash
-curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/enable
-```
-
-**Response:**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "message": "MFA setup required on next login"
-  }
-}
-```
-
-After an admin enables MFA for another user, the user will see an **MFA Setup** prompt on their next login and must complete the setup flow before accessing the Dashboard.
-
-If an admin enables MFA for themselves, the API response includes the QR code URI and secret immediately, without waiting for the next login.
-
-:::tip
-
-A user's MFA state can be checked at any time using `GET /api/v4/users/:username/mfa`. See [Check MFA Status](#check-mfa-status) for details.
-
-:::
-
-#### Disable MFA for a Specific User
-
-Admins can disable MFA for any user. Once disabled, the user can log in with username and password alone.
-
-**Request:**
-
-```bash
-POST /api/v4/users/:username/mfa/disable
-```
-
-**Example:**
-
-```bash
-curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/disable
-```
-
-**Response:**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "message": "MFA disabled"
-  }
-}
-```
-
-:::tip
-
-Even when the SAML module has `force_mfa=true`, an admin can still disable MFA for an individual SSO user. The setting takes effect on that user's subsequent logins.
-
-:::
-
-#### Reset the TOTP Secret
-
-Admins can reset a user's TOTP secret via the API. The old secret is immediately invalidated and the user is placed back into the setup flow on their next login.
-
-```bash
-POST /api/v4/users/:username/mfa/enable
-```
-
-Include the `reset=true` parameter:
-
-```bash
-curl -u admin:public \
-     -H "Content-Type: application/json" \
-     -X POST http://localhost:18083/api/v4/users/alice/mfa/enable \
-     -d '{"reset": true}'
-```
-
-If an admin resets their own MFA secret, the response includes a new QR code URI and secret immediately.
-
-If an admin resets another user's secret, the user is placed back in **Setup Required** state and must complete the setup flow on their next login.
-
-#### Check MFA Status
-
-Admins can query the MFA status of any user.
-
-```bash
-GET /api/v4/users/:username/mfa
-```
-
-```bash
-curl -u admin:public http://localhost:18083/api/v4/users/alice/mfa
-```
-
-**Response:**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "enabled": true,
-    "setup_required": false
-  }
-}
-```
-
-The user list endpoint also includes MFA fields for each account:
-
-```bash
-GET /api/v4/users/
-```
-
-Each user object in the response includes:
-
-```json
-{
-  "username": "alice",
-  "mfa_enabled": true,
-  "mfa_setup_required": false
-}
-```
+Admins can view the MFA status of any user on the **General** -> **Users** page. Each user entry shows whether MFA is enabled and whether setup is required.
 
 ## Log In with MFA
 
@@ -268,7 +142,7 @@ The setup and login flows for SSO users are identical to those described in [Fir
 
 :::tip
 
-An admin can disable MFA for an individual SSO user even when `force_mfa=true` is set at the module level. See [Disable MFA for a Specific User](#disable-mfa-for-a-specific-user).
+An admin can disable MFA for an individual SSO user even when `force_mfa=true` is set at the module level. See [Disable MFA via the Dashboard](#disable-mfa-via-the-dashboard).
 
 :::
 
@@ -283,15 +157,3 @@ An admin can disable MFA for an individual SSO user even when `force_mfa=true` i
 TOTP codes are valid for a short window around their 30-second period. Ensure that the server clock and the authenticator device clock are synchronized to avoid verification failures.
 
 :::
-
-## API Reference
-
-| Endpoint | Method | Auth | Description |
-|---|---|---|---|
-| `/api/v4/auth` | POST | Basic | Login. Returns `mfa_required` or `mfa_setup_required` if MFA is active. |
-| `/api/v4/auth/mfa_challenge` | POST | Bearer (MFA state token) | Submit TOTP code to complete login. |
-| `/api/v4/mfa/setup` | POST | Bearer (MFA state token) | Get QR code and secret for initial MFA setup. |
-| `/api/v4/mfa/setup/verify` | POST | Bearer (verification token) | Complete MFA setup by verifying a TOTP code. |
-| `/api/v4/users/:username/mfa/enable` | POST | Basic | Enable MFA for a user. Pass `reset=true` to regenerate the secret. |
-| `/api/v4/users/:username/mfa/disable` | POST | Basic | Disable MFA for a user. |
-| `/api/v4/users/:username/mfa` | GET | Basic | Get the MFA status of a user. |
