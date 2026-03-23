@@ -228,42 +228,7 @@ API Key 权限控制的是对应接口的写入操作（`PUT`、`POST`、`DELETE
 
 ## 管理 API Key
 
-本节介绍 API Key 的管理接口，包括列出、查询、更新和删除等操作。
-
-### 列出所有 Key
-
-**接口：** `GET /api/v4/apps/`
-
-**示例：**
-
-```bash
-curl -u admin:public "http://127.0.0.1:18083/api/v4/apps/"
-```
-
-**响应示例：**
-
-```json
-{
-  "code": 0,
-  "data": [
-    {
-      "status": true,
-      "permissions": {
-        "rule_engine": true,
-        "resources": true,
-        "plugins": false,
-        "modules": false,
-        "banned": false
-      },
-      "name": "Documentation Test",
-      "expired": "undefined",
-      "desc": "Created for documentation examples",
-      "compatibility_mode": false,
-      "app_id": "doc_test_key"
-    }
-  ]
-}
-```
+本节介绍 API Key 的管理接口，包括查询、更新和删除等操作。
 
 ### 查看 Key 详情
 

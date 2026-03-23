@@ -640,7 +640,7 @@
     {
       "title": "HTTP API",
       "path": "advanced/http-api",
-      "children":[
+      "children": [
         {
           "title": "API 访问密钥",
           "path": "advanced/api-key"

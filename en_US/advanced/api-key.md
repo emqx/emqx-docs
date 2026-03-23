@@ -228,42 +228,7 @@ Updating a compatibility mode key with a `permissions` object is irreversible. O
 
 ## Manage API Keys
 
-This section describes the API Key management endpoints: list, get, update, and delete.
-
-### List All Keys
-
-**Endpoint:** `GET /api/v4/apps/`
-
-**Example:**
-
-```bash
-curl -u admin:public "http://127.0.0.1:18083/api/v4/apps/"
-```
-
-**Response Example:**
-
-```json
-{
-  "code": 0,
-  "data": [
-    {
-      "status": true,
-      "permissions": {
-        "rule_engine": true,
-        "resources": true,
-        "plugins": false,
-        "modules": false,
-        "banned": false
-      },
-      "name": "Documentation Test",
-      "expired": null,
-      "desc": "Created for documentation examples",
-      "compatibility_mode": false,
-      "app_id": "doc_test_key"
-    }
-  ]
-}
-```
+This section describes the API Key management endpoints: get, update, and delete.
 
 ### Get Key Details
 
