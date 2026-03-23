@@ -32,7 +32,7 @@
 
 - 通过升级 `pulsar-client-erl` 到 `0.7.3`，修复 Pulsar 桥接单条消息解析问题。
 
-- 修复 HTTP API 无法将 ACL File 更新为空值的问题。
+- 修复 HTTP API 无法将 ACL 文件 更新为空值的问题。
 
 - 优化 `emqx_vm_mon` 的资源开销，降低大连接数场景下的内存消耗。
 
