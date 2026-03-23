@@ -23,7 +23,7 @@ Dashboard 用户凭证（用户名和密码）可直接用于调用 Dashboard AP
 如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key，详见 [API Key](../advanced/api-key.md)。
 :::
 
-D支持以下两种认证方式：
+支持以下两种认证方式：
 
 ### Basic Auth（基础认证）
 
