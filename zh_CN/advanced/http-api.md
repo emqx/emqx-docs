@@ -8,7 +8,11 @@ EMQX 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_m
 
 EMQX 的 HTTP API（端口 8081）使用 [HTTP Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication)，需使用 API Key 的 AppID 和 AppSecret 作为认证凭据。默认的 AppID 和 AppSecret 为 `admin/public`。
 
+{% emqxee %}
+
 每个 API Key 可以独立配置对各类接口的写入权限，遵循最小权限原则。关于 API Key 的创建、权限配置和管理，请参阅 [API Key](./api-key.md)。
+
+{% endemqxee %}
 
 ## 响应码
 

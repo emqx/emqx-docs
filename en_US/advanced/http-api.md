@@ -7,7 +7,11 @@ EMQX Broker's HTTP API service listens on port 8081 by default. You can modify t
 
 The HTTP API (port 8081) uses [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) with an API Key's AppID and AppSecret as credentials. The default AppID and AppSecret are `admin/public`.
 
+{% emqxee %}
+
 Each API Key can be configured with independent write permissions per API category, following the principle of least privilege. For details on creating, configuring, and managing API Keys, see [API Key](./api-key.md).
+
+{% endemqxee %}
 
 ## Response code
 ### HTTP status codes
