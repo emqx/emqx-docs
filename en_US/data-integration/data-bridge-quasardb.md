@@ -134,6 +134,7 @@ This section demonstrates how to create a Connector to connect the Sink to Quasa
    - **Username**: Enter the username, if any.
    - **Password**: Enter the user secret key, if any.
    - **Cluster Public Key**: Enter the cluster public key, if any.
+   - **Connect Timeout**: Timeout to be used when connecting to QuasarDB.
 
 5. Advanced settings (optional): For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
