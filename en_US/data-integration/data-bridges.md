@@ -85,6 +85,7 @@ EMQX supports data integrations with the following types of data systems:
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [Azure Event Grid](./azure-event-grid.md)
 - [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 **TSDB**

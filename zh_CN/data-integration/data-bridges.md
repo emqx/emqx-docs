@@ -79,6 +79,7 @@ D1 -->|发布消息| E[客户端]
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure Event Hubs](./data-bridge-azure-event-hub.md)
+- [Azure Event Grid](./azure-event-grid.md)
 - [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 **时序数据库**
