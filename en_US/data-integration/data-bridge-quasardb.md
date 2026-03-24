@@ -129,7 +129,7 @@ This section demonstrates how to create a Connector to connect the Sink to Quasa
 4. In the **Configuration** step, configure the following information:
 
    - **Connector Name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_quasardb`.
-   - **Server URI**: Enter the URI of your QuasarDB cluster using an IP address, for example `qdb://127.0.0.1:2836`. The default port is `2836`.
+   - **Server URI**: Enter the URI of your QuasarDB cluster using an IP address, for example `qdb://127.0.0.1:2836`.
    - **ODBC Data Source Name**: Enter the DSN name defined in `/etc/odbc.ini`, for example `qdb`.
    - **Username**: Enter the username, if any.
    - **Password**: Enter the user secret key, if any.
