@@ -82,7 +82,7 @@ Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请�
    - **清除会话**：默认启用。启用后，EMQX 每次连接到 Azure Event Grid 时都会创建新的会话。
    - **启用 TLS**：默认启用。Azure Event Grid 要求使用 TLS。如使用客户端证书认证，请在此处配置证书和私钥。详细的 TLS 配置选项，请参阅[外部资源访问的 TLS](../network/overview.md#启用-tls-加密访问外部资源)。
 
-6. 高级设置（可选）：详情请参阅[数据集成特性](./data-bridges.md#features-of-sink)。
+6. 高级设置（可选）：详情请参阅[Sink 的特性](./data-bridges.md#sink-的特性)。
 
 7. 点击**创建**之前，可先点击**测试连接**，验证 EMQX 是否能成功连接到 Azure Event Grid。
 
@@ -126,9 +126,9 @@ Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请�
    - **Retain**：选择 `true`、`false` 或使用 `${flags.retain}` 等占位符设置保留标志。
    - **消息模版**：消息 payload 模板。留空则转发完整的规则输出，或输入 `${payload}` 仅转发 payload。
 
-7. **备选动作（可选）**：如需在消息投递失败时提高可靠性，可定义一个或多个备选动作，当主 Sink 处理消息失败时触发。详情请参阅[备选动作](./data-bridges.md#fallback-actions)。
+7. **备选动作（可选）**：如需在消息投递失败时提高可靠性，可定义一个或多个备选动作，当主 Sink 处理消息失败时触发。详情请参阅[备选动作](./data-bridges.md#备选动作)。
 
-8. **高级设置（可选）**：详情请参阅[数据集成特性](./data-bridges.md#features-of-sink)。
+8. **高级设置（可选）**：详情请参阅[Sink 的特性](./data-bridges.md#sink-的特性)。
 
 9. 点击**创建**之前，可先点击**测试连接**，验证 Sink 能否连接到 Azure Event Grid。
 
