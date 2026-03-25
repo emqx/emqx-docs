@@ -1,5 +1,57 @@
 # 版本发布
 
+## e4.4.34
+
+*发布日期: 2026-03-25*
+
+### 增强
+
+- 新增管理 HTTP API 的 API Key 权限控制。
+
+  现在可以按分类配置写操作（POST/PUT/DELETE）权限：`banned`、`rule_engine`、`resources`、`plugins`、`modules`；为兼容性，`GET` 请求保持可读。
+
+- Dashboard 新增 MFA 认证与会话管理能力。
+
+  支持 MFA 初始化/挑战流程、MFA 状态管理接口、JWT Bearer 会话，以及用户登出。
+
+- 新增 Dashboard SAML 2.0 SSO 模块。
+
+  支持 IDP Metadata 对接、ACS 回调处理、SP Metadata 导出、可选的 SP 请求签名，以及可配置的 `force_mfa`。
+
+- 新增 HTTP API 可观测性指标。
+
+  EMQX 现在会统计 HTTP API 的成功/失败计数和请求时延直方图，并导出到 Prometheus；同时提供 `/api/v4/http_api_metrics` 用于直接查询计数指标。
+
+- 优化 Helm Chart 启动行为。
+
+  默认 `podManagementPolicy` 调整为 `OrderedReady`，并在 `k8s`/`dns` 发现模式下增加 DNS 就绪等待 init container，以提升集群启动稳定性。
+
+- `ehttpc` 在检测到队头堵塞时，自动断开重连，避免少量请求长时间挂起导致整个连接不可用。
+
+  此修复将影响所有使用 `ehttpc` 的组件，如 HTTP ACL 和认证，WebHook 资源，IoTDB 资源，SAP Event Mesh 资源，以及 GCP PubSub 资源。
+
+### 修复
+
+- 修复 trace 模块在热升级和滚动升级过程中的表处理问题，避免 trace 表副本不一致和启动异常。
+
+- 通过升级 `pulsar-client-erl` 到 `0.7.3`，修复 Pulsar 桥接单条消息解析问题。
+
+- 修复 HTTP API 无法将 ACL File 更新为空值的问题。
+
+- 优化 `emqx_vm_mon` 的资源开销，降低大连接数场景下的内存消耗。
+
+- 修复获取系统内存使用率导致 HTTP API 响应缓慢的问题。
+
+  此前，当连接数较大时，通过 `memsup` 获取内存使用率会很慢，因为 `memsup` 除了获取系统内存使用率之外，还会遍历所有的 Erlang 进程找到内存使用最大者。当前版本通过设置 `os_mon.memsup_system_only = true` 禁用此功能，即仅仅获取系统内存使用率。
+
+  `/nodes` 和 `/emqx_prometheus` 均会受此问题影响。
+
+- 升级 `eredis_cluster` 到 `0.7.8`，改进 Redis Cluster 的重连退避行为。
+
+- 升级 `wolff` 到 `1.5.20`，引入 Kafka 客户端稳定性修复。
+
+- 修正节点加入集群时的 License 加载行为，优先使用集群 License，并避免使用无效或过期的 License。
+
 ## e4.4.33
 
 *发布日期: 2025-11-26*

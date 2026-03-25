@@ -1,5 +1,57 @@
 # Releases
 
+## e4.4.34
+
+*Release Date: 2026-03-25*
+
+### Enhancements
+
+- Added API key permission control for management HTTP APIs.
+
+  API keys can now be configured with category-based write permissions (`banned`, `rule_engine`, `resources`, `plugins`, `modules`), while `GET` requests remain readable for compatibility.
+
+- Added Dashboard MFA authentication and session management.
+
+  Dashboard now supports MFA setup/challenge flows, MFA status management APIs, JWT bearer sessions, and user logout.
+
+- Added Dashboard SAML 2.0 SSO module.
+
+  It supports IDP metadata integration, ACS callback handling, SP metadata export, optional SP-signed AuthnRequest, and configurable `force_mfa` for SSO users.
+
+- Added HTTP API observability metrics.
+
+  EMQX now records HTTP API success/failure counters and request duration histogram, exports them to Prometheus, and provides `/api/v4/http_api_metrics` for direct counter lookup.
+
+- Improved Helm Chart startup behavior.
+
+  The default `podManagementPolicy` is changed to `OrderedReady`, and a DNS-wait init container is added for `k8s`/`dns` discovery modes to improve cluster bootstrap stability.
+
+- `ehttpc` now automatically disconnects and reconnects when head-of-line blocking is detected, preventing a few long-hanging requests from making the entire connection unavailable.
+
+  This fix affects all components using `ehttpc`, such as HTTP ACL and authentication, WebHook resources, IoTDB resources, SAP Event Mesh resources, and GCP PubSub resources.
+
+### Fixes
+
+- Fixed trace module table handling during hot upgrade and rolling upgrade to avoid trace table copy inconsistencies and startup issues.
+
+- Fixed Pulsar bridge single-message parsing by upgrading `pulsar-client-erl` to `0.7.3`.
+
+- Fixed an issue where the HTTP API could not update the ACL file to an empty value.
+
+- Optimized `emqx_vm_mon` resource usage to reduce memory overhead in high-connection scenarios.
+
+- Fixed slow HTTP API response caused by system memory usage retrieval.
+
+  Previously, with a large number of connections, retrieving memory usage via `memsup` was slow because `memsup` would traverse all Erlang processes to find the one with the highest memory usage, in addition to getting system memory utilization. The current version disables this behavior by setting `os_mon.memsup_system_only = true`, retrieving only system memory usage.
+
+  Both `/nodes` and `/emqx_prometheus` endpoints were affected by this issue.
+
+- Upgraded `eredis_cluster` to `0.7.8` to improve Redis Cluster reconnect backoff behavior.
+
+- Upgraded `wolff` to `1.5.20` to include Kafka client stability fixes.
+
+- Fixed license loading behavior when a node joins a cluster by prioritizing the cluster license and preventing the use of invalid or expired licenses.
+
 ## e4.4.33
 
 *Release Date: 2025-11-26*
