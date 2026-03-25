@@ -1,172 +1,168 @@
 # SAML 2.0 Single Sign-On
 
-SAML 2.0 Single Sign-On (SSO) is an enterprise-only feature that lets users log in to the EMQX Dashboard through their organization's Identity Provider (IDP), such as Keycloak, Okta, or Azure AD. Once authenticated at the IDP, users are automatically provisioned in EMQX and redirected to the Dashboard without entering a separate password.
+SAML 2.0 Single Sign-On (SSO) lets users log in to the EMQX Dashboard through your organization's Identity Provider (IdP), such as Keycloak, Okta, or Azure AD, instead of managing a separate Dashboard password.
+
+## How It Works
+
+SAML 2.0 SSO involves two parties:
+
+- **Identity Provider (IdP)**: Your organization's authentication service. It verifies the user's identity and issues a signed assertion.
+- **Service Provider (SP)**: EMQX Dashboard. It trusts the IdP's assertion and grants access based on it.
+
+The two parties establish trust by exchanging metadata: EMQX publishes an SP metadata document that the IdP registers, and EMQX fetches the IdP's metadata to verify incoming assertions. Once trust is established, the login flow works as follows:
+
+1. A user clicks **Login with SSO** on the Dashboard login page.
+2. EMQX redirects the user to the IdP login page.
+3. The user authenticates at the IdP.
+4. The IdP posts a signed `SAMLResponse` back to EMQX.
+5. EMQX validates the assertion and logs the user in, provisioning their account automatically if it does not already exist.
+
+## Setup Overview
+
+Configuring SAML SSO involves setting up in both EMQX and your identity provider (IdP):
+
+1. **Enable the SAML SSO module in EMQX**: this generates the service provider (SP) metadata and ACS URLs required for the next step.
+2. **Register EMQX as a SAML client in your IdP**: provide the SP metadata URL or upload the metadata file, then record the IdP metadata URL.
+3. **Finish the EMQX configuration**: enter the IdP metadata URL and configure the signing settings.
 
 ## Prerequisites
 
-Before configuring SAML SSO, make sure the following conditions are met:
-
-- A SAML 2.0 compatible Identity Provider is available and accessible.
-- You have the IDP metadata URL (typically an XML endpoint provided by the IDP).
-- Network connectivity exists between the EMQX node(s) and the IDP host.
+- EMQX Enterprise 4.4.34 or later.
+- A SAML 2.0 compatible IdP. This guide uses Keycloak 26.3 or later as the example.
+- Network connectivity between EMQX nodes and the IdP host. EMQX fetches the IdP metadata URL at module load time.
+- HTTPS must be enabled on both the EMQX Dashboard and the IdP. Keycloak 26.x requires HTTPS for SAML clients.
+- The IdP metadata URL (an XML endpoint provided by the IdP).
 
 ## Add the SAML SSO Module
 
-1. In the left-hand navigation panel of the Dashboard, click **Modules**.
+1. In the left navigation panel of the Dashboard, click **Modules**.
+
 2. Click **Add Module**.
-3. Select **SAML 2.0 Single Sign-On** from the module list and click **Select**.
-4. Fill in the configuration fields described below.
+
+3. Select **SAML 2.0 Single Sign-On** and click **Select**.
+
+4. Fill in the configuration fields. See [Configuration Fields](#configuration-fields) for details.
+
 5. Click **Add** to enable the module.
 
-   ![SAML SSO Module Config](./assets/saml_sso_config.png)
+   ![SAML SSO Module Config](/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/saml_sso_config.png)
 
-### Configuration Fields
+On the configuration page, two read-only addresses are displayed:
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| **Dashboard Address** | string | `https://127.0.0.1:18083` | The externally reachable base URL of the Dashboard. Do not include a path suffix. This address is used to construct the SP ACS URL and SP metadata URL that you register with your IDP. |
-| **IDP Metadata URL** | string | required | The URL from which EMQX fetches the IDP's SAML metadata XML. For example, in Keycloak this is `http://<keycloak>/realms/<realm>/protocol/saml/descriptor`. |
-| **SP Signs Authentication Requests** | boolean | `false` | When enabled, EMQX (acting as the SP) signs outgoing SAML `AuthnRequest` messages. Enabling this requires you to upload a valid SP certificate and private key. |
-| **Force MFA for SSO Users** | boolean | `false` | When enabled, all users who log in via SAML SSO must configure TOTP-based Multi-Factor Authentication on their first login. |
-| **Require Signed Response Envelopes from IDP** | boolean | `true` | When enabled, EMQX requires the IDP to sign the SAML `Response` envelope. Disabling this weakens security and should only be done for testing. |
-| **Require Signed Assertions from IDP** | boolean | `true` | When enabled, EMQX requires the IDP to sign the SAML `Assertion` element inside the response. Disabling this weakens security and should only be done for testing. |
-| **SP Public Key/Certificate** | file | — | The SP certificate in PEM format. Required when **SP Signs Authentication Requests** is enabled. |
-| **SP Private Key** | file | — | The SP private key in PEM format. Required when **SP Signs Authentication Requests** is enabled. |
+- **SSO Address**: `<Dashboard Address>/api/v4/sso/saml/acs`. This is the ACS (Assertion Consumer Service) URL, the endpoint where your IdP posts the `SAMLResponse` after authentication. Register this with your IdP as the ACS URL or Valid Redirect URI.
+- **Metadata Address**: `<Dashboard Address>/api/v4/sso/saml/metadata`. This is the Service Provider (SP) metadata URL to register as the Client ID with your IdP.
 
-## Configure the IDP (Keycloak Example)
+## Configuration Fields
 
-The following steps use Keycloak as an example. Steps for other IDPs will differ, but the key values (ACS URL, Entity ID, metadata URL) remain the same.
+| Field                                          | Default                  | Description                                                  |
+| ---------------------------------------------- | ------------------------ | ------------------------------------------------------------ |
+| **Dashboard Address**                          | `http://localhost:18083` | The externally reachable base URL of the Dashboard, without a trailing slash or path. EMQX derives the SSO Address and Metadata Address from this value. |
+| **IDP Metadata URL**                           | Required                 | The URL from which EMQX fetches the IdP's SAML metadata XML. In Keycloak, this follows the pattern `https://<keycloak-host>/realms/<realm>/protocol/saml/descriptor`. |
+| **SP Signs Authentication Requests**           | `false`                  | When enabled, EMQX signs outgoing SAML `AuthnRequest` messages (EMQX -> IdP). Requires a valid SP certificate and private key. |
+| **Force MFA for SSO Users**                    | `false`                  | When enabled, all users who log in via SAML SSO must complete TOTP-based [Multi-Factor Authentication](./mfa.md). Users who have not yet configured MFA are prompted to do so on their first login. |
+| **Require Signed Response Envelopes from IDP** | `true`                   | Requires the IdP to sign the SAML `Response` envelope (IdP -> EMQX). Recommended for production. |
+| **Require Signed Assertions from IDP**         | `true`                   | Requires the IdP to sign the SAML `Assertion` element (IdP -> EMQX). Recommended for production. |
+| **SP Public Key/Certificate**                  | —                        | The SP certificate in PEM format. Required when **SP Signs Authentication Requests** is enabled. Paste the PEM content directly or use **Select file** to upload a file. |
+| **SP Private Key**                             | —                        | The SP private key in PEM format. Required when **SP Signs Authentication Requests** is enabled. Paste the PEM content directly or use **Select file** to upload a file. |
 
-1. Log in to the Keycloak Admin Console.
-2. Select your realm and navigate to **Clients**.
-3. Click **Create client** and choose **SAML** as the client type.
-4. Set the **Client ID** to the SP Entity ID, which EMQX publishes at:
+::: warning Note
 
-   ```
-   http://<dashboard-addr>/api/v4/sso/saml/metadata
-   ```
-
-5. Set the **Valid Redirect URIs** and **ACS URL** to:
-
-   ```
-   http://<dashboard-addr>/api/v4/sso/saml/acs
-   ```
-
-6. Save the client. Then copy your IDP metadata URL, which follows this pattern in Keycloak:
-
-   ```
-   http://<keycloak>/realms/<realm>/protocol/saml/descriptor
-   ```
-
-7. Paste this URL into the **IDP Metadata URL** field when adding the SAML SSO module in EMQX Dashboard.
-
-::: tip
-
-If you configured signing on either side, download the IDP signing certificate from Keycloak and ensure the SP certificate uploaded to EMQX is trusted by your IDP.
+For production deployments, keep at least one of **Require Signed Response Envelopes from IDP** or **Require Signed Assertions from IDP** enabled. Disabling both removes all cryptographic verification of the identity assertion.
 
 :::
 
-## SP Metadata
+## Configure the IdP
 
-After the module is enabled, EMQX publishes its Service Provider metadata at:
+The following steps use Keycloak as an example. The exact steps vary by IdP, but the values you register remain the same.
 
-```
-GET /api/v4/sso/saml/metadata
-```
+### Register SP Metadata with Your IdP
 
-The response is a standard SAML metadata XML document. You can provide this URL directly to IDPs that support automatic SP metadata import, or download the XML and upload it manually.
+After enabling the module, EMQX publishes an SP metadata document at the Metadata Address. This XML document contains the SP Entity ID, the ACS URL, and the SP signing certificate (if SP signing is enabled). Your IdP needs this information to trust and communicate with EMQX.
 
-The SP metadata includes:
+There are two ways to provide it:
 
-- The Entity ID of the SP
-- The ACS (Assertion Consumer Service) URL: `http://<dashboard-addr>/api/v4/sso/saml/acs`
-- The SP signing certificate (if SP signing is enabled)
+- **Automatic import**: If your IdP supports metadata import by URL, paste the Metadata Address directly. The IdP automatically fetches the XML and configures the Entity ID and ACS URL.
+- **Manual upload**: If your IdP requires a file, open the Metadata Address in a browser, save the XML, and upload it to your IdP.
+
+### Create a SAML Client in Keycloak
+
+1. Log in to the Keycloak Admin Console and select your realm.
+
+2. Navigate to **Clients** and click **Create client**.
+
+3. Set **Client type** to `SAML`.
+
+4. Set **Client ID** to the SP Metadata Address shown on the EMQX configuration page:
+
+   ```
+   https://<dashboard-addr>/api/v4/sso/saml/metadata
+   ```
+
+   ::: tip
+
+   EMQX does not support custom SP Client IDs. You must use the Metadata Address exactly as shown.
+
+   :::
+
+5. Set **Valid Redirect URIs** or **ACS URL** to the SSO Address shown on the EMQX configuration page:
+
+   ```
+   https://<dashboard-addr>/api/v4/sso/saml/acs
+   ```
+
+6. Under the **Keys** tab, enable **Sign documents** and **Sign assertions**. Both options are required unless you explicitly disabled **Require Signed Response Envelopes from IDP** and **Require Signed Assertions from IDP** in EMQX (both default to `true`).
+
+7. Copy the **IDP metadata URL** from **Realm Settings** -> **Endpoints** -> **SAML 2.0 Identity Provider Metadata**. Paste this URL into the **IDP Metadata URL** field in EMQX.
+
+### Prepare SP Certificate and Key (If SP Signing Is Enabled)
+
+If you enable **SP Signs Authentication Requests**, you need an SP certificate and private key. When generating them in Keycloak:
+
+1. Go to **Clients** -> your SAML client -> **Keys** tab.
+
+2. Click **Regenerate** (not **Export**). The key file downloads automatically.
+
+   ::: warning
+
+   Do not use the **Export** button. Exported keys are password-protected, and EMQX does not support password-protected PEM keys.
+
+   :::
+
+3. Keycloak downloads the certificate and key in raw Base64 format without PEM headers. Convert them to PEM format before uploading to EMQX:
+
+   ```bash
+   # Convert certificate
+   ./scripts/convert-keycloak-certs.sh <downloaded-cert-file> sp_public.pem cert
+   
+   # Convert private key
+   ./scripts/convert-keycloak-certs.sh <downloaded-key-file> sp_private.pem key
+   ```
+
+4. Upload or paste the converted PEM files into the **SP Public Key/Certificate** and **SP Private Key** fields in EMQX.
 
 ## SSO Login Flow
 
-The end-to-end SAML SSO login sequence is as follows:
+1. The user opens the Dashboard login page. If SSO is enabled, a **Login with SSO** button is displayed.
+2. The user clicks **Login with SSO** and is redirected to the IdP login page.
+3. The user authenticates at the IdP.
+4. The IdP posts the `SAMLResponse` back to the EMQX ACS endpoint.
+5. EMQX validates the assertion, provisions the user if they do not already exist, and redirects the browser to the Dashboard.
 
-1. The user opens the Dashboard login page. The frontend calls `GET /api/v4/sso/status` to check whether SSO is enabled. If it is, a **Login with SSO** button is displayed.
-2. The user clicks **Login with SSO**. The frontend sends `POST /api/v4/sso/saml/login`.
-3. EMQX returns a `302` redirect to the IDP's authentication endpoint.
-4. The user authenticates at the IDP (entering credentials, completing MFA at the IDP, etc.).
-5. The IDP posts the `SAMLResponse` back to the EMQX ACS endpoint: `POST /api/v4/sso/saml/acs`.
-6. EMQX validates the assertion, provisions the user if they do not already exist, and redirects the browser back to the Dashboard with a `login_meta` token.
+If **Force MFA for SSO Users** is enabled, users are prompted to configure or complete MFA before reaching the Dashboard.
 
-### Automatic User Provisioning
+### User Provisioning
 
-New SSO users are provisioned automatically (Just-in-Time provisioning) on their first successful login:
+SSO users are provisioned automatically on their first successful login (Just-in-Time provisioning):
 
-- They are assigned the `viewer` role by default.
-- Existing Dashboard users who match the SSO username keep their current role and settings.
+- New SSO users are assigned the `viewer` role by default.
+- Existing Dashboard users with a matching username retain their current role and settings.
 
-To grant higher privileges to an SSO user, edit the user record in **Dashboard → Users** after their first login.
-
-## Signature Configuration
-
-EMQX provides three independent signature mechanisms, each controlled by a separate configuration option. They can be enabled or disabled individually.
-
-| Mechanism | Option | Who signs | Direction |
-|-----------|--------|-----------|-----------|
-| SP signs `AuthnRequest` | **SP Signs Authentication Requests** | EMQX (SP) | SP → IDP |
-| IDP signs `Response` envelope | **Require Signed Response Envelopes from IDP** | IDP | IDP → SP |
-| IDP signs `Assertion` | **Require Signed Assertions from IDP** | IDP | IDP → SP |
-
-::: warning
-
-For production deployments, at least one of **Require Signed Response Envelopes from IDP** or **Require Signed Assertions from IDP** should be enabled. Disabling both removes all cryptographic verification of the identity assertion and should only be done in isolated test environments.
-
-:::
-
-When **SP Signs Authentication Requests** is enabled, you must upload both the SP certificate and SP private key. The certificate must be registered with the IDP so it can verify the signed requests.
+To grant a higher privilege level to an SSO user, navigate to **General** -> **Users** in the Dashboard after their first login and update their role.
 
 ## MFA Integration
 
-When **Force MFA for SSO Users** is enabled, every user who logs in via SAML SSO is required to set up TOTP-based Multi-Factor Authentication on their first successful login. Subsequent logins require a valid TOTP code after the SAML assertion is accepted.
+When **Force MFA for SSO Users** is enabled, every user who logs in via SAML SSO must configure TOTP-based Multi-Factor Authentication. Users without MFA configured are prompted to set it up immediately after their first successful SAML authentication.
 
-Administrators can disable MFA for individual SSO users even when **Force MFA for SSO Users** is globally enabled. To do this, find the user in **Dashboard → Users**, click the user, and toggle off the MFA option.
+Administrators can still disable MFA for individual SSO users regardless of the global setting. Navigate to **General** -> **Users**, select the user, and toggle off MFA.
 
-For full MFA configuration details, see the MFA documentation.
-
-## API Reference
-
-The following endpoints support the SAML SSO workflow. Endpoints marked as "public" do not require Dashboard authentication credentials.
-
-### GET /api/v4/sso/status
-
-Check whether SSO is currently enabled. This endpoint is public and does not require authentication.
-
-**Response example:**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "enabled": true,
-    "providers": [
-      {
-        "type": "saml",
-        "enabled": true
-      }
-    ]
-  }
-}
-```
-
-### POST /api/v4/sso/saml/login
-
-Initiate a SAML login. Returns a `302` redirect to the IDP's authentication page.
-
-### POST /api/v4/sso/saml/acs
-
-SAML Assertion Consumer Service endpoint. The IDP posts the `SAMLResponse` to this URL after the user authenticates. EMQX validates the response, provisions the user if needed, and redirects to the Dashboard.
-
-::: tip
-
-This endpoint is called by the IDP, not by the browser directly. Configure this URL in your IDP as the ACS URL for the EMQX SP client.
-
-:::
-
-### GET /api/v4/sso/saml/metadata
-
-Return the SP metadata XML. Use this URL when configuring automatic SP metadata import in your IDP, or download the XML for manual upload.
+For general MFA configuration, see [Multi-Factor Authentication](./mfa.md).
