@@ -59,7 +59,7 @@ SAML 2.0 SSO 涉及两个角色：
 | **Dashboard 地址**          | `http://localhost:18083` | Dashboard 的外部访问基础地址，末尾不带斜杠或路径。EMQX 使用该地址构造 SSO 地址和元数据地址。 |
 | **IDP 元数据 URL**          | 必填                     | EMQX 从该地址获取 IdP 的 SAML 元数据 XML。在 Keycloak 中，格式为 `https://<keycloak-host>/realms/<realm>/protocol/saml/descriptor`。 |
 | **SP 对认证请求签名**       | `false`                  | 启用后，EMQX 会对发出的 SAML `AuthnRequest` 消息进行签名（EMQX -> IdP）。需同时提供有效的 SP 证书和私钥。 |
-| **强制 SSO 用户启用 MFA**   | `false`                  | 启用后，所有通过 SAML SSO 登录的用户必须完成基于 TOTP 的[多因素认证](./mfa.md)。尚未配置 MFA 的用户在首次登录时会收到配置提示。 |
+| **强制 SSO 用户启用 MFA**   | `false`                  | 启用后，所有通过 SAML SSO 登录的用户必须完成基于 TOTP 的[多因素认证](../getting-started/dashboard-mfa.md)。尚未配置 MFA 的用户在首次登录时会收到配置提示。 |
 | **要求 IDP 对响应信封签名** | `true`                   | 要求 IdP 对 SAML `Response` 信封进行签名（IdP -> EMQX）。建议在生产环境中保持启用。 |
 | **要求 IDP 对断言签名**     | `true`                   | 要求 IdP 对 SAML `Assertion` 元素进行签名（IdP -> EMQX）。建议在生产环境中保持启用。 |
 | **SP 公钥/证书**            | —                        | PEM 格式的 SP 证书。启用 **SP 对认证请求签名** 时必填。可直接粘贴 PEM 内容，或点击**选择文件**上传文件。 |
@@ -165,4 +165,4 @@ SSO 用户在首次成功登录时会被自动初始化（即时供给，Just-in
 
 即使全局启用了该设置，管理员仍可为单个 SSO 用户单独关闭 MFA。操作方法：进入 Dashboard **通用** -> **用户**，选中对应用户，关闭其 MFA 开关。
 
-有关 MFA 的完整配置说明，请参考[多因素认证](./mfa.md)。
+有关 MFA 的完整配置说明，请参考[多因素认证](../getting-started/dashboard-mfa.md)。

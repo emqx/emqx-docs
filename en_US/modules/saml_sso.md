@@ -45,7 +45,7 @@ Configuring SAML SSO involves setting up in both EMQX and your identity provider
 
 5. Click **Add** to enable the module.
 
-   ![SAML SSO Module Config](/Users/emqx/Documents/GitHub/emqx-docs/en_US/modules/assets/saml_sso_config.png)
+   ![SAML SSO Module Config](./assets/saml_sso_config.png)
 
 On the configuration page, two read-only addresses are displayed:
 
@@ -59,7 +59,7 @@ On the configuration page, two read-only addresses are displayed:
 | **Dashboard Address**                          | `http://localhost:18083` | The externally reachable base URL of the Dashboard, without a trailing slash or path. EMQX derives the SSO Address and Metadata Address from this value. |
 | **IDP Metadata URL**                           | Required                 | The URL from which EMQX fetches the IdP's SAML metadata XML. In Keycloak, this follows the pattern `https://<keycloak-host>/realms/<realm>/protocol/saml/descriptor`. |
 | **SP Signs Authentication Requests**           | `false`                  | When enabled, EMQX signs outgoing SAML `AuthnRequest` messages (EMQX -> IdP). Requires a valid SP certificate and private key. |
-| **Force MFA for SSO Users**                    | `false`                  | When enabled, all users who log in via SAML SSO must complete TOTP-based [Multi-Factor Authentication](./mfa.md). Users who have not yet configured MFA are prompted to do so on their first login. |
+| **Force MFA for SSO Users**                    | `false`                  | When enabled, all users who log in via SAML SSO must complete TOTP-based [Multi-Factor Authentication](../getting-started/dashboard-mfa.md). Users who have not yet configured MFA are prompted to do so on their first login. |
 | **Require Signed Response Envelopes from IDP** | `true`                   | Requires the IdP to sign the SAML `Response` envelope (IdP -> EMQX). Recommended for production. |
 | **Require Signed Assertions from IDP**         | `true`                   | Requires the IdP to sign the SAML `Assertion` element (IdP -> EMQX). Recommended for production. |
 | **SP Public Key/Certificate**                  | —                        | The SP certificate in PEM format. Required when **SP Signs Authentication Requests** is enabled. Paste the PEM content directly or use **Select file** to upload a file. |
@@ -165,4 +165,4 @@ When **Force MFA for SSO Users** is enabled, every user who logs in via SAML SSO
 
 Administrators can still disable MFA for individual SSO users regardless of the global setting. Navigate to **General** -> **Users**, select the user, and toggle off MFA.
 
-For general MFA configuration, see [Multi-Factor Authentication](./mfa.md).
+For general MFA configuration, see [Multi-Factor Authentication](../getting-started/dashboard-mfa.md).
