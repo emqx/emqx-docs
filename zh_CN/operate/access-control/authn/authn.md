@@ -176,8 +176,6 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 
-- `${peerport}`: 它将在运行时被客户端的 IP 端口替换。
-
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
@@ -293,4 +291,3 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 对于通过内置数据库存储认证数据的认证方式，例如 [使用内置数据库进行密码认证](./mnesia.md) 和 [MQTT 5.0 增强认证](./scram.md)，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
 
 详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
-
