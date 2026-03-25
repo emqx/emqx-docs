@@ -173,7 +173,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 
 - The `mcast` discovery strategy for cluster creation has been deprecated and is pending removal.
 - Configuration for service discovery has been changed: cluster.discovery is changed to **cluster.discovery_strategy**.
-- New feature: [cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery).
+- New feature: [cluster call](https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/).
 - Optional [eventual consistency](../design/clustering.md#data-consistency) has been added to the internal DB. 
 
 ## MQTT

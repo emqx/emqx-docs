@@ -171,7 +171,7 @@ API 经历了重大变化，其中一些 API 已经兼容。以下是常用 API 
 
 - 集群创建的 `mcast` 发现策略已经被弃用，并且正在等待删除。
 - 服务发现的配置已经更改：`cluster.discovery` 改为 **cluster.discovery_strategy**。
-- 新功能：[集群调用设置](https://docs.emqx.com/zh/enterprise/v5.0/configuration/configuration-manual.html#%E9%9B%86%E7%BE%A4%E8%B0%83%E7%94%A8%E8%AE%BE%E7%BD%AE)。
+- 新功能：[集群调用设置](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)。
 - 内部数据库中添加了可选的[最终一致性](https://docs.emqx.com/en/enterprise/v5.1/design/clustering.html#data-consistency)。
 
 ## MQTT

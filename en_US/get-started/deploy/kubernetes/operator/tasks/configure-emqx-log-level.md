@@ -8,7 +8,7 @@ Modify the log level of EMQX cluster.
 
 The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
 
-`apps.emqx.io/v2beta1 EMQX` supports configuration of EMQX cluster log level through `.spec.config.data`. The configuration of config.data can refer to the document: [Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual).
+`apps.emqx.io/v2beta1 EMQX` supports configuration of EMQX cluster log level through `.spec.config.data`. The configuration of config.data can refer to the document: [Configuration Manual](https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/).
 
 > This field is only allowed to be configured when creating an EMQX cluster, and does not support updating. If you need to modify the cluster log level after creating EMQX, please modify it through EMQX Dashboard.
 
@@ -49,7 +49,7 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 

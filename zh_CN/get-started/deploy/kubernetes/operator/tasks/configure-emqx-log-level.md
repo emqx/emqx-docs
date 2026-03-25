@@ -8,7 +8,7 @@
 
 下面是 EMQX Custom Resource 的相关配置，你可以根据希望部署的 EMQX 的版本来选择对应的 APIVersion，具体的兼容性关系，请参考 [EMQX Operator 兼容性](../operator.md):
 
-`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.config.data` 来配置 EMQX 集群日志等级，EMQX 配置可以参考文档：[配置手册](https://www.emqx.io/docs/zh/v5.1/configuration/configuration-manual.html#%E8%8A%82%E7%82%B9%E8%AE%BE%E7%BD%AE)。
+`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.config.data` 来配置 EMQX 集群日志等级，EMQX 配置可以参考文档：[配置手册](https://docs.emqx.com/zh/emqx/v${CE_VERSION}/hocon/)。
 
 > 这个字段只允许在创建 EMQX 集群的时候配置，不支持更新。如果在创建 EMQX 之后需要修改集群日志等级，请通过 EMQX Dashboard 进行修改。
 
@@ -46,7 +46,7 @@
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 
