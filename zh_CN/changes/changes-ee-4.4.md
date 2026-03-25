@@ -2,7 +2,7 @@
 
 ## e4.4.34
 
-*发布日期: 2026-03-20*
+*发布日期: 2026-03-25*
 
 ### 增强
 
@@ -25,6 +25,10 @@
 - 优化 Helm Chart 启动行为。
 
   默认 `podManagementPolicy` 调整为 `OrderedReady`，并在 `k8s`/`dns` 发现模式下增加 DNS 就绪等待 init container，以提升集群启动稳定性。
+
+- 优化了 ehttpc 对队头阻塞的处理：检测到阻塞时，现在会自动断开并重新连接，避免少量长时间运行的请求阻塞整个连接。
+  
+  这一改进影响所有依赖 ehttpc 的组件，包括 HTTP ACL 与认证、WebHook 资源、IoTDB 资源、SAP Event Mesh 资源以及 GCP PubSub 资源。
 
 ### 修复
 

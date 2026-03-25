@@ -2,7 +2,7 @@
 
 ## e4.4.34
 
-*Release Date: 2026-03-20*
+*Release Date: 2026-03-25*
 
 ### Enhancements
 
@@ -25,6 +25,10 @@
 - Improved Helm Chart startup behavior.
 
   The default `podManagementPolicy` is changed to `OrderedReady`, and a DNS-wait init container is added for `k8s`/`dns` discovery modes to improve cluster bootstrap stability.
+  
+- Improved `ehttpc` handling of head-of-line blocking: when blocking is detected, it now automatically disconnects and reconnects, preventing a small number of long-running requests from blocking the entire connection.
+  
+  This improvement affects all components that rely on ehttpc, including HTTP ACL and authentication, WebHook resources, IoTDB resources, SAP Event Mesh resources, and GCP PubSub resources.
 
 ### Bug Fixes
 
