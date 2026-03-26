@@ -55,31 +55,116 @@ EMQX 提供 `emqx_prometheus` 插件，用于将系统的监控数据输出到�
 
 > 从 EMQX Enterprise v4.1.0 开始，emqx_statsd 更名为 emqx_prometheus，相关插件名称、目录均有变更。
 
-EMQX 提供 [emqx_prometheus](https://github.com/emqx/emqx-prometheus) 插件，用于将系统的监控数据输出到第三方的监控系统中。
+EMQX Enterprise 支持两种与 Prometheus 集成的方式：
 
-以 [Prometheus](https://prometheus.io) 为例：
+- **推送模式**（全版本）：[`emqx_prometheus`](https://github.com/emqx/emqx-prometheus) 插件定期将指标推送到 Prometheus Pushgateway，再由 Prometheus Server 拉取。
+- **拉取模式**（e4.4.34+）：Prometheus Server 直接抓取 EMQX 内置的 HTTP 端点 `/api/v4/emqx_prometheus`，无需 Pushgateway。
 
-`emqx_prometheus` 支持将数据推送至 Pushgateway 中，然后再由 Promethues Server 拉取进行存储。
+## 推送模式：`emqx_prometheus` 插件
 
-注意：`emqx_prometheus` 不支持 Prometheus 的 Pull 操作。
+```
+EMQX → [emqx_prometheus 插件] → Pushgateway → Prometheus Server
+```
 
-## 配置
+`emqx_prometheus` 插件内部会启动一个定时器，使其每间隔一段时间便采集 EMQX 中的监控数据，并推送至 Pushgateway。
 
-`emqx_prometheus` 插件内部会启动一个定时器，使其每间隔一段时间便采集 EMQX 中的监控数据。
+> 注意：`emqx_prometheus` 插件不支持被 Prometheus 直接抓取，必须通过 Pushgateway 中转。
 
-`emqx_prometheus` 推送的监控数据包含的具体字段和含义，参见：[Metrics & Stats](../advanced/metrics-and-stats.md)
+### 启用
+
+打开 EMQX Dashboard，进入**模块**页面，添加 **[EMQX Prometheus Agent](../modules/prometheus.md)**。
+
+### 配置
 
 配置文件位于 `etc/plugins/emqx_prometheus.conf`，其中：
 
-|  配置项             | 类型    | 可取值    | 默认值                | 说明                           |
-| ------------------- | ------- | --------- | --------------------- | ------------------------------ |
-| push.gateway.server | string  | -         | http://127.0.0.1:9091 | Prometheus 的 PushGateway 地址 |
-| interval            | integer | > 0       | 5000                  | 推送间隔，单位：毫秒           |
+| 配置项              | 类型    | 默认值                | 说明                           |
+| ------------------- | ------- | --------------------- | ------------------------------ |
+| push.gateway.server | string  | http://127.0.0.1:9091 | Prometheus 的 PushGateway 地址 |
+| interval            | integer | 15000                 | 推送间隔，单位：毫秒           |
+
+`emqx_prometheus` 推送的监控数据包含的具体字段和含义，参见：[Metrics & Stats](../advanced/metrics-and-stats.md)。
 
 ### Grafana 数据模板
 
-`emqx_prometheus` 插件提供了 Grafana 的 Dashboard 的模板文件。这些模板包含了所有 EMQX 监控数据的展示。用户可直接导入到 Grafana 中，进行显示 EMQX 的监控状态的图标。
+`emqx_prometheus` 插件提供了 Grafana 的 Dashboard 模板文件，包含所有 EMQX 监控数据的展示。用户可直接导入到 Grafana 中查看 EMQX 监控状态。
 
-模板文件位于：[emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template)。
+模板文件位于：[emqx_prometheus/grafana_template](https://github.com/emqx/emqx-prometheus/tree/master/grafana_template)
+
+## 拉取模式：HTTP 端点
+
+> 从 EMQX Enterprise e4.4.34 开始支持。
+
+```
+Prometheus Server → scrape → EMQX HTTP 端点
+```
+
+在 Prometheus 中配置抓取以下端点：
+
+```
+http://localhost:8081/api/v4/emqx_prometheus?type=prometheus
+```
+
+> 注意：默认响应格式为 JSON（`type=json`），需添加 `?type=prometheus` 参数以获取 Prometheus text 格式数据。
+
+## HTTP API 监控指标
+
+> 从 EMQX Enterprise e4.4.34 开始支持。
+
+从 e4.4.34 开始，EMQX Enterprise 新增两个用于监控 HTTP API 请求性能的指标。这些指标会自动包含在 `emqx_prometheus` 插件的数据采集中，无需额外配置，可通过推送模式和拉取模式两种方式获取。
+
+如需直接以 JSON 格式查询请求计数，可使用以下端点：
+
+```
+GET /api/v4/http_api_metrics
+```
+
+### 指标列表
+
+| 指标名 | 类型 | 标签 | 说明 |
+| ------ | ---- | ---- | ---- |
+| `emqx_http_api_request_total` | Counter | `result`=`success` \| `failure` | HTTP API 请求总数 |
+| `emqx_http_api_request_duration_milliseconds` | Histogram | 无 | HTTP API 请求耗时分布（毫秒） |
+
+### 结果分类
+
+`emqx_http_api_request_total` 指标的 `result` 标签按以下规则分类：
+
+- **success**：HTTP 状态码为 200 且业务返回码 `code=0`。
+- **failure**：所有其他情况，包括：
+  - 鉴权失败（HTTP 401）
+  - 路由不存在（HTTP 404）
+  - 服务端异常（HTTP 500）
+  - 业务错误码不为 0
+  - 权限不足（permission denied）
+
+### 耗时直方图
+
+`emqx_http_api_request_duration_milliseconds` 使用以下 bucket 边界（单位：毫秒）：
+
+`5, 10, 25, 50, 100, 250, 500, 1000`
+
+### 在 Prometheus 中查询
+
+```promql
+# 查看 API 请求速率（每秒请求数）
+rate(emqx_http_api_request_total[5m])
+
+# 按结果分组查看请求速率
+sum by (result) (rate(emqx_http_api_request_total[5m]))
+
+# 请求失败率
+sum(rate(emqx_http_api_request_total{result="failure"}[5m]))
+/
+sum(rate(emqx_http_api_request_total[5m]))
+
+# 请求耗时 P99
+histogram_quantile(0.99, rate(emqx_http_api_request_duration_milliseconds_bucket[5m]))
+
+# 请求平均耗时
+rate(emqx_http_api_request_duration_milliseconds_sum[5m])
+/
+rate(emqx_http_api_request_duration_milliseconds_count[5m])
+```
 
 {% endemqxee %}
