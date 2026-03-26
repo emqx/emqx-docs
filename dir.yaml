@@ -971,6 +971,14 @@
   path: emqx-ai/overview
   collapsed: true
   children:
+    - title_en: A2A over MQTT
+      title_cn: A2A over MQTT
+      title_ja: A2A over MQTT
+      path: emqx-ai/a2a-over-mqtt/overview
+      collapsed: true
+      children:
+        - emqx-ai/a2a-over-mqtt/architecture
+        - emqx-ai/a2a-over-mqtt/manage-agents
     - title_en: MCP over MQTT
       title_cn: MCP over MQTT
       title_ja: MCP over MQTT
