@@ -3,9 +3,15 @@ EMQX Broker provides HTTP APIs for integration with external systems, such as qu
 
 EMQX Broker's HTTP API service listens on port 8081 by default. You can modify the listening port through the configuration file of  `etc/plugins/emqx_management.conf`, or enable HTTPS listening. All API calls start with `api/v4` after [EMQX Broker 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0).
 
-## Interface security
-EMQX Broker's HTTP API uses the method of [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication). The `id` and ` password` must be filled with AppID and AppSecret respectively.
-The default AppID and AppSecret are: `admin/public`. You can modify and add AppID / AppSecret in the left menu bar of Dashboard by selecting "Manage"-> "Apps".
+## API Authentication
+
+The HTTP API (port 8081) uses [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) with an API Key's AppID and AppSecret as credentials. The default AppID and AppSecret are `admin/public`.
+
+{% emqxee %}
+
+Each API Key can be configured with independent write permissions per API category, following the principle of least privilege. For details on creating, configuring, and managing API Keys, see [API Key](./api-key.md).
+
+{% endemqxee %}
 
 ## Response code
 ### HTTP status codes

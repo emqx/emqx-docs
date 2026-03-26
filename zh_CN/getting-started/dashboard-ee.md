@@ -73,8 +73,8 @@ Dashboard 界面如下图所示，包含左侧导航栏、顶部控制栏和中�
   - 监听协议：监听的网络/应用协议，包含协议与功能信息：
       - mqtt:ssl： MQTT TCP TLS 加密协议，默认最大连接数 102400
       - mqtt:tcp： MQTT TCP 协议，默认最大连接数 1024000
-      - <http:dashboard：Dashboard> 使用的 HTTP 协议，默认最大连接数 512
-      - <http:management：EMQ> X REST API 使用的 HTTP 协议，默认最大连接数 512
+      - http:dashboard：Dashboard 使用的 HTTP 协议，默认最大连接数 512
+      - http:management：EMQX REST API 使用的 HTTP 协议，默认最大连接数 512
       - mqtt:ws：MQTT WebSocket 协议，默认最大连接数 102400
       - mqtt:wss：MQTT WebSocket TLS 加密协议，默认最大连接数 102400
   - 监听地址：监听绑定的网络地址与端口，默认监听全部 IP 地址；
@@ -89,9 +89,7 @@ Dashboard 界面如下图所示，包含左侧导航栏、顶部控制栏和中�
 1.  节点内每个监听协议连接数不能超过配置文件最大连接数；
 2.  集群内 mqtt 协议的连接总数不能超过 License 规格上限。
 
-系统调优与当前资源使用情况也可能会影响最大连接数，此处请参照
-[测试调优](https://docs.emqx.io/broker/v3/cn/tune.html) 或联系 EMQ
-技术人员进行确认。
+系统调优与当前资源使用情况也可能会影响最大连接数，如有疑问请联系 EMQ 技术人员进行确认。
 
 ![image-20191227144910037](./assets/dashboard-ee/image-20191227144910037.png)
 
@@ -177,15 +175,11 @@ RabbitMQ，重新发布到新的主题甚至是另一个 Broker 集群中，每�
 
 1.  选择发布到 t/\# 主题的消息，并筛选出全部字段：
 
-<!-- end list -->
-
 ```sql
 SELECT * FROM "t/#"
 ```
 
 2.  选择发布到 t/a 主题的消息，并从 JSON 格式的消息内容中筛选出 "x" 字段：
-
-<!-- end list -->
 
 ```sql
 SELECT payload.x as x FROM "t/a"
@@ -195,10 +189,7 @@ SELECT payload.x as x FROM "t/a"
 内置事件，内置事件提供更精细的消息控制和客户端动作处理能力，可用在
 QoS 1 QoS 2 的消息抵达记录、设备上下线记录等业务中。
 
-1.  选择客户端连接事件，筛选 Username 为 'emqx'
-的设备并获取连接信息：
-
-<!-- end list -->
+1.  选择客户端连接事件，筛选 Username 为 'emqx' 的设备并获取连接信息：
 
 ```sql
 SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = 'emqx'
@@ -304,27 +295,15 @@ Dashboard 上模块的创建、启动、停止操作是集群同步的，如果�
 
 ### 用户
 
-Dashboard 登录用户管理，您可以创建、编辑、删除用户，如果忘记用户密码，可通过管理命令进行密码重置。
-
-要添加新用户，只需点击页面上的**创建**按钮。一个弹出的对话框将提示您输入必要的用户详细信息。
+Dashboard 登录用户管理，支持创建、编辑和删除用户，并通过基于角色的访问控制（RBAC）管理权限。
 
 ![user](./assets/user.png)
 
-从 EMQX 4.4.22 开始，Dashboard 用户引入了 基于角色的访问控制 （RBAC）功能。RBAC 允许根据用户在组织中的角色为其分配权限。此功能简化了授权管理，通过限制访问权限提高安全性，并改善组织合规性，因此是 Dashboard 必不可少的访问控制机制。
-
-您可以在创建用户时从**角色**下拉菜单中选择角色。目前，可以为用户设置以下两种预定义角色之一：
-
-- 管理员
-
-  管理员拥有对 EMQX 所有功能和资源的完全管理访问权限，包括客户端管理、系统配置、API 密钥以及用户管理。
-
-- 查看者
-
-  查看者可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
+创建用户时，可从**角色**下拉菜单中选择 `administrator`（完整管理权限）或 `viewer`（只读权限）。
 
 ![user-role](./assets/user-role.png)
 
-输入完毕后，点击**确定**按钮即可生成新用户。对于进一步的用户管理，如编辑用户信息、更新密码或删除用户，您可以点击用户列表末端的**编辑**按钮。
+用户与角色管理的完整说明，包括 API 操作和多因素认证，详见 [Dashboard 用户与角色管理](./dashboard-users.md)。
 
 ### 黑名单
 
