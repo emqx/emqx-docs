@@ -132,11 +132,120 @@ SAML 2.0 SSO 涉及两个角色：
 
    ```bash
    # 转换证书
-   ./scripts/convert-keycloak-certs.sh <downloaded-cert-file> sp_public.pem cert
-   
+   ./convert-keycloak-certs.sh <downloaded-cert-file> sp_public.pem cert
+
    # 转换私钥
-   ./scripts/convert-keycloak-certs.sh <downloaded-key-file> sp_private.pem key
+   ./convert-keycloak-certs.sh <downloaded-key-file> sp_private.pem key
    ```
+
+   <details>
+   <summary>convert-keycloak-certs.sh</summary>
+
+   ```bash
+   #!/bin/bash
+   #
+   # Convert Keycloak exported certificate and private key to PEM format
+   #
+   # Keycloak exports certificates/keys as raw base64 (DER format without PEM headers).
+   # This script converts them to standard PEM format.
+   #
+   # Usage:
+   #   ./convert-keycloak-certs.sh <input_file> <output_file> [cert|key]
+   #
+   # Examples:
+   #   ./convert-keycloak-certs.sh public public.pem cert
+   #   ./convert-keycloak-certs.sh private.key private.pem key
+   #
+
+   set -e
+
+   usage() {
+       echo "Usage: $0 <input_file> <output_file> [cert|key]"
+       echo ""
+       echo "Arguments:"
+       echo "  input_file   - Raw base64 encoded certificate or key file from Keycloak"
+       echo "  output_file  - Output PEM file path"
+       echo "  type         - Type of file: 'cert' for certificate, 'key' for private key"
+       echo "                 (optional, will auto-detect if not specified)"
+       echo ""
+       echo "Examples:"
+       echo "  $0 public public.pem cert"
+       echo "  $0 private.key private.pem key"
+       echo "  $0 myfile myfile.pem  # auto-detect type"
+       exit 1
+   }
+
+   if [ $# -lt 2 ]; then
+       usage
+   fi
+
+   INPUT_FILE="$1"
+   OUTPUT_FILE="$2"
+   TYPE="${3:-auto}"
+
+   if [ ! -f "$INPUT_FILE" ]; then
+       echo "Error: Input file '$INPUT_FILE' not found"
+       exit 1
+   fi
+
+   # Read and clean the input (remove whitespace and newlines)
+   CONTENT=$(tr -d '\n\r\t ' < "$INPUT_FILE")
+
+   # Auto-detect type based on content prefix
+   if [ "$TYPE" = "auto" ]; then
+       # MIIJ... typically indicates a private key (large size)
+       # MIIE/MIIC/MIID... typically indicates a certificate
+       if echo "$CONTENT" | grep -qE '^MIIJ|^MIIJ'; then
+           TYPE="key"
+           echo "Auto-detected: RSA Private Key (large key, likely 4096-bit)"
+       elif echo "$CONTENT" | grep -qE '^MIIE|^MIID|^MIIC|^MIIB'; then
+           TYPE="cert"
+           echo "Auto-detected: X.509 Certificate"
+       else
+           echo "Warning: Could not auto-detect type, assuming certificate"
+           TYPE="cert"
+       fi
+   fi
+
+   # Determine PEM headers based on type
+   case "$TYPE" in
+       cert|certificate)
+           HEADER="-----BEGIN CERTIFICATE-----"
+           FOOTER="-----END CERTIFICATE-----"
+           VERIFY_CMD="openssl x509 -in '$OUTPUT_FILE' -noout -subject -dates"
+           ;;
+       key|privatekey|private)
+           HEADER="-----BEGIN RSA PRIVATE KEY-----"
+           FOOTER="-----END RSA PRIVATE KEY-----"
+           VERIFY_CMD="openssl rsa -in '$OUTPUT_FILE' -check -noout"
+           ;;
+       *)
+           echo "Error: Unknown type '$TYPE'. Use 'cert' or 'key'"
+           exit 1
+           ;;
+   esac
+
+   # Convert to PEM format (64 char line width)
+   echo "$HEADER" > "$OUTPUT_FILE"
+   echo "$CONTENT" | fold -w 64 >> "$OUTPUT_FILE"
+   echo "$FOOTER" >> "$OUTPUT_FILE"
+
+   echo "Created: $OUTPUT_FILE"
+
+   # Verify the output
+   echo ""
+   echo "Verifying..."
+   if eval "$VERIFY_CMD" 2>&1; then
+       echo ""
+       echo "Success! PEM file is valid."
+   else
+       echo ""
+       echo "Warning: Verification failed. The file may be corrupted or in wrong format."
+       exit 1
+   fi
+   ```
+
+   </details>
 
 4. 将转换后的 PEM 文件上传或粘贴至 EMQX 的 **SP 公钥/证书**和 **SP 私钥**字段。
 
