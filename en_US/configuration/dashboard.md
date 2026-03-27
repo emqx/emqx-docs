@@ -128,7 +128,7 @@ Where,
 
 - `swagger_support = true`
 
-  Enable API documentation endpoints, including the Swagger UI (`/api-docs`) and the API spec pages (`/api-spec.html`, `/api-spec.md`, `/api-spec.json`). Set to `false` to disable all API documentation endpoints.
+  Enable API documentation endpoints, including the API spec pages (`/api-spec.html`, `/api-spec.md`, `/api-spec.json`) and the Swagger UI (`/api-docs`, deprecated — will be removed in v7). Set to `false` to disable all API documentation endpoints.
 
 - `default_password`
 

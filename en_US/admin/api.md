@@ -9,7 +9,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 | `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
 | `/api-spec.md` | Markdown | API reference in Markdown format, suited for AI agents and automation tools. |
 | `/api-spec.json` | JSON | OpenAPI 3.0 specification in JSON format, suited for scripts and programmatic tooling. |
-| `/api-docs/index.html` | HTML | Interactive Swagger UI with "Try it" support for testing API calls directly in the browser. |
+| `/api-docs/index.html` | HTML | Interactive Swagger UI with "Try it" support for testing API calls directly in the browser. **Deprecated**: will be removed in v7. |
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
 
