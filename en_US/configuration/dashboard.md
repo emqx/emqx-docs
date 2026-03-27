@@ -128,7 +128,7 @@ Where,
 
 - `swagger_support = true`
 
-  Enable Swagger (OpenAPI) UI available at the endpoint `/api-docs`. Set to `false` to disable.
+  Enable API documentation endpoints, including the Swagger UI (`/api-docs`) and the API spec pages (`/api-spec.html`, `/api-spec.md`, `/api-spec.json`). Set to `false` to disable all API documentation endpoints.
 
 - `default_password`
 

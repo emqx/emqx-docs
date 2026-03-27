@@ -2,9 +2,18 @@
 
 EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
 
-After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../configuration/dashboard.md).
+EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
-The section introduces how to work with EMQX REST API.
+| Endpoint | Format | Description |
+| --- | --- | --- |
+| `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
+| `/api-spec.md` | Markdown | API reference in Markdown format, suited for AI agents and automation tools. |
+| `/api-spec.json` | JSON | OpenAPI 3.0 specification in JSON format, suited for scripts and programmatic tooling. |
+| `/api-docs/index.html` | HTML | Interactive Swagger UI with "Try it" support for testing API calls directly in the browser. |
+
+All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
+
+This section introduces how to work with the EMQX REST API.
 
 ## Basic Path
 
