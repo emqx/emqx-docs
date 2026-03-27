@@ -28,7 +28,18 @@ EMQX 不仅支持原生的 MQTT 发布/订阅模型，还扩展了一系列强�
 - [延迟发布](./mqtt-delayed-publish.md)
 - [自动订阅](./mqtt-auto-subscription.md)
 - [主题重写](./mqtt-topic-rewrite.md)
+- [订阅过滤器](../subscription-filter/subscription-filter-concept.md)
 - [消息队列](../message-queue/message-queue-concept.md)
+
+### 订阅过滤器（高级功能）
+
+[订阅过滤器](../subscription-filter/subscription-filter-concept.md)是 EMQX 6.2 引入的一项高级功能，在 MQTT 5.0 发布/订阅模型的基础上增加了订阅层面的内容过滤能力。通过在主题过滤器后附加过滤表达式，订阅方可指示 EMQX 只投递用户属性满足指定条件的消息。
+
+这一机制实现了精确的服务端消息路由，无需独立的主题层级结构，也无需修改发布方：
+
+- 基于任意 MQTT 5.0 用户属性键值对进行过滤
+- 通过逻辑与（`&`）组合多个条件
+- 完全在服务端执行，客户端无需承担任何过滤逻辑
 
 ### 消息队列（高级功能）
 
