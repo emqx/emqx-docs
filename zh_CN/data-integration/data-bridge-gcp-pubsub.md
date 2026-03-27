@@ -61,6 +61,41 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 ![GCP 服务账户凭证](./assets/gcp_pubsub/gcp-service-account.png)
 
+### 配置工作负载身份联合
+
+工作负载身份联合（WIF）允许 EMQX 无需持有服务账号密钥文件即可访问 GCP 资源。EMQX 将从外部身份提供商（如 Microsoft Azure）获取的 token 通过 GCP Security Token Service 换取临时 GCP token，再凭此模拟指定的 GCP 服务账号。Token 续期由 EMQX 自动处理。
+
+要使用 WIF，请在创建连接器之前在 GCP 项目中完成以下配置。
+
+1. 在 Google Cloud 控制台中，进入 **IAM 和管理** -> **工作负载身份联合**，创建一个工作负载身份池，并记录**池 ID** 和**项目编号**。
+
+2. 向该池添加提供商并记录**提供商 ID**。如使用基于 OIDC 的认证，请从外部身份提供商处获取 OAuth 2.0 客户端凭证（客户端 ID、客户端密钥和令牌端点 URI）。
+
+3. 授予工作负载身份池权限，使其能够模拟具有 Pub/Sub 主题访问权限的 GCP 服务账号。配置连接器时需要填写服务账号的电子邮件地址。
+
+   ::: tip
+
+   详细配置步骤请参阅 [配置工作负载身份联合](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers)。
+
+   :::
+
+**示例：Microsoft Azure（Entra ID）**
+
+在 [Microsoft Entra ID](https://portal.azure.com/) 中注册一个公开 API 的应用程序，并为其创建客户端密钥。配置连接器时使用以下值：
+
+| 连接器字段 | 值 |
+|---|---|
+| **OAuth Token 端点 URI** | `https://login.microsoftonline.com/<租户 ID>/oauth2/v2.0/token` |
+| **OAuth 客户端 ID** | 应用程序（客户端）ID，格式为 `api://<应用程序 ID>` |
+| **OAuth 客户端密钥** | 为该应用程序生成的客户端密钥 |
+| **OAuth 请求范围** | `api://<应用程序 ID>/.default` |
+
+::: tip 注意
+
+**OAuth 请求范围**必须与应用程序的受众（`aud`）完全匹配，否则与 GCP STS 的令牌交换将会失败。详情请参阅 Microsoft 文档中的 [OAuth 2.0 客户端凭证流](https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-client-creds-grant-flow)。
+
+:::
+
 ### 在 GCP Pub/Sub 中创建主题
 
 1. 打开 [Pub/Sub 控制台](https://console.cloud.google.com/cloudpubsub)，点击 **CREATE TOPIC**，输入自定义的 **Topic ID**，点击 **CREATE** 即可完成创建。
@@ -71,7 +106,7 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 ![GCP PubSub 创建订阅](./assets/gcp_pubsub/gcp-pubsub-subscription-create.png)
 
-3. 点击 **Subscription ID** → **MESSAGES** → **PULL** 可以在线查看发送到主题中的消息。
+3. 点击 **Subscription ID** -> **MESSAGES** -> **PULL** 可以在线查看发送到主题中的消息。
 
 ## 创建 GCP Pub/Sub 生产者连接器
 
@@ -80,7 +115,19 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 1. 转到 EMQX Dashboard，点击 **集成** -> **连接器**。
 2. 在页面的右上角点击 **创建**，在连接器选择页面选择 **Google PubSub 生产者**，然后点击 **下一步**。
 3. 输入连接器名称和描述，例如 `my-pubsubproducer`。名称用于将 GCP Pub/Sub 生产者 Sink 与连接器关联，并且必须在集群内唯一。
-4. 在 **GCP 服务账户凭证** 中，上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式的服务账户凭证。
+4. 在**认证**下拉菜单中选择认证方式并填写相应字段：
+   - **服务账号 JSON**：上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式服务账户凭证。
+   - **工作负载身份联合 (WIF)**：填写以下字段。前置条件请参见 [配置工作负载身份联合](#配置工作负载身份联合)。
+     - **GCP 项目 ID**：连接器所访问资源的 GCP 项目 ID。
+     - **GCP 项目编号**：连接器所访问资源的 GCP 项目编号。
+     - **服务账号邮箱**：需要模拟的服务账号电子邮件地址。
+     - **工作负载身份池 ID**：WIF 令牌交换中使用的工作负载身份池 ID。
+     - **工作负载身份提供商 ID**：WIF 令牌交换中使用的工作负载身份提供商 ID。
+     - **凭证类型**：外部身份提供商使用的凭证类型，目前支持 **OIDC 客户端凭证**，选择后填写以下字段：
+       - **OAuth 客户端 ID**：用于向 OAuth 服务器请求令牌的客户端 ID。
+       - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
+       - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
+       - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
 5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
 6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 生产者 Sink 的规则，以指定要转发到 GCP Pub/Sub 的数据。详细步骤请参见 [创建 GCP Pub/Sub 生产者 Sink 规则](#创建-gcp-pub-sub-生产者-sink-规则)。
 
@@ -159,8 +206,20 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 
 1. 转到 EMQX Dashboard，点击 **集成** -> **连接器**。
 2. 在页面的右上角点击 **创建**，在连接器选择页面选择 **Google PubSub 消费者**，然后点击 **下一步**。
-3. 输入连接器名称和描述，例如 `my-pubsubconsumer`。名称用于将 GCP Pub/Sub 生产者 Sink 与连接器关联，并且必须在集群内唯一。
-4. 在 **GCP 服务账户凭证** 中，上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式的服务账户凭证。
+3. 输入连接器名称和描述，例如 `my-pubsubconsumer`。名称用于将 GCP Pub/Sub 消费者连接器关联，并且必须在集群内唯一。
+4. 在**认证**下拉菜单中选择认证方式并填写相应字段：
+   - **服务账号 JSON**：上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式服务账户凭证。
+   - **工作负载身份联合 (WIF)**：填写以下字段。前置条件请参见 [配置工作负载身份联合](#配置工作负载身份联合)。
+     - **GCP 项目 ID**：连接器所访问资源的 GCP 项目 ID。
+     - **GCP 项目编号**：连接器所访问资源的 GCP 项目编号。
+     - **服务账号邮箱**：需要模拟的服务账号电子邮件地址。
+     - **工作负载身份池 ID**：WIF 令牌交换中使用的工作负载身份池 ID。
+     - **工作负载身份提供商 ID**：WIF 令牌交换中使用的工作负载身份提供商 ID。
+     - **凭证类型**：外部身份提供商使用的凭证类型，目前支持 **OIDC 客户端凭证**，选择后填写以下字段：
+       - **OAuth 客户端 ID**：用于向 OAuth 服务器请求令牌的客户端 ID。
+       - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
+       - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
+       - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
 5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
 6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 消费者 Source 的规则，以消费来自 GCP Pub/Sub 的数据并转发到 EMQX 本地。详细步骤请参见 [创建 GCP Pub/Sub 消费者 Source 规则](#创建-gcp-pub-sub-消费者-source-规则)。
 
