@@ -111,6 +111,16 @@ Through MCP, AI gains the ability to act, while devices gain a unified control i
 
 - [MCP over MQTT Protocol Overview](./mcp-over-mqtt/overview.md)
 
+### Coordination: A2A over MQTT — Agent-to-Agent Collaboration
+
+As intelligent hardware and AI agents proliferate, individual agents increasingly need to delegate tasks to, and collaborate with, other agents. The Agent-to-Agent (A2A) protocol defines how agents discover each other, exchange task requests, and stream results, forming a multi-agent system that can tackle complex workflows no single agent can handle alone.
+
+EMQX implements A2A over MQTT through its built-in A2A Registry, which records Agent Cards published by agents, tracks their connection state, and routes task requests between them using standard MQTT topics.
+
+#### Further Reading
+
+- [A2A over MQTT Overview](./a2a-over-mqtt/overview.md)
+
 ### Typical Intelligent Agent Interaction Scenarios
 
 - **Pure voice interaction**: Voice as the sole input; real-time, high-quality interaction can be achieved using WebRTC alone.
