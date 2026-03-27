@@ -85,7 +85,7 @@ Minimum required fields:
 | `name` | String | Human-readable agent name. |
 | `description` | String | Brief description of what the agent does. |
 | `version` | String | Version string, for example `"1.0.0"`. |
-| `url` | String (URI) | The agent's endpoint URI. For HTTP-based A2A interactions, this is the HTTP endpoint; for MQTT-registered agents, it identifies the broker endpoint (for example, `mqtts://broker.example.com:8883`). |
+| `url` | String (URI) | The agent's endpoint URI. |
 | `skills` | Array | At least one skill object, each with `id`, `name`, and `description`. |
 
 Example minimal Agent Card:

@@ -85,7 +85,7 @@ Agent Card 是 Agent 发布到其发现主题的 JSON 文档，描述 Agent 的�
 | `name` | String | 易于阅读的 Agent 名称。 |
 | `description` | String | Agent 功能的简短描述。 |
 | `version` | String | 版本字符串，例如 `"1.0.0"`。 |
-| `url` | String（URI） | Agent 的端点 URI。对于基于 HTTP 的 A2A 交互，这是 HTTP 端点；对于 MQTT 注册的 Agent，则标识 Broker 端点（例如 `mqtts://broker.example.com:8883`）。 |
+| `url` | String（URI） | Agent 的端点 URI。 |
 | `skills` | Array | 至少一个技能对象，每个对象包含 `id`、`name` 和 `description`。 |
 
 Agent Card 最小示例：
