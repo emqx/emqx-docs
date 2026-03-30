@@ -65,24 +65,23 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
    <img src="./assets/authz-MySQL_ee.png" alt="authz-MySQL_ee" style="zoom:67%;" />
 
-3. Follow the instructions below to do the configuration.
+3. Follow the instructions below to configure the authorization backend:
 
-   **Connect**: Fill in the information needed to connect MySQL.
+   - Enter the information for connecting to MySQL.
 
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Database**: MySQL database name.
-   - **Username**: Specify user name. 
-   - **Password**: Specify user password. 
+     - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+     - **Database**: MySQL database name.
+     - **Username**: Specify user name.
+     - **Password**: Specify user password.
 
-   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md#tls-for-external-resource-access).
 
-   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
+   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement).
 
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: **8**. 
-
-   **Authorization configuration**: Fill in the authorization-related settings:
-
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
+   - **Advanced Settings**: Configure connection pool, timeout, and prepared statement behavior.
+     - **Connection Pool Size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`.
+     - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection attempt has timed out. Units supported include milliseconds, second, minute, and hour. Default: `15` seconds.
+     - **Disable Prepared Statements** (optional): Disable the use of prepared statements for database queries. Enable this option if your MySQL proxy or middleware (for example, PGBouncer or Supabase in Transaction mode) does not support session-level features such as prepared statements. Default: disabled.
 
 4. Click **Create** to finish the settings.
 
@@ -90,7 +89,7 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
 You can configure the EMQX MySQL authorizer with EMQX configuration items.
 
-The MySQL authorizer is identified by type `mysql`. <!--For detailed configuration, see [authz:mysql](../../configuration/configuration-manual.html#authz:mysql).-->
+The MySQL authorizer is identified by type `mysql`. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 Sample configuration:
 
@@ -103,6 +102,8 @@ Sample configuration:
   password = "public"
   server = "127.0.0.1:3306"
   query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+  connect_timeout = "15s"
+  disable_prepared_statements = false
 }
 ```
 

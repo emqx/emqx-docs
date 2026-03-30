@@ -57,83 +57,38 @@ query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE usern
 
 1. 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)，点击左侧目录上的 **访问控制** -> **客户端授权** 进入授权检查器页面。
 2. 点击右上角的**创建**，然后点击选择 **PostgreSQL** 作为**数据源**。单击**下一步**。
-3. 按照以下说明进行配置。
+3. 按照以下说明配置数据源：
+   - PostgreSQL 数据库的连接设置：
+     - **服务**：填入 PostgreSQL 服务器地址（`host:port`）。
+     - **数据库**：填入 PostgreSQL 的数据库名称。
+     - **用户名**：填入用户名称。
+     - **密码**：填入用户密码。
+   - **启用 TLS**：如果要启用 TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和 TLS](../../network/overview.md#启用-tls-加密访问外部资源)。
+   - **SQL**：根据表结构填入查询 SQL，具体要求见[表结构与查询语句](#表结构与查询语句)。
+   - **高级设置**：配置连接池、超时及预处理语句相关选项。
+     - **连接池大小**（可选）：填入一个整数用于指定从 EMQX 节点到 PostgreSQL 数据库的并发连接数；默认值：`8`。
+     - **连接超时**（可选）：指定 EMQX 等待数据库连接建立的最长时间。支持毫秒、秒、分钟、小时等单位。默认值：`15` 秒。
+     - **禁用预处理语句**（可选）：禁止在数据库查询中使用预处理语句（Prepared Statements）。如果您的 PostgreSQL 代理或中间件（例如事务模式下的 PGBouncer 或 Supabase）不支持会话级功能（如预处理语句），请启用此选项。默认：禁用。
+4. 点击**创建**完成相关配置。
 
-   - **服务**：指定 EMQX 要连接的服务器地址（`host:port`）。
-   
-   - **数据库**： PostgreSQL 数据库名称。
-   - **用户名**（可选）： 指定用户名。
-   - **密码**（可选）： 指定用户密码。
-   - **启用 TLS**：如果要启用 TLS，请启用此项。
-   - **连接池大小**（可选）： 输入一个整数值，以定义从 EMQX 节点到 PostgreSQL 的并发连接数。默认值： `8`.
-   - **禁用预处理语句**（可选）：如果使用的 PostgreSQL 服务不支持预处理语句，如事务模式下的 PGBouncer 或 Supabase，请启用此选项。该选项在 EMQ X v5.7.1 中引入。
-   - **SQL**： 根据数据模式填写查询语句。有关详细信息，请参阅 [表结构与查询语句](#表结构与查询语句)。
-4. 单击**创建**完成设置。
+## 通过配置文件配置
 
-## 配置项
+您也可以通过配置文件完成以上配置。详细参数说明请参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-<!--详细配置请参考 [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql)。-->
+PostgreSQL 授权器由 `type = postgresql` 标识，配置示例：
 
-PostgreSQL 授权器由 `type=postgresql` 标识。
-
-配置示例：
-
-```hcl
+```bash
 {
   type = postgresql
 
+  server = "127.0.0.1:5432"
   database = "mqtt"
   username = "postgres"
   password = "public"
-  server = "127.0.0.1:5432"
+  pool_size = 8
+  connect_timeout = "15s"
+  disable_prepared_statements = false
+
   query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
-
-### query
-
-必选的字符串类型配置，用于查询当前客户端具有的权限列表，支持[占位符](./authz.md#数据查询占位符)。
-
-出于安全原因占位符值不会直接拼接 SQL，而是通过 PostgreSQL 预处理插入，能够有效预防 SQL 注入。
-
-例如，以下查询语句：
-
-```sql
-SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}
-```
-
-将首先被转换为以下 Prepared statement：
-
-```sql
-SELECT permission, action, topic FROM mqtt_acl WHERE username = $1
-```
-
-然后使用 `${username}` 执行查询。
-
-### server
-
-必选的字符串类型配置，用于指定 PostgreSQL 服务器地址，格式为 `host:port`。
-
-### database
-
-必选的字符串类型配置，用于指定 PostgreSQL 数据库名称。
-
-### username
-
-可选的字符串类型配置，用于指定 PostgreSQL 用户名。
-
-### password
-
-可选的字符串类型配置，用于指定 PostgreSQL 用户密码。
-
-#### auto_reconnect
-
-可选的布尔类型配置，用于指定 EMQX 是否会在连接断开时自动重新连接到 PostgreSQL，默认值为 `true`。
-
-### pool_size
-
-可选的整型配置，用于指定 EMQX 节点到 PostgreSQL 服务器的并发连接数，默认值为 8。
-
-### ssl
-
-用于 [安全连接到 PostgreSQL](https://www.postgresql.org/docs/current/ssl-tcp.html) 的标准 SSL 选项。
