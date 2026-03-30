@@ -1,5 +1,172 @@
 # EMQX 企业版 v6 版本
 
+## 6.2.0
+
+*发布日期: 2026-03-31*
+
+在升级到 EMQX 6.2.0 之前，请务必查阅不兼容变更和已知问题。
+
+### 增强
+
+#### AI 互操作性
+
+- [#16840](https://github.com/emqx/emqx/pull/16840) 实现了 Agent-to-Agent（A2A）Card Registry。该功能允许自主 AI 智能体通过标准化、事件驱动的 MQTT 5.0 机制进行发现与协作。
+
+- [#16958](https://github.com/emqx/emqx/pull/16958) 新增 `/api-spec.md` 和 `/api-spec.html` 端点，用于支持对 EMQX HTTP API 的分层发现。这些端点尤其适合 AI 智能体和其他工具，可按需获取特定 API 分片，而无需拉取完整的 API 规范文件。EMQX 现在可以提供按标签划分和支持下钻的 OpenAPI 分片。当 `dashboard.swagger_support` 设置为 `false` 时，这些端点将与 Swagger 一同被禁用。
+
+  同时新增了 `emqx ctl api_keys` 命令，支持通过命令行对 API Key 进行列出、查看、添加、删除、启用和禁用操作。
+
+#### 核心 MQTT 功能
+
+- [#16612](https://github.com/emqx/emqx/pull/16612) 引入 `emqx_setopts` 应用，支持通过 `$SETOPTS` 主题对服务端选项进行动态更新，包括 keepalive 控制，以及对未知 `$SETOPTS/*` 发布的告警与抑制机制。
+
+- [#16887](https://github.com/emqx/emqx/pull/16887) 新增可选的订阅消息过滤功能，由 `mqtt.subscription_message_filter` 配置项控制。
+
+  启用后，客户端可以使用 `?` 后缀进行订阅，例如 `sensor/+/temperature?location=roomA&value>25`，EMQX 将仅投递 MQTT 5.0 User Properties 满足该过滤表达式的消息。禁用时，`?` 将作为主题过滤器文本的一部分，不执行额外过滤。
+
+  因订阅过滤不匹配而被丢弃的消息将通过现有的 `delivery.dropped` 事件上报，原因为 `subscription_filter`，并由新增的 `delivery.dropped.filter` 指标进行统计。
+
+- [#16929](https://github.com/emqx/emqx/pull/16929) 引入两种新的限速器类型：`delivery_messages` 和 `delivery_bytes`。与现有的 `messages` 和 `bytes` 限速器（限制单个客户端的发布速率）不同，新限速器用于限制单个客户端从任意来源接收消息的速率。当达到限制时，QoS 0 消息将被丢弃，QoS 1/2 消息将在内部排队并按配置的重试间隔调度重试。
+
+  新限速器仅支持内存会话（`durable_sessions.enable = false`）。默认值为不限速，保持向后兼容。
+
+- [#16779](https://github.com/emqx/emqx/pull/16779) 改进了对格式错误的首个报文的处理，将其归类为无效 CONNECT 报文，并在日志中提供更详细的协议提示信息。
+
+#### 数据集成
+
+- [#16589](https://github.com/emqx/emqx/pull/16589) 将规则引擎使用的 `jq` 库升级至 1.8.1 版本。
+
+  注意：jq 1.8.1 相较于 1.6.1 版本引入了若干细微的不兼容变更：
+
+  - 空字符串作为 jq 程序现在会报错，请改用 `"."`。
+  - 字符串函数 `indices/1`、`index/1` 和 `rindex/1` 现在使用码点（code point）索引而非字节索引；如需字节索引，请使用 `utf8bytelength/0`。
+  - `tonumber/0` 拒绝处理包含前导或尾部空白的数字字符串，请在调用前先使用 `trim/0`。
+  - `last(empty)` 现在不产生任何输出，与 `first(empty)` 行为保持一致。
+  - `limit/2` 在计数为负数时会报错，而不再静默接受。
+  - 现已支持 Tcl 风格的多行注释，可能对现有代码的解析产生细微影响。
+  - 十进制数字现在转换为 binary64（double）而非 decimal64。
+  - `nth/2` 在索引超出范围时返回空值而非报错。
+  - 字符串与 0 或小于 1 的数相乘，现在返回空字符串而非原字符串。
+
+- [#16634](https://github.com/emqx/emqx/pull/16634) 外部 HTTP Schema 校验现已支持 GET 请求。Schema 注册表条目可以指定 HTTP 方法，默认仍为 POST。
+
+- [#16647](https://github.com/emqx/emqx/pull/16647) 在 GreptimeDB 和 EMQX Tables 动作中，不带 `i` 或 `u` 后缀的整数值现在会在发送至数据库前自动转换为 `float64` 类型。
+
+- [#16707](https://github.com/emqx/emqx/pull/16707) 新增 Azure Event Grid 数据集成，支持向 Azure Event Grid 发布消息及从中消费消息。
+
+- [#16750](https://github.com/emqx/emqx/pull/16750) GCP 连接器（GCP PubSub 生产者/消费者、BigQuery）现已通过 Service Account 模拟方式支持工作负载身份联合（Workload Identity Federation，WIF）认证。当前仅支持使用 Client Credentials 授权类型的 OIDC 工作负载身份池提供程序。
+
+- [#16773](https://github.com/emqx/emqx/pull/16773) 使用 MQTT 连接器并启用 SSL 时，如果未设置服务器名称指示（SNI），现在将自动使用服务器主机名填充该字段。
+
+- [#16893](https://github.com/emqx/emqx/pull/16893) 新增用于向 QuasarDB 追加写入数据的连接器和动作。
+
+- [#16962](https://github.com/emqx/emqx/pull/16962) 改进了 Kafka Source 的轮询行为。当没有可用记录时，Fetch 请求现在会短暂等待数据到来，而不是立即返回空批次。
+
+#### 访问控制
+
+- [#16597](https://github.com/emqx/emqx/pull/16597) 改进了 MySQL 和 PostgreSQL 认证与授权中 SQL 模板对非法变量和带引号变量的处理方式。
+
+- [#16616](https://github.com/emqx/emqx/pull/16616) 为 SSO OIDC 后端新增配置项，支持通过 `jq` 表达式在创建新 Dashboard 用户时提取所需的角色和命名空间。
+
+- [#16759](https://github.com/emqx/emqx/pull/16759) 在 Variform 表达式中新增 `timestamp_s` 和 `timestamp_ms` 函数，分别用于获取当前系统时间（秒和毫秒）。
+
+- [#16817](https://github.com/emqx/emqx/pull/16817) 新增重置认证和授权指标计数器的 REST API 端点：
+  - `POST /authentication/:id/metrics/reset`
+  - `POST /authorization/sources/:type/metrics/reset`
+
+- [#16849](https://github.com/emqx/emqx/pull/16849) 为插件 API 端点（`/api/v5/plugin_api/...`）新增基于 Cookie 的认证回退机制。
+
+#### 网关
+
+- [#16734](https://github.com/emqx/emqx/pull/16734) 为 NATS 网关新增 `token`、`nkey` 和 `jwt` 内置认证方式，按顺序依次尝试。
+
+#### 部署与安全
+
+- [#16653](https://github.com/emqx/emqx/pull/16653) 支持通过 `node.dist_bind_address` 配置 Erlang 分布式监听器的绑定地址。
+
+- [#16888](https://github.com/emqx/emqx/pull/16888) 更新了 EMQX 安装包中用于本地开发和测试的默认 TLS 证书。新证书仅签发给 `localhost` 及回环地址。
+
+- [#16916](https://github.com/emqx/emqx/pull/16916) `emqx_cert_expiry_at` Prometheus 指标现在会同时考虑 MQTT 监听器中托管证书包所含证书的到期日期。
+
+#### 性能
+
+- [#16500](https://github.com/emqx/emqx/pull/16500) 优化了空闲内存占用，降低了维护基于速率的指标的开销。注意：5 分钟平均速率指标现在采用 EWMA（指数加权移动平均）计算，而非精确的滚动平均值。
+
+- [#16547](https://github.com/emqx/emqx/pull/16547) 默认禁用 TLS 1.2 会话复用，以降低 TLS 握手开销。
+
+- [#16794](https://github.com/emqx/emqx/pull/16794) 默认启用节点级认证与授权缓存。
+
+- [#16829](https://github.com/emqx/emqx/pull/16829) 优化了 NATS 网关的发布热路径性能。
+
+- [#16911](https://github.com/emqx/emqx/pull/16911) 通过避免重复查询 Mria 统计信息，降低了 Prometheus 指标采集的开销。
+
+- [#16550](https://github.com/emqx/emqx/pull/16550) 停止对订阅 ACL 检查结果进行缓存。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#16721](https://github.com/emqx/emqx/pull/16721) 修复了 `await_rel_timeout` 超时后 QoS 2 重复消息处理不正确的问题。
+- [#16725](https://github.com/emqx/emqx/pull/16725) 默认禁用 TCP 连接拥塞告警。
+- [#16781](https://github.com/emqx/emqx/pull/16781) 修复了保留消息不可用时的 CONNECT 报文校验问题。
+- [#16783](https://github.com/emqx/emqx/pull/16783) 修复了 MQTT v5 SUBSCRIBE 报文对 `Subscription-Identifier` 上限的校验问题；现在可以正确接受最大值 `268435455`。
+- [#16974](https://github.com/emqx/emqx/pull/16974) 修复了会话接管或恢复时，未重新订阅却再次投递保留消息的问题。
+- [#16876](https://github.com/emqx/emqx/pull/16876) 将日志消息 `msg_publish_not_allowed` 重命名为 `msg_not_routed_to_subscribers`。
+
+#### 数据集成
+
+- [#16803](https://github.com/emqx/emqx/pull/16803) 改进了 MySQL 动作批量操作的错误上报。
+- [#16796](https://github.com/emqx/emqx/pull/16796) 修复了连接器动作中对多行 SQL 语句的处理问题。
+- [#16936](https://github.com/emqx/emqx/pull/16936) 修复了 Azure Blob Storage 动作在大型容器上进行健康检查时超时的问题。
+- [#16955](https://github.com/emqx/emqx/pull/16955) 消除了 Kafka 生产者动作误产生的健康检查告警日志。
+- [#16972](https://github.com/emqx/emqx/pull/16972) HTTP 和 GCP PubSub 动作现在将 `closing` 连接错误视为可恢复错误。
+- [#16863](https://github.com/emqx/emqx/pull/16863) 新增告警日志：当异步回复到达时请求已过期，将记录 warning 级别日志。
+- [#16847](https://github.com/emqx/emqx/pull/16847) 修复了消息转换表达式中使用非 ASCII Unicode 字符串时导致崩溃的问题。
+- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT Ingress Bridge 现已支持从 `$queue/{name}/{bind-filter}` 消费消息。
+
+#### 访问控制
+
+- [#16780](https://github.com/emqx/emqx/pull/16780) 修复了授权源校验问题：`type` 字段缺失时，现在返回 `BAD_REQUEST` 而非内部错误。
+- [#16805](https://github.com/emqx/emqx/pull/16805) 新增支持：authz 钩子结果可选择不将结果写入授权缓存。
+- [#16865](https://github.com/emqx/emqx/pull/16865) 为 `mqtt.client_attrs_init` 表达式新增 `cert_common_name` 和 `cert_subject` 别名。
+- [#16868](https://github.com/emqx/emqx/pull/16868) 改进了面向程序化客户端的 REST API 认证错误提示信息。
+- [#16928](https://github.com/emqx/emqx/pull/16928) 通过 Dashboard 创建的 REST API Key 现在随机生成，不再基于 API Key 名称派生。
+- [#16939](https://github.com/emqx/emqx/pull/16939) 修复了内置数据库认证器对于缺少但具有默认值的 bootstrap 文件，不再输出 warning 日志的问题。
+
+#### 持久化存储
+
+- [#16874](https://github.com/emqx/emqx/pull/16874) 修复了 DS Raft 持久化存储在频繁 Leader 切换后停止接受新消息的问题。
+
+#### 集群
+
+- [#16534](https://github.com/emqx/emqx/pull/16534) 将默认 `net_ticktime` 从 2 分钟降低至 1 分钟，以加快节点故障检测速度。
+
+#### 插件
+
+- [#16842](https://github.com/emqx/emqx/pull/16842) 减少了启动时的插件配置告警日志噪音；无害的配置缺失告警现在改为 debug 级别日志。
+- [#16843](https://github.com/emqx/emqx/pull/16843) 修复了 HTTP 头和查询字符串参数未被透传至插件 API 处理器的问题。
+- [#16904](https://github.com/emqx/emqx/pull/16904) 防止同一插件的多个版本同时被启用。
+
+#### 网关
+
+- [#16536](https://github.com/emqx/emqx/pull/16536) 修复了 CoAP 网关在 DTLS 连接模式下运行时存在的问题。
+
+#### 可观测性
+
+- [#16879](https://github.com/emqx/emqx/pull/16879) 新增 `log.audit.cache_size` 作为审计日志数据库缓存大小的主配置项。
+
+#### 部署
+
+- [#16901](https://github.com/emqx/emqx/pull/16901) 修复了 RHEL 9.6 LTS 的 RPM 安装包 OpenSSL 依赖问题。
+
+#### ExHook
+
+- [#16890](https://github.com/emqx/emqx/pull/16890) 修复了 ExHook 在重连成功重载后，相同服务器名称可能在运行列表中出现重复的问题。
+
+#### 许可证
+
+- [#16764](https://github.com/emqx/emqx/pull/16764) 优化了许可证客户层级处理逻辑：引入 `STANDARD` 和 `VIP` 两个层级，并将官方许可证 `STANDARD` 层级的到期宽限期从 90 天缩短至 15 天。
+
 ## 6.1.1
 
 *发布日期: 2026-02-27*
