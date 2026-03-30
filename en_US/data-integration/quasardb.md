@@ -118,41 +118,41 @@ QuasarDB tables always include an implicit `$timestamp` index column. You do not
 
 ## Create a Connector
 
-This section demonstrates how to create a Connector to connect the Sink to QuasarDB.
+This section demonstrates how to create a Connector to connect EMQX to QuasarDB.
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
 
 2. Click **Create** in the top right corner of the page.
 
 3. On the **Create Connector** page, select **QuasarDB** and then click **Next**.
 
-4. In the **Configuration** step, configure the following information:
+4. Enter a name for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_quasardb`.
 
-   - **Connector Name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_quasardb`.
+5. Configure the connection information:
+
    - **Server URI**: Enter the URI of your QuasarDB cluster using an IP address, for example `qdb://127.0.0.1:2836`.
    - **ODBC Data Source Name**: Enter the DSN name defined in `/etc/odbc.ini`, for example `qdb`.
    - **Username**: Enter the username, if any.
    - **Password**: Enter the user secret key, if any.
    - **Cluster Public Key**: Enter the cluster public key, if any.
-   - **Connect Timeout**: Timeout to be used when connecting to QuasarDB.
 
-5. Advanced settings (optional): For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Advanced settings (optional): For details, see [Advanced Configuration](#advanced-configuration).
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to QuasarDB.
+7. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to QuasarDB.
 
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to QuasarDB. For detailed steps, see [Create a Rule with QuasarDB Sink](#create-a-rule-with-quasardb-sink).
+8. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
 
 ## Create a Rule with QuasarDB Sink
 
 This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#` and saving the processed data to the QuasarDB table `temp_hum` via the configured Sink.
 
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `QuasarDB` and the connector pre-selected. Skip to step 5.
 
-2. Click **Create** on the top right corner of the page.
+   Otherwise, go to the EMQX Dashboard, click **Integration** -> **Rules**, click **Create** in the top right corner, then click **+ Add Action**.
 
-3. Enter `my_rule` as the rule ID. To create a rule for message storage, enter the following statement in the **SQL Editor**:
+2. In the **SQL Editor** on the left, enter a rule ID and the following SQL to match messages from topic `t/#`:
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   Note: If you want to specify your own SQL syntax, make sure all fields required by the Sink are included in the `SELECT` part.
 
    ```sql
    SELECT
@@ -167,17 +167,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
 
-4. Click the **+ Add Action** button to define an action that will be triggered by the rule.
+3. In the **Add Action** panel on the right, select `QuasarDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value.
 
-5. Select `QuasarDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a QuasarDB Sink if you have created one.
+4. From the **Connectors** dropdown, select the `my_quasardb` connector you just created. You can also create a new Connector by clicking the button next to the dropdown. For configuration parameters, see [Create a Connector](#create-a-connector).
 
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+5. Enter a name and optional description for the Sink.
 
-7. From the **Connector** dropdown box, select the `my_quasardb` connector created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+6. Configure the **SQL Template** to define how data is written to QuasarDB.
 
-8. Configure the **SQL Template** to define how data is written to QuasarDB.
-
-   ::: tip
+   ::: tip Note
 
    The SQL Template only accepts **INSERT** statements. Other statement types such as UPDATE and DELETE are not supported.
 
@@ -185,7 +183,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    The SQL template supports placeholder variables such as `${clientid}`. QuasarDB uses `$timestamp` as the implicit timestamp index column; you can use `now()` to insert the current server time.
 
-   ::: warning
+   ::: tip Note
 
    The QuasarDB ODBC driver does not support prepared statements. Any value that resolves to a `STRING` or `BLOB` type must be manually quoted with single quotes (`'`) in your SQL template.
 
@@ -196,21 +194,19 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    values (now(), ${.temp}, ${.hum})
    ```
 
-   You can optionally configure a **Table Name For Health Check**. If set, EMQX runs `SHOW TABLE <table>` against this table during action health checks to probe whether the table exists. If left empty, action-level health checking is skipped.
+7. **Fallback Actions (Optional)**: Define one or more fallback actions to improve reliability in case of message delivery failure. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+8. **Advanced settings (optional)**: For details, see [Sink Advanced Settings](#sink-advanced-settings).
 
-10. **Advanced settings (optional)**: For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can connect to QuasarDB.
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can connect to QuasarDB.
+10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs**.
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs**.
+11. Back on the **Create Rule** page, verify the configured information and click the **Save** button to generate the rule.
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab to see the new QuasarDB Sink.
 
-You have now successfully created the rule for the QuasarDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab to see the new QuasarDB Sink.
-
-You can also click **Integration** -> **Flow Designer** to view the topology and verify that messages under topic `t/#` are sent and saved to QuasarDB after parsing by rule `my_rule`.
+You can also click **Integration** -> **Flow Designer** to view the topology and verify that messages under topic `t/#` are forwarded to QuasarDB after processing by rule `my_rule`.
 
 ## Test the Rule
 
@@ -221,3 +217,31 @@ mqttx pub -i emqx_c -t t/1 -m '{ "temp": "27.5", "hum": "41.8" }'
 ```
 
 Check the running statistics of the QuasarDB Sink. There should be 1 new matching and 1 new outgoing message. Verify that the data is written into the `temp_hum` table in QuasarDB.
+
+## Advanced Configuration
+
+This section describes the advanced configuration options available for the QuasarDB Connector and Sink. When configuring them in the Dashboard, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+
+### Connector Advanced Settings
+
+| Field Name | Description | Default Value |
+| --- | --- | --- |
+| Connection Pool Size | Number of concurrent connections maintained in the pool. Too large a value may exhaust system resources; too small a value may limit throughput. | `8` |
+| Connect Timeout | Maximum time to wait when establishing a connection to QuasarDB. | `5` seconds |
+| Start Timeout | Maximum time the connector waits for an auto-started resource to become healthy before accepting requests. | `5` seconds |
+| Health Check Interval | How often the connector runs an automated health check on the QuasarDB connection. | `15` seconds |
+| Health Check Timeout | Maximum time allowed for each health check to complete. | `60` seconds |
+
+### Sink Advanced Settings
+
+| Field Name | Description | Default Value |
+| --- | --- | --- |
+| Buffer Pool Size | Number of buffer worker processes that handle data flow between EMQX and QuasarDB. Increase this value to improve throughput under high load. | `16` |
+| Request TTL | Maximum time a request remains valid in the buffer. Requests that exceed this duration — whether still queued or sent without acknowledgment — are discarded. | `45` seconds |
+| Health Check Interval | How often the Sink runs an automated health check on the QuasarDB connection. | `15` seconds |
+| Health Check Interval Jitter | Random delay added to the health check interval to prevent multiple nodes from checking simultaneously. Useful when multiple Actions or Sources share the same Connector. | `0` milliseconds |
+| Health Check Timeout | Maximum time allowed for each Sink health check to complete. | `60` seconds |
+| Max Buffer Queue Size | Maximum bytes each buffer worker can hold. Increase this value if your workload produces bursts that exceed default capacity. | `256` MB |
+| Batch Size | Maximum number of records sent to QuasarDB in a single operation. Set to `1` to disable batching and send records individually. | `100` |
+| Query Mode | `async` lets EMQX continue publishing without waiting for QuasarDB to confirm each write; `sync` waits for confirmation before proceeding. Async mode offers higher throughput but may result in out-of-order delivery. | `Async` |
+| Inflight Window | Maximum number of unacknowledged requests allowed in flight at once. When **Query Mode** is `async`, set this to `1` to guarantee per-client message ordering. | `100` |
