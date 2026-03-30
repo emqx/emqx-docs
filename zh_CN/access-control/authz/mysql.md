@@ -125,7 +125,7 @@ $ mqttx sub -u emqx_u -t t/3 -q 1
 
 2. 在**客户端授权**页面，点击**创建**，选择 **MySQL** 作为**数据源**，点击**下一步**进入**配置参数**页签。
 
-   ![anthz-mysql](./assets/anthz-mysql.png)
+   ![authz-mysql](./assets/anthz-mysql.png)
 
 3. 按照以下说明配置数据源：
    - MySQL 数据库的连接设置：
