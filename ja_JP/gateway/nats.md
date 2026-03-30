@@ -14,7 +14,7 @@ NATS プロトコルゲートウェイは現在、以下の主要な機能をサ
   - メッセージ配信および応答：`MSG`、`HMSG`
   - ハートビートおよびステータス：`PING`、`PONG`、`+OK`、`-ERR`
 - **冗長モード（Verbose mode）対応**：クライアントが `CONNECT verbose=true` で接続した場合に応答確認を有効化。
-- **豊富な認証サポート**：`token`、`nkey`、`jwt` およびゲートウェイ認証をサポート。
+- **豊富な認証サポート**：Token、NKey、JWT、およびユーザー名/パスワード認証をサポート。
 
 ### MQTT との相互運用性
 
@@ -198,8 +198,8 @@ NATS ゲートウェイは TCP、SSL、WS、WSS タイプのリスナーをサ�
 
 NATS ゲートウェイは、以下2つの方式で認証をサポートします。
 
-- **ゲートウェイ内部認証（`internal_authn`）**：NATS ネイティブの認証方式を配列順で評価します。
 - **ゲートウェイ認証（`authentication`）**：EMQX ゲートウェイの汎用認証機構で、主にユーザー名／パスワード系バックエンドで利用します。
+- **ゲートウェイ内部認証（`internal_authn`）**：NATS ネイティブの、ユーザー名/パスワード以外の認証です。
 
 両方を有効化した場合、EMQX は次の順序で認証します。
 
@@ -209,18 +209,9 @@ NATS ゲートウェイは、以下2つの方式で認証をサポートしま�
 4. すべての内部認証方式がスキップされ、`authentication` が設定されている場合はゲートウェイ認証にフォールバックします。
 5. 内部認証・ゲートウェイ認証とも未設定の場合は、すべての NATS クライアント接続を許可します。
 
-NATS ゲートウェイは `CONNECT` パケットから以下の認証情報を取得します。
-
-- **クライアント ID**：デフォルトで自動生成されます。
-- **ユーザー名**：`user` フィールドの値。
-- **パスワード**：`pass` フィールドの値。
-- **トークン**：`auth_token` フィールドの値。
-- **NKey**：`nkey` フィールドの値（署名は `sig`）。
-- **JWT**：`jwt` フィールドの値（署名は `sig`）。
-
 #### ゲートウェイ認証の設定
 
-NATS ゲートウェイは以下の認証バックエンドをサポートします。
+他のゲートウェイと同様に、NATS ゲートウェイも EMQX 標準認証機構と統合できます。対応バックエンドは以下の通りです。
 
 - [組み込みデータベース認証](../access-control/authn/mnesia.md)
 - [MySQL 認証](../access-control/authn/mysql.md)
@@ -231,9 +222,15 @@ NATS ゲートウェイは以下の認証バックエンドをサポートしま
 - [JWT 認証](../access-control/authn/jwt.md)
 - [LDAP 認証](../access-control/authn/ldap.md)
 
+ゲートウェイ認証では、NATS ゲートウェイは `CONNECT` パケットから以下の項目を取り出して認証に使用します。
+
+- **クライアント ID**：デフォルトで自動生成されます。
+- **ユーザー名**：`user` フィールドの値。
+- **パスワード**：`pass` フィールドの値。
+
 MQTT とは異なり、ゲートウェイ認証は単一の認証機構のみサポートし、認証チェーンはサポートしません。
 
-#### ダッシュボードでの設定
+##### ダッシュボードでの設定
 
 以下は HTTP サーバーを利用したパスワード認証の設定例です。
 
@@ -242,7 +239,7 @@ MQTT とは異なり、ゲートウェイ認証は単一の認証機構のみサ
 3. 設定パラメータを入力します。各オプションの詳細は [HTTP パスワード認証](../access-control/authn/http.md) を参照してください。
 4. **作成** をクリックし、設定内容を確認後、**更新** をクリックして確定します。
 
-#### REST API での設定
+##### REST API での設定
 
 以下は組み込みデータベース認証を REST API で設定する例です。
 
@@ -263,7 +260,7 @@ curl -X 'POST' \
 }'
 ```
 
-#### 設定ファイルでの設定
+##### 設定ファイルでの設定
 
 以下は設定ファイルで組み込みデータベース認証を設定する例です。
 
@@ -286,13 +283,19 @@ gateway.nats {
 
 #### ゲートウェイ内部認証（`internal_authn`）の設定
 
-`internal_authn` で内部認証方式を順序付きで設定できます。
+NATS ゲートウェイ固有の認証機能であり、NATS Server の標準 3 認証方式をサポートします。
 
-##### 1) Token 認証
+##### Token 認証
 
 - NATS `CONNECT` の `auth_token` を使用します。
 - プレーンテキストと bcrypt ハッシュ（`$2a$`, `$2b$`, `$2y$`）をサポートします。
 - NATS 参考: [Token authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens)
+
+ダッシュボード設定例:
+
+![nats-auth-token](assets/nats-auth-token.png)
+
+設定ファイル例:
 
 ```properties
 gateway.nats {
@@ -305,11 +308,17 @@ gateway.nats {
 }
 ```
 
-##### 2) NKey 認証
+##### NKey 認証
 
-- `nkey` + `sig` の challenge/response 方式を使用します。
+- NATS `CONNECT` の `nkey` + `sig` challenge/response を使用します。
 - `nkeys` は有効な NATS ユーザー公開鍵（`U...`）である必要があります。
 - NATS 参考: [NKey authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth)
+
+ダッシュボード設定例:
+
+![nats-auth-nkey](assets/nats-auth-nkey.png)
+
+設定ファイル例:
 
 ```properties
 gateway.nats {
@@ -324,14 +333,18 @@ gateway.nats {
 }
 ```
 
-##### 3) JWT 認証（ACL 対応）
+##### JWT 認証（ACL 対応）
 
 - `jwt` + `sig`（必要に応じて `nkey`）で認証します。
-- `trusted_operators` と `resolver.resolver_preload` は必須です。
-- `trusted_operators` は有効な Operator NKey（`O...`）である必要があります。
-- `resolver.resolver_preload[].pubkey` は有効な Account NKey（`A...`）である必要があります。
-- `resolver` は現在 `memory` のみサポートします。
+- 「信頼済みオペレーター公開鍵リスト」と「JWT プリロードリスト」の両方が必須です。
+- `resolver` の種類は現在 `memory` のみをサポートし、設定で Account JWT を事前定義します。
 - NATS 参考: [JWT authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/jwt)
+
+ダッシュボード設定例:
+
+![nats-auth-jwt](assets/nats-auth-jwt.png)
+
+設定ファイル例:
 
 ```properties
 gateway.nats {
