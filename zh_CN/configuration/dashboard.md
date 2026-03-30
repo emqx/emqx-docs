@@ -127,7 +127,7 @@ dashboard {
 
 - `swagger_support = true`
 
-  用于启用所有与 swagger 相关的功能，如生成 Swagger API 文档。默认情况下，其值始终为 `true`，您可以将值设置为 `false` 以禁用它。
+  用于启用 API 文档端点，包括 Swagger UI（`/api-docs`）和 API 规范页面（`/api-spec.html`、`/api-spec.md`、`/api-spec.json`）。将其设置为 `false` 可禁用所有 API 文档端点。
 
 - `default_password`
 
