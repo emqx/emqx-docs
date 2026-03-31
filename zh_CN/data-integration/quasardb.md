@@ -10,7 +10,7 @@ QuasarDB 数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备�
 
 下图展示了 EMQX 和 QuasarDB 之间数据集成的典型架构：
 
-<!-- TODO: add architecture diagram -->
+![quasardb_integration](./assets/quasardb_integration.png)
 
 将 MQTT 数据摄取到 QuasarDB 的工作流程如下：
 

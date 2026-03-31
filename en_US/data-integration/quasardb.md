@@ -2,7 +2,7 @@
 
 [QuasarDB](https://www.quasardb.net/) is a high-performance, column-oriented time-series database designed for storing and querying large volumes of time-stamped data. EMQX supports integration with QuasarDB, enabling you to save MQTT messages and client events to QuasarDB. This facilitates the construction of data pipelines and analytical processes for IoT telemetry management and analysis.
 
-This page provides a detailed overview of the data integration between EMQX and QuasarDB with practical instructions on creating and validating the data integration.
+This page provides a detailed overview of the data integration between EMQX and QuasarDB, with practical instructions on creating and validating the data integration.
 
 
 ## How It Works
@@ -11,7 +11,7 @@ QuasarDB data integration is an out-of-the-box feature in EMQX that combines EMQ
 
 The diagram below illustrates a typical architecture of data integration between EMQX and QuasarDB:
 
-<!-- TODO: add architecture diagram -->
+![quasardb_integration](./assets/quasardb_integration.png)
 
 Ingesting MQTT data into QuasarDB works as follows:
 
@@ -177,7 +177,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip Note
 
-   The SQL Template only accepts **INSERT** statements. Other statement types such as UPDATE and DELETE are not supported.
+   The SQL Template only accepts **INSERT** statements. Other statement types, such as UPDATE and DELETE, are not supported.
 
    :::
 
