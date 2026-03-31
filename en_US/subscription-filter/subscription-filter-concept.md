@@ -77,6 +77,9 @@ key1=value1&key2>value2
 | `key` | The name of a User Property key in the published message |
 | `=` | Equality match (the key's value must equal the specified string) |
 | `>` | Numeric comparison (the key's value must be numerically greater than the specified number) |
+| `>=` | Numeric comparison (the key's value must be numerically equal or greater than the specified number) |
+| `<` | Numeric comparison (the key's value must be numerically smaller than the specified number) |
+| `<=` | Numeric comparison (the key's value must be numerically equal or smaller than the specified number) |
 | `&` | Combines multiple conditions; all must be true for the message to be delivered |
 
 Filter expressions are **case-sensitive**. If a specified key is absent from the message's User Properties, the message is filtered out.
