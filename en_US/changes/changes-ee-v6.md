@@ -115,27 +115,27 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#16721](https://github.com/emqx/emqx/pull/16721) Fixed QoS 2 duplicate handling when `await_rel_timeout` has expired. Previously, if a client retried a QoS 2 PUBLISH with `DUP=1` after the broker had expired the pending PUBREL state (default 300 seconds), the message could be published to subscribers again. EMQX now treats this retransmission as a duplicate handshake packet and returns `PUBREC` without re-delivering the application message.
 - [#16725](https://github.com/emqx/emqx/pull/16725) Disabled the TCP connection congestion alarm by default by setting `conn_congestion.enable_alarm = false` in the default zone/global configuration.
 - [#16781](https://github.com/emqx/emqx/pull/16781) Fixed CONNECT validation when retained messages are unavailable. When `mqtt.retain_available` is set to `false`, CONNECT packets with Will Retain set are now correctly rejected with CONNACK reason `Retain not supported (0x9A)`.
-- [#16783](https://github.com/emqx/emqx/pull/16783) Fixed MQTT v5 SUBSCRIBE validation for the `Subscription-Identifier` upper bound; the value `268435455` is now correctly accepted.
-- [#16974](https://github.com/emqx/emqx/pull/16974) In EMQX 6.1.1, when a session was subscribed to a topic filter containing retained messages and was later taken over or resumed without re-subscribing to the same topic filter, it would receive again the retained messages. Now, the previous behavior is restored, meaning that, upon session resumption or takeover without explicit re-subscription, retained message iteration will cease.
+- [#16783](https://github.com/emqx/emqx/pull/16783) Fixed MQTT v5 SUBSCRIBE validation for the `Subscription-Identifier` upper bound. EMQX now accepts `268435455` (`0x0FFFFFFF`), which is the maximum valid Subscription Identifier value defined by the MQTT spec.
+- [#16974](https://github.com/emqx/emqx/pull/16974) Restored the previous retained-message behavior for resumed or taken-over sessions. In EMQX 6.1.1, if a session had subscribed to a topic filter with retained messages and was later resumed or taken over without re-subscribing, it would receive those retained messages again. Now, retained message iteration stops unless the session explicitly re-subscribes to the topic filter.
 - [#16876](https://github.com/emqx/emqx/pull/16876) Renamed the log message `msg_publish_not_allowed` to `msg_not_routed_to_subscribers`.
 
 #### Data Integration
 
 - [#16803](https://github.com/emqx/emqx/pull/16803) Improved error reporting when configuring batch operations for MySQL actions.
 - [#16796](https://github.com/emqx/emqx/pull/16796) Fixed handling of multiline SQL statements in connector actions.
-- [#16936](https://github.com/emqx/emqx/pull/16936) Fixed Azure Blob Storage action health check timeouts with large containers.
+- [#16936](https://github.com/emqx/emqx/pull/16936) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could timeout if the container contained too many blobs.
 - [#16955](https://github.com/emqx/emqx/pull/16955) Eliminated Kafka producer action false health check warning logs. Previously if Kafka producer is idling for too long, Kafka may close the connection (typically default is 10 minutes), if Kafka producer action health-checks happen to be performed around the same moment, there could be a false warning message with message `"not_all_kafka_partitions_connected"`.
 - [#16972](https://github.com/emqx/emqx/pull/16972) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
-- [#16863](https://github.com/emqx/emqx/pull/16863) Added a warning log when an async reply is received for an already-expired request.
+- [#16863](https://github.com/emqx/emqx/pull/16863) Added a warning log when an async reply is received for an already-expired request in async actions.
 - [#16847](https://github.com/emqx/emqx/pull/16847) Fixed a crash when a non-ASCII Unicode string was used in a message transformation expression.
-- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT ingress bridges now support consuming from `$queue/{name}/{bind-filter}`.
+- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT ingress bridges now support consuming from remote message queues `$queue/{name}/{bind-filter}`.
 
 #### Access Control
 
-- [#16780](https://github.com/emqx/emqx/pull/16780) Fixed authorization source validation: a missing `type` field now returns `BAD_REQUEST` instead of an internal error.
+- [#16780](https://github.com/emqx/emqx/pull/16780) Fixed an issue in authorization source validation where requests missing the `type` field could trigger an internal error. Now EMQX returns a clear `BAD_REQUEST` validation error for this case.
 - [#16805](https://github.com/emqx/emqx/pull/16805) Added support for authz hook results to opt out of authorization cache storage.
 - [#16865](https://github.com/emqx/emqx/pull/16865) Added `cert_common_name` and `cert_subject` as aliases for `mqtt.client_attrs_init` expressions, alongside the existing `cn` and `dn` variables.
-- [#16868](https://github.com/emqx/emqx/pull/16868) Improved REST API authentication error messages for programmatic clients. Error responses now mention the `api_key.bootstrap_file` configuration option and the `POST /api_key` endpoint as the recommended approach for creating persistent API keys.
+- [#16868](https://github.com/emqx/emqx/pull/16868) Improved REST API authentication error messages for programmatic clients. Error responses now mention the `api_key.bootstrap_file` configuration option and the `POST /api_key` endpoint for creating persistent API keys.
 - [#16928](https://github.com/emqx/emqx/pull/16928) Dashboard-created REST API keys are now generated randomly instead of being derived from the API key name.
 - [#16939](https://github.com/emqx/emqx/pull/16939) Fixed the built-in database authenticator to no longer log a warning for a missing but default bootstrap file.
 
@@ -145,13 +145,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Clustering
 
-- [#16534](https://github.com/emqx/emqx/pull/16534) Lowered the default `net_ticktime` from 2 minutes to 1 minute for faster node failure detection. In the event of a network outage or abrupt node termination, remaining nodes will detect the failure sooner, reducing the time before failover mechanisms activate and improving overall cluster resilience.
+- [#16534](https://github.com/emqx/emqx/pull/16534) Lowered the default `net_ticktime` from 2 minutes to 1 minute to improve cluster node failure detection.
 
 #### Plugins
 
-- [#16842](https://github.com/emqx/emqx/pull/16842) Reduced noisy plugin config warning logs at startup. Missing-config warnings for benign cases are now logged at debug level.
-- [#16843](https://github.com/emqx/emqx/pull/16843) Fixed HTTP headers and query string parameters not being passed through to plugin API handlers.
-- [#16904](https://github.com/emqx/emqx/pull/16904) Prevent enabling or starting multiple versions of the same plugin at once. When a newer version is enabled, older configured versions of that plugin are automatically disabled, and management API actions now return a clear error instead of reporting success while another version is still active.
+- [#16842](https://github.com/emqx/emqx/pull/16842) Reduced noisy warning logs for plugin config fetches when no peer node has the config yet. Previously, on startup, a node logged warnings when fetching plugin config from peers even in the benign case where no peer had the config, such as when the plugin was first loaded. This case is now logged at debug level, while genuine errors such as RPC failures and timeouts remain warnings.
+- [#16843](https://github.com/emqx/emqx/pull/16843) Fixed an issue where HTTP headers and query string parameters were not passed through to plugin API handlers, causing plugins to receive empty headers and missing query parameters.
+- [#16904](https://github.com/emqx/emqx/pull/16904) Prevented multiple versions of the same plugin from being enabled or started at the same time. When a newer version is enabled, older configured versions are now automatically disabled. Management API actions also now return a clear error instead of reporting success while another version is still active.
 
 #### Gateway
 
@@ -171,7 +171,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Licensing
 
-- [#16764](https://github.com/emqx/emqx/pull/16764) Refined license customer tier handling: introduced `STANDARD` and `VIP` tiers, and reduced the expiry grace period for official-license `STANDARD` tier from 90 days to 15 days.
+- [#16764](https://github.com/emqx/emqx/pull/16764) Refined license customer tier handling by introducing `STANDARD` and `VIP` tiers in enforcement logic and reducing the official-license `STANDARD` expiry grace period from 90 days to 15 days before new sessions are restricted.
 
 ## 6.1.1
 

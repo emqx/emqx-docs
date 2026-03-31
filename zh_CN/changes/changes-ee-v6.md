@@ -115,27 +115,27 @@
 - [#16721](https://github.com/emqx/emqx/pull/16721) 修复了 `await_rel_timeout` 超时后 QoS 2 重复消息处理不正确的问题。此前，当 Broker 的 PUBREL 等待状态过期（默认 300 秒）后，如果客户端以 `DUP=1` 重发 QoS 2 PUBLISH 报文，消息可能再次被投递给订阅者。现在，EMQX 会将此重传视为重复握手报文，返回 `PUBREC` 但不再重新投递应用消息。
 - [#16725](https://github.com/emqx/emqx/pull/16725) 在默认 zone/全局配置中将 `conn_congestion.enable_alarm` 设置为 `false`，默认禁用 TCP 连接拥塞告警。
 - [#16781](https://github.com/emqx/emqx/pull/16781) 修复了保留消息不可用时的 CONNECT 报文校验问题。当 `mqtt.retain_available` 设置为 `false` 时，携带 Will Retain 标志的 CONNECT 报文现在会被正确拒绝，并返回 CONNACK 原因码 `Retain not supported (0x9A)`。
-- [#16783](https://github.com/emqx/emqx/pull/16783) 修复了 MQTT v5 SUBSCRIBE 报文对 `Subscription-Identifier` 上限的校验问题；现在可以正确接受最大值 `268435455`。
-- [#16974](https://github.com/emqx/emqx/pull/16974) 修复 EMQX 6.1.1 中的回归问题：当会话订阅了包含保留消息的主题过滤器后，若该会话在未重新订阅相同主题过滤器的情况下发生接管或恢复，会再次收到保留消息。现在已恢复此前的行为，即在未显式重新订阅的情况下进行会话恢复或接管时，保留消息的迭代投递将停止。
+- [#16783](https://github.com/emqx/emqx/pull/16783) 修复了 MQTT v5 SUBSCRIBE 报文对 `Subscription-Identifier` 上限的校验问题。现在可以正确接受 `268435455`（`0x0FFFFFFF`），即 MQTT 规范定义的最大有效 Subscription Identifier 值。
+- [#16974](https://github.com/emqx/emqx/pull/16974) 恢复了恢复或接管会话时的原有保留消息行为。在 EMQX 6.1.1 中，如果会话已订阅含有保留消息的主题过滤器，在未重新订阅的情况下恢复或接管该会话时，会再次收到这些保留消息。现在，除非会话显式重新订阅该主题过滤器，否则保留消息的迭代投递将停止。
 - [#16876](https://github.com/emqx/emqx/pull/16876) 将日志消息 `msg_publish_not_allowed` 重命名为 `msg_not_routed_to_subscribers`。
 
 #### 数据集成
 
 - [#16803](https://github.com/emqx/emqx/pull/16803) 改进了配置 MySQL 动作批量操作时的错误上报。
 - [#16796](https://github.com/emqx/emqx/pull/16796) 修复了连接器动作中对多行 SQL 语句的处理问题。
-- [#16936](https://github.com/emqx/emqx/pull/16936) 修复了 Azure Blob Storage 动作在大型容器上进行健康检查时超时的问题。
+- [#16936](https://github.com/emqx/emqx/pull/16936) 修复了 Azure Blob Storage 聚合模式动作在容器内 blob 数量过多时健康检查超时的问题。
 - [#16955](https://github.com/emqx/emqx/pull/16955) 消除了 Kafka 生产者动作误产生的健康检查告警日志。此前，当 Kafka 生产者长时间空闲时，Kafka 可能会关闭连接（通常默认为 10 分钟），若此时恰好触发健康检查，可能产生内容为 `"not_all_kafka_partitions_connected"` 的误报告警日志。
 - [#16972](https://github.com/emqx/emqx/pull/16972) 修复 HTTP 和 GCP PubSub 动作，将原因为 `closing` 的瞬态连接错误视为可恢复错误，减少日志噪音。
-- [#16863](https://github.com/emqx/emqx/pull/16863) 新增告警日志：当异步回复到达时请求已过期，将记录 warning 级别日志。
+- [#16863](https://github.com/emqx/emqx/pull/16863) 新增告警日志：当异步动作中收到已过期请求的异步回复时，将记录 warning 级别日志。
 - [#16847](https://github.com/emqx/emqx/pull/16847) 修复了消息转换表达式中使用非 ASCII Unicode 字符串时导致崩溃的问题。
-- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT Ingress Bridge 现已支持从 `$queue/{name}/{bind-filter}` 消费消息。
+- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT Ingress Bridge 现已支持从远端消息队列 `$queue/{name}/{bind-filter}` 消费消息。
 
 #### 访问控制
 
-- [#16780](https://github.com/emqx/emqx/pull/16780) 修复了授权源校验问题：`type` 字段缺失时，现在返回 `BAD_REQUEST` 而非内部错误。
+- [#16780](https://github.com/emqx/emqx/pull/16780) 修复了授权源校验中的问题：缺少 `type` 字段的请求可能触发内部错误。现在 EMQX 会针对此情况返回明确的 `BAD_REQUEST` 校验错误。
 - [#16805](https://github.com/emqx/emqx/pull/16805) 新增支持：authz 钩子结果可选择不将结果写入授权缓存。
 - [#16865](https://github.com/emqx/emqx/pull/16865) 为 `mqtt.client_attrs_init` 表达式新增 `cert_common_name` 和 `cert_subject` 别名，与现有的 `cn` 和 `dn` 变量并列使用。
-- [#16868](https://github.com/emqx/emqx/pull/16868) 改进了面向程序化客户端的 REST API 认证错误提示信息。错误响应现在会说明推荐使用 `api_key.bootstrap_file` 配置项或 `POST /api_key` 端点来创建持久化 API Key。
+- [#16868](https://github.com/emqx/emqx/pull/16868) 改进了面向程序化客户端的 REST API 认证错误提示信息。错误响应现在会说明 `api_key.bootstrap_file` 配置项和 `POST /api_key` 端点，用于创建持久化 API Key。
 - [#16928](https://github.com/emqx/emqx/pull/16928) 通过 Dashboard 创建的 REST API Key 现在随机生成，不再基于 API Key 名称派生。
 - [#16939](https://github.com/emqx/emqx/pull/16939) 修复了内置数据库认证器对于缺少但具有默认值的 bootstrap 文件，不再输出 warning 日志的问题。
 
@@ -145,13 +145,13 @@
 
 #### 集群
 
-- [#16534](https://github.com/emqx/emqx/pull/16534) 将默认 `net_ticktime` 从 2 分钟降低至 1 分钟，以加快节点故障检测速度。发生网络中断或节点异常终止时，其余节点能够更快检测到故障节点，缩短故障转移机制的触发时间，提升集群整体韧性。
+- [#16534](https://github.com/emqx/emqx/pull/16534) 将默认 `net_ticktime` 从 2 分钟降低至 1 分钟，以改善集群节点故障检测能力。
 
 #### 插件
 
-- [#16842](https://github.com/emqx/emqx/pull/16842) 减少了启动时的插件配置告警日志噪音；无害的配置缺失告警现在改为 debug 级别日志。
-- [#16843](https://github.com/emqx/emqx/pull/16843) 修复了 HTTP 头和查询字符串参数未被透传至插件 API 处理器的问题。
-- [#16904](https://github.com/emqx/emqx/pull/16904) 防止同一插件的多个版本同时被启用或运行。当启用更新版本时，该插件的旧版本配置将自动禁用；若另一版本仍处于活动状态，管理 API 操作现在将返回明确的错误，而不再报告成功。
+- [#16842](https://github.com/emqx/emqx/pull/16842) 减少了在没有 peer 节点持有插件配置时拉取插件配置产生的多余 warning 日志。此前，节点启动时从 peer 节点拉取插件配置，即使在无害的情况下（例如该插件首次被加载，没有任何 peer 持有配置），也会记录 warning 日志。此类情况现在改为 debug 级别日志，而真正的错误（如 RPC 失败、超时）仍保留为 warning。
+- [#16843](https://github.com/emqx/emqx/pull/16843) 修复了 HTTP 头和查询字符串参数未被透传至插件 API 处理器的问题，导致插件收到空的请求头和缺失的查询参数。
+- [#16904](https://github.com/emqx/emqx/pull/16904) 防止同一插件的多个版本同时被启用或运行。当启用更新版本时，已配置的旧版本现在将自动禁用。管理 API 操作也不再在另一版本仍处于活动状态时报告成功，而是返回明确的错误。
 
 #### 网关
 
@@ -171,7 +171,7 @@
 
 #### 许可证
 
-- [#16764](https://github.com/emqx/emqx/pull/16764) 优化了许可证客户层级处理逻辑：引入 `STANDARD` 和 `VIP` 两个层级，并将官方许可证 `STANDARD` 层级的到期宽限期从 90 天缩短至 15 天。
+- [#16764](https://github.com/emqx/emqx/pull/16764) 优化了许可证客户层级的执行逻辑：引入 `STANDARD` 和 `VIP` 两个层级，并将官方许可证 `STANDARD` 层级的到期宽限期从 90 天缩短至 15 天，超过宽限期后新会话将受到限制。
 
 ## 6.1.1
 
