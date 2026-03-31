@@ -14,10 +14,8 @@ EMQX 提供对接入速度、消息速度的限制，从入口处避免了系统
 | messages_burst            | 最大消息发布突发速率（单客户端）       | 在常规 `消息发布速率` 基础上，每个客户端允许突发发送的消息数量。 | 暂停接收客户端消息 |
 | max_conn_rate             | 最大连接速率（监听器）                 | 当前监听器每秒的连接数。                                       | 暂停接收新的连接   |
 | max_conn_burst            | 最大连接突发速率（监听器）             | 在突发情况下当前监听器可以接受的最大连接数。                   | 暂停接收新的连接   |
-| delivery_messages_rate    | 最大消息投递速率（单客户端）           | 每个节点向单个订阅者投递消息的最大速率。                       | 暂停投递客户端消息 |
-| delivery_messages_burst   | 最大消息投递突发速率（单客户端）       | 在常规 `delivery_messages_rate` 基础上允许的突发量。           | 暂停投递客户端消息 |
-| delivery_bytes_rate       | 最大消息投递流量（单客户端）           | 每个节点向单个订阅者投递数据的最大速率（字节）。               | 暂停投递客户端消息 |
-| delivery_bytes_burst      | 最大消息投递流量突发速率（单客户端）   | 在常规 `delivery_bytes_rate` 基础上允许的突发量。              | 暂停投递客户端消息 |
+
+投递速率限制器同样在监听器级别生效，但过载行为有所不同，详见[投递速率限制器](#投递速率限制器)。
 
 ### 配置监听器级别限制器
 
@@ -114,25 +112,15 @@ zones.my_zone.mqtt {
 
 您可以在 Dashboard 的**管理** -> **监听器**页面中，为每个监听器设置投递速率限制。
 
-也可以通过配置文件设置，投递限制器与发布端限制器使用相同的 `mqtt.limiter` 命名空间进行配置。例如：
+也可以通过配置文件设置，例如，要为默认的 TCP 监听器设置投递速率限制，可以在 emqx.conf 中按以下进行配置：
 
 ```bash
-mqtt.limiter {
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
   delivery_messages_rate = "100/s"
   delivery_messages_burst = "500/10s"
   delivery_bytes_rate = "1MB/s"
   delivery_bytes_burst = "10MB/10s"
-}
-```
-
-Zone 级别的投递限制器可以嵌入到 `zone` 配置中：
-
-```bash
-zones.my_zone.mqtt {
-  limiter {
-    delivery_messages_rate = "50/s"
-    delivery_bytes_rate = "500KB/s"
-  }
 }
 ```
 

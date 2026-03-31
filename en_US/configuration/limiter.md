@@ -15,6 +15,8 @@ Limiters can operate at the listener level. EMQX uses the following types of lim
 | max_conn_rate  | Max Connection Rate (Listener)                    | The number of connections per second for the current listener. | Pause receiving new connections |
 | max_conn_burst | Max Connection Burst (Listener)                   | The maximum number of connections that the listener can accept in bursts. | Pause receiving new connections |
 
+For delivery rate limiters, which also operate at the listener level but have different overload behavior, see [Delivery Rate Limiters](#delivery-rate-limiters).
+
 For example, to set a limiter for the default TCP listener, you can use the configuration below:
 
 ```bash
@@ -96,25 +98,15 @@ Delivery rate limiters are only supported for memory sessions (`durable_sessions
 
 You can set delivery rate limits for each listener on the **Management** -> **Listeners** page in the Dashboard.
 
-Alternatively, you can configure delivery limiters through the configuration file under the same `mqtt.limiter` namespace as publish-side limiters. For example:
+Alternatively, you can configure them through the configuration file. For example, to set delivery rate limits for the default TCP listener, configure it in the `emqx.conf` file as follows:
 
 ```bash
-mqtt.limiter {
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
   delivery_messages_rate = "100/s"
   delivery_messages_burst = "500/10s"
   delivery_bytes_rate = "1MB/s"
   delivery_bytes_burst = "10MB/10s"
-}
-```
-
-Zone-level delivery limiters can be embedded in the `zone` section:
-
-```bash
-zones.my_zone.mqtt {
-  limiter {
-    delivery_messages_rate = "50/s"
-    delivery_bytes_rate = "500KB/s"
-  }
 }
 ```
 
