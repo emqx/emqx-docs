@@ -123,9 +123,9 @@ EMQX 支持通过 `$SETOPTS/` 系统主题对每个客户端动态调整 keepali
 300
 ```
 
-**有效范围：** `0`–`65535` 秒。`0` 表示禁用该会话的 keepalive 检查；超过 `65535` 的值将被截断为 `65535`。若客户端所在 zone 配置了 `mqtt.server_keepalive`，实际生效值还将被限制在该最大值以内。
+**有效范围：** `0`–`65535` 秒。`0` 表示禁用该会话的 keepalive 检查；超过 `65535` 的值将被截断为 `65535`。若客户端所在 zone 配置了 `mqtt.server_keepalive`，实际生效值为两者的最小值。
 
-**使用场景示例：** 车辆进入停驻状态后，T-Box 客户端向 `$SETOPTS/mqtt/keepalive` 发布 `300`。EMQX 将该客户端的 keepalive 容忍时长延长至 300 秒（在默认 `1.5×` 乘数下，实际空闲超时为 450 秒），既降低了心跳频率，又保持 MQTT 连接持续可用以接收远程指令。
+**使用场景示例：** 车辆进入停驻状态后，T-Box 客户端向 `$SETOPTS/mqtt/keepalive` 发布 `300`。EMQX 将该客户端在 Broker 侧的 keepalive 容忍时长延长至 300 秒（在默认 `1.5×` 乘数下，实际空闲超时为 450 秒），保持 MQTT 连接持续可用以接收远程指令。需要注意的是，此操作仅调整 Broker 侧的超时容忍度，客户端实际发送 PINGREQ 的间隔不会自动变化。如需降低心跳流量，客户端还需自行调长其本地的 keepalive 间隔。
 
 #### 批量更新：`$SETOPTS/mqtt/keepalive-bulk`
 
@@ -151,8 +151,12 @@ EMQX 支持通过 `$SETOPTS/` 系统主题对每个客户端动态调整 keepali
 
 两个主题有意设计为独立路径，以支持精细化的权限控制：
 
-- 允许所有客户端向 `$SETOPTS/mqtt/keepalive` 发布消息，使每台设备可以自行调整 keepalive。
+- 允许已认证的客户端向 `$SETOPTS/mqtt/keepalive` 发布消息，使每台设备可以自行调整 keepalive。
 - 将 `$SETOPTS/mqtt/keepalive-bulk` 的发布权限限制为可信的后端服务。
+
+:::tip
+不建议对不可信客户端开放 `$SETOPTS/mqtt/keepalive` 的发布权限。将 keepalive 设为 `0` 会完全禁用该会话的 keepalive 检查，设置过大的值则可能导致僵尸连接长时间保留，消耗 Broker 资源。
+:::
 
 发布到上述任一主题的消息均会被 EMQX 在路由前拦截消费，不会投递给任何订阅者。
 

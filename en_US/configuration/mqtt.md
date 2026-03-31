@@ -116,7 +116,7 @@ In scenarios such as vehicle networking (T-Box) and mobile IoT, MQTT clients nee
 - A short keepalive keeps disconnection detection fast during active use but causes excessive heartbeat traffic and battery drain when the device is parked or idle.
 - A long keepalive reduces traffic during sleep but delays disconnection detection during active use.
 
-EMQX supports dynamic, per-client keepalive adjustment through a set of `$SETOPTS/` system topics. A client can publish to these topics to update its own broker-side keepalive tolerance, or a privileged backend service can update multiple clients at once, all without disconnecting or renegotiating the MQTT connection. The adjustment is applied in-memory to the active session only and is not persisted. The client reverts to its originally negotiated keepalive value after a broker restart.
+EMQX supports dynamic, per-client keepalive adjustment through a set of `$SETOPTS/` system topics. A client can publish to these topics to update its own broker-side keepalive tolerance, or a privileged backend service can update multiple clients at once, all without disconnecting or renegotiating the MQTT connection. The adjustment is applied in-memory to the active session only and is not persisted.
 
 #### Single-Client Update: `$SETOPTS/mqtt/keepalive`
 
@@ -128,9 +128,9 @@ A client publishes to this topic to update its own broker-side keepalive timeout
 300
 ```
 
-**Valid range:** `0`–`65535` seconds. `0` disables the keepalive check for that session. Values above `65535` are clamped to `65535`. If `mqtt.server_keepalive` is configured for the client's zone, the effective value is also clamped to that maximum.
+**Valid range:** `0`–`65535` seconds. `0` disables the keepalive check for that session. Values above `65535` are clamped to `65535`. If `mqtt.server_keepalive` is configured for the client's zone, the effective value is the minimum of the two.
 
-**Example use case:** When a vehicle enters a parked state, the T-Box client publishes `300` to `$SETOPTS/mqtt/keepalive`. EMQX extends the keepalive tolerance to 300 s (450 s effective idle timeout with the default `1.5×` multiplier), reducing heartbeat frequency while keeping the MQTT connection alive for remote command delivery.
+**Example use case:** When a vehicle enters a parked state, the T-Box client publishes `300` to `$SETOPTS/mqtt/keepalive`. EMQX extends the broker-side keepalive tolerance to 300 s (450 s effective idle timeout with the default `1.5×` multiplier), keeping the MQTT connection alive for remote command delivery. Note that this only adjusts the broker's timeout; the client's actual PINGREQ interval is unchanged. To reduce heartbeat traffic, the client must also lengthen its own keepalive interval accordingly.
 
 #### Batch Update: `$SETOPTS/mqtt/keepalive-bulk`
 
@@ -156,8 +156,12 @@ Batch updates are processed asynchronously and are cluster-aware: EMQX locates t
 
 The two topics are intentionally separate to support fine-grained ACL:
 
-- Allow all clients to publish to `$SETOPTS/mqtt/keepalive` so each device can self-adjust its keepalive.
+- Allow authenticated clients to publish to `$SETOPTS/mqtt/keepalive` so each device can self-adjust its keepalive.
 - Restrict `$SETOPTS/mqtt/keepalive-bulk` to trusted backend services only.
+
+:::tip
+Avoid granting publish access to `$SETOPTS/mqtt/keepalive` for untrusted clients. A client that sets keepalive to `0` disables the keepalive check entirely for its session, and excessively large values can allow stale connections to linger and consume broker resources.
+:::
 
 Messages published to either topic are intercepted and consumed by EMQX before routing. They are never delivered to subscribers.
 
