@@ -605,7 +605,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   2026-02-03T13:53:54.576326+00:00 [error] Generic server <0.11323236.0> terminating. Reason: {{badkey,'actions.success'},[{erlang,map_get,['actions.success',#{}],[{error_info,#{module => erl_erts_errors}}]},{emqx_metrics_worker,idx_metric,4,[{file,"emqx_metrics_worker.erl"},{line,683}]},{emqx_metrics_worker,inc,4,[{file,"emqx_metrics_worker.erl"},{line,322}]},{emqx_rule_runtime,do_eval_action_reply_t...
   ```
 
-  Now, the system print more meaningful information to help debug the issue.
+  Now, the system prints more meaningful information to help debug the issue.
 
 #### Security
 
