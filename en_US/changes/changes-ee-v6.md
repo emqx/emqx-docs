@@ -12,7 +12,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16840](https://github.com/emqx/emqx/pull/16840) Implemented Agent-to-Agent (A2A) Card Registry. This feature enables autonomous AI agents to discover and collaborate through a standardized, event-driven MQTT 5.0 mechanism.
 
-- [#16958](https://github.com/emqx/emqx/pull/16958) Added focused `/api-spec.md` endpoint and `/api-spec.html` to support drill-down discovery of EMQX HTTP API context, especially for AI agents and other tools that benefit from fetching only the relevant API slices instead of a single bloated spec.
+- [#16958](https://github.com/emqx/emqx/pull/16958) Added focused `/api-spec.md` and `/api-spec.html` endpoints to support drill-down discovery of EMQX HTTP API context, especially for AI agents and other tools that benefit from fetching only the relevant API slices instead of a single bloated spec.
 
 #### Core MQTT Functionalities
 
