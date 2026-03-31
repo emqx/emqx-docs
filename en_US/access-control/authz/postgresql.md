@@ -80,7 +80,7 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
 ## Configure with Configuration Items
 
-You can configure the EMQX PostgresSQL authorizer with EMQX configuration items.
+You can configure the EMQX PostgreSQL authorizer with EMQX configuration items.
 
 The PostgreSQL authorizer is identified by type `postgresql`. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
