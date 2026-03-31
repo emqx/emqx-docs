@@ -217,7 +217,7 @@ NATS 网关通过以下两种方式支持认证：
 - [JWT 认证](../access-control/authn/jwt.md)
 - [LDAP 认证](../access-control/authn/ldap.md)
 
-NATS 网关从 `CONNECT` 报文提取以下认证字段，用于以上认证器的校验:
+NATS 网关从 `CONNECT` 报文提取以下认证字段，用于以上认证器的校验：
 - **Client ID**：默认自动生成随机字符串。
 - **Username**：`user` 字段。
 - **Password**：`pass` 字段。
@@ -273,9 +273,9 @@ gateway.nats {
 ```
 其他类型的认证器的配置格式参考每种 [EMQX 认证器](../access-control/authn/authn.md#emqx-认证器)的使用文档。
 
-#### 配置网关内部认证（internal_authn）
+#### 配置网关内部认证（`internal_authn`）
 
-NATS 网关的独有的认证方式，用于支持 NATS Server 中标准的三种认证方式。
+NATS 网关独有的认证方式，用于支持 NATS Server 中标准的三种认证方式。
 
 ##### Token 认证
 
