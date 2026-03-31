@@ -104,7 +104,7 @@ $$
 \text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
-### 动态 Keepalive 调整
+### 动态 Keep Alive 调整
 
 在车联网（T-Box）和移动物联网等场景中，MQTT 客户端需要在**活跃状态**（高频通信）和**休眠状态**（低功耗保活）之间切换。固定的 keepalive 值无法同时满足两种需求：
 
