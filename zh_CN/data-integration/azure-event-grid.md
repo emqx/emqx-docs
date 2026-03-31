@@ -21,7 +21,7 @@ Azure Event Grid 数据集成是 EMQX 的开箱即用功能，将 EMQX 的设备
 
 - **基于标准协议的 MQTT 桥接**：Azure Event Grid 支持 MQTT 3.1.1 和 MQTT 5.0，EMQX 可使用标准 MQTT 协议与之桥接，并与任何支持 MQTT 的客户端或服务互通。
 - **双向数据流**：支持从 EMQX 向 Azure Event Grid 发布消息（Sink），以及订阅 Azure Event Grid 主题并将消息转发到 EMQX（Source），实现灵活的物联网数据路由。
-- **安全连接**：Azure Event Grid 要求使用 TLS，连接器默认启用 TLS，并支持客户端证书认证，这是生产环境中推荐的认证方式。
+- **安全连接**：连接器支持 TLS，并支持客户端证书认证。
 - **灵活的主题映射**：通过 EMQX 规则引擎，可以对消息进行过滤、转换，并通过动态主题映射将其路由到特定的 Azure Event Grid 主题空间。
 - **丰富的 Azure 生态集成**：数据到达 Azure Event Grid 后，可路由到 Azure Functions、Azure Event Hubs、Azure Storage 等其他 Azure 服务，进行进一步的处理和分析。
 
@@ -43,12 +43,12 @@ Azure Event Grid 数据集成是 EMQX 的开箱即用功能，将 EMQX 的设备
 完成设置后，请记录以下连接信息，创建连接器时需要用到：
 
 - **主机名**：Event Grid 命名空间的 MQTT 代理主机名，格式为 `<namespace>.ts.<region>.eventgrid.azure.net`，端口为 `8883`。
-- **认证方式**：客户端证书（推荐）或 Microsoft Entra ID JWT。如使用客户端证书，请准备好证书和私钥文件。
+- **客户端证书和私钥**：Azure Event Grid 需要客户端证书认证。请从 Azure Event Grid 命名空间导出证书和私钥，以便在连接器中配置 TLS 时使用。
 - **主题空间**：您在 Azure Event Grid 中配置的主题空间和权限绑定。
 
 ::: tip
 
-Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请使用客户端证书或 Microsoft Entra ID JWT 进行认证。
+有关支持的认证方式和 TLS 要求，请参阅 [Azure Event Grid 官方文档](https://learn.microsoft.com/zh-cn/azure/event-grid/mqtt-client-authentication)。
 
 :::
 
@@ -68,7 +68,7 @@ Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请�
 
    - **服务器地址**：输入 Event Grid 命名空间的 MQTT 代理地址，例如 `myns.northeurope-1.ts.eventgrid.azure.net:8883`。默认端口为 `8883`。
    - **客户端 ID 前缀**：（可选）为 EMQX 自动生成的客户端 ID 指定前缀。EMQX 会按照 `[前缀]:{连接器名称}{随机字符串}:{连接池序号}` 的格式生成唯一客户端 ID。详情请参阅[连接池与客户端 ID 生成规则](./data-bridge-mqtt.md#连接池与客户端-id-生成规则)。
-   - **用户名**和**密码**：如使用客户端证书认证，可留空。如 Event Grid 命名空间配置有其他要求，请填写相应凭证。
+   - **用户名**和**密码**：留空。Azure Event Grid MQTT 不使用用户名/密码认证。
    - **Keepalive**：指定心跳间隔，单位为秒，默认值为 `160`。
    - **MQTT 协议版本**：选择 MQTT 协议版本。Azure Event Grid 支持 MQTT 3.1.1（`v4`）和 MQTT 5.0（`v5`）。
    - **静态客户端 ID 映射表**：（可选）为特定 EMQX 节点配置静态客户端 ID，适用于 Azure Event Grid 要求预先注册客户端 ID 的场景。详情请参阅[配置静态客户端 ID](./data-bridge-mqtt.md#配置静态客户端-id)。
@@ -80,9 +80,9 @@ Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请�
      :::
 
    - **清除会话**：默认启用。启用后，EMQX 每次连接到 Azure Event Grid 时都会创建新的会话。
-   - **启用 TLS**：默认启用。Azure Event Grid 要求使用 TLS。如使用客户端证书认证，请在此处配置证书和私钥。详细的 TLS 配置选项，请参阅[外部资源访问的 TLS](../network/overview.md#启用-tls-加密访问外部资源)。
+   - **启用 TLS**：开启此选项。Azure Event Grid 要求使用 TLS。如使用客户端证书认证，请在此处配置证书和私钥。详细的 TLS 配置选项，请参阅[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 
-6. 高级设置（可选）：详情请参阅[Sink 的特性](./data-bridges.md#sink-的特性)。
+6. **高级设置（可选）**：详情请参阅[连接器高级设置](#连接器高级设置)。
 
 7. 点击**创建**之前，可先点击**测试连接**，验证 EMQX 是否能成功连接到 Azure Event Grid。
 
@@ -128,7 +128,7 @@ Azure Event Grid MQTT 需要使用 TLS，不支持用户名/密码认证，请�
 
 7. **备选动作（可选）**：如需在消息投递失败时提高可靠性，可定义一个或多个备选动作，当主 Sink 处理消息失败时触发。详情请参阅[备选动作](./data-bridges.md#备选动作)。
 
-8. **高级设置（可选）**：详情请参阅[Sink 的特性](./data-bridges.md#sink-的特性)。
+8. **高级设置（可选）**：详情请参阅 [Sink 高级设置](#sink-高级设置)。
 
 9. 点击**创建**之前，可先点击**测试连接**，验证 Sink 能否连接到 Azure Event Grid。
 
@@ -229,3 +229,41 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure Event Grid" }'
    topic: azure/devices/device1/messages
    payload: hello from azure
    ```
+
+## 高级设置
+
+本节介绍 Azure Event Grid 连接器和 Sink 的高级配置选项。在 Dashboard 中配置时，展开**高级设置**即可根据实际需求调整以下参数。
+
+### 连接器高级设置
+
+| 字段名称 | 说明 | 默认值 |
+| --- | --- | --- |
+| 消息重发间隔 | 消息投递失败时，两次重试之间的等待时间。 | `15` 秒 |
+| 桥接模式 | 启用后，连接器将以 MQTT 桥接模式连接，向远端 Broker 声明本连接为桥接连接。 | 禁用 |
+| 飞行窗口 | 每个连接中允许同时存在的未确认消息最大数量。 | `32` |
+| 连接池大小 | 与 Azure Event Grid 保持的并发 MQTT 连接数。增大该值可提升吞吐量。 | `8` |
+| 连接超时 | 等待与 Azure Event Grid 建立 TCP 连接的最长时间。 | `10` 秒 |
+| 启动超时时间 | 连接器启动后，等待资源进入健康状态再开始接受请求的最长时间。 | `5` 秒 |
+| 健康检查间隔 | 连接器对连接进行自动健康检查的时间间隔。 | `15` 秒 |
+| 健康检查超时 | 每次健康检查允许完成的最长时间。 | `60` 秒 |
+
+### Sink 高级设置
+
+| 字段名称 | 说明 | 默认值 |
+| --- | --- | --- |
+| 缓存池大小 | 负责处理 EMQX 与 Azure Event Grid 之间数据流的缓存工作进程数量。高负载下可适当增大该值以提升吞吐量。 | `16` |
+| 请求超期 | 请求在缓冲区中保持有效的最长时间。超过该时限的请求（无论仍在排队还是已发送但未收到确认）将被丢弃。 | `45` 秒 |
+| 健康检查间隔 | Sink 对连接进行自动健康检查的时间间隔。 | `15` 秒 |
+| 健康检查间隔抖动 | 在健康检查间隔上随机增加的延迟，防止多个节点同时发起检查。当多个动作或数据源共用同一连接器时尤为有用。 | `0` 毫秒 |
+| 健康检查超时 | 每次 Sink 健康检查允许完成的最长时间。 | `60` 秒 |
+| 缓存队列最大长度 | 每个缓存工作进程可缓存的最大字节数。如果工作负载存在突发流量超出默认容量的情况，可适当增大该值。 | `256` MB |
+| 请求模式 | `异步` 模式下，EMQX 无需等待 Azure Event Grid 确认即可继续发布消息；`同步` 模式下则等待确认后再继续。异步模式吞吐量更高，但可能出现乱序投递。 | `异步` |
+| 请求飞行队列窗口 | 同时允许存在的最大未确认请求数。当**请求模式**为`异步`时，若需保证单个客户端的消息顺序，请将此值设为 `1`。 | `100` |
+
+### Source 高级设置
+
+| 字段名称 | 说明 | 默认值 |
+| --- | --- | --- |
+| 健康检查间隔 | Source 对连接进行自动健康检查的时间间隔。 | `15` 秒 |
+| 健康检查间隔抖动 | 在健康检查间隔上随机增加的延迟，防止多个节点同时发起检查。当多个动作或数据源共用同一连接器时尤为有用。 | `0` 毫秒 |
+| 健康检查超时 | 每次 Source 健康检查允许完成的最长时间。 | `60` 秒 |
