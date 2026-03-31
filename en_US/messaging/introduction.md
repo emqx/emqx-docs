@@ -27,9 +27,20 @@ In addition to the native MQTT features, EMQX provides several extended capabili
 - [Delayed Publish](./mqtt-delayed-publish.md)
 - [Auto Subscribe](./mqtt-auto-subscription.md)
 - [Topic Rewrite](./mqtt-topic-rewrite.md)
+- [Subscription Filters](../subscription-filter/subscription-filter-concept.md)
 - [Message Queue](../message-queue/message-queue-concept.md)
 
-### Message Queue (Advanced Feature)
+### Subscription Filters (Advanced)
+
+[Subscription Filters](../subscription-filter/subscription-filter-concept.md) is an advanced feature introduced in EMQX 6.2 that extends the MQTT 5.0 pub/sub model with content-based filtering at the subscription level. By appending a filter expression to a topic filter, subscribers can instruct EMQX to deliver only messages whose MQTT 5.0 User Properties satisfy the specified conditions.
+
+This enables precise, server-side message routing without requiring separate topic hierarchies or changes to publishers:
+
+- Filter on any MQTT 5.0 User Property key-value pair
+- Combine multiple conditions with logical AND (`&`)
+- Fully server-side with no client-side filtering logic required
+
+### Message Queue (Advanced)
 
 [Message Queue](../message-queue/message-queue-concept.md) is an advanced feature introduced in EMQX 6.0 that extends the MQTT pub/sub model with durable and asynchronous message queuing capabilities. It allows messages to be stored even when subscribers are offline and supports advanced dispatch strategies and message compaction through Last-Value Semantics.
 
