@@ -89,16 +89,18 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
    
          - 生成的哈希以十六进制字符串表示，并与存储的凭据进行不区分大小写的比对。
    - **调用条件**：一个 Variform 表达式，用于控制是否将此 PostgreSQL 认证器应用于客户端连接。该表达式会根据客户端的属性（例如 `username`、`clientid`、`listener` 等）进行评估。如果表达式的结果为字符串 `"true"`，则会触发认证器。否则，认证器将被跳过。有关调用条件的更多信息，请参见[认证器调用条件](./authn.md#认证器调用条件)。
-   - **启用 TLS**：如果要启用TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和 TLS](../../network/overview.md)。
+   - **启用 TLS**：如果要启用TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和 TLS](../../network/overview.md#启用-tls-加密访问外部资源)。
    - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
-   - **高级设置**：
+   - **高级设置**：配置连接池、超时及预处理语句相关选项。
      - **连接池大小**（可选）：填入一个整数用于指定从 EMQX 节点到 PostgreSQL 数据库的并发连接数；默认值：`8`。
-     - **禁用预处理**（可选）：如果您使用的是不支持预处理语句会话的 PostgreSQL 服务，例如在事务模式下的 PGBouncer 或 Supabase，请启用此项。这个选项在  EMQX v5.7.1 中引入。
+     - **查询超时**（可选）：指定 EMQX 等待查询结果的最长时间，超时则视为失败。支持毫秒、秒、分钟、小时等单位。默认值：`5` 秒。
+     - **连接超时**（可选）：指定 EMQX 等待数据库连接建立的最长时间。支持毫秒、秒、分钟、小时等单位。默认值：`15` 秒。
+     - **禁用预处理语句**（可选）：禁止在数据库查询中使用预处理语句（Prepared Statements）。如果您的 PostgreSQL 代理或中间件（例如事务模式下的 PGBouncer 或 Supabase）不支持会话级功能（如预处理语句），请启用此选项。默认：禁用。
 5. 点击**创建**完成配置。
 
 ### 通过配置文件配置
 
-您也可通过配置文件完成相关配置。 <!-- 具体操作步骤，请参考： [authn-postgresql:authentication](../../configuration/configuration-manual.html#authn-postgresql:authentication)。-->
+您也可以通过配置文件完成以上配置。详细参数说明请参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 配置示例：
 
@@ -117,5 +119,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
   password = public
   server = "127.0.0.1:5432"
   query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+  query_timeout = "5s"
+  connect_timeout = "15s"
+  disable_prepared_statements = false
 }
 ```
