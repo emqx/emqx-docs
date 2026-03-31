@@ -52,13 +52,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   In InfluxDB Write Syntax, float is the default numeric type and integers must be explicitly annotated. Previously, EMQX would interpret a non-annotated integer as a one-character string, causing insertion to fail if the target column was of type float.
 
-- [#16707](https://github.com/emqx/emqx/pull/16707) Added a Data Integration to consume from and publish messages to Azure Event Grid.
+- [#16707](https://github.com/emqx/emqx/pull/16707) EMQX supports data integration with Azure Event Grid.
 
 - [#16750](https://github.com/emqx/emqx/pull/16750) Added support for Workload Identity Federation (WIF) authentication in GCP connectors (GCP PubSub Producer and Consumer, BigQuery) via Service Account Impersonation. Currently, only OIDC workload identity pool providers using the Client Credentials grant type are supported.
 
 - [#16773](https://github.com/emqx/emqx/pull/16773) When using the MQTT connector with SSL enabled, the Server Name Indication (SNI) field is now automatically populated with the server's hostname if left unset.
 
-- [#16893](https://github.com/emqx/emqx/pull/16893) Added a new connector and action that appends data to QuasarDB.
+- [#16893](https://github.com/emqx/emqx/pull/16893) EMQX supports data integration with QuasarDB.
 
 - [#16962](https://github.com/emqx/emqx/pull/16962) Improved Kafka source polling behavior. Fetch requests now wait briefly for data instead of immediately returning empty batches when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
 
@@ -74,11 +74,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `POST /authentication/:id/metrics/reset` resets counters for a specific authenticator.
   - `POST /authorization/sources/:type/metrics/reset` resets counters for a specific authorization source.
 
-- [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication as a fallback for plugin API endpoints. Plugin UI iframes served by the Dashboard can now authenticate via the `emqx_auth` cookie when no `Authorization` header is present. This only applies to `/api/v5/plugin_api/...` paths.
-
 #### Management
 
 - [#16958](https://github.com/emqx/emqx/pull/16958) Added `emqx ctl api_keys` CLI commands to list, show, add, delete, enable, and disable API keys from the command line.
+
+#### Plugins
+
+- [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication as a fallback for plugin API endpoints. Plugin UI iframes served by the Dashboard can now authenticate via the `emqx_auth` cookie when no `Authorization` header is present. This only applies to `/api/v5/plugin_api/...` paths.
 
 #### Gateway
 

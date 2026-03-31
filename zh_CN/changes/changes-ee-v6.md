@@ -22,9 +22,9 @@
 
   启用后，客户端可以使用 `?` 后缀进行订阅，例如 `sensor/+/temperature?location=roomA&value>25`，EMQX 将仅投递 MQTT 5.0 User Properties 满足该过滤表达式的消息。禁用时，`?` 将作为主题过滤器文本的一部分，不执行额外过滤。
 
-  因订阅过滤不匹配而被丢弃的消息将通过现有的 `delivery.dropped` 事件上报，原因为 `subscription_filter`，并由新增的 `delivery.dropped.filter` 指标进行统计。
+  因订阅过滤不匹配而被丢弃的消息将触发 `delivery.dropped` 钩子/事件，触发原因为 `subscription_filter`；并由新增的 `delivery.dropped.filter` 指标进行统计。
 
-- [#16929](https://github.com/emqx/emqx/pull/16929) 引入两种新的限速器类型：`delivery_messages` 和 `delivery_bytes`。与现有的 `messages` 和 `bytes` 限速器（限制单个客户端的发布速率）不同，新限速器用于限制单个客户端从任意来源接收消息的速率。当达到限制时，QoS 0 消息将被丢弃，QoS 1/2 消息将在内部排队并按配置的重试间隔调度重试。
+- [#16929](https://github.com/emqx/emqx/pull/16929) 引入两种新的限速器类型：`delivery_messages` 和 `delivery_bytes`。与现有的 `messages` 和 `bytes` 限速器不同，新限速器用于限制服务器客户端进程从任意来源接收消息的速率。当达到限制时，QoS 0 消息将被丢弃，QoS 1/2 消息将在内部排队并按配置的重试间隔调度重试。
 
   新限速器仅支持内存会话（`durable_sessions.enable = false`）。默认值为不限速，保持向后兼容。
 
@@ -52,13 +52,13 @@
 
   在 InfluxDB Write Syntax 中，浮点数是默认的数值类型，整数需要显式标注。此前，EMQX 遇到未标注的整数时，会将其解读为单字符字符串，导致目标列类型为 float 时写入失败。
 
-- [#16707](https://github.com/emqx/emqx/pull/16707) 新增 Azure Event Grid 数据集成，支持从 Azure Event Grid 消费消息及向其发布消息。
+- [#16707](https://github.com/emqx/emqx/pull/16707) EMQX 新增与 Azure Event Grid 数据集成，支持从 Azure Event Grid 消费消息及向其发布消息。
 
 - [#16750](https://github.com/emqx/emqx/pull/16750) GCP 连接器（GCP PubSub 生产者/消费者、BigQuery）现已通过 Service Account 模拟方式支持工作负载身份联合（Workload Identity Federation，WIF）认证。当前仅支持使用 Client Credentials 授权类型的 OIDC 工作负载身份池提供程序。
 
 - [#16773](https://github.com/emqx/emqx/pull/16773) 使用 MQTT 连接器并启用 SSL 时，如果未设置服务器名称指示（SNI），现在将自动使用服务器主机名填充该字段。
 
-- [#16893](https://github.com/emqx/emqx/pull/16893) 新增用于向 QuasarDB 追加写入数据的连接器和动作。
+- [#16893](https://github.com/emqx/emqx/pull/16893) EMQX 新增与 QuasarDB 数据集成。
 
 - [#16962](https://github.com/emqx/emqx/pull/16962) 改进了 Kafka Source 的轮询行为。当没有可用记录时，Fetch 请求现在会短暂等待数据到来，而不是立即返回空批次。这减少了不必要的轮询延迟，并有助于 Kafka 消费者更及时地接收新记录。
 
@@ -74,15 +74,17 @@
   - `POST /authentication/:id/metrics/reset`：重置指定认证器的计数器。
   - `POST /authorization/sources/:type/metrics/reset`：重置指定授权源的计数器。
 
-- [#16849](https://github.com/emqx/emqx/pull/16849) 为插件 API 端点新增基于 Cookie 的认证回退机制。Dashboard 提供的插件 UI iframe 现在可以在未携带 `Authorization` 请求头时，通过 `emqx_auth` Cookie 进行认证。此机制仅适用于 `/api/v5/plugin_api/...` 路径。
-
 #### 管理
 
 - [#16958](https://github.com/emqx/emqx/pull/16958) 新增 `emqx ctl api_keys` 命令，支持通过命令行对 API Key 进行列出、查看、添加、删除、启用和禁用操作。
 
+#### 插件
+
+- [#16849](https://github.com/emqx/emqx/pull/16849) 为插件 API 端点新增基于 Cookie 的认证回退机制。Dashboard 提供的插件 UI iframe 现在可以在未携带 `Authorization` 请求头时，通过 `emqx_auth` Cookie 进行认证。此机制仅适用于 `/api/v5/plugin_api/...` 路径。
+
 #### 网关
 
-- [#16734](https://github.com/emqx/emqx/pull/16734) 为 NATS 网关新增 `token`、`nkey` 和 `jwt` 内置认证方式，按顺序依次尝试，以缩小与 NATS Server 之间的认证功能差距。
+- [#16734](https://github.com/emqx/emqx/pull/16734) 为 NATS 网关新增 `token`、`nkey` 和 `jwt` 内置认证方式，按顺序依次尝试，以缩小与 NATS Server 之间的认证功能差异。
 
 #### 部署与安全
 
@@ -149,7 +151,7 @@
 
 #### 插件
 
-- [#16842](https://github.com/emqx/emqx/pull/16842) 减少了在没有 peer 节点持有插件配置时拉取插件配置产生的多余 warning 日志。此前，节点启动时从 peer 节点拉取插件配置，即使在无害的情况下（例如该插件首次被加载，没有任何 peer 持有配置），也会记录 warning 日志。此类情况现在改为 debug 级别日志，而真正的错误（如 RPC 失败、超时）仍保留为 warning。
+- [#16842](https://github.com/emqx/emqx/pull/16842) 减少了在没有 peer 节点持有插件配置时拉取插件配置产生的多余 warning 日志。此前，节点启动时从集群中的节点拉取插件配置，即使在无害的情况下（例如该插件首次被加载，没有任何节点持有配置），也会记录 warning 日志。此类情况现在改为 debug 级别日志，而真正的错误（如 RPC 失败、超时）仍保留为 warning。
 - [#16843](https://github.com/emqx/emqx/pull/16843) 修复了 HTTP 头和查询字符串参数未被透传至插件 API 处理器的问题，导致插件收到空的请求头和缺失的查询参数。
 - [#16904](https://github.com/emqx/emqx/pull/16904) 防止同一插件的多个版本同时被启用或运行。当启用更新版本时，已配置的旧版本现在将自动禁用。管理 API 操作也不再在另一版本仍处于活动状态时报告成功，而是返回明确的错误。
 
@@ -167,7 +169,7 @@
 
 #### ExHook
 
-- [#16890](https://github.com/emqx/emqx/pull/16890) 修复了 ExHook 在重连成功重载后，相同服务器名称可能在运行列表中出现重复并触发重复回调分发的问题。
+- [#16890](https://github.com/emqx/emqx/pull/16890) 修复了 ExHook 在重连成功，可能存在的回调被重复触发的问题。
 
 #### 许可证
 

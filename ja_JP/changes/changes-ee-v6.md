@@ -74,6 +74,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `POST /authentication/:id/metrics/reset`
   - `POST /authorization/sources/:type/metrics/reset`
 
+#### Plugins
+
 - [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication as a fallback for plugin API endpoints (`/api/v5/plugin_api/...`).
 
 #### Gateway
