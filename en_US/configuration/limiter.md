@@ -1,6 +1,6 @@
 # Rate Limiter Configuration
 
-Limiter is a new feature introduced in EMQX 5.0, it is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time. For more information on the Limiter and how it works, see [Rate Limit](../rate-limit/rate-limit.md).
+Limiter is a new feature introduced in EMQX 5.0. It is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time. For more information on the Limiter and how it works, see [Rate Limit](../rate-limit/rate-limit.md).
 
 ## Listener-Level Limiters
 
