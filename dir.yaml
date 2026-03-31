@@ -538,6 +538,10 @@
       title_cn: Azure Blob Storage
       title_ja: Azure Blob Storage
       path: data-integration/azure-blob-storage
+    - title_en: Azure Event Grid
+      title_cn: Azure Event Grid
+      title_ja: Azure Event Grid
+      path: data-integration/azure-event-grid
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
       title_ja: Azure Event Hubs
