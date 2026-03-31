@@ -108,6 +108,7 @@ EMQX supports data integrations with the following types of data systems:
 - [AlloyDB](./alloydb.md)
 - [CockroachDB](./cockroachdb.md)
 - [Redshift](./redshift.md)
+- [QuasarDB](./quasardb.md)
 
 **NoSQL**
 

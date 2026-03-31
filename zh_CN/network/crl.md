@@ -16,17 +16,15 @@ EMQX 支持通过配置文件 `emqx.conf` 启用 CRL 检查功能。
 
 **示例代码**：
 
-
 ```hcl
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
-  max_connections = 512000
   ssl_options {
     # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the clients.
     cacertfile = "/etc/emqx/certs/ca.pem"
     # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
     certfile = "/etc/emqx/certs/server.pem"
-    # PEM format file containing the private key corresponding to the SSL/TLS certificate
+    # PEM format file containing the private key corresponding to the SSL/TLS certificate.
     keyfile = "/etc/emqx/certs/server.key"
     # Must verify peer certificates
     verify = verify_peer
@@ -38,7 +36,4 @@ listeners.ssl.default {
 }
 ```
 
-其中：
-
-- `verify = verify_peer` 表示将启用对端验证。
 - `enable_crl_check = true` 表示启用CRL 检查。

@@ -635,6 +635,10 @@
       title_cn: PostgreSQL
       title_ja: PostgreSQL
       path: data-integration/data-bridge-pgsql
+    - title_en: QuasarDB
+      title_cn: QuasarDB
+      title_ja: QuasarDB
+      path: data-integration/quasardb
     - title_en: RabbitMQ
       title_cn: RabbitMQ
       title_ja: RabbitMQ
