@@ -109,7 +109,7 @@ $$
 \text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
-### Dynamic Keepalive Adjustment
+### Dynamic Keep Alive Adjustment
 
 In scenarios such as vehicle networking (T-Box) and mobile IoT, MQTT clients need to switch between an **active state** (frequent communication) and a **sleep state** (low-power idle). A single fixed keepalive value cannot satisfy both needs simultaneously:
 
