@@ -109,6 +109,58 @@ $$
 \text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
+### Dynamic Keepalive Adjustment
+
+In scenarios such as vehicle networking (T-Box) and mobile IoT, MQTT clients need to switch between an **active state** (frequent communication) and a **sleep state** (low-power idle). A single fixed keepalive value cannot satisfy both needs simultaneously:
+
+- A short keepalive keeps disconnection detection fast during active use but causes excessive heartbeat traffic and battery drain when the device is parked or idle.
+- A long keepalive reduces traffic during sleep but delays disconnection detection during active use.
+
+EMQX supports dynamic, per-client keepalive adjustment through a set of `$SETOPTS/` system topics. A client can publish to these topics to update its own broker-side keepalive tolerance, or a privileged backend service can update multiple clients at once, all without disconnecting or renegotiating the MQTT connection. The adjustment is applied in-memory to the active session only and is not persisted. The client reverts to its originally negotiated keepalive value after a broker restart.
+
+#### Single-Client Update: `$SETOPTS/mqtt/keepalive`
+
+A client publishes to this topic to update its own broker-side keepalive timeout. EMQX derives the client ID from the publishing session automatically.
+
+**Payload:** A string representation of a non-negative integer, in seconds.
+
+```text
+300
+```
+
+**Valid range:** `0`–`65535` seconds. `0` disables the keepalive check for that session. Values above `65535` are clamped to `65535`. If `mqtt.server_keepalive` is configured for the client's zone, the effective value is also clamped to that maximum.
+
+**Example use case:** When a vehicle enters a parked state, the T-Box client publishes `300` to `$SETOPTS/mqtt/keepalive`. EMQX extends the keepalive tolerance to 300 s (450 s effective idle timeout with the default `1.5×` multiplier), reducing heartbeat frequency while keeping the MQTT connection alive for remote command delivery.
+
+#### Batch Update: `$SETOPTS/mqtt/keepalive-bulk`
+
+A backend service publishes to this topic to update keepalive for multiple clients in a single message.
+
+**Payload:** A JSON array. Each element must contain:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `clientid` | String | Yes | Target MQTT client identifier |
+| `keepalive` | Integer | Yes | New keepalive interval in seconds (0–65535) |
+
+```json
+[
+  { "clientid": "tbox-001", "keepalive": 300 },
+  { "clientid": "tbox-002", "keepalive": 60 }
+]
+```
+
+Batch updates are processed asynchronously and are cluster-aware: EMQX locates the node hosting each target client and applies the update via inter-node RPC. If more than 10 batch requests are queued internally, additional requests are dropped and a warning is logged.
+
+#### Access Control
+
+The two topics are intentionally separate to support fine-grained ACL:
+
+- Allow all clients to publish to `$SETOPTS/mqtt/keepalive` so each device can self-adjust its keepalive.
+- Restrict `$SETOPTS/mqtt/keepalive-bulk` to trusted backend services only.
+
+Messages published to either topic are intercepted and consumed by EMQX before routing. They are never delivered to subscribers.
+
 ## Session Settings
 
 In MQTT, a session refers to the connection between a client and a broker. As in EMQX, when a client connects to EMQX, it establishes a session that allows it to subscribe to topics and receive messages, as well as publish messages to EMQX.
