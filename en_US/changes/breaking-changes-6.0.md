@@ -4,7 +4,7 @@
 
 - [#16589](https://github.com/emqx/emqx/pull/16589) The jq language in the Rule Engine runtime has been upgraded from version 1.6.1 to 1.8.1, introducing several subtle incompatibilities. These are unlikely to affect your deployment but are documented here for completeness.
 
-  - **Providing empty string as jq program is now considered an error**: use `"."` instead. ([jq#2790](https://github.com/jqlang/jq/pull/2790))
+  - **Providing an empty string as a jq program is now considered an error**: use `"."` instead. ([jq#2790](https://github.com/jqlang/jq/pull/2790))
 
   - **String functions now use code point indices** : `indices/1`, `index/1`, and `rindex/1` functions now use code point indices instead of byte indices; use `utf8bytelength/0` to get byte index if needed. ([jq#3065](https://github.com/jqlang/jq/pull/3065))
 
