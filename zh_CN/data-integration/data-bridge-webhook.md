@@ -12,7 +12,7 @@ HTTP 服务数据集成提供了将 EMQX 与外部服务快速集成的方法。
 
 HTTP 服务数据集成是 EMQX 中开箱即用的功能，通过简单的配置即可实现 EMQX 与外部服务的集成。借助 HTTP 服务，用户可以使用自己熟悉的编程语言和框架编写代码，实现自定义的灵活和复杂的数据处理逻辑。
 
-![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
+![EMQX Webhook 集成](./assets/emqx-integration-http.png)
 
 EMQX 通过规则引擎与 Sink 将设备事件和数据转发至 HTTP 服务，其工作流程如下：
 
