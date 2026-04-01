@@ -6,7 +6,7 @@
 
   - **Providing an empty string as a jq program is now considered an error**: use `"."` instead. ([jq#2790](https://github.com/jqlang/jq/pull/2790))
 
-  - **String functions now use code point indices** : `indices/1`, `index/1`, and `rindex/1` functions now use code point indices instead of byte indices; use `utf8bytelength/0` to get byte index if needed. ([jq#3065](https://github.com/jqlang/jq/pull/3065))
+  - **String functions now use code point indices**: `indices/1`, `index/1`, and `rindex/1` functions now use code point indices instead of byte indices; use `utf8bytelength/0` to get byte index if needed. ([jq#3065](https://github.com/jqlang/jq/pull/3065))
 
   - **`tonumber/0` rejects numbers with leading or trailing whitespace**: use `trim/0` to remove leading and trailing whitespace before calling `tonumber/0`. ([jq#3055](https://github.com/jqlang/jq/pull/3055), [jq#3195](https://github.com/jqlang/jq/pull/3195))
 
