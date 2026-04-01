@@ -904,23 +904,38 @@
       path: subscription-filter/subscription-filter-concept
       collapsed: true
       children:
-        - subscription-filter/subscription-filter-get-started
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          path: subscription-filter/subscription-filter-get-started
     - title_en: Message Queue
       title_cn: 消息队列
       title_ja: Message Queue
       path: message-queue/message-queue-concept
       collapsed: true
       children:
-        - message-queue/message-queue-task
-        - message-queue/message-queue-quick-start
+        - title_en: User Guide
+          title_cn: 用户指南
+          title_ja: ユーザーガイド
+          path: message-queue/message-queue-task
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          path: message-queue/message-queue-quick-start
     - title_en: MQTT Streams
       title_cn: MQTT 消息流
       title_ja: MQTT Streams
       path: mqtt-stream/mqtt-stream-concept
       collapsed: true
       children:
-        - mqtt-stream/mqtt-stream-task
-        - mqtt-stream/mqtt-stream-quick-start
+        - title_en: User Guide
+          title_cn: 用户指南
+          title_ja: ユーザーガイド
+          path: mqtt-stream/mqtt-stream-task
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          path: mqtt-stream/mqtt-stream-quick-start
     - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
@@ -940,17 +955,32 @@
       path: cluster-linking/introduction
       collapsed: true
       children:
-        - cluster-linking/quick-start
-        - cluster-linking/configuration
+        - title_en: User Guide
+          title_cn: 用户指南
+          title_ja: ユーザーガイド
+          path: cluster-linking/configuration
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          path: cluster-linking/quick-start
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       title_ja: MQTT ベースのファイル転送
       path: file-transfer/introduction
       collapsed: true
       children:
-        - file-transfer/quick-start
-        - file-transfer/broker
-        - file-transfer/client
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          path: file-transfer/quick-start
+        - title_en: Server-Side Settings
+          title_cn: 服务端配置
+          title_ja: サーバー側設定の構成
+          path: file-transfer/broker
+        - title_en: Client Development
+          title_cn: 客户端开发
+          title_ja: クライアント開発
+          path: file-transfer/client
     - title_en: Multi-Protocol Gateway
       title_cn: 多协议网关
       title_ja: マルチプロトコルゲートウェイ
@@ -972,7 +1002,10 @@
           path: gateway/jt808
           collapsed: true
           children:
-            - gateway/jt808_data_exchange
+            - title_en: Data Exchange Format
+              title_cn: 数据交换格式
+              title_ja: JT/T 808 データ交換
+              path: gateway/jt808_data_exchange
         - gateway/nats
         - title_en: GB/T 32960 Gateway
           title_cn: GB/T 32960 协议网关
@@ -1262,26 +1295,77 @@
     - title_en: Known Issues
       title_cn: 已知问题
       title_ja: 既知の問題
+      collapsed: true
       children:
-        - changes/known-issues-6.1
-        - changes/known-issues-6.0
-        - changes/known-issues-5.9
-        - changes/known-issues-5.8
-        - changes/known-issues-5.3
-        - changes/known-issues-5.1
+        - title_en: EMQX 6.1
+          title_cn: EMQX 6.1
+          title_ja: EMQX 6.1
+          path: changes/known-issues-6.1
+        - title_en: EMQX 6.0
+          title_cn: EMQX 6.0
+          title_ja: EMQX 6.0
+          path: changes/known-issues-6.0
+        - title_en: EMQX 5.9
+          title_cn: EMQX 5.9
+          title_ja: EMQX 5.9
+          path: changes/known-issues-5.9
+        - title_en: EMQX 5.8
+          title_cn: EMQX 5.8
+          title_ja: EMQX 5.8
+          path: changes/known-issues-5.8
+        - title_en: EMQX 5.3
+          title_cn: EMQX 5.3
+          title_ja: EMQX 5.3
+          path: changes/known-issues-5.3
+        - title_en: EMQX 5.1
+          title_cn: EMQX 5.1
+          title_ja: EMQX 5.1
+          path: changes/known-issues-5.1
     - title_en: Incompatible Changes
       title_cn: 不兼容变更
       title_ja: 非互換の変更
       collapsed: true
       children:
-        - changes/breaking-changes-6.0
-        - changes/breaking-changes-5.10
-        - changes/breaking-changes-ee-5.9
-        - changes/breaking-changes-ee-5.8
-        - changes/breaking-changes-ee-5.7
-        - changes/breaking-changes-ee-5.6
-        - changes/breaking-changes-ee-5.5
-        - changes/breaking-changes-ee-5.4
+        - title_en: EMQX 6.2
+          title_cn: EMQX 6.2
+          title_ja: EMQX 6.2
+          path: changes/breaking-changes-6.2
+        - title_en: EMQX 6.1
+          title_cn: EMQX 6.1
+          title_ja: EMQX 6.1
+          path: changes/breaking-changes-6.1
+        - title_en: EMQX 6.0
+          title_cn: EMQX 6.0
+          title_ja: EMQX
+          path: changes/breaking-changes-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/breaking-changes-5.10
+        - title_en: EMQX 5.9
+          title_cn: EMQX 5.9
+          title_ja: EMQX 5.9
+          path: changes/breaking-changes-ee-5.9
+        - title_en: EMQX 5.8
+          title_cn: EMQX 5.8
+          title_ja: EMQX 5.8
+          path: changes/breaking-changes-ee-5.8
+        - title_en: EMQX 5.7
+          title_cn: EMQX 5.7
+          title_ja: EMQX 5.7
+          path: changes/breaking-changes-ee-5.7
+        - title_en: EMQX 5.6
+          title_cn: EMQX 5.6
+          title_ja: EMQX 5.6
+          path: changes/breaking-changes-ee-5.6
+        - title_en: EMQX 5.5
+          title_cn: EMQX 5.5
+          title_ja: EMQX 5.5
+          path: changes/breaking-changes-ee-5.5
+        - title_en: EMQX 5.4
+          title_cn: EMQX 5.4
+          title_ja: EMQX 5.4
+          path: changes/breaking-changes-ee-5.4
     - changes/breaking-changes-6.0.0
     - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
@@ -1289,9 +1373,18 @@
       path: changes/breaking-changes-5.1.0
       collapsed: true
       children:
-        - changes/auth-4.4-to-5.1-compatibility
-        - changes/data-integration-4.4-to-5.1-incompatibility
-        - changes/gateway-4.4-to-5.1-incompatibility
+        - title_en: Authentication / Authorization
+          title_cn: 认证与授权
+          title_ja: 認証と認可
+          path: changes/auth-4.4-to-5.1-compatibility
+        - title_en: Data Integration
+          title_cn: 数据集成
+          title_ja: データ統合
+          path: changes/data-integration-4.4-to-5.1-incompatibility
+        - title_en: Gateway
+          title_cn: 网关
+          title_ja: ゲートウェイ
+          path: changes/gateway-4.4-to-5.1-incompatibility
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日
