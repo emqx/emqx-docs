@@ -4,7 +4,7 @@
 
 EMQX rules allow users to define SQL-like rules to process and route messages. These rules can include jq functions to perform complex transformations on JSON payloads as they pass through the broker.
 
-If you are new to jq language, you can refer to the [Reference](#references) section to get started quickly.
+If you are new to jq, you can refer to the [Reference](#references) section to get started quickly.
 
 ::: tip
 
