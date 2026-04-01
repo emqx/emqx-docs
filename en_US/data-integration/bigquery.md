@@ -84,7 +84,9 @@ In [Microsoft Entra ID](https://portal.azure.com/), register an application that
 
 ::: tip Note
 
-The `scope` must match the application's audience (`aud`) exactly, otherwise the token exchange with GCP STS will fail. See [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow) in the Microsoft documentation for details.
+The `scope` must exactly match the application's audience (aud). Otherwise, the token exchange with GCP STS will fail. See the [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow) in the Microsoft documentation for details.
+
+When granting the Service Account access to the WIF pool, use the **Object ID** (not the Application ID) as the Subject value. The Object ID is visible on the application's Overview page in the Azure portal under **Enterprise applications**.
 
 :::
 
@@ -141,15 +143,15 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **BigQuery** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my_bigquery`. The name is used to associate the BigQuery Sink with the connector and must be unique within the cluster.
-4. In the **Authentication** dropdown, select an authentication method and fill in the corresponding fields:
-   - **Service Account JSON**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-   - **Workload Identity Federation (WIF)**: Fill in the following fields. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
+4. In the **Authentication** dropdown, select one of the following authentication methods and fill in the corresponding fields:
+   - **Service Account JSON**: Upload the Service Account credentials in JSON format that you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+   - **Workload Identity Federation (WIF)**: Fill in the following fields. This method does not use a service account JSON file. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
      - **GCP Project ID**: The Project ID for the resource being accessed by the connector.
      - **GCP Project Number**: The Project Number for the resource being accessed by the connector.
      - **Service Account Email**: The email of the service account that will be impersonated.
      - **Workload Identity Pool ID**: The ID of the Workload Identity Pool used in the WIF token exchange.
      - **Workload Identity Provider ID**: The ID of the Workload Identity Provider used in the WIF token exchange.
-     - Under **Initial Token Configuration**, select the credential type and fill in the corresponding fields. Currently only **OIDC with Client Credentials Grant Type** is supported:
+     - Under **Initial Token Configuration**, select the credential type and fill in the corresponding fields. Currently, only **OIDC with Client Credentials Grant Type** is supported:
        - **Endpoint URI**: The OAuth Token Endpoint URI from the OIDC provider.
        - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
        - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
