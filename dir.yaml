@@ -538,6 +538,10 @@
       title_cn: Azure Blob Storage
       title_ja: Azure Blob Storage
       path: data-integration/azure-blob-storage
+    - title_en: Azure Event Grid
+      title_cn: Azure Event Grid
+      title_ja: Azure Event Grid
+      path: data-integration/azure-event-grid
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
       title_ja: Azure Event Hubs
@@ -635,6 +639,10 @@
       title_cn: PostgreSQL
       title_ja: PostgreSQL
       path: data-integration/data-bridge-pgsql
+    - title_en: QuasarDB
+      title_cn: QuasarDB
+      title_ja: QuasarDB
+      path: data-integration/quasardb
     - title_en: RabbitMQ
       title_cn: RabbitMQ
       title_ja: RabbitMQ
@@ -890,6 +898,13 @@
   collapsed: true
   path: mqtt-over-quic/advanced-feature
   children:
+    - title_en: Subscription Filters
+      title_cn: 订阅过滤器
+      title_ja: サブスクリプションフィルター
+      path: subscription-filter/subscription-filter-concept
+      collapsed: true
+      children:
+        - subscription-filter/subscription-filter-get-started
     - title_en: Message Queue
       title_cn: 消息队列
       title_ja: Message Queue

@@ -99,21 +99,23 @@ You can use EMQX Dashboard to configure how to use MySQL for password authentica
       - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MySQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
    
    
-      - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+      - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md#tls-for-external-resource-access).
    
    
       - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
    
    
-      - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-        - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`. 
-          - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. Default: `5` second.
+      - **Advanced Settings**: Configure connection pool, timeout, and prepared statement behavior.
+        - **Connection Pool Size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`.
+        - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query has timed out. Units supported include milliseconds, second, minute, and hour. Default: `5` seconds.
+        - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection attempt has timed out. Units supported include milliseconds, second, minute, and hour. Default: `15` seconds.
+        - **Disable Prepared Statements** (optional): Disable the use of prepared statements for database queries. Enable this option if your MySQL proxy or middleware (for example, PGBouncer or Supabase in Transaction mode) does not support session-level features such as prepared statements. Default: disabled.
    
 5. After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX MySQL authenticator with EMQX configuration items.<!--插入超链接-->
+You can configure the EMQX MySQL authenticator with EMQX configuration items. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 MySQL authentication is identified with `mechanism = password_based` and `backend = mysql`.
 
@@ -133,5 +135,7 @@ Sample configuration:
   password_hash_algorithm {name = "sha256", salt_position = "suffix"}
   query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
   query_timeout = "5s"
+  connect_timeout = "15s"
+  disable_prepared_statements = false
 }
 ```

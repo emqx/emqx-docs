@@ -88,17 +88,19 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for password authe
          - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
          - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
    - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this PostgreSQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-   - **Advanced Settings**:
-     - **Connection Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a PostgreSQL server. Default: `8`. 
-     - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md#tls-for-external-resource-access).
+   - **Advanced Settings**: Configure connection pool, timeout, and prepared statement behavior.
+     - **Connection Pool Size** (optional): Specify the number of concurrent connections from an EMQX node to a PostgreSQL server. Default: `8`.
+     - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query has timed out. Units supported include milliseconds, second, minute, and hour. Default: `5` seconds.
+     - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection attempt has timed out. Units supported include milliseconds, second, minute, and hour. Default: `15` seconds.
+     - **Disable Prepared Statements** (optional): Disable the use of prepared statements for database queries. Enable this option if your PostgreSQL proxy or middleware (for example, PGBouncer or Supabase in Transaction mode) does not support session-level features such as prepared statements. Default: disabled.
    - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. <!--For detailed operation steps, see [authn-postgresql:authentication](../../configuration/configuration-manual.html#authn-postgresql:authentication). -->
+You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 PostgreSQL authentication is identified with `mechanism = password_based` and `backend = postgresql`.
 
@@ -119,5 +121,8 @@ Sample configuration:
   password = public
   server = "127.0.0.1:5432"
   query = "SELECT password_hash, salt, is_superuser FROM users where username = ${username} LIMIT 1"
+  query_timeout = "5s"
+  connect_timeout = "15s"
+  disable_prepared_statements = false
 }
 ```

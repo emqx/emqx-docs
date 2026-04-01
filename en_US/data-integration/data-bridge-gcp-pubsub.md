@@ -57,6 +57,43 @@ You need to create a service account and a service account key to use the GCP Pu
 
    <img src="./assets/gcp_pubsub/service-account-key.png" alt="service-account-key" style="zoom:50%;" />
 
+### Set Up Workload Identity Federation in GCP
+
+Workload Identity Federation (WIF) allows EMQX to access GCP resources without a long-lived service account key file. Instead, EMQX exchanges a token from your external identity provider (such as Microsoft Azure) for a temporary GCP token via GCP's Security Token Service, then uses it to impersonate a GCP service account. Token renewal is handled automatically.
+
+To use WIF, complete the following in your GCP project before creating the connector.
+
+1. In the Google Cloud console, go to **IAM & Admin** -> **Workload Identity Federation**, create a workload identity pool, and note the **Pool ID** and **Project Number**.
+
+2. Add a provider to the pool and note the **Provider ID**. For OIDC-based authentication, obtain the OAuth 2.0 client credentials (client ID, client secret, and token endpoint URI) from your external identity provider.
+
+3. Grant the workload identity pool permission to impersonate the GCP service account with access to the Pub/Sub topic. The service account email is required when configuring the connector.
+
+   ::: tip
+
+   See [Configure Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers) for detailed instructions.
+
+   :::
+
+**Example: Microsoft Azure (Entra ID)**
+
+In [Microsoft Entra ID](https://portal.azure.com/), register an application that exposes an API and create a client secret for it. Use the following values when configuring the connector:
+
+| Connector field | Value |
+|---|---|
+| **Endpoint URI** | `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token` |
+| **OAuth Client ID** | The Application (client) ID, in the form `api://<application-id>` |
+| **OAuth Client Secret** | The client secret generated for the application |
+| **OAuth Request Scope** | `api://<application-id>/.default` |
+
+::: tip Note
+
+The `scope` must match the application's audience (`aud`) exactly, otherwise the token exchange with GCP STS will fail. See [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow) in the Microsoft documentation for details.
+
+When granting the Service Account access to the WIF pool, use the **Object ID** (not the Application ID) as the Subject value. The Object ID is visible on the application's Overview page in the Azure portal under **Enterprise applications**.
+
+:::
+
 ### Create and Manage Topics in GCP
 
 Before configuring the GCP Pub/Sub data integration on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
@@ -95,7 +132,19 @@ Before adding a GCP Pub/Sub Producer Sink action, you need to create a GCP Pub/S
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **Google PubSub Producer** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my-pubsubproducer`. The name is used to associate the GCP Pub/Sub Producer Sink with the connector and must be unique within the cluster.
-4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+4. In the **Authentication** dropdown, select one of the following authentication methods and fill in the corresponding fields:
+   - **Service Account JSON**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+   - **Workload Identity Federation (WIF)**: Fill in the following fields. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
+     - **GCP Project ID**: The Project ID for the resource being accessed by the connector.
+     - **GCP Project Number**: The Project Number for the resource being accessed by the connector.
+     - **Service Account Email**: The email of the service account that will be impersonated.
+     - **Workload Identity Pool ID**: The ID of the Workload Identity Pool used in the WIF token exchange.
+     - **Workload Identity Provider ID**: The ID of the Workload Identity Provider used in the WIF token exchange.
+     - Under **Initial Token Configuration**, select the credential type and fill in the corresponding fields. Currently only **OIDC with Client Credentials Grant Type** is supported:
+       - **Endpoint URI**: The OAuth Token Endpoint URI from the OIDC provider.
+       - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
+       - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
+       - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to GCP Pub/Sub. For detailed steps, see [Create a Rule with GCP Pub/Sub Producer Sink](#create-a-rule-with-gcp-pub-sub-producer-sink).
 
@@ -175,7 +224,19 @@ Before adding a GCP Pub/Sub Consumer Sink, you need to create a GCP Pub/Sub Cons
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **Google PubSub Consumer** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my-pubsubconsumer`. The name is used to associate the GCP Pub/Sub Consumer Sink with the connector and must be unique within the cluster.
-4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+4. In the **Authentication** dropdown, select one of the following authentication methods and fill in the corresponding fields:
+   - **Service Account JSON**: Upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
+   - **Workload Identity Federation (WIF)**: Fill in the following fields. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
+     - **GCP Project ID**: The Project ID for the resource being accessed by the connector.
+     - **GCP Project Number**: The Project Number for the resource being accessed by the connector.
+     - **Service Account Email**: The email of the service account that will be impersonated.
+     - **Workload Identity Pool ID**: The ID of the Workload Identity Pool used in the WIF token exchange.
+     - **Workload Identity Provider ID**: The ID of the Workload Identity Provider used in the WIF token exchange.
+     - Under **Initial Token Configuration**, select the credential type and fill in the corresponding fields. Currently only **OIDC with Client Credentials Grant Type** is supported:
+       - **Endpoint URI**: The OAuth Token Endpoint URI from the OIDC provider.
+       - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
+       - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
+       - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GCP Pub/Sub Consumer Source to consume the data from GCP Pub/Sub and forward the data to EMQX. For detailed steps, see [Create a Rule with GCP Pub/Sub Consumer Source](#create-a-rule-with-gcp-pub-sub-cconsumer-source).
 

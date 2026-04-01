@@ -17,7 +17,6 @@
 
 以下示例展示了如何配置启用了 CRL 检查的 SSL 监听器：
 
-
 ```hcl
 listeners.ssl.default {
   bind = "0.0.0.0:8883"

@@ -58,26 +58,31 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
    <img src="./assets/authz-PostgreSQL_ee.png" alt="authz-PostgreSQL_ee" style="zoom:67%;" />
 
-3. Follow the instructions below to configure the settings:
+3. Follow the instructions below to configure the authorization backend:
 
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Database**: PostgreSQL database name.
-   - **Username**: Specify user name. 
-   - **Password**: Specify user password. 
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. 
-   
-   - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
-   - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
-   
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
-   
+   - Enter the information for connecting to PostgreSQL.
+
+     - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+     - **Database**: PostgreSQL database name.
+     - **Username**: Specify user name.
+     - **Password**: Specify user password.
+
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md#tls-for-external-resource-access).
+
+   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement).
+
+   - **Advanced Settings**: Configure connection pool, timeout, and prepared statement behavior.
+     - **Connection Pool Size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: `8`.
+     - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection attempt has timed out. Units supported include milliseconds, second, minute, and hour. Default: `15` seconds.
+     - **Disable Prepared Statements** (optional): Disable the use of prepared statements for database queries. Enable this option if your PostgreSQL proxy or middleware (for example, PGBouncer or Supabase in Transaction mode) does not support session-level features such as prepared statements. Default: disabled.
+
 4. Click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
-You can configure the EMQX PostgresSQL authorizer with EMQX configuration items.
+You can configure the EMQX PostgreSQL authorizer with EMQX configuration items.
 
-The PostgreSQL authorizer is identified by type `postgresql`. <!--For detailed configuration, see [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql).-->
+The PostgreSQL authorizer is identified by type `postgresql`. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 Sample configuration:
 
@@ -90,6 +95,8 @@ Sample configuration:
   password = "public"
   server = "127.0.0.1:5432"
   query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+  connect_timeout = "15s"
+  disable_prepared_statements = false
 }
 ```
 

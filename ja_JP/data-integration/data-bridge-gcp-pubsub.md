@@ -57,6 +57,41 @@ GCP Pub/Sub サービスを利用するには、サービスアカウントと�
 
    <img src="./assets/gcp_pubsub/service-account-key.png" alt="サービスアカウントキー" style="zoom:50%;" />
 
+### ワークロード ID 連携の設定
+
+ワークロード ID 連携（WIF）を使用すると、EMQX は長期有効なサービスアカウント キーファイルなしで GCP リソースにアクセスできます。EMQX は外部 ID プロバイダー（Microsoft Azure など）から取得した token を GCP Security Token Service 経由で一時的な GCP token に交換し、指定したサービスアカウントを借用します。Token の更新は EMQX が自動的に処理します。
+
+WIF を使用するには、コネクターを作成する前に GCP プロジェクトで以下の設定を行ってください。
+
+1. Google Cloud コンソールで **IAM と管理** -> **ワークロード ID 連携** に移動し、ワークロード ID プールを作成して、**プール ID** と**プロジェクト番号**を控えておいてください。
+
+2. プールにプロバイダーを追加して**プロバイダー ID** を控えます。OIDC ベースの認証を使用する場合は、外部 ID プロバイダーから OAuth 2.0 クライアント資格情報（クライアント ID、クライアント シークレット、トークン エンドポイント URI）を取得してください。
+
+3. Pub/Sub トピックへのアクセス権を持つ GCP サービスアカウントを借用できるよう、ワークロード ID プールに権限を付与します。コネクターの設定時にサービスアカウントのメールアドレスが必要です。
+
+   ::: tip
+
+   詳細な設定手順については、[ワークロード ID 連携の設定](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers) を参照してください。
+
+   :::
+
+**例：Microsoft Azure（Entra ID）**
+
+[Microsoft Entra ID](https://portal.azure.com/) で API を公開するアプリケーションを登録し、クライアント シークレットを作成してください。コネクターの設定時には以下の値を使用します。
+
+| コネクターフィールド | 値 |
+|---|---|
+| **Endpoint URI** | `https://login.microsoftonline.com/<テナント ID>/oauth2/v2.0/token` |
+| **OAuth Client ID** | アプリケーション（クライアント）ID（`api://<アプリケーション ID>` の形式） |
+| **OAuth Client Secret** | アプリケーションに対して生成したクライアント シークレット |
+| **OAuth Request Scope** | `api://<アプリケーション ID>/.default` |
+
+::: note
+
+**OAuth Request Scope** はアプリケーションのオーディエンス（`aud`）と完全に一致している必要があります。一致しない場合、GCP STS とのトークン交換が失敗します。詳細は Microsoft ドキュメントの [OAuth 2.0 クライアント資格情報フロー](https://learn.microsoft.com/ja-jp/entra/identity-platform/v2-oauth2-client-creds-grant-flow) を参照してください。
+
+:::
+
 ### GCP でのトピックの作成と管理
 
 EMQX で GCP Pub/Sub データ統合を設定する前に、トピックを作成し、GCP での基本的な管理操作に慣れておく必要があります。
@@ -95,7 +130,19 @@ GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EM
 1. EMQX ダッシュボードで **Integration** -> **Connector** をクリックします。
 2. ページ右上の **Create** をクリックし、コネクター選択画面で **Google PubSub Producer** を選択して **Next** をクリックします。
 3. 名前と説明を入力します（例：`my-pubsubproducer`）。この名前は GCP Pub/Sub プロデューサー Sink とコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
-4. **GCP Service Account Credentials** にて、[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+4. **Authentication** ドロップダウンで認証方式を選択し、対応するフィールドを入力します。
+   - **Service Account JSON**：[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+   - **Workload Identity Federation (WIF)**：以下のフィールドを入力します。前提条件については [ワークロード ID 連携の設定](#ワークロード-id-連携の設定) を参照してください。
+     - **GCP Project ID**：コネクターがアクセスするリソースのプロジェクト ID。
+     - **GCP Project Number**：コネクターがアクセスするリソースのプロジェクト番号。
+     - **Service Account Email**：借用するサービスアカウントのメールアドレス。
+     - **Workload Identity Pool ID**：WIF トークン交換で使用するワークロード ID プールの ID。
+     - **Workload Identity Provider ID**：WIF トークン交換で使用するワークロード ID プロバイダーの ID。
+     - **Initial Token Configuration** の下で、資格情報の種類を選択して対応するフィールドを入力します。現在は **OIDC with Client Credentials Grant Type** のみをサポートしています。
+       - **Endpoint URI**：OIDC プロバイダーの OAuth トークン エンドポイント URI。
+       - **OAuth Client ID**：OAuth サーバーにトークンを要求するためのクライアント ID。
+       - **OAuth Client Secret**：OAuth サーバーにトークンを要求するためのクライアント シークレット。
+       - **OAuth Request Scope**：OAuth アクセス トークンを要求する際に指定する `scope`（プロバイダーが要求する場合に入力）。
 5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが GCP Pub/Sub サーバーに接続できるかテスト可能です。
 6. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックして Sink を指定したルール作成を続行できます。詳細は [GCP Pub/Sub プロデューサー Sink を用いたルール作成](#create-a-rule-with-gcp-pub-sub-producer-sink) を参照してください。
 
@@ -174,8 +221,20 @@ GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/
 
 1. EMQX ダッシュボードで **Integration** -> **Connector** をクリックします。
 2. ページ右上の **Create** をクリックし、コネクター選択画面で **Google PubSub Consumer** を選択して **Next** をクリックします。
-3. 名前と説明を入力します（例：`my-pubsubconsumer`）。この名前は GCP Pub/Sub コンシューマー Sink とコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
-4. **GCP Service Account Credentials** にて、[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+3. 名前と説明を入力します（例：`my-pubsubconsumer`）。この名前は GCP Pub/Sub コンシューマーコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
+4. **Authentication** ドロップダウンで認証方式を選択し、対応するフィールドを入力します。
+   - **Service Account JSON**：[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+   - **Workload Identity Federation (WIF)**：以下のフィールドを入力します。前提条件については [ワークロード ID 連携の設定](#ワークロード-id-連携の設定) を参照してください。
+     - **GCP Project ID**：コネクターがアクセスするリソースのプロジェクト ID。
+     - **GCP Project Number**：コネクターがアクセスするリソースのプロジェクト番号。
+     - **Service Account Email**：借用するサービスアカウントのメールアドレス。
+     - **Workload Identity Pool ID**：WIF トークン交換で使用するワークロード ID プールの ID。
+     - **Workload Identity Provider ID**：WIF トークン交換で使用するワークロード ID プロバイダーの ID。
+     - **Initial Token Configuration** の下で、資格情報の種類を選択して対応するフィールドを入力します。現在は **OIDC with Client Credentials Grant Type** のみをサポートしています。
+       - **Endpoint URI**：OIDC プロバイダーの OAuth トークン エンドポイント URI。
+       - **OAuth Client ID**：OAuth サーバーにトークンを要求するためのクライアント ID。
+       - **OAuth Client Secret**：OAuth サーバーにトークンを要求するためのクライアント シークレット。
+       - **OAuth Request Scope**：OAuth アクセス トークンを要求する際に指定する `scope`（プロバイダーが要求する場合に入力）。
 5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが GCP Pub/Sub サーバーに接続できるかテスト可能です。
 6. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックして GCP Pub/Sub コンシューマーソースを用いたルール作成を続行できます。詳細は [GCP Pub/Sub コンシューマーソースを用いたルール作成](#create-a-rule-with-gcp-pub-sub-cconsumer-source) を参照してください。
 

@@ -1,5 +1,180 @@
 # EMQX Enterprise Version 6
 
+## 6.2.0
+
+*Release Date: 2026-03-31*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 6.2.0.
+
+### Enhancements
+
+#### AI Interoperability
+
+- [#16840](https://github.com/emqx/emqx/pull/16840) Implemented Agent-to-Agent (A2A) Card Registry. This feature enables autonomous AI agents to discover and collaborate through a standardized, event-driven MQTT 5.0 mechanism.
+
+- [#16958](https://github.com/emqx/emqx/pull/16958) Added focused `/api-spec.md` and `/api-spec.html` endpoints to support drill-down discovery of EMQX HTTP API context, especially for AI agents and other tools that benefit from fetching only the relevant API slices instead of a single bloated spec.
+
+#### Core MQTT Functionalities
+
+- [#16612](https://github.com/emqx/emqx/pull/16612) Introduced the `emqx_setopts` application for server-side option updates via `$SETOPTS` topics, including keepalive control and warning suppression for unknown `$SETOPTS/*` publishes.
+
+- [#16887](https://github.com/emqx/emqx/pull/16887) Added optional subscription message filters, controlled by `mqtt.subscription_message_filter`.
+
+  When enabled, clients can subscribe with a `?` suffix (for example, `sensor/+/temperature?location=roomA&value>25`), and EMQX will deliver only messages whose MQTT 5.0 User Properties satisfy the filter expression. When disabled, `?` is treated as part of the topic filter text and no additional filtering is applied.
+
+  Messages dropped due to a subscription filter mismatch are reported via the existing `delivery.dropped` event with reason `subscription_filter`, and counted by the new `delivery.dropped.filter` metric.
+
+- [#16929](https://github.com/emqx/emqx/pull/16929) Introduced two new limiter kinds: `delivery_messages` and `delivery_bytes`. Unlike the existing `messages` and `bytes` limiters (which limit messages published by a single client), these new limiters throttle messages received by a single client from any source. When a limit is reached, QoS 0 messages are dropped and QoS 1/2 messages are queued internally with a scheduled retry. The retry interval is derived from the limiter configuration.
+
+  These new limiters are only supported for memory sessions (`durable_sessions.enable = false`). Default values are unlimited to maintain backward compatibility.
+
+- [#16779](https://github.com/emqx/emqx/pull/16779) Improved handling of malformed first packets by classifying them as invalid CONNECT packets and providing more informative protocol hints in logs.
+
+#### Data Integration
+
+- [#16589](https://github.com/emqx/emqx/pull/16589) Updated the `jq` library used in the Rule Engine to version 1.8.1.
+
+  Note that jq 1.8.1 introduces several subtle breaking changes compared to 1.6.1:
+
+  - An empty string as a jq program is now an error; use `"."` instead. ([jq#2790](https://github.com/jqlang/jq/pull/2790))
+  - String functions `indices/1`, `index/1`, and `rindex/1` now use code point indices instead of byte indices; use `utf8bytelength/0` to get the byte index. ([jq#3065](https://github.com/jqlang/jq/pull/3065))
+  - `tonumber/0` rejects numbers with leading or trailing whitespace; use `trim/0` before calling `tonumber/0`. ([jq#3055](https://github.com/jqlang/jq/pull/3055), [jq#3195](https://github.com/jqlang/jq/pull/3195))
+  - `last(empty)` now yields no output, consistent with `first(empty)`. ([jq#3179](https://github.com/jqlang/jq/pull/3179))
+  - `limit/2` errors on a negative count instead of silently accepting it. ([jq#3181](https://github.com/jqlang/jq/pull/3181))
+  - Tcl-style multiline comments are now supported, which may subtly affect parsing of existing code. ([jq#2989](https://github.com/jqlang/jq/pull/2989))
+  - Decimal numbers are now converted to binary64 (double) instead of decimal64. ([jq#2949](https://github.com/jqlang/jq/pull/2949))
+  - `nth/2` emits empty on an out-of-range index instead of erroring. ([jq#2674](https://github.com/jqlang/jq/pull/2674))
+  - String multiplication by 0 or a value less than 1 now emits an empty string. ([jq#2142](https://github.com/jqlang/jq/pull/2142))
+
+- [#16634](https://github.com/emqx/emqx/pull/16634) Added support for GET requests in external HTTP schema validation. Schema registry entries can now specify the HTTP method, with POST remaining the default.
+
+- [#16647](https://github.com/emqx/emqx/pull/16647) In GreptimeDB and EMQX Tables actions, integer values without an `i` or `u` suffix are now automatically cast to `float64` before being sent to the database.
+
+  In InfluxDB Write Syntax, float is the default numeric type and integers must be explicitly annotated. Previously, EMQX would interpret a non-annotated integer as a one-character string, causing insertion to fail if the target column was of type float.
+
+- [#16707](https://github.com/emqx/emqx/pull/16707) EMQX supports data integration with Azure Event Grid.
+
+- [#16750](https://github.com/emqx/emqx/pull/16750) Added support for Workload Identity Federation (WIF) authentication in GCP connectors (GCP PubSub Producer and Consumer, BigQuery) via Service Account Impersonation. Currently, only OIDC workload identity pool providers using the Client Credentials grant type are supported.
+
+- [#16773](https://github.com/emqx/emqx/pull/16773) When using the MQTT connector with SSL enabled, the Server Name Indication (SNI) field is now automatically populated with the server's hostname if left unset.
+
+- [#16893](https://github.com/emqx/emqx/pull/16893) EMQX supports data integration with QuasarDB.
+
+- [#16962](https://github.com/emqx/emqx/pull/16962) Improved Kafka source polling behavior. Fetch requests now wait briefly for data instead of immediately returning empty batches when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
+
+#### Access Control
+
+- [#16597](https://github.com/emqx/emqx/pull/16597) Improved handling of disallowed and quoted variables in SQL templates for MySQL and PostgreSQL authentication and authorization.
+
+- [#16616](https://github.com/emqx/emqx/pull/16616) Added new configurations to the SSO OIDC backend to support specifying `jq` expressions for extracting the desired role and namespace when creating new Dashboard users.
+
+- [#16759](https://github.com/emqx/emqx/pull/16759) Added `timestamp_s` and `timestamp_ms` functions to Variform expressions to retrieve the current system time in seconds and milliseconds respectively (for example, to populate additional client attributes on connection).
+
+- [#16817](https://github.com/emqx/emqx/pull/16817) Added REST API endpoints to reset authentication and authorization metrics counters:
+  - `POST /authentication/:id/metrics/reset` resets counters for a specific authenticator.
+  - `POST /authorization/sources/:type/metrics/reset` resets counters for a specific authorization source.
+
+#### Management
+
+- [#16958](https://github.com/emqx/emqx/pull/16958) Added `emqx ctl api_keys` CLI commands to list, show, add, delete, enable, and disable API keys from the command line.
+
+#### Plugins
+
+- [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication as a fallback for plugin API endpoints. Plugin UI iframes served by the Dashboard can now authenticate via the `emqx_auth` cookie when no `Authorization` header is present. This only applies to `/api/v5/plugin_api/...` paths.
+
+#### Gateway
+
+- [#16734](https://github.com/emqx/emqx/pull/16734) Added ordered `token`, `nkey`, and `jwt` internal authentication methods to the NATS Gateway to reduce the authentication feature gap with NATS Server.
+
+#### Deployment and Security
+
+- [#16653](https://github.com/emqx/emqx/pull/16653) Made the Erlang distribution listener address configurable via `node.dist_bind_address`.
+
+  For example: `node.dist_bind_address = "10.0.1.5"`. Previously this required configuration in `vm.args` as `-kernel inet_dist_use_interface {10,0,1,5}`.
+
+- [#16888](https://github.com/emqx/emqx/pull/16888) Refreshed the default TLS certificate bundle shipped with EMQX packages for local development and testing. The new server certificate is issued for `localhost` and loopback addresses only (`localhost`, `127.0.0.1`, `::1`). These default certificates must not be used in production.
+
+- [#16916](https://github.com/emqx/emqx/pull/16916) The `emqx_cert_expiry_at` Prometheus metric now takes into account the expiry dates of certificates belonging to managed certificate bundles used in MQTT listeners.
+
+#### Performance
+
+- [#16500](https://github.com/emqx/emqx/pull/16500) Optimized idle memory usage and reduced the cost of maintaining rate-based metrics. Note: 5-minute average rate metrics are now computed as EWMAs rather than exact rolling averages.
+
+- [#16547](https://github.com/emqx/emqx/pull/16547) Disabled TLS 1.2 session reuse by default to reduce TLS handshake overhead. The TLS 1.2 session cache is limited to 1000 entries and is local to each node, resulting in a very low reuse rate especially in large clusters with many connections.
+
+- [#16794](https://github.com/emqx/emqx/pull/16794) Enabled node-level authentication and authorization caches by default. This reduces repeated backend lookups for repeated client checks, improving authentication and authorization performance in common deployments.
+
+- [#16829](https://github.com/emqx/emqx/pull/16829) Optimized the NATS Gateway publish hot path to reduce per-message overhead in frame parsing, subject/topic handling, metrics updates, and ACK/message build steps.
+
+- [#16911](https://github.com/emqx/emqx/pull/16911) Reduced Prometheus metrics collection overhead by avoiding repeated queries of Mria statistics.
+
+- [#16550](https://github.com/emqx/emqx/pull/16550) Stopped caching subscribe ACL check results. MQTT subscription is mostly done once per connection lifecycle, so caching subscribe ACL results provides little benefit and wastes RAM.
+
+### Bug Fixes
+
+#### Core MQTT Functionalities
+
+- [#16721](https://github.com/emqx/emqx/pull/16721) Fixed QoS 2 duplicate handling when `await_rel_timeout` has expired. Previously, if a client retried a QoS 2 PUBLISH with `DUP=1` after the broker had expired the pending PUBREL state (default 300 seconds), the message could be published to subscribers again. EMQX now treats this retransmission as a duplicate handshake packet and returns `PUBREC` without re-delivering the application message.
+- [#16725](https://github.com/emqx/emqx/pull/16725) Disabled the TCP connection congestion alarm by default by setting `conn_congestion.enable_alarm = false` in the default zone/global configuration.
+- [#16781](https://github.com/emqx/emqx/pull/16781) Fixed CONNECT validation when retained messages are unavailable. When `mqtt.retain_available` is set to `false`, CONNECT packets with Will Retain set are now correctly rejected with CONNACK reason `Retain not supported (0x9A)`.
+- [#16783](https://github.com/emqx/emqx/pull/16783) Fixed MQTT v5 SUBSCRIBE validation for the `Subscription-Identifier` upper bound. EMQX now accepts `268435455` (`0x0FFFFFFF`), which is the maximum valid Subscription Identifier value defined by the MQTT spec.
+- [#16974](https://github.com/emqx/emqx/pull/16974) Restored the previous retained-message behavior for resumed or taken-over sessions. In EMQX 6.1.1, if a session had subscribed to a topic filter with retained messages and was later resumed or taken over without re-subscribing, it would receive those retained messages again. Now, retained message iteration stops unless the session explicitly re-subscribes to the topic filter.
+- [#16876](https://github.com/emqx/emqx/pull/16876) Renamed the log message `msg_publish_not_allowed` to `msg_not_routed_to_subscribers`.
+
+#### Data Integration
+
+- [#16803](https://github.com/emqx/emqx/pull/16803) Improved error reporting when configuring batch operations for MySQL actions.
+- [#16796](https://github.com/emqx/emqx/pull/16796) Fixed handling of multiline SQL statements in connector actions.
+- [#16936](https://github.com/emqx/emqx/pull/16936) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could timeout if the container contained too many blobs.
+- [#16955](https://github.com/emqx/emqx/pull/16955) Eliminated Kafka producer action false health check warning logs. Previously if Kafka producer is idling for too long, Kafka may close the connection (typically default is 10 minutes), if Kafka producer action health-checks happen to be performed around the same moment, there could be a false warning message with message `"not_all_kafka_partitions_connected"`.
+- [#16972](https://github.com/emqx/emqx/pull/16972) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
+- [#16863](https://github.com/emqx/emqx/pull/16863) Added a warning log when an async reply is received for an already-expired request in async actions.
+- [#16847](https://github.com/emqx/emqx/pull/16847) Fixed a crash when a non-ASCII Unicode string was used in a message transformation expression.
+- [#16979](https://github.com/emqx/emqx/pull/16979) MQTT ingress bridges now support consuming from remote message queues `$queue/{name}/{bind-filter}`.
+
+#### Access Control
+
+- [#16780](https://github.com/emqx/emqx/pull/16780) Fixed an issue in authorization source validation where requests missing the `type` field could trigger an internal error. Now EMQX returns a clear `BAD_REQUEST` validation error for this case.
+- [#16805](https://github.com/emqx/emqx/pull/16805) Added support for authz hook results to opt out of authorization cache storage.
+- [#16865](https://github.com/emqx/emqx/pull/16865) Added `cert_common_name` and `cert_subject` as aliases for `mqtt.client_attrs_init` expressions, alongside the existing `cn` and `dn` variables.
+- [#16868](https://github.com/emqx/emqx/pull/16868) Improved REST API authentication error messages for programmatic clients. Error responses now mention the `api_key.bootstrap_file` configuration option and the `POST /api_key` endpoint for creating persistent API keys.
+- [#16928](https://github.com/emqx/emqx/pull/16928) Dashboard-created REST API keys are now generated randomly instead of being derived from the API key name.
+- [#16939](https://github.com/emqx/emqx/pull/16939) Fixed the built-in database authenticator to no longer log a warning for a missing but default bootstrap file.
+
+#### Durable Storage
+
+- [#16874](https://github.com/emqx/emqx/pull/16874) Fixed a rare issue where Durable Storage backed by DS Raft could stop accepting new messages after a sequence of quick cluster leadership changes, requiring a node restart to recover.
+
+#### Clustering
+
+- [#16534](https://github.com/emqx/emqx/pull/16534) Lowered the default `net_ticktime` from 2 minutes to 1 minute to improve cluster node failure detection.
+
+#### Plugins
+
+- [#16842](https://github.com/emqx/emqx/pull/16842) Reduced noisy warning logs for plugin config fetches when no peer node has the config yet. Previously, on startup, a node logged warnings when fetching plugin config from peers even in the benign case where no peer had the config, such as when the plugin was first loaded. This case is now logged at debug level, while genuine errors such as RPC failures and timeouts remain warnings.
+- [#16843](https://github.com/emqx/emqx/pull/16843) Fixed an issue where HTTP headers and query string parameters were not passed through to plugin API handlers, causing plugins to receive empty headers and missing query parameters.
+- [#16904](https://github.com/emqx/emqx/pull/16904) Prevented multiple versions of the same plugin from being enabled or started at the same time. When a newer version is enabled, older configured versions are now automatically disabled. Management API actions also now return a clear error instead of reporting success while another version is still active.
+
+#### Gateway
+
+- [#16536](https://github.com/emqx/emqx/pull/16536) Fixed the CoAP Gateway when running in DTLS connection mode.
+
+#### Observability
+
+- [#16879](https://github.com/emqx/emqx/pull/16879) Added `log.audit.cache_size` as the primary configuration key for the audit log database cache size, while keeping `log.audit.max_filter_size` for backward compatibility.
+
+#### Deployment
+
+- [#16901](https://github.com/emqx/emqx/pull/16901) Fixed the RPM package OpenSSL dependency for RHEL 9.6 LTS: pinned `openssl >= 3.5.1` for RHEL >= 9.7 and `openssl >= 3.0.7` for older RHEL 9 versions.
+
+#### ExHook
+
+- [#16890](https://github.com/emqx/emqx/pull/16890) Fixed an ExHook issue where a successful reconnect reload could duplicate the same server name in the running list and trigger repeated callback dispatches.
+
+#### Licensing
+
+- [#16764](https://github.com/emqx/emqx/pull/16764) Refined license customer tier handling by introducing `STANDARD` and `VIP` tiers in enforcement logic and reducing the official-license `STANDARD` expiry grace period from 90 days to 15 days before new sessions are restricted.
+
 ## 6.1.1
 
 *Release Date: 2026-02-27*

@@ -22,7 +22,7 @@ For users who need to integrate with HTTP services but do not require data proce
 
 HTTP server data integration is an out-of-the-box feature in EMQX, allowing integration with external HTTP services through simple configuration. With the HTTP service, users can write code in their preferred programming language and framework to implement custom, flexible, and complex data processing logic.
 
-<img src="./assets/emqx-integration-http.jpg" alt="emqx-integration-http" style="zoom:67%;" />
+<img src="./assets/emqx-integration-http.png" alt="emqx-integration-http" style="zoom:67%;" />
 
 EMQX forwards device events and messages to an HTTP server through the rule engine and Sink. The workflow is as follows:
 

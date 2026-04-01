@@ -22,22 +22,39 @@ Audit Logには以下のオプションを設定できます：
 - **Audit Log File Name**：Audit Logファイルのパスと名前を指定します。デフォルト値は`${EMQX_LOG_DIR}/audit.log`で、`${EMQX_LOG_DIR}`は変数であり、デフォルトは`./log`です。つまり最終的には`./log/audit.log.1`に保存されます。
 - **Maximum Log Files Number**：ローテーションされるログファイルの最大数。デフォルトは`10`です。
 - **Rotation Size**：ログファイルのサイズを設定し、指定サイズに達するとログファイルがローテーションされます。無効にするとログファイルは無制限に増加します。テキストボックスに値を入力し、ドロップダウンリストから`MB`、`GB`、`KB`などの単位を選択できます。デフォルトは`50MB`です。
-- **Max Dashboard Record Size**：データベースに保存される最大レコード数を決定し、ダッシュボードおよび`/audit` APIからアクセス・取得可能です。デフォルトは`5000`です。
+- **Cache Size**：データベースに保存される最大レコード数を決定し、ダッシュボードおよび`/audit` APIからアクセス・取得可能です。デフォルトは`5000`です。
+
+  ::: tip 注意
+  `log.audit.max_filter_size` は後方互換性のためエイリアスとして保持されています。
+  :::
+
 - **Ignore High Frequency Request**：高頻度リクエストを無視するかどうかを制御し、パブリッシュ／サブスクライブやクライアントキックアウトに関連するリクエストでAudit Logの洪水を防ぎます。デフォルトで有効です。
-- **Time Offset**：ログのタイムスタンプのフォーマットを定義します。例として"-02:00"や"+00:00"など。デフォルトは`system`です。
+- **Timestamp Format**：ログエントリーのタイムスタンプ形式です。選択肢は以下の通りです。
+  - `auto`：ログフォーマッターに基づいて最適な形式を自動選択します。JSON には `epoch`、テキストには `rfc3339` が使用されます。
+  - `epoch`：Unix エポックからのマイクロ秒単位の時刻です。
+  - `rfc3339`：RFC3339 形式です。
+- **Time Offset**：ログエントリーのタイムスタンプをフォーマットする際に使用するタイムオフセットです。選択肢は以下の通りです。
+  - `system`：ローカルシステムが使用するタイムオフセット。
+  - `utc`：UTC のタイムオフセット。
+  - `+-[hh]:[mm]`：ユーザー指定のタイムオフセット。例として `"-02:00"` や `"+00:00"` など。
+
+  デフォルトは `system` です。
+- **Payload Encode**：ログエントリーにおけるペイロードデータのエンコード方式です。`text`、`hex`、`hidden` から選択できます。デフォルトは `text` です。
 
 ### 設定ファイルからAudit Logを有効化する
 
 `base.hocon`ファイルの`log.audit`セクションでAudit Logを有効化し、設定オプションを変更することも可能です。以下は例です。
 
-```bash
+```hocon
 log.audit {
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB
-  time_offset = system
+  cache_size = 5000
   ignore_high_frequency_request = true
-  max_filter_size = 5000
+  timestamp_format = auto
+  time_offset = system
+  payload_encode = text
 }
 ```
 
