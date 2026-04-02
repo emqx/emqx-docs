@@ -1289,9 +1289,18 @@
   collapsed: true
   path: changes/all-changes-ee
   children:
-    - changes/changes-ee-v6
-    - changes/changes-ee-v5
-    - changes/changes-ee-v4
+    - title_en: Version 6
+      title_cn: v6 版本
+      title_ja: Version 6
+      path: changes/changes-ee-v6
+    - title_en: Version 5
+      title_cn: v5 版本
+      title_ja: Version 5
+      path: changes/changes-ee-v5
+    - title_en: Version 4
+      title_cn: v4 版本
+      title_ja: Version 4
+      path: changes/changes-ee-v4
     - title_en: Known Issues
       title_cn: 已知问题
       title_ja: 既知の問題
@@ -1367,13 +1376,13 @@
           title_ja: EMQX 5.4
           path: changes/breaking-changes-ee-5.4
     - changes/breaking-changes-6.0.0
-    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+    - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
       path: changes/breaking-changes-5.1.0
       collapsed: true
       children:
-        - title_en: Authentication / Authorization
+        - title_en: Authentication and Authorization
           title_cn: 认证与授权
           title_ja: 認証と認可
           path: changes/auth-4.4-to-5.1-compatibility
