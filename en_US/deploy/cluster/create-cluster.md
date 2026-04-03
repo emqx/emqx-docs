@@ -352,15 +352,15 @@ cluster {
 
 Where,
 
-- `discovery_strategy` is the node discovery strategy, set it to `dns`.
-- `cluster.dns.name` is a a string, input the localhost.
-- `cluster.dns.record_type` is a enum, optional value: `a` or `srv`.
+- `discovery_strategy` is the node discovery strategy; set it to `dns`.
+- `cluster.dns.name` is a string; set it to the DNS name/domain to query, for example, `localhost`.
+- `cluster.dns.record_type` is an enum; allowed values are `a` and `srv`.
 
 After all nodes are started, the cluster will be automatically established.
 
 ### Autocluster Using etcd
 
-[etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishing, which is exactly what EMQX auto clustering needs.
+[etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishment, which is exactly what EMQX auto clustering needs.
 
 After you deploy an etcd server (cluster) in your network, EMQX can automatically create the cluster via etcd. For how to install and configure etcd, see [etcd Install](https://etcd.io/docs/latest/install/).
 

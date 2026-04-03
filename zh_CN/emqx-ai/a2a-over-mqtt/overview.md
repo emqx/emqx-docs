@@ -1,12 +1,12 @@
 # A2A over MQTT
 
-A2A over MQTT 是一种与 Broker 无关的传输规范，将 [Agent-to-Agent（A2A）协议](https://google.github.io/A2A/)引入 MQTT。它定义了标准化的主题规范、MQTT v5 属性映射及 Agent 发现机制，使基于不同框架构建的 AI Agent 能够通过 MQTT Broker 完成注册、发现与协作，无需彼此之间建立点对点集成。
+A2A over MQTT 是一种与 Broker 无关的传输规范，将 [Agent-to-Agent（A2A）协议](https://a2a-protocol.org/latest/)引入 MQTT。它定义了标准化的主题规范、MQTT v5 属性映射及 Agent 发现机制，使基于不同框架构建的 AI Agent 能够通过 MQTT Broker 完成注册、发现与协作，无需彼此之间建立点对点集成。
 
 EMQX 通过内置的 **A2A Registry** 功能实现 A2A over MQTT。该功能负责收录发布到发现主题的 Agent Card，跟踪 Agent 的在线状态，并为运维人员提供管理界面。
 
 ## 为什么选择 MQTT 传输 A2A
 
-标准 A2A 协议以 HTTP 作为传输层。这在云端环境中运行良好，但在分布式、IoT 或边缘部署场景下存在局限——Agent 可能运行在资源受限的设备上、处于 NAT 之后，或所处环境不适合维持持久 HTTP 连接。
+标准 A2A 协议以 HTTP 作为传输层。这在云端环境中运行良好，但在分布式、IoT 或边缘部署场景下存在局限：Agent 可能运行在资源受限的设备上、处于 NAT 之后，或所处环境不适合维持持久 HTTP 连接。
 
 MQTT 可以直接解决上述问题：
 

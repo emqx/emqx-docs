@@ -48,7 +48,7 @@ Publisher --> Topic -- (Filter) --> Subscription -- (Filter) --> Subscriber
 
 订阅过滤器以 MQTT 5.0 **用户属性**作为过滤依据。当客户端发布消息时，可在消息的用户属性头部包含键值对。EMQX 对每个过滤表达式与这些键值对进行匹配，只有表达式满足时才投递消息。
 
-订阅过滤器默认禁用。如需启用该功能，请参阅[订阅过滤器快速入门](./subscription-filter-get-started.md)。
+订阅过滤器默认禁用。如需启用该功能，请参阅[订阅过滤器快速开始](./subscription-filter-get-started.md)。
 
 ### 过滤语法
 
