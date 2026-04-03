@@ -4,7 +4,7 @@
 
 *Release Date: 2026-04-03*
 
-### Bug Fix
+### Bug Fixes
 
 - Fixed routing table inconsistencies caused by EMQX restarts after network partitions.This issue is resolved by upgrading to `ekka-0.8.1.17`.
 
