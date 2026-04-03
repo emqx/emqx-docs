@@ -1,6 +1,6 @@
 # A2A over MQTT
 
-A2A over MQTT is a broker-neutral transport profile that brings the [Agent-to-Agent (A2A) protocol](https://google.github.io/A2A/) to MQTT. It defines standardized topic conventions, MQTT v5 property mappings, and discovery behavior so that AI agents built on different frameworks can register, discover, and collaborate through an MQTT broker without requiring any point-to-point integration between them.
+A2A over MQTT is a broker-neutral transport profile that brings the [Agent-to-Agent (A2A) protocol](https://a2a-protocol.org/latest/) to MQTT. It defines standardized topic conventions, MQTT v5 property mappings, and discovery behavior so that AI agents built on different frameworks can register, discover, and collaborate through an MQTT broker without requiring any point-to-point integration between them.
 
 EMQX implements A2A over MQTT through the **A2A Registry**, a built-in feature that indexes Agent Cards published to discovery topics, tracks agent liveness, and provides management interfaces for operators.
 

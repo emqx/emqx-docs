@@ -213,9 +213,9 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 
 | Cloud Platform        | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
 | --------------------- | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **AWS Marketplace**   | ✅                        | ✅                              | ✅                                  | [AWS Marketplace: EMQX Platform (Pay as you go)](https://aws.amazon.com/marketplace/pp/prodview-g6zejrbcad6mu) |
-| **Azure Marketplace** | ✅                        | ✅                              | ✅                                  | [Azure Marketplace: EMQX Platform](https://marketplace.microsoft.com/en-us/product/saas/emqtechnologiesincorporated1678779968155.emqx_cloud?tab=Overview) |
-| **GCP Marketplace**   | ✅                        | ✅                              | ✅                                  | [GCP Marketplace](https://console.cloud.google.com/marketplace/product/emq-public-380104/emqx-cloudpay-as-you-go) |
+| **AWS Marketplace**   | ✅                        | ✅                              | ✅                                  | [AWS Marketplace: EMQX Platform (Pay as you go)](https://docs.emqx.com/en/cloud/latest/billing/aws_marketplace.html) |
+| **Azure Marketplace** | ✅                        | ✅                              | ✅                                  | [Azure Marketplace: EMQX Platform](https://docs.emqx.com/en/cloud/latest/billing/azure_marketplace.html) |
+| **GCP Marketplace**   | ✅                        | ✅                              | ✅                                  | [GCP Marketplace](https://docs.emqx.com/en/cloud/latest/billing/gcp_marketplace.html) |
 | **AWS**               | ✅                        | ✅                              | ✅                                  |                                                              |
 | **Azure**             | ✅                        | ✅                              | ✅                                  |                                                              |
 | **GCP**               | ✅                        | ✅                              | ✅                                  |                                                              |
