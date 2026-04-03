@@ -6,6 +6,7 @@ Through simple and visual configuration, message flow and device events can be i
 EMQX provides a real-time, concise and efficient data integration scheme by combining **Rules** and **Data Bridges**.
 The rules are used to process messages or events, and the data bridge is used to connect the data system.
 
+<img src="./assets/rules/data-integration-arch.png" alt="Data integration architecture" style="zoom:50%;" />
 ## Rules
 
 Based on the publish/subscribe model, EMQX provides rules to handle messages or events, such as data format conversion, message encoding and decoding, and business logic processing.
