@@ -353,8 +353,8 @@ cluster {
 Where,
 
 - `discovery_strategy` is the node discovery strategy; set it to `dns`.
-- `cluster.dns.name` is a string; input the localhost.
-- `cluster.dns.record_type` is an enum, optional value: `a` or `srv`.
+- `cluster.dns.name` is a string; set it to the DNS name/domain to query, for example, `localhost`.
+- `cluster.dns.record_type` is an enum; allowed values are `a` and `srv`.
 
 After all nodes are started, the cluster will be automatically established.
 
