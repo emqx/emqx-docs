@@ -1345,7 +1345,7 @@
           path: changes/breaking-changes-6.1
         - title_en: EMQX 6.0
           title_cn: EMQX 6.0
-          title_ja: EMQX
+          title_ja: EMQX 6.0
           path: changes/breaking-changes-6.0
         - title_en: EMQX 5.10
           title_cn: EMQX 5.10
