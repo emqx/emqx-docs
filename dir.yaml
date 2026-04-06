@@ -869,28 +869,38 @@
       title_cn: 备份与恢复
       title_ja: バックアップとリストア
       path: operations/backup-restore
-    - title_en: Plugin and Extension
-      title_cn: 插件与扩展
-      title_ja: プラグインと拡張
+    - title_en: Extensions
+      title_cn: 扩展
+      title_ja: 拡張
       path: extensions/introduction
       collapsed: true
       children:
         - extensions/hooks
-        - title_en: Plugins
-          title_cn: 插件
-          collapsed: true
-          title_ja: プラグイン
-          path: extensions/plugins
-          children:
-            - extensions/plugin-development
-            - extensions/plugin-example
-            - extensions/plugin-management
         # - extensions/lang-lua
         - extensions/exhook
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ
       path: telemetry/telemetry
+
+- title_en: Plugins
+  title_cn: 插件
+  title_ja: プラグイン
+  path: extensions/plugins
+  collapsed: true
+  children:
+    - extensions/plugin-development
+    - extensions/plugin-example
+    - extensions/plugin-management
+    - title_en: Plugin Catalog
+      title_cn: 插件目录
+      title_ja: プラグインカタログ
+      path: extensions/plugin-catalog
+      collapsed: true
+      children:
+        - extensions/plugin-catalog/emqx-bridge-mqtt-dq
+        - extensions/plugin-catalog/emqx-unsgov
+        - extensions/plugin-catalog/emqx-username-quota
 
 - title_en: Advanced Features
   title_cn: 高级功能
