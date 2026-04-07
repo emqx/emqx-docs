@@ -1,16 +1,15 @@
-# Plugin and Extension
+# Extensions
 
-EMQX 5.0 supports extensions in the form of plugins, multilingual gRPC hooks and protocol extensions to facilitate your development workflow, and you can choose the extension method according to your needs.
+EMQX supports several extension mechanisms beyond native plugins. This section focuses on external extension interfaces, especially hook integrations and protocol adaptation paths that let you extend EMQX without embedding Erlang code directly into the broker.
 
-## Plugins
+## Hooks and Protocol Extensions
 
-Through EMQX's plugin development interface, users can access the core process to customize business logic, such as access control, message routing, or message storage. In addition, our protocol extensions help our users to manage client access through a unified [Gateway](../gateway/gateway.md) framework.
+EMQX provides extension interfaces for hook processing and protocol adaptation. These interfaces are suitable when you want to intercept broker events, connect external services, or adapt private protocols while keeping the integration boundary explicit.
 
-Developing plugins requires an understanding of EMQX and Erlang.
+For MQTT and non-MQTT device access, EMQX also provides a unified [Gateway](../gateway/gateway.md) framework for protocol access management.
 
-## Multilingual gRPC Hooks and Protocol Extension
+## Multilingual gRPC Extensions
 
-EMQX offers a multilingual extension combining multilingual [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) hooks and protocol extension.
+EMQX offers multilingual extension capabilities through [gRPC](https://grpc.io/), allowing you to implement services in languages such as Python or Java and integrate them with EMQX over RPC.
 
-Through multilingual extensions, users can write services in Python or Java and integrate them with EMQX through the gRPC channel, enabling features similar to plugins, such as Hooks processing or private TCP/UDP protocol parsing.
-
+This approach is useful when you want functionality similar to plugins, such as hook processing or custom TCP/UDP protocol parsing, but prefer to keep the implementation outside the broker runtime.
