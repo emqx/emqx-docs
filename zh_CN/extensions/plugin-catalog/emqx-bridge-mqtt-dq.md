@@ -109,7 +109,7 @@ remotes {
 
 如果环境变量未设置，插件会记录错误日志，并将原始 `${EMQXDQ_...}` 字符串保留为字面值。这通常会导致连接失败（例如尝试连接到 `"${EMQXDQ_REMOTE_SERVER}"`），从而使配置错误在日志和状态 API 中都能被明显发现。
 
-> **警告 — 动态配置更新与节点本地环境变量**
+> **警告：动态配置更新与节点本地环境变量**
 >
 > 环境变量会在节点解析配置时进行替换。当您通过 EMQX Dashboard、REST API 或 CLI 更新插件配置时，原始配置文本会被持久化，然后在集群中每个节点上重新解析。如果各节点上的相关环境变量值不同（或有的节点缺失），每个节点解析出的生效配置也会不同。
 >
@@ -170,9 +170,9 @@ remotes {
 `remote_topic` 字段支持 `${topic}` 占位符，转发时会被替换为原始发布主题。
 
 示例：
-- `remote_topic = "${topic}"` — 保持原始主题不变直接转发。
-- `remote_topic = "forwarded/${topic}"` — 在原始主题前增加前缀。
-- `remote_topic = "region1/${topic}"` — 添加区域命名空间。
+- `remote_topic = "${topic}"`：保持原始主题不变直接转发。
+- `remote_topic = "forwarded/${topic}"`：在原始主题前增加前缀。
+- `remote_topic = "region1/${topic}"`：添加区域命名空间。
 
 `remote_topic` 在消息从队列发送出去时生效。修改该字段后，受影响桥接在重启后，队列中的消息会使用新的模板。
 
@@ -180,10 +180,10 @@ remotes {
 
 该插件在 EMQX plugin API 基础路径下暴露四个端点：
 
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics` — Prometheus 文本格式
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats` — JSON 仪表盘快照
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>` — 单个桥接视图
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status` — 插件/集群健康状态摘要
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics`：Prometheus 文本格式
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats`：JSON 仪表盘快照
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>`：单个桥接视图
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status`：插件/集群健康状态摘要
 
 所有 JSON 端点都返回 `application/json; charset=utf-8`。
 
@@ -381,7 +381,7 @@ curl -u admin:public \
 
 ### 修改 `queue.base_dir`
 
-修改已启用桥接的 `queue.base_dir` 会使该桥接使用新目录重启。实际队列路径为 `<base_dir>/<bridge_name>/<index>`。旧目录**不会**被自动清理 —— 它会作为孤立数据继续保留在磁盘中。如果旧目录不再需要，请在确认桥接已在新路径上正常运行后手动删除。
+修改已启用桥接的 `queue.base_dir` 会使该桥接使用新目录重启。实际队列路径为 `<base_dir>/<bridge_name>/<index>`。旧目录**不会**被自动清理：它会作为孤立数据继续保留在磁盘中。如果旧目录不再需要，请在确认桥接已在新路径上正常运行后手动删除。
 
 ### 修改 `buffer_pool_size`
 
@@ -389,7 +389,7 @@ curl -u admin:public \
 
 1. **缩小分区池**（例如 8 -> 4）：索引 >= 新大小的分区将不再被消费。其旧文件仍保留在 `queue.base_dir` 下，需要手动清理。
 
-2. **扩大分区池**（例如 4 -> 8）：哈希空间会发生变化，因此此前映射到分区 N 的主题，之后可能映射到分区 M。旧分区中已排队的消息仍会继续投递（且在该分区内保持顺序），但同一主题的新消息可能进入新分区。这会打破变更前后的端到端逐主题顺序 —— 某些旧消息可能会晚于新消息送达。
+2. **扩大分区池**（例如 4 -> 8）：哈希空间会发生变化，因此此前映射到分区 N 的主题，之后可能映射到分区 M。旧分区中已排队的消息仍会继续投递（且在该分区内保持顺序），但同一主题的新消息可能进入新分区。这会打破变更前后的端到端逐主题顺序：某些旧消息可能会晚于新消息送达。
 
 3. **桥接级掉消息窗口**：修改 `buffer_pool_size` 会导致该桥接重启，因此切换期间匹配中的消息可能丢失。
 
@@ -440,13 +440,13 @@ curl -u admin:public \
 
 当 QoS 1 或 2 客户端发布了一条匹配桥接的消息时，插件会先将该消息发送到 buffer worker 的邮箱，然后最多阻塞发布会话进程 `enqueue_timeout_ms`（默认 5000 ms），等待磁盘写入确认。
 
-当该超时触发时，消息本身**不会丢失** —— 它已经进入了 buffer worker 的 Erlang 邮箱，最终仍会被写入磁盘队列。该超时仅用于控制本地发布路径最多阻塞多久。
+当该超时触发时，消息本身**不会丢失**：它已经进入了 buffer worker 的 Erlang 邮箱，最终仍会被写入磁盘队列。该超时仅用于控制本地发布路径最多阻塞多久。
 
 其重要性在于：`message.publish` Hook 运行在 MQTT 会话进程内部。当 Hook 阻塞时，该会话无法处理来自同一客户端的其他消息。如果 buffer worker 很慢（例如磁盘 IO 卡顿或邮箱堆积严重），这个超时机制可以防止单个慢桥接无限期阻塞客户端会话。
 
 当超时触发时：
 1. 会话进程停止等待并继续正常执行。
-2. 客户端照常收到 PUBACK/PUBREC —— 不会显式收到发布错误。
+2. 客户端照常收到 PUBACK/PUBREC：不会显式收到发布错误。
 3. 插件会记录告警日志（`mqtt_dq_enqueue_timeout`）。
 4. 消息继续保留在 buffer worker 的邮箱中，待 worker 追上处理进度后写入磁盘队列。
 
@@ -454,7 +454,7 @@ curl -u admin:public \
 
 **缓解方式：** 增加 `buffer_pool_size` 分散负载，为 `queue.base_dir` 使用更快的存储，或降低匹配主题的消息速率。
 
-注意：QoS 0 本地发布从不阻塞 —— 它们始终异步入队，不对发布会话施加背压。
+注意：QoS 0 本地发布从不阻塞：它们始终异步入队，不对发布会话施加背压。
 
 ### Bridge 重启窗口
 
@@ -468,7 +468,7 @@ curl -u admin:public \
 
 这是 MQTT QoS 0 本身的特性，并非该插件特有问题。
 
-## Operational Notes
+## 运维说明
 
 ### 持久化
 
@@ -492,7 +492,7 @@ curl -u admin:public \
 较好的例子：`pool_size = 4, buffer_pool_size = 4`（1:1），
 `pool_size = 4, buffer_pool_size = 8`（2:1）。
 
-较差的例子：`pool_size = 4, buffer_pool_size = 5` —— connector 0 需要服务两个 buffer，而其他 connector 只服务一个，会导致吞吐分布不均。
+较差的例子：`pool_size = 4, buffer_pool_size = 5`：connector 0 需要服务两个 buffer，而其他 connector 只服务一个，会导致吞吐分布不均。
 
 如果某个 connector 断开，分配给它的 buffer worker 会暂停；待该 connector 重连后会自动恢复。
 

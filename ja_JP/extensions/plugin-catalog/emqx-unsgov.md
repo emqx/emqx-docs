@@ -18,20 +18,20 @@ Base path: `/api/v5/plugin_api/emqx_unsgov`
 
 ### JSON Data Endpoints
 
-- `GET /status`: plugin status (on_mismatch, exempt_topics).
-- `GET /stats`: cluster-aggregated counters and recent drops.
-- `GET /models`: list all stored models (each entry includes an `active` flag).
-- `GET /models/:id`: get a specific model by ID. 404 if not found.
-- `POST /models`: create or update a model; optional `activate` flag.
-- `POST /models/:id/activate`: activate a stored model.
-- `POST /models/:id/deactivate`: deactivate a model.
-- `DELETE /models/:id`: delete a stored model.
-- `POST /validate/topic`: validate a topic against active models.
+- `GET /status` — plugin status (on_mismatch, exempt_topics).
+- `GET /stats` — cluster-aggregated counters and recent drops.
+- `GET /models` — list all stored models (each entry includes an `active` flag).
+- `GET /models/:id` — get a specific model by ID. 404 if not found.
+- `POST /models` — create or update a model; optional `activate` flag.
+- `POST /models/:id/activate` — activate a stored model.
+- `POST /models/:id/deactivate` — deactivate a model.
+- `DELETE /models/:id` — delete a stored model.
+- `POST /validate/topic` — validate a topic against active models.
 
 ### Other Endpoints
 
-- `GET /ui`: interactive model editor UI.
-- `GET /metrics`: Prometheus text exposition format.
+- `GET /ui` — interactive model editor UI.
+- `GET /metrics` — Prometheus text exposition format.
 
 ## UNS Model Schema
 

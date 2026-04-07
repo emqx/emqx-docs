@@ -205,7 +205,7 @@ the bootstrap loop is throttled:
 - If replication does not complete within 10 seconds, an error is logged and bootstrap is aborted with an `error` level log.
   Sessions registered before the timeout are retained; remaining sessions will be picked up naturally through subsequent hook-based registration on reconnect.
 
-### Handle `503` from list API
+### Handling `503` from list API
 
 When the server is busy or building a snapshot, the list API returns `503`.
 

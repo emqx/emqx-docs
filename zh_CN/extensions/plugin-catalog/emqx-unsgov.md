@@ -2,11 +2,11 @@
 
 该插件在 ACL 检查阶段强制执行 Unified Namespace 主题结构。
 
-## Plugin API
+## 插件 API
 
 基础路径：`/api/v5/plugin_api/emqx_unsgov`
 
-## Bootstrap Models
+## Bootstrap 模型
 
 - 启动时，UNS Governance 会扫描 `priv/bootstrap_models/*.json`。
 - 对于每个 bootstrap model：
@@ -33,7 +33,7 @@
 - `GET /ui` — 交互式模型编辑 UI。
 - `GET /metrics` — Prometheus 文本暴露格式。
 
-## UNS Model Schema
+## UNS 模型结构
 
 本节定义 UNS Governance 接受的完整模型 JSON 格式。
 
@@ -150,7 +150,7 @@
 }
 ```
 
-## Enforcement Behavior
+## 校验行为
 
 UNS Governance 会同时校验主题结构以及（可选的）负载模式。
 
@@ -186,7 +186,7 @@ UNS Governance 会同时校验主题结构以及（可选的）负载模式。
 
 这样可以避免无关的激活模型放大计数器，并保持模型行为确定可预测。这也意味着应尽量避免不同模型之间出现重叠的主题树。
 
-## Counters
+## 计数器
 
 `GET /stats` 返回集群聚合计数器。
 

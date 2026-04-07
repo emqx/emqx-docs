@@ -95,7 +95,7 @@ remotes {
 
 Any string value in the config file can reference an OS environment variable
 using the `${EMQXDQ_*}` syntax. Only variables with the `EMQXDQ_` prefix are
-resolved: other `${...}` patterns (such as `${topic}` in `remote_topic`) are
+resolved — other `${...}` patterns (such as `${topic}` in `remote_topic`) are
 left untouched. The entire value must be the placeholder; partial interpolation
 (e.g. `"prefix-${EMQXDQ_VAR}-suffix"`) is not supported.
 
@@ -120,7 +120,7 @@ original `${EMQXDQ_...}` string as the literal value. This typically causes a
 connection failure (e.g. trying to connect to `"${EMQXDQ_REMOTE_SERVER}"`),
 which makes the misconfiguration visible in both logs and the status API.
 
-> **Warning: dynamic config updates and node-local environment variables**
+> **Warning — dynamic config updates and node-local environment variables**
 >
 > Environment variables are resolved at config parse time on the node that
 > parses the config. When you update the plugin config via the EMQX Dashboard,
@@ -152,7 +152,7 @@ which makes the misconfiguration visible in both logs and the status API.
 | `enable`          | boolean | `true`  | Enable or disable this bridge.                                              |
 | `remote`          | string  | —       | Name of the remote broker definition under `remotes`.                       |
 | `proto_ver`       | string  | `"v4"`  | MQTT protocol version: `v3`, `v4`, or `v5`.                                |
-| `clientid_prefix` | string  | `"emqx-dq-<name>-"` | Prefix for auto-generated MQTT client IDs. Each connection appends a unique index (e.g. `emqx-dq-mybridge-0`). Optional: leave empty to use the default. |
+| `clientid_prefix` | string  | `"emqx-dq-<name>-"` | Prefix for auto-generated MQTT client IDs. Each connection appends a unique index (e.g. `emqx-dq-mybridge-0`). Optional — leave empty to use the default. |
 | `keepalive_s`     | integer | `60`    | MQTT keep-alive interval in seconds.                                        |
 | `pool_size`       | integer | `4`     | Number of MQTT connections to the remote broker.                            |
 | `buffer_pool_size` | integer | `4`    | Number of disk queue buffer workers per bridge. See warnings below.         |
@@ -186,15 +186,15 @@ which makes the misconfiguration visible in both logs and the status API.
 | `queue_seg_bytes` | string | `"100MB"`                      | Maximum size per queue segment file.              |
 | `queue.max_total_bytes` | string | `"1GB"`                  | Maximum disk queue size **per partition**. Each bridge uses `buffer_pool_size` partitions (default 4), so the worst-case total disk usage is `buffer_pool_size` x this value. Oldest messages are discarded when exceeded. |
 
-## Topic Templates
+## Topic Templating
 
 The `remote_topic` field supports the `${topic}` placeholder, which is replaced
 with the original publish topic at forwarding time.
 
 Examples:
-- `remote_topic = "${topic}"`: forward with the original topic unchanged.
-- `remote_topic = "forwarded/${topic}"`: prepend a prefix.
-- `remote_topic = "region1/${topic}"`: add a region namespace.
+- `remote_topic = "${topic}"` — forward with the original topic unchanged.
+- `remote_topic = "forwarded/${topic}"` — prepend a prefix.
+- `remote_topic = "region1/${topic}"` — add a region namespace.
 
 `remote_topic` is applied when messages are sent out of the queue. After changing
 this field, queued messages use the new template after the affected bridge restarts.
@@ -203,10 +203,10 @@ this field, queued messages use the new template after the affected bridge resta
 
 The plugin exposes four endpoints under the EMQX plugin API base path:
 
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics`: Prometheus text format
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats`: JSON dashboard snapshot
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>`: one bridge only
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status`: plugin/cluster health summary
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics` — Prometheus text format
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats` — JSON dashboard snapshot
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>` — one bridge only
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status` — plugin/cluster health summary
 
 All JSON endpoints return `application/json; charset=utf-8`.
 
@@ -407,15 +407,15 @@ messages can be dropped. Apply bridge-impacting changes during low traffic.
 3. Monitor Dashboard status and logs for restart/reconnect errors.
 4. For critical pipelines, validate end-to-end delivery after the change.
 
-### Change `queue.base_dir`
+### Changing `queue.base_dir`
 
 Changing `queue.base_dir` on an enabled bridge restarts the bridge with the new
 directory. The actual queue path is `<base_dir>/<bridge_name>/<index>`. The old
-directory is **not** automatically purged: it remains on disk as orphaned data.
+directory is **not** automatically purged — it remains on disk as orphaned data.
 If the old directory is no longer needed, remove it manually after verifying the
 bridge is running on the new path.
 
-### Change `buffer_pool_size`
+### Changing `buffer_pool_size`
 
 The `buffer_pool_size` controls how many disk queue partitions exist per bridge.
 Messages are assigned to partitions by `erlang:phash2(Topic, buffer_pool_size)`.
@@ -430,7 +430,7 @@ Changing this value has important side effects:
    queued in the old partition are still delivered (in order, within that
    partition), but new messages for the same topic may go to a different
    partition. This breaks end-to-end per-topic ordering across the
-   transition: some old messages may be delivered after new ones.
+   transition — some old messages may be delivered after new ones.
 
 3. **Bridge-scoped drop window**: changing `buffer_pool_size` restarts that bridge,
    so in-flight matching messages can be dropped during handover.
@@ -483,10 +483,10 @@ failures without a successful delivery, the message is dropped.
 
 For example, a message published during a network outage:
 1. Queued locally (retry counter = 3).
-2. Remote reconnects, message dispatched: remote disconnects again before ACK
+2. Remote reconnects, message dispatched — remote disconnects again before ACK
    (retry counter = 2).
-3. Reconnects, dispatched again: connection drops (retry counter = 1).
-4. Reconnects, dispatched: rejected or connection drops (retry counter = 0).
+3. Reconnects, dispatched again — connection drops (retry counter = 1).
+4. Reconnects, dispatched — rejected or connection drops (retry counter = 0).
 5. Message dropped, warning logged.
 
 **Mitigation**: investigate why the remote broker is repeatedly unreachable.
@@ -500,7 +500,7 @@ sends the message to the buffer worker's mailbox and then blocks the publishing
 session process for up to `enqueue_timeout_ms` (default 5000 ms) waiting for
 disk-write confirmation.
 
-The message itself is **not lost** when this timeout fires: it is already in the
+The message itself is **not lost** when this timeout fires — it is already in the
 buffer worker's Erlang mailbox and will eventually be written to the disk queue.
 The timeout only controls how long the local publish path blocks.
 
@@ -512,7 +512,7 @@ client session indefinitely.
 
 When the timeout fires:
 1. The session process stops waiting and continues normally.
-2. The client receives PUBACK/PUBREC as usual: no error is surfaced.
+2. The client receives PUBACK/PUBREC as usual — no error is surfaced.
 3. A warning log (`mqtt_dq_enqueue_timeout`) is emitted.
 4. The message remains in the buffer worker's mailbox and is written to the disk
    queue when the worker catches up.
@@ -524,7 +524,7 @@ cannot keep up with the incoming message rate.
 **Mitigation**: increase `buffer_pool_size` to spread load, use faster storage
 for `queue.base_dir`, or reduce the message rate for matched topics.
 
-Note: QoS 0 local publishes never block: they are enqueued asynchronously with
+Note: QoS 0 local publishes never block — they are enqueued asynchronously with
 no backpressure applied to the publishing session.
 
 ### Bridge Restart Window
@@ -570,7 +570,7 @@ Each buffer worker is assigned to exactly one connector by
 Good examples: `pool_size = 4, buffer_pool_size = 4` (1:1),
 `pool_size = 4, buffer_pool_size = 8` (2:1).
 
-Bad example: `pool_size = 4, buffer_pool_size = 5`: connector 0 serves two
+Bad example: `pool_size = 4, buffer_pool_size = 5` — connector 0 serves two
 buffers while others serve one, causing uneven throughput.
 
 If a connector drops, the buffer workers assigned to it pause and resume
