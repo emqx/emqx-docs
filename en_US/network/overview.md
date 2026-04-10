@@ -50,3 +50,7 @@ authentication {
 ## TLS for Nodes Communication
 
 Instructions on how to enable SSL/TLS for cluster connections are not covered in this chapter, and you can refer to [Cluster Security](../deploy/cluster/security.md) for details.
+
+## IPv6 Support
+
+EMQX fully supports IPv6 for client connections, the Dashboard, inter-node cluster communication, and outbound connections to external services. For configuration details, see [IPv6](./ipv6.md).

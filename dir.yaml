@@ -390,7 +390,7 @@
           title_ja: 国密 SSL
           lang: cn
           path: network/gmssl
-      # - network/ipv6
+        - network/ipv6
     - title_en: Authentication
       title_cn: 认证
       title_ja: 認証
