@@ -769,44 +769,40 @@
 /release-notes/:
 -  title_en: Release Notes
    title_cn: 版本发布历史
-   collapsed: true
+   collapsed: false
+   path: release-notes/all-changes-ee
    children:
-       - title_en: Release Notes
-         title_cn: 版本发布历史
-         collapsed: true
-         path: release-notes/all-changes-ee
-         children:
-             - release-notes/changes-ee-v5
-             - release-notes/changes-ee-v4
-             - title_en: Known Issues
-               title_cn: 已知问题
-               children:
-                   - release-notes/known-issues-5.8
-                   - release-notes/known-issues-5.3
-                   - release-notes/known-issues-5.1
-             - title_en: Incompatible Changes
-               title_cn: 不兼容变更
-               collapsed: true
-               children:
-                   - release-notes/breaking-changes-ee-5.8
-                   - release-notes/breaking-changes-ee-5.7
-                   - release-notes/breaking-changes-ee-5.6
-                   - release-notes/breaking-changes-ee-5.5
-                   - release-notes/breaking-changes-ee-5.4
-                   - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-                     title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-                     path: release-notes/breaking-changes-5.1.0
-                     collapsed: true
-                     children:
-                         - release-notes/auth-4.4-to-5.1-compatibility
-                         - release-notes/data-integration-4.4-to-5.1-incompatibility
-                         - release-notes/gateway-4.4-to-5.1-incompatibility
-             - title_en: End of Life Dates
-               title_cn: 产品生命周期结束日期
-               path: release-notes/eol-ee
+      - release-notes/changes-ee-v5
+      - release-notes/changes-ee-v4
+      - title_en: Known Issues
+        title_cn: 已知问题
+        children:
+            - release-notes/known-issues-5.8
+            - release-notes/known-issues-5.3
+            - release-notes/known-issues-5.1
+      - title_en: Incompatible Changes
+        title_cn: 不兼容变更
+        collapsed: false
+        children:
+            - release-notes/breaking-changes-ee-5.8
+            - release-notes/breaking-changes-ee-5.7
+            - release-notes/breaking-changes-ee-5.6
+            - release-notes/breaking-changes-ee-5.5
+            - release-notes/breaking-changes-ee-5.4
+            - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+              title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+              path: release-notes/breaking-changes-5.1.0
+              collapsed: false
+              children:
+                  - release-notes/auth-4.4-to-5.1-compatibility
+                  - release-notes/data-integration-4.4-to-5.1-incompatibility
+                  - release-notes/gateway-4.4-to-5.1-incompatibility
+            - title_en: End of Life Dates
+              title_cn: 产品生命周期结束日期
+              path: release-notes/eol-ee
        - title_en: EMQX Open Source Release Notes
          title_cn: EMQX 开源版版本发布历史
-         collapsed: true
+         collapsed: false
          path: release-notes/all-changes-ce
          children:
              - release-notes/changes-ce-v5
@@ -816,7 +812,7 @@
                path: release-notes/changes-ce-v3
              - title_en: Incompatible Changes
                title_cn: 不兼容变更
-               collapsed: true
+               collapsed: false
                children:
                    - release-notes/breaking-changes-ce-5.8
                    - release-notes/breaking-changes-ce-5.7
@@ -826,7 +822,7 @@
                    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
                      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
                      path: release-notes/breaking-changes-5.1.0
-                     collapsed: true
+                     collapsed: false
                      children:
                          - release-notes/auth-4.4-to-5.1-compatibility
                          - release-notes/data-integration-4.4-to-5.1-incompatibility
