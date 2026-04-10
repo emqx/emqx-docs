@@ -4,7 +4,7 @@ EMQX 全面支持 IPv6，涵盖客户端连接、Dashboard、集群节点间通�
 
 ## MQTT 监听器
 
-要通过 IPv6 接受 MQTT 客户端连接，需将监听器绑定到 IPv6 地址。当检测到 IPv6 绑定地址时，EMQX 会自动启用 `inet6` 套接字选项。
+要通过 IPv6 接受 MQTT 客户端连接，需将监听器绑定到 IPv6 地址。当检测到 IPv6 绑定地址时，EMQX 会自动启用 `inet6` socket 选项。
 
 ### 双栈（IPv4 和 IPv6）
 
@@ -33,7 +33,7 @@ listeners.tcp.default {
 }
 ```
 
-此选项设置 `IPV6_V6ONLY` 套接字选项，阻止接受 IPv4 映射的 IPv6 地址。
+此选项设置 `IPV6_V6ONLY` socket 选项，阻止接受 IPv4 映射的 IPv6 地址。
 
 ### 绑定到特定 IPv6 地址
 
@@ -66,7 +66,7 @@ listeners.wss.default {
 }
 ```
 
-## Dashboard 监听器
+## Dashboard HTTP/HTTPS 监听器
 
 EMQX Dashboard 的 HTTP/HTTPS 监听器同样支持 IPv6。
 
@@ -117,7 +117,7 @@ cluster.proto_dist = inet6_tcp
 | `inet_tls`   | 基于 IPv4 的 TLS，通过 `etc/ssl_dist.conf` 配置      |
 | `inet6_tls`  | 基于 IPv6 的 TLS，通过 `etc/ssl_dist.conf` 配置      |
 
-::: warning
+::: warning 重要提示
 
 当使用 IPv6 节点名称（例如 `emqx@::1`）时，**必须**将 `cluster.proto_dist` 设置为 `inet6_tcp` 或 `inet6_tls`。否则节点将无法启动，并报告"not responding to pings"错误。
 
@@ -196,7 +196,7 @@ dashboard.listeners.http {
 
 **原因**：Erlang 分布式协议默认使用 `inet_tcp`（IPv4）。IPv6 节点名称需要使用 `inet6_tcp`。
 
-**解决方法**：在 `emqx.conf` 中设置 `cluster.proto_dist = inet6_tcp`。
+**解决方案**：在 `emqx.conf` 中设置 `cluster.proto_dist = inet6_tcp`。
 
 ### 出站连接报 `enetunreach` 错误
 
@@ -204,7 +204,7 @@ dashboard.listeners.http {
 
 **原因**：连接尝试使用 IPv4 访问仅支持 IPv6 的服务，或反之。
 
-**解决方法**：验证目标服务可通过正确的地址族从 EMQX 主机访问。对于 HTTP 连接器，自动 IPv6 探测功能通常可以处理此问题。如果服务使用域名，请确保 DNS 返回正确的记录类型（IPv4 为 A 记录，IPv6 为 AAAA 记录）。
+**解决方案**：验证目标服务可通过正确的地址族从 EMQX 主机访问。对于 HTTP 连接器，自动 IPv6 探测功能通常可以处理此问题。如果服务使用域名，请确保 DNS 返回正确的记录类型（IPv4 为 A 记录，IPv6 为 AAAA 记录）。
 
 ### IPv6 环境下 Dashboard 无法访问
 
@@ -212,4 +212,4 @@ dashboard.listeners.http {
 
 **原因**：Dashboard 监听器默认使用 IPv4（`0.0.0.0:18083`）。
 
-**解决方法**：将 Dashboard 绑定到 IPv6 地址（`bind = "[::]:18083"`），或显式启用 IPv6（`inet6 = true`）。
+**解决方案**：将 Dashboard 绑定到 IPv6 地址（`bind = "[::]:18083"`），或显式启用 IPv6（`inet6 = true`）。

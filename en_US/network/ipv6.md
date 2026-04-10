@@ -66,11 +66,11 @@ listeners.wss.default {
 }
 ```
 
-## Dashboard Listener
+## Dashboard HTTP/HTTPS Listeners
 
 The EMQX Dashboard HTTP/HTTPS listener also supports IPv6.
 
-### Using an IPv6 Bind Address
+### Use an IPv6 Bind Address
 
 When the `bind` address is an IPv6 address, EMQX automatically enables IPv6 for the Dashboard listener:
 
@@ -80,7 +80,7 @@ dashboard.listeners.http {
 }
 ```
 
-### Using the `inet6` Flag
+### Use the `inet6` Flag
 
 Alternatively, if using a port-only bind (without an explicit IP address), you can enable IPv6 explicitly:
 
@@ -117,9 +117,9 @@ Available options:
 | `inet_tls`   | TLS over IPv4, configured via `etc/ssl_dist.conf`        |
 | `inet6_tls`  | TLS over IPv6, configured via `etc/ssl_dist.conf`        |
 
-::: warning
+::: warning Important Notice
 
-When using IPv6 node names (for example, `emqx@::1`), you **must** set `cluster.proto_dist` to `inet6_tcp` or `inet6_tls`. Otherwise the node will fail to start with errors such as "not responding to pings".
+When using IPv6 node names (for example, `emqx@::1`), you **must** set `cluster.proto_dist` to `inet6_tcp` or `inet6_tls`. Otherwise, the node will fail to start with errors such as "not responding to pings".
 
 :::
 
@@ -196,7 +196,7 @@ dashboard.listeners.http {
 
 **Cause**: The Erlang distribution protocol defaults to `inet_tcp` (IPv4). An IPv6 node name requires `inet6_tcp`.
 
-**Fix**: Set `cluster.proto_dist = inet6_tcp` in `emqx.conf`.
+**Solution**: Set `cluster.proto_dist = inet6_tcp` in `emqx.conf`.
 
 ### `enetunreach` Errors in Outbound Connections
 
@@ -204,7 +204,7 @@ dashboard.listeners.http {
 
 **Cause**: The connection is attempting to use IPv4 to reach an IPv6-only service, or vice versa.
 
-**Fix**: Verify that the target service is reachable from the EMQX host using the correct address family. For HTTP connectors, the automatic IPv6 probe should handle this. If the service is behind a DNS name, ensure the DNS returns the correct record type (A for IPv4, AAAA for IPv6).
+**Solution**: Verify that the target service is reachable from the EMQX host using the correct address family. For HTTP connectors, the automatic IPv6 probe should handle this. If the service is behind a DNS name, ensure the DNS returns the correct record type (A for IPv4, AAAA for IPv6).
 
 ### Dashboard Unreachable on IPv6
 
@@ -212,4 +212,4 @@ dashboard.listeners.http {
 
 **Cause**: The Dashboard listener defaults to IPv4 (`0.0.0.0:18083`).
 
-**Fix**: Either bind the Dashboard to an IPv6 address (`bind = "[::]:18083"`), or explicitly enable IPv6 with `inet6 = true`.
+**Solution**: Either bind the Dashboard to an IPv6 address (`bind = "[::]:18083"`), or explicitly enable IPv6 with `inet6 = true`.
