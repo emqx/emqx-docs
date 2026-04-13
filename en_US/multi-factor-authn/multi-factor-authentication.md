@@ -122,3 +122,70 @@ After you've completed the initial setup, you can use the authenticator app to l
    If the code is valid, you will be logged into the Dashboard.
 4. **Invalid Code**:
    If the code is incorrect or expired, you will see an error message. In this case, you can try entering the current code from your authenticator app.
+
+## MFA for SSO Users
+
+{% emqxee %}
+
+Starting from EMQX 5.10.4, administrators can enforce MFA for users who log in through Single Sign-On (SSO) backends such as SAML, OIDC, and LDAP. This ensures that SSO users are also protected by two-factor authentication.
+
+### Enable Force MFA for SSO Backend
+
+To require MFA for all users logging in through a specific SSO backend:
+
+1. In the Dashboard, go to **System** -> **SSO**.
+2. Select the SSO backend (e.g., SAML, OIDC).
+3. Enable the **Force MFA** toggle.
+4. Click **Save**.
+
+<!-- TODO: Add screenshot of SSO backend configuration page showing the Force MFA toggle -->
+
+### How SSO MFA Works
+
+When `force_mfa` is enabled for an SSO backend:
+
+1. **First-time login**: After SSO authentication, the user is prompted to set up TOTP by scanning a QR code with an authenticator app (such as Google Authenticator or Authy). The user must enter a valid TOTP code to complete the binding.
+2. **Subsequent logins**: After SSO authentication, the user is prompted to enter their TOTP code before accessing the Dashboard.
+3. **Admin-disabled MFA**: Administrators can exempt specific users from MFA (see [Managing SSO User MFA](#managing-sso-user-mfa) below). Exempted users can log in without TOTP even when `force_mfa` is enabled.
+
+### Managing SSO User MFA
+
+Administrators can manage MFA for SSO users through the Dashboard:
+
+#### Disable MFA (Exempt a User)
+
+To exempt an SSO user from MFA:
+
+1. In the Dashboard, go to **System** -> **Users**.
+2. Find the SSO user and click **MFA Settings**.
+3. Click **Disable**.
+
+<!-- TODO: Add screenshot of MFA Settings dialog showing the Disable button -->
+
+The user will no longer be required to enter a TOTP code, even if `force_mfa` is enabled for their SSO backend.
+
+#### Reset MFA (Re-bind TOTP)
+
+If a user loses access to their authenticator app (e.g., lost phone), the administrator can reset their MFA:
+
+1. In the Dashboard, go to **System** -> **Users**.
+2. Find the SSO user and click **MFA Settings**.
+3. Click **Reset**.
+
+<!-- TODO: Add screenshot of MFA Settings dialog showing the Reset button -->
+
+On the next login with `force_mfa` enabled, the user will be prompted to set up TOTP again by scanning a new QR code.
+
+#### Re-enable MFA (Cancel Exemption)
+
+To cancel a user's MFA exemption and require them to set up TOTP again on their next login:
+
+1. In the Dashboard, go to **System** -> **Users**.
+2. Find the SSO user and click **MFA Settings**.
+3. Click **Enable**.
+
+<!-- TODO: Add screenshot of MFA Settings dialog showing the Enable button -->
+
+The user will be prompted to set up TOTP on their next SSO login.
+
+{% endemqxee %}
