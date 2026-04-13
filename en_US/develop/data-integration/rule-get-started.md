@@ -163,7 +163,7 @@ If you update the rule action or redefine the data source, the statistics listed
 
 :::
 
-![Rule Statistics](assets/rule_statistics.png)
+![Rule Statistics](./assets/rule_statistics.png)
 
 ### Search Rules
 
