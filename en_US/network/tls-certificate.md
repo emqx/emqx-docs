@@ -350,7 +350,7 @@ POST /certs/global/name/:name?file=key|chain|ca|key-password
 List managed certificate bundles in a namespace:
 
 ```
-GET /certs/ns/:namespace
+GET /certs/ns/:namespace/list
 ```
 
 List managed certificate bundles in the global namespace:

@@ -340,7 +340,7 @@ POST /certs/global/name/:name?file=key|chain|ca|key-password
 - 列出指定命名空间下的证书包：
 
   ```
-  GET /certs/ns/:namespace
+  GET /certs/ns/:namespace/list
   ```
 
 - 列出全局命名空间下的证书包：
