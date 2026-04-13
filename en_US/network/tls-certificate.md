@@ -310,7 +310,7 @@ When you click **Delete** for a certificate bundle, EMQX checks whether any list
 - If no dependencies are found, the bundle is deleted immediately.
 - If one or more configurations depend on the bundle, EMQX displays a warning and asks whether you want to force delete. Proceeding with force delete removes the certificate bundle even though it is still referenced.
 
-::: caution 
+::: caution
 Force deleting a certificate bundle that is in use will cause the dependent listeners or connectors to lose their certificate configuration. Affected connectors may report errors and fail to establish new TLS connections. Update or reconfigure the dependent resources after a force delete.
 :::
 
