@@ -82,6 +82,47 @@ The REST API implements role-based access control. When creating an API key, you
 - **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
 - **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
 
+#### API Key Scopes
+
+{% emqxee %}
+
+Starting from EMQX 5.10.4, in addition to role-based access control, EMQX Enterprise supports fine-grained scope-based permissions for API keys. Scopes allow you to restrict an API key's access to specific functional areas, providing more precise control over what each key can do.
+
+When creating or editing an API key, you can select one or more scopes to limit its access. If no scopes are specified, the API key has access to all resources allowed by its role (backward compatible).
+
+The following scopes are available:
+
+| Scope | Description |
+|-------|-------------|
+| `connections` | Client connections, subscriptions, topics, banned clients, retained messages, delayed publish, topic rewrite, and file transfer |
+| `publish` | Message publishing |
+| `data_integration` | Rules, actions, connectors, schema registry, and message validation |
+| `access_control` | Authentication and authorization configuration |
+| `gateways` | Protocol gateways (CoAP, LwM2M, etc.) |
+| `monitoring` | Metrics, stats, alarms, trace, dashboard monitor, Prometheus data, slow subscriptions, and telemetry |
+| `cluster_operations` | Cluster management, node operations, rebalancing, and eviction |
+| `system` | System configuration, listeners, plugins, data backups, OpenTelemetry config, and Prometheus config |
+| `audit` | Audit log |
+| `license` | License management |
+
+The available scopes and their descriptions are displayed in the Dashboard when creating or editing an API key.
+
+##### Configure Scopes via Dashboard
+
+1. Navigate to **System** -> **API Key**.
+2. Click **Create** or edit an existing API key.
+3. In the **Permissions** section, select the scopes you want to allow.
+4. Click **Save**.
+
+<!-- TODO: Add screenshot of API Key creation/edit page showing the Permissions section -->
+
+::: tip
+- If no scopes are selected, the API key has access to all resources allowed by its role.
+- Selecting specific scopes restricts the API key to only those functional areas.
+:::
+
+{% endemqxee %}
+
 #### Authentication Method Using API Keys
 
 Once you have your API key and secret key, you can use them to authenticate your requests. The API key is used as the username and the secret key as the password for Basic Authentication.
