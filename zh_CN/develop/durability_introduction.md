@@ -133,7 +133,7 @@ mqttx sub -t t/1 -i emqx_c --no-clean
 
 断开步骤 2 中的客户端连接。打开 EMQX Dashboard，在 **监控** -> **客户端** 页面中，您仍然可以看到客户端状态变为**未连接**，这表明会话已经保留。
 
-![MQTT 保留会话](./assets/session-persistence-list.png)
+![MQTT 保留会话](../../operate/durability/assets/session-persistence-list.png)
 
 ### 4. 向客户端发送消息，消息将被发送到客户端队列
 
@@ -178,7 +178,7 @@ mqttx sub -t t/1 -i emqx_c --no-clean
 
 EMQX 内置持久性功能所使用的数据库引擎将数据按照一个分层结构来组织，包括存储 (Storage)、分片 (Shard)、代 (Generation) 和流 (Stream)。
 
-![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
+![Diagram of EMQX durable storage sharding](../../operate/durability/assets/emqx_ds_sharding.png)
 
 ### 存储 (Storage)
 

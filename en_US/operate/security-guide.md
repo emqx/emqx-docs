@@ -20,7 +20,7 @@ Security is a critical aspect of any MQTT-based application, and this guide is d
 
   In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. This chapter will introduce how to use the built-in database, ACL file, or how to integrate with MySQL, PostgreSQL, MongoDB, or Redis to configure the authorization rules.
 
-- [Banned Clients](./dashboard/blacklist.md)
+- [Banned Clients](./access-control/blacklist.md)
 
   EMQX provides a blacklisting/banning functionality. System admins can block certain clients from accessing EMQX via Dashboard or HTTP API with their client ID, user name, or IP address.
 
