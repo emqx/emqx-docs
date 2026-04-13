@@ -1,30 +1,21 @@
 # 开发者指南
 
-开发者指南旨在帮助开发者们快速入门 EMQX，并构建应用程序。开发者指南将探讨 MQTT 的核心概念和功能以及 EMQX 的一些扩展功能，还会介绍如何在 EMQX Dashboard 中配置这些功能并使用客户端工具进行测试。具体将涵盖以下内容：
+开发者指南旨在帮助开发者快速入门 EMQX，并构建物联网应用程序。本章节涵盖客户端连接、API 使用、数据处理、外部系统集成以及高级协议特性等内容，主要包括以下主题：
 
-- [MQTT 核心概念](../get-started/messaging/mqtt-concepts.md)
-- [MQTT 客户端工具演示](../get-started/messaging/publish-and-subscribe.md)
-- [共享订阅](../get-started/messaging/mqtt-shared-subscription.md)
-- [保留消息](../get-started/messaging/mqtt-retained-message.md)
-- [遗嘱消息](../get-started/messaging/mqtt-will-message.md)
-- [排他订阅](../get-started/messaging/mqtt-exclusive-subscription.md)
-- [延迟发布](../get-started/messaging/mqtt-delayed-publish.md)
-- [自动订阅](../get-started/messaging/mqtt-auto-subscription.md)
-- [主题重写](../get-started/messaging/mqtt-topic-rewrite.md)
-- [通配符订阅](../get-started/messaging/mqtt-wildcard-subscription.md)
+- [客户端 SDK](./connect-emqx/introduction.md) 提供了使用 C、Java、Go、Python 和 JavaScript 等主流 MQTT 客户端库连接 EMQX 的分步说明和代码示例。
 
-除 MQTT 消息相关功能外，开发者指南还介绍了与 EMQX 进行交互的不同方式：
+- [实用教程](./tutorial/tutorial.md) 提供了涵盖客户端连接、数据采集、MQTT 通信优化、系统集成、安全以及部署等多个主题的实践指南。
 
-- [使用 curl 连接 EMQX](./connect-emqx/curl.md)
+- [REST API](./api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
 
-此外，本指南中还介绍了EMQX 的 [MQTT 会话持久化](./durability_introduction.md)功能，同时提供了快速体验该功能的步骤。
+- [规则引擎](./data-integration/rules.md) 介绍了 EMQX 内置的数据处理引擎，可实时对物联网数据进行提取、过滤、丰富和转换，并与数据集成功能配合使用。
 
-由于 EMQX 支持 MQTT 协议，所以能够兼容大多数 MQTT 客户端库和 SDK。开发者指南提供了多种[代码示例](./cluster/introduction.md)，帮助开发者快速开始构建其 MQTT 项目。有关 MQTT 客户端 SDK 及其比较的完整列表，参见 [MQTT 客户端 & SDKs](https://www.emqx.com/zh/mqtt-client-sdk)。
+- [数据集成](./data-integration/data-bridges.md) 介绍了如何通过 Sink 和 Source 组件将 EMQX 与数据库、消息队列、云服务等外部数据系统进行连接。
 
-::: tip
+- [Flow 设计器](./flow-designer/introduction.md)（企业版功能）是一款可视化无代码工具，通过图形化界面将规则、动作和集成连接起来，快速构建数据处理流水线。
 
-文档中并不包括所有的 SDK。
+- [高级功能](./advanced-feature.md) 介绍了 EMQX 的扩展协议能力，包括 MQTT over WebSocket、MQTT over QUIC、集群连接、基于 MQTT 的文件传输、多协议网关以及客户端属性等功能。
 
-:::
+- [架构设计](./architecture-introduction.md) 介绍了 EMQX 核心模块的设计原理，包括集群机制、MQTT 会话持久化、飞行窗口与消息队列，以及消息重传。
 
-EMQX 还为开发者提供了 API 文档来帮助开发。[REST API](./api.md) 指导您快速上手使用管理监控 API。
+- [MQTT 参考指南](./mqtt-reference.md) 提供了 MQTT 协议的完整参考资料，涵盖协议版本、术语、功能特性以及原因码等内容。

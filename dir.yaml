@@ -290,146 +290,141 @@
       title_cn: EMQX 开源版 API 文档
       lang: cn
       path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
-- title_en: Integration and Processing
-  title_cn: 数据集成与数据处理
-  path: develop/integration-and-processing
+- title_en: Rule Engine
+  title_cn: 规则引擎
+  path: develop/data-integration/rules
   collapsed: true
   children:
-    - title_en: Rule Engine
-      title_cn: 规则引擎
-      path: develop/data-integration/rules
+    - develop/data-integration/rule-get-started
+    - develop/data-integration/rule-sql-syntax
+    - develop/data-integration/rule-sql-events-and-fields
+    - develop/data-integration/rule-sql-builtin-functions
+    - develop/data-integration/rule-sql-jq
+  # - data-integration/rule-sql-user-defined-function
+    - title_en: Schema Registry
+      title_cn: Schema
+      path: develop/data-integration/schema-registry
       collapsed: true
       children:
-        - develop/data-integration/rule-get-started
-        - develop/data-integration/rule-sql-syntax
-        - develop/data-integration/rule-sql-events-and-fields
-        - develop/data-integration/rule-sql-builtin-functions
-        - develop/data-integration/rule-sql-jq
-      # - data-integration/rule-sql-user-defined-function
-        - title_en: Schema Registry
-          title_cn: Schema
-          path: develop/data-integration/schema-registry
-          collapsed: true
-          children:
-            - develop/data-integration/schema-registry-example-avro
-            - develop/data-integration/schema-registry-example-protobuf
-        - develop/data-integration/schema-validation
-        - develop/data-integration/message-transformation
-        - develop/data-integration/sparkplug    
-    - title_en: Data Integration
-      title_cn: 数据集成
-      path: develop/data-integration/data-bridges
-      collapsed: true
-      children:
-        - develop/data-integration/connector
-        - title_en: Webhook
-          title_cn: Webhook
-          path: develop/data-integration/webhook
-        - title_en: Apache Kafka
-          title_cn: Apache Kafka
-          path: develop/data-integration/data-bridge-kafka
-        - title_en: Apache IoTDB
-          title_cn: Apache IoTDB
-          path: develop/data-integration/data-bridge-iotdb
-        - title_en: Apache Pulsar
-          title_cn: Apache Pulsar
-          path: develop/data-integration/data-bridge-pulsar
-        - title_en: AWS Kinesis
-          title_cn: AWS Kinesis
-          path: develop/data-integration/data-bridge-kinesis
-        - title_en: AWS S3
-          title_cn: AWS S3
-          path: develop/data-integration/s3
-        - title_en: Azure Blob Storage
-          title_cn: Azure Blob Storage
-          path: develop/data-integration/azure-blob-storage
-        - title_en: Azure Event Hubs
-          title_cn: Azure Event Hubs
-          path: develop/data-integration/data-bridge-azure-event-hub
-        - title_en: Cassandra
-          title_cn: Cassandra
-          path: develop/data-integration/data-bridge-cassa
-        - title_en: ClickHouse
-          title_cn: ClickHouse
-          path: develop/data-integration/data-bridge-clickhouse
-        - title_en: Confluent
-          title_cn: Confluent
-          path: develop/data-integration/confluent-sink
-        - title_en: Couchbase
-          title_cn: Couchbase
-          path: develop/data-integration/data-bridge-couchbase
-        - title_en: Datalayers
-          title_cn: Datalayers
-          path: develop/data-integration/data-bridge-datalayers
-        - title_en: DynamoDB
-          title_cn: DynamoDB
-          path: develop/data-integration/data-bridge-dynamo
-        - title_en: Elasticsearch
-          title_cn: Elasticsearch
-          path: develop/data-integration/elasticsearch
-        - title_en: GCP PubSub
-          title_cn: GCP PubSub
-          path: develop/data-integration/data-bridge-gcp-pubsub
-        - title_en: GreptimeDB
-          title_cn: GreptimeDB
-          path: develop/data-integration/data-bridge-greptimedb
-        - title_en: HStreamDB
-          title_cn: HStreamDB
-          path: develop/data-integration/data-bridge-hstreamdb
-        - title_en: HTTP Server
-          title_cn: HTTP Server
-          path: develop/data-integration/data-bridge-webhook
-        - title_en: InfluxDB
-          title_cn: InfluxDB
-          path: develop/data-integration/data-bridge-influxdb
-        - title_en: Microsoft SQL Server
-          title_cn: Microsoft SQL Server
-          path: develop/data-integration/data-bridge-sqlserver
-        - title_en: MongoDB
-          title_cn: MongoDB
-          path: develop/data-integration/data-bridge-mongodb
-        - title_en: MQTT
-          title_cn: MQTT
-          path: develop/data-integration/data-bridge-mqtt
-        - title_en: MySQL
-          title_cn: MySQL
-          path: develop/data-integration/data-bridge-mysql
-        - title_en: OpenTSDB
-          title_cn: OpenTSDB
-          path: develop/data-integration/data-bridge-opents
-        - title_en: Oracle Database
-          title_cn: Oracle Database
-          path: develop/data-integration/data-bridge-oracle
-        - title_en: PostgreSQL
-          title_cn: PostgreSQL
-          path: develop/data-integration/data-bridge-pgsql
-        - title_en: RabbitMQ
-          title_cn: RabbitMQ
-          path: develop/data-integration/data-bridge-rabbitmq
-        - title_en: Redis
-          title_cn: Redis
-          path: develop/data-integration/data-bridge-redis
-        - title_en: RocketMQ
-          title_cn: RocketMQ
-          path: develop/data-integration/data-bridge-rocketmq
-        - title_en: Snowflake
-          title_cn: Snowflake
-          path: develop/data-integration/snowflake
-        - title_en: SysKeeper
-          title_cn: SysKeeper
-          path: develop/data-integration/syskeeper
-        - title_en: Tablestore
-          title_cn: Tablestore
-          path: develop/data-integration/tablestore
-        - title_en: TDengine
-          title_cn: TDengine
-          path: develop/data-integration/data-bridge-tdengine
-        - title_en: TimescaleDB
-          title_cn: TimescaleDB
-          path: develop/data-integration/data-bridge-timescale
-    - title_en: Flow Designer
-      title_cn: Flow 设计器
-      path: develop/flow-designer/introduction
+        - develop/data-integration/schema-registry-example-avro
+        - develop/data-integration/schema-registry-example-protobuf
+    - develop/data-integration/schema-validation
+    - develop/data-integration/message-transformation
+    - develop/data-integration/sparkplug
+- title_en: Data Integration
+  title_cn: 数据集成
+  path: develop/data-integration/data-bridges
+  collapsed: true
+  children:
+    - develop/data-integration/connector
+    - title_en: Webhook
+      title_cn: Webhook
+      path: develop/data-integration/webhook
+    - title_en: Apache Kafka
+      title_cn: Apache Kafka
+      path: develop/data-integration/data-bridge-kafka
+    - title_en: Apache IoTDB
+      title_cn: Apache IoTDB
+      path: develop/data-integration/data-bridge-iotdb
+    - title_en: Apache Pulsar
+      title_cn: Apache Pulsar
+      path: develop/data-integration/data-bridge-pulsar
+    - title_en: AWS Kinesis
+      title_cn: AWS Kinesis
+      path: develop/data-integration/data-bridge-kinesis
+    - title_en: AWS S3
+      title_cn: AWS S3
+      path: develop/data-integration/s3
+    - title_en: Azure Blob Storage
+      title_cn: Azure Blob Storage
+      path: develop/data-integration/azure-blob-storage
+    - title_en: Azure Event Hubs
+      title_cn: Azure Event Hubs
+      path: develop/data-integration/data-bridge-azure-event-hub
+    - title_en: Cassandra
+      title_cn: Cassandra
+      path: develop/data-integration/data-bridge-cassa
+    - title_en: ClickHouse
+      title_cn: ClickHouse
+      path: develop/data-integration/data-bridge-clickhouse
+    - title_en: Confluent
+      title_cn: Confluent
+      path: develop/data-integration/confluent-sink
+    - title_en: Couchbase
+      title_cn: Couchbase
+      path: develop/data-integration/data-bridge-couchbase
+    - title_en: Datalayers
+      title_cn: Datalayers
+      path: develop/data-integration/data-bridge-datalayers
+    - title_en: DynamoDB
+      title_cn: DynamoDB
+      path: develop/data-integration/data-bridge-dynamo
+    - title_en: Elasticsearch
+      title_cn: Elasticsearch
+      path: develop/data-integration/elasticsearch
+    - title_en: GCP PubSub
+      title_cn: GCP PubSub
+      path: develop/data-integration/data-bridge-gcp-pubsub
+    - title_en: GreptimeDB
+      title_cn: GreptimeDB
+      path: develop/data-integration/data-bridge-greptimedb
+    - title_en: HStreamDB
+      title_cn: HStreamDB
+      path: develop/data-integration/data-bridge-hstreamdb
+    - title_en: HTTP Server
+      title_cn: HTTP Server
+      path: develop/data-integration/data-bridge-webhook
+    - title_en: InfluxDB
+      title_cn: InfluxDB
+      path: develop/data-integration/data-bridge-influxdb
+    - title_en: Microsoft SQL Server
+      title_cn: Microsoft SQL Server
+      path: develop/data-integration/data-bridge-sqlserver
+    - title_en: MongoDB
+      title_cn: MongoDB
+      path: develop/data-integration/data-bridge-mongodb
+    - title_en: MQTT
+      title_cn: MQTT
+      path: develop/data-integration/data-bridge-mqtt
+    - title_en: MySQL
+      title_cn: MySQL
+      path: develop/data-integration/data-bridge-mysql
+    - title_en: OpenTSDB
+      title_cn: OpenTSDB
+      path: develop/data-integration/data-bridge-opents
+    - title_en: Oracle Database
+      title_cn: Oracle Database
+      path: develop/data-integration/data-bridge-oracle
+    - title_en: PostgreSQL
+      title_cn: PostgreSQL
+      path: develop/data-integration/data-bridge-pgsql
+    - title_en: RabbitMQ
+      title_cn: RabbitMQ
+      path: develop/data-integration/data-bridge-rabbitmq
+    - title_en: Redis
+      title_cn: Redis
+      path: develop/data-integration/data-bridge-redis
+    - title_en: RocketMQ
+      title_cn: RocketMQ
+      path: develop/data-integration/data-bridge-rocketmq
+    - title_en: Snowflake
+      title_cn: Snowflake
+      path: develop/data-integration/snowflake
+    - title_en: SysKeeper
+      title_cn: SysKeeper
+      path: develop/data-integration/syskeeper
+    - title_en: Tablestore
+      title_cn: Tablestore
+      path: develop/data-integration/tablestore
+    - title_en: TDengine
+      title_cn: TDengine
+      path: develop/data-integration/data-bridge-tdengine
+    - title_en: TimescaleDB
+      title_cn: TimescaleDB
+      path: develop/data-integration/data-bridge-timescale
+- title_en: Flow Designer
+  title_cn: Flow 设计器
+  path: develop/flow-designer/introduction
 - title_en: Advanced Features
   title_cn: 高级功能
   collapsed: true

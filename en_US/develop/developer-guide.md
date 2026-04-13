@@ -1,32 +1,21 @@
 # Developer Guide
 
-The Developer Guide is designed to provide developers with the information to get started with EMQX and build applications on top of it.
+The Developer Guide is designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, API usage, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
 
-This chapter explores the core concepts of MQTT, MQTT-specific features, and some extended features in EMQX. We will also explain how to configure these features in the EMQX Dashboard and test them using client tools. The following features are covered in the guide:
+- [Client SDK](./connect-emqx/introduction.md) provides step-by-step instructions and code samples for connecting to EMQX using popular MQTT client libraries in C, Java, Go, Python, and JavaScript.
 
-- [MQTT Core Concepts](../get-started/messaging/mqtt-concepts.md)
-- [Test with MQTT Clients](../get-started/messaging/publish-and-subscribe.md)
-- [Shared Subscription](../get-started/messaging/mqtt-shared-subscription.md)
-- [Retained Message](../get-started/messaging/mqtt-retained-message.md)
-- [Will Message](../get-started/messaging/mqtt-will-message.md)
-- [Wildcard Subscription](../get-started/messaging/mqtt-wildcard-subscription.md)
-- [Exclusive Subscription](../get-started/messaging/mqtt-exclusive-subscription.md)
-- [Delayed Publish](../get-started/messaging/mqtt-delayed-publish.md)
-- [Auto Subscribe](../get-started/messaging/mqtt-auto-subscription.md)
-- [Topic Rewrite](../get-started/messaging/mqtt-topic-rewrite.md)
+- [Tutorials](./tutorial/tutorial.md) offers practical guides on a wide range of topics including client connection, data collection, MQTT communication optimization, integrations, security, and deployment.
 
-In addition to MQTT messaging features, the Developer Guide also covers different ways to interact with EMQX:
+- [REST API](./api.md) guides you on getting started with the HTTP management API exposed by EMQX for managing clients, topics, subscriptions, and more.
 
-- [Use curl with EMQX](./connect-emqx/curl.md)
+- [Rule Engine](./data-integration/rules.md) introduces the built-in data processing engine that lets you extract, filter, enrich, and transform IoT data in real time, working in conjunction with Data Integration.
 
-The guide also introduces EMQX's [MQTT Durable Session](./durability_introduction.md) feature and provides instructions for quickly trying it out.
+- [Data Integration](./data-integration/data-bridges.md) explains how to connect EMQX with external data systems, including databases, message queues, and cloud services, using Sink and Source components.
 
-Thanks to its support for the MQTT protocol, EMQX is compatible with most MQTT client libraries and SDKs. This guide includes [step-by-step instructions and code samples](./cluster/introduction.md) to help developers start building their MQTT projects quickly. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
+- [Flow Designer](./flow-designer/introduction.md) (EMQX Enterprise feature) is a visual, no-code tool for building data processing pipelines by connecting rules, actions, and integrations in a graphical interface.
 
-::: tip
+- [Advanced Features](./advanced-feature.md) introduces additional protocol capabilities in EMQX, including MQTT over WebSocket, MQTT over QUIC, Cluster Linking, File Transfer over MQTT, Multi-Protocol Gateway, and client attributes.
 
-Not all SDKs are displayed in the document.
+- [Architecture](./architecture-introduction.md) covers the design principles behind key EMQX internals, including clustering, MQTT Durable Sessions, the inflight window and message queue, and message retransmission.
 
-:::
-
-EMQX also provides API documents to facilitate your development. [REST API](./api.md) guides you on quickly getting started with the HTTP management API exposed by EMQX.
+- [MQTT Reference](./mqtt-reference.md) is a comprehensive reference for the MQTT protocol, covering versions, terminology, features, and reason codes.
