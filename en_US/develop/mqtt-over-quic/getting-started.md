@@ -11,7 +11,7 @@ Knowledge of [MQTT over QUIC](./introduction.md).
 
 MQTT over QUIC is an experimental function currently not supported in CentOS 6, macOS.
 
-To test this listener in these systems, you can [install EMQX from the source code](../deploy/install-source.md) and specify the environment variable `BUILD_WITH_QUIC=1` before compiling.
+To test this listener in these systems, you can [install EMQX from the source code](../../get-started/deploy/install-source.md) and specify the environment variable `BUILD_WITH_QUIC=1` before compiling.
 
 You can follow the standard procedure for the other operating systems and platforms.
 
@@ -29,7 +29,7 @@ docker run -d --name emqx \
 emqx/emqx:@CE_VERSION@
 ```
 
-For more information on running EMQX via Docker container, see [Deploy with Docker](../deploy/install-docker.md).
+For more information on running EMQX via Docker container, see [Deploy with Docker](../../get-started/deploy/install-docker.md).
 
 ## Enable MQTT over QUIC
 

@@ -547,15 +547,15 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 以下是可以在表达式中使用的函数：
 
 - **字符串函数**：
-  - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - [字符串操作函数](../../develop/data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - 还添加了一个新函数 `any_to_string/1`，用于将任何中间非字符串值转换为字符串。
-- **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **数组函数**：[nth/2](../../develop/data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
 - **随机函数**：rand_str, rand_int
 - **无模式编码/解码函数**：
-  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
+  - [bin2hexstr/1](../../develop/data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
+  - [hexstr2bin/1](../../develop/data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
+  - [base64_decode/1](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
+  - [base64_encode/1](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s

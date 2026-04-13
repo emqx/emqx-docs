@@ -10,7 +10,7 @@ The License and SSO features are only available in the EMQX Enterprise edition.
 
 ## Users
 
-The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
+The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../cli.md).
 
 To add new users, click the + Create button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
 
@@ -35,14 +35,14 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ## API Key
 
-On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
+On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../../develop/api.md) by following the steps below.
 
 1. Click the **+ Create** button on the top right corner of the page to bring up the Create API Key pop-up dialog. 
 
 2. On the Create API Key dialog, configure the detailed information for the API key. 
 
    - The API key will never expire if the Expire At box is left empty.
-   - Select a role for API key (optional), applicable only in the Enterprise edition. For more information about roles, see [Roles and Permissions](../admin/api.md#roles-and-permissions).
+   - Select a role for API key (optional), applicable only in the Enterprise edition. For more information about roles, see [Roles and Permissions](../../develop/api.md#roles-and-permissions).
 
 3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
 
@@ -90,5 +90,5 @@ The Single Sign-On (SSO) is an EMQX Enterprise feature.
 
 :::
 
-The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](../sso.md).
 

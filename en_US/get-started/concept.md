@@ -14,7 +14,7 @@ WebSocket is a full-duplex communication protocol with an API supported by moder
 
 EMQX supports MQTT over WebSocket, allowing users to publish and subscribe to MQTT topics directly from web browsers and other environments where raw TCP connections are not available.
 
-For more details about how MQTT over WebSocket works and how to configure it, see [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md).
+For more details about how MQTT over WebSocket works and how to configure it, see [MQTT over WebSocket](../develop/connect-emqx/mqtt-over-websocket.md).
 
 ## How does the EMQX achieve high concurrency and high availability?
 

@@ -438,7 +438,7 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
 ## 集群自动发现
 
-EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](../deploy/cluster/create-cluster.md)。
+EMQX 支持多种策略的节点自动发现与集群，详见 [创建集群](../cluster/create-cluster.md)。
 
 | 策略   | 说明                    |
 | ------ | ----------------------- |
@@ -758,7 +758,7 @@ log_overload_kill -->
 
 EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
 
-**listeners.tcp.$name.enable**
+**`listeners.tcp.$name.enable`**
 
   *类型*: `boolean`
 
@@ -767,7 +767,7 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
   启停监听器。
 
 
-**listeners.tcp.$name.bind**
+**`listeners.tcp.$name.bind`**
 
   *类型*: `ip_port`
 
@@ -776,7 +776,7 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
   监听套接字的 IP 地址和端口。
 
 
-**listeners.tcp.$name.acceptors**
+**`listeners.tcp.$name.acceptors`**
 
   *类型*: `pos_integer`
 
@@ -785,7 +785,7 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
   监听器接收池的大小。
 
 
-**listeners.tcp.$name.max_connections**
+**`listeners.tcp.$name.max_connections`**
 
   *类型*: `infinity | pos_integer`
 
@@ -794,7 +794,7 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
   监听器允许的最大并发连接数。
 
 
-**listeners.tcp.$name.mountpoint**
+**`listeners.tcp.$name.mountpoint`**
 
   *类型*: `string`
 
@@ -814,7 +814,7 @@ mountpoint 字符串中的变量：
 - <code>${username}</code>: username
 
 
-**listeners.tcp.$name.enable_authn**
+**`listeners.tcp.$name.enable_authn`**
 
   *类型*: `enum`
 
@@ -828,28 +828,28 @@ mountpoint 字符串中的变量：
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
-**listeners.tcp.$name.max_conn_rate**
+**`listeners.tcp.$name.max_conn_rate`**
 
   *类型*: `rate`
 
   最大连接率。<br/> 用于限制该监听器的连接速率，一旦达到限制值，新的连接将被推迟或拒绝。
 
 
-**listeners.tcp.$name.messages_rate**
+**`listeners.tcp.$name.messages_rate`**
 
   *类型*: `rate`
 
   消息发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站消息数，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.tcp.$name.bytes_rate**
+**`listeners.tcp.$name.bytes_rate`**
 
   *类型*: `rate`
 
   数据发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站字节速率，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.tcp.$name.access_rules**
+**`listeners.tcp.$name.access_rules`**
 
   *类型*: `array`
 
@@ -858,7 +858,7 @@ mountpoint 字符串中的变量：
   此监听器的访问控制规则。
 
 
-**listeners.tcp.$name.proxy_protocol**
+**`listeners.tcp.$name.proxy_protocol`**
 
   *类型*: `boolean`
 
@@ -868,7 +868,7 @@ mountpoint 字符串中的变量：
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.tcp.$name.proxy_protocol_timeout**
+**`listeners.tcp.$name.proxy_protocol_timeout`**
 
   *类型*: `duration`
 
@@ -877,7 +877,7 @@ mountpoint 字符串中的变量：
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
-**listeners.tcp.$name.tcp_options**
+**`listeners.tcp.$name.tcp_options`**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
 
@@ -888,7 +888,7 @@ mountpoint 字符串中的变量：
 
 Settings for the MQTT over SSL listener.
 
-**listeners.ssl.$name.enable**
+**`listeners.ssl.$name.enable`**
 
   *类型*: `boolean`
 
@@ -897,7 +897,7 @@ Settings for the MQTT over SSL listener.
   启停监听器。
 
 
-**listeners.ssl.$name.bind**
+**`listeners.ssl.$name.bind`**
 
   *类型*: `ip_port`
 
@@ -906,7 +906,7 @@ Settings for the MQTT over SSL listener.
   监听套接字的 IP 地址和端口。
 
 
-**listeners.ssl.$name.acceptors**
+**`listeners.ssl.$name.acceptors`**
 
   *类型*: `pos_integer`
 
@@ -915,7 +915,7 @@ Settings for the MQTT over SSL listener.
   监听器接收池的大小。
 
 
-**listeners.ssl.$name.max_connections**
+**`listeners.ssl.$name.max_connections`**
 
   *类型*: `infinity | pos_integer`
 
@@ -924,7 +924,7 @@ Settings for the MQTT over SSL listener.
   监听器允许的最大并发连接数。
 
 
-**listeners.ssl.$name.mountpoint**
+**`listeners.ssl.$name.mountpoint`**
 
   *类型*: `string`
 
@@ -944,7 +944,7 @@ mountpoint 字符串中的变量：
 - <code>${username}</code>: username
 
 
-**listeners.ssl.$name.enable_authn**
+**`listeners.ssl.$name.enable_authn`**
 
   *类型*: `enum`
 
@@ -958,28 +958,28 @@ mountpoint 字符串中的变量：
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
-**listeners.ssl.$name.max_conn_rate**
+**`listeners.ssl.$name.max_conn_rate`**
 
   *类型*: `rate`
 
   最大连接率。<br/> 用于限制该监听器的连接速率，一旦达到限制值，新的连接将被推迟或拒绝。
 
 
-**listeners.ssl.$name.messages_rate**
+**`listeners.ssl.$name.messages_rate`**
 
   *类型*: `rate`
 
   消息发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站消息数，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.ssl.$name.bytes_rate**
+**`listeners.ssl.$name.bytes_rate`**
 
   *类型*: `rate`
 
   数据发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站字节速率，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.ssl.$name.access_rules**
+**`listeners.ssl.$name.access_rules`**
 
   *类型*: `array`
 
@@ -988,7 +988,7 @@ mountpoint 字符串中的变量：
   此监听器的访问控制规则。
 
 
-**listeners.ssl.$name.proxy_protocol**
+**`listeners.ssl.$name.proxy_protocol`**
 
   *类型*: `boolean`
 
@@ -998,7 +998,7 @@ mountpoint 字符串中的变量：
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.ssl.$name.proxy_protocol_timeout**
+**`listeners.ssl.$name.proxy_protocol_timeout`**
 
   *类型*: `duration`
 
@@ -1007,12 +1007,12 @@ mountpoint 字符串中的变量：
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
-**listeners.ssl.$name.tcp_options**
+**`listeners.ssl.$name.tcp_options`**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.ssl.$name.ssl_options**
+**`listeners.ssl.$name.ssl_options`**
 
   *类型*: [listener_ssl_opts](#监听器-ssl-tls-配置)
 
@@ -1020,12 +1020,12 @@ mountpoint 字符串中的变量：
 
 ## MQTT Over QUIC/UDP 监听器 - 14567
 
-设置 MQTT over QUIC UDP 监听器，该监听器默认不启用且在某些操作系统中不可用，详情请参考 [MQTT over QUIC 快速开始](../mqtt-over-quic/getting-started.md)
+设置 MQTT over QUIC UDP 监听器，该监听器默认不启用且在某些操作系统中不可用，详情请参考 [MQTT over QUIC 快速开始](../../develop/mqtt-over-quic/getting-started.md)
 
 
 Settings for the MQTT over QUIC listener.
 
-**listeners.quic.$name.ciphers**
+**`listeners.quic.$name.ciphers`**
 
   *类型*: `array`
 
@@ -1059,14 +1059,14 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 注：QUIC 监听器只支持 tlsv1.3 的 ciphers。
 
 
-**listeners.quic.$name.ssl_options**
+**`listeners.quic.$name.ssl_options`**
 
   *类型*: `broker:listener_quic_ssl_opts`
 
   QUIC 传输层的 TLS 选项
 
 
-**listeners.quic.$name.enable**
+**`listeners.quic.$name.enable`**
 
   *类型*: `boolean`
 
@@ -1075,7 +1075,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   启停监听器。
 
 
-**listeners.quic.$name.bind**
+**`listeners.quic.$name.bind`**
 
   *类型*: `ip_port`
 
@@ -1084,7 +1084,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   监听套接字的 IP 地址和端口。
 
 
-**listeners.quic.$name.acceptors**
+**`listeners.quic.$name.acceptors`**
 
   *类型*: `pos_integer`
 
@@ -1093,7 +1093,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   监听器接收池的大小。
 
 
-**listeners.quic.$name.max_connections**
+**`listeners.quic.$name.max_connections`**
 
   *类型*: `infinity | pos_integer`
 
@@ -1102,7 +1102,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
   监听器允许的最大并发连接数。
 
 
-**listeners.quic.$name.mountpoint**
+**`listeners.quic.$name.mountpoint`**
 
   *类型*: `string`
 
@@ -1122,7 +1122,7 @@ mountpoint 字符串中的变量：
 - <code>${username}</code>: username
 
 
-**listeners.quic.$name.enable_authn**
+**`listeners.quic.$name.enable_authn`**
 
   *类型*: `enum`
 
@@ -1136,21 +1136,21 @@ mountpoint 字符串中的变量：
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
-**listeners.quic.$name.max_conn_rate**
+**`listeners.quic.$name.max_conn_rate`**
 
   *类型*: `rate`
 
   最大连接率。<br/> 用于限制该监听器的连接速率，一旦达到限制值，新的连接将被推迟或拒绝。
 
 
-**listeners.quic.$name.messages_rate**
+**`listeners.quic.$name.messages_rate`**
 
   *类型*: `rate`
 
   消息发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站消息数，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.quic.$name.bytes_rate**
+**`listeners.quic.$name.bytes_rate`**
 
   *类型*: `rate`
 
@@ -1163,7 +1163,7 @@ mountpoint 字符串中的变量：
 
 Settings for the MQTT over WebSocket listener.
 
-**listeners.ws.$name.enable**
+**`listeners.ws.$name.enable`**
 
   *类型*: `boolean`
 
@@ -1172,7 +1172,7 @@ Settings for the MQTT over WebSocket listener.
   启停监听器。
 
 
-**listeners.ws.$name.bind**
+**`listeners.ws.$name.bind`**
 
   *类型*: `ip_port`
 
@@ -1181,7 +1181,7 @@ Settings for the MQTT over WebSocket listener.
   监听套接字的 IP 地址和端口。
 
 
-**listeners.ws.$name.acceptors**
+**`listeners.ws.$name.acceptors`**
 
   *类型*: `pos_integer`
 
@@ -1190,7 +1190,7 @@ Settings for the MQTT over WebSocket listener.
   监听器接收池的大小。
 
 
-**listeners.ws.$name.max_connections**
+**`listeners.ws.$name.max_connections`**
 
   *类型*: `infinity | pos_integer`
 
@@ -1199,7 +1199,7 @@ Settings for the MQTT over WebSocket listener.
   监听器允许的最大并发连接数。
 
 
-**listeners.ws.$name.mountpoint**
+**`listeners.ws.$name.mountpoint`**
 
   *类型*: `string`
 
@@ -1219,7 +1219,7 @@ mountpoint 字符串中的变量：
 - <code>${username}</code>: username
 
 
-**listeners.ws.$name.enable_authn**
+**`listeners.ws.$name.enable_authn`**
 
   *类型*: `enum`
 
@@ -1233,28 +1233,28 @@ mountpoint 字符串中的变量：
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
-**listeners.ws.$name.max_conn_rate**
+**`listeners.ws.$name.max_conn_rate`**
 
   *类型*: `rate`
 
   最大连接率。<br/> 用于限制该监听器的连接速率，一旦达到限制值，新的连接将被推迟或拒绝。
 
 
-**listeners.ws.$name.messages_rate**
+**`listeners.ws.$name.messages_rate`**
 
   *类型*: `rate`
 
   消息发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站消息数，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.ws.$name.bytes_rate**
+**`listeners.ws.$name.bytes_rate`**
 
   *类型*: `rate`
 
   数据发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站字节速率，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.ws.$name.access_rules**
+**`listeners.ws.$name.access_rules`**
 
   *类型*: `array`
 
@@ -1263,7 +1263,7 @@ mountpoint 字符串中的变量：
   此监听器的访问控制规则。
 
 
-**listeners.ws.$name.proxy_protocol**
+**`listeners.ws.$name.proxy_protocol`**
 
   *类型*: `boolean`
 
@@ -1273,7 +1273,7 @@ mountpoint 字符串中的变量：
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.ws.$name.proxy_protocol_timeout**
+**`listeners.ws.$name.proxy_protocol_timeout`**
 
   *类型*: `duration`
 
@@ -1282,12 +1282,12 @@ mountpoint 字符串中的变量：
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
-**listeners.ws.$name.tcp_options**
+**`listeners.ws.$name.tcp_options`**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.ws.$name.websocket**
+**`listeners.ws.$name.websocket`**
 
   *类型*: [broker:ws_opts](#ws_opts)
 
@@ -1298,7 +1298,7 @@ mountpoint 字符串中的变量：
 
 Settings for the MQTT over WebSocket/SSL listener.
 
-**listeners.wss.$name.enable**
+**`listeners.wss.$name.enable`**
 
   *类型*: `boolean`
 
@@ -1307,7 +1307,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   启停监听器。
 
 
-**listeners.wss.$name.bind**
+**`listeners.wss.$name.bind`**
 
   *类型*: `ip_port`
 
@@ -1316,7 +1316,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   监听套接字的 IP 地址和端口。
 
 
-**listeners.wss.$name.acceptors**
+**`listeners.wss.$name.acceptors`**
 
   *类型*: `pos_integer`
 
@@ -1325,7 +1325,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   监听器接收池的大小。
 
 
-**listeners.wss.$name.max_connections**
+**`listeners.wss.$name.max_connections`**
 
   *类型*: `infinity | pos_integer`
 
@@ -1334,7 +1334,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   监听器允许的最大并发连接数。
 
 
-**listeners.wss.$name.mountpoint**
+**`listeners.wss.$name.mountpoint`**
 
   *类型*: `string`
 
@@ -1354,7 +1354,7 @@ mountpoint 字符串中的变量：
 - <code>${username}</code>: username
 
 
-**listeners.wss.$name.enable_authn**
+**`listeners.wss.$name.enable_authn`**
 
   *类型*: `enum`
 
@@ -1368,28 +1368,28 @@ mountpoint 字符串中的变量：
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
-**listeners.wss.$name.max_conn_rate**
+**`listeners.wss.$name.max_conn_rate`**
 
   *类型*: `rate`
 
   最大连接率。<br/> 用于限制该监听器的连接速率，一旦达到限制值，新的连接将被推迟或拒绝。
 
 
-**listeners.wss.$name.messages_rate**
+**`listeners.wss.$name.messages_rate`**
 
   *类型*: `rate`
 
   消息发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站消息数，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.wss.$name.bytes_rate**
+**`listeners.wss.$name.bytes_rate`**
 
   *类型*: `rate`
 
   数据发布速率。<br/> 用于限制连接到该监听器的每个客户端的入站字节速率，一旦达到限制值，受限制的客户端将会减速甚至暂时被挂起。
 
 
-**listeners.wss.$name.access_rules**
+**`listeners.wss.$name.access_rules`**
 
   *类型*: `array`
 
@@ -1398,7 +1398,7 @@ mountpoint 字符串中的变量：
   此监听器的访问控制规则。
 
 
-**listeners.wss.$name.proxy_protocol**
+**`listeners.wss.$name.proxy_protocol`**
 
   *类型*: `boolean`
 
@@ -1408,7 +1408,7 @@ mountpoint 字符串中的变量：
 详情见: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.wss.$name.proxy_protocol_timeout**
+**`listeners.wss.$name.proxy_protocol_timeout`**
 
   *类型*: `duration`
 
@@ -1417,17 +1417,17 @@ mountpoint 字符串中的变量：
   代理协议超时。如果在超时时间内未收到代理协议数据包，EMQX将关闭TCP连接。
 
 
-**listeners.wss.$name.tcp_options**
+**`listeners.wss.$name.tcp_options`**
 
   *类型*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.wss.$name.ssl_options**
+**`listeners.wss.$name.ssl_options`**
 
   *类型*: [broker:listener_wss_opts](#listener_wss_opts)
 
 
-**listeners.wss.$name.websocket**
+**`listeners.wss.$name.websocket`**
 
   *类型*: [broker:ws_opts](#ws_opts)
 
@@ -1997,8 +1997,8 @@ Prometheus 监控数据推送
   *默认值*: `${name}/instance/${name}~${host}`
 
   推送到 Push Gateway 的 Job 名称。可用变量为：<br/>
-- ${name}: EMQX 节点的名称。
-- ${host}: EMQX 节点主机名。
+- `${name}`: EMQX 节点的名称。
+- `${host}`: EMQX 节点主机名。
 例如，当 EMQX 节点名为 <code>emqx@127.0.0.1</code> 则 name 变量的值为 <code>emqx</code>，host 变量的值为 <code>127.0.0.1</code>。<br/>
 默认值为: <code>${name}/instance/${name}~${host}</code>
 
@@ -2330,7 +2330,7 @@ warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_
 
 ## 速率限制
 
-有关速率限制的介绍以及使用请参考 [速率限制](../rate-limit/rate-limit.md)。
+有关速率限制的介绍以及使用请参考 [速率限制](../rate-limit.md)。
 
 <!-- ## 过载保护
 
@@ -2776,7 +2776,7 @@ API 密钥， 可用于请求除管理 API 密钥及 Dashboard 用户管理 API 
 
 Settings for simple algorithms.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *类型*: `enum`
 
@@ -2785,7 +2785,7 @@ Settings for simple algorithms.
   Simple password hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.salt_position**
+**`authentication.$INDEX.password_hash_algorithm.salt_position`**
 
   *类型*: `enum`
 
@@ -2800,7 +2800,7 @@ Settings for simple algorithms.
 
 Settings for bcrypt password hashing algorithm.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *类型*: `bcrypt`
 
@@ -2811,14 +2811,14 @@ Settings for bcrypt password hashing algorithm.
 
 Settings for bcrypt password hashing algorithm (for DB backends with write capability).
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *类型*: `bcrypt`
 
   BCRYPT password hashing.
 
 
-**authentication.$INDEX.password_hash_algorithm.salt_rounds**
+**`authentication.$INDEX.password_hash_algorithm.salt_rounds`**
 
   *类型*: `integer`
 
@@ -2833,14 +2833,14 @@ Settings for bcrypt password hashing algorithm (for DB backends with write capab
 
 Settings for PBKDF2 password hashing algorithm.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *类型*: `pbkdf2`
 
   PBKDF2 password hashing.
 
 
-**authentication.$INDEX.password_hash_algorithm.mac_fun**
+**`authentication.$INDEX.password_hash_algorithm.mac_fun`**
 
   *类型*: `enum`
 
@@ -2849,14 +2849,14 @@ Settings for PBKDF2 password hashing algorithm.
   Specifies mac_fun for PBKDF2 hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.iterations**
+**`authentication.$INDEX.password_hash_algorithm.iterations`**
 
   *类型*: `integer`
 
   Iteration count for PBKDF2 hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.dk_length**
+**`authentication.$INDEX.password_hash_algorithm.dk_length`**
 
   *类型*: `integer`
 
@@ -3156,7 +3156,7 @@ are distinguished by the topic prefix:
 
 MQTT数据桥接的配置。
 
-**bridges.mqtt.$name.enable**
+**`bridges.mqtt.$name.enable`**
 
   *类型*: `boolean`
 
@@ -3165,7 +3165,7 @@ MQTT数据桥接的配置。
   启用/禁用数据桥接
 
 
-**bridges.mqtt.$name.resource_opts**
+**`bridges.mqtt.$name.resource_opts`**
 
   *类型*: `bridge_mqtt:creation_opts`
 
@@ -3174,7 +3174,7 @@ MQTT数据桥接的配置。
   资源相关的选项。
 
 
-**bridges.mqtt.$name.mode**
+**`bridges.mqtt.$name.mode`**
 
   *类型*: `enum`
 
@@ -3183,28 +3183,28 @@ MQTT数据桥接的配置。
   Deprecated since v5.1.0 & e5.1.0.
 
 
-**bridges.mqtt.$name.server**
+**`bridges.mqtt.$name.server`**
 
   *类型*: `string`
 
   The host and port of the remote MQTT broker
 
 
-**bridges.mqtt.$name.clientid_prefix**
+**`bridges.mqtt.$name.clientid_prefix`**
 
   *类型*: `string`
 
   Optional prefix to prepend to the clientid used by egress bridges.
 
 
-**bridges.mqtt.$name.reconnect_interval**
+**`bridges.mqtt.$name.reconnect_interval`**
 
   *类型*: `string`
 
   Deprecated since v5.0.16.
 
 
-**bridges.mqtt.$name.proto_ver**
+**`bridges.mqtt.$name.proto_ver`**
 
   *类型*: `enum`
 
@@ -3215,7 +3215,7 @@ MQTT数据桥接的配置。
   The MQTT protocol version
 
 
-**bridges.mqtt.$name.bridge_mode**
+**`bridges.mqtt.$name.bridge_mode`**
 
   *类型*: `boolean`
 
@@ -3228,21 +3228,21 @@ If bridge_mode is set to true, the bridge will indicate to the remote broker tha
 This means that loop detection will be more effective and that retained messages will be propagated correctly.
 
 
-**bridges.mqtt.$name.username**
+**`bridges.mqtt.$name.username`**
 
   *类型*: `string`
 
   The username of the MQTT protocol
 
 
-**bridges.mqtt.$name.password**
+**`bridges.mqtt.$name.password`**
 
   *类型*: `string`
 
   The password of the MQTT protocol
 
 
-**bridges.mqtt.$name.clean_start**
+**`bridges.mqtt.$name.clean_start`**
 
   *类型*: `boolean`
 
@@ -3251,7 +3251,7 @@ This means that loop detection will be more effective and that retained messages
   Whether to start a clean session when reconnecting a remote broker for ingress bridge
 
 
-**bridges.mqtt.$name.keepalive**
+**`bridges.mqtt.$name.keepalive`**
 
   *类型*: `string`
 
@@ -3264,7 +3264,7 @@ This means that loop detection will be more effective and that retained messages
 <br/>or combination of whereof: `1h5m0s`
 
 
-**bridges.mqtt.$name.retry_interval**
+**`bridges.mqtt.$name.retry_interval`**
 
   *类型*: `string`
 
@@ -3277,7 +3277,7 @@ This means that loop detection will be more effective and that retained messages
 <br/>or combination of whereof: `1h5m0s`
 
 
-**bridges.mqtt.$name.max_inflight**
+**`bridges.mqtt.$name.max_inflight`**
 
   *类型*: `non_neg_integer`
 
@@ -3286,7 +3286,7 @@ This means that loop detection will be more effective and that retained messages
   Max inflight (sent, but un-acked) messages of the MQTT protocol
 
 
-**bridges.mqtt.$name.ssl**
+**`bridges.mqtt.$name.ssl`**
 
   *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
 
@@ -3295,7 +3295,7 @@ This means that loop detection will be more effective and that retained messages
   启用 SSL 连接。
 
 
-**bridges.mqtt.$name.ingress**
+**`bridges.mqtt.$name.ingress`**
 
   *类型*: `connector-mqtt:ingress`
 
@@ -3307,7 +3307,7 @@ This means that loop detection will be more effective and that retained messages
         the rule.
 
 
-**bridges.mqtt.$name.egress**
+**`bridges.mqtt.$name.egress`**
 
   *类型*: `connector-mqtt:egress`
 
@@ -3322,7 +3322,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
 资源启动相关的选项。
 
-**bridges.mqtt.$name.resource_opts.worker_pool_size**
+**`bridges.mqtt.$name.resource_opts.worker_pool_size`**
 
   *类型*: `integer`
 
@@ -3333,7 +3333,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
   缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
 
 
-**bridges.mqtt.$name.resource_opts.health_check_interval**
+**`bridges.mqtt.$name.resource_opts.health_check_interval`**
 
   *类型*: `timeout_duration_ms`
 
@@ -3342,7 +3342,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
   健康检查间隔。
 
 
-**bridges.mqtt.$name.resource_opts.start_after_created**
+**`bridges.mqtt.$name.resource_opts.start_after_created`**
 
   *类型*: `boolean`
 
@@ -3351,7 +3351,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
   是否在创建资源后立即启动资源。
 
 
-**bridges.mqtt.$name.resource_opts.start_timeout**
+**`bridges.mqtt.$name.resource_opts.start_timeout`**
 
   *类型*: `timeout_duration_ms`
 
@@ -3360,14 +3360,14 @@ is configured, then both the data got from the rule and the MQTT messages that m
   在回复资源创建请求前等待资源进入健康状态的时间。
 
 
-**bridges.mqtt.$name.resource_opts.auto_restart_interval**
+**`bridges.mqtt.$name.resource_opts.auto_restart_interval`**
 
   *类型*: `infinity | duration_ms`
 
   Deprecated since 5.1.0.
 
 
-**bridges.mqtt.$name.resource_opts.query_mode**
+**`bridges.mqtt.$name.resource_opts.query_mode`**
 
   *类型*: `enum`
 
@@ -3378,7 +3378,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
   请求模式。可选 '同步/异步'，默认为'异步'模式。
 
 
-**bridges.mqtt.$name.resource_opts.request_ttl**
+**`bridges.mqtt.$name.resource_opts.request_ttl`**
 
   *类型*: `timeout_duration_ms | infinity`
 
@@ -3387,7 +3387,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
   从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。
 
 
-**bridges.mqtt.$name.resource_opts.inflight_window**
+**`bridges.mqtt.$name.resource_opts.inflight_window`**
 
   *类型*: `pos_integer`
 
@@ -3396,14 +3396,14 @@ is configured, then both the data got from the rule and the MQTT messages that m
   请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
 
 
-**bridges.mqtt.$name.resource_opts.enable_queue**
+**`bridges.mqtt.$name.resource_opts.enable_queue`**
 
   *类型*: `boolean`
 
   Deprecated since v5.0.14.
 
 
-**bridges.mqtt.$name.resource_opts.max_buffer_bytes**
+**`bridges.mqtt.$name.resource_opts.max_buffer_bytes`**
 
   *类型*: `bytesize`
 
@@ -3418,7 +3418,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
 Configuration for an HTTP bridge.
 
-**bridges.webhook.$name.enable**
+**`bridges.webhook.$name.enable`**
 
   *类型*: `boolean`
 
@@ -3427,7 +3427,7 @@ Configuration for an HTTP bridge.
   Enable or disable this bridge
 
 
-**bridges.webhook.$name.resource_opts**
+**`bridges.webhook.$name.resource_opts`**
 
   *类型*: `bridge_webhook:creation_opts`
 
@@ -3436,7 +3436,7 @@ Configuration for an HTTP bridge.
   资源相关的选项。
 
 
-**bridges.webhook.$name.connect_timeout**
+**`bridges.webhook.$name.connect_timeout`**
 
   *类型*: `timeout_duration_ms`
 
@@ -3445,14 +3445,14 @@ Configuration for an HTTP bridge.
   The timeout when connecting to the HTTP server.
 
 
-**bridges.webhook.$name.retry_interval**
+**`bridges.webhook.$name.retry_interval`**
 
   *类型*: `timeout_duration`
 
   Deprecated since 5.0.4.
 
 
-**bridges.webhook.$name.pool_type**
+**`bridges.webhook.$name.pool_type`**
 
   *类型*: `emqx_bridge_http_connector:pool_type`
 
@@ -3461,7 +3461,7 @@ Configuration for an HTTP bridge.
   The type of the pool. Can be one of `random`, `hash`.
 
 
-**bridges.webhook.$name.pool_size**
+**`bridges.webhook.$name.pool_size`**
 
   *类型*: `pos_integer`
 
@@ -3470,7 +3470,7 @@ Configuration for an HTTP bridge.
   The pool size.
 
 
-**bridges.webhook.$name.enable_pipelining**
+**`bridges.webhook.$name.enable_pipelining`**
 
   *类型*: `pos_integer`
 
@@ -3479,14 +3479,14 @@ Configuration for an HTTP bridge.
   A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 
-**bridges.webhook.$name.request**
+**`bridges.webhook.$name.request`**
 
   *类型*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
-**bridges.webhook.$name.ssl**
+**`bridges.webhook.$name.ssl`**
 
   *类型*: [ssl_client_opts](#客户端-ssl-tls-配置)
 
@@ -3495,7 +3495,7 @@ Configuration for an HTTP bridge.
   启用 SSL 连接。
 
 
-**bridges.webhook.$name.url**
+**`bridges.webhook.$name.url`**
 
   *类型*: `string`
 
@@ -3507,14 +3507,14 @@ For example, <code> http://localhost:9901/${topic} </code> is allowed, but
 is not allowed.
 
 
-**bridges.webhook.$name.direction**
+**`bridges.webhook.$name.direction`**
 
   *类型*: `egress`
 
   Deprecated since 5.0.12.
 
 
-**bridges.webhook.$name.local_topic**
+**`bridges.webhook.$name.local_topic`**
 
   *类型*: `string`
 
@@ -3525,7 +3525,7 @@ configured, then both the data got from the rule and the MQTT messages that matc
 will be forwarded.
 
 
-**bridges.webhook.$name.method**
+**`bridges.webhook.$name.method`**
 
   *类型*: `enum`
 
@@ -3537,7 +3537,7 @@ will be forwarded.
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.headers**
+**`bridges.webhook.$name.headers`**
 
   *类型*: `map`
 
@@ -3547,7 +3547,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.body**
+**`bridges.webhook.$name.body`**
 
   *类型*: `string`
 
@@ -3560,7 +3560,7 @@ webhook is used as an action of a rule).<br/>
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.max_retries**
+**`bridges.webhook.$name.max_retries`**
 
   *类型*: `non_neg_integer`
 
@@ -3569,7 +3569,7 @@ Template with variables is allowed.
   HTTP request max retry times if failed.
 
 
-**bridges.webhook.$name.request_timeout**
+**`bridges.webhook.$name.request_timeout`**
 
   *类型*: `duration_ms`
 
@@ -3580,7 +3580,7 @@ Template with variables is allowed.
 
 资源启动相关的选项。
 
-**bridges.webhook.$name.resource_opts.worker_pool_size**
+**`bridges.webhook.$name.resource_opts.worker_pool_size`**
 
   *类型*: `integer`
 
@@ -3591,7 +3591,7 @@ Template with variables is allowed.
   缓存队列 worker 数量。仅对 egress 类型的桥接有意义。当桥接仅有 ingress 方向时，可设置为 0，否则必须大于 0。
 
 
-**bridges.webhook.$name.resource_opts.health_check_interval**
+**`bridges.webhook.$name.resource_opts.health_check_interval`**
 
   *类型*: `timeout_duration_ms`
 
@@ -3600,7 +3600,7 @@ Template with variables is allowed.
   健康检查间隔。
 
 
-**bridges.webhook.$name.resource_opts.start_after_created**
+**`bridges.webhook.$name.resource_opts.start_after_created`**
 
   *类型*: `boolean`
 
@@ -3609,7 +3609,7 @@ Template with variables is allowed.
   是否在创建资源后立即启动资源。
 
 
-**bridges.webhook.$name.resource_opts.start_timeout**
+**`bridges.webhook.$name.resource_opts.start_timeout`**
 
   *类型*: `timeout_duration_ms`
 
@@ -3618,14 +3618,14 @@ Template with variables is allowed.
   在回复资源创建请求前等待资源进入健康状态的时间。
 
 
-**bridges.webhook.$name.resource_opts.auto_restart_interval**
+**`bridges.webhook.$name.resource_opts.auto_restart_interval`**
 
   *类型*: `infinity | duration_ms`
 
   Deprecated since 5.1.0.
 
 
-**bridges.webhook.$name.resource_opts.query_mode**
+**`bridges.webhook.$name.resource_opts.query_mode`**
 
   *类型*: `enum`
 
@@ -3636,7 +3636,7 @@ Template with variables is allowed.
   请求模式。可选 '同步/异步'，默认为'异步'模式。
 
 
-**bridges.webhook.$name.resource_opts.request_ttl**
+**`bridges.webhook.$name.resource_opts.request_ttl`**
 
   *类型*: `timeout_duration_ms | infinity`
 
@@ -3645,7 +3645,7 @@ Template with variables is allowed.
   从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。
 
 
-**bridges.webhook.$name.resource_opts.inflight_window**
+**`bridges.webhook.$name.resource_opts.inflight_window`**
 
   *类型*: `pos_integer`
 
@@ -3654,14 +3654,14 @@ Template with variables is allowed.
   请求飞行队列窗口大小。当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
 
 
-**bridges.webhook.$name.resource_opts.enable_queue**
+**`bridges.webhook.$name.resource_opts.enable_queue`**
 
   *类型*: `boolean`
 
   Deprecated since v5.0.14.
 
 
-**bridges.webhook.$name.resource_opts.max_buffer_bytes**
+**`bridges.webhook.$name.resource_opts.max_buffer_bytes`**
 
   *类型*: `bytesize`
 
@@ -3726,25 +3726,25 @@ NOTE: if this bridge is used as the action of a rule, and also 'local.topic'
 is configured, then both the data got from the rule and the MQTT messages that matches
 'local.topic' will be forwarded.
 
-**bridges.mqtt.$name.egress.pool_size**
+**`bridges.mqtt.$name.egress.pool_size`**
 
   *类型*: `pos_integer`
 
   *默认值*: `8`
 
   Size of the pool of MQTT clients that will publish messages to the remote broker.<br/>
-Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:egress:${node}:${n}'
+Each MQTT client will be assigned 'clientid' of the form `${clientid_prefix}:${bridge_name}:egress:${node}:${n}`
 where 'n' is the number of a client inside the pool.
 
 
-**bridges.mqtt.$name.egress.local**
+**`bridges.mqtt.$name.egress.local`**
 
   *类型*: `connector-mqtt:egress_local`
 
   The configs about receiving messages from local broker.
 
 
-**bridges.mqtt.$name.egress.remote**
+**`bridges.mqtt.$name.egress.remote`**
 
   *类型*: `connector-mqtt:egress_remote`
 
@@ -3755,7 +3755,7 @@ where 'n' is the number of a client inside the pool.
 
 The configs about receiving messages from local broker.
 
-**bridges.mqtt.$name.egress.local.topic**
+**`bridges.mqtt.$name.egress.local.topic`**
 
   *类型*: `string`
 
@@ -3766,7 +3766,7 @@ The configs about receiving messages from local broker.
 
 The configs about sending message to the remote broker.
 
-**bridges.mqtt.$name.egress.remote.topic**
+**`bridges.mqtt.$name.egress.remote.topic`**
 
   *类型*: `string`
 
@@ -3774,7 +3774,7 @@ The configs about sending message to the remote broker.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.egress.remote.qos**
+**`bridges.mqtt.$name.egress.remote.qos`**
 
   *类型*: `qos | string`
 
@@ -3784,7 +3784,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.egress.remote.retain**
+**`bridges.mqtt.$name.egress.remote.retain`**
 
   *类型*: `boolean | string`
 
@@ -3794,7 +3794,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.egress.remote.payload**
+**`bridges.mqtt.$name.egress.remote.payload`**
 
   *类型*: `string`
 
@@ -3811,7 +3811,7 @@ The ingress config defines how this bridge receive messages from the remote MQTT
         configured, then messages got from the remote broker will be sent to both the 'local.topic' and
         the rule.
 
-**bridges.mqtt.$name.ingress.pool_size**
+**`bridges.mqtt.$name.ingress.pool_size`**
 
   *类型*: `pos_integer`
 
@@ -3820,19 +3820,19 @@ The ingress config defines how this bridge receive messages from the remote MQTT
   Size of the pool of MQTT clients that will ingest messages from the remote broker.<br/>
 This value will be respected only if 'remote.topic' is a shared subscription topic or topic-filter
 (for example `$share/name1/topic1` or `$share/name2/topic2/#`), otherwise only a single MQTT client will be used.
-Each MQTT client will be assigned 'clientid' of the form '${clientid_prefix}:${bridge_name}:ingress:${node}:${n}'
+Each MQTT client will be assigned 'clientid' of the form `${clientid_prefix}:${bridge_name}:ingress:${node}:${n}`
 where 'n' is the number of a client inside the pool.
 NOTE: Non-shared subscription will not work well when EMQX is clustered.
 
 
-**bridges.mqtt.$name.ingress.remote**
+**`bridges.mqtt.$name.ingress.remote`**
 
   *类型*: `connector-mqtt:ingress_remote`
 
   The configs about subscribing to the remote broker.
 
 
-**bridges.mqtt.$name.ingress.local**
+**`bridges.mqtt.$name.ingress.local`**
 
   *类型*: `connector-mqtt:ingress_local`
 
@@ -3843,7 +3843,7 @@ NOTE: Non-shared subscription will not work well when EMQX is clustered.
 
 The configs about sending message to the local broker.
 
-**bridges.mqtt.$name.ingress.local.topic**
+**`bridges.mqtt.$name.ingress.local.topic`**
 
   *类型*: `string`
 
@@ -3851,7 +3851,7 @@ The configs about sending message to the local broker.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.ingress.local.qos**
+**`bridges.mqtt.$name.ingress.local.qos`**
 
   *类型*: `qos | string`
 
@@ -3861,7 +3861,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.ingress.local.retain**
+**`bridges.mqtt.$name.ingress.local.retain`**
 
   *类型*: `boolean | string`
 
@@ -3871,7 +3871,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.mqtt.$name.ingress.local.payload**
+**`bridges.mqtt.$name.ingress.local.payload`**
 
   *类型*: `string`
 
@@ -3883,14 +3883,14 @@ Template with variables is allowed.
 
 The configs about subscribing to the remote broker.
 
-**bridges.mqtt.$name.ingress.remote.topic**
+**`bridges.mqtt.$name.ingress.remote.topic`**
 
   *类型*: `string`
 
   Receive messages from which topic of the remote broker
 
 
-**bridges.mqtt.$name.ingress.remote.qos**
+**`bridges.mqtt.$name.ingress.remote.qos`**
 
   *类型*: `qos`
 
@@ -4761,7 +4761,7 @@ Settings for SSL listener.
 
 描述插件的状态
 
-**plugins.states.$INDEX.name_vsn**
+**`plugins.states.$INDEX.name_vsn`**
 
   *类型*: `string`
 
@@ -4769,7 +4769,7 @@ Settings for SSL listener.
 它应该与插件的发布包名称一致，如my_plugin-0.1.0。
 
 
-**plugins.states.$INDEX.enable**
+**`plugins.states.$INDEX.enable`**
 
   *类型*: `boolean`
 
@@ -4795,14 +4795,14 @@ External hook (exhook) configuration.
 
 gRPC server configuration.
 
-**exhook.servers.$INDEX.name**
+**`exhook.servers.$INDEX.name`**
 
   *类型*: `string`
 
   ExHook 服务器名称
 
 
-**exhook.servers.$INDEX.enable**
+**`exhook.servers.$INDEX.enable`**
 
   *类型*: `boolean`
 
@@ -4811,14 +4811,14 @@ gRPC server configuration.
   开启这个 Exhook 服务器
 
 
-**exhook.servers.$INDEX.url**
+**`exhook.servers.$INDEX.url`**
 
   *类型*: `string`
 
   gRPC 服务器地址
 
 
-**exhook.servers.$INDEX.request_timeout**
+**`exhook.servers.$INDEX.request_timeout`**
 
   *类型*: `timeout_duration`
 
@@ -4827,7 +4827,7 @@ gRPC server configuration.
   gRPC 服务器请求超时
 
 
-**exhook.servers.$INDEX.failed_action**
+**`exhook.servers.$INDEX.failed_action`**
 
   *类型*: `enum`
 
@@ -4838,19 +4838,19 @@ gRPC server configuration.
   当 gRPC 请求失败后的操作
 
 
-**exhook.servers.$INDEX.ssl**
+**`exhook.servers.$INDEX.ssl`**
 
   *类型*: `exhook:ssl_conf`
 
 
-**exhook.servers.$INDEX.socket_options**
+**`exhook.servers.$INDEX.socket_options`**
 
   *类型*: `exhook:socket_options`
 
   *默认值*: `{"nodelay":true,"keepalive":true}`
 
 
-**exhook.servers.$INDEX.auto_reconnect**
+**`exhook.servers.$INDEX.auto_reconnect`**
 
   *类型*: `false | timeout_duration`
 
@@ -4860,7 +4860,7 @@ gRPC server configuration.
 当 gRPC 服务器不可用时，Exhook 将会按照这里设置的间隔时间进行重连，并重新初始化注册的钩子
 
 
-**exhook.servers.$INDEX.pool_size**
+**`exhook.servers.$INDEX.pool_size`**
 
   *类型*: `pos_integer`
 
@@ -4873,7 +4873,7 @@ gRPC server configuration.
 
 连接套接字设置
 
-**exhook.servers.$INDEX.socket_options.keepalive**
+**`exhook.servers.$INDEX.socket_options.keepalive`**
 
   *类型*: `boolean`
 
@@ -4882,7 +4882,7 @@ gRPC server configuration.
   当没有其他数据交换时，是否向连接的对端套接字定期的发送探测包。如果另一端没有响应，则认为连接断开，并向控制进程发送错误消息。
 
 
-**exhook.servers.$INDEX.socket_options.nodelay**
+**`exhook.servers.$INDEX.socket_options.nodelay`**
 
   *类型*: `boolean`
 
@@ -4891,14 +4891,14 @@ gRPC server configuration.
   如果为 true，则为套接字设置 TCP_NODELAY 选项，这意味着会立即发送数据包。
 
 
-**exhook.servers.$INDEX.socket_options.recbuf**
+**`exhook.servers.$INDEX.socket_options.recbuf`**
 
   *类型*: `bytesize`
 
   套接字的最小接收缓冲区大小
 
 
-**exhook.servers.$INDEX.socket_options.sndbuf**
+**`exhook.servers.$INDEX.socket_options.sndbuf`**
 
   *类型*: `bytesize`
 
@@ -4909,7 +4909,7 @@ gRPC server configuration.
 
 SSL client configuration.
 
-**exhook.servers.$INDEX.ssl.cacertfile**
+**`exhook.servers.$INDEX.ssl.cacertfile`**
 
   *类型*: `string`
 
@@ -4920,14 +4920,14 @@ SSL client configuration.
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
-**exhook.servers.$INDEX.ssl.cacerts**
+**`exhook.servers.$INDEX.ssl.cacerts`**
 
   *类型*: `boolean`
 
   Deprecated since 5.1.4.
 
 
-**exhook.servers.$INDEX.ssl.certfile**
+**`exhook.servers.$INDEX.ssl.certfile`**
 
   *类型*: `string`
 
@@ -4937,14 +4937,14 @@ SSL client configuration.
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
-**exhook.servers.$INDEX.ssl.keyfile**
+**`exhook.servers.$INDEX.ssl.keyfile`**
 
   *类型*: `string`
 
   PEM格式的私钥文件。
 
 
-**exhook.servers.$INDEX.ssl.verify**
+**`exhook.servers.$INDEX.ssl.verify`**
 
   *类型*: `enum`
 
@@ -4955,7 +4955,7 @@ SSL client configuration.
   启用或禁用对等验证。
 
 
-**exhook.servers.$INDEX.ssl.reuse_sessions**
+**`exhook.servers.$INDEX.ssl.reuse_sessions`**
 
   *类型*: `boolean`
 
@@ -4964,7 +4964,7 @@ SSL client configuration.
   启用 TLS 会话重用。
 
 
-**exhook.servers.$INDEX.ssl.depth**
+**`exhook.servers.$INDEX.ssl.depth`**
 
   *类型*: `non_neg_integer`
 
@@ -4976,14 +4976,14 @@ SSL client configuration.
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
-**exhook.servers.$INDEX.ssl.password**
+**`exhook.servers.$INDEX.ssl.password`**
 
   *类型*: `string`
 
   包含用户密码的字符串。仅在私钥文件受密码保护时使用。
 
 
-**exhook.servers.$INDEX.ssl.versions**
+**`exhook.servers.$INDEX.ssl.versions`**
 
   *类型*: `array`
 
@@ -4993,7 +4993,7 @@ SSL client configuration.
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
-**exhook.servers.$INDEX.ssl.ciphers**
+**`exhook.servers.$INDEX.ssl.ciphers`**
 
   *类型*: `array`
 
@@ -5025,7 +5025,7 @@ RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
-**exhook.servers.$INDEX.ssl.secure_renegotiate**
+**`exhook.servers.$INDEX.ssl.secure_renegotiate`**
 
   *类型*: `boolean`
 
@@ -5035,7 +5035,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
 
 
-**exhook.servers.$INDEX.ssl.log_level**
+**`exhook.servers.$INDEX.ssl.log_level`**
 
   *类型*: `enum`
 
@@ -5046,7 +5046,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
 
 
-**exhook.servers.$INDEX.ssl.hibernate_after**
+**`exhook.servers.$INDEX.ssl.hibernate_after`**
 
   *类型*: `duration`
 
@@ -5055,7 +5055,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   在闲置一定时间后休眠 SSL 进程，减少其内存占用。
 
 
-**exhook.servers.$INDEX.ssl.enable**
+**`exhook.servers.$INDEX.ssl.enable`**
 
   *类型*: `boolean`
 
@@ -5064,7 +5064,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   启用 TLS。
 
 
-**exhook.servers.$INDEX.ssl.server_name_indication**
+**`exhook.servers.$INDEX.ssl.server_name_indication`**
 
   *类型*: `disable | string`
 
@@ -5722,7 +5722,7 @@ WebSocket listener options.
 
 Socket options for WebSocket/SSL connections.
 
-**listeners.wss.$name.ssl_options.cacertfile**
+**`listeners.wss.$name.ssl_options.cacertfile`**
 
   *类型*: `string`
 
@@ -5735,14 +5735,14 @@ Socket options for WebSocket/SSL connections.
 注意：从文件中失效（删除）证书不会影响已建立的连接。
 
 
-**listeners.wss.$name.ssl_options.cacerts**
+**`listeners.wss.$name.ssl_options.cacerts`**
 
   *类型*: `boolean`
 
   Deprecated since 5.1.4.
 
 
-**listeners.wss.$name.ssl_options.certfile**
+**`listeners.wss.$name.ssl_options.certfile`**
 
   *类型*: `string`
 
@@ -5754,7 +5754,7 @@ Socket options for WebSocket/SSL connections.
 根 CA 证书是可选的，如果想要添加，应加到文件到最末端。
 
 
-**listeners.wss.$name.ssl_options.keyfile**
+**`listeners.wss.$name.ssl_options.keyfile`**
 
   *类型*: `string`
 
@@ -5763,7 +5763,7 @@ Socket options for WebSocket/SSL connections.
   PEM格式的私钥文件。
 
 
-**listeners.wss.$name.ssl_options.verify**
+**`listeners.wss.$name.ssl_options.verify`**
 
   *类型*: `enum`
 
@@ -5774,7 +5774,7 @@ Socket options for WebSocket/SSL connections.
   启用或禁用对等验证。
 
 
-**listeners.wss.$name.ssl_options.reuse_sessions**
+**`listeners.wss.$name.ssl_options.reuse_sessions`**
 
   *类型*: `boolean`
 
@@ -5783,7 +5783,7 @@ Socket options for WebSocket/SSL connections.
   启用 TLS 会话重用。
 
 
-**listeners.wss.$name.ssl_options.depth**
+**`listeners.wss.$name.ssl_options.depth`**
 
   *类型*: `non_neg_integer`
 
@@ -5795,14 +5795,14 @@ Socket options for WebSocket/SSL connections.
 如果是2，则路径可以是PEER、中间 CA1、中间 CA2、ROOT-CA。
 
 
-**listeners.wss.$name.ssl_options.password**
+**`listeners.wss.$name.ssl_options.password`**
 
   *类型*: `string`
 
   包含用户密码的字符串。仅在私钥文件受密码保护时使用。
 
 
-**listeners.wss.$name.ssl_options.versions**
+**`listeners.wss.$name.ssl_options.versions`**
 
   *类型*: `array`
 
@@ -5812,7 +5812,7 @@ Socket options for WebSocket/SSL connections.
 注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
 
 
-**listeners.wss.$name.ssl_options.ciphers**
+**`listeners.wss.$name.ssl_options.ciphers`**
 
   *类型*: `array`
 
@@ -5844,7 +5844,7 @@ RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
-**listeners.wss.$name.ssl_options.secure_renegotiate**
+**`listeners.wss.$name.ssl_options.secure_renegotiate`**
 
   *类型*: `boolean`
 
@@ -5854,7 +5854,7 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。
 
 
-**listeners.wss.$name.ssl_options.log_level**
+**`listeners.wss.$name.ssl_options.log_level`**
 
   *类型*: `enum`
 
@@ -5865,7 +5865,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   SSL 握手的日志级别。默认值是 'notice'，可以设置为 'debug' 用来调查 SSL 握手的问题。
 
 
-**listeners.wss.$name.ssl_options.hibernate_after**
+**`listeners.wss.$name.ssl_options.hibernate_after`**
 
   *类型*: `duration`
 
@@ -5874,7 +5874,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   在闲置一定时间后休眠 SSL 进程，减少其内存占用。
 
 
-**listeners.wss.$name.ssl_options.dhfile**
+**`listeners.wss.$name.ssl_options.dhfile`**
 
   *类型*: `string`
 
@@ -5882,7 +5882,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 注意：TLS 1.3不支持<code>dhfile</code>选项。
 
 
-**listeners.wss.$name.ssl_options.fail_if_no_peer_cert**
+**`listeners.wss.$name.ssl_options.fail_if_no_peer_cert`**
 
   *类型*: `boolean`
 
@@ -5893,7 +5893,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 如果设置为false，则仅当客户端发送无效证书（空证书被视为有效证书）时才会失败。
 
 
-**listeners.wss.$name.ssl_options.honor_cipher_order**
+**`listeners.wss.$name.ssl_options.honor_cipher_order`**
 
   *类型*: `boolean`
 
@@ -5902,7 +5902,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   一个重要的安全设置，它强制根据服务器指定的顺序而不是客户机指定的顺序设置密码，从而强制服务器管理员执行（通常配置得更正确）安全顺序。
 
 
-**listeners.wss.$name.ssl_options.client_renegotiation**
+**`listeners.wss.$name.ssl_options.client_renegotiation`**
 
   *类型*: `boolean`
 
@@ -5914,7 +5914,7 @@ SSL 应用程序已经采取措施来反击此类尝试，但通过将此选项�
 默认值为 true。请注意，由于基础密码套件可以加密的消息数量有限，禁用重新协商可能会导致长期连接变得不可用。
 
 
-**listeners.wss.$name.ssl_options.handshake_timeout**
+**`listeners.wss.$name.ssl_options.handshake_timeout`**
 
   *类型*: `duration`
 

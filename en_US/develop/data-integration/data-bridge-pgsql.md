@@ -119,7 +119,7 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
    - **Database Name**: Enter `emqx_data`.
    - **Username**: Enter `postgres`.
    - **Password**: Enter `public`.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
 6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
 8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).

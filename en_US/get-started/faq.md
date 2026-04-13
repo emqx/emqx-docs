@@ -20,7 +20,7 @@ You can use the following command to update your EMQX Enterprise License:
     license update <License> # Update license given as a string
 ```
 
-You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](../deploy/license.md).
+You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](./deploy/license.md).
 
 ## Why can't I receive retained messages when using shared subscriptions?
 
@@ -30,11 +30,11 @@ According to the MQTT protocol, when a client uses a shared subscription, the se
 
 When a shared subscriber's connection is disconnected but the session remains active, the server continues to deliver messages to the subscriber, which are temporarily stored in the session. As a result, other active shared subscribers may appear as if they have not consumed all the messages. In addition, if the shared subscriber chooses to create a new session when reconnecting, the messages cached in the old session will be permanently lost.
 
-If it is confirmed that the above situation does not exist, yet the issue of message loss persists, you can use the [Log Trace](../observability/tracer.md) to conduct further investigation.
+If it is confirmed that the above situation does not exist, yet the issue of message loss persists, you can use the [Log Trace](../operate/observability/tracer.md) to conduct further investigation.
 
 ## How to troubleshoot the cause of SSL/TLS connection failure?
 
-Usually when the SSL/TLS connection handshake fails, EMQX will output the corresponding failure reason in the [Log](../observability/log.md). The following are some common keywords in the log and their corresponding meanings:
+Usually when the SSL/TLS connection handshake fails, EMQX will output the corresponding failure reason in the [Log](../operate/observability/log.md). The following are some common keywords in the log and their corresponding meanings:
 
 - certificate_expired
 
@@ -94,19 +94,19 @@ Here are some common disconnection reasons:
 - `protocol_error`: EMQX closed the connection due to non-compliant behavior, e.g., the client sent multiple CONNECT packets within the same connection.
 - `idle_timeout`: EMQX closed the connection because it did not receive a CONNECT packet from the client within 15 seconds of the TCP connection being established.
 
-You can also use the [Log Trace](../observability/tracer.md) to trace all the logs related to the Client ID, IP, and topic you specify, and then you can analyze why the client disconnected based on these logs.
+You can also use the [Log Trace](../operate/observability/tracer.md) to trace all the logs related to the Client ID, IP, and topic you specify, and then you can analyze why the client disconnected based on these logs.
 
 ## When I was executing the stress test, the connection number and throughput were lower than expected. How can I tune the system to make full use of it?
 
 When executing a stress test, besides ensuring the necessary hardware resources, it is also necessary to tune the OS and the Erlang VM to make maximum use of the resources. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM, and so on. You will also need to tune the client machine to ensure it has the ability and resources to handle all the subs and pubs.
 
-Different use cases require different tuning. Refer to [Performance Tuning](../performance/tune.md) for tuning the system for general purposes.
+Different use cases require different tuning. Refer to [Performance Tuning](../operate/performance/tune.md) for tuning the system for general purposes.
 
 ## When I encounter problems related to client connection, publishing, and subscription, such as failure to connect, abnormal disconnection, etc., how should I troubleshoot?
 
 EMQX's debug logs already capture all the behaviors and phenomena. By viewing the debug logs, we can determine when the client initiated the connection, the parameters specified during the connection, the success of rejection of the connection, and the reasons for rejection, among other details. However, the extensive information logged in debug mode can consume additional resources and make it challenging to analyze individual clients or topics.
 
-To address this, EMQX provides a [Log Trace](../observability/tracer.md) feature. We can specify the clients or topics we want to trace, and EMQX will output all the debug logs related to those clients or topics to the designated log file. This facilitates self-analysis and seeking assistance from the community.
+To address this, EMQX provides a [Log Trace](../operate/observability/tracer.md) feature. We can specify the clients or topics we want to trace, and EMQX will output all the debug logs related to those clients or topics to the designated log file. This facilitates self-analysis and seeking assistance from the community.
 
 It's important to note that if the client cannot establish a connection with EMQX due to network issues, the log tracing feature will not be useful since EMQX does not receive any messages in such cases. This situation often arises from network configuration problems like firewalls or security groups, resulting in closed server ports. This is particularly common when deploying EMQX on cloud instances. Therefore, in addition to log tracing, troubleshooting network-related issues involves checking port occupation, listening status, and network configurations.
 

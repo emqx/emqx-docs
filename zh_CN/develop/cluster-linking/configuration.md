@@ -72,7 +72,7 @@ cluster {
 
 根据集群的大小和配置，可能会与远程集群建立多个 MQTT 客户端连接，每个客户端必须有唯一的 ClientID。可以通过设置 `clientid` 参数来控制这些 ClientID 的分配，该参数作为这些连接的 *ClientID 前缀*。
 
-其他 MQTT 协议方面的参数，如认证和授权参数（`username`，`password`），也是可配置的。远程集群必须能够[认证](../access-control/authn/authn.md)这些连接，并[授权](../access-control/authz/authz.md)它们向集群连接设置指定的 MQTT 主题发布消息。例如，根据上述配置，远程集群可以有如下的 [ACL规则](../access-control/authz/file.md)来正常运行：
+其他 MQTT 协议方面的参数，如认证和授权参数（`username`，`password`），也是可配置的。远程集群必须能够[认证](../../operate/access-control/authn/authn.md)这些连接，并[授权](../../operate/access-control/authz/authz.md)它们向集群连接设置指定的 MQTT 主题发布消息。例如，根据上述配置，远程集群可以有如下的 [ACL规则](../../operate/access-control/authz/file.md)来正常运行：
 
 ```erlang
 %% 允许集群连接MQTT客户端操作"$LINK/#"主题

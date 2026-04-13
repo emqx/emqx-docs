@@ -95,7 +95,7 @@ EMQX 授权支持的数据查询占位符如下：
 - `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
-- `${client_attrs.NAME}`: 某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
+- `${client_attrs.NAME}`: 某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。
 - `${zone}`: 在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于授权模板中。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
 
 <!-- TODO
@@ -262,4 +262,4 @@ EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改�
 - `/api/v5/authorization/cache`: 清除授权数据缓存
 - `/api/v5/authorization/sources/built_in_database`: 内置数据库数据管理
 
-详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
+详细的请求方式与参数请参考 [HTTP API](../../../develop/api.md)。

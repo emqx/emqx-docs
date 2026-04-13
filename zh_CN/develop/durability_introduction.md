@@ -42,7 +42,7 @@ EMQX 提供了两种不同的客户端会话实现，每种实现都针对特定
 - **临时会话**：会话状态保存在正在运行的 EMQX 节点的内存中。当 EMQX 节点重启时，其状态会丢失。
 - **持久会话**：会话状态和接收的消息备份在持久存储中。EMQX 节点重启后可以恢复这些会话。
 
-会话实现的选择取决于会话过期间隔和 `durable_sessions.enable` 配置参数，该参数可以全局设置或按 [zone](../configuration/configuration.md#zone-override) 设置。基于以下标准可以选择实现方式：
+会话实现的选择取决于会话过期间隔和 `durable_sessions.enable` 配置参数，该参数可以全局设置或按 [zone](../operate/configuration/configuration.md#zone-override) 设置。基于以下标准可以选择实现方式：
 
 | `durable_sessions.enable` | 会话过期间隔 = 0 | 会话过期间隔 > 0 |
 | ------------------------- | ---------------- | ---------------- |
@@ -80,7 +80,7 @@ EMQX 采用独特的方法来管理消息的持久性，使临时会话和持久
 
 每条持久 MQTT 消息在每个副本上只存储一次，无论有多少订阅持久会话或它们的连接状态如何。这确保了高效的消息分发并最小化磁盘写入。
 
-持久存储通过在 EMQX 集群内的多个节点间一致地复制会话元数据和 MQTT 消息，提供了强大的持久性和高可用性。可配置的[复制因子 (replication factor) ](./managing-replication.md#replication-factor)确定每条消息或会话的副本数量，使用户能够根据具体需求定制持久性和性能之间的平衡。
+持久存储通过在 EMQX 集群内的多个节点间一致地复制会话元数据和 MQTT 消息，提供了强大的持久性和高可用性。可配置的[复制因子 (replication factor) ](../operate/durability/managing-replication.md#replication-factor)确定每条消息或会话的副本数量，使用户能够根据具体需求定制持久性和性能之间的平衡。
 
 ::: tip 提示
 
@@ -186,7 +186,7 @@ EMQX 内置持久性功能所使用的数据库引擎将数据按照一个分层
 
 ### 分片 (Shard)
 
-消息根据客户端进行隔离，并根据发布者的客户端 ID 存储在分片中。分片数量在 EMQX 初始启动时由 [n_shards](./managing-replication.md#number-of-shards) 配置参数决定。分片也是复制的单位。每个分片会根据 `durable_storage.messages.replication_factor` 在不同节点间进行一致性复制，确保每个副本中的消息集是相同的。
+消息根据客户端进行隔离，并根据发布者的客户端 ID 存储在分片中。分片数量在 EMQX 初始启动时由 [n_shards](../operate/durability/managing-replication.md#number-of-shards) 配置参数决定。分片也是复制的单位。每个分片会根据 `durable_storage.messages.replication_factor` 在不同节点间进行一致性复制，确保每个副本中的消息集是相同的。
 
 ### 代 (Generation)
 
@@ -222,5 +222,5 @@ EMQX 集群中的每个节点都分配有唯一的 *站点 ID*，该 ID 作为�
 
 想要了解如何对会话持久化功能进行配置和管理，以及如何对 EMQX 集群中的会话持久化进行初始设置和更改设置，请参阅以下页面：
 
-- [管理数据副本](./managing-replication.md)
-- [配置和管理会话持久化](./management.md)
+- [管理数据副本](../operate/durability/managing-replication.md)
+- [配置和管理会话持久化](../operate/durability/management.md)

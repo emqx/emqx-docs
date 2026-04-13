@@ -92,7 +92,7 @@ The following steps assume that EMQX and Datalayers are both running locally. If
    - Enter the connection information for the Datalayers server:
      - Server address: `127.0.0.1:8361`.
      - Complete the **Username**, **Password**, and **Database** settings as configured in [Install and Set Up Datalayers](#install-and-set-up-datalayers).
-   - Set whether to enable TLS. For detailed information about TLS connection options, refer to [Enable TLS Encryption to Access External Resources](../network/overview.md#tls-for-external-resource-access).
+   - Set whether to enable TLS. For detailed information about TLS connection options, refer to [Enable TLS Encryption to Access External Resources](../../operate/network/overview.md#tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test whether the connector can connect to the Datalayers server.
 6. Click the **Create** button at the bottom to complete the connector creation. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sinks to specify the data to be forwarded to Datalayers. For detailed steps, see [Create Datalayers Sink Rules](#create-datalayers-sink-rules).
 

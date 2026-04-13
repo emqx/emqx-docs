@@ -12,17 +12,17 @@ EMQX 多协议网关支持处理所有非 MQTT 协议的连接、认证以及消
 
 在**网关**页面中，您可以启用网关并配置其基本设置，例如监听器配置。EMQX 还提供了自定义配置选项。有关详细的配置指导，请参考以下常见网关的快速入门文档：
 
-- [MQTT-SN](../gateway/mqttsn.md)
-- [STOMP](../gateway/stomp.md)
-- [CoAP](../gateway/coap.md)
-- [LwM2M](../gateway/lwm2m.md)
-- [ExProto](../gateway/exproto.md)
+- [MQTT-SN](../../develop/gateway/mqttsn.md)
+- [STOMP](../../develop/gateway/stomp.md)
+- [CoAP](../../develop/gateway/coap.md)
+- [LwM2M](../../develop/gateway/lwm2m.md)
+- [ExProto](../../develop/gateway/exproto.md)
 
 以下网关仅在 EMQX 企业版中支持：
 
-- [OCPP](../gateway/ocpp.md)
-- [GB/T 32960](../gateway/gbt32960.md)
-- [JT/T 808](../gateway/jt808.md)
+- [OCPP](../../develop/gateway/ocpp.md)
+- [GB/T 32960](../../develop/gateway/gbt32960.md)
+- [JT/T 808](../../develop/gateway/jt808.md)
 
 在启用网关之前，必须先完成其正确的配置。一旦配置完成，您可以在**网关**页面中监控每个已启用协议网关的连接数量，并管理网关状态（启用/禁用）。
 

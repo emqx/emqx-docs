@@ -46,7 +46,7 @@ After execution, you can run `emqx ctl license info` to confirm that the new lic
 
 ::: tip
 
-You can also configure the license file through the EMQX Dashboard. For how to configure the license via Dashboard, see [Work with License](../deploy/license.md). Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also configure the license file through the EMQX Dashboard. For how to configure the license via Dashboard, see [Work with License](../../get-started/deploy/license.md). Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
 :::
 

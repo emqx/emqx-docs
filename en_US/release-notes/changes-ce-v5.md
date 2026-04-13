@@ -1117,9 +1117,9 @@ Note: This is a breaking change. This option is enabled by default, so the defau
       flexibility and control. Examples include: In `acl.conf`, use `{allow, all, all, ["${client_attrs.namespace}/#"]}` to apply permissions based on the `namespace` attribute.
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
   
-  For more information about the Client Attributes feature, see [Client Attributes](../client-attributes/client-attributes.md).
+  For more information about the Client Attributes feature, see [Client Attributes](../develop/client-attributes/client-attributes.md).
   
-- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../extensions/plugins.md).
+- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. For EMQX enterprise edition, one can also annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and plugin [documentation](../operate/extensions/plugins.md).
 
 #### Operations and Management
 
@@ -1397,7 +1397,7 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 
 - [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
 
-  For more information on the functions and their usage, refer to [Built-in SQL Functions](../data-integration/rule-sql-builtin-functions) the documentation.
+  For more information on the functions and their usage, refer to [Built-in SQL Functions](../develop/data-integration/rule-sql-builtin-functions.md) the documentation.
 
 - [#12336](https://github.com/emqx/emqx/pull/12336) Performance enhancement. Created a dedicated async task handler pool to handle client session cleanup tasks.
 
@@ -1523,7 +1523,7 @@ Note: This is a breaking change. This option is enabled by default, so the defau
 
 - [#12085](https://github.com/emqx/emqx/pull/12085) EMQX has been upgraded to leverage the capabilities of OTP version 26.1.2-2. NOTE: Docker images are still built with OTP 25.3.2.
 
-- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../operate/access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
 
   For example:
 

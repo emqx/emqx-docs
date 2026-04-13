@@ -13,11 +13,11 @@ This chapter provides a comprehensive overview of EMQX clustering and how to app
 - The [benefits of clustering](#why-use-emqx-clustering)
 - The [working principle of EMQX Clustering](#how-clustering-in-emqx-works)
 - The [Mria and RLOG architecture](./mria-introduction.md)
-- How to [create a cluster manually or automatically](./create-cluster.md)
-- How to [secure communication between nodes](./security.md)
-- How to [implement load balancing](./lb.md)
-- How to [rebalance cluster load and evacuate nodes](./rebalancing.md)
-- How to [perform system tuning and performance testing](../../performance/overview.md)
+- How to [create a cluster manually or automatically](../../operate/cluster/create-cluster.md)
+- How to [secure communication between nodes](../../operate/cluster/security.md)
+- How to [implement load balancing](../../operate/cluster/lb.md)
+- How to [rebalance cluster load and evacuate nodes](../../operate/cluster/rebalancing.md)
+- How to [perform system tuning and performance testing](../../operate/performance/overview.md)
 
 Whether you're building a highly available MQTT platform or preparing for production scale, this guide will help you get started with confidence.
 
@@ -122,7 +122,7 @@ topic3 -> node2, node4
 
 #### Topic Tree (replicated from Core)
 
-The topic tree is a hierarchical structure used to match published topics against subscription patterns, including [MQTT wildcards](../../design/mqtt-basics.md#mqtt-topics-and-wildcards) (`+` and `#`). It enables EMQX to resolve complex topic filters quickly.
+The topic tree is a hierarchical structure used to match published topics against subscription patterns, including [MQTT wildcards](../../get-started/mqtt-basics.md#mqtt-topics-and-wildcards) (`+` and `#`). It enables EMQX to resolve complex topic filters quickly.
 
 Like the routing table, the topic tree is replicated by Core nodes and shared with Replicant nodes. When a new subscription arrives (e.g., `client1` subscribes to `t/+/x`), the topic tree is updated on all nodes to include this pattern. When a client subscribes to a new pattern (e.g., `t/+/x`), the update is handled by a Core node and then replicated.
 
@@ -161,7 +161,7 @@ For example, when **Client 1** publishes a message to the topic `t/a`, the routi
 
 6. The message delivery process is complete.
 
-To better understand how clustering in EMQX works, you can continue to read the [Design for EMQX Clustering](../../design/clustering.md).
+To better understand how clustering in EMQX works, you can continue to read the [Design for EMQX Clustering](../design/clustering.md).
 
 ## Clustering Features Overview
 
@@ -179,7 +179,7 @@ EMQX supports multiple node discovery mechanisms, allowing clusters to form auto
 | `etcd`   | Autocluster through etcd                |
 | `k8s`    | Autocluster provided by Kubernetes      |
 
-For detailed information, see [Create and Manage Cluster](./create-cluster.md).
+For detailed information, see [Create and Manage Cluster](../../operate/cluster/create-cluster.md).
 
 ### Network Partition Autoheal
 
@@ -225,5 +225,5 @@ The Core nodes should be under the same private network. In Mria+RLOG mode, it i
 You can continue with the following sections to learn how to create an EMQX cluster:
 
 - [Cluster Architecture](./mria-introduction.md)
-- [Create a Cluster](./create-cluster.md)
-- [Cluster Security](./security.md)
+- [Create a Cluster](../../operate/cluster/create-cluster.md)
+- [Cluster Security](../../operate/cluster/security.md)

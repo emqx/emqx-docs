@@ -55,7 +55,7 @@ This section will introduce how to use the Docker image to install the latest ve
 
 Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster.
 
-Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](./cluster/introduction.md).
+Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](../../develop/cluster/introduction.md).
 
 :::tip
 
@@ -136,6 +136,6 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
 
 Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md). 
 
-- On how to configure EMQX parameters and other features, see [Configuration](../configuration/configuration.md).
+- On how to configure EMQX parameters and other features, see [Configuration](../../operate/configuration/configuration.md).
 
-- On how to build an EMQX cluster with multiple nodes, see  [Clustering](./cluster/introduction.md).
+- On how to build an EMQX cluster with multiple nodes, see  [Clustering](../../develop/cluster/introduction.md).

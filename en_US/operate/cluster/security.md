@@ -1,6 +1,6 @@
 # Cluster Security
 
-EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
+EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../access-control/authn/authn.md) and [authorization](../access-control/authz/authz.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
 
 To help provision firewall rules, we will also touch on EMQX's inter-broker [communication port mapping rules](#port-mapping). 
 
@@ -26,7 +26,7 @@ All nodes to join the cluster should use the same security cookie. For details a
 
 EMQX also supports using TLS to secure the communication channel between EMQX nodes to protect the confidentiality, integrity, and authenticity of the data exchanged between them. TLS comes at the cost of increased CPU load and RAM usage, please configure as per your business needs. 
 
-This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
+This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md). 
 
 ## Use TLS/SSL for Cluster RPC Connections
 

@@ -4,7 +4,7 @@ You can create an EMQX cluster either manually or automatically. This page will 
 
 ## Basic Concepts
 
-You can learn about the basic knowledge of the EMQX cluster and how it works in [Cluster](./introduction.md) and [Architecture](./mria-introduction.md). To create a cluster, you also need to be familiar with the following concepts:
+You can learn about the basic knowledge of the EMQX cluster and how it works in [Cluster](../../develop/cluster/introduction.md) and [Architecture](../../develop/cluster/mria-introduction.md). To create a cluster, you also need to be familiar with the following concepts:
 
 ### Node Name
 

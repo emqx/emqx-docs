@@ -38,7 +38,7 @@ See [Access Control List (ACL)](./acl.md) for more information.
 
 ## Client Attributes
 
-Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
+Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../../develop/client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
 
 Example:
 

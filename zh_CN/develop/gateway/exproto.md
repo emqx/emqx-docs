@@ -121,7 +121,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-更多信息，参考 [REST API](../admin/api.md)。
+更多信息，参考 [REST API](../api.md)。
 
 如果您有一些定制化的需求，比如想要添加更多监听器或增加认证规则，您可以继续阅读 [自定义您的 ExProto 网关](#自定义您的-exproto-网关)。
 
@@ -140,7 +140,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 - **挂载点**: 设置一个字符串，用于在发布或订阅时作为所有主题的前缀，提供在不同协议之间实现消息路由隔离的方法，例如 `mqttsn/`。此主题前缀由网关管理。客户端在发布和订阅时无需显式添加此前缀。
 - **gRPC 监听**: 配置 ExProto 网关需要启动的 `ConnectionAdapter` 服务。
   - **绑定**: 服务监听地址和端口。监听地址。默认值：**0.0.0.0:9100**。
-  - **验证客户端证书**：启用或禁用对等验证。默认为禁用，如果启用，您可以配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
+  - **验证客户端证书**：启用或禁用对等验证。默认为禁用，如果启用，您可以配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../../operate/network/emqx-mqtt-tls.md)。
 - **gRPC 连接**: 配置 ExProto 网关需要请求的 `ConnectionHandler` 服务地址。
   - **服务器**: 对端 gRPC 服务器地址。
   - **启用 TLS**：启用 TLS 连接。默认为禁用，如果启用，您可以继续进行以下设置：
@@ -181,7 +181,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 
 **TLS 设置**（仅适用于 SSL 监听器）
 
-您可以通过设置切换开关来启用 TLS 验证。但在此之前，您需要配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
+您可以通过设置切换开关来启用 TLS 验证。但在此之前，您需要配置相关的 **TLS 证书**，**TLS 密钥**和 **CA 证书**信息，可以通过输入文件内容或使用**选择文件**按钮上传。详细信息请参阅 [开启 SSL/TLS 连接](../../operate/network/emqx-mqtt-tls.md)。
 
 然后您可以继续设置：
 
@@ -195,20 +195,20 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 
 ExProto 网关支持各种类型的认证器，例如：
 
-- [内置数据库认证](../access-control/authn/mnesia.md)
-- [MySQL 认证](../access-control/authn/mysql.md)
-- [MongoDB 认证](../access-control/authn/mongodb.md)
-- [PostgreSQL 认证](../access-control/authn/postgresql.md)
-- [Redis 认证](../access-control/authn/redis.md)
-- [HTTP 服务器认证](../access-control/authn/http.md)
-- [JWT 认证](../access-control/authn/jwt.md)
-- [LDAP 认证](../access-control/authn/ldap.md)
+- [内置数据库认证](../../operate/access-control/authn/mnesia.md)
+- [MySQL 认证](../../operate/access-control/authn/mysql.md)
+- [MongoDB 认证](../../operate/access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../../operate/access-control/authn/postgresql.md)
+- [Redis 认证](../../operate/access-control/authn/redis.md)
+- [HTTP 服务器认证](../../operate/access-control/authn/http.md)
+- [JWT 认证](../../operate/access-control/authn/jwt.md)
+- [LDAP 认证](../../operate/access-control/authn/ldap.md)
 
 客户端信息的客户端 ID、用户名和密码都是从 ConnectionAdapter 的 Authenticate 方法中传递的参数中获取的。
 
 本节以 Dashboard 为例，说明如何进行接入认证配置。点击**接入认证**页签。
 
-点击 **+ 添加认证**，选择 **Password-Based** 作为**认证方式**，并选择 **HTTP 服务**作为**数据源**，点击**下一步**。然后在**配置参数**中，您可以设置身份验证规则。对于每一项配置的具体解释，您可以参考[使用 HTTP 服务进行密码认证](../access-control/authn/http.md)。
+点击 **+ 添加认证**，选择 **Password-Based** 作为**认证方式**，并选择 **HTTP 服务**作为**数据源**，点击**下一步**。然后在**配置参数**中，您可以设置身份验证规则。对于每一项配置的具体解释，您可以参考[使用 HTTP 服务进行密码认证](../../operate/access-control/authn/http.md)。
 
 ![mqttsn authentication](./assets/exproto-authn-config.png)
 

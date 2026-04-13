@@ -180,7 +180,7 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
-- `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
+- `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。
 
 - `${zone}`: 在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于认证模板中，简化规则创建，并支持基于 Zone 的特定配置。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
 
@@ -290,4 +290,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 对于通过内置数据库存储认证数据的认证方式，例如 [使用内置数据库进行密码认证](./mnesia.md) 和 [MQTT 5.0 增强认证](./scram.md)，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
 
-详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
+详细的请求方式与参数请参考 [HTTP API](../../../develop/api.md)。

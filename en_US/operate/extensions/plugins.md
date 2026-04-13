@@ -73,7 +73,7 @@ The project also includes an example module demonstrating how to add custom `emq
 
 ### Test Your Development Environment
 
-If you are using the EMQX Open Source edition, ensure your development environment is correctly set up. You can refer to the information in [Install from Source Code](../deploy/install-source.md).
+If you are using the EMQX Open Source edition, ensure your development environment is correctly set up. You can refer to the information in [Install from Source Code](../../get-started/deploy/install-source.md).
 
 Execute the following command to verify if your plugin compiles and packages successfully:
 

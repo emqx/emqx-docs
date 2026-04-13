@@ -9,7 +9,7 @@ If you configured these items with the Dashboard, the new settings can only temp
 
 :::
 
-EMQX provides support for two primary log handlers: Console Log and File Log, with an additional [Audit Log](../dashboard/audit-log.md) handler specifically designed to always direct logs to files.
+EMQX provides support for two primary log handlers: Console Log and File Log, with an additional [Audit Log](../audit-log.md) handler specifically designed to always direct logs to files.
 
 The system's default log-handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
 

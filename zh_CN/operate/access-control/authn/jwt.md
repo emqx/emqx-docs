@@ -34,7 +34,7 @@
 
 ## 客户端属性
 
-从 EMQX v5.7.0 版本开始，您可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
+从 EMQX v5.7.0 版本开始，您可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../../develop/client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
 
 示例：
 

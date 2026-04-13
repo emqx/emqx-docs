@@ -89,7 +89,7 @@
 
 <img src="./assets/ldap_login.png" alt="image-20230926182543521" style="zoom:67%;" />
 
-成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。
+成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./dashboard/system.md#用户)中进行管理，例如为其分配角色与权限。
 
 ## 退出登录
 

@@ -53,8 +53,8 @@ EMQX 企业版提供以下两种监听器：
 
 有关详细的配置说明，请参阅：
 
-- [配置 WebSocket 监听器](../configuration/listener.md#配置-websocket-监听器)
-- [配置安全 WebSocket 监听器](../configuration/listener.md#配置安全-websocket-监听器)
+- [配置 WebSocket 监听器](../../operate/configuration/listener.md#配置-websocket-监听器)
+- [配置安全 WebSocket 监听器](../../operate/configuration/listener.md#配置安全-websocket-监听器)
 
 ## 快速开始
 

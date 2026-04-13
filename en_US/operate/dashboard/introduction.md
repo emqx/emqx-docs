@@ -18,7 +18,7 @@ View overall information of the running EMQX cluster, including connection count
 
 Add and configure authentication and authorization mechanisms in EMQX visually.
 
-### [Integration](./bridgeoverview.md)
+### [Integration](./data-integration.md)
 
 Utilize a powerful SQL-based rule engine and data integration, or the Flow editor's visual capabilities, for low-code data processing and integration. This helps in real-time extraction, filtering, enrichment, transformation, storage, and validation of MQTT data.
 
@@ -60,7 +60,7 @@ After logging in for the first time, the system will automatically detect that y
 
 ### Reset Password
 
-You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).
+You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../cli.md#admins).
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>

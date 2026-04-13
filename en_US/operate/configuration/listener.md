@@ -81,7 +81,7 @@ where:
 
 A WebSocket listener is a network service that receives and processes messages over WebSocket. WebSocket support in EMQX allows clients to use the WebSocket protocol to connect to EMQX and exchange data in real-time.
 
-For an overview of how MQTT over WebSocket works and typical usage scenarios, see [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md).
+For an overview of how MQTT over WebSocket works and typical usage scenarios, see [MQTT over WebSocket](../../develop/connect-emqx/mqtt-over-websocket.md).
 
 To configure the WebSocket listener in EMQX, you can add the `listeners.ws` configuration items in the `emqx.conf` file within the `etc` folder of the EMQX installation directory.
 

@@ -65,7 +65,7 @@ After enabling SAML Single Sign-On, the EMQX Dashboard will display the SSO opti
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./dashboard/system.md#users), such as assigning roles and permissions.
 
 ## Logout
 

@@ -2,7 +2,7 @@
 
 EMQX provides a powerful and efficient built-in data processing feature, the Rule Engine. By leveraging SQL-like syntax, users can effortlessly extract, transform, and enrich data from various sources. Once processed, data can be distributed or integrated to external systems through actions triggered by rules, including built-in actions and Sink/Sources. You can also republish processed data to MQTT clients or devices.
 
-Rule Engine is a core component of EMQX's data integration capabilities. It provides a flexible business integration solution with the use of data integration, simplifying the business development process, improving user usability, and reducing the coupling between business systems and EMQX. For more detailed information, see [Rule Engine](../data-integration/rules.md).
+Rule Engine is a core component of EMQX's data integration capabilities. It provides a flexible business integration solution with the use of data integration, simplifying the business development process, improving user usability, and reducing the coupling between business systems and EMQX. For more detailed information, see [Rule Engine](../../develop/data-integration/rules.md).
 
 To create and manage the rules, you can access the **Rules** page by clicking **Integration** -> **Rules** from the left menu.
 
@@ -22,9 +22,9 @@ By clicking the **SQL Examples** below the SQL Editor, you can see some common S
 
 The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publishes a message to the topic `t/#`, the Rule Engine will take out all the data under the current event. 
 
-The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). 
+The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../../develop/data-integration/rule-sql-builtin-functions.md). 
 
-The `FROM` keyword is followed by one or more data sources. To see possible event topics, the **Try It Out** area below the SQL Editor can view all the optional data source events. Using the `WHERE` keyword, you can add conditional filtering. For more detailed SQL syntax usage, see [SQL syntax and examples](./../data-integration/rule-sql-syntax.md).
+The `FROM` keyword is followed by one or more data sources. To see possible event topics, the **Try It Out** area below the SQL Editor can view all the optional data source events. Using the `WHERE` keyword, you can add conditional filtering. For more detailed SQL syntax usage, see [SQL syntax and examples](../../develop/data-integration/rule-sql-syntax.md).
 
 ### Try It Out
 
@@ -57,15 +57,15 @@ For other events, you can select different client and session events to simulate
 - Subscribed ($events/session_subscribed)
 - Unsubscribed ($events/session_unsubscribed)
 
-The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword, and rules support the use of multiple events. For more details about data source and event explanations, see [SQL Data Source and Fields](../data-integration/rule-sql-events-and-fields.md).
+The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword, and rules support the use of multiple events. For more details about data source and event explanations, see [SQL Data Source and Fields](../../develop/data-integration/rule-sql-events-and-fields.md).
 
-You can also test the rule in the testing area. For detailed testing steps, you can see [Test Rule](../data-integration/rule-get-started.md#test-rule) for details.
+You can also test the rule in the testing area. For detailed testing steps, you can see [Test Rule](../../develop/data-integration/rule-get-started.md#test-rule) for details.
 
 <img src="./assets/rule-test.png" alt="image" style="zoom:67%;" />
 
 ### Action Outputs
 
-After completing the editing of the SQL statement and the rule debugging, you can get output data that meets your requirements. At this time, you can select the action that needs to be executed after the rule is triggered in the **Action Outputs** tab on the right side of the page. Click the **Add Action** button, and you can select the type of the actions, including 2 built-in actions and various Sink/Source to continue to process the output data of the rule. For more detailed information about creating actions, see [Add Action](../data-integration/rule-get-started.md#add-action).
+After completing the editing of the SQL statement and the rule debugging, you can get output data that meets your requirements. At this time, you can select the action that needs to be executed after the rule is triggered in the **Action Outputs** tab on the right side of the page. Click the **Add Action** button, and you can select the type of the actions, including 2 built-in actions and various Sink/Source to continue to process the output data of the rule. For more detailed information about creating actions, see [Add Action](../../develop/data-integration/rule-get-started.md#add-action).
 
 ## View Rules
 

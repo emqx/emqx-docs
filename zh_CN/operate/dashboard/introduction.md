@@ -60,7 +60,7 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 ### 忘记密码
 
-如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../admin/cli.md#admins)：
+如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../cli.md#admins)：
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>

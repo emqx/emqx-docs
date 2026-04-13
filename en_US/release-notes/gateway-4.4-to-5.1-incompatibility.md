@@ -174,7 +174,7 @@ This means that in version 5.0, it is not possible to specify different Connecti
 
 The implementation specification for the CoAP protocol is completely redesigned.
 
-Refers to the [CoAP](../gateway/coap.md) for the new design.
+Refers to the [CoAP](../develop/gateway/coap.md) for the new design.
 
 ### LwM2M
 

@@ -10,7 +10,7 @@
 
 ## 安装 EMQX
 
-EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
+EMQX 支持多种安装方式，比如[容器化部署](./deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
 - RedHat
 - CentOS
@@ -21,7 +21,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - macOS
 - Linux
 
-如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考[源码编译安装](../deploy/install-source.md)（EMQX 开源版）或[联系我们](https://www.emqx.com/zh/contact)获取支持。
+如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考[源码编译安装](./deploy/install-source.md)（EMQX 开源版）或[联系我们](https://www.emqx.com/zh/contact)获取支持。
 
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
@@ -41,7 +41,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
    ```
 
-2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../operate/dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
 ​        默认用户名及密码：
 
@@ -61,7 +61,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
    ```
 
-2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../operate/dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
 ​        默认用户名及密码：
 
@@ -102,7 +102,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
    ./emqx/bin/emqx start
    ```
 
-5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../operate/dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
    默认用户名及密码：
 
@@ -142,7 +142,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
    ./emqx/bin/emqx start
    ```
 
-5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
+5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../operate/dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
 
    默认用户名及密码：
 
@@ -216,7 +216,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ## 下一步
 
-至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行[访问控制](../access-control/authn/authn.md)、[规则引擎数据处理](../data-integration/rules.md)等操作。
+至此，我们已经完成基本的 EMQX 安装、启动和接入测试，您还可以继续进行[访问控制](../operate/access-control/authn/authn.md)、[规则引擎数据处理](../develop/data-integration/rules.md)等操作。
 
 ## 常见问题解答
 

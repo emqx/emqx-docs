@@ -70,7 +70,7 @@ Trace according to the rule ID by selecting the type as Rule ID and entering the
 
 The trace results will include the execution results of the rule SQL and the execution logs of all actions added to the rule. This can be used for debugging and optimizing the rule.
 
-The [Test Rule](../data-integration/rule-get-started.md#test-rule) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
+The [Test Rule](../../develop/data-integration/rule-get-started.md#test-rule) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
 
 ## View Log Trace 
 

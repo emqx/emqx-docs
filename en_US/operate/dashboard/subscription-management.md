@@ -13,7 +13,7 @@ The Subscriptions page displays all topics subscribed by connections, mapped by 
   - Retain Handling equals 1: The server sends retained messages only if this subscription did not exist before.
   - Retain Handling equals 2: The server does not send retained messages to the client, regardless of the subscription status.
 
-The top search bar by default displays 3 filter fields: Node, Client ID, and Topic. Node is a dropdown selection box that allows filtering subscriptions by clients connected to specific nodes. You can use Client ID and Topic for fuzzy searching in the subscription list. Clicking the right arrow button next to the search bar also displays QoS and Shared Name filter input boxes, supporting precise matching for [Shared Name](../../messaging/mqtt-shared-subscription.md).
+The top search bar by default displays 3 filter fields: Node, Client ID, and Topic. Node is a dropdown selection box that allows filtering subscriptions by clients connected to specific nodes. You can use Client ID and Topic for fuzzy searching in the subscription list. Clicking the right arrow button next to the search bar also displays QoS and Shared Name filter input boxes, supporting precise matching for [Shared Name](../../get-started/messaging/mqtt-shared-subscription.md).
 
 <img src="./assets/subscriptions.png" alt="Subscriptions" style="zoom:50%;" />
 
@@ -23,6 +23,6 @@ The Topics page displays all topics subscribed by connections across various nod
 
 > Note: The Subscription List is client-specific, whereas the Topics List shows all currently subscribed topics. The same topic may be subscribed to by different clients.
 
-Clicking **Create Monitor** in the **Actions** column redirects to the **Diagnose** -> **Topic Metrics** page. Here, you can create [Topic Metrics](../../observability/topic-metrics.md) to track message counts, rates, and other metrics for a specific topic.
+Clicking **Create Monitor** in the **Actions** column redirects to the **Diagnose** -> **Topic Metrics** page. Here, you can create [Topic Metrics](../observability/topic-metrics.md) to track message counts, rates, and other metrics for a specific topic.
 
 <img src="./assets/topics.png" alt="topics" style="zoom:50%;" />

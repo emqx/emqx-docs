@@ -37,7 +37,7 @@ EMQX 的其他功能允许在相关配置项中使用 `${client_attrs.NAME}` 占
 
 其中，**属性**为属性的名称，**属性表达式**为属性的提取配置。
 
-属性表达式支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)以及其中的[预定义的函数](../configuration/configuration.md#预定义函数)对值进行动态处理。例如:
+属性表达式支持使用 [Variform 表达式](../../operate/configuration/configuration.md#variform-表达式)以及其中的[预定义的函数](../../operate/configuration/configuration.md#预定义函数)对值进行动态处理。例如:
 
 - 要提取由点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`
 - 要截取用户名部分信息：`substr(username, 0, 5)`
@@ -74,8 +74,8 @@ mqtt {
 
 在客户端认证过程中，可以通过认证器返回的信息设置客户端属性，目前支持：
 
-- [JWT 认证](../access-control/authn/jwt.md)：签发 Token 时，在 Payload 中通过 `client_attrs` 字段设置客户端属性。
-- [HTTP 认证](../access-control/authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
+- [JWT 认证](../../operate/access-control/authn/jwt.md)：签发 Token 时，在 Payload 中通过 `client_attrs` 字段设置客户端属性。
+- [HTTP 认证](../../operate/access-control/authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
 
 属性的键值均要求是字符串。这种方式允许根据认证结果动态地设置属性，增加了使用的灵活性。
 
@@ -92,7 +92,7 @@ mqtt {
 
 ### 客户端认证
 
-通过[认证占位符](../access-control/authn/authn.md#认证占位符)用于 SQL 语句、查询命令或 HTTP 请求体中的动态参数，例如：
+通过[认证占位符](../../operate/access-control/authn/authn.md#认证占位符)用于 SQL 语句、查询命令或 HTTP 请求体中的动态参数，例如：
 
 ```sql
 # MySQL/PostgreSQL - 认证查询 SQL
@@ -113,7 +113,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attr
 
 ### 客户端授权
 
-通过[数据查询占位符](../access-control/authz/authz.md#数据查询占位符)与[主题占位符](../access-control/authz/authz.md#主题占位符)，用于 SQL 语句、查询命令，以及主题当中。
+通过[数据查询占位符](../../operate/access-control/authz/authz.md#数据查询占位符)与[主题占位符](../../operate/access-control/authz/authz.md#主题占位符)，用于 SQL 语句、查询命令，以及主题当中。
 
 #### 示例场景：
 
@@ -126,7 +126,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attr
   - 订阅：`down/{productId}/{deviceId}`
 
 
-可以使用[授权-内置数据库](../access-control/authz/mnesia.md)配置如下规则实现：
+可以使用[授权-内置数据库](../../operate/access-control/authz/mnesia.md)配置如下规则实现：
 
 | 权限 | 操作 | 主题 |
 | --- |  --- |  --- |

@@ -98,7 +98,7 @@ The log level is `warning`, and the `msg` field is `alarm_is_activated` and `ala
 
 ### Get Alarms via REST API
 
-You can query and manage alarms through the API. Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
+You can query and manage alarms through the API. Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../../develop/api.md).
 
 <img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
 
@@ -106,8 +106,8 @@ You can query and manage alarms through the API. Click **Alarms** on the left na
 
 Starting from EMQX version 5.8.5, the rule engine supports two new alarm events:
 
-- [$events/sys/alarm_activated](../data-integration/rule-sql-events-and-fields.md#system-alarm-activated-event-events-sys-alarm-activated)
-- [$events/sys/alarm_deactivated](../data-integration/rule-sql-events-and-fields.md#system-alarm-deactivated-event-events-sys-alarm-deactivated)
+- [$events/sys/alarm_activated](../../develop/data-integration/rule-sql-events-and-fields.md#system-alarm-activated-event-events-sys-alarm-activated)
+- [$events/sys/alarm_deactivated](../../develop/data-integration/rule-sql-events-and-fields.md#system-alarm-deactivated-event-events-sys-alarm-deactivated)
 
 These events allow you to receive notifications of alarm activities via external HTTP services through Webhook integration.
 
@@ -117,7 +117,7 @@ To configure Webhook integration:
 2. Click the **Set Up Webhook** button in the upper right corner to open the Webhook integration setup page.
 3. Enter a name for the Webhook integration and a note (optional). In the **Trigger** field,  `Alarm Activated` and `Alarm Deactivated` are pre-selected.
 4. Enter the Webhook URL where you want to send the notifications.
-5. For more configuration options, refer to [Create Webhook](../data-integration/webhook.md).
+5. For more configuration options, refer to [Create Webhook](../../develop/data-integration/webhook.md).
 6. Click **Save** when you finish.
 
 ![alarm_webhook_setup](./assets/alarm_webhook_setup.png)

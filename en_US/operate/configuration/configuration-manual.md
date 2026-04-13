@@ -461,7 +461,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 ## Cluster Autodiscovery
 
 EMQX supports node discovery and autocluster with various strategies:
-see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
+see [Create and manage clusters](../cluster/create-cluster.md)。
 
 | Strategy | Description                     |
 | -------- | ------------------------------- |
@@ -783,7 +783,7 @@ log_overload_kill -->
 
 EMQX supports the creation of multiple listeners, and the default MQTT/TCP listener port is `1883`.
 
-**listeners.tcp.$name.enable**
+**`listeners.tcp.$name.enable`**
 
   *Type*: `boolean`
 
@@ -792,7 +792,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
   Enable listener.
 
 
-**listeners.tcp.$name.bind**
+**`listeners.tcp.$name.bind`**
 
   *Type*: `ip_port`
 
@@ -801,7 +801,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
   IP address and port for the listening socket.
 
 
-**listeners.tcp.$name.acceptors**
+**`listeners.tcp.$name.acceptors`**
 
   *Type*: `pos_integer`
 
@@ -810,7 +810,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
   The size of the listener's receiving pool.
 
 
-**listeners.tcp.$name.max_connections**
+**`listeners.tcp.$name.max_connections`**
 
   *Type*: `infinity | pos_integer`
 
@@ -819,7 +819,7 @@ EMQX supports the creation of multiple listeners, and the default MQTT/TCP liste
   The maximum number of concurrent connections allowed by the listener.
 
 
-**listeners.tcp.$name.mountpoint**
+**`listeners.tcp.$name.mountpoint`**
 
   *Type*: `string`
 
@@ -842,7 +842,7 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-**listeners.tcp.$name.enable_authn**
+**`listeners.tcp.$name.enable_authn`**
 
   *Type*: `enum`
 
@@ -858,7 +858,7 @@ denied immediately without going through any authenticators if <code>username</c
 anonymous clients early.
 
 
-**listeners.tcp.$name.max_conn_rate**
+**`listeners.tcp.$name.max_conn_rate`**
 
   *Type*: `rate`
 
@@ -867,7 +867,7 @@ This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
 
-**listeners.tcp.$name.messages_rate**
+**`listeners.tcp.$name.messages_rate`**
 
   *Type*: `rate`
 
@@ -876,7 +876,7 @@ This is used to limit the inbound message numbers for each client connected to t
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.tcp.$name.bytes_rate**
+**`listeners.tcp.$name.bytes_rate`**
 
   *Type*: `rate`
 
@@ -885,7 +885,7 @@ This is used to limit the inbound bytes rate for each client connected to this l
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.tcp.$name.access_rules**
+**`listeners.tcp.$name.access_rules`**
 
   *Type*: `array`
 
@@ -894,7 +894,7 @@ once the limit is reached, the restricted client will slow down and even be hung
   The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
-**listeners.tcp.$name.proxy_protocol**
+**`listeners.tcp.$name.proxy_protocol`**
 
   *Type*: `boolean`
 
@@ -904,7 +904,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.tcp.$name.proxy_protocol_timeout**
+**`listeners.tcp.$name.proxy_protocol_timeout`**
 
   *Type*: `duration`
 
@@ -913,7 +913,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.tcp.$name.tcp_options**
+**`listeners.tcp.$name.tcp_options`**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
 
@@ -924,7 +924,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 Settings for the MQTT over SSL listener.
 
-**listeners.ssl.$name.enable**
+**`listeners.ssl.$name.enable`**
 
   *Type*: `boolean`
 
@@ -933,7 +933,7 @@ Settings for the MQTT over SSL listener.
   Enable listener.
 
 
-**listeners.ssl.$name.bind**
+**`listeners.ssl.$name.bind`**
 
   *Type*: `ip_port`
 
@@ -942,7 +942,7 @@ Settings for the MQTT over SSL listener.
   IP address and port for the listening socket.
 
 
-**listeners.ssl.$name.acceptors**
+**`listeners.ssl.$name.acceptors`**
 
   *Type*: `pos_integer`
 
@@ -951,7 +951,7 @@ Settings for the MQTT over SSL listener.
   The size of the listener's receiving pool.
 
 
-**listeners.ssl.$name.max_connections**
+**`listeners.ssl.$name.max_connections`**
 
   *Type*: `infinity | pos_integer`
 
@@ -960,7 +960,7 @@ Settings for the MQTT over SSL listener.
   The maximum number of concurrent connections allowed by the listener.
 
 
-**listeners.ssl.$name.mountpoint**
+**`listeners.ssl.$name.mountpoint`**
 
   *Type*: `string`
 
@@ -983,7 +983,7 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-**listeners.ssl.$name.enable_authn**
+**`listeners.ssl.$name.enable_authn`**
 
   *Type*: `enum`
 
@@ -999,7 +999,7 @@ denied immediately without going through any authenticators if <code>username</c
 anonymous clients early.
 
 
-**listeners.ssl.$name.max_conn_rate**
+**`listeners.ssl.$name.max_conn_rate`**
 
   *Type*: `rate`
 
@@ -1008,7 +1008,7 @@ This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
 
-**listeners.ssl.$name.messages_rate**
+**`listeners.ssl.$name.messages_rate`**
 
   *Type*: `rate`
 
@@ -1017,7 +1017,7 @@ This is used to limit the inbound message numbers for each client connected to t
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.ssl.$name.bytes_rate**
+**`listeners.ssl.$name.bytes_rate`**
 
   *Type*: `rate`
 
@@ -1026,7 +1026,7 @@ This is used to limit the inbound bytes rate for each client connected to this l
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.ssl.$name.access_rules**
+**`listeners.ssl.$name.access_rules`**
 
   *Type*: `array`
 
@@ -1035,7 +1035,7 @@ once the limit is reached, the restricted client will slow down and even be hung
   The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
-**listeners.ssl.$name.proxy_protocol**
+**`listeners.ssl.$name.proxy_protocol`**
 
   *Type*: `boolean`
 
@@ -1045,7 +1045,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.ssl.$name.proxy_protocol_timeout**
+**`listeners.ssl.$name.proxy_protocol_timeout`**
 
   *Type*: `duration`
 
@@ -1054,12 +1054,12 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.ssl.$name.tcp_options**
+**`listeners.ssl.$name.tcp_options`**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.ssl.$name.ssl_options**
+**`listeners.ssl.$name.ssl_options`**
 
   *Type*: [listener_ssl_opts](#ssl-tls-configuration-for-the-listener)
 
@@ -1069,12 +1069,12 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 Set the MQTT over QUIC UDP listener, which is not enabled by default. And this feature is not available in some operating systems.
 
-For details, please refer to [MQTT over QUIC Quick Start](../mqtt-over-quic/getting-started.md).
+For details, please refer to [MQTT over QUIC Quick Start](../../develop/mqtt-over-quic/getting-started.md).
 
 
 Settings for the MQTT over QUIC listener.
 
-**listeners.quic.$name.ciphers**
+**`listeners.quic.$name.ciphers`**
 
   *Type*: `array`
 
@@ -1111,14 +1111,14 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
 
-**listeners.quic.$name.ssl_options**
+**`listeners.quic.$name.ssl_options`**
 
   *Type*: `broker:listener_quic_ssl_opts`
 
   TLS options for QUIC transport
 
 
-**listeners.quic.$name.enable**
+**`listeners.quic.$name.enable`**
 
   *Type*: `boolean`
 
@@ -1127,7 +1127,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   Enable listener.
 
 
-**listeners.quic.$name.bind**
+**`listeners.quic.$name.bind`**
 
   *Type*: `ip_port`
 
@@ -1136,7 +1136,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   IP address and port for the listening socket.
 
 
-**listeners.quic.$name.acceptors**
+**`listeners.quic.$name.acceptors`**
 
   *Type*: `pos_integer`
 
@@ -1145,7 +1145,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   The size of the listener's receiving pool.
 
 
-**listeners.quic.$name.max_connections**
+**`listeners.quic.$name.max_connections`**
 
   *Type*: `infinity | pos_integer`
 
@@ -1154,7 +1154,7 @@ NOTE: QUIC listener supports only 'tlsv1.3' ciphers
   The maximum number of concurrent connections allowed by the listener.
 
 
-**listeners.quic.$name.mountpoint**
+**`listeners.quic.$name.mountpoint`**
 
   *Type*: `string`
 
@@ -1177,7 +1177,7 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-**listeners.quic.$name.enable_authn**
+**`listeners.quic.$name.enable_authn`**
 
   *Type*: `enum`
 
@@ -1193,7 +1193,7 @@ denied immediately without going through any authenticators if <code>username</c
 anonymous clients early.
 
 
-**listeners.quic.$name.max_conn_rate**
+**`listeners.quic.$name.max_conn_rate`**
 
   *Type*: `rate`
 
@@ -1202,7 +1202,7 @@ This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
 
-**listeners.quic.$name.messages_rate**
+**`listeners.quic.$name.messages_rate`**
 
   *Type*: `rate`
 
@@ -1211,7 +1211,7 @@ This is used to limit the inbound message numbers for each client connected to t
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.quic.$name.bytes_rate**
+**`listeners.quic.$name.bytes_rate`**
 
   *Type*: `rate`
 
@@ -1224,7 +1224,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 
 TLS options for QUIC transport.
 
-**listeners.quic.$name.ssl_options.cacertfile**
+**`listeners.quic.$name.ssl_options.cacertfile`**
 
   *Type*: `string`
 
@@ -1239,7 +1239,7 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-**listeners.quic.$name.ssl_options.certfile**
+**`listeners.quic.$name.ssl_options.certfile`**
 
   *Type*: `string`
 
@@ -1253,7 +1253,7 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-**listeners.quic.$name.ssl_options.keyfile**
+**`listeners.quic.$name.ssl_options.keyfile`**
 
   *Type*: `string`
 
@@ -1262,7 +1262,7 @@ the file if it is to be added.
   PEM format private key file.
 
 
-**listeners.quic.$name.ssl_options.verify**
+**`listeners.quic.$name.ssl_options.verify`**
 
   *Type*: `enum`
 
@@ -1273,7 +1273,7 @@ the file if it is to be added.
   Enable or disable peer verification.
 
 
-**listeners.quic.$name.ssl_options.password**
+**`listeners.quic.$name.ssl_options.password`**
 
   *Type*: `string`
 
@@ -1286,7 +1286,7 @@ the file if it is to be added.
 
 Settings for the MQTT over WebSocket listener.
 
-**listeners.ws.$name.enable**
+**`listeners.ws.$name.enable`**
 
   *Type*: `boolean`
 
@@ -1295,7 +1295,7 @@ Settings for the MQTT over WebSocket listener.
   Enable listener.
 
 
-**listeners.ws.$name.bind**
+**`listeners.ws.$name.bind`**
 
   *Type*: `ip_port`
 
@@ -1304,7 +1304,7 @@ Settings for the MQTT over WebSocket listener.
   IP address and port for the listening socket.
 
 
-**listeners.ws.$name.acceptors**
+**`listeners.ws.$name.acceptors`**
 
   *Type*: `pos_integer`
 
@@ -1313,7 +1313,7 @@ Settings for the MQTT over WebSocket listener.
   The size of the listener's receiving pool.
 
 
-**listeners.ws.$name.max_connections**
+**`listeners.ws.$name.max_connections`**
 
   *Type*: `infinity | pos_integer`
 
@@ -1322,7 +1322,7 @@ Settings for the MQTT over WebSocket listener.
   The maximum number of concurrent connections allowed by the listener.
 
 
-**listeners.ws.$name.mountpoint**
+**`listeners.ws.$name.mountpoint`**
 
   *Type*: `string`
 
@@ -1345,7 +1345,7 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-**listeners.ws.$name.enable_authn**
+**`listeners.ws.$name.enable_authn`**
 
   *Type*: `enum`
 
@@ -1361,7 +1361,7 @@ denied immediately without going through any authenticators if <code>username</c
 anonymous clients early.
 
 
-**listeners.ws.$name.max_conn_rate**
+**`listeners.ws.$name.max_conn_rate`**
 
   *Type*: `rate`
 
@@ -1370,7 +1370,7 @@ This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
 
-**listeners.ws.$name.messages_rate**
+**`listeners.ws.$name.messages_rate`**
 
   *Type*: `rate`
 
@@ -1379,7 +1379,7 @@ This is used to limit the inbound message numbers for each client connected to t
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.ws.$name.bytes_rate**
+**`listeners.ws.$name.bytes_rate`**
 
   *Type*: `rate`
 
@@ -1388,7 +1388,7 @@ This is used to limit the inbound bytes rate for each client connected to this l
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.ws.$name.access_rules**
+**`listeners.ws.$name.access_rules`**
 
   *Type*: `array`
 
@@ -1397,7 +1397,7 @@ once the limit is reached, the restricted client will slow down and even be hung
   The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
-**listeners.ws.$name.proxy_protocol**
+**`listeners.ws.$name.proxy_protocol`**
 
   *Type*: `boolean`
 
@@ -1407,7 +1407,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.ws.$name.proxy_protocol_timeout**
+**`listeners.ws.$name.proxy_protocol_timeout`**
 
   *Type*: `duration`
 
@@ -1416,12 +1416,12 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.ws.$name.tcp_options**
+**`listeners.ws.$name.tcp_options`**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.ws.$name.websocket**
+**`listeners.ws.$name.websocket`**
 
   *Type*: [broker:ws_opts](#ws_opts)
 
@@ -1432,7 +1432,7 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 Settings for the MQTT over WebSocket/SSL listener.
 
-**listeners.wss.$name.enable**
+**`listeners.wss.$name.enable`**
 
   *Type*: `boolean`
 
@@ -1441,7 +1441,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   Enable listener.
 
 
-**listeners.wss.$name.bind**
+**`listeners.wss.$name.bind`**
 
   *Type*: `ip_port`
 
@@ -1450,7 +1450,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   IP address and port for the listening socket.
 
 
-**listeners.wss.$name.acceptors**
+**`listeners.wss.$name.acceptors`**
 
   *Type*: `pos_integer`
 
@@ -1459,7 +1459,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   The size of the listener's receiving pool.
 
 
-**listeners.wss.$name.max_connections**
+**`listeners.wss.$name.max_connections`**
 
   *Type*: `infinity | pos_integer`
 
@@ -1468,7 +1468,7 @@ Settings for the MQTT over WebSocket/SSL listener.
   The maximum number of concurrent connections allowed by the listener.
 
 
-**listeners.wss.$name.mountpoint**
+**`listeners.wss.$name.mountpoint`**
 
   *Type*: `string`
 
@@ -1491,7 +1491,7 @@ Variables in mountpoint string:
   - <code>${username}</code>: username
 
 
-**listeners.wss.$name.enable_authn**
+**`listeners.wss.$name.enable_authn`**
 
   *Type*: `enum`
 
@@ -1507,7 +1507,7 @@ denied immediately without going through any authenticators if <code>username</c
 anonymous clients early.
 
 
-**listeners.wss.$name.max_conn_rate**
+**`listeners.wss.$name.max_conn_rate`**
 
   *Type*: `rate`
 
@@ -1516,7 +1516,7 @@ This is used to limit the connection rate for this listener,
 once the limit is reached, new connections will be deferred or refused
 
 
-**listeners.wss.$name.messages_rate**
+**`listeners.wss.$name.messages_rate`**
 
   *Type*: `rate`
 
@@ -1525,7 +1525,7 @@ This is used to limit the inbound message numbers for each client connected to t
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.wss.$name.bytes_rate**
+**`listeners.wss.$name.bytes_rate`**
 
   *Type*: `rate`
 
@@ -1534,7 +1534,7 @@ This is used to limit the inbound bytes rate for each client connected to this l
 once the limit is reached, the restricted client will slow down and even be hung for a while.
 
 
-**listeners.wss.$name.access_rules**
+**`listeners.wss.$name.access_rules`**
 
   *Type*: `array`
 
@@ -1543,7 +1543,7 @@ once the limit is reached, the restricted client will slow down and even be hung
   The access control rules for this listener.<br/>See: https://github.com/emqtt/esockd#allowdeny
 
 
-**listeners.wss.$name.proxy_protocol**
+**`listeners.wss.$name.proxy_protocol`**
 
   *Type*: `boolean`
 
@@ -1553,7 +1553,7 @@ once the limit is reached, the restricted client will slow down and even be hung
 See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
 
 
-**listeners.wss.$name.proxy_protocol_timeout**
+**`listeners.wss.$name.proxy_protocol_timeout`**
 
   *Type*: `duration`
 
@@ -1562,17 +1562,17 @@ See: https://www.haproxy.com/blog/haproxy/proxy-protocol/
   Timeout for proxy protocol. EMQX will close the TCP connection if proxy protocol packet is not received within the timeout.
 
 
-**listeners.wss.$name.tcp_options**
+**`listeners.wss.$name.tcp_options`**
 
   *Type*: [broker:tcp_opts](#tcp_opts)
 
 
-**listeners.wss.$name.ssl_options**
+**`listeners.wss.$name.ssl_options`**
 
   *Type*: [broker:listener_wss_opts](#listener_wss_opts)
 
 
-**listeners.wss.$name.websocket**
+**`listeners.wss.$name.websocket`**
 
   *Type*: [broker:ws_opts](#ws_opts)
 
@@ -2183,8 +2183,8 @@ For example, <code> { Authorization = "some-authz-tokens"}</code>
   *Default*: `${name}/instance/${name}~${host}`
 
   Job Name that is pushed to the Push Gateway. Available variables:<br/>
-- ${name}: Name of EMQX node.<br/>
-- ${host}: Host name of EMQX node.<br/>
+- `${name}`: Name of EMQX node.<br/>
+- `${host}`: Host name of EMQX node.<br/>
 For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
 Default value is: <code>${name}/instance/${name}~${host}</code>
 
@@ -2573,7 +2573,7 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port
 
 ## Rate Limit
 
-For an introduction to rate limiting and its use, please refer to [rate limiting](../rate-limit/rate-limit.md).
+For an introduction to rate limiting and its use, please refer to [rate limiting](../rate-limit.md).
 
 <!-- ## Overload Protection
 
@@ -3298,7 +3298,7 @@ are distinguished by the topic prefix:
 
 Settings for simple algorithms.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *Type*: `enum`
 
@@ -3307,7 +3307,7 @@ Settings for simple algorithms.
   Simple password hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.salt_position**
+**`authentication.$INDEX.password_hash_algorithm.salt_position`**
 
   *Type*: `enum`
 
@@ -3322,7 +3322,7 @@ Settings for simple algorithms.
 
 Settings for bcrypt password hashing algorithm.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *Type*: `bcrypt`
 
@@ -3333,14 +3333,14 @@ Settings for bcrypt password hashing algorithm.
 
 Settings for bcrypt password hashing algorithm (for DB backends with write capability).
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *Type*: `bcrypt`
 
   BCRYPT password hashing.
 
 
-**authentication.$INDEX.password_hash_algorithm.salt_rounds**
+**`authentication.$INDEX.password_hash_algorithm.salt_rounds`**
 
   *Type*: `integer`
 
@@ -3355,14 +3355,14 @@ Settings for bcrypt password hashing algorithm (for DB backends with write capab
 
 Settings for PBKDF2 password hashing algorithm.
 
-**authentication.$INDEX.password_hash_algorithm.name**
+**`authentication.$INDEX.password_hash_algorithm.name`**
 
   *Type*: `pbkdf2`
 
   PBKDF2 password hashing.
 
 
-**authentication.$INDEX.password_hash_algorithm.mac_fun**
+**`authentication.$INDEX.password_hash_algorithm.mac_fun`**
 
   *Type*: `enum`
 
@@ -3371,14 +3371,14 @@ Settings for PBKDF2 password hashing algorithm.
   Specifies mac_fun for PBKDF2 hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.iterations**
+**`authentication.$INDEX.password_hash_algorithm.iterations`**
 
   *Type*: `integer`
 
   Iteration count for PBKDF2 hashing algorithm.
 
 
-**authentication.$INDEX.password_hash_algorithm.dk_length**
+**`authentication.$INDEX.password_hash_algorithm.dk_length`**
 
   *Type*: `integer`
 
@@ -3622,7 +3622,7 @@ Settings for the authorization cache.
 
 The config for MQTT Bridges.
 
-**bridges.mqtt.$name.enable**
+**`bridges.mqtt.$name.enable`**
 
   *Type*: `boolean`
 
@@ -3631,7 +3631,7 @@ The config for MQTT Bridges.
   Enable or disable this bridge
 
 
-**bridges.mqtt.$name.resource_opts**
+**`bridges.mqtt.$name.resource_opts`**
 
   *Type*: `bridge_mqtt:creation_opts`
 
@@ -3640,7 +3640,7 @@ The config for MQTT Bridges.
   Resource options.
 
 
-**bridges.mqtt.$name.mode**
+**`bridges.mqtt.$name.mode`**
 
   *Type*: `enum`
 
@@ -3649,28 +3649,28 @@ The config for MQTT Bridges.
   Deprecated since v5.1.0 & e5.1.0.
 
 
-**bridges.mqtt.$name.server**
+**`bridges.mqtt.$name.server`**
 
   *Type*: `string`
 
   The host and port of the remote MQTT broker
 
 
-**bridges.mqtt.$name.clientid_prefix**
+**`bridges.mqtt.$name.clientid_prefix`**
 
   *Type*: `string`
 
   Optional prefix to prepend to the clientid used by egress bridges.
 
 
-**bridges.mqtt.$name.reconnect_interval**
+**`bridges.mqtt.$name.reconnect_interval`**
 
   *Type*: `string`
 
   Deprecated since v5.0.16.
 
 
-**bridges.mqtt.$name.proto_ver**
+**`bridges.mqtt.$name.proto_ver`**
 
   *Type*: `enum`
 
@@ -3681,7 +3681,7 @@ The config for MQTT Bridges.
   The MQTT protocol version
 
 
-**bridges.mqtt.$name.bridge_mode**
+**`bridges.mqtt.$name.bridge_mode`**
 
   *Type*: `boolean`
 
@@ -3694,21 +3694,21 @@ If bridge_mode is set to true, the bridge will indicate to the remote broker tha
 This means that loop detection will be more effective and that retained messages will be propagated correctly.
 
 
-**bridges.mqtt.$name.username**
+**`bridges.mqtt.$name.username`**
 
   *Type*: `string`
 
   The username of the MQTT protocol
 
 
-**bridges.mqtt.$name.password**
+**`bridges.mqtt.$name.password`**
 
   *Type*: `string`
 
   The password of the MQTT protocol
 
 
-**bridges.mqtt.$name.clean_start**
+**`bridges.mqtt.$name.clean_start`**
 
   *Type*: `boolean`
 
@@ -3717,7 +3717,7 @@ This means that loop detection will be more effective and that retained messages
   Whether to start a clean session when reconnecting a remote broker for ingress bridge
 
 
-**bridges.mqtt.$name.keepalive**
+**`bridges.mqtt.$name.keepalive`**
 
   *Type*: `string`
 
@@ -3730,7 +3730,7 @@ This means that loop detection will be more effective and that retained messages
 <br/>or combination of whereof: `1h5m0s`
 
 
-**bridges.mqtt.$name.retry_interval**
+**`bridges.mqtt.$name.retry_interval`**
 
   *Type*: `string`
 
@@ -3743,7 +3743,7 @@ This means that loop detection will be more effective and that retained messages
 <br/>or combination of whereof: `1h5m0s`
 
 
-**bridges.mqtt.$name.max_inflight**
+**`bridges.mqtt.$name.max_inflight`**
 
   *Type*: `non_neg_integer`
 
@@ -3752,7 +3752,7 @@ This means that loop detection will be more effective and that retained messages
   Max inflight (sent, but un-acked) messages of the MQTT protocol
 
 
-**bridges.mqtt.$name.ssl**
+**`bridges.mqtt.$name.ssl`**
 
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
@@ -3761,7 +3761,7 @@ This means that loop detection will be more effective and that retained messages
   SSL connection settings.
 
 
-**bridges.mqtt.$name.ingress**
+**`bridges.mqtt.$name.ingress`**
 
   *Type*: `connector-mqtt:ingress`
 
@@ -3773,7 +3773,7 @@ This means that loop detection will be more effective and that retained messages
         the rule.
 
 
-**bridges.mqtt.$name.egress**
+**`bridges.mqtt.$name.egress`**
 
   *Type*: `connector-mqtt:egress`
 
@@ -3788,7 +3788,7 @@ is configured, then both the data got from the rule and the MQTT messages that m
 
 Creation options.
 
-**bridges.mqtt.$name.resource_opts.worker_pool_size**
+**`bridges.mqtt.$name.resource_opts.worker_pool_size`**
 
   *Type*: `integer`
 
@@ -3800,7 +3800,7 @@ Creation options.
 For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
 
 
-**bridges.mqtt.$name.resource_opts.health_check_interval**
+**`bridges.mqtt.$name.resource_opts.health_check_interval`**
 
   *Type*: `timeout_duration_ms`
 
@@ -3809,7 +3809,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Health check interval.
 
 
-**bridges.mqtt.$name.resource_opts.start_after_created**
+**`bridges.mqtt.$name.resource_opts.start_after_created`**
 
   *Type*: `boolean`
 
@@ -3818,7 +3818,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Whether start the resource right after created.
 
 
-**bridges.mqtt.$name.resource_opts.start_timeout**
+**`bridges.mqtt.$name.resource_opts.start_timeout`**
 
   *Type*: `timeout_duration_ms`
 
@@ -3827,14 +3827,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.
 
 
-**bridges.mqtt.$name.resource_opts.auto_restart_interval**
+**`bridges.mqtt.$name.resource_opts.auto_restart_interval`**
 
   *Type*: `infinity | duration_ms`
 
   Deprecated since 5.1.0.
 
 
-**bridges.mqtt.$name.resource_opts.query_mode**
+**`bridges.mqtt.$name.resource_opts.query_mode`**
 
   *Type*: `enum`
 
@@ -3845,7 +3845,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Query mode. Optional 'sync/async', default 'async'.
 
 
-**bridges.mqtt.$name.resource_opts.request_ttl**
+**`bridges.mqtt.$name.resource_opts.request_ttl`**
 
   *Type*: `timeout_duration_ms | infinity`
 
@@ -3854,7 +3854,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
 
 
-**bridges.mqtt.$name.resource_opts.inflight_window**
+**`bridges.mqtt.$name.resource_opts.inflight_window`**
 
   *Type*: `pos_integer`
 
@@ -3863,14 +3863,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Query inflight window. When query_mode is set to async, this config has to be set to 1 if messages from the same MQTT client have to be strictly ordered.
 
 
-**bridges.mqtt.$name.resource_opts.enable_queue**
+**`bridges.mqtt.$name.resource_opts.enable_queue`**
 
   *Type*: `boolean`
 
   Deprecated since v5.0.14.
 
 
-**bridges.mqtt.$name.resource_opts.max_buffer_bytes**
+**`bridges.mqtt.$name.resource_opts.max_buffer_bytes`**
 
   *Type*: `bytesize`
 
@@ -3885,7 +3885,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 
 Configuration for an HTTP bridge.
 
-**bridges.webhook.$name.enable**
+**`bridges.webhook.$name.enable`**
 
   *Type*: `boolean`
 
@@ -3894,7 +3894,7 @@ Configuration for an HTTP bridge.
   Enable or disable this bridge
 
 
-**bridges.webhook.$name.resource_opts**
+**`bridges.webhook.$name.resource_opts`**
 
   *Type*: `bridge_webhook:creation_opts`
 
@@ -3903,7 +3903,7 @@ Configuration for an HTTP bridge.
   Resource options.
 
 
-**bridges.webhook.$name.connect_timeout**
+**`bridges.webhook.$name.connect_timeout`**
 
   *Type*: `timeout_duration_ms`
 
@@ -3912,14 +3912,14 @@ Configuration for an HTTP bridge.
   The timeout when connecting to the HTTP server.
 
 
-**bridges.webhook.$name.retry_interval**
+**`bridges.webhook.$name.retry_interval`**
 
   *Type*: `timeout_duration`
 
   Deprecated since 5.0.4.
 
 
-**bridges.webhook.$name.pool_type**
+**`bridges.webhook.$name.pool_type`**
 
   *Type*: `emqx_bridge_http_connector:pool_type`
 
@@ -3928,7 +3928,7 @@ Configuration for an HTTP bridge.
   The type of the pool. Can be one of `random`, `hash`.
 
 
-**bridges.webhook.$name.pool_size**
+**`bridges.webhook.$name.pool_size`**
 
   *Type*: `pos_integer`
 
@@ -3937,7 +3937,7 @@ Configuration for an HTTP bridge.
   The pool size.
 
 
-**bridges.webhook.$name.enable_pipelining**
+**`bridges.webhook.$name.enable_pipelining`**
 
   *Type*: `pos_integer`
 
@@ -3946,14 +3946,14 @@ Configuration for an HTTP bridge.
   A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.
 
 
-**bridges.webhook.$name.request**
+**`bridges.webhook.$name.request`**
 
   *Type*: `connector-http:request`
 
   Configure HTTP request parameters.
 
 
-**bridges.webhook.$name.ssl**
+**`bridges.webhook.$name.ssl`**
 
   *Type*: [ssl_client_opts](#ssl-tls-configuration-for-clients)
 
@@ -3962,7 +3962,7 @@ Configuration for an HTTP bridge.
   SSL connection settings.
 
 
-**bridges.webhook.$name.url**
+**`bridges.webhook.$name.url`**
 
   *Type*: `string`
 
@@ -3974,14 +3974,14 @@ For example, <code> http://localhost:9901/${topic} </code> is allowed, but
 is not allowed.
 
 
-**bridges.webhook.$name.direction**
+**`bridges.webhook.$name.direction`**
 
   *Type*: `egress`
 
   Deprecated since 5.0.12.
 
 
-**bridges.webhook.$name.local_topic**
+**`bridges.webhook.$name.local_topic`**
 
   *Type*: `string`
 
@@ -3992,7 +3992,7 @@ configured, then both the data got from the rule and the MQTT messages that matc
 will be forwarded.
 
 
-**bridges.webhook.$name.method**
+**`bridges.webhook.$name.method`**
 
   *Type*: `enum`
 
@@ -4004,7 +4004,7 @@ will be forwarded.
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.headers**
+**`bridges.webhook.$name.headers`**
 
   *Type*: `map`
 
@@ -4014,7 +4014,7 @@ Template with variables is allowed.
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.body**
+**`bridges.webhook.$name.body`**
 
   *Type*: `string`
 
@@ -4027,7 +4027,7 @@ webhook is used as an action of a rule).<br/>
 Template with variables is allowed.
 
 
-**bridges.webhook.$name.max_retries**
+**`bridges.webhook.$name.max_retries`**
 
   *Type*: `non_neg_integer`
 
@@ -4036,7 +4036,7 @@ Template with variables is allowed.
   HTTP request max retry times if failed.
 
 
-**bridges.webhook.$name.request_timeout**
+**`bridges.webhook.$name.request_timeout`**
 
   *Type*: `duration_ms`
 
@@ -4047,7 +4047,7 @@ Template with variables is allowed.
 
 Creation options.
 
-**bridges.webhook.$name.resource_opts.worker_pool_size**
+**`bridges.webhook.$name.resource_opts.worker_pool_size`**
 
   *Type*: `integer`
 
@@ -4059,7 +4059,7 @@ Creation options.
 For bridges only have ingress direction data flow, it can be set to 0 otherwise must be greater than 0.
 
 
-**bridges.webhook.$name.resource_opts.health_check_interval**
+**`bridges.webhook.$name.resource_opts.health_check_interval`**
 
   *Type*: `timeout_duration_ms`
 
@@ -4068,7 +4068,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Health check interval.
 
 
-**bridges.webhook.$name.resource_opts.start_after_created**
+**`bridges.webhook.$name.resource_opts.start_after_created`**
 
   *Type*: `boolean`
 
@@ -4077,7 +4077,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Whether start the resource right after created.
 
 
-**bridges.webhook.$name.resource_opts.start_timeout**
+**`bridges.webhook.$name.resource_opts.start_timeout`**
 
   *Type*: `timeout_duration_ms`
 
@@ -4086,14 +4086,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.
 
 
-**bridges.webhook.$name.resource_opts.auto_restart_interval**
+**`bridges.webhook.$name.resource_opts.auto_restart_interval`**
 
   *Type*: `infinity | duration_ms`
 
   Deprecated since 5.1.0.
 
 
-**bridges.webhook.$name.resource_opts.query_mode**
+**`bridges.webhook.$name.resource_opts.query_mode`**
 
   *Type*: `enum`
 
@@ -4104,7 +4104,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Query mode. Optional 'sync/async', default 'async'.
 
 
-**bridges.webhook.$name.resource_opts.request_ttl**
+**`bridges.webhook.$name.resource_opts.request_ttl`**
 
   *Type*: `timeout_duration_ms | infinity`
 
@@ -4113,7 +4113,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.
 
 
-**bridges.webhook.$name.resource_opts.inflight_window**
+**`bridges.webhook.$name.resource_opts.inflight_window`**
 
   *Type*: `pos_integer`
 
@@ -4122,14 +4122,14 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
   Query inflight window. When query_mode is set to async, this config has to be set to 1 if messages from the same MQTT client have to be strictly ordered.
 
 
-**bridges.webhook.$name.resource_opts.enable_queue**
+**`bridges.webhook.$name.resource_opts.enable_queue`**
 
   *Type*: `boolean`
 
   Deprecated since v5.0.14.
 
 
-**bridges.webhook.$name.resource_opts.max_buffer_bytes**
+**`bridges.webhook.$name.resource_opts.max_buffer_bytes`**
 
   *Type*: `bytesize`
 
@@ -4381,7 +4381,7 @@ by anyone except <code>emqx</code> (or any user which runs EMQX).
 
 A per-plugin config to describe the desired state of the plugin.
 
-**plugins.states.$INDEX.name_vsn**
+**`plugins.states.$INDEX.name_vsn`**
 
   *Type*: `string`
 
@@ -4390,7 +4390,7 @@ It should match the plugin application name-version as the for the plugin releas
 For example: my_plugin-0.1.0.
 
 
-**plugins.states.$INDEX.enable**
+**`plugins.states.$INDEX.enable`**
 
   *Type*: `boolean`
 
@@ -4416,14 +4416,14 @@ External hook (exhook) configuration.
 
 gRPC server configuration.
 
-**exhook.servers.$INDEX.name**
+**`exhook.servers.$INDEX.name`**
 
   *Type*: `string`
 
   Name of the exhook server
 
 
-**exhook.servers.$INDEX.enable**
+**`exhook.servers.$INDEX.enable`**
 
   *Type*: `boolean`
 
@@ -4432,14 +4432,14 @@ gRPC server configuration.
   Enable this Exhook server
 
 
-**exhook.servers.$INDEX.url**
+**`exhook.servers.$INDEX.url`**
 
   *Type*: `string`
 
   URL of the gRPC server
 
 
-**exhook.servers.$INDEX.request_timeout**
+**`exhook.servers.$INDEX.request_timeout`**
 
   *Type*: `timeout_duration`
 
@@ -4448,7 +4448,7 @@ gRPC server configuration.
   The timeout of request gRPC server
 
 
-**exhook.servers.$INDEX.failed_action**
+**`exhook.servers.$INDEX.failed_action`**
 
   *Type*: `enum`
 
@@ -4459,19 +4459,19 @@ gRPC server configuration.
   The value that is returned when the request to the gRPC server fails for any reason
 
 
-**exhook.servers.$INDEX.ssl**
+**`exhook.servers.$INDEX.ssl`**
 
   *Type*: `exhook:ssl_conf`
 
 
-**exhook.servers.$INDEX.socket_options**
+**`exhook.servers.$INDEX.socket_options`**
 
   *Type*: `exhook:socket_options`
 
   *Default*: `{"nodelay":true,"keepalive":true}`
 
 
-**exhook.servers.$INDEX.auto_reconnect**
+**`exhook.servers.$INDEX.auto_reconnect`**
 
   *Type*: `false | timeout_duration`
 
@@ -4481,7 +4481,7 @@ gRPC server configuration.
 When gRPC is not available, Exhook tries to request the gRPC service at that interval and reinitialize the list of mounted hooks.
 
 
-**exhook.servers.$INDEX.pool_size**
+**`exhook.servers.$INDEX.pool_size`**
 
   *Type*: `pos_integer`
 
@@ -4494,7 +4494,7 @@ When gRPC is not available, Exhook tries to request the gRPC service at that int
 
 Connection socket options
 
-**exhook.servers.$INDEX.socket_options.keepalive**
+**`exhook.servers.$INDEX.socket_options.keepalive`**
 
   *Type*: `boolean`
 
@@ -4504,7 +4504,7 @@ Connection socket options
 If the other end does not respond, the connection is considered broken and an error message is sent to the controlling process.
 
 
-**exhook.servers.$INDEX.socket_options.nodelay**
+**`exhook.servers.$INDEX.socket_options.nodelay`**
 
   *Type*: `boolean`
 
@@ -4514,14 +4514,14 @@ If the other end does not respond, the connection is considered broken and an er
 which means that also small amounts of data are sent immediately
 
 
-**exhook.servers.$INDEX.socket_options.recbuf**
+**`exhook.servers.$INDEX.socket_options.recbuf`**
 
   *Type*: `bytesize`
 
   The minimum size of receive buffer to use for the socket
 
 
-**exhook.servers.$INDEX.socket_options.sndbuf**
+**`exhook.servers.$INDEX.socket_options.sndbuf`**
 
   *Type*: `bytesize`
 
@@ -4532,7 +4532,7 @@ which means that also small amounts of data are sent immediately
 
 SSL client configuration.
 
-**exhook.servers.$INDEX.ssl.cacertfile**
+**`exhook.servers.$INDEX.ssl.cacertfile`**
 
   *Type*: `string`
 
@@ -4545,14 +4545,14 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-**exhook.servers.$INDEX.ssl.cacerts**
+**`exhook.servers.$INDEX.ssl.cacerts`**
 
   *Type*: `boolean`
 
   Deprecated since 5.1.4.
 
 
-**exhook.servers.$INDEX.ssl.certfile**
+**`exhook.servers.$INDEX.ssl.certfile`**
 
   *Type*: `string`
 
@@ -4564,14 +4564,14 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-**exhook.servers.$INDEX.ssl.keyfile**
+**`exhook.servers.$INDEX.ssl.keyfile`**
 
   *Type*: `string`
 
   PEM format private key file.
 
 
-**exhook.servers.$INDEX.ssl.verify**
+**`exhook.servers.$INDEX.ssl.verify`**
 
   *Type*: `enum`
 
@@ -4582,7 +4582,7 @@ the file if it is to be added.
   Enable or disable peer verification.
 
 
-**exhook.servers.$INDEX.ssl.reuse_sessions**
+**`exhook.servers.$INDEX.ssl.reuse_sessions`**
 
   *Type*: `boolean`
 
@@ -4592,7 +4592,7 @@ the file if it is to be added.
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**exhook.servers.$INDEX.ssl.depth**
+**`exhook.servers.$INDEX.ssl.depth`**
 
   *Type*: `non_neg_integer`
 
@@ -4604,14 +4604,14 @@ if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
-**exhook.servers.$INDEX.ssl.password**
+**`exhook.servers.$INDEX.ssl.password`**
 
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
-**exhook.servers.$INDEX.ssl.versions**
+**`exhook.servers.$INDEX.ssl.versions`**
 
   *Type*: `array`
 
@@ -4623,7 +4623,7 @@ In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
-**exhook.servers.$INDEX.ssl.ciphers**
+**`exhook.servers.$INDEX.ssl.ciphers`**
 
   *Type*: `array`
 
@@ -4658,7 +4658,7 @@ RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
-**exhook.servers.$INDEX.ssl.secure_renegotiate**
+**`exhook.servers.$INDEX.ssl.secure_renegotiate`**
 
   *Type*: `boolean`
 
@@ -4671,7 +4671,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**exhook.servers.$INDEX.ssl.log_level**
+**`exhook.servers.$INDEX.ssl.log_level`**
 
   *Type*: `enum`
 
@@ -4682,7 +4682,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Log level for SSL communication. Default is 'notice'. Set to 'debug' to inspect TLS handshake messages.
 
 
-**exhook.servers.$INDEX.ssl.hibernate_after**
+**`exhook.servers.$INDEX.ssl.hibernate_after`**
 
   *Type*: `duration`
 
@@ -4691,7 +4691,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Hibernate the SSL process after idling for amount of time reducing its memory footprint.
 
 
-**exhook.servers.$INDEX.ssl.enable**
+**`exhook.servers.$INDEX.ssl.enable`**
 
   *Type*: `boolean`
 
@@ -4700,7 +4700,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Enable TLS.
 
 
-**exhook.servers.$INDEX.ssl.server_name_indication**
+**`exhook.servers.$INDEX.ssl.server_name_indication`**
 
   *Type*: `disable | string`
 
@@ -5244,7 +5244,7 @@ ID of N.
 
 Note: the pre-defined topic ID of 0 is reserved.
 
-**gateway.mqttsn.predefined.$INDEX.id**
+**`gateway.mqttsn.predefined.$INDEX.id`**
 
   *Type*: `integer`
 
@@ -5253,7 +5253,7 @@ Note: the pre-defined topic ID of 0 is reserved.
   Topic ID. Range: 1-65535
 
 
-**gateway.mqttsn.predefined.$INDEX.topic**
+**`gateway.mqttsn.predefined.$INDEX.topic`**
 
   *Type*: `string`
 
@@ -7226,7 +7226,7 @@ Relevant when the EMQX cluster is deployed behind a load-balancer.
 
 Socket options for WebSocket/SSL connections.
 
-**listeners.wss.$name.ssl_options.cacertfile**
+**`listeners.wss.$name.ssl_options.cacertfile`**
 
   *Type*: `string`
 
@@ -7241,14 +7241,14 @@ NOTE: invalidating (deleting) a certificate from the file will not affect
 already established connections.
 
 
-**listeners.wss.$name.ssl_options.cacerts**
+**`listeners.wss.$name.ssl_options.cacerts`**
 
   *Type*: `boolean`
 
   Deprecated since 5.1.4.
 
 
-**listeners.wss.$name.ssl_options.certfile**
+**`listeners.wss.$name.ssl_options.certfile`**
 
   *Type*: `string`
 
@@ -7262,7 +7262,7 @@ Although the root CA certificate is optional, it should be placed at the end of
 the file if it is to be added.
 
 
-**listeners.wss.$name.ssl_options.keyfile**
+**`listeners.wss.$name.ssl_options.keyfile`**
 
   *Type*: `string`
 
@@ -7271,7 +7271,7 @@ the file if it is to be added.
   PEM format private key file.
 
 
-**listeners.wss.$name.ssl_options.verify**
+**`listeners.wss.$name.ssl_options.verify`**
 
   *Type*: `enum`
 
@@ -7282,7 +7282,7 @@ the file if it is to be added.
   Enable or disable peer verification.
 
 
-**listeners.wss.$name.ssl_options.reuse_sessions**
+**`listeners.wss.$name.ssl_options.reuse_sessions`**
 
   *Type*: `boolean`
 
@@ -7292,7 +7292,7 @@ the file if it is to be added.
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**listeners.wss.$name.ssl_options.depth**
+**`listeners.wss.$name.ssl_options.depth`**
 
   *Type*: `non_neg_integer`
 
@@ -7304,14 +7304,14 @@ if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/>
 if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
 
 
-**listeners.wss.$name.ssl_options.password**
+**`listeners.wss.$name.ssl_options.password`**
 
   *Type*: `string`
 
   String containing the user's password. Only used if the private key file is password-protected.
 
 
-**listeners.wss.$name.ssl_options.versions**
+**`listeners.wss.$name.ssl_options.versions`**
 
   *Type*: `array`
 
@@ -7323,7 +7323,7 @@ In case PSK cipher suites are intended, make sure to configure
 <code>['tlsv1.2', 'tlsv1.1']</code> here.
 
 
-**listeners.wss.$name.ssl_options.ciphers**
+**`listeners.wss.$name.ssl_options.ciphers`**
 
   *Type*: `array`
 
@@ -7358,7 +7358,7 @@ RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
 RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
 
 
-**listeners.wss.$name.ssl_options.secure_renegotiate**
+**`listeners.wss.$name.ssl_options.secure_renegotiate`**
 
   *Type*: `boolean`
 
@@ -7371,7 +7371,7 @@ you drop support for the insecure renegotiation, prone to MitM attacks.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**listeners.wss.$name.ssl_options.log_level**
+**`listeners.wss.$name.ssl_options.log_level`**
 
   *Type*: `enum`
 
@@ -7382,7 +7382,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Log level for SSL communication. Default is 'notice'. Set to 'debug' to inspect TLS handshake messages.
 
 
-**listeners.wss.$name.ssl_options.hibernate_after**
+**`listeners.wss.$name.ssl_options.hibernate_after`**
 
   *Type*: `duration`
 
@@ -7391,7 +7391,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
   Hibernate the SSL process after idling for amount of time reducing its memory footprint.
 
 
-**listeners.wss.$name.ssl_options.dhfile**
+**`listeners.wss.$name.ssl_options.dhfile`**
 
   *Type*: `string`
 
@@ -7402,7 +7402,7 @@ are used.<br/>
 NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
 
 
-**listeners.wss.$name.ssl_options.fail_if_no_peer_cert**
+**`listeners.wss.$name.ssl_options.fail_if_no_peer_cert`**
 
   *Type*: `boolean`
 
@@ -7415,7 +7415,7 @@ If set to false, it fails only if the client sends an invalid
 certificate (an empty certificate is considered valid).
 
 
-**listeners.wss.$name.ssl_options.honor_cipher_order**
+**`listeners.wss.$name.ssl_options.honor_cipher_order`**
 
   *Type*: `boolean`
 
@@ -7427,7 +7427,7 @@ certificate (an empty certificate is considered valid).
  ordering of the server administrator.
 
 
-**listeners.wss.$name.ssl_options.client_renegotiation**
+**`listeners.wss.$name.ssl_options.client_renegotiation`**
 
   *Type*: `boolean`
 
@@ -7444,7 +7444,7 @@ the number of messages the underlying cipher suite can encipher.<br/>
 Has no effect when TLS version is configured (or negotiated) to 1.3
 
 
-**listeners.wss.$name.ssl_options.handshake_timeout**
+**`listeners.wss.$name.ssl_options.handshake_timeout`**
 
   *Type*: `duration`
 

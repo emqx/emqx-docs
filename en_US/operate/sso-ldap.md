@@ -30,7 +30,7 @@ This section guides you on how to enable and configure the OpenLDAP SSO in the E
    | Password           | The user password to access the OpenLDAP server.             |
    | Base DN            | The name of the base object entry (or possibly the root) of the OpenLDAP directory, the starting point for performing user searches. |
    | User Lookup Filter | The filter in OpenLDAP that matches users. In the LDAP user query condition, the system will automatically replace `${username}` with the actual input username for user matching.<br />For standard LDAP, the default filter is `(&(objectClass=person)(uid=${username}))`.<br />This variable replacement mechanism allows you to construct query filters flexibly based on different user attributes for username queries and matching. For more information on the condition format, see [LDAP Filters](https://ldap.com/ldap-filters/). |
-   | Enable TLS         | The option for enabling a TLS secure transmission for OpenLDAP access. If enabled, certificate configuration is required. You can refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) for details on how to enable TLS. |
+   | Enable TLS         | The option for enabling a TLS secure transmission for OpenLDAP access. If enabled, certificate configuration is required. You can refer to [TLS for External Resource Access](./network/overview.md#tls-for-external-resource-access) for details on how to enable TLS. |
 
 
 4. Click the **Update** button to save the configuration.
@@ -103,7 +103,7 @@ After enabling LDAP-based SSO, the EMQX Dashboard will display the LDAP SSO opti
 
 <img src="./assets/ldap_login.png" alt="ldap_login" style="zoom:67%;" />
 
-After successfully authenticating with LDAP, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successfully authenticating with LDAP, EMQX will automatically add a Dashboard user, which you can manage in [Users](./dashboard/system.md#users), such as assigning roles and permissions.
 
 ## Logout
 

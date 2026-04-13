@@ -24,7 +24,7 @@ On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../../operate/configuration/configuration.md).
 
 :::
 
@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
   ]
 }'
 ```
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
+For a detailed HTTP API description, see [HTTP API - Gateway](../api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
@@ -157,14 +157,14 @@ You can set whether to enable the TLS Verify by setting the toggle switch. But b
 
 The client ID, username, and password are provided by the client's [Create Connection](#create-connection) request. The CoAP gateway supports the following authenticator types:
 
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
-- [LDAP Authentication](../access-control/authn/ldap.md)
+- [Built-in Database Authentication](../../operate/access-control/authn/mnesia.md)
+- [MySQL Authentication](../../operate/access-control/authn/mysql.md)
+- [MongoDB Authentication](../../operate/access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../../operate/access-control/authn/postgresql.md)
+- [Redis Authentication](../../operate/access-control/authn/redis.md)
+- [HTTP Server Authentication](../../operate/access-control/authn/http.md)
+- [JWT Authentication](../../operate/access-control/authn/jwt.md)
+- [LDAP Authentication](../../operate/access-control/authn/ldap.md)
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 

@@ -71,7 +71,7 @@ my_emqx_plugin
 ### 测试您的开发环境
 
 ::: tip 提示
-要使用可工作的开发环境，请参阅[从源代码安装](../deploy/install-source.md)。
+要使用可工作的开发环境，请参阅[从源代码安装](../../get-started/deploy/install-source.md)。
 :::
 
 运行 `make rel` 以测试插件是否可以成功编译和打包，此时无需编写代码。

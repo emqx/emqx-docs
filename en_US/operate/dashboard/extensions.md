@@ -12,17 +12,17 @@ EMQX Multi-Protocol Gateways support handling all non-MQTT protocol connections,
 
 In the gateways page, you can enable a gateway and configure its basic settings, such as listener configuration. EMQX also provides custom configuration options. For detailed configuration guidance, refer to the quick start documentation for the following common gateways:
 
-- [MQTT-SN](../gateway/mqttsn.md)
-- [STOMP](../gateway/stomp.md)
-- [CoAP](../gateway/coap.md)
-- [LwM2M](../gateway/lwm2m.md)
-- [ExProto](../gateway/exproto.md)
+- [MQTT-SN](../../develop/gateway/mqttsn.md)
+- [STOMP](../../develop/gateway/stomp.md)
+- [CoAP](../../develop/gateway/coap.md)
+- [LwM2M](../../develop/gateway/lwm2m.md)
+- [ExProto](../../develop/gateway/exproto.md)
 
 The following gateways are only supported in the EMQX Enterprise Edition:
 
-- [OCPP](../gateway/ocpp.md)
-- [GB/T 32960](../gateway/gbt32960.md)
-- [JT/T 808](../gateway/jt808.md)
+- [OCPP](../../develop/gateway/ocpp.md)
+- [GB/T 32960](../../develop/gateway/gbt32960.md)
+- [JT/T 808](../../develop/gateway/jt808.md)
 
 Before enabling a gateway, it must be properly set up. Once set up, you can monitor the number of connections for each enabled protocol gateway and manage gateway statuses (enable/disable) on the **Gateways** page.
 

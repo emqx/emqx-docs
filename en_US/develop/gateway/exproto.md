@@ -76,7 +76,7 @@ On EMQX Dashboard, click **Management** -> **Gateways** from the left navigation
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure the gateway using [`emqx.conf`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure the gateway using [`emqx.conf`](../../operate/configuration/configuration.md).
 
 :::
 
@@ -121,7 +121,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-For a detailed REST API description, see [REST API](../admin/api.md).
+For a detailed REST API description, see [REST API](../api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your ExProto Gateway](#customize-your-exproto-gateway).
 
@@ -141,7 +141,7 @@ On the Gateways page, locate **ExProto**. Click **Settings** in the **Actions** 
 - **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`. This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
 - **gRPC ConnectionAdapter**: Set the configurations for starting the `ConnectionAdapter` service.
   - **Bind**: Listening address and port for the gRPC server; default: **0.0.0.0:9100**.
-    - **TLS Verify Client**: Enable or disable peer verification; disabled by default. When enabled, you can configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+    - **TLS Verify Client**: Enable or disable peer verification; disabled by default. When enabled, you can configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md).
 - **gRPC ConnectionHandler**: Set the callback server configurations that implemented ConnectionUnaryHandler.
   - **Server**: The callback gRPC server address.
     - **Enable TLS**: Enable the TLS connection for gRPC server; disabled by default. When enabled, you can further set the configurations below:
@@ -183,7 +183,7 @@ Click **+ Add Listener** to open **Add Listener** page, where you can continue w
 
 **TLS Settings** (for SSL listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
@@ -197,14 +197,14 @@ Then you can continue to set:
 
 ExProto Gateway supports various types of authenticators, such as:
 
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
-- [LDAP Authentication](../access-control/authn/ldap.md)
+- [Built-in Database Authentication](../../operate/access-control/authn/mnesia.md)
+- [MySQL Authentication](../../operate/access-control/authn/mysql.md)
+- [MongoDB Authentication](../../operate/access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../../operate/access-control/authn/postgresql.md)
+- [Redis Authentication](../../operate/access-control/authn/redis.md)
+- [HTTP Server Authentication](../../operate/access-control/authn/http.md)
+- [JWT Authentication](../../operate/access-control/authn/jwt.md)
+- [LDAP Authentication](../../operate/access-control/authn/ldap.md)
 
 The Client ID, Username, and Password of the client information are all derived from the parameters passed in the Authenticate method of the ConnectionAdapter.
 
@@ -213,7 +213,7 @@ This section takes the Dashboard as an example to illustrate how to do the authe
 
 On the ExProto page, click the **Authentication** tab.
 
-Click **+ Create Authentication**, select `Password-Based` as the **Mechanism**, and select `HTTP Server` as the **Backend**. Click **Next**. In **Configuration**, you can set the authentication rules. For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
+Click **+ Create Authentication**, select `Password-Based` as the **Mechanism**, and select `HTTP Server` as the **Backend**. Click **Next**. In **Configuration**, you can set the authentication rules. For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../../operate/access-control/authn/http.md).
 
 <img src="./assets/exproto-authn-config.png" alt="mqttsn authentication" style="zoom:43%;" />
 

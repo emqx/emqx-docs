@@ -22,7 +22,7 @@ The **Session** tab page includes configuration items related to MQTT session ma
 
 ### Durable Sessions
 
-The **Durable Sessions** tab page includes configuration items related to the [MQTT Durable Sessions](../durability/durability_introduction.md) feature, such as message retention duration, message query batch size, idle poll interval, session heartbeat interval, etc.
+The **Durable Sessions** tab page includes configuration items related to the [MQTT Durable Sessions](../../develop/durability_introduction.md) feature, such as message retention duration, message query batch size, idle poll interval, session heartbeat interval, etc.
 
 ### Retainer
 
@@ -73,7 +73,7 @@ In the **Limiter** section of the **Add Listener** form, you can limit the messa
 
 Configuring rate limiting ensures the stability of the system and network when message data overload or excessive client requests occur.
 
-For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit/rate-limit.md).
+For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit.md).
 
 For more details on listener configuration, refer to [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and  [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
@@ -97,7 +97,7 @@ EMQX supports two types of log output: console log and file log. You can choose 
 
 In the **Log Throttling** tab page, you can configure the time window for log throttling. For more information on log throttling, refer to [Log Rate Limiting](../observability/log.md#log-throttling).
 
-In the **Audit Log** page, you can enable or disable the audit log feature in the EMQX Enterprise edition and configure it. For detailed configuration instructions, refer to [Audit Log](./audit-log.md).
+In the **Audit Log** page, you can enable or disable the audit log feature in the EMQX Enterprise edition and configure it. For detailed configuration instructions, refer to [Audit Log](../audit-log.md).
 
 ## Monitoring
 
@@ -142,4 +142,4 @@ The Cluster Linking feature is only available in the EMQX Enterprise edition.
 
 :::
 
-The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../cluster-linking/introduction.md).
+The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../../develop/cluster-linking/introduction.md).

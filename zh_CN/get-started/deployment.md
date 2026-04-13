@@ -28,7 +28,7 @@ EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部
 
 ## EMQX 启动失败时该如何排查？
 
-EMQX 启动失败时，可以查看 [日志目录](../deploy/install.md#文件与目录) 下的 `emqx.log.N` 或 `erlang.log.N` 获取详细的错误提示。或者执行 `emqx console` 从控制台启动 EMQX，这样错误日志将直接输出到控制台。然后根据提日志内容，在本页面中查找对应的解决办法，或在我们的 askemq 论坛发帖寻求支持。
+EMQX 启动失败时，可以查看 [日志目录](./deploy/install.md#文件与目录) 下的 `emqx.log.N` 或 `erlang.log.N` 获取详细的错误提示。或者执行 `emqx console` 从控制台启动 EMQX，这样错误日志将直接输出到控制台。然后根据提日志内容，在本页面中查找对应的解决办法，或在我们的 askemq 论坛发帖寻求支持。
 
 ## EMQX 启动失败，日志提示 “logger: command not found”
 

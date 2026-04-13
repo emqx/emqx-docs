@@ -49,7 +49,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
  <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中管理该用户，例如分配角色和权限。
+认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./dashboard/system.md#用户)中管理该用户，例如分配角色和权限。
 
 ## 退出登录
 

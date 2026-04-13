@@ -22,7 +22,7 @@ The request can use JSON format, with the following placeholders in the URL and 
 
 - `${clientid}`: The client ID.
 - `${username}`: The username used by the client on login.
-- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
+- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md).
 - `${peerhost}`: The source IP address of the client.
 - `${proto_name}`: The protocol name used by the client, e.g. `MQTT`, `CoAP`.
 - `${mountpoint}`: The mountpoint of the gateway listener (topic prefix).

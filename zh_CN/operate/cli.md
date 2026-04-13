@@ -773,7 +773,7 @@ stop tracing ip_address 127.0.0.1 successfully
 :::
 
 ::: tip
-也可以在控制台界面中管理追踪日志。参考 [日志追踪 (Trace)](../observability/tracer.md)。
+也可以在控制台界面中管理追踪日志。参考 [日志追踪 (Trace)](./observability/tracer.md)。
 :::
 
 ## traces

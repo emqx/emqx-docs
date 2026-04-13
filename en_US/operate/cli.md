@@ -770,7 +770,7 @@ It's recommended to use absolute paths for trace log files when start from comma
 :::
 
 ::: tip
-You can also manage traces from the dashboard UI. See [Log Trace](../observability/tracer.md).
+You can also manage traces from the dashboard UI. See [Log Trace](./observability/tracer.md).
 :::
 
 ## traces

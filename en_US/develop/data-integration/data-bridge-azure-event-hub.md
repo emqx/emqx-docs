@@ -69,7 +69,7 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
 5. Configure the connection details.
    - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Set other fields as per your actual setup.
    - **Connection String**: Enter the connection string for your namespace, which can be found in the "Connection string - primary key" of the namespace's Shared access policies. For more details, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
-   - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
+   - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../../operate/network/overview.md#enable-tls-encryption-for-accessing-external-resources).
 6. Click the **Create** button at the bottom to complete the Connector creation. 
 
 Now, Azure Event Hubs should be listed in the connector list (**Integration** -> **Connector**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
