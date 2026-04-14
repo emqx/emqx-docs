@@ -41,7 +41,7 @@
 
 - [#16971](https://github.com/emqx/emqx/pull/16971) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
 
-#### Gateway2
+#### Gateway
 
 - [#16606](https://github.com/emqx/emqx/pull/16606) Fixed the CoAP Gateway in connection mode over DTLS.
 
