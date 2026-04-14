@@ -486,7 +486,7 @@ Motor entry fields:
 | `FaultOthersNum`            | Integer | Total other faults                                                                                                                         |
 | `FaultOthersList`           | Array   | Other fault code list                                                                                                                      |
 | `FaultGeneralNum`           | Integer | **gbt32960-2025 only**: Total general fault count                                                                                          |
-| `FaulGeneralList`           | Array   | **gbt32960-2025 only**: General fault list; each entry is a JSON object `{"No": integer, "Level": integer}`                                |
+| `FaultGeneralList`          | Array   | **gbt32960-2025 only**: General fault list; each entry is a JSON object `{"No": integer, "Level": integer}`                                |
 
 #### Rechargeable Energy Storage Voltage Data
 
@@ -612,6 +612,46 @@ Sub-system temperature fields:
 
 > **gbt32960-2025 only**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "MinVoltageOfPowerBattery",
+                "Number": 2,
+                "SubSystems": [
+                    {
+                        "BatteryPackNo": 1,
+                        "BatteryPackVoltage": 3000,
+                        "BatteryPackCurrent": 1000,
+                        "MinParallelUnitTotal": 2,
+                        "MinParallelUnitVoltage": [1200, 1201]
+                    },
+                    {
+                        "BatteryPackNo": 2,
+                        "BatteryPackVoltage": 3100,
+                        "BatteryPackCurrent": 1100,
+                        "MinParallelUnitTotal": 2,
+                        "MinParallelUnitVoltage": [1300, 1301]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | Field                       | Type    | Description                                                  |
 |-----------------------------|---------|--------------------------------------------------------------|
 | `Type`                      | String  | `MinVoltageOfPowerBattery`                                   |
@@ -621,13 +661,47 @@ Sub-system temperature fields:
 | `BatteryPackVoltage`        | Integer | Battery pack voltage; unit: 0.1 V                            |
 | `BatteryPackCurrent`        | Integer | Battery pack current; offset 1000 A; unit: 0.1 A             |
 | `MinParallelUnitTotal`      | Integer | Total number of minimum parallel units                       |
-| `FrameMinParallelUnitIndex` | Integer | Starting minimum parallel unit index in this frame           |
-| `FrameMinParallelUnitCount` | Integer | Number of minimum parallel units in this frame               |
 | `MinParallelUnitVoltage`    | Array   | Voltage list for minimum parallel units; offset 4 V; unit: 1 mV |
 
 #### Power Battery Pack Temperature Data
 
 > **gbt32960-2025 only**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "TempOfPowerBattery",
+                "Number": 2,
+                "SubSystems": [
+                    {
+                        "BatteryPackNo": 1,
+                        "ProbeNum": 5,
+                        "ProbesTemp": [120, 121, 122, 123, 124]
+                    },
+                    {
+                        "BatteryPackNo": 2,
+                        "ProbeNum": 3,
+                        "ProbesTemp": [130, 131, 132]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | Field           | Type    | Description                                          |
 |-----------------|---------|------------------------------------------------------|
@@ -641,6 +715,42 @@ Sub-system temperature fields:
 #### Fuel Cell Stack Data
 
 > **gbt32960-2025 only**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "FuelCellStack",
+                "Number": 1,
+                "Stacks": [
+                    {
+                        "FuelCellStackNo": 1,
+                        "Voltage": 2000,
+                        "Current": 300,
+                        "H2InletPressure": 1200,
+                        "AirInletPressure": 1100,
+                        "AirInletTemp": 50,
+                        "StackProbeNum": 3,
+                        "StackProbeTemp": [100, 101, 102]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | Field              | Type    | Description                                     |
 |--------------------|---------|-------------------------------------------------|
@@ -660,6 +770,36 @@ Sub-system temperature fields:
 
 > **gbt32960-2025 only**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "SuperCapacitor",
+                "ManagerSysNo": 1,
+                "TotalVoltage": 1000,
+                "TotalCurrent": 2000,
+                "CellsTotal": 3,
+                "CellsVoltage": [1200, 1201, 1202],
+                "ProbeNum": 2,
+                "ProbeTemp": [100, 101]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | Field          | Type    | Description                                        |
 |----------------|---------|----------------------------------------------------|
 | `Type`         | String  | `SuperCapacitor`                                   |
@@ -668,13 +808,47 @@ Sub-system temperature fields:
 | `TotalCurrent` | Integer | Total current; offset 1000 A; unit: 0.1 A          |
 | `CellsTotal`   | Integer | Total number of cells                              |
 | `CellsVoltage` | Array   | Cell voltage list; unit: 1 mV                      |
-| `Temp`         | Integer | Temperature; offset 40°C; unit: 1°C                |
 | `ProbeNum`     | Integer | Number of temperature probes                       |
 | `ProbeTemp`    | Array   | Probe temperature list; offset 40°C; unit: 1°C     |
 
 #### Supercapacitor Extreme Value Data
 
 > **gbt32960-2025 only**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "SuperCapacitorExtreme",
+                "MaxVoltageManagerSysNo": 1,
+                "MaxVoltageCellCode": 10,
+                "MaxVoltageCellValue": 7500,
+                "MinVoltageManagerSysNo": 2,
+                "MinVoltageCellCode": 11,
+                "MinVoltageCellValue": 2000,
+                "MaxTempManagerSysNo": 3,
+                "MaxTempProbeCode": 12,
+                "MaxTempValue": 120,
+                "MinTempManagerSysNo": 4,
+                "MinTempProbeCode": 13,
+                "MinTempValue": 40
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | Field                    | Type    | Description                         |
 |--------------------------|---------|-------------------------------------|
@@ -696,20 +870,92 @@ Sub-system temperature fields:
 
 > **gbt32960-2025 only**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "Signature",
+                "SignatureType": 1,
+                "RLength": 32,
+                "RValue": "5256414C5256414C5256414C5256414C5256414C5256414C5256414C5256414C",
+                "SLength": 32,
+                "SValue": "5356414C5356414C5356414C5356414C5356414C5356414C5356414C5356414C"
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | Field           | Type    | Description         |
 |-----------------|---------|---------------------|
 | `Type`          | String  | `Signature`         |
 | `SignatureType` | Integer | Signature type      |
 | `RLength`       | Integer | Length of R value   |
-| `RValue`        | Binary  | R value (hex string) |
+| `RValue`        | String  | R value (hex-encoded string) |
 | `SLength`       | Integer | Length of S value   |
-| `SValue`        | Binary  | S value (hex string) |
+| `SValue`        | String  | S value (hex-encoded string) |
 
 ### Historical Data Retransmission
 
 Topic: `gbt32960/${vin}/upstream/reinfo`
 
 Data format: same as Real-Time Data Report.
+
+### Activation
+
+> **gbt32960-2025 only**
+
+Topic: `gbt32960/${vin}/upstream/activation`
+
+```json
+{
+    "Cmd": 9,
+    "Encrypt": 1,
+    "Vin": "VIN12345678901234",
+    "Data": {
+        "Time": {
+            "Day": 1,
+            "Hour": 12,
+            "Minute": 0,
+            "Month": 1,
+            "Second": 0,
+            "Year": 25
+        },
+        "ChipID": "CHIP123456789012",
+        "PubKeyLen": 15,
+        "PubKey": "5055424C49434B4559313233343536",
+        "VIN": "VIN12345678901234",
+        "Signature": {
+            "SignatureType": 1,
+            "RLength": 32,
+            "RValue": "5252525252525252525252525252525252525252525252525252525252525252",
+            "SLength": 32,
+            "SValue": "5353535353535353535353535353535353535353535353535353535353535353"
+        }
+    }
+}
+```
+
+| Field         | Type    | Description                                    |
+|---------------|---------|-------------------------------------------------|
+| `Cmd`         | Integer | Command identifier; `9` = Activation           |
+| `ChipID`      | String  | 16-byte chip identifier                        |
+| `PubKeyLen`   | Integer | Public key length                              |
+| `PubKey`      | String  | Public key (hex-encoded)                       |
+| `VIN`         | String  | Vehicle Identification Number                  |
+| `Signature`   | Object  | Digital signature (same structure as Signature info type) |
 
 ## Downstream
 

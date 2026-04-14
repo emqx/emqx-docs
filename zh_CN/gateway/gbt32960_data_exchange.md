@@ -500,7 +500,7 @@ Topic: `gbt32960/${vin}/upstream/info`
 | `FaultOthersNum`            | Integer | 其他故障总数                                                                                                                                          |
 | `FaultOthersList`           | Array   | 其他故障代码列表                                                                                                                                      |
 | `FaultGeneralNum`           | Integer | **仅 gbt32960-2025**：通用故障数量                                                                                                                    |
-| `FaulGeneralList`           | Array   | **仅 gbt32960-2025**：通用故障列表，成员为 `{"No": integer, "Level": integer}` 的 JSON 对象                                                           |
+| `FaultGeneralList`          | Array   | **仅 gbt32960-2025**：通用故障列表，成员为 `{"No": integer, "Level": integer}` 的 JSON 对象                                                           |
 
 #### 可充电储能装置电压数据
 
@@ -630,6 +630,46 @@ Topic: `gbt32960/${vin}/upstream/info`
 
 > **仅 gbt32960-2025**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "MinVoltageOfPowerBattery",
+                "Number": 2,
+                "SubSystems": [
+                    {
+                        "BatteryPackNo": 1,
+                        "BatteryPackVoltage": 3000,
+                        "BatteryPackCurrent": 1000,
+                        "MinParallelUnitTotal": 2,
+                        "MinParallelUnitVoltage": [1200, 1201]
+                    },
+                    {
+                        "BatteryPackNo": 2,
+                        "BatteryPackVoltage": 3100,
+                        "BatteryPackCurrent": 1100,
+                        "MinParallelUnitTotal": 2,
+                        "MinParallelUnitVoltage": [1300, 1301]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | 字段                        | 类型    | 描述                                         |
 |-----------------------------|---------|----------------------------------------------|
 | `Type`                      | String  | `MinVoltageOfPowerBattery`                   |
@@ -639,13 +679,47 @@ Topic: `gbt32960/${vin}/upstream/info`
 | `BatteryPackVoltage`        | Integer | 动力电池包电压，单位 0.1 V                   |
 | `BatteryPackCurrent`        | Integer | 动力电池包电流，偏移量 1000 A，单位 0.1 A    |
 | `MinParallelUnitTotal`      | Integer | 最小并联单元总数                             |
-| `FrameMinParallelUnitIndex` | Integer | 本帧起始最小并联单元序号                     |
-| `FrameMinParallelUnitCount` | Integer | 本帧最小并联单元总数                         |
 | `MinParallelUnitVoltage`    | Array   | 最小并联单元电压列表，偏移量 4 V，单位 1 mV  |
 
 #### 动力电池包温度数据
 
 > **仅 gbt32960-2025**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "TempOfPowerBattery",
+                "Number": 2,
+                "SubSystems": [
+                    {
+                        "BatteryPackNo": 1,
+                        "ProbeNum": 5,
+                        "ProbesTemp": [120, 121, 122, 123, 124]
+                    },
+                    {
+                        "BatteryPackNo": 2,
+                        "ProbeNum": 3,
+                        "ProbesTemp": [130, 131, 132]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | 字段            | 类型    | 描述                                    |
 |-----------------|---------|-----------------------------------------|
@@ -659,6 +733,42 @@ Topic: `gbt32960/${vin}/upstream/info`
 #### 燃料电池电堆数据
 
 > **仅 gbt32960-2025**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "FuelCellStack",
+                "Number": 1,
+                "Stacks": [
+                    {
+                        "FuelCellStackNo": 1,
+                        "Voltage": 2000,
+                        "Current": 300,
+                        "H2InletPressure": 1200,
+                        "AirInletPressure": 1100,
+                        "AirInletTemp": 50,
+                        "StackProbeNum": 3,
+                        "StackProbeTemp": [100, 101, 102]
+                    }
+                ]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | 字段               | 类型    | 描述                                    |
 |--------------------|---------|------------------------------------------|
@@ -678,6 +788,36 @@ Topic: `gbt32960/${vin}/upstream/info`
 
 > **仅 gbt32960-2025**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "SuperCapacitor",
+                "ManagerSysNo": 1,
+                "TotalVoltage": 1000,
+                "TotalCurrent": 2000,
+                "CellsTotal": 3,
+                "CellsVoltage": [1200, 1201, 1202],
+                "ProbeNum": 2,
+                "ProbeTemp": [100, 101]
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | 字段           | 类型    | 描述                                        |
 |----------------|---------|---------------------------------------------|
 | `Type`         | String  | `SuperCapacitor`                            |
@@ -686,13 +826,47 @@ Topic: `gbt32960/${vin}/upstream/info`
 | `TotalCurrent` | Integer | 总电流，偏移量 1000 A，单位 0.1 A           |
 | `CellsTotal`   | Integer | 单体总数                                    |
 | `CellsVoltage` | Array   | 单体电压列表，单位 1 mV                     |
-| `Temp`         | Integer | 温度，偏移量 40°C，单位 1°C                 |
 | `ProbeNum`     | Integer | 温度探针个数                                |
 | `ProbeTemp`    | Array   | 温度探针温度列表，偏移量 40°C，单位 1°C     |
 
 #### 超级电容极值数据
 
 > **仅 gbt32960-2025**
+
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "SuperCapacitorExtreme",
+                "MaxVoltageManagerSysNo": 1,
+                "MaxVoltageCellCode": 10,
+                "MaxVoltageCellValue": 7500,
+                "MinVoltageManagerSysNo": 2,
+                "MinVoltageCellCode": 11,
+                "MinVoltageCellValue": 2000,
+                "MaxTempManagerSysNo": 3,
+                "MaxTempProbeCode": 12,
+                "MaxTempValue": 120,
+                "MinTempManagerSysNo": 4,
+                "MinTempProbeCode": 13,
+                "MinTempValue": 40
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
 
 | 字段                     | 类型    | 描述                      |
 |--------------------------|---------|---------------------------|
@@ -714,20 +888,92 @@ Topic: `gbt32960/${vin}/upstream/info`
 
 > **仅 gbt32960-2025**
 
+```json
+{
+    "Cmd": 2,
+    "Encrypt": 1,
+    "Vin": "1G1BL52P7TR115520",
+    "Data": {
+        "Infos": [
+            {
+                "Type": "Signature",
+                "SignatureType": 1,
+                "RLength": 32,
+                "RValue": "5256414C5256414C5256414C5256414C5256414C5256414C5256414C5256414C",
+                "SLength": 32,
+                "SValue": "5356414C5356414C5356414C5356414C5356414C5356414C5356414C5356414C"
+            }
+        ],
+        "Time": {
+            "Day": 13,
+            "Hour": 15,
+            "Minute": 30,
+            "Month": 11,
+            "Second": 0,
+            "Year": 25
+        }
+    }
+}
+```
+
 | 字段            | 类型    | 描述              |
 |-----------------|---------|-------------------|
 | `Type`          | String  | `Signature`       |
 | `SignatureType` | Integer | 签名类型          |
 | `RLength`       | Integer | R 值长度          |
-| `RValue`        | Binary  | R 值（十六进制字符串） |
+| `RValue`        | String  | R 值（十六进制编码字符串） |
 | `SLength`       | Integer | S 值长度          |
-| `SValue`        | Binary  | S 值（十六进制字符串） |
+| `SValue`        | String  | S 值（十六进制编码字符串） |
 
 ### 数据补发
 
 Topic: `gbt32960/${vin}/upstream/reinfo`
 
 数据格式与实时信息上报相同。
+
+### 激活
+
+> **仅 gbt32960-2025**
+
+Topic: `gbt32960/${vin}/upstream/activation`
+
+```json
+{
+    "Cmd": 9,
+    "Encrypt": 1,
+    "Vin": "VIN12345678901234",
+    "Data": {
+        "Time": {
+            "Day": 1,
+            "Hour": 12,
+            "Minute": 0,
+            "Month": 1,
+            "Second": 0,
+            "Year": 25
+        },
+        "ChipID": "CHIP123456789012",
+        "PubKeyLen": 15,
+        "PubKey": "5055424C49434B4559313233343536",
+        "VIN": "VIN12345678901234",
+        "Signature": {
+            "SignatureType": 1,
+            "RLength": 32,
+            "RValue": "5252525252525252525252525252525252525252525252525252525252525252",
+            "SLength": 32,
+            "SValue": "5353535353535353535353535353535353535353535353535353535353535353"
+        }
+    }
+}
+```
+
+| 字段          | 类型    | 描述                                          |
+|---------------|---------|-----------------------------------------------|
+| `Cmd`         | Integer | 命令单元；`9` 表示激活                        |
+| `ChipID`      | String  | 16 字节芯片标识                               |
+| `PubKeyLen`   | Integer | 公钥长度                                      |
+| `PubKey`      | String  | 公钥（十六进制编码）                          |
+| `VIN`         | String  | 车辆识别号                                    |
+| `Signature`   | Object  | 数字签名（格式与签名信息类型相同）            |
 
 ## 下行数据（Downstream）
 
