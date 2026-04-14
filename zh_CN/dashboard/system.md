@@ -30,6 +30,13 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 
 从 EMQX 6.0 开始，Dashboard 支持命名空间角色功能。该特性扩展了基于角色的访问控制（RBAC），以支持多租户场景：每个用户仅被授权访问特定的命名空间，实现资源隔离与权限精细化管理。
 
+::: warning 仅适用于受信任部署
+
+当前命名空间管理员访问仅适用于受信任的内部部署场景，例如在同一组织内隔离不同团队或业务单元，以降低误修改其他配置的风险。
+它并不作为面向公共环境或其他非受信任多租户场景的安全边界。
+
+:::
+
 ::: tip
 
 如需了解命名空间功能的详细信息，请参阅：[命名空间](../multi-tenancy/namespace-overview.md)。
@@ -148,4 +155,3 @@ ns:<NAMESPACE>::<ROLE>
 此外，设置菜单中还包含一个开关，用于启用或禁用**规则**页面中的 [SQL 生成器](../data-integration/rule-get-started.md#sql-generator)功能。
 
 <img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
-
