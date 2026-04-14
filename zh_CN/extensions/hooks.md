@@ -124,6 +124,7 @@ EMQX 以一个客户端在其生命周期内事件为基础，预置了大量的
 | client.connected     | 成功接入     | 客户端认证完成并成功接入系统后                        |
 | client.disconnected  | 连接断开     | 客户端连接层在准备关闭时                              |
 | client.authenticate  | 连接认证     | 执行完 `client.connect` 后                            |
+| client.post_authn    | 认证后改写   | `client.authenticate` 认证链执行完成后（6.1.2 新增）  |
 | client.authorize     | 发布订阅鉴权 | 执行 `发布/订阅` 操作前                               |
 | client.subscribe     | 订阅主题     | 收到订阅报文后，执行 `client.authorize` 鉴权前        |
 | client.unsubscribe   | 取消订阅     | 收到取消订阅报文后                                    |
@@ -182,6 +183,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected     | `ClientInfo`：客户端信息参数<br />`ConnInfo`： 客户端连接层参数                                                               | -                   |
 | client.disconnected  | `ClientInfo`：客户端信息参数<br />`ConnInfo`：客户端连接层参数<br />`ReasonCode`：错误码                                      | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br />`AuthNResult`：认证结果                                                                     | 新的 `AuthNResult`  |
+| client.post_authn    | `ClientInfo`：合并后的客户端信息（包含认证响应的 `client_attrs`）                                                                 | 新的 `ClientInfo`，或返回 `{error, Reason}` 拒绝连接（6.1.2 新增） |
 | client.authorize     | `ClientInfo`：客户端信息参数<br />`Topic`：发布/订阅的主题<br />`PubSub`：发布或订阅<br />`AuthZResult`：授权结果             | 新的 `AuthZResult`  |
 | client.subscribe     | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 订阅报文的 Properties 参数<br />`TopicFilters`：需订阅的主题列表         | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br />`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |
