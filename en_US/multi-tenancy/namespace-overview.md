@@ -47,6 +47,13 @@ A namespace becomes effective once it is created, regardless of whether it is cr
 - **Admin User Isolation**
   
   Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
+
+  ::: warning Trusted Deployments Only
+
+  Admin namespaces are currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
+  They are not intended as a security boundary for public or untrusted multi-tenant use.
+
+  :::
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
