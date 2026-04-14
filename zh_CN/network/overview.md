@@ -88,3 +88,7 @@ authentication {
 ## 启用 TLS 加密节点通信
 
 关于如何在集群节点通信中启用 TLS的具体介绍，您可以参阅[集群安全](../deploy/cluster/security.md)。
+
+## IPv6 支持
+
+EMQX 全面支持 IPv6，涵盖客户端连接、Dashboard、集群节点间通信以及到外部服务的出站连接。详细配置说明请参阅 [IPv6](./ipv6.md)。

@@ -31,6 +31,13 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, where each user can be restricted to operate only within a specific namespace.
 
+::: warning Trusted Deployments Only
+
+Namespaced admin access is currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
+It is not intended as a security boundary for public or otherwise untrusted multi-tenant use.
+
+:::
+
 ::: tip
 
 To learn more about the namespaces, see [Namespace](../multi-tenancy/namespace-overview.md).
@@ -143,4 +150,3 @@ In the **Settings** menu, you can customize the Dashboard's language and theme:
 Additionally, the Settings menu includes a toggle to enable or disable the [AI SQL Generator](../data-integration/rule-get-started.md#sql-generator) feature on the **Rules** page.
 
 <img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
-
