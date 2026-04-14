@@ -1,6 +1,6 @@
 # GB/T 32960 Gateway Data Exchange Format
 
-This page defines the format of data exchanged between **emqx_gbt32960** and **EMQX**.
+The GB/T 32960 gateway (`emqx_gbt32960`) bridges GB/T 32960-compliant electric vehicle terminals to EMQX over MQTT. This page defines the JSON message format used for that data exchange.
 
 ## Protocol Version Support
 
@@ -550,7 +550,7 @@ Sub-system voltage fields:
 | `ChargeableVoltage`  | Integer | Sub-system voltage; valid range 0–10000 (0–1000 V); unit: 0.1 V                                     |
 | `ChargeableCurrent`  | Integer | Sub-system current; valid range 0–20000 (offset 1000 A, -1000 A to +1000 A); unit: 0.1 A            |
 | `CellsTotal`         | Integer | Total number of battery cells; valid range 1–65531                                                   |
-| `FrameCellsIndex`    | Integer | Starting cell index in this frame; split into multiple frames if count exceeds 200; valid range 1–65531 |
+| `FrameCellsIndex`    | Integer | Starting cell index (1-based) of the cells reported in this frame; valid range 1–65531. Frames are split when the total cell count exceeds 200 per frame. |
 | `FrameCellsCount`    | Integer | Number of cells in this frame; valid range 1–200                                                     |
 | `CellsVoltage`       | Array   | Individual cell voltages; valid range 0–60000 (0–60.000 V); unit: 0.001 V                           |
 
@@ -906,7 +906,6 @@ Sub-system temperature fields:
 | `RValue`        | String  | R value (hex-encoded string) |
 | `SLength`       | Integer | Length of S value   |
 | `SValue`        | String  | S value (hex-encoded string) |
-
 ### Historical Data Retransmission
 
 Topic: `gbt32960/${vin}/upstream/reinfo`

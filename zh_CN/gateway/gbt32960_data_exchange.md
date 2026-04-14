@@ -1,6 +1,6 @@
 # GB/T 32960 网关数据交换格式
 
-该文档定义了 **emqx_gbt32960** 和 **EMQX** 之间数据交换的格式。
+GB/T 32960 网关（`emqx_gbt32960`）通过 MQTT 将符合 GB/T 32960 标准的电动汽车终端接入 EMQX。本文档定义该数据交换所使用的 JSON 消息格式。
 
 ## 协议版本支持
 
@@ -566,7 +566,7 @@ Topic: `gbt32960/${vin}/upstream/info`
 | `ChargeableVoltage`  | Integer | 可充电储能装置电压，有效值范围 0~10000（表示 0~1000 V），单位 0.1 V                                 |
 | `ChargeableCurrent`  | Integer | 可充电储能装置电流，有效值范围 0~20000（数值偏移量 1000 A，表示 -1000~+1000 A），单位 0.1 A          |
 | `CellsTotal`         | Integer | 单体电池总数，有效值范围 1~65531                                                                    |
-| `FrameCellsIndex`    | Integer | 本帧起始电池序号，当本帧单体个数超过 200 时，应拆分多个帧进行传输，有效值范围 1~65531               |
+| `FrameCellsIndex`    | Integer | 本帧起始电池序号（从 1 开始），有效值范围 1~65531。当单体总数超过 200 时，需拆分为多帧传输。         |
 | `FrameCellsCount`    | Integer | 本帧单体电池总数，有效值范围 1~200                                                                  |
 | `CellsVoltage`       | Array   | 单体电池电压，有效值范围 0~60000（表示 0~60.000 V），单位 0.001 V                                   |
 
@@ -924,7 +924,6 @@ Topic: `gbt32960/${vin}/upstream/info`
 | `RValue`        | String  | R 值（十六进制编码字符串） |
 | `SLength`       | Integer | S 值长度          |
 | `SValue`        | String  | S 值（十六进制编码字符串） |
-
 ### 数据补发
 
 Topic: `gbt32960/${vin}/upstream/reinfo`
