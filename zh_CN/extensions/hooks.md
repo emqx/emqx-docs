@@ -183,7 +183,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected     | `ClientInfo`：客户端信息参数<br />`ConnInfo`： 客户端连接层参数                                                               | -                   |
 | client.disconnected  | `ClientInfo`：客户端信息参数<br />`ConnInfo`：客户端连接层参数<br />`ReasonCode`：错误码                                      | -                   |
 | client.authenticate  | `ClientInfo`：客户端信息参数<br />`AuthNResult`：认证结果                                                                     | 新的 `AuthNResult`  |
-| client.post_authn    | `ClientInfo`：合并后的客户端信息（包含认证响应的 `client_attrs`）                                                                 | 新的 `ClientInfo`，或返回 `{error, Reason}` 拒绝连接（6.1.2 新增） |
+| client.post_authn    | `Context`：上下文 map `#{client_info := ClientInfo}`，包含合并后的客户端信息（含认证响应的 `client_attrs`）                          | 新的 `Context`，或返回 `{error, Reason}` 拒绝连接（6.1.2 新增） |
 | client.authorize     | `ClientInfo`：客户端信息参数<br />`Topic`：发布/订阅的主题<br />`PubSub`：发布或订阅<br />`AuthZResult`：授权结果             | 新的 `AuthZResult`  |
 | client.subscribe     | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 订阅报文的 Properties 参数<br />`TopicFilters`：需订阅的主题列表         | 新的 `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`：客户端信息参数<br />`Props`：MQTT v5.0 取消订阅报文的 Properties 参数<br />`TopicFilters`：需取消订阅的主题列表 | 新的 `TopicFilters` |

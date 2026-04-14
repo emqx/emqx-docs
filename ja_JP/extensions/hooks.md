@@ -163,7 +163,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected      | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ            | -                   |
 | client.disconnected   | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ<br />`ReasonCode`：理由コード | -                   |
 | client.authenticate   | `ClientInfo`：クライアント情報パラメータ<br />`AuthNResult`：認証結果                             | 新しい `AuthNResult` |
-| client.post_authn     | `ClientInfo`：マージされたクライアント情報（認証応答の `client_attrs` を含む）                       | 新しい `ClientInfo`、または `{error, Reason}` で接続を拒否（6.1.2 で追加） |
+| client.post_authn     | `Context`：コンテキスト map `#{client_info := ClientInfo}`。マージされたクライアント情報（認証応答の `client_attrs` を含む）を保持 | 新しい `Context`、または `{error, Reason}` で接続を拒否（6.1.2 で追加） |
 | client.authorize      | `ClientInfo`：クライアント情報パラメータ<br />`Topic`：パブリッシュ／サブスクライブトピック<br />`PubSub`：パブリッシュ／サブスクライブ区分<br />`AuthZResult`：認可結果 | 新しい `AuthZResult` |
 | client.subscribe      | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブメッセージのプロパティ<br />`TopicFilters`：サブスクライブトピックのリスト | 新しい `TopicFilters` |
 | client.unsubscribe    | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブ解除メッセージのプロパティ<br />`TopicFilters`：サブスクライブ解除トピックのリスト | 新しい `TopicFilters` |
