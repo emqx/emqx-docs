@@ -37,7 +37,7 @@
 
 - [#16724](https://github.com/emqx/emqx/pull/16724) Fixed an issue with RabbitMQ Connector/Action/Source where, if some connection or channel processes died unexpectedly, the Connector/Action/Source would be reported as disconnected and never recover by itself without restarting it.
 
-- [#16935](https://github.com/emqx/emqx/pull/16935) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could timeout if the container contained too many blobs.
+- [#16935](https://github.com/emqx/emqx/pull/16935) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could time out if the container contained too many blobs.
 
 - [#16971](https://github.com/emqx/emqx/pull/16971) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
 
