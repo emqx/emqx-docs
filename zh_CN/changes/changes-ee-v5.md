@@ -1,5 +1,84 @@
 # EMQX 企业版 v5 版本
 
+## 5.8.10
+
+*发布日期：2026-04-16*
+
+### 增强
+
+#### 可观测性与性能
+
+- [#16746](https://github.com/emqx/emqx/pull/16746) 将 `os_mon` 默认配置为仅收集系统级内存统计信息，减少逐进程内存扫描开销。
+- [#16911](https://github.com/emqx/emqx/pull/16911) 通过避免对 Mria 统计信息的意外重复查询，降低了 Prometheus 指标采集的开销。
+
+#### 数据集成
+
+- [#16961](https://github.com/emqx/emqx/pull/16961) 改进了 Kafka source 的轮询行为，确保在没有可用记录时，fetch 请求会短暂等待数据，而不是立即返回空批次。这减少了不必要的轮询延迟，有助于 Kafka 消费者更稳定地接收新记录。
+
+#### 许可证
+
+- [#16853](https://github.com/emqx/emqx/pull/16853) 使 v5 许可证解析器向前兼容 v6 许可证密钥。
+
+### 修复
+
+#### 集群
+
+- [#16729](https://github.com/emqx/emqx/pull/16729) 改进了所有节点同时重启后集群的恢复速度。
+
+  内置的 Mria 数据库管理系统不再等待用于生成事务同步事件的内部表完成全量同步。
+
+#### 数据集成
+
+- [#16507](https://github.com/emqx/emqx/pull/16507) 修复了 MQTT Source 的连接器在断线后恢复时，主题不会被重新订阅的问题，导致 Source 停止工作，直到连接器本身被重启。现在，Source 会在重连时自动重新订阅。
+
+- [#16618](https://github.com/emqx/emqx/pull/16618) Kafka 请求超时时间现在会自动设置为元数据请求超时时间的至少两倍，且最小为 30 秒，从而在元数据请求耗时较长时减少不必要的重连和重试。
+
+  当元数据请求超时时间配置较小时，此改进尤为有效。
+
+- [#16724](https://github.com/emqx/emqx/pull/16724) 修复了 RabbitMQ 连接器/动作/Source 的问题：若部分连接或通道进程意外退出，连接器/动作/Source 会被报告为已断开，且在不重启的情况下无法自行恢复。
+
+- [#16935](https://github.com/emqx/emqx/pull/16935) 修复了聚合模式下 Azure Blob Storage 动作的健康检查在容器包含过多 blob 时可能超时的问题。
+
+- [#16971](https://github.com/emqx/emqx/pull/16971) 修复了 HTTP 和 GCP PubSub 动作，使其将原因为 `closing` 的瞬时连接错误视为可恢复错误，减少日志噪音。
+
+#### 网关
+
+- [#16606](https://github.com/emqx/emqx/pull/16606) 修复了 CoAP 网关在 DTLS 连接模式下的问题。
+
+- [#17030](https://github.com/emqx/emqx/pull/17030)、[#17042](https://github.com/emqx/emqx/pull/17042) 修复了 CoAP 客户端在 UDP 和 DTLS 连接下的接管处理逻辑。
+
+  本次修复改进了重连客户端的接管路由和 token 验证，并使 DTLS token 接管宽限期与配置的 keepalive 窗口保持一致。
+
+#### 运维
+
+- [#16732](https://github.com/emqx/emqx/pull/16732) 修复了在存在共享订阅时，`emqx ctl subscriptions list` 可能崩溃的问题。
+
+  修复前，对部分客户端执行订阅列表查询可能失败并无任何输出。
+
+  修复后，`emqx ctl subscriptions list` 能够可靠地处理普通订阅和共享订阅。
+
+#### 安全
+
+- [#16690](https://github.com/emqx/emqx/pull/16690) 修复了 CRL 缓存的一个回归问题：`emqx_crl_cache:evict/1` 未能完全清除内部 URL 状态。
+
+  驱逐后，相同的 CRL URL 现在能在下次使用时正确重新注册，其刷新定时器得以恢复，并避免了每次连接时重复发起 HTTP 请求。
+
+- [#17012](https://github.com/emqx/emqx/pull/17012) 修复了基于密码的认证后端，使其在 CONNECT 报文不含密码时允许认证链继续执行，而非立即拒绝连接。
+
+  此前，若客户端连接时未提供密码，认证链中第一个基于密码的认证器（内置数据库、MySQL、PostgreSQL、MongoDB、Redis 或 LDAP）会返回错误，导致后续认证器无法被尝试。
+
+#### 可观测性
+
+- [#16672](https://github.com/emqx/emqx/pull/16672) 确保 Erlang PID 以日志数据字段的形式输出。
+
+- [#16699](https://github.com/emqx/emqx/pull/16699) 修复了在某些竞态条件下可能输出如下冗长且难以阅读的日志的问题：
+
+  ```
+  2026-02-03T13:53:54.576326+00:00 [error] Generic server <0.11323236.0> terminating. Reason: {{badkey,'actions.success'},[{erlang,map_get,['actions.success',#{}],[{error_info,#{module => erl_erts_errors}}]},{emqx_metrics_worker,idx_metric,4,[{file,"emqx_metrics_worker.erl"},{line,683}]},{emqx_metrics_worker,inc,4,[{file,"emqx_metrics_worker.erl"},{line,322}]},{emqx_rule_runtime,do_eval_action_reply_t...
+  ```
+
+  EMQX 现在会打印更有意义的信息以辅助问题排查。
+
 ## 5.8.9
 
 *发布日期：2025-12-31*
