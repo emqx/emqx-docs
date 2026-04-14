@@ -4568,97 +4568,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -4670,61 +4580,25 @@
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "emqx_tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mongodb"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -4742,43 +4616,67 @@
               },
               {
                 "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "snowflake"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "timescale"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
+                  "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "oracle"
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
                 ],
                 "type": "string"
               },
@@ -4790,31 +4688,37 @@
               },
               {
                 "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "tdengine"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "alloydb"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pulsar"
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -4826,7 +4730,103 @@
               },
               {
                 "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               }
@@ -31684,8 +31684,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
@@ -32115,7 +32115,7 @@
       "emqx.client_attrs_init": {
         "properties": {
           "expression": {
-            "description": "A one line expression to evaluate a set of predefined string functions (like in the rule engine SQL statements).<br/>The expression can be a function call with nested calls as its arguments, or direct variable reference.<br/>So far, it does not provide user-defined variable binding (like `var a=1`) or user-defined functions.<br/>As an example, to extract the prefix of client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`.<br/><br/>The variables pre-bound variables are:<br/>- `clientid`: MQTT Client ID.<br/>- `username`: MQTT Client's username.<br/>- `user_property.{NAME}`: User properties in the CONNECT packet.<br/>- `zone`: Listener's config zone.<br/>- `listener`: The ID (like `tcp:default`) of the listener from which the client is connected.<br/>For TLS clients, connected directly or via proxy-protocol (v2) enabled load balancer,<br/>some extra variables can be used:<br/>- `cn`: Client's TLS certificate common name.<br/>- `dn`: Client's TLS certificate distinguished name (the subject).<br/>- `peersni`: TLS server name indication sent by the client.<br/><br/>You can read more about variform expressions in EMQX docs.",
+            "description": "A one line expression to evaluate a set of predefined string functions (like in the rule engine SQL statements).<br/>The expression can be a function call with nested calls as its arguments, or direct variable reference.<br/>So far, it does not provide user-defined variable binding (like `var a=1`) or user-defined functions.<br/>As an example, to extract the prefix of client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`.<br/><br/>The variables pre-bound variables are:<br/>- `clientid`: MQTT Client ID.<br/>- `username`: MQTT Client's username.<br/>- `user_property.{NAME}`: User properties in the CONNECT packet.<br/>- `zone`: Listener's config zone.<br/>- `listener`: The ID (like `tcp:default`) of the listener from which the client is connected.<br/>For TLS clients, connected directly or via proxy-protocol (v2) enabled load balancer,<br/>some extra variables can be used:<br/>- `cn`: Client's TLS certificate common name.<br/>- `cert_common_name`: Alias of `cn`.<br/>- `dn`: Client's TLS certificate distinguished name (the subject).<br/>- `cert_subject`: Alias of `dn`.<br/>- `peersni`: TLS server name indication sent by the client.<br/><br/>You can read more about variform expressions in EMQX docs.",
             "type": "string"
           },
           "set_as_attr": {
@@ -32869,6 +32869,13 @@
       },
       "emqx.log_audit_handler": {
         "properties": {
+          "cache_size": {
+            "default": 5000,
+            "description": "Store the latest N log entries in a database for allow `/audit` HTTP API to filter and retrieval of log data.<br/>The interval for purging redundant log records is maintained within a range of 10~20 seconds.",
+            "maximum": 30000,
+            "minimum": 10,
+            "type": "integer"
+          },
           "enable": {
             "default": false,
             "description": "Enable this log handler.",
@@ -32878,13 +32885,6 @@
             "default": true,
             "description": "Ignore high frequency requests to avoid flooding the audit log,<br/>such as publish/subscribe kick out http api requests are ignored.",
             "type": "boolean"
-          },
-          "max_filter_size": {
-            "default": 5000,
-            "description": "Store the latest N log entries in a database for allow `/audit` HTTP API to filter and retrieval of log data.<br/>The interval for purging redundant log records is maintained within a range of 10~20 seconds.",
-            "maximum": 30000,
-            "minimum": 10,
-            "type": "integer"
           },
           "path": {
             "default": "${EMQX_LOG_DIR}/audit.log",
@@ -38713,7 +38713,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "C1F90B5A30E6B701",
+            "example": "AD7855CB248DDD76",
             "type": "string"
           },
           "status": {
@@ -44979,6 +44979,22 @@
             "description": "Limits the number of bytes a single client can send to the broker, per each node.<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages<br/>with \"Quota Exceeded\" error code (0x97).<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected.",
             "type": "string"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "max_conn_burst": {
             "description": "Number of connections that can be accepted in a burst, on top of regular rate, per each node.<br/><br/>For example: `10000/60m`: Once every 60 minutes, up to 10000 connections can be accepted in a short period of time.",
             "type": "string"
@@ -45151,6 +45167,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -45273,6 +45305,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -45393,6 +45441,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -45535,6 +45599,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -45720,6 +45800,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -45867,6 +45963,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -46019,6 +46131,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -46139,6 +46267,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -46282,6 +46426,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -46432,6 +46592,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -46565,6 +46741,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -46703,6 +46895,22 @@
             "minimum": 0,
             "type": "integer"
           },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
+          },
           "enable": {
             "default": true,
             "description": "Enable listener.",
@@ -46835,6 +47043,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -46969,6 +47193,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -47105,6 +47345,22 @@
             "description": "Current number of connections.",
             "minimum": 0,
             "type": "integer"
+          },
+          "delivery_bytes_burst": {
+            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_bytes_rate": {
+            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "type": "string"
+          },
+          "delivery_messages_burst": {
+            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "type": "string"
+          },
+          "delivery_messages_rate": {
+            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "type": "string"
           },
           "enable": {
             "default": true,
@@ -48910,6 +49166,23 @@
         ],
         "type": "object"
       },
+      "mt.client_limiter_in": {
+        "properties": {
+          "bytes": {
+            "$ref": "#/components/schemas/mt.limiter_options"
+          },
+          "delivery_bytes": {
+            "$ref": "#/components/schemas/mt.limiter_options"
+          },
+          "delivery_messages": {
+            "$ref": "#/components/schemas/mt.limiter_options"
+          },
+          "messages": {
+            "$ref": "#/components/schemas/mt.limiter_options"
+          }
+        },
+        "type": "object"
+      },
       "mt.config_in": {
         "properties": {
           "limiter": {
@@ -48935,9 +49208,10 @@
       "mt.limiter_config_in": {
         "properties": {
           "client": {
+            "default": "disabled",
             "oneOf": [
               {
-                "$ref": "#/components/schemas/mt.limiter_in"
+                "$ref": "#/components/schemas/mt.client_limiter_in"
               },
               {
                 "enum": [
@@ -48948,9 +49222,10 @@
             ]
           },
           "tenant": {
+            "default": "disabled",
             "oneOf": [
               {
-                "$ref": "#/components/schemas/mt.limiter_in"
+                "$ref": "#/components/schemas/mt.tenant_limiter_in"
               },
               {
                 "enum": [
@@ -48963,23 +49238,14 @@
         },
         "type": "object"
       },
-      "mt.limiter_in": {
-        "properties": {
-          "bytes": {
-            "$ref": "#/components/schemas/mt.limiter_options"
-          },
-          "messages": {
-            "$ref": "#/components/schemas/mt.limiter_options"
-          }
-        },
-        "type": "object"
-      },
       "mt.limiter_options": {
         "properties": {
           "burst": {
+            "default": "0/s",
             "type": "string"
           },
           "rate": {
+            "default": "infinity",
             "type": "string"
           }
         },
@@ -49020,6 +49286,17 @@
                 "type": "string"
               }
             ]
+          }
+        },
+        "type": "object"
+      },
+      "mt.tenant_limiter_in": {
+        "properties": {
+          "bytes": {
+            "$ref": "#/components/schemas/mt.limiter_options"
+          },
+          "messages": {
+            "$ref": "#/components/schemas/mt.limiter_options"
           }
         },
         "type": "object"
@@ -57209,7 +57486,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.1"
+    "version": "6.1.2-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -57225,100 +57502,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "rabbitmq",
-                      "kinesis",
-                      "pulsar",
-                      "alloydb",
-                      "azure_blob_storage",
-                      "tdengine",
-                      "iotdb",
-                      "rocketmq",
-                      "oracle",
-                      "bigquery",
-                      "clickhouse",
-                      "snowflake_streaming",
                       "pgsql",
-                      "greptimedb",
-                      "tablestore",
-                      "mysql",
-                      "s3",
-                      "opents",
-                      "snowflake",
-                      "sqlserver",
-                      "timescale",
-                      "disk_log",
-                      "elasticsearch",
-                      "kafka_producer",
-                      "cassandra",
-                      "mongodb",
+                      "doris",
                       "confluent_producer",
-                      "s3tables",
+                      "sqlserver",
+                      "pulsar",
+                      "kafka_producer",
+                      "dynamo",
+                      "iotdb",
                       "matrix",
                       "azure_event_hub_producer",
-                      "redis",
-                      "doris",
-                      "gcp_pubsub_producer",
-                      "syskeeper_forwarder",
-                      "http",
-                      "emqx_tables",
+                      "alloydb",
+                      "greptimedb",
+                      "rabbitmq",
+                      "azure_blob_storage",
+                      "oracle",
+                      "opents",
+                      "cassandra",
+                      "kinesis",
                       "cockroachdb",
-                      "mqtt",
-                      "dynamo",
+                      "snowflake_streaming",
                       "aws_timestream",
-                      "redshift",
+                      "disk_log",
+                      "redis",
+                      "tdengine",
+                      "rocketmq",
                       "couchbase",
+                      "syskeeper_forwarder",
+                      "redshift",
+                      "timescale",
+                      "http",
+                      "snowflake",
+                      "gcp_pubsub_producer",
+                      "tablestore",
                       "influxdb",
-                      "datalayers"
+                      "mongodb",
+                      "mqtt",
+                      "mysql",
+                      "s3",
+                      "bigquery",
+                      "datalayers",
+                      "clickhouse",
+                      "emqx_tables",
+                      "s3tables",
+                      "elasticsearch"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "rabbitmq",
-                      "kinesis",
-                      "pulsar",
-                      "alloydb",
-                      "azure_blob_storage",
-                      "tdengine",
-                      "iotdb",
-                      "rocketmq",
-                      "oracle",
-                      "bigquery",
-                      "clickhouse",
-                      "snowflake_streaming",
                       "pgsql",
-                      "greptimedb",
-                      "tablestore",
-                      "mysql",
-                      "s3",
-                      "opents",
-                      "snowflake",
-                      "sqlserver",
-                      "timescale",
-                      "disk_log",
-                      "elasticsearch",
-                      "kafka_producer",
-                      "cassandra",
-                      "mongodb",
+                      "doris",
                       "confluent_producer",
-                      "s3tables",
+                      "sqlserver",
+                      "pulsar",
+                      "kafka_producer",
+                      "dynamo",
+                      "iotdb",
                       "matrix",
                       "azure_event_hub_producer",
-                      "redis",
-                      "doris",
-                      "gcp_pubsub_producer",
-                      "syskeeper_forwarder",
-                      "http",
-                      "emqx_tables",
+                      "alloydb",
+                      "greptimedb",
+                      "rabbitmq",
+                      "azure_blob_storage",
+                      "oracle",
+                      "opents",
+                      "cassandra",
+                      "kinesis",
                       "cockroachdb",
-                      "mqtt",
-                      "dynamo",
+                      "snowflake_streaming",
                       "aws_timestream",
-                      "redshift",
+                      "disk_log",
+                      "redis",
+                      "tdengine",
+                      "rocketmq",
                       "couchbase",
+                      "syskeeper_forwarder",
+                      "redshift",
+                      "timescale",
+                      "http",
+                      "snowflake",
+                      "gcp_pubsub_producer",
+                      "tablestore",
                       "influxdb",
-                      "datalayers"
+                      "mongodb",
+                      "mqtt",
+                      "mysql",
+                      "s3",
+                      "bigquery",
+                      "datalayers",
+                      "clickhouse",
+                      "emqx_tables",
+                      "s3tables",
+                      "elasticsearch"
                     ],
                     "type": "string"
                   },
@@ -90951,7 +91228,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "C1F90B5A30E6B701",
+            "example": "AD7855CB248DDD76",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91014,7 +91291,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "C1F90B5A30E6B701",
+            "example": "AD7855CB248DDD76",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91428,7 +91705,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "C1F90B5A30E6B701",
+            "example": "AD7855CB248DDD76",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91514,7 +91791,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "C1F90B5A30E6B701",
+            "example": "AD7855CB248DDD76",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97036,73 +97313,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -97203,6 +97413,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -102867,8 +103144,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -109182,6 +109459,28 @@
         "responses": {
           "204": {
             "description": "Trigger action successfully."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PARAM_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad parameter.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           },
           "404": {
             "content": {
@@ -115510,8 +115809,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -115523,10 +115822,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -115781,8 +116080,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -115979,8 +116278,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116038,8 +116337,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116052,10 +116351,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -116114,8 +116413,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116127,10 +116426,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -116147,10 +116446,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -118075,8 +118374,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -118168,8 +118467,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
