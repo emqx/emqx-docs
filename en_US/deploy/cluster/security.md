@@ -77,3 +77,48 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 - For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
 - For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
 
+## Mitigate SSRF with Firewall Rules
+
+Administrative features and integrations may require EMQX to open outbound network connections. If delegated administrators can configure namespace-scoped resources, use host-level egress filtering so EMQX nodes can reach only approved destinations.
+
+This does not replace EMQX role-based access control, but it adds an important defense-in-depth layer against SSRF by preventing the broker host from contacting arbitrary endpoints.
+
+When planning egress restrictions:
+
+- Allow only the destinations required by your deployment, such as identity providers, webhooks, and connector backends.
+- Deny access to sensitive addresses that are commonly abused in SSRF attacks, such as loopback, link-local, and instance metadata endpoints, unless your deployment explicitly requires them. In particular, consider blocking the following metadata endpoints:
+  - `100.100.100.200` for Alibaba Cloud metadata service
+  - `169.254.169.253` for the AWS external metadata service
+  - `169.254.169.254` for AWS and Azure metadata service
+  - `fd00:ec2::254` for the AWS IPv6 metadata service
+- If you use AWS IAM authentication for Amazon MSK on EC2, do not block `169.254.169.254`, because EMQX must reach the instance metadata service to obtain credentials or generate authentication tokens. The same exception should be reflected in your `iptables` or `nftables` rules.
+- Validate the rules carefully in staging before applying them to production systems.
+- If EMQX runs in containers or Kubernetes, apply equivalent egress controls with the container host firewall, cloud security groups, or Kubernetes network policies.
+
+The following `iptables` example shows the general approach. Adapt the interface names, ports, and destination addresses to match your environment. If `iptables` is not available on your host, apply equivalent rules with `nftables`:
+
+```bash
+# Allow established outbound connections
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Allow DNS and NTP if required by the host
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+
+# Allow access only to approved external services
+iptables -A OUTPUT -p tcp -d 198.51.100.10 --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp -d 203.0.113.20 --dport 443 -j ACCEPT
+
+# Block common metadata and local-only destinations
+iptables -A OUTPUT -d 127.0.0.0/8 -j REJECT
+# If you use AWS IAM authentication for Amazon MSK on EC2, do not apply
+# this blanket deny to 169.254.169.254. Add a more specific allow rule instead.
+iptables -A OUTPUT -d 169.254.0.0/16 -j REJECT
+iptables -A OUTPUT -d 100.100.100.200 -j REJECT
+ip6tables -A OUTPUT -d fd00:ec2::254 -j REJECT
+
+# Reject all other new outbound connections by default
+iptables -A OUTPUT -m conntrack --ctstate NEW -j REJECT
+```
+
+If your host uses `nftables` instead of `iptables`, implement the same policy there, including explicit denies for known metadata endpoints such as `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`. If you use AWS IAM authentication for Amazon MSK on EC2, make sure the rules leave `169.254.169.254` reachable.

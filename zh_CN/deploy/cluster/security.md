@@ -114,3 +114,48 @@ EMQX 核心节点用 Erlang 分布机制来同步数据库更新并管理集群�
 * 确保 `ssl_dist.conf` 文件有正确的密钥和证书的路径。
 * 确保配置 `cluster.proto_dist` 被设置为 `inet_tls`。
 
+## 使用防火墙规则缓解 SSRF
+
+管理功能和各类集成可能需要 EMQX 主动建立出站网络连接。如果委派管理员可以配置命名空间范围内的资源，建议通过主机级出站访问控制，确保 EMQX 节点只能访问经批准的目标地址。
+
+这不能替代 EMQX 的基于角色访问控制，但可以作为额外的纵深防御手段，降低 SSRF 风险，防止 Broker 所在主机访问任意端点。
+
+在规划出站访问限制时，建议：
+
+- 仅放行部署实际需要访问的目标地址，例如身份提供商、Webhook 接收端和连接器后端服务。
+- 默认拒绝 SSRF 攻击中常见的敏感地址，例如回环地址、链路本地地址以及实例元数据地址，除非您的部署明确需要访问它们。尤其建议显式阻止以下元数据端点：
+  - `100.100.100.200`，阿里云元数据服务
+  - `169.254.169.253`，AWS 外部元数据服务
+  - `169.254.169.254`，AWS 和 Azure 元数据服务
+  - `fd00:ec2::254`，AWS IPv6 元数据服务
+- 如果您在 EC2 上为 Amazon MSK 使用 AWS IAM 认证，则不要阻止 `169.254.169.254`，因为 EMQX 需要访问实例元数据服务来获取凭据或生成认证令牌。该例外也应体现在您的 `iptables` 或 `nftables` 规则中。
+- 在生产环境启用前，先在预发或测试环境中仔细验证规则。
+- 如果 EMQX 运行在容器或 Kubernetes 中，应通过宿主机防火墙、云安全组或 Kubernetes NetworkPolicy 实现等效的出站访问控制。
+
+下面的 `iptables` 示例展示了基本思路。请根据您的环境调整网卡名称、端口和目标地址。如果宿主机未提供 `iptables`，请使用 `nftables` 配置等效规则：
+
+```bash
+# 允许已建立的出站连接
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# 如宿主机需要，可放行 DNS 和 NTP
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+
+# 仅允许访问经批准的外部服务
+iptables -A OUTPUT -p tcp -d 198.51.100.10 --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp -d 203.0.113.20 --dport 443 -j ACCEPT
+
+# 阻止常见的元数据地址和本地地址
+iptables -A OUTPUT -d 127.0.0.0/8 -j REJECT
+# 如果您在 EC2 上为 Amazon MSK 使用 AWS IAM 认证，请不要直接套用
+# 这条对 169.254.169.254 生效的整段拒绝规则，而应改为更具体的放行规则。
+iptables -A OUTPUT -d 169.254.0.0/16 -j REJECT
+iptables -A OUTPUT -d 100.100.100.200 -j REJECT
+ip6tables -A OUTPUT -d fd00:ec2::254 -j REJECT
+
+# 默认拒绝所有新的其他出站连接
+iptables -A OUTPUT -m conntrack --ctstate NEW -j REJECT
+```
+
+如果您的宿主机使用 `nftables` 而非 `iptables`，也应实现同样的策略，并显式阻止这些已知元数据端点：`100.100.100.200`、`169.254.169.253`、`169.254.169.254` 和 `fd00:ec2::254`。如果您在 EC2 上为 Amazon MSK 使用 AWS IAM 认证，请确保规则保留对 `169.254.169.254` 的访问。

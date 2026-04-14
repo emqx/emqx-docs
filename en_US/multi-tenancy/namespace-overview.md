@@ -49,6 +49,8 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   Admin namespaces are currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
   They are not intended as a security boundary for public or untrusted multi-tenant use.
 
+  If delegated administrators are allowed to configure namespace-scoped resources, restrict outbound network access from EMQX nodes to approved destinations only. This helps reduce SSRF exposure in environments where administrators should not be able to reach arbitrary services from the broker host. For example, use host-level firewall rules such as `iptables` or `nftables`. See [Mitigate SSRF with Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-firewall-rules).
+
   :::
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
@@ -59,6 +61,18 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
+
+## Operational Security for Admin Namespaces
+
+Namespaced administrative access is designed for trusted internal delegation, not for exposing a hard isolation boundary between mutually untrusted tenants.
+
+If you use this feature, apply network egress controls on the EMQX hosts so the broker can reach only the external services your deployment actually requires. In particular:
+
+- Allow outbound access only to approved business endpoints, such as IdPs, webhooks, or connector backends that your deployment uses.
+- Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless they are explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.
+- Review firewall rules whenever you add new integrations or management features that initiate outbound HTTP or TCP connections.
+
+For an example `iptables`- or `nftables`-based approach, see [Mitigate SSRF with Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-firewall-rules).
 
 ### Isolation Mechanisms
 
