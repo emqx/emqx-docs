@@ -295,6 +295,17 @@ listeners.ssl.default {
 - 编辑证书包，以更新证书内容、私钥或 CA 证书；
 - 删除不再需要的证书包。
 
+#### 删除证书包
+
+点击证书包的**删除**按钮时，EMQX 会检查当前是否有监听器或连接器正在引用该证书包。
+
+- 如果没有依赖项，证书包将被立即删除。
+- 如果存在一个或多个配置依赖该证书包，EMQX 将显示警告，并询问是否强制删除。确认强制删除后，即使该证书包仍被引用，也会被删除。
+
+::: caution
+强制删除正在使用中的证书包，会导致依赖该证书包的监听器或连接器失去其证书配置。受影响的连接器可能会报错，并无法建立新的 TLS 连接。强制删除后，请及时更新或重新配置相关资源。
+:::
+
 托管证书包存储在磁盘上，并由 EMQX 自动重新加载。更新托管证书无需重启 EMQX。
 
 ![certificate_bundle_list](./assets/certificate_bundle_list.png)
@@ -315,13 +326,13 @@ listeners.ssl.default {
 上传到指定命名空间：
 
 ```
-POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|key-password
+POST /certs/ns/:namespace/name/:name?file=key|chain|ca|key-password
 ```
 
 上传到全局命名空间：
 
 ```
-POST /certs/global/name/:NAME?file=key|chain|ca|key-password
+POST /certs/global/name/:name?file=key|chain|ca|key-password
 ```
 
 #### 列出托管证书包
@@ -329,7 +340,7 @@ POST /certs/global/name/:NAME?file=key|chain|ca|key-password
 - 列出指定命名空间下的证书包：
 
   ```
-  GET /certs/ns/:NAMESPACE
+  GET /certs/ns/:namespace/list
   ```
 
 - 列出全局命名空间下的证书包：
@@ -340,17 +351,45 @@ POST /certs/global/name/:NAME?file=key|chain|ca|key-password
 
 #### 删除托管证书包
 
-- 从指定命名空间删除：
+在删除托管证书包或证书包中的单个证书文件之前，EMQX 会检查所有命名空间中是否有配置正在引用该证书包。如果存在依赖项，请求将返回 `400 BAD_REQUEST` 错误，除非指定了 `force_delete=true`。
 
-  ```
-  DELETE /certs/ns/:NAMESPACE/name/:NAME
-  ```
+从指定命名空间删除：
 
-- 从全局命名空间删除：
+```
+DELETE /certs/ns/:namespace/name/:name
+```
 
-  ```
-  DELETE /certs/global/name/:NAME
-  ```
+从全局命名空间删除：
+
+```
+DELETE /certs/global/name/:name
+```
+
+在删除证书包中的单个文件时（通过 `kind` 查询参数指定），同样适用 `force_delete` 参数。
+
+**查询参数**
+
+| 参数           | 类型    | 默认值  | 说明                                                                                          |
+| -------------- | ------- | ------- | --------------------------------------------------------------------------------------------- |
+| `force_delete` | Boolean | `false` | 为 `true` 时，即使该证书包或文件被其他配置引用，也会强制删除。为 `false`（默认值）时，若存在依赖配置，请求将返回 `400` 错误。 |
+
+当删除请求被拒绝时，`400` 响应体中会包含 `referencing_configs` 字段，按命名空间列出引用该证书包的配置路径。示例：
+
+```json
+{
+  "code": "BAD_REQUEST",
+  "message": "Cannot delete file or bundle while configurations are depending on it",
+  "referencing_configs": {
+    "global": [
+      ["connectors", "http", "my-connector"]
+    ]
+  }
+}
+```
+
+::: caution
+将 `force_delete` 设置为 `true` 会在忽略所有依赖关系的情况下删除证书包。引用该证书包的监听器或连接器将失去 TLS 证书配置，可能无法建立新的安全连接。强制删除后，请及时重新配置相关资源。
+:::
 
 <!--## 使用 ACME 自动签发托管证书
 
