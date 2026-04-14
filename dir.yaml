@@ -963,6 +963,9 @@
           title_cn: GB/T 32960 协议网关
           title_ja: GB/T 32960 ゲートウェイ
           path: gateway/gbt32960
+          collapsed: true
+          children:
+            - gateway/gbt32960_data_exchange
         #- gateway/tcp
     - client-attributes/client-attributes
 - title_en: EMQX AI
