@@ -4568,235 +4568,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4808,13 +4580,25 @@
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -4826,7 +4610,223 @@
               },
               {
                 "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -25069,7 +25069,7 @@
             "type": "string"
           },
           "streams": {
-            "description": "The number of RLOG (replicated log) streams.",
+            "description": "The number of replicated log streams.",
             "example": "10",
             "minimum": 0,
             "type": "integer"
@@ -31238,7 +31238,7 @@
           },
           "swagger_support": {
             "default": true,
-            "description": "Enable or disable support for swagger API documentation.",
+            "description": "Enable or disable support for API spec/documentation.",
             "type": "boolean"
           },
           "token_expired_time": {
@@ -31684,8 +31684,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -33146,7 +33146,7 @@
             "type": "number"
           },
           "limiter": {
-            "$ref": "#/components/schemas/limiter.mqtt",
+            "$ref": "#/components/schemas/limiter.mqtt_shared_limiters",
             "description": "MQTT related limiter configuration."
           },
           "max_awaiting_rel": {
@@ -34570,6 +34570,10 @@
             "description": "Number of Action executions (failures + successes) in the last sample window.",
             "type": "integer"
           },
+          "actions_messages": {
+            "description": "Number of messages handled by Action executions (failures + successes) in the last sample window. An Action execution may handle a batch of messages, so this count is greater than or equal to the number of Action executions.",
+            "type": "integer"
+          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -34642,6 +34646,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -34731,6 +34739,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -38713,7 +38725,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "AD7855CB248DDD76",
+            "example": "3144976BFE782D1A",
             "type": "string"
           },
           "status": {
@@ -38794,6 +38806,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -38871,6 +38888,11 @@
           },
           "client.disconnected": {
             "description": "Number of client disconnects",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -39299,6 +39321,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -39376,6 +39403,11 @@
           },
           "client.disconnected": {
             "description": "Number of client disconnects",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -44969,7 +45001,50 @@
         ],
         "type": "object"
       },
-      "limiter.mqtt": {
+      "license_http_api.session_hwm_history": {
+        "properties": {
+          "count": {
+            "description": "Number of data rows returned.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "data": {
+            "description": "Array of high-watermark rows, newest first.",
+            "items": {
+              "$ref": "#/components/schemas/license_http_api.session_hwm_row"
+            },
+            "type": "array"
+          },
+          "period": {
+            "description": "The aggregation period used for this response (`daily` or `monthly`).",
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "license_http_api.session_hwm_row": {
+        "properties": {
+          "high_watermark": {
+            "description": "Peak session count observed during this period.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "observed_at": {
+            "description": "Timestamp (RFC 3339) when the peak was observed.",
+            "type": "string"
+          },
+          "period": {
+            "description": "Calendar period label, e.g. `2026-04-18` for daily or `2026-04` for monthly.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "limiter.mqtt_shared_limiters": {
         "properties": {
           "bytes_burst": {
             "description": "Number of bytes that can be sent in a burst, on top of regular `bytes_rate`.<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
@@ -44977,22 +45052,6 @@
           },
           "bytes_rate": {
             "description": "Limits the number of bytes a single client can send to the broker, per each node.<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages<br/>with \"Quota Exceeded\" error code (0x97).<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected.",
-            "type": "string"
-          },
-          "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
-            "type": "string"
-          },
-          "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
-            "type": "string"
-          },
-          "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
-            "type": "string"
-          },
-          "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
             "type": "string"
           },
           "max_conn_burst": {
@@ -57486,7 +57545,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.2-rc.1"
+    "version": "6.1.2-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -57502,100 +57561,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "pgsql",
-                      "doris",
-                      "confluent_producer",
-                      "sqlserver",
-                      "pulsar",
-                      "kafka_producer",
-                      "dynamo",
-                      "iotdb",
-                      "matrix",
-                      "azure_event_hub_producer",
-                      "alloydb",
-                      "greptimedb",
-                      "rabbitmq",
-                      "azure_blob_storage",
-                      "oracle",
-                      "opents",
                       "cassandra",
-                      "kinesis",
-                      "cockroachdb",
-                      "snowflake_streaming",
+                      "pgsql",
+                      "kafka_producer",
                       "aws_timestream",
-                      "disk_log",
-                      "redis",
-                      "tdengine",
-                      "rocketmq",
-                      "couchbase",
                       "syskeeper_forwarder",
-                      "redshift",
                       "timescale",
-                      "http",
-                      "snowflake",
-                      "gcp_pubsub_producer",
-                      "tablestore",
-                      "influxdb",
-                      "mongodb",
-                      "mqtt",
-                      "mysql",
                       "s3",
-                      "bigquery",
+                      "sqlserver",
+                      "dynamo",
+                      "redis",
                       "datalayers",
+                      "snowflake",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "oracle",
+                      "elasticsearch",
+                      "mongodb",
+                      "tdengine",
+                      "alloydb",
+                      "tablestore",
+                      "disk_log",
+                      "greptimedb",
+                      "couchbase",
+                      "matrix",
+                      "confluent_producer",
+                      "rabbitmq",
+                      "http",
+                      "azure_blob_storage",
+                      "iotdb",
                       "clickhouse",
-                      "emqx_tables",
+                      "bigquery",
                       "s3tables",
-                      "elasticsearch"
+                      "mqtt",
+                      "kinesis",
+                      "mysql",
+                      "snowflake_streaming",
+                      "cockroachdb",
+                      "doris",
+                      "gcp_pubsub_producer",
+                      "influxdb",
+                      "emqx_tables",
+                      "opents",
+                      "pulsar",
+                      "redshift"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "pgsql",
-                      "doris",
-                      "confluent_producer",
-                      "sqlserver",
-                      "pulsar",
-                      "kafka_producer",
-                      "dynamo",
-                      "iotdb",
-                      "matrix",
-                      "azure_event_hub_producer",
-                      "alloydb",
-                      "greptimedb",
-                      "rabbitmq",
-                      "azure_blob_storage",
-                      "oracle",
-                      "opents",
                       "cassandra",
-                      "kinesis",
-                      "cockroachdb",
-                      "snowflake_streaming",
+                      "pgsql",
+                      "kafka_producer",
                       "aws_timestream",
-                      "disk_log",
-                      "redis",
-                      "tdengine",
-                      "rocketmq",
-                      "couchbase",
                       "syskeeper_forwarder",
-                      "redshift",
                       "timescale",
-                      "http",
-                      "snowflake",
-                      "gcp_pubsub_producer",
-                      "tablestore",
-                      "influxdb",
-                      "mongodb",
-                      "mqtt",
-                      "mysql",
                       "s3",
-                      "bigquery",
+                      "sqlserver",
+                      "dynamo",
+                      "redis",
                       "datalayers",
+                      "snowflake",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "oracle",
+                      "elasticsearch",
+                      "mongodb",
+                      "tdengine",
+                      "alloydb",
+                      "tablestore",
+                      "disk_log",
+                      "greptimedb",
+                      "couchbase",
+                      "matrix",
+                      "confluent_producer",
+                      "rabbitmq",
+                      "http",
+                      "azure_blob_storage",
+                      "iotdb",
                       "clickhouse",
-                      "emqx_tables",
+                      "bigquery",
                       "s3tables",
-                      "elasticsearch"
+                      "mqtt",
+                      "kinesis",
+                      "mysql",
+                      "snowflake_streaming",
+                      "cockroachdb",
+                      "doris",
+                      "gcp_pubsub_producer",
+                      "influxdb",
+                      "emqx_tables",
+                      "opents",
+                      "pulsar",
+                      "redshift"
                     ],
                     "type": "string"
                   },
@@ -78522,7 +78581,7 @@
     },
     "/cluster/topology": {
       "get": {
-        "description": "Get RLOG cluster topology: connections between core and replicant nodes.",
+        "description": "Get cluster topology: connections between core and replicant nodes.",
         "parameters": [],
         "responses": {
           "200": {
@@ -82624,7 +82683,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -84207,7 +84266,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -86022,7 +86081,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -87250,7 +87309,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -88822,7 +88881,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -90397,7 +90456,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -91228,7 +91287,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "AD7855CB248DDD76",
+            "example": "3144976BFE782D1A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91291,7 +91350,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "AD7855CB248DDD76",
+            "example": "3144976BFE782D1A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91705,7 +91764,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "AD7855CB248DDD76",
+            "example": "3144976BFE782D1A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91791,7 +91850,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "AD7855CB248DDD76",
+            "example": "3144976BFE782D1A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -101567,6 +101626,62 @@
         ]
       }
     },
+    "/license/session_hwm_history": {
+      "get": {
+        "description": "Get session high-watermark history. Returns daily or monthly peak session counts.",
+        "parameters": [
+          {
+            "description": "Aggregation period: `daily` returns one row per day, `monthly` folds daily peaks into month-level maximums.",
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "daily",
+              "enum": [
+                "daily",
+                "monthly"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maximum number of rows to return. Applies only to `daily` period (defaults to 30). Ignored for `monthly` period, which always returns the full 24-month retention window.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/license_http_api.session_hwm_history"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Session High-Watermark History",
+        "tags": [
+          "License"
+        ]
+      }
+    },
     "/license/setting": {
       "get": {
         "description": "Update license setting",
@@ -101588,6 +101703,21 @@
                       "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -101629,6 +101759,21 @@
                     "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                     "example": "75%",
                     "type": "string"
+                  },
+                  "high_watermark_timezone": {
+                    "default": "system",
+                    "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "enum": [
+                          "system"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -101653,6 +101798,21 @@
                       "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -103144,8 +103304,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -115809,8 +115969,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -115822,10 +115982,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -116080,8 +116240,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -116278,8 +116438,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -116337,8 +116497,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -116351,10 +116511,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -116413,8 +116573,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -116426,10 +116586,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -116446,10 +116606,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -118374,8 +118534,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -118467,8 +118627,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
