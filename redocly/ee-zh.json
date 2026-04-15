@@ -2852,7 +2852,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/bridge_greptimedb.action_parameters",
-            "description": "动作的参数集合。"
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_emqx_tables.action_resource_opts",
@@ -2934,7 +2934,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/bridge_greptimedb.action_parameters",
-            "description": "动作的参数集合。"
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_emqx_tables.action_resource_opts",
@@ -2997,7 +2997,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/bridge_greptimedb.action_parameters",
-            "description": "动作的参数集合。"
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_emqx_tables.action_resource_opts",
@@ -4568,13 +4568,19 @@
             "oneOf": [
               {
                 "enum": [
-                  "elasticsearch"
+                  "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
                 ],
                 "type": "string"
               },
@@ -4586,19 +4592,19 @@
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "doris"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3"
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -4616,163 +4622,13 @@
               },
               {
                 "enum": [
-                  "mongodb"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
@@ -4784,31 +4640,19 @@
               },
               {
                 "enum": [
-                  "dynamo"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "http"
                 ],
                 "type": "string"
               },
@@ -4820,13 +4664,169 @@
               },
               {
                 "enum": [
-                  "doris"
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -15494,7 +15494,7 @@
       "bridge_iotdb.action_parameters_data_table": {
         "properties": {
           "column_category": {
-            "description": "列类别，用于构建向 IoTDB 表插入请求。有效值包括：<br/>- <code>tag</code><br/>- <code>field</code><br/>- <code>attribute</code>",
+            "description": "列类别，用于构建对IoTDB表的插入请求。有效值包括：<br/>- <code>tag</code><br/>- <code>field</code><br/>- <code>attribute</code>",
             "enum": [
               "tag",
               "field",
@@ -32115,7 +32115,7 @@
       "emqx.client_attrs_init": {
         "properties": {
           "expression": {
-            "description": "单行表达式，用于解析一组预定义的字符串函数（类似规则引擎 SQL 语句中的函数）。<br/>表达式可以是带有嵌套调用的函数调用，或直接变量引用。<br/>目前，它不提供用户定义的变量绑定（如 `var a=1`）或用户定义的函数。<br/>例如，提取以点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`。<br/><br/>预绑定的变量包括：<br/>- `clientid`：MQTT 客户端 ID。<br/>- `username`：MQTT 客户端的用户名。<br/>- `user_property.{NAME}`：连接包中的用户属性。<br/>- `zone`：监听器的配置区域。<br/>- `listener`：客户端连接的监听器 ID（如 `tcp:default`）。<br/>对于 TLS 客户端，直接连接或通过启用代理协议（v2）负载均衡器连接时，<br/>还可以使用一些额外的变量：<br/>- `cn`：客户端的 TLS 证书公共名称。<br/>- `dn`：客户端的 TLS 证书区分名称（主体）。<br/>- `peersni`：客户端发送的 TLS 服务器名称指示。<br/><br/>您可以在 EMQX 文档中阅读更多关于变量表达式的信息。",
+            "description": "单行表达式，用于解析一组预定义的字符串函数（类似规则引擎 SQL 语句中的函数）。<br/>表达式可以是带有嵌套调用的函数调用，或直接变量引用。<br/>目前，它不提供用户定义的变量绑定（如 `var a=1`）或用户定义的函数。<br/>例如，提取以点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`。<br/><br/>预绑定的变量包括：<br/>- `clientid`：MQTT 客户端 ID。<br/>- `username`：MQTT 客户端的用户名。<br/>- `user_property.{NAME}`：CONNECT 包中的用户属性。<br/>- `zone`：监听器的配置区域。<br/>- `listener`：客户端连接的监听器 ID（如 `tcp:default`）。<br/>对于 TLS 客户端，直接连接或通过启用代理协议（v2）负载均衡器连接时，<br/>还可以使用一些额外的变量：<br/>- `cn`：客户端的 TLS 证书公共名称。<br/>- `cert_common_name`：`cn` 的别名。<br/>- `dn`：客户端的 TLS 证书区分名称（主体）。<br/>- `cert_subject`：`dn` 的别名。<br/>- `peersni`：客户端发送的 TLS 服务器名称指示。<br/><br/>您可以在 EMQX 文档中阅读更多关于变量表达式的信息。",
             "type": "string"
           },
           "set_as_attr": {
@@ -32871,7 +32871,7 @@
         "properties": {
           "cache_size": {
             "default": 5000,
-            "description": "Store the latest N log entries in a database for allow `/audit` HTTP API to filter and retrieval of log data.<br/>The interval for purging redundant log records is maintained within a range of 10~20 seconds.",
+            "description": "将最新的 N 条日志记录存储在数据库中，以便 `/audit` HTTP API 过滤和检索日志数据。<br/>清理冗余日志记录的间隔保持在 10~20 秒之间。",
             "maximum": 30000,
             "minimum": 10,
             "type": "integer"
@@ -33146,7 +33146,7 @@
             "type": "number"
           },
           "limiter": {
-            "$ref": "#/components/schemas/limiter.mqtt",
+            "$ref": "#/components/schemas/limiter.mqtt_shared_limiters",
             "description": "MQTT 相关的限流器配置。"
           },
           "max_awaiting_rel": {
@@ -34570,6 +34570,10 @@
             "description": "在最后一个采样窗口中执行的动作次数（失败 + 成功）。",
             "type": "integer"
           },
+          "actions_messages": {
+            "description": "Number of messages handled by Action executions (failures + successes) in the last sample window. An Action execution may handle a batch of messages, so this count is greater than or equal to the number of Action executions.",
+            "type": "integer"
+          },
           "connections": {
             "description": "在采样时的连接数。只能表示一个近似值。",
             "type": "integer"
@@ -34642,6 +34646,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "最后一个采样窗口中的动作执行率。",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -34731,6 +34739,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "最后一个采样窗口中的动作执行率。",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -38713,7 +38725,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "59C8BFDEB0A18203",
+            "example": "4C89A28C06E42B74",
             "type": "string"
           },
           "status": {
@@ -38794,6 +38806,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "客户端认证失败的次数",
             "minimum": 0,
@@ -38871,6 +38888,11 @@
           },
           "client.disconnected": {
             "description": "客户端断开连接的次数",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -39299,6 +39321,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "客户端认证失败的次数",
             "minimum": 0,
@@ -39376,6 +39403,11 @@
           },
           "client.disconnected": {
             "description": "客户端断开连接的次数",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -44969,7 +45001,50 @@
         ],
         "type": "object"
       },
-      "limiter.mqtt": {
+      "license_http_api.session_hwm_history": {
+        "properties": {
+          "count": {
+            "description": "Number of data rows returned.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "data": {
+            "description": "Array of high-watermark rows, newest first.",
+            "items": {
+              "$ref": "#/components/schemas/license_http_api.session_hwm_row"
+            },
+            "type": "array"
+          },
+          "period": {
+            "description": "The aggregation period used for this response (`daily` or `monthly`).",
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "license_http_api.session_hwm_row": {
+        "properties": {
+          "high_watermark": {
+            "description": "Peak session count observed during this period.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "observed_at": {
+            "description": "Timestamp (RFC 3339) when the peak was observed.",
+            "type": "string"
+          },
+          "period": {
+            "description": "Calendar period label, e.g. `2026-04-18` for daily or `2026-04` for monthly.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "limiter.mqtt_shared_limiters": {
         "properties": {
           "bytes_burst": {
             "description": "可以突发发送的字节数，超出常规的 `bytes_rate`。<br/><br/>例如：`100MB/60m`：每 60 分钟内，可以在短时间内发送最多 100MB 的数据。",
@@ -44977,22 +45052,6 @@
           },
           "bytes_rate": {
             "description": "限制单个客户端每个节点可以向代理发送的字节数。<br/><br/>一旦达到限制，EMQX 将丢弃 QoS 0 消息并拒绝 QoS 1 和 QoS 2 消息，<br/>返回“配额超出”错误代码 (0x97)。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒钟只接收 500 千字节，剩余字节将被丢弃/拒绝。<br/>- `500MB/10s`：每 10 秒只接收 500 兆字节，剩余字节将被丢弃/拒绝。",
-            "type": "string"
-          },
-          "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
-            "type": "string"
-          },
-          "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
-            "type": "string"
-          },
-          "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
-            "type": "string"
-          },
-          "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
             "type": "string"
           },
           "max_conn_burst": {
@@ -45168,19 +45227,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -45306,19 +45365,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -45443,19 +45502,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -45601,19 +45660,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -45801,19 +45860,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -45965,19 +46024,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46132,19 +46191,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46269,19 +46328,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46428,19 +46487,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46593,19 +46652,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46743,19 +46802,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -46896,19 +46955,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -47045,19 +47104,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -47195,19 +47254,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -47347,19 +47406,19 @@
             "type": "integer"
           },
           "delivery_bytes_burst": {
-            "description": "Number of bytes that can be sent in a burst, on top of regular `delivery_bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `100MB/60m`: Once every 60 minutes, up to 100 megabytes can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_bytes_rate` 之上，允许突发发送的字节数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`100MB/60m`：每 60 分钟一次，短时间内最多可发送 100 MB。",
             "type": "string"
           },
           "delivery_bytes_rate": {
-            "description": "Limits the number of bytes the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `bytes_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>The unit of the bytes could be: B, KB, MB, GB.<br/><br/>For example:<br/><br/>- `500KB/s`: Only 500 kilobytes per second will be received, and the remaining bytes will be dropped/rejected/queued.<br/>- `500MB/10s`: Only 500 megabytes will be received every 10 seconds, and the remaining bytes will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的字节数。注意，这与 `bytes_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>字节单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- `500KB/s`：每秒只接收 500 KB，其余字节将被丢弃/拒绝/入队。<br/>- `500MB/10s`：每 10 秒只接收 500 MB，其余字节将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "delivery_messages_burst": {
-            "description": "Number of messages that can be sent in a burst, on top of regular `delivery_messages_rate`, per each node.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>For example: `10000/60m`: Once in 60 minutes, up to 10000 messages can be sent in a short period of time.",
+            "description": "每个节点在常规 `delivery_messages_rate` 之上，允许突发发送的消息数。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>例如：`10000/60m`：每 60 分钟一次，短时间内最多可发送 10000 条消息。",
             "type": "string"
           },
           "delivery_messages_rate": {
-            "description": "Limits the number of messages the broker can send to a single client, per each node.  Note that this is for the opposite direction than that of `messages_rate`.<br/><br/>This only takes effect when using in-memory sessions (i.e., when `durable_sessions.enable = false`).<br/><br/>Once the limit is reached, EMQX will drop QoS 0 messages and enqueue QoS 1 and QoS 2 messages in the client's internal queue and retried later.<br/><br/>For example:<br/><br/>- `500/s`: Only 500 messages will be received per second, and the remaining messages will be dropped/rejected/queued.<br/>- `500/10s`: Only 500 messages will be received every 10 seconds and the remaining messages will be dropped/rejected/queued.",
+            "description": "限制每个节点 Broker 向单个客户端发送的消息数。注意，这与 `messages_rate` 的方向相反。<br/><br/>仅在使用内存会话时生效（即 `durable_sessions.enable = false`）。<br/><br/>达到限制后，EMQX 将丢弃 QoS 0 消息，并将 QoS 1 和 QoS 2 消息放入客户端内部队列，稍后重试。<br/><br/>例如：<br/><br/>- `500/s`：每秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。<br/>- `500/10s`：每 10 秒只接收 500 条消息，其余消息将被丢弃/拒绝/入队。",
             "type": "string"
           },
           "enable": {
@@ -57486,7 +57545,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.2-rc.1"
+    "version": "6.1.2-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -57502,100 +57561,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "pgsql",
-                      "doris",
-                      "confluent_producer",
-                      "sqlserver",
-                      "pulsar",
-                      "kinesis",
-                      "gcp_pubsub_producer",
-                      "dynamo",
-                      "iotdb",
-                      "matrix",
-                      "azure_event_hub_producer",
-                      "snowflake_streaming",
-                      "alloydb",
-                      "greptimedb",
-                      "s3tables",
-                      "bigquery",
-                      "azure_blob_storage",
-                      "oracle",
-                      "opents",
                       "cassandra",
-                      "kafka_producer",
-                      "cockroachdb",
-                      "aws_timestream",
-                      "disk_log",
-                      "redis",
-                      "tdengine",
-                      "rocketmq",
-                      "couchbase",
+                      "pgsql",
                       "syskeeper_forwarder",
-                      "redshift",
+                      "aws_timestream",
+                      "s3",
+                      "kafka_producer",
                       "timescale",
-                      "http",
+                      "sqlserver",
+                      "dynamo",
+                      "snowflake_streaming",
+                      "redis",
+                      "datalayers",
                       "snowflake",
-                      "tablestore",
-                      "influxdb",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "oracle",
+                      "elasticsearch",
+                      "kinesis",
                       "mongodb",
+                      "tdengine",
+                      "bigquery",
+                      "alloydb",
+                      "tablestore",
+                      "s3tables",
+                      "disk_log",
+                      "greptimedb",
+                      "couchbase",
+                      "matrix",
+                      "confluent_producer",
+                      "http",
+                      "azure_blob_storage",
+                      "rabbitmq",
+                      "iotdb",
+                      "clickhouse",
+                      "gcp_pubsub_producer",
                       "mqtt",
                       "mysql",
-                      "s3",
-                      "datalayers",
-                      "clickhouse",
+                      "cockroachdb",
+                      "doris",
+                      "influxdb",
                       "emqx_tables",
-                      "rabbitmq",
-                      "elasticsearch"
+                      "opents",
+                      "pulsar",
+                      "redshift"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "pgsql",
-                      "doris",
-                      "confluent_producer",
-                      "sqlserver",
-                      "pulsar",
-                      "kinesis",
-                      "gcp_pubsub_producer",
-                      "dynamo",
-                      "iotdb",
-                      "matrix",
-                      "azure_event_hub_producer",
-                      "snowflake_streaming",
-                      "alloydb",
-                      "greptimedb",
-                      "s3tables",
-                      "bigquery",
-                      "azure_blob_storage",
-                      "oracle",
-                      "opents",
                       "cassandra",
-                      "kafka_producer",
-                      "cockroachdb",
-                      "aws_timestream",
-                      "disk_log",
-                      "redis",
-                      "tdengine",
-                      "rocketmq",
-                      "couchbase",
+                      "pgsql",
                       "syskeeper_forwarder",
-                      "redshift",
+                      "aws_timestream",
+                      "s3",
+                      "kafka_producer",
                       "timescale",
-                      "http",
+                      "sqlserver",
+                      "dynamo",
+                      "snowflake_streaming",
+                      "redis",
+                      "datalayers",
                       "snowflake",
-                      "tablestore",
-                      "influxdb",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "oracle",
+                      "elasticsearch",
+                      "kinesis",
                       "mongodb",
+                      "tdengine",
+                      "bigquery",
+                      "alloydb",
+                      "tablestore",
+                      "s3tables",
+                      "disk_log",
+                      "greptimedb",
+                      "couchbase",
+                      "matrix",
+                      "confluent_producer",
+                      "http",
+                      "azure_blob_storage",
+                      "rabbitmq",
+                      "iotdb",
+                      "clickhouse",
+                      "gcp_pubsub_producer",
                       "mqtt",
                       "mysql",
-                      "s3",
-                      "datalayers",
-                      "clickhouse",
+                      "cockroachdb",
+                      "doris",
+                      "influxdb",
                       "emqx_tables",
-                      "rabbitmq",
-                      "elasticsearch"
+                      "opents",
+                      "pulsar",
+                      "redshift"
                     ],
                     "type": "string"
                   },
@@ -70599,7 +70658,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -70838,7 +70897,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -71393,7 +71452,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -71654,7 +71713,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -72030,7 +72089,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -72332,7 +72391,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -91228,7 +91287,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "59C8BFDEB0A18203",
+            "example": "4C89A28C06E42B74",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91291,7 +91350,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "59C8BFDEB0A18203",
+            "example": "4C89A28C06E42B74",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91705,7 +91764,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "59C8BFDEB0A18203",
+            "example": "4C89A28C06E42B74",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91791,7 +91850,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "59C8BFDEB0A18203",
+            "example": "4C89A28C06E42B74",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94142,7 +94201,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -94380,7 +94439,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -94764,7 +94823,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95148,7 +95207,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95282,7 +95341,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95437,7 +95496,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95573,7 +95632,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95673,7 +95732,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95793,7 +95852,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95937,7 +95996,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -95979,7 +96038,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "更新网关认证器的用户信息",
+        "summary": "更新网关认证器用户信息",
         "tags": [
           "Gateway Authentication"
         ]
@@ -97313,73 +97372,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -97480,6 +97472,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -100430,7 +100489,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "请求错误。",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -101567,6 +101626,62 @@
         ]
       }
     },
+    "/license/session_hwm_history": {
+      "get": {
+        "description": "Get session high-watermark history. Returns daily or monthly peak session counts.",
+        "parameters": [
+          {
+            "description": "Aggregation period: `daily` returns one row per day, `monthly` folds daily peaks into month-level maximums.",
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "daily",
+              "enum": [
+                "daily",
+                "monthly"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maximum number of rows to return. Applies only to `daily` period (defaults to 30). Ignored for `monthly` period, which always returns the full 24-month retention window.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/license_http_api.session_hwm_history"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Session High-Watermark History",
+        "tags": [
+          "License"
+        ]
+      }
+    },
     "/license/setting": {
       "get": {
         "description": "更新 License 设置",
@@ -101588,6 +101703,21 @@
                       "description": "连接数低于此值是，系统会清除连接配额使用告警",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -101629,6 +101759,21 @@
                     "description": "连接数低于此值是，系统会清除连接配额使用告警",
                     "example": "75%",
                     "type": "string"
+                  },
+                  "high_watermark_timezone": {
+                    "default": "system",
+                    "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "enum": [
+                          "system"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -101653,6 +101798,21 @@
                       "description": "连接数低于此值是，系统会清除连接配额使用告警",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
