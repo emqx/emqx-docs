@@ -66,7 +66,7 @@ docker run -it -p 1880:1880 --name mynodered nodered/node-red
 
 配置 Node-RED Broker 连接时，请参考您 EMQX Enterprise 的监听器与认证配置。
 
-> 除自托管的 EMQX Enterprise 部署外，您也可以将 Node-RED 连接到全托管 MQTT 服务 [EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/overview.html)（Serverless 或 Dedicated）。请使用 EMQX Cloud 提供的 Broker 地址、端口和认证信息。
+> 除自托管的 EMQX Enterprise 部署外，您也可以将 Node-RED 连接到全托管 MQTT 服务 [EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/)（Serverless 或 Dedicated）。请使用 EMQX Cloud 提供的 Broker 地址、端口和认证信息。
 
 ## 构建基础 MQTT 流程
 

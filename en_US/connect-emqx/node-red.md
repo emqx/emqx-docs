@@ -66,7 +66,7 @@ Typical configurations include:
 
 Refer to your EMQX Enterprise listener and authentication configuration when setting up Node-RED broker connections.
 
-> In addition to self-managed EMQX Enterprise deployments, you can also connect Node-RED to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated). Use the broker address, ports, and credentials provided by EMQX Cloud.
+> In addition to self-managed EMQX Enterprise deployments, you can also connect Node-RED to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/) (Serverless or Dedicated). Use the broker address, ports, and credentials provided by EMQX Cloud.
 
 ## Build a Basic MQTT Flow
 
@@ -123,7 +123,7 @@ Node-RED's real power comes from chaining multiple nodes to filter and transform
 3. Filters out duplicate temperature readings.
 4. Formats the result and republishes it.
 
-The complete flow is: **mqtt-in** → **json** → **rbe** → **template** → **mqtt-out**
+The complete flow is: **mqtt-in** -> **json** -> **rbe** -> **template** -> **mqtt-out**
 
 ### Step 1: Add a JSON Node
 
