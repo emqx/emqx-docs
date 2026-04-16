@@ -6,7 +6,7 @@ This page explains how to install Node-RED, connect it to EMQX, and build a data
 
 ## Prerequisites
 
-- Node.js 14 or later (for NPM installation)
+- Node.js 18 LTS or 20 LTS (for NPM installation)
 - An EMQX deployment, or use the EMQX public broker for testing
 - [MQTTX](https://mqttx.app/) or another MQTT client for sending test messages
 
