@@ -6,7 +6,7 @@
 
 ## 前提条件
 
-- Node.js 14 或更高版本（使用 NPM 安装时需要）
+- 受支持的 Node.js LTS 版本，例如 Node.js 18 或更高版本（使用 NPM 安装时需要）
 - 已部署的 EMQX 实例，或使用 EMQX 公共 Broker 进行测试
 - [MQTTX](https://mqttx.app/zh) 或其他 MQTT 客户端，用于发送测试消息
 
