@@ -126,7 +126,7 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
   ::: tip Important Notice
 
   MSK IAM authentication is supported only when EMQX is running on EC2 instances connecting to MSK clusters, as it relies on the AWS Metadata API.
-  If you apply host-level egress filtering with `iptables` or `nftables`, do not block `169.254.169.254`, because EMQX must reach the instance metadata service to obtain the credentials used for MSK IAM authentication.
+  If you apply host-level egress filtering with `iptables` or `nftables`, do not block `169.254.169.254`, because EMQX must reach the instance metadata service to obtain the credentials used for MSK IAM authentication. The same metadata-service exception also applies to other AWS-based connectors that retrieve credentials from EC2 instance metadata.
 
   :::
 
