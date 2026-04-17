@@ -8,7 +8,7 @@ This page provides a detailed introduction to the data integration between EMQX 
 
 Databricks data integration in EMQX is built on top of the Amazon S3 integration. EMQX writes MQTT data into an S3 bucket managed by Databricks. Databricks accesses this bucket via an external location, allowing direct SQL queries over the stored data.
 
-![EMQX Databricks Data Integration](./assets/emqx-integration-databricks.jpg)
+![EMQX Databricks Data Integration](./assets/databricks-architecture.png)
 
 The specific workflow is as follows:
 

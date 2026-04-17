@@ -8,7 +8,7 @@
 
 Databricks 数据集成基于 EMQX 的 Amazon S3 集成实现。EMQX 将 MQTT 数据写入 Databricks 工作区管理的 S3 存储桶，Databricks 通过外部位置访问该存储桶，从而可以直接使用 SQL 查询存储的数据。
 
-![EMQX Databricks 数据集成](./assets/emqx-integration-databricks.jpg)
+![EMQX Databricks 数据集成](./assets/databricks-architecture.png)
 
 具体工作流程如下：
 
