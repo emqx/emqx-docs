@@ -135,6 +135,7 @@ EMQX supports data integrations with the following types of data systems:
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)
 - [BigQuery](./bigquery.md)
+- [Databricks](./databricks.md)
 
 ## Features of Sink
 
