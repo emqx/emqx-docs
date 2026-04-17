@@ -148,10 +148,12 @@ jobs:
         cp docs-files/hocon/hocon-*-${VERSION}.*-*.json frontend/docs/public/api/
         shopt -s nullglob
         for file in frontend/docs/public/api/hocon-ce-*-en.json; do
+          [[ -f "$file" ]] || continue
           version=$(echo $file | sed -E 's_.*/hocon-ce-(.*)-en.json_\1_g')
           cp $file frontend/docs/public/api/hocon-ce-${version}-ja.json
         done
         for file in frontend/docs/public/api/hocon-ee-*-en.json; do
+          [[ -f "$file" ]] || continue
           version=$(echo $file | sed -E 's_.*/hocon-ee-(.*)-en.json_\1_g')
           cp $file frontend/docs/public/api/hocon-ee-${version}-ja.json
         done
@@ -251,7 +253,7 @@ jobs:
 
     - name: update search index
       if: github.event_name == 'push'
-      uses: Swilder-M/docsearch-scraper-simple@next
+      uses: emqx/docsearch-scraper@main
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
