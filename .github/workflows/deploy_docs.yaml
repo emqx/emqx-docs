@@ -145,7 +145,8 @@ jobs:
       if: matrix.version != 'latest'
       run: |
         echo "HOCON=true" >> $GITHUB_ENV
-        cp docs-files/hocon/hocon-*-${VERSION}.*-*.json frontend/docs/public/api/ || true
+        cp docs-files/hocon/hocon-*-${VERSION}.*-*.json frontend/docs/public/api/
+        shopt -s nullglob
         for file in frontend/docs/public/api/hocon-ce-*-en.json; do
           [[ -f "$file" ]] || continue
           version=$(echo $file | sed -E 's_.*/hocon-ce-(.*)-en.json_\1_g')
@@ -156,6 +157,7 @@ jobs:
           version=$(echo $file | sed -E 's_.*/hocon-ee-(.*)-en.json_\1_g')
           cp $file frontend/docs/public/api/hocon-ee-${version}-ja.json
         done
+        shopt -u nullglob
 
         hocon_products=(enterprise)
         for hocon_product in "${hocon_products[@]}"; do
