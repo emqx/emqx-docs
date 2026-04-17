@@ -52,8 +52,6 @@ This section uses subscribing to Databricks on AWS Marketplace as an example dep
 
 1. Subscribe to Databricks on the [AWS Marketplace](https://aws.amazon.com/marketplace/). You will be guided to create a Databricks account and a Databricks workspace.
 
-   ![Databricks on AWS Marketplace](./assets/databricks-marketplace.png)
-
 2. Once subscribed, create a workspace. Select a region and storage option, then click **Create**.
 
    ![Create Databricks Workspace](./assets/databricks-create-workspace.png)
@@ -78,7 +76,7 @@ With the Databricks workspace and S3 bucket configured, you are now ready to cre
 
 Before adding the Amazon S3 Sink, you need to create the corresponding connector.
 
-1. Go to the Dashboard **Integration** -> **Connector** page.
+1. Go to the Dashboard **Integration** -> **Connectors** page.
 2. Click the **Create** button in the top right corner.
 3. Select **Amazon S3** as the connector type and click **Next**.
 4. Enter a name for the connector. The name must start with a letter or number and can contain letters, numbers, hyphens, or underscores. In this example, enter `my-databricks`.
@@ -87,18 +85,16 @@ Before adding the Amazon S3 Sink, you need to create the corresponding connector
    - **Port**: Enter `443`.
    - **Access Key ID** and **Secret Access Key**: Enter the AWS access credentials obtained in [Set Up Databricks on AWS Marketplace](#set-up-databricks-on-aws-marketplace).
 6. Use the default values for the remaining settings.
-7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the S3 service.
-8. Click the **Create** button at the bottom to complete the connector creation.
-
-You have now completed the connector creation and will proceed to create a rule and Sink for specifying the data to be written into the Databricks-managed S3 bucket.
+7. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to the S3 service.
+8. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
 
 ## Create a Rule with Amazon S3 Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the Databricks-managed S3 bucket through the configured Sink.
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
-2. Click the **Create** button in the top right corner.
-3. Enter the rule ID `my_rule`, and input the following rule SQL in the SQL editor:
+1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `Amazon S3` and the connector pre-selected. Skip to step 5. Otherwise, go to the Dashboard **Integration** -> **Rules** page, click **Create** in the top right corner.
+
+2. Enter a rule ID and input the following rule SQL in the SQL editor:
 
    ```sql
    SELECT
@@ -109,15 +105,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
-4. Add an action, select `Amazon S3` from the **Action Type** dropdown list, keep the action dropdown as the default `create action` option, or choose a previously created Amazon S3 action from the action dropdown. Here, create a new Sink and add it to the rule.
+3. Click **+ Add Action** on the right. In the **Add Action** panel, select `Amazon S3` from the **Type of Action** dropdown, keeping the **Action** dropdown at the default `Create Action` value.
 
-5. Enter the Sink's name and description.
+4. Select the `my-databricks` connector created earlier from the **Connectors** dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
 
-6. Select the `my-databricks` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
+5. Enter a name and optional description for the Sink.
 
 7. Set the **Bucket** by entering `databricks-workspace-stack-142ec-bucket`. This field also supports `${var}` format placeholders, but ensure the corresponding bucket exists in S3.
 
@@ -174,9 +170,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
-12. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+12. Use the default values for the remaining settings. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to the S3 service.
 
-13. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+13. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+
+14. Back on the rule creation page, click the **Save** button to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Amazon S3 Sink on the **Actions (Sink)** tab.
 
