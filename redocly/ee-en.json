@@ -1306,15 +1306,8 @@
             "type": "string"
           },
           "parameters": {
-            "description": "IoTDB action parameters",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
-              },
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
-              }
-            ]
+            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
+            "description": "IoTDB action parameters"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -1536,7 +1529,7 @@
           },
           "key_encoding_mode": {
             "default": "none",
-            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code>: Uses the key from the Kafka message unchanged. Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code>: Uses base-64 encoding on the received key.",
+            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code> Uses base-64 encoding on the received key.",
             "enum": [
               "none",
               "base64"
@@ -2854,54 +2847,6 @@
         },
         "type": "object"
       },
-      "bridge_iotdb.action_parameters_data_tree": {
-        "properties": {
-          "data_type": {
-            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
-            "enum": [
-              "text",
-              "boolean",
-              "int32",
-              "int64",
-              "float",
-              "double"
-            ],
-            "type": "string"
-          },
-          "measurement": {
-            "description": "Measurement. Placeholders in format of ${var} is supported",
-            "type": "string"
-          },
-          "timestamp": {
-            "default": "now",
-            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "now",
-                  "now_ms",
-                  "now_ns",
-                  "now_us"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "value": {
-            "description": "Value. Placeholders in format of ${var} is supported",
-            "type": "string"
-          }
-        },
-        "required": [
-          "data_type",
-          "measurement",
-          "value"
-        ],
-        "type": "object"
-      },
       "confluent.put_bridge_v2": {
         "properties": {
           "connector": {
@@ -3005,15 +2950,8 @@
             "type": "array"
           },
           "parameters": {
-            "description": "IoTDB action parameters",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
-              },
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
-              }
-            ]
+            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
+            "description": "IoTDB action parameters"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -3054,45 +2992,6 @@
           "name",
           "parameters",
           "type"
-        ],
-        "type": "object"
-      },
-      "bridge_iotdb.action_parameters_table": {
-        "properties": {
-          "data": {
-            "description": "IoTDB action parameter data",
-            "items": {
-              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_table"
-            },
-            "type": "array"
-          },
-          "is_aligned": {
-            "default": false,
-            "description": "Whether to align the timeseries",
-            "type": "boolean"
-          },
-          "max_retries": {
-            "default": 2,
-            "description": "HTTP request max retry times if failed.",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "table": {
-            "description": "The name of the IoTDB table to which the data will be written.",
-            "type": "string"
-          },
-          "write_to_table": {
-            "default": true,
-            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
-            "enum": [
-              true
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "data",
-          "table"
         ],
         "type": "object"
       },
@@ -4365,7 +4264,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -4753,14 +4652,9 @@
       },
       "bridge_kafka.put_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -4814,7 +4708,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -4855,14 +4749,9 @@
             },
             "type": "array"
           },
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -4912,7 +4801,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -5021,14 +4910,6 @@
               "type": "string"
             },
             "type": "array"
-          },
-          "ts_column": {
-            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
-            "type": "string"
-          },
-          "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
-            "type": "string"
           },
           "username": {
             "description": "GreptimeDB username.",
@@ -6662,7 +6543,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -6788,12 +6669,12 @@
         "properties": {
           "memory_overload_protection": {
             "default": true,
-            "description": "Applicable when buffer mode is set to <code>memory</code>.<br/>EMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config <code>sysmon.os.sysmem_high_watermark</code>. NOTE: This config only works on Linux.",
+            "description": "Applicable when buffer mode is set to <code>memory</code><br/>EMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config <code>sysmon.os.sysmem_high_watermark</code>. NOTE: This config only works on Linux.",
             "type": "boolean"
           },
           "mode": {
             "default": "memory",
-            "description": "Message buffer mode.<br/><br/><code>memory</code>: Buffer all messages in memory. The messages will be lost in case of EMQX node restart.<br/><code>disk</code>: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.<br/><code>hybrid</code>: Buffer message in memory first, when up to certain limit (see <code>segment_bytes</code> config for more information), then start offloading messages to disk. Like <code>memory</code> mode, the messages will be lost in case of EMQX node restart.",
+            "description": "Message buffer mode.<br/><br/><code>memory</code>: Buffer all messages in memory. The messages will be lost in case of EMQX node restart<br/><code>disk</code>: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.<br/><code>hybrid</code>: Buffer message in memory first, when up to certain limit (see <code>segment_bytes</code> config for more information), then start offloading messages to disk, Like <code>memory</code> mode, the messages will be lost in case of EMQX node restart.",
             "enum": [
               "memory",
               "disk",
@@ -7417,23 +7298,13 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
-          },
-          "session_tickets": {
-            "default": "disabled",
-            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
-            "enum": [
-              "disabled",
-              "stateless",
-              "stateless_with_cert"
-            ],
-            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -7557,7 +7428,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -8174,22 +8045,6 @@
           "name",
           "parameters",
           "type"
-        ],
-        "type": "object"
-      },
-      "iotdb.sql_dialect_tree": {
-        "properties": {
-          "dialect": {
-            "default": "tree",
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "enum": [
-              "tree"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "dialect"
         ],
         "type": "object"
       },
@@ -10896,7 +10751,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -12477,17 +12332,6 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
-          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -12688,11 +12532,6 @@
       },
       "bridge_azure_event_hub.post_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -13193,24 +13032,51 @@
         ],
         "type": "object"
       },
-      "iotdb.sql_dialect_table": {
+      "bridge_iotdb.action_parameters_data": {
         "properties": {
-          "database": {
-            "description": "The name of the IoTDB database to connect to.",
+          "data_type": {
+            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
+            "enum": [
+              "text",
+              "boolean",
+              "int32",
+              "int64",
+              "float",
+              "double"
+            ],
             "type": "string"
           },
-          "dialect": {
-            "default": "table",
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "enum": [
-              "table"
-            ],
+          "measurement": {
+            "description": "Measurement. Placeholders in format of ${var} is supported",
+            "type": "string"
+          },
+          "timestamp": {
+            "default": "now",
+            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "now",
+                  "now_ms",
+                  "now_ns",
+                  "now_us"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "value": {
+            "description": "Value. Placeholders in format of ${var} is supported",
             "type": "string"
           }
         },
         "required": [
-          "database",
-          "dialect"
+          "data_type",
+          "measurement",
+          "value"
         ],
         "type": "object"
       },
@@ -14492,17 +14358,6 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
-          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -15406,44 +15261,6 @@
             "type": "integer"
           }
         },
-        "type": "object"
-      },
-      "bridge_iotdb.action_parameters_tree": {
-        "properties": {
-          "data": {
-            "description": "IoTDB action parameter data",
-            "items": {
-              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_tree"
-            },
-            "type": "array"
-          },
-          "device_id": {
-            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
-            "type": "string"
-          },
-          "is_aligned": {
-            "default": false,
-            "description": "Whether to align the timeseries",
-            "type": "boolean"
-          },
-          "max_retries": {
-            "default": 2,
-            "description": "HTTP request max retry times if failed.",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "write_to_table": {
-            "default": false,
-            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
-            "enum": [
-              false
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "data"
-        ],
         "type": "object"
       },
       "audit.audit": {
@@ -18637,14 +18454,6 @@
             },
             "type": "array"
           },
-          "ts_column": {
-            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
-            "type": "string"
-          },
-          "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
-            "type": "string"
-          },
           "type": {
             "description": "The type of the connector.",
             "enum": [
@@ -19626,16 +19435,6 @@
             "description": "The URL of the IdP metadata.",
             "type": "string"
           },
-          "idp_signs_assertions": {
-            "default": false,
-            "description": "Whether to require IDP to sign SAML Assertions (inner signature). For security, at least one of envelope or assertion signature should be enabled in production.",
-            "type": "boolean"
-          },
-          "idp_signs_envelopes": {
-            "default": false,
-            "description": "Whether to require IDP to sign SAML Response envelopes (outer signature). For security, at least one of envelope or assertion signature should be enabled in production.",
-            "type": "boolean"
-          },
           "sp_private_key": {
             "description": "The private key of the SP.",
             "format": "password",
@@ -20612,14 +20411,9 @@
       },
       "bridge_kafka.put_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -20681,7 +20475,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -21099,7 +20893,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -22435,15 +22229,8 @@
             "type": "string"
           },
           "parameters": {
-            "description": "IoTDB action parameters",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
-              },
-              {
-                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
-              }
-            ]
+            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
+            "description": "IoTDB action parameters"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -23063,14 +22850,9 @@
       },
       "kafka_consumer.put_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -23120,7 +22902,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -23842,7 +23624,7 @@
           },
           "max_packet_size": {
             "default": "1MB",
-            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB.<br/>Note: changing this config at runtime may only take effect for newly established connections after the change.",
+            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB",
             "example": "32MB",
             "type": "string"
           },
@@ -23869,7 +23651,7 @@
           },
           "response_information": {
             "default": "",
-            "description": "MQTT v5 Response Information (Optional).<br/>Specifies a string returned to clients in the `CONNACK` packet if requested.<br/>The server passes this value as-is and does automatically add it to Access Control (ACL) rules.<br/>It is intended solely to help publishers and subscribers establish their own topic contract<br/> (e.g., a topic prefix). Leave blank to disable.",
+            "description": "UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.<br/>To disable this feature, input <code>\"\"</code> in the text box below. Only applicable to MQTT 5.0 clients.",
             "type": "string"
           },
           "shared_subscription": {
@@ -24096,11 +23878,6 @@
       },
       "bridge_azure_event_hub.put_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
             "description": "Authentication configs.",
@@ -24929,11 +24706,6 @@
       },
       "bridge_azure_event_hub.get_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
             "description": "Authentication configs.",
@@ -26153,7 +25925,7 @@
           },
           "payload_template": {
             "default": "${.}",
-            "description": "The template for transforming the incoming Kafka message. By default, it will use JSON format to serialize inputs from the Kafka message. Such fields are:<br/><code>headers</code>: an object containing string key-value pairs.<br/><code>key</code>: Kafka message key (uses the chosen key encoding).<br/><code>offset</code>: offset for the message.<br/><code>topic</code>: Kafka topic.<br/><code>ts</code>: message timestamp.<br/><code>ts_type</code>: message timestamp type, which is one of <code>create</code>, <code>append</code> or <code>undefined</code>.<br/><code>value</code>: Kafka message value (uses the chosen value encoding).",
+            "description": "The template for transforming the incoming Kafka message.  By default, it will use JSON format to serialize inputs from the Kafka message.  Such fields are:<br/><code>headers</code>: an object containing string key-value pairs.<br/><code>key</code>: Kafka message key (uses the chosen key encoding).<br/><code>offset</code>: offset for the message.<br/><code>topic</code>: Kafka topic.<br/><code>ts</code>: message timestamp.<br/><code>ts_type</code>: message timestamp type, which is one of <code>create</code>, <code>append</code> or <code>undefined</code>.<br/><code>value</code>: Kafka message value (uses the chosen value encoding).",
             "type": "string"
           },
           "qos": {
@@ -26227,14 +25999,9 @@
       },
       "bridge_kafka.get_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -26296,7 +26063,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -26624,7 +26391,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -28074,11 +27841,6 @@
       },
       "confluent.post_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -29367,11 +29129,6 @@
             },
             "type": "array"
           },
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -29890,14 +29647,9 @@
       },
       "bridge_kafka.put_consumer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -29949,7 +29701,7 @@
           },
           "key_encoding_mode": {
             "default": "none",
-            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code>: Uses the key from the Kafka message unchanged. Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code>: Uses base-64 encoding on the received key.",
+            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code> Uses base-64 encoding on the received key.",
             "enum": [
               "none",
               "base64"
@@ -29964,7 +29716,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -30910,103 +30662,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
@@ -31018,79 +30674,25 @@
               },
               {
                 "enum": [
-                  "hstreamdb"
+                  "s3tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
+                  "couchbase"
                 ],
                 "type": "string"
               },
@@ -31102,13 +30704,37 @@
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "timescale"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "iotdb"
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -31120,19 +30746,145 @@
               },
               {
                 "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
                 ],
                 "type": "string"
               }
@@ -31678,7 +31430,6 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
-              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -31722,17 +31473,6 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
-          },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -31780,14 +31520,9 @@
       },
       "kafka_consumer.post_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -31837,7 +31572,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -32111,10 +31846,6 @@
             "minimum": 0,
             "type": "integer"
           },
-          "rules.matched": {
-            "minimum": 0,
-            "type": "integer"
-          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -32337,10 +32068,6 @@
           },
           "authorization.deny": {
             "description": "Number of Authorization deny",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -32759,11 +32486,6 @@
       },
       "bridge_azure_event_hub.post_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -34092,23 +33814,13 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
-          },
-          "session_tickets": {
-            "default": "disabled",
-            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
-            "enum": [
-              "disabled",
-              "stateless",
-              "stateless_with_cert"
-            ],
-            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -34179,14 +33891,9 @@
             },
             "type": "array"
           },
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -34240,7 +33947,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -34431,11 +34138,6 @@
       },
       "bridge_azure_event_hub.put_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -35035,10 +34737,6 @@
       },
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
-          "actions_executed_rate": {
-            "description": "Action execution rate in the last sampling window.",
-            "type": "integer"
-          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -35077,10 +34775,6 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
-            "type": "integer"
-          },
-          "rules_matched_rate": {
-            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -36049,6 +35743,36 @@
         },
         "type": "object"
       },
+      "bridge_iotdb.action_parameters": {
+        "properties": {
+          "data": {
+            "description": "IoTDB action parameter data",
+            "items": {
+              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data"
+            },
+            "type": "array"
+          },
+          "device_id": {
+            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
+            "type": "string"
+          },
+          "is_aligned": {
+            "default": false,
+            "description": "Whether to align the timeseries",
+            "type": "boolean"
+          },
+          "max_retries": {
+            "default": 2,
+            "description": "HTTP request max retry times if failed.",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "bridge_dynamo.action_parameters": {
         "properties": {
           "hash_key": {
@@ -36862,7 +36586,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -37507,7 +37231,7 @@
             "type": "string"
           },
           "kafka_ext_headers": {
-            "description": "Provide more key-value pairs for message headers.<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before producing.",
+            "description": "Provide more key-value pairs for message headers<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before sending producing.",
             "items": {
               "$ref": "#/components/schemas/bridge_kafka.producer_kafka_ext_headers"
             },
@@ -37523,7 +37247,7 @@
             "type": "string"
           },
           "kafka_headers": {
-            "description": "Provide a placeholder for message headers.<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>.",
+            "description": "Provide a placeholder for message headers<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
           "max_batch_bytes": {
@@ -37571,7 +37295,7 @@
           },
           "partitions_limit": {
             "default": "all_partitions",
-            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions has no effect.",
+            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions in has no effect.",
             "oneOf": [
               {
                 "minimum": 1,
@@ -37587,7 +37311,7 @@
           },
           "query_mode": {
             "default": "async",
-            "description": "Query mode. Optional 'sync' or 'async', default is 'async'.",
+            "description": "Query mode. Optional 'sync/async', default 'async'.",
             "enum": [
               "async",
               "sync"
@@ -37611,7 +37335,7 @@
             "type": "string"
           },
           "topic": {
-            "description": "Kafka topic name. Supports templates (e.g.: `t-${payload.t}`).",
+            "description": "Kafka topic name.  Supports templates (e.g.: `t-${payload.t}`).",
             "type": "string"
           }
         },
@@ -38390,7 +38114,6 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
-              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -38424,17 +38147,6 @@
             "default": {},
             "description": "Resource options."
           },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
-          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -38452,64 +38164,6 @@
         },
         "required": [
           "base_url"
-        ],
-        "type": "object"
-      },
-      "bridge_iotdb.action_parameters_data_table": {
-        "properties": {
-          "column_category": {
-            "description": "Column category, required to construct an insert request to an IoTDB table. Valid values include:<br/>- <code>tag</code><br/>- <code>field</code><br/>- <code>attribute</code>",
-            "enum": [
-              "tag",
-              "field",
-              "attribute"
-            ],
-            "type": "string"
-          },
-          "data_type": {
-            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
-            "enum": [
-              "text",
-              "boolean",
-              "int32",
-              "int64",
-              "float",
-              "double"
-            ],
-            "type": "string"
-          },
-          "measurement": {
-            "description": "Measurement. Placeholders in format of ${var} is supported",
-            "type": "string"
-          },
-          "timestamp": {
-            "default": "now",
-            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "now",
-                  "now_ms",
-                  "now_ns",
-                  "now_us"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "value": {
-            "description": "Value. Placeholders in format of ${var} is supported",
-            "type": "string"
-          }
-        },
-        "required": [
-          "column_category",
-          "data_type",
-          "measurement",
-          "value"
         ],
         "type": "object"
       },
@@ -39772,7 +39426,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "6F73F69F94E6F850",
             "type": "string"
           },
           "status": {
@@ -40334,7 +39988,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -40740,7 +40394,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -41747,7 +41401,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -45140,7 +44794,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -45498,10 +45152,6 @@
             "description": "The valid time span for an OIDC `state`, the default is `30s`, if the code response returned by the authorization server exceeds this time span, it will be treated as invalid.",
             "example": "1h",
             "type": "string"
-          },
-          "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
-            "description": "SSL connection settings."
           }
         },
         "required": [
@@ -48229,14 +47879,9 @@
       },
       "bridge_kafka.get_consumer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -48288,7 +47933,7 @@
           },
           "key_encoding_mode": {
             "default": "none",
-            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code>: Uses the key from the Kafka message unchanged. Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code>: Uses base-64 encoding on the received key.",
+            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code> Uses base-64 encoding on the received key.",
             "enum": [
               "none",
               "base64"
@@ -48303,7 +47948,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -50768,7 +50413,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -51392,14 +51037,9 @@
       },
       "bridge_kafka.post_producer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -51461,7 +51101,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -52552,17 +52192,6 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
-          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -52909,10 +52538,6 @@
       },
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
-          "actions_executed": {
-            "description": "Number of Action executions (failures + successes) in the last sample window.",
-            "type": "integer"
-          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -52935,10 +52560,6 @@
           },
           "received": {
             "description": "Received messages in the last sample window.",
-            "type": "integer"
-          },
-          "rules_matched": {
-            "description": "Number of Rules that matched their where clauses in the last sample window.",
             "type": "integer"
           },
           "sent": {
@@ -53599,14 +53220,9 @@
       },
       "bridge_kafka.post_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -53660,7 +53276,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -54105,20 +53721,6 @@
             "description": "The maximum length of the JT/T 808 frame.",
             "minimum": 0,
             "type": "integer"
-          },
-          "parse_unknown_message": {
-            "default": true,
-            "description": "Whether to process and forward unrecognized Message IDs. <br/><br/>- <code>true</code>: Unrecognized Message IDs are processed, and their body is encoded in Base64 and forwarded.<br/><br/>- <code>false</code>: An error is reported and logged when an unrecognized Message ID is received.<br/><br/>Default is true.",
-            "type": "boolean"
-          },
-          "string_encoding": {
-            "default": "utf8",
-            "description": "Character encoding for STRING type fields on the JT/T 808 wire protocol.<br/><br/>- <code>utf8</code>: Strings are treated as UTF-8 encoded (legacy behavior, default).<br/><br/>- <code>gbk</code>: Strings are treated as GBK encoded per JT/T 808 specification; converted to/from UTF-8 for MQTT payloads.<br/><br/>Note: MQTT payloads always use UTF-8 regardless of this setting. Set to <code>gbk</code> if Chinese text appears garbled (Mojibake).",
-            "enum": [
-              "utf8",
-              "gbk"
-            ],
-            "type": "string"
           }
         },
         "type": "object"
@@ -56163,11 +55765,6 @@
             },
             "type": "array"
           },
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -56795,23 +56392,13 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
-          },
-          "session_tickets": {
-            "default": "disabled",
-            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
-            "enum": [
-              "disabled",
-              "stateless",
-              "stateless_with_cert"
-            ],
-            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -56865,10 +56452,6 @@
       },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
-          "actions_executed_rate": {
-            "description": "Action execution rate in the last sampling window.",
-            "type": "integer"
-          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -56903,10 +56486,6 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
-            "type": "integer"
-          },
-          "rules_matched_rate": {
-            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -57390,14 +56969,9 @@
       },
       "bridge_kafka.post_consumer": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -57449,7 +57023,7 @@
           },
           "key_encoding_mode": {
             "default": "none",
-            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code>: Uses the key from the Kafka message unchanged. Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code>: Uses base-64 encoding on the received key.",
+            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code> Uses base-64 encoding on the received key.",
             "enum": [
               "none",
               "base64"
@@ -57464,7 +57038,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -58438,11 +58012,6 @@
       },
       "confluent.put_connector": {
         "properties": {
-          "allow_auto_topic_creation": {
-            "default": false,
-            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
-            "type": "boolean"
-          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -58531,7 +58100,7 @@
             "type": "string"
           },
           "kafka_ext_headers": {
-            "description": "Provide more key-value pairs for message headers.<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before producing.",
+            "description": "Provide more key-value pairs for message headers<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before sending producing.",
             "items": {
               "$ref": "#/components/schemas/bridge_kafka.producer_kafka_ext_headers"
             },
@@ -58547,7 +58116,7 @@
             "type": "string"
           },
           "kafka_headers": {
-            "description": "Provide a placeholder for message headers.<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>.",
+            "description": "Provide a placeholder for message headers<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
           "max_batch_bytes": {
@@ -58583,7 +58152,7 @@
           },
           "partitions_limit": {
             "default": "all_partitions",
-            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions has no effect.",
+            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions in has no effect.",
             "oneOf": [
               {
                 "minimum": 1,
@@ -58599,7 +58168,7 @@
           },
           "query_mode": {
             "default": "async",
-            "description": "Query mode. Optional 'sync' or 'async', default is 'async'.",
+            "description": "Query mode. Optional 'sync/async', default 'async'.",
             "enum": [
               "async",
               "sync"
@@ -58623,7 +58192,7 @@
             "type": "string"
           },
           "topic": {
-            "description": "Kafka topic name. Supports templates (e.g.: `t-${payload.t}`).",
+            "description": "Kafka topic name.  Supports templates (e.g.: `t-${payload.t}`).",
             "type": "string"
           }
         },
@@ -58681,14 +58250,6 @@
               "type": "string"
             },
             "type": "array"
-          },
-          "ts_column": {
-            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
-            "type": "string"
-          },
-          "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
-            "type": "string"
           },
           "type": {
             "description": "The type of the connector.",
@@ -59738,10 +59299,6 @@
             "minimum": 0,
             "type": "integer"
           },
-          "rules.matched": {
-            "minimum": 0,
-            "type": "integer"
-          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -59967,10 +59524,6 @@
             "minimum": 0,
             "type": "integer"
           },
-          "actions.executed": {
-            "minimum": 0,
-            "type": "integer"
-          },
           "packets.subscribe.auth_error": {
             "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
@@ -60061,11 +59614,11 @@
       "bridge_kafka.producer_kafka_ext_headers": {
         "properties": {
           "kafka_ext_header_key": {
-            "description": "Key of the header. Placeholders in the format of ${var} are supported.",
+            "description": "Key of the header. Placeholders in format of ${var} are supported.",
             "type": "string"
           },
           "kafka_ext_header_value": {
-            "description": "Value of the header. Placeholders in the format of ${var} are supported.",
+            "description": "Value of the header. Placeholders in format of ${var} are supported.",
             "type": "string"
           }
         },
@@ -60923,23 +60476,13 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
-          },
-          "session_tickets": {
-            "default": "disabled",
-            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
-            "enum": [
-              "disabled",
-              "stateless",
-              "stateless_with_cert"
-            ],
-            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -61457,7 +61000,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "frame",
+            "default": "chunk",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -62008,23 +61551,13 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
-          },
-          "session_tickets": {
-            "default": "disabled",
-            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
-            "enum": [
-              "disabled",
-              "stateless",
-              "stateless_with_cert"
-            ],
-            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -62104,7 +61637,6 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
-              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -62141,17 +61673,6 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
-          },
-          "sql": {
-            "description": "IoTDB supports two time-series data models (SQL dialects) for managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path structure, where each path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table structure, where each table corresponds to a category of devices.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
-              },
-              {
-                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
-              }
-            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -63009,7 +62530,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.3"
+    "version": "5.10.1-patch.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -75641,39 +75162,39 @@
                       "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "kafka_producer",
                       "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "influxdb",
                       "hstreamdb",
-                      "greptimedb",
-                      "azure_event_hub_producer",
-                      "confluent_producer",
-                      "pulsar",
-                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "sqlserver",
                       "mongodb",
-                      "doris",
+                      "influxdb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "kafka_producer",
+                      "pulsar",
+                      "confluent_producer",
+                      "greptimedb",
                       "kinesis",
                       "datalayers",
                       "s3",
-                      "redis",
+                      "doris",
                       "opents",
                       "s3tables",
+                      "redis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
                       "tdengine",
+                      "snowflake",
+                      "oracle",
+                      "clickhouse",
+                      "azure_blob_storage",
+                      "tablestore",
                       "timescale",
                       "couchbase",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75685,39 +75206,39 @@
                       "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "kafka_producer",
                       "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "influxdb",
                       "hstreamdb",
-                      "greptimedb",
-                      "azure_event_hub_producer",
-                      "confluent_producer",
-                      "pulsar",
-                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "sqlserver",
                       "mongodb",
-                      "doris",
+                      "influxdb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "kafka_producer",
+                      "pulsar",
+                      "confluent_producer",
+                      "greptimedb",
                       "kinesis",
                       "datalayers",
                       "s3",
-                      "redis",
+                      "doris",
                       "opents",
                       "s3tables",
+                      "redis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
                       "tdengine",
+                      "snowflake",
+                      "oracle",
+                      "clickhouse",
+                      "azure_blob_storage",
+                      "tablestore",
                       "timescale",
                       "couchbase",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -85937,7 +85458,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "6F73F69F94E6F850",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94145,7 +93666,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "6F73F69F94E6F850",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94230,7 +93751,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "6F73F69F94E6F850",
             "in": "path",
             "name": "site",
             "required": true,
