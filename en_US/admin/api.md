@@ -56,11 +56,12 @@ api_key = {
 }
 ```
 
-In the specified file, add multiple API keys in the format `{API Key}:{Secret Key}:{?Role}`, separated by new lines:
+In the specified file, add multiple API keys in the format `{API Key}:{Secret Key}:{?Role}:{?Scopes}`, separated by new lines:
 
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
 - **Role (optional)**: Specify the key's [role](#roles-and-permissions).
+- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases).
 
 For example:
 
@@ -68,11 +69,13 @@ For example:
 my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
 ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
+rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 ```
 
 API keys created this way are valid indefinitely.
 
-Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key and Role will be updated.
+Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key, Role, and Scopes will be updated.
 
 #### Roles and Permissions
 
@@ -81,6 +84,80 @@ The REST API implements role-based access control. When creating an API key, you
 - **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
 - **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
 - **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
+
+#### API Scopes
+
+**Scopes** are a per-key permission dimension introduced in EMQX 5.10 that declare **which business areas** of the REST API a key is allowed to reach. Scopes are **orthogonal** to [Roles and Permissions](#roles-and-permissions):
+
+| Dimension | Purpose | Granularity |
+| --------- | ------- | ----------- |
+| **Role** | Limits HTTP verbs (read-only vs. writes, publish-only, etc.) | Request action |
+| **Scope** | Limits the API domain (clients, rules, monitoring, ...) | Resource area |
+
+Every request is checked against **both** dimensions — the role check and the scope check. A request is accepted only when both checks pass.
+
+##### Why Scopes
+
+In microservice and integration scenarios, external systems typically need access to only a **subset** of EMQX's management surface:
+
+- A monitoring platform only needs the **monitoring** scope (`/metrics`, `/stats`, `/prometheus`, ...);
+- A rules-publishing service only needs **data_integration** (`/rules`, `/connectors`, `/actions`, ...);
+- A cluster operator tool only needs **cluster_operations** (`/cluster`, `/nodes`, `/load_rebalance`, ...).
+
+With only `administrator` / `viewer` / `publisher` available, granularity is coarse: the only way to grant a service write access to rules is to hand it `administrator`, which effectively gives it full control over the whole system.
+
+Scopes let you assign keys using the **principle of least privilege**: grant only the scopes required for the task, and minimize the blast radius if a key is ever leaked.
+
+##### Built-in Scopes
+
+EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
+
+| Scope | Name | Typical API areas |
+| --- | --- | --- |
+| `connections` | Connection management | `/clients`, `/subscriptions`, `/topics`, `/banned`, `/retainer`, `/file_transfer`, `/mqtt/delayed`, `/mqtt/topic_rewrite`, ... |
+| `publish` | Message publishing | `/publish`, `/publish/bulk` |
+| `data_integration` | Data integration | `/rules`, `/connectors`, `/actions`, `/schema_registry`, `/schema_validations`, `/message_transformations`, `/exhooks`, `/ai/*` |
+| `access_control` | Access control | `/authentication`, `/authorization/*` |
+| `gateways` | Protocol gateways | `/gateways`, `/coap/*`, `/lwm2m/*`, `/gcp_devices`, ... |
+| `monitoring` | Monitoring data | `/metrics`, `/stats`, `/monitor*`, `/alarms`, `/trace`, `/slow_subscriptions`, `/telemetry`, `/prometheus/{auth,stats,data_integration,...}`, ... |
+| `cluster_operations` | Cluster operations | `/cluster*`, `/nodes`, `/load_rebalance`, `/node_eviction`, `/mt/*`, ... |
+| `system` | System configuration | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
+| `audit` | Audit log | `/audit` |
+| `license` | License | `/license*` |
+
+::: tip
+Scope names are **stable identifiers** that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
+:::
+
+Dashboard login, SSO callbacks and the API key self-management endpoints (for example `/login` and `/api_key`) can **never** be reached via API keys, regardless of the key's `scopes` configuration — this is a built-in Dashboard security boundary, unrelated to the scope model.
+
+##### Default Behaviour of `scopes`
+
+The `scopes` field on an API key follows these rules:
+
+| Value of `scopes` | Meaning |
+| --- | --- |
+| **Absent** (field missing) | All business endpoints are allowed. This is the backward-compatible default for keys created before the scopes feature existed. |
+| **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
+| **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
+
+When a bootstrap file entry omits the scopes segment, the key is **explicitly** written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
+
+##### Listing Available Scopes
+
+EMQX exposes `GET /api/v5/api_key/scopes` to return the current version's user-visible scope catalogue with descriptions. Use it to populate a scope-picker UI or validate automation scripts:
+
+```bash
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+```
+
+##### Assigning Scopes
+
+Scopes can be set from any of the following entry points:
+
+- **Dashboard**: when creating or editing a key under **System** -> **API Key**, tick the scopes to grant.
+- **REST API**: include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
+- **Bootstrap file**: provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
 
 #### Authentication Method Using API Keys
 

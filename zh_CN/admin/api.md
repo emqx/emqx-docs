@@ -54,11 +54,12 @@ api_key = {
 }
 ```
 
-在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}` 的格式添加多个 API 密钥：
+在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}:{?Scopes}` 的格式添加多个 API 密钥：
 
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
-- **Role （可选）**：指定密钥的[角色](#角色与权限)。
+- **Role（可选）**：指定密钥的[角色](#角色与权限)。
+- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围-scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。
 
 例如：
 
@@ -66,11 +67,13 @@ api_key = {
 my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
 ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
+rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 ```
 
 通过此方式创建的 API 密钥有效期为永久有效。
 
-每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
+每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key、Role 与 Scopes。
 
 #### 角色与权限
 
@@ -79,6 +82,80 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 - **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
 - **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
 - **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
+
+#### API 范围（Scope）
+
+**Scope（范围）** 是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些**业务领域**的 API。它与 [角色与权限](#角色与权限) 是**正交的两层控制**：
+
+| 维度 | 作用 | 粒度 |
+| ---- | ---- | ---- |
+| **Role（角色）** | 限制 HTTP 方法（只读 vs 可写、只能发布等） | 请求动作 |
+| **Scope（范围）** | 限制可访问的 API 领域（客户端、规则、监控等） | 资源领域 |
+
+一次请求会先后通过两个检查：**Role 校验** + **Scope 校验**。只有两个检查都通过，请求才会被接受。
+
+##### 为什么需要 Scope
+
+在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的**一部分**管理接口：
+
+- 监控平台只需要读 `/metrics`、`/stats`、`/prometheus` 等 **monitoring** 范围的接口；
+- 规则发布服务只需要操作 `/rules`、`/connectors`、`/actions` 等 **data_integration** 范围的接口；
+- 集群运维工具只需要访问 `/cluster`、`/nodes`、`/load_rebalance` 等 **cluster_operations** 范围的接口。
+
+以前只有 `administrator` / `viewer` / `publisher` 三种角色，颗粒度较粗：想让一个服务只能改规则，就不得不授予 `administrator`，这等于把整个系统的管理权都交给对方。
+
+通过 Scope，您可以**最小权限**地分配密钥：只授予完成任务所需的最少范围，降低单个密钥被泄露带来的影响面。
+
+##### 内置范围
+
+EMQX 5.10 提供 10 个 Scope，可在创建密钥时自由组合：
+
+| Scope 标识 | 名称 | 涵盖的典型 API 领域 |
+| --- | --- | --- |
+| `connections` | 连接管理 | `/clients`、`/subscriptions`、`/topics`、`/banned`、`/retainer`、`/file_transfer`、`/mqtt/delayed`、`/mqtt/topic_rewrite` 等 |
+| `publish` | 消息发布 | `/publish`、`/publish/bulk` |
+| `data_integration` | 数据集成 | `/rules`、`/connectors`、`/actions`、`/schema_registry`、`/schema_validations`、`/message_transformations`、`/exhooks`、`/ai/*` |
+| `access_control` | 访问控制 | `/authentication`、`/authorization/*` |
+| `gateways` | 协议网关 | `/gateways`、`/coap/*`、`/lwm2m/*`、`/gcp_devices` 等 |
+| `monitoring` | 监控数据 | `/metrics`、`/stats`、`/monitor*`、`/alarms`、`/trace`、`/slow_subscriptions`、`/telemetry`、`/prometheus/{auth,stats,data_integration,...}` 等 |
+| `cluster_operations` | 集群运维 | `/cluster*`、`/nodes`、`/load_rebalance`、`/node_eviction`、`/mt/*` 等 |
+| `system` | 系统配置 | `/configs*`、`/listeners*`、`/plugins*`、`/ds/*`、`/data/*`、`/status`、`/relup`、`/opentelemetry*`、`/prometheus` 等 |
+| `audit` | 审计日志 | `/audit` |
+| `license` | 许可证 | `/license*` |
+
+::: tip 提示
+Scope 是**稳定标识符**，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
+:::
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/login`、`/api_key`）永远**不**允许被 API 密钥访问，无论密钥的 `scopes` 如何配置——这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
+
+##### Scope 的默认行为
+
+`scopes` 字段在 API 密钥中的行为遵循以下规则：
+
+| `scopes` 字段的值 | 语义 |
+| --- | --- |
+| **未设置**（字段不存在） | 放行所有业务端点。主要用于历史升级场景，保持与旧版本兼容。 |
+| **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
+| 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
+
+Bootstrap 文件中不指定 Scopes 时，密钥将**显式**写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
+
+##### 查询可用范围
+
+EMQX 提供 `GET /api/v5/api_key/scopes` 端点返回当前版本支持的用户可见 Scope 列表及其描述，可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
+
+```bash
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+```
+
+##### 如何分配 Scope
+
+Scope 可以在以下任一入口指定：
+
+- **Dashboard**：在**系统设置** -> **API 密钥**创建或编辑密钥时，勾选需要授予的范围。
+- **REST API**：在创建 / 更新 API 密钥时，请求体加入 `"scopes": ["monitoring", "cluster_operations"]`。
+- **Bootstrap 文件**：在每一行的第四段以逗号分隔范围名，例如 `my-app:my-secret:administrator:monitoring,cluster_operations`。
 
 #### 认证方式
 
