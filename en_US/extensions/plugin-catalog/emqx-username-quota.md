@@ -215,3 +215,15 @@ API Client guidance:
 
 - Inspect `data` for any partial results available immediately.
 - Retry with bounded backoff.
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## Download
+
+Tarballs for each EMQX release:
+
+| EMQX Version | Plugin Version | Package |
+|---|---|---|
+| 6.2.0 | 1.2.0 | [emqx_username_quota-1.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_username_quota-1.2.0.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

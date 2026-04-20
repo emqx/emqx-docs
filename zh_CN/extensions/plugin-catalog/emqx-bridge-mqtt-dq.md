@@ -505,3 +505,15 @@ curl -u admin:public \
 对于匹配桥接的消息：
 - 返回给发布客户端的 `PUBACK`（QoS 1）与 `PUBREC`（QoS 2）可能会被延迟，直到 EMQX 等到磁盘队列入队确认（`enqueue_timeout_ms`）。
 - 即使该等待最终超时，EMQX 仍会完成客户端的发布流程。客户端不会因为磁盘队列入队超时而收到发布错误。
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 6.2.0 | 0.5.1 | [emqx_bridge_mqtt_dq-0.5.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_bridge_mqtt_dq-0.5.1.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

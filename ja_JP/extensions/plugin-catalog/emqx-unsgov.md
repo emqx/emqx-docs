@@ -235,3 +235,15 @@ Counter semantics:
 - If no model passes the topic-filter pre-check, `topic_nomatch` is bumped
   globally and no per-model drop counter is bumped.
   This includes the case where the active model set is empty.
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## ダウンロード
+
+各 EMQX リリースに対応するプラグインパッケージ:
+
+| EMQX バージョン | プラグインバージョン | パッケージ |
+|---|---|---|
+| 6.2.0 | 0.1.2 | [emqx_unsgov-0.1.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

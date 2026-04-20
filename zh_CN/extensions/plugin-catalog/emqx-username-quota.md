@@ -212,3 +212,15 @@
 
 - 先检查 `data` 中是否已有部分可用结果。
 - 使用有界退避策略进行重试。
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 6.2.0 | 1.2.0 | [emqx_username_quota-1.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_username_quota-1.2.0.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->
