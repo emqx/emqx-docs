@@ -133,7 +133,9 @@ This matters especially for EMQX deployments exposed on public networks: even if
 
 ### Enable Forced MFA for an SSO Backend
 
-In `base.hocon` (or via the Dashboard SSO configuration UI), add `force_mfa = true` to each backend that must require MFA:
+In `base.hocon`, add `force_mfa = true` to each backend that must require MFA. You can also configure this in the Dashboard SSO configuration UI; see [Configure LDAP SSO](../dashboard/sso-ldap.md), [Configure SAML SSO](../dashboard/sso-saml.md), and [Configure OIDC SSO](../dashboard/sso-oidc.md).
+
+Example configuration:
 
 ```hocon
 dashboard {

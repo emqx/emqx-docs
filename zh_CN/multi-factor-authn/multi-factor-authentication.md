@@ -124,7 +124,9 @@ dashboard.default_mfa = {mechanism: totp}
 
 ### 为 SSO 后端开启强制 MFA
 
-在 `base.hocon` 或 Dashboard 的 SSO 后端配置中，为每个需要强制 MFA 的后端加上 `force_mfa = true`：
+在 `base.hocon` 中，为每个需要强制 MFA 的后端加上 `force_mfa = true`。也可以在 Dashboard 的 SSO 配置页面中进行配置，详见[配置 LDAP 单点登录](../dashboard/sso-ldap.md)、[配置 SAML 单点登录](../dashboard/sso-saml.md)和[配置 OIDC 单点登录](../dashboard/sso-oidc.md)。
+
+配置示例：
 
 ```hocon
 dashboard {
