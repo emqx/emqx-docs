@@ -56,7 +56,7 @@ After enabling OIDC SSO, the EMQX Dashboard will display the SSO option on the l
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-After successful authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successful authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions. To require OIDC users to complete a TOTP second factor at login, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Logout
 

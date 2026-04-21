@@ -116,19 +116,15 @@ dashboard.default_mfa = {mechanism: totp}
 
 ## 为 SSO 用户强制启用 MFA
 
-除了 Dashboard 的本地账户之外，EMQX 5.10 起还支持**为 SSO 用户强制启用 MFA**。当您启用了 [单点登录（SSO）](../dashboard/sso.md)（SAML、OIDC 或 LDAP）后，可以针对每个 SSO 后端单独开启该功能，要求所有通过该后端登录的用户在完成 IdP（身份提供方）认证后，额外完成一次 TOTP 双因素验证。
+除了 Dashboard 的本地账户之外，EMQX 5.10 起还支持为 SSO 用户强制启用 MFA。当您启用了 [单点登录（SSO）](../dashboard/sso.md)（SAML、OIDC 或 LDAP）后，可以针对每个 SSO 后端单独开启该功能，要求所有通过该后端登录的用户在完成 IdP（身份提供方）认证后，额外完成一次 TOTP 双因素验证。
 
 这对部署在公共网络上的 EMQX 尤其重要：即使外部 IdP 的账户不慎泄露，攻击者依然无法登录 Dashboard，除非他们同时掌握用户的 TOTP 验证器。
 
-### 特性要点
-
-- **粒度到后端**：MFA 可以按 `saml` / `oidc` / `ldap` 三个后端**分别**开启或关闭，不影响已有本地用户。
-- **状态独立**：SSO 用户的 MFA 密钥（TOTP 共享密钥）与本地用户**完全隔离**。
-- **完整生命周期**：管理员可以为任意 SSO 用户启用、禁用、重置 MFA。禁用后即便后端仍然开启了强制 MFA，该用户也会被**豁免**二次验证，便于保留紧急救援账号。
+`force_mfa` 可以针对每个 SSO 后端（`saml`、`oidc` 和 `ldap`）单独配置，不影响本地用户。SSO 用户的 TOTP 密钥与本地用户完全隔离。管理员可以为任意 SSO 用户启用、禁用或重置 MFA；被禁用的用户即便后端开启了 `force_mfa = true` 也会被豁免，适合用于紧急救援账号。
 
 ### 为 SSO 后端开启强制 MFA
 
-在 `base.hocon` 或 Dashboard 的 SSO 后端配置中，为每个需要强制 MFA 的后端加上 `force_mfa: true`：
+在 `base.hocon` 或 Dashboard 的 SSO 后端配置中，为每个需要强制 MFA 的后端加上 `force_mfa = true`：
 
 ```hocon
 dashboard {
@@ -152,10 +148,10 @@ dashboard {
 }
 ```
 
-`force_mfa` 默认是 `false`，即升级前的行为——SSO 用户按旧流程登录。
+`force_mfa` 默认是 `false`，即升级前的行为，SSO 用户按旧流程登录。
 
 ::: tip
-开启 `force_mfa` **不会**追溯影响已经登录的用户；只会在用户**下一次登录**时生效。
+开启 `force_mfa` 不会追溯影响已经登录的用户；只会在用户下一次登录时生效。
 :::
 
 ### 管理单个 SSO 用户的 MFA
@@ -163,7 +159,7 @@ dashboard {
 在 Dashboard 的**系统设置** -> **用户**页面可以找到所有 SSO 用户（用户名旁会标注所属后端）。点击该用户行的 **MFA 设置**可以：
 
 - **启用 MFA**：让该用户在下次登录时必须绑定并使用 TOTP，即便对应后端的 `force_mfa` 没开。
-- **禁用 MFA**：把该用户标记为豁免，即便后端 `force_mfa=true` 也跳过。适用于紧急救援账号。
+- **禁用 MFA**：把该用户标记为豁免，即便后端 `force_mfa = true` 也跳过。适用于紧急救援账号。
 - **重置 TOTP 密钥**：清除当前密钥，用户下次登录时会重新进入首次设置流程。常用于用户丢失验证器设备时。
 
 ### 登录体验
@@ -182,10 +178,10 @@ dashboard {
 ### 常见问题
 
 **Q：已经登录的 SSO 用户，会因为我开启 `force_mfa` 被踢下线吗？**
-A：不会。`force_mfa` 只影响**下一次新登录**。已有会话继续有效直到过期。
+A：不会。`force_mfa` 只影响下一次新登录。已有会话继续有效直到过期。
 
 **Q：如何为一个紧急救援账号临时禁用 MFA？**
-A：在 Dashboard **用户**页面找到该 SSO 用户，**MFA 设置** → **禁用 MFA**。该用户后续登录会跳过 TOTP，直到您重新启用或重置。
+A：在 Dashboard **用户**页面找到该 SSO 用户，**MFA 设置** -> **禁用 MFA**。该用户后续登录会跳过 TOTP，直到您重新启用或重置。
 
 **Q：能不能只对某一批 SSO 用户启用 MFA，而不是整个后端？**
-A：可以。不开启 `force_mfa`（保持 `false`），然后在 Dashboard 里**逐个**为需要 MFA 的用户手动 **启用 MFA** 即可。
+A：可以。不开启 `force_mfa`（保持 `false`），然后在**用户**页面逐个为需要 MFA 的用户手动启用即可。

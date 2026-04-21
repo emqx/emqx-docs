@@ -33,30 +33,7 @@ For a detailed overview of the Audit Log feature, see [Audit Log](../dashboard/a
 
 ## API Keys
 
-On the **API Keys** page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
-
-1. Click the **+ Create** button in the top right corner of the page to bring up the Create API Key pop-up dialog. 
-
-2. On the Create API Key dialog, configure the detailed information for the API key. 
-
-   - The API key will never expire if the Expire At box is left empty.
-   - Select a role for the API key (optional). For more information about roles, see [Roles and Permissions](../admin/api.md#roles-and-permissions).
-
-3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
-
-   ::: warning Notice
-
-   You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
-
-   :::
-
-    Click the **Close** button to close the dialog.
-
-<img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
-
-You can view the details of the API key by clicking the name in the **Name** column. You click the **Edit** button in the **Actions** column to reset the expiration time, change the status, and edit the note of the API key. If an API key is no longer needed, you can delete it by clicking the **Delete** button.
-
-<img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+The **API Keys** page allows you to create and manage API keys for accessing the [HTTP API](../admin/api.md). For instructions on creating and managing API keys, including role and scope assignment, see [Create API Keys](../admin/api.md#create-api-keys).
 
 ## License
 

@@ -21,8 +21,12 @@ With SAML SSO, users only need to authenticate themselves once with the Identity
 1. Administrators configure and enable SSO in the Dashboard. Once configured, the EMQX Dashboard displays an SSO entry point on the login page.
 2. User information is configured on the Identity Provider (IdP) side.
 3. Users are guided to choose different Single Sign-On methods on the Dashboard login page.
-4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard.
+4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard. If `force_mfa` is enabled for the backend, users are also required to complete TOTP verification before the session is issued.
 5. Administrators assign roles and permissions to different users. Users can access corresponding resources after refreshing their login.
+
+## MFA for SSO Users
+
+Starting from EMQX 5.10, you can require SSO users to complete a TOTP second factor at login by enabling `force_mfa` on each SSO backend. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Configuration Examples
 

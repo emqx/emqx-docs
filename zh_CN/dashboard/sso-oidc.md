@@ -49,7 +49,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
  <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中管理该用户，例如分配角色和权限。
+认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中管理该用户，例如分配角色和权限。如需要求 OIDC 用户在登录时完成 TOTP 二次验证，请参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
 
 ## 退出登录
 

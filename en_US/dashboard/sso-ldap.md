@@ -103,7 +103,7 @@ After enabling LDAP-based SSO, the EMQX Dashboard will display the LDAP SSO opti
 
 <img src="./assets/ldap_login.png" alt="ldap_login" style="zoom:67%;" />
 
-After successfully authenticating with LDAP, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successfully authenticating with LDAP, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions. To require LDAP users to complete a TOTP second factor at login, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Logout
 

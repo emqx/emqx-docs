@@ -46,7 +46,24 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 #### Create API Keys
 
-You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [System - API Keys](../dashboard/system.md#api-keys).
+You can manually create API keys on the Dashboard by navigating to **System** -> **API Key**:
+
+1. Click the **+ Create** button in the top right corner to open the Create API Key dialog.
+2. Configure the API key details:
+   - Leave **Expire At** empty for the key to never expire.
+   - Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
+   - Select the scopes to grant (optional). See [API Scopes](#api-scopes).
+3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
+
+   ::: warning Important Notice
+
+   Save the API key and secret key immediately. The secret key will not be shown again.
+
+   :::
+
+4. Click **Close** to dismiss the dialog.
+
+You can view key details by clicking its name, edit its expiration, status, or note via the **Edit** button, or remove it with the **Delete** button.
 
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
 
@@ -87,26 +104,26 @@ The REST API implements role-based access control. When creating an API key, you
 
 #### API Scopes
 
-**Scopes** are a per-key permission dimension introduced in EMQX 5.10 that declare **which business areas** of the REST API a key is allowed to reach. Scopes are **orthogonal** to [Roles and Permissions](#roles-and-permissions):
+Scopes are a per-key permission dimension introduced in EMQX 5.10 that declare which business areas of the REST API a key is allowed to reach. Scopes and [Roles and Permissions](#roles-and-permissions) are independent of each other and enforced together, forming two separate layers of access control:
 
 | Dimension | Purpose | Granularity |
 | --------- | ------- | ----------- |
 | **Role** | Limits HTTP verbs (read-only vs. writes, publish-only, etc.) | Request action |
 | **Scope** | Limits the API domain (clients, rules, monitoring, ...) | Resource area |
 
-Every request is checked against **both** dimensions — the role check and the scope check. A request is accepted only when both checks pass.
+Every request is checked against both dimensions: the role check and the scope check. A request is accepted only when both checks pass.
 
 ##### Why Scopes
 
-In microservice and integration scenarios, external systems typically need access to only a **subset** of EMQX's management surface:
+In microservice and integration scenarios, external systems typically need access to only a subset of EMQX's management surface:
 
-- A monitoring platform only needs the **monitoring** scope (`/metrics`, `/stats`, `/prometheus`, ...);
-- A rules-publishing service only needs **data_integration** (`/rules`, `/connectors`, `/actions`, ...);
-- A cluster operator tool only needs **cluster_operations** (`/cluster`, `/nodes`, `/load_rebalance`, ...).
+- A monitoring platform only needs the `monitoring` scope (`/metrics`, `/stats`, `/prometheus`, ...);
+- A rules-publishing service only needs `data_integration` (`/rules`, `/connectors`, `/actions`, ...);
+- A cluster operator tool only needs `cluster_operations` (`/cluster`, `/nodes`, `/load_rebalance`, ...).
 
 With only `administrator` / `viewer` / `publisher` available, granularity is coarse: the only way to grant a service write access to rules is to hand it `administrator`, which effectively gives it full control over the whole system.
 
-Scopes let you assign keys using the **principle of least privilege**: grant only the scopes required for the task, and minimize the blast radius if a key is ever leaked.
+Scopes let you assign keys using the principle of least privilege: grant only the scopes required for the task, and minimize the blast radius if a key is ever leaked.
 
 ##### Built-in Scopes
 
@@ -126,10 +143,10 @@ EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
 | `license` | License | `/license*` |
 
 ::: tip
-Scope names are **stable identifiers** that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
+Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-Dashboard login, SSO callbacks and the API key self-management endpoints (for example `/login` and `/api_key`) can **never** be reached via API keys, regardless of the key's `scopes` configuration — this is a built-in Dashboard security boundary, unrelated to the scope model.
+Dashboard login, SSO callbacks and the API key self-management endpoints (for example `/login` and `/api_key`) can **never** be reached via API keys, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ##### Default Behaviour of `scopes`
 
@@ -141,9 +158,9 @@ The `scopes` field on an API key follows these rules:
 | **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
 | **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
 
-When a bootstrap file entry omits the scopes segment, the key is **explicitly** written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
+When a bootstrap file entry omits the scopes segment, the key is explicitly written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
 
-##### Listing Available Scopes
+##### List Available Scopes
 
 EMQX exposes `GET /api/v5/api_key/scopes` to return the current version's user-visible scope catalogue with descriptions. Use it to populate a scope-picker UI or validate automation scripts:
 
@@ -151,13 +168,13 @@ EMQX exposes `GET /api/v5/api_key/scopes` to return the current version's user-v
 curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
 ```
 
-##### Assigning Scopes
+##### Assign Scopes
 
 Scopes can be set from any of the following entry points:
 
-- **Dashboard**: when creating or editing a key under **System** -> **API Key**, tick the scopes to grant.
-- **REST API**: include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
-- **Bootstrap file**: provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
+- **Dashboard**: When creating or editing a key under **System** -> **API Key**, tick the scopes to grant.
+- **REST API**: Include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
+- **Bootstrap file**: Provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
 
 #### Authentication Method Using API Keys
 

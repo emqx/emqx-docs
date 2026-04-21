@@ -123,21 +123,17 @@ After you've completed the initial setup, you can use the authenticator app to l
 4. **Invalid Code**:
    If the code is incorrect or expired, you will see an error message. In this case, you can try entering the current code from your authenticator app.
 
-## Forcing MFA for SSO Users
+## Forced MFA for SSO Users
 
-Starting from EMQX 5.10, MFA can also be **required for SSO users**. Once you have enabled [Single Sign-On (SSO)](../dashboard/sso.md) (SAML, OIDC, or LDAP), you can turn on a per-backend `force_mfa` switch that requires every user arriving from that backend to pass a TOTP second factor in addition to the IdP authentication.
+Starting from EMQX 5.10, MFA can also be required for SSO users. Once you have enabled [Single Sign-On (SSO)](../dashboard/sso.md) (SAML, OIDC, or LDAP), you can turn on a per-backend `force_mfa` switch that requires every user arriving from that backend to pass a TOTP second factor in addition to the IdP authentication.
 
 This matters especially for EMQX deployments exposed on public networks: even if an identity is leaked at the upstream IdP, an attacker still cannot reach the Dashboard without also owning the user's authenticator device.
 
-### Highlights
+`force_mfa` is configured for each SSO backend (`saml`, `oidc`, and `ldap`) independently. Local accounts are unaffected. Each SSO user's TOTP secret is stored separately from local users'. Administrators can enable, disable, or reset MFA for any individual SSO user; a user with MFA disabled is exempt from TOTP even when the backend has `force_mfa = true`, which is useful for break-glass admin accounts.
 
-- **Per-backend granularity**: `force_mfa` is configured **independently** for each of `saml` / `oidc` / `ldap`. Local accounts are unaffected.
-- **Isolated state**: An SSO user's TOTP shared secret is stored **separately** from local users'.
-- **Full lifecycle**: Administrators can enable, disable, or reset MFA for any individual SSO user. A disabled user is **exempt** even when the backend has `force_mfa: true` — handy for break-glass admin accounts.
+### Enable Forced MFA for an SSO Backend
 
-### Enabling Forced MFA per SSO Backend
-
-In `base.hocon` (or via the Dashboard SSO configuration UI), add `force_mfa: true` to each backend that must require MFA:
+In `base.hocon` (or via the Dashboard SSO configuration UI), add `force_mfa = true` to each backend that must require MFA:
 
 ```hocon
 dashboard {
@@ -164,18 +160,18 @@ dashboard {
 `force_mfa` defaults to `false`, preserving pre-5.10 behaviour.
 
 ::: tip
-Turning `force_mfa` on does **not** retroactively invalidate existing sessions. It takes effect on the next fresh login.
+Turning `force_mfa` on does not retroactively invalidate existing sessions. It takes effect on the next fresh login.
 :::
 
-### Managing MFA for an Individual SSO User
+### Manage MFA for Individual SSO Users
 
-In the Dashboard, go to **System** -> **Users**. SSO users are listed with their backend shown next to the username. Open **MFA** on a user row to:
+In the Dashboard, go to **System** -> **Users**. SSO users are listed with their backend shown next to the username. Click the **MFA Settings** button in the Actions column to:
 
 - **Enable MFA**: force this user to set up and use TOTP on the next login, even when the corresponding backend has `force_mfa` off.
-- **Disable MFA**: mark the user as exempt — they skip TOTP even when the backend requires it. Useful for break-glass administrators.
+- **Disable MFA**: mark the user as exempt. They skip TOTP even when the backend requires it. This is useful for break-glass administrators.
 - **Reset TOTP secret**: clear the current secret. The user enters the setup flow again on the next login. Use this when a user loses their authenticator device.
 
-### What the User Sees at Login
+### SSO Login Flow with MFA
 
 Forcing MFA does not change the SSO login experience:
 
@@ -184,17 +180,17 @@ Forcing MFA does not change the SSO login experience:
 3. After returning to the Dashboard, enter a TOTP code if MFA applies to you.
 4. On the first login when `force_mfa` is enabled, you will be guided through a one-time TOTP setup (scan QR / enter key) before reaching the Dashboard.
 
-::: tip Security note
+::: tip Security Note
 By design, no Dashboard access credential is issued before TOTP succeeds. Intercepting the SSO callback link cannot bypass MFA.
 :::
 
 ### FAQ
 
 **Q: Will already-logged-in SSO users be kicked out when I enable `force_mfa`?**
-A: No. `force_mfa` only gates **new logins**. Existing sessions remain valid until they expire.
+A: No. `force_mfa` only gates new logins. Existing sessions remain valid until they expire.
 
 **Q: How do I temporarily disable MFA for a break-glass account?**
-A: Find the user under **Dashboard → Users**, open **MFA** → **Disable MFA**. Subsequent logins skip TOTP until you re-enable or reset.
+A: Find the user under **System** -> **Users**, click **MFA Settings** -> **Disable MFA**. Subsequent logins skip TOTP until you re-enable or reset.
 
 **Q: Can I require MFA for only a subset of SSO users instead of the whole backend?**
-A: Yes — leave `force_mfa` at `false` and explicitly **Enable MFA** for the users you want to cover, one by one, from the Dashboard **Users** page.
+A: Yes — leave `force_mfa` at `false` and enable MFA for the users you want to cover one by one from the **Users** page.

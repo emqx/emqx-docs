@@ -62,7 +62,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-登录成功后，将跳转回到 Dashboard，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。
+登录成功后，将跳转回到 Dashboard，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。如需要求 SAML 用户在登录时完成 TOTP 二次验证，请参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
 
 ## 退出登录
 

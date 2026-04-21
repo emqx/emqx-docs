@@ -44,7 +44,24 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 
 #### 创建 API 密钥
 
-您可以在 Dashboard **系统设置** -> **API 密钥** 页面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
+您可以在 Dashboard **系统设置** -> **API 密钥**页面中手动创建 API 密钥：
+
+1. 单击页面右上角的**创建**按钮，打开创建 API 密钥对话框。
+2. 配置 API 密钥详细信息：
+   - **到期时间**留空表示永不过期。
+   - 选择角色（可选），参见[角色与权限](#角色与权限)。
+   - 选择授予的范围（可选），参见 [API 范围（Scope）](#api-范围-scope)。
+3. 单击**确认**，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
+
+   ::: warning 重要提示
+
+   请立即保存 API Key 和 Secret Key。Secret Key 后续将不再显示。
+
+   :::
+
+4. 单击**关闭**按钮关闭对话框。
+
+已创建的密钥可在列表页查看详情，通过**编辑**按钮修改到期时间、状态和备注，或通过**删除**按钮移除。
 
 您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
 
@@ -77,7 +94,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 #### 角色与权限
 
-在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下3个预定义的角色：
+在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下 3 个预定义的角色：
 
 - **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
 - **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
@@ -85,26 +102,26 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 #### API 范围（Scope）
 
-**Scope（范围）** 是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些**业务领域**的 API。它与 [角色与权限](#角色与权限) 是**正交的两层控制**：
+**Scope（范围）** 是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些业务领域的 API。它与[角色与权限](#角色与权限)相互独立、共同生效，形成两层权限控制：
 
 | 维度 | 作用 | 粒度 |
 | ---- | ---- | ---- |
 | **Role（角色）** | 限制 HTTP 方法（只读 vs 可写、只能发布等） | 请求动作 |
 | **Scope（范围）** | 限制可访问的 API 领域（客户端、规则、监控等） | 资源领域 |
 
-一次请求会先后通过两个检查：**Role 校验** + **Scope 校验**。只有两个检查都通过，请求才会被接受。
+一次请求会先后通过两个检查：Role 校验 + Scope 校验。只有两个检查都通过，请求才会被接受。
 
 ##### 为什么需要 Scope
 
-在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的**一部分**管理接口：
+在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：
 
-- 监控平台只需要读 `/metrics`、`/stats`、`/prometheus` 等 **monitoring** 范围的接口；
-- 规则发布服务只需要操作 `/rules`、`/connectors`、`/actions` 等 **data_integration** 范围的接口；
-- 集群运维工具只需要访问 `/cluster`、`/nodes`、`/load_rebalance` 等 **cluster_operations** 范围的接口。
+- 监控平台只需要读 `/metrics`、`/stats`、`/prometheus` 等 `monitoring` 范围的接口；
+- 规则发布服务只需要操作 `/rules`、`/connectors`、`/actions` 等 `data_integration` 范围的接口；
+- 集群运维工具只需要访问 `/cluster`、`/nodes`、`/load_rebalance` 等 `cluster_operations` 范围的接口。
 
 以前只有 `administrator` / `viewer` / `publisher` 三种角色，颗粒度较粗：想让一个服务只能改规则，就不得不授予 `administrator`，这等于把整个系统的管理权都交给对方。
 
-通过 Scope，您可以**最小权限**地分配密钥：只授予完成任务所需的最少范围，降低单个密钥被泄露带来的影响面。
+通过 Scope，您可以按最小权限原则分配密钥：只授予完成任务所需的最少范围，降低单个密钥被泄露带来的影响面。
 
 ##### 内置范围
 
@@ -124,10 +141,10 @@ EMQX 5.10 提供 10 个 Scope，可在创建密钥时自由组合：
 | `license` | 许可证 | `/license*` |
 
 ::: tip 提示
-Scope 是**稳定标识符**，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
+Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/login`、`/api_key`）永远**不**允许被 API 密钥访问，无论密钥的 `scopes` 如何配置——这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/login`、`/api_key`）永远**不**允许被 API 密钥访问，无论密钥的 `scopes` 如何配置。这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
 
 ##### Scope 的默认行为
 
@@ -139,7 +156,7 @@ Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（�
 | **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
 | 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
 
-Bootstrap 文件中不指定 Scopes 时，密钥将**显式**写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
+Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
 
 ##### 查询可用范围
 
