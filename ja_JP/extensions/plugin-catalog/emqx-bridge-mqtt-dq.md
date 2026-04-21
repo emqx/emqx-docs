@@ -588,3 +588,15 @@ For messages matching a bridge:
   EMQX waits for disk-queue enqueue confirmation (`enqueue_timeout_ms`).
 - If that enqueue wait times out, EMQX still completes the client publish flow.
   The client does not receive a publish error because of disk-queue enqueue timeout.
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## ダウンロード
+
+各 EMQX リリースに対応するプラグインパッケージ:
+
+| EMQX バージョン | プラグインバージョン | パッケージ |
+|---|---|---|
+| 6.2.0 | 0.5.1 | [emqx_bridge_mqtt_dq-0.5.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_bridge_mqtt_dq-0.5.1.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

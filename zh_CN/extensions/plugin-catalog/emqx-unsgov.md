@@ -215,3 +215,15 @@ UNS Governance 会同时校验主题结构以及（可选的）负载模式。
 - 主题/负载丢弃会对选中模型的 `messages_total`、`messages_dropped` 以及对应原因计数器加一。
 - 如果没有任何模型通过 topic-filter 预检查，则只会全局增加 `topic_nomatch`，不会增加任何逐模型丢弃计数。
   这也包括激活模型集合为空的情况。
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 6.2.0 | 0.1.2 | [emqx_unsgov-0.1.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->
