@@ -46,13 +46,18 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 #### Create API Keys
 
+##### Dashboard
+
 You can manually create API keys on the Dashboard by navigating to **System** -> **API Key**:
 
-1. Click the **+ Create** button in the top right corner to open the Create API Key dialog.
+1. Click the **+ Create** button in the top right corner to open the Create dialog.
 2. Configure the API key details:
-   - Leave **Expire At** empty for the key to never expire.
-   - Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
-   - Select the scopes to grant (optional). See [API Scopes](#api-scopes).
+   - **Name** (required): Enter a name for the API key.
+   - **Expire At**: Leave empty for the key to never expire.
+   - **Is Enable**: Defaults to enabled.
+   - **Role**: Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
+   - **Scopes**: Select the scopes to grant (optional). Defaults to all scope permissions. See [API Scopes](#api-scopes).
+   - **Note**: Optionally enter a description for the key.
 3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
 
    ::: warning Important Notice
@@ -64,6 +69,8 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 4. Click **Close** to dismiss the dialog.
 
 You can view key details by clicking its name, edit its expiration, status, or note via the **Edit** button, or remove it with the **Delete** button.
+
+##### Bootstrap File
 
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
 
