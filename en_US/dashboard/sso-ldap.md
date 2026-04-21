@@ -15,7 +15,7 @@ Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 
 ## Configure OpenLDAP SSO
 
-This section guides you on how to enable and configure the OpenLDAP SSO in the EMQX Dashboard.
+This section guides you through enabling and configuring OpenLDAP SSO in the EMQX Dashboard.
 
 1. Go to Dashboard, and click **System Settings** -> **Single Sign-On** from the left navigation menu.
 
@@ -25,6 +25,7 @@ This section guides you on how to enable and configure the OpenLDAP SSO in the E
 
    | Option             | Description                                                  |
    | ------------------ | ------------------------------------------------------------ |
+   | Force MFA          | When enabled, all users from this LDAP backend are required to set up and verify MFA at login. Disabled by default. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users). |
    | Server             | The address of the OpenLDAP server, for example, `localhost:389`. |
    | Username           | The Bind DN to access the OpenLDAP server.                   |
    | Password           | The user password to access the OpenLDAP server.             |
@@ -88,6 +89,8 @@ Before you configure the Microsoft Extra ID SSO in the Dashboard, you need to fo
    - **User Query Condition**: For Microsoft Entra ID, the default filter is `(&(objectClass=user)(sAMAccountName=${username}))`, which means logging in using the account name (email). You can replace `sAMAccountName` with `mail` to use the email address for login.
 
    - Here, you are using IP address + secure LDAP direct access, so you need to click **Enable TLS** and disable **Verify Server Certificate**.
+
+   - **Force MFA**: Optionally enable this to require all users from this backend to complete TOTP verification at login. Disabled by default.
 
      <img src="./assets/sso-ad-dashboard.png" alt="sso-ad-dashboard" style="zoom:67%;" />
 

@@ -25,6 +25,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 1. 转到 Dashboard **系统设置** -> **单点登录**页面。
 2. 选择 **SAML 2.0** 选项，点击**启用**按钮。
 3. 在配置页面中，输入以下信息：
+   - **强制启用 MFA**：可选。开启后，该后端的所有用户在登录时须完成 TOTP 验证。默认关闭。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
    - **Dashboard 地址**：确保用户能够访问 Dashboard 的实际访问地址，不需要带具体路径。例如 `http://localhost:18083`。该地址将自动拼接生成**单点登录地址**与**元数据地址**供 IdP 侧配置使用。
    - **SAML 元数据 URL**：暂时留空，等待第 2 步配置生成。
 

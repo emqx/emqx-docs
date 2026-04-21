@@ -2,7 +2,7 @@
 
 Single Sign-On (SSO) is an authentication mechanism that allows users to log in to multiple applications or systems using a single set of credentials, such as a username and password, without the need for separate authentication in each application. When EMQX Dashboard enables the SSO feature, users can conveniently log in to the EMQX Dashboard using their enterprise account credentials. Organizations can centrally manage user identities and permissions and simplify their user management processes. This feature enhances the security of enterprise data and systems while ensuring user convenience.
 
-EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
+EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP), the Security Assertion Markup Language (SAML) 2.0 standard, and OpenID Connect (OIDC), supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID)](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more.
 
 ## LDAP-Based SSO
 
@@ -15,6 +15,12 @@ EMQX sends the user's LDAP credentials to the directory server for validation wh
 EMQX Dashboard allows you to integrate Identity Provider (IdP) services that support SAML for SSO. SAML is an XML-based open standard data format widely used in enterprise environments for SSO solutions.
 
 With SAML SSO, users only need to authenticate themselves once with the Identity Provider. The Identity Provider generates a SAML assertion containing user information and sends it to the EMQX Dashboard. Upon receiving and successfully verifying the SAML assertion, EMQX Dashboard creates user session information and logs the user into the Dashboard. SAML provides the capability for cross-domain authentication and authorization, supporting seamless integration between multiple applications. Enterprises can easily incorporate EMQX into their existing SAML identity systems, enabling users to access EMQX services conveniently and securely.
+
+## OIDC-Based SSO
+
+EMQX Dashboard allows you to integrate Identity Provider (IdP) services that support OIDC for SSO. OIDC is an identity layer built on top of the OAuth 2.0 protocol, providing a standardized way to verify user identity and obtain user information.
+
+With OIDC SSO, users authenticate with the Identity Provider, which returns an ID token containing user information to the EMQX Dashboard. Upon receiving and successfully validating the ID token, EMQX Dashboard creates user session information and logs the user into the Dashboard. OIDC provides a modern, RESTful approach to authentication, making it easy to integrate with contemporary identity services.
 
 ## Configuration and Usage Workflow
 
@@ -30,7 +36,8 @@ Starting from EMQX 5.10, you can require SSO users to complete a TOTP second fac
 
 ## Configuration Examples
 
-Below are configuration examples for SSO based on LDAP and SAML 2.0:
+Below are configuration examples for each SSO method:
 
 - [Configure LDAP Single Sign-On](./sso-ldap.md)
 - [Configure SAML Single Sign-On](./sso-saml.md)
+- [Configure OIDC Single Sign-On](./sso-oidc.md)

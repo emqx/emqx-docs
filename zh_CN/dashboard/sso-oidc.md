@@ -34,6 +34,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 1. 在 EMQX Dashboard 中，导航到 **System** -> **SSO**。
 2. 在 **OIDC** 选项卡中点击**启用**按钮。
 3. 在配置页面中，输入以下信息：
+   - **强制启用 MFA**：可选。开启后，该后端的所有用户在登录时须完成 TOTP 验证。默认关闭。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
    - **提供商**：选择 `Okta` 或为其他提供商选择 `通用`。
    - **签发者 URL**：这是您的 Okta 授权服务器的 URL，例如 `https://example-org.okta.com`。
    - **Client ID**：从**第一步**创建的应用程序中复制。
