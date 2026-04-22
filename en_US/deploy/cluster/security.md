@@ -77,3 +77,104 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 - For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
 - For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
 
+## Mitigate SSRF with Rule Engine Policy and Firewall Rules
+
+Administrative features and integrations may require EMQX to open outbound network connections. If delegated administrators can configure namespace-scoped resources, use the built-in rule engine SSRF policy as the first line of defense for rule-engine-managed outbound targets, and use host-level egress filtering as an additional runtime defense.
+
+### Use `rule_engine.ssrf` as the First Line of Defense
+
+Starting from EMQX `6.0.3`, `6.1.2`, and `6.2.1`, EMQX provides a cluster-level SSRF policy for outbound rule engine targets such as connectors, bridges, and actions:
+
+```hocon
+rule_engine {
+  ssrf {
+    enable = true
+    allow_cidrs = []
+    deny_cidrs = [
+      "127.0.0.0/8",
+      "::1/128",
+      "169.254.0.0/16",
+      "fe80::/10",
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+      "fc00::/7",
+      "0.0.0.0/32",
+      "224.0.0.0/4",
+      "ff00::/8",
+      "100.100.100.200/32",
+      "69.254.169.253/32"
+    ]
+    deny_hosts = [
+      "metadata.tencentyun.com",
+      "metadata.google.internal",
+      "metadata.azure.internal"
+    ]
+  }
+}
+```
+
+When enabled, EMQX validates outbound targets at configuration update time. Exact matches in `deny_hosts` are rejected immediately. Resolved IPs are checked against `allow_cidrs` first, and then against `deny_cidrs` if no allowlist match is found.
+
+This policy is disabled by default for compatibility. Enable it unless you intentionally rely on rule-engine-managed outbound targets that must reach internal services and you have reviewed the allow/deny lists carefully.
+
+### When Static Config Validation Is Usually Enough
+
+Using `rule_engine.ssrf` alone is usually sufficient when all of the following are true:
+
+- Only trusted administrators can create or update connectors, bridges, or actions.
+- Outbound targets are stable and expected, such as fixed SaaS endpoints or explicitly approved public services.
+- You mainly want to prevent accidental misconfiguration or obvious SSRF targets at config-update time.
+- You do not rely on DNS names that could later be rebound to different addresses.
+
+### When You Should Also Add Firewall Rules
+
+Add host-level egress filtering with `iptables`, `nftables`, cloud security groups, or Kubernetes network policies when any of the following applies:
+
+- Delegated administrators can configure namespace-scoped resources.
+- EMQX must not be able to reach internal services, metadata endpoints, or management networks even if a target passes config-time validation.
+- DNS rebinding or post-validation address changes are part of your threat model.
+- Your deployment is multi-tenant, higher-risk, or must enforce a strict outbound network boundary at runtime.
+
+When planning egress restrictions:
+
+- Allow only the destinations required by your deployment, such as identity providers, webhooks, and connector backends.
+- Deny access to sensitive addresses that are commonly abused in SSRF attacks, such as loopback, link-local, and instance metadata endpoints, unless your deployment explicitly requires them. In particular, consider blocking the following metadata endpoints:
+  - `100.100.100.200` for Alibaba Cloud metadata service
+  - `169.254.169.253` for the AWS external metadata service
+  - `169.254.169.254` for AWS and Azure metadata service
+  - `fd00:ec2::254` for the AWS IPv6 metadata service
+- If you use AWS-based connectors or actions on EC2 and let EMQX obtain credentials from the instance metadata service by omitting the access key ID and secret access key, do not block `169.254.169.254`. This applies not only to Amazon MSK IAM, but also to integrations such as S3, S3 Tables, DynamoDB, and Kinesis. The same exception should be reflected in your `iptables` or `nftables` rules.
+- Validate the rules carefully in staging before applying them to production systems.
+- If EMQX runs in containers or Kubernetes, apply equivalent egress controls with the container host firewall, cloud security groups, or Kubernetes network policies.
+
+`rule_engine.ssrf` does not replace these network-layer controls. The SSRF policy validates targets only when the configuration is created or updated. Runtime network controls are still required if you need protection against DNS rebinding or any other case where the resolved address may change after validation.
+
+The following `iptables` example shows the general approach. Adapt the interface names, ports, and destination addresses to match your environment. If `iptables` is not available on your host, apply equivalent rules with `nftables`:
+
+```bash
+# Allow established outbound connections
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Allow DNS and NTP if required by the host
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+
+# Allow access only to approved external services
+iptables -A OUTPUT -p tcp -d 198.51.100.10 --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp -d 203.0.113.20 --dport 443 -j ACCEPT
+
+# Block common metadata and local-only destinations
+iptables -A OUTPUT -d 127.0.0.0/8 -j REJECT
+# If AWS-based connectors or actions on EC2 must retrieve credentials from
+# the instance metadata service, do not apply this blanket deny to
+# 169.254.169.254. Add a more specific allow rule instead.
+iptables -A OUTPUT -d 169.254.0.0/16 -j REJECT
+iptables -A OUTPUT -d 100.100.100.200 -j REJECT
+ip6tables -A OUTPUT -d fd00:ec2::254 -j REJECT
+
+# Reject all other new outbound connections by default
+iptables -A OUTPUT -m conntrack --ctstate NEW -j REJECT
+```
+
+If your host uses `nftables` instead of `iptables`, implement the same policy there, including explicit denies for known metadata endpoints such as `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`. If AWS-based connectors or actions on EC2 must retrieve credentials from the instance metadata service, make sure the rules leave `169.254.169.254` reachable.

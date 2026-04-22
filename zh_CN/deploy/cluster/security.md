@@ -114,3 +114,103 @@ EMQX 核心节点用 Erlang 分布机制来同步数据库更新并管理集群�
 * 确保 `ssl_dist.conf` 文件有正确的密钥和证书的路径。
 * 确保配置 `cluster.proto_dist` 被设置为 `inet_tls`。
 
+## 结合规则引擎策略与防火墙规则缓解 SSRF
+
+管理功能和各类集成可能需要 EMQX 主动建立出站网络连接。如果委派管理员可以配置命名空间范围内的资源，建议优先使用内置的规则引擎 SSRF 策略保护规则引擎管理的出站目标，并将主机级出站访问控制作为额外的运行时防线。
+
+### 优先启用 `rule_engine.ssrf`
+
+从 EMQX `6.0.3`、`6.1.2` 和 `6.2.1` 开始，EMQX 为连接器、数据桥接和动作等规则引擎相关的出站目标提供了集群级 SSRF 策略：
+
+```hocon
+rule_engine {
+  ssrf {
+    enable = true
+    allow_cidrs = []
+    deny_cidrs = [
+      "127.0.0.0/8",
+      "::1/128",
+      "169.254.0.0/16",
+      "fe80::/10",
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+      "fc00::/7",
+      "0.0.0.0/32",
+      "224.0.0.0/4",
+      "ff00::/8",
+      "100.100.100.200/32",
+      "69.254.169.253/32"
+    ]
+    deny_hosts = [
+      "metadata.tencentyun.com",
+      "metadata.google.internal",
+      "metadata.azure.internal"
+    ]
+  }
+}
+```
+
+启用后，EMQX 会在配置创建或更新时校验出站目标。`deny_hosts` 中的主机会被直接拒绝；解析得到的 IP 会先匹配 `allow_cidrs`，如果没有命中，再继续匹配 `deny_cidrs`。
+
+为兼容现有部署，该策略默认关闭。如果您没有明确依赖必须访问内部服务的规则引擎出站目标，建议启用它，并仔细审查 `allow_cidrs` 与 `deny_cidrs` 配置。
+
+### 何时仅靠静态配置校验通常就足够
+
+如果同时满足以下条件，通常仅启用 `rule_engine.ssrf` 就已经足够：
+
+- 只有受信任的管理员可以创建或修改连接器、数据桥接或动作。
+- 出站目标是稳定且可预期的，例如固定的 SaaS 端点或已批准的公共服务。
+- 您的主要目标是在配置更新时阻止明显的 SSRF 目标或误配置。
+- 您不依赖后续可能被重新绑定到其他地址的 DNS 名称。
+
+### 何时还应同时实施防火墙规则
+
+如果满足以下任一条件，建议再增加 `iptables`、`nftables`、云安全组或 Kubernetes NetworkPolicy 等主机级出站访问控制：
+
+- 委派管理员可以配置命名空间范围内的资源。
+- 即使目标通过了配置时校验，EMQX 运行主机在运行时仍绝不能访问内部服务、元数据端点或管理网络。
+- 您需要防御 DNS rebinding 或其他“校验通过后目标地址发生变化”的场景。
+- 您的部署属于多租户、高风险场景，或需要在运行时强制执行严格的出站网络边界。
+
+在规划出站访问限制时，建议：
+
+- 仅放行部署实际需要访问的目标地址，例如身份提供商、Webhook 接收端和连接器后端服务。
+- 默认拒绝 SSRF 攻击中常见的敏感地址，例如回环地址、链路本地地址以及实例元数据地址，除非您的部署明确需要访问它们。尤其建议显式阻止以下元数据端点：
+  - `100.100.100.200`，阿里云元数据服务
+  - `169.254.169.253`，AWS 外部元数据服务
+  - `169.254.169.254`，AWS 和 Azure 元数据服务
+  - `fd00:ec2::254`，AWS IPv6 元数据服务
+- 如果您在 EC2 上使用 AWS 相关连接器或动作，并且通过省略 Access Key ID 与 Secret Access Key 的方式让 EMQX 从实例元数据服务获取凭据，请不要阻止 `169.254.169.254`。这不仅适用于 Amazon MSK IAM，也适用于 S3、S3 Tables、DynamoDB、Kinesis 等集成。该例外也应体现在您的 `iptables` 或 `nftables` 规则中。
+- 在生产环境启用前，先在预发或测试环境中仔细验证规则。
+- 如果 EMQX 运行在容器或 Kubernetes 中，应通过宿主机防火墙、云安全组或 Kubernetes NetworkPolicy 实现等效的出站访问控制。
+
+`rule_engine.ssrf` 不能替代这些网络层控制。该策略只在配置创建或更新时校验目标；如果您需要防御 DNS rebinding，或担心目标在校验通过后被解析到不同地址，仍应使用运行时网络访问控制。
+
+下面的 `iptables` 示例展示了基本思路。请根据您的环境调整网卡名称、端口和目标地址。如果宿主机未提供 `iptables`，请使用 `nftables` 配置等效规则：
+
+```bash
+# 允许已建立的出站连接
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# 如宿主机需要，可放行 DNS 和 NTP
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+
+# 仅允许访问经批准的外部服务
+iptables -A OUTPUT -p tcp -d 198.51.100.10 --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp -d 203.0.113.20 --dport 443 -j ACCEPT
+
+# 阻止常见的元数据地址和本地地址
+iptables -A OUTPUT -d 127.0.0.0/8 -j REJECT
+# 如果 EC2 上的 AWS 相关连接器或动作需要通过实例元数据服务获取凭据，
+# 请不要直接套用这条对 169.254.169.254 生效的整段拒绝规则，而应改为更具体的放行规则。
+iptables -A OUTPUT -d 169.254.0.0/16 -j REJECT
+iptables -A OUTPUT -d 100.100.100.200 -j REJECT
+ip6tables -A OUTPUT -d fd00:ec2::254 -j REJECT
+
+# 默认拒绝所有新的其他出站连接
+iptables -A OUTPUT -m conntrack --ctstate NEW -j REJECT
+```
+
+如果您的宿主机使用 `nftables` 而非 `iptables`，也应实现同样的策略，并显式阻止这些已知元数据端点：`100.100.100.200`、`169.254.169.253`、`169.254.169.254` 和 `fd00:ec2::254`。如果 EC2 上的 AWS 相关连接器或动作需要通过实例元数据服务获取凭据，请确保规则保留对 `169.254.169.254` 的访问。

@@ -49,6 +49,8 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   Admin namespaces are currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
   They are not intended as a security boundary for public or untrusted multi-tenant use.
 
+  If delegated administrators are allowed to configure namespace-scoped resources, first enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets, and then restrict outbound network access from EMQX nodes to approved destinations when you need runtime enforcement. For example, use host-level firewall rules such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+
   :::
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
@@ -59,6 +61,18 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
+
+## Operational Security for Admin Namespaces
+
+Namespaced administrative access is designed for trusted internal delegation, not for exposing a hard isolation boundary between mutually untrusted tenants.
+
+If you use this feature, enable `rule_engine.ssrf` where available as the first guard for rule-engine-managed outbound targets, and add network egress controls on the EMQX hosts when your deployment needs runtime enforcement. In particular:
+
+- Allow outbound access only to approved business endpoints, such as IdPs, webhooks, or connector backends that your deployment uses.
+- Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless they are explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.
+- Review firewall rules whenever you add new integrations or management features that initiate outbound HTTP or TCP connections.
+
+For guidance on when `rule_engine.ssrf` alone is usually sufficient and when to add `iptables`- or `nftables`-based controls, see [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 ### Isolation Mechanisms
 
