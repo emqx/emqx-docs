@@ -872,3 +872,6 @@
   title_cn: MQTT 教程
   lang: cn
   path: https://www.emqx.com/zh/mqtt-guide
+- title_en: LLM Resources
+  title_cn: LLM 资源
+  path: get-started/llms-txt
