@@ -16,56 +16,36 @@ The `llms.txt` file is automatically generated at each documentation build, so i
 
 ## Available Files
 
-The following `llms.txt` endpoints are available for EMQX products:
-
-| Product | URL |
-|---|---|
-| EMQX Enterprise | `https://docs.emqx.com/en/emqx/latest/llms.txt` |
-| EMQX Cloud | `https://docs.emqx.com/en/cloud/latest/llms.txt` |
-| EMQX Edge | `https://docs.emqx.com/en/emqx-edge/latest/llms.txt` | <!-- TODO: llms.txt for EMQX Edge returns 404; check doc build pipeline -->
-| EMQX Neuron | `https://docs.emqx.com/en/neuronex/latest/llms.txt` |
-
-A top-level index that lists all available `llms.txt` files is also available at:
+The top-level index file lists all available `llms.txt` files across EMQX products and versions:
 
 ```
 https://docs.emqx.com/llms.txt
 ```
 
+EMQX documentation is organized by product and version. Each product version has its own `llms.txt`, for example:
+
+```
+https://docs.emqx.com/en/emqx/latest/llms.txt
+https://docs.emqx.com/en/emqx/v5.8/llms.txt
+```
+
+Point your AI tool at the top-level index, and it can discover the full list and navigate to the right version on its own.
+
 ## Usage with AI Tools
 
-### Cursor
-
-To add EMQX documentation as a context source in [Cursor](https://docs.cursor.com/context/rules):
-
-1. Open **Cursor Settings** > **Features** > **Docs**.
-2. Click **Add new doc**.
-3. Enter the `llms.txt` URL for the product you need, for example:
-   ```
-   https://docs.emqx.com/en/emqx/latest/llms.txt
-   ```
-4. Cursor indexes the documentation and makes it available via `@Docs` in chat.
-
-### Windsurf
-
-To use EMQX documentation in [Windsurf](https://docs.windsurf.com/windsurf/memories#adding-a-documentation-source):
-
-1. Open the **Memories** panel.
-2. Click **Add documentation source**.
-3. Paste the `llms.txt` URL.
-
-### Claude, ChatGPT, and Other AI Tools
-
-For AI tools that accept URLs or file attachments as context, paste the `llms.txt` URL directly into your prompt:
+Point your AI tool or coding assistant at the top-level `llms.txt` URL:
 
 ```
-Using the EMQX documentation at https://docs.emqx.com/en/emqx/latest/llms.txt, help me configure authentication with JWT tokens.
+https://docs.emqx.com/llms.txt
 ```
 
-::: tip Note
+How you add it depends on the tool. Some tools let you register a documentation source directly in their settings; others accept a URL pasted into the prompt. If you are not sure, ask your AI tool directly. For example:
 
-Some AI tools require you to type the `@` symbol manually to reference a documentation source. If the URL is not recognized automatically, check your tool's documentation for how to add custom doc sources.
+```
+How do I add https://docs.emqx.com/llms.txt as a documentation source?
+```
 
-:::
+The AI will know the current steps for its own interface.
 
 ## Access Documentation as Markdown
 

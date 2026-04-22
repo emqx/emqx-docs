@@ -16,56 +16,36 @@ EMQX 文档提供 `llms.txt` 文件，专为大语言模型（LLM）设计的结
 
 ## 可用文件
 
-以下 `llms.txt` 端点适用于各 EMQX 产品：
-
-| 产品 | URL |
-|---|---|
-| EMQX 企业版 | `https://docs.emqx.com/en/emqx/latest/llms.txt` |
-| EMQX Cloud | `https://docs.emqx.com/en/cloud/latest/llms.txt` |
-| EMQX Edge | `https://docs.emqx.com/en/emqx-edge/latest/llms.txt` | <!-- TODO: llms.txt for EMQX Edge returns 404; check doc build pipeline -->
-| EMQX Neuron | `https://docs.emqx.com/en/neuronex/latest/llms.txt` |
-
-此外，顶层索引文件列出了所有可用的 `llms.txt`：
+以下顶层索引文件列出了所有 EMQX 产品和版本的 `llms.txt`：
 
 ```
 https://docs.emqx.com/llms.txt
 ```
 
+EMQX 文档按产品和版本进行组织，每个产品版本都有对应的 `llms.txt`，例如：
+
+```
+https://docs.emqx.com/en/emqx/latest/llms.txt
+https://docs.emqx.com/en/emqx/v5.8/llms.txt
+```
+
+将顶层索引提供给 AI 工具，它可以自行发现完整列表并导航到正确的版本。
+
 ## 在 AI 工具中使用
 
-### Cursor
-
-在 [Cursor](https://docs.cursor.com/context/rules) 中将 EMQX 文档添加为上下文来源：
-
-1. 打开 **Cursor Settings** -> **Features** -> **Docs**。
-2. 点击 **Add new doc**。
-3. 输入所需产品的 `llms.txt` URL，例如：
-   ```
-   https://docs.emqx.com/en/emqx/latest/llms.txt
-   ```
-4. Cursor 会对文档进行索引，之后可在对话中通过 `@Docs` 引用。
-
-### Windsurf
-
-在 [Windsurf](https://docs.windsurf.com/windsurf/memories#adding-a-documentation-source) 中使用 EMQX 文档：
-
-1. 打开 **Memories** 面板。
-2. 点击 **Add documentation source**。
-3. 粘贴 `llms.txt` URL。
-
-### Claude、ChatGPT 及其他 AI 工具
-
-对于支持 URL 或文件附件作为上下文的 AI 工具，可直接在提示词中粘贴 `llms.txt` URL：
+将顶层 `llms.txt` URL 提供给你使用的 AI 工具或编程助手：
 
 ```
-请参考 https://docs.emqx.com/en/emqx/latest/llms.txt 中的 EMQX 文档，帮我配置 JWT 认证。
+https://docs.emqx.com/llms.txt
 ```
 
-::: tip 注意
+具体操作方式因工具而异。有些工具支持在设置中直接注册文档来源，有些则接受在提示词中直接粘贴 URL。如果不确定如何操作，可以直接问该工具，例如：
 
-部分 AI 工具需要手动输入 `@` 符号来引用文档来源。如果 URL 未被自动识别，请查阅该工具的文档了解如何添加自定义文档来源。
+```
+如何将 https://docs.emqx.com/llms.txt 添加为文档来源？
+```
 
-:::
+AI 会告诉你当前版本的具体操作步骤。
 
 ## 以 Markdown 格式访问文档
 
