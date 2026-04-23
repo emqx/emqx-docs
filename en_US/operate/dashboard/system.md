@@ -35,30 +35,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ## API Key
 
-On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../../develop/api.md) by following the steps below.
-
-1. Click the **+ Create** button on the top right corner of the page to bring up the Create API Key pop-up dialog. 
-
-2. On the Create API Key dialog, configure the detailed information for the API key. 
-
-   - The API key will never expire if the Expire At box is left empty.
-   - Select a role for API key (optional), applicable only in the Enterprise edition. For more information about roles, see [Roles and Permissions](../../develop/api.md#roles-and-permissions).
-
-3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
-
-   ::: warning Notice
-
-   You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
-
-   :::
-
-    Click the **Close** button to close the dialog.
-
-<img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
-
-You can view the details of the API key by clicking the name in the **Name** column. You click the **Edit** button in the **Actions** column to reset the expiration time, change the status, and edit the note of the API key. If an API key is no longer needed, you can delete it by clicking the **Delete** button.
-
-<img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+The **API Key** page lets you create and manage API keys for authenticating [HTTP API](../../develop/api.md) requests. For instructions, see [API Keys](../api-keys.md).
 
 ## License
 

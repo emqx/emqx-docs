@@ -32,32 +32,7 @@ License 和单点登录仅适用于 EMQX 企业版。
 
 ## API 密钥
 
-点击左侧**系统设置**菜单下的 **API 密钥**，可以来到 API 密钥页面。如果需要 API 密钥来创建一些脚本调用 [HTTP API](../../develop/api.md)，可以在此页面进行创建获取操作。点击页面右上角**创建**按钮打开创建 API 密钥弹框，填写 API 密钥相关数据，如果**到期时间**未填写 API 密钥将永不过期，点击**确定**提交数据，提交成功后页面上将提供此次创建的 API 密钥的 API Key 和 Secret Key，**其中 Secret Key 后续将不再显示**，用户需立即将 API Key 和 Secret Key 保存至安全的地方；保存数据完毕可点击**关闭**按钮关闭弹框。
-
-在 API 密钥页面上，您可以按照以下步骤生成用于访问 [HTTP API](../../develop/api.md) 的 API 密钥和 Secret key。
-
-1. 单击页面右上角的**创建**按钮，弹出创建 API 密钥的对话框。
-
-2. 在创建 API 密钥对话框上，配置 API 密钥的详细信息。
-
-   - 如果**到期时间**文本框留空，API 密钥将永不过期。
-   - 您可以指定密钥的[角色](../../develop/api.md#角色与权限)（可选，仅适用于企业版）。
-
-3. 单击**确认**按钮，API 密钥和密钥将被创建并显示在**创建成功**对话框中。
-
-   ::: tip
-
-   您需要将 API Key 和 Secret Key 保存在安全的地方，因为 Secret Key 将不再显示。
-
-   :::
-
-   单击**关闭**按钮以关闭对话框。
-
-<img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
-
-已创建的 API 密钥可在页面上进行查看和切换启用状态，点击 API 密钥名称可查看密钥详情。点击**编辑**按钮可重新设置 API 密钥的到期时间、启用状态和备注，如某 API 密钥已过期，可在此延长 API 密钥的可使用时间。如果某个 API 密钥已不再需要，可点击 API 密钥右侧**删除**按钮删除 API 密钥。
-
-<img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+**API 密钥**页面用于创建和管理访问 [HTTP API](../../develop/api.md) 所需的 API 密钥。详细操作请参阅 [API 密钥](../api-keys.md)。
 
 ## License
 

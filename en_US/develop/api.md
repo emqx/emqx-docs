@@ -46,7 +46,7 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 #### Create API Keys
 
-You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [System - API Keys](../operate/dashboard/system.md#api-keys).
+You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [API Keys](../operate/api-keys.md).
 
 You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
 
