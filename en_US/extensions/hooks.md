@@ -109,6 +109,7 @@ EMQX is based on a client's key activities during its life cycle and presets a l
 | client.connected     | Connection succeed          | After client authentication is completed and successfully connected to the system           |
 | client.disconnected  | Disconnect                  | Connection layer of client is ready to close                                                |
 | client.authenticate  | Connection authentication   | After `client.connect` is executed                                                          |
+| client.post_authn    | Post-authentication rewrite | After the authentication chain in `client.authenticate` completes (added in 6.1.2)          |
 | client.authorize     | Pub/Sub authorization       | Before `publish/subscribe` operation is executed                                            |
 | client.subscribe     | Subscribe to topic          | After receiving the subscription message, and before executing `client.authorize`           |
 | client.unsubscribe   | Unsubscribe                 | After receiving the unsubscribe packet                                                      |
@@ -166,6 +167,7 @@ For parameter data structure, see [emqx_types.erl](https://github.com/emqx/emqx/
 | client.connected     | `ClientInfo`: Client information parameters<br />`ConnInfo`: Client connection layer parameters | -                  |
 | client.disconnected  | `ClientInfo`: Client information parameters<br />`ConnInfo`: Client connection layer parameters<br />`ReasonCode`: Reason code | -                  |
 | client.authenticate  | `ClientInfo`: Client information parameters<br />`AuthNResult`: Authentication results | New `AuthNResult`  |
+| client.post_authn    | `Context`: Map `#{client_info := ClientInfo}` with the merged client information (includes authentication-response `client_attrs`) | New `Context`, or `{error, Reason}` to reject (added in 6.1.2) |
 | client.authorize     | `ClientInfo`: Client information parameters<br />`Topic`: Publish/subscribe topic<br />`PubSub`: Publish/subscribe<br />`AuthZResult`: Authentication result | New `AuthZResult`  |
 | client.subscribe     | `ClientInfo`: Client information parameters<br />`Props`: Properties parameters of MQTT v5.0 subscription messages<br />`TopicFilters`: List of topics of subscription | New `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`: Client information parameters<br />`Props`: Properties parameters of MQTT v5.0 unsubscription messages<br />`TopicFilters`: List of topics of unsubscription | New `TopicFilters` |
