@@ -115,11 +115,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 5. Enter a name and optional description for the Sink.
 
-7. Set the **Bucket** by entering `databricks-workspace-stack-142ec-bucket`. This field also supports `${var}` format placeholders, but ensure the corresponding bucket exists in S3.
+6. Set the **Bucket** by entering `databricks-workspace-stack-142ec-bucket`. This field also supports `${var}` format placeholders, but ensure the corresponding bucket exists in S3.
 
-8. Select **ACL** as needed, specifying the access permission for the uploaded object.
+7. Select **ACL** as needed, specifying the access permission for the uploaded object.
 
-9. Select the **Upload Method**:
+8. Select the **Upload Method**:
 
    - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to S3 according to the preset object key and content. This method is suitable for storing binary or large text data.
    - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to S3, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
@@ -166,15 +166,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::::
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+10. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
-12. Use the default values for the remaining settings. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to the S3 service.
+11. Use the default values for the remaining settings. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to the S3 service.
 
-13. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+12. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
 
-14. Back on the rule creation page, click the **Save** button to complete the entire rule creation process.
+13. Back on the rule creation page, click the **Save** button to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Amazon S3 Sink on the **Actions (Sink)** tab.
 
