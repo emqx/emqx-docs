@@ -1,3 +1,9 @@
+---
+next:
+  text: 'Release Notes'
+  link: '/en/emqx/latest/release-notes/all-changes-ee'
+---
+
 # Telemetry
 
 ::: tip

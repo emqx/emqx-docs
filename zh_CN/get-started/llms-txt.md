@@ -1,3 +1,9 @@
+---
+next:
+  text: '开发者指南'
+  link: '../develop/developer-guide'
+---
+
 # LLMs.txt
 
 EMQX 文档提供 `llms.txt` 文件，专为大语言模型（LLM）设计的结构化文档索引。AI 工具和 Agent 可以通过这些文件快速发现和引用 EMQX 文档内容，帮助你在构建 Agent 或使用 AI 编程助手时获得更准确、更相关的回答。

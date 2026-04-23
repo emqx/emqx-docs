@@ -1,3 +1,9 @@
+---
+next:
+  text: 'EMQX 企业版版本发布历史'
+  link: '/zh/emqx/latest/release-notes/all-changes-ee'
+---
+
 # 遥测
 
 ::: tip

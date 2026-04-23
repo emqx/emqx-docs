@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'MQTT Reference'
+  link: '../develop/mqtt-reference'
+---
+
 # Administration Guide
 
 This Administration Guide is designed to assist administrators and operators in effectively managing and maintaining EMQX. In this chapter, you can explore various administrative tasks and learn comprehensive instructions and best practices to ensure the smooth and efficient operation of your EMQX deployments. The main contents in this chapter include:

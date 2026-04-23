@@ -1,3 +1,9 @@
+---
+next:
+  text: 'Developer Guide'
+  link: '../develop/developer-guide'
+---
+
 # LLMs.txt
 
 EMQX documentation provides `llms.txt` files, which are structured documentation indexes designed for large language models (LLMs). These files help AI tools and agents quickly discover and reference EMQX documentation content, so you get more accurate and relevant results when building agents or using AI coding assistants.

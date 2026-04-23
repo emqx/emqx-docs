@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'LLM Resources'
+  link: '../get-started/llms-txt'
+---
+
 # Developer Guide
 
 The Developer Guide is designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, API usage, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
