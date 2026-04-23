@@ -309,6 +309,7 @@
       children:
         - operate/cluster/lb-nginx
         - operate/cluster/lb-haproxy
+        - operate/cluster/proxy-protocol
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
       path: operate/cluster/rebalancing
