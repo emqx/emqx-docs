@@ -1,6 +1,6 @@
 # API Keys
 
-On the **API Keys** page in the EMQX Dashboard, you can generate API keys and secret keys for authenticating [HTTP API](../../develop/api.md) requests.
+On the **API Keys** page in the EMQX Dashboard, you can generate API keys and secret keys for authenticating [HTTP API](../develop/api.md) requests.
 
 ## Create an API Key
 
@@ -11,7 +11,7 @@ On the **API Keys** page in the EMQX Dashboard, you can generate API keys and se
 3. Configure the API key details:
 
    - Leave the **Expire At** field empty if you want the key to never expire.
-   - Optionally select a role for the API key (EMQX Enterprise only). For details on available roles, see [Roles and Permissions](../../develop/api.md#roles-and-permissions).
+   - Optionally select a role for the API key (EMQX Enterprise only). For details on available roles, see [Roles and Permissions](../develop/api.md#roles-and-permissions).
 
 4. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
 

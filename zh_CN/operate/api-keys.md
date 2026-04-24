@@ -1,6 +1,6 @@
 # API 密钥
 
-在 EMQX Dashboard 的 **API 密钥**页面，您可以生成用于访问 [HTTP API](../../develop/api.md) 的 API 密钥和 Secret Key。
+在 EMQX Dashboard 的 **API 密钥**页面，您可以生成用于访问 [HTTP API](../develop/api.md) 的 API 密钥和 Secret Key。
 
 ## 创建 API 密钥
 
@@ -11,7 +11,7 @@
 3. 配置 API 密钥的详细信息：
 
    - 如果**到期时间**留空，API 密钥将永不过期。
-   - 可选择为 API 密钥指定[角色](../../develop/api.md#角色与权限)（仅适用于 EMQX 企业版）。
+   - 可选择为 API 密钥指定[角色](../develop/api.md#角色与权限)（仅适用于 EMQX 企业版）。
 
 4. 点击**确认**按钮，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
 

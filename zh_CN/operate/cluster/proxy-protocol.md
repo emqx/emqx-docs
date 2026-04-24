@@ -62,6 +62,12 @@ sequenceDiagram
 
 `proxy_protocol` 选项适用于所有基于 TCP 的 EMQX 监听器：MQTT TCP、MQTT SSL、MQTT WebSocket 和 MQTT WebSocket SSL。默认情况下，该选项处于禁用状态。
 
+::: warning 安全提示
+
+当在 EMQX 监听器上启用 PROXY Protocol 时，请确保该监听器端点不对公网开放，并通过防火墙规则仅允许指定的代理或负载均衡器访问。
+
+:::
+
 ### 通过 Dashboard 配置
 
 1. 在 EMQX Dashboard 中，进入**管理** -> **监听器**。
@@ -69,9 +75,9 @@ sequenceDiagram
 3. 将 **Proxy Protocol** 设置为 `true`。
 4. 点击**更新**。
 
-### 通过 emqx.conf 配置
+### 通过 base.hocon 配置
 
-在 `etc/emqx.conf` 中添加或修改监听器配置块。以下示例展示了各监听器类型中 `proxy_protocol` 选项的写法。
+在 `etc/base.hocon` 中添加或修改监听器配置块。以下示例展示了各监听器类型中 `proxy_protocol` 选项的写法。
 
 **MQTT TCP（端口 1883）**
 

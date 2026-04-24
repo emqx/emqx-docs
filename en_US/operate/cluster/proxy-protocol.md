@@ -63,6 +63,12 @@ Both the load balancer and the EMQX listener must agree on PROXY protocol. A mis
 
 The `proxy_protocol` option is available on all TCP-based EMQX listeners: MQTT TCP, MQTT SSL, MQTT WebSocket, and MQTT WebSocket SSL. It is disabled by default.
 
+::: warning Security Note
+
+When PROXY Protocol is enabled for an EMQX listener, ensure that the listener endpoint is not publicly accessible. Configure firewall rules to to allow only the designated proxy or load balancer.
+
+:::
+
 ### Configure via Dashboard
 
 1. Go to **Management** -> **Listeners** in the EMQX Dashboard.
@@ -70,9 +76,9 @@ The `proxy_protocol` option is available on all TCP-based EMQX listeners: MQTT T
 3. Set **Proxy Protocol** to `true`.
 4. Click **Update**.
 
-### Configure via emqx.conf
+### Configure via base.hocon
 
-Add or modify the listener block in `etc/emqx.conf`. The following examples show the `proxy_protocol` option for each listener type.
+Add or modify the listener block in `etc/base.hocon`. The following examples show the `proxy_protocol` option for each listener type.
 
 **MQTT TCP (port 1883)**
 
