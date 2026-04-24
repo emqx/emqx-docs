@@ -566,6 +566,10 @@
       title_cn: Datalayers
       title_ja: Datalayers
       path: data-integration/data-bridge-datalayers
+    - title_en: Databricks
+      title_cn: Databricks
+      title_ja: Databricks
+      path: data-integration/databricks
     - title_en: Disk Log
       title_cn: Disk Log
       title_ja: Disk Log
