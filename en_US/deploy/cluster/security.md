@@ -79,7 +79,7 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 
 ## Mitigate SSRF with Rule Engine Policy and Firewall Rules
 
-Administrative features and integrations may require EMQX to open outbound network connections. If delegated administrators can configure namespace-scoped resources, use the built-in rule engine SSRF policy as the first line of defense for rule-engine-managed outbound targets, and use host-level egress filtering as an additional runtime defense.
+EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF). EMQX provides two complementary defenses: a built-in rule engine SSRF policy that validates targets at configuration time, and host-level egress filtering that enforces network boundaries at runtime.
 
 ### Use `rule_engine.ssrf` as the First Line of Defense
 
@@ -103,7 +103,7 @@ rule_engine {
       "224.0.0.0/4",
       "ff00::/8",
       "100.100.100.200/32",
-      "69.254.169.253/32"
+      "169.254.169.253/32"
     ]
     deny_hosts = [
       "metadata.tencentyun.com",
@@ -116,23 +116,23 @@ rule_engine {
 
 When enabled, EMQX validates outbound targets at configuration update time. Exact matches in `deny_hosts` are rejected immediately. Resolved IPs are checked against `allow_cidrs` first, and then against `deny_cidrs` if no allowlist match is found.
 
-This policy is disabled by default for compatibility. Enable it unless you intentionally rely on rule-engine-managed outbound targets that must reach internal services and you have reviewed the allow/deny lists carefully.
+This policy is disabled by default for compatibility. Enable it for all deployments unless your connectors or actions must reach internal services — in that case, review and adjust `allow_cidrs` and `deny_cidrs` before enabling.
 
-### When Static Config Validation Is Usually Enough
+### When `rule_engine.ssrf` Alone Is Usually Enough
 
 Using `rule_engine.ssrf` alone is usually sufficient when all of the following are true:
 
 - Only trusted administrators can create or update connectors, bridges, or actions.
 - Outbound targets are stable and expected, such as fixed SaaS endpoints or explicitly approved public services.
-- You mainly want to prevent accidental misconfiguration or obvious SSRF targets at config-update time.
+- You mainly want to prevent accidental misconfiguration or obvious SSRF targets during config updates.
 - You do not rely on DNS names that could later be rebound to different addresses.
 
 ### When You Should Also Add Firewall Rules
 
-Add host-level egress filtering with `iptables`, `nftables`, cloud security groups, or Kubernetes network policies when any of the following applies:
+Add host-level egress filtering with `iptables`, `nftables`, Cloud security groups, or Kubernetes network policies when any of the following apply:
 
 - Delegated administrators can configure namespace-scoped resources.
-- EMQX must not be able to reach internal services, metadata endpoints, or management networks even if a target passes config-time validation.
+- EMQX must not be able to reach internal services, metadata endpoints, or management networks, even if a target passes config-time validation.
 - DNS rebinding or post-validation address changes are part of your threat model.
 - Your deployment is multi-tenant, higher-risk, or must enforce a strict outbound network boundary at runtime.
 

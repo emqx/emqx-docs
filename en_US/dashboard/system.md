@@ -29,14 +29,13 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Namespaced Roles
 
-Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, where each user can be restricted to operate only within a specific namespace.
+Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, in which each user can be restricted to operating only within a specific namespace.
 
 ::: warning Trusted Deployments Only
 
-Namespaced admin access is currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
-It is not intended as a security boundary for public or otherwise untrusted multi-tenant use.
+Namespaced admin access is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidental cross-team configuration changes. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-If you allow delegated administrators to manage namespace-scoped resources, first enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets, and then add host-level egress controls such as `iptables` or `nftables` when you need a runtime network boundary. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+If you allow delegated administrators to manage namespace-scoped resources, enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 :::
 
