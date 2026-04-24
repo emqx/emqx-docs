@@ -41,40 +41,39 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   Namespaces provide a clean boundary for collecting metrics such as connection count and message throughput per tenant, essential for capacity planning and operational insight.
 
 - **Admin User Isolation**
-   
+  
   Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
 
   ::: warning Trusted Deployments Only
 
-  Admin namespaces are currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
-  They are not intended as a security boundary for public or untrusted multi-tenant use.
+  Admin namespaces are intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-  If delegated administrators are allowed to configure namespace-scoped resources, first enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets, and then restrict outbound network access from EMQX nodes to approved destinations when you need runtime enforcement. For example, use host-level firewall rules such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+  If you allow delegated administrators to manage namespace-scoped resources, see [Operational Security for Admin Namespaces](#operational-security-for-admin-namespaces).
 
   :::
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
-   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
-   - This ensures secure, tenant-specific administrative access alongside data isolation.
-   
+  - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
+  - This ensures secure, tenant-specific administrative access alongside data isolation.
+  
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
 
 ## Operational Security for Admin Namespaces
 
-Namespaced administrative access is designed for trusted internal delegation, not for exposing a hard isolation boundary between mutually untrusted tenants.
+Delegated namespace administrators can configure outbound targets such as connectors, bridges, and actions. Without additional controls, this could allow unintended access to internal or sensitive network destinations.
 
-If you use this feature, enable `rule_engine.ssrf` where available as the first guard for rule-engine-managed outbound targets, and add network egress controls on the EMQX hosts when your deployment needs runtime enforcement. In particular:
+Enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. When your deployment also requires runtime network enforcement, add egress controls on the EMQX hosts:
 
-- Allow outbound access only to approved business endpoints, such as IdPs, webhooks, or connector backends that your deployment uses.
-- Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless they are explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.
+- Allow outbound access only to approved destinations, such as identity providers (IdPs), webhooks, or connector backends.
+- Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.
 - Review firewall rules whenever you add new integrations or management features that initiate outbound HTTP or TCP connections.
 
-For guidance on when `rule_engine.ssrf` alone is usually sufficient and when to add `iptables`- or `nftables`-based controls, see [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+For details, see [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
-### Isolation Mechanisms
+## Isolation Mechanisms
 
 EMQX offers high flexibility and has supported various isolation methods even before the namespace feature. The namespace feature provides a unified tenant identifier field (`client_attrs.tns`), allowing configurations like client ID and topic mount points to be organized and managed around unified tenant information.
 
