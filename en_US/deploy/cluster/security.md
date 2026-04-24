@@ -129,7 +129,7 @@ Using `rule_engine.ssrf` alone is usually sufficient when all of the following a
 
 ### When You Should Also Add Firewall Rules
 
-Add host-level egress filtering with `iptables`, `nftables`, Cloud security groups, or Kubernetes network policies when any of the following apply:
+Add host-level egress filtering with `iptables`, `nftables`, cloud security groups, or Kubernetes network policies when any of the following apply:
 
 - Delegated administrators can configure namespace-scoped resources.
 - EMQX must not be able to reach internal services, metadata endpoints, or management networks, even if a target passes config-time validation.
