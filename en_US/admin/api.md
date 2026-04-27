@@ -1,14 +1,14 @@
 # REST API
 
-EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
+EMQX exposes an HTTP management API designed following the OpenAPI (Swagger) 3.0 specification.
 
 After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../configuration/dashboard.md).
 
-The section introduces how to work with EMQX REST API.
+The section introduces how to work with the EMQX REST API.
 
 ## Basic Path
 
-EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
+EMQX has version control on the REST API; all API paths from EMQX 5.0.0 start with `/api/v5`.
 
 ## HTTP Headers
 
@@ -128,7 +128,7 @@ In microservice and integration scenarios, external systems typically need acces
 - A rules-publishing service only needs `data_integration` (`/rules`, `/connectors`, `/actions`, ...);
 - A cluster operator tool only needs `cluster_operations` (`/cluster`, `/nodes`, `/load_rebalance`, ...).
 
-With only `administrator` / `viewer` / `publisher` available, granularity is coarse: the only way to grant a service write access to rules is to hand it `administrator`, which effectively gives it full control over the whole system.
+With only `administrator` / `viewer` / `publisher` available, granularity is coarse: the only way to grant a service write access to rules is to hand it to an `administrator`, which effectively gives it full control over the whole system.
 
 Scopes let you assign keys using the principle of least privilege: grant only the scopes required for the task, and minimize the blast radius if a key is ever leaked.
 
@@ -153,7 +153,7 @@ EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-Dashboard login, SSO callbacks, and API key self-management endpoints (for example `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example,`/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ##### Default Behaviour of `scopes`
 
