@@ -2,7 +2,7 @@
 
 The EMQX Operator provides native [Kubernetes](https://kubernetes.io/) support for deploying and managing [EMQX](https://www.emqx.io/) clusters. Its primary goal is to simplify and automate the lifecycle management of EMQX in Kubernetes environments.
 
-EMQX Operator requires Kubernetes 1.24 or higher.
+EMQX Operator 3.0 requires Kubernetes 1.27 or higher.
 
 EMQX Operator includes, but is not limited to, the following features:
 
@@ -10,7 +10,7 @@ EMQX Operator includes, but is not limited to, the following features:
 
     For more details, see the [Getting Started](./getting-started.md) guide.
 
-* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including cluster upgrades with workload migrations, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
+* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including rolling updates, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
 
     For more details, see the [Manage EMQX](./tasks/overview.md) section.
 
@@ -18,7 +18,20 @@ EMQX Operator includes, but is not limited to, the following features:
 
 ## EMQX and EMQX Operator Compatibility
 
-### EMQX Operator 2.3.x
+### EMQX Operator 3.0.x
+
+The EMQX Operator 3.0.x release series is compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
+
+The following API versions are supported:
+- [apps.emqx.io/v3beta1](./reference/v3beta1-reference.md)
+
+EMQX Operator 3.0 introduces in-place rolling updates for Core nodes, Deployment-style rollouts for Replicant nodes, and HPA-compatible scaling of Core-Replicant clusters. It does not provide backward compatibility with earlier EMQX CR API versions.
+
+### Past Releases
+
+#### EMQX Operator 2.3.x
 
 The EMQX Operator 2.3.x release series is fully compatible with the following EMQX versions:
 - EMQX 5.9 and 5.10
@@ -27,8 +40,6 @@ The EMQX Operator 2.3.x release series is fully compatible with the following EM
 The following API versions are supported:
 - [apps.emqx.io/v2](./reference/v2-reference.md)
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md) (deprecated)
-
-### Past Releases
 
 #### EMQX Operator 2.2.x
 

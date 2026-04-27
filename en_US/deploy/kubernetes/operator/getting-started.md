@@ -6,8 +6,8 @@ This section guides you through preparing the environment for EMQX Operator, ins
 
 Before deploying EMQX Operator, ensure that the following components are ready:
 
-- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.24 or higher.
-
+- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.27 or higher.
+   * The `StatefulSetAutoDeletePVC` feature gate enabled when using Kubernetes 1.27 through 1.31. This feature is enabled by default in Kubernetes 1.32 and later.
 - A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
 
 ## Install EMQX Operator
@@ -18,7 +18,7 @@ Before deploying EMQX Operator, ensure that the following components are ready:
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   This command will download the latest 2.3.x release, install cluster-wide EMQX CRDs and deploy controller services into a separate `emqx-operator-system` namespace.
+   This command downloads EMQX Operator 3.0.0, installs cluster-wide EMQX CRDs, and deploys controller services into a separate `emqx-operator-system` namespace.
 
 2. Wait till EMQX Operator is ready:
 
@@ -34,7 +34,7 @@ Once the Operator is running, you can proceed to deploy EMQX.
 1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
       name: emqx
@@ -47,7 +47,7 @@ Once the Operator is running, you can proceed to deploy EMQX.
          }
    ```
 
-   For more details about the EMQX CRD, check out the [reference documentation](./reference/v2beta1-reference.md).
+   For more details about the EMQX CRD, check out the [reference documentation](./reference/v3beta1-reference.md).
 
 2. Wait until the EMQX cluster is ready.
 

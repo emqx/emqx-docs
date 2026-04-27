@@ -12,12 +12,13 @@ This chapter provides step-by-step instructions for performing common tasks and 
   - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
   - [Enable Persistence](./configure-emqx-persistence.md)
   - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
+  - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
   - [Rebalance Cluster Load](./configure-emqx-rebalance.md)
 
 ## Upgrades and Maintenance
 
 - Upgrade
-  - [Perform Blue-Green Upgrade](./configure-emqx-blueGreenUpdate.md)
+  - [Configure Rolling Update](./configure-emqx-rolling-update.md)
 - Log Management
   - [Collect EMQX Logs](./configure-emqx-log-collection.md)
   - [Change EMQX Log Level](./configure-emqx-log-level.md)

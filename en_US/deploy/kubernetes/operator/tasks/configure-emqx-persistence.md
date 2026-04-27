@@ -2,22 +2,38 @@
 
 ## Objective
 
-Configure persistence for the set of Core nodes of an EMQX cluster through the `volumeClaimTemplates` field.
+Configure persistence for the set of Core nodes of an EMQX cluster through the `persistentVolumeClaimSpec` field.
 
 ## Configure EMQX Cluster Persistence
 
-EMQX CRD `apps.emqx.io/v2` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring persistence of each Core node data through `.spec.coreTemplate.spec.persistentVolumeClaimSpec`.
 
-The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
+The definition and semantics of the `.spec.coreTemplate.spec.persistentVolumeClaimSpec` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
 
-When you specify the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). As a result, when an EMQX Pod is deleted, the associated PV and PVC are retained, preserving EMQX runtime data.
+EMQX Operator 3.0 manages Core nodes with a single StatefulSet. Each Core Pod has a stable identity and a stable PVC across image updates and rolling upgrades. When you specify `.spec.coreTemplate.spec.persistentVolumeClaimSpec`, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/).
+
+## PVC Lifecycle
+
+Core node PVCs are tied to StatefulSet Pod ordinals. For example, the PVC for `emqx-core-0` stays attached to `emqx-core-0` during image updates and rolling updates, so the node keeps using the same data volume.
+
+EMQX Operator configures Kubernetes to delete Core node PVCs when they are no longer needed:
+
+- When you scale down Core nodes, PVCs for the removed Pod ordinals are deleted.
+    
+    For example, scaling from 5 Core replicas to 3 deletes the PVCs for ordinals 3 and 4. EMQX Operator ensures that this incurs no data or durability loss: any Durable Storage data is "rebalanced away" from those Core replicas before scaling the StatefulSet down.
+
+- When you delete the EMQX custom resource, Kubernetes deletes the Core StatefulSet and its associated PVCs.
+
+- During rolling updates, PVCs are preserved because the StatefulSet name and Pod ordinals do not change.
+
+This automatic cleanup depends on the Kubernetes `StatefulSetAutoDeletePVC` feature gate. It is enabled by default in Kubernetes 1.32 and later. On Kubernetes 1.27 through 1.31, make sure the feature gate is enabled; otherwise Kubernetes ignores the deletion policy and you must clean up unused PVCs manually.
 
 For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
@@ -30,7 +46,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
          }
      coreTemplate:
        spec:
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            storageClassName: standard
            resources:
              requests:

@@ -6,12 +6,12 @@ Modify the log level in the EMQX cluster.
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` supports configuring the log level of the EMQX cluster through `.spec.config.data`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for a complete configuration reference.
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring the log level of the EMQX cluster through `.spec.config.data`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx

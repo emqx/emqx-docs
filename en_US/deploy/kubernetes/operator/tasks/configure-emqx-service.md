@@ -6,16 +6,16 @@ Access the EMQX cluster through a Service of type LoadBalancer.
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` supports:
+EMQX CRD `apps.emqx.io/v3beta1` supports:
 * Configuring the EMQX Dashboard Service through `.spec.dashboardServiceTemplate`.
 * Configuring the EMQX cluster listener Service through `.spec.listenersServiceTemplate`.
 
-Refer to the [respective documentation](../reference/v2-reference.md#emqxspec) for more details.
+Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) for more details.
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx

@@ -14,7 +14,7 @@ Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter) and monitor an EMQ
 EMQX exposes various metrics through the [Prometheus-compatible HTTP API](../../../../observability/prometheus.md).
 
 ```yaml
-apiVersion: apps.emqx.io/v2
+apiVersion: apps.emqx.io/v3beta1
 kind: EMQX
 metadata:
   name: emqx

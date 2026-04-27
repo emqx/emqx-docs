@@ -42,11 +42,11 @@ In this example, the contents of the above three fields are omitted. Please fill
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
-* `.spec.coreTemplate.extraVolumes`
-* `.spec.coreTemplate.extraVolumeMounts`
-* `.spec.replicantTemplate.extraVolumes`
-* `.spec.replicantTemplate.extraVolumeMounts`
+EMQX CRD `apps.emqx.io/v3beta1` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
+* `.spec.coreTemplate.spec.extraVolumes`
+* `.spec.coreTemplate.spec.extraVolumeMounts`
+* `.spec.replicantTemplate.spec.extraVolumes`
+* `.spec.replicantTemplate.spec.extraVolumeMounts`
 
 In this demonstration, we will use these fields to provide TLS certificates to the EMQX cluster.
 
@@ -55,7 +55,7 @@ There are many types of Volumes. For information about Volumes, please refer to 
 1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
