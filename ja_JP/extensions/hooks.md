@@ -106,6 +106,7 @@ EMQX はクライアントのライフサイクルにおける主要なアクテ
 | client.connected      | 接続成功                     | クライアント認証が完了し、システムへの接続が成功した後                                       |
 | client.disconnected   | 切断                         | クライアントの接続層が閉じる準備ができたとき                                                 |
 | client.authenticate   | 接続認証                     | `client.connect` 実行後                                                                       |
+| client.post_authn     | 認証後のクライアント情報書換 | `client.authenticate` の認証チェーン完了後（6.1.2 で追加）                                    |
 | client.authorize      | Pub/Sub 認可                 | `publish/subscribe` 操作実行前                                                                |
 | client.subscribe      | トピックのサブスクライブ       | サブスクライブメッセージ受信後、`client.authorize` 実行前                                    |
 | client.unsubscribe    | サブスクライブ解除             | サブスクライブ解除パケット受信後                                                               |
@@ -162,6 +163,7 @@ emqx:unhook(Name, {Module, Function}).
 | client.connected      | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ            | -                   |
 | client.disconnected   | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ<br />`ReasonCode`：理由コード | -                   |
 | client.authenticate   | `ClientInfo`：クライアント情報パラメータ<br />`AuthNResult`：認証結果                             | 新しい `AuthNResult` |
+| client.post_authn     | `Context`：コンテキスト map `#{client_info := ClientInfo}`。マージされたクライアント情報（認証応答の `client_attrs` を含む）を保持 | 新しい `Context`、または `{error, Reason}` で接続を拒否（6.1.2 で追加） |
 | client.authorize      | `ClientInfo`：クライアント情報パラメータ<br />`Topic`：パブリッシュ／サブスクライブトピック<br />`PubSub`：パブリッシュ／サブスクライブ区分<br />`AuthZResult`：認可結果 | 新しい `AuthZResult` |
 | client.subscribe      | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブメッセージのプロパティ<br />`TopicFilters`：サブスクライブトピックのリスト | 新しい `TopicFilters` |
 | client.unsubscribe    | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブ解除メッセージのプロパティ<br />`TopicFilters`：サブスクライブ解除トピックのリスト | 新しい `TopicFilters` |
