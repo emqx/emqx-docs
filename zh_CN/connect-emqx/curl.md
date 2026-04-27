@@ -59,7 +59,7 @@ curl --version
 - 当您针对自己的部署进行测试时，请将所有示例中的 `broker.emqx.io` 替换为您 EMQX Enterprise 的 Broker 地址。
 - 连接前请确保在 EMQX Enterprise 中已启用相应的 MQTT 或 MQTTS 监听器。
 
-> 除了自托管的 EMQX Enterprise 部署外，您也可以使用 curl 连接全托管的 MQTT 服务：[EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/overview.html)（Serverless 或 Dedicated）。
+> 除了自托管的 EMQX Enterprise 部署外，您也可以使用 curl 连接全托管的 MQTT 服务：[EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/)（Serverless 或 Dedicated）。
 >
 > curl 的 MQTT/MQTTS 用法保持一致，仅需使用 EMQX Cloud 提供的 Broker 地址、端口及认证信息。
 
