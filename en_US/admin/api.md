@@ -153,7 +153,7 @@ EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-Dashboard login, SSO callbacks and the API key self-management endpoints (for example `/login` and `/api_key`) can **never** be reached via API keys, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ##### Default Behaviour of `scopes`
 
