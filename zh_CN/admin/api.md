@@ -151,7 +151,7 @@ EMQX 5.10 提供 10 个 Scope，可在创建密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/login`、`/api_key`）永远**不**允许被 API 密钥访问，无论密钥的 `scopes` 如何配置。这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口不支持使用 API 密钥进行认证/授权；例如，API 密钥管理接口 `/api_key` 仅允许使用 bearer token。这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
 
 ##### Scope 的默认行为
 
