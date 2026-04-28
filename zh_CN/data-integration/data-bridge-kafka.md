@@ -125,7 +125,9 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
   ::: tip 重要说明
 
-  MSK IAM 认证仅适用于运行在 EC2 实例上的 EMQX 节点连接到 MSK 集群，因为该方式依赖于 AWS Metadata API。
+  MSK IAM 认证仅适用于运行在 EC2 实例上的 EMQX 节点连接到 MSK 集群，因为该方式依赖于 EC2 实例元数据服务。
+
+  如果您使用 `iptables` 或 `nftables` 配置宿主机出站访问控制，请不要阻止 `169.254.169.254`。EMQX 需要访问实例元数据服务，以获取用于 MSK IAM 认证的凭据。同样的例外也适用于其他通过 EC2 实例元数据获取 AWS 凭据的连接器，例如 S3、S3 Tables、DynamoDB 和 Kinesis。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md)。
 
   :::
 
