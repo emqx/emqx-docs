@@ -50,21 +50,33 @@ A namespace becomes effective once it is created, regardless of whether it is cr
 
   ::: warning Trusted Deployments Only
 
-  Admin namespaces are currently intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations.
-  They are not intended as a security boundary for public or untrusted multi-tenant use.
+  Admin namespaces are intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
+
+  If you allow delegated administrators to manage namespace-scoped resources, see [Operational Security for Admin Namespaces](#operational-security-for-admin-namespaces).
 
   :::
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
-   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
-   - This ensures secure, tenant-specific administrative access alongside data isolation.
-  
+  - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
+  - This ensures secure, tenant-specific administrative access alongside data isolation.
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
 
-### Isolation Mechanisms
+## Operational Security for Admin Namespaces
+
+Delegated namespace administrators can configure outbound targets such as connectors, bridges, and actions. Without additional controls, this could allow unintended access to internal or sensitive network destinations.
+
+Enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. When your deployment also requires runtime network enforcement, add egress controls on the EMQX hosts:
+
+- Allow outbound access only to approved destinations, such as identity providers (IdPs), webhooks, or connector backends.
+- Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.
+- Review firewall rules whenever you add new integrations or management features that initiate outbound HTTP or TCP connections.
+
+For details, see [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+
+## Isolation Mechanisms
 
 EMQX is highly flexible and supports multiple isolation mechanisms even before namespaces were introduced.
 

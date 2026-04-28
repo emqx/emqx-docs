@@ -59,7 +59,7 @@ Refer to your EMQX Enterprise listener, authentication, and TLS configuration wh
 - Replace `broker.emqx.io` with your EMQX Enterprise broker address in all examples when testing against your own deployment.
 - Ensure the corresponding MQTT or MQTTS listener is enabled in EMQX Enterprise before connecting.
 
-> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated).
+> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/) (Serverless or Dedicated).
 >
 > The curl MQTT/MQTTS usage remains the same. Use the broker address, ports, and authentication information provided by EMQX Cloud.
 
