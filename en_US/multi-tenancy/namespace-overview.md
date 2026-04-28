@@ -58,14 +58,8 @@ A namespace becomes effective once it is created, regardless of whether it is cr
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
-<<<<<<< HEAD
-   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
-   - This ensures secure, tenant-specific administrative access alongside data isolation.
-=======
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
   - This ensures secure, tenant-specific administrative access alongside data isolation.
->>>>>>> origin/release-6.0
-  
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
