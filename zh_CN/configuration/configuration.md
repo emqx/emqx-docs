@@ -44,13 +44,62 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 - 如果您使用 RPM 或 DEB 包安装 EMQX，您可以在 `etc/emqx/examples` 目录中找到配置示例。
 - 如果您在 Docker 容器中运行 EMQX，您可以在 `opt/emqx/etc/examples` 目录中找到配置示例。
 
+## 配置即代码最佳实践
+
+当您通过源码仓库或自动化系统管理 EMQX 配置时，可以遵循以下经验规则：
+
+- 将配置即代码管理的配置项放在 `base.hocon` 中。
+- 不要手动编辑 `cluster.hocon`，也不要挂载您自己的 `cluster.hocon` 文件。
+- 除非您了解 `emqx.conf` 在配置层级中具有更高优先级及其升级影响，否则应避免修改 `emqx.conf`。
+- 对于不希望通过 Dashboard、API 或 CLI 在运行时修改的简单覆盖项，可以使用环境变量。
+
+配置即代码推荐以 `base.hocon` 作为配置事实来源。它位于静态配置目录中，并在节点启动时读取，可以由打包、镜像构建、配置管理或 GitOps 流程管理。通过 Dashboard、REST API 或 CLI 做出的运行时变更会持久化到 `cluster.hocon`，并覆盖在 `base.hocon` 之上。
+
+例如，部署可以在 `base.hocon` 中维护监听器、日志、认证、授权和数据集成等基线配置：
+
+```bash
+# base.hocon
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+}
+
+log.console {
+  enable = true
+  level = warning
+}
+
+authentication = [
+  {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+  }
+]
+```
+
+不要将 `cluster.hocon` 作为配置即代码的事实来源。该文件由 EMQX 在运行时管理：Dashboard、REST API 和 CLI 会重写它；EMQX 在覆盖前会创建备份；集群节点之间也可能相互复制该文件。手动编辑或挂载该文件可能导致您的变更与运行时更新冲突，或被覆盖。
+
+`emqx.conf` 是随发行包提供的基线配置文件。保持该文件不变，可以让安装实例在升级时更容易获取新版本提供的保守默认配置变更。如果在 `emqx.conf` 中设置了某个配置项，它的优先级高于 `base.hocon` 和 `cluster.hocon`，因此针对同一配置项的运行时变更可能看起来已经生效，但在节点重启后被恢复。只有在明确需要这种行为时，才使用 `emqx.conf`。
+
+环境变量具有最高优先级。它们适用于简单的部署特定值，尤其是由运行环境提供的值，以及不应在运行时修改的值：
+
+```bash
+export EMQX_NODE__NAME='emqx@node1.example.net'
+export EMQX_NODE__COOKIE='mysecret'
+export EMQX_CLUSTER__DISCOVERY_STRATEGY='static'
+export EMQX_CLUSTER__STATIC__SEEDS='["emqx@node1.example.net", "emqx@node2.example.net"]'
+```
+
+由于环境变量会覆盖所有配置文件，因此如果某些配置需要后续由运维人员通过 Dashboard、API 或 CLI 调整，应避免使用环境变量设置这些配置。
+
 ## 基础配置文件
 
 从 EMQX 5.8.4 开始，`etc` 目录中新增了一个名为 `base.hocon` 的基础配置文件。该文件包含默认设置，可以在运行时被更高层次的配置文件覆盖。
 
 例如，您可能希望在部署时使用一个基本的身份认证配置，然后在运行时通过 Dashboard UI 覆盖它为更复杂的配置。
 
-对于 `node` 和 `cluster` 等不可变配置，**不推荐**将它们设置在 `base.hocon` 文件中。有关更多信息，请参阅[不可变配置文件](#不可变配置文件) 部分。
+对于 `node` 和 `cluster` 等不可变配置，如果这些值是部署特定的，并且不应在运行时修改，也可以使用环境变量。有关更多信息，请参阅[环境变量](#环境变量)和[配置覆盖规则](#配置覆盖规则)。
 
 ::: tip
 
@@ -64,13 +113,13 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 
 如果集群中的某个节点被重启或添加了新节点，该节点将自动从集群中的其他节点复制并应用 `cluster.hocon` 文件。因此，不建议手动修改此文件。
 
-此文件中的配置会覆盖 `base.hocon` 文件中的配置。有关配置覆盖优先级的详细信息，请参阅[配置覆盖规则](#配覆盖规则)。
+此文件中的配置会覆盖 `base.hocon` 文件中的配置。有关配置覆盖优先级的详细信息，请参阅[配置覆盖规则](#配置覆盖规则)。
 
 自 EMQX 5.1 版本起，对集群配置的任何更改都会在覆盖 `cluster.hocon` 文件之前备份该文件。备份文件会带有节点本地时间的时间戳，最多可以保留 10 个备份文件。
 
 ## 不可变配置文件
 
-出于向后兼容的考虑，`emqx.conf` 文件仍然是用于配置关键系统设置的主要配置文件，包括 `node` 和 `cluster` 配置。该文件的优先级高于 `base.hocon` 和 `cluster.hocon`，但低于环境变量。
+出于向后兼容的考虑，`emqx.conf` 文件仍可用于配置关键系统设置，包括 `node` 和 `cluster` 配置。该文件的优先级高于 `base.hocon` 和 `cluster.hocon`，但低于环境变量。除非您明确需要这种优先级，并且了解发行包升级可能更新此文件中的默认配置，否则应避免修改它。
 
 有关配置覆盖的更多细节，请参阅[配置覆盖规则](#配置覆盖规则)部分。
 
