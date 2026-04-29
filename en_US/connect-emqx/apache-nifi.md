@@ -99,7 +99,7 @@ Apache NiFi 2.x by default uses HTTPS for access, and its built-in certificate o
 
 ##### Method 2: Configure HTTPS Certificates for Remote Access
 
-Follow [Stackoverflow: Apache NIFI 2+ HTTP ERROR 400 Invalid SNI](https://stackoverflow.com/questions/78985347/apache-nifi-2-http-error-400-invalid-sni) to configure certificates and internal network access.
+Follow [Stack Overflow: Apache NIFI 2+ HTTP ERROR 400 Invalid SNI](https://stackoverflow.com/questions/78985347/apache-nifi-2-http-error-400-invalid-sni) to configure certificates and internal network access.
 
 ##### Method 3: Access via SSH Tunnel (Temporary Debugging)
 
