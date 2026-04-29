@@ -99,7 +99,7 @@ Apache NiFi 2.x 默认使用 HTTPS 访问，且内置证书仅支持本地访问
 
 ##### 方法二：配置 HTTPS 证书以实现远程访问
 
-参照 [Stackoverflow: Apache NIFI 2+ HTTP ERROR 400 Invalid SNI](https://stackoverflow.com/questions/78985347/apache-nifi-2-http-error-400-invalid-sni) 配置证书和内网访问。
+参照 [Stack Overflow: Apache NIFI 2+ HTTP ERROR 400 Invalid SNI](https://stackoverflow.com/questions/78985347/apache-nifi-2-http-error-400-invalid-sni) 配置证书和内网访问。
 
 ##### 方法三：通过 SSH 隧道访问（临时调试）
 
