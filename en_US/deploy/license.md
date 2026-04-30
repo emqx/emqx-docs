@@ -129,6 +129,62 @@ The session limit defines the maximum number of concurrent MQTT client connectio
 
 You can configure the alarm watermarks via the EMQX Dashboard or configuration file.
 
+### Session High-Watermark History
+
+EMQX Enterprise automatically records the daily peak session count across the cluster and retains at least 24 months of history. This data is stored in a replicated, tamper-proof internal table that persists across node restarts and cluster topology changes, providing an audit-ready basis for billing settlements.
+
+#### CLI
+
+Use `emqx ctl license history` to query the recorded history:
+
+```bash
+# Monthly peaks (default)
+emqx ctl license history
+
+# Daily peaks, last 7 days
+emqx ctl license history 7 --period daily
+
+# JSON output
+emqx ctl license history --json
+```
+
+For full command reference, see [license history](../admin/cli.md#license-history).
+
+#### REST API
+
+```bash
+GET /api/v5/license/session_hwm_history
+```
+
+**Query Parameters**
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| `period` | `daily` \| `monthly` | `daily` | Aggregation granularity. `daily` returns one row per calendar day; `monthly` folds daily peaks into per-month maximums. |
+| `limit` | Integer | `30` | Maximum number of rows to return. Applies to `daily` period only; for `monthly`, all 24 months are always returned. |
+
+**Response Example**
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+Each record contains:
+- `period`: Calendar day (`YYYY-MM-DD`) or month (`YYYY-MM`), depending on the requested period
+- `high_watermark`: Peak session count observed during the period
+- `observed_at`: RFC 3339 timestamp of the peak observation
+
+#### Timezone Configuration
+
+Day boundaries are determined by the `license.high_watermark_timezone` configuration field. By default, it uses the node host's local timezone (`"system"`). You can set an explicit UTC offset (e.g., `"+08:00"`) to ensure consistent day boundaries across nodes in different regions. See [License Configuration](../configuration/license.md) for details.
+
 ### TPS Limits
 
 Starting from EMQX 6.0, Licenses can also include a Transactions Per Second (TPS) limit. This limit applies to the total MQTT messages processed across the cluster, including both incoming and outgoing MQTT messages.
