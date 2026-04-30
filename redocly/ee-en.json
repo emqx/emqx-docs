@@ -2902,6 +2902,28 @@
         ],
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_info_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "username"
+        ],
+        "type": "object"
+      },
       "confluent.put_bridge_v2": {
         "properties": {
           "connector": {
@@ -9191,7 +9213,6 @@
           },
           "enable": {
             "default": true,
-            "deprecated": true,
             "description": "Enable retainer feature",
             "type": "boolean"
           },
@@ -9590,6 +9611,48 @@
           "parameters",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.login_success_response": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "license": {
+            "properties": {
+              "edition": {
+                "description": "EMQX License. opensource or enterprise",
+                "enum": [
+                  "opensource",
+                  "enterprise"
+                ],
+                "example": "opensource",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "User role",
+            "example": "administrator",
+            "type": "string"
+          },
+          "token": {
+            "description": "Dashboard Auth Token",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "version": {
+            "description": "EMQX Version",
+            "example": "5.0.0",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "syskeeper_forwarder.connector_resource_opts": {
@@ -13118,6 +13181,33 @@
             "default": "5s",
             "description": "Time interval to wait for an auto-started resource to become healthy before responding resource creation requests.",
             "example": "32s",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "dashboard_sso.mfa_setup_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_setup",
+            "example": "mfa_setup",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "MFA mechanism",
+            "example": "totp",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token for MFA binding",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
             "type": "string"
           }
         },
@@ -18544,6 +18634,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "username": {
             "description": "InfluxDB username.",
             "type": "string"
@@ -19621,6 +19716,11 @@
             "description": "Whether to enable this backend.",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "idp_metadata_url": {
             "default": "https://idp.example.com",
             "description": "The URL of the IdP metadata.",
@@ -19751,6 +19851,33 @@
         },
         "required": [
           "cluster_identifier"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_verify_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token from SSO login flow.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "totp_code",
+          "username",
+          "verify_token"
         ],
         "type": "object"
       },
@@ -20786,6 +20913,7 @@
           "SERVICE_UNAVAILABLE",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
+          "UNAUTHORIZED",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -21371,6 +21499,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -22012,6 +22145,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -25860,6 +25998,28 @@
         },
         "type": "object"
       },
+      "dashboard_sso.token_exchange_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "code": {
+            "description": "One-time SSO code",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "code",
+          "username"
+        ],
+        "type": "object"
+      },
       "bridge_mongodb.get_sharded": {
         "properties": {
           "auth_source": {
@@ -28756,6 +28916,11 @@
             "example": "(& (objectClass=person) (uid=${username}))",
             "type": "string"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -30031,6 +30196,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "totp_code",
+          "username"
+        ],
+        "type": "object"
+      },
       "emqx_gateway_api.ws_listener": {
         "properties": {
           "acceptors": {
@@ -30868,14 +31060,19 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
           "enable": {
             "default": false,
             "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
             "type": "boolean"
           },
           "last_error": {
@@ -30910,145 +31107,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -31060,25 +31119,7 @@
               },
               {
                 "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -31090,7 +31131,67 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -31102,25 +31203,7 @@
               },
               {
                 "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -31132,7 +31215,121 @@
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
                 ],
                 "type": "string"
               }
@@ -39772,7 +39969,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "74A392ABD7F7DB56",
             "type": "string"
           },
           "status": {
@@ -42705,6 +42902,17 @@
             "description": "Role for this API",
             "example": "administrator",
             "type": "string"
+          },
+          "scopes": {
+            "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+            "example": [
+              "clients",
+              "rules"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -44001,6 +44209,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -44817,6 +45030,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -44983,6 +45201,11 @@
           "org": {
             "description": "Organization name of InfluxDB.",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -45196,6 +45419,23 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_response": {
+        "properties": {
+          "mechanism": {
+            "description": "MFA mechanism type (e.g. totp).",
+            "type": "string"
+          },
+          "secret": {
+            "description": "TOTP secret for QR code generation.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism",
+          "secret"
+        ],
         "type": "object"
       },
       "bridge_elasticsearch.post_bridge_v2": {
@@ -45433,6 +45673,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
           },
           "issuer": {
             "description": "The URL of the OIDC issuer.",
@@ -46770,6 +47015,18 @@
         ],
         "type": "object"
       },
+      "api_key.scopes_response": {
+        "properties": {
+          "scopes": {
+            "description": "All available scopes with their names and descriptions.",
+            "items": {
+              "$ref": "#/components/schemas/api_key.scope_info"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "retainer.message_summary": {
         "properties": {
           "from_clientid": {
@@ -47505,6 +47762,21 @@
           "server",
           "type"
         ],
+        "type": "object"
+      },
+      "api_key.scope_info": {
+        "properties": {
+          "desc": {
+            "description": "Human-readable description of the scope's coverage.",
+            "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
+            "type": "string"
+          },
+          "name": {
+            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "example": "connections",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "authn.cinfo": {
@@ -53257,6 +53529,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "token": {
             "description": "InfluxDB token.",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -53700,6 +53977,28 @@
           "name",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.mfa_verify_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_verify",
+            "example": "mfa_verify",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token for MFA verification",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_disk_log.get_connector": {
@@ -62212,6 +62511,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -63009,7 +63313,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.3"
+    "version": "5.10.4-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -63390,8 +63694,24 @@
     },
     "/users/{username}/mfa": {
       "delete": {
-        "description": "Delete MFA state for a dashboard user.<br/>After the state is deleted, the user will have MFA explicitly disabled, to re-enabled MFA, call the `POST` method.",
+        "description": "Disable MFA for a dashboard user. To reset or re-key TOTP, call the `POST` method.",
         "parameters": [
+          {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml",
+                "oidc"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -63405,7 +63725,7 @@
         ],
         "responses": {
           "204": {
-            "description": "MFA setting is deleted"
+            "description": "MFA setting is disabled"
           },
           "404": {
             "content": {
@@ -63443,8 +63763,24 @@
         ]
       },
       "post": {
-        "description": "Setup MFA for a dashboard user.",
+        "description": "Set up or reset MFA for a dashboard user. Calling this endpoint generates a fresh TOTP secret.",
         "parameters": [
+          {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml",
+                "oidc"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -63479,7 +63815,7 @@
         },
         "responses": {
           "204": {
-            "description": "MFA setting is reset"
+            "description": "MFA setting is updated"
           },
           "404": {
             "content": {
@@ -66338,6 +66674,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -72325,6 +72662,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -73407,6 +73745,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -74413,6 +74752,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -75179,7 +75519,7 @@
                       "type": "object"
                     },
                     "password_expire_in_seconds": {
-                      "description": "Time in seconds until the password expiresc.",
+                      "description": "Time in seconds until the password expires.",
                       "example": 3600,
                       "type": "integer"
                     },
@@ -75642,36 +75982,36 @@
                       "cassandra",
                       "rabbitmq",
                       "kafka_producer",
-                      "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
                       "influxdb",
-                      "hstreamdb",
                       "greptimedb",
+                      "hstreamdb",
+                      "sqlserver",
                       "azure_event_hub_producer",
+                      "iotdb",
                       "confluent_producer",
-                      "pulsar",
                       "syskeeper_forwarder",
                       "mongodb",
-                      "doris",
-                      "kinesis",
-                      "datalayers",
+                      "pulsar",
+                      "gcp_pubsub_producer",
                       "s3",
-                      "redis",
-                      "opents",
                       "s3tables",
+                      "redis",
+                      "datalayers",
+                      "opents",
+                      "kinesis",
+                      "doris",
                       "mqtt",
-                      "clickhouse",
+                      "timescale",
+                      "snowflake",
                       "tablestore",
                       "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "tdengine",
-                      "timescale",
                       "couchbase",
+                      "clickhouse",
+                      "tdengine",
+                      "azure_blob_storage",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "pgsql",
                       "mysql",
                       "dynamo"
@@ -75686,36 +76026,36 @@
                       "cassandra",
                       "rabbitmq",
                       "kafka_producer",
-                      "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
                       "influxdb",
-                      "hstreamdb",
                       "greptimedb",
+                      "hstreamdb",
+                      "sqlserver",
                       "azure_event_hub_producer",
+                      "iotdb",
                       "confluent_producer",
-                      "pulsar",
                       "syskeeper_forwarder",
                       "mongodb",
-                      "doris",
-                      "kinesis",
-                      "datalayers",
+                      "pulsar",
+                      "gcp_pubsub_producer",
                       "s3",
-                      "redis",
-                      "opents",
                       "s3tables",
+                      "redis",
+                      "datalayers",
+                      "opents",
+                      "kinesis",
+                      "doris",
                       "mqtt",
-                      "clickhouse",
+                      "timescale",
+                      "snowflake",
                       "tablestore",
                       "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "tdengine",
-                      "timescale",
                       "couchbase",
+                      "clickhouse",
+                      "tdengine",
+                      "azure_blob_storage",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "pgsql",
                       "mysql",
                       "dynamo"
@@ -79931,6 +80271,81 @@
         ]
       }
     },
+    "/sso/mfa/verify": {
+      "post": {
+        "description": "Verify SSO MFA TOTP code and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_verify_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/listeners": {
       "get": {
         "description": "List all running node's listeners for the specified type.",
@@ -80937,6 +81352,17 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -81036,6 +81462,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -81119,6 +81556,17 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -82217,6 +82665,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -82785,7 +83234,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -84631,6 +85080,7 @@
         "description": "Get Dashboard Auth Token.",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -84638,8 +85088,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -84651,10 +85101,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -84669,38 +85119,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "license": {
-                      "properties": {
-                        "edition": {
-                          "description": "EMQX License. opensource or enterprise",
-                          "enum": [
-                            "opensource",
-                            "enterprise"
-                          ],
-                          "example": "opensource",
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
                     },
-                    "role": {
-                      "default": "administrator",
-                      "description": "User role",
-                      "example": "administrator",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
                     },
-                    "token": {
-                      "description": "Dashboard Auth Token",
-                      "type": "string"
-                    },
-                    "version": {
-                      "description": "EMQX Version",
-                      "example": "5.0.0",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
                     }
-                  },
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -84775,7 +85204,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -85937,7 +86366,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "74A392ABD7F7DB56",
             "in": "path",
             "name": "site",
             "required": true,
@@ -88701,6 +89130,7 @@
         "description": "Delete dashboard user",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88709,8 +89139,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -88792,6 +89222,7 @@
         "description": "Update dashboard user description",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88800,8 +89231,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -88925,6 +89356,7 @@
         "description": "Dashboard user logout.<br/>This endpoint is only for the Dashboard, not the `API Key`.<br/>The token from the `/login` endpoint must be a bearer authorization in the headers.",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88933,8 +89365,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -94049,7 +94481,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -94145,7 +94577,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "74A392ABD7F7DB56",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94230,7 +94662,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "74A392ABD7F7DB56",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96695,6 +97127,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -97718,6 +98151,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -98730,6 +99164,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -101009,8 +101444,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -101023,7 +101458,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -102358,6 +102793,32 @@
         ]
       }
     },
+    "/api_key/scopes": {
+      "get": {
+        "description": "List all available API key scopes. This API can only be requested using a bearer token.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_key.scopes_response"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "API Keys"
+        ]
+      }
+    },
     "/sources/{id}": {
       "delete": {
         "description": "Delete a bridge by id.",
@@ -103010,7 +103471,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -107538,6 +107999,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -108708,6 +109170,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -109944,6 +110407,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -110684,6 +111148,17 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -110759,6 +111234,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -112393,6 +112879,72 @@
         ]
       }
     },
+    "/sso/token_exchange": {
+      "post": {
+        "description": "Exchange a one-time SSO code for the actual login result (JWT token or MFA metadata). The code is consumed after a single use.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso.token_exchange_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Invalid or expired SSO code.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          [
+            68,
+            "ashboard SSO"
+          ]
+        ]
+      }
+    },
     "/rule_test": {
       "post": {
         "description": "Test a rule",
@@ -113480,6 +114032,81 @@
         ],
         "tags": [
           "GCP Devices"
+        ]
+      }
+    },
+    "/sso/mfa/setup": {
+      "post": {
+        "description": "Complete SSO MFA TOTP setup: bind the TOTP authenticator and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -114888,7 +115515,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -116789,6 +117416,7 @@
         "description": "Delete a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116796,8 +117424,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116839,13 +117467,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "get": {
         "description": "Get details of a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116853,8 +117482,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116867,10 +117496,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -116913,13 +117542,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "put": {
         "description": "Update a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116927,8 +117557,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116940,10 +117570,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -116960,10 +117590,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -117006,7 +117636,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -121211,6 +121841,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -122351,6 +122982,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -123633,6 +124265,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -124992,6 +125625,59 @@
         ]
       }
     },
+    "/sso/mfa/setup_info": {
+      "post": {
+        "description": "Retrieve TOTP setup info (secret, mechanism) for QR code display. Requires a valid setup token in the request body.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/ai/providers/{name}": {
       "delete": {
         "description": "Delete provider entry for an AI provider.",
@@ -125325,7 +126011,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       },
       "put": {
@@ -125451,7 +126137,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       }
     }
