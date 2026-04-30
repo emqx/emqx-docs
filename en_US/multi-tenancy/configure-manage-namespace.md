@@ -115,7 +115,7 @@ To view clients connected to a specific namespace, click **Clients** in the **Ac
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+Always check the corresponding [Swagger API documentation](../admin/api.md) for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
 
 :::
 
@@ -126,7 +126,7 @@ EMQX provides two endpoints for listing namespaces with details, depending on wh
 | Endpoint | Scope | Config included |
 | -------- | ----- | --------------- |
 | `GET /mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
-| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | No |
+| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | Yes |
 
 Both endpoints support the same query parameters:
 
@@ -135,9 +135,9 @@ Both endpoints support the same query parameters:
 | `last_ns` | String | `""` | Pagination cursor. Pass the `name` of the last item from the previous page to retrieve the next page. |
 | `limit` | Integer | `100` | Maximum number of namespaces to return per page. |
 
-Each item in the response contains:
-- `name`: The namespace identifier.
-- `created_at`: Unix timestamp (seconds) of when the namespace was created.
+#### List All Namespaces
+
+`GET /mt/ns_list_details` returns all namespaces, including those auto-created from client connection metadata. Each item contains `name` and `created_at` only, with no configuration fields.
 
 **Response Example**
 
@@ -148,18 +148,58 @@ Each item in the response contains:
 ]
 ```
 
+#### List Managed Namespaces with Configuration
+
+`GET /mt/managed_ns_list_details` returns only explicitly created namespaces and includes each namespace's current configuration inline. A management UI can use this endpoint to render a full list with configuration data in a single request.
+
+**Response Example**
+
+```json
+[
+  {
+    "name": "ns1",
+    "created_at": 1747917753,
+    "config": {
+      "session": {
+        "max_sessions": 100
+      },
+      "limiter": {
+        "tenant": {
+          "bytes": { "rate": "20MB/10s", "burst": "300MB/1m" },
+          "messages": { "rate": "5000/1s", "burst": "60/1m" }
+        },
+        "client": {
+          "bytes": { "rate": "10MB/10s", "burst": "200MB/1m" },
+          "messages": { "rate": "3000/1s", "burst": "40/1m" }
+        }
+      }
+    }
+  },
+  {
+    "name": "ns2",
+    "created_at": 1747917754,
+    "config": {}
+  }
+]
+```
+
+Each item contains:
+- `name`: The namespace identifier.
+- `created_at`: Unix timestamp (seconds) of when the namespace was created.
+- `config`: The namespace configuration. An empty object (`{}`) indicates no configuration has been applied. For a full description of config fields, see [Configure a Namespace via REST API](#configure-a-namespace-via-rest-api).
+
 To retrieve the full configuration of a specific namespace, use `GET /mt/ns/<namespace>/config`.
 
 ### Configure a Namespace via REST API
 
 After the namespace is created, it can be configured using the `PUT /mt/ns/<namespace>/config` API.
 
-Use this endpoint to set rate limits, session limits, and other namespace-specific settings. For example configurations, see the [Configuration Example](#configuration-example).
+Use this endpoint to set rate limits, session limits, and other namespace-specific settings.
 
 #### Configuration Example
 
 
-This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+This example configures a namespace using the REST API. Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
 ##### Create the Namespace
 
