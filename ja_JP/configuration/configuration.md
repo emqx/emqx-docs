@@ -527,6 +527,11 @@ EMQXはルールエンジンの文字列関数に似た豊富な文字列、配�
   - [文字列操作関数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - 新関数`any_to_string/1`（任意の中間値を文字列に変換）
 - **配列関数**：`nth/2`など
+- **トピック関数**：
+  - `topic_join(Words)`：配列内のトピック階層を `/` で連結し、MQTTトピックまたはトピックフィルターを生成します。例えば、`topic_join(['devices', clientid, '#'])` は `devices/<clientid>/#` を生成します。
+  - `topic_join(Parent, Word)`：`Word` を `Parent` トピックの末尾に追加します。`Parent` がすでに `/` で終わっている場合、区切り文字は重複して追加されません。
+  - `topic_match(Topic, Filter)`：MQTTトピックがトピックフィルターに一致するかを判定し、`true` または `false` を返します。例えば、`topic_match(topic, topic_join(['devices', clientid, '#']))` を使うと、現在のトピックが特定クライアント用のトピック範囲内にあるかを判定できます。
+  - `topic_split(Topic)`：MQTTトピックを `/` で分割し、トピック階層の配列にします。
 - **乱数関数**：`rand_str`、`rand_int`
 - **スキーマレスエンコード/デコード関数**：
   - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)

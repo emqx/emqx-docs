@@ -546,6 +546,11 @@ Below are the functions that can be used in the expressions:
   - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - A new function `any_to_string/1` is also added to convert any intermediate non-string value to a string.
 - **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **Topic functions**:
+  - `topic_join(Words)`: Join topic levels in an array with `/` into an MQTT topic or topic filter. For example, `topic_join(['devices', clientid, '#'])` generates `devices/<clientid>/#`.
+  - `topic_join(Parent, Word)`: Append `Word` to the `Parent` topic. If `Parent` already ends with `/`, no extra separator is added.
+  - `topic_match(Topic, Filter)`: Check whether an MQTT topic matches a topic filter. It returns `true` or `false`. For example, `topic_match(topic, topic_join(['devices', clientid, '#']))` can check whether the current topic is under a client-specific topic range.
+  - `topic_split(Topic)`: Split an MQTT topic into an array of topic levels by `/`.
 - **Random functions**: rand_str, rand_int
 - **Schema-less encode/decode functions**:
   - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
