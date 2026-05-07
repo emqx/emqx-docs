@@ -69,7 +69,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
    - 输入连接器名称，要求是大小写英文字母和数字的组合，例如：`my_influxdb`。
    - 服务器地址填写 `127.0.0.1:8086`。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 `{url}:443` 并点击**启用 TLS** 以启用 TLS 连接。
-   - 根据情况选择 **InfluxDB 版本**。不同版本所需的认证配置项有所差异，如下表所示。相关取值应与[安装和设置 InfluxDB](#安装和设置-influxdb) 中的设置保持一致。
+   - 根据情况选择 **InfluxDB 版本**。不同版本所需的认证配置项有所差异，如下表所示。对于 InfluxDB v2，请使用[安装和设置 InfluxDB](#安装和设置-influxdb) 中配置的组织、Bucket 和 Token 值；对于 InfluxDB v1，请填写数据库名称，以及（如已在 InfluxDB 服务器上配置）该数据库对应的用户名和密码。
 
      | 配置项       | InfluxDB v1 | InfluxDB v2 |
      | ------------ | ----------- | ----------- |
