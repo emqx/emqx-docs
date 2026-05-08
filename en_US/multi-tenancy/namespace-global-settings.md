@@ -98,7 +98,7 @@ If **Take Namespace From** is not configured, no `tns` attribute will be generat
 Extract the namespace from the username:
 
 ```text
-nth(1, tokens(username, ‘-’))
+nth(1, tokens(username, '-'))
 ```
 
 With this configuration, a client connecting with the username `tenantA-user1` has `tenantA` assigned as its namespace identifier before authentication runs.
