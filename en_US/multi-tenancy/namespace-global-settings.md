@@ -31,9 +31,9 @@ When this setting is enabled, EMQX validates the client’s namespace during the
 
 ::: tip Note
 
-Before disabling this setting, ensure that **Take Namespace From** is properly configured and that all valid clients can successfully resolve a namespace.
+Before disabling this setting, ensure that **Take Namespace From** is properly configured and that all valid clients can successfully resolve a namespace. Otherwise, clients may be rejected because their namespace cannot be resolved.
 
-Otherwise, clients may be rejected because their namespace cannot be resolved.
+When **After Authentication** mode is selected under **When to Resolve Namespace**, pre-authentication namespace checks are skipped. The check against explicitly created namespaces runs after authentication completes instead.
 
 :::
 
@@ -48,15 +48,37 @@ This setting defines the default maximum number of concurrent sessions for newly
 
 This setting applies only to namespaces created after the configuration takes effect. Existing namespaces are not affected and must be updated individually if needed.
 
-## Take Namespace From
+## When to Resolve Namespace
 
-This setting specifies how EMQX determines which namespace a client belongs to.
+This setting controls at which point in the connection lifecycle EMQX resolves the client’s namespace identifier.
 
-When a client connects, EMQX evaluates the configured **Take Namespace From** rule and extracts a namespace identifier from the client’s connection metadata (such as the username, SNI, or other attributes). The extracted value is stored as the client attribute `client_attrs.tns`.
+EMQX supports two modes, selectable via the **When to Resolve Namespace** radio button in the Dashboard:
+
+- **Before Authentication** (default): The namespace expression is evaluated before the authentication chain runs, using only connection metadata available at that point (such as `username`, `clientid`, or `cert_common_name`). This corresponds to configuring `tns` via `mqtt.client_attrs_init` in the configuration file.
+- **After Authentication**: The namespace expression is evaluated after the full authentication chain completes. In addition to the standard connection metadata, `client_attrs.*` values are available, including any attributes returned by the authentication backend (for example, a `tag` field from an HTTP auth response). This corresponds to configuring `multi_tenancy.post_auth_tns_expression` in the configuration file.
 
 ::: tip
 
-The **Take Namespace From** rule is defined using Variform expressions. For details on the syntax and available functions, see [Variform Expressions](../configuration/configuration.md#variform-expressions).
+These two modes are mutually exclusive. If **After Authentication** is configured, it takes precedence and overrides any pre-authentication `tns` value derived from `mqtt.client_attrs_init`.
+
+:::
+
+### Interaction with Allow Only Explicitly Created Namespaces
+
+When **After Authentication** mode is selected, pre-authentication namespace checks are skipped entirely, even if **Allow Only Explicitly Created Namespaces** is enabled. All enforcement (whether the resolved namespace exists, quota checks) is deferred until after authentication completes and the final namespace value is known.
+
+## Take Namespace From
+
+This setting specifies the Variform expression EMQX uses to derive the client’s namespace identifier (`client_attrs.tns`).
+
+The expression is evaluated at the point in the connection lifecycle determined by the **When to Resolve Namespace** setting:
+
+- In **Before Authentication** mode, only standard connection metadata is available: `username`, `clientid`, `cert_common_name`, and other pre-auth attributes.
+- In **After Authentication** mode, `client_attrs.*` is also available, including attributes merged in from the authentication result.
+
+::: tip
+
+The **Take Namespace From** expression uses Variform syntax. For details on available functions, see [Variform Expressions](../configuration/configuration.md#variform-expressions).
 
 :::
 
@@ -69,20 +91,39 @@ This configuration is a prerequisite for the following features:
 
 If **Take Namespace From** is not configured, no `tns` attribute will be generated. In this case, clients will not be associated with any namespace, and all namespace-related isolation and control features will remain inactive.
 
-### Example
+### Examples
 
-The following example shows how to configure the **Take Namespace From** setting to extract the namespace identifier from the client username:
+#### Before Authentication
+
+Extract the namespace from the username:
 
 ```text
-nth(1, tokens(username, '-'))
+nth(1, tokens(username, ‘-’))
 ```
 
-With this configuration:
+With this configuration, a client connecting with the username `tenantA-user1` has `tenantA` assigned as its namespace identifier before authentication runs.
 
-- A client connects using the username `tenantA-user1`.
-- EMQX evaluates the defined setting and extracts `tenantA` from the username.
-- The extracted value is assigned to the client attribute `client_attrs.tns`.
-- `tenantA` becomes the namespace identifier for the client.
+#### After Authentication
+
+Use a `tag` attribute returned by an HTTP auth backend:
+
+```text
+client_attrs.tag
+```
+
+With a fallback in case the auth backend does not return a tag:
+
+```text
+coalesce(client_attrs.tag, username)
+```
+
+With this configuration, EMQX waits for the authentication chain to complete, then reads the `tag` value from the merged `client_attrs` and assigns it as the namespace identifier.
+
+::: tip
+
+If the expression renders to an empty string, the existing `tns` value (if any) is kept. If the expression produces an error, a warning is logged, and the client is treated as having no namespace.
+
+:::
 
 ## Client ID Isolation
 
