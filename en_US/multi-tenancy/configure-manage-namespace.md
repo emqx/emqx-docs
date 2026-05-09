@@ -101,8 +101,8 @@ EMQX provides two endpoints for listing namespaces with details, depending on wh
 
 | Endpoint | Scope | Config included |
 | -------- | ----- | --------------- |
-| `GET /api/v5/mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
-| `GET /api/v5/mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | No |
+| `GET /mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
+| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | No |
 
 Both endpoints support the same query parameters:
 
@@ -124,7 +124,7 @@ Each item in the response contains:
 ]
 ```
 
-To retrieve the full configuration of a specific namespace, use `GET /api/v5/mt/ns/<namespace>/config`.
+To retrieve the full configuration of a specific namespace, use `GET /mt/ns/<namespace>/config`.
 
 ### Configure a Namespace via REST API
 

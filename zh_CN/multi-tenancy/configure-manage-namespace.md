@@ -95,8 +95,8 @@ EMQX 提供两个带详情的命名空间列表接口，可根据实际需求选
 
 | 接口 | 范围 | 是否包含配置 |
 | ---- | ---- | ------------ |
-| `GET /api/v5/mt/ns_list_details` | 所有命名空间（自动创建和显式创建） | 否 |
-| `GET /api/v5/mt/managed_ns_list_details` | 仅显式创建（托管）的命名空间 | 否 |
+| `GET /mt/ns_list_details` | 所有命名空间（自动创建和显式创建） | 否 |
+| `GET /mt/managed_ns_list_details` | 仅显式创建（托管）的命名空间 | 否 |
 
 两个接口支持相同的查询参数：
 
@@ -118,7 +118,7 @@ EMQX 提供两个带详情的命名空间列表接口，可根据实际需求选
 ]
 ```
 
-如需获取某个命名空间的完整配置详情，可使用 `GET /api/v5/mt/ns/<namespace>/config` 接口。
+如需获取某个命名空间的完整配置详情，可使用 `GET /mt/ns/<namespace>/config` 接口。
 
 ### 配置命名空间
 
