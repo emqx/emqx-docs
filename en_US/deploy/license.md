@@ -131,7 +131,7 @@ You can configure the alarm watermarks via the EMQX Dashboard or configuration f
 
 ### Session High-Watermark History
 
-EMQX Enterprise automatically records the daily peak session count across the cluster and retains at least 24 months of history. This data is stored in a replicated, tamper-proof internal table that persists across node restarts and cluster topology changes, providing an audit-ready basis for billing settlements.
+EMQX Enterprise automatically records the daily peak session count across the cluster and retains up to 24 months of history. This data is stored in a replicated, integrity-protected internal table that persists across node restarts and cluster topology changes, providing an audit-ready basis for billing settlements.
 
 #### CLI
 
@@ -161,9 +161,15 @@ GET /api/v5/license/session_hwm_history
 | Parameter | Type | Default | Description |
 | --------- | ---- | ------- | ----------- |
 | `period` | `daily` \| `monthly` | `daily` | Aggregation granularity. `daily` returns one row per calendar day; `monthly` folds daily peaks into per-month maximums. |
-| `limit` | Integer | `30` | Maximum number of rows to return. Applies to `daily` period only; for `monthly`, all 24 months are always returned. |
+| `limit` | Integer | `30` | Maximum number of rows to return. Applies to `daily` period only; ignored for `monthly`, which returns all available months up to the 24-month retention window. |
 
 **Response Example**
+
+The following example requests monthly aggregation explicitly:
+
+```bash
+GET /api/v5/license/session_hwm_history?period=monthly
+```
 
 ```json
 {
