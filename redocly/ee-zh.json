@@ -2902,6 +2902,28 @@
         ],
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_info_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "username"
+        ],
+        "type": "object"
+      },
       "confluent.put_bridge_v2": {
         "properties": {
           "connector": {
@@ -9191,7 +9213,6 @@
           },
           "enable": {
             "default": true,
-            "deprecated": true,
             "description": "是否开启消息保留功能",
             "type": "boolean"
           },
@@ -9590,6 +9611,48 @@
           "parameters",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.login_success_response": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "license": {
+            "properties": {
+              "edition": {
+                "description": "EMQX License 类型。可为 opensource 或 enterprise",
+                "enum": [
+                  "opensource",
+                  "enterprise"
+                ],
+                "example": "opensource",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "用户角色",
+            "example": "administrator",
+            "type": "string"
+          },
+          "token": {
+            "description": "Dashboard 认证 Token",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "version": {
+            "description": "EMQX 版本",
+            "example": "5.0.0",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "syskeeper_forwarder.connector_resource_opts": {
@@ -13118,6 +13181,33 @@
             "default": "5s",
             "description": "在回复资源创建请求前等待资源进入健康状态的时间。",
             "example": "32s",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "dashboard_sso.mfa_setup_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_setup",
+            "example": "mfa_setup",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "MFA mechanism",
+            "example": "totp",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token for MFA binding",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
             "type": "string"
           }
         },
@@ -18544,6 +18634,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "username": {
             "description": "InfluxDB 用户名。",
             "type": "string"
@@ -19621,6 +19716,11 @@
             "description": "是否启用该后端",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "idp_metadata_url": {
             "default": "https://idp.example.com",
             "description": "身份提供商的元数据地址。",
@@ -19751,6 +19851,33 @@
         },
         "required": [
           "cluster_identifier"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_verify_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token from SSO login flow.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "totp_code",
+          "username",
+          "verify_token"
         ],
         "type": "object"
       },
@@ -20786,6 +20913,7 @@
           "SERVICE_UNAVAILABLE",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
+          "UNAUTHORIZED",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -21371,6 +21499,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -22012,6 +22145,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -25860,6 +25998,28 @@
         },
         "type": "object"
       },
+      "dashboard_sso.token_exchange_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "code": {
+            "description": "One-time SSO code",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "code",
+          "username"
+        ],
+        "type": "object"
+      },
       "bridge_mongodb.get_sharded": {
         "properties": {
           "auth_source": {
@@ -28756,6 +28916,11 @@
             "example": "(& (objectClass=person) (uid=${username}))",
             "type": "string"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "password": {
             "description": "内部数据库密码。",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -30031,6 +30196,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "totp_code",
+          "username"
+        ],
+        "type": "object"
+      },
       "emqx_gateway_api.ws_listener": {
         "properties": {
           "acceptors": {
@@ -30878,6 +31070,11 @@
             "description": "是否启用该后端",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "last_error": {
             "description": "该后端的最后一个错误",
             "type": "string"
@@ -30910,19 +31107,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -30934,85 +31119,7 @@
               },
               {
                 "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
+                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -31024,13 +31131,7 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
+                  "hstreamdb"
                 ],
                 "type": "string"
               },
@@ -31042,79 +31143,37 @@
               },
               {
                 "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "doris"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -31126,13 +31185,151 @@
               },
               {
                 "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
                 ],
                 "type": "string"
               }
@@ -39772,7 +39969,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "46722DBDC17D7E57",
             "type": "string"
           },
           "status": {
@@ -42705,6 +42902,17 @@
             "description": "用于此 API 的角色",
             "example": "administrator",
             "type": "string"
+          },
+          "scopes": {
+            "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+            "example": [
+              "clients",
+              "rules"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -44001,6 +44209,11 @@
             "description": "InfluxDB 组织名称。",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池的大小，指向桥接目标服务的连接池大小。",
@@ -44817,6 +45030,11 @@
             "description": "InfluxDB 组织名称。",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池的大小，指向桥接目标服务的连接池大小。",
@@ -44983,6 +45201,11 @@
           "org": {
             "description": "InfluxDB 组织名称。",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -45196,6 +45419,23 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_response": {
+        "properties": {
+          "mechanism": {
+            "description": "MFA mechanism type (e.g. totp).",
+            "type": "string"
+          },
+          "secret": {
+            "description": "TOTP secret for QR code generation.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism",
+          "secret"
+        ],
         "type": "object"
       },
       "bridge_elasticsearch.post_bridge_v2": {
@@ -45433,6 +45673,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
           },
           "issuer": {
             "description": "OIDC 发行者的 URL。",
@@ -46770,6 +47015,18 @@
         ],
         "type": "object"
       },
+      "api_key.scopes_response": {
+        "properties": {
+          "scopes": {
+            "description": "All available scopes with their names and descriptions.",
+            "items": {
+              "$ref": "#/components/schemas/api_key.scope_info"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "retainer.message_summary": {
         "properties": {
           "from_clientid": {
@@ -47505,6 +47762,21 @@
           "server",
           "type"
         ],
+        "type": "object"
+      },
+      "api_key.scope_info": {
+        "properties": {
+          "desc": {
+            "description": "Human-readable description of the scope's coverage.",
+            "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
+            "type": "string"
+          },
+          "name": {
+            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "example": "connections",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "authn.cinfo": {
@@ -53257,6 +53529,11 @@
             "description": "InfluxDB 组织名称。",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "token": {
             "description": "InfluxDB token。",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -53700,6 +53977,28 @@
           "name",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.mfa_verify_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_verify",
+            "example": "mfa_verify",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token for MFA verification",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_disk_log.get_connector": {
@@ -62212,6 +62511,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池的大小，指向桥接目标服务的连接池大小。",
@@ -63009,7 +63313,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.3"
+    "version": "5.10.4-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -63393,6 +63697,22 @@
         "description": "删除 Dashboard 用户的多重身份认证（MFA）状态。<br/>删除后，该用户的 MFA 将被显式禁用。如需重新启用 MFA，请调用 `POST` 方法。",
         "parameters": [
           {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard 用户名",
             "example": "admin",
             "in": "path",
@@ -63405,7 +63725,7 @@
         ],
         "responses": {
           "204": {
-            "description": "MFA setting is deleted"
+            "description": "MFA setting is disabled"
           },
           "404": {
             "content": {
@@ -63446,6 +63766,22 @@
         "description": "为 Dashboard 用户设置多重身份认证（MFA）。",
         "parameters": [
           {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Dashboard 用户名",
             "example": "admin",
             "in": "path",
@@ -63479,7 +63815,7 @@
         },
         "responses": {
           "204": {
-            "description": "MFA setting is reset"
+            "description": "MFA setting is updated"
           },
           "404": {
             "content": {
@@ -66338,6 +66674,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -72325,6 +72662,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -73407,6 +73745,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -74413,6 +74752,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -75639,41 +75979,41 @@
                     "value": [
                       "http",
                       "rocketmq",
-                      "cassandra",
                       "rabbitmq",
-                      "iotdb",
+                      "cassandra",
                       "sqlserver",
-                      "influxdb",
-                      "syskeeper_forwarder",
-                      "hstreamdb",
-                      "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
                       "pulsar",
-                      "kafka_producer",
+                      "greptimedb",
+                      "azure_event_hub_producer",
                       "mongodb",
-                      "doris",
-                      "opents",
-                      "kinesis",
-                      "datalayers",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "iotdb",
+                      "kafka_producer",
+                      "influxdb",
+                      "hstreamdb",
+                      "gcp_pubsub_producer",
                       "s3",
-                      "redis",
                       "s3tables",
+                      "opents",
+                      "redis",
+                      "doris",
+                      "datalayers",
+                      "kinesis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "timescale",
-                      "azure_blob_storage",
                       "oracle",
-                      "snowflake",
+                      "clickhouse",
+                      "azure_blob_storage",
+                      "tablestore",
                       "tdengine",
+                      "snowflake",
+                      "timescale",
                       "couchbase",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75683,41 +76023,41 @@
                     "enum": [
                       "http",
                       "rocketmq",
-                      "cassandra",
                       "rabbitmq",
-                      "iotdb",
+                      "cassandra",
                       "sqlserver",
-                      "influxdb",
-                      "syskeeper_forwarder",
-                      "hstreamdb",
-                      "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
                       "pulsar",
-                      "kafka_producer",
+                      "greptimedb",
+                      "azure_event_hub_producer",
                       "mongodb",
-                      "doris",
-                      "opents",
-                      "kinesis",
-                      "datalayers",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "iotdb",
+                      "kafka_producer",
+                      "influxdb",
+                      "hstreamdb",
+                      "gcp_pubsub_producer",
                       "s3",
-                      "redis",
                       "s3tables",
+                      "opents",
+                      "redis",
+                      "doris",
+                      "datalayers",
+                      "kinesis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "timescale",
-                      "azure_blob_storage",
                       "oracle",
-                      "snowflake",
+                      "clickhouse",
+                      "azure_blob_storage",
+                      "tablestore",
                       "tdengine",
+                      "snowflake",
+                      "timescale",
                       "couchbase",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -79931,6 +80271,81 @@
         ]
       }
     },
+    "/sso/mfa/verify": {
+      "post": {
+        "description": "Verify SSO MFA TOTP code and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_verify_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/listeners": {
       "get": {
         "description": "列出所有节点上的指定类型的监听器",
@@ -80937,6 +81352,17 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -81036,6 +81462,17 @@
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -81119,6 +81556,17 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -82217,6 +82665,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -82785,7 +83234,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -84631,6 +85080,7 @@
         "description": "获取 Dashboard 认证令牌。",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -84669,38 +85119,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "license": {
-                      "properties": {
-                        "edition": {
-                          "description": "EMQX License 类型。可为 opensource 或 enterprise",
-                          "enum": [
-                            "opensource",
-                            "enterprise"
-                          ],
-                          "example": "opensource",
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
                     },
-                    "role": {
-                      "default": "administrator",
-                      "description": "用户角色",
-                      "example": "administrator",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
                     },
-                    "token": {
-                      "description": "Dashboard 认证 Token",
-                      "type": "string"
-                    },
-                    "version": {
-                      "description": "EMQX 版本",
-                      "example": "5.0.0",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
                     }
-                  },
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -84775,7 +85204,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -85937,7 +86366,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "46722DBDC17D7E57",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86545,6 +86974,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -86645,73 +87141,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -88701,6 +89130,7 @@
         "description": "删除 Dashboard 用户",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88792,6 +89222,7 @@
         "description": "更新 Dashboard 用户备注",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88925,6 +89356,7 @@
         "description": "Dashboard 用户退出登录",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -94049,7 +94481,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -94145,7 +94577,7 @@
           },
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "46722DBDC17D7E57",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94230,7 +94662,7 @@
           },
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "46722DBDC17D7E57",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96695,6 +97127,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -97718,6 +98151,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -98730,6 +99164,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -101023,7 +101458,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -102358,6 +102793,32 @@
         ]
       }
     },
+    "/api_key/scopes": {
+      "get": {
+        "description": "List all available API key scopes. This API can only be requested using a bearer token.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_key.scopes_response"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "API Keys"
+        ]
+      }
+    },
     "/sources/{id}": {
       "delete": {
         "description": "通过 id 删除数据桥接",
@@ -103010,7 +103471,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -107538,6 +107999,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -108708,6 +109170,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -109944,6 +110407,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -110684,6 +111148,17 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
                     }
                   },
                   "type": "object"
@@ -110759,6 +111234,17 @@
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to restrict this API key's access. Each scope is a stable functional category (e.g., connections, publish, monitoring). If not set or undefined, the key has access to all APIs. An empty list means no API access.",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -112393,6 +112879,72 @@
         ]
       }
     },
+    "/sso/token_exchange": {
+      "post": {
+        "description": "Exchange a one-time SSO code for the actual login result (JWT token or MFA metadata). The code is consumed after a single use.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso.token_exchange_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Invalid or expired SSO code.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          [
+            68,
+            "ashboard SSO"
+          ]
+        ]
+      }
+    },
     "/rule_test": {
       "post": {
         "description": "测试一个规则",
@@ -113480,6 +114032,81 @@
         ],
         "tags": [
           "GCP Devices"
+        ]
+      }
+    },
+    "/sso/mfa/setup": {
+      "post": {
+        "description": "Complete SSO MFA TOTP setup: bind the TOTP authenticator and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -114888,7 +115515,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -116789,6 +117416,7 @@
         "description": "删除一个后端",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116839,13 +117467,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "get": {
         "description": "获取后端的详细信息",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116913,13 +117542,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "put": {
         "description": "更新一个后端",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -117006,7 +117636,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -121211,6 +121841,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -122351,6 +122982,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -123633,6 +124265,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -124992,6 +125625,59 @@
         ]
       }
     },
+    "/sso/mfa/setup_info": {
+      "post": {
+        "description": "Retrieve TOTP setup info (secret, mechanism) for QR code display. Requires a valid setup token in the request body.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/ai/providers/{name}": {
       "delete": {
         "description": "删除 AI 提供商的提供商条目。",
@@ -125325,7 +126011,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       },
       "put": {
@@ -125451,7 +126137,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       }
     }
