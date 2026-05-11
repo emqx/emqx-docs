@@ -444,7 +444,7 @@
         - operate/sso-saml
         - operate/sso-oidc
     - operate/api-keys
-    - operate/dashboard-security
+
     - operate/audit-log
     - operate/rate-limit
     - operate/backup-restore
