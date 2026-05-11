@@ -84,9 +84,9 @@ insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${top
 
 填写资源配置:
 
-数据库名填写 “mqtt”，用户名填写 “root”，密码填写 “123456”
+数据库名填写 “test”，用户名填写 “root”，密码填写 “public”
 
-![image](./assets/rule-engine/rule_action_3@2x.png)
+![image](./assets/rule-engine/rule_resource_1@2x.png)
 
 点击 “新建” 按钮。
 
