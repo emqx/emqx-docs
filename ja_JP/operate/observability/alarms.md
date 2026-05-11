@@ -75,7 +75,7 @@ EMQX ダッシュボードで **Monitoring** -> **Alarms** をクリックし、
 
 ### REST API でアラームを取得する
 
-API を通じてアラームの照会や管理が可能です。UI の左ナビゲーションメニューで **Alarms** をクリックすると、この API リクエストが実行されます。EMQX API の利用方法については [REST API](../admin/api.md) を参照してください。
+API を通じてアラームの照会や管理が可能です。UI の左ナビゲーションメニューで **Alarms** をクリックすると、この API リクエストが実行されます。EMQX API の利用方法については [REST API](../api.md) を参照してください。
 
 <img src="./assets/view-alarms-api.png" alt="APIでのアラーム表示" style="zoom:45%;" />
 
@@ -83,8 +83,8 @@ API を通じてアラームの照会や管理が可能です。UI の左ナビ�
 
 EMQX バージョン 5.8.5 以降、ルールエンジンは以下の2つの新しいアラームイベントをサポートしています：
 
-- [$events/sys/alarm_activated](../data-integration/rule-sql-events-and-fields.md#system-alarm-activated-event-events-sys-alarm-activated)
-- [$events/sys/alarm_deactivated](../data-integration/rule-sql-events-and-fields.md#system-alarm-deactivated-event-events-sys-alarm-deactivated)
+- [$events/sys/alarm_activated](../../develop/data-integration/rule-sql-events-and-fields.md#system-alarm-activated-event-events-sys-alarm-activated)
+- [$events/sys/alarm_deactivated](../../develop/data-integration/rule-sql-events-and-fields.md#system-alarm-deactivated-event-events-sys-alarm-deactivated)
 
 これらのイベントにより、Webhook 統合を通じて外部 HTTP サービスへアラームの発動・解除通知を受け取ることが可能です。
 
@@ -94,7 +94,7 @@ Webhook 統合の設定手順：
 2. 右上の **Set Up Webhook** ボタンをクリックし、Webhook 統合設定ページを開きます。  
 3. Webhook 統合の名前と任意のメモを入力します。**Trigger** フィールドには `Alarm Activated` と `Alarm Deactivated` が事前選択されています。  
 4. 通知を送信したい Webhook URL を入力します。  
-5. 詳細な設定オプションについては [Create Webhook](../data-integration/webhook.md) を参照してください。  
+5. 詳細な設定オプションについては [Create Webhook](../../develop/data-integration/webhook.md) を参照してください。  
 6. 設定が完了したら **Save** をクリックします。
 
 ![alarm_webhook_setup](./assets/alarm_webhook_setup.png)

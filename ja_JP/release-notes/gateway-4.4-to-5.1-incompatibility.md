@@ -174,7 +174,7 @@ gateway.exproto {
 
 CoAP プロトコルの実装仕様は完全に再設計されました。
 
-新しい設計については [CoAP](../gateway/coap.md) を参照してください。
+新しい設計については [CoAP](../develop/gateway/coap.md) を参照してください。
 
 ### LwM2M
 

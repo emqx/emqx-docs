@@ -25,7 +25,7 @@ EMQX 4.4 と比較して、EMQX 5.1 へのアップグレードでは、特に�
 
 ## HTTP API
 
-以前はダッシュボードの **Applications** で API アクセス認証情報を管理していましたが、現在は **[API Key](../dashboard/system.md#api-key)** を使って認証情報を作成します。認証情報は API Key と Secret Key からなり、それぞれ HTTP Basic 認証のユーザー名とパスワードとして使用できます。Secret Key は作成時に一度だけ表示され、その後は取得できません。
+以前はダッシュボードの **Applications** で API アクセス認証情報を管理していましたが、現在は **[API Key](../operate/dashboard/system.md#api-key)** を使って認証情報を作成します。認証情報は API Key と Secret Key からなり、それぞれ HTTP Basic 認証のユーザー名とパスワードとして使用できます。Secret Key は作成時に一度だけ表示され、その後は取得できません。
 
 - ポート 8081 は閉じられ、すべての API リクエストはポート 18083 を使用します。  
 - HTTP API へのアクセスにユーザー名/パスワードは使えず、API Key の使用が**必須**です。  
@@ -172,7 +172,7 @@ API は大幅に変更され、一部は互換性を持たせています。以�
 - クラスター作成のための `mcast` 探索戦略は非推奨となり、削除予定です。  
 - サービス探索の設定が変更され、`cluster.discovery` は **cluster.discovery_strategy** に変更されました。  
 - 新機能：[cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery)。  
-- 内部 DB にオプションの [最終的整合性](../design/clustering.md#data-consistency) が追加されました。
+- 内部 DB にオプションの [最終的整合性](../develop/design/clustering.md#data-consistency) が追加されました。
 
 ## MQTT
 
@@ -210,8 +210,8 @@ Auth は **Authentication（認証）**、ACL は **Authorization（認可）** 
 
 対応プレースホルダーの詳細は以下を参照してください：
 
-- [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders)  
-- [Authorization Placeholders](../access-control/authz/authz.md#placeholders-in-data-queries)  
+- [Authentication Placeholders](../operate/access-control/authn/authn.md#authentication-placeholders)  
+- [Authorization Placeholders](../operate/access-control/authz/authz.md#placeholders-in-data-queries)  
 
 ::: details 使用例
 
@@ -239,7 +239,7 @@ authentication = [
 - スーパーユーザーのクエリは廃止されました。ハッシュ化された資格情報と `is_superuser` フラグを返す単一のクエリが必要です。  
 - HTTP 認証  
   - EMQX 4.x では HTTP ステータスコードのみを使用し、本文は破棄されていました（例：`200` は許可、`403` は拒否）。  
-  - EMQX 5.x では HTTP 認証が再設計され、HTTP 本文を活用します。詳細は [HTTP サービス認証](../access-control/authn/http.md#http-request-and-response) を参照してください。  
+  - EMQX 5.x では HTTP 認証が再設計され、HTTP 本文を活用します。詳細は [HTTP サービス認証](../operate/access-control/authn/http.md#http-request-and-response) を参照してください。  
 - SCRAM 認証  
   - 4.4 で唯一利用可能だった SHA1 ハッシュモードは廃止され、SHA256/SHA512 ハッシュが使用されます。  
 - 組み込みデータベース  
@@ -261,7 +261,7 @@ authentication = [
 - HTTP  
 
   - EMQX 4.x では HTTP ステータスコードのみを使用し、本文は破棄されていました（"ignore" ケースを除く）。例：`200` は許可、`403` は拒否。  
-  - EMQX 5.0 では HTTP 認可が再設計され、HTTP 本文を活用します。詳細は [HTTP リクエストとレスポンス](../access-control/authz/http.md#http-request-and-response) を参照してください。
+  - EMQX 5.0 では HTTP 認可が再設計され、HTTP 本文を活用します。詳細は [HTTP リクエストとレスポンス](../operate/access-control/authz/http.md#http-request-and-response) を参照してください。
 
 - MySQL、PostgreSQL  
 
@@ -344,7 +344,7 @@ EMQX 5.1 のログファイルは、EMQX 4.4 と同様のフラットログ形�
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-詳細は [Logs](../observability/log.md) を参照してください。
+詳細は [Logs](../operate/observability/log.md) を参照してください。
 
 ## Prometheus
 
@@ -356,7 +356,7 @@ EMQX 5.1 のログファイルは、EMQX 4.4 と同様のフラットログ形�
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-プッシュゲートウェイを有効にする場合は [Integrate with Prometheus](../observability/prometheus.md) を参照してください。
+プッシュゲートウェイを有効にする場合は [Integrate with Prometheus](../operate/observability/prometheus.md) を参照してください。
 
 ::: details Prometheus メトリクスの変更点
 

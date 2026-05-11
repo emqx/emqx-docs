@@ -90,7 +90,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 4. 配置连接到 Kafka 所需的参数：
    - 对于 **主机列表**，输入 `127.0.0.1:9092`。注意：此演示假设您在本地机器上运行 EMQX 和 Kafka。如果您在远程运行 Kafka 和 EMQX，请相应调整设置。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
-   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
+   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
 5. 点击**创建**按钮完成连接器的创建。
 
 创建成功后，连接器将自动连接到 Kafka。接下来，我们将基于此连接器创建一条规则，将数据转发到连接器所配置的 Kafka 集群中。
@@ -168,7 +168,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 #### 使用环境变量
 
-EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的[环境变量](../configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
+EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的[环境变量](../../operate/configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
 
 ::: tip 注意
 
@@ -277,7 +277,7 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
 
    - 对于 **主机列表**，输入 `127.0.0.1:9092`。注意：此演示假设您在本地机器上运行 EMQX 和 Kafka。如果您在远程运行 Kafka 和 EMQX，请相应调整设置。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
-   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
+   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
 6. 高级设置（可选）：参见 **[高级配置](#高级配置)**。
 7. 在点击 **创建** 之前，您可以点击 **测试连接** 来测试连接器是否能连接到 Kafka 服务器。
 11. 点击 **创建**。您将被提供创建关联规则的选项。请参见 [创建 Kafka Source 规则](#创建-kafka-source-规则)。

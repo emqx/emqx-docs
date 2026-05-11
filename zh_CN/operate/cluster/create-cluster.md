@@ -4,7 +4,7 @@ EMQX 支持手动创建集群，也支持通过多种方式自动集群。本页
 
 ## 基本概念
 
-您可以在[分布式集群介绍](./introduction.md)和[部署架构](./mria-introduction.md)中了解 EMQX 集群的基础知识和工作方式。想要创建集群，您还需要熟悉以下概念：
+您可以在[分布式集群介绍](../../develop/cluster/introduction.md)和[部署架构](../../develop/cluster/mria-introduction.md)中了解 EMQX 集群的基础知识和工作方式。想要创建集群，您还需要熟悉以下概念：
 
 ### 节点名称
 
@@ -246,7 +246,7 @@ Cluster status: #{running_nodes =>
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
-从 EMQX v5.9.0 开始，你还可以通过 Dashboard 邀请节点创建集群，详情参考[集群](../../dashboard/cluster_settings.md#集群)。
+从 EMQX v5.9.0 开始，你还可以通过 Dashboard 邀请节点创建集群，详情参考[集群](../dashboard/cluster_settings.md#集群)。
 
 ## 自动集群
 

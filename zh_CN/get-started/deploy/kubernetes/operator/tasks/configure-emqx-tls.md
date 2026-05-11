@@ -95,7 +95,7 @@ Volumes 的类型有很多种，关于 Volumes 描述可以参考文档：[Volum
 
   >`.spec.coreTemplate.extraVolumeMounts` 字段配置了 TLS 证书挂载到 EMQX 的目录为：`/mounted/cert`。
 
-  >`.spec.config.data` 字段配置了 TLS 监听器证书路径，更多 TLS 监听器的配置可以参考文档：[配置手册](../../../../configuration/configuration.md)。
+  >`.spec.config.data` 字段配置了 TLS 监听器证书路径，更多 TLS 监听器的配置可以参考文档：[配置手册](../../../../../operate/configuration/configuration.md)。
 
 + 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
 

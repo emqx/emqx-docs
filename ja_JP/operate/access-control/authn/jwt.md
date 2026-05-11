@@ -38,7 +38,7 @@ JWTの漏洩や盗難の可能性を減らすために、適切な有効期限�
 
 ## クライアント属性
 
-EMQX v5.7.0以降、JWTペイロード内のオプションフィールド`client_attrs`を使用して[クライアント属性](../../client-attributes/client-attributes.md)を設定できます。キーと値は両方とも文字列型である必要があります。
+EMQX v5.7.0以降、JWTペイロード内のオプションフィールド`client_attrs`を使用して[クライアント属性](../../../develop/client-attributes/client-attributes.md)を設定できます。キーと値は両方とも文字列型である必要があります。
 
 例：
 

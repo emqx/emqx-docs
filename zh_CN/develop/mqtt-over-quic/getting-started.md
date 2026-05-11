@@ -23,7 +23,7 @@ docker run -d --name emqx \
 emqx/emqx:@EE_VERSION@
 ```
 
-有关 Docker 安装更多内容请参考 [Docker 部署指南](../deploy/install-docker.md)。
+有关 Docker 安装更多内容请参考 [Docker 部署指南](../../get-started/deploy/install-docker.md)。
 
 ## 启用 MQTT over QUIC
 

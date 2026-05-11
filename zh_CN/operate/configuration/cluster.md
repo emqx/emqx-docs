@@ -21,7 +21,7 @@ node {
 其中，
 
 - `name ` 指的是所需的节点名称，例如，`emqx@localhost`。
-- `role` 指的是 EMQX 节点在 EMQX 集群中执行的功能。有两种类型的角色：核心节点和复制节点。关于核心节点和复制节点的详细解释，请参见 [EMQX 集群 - 核心节点和复制节点](../deploy/cluster/mria-introduction.md)。
+- `role` 指的是 EMQX 节点在 EMQX 集群中执行的功能。有两种类型的角色：核心节点和复制节点。关于核心节点和复制节点的详细解释，请参见 [EMQX 集群 - 核心节点和复制节点](../../develop/cluster/mria-introduction.md)。
   - 默认值：`core`
   - 可选值：`core` 或 `replicant`
 
@@ -31,7 +31,7 @@ node {
 
 - 节点的 `node.db_backend`设置为 `rlog`，表示节点使用 `rlog `作为数据库后端。
 - `node.role `设置为 `replicant`，表示此节点作为一个复制节点功能。
-- `node.discovery_strategy `设置为 `manual` 或 `static`，如果使用自动集群发现机制，则不需要设置此配置项。关于节点发现策略及相应配置项的详细解释，请参见[创建集群](../deploy/cluster/create-cluster.md)。
+- `node.discovery_strategy `设置为 `manual` 或 `static`，如果使用自动集群发现机制，则不需要设置此配置项。关于节点发现策略及相应配置项的详细解释，请参见[创建集群](../cluster/create-cluster.md)。
 
 ```bash
 cluster {

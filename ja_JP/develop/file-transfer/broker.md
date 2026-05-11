@@ -167,7 +167,7 @@ EMQX Dashboardにアクセスし、**管理** -> **ファイル転送**をクリ
   - **ポート**：S3サービス接続に使用するポート。例：`443`（HTTPSの安全な接続）
   - **アクセスキーID** と **シークレットアクセスキー**：S3バケットへのアクセスに必要な認証情報。安全に管理してください。
   - **バケット**：ファイルを保存するS3バケット名。例：`my-bucket`
-  - **TLSの有効化**：安全なファイル転送のためTLS（Transport Layer Security）を使用するかどうか。詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
+  - **TLSの有効化**：安全なファイル転送のためTLS（Transport Layer Security）を使用するかどうか。詳細は[外部リソースアクセスのTLS](../../operate/network/overview.md#tls-for-external-resource-access)を参照してください。
 - **ファイルルートディレクトリ**：ファイル保存のルートディレクトリを絶対パスで指定します。`ローカルストレージ`をファイル保存方法に選択した場合に、組み立て済みファイルの保存先として使用されます。
 
 ### 詳細設定

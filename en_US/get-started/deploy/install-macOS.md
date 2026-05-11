@@ -51,7 +51,7 @@ You can check the status of EMQX with this command:
 ./bin/emqx ctl status
 ```
 
-Start your web browser and enter `http://localhost:18083/` (`localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
+Start your web browser and enter `http://localhost:18083/` (`localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
 The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 

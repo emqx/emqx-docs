@@ -93,7 +93,7 @@ Tablestoreデータ統合は以下の特長と利点を提供します。
      - **Access Key ID**：Tablestore認証に使用するアクセスキーID。Alibaba Cloudが発行したキーです。
      - **Access Key Secret**：アクセスキーIDに対応するシークレットキー。
      - **Storage Model Type**：現在は`TimeSeries`のみサポート。
-   - TLSパラメータの設定。TablestoreはHTTPSエンドポイントを使用するためTLSはデフォルトで有効です。追加設定は不要です。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+   - TLSパラメータの設定。TablestoreはHTTPSエンドポイントを使用するためTLSはデフォルトで有効です。追加設定は不要です。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../../operate/network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがTablestoreサーバーに接続できるかテストできます。
 6. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成を続けてください。詳細は[Tablestore Sink付きルールの作成](#create-a-rule-with-tablestore-sink)を参照してください。
 

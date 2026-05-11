@@ -8,13 +8,13 @@ description: このセクションでは、EMQX 5.0および5.1で導入され�
 
 ## コア＋レプリカ クラスターアーキテクチャ
 
-EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../deploy/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
+EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../operate/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
 
 <img src="./assets/100m-benchmark.png" alt="1億接続ベンチマーク" style="zoom:50%;" />
 
 この明らかなスケーラビリティの向上に加え、Mriaクラスターアーキテクチャは大規模展開におけるブレインスプリットのリスクとその影響を低減し、より安定で信頼性の高いIoTデータアクセスサービスをクライアントに提供します。
 
-導入方法は[EMQXクラスターの作成](../deploy/cluster/create-cluster.md)をご覧ください。
+導入方法は[EMQXクラスターの作成](../operate/cluster/create-cluster.md)をご覧ください。
 
 ## ダウンタイムなしのローリングアップグレード
 
@@ -26,7 +26,7 @@ EMQX 5.0では、実験的機能としてQUIC対応（MQTT over QUIC）を導入
 
 次世代インターネットプロトコルHTTP/3の基盤となるトランスポートプロトコルである[QUIC](https://datatracker.ietf.org/doc/html/rfc9000)は、TCP/TLSに比べて接続オーバーヘッドやメッセージレイテンシを低減し、モダンなモバイルインターネットに適した接続性を提供します。そこでEMQXはMQTTのトランスポート層をQUICに置き換え、MQTT over QUICを実現しました。
 
-MQTT over QUICの評価やネットワーク接続性の改善効果を検証するには、[MQTT over QUICの使い方](../mqtt-over-quic/getting-started.md)をご覧ください。
+MQTT over QUICの評価やネットワーク接続性の改善効果を検証するには、[MQTT over QUICの使い方](../develop/mqtt-over-quic/getting-started.md)をご覧ください。
 
 ## MQTTによるファイル転送
 
@@ -36,7 +36,7 @@ EMQX 5.1では、MQTTプロトコルを用いたファイル転送機能を導�
 
 HTTP/FTPプロトコルと比較して、MQTTは低帯域幅消費と最小限のリソース利用を実現し、高速かつ効率的なファイル転送が可能です。統一されたIoTデータチャネルによりシステム構成も簡素化され、アプリケーションの複雑さや保守コストを削減します。
 
-[MQTTによるファイル転送](../file-transfer/introduction.md)をぜひお試しください。
+[MQTTによるファイル転送](../develop/file-transfer/introduction.md)をぜひお試しください。
 
 ## バックアップとリストア
 
@@ -58,15 +58,15 @@ Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-
 ```
 :::
 
-詳細は[バックアップとリストア](../operations/backup-restore.md)をご覧ください。
+詳細は[バックアップとリストア](../operate/backup-restore.md)をご覧ください。
 
 ## 再設計されたIoTデータ統合
 
-SQLに加え、EMQX 5.xのルールエンジンは[jq](https://stedolan.github.io/jq/)もサポートし、より複雑なJSONデータ形式の処理が可能になりました。詳細は[jq関数のドキュメント](../data-integration/rule-sql-jq.md)をご参照ください。
+SQLに加え、EMQX 5.xのルールエンジンは[jq](https://stedolan.github.io/jq/)もサポートし、より複雑なJSONデータ形式の処理が可能になりました。詳細は[jq関数のドキュメント](../develop/data-integration/rule-sql-jq.md)をご参照ください。
 
 EMQXはデフォルトでWebHookへのデータ送信や外部MQTTサービスとの双方向データ統合をサポートします。40以上のクラウドサービスやエンタープライズシステムにリアルタイムでIoTデータを送信したり、そこからデータを取得して処理後に指定トピックへ送信できます。EMQX 5.0ではダッシュボードでデータ統合プロセスを可視化するFlows機能を提供し、ルールエンジンのIoTデータ処理や外部データサービス・デバイスへのデータフローを簡単に確認可能です。
 
-対応する各種データ統合の詳細と設定方法は[データ統合](../data-integration/data-bridges.md)をご覧ください。
+対応する各種データ統合の詳細と設定方法は[データ統合](../develop/data-integration/data-bridges.md)をご覧ください。
 
 ## 柔軟な認証／認可
 
@@ -80,7 +80,7 @@ EMQX 5.xは組み込みのクライアント認証／認可機能を提供し、
 - 実行速度や回数の統計による完全な可観測性を実現
 - リスナー単位での認証設定をサポートし、より柔軟なアクセス制御を提供
 
-Dashboardや設定ファイルによる認証／認可設定の詳細は[認証](../access-control/authn/authn.md)および[認可](../access-control/authz/authz.md)をご覧ください。
+Dashboardや設定ファイルによる認証／認可設定の詳細は[認証](../operate/access-control/authn/authn.md)および[認可](../operate/access-control/authz/authz.md)をご覧ください。
 
 ## 使いやすくなったEMQXダッシュボード
 
@@ -92,7 +92,7 @@ EMQX 5.xではダッシュボードを全面的に再設計し、視覚的な体
 - メニュー構造の最適化：コンテンツへの高速かつ直接的なアクセス
 - データ監視と管理：重要データを一目で把握
 - 可視化されたアクセス制御：認証／認可管理を標準搭載
-- 可視化されたデータフロー：[Flows](../flow-designer/introduction.md)により、デバイスやクライアントからルールエンジンを経てのデータフローを明確に確認可能
+- 可視化されたデータフロー：[Flows](../develop/flow-designer/introduction.md)により、デバイスやクライアントからルールエンジンを経てのデータフローを明確に確認可能
 - 実行時の設定更新：即時反映されるホットアップデート対応
 
 ## ブリッジ向けの過負荷保護、リミッター、バッファキュー

@@ -100,7 +100,7 @@ LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数�
 ## 认证
 
 由于 LwM2M 协议仅提供了客户端的 Endpoint Name，而没有提供用户名和密码。因此，
-LwM2M 网关仅支持 [HTTP Server 认证](../access-control/authn/http.md)。
+LwM2M 网关仅支持 [HTTP Server 认证](../../operate/access-control/authn/http.md)。
 
 例如，通过 HTTP API 或 `emqx.conf` 为 LwM2M 网关创建 HTTP 认证：
 

@@ -11,7 +11,7 @@
 2. **メッセージ変換パイプライン**：
 
    - **変換マッチング**：メッセージはトピックに基づいてユーザー定義の変換リストと照合されます。異なるトピックやトピックフィルターに対して複数の変換を設定可能です。
-   - **変換実行**：マッチした変換は設定された順序で実行されます。パイプラインはJSON、Protobuf、Avroなどの各種エンコーダー・デコーダーをサポートし、[Variform式](../configuration/configuration.md#variform-expressions)を用いてメッセージの拡張や変更が可能です。
+   - **変換実行**：マッチした変換は設定された順序で実行されます。パイプラインはJSON、Protobuf、Avroなどの各種エンコーダー・デコーダーをサポートし、[Variform式](../../operate/configuration/configuration.md#variform-expressions)を用いてメッセージの拡張や変更が可能です。
    - **変換後処理**：メッセージが変換パイプラインを正常に通過すると、ルールエンジンの起動やサブスクライバーへの配信など次の処理に進みます。
 
 3. **失敗時の処理**：変換が失敗した場合、ユーザー設定のアクションが実行されます：
@@ -61,7 +61,7 @@
    - **Message Properties Transformation**：
      
      - **Properties**：式によって生成された変換後の値を書き込む宛先を指定します。有効な宛先は`payload`、`topic`、`qos`、`retain`（対応するフラグを設定）、`user_property`（MQTTのUser-Property）です。`user_property`を使う場合は、必ず1つのキーを指定します（例：`user_property.my_custom_prop`）。`payload`はそのまま使いメッセージペイロード全体を上書きするか、ネストされたJSONオブジェクトのように特定のキーのパスを指定できます（例：`payload.x.y`）。
-     - **Target Value**：設定したプロパティに書き込む値を定義します。この値は`qos`、`retain`、`topic`、`payload`、`payload.x.y`など他のフィールドからコピーするか、[variform式](../configuration/configuration.md#variform-expressions)で生成可能です。
+     - **Target Value**：設定したプロパティに書き込む値を定義します。この値は`qos`、`retain`、`topic`、`payload`、`payload.x.y`など他のフィールドからコピーするか、[variform式](../../operate/configuration/configuration.md#variform-expressions)で生成可能です。
      
    - **Transformation Failure Operation**：
      - **Action After Failure**：変換失敗時に実行するアクションを選択します：

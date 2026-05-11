@@ -90,7 +90,7 @@ Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確�
 4. Kafka接続に必要なパラメータを設定します。
    - **Bootstrap Hosts** に `127.0.0.1:9092` を入力します。デモではEMQXとKafkaをローカルマシンで起動している前提です。リモートで起動している場合は適宜調整してください。
    - 他のオプションはデフォルトのままか、ビジネス要件に合わせて設定してください。
-   - 暗号化接続を確立する場合は、**Enable TLS** のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
+   - 暗号化接続を確立する場合は、**Enable TLS** のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../operate/network/overview.md#tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connection** をクリックしてKafkaサーバーへの接続が成功するかテストできます。
 6. **Create** をクリックしてコネクターの作成を完了します。
 
@@ -164,7 +164,7 @@ EMQX v5.7.2以降、Kafka Producer Sink設定のKafkaトピックを環境変数
 
 #### 環境変数の利用
 
-EMQX v5.7.2は、ルールSQL処理段階で[環境変数](../configuration/configuration.md#environment-variables)から取得した値をメッセージ内のフィールドに動的に割り当てる機能を追加しました。この機能はルールエンジンの組み込みSQL関数[getenv](../data-integration/rule-sql-builtin-functions.md#system-function)を使い、EMQXの環境変数を取得します。取得した変数値はSQL処理結果にセットされます。この機能の応用例として、Kafka SinkルールアクションのKafkaトピック設定でルール出力結果のフィールドを参照しKafkaトピックを設定できます。以下はその例です。
+EMQX v5.7.2は、ルールSQL処理段階で[環境変数](../../operate/configuration/configuration.md#environment-variables)から取得した値をメッセージ内のフィールドに動的に割り当てる機能を追加しました。この機能はルールエンジンの組み込みSQL関数[getenv](../data-integration/rule-sql-builtin-functions.md#system-function)を使い、EMQXの環境変数を取得します。取得した変数値はSQL処理結果にセットされます。この機能の応用例として、Kafka SinkルールアクションのKafkaトピック設定でルール出力結果のフィールドを参照しKafkaトピックを設定できます。以下はその例です。
 
 ::: tip 注意
 
@@ -273,7 +273,7 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 5. ソースの接続情報を入力します。
    - **Bootstrap Hosts** に `127.0.0.1:9092` を入力します。デモではEMQXとKafkaをローカルマシンで起動している前提です。リモートで起動している場合は適宜調整してください。
    - 他のオプションはデフォルトのままか、ビジネス要件に合わせて設定してください。
-   - 暗号化接続を確立する場合は、**Enable TLS** のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
+   - 暗号化接続を確立する場合は、**Enable TLS** のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../operate/network/overview.md#tls-for-external-resource-access)を参照してください。
 6. 詳細設定（任意）：[詳細設定](#advanced-configurations)を参照してください。
 7. **Create**をクリックする前に、**Test Connection** をクリックしてKafkaサーバーへの接続が成功するかテストできます。
 8. **Create** をクリックします。関連するルール作成のオプションが表示されます。[Kafka Consumer Sourceを使ったルールの作成](#create-a-rule-with-kafka-consumer-source)を参照してください。

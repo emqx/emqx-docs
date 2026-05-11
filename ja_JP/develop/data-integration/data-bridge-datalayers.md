@@ -86,7 +86,7 @@ Datalayersデータ連携は以下の特長と利点を提供します。
    - Datalayersサーバーの接続情報を入力：
      - サーバーアドレス：`127.0.0.1:8361`
      - [Install and Set Up Datalayers](#install-and-set-up-datalayers)で設定した**Username**、**Password**、**Database**を入力
-   - TLSの有効化設定。TLS接続オプションの詳細は[外部リソースアクセスのTLS暗号化有効化](../network/overview.md#tls-for-external-resource-access)を参照してください。
+   - TLSの有効化設定。TLS接続オプションの詳細は[外部リソースアクセスのTLS暗号化有効化](../../operate/network/overview.md#tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connectivity**を押してコネクターがDatalayersサーバーに接続できるか確認できます。
 6. ページ下部の **Create** ボタンを押してコネクター作成を完了します。ポップアップで **Back to Connector List** または **Create Rule** を選択可能です。ルールとSinkを作成してDatalayersへの転送データを指定する場合は、[Create Datalayers Sink Rules](#create-a-rule-with-datalayers-sink)を参照してください。
 

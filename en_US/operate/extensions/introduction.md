@@ -4,7 +4,7 @@ EMQX 5.0 supports extensions in the form of plugins, multilingual gRPC hooks and
 
 ## Plugins
 
-Through EMQX's plugin development interface, users can access the core process to customize business logic, such as access control, message routing, or message storage. In addition, our protocol extensions help our users to manage client access through a unified [Gateway](../gateway/gateway.md) framework.
+Through EMQX's plugin development interface, users can access the core process to customize business logic, such as access control, message routing, or message storage. In addition, our protocol extensions help our users to manage client access through a unified [Gateway](../../develop/gateway/gateway.md) framework.
 
 Developing plugins requires an understanding of EMQX and Erlang.
 

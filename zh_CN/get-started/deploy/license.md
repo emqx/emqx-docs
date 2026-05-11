@@ -84,7 +84,7 @@ EMQX Dashboard 允许用户将系统恢复为默认的单节点社区版 License
 
 ### 配置文件
 
-您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../admin/cli.md)中执行 `emqx ctl license reload` 重新加载 License：
+您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../../operate/cli.md)中执行 `emqx ctl license reload` 重新加载 License：
 
 ```bash
 license {

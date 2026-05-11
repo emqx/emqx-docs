@@ -174,7 +174,7 @@ gateway.exproto {
 
 对CoAP 协议的实现规范进行了完全重新设计。
 
-请参考 [CoAP](../gateway/coap.md) 以了解新设计的内容。
+请参考 [CoAP](../develop/gateway/coap.md) 以了解新设计的内容。
 
 ### LwM2M
 

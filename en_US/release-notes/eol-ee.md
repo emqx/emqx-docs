@@ -4,7 +4,7 @@ EMQX serves a wide range of users, from fast-moving SaaS platforms to large ente
 
 This lifecycle policy is designed to:
 
-- **Support rapid innovation** in [EMQX Cloud](../faq/concept.md#which-products-do-we-offer) through frequent internal updates.
+- **Support rapid innovation** in [EMQX Cloud](../get-started/concept.md#which-products-do-we-offer) through frequent internal updates.
 - **Deliver new features** to on-premise users on a predictable, quarterly schedule.
 - **Provide long-term stability** to enterprise customers through designated **Long-Term Support (LTS)** versions.
 - **Ensure clear and predictable timelines** for version support and **End-of-Life (EOL)**.

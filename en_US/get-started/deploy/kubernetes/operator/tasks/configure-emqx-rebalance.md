@@ -13,7 +13,7 @@ The value of rebalancing mainly has the following two points:
 - **Improve system scalability**: Due to the persistent nature of MQTT connections, connections to the original nodes will not automatically migrate to the new nodes when the cluster scales. To address this, you can use the load rebalancing feature to smoothly transfer connections from overloaded nodes to newly-added ones. This process ensures a more balanced distribution of load across the entire cluster and enhances throughput, response speed, and resource utilization rate.
 - **Reduce O&M costs**: For clusters with unevenly distributed loads, where some nodes are overloaded while others remain idle, you can use the load rebalancing feature to automatically adjust the load within the cluster. This helps achieve a more balanced distribution of work and reduces operation and maintenance costs.
 
-For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../cluster/rebalancing.md)
+For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../../../operate/cluster/rebalancing.md)
 
 ## How to Use Load Rebalancing
 

@@ -12,7 +12,7 @@ Grafana 部署文档可以参考：[Grafana](https://grafana.com/docs/grafana/la
 
 下面是 EMQX Custom Resource 的相关配置，你可以根据希望部署的 EMQX 的版本来选择对应的 APIVersion，具体的兼容性关系，请参考 [EMQX Operator 兼容性](../operator.md)。
 
-EMQX 支持通过 http 接口对外暴露指标，集群下所有统计指标数据可以参考文档：[集成 Prometheus](../../../../observability/prometheus.md)。
+EMQX 支持通过 http 接口对外暴露指标，集群下所有统计指标数据可以参考文档：[集成 Prometheus](../../../../../operate/observability/prometheus.md)。
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -51,7 +51,7 @@ emqx.apps.emqx.io/emqx created
   ```
 
 ## 创建 API Secret
-emqx-exporter 和 Prometheus 通过访问 EMQX dashboard API 拉取监控指标，因此需要提前登录 dashboard 创建 [API 密钥](../../../../dashboard/system.md#api-%E5%AF%86%E9%92%A5)。
+emqx-exporter 和 Prometheus 通过访问 EMQX dashboard API 拉取监控指标，因此需要提前登录 dashboard 创建 [API 密钥](../../../../../operate/dashboard/system.md#api-%E5%AF%86%E9%92%A5)。
 
 ## 部署 [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 

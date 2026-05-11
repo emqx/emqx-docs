@@ -101,7 +101,7 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 ## Authentication
 
 Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
-Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
+Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../../operate/access-control/authn/http.md).
 
 For example, to create an HTTP authentication for LwM2M gateway via HTTP API or configuration file:
 
@@ -817,7 +817,7 @@ Variables:
 ## User Interfaces
 
 - Detailed configuration options: [Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-- Detailed HTTP APIs Description: [HTTP API - Gateway](../admin/api.md)
+- Detailed HTTP APIs Description: [HTTP API - Gateway](../../operate/api.md)
 
 ## Client libraries
 

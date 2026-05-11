@@ -28,19 +28,19 @@
 
 ### 不兼容更改
 
-在开始升级之前，您需要解决当前部署中的所有不兼容性或冲突。为了确定可能影响您的应用程序和部署的潜在兼容性问题和重大更改，请参考 [从 EMQX 4.4 到 EMQX 5.1 的不兼容变更](../changes/breaking-changes-5.1.0.md)，以及以下版本中的不兼容变更文档：
+在开始升级之前，您需要解决当前部署中的所有不兼容性或冲突。为了确定可能影响您的应用程序和部署的潜在兼容性问题和重大更改，请参考 [从 EMQX 4.4 到 EMQX 5.1 的不兼容变更](../../release-notes/breaking-changes-5.1.0.md)，以及以下版本中的不兼容变更文档：
 
-- [EMQX 5.4 中的不兼容变更](../changes/breaking-changes-ee-5.4.md)
-- [EMQX 5.5 中的不兼容变更](../changes/breaking-changes-ee-5.5.md)
-- [EMQX 5.6 中的不兼容变更](../changes/breaking-changes-ee-5.6.md)
-- [EMQX 5.7 中的不兼容变更](../changes/breaking-changes-ee-5.7.md)
-- [EMQX 5.8 中的不兼容变更](../changes/breaking-changes-ee-5.8.md)
+- [EMQX 5.4 中的不兼容变更](../../release-notes/breaking-changes-ee-5.4.md)
+- [EMQX 5.5 中的不兼容变更](../../release-notes/breaking-changes-ee-5.5.md)
+- [EMQX 5.6 中的不兼容变更](../../release-notes/breaking-changes-ee-5.6.md)
+- [EMQX 5.7 中的不兼容变更](../../release-notes/breaking-changes-ee-5.7.md)
+- [EMQX 5.8 中的不兼容变更](../../release-notes/breaking-changes-ee-5.8.md)
 
 此外，建议在将升级部署到生产环境之前，在测试环境中充分测试您的应用程序。这将有助于确保平稳过渡并最小化潜在的中断。
 
 #### 客户端应用程序和数据桥接兼容性
 
-使用不兼容的客户端和数据桥接版本运行升级部署可能会导致意外或未定义的行为。因此，务必确保您的客户端应用程序和数据桥接后端服务与 EMQX 最新版本兼容。您可以参考[客户端 SDK](../connect-emqx/introduction.md) 来验证与 EMQX 5.x 的兼容性。
+使用不兼容的客户端和数据桥接版本运行升级部署可能会导致意外或未定义的行为。因此，务必确保您的客户端应用程序和数据桥接后端服务与 EMQX 最新版本兼容。您可以参考[客户端 SDK](../../develop/connect-emqx/introduction.md) 来验证与 EMQX 5.x 的兼容性。
 
 ### 潜在问题
 
@@ -57,10 +57,10 @@
 ::: tip 前置准备
 
 - 确保您正在运行 EMQX 集群版本 4.4.x。
-- 您已阅读[更新日志](../changes/all-changes-ee.md)。
+- 您已阅读[更新日志](../../release-notes/all-changes-ee.md)。
 - 部署环境支持运行 [EMQX 支持的操作系统](./install.md) 的虚拟机或 Docker 容器。
 - 您有足够的磁盘空间和可用内存进行升级。
-- 您已查看了[性能调优 (Linux)](../performance/tune.md) 中提到的任何特定前提条件。
+- 您已查看了[性能调优 (Linux)](../../operate/performance/tune.md) 中提到的任何特定前提条件。
 
 :::
 

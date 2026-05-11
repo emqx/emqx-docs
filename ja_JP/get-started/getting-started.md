@@ -14,7 +14,7 @@ EMQXは、世界で最もスケーラブルかつ信頼性の高いMQTTメッセ
 
 ## EMQXのインストール
 
-EMQXは、[Docker](../deploy/install-docker.md)での実行、[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)によるインストール、またはコンピュータや仮想マシン（VM）にダウンロードパッケージでインストールすることが可能です。ダウンロードパッケージによるインストールを選択した場合、現在以下のOSがサポートされています。
+EMQXは、[Docker](deploy/install-docker.md)での実行、[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)によるインストール、またはコンピュータや仮想マシン（VM）にダウンロードパッケージでインストールすることが可能です。ダウンロードパッケージによるインストールを選択した場合、現在以下のOSがサポートされています。
 
 - RedHat
 - CentOS
@@ -45,7 +45,7 @@ EMQXは、[Docker](../deploy/install-docker.md)での実行、[EMQX Kubernetes O
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
    ```
 
-2. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
+2. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../operate/dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
 
    デフォルトのユーザー名とパスワード：
 
@@ -81,7 +81,7 @@ EMQXは、[Docker](../deploy/install-docker.md)での実行、[EMQX Kubernetes O
    ./emqx/bin/emqx start
    ```
 
-6. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
+6. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../operate/dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
 
    デフォルトのユーザー名とパスワードは `admin` と `public` です。ログイン後にパスワード変更を求められます。
 
@@ -149,7 +149,7 @@ EMQXダッシュボードのクラスター概要ページでは、**Connections
 
 ## 次のステップ
 
-ここまででEMQXのインストール、起動、アクセスのテストが完了しました。次は、[認証と認可](../access-control/authn/authn.md)や[ルールエンジン](../data-integration/rules.md)との連携など、EMQXのより高度な機能を試してみてください。
+ここまででEMQXのインストール、起動、アクセスのテストが完了しました。次は、[認証と認可](../operate/access-control/authn/authn.md)や[ルールエンジン](../develop/data-integration/rules.md)との連携など、EMQXのより高度な機能を試してみてください。
 
 ## よくある質問
 

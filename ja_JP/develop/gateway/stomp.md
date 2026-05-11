@@ -18,7 +18,7 @@ EMQX Dashboardの左ナビゲーションメニューで **Management** -> **Gat
 
 ::: tip
 
-EMQXをクラスターで運用している場合、DashboardやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)で設定してください。
+EMQXをクラスターで運用している場合、DashboardやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../operate/configuration/configuration.md)で設定してください。
 
 :::
 
@@ -118,7 +118,7 @@ STOMP GatewayはTCPおよびSSLタイプのリスナーのみをサポートし�
 - **Acceptor**: アクセプタープールのサイズを設定します。デフォルトは**16**です。  
 - **Max Connections**: リスナーが処理可能な最大同時接続数を設定します。デフォルトは**1024000**です。  
 - **Max Connection Rate**: リスナーが1秒あたりに受け入れ可能な新規接続の最大レートを設定します。デフォルトは**1000**です。  
-- **Proxy Protocol**: EMQXが[ロードバランサー](../deploy/cluster/lb.md)の背後にある場合、プロトコルV1/V2を有効化します。  
+- **Proxy Protocol**: EMQXが[ロードバランサー](../../operate/cluster/lb.md)の背後にある場合、プロトコルV1/V2を有効化します。  
 - **Proxy Protocol Timeout**: プロキシプロトコルパッケージを待機する最大秒数を設定し、非アクティブ時に接続を切断します。デフォルトは**3秒**です。
 
 **TCP設定**
@@ -132,7 +132,7 @@ STOMP GatewayはTCPおよびSSLタイプのリスナーのみをサポートし�
 
 **SSL設定**（SSLリスナーのみ）
 
-TLS検証の有効化はトグルスイッチで設定可能ですが、その前に**TLS Cert**、**TLS Key**、**CA Cert**の関連情報をファイル内容の直接入力または**Select File**ボタンでアップロードして設定する必要があります。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
+TLS検証の有効化はトグルスイッチで設定可能ですが、その前に**TLS Cert**、**TLS Key**、**CA Cert**の関連情報をファイル内容の直接入力または**Select File**ボタンでアップロードして設定する必要があります。詳細は[Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md)を参照してください。
 
 続けて以下を設定可能です。
 
@@ -145,14 +145,14 @@ TLS検証の有効化はトグルスイッチで設定可能ですが、その�
 
 STOMPプロトコルの接続メッセージにはユーザー名とパスワードの概念が既に定義されているため、STOMPは以下のような多様な認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)  
-- [MySQL認証](../access-control/authn/mysql.md)  
-- [MongoDB認証](../access-control/authn/mongodb.md)  
-- [PostgreSQL認証](../access-control/authn/postgresql.md)  
-- [Redis認証](../access-control/authn/redis.md)  
-- [HTTPサーバー認証](../access-control/authn/http.md)  
-- [JWT認証](../access-control/authn/jwt.md)  
-- [LDAP認証](../access-control/authn/ldap.md)
+- [組み込みデータベース認証](../../operate/access-control/authn/mnesia.md)  
+- [MySQL認証](../../operate/access-control/authn/mysql.md)  
+- [MongoDB認証](../../operate/access-control/authn/mongodb.md)  
+- [PostgreSQL認証](../../operate/access-control/authn/postgresql.md)  
+- [Redis認証](../../operate/access-control/authn/redis.md)  
+- [HTTPサーバー認証](../../operate/access-control/authn/http.md)  
+- [JWT認証](../../operate/access-control/authn/jwt.md)  
+- [LDAP認証](../../operate/access-control/authn/ldap.md)
 
 STOMP GatewayはSTOMPプロトコルの`CONNECT`または`STOMP`メッセージに含まれる情報を使ってクライアントの認証フィールドを生成します。
 

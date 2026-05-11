@@ -1,8 +1,8 @@
 # Data Bridge
 
-As one of the most important capabilities EMQX provides for building IoT data infrastructure, data integration helps users to process and distribute all business data quickly without writing additional code. Data integration capability consists of data bridging and rules. Users can use data bridging or MQTT topics to access data, use rules to process data, and then send data to external applications through data bridging. For more details, please visit [Rule Engine](../data-integration/rules.md).
+As one of the most important capabilities EMQX provides for building IoT data infrastructure, data integration helps users to process and distribute all business data quickly without writing additional code. Data integration capability consists of data bridging and rules. Users can use data bridging or MQTT topics to access data, use rules to process data, and then send data to external applications through data bridging. For more details, please visit [Rule Engine](../../develop/data-integration/rules.md).
 
-Data Bridges allows users to send messages from EMQX to an external data system or pull data from an external data system and send it to an EMQX topic in real-time. The EMQX Dashboard provides the ability to visually create data bridges by simply configuring the relevant resources on the page. For more details, please visit [Data Integration](../data-integration/data-bridges.md).
+Data Bridges allows users to send messages from EMQX to an external data system or pull data from an external data system and send it to an EMQX topic in real-time. The EMQX Dashboard provides the ability to visually create data bridges by simply configuring the relevant resources on the page. For more details, please visit [Data Integration](../../develop/data-integration/data-bridges.md).
 
 Under the Data Integration menu on the left, users can access the Data Bridge page, where they can quickly create and manage the created data bridges.
 
@@ -25,7 +25,7 @@ The same user needs a pre-built HTTP service, we need to configure the HTTP URL,
 
 <img src="./assets/bridge-webhook.png" alt="image" style="zoom:50%;" />
 
-For more details about how to use of Webhook data bridge, please visit [Webhook](../data-integration/data-bridge-webhook.md)
+For more details about how to use of Webhook data bridge, please visit [Webhook](../../develop/data-integration/data-bridge-webhook.md)
 
 ## MQTT
 
@@ -61,7 +61,7 @@ Before creating, whether you choose the type of data bridge, you can click the "
 
 After creating the data bridge, you can use the data bridge to create a rule, or you can go to the rule list page to create a rule.
 
-For more details about how to use MQTT data bridge, please visit [MQTT Bridge](../data-integration/data-bridge-mqtt.md)
+For more details about how to use MQTT data bridge, please visit [MQTT Bridge](../../develop/data-integration/data-bridge-mqtt.md)
 
 :::tip
 Note: Each data bridge must enter a name, which users can use to customize the identification and distinguish the function of the current data bridge

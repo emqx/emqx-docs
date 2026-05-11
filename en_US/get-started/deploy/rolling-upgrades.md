@@ -1,6 +1,6 @@
 # EMQX Enterprise Rolling Upgrade
 
-In a clustered deployment, EMQX nodes can be upgraded one at a time without incurring any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../deploy/cluster/rebalancing.md).
+In a clustered deployment, EMQX nodes can be upgraded one at a time without incurring any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../../operate/cluster/rebalancing.md).
 
 ## Important Notice for Upgrades to EMQX 5.9 or Later
 
@@ -30,7 +30,7 @@ To upgrade each node in the cluster without downtime, follow these steps:
 
 1. Evacuate clients from the node using cluster rebalancing. (optional)
 2. Stop the old version node.
-3. [Back up](../operations/backup-restore.md) the config files and data directory of the nodes.
+3. [Back up](../../operate/backup-restore.md) the config files and data directory of the nodes.
 4. Install a new version of EMQX.
 5. Start the new version node.
 

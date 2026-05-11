@@ -14,7 +14,7 @@ EMQXダッシュボードの左側ナビゲーションメニューで **Managem
 
 ::: tip
 
-EMQXをクラスターで運用している場合、ダッシュボードやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)で設定してください。
+EMQXをクラスターで運用している場合、ダッシュボードやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../operate/configuration/configuration.md)で設定してください。
 
 :::
 
@@ -186,7 +186,7 @@ OCPPゲートウェイはWebsocketおよびWebsocket over TLSタイプのリス�
 - **Acceptor**: アクセプタープールのサイズを設定。デフォルトは`16`
 - **Max Connections**: リスナーが処理可能な最大同時接続数。デフォルトは`1024000`
 - **Max Connection Rate**: リスナーが1秒あたり受け入れ可能な新規接続の最大レート。デフォルトは`1000`
-- **Proxy Protocol**: EMQXが[ロードバランサー](../deploy/cluster/lb.md)の背後にある場合にプロトコルV1/V2を有効化
+- **Proxy Protocol**: EMQXが[ロードバランサー](../../operate/cluster/lb.md)の背後にある場合にプロトコルV1/V2を有効化
 - **Proxy Protocol Timeout**: プロキシプロトコルパッケージ受信待機の最大時間（秒）。非アクティブ時に接続を切断。デフォルトは`3s`
 
 **TCP設定**
@@ -200,7 +200,7 @@ OCPPゲートウェイはWebsocketおよびWebsocket over TLSタイプのリス�
 
 **SSL設定**（wssリスナーのみ）
 
-TLS検証の有効化はトグルスイッチで設定可能ですが、その前に**TLS Cert**、**TLS Key**、**CA Cert**の情報をファイル内容の入力か**Select File**ボタンによるアップロードで設定する必要があります。詳細は[SSL/TLS接続の有効化](../network/emqx-mqtt-tls.md)を参照してください。
+TLS検証の有効化はトグルスイッチで設定可能ですが、その前に**TLS Cert**、**TLS Key**、**CA Cert**の情報をファイル内容の入力か**Select File**ボタンによるアップロードで設定する必要があります。詳細は[SSL/TLS接続の有効化](../../operate/network/emqx-mqtt-tls.md)を参照してください。
 
 続いて以下の設定が可能です。
 
@@ -213,14 +213,14 @@ TLS検証の有効化はトグルスイッチで設定可能ですが、その�
 
 OCPPプロトコルの接続メッセージにはユーザー名とパスワードの概念が既に定義されているため、OCPPは以下のような多様な認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)
-- [MySQL認証](../access-control/authn/mysql.md)
-- [MongoDB認証](../access-control/authn/mongodb.md)
-- [PostgreSQL認証](../access-control/authn/postgresql.md)
-- [Redis認証](../access-control/authn/redis.md)
-- [HTTPサーバー認証](../access-control/authn/http.md)
-- [JWT認証](../access-control/authn/jwt.md)
-- [LDAP認証](../access-control/authn/ldap.md)
+- [組み込みデータベース認証](../../operate/access-control/authn/mnesia.md)
+- [MySQL認証](../../operate/access-control/authn/mysql.md)
+- [MongoDB認証](../../operate/access-control/authn/mongodb.md)
+- [PostgreSQL認証](../../operate/access-control/authn/postgresql.md)
+- [Redis認証](../../operate/access-control/authn/redis.md)
+- [HTTPサーバー認証](../../operate/access-control/authn/http.md)
+- [JWT認証](../../operate/access-control/authn/jwt.md)
+- [LDAP認証](../../operate/access-control/authn/ldap.md)
 
 OCPPゲートウェイはWebsocketハンドシェイクメッセージのBasic認証情報を用いてクライアントの認証フィールドを生成します。
 

@@ -4,7 +4,7 @@ MQTT is a stateful protocol, which necessitates that the broker maintains state 
 
 EMQX is a highly scalable and fault-tolerant MQTT broker capable of operating in a clustered mode with multiple nodes. Clustering EMQX enhances the scalability, availability, reliability, and manageability of IoT messaging systems, making it a recommended approach for larger or mission-critical applications. This page explores the necessity of clustering MQTT brokers and how EMQX achieves this, enabling support for millions of unique wildcard subscribers within a single cluster.
 
-For detailed instructions on creating and running an EMQX v5 cluster, refer to [EMQX Cluster](../deploy/cluster/introduction.md).
+For detailed instructions on creating and running an EMQX v5 cluster, refer to [EMQX Cluster](../cluster/introduction.md).
 
 ## Key Aspects of Clustering
 
@@ -117,7 +117,7 @@ When a node newly joins the cluster, it will start off with an empty state. With
 
 If the clients reconnect in a relatively short period of time, the cluster can reach balance quickly. If the clients are not reconnecting, the cluster may remain unbalanced for a long time.
 
-To address this issue, EMQX (since version 4.4) introduced a new feature called "[Cluster Load Rebalancing](../deploy/cluster/rebalancing.md)". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
+To address this issue, EMQX (since version 4.4) introduced a new feature called "[Cluster Load Rebalancing](../../operate/cluster/rebalancing.md)". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
 
 An extreme version of "rebalance" is "evacuation", in which all the sessions are migrated off the given node. This is useful when you want to remove a node from the cluster.
 

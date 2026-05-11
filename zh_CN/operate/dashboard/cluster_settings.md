@@ -57,7 +57,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 
 <img src="./assets/cluster-node.png" alt="cluster-node" style="zoom:67%;" />
 
-EMQX 还提供了通过使用命令的方式来创建和管理集群，详细信息请参考[创建和管理集群](../deploy/cluster/create-cluster.md)。
+EMQX 还提供了通过使用命令的方式来创建和管理集群，详细信息请参考[创建和管理集群](../cluster/create-cluster.md)。
 
 ## 命名空间
 
@@ -92,7 +92,7 @@ EMQX 中的命名空间功能为单个集群内的不同客户端组提供逻辑
 
 配置速率限制可以在当消息数据过载或客户端过度请求时确保系统和网络的稳定性。
 
-更多关于速率限制的详细配置文档，请参考[速率限制](../rate-limit/rate-limit.md)。
+更多关于速率限制的详细配置文档，请参考[速率限制](../rate-limit.md)。
 
 更多关于监听器配置的详情，请参考[企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
@@ -149,4 +149,4 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ## 集群连接
 
-集群连接功能可以将多个独立的 EMQX 集群连接在一起，因此通常地理位置分散的不同集群之间的客户端能够相互通信。用户可以在该页面中创建和配置集群连接。具体的创建和配置指导，参考 [EMQX 集群连接](../cluster-linking/introduction.md)。
+集群连接功能可以将多个独立的 EMQX 集群连接在一起，因此通常地理位置分散的不同集群之间的客户端能够相互通信。用户可以在该页面中创建和配置集群连接。具体的创建和配置指导，参考 [EMQX 集群连接](../../develop/cluster-linking/introduction.md)。

@@ -11,11 +11,11 @@ EMQX 集群是指多个 EMQX 节点协同工作，组成一个统一系统。各
 - [集群部署的优势](#为什么使用-emqx-集群)
 - [EMQX 集群工作原理](#emqx-集群工作原理)
 - [Mria 与 RLOG 架构](./mria-introduction.md)
-- [如何通过手动或自动方式创建集群](./create-cluster.md)
-- [如何保障节点通信安全](./security.md)
-- [如何配置负载均衡](./lb.md)
-- [如何进行集群负载重平衡与节点疏散](./rebalancing.md)
-- [如何进行系统调优和性能测试](../../performance/overview.md)
+- [如何通过手动或自动方式创建集群](../../operate/cluster/create-cluster.md)
+- [如何保障节点通信安全](../../operate/cluster/security.md)
+- [如何配置负载均衡](../../operate/cluster/lb.md)
+- [如何进行集群负载重平衡与节点疏散](../../operate/cluster/rebalancing.md)
+- [如何进行系统调优和性能测试](../../operate/performance/overview.md)
 
 无论您是构建高可用 MQTT 平台，还是准备部署生产级集群，本章节都将为您提供清晰的指导。
 
@@ -116,7 +116,7 @@ topic3 -> node2, node4
 
 #### 主题树（由核心节点复制）
 
-主题树是一种分层结构，用于匹配发布的主题与订阅模式（包括 [MQTT 通配符](../../messaging/mqtt-wildcard-subscription.md) `+` 和 `#`）。它帮助 EMQX 高效处理复杂的主题过滤逻辑。
+主题树是一种分层结构，用于匹配发布的主题与订阅模式（包括 [MQTT 通配符](../../get-started/messaging/mqtt-wildcard-subscription.md) `+` 和 `#`）。它帮助 EMQX 高效处理复杂的主题过滤逻辑。
 
 与路由表类似，主题树由核心节点构建并同步至所有副本节点。当客户端（如 `client1`）订阅 `t/+/x` 时，该订阅模式将被添加至主题树，并在全集群中同步更新。
 
@@ -147,7 +147,7 @@ topic3 -> node2, node4
 5. `节点 3` 收到转发的 `t/a` 消息后，通过查询本地订阅表，将消息分发给订阅了 `t/a` 的客户端。
 6. 消息发布完成。
 
-如需进一步了解 EMQX 集群设计，请参见 [EMQX 集群设计](../../design/clustering.md)。
+如需进一步了解 EMQX 集群设计，请参见 [EMQX 集群设计](../design/clustering.md)。
 
 ## 集群特性概览
 
@@ -165,7 +165,7 @@ EMQX 支持多种节点发现机制，可在不同的部署环境中实现自动
 | etcd | 通过 etcd 的自动集群     |
 | k8s  | 基于 Kubernetes 服务的自动集群 |
 
-详细说明请参阅：[创建与管理集群](./create-cluster.md)。
+详细说明请参阅：[创建与管理集群](../../operate/cluster/create-cluster.md)。
 
 ### 网络分区自动修复
 
@@ -215,5 +215,5 @@ cluster.autoclean = 24h
 您可继续阅读以下章节了解如何创建 EMQX 集群。
 
 - [部署架构与集群要求](./mria-introduction.md)
-- [创建集群](./create-cluster.md)
-- [集群安全](./security.md)
+- [创建集群](../../operate/cluster/create-cluster.md)
+- [集群安全](../../operate/cluster/security.md)

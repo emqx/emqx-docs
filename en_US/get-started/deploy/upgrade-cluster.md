@@ -29,19 +29,19 @@ If you are running a version earlier than 4.4.x, you must first upgrade through 
 
 ### Incompatible Changes
 
-You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../changes/breaking-changes-5.1.0.md), and the following incompatible changes documents in later versions:
+You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../../release-notes/breaking-changes-5.1.0.md), and the following incompatible changes documents in later versions:
 
-- [Incompatible Changes in EMQX 5.4](../changes/breaking-changes-ee-5.4.md)
-- [Incompatible Changes in EMQX 5.5](../changes/breaking-changes-ee-5.5.md)
-- [Incompatible Changes in EMQX 5.6](../changes/breaking-changes-ee-5.6.md)
-- [Incompatible Changes in EMQX 5.7](../changes/breaking-changes-ee-5.7.md)
-- [Incompatible Changes in EMQX 5.8](../changes/breaking-changes-ee-5.8.md)
+- [Incompatible Changes in EMQX 5.4](../../release-notes/breaking-changes-ee-5.4.md)
+- [Incompatible Changes in EMQX 5.5](../../release-notes/breaking-changes-ee-5.5.md)
+- [Incompatible Changes in EMQX 5.6](../../release-notes/breaking-changes-ee-5.6.md)
+- [Incompatible Changes in EMQX 5.7](../../release-notes/breaking-changes-ee-5.7.md)
+- [Incompatible Changes in EMQX 5.8](../../release-notes/breaking-changes-ee-5.8.md)
 
 It is also advisable to thoroughly test your application in a staging environment before deploying the upgrade to your production environment. This will help ensure a smooth transition and minimize any potential disruptions.
 
 #### Client Applications and Data Bridge Compatibility
 
-Running upgraded deployments with incompatible clients and data bridge versions may result in unexpected or undefined behavior. Therefore, it is important to make sure that your client applications and data bridge backend services are compatible with the latest EMQX version. You can refer to [Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4](../changes/data-integration-4.4-to-5.1-incompatibility.md) and [Client SDKs](../connect-emqx/introduction.md) to verify the compatibility with EMQX 5.x.
+Running upgraded deployments with incompatible clients and data bridge versions may result in unexpected or undefined behavior. Therefore, it is important to make sure that your client applications and data bridge backend services are compatible with the latest EMQX version. You can refer to [Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4](../../release-notes/data-integration-4.4-to-5.1-incompatibility.md) and [Client SDKs](../../develop/connect-emqx/introduction.md) to verify the compatibility with EMQX 5.x.
 
 ### Potential Pitfalls
 
@@ -58,10 +58,10 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 ::: tip Prerequisites
 
 - Make sure that you are running EMQX cluster release 4.4.x.
-- You have read the [release notes](../changes/all-changes-ee.md).
+- You have read the [release notes](../../release-notes/all-changes-ee.md).
 - Your deployment environment is capable of running VMs with one of the [operating systems supported by EMQX](./install.md), or docker containers.
 - You have sufficient disk space and memory available for the upgrade.
-- You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../performance/tune.md).
+- You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../../operate/performance/tune.md).
 
 :::
 

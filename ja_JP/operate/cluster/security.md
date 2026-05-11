@@ -1,6 +1,6 @@
 # クラスターのセキュリティ
 
-EMQXは、データの機密性、完全性、および可用性を確保するために、ノードレベルでの[認証](../../access-control/authn/authn.md)および[認可](../../access-control/authz/authz.md)機構、クラスター内ノード間の安全な通信を保証するための[シークレットクッキー](#set-node-cookie)、およびノード間トラフィックのエンドツーエンド暗号化を提供する[TLS/SSL暗号化](#configure-tls-ssl-to-secure-cluster-connections)など、複数のセキュリティ機構を提供しています。
+EMQXは、データの機密性、完全性、および可用性を確保するために、ノードレベルでの[認証](../access-control/authn/authn.md)および[認可](../access-control/authz/authz.md)機構、クラスター内ノード間の安全な通信を保証するための[シークレットクッキー](#set-node-cookie)、およびノード間トラフィックのエンドツーエンド暗号化を提供する[TLS/SSL暗号化](#configure-tls-ssl-to-secure-cluster-connections)など、複数のセキュリティ機構を提供しています。
 
 ファイアウォールルールのプロビジョニングを支援するために、EMQXのブローカー間[通信ポートのマッピングルール](#port-mapping)についても説明します。
 
@@ -26,7 +26,7 @@ node {
 
 EMQXは、ノード間の通信チャネルをTLSで保護し、交換されるデータの機密性、完全性、および真正性を守ることもサポートしています。TLSはCPU負荷とRAM使用量の増加を伴うため、ビジネスニーズに応じて設定してください。
 
-本節では、EMQXクラスターでのTLS設定方法を紹介します。SSL/TLS証明書の取得方法については、[SSL/TLS接続の有効化](../../network/emqx-mqtt-tls.md)を参照してください。
+本節では、EMQXクラスターでのTLS設定方法を紹介します。SSL/TLS証明書の取得方法については、[SSL/TLS接続の有効化](../network/emqx-mqtt-tls.md)を参照してください。
 
 ## クラスターRPC接続にTLS/SSLを使用する
 

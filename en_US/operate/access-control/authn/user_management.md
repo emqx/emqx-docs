@@ -35,7 +35,7 @@ User management endpoints vary depending on the authentication chain scope.
   /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
   ```
 
-See [REST API](../../admin/api.md) for identifier conventions and parameter descriptions.
+See [REST API](../../api.md) for identifier conventions and parameter descriptions.
 
 ## Import Users
 

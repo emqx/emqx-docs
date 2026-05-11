@@ -24,6 +24,6 @@ EMQX 提供了主题监控功能，可以统计指定主题下的消息收发数
 
 ## 通过 REST API 获取主题指标
 
-您还可以通过 API 获取主题指标。有关如何使用 EMQX API 的详细信息，请参阅 [REST API](../admin/api.md)。
+您还可以通过 API 获取主题指标。有关如何使用 EMQX API 的详细信息，请参阅 [REST API](../api.md)。
 
 <img src="./assets/topic-metrics-api.png" alt="topic-metrics-api" style="zoom:45%;" />

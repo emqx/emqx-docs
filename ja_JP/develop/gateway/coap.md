@@ -24,7 +24,7 @@ EMQX ダッシュボードの左ナビゲーションメニューで **Extension
 
 ::: tip
 
-EMQX をクラスターで稼働している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
+EMQX をクラスターで稼働している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../operate/configuration/configuration.md) で設定してください。
 
 :::
 
@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
 }'
 ```
 
-HTTP API の詳細は [HTTP API - Gateway](../admin/api.md) を参照してください。
+HTTP API の詳細は [HTTP API - Gateway](../../operate/api.md) を参照してください。
 
 カスタマイズが必要な場合やリスナー追加、認証ルール追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションをお読みください。
 
@@ -157,14 +157,14 @@ TLS Verify の有効化はトグルスイッチで設定可能ですが、その
 
 クライアント ID、ユーザー名、パスワードはクライアントの [Create Connection](#create-connection) リクエストで提供されます。CoAP ゲートウェイは以下の認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)  
-- [MySQL 認証](../access-control/authn/mysql.md)  
-- [MongoDB 認証](../access-control/authn/mongodb.md)  
-- [PostgreSQL 認証](../access-control/authn/postgresql.md)  
-- [Redis 認証](../access-control/authn/redis.md)  
-- [HTTP サーバー認証](../access-control/authn/http.md)  
-- [JWT 認証](../access-control/authn/jwt.md)  
-- [LDAP 認証](../access-control/authn/ldap.md)  
+- [組み込みデータベース認証](../../operate/access-control/authn/mnesia.md)  
+- [MySQL 認証](../../operate/access-control/authn/mysql.md)  
+- [MongoDB 認証](../../operate/access-control/authn/mongodb.md)  
+- [PostgreSQL 認証](../../operate/access-control/authn/postgresql.md)  
+- [Redis 認証](../../operate/access-control/authn/redis.md)  
+- [HTTP サーバー認証](../../operate/access-control/authn/http.md)  
+- [JWT 認証](../../operate/access-control/authn/jwt.md)  
+- [LDAP 認証](../../operate/access-control/authn/ldap.md)  
 
 本節ではダッシュボードを例に認証設定方法を説明します。
 

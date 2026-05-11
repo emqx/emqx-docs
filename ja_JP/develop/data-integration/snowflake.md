@@ -210,7 +210,7 @@ Snowflake Sink を追加する前に、EMQX で Snowflake への接続を確立�
    - **Data Source Name(DSN)**：ODBC ドライバー設定時に `.odbc.ini` ファイルで設定した `snowflake` を入力します。
    - **Username**：前述の設定で作成した `snowpipeuser` を入力します。
    - **Password**：前述の設定で定義した `Snowpipeuser99` を入力します。
-6. 暗号化接続を確立したい場合は、**Enable TLS** のトグルスイッチをオンにします。TLS 接続の詳細は [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access) を参照してください。
+6. 暗号化接続を確立したい場合は、**Enable TLS** のトグルスイッチをオンにします。TLS 接続の詳細は [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 7. 詳細設定（任意）：[Advanced Settings](#advanced-settings) を参照してください。
 8. **Create** をクリックする前に、**Test Connectivity** ボタンでコネクターが Snowflake に接続できるかテストできます。
 9. 最後に、ページ下部の **Create** ボタンをクリックしてコネクター作成を完了します。

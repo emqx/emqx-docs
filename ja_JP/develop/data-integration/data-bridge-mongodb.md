@@ -132,7 +132,7 @@ db.createCollection('emqx_messages')
    - **Auth Source**：ユーザー認証に使用するデータベース名を入力
    - **Use Legacy Protocol**：MongoDBのレガシープロトコルを使用するかどうかを設定（MongoDB 3.6で新しいワイヤープロトコルが導入され、レガシープロトコルは後方互換のために残されています）。`true`、`false`、`auto`のいずれかで、`auto`（デフォルト）ではMongoDBのバージョンに応じて自動判別します。
    - **Srv Record**：デフォルトで無効。有効にすると、DNSのSRVレコードを使ってMongoDBホストを自動検出し、レプリカセットやシャーディングクラスターへの接続が容易になります。
-   - 暗号化接続を確立したい場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - 暗号化接続を確立したい場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../operate/network/overview.md#tls-for-external-resource-access)を参照してください。
 6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 7. **詳細設定（任意）**：詳細は[高度な設定](#advanced-configurations)を参照してください。
 8. **Create**をクリックする前に、**Test Connectivity**を押してコネクターがMongoDBサーバーに接続できるかテストできます。

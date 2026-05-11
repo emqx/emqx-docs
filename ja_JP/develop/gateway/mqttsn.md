@@ -20,7 +20,7 @@ EMQX ダッシュボードの左側ナビゲーションメニューで **Manage
 
 ::: tip
 
-EMQX をクラスターで運用している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
+EMQX をクラスターで運用している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../operate/configuration/configuration.md) で設定してください。
 
 :::
 
@@ -59,7 +59,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-HTTP API の詳細は [HTTP API - Gateway](../admin/api.md) を参照してください。
+HTTP API の詳細は [HTTP API - Gateway](../../operate/api.md) を参照してください。
 
 カスタマイズが必要でリスナーを追加したり認証ルールを設定したい場合は、[MQTT-SN ゲートウェイのカスタマイズ](#customize-your-mqtt-sn-gateway) セクションをお読みください。
 
@@ -140,7 +140,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 
 **DTLS 設定**（DTLS リスナーのみ）
 
-TLS Verify を有効にするかどうかの切り替えスイッチがあります。ただし、その前に関連する **TLS Cert**、**TLS Key**、**CA Cert** の情報を設定する必要があります。ファイルの内容を直接入力するか、**Select File** ボタンでアップロードしてください。詳細は [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md) を参照してください。
+TLS Verify を有効にするかどうかの切り替えスイッチがあります。ただし、その前に関連する **TLS Cert**、**TLS Key**、**CA Cert** の情報を設定する必要があります。ファイルの内容を直接入力するか、**Select File** ボタンでアップロードしてください。詳細は [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md) を参照してください。
 
 続いて以下の設定が可能です。
 
@@ -151,7 +151,7 @@ TLS Verify を有効にするかどうかの切り替えスイッチがありま
 
 ### 認証の設定
 
-MQTT-SN プロトコルの接続メッセージはクライアントの Client ID のみを提供するため、MQTT-SN ゲートウェイは [HTTP Server Authentication](../access-control/authn/http.md) のみをサポートしています。
+MQTT-SN プロトコルの接続メッセージはクライアントの Client ID のみを提供するため、MQTT-SN ゲートウェイは [HTTP Server Authentication](../../operate/access-control/authn/http.md) のみをサポートしています。
 
 クライアント情報の生成ルールは以下の通りです。
 
@@ -167,7 +167,7 @@ MQTT-SN プロトコルの接続メッセージはクライアントの Client I
 
 ![mqttsn authentication](./assets/mqttsn-authn-config.png)
 
-各フィールドの詳細は [HTTP Server Authentication](../access-control/authn/http.md) を参照してください。
+各フィールドの詳細は [HTTP Server Authentication](../../operate/access-control/authn/http.md) を参照してください。
 
 上記の設定は HTTP API でも実行可能です。
 

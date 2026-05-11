@@ -93,7 +93,7 @@ You can also use the following command to update your EMQX Enterprise License:
 
 ### Configuration File
 
-You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
+You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../../operate/cli.md) to reload the license. 
 
 ```bash
 license {

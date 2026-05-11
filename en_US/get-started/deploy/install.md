@@ -110,7 +110,7 @@ EMQX uses the following ports by default. Ensure these ports are not occupied by
 
 ::: tip Note
 
-Even if a cluster is not formed, EMQX will still listen on ports 4370 and 5370. These two ports are fixed and cannot be modified. The Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, the default is 0. For more information, refer to [Port Mapping](./cluster/security.md#port-mapping).
+Even if a cluster is not formed, EMQX will still listen on ports 4370 and 5370. These two ports are fixed and cannot be modified. The Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, the default is 0. For more information, refer to [Port Mapping](../../operate/cluster/security.md#port-mapping).
 
 :::
 
@@ -133,17 +133,17 @@ After installation, EMQX creates some directories to store running and configura
 
 1. When installed with the compressed package, the directory is relative to the directory where the software is installed.
 2. When installed with Docker container, EMQX is installed in the `/opt/emqx` directory.
-3. The `data`, `log`, and `plugins` directories are configurable via the configuration files. Mounting the `data` directory to a high-performance disk is recommended for better performance. For nodes belonging to the same cluster, the configuration for the `data` directory should be the same. For more information about clusters, see [Cluster](./cluster/introduction.md).
+3. The `data`, `log`, and `plugins` directories are configurable via the configuration files. Mounting the `data` directory to a high-performance disk is recommended for better performance. For nodes belonging to the same cluster, the configuration for the `data` directory should be the same. For more information about clusters, see [Cluster](../../operate/cluster/create-cluster.md).
    :::
 
 The table below introduces the files and subfolders of some directories.
 
 | Directory | Description         | Permissions | Files                                                        |
 | --------- | ------------------- | ----------- | ------------------------------------------------------------ |
-| bin       | Executables         | Read        | `emqx` and `emqx.cmd`: Executables of EMQX. For details, see [Command Line Interface](../admin/cli.md). |
+| bin       | Executables         | Read        | `emqx` and `emqx.cmd`: Executables of EMQX. For details, see [Command Line Interface](../../operate/cli.md). |
 | etc       | Configuration files | Read        | `base.hocon`: Base configuration which can be overridden from runtime config changes.<br /><br />`emqx.conf`: Static configurations which cannot be overridden.<br /><br />`emqx-example-en.conf`: Demo configuration files of EMQX, contains all the configurable items.<br /><br />`acl.conf`: Default ACl rules.<br /><br />`vm.args`: Operating parameters of the Erlang virtual machine.<br /><br />`certs/`: X.509 keys and certificate files for EMQX SSL listeners, may also be used in the SSL/TLS connection when integrating with external systems. |
-| data      | Operating data      | Write       | `authz`: Stores file authorization rules uploaded by REST API or Dashboard. For details, see [Authorization - File](../access-control/authz/file.md). <br /><br />`certs`: Stores certificate files uploaded by REST API or Dashboard.<br /><br />`configs`: Stores configuration files generated at boot, or configuration overrides by changes from API or CLI.<br /><br />`mnesia`: Built-in database to store EMQX operating data, including alarm records, authentication and authorization data of the clients, Dashboard user information, etc. **If the directory is deleted, all these operating data will be lost.**<br /><br />  —  May contain subdirectories named after different node, e.g., `emqx@127.0.0.1`. Note: In case of node renaming, you should also delete or remove the corresponding subdirectory. <br /><br />  —  Can use command `emqx ctl mnesia` to  query the built-in database. For details, see [Management Command CLI](https://docs.emqx.com/en/enterprise/v5.0/admin/cli.html).<br /><br />`patches`: Stores the `.beam` files for EMQX to load as a hot patch. Can be used for a quick fix.<br /><br />`trace`: Online tracing log files.<br /><br />In production, it is recommended to periodically backup the `data` directory (excluding the `trace` folder )  for data safety. |
-| log       | Operating logs      | Read        | `emqx.log.*`: Operation logs of EMQX, for more information, see [logs](../observability/log.md). |
+| data      | Operating data      | Write       | `authz`: Stores file authorization rules uploaded by REST API or Dashboard. For details, see [Authorization - File](../../operate/access-control/authz/file.md). <br /><br />`certs`: Stores certificate files uploaded by REST API or Dashboard.<br /><br />`configs`: Stores configuration files generated at boot, or configuration overrides by changes from API or CLI.<br /><br />`mnesia`: Built-in database to store EMQX operating data, including alarm records, authentication and authorization data of the clients, Dashboard user information, etc. **If the directory is deleted, all these operating data will be lost.**<br /><br />  —  May contain subdirectories named after different node, e.g., `emqx@127.0.0.1`. Note: In case of node renaming, you should also delete or remove the corresponding subdirectory. <br /><br />  —  Can use command `emqx ctl mnesia` to  query the built-in database. For details, see [Management Command CLI](https://docs.emqx.com/en/enterprise/v5.0/admin/cli.html).<br /><br />`patches`: Stores the `.beam` files for EMQX to load as a hot patch. Can be used for a quick fix.<br /><br />`trace`: Online tracing log files.<br /><br />In production, it is recommended to periodically backup the `data` directory (excluding the `trace` folder )  for data safety. |
+| log       | Operating logs      | Read        | `emqx.log.*`: Operation logs of EMQX, for more information, see [logs](../../operate/observability/log.md). |
 
 :::tip
 

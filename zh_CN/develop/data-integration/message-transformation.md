@@ -11,7 +11,7 @@
 2. **消息转换管道**：
 
    - **转换匹配**：根据消息的主题，将其与用户定义的转换规则列表进行匹配。可以为不同的主题或主题过滤器设置多个转换。
-   - **转换执行**：匹配到的转换将按照用户配置的顺序依次执行。管道支持多种编码器和解码器，如 JSON、Protobuf 和 Avro，并允许使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)来丰富或修改消息。
+   - **转换执行**：匹配到的转换将按照用户配置的顺序依次执行。管道支持多种编码器和解码器，如 JSON、Protobuf 和 Avro，并允许使用 [Variform 表达式](../../operate/configuration/configuration.md#variform-表达式)来丰富或修改消息。
    - **转换后处理**：消息成功通过转换管道后，将继续进行下一步处理，如触发规则引擎或将消息分发给订阅者。
 
 3. **故障处理**：如果转换失败，将执行用户配置的操作：
@@ -60,7 +60,7 @@
      
    - **消息属性转换**：
      - **属性**：指定转换后的值（由表达式生成）的写入目标位置。有效目标包括 `payload`、`topic`、`qos`、`retain`（设置相应的标志）以及 `user_property`（用于 `User-Property` MQTT 属性）。使用 `user_property` 时，必须指定一个具体的键（例如：`user_property.my_custom_prop`）。`payload` 可以按原样使用，覆盖整个消息 payload，或者指定一个嵌套键路径，将 payload 视为嵌套的 JSON 对象（例如：`payload.x.y`）。
-     - **目标值**：定义将写入配置的属性的值。此值可以从其他字段复制，如 `qos`、`retain`、`topic`、`payload` 和 `payload.x.y`，也可以通过 [Variform表达式](../configuration/configuration.md#variform-表达式)生成。
+     - **目标值**：定义将写入配置的属性的值。此值可以从其他字段复制，如 `qos`、`retain`、`topic`、`payload` 和 `payload.x.y`，也可以通过 [Variform表达式](../../operate/configuration/configuration.md#variform-表达式)生成。
      
    - **转换失败后的操作**：
      - **失败操作**：选择在转换失败时执行的操作：

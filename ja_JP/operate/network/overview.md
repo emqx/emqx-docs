@@ -49,4 +49,4 @@ authentication {
 
 ## ノード間通信のTLS
 
-クラスター接続におけるSSL/TLSの有効化方法については本章では扱っておらず、詳細は[Cluster Security](../deploy/cluster/security.md)をご参照ください。
+クラスター接続におけるSSL/TLSの有効化方法については本章では扱っておらず、詳細は[Cluster Security](../cluster/security.md)をご参照ください。

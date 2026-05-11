@@ -40,7 +40,7 @@ EMQXクラスターは大規模またはミッションクリティカルなア�
 
 
 
-EMQXのクラスタリングの仕組みをより深く理解するには、[EMQXクラスタリング](../../design/clustering.md)を参照してください。
+EMQXのクラスタリングの仕組みをより深く理解するには、[EMQXクラスタリング](../../develop/design/clustering.md)を参照してください。
 
 ::: tip Note
 

@@ -1628,7 +1628,7 @@ Please read [Known Issues of 5.8](./known-issues-5.8.md) before upgrade.
   
 - [#13452](https://github.com/emqx/emqx/pull/13518) Kafka producer action's `topic` configuration now supports templates.
 
-  Ensure that topics are pre-existing in Kafka. If a message is directed to a non-existent topic (given Kafka's disabled topic auto-creation), the message will fail with an unrecoverable error. Additionally, if a message lacks sufficient information to match the configured template, it will also fail with an unrecoverable error. For example, the template is `t-${t}` but the message context lacks a `t` definition. For detailed information, see [Configure Kafka Dynamic Topics](../data-integration/data-bridge-kafka.md#configure-kafka-dynamic-topics).
+  Ensure that topics are pre-existing in Kafka. If a message is directed to a non-existent topic (given Kafka's disabled topic auto-creation), the message will fail with an unrecoverable error. Additionally, if a message lacks sufficient information to match the configured template, it will also fail with an unrecoverable error. For example, the template is `t-${t}` but the message context lacks a `t` definition. For detailed information, see [Configure Kafka Dynamic Topics](../develop/data-integration/data-bridge-kafka.md#configure-kafka-dynamic-topics).
 
   This feature is also supported for Azure Event Hubs and Confluent Platform producer integrations.
 
@@ -1843,7 +1843,7 @@ Added metrics related to EMQX durable storage to Prometheus:
 Note: these metrics are only visible when session persistence is enabled.
 The number of persisted messages has also been added to the Dashboard.
 
-For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../durability/durability_introduction.md).
+For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../operate/durability/durability_introduction.md).
 
 #### Security
 
@@ -1853,7 +1853,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
 #### Data Processing and Integration
 
-- [#12711](https://github.com/emqx/emqx/pull/12711) Added the Schema Validation feature. With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages. If the checking results are not accepted by validation, the message is dropped and the client may be disconnected, depending on the configuration. For more information about the Schema Validation feature, see [Schema Validation](../data-integration/schema-validation.md).
+- [#12711](https://github.com/emqx/emqx/pull/12711) Added the Schema Validation feature. With this feature, once validations are configured for certain topic filters, the configured checks are run against published messages. If the checking results are not accepted by validation, the message is dropped and the client may be disconnected, depending on the configuration. For more information about the Schema Validation feature, see [Schema Validation](../develop/data-integration/schema-validation.md).
 
 - [#12899](https://github.com/emqx/emqx/pull/12899) For RocketMQ data integration, added support for namespace and key dispatch strategy.
 
@@ -1904,9 +1904,9 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
     - In other authorization backends, `${client_attrs.namespace}` can be used within request templates to dynamically include client attributes.
 
-  For more information about the Client Attributes feature, see [Client Attributes](../client-attributes/client-attributes.md).
+  For more information about the Client Attributes feature, see [Client Attributes](../develop/client-attributes/client-attributes.md).
 
-- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. It is also possible to annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and [plugin documentation](../extensions/plugins.md).
+- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. It is also possible to annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and [plugin documentation](../operate/extensions/plugins.md).
 
 #### Operations and Management
 
@@ -2229,7 +2229,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
 - [#12381](https://github.com/emqx/emqx/pull/12381) Added new SQL functions: `map_keys()`, `map_values()`, `map_to_entries()`, `join_to_string()`, `join_to_string()`, `join_to_sql_values_string()`, `is_null_var()`, `is_not_null_var()`.
 
-  For more information on the functions and their usage, refer to [Built-in SQL Functions](../data-integration/rule-sql-builtin-functions) the documentation.
+  For more information on the functions and their usage, refer to [Built-in SQL Functions](../develop/data-integration/rule-sql-builtin-functions.md) the documentation.
 
 - [#12427](https://github.com/emqx/emqx/pull/12427) Introduced the capability to specify a limit on the number of Kafka partitions that can be used for Kafka data integration.
 
@@ -2382,7 +2382,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
 - [#12085](https://github.com/emqx/emqx/pull/12085) EMQX has been upgraded to leverage the capabilities of OTP version 26.1.2-2. NOTE: Docker images are still built with OTP 25.3.2.
 
-- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../operate/access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
 
   For example:
 

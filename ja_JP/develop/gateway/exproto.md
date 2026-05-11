@@ -75,7 +75,7 @@ EMQXダッシュボードの左側ナビゲーションメニューから **Mana
 
 ::: tip
 
-EMQXをクラスターで運用している場合、ダッシュボードやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)でゲートウェイを設定してください。
+EMQXをクラスターで運用している場合、ダッシュボードやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../operate/configuration/configuration.md)でゲートウェイを設定してください。
 
 :::
 
@@ -120,7 +120,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-詳細なREST APIの説明は[REST API](../admin/api.md)を参照してください。
+詳細なREST APIの説明は[REST API](../../operate/api.md)を参照してください。
 
 より細かいカスタマイズやリスナーの追加、認証ルールの追加が必要な場合は、[Customize Your ExProto Gateway](#customize-your-exproto-gateway)をお読みください。
 
@@ -139,7 +139,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 - **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックに接頭辞として付与される文字列を設定します。異なるプロトコル間でのメッセージルーティングの分離を実現します（例：`mqttsn/`）。このトピック接頭辞はゲートウェイが管理し、クライアントは明示的に追加する必要はありません。
 - **gRPC ConnectionAdapter**：`ConnectionAdapter`サービスの起動設定を行います。
   - **Bind**：gRPCサーバーのリスニングアドレスとポート。デフォルトは`0.0.0.0:9100`です。
-    - **TLS Verify Client**：ピア認証の有効・無効を設定します。デフォルトは無効です。有効にすると、関連する**TLS Cert**、**TLS Key**、**CA Cert**情報をファイルの内容入力または**Select File**ボタンでアップロードして設定できます。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
+    - **TLS Verify Client**：ピア認証の有効・無効を設定します。デフォルトは無効です。有効にすると、関連する**TLS Cert**、**TLS Key**、**CA Cert**情報をファイルの内容入力または**Select File**ボタンでアップロードして設定できます。詳細は[Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md)を参照してください。
 - **gRPC ConnectionHandler**：`ConnectionUnaryHandler`を実装したコールバックサーバーの設定を行います。
   - **Server**：コールバックgRPCサーバーのアドレス。
     - **Enable TLS**：gRPCサーバーのTLS接続を有効にします。デフォルトは無効です。有効にすると以下の設定が可能です。
@@ -180,7 +180,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 
 **TLS設定**（SSLリスナーのみ）
 
-TLS Verifyの有効化はトグルスイッチで設定できますが、その前に関連する**TLS Cert**、**TLS Key**、**CA Cert**情報をファイルの内容入力または**Select File**ボタンでアップロードして設定してください。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
+TLS Verifyの有効化はトグルスイッチで設定できますが、その前に関連する**TLS Cert**、**TLS Key**、**CA Cert**情報をファイルの内容入力または**Select File**ボタンでアップロードして設定してください。詳細は[Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md)を参照してください。
 
 続いて以下の設定が可能です。
 
@@ -193,14 +193,14 @@ TLS Verifyの有効化はトグルスイッチで設定できますが、その�
 
 ExProtoゲートウェイは以下のような多様な認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)
-- [MySQL認証](../access-control/authn/mysql.md)
-- [MongoDB認証](../access-control/authn/mongodb.md)
-- [PostgreSQL認証](../access-control/authn/postgresql.md)
-- [Redis認証](../access-control/authn/redis.md)
-- [HTTPサーバー認証](../access-control/authn/http.md)
-- [JWT認証](../access-control/authn/jwt.md)
-- [LDAP認証](../access-control/authn/ldap.md)
+- [組み込みデータベース認証](../../operate/access-control/authn/mnesia.md)
+- [MySQL認証](../../operate/access-control/authn/mysql.md)
+- [MongoDB認証](../../operate/access-control/authn/mongodb.md)
+- [PostgreSQL認証](../../operate/access-control/authn/postgresql.md)
+- [Redis認証](../../operate/access-control/authn/redis.md)
+- [HTTPサーバー認証](../../operate/access-control/authn/http.md)
+- [JWT認証](../../operate/access-control/authn/jwt.md)
+- [LDAP認証](../../operate/access-control/authn/ldap.md)
 
 クライアント情報のClient ID、Username、Passwordはすべて`ConnectionAdapter`の`Authenticate`メソッドに渡されたパラメータから取得されます。
 
@@ -208,7 +208,7 @@ ExProtoゲートウェイは以下のような多様な認証方式をサポー�
 
 ExProtoページで**Authentication**タブをクリックします。
 
-**+ Create Authentication**をクリックし、**Mechanism**に`Password-Based`を選択、**Backend**に`HTTP Server`を選択して**Next**をクリックします。**Configuration**では認証ルールを設定できます。各項目の詳細は[HTTP Server Authentication](../access-control/authn/http.md)を参照してください。
+**+ Create Authentication**をクリックし、**Mechanism**に`Password-Based`を選択、**Backend**に`HTTP Server`を選択して**Next**をクリックします。**Configuration**では認証ルールを設定できます。各項目の詳細は[HTTP Server Authentication](../../operate/access-control/authn/http.md)を参照してください。
 
 <img src="./assets/exproto-authn-config.png" alt="mqttsn認証設定" style="zoom:43%;" />
 

@@ -264,7 +264,7 @@ Cluster status: #{running_nodes =>
 
 これで2ノードのクラスター作成に成功しました。クラスター状態の監視やノード管理については、[クラスター状態の照会](#query-cluster-status)、[クラスターのノード管理](#manage-cluster-nodes)、[ネットワークプロトコルの設定](#configure-network-protocols)をご参照ください。
 
-EMQX v5.9.0以降は、EMQXダッシュボードからノードの招待や管理も可能です。詳細は[Cluster](../../dashboard/cluster_settings.md#cluster)を参照してください。
+EMQX v5.9.0以降は、EMQXダッシュボードからノードの招待や管理も可能です。詳細は[Cluster](../dashboard/cluster_settings.md#cluster)を参照してください。
 
 ## 自動クラスタリング
 

@@ -12,15 +12,15 @@ EMQXのマルチプロトコルゲートウェイは、すべての非MQTTプロ
 
 ゲートウェイページでは、ゲートウェイを有効化し、リスナー設定などの基本設定を行うことができます。EMQXはカスタム設定オプションも提供しています。詳細な設定手順については、以下の一般的なゲートウェイのクイックスタートドキュメントを参照してください。
 
-- [MQTT-SN](../gateway/mqttsn.md)
-- [STOMP](../gateway/stomp.md)
-- [CoAP](../gateway/coap.md)
-- [LwM2M](../gateway/lwm2m.md)
-- [ExProto](../gateway/exproto.md)
+- [MQTT-SN](../../develop/gateway/mqttsn.md)
+- [STOMP](../../develop/gateway/stomp.md)
+- [CoAP](../../develop/gateway/coap.md)
+- [LwM2M](../../develop/gateway/lwm2m.md)
+- [ExProto](../../develop/gateway/exproto.md)
 
-- [OCPP](../gateway/ocpp.md)
-- [GB/T 32960](../gateway/gbt32960.md)
-- [JT/T 808](../gateway/jt808.md)
+- [OCPP](../../develop/gateway/ocpp.md)
+- [GB/T 32960](../../develop/gateway/gbt32960.md)
+- [JT/T 808](../../develop/gateway/jt808.md)
 
 ゲートウェイを有効にする前に、正しくセットアップされている必要があります。セットアップ後は、各有効化されたプロトコルゲートウェイの接続数を監視し、**Gateways**ページでゲートウェイの状態（有効／無効）を管理できます。
 

@@ -63,7 +63,7 @@ Azure Event Hubs データ連携を作成するには、Azure Event Hubs Sink �
 5. 接続情報を設定します。
    - **Bootstrap Host**：Namespace のホスト名を入力します。デフォルトポートは `9093` です。その他のフィールドは実際の環境に合わせて設定してください。
    - **Connection String**：Namespace の共有アクセスポリシーの「Connection string - primary key」から取得した接続文字列を入力します。詳細は [イベントハブの接続文字列を取得する](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string) を参照してください。
-   - **Enable TLS**：Azure Event Hub への接続時は TLS がデフォルトで有効です。TLS 接続オプションの詳細は [外部リソースアクセスの TLS 有効化](../network/overview.md#enable-tls-encryption-for-accessing-external-resources) をご覧ください。
+   - **Enable TLS**：Azure Event Hub への接続時は TLS がデフォルトで有効です。TLS 接続オプションの詳細は [外部リソースアクセスの TLS 有効化](../../operate/network/overview.md#enable-tls-encryption-for-accessing-external-resources) をご覧ください。
 6. ページ下部の **Create** ボタンをクリックしてコネクター作成を完了します。
 
 これで、Azure Event Hubs がコネクター一覧（**Integration** -> **Connector**）に表示され、**Connection Status** が **Connected** となっているはずです。次に、ルールと Sink を作成し、Azure Event Hubs にストリームするデータを指定します。

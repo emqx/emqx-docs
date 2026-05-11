@@ -2,7 +2,7 @@
 
 规则引擎是 EMQX 内置的数据处理功能，它使用 SQL 语句编排规则，并通过消息、客户端事件以及外部数据系统触发，无需编写代码即可实现一站式的 IoT 数据提取、过滤、丰富和转换处理，并将处理完成后的数据输出到动作或外部数据系统中。
 
-规则是构成 EMQX 强大的数据集成能力的一部分，配合使用 Sink/Source 提供了清晰、灵活的业务集成方案，能够简化业务开发流程，提升用户易用性并降低业务系统与 EMQX 的耦合度。详情请查看[规则引擎](../data-integration/rules.md)。
+规则是构成 EMQX 强大的数据集成能力的一部分，配合使用 Sink/Source 提供了清晰、灵活的业务集成方案，能够简化业务开发流程，提升用户易用性并降低业务系统与 EMQX 的耦合度。详情请查看[规则引擎](../../develop/data-integration/rules.md)。
 
 在左侧的**集成**菜单下，用户可以进入到规则页面。规则页面中用户可以创建和管理创建好的规则。
 
@@ -23,7 +23,7 @@
 - CASE-WHEN 从多个条件列表返回可能结果
 - 数组处理 - 从 JSON 格式的 payload 中获取嵌套的值
 
-SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../data-integration/rule-sql-syntax.md)。
+SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` 这个主题发送消息时，我们就取出当前事件下所有的数据信息。`SELECT` 关键词可以获取消息中的所有字段，例如可以获取当前消息的 `Payload`，则 SQL 语句可以修改为 `SELECT payload from "t/#"`，获取的内容可以使用[内置函数](../../develop/data-integration/rule-sql-builtin-functions.md)来进行处理和转化，`FROM` 关键词后面输入数据源，即事件主题，下方规则调试部分可查看到所有可选的数据源事件，使用 `WHERE` 关键词，可以添加条件判断，更多详细的 SQL 语法使用，请参考 [SQL 语法与示列](../../develop/data-integration/rule-sql-syntax.md)。
 
 ### 启用调试
 
@@ -54,9 +54,9 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 - 订阅（$events/session_subscribed）
 - 取消订阅（$events/session_unsubscribed）
 
-对应的数据源需要与编辑器中的 SQL 语句保持一致，当需要使用上述中的一些消息事件或 Source 来获取数据时，需要将对应的事件主题（括号中的内容）填写到 SQL 语句中， `FROM` 关键词的后面，规则支持使用多个事件。更多详细的数据源与事件解释，请参考 [SQL 数据源和字段](../data-integration/rule-sql-events-and-fields.md)。
+对应的数据源需要与编辑器中的 SQL 语句保持一致，当需要使用上述中的一些消息事件或 Source 来获取数据时，需要将对应的事件主题（括号中的内容）填写到 SQL 语句中， `FROM` 关键词的后面，规则支持使用多个事件。更多详细的数据源与事件解释，请参考 [SQL 数据源和字段](../../develop/data-integration/rule-sql-events-and-fields.md)。
 
-您还可以在调试区域对规则进行测试，详细的测试步骤，参考[测试规则](../data-integration/rule-get-started.md#测试规则)。
+您还可以在调试区域对规则进行测试，详细的测试步骤，参考[测试规则](../../develop/data-integration/rule-get-started.md#测试规则)。
 
 ![image](./assets/rule-test.png)
 
@@ -71,7 +71,7 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 
 如果使用外部动作转发数据，可以创建一个新的动作，也可以选择已经创建好的动作。选择动作后，规则的输出结果将转发到对应的外部数据系统上，有关每个动作的配置可参考动作页签。
 
-更多关于规则动作的详情，请参考[添加动作](../data-integration/rule-get-started.md#添加动作)。
+更多关于规则动作的详情，请参考[添加动作](../../develop/data-integration/rule-get-started.md#添加动作)。
 
 ## 规则列表
 

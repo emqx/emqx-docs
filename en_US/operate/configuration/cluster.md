@@ -21,7 +21,7 @@ node {
 Where, 
 
 - `name` refers to the desired node name, for example, `emqx@localhost`.
-- `role` refers to the function that an EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../deploy/cluster/mria-introduction.md). 
+- `role` refers to the function that an EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../../develop/cluster/mria-introduction.md). 
   - Default value: `core` 
   - Optional value: `core` or `replicant`
 
@@ -31,7 +31,7 @@ This section introduces how to configure an EMQX cluster. You can add the cluste
 
 - `node.db_backend` of the node is set to `rlog`, indicating the node uses `rlog` as the database backend. 
 - `node.role` is set to `replicant`, indicating this code functions as a replicant node. 
-- `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if the automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../deploy/cluster/create-cluster.md). 
+- `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if the automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../cluster/create-cluster.md). 
 
 ```bash
 cluster {

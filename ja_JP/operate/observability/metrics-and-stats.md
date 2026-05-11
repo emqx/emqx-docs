@@ -182,7 +182,7 @@ EMQXダッシュボードの左ナビゲーションメニューから **Monitor
 
 ## REST APIによる監視状態の取得
 
-APIを通じてメトリクスや統計情報を取得することも可能です。UIの左ナビゲーションメニューで **Metrics** をクリックするとこのAPIリクエストを実行できます。EMQX APIの利用方法については[REST API](../admin/api.md)をご覧ください。
+APIを通じてメトリクスや統計情報を取得することも可能です。UIの左ナビゲーションメニューで **Metrics** をクリックするとこのAPIリクエストを実行できます。EMQX APIの利用方法については[REST API](../api.md)をご覧ください。
 
 <img src="./assets/metrics-api-doc.png" alt="メトリクスAPIドキュメント" style="zoom:35%;" />
 

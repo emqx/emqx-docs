@@ -8,7 +8,7 @@ EMQX 5.0 は、[Mria](https://github.com/emqx/mria) を用いてクラスタア�
 
 この [Mria](https://github.com/emqx/mria) では、各ノードはコアノードまたはレプリカントのいずれかの役割を担います。  
 コアノードはデータベースのデータレイヤーとして機能します。  
-レプリカントノードはコアノードに接続し、コアノードからのデータ更新を受動的にレプリケーションします。コアノードとレプリカントノードの動作については、[EMQX クラスタリング](../../design/clustering.md) をご参照ください。
+レプリカントノードはコアノードに接続し、コアノードからのデータ更新を受動的にレプリケーションします。コアノードとレプリカントノードの動作については、[EMQX クラスタリング](../../develop/design/clustering.md) をご参照ください。
 
 デフォルトでは、すべてのノードがコアノードの役割を担うため、クラスタは [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster) と同様に動作します。これは3ノード以下の小規模クラスタに推奨されます。コア＋レプリカントモードは、クラスタに3ノードを超える場合にのみ推奨されます。
 
@@ -44,7 +44,7 @@ Mria のパフォーマンスは Prometheus メトリクスや Erlang コンソ�
 
 ### Prometheus 指標
 
-Prometheus と連携してクラスタの動作を監視可能です。Prometheus との連携方法は [ログと可観測性 - Prometheus 連携](../../observability/prometheus.md) をご覧ください。
+Prometheus と連携してクラスタの動作を監視可能です。Prometheus との連携方法は [ログと可観測性 - Prometheus 連携](../observability/prometheus.md) をご覧ください。
 
 #### コアノード
 

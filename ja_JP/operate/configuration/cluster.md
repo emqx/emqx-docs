@@ -21,7 +21,7 @@ node {
 ここで、
 
 - `name` は設定したいノード名を指します。例：`emqx@localhost`。
-- `role` はEMQXクラスター内でノードが果たす役割を示します。役割はコアノード（core）とレプリカントノード（replicant）の2種類があります。コアノードとレプリカントノードの詳細は[EMQXクラスタリング - コアノードとレプリカントノード](../deploy/cluster/mria-introduction.md)を参照してください。  
+- `role` はEMQXクラスター内でノードが果たす役割を示します。役割はコアノード（core）とレプリカントノード（replicant）の2種類があります。コアノードとレプリカントノードの詳細は[EMQXクラスタリング - コアノードとレプリカントノード](../cluster/mria-introduction.md)を参照してください。  
   - デフォルト値：`core`  
   - 選択可能な値：`core` または `replicant`
 
@@ -31,7 +31,7 @@ node {
 
 - ノードの `node.db_backend` が `rlog` に設定されていること（`rlog` をデータベースバックエンドとして使用）。
 - ノードの `node.role` が `replicant` に設定されていること（レプリカントノードとして機能）。
-- ノードの `node.discovery_strategy` が `manual` または `static` に設定されていること。自動クラスター検出機構を使用する場合は設定不要です。ノード検出戦略と関連設定の詳細は[クラスターの作成](../deploy/cluster/create-cluster.md)を参照してください。
+- ノードの `node.discovery_strategy` が `manual` または `static` に設定されていること。自動クラスター検出機構を使用する場合は設定不要です。ノード検出戦略と関連設定の詳細は[クラスターの作成](../cluster/create-cluster.md)を参照してください。
 
 ```bash
 cluster {

@@ -13,7 +13,7 @@ The Subscriptions page displays all topics subscribed by connections, mapped by 
   - Retain Handling equals 1: The server sends retained messages only if this subscription did not exist before.
   - Retain Handling equals 2: The server does not send retained messages to the client, regardless of the subscription status.
 
-The top search bar by default displays 3 filter fields: Node, Client ID, and Topic. Node is a dropdown selection box that allows filtering subscriptions by clients connected to specific nodes. You can use Client ID and Topic for fuzzy searching in the subscription list. Clicking the right arrow button next to the search bar also displays QoS and Shared Name filter input boxes, supporting precise matching for [Shared Name](../../messaging/mqtt-shared-subscription.md).
+The top search bar by default displays 3 filter fields: Node, Client ID, and Topic. Node is a dropdown selection box that allows filtering subscriptions by clients connected to specific nodes. You can use Client ID and Topic for fuzzy searching in the subscription list. Clicking the right arrow button next to the search bar also displays QoS and Shared Name filter input boxes, supporting precise matching for [Shared Name](../../../get-started/messaging/mqtt-shared-subscription.md).
 
 <img src="./assets/subscriptions.png" alt="Subscriptions" style="zoom:50%;" />
 

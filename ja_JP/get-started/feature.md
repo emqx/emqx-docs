@@ -6,19 +6,19 @@
 
 ## EMQXはメッセージをデータベースに保存できますか？
 
-EMQX Enterpriseはデータのパーシステンスをサポートしています。詳細は[Data Integration](../data-integration/data-bridges.md)をご参照ください。
+EMQX Enterpriseはデータのパーシステンスをサポートしています。詳細は[Data Integration](../develop/data-integration/data-bridges.md)をご参照ください。
 
 ## EMQXはMQTTメッセージをデータベースに保存できますか？
 
-はい。**EMQX Enterprise**の[Data Integration](../data-integration/data-bridges.md)を利用してメッセージのパーシステンスを実現できます。EMQXは各種SQL、NoSQL、時系列データベースをサポートしており、用途に応じて選択可能です。
+はい。**EMQX Enterprise**の[Data Integration](../develop/data-integration/data-bridges.md)を利用してメッセージのパーシステンスを実現できます。EMQXは各種SQL、NoSQL、時系列データベースをサポートしており、用途に応じて選択可能です。
 
 ## EMQXはMQTTメッセージをKafkaなどのメッセージキューに転送できますか？
 
-はい。**EMQX Enterprise**の[Data Integration](../data-integration/data-bridges.md)を通じて、KafkaやRabbitMQなどのメッセージキューにメッセージを転送できます。
+はい。**EMQX Enterprise**の[Data Integration](../develop/data-integration/data-bridges.md)を通じて、KafkaやRabbitMQなどのメッセージキューにメッセージを転送できます。
 
 ## EMQXはMQTTメッセージを他のMQTTサービスに転送できますか？
 
-はい。EMQXの[MQTTブリッジ](../data-integration/data-bridge-mqtt.md)を利用することで、AWSやAzureなどのパブリッククラウド上に展開されたIoT Hubや、EMQXやMosquittoなどの標準MQTTブローカーを含む他のMQTTサービスへメッセージを転送できます。
+はい。EMQXの[MQTTブリッジ](../develop/data-integration/data-bridge-mqtt.md)を利用することで、AWSやAzureなどのパブリッククラウド上に展開されたIoT Hubや、EMQXやMosquittoなどの標準MQTTブローカーを含む他のMQTTサービスへメッセージを転送できます。
 
 ## 共有サブスクリプションとは何ですか？
 
@@ -26,13 +26,13 @@ EMQX Enterpriseはデータのパーシステンスをサポートしていま�
 
 MQTT 3.1.1のクライアントもサーバー側で共有サブスクリプションの処理が行われるため、`$share/group/{topic filter}`にサブスクライブするだけで同様に利用可能です。
 
-共有サブスクリプションは、メッセージのパブリッシャーが多数でサブスクライバーが少数のデータ収集シナリオに有効です。詳細は[Shared Subscription](../messaging/mqtt-shared-subscription.md)をご参照ください。
+共有サブスクリプションは、メッセージのパブリッシャーが多数でサブスクライバーが少数のデータ収集シナリオに有効です。詳細は[Shared Subscription](messaging/mqtt-shared-subscription.md)をご参照ください。
 
 ## システムトピックとは何ですか？
 
 EMQXは自身の稼働状況、MQTTメッセージ数、クライアントのオンライン／オフラインイベントを`$SYS/`で始まるシステムトピックに定期的にパブリッシュします。クライアントはシステムトピックをサブスクライブして関連情報を取得できます。
 
-システムトピックの詳細な説明は[こちら](../observability/mqtt-system-topics.md)をご覧ください。
+システムトピックの詳細な説明は[こちら](../operate/observability/mqtt-system-topics.md)をご覧ください。
 
 ## EMQXはクライアントが共有サブスクリプション経由でシステムトピックをサブスクライブすることをサポートしていますか？
 
@@ -42,7 +42,7 @@ EMQXは自身の稼働状況、MQTTメッセージ数、クライアントのオ
 
 EMQXはExProtoゲートウェイを提供しており、Java、Python、Goなどの慣れ親しんだプログラミング言語でgRPCサービスを開発し、デバイスが使用するカスタマイズプロトコルの解析や、デバイス接続、認証、メッセージ送信などの機能を実現できます。
 
-詳細は[ExProto Protocol Gateway](../gateway/exproto.md)をご参照ください。
+詳細は[ExProto Protocol Gateway](../develop/gateway/exproto.md)をご参照ください。
 
 ## EMQXはクライアントがパブリッシュまたはサブスクライブできるトピックの制限をサポートしていますか？
 
@@ -52,25 +52,25 @@ EMQXはデフォルトで`acl.conf`ファイルからACLルールを参照しま
 
 通常、複数クライアントに有効なルールは`acl.conf`に記述し、例えば同一ネットワークセグメントのクライアントのみがシステムトピックをサブスクライブ可能にします。一方、単一クライアントに有効なルールはデータベースに記述し、例えばクライアント`client1`がトピック`example`をサブスクライブ可能にします。
 
-認可の詳細は[こちら](../access-control/authz/authz.md)をご覧ください。
+認可の詳細は[こちら](../operate/access-control/authz/authz.md)をご覧ください。
 
 ## EMQXはレート制限をサポートしていますか？
 
-はい。EMQXは接続レートおよびメッセージ流入レートの制御をサポートし、入口でのシステム過負荷を防止します。詳細は[こちら](../rate-limit/rate-limit.md)をご参照ください。
+はい。EMQXは接続レートおよびメッセージ流入レートの制御をサポートし、入口でのシステム過負荷を防止します。詳細は[こちら](../operate/rate-limit.md)をご参照ください。
 
 ## EMQXクライアントのメッセージ受信レートに制限はありますか？
 
 EMQXやMQTTプロトコル自体はクライアントごとのメッセージ受信レートを直接制限しません。しかし、多数のメッセージを受信してクライアントが処理しきれない場合、メッセージが積み重なり最終的に破棄される可能性があります。システムの安定性とメッセージ信頼性を確保するため、クライアントごとのメッセージ受信レートは1秒あたり1500メッセージ（1KB/メッセージ）以内を推奨します。
 
-受信レートが推奨値を超える場合は、[Shared Subscription](../messaging/mqtt-shared-subscription.md)を利用して複数のサブスクライバーを追加し、単一サブスクライバーの受信レートを分散してください。
+受信レートが推奨値を超える場合は、[Shared Subscription](messaging/mqtt-shared-subscription.md)を利用して複数のサブスクライバーを追加し、単一サブスクライバーの受信レートを分散してください。
 
 ## EMQXはクラスターの自動検出をサポートしていますか？実装方法は？
 
-手動でクラスターを作成するほか、EMQXはDNSやetcdなどのノード検出戦略をサポートし、自動クラスタリングを実現できます。詳細は[Create and Manage Cluster](../deploy/cluster/create-cluster.md)をご参照ください。
+手動でクラスターを作成するほか、EMQXはDNSやetcdなどのノード検出戦略をサポートし、自動クラスタリングを実現できます。詳細は[Create and Manage Cluster](../operate/cluster/create-cluster.md)をご参照ください。
 
 ## EMQXはサーバー側でMQTT接続をユーザーが能動的に切断することをサポートしていますか？
 
-はい。EMQXは[CLI](../admin/cli.md#clients)の`emqx ctl clients kick <Client ID>`コマンドおよび[REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)の`DELETE /clients/{clientid}`を提供し、ユーザーがMQTT接続を手動で切断できます。Dashboardのクライアントページからも操作可能です。
+はい。EMQXは[CLI](../operate/cli.md#clients)の`emqx ctl clients kick <Client ID>`コマンドおよび[REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)の`DELETE /clients/{clientid}`を提供し、ユーザーがMQTT接続を手動で切断できます。Dashboardのクライアントページからも操作可能です。
 
 REST APIの詳細は[EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)をご覧ください。
 
@@ -78,9 +78,9 @@ REST APIの詳細は[EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@
 
 EMQXはデバイスのオンライン・オフラインイベントを監視する方法を3つ提供しています：
 
-- [WebHook](../data-integration/data-bridge-webhook.md)を使い、オンライン・オフラインイベントメッセージを外部HTTPサービスに転送する。
-- MQTTクライアントで[システムトピック](../observability/mqtt-system-topics.md)をサブスクライブし、オンライン・オフライン通知を取得する。
-- [ルールエンジン](../data-integration/rules.md)で`client.connected`および`client.disconnected`イベントを監視し、[Data Integration](../data-integration/data-bridges.md)と連携してイベントメッセージを指定データベースに書き込む（EMQX Enterpriseのみ）。
+- [WebHook](../develop/data-integration/data-bridge-webhook.md)を使い、オンライン・オフラインイベントメッセージを外部HTTPサービスに転送する。
+- MQTTクライアントで[システムトピック](../operate/observability/mqtt-system-topics.md)をサブスクライブし、オンライン・オフライン通知を取得する。
+- [ルールエンジン](../develop/data-integration/rules.md)で`client.connected`および`client.disconnected`イベントを監視し、[Data Integration](../develop/data-integration/data-bridges.md)と連携してイベントメッセージを指定データベースに書き込む（EMQX Enterpriseのみ）。
 
 ## MQTTを使ってサーバーとEMQXを連携する際、データのスループットと信頼性を向上させるには？
 

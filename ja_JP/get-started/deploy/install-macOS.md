@@ -52,7 +52,7 @@ EMQXの状態は以下のコマンドで確認できます：
 ./bin/emqx ctl status
 ```
 
-ウェブブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力すると、[EMQXダッシュボード](../dashboard/introduction.md)にアクセスできます。ここからクライアントの接続や稼働状況の確認が可能です。
+ウェブブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力すると、[EMQXダッシュボード](../../operate/dashboard/introduction.md)にアクセスできます。ここからクライアントの接続や稼働状況の確認が可能です。
 
 初期のユーザー名とパスワードは `admin` と `public` です。ログイン後にパスワード変更が求められます。
 

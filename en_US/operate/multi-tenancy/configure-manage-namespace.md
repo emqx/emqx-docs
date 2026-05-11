@@ -23,7 +23,7 @@ Both limiter types can define limits for:
 
 ::: tip
 
-For more details, refer to the [Rate Limit](../rate-limit/rate-limit.md) documentation.
+For more details, refer to the [Rate Limit](../rate-limit.md) documentation.
 
 :::
 
@@ -104,7 +104,7 @@ Use this endpoint to set rate limits, session limits, and other namespace-specif
 #### Configuration Example
 
 
-This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+This example configures a namespace using the [REST API](../api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
 ##### Create the Namespace
 

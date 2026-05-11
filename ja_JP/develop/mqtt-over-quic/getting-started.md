@@ -23,7 +23,7 @@ docker run -d --name emqx \
 emqx/emqx:@CE_VERSION@
 ```
 
-EMQX を Docker コンテナで実行する詳細は、[Deploy with Docker](../deploy/install-docker.md) をご参照ください。
+EMQX を Docker コンテナで実行する詳細は、[Deploy with Docker](../../get-started/deploy/install-docker.md) をご参照ください。
 
 ## MQTT over QUIC の有効化
 

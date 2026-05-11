@@ -102,7 +102,7 @@ LwM2MゲートウェイはUDPおよびDTLSタイプのリスナーのみサポ�
 ## 認証
 
 LwM2MプロトコルではクライアントのEndpoint Nameのみが与えられ、UsernameやPasswordはありません。  
-そのため、LwM2Mゲートウェイは[HTTPサーバー認証](../access-control/authn/http.md)のみサポートしています。
+そのため、LwM2Mゲートウェイは[HTTPサーバー認証](../../operate/access-control/authn/http.md)のみサポートしています。
 
 例えば、HTTP APIや設定ファイルでLwM2MゲートウェイのHTTP認証を作成する例は以下の通りです：
 
@@ -753,7 +753,7 @@ LwM2Mクライアントからの通知はMQTTメッセージに変換されま�
 ## ユーザーインターフェース
 
 - 詳細な設定オプション：[Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) および [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
-- 詳細なHTTP API説明：[HTTP API - Gateway](../admin/api.md)
+- 詳細なHTTP API説明：[HTTP API - Gateway](../../operate/api.md)
 
 ## クライアントライブラリ
 

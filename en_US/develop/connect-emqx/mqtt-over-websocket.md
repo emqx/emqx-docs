@@ -53,8 +53,8 @@ You can configure these listeners via:
 
 For detailed configuration instructions, see:
 
-- [Configure WebSocket Listener](../configuration/listener.md#configure-websocket-listener)
-- [Configure Secure WebSocket Listener](../configuration/listener.md#configure-secure-websocket-listener)
+- [Configure WebSocket Listener](../../operate/configuration/listener.md#configure-websocket-listener)
+- [Configure Secure WebSocket Listener](../../operate/configuration/listener.md#configure-secure-websocket-listener)
 
 ## Get Started
 

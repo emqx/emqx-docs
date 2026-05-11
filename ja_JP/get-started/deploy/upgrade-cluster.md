@@ -30,18 +30,18 @@ EMQX 5.x は設定、管理 API、クラスタリング API の点で 4.x と互
 
 アップグレードを開始する前に、現在の環境との非互換や競合をすべて解消する必要があります。アプリケーションやデプロイメントに影響を与える可能性のある互換性問題や破壊的変更については、以下の資料を参照してください。
 
-- [EMQX 5.1 と EMQX 4.4 間の非互換変更](../changes/breaking-changes-5.1.0.md)
-- [EMQX 5.4 の非互換変更](../changes/breaking-changes-ee-5.4.md)
-- [EMQX 5.5 の非互換変更](../changes/breaking-changes-ee-5.5.md)
-- [EMQX 5.6 の非互換変更](../changes/breaking-changes-ee-5.6.md)
-- [EMQX 5.7 の非互換変更](../changes/breaking-changes-ee-5.7.md)
-- [EMQX 5.8 の非互換変更](../changes/breaking-changes-ee-5.8.md)
+- [EMQX 5.1 と EMQX 4.4 間の非互換変更](../../release-notes/breaking-changes-5.1.0.md)
+- [EMQX 5.4 の非互換変更](../../release-notes/breaking-changes-ee-5.4.md)
+- [EMQX 5.5 の非互換変更](../../release-notes/breaking-changes-ee-5.5.md)
+- [EMQX 5.6 の非互換変更](../../release-notes/breaking-changes-ee-5.6.md)
+- [EMQX 5.7 の非互換変更](../../release-notes/breaking-changes-ee-5.7.md)
+- [EMQX 5.8 の非互換変更](../../release-notes/breaking-changes-ee-5.8.md)
 
 また、本番環境に適用する前にステージング環境で十分にアプリケーションの動作検証を行うことを推奨します。これによりスムーズな移行と潜在的な障害の最小化が期待できます。
 
 #### クライアントアプリケーションおよびデータブリッジの互換性
 
-アップグレードした EMQX と互換性のないクライアントやデータブリッジのバージョンを混在させると、予期しない動作や未定義の挙動が発生する可能性があります。したがって、クライアントアプリケーションやデータブリッジのバックエンドサービスが最新の EMQX バージョンと互換性があることを必ず確認してください。互換性の確認には、[EMQX 5.1 と EMQX 4.4 間のデータ統合の非互換性](../changes/data-integration-4.4-to-5.1-incompatibility.md)および[クライアント SDK](../connect-emqx/introduction.md)を参照してください。
+アップグレードした EMQX と互換性のないクライアントやデータブリッジのバージョンを混在させると、予期しない動作や未定義の挙動が発生する可能性があります。したがって、クライアントアプリケーションやデータブリッジのバックエンドサービスが最新の EMQX バージョンと互換性があることを必ず確認してください。互換性の確認には、[EMQX 5.1 と EMQX 4.4 間のデータ統合の非互換性](../../release-notes/data-integration-4.4-to-5.1-incompatibility.md)および[クライアント SDK](../../develop/connect-emqx/introduction.md)を参照してください。
 
 ### 潜在的な注意点
 
@@ -58,10 +58,10 @@ EMQX 5.x は設定、管理 API、クラスタリング API の点で 4.x と互
 ::: tip 前提条件
 
 - EMQX クラスターのリリースが 4.4.x であることを確認してください。
-- [リリースノート](../changes/all-changes-ee.md)を読んでいること。
+- [リリースノート](../../release-notes/all-changes-ee.md)を読んでいること。
 - デプロイ環境が EMQX がサポートする[対応 OS](./install.md)の VM または Docker コンテナを実行可能であること。
 - アップグレードに十分なディスク容量とメモリがあること。
-- [パフォーマンスチューニング（Linux）](../performance/tune.md)に記載された特定の前提条件を確認済みであること。
+- [パフォーマンスチューニング（Linux）](../../operate/performance/tune.md)に記載された特定の前提条件を確認済みであること。
 
 :::
 

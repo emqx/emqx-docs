@@ -70,7 +70,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
    - InfluxDBサーバー接続情報を入力：
      - **Server Host**に`127.0.0.1:8086`を入力。InfluxDB Cloudを使う場合はポート443を指定し、`{url}:443`と入力して**Enable TLS**を有効にします。
      - [InfluxDBのインストールとセットアップ](#install-and-set-up-influxdb)に従い、**Token**、**Organization**、**Bucket**を設定。InfluxDB v1を選択した場合は、**Database**、**Username**、**Password**を設定してください。
-   - TLSを有効にするかどうかを決定します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+   - TLSを有効にするかどうかを決定します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../../operate/network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connectivity**でInfluxDBサーバーへの接続テストが可能です。
 6. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択可能です。続けてルールとSinkを作成し、InfluxDBに転送するデータを指定できます。詳細は[InfluxDB Sink付きルールの作成](#create-a-rule-with-influxdb-sink)を参照してください。
 

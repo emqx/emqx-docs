@@ -72,7 +72,7 @@ Cluster Linking uses standard MQTT as the underlying protocol, requiring you to 
 
 Depending on the cluster size and configuration, multiple MQTT client connections may be established to the remote cluster, and each client must have a unique ClientID. You can control how these ClientIDs are allocated by setting the `clientid` parameter, which serves as a *ClientID prefix* for these connections. 
 
-Other MQTT protocol aspects, such as authentication and authorization parameters (`username`, `password`), are also configurable. The remote cluster must be able to [authenticate](../access-control/authn/authn.md) these connections and [authorize](../access-control/authz/authz.md) them to publish messages to the specific MQTT topics designated for inter-cluster communication by the Cluster Linking setup. For example, with the configuration above, the remote cluster can have the following [ACL rule](../access-control/authz/file.md) to function correctly:
+Other MQTT protocol aspects, such as authentication and authorization parameters (`username`, `password`), are also configurable. The remote cluster must be able to [authenticate](../../operate/access-control/authn/authn.md) these connections and [authorize](../../operate/access-control/authz/authz.md) them to publish messages to the specific MQTT topics designated for inter-cluster communication by the Cluster Linking setup. For example, with the configuration above, the remote cluster can have the following [ACL rule](../../operate/access-control/authz/file.md) to function correctly:
 
 ```erlang
 %% Allow Cluster Linking MQTT clients to operate with "$LINK/#" topics
@@ -82,7 +82,7 @@ Other MQTT protocol aspects, such as authentication and authorization parameters
 
 This rule allows MQTT clients with ClientIDs that match the regex pattern `^clink-us-east` to publish and subscribe to any topic that starts with `$LINK/`. The `$LINK/` is the control topic prefix used for Cluster Linking-related messages. This ensures that the subscribing entity receives all relevant messages under the `$LINK/` namespace, which are necessary for maintaining and managing the cluster link.
 
-Cluster Linking supports [TLS connections](../network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
+Cluster Linking supports [TLS connections](../../operate/network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
 
 ## Manage Cluster Linking via REST API
 

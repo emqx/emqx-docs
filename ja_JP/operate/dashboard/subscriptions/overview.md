@@ -13,7 +13,7 @@
   - Retain Handlingが`1`の場合：このサブスクリプションが以前に存在しなかった場合のみ保持メッセージを送信します。
   - Retain Handlingが`2`の場合：サブスクリプションの状態に関わらず保持メッセージを送信しません。
 
-画面上部の検索バーにはデフォルトで3つのフィルター項目（Node、Client ID、Topic）が表示されます。Nodeはドロップダウン選択ボックスで、特定のノードに接続しているクライアントでフィルタリング可能です。Client IDとTopicはサブスクリプションリスト内のあいまい検索に使用できます。検索バー右の矢印ボタンをクリックすると、QoSおよびShared Nameのフィルター入力欄も表示され、[Shared Name](../../messaging/mqtt-shared-subscription.md)の厳密なマッチングに対応しています。
+画面上部の検索バーにはデフォルトで3つのフィルター項目（Node、Client ID、Topic）が表示されます。Nodeはドロップダウン選択ボックスで、特定のノードに接続しているクライアントでフィルタリング可能です。Client IDとTopicはサブスクリプションリスト内のあいまい検索に使用できます。検索バー右の矢印ボタンをクリックすると、QoSおよびShared Nameのフィルター入力欄も表示され、[Shared Name](../../../get-started/messaging/mqtt-shared-subscription.md)の厳密なマッチングに対応しています。
 
 <img src="./assets/subscriptions.png" alt="サブスクリプション" style="zoom:50%;" />
 

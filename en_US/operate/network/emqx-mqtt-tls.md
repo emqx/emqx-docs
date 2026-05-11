@@ -21,7 +21,7 @@ You can enable SSL/TLS encrypted connections for all connections, including MQTT
 | Directly establish SSL/TLS connection between the client and EMQX. | Easy to use, no additional components required               | It will increase EMQX's resource consumption, and if the number of connections is huge, it may lead to high CPU and memory consumption. |
 | Terminate TLS connection through a proxy or load balancer.   | No impact on EMQX performance, and provides load balancing capabilities. | Only a few cloud vendors' load balancers support TCP SSL/TLS termination. In addition, users need to deploy software such as HAProxy themselves. |
 
-For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../deploy/cluster/lb.md).
+For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../cluster/lb.md).
 
 ## One-Way/Two-Way Authentication
 

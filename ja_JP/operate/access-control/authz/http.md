@@ -22,7 +22,7 @@ EMQXはHTTPサービスをベースとした認可をサポートしています
 
 - `${clientid}`：クライアントID。
 - `${username}`：クライアントのログイン時に使用されたユーザー名。
-- `${client_attrs.NAME}`：クライアント属性。`NAME`は実行時に事前設定された属性名に置き換えられます。クライアント属性の詳細は[MQTTクライアント属性](../../client-attributes/client-attributes.md)をご覧ください。
+- `${client_attrs.NAME}`：クライアント属性。`NAME`は実行時に事前設定された属性名に置き換えられます。クライアント属性の詳細は[MQTTクライアント属性](../../../develop/client-attributes/client-attributes.md)をご覧ください。
 - `${peerhost}`：クライアントの送信元IPアドレス。
 - `${proto_name}`：クライアントが使用するプロトコル名（例：`MQTT`、`CoAP`）。
 - `${mountpoint}`：ゲートウェイリスナーのマウントポイント（トピックプレフィックス）。

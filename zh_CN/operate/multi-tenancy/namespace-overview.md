@@ -73,7 +73,7 @@ mqtt.client_attrs_init = [{expression = username, set_as_attr = tns}]
 1. 在**管理** -> **MQTT 配置** -> **通用**标签页，找到**客户端属性**。
 2. 点击**添加**，并填写以下信息：
    - **属性**：`tns`。
-   - **属性表达式**：如使用客户端的用户名作为命名空间标识符，可以填写 `username`，也可以使用其他变量。更多关于属性表达式的使用方法，参考[设置客户端属性](../client-attributes/client-attributes.md#设置客户端属性)。
+   - **属性表达式**：如使用客户端的用户名作为命名空间标识符，可以填写 `username`，也可以使用其他变量。更多关于属性表达式的使用方法，参考[设置客户端属性](../../develop/client-attributes/client-attributes.md#设置客户端属性)。
 3. 点击**保存修改**。
 
 ## 多租户功能路线图

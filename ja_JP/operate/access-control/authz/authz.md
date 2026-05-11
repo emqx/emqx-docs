@@ -181,7 +181,7 @@ SELECT action, permission, topic FROM mqtt_acl where username = 'emqx_u'
 * `${peername}`：実行時にクライアントのIPアドレスとポート（`IP:PORT`形式）に置き換えられます。
 * `${cert_common_name}`：実行時にクライアントTLS証明書のCommon Nameに置き換えられます。ロードバランサーがクライアント証明書情報をTCPリスナーに送る場合はProxy Protocol v2を使用してください。
 * `${cert_subject}`：実行時にクライアントTLS証明書のSubjectに置き換えられます。ロードバランサーがクライアント証明書情報をTCPリスナーに送る場合はProxy Protocol v2を使用してください。
-* `${client_attrs.NAME}`：クライアント属性。`NAME`は事前定義された設定に基づき実行時に置き換えられます。詳細は[MQTTクライアント属性](../../client-attributes/client-attributes.md)を参照してください。
+* `${client_attrs.NAME}`：クライアント属性。`NAME`は事前定義された設定に基づき実行時に置き換えられます。詳細は[MQTTクライアント属性](../../../develop/client-attributes/client-attributes.md)を参照してください。
 * `${zone}`：実行時にクライアントのゾーンに置き換えられます。`${zone}`プレースホルダーは認可テンプレート内で直接使用可能です。ゾーン設定の詳細は[ゾーンオーバーライド](../../configuration/configuration.md#zone-override)を参照してください。
 
 ### トピック内のプレースホルダー
@@ -271,7 +271,7 @@ authorization {
 * `/api/v5/authorization/cache`：クライアント認可キャッシュのクリア
 * `/api/v5/authorization/sources/built_in_database`：`built_in_database`オーソライザーの認可ルール管理
 
-詳細な操作手順は[HTTP API](../../admin/api.md)を参照してください。
+詳細な操作手順は[HTTP API](../../api.md)を参照してください。
 
 ## オーソライザー管理
 

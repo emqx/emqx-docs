@@ -69,7 +69,7 @@ Node role assignment should be based on actual business requirements and the exp
 
 ## Enable Core + Replicant Mode
 
-To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster [discovery strategy](./create-cluster.md#node-discovery) (`cluster.discovery_strategy`). 
+To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster [discovery strategy](../../operate/cluster/create-cluster.md#node-discovery) (`cluster.discovery_strategy`). 
 
 ::: tip
 
@@ -111,7 +111,7 @@ The Mria performance can be monitored using Prometheus metrics or Erlang console
 
 ### Prometheus Indicators
 
-You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../observability/prometheus.md).
+You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../operate/observability/prometheus.md).
 
 #### Core Nodes
 

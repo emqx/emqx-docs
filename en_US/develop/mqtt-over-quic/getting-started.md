@@ -23,7 +23,7 @@ docker run -d --name emqx \
 emqx/emqx:@CE_VERSION@
 ```
 
-For more information on running EMQX via Docker container, see [Deploy with Docker](../deploy/install-docker.md).
+For more information on running EMQX via Docker container, see [Deploy with Docker](../../get-started/deploy/install-docker.md).
 
 ## Enable MQTT over QUIC
 

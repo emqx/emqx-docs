@@ -24,6 +24,6 @@ EMQXのトピックメトリクス機能は、指定したトピックに関す�
 
 ## REST APIでトピックメトリクスを取得する
 
-APIを通じてトピックメトリクスを取得することも可能です。EMQXのAPIの使い方については、[REST API](../admin/api.md)をご参照ください。
+APIを通じてトピックメトリクスを取得することも可能です。EMQXのAPIの使い方については、[REST API](../api.md)をご参照ください。
 
 <img src="./assets/topic-metrics-api-ee.png" alt="トピックメトリクスAPI" style="zoom:45%;" />

@@ -89,7 +89,7 @@ EMQXダッシュボードからもNamespaceを有効化できます。
 1. **Management** -> **MQTT Settings** -> **General**タブに移動し、**Client Attributes**セクションを探します。
 2. **Add**をクリックし、以下の情報を入力します：
    - **Attribute**: `tns`
-   - **Attribute Expression**: 例えばクライアントのユーザー名をNamespace識別子にしたい場合は `username` と入力します。他の変数も利用可能です。属性式の詳細は[Set Client Attributes](../client-attributes/client-attributes.md#set-client-attributes)を参照してください。
+   - **Attribute Expression**: 例えばクライアントのユーザー名をNamespace識別子にしたい場合は `username` と入力します。他の変数も利用可能です。属性式の詳細は[Set Client Attributes](../../develop/client-attributes/client-attributes.md#set-client-attributes)を参照してください。
 3. **Save Changes**をクリックします。
 
 ## マルチテナンシーロードマップ

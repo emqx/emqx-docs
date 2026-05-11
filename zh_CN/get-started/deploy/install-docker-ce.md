@@ -49,7 +49,7 @@
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群用于测试。
 
-请注意，本节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](./cluster/introduction.md)。
+请注意，本节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](../../operate/cluster/create-cluster.md)。
 
 :::tip
 
@@ -130,6 +130,6 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
 
 使用客户端连接到 EMQX，进行消息收发请参考[发布订阅操作](../messaging/publish-and-subscribe.md)。
 
-配置 EMQX 参数及其他功能请参考 [配置文件手册](../configuration/configuration.md)。
+配置 EMQX 参数及其他功能请参考 [配置文件手册](../../operate/configuration/configuration.md)。
 
-将多个 EMQX 节点组建为一个集群请参考 [构建集群](./cluster/introduction.md)。
+将多个 EMQX 节点组建为一个集群请参考 [构建集群](../../operate/cluster/create-cluster.md)。

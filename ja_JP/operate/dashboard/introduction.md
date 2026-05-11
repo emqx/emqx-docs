@@ -60,7 +60,7 @@ EMQXを初めてインストールしたユーザーは、Dashboardをブラウ�
 
 ### パスワードのリセット
 
-Dashboardのログインパスワードは`admins`コマンドでリセット可能です。詳細は[CLI - admins](../admin/cli.md#admins)をご覧ください。
+Dashboardのログインパスワードは`admins`コマンドでリセット可能です。詳細は[CLI - admins](../cli.md#admins)をご覧ください。
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>
@@ -70,7 +70,7 @@ Dashboardのログインパスワードは`admins`コマンドでリセット可
 
 現在のDashboardログインパスワードの使用期間が設定された有効期限（`password_expired_time`）を超えると、ログイン時にパスワード更新を促されます。`password_expired_time`設定の詳細は[Dashboard設定](../configuration/dashboard.md)を参照してください。
 
-「管理者」ロールのユーザーは[REST API](../admin/api.md)を使ってパスワード有効期限を設定することも可能です。
+「管理者」ロールのユーザーは[REST API](../api.md)を使ってパスワード有効期限を設定することも可能です。
 
 **例**:
 

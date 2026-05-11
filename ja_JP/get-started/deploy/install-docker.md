@@ -52,7 +52,7 @@ description: このページでは、公式Dockerイメージを使ってEMQXを
 
 Docker Composeは、複数のコンテナからなるDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
 
-なお、このセクションのDocker Composeの例はローカルテスト用です。本番環境でクラスターをデプロイする場合は、[クラスター](./cluster/introduction.md)を参照してください。
+なお、このセクションのDocker Composeの例はローカルテスト用です。本番環境でクラスターをデプロイする場合は、[クラスター](../../operate/cluster/introduction.md)を参照してください。
 
 :::tip
 
@@ -133,6 +133,6 @@ Docker ComposeはDocker Desktopに含まれています。もしDocker Compose�
 
 MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行います。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)をご覧ください。
 
-- EMQXのパラメータ設定やその他機能については、[設定](../configuration/configuration.md)を参照してください。
+- EMQXのパラメータ設定やその他機能については、[設定](../../operate/configuration/configuration.md)を参照してください。
 
-- 複数ノードによるEMQXクラスターの構築方法については、[クラスター](./cluster/introduction.md)をご覧ください。
+- 複数ノードによるEMQXクラスターの構築方法については、[クラスター](../../operate/cluster/introduction.md)をご覧ください。

@@ -6,7 +6,7 @@
 
 ### SSL オプション
 
-EMQX 5.1 では、MySQL、PostgreSQL、MongoDB、Redis などの外部リソースにアクセスする際や、HTTPS 経由でのパスワード認証を行う場合に TLS を有効にするオプションが提供されています。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+EMQX 5.1 では、MySQL、PostgreSQL、MongoDB、Redis などの外部リソースにアクセスする際や、HTTPS 経由でのパスワード認証を行う場合に TLS を有効にするオプションが提供されています。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 
 ### プレースホルダー
 
@@ -18,7 +18,7 @@ MySQL、PostgreSQL、MongoDB、Redis、外部リクエスト用の HTTP、JWT �
 
 #### パスワードハッシュ
 
-組み込みデータベース、MySQL、PostgreSQL、MongoDB、Redis などのパスワードベースのプロバイダーはすべて、同じ `password_hash` オプションを持ち、同様に設定されます。詳細は [Password Hashing](../access-control/authn/authn.md#password-hashing) を参照してください。
+組み込みデータベース、MySQL、PostgreSQL、MongoDB、Redis などのパスワードベースのプロバイダーはすべて、同じ `password_hash` オプションを持ち、同様に設定されます。詳細は [Password Hashing](../operate/access-control/authn/authn.md#password-hashing) を参照してください。
 
 #### リスナーごとの認証
 
@@ -39,7 +39,7 @@ EMQX 5.1 では明示的な `allow_anonymous` 設定はなくなりました。�
 ### 組み込みデータベース（Mnesia）
 
 - Mnesia は「組み込み」データベースと呼ばれ、設定内にユーザーレコードはありません。
-- `password_hash` は `password_hash_algorithm` に変更され、`{name = Algo, salt_position = prefix}` の形式です。詳細は [Password Hashing](../access-control/authn/authn.md#password-hashing) を参照してください。
+- `password_hash` は `password_hash_algorithm` に変更され、`{name = Algo, salt_position = prefix}` の形式です。詳細は [Password Hashing](../operate/access-control/authn/authn.md#password-hashing) を参照してください。
 - `user_id_type` は MQTT ユーザー識別子として `clientid` または `username` のどちらを使うかを指定します。混在は許されません。
 - 認証データレコード管理用の REST API が変更されました。詳細は `POST /authentication/{id}/users` の API ドキュメントを参照してください。
 - 古いバージョンからのデータインポート用 API も利用可能です。詳細は `POST /authentication/{id}/import_users` を参照してください。
@@ -108,7 +108,7 @@ EMQX 5.1
 - `pool` は `pool_size` に変更。
 - `password` はそのまま。
 - `query_timeout` は廃止。
-- `ssl.*` オプションは共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` オプションは共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `auth_cmd` は `cmd` に変更。Redis ハッシュデータ構造と `HGET`、`HMGET` コマンドのみサポート。コマンド内で `${var}` 形式のプレースホルダーを使用可能。コマンドは少なくとも `password`（4.x 互換）または `password_hash` フィールドを取得し、オプションで `salt` と `is_superuser` フィールドも取得してください。
 - `super_cmd` は廃止。代わりに `cmd` 内で `is_superuser` フィールドを提供してください。クライアントにスーパーユーザー権限を与える場合は、Redis クエリコマンドに `is_superuser` フィールドを追加してください。
 
@@ -198,7 +198,7 @@ authentication {
 
 - `server`、`username`、`password`、`database`、`query_timeout` は引き続き使用可能。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `password_hash` は共通の `password_hash_algorithm` パラメータに変更。
 - `auth_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用。クエリは少なくとも `password` または `password_hash` カラムを取得し、オプションで `salt` と `is_superuser` カラムを取得してください。
 - `super_query` は廃止。`is_superuser` カラムは `query` 内で提供してください。クライアントにスーパーユーザー権限を与える場合は、認証 SQL の結果に `is_superuser` フィールドを含めてください。
@@ -285,7 +285,7 @@ authentication {
 - `query_timeout` は廃止。
 - `encoding` は廃止。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `password_hash` は共通の `password_hash_algorithm` パラメータに変更。
 - `auth_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用。クエリは少なくとも `password` または `password_hash` カラムを取得し、オプションで `salt` と `is_superuser` カラムを取得してください。
 - `super_query` は廃止。`is_superuser` カラムは `query` 内で提供してください。クライアントにスーパーユーザー権限を与える場合は、認証 SQL の結果に `is_superuser` フィールドを含めてください。
@@ -374,7 +374,7 @@ backend = mongodb
 - `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` は引き続き使用可能。
 - `r_mode` は `rs` タイプのみ使用可能。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `auth_query.selector` は `filter` に変更。文字列ではなく、セレクターのデータ構造全体を指定します。`${var}` 形式のプレースホルダーはセレクター値で使用可能。
 - `auth_query.salt_field` は `salt_field` に変更。
 - `auth_query.super_field` は `is_superuser_field` に変更。
@@ -562,7 +562,7 @@ backend = http
 - `auth_req.headers` は `headers` に変更。
 - `auth_req.params` は `body` に変更。
 - `timeout` は `request_timeout` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `super_req` は廃止。代わりにサービスレスポンスに `is_superuser` フィールドを含めてください。
 
 4.4 と異なり、`url`、`headers`、`body` パラメータでプレースホルダーが使用可能です。5.1 では `body` は文字列ではなくマップで、POST リクエストでは JSON または X-WWW-Form-Urlencoded 形式でシリアライズされ、GET リクエストではクエリパラメータとして送信されます。
@@ -735,7 +735,7 @@ type = http
 - `acl_req.headers` は `headers` に変更。
 - `acl_req.params` は `body` に変更。
 - `timeout` は `request_timeout` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 
 4.4 と異なり、`url`、`headers`、`body` パラメータでプレースホルダーが使用可能です。5.1 では `body` は文字列ではなくマップで、POST リクエストでは JSON または X-WWW-Form-Urlencoded 形式でシリアライズされ、GET リクエストではクエリパラメータとして送信されます。
 
@@ -842,7 +842,7 @@ EMQX 5.1
 - `pool` は `pool_size` に変更。
 - `password` はそのまま。
 - `query_timeout` は廃止。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `auth_cmd` は `cmd` に変更。`${var}` 形式のプレースホルダーをコマンド内で使用可能。
 - Redis データソースは引き続きホワイトリストモードのみサポートし、`acl_nomatch = deny` の設定が必要です。
 - `access` フィールド名は `action` に変更され、値は数値からアクション文字列に変更されました。
@@ -948,7 +948,7 @@ EMQX 5.1
 
 - `server`、`username`、`password`、`database`、`query_timeout` は引き続き使用可能。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `acl_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用してください。
 
 障害時に MySQL に自動再接続するには `auto_reconnect` を使用可能。
@@ -1045,7 +1045,7 @@ type = postgresql
 - `query_timeout` は廃止。
 - `encoding` は廃止。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `acl_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用してください。
 
 ストレージスキーマが変更されました。
@@ -1120,7 +1120,7 @@ type = mongodb
 - `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` は引き続き使用可能。
 - `r_mode` は `rs` タイプのみ使用可能。
 - `pool` は `pool_size` に変更。
-- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../operate/network/overview.md#tls-for-external-resource-access) を参照してください。
 - `auth_query.selector` は `filter` に変更。文字列ではなく、セレクターのデータ構造全体を指定します。`${var}` 形式のプレースホルダーはセレクター値で使用可能。
 - `query_timeout` は廃止。
 
@@ -1136,7 +1136,7 @@ EMQX 4.4 では、結果ドキュメントは Redis や JWT と同様にアク�
 }
 ```
 
-EMQX 5.1 では、MongoDB データソースは許可ルールと拒否ルールの両方に使用可能です。以前はホワイトリストモードのみサポートし、`acl_nomatch = deny` の設定が必要でした。ドキュメントは `permission`、`action`、`topics` フィールドを個別に持つ必要があります。`topics` はトピックの配列です。詳細は [AuthZ-MongoDB](../access-control/authz/mongodb.md) を参照してください。
+EMQX 5.1 では、MongoDB データソースは許可ルールと拒否ルールの両方に使用可能です。以前はホワイトリストモードのみサポートし、`acl_nomatch = deny` の設定が必要でした。ドキュメントは `permission`、`action`、`topics` フィールドを個別に持つ必要があります。`topics` はトピックの配列です。詳細は [AuthZ-MongoDB](../operate/access-control/authz/mongodb.md) を参照してください。
 
 4.x のデータを継続利用する場合は、手動でマイグレーションしてください。
 

@@ -200,7 +200,7 @@ The following placeholders are supported in query statements:
 - `${peername}`:  It will be replaced with the client's IP address and port at runtime, and the format is `IP: PORT`.
 * `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 * `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
-* `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
+* `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md).
 * `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authorization templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
 
 ### Topic Placeholders
@@ -290,7 +290,7 @@ There are several API endpoints for managing authorization:
 * `/api/v5/authorization/cache`: for cleaning client authorization cache;
 * `/api/v5/authorization/sources/built_in_database`:  for managing authorization rules of `built_in_database` authorizer.
 
-For detailed operation steps, see [HTTP API](../../admin/api.md).
+For detailed operation steps, see [HTTP API](../../api.md).
 
 ## Manage Authorizers
 

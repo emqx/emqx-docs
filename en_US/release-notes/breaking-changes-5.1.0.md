@@ -25,7 +25,7 @@ In conclusion, there are several points that need to be noted:
 
 ## HTTP APIs
 
-Previously, **Applications** in Dashboard was used to manage API access credentials. Now, **[API Key](../dashboard/system.md#api-key)** should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic authentication. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
+Previously, **Applications** in Dashboard was used to manage API access credentials. Now, **[API Key](../operate/dashboard/system.md#api-key)** should be used to create credentials. The credentials consist of API Key and Secret Key that can be respectively used as username and password in HTTP basic authentication. Secret Key is only displayed once when credentials are created, but cannot be obtained again later.
 
 - Port 8081 has been closed, and all API requests now use port 18083.
 - Username/password can not be used to access HTTP API, API Key **must** be used instead.
@@ -174,7 +174,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 - The `mcast` discovery strategy for cluster creation has been deprecated and is pending removal.
 - Configuration for service discovery has been changed: cluster.discovery is changed to **cluster.discovery_strategy**.
 - New feature: [cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery).
-- Optional [eventual consistency](../design/clustering.md#data-consistency) has been added to the internal DB. 
+- Optional [eventual consistency](../develop/design/clustering.md#data-consistency) has been added to the internal DB. 
 
 ## MQTT
 
@@ -212,8 +212,8 @@ Now EMQX uses the new syntax `${}`, such as `${username}`, `${clientid}`, which 
 
 For supported placeholders, please refer to:
 
-- [Authentication Placeholders](../access-control/authn/authn.md#authentication-placeholders)
-- [Authorization Placeholders](../access-control/authz/authz.md#placeholders-in-data-queries)
+- [Authentication Placeholders](../operate/access-control/authn/authn.md#authentication-placeholders)
+- [Authorization Placeholders](../operate/access-control/authz/authz.md#placeholders-in-data-queries)
 
 ::: details Usage example
 
@@ -241,7 +241,7 @@ authentication = [
 - The superuser query has been removed. There should be a single query returning hashed credentials and the `is_superuser` flag.
 - HTTP authentication
   - In EMQX 4.x, only the HTTP status code was used, and the body was discarded (e.g., `200` for `allow` and `403` for `deny`).
-  - In EMQX 5.x, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](../access-control/authn/http.md#http-request-and-response) for more detailed information.
+  - In EMQX 5.x, HTTP authentication has been redesigned to make use of the HTTP body. Refer to [HTTP service authentication](../operate/access-control/authn/http.md#http-request-and-response) for more detailed information.
 - SCRAM authentication
   - The SHA1 hashing mode (the only one available in version 4.4) is not available. SHA256/SHA512 hashes are used.
 - Built-in database
@@ -263,7 +263,7 @@ authentication = [
 - HTTP 
 
   - In EMQX 4.x, HTTP status code was used, but the body was discarded (except for the "ignore" case). For example, `200` for `allow` and `403` for `deny`.
-  - In EMQX 5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [HTTP Request and Response](../access-control/authz/http.md#http-request-and-response) for more information.
+  - In EMQX 5.0, HTTP authorization has been redesigned to make use of the HTTP body. Refer to [HTTP Request and Response](../operate/access-control/authz/http.md#http-request-and-response) for more information.
 
 - MySQL, PostgreSQL
 
@@ -347,7 +347,7 @@ Also, most log fields now use underscores as word separators, making them more s
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-Find more details in [Logs](../observability/log.md).
+Find more details in [Logs](../operate/observability/log.md).
 
 ## Prometheus
 
@@ -359,7 +359,7 @@ You can use `curl` command to inspect the metrics:
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-If you want to enable push-gateway, refer to [Integrate with Prometheus](../observability/prometheus.md).
+If you want to enable push-gateway, refer to [Integrate with Prometheus](../operate/observability/prometheus.md).
 
 ::: details Changes in Prometheus metrics
 

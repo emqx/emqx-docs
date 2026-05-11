@@ -60,7 +60,7 @@ To remove a node, click **Remove**. A confirmation dialog will appear before the
 
 ![cluster-node](./assets/cluster-node.png)
 
-EMQX also supports creating and managing clusters using Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md)
+EMQX also supports creating and managing clusters using Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../cluster/create-cluster.md)
 
 ## Namespace
 
@@ -95,7 +95,7 @@ In the **Limiter** section of the **Add Listener** form, you can limit the messa
 
 Configuring rate limiting ensures the stability of the system and network when message data overload or excessive client requests occur.
 
-For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit/rate-limit.md).
+For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit.md).
 
 For more details on listener configuration, refer to [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
@@ -158,4 +158,4 @@ For detailed configuration of OpenTelemetry and Datadog integration, refer to [I
 
 ## Cluster Linking
 
-The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../cluster-linking/introduction.md).
+The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../../develop/cluster-linking/introduction.md).

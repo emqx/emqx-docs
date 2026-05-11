@@ -137,7 +137,7 @@ from t
 
 MQTTXクライアントツールを使って、Sparkplug Bメッセージをトピック `my/sparkplug/topic` にパブリッシュし、メッセージが変換されてJSON形式で `interesting_counters/counter1_run_updates` トピックに転送されることを確認します。
 
-1. MQTTXクライアントデスクトップを開き、EMQXブローカーに接続します。MQTTXの詳細は[MQTTXクライアント](../messaging/publish-and-subscribe.md)を参照してください。
+1. MQTTXクライアントデスクトップを開き、EMQXブローカーに接続します。MQTTXの詳細は[MQTTXクライアント](../../get-started/messaging/publish-and-subscribe.md)を参照してください。
 
 2. 新しいサブスクリプションを作成し、トピック `interesting_counters/counter1_run_updates` をサブスクライブします。
 

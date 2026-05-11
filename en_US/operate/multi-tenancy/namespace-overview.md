@@ -89,7 +89,7 @@ You can also enable namespaces using the EMQX Dashboard:
 1. Navigate to **Management** -> **MQTT Settings** -> **General** tab, and locate the **Client Attributes** section.
 2. Click **Add**, and fill in the following information:
    - **Attribute**: `tns`
-   - **Attribute Expression**: For example, if you want to use the client's username as the namespace identifier, enter `username`. You may also use other variables. For more information on attribute expressions, refer to [Set Client Attributes](../client-attributes/client-attributes.md#set-client-attributes).
+   - **Attribute Expression**: For example, if you want to use the client's username as the namespace identifier, enter `username`. You may also use other variables. For more information on attribute expressions, refer to [Set Client Attributes](../../develop/client-attributes/client-attributes.md#set-client-attributes).
 3. Click **Save Changes**.
 
 ## Multi-Tenancy Roadmap

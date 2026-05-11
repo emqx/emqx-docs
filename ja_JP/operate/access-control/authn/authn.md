@@ -259,7 +259,7 @@ EMQXがサポートするプレースホルダーは以下の通りです：
 
 - `${cert_common_name}`: 実行時にクライアントTLS証明書のCommon Nameに置換されます。ロードバランサーがクライアント証明書情報をTCPリスナーに送信する場合、Proxy Protocol v2を使用していることを確認してください。
 
-- `${client_attrs.NAME}`: クライアント属性。`NAME`は事前設定に基づく属性名に置換されます。クライアント属性の詳細は[MQTT Client Attributes](../../client-attributes/client-attributes.md)を参照してください。
+- `${client_attrs.NAME}`: クライアント属性。`NAME`は事前設定に基づく属性名に置換されます。クライアント属性の詳細は[MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md)を参照してください。
 
 - `${zone}`: 実行時にクライアントのゾーンに置換されます。`${zone}`プレースホルダーは認証テンプレート内で直接使用可能です。ゾーン設定の詳細は[Zone Override](../../configuration/configuration.md#zone-override)を参照してください。
 
@@ -365,4 +365,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 [組み込みデータベース](./mnesia.md)および[MQTT 5.0拡張認証](./scram.md)を利用する認証では、認証データの作成、更新、削除、一覧取得を行うHTTP APIを提供しています。詳細は[HTTP APIでの認証データ管理](./user_management.md)を参照してください。
 
-詳細なAPIリクエストやパラメータは[HTTP API](../../admin/api.md)を参照してください。
+詳細なAPIリクエストやパラメータは[HTTP API](../../api.md)を参照してください。

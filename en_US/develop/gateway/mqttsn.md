@@ -20,7 +20,7 @@ On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../../operate/configuration/configuration.md).
 
 :::
 
@@ -59,7 +59,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md)
+For a detailed HTTP API description, see [HTTP API - Gateway](../../operate/api.md)
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your MQTT-SN Gateway section](#customize-your-mqtt-sn-gateway).
 
@@ -140,7 +140,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **DTLS Settings** (for DTLS listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
@@ -151,7 +151,7 @@ Then you can continue to set:
 
 ### Configure Authentication
 
-Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
+Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../../operate/access-control/authn/http.md).
 
 The client information generation rules are as follows:
 
@@ -167,7 +167,7 @@ Click **Create Authentication**, choose **Password-Based** as the **Mechanism**,
 
 ![mqttsn authentication](./assets/mqttsn-authn-config.png)
 
-For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
+For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../../operate/access-control/authn/http.md).
 
 The above configuration can also be performed via HTTP API.
 

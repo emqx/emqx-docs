@@ -85,7 +85,7 @@ docker exec -it cassa cqlsh "-e \
 4. **Configuration**ステップで以下を設定します：
    - コネクター名を入力します。英数字の組み合わせが推奨されます（例：`my_cassandra`）。
    - **Servers**に`127.0.0.1:9042`、**Keyspace**に`mqtt`を入力し、他はデフォルトのままにします。
-   - TLSを有効にするかどうかを選択します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+   - TLSを有効にするかどうかを選択します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../../operate/network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがCassandraサーバーに接続できるか確認できます。
 6. ページ下部の**Create**ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで**Back to Connector List**または**Create Rule**を選択して、ルールとSinkの作成を続けることができます。詳細は[Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink)を参照してください。
 

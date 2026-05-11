@@ -139,7 +139,7 @@ EMQXをローカルにデプロイする前でも、EMQが提供する無料の�
 
 ## ダッシュボード WebSocket
 
-[EMQX Dashboard](../dashboard/introduction.md)はWebSocketクライアントを提供しており、手軽かつ効果的なMQTTテストツールとして利用できます。MQTT over WebSocketでEMQXへの接続、トピックのサブスクライブ、メッセージのパブリッシュをテスト可能です。
+[EMQX Dashboard](../../operate/dashboard/introduction.md)はWebSocketクライアントを提供しており、手軽かつ効果的なMQTTテストツールとして利用できます。MQTT over WebSocketでEMQXへの接続、トピックのサブスクライブ、メッセージのパブリッシュをテスト可能です。
 
 1. EMQX Dashboardの左ナビゲーションメニューで**Diagnose** -> **WebSocket Client**をクリックします。
 

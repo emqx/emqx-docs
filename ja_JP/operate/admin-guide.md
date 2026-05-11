@@ -2,16 +2,16 @@
 
 本管理ガイドは、管理者および運用担当者がEMQXを効果的に管理・運用するための支援を目的としています。本章では、さまざまな管理タスクを紹介し、EMQXのスムーズかつ効率的な運用を実現するための包括的な手順やベストプラクティスを学べます。本章の主な内容は以下の通りです。
 
-- [設定ファイル](../configuration/configuration.md)と設定マニュアルでは、設定ファイルの基本情報、設定オプション、および詳細設定のリファレンスを提供します。
+- [設定ファイル](configuration/configuration.md)と設定マニュアルでは、設定ファイルの基本情報、設定オプション、および詳細設定のリファレンスを提供します。
 - [コマンドラインインターフェース](./cli.md)では、EMQXがサポートする各種起動および管理コマンドを紹介します。
-- [MQTT Durable Sessions](../durability/management.md)では、Durable Sessions機能の設定方法と高可用性のためのデータレプリカパラメータの設定手順を案内します。
-- [EMQXダッシュボード](../dashboard/introduction.md)では、EMQXに組み込まれた管理コンソールの包括的な紹介を行います。クラスターの管理・監視、各種機能の設定、および必要な機能の活用方法を学べます。
-- [シングルサインオン（SSO）](../dashboard/sso.md)では、EMQXが統合する主流のIDサービスを紹介し、これらのサービスに基づくSSOの設定方法を案内します。
-- [多要素認証（MFA）](../multi-factor-authn/multi-factor-authentication.md)では、ダッシュボードログインのセキュリティ強化のためのMFAの設定と利用方法を説明します。
-- [監査ログ](../dashboard/audit-log.md)では、EMQXクラスターの重要な操作変更をリアルタイムで追跡するための監査ログの有効化および設定方法を紹介します。
-- [レートリミット](../rate-limit/rate-limit.md)では、接続およびメッセージ送信速度のレートリミッターを設定してシステム過負荷を防ぎ、システムの安定性を確保する方法を説明します。
-- [ネームスペース](../multi-tenancy/namespace-overview.md)では、単一のEMQXクラスター内でテナントごとに分離された設定（例：レートリミッター）を構成するネームスペース機能を紹介します。
-- [ログと可観測性](../observability/overview.md)では、EMQXのメトリクス観測および監視機能を紹介し、システム監視やデバッグを支援します。
-- [バックアップとリストア](../operations/backup-restore.md)では、EMQXデータのバックアップおよびリストア方法を案内します。
-- [プラグインと拡張機能](../extensions/introduction.md)では、プラグイン開発によるEMQX機能拡張の方法を紹介します。
-- [テレメトリ](../telemetry/telemetry.md)では、製品改善のために利用情報を共有するテレメトリの有効化方法を説明します。
+- [MQTT Durable Sessions](durability/management.md)では、Durable Sessions機能の設定方法と高可用性のためのデータレプリカパラメータの設定手順を案内します。
+- [EMQXダッシュボード](dashboard/introduction.md)では、EMQXに組み込まれた管理コンソールの包括的な紹介を行います。クラスターの管理・監視、各種機能の設定、および必要な機能の活用方法を学べます。
+- [シングルサインオン（SSO）](dashboard/sso.md)では、EMQXが統合する主流のIDサービスを紹介し、これらのサービスに基づくSSOの設定方法を案内します。
+- [多要素認証（MFA）](multi-factor-authn/multi-factor-authentication.md)では、ダッシュボードログインのセキュリティ強化のためのMFAの設定と利用方法を説明します。
+- [監査ログ](dashboard/audit-log.md)では、EMQXクラスターの重要な操作変更をリアルタイムで追跡するための監査ログの有効化および設定方法を紹介します。
+- [レートリミット](rate-limit.md)では、接続およびメッセージ送信速度のレートリミッターを設定してシステム過負荷を防ぎ、システムの安定性を確保する方法を説明します。
+- [ネームスペース](multi-tenancy/namespace-overview.md)では、単一のEMQXクラスター内でテナントごとに分離された設定（例：レートリミッター）を構成するネームスペース機能を紹介します。
+- [ログと可観測性](observability/overview.md)では、EMQXのメトリクス観測および監視機能を紹介し、システム監視やデバッグを支援します。
+- [バックアップとリストア](backup-restore.md)では、EMQXデータのバックアップおよびリストア方法を案内します。
+- [プラグインと拡張機能](extensions/introduction.md)では、プラグイン開発によるEMQX機能拡張の方法を紹介します。
+- [テレメトリ](telemetry/telemetry.md)では、製品改善のために利用情報を共有するテレメトリの有効化方法を説明します。

@@ -97,7 +97,7 @@ PrometheusのPullエンドポイントの詳細は、[EMQX Enterprise APIドキ�
 
 ::: tip
 
-デフォルトではPullモードAPIは認証不要です。ページ上の **Enable Basic Auth** スイッチを設定すると、インターフェースにベーシック認証を有効化できます。有効化後は、EMQXで[APIキー](../admin/api.md#authentication)を作成し、Prometheus設定に適用してメトリクスを取得する必要があります。
+デフォルトではPullモードAPIは認証不要です。ページ上の **Enable Basic Auth** スイッチを設定すると、インターフェースにベーシック認証を有効化できます。有効化後は、EMQXで[APIキー](../api.md#authentication)を作成し、Prometheus設定に適用してメトリクスを取得する必要があります。
 
 :::
 

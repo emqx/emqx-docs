@@ -524,15 +524,15 @@ EMQXはルールエンジンの文字列関数に似た豊富な文字列、配�
 利用可能な関数例：
 
 - **文字列関数**：
-  - [文字列操作関数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - [文字列操作関数](../../develop/data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - 新関数`any_to_string/1`（任意の中間値を文字列に変換）
 - **配列関数**：`nth/2`など
 - **乱数関数**：`rand_str`、`rand_int`
 - **スキーマレスエンコード/デコード関数**：
-  - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin(Data)](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
+  - [bin2hexstr(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
+  - [hexstr2bin(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
+  - [base64_decode(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
+  - [base64_encode(Data)](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - `int2hexstr(Integer)`：整数を16進文字列に変換（例：15 → 'F'）
 - **ハッシュ関数**：
   - `hash(Algorithm, Data)`：アルゴリズムはmd4、md5、sha（sha1）、sha224、sha256、sha384、sha512、sha3_224、sha3_256、sha3_384、sha3_512、shake128、shake256、blake2b、blake2sのいずれか
