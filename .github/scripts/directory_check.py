@@ -50,10 +50,20 @@ def check_md_content(md_file):
             success = False
 
 
+def flatten_config(dir_config):
+    """Accept either a list or a dict-of-lists (new multi-section format) and return a flat list."""
+    if isinstance(dir_config, dict):
+        flat = []
+        for items in dir_config.values():
+            flat += items
+        return flat
+    return dir_config
+
+
 def get_md_files(dir_config, path):
     global success
     md_list = []
-    for i in dir_config:
+    for i in flatten_config(dir_config):
         md_name = i.get('path')
         md_children = i.get('children')
 

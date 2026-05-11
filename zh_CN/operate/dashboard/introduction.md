@@ -52,87 +52,8 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 在不启用 Dashboard 的情况下仍然可以正常使用 EMQX，Dashboard 只是为用户提供了可视化使用的选择。
 :::
 
-### 首次登录
-
-对于首次安装和部署好 EMQX 的用户来说，浏览器打开 Dashboard 后可以使用默认用户名 `admin` 和默认密码 `public` 来进行登录使用。
-
-首次登录后，系统会自动检测到您正在使用默认用户名和密码登录，并会强制要求修改默认密码，这有利于访问 Dashboard 的安全性提升，注意修改的密码不能与原密码相同，且不建议再次使用 `public` 做为登录密码。
-
-### 通过 URL Token 登录 Dashboard
-
-从 EMQX 5.6.0 开始，Dashboard 支持通过在 URL 中携带登录信息的方式进行免登录访问。
-
-此功能适用于需要无缝跳转或集成场景，可在无需用户手动输入凭据的情况下，自动登录 Dashboard。
-
-#### 使用方法
-
-使用此登录方式的步骤如下：
-
-1. 使用 `/login` 接口获取身份验证 token。由于返回结果中不包含用户名，你需要手动将用户名添加到 JSON 数据中，再进行编码。
-
-   你可以通过以下命令一步完成所有操作，包括请求 token、添加用户名，以及将结果进行 Base64 编码：
-
-   ```
-   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
-   ```
-
-2. 构造登录 URL。将编码后的字符串嵌入到 Dashboard URL 的 `login_meta` 查询参数中。例如：
-
-   对于 **EMQX 5.6.0 之前的版本**：
-
-   ```bash
-   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
-   ```
-
-   该方式会跳转至默认的集群概览页面。
-
-   对于 **EMQX 5.6.0 及以上版本**：
-
-   ```bash
-   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
-   ```
-
-   该方式支持在登录后跳转到指定页面。
-
-通过 URL 携带 token 登录的方式，可以为用户提供无需手动登录的便捷访问体验。请确保妥善管理 token 的安全性，建议设置合理的过期时间和访问权限范围。
-
-### 忘记密码
-
-如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../admin/cli.md#admins)：
-
-```bash
-./bin/emqx ctl admins passwd <Username> <Password>
-```
-
-### 密码过期
-
-如果当前 Dashboard 登录密码的使用时长超过了配置的密码过期时间 (`password_expired_time`)，系统将在您登录时提示您修改密码。关于 `password_expired_time` 设置的详细信息，参考 [Dashboard 配置](../configuration/dashboard.md)。
-
-“管理员”角色的用户也可以通过 [REST API](../admin/api.md) 配置密码过期时间。
-
-**示例**：
-
-```bash
-curl -X 'PUT' \
-  'http://admin:ppp@localhost:18083/api/v5/configs/dashboard' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{"password_expired_time": "1d"}'
-```
-
-上述示例中，密码过期时间被设置为 1 天。
-
-### 账户锁定与解锁
-
-为了增强安全性，EMQX Dashboard 实现了“账户锁定与解锁”机制。当用户在 5 分钟内连续输入错误密码 5 次时，账户将被锁定 10 分钟。
-
-具有“管理员”角色的用户可以通过 CLI 重置密码手动解锁账户。10 分钟后，账户将自动解锁，用户可以正常登录。
-
-管理员还可以通过后台设置配置锁定持续时间和触发锁定所需的失败尝试次数。有关设置的详细信息，请参阅 [Dashboard 配置](../configuration/dashboard.md)。
+首次登录、密码管理、账户锁定、HTTPS 访问以及基于角色的访问控制等内容，参考 [Dashboard 安全](../dashboard-security.md)。
 
 ## 配置 Dashboard
 
-Dashboard 默认监听 HTTP 端口，端口号默认为 18083，用户可以启用 HTTPS 或更改监听器端口。更多关于 Dashboard 如何配置和修改的使用方法请参考 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+Dashboard 默认监听 HTTP 端口 `18083`，用户可以启用 HTTPS 或更改监听器端口。配置详情参考 [Dashboard 配置](../configuration/dashboard.md)。
