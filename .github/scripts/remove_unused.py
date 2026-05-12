@@ -6,9 +6,21 @@ directory_file = sys.argv[1]
 docs_path = sys.argv[2]
 
 
+def flatten_config(dir_config):
+    if isinstance(dir_config, dict):
+        flat = []
+        for items in dir_config.values():
+            flat += items
+        return flat
+    return dir_config
+
+
 def get_markdown_file(dir_config, base_path):
     current_files = []
-    for row in dir_config:
+    for row in flatten_config(dir_config):
+        if isinstance(row, str):
+            current_files.append(f'{base_path}/{row}.md')
+            continue
         if row.get('path'):
             current_files.append(
                 f'{base_path}/index.md' if row['path'] == './'
