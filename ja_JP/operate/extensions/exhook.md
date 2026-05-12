@@ -1,6 +1,6 @@
 # gRPC Hook Extension
 
-**Extension Hook** は **emqx-exhook** プラグインによってサポートされています。これにより、ユーザーは他のプログラミング言語を使って EMQX の [Hooks](hooks.md) を処理することが可能になります。
+**Extension Hook** は **emqx-exhook** プラグインによってサポートされています。これにより、ユーザーは他のプログラミング言語を使って EMQX の [Hooks](./hooks.md) を処理することが可能になります。
 
 この仕組みにより、他のプログラミング言語で emqx のイベントを処理し、emqx のカスタマイズや拡張を行うことができます。例えば、以下のような実装が可能です。
 
@@ -89,7 +89,7 @@ HookProvider の役割:
 
 フックイベントの役割:
 
-- `OnClient`、`OnSession`、`OnMessage` で始まるメソッドは [hooks](hooks.md) のメソッドに対応しており、呼び出しタイミングや引数リストも類似しています。
+- `OnClient`、`OnSession`、`OnMessage` で始まるメソッドは [hooks](./hooks.md) のメソッドに対応しており、呼び出しタイミングや引数リストも類似しています。
 - `OnClientAuthenticate`、`OnClientAuthorize`、`OnMessagePublish` のみが EMQX へ戻り値を返すことが許可されており、他のコールバックは戻り値をサポートしていません。
 
 インターフェースおよびパラメータの詳細は以下を参照してください。  

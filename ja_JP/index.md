@@ -8,13 +8,13 @@ EMQX は「無制限の接続、シームレスな統合、どこでも展開」
 ## 主なメリット
 
 - [**大規模スケール**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): 単一クラスター内で20ノード以上の水平スケールにより1億 MQTT 接続を実現。
-- [**業務クリティカルな信頼性**](operate/cluster/mria-introduction.md): 組み込みの RocksDB データパーシステンスによりデータ損失を防止。
+- [**業務クリティカルな信頼性**](./develop/cluster/mria-introduction.md): 組み込みの RocksDB データパーシステンスによりデータ損失を防止。
 - [**データセキュリティ**](https://www.emqx.com/en/use-cases/mqtt-security): エンドツーエンドのデータ暗号化と細粒度アクセス制御でデータを保護。
 - [**複数プロトコル対応**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT、QUIC、CoAP、Stomp、LwM2M など多彩なプロトコルをサポート。
 - [**完全な MQTT 5.0 対応**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): MQTT 5.0 と 3.x 両方の標準に完全準拠し、スケーラビリティ、セキュリティ、信頼性を向上。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): ノードごとに毎秒数百万の MQTT メッセージを効率的に処理。
 - [**低レイテンシ**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): ソフトリアルタイムランタイムでミリ秒未満のメッセージ伝送を保証。
-- [**完全な可観測性**](operate/dashboard/introduction.md): 監視、アラート、リアルタイム MQTT トレースによる高度なエンドツーエンド分析。
+- [**完全な可観測性**](./operate/dashboard/introduction.md): 監視、アラート、リアルタイム MQTT トレースによる高度なエンドツーエンド分析。
 - [**クラウドネイティブ＆K8s 対応**](https://www.emqx.com/en/emqx-kubernetes-operator): Kubernetes Operator と Terraform を使いオンプレミスやパブリッククラウドに容易にデプロイ可能。
 
 ## 主なコンポーネント
@@ -27,47 +27,47 @@ EMQX Enterprise は MQTT 5.0 と 3.x 仕様に100%準拠し、優れたスケー
 
 #### MQTT over QUIC
 
-EMQX Enterprise は先駆的に [MQTT over QUIC](develop/mqtt-over-quic/introduction.md) プロトコルを導入し、IoT クライアントが QUIC 経由で EMQX に接続して通信可能にします。QUIC を利用することで接続性能やメッセージスループットが向上し、メッセージレイテンシを低減。特に、ネットワーク環境が不安定でリンクの切り替えが頻繁に発生するインターネット・オブ・ビークル（IoV）などのシナリオでリアルタイムかつ効率的なメッセージ伝送要件を満たします。
+EMQX Enterprise は先駆的に [MQTT over QUIC](./develop/mqtt-over-quic/introduction.md) プロトコルを導入し、IoT クライアントが QUIC 経由で EMQX に接続して通信可能にします。QUIC を利用することで接続性能やメッセージスループットが向上し、メッセージレイテンシを低減。特に、ネットワーク環境が不安定でリンクの切り替えが頻繁に発生するインターネット・オブ・ビークル（IoV）などのシナリオでリアルタイムかつ効率的なメッセージ伝送要件を満たします。
 
 #### マルチプロトコルゲートウェイ
 
-[マルチプロトコルゲートウェイ](develop/gateway/gateway.md) により、EMQX Enterprise は MQTT 以外の異なる通信プロトコルを使うデバイス接続もサポートします。ゲートウェイはデバイスの接続要求を受け付け、使用されている通信プロトコルを識別し、各プロトコル仕様に従ってデバイスから送信されるメッセージやコマンド、データを解析。これらを MQTT メッセージ形式に変換してメッセージ処理に渡します。
+[マルチプロトコルゲートウェイ](./develop/gateway/gateway.md) により、EMQX Enterprise は MQTT 以外の異なる通信プロトコルを使うデバイス接続もサポートします。ゲートウェイはデバイスの接続要求を受け付け、使用されている通信プロトコルを識別し、各プロトコル仕様に従ってデバイスから送信されるメッセージやコマンド、データを解析。これらを MQTT メッセージ形式に変換してメッセージ処理に渡します。
 
 ### メッセージルーティング
 
-EMQX Enterprise は [パブリッシュ/サブスクライブ](get-started/messaging/introduction.md) パターンをサポートし、高信頼のメッセージ伝送機構を提供。メッセージが意図したデバイスやアプリケーションに確実に届くようにします。QoS 機構やセッション保持機能により、不安定なネットワーク環境下でも迅速かつ確実なデータ配信を実現し、業務の継続性と安定性を確保します。
+EMQX Enterprise は [パブリッシュ/サブスクライブ](./get-started/messaging/introduction.md) パターンをサポートし、高信頼のメッセージ伝送機構を提供。メッセージが意図したデバイスやアプリケーションに確実に届くようにします。QoS 機構やセッション保持機能により、不安定なネットワーク環境下でも迅速かつ確実なデータ配信を実現し、業務の継続性と安定性を確保します。
 
 ### 分散クラスタリング
 
-EMQX Enterprise はネイティブの [クラスタリング](operate/cluster/introduction.md) 機能を備え、シームレスかつ弾性的なスケーリングを可能にし、単一障害点を排除します。極限まで最適化された単一ノードは毎秒数百万の MQTT メッセージを低レイテンシで処理・配信可能。クラスターの水平スケールにより最大1億の同時 MQTT 接続をサポートし、IoV、産業オートメーション、スマートホームなど大規模 IoT 展開に不可欠な基盤を提供します。
+EMQX Enterprise はネイティブの [クラスタリング](./develop/cluster/introduction.md) 機能を備え、シームレスかつ弾性的なスケーリングを可能にし、単一障害点を排除します。極限まで最適化された単一ノードは毎秒数百万の MQTT メッセージを低レイテンシで処理・配信可能。クラスターの水平スケールにより最大1億の同時 MQTT 接続をサポートし、IoV、産業オートメーション、スマートホームなど大規模 IoT 展開に不可欠な基盤を提供します。
 
 ### アクセス制御とデータセキュリティ
 
-[TLS/SSL 暗号化](operate/network/overview.md)と[認証](operate/access-control/authn/authn.md)/[認可](operate/access-control/authz/authz.md)機構により、EMQX Enterprise はデバイス間のデータ送信の機密性と完全性を保証します。
+[TLS/SSL 暗号化](./operate/network/overview.md)と[認証](./operate/access-control/authn/authn.md)/[認可](./operate/access-control/authz/authz.md)機構により、EMQX Enterprise はデバイス間のデータ送信の機密性と完全性を保証します。
 
 ユーザー名/パスワード、JWT、拡張認証、PSK、X.509 証明書など複数のクライアント認証方式を提供。ACL に基づくパブリッシュ/サブスクライブ認可機構も備えています。認証・認可情報は LDAP、HTTP サービス、SQL、NoSQL データベースなど外部企業セキュリティシステムと連携・管理可能で、多様かつ柔軟なクライアントセキュリティ保護を実現。
 
-さらに、EMQX Enterprise は[監査ログ](operate/dashboard/audit-log.md)、ロール・権限管理、[シングルサインオン](operate/dashboard/sso.md)を提供し、SOC 2 準拠や GDPR データプライバシー保護に対応。包括的なセキュリティ機能で業界標準に準拠した信頼性の高い IoT アプリケーション構築を支援します。
+さらに、EMQX Enterprise は[監査ログ](./operate/audit-log.md)、ロール・権限管理、[シングルサインオン](./operate/sso.md)を提供し、SOC 2 準拠や GDPR データプライバシー保護に対応。包括的なセキュリティ機能で業界標準に準拠した信頼性の高い IoT アプリケーション構築を支援します。
 
 ### ルールエンジンとデータ統合
 
-EMQX Enterprise は強力な [ルールエンジン](develop/data-integration/rules.md) を備え、EMQX 内でルールを設定して受信データを要件に応じて処理・ルーティング可能。Sink 機能を使ってクラウドサービスやデータベースと連携し、IoT データをクラウドに転送して保存・分析できます。
+EMQX Enterprise は強力な [ルールエンジン](./develop/data-integration/rules.md) を備え、EMQX 内でルールを設定して受信データを要件に応じて処理・ルーティング可能。Sink 機能を使ってクラウドサービスやデータベースと連携し、IoT データをクラウドに転送して保存・分析できます。
 
 #### リアルタイムデータ処理
 
-組み込みの SQL ベースルールエンジン、スキーマレジストリ、メッセージコーデック、[Flow Designer](develop/flow-designer/introduction.md) により、デバイスイベントやメッセージ処理フローを簡単に作成・編集可能。IoT データのリアルタイム抽出、検証、フィルタリング、変換を実現します。
+組み込みの SQL ベースルールエンジン、スキーマレジストリ、メッセージコーデック、[Flow Designer](./develop/flow-designer/introduction.md) により、デバイスイベントやメッセージ処理フローを簡単に作成・編集可能。IoT データのリアルタイム抽出、検証、フィルタリング、変換を実現します。
 
 #### 企業向けデータ統合
 
-標準搭載の Webhook や Sink/Source を通じて、Kafka、AWS RDS、MongoDB、Oracle、SAP、時系列データベースなど40以上のクラウドサービスや企業システムとシームレスに[統合](develop/data-integration/data-bridges.md)可能。企業は IoT デバイスのデータを効果的に管理・分析・活用し、多様なアプリケーションや業務ニーズに対応できます。
+標準搭載の Webhook や Sink/Source を通じて、Kafka、AWS RDS、MongoDB、Oracle、SAP、時系列データベースなど40以上のクラウドサービスや企業システムとシームレスに[統合](./develop/data-integration/data-bridges.md)可能。企業は IoT デバイスのデータを効果的に管理・分析・活用し、多様なアプリケーションや業務ニーズに対応できます。
 
 ### 管理・監視ダッシュボード
 
-EMQX Enterprise は [ダッシュボード](operate/dashboard/introduction.md) と呼ばれるグラフィカル管理システムを提供し、主要メトリクスや運用状況をリアルタイムで監視可能。クライアント接続や機能設定の管理を簡素化します。ダッシュボードはクライアントやクラスターの異常診断・デバッグも可能にし、MQTT デバイスのエンドツーエンドトラブルシューティングを支援、問題解決時間を大幅に短縮します。さらに、Prometheus、Datadog、OpenTelemetry 対応サービスなど外部サービスへの可観測性メトリクス統合もサポートし、運用監視能力を強化します。
+EMQX Enterprise は [ダッシュボード](./operate/dashboard/introduction.md) と呼ばれるグラフィカル管理システムを提供し、主要メトリクスや運用状況をリアルタイムで監視可能。クライアント接続や機能設定の管理を簡素化します。ダッシュボードはクライアントやクラスターの異常診断・デバッグも可能にし、MQTT デバイスのエンドツーエンドトラブルシューティングを支援、問題解決時間を大幅に短縮します。さらに、Prometheus、Datadog、OpenTelemetry 対応サービスなど外部サービスへの可観測性メトリクス統合もサポートし、運用監視能力を強化します。
 
 ## デプロイメントモードとエディション比較
 
-EMQ は EMQX のデプロイメントとして、2つのマネージドサービス（EMQX Serverless と EMQX Dedicated）と1つのセルフホスト型（EMQX Enterprise）を提供しています。要件に最適なデプロイメントを選択できるよう、以下の表に各タイプの機能サポート比較を示します。詳細な機能比較は [Feature Comparison](get-started/feature-comparison.md) を参照してください。
+EMQ は EMQX のデプロイメントとして、2つのマネージドサービス（EMQX Serverless と EMQX Dedicated）と1つのセルフホスト型（EMQX Enterprise）を提供しています。要件に最適なデプロイメントを選択できるよう、以下の表に各タイプの機能サポート比較を示します。詳細な機能比較は [Feature Comparison](./get-started/feature-comparison.md) を参照してください。
 
 <table>
 <thead>
@@ -141,7 +141,7 @@ EMQX は MQTT 5.0 のリクエスト-レスポンス機能をサポート。こ�
 
 ### 流れるデータの変換
 
-強力な SQL ベースの [ルールエンジン](develop/data-integration/rules.md) により、EMQX は流れるデータをリアルタイムに抽出、フィルタリング、付加価値付与、変換可能。処理済みデータは外部 HTTP サーバーや MQTT サービスに容易に取り込めます。EMQX Enterprise では主流のデータベース、データストレージ、メッセージキューへの取り込みも可能です。
+強力な SQL ベースの [ルールエンジン](./develop/data-integration/rules.md) により、EMQX は流れるデータをリアルタイムに抽出、フィルタリング、付加価値付与、変換可能。処理済みデータは外部 HTTP サーバーや MQTT サービスに容易に取り込めます。EMQX Enterprise では主流のデータベース、データストレージ、メッセージキューへの取り込みも可能です。
 
 ![データ変換](./assets/use_case_6_ce.png)
 
@@ -159,7 +159,7 @@ EMQX Enterprise はデバイスデータをクラウドにアップロードし�
 
 ### 大容量ファイルアップロード
 
-EMQX Enterprise は MQTT プロトコルの[ファイル転送](develop/file-transfer/introduction.md)機能を提供し、デバイスから大容量ファイルをアップロードしてローカルまたは S3 ストレージに保存可能。例えば IoV シナリオでは、機械学習ログファイルやパッケージ化された CAN バスデータをクラウドストレージに送信し、インテリジェント運転アルゴリズムモデルの更新に活用します。構造化データとファイル型データを統一チャネルで扱い、アプリケーションの複雑さと保守コストを削減します。
+EMQX Enterprise は MQTT プロトコルの[ファイル転送](./develop/file-transfer/introduction.md)機能を提供し、デバイスから大容量ファイルをアップロードしてローカルまたは S3 ストレージに保存可能。例えば IoV シナリオでは、機械学習ログファイルやパッケージ化された CAN バスデータをクラウドストレージに送信し、インテリジェント運転アルゴリズムモデルの更新に活用します。構造化データとファイル型データを統一チャネルで扱い、アプリケーションの複雑さと保守コストを削減します。
 
 <img src="./assets/use_case_3.png" alt="大容量ファイルアップロード" style="zoom:50%;" />
 

@@ -34,5 +34,5 @@ The Settings can be accessed by clicking the settings icon in the top right corn
 
 ## SSO
 
-The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](../sso.md).
 

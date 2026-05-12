@@ -121,7 +121,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-For a detailed REST API description, see [REST API](../../operate/api.md).
+For a detailed REST API description, see [REST API](../api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your ExProto Gateway](#customize-your-exproto-gateway).
 

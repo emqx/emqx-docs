@@ -14,7 +14,7 @@ EMQXは、世界で最もスケーラブルかつ信頼性の高いMQTTメッセ
 
 ## EMQXのインストール
 
-EMQXは、[Docker](deploy/install-docker.md)での実行、[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)によるインストール、またはコンピュータや仮想マシン（VM）にダウンロードパッケージでインストールすることが可能です。ダウンロードパッケージによるインストールを選択した場合、現在以下のOSがサポートされています。
+EMQXは、[Docker](./deploy/install-docker.md)での実行、[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)によるインストール、またはコンピュータや仮想マシン（VM）にダウンロードパッケージでインストールすることが可能です。ダウンロードパッケージによるインストールを選択した場合、現在以下のOSがサポートされています。
 
 - RedHat
 - CentOS

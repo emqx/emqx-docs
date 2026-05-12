@@ -182,7 +182,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 
 ## Request Monitoring Status via REST API
 
-You can also get the metrics and statistics through the API. Click **Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../api.md).
+You can also get the metrics and statistics through the API. Click **Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../../develop/api.md).
 
 <img src="./assets/metrics-api-doc.png" alt="metrics-api-doc" style="zoom:35%;" />
 

@@ -20,7 +20,7 @@ EMQXノードはポートをパブリックネットワークに公開しない�
 
 ## EMQXが起動しない場合のトラブルシューティング方法は？
 
-EMQXが起動しない場合は、[ログディレクトリ](deploy/install.md#files-and-directories)内の `emqx.log.N` または `erlang.log.N` を確認して詳細なエラー情報を取得してください。
+EMQXが起動しない場合は、[ログディレクトリ](./deploy/install.md#files-and-directories)内の `emqx.log.N` または `erlang.log.N` を確認して詳細なエラー情報を取得してください。
 
 または、`emqx console` コマンドでコンソールから起動すると、エラーログが直接コンソールに出力されます。ログ内容に基づき、本ページの対応策を参照するか、[GitHub](https://github.com/emqx/emqx/issues)にてサポートを依頼してください。
 

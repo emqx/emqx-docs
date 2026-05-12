@@ -15,7 +15,7 @@ In addition to CLI commands, the EMQX Enterprise also offers a data backup and r
 
 The data that EMQX supports for import and export includes:
 
-- Contents of EMQX [configuration rewrite file](configuration/configuration.md#configuration-rewrite-file):
+- Contents of EMQX [configuration rewrite file](./configuration/configuration.md#configuration-rewrite-file):
   - Authentication and authorization configuration
   - Rules, connectors, and Sink/Source
   - Listeners, gateway configuration

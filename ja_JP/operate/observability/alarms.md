@@ -75,7 +75,7 @@ EMQX ダッシュボードで **Monitoring** -> **Alarms** をクリックし、
 
 ### REST API でアラームを取得する
 
-API を通じてアラームの照会や管理が可能です。UI の左ナビゲーションメニューで **Alarms** をクリックすると、この API リクエストが実行されます。EMQX API の利用方法については [REST API](../api.md) を参照してください。
+API を通じてアラームの照会や管理が可能です。UI の左ナビゲーションメニューで **Alarms** をクリックすると、この API リクエストが実行されます。EMQX API の利用方法については [REST API](../../develop/api.md) を参照してください。
 
 <img src="./assets/view-alarms-api.png" alt="APIでのアラーム表示" style="zoom:45%;" />
 

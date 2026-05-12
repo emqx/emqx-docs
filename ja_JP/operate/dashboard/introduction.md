@@ -18,7 +18,7 @@ EMQX Dashboardの新しいUI/UXデザインは、主要なデータやメトリ�
 
 EMQXの認証および認可機構を視覚的に追加・設定できます。
 
-### [統合](./bridgeoverview.md)
+### [統合](./data-integration.md)
 
 強力なSQLベースのルールエンジンやデータ統合機能、またはFlowエディターのビジュアル機能を活用し、ローコードでのデータ処理と統合を実現します。これにより、MQTTデータのリアルタイム抽出、フィルタリング、強化、変換、保存、検証が可能です。
 
@@ -70,7 +70,7 @@ Dashboardのログインパスワードは`admins`コマンドでリセット可
 
 現在のDashboardログインパスワードの使用期間が設定された有効期限（`password_expired_time`）を超えると、ログイン時にパスワード更新を促されます。`password_expired_time`設定の詳細は[Dashboard設定](../configuration/dashboard.md)を参照してください。
 
-「管理者」ロールのユーザーは[REST API](../api.md)を使ってパスワード有効期限を設定することも可能です。
+「管理者」ロールのユーザーは[REST API](../../develop/api.md)を使ってパスワード有効期限を設定することも可能です。
 
 **例**:
 

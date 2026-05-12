@@ -10,7 +10,7 @@
 
 ## 安装 EMQX
 
-EMQX 支持多种安装方式，比如[容器化部署](deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
+EMQX 支持多种安装方式，比如[容器化部署](./deploy/install-docker.md)，通过 [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) 安装部署、或通过安装包的形式部署在物理服务器或虚拟机上，针对安装包部署形式，目前我们支持以下操作系统：
 
 - RedHat
 - CentOS

@@ -15,7 +15,7 @@ EMQX 提供了 CLI 命令用于数据导入和导出实现备份与恢复，尽�
 
 EMQX 支持导入和导出的数据包括：
 
-- EMQX [配置重写](configuration/configuration.md#配置重写)的内容：
+- EMQX [配置重写](./configuration/configuration.md#配置重写)的内容：
   - 认证与授权配置
   - 规则、连接器与 Sink/Source
   - 监听器、网关配置

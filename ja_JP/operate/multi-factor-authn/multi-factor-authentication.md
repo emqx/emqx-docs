@@ -71,7 +71,7 @@ dashboard.default_mfa = {mechanism: totp}
 `/users/{username}/mfa` エンドポイントへのPOSTおよびDELETEメソッドは、管理者または対象ユーザー本人のみが使用可能です。  
 つまり、「viewer」ロールのユーザーは他ユーザーのMFA設定を変更できません。現在の認証トークン（ベアラートークン）に紐づくユーザーのみが自身のMFA設定を変更できます。  
 
-REST APIのロールベースアクセス制御の詳細は[Roles and Permissions](../api.md#roles-and-permissions)を参照してください。
+REST APIのロールベースアクセス制御の詳細は[Roles and Permissions](../../develop/api.md#roles-and-permissions)を参照してください。
 
 :::
 

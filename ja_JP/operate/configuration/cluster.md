@@ -21,7 +21,7 @@ node {
 ここで、
 
 - `name` は設定したいノード名を指します。例：`emqx@localhost`。
-- `role` はEMQXクラスター内でノードが果たす役割を示します。役割はコアノード（core）とレプリカントノード（replicant）の2種類があります。コアノードとレプリカントノードの詳細は[EMQXクラスタリング - コアノードとレプリカントノード](../cluster/mria-introduction.md)を参照してください。  
+- `role` はEMQXクラスター内でノードが果たす役割を示します。役割はコアノード（core）とレプリカントノード（replicant）の2種類があります。コアノードとレプリカントノードの詳細は[EMQXクラスタリング - コアノードとレプリカントノード](../../develop/cluster/mria-introduction.md)を参照してください。  
   - デフォルト値：`core`  
   - 選択可能な値：`core` または `replicant`
 

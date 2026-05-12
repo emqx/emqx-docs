@@ -1843,7 +1843,7 @@ Added metrics related to EMQX durable storage to Prometheus:
 Note: these metrics are only visible when session persistence is enabled.
 The number of persisted messages has also been added to the Dashboard.
 
-For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../operate/durability/durability_introduction.md).
+For more information about the Durable Sessions feature, see [MQTT Durable Sessions](../operate/durability/management.md).
 
 #### Security
 

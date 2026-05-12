@@ -58,8 +58,8 @@ EMQX supports below authentication methods (referred to as authenticator hereaft
 | Mechanism      | Database          | Description                                                  |
 | -------------- | ----------------- | ------------------------------------------------------------ |
 | Password-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
-| Password-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
-| Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
+| Password-Based | MySQL             | [Authentication with MySQL database as credential storage](./mysql.md) |
+| Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](./postgresql.md) |
 | Password-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
 | Password-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
 | Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
@@ -380,4 +380,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
 
-For more detailed API requests and parameters, see [HTTP API](../../api.md).
+For more detailed API requests and parameters, see [HTTP API](../../../develop/api.md).

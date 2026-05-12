@@ -24,6 +24,6 @@ The topic metrics list includes the following fields:
 
 ## Get Topic Metrics via REST API
 
-You can also retrieve the topic metrics through the API. On how to work with EMQX APIs, see [REST API](../api.md).
+You can also retrieve the topic metrics through the API. On how to work with EMQX APIs, see [REST API](../../develop/api.md).
 
 <img src="./assets/topic-metrics-api-ee.png" alt="topic-metrics-api-ee" style="zoom:45%;" />

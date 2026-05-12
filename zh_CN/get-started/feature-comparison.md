@@ -8,13 +8,13 @@
 | ---------------------- | --------------------------------- | ------------------- | --------------- | ------------------------------------------------------------ |
 | **MQTT 5.0 Broker**    | ✅                                 | ✅                   | ✅               | 完整实现 MQTT 5.0 协议                                       |
 | **MQTT over QUIC**     | ✅                                 | ✅                   | ✅               | 全球领先支持                                                 |
-| **MQTT 扩展**          | ✅                                 | ❌                   | ✅               | [共享订阅](messaging/mqtt-shared-subscription.md)<br>[排他订阅](messaging/mqtt-exclusive-subscription.md)<br>[延迟发布](messaging/mqtt-delayed-publish.md)<br>[自动订阅](messaging/mqtt-auto-subscription.md)<br>[主题重写](messaging/mqtt-topic-rewrite.md)<br>更多个性化选项 |
+| **MQTT 扩展**          | ✅                                 | ❌                   | ✅               | [共享订阅](./messaging/mqtt-shared-subscription.md)<br>[排他订阅](./messaging/mqtt-exclusive-subscription.md)<br>[延迟发布](./messaging/mqtt-delayed-publish.md)<br>[自动订阅](./messaging/mqtt-auto-subscription.md)<br>[主题重写](./messaging/mqtt-topic-rewrite.md)<br>更多个性化选项 |
 | **多协议网关**         | ✅                                 | ❌                   | ✅               | 更多行业设备接入                                             |
 | **多租户**             | ✅                                 | ❌                   | ✅               | 更高的系统灵活性和利用率（即将发布）                         |
 | **集群连接**           | ✅                                 | ❌                   | ✅               | 设备和应用数据的无缝连接                                     |
 | **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构（即将发布）                         |
 | **流处理**             | ✅                                 | ❌                   | ✅               | 更高的可靠性和灾难恢复能力<br>（即将发布）                   |
-| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../operate/durability/durability_introduction.md) |
+| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../operate/durability/management.md) |
 | **Schema Registry**    | ✅                                 | ❌                   | ✅               | [编解码](../develop/data-integration/schema-registry.md)保证数据一致性和可兼容性 |
 | **消息编解码**         | ✅                                 | ❌                   | ✅               | 灵活的消息格式转换：JSON / Avro / Protobuf / HTTP / gRPC     |
 | **消息验证**           | ✅                                 | ❌                   | ✅               | 确保消息的完整性和合法性                                     |
@@ -89,7 +89,7 @@
 | **OCSP Stapling**                                | ✅               | ❌                   | ✅               | 提供更灵活的安全实践                      |
 | **连接抖动**                                     | ✅               | ✅                   | ✅ 规划中        | 检测并拦截频繁上下线的连接                |
 | **审计日志**                                     | ✅               | ✅                   | ✅               | 支持重要操作的审计追踪                    |
-| **Dashboard 单点登录（SSO）**                    | ✅               | ✅                   | ✅               | [安全简便的认证流程](../operate/dashboard/sso.md) |
+| **Dashboard 单点登录（SSO）**                    | ✅               | ✅                   | ✅               | [安全简便的认证流程](../operate/sso.md) |
 | **Dashboard/REST API 基于角色的访问控制 (RBAC)** | ✅               | ✅                   | ✅               | 最小化权限以确保系统安全                  |
 
 ## 认证与授权

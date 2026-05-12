@@ -2255,7 +2255,7 @@
 
 Dashboard 上也增加了持久消息的数量。
 
-更多关于会话持久化功能的详细信息，参见 [MQTT 会话持久化](../operate/durability/durability_introduction.md)。
+更多关于会话持久化功能的详细信息，参见 [MQTT 会话持久化](../operate/durability/management.md)。
 
 #### 安全
 

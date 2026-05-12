@@ -104,7 +104,7 @@ Use this endpoint to set rate limits, session limits, and other namespace-specif
 #### Configuration Example
 
 
-This example configures a namespace using the [REST API](../api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+This example configures a namespace using the [REST API](../../develop/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
 ##### Create the Namespace
 

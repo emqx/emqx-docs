@@ -8,7 +8,7 @@ description: このセクションでは、EMQX 5.0および5.1で導入され�
 
 ## コア＋レプリカ クラスターアーキテクチャ
 
-EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../operate/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
+EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../develop/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
 
 <img src="./assets/100m-benchmark.png" alt="1億接続ベンチマーク" style="zoom:50%;" />
 

@@ -4,7 +4,7 @@
 
 In terms of the design of EMQX, it firstly separates the frontend and backend, and secondly separates the  Message Flow Plane and Monitor/Control Plane :
 
-![image](../assets/design_1.png)
+![image](./assets/design_1.png)
 
 ### 1 million connections
 
@@ -18,7 +18,7 @@ EMQX is a fully asynchronous architecture based on the Erlang/OTP platform: asyn
 
 In EMQX 3.0 version, from the Publisher to the Subscriber, an MQTT message flows   with a series of Erlang processes Mailbox flows asynchronously inside EMQX:
 
-![image](../assets/design_2.png)
+![image](./assets/design_2.png)
 
 ### Message persistence
 
@@ -41,7 +41,7 @@ In EMQX Enterprise edition products, through rule engines or plugins, messages c
 
 EMQX is more like a network Router or a Switch in concept, rather than the traditional enterprise-level message queue (MQ). Compared to network routers that route packets by IP address or MPLS label, EMQX routes MQTT messages between cluster nodes by publish-subscribe model of Topic Trie:
 
-![image](../assets/design_3.png)
+![image](./assets/design_3.png)
 
 ### Design Philosophy
 
@@ -91,7 +91,7 @@ The MQTT protocol defines a 16-bit PacketId, which is used to send, receive and 
 
 Global unique time series message ID structure:
 
-![image](../assets/design_5.png)
+![image](./assets/design_5.png)
 
 1. 64bits timestamp: `erlang:system_time`
 2. Erlang node ID: encoded as 2 bytes
@@ -100,13 +100,13 @@ Global unique time series message ID structure:
 
 During the end-to-end message Pub/Sub process, the published message ID and packet QoS are terminated at the session layer, and the MQTT message object identified by the unique ID is routed between the nodes:
 
-![image](../assets/design_6.png)
+![image](./assets/design_6.png)
 
 ## Routing layer  design
 
 The routing layer maintains the Subscriber and Subscription, and Dispatch message at this node with Pub/Sub model :
 
-![image](../assets/design_7.png)
+![image](./assets/design_7.png)
 
 After the message is dispatched to the session, the session is responsible for delivering the message according to different QoS.
 
@@ -114,11 +114,11 @@ After the message is dispatched to the session, the session is responsible for d
 
 The distribution layer maintains a Topic Trie and a Route Table. The Topic Trie is composed of wildcard topics, and the Route Table maps topics to nodes:
 
-![image](../assets/design_8.png)
+![image](./assets/design_8.png)
 
 The distribution layer forwards routed MQTT messages between nodes in the cluster by matching the Topic Trie and querying Route Table:
 
-![image](../assets/design_9.png)
+![image](./assets/design_9.png)
 
 ## Mnesia/ETS  table design
 

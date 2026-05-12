@@ -183,7 +183,7 @@ Here is an overview of the main span types:
 - **Rule Engine Spans**: Trace the processing and execution of the rule engine.
 - **Broker Internal Spans**: Trace internal Broker operations, such as actively disconnecting a client or internal subscriptions.
 
-For a detailed explanation of each span, please refer to the [End-to-End Tracing Span Details](./e2e_span_details.md).
+For a detailed explanation of each span, please refer to the [End-to-End Tracing Span Details](./e2e-traces.md).
 
 ## Manage Trace Span Overload
 

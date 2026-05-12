@@ -1,6 +1,6 @@
 # Configure and Manage Durable Sessions
 
-This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Sessions](./durability_introduction.md) feature within EMQX, including sessions and storage configuration.
+This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Sessions](./management.md) feature within EMQX, including sessions and storage configuration.
 
 ## Configuration Parameters
 

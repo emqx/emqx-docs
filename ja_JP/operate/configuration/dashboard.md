@@ -148,7 +148,7 @@ dashboard {
 
 - `sso`
 
-  [シングルサインオン（SSO）](../dashboard/sso.md)の設定を行います。`ldap`、`oidc`、`saml`のうち一つだけが同時に有効になります。詳細な設定説明は[設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso)のSSOセクションをご参照ください。
+  [シングルサインオン（SSO）](../sso.md)の設定を行います。`ldap`、`oidc`、`saml`のうち一つだけが同時に有効になります。詳細な設定説明は[設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso)のSSOセクションをご参照ください。
 
 ::: tip
 

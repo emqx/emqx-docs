@@ -18,7 +18,7 @@ View overall information of the running EMQX cluster, including connection count
 
 Add and configure authentication and authorization mechanisms in EMQX visually.
 
-### [Integration](./bridgeoverview.md)
+### [Integration](./data-integration.md)
 
 Utilize a powerful SQL-based rule engine and data integration, or the Flow editor's visual capabilities, for low-code data processing and integration. This helps in real-time extraction, filtering, enrichment, transformation, storage, and validation of MQTT data.
 

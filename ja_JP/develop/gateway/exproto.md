@@ -120,7 +120,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-詳細なREST APIの説明は[REST API](../../operate/api.md)を参照してください。
+詳細なREST APIの説明は[REST API](../api.md)を参照してください。
 
 より細かいカスタマイズやリスナーの追加、認証ルールの追加が必要な場合は、[Customize Your ExProto Gateway](#customize-your-exproto-gateway)をお読みください。
 

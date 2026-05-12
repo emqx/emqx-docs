@@ -148,7 +148,7 @@ dashboard {
 
 - `sso`
 
-  配置[单点登录（SSO）](../dashboard/sso.md) 选项。`ldap`、`oidc` 和 `saml` 三者中只能启用一个。如需详细的配置说明，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso)中的 SSO 部分。
+  配置[单点登录（SSO）](../sso.md) 选项。`ldap`、`oidc` 和 `saml` 三者中只能启用一个。如需详细的配置说明，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso)中的 SSO 部分。
 
 ::: tip
 

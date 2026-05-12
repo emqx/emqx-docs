@@ -2,7 +2,7 @@
 
 EMQXはOpenAPI（Swagger）3.0仕様に準拠したHTTP管理APIを公開しています。
 
-EMQX起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスするとAPIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトでは、Dashboardの設定で `swagger_support` が `true` に設定されており、Swagger UIが有効であることを示しています。これにより、インタラクティブなAPIドキュメントの生成など、Swagger関連機能がすべて有効になります。無効化したい場合は `false` に設定してください。詳細は[Dashboard設定](configuration/dashboard.md)を参照してください。
+EMQX起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスするとAPIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトでは、Dashboardの設定で `swagger_support` が `true` に設定されており、Swagger UIが有効であることを示しています。これにより、インタラクティブなAPIドキュメントの生成など、Swagger関連機能がすべて有効になります。無効化したい場合は `false` に設定してください。詳細は[Dashboard設定](./configuration/dashboard.md)を参照してください。
 
 本節ではEMQX REST APIの利用方法を紹介します。
 
@@ -46,7 +46,7 @@ EMQXのREST APIは主にAPIキーを用いたBasic認証とBearerトークン認
 
 #### APIキーの作成
 
-Dashboardの **System** -> **API Key** から手動でAPIキーを作成できます。詳細は[System - API Keys](dashboard/system.md#api-keys)を参照してください。
+Dashboardの **System** -> **API Key** から手動でAPIキーを作成できます。詳細は[System - API Keys](./dashboard/system.md#api-keys)を参照してください。
 
 また、ブートストラップファイル方式でAPIキーを作成することも可能です。以下の設定ファイルでファイルパスを指定します。
 

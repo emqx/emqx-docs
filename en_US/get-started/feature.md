@@ -26,7 +26,7 @@ Shared subscription is a new feature introduced in MQTT 5.0 that allows clients 
 
 Clients of MQTT 3.1.1 can use shared subscriptions in the same way, since all the processing logic for shared subscriptions is done on the server, and the client only needs to subscribe to `$share/group/{topic filter}`.
 
-Shared subscriptions are useful in data collection scenarios where there are many more message producers than consumers. For more information, see [Shared Subscription](messaging/mqtt-shared-subscription.md).
+Shared subscriptions are useful in data collection scenarios where there are many more message producers than consumers. For more information, see [Shared Subscription](./messaging/mqtt-shared-subscription.md).
 
 ## What is the system topic?
 
@@ -62,7 +62,7 @@ Yes. EMQX supports connection rate and message inflow rate control to avoid syst
 
 The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
 
-If the message receive rate exceeds this recommendation, you can use [Shared Subscription](messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
+If the message receive rate exceeds this recommendation, you can use [Shared Subscription](./messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
 
 ## Does EMQX support cluster autodiscovery? What are the implementation methods?
 

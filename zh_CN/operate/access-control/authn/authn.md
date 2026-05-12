@@ -49,8 +49,8 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | 认证方式 | 数据源      | 说明                                                |
 | -------- | ----------- | --------------------------------------------------- |
 | 密码认证 | 内置数据库  | [使用内置数据库（Mnesia）进行密码认证](./mnesia.md) |
-| 密码认证 | MySQL       | [使用 MySQL 进行密码认证](mysql.md)                 |
-| 密码认证 | PostgreSQL  | [使用 PostgreSQL 进行密码认证](postgresql.md)       |
+| 密码认证 | MySQL       | [使用 MySQL 进行密码认证](./mysql.md)                 |
+| 密码认证 | PostgreSQL  | [使用 PostgreSQL 进行密码认证](./postgresql.md)       |
 | 密码认证 | MongoDB     | [使用 MongoDB 进行密码认证](./mongodb.md)           |
 | 密码认证 | Redis       | [使用 Redis 进行密码认证](./redis.md)               |
 | 密码认证 | LDAP        | [使用 LDAP 进行密码认证](./ldap.md)                 |
@@ -370,4 +370,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 对于通过内置数据库存储认证数据的认证方式，例如 [使用内置数据库进行密码认证](./mnesia.md) 和 [MQTT 5.0 增强认证](./scram.md)，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
 
-详细的请求方式与参数请参考 [HTTP API](../../api.md)。
+详细的请求方式与参数请参考 [HTTP API](../../../develop/api.md)。

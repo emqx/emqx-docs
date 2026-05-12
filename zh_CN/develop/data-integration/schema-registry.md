@@ -22,7 +22,7 @@ JSON Schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义
 
 EMQX 可以将 Schema 用于消息的编码、解码，以及验证发布的消息是否符合 Schema 规范。Schema Registry 为 Avro 和 Protobuf 内置编码格式维护 Schema 文本。Schema API 提供了通过 Schema Name 的添加、查询和删除操作，因此编码和解码时需要指定 Schema Name。
 
-![schema_registry1](./assets/schema_registry1.svg)
+![schema_registry1](./assets/schema_registry/schema_registry1.svg)
 
 常见的使用案例是，使用规则引擎来调用 Schema Registry 提供的编码和解码接口，然后将编码或解码后的数据作为后续动作的输入。
 

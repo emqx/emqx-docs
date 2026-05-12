@@ -71,7 +71,7 @@ Administrators can enable or manage MFA for users through the configuration file
 
 The POST and DELETE methods on the `/users/{username}/mfa` endpoint can only be used by administrators or by the user themselves. This means that a user with a "viewer" role cannot modify another user's MFA settings. Only the user associated with the current authentication token (the "bearer token") can modify their own MFA settings. 
 
-For more information on the role-based access control implementation of the REST API, see [Roles and Permissions](../api.md#roles-and-permissions).
+For more information on the role-based access control implementation of the REST API, see [Roles and Permissions](../../develop/api.md#roles-and-permissions).
 
 :::
 

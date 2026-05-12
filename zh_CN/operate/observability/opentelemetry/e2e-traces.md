@@ -191,7 +191,7 @@ EMQX 在端到端追踪过程中会生成多种类型的 Span，以便深入了�
 - **规则引擎 Span**: 追踪规则引擎的处理和执行过程。
 - **Broker 内部 Span**: 追踪 Broker 的内部操作，如主动断开客户端连接或内部订阅等。
 
-关于每个 Span 的详细说明，请参考[端到端追踪 Span 详情](./e2e_span_details.md)。
+关于每个 Span 的详细说明，请参考[端到端追踪 Span 详情](./e2e-traces.md)。
 
 ## 管理追踪 Span 过载
 

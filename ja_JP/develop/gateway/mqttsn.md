@@ -59,7 +59,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-HTTP API の詳細は [HTTP API - Gateway](../../operate/api.md) を参照してください。
+HTTP API の詳細は [HTTP API - Gateway](../api.md) を参照してください。
 
 カスタマイズが必要でリスナーを追加したり認証ルールを設定したい場合は、[MQTT-SN ゲートウェイのカスタマイズ](#customize-your-mqtt-sn-gateway) セクションをお読みください。
 

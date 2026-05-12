@@ -149,7 +149,7 @@ Where,
 
 - `sso`
 
-  Configure the [Single Sign-On (SSO)](../dashboard/sso.md) options. Only one of `ldap`, `oidc`, or `smal` can be active at a time. For detailed configuration descriptions, see the SSO section in the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso).
+  Configure the [Single Sign-On (SSO)](../sso.md) options. Only one of `ldap`, `oidc`, or `smal` can be active at a time. For detailed configuration descriptions, see the SSO section in the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso).
 
 ::: tip
 

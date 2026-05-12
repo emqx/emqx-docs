@@ -20,7 +20,7 @@ EMQX 支持完整的 MQTT 消息特性包括标准协议中的遗嘱消息、保
 
 如果客户端想要设置遗嘱消息，它将在发起连接请求时设置遗嘱消息的主题和有效负载。
 当另一个客户端订阅遗嘱消息的主题时，如果设置了遗嘱消息的客户端意外断开与服务器的连接，订阅遗嘱主题的客户端将接收遗嘱消息。
-更信息请参阅 [遗嘱消息](mqtt-will-message.md) and [使用 MQTT 遗嘱消息](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
+更信息请参阅 [遗嘱消息](./mqtt-will-message.md) and [使用 MQTT 遗嘱消息](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
 
 ### 使用 MQTTX CLI 验证：
 

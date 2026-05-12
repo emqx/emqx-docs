@@ -271,7 +271,7 @@ authorization {
 * `/api/v5/authorization/cache`：クライアント認可キャッシュのクリア
 * `/api/v5/authorization/sources/built_in_database`：`built_in_database`オーソライザーの認可ルール管理
 
-詳細な操作手順は[HTTP API](../../api.md)を参照してください。
+詳細な操作手順は[HTTP API](../../../develop/api.md)を参照してください。
 
 ## オーソライザー管理
 

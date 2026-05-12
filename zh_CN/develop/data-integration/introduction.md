@@ -5,7 +5,7 @@
 EMQX 通过结合**规则**与 **Sink** 两个功能，提供了实时、简洁、高效的数据集成方案。
 其中规则用于处理消息或事件，而 Sink 用于对接数据系统。
 
-![image](./assets/rules/data-integration-arch.png)
+![image](./assets/rules/data-integration-arch.jpg)
 
 ## 规则
 
@@ -22,4 +22,4 @@ EMQX 在发布/订阅模型的基础上提供了规则来处理消息或事件�
 
 创建完成 Sink 和规则之后，我们可以从 Dashboard 上看到数据集成的拓扑图：
 
-![image](./assets/rules/cn_introduction_flow.png)
+![image](./assets/rules/rules/cn_introduction_flow.png)

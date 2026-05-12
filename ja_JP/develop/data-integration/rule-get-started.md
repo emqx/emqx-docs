@@ -157,7 +157,7 @@ MQTTXクライアントツールとEMQXの接続方法の詳細は [MQTTX - Get 
 
 :::
 
-![Rule Statistics](assets/rule_statistics.png)
+![Rule Statistics](./assets/rule_statistics.png)
 
 ### ルールの検索
 

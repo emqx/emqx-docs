@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
 }'
 ```
 
-HTTP API の詳細は [HTTP API - Gateway](../../operate/api.md) を参照してください。
+HTTP API の詳細は [HTTP API - Gateway](../api.md) を参照してください。
 
 カスタマイズが必要な場合やリスナー追加、認証ルール追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションをお読みください。
 

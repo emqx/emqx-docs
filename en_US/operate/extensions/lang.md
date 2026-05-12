@@ -2,7 +2,7 @@
 
 EMQX extensions are implemented by adding callbacks to various hook points.
 
-See [Hooks](hooks.md) for more information.
+See [Hooks](./hooks.md) for more information.
 
 ## Multi-Language Support
 
@@ -18,7 +18,7 @@ Since 4.1, EMQX provides **multi-language support**. It allows users to use Pyth
 
 ### Extension Hook
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](hooks.md) using other programming languages. For example:
+The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](./hooks.md) using other programming languages. For example:
 
 - Check the login permission for a client.
 - Check the PUB/SUB operation privileges for a client.
@@ -39,4 +39,4 @@ See: [Extension Hook](./exhook.md).
 
 <!-- Prior to EMQX 4.1, only Lua support was included, and it was implemented by `emqx-lua-hook`. This plugin only supports handling of hooks, not protocol access. -->
 
-<!-- See: [Lua Support](lang-lua.md). -->
+<!-- See: [Lua Support](./lang-lua.md). -->

@@ -693,7 +693,7 @@ stop tracing ip_address 127.0.0.1 successfully
 :::
 
 ::: tip
-トレースはダッシュボードUIからも管理可能です。詳細は[tracer](observability/tracer.md)を参照してください。
+トレースはダッシュボードUIからも管理可能です。詳細は[tracer](./observability/tracer.md)を参照してください。
 :::
 
 `emqx ctl traces`

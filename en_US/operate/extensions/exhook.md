@@ -1,6 +1,6 @@
 # gRPC Hook Extension
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](hooks.md) using other programming languages.
+The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](./hooks.md) using other programming languages.
 
 In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
 
@@ -89,7 +89,7 @@ The HookProvider part:
 
 The hook events part:
 
-- The methods prefixed with `OnClient`, `OnSession`, and `OnMessage` correspond to the methods in [hooks](hooks.md). They have the same call timing and a similar argument list.
+- The methods prefixed with `OnClient`, `OnSession`, and `OnMessage` correspond to the methods in [hooks](./hooks.md). They have the same call timing and a similar argument list.
 - Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return values to EMQX, other callbacks are not supported.
 
 For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)

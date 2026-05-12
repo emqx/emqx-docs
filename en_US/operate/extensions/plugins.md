@@ -32,6 +32,6 @@ Upon startup, a plugin typically registers some of its functions as EMQX *callba
 
 ## Learn More
 
-- [**Develop EMQX Plugins**](./plugin-development): Learn how to build a plugin from scratch using the official template.
-- [**Customize Plugin Logic**](./plugin-example.md): Explore examples of how to implement hook callbacks for authentication, authorization, and more.
-- [**Manage Plugins**](./plugin-management): Understand how to install, configure, start/stop, and uninstall plugins across EMQX nodes and clusters.
+- [**Develop EMQX Plugins**](./plugins.md): Learn how to build a plugin from scratch using the official template.
+- [**Customize Plugin Logic**](./plugins.md): Explore examples of how to implement hook callbacks for authentication, authorization, and more.
+- [**Manage Plugins**](./plugins.md): Understand how to install, configure, start/stop, and uninstall plugins across EMQX nodes and clusters.

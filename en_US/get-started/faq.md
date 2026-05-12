@@ -20,7 +20,7 @@ You can use the following command to update your EMQX Enterprise License:
     license update <License> # Update license given as a string
 ```
 
-You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](deploy/license.md).
+You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](./deploy/license.md).
 
 ## Why can't I receive retained messages when using shared subscriptions?
 

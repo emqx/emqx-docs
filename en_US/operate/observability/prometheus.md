@@ -97,7 +97,7 @@ For more information about Prometheus pull endpoints, refer to the [EMQX Enterpr
 
 ::: tip 
 
-By default, the pull mode API does not require authentication. You can configure the **Enable Basic Auth** switch on the page to enable basic authentication for the interface. Once enabled, you need to create an [API key](../api.md#authentication) on EMQX and apply it to the Prometheus configuration to obtain metric data.
+By default, the pull mode API does not require authentication. You can configure the **Enable Basic Auth** switch on the page to enable basic authentication for the interface. Once enabled, you need to create an [API key](../../develop/api.md#authentication) on EMQX and apply it to the Prometheus configuration to obtain metric data.
 
 :::
 

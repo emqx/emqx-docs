@@ -753,7 +753,7 @@ LwM2Mクライアントからの通知はMQTTメッセージに変換されま�
 ## ユーザーインターフェース
 
 - 詳細な設定オプション：[Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) および [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)。
-- 詳細なHTTP API説明：[HTTP API - Gateway](../../operate/api.md)
+- 詳細なHTTP API説明：[HTTP API - Gateway](../api.md)
 
 ## クライアントライブラリ
 

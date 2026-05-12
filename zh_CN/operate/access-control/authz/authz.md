@@ -296,7 +296,7 @@ EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改�
 - `/api/v5/authorization/cache`: 清除客户端授权数据缓存
 - `/api/v5/authorization/sources/built_in_database`: 内置数据库数据管理
 
-详细的请求方式与参数请参考 [HTTP API](../../api.md)。
+详细的请求方式与参数请参考 [HTTP API](../../../develop/api.md)。
 
 ## 管理授权检查器
 
