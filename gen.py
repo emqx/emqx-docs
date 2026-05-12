@@ -45,7 +45,7 @@ def parse_env_file(file_path):
 ## check if the 'edition' field matches expected input
 ## when no 'edition' is defined, it matches both 'ce' and 'ee'
 def is_edition_match(i, ce_or_ee):
-    if 'edition' in i:
+    if isinstance(i, dict) and ('edition' in i):
         return i['edition'] == ce_or_ee
     else:
         return True
