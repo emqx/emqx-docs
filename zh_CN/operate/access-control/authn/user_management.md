@@ -35,7 +35,7 @@
   /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
   ```
 
-关于标识符约定及参数说明，请参见 [REST API](../../api.md)。
+关于标识符约定及参数说明，请参见 [REST API](../../../develop/api.md)。
 
 ## 导入用户
 

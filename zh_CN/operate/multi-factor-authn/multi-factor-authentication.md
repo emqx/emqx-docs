@@ -69,7 +69,7 @@ dashboard.default_mfa = {mechanism: totp}
 
 在 `/users/{username}/mfa` 端点上使用 POST 和 DELETE 方法时，仅管理员或当前身份验证令牌（即“Bearer token”）的所有者可以使用此接口。也就是说，具有“查看者”角色的用户无法修改其他用户的 MFA 设置。只有与当前身份验证令牌关联的用户（“Bearer token”拥有者）才能修改自己的 MFA 设置。
 
-有关基于角色的访问控制（RBAC）的更多信息，请参见[用户](../api.md#角色与权限)。
+有关基于角色的访问控制（RBAC）的更多信息，请参见[用户](../../develop/api.md#角色与权限)。
 
 :::
 

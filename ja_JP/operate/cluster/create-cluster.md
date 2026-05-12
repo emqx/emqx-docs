@@ -10,7 +10,7 @@ EMQXクラスターは手動または自動で作成できます。本ページ�
 
 ## 基本概念
 
-EMQXクラスターの基本知識や動作については、[Cluster](./introduction.md) と [Architecture](../../develop/cluster/mria-introduction.md) をご参照ください。クラスターを作成するには、以下の概念にも慣れておく必要があります。
+EMQXクラスターの基本知識や動作については、[Cluster](../../develop/cluster/introduction.md) と [Architecture](../../develop/cluster/mria-introduction.md) をご参照ください。クラスターを作成するには、以下の概念にも慣れておく必要があります。
 
 ### ノード名
 

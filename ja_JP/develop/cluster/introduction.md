@@ -128,7 +128,7 @@ topic3 -> node2, node4
 
 #### Topic Tree (replicated from Core)
 
-The topic tree is a hierarchical structure used to match published topics against subscription patterns, including [MQTT wildcards](../../get-started/mqtt-basics.md#mqtt-topics-and-wildcards) (`+` and `#`). It enables EMQX to resolve complex topic filters quickly.
+The topic tree is a hierarchical structure used to match published topics against subscription patterns, including MQTT wildcards (`+` and `#`). It enables EMQX to resolve complex topic filters quickly.
 
 Like the routing table, the topic tree is replicated by Core nodes and shared with Replicant nodes. When a new subscription arrives (e.g., `client1` subscribes to `t/+/x`), the topic tree is updated on all nodes to include this pattern. When a client subscribes to a new pattern (e.g., `t/+/x`), the update is handled by a Core node and then replicated.
 
