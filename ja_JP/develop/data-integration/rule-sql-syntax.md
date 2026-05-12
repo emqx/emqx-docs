@@ -11,7 +11,7 @@ EMQX のルールでは、データの抽出、フィルタリング、拡張、
 
 また、SQL ステートメントは式内に [jq プログラム](https://stedolan.github.io/jq/) を埋め込むことをサポートしており、必要に応じて複雑なデータ変換を行えます。式は `SELECT` と `FOREACH` ステートメント内に埋め込むことができます。`SELECT` と `FOREACH` ステートメントで参照可能なフィールドについては、[データソースとフィールド](./rule-sql-events-and-fields.md) を参照してください。
 
-<img src="./assets/rules/data-integration-arch.jpg" alt="データ統合アーキテクチャ" style="zoom:40%;" />
+<img src="./assets/rules/data-integration-arch.png" alt="データ統合アーキテクチャ" style="zoom:40%;" />
 
 ## `SELECT` ステートメント
 

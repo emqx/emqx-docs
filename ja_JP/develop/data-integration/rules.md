@@ -2,7 +2,7 @@
 
 EMQXは、データ処理のためのルールエンジン機能を提供しており、[データインテグレーション](./data-bridges.md)と連携してIoTデータの抽出、フィルタリング、強化、変換、保存を実現します。これにより、アプリケーション統合が加速され、ビジネスのイノベーションを促進します。
 
-![data-integration-arch](./assets/rules/data-integration-arch.jpg)
+![data-integration-arch](./assets/rules/data-integration-arch.png)
 
 EMQXのルールエンジンは、特に受信メッセージの変換やルーティングに有効です。たとえば、不要なデータをフィルタリングし、変換を行い、特定のイベントや条件に基づいてアラートや通知をトリガーするルールを作成できます。
 
