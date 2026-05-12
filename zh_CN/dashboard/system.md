@@ -24,6 +24,46 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 
     查看者可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
 
+### 登录用户权限范围（Scopes）
+
+从 EMQX 5.10 开始，Dashboard 登录用户在角色之外，还可以被分配**用户权限范围（Scope）**，用于限制用户可以访问的业务领域。Dashboard 用户与 API 密钥的 Scope 限制逻辑完全相同（见 [API 密钥的用户权限范围](../admin/api.md#api-范围（scope）)），此外还额外拥有 4 个**仅登录用户可用**的 Scope：
+
+| Scope | 仅登录用户 | 用途 |
+| --- | --- | --- |
+| `user_management` | 是 | 管理 Dashboard 用户（创建 / 修改 / 删除）。 |
+| `sso_management` | 是 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 是 | 管理 API 密钥。 |
+| `mfa_management` | 是 | 管理 Dashboard 用户的 MFA。 |
+
+这 4 个登录专属 Scope 默认仅保留给管理员。查看者（Viewer）角色不能持有它们 —— 但 `mfa_management` 是一个例外，可以显式赋给查看者。在这种情况下，该查看者**只能管理自己账号的 MFA**（重新绑定 TOTP 或禁用自己的 MFA），无法操作其他用户的 MFA。这样可以让查看者在不获得其他高权限的前提下，自助轮换或恢复自己的认证设备。
+
+在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
+
+- **管理员（Administrator）**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
+- **查看者（Viewer）**：拥有所有适用于只读访问的 Scope；`mfa_management` 仅在显式勾选时才会被授予。
+
+<!-- TODO: Screenshot of "Create user" dialog showing the Scopes multi-select with role-derived defaults and the four login-only scopes -->
+
+### 默认管理员保护
+
+`dashboard.default_username` 账号（其密码由 `dashboard.default_password` 配置）是一个**应急（break-glass）账号**。为了保证在其他管理员配置错误或失联时系统仍可恢复，默认用户受到下列保护，以防止误操作导致整个系统失去管理入口：
+
+- **不能被删除** —— 无论是从 Dashboard 还是 REST API，**删除**按钮始终不可用。
+- 角色**不能被更改**，始终保持 `administrator`。
+- Scope 集**不能被自定义**，始终拥有完整的管理员 Scope。
+- 描述和密码**可以**正常修改。
+
+其他管理员不受此限制，只要系统中至少还存在一个管理员，就可以被删除。
+
+### 自助操作边界
+
+每个 Dashboard 用户无论持有哪些 Scope，都被允许执行以下两类自助操作：
+
+- 修改自己的密码。
+- 绑定、重新绑定或禁用自己的 TOTP / MFA。
+
+其他个人信息变更（描述、角色、由管理员授予的 Scope）都需要操作者持有对应 Scope，即使目标用户就是操作者自己也不能绕过此检查。
+
 ## 审计日志
 
 **审计日志**页面允许管理员配置审计日志功能，以实时监控 EMQX 集群中的关键操作变更。

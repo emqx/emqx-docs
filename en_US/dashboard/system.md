@@ -25,6 +25,46 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
     Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
 
+### Login User Scopes
+
+Starting from EMQX 5.10, Dashboard login users can additionally be assigned **scopes**, which restrict the business areas that the user is allowed to reach on top of their role. Scopes follow the same model as [API Key Scopes](../admin/api.md#api-scopes), and Dashboard users share the entire API-key scope catalogue plus four scopes that only apply to Dashboard login users:
+
+| Scope | Login user only | Purpose |
+| --- | --- | --- |
+| `user_management` | yes | Manage Dashboard users (create / update / delete). |
+| `sso_management` | yes | Manage SSO backends and SSO user records. |
+| `api_key_management` | yes | Manage API keys. |
+| `mfa_management` | yes | Manage MFA for Dashboard users. |
+
+All four login-only scopes are reserved for administrators by default. The Viewer role cannot have them — except `mfa_management`, which can be explicitly granted to a Viewer. In that case the Viewer can only manage MFA for **their own account** (re-enroll TOTP or disable it), but cannot touch other users' MFA. This lets you give Viewer accounts the ability to rotate or recover their own authenticator device without escalating their privileges elsewhere.
+
+When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
+
+- **Administrator** — all scopes, including the four login-only ones above.
+- **Viewer** — every read-applicable scope; `mfa_management` is only granted if you explicitly tick it.
+
+<!-- TODO: Screenshot of "Create user" dialog showing the Scopes multi-select with role-derived defaults and the four login-only scopes -->
+
+### Default Administrator Protection
+
+The `dashboard.default_username` account (created with the password configured in `dashboard.default_password`) is a **break-glass account**. To make sure the system can always be recovered when other administrators are misconfigured or have lost access, the default user is protected from accidental lockout:
+
+- It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
+- Its role **cannot be changed** away from `administrator`.
+- Its scope set **cannot be customized** — it always retains the full administrator scope.
+- Its description and password **can** be edited normally.
+
+Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
+
+### Self-Service Boundaries
+
+Every Dashboard user is allowed to perform two self-service actions regardless of their scopes:
+
+- Change their own password.
+- Enroll, re-enroll, or disable their own TOTP / MFA.
+
+All other profile updates (description, role, scopes assigned by an administrator) require the appropriate scope on the acting user and are not bypassed even when the target is the acting user.
+
 ## Audit Logs
 
 The **Audit Logs** page allows administrators to configure audit logging for monitoring critical operational changes within the EMQX cluster in real time.
