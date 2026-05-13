@@ -17,41 +17,41 @@ Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (
 RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
 
 Currently, either of the following two predefined roles can be set for a user. You can select the role from the **Role** dropdown when you create users.
-+ Administrator
++ **Administrator**
 
     Administrators have full access to manage all EMQX features and resources, including client management, system configuration, API key, and user management.
 
-+ Viewer
++ **Viewer**
 
     Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
 
 ### Login User Scopes
 
-Starting from EMQX 5.10, Dashboard login users can additionally be assigned **scopes**, which restrict the business areas that the user is allowed to reach on top of their role. Scopes follow the same model as [API Key Scopes](../admin/api.md#api-scopes), and Dashboard users share the entire API-key scope catalogue plus four scopes that only apply to Dashboard login users:
+Starting from EMQX 5.10, Dashboard login users can be assigned scopes, which further restrict what the user can access within their role. Scopes follow the same model as [API Key Scopes](../admin/api.md#api-scopes), and Dashboard users share the entire API-key scope catalogue plus four scopes that only apply to Dashboard login users:
 
-| Scope | Login user only | Purpose |
+| Scope | Required role | Purpose |
 | --- | --- | --- |
-| `user_management` | yes | Manage Dashboard users (create / update / delete). |
-| `sso_management` | yes | Manage SSO backends and SSO user records. |
-| `api_key_management` | yes | Manage API keys. |
-| `mfa_management` | yes | Manage MFA for Dashboard users. |
+| `user_management` | Administrator | Manage Dashboard users (create / update / delete). |
+| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
+| `api_key_management` | Administrator | Manage API keys. |
+| `mfa_management` | Any | Manage own MFA; administrators can manage other users' MFA. |
 
-All four login-only scopes are reserved for administrators by default. The Viewer role cannot have them — except `mfa_management`, which can be explicitly granted to a Viewer. In that case the Viewer can only manage MFA for **their own account** (re-enroll TOTP or disable it), but cannot touch other users' MFA. This lets you give Viewer accounts the ability to rotate or recover their own authenticator device without escalating their privileges elsewhere.
+Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) are restricted to administrators and cannot be assigned to Viewers. `mfa_management` is the exception: it can be granted to Viewers, but with limited effect. A Viewer with `mfa_management` can only manage MFA for their own account (re-enroll TOTP or disable it) and cannot touch other users' MFA. This lets you give Viewer accounts the ability to rotate or recover their own authenticator device without escalating their privileges elsewhere.
 
 When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
 
-- **Administrator** — all scopes, including the four login-only ones above.
-- **Viewer** — every read-applicable scope; `mfa_management` is only granted if you explicitly tick it.
+- **Administrator**: All scopes, including the four login-only ones above.
+- **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
 
 <!-- TODO: Screenshot of "Create user" dialog showing the Scopes multi-select with role-derived defaults and the four login-only scopes -->
 
 ### Default Administrator Protection
 
-The `dashboard.default_username` account (created with the password configured in `dashboard.default_password`) is a **break-glass account**. To make sure the system can always be recovered when other administrators are misconfigured or have lost access, the default user is protected from accidental lockout:
+The `dashboard.default_username` account (created with the password configured in `dashboard.default_password`) is a break-glass account. To make sure the system can always be recovered when other administrators are misconfigured or have lost access, the default user is protected from accidental lockout:
 
 - It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
 - Its role **cannot be changed** away from `administrator`.
-- Its scope set **cannot be customized** — it always retains the full administrator scope.
+- Its scope set **cannot be customized**; it always retains the full administrator scope.
 - Its description and password **can** be edited normally.
 
 Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
@@ -61,9 +61,9 @@ Other administrators are unaffected and can be deleted as long as at least one a
 Every Dashboard user is allowed to perform two self-service actions regardless of their scopes:
 
 - Change their own password.
-- Enroll, re-enroll, or disable their own TOTP / MFA.
+- Enroll or re-enroll their own TOTP / MFA. Disabling MFA is also allowed, unless an administrator has explicitly required MFA for the user's account. In that case, the `mfa_management` scope is needed to disable it.
 
-All other profile updates (description, role, scopes assigned by an administrator) require the appropriate scope on the acting user and are not bypassed even when the target is the acting user.
+All other profile updates (description, role, scopes assigned by an administrator) require the appropriate scope on the acting user and are not bypassed, even when the target is the acting user.
 
 ## Audit Logs
 
