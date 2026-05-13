@@ -299,6 +299,14 @@
   path: access-control/security-guide
   collapsed: true
   children:
+    - title_en: Security Checklist
+      title_cn: 安全检查清单
+      path: access-control/security-checklist
+      lang: en
+    - title_en: Security Checklist
+      title_cn: 安全检查清单
+      path: access-control/security-checklist
+      lang: cn
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       path: network/overview
@@ -895,4 +903,3 @@
                          - changes/auth-4.4-to-5.1-compatibility
                          - changes/data-integration-4.4-to-5.1-incompatibility
                          - changes/gateway-4.4-to-5.1-incompatibility
-
