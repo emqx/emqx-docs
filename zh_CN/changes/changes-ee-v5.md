@@ -14,6 +14,10 @@
 
 #### 可观测性
 
+- [#17161](https://github.com/emqx/emqx/pull/17161) 通过 Prometheus Gauge 指标（`emqx_license_max_sessions`、`emqx_license_expiry_at`、`emqx_license_issued_at`）暴露每个节点的许可证信息，支持在不逐节点执行 CLI 检查的情况下，对集群范围的许可证一致性进行告警监控。
+
+  时间戳以 Unix 纪元秒表示，精确到许可证颁发/到期日期的 UTC 零点。当许可证不可用时，三个指标均输出 `0`；建议在告警规则中使用 `emqx_license_expiry_at == 0` 作为"不可用"信号（因为 `max_sessions == 0` 也可能表示试用许可证已到期）。
+
 - [#17074](https://github.com/emqx/emqx/pull/17074) 新增 `emqx_routes_count` 和 `emqx_routes_max` Prometheus 指标，用于导出每个节点的路由表条目数量，与 EMQX v4 中的 `emqx_routes_count` 指标功能类似。
 - [#16746](https://github.com/emqx/emqx/pull/16746) 将 `os_mon` 默认设置为仅采集系统级内存统计数据，减少逐进程内存扫描的开销。
 - [#16911](https://github.com/emqx/emqx/pull/16911) 通过避免意外重复查询 Mria 统计数据，降低 Prometheus 指标采集的开销。
@@ -33,6 +37,22 @@
 - [#16943](https://github.com/emqx/emqx/pull/16943) 为 SSO（OIDC/SAML/LDAP）新增各后端独立的 `force_mfa` 选项。
 
   启用后，SSO 用户在获取 Dashboard Token 前必须完成 TOTP MFA 的配置或验证，不受 IDP 侧 MFA 设置影响。支持三种 MFA 状态：`not_configured`（强制配置）、`enabled`（要求验证）和 `admin_disabled`（跳过 MFA）。新增 API 接口 `POST /sso/mfa/setup` 和 `POST /sso/mfa/verify` 处理 MFA 流程。
+
+#### 集群
+
+- [#17076](https://github.com/emqx/emqx/pull/17076) 引入新的路由表同步机制，路由表 Schema 版本升级至 `v3`，并向下兼容 `v2`。
+
+  在 v3 Schema 下，每个节点（核心节点或副本节点）对指向自身的路由表条目拥有完整所有权，其他对等节点仅具有只读访问权限。这提升了 EMQX 集群的分区容错能力，同时改善了副本节点上 `SUBACK` 的响应延迟。
+
+  **向后兼容：** 支持 v3 的节点加入仅支持 v2 的集群时，将自动使用 v2 兼容模式。若集群中任意节点已处于兼容模式，新节点也将同样使用兼容模式。如需将集群切换至 v3，须在升级后对整个集群执行全量重启。若需阻止自动切换，可将 `broker.routing.storage_schema` 设置为 `v2`。
+
+  **降级说明：** 集群切换至 v3 后，将无法进行滚动降级。
+
+  可通过以下命令检查节点当前的路由表 Schema 版本：
+
+  ```bash
+  emqx eval 'emqx_router:get_schema_vsn()'
+  ```
 
 #### 网关
 
@@ -67,6 +87,8 @@
 
 #### 规则引擎
 
+- [#17210](https://github.com/emqx/emqx/pull/17210) 补充了 `$events/client/connack` 规则事件中缺失的 `connected_at` 字段。该字段在文档中已有说明，但此前在实际事件数据中未被包含。
+
 - [#17106](https://github.com/emqx/emqx/pull/17106) 在规则创建和更新时忽略无效的规则元数据时间戳。
 
   此前，若规则包含非整数类型的 `metadata.created_at` 或 `metadata.last_modified_at` 值（如日期字符串），EMQX 可能会存储该无效值，并在后续通过 API 列出或获取该规则时产生内部错误。
@@ -97,6 +119,14 @@
 
   默认 TCP/TLS 连接超时时间也从 60 秒调低至 10 秒，使配置错误的服务器能快速暴露为失败状态，而非表现为卡死。
 
+- [#17179](https://github.com/emqx/emqx/pull/17179) 修复在高负载情况下，对 MongoDB 进程的调用超时被误判为不可恢复错误而不进行重试的问题。现在此类事件将触发重试。
+
+  在受影响的部署中，日志中会出现如下记录：
+
+  ```text
+  {"stacktrace":["{emqx_mongodb,on_query,3,...}","{emqx_resource_buffer_worker,apply_query_fun,9,...}",...],"request":"...","name":"call_query","id":"action:mongodb:xxx:connector:mongodb:xxx","error":"{error,{case_clause,{error,{timeout,{gen_server,call,[...,{checkout,...},5000]}}}}}"}
+  ```
+
 #### 集群
 
 - [#16729](https://github.com/emqx/emqx/pull/16729) 改善集群所有节点同时重启后的恢复时间。
@@ -106,6 +136,8 @@
 - [#17164](https://github.com/emqx/emqx/pull/17164) 将 Erlang/OTP 从 27.3.4.2-6 升级至 27.3.4.2-7。
 
   此版本修复了一个竞态条件，该条件可能在节点启动时遭遇与集群其他节点的网络分区时，导致 MQTT 路由表不一致。
+
+- [#17195](https://github.com/emqx/emqx/pull/17195) 升级至 emqx-OTP 27.3.4.2-8。若不升级，EMQX 启动时 Mria 应用的启动流程在未连接到集群的情况下可能会卡住。
 
 #### 访问控制
 
@@ -124,6 +156,18 @@
 - [#17101](https://github.com/emqx/emqx/pull/17101) 修复当身份提供商返回的 JWKS 响应的 `Content-Type` 使用 `+json` 结构化语法后缀（例如 `application/jwk-set+json; charset=utf-8`）时，OIDC SSO 登录失败并报 `provider_not_ready` 的问题。此类响应现在被视为有效的 JWKS 内容。
 
 - [#17122](https://github.com/emqx/emqx/pull/17122) 修复包含 URL 编码用户名（如电子邮件地址）的 SSO 用户的 Dashboard RBAC 检查，确保在 `force_mfa` 禁用时，Viewer 角色用户自助禁用 MFA 的请求可正确处理。
+
+- [#17169](https://github.com/emqx/emqx/pull/17169) 限制 API 密钥通过数据备份接口导出或导入 Dashboard 账户及 API 密钥。
+
+  使用 API 密钥调用 `POST /data/export` 时，导出文件将静默忽略 `dashboard_users` 和 `api_keys` 表数据集。使用 API 密钥调用 `POST /data/import` 时，若上传的备份文件包含上述任一表数据集，将返回 `403 FORBIDDEN`。使用 Dashboard Bearer Token 的调用方不受影响，仍可备份和恢复完整数据库。
+
+  此修复关闭了一个权限提升漏洞：API 密钥持有者原本可以通过数据备份接口读取或写入 Dashboard 登录凭据和 API 密钥记录，而这些数据已被现有的 `/users` 和 `/api_key` 接口明确拒绝 API 密钥访问。
+
+- [#17188](https://github.com/emqx/emqx/pull/17188) 从未认证的 `GET /status?format=json` 响应中移除 `rel_vsn` 字段（EMQX 发布版本号），防止向未认证调用方泄露 Broker 版本信息。版本信息仍可通过需认证的节点信息 API 获取。
+
+- [#17200](https://github.com/emqx/emqx/pull/17200) 修复插件安装接口中的路径穿越漏洞。包含 `..` 路径段的 tar 包条目可能导致文件被写入插件安装目录之外。EMQX 现在拒绝解压任何条目路径可能逃逸至安装目录之外的 tar 包。
+
+- [#17202](https://github.com/emqx/emqx/pull/17202) 通过 `POST /api/v5/plugins/install`（及 Dashboard 中封装该接口的上传功能）成功安装插件后，立即撤销用于授权本次上传的集群级 `emqx ctl plugins allow <name-vsn>` 授权，防止同一授权被重复用于后续（可能不同的）tar 包。5 分钟 TTL 仍然有效；此修改在正常安装路径上更早地关闭了授权复用窗口。
 
 #### 可观测性
 

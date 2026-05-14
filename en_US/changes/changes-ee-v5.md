@@ -14,6 +14,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Observability
 
+- [#17161](https://github.com/emqx/emqx/pull/17161) Exposed per-node License info via Prometheus gauges (`emqx_license_max_sessions`, `emqx_license_expiry_at`, `emqx_license_issued_at`) so cluster-wide License consistency can be alerted on without per-node CLI checks.
+
+  Timestamps are Unix epoch seconds at UTC midnight of the license's issue/expiry date. All three metrics emit `0` when the License is unavailable; use `emqx_license_expiry_at == 0` as the "unavailable" signal in alerting rules (since `max_sessions == 0` may also indicate an expired trial license).
+
 - [#17074](https://github.com/emqx/emqx/pull/17074) Added `emqx_routes_count` and `emqx_routes_max` Prometheus metrics to export the number of route table entries per node, similar to the `emqx_routes_count` metric in EMQX v4.
 - [#16746](https://github.com/emqx/emqx/pull/16746) Set `os_mon` to collect only system-wide memory statistics by default, reducing per-process memory scanning overhead.
 - [#16911](https://github.com/emqx/emqx/pull/16911) Reduced the overhead of Prometheus metrics collection by avoiding accidental repeated queries of Mria statistics.
@@ -42,6 +46,22 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Also fixed JT/T 808 gateway `string_encoding` not applied to downlink message serialization. Previously, the `string_encoding` configuration (e.g., `gbk`) was only used for parsing uplink messages, but not for serializing downlink messages. Now when `string_encoding: gbk` is configured, both uplink parsing (GBK to UTF-8) and downlink serialization (UTF-8 to GBK) work correctly.
 
+#### Clustering
+
+- [#17076](https://github.com/emqx/emqx/pull/17076) Introduced a new routing table synchronization mechanism. The routing table schema version has been stepped to `v3`, with backward compatibility for `v2` provided.
+
+  With schema v3, each node (core or replicant) takes full ownership of the routing table entries pointing towards it, giving peer nodes only read-only access to these entries. This improves partition tolerance of the EMQX cluster, as peer nodes in a partitioned cluster cannot change the routing table on behalf of other nodes. It also improves `SUBACK` latency on replicant nodes.
+
+  **Backward compatibility:** When a node supporting v3 joins a cluster of nodes that only support v2, it keeps using v2 for compatibility. New nodes also use compatibility mode if any existing node in the cluster is already in compatibility mode. To switch the cluster to v3, perform a full cluster restart after upgrade. To prevent the automatic switch, set `broker.routing.storage_schema` to `v2`.
+
+  **Downgrade note:** After the cluster switches to v3, rolling downgrade is not possible.
+
+  To check the current routing schema version on a node:
+
+  ```bash
+  emqx eval 'emqx_router:get_schema_vsn()'
+  ```
+
 #### Data Integration
 
 - [#16961](https://github.com/emqx/emqx/pull/16961) Improved Kafka source polling behavior by ensuring fetch requests wait briefly for data instead of returning empty batches immediately when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
@@ -66,6 +86,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Before this fix, listing subscriptions could fail for some clients and return no output. After this fix, `emqx ctl subscriptions list` works reliably with both regular and shared subscriptions.
 
 #### Rule Engine
+
+- [#17210](https://github.com/emqx/emqx/pull/17210) Added the missing `connected_at` field to the `$events/client/connack` rule event. The field was documented but absent from the actual event data.
 
 - [#17106](https://github.com/emqx/emqx/pull/17106) Ignored invalid rule metadata timestamps during rule creation and updates.
 
@@ -97,6 +119,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The default TCP/TLS connect timeout is also lowered from 60 seconds to 10 seconds so a misconfigured server surfaces as failed quickly instead of appearing stuck.
 
+- [#17179](https://github.com/emqx/emqx/pull/17179) Fixed an issue where, under heavy load, a timed-out call to a MongoDB process was treated as an unrecoverable error and not retried. The message is now retried on such events.
+
+  On affected deployments, logs like the following would be printed:
+
+  ```text
+  {"stacktrace":["{emqx_mongodb,on_query,3,...}","{emqx_resource_buffer_worker,apply_query_fun,9,...}",...],"request":"...","name":"call_query","id":"action:mongodb:xxx:connector:mongodb:xxx","error":"{error,{case_clause,{error,{timeout,{gen_server,call,[...,{checkout,...},5000]}}}}}"}
+  ```
+
 #### Clustering
 
 - [#16729](https://github.com/emqx/emqx/pull/16729) Improved recovery time of a cluster after a simultaneous restart of all nodes.
@@ -106,6 +136,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17164](https://github.com/emqx/emqx/pull/17164) Upgraded Erlang/OTP from 27.3.4.2-6 to 27.3.4.2-7.
 
   This addresses a race condition which may cause MQTT routing table inconsistency if a node experiences network partition from other nodes in the cluster during boot-up.
+
+- [#17195](https://github.com/emqx/emqx/pull/17195) Upgraded to emqx-OTP 27.3.4.2-8. Without this fix, Mria app boot could get stuck during EMQX startup if the node was not connected to the cluster.
 
 #### Access Control
 
@@ -124,6 +156,18 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17101](https://github.com/emqx/emqx/pull/17101) Fixed OIDC SSO login failing with `provider_not_ready` when the identity provider returns a JWKS response whose `Content-Type` uses the `+json` structured syntax suffix (for example, `application/jwk-set+json; charset=utf-8`). Such responses are now accepted as valid JWKS content.
 
 - [#17122](https://github.com/emqx/emqx/pull/17122) Fixed Dashboard RBAC checks for SSO users with URL-encoded usernames such as email addresses, so viewer self-service MFA disable requests work correctly when `force_mfa` is disabled.
+
+- [#17169](https://github.com/emqx/emqx/pull/17169) Restricted API keys from exporting or importing Dashboard accounts and API keys via the data backup endpoints.
+
+  `POST /data/export` called with an API key now silently omits the `dashboard_users` and `api_keys` table sets from the resulting archive. `POST /data/import` called with an API key returns `403 FORBIDDEN` when the uploaded backup contains either of those table sets. Dashboard bearer-token callers are unaffected and can continue to back up and restore the full database.
+
+  This closes a privilege-escalation gap where an API key holder could read or write dashboard login credentials and API key records (material that the existing `/users` and `/api_key` endpoints already deny to API keys) by going through the data backup endpoints instead.
+
+- [#17188](https://github.com/emqx/emqx/pull/17188) Removed the `rel_vsn` field (EMQX release version) from the unauthenticated `GET /status?format=json` response to prevent version disclosure to unauthenticated callers. The version remains available via the authenticated node-info APIs.
+
+- [#17200](https://github.com/emqx/emqx/pull/17200) Fixed a path-traversal vulnerability in the plugin install endpoint. A tarball whose entry names contained `..` segments could cause file writes outside the plugin install directory. EMQX now refuses to extract any tarball whose entries would escape the install directory.
+
+- [#17202](https://github.com/emqx/emqx/pull/17202) A successful plugin install via `POST /api/v5/plugins/install` (and the Dashboard upload that wraps it) now immediately revokes the cluster-wide `emqx ctl plugins allow <name-vsn>` grant that authorized the upload, so the same grant cannot be reused for a subsequent (potentially different) tarball. The 5-minute TTL still applies; this change closes the window earlier on the common path.
 
 #### Observability
 
