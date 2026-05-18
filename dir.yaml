@@ -256,6 +256,7 @@
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
         - title_en: Hot Upgrade
           title_cn: 版本热升级
+          title_ja: ホットアップグレード
           path: deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
