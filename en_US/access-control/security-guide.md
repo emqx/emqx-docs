@@ -4,9 +4,7 @@ Security is a critical aspect of any MQTT-based application, and this guide is d
 
 - [Security Checklist](./security-checklist.md)
 
-  Use this production-oriented checklist to review listener exposure, TLS,
-  authentication, authorization, secret handling, and monitoring before a
-  rollout.
+  Use this production-oriented checklist to review listener exposure, TLS, authentication, authorization, secret handling, and monitoring before a rollout.
 
 - [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
 

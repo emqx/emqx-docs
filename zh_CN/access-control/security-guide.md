@@ -6,7 +6,7 @@
 
   以生产环境为目标，对监听器暴露面、TLS、认证、授权、机密信息管理以及监控与运维进行分层检查。
 
-- [网络与 TLS](../network/overview.md) 
+- [网络与 TLS](../network/overview.md)
 
   介绍了 EMQX 如何支持端对端加密通信，包括如何启用 SSL/TLS 连接和获取 SSL/TLS 证书。
 

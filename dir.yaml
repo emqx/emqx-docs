@@ -302,11 +302,6 @@
     - title_en: Security Checklist
       title_cn: 安全检查清单
       path: access-control/security-checklist
-      lang: en
-    - title_en: Security Checklist
-      title_cn: 安全检查清单
-      path: access-control/security-checklist
-      lang: cn
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       path: network/overview
