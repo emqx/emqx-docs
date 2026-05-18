@@ -66,7 +66,7 @@ MQTT 消息流为 MQTT 增加了持久化存储与回放能力。它允许消费
 
   - `<name>` 为消息流名称（必填）
   - `<topic_filter>` 可选，用于与已存在的消息流绑定
-  - 当启用自动创建功能时，使用 `$queue/<name>/<topic_filter>` 可以在该消息流不存在的情况下，使用提供的主题过滤器自动创建流。
+  - 当启用自动创建功能时，使用 `$stream/<name>/<topic_filter>` 可以在该消息流不存在的情况下，使用提供的主题过滤器自动创建流。
 
   消息流订阅与普通 MQTT 订阅相互独立，并通过外部订阅（External Subscription，ExtSub）机制进行投递。
 
