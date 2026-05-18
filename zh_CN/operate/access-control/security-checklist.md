@@ -6,17 +6,17 @@
 
 - 根据预期连接规模，提升操作系统文件描述符上限以及服务级别的 `LimitNOFILE` 配置，避免节点在正常流量或恶意连接压力下提前耗尽资源。
 - 针对长连接 MQTT 流量加固 TCP 栈和防火墙策略，包括 SYN Flood 防护、连接跟踪容量以及仅在受信任接口上暴露监听器。
-- 仅暴露客户端实际需要的监听器。在不可信网络上，优先使用 `8883`、`8084` 等加密监听器，并将 `1883` 等明文监听器限制在内网或过渡性场景中使用。详见[监听器配置](../../configuration/listener.md)和[开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
-- 使用安全组或防火墙规则限制节点间通信端口。关于集群内部使用的端口映射规则，详见[集群安全](../../cluster/security.md)。
+- 仅暴露客户端实际需要的监听器。在不可信网络上，优先使用 `8883`、`8084` 等加密监听器，并将 `1883` 等明文监听器限制在内网或过渡性场景中使用。详见[监听器配置](../configuration/listener.md)和[开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)。
+- 使用安全组或防火墙规则限制节点间通信端口。关于集群内部使用的端口映射规则，详见[集群安全](../cluster/security.md)。
 - 如果节点存在多个网卡接口，应将 Erlang 分布式通信仅绑定到私网接口。
-- 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../../cluster/lb.md)。
+- 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../cluster/lb.md)。
 - 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。
 
 ## 阶段 2：Erlang 与集群
 
-- 在所有集群节点上替换默认 Erlang Cookie，并确保所有节点使用相同的高熵机密值。详见[集群安全](../../cluster/security.md)。
+- 在所有集群节点上替换默认 Erlang Cookie，并确保所有节点使用相同的高熵机密值。详见[集群安全](../cluster/security.md)。
 - 对 `emqx.conf`、ACL 文件、证书、私钥以及其他敏感配置文件设置严格的文件权限，并使用安全的密钥管理流程进行分发和轮换。
-- 保持集群端口仅在内网开放；当节点间流量经过低信任网络或公有云边界时，应为节点间通信启用 TLS。详见[集群安全](../../cluster/security.md)。
+- 保持集群端口仅在内网开放；当节点间流量经过低信任网络或公有云边界时，应为节点间通信启用 TLS。详见[集群安全](../cluster/security.md)。
 - 在新增节点、迁移网络或调整部署拓扑后，应重新检查防火墙规则、证书配置以及集群成员控制策略。
 
 ## 阶段 3：传输层安全
@@ -38,18 +38,18 @@
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
-- 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../../configuration/mqtt.md)。
-- 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../../configuration/limiter.md)。
+- 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
+- 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。
 - 在需要时，使用[黑名单](./blacklist.md)和[连接抖动检测](./flapping-detect.md)抑制异常或不稳定客户端。
 
 ## 阶段 5：管理面与运维维护
 
 - 在生产环境使用前修改 Dashboard 默认密码，并定期审查谁拥有管理权限。详见[系统](../dashboard/system.md)。
-- 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../../configuration/dashboard.md)。
-- 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../api.md)和[系统](../dashboard/system.md#api-key)。
+- 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../configuration/dashboard.md)。
+- 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../../develop/api.md)和[系统](../dashboard/system.md#api-key)。
 - 如果您使用的是 EMQX 企业版，可为管理用户配置[单点登录（SSO）](../sso.md)，并在身份提供方侧启用 MFA（如果可用）。
 - 定期执行备份并演练恢复流程。请注意，若证书或 ACL 文件存放在 EMQX 数据目录之外，则需要单独备份。详见[备份与恢复](../backup-restore.md)。
-- 在可用场景下启用审计能力，并将日志与指标统一接入可观测性平台，用于异常检测和事件响应。详见[审计日志](../audit-log.md)、[日志配置](../../configuration/logs.md)和[日志与可观测性](../observability/overview.md)。
+- 在可用场景下启用审计能力，并将日志与指标统一接入可观测性平台，用于异常检测和事件响应。详见[审计日志](../audit-log.md)、[日志配置](../configuration/logs.md)和[日志与可观测性](../observability/overview.md)。
 
 ## 变更后重新验证
 
