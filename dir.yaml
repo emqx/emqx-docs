@@ -15,42 +15,6 @@
 # - A node with 'title_en' 'title_cn' and 'path'
 
 /operate/:
-  title_cn: EMQX 概览
-  path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
-  collapsed: true
-  children:
-    - title_en: What's New
-      title_cn: 全新功能
-      path: getting-started/new-features
-    - title_en: Feature Comparison
-      title_cn: 功能对比
-      path: getting-started/feature-comparison
-    - title_en: Get Started
-      title_cn: 快速开始
-      path: getting-started/getting-started
-    - title_en: Operating Limitations
-      title_cn: 使用限制
-      path: getting-started/restrictions
-    - title_en: FAQ
-      title_cn: 常见问题解答
-      collapsed: true
-      children:
-        - title_en: Concept FAQs
-          title_cn: 概念问题
-          path: faq/concept
-        - title_en: Deployment FAQs
-          title_cn: 部署问题
-          path: faq/deployment
-        - title_en: Feature FAQs
-          title_cn: 功能问题
-          path: faq/feature
-        - title_en: Usage FAQs
-          title_cn: 使用问题
-          path: faq/faq
-    - title_en: Technical Support
-      title_cn: 技术支持
-      path: support/technical-support
-
 - title_en: Installation and Deployment
   title_cn: 安装部署
   path: deploy/install
