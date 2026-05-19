@@ -120,14 +120,8 @@ jobs:
           OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
           OPENAI_API_URL: ${{ secrets.OPENAI_API_URL }}
         run: |
-          echo "Starting translation process..."
-          while IFS= read -r file; do
-            if [ -n "$file" ]; then
-              echo "Translating: $file"
-              uv run .github/scripts/translate_to_ja.py "$file"
-            fi
-          done < modified_files.txt
-          uv run .github/scripts/translate_to_ja.py ./dir.yaml
+          echo "./dir.yaml" >> modified_files.txt
+          uv run .github/scripts/translate_to_ja.py modified_files.txt
 
           uv run .github/scripts/remove_unused.py directory.json $(pwd) ja_JP
 
