@@ -44,7 +44,7 @@ EMQXはOpenTelemetry標準に基づくエンドツーエンドトレーシング
 
 - **`broker.publish`**: ブローカーがサブスクライバーにメッセージを準備しパブリッシュする処理をトレースします。`message.route`または`message.handle_forward`の子スパンです。
 
-## QoSアック（Acknowledgement）スパン
+### QoSアック（Acknowledgement）スパン
 
 これらのスパンはQoS 1およびQoS 2のアックフローをトレースします。
 
