@@ -156,6 +156,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
        - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
        - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
        - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
+   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves a token from the GCP instance metadata endpoint. Use this option when EMQX is deployed on a GCP Compute Engine instance with a service account attached to the VM.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Sink](#create-a-rule-with-bigquery-sink).
 
