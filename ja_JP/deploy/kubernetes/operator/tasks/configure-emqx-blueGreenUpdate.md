@@ -1,20 +1,20 @@
-# Upgrade the EMQX Cluster Elegantly through Blue-Green Deployment
+# Blue-GreenデプロイメントによるEMQXクラスターのエレガントなアップグレード
 
-This page demonstrates how to gracefully upgrade the EMQX cluster through blue-green deployment.
+本ページでは、Blue-Greenデプロイメントを用いてEMQXクラスターをグレースフルにアップグレードする方法を説明します。
 
 :::tip
 
-This feature only supports `apps.emqx.io/v1beta4 EmqxEnterprise` and `apps.emqx.io/v2beta1 EMQX`.
+この機能は `apps.emqx.io/v1beta4 EmqxEnterprise` および `apps.emqx.io/v2beta1 EMQX` のみをサポートしています。
 
 :::
 
-## Background
+## 背景
 
-1. In traditional EMQX cluster deployment, the default rolling upgrade strategy of StatefulSet is usually used to update EMQX Pods. However, this approach has the following two problems:
+1. 従来のEMQXクラスターのデプロイメントでは、StatefulSetのデフォルトのローリングアップグレード戦略を用いてEMQX Podを更新することが一般的です。しかし、この方法には以下の2つの問題があります。
 
-   1. During the rolling update, both new and old Pods are selected by the corresponding Service. This may cause MQTT clients to connect to the wrong Pod, resulting in frequent disconnections and reconnections.
+   1. ローリングアップデート中は、新旧両方のPodが対応するServiceに選択されるため、MQTTクライアントが誤ったPodに接続し、頻繁な切断と再接続が発生する可能性があります。
 
-   2. During the rolling update process, only N - 1 Pods can provide services because it takes some time for new Pods to start up and become ready. This may lead to a decrease in service availability.
+   2. ローリングアップデートの過程で、新しいPodが起動して準備完了になるまでに時間がかかるため、N - 1のPodしかサービスを提供できず、サービスの可用性が低下する恐れがあります。
 
 ```mermaid
 timeline
@@ -41,23 +41,23 @@ timeline
 						: pod-2
 ```
 
-## Solution
+## 解決策
 
-Regarding the issue of rolling updates mentioned in the previous text, EMQX Operator provides a blue-green deployment upgrade solution. When upgrading the EMQX cluster using EMQX custom resources, EMQX Operator will create a new EMQX cluster and redirect the Kubernetes Service to the new EMQX cluster after it is ready. It will then gradually delete Pods from the old EMQX cluster to achieve the purpose of updating the EMQX cluster.
+前述のローリングアップデートの問題に対して、EMQX OperatorはBlue-Greenデプロイメントによるアップグレードソリューションを提供しています。EMQXカスタムリソースを用いてクラスターをアップグレードする際、EMQX Operatorは新しいEMQXクラスターを作成し、新クラスターが準備完了後にKubernetes Serviceを新クラスターに切り替えます。その後、古いEMQXクラスターのPodを段階的に削除してEMQXクラスターの更新を実現します。
 
-When deleting Pods from the old EMQX cluster, EMQX Operator can also take advantage of the node evacuation feature of EMQX to transfer MQTT connections to the new cluster at a desired rate, avoiding issues with a large number of connections for a period of time.
+古いEMQXクラスターのPodを削除する際、EMQX OperatorはEMQXのノード避難機能を活用して、MQTT接続を希望するレートで新クラスターに移行させることができ、大量の接続が一時的に集中する問題を回避します。
 
-The entire upgrade process can be roughly divided into the following steps:
+アップグレードの全体的な流れは以下のステップに大別されます。
 
-1. Create a cluster with the same specifications.
+1. 同一仕様のクラスターを作成する。
 
-2. After the new cluster is ready, redirect the service to the new cluster and remove the old cluster from the service. At this time, the new cluster starts to receive traffic, and existing connections in the old cluster are not affected.
+2. 新クラスターが準備完了後、Serviceを新クラスターに切り替え、古いクラスターをServiceから外す。この時点で新クラスターがトラフィックを受け始め、古いクラスターの既存接続は影響を受けません。
 
-3. (Only supported by EMQX Enterprise Edition) Use EMQX node evacuation function to evacuate connections on each node one by one.
+3. （EMQX Enterprise Editionのみ対応）EMQXのノード避難機能を使い、各ノードの接続を順次避難させる。
 
-4. Gradually scale down the old cluster to 0 nodes.
+4. 古いクラスターを段階的にスケールダウンし、ノード数を0にする。
 
-5. Complete the upgrade.
+5. アップグレード完了。
 
 ```mermaid
 timeline
@@ -96,12 +96,12 @@ timeline
 						: pod-2
 ```
 
-## Configuration Update Strategy
+## アップデート戦略の設定
 
 :::: tabs type:card
 ::: tab apps.emqx.io/v2beta1
 
-Create `apps.emqx.io/v2beta1` EMQX and configure update strategy.
+`apps.emqx.io/v2beta1` EMQXを作成し、アップデート戦略を設定します。
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -124,15 +124,15 @@ spec:
     type: Recreate
 ```
 
-`initialDelaySeconds`:The waiting time before starting the update after all nodes are ready (unit: second).
+`initialDelaySeconds`：全ノードが準備完了後、アップデート開始までの待機時間（単位：秒）。
 
-`waitTakeover`: Interval time when deleting a Pod (unit: second)。
+`waitTakeover`：Pod削除時の間隔時間（単位：秒）。
 
-`connEvictRate`: MQTT client evacuation rate, only supported by EMQX Enterprise Edition (unit: count/second)。
+`connEvictRate`：MQTTクライアントの避難レート。EMQX Enterprise Editionのみサポート（単位：件数/秒）。
 
-`sessEvictRate`: MQTT Session evacuation rate, only supported by EMQX Enterprise Edition (unit: count/second)。
+`sessEvictRate`：MQTTセッションの避難レート。EMQX Enterprise Editionのみサポート（単位：件数/秒）。
 
-Save the above content as: `emqx-update.yaml`, execute the following command to deploy EMQX:
+上記内容を `emqx-update.yaml` として保存し、以下のコマンドでEMQXをデプロイします。
 
 ```bash
 $ kubectl apply -f emqx-update.yaml
@@ -140,7 +140,7 @@ $ kubectl apply -f emqx-update.yaml
 emqx.apps.emqx.io/emqx-ee created
 ```
 
-Check the status of the EMQX cluster, please make sure that `STATUS` is `Ready`. This may require some time to wait for the EMQX cluster to be ready.
+EMQXクラスターの状態を確認し、`STATUS` が `Ready` であることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
 
 ```bash
 $ kubectl get emqx
@@ -152,7 +152,7 @@ emqx-ee   Ready    8m33s
 :::
 ::: tab apps.emqx.io/v1beta4
 
-Create `apps.emqx.io/v1beta4 EmqxEnterprise` and configure update strategy.
+`apps.emqx.io/v1beta4 EmqxEnterprise` を作成し、アップデート戦略を設定します。
 
 ```yaml
 apiVersion: apps.emqx.io/v1beta4
@@ -174,15 +174,15 @@ spec:
           version: 4.4.30
 ```
 
-`initialDelaySeconds`: The waiting time before the start node is evacuated after all nodes are ready (unit: second).
+`initialDelaySeconds`：全ノードが準備完了後、ノード避難開始までの待機時間（単位：秒）。
 
-`waitTakeover`: The time to wait for the client to reconnect and take over the session after all connections are disconnected (unit: second).
+`waitTakeover`：全接続が切断された後、クライアントが再接続してセッションを引き継ぐまでの待機時間（単位：秒）。
 
-`connEvictRate`: MQTT client evacuation rate (unit: count/second)。
+`connEvictRate`：MQTTクライアントの避難レート（単位：件数/秒）。
 
-`sessEvictRate`: MQTT Session evacuation speed (unit: count/second)。
+`sessEvictRate`：MQTTセッションの避難レート（単位：件数/秒）。
 
-Save the above content as: `emqx-update.yaml`, execute the following command to deploy EMQX Enterprise Edition cluster:
+上記内容を `emqx-update.yaml` として保存し、以下のコマンドでEMQX Enterprise Editionクラスターをデプロイします。
 
 ```bash
 $ kubectl apply -f emqx-update.yaml
@@ -190,7 +190,7 @@ $ kubectl apply -f emqx-update.yaml
 emqxenterprise.apps.emqx.io/emqx-ee created
 ```
 
-Check the status of the EMQX cluster, please make sure that `STATUS` is `Running`. This may require some time to wait for the EMQX cluster to be ready.
+EMQXクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
 
 ```bash
 $ kubectl get emqxenterprises
@@ -202,17 +202,17 @@ emqx-ee   Running  8m33s
 :::
 ::::
 
-## Connect to EMQX Cluster Using MQTTX CLI
+## MQTTX CLIを使ったEMQXクラスターへの接続
 
-MQTT X CLI is an open-source MQTT 5.0 CLI Client that supports automatic reconnection. It is also a pure command-line mode MQTT X. It aims to help develop and debug MQTT services and applications faster without using a graphical interface. For documentation about MQTT X CLI, please refer to: [MQTTX CLI](https://mqttx.app/cli).
+MQTT X CLIは自動再接続をサポートするオープンソースのMQTT 5.0 CLIクライアントです。純粋なコマンドラインモードのMQTT Xであり、グラフィカルインターフェースを使わずにMQTTサービスやアプリケーションの開発・デバッグを迅速に行うことを目的としています。MQTT X CLIのドキュメントは以下をご参照ください：[MQTTX CLI](https://mqttx.app/cli)。
 
-Execute the following command to connect to the EMQX cluster:
+以下のコマンドを実行してEMQXクラスターに接続します。
 
 ```bash
 mqttx bench conn -h ${IP} -p ${PORT} -c 3000
 ```
 
-Output is similar to:
+出力例：
 
 ```bash
 [10:05:21 AM] › ℹ  Start the connect benchmarking, connections: 3000, req interval: 10ms
@@ -220,11 +220,11 @@ Output is similar to:
 [10:06:13 AM] › ℹ  Done, total time: 31.113s
 ```
 
-## Upgrade EMQX Cluster
+## EMQXクラスターのアップグレード
 
-- Any modifications made to the Pod Template will trigger the upgrade strategy of EMQX Operator.
+- Podテンプレートに対する変更はすべてEMQX Operatorのアップグレード戦略をトリガーします。
 
-  > In this article, we trigger the upgrade by modifying the Container ImagePullPolicy. Users can modify it according to their actual needs.
+  > 本記事では、ContainerのImagePullPolicyを変更することでアップグレードをトリガーしています。ユーザーは実際のニーズに応じて変更してください。
 
   ```bash
   $ kubectl patch emqx emqx-ee --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
@@ -232,7 +232,7 @@ Output is similar to:
   emqx.apps.emqx.io/emqx-ee patched
   ```
 
-- Check status.
+- ステータスの確認。
 
   ```bash
   $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
@@ -260,19 +260,19 @@ Output is similar to:
   ]
   ```
 
-  `connection_eviction_rate`: Node evacuation rate (unit: count/second).
+  `connection_eviction_rate`：ノードの避難レート（単位：件数/秒）。
 
-  `node`: The node being evacuated currently.
+  `node`：現在避難中のノード。
 
-  `session_eviction_rate`: Node session evacuation rate (unit: count/second).
+  `session_eviction_rate`：ノードのセッション避難レート（単位：件数/秒）。
 
-  `session_recipients`: Session evacuation recipient list.
+  `session_recipients`：セッション避難の受け取り先リスト。
 
-  `state`: Node evacuation phase.
+  `state`：ノード避難のフェーズ。
 
-  `stats`: Evacuation node statistical indicators, including current number of connections (current_connected), current number of sessions (current_sessions), initial number of connections (initial_connected), and initial number of sessions (initial_sessions).
+  `stats`：避難中ノードの統計情報。現在の接続数（current_connected）、現在のセッション数（current_sessions）、開始時の接続数（initial_connected）、開始時のセッション数（initial_sessions）を含みます。
 
-- Waiting for the upgrade to complete.
+- アップグレード完了を待ちます。
 
   ```bash
   $ kubectl get emqx
@@ -281,21 +281,20 @@ Output is similar to:
   emqx-ee   Ready    8m33s
   ```
 
-  Please make sure that the STATUS is Running, which requires some time to wait for the EMQX cluster to complete the upgrade.
+  `STATUS` が `Running` であることを確認してください。EMQXクラスターのアップグレード完了までには時間がかかる場合があります。
 
-  After the upgrade is completed, you can observe that the old EMQX nodes have been deleted by using the command $ kubectl get pods.
+  アップグレード完了後は、`$ kubectl get pods` コマンドで古いEMQXノードが削除されていることを確認できます。
 
+## Grafanaによるモニタリング
 
-## Grafana Monitoring
-
-The monitoring graph of the number of connections during the upgrade process is shown below (using 10,000 connections as an example).
+アップグレード中の接続数のモニタリンググラフ（10,000接続を例としています）は以下の通りです。
 
 ![](./assets/configure-emqx-blueGreenUpdate/grafana.png)
 
-Total: Total number of connections, represented by the top line in the graph.
+Total：接続数の合計で、グラフの最上部の線で表されています。
 
-emqx-ee-86f864f975： This prefix represents the 3 EMQX nodes before the upgrade.
+emqx-ee-86f864f975：アップグレード前の3つのEMQXノードを表すプレフィックス。
 
-emqx-ee-648c45c747： This prefix represents the 3 EMQX nodes after the upgrade.
+emqx-ee-648c45c747：アップグレード後の3つのEMQXノードを表すプレフィックス。
 
-As shown in the figure above, we have implemented graceful upgrade in Kubernetes through EMQX Kubernetes Operator's blue-green deployment. Through this solution, the total number of connections did not have a significant shake (depending on migration rate, server reception rate, client reconnection policy, etc.) during the upgrade process, which can greatly ensure the smoothness of the upgrade process, effectively prevent server overload, reduce business perception, and improve the stability of the service.
+上図のように、EMQX Kubernetes OperatorのBlue-GreenデプロイメントによりKubernetes上でグレースフルなアップグレードを実現しています。このソリューションにより、アップグレード中の接続数の大きな変動（移行速度、サーバー受け入れ速度、クライアントの再接続ポリシーなどに依存）が抑えられ、アップグレードのスムーズさが大幅に向上します。これによりサーバーの過負荷を防ぎ、業務への影響を低減し、サービスの安定性を高めることが可能です。

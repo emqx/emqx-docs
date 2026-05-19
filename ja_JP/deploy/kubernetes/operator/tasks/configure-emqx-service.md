@@ -1,16 +1,16 @@
-# Access EMQX Cluster Through LoadBalancer
+# LoadBalancerを介したEMQXクラスターへのアクセス
 
-## Task Target
+## タスク対象
 
-Access the EMQX cluster through the Service of LoadBalancer type.
+LoadBalancerタイプのServiceを介してEMQXクラスターにアクセスします。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
+以下はEMQXカスタムリソースの関連設定例です。デプロイしたいEMQXのバージョンに応じて対応するAPIVersionを選択してください。具体的な対応関係は[EMQX Operator Compatibility](../operator.md)を参照してください。
 
-Operator supports configuring EMQX cluster Dashboard Service through `.spec.dashboardServiceTemplate`, and configuring EMQX cluster listener Service through `.spec.listenersServiceTemplate`, its documentation can refer to [Service](../api-reference.md#emqxspec).
+Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュボードServiceを、`.spec.listenersServiceTemplate`でEMQXクラスターのリスナーServiceを設定可能です。詳細は[Service](../api-reference.md#emqxspec)を参照してください。
 
-+ Save the following content as a YAML file and deploy it via the `kubectl apply` command
++ 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -32,20 +32,20 @@ Operator supports configuring EMQX cluster Dashboard Service through `.spec.dash
         type: LoadBalancer
   ```
 
-  > By default, EMQX will open an MQTT TCP listener `tcp-default` corresponding to port 1883 and Dashboard listener `dashboard-listeners-http-bind` corresponding to port 18083.
+  > デフォルトで、EMQXはポート1883に対応するMQTT TCPリスナー `tcp-default` と、ポート18083に対応するダッシュボードリスナー `dashboard-listeners-http-bind` を開きます。
 
-  > Users can add new listeners through `.spec.config.data` field or EMQX Dashboard. EMQX Operator will automatically inject the default listener information into the Service when creating the Service, but when there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator will use the user's configuration prevail.
+  > ユーザーは`.spec.config.data`フィールドまたはEMQXダッシュボードを通じて新しいリスナーを追加できます。EMQX OperatorはService作成時にデフォルトのリスナー情報を自動的にServiceに注入しますが、ユーザーが設定したServiceとEMQXが設定したリスナーに名前やポートの重複がある場合は、ユーザーの設定が優先されます。
 
-+ Wait for the EMQX cluster to be ready, you can check the status of the EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
++ EMQXクラスターが準備完了になるまで待機します。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
 
   ```bash
   $ kubectl get emqx emqx
   NAME   IMAGE                              STATUS    AGE
   emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
   ```
-+ Obtain the Dashboard External IP of the EMQX cluster and access the EMQX console
++ EMQXクラスターのダッシュボード外部IPを取得し、EMQXコンソールにアクセスします。
 
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
+  EMQX OperatorはEMQXコンソール用の`emqx-dashboard`と、EMQXリスニングポート用の`emqx-listeners`の2つのEMQX Serviceリソースを作成します。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -53,17 +53,17 @@ Operator supports configuring EMQX cluster Dashboard Service through `.spec.dash
   192.168.1.200
   ```
 
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to log in to the EMQX console.
+  ブラウザで `http://192.168.1.200:18083` にアクセスし、デフォルトのユーザー名とパスワード `admin/public` でEMQXコンソールにログインします。
 
-## Connect To EMQX Cluster By MQTTX CLI
+## MQTTX CLIによるEMQXクラスターへの接続
 
-+ Obtain the External IP of the EMQX cluster
++ EMQXクラスターの外部IPを取得します。
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
 
-+ Use MQTTX CLI to connect to the EMQX cluster
++ MQTTX CLIを使ってEMQXクラスターに接続します。
 
   ```bash
   $ mqttx conn -h ${external_ip} -p 1883
@@ -72,22 +72,23 @@ Operator supports configuring EMQX cluster Dashboard Service through `.spec.dash
   [4/17/2023] [5:17:31 PM] › ✔ Connected
   ```
 
-## Add New Listener Through EMQX Dashboard
+## EMQXダッシュボードを通じた新規リスナーの追加
 
-+ Add new Listener
++ 新しいリスナーの追加
 
-  Open the browser to login the EMQX Dashboard and click Configuration → Listeners to enter the listener page, we first click the Add Listener button to add a name called test, port 1884 The listener, as shown in the following figure:
+  ブラウザでEMQXダッシュボードにログインし、メニューの「Configuration」→「Listeners」をクリックしてリスナーページに入ります。まず「Add Listener」ボタンをクリックし、名前を`test`、ポートを1884に設定したリスナーを追加します。以下の図のように操作してください。
 
   <div style="text-align:center">
-  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" />
+  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" alt="EMQXでのリスナー追加画面" />
   </div>
-  Then click the Add button to create the listener, as shown in the following figure:
 
-  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" />
+  次に「Add」ボタンをクリックしてリスナーを作成します。以下の図のように表示されます。
 
-  As can be seen from the figure, the test listener we created has taken effect.
+  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" alt="EMQXで追加されたリスナーの一覧" />
 
-+ Check whether the newly added listener is injected into the Service
+  図からわかるように、作成した`test`リスナーが有効になっています。
+
++ 新規追加したリスナーがServiceに注入されているか確認します。
 
   ```bash
   kubectl get svc
@@ -97,4 +98,4 @@ Operator supports configuring EMQX cluster Dashboard Service through `.spec.dash
   emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
   ```
 
-  From the output results, we can see that the newly added listener 1884 has been injected into the `emqx-listeners` Service.
+  出力結果から、新たに追加したポート1884のリスナーが`emqx-listeners` Serviceに注入されていることが確認できます。

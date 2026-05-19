@@ -1,46 +1,46 @@
 # CoAP ゲートウェイ
 
-EMQX の CoAP ゲートウェイは、[Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) プロトコルに準拠し、標準的なパブリッシュ、サブスクライブ、メッセージ受信を実現します。
+EMQX の CoAP ゲートウェイは、[Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) プロトコルに準拠し、標準的なパブリッシュ、サブスクライブ、およびメッセージ受信を実現します。
 
 以下は、コネクションモードとコネクションレスモードでサポートされる機能一覧です。
 
 | 機能               | コネクションレスモード | コネクションモード |
-| ----------------- | ------------------- | --------------- |
-| メッセージパブリッシュ   | √                   | √               |
-| トピックサブスクライブ   | √                   | √               |
-| トピックのサブスクライブ解除 | ×                   | √               |
-| コネクションの作成       | ×                   | √               |
-| コネクションのクローズ   | ×                   | √               |
-| ハートビート           | ×                   | √               |
-| 認証                 | ×                   | √               |
+| ------------------ | ---------------------- | ------------------ |
+| メッセージパブリッシュ | √                      | √                  |
+| トピックサブスクライブ | √                      | √                  |
+| トピックのサブスクライブ解除 | ×                      | √                  |
+| コネクション作成       | ×                      | √                  |
+| コネクション終了       | ×                      | √                  |
+| ハートビート           | ×                      | √                  |
+| 認証                 | ×                      | √                  |
 
 <!--アーキテクチャの簡単な紹介-->
 
 ## CoAP ゲートウェイの有効化
 
-EMQX 5 では、CoAP ゲートウェイはダッシュボード、HTTP API、設定ファイル `base.hocon` を通じて設定・有効化できます。本節ではダッシュボードを例に操作手順を説明します。
+EMQX 5 では、CoAP ゲートウェイはダッシュボード、HTTP API、および設定ファイル `base.hocon` を通じて設定および有効化できます。本節では、ダッシュボードを使った設定例を示し、操作手順を説明します。
 
-EMQX ダッシュボードの左ナビゲーションメニューで **Extensions** -> **Gateways** をクリックします。**Gateway** ページにはサポートされているゲートウェイが一覧表示されます。**CoAP** を探し、**Actions** 列の **Setup** をクリックすると、**Initialize CoAP** ページに遷移します。
+EMQX ダッシュボードの左側ナビゲーションメニューで **Extensions** -> **Gateways** をクリックします。**Gateway** ページにはサポートされているすべてのゲートウェイが一覧表示されます。**CoAP** を探し、**Actions** 列の **Setup** をクリックすると、**Initialize CoAP** ページに遷移します。
 
 ::: tip
 
-EMQX をクラスターで稼働している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
+EMQX をクラスターで運用している場合、ダッシュボードや HTTP API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
 
 :::
 
-EMQX CoAP ゲートウェイはコネクションレスモードとコネクションモードの両方をサポートしています。コネクションレスモードではメッセージはワンオフ送信され、センサーの読み取りや簡単なコマンド送信など短時間のやり取りに適しています。コネクションモードでは、データ転送開始前にクライアントがブローカーとコネクションを確立します。
+EMQX CoAP ゲートウェイは、コネクションレスモードとコネクションモードの両方をサポートしています。コネクションレスモードでは、メッセージはワンオフの送信として扱われ、センサーの読み取りや簡単なコマンド送信などの短時間のやり取りに適しています。コネクションモードでは、クライアントがデータ転送開始前にブローカーとのコネクションを確立します。
 
-**Connection Requested** で `false`（デフォルト）または `true` を選択し、コネクションレスモードかコネクションモードかを選択できます。
+**Connection Requested** の設定で、`false`（デフォルト、コネクションレスモード）か `true`（コネクションモード）を選択して、モードを切り替えられます。
 
-コネクションモードを確認後、設定を続けられます。特にカスタマイズが不要な場合は、以下の3クリックで CoAP ゲートウェイを有効化できます。
+モードを決定したら、設定を続けます。大幅なカスタマイズが不要な場合は、以下の3ステップで CoAP ゲートウェイを有効化できます。
 
-1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。  
-2. **Listeners** タブに遷移し、EMQX がポート `5683` で UDP リスナーを事前設定しています。再度 **Next** をクリックして設定を確定します。  
+1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。
+2. **Listeners** タブに遷移し、EMQX がポート `5683` で UDP リスナーを事前設定しています。再度 **Next** をクリックして設定を確定します。
 3. **Enable** ボタンをクリックして CoAP ゲートウェイを有効化します。
 
 ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、CoAP ゲートウェイのステータスが **Enabled** と表示されます。
 
-<img src="./assets/coap-enabled.png" alt="CoAP ゲートウェイ有効化済み" style="zoom:50%;" />
+<img src="./assets/coap-enabled.png" alt="CoAP ゲートウェイ有効化" style="zoom:50%;" />
 
 上記の設定は HTTP API でも可能です。
 
@@ -69,112 +69,108 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
 
 HTTP API の詳細は [HTTP API - Gateway](../admin/api.md) を参照してください。
 
-カスタマイズが必要な場合やリスナー追加、認証ルール追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションをお読みください。
+カスタマイズが必要な場合やリスナーの追加、認証ルールの追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションを参照してください。
 
-CoAP ゲートウェイは UDP と DTLS タイプリスナーのみをサポートしています。設定可能なパラメータの完全な一覧は [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) を参照してください。
+CoAP ゲートウェイは UDP および DTLS タイプリスナーのみをサポートしています。設定可能なパラメータの完全な一覧は [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
 
 ## CoAP クライアントとの連携
 
 ### クライアントライブラリ
 
-CoAP ゲートウェイを構築後、CoAP クライアントツールを使って接続テストし、正常に動作するか確認できます。以下は推奨される CoAP クライアントツールの例です。
+CoAP ゲートウェイを構築した後、CoAP クライアントツールを使用して接続テストを行い、正常に動作することを確認できます。以下は推奨される CoAP クライアントツールの例です。
 
 - [libcoap](https://github.com/obgm/libcoap)
 - [californium](https://github.com/eclipse/californium)
 
 ## パブリッシュ／サブスクライブ
 
-CoAP ゲートウェイは [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 標準で定義された URI パスとメソッドを使用します。
+CoAP ゲートウェイは、[Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 標準で定義された URI パスとメソッドを使用します。
 
-詳細なパラメータは [メッセージパブリッシュ](#message-publish)、[トピックサブスクライブ](#topic-subscribe)、[トピックサブスクライブ解除](#topic-unsubscribe) を参照してください。
+詳細なパラメータは [メッセージパブリッシュ](#message-publish)、[トピックサブスクライブ](#topic-subscribe)、[トピックのサブスクライブ解除](#topic-unsubscribe) を参照してください。
 
 ## CoAP ゲートウェイのカスタマイズ
 
-デフォルト設定に加え、EMQX は多様な設定オプションを提供し、特定のビジネス要件に柔軟に対応可能です。本節では **Gateways** ページで利用可能な各フィールドについて詳しく解説します。以下のスクリーンショット下の説明もご参照ください。
+デフォルト設定に加え、EMQX はさまざまな設定オプションを提供し、特定のビジネス要件に柔軟に対応できます。本節では、**Gateways** ページにある各フィールドの詳細を説明します。以下のスクリーンショットと説明をご覧ください。
 
-<img src="./assets/coap-basic-conf.png" alt="基本設定画面" style="zoom:50%;" />
+<img src="./assets/coap-basic-conf.png" alt="image-20230420152920254" style="zoom:50%;" />
 
-- **Connection Required**: コネクションレスモードかコネクションモードかを設定します。デフォルトは `false`（コネクションレスモード）。選択肢は `false`（コネクションレス）、`true`（コネクション）。
+- **Connection Required**: コネクションレスモードまたはコネクションモードを有効にするかを設定します。デフォルトは `false`（コネクションレスモード）。選択肢は `false`（コネクションレス）、`true`（コネクション）。
+- **Notification Message Type**: 配信する CoAP メッセージのタイプを設定します。デフォルトは `qos`。選択肢は以下の通りです。
 
-- **Notification Message Type**: 配信される CoAP メッセージのタイプを設定します。デフォルトは `qos`。選択肢は以下の通りです。
+  - **qos**: CoAP 通知のアック（ACK）要否は受信メッセージの QoS レベルに依存します。
+    - QoS 0：クライアントからのアック不要
+    - QoS 1/2：クライアントからのアック必要
+  - **con**: CoAP 通知はクライアントからのアックが必要です。
+  - **non**: CoAP 通知はクライアントからのアック不要です。
 
-  - **qos**: 受信メッセージの QoS レベルに応じて CoAP 通知のアックが必要か決まります。  
-    - QoS 0: クライアントからのアック不要  
-    - QoS 1/2: クライアントからのアック必要  
-  - **con**: クライアントによるアックが必須の CoAP 通知  
-  - **non**: クライアントによるアック不要の CoAP 通知  
+- **Heartbeat**: **Connection Required** が `true` の場合のみ必要。接続維持のための最小ハートビート間隔を設定します。デフォルトは 30 秒。
+- **Enable Statistics**: ゲートウェイによる統計収集とレポートを許可するかを設定します。デフォルトは `true`。選択肢は `true`、`false`。
+- **Subscriber QoS**: サブスクライブ要求のデフォルト QoS レベルを設定します。デフォルトは `coap`。選択肢は以下の通りです。
 
-- **Heartbeat**: **Connection Required** が `true` の場合のみ必要。コネクション維持のための最小ハートビート間隔を設定します。デフォルトは 30秒。
-
-- **Enable Statistics**: ゲートウェイによる統計収集・報告を許可するか設定します。デフォルトは `true`。選択肢は `true`、`false`。
-
-- **Subscriber QoS**: サブスクライブ要求のデフォルト QoS レベルを設定します。デフォルトは `coap`。選択肢は以下。
-
-  - **coap**: **Notification Message Type** の設定に従い QoS レベルを決定  
-    - アック不要なら QoS 0  
-    - アック必要なら QoS 1  
+  - **coap**: **Notification Message Type** の設定に従い QoS レベルを決定
+    - アック不要の場合は QoS 0
+    - アック必要の場合は QoS 1
   - **qos0**, **qos1**, **qos2**
 
 - **Publish QoS**: パブリッシュ要求のデフォルト QoS レベルを設定します。デフォルトは `coap`。選択肢は `coap`、`qos0`、`qos1`、`qos2`。
+- **MountPoint**: パブリッシュおよびサブスクライブ時にすべてのトピックの前に付加される文字列を設定します。これにより異なるプロトコル間でのメッセージルーティングの分離が可能になります。例: *CoAP*。
 
-- **MountPoint**: パブリッシュやサブスクライブ時にすべてのトピックの前に付与される文字列を設定します。異なるプロトコル間でのメッセージルーティング分離を実現できます。例: *CoAP*
-
-  **注意**: このトピックプレフィックスはゲートウェイが管理するため、CoAP クライアントはパブリッシュやサブスクライブ時に明示的に付与する必要はありません。
+  **注意**: このトピックプレフィックスはゲートウェイが管理しており、CoAP クライアントはパブリッシュやサブスクライブ時に明示的にこのプレフィックスを付加する必要はありません。
 
 ### リスナーの追加
 
-デフォルトで、名前が **default** の UDP リスナーがポート `5683` に設定されており、最大 1,024,000 の同時接続をサポートしています。**Settings** をクリックすると詳細設定が可能、**Delete** でリスナー削除、**Add Listener** で新規リスナー追加ができます。
+デフォルトで、名前が **default** の UDP リスナーがポート `5683` に設定されており、最大 1,024,000 の同時接続をサポートしています。**Settings** をクリックすると詳細設定が可能で、**Delete** でリスナー削除、**Add Listener** で新規リスナー追加ができます。
 
 ![coap-advanced-conf](./assets/coap-advanced-conf.png)
 
-**Add Listener** をクリックするとリスナー追加画面が開き、以下の設定が可能です。
+**Add Listener** をクリックすると **Add Listener** ページが開き、以下の設定が可能です。
 
 **基本設定**
 
-- **Name**: リスナーの一意識別子を設定します。  
-- **Type**: プロトコルタイプを選択します。CoAP では `udp` または `dtls` が選べます。  
-- **Bind**: リスナーが接続を受け付けるポート番号を設定します。  
-- **MountPoint**（任意）: パブリッシュやサブスクライブ時にすべてのトピックの前に付与される文字列を設定し、異なるプロトコル間のメッセージルーティング分離を実現します。
+- **Name**: リスナーの一意識別子を設定します。
+- **Type**: プロトコルタイプを選択します。CoAP では `udp` または `dtls` が選択可能です。
+- **Bind**: リスナーが接続を受け付けるポート番号を設定します。
+- **MountPoint**（任意）: パブリッシュおよびサブスクライブ時にすべてのトピックの前に付加される文字列を設定し、異なるプロトコル間でのメッセージルーティング分離を実現します。
 
 **リスナー設定**
 
-- **Max Connections**: リスナーが処理可能な最大同時接続数を設定します。デフォルトは 1024000。  
-- **Max Connection Rate**: リスナーが1秒あたり受け入れる新規接続の最大レートを設定します。デフォルトは 1000。
+- **Max Connections**: リスナーが処理可能な最大同時接続数を設定します。デフォルトは 1024000。
+- **Max Connection Rate**: リスナーが1秒あたりに受け入れる新規接続の最大レートを設定します。デフォルトは 1000。
 
 **UDP 設定**
 
-- **ActiveN**: ソケットの `{active, N}` オプションを設定します。これはソケットが能動的に処理できる受信パケット数です。詳細は [Erlang Documentation - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2) を参照してください。  
-- **Buffer**: 受信および送信パケットを格納するバッファサイズを KB 単位で設定します。  
-- **Receive Buffer**: 受信バッファサイズを KB 単位で設定します。  
-- **Send Buffer**: 送信バッファサイズを KB 単位で設定します。  
-- **SO_REUSEADDR**: ローカルでポート番号の再利用を許可するか設定します。
+- **ActiveN**: ソケットの `{active, N}` オプションを設定します。これはソケットが能動的に処理できる受信パケット数を意味します。詳細は [Erlang Documentation - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2) を参照してください。
+- **Buffer**: 受信および送信パケットを格納するバッファサイズを KB 単位で設定します。
+- **Receive Buffer**: 受信バッファサイズを KB 単位で設定します。
+- **Send Buffer**: 送信バッファサイズを KB 単位で設定します。
+- **SO_REUSEADDR**: ポート番号のローカル再利用を許可するかを設定します。
 
 **DTLS 設定**（DTLS リスナーのみ）
 
-TLS Verify の有効化はトグルスイッチで設定可能ですが、その前に関連する **TLS Cert**、**TLS Key**、**CA Cert** 情報をファイル内容の入力または **Select File** ボタンでアップロードする必要があります。詳細は [Enable SSL/TLS Connection](https://docs.emqx.com/en/enterprise/v5.0/network/emqx-mqtt-tls.html) を参照してください。
+TLS Verify の有効化はトグルスイッチで設定可能です。ただし、その前に関連する **TLS Cert**、**TLS Key**、および **CA Cert** 情報をファイルの内容を入力するか、**Select File** ボタンでアップロードして設定する必要があります。詳細は [Enable SSL/TLS Connection](https://docs.emqx.com/en/enterprise/v5.0/network/emqx-mqtt-tls.html) を参照してください。
 
 ### 認証の設定
 
 クライアント ID、ユーザー名、パスワードはクライアントの [Create Connection](#create-connection) リクエストで提供されます。CoAP ゲートウェイは以下の認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)  
-- [MySQL 認証](../access-control/authn/mysql.md)  
-- [MongoDB 認証](../access-control/authn/mongodb.md)  
-- [PostgreSQL 認証](../access-control/authn/postgresql.md)  
-- [Redis 認証](../access-control/authn/redis.md)  
-- [HTTP サーバー認証](../access-control/authn/http.md)  
-- [JWT 認証](../access-control/authn/jwt.md)  
-- [LDAP 認証](../access-control/authn/ldap.md)  
+- [組み込みデータベース認証](../access-control/authn/mnesia.md)
+- [MySQL 認証](../access-control/authn/mysql.md)
+- [MongoDB 認証](../access-control/authn/mongodb.md)
+- [PostgreSQL 認証](../access-control/authn/postgresql.md)
+- [Redis 認証](../access-control/authn/redis.md)
+- [HTTP サーバー認証](../access-control/authn/http.md)
+- [JWT 認証](../access-control/authn/jwt.md)
+- [LDAP 認証](../access-control/authn/ldap.md)
 
 本節ではダッシュボードを例に認証設定方法を説明します。
 
 **Gateways** ページで **CoAP** を探し、**Actions** 列の **Setup** をクリックし、**Authentication** タブに入ります。
 
-**Create Authentication** をクリックし、**Mechanism** に **Password-Based** または **JWT** を選択、必要に応じて **Backend** を選びます。
+**Create Authentication** をクリックし、**Mechanism** に **Password-Based** または **JWT** を選択し、必要に応じて **Backend** を選択します。
 
-認証方式の詳細な設定方法は本節冒頭の各ページを参照してください。
+認証方式の詳細な設定方法は、本節冒頭に記載の各ページを参照してください。
 
-ダッシュボード以外に HTTP API でも認証器を設定可能です。例えば、CoAP ゲートウェイ用に組み込みデータベース認証を作成する場合は以下のコードを使用します。
+ダッシュボードのほか、HTTP API でも認証設定が可能です。例えば、CoAP ゲートウェイ用に組み込みデータベース認証を作成する場合、以下のコードを使用します。
 
 ```bash
 curl -X 'POST' \
@@ -195,41 +191,41 @@ curl -X 'POST' \
 
 ::: tip
 
-MQTT プロトコルとは異なり、**ゲートウェイは認証器の作成のみをサポートし、認証器リスト（または認証チェーン）はサポートしません**。認証器が有効化されていない場合、すべての CoAP クライアントのログインが許可されます。
+MQTT プロトコルとは異なり、**ゲートウェイでは認証器の作成のみをサポートし、認証器リスト（または認証チェーン）はサポートしていません**。認証器が有効化されていない場合、すべての CoAP クライアントのログインが許可されます。
 
 :::
 
-## 参考: CoAP クライアントガイド
+## リファレンス: CoAP クライアントガイド
 
 ### Create Connection
 
 `Connection Mode` のみ利用可能です。
 
-このインターフェースは CoAP ゲートウェイへのクライアントコネクション作成に使用します。CoAP ゲートウェイの認証が有効な場合、このリクエストで提供された `clientid`、`username`、`password` を検証し、不正ユーザーを防止します。
+このインターフェースは、CoAP ゲートウェイへのクライアントコネクションを作成するために使用します。CoAP ゲートウェイの認証が有効な場合、このリクエストで提供された `clientid`、`username`、`password` を検証し、不正ユーザーを防止します。
 
 **リクエストパラメータ:**
 
-- メソッド: `POST`  
-- URI: `mqtt/connection{?QueryString*}`  
-  - `clientid`: 必須、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。  
-  - `username`: 任意、UTF-8 文字列。接続認証に使用。  
-  - `password`: 任意、UTF-8 文字列。接続認証に使用。  
+- メソッド: `POST`
+- URI: `mqtt/connection{?QueryString*}`、`QueryString` は以下:
+  - `clientid`: 必須パラメータ、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。
+  - `username`: 任意パラメータ、UTF-8 文字列。接続認証に使用。
+  - `password`: 任意パラメータ、UTF-8 文字列。接続認証に使用。
 - ペイロード: 空
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.01`: コネクション作成成功。トークン文字列がメッセージ本文に返されます。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.01` の場合は `Token`（トークン文字列）  
-  - それ以外は `ErrorMessage`（エラー説明）
+- ステータスコード:
+  - `2.01`: コネクション作成成功。このコネクション用のトークン文字列がメッセージボディに返されます。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.01` の場合は `Token`、それ以外は `ErrorMessage`。
+  - `Token`: 後続リクエストで使用するトークン文字列。
+  - `ErrorMessage`: エラー説明メッセージ。
 
 `libcoap` を例に示します。
 
 ```bash
-# clientid 123、username admin、password public で接続リクエストを送信
+# clientid 123、username と password に admin/public を指定して接続リクエストを送信。
 # 返却されたトークンは 3404490787
 coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&username=admin&password=public"
 
@@ -237,32 +233,30 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
 ```
 
 :::tip
-コネクション作成成功後、ダッシュボード、HTTP API、CLI で CoAP ゲートウェイのクライアント一覧を確認できます。
+コネクション作成成功後、ダッシュボード、HTTP API、CLI を使って CoAP ゲートウェイのクライアント一覧を確認できます。
 :::
 
 ### Close Connection
 
 `Connection Mode` のみ利用可能です。
 
-このインターフェースは CoAP コネクションをクローズします。
+このインターフェースは CoAP コネクションを終了するために使用します。
 
 **リクエストパラメータ:**
 
-- メソッド: `DELETE`  
-- URI: `mqtt/connection{?QueryString*}`  
-  - `clientid`: 必須、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。  
-  - `token`: 必須、"Create Connection" リクエストで返されたトークン文字列。  
+- メソッド: `DELETE`
+- URI: `mqtt/connection{?QueryString*}`、`QueryString` は以下:
+  - `clientid`: 必須パラメータ、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。
+  - `token`: 必須パラメータ。`Create Connection` リクエストで返されたトークン文字列を使用。
 - ペイロード: 空
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.01`: コネクション正常にクローズ。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.01` の場合は `Token`  
-  - それ以外は `ErrorMessage`
+- ステータスコード:
+  - `2.01`: コネクション終了成功。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.01` の場合は `Token`、それ以外は `ErrorMessage`。
 
 例:
 
@@ -274,25 +268,23 @@ coap-client -m delete -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token
 
 `Connection Mode` のみ利用可能です。
 
-このインターフェースは CoAP クライアントとゲートウェイ間のコネクション維持に使用します。ハートビートが期限切れになると、ゲートウェイはセッションとサブスクリプションを削除し、そのクライアントのすべてのリソースを解放します。
+このインターフェースは CoAP クライアントとゲートウェイ間の接続維持に使用します。ハートビートが期限切れになると、ゲートウェイはセッションとサブスクリプションを削除し、そのクライアントのすべてのリソースを解放します。
 
 **リクエストパラメータ:**
 
-- メソッド: `PUT`  
-- URI: `mqtt/connection{?QueryString*}`  
-  - `clientid`: 必須、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。  
-  - `token`: 必須、"Create Connection" リクエストで返されたトークン文字列。  
+- メソッド: `PUT`
+- URI: `mqtt/connection{?QueryString*}`、`QueryString` は以下:
+  - `clientid`: 必須パラメータ、UTF-8 文字列。ゲートウェイはこの文字列をコネクションの一意識別子として使用します。
+  - `token`: 必須パラメータ。`Create Connection` リクエストで返されたトークン文字列を使用。
 - ペイロード: 空
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.01`: コネクション正常に維持。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.01` の場合は `Token`  
-  - それ以外は `ErrorMessage`
+- ステータスコード:
+  - `2.01`: コネクション終了成功。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.01` の場合は `Token`、それ以外は `ErrorMessage`。
 
 例:
 
@@ -301,44 +293,42 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 ```
 
 :::tip
-ハートビート間隔は CoAP ゲートウェイの `heartbeat` オプションで決まり、デフォルトは 30 秒です。
+ハートビート間隔は CoAP ゲートウェイの `heartbeat` オプションで決定されます。デフォルトは 30 秒です。
 :::
 
 ### メッセージパブリッシュ
 
-CoAP クライアントが指定トピックにメッセージを送信するためのインターフェースです。`Connection Mode` が有効な場合は追加の識別情報が必要です。
+このインターフェースは CoAP クライアントが指定したトピックにメッセージを送信するために使用します。`Connection Mode` が有効な場合は追加の識別情報を含める必要があります。
 
 **リクエストパラメータ:**
 
-- メソッド: `POST`  
-- URI: `ps/{+topic}{?QueryString*}`  
-  - `{+topic}` はパブリッシュ先トピック。例: `coap/test` へ送信する場合は URI は `ps/coap/test`。  
-  - `{?QueryString}` はリクエストパラメータ:  
-    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。  
-    - `token`: `Connection Mode` のみ必須。  
-    - `retain`（任意）: リテインメッセージとしてパブリッシュするか。boolean、デフォルトは `false`。  
-    - `qos`: メッセージの QoS。MQTT クライアントがメッセージ受信に使用する QoS レベル。`0`、`1`、`2` のいずれか。  
+- メソッド: `POST`
+- URI: `ps/{+topic}{?QueryString*}`
+  - `{+topic}` はパブリッシュ対象のトピック。例: `coap/test` にパブリッシュする場合は URI は `ps/coap/test`。
+  - `{?QueryString}` はリクエストパラメータ:
+    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。
+    - `token`: `Connection Mode` のみ必須。
+    - `retain`（任意）: リテインメッセージとしてパブリッシュするか。真偽値。デフォルトは `false`。
+    - `qos`: メッセージの QoS。MQTT クライアントがメッセージを受け取る際の QoS レベルを示す。`0`, `1`, `2` の列挙値。
     - `expiry`: メッセージの有効期限（秒単位）。デフォルトは 0（期限なし）。
 
 - ペイロード: メッセージペイロード
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.04`: パブリッシュ成功。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.04` の場合は空  
-  - それ以外は `ErrorMessage`
+- ステータスコード:
+  - `2.04`: パブリッシュ成功
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.04` の場合は空、そうでなければ `ErrorMessage`。
 
-例: コネクションレスモードでメッセージをパブリッシュ
+例: `Connectionless Mode` でメッセージをパブリッシュ
 
 ```bash
 coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test"
 ```
 
-または、コネクションモードで `clientid` と `token` を付与してパブリッシュ
+または、`Connection Mode` で `clientid` と `token` を付与してパブリッシュ
 
 ```bash
 coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
@@ -346,73 +336,69 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 
 ### トピックサブスクライブ
 
-CoAP クライアントがトピックをサブスクライブするためのインターフェースです。`Connection Mode` が有効な場合は追加の識別情報が必要です。
+このインターフェースは CoAP クライアントがトピックをサブスクライブするために使用します。`Connection Mode` が有効な場合は追加の識別情報を含める必要があります。
 
 **リクエストパラメータ:**
 
-- メソッド: `GET`  
-- オプション: `observer` を `0` に設定  
-- URI: `ps/{+topic}{?QueryString*}`  
-  - `{+topic}` はサブスクライブするトピック。例: `coap/test` をサブスクライブする場合は URI は `ps/coap/test`。  
-  - `{?QueryString}` はリクエストパラメータ:  
-    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。  
-    - `token`: `Connection Mode` のみ必須。  
-    - `qos`: サブスクライブ QoS。ゲートウェイが CoAP クライアントにメッセージ配信に使用する MessageType (`CON` または `NON`) を示します。  
-      - `0`: `NON` メッセージで配信  
-      - `1` または `2`: `CON` メッセージで配信  
+- メソッド: `GET`
+- オプション: `observer` を `0` に設定
+- URI: `ps/{+topic}{?QueryString*}`
+  - `{+topic}` はサブスクライブ対象のトピック。例: `coap/test` にサブスクライブする場合は URI は `ps/coap/test`。
+  - `{?QueryString}` はリクエストパラメータ:
+    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。
+    - `token`: `Connection Mode` のみ必須。
+    - `qos`: サブスクライブ QoS。ゲートウェイが CoAP クライアントにメッセージ配信時に使用する MessageType（`CON` または `NON`）を示す。列挙値:
+      - `0`: `NON` メッセージで配信
+      - `1` または `2`: `CON` メッセージで配信
 
 - ペイロード: 空
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.05`: サブスクライブ成功。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.05` の場合は空  
-  - それ以外は `ErrorMessage`
+- ステータスコード:
+  - `2.05`: サブスクライブ成功
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.05` の場合は空、そうでなければ `ErrorMessage`。
 
-例: コネクションレスモードで `coap/test` をサブスクライブ
+例: `Connectionless Mode` で `coap/test` をサブスクライブ
 
 ```bash
 coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/test"
 ```
 
-または、コネクションモードで `clientid` と `token` を付与してサブスクライブ
+または、`Connection Mode` で `clientid` と `token` を付与してサブスクライブ
 
 ```bash
 coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### トピックサブスクライブ解除
+### トピックのサブスクライブ解除
 
-CoAP クライアントがトピックのサブスクライブを解除するためのインターフェースです。
+このインターフェースは CoAP クライアントがトピックのサブスクライブを解除するために使用します。
 
-現状の実装では、サブスクライブ解除操作は `Connection Mode` のみ利用可能です。
+現状の実装では、サブスクライブ解除操作は `Connection Mode` のみで利用可能です。
 
 **リクエストパラメータ:**
 
-- メソッド: `GET`  
-- URI: `ps/{+topic}{?QueryString*}`  
-  - `{+topic}` はサブスクライブ解除するトピック。例: `coap/test` の場合は URI は `ps/coap/test`。  
-  - `{?QueryString}` はリクエストパラメータ:  
-    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。  
-    - `token`: `Connection Mode` のみ必須。  
+- メソッド: `GET`
+- URI: `ps/{+topic}{?QueryString*}`
+  - `{+topic}` はサブスクライブ解除対象のトピック。例: `coap/test` のサブスクライブを解除する場合は URI は `ps/coap/test`。
+  - `{?QueryString}` はリクエストパラメータ:
+    - `clientid`: `Connection Mode` では必須、`Connectionless Mode` では任意。
+    - `token`: `Connection Mode` のみ必須。
 
 - ペイロード: 空
 
 **レスポンス:**
 
-- ステータスコード:  
-  - `2.07`: サブスクライブ解除成功。  
-  - `4.00`: 不正なリクエスト。詳細なエラー情報が本文に返されます。  
-  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。  
-- ペイロード:  
-  - `2.07` の場合は空  
-  - それ以外は `ErrorMessage`
+- ステータスコード:
+  - `2.07`: サブスクライブ解除成功
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
+- ペイロード: ステータスコードが `2.07` の場合は空、そうでなければ `ErrorMessage`。
 
-例: コネクションモードで `coap/test` のサブスクライブ解除
+例: `Connection Mode` で `coap/test` のサブスクライブを解除
 
 ```bash
 coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
@@ -422,11 +408,11 @@ coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3
 
 メッセージサイズ削減のため、CoAP ゲートウェイは短縮パラメータ名をサポートしています。例えば、`clientid=barx` は `c=bar` と書けます。サポートされる短縮パラメータ名は以下の通りです。
 
-| パラメータ名     | 短縮名  |
-| -------------- | ------ |
-| `clientid`     | `c`    |
-| `username`     | `u`    |
-| `password`     | `p`    |
-| `token`        | `t`    |
-| `qos`          | `q`    |
-| `retain`       | `r`    |
+| パラメータ名   | 短縮名 |
+| -------------- | ------- |
+| `clientid`     | `c`     |
+| `username`     | `u`     |
+| `password`     | `p`     |
+| `token`        | `t`     |
+| `qos`          | `q`     |
+| `retain`       | `r`     |

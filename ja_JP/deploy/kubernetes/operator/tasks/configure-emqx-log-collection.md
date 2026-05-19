@@ -1,18 +1,18 @@
-# Collect EMQX Logs In Kubernetes
+# KubernetesでEMQXログを収集する
 
-## Task Target
+## タスク対象
 
-Use ELK to collect EMQX cluster logs.
+ELKを使用してEMQXクラスターのログを収集します。
 
-## Deploy ELK
+## ELKのデプロイ
 
-ELK is the capitalized abbreviation of the three open source frameworks of Elasticsearch, Logstash, and Kibana, and is also known as the Elastic Stack. [Elasticsearch](https://www.elastic.co/elasticsearch/) is a near-real-time search platform framework based on Lucene, distributed, and interactive through Restful, also referred to as: es. [Logstash](https://www.elastic.co/logstash/) is the central data flow engine of ELK, which is used to collect data in different formats from different targets (files/data storage/MQ), and supports after filtering Output to different destinations (file/MQ/redis/elasticsearch/kafka, etc.). [Kibana](https://www.elastic.co/kibana/) can display es data on a page and provide real-time analysis functions.
+ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフレームワークの頭文字を取った略称で、Elastic Stackとも呼ばれます。[Elasticsearch](https://www.elastic.co/elasticsearch/)はLuceneをベースにしたほぼリアルタイム検索プラットフォームフレームワークで、分散型かつRestfulを通じてインタラクティブに利用でき、esとも呼ばれます。[Logstash](https://www.elastic.co/logstash/)はELKの中央データフローエンジンで、異なるターゲット（ファイル／データストレージ／MQ）から異なるフォーマットのデータを収集し、フィルタリング後に異なる宛先（ファイル／MQ／redis／elasticsearch／kafkaなど）へ出力することをサポートします。[Kibana](https://www.elastic.co/kibana/)はesのデータをページ上に表示し、リアルタイム分析機能を提供します。
 
-### Deploy Single Node Elasticsearch
+### シングルノードElasticsearchのデプロイ
 
-The method of deploying single-node Elasticsearch is relatively simple. You can refer to the following YAML orchestration file to quickly deploy an Elasticsearch cluster.
+シングルノードElasticsearchのデプロイ方法は比較的簡単です。以下のYAMLオーケストレーションファイルを参照して、Elasticsearchクラスターを素早くデプロイできます。
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+- 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   ---
@@ -104,12 +104,12 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
         containers:
         - image: docker.io/library/elasticsearch:7.9.3
           name: elasticsearch-logging
-            limits:
-              cpu: 1000m
-              memory: 1Gi
-            requests:
-              cpu: 100m
-              memory: 500Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 500Mi
           ports:
           - containerPort: 9200
             name: db
@@ -129,9 +129,8 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
             value: "single-node"
           - name: ES_JAVA_OPTS
             value: "-Xms512m -Xmx2g"
-        # Elasticsearch requires vm.max_map_count to be at least 262144.
-        # If your OS already sets up this number to a higher value, feel free
-        # to remove this init container.
+        # Elasticsearchはvm.max_map_countを少なくとも262144に設定する必要があります。
+        # OSで既にこれ以上の値が設定されている場合は、このinitコンテナは削除して構いません。
         initContainers:
         - name: elasticsearch-logging-init
           image: alpine:3.6
@@ -164,9 +163,9 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
           requests:
             storage: 10Gi
   ```
-  > The `storageClassName` field indicates the name of `StorageClass`, you can use the command `kubectl get storageclass` to get the StorageClass that already exists in the Kubernetes cluster, or you can create a StorageClass according to your own needs.
+  > `storageClassName`フィールドは`StorageClass`の名前を示します。`kubectl get storageclass`コマンドでKubernetesクラスターに既存のStorageClassを確認するか、必要に応じてStorageClassを作成してください。
 
-- Wait for the es to be ready, you can check the status of the es pod through the `kubectl get` command, make sure `STATUS` is `Running`
+- Elasticsearchが準備完了になるまで待ちます。`kubectl get`コマンドでesのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=elasticsearch"
@@ -174,11 +173,11 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
   elasticsearch-0             1/1     Running            0          16m
   ```
 
-### Deploy Kibana
+### Kibanaのデプロイ
 
-This article uses `Deployment` to deploy Kibana to visualize the collected logs. `Service` uses `NodePort`.
+本記事では`Deployment`を使ってKibanaをデプロイし、収集したログを可視化します。`Service`は`NodePort`を使用します。
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+- 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   ---
@@ -191,6 +190,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
       k8s-app: kibana
   spec:
     type: NodePort
+    ports:
     - port: 5601
       nodePort: 35601
       protocol: TCP
@@ -220,7 +220,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
       spec:
         containers:
-        -name: kibana
+        - name: kibana
           image: docker.io/kubeimages/kibana:7.9.3
           resources:
             limits:
@@ -228,7 +228,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
             requests:
               cpu: 100m
           env:
-            # The access address of ES
+            # ESのアクセス先アドレス
             - name: ELASTICSEARCH_HOSTS
               value: http://elasticsearch-logging:9200
           ports:
@@ -237,7 +237,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
             protocol: TCP
   ```
 
-- Wait for Kibana to be ready, you can check the status of the Kibana pod through the `kubectl get` command, make sure `STATUS` is `Running`
+- Kibanaが準備完了になるまで待ちます。`kubectl get`コマンドでKibanaのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=kibana"
@@ -245,13 +245,13 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
   kibana-b7d98644-48gtm       1/1     Running            0          17m
   ```
 
-  Finally, in the browser, enter `http://{node_ip}:35601`, and you will enter the kibana web interface
+  最後にブラウザで`http://{node_ip}:35601`にアクセスすると、KibanaのWebインターフェースに入れます。
 
-### Deploy Filebeat
+### Filebeatのデプロイ
 
-[Filebeat](https://www.elastic.co/beats/filebeat) is a lightweight eating log collection component, which is part of the Elastic Stack and can work seamlessly with Logstash, Elasticsearch and Kibana. Whether you're transforming or enriching logs and files with Logstash, throwing around some data analysis in Elasticsearch, or building and sharing dashboards in Kibana, Filebeat makes it easy to get your data where it matters most.
+[Filebeat](https://www.elastic.co/beats/filebeat)は軽量なログ収集コンポーネントで、Elastic Stackの一部です。Logstash、Elasticsearch、Kibanaとシームレスに連携できます。ログを変換・強化したり、Elasticsearchでデータ分析を行ったり、Kibanaでダッシュボードを作成・共有したりする際に、Filebeatはデータを必要な場所に簡単に届けます。
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+- 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   ---
@@ -267,7 +267,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
       filebeat.inputs:
       - type: container
         paths:
-          # The log path of the EMQX container on the host
+          # ホスト上のEMQXコンテナのログパス
           - /var/log/containers/^emqx.*.log
         processors:
           - add_kubernetes_metadata:
@@ -369,10 +369,10 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           - name: varlibdockercontainers
             mountPath: /data/var/
             readOnly: true
-          -name: varlog
+          - name: varlog
             mountPath: /var/log/
             readOnly: true
-          -name: timezone
+          - name: timezone
             mountPath: /etc/localtime
         volumes:
         - name: config
@@ -382,7 +382,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
         - name: varlibdockercontainers
           hostPath:
             path: /data/var/
-        -name: varlog
+        - name: varlog
           hostPath:
             path: /var/log/
         - name: inputs
@@ -393,12 +393,12 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           hostPath:
             path: /data/filebeat-data
             type: DirectoryOrCreate
-        -name: timezone
+        - name: timezone
           hostPath:
             path: /etc/localtime
   ```
 
-- Wait for Filebeat to be ready, you can check the status of the Filebeat pod through the `kubectl get` command, make sure `STATUS` is `Running`
+- Filebeatが準備完了になるまで待ちます。`kubectl get`コマンドでFilebeatのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
@@ -407,11 +407,11 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
   filebeat-vwrjn   1/1     Running   0          45m
   ```
 
-### Deploy Logstash
+### Logstashのデプロイ
 
-This is mainly to combine the business needs and the secondary utilization of logs, and Logstash is added for log cleaning. This article uses the [Beats Input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html) of Logstash to collect logs, and uses the [Ruby filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html) to filter logs. Logstash also provides many other input and filtering plug-ins for users to use, and you can configure appropriate plug-ins according to your business needs.
+主にビジネスニーズやログの二次利用に対応するために、Logstashを追加してログのクレンジングを行います。本記事ではLogstashの[Beats Inputプラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html)を使ってログを収集し、[Rubyフィルタープラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html)でログをフィルタリングします。Logstashは他にも多くの入力およびフィルタープラグインを提供しており、ビジネスニーズに応じて適切なプラグインを設定可能です。
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+- 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   ---
@@ -460,7 +460,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
             mountPath: /etc/logstash_c/
           - name: config-yml-volume
             mountPath: /usr/share/logstash/config/
-          -name: timezone
+          - name: timezone
             mountPath: /etc/localtime
           resources:
             limits:
@@ -476,7 +476,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
             items:
             - key: logstash.conf
               path: logstash.conf
-        -name: timezone
+        - name: timezone
           hostPath:
             path: /etc/localtime
         - name: config-yml-volume
@@ -504,7 +504,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
         ruby {
           code => "
             ss = event.get('message').split(' ')
-            len = ss. length()
+            len = ss.length()
             level = ''
             index = ''
             msg = ''
@@ -553,7 +553,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
       xpack.monitoring.elasticsearch.hosts: http://elasticsearch-logging:9200
   ```
 
-- Wait for Logstash to be ready, you can view the status of the Logstash pod through the `kubectl get` command, make sure `STATUS` is `Running`
+- Logstashが準備完了になるまで待ちます。`kubectl get`コマンドでLogstashのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=logstash"
@@ -562,22 +562,22 @@ This is mainly to combine the business needs and the secondary utilization of lo
   filebeat-vwrjn   1/1     Running   0          45m
   ```
 
-## Deploy EMQX Cluster
+## EMQXクラスターのデプロイ
 
-To deploy the EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md).
+EMQXクラスターのデプロイについては、ドキュメント[Deploy EMQX](../getting-started.md)を参照してください。
 
-## Verify Log Collection
+## ログ収集の検証
 
-- First log in to the Kibana interface, open the stack management module in the menu, click on the index management, you can find that there are already collected log indexes
+- まずKibanaのインターフェースにログインし、メニューのスタック管理モジュールを開き、インデックス管理をクリックすると、すでに収集されたログインデックスが確認できます。
 
   ![](./assets/configure-log-collection/index-manage.png)
 
-- In order to be able to discover and view logs in Kibana, you need to set an index match, select index patterns, and click Create
+- Kibanaでログを検出・閲覧できるようにするため、インデックスマッチを設定します。インデックスパターンを選択し、Createをクリックします。
 
   ![](./assets/configure-log-collection/create-index-0.png)
 
   ![](./assets/configure-log-collection/create-index-1.png)
 
-- Finally verify whether the EMQX cluster logs are collected
+- 最後にEMQXクラスターのログが収集されているかを確認します。
 
   ![](./assets/configure-log-collection/log-collection.png)
