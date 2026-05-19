@@ -1,27 +1,27 @@
-# Design for Durable Storage
+# Durable Storage の設計
 
-EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built database abstraction layer designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
+EMQX 6.0 では、MQTT メッセージ配信の高信頼性と永続性を確保するために設計された、専用のデータベース抽象化レイヤーである最適化された Durable Storage（DS）を導入しました。DS はストリーミングサービス（Kafka など）とキー・バリュー・ストアの強みを組み合わせ、MQTT データの保存、再生、管理において堅牢で高度に最適化された基盤を提供します。
 
-## Architecture: Backends and Storage Hierarchy
+## アーキテクチャ：バックエンドとストレージ階層
 
-Durable Storage is implementation-agnostic, using a backend concept to allow data to be stored across different database management systems.
+Durable Storage は実装に依存しない設計で、バックエンドの概念を用いて異なるデータベース管理システムにまたがってデータを保存可能にしています。
 
-### Embedded Backends
+### 埋め込みバックエンド
 
-EMQX provides two embedded backends that do not rely on third-party services: 
+EMQX はサードパーティのサービスに依存しない2つの埋め込みバックエンドを提供しています：
 
-- The `builtin_local` backend uses RocksDB as the storage engine and is intended for single-node deployments. 
-- The `builtin_raft` backend extends `builtin_local` with support for clustering and data replication across different sites.
+- `builtin_local` バックエンドは RocksDB をストレージエンジンとして使用し、単一ノードのデプロイメント向けです。
+- `builtin_raft` バックエンドは `builtin_local` を拡張し、クラスタリングと異なるサイト間でのデータレプリケーションをサポートします。
 
-### Data Storage Hierarchy
+### データストレージ階層
 
-The database storage engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:
+EMQX の組み込み耐久性機能を支えるデータベースストレージエンジンは、階層構造でデータを整理しています。以下の図は、EMQX クラスターに分散された Durable Storage データベースの構成を示しています。
 
 ![emqx_ds_sharding](./assets/emqx_ds_sharding.png)
 
-Internally, DS organizes data into a multi-layered hierarchy designed for both horizontal scalability and temporal partitioning. The structure is transparent to applications and ensures efficient data management across distributed EMQX nodes.
+内部的に、DS は水平スケーラビリティと時間的パーティショニングの両方を考慮した多層階層でデータを整理します。この構造はアプリケーションからは透過的であり、分散した EMQX ノード間で効率的なデータ管理を保証します。
 
-The complete DS hierarchy can be represented as follows:
+DS の階層構造は以下のように表現できます：
 
 ```mermaid
 flowchart TB
@@ -42,132 +42,180 @@ flowchart TB
     %% Styling
     classDef box fill:#f9f9ff,stroke:#666,stroke-width:1px,rx:6,ry:6;
     class DB,SH,SL,ST,TTV,GEN box;
-
-
 ```
-
-
 
 #### Database (DB)
 
-A database is the top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
+データベースはデータの最上位の論理コンテナです。各 DS データベースは独立しており、シャード、スラブ、ストリームを管理し、必要に応じて作成、管理、削除が可能です。例として：
 
-- **Sessions DB** stores durable session states.
-- **Messages DB** holds the corresponding MQTT message data.
+- **Sessions DB** は耐久セッション状態を保存します。
+- **Messages DB** は対応する MQTT メッセージデータを保持します。
 
-A single EMQX cluster can host multiple DS databases.
+単一の EMQX クラスターは複数の DS データベースをホストできます。
 
 #### Shard
 
-A shard is the horizontal partition of a durable storage database. Data is distributed across shards based on the publisher's client ID, enabling parallel processing and high availability. Each EMQX node can host one or more shards, and the total number of shards is determined by [n_shards](../durability/managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. 
+シャードは Durable Storage データベースの水平パーティションです。データはパブリッシャーのクライアント ID に基づいてシャード間に分散され、並列処理と高可用性を実現します。各 EMQX ノードは1つ以上のシャードをホストでき、シャードの総数は EMQX の初回起動時に設定される [n_shards](../durability/managing-replication.md#number-of-shards) パラメータで決まります。
 
-Shards also serve as the fundamental unit of replication. Each shard is replicated across multiple nodes according to the `durable_storage.messages.replication_factor` setting, ensuring that all replicas maintain identical message sets for redundancy and fault tolerance.
+シャードはレプリケーションの基本単位でもあります。各シャードは `durable_storage.messages.replication_factor` 設定に従い複数ノードにレプリケートされ、冗長性とフォールトトレランスのためにすべてのレプリカが同一のメッセージセットを保持します。
 
 #### Generation
 
-A generation is a logical, time-based partition of the database. Data written during different time periods is grouped into separate generations. New messages are always written to the current generation, while older generations become immutable and read-only. EMQX periodically creates new generations for several main purposes:
+ジェネレーションは論理的かつ時間ベースのデータベースパーティションです。異なる期間に書き込まれたデータは別々のジェネレーションにグループ化されます。新しいメッセージは常に現在のジェネレーションに書き込まれ、古いジェネレーションは不変かつ読み取り専用になります。EMQX は以下の主な目的で定期的に新しいジェネレーションを作成します：
 
-1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
-2. **Time-based data retention:** Because each generation corresponds to a specific time range, expired data can be efficiently removed by dropping entire generations.
+1. **後方互換性とデータ移行:** 新しいデータは改善されたエンコーディングで新ジェネレーションに追加され、古いジェネレーションは不変かつ読み取り専用のままです。
+2. **時間ベースのデータ保持:** 各ジェネレーションが特定の時間範囲に対応するため、期限切れデータはジェネレーション単位で効率的に削除可能です。
 
-Although conceptually related to slabs, generations are not physical storage units. Instead, they define temporal boundaries that organize slabs within each shard.
+ジェネレーションはスラブと概念的に関連しますが、物理的なストレージ単位ではありません。代わりに各シャード内のスラブを時間的に区分けします。
 
-Generations may also differ in how they internally structure and store data, depending on the configured storage layout. Currently, DS supports a single layout optimized for high-throughput wildcard and single-topic subscriptions. Future releases will introduce additional layouts designed for different workloads. The layout used for new generations is configured via the `durable_storage.messages.layout` parameter, with each layout engine providing its own set of configuration options.
+ジェネレーションは内部的なデータ構造や保存方法がストレージレイアウトにより異なる場合があります。現時点で DS は高スループットのワイルドカードおよび単一トピックサブスクライブに最適化された単一のレイアウトをサポートしています。将来のリリースでは異なるワークロード向けの追加レイアウトが導入される予定です。新しいジェネレーションで使用されるレイアウトは `durable_storage.messages.layout` パラメータで設定し、各レイアウトエンジンは独自の設定オプションを提供します。
 
 #### Slab
 
-A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more durable storage streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
+スラブはシャード ID とジェネレーション ID の両方で識別される物理的なデータパーティションです。各スラブは1つ以上の Durable Storage ストリームの耐久コンテナとして機能します。スラブ内のすべてのデータは同一のエンコーディングスキーマを共有し、追加のメタデータ保存を不要にします。スラブ内では原子性と一貫性が保証されます。
 
-Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
+例：`shard 2, gen 3` はそのジェネレーションの時間範囲内に書き込まれたすべてのストリームを格納する個別のスラブを表します。
 
 #### Stream
 
-A durable storage stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topic structures, allowing data to be read in time-ordered, deterministic chunks. A single durable storage stream may contain messages from multiple topics, and different storage layouts may apply different strategies for mapping topics into streams.
+Durable Storage ストリームは各スラブ内のバッチ処理およびシリアライズの論理単位です。ストリームは類似したトピック構造を持つ **Topic–Timestamp–Value (TTV)** トリプルをグループ化し、時間順かつ決定論的なチャンクでの読み取りを可能にします。単一の Durable Storage ストリームは複数トピックのメッセージを含むことがあり、異なるストレージレイアウトはトピックをストリームにマッピングする異なる戦略を採用する場合があります。
 
-Durable storage streams are also the fundamental unit of subscription and iteration in Durable Storage, enabling efficient handling of wildcard topic filters and consistent replay of ordered data. [Durable sessions](../durability/durability_introduction.md#durable-sessions) read messages from streams in batches, with the batch size controlled by the `durable_sessions.batch_size` configuration parameter.
+Durable Storage ストリームは Durable Storage におけるサブスクライブとイテレーションの基本単位でもあり、ワイルドカードトピックフィルターの効率的な処理と順序付けられたデータの一貫した再生を実現します。[Durable sessions](../durability/durability_introduction.md#durable-sessions) は `durable_sessions.batch_size` 設定で制御されるバッチサイズでストリームからメッセージを読み取ります。
 
 #### Topic–Timestamp–Value
 
-The minimal storage unit, representing a single MQTT message. Each TTV includes:
+最小の保存単位であり、単一の MQTT メッセージを表します。各 TTV は以下を含みます：
 
-- **Topic:** Follows MQTT semantics.
+- **Topic:** MQTT のセマンティクスに準拠。
+- **Timestamp:** 書き込み時刻または論理的な順序キー。
+- **Value:** 任意のバイナリデータ。
 
-- **Timestamp:** Write time or logical ordering key.
+## Durable Storage データベースグループ
 
-- **Value:** An arbitrary binary blob.
+EMQX 6.0.2 以降、Durable Storage はリソース管理と運用安全性向上のためにデータベースグループの概念を導入しました。
 
-## Write Path
+データベースグループは、ノード上の1つ以上の Durable Storage データベースに対して、ディスク容量やメモリバッファなどのストレージリソースを統合的に管理します。デフォルトでは各 Durable Storage データベースは自身のデータベースグループに割り当てられ、グループ名はデータベース名と同じであり、以前のリリースの挙動を維持します。
 
-Data writes to DS can use either **append-only mode** or **ACID transactions**.
+データベースグループはデータの構造やアクセス方法を変更しません。論理データモデル（シャード、ジェネレーション、スラブ、ストリーム）はそのままです。リソース管理のためのガバナンスレイヤーとして機能し、グループに単一のデータベースが含まれていても、クォータ管理やリソース計測の一貫した拡張可能な境界を確立します。
 
-### Append-Only Mode
+### 設計の動機
 
-This mode supports only the **appending of data**, offering minimal overhead for high-throughput scenarios.
+Durable Storage の永続データは RocksDB の SST（Stored String Table）ファイルに保存されます。書き込み先行ログはサイズが制限されていますが、SST ファイルは新しいデータの書き込みに伴い無制限に増加する可能性があります。
 
-### ACID Transactions
+データベースグループは同一ノード上で動作する複数の Durable Storage データベースの RAM とディスク使用量を明示的に制御し、リソース消費の明確な境界を設けるために導入されました。
 
-Transactions rely on **Optimistic Concurrency Control (OCC)**, assuming that clients typically operate on non-conflicting data subsets. If a conflict occurs, only one contender succeeds in committing the transaction; the others are aborted and retried.
+データベースグループは以下の課題に対応します：
 
-**Transaction Flow:**
+- 複数データベースで共通のディスク使用制限を共有可能にする
+- データ永続化前の書き込み受け入れ制御を強制する
+- グループ単位の可観測性の基盤を提供する
 
-1. **Initiation:** A client process (Tx) requests the Leader node to create a transaction context (containing the Leader's term and last committed serial number).
-2. **Operations:** The client schedules reads (added to the context), writes, and deletes. It also sets commit preconditions (e.g., check for the existence/non-existence of specific TTVs). Scheduled writes/deletes only materialize upon full commitment and replication.
-3. **Submission & Verification:** The client sends the list of operations to the Leader.
-   - The Leader checks the preconditions against the latest data snapshot.
-   - It verifies that the reads do not conflict with recent writes.
-4. **"Cooking (preparing)" and Logging:** If successful, the Leader "cooks" the transaction:
-   - It assigns written TTVs to streams.
-   - It creates a deterministic list of low-level storage mutations applicable to all replicas.
-5. **Commit:** A batch of "cooked" transactions is added to the Raft log (`builtin_raft`) or the RocksDB write-ahead log (WAL).
-6. **Outcome:** Upon successful completion, the transaction process is notified. Conflicts result in the transaction being aborted and retried.
+データベースグループは、特定ノードにレプリカを持つすべての Durable Storage シャードのリソース使用を制限します。RAM 制限はノードローカルで適用され、グループの総メモリ消費に直接影響します。ディスク制限はローカルレプリカが書き込む SST ファイルに適用されます。データはレプリケートされるため、ディスク使用量は論理データサイズではなく物理ストレージ消費を表します。
 
-**Write Flush Control**:
+### データベースグループモデル
 
-The frequency of flushing the buffer to the Raft log is controlled:
+各 Durable Storage データベースは必ず1つのデータベースグループに属します。複数のデータベースが同一グループに属することができ、グループ内のすべてのデータベースは同じストレージバックエンドを使用する必要があります。
 
-- `flush_interval`: Maximum time a cooked transaction can remain in the buffer.
-- `max_items`: Maximum number of pending transactions.
-- `idle_flush_interval`: Allows early flushing if no new data has been added within this interval.
+データベースグループは以下の共有リソースを所有・管理します：
 
-The following sequence describes the transaction lifecycle within the `builtin_raft` backend.
+- SST ファイルのディスク使用量（ソフトクォータ）
+- RocksDB の書き込みバッファ（メモリテーブル）メモリ
+- RocksDB のバックグラウンドスレッドプール
+
+リソース使用量はデータベースやシャード単位ではなく、グループ単位で追跡・強制されます。
+
+概念的には、データベースグループは以下の階層を導入します：
+
+```
+Database Group
+  └── Database (DB)
+        └── Shards
+              └── Slabs
+                    └── Streams
+                          └── TTV
+```
+
+### ストレージクォータ
+
+Durable Storage はディスク使用量制御の主な仕組みとしてソフトクォータを使用します。
+
+#### ソフトクォータの強制
+
+ストレージクォータは Durable Storage リーダーが書き込みトランザクションを受け入れる前に強制されます：
+
+1. 書き込みを含むトランザクションが送信されると、リーダーはデータベースグループの現在の SST ディスク使用量を確認します。
+2. クォータを超える場合、リーダーはトランザクションを拒否します。受理された場合はすべてのレプリカに一貫して複製・適用されます。
+3. 読み取り専用トランザクションは引き続き受け入れられます。
+4. データ削除のみのトランザクションも受け入れられます。
+
+## 書き込みパス
+
+DS へのデータ書き込みは、**append-only モード**または **ACID トランザクション**のいずれかを使用できます。
+
+### Append-Only モード
+
+このモードはデータの追加のみをサポートし、高スループットシナリオ向けに最小限のオーバーヘッドを提供します。
+
+### ACID トランザクション
+
+トランザクションは **楽観的同時実行制御（OCC）** に基づき、クライアントは通常競合しないデータサブセットを操作すると仮定します。競合が発生した場合は、1つのトランザクションのみがコミットに成功し、他は中止されて再試行されます。
+
+**トランザクションフロー：**
+
+1. **開始:** クライアントプロセス（Tx）がリーダーノードにトランザクションコンテキスト（リーダーの term と最後にコミットされたシリアル番号を含む）作成を要求します。
+2. **操作:** Durable Storage トランザクションは Erlang 関数で表現されます。この関数内でクライアントはデータを読み取り（アクセスしたトピックと時間範囲の情報がトランザクションコンテキストに追加されます）、書き込みや削除をスケジュールできます。コミット前提条件（特定の TTV の存在/非存在チェック）も設定可能です。読み取りは即時実行され、書き込み/削除は完全コミットとレプリケーション時にのみ実体化されます。
+3. **送信と検証:** クライアントは操作リストをリーダーに送信します。
+   - リーダーは最新のデータスナップショットに対して前提条件を検証します。
+   - 読み取りが最近の書き込みと競合しないか確認します。
+4. **「調理（準備）」とログ記録:** 成功するとリーダーはトランザクションを「調理」します：
+   - 書き込まれる各 TTV をストリームに割り当て、必要に応じて新規ストリームを作成します。
+   - すべてのレプリカで決定論的に適用可能な低レベルのストレージ変異リストを作成します。
+5. **コミット:** 「調理済み」トランザクションのバッチが Raft ログ（`builtin_raft`）または RocksDB 書き込み先行ログ（WAL）に追加されます。
+6. **結果:** 成功時にトランザクションプロセスに通知されます。競合があればトランザクションは中止され再試行されます。
+
+**書き込みフラッシュ制御：**
+
+バッファを Raft ログにフラッシュする頻度は以下で制御されます：
+
+- `flush_interval`: 調理済みトランザクションがバッファに残る最大時間
+- `max_items`: 保留中トランザクションの最大数
+- `idle_flush_interval`: 新規データが追加されていない場合の早期フラッシュ許可
+
+以下のシーケンスは `builtin_raft` バックエンド内のトランザクションライフサイクルを示します。
 
 <img src="./assets/transaction_flow.png" alt="transaction_flow" style="zoom:67%;" />
 
-## Read Path
+## 読み取りパス
 
-Reading data from DS revolves around streams. 
+DS からのデータ読み取りはストリームを中心に行われます。
 
-1. To access data in an MQTT topic, the reader first retrieves the list of streams associated with the topic using the `get_streams` API. This indirection allows DS to group similar topics and minimize metadata volume. The reader then creates an *iterator* for each stream with a specified start time. An iterator is a small data structure that tracks the read position in the stream. 
-2. Data can then be read using the `next` API, which returns a chunk of data and an updated iterator pointing to the next chunk.
+1. MQTT トピックのデータにアクセスするため、リーダーはまず `get_streams` API を使ってトピックに関連付けられたストリームのリストを取得します。この間接的な方法により、DS は類似トピックをグループ化しメタデータ量を最小化します。リーダーは指定した開始時刻で各ストリームの *イテレーター* を作成します。イテレーターはストリーム内の読み取り位置を追跡する小さなデータ構造です。
+2. その後、`next` API を使ってデータを読み取り、データチャンクと次のチャンクを指す更新済みイテレーターを受け取ります。
 
-### Reads with Wildcard Topic Filters
+### ワイルドカードトピックフィルターによる読み取り
 
-To facilitate efficient subscriptions to wildcard topic filters, DS groups TTVs with similarly structured topics into the same stream. This is achieved using the Learned Topic Structure (LTS) algorithm, which splits topics into *static* and *varying* parts. 
+ワイルドカードトピックフィルターの効率的なサブスクライブを実現するため、DS は類似構造のトピックを同一ストリームにグループ化します。これは Learned Topic Structure（LTS）アルゴリズムを用いて、トピックを *静的* 部分と *可変* 部分に分割することで達成されます。
 
-- **Example:** If clients publish data to the topic `metrics/<hostname>/cpu/socket/1/core/16`, the LTS algorithm, given enough data, derives the static topic part as `metrics/+/cpu/socket/+/core/+`, treating the hostname, socket, and core as varying parts. 
-- **Benefits:** This enables efficient queries such as `metrics/my_host/cpu/#` or `metrics/+/cpu/socket/1/core/+`.
+- **例:** クライアントが `metrics/<hostname>/cpu/socket/1/core/16` にデータをパブリッシュする場合、LTS アルゴリズムは十分なデータを元に静的トピック部分を `metrics/+/cpu/socket/+/core/+` と推定し、ホスト名、ソケット、コアを可変部分として扱います。
+- **利点:** これにより `metrics/my_host/cpu/#` や `metrics/+/cpu/socket/1/core/+` のような効率的なクエリが可能になります。
 
-### Real-Time Subscriptions
+### リアルタイムサブスクリプション
 
-Readers can also access data in real time using the subscription mechanism. The `subscribe` API, also based on iterators, allows DS to push data to subscribers instead of requiring clients to poll for data.
+リーダーはサブスクリプション機構を使いリアルタイムでデータにアクセスすることも可能です。`subscribe` API はイテレーターに基づき、クライアントがポーリングせずに DS からデータをプッシュ受信できるようにします。
 
-DS maintains two pools of subscribers: 
+DS は2つのサブスクライバープールを維持しています：
 
-- **Catch-up subscribers** read historical data and, upon reaching the end, become real-time subscribers. 
-- **Real-time subscriptions** are event-based and activate only when new data is written to DS.
+- **キャッチアップサブスクライバー** は過去データを読み取り、終端に達するとリアルタイムサブスクライバーに移行します。
+- **リアルタイムサブスクリプション** はイベントベースで、新規データが DS に書き込まれた時のみアクティブになります。
 
-Both pools group subscribers by stream and topic, reusing resources to serve multiple subscribers simultaneously. This approach saves IOPS when reading from disk and reduces network bandwidth when sending data to remote clients. A batch of messages, a list of subscription IDs, and a sparse dispatch matrix are sent across the cluster to remote nodes hosting subscribers, which then dispatches messages to local clients.
+両プールはストリームとトピックごとにサブスクライバーをグループ化し、複数のサブスクライバーに同時にサービスを提供するためリソースを共有します。この方法によりディスク読み取り時の IOPS を節約し、リモートクライアントへの送信時のネットワーク帯域も削減します。メッセージのバッチ、サブスクリプション ID のリスト、疎なディスパッチ行列がクラスター内のリモートノードに送信され、そこからローカルクライアントにメッセージが配信されます。
 
-<img src="./assets/real-time_subscriptions.png" alt="real-time_subscriptions" style="zoom:67%;" />
+<img src="./assets/real-time_subscriptions.png" alt="リアルタイムサブスクリプション" style="zoom:67%;" />
 
-## Conclusion: The Foundation of High-Reliability MQTT
+## さらに詳しく
 
-The Optimized Durable Storage in EMQX 6.0 is the resilient foundation for high-reliability MQTT messaging. By re-engineering RocksDB and embedding concepts like TTVs and Streams, DS provides a purpose-built, highly available, and persistent internal database. This architecture, coupled with sophisticated features like the LTS algorithm and Raft replication, ensures lossless message delivery and optimal retrieval for complex wildcard and shared subscriptions, solidifying EMQX's position as a leading solution for demanding IoT infrastructure.
+Durable Storage は EMQX の高信頼性および永続性に関連する複数の機能のコアデータ基盤として機能し、上位レイヤーの機能に対して統一されたストレージ、再生、一貫性保証を提供します。主な機能は以下の通りです：
 
-## More Information
-
-Durable Storage serves as the core data foundation for several high-reliability and persistence-related features in EMQX, providing unified storage, replay, and consistency guarantees for upper-layer functionality, including:
-
-- **[MQTT Durable Sessions](../durability/durability_introduction.md)**: A DS-based mechanism for persisting session state and undelivered messages.
-- **[Message Queue](../message-queue/message-queue-concept.md)**: A built-in message queueing feature that provides ordered message delivery, message replay, and high availability across the EMQX cluster.
-- **[Shared Subscription](../messaging/mqtt-shared-subscription.md)**: A load-balancing subscription mechanism that distributes messages among multiple subscribers in the same group.
+- **[MQTT Durable Sessions](../durability/durability_introduction.md)**：セッション状態と未配信メッセージを永続化する DS ベースの仕組み。
+- **[Message Queue](../message-queue/message-queue-concept.md)**：EMQX クラスター全体で順序付けられたメッセージ配信、メッセージ再生、高可用性を提供する組み込みメッセージキュー機能。
+- **[Shared Subscription](../messaging/mqtt-shared-subscription.md)**：同一グループ内の複数サブスクライバー間でメッセージを分散するロードバランシングサブスクリプション機構。

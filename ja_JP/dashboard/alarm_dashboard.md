@@ -1,44 +1,49 @@
-# Alarms
+# アラーム
 
-The **Alarms** page in the EMQX Dashboard displays both currently active alarms and historical (cleared) alarms. This allows administrators to monitor and manage system anomalies in real time.
+EMQXダッシュボードの**アラーム**ページでは、現在アクティブなアラームと過去の（解除済みの）アラームの両方を表示します。これにより、管理者はシステムの異常をリアルタイムで監視および管理できます。
 
-Each alarm record contains the following details:
+各アラームレコードには以下の詳細が含まれます。
 
-- **Name**: Identifier of the resource or component raising the alarm (e.g., connector, plugin, etc.)
-- **Message**: The specific error message or description (e.g., `resource down: timeout`)
-- **Trigger Node**: The EMQX node that reported the alarm
-- **Level**: The severity level (e.g., Warning, Critical)
-- **Activate At**: Timestamp when the alarm was triggered
-- **Duration**: How long the alarm has remained active
+- **名前**：アラームを発生させたリソースまたはコンポーネントの識別子（例：コネクター、プラグインなど）
+- **メッセージ**：具体的なエラーメッセージまたは説明（例：`resource down: timeout`）
+- **トリガーノード**：アラームを報告したEMQXノード
+- **レベル**：重大度レベル（例：Warning、Critical）
+- **発生時刻**：アラームがトリガーされたタイムスタンプ
+- **継続時間**：アラームがアクティブである期間
 
-## Active Alarms
+## アクティブアラーム
 
-On the **Active** tab, you can view all alarms that are currently active in the system.
+**アクティブ**タブでは、現在システム内でアクティブなすべてのアラームを確認できます。
 
-### Available Actions:
+### 利用可能な操作
 
-- **Refresh**: Click the **Refresh** button to update the list with the latest alarm data.
-- **Settings**: Click **Settings** to navigate to the [Monitoring](./cluster_settings.md#monitoring) settings page, where you can configure alarm trigger thresholds and check intervals.
-- **Set Up Webhook**: Click **Set Up Webhook** to enable webhook-based notification for alarm events. For setup details, refer to [Integrate Webhook to Send Alarm Events](../observability/alarms.md#integrate-webhook-to-send-alarm-events).
-- **Deactivate (Manual)**:
-   In some cases, alarms (e.g., from client disconnections or resource timeouts) may not automatically resolve.
-   Click the **Deactivate** button in the **Actions** column to manually clear the alarm.
+- **更新**：**更新**ボタンをクリックすると、最新のアラームデータでリストが更新されます。
+- **設定**：**設定**をクリックすると、[モニタリング](./cluster_settings.md#monitoring)設定ページに移動し、アラームのトリガー閾値やチェック間隔を設定できます。
+- **Webhookの設定**：**Webhookの設定**をクリックすると、アラームイベントのWebhook通知を有効にできます。設定手順は[アラームイベント送信のためのWebhook統合](../observability/alarms.md#integrate-webhook-to-send-alarm-events)を参照してください。
+- **手動解除**：
+   クライアントの切断やリソースのタイムアウトなど、一部のアラームは自動的に解消されない場合があります。
+   **操作**列の**解除**ボタンをクリックして、アラームを手動で解除できます。
 
-> **Tip**: Manual deactivation should only be used when automatic recovery is not triggered, such as after a disconnected client or failed connector that no longer exists.
+> **ヒント**：手動解除は、切断されたクライアントや存在しなくなったコネクターなど、自動復旧がトリガーされない場合にのみ使用してください。
 
-**Example**
+**例**
 
-The image below shows an active system alarm triggered by a failed MQTT connector (`connector:mqtt:qwe`) due to a resource timeout. The **Deactivate** button is available to manually resolve this alarm if necessary.
+以下の画像は、リソースのタイムアウトにより失敗したMQTTコネクター（`connector:mqtt:qwe`）によってトリガーされたアクティブなシステムアラームを示しています。必要に応じて**解除**ボタンを使って手動でアラームを解消できます。
 
-<img src="./assets/alarm.png" alt="image" style="zoom:67%;" />
+::: tip 注意
 
-## Historical Alarms
+現在、アラートはノード単位で管理されています。ログインしているノードでトリガーされたアラートのみ解除可能です。例えば、`emqx@10.50.0.12`にログインしている場合、`emqx@127.0.0.1`でトリガーされたアラートは解除できません。
 
-Navigate to the **History** tab to view past alarms that have been cleared or deactivated. Click **Clear History Alarms** to remove historical alarm records from the Dashboard.
+この制限はクラスター モードにのみ適用され、単一ノードのデプロイメントには影響しません。
 
-## Additional Information
+:::
 
-For a comprehensive list of supported alarm types, how alarms are triggered, and webhook payload structure, refer to the [Alarms Documentation](../observability/alarms.md).
+<img src="./assets/alarm.png" alt="アラーム画面" style="zoom:67%;" />
 
+## 過去のアラーム
 
+**履歴**タブに移動すると、解除または非アクティブ化された過去のアラームを確認できます。**履歴アラームをクリア**をクリックすると、ダッシュボードから過去のアラームレコードを削除できます。
 
+## 追加情報
+
+サポートされているアラームの種類、アラームのトリガー方法、Webhookペイロードの構造については、[アラームドキュメント](../observability/alarms.md)をご参照ください。

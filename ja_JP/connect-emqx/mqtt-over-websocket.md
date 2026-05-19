@@ -1,16 +1,16 @@
 # MQTT over WebSocket
 
-EMQX Enterprise natively supports MQTT over WebSocket through the built-in WebSocket listener. This allows MQTT clients to communicate with the broker over WebSocket instead of raw TCP or TLS connections.
+EMQX Enterprise は、組み込みの WebSocket リスナーを通じてネイティブに MQTT over WebSocket をサポートしています。これにより、MQTT クライアントは生の TCP または TLS 接続の代わりに WebSocket を介してブローカーと通信できます。
 
-MQTT over WebSocket is functionally identical to MQTT over TCP/TLS. The only difference is the transport layer: MQTT packets are encapsulated inside WebSocket frames and transmitted over HTTP or HTTPS.
+MQTT over WebSocket は機能的に MQTT over TCP/TLS と同一です。唯一の違いはトランスポート層であり、MQTT パケットが WebSocket フレーム内にカプセル化され、HTTP または HTTPS 上で送信される点です。
 
-Clients using MQTT over WebSocket can interoperate seamlessly with other MQTT clients connected to the same broker or cluster over TCP, TLS, or QUIC. Since the MQTT protocol remains unchanged, clients connected over different transports share the same topic namespace and routing behavior.
+MQTT over WebSocket を使用するクライアントは、TCP、TLS、または QUIC を介して同じブローカーやクラスターに接続された他の MQTT クライアントとシームレスに相互運用できます。MQTT プロトコル自体は変更されないため、異なるトランスポートで接続されたクライアントは同じトピックネームスペースとルーティング動作を共有します。
 
-This capability is particularly useful in environments where direct TCP connections are unavailable or restricted, such as web browsers and certain enterprise networks.
+この機能は、Web ブラウザや特定の企業ネットワークのように、直接 TCP 接続が利用できないまたは制限されている環境で特に有用です。
 
-## Protocol Stack
+## プロトコルスタック
 
-When using MQTT over WebSocket, the protocol stack is:
+MQTT over WebSocket を使用する場合のプロトコルスタックは以下の通りです：
 
 ```
 MQTT
@@ -20,60 +20,60 @@ TCP
 IP
 ```
 
-The MQTT protocol itself remains unchanged. All MQTT control packets (CONNECT, PUBLISH, SUBSCRIBE, etc.) are transmitted as-is within WebSocket frames.
+MQTT プロトコル自体は変更されません。すべての MQTT 制御パケット（CONNECT、PUBLISH、SUBSCRIBE など）は、そのまま WebSocket フレーム内で送信されます。
 
-## Features
+## 特長
 
-MQTT over WebSocket in EMQX Enterprise provides:
+EMQX Enterprise の MQTT over WebSocket は以下を提供します：
 
-- Full compatibility with MQTT v3.1, v3.1.1, and v5.0
-- Support for QoS 0, 1, and 2
-- Retained messages and Will messages
-- Persistent sessions and offline messages
-- Shared subscriptions
-- Authentication and authorization mechanisms (Username/Password, JWT, OAuth, etc.)
-- TLS encryption via WSS
+- MQTT v3.1、v3.1.1、v5.0 との完全互換性
+- QoS 0、1、2 のサポート
+- リテインドメッセージおよびウィルメッセージ
+- パーシステントセッションおよびオフラインメッセージ
+- 共有サブスクリプション
+- 認証および認可機構（ユーザー名/パスワード、JWT、OAuth など）
+- WSS による TLS 暗号化
 
-All MQTT semantics and broker-side processing remain identical to standard TCP or TLS connections.
+すべての MQTT セマンティクスおよびブローカー側の処理は、標準の TCP または TLS 接続と同一です。
 
-## Configure WebSocket Listeners
+## WebSocket リスナーの設定
 
-MQTT over WebSocket requires a WebSocket listener to be enabled.
+MQTT over WebSocket を利用するには、WebSocket リスナーを有効にする必要があります。
 
-EMQX Enterprise provides both:
+EMQX Enterprise では以下のリスナーを提供しています：
 
-- WebSocket listener (WS)
-- Secure WebSocket listener (WSS)
+- WebSocket リスナー（WS）
+- セキュア WebSocket リスナー（WSS）
 
-You can configure these listeners via:
+これらのリスナーは以下の方法で設定可能です：
 
-- EMQX Dashboard: **Management** -> **Listeners**
-- Configuration file
+- EMQX ダッシュボード：**Management** -> **Listeners**
+- 設定ファイル
 - REST API
 
-For detailed configuration instructions, see:
+詳細な設定手順は以下を参照してください：
 
-- [Configure WebSocket Listener](../configuration/listener.md#configure-websocket-listener)
-- [Configure Secure WebSocket Listener](../configuration/listener.md#configure-secure-websocket-listener)
+- [WebSocket リスナーの設定](../configuration/listener.md#configure-websocket-listener)
+- [セキュア WebSocket リスナーの設定](../configuration/listener.md#configure-secure-websocket-listener)
 
-## Get Started
+## はじめに
 
-To use MQTT over WebSocket:
+MQTT over WebSocket を使用するには：
 
-1. Enable a WebSocket (WS) or Secure WebSocket (WSS) listener.
-2. Connect the client to the corresponding endpoint using `ws://` or `wss://`.
-3. Use an MQTT client library that supports MQTT over WebSocket.
-4. Configure the client to use WebSocket transport.
+1. WebSocket（WS）またはセキュア WebSocket（WSS）リスナーを有効にします。
+2. クライアントを `ws://` または `wss://` を使って対応するエンドポイントに接続します。
+3. MQTT over WebSocket をサポートする MQTT クライアントライブラリを使用します。
+4. クライアントを WebSocket トランスポートで設定します。
 
-From the client perspective, MQTT behavior remains unchanged. The client sends standard MQTT control packets, which are transparently transported inside WebSocket frames.
+クライアントの視点では、MQTT の動作は変更されません。クライアントは標準の MQTT 制御パケットを送信し、それが透過的に WebSocket フレーム内で運ばれます。
 
-For browser-based applications, MQTT over WebSocket is commonly used together with JavaScript MQTT client libraries.
+ブラウザベースのアプリケーションでは、MQTT over WebSocket は JavaScript MQTT クライアントライブラリと共に使われることが一般的です。
 
-For step-by-step examples, see [Connect via JavaScript SDK](./javascript.md).
+ステップバイステップの例については、[JavaScript SDK での接続](./javascript.md) を参照してください。
 
-### Example: Browser Client
+### 例：ブラウザクライアント
 
-The following example demonstrates how a browser client can publish and subscribe to MQTT topics over a secure WebSocket connection:
+以下の例は、ブラウザクライアントがセキュア WebSocket 接続を介して MQTT トピックにパブリッシュおよびサブスクライブする方法を示しています：
 
 ```javascript
 import mqtt from "mqtt";
@@ -85,10 +85,10 @@ const client = mqtt.connect("wss://broker.example.com:8084/mqtt", {
 });
 
 client.on("connect", () => {
-  console.log("Connected over WebSockets");
+  console.log("WebSocket 経由で接続されました");
 
   client.subscribe("test/topic", () => {
-    client.publish("test/topic", "Hello from browser");
+    client.publish("test/topic", "ブラウザからこんにちは");
   });
 });
 
@@ -97,25 +97,25 @@ client.on("message", (topic, message) => {
 });
 ```
 
-Publishing and subscribing over WebSockets works exactly the same as over MQTT/TCP or MQTT/TLS.
+WebSocket 経由でのパブリッシュおよびサブスクライブは、MQTT/TCP や MQTT/TLS とまったく同じ動作をします。
 
-## Typical Use Cases
+## 典型的なユースケース
 
-MQTT over WebSockets is recommended for:
+MQTT over WebSocket は以下の用途に推奨されます：
 
-- Browser-based applications
-- Web dashboards and front-end systems
-- Environments where only ports 80 or 443 are allowed
-- Enterprise networks with strict firewall or proxy policies
+- ブラウザベースのアプリケーション
+- Web ダッシュボードやフロントエンドシステム
+- ポート 80 または 443 のみが許可されている環境
+- 厳格なファイアウォールやプロキシポリシーのある企業ネットワーク
 
-For backend services and device connections where TCP is available, MQTT over TCP/TLS is generally preferred for optimal performance.
+TCP が利用可能なバックエンドサービスやデバイス接続では、最適なパフォーマンスのために通常 MQTT over TCP/TLS が推奨されます。
 
-## Performance Considerations
+## パフォーマンスに関する考慮事項
 
-Compared to MQTT over TCP/TLS, MQTT over WebSocket introduces:
+MQTT over TCP/TLS と比較して、MQTT over WebSocket は以下の点が追加されます：
 
-- Additional HTTP and WebSocket framing overhead
-- Slightly increased latency
-- Marginally reduced throughput
+- 追加の HTTP および WebSocket フレーミングによるオーバーヘッド
+- わずかなレイテンシの増加
+- わずかなスループットの低下
 
-These differences are typically negligible for browser and web applications but may be relevant in high-throughput or latency-sensitive scenarios.
+これらの差異は通常、ブラウザや Web アプリケーションでは無視できる程度ですが、高スループットやレイテンシに敏感なシナリオでは考慮が必要です。

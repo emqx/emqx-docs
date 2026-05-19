@@ -1,85 +1,85 @@
 # Volcano Engine Speech Services
 
-Volcano Engine Real-Time Conversational AI provides core capabilities such as RTC audio/video transmission, ASR speech recognition, and TTS speech synthesis. Developers can integrate their own AI backends through the CustomLLM mode to build voice-driven intelligent interactions.
+Volcano Engine Real-Time Conversational AIは、RTC音声／映像伝送、ASR音声認識、TTS音声合成などのコア機能を提供します。開発者はCustomLLMモードを通じて独自のAIバックエンドを統合し、音声駆動のインテリジェントな対話を構築できます。
 
-## What Is Volcano Engine Speech Services
+## Volcano Engine Speech Servicesとは
 
-Volcano Engine Real-Time Conversational AI is an end-to-end voice interaction solution that enables intelligent agents to “hear, speak, see, and reason.” It is suitable for scenarios such as AI assistants, AI customer service, AI companionship, AI spoken-language learning, and intelligent hardware.
+Volcano Engine Real-Time Conversational AIは、インテリジェントエージェントが「聞く、話す、見る、推論する」ことを可能にするエンドツーエンドの音声対話ソリューションです。AIアシスタント、AIカスタマーサービス、AIコンパニオン、AI音声学習、インテリジェントハードウェアなどのシナリオに適しています。
 
-### Core Components
+### コアコンポーネント
 
-#### RTC (Real-Time Audio and Video)
+#### RTC（リアルタイム音声・映像）
 
-Responsible for audio and video transmission between clients and the cloud.
+クライアントとクラウド間の音声および映像伝送を担当します。
 
-- Based on the WebRTC protocol, supporting mainstream browsers
-- Multi-platform SDKs: Web (`@volcengine/rtc`), iOS, Android, Windows, Linux, macOS
-- Built-in AI noise suppression (AI-ANS) to filter environmental noise
-- Binary message channel for transmitting structured data such as subtitles and status
-- Strong resilience to weak network conditions, ensuring reliable transmission in complex environments
+- WebRTCプロトコルに基づき、主要なブラウザをサポート
+- マルチプラットフォームSDK：Web（`@volcengine/rtc`）、iOS、Android、Windows、Linux、macOS
+- 環境ノイズを除去するAIノイズ抑制（AI-ANS）を内蔵
+- 字幕やステータスなどの構造化データを送信するバイナリメッセージチャネル
+- ネットワークが不安定な環境でも強いレジリエンスを持ち、信頼性の高い伝送を実現
 
-#### ASR (Automatic Speech Recognition)
+#### ASR（自動音声認識）
 
-Converts user speech into text in real time.
+ユーザーの音声をリアルタイムでテキストに変換します。
 
-- Streaming recognition with real-time transcription
-- Supports multiple languages, including Chinese, English, Japanese, and Spanish
-- Supports hotword configuration to improve recognition accuracy for domain-specific terms
-- Frame-level Voice Activity Detection (VAD) for accurate speech start and end detection
+- ストリーミング認識によるリアルタイム文字起こし
+- 中国語、英語、日本語、スペイン語など複数言語をサポート
+- ドメイン固有用語の認識精度を向上させるホットワード設定に対応
+- フレームレベルの音声活動検出（VAD）で正確な発話開始・終了検出を実現
 
-#### TTS (Text-to-Speech)
+#### TTS（テキスト読み上げ）
 
-Converts AI-generated text responses into natural-sounding speech.
+AIが生成したテキスト応答を自然な音声に変換します。
 
-- Streaming synthesis with low latency
-- Multiple voice options (male, female, and different styles)
-- Supports adjustment of speech rate, pitch, and volume
-- Supports emotional synthesis (e.g., happy, calm)
+- 低レイテンシのストリーミング合成
+- 男性・女性および多様なスタイルの音声オプション
+- 話速、ピッチ、音量の調整に対応
+- 感情合成（例：喜び、落ち着き）をサポート
 
-#### LLM (Large Language Models)
+#### LLM（大規模言語モデル）
 
-Handles user intent understanding and response generation, with two integration modes:
+ユーザーの意図理解と応答生成を担当し、2つの統合モードがあります：
 
-**Volcano Ark (ArkV3)**
+**Volcano Ark（ArkV3）**
 
-Uses large language models hosted by Volcano Engine, ready to use out of the box.
+Volcano Engineがホストする大規模言語モデルを利用し、すぐに使えます。
 
-- Supports multiple models such as Doubao, Claude, and GLM
-- No additional service deployment required
-- Automatic cloud scaling
+- Doubao、Claude、GLMなど複数モデルをサポート
+- 追加のサービスデプロイ不要
+- 自動クラウドスケーリング対応
 
-**CustomLLM (Custom Backend)**
+**CustomLLM（カスタムバックエンド）**
 
-Volcano Engine invokes the developer’s custom service to obtain LLM responses.
+開発者のカスタムサービスを呼び出してLLM応答を取得します。
 
-- Can integrate with any LLM (OpenAI, Qwen, local models, etc.)
-- Full control over conversation logic
-- Supports agent architectures and tool invocation
-- Can integrate private knowledge bases
+- OpenAI、Qwen、ローカルモデルなど任意のLLMと統合可能
+- 会話ロジックを完全に制御可能
+- エージェントアーキテクチャやツール呼び出しに対応
+- プライベートナレッジベースの統合も可能
 
-The EMQX MCP AI voice assistant uses the CustomLLM mode to enable MCP tool invocation.
+EMQX MCP AI音声アシスタントはCustomLLMモードを利用し、MCPツール呼び出しを実現しています。
 
-## Extended Capabilities
+## 拡張機能
 
-Volcano Engine Speech Services also provide the following extended features:
+Volcano Engine Speech Servicesは以下の拡張機能も提供します：
 
-| Capability               | Description                                                  |
+| 機能                     | 説明                                                         |
 | ------------------------ | ------------------------------------------------------------ |
-| Intelligent Interruption | Full-duplex communication; users can interrupt the AI at any time for more natural interaction |
-| Visual Understanding     | Supports image and video input, enabling AI to “see” and understand visual content |
-| Function Calling         | Allows the LLM to identify user intent and invoke external functions |
-| MCP Protocol Support     | Standardized access to external tool ecosystems              |
-| Real-Time Subtitles      | Returns ASR results and LLM responses in real time           |
-| Context Management       | Supports short-term and long-term memory (via vector databases) |
+| インテリジェント割り込み | フルデュプレックス通信により、ユーザーはいつでもAIを割り込み可能で、より自然な対話を実現 |
+| ビジュアル理解           | 画像や映像の入力をサポートし、AIが視覚コンテンツを「見る」・理解可能 |
+| ファンクションコール     | LLMがユーザーの意図を特定し、外部関数を呼び出すことを可能にする |
+| MCPプロトコルサポート    | 外部ツールエコシステムへの標準化されたアクセスを提供           |
+| リアルタイム字幕         | ASR結果およびLLM応答をリアルタイムで返却                       |
+| コンテキスト管理         | ベクトルデータベースを用いた短期・長期メモリをサポート         |
 
-For detailed feature descriptions, see the
- [Volcano Engine Real-Time Conversational AI Documentation](https://www.volcengine.com/docs/6348/1310537).
+詳細な機能説明は
+[Volcano Engine Real-Time Conversational AI ドキュメント](https://www.volcengine.com/docs/6348/1310537)をご参照ください。
 
-## Pricing
+## 料金
 
-Volcano Engine Speech Services are billed based on usage. Each billing item includes a free trial quota. For details, see
- [Conversational AI Real-Time Pricing](https://www.volcengine.com/docs/6348/1392584).
+Volcano Engine Speech Servicesは利用量に応じて課金されます。各課金項目には無料トライアル枠が含まれます。詳細は
+[Conversational AI Real-Time Pricing](https://www.volcengine.com/docs/6348/1392584)をご覧ください。
 
-## Related Resources
+## 関連リソース
 
-- [Volcano Engine Real-Time Conversational AI Documentation](https://www.volcengine.com/docs/6348/1310537)
+- [Volcano Engine Real-Time Conversational AI ドキュメント](https://www.volcengine.com/docs/6348/1310537)

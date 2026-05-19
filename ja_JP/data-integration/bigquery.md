@@ -1,95 +1,127 @@
-# Ingest MQTT Data into BigQuery
+# BigQueryへのMQTTデータ取り込み
 
-[BigQuery](https://cloud.google.com/bigquery?hl=en) is an enterprise data warehouse for large amounts of relational structured data. It is optimized for large-scale, ad-hoc SQL-based analysis and reporting, which makes it best suited for gaining organizational insights. EMQX supports seamless integration with BigQuery for real-time extraction, processing, and analysis of MQTT data.
+[BigQuery](https://cloud.google.com/bigquery?hl=en)は、大量のリレーショナル構造化データ向けのエンタープライズデータウェアハウスです。大規模なアドホックSQLベースの分析やレポートに最適化されており、組織の洞察を得るのに最適です。EMQXは、MQTTデータのリアルタイム抽出、処理、分析のためにBigQueryとのシームレスな統合をサポートしています。
 
-This page provides a comprehensive introduction to the data integration between EMQX and BigQuery with practical instructions on creating and validating the data integration.
+このページでは、EMQXとBigQuery間のデータ統合について包括的に紹介し、データ統合の作成および検証に関する実践的な手順を提供します。
 
-## How It Works
+## 動作概要
 
-BigQuery data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
+BigQueryデータ統合は、EMQXの標準機能として提供されており、ユーザーがMQTTデータストリームをGoogle Cloudとシームレスに統合し、IoTアプリケーション開発のための豊富なサービスと機能を活用できるよう設計されています。
 
-EMQX forwards MQTT data to BigQuery through the rule engine and Sink. Taking the example of a BigQuery producer role, the complete process is as follows:
+![bigquery_architecture](./assets/bigquery_architecture.png)
 
-1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
-2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
-3. **Bridging to BigQuery**: The rule triggers the action of forwarding messages to BigQuery, allowing easy configuration of data properties, ordering keys, and mapping of MQTT topics to BigQuery topics. This provides richer context information and order assurance for data integration, enabling flexible IoT data processing.
+EMQXはルールエンジンとSinkを介してMQTTデータをBigQueryに転送します。全体のプロセスは以下の通りです：
 
-## Features and Benefits
+1. **IoTデバイスがメッセージをパブリッシュ**：デバイスは特定のトピックを通じてテレメトリやステータスデータをパブリッシュし、ルールエンジンをトリガーします。
+2. **ルールエンジンがメッセージを処理**：組み込みのルールエンジンを使い、特定のソースからのMQTTメッセージをトピックマッチングに基づいて処理します。ルールエンジンは対応するルールをマッチさせ、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
+3. **BigQueryへのブリッジング**：ルールはメッセージをBigQueryに転送するアクションをトリガーし、データプロパティ、オーダーキー、MQTTトピックとBigQueryトピックのマッピングを簡単に設定できます。これにより、データ統合におけるより豊かなコンテキスト情報と順序保証が可能となり、柔軟なIoTデータ処理を実現します。
 
+## 特長と利点
 
-## Before You Start
+EMQXとBigQueryの統合は、MQTTデータのための堅牢でスケーラブルかつリアルタイムなデータパイプラインを提供します。以下の特長と利点により、IoT分析やデータ駆動型の意思決定を簡素化します：
 
-This section describes the preparations you need to complete before you start to create the BigQuery data integration.
+- **リアルタイムデータ取り込み**：EMQXからBigQueryへ低レイテンシでMQTTメッセージをシームレスにストリーム送信します。即時処理と分析が必要な時間敏感なアプリケーションに対応します。
+- **柔軟なデータマッピング**：MQTTトピックやメッセージペイロードをBigQueryのテーブルやフィールドにカスタマイズしてマッピング可能です。
+- **スケーラブルかつサーバーレスな分析**：BigQueryの完全マネージドでサーバーレスなアーキテクチャを活用し、大規模なIoTデータの分析を実現します。
+- **Google Cloudエコシステムとの簡単統合**：Data Studio、Looker、AI PlatformなどのGoogle Cloudサービスとネイティブに連携し、可視化や機械学習を容易にします。データ収集から洞察生成までのエンドツーエンドパイプライン構築を簡素化します。
 
-### Prerequisites
+## はじめる前に
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+このセクションでは、BigQueryデータ統合の作成を開始する前に必要な準備について説明します。
 
-### Create Service Account Key in GCP
+### 前提条件
 
-You need to create a service account and a service account key to use the BigQuery service.
+- EMQXのデータ統合[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permission to read and write the datasets and tables used in your Actions (e.g. "BigQuery Data Editor" for the datasets/tables involved, or at least read/write over their data).
+### GCPでのサービスアカウントキーの作成
 
-2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
+EMQXがBigQueryに接続できるようにするため、Google Cloudでサービスアカウントを作成し、JSON形式のキーを生成する必要があります。
 
-   ::: tip
+1. GCPアカウントで[サービスアカウント](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)を作成します。サービスアカウントには、使用するデータセットおよびテーブルにアクセスするための必要な権限があることを確認してください。例えば、「BigQuery Data Editor」ロールを付与して対象のデータセットやテーブルの読み書きを許可するか、少なくともデータの読み書き権限を持っている必要があります。
 
-   Store the Service Account key securely for later use.
+2. 作成したサービスアカウントのメールアドレスをクリックします。
 
-   :::
-
-   <img src="./assets/gcp_pubsub/service-account-key.png" alt="service-account-key" style="zoom:50%;" />
-
-### Create and Manage Datasets and Tables in GCP
-
-Before configuring the BigQuery data integration on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
-
-1. In the Google Cloud console, go to the **BigQuery** -> **Studio** page. For detailed instructions, see [Load and query data](https://cloud.google.com/bigquery/docs/quickstarts/load-data-console) tutorial for some hints on getting started.
+3. **Key** タブをクリックし、**Add key** のドロップダウンリストから **Create new key** を選択してサービスアカウントキーを作成し、JSON形式でダウンロードします。
 
    ::: tip
 
-   The Service Account must have permission to write to the table in the dataset.
+   ダウンロードしたサービスアカウントキーのファイルは後でEMQXの認証に使用するため、安全に保管してください。
 
    :::
 
-2. In the **Explorer** pane, click the kebab icon (⋮), then Create Dataset.  Define a name for your dataset.  Click Create Dataset.
+   <img src="./assets/gcp_pubsub/service-account-key.png" alt="サービスアカウントキー" style="zoom:50%;" />
 
-3. In the **Explorer** pane, click the recently created dataset, then (+) Create Table.  Set the source as "Empty Table", define a name for it, define a schema for it (for example, choosing to edit it as text, `clientid:string,payload:bytes,topic:string,publish_received_at:timestamp`).  Click Create Table.
+### GCPでのデータセットおよびテーブルの作成と管理
 
-3. Click the dataset, then click Share.  Add your Service Account Email as the principal, and assign it an a role that has read and write access to the table, and read access for the dataset.  For example, the principal may have "BigQuery Data Viewer" on the dataset, and "Editor" on the table that will be used.
+EMQXでBigQueryデータ統合を設定する前に、GCPで必要なデータセットとテーブルを作成しておく必要があります。
 
-4. Click the table, then Query.  You can query its data by using SQL statements.
+1. Google Cloudコンソールで **BigQuery** -> **Studio** ページに移動します。詳細な手順は[データのロードとクエリ](https://cloud.google.com/bigquery/docs/quickstarts/load-data-console)のクイックスタートガイドを参照してください。
 
-```
-SELECT * FROM `my_project.my_dataset.my_tab` LIMIT 1000
-```
+   ::: tip
 
-## Create a BigQuery Producer Connector
+   使用するサービスアカウントには、対象データセットのテーブルに対する書き込み権限が必要です。
 
-Before adding a BigQuery Producer Sink action, you need to create a BigQuery Producer connector to establish a connection between EMQX and BigQuery.
+   :::
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
-2. Click **Create** in the top right corner of the page, select **BigQuery** on the connector selection page, and click **Next**.
-3. Enter a name and description, such as `my_producer`. The name is used to associate the BigQuery Producer Sink with the connector and must be unique within the cluster.
-4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Producer Sink](#create-a-rule-with-bigquery-producer-sink).
+2. **Explorer** ペインでケバブメニュー（⋮）をクリックし、**Create dataset** を選択します。データセット名を定義し、**Create dataset** をクリックします。
 
-## Create a Rule with BigQuery Producer Sink
+3. データセット作成後、**Explorer** ペインで該当データセットをクリックし、**(+) Create table** をクリックします。
 
-This section demonstrates how to create a rule to specify the data to be saved into BigQuery.
+   - ソースは「Empty Table」を選択します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+   - テーブル名を入力します。
 
-2. Click **Create** on the top right corner of the page.
+   - テーブルスキーマを定義します。例えば、**Edit as text** トグルをクリックし、以下のスキーマ定義をテキストフィールドに貼り付けます。
 
-3. Enter `my_rule` as the rule ID.
+     ```
+     clientid:string,payload:bytes,topic:string,publish_received_at:timestamp
+     ```
 
-4. Set the rules in the **SQL Editor**. Here if you want to save the MQTT messages under topic `t/bq`  to BigQuery, you can use the SQL syntax below.
+   - **Create table** をクリックして設定を完了します。
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
+4. EMQXが書き込みできるように権限を設定します：
+
+   - データセットを選択し、**Share** をクリックします。  
+   - サービスアカウントのメールアドレスをプリンシパルとして追加します。
+   - 以下のような適切なロールを割り当てます：
+     - データセットに対して「BigQuery Data Viewer」（読み取りアクセス）
+     - テーブルに対して「Editor」（読み書きアクセス）
+
+5. テーブル作成後、クエリを実行して確認できます：
+
+   - テーブルをクリックし、**Query** をクリックします。
+
+   - 以下のような簡単なSQL文を実行してテーブルにアクセスできることを確認します。
+
+     ```sql
+     SELECT * FROM `my_project.my_dataset.my_tab` LIMIT 1000
+     ```
+
+## BigQueryコネクターの作成
+
+BigQuery Producer Sinkアクションを追加する前に、EMQXとBigQuery間の接続を確立するためのBigQueryコネクターを作成する必要があります。
+
+1. EMQXダッシュボードで **Integration** -> **Connector** をクリックします。
+2. ページ右上の **Create** をクリックし、コネクター選択画面で **BigQuery** を選択して **Next** をクリックします。
+3. 名前と説明を入力します（例：`my_bigquery`）。この名前はBigQuery Sinkとコネクターを紐付けるために使用され、クラスター内で一意である必要があります。
+4. **GCP Service Account Credentials** にて、[GCPでのサービスアカウントキーの作成](#gcpでのサービスアカウントキーの作成)でエクスポートしたJSON形式のサービスアカウント認証情報をアップロードします。
+5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターがBigQueryサーバーに接続できるかテストできます。
+6. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックしてBigQueryに転送するデータを指定するルールの作成を続けることができます。詳細は[BigQuery Sink付きルールの作成](#create-a-rule-with-bigquery-sink)を参照してください。
+
+## BigQuery Sink付きルールの作成
+
+このセクションでは、BigQueryに保存するデータを指定するルールの作成方法を示します。
+
+1. EMQXダッシュボードで **Integration** -> **Rules** をクリックします。
+
+2. ページ右上の **Create** をクリックします。
+
+3. ルールIDに `my_rule` を入力します。
+
+4. **SQL Editor** でルールを設定します。例えば、トピック `t/bq` のMQTTメッセージをBigQueryに保存したい場合、以下のSQL構文を使用します。
+
+   注意：独自のSQL構文を指定する場合、`SELECT` 部分にSinkのペイロードテンプレートで必要なすべてのフィールドが含まれていることを確認してください。
 
    ```sql
    SELECT
@@ -101,44 +133,66 @@ This section demonstrates how to create a rule to specify the data to be saved i
      "t/bq"
    ```
 
-   ::: tip
-   Be sure to select only the fields that are columns in your BigQuery table, otherwise BigQuery will not recognize unknown fields.
+   ::: tip 注意
+
+   BigQueryテーブルのカラムであるフィールドのみを選択してください。そうでないとBigQueryが未知のフィールドとして認識しません。
+
    :::
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   ::: tip
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `BigQuery` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to BigQuery.
+   初心者の方は、**SQL Examples** をクリックし、**Enable Test** を有効にしてSQLルールを学習・テストできます。
 
-6. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a BigQuery Producer Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
+   :::
 
-7. In the **Name** field, enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+5. **Add Action** ボタンをクリックしてルールでトリガーされるアクションを定義します。**Type of Action** ドロップダウンリストから `BigQuery` を選択し、EMQXがルールで処理したデータをBigQueryに送信するようにします。
 
-8. Select the `my_producer` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+6. **Action** ドロップダウンボックスは `Create Action` のままにするか、既存のBigQuery Sinkを選択できます。この例では新しいSinkを作成し、ルールに追加します。
 
-9. In **Dataset** and **Table**, enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
+7. **Name** フィールドにSinkの名前を入力します。名前は英数字の組み合わせである必要があります。
 
-12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+8. **Connector** ドロップダウンボックスから先ほど作成した `my_bigquery` を選択します。ドロップダウン横のボタンから新しいコネクターを作成することも可能です。設定パラメータの詳細は[コネクターの作成](#bigqueryコネクターの作成)を参照してください。
 
-13. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Dataset** と **Table** に、それぞれ[GCPでのデータセットおよびテーブルの作成と管理](#gcpでのデータセットおよびテーブルの作成と管理)で作成したデータセット名とテーブル名を入力します。
 
-14. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the BigQuery server.
+12. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-15. Click the **Create** button to complete the Sink configuration and you will see the new Sink appear under the **Action Outputs** tab.
+13. **詳細設定（任意）**：必要に応じて詳細設定オプションを構成します。詳細は[詳細設定](#advanced-settings)を参照してください。
 
-16. Back on the **Create Rule** page, click **Create** to create the rule.
+14. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターがBigQueryサーバーに接続できるかテストできます。
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
+15. **Create** ボタンをクリックしてSinkの設定を完了すると、新しいSinkが **Action Outputs** タブに表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `t/bq` are sent and saved to BigQuery after parsing by rule `my_rule`.
+16. **Create Rule** ページに戻り、**Create** をクリックしてルールを作成します。
 
-## Test the Producer Rule
+これでルールの作成が完了しました。**Integration** -> **Rules** ページで新規作成したルールを確認できます。**Actions(Sink)** タブをクリックすると新しいBigQuery Sinkが表示されます。
 
-1. Use MQTTX to send messages on the topic `t/bq`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/bq` のメッセージがルール `my_rule` によって解析され、BigQueryに送信・保存されていることが確認できます。
+
+## ルールのテスト
+
+1. MQTTXを使用してトピック `t/bq` にメッセージを送信します。
 
    ```bash
    mqttx pub -i emqx_c -t t/bq -m '{ "msg": "hello BigQuery" }'
    ```
 
-2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+2. Sinkの稼働状況を確認し、新しい着信メッセージと送信メッセージがそれぞれ1件ずつあることを確認します。
 
-3. Go to GCP **BigQuery** -> **Studio**, click your table, then Query, and run a query. You should see the message.
+3. GCPの **BigQuery** -> **Studio** にアクセスし、テーブルをクリックして **Query** をクリックします。クエリを実行するとメッセージが確認できます。
+
+## 詳細設定
+
+このセクションでは、BigQuery Producer Sinkの詳細な設定オプションについて説明します。ダッシュボードのSink設定時に **Advanced Settings** を展開し、必要に応じて以下のパラメータを調整できます。
+
+| フィールド名                      | 説明                                                         | デフォルト値    |
+| -------------------------------- | ------------------------------------------------------------ | --------------- |
+| **Buffer Pool Size**             | EMQXとBigQuery間のデータフローを管理するバッファワーカープロセスの数を指定します。これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへ送信する前にパフォーマンス最適化とスムーズなデータ転送を確保します。 | `16`            |
+| **Request TTL**                  | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストはバッファに入った時点からTTLがカウントされ、TTLを超えるか、送信後にBigQueryからの応答やアック（ACK）がタイムリーに得られない場合、リクエストは期限切れとみなされます。 | `45` 秒         |
+| **Health Check Interval**        | SinkがBigQueryとの接続状態を自動的にヘルスチェックする間隔（秒）を指定します。 | `15` 秒         |
+| **Health Check Interval Jitter** | 複数のノードが同時にヘルスチェックを開始する確率を減らすため、基本のヘルスチェック間隔に加える一様ランダム遅延です。複数のアクションやソースが同じコネクターを共有する場合、ジッターを有効にするとヘルスチェック開始時刻がずれます。 | `0` ミリ秒      |
+| **Health Check Timeout**         | コネクターがBigQueryとの接続ヘルスチェックを行う際のタイムアウト時間（秒）を指定します。 | `60` 秒         |
+| **Max Buffer Queue Size**        | BigQuery Sinkの各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保存し、BigQueryへの送信を効率化します。システム性能やデータ転送要件に応じて調整してください。 | `256`           |
+| **Query Mode**                   | メッセージ送信の最適化のため、`synchronous`（同期）または`asynchronous`（非同期）リクエストモードを選択できます。非同期モードではBigQueryへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがBigQuery到達前にメッセージを受け取る可能性があります。 | `Async`         |
+| **Batch Size**                   | EMQXからBigQueryへ一度に転送するデータバッチの最大サイズを指定します。サイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。`Batch Size`が`1`の場合、データレコードはバッチ化されず個別に送信されます。 | `1000`          |
+| **Inflight Window**              | 「インフライトキューリクエスト」とは、開始されたがまだ応答やアック（ACK）が返ってきていないリクエストを指します。この設定はSinkがBigQueryと通信する際に同時に存在できるインフライトキューリクエストの最大数を制御します。**Request Mode** が`asynchronous`の場合に特に重要です。同一MQTTクライアントからのメッセージを厳密に順次処理する必要がある場合、この値を`1`に設定してください。 | `100`           |

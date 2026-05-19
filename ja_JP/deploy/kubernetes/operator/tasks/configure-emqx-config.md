@@ -1,19 +1,19 @@
-# Change EMQX Configuration
+# EMQXの設定変更
 
-## Objective
+## 目的
 
-Change the EMQX configuration using the `.spec.config.data` field in the EMQX Custom Resource.
+EMQXカスタムリソースの`.spec.config.data`フィールドを使用してEMQXの設定を変更します。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-The EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for the complete configuration reference.
+EMQX CRD `apps.emqx.io/v2`は、`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
 
-EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration-format) as the configuration file format.
+EMQXは設定ファイル形式として[HOCON](../../../../configuration/configuration.md#hocon-configuration-format)を使用しています。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`:
+1. 以下をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
       name: emqx
@@ -21,7 +21,7 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
       image: emqx/emqx:@EE_VERSION@
       imagePullPolicy: IfNotPresent
       config:
-         # Configure a TCP listener named `test` listening on port 1884:
+         # ポート1884でリッスンするTCPリスナー`test`を設定：
          data: |
             listeners.tcp.test {
                bind = "0.0.0.0:1884"
@@ -39,12 +39,10 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
    ```
 
    ::: tip
-   The content of the `.spec.config.data` field is supplied as [`emqx.conf` configuration file](../../../../configuration/configuration.md#immutable-configuration-file) to the EMQX container.
+   `.spec.config.data`フィールドの内容は、EMQXコンテナに対して[`emqx.conf`設定ファイル](../../../../configuration/configuration.md#immutable-configuration-file)として渡されます。
    :::
 
-2. Wait for the EMQX cluster to become ready.
-
-  Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
+2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`であることを確認してください。完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -52,9 +50,9 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
    emqx   Ready    10m
    ```
 
-## Verify Configuration
+## 設定の確認
 
-View the EMQX listeners' status.
+EMQXのリスナーの状態を確認します。
 
 ```bash
 $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
@@ -74,4 +72,4 @@ tcp:test
    max_conns : 1024000
 ```
 
-Here we can see that the new listener on port 1884 is running.
+ここで、ポート1884で新たに設定したリスナーが稼働していることが確認できます。

@@ -1,143 +1,324 @@
-# Message Queue User Guide
+# メッセージキュー ユーザーガイド
 
-This page walks you through the practical usage of the Message Queue feature in EMQX, from creating queues to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
+このページでは、EMQXのメッセージキュー機能の実践的な使い方を、キューの作成から動作設定、ダッシュボード、REST API、設定ファイルによる管理方法まで順を追って説明します。
 
-## Create Message Queue via Dashboard
+## ダッシュボードからキューを手動で作成する
 
-Message Queues must be explicitly declared/created before they can store or dispatch messages.
+メッセージキューは、メッセージを格納・配信する前に明示的に宣言／作成する必要があります。キューは手動または自動で作成できます。自動作成の詳細は[ダッシュボードからメッセージキューを自動作成する](#automatically-create-message-queues-via-dashboard)をご覧ください。
 
-To create a new Message Queue using the EMQX Dashboard:
+1. 左メニューの **Queues** に移動します。
 
-1. Navigate to **Message Queue** in the left menu.
+2. ページ上の **Create** ボタンをクリックします。
 
-2. Click the **Create** button on the page.
+3. **Create Queue** ダイアログで以下のオプションを設定します：
 
-3. In the **Create Message Queue** dialog:
+   - **Name**：キューの一意の名前を指定します。キュー名には以下のみ使用可能です：
 
-   - **Topic Filter**: Enter the topic or topic filter (e.g., `t/1`).  It defines which published messages are enqueued based on topic matching. A queue will collect all messages that match this topic filter.
+     - 英数字 (`A–Z`, `a–z`, `0–9`)
+     - アンダースコア (`_`)
+     - ハイフン (`-`)
+     - ドット (`.`)
 
-     To consume messages from the queue, clients must subscribe to the topic using the `$q/{Topic Filter}` format.
+     この名前でキューは識別・管理されます。
 
-   - **Dispatch Strategy**: Select how messages should be distributed among subscribers. Available strategies include:
+     クライアントは以下のサブスクライブ形式でメッセージを消費できます：
 
-     - `Least Inflight Subscriber`: Prefer subscribers with the fewest unacknowledged messages.
-     - `Random`: (default) Select a subscriber at random.
-     - `Round Robin`: Rotate delivery evenly across all subscribers.
+     - キューが既に存在する場合は `$queue/<name>` を使用します。
+     - 既存のキューにサブスクライブする際は `$queue/<name>/<topic_filter>` がオプションです。自動作成が有効な場合に使用できます。キューが存在しない場合、EMQXは指定された `<topic_filter>` を使って自動的にキューを作成します。
 
-   - **Data Retention Period**: Specify how long messages should be retained in the queue. You can set the time unit (e.g., days).
+   - **Topic Filter**：トピックまたはトピックフィルター（例：`t/1`）を入力します。これはパブリッシュされたメッセージのトピックとマッチングし、キューに格納されるメッセージを決定します。キューはこのトピックフィルターにマッチするすべてのメッセージを収集します。
 
-   - **Last Value Semantics**: Toggle this switch on if you want the queue to overwrite older messages with the same key, keeping only the latest value per key.
+     > トピックフィルターはキューの設定の一部ですが、キューの識別には使われません。
 
-   - **Queue Key Expression**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message (e.g., `message.from`, which means the client ID of the message publisher). The key is used to determine whether a new message should replace an existing one.
+   - **Dispatch Strategy**：メッセージをサブスクライバーに配信する方法を選択します。利用可能な戦略は以下の通りです：
 
-4. Click **Create** to save the queue.
+     - `Least Inflight Subscriber`：未アックのメッセージ数が最も少ないサブスクライバーを優先します。
+     - `Random`：（デフォルト）ランダムにサブスクライバーを選択します。
+     - `Round Robin`：すべてのサブスクライバーに均等に配信を回します。
 
-The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit or delete queues using the buttons in the **Actions** column.
+   - **Data Retention Period**：メッセージをキュー内に保持する期間を指定します。時間単位（例：日）を設定可能です。
 
-## Configure Message Queue Settings
+   - **Last Value Semantics**：デフォルトで有効です。有効時は、同じキューキーを持つ新しいメッセージが、同じキュー内の未消費の以前のメッセージを上書きします。これによりキーごとに最新のメッセージのみが保持されます。デフォルトのキーはメッセージパブリッシャーのクライアントIDです。
 
-This section explains how to configure global settings that apply to all Message Queues in EMQX. These settings control message retention, cleanup intervals, and internal queue behavior. You can configure them via the Dashboard, REST API, or configuration file.
+     - **[Queue Key Expression](#queue-key-expression)**：Last Value Semanticsが有効な場合、このフィールドで各メッセージからキーを抽出する式を定義します。デフォルトは `message.from`（メッセージパブリッシャーのクライアントID）です。このフィールドは[Variform式](../configuration/configuration.md#variform-expressions)で設定可能です。
 
-### Dashboard
+   - **Max Shard Message Count**：（任意）キューの各シャードに許容される最大メッセージ数を設定します。この設定をオンにしてカスタム値を入力するか、無制限（`infinity`）のままにできます。この設定は永続ストレージに保存されます。
 
-You can update Message Queue settings directly from the EMQX Dashboard without restarting the broker. This is useful for making changes to system-wide behavior at runtime.
+   - **Max Shard Message Bytes**：（任意）キューの各シャードに許容されるメッセージの合計サイズ（バイト単位）を設定します。設定をオンにして値（例：`200MB`）を入力するか、無制限（`infinity`）のままにできます。この設定も永続ストレージに保存されます。
 
-To configure global settings for Message Queues via the Dashboard:
+     ::: tip パフォーマンス注意点
 
-1. Navigate to the **Message Queue** page from the left menu.
-2. Click the **Settings** button in the top-right corner of the page.
-3. You will be redirected to the **MQTT Settings** -> **Message Queue** tab. In this panel, you can configure the following parameters:
-   - **GC Interval**: The interval at which expired messages are cleaned up from queues. Default is `1` hour.
-   - **Regular Queue Retention Period**: The maximum duration for which messages are retained in regular queues. Default is `7` days.
-   - **Find Queue Retry Interval**: When a client subscribes to a `$q/`-prefixed queue topic and the corresponding queue does not yet exist, this setting controls how often the client retries to find the queue. Default is `10` seconds.
-4. After making changes, click **Save Changes** to apply the new settings.
+     サイズ制限付きのキューは、特に高スループット時に書き込み性能が低下する可能性があります。
+
+     :::
+
+4. **Create** をクリックしてキューを保存します。
+
+新しいキューはキュー一覧に表示され、名前、トピックフィルター、配信戦略、Last Value Semanticsの状態、データ保持期間が確認できます。**Actions** 列のボタンからキュー設定の編集や削除が可能です。
+
+### Queue Key Expression
+
+Queue Key Expressionは、Last Value Semanticsモードでメッセージの重複排除に使うキーをどのように抽出するかを指定します。この式はメッセージのメタデータに対して評価され、[Variform式](../configuration/configuration.md#variform-expressions)の構文に従います。
+
+式は以下のようなメッセージコンテキストに対して評価されます。例えばユーザープロパティをキーに使う場合は次のように設定できます：
+
+```
+message.headers.properties.'User-Property'.user-prop
+```
+
+式に基づいてキーが抽出できない場合（例：フィールドが存在しない）、メッセージは破棄されキューに格納されません。
+
+#### メッセージコンテキスト例
+
+Queue Key Expressionは以下のメッセージ構造に対して評価されます：
+
+<details>
+<summary><strong>JSON例</strong></summary>
+
+```json
+{
+  "message": {
+    "qos": 0,
+    "topic": "some/topic",
+    "payload": "some-payload",
+    "headers": {
+      "client_attrs": {},
+      "proto_ver": 5,
+      "properties": {
+        "User-Property": {
+          "user-prop": "some-value"
+        }
+      },
+      "peerhost": "127.0.0.1",
+      "username": "undefined",
+      "protocol": "mqtt",
+      "peername": "127.0.0.1:49352"
+    },
+    "from": "clientid",
+    "timestamp": 1759238376252,
+    "id": "..non utf8 bytes...",
+    "flags": {
+      "retain": false,
+      "dup": false
+    },
+    "extra": {}
+  }
+}
+```
+
+</details>
+
+<details> <summary><strong>Erlangターム例</strong></summary>
+
+```erlang
+#{message =>
+      #{extra => #{},
+        flags => #{dup => false, retain => false},
+        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
+        timestamp => 1759238376252, from => <<"clientid">>,
+        headers =>
+            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
+              username => undefined, peerhost => <<"127.0.0.1">>,
+              properties =>
+                  #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
+              proto_ver => 5, client_attrs => #{}
+            },
+        payload => <<"some-payload">>, topic => <<"some/topic">>,
+        qos => 0
+      }
+    }
+```
+
+</details>
+
+## ダッシュボードからキューを自動作成する
+
+クライアントが `$queue/` プレフィックス付きのトピックにサブスクライブすると、メッセージキューを自動的に作成できます。これにより手動設定なしでキューを動的にプロビジョニング可能です。
+
+自動作成が有効な場合：
+
+- `$queue/<name>` へのサブスクライブはキューが既に存在する場合のみ機能します。
+- `$queue/<name>/<topic_filter>` へのサブスクライブは、キューが存在しない場合に `<topic_filter>` を使ってEMQXが自動的にキューを作成します。
+
+キューは通常のキューまたはLast Value Semanticsキューとして自動作成できます。
+
+::: tip 注意
+
+適切なキュー動作のために、**Auto Create Regular Queue** と **Auto Create Last Value Semantics Queue** のいずれか一方のみを有効にしてください。両方同時に有効にはできません。
+
+:::
+
+### Last Value Semanticsキューの自動作成
+
+このオプションはデフォルトで **MQTT Settings** の **Queues** タブにて有効になっています。Last Value Semanticsをサポートするキューを自動的に作成し、キーごとに最新のメッセージのみを保持します。
+
+1. **Management** -> **MQTT Settings** -> **Queues** タブに移動します。
+
+2. デフォルトで **Enable Auto Create Queue** -> **Last Value Semantics Queue** が有効です。
+
+   以下を設定します：
+
+   - **Queue Key Expression**：必須。各メッセージから一意のキーを抽出する方法を定義します（デフォルト：`message.from`）。
+   - **Dispatch Strategy**：メッセージをサブスクライバーに配信する方法を決定します（デフォルト：`Random`）。
+   - **Data Retention Period**：メッセージをキューに保持する期間を指定します。
+
+3. **Save Changes** をクリックします。
+
+クライアントが `$queue/my_queue/test` のようなトピックにサブスクライブすると、`my_queue` が存在しなければEMQXは `test` をトピックフィルターとしてLast Value Semanticsキュー `my_queue` を自動作成します。作成されたキューは **Queues** 一覧に表示されます。
+
+### 通常キューの自動作成
+
+メッセージを上書きせず独立して保存する通常キューを自動作成したい場合に手動で有効にできます。
+
+1. **Management** -> **MQTT Settings** -> **Queues** タブに移動します。
+2. **Enable Auto Create Queue** -> **Regular Queue** をオンにします。
+3. 以下を設定します：
+   - **Dispatch Strategy**：メッセージ配信方法（デフォルト：`Random`）。
+   - **Data Retention Period**：メッセージ保持期間。
+4. **Save Changes** をクリックします。
+
+## キュー設定の構成
+
+このセクションでは、EMQXのすべてのメッセージキューに適用されるグローバル設定の方法を説明します。これらの設定はメッセージ保持、クリーンアップ間隔、内部キュー動作、キューの自動作成動作を制御します。ダッシュボード、REST API、設定ファイルで設定可能です。
+
+### ダッシュボード
+
+EMQXダッシュボードからメッセージキュー設定を直接更新でき、ブローカーの再起動は不要です。システム全体の動作をランタイムで変更する際に便利です。
+
+1. **Management** -> **MQTT Settings** -> **Queues** タブに移動します。
+
+   または、**Queues** ページ右上の **Settings** ボタンをクリックします。
+
+2. **Queues** パネルで以下の設定が可能です：
+
+   - **Enable Queues**：メッセージキュー機能を有効化します。
+
+     > ダッシュボードからはキュー機能を無効化できません。無効化する場合は設定ファイルを直接編集してください。
+
+   - **Max Queue Count**：作成可能なキューの最大数を設定します。
+
+   - **GC Interval**：期限切れメッセージをキューからクリーンアップする間隔。デフォルトは `1` 時間です。
+
+   - **Regular Queue Retention Period**：通常キューでメッセージを保持する最大期間。デフォルトは `7` 日です。
+
+   - **Find Queue Retry Interval**：クライアントが `$queue/<name>` にサブスクライブした際、対応するキューが見つからない場合に再試行する間隔。デフォルトは `10` 秒です。
+
+   - **Enable Auto Create Queue**：クライアントがキュートピックにサブスクライブし、該当キューが存在しない場合に自動作成を有効化します。
+
+   - **Auto Create Queue Type**：自動作成するキューのタイプを指定します：
+
+     - **Last Value Semantics Queue**（デフォルト有効）：クライアントが `$queue/<name>/<topic_filter>` にサブスクライブし該当キューがなければ、Last Value Semanticsを有効にしたキューを自動作成します。
+
+       詳細は[Last Value Semanticsキューの自動作成](#auto-create-last-value-semantics-queues)を参照してください。
+
+     - **Regular Queue**：有効にすると、EMQXは `$queue/<name>/<topic_filter>` のサブスクライブに対して通常キューを自動作成します。
+
+       詳細は[通常キューの自動作成](#auto-create-regular-queues)を参照してください。
+
+3. 変更後、**Save Changes** をクリックして設定を適用します。
 
 ### REST API
 
-You can also configure global Message Queue settings via the REST API. These settings apply system-wide and affect how all queues are managed internally.
+REST APIでもグローバルなメッセージキュー設定を構成できます。これらはシステム全体に適用され、すべてのキューの内部管理に影響します。
 
 ```bash
 curl -v -u key:secret -X PUT -H "Content-Type: application/json" http://localhost:18083/api/v5/message_queues/config -d '{"find_queue_retry_interval": "10s", "gc_interval": "1h", "regular_queue_retention_period": "7d"}'
 ```
 
-### Configuration File
+### 設定ファイル
 
-For persistent and version-controlled configuration, you can define Message Queue settings in the EMQX configuration file (`emqx.conf`). Below is an example with key settings:
+永続的かつバージョン管理可能な設定のために、EMQX設定ファイル（`emqx.conf`）でメッセージキュー設定を定義できます。主要な設定例は以下の通りです：
 
 ```hocon
 mq {
     gc_interval = 1h
     regular_queue_retention_period = 1d
     find_queue_retry_interval = 10s
+    max_queue_count = 100
+    }
 }
 ```
 
-#### Configuration Descriptions
+#### 設定の説明
 
-- **`gc_interval`**:
-  Defines the interval at which the Message Queues will clean up expired messages.
-- **`regular_queue_retention_period`**:
-  Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
-- **`find_queue_retry_interval`**:
-  Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
+- **`gc_interval`**：メッセージキューが期限切れメッセージをクリーンアップする間隔を定義します。
+- **`regular_queue_retention_period`**：通常キューでメッセージを保持する最大期間を設定します。この期間を過ぎるとメッセージは削除されます。
+- **`find_queue_retry_interval`**：クライアントが `$queue/<name>` にサブスクライブし該当キューが見つからない場合に再試行する頻度を決定します。
+- **`max_queue_count`**：（任意）作成可能なキューの最大数を設定します。
 
-## Manage Message Queue via REST API
+## REST APIでキューを管理する
 
-EMQX provides a set of REST APIs to manage the lifecycle of Message Queues, including creation, retrieval, update, and deletion.
+EMQXはメッセージキューのライフサイクル管理（作成、取得、更新、削除）用のREST APIを提供しています。
 
-### Create a Message Queue
+::: tip 注意
 
-Create a new message queue by specifying the topic filter and queue properties such as whether to enable Last-Value Semantics:
+すべてのREST API操作には適切な認証と権限が必要です。リクエスト・レスポンスの詳細スキーマは[REST API](../admin/api.md)の「Message Queue」セクションを参照してください。
+
+:::
+
+以下の例はすべてAPIキーとシークレットによるベーシック認証を前提としています。
+
+### キューを作成する
+
+キュー名、トピックフィルター、Last Value Semanticsの有効化などのキュー属性を指定して新しいメッセージキューを作成します：
 
 ```bash
 curl -s -u key:secret -X POST -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues \
--d '{"topic_filter": "t1/#", "is_lastvalue": false}' | jq
+-d '{"name": "my_queue", "topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
-### List All Message Queues
+レスポンスには作成されたキューの名前や設定などの詳細が含まれます。
 
-Retrieve the list of existing message queues:
+### すべてのキューを一覧表示する
+
+既存のメッセージキュー一覧を取得します：
 
 ```bash
 curl -s -u key:secret -X GET -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues | jq
 ```
 
-### Update a Message Queue
+### キューを更新する
 
-Update the properties of an existing queue, such as its dispatch strategy:
+既存キューの配信戦略などの属性を更新します：
 
 ```bash
 curl -s -u key:secret -X PUT -H "Content-Type: application/json" \
-http://localhost:18083/api/v5/message_queues/t1%2F%23 \
--d '{"dispatch_strategy": "least_inflight"}' | jq
+http://localhost:18083/api/v5/message_queues/my_queue \
+-d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
-### Delete a Message Queue
+### キューを削除する
 
-Remove a message queue and all messages retained in it:
+メッセージキューとその中に保持されているすべてのメッセージを削除します：
 
 ```bash
 curl -s -u key:secret -X DELETE \
-http://localhost:18083/api/v5/message_queues/t1%2F%23
+http://localhost:18083/api/v5/message_queues/my_queue
 ```
 
-> **Note:**
->
-> - Topic filters in the URL must be URL-encoded (e.g., `t1/#` becomes `t1%2F%23`).
-> - Authentication is required (`key:secret`).
+削除後、キューは新しいメッセージの受け入れを停止し、保存データは消去されます。
 
-## FAQ and Troubleshooting
+## FAQとトラブルシューティング
 
-### Why aren't messages being enqueued?
+### なぜメッセージがキューに格納されないのですか？
 
-- Make sure the topic filter of the declared Message Queue matches the topic of the published message.
-- Verify that the queue exists and is properly configured.
-- Check the EMQX logs for relevant errors or warnings. Look specifically for entries with the `mq_` prefix to diagnose queue-related issues.
+- 宣言済みのメッセージキューのトピックフィルターがパブリッシュされたメッセージのトピックと一致しているか確認してください。
+- キューが存在し、正しく設定されていることを確認してください。
+- EMQXのログを確認し、関連するエラーや警告を探してください。特に `mq_` プレフィックスのログを確認するとキュー関連の問題を特定しやすいです。
 
-### What happens when queues exceed capacity?
+### キューが容量を超えた場合はどうなりますか？
 
-- Currently, Message Queues are not limited by size (number of messages or total bytes), but they are time-limited via the configured *retention period*.
-- Once messages expire (i.e., exceed the retention period), they are no longer eligible for delivery and will be automatically purged by EMQX during regular garbage collection cycles.
+EMQXのメッセージキューは複数の容量制限タイプをサポートしています。いずれかの制限に達した場合、EMQXはガベージコレクション（GC）時に最も古いメッセージを削除し、キューサイズを設定範囲内に戻します。
 
+- **時間ベースの制限**：すべてのキューは設定された保持期間の制限を受けます。保持期間を過ぎたメッセージは配信対象外となり、GC時に自動的に削除されます。
+
+- **サイズベースの制限**：オプションでシャードごとに以下の制限を設定可能です：
+
+  - **最大メッセージ数**（`max_shard_message_count`）
+  - **最大メッセージ合計サイズ（バイト単位）**（`max_shard_message_bytes`）
+
+  これらの制限はソフト制限であり、リアルタイムではなくGC時に適用されます。GCサイクル間は一時的に制限を超える場合があります。
+
+  なお、これらの制限は永続ストレージの各シャードに対して適用されます。シャード数の設定方法は[シャード数](../durability/managing-replication.md#number-of-shards)を参照してください。また、サイズ制限は[レプリケーション係数](../durability/managing-replication.md#replication-factor)を考慮していません。実際の物理ストレージ使用量はレプリケーション係数分だけ増加します。

@@ -1,114 +1,198 @@
-# DatalayersへのMQTTデータ取り込み
+# MQTTデータをDatalayersに取り込む
 
-Datalayersは、産業用IoT、IoV、エネルギーなどの分野向けに設計されたマルチモーダルかつハイパーコンバージドデータベースです。高いデータスループットと安定したパフォーマンスを備えており、IoTアプリケーションに最適です。EMQXは現在、Sinkを介してDatalayersにメッセージやデータを格納することをサポートしており、データ分析や可視化を容易にしています。
+Datalayersは、産業用IoT、IoV、エネルギーなどの業界向けに設計されたマルチモーダルかつハイパーコンバージドなデータベースです。高いデータスループットと安定したパフォーマンスを備えており、IoTアプリケーションに最適です。EMQXは現在、Sinkを通じてDatalayersにメッセージやデータを保存することをサポートしており、データ分析や可視化を容易にしています。
 
-本ページでは、EMQXとDatalayersのデータ連携の詳細な概要を説明し、ルールおよびSinkの作成方法について実践的なガイドを提供します。
+本ページでは、EMQXとDatalayersのデータ統合について詳細に解説し、ルールとSinkの作成方法について実践的なガイドを提供します。
 
 ## 動作概要
 
-Datalayersデータ連携はEMQXの標準機能であり、EMQXのデバイス接続およびメッセージ転送機能とDatalayersのデータ格納・分析機能を組み合わせています。簡単な設定により、シームレスなMQTTデータ連携を実現可能です。EMQXはルールエンジンとSinkを利用してデバイスデータをDatalayersへ転送し、格納・分析します。Datalayersは分析結果をレポートやチャートなどの形で生成し、Datalayersの可視化ツールを通じてユーザーに表示します。
+Datalayersのデータ統合はEMQXの標準機能として提供されており、デバイスからのMQTTメッセージをシームレスにDatalayersへ転送して保存・分析できます。ルールとSinkを設定することで、処理済みのMQTTデータを柔軟にDatalayersへルーティング可能です。
 
-以下の図は、エネルギー貯蔵シナリオにおけるEMQXとDatalayersの典型的なデータ連携アーキテクチャを示しています。
+以下の図は、エネルギー貯蔵シナリオにおけるEMQXとDatalayersの典型的なアーキテクチャを示しています：
 
 ![MQTT to Datalayers](./assets/mqtt-to-datalayers.jpg)
 
-EMQXとDatalayersは、エネルギー消費データをリアルタイムに効率的に収集・分析するためのスケーラブルなIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがデバイス接続、メッセージ転送、データルーティングを担うIoTプラットフォームとして機能し、Datalayersはデータ格納・分析プラットフォームとしてデータの保存と解析を担当します。具体的なワークフローは以下の通りです。
+このアーキテクチャでは、EMQXがデバイスの接続管理、メッセージの送受信、ルールベースの処理を担当し、Datalayersがデータの保存、分析、可視化を担います。両者が連携することで、エネルギー消費のリアルタイムデータを効率的に収集・分析できるスケーラブルなIoTプラットフォームを構築します。
 
-1. **メッセージのパブリッシュと受信**：MQTTプロトコルで正常に接続されたエネルギー貯蔵デバイスは、電力、入力、出力などのエネルギー消費データを定期的にパブリッシュします。EMQXはこれらのメッセージを受信し、ルールエンジンでマッチングします。
-2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づいて特定のソースからのメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールにマッチしてメッセージデータを処理します。例えば、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などを行います。
-3. **Datalayersへの書き込み**：ルールエンジンで定義されたルールは、メッセージをDatalayersに書き込むアクションをトリガーします。Datalayers SinkはSQLテンプレートを提供し、書き込むデータ形式を柔軟に定義可能です。メッセージの特定フィールドをDatalayersの対応するテーブルやカラムに格納できます。
+EMQX 6.0.0以降、DatalayersはApache Arrowをベースとした高性能バイナリ通信プロトコルであるArrow Flight SQLをサポートしています。従来のInfluxDB Line Protocolと比較して、Arrow Flight SQLはより効率的なデータ転送と構造化データの書き込みに強みがあります。
 
-エネルギー貯蔵データがDatalayersに書き込まれた後は、[line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)を活用して柔軟にデータ分析が可能です。例えば：
+::: warning 注意
 
-- Grafanaなどの可視化ツールと連携し、チャートを生成してエネルギー貯蔵データを表示する。
-- 業務システムと連携し、エネルギー貯蔵デバイスの状態監視やアラート発報を行う。
+Arrow FlightドライバーはRustで実装され、Native Implemented Function（NIF）を介してErlang VMに統合されています。本機能は現在実験的であり、テスト環境での利用を推奨します。
 
-## 特長と利点
+:::
 
-Datalayersデータ連携は以下の特長と利点を提供します。
+具体的なワークフローは以下の通りです：
 
-- **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを処理可能であり、Datalayersはデータ書き込み、格納、クエリに優れているため、IoTシナリオのデータ処理要件をシステム負荷を抑えつつ満たせます。
-- **メッセージ変換**：メッセージはEMQXのルールで多様な処理・変換を経てからDatalayersに書き込まれます。
-- **スケーラビリティ**：EMQXとDatalayersは共にクラスタリング機能を持ち、ビジネスの拡大に応じて柔軟な水平スケールアウトが可能です。
-- **豊富なクエリ機能**：Datalayersはタイムスタンプデータの効率的なクエリ・分析のために最適化された関数、演算子、インデックス技術を提供し、IoT時系列データから価値ある洞察を抽出します。
-- **効率的なストレージ**：Datalayersは高圧縮エンコーディング方式を用いてストレージコストを大幅に削減し、不要なデータがストレージを占有しないようにカスタマイズ可能なデータ保持期間も設定可能です。
+1. **メッセージのパブリッシュと受信**：デバイスはMQTTでEMQXに接続し、電力、電流、電圧などのエネルギー関連メトリクスを定期的にパブリッシュします。EMQXはこれらのメッセージを受信し、ルールエンジンに渡します。
+
+2. **ルールエンジンによるメッセージ処理**：EMQXの組み込みルールエンジンはトピックパターンに基づいてメッセージをマッチングし、ペイロードの変換、フィールドのフィルタリング、コンテキスト情報の付加などの処理を行います。
+
+3. **Datalayersへの書き込み**：ルールがトリガーされると、Sinkアクションが実行され、処理済みデータをDatalayersに書き込みます。SinkはフィールドをDatalayersのテーブルやカラムにマッピングするためのカスタマイズ可能なSQLテンプレートをサポートしています。
+
+   EMQXは以下の2つの書き込み方式をサポートしています：
+
+   - InfluxDB Line Protocol
+   - Arrow Flight SQLドライバー
+
+   Sinkの設定は選択した方式により異なります。
+
+エネルギー貯蔵データがDatalayersに書き込まれた後は、以下のようなツールを利用して柔軟にデータ分析が可能です：
+
+- Grafanaなどの可視化ツールに接続し、エネルギー貯蔵データのグラフを生成・表示。
+- 業務システムに接続し、エネルギー貯蔵デバイスの状態監視やアラート通知を実施。
+
+## 特長とメリット
+
+Datalayersデータ統合は以下の特長と利点を提供します：
+
+- **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを処理可能であり、Datalayersはデータの書き込み、保存、クエリに優れ、IoTシナリオのデータ処理要件をシステム負荷を抑えて満たします。
+- **メッセージ変換**：EMQXのルールでメッセージを高度に処理・変換してからDatalayersに書き込めます。
+- **スケーラビリティ**：EMQXとDatalayersは共にクラスター機能を備え、ビジネスの成長に応じて柔軟な水平スケールが可能です。
+- **豊富なクエリ機能**：Datalayersはタイムスタンプデータの効率的なクエリと分析のために最適化された関数、演算子、インデックス技術を提供し、IoT時系列データから価値あるインサイトを抽出します。
+- **効率的なストレージ**：Datalayersは高圧縮エンコーディングを用いてストレージコストを大幅に削減し、不要なデータがストレージを占有しないようカスタマイズ可能なデータ保持期間を設定できます。
 
 ## はじめる前に
 
-このセクションでは、EMQXでDatalayers Sinkを作成する前の準備として、Datalayersのインストールとセットアップについて説明します。
+本節では、EMQXでDatalayers Sinkを作成する前に必要な準備として、Datalayersのインストール、データベース作成、テーブル構造定義について説明します。
 
 ### 前提条件
 
 - [ルール](./rules.md)の基本知識
-- [データ連携](./data-bridges.md)の基本知識
-- Datalayers Sinkでのデータ書き込みに使用される[Datalayers Line Protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)の理解
+- [データ統合](./data-bridges.md)の基本知識
+- 使用するドライバーに応じて、[InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/)または[Arrow Flight SQL](https://arrow.apache.org/docs/format/FlightSql.html#arrow-flight-sql)の理解
 
 ### Datalayersのインストールとセットアップ
 
-1. Dockerを使ってDatalayersをインストールし起動します。詳細な手順は[Install Datalayers](https://docs.datalayers.cn/datalayers/latest/getting-started/docker.html)を参照してください。
+1. Dockerを使ってDatalayersをインストールし起動します。詳細は[Install Datalayers](https://docs.datalayers.cn/datalayers/latest/getting-started/docker.html)を参照してください。
 
    ```bash
    # Datalayersコンテナを起動
    docker run -d --name datalayers -p 8360:8360 -p 8361:8361 datalayers/datalayers:latest
    ```
 
-2. Datalayersサービス起動後、デフォルトのユーザー名・パスワード `admin`/`public` でDatalayers CLIにログインします。CLIでデータベースを作成する手順は以下の通りです。
+   - ポート`8360`はArrow Flight SQL用のデフォルトgRPCポートです。
+   - ポート`8361`はHTTPポートで、主にLine Protocol書き込みや管理APIに使用されます。
+
+2. Datalayersサービス起動後、デフォルトのユーザー名・パスワード`admin`/`public`でDatalayers CLIにログインし、データベースを作成します。
 
    - Datalayersコンテナにアクセス：
 
      ```bash
      docker exec -it datalayers bash
      ```
-     
-   - Datalayers CLIに入る：
+
+   - Datalayers CLIを起動：
 
      ```bash
      dlsql -u admin -p public
      ```
-     
-   - データベースを作成：
+
+   - データベースを作成（例：`mqtt`）：
 
      ```sql
      create database mqtt
      ```
 
-## コネクターの作成
-
-このセクションでは、SinkをDatalayersサーバーに接続するためのコネクター作成方法を説明します。
-
-以下の手順はEMQXとDatalayersがローカルで起動していることを前提としています。リモート環境の場合は設定を適宜調整してください。
-
-1. EMQXダッシュボードで、**Integration** -> **Connectors** を開きます。
-2. ページ右上の **Create** をクリックします。
-3. **Create Connector** ページで **Datalayers** を選択し、**Next** をクリックします。
-4. **Configuration** ステップで以下を設定します：
-   - コネクター名を入力（大文字・小文字の英数字の組み合わせ推奨）、例：`my_datalayers`
-   - Datalayersサーバーの接続情報を入力：
-     - サーバーアドレス：`127.0.0.1:8361`
-     - [Install and Set Up Datalayers](#install-and-set-up-datalayers)で設定した**Username**、**Password**、**Database**を入力
-   - TLSの有効化設定。TLS接続オプションの詳細は[外部リソースアクセスのTLS暗号化有効化](../network/overview.md#tls-for-external-resource-access)を参照してください。
-5. **Create**をクリックする前に、**Test Connectivity**を押してコネクターがDatalayersサーバーに接続できるか確認できます。
-6. ページ下部の **Create** ボタンを押してコネクター作成を完了します。ポップアップで **Back to Connector List** または **Create Rule** を選択可能です。ルールとSinkを作成してDatalayersへの転送データを指定する場合は、[Create Datalayers Sink Rules](#create-a-rule-with-datalayers-sink)を参照してください。
-
-## Datalayers Sinkを使ったルールの作成
-
-このセクションでは、EMQXでMQTTトピック `t/#` からのメッセージを処理し、処理結果を設定済みのDatalayers Sinkに送信するルールの作成方法を説明します。
-
-1. ダッシュボード左メニューの **Data Integration** -> **Rules** をクリックします。
-
-2. ルールページ右上の **Create** ボタンを押します。
-
-3. ルールIDに `my_rule` を入力します。
-
-4. SQLエディターに、`t/#` トピックのMQTTメッセージをDatalayersに格納するためのルールを入力します。例：
+4. Arrow Flight SQLドライバーを使用する場合は、対象テーブルを事前に作成する必要があります。
 
    ::: tip 注意
 
-   独自のSQLルールを指定する場合は、ルールで選択するフィールド（SELECT部分）が、Datalayers Sinkで指定したデータ書き込みフォーマットに含まれるすべての変数を含んでいることを確認してください。
+   InfluxDB Line Protocolを使用する場合は、テーブルの事前作成は不要です。Datalayersは受信したLine Protocolの`measurement`およびフィールド定義に基づき自動でテーブルを作成します。
 
    :::
 
+   例として、`t_mqtt_msg`というテーブルを以下のSQLで作成します：
+
    ```sql
+   CREATE TABLE IF NOT EXISTS `t_mqtt_msg` (
+       time TIMESTAMP(3) NOT NULL,
+       msgid STRING NOT NULL,
+       sender STRING NOT NULL,
+       topic STRING NOT NULL,
+       qos INT8 NOT NULL,
+       payload STRING,
+       arrived TIMESTAMP(3) NOT NULL,
+       timestamp key(time)
+   ) PARTITION BY HASH (msgid, sender) PARTITIONS 1
+   ENGINE = TimeSeries WITH (ttl = '14d');
+   ```
+
+## Datalayersコネクターの作成
+
+本節では、EMQXでDatalayersサーバーに接続するためのコネクターを作成する方法を説明します。
+
+以下の手順はEMQXとDatalayersがローカルで稼働していることを前提としています。別環境やリモート環境でのデプロイの場合は、接続設定を適宜更新してください。
+
+1. EMQXダッシュボードで、**Integration** -> **Connectors**をクリックします。
+
+2. 画面右上の**Create**をクリックします。
+
+3. **Create Connector**画面で**Datalayers**を選択し、**Next**をクリックします。
+
+5. **Configuration**画面でコネクターの詳細を入力します：
+
+   - **Connector Name**：英数字で始まり、英数字、ハイフン、アンダースコアのみ使用可能です。例：`my_datalayers`
+   - **Description**（任意）：後で識別しやすい説明を入力します。
+
+   Datalayersサーバー接続設定：
+
+   - **Driver Type**：
+
+     - `InfluxDB Line Protocol`：InfluxDB互換のLine Protocolを用いたデータ取り込み。テーブルは自動作成されます。
+
+     - `Arrow Flight`：SQLテンプレートを用いた高性能な構造化データ書き込みを有効化。厳密なスキーマ管理や高スループットが必要な場合に最適です。
+
+       ::: warning 注意
+
+       Arrow FlightドライバーはRustで実装され、NIFを介してErlang VMに統合されています。現在実験的機能のため、テスト環境での評価を推奨します。
+
+       :::
+
+   - **Server Host**：
+
+     - デフォルト：`127.0.0.1:8361`
+     - `Arrow Flight`ドライバー利用時はgRPC通信のためポート`8360`を使用します。
+
+   - **Database Name**：Datalayers上の対象データベース名（例：`mqtt`）
+
+   - **Username / Password**：Datalayersアクセス用認証情報（例：`admin` / `public`）
+
+   - **Enable TLS**（任意）：暗号化接続を有効化します。有効時は証明書パスや検証オプションを設定可能です。詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#tls-for-external-resource-access)を参照してください。
+
+     ::: tip 注意
+
+     Arrow Flight SQLプロトコル利用時は、ライブラリの制約により証明書検証のスキップ（`verify_none`）はできません。gRPCサーバーの証明書は、サーバーホストと一致する有効なCommon Name（CN）を持つ必要があります。
+
+     :::
+
+5. `Arrow Flight`を選択した場合、**Enable Prepared Statements**オプションが表示されます。SinkがSQLテンプレートを用いたデータ挿入を行うかどうかの設定で、デフォルトで有効です。
+
+6. **Create**をクリックする前に、**Test Connectivity**でDatalayersサーバーへの接続確認が可能です。
+
+7. 画面下部の**Create**をクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択できます。ルールとSinkの作成手順は[Create a Datalayers Rule](#create-a-datalayers-rule)を参照してください。
+
+## Datalayersルールの作成
+
+本節では、ソーストピック`t/#`からのMQTTメッセージを処理し、設定済みのSinkを使ってDatalayersに送信するルールの作成方法を説明します。
+
+### SQLを定義したルールの作成
+
+1. EMQXダッシュボードの左メニューから**Data Integration** -> **Rules**に移動します。
+
+2. **Rules**画面右上の**Create**ボタンをクリックします。
+
+3. ルール作成フォームでルールIDを入力します（例：`my_rule`）。
+
+4. **SQL Editor**にルールのロジックを定義します。トピック`t/#`にパブリッシュされたMQTTメッセージをDatalayersに保存するには、以下のSQLを使用できます：
+
+   ::: tip 注意
+
+   カスタムSQLルールを書く場合、Sinkテンプレートで参照する変数（例：`${clientid}`, `${payload.temp}`）はすべてルールの`SELECT`句に含める必要があります。
+
+   :::
+
+   ```
    SELECT
      *
    FROM
@@ -117,117 +201,196 @@ Datalayersデータ連携は以下の特長と利点を提供します。
 
    ::: tip
 
-   SQLに不慣れな場合は、**SQL Examples** や **Enable Debug** をクリックしてルールSQLの学習やテストが可能です。
+   EMQXのSQLに不慣れな場合は、**SQL Examples**や**Enable Debug**をクリックしてサンプルクエリを試し、出力を確認できます。
 
    :::
 
-5. ルールがトリガーされた際のアクションを指定するため、右側の **Add Action** ボタンをクリックします。これにより、EMQXはルールで処理したデータをDatalayersに転送します。
+5. ルールにDatalayers Sinkを追加し、処理結果をDatalayersに書き込みます。
 
-6. **Action** ドロップダウンリストで `Datalayers` を選択し、**Action** はデフォルトの `Create Action` のままにします。既存のDatalayers Sinkを選択することも可能です。本例では新規Sinkを作成します。
+   - **InfluxDB Line Protocol**を使う場合は、[Add an InfluxDB Line Protocol Sink](#add-an-influxdb-line-protocol-sink)を参照してください。
+   - **Arrow Flight SQLドライバー**を使う場合は、[Add an Arrow Flight SQL Sink](#add-an-arrow-flight-sql-sink)を参照してください。
 
-7. Sinkの名前を入力します。名前は大文字・小文字の英数字の組み合わせにしてください。
+6. **Create Rule**画面で設定を確認し、**Save**をクリックしてルールを作成します。
 
-8. **Connector** ドロップダウンリストから先に作成した `my_datalayers` を選択します。新しいコネクターを作成する場合は、ドロップダウン横のボタンをクリックしてください。設定パラメータは[コネクターの作成](#コネクターの作成)を参照してください。
+作成したルールは**Rules**一覧に表示されます。ルールの**Actions (Sink)**タブをクリックすると、このルールに関連付けられたDatalayers Sinkを確認できます。
 
-9. **Time Precision** はデフォルトでミリ秒に設定します。
+また、**Integrations** -> **Flow Designer**でトポロジーグラフを表示すると、トピック`t/#`のメッセージが`my_rule`ルールで処理され、Datalayersに書き込まれる様子が視覚的に確認できます。
 
-10. データ解析を定義し、Datalayersにパース・書き込みするための**Data Format**と内容を指定します。`JSON` と `InfluxDB Line Protocol` フォーマットをサポートしています。
+### InfluxDB Line Protocol Sinkの追加
 
-    - JSONフォーマットの場合、**Measurement**、**Timestamp**、**Fields**、**Tags**を含むデータ解析方法を定義します。すべてのキー値は変数やプレースホルダーにできます。また、[InfluxDB line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)に従って設定可能です。**Fields**はCSVファイルによる一括設定もサポートしています。詳細は[バッチ設定](#batch-settings)を参照してください。
+本節では、InfluxDB Line Protocolを用いて処理済みデータをDatalayersに書き込むSinkをルールに追加する方法を説明します。
 
-    - Line Protocolフォーマットの場合、ステートメントでテーブル、フィールド、タイムスタンプ、タグを指定します。キー・値は定数またはプレースホルダー変数をサポートし、[InfluxDB line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)に従って設定可能です。
+1. ルールエディター右側の**Add Action**ボタンをクリックし、ルール条件にマッチした際にトリガーされるアクションを定義します。このアクションで処理済みメッセージをDatalayersに転送します。
 
-      ::: tip
+2. **Type of Action**ドロップダウンから`Datalayers`を選択し、**Action**はデフォルトの`Create Action`のままにします。既存のDatalayers Sinkを選択することも可能ですが、本例では新規作成を想定しています。
 
-      Datalayersに書き込むデータはInfluxDB v1のline protocolと完全互換のため、[InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/)を参照してデータフォーマットを設定できます。
+3. Sinkの名前を入力します（例：`dl_sink_influx`）。名前は英数字の組み合わせが推奨されます。
 
-      例えば、符号付き整数値を入力する場合、プレースホルダーの後に型指示子として `i` を付けます。例：`${payload.int}i`。詳細は[InfluxDB 1.8で整数値を書き込む方法](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)を参照してください。
+4. **Connector**ドロップダウンから、`InfluxDB Line Protocol`ドライバーを設定済みのコネクターを選択します。利用可能なコネクターがない場合は、隣のボタンから新規作成できます。[Create a Datalayers Connector](#create-a-datalayers-connector)を参照してください。
 
-      :::
+5. **Time Precision**はデフォルトでミリ秒に設定します。
 
-      ここではLine Protocolフォーマットを使い、以下のように設定できます。
+6. Datalayersへのデータ解析・書き込み用の**Data Format**と内容を定義します。`JSON`または`Line Protocol`を選択可能です：
 
-      ```sql
-      devices,clientid=${clientid} temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
-      ```
+   - **JSON**：
 
-11. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。プライマリSinkがメッセージ処理に失敗した場合にこれらのアクションがトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
+     **Measurement**、**Fields**、**Timestamp**、**Tags**を指定します。キーと値は定数または`${payload.temp}`のような変数プレースホルダーをサポートします。書式ルールは[InfluxDB Line Protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)を参照してください。
 
-12. **Advanced Settings** を展開し、必要に応じて高度なオプションを設定します（任意）。詳細は[高度な設定](#advanced-settings)を参照してください。
+     **Fields**はCSVファイルを使った一括設定も可能です。[Use CSV to Batch Configure Fields](#use-csv-to-batch-configure-fields)を参照してください。
 
-13. **Create**をクリックする前に、**Test Connectivity**を押してSinkがDatalayersサーバーに接続できるか確認できます。
+   - **Line Protocol**：
 
-14. **Create**を押してSink作成を完了します。**Create Rule**ページに戻ると、**Action Outputs**タブに新しいSinkが表示されます。
+     テーブル、フィールド、タイムスタンプ、タグを含む単一のLine Protocol文字列を定義できます。キーと値は定数またはプレースホルダーをサポートします。書式は[InfluxDB Line Protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)を参照してください。
 
-15. **Create Rule**ページで設定内容を確認し、**Create**ボタンを押してルールを生成します。
+     ::: tip
 
-これでルールの作成が完了しました。**Rules**ページで新規ルールを確認でき、**Actions (Sink)**タブには新しいDatalayers Sinkが表示されます。
+     Datalayersに書き込むデータはInfluxDB v1のLine Protocolと完全互換です。設定時は[InfluxDB Line Protocolリファレンス](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/)を参考にしてください。
 
-また、**Integration** -> **Flow Designer**を開くとトポロジーを確認でき、`t/#`トピックのメッセージが`my_rule`ルールで処理され、その結果がDatalayersに格納されていることがわかります。
+     例えば、符号付き整数値を入力する場合は、プレースホルダーの後に`i`を付けます（例：`${payload.int}i`）。詳細は[InfluxDB 1.8で整数値を書く方法](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)を参照してください。
 
-### バッチ設定
+     :::
 
-Datalayersでは1つのデータエントリーに数百のフィールドが含まれることが多く、データフォーマット設定が複雑になる場合があります。これを解決するため、EMQXはバッチフィールド設定機能を提供しています。
+     Line Protocolの例：
 
-JSON形式でデータフォーマットを設定する際、CSVファイルからフィールドのキー・バリューを一括インポートできます。
+     ```sql
+     devices,clientid=${clientid} temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
+     ```
 
-1. **Fields**テーブルの **Batch Settings** ボタンをクリックし、**Import Batch Settings** ポップアップを開きます。
+7. **Fallback Actions**（任意）：メッセージ送信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
 
-2. 指示に従いバッチ設定テンプレートファイルをダウンロードし、テンプレートにフィールドのキー・バリューを記入します。デフォルトのテンプレート内容は以下の通りです。
+8. **Advanced Settings**を展開し、必要に応じて詳細設定を行います。詳細は[Advanced Settings](#advanced-settings)を参照してください。
+
+9. **Create**をクリックする前に、**Test Connectivity**でSinkがDatalayersサーバーに接続可能か確認できます。
+
+10. **Create**をクリックしてSink作成を完了します。**Create Rule**画面の**Action Outputs**タブに新しいSinkが表示されます。
+
+#### CSVを使ったフィールド一括設定
+
+::: tip
+
+この機能は**InfluxDB Line Protocol**ドライバーでデータフォーマットが`JSON`の場合のみ利用可能です。フィールド設定をCSVファイルで一括インポートできます。
+
+:::
+
+Datalayersのデータエントリーは数百のフィールドを含むことが多く、データフォーマット設定が煩雑になりがちです。これを解決するため、EMQXはフィールドの一括設定機能を提供しています。
+
+JSONフォーマット設定時に、CSVファイルからフィールドのキー・値ペアをインポート可能です。
+
+1. **Fields**テーブルの**Batch Settings**ボタンをクリックし、**Import Batch Settings**ポップアップを開きます。
+
+2. 指示に従い一括設定テンプレートファイルをダウンロードし、フィールドのキー・値ペアを記入します。テンプレートのデフォルト内容は以下の通りです：
 
    | Field  | Value              | 備考（任意）                                               |
    | ------ | ------------------ | ---------------------------------------------------------- |
    | temp   | ${payload.temp}    |                                                            |
    | hum    | ${payload.hum}     |                                                            |
-   | precip | ${payload.precip}i | フィールド値の後に `i` を付けると、Datalayersは整数型として格納します。 |
+   | precip | ${payload.precip}i | フィールド値の後に`i`を付けるとDatalayersは整数型として保存 |
 
    - **Field**：フィールドキー。定数または`${var}`形式のプレースホルダーをサポート。
-   - **Value**：フィールド値。定数またはプレースホルダーをサポートし、line protocolに従った型指定子の付加も可能。
-   - **備考**：CSV内のフィールドコメント用で、EMQXへのインポート対象外。
+   - **Value**：フィールド値。定数またはプレースホルダーをサポート。Line Protocolに従い型識別子を付加可能。
+   - **備考**：CSV内のコメント用で、EMQXにはインポートされません。
 
-   バッチ設定CSVファイルは2048行を超えないようにしてください。
+   一括設定CSVファイルは2048行以内である必要があります。
 
-3. 記入したテンプレートファイルを保存し、**Import Batch Settings**ポップアップにアップロードして **Import** をクリックし、バッチ設定を完了します。
+3. 記入済みテンプレートファイルを保存し、**Import Batch Settings**ポップアップにアップロードして**Import**をクリックし、一括設定を完了します。
 
-4. インポート後、**Fields**設定テーブルでフィールドのキー・バリューをさらに調整可能です。
+4. インポート後、**Fields**設定テーブルでキー・値ペアをさらに調整可能です。
+
+### Arrow Flight SQL Sinkの追加
+
+本節では、**Arrow Flight SQL**ドライバーを使い、SQL挿入文でDatalayersにデータを書き込むSinkをルールに追加する方法を説明します。
+
+::: warning 注意
+
+Arrow Flight SQLドライバーは現在実験的機能です。運用環境での利用は慎重に行ってください。
+
+:::
+
+1. ルールエディター右側の**Add Action**ボタンをクリックし、ルールマッチ時にトリガーされるアクションを定義します。このアクションで処理済みデータをDatalayersに転送します。
+
+2. **Type of Action**ドロップダウンから`Datalayers`を選択し、**Action**はデフォルトの`Create Action`のままにします。既存のDatalayers Sinkを選択することも可能ですが、本例では新規作成を想定しています。
+
+3. Sinkの名前を入力します（例：`dl_sink_arrow`）。英数字の組み合わせが推奨されます。
+
+4. **Connector**ドロップダウンから、`Arrow Flight`ドライバーを設定済みのコネクターを選択します。存在しない場合は隣のボタンから新規作成可能です。[Create a Datalayers Connector](#create-a-datalayers-connector)を参照してください。
+
+5. データを対象テーブルに挿入するための**SQL**テンプレートを設定します。
+
+   ::: tip
+
+   これは[プリプロセスSQL](./data-bridges.md#prepared-statement)テンプレートです。フィールド名は引用符で囲まず、SQL文の末尾にセミコロン`;`を含めないでください。すべての`${}`プレースホルダーはルールSQLで選択したフィールドと一致させる必要があります。
+
+   :::
+
+   ::: tip
+
+   コネクター設定以外のデータベースにデータを挿入する場合は、SQLテンプレート内で明示的に対象データベース名を指定してください。コネクターは対象データベースの存在を引き続きチェックします。
+
+   :::
+
+   例：
+
+   ```sql
+   insert into t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
+   ```
+
+6. **Fallback Actions**（任意）：信頼性向上のため、1つ以上のフォールバックアクションを設定できます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
+
+7. **Advanced Settings**を展開し、必要に応じて詳細設定を行います。詳細は[Advanced Settings](#advanced-settings)を参照してください。
+
+8. **Create**をクリックする前に、**Test Connection**でSinkがDatalayersサーバーに接続可能か確認できます。
+
+9. **Create**をクリックしてSink作成を完了します。**Create Rule**画面の**Action Outputs**タブに新しいSinkが表示されます。
 
 ## ルールとSinkのテスト
 
-MQTTXを使って `t/1` トピックにメッセージをパブリッシュします。この操作によりオンライン・オフラインイベントもトリガーされます。
+ルールとSinkの設定後、テスト用MQTTメッセージをパブリッシュしてDatalayersへの書き込みが成功しているか確認できます。
 
-```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "temp": "23.5", "hum": "62", "precip": 2}'
-```
+1. [MQTTX](https://mqttx.app/)を使い、トピック`t/1`にメッセージを送信します。これによりセッションイベント（クライアントのオンライン/オフライン）もトリガーされる場合があります：
 
-両方のSinkの稼働統計を確認し、ヒット数と送信成功数がそれぞれ1ずつ増加していることを確認してください。
+   ```bash
+   mqttx pub -i emqx_c -t t/1 -m '{ "temp": "23.5", "hum": "62", "precip": 2 }'
+   ```
 
-Datalayers CLIにて以下のコマンドを実行し、データベースにデータが正常に書き込まれているか確認します。
+   このメッセージはルールエンジンをトリガーし、設定済みのDatalayers Sinkに転送されます。ルールにクライアント接続・切断などのセッションイベントが含まれる場合も同様にトリガーされます。
 
-1. Datalayersコンソールに入る：
+2. Sinkの実行統計を確認します。EMQXダッシュボードの**Rules**ページで対象ルールを探し、**Actions (Sink)**タブに切り替えます。対象Sinkの**Matched**と**Success**のカウントが1増えていることを確認してください。
+
+3. CLIでDatalayers内のデータを確認します。
+
+   Datalayersコンテナにアクセスし、CLIツールを起動します：
 
    ```bash
    docker exec -it datalayers bash
    dlsql -u admin -p public
    ```
 
-2. SQLクエリを実行してデータを確認：
+   書き込み方式に応じてSQLクエリを実行します：
 
-   ```sql
-   use mqtt;
-   select * from devices;
-   ```
+   - InfluxDB Line Protocolの場合、テーブル名はSink設定の`measurement`（例：`devices`）がデフォルト：
 
-## 高度な設定
+     ```sql
+     use mqtt
+     select * from devices
+     ```
 
-このセクションでは、DatalayersコネクターおよびSinkで利用可能な高度な設定オプションについて説明します。ダッシュボードでコネクターやSinkを設定する際、**Advanced Settings**を展開して、用途に応じて以下のパラメータを調整可能です。
+   - Arrow Flight SQLの場合、事前に作成した対象テーブル（例：`t_mqtt_msg`）をクエリ：
 
-| 項目名                  | 説明                                                                                                                         | デフォルト値   |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| Startup Timeout         | コネクターが自動起動したリソース（例：Datalayersのデータベースインスタンス）が正常状態になるまで待機する最大時間（秒）を指定します。この設定により、接続先リソースが完全に稼働しデータ処理可能であることを確認してから処理を進めます。 | `5`            |
-| Buffer Pool Size        | バッファワーカープロセス数を指定します。これらのプロセスはEMQXとDatalayersのエグレス型Sink間のデータフローを管理し、データを一時的に格納・処理してから送信します。エグレスシナリオでのパフォーマンス最適化に重要です。イングレスのみを扱うブリッジの場合は`0`に設定可能です。 | `4`            |
-| Request Timeout         | 「Request TTL（Time to Live）」設定で、リクエストがバッファに入ってから有効とみなされる最大時間（秒）を指定します。リクエストがこの時間を超えてバッファに滞留するか、Datalayersからの応答・アックがタイムリーに得られない場合、リクエストは期限切れとみなされます。 | `45`           |
-| Health Check Interval   | SinkがDatalayersとの接続状態を自動的にヘルスチェックする間隔（秒）を指定します。                                         | `15`           |
-| Max Buffer Queue Size   | Datalayers Sinkの各バッファワーカープロセスがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータ送信前に一時格納し、データストリームを効率的に処理します。システム性能やデータ送信要件に応じて調整してください。 | `1`            |
-| Max Batch Request Size  | EMQXからDatalayersへ一度に転送するデータバッチの最大サイズを指定します。このサイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。<br />`1`に設定すると、データレコードはバッチ化せず個別に送信されます。 | `100`          |
-| Request Mode            | `synchronous`（同期）または`asynchronous`（非同期）のリクエストモードを選択し、メッセージ送信を要件に応じて最適化します。非同期モードではDatalayersへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがDatalayers到達前にメッセージを受信する可能性があります。 | `Asynchronous` |
-| Inflight Queue Window   | 「Inflight queue requests」とは、送信済みで応答・アック待ちのリクエストを指します。この設定はSinkとDatalayers間の通信で同時に存在可能なインフライトリクエストの最大数を制御します。<br/>**Request Mode**が`asynchronous`の場合に特に重要で、同一MQTTクライアントからのメッセージを厳密に順序処理したい場合はこの値を`1`に設定してください。 | `100`          |
+     ```sql
+     use mqtt
+     select * from t_mqtt_msg
+     ```
+
+## 詳細設定
+
+本節では、DatalayersコネクターおよびSinkの詳細設定オプションについて説明します。ダッシュボードでコネクターやSinkを設定する際、**Advanced Settings**を展開して以下のパラメーターを用途に応じて調整可能です。
+
+| フィールド名              | 説明                                                                                                                             | デフォルト値 |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Buffer Pool Size          | バッファワーカープロセスの数を指定します。これらのプロセスはEMQXとDatalayersのEgressタイプSink間のデータフローを管理し、データを一時的に格納・処理してから送信します。Egressシナリオでのパフォーマンス最適化とスムーズなデータ転送に重要です。Ingressのみを扱うブリッジでは`0`に設定可能です。 | `4`          |
+| Request TTL               | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストがこのTTLを超えてバッファに滞留するか、送信後にDatalayersからの応答やアックがタイムリーに得られない場合、リクエストは期限切れとみなされます。 | `45`         |
+| Health Check Interval     | SinkがDatalayersとの接続状態を自動的にヘルスチェックする間隔（秒）を指定します。                                         | `15`         |
+| Max Buffer Queue Size     | Datalayers Sinkの各バッファワーカープロセスがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保管し、効率的にデータストリームを処理します。システム性能やデータ転送要件に応じて調整してください。 | `1`          |
+| Batch Size                | EMQXからDatalayersへ一度に転送するデータバッチの最大サイズを指定します。サイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。`1`に設定するとデータレコードを個別送信し、バッチ化しません。 | `100`        |
+| Query Mode                | `synchronous`または`asynchronous`のリクエストモードを選択し、メッセージ送信を要件に応じて最適化します。非同期モードではDatalayersへの書き込みがMQTTメッセージのパブリッシュをブロックしませんが、クライアントがメッセージをDatalayers到着前に受信する可能性があります。 | `Asynch`     |
+| Inflight Window           | 送信済みだが応答やアックをまだ受け取っていないリクエストの最大数を制御します。`Request Mode`が`asynchronous`の場合に特に重要で、同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は`1`に設定してください。 | `100`        |

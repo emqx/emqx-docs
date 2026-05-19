@@ -1,32 +1,32 @@
-# Deploy EMQX on Amazon Elastic Kubernetes Service
+# Amazon Elastic Kubernetes Service 上での EMQX デプロイ
 
-EMQX Operator supports running on Amazon Container Service EKS (Elastic Kubernetes Service). Amazon EKS is a managed Kubernetes service that simplifies the deployment, management, and scaling of containerized applications. EKS provides the Kubernetes control plane and node groups, automatically handling node replacements, upgrades, and patching. It supports AWS services such as Load Balancers, RDS, and IAM, and integrates seamlessly with other Kubernetes ecosystem tools.
+EMQX Operator は Amazon Container Service EKS（Elastic Kubernetes Service）上での実行をサポートしています。Amazon EKS は、コンテナ化されたアプリケーションのデプロイ、管理、スケーリングを簡素化するマネージド Kubernetes サービスです。EKS は Kubernetes のコントロールプレーンとノードグループを提供し、ノードの置換、アップグレード、パッチ適用を自動で処理します。Load Balancer、RDS、IAM などの AWS サービスをサポートし、他の Kubernetes エコシステムツールとシームレスに統合されます。
 
-For an in-depth introduction, refer to [What is Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html).
+詳細な紹介については、[Amazon EKS とは](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)をご参照ください。
 
-## Before You Begin
+## はじめに
 
-Before deploying EMQX on EKS, ensure you have completed the following prerequisites:
+EKS 上に EMQX をデプロイする前に、以下の前提条件を満たしていることを確認してください。
 
-- Create an EKS cluster.<br/>See [Create an Amazon EKS cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for more details.
+- EKS クラスターを作成する。<br/>詳細は[Amazon EKS クラスターの作成](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)を参照してください。
 
-- Configure kubectl to connect to your EKS cluster.<br/>See [Using kubectl to connect to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl) for more details.
+- kubectl を設定して EKS クラスターに接続する。<br/>詳細は[クラスターへの kubectl 接続](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)を参照してください。
 
-- Deploy an AWS Load Balancer Controller on a cluster.<br/>See [Create a Network Load Balancer](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html) for more details.
+- クラスターに AWS Load Balancer Controller をデプロイする。<br/>詳細は[ネットワークロードバランサーの作成](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)を参照してください。
 
-- Install the Amazon EBS CSI driver on the cluster.<br/>See [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) for further details.
+- クラスターに Amazon EBS CSI ドライバーをインストールする。<br/>詳細は[Amazon EBS CSI ドライバー](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)を参照してください。
 
-- Install EMQX Operator.<br/>Please refer to [Install EMQX Operator](./getting-started.md) for further details.
+- EMQX Operator をインストールする。<br/>詳細は[EMQX Operator のインストール](./getting-started.md)をご参照ください。
 
-## Deploy EMQX Cluster Quickly
+## EMQX クラスターの迅速なデプロイ
 
-The following example demonstrates the relevant EMQX Custom Resource (CR) configuration for deployment on EKS.
+以下の例は、EKS 上でのデプロイに関連する EMQX カスタムリソース（CR）設定を示しています。
 
-1. Save the following content as a YAML file and deploy it with `kubectl apply`.
+1. 次の内容を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
    ```yaml
-   # Configure EBS StorageClass with WaitForFirstConsumer binding mode
-   # This ensures volumes are created in the same AZ as the pods that will use them
+   # WaitForFirstConsumer バインディングモードを持つ EBS StorageClass の設定
+   # これにより、ボリュームはそれを使用するポッドと同じ AZ に作成されます
    apiVersion: storage.k8s.io/v1
    kind: StorageClass
    metadata:
@@ -34,7 +34,7 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    provisioner: ebs.csi.aws.com
    volumeBindingMode: WaitForFirstConsumer
    ---
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx
@@ -47,7 +47,7 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
          }
      coreTemplate:
        spec:
-         ## EMQX custom resources do not support updating this field at runtime
+         ## EMQX カスタムリソースはこのフィールドのランタイム更新をサポートしていません
          volumeClaimTemplates:
            storageClassName: ebs-sc
            resources:
@@ -57,31 +57,31 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
              - ReadWriteOnce
      dashboardServiceTemplate:
        metadata:
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
+         ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## Specifies whether the NLB is Internet-facing or internal. If not specified, defaults to internal.
+           ## NLB がインターネット向けか内部向けかを指定します。指定しない場合は内部がデフォルトです。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
          type: LoadBalancer
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
+         ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
          loadBalancerClass: service.k8s.aws/nlb
      listenersServiceTemplate:
        metadata:
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
+         ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## Specifies whether the NLB is Internet-facing or internal. If not specified, defaults to internal.
+           ## NLB がインターネット向けか内部向けかを指定します。指定しない場合は内部がデフォルトです。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
          type: LoadBalancer
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
+         ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
          loadBalancerClass: service.k8s.aws/nlb
    ```
 
-2. Wait for the EMQX cluster to become ready.
+2. EMQX クラスターが Ready 状態になるまで待ちます。
 
-   Use the following command to check the status. The `STATUS` field must show `Ready`, which may take several minutes:
+   以下のコマンドでステータスを確認します。`STATUS` フィールドが `Ready` になるまで数分かかる場合があります。
 
    ```shell
    $ kubectl get emqx
@@ -89,84 +89,84 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    emqx   Ready     55s
    ```
 
-3. Obtain the external IP of the EMQX Dashboard and access it.
+3. EMQX ダッシュボードの外部 IP を取得し、アクセスします。
 
-   The EMQX Operator creates a Service for the EMQX Dashboard based on your `dashboardServiceTemplate` configuration.
+   EMQX Operator は `dashboardServiceTemplate` の設定に基づいて EMQX ダッシュボード用の Service を作成します。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    192.168.1.200
    ```
 
-4. Open the Dashboard at: `http://192.168.1.200:18083`.
+4. ダッシュボードにアクセスします：`http://192.168.1.200:18083`
 
-   Log in with the default credentials:
+   デフォルトの認証情報でログインしてください：
 
-     - **Username:** `admin`
-     - **Password:** `public`
+     - **ユーザー名:** `admin`
+     - **パスワード:** `public`
 
-## Subscribe and Publish
+## サブスクライブとパブリッシュ
 
-This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.0 command-line client tool that helps developers quickly test the MQTT services and applications.
+このハンズオンでは、開発者が MQTT サービスやアプリケーションを素早くテストできるオープンソースの MQTT 5.0 コマンドラインクライアントツールである [MQTTX CLI](https://mqttx.app/cli) を使用します。
 
-1. Retrieve the external IP of the EMQX TCP listener.
+1. EMQX TCP リスナーの外部 IP を取得します。
 
-   The EMQX Operator automatically creates a Service resource for each configured listener.
+   EMQX Operator は設定された各リスナーに対して自動的に Service リソースを作成します。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Subscribe to a topic.
+2. トピックにサブスクライブします。
 
    ```shell
    $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
    
-   [10:00:25] › … Connecting...
-   [10:00:25] › ✔ Connected
-   [10:00:25] › … Subscribing to hello...
-   [10:00:25] › ✔ Subscribed to hello
+   [10:00:25] › … 接続中...
+   [10:00:25] › ✔ 接続完了
+   [10:00:25] › … hello にサブスクライブ中...
+   [10:00:25] › ✔ hello にサブスクライブしました
    ```
 
-3. In another terminal, connect to the EMQX cluster and publish a message.
+3. 別のターミナルで EMQX クラスターに接続し、メッセージをパブリッシュします。
 
    ```shell
    $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
    
-   [10:00:58] › … Connecting...
-   [10:00:58] › ✔ Connected
-   [10:00:58] › … Message Publishing...
-   [10:00:58] › ✔ Message published
+   [10:00:58] › … 接続中...
+   [10:00:58] › ✔ 接続完了
+   [10:00:58] › … メッセージをパブリッシュ中...
+   [10:00:58] › ✔ メッセージをパブリッシュしました
    ```
 
-4. Observe the subscriber receiving the message.
+4. サブスクライバーがメッセージを受信する様子を確認します。
 
    ```shell
    [10:00:58] › payload: hello world
    ```
 
-## Terminate TLS Encryption with LoadBalancer
+## LoadBalancer での TLS 暗号化の終端
 
-You can use an AWS Network Load Balancer (NLB) to terminate TLS traffic for EMQX. Follow the steps below:
+AWS Network Load Balancer（NLB）を使用して EMQX の TLS トラフィックを終端することができます。以下の手順に従ってください。
 
-1. Import relevant certificates in [AWS Console](https://us-east-2.console.aws.amazon.com/acm/home). Open the certificate details page by clicking the certificate ID. Record the certificate ARN.
+1. [AWS コンソール](https://us-east-2.console.aws.amazon.com/acm/home)で関連する証明書をインポートします。証明書 ID をクリックして証明書詳細ページを開き、証明書 ARN を控えてください。
 
     ::: tip
-For certificate/key import formats, see [Importing certificates](https://docs.aws.amazon.com/acm/latest/userguide/import-certificate-format.html).
+証明書/キーのインポート形式については、[証明書のインポート](https://docs.aws.amazon.com/acm/latest/userguide/import-certificate-format.html)をご参照ください。
     :::
 
-2. Add annotations to the EMQX Service metadata, for example:
+2. EMQX Service のメタデータに以下のようなアノテーションを追加します。
 
     ```yaml
-    ## Specifies the ARN of one or more certificates managed by the AWS Certificate Manager.
+    ## AWS Certificate Manager が管理する 1 つ以上の証明書の ARN を指定します。
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:xxxxx:certificate/xxxxxxx
-    ## Specifies whether to use TLS for the backend traffic between the load balancer and the kubernetes pods.
+    ## ロードバランサーと Kubernetes ポッド間のバックエンドトラフィックに TLS を使用するかどうかを指定します。
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
-    ## Specifies a frontend port with a TLS listener. This means that accessing port 1883 through AWS NLB service requires TLS authentication,
-    ## but direct access to K8S service port does not require TLS authentication
+    ## TLS リスナーを持つフロントエンドポートを指定します。これにより、AWS NLB サービス経由でポート 1883 にアクセスする際に TLS 認証が必要ですが、
+    ## K8S サービスポートへの直接アクセスには TLS 認証は不要です。
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "1883"
     ```
 
     ::: tip
-    The value of `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` should match the ARN recorded in step 1.
+    `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` の値は、ステップ 1 で控えた ARN と一致させてください。
     :::
