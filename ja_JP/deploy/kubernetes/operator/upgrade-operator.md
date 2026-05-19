@@ -1,25 +1,25 @@
-# Upgrade EMQX Operator
+# EMQX Operator のアップグレード
 
-This page provides instructions on how to upgrade EMQX Operator to the latest version, 2.3.0.
+このページでは、EMQX Operator を最新バージョン 2.3.0 にアップグレードする手順を説明します。
 
-## Upgrade from EMQX Operator 2.2.x to 2.3.0
+## EMQX Operator 2.2.x から 2.3.0 へのアップグレード
 
-1. Before starting the upgrade process, make sure that all EMQX custom resources are using the `v2beta1` API version. EMQX Operator 2.3.0 does not support API versions earlier than `v2beta1`.
+1. アップグレードを開始する前に、すべての EMQX カスタムリソースが `v2beta1` API バージョンを使用していることを確認してください。EMQX Operator 2.3.0 は `v2beta1` より前の API バージョンをサポートしていません。
 
-   If your resources are still using `v2alpha1` or `v1beta4` API versions, update them to `v2beta1`. In most cases, this can be done by patching the `apiVersion` field:
+   もしリソースがまだ `v2alpha1` または `v1beta4` API バージョンを使用している場合は、`v2beta1` に更新してください。多くの場合、`apiVersion` フィールドをパッチ適用するだけで対応可能です。
 
    ```sh
    kubectl patch emqx emqx --type=merge -p '{"apiVersion":"apps.emqx.io/v2beta1"}'
    ```
 
-2. Patch the existing EMQX CRDs to explicitly remove the conversion webhook.
+2. 既存の EMQX CRD に対して、変換用 webhook を明示的に削除するパッチを適用します。
 
    ```sh
    kubectl patch crd emqxes.apps.emqx.io     --type=json -p='[{"op":"replace", "path":"/spec/conversion", "value":{"strategy":"None"}}]'
    kubectl patch crd rebalances.apps.emqx.io --type=json -p='[{"op":"replace", "path":"/spec/conversion", "value":{"strategy":"None"}}]'
    ```
 
-3. After patching the EMQX CRDs, delete the existing controller manager deployment and other related resources.
+3. EMQX CRD のパッチ適用後、既存のコントローラーマネージャのデプロイメントおよび関連リソースを削除します。
 
    ```sh
    kubectl delete --ignore-not-found clusterrole emqx-operator-manager-role
@@ -29,11 +29,10 @@ This page provides instructions on how to upgrade EMQX Operator to the latest ve
    kubectl delete --ignore-not-found namespace emqx-operator-system
    ```
 
-4. Optionally, delete legacy CRDs.
+4. 必要に応じて、レガシー CRD を削除します。
 
    ```sh
    kubectl delete --ignore-not-found crd emqxbrokers.apps.emqx.io emqxenterprises.apps.emqx.io emqxplugins.apps.emqx.io
    ```
 
-5. Deploy the new EMQX Operator by following the [installation steps](./getting-started.md).
-
+5. [インストール手順](./getting-started.md) に従って、新しい EMQX Operator をデプロイします。

@@ -1,12 +1,12 @@
-# MCP over MQTT Architecture
+# MCP over MQTT アーキテクチャ
 
-MCP over MQTT inherits the core concepts of the standard MCP architecture (Host, Client, Server), while introducing a centralized MQTT Broker as the transport layer. The broker enables message routing, service registration and discovery, authentication, and authorization.
+MCP over MQTT は、標準のMCPアーキテクチャ（Host、Client、Server）のコアコンセプトを継承しつつ、トランスポート層として中央集約型のMQTT ブローカーを導入しています。ブローカーはメッセージのルーティング、サービスの登録および検出、認証、認可を可能にします。
 
-This architecture not only preserves MCP’s original context interaction model but also leverages MQTT’s lightweight and broadly applicable design, providing the foundation for many-to-many communication, load balancing, and scalability in IoT and edge computing scenarios.
+このアーキテクチャは、MCPの元々のコンテキストインタラクションモデルを保持しながら、MQTTの軽量で広く適用可能な設計を活用し、IoTおよびエッジコンピューティングのシナリオにおける多対多通信、ロードバランシング、スケーラビリティの基盤を提供します。
 
-## Core Components of the MQTT Transport
+## MQTT トランスポートのコアコンポーネント
 
-In the MCP over MQTT architecture, a centralized MQTT Broker is introduced as the message router, while other components (Host, Client, Server) remain consistent with the standard MCP design.
+MCP over MQTT アーキテクチャでは、メッセージルーターとして中央集約型のMQTT ブローカーが導入され、それ以外のコンポーネント（Host、Client、Server）は標準のMCP設計と同様です。
 
 ```mermaid
 graph LR
@@ -42,33 +42,33 @@ graph LR
     end
 ```
 
-### Host, Client, and Server
+### Host、Client、および Server
 
-The Host, Client, and Server components remain unchanged (see [MCP core concepts](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)):
+Host、Client、および Server のコンポーネントは変更されていません（詳細は[MCPコアコンセプト](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)を参照）：
 
-- **Host** acts as a container and coordinator for clients.
-- Each **Client** is created by the Host and maintains an independent connection with a Server.
-- **Server** provides dedicated context and capabilities.
+- **Host** はクライアントのコンテナおよびコーディネーターとして機能します。
+- 各 **Client** はHostによって作成され、Serverとの独立した接続を維持します。
+- **Server** は専用のコンテキストと機能を提供します。
 
-The key difference is that Clients and Servers now communicate through the MQTT Broker, instead of directly. With the broker in place, the relationship between Clients and Servers becomes many-to-many rather than one-to-one.
+主な違いは、ClientとServerが直接通信するのではなく、MQTT ブローカーを介して通信する点です。ブローカーの導入により、ClientとServer間の関係は1対1から多対多へと変わります。
 
-### Role of the MQTT Broker
+### MQTT ブローカーの役割
 
-The MQTT Broker serves as the centralized message router:
+MQTT ブローカーは中央集約型のメッセージルーターとして機能します：
 
-- Forwards messages between Clients and Servers.
-- Supports service registration and discovery (via retained messages).
-- Handles authentication and authorization for Clients and Servers.
+- ClientとServer間のメッセージを転送します。
+- サービス登録および検出（保持メッセージを介して）をサポートします。
+- ClientおよびServerの認証と認可を処理します。
 
-## Server Scaling and Load Balancing
+## Serverのスケーリングとロードバランシング
 
-To achieve scalability and load balancing, an MCP Server can launch multiple instances (processes). Each instance connects to the broker with a unique `server-id` as its MQTT Client ID, while all instances share the same `server-name`.
+スケーラビリティとロードバランシングを実現するために、MCP Serverは複数のインスタンス（プロセス）を起動できます。各インスタンスはユニークな`server-id`をMQTT Client IDとしてブローカーに接続し、すべてのインスタンスは同じ`server-name`を共有します。
 
-**Client interaction flow:**
+**Clientのインタラクションフロー：**
 
-1. The Client subscribes to the service discovery topic to obtain all available `server-id`s under the target `server-name`.
-2. The Client selects a Server instance based on a custom policy (e.g., random or round-robin) and sends an `initialize` request.
-3. After initialization, the Client communicates with the selected Server instance through a dedicated RPC topic.
+1. Clientはサービス検出トピックをサブスクライブし、対象の`server-name`に属するすべての利用可能な`server-id`を取得します。
+2. Clientはカスタムポリシー（例：ランダムまたはラウンドロビン）に基づいてServerインスタンスを選択し、`initialize`リクエストを送信します。
+3. 初期化後、Clientは専用のRPCトピックを通じて選択したServerインスタンスと通信します。
 
 ```mermaid
 graph LR
@@ -90,7 +90,7 @@ graph LR
 
 ```
 
-This approach enables high availability and scalability of MCP servers:
+このアプローチにより、MCP Serverの高可用性とスケーラビリティが実現されます：
 
-- **During scaling up**, existing MCP clients remain connected to old server instances, while new clients can initialize with newly added instances.
-- **During scaling down**, MCP clients can reinitialize and connect to other available server instances.
+- **スケールアップ時**、既存のMCPクライアントは古いServerインスタンスに接続し続け、新しいクライアントは新たに追加されたインスタンスで初期化できます。
+- **スケールダウン時**、MCPクライアントは再初期化して他の利用可能なServerインスタンスに接続できます。

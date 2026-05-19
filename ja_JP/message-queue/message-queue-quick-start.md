@@ -1,48 +1,48 @@
-# Message Queue Quick Start
+# メッセージキュー クイックスタート
 
-This page walks you through how to use the Message Queue feature in EMQX 6.0. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
+このページでは、メッセージキュー機能の簡単な使い方を説明します。MQTTXを使ってクライアントをシミュレートし、EMQXダッシュボードからメッセージキューを作成・管理し、メッセージがどのように確実に保存・配信されるかを確認します。
 
-## Objectives
+## 目的
 
-This quick start showcases how EMQX Message Queues can:
+このクイックスタートでは、EMQXメッセージキューが以下を実現できることを紹介します。
 
-- Persist messages even when subscribers are offline
-- Support configurable dispatch strategies
-- Enable Last-Value Semantics for message compaction
+- サブスクライバーがオフラインでもメッセージを永続化できる
+- 設定可能なディスパッチ戦略をサポートする
+- メッセージ圧縮のためのLast-Value Semanticsを有効にできる
 
-## Prerequisites
+## 前提条件
 
-Before starting, ensure you have:
+開始前に以下を準備してください。
 
-- EMQX 6.0+ running (Message Queue feature enabled)
-- [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
-- Access to the EMQX Dashboard (default: `http://localhost:18083`)
+- EMQX 6.0以上が稼働中（メッセージキュー機能が有効）
+- [MQTTX](https://mqttx.app/)（またはMQTT 5.0対応のクライアント）
+- EMQXダッシュボードへのアクセス（デフォルト：`http://localhost:18083`）
 
-## Test Message Queue Basic Features
+## メッセージキューの基本機能を試す
 
-This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline.
+このセクションでは、EMQXメッセージキューがメッセージを永続化し配信する仕組みを示します。MQTTXでクライアントをシミュレートし、サブスクライバーがオフラインでもメッセージが保持・配信される様子を確認します。
 
-### Step 1: Create a Message Queue
+### ステップ1: キューの作成
 
-1. Navigate to **Message Queue** in the left menu.
-2. Click the **Create** button in the upper-right corner of the page.
-
-3. In the **Create Message Queue** dialog, configure the following settings:
+1. 左メニューの **Queues** に移動します。
+2. ページ右上の **Create** ボタンをクリックします。
+3. **Create Queue** ダイアログで以下の設定を行います。
+   - **Name**: `my_queue`
    - **Topic Filter**: `demo/topic`
    - **Dispatch Strategy**: `Random`
-   - **Data Retention Period**: `1` day
+   - **Data Retention Period**: `7` 日
    - **Last Value Semantics**: `Disabled`
-4. Click **Create**.
+4. **Create** をクリックします。
 
-### Step 2: Publish Messages
+### ステップ2: メッセージのパブリッシュ
 
-Use MQTTX to simulate a client as a **publisher**:
+MQTTXを使ってパブリッシャーとしてクライアントをシミュレートします。
 
-1. Open MQTTX and create a client (e.g., `publisher`).
-2. Connect to EMQX (`mqtt://localhost:1883`).
-3. Publish messages to the topic `demo/topic` with QoS 1:
+1. MQTTXを開き、クライアント（例：`publisher`）を作成します。
+2. EMQXに接続します（`mqtt://localhost:1883`）。
+3. トピック `demo/topic` にQoS 1でメッセージをパブリッシュします。
 
-Example:
+例：
 
 ```
 Topic: demo/topic
@@ -50,34 +50,32 @@ QoS: 1
 Payload: {"msg": "Hello 1"}
 ```
 
-Repeat with more payloads: `{"msg": "Hello 2"}`, etc.
+続けて `{"msg": "Hello 2"}` などのペイロードで複数回パブリッシュしてください。
 
-At this point, there are no subscribers. Messages will be queued and persisted by EMQX.
+この時点ではサブスクライバーがいませんが、メッセージはEMQXによってキューに保存されます。
 
-### Step 3: Subscribe and Consume Messages
+### ステップ3: サブスクライブしてメッセージを受信
 
-Use MQTTX to simulate a client as a **subscriber**:
+MQTTXを使ってサブスクライバーとしてクライアントをシミュレートします。
 
-1. Open a second client (e.g., `worker-a`).
-
-2. Connect to EMQX.
-
-3. Subscribe to the queue topic:
+1. 2つ目のクライアント（例：`worker-a`）を開きます。
+2. EMQXに接続します。
+3. 以下のキュートピックにサブスクライブします。
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
-You should now receive all previously published messages in the queue.
+これでキューに保存されていた過去のメッセージをすべて受信できます。
 
-<img src="./assets/consume_message.png" alt="consume_message" style="zoom:67%;" />
+<img src="./assets/consume_message.png" alt="メッセージの消費" style="zoom:67%;" />
 
-## Simulate Multiple Subscribers with Dispatch Strategies
+## 複数サブスクライバーとディスパッチ戦略のシミュレーション
 
-In this section, you will simulate multiple subscribers connected to the same Message Queue and explore how different dispatch strategies influence message distribution behavior.
+このセクションでは、同じメッセージキューに複数のサブスクライバーが接続した場合に、異なるディスパッチ戦略がメッセージ配信にどのように影響するかを確認します。
 
-1. In your `publisher` client, publish a series of messages to the original topic (not prefixed with `$q/`), e.g.:
+1. `publisher` クライアントで、元のトピック（`$queue/` プレフィックスなし）に複数のメッセージをパブリッシュします。
 
    ```bash
    for i in {1..10}; do
@@ -85,105 +83,103 @@ In this section, you will simulate multiple subscribers connected to the same Me
    done
    ```
 
-2. Create another MQTTX client (e.g., `worker-b`).
-
-3. Connect to EMQX and subscribe to the same queue topic:
+2. 別のMQTTXクライアント（例：`worker-b`）を作成します。
+3. EMQXに接続し、同じキュートピックにサブスクライブします。
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
-   Now, both `worker-a` and `worker-b` are consuming messages from the same queue.
+4. これで `worker-a` と `worker-b` の両方が同じキューからメッセージを受信します。
+5. 両サブスクライバーのメッセージの流れを観察してください。
 
-4. Observe the message flow in both subscriber clients.
+### ディスパッチ戦略が配信に与える影響
 
+キューの **Dispatch Strategy** によってメッセージ配信の挙動が変わります。
 
-### How Dispatch Strategies Affect Delivery
+| ディスパッチ戦略               | 挙動                                                         | 利用ケース                             |
+| ------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
+| `Least Inflight Subscriber`    | 未アック（未確認）メッセージ数が少ないサブスクライバーを優先 | 負荷が偏ったコンシューマ間の負荷分散 |
+| `Round Robin`                  | サブスクライバーに順番にメッセージを配信                      | 処理速度に関係なく公平に配信したい場合 |
+| `Random`（デフォルト）          | ランダムにサブスクライバーを選んでメッセージを送信            | デモや予測不能な配信シナリオ         |
 
-The behavior of message distribution depends on the selected **Dispatch Strategy** for the queue:
+`worker-a` と `worker-b` のメッセージ配信状況を見て、これらの挙動を確認できます。
 
-| Dispatch Strategy           | Behavior                                                     | Use Case                               |
-| --------------------------- | ------------------------------------------------------------ | -------------------------------------- |
-| `Least Inflight Subscriber` | Prefers subscribers with fewer in-flight (unacknowledged) messages. | Load balancing across uneven consumers |
-| `Round Robin`               | Delivers messages alternately to each subscriber in strict rotation. | Fair distribution regardless of speed  |
-| `Random` (default)          | Sends each message to a randomly chosen subscriber.          | Unpredictable or demo scenarios        |
+### ディスパッチ戦略の変更
 
-You can verify these behaviors by watching how messages are delivered to `worker-a` and `worker-b`.
+戦略は動的に変更可能です。
 
-### Modify the Dispatch Strategy
+1. ダッシュボードの **Queues** に移動します。
+2. 対象キューの **Edit** をクリックします。
+3. 新しい **Dispatch Strategy** を選択し、保存します。
 
-You can change the strategy on the fly:
+ただし、オンラインのサブスクライバーがいる間は新しい戦略は適用されません。クライアントを切断して再接続してください。
 
-1. Go to **Message Queue** in Dashboard.
-2. Click **Edit** next to your queue.
-3. Select a new **Dispatch Strategy** and save.
+切り替え後、再度メッセージをパブリッシュして、サブスクライバー間の配信パターンの違いを確認してください。
 
-Note that the new dispatch strategy will not apply while there are active subscribers online. You need to disconnect the clients and reconnects them back.
+## Last-Value Semanticsのテスト
 
-After switching, repeat the message publishing test and observe the difference in distribution patterns between the subscribers.
+このセクションでは、**Last-Value Semantics** を有効にする方法を示します。これはキーごとに最新のメッセージのみをキューに保持し、デバイス設定の更新などに適した機能です。
 
-## Test Last-Value Semantics
+### ステップ1: 既存キューの削除
 
-This section demonstrates how to enable **Last-Value Semantics**, which ensures only the most recent message per key is retained in the queue, ideal for use cases such as device configuration updates.
+1. EMQXダッシュボードの **Queues** に移動します。
+2. トピックフィルターが `demo/topic` のキューを探します。
+3. **Actions** 列の **Delete** をクリックします。
+4. 確認ダイアログで削除を確定します。
 
-### Step 1: Delete the Existing Queue
+これで前のキューと保存済みメッセージが削除されます。
 
-1. Navigate to **Message Queue** in the EMQX Dashboard.
-2. Locate the queue with the topic filter `demo/topic`.
-3. Click **Delete** in the **Actions** column.
-4. Confirm deletion in the prompt.
+### ステップ2: Last-Value Semanticsを有効にしたキューの作成
 
-This removes the previous queue and its stored messages.
-
-### Step 2: Create a Queue with Last-Value Semantics
-
-1. On the **Message Queue** page, click **Create**.
-2. In the **Create Message Queue** dialog, configure the settings:
+1. **Queues** ページで **Create** をクリックします。
+2. **Create Queue** ダイアログで以下を設定します。
+   - **Name**: `my_queue`
    - **Topic Filter**: `device/config`
-   - **Dispatch Strategy**: `Random` (or your choice)
-   - **Data Retention Period**: `1` day
-   - **Last Value Semantics**: Toggle on
-   - **Queue Key Expression**: `message.from` (or any field name you will use as key)
-3. Click **Create**.
+   - **Dispatch Strategy**: `Random`（または任意）
+   - **Data Retention Period**: `7` 日
+   - **Last Value Semantics**: 有効にする
+   - **Queue Key Expression**: `message.from`（またはキーに使う任意のフィールド名）
+3. **Create** をクリックします。
 
-The “Queue Key Expression” defines where to extract the key from the message’s metadata. Set to `message.from` means EMQX will extract the queue key from the client ID of the message publisher.
+「Queue Key Expression」は、EMQXが各メッセージからキーを抽出し、Last-Valueキューで重複排除に使う方法を定義します。このフィールドは[Variform式](../configuration/configuration.md#variform-expressions)で設定可能です。
 
-### Step 3: Publish Messages
+このクイックスタートでは `message.from` を使い、メッセージのパブリッシャーのクライアントIDをキーとして抽出します。
 
-1. Open MQTTX and select or create a client (e.g., `publisher`).
+> キューキー式の高度な使い方やカスタムキー、メッセージ構造の例は[Queue Key Expression](./message-queue-task.md#queue-key-expression)を参照してください。
 
-2. Connect to EMQX (`mqtt://localhost:1883`).
+### ステップ3: メッセージのパブリッシュ
 
-3. Publish messages to `device/config`:
+1. MQTTXを開き、クライアント（例：`publisher`）を選択または作成します。
+2. EMQXに接続します（`mqtt://localhost:1883`）。
+3. `device/config` にメッセージをパブリッシュします。
 
-   Example:
+例：
 
-   | Field       | Value               |
-   | ----------- | ------------------- |
-   | **Topic**   | `device/config`     |
-   | **QoS**     | 1                   |
-   | **Payload** | `{"ssid": "wifi1"}` |
+| フィールド   | 値                 |
+| ------------ | ------------------ |
+| **Topic**    | `device/config`    |
+| **QoS**      | 1                  |
+| **Payload**  | `{"ssid": "wifi1"}` |
 
-4. Publish another message with updated content using the same client (same client ID):
+4. 同じクライアントIDで内容を更新した別のメッセージをパブリッシュします。
 
    ```json
    Payload: {"ssid": "wifi2"}
    ```
 
-Since the **Queue Key Expression** is set to `message.from`, EMQX will automatically extract the client ID from each message and use it as the queue key. Messages from the same client will overwrite previous unconsumed messages in the queue.
+**Queue Key Expression** が `message.from` に設定されているため、EMQXはメッセージからクライアントIDを抽出し、同じキーの未消費メッセージを上書きします。
 
-### Step 4: Subscribe to the Queue
+### ステップ4: キューへのサブスクライブ
 
-1. Create a second MQTTX client (e.g., `subscriber`) and connect to EMQX.
-
-3. Subscribe to the queue topic:
+1. 2つ目のMQTTXクライアント（例：`subscriber`）を作成し、EMQXに接続します。
+2. 以下のキュートピックにサブスクライブします。
 
    ```json
-   Topic: $q/device/config
+   Topic: $queue/my_queue/device/config
    QoS: 1
    ```
 
-**Expected Behavior**:
-Only the most recent message is delivered. In this case, only `{"ssid": "wifi2"}` will be received.
-
+**期待される動作**：  
+最新のメッセージのみが配信されます。この例では `{"ssid": "wifi2"}` のみが受信されます。

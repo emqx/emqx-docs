@@ -1,100 +1,100 @@
-# Ingest MQTT Data into Databricks
+# DatabricksへのMQTTデータ取り込み
 
-[Databricks](https://www.databricks.com/) is a unified data analytics platform built on Apache Spark, designed for large-scale data engineering, machine learning, and collaborative analytics. EMQX integrates with Databricks by writing MQTT data into an Amazon S3 bucket managed by Databricks, which Databricks can then query directly through external locations.
+[Databricks](https://www.databricks.com/)はApache Sparkを基盤とした統合データ分析プラットフォームで、大規模なデータエンジニアリング、機械学習、協調分析に対応しています。EMQXはDatabricksが管理するAmazon S3バケットにMQTTデータを書き込み、Databricksが外部ロケーション経由で直接クエリを実行できる形で統合されています。
 
-This page provides a detailed introduction to the data integration between EMQX and Databricks and offers practical guidance on the connector and Sink creation.
+本ページでは、EMQXとDatabricks間のデータ統合について詳細に解説し、コネクターおよびSinkの作成方法を実践的に案内します。
 
-## How It Works
+## 動作の仕組み
 
-Databricks data integration in EMQX is built on top of the Amazon S3 integration. EMQX writes MQTT data into an S3 bucket managed by Databricks. Databricks accesses this bucket via an external location, allowing direct SQL queries over the stored data.
+EMQXのDatabricksデータ統合はAmazon S3統合をベースに構築されています。EMQXはMQTTデータをDatabricksが管理するS3バケットに書き込み、Databricksは外部ロケーションを介してこのバケットにアクセスし、保存されたデータに対して直接SQLクエリを実行します。
 
-![EMQX Databricks Data Integration](./assets/databricks-architecture.png)
+![EMQX Databricksデータ統合](./assets/databricks-architecture.png)
 
-The specific workflow is as follows:
+具体的なワークフローは以下の通りです：
 
-1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
-2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
-3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Amazon S3**: The rule triggers the Amazon S3 Sink to write the processed data into the S3 bucket associated with the Databricks workspace.
-5. **Databricks Reads from S3**: Databricks queries the data stored in the S3 bucket directly via an external location, enabling real-time analytics and machine learning workflows.
+1. **デバイスのEMQXへの接続**：IoTデバイスはMQTTプロトコルで正常に接続するとオンラインイベントをトリガーします。このイベントにはデバイスID、送信元IPアドレスなどのプロパティ情報が含まれます。
+2. **デバイスのメッセージパブリッシュと受信**：デバイスは特定のトピックを通じてテレメトリやステータスデータをパブリッシュします。EMQXはメッセージを受信し、ルールエンジン内で比較処理を行います。
+3. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンはトピックマッチングに基づき特定のソースからのメッセージやイベントを処理します。対応するルールをマッチングし、データフォーマット変換、特定情報のフィルタリング、コンテキスト情報によるメッセージの付加などを実施します。
+4. **Amazon S3への書き込み**：ルールはAmazon S3 Sinkをトリガーし、処理済みデータをDatabricksワークスペースに紐づくS3バケットへ書き込みます。
+5. **DatabricksによるS3からの読み込み**：Databricksは外部ロケーション経由でS3バケット内のデータを直接クエリし、リアルタイム分析や機械学習ワークフローを実現します。
 
-## Features and Benefits
+## 特長と利点
 
-Using Databricks data integration in EMQX can bring the following features and advantages to your business:
+EMQXのDatabricksデータ統合を利用することで、以下のような特長とメリットが得られます：
 
-- **Message Transformation**: Messages can undergo extensive processing and transformation in EMQX rules before being written to S3, facilitating subsequent storage and analysis.
-- **Flexible Data Operations**: With the Amazon S3 Sink, specific fields of data can be conveniently written into the Databricks-managed S3 bucket, supporting dynamic object key configuration for flexible data storage.
-- **Unified Analytics Platform**: By integrating EMQX with Databricks, IoT data becomes immediately available for SQL analytics, machine learning, and data engineering pipelines within the Databricks workspace.
-- **Low-Cost Long-Term Storage**: Leveraging S3 as the underlying storage provides a highly available, reliable, and cost-effective data store, suitable for large-scale IoT workloads.
+- **メッセージ変換**：EMQXルール内でメッセージを高度に処理・変換してからS3に書き込むため、後続の保存や分析が容易になります。
+- **柔軟なデータ操作**：Amazon S3 Sinkを使い、特定のデータフィールドをDatabricks管理のS3バケットに書き込めます。動的なオブジェクトキー設定もサポートし、柔軟なデータ格納が可能です。
+- **統合分析プラットフォーム**：EMQXとDatabricksを連携させることで、IoTデータを即座にDatabricksワークスペース内のSQL分析、機械学習、データエンジニアリングパイプラインに活用できます。
+- **低コストの長期保存**：S3を基盤ストレージとして利用することで、高可用性かつ信頼性の高いコスト効率の良いデータ保存を実現し、大規模IoTワークロードに適しています。
 
-## Before You Start
+## はじめる前に
 
-This section introduces the preparations required before creating the Amazon S3 connector and Sink for Databricks in EMQX.
+このセクションでは、EMQXでDatabricks向けのAmazon S3コネクターとSinkを作成する前に必要な準備を紹介します。
 
-### Prerequisites
+### 前提条件
 
-Before proceeding, make sure you are familiar with the following:
+以下の内容を理解していることを確認してください：
 
-#### EMQX Concepts:
+#### EMQXの概念：
 
-- [Rule Engine](./rules.md): Understand how rules define the logic for extracting and transforming data from MQTT messages.
-- [Data Integration](./data-bridges.md): Understand the concept of connectors and sinks in EMQX data integration.
+- [ルールエンジン](./rules.md)：MQTTメッセージからデータを抽出・変換するロジックを定義する方法。
+- [データ統合](./data-bridges.md)：EMQXのコネクターとSinkの概念。
 
-#### Databricks Concepts:
+#### Databricksの概念：
 
-- **Workspace**: A Databricks workspace is the environment where you access all Databricks assets.
-- **External Location**: A Databricks feature that maps an external S3 path so that data stored there can be queried directly using SQL.
-- **Storage Credential**: An access credential in Databricks that grants permission to read and write an external storage location.
+- **ワークスペース**：Databricksの全資産にアクセスする環境。
+- **外部ロケーション**：外部のS3パスをマッピングし、そこに保存されたデータをSQLで直接クエリ可能にするDatabricksの機能。
+- **ストレージ認証情報**：外部ストレージロケーションの読み書き権限を付与するDatabricksのアクセス認証情報。
 
-### Set Up Databricks on AWS Marketplace
+### AWS MarketplaceでDatabricksをセットアップ
 
-This section uses subscribing to Databricks on AWS Marketplace as an example deployment.
+ここではAWS MarketplaceでDatabricksをサブスクライブする例を用いて説明します。
 
-1. Subscribe to Databricks on the [AWS Marketplace](https://aws.amazon.com/marketplace/). You will be guided to create a Databricks account and a Databricks workspace.
+1. [AWS Marketplace](https://aws.amazon.com/marketplace/)でDatabricksをサブスクライブします。Databricksアカウントとワークスペース作成の案内が表示されます。
 
-2. Once subscribed, create a workspace. Select a region and storage option, then click **Create**.
+2. サブスクライブ後、ワークスペースを作成します。リージョンとストレージオプションを選択し、**Create**をクリックします。
 
-   ![Create Databricks Workspace](./assets/databricks-create-workspace.png)
+   ![Databricksワークスペース作成](./assets/databricks-create-workspace.png)
 
-   After the workspace is created, it will appear in the **Workspaces** list. Note the S3 bucket name automatically provisioned for the workspace (for example, `databricks-workspace-stack-142ec-bucket`). This bucket will be used to store MQTT data from EMQX.
+   ワークスペース作成後、**Workspaces**リストに表示されます。ワークスペースに自動プロビジョニングされたS3バケット名（例：`databricks-workspace-stack-142ec-bucket`）を控えてください。このバケットにEMQXのMQTTデータを保存します。
 
-   ![Databricks Workspaces](./assets/databricks-workspaces.png)
+   ![Databricksワークスペース一覧](./assets/databricks-workspaces.png)
 
-3. Open the workspace, go to **Catalog** -> **External locations** to create an external location that points to the S3 path where EMQX will write data.
+3. ワークスペースを開き、**Catalog** -> **External locations**に移動し、EMQXがデータを書き込むS3パスを指す外部ロケーションを作成します。
 
-   ![Databricks External Locations](./assets/databricks-external-locations.png)
+   ![Databricks外部ロケーション](./assets/databricks-external-locations.png)
 
-   Click **Create location**, set the **Storage type** to `S3`, enter the **URL** as `s3://databricks-workspace-stack-142ec-bucket/emqx-iot-data-new`, and select a **Storage credential**.
+   **Create location**をクリックし、**Storage type**を`S3`に設定、**URL**に`s3://databricks-workspace-stack-142ec-bucket/emqx-iot-data-new`を入力し、**Storage credential**を選択します。
 
-   ![Create External Location](./assets/databricks-create-external-locations.png)
+   ![外部ロケーション作成](./assets/databricks-create-external-locations.png)
 
-4. Obtain the AWS access credentials (Access Key ID and Secret Access Key) for the IAM user or role that has read/write access to the S3 bucket. These credentials will be used to configure the EMQX connector.
+4. S3バケットへの読み書き権限を持つIAMユーザーまたはロールのAWSアクセス認証情報（Access Key IDとSecret Access Key）を取得します。これらはEMQXコネクターの設定に使用します。
 
-With the Databricks workspace and S3 bucket configured, you are now ready to create the connector and Sink in EMQX.
+DatabricksワークスペースとS3バケットの設定が完了したら、EMQXでコネクターとSinkの作成準備が整いました。
 
-## Create a Connector
+## コネクターの作成
 
-Before adding the Amazon S3 Sink, you need to create the corresponding connector.
+Amazon S3 Sinkを追加する前に、対応するコネクターを作成します。
 
-1. Go to the Dashboard **Integration** -> **Connectors** page.
-2. Click the **Create** button in the top right corner.
-3. Select **Amazon S3** as the connector type and click **Next**.
-4. Enter a name for the connector. The name must start with a letter or number and can contain letters, numbers, hyphens, or underscores. In this example, enter `my-databricks`.
-5. Enter the connection information:
-   - **Host**: Enter the S3 endpoint for the AWS region where your Databricks workspace is deployed, formatted as `s3.{region}.amazonaws.com`.
-   - **Port**: Enter `443`.
-   - **Access Key ID** and **Secret Access Key**: Enter the AWS access credentials obtained in [Set Up Databricks on AWS Marketplace](#set-up-databricks-on-aws-marketplace).
-6. Use the default values for the remaining settings.
-7. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to the S3 service.
-8. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
+1. ダッシュボードの**Integration** -> **Connectors**ページに移動します。
+2. 右上の**Create**ボタンをクリックします。
+3. コネクタータイプで**Amazon S3**を選択し、**Next**をクリックします。
+4. コネクター名を入力します。名前は英数字で始まり、英数字、ハイフン、アンダースコアを含めることができます。例として`my-databricks`を入力します。
+5. 接続情報を入力します：
+   - **Host**：Databricksワークスペースが展開されているAWSリージョンのS3エンドポイントを`s3.{region}.amazonaws.com`形式で入力します。
+   - **Port**：`443`を入力します。
+   - **Access Key ID**と**Secret Access Key**：[AWS MarketplaceでDatabricksをセットアップ](#aws-marketplaceでdatabricksをセットアップ)で取得したAWSアクセス認証情報を入力します。
+6. 残りの設定はデフォルト値を使用します。
+7. **Create**をクリックする前に、**Test Connectivity**をクリックしてEMQXがS3サービスに接続できるか確認できます。
+8. **Create**ボタンをクリックしてコネクターの設定を完了します。作成成功のダイアログが表示され、ルールを今すぐ作成するか尋ねられます。**Create Rule**をクリックするとコネクターが事前選択された状態でルール作成画面に進みます。**Back To Connector List**をクリックすると後でルールを作成できます。
 
-## Create a Rule with Amazon S3 Sink
+## Amazon S3 Sinkを使ったルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the Databricks-managed S3 bucket through the configured Sink.
+このセクションでは、ソースMQTTトピック`t/#`からのメッセージを処理し、処理結果をDatabricks管理のS3バケットに書き込むルールの作成手順を示します。
 
-1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `Amazon S3` and the connector pre-selected. Skip to step 5. Otherwise, go to the Dashboard **Integration** -> **Rules** page, click **Create** in the top right corner.
+1. 前のステップで**Create Rule**をクリックした場合、**Add Action**パネルが自動で開き、**Type of Action**が`Amazon S3`、コネクターが事前選択されています。ステップ5に進んでください。そうでなければ、ダッシュボードの**Integration** -> **Rules**ページに移動し、右上の**Create**をクリックします。
 
-2. Enter a rule ID and input the following rule SQL in the SQL editor:
+2. ルールIDを入力し、SQLエディターに以下のルールSQLを入力します：
 
    ```sql
    SELECT
@@ -105,112 +105,112 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールの学習とテストが可能です。
 
    :::
 
-3. Click **+ Add Action** on the right. In the **Add Action** panel, select `Amazon S3` from the **Type of Action** dropdown, keeping the **Action** dropdown at the default `Create Action` value.
+3. 右側の**+ Add Action**をクリックし、**Add Action**パネルで**Type of Action**ドロップダウンから`Amazon S3`を選択し、**Action**はデフォルトの`Create Action`のままにします。
 
-4. Select the `my-databricks` connector created earlier from the **Connectors** dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
+4. **Connectors**ドロップダウンから先ほど作成した`my-databricks`コネクターを選択します。ドロップダウン横の作成ボタンをクリックするとポップアップで新規コネクターを素早く作成できます。必要な設定パラメーターは[コネクターの作成](#コネクターの作成)を参照してください。
 
-5. Enter a name and optional description for the Sink.
+5. Sinkの名前と任意で説明を入力します。
 
-6. Set the **Bucket** by entering `databricks-workspace-stack-142ec-bucket`. This field also supports `${var}` format placeholders, but ensure the corresponding bucket exists in S3.
+6. **Bucket**に`databricks-workspace-stack-142ec-bucket`を入力します。このフィールドは`${var}`形式のプレースホルダーもサポートしますが、対応するバケットがS3に存在することを確認してください。
 
-7. Select **ACL** as needed, specifying the access permission for the uploaded object.
+7. 必要に応じて**ACL**を選択し、アップロードするオブジェクトのアクセス権限を指定します。
 
-8. Select the **Upload Method**:
+8. **Upload Method**を選択します：
 
-   - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to S3 according to the preset object key and content. This method is suitable for storing binary or large text data.
-   - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to S3, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
+   - **Direct Upload**：ルールがトリガーされるたびに、プリセットのオブジェクトキーと内容に従ってデータを直接S3にアップロードします。バイナリや大きなテキストデータの保存に適しています。
+   - **Aggregated Upload**：複数回のルールトリガー結果を1つのファイル（CSVなど）にまとめてアップロードします。構造化データの保存に適し、ファイル数を減らし書き込み効率を向上させます。
 
-   The configuration parameters differ for each method. Please configure according to the selected method:
+   選択した方法に応じて設定パラメーターが異なります。以下のタブから該当する方法の設定を行ってください：
 
    :::: tabs type
 
    ::: tab Direct Upload
 
-   Direct Upload requires configuring the following fields:
+   Direct Uploadでは以下の項目を設定します：
 
-   - **Object Key**: Defines the object's location to be uploaded to the bucket. It supports placeholders in the format of `${var}` and can use `/` to specify storage directories. Here, enter `emqx-iot-data-new/${clientid}_${timestamp}.json`, where `${clientid}` is the client ID and `${timestamp}` is the timestamp of the message.
-   - **Object Content**: By default, this is in JSON text format containing all fields. It supports placeholders in the format of `${var}`. Here, enter `${payload}` to use the message body as the object content.
+   - **Object Key**：バケット内のアップロード先オブジェクトの場所を定義します。`${var}`形式のプレースホルダーをサポートし、`/`でディレクトリ指定も可能です。ここでは`emqx-iot-data-new/${clientid}_${timestamp}.json`を入力します。`${clientid}`はクライアントID、`${timestamp}`はメッセージのタイムスタンプを表します。
+   - **Object Content**：デフォルトで全フィールドを含むJSONテキスト形式です。`${var}`形式のプレースホルダーをサポートします。ここでは`${payload}`を入力し、メッセージ本文をオブジェクト内容として使用します。
 
    :::
 
    ::: tab Aggregate Upload
 
-   Aggregate Upload requires configuring the following parameters:
+   Aggregate Uploadでは以下のパラメーターを設定します：
 
-   - **Object Key**: Used to specify the storage path of the object. The following variables can be used:
+   - **Object Key**：オブジェクトの保存パスを指定します。以下の変数が使用可能です：
 
-     - **`${action}`**: Action name (required).
-     - **`${node}`**: Name of the EMQX node performing the upload (required).
-     - **`${datetime.{format}}`**: Start date and time of the aggregation, with the format specified by the `{format}` string (required):
-       - **`${datetime.rfc3339utc}`**: RFC3339 date and time in UTC format.
-       - **`${datetime.rfc3339}`**: RFC3339 date and time in local time zone format.
-       - **`${datetime.unix}`**: Unix timestamp.
-     - **`${datetime_until.{format}}`**: End date and time of the aggregation, with format options as above.
-     - **`${sequence}`**: Sequence number for aggregated uploads within the same time interval (required).
+     - **`${action}`**：アクション名（必須）。
+     - **`${node}`**：アップロードを実行するEMQXノード名（必須）。
+     - **`${datetime.{format}}`**：集約の開始日時。`{format}`で指定した形式で出力（必須）：
+       - **`${datetime.rfc3339utc}`**：UTC形式のRFC3339日時。
+       - **`${datetime.rfc3339}`**：ローカルタイムゾーン形式のRFC3339日時。
+       - **`${datetime.unix}`**：Unixタイムスタンプ。
+     - **`${datetime_until.{format}}`**：集約の終了日時。フォーマットは上記と同様。
+     - **`${sequence}`**：同一時間間隔内の集約アップロードの連番（必須）。
 
-   - **Aggregation Type**: Currently, CSV and JSON Lines are supported.
-     - `CSV`: Data will be written to S3 in comma-separated CSV format.
-     - `JSON Lines`: Data will be written to S3 in [JSON Lines](https://jsonlines.org/) format.
+   - **Aggregation Type**：現在はCSVとJSON Linesをサポート。
+     - `CSV`：データをカンマ区切りのCSV形式でS3に書き込みます。
+     - `JSON Lines`：データを[JSON Lines](https://jsonlines.org/)形式でS3に書き込みます。
 
-   - **Column Order** (applies only when the Aggregation Type is `CSV`): Adjust the order of rule result columns through a dropdown selection.
+   - **Column Order**（Aggregation Typeが`CSV`の場合のみ適用）：ルール結果のカラム順序をドロップダウンで調整します。
 
-   - **Max Records**: When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded.
+   - **Max Records**：最大レコード数に達すると1ファイルの集約が完了しアップロードされます。
 
-   - **Time Interval**: When the time interval is reached, even if the maximum number of records has not been reached, the aggregation of a single file will be completed and uploaded.
+   - **Time Interval**：時間間隔に達すると、最大レコード数に達していなくても1ファイルの集約が完了しアップロードされます。
 
    :::
 
    ::::
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+10. **Advanced Settings**を展開し、必要に応じて高度な設定オプションを構成します（任意）。詳細は[高度な設定](#advanced-settings)を参照してください。
 
-11. Use the default values for the remaining settings. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to the S3 service.
+11. 残りの設定はデフォルト値を使用します。**Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがS3サービスに接続できるか確認できます。
 
-12. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+12. **Create**ボタンをクリックしてSinkの作成を完了します。作成成功後、ルール作成画面に戻り、新しいSinkがルールアクションに追加されます。
 
-13. Back on the rule creation page, click the **Save** button to complete the entire rule creation process.
+13. ルール作成画面で**Save**ボタンをクリックし、ルール作成プロセス全体を完了します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Amazon S3 Sink on the **Actions (Sink)** tab.
+これでルールの作成が完了しました。**Rules**ページで新規作成したルールを確認でき、**Actions (Sink)**タブで新しいAmazon S3 Sinkが表示されます。
 
-## Test the Rule
+## ルールのテスト
 
-Use MQTTX to publish a message to the topic `t/1`:
+MQTTXを使い、トピック`t/1`にメッセージをパブリッシュします：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Databricks" }'
 ```
 
-After sending a few messages, in your Databricks workspace, right-click **Workspace**, select **Create** -> **Notebook** to create a new notebook.
+数回メッセージを送信した後、Databricksワークスペースで**Workspace**を右クリックし、**Create** -> **Notebook**を選択して新しいノートブックを作成します。
 
-![Create Notebook](./assets/databricks-create-notebook.png)
+![ノートブック作成](./assets/databricks-create-notebook.png)
 
-In the notebook, run a SQL query against the external location to verify the data has been ingested successfully:
+ノートブック内で外部ロケーションに対してSQLクエリを実行し、データが正常に取り込まれていることを確認します：
 
 ```sql
 SELECT * FROM json.`s3://databricks-workspace-stack-142ec-bucket/emqx-iot-data-new/`
 ```
 
-![Databricks Query Result](./assets/databricks-query-result.png)
+![Databricksクエリ結果](./assets/databricks-query-result.png)
 
-## Advanced Settings
+## 高度な設定
 
-This section delves into the advanced configuration options available for the Amazon S3 Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+このセクションではAmazon S3 Sinkの高度な設定オプションについて説明します。ダッシュボードのSink設定画面で**Advanced Settings**を展開し、用途に応じて以下のパラメーターを調整できます。
 
-| Field Name                       | Description                                                  | Default Value   |
-| -------------------------------- | ------------------------------------------------------------ | --------------- |
-| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and S3. | `16`            |
-| **Request TTL**                  | Specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. | `45`            |
-| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with S3. | `15` seconds    |
-| **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. | `0` millisecond |
-| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with S3. | `60` seconds    |
-| **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the S3 Sink. | `256` MB        |
-| **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission. | `Asynchronous`  |
-| **In-flight Window**             | Controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with S3. | `100`           |
-| **Min Part Size**                | The minimum chunk size for part uploads after aggregation is complete. | `5MB`           |
-| **Max Part Size**                | The maximum chunk size for part uploads. | `5GB`           |
+| 項目名                          | 説明                                                         | デフォルト値     |
+| ------------------------------- | ------------------------------------------------------------ | --------------- |
+| **Buffer Pool Size**             | EMQXとS3間のデータフローを管理するバッファーワーカープロセス数を指定します。 | `16`            |
+| **Request TTL**                  | バッファに入ったリクエストが有効とみなされる最大秒数を指定します。 | `45`            |
+| **Health Check Interval**        | SinkがS3との接続状態を自動チェックする間隔（秒）を指定します。 | `15`秒          |
+| **Health Check Interval Jitter** | 複数ノードが同時にヘルスチェックを開始するのを防ぐため、基本間隔に加える一様ランダム遅延（ミリ秒）です。 | `0`ミリ秒       |
+| **Health Check Timeout**         | コネクターがS3との接続状態を自動チェックする際のタイムアウト時間を指定します。 | `60`秒          |
+| **Max Buffer Queue Size**        | S3 Sinkの各バッファーワーカープロセスがバッファリング可能な最大バイト数を指定します。 | `256` MB        |
+| **Query Mode**                   | メッセージ送信を最適化するため、`synchronous`または`asynchronous`のリクエストモードを選択します。 | `Asynchronous`  |
+| **In-flight Window**             | SinkがS3と通信中に同時に存在可能なインフライトキューリクエストの最大数を制御します。 | `100`           |
+| **Min Part Size**                | 集約完了後のパートアップロードにおける最小チャンクサイズを指定します。 | `5MB`           |
+| **Max Part Size**                | パートアップロードの最大チャンクサイズを指定します。 | `5GB`           |

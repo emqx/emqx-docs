@@ -1,12 +1,12 @@
-# MCP Bridge Plugin
+# MCP Bridge プラグイン
 
-The [EMQX MCP Bridge Plugin](https://github.com/emqx/emqx_mcp_bridge) is a plugin used to integrate EMQX with MCP (Model Context Protocol)–enabled devices. With this plugin, users can access and control IoT devices using MCP-compatible large language models or AI agents.
+[EMQX MCP Bridge プラグイン](https://github.com/emqx/emqx_mcp_bridge) は、EMQX と MCP（Model Context Protocol）対応デバイスを統合するためのプラグインです。このプラグインを使用することで、MCP対応の大規模言語モデルやAIエージェントを使ってIoTデバイスにアクセスし、制御することが可能になります。
 
-## How MCP Bridge Plugin Works
+## MCP Bridge プラグインの仕組み
 
-The MCP Bridge Plugin is installed and runs inside EMQX. After startup, it exposes an HTTP endpoint that converts MCP connections based on Streamable HTTP or SSE into the MQTT protocol.
+MCP Bridge プラグインはEMQX内にインストールされて動作します。起動後、Streamable HTTP または SSE に基づくMCP接続をMQTTプロトコルに変換するHTTPエンドポイントを公開します。
 
-IoT devices connect to the EMQX broker using MQTT, while MCP-enabled large models or AI agents connect to the HTTP endpoint exposed by the MCP Bridge Plugin.
+IoTデバイスはMQTTを使ってEMQXブローカーに接続し、MCP対応の大規模モデルやAIエージェントはMCP Bridge プラグインが公開するHTTPエンドポイントに接続します。
 
 ```mermaid
 graph LR
@@ -27,15 +27,15 @@ graph LR
     end
 ```
 
-## Access Devices Using MCP over MQTT
+## MCP over MQTT を使ったデバイスアクセス
 
-On the device side, devices can use the MCP over MQTT protocol and act as MCP Servers that directly expose their tools and capabilities. The plugin aggregates the tools registered by devices based on tool type. In the MCP Bridge Plugin, the Server Name concept from the MCP over MQTT protocol is mapped to a tool type.
+デバイス側では、MCP over MQTT プロトコルを使用し、MCPサーバーとして自身のツールや機能を直接公開できます。プラグインはデバイスが登録したツールをツールタイプごとに集約します。MCP Bridge プラグイン内では、MCP over MQTT プロトコルのServer Nameの概念がツールタイプにマッピングされています。
 
-In other words, tools registered by multiple devices of the same type are aggregated by the bridge plugin into a single logical tool that can be invoked by an MCP Client.
+つまり、同じタイプの複数デバイスが登録したツールは、ブリッジプラグインによって単一の論理的なツールに集約され、MCPクライアントから呼び出せるようになります。
 
-This approach is suitable for scenarios where a single client accesses one or a small number of devices, such as smart homes, industrial control systems, or voice-enabled toys. In these scenarios, users typically only need access to their own devices rather than managing large fleets of devices.
+この方式は、スマートホーム、産業制御システム、音声対応玩具など、単一または少数のデバイスにクライアントがアクセスするシナリオに適しています。これらのシナリオでは、ユーザーは大規模なデバイス群を管理するのではなく、自身のデバイスにのみアクセスすることが一般的です。
 
-Because tools from multiple devices of the same type are aggregated into a single logical tool, the MCP Bridge Plugin injects a required parameter named `target-mqtt-client-id` into the tool definition. When an AI agent invokes the tool, it must determine the target device ID according to business logic and provide it via this parameter, allowing the MCP request to be routed to the specific device.
+同じタイプの複数デバイスのツールが単一の論理ツールに集約されるため、MCP Bridge プラグインはツール定義に `target-mqtt-client-id` という必須パラメータを注入します。AIエージェントがツールを呼び出す際には、ビジネスロジックに基づいて対象デバイスIDを決定し、このパラメータで指定する必要があります。これにより、MCPリクエストが特定のデバイスにルーティングされます。
 
 ```mermaid
 graph LR
@@ -56,13 +56,13 @@ graph LR
     end
 ```
 
-## Access Devices Using Standard MQTT
+## 標準MQTTを使ったデバイスアクセス
 
-Devices can also connect to EMQX using the standard MQTT protocol instead of MCP over MQTT. In this case, users can implement MCP tools directly within the MCP Bridge Plugin to indirectly access these regular MQTT devices.
+デバイスはMCP over MQTTではなく、標準のMQTTプロトコルを使ってEMQXに接続することも可能です。この場合、ユーザーはMCP Bridge プラグイン内にMCPツールを直接実装し、これらの通常のMQTTデバイスに間接的にアクセスできます。
 
-This approach is suitable for scenarios that require more flexible device access, such as smart cities, connected vehicles, and industrial IoT. Within the MCP Bridge Plugin, arbitrary business logic can be implemented, including accessing user-defined external services or APIs, or querying external databases to retrieve device-reported data.
+この方式は、スマートシティ、コネクテッドビークル、産業用IoTなど、より柔軟なデバイスアクセスが求められるシナリオに適しています。MCP Bridge プラグイン内では、ユーザー定義の外部サービスやAPIへのアクセス、外部データベースからのデバイス報告データの取得など、任意のビジネスロジックを実装できます。
 
-For examples on how to implement MCP tools in code, refer to [Create Custom MCP Tools](https://github.com/emqx/emqx_mcp_bridge?tab=readme-ov-file#create-custom-mcp-tools).
+コードでのMCPツール実装例については、[Create Custom MCP Tools](https://github.com/emqx/emqx_mcp_bridge?tab=readme-ov-file#create-custom-mcp-tools) を参照してください。
 
 ```mermaid
 graph LR

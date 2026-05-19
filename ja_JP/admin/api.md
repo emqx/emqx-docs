@@ -2,53 +2,62 @@
 
 EMQXはOpenAPI（Swagger）3.0仕様に準拠したHTTP管理APIを公開しています。
 
-EMQX起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスするとAPIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトでは、Dashboardの設定で `swagger_support` が `true` に設定されており、Swagger UIが有効であることを示しています。これにより、インタラクティブなAPIドキュメントの生成など、Swagger関連機能がすべて有効になります。無効化したい場合は `false` に設定してください。詳細は[Dashboard設定](../configuration/dashboard.md)を参照してください。
+EMQXはREST APIを探索および操作するための複数の方法を提供しています。EMQX起動後、以下のAPI仕様エンドポイントが利用可能です。
 
-本節ではEMQX REST APIの利用方法を紹介します。
+| エンドポイント | フォーマット | 説明 |
+| --- | --- | --- |
+| `/api-spec.html` | HTML | 人間が読みやすいドリルダウン形式のAPIリファレンスページ。 |
+| `/api-spec.md` | Markdown | AIエージェントや自動化ツール向けのMarkdown形式APIリファレンス。 |
+| `/api-spec.json` | JSON | スクリプトやプログラムツール向けのOpenAPI 3.0仕様JSON形式。 |
+| `/api-docs/index.html` | HTML | ブラウザ上でAPIコールを直接テストできるインタラクティブなSwagger UI。**非推奨**：v7で削除予定。 |
+
+上記のすべてのエンドポイントは、ダッシュボード設定で `swagger_support` が `true`（デフォルト）に設定されている必要があります。APIドキュメントエンドポイントを無効化するには、`false`に設定してください。詳細は[ダッシュボード設定](../configuration/dashboard.md)を参照してください。
+
+本セクションではEMQX REST APIの利用方法を紹介します。
 
 ## 基本パス
 
-EMQXのREST APIはバージョン管理されており、EMQX 5.0.0以降のすべてのAPIパスは `/api/v5` から始まります。
+EMQXのREST APIはバージョン管理されており、EMQX 5.0.0以降のすべてのAPIパスは `/api/v5` で始まります。
 
 ## HTTPヘッダー
 
-ほとんどのAPIリクエストでは `Accept` ヘッダーに `application/json` を設定する必要があり、指定がなければレスポンスはJSON形式で返されます。
+ほとんどのAPIリクエストでは、`Accept` ヘッダーを `application/json` に設定する必要があり、特に指定がない限りレスポンスはJSON形式で返されます。
 
 ## HTTPレスポンスステータスコード
 
 EMQXは[HTTPレスポンスステータスコード](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)の標準に準拠しています。主なステータスコードは以下の通りです。
 
-| コード | 説明                                                        |
-| ------ | ----------------------------------------------------------- |
-| 200    | リクエスト成功。返却されるJSONデータに詳細が含まれます。    |
-| 201    | 作成成功。新規オブジェクトがBodyに返されます。              |
-| 204    | リクエスト成功。通常は削除や更新操作で、Bodyは空です。      |
-| 400    | 不正なリクエスト。リクエストボディやパラメータのエラー。    |
-| 401    | 認証エラー。APIキーが期限切れまたは存在しません。            |
-| 403    | 禁止。オブジェクトが使用中、または依存関係の制約があります。|
-| 404    | 見つかりません。Bodyの `message` フィールドで理由を確認可能。|
-| 409    | コンフリクト。オブジェクトが既に存在するか、数の上限超過。  |
-| 500    | サーバ内部エラー。Bodyやログで原因を確認してください。      |
+| コード | 説明 |
+| ----- | ------------------------------------------------------------ |
+| 200   | リクエスト成功。返却されるJSONデータに詳細が含まれます。 |
+| 201   | 作成成功。新規オブジェクトがBodyに返されます。 |
+| 204   | リクエスト成功。主に削除や更新操作で使用され、Bodyは空です。 |
+| 400   | 不正なリクエスト。通常はリクエストボディやパラメータのエラー。 |
+| 401   | 認証失敗。APIキーの期限切れまたは存在しません。 |
+| 403   | 禁止。オブジェクトが使用中、または依存関係制約があります。 |
+| 404   | 見つかりません。Bodyの `message` フィールドで理由を確認できます。 |
+| 409   | 競合。オブジェクトが既に存在するか、数の上限を超えています。 |
+| 500   | サーバ内部エラー。Bodyやログで原因を確認してください。 |
 
 ## 認証
 
-EMQXのREST APIは主にAPIキーを用いたBasic認証とBearerトークン認証の2種類をサポートしています。
+EMQXのREST APIは主に2つの認証方法をサポートしています。APIキーを使ったベーシック認証とベアラートークン認証です。
 
-### APIキーを用いたBasic認証
+### APIキーを使ったベーシック認証
 
-この方法では、APIキーとシークレットキーをそれぞれユーザー名とパスワードとしてAPIリクエストを認証します。EMQXのREST APIは[HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework)に準拠しており、これらの認証情報が必要です。EMQX REST APIを利用する前にAPIキーを作成してください。
+この方法では、APIキーとシークレットキーをユーザー名とパスワードとしてAPIリクエストの認証に使用します。EMQXのREST APIは[HTTPベーシック認証](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework)に準拠しています。利用前にAPIキーを作成する必要があります。
 
 ::: tip 注意
 
-セキュリティ上の理由から、EMQX 5.0.0以降はDashboardユーザーの認証情報でREST APIを認証できません。代わりにAPIキーを作成し、認証に使用してください。
+セキュリティ上の理由から、EMQX 5.0.0以降はダッシュボードのユーザー認証情報をREST API認証に使用できません。代わりにAPIキーを作成して認証に使用してください。
 
 :::
 
 #### APIキーの作成
 
-Dashboardの **System** -> **API Key** から手動でAPIキーを作成できます。詳細は[System - API Keys](../dashboard/system.md#api-keys)を参照してください。
+ダッシュボードの **System** -> **API Key** から手動でAPIキーを作成できます。詳細は[System - API Keys](../dashboard/system.md#api-keys)を参照してください。
 
-また、ブートストラップファイル方式でAPIキーを作成することも可能です。以下の設定ファイルでファイルパスを指定します。
+また、ブートストラップファイル方式でAPIキーを作成することも可能です。以下の設定ファイルを追加し、ファイルの場所を指定します。
 
 ```bash
 api_key = {
@@ -56,15 +65,13 @@ api_key = {
 }
 ```
 
-指定ファイル内に複数のAPIキーを以下の形式で改行区切りで記述します。
+指定したファイルには複数のAPIキーを以下の形式で改行区切りで記述します。
 
-```
-{API Key}:{Secret Key}:{?Role}
-```
+`{API Key}:{Secret Key}:{?Role}`
 
-- **API Key**：任意の文字列でキー識別子
-- **Secret Key**：ランダムな文字列をシークレットキーとして使用
-- **Role（任意）**：キーの[ロール](#roles-and-permissions)を指定
+- **API Key**: キー識別子として任意の文字列
+- **Secret Key**: シークレットキーとしてランダムな文字列を使用
+- **Role（任意）**: キーの[ロール](#roles-and-permissions)を指定
 
 例：
 
@@ -74,21 +81,21 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 ```
 
-この方法で作成したAPIキーは無期限で有効です。
+この方法で作成されたAPIキーは無期限で有効です。
 
-EMQX起動時にファイル内のデータがAPIキーリストに追加され、既存のAPIキーがあればSecret KeyとRoleが更新されます。
+EMQX起動時にファイル内のデータをAPIキーリストに追加します。既存のAPIキーがある場合はシークレットキーとロールが更新されます。
 
 #### ロールと権限
 
-REST APIはロールベースアクセス制御を実装しています。APIキー作成時に以下の3つの定義済みロールのいずれかを割り当てられます。
+REST APIはロールベースアクセス制御を実装しています。APIキー作成時に以下3つの事前定義ロールのいずれかを割り当てられます。
 
-- **Administrator**：すべてのリソースにアクセス可能。ロール指定がない場合のデフォルト。ロール識別子は `administrator`。
-- **Viewer**：リソースやデータの閲覧のみ可能。REST APIのすべてのGETリクエストに対応。ロール識別子は `viewer`。
-- **Publisher**：MQTTメッセージのパブリッシュ専用。メッセージパブリッシュ関連APIのみアクセス可能。ロール識別子は `publisher`。
+- **Administrator**: すべてのリソースにアクセス可能。ロール識別子は `administrator`。ロール未指定時のデフォルト。
+- **Viewer**: リソースやデータの閲覧のみ可能。REST APIの全GETリクエストに対応。ロール識別子は `viewer`。
+- **Publisher**: MQTTメッセージのパブリッシュ専用。メッセージパブリッシュ関連APIのみアクセス可能。ロール識別子は `publisher`。
 
-#### APIキーを用いた認証方法
+#### APIキーを使った認証方法
 
-APIキーとシークレットキーを用いてリクエストを認証します。APIキーがユーザー名、シークレットキーがパスワードとしてBasic認証に利用されます。
+APIキーとシークレットキーを用いてリクエストを認証します。APIキーをユーザー名、シークレットキーをパスワードとしてベーシック認証を行います。
 
 各言語での例：
 
@@ -235,13 +242,13 @@ axios
 :::
 ::::
 
-### Bearerトークンを用いた認証
+### ベアラートークンを使った認証
 
-APIキー認証の代替として、Bearerトークンを使った安全かつプログラム的なEMQX REST APIアクセスが可能です。Bearerトークンは以下のログインAPIエンドポイントにリクエストを送信して取得します。
+APIキー認証の代替として、EMQX REST APIへの安全かつプログラム的なアクセスのためにベアラートークン認証を利用できます。ベアラートークンは以下のログインAPIエンドポイントにリクエストを送信して取得します。
 
-#### Bearerトークンの取得
+#### ベアラートークンの取得
 
-以下のログインAPIエンドポイントにHTTP `POST` リクエストを送信してください。
+以下のログインAPIエンドポイントにHTTP `POST` リクエストを送信してベアラートークンを取得します。
 
 ```bash
 POST http://your-emqx-address:8483/api/v5/login
@@ -261,13 +268,13 @@ POST http://your-emqx-address:8483/api/v5/login
 ```
 
 - `your-emqx-address` はEMQXノードのアドレスまたはIPに置き換えてください。
-- `"admin"` と `"yourpassword"` はEMQX Dashboardの認証情報に置き換えてください。
+- `"admin"` と `"yourpassword"` はEMQXダッシュボードの認証情報に置き換えてください。
 
-レスポンスにBearerトークンが含まれ、APIリクエストの認証に利用できます。
+レスポンスにベアラートークンが含まれ、APIリクエストの認証に使用できます。
 
-#### Bearerトークンを用いた認証方法
+#### ベアラートークンを使った認証方法
 
-Bearerトークンを取得したら、APIリクエストの `Authorization` ヘッダーに以下のように含めてください。
+取得したベアラートークンはAPIリクエストの `Authorization` ヘッダーに以下のように含めて送信します。
 
 ```bash
 --header "Authorization: Bearer <your-token>"
@@ -275,11 +282,11 @@ Bearerトークンを取得したら、APIリクエストの `Authorization` ヘ
 
 ## ページネーション
 
-大量データを扱う一部APIではページネーション機能が提供されています。データの特性に応じて2種類のページネーション方式があります。
+大量データを扱うAPIの一部ではページネーション機能が提供されています。データの特性に応じて2種類のページネーション方式があります。
 
-### ページ番号方式
+### ページ番号によるページネーション
 
-ページネーション対応APIの多くは、`page`（ページ番号）と `limit`（ページサイズ）パラメータで制御します。最大ページサイズは `10000` です。`limit` 指定がない場合はデフォルトで `100` となります。
+ページネーション対応の多くのAPIでは、`page`（ページ番号）と `limit`（ページサイズ）パラメータで制御します。最大ページサイズは `10000` です。`limit` パラメータ未指定時はデフォルトで `100` になります。
 
 例：
 
@@ -287,7 +294,7 @@ Bearerトークンを取得したら、APIリクエストの `Authorization` ヘ
 GET /clients?page=1&limit=100
 ```
 
-レスポンスの `meta` フィールドにページネーション情報が含まれます。EMQXは検索条件付きリクエストの総件数を予測できないため、`meta.hasnext` フィールドで次ページの有無を示します。
+レスポンスの `meta` フィールドにページネーション情報が含まれます。EMQXは検索条件付きリクエストの総データ数を予測できないため、`meta.hasnext` フィールドで次ページの有無を示します。
 
 ```json
 {
@@ -301,11 +308,11 @@ GET /clients?page=1&limit=100
 }
 ```
 
-### カーソル方式
+### カーソルによるページネーション
 
-データが急速に変化し、ページ番号方式が非効率な一部APIではカーソル方式を採用しています。
+データが急速に変化し、ページ番号によるページネーションが非効率な場合はカーソルページネーションを使用します。
 
-`position` または `cursor`（開始位置）パラメータでデータの開始位置を指定し、`limit`（ページサイズ）パラメータで開始位置から取得する件数を指定します。最大ページサイズは `10000` です。`limit` 指定がない場合はデフォルトで `100` となります。
+`position` または `cursor`（開始位置）パラメータでデータの開始位置を指定し、`limit`（ページサイズ）パラメータで開始位置から読み込む件数を指定します。最大ページサイズは `10000` です。`limit` 未指定時はデフォルトで `100` になります。
 
 例：
 
@@ -337,7 +344,7 @@ GET /clients/{clientid}/mqueue_messages?position=1716187698257189921_0&limit=100
 }
 ```
 
-この方式はデータ変動が激しいシナリオで連続性と効率性を確保します。
+この方式はデータ変動が激しい場合に効率的かつ継続的なデータ取得を実現します。
 
 ## エラーコード
 
@@ -354,35 +361,35 @@ HTTPレスポンスステータスコードに加え、EMQXは特定のエラー
 }
 ```
 
-| エラーコード                                   | 説明                                                         |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| WRONG_USERNAME_OR_PWD                          | ユーザー名またはパスワードが間違っています                  |
+| エラーコード                                    | 説明                                                  |
+| ---------------------------------------------- | ----------------------------------------------------- |
+| WRONG_USERNAME_OR_PWD                          | ユーザー名またはパスワードが間違っています            |
 | WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | ユーザー名＆パスワードまたはキー＆シークレットが間違っています |
-| BAD_REQUEST                                    | リクエストパラメータが不正です                               |
-| NOT_MATCH                                      | 条件が一致しません                                           |
-| ALREADY_EXISTS                                 | リソースが既に存在します                                     |
-| BAD_CONFIG_SCHEMA                              | 設定データが不正です                                         |
-| BAD_LISTENER_ID                                | リスナーIDが不正です                                         |
-| BAD_NODE_NAME                                  | ノード名が不正です                                           |
-| BAD_RPC                                        | RPC失敗。クラスター状態および対象ノードの状態を確認してください |
-| BAD_TOPIC                                      | トピックの構文エラー。トピックはMQTTプロトコル標準に準拠する必要があります |
-| EXCEED_LIMIT                                   | 作成リソースが最大または最小制限を超えています               |
-| INVALID_PARAMETER                              | リクエストパラメータが不正または境界値を超えています         |
-| CONFLICT                                       | リクエストリソースに競合があります                           |
-| NO_DEFAULT_VALUE                               | リクエストパラメータにデフォルト値が使用されていません       |
-| DEPENDENCY_EXISTS                              | リソースが他のリソースに依存しています                       |
-| MESSAGE_ID_SCHEMA_ERROR                        | メッセージIDの解析エラー                                     |
-| INVALID_ID                                     | IDスキーマが不正です                                         |
-| MESSAGE_ID_NOT_FOUND                           | メッセージIDが存在しません                                   |
-| NOT_FOUND                                      | リソースが見つかりません                                     |
-| CLIENTID_NOT_FOUND                             | クライアントIDが見つかりません                               |
-| CLIENT_NOT_FOUND                               | クライアントが見つかりません（通常はMQTTクライアントではない） |
-| RESOURCE_NOT_FOUND                             | リソースが見つかりません                                     |
-| TOPIC_NOT_FOUND                                | トピックが見つかりません                                     |
-| USER_NOT_FOUND                                 | ユーザーが見つかりません                                     |
-| INTERNAL_ERROR                                 | サーバ内部エラー                                             |
-| SERVICE_UNAVAILABLE                            | サービス利用不可                                             |
-| SOURCE_ERROR                                   | ソースエラー                                                 |
-| UPDATE_FAILED                                  | 更新失敗                                                   |
-| REST_FAILED                                    | リセットソースまたは設定失敗                                 |
-| CLIENT_NOT_RESPONSE                            | クライアントが応答しません                                   |
+| BAD_REQUEST                                    | リクエストパラメータが不正です                         |
+| NOT_MATCH                                      | 条件が一致しません                                     |
+| ALREADY_EXISTS                                 | リソースが既に存在します                               |
+| BAD_CONFIG_SCHEMA                              | 設定データが不正です                                  |
+| BAD_LISTENER_ID                                | リスナーIDが不正です                                  |
+| BAD_NODE_NAME                                  | ノード名が不正です                                    |
+| BAD_RPC                                        | RPC失敗。クラスター状態や対象ノードの状態を確認してください |
+| BAD_TOPIC                                      | トピック構文エラー。トピックはMQTTプロトコル標準に準拠する必要があります |
+| EXCEED_LIMIT                                   | 作成リソースが最大または最小制限を超えています         |
+| INVALID_PARAMETER                              | リクエストパラメータが不正または境界値を超えています   |
+| CONFLICT                                       | リクエストリソースが競合しています                     |
+| NO_DEFAULT_VALUE                               | リクエストパラメータにデフォルト値が使用されていません |
+| DEPENDENCY_EXISTS                              | リソースが他のリソースに依存しています                 |
+| MESSAGE_ID_SCHEMA_ERROR                        | メッセージID解析エラー                                 |
+| INVALID_ID                                     | IDスキーマが不正です                                  |
+| MESSAGE_ID_NOT_FOUND                           | メッセージIDが存在しません                             |
+| NOT_FOUND                                      | リソースが見つかりません                               |
+| CLIENTID_NOT_FOUND                             | クライアントIDが見つかりません                         |
+| CLIENT_NOT_FOUND                               | クライアントが見つかりません（通常はMQTTクライアントではありません） |
+| RESOURCE_NOT_FOUND                             | リソースが見つかりません                               |
+| TOPIC_NOT_FOUND                                | トピックが見つかりません                               |
+| USER_NOT_FOUND                                 | ユーザーが見つかりません                               |
+| INTERNAL_ERROR                                 | サーバ内部エラー                                       |
+| SERVICE_UNAVAILABLE                            | サービス利用不可                                       |
+| SOURCE_ERROR                                   | ソースエラー                                           |
+| UPDATE_FAILED                                  | 更新失敗                                              |
+| REST_FAILED                                    | リセットソースまたは設定失敗                           |
+| CLIENT_NOT_RESPONSE                            | クライアントが応答しません                             |

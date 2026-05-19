@@ -1,93 +1,93 @@
-# Device-Initiated Voice Feedback Scenarios
+# デバイス起動型音声フィードバックシナリオ
 
-Unlike user-initiated voice control or conversational scenarios, interactions here are initiated by the device. When a device detects environmental changes or events, it proactively triggers AI-generated voice messages and plays them to the user—shifting from “people finding devices” to “devices finding people.”
+ユーザー起動型の音声操作や対話型シナリオとは異なり、ここでのインタラクションはデバイスが主体となって開始されます。デバイスが環境の変化やイベントを検知すると、AIが生成した音声メッセージを能動的にユーザーに再生し、「人がデバイスを探す」から「デバイスが人を見つける」へとシフトします。
 
-**Technical implementation**: Sensors on the device (temperature, smoke, camera AI, etc.) detect events and report them to the cloud via MQTT. The AI Agent analyzes the event and generates natural-language announcements, then uses the Volcano Engine `UpdateVoiceChat` API with the `ExternalTextToSpeech` command to push text into an RTC room for TTS playback.
+**技術的実装**：デバイス上のセンサー（温度、煙、カメラAIなど）がイベントを検知し、MQTT経由でクラウドに報告します。AIエージェントがイベントを解析し、自然言語のアナウンスを生成します。その後、Volcano Engineの`UpdateVoiceChat` APIの`ExternalTextToSpeech`コマンドを使用し、RTCルームにテキストをプッシュしてTTS再生を行います。
 
-**Architecture components**:
+**アーキテクチャ構成要素**：
 
-- **Device sensors**: Detect environmental changes (standard hardware)
-- **EMQX**: Event data ingestion via MQTT (standard product)
-- **AI Agent**: Event analysis and announcement generation (custom-developed)
-- **Volcano Engine RTC + TTS**: Voice broadcast channel (standard product)
+- **デバイスセンサー**：環境変化を検知（標準ハードウェア）
+- **EMQX**：MQTTによるイベントデータの取り込み（標準製品）
+- **AIエージェント**：イベント解析とアナウンス生成（カスタム開発）
+- **Volcano Engine RTC + TTS**：音声配信チャネル（標準製品）
 
-## Flow Diagram
+## フローダイアグラム
 
-![Device-triggered voice feedback flow](./device-triggered-voice.png)
+![デバイス起動型音声フィードバックのフロー](./device-triggered-voice.png)
 
-**Flow description**:
+**フロー説明**：
 
-1. Device sensors detect an event (e.g., abnormal temperature, smoke alarm)
-2. Event data is reported to the cloud via MQTT
-3. The AI Agent analyzes the event and generates natural-language announcements
-4. The `ExternalTextToSpeech` command of the `UpdateVoiceChat` API is invoked
-5. Volcano Engine pushes TTS audio to the device via RTC for playback
+1. デバイスセンサーがイベントを検知（例：異常温度、煙警報）
+2. イベントデータをMQTT経由でクラウドに報告
+3. AIエージェントがイベントを解析し、自然言語アナウンスを生成
+4. `UpdateVoiceChat` APIの`ExternalTextToSpeech`コマンドを呼び出す
+5. Volcano EngineがRTC経由でTTS音声をデバイスにプッシュし再生
 
-## Typical Scenarios
+## 代表的なシナリオ
 
-### Industrial Monitoring — Real-Time Incident Alerts
+### 産業モニタリング — リアルタイム事故警告
 
-At 3:00 a.m., the factory is unattended:
+午前3時、工場は無人状態：
 
-> *(A temperature sensor detects abnormal temperature in Boiler #3)*
->  **PA system**: “Warning! Boiler #3 temperature has reached 285°C, exceeding the safety threshold. Power has been automatically reduced. On-duty personnel, please inspect immediately.”
->  *(A phone call is also placed to the shift supervisor)*
+> *(ボイラー3号の温度センサーが異常温度を検知)*
+>  **PAシステム**：「警告！ボイラー3号の温度が285℃に達し、安全閾値を超えました。電力は自動的に削減されています。担当者は直ちに点検してください。」
+>  *(当直監督者へ電話も発信される)*
 >
-> *(Abnormal vibration detected)*
->  **System**: “Attention: Abnormal vibration detected on Motor #5. Possible bearing wear. Data recorded and a maintenance ticket has been generated.”
+> *(異常振動を検知)*
+>  **システム**：「注意：モーター5号に異常振動を検知しました。ベアリングの摩耗の可能性があります。データは記録され、保守チケットが発行されました。」
 
-Immediate voice alerts reduce inspection workload and help prevent accidents.
+即時の音声警告により点検負荷を軽減し、事故防止に寄与します。
 
-### Child Care — Safety and Companionship
+### 子育て — 安全と寄り添い
 
-A mother is cooking in the kitchen while her 3-year-old plays in the living room:
+母親がキッチンで調理中、3歳の子供がリビングで遊んでいる状況：
 
-> *(Camera detects the child approaching a power outlet)*
->  **Speaker**: “Sweetie, the outlet is dangerous—don’t touch it. How about we play with some blocks instead?”
+> *(カメラが子供がコンセントに近づくのを検知)*
+>  **スピーカー**：「お子さま、コンセントは危ないですよ。触らないでね。代わりにブロック遊びをしませんか？」
 >
-> *(Crying detected)*
->  **Speaker**: “What’s wrong, sweetheart? Did you fall? Mom is coming right away.”
->  *(A notification is also sent to the mother’s phone)*
+> *(泣き声を検知)*
+>  **スピーカー**：「どうしたの？転んだの？お母さんがすぐに行くよ。」
+>  *(母親のスマホにも通知が送信される)*
 >
-> *(On a hot day, a car temperature sensor detects rising heat and the camera recognizes a child alone in the car)*
->  **In-vehicle system** (voice alert sent to the parent’s phone): “Emergency alert! A child is detected in the vehicle. Current temperature is 42°C and rising. The air conditioner has been turned on automatically. Please return to the vehicle immediately!”
->  *(Hazard lights are activated to alert nearby pedestrians)*
+> *(暑い日に車内温度センサーが上昇を検知し、カメラが子供が車内に一人でいることを認識)*
+>  **車載システム**（親のスマホに音声警告送信）：「緊急警報！車内に子供が検知されました。現在の温度は42℃で上昇中です。エアコンは自動的に作動しています。直ちに車両に戻ってください！」
+>  *(ハザードランプが点灯し、周囲の歩行者に注意を促す)*
 
-Devices proactively detect danger and alert caregivers in time to protect children.
+デバイスが危険を能動的に検知し、子供の安全を守るために適時に保護者へ警告します。
 
-## Key Technical Points
+## 主要技術ポイント
 
-| Aspect             | Description                                            |
-| ------------------ | ------------------------------------------------------ |
-| Event-driven       | Triggered by sensor data, no user initiation required  |
-| Intelligent speech | AI-generated natural language, not fixed alert tones   |
-| Priority control   | Critical alerts can interrupt ongoing conversations    |
-| Multi-channel      | Voice + app push + SMS for multi-channel notifications |
+| 項目               | 説明                                                     |
+| ------------------ | -------------------------------------------------------- |
+| イベント駆動       | センサーデータによるトリガーで、ユーザー起動は不要       |
+| インテリジェント音声 | AI生成の自然言語で固定アラート音ではない                 |
+| 優先制御           | 重要警告は会話中でも割り込み可能                         |
+| マルチチャネル     | 音声＋アプリプッシュ＋SMSによる多チャネル通知             |
 
-## Flexibility of the AI Agent
+## AIエージェントの柔軟性
 
-The AI Agent is the most customizable core component. Developers can tailor it to specific scenarios:
+AIエージェントは最もカスタマイズ可能なコアコンポーネントです。開発者は特定シナリオに合わせて調整可能です：
 
-- **Announcement style**: Serious industrial alerts, gentle child companionship, professional medical reminders
-- **Decision logic**: Multi-sensor fusion instead of single-threshold triggers
-- **Response strategy**: Different notification channels and priorities based on urgency
-- **Context awareness**: Incorporate history, time, and user habits for more relevant messages
+- **アナウンススタイル**：産業向けの厳格な警告、子供への優しい寄り添い、医療現場の専門的リマインダーなど
+- **判定ロジック**：単一閾値トリガーではなく複数センサーの融合判定
+- **対応戦略**：緊急度に応じた通知チャネルや優先度の切り替え
+- **コンテキスト認識**：履歴、時間、ユーザー習慣を考慮したより適切なメッセージ生成
 
-## Comparison with Traditional Rule-Based Approaches
+## 従来のルールベース方式との比較
 
-| Aspect           | Traditional Rules                           | AI Agent Approach                                        |
-| ---------------- | ------------------------------------------- | -------------------------------------------------------- |
-| Triggering       | Fixed thresholds (e.g., temperature > 50°C) | Contextual reasoning (temperature + trend + environment) |
-| Message content  | Static templates (“Temperature abnormal”)   | Dynamic generation with values, suggestions, and context |
-| New scenarios    | Requires new rules                          | Adaptable via prompt updates                             |
-| False alarms     | Hard to filter                              | Multi-factor analysis reduces false alerts               |
-| Maintenance cost | Grows with rule complexity                  | Unified agent logic, easier iteration                    |
+| 項目             | 従来のルールベース                         | AIエージェント方式                                   |
+| ---------------- | ----------------------------------------- | --------------------------------------------------- |
+| トリガー         | 固定閾値（例：温度 > 50℃）               | 文脈的推論（温度＋傾向＋環境情報）                   |
+| メッセージ内容   | 静的テンプレート（「温度異常」など）       | 値や提案、文脈を含む動的生成                         |
+| 新シナリオ対応   | 新ルールの追加が必要                       | プロンプト更新で柔軟に適応                           |
+| 誤警報           | フィルタリング困難                         | 多要素解析により誤警報を低減                         |
+| メンテナンスコスト | ルール増加に伴い増大                       | 統一されたエージェントロジックで容易に反復可能     |
 
-## Applicable Devices
+## 対応デバイス例
 
-- Smart speakers / control panels
-- Health monitoring bands / watches
-- Children’s watches / companion robots
-- In-vehicle systems
-- Industrial monitoring terminals
-- Retail display kiosks / greeting robots
+- スマートスピーカー／コントロールパネル
+- 健康モニタリングバンド／スマートウォッチ
+- 子供用ウォッチ／コンパニオンロボット
+- 車載システム
+- 産業用モニタリング端末
+- 小売店ディスプレイキオスク／挨拶ロボット

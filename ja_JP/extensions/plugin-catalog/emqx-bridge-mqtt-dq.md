@@ -1,62 +1,59 @@
-# MQTT Bridge with Disk Queue
+# MQTT ブリッジ（ディスクキュー付き）
 
-Use this plugin to forward local MQTT messages to another MQTT broker with a
-disk buffer for better resilience.
+このプラグインは、ローカルの MQTT メッセージを別の MQTT ブローカーに転送する際に、ディスクバッファを利用してレジリエンスを向上させます。
 
-## Features
+## 特長
 
-- Disk buffering per bridge.
-- Automatic retry when the remote broker is unavailable.
-- Topic rewrite support with `${topic}`.
-- Multiple bridges in one plugin.
-- Config updates apply per bridge (unchanged bridges keep running).
+- ブリッジごとのディスクバッファリング。
+- リモートブローカーが利用不可の場合の自動リトライ。
+- `${topic}` を使ったトピック書き換え対応。
+- 1つのプラグインで複数のブリッジを管理可能。
+- 設定更新はブリッジ単位で適用（変更のないブリッジは継続稼働）。
 
-## How It Works
+## 動作概要
 
-1. Match local publishes with each bridge `filter_topic`.
-2. Append matching messages to disk queue partitions.
-3. Publish queued messages to the remote broker.
-4. Retry automatically if publish fails due to network/connectivity.
-5. If a queue partition exceeds `queue.max_total_bytes`, oldest records in that partition are dropped.
+1. ローカルのパブリッシュが各ブリッジの `filter_topic` とマッチするか判定。
+2. マッチしたメッセージをディスクキューのパーティションに追記。
+3. キュー内のメッセージをリモートブローカーにパブリッシュ。
+4. ネットワークや接続障害でパブリッシュに失敗した場合は自動リトライ。
+5. キューパーティションが `queue.max_total_bytes` を超えた場合、最も古いレコードから削除。
 
-## Configuration
+## 設定
 
-Configure from EMQX Dashboard (recommended) or via plugin config file.
+EMQX ダッシュボード（推奨）またはプラグイン設定ファイルから設定可能です。
 
-For production, start with one bridge, validate traffic, then scale out.
+本番環境では、まず1つのブリッジでトラフィックを検証し、その後スケールアウトしてください。
 
-### Config File Locations
+### 設定ファイルの場所
 
-There are two relevant config file locations:
+関連する設定ファイルは以下の2種類です：
 
-- Bundled default file inside the installed plugin package:
-  - docker install example for `0.2.0`:
+- インストール済みプラグインパッケージ内のデフォルトファイル：
+  - docker インストール例（バージョン `0.2.0`）：
     `/opt/emqx/plugins/emqx_bridge_mqtt_dq-0.2.0/emqx_bridge_mqtt_dq-0.2.0/priv/config.hocon`
-  - deb/rpm install example for `0.2.0`:
+  - deb/rpm インストール例（バージョン `0.2.0`）：
     `/usr/lib/emqx/plugins/emqx_bridge_mqtt_dq-0.2.0/emqx_bridge_mqtt_dq-0.2.0/priv/config.hocon`
 
-- Persisted plugin config file managed by EMQX after config is saved via Dashboard or API:
-  - docker:
+- ダッシュボードや API で設定保存後に EMQX が管理する永続化プラグイン設定ファイル：
+  - docker：
     `/opt/emqx/data/plugins/emqx_bridge_mqtt_dq/config.hocon`
-  - deb/rpm:
+  - deb/rpm：
     `/var/lib/emqx/plugins/emqx_bridge_mqtt_dq/config.hocon`
 
-The `priv/config.hocon` file is the packaged default template. The
-`data/plugins/.../config.hocon` file is the persisted plugin config location
-used after EMQX saves plugin config changes.
+`priv/config.hocon` はパッケージに含まれるデフォルトテンプレートであり、`data/plugins/.../config.hocon` は設定変更後に EMQX が使用する永続化設定ファイルです。
 
-### Quick Start (Dashboard)
+### クイックスタート（ダッシュボード）
 
-1. Enable the plugin.
-2. Add one reusable remote under `remotes`.
-3. Add one bridge under `bridges`.
-4. Set `remote`, `filter_topic`, and `remote_topic`.
-5. Save and verify remote delivery.
-6. Tune queue and pool settings only after baseline validation.
+1. プラグインを有効化。
+2. `remotes` に再利用可能なリモートを1つ追加。
+3. `bridges` にブリッジを1つ追加。
+4. `remote`、`filter_topic`、`remote_topic` を設定。
+5. 保存してリモートへの配信を検証。
+6. ベースライン検証後にキューやプール設定を調整。
 
-### Example
+### 例
 
-```
+```hocon
 bridges {
   to-cloud {
     enable = true
@@ -91,21 +88,15 @@ remotes {
 }
 ```
 
-### Environment Variable Substitution
+### 環境変数の置換
 
-Any string value in the config file can reference an OS environment variable
-using the `${EMQXDQ_*}` syntax. Only variables with the `EMQXDQ_` prefix are
-resolved — other `${...}` patterns (such as `${topic}` in `remote_topic`) are
-left untouched. The entire value must be the placeholder; partial interpolation
-(e.g. `"prefix-${EMQXDQ_VAR}-suffix"`) is not supported.
+設定ファイル内の任意の文字列値は `${EMQXDQ_*}` 形式で OS 環境変数を参照可能です。`EMQXDQ_` プレフィックスの付いた変数のみ解決され、それ以外の `${...}` パターン（例：`remote_topic` 内の `${topic}`）はそのまま残ります。値全体がプレースホルダーである必要があり、部分的な文字列補間（例：`"prefix-${EMQXDQ_VAR}-suffix"`）はサポートされません。
 
-**Limitation:** `${EMQXDQ_*}` substitution only works for config fields that
-accept string values (e.g. `server`, `username`, `password`). It cannot be used
-for boolean fields (`enable`), integer fields (`pool_size`, `keepalive_s`).
+**制限:** `${EMQXDQ_*}` の置換は文字列型フィールド（例：`server`、`username`、`password`）のみ対応し、ブール型（`enable`）、整数型（`pool_size`、`keepalive_s`）には使用できません。
 
-Example:
+例：
 
-```
+```hocon
 remotes {
   cloud {
     server = "${EMQXDQ_REMOTE_SERVER}"
@@ -115,106 +106,89 @@ remotes {
 }
 ```
 
-If the environment variable is not set, the plugin logs an error and keeps the
-original `${EMQXDQ_...}` string as the literal value. This typically causes a
-connection failure (e.g. trying to connect to `"${EMQXDQ_REMOTE_SERVER}"`),
-which makes the misconfiguration visible in both logs and the status API.
+環境変数が設定されていない場合、プラグインはエラーをログに記録し、元の `${EMQXDQ_...}` 文字列をリテラル値として保持します。これにより接続失敗（例：`"${EMQXDQ_REMOTE_SERVER}"` に接続しようとする）が発生し、ログおよびステータス API で誤設定が明示されます。
 
-> **Warning — dynamic config updates and node-local environment variables**
+> **警告: 動的設定更新とノードローカル環境変数について**
 >
-> Environment variables are resolved at config parse time on the node that
-> parses the config. When you update the plugin config via the EMQX Dashboard,
-> REST API, or CLI, the raw config text is persisted and then re-parsed on
-> every node in the cluster. If different nodes have different values (or
-> missing values) for the referenced environment variables, each node will
-> resolve to a different effective config.
+> 環境変数は設定を解析するノード上で解決されます。EMQX ダッシュボード、REST API、CLI からプラグイン設定を更新すると、設定テキストが永続化され、クラスタ内のすべてのノードで再解析されます。ノードごとに環境変数の値が異なる（または未設定）場合、ノードごとに異なる実効設定となります。
 >
-> Because of this, **avoid using `${EMQXDQ_...}` substitution with Dashboard,
-> API, or CLI config updates** unless you are certain that every node in the
-> cluster has the same environment variables set. For node-local secrets,
-> prefer editing the config file directly and reloading the plugin, or use a
-> consistent secret-injection mechanism (e.g. Kubernetes ConfigMaps/Secrets
-> mounted identically on all nodes).
+> そのため、**クラスタ内のすべてのノードで同一の環境変数が設定されていることが確実でない限り、ダッシュボード、API、CLI での設定更新に `${EMQXDQ_...}` を使うのは避けてください**。ノードローカルなシークレットは、設定ファイルを直接編集してプラグインをリロードするか、Kubernetes ConfigMaps/Secrets のような一貫したシークレット注入機構を利用してください。
 
-### Configuration Reference
+### 設定リファレンス
 
-#### Top Level
+#### トップレベル
 
-| Field     | Type    | Default | Description                          |
-|-----------|---------|---------|--------------------------------------|
-| `bridges` | map     | `{}`    | Map of bridge name to bridge configuration. |
-| `remotes` | map     | `{}`    | Map of reusable remote broker definitions. |
+| フィールド | 型   | デフォルト | 説明                              |
+|------------|------|------------|----------------------------------|
+| `bridges`  | map  | `{}`       | ブリッジ名をキーとしたブリッジ設定のマップ。 |
+| `remotes`  | map  | `{}`       | 再利用可能なリモートブローカー定義のマップ。 |
 
-#### Bridge (`bridges.<name>`)
+#### ブリッジ (`bridges.<name>`)
 
-| Field             | Type    | Default | Description                                                                 |
-|-------------------|---------|---------|-----------------------------------------------------------------------------|
-| `enable`          | boolean | `true`  | Enable or disable this bridge.                                              |
-| `remote`          | string  | —       | Name of the remote broker definition under `remotes`.                       |
-| `proto_ver`       | string  | `"v4"`  | MQTT protocol version: `v3`, `v4`, or `v5`.                                |
-| `clientid_prefix` | string  | `"emqx-dq-<name>-"` | Prefix for auto-generated MQTT client IDs. Each connection appends a unique index (e.g. `emqx-dq-mybridge-0`). Optional — leave empty to use the default. |
-| `keepalive_s`     | integer | `60`    | MQTT keep-alive interval in seconds.                                        |
-| `pool_size`       | integer | `4`     | Number of MQTT connections to the remote broker.                            |
-| `buffer_pool_size` | integer | `4`    | Number of disk queue buffer workers per bridge. See warnings below.         |
-| `filter_topic`    | string  | —       | Local topic filter pattern. Supports `+` and `#` wildcards.                |
-| `remote_topic`    | string  | —       | Target topic template. Use `${topic}` for the original topic.              |
-| `enqueue_timeout_ms` | integer | `5000` | Max time (ms) to block waiting for disk queue confirmation. Only applies to QoS > 0; QoS 0 is always async. |
-| `max_inflight`    | integer | `32`    | Maximum unacknowledged messages per connection to the remote broker. Controls batch pop size from disk queue and emqtt send window. |
-| `remote_qos`      | string | `"${qos}"` | QoS level for publishing to the remote broker (`"0"`, `"1"`, `"2"`). The default `"${qos}"` preserves the original message's QoS. |
-| `remote_retain`   | string | `"${retain}"` | Retain flag for publishing to the remote broker (`"true"`, `"false"`). The default `"${retain}"` preserves the original message's retain flag. |
-| `max_publish_retries` | integer | `-1` | Number of publish retry attempts per message before dropping it. `-1` means infinite retries. Each failed PUBACK or connection loss consumes one credit. |
+| フィールド             | 型      | デフォルト               | 説明                                                                                   |
+|-----------------------|---------|-------------------------|----------------------------------------------------------------------------------------|
+| `enable`              | boolean | `true`                  | このブリッジを有効または無効にします。                                               |
+| `remote`              | string  | —                       | `remotes` 内のリモートブローカー定義名。                                             |
+| `proto_ver`           | string  | `"v4"`                  | MQTT プロトコルバージョン：`v3`、`v4`、`v5`。                                       |
+| `clientid_prefix`     | string  | `"emqx-dq-<name>-"`     | 自動生成される MQTT クライアントIDのプレフィックス。各接続にユニークなインデックスが付加されます（例：`emqx-dq-mybridge-0`）。省略可。 |
+| `keepalive_s`         | integer | `60`                    | MQTT のキープアライブ間隔（秒）。                                                    |
+| `pool_size`           | integer | `4`                     | リモートブローカーへの MQTT 接続数。                                                |
+| `buffer_pool_size`    | integer | `4`                     | ブリッジごとのディスクキューバッファワーカー数。以下の注意を参照してください。       |
+| `filter_topic`        | string  | —                       | ローカルトピックフィルタパターン。`+` と `#` ワイルドカード対応。                    |
+| `remote_topic`        | string  | —                       | 転送先トピックのテンプレート。元のトピックは `${topic}` で参照可能。                 |
+| `enqueue_timeout_ms`  | integer | `5000`                  | ディスクキューへの書き込み確認待ちの最大ブロック時間（ms）。QoS > 0 のみ適用。QoS 0 は常に非同期。 |
+| `max_inflight`        | integer | `32`                    | リモートブローカーへの未アックメッセージ最大数。ディスクキューからのバッチポップサイズと emqtt 送信ウィンドウを制御。 |
+| `remote_qos`          | string  | `"${qos}"`              | リモートブローカーへのパブリッシュ時の QoS レベル（`"0"`、`"1"`、`"2"`）。デフォルトの `"${qos}"` は元メッセージの QoS を維持。 |
+| `remote_retain`       | string  | `"${retain}"`           | リモートブローカーへのパブリッシュ時のリテインフラグ（`"true"`、`"false"`）。デフォルトの `"${retain}"` は元メッセージのリテインを維持。 |
+| `max_publish_retries` | integer | `-1`                    | メッセージごとのパブリッシュリトライ回数。`-1` は無限リトライ。失敗した PUBACK や接続切断で1回消費。 |
 
-#### Remote (`remotes.<name>`)
+#### リモート (`remotes.<name>`)
 
-| Field        | Type    | Default | Description                                             |
-|--------------|---------|---------|---------------------------------------------------------|
-| `server`     | string  | —       | Remote MQTT broker address (`host:port`).               |
-| `username`   | string  | `""`    | Username for authentication with the remote broker.     |
-| `password`   | string  | `""`    | Password for authentication with the remote broker.     |
-| `ssl.enable` | boolean | `false` | Enable SSL/TLS for the connection to the remote broker. |
-| `ssl.verify` | string | `verify_none` | TLS verification mode. Supported values: `verify_none`, `verify_peer`. |
-| `ssl.sni`    | string  | server hostname | TLS Server Name Indication. Defaults to the server hostname. Set to `"disable"` to turn off SNI. |
-| `ssl.cacertfile` | string | —    | CA certificate file used to verify the remote broker certificate. |
-| `ssl.certfile` | string | —      | Client certificate file for mutual TLS authentication.  |
-| `ssl.keyfile` | string | —       | Client private key file for mutual TLS authentication.  |
+| フィールド         | 型      | デフォルト       | 説明                                               |
+|--------------------|---------|-----------------|----------------------------------------------------|
+| `server`           | string  | —               | リモート MQTT ブローカーのアドレス（`host:port`）。 |
+| `username`         | string  | `""`            | リモートブローカー認証用ユーザー名。               |
+| `password`         | string  | `""`            | リモートブローカー認証用パスワード。               |
+| `ssl.enable`       | boolean | `false`         | リモートブローカー接続に SSL/TLS を使用するか。    |
+| `ssl.verify`       | string  | `verify_none`   | TLS 検証モード。サポート値：`verify_none`、`verify_peer`。 |
+| `ssl.sni`          | string  | サーバーホスト名 | TLS Server Name Indication。デフォルトはサーバーホスト名。`"disable"` で無効化可能。 |
+| `ssl.cacertfile`   | string  | —               | リモートブローカー証明書検証用 CA 証明書ファイル。  |
+| `ssl.certfile`     | string  | —               | 相互 TLS 認証用クライアント証明書ファイル。         |
+| `ssl.keyfile`      | string  | —               | 相互 TLS 認証用クライアント秘密鍵ファイル。         |
 
-#### Queue
+#### キュー
 
-| Field             | Type   | Default                        | Description                                      |
-|-------------------|--------|--------------------------------|--------------------------------------------------|
-| `queue.base_dir`  | string | `"emqx_bridge_mqtt_dq"` | Base directory for disk queue segment files. The bridge name and partition index are automatically appended (i.e. `<base_dir>/<bridge_name>/<index>`). Relative paths are resolved against EMQX `data_dir`. Absolute paths are used as-is. |
-| `queue_seg_bytes` | string | `"100MB"`                      | Maximum size per queue segment file.              |
-| `queue.max_total_bytes` | string | `"1GB"`                  | Maximum disk queue size **per partition**. Each bridge uses `buffer_pool_size` partitions (default 4), so the worst-case total disk usage is `buffer_pool_size` x this value. Oldest messages are discarded when exceeded. |
+| フィールド             | 型     | デフォルト               | 説明                                                                                   |
+|-----------------------|--------|-------------------------|----------------------------------------------------------------------------------------|
+| `queue.base_dir`       | string | `"emqx_bridge_mqtt_dq"` | ディスクキューセグメントファイルのベースディレクトリ。ブリッジ名とパーティションインデックスが自動付加されます（例：`<base_dir>/<bridge_name>/<index>`）。相対パスは EMQX の `data_dir` に対して解決され、絶対パスはそのまま使用されます。 |
+| `queue_seg_bytes`      | string | `"100MB"`               | キューセグメントファイルの最大サイズ。                                                  |
+| `queue.max_total_bytes`| string | `"1GB"`                 | パーティションごとの最大ディスクキューサイズ。ブリッジは `buffer_pool_size` 個のパーティションを使用するため、最大総ディスク使用量は `buffer_pool_size` × この値となります。超過時は古いメッセージから破棄されます。 |
 
-## Topic Templating
+## トピックテンプレート
 
-The `remote_topic` field supports the `${topic}` placeholder, which is replaced
-with the original publish topic at forwarding time.
+`remote_topic` フィールドは `${topic}` プレースホルダーをサポートし、転送時に元のパブリッシュトピックに置換されます。
 
-Examples:
-- `remote_topic = "${topic}"` — forward with the original topic unchanged.
-- `remote_topic = "forwarded/${topic}"` — prepend a prefix.
-- `remote_topic = "region1/${topic}"` — add a region namespace.
+例：
+- `remote_topic = "${topic}"`：元のトピックをそのまま転送。
+- `remote_topic = "forwarded/${topic}"`：プレフィックスを付加。
+- `remote_topic = "region1/${topic}"`：リージョンのネームスペースを追加。
 
-`remote_topic` is applied when messages are sent out of the queue. After changing
-this field, queued messages use the new template after the affected bridge restarts.
+`remote_topic` はキューからメッセージを送信する際に適用されます。このフィールドを変更した場合、影響を受けるブリッジを再起動後、新しいテンプレートがキュー内メッセージに適用されます。
 
 ## REST API
 
-The plugin exposes four endpoints under the EMQX plugin API base path:
+プラグインは EMQX プラグイン API ベースパス配下に4つのエンドポイントを公開しています：
 
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics` — Prometheus text format
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats` — JSON dashboard snapshot
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>` — one bridge only
-- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status` — plugin/cluster health summary
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/metrics`：Prometheus テキスト形式
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats`：JSON ダッシュボードスナップショット
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/stats/<bridge>`：特定ブリッジのみ
+- `GET /api/v5/plugin_api/emqx_bridge_mqtt_dq/status`：プラグイン／クラスターのヘルスサマリー
 
-All JSON endpoints return `application/json; charset=utf-8`.
+すべての JSON エンドポイントは `application/json; charset=utf-8` を返します。
 
-The JSON APIs are cluster-aggregated. If a node is unavailable or times out
-during aggregation, the API still returns best-effort data, but the response
-contains explicit cluster completeness metadata.
+JSON API はクラスタ集約されており、ノードが利用不可またはタイムアウトした場合もベストエフォートでデータを返しますが、レスポンスにクラスタの完全性メタデータが含まれます。
 
-Example:
+例：
 
 ```bash
 curl -u admin:public \
@@ -226,16 +200,16 @@ curl -u admin:public \
   http://127.0.0.1:18083/api/v5/plugin_api/emqx_bridge_mqtt_dq/stats
 ```
 
-### `/stats` Response Shape
+### `/stats` レスポンス構造
 
-The `/stats` response body contains:
+`/stats` のレスポンスボディには以下が含まれます：
 
-- `cluster`: cluster completeness and failed-node information
-- `uptime_seconds`: maximum plugin uptime observed across responding nodes
-- `summary`: totals across all configured bridges
-- `bridges`: one entry per configured bridge
+- `cluster`：クラスタの完全性と失敗ノード情報
+- `uptime_seconds`：応答ノード間で観測された最大プラグインアップタイム
+- `summary`：すべての設定済みブリッジの合計値
+- `bridges`：設定済みブリッジごとのエントリ
 
-Example:
+例：
 
 ```json
 {
@@ -297,7 +271,7 @@ Example:
 }
 ```
 
-`GET /stats/<bridge>` returns:
+`GET /stats/<bridge>` は以下を返します：
 
 ```json
 {
@@ -316,9 +290,9 @@ Example:
 }
 ```
 
-If the bridge does not exist in current config, the API returns `404`.
+ブリッジが存在しない場合は `404` を返します。
 
-`GET /status` returns a compact health view:
+`GET /status` は簡潔なヘルスビューを返します：
 
 ```json
 {
@@ -334,8 +308,7 @@ If the bridge does not exist in current config, the API returns `404`.
 }
 ```
 
-The `/metrics` endpoint returns Prometheus text exposition with cluster-aggregated
-series such as:
+`/metrics` エンドポイントは以下のようなクラスタ集約された Prometheus テキスト形式のメトリクスを返します：
 
 - `emqx_bridge_mqtt_dq_uptime_seconds`
 - `emqx_bridge_mqtt_dq_bridge_enqueue_total{bridge="..."}`
@@ -348,255 +321,198 @@ series such as:
 - `emqx_bridge_mqtt_dq_connector_backlog{bridge="...",index="..."}`
 - `emqx_bridge_mqtt_dq_connector_inflight{bridge="...",index="..."}`
 
-### Metric Semantics
+### メトリクスの意味
 
-#### Bridge Metrics
+#### ブリッジメトリクス
 
-- `enqueue`: number of local messages accepted into the bridge enqueue path
-- `dequeue`: number of messages durably removed from the local queue
-- `publish`: number of messages successfully published to the remote broker
-- `drop`: number of queued messages finalized as dropped
-- `retried_by_reason`: retry attempts broken down by reason
-- `config_state`: desired bridge state from config (`enabled` or `disabled`)
-- `runtime_state`: observed worker/storage state (`running`, `degraded`, or `purged`)
-- `status`: operator-facing bridge health (`ok`, `partial`, `disconnected`, `disabled`, `error`)
+- `enqueue`：ローカルでブリッジのエンキュー経路に受け入れられたメッセージ数
+- `dequeue`：ローカルキューから永続的に削除されたメッセージ数
+- `publish`：リモートブローカーに正常にパブリッシュされたメッセージ数
+- `drop`：キュー内で破棄されたメッセージ数
+- `retried_by_reason`：リトライ理由別のリトライ試行回数
+- `config_state`：設定上のブリッジ状態（`enabled` または `disabled`）
+- `runtime_state`：実際のワーカー／ストレージ状態（`running`、`degraded`、`purged`）
+- `status`：運用者向けブリッジヘルス状態（`ok`、`partial`、`disconnected`、`disabled`、`error`）
 
-Current retry reasons include:
+現在のリトライ理由：
 
-- `reason_code`: remote broker returned a non-success MQTT reason code and the message was retried
-- `connect_failed`: connect or publish failure triggered a retry
-- `timeout`: timeout-specific retry classification
-- `connection_lost`: linked client process exited and inflight messages were salvaged for retry
-- `other`: fallback bucket for unclassified retry causes
+- `reason_code`：リモートブローカーが非成功 MQTT 理由コードを返しリトライした
+- `connect_failed`：接続またはパブリッシュ失敗によるリトライ
+- `timeout`：タイムアウトによるリトライ分類
+- `connection_lost`：関連クライアントプロセス終了に伴いインフライトメッセージをリトライ用に回収
+- `other`：分類不能なリトライ理由のフォールバック
 
-After the bridge drains fully, the counters satisfy:
+ブリッジが完全にドレインされた後は以下が成立：
 
 - `enqueue = dequeue = publish + drop`
 
-#### Buffer Metrics
+#### バッファメトリクス
 
-- `buffered`: current number of messages stored in that durable queue partition
-- buffer row `status`: `running` when the worker is present, `missing` otherwise
+- `buffered`：その永続キューパーティションに現在格納されているメッセージ数
+- バッファ行の `status`：ワーカーが存在する場合は `running`、それ以外は `missing`
 
-This gauge is refreshed immediately after `replayq:open/1`, so persisted on-disk
-messages are visible even before new traffic arrives.
+このゲージは `replayq:open/1` 直後に更新されるため、新規トラフィック到着前でも永続化済みメッセージが可視化されます。
 
-#### Connector Metrics
+#### コネクタメトリクス
 
-- `backlog`: number of messages sitting in the connector backlog queue waiting to be dispatched to `emqtt`
-- `inflight`: number of messages already handed to `emqtt` and still awaiting completion
-- connector row `status`: `connected`, `disconnected`, `partial`, `missing`, or `unknown`
+- `backlog`：`emqtt` への送信待ちでコネクタのバックログキューに溜まっているメッセージ数
+- `inflight`：すでに `emqtt` に渡されて完了待ちのメッセージ数
+- コネクタ行の `status`：`connected`、`disconnected`、`partial`、`missing`、`unknown`
 
-## Configuration Change Behavior
+## 設定変更時の挙動
 
-Configuration updates are applied per bridge:
-- Changed bridges restart.
-- Removed bridges stop.
-- Disabled bridges stop and purge their queue directory.
-- New bridges start.
-- Unchanged bridges continue running.
+設定更新はブリッジ単位で適用されます：
 
-The full plugin is not restarted for every config update.
-However, each restarted bridge has a short handover window where matching
-messages can be dropped. Apply bridge-impacting changes during low traffic.
+- 変更されたブリッジは再起動。
+- 削除されたブリッジは停止。
+- 無効化されたブリッジは停止し、キューディレクトリを削除。
+- 新規ブリッジは起動。
+- 変更のないブリッジは継続稼働。
 
-### Before You Change Config
+プラグイン全体は設定更新ごとに再起動されません。ただし、再起動されるブリッジは短時間のハンドオーバー期間があり、その間にマッチするメッセージが破棄される可能性があります。ブリッジに影響する変更はトラフィックが少ない時間帯に適用してください。
 
-1. Identify which bridges are impacted.
-2. Apply during a low-traffic window.
-3. Monitor Dashboard status and logs for restart/reconnect errors.
-4. For critical pipelines, validate end-to-end delivery after the change.
+### 設定変更前の注意
 
-### Changing `queue.base_dir`
+1. 影響を受けるブリッジを特定。
+2. トラフィックが少ない時間帯に適用。
+3. ダッシュボードのステータスやログで再起動・再接続エラーを監視。
+4. 重要なパイプラインは変更後にエンドツーエンドの配信検証を実施。
 
-Changing `queue.base_dir` on an enabled bridge restarts the bridge with the new
-directory. The actual queue path is `<base_dir>/<bridge_name>/<index>`. The old
-directory is **not** automatically purged — it remains on disk as orphaned data.
-If the old directory is no longer needed, remove it manually after verifying the
-bridge is running on the new path.
+### `queue.base_dir` の変更
 
-### Changing `buffer_pool_size`
+有効なブリッジで `queue.base_dir` を変更すると、新しいディレクトリでブリッジが再起動します。実際のキューパスは `<base_dir>/<bridge_name>/<index>` です。古いディレクトリは自動削除されず、オーファンデータとしてディスクに残ります。不要な場合は新しいパスでブリッジが稼働していることを確認後、手動で削除してください。
 
-The `buffer_pool_size` controls how many disk queue partitions exist per bridge.
-Messages are assigned to partitions by `erlang:phash2(Topic, buffer_pool_size)`.
-Changing this value has important side effects:
+### `buffer_pool_size` の変更
 
-1. **Shrinking the pool** (e.g. 8 -> 4): partitions with indices >= new size
-   are no longer consumed. Their old files remain under `queue.base_dir` and
-   need manual cleanup.
+`buffer_pool_size` はブリッジごとのディスクキューパーティション数を制御します。メッセージは `erlang:phash2(Topic, buffer_pool_size)` でパーティションに割り当てられます。変更すると以下の影響があります：
 
-2. **Growing the pool** (e.g. 4 -> 8): the hash space changes, so topics that
-   previously mapped to partition N may now map to partition M. Messages already
-   queued in the old partition are still delivered (in order, within that
-   partition), but new messages for the same topic may go to a different
-   partition. This breaks end-to-end per-topic ordering across the
-   transition — some old messages may be delivered after new ones.
+1. **プール縮小**（例：8 → 4）：新サイズ以上のインデックスのパーティションは消費されなくなり、古いファイルは `queue.base_dir` 配下に残るため手動でクリーンアップが必要。
 
-3. **Bridge-scoped drop window**: changing `buffer_pool_size` restarts that bridge,
-   so in-flight matching messages can be dropped during handover.
+2. **プール拡大**（例：4 → 8）：ハッシュ空間が変わるため、以前パーティション N に割り当てられていたトピックがパーティション M に移動する可能性があります。古いパーティション内のメッセージは順序を保って配信されますが、新旧パーティション間でトピック単位の順序が一時的に崩れます。
 
-## Message Delivery Guarantees
+3. **ブリッジ単位のドロップウィンドウ**：`buffer_pool_size` の変更によりブリッジが再起動し、ハンドオーバー期間中にインフライトのマッチメッセージが破棄される可能性があります。
 
-This plugin provides **at-least-once** delivery under normal operation, and
-**best-effort** delivery under sustained failure. Messages can be lost in the
-following scenarios:
+## メッセージ配信保証
 
-### Disk Queue Overflow
+このプラグインは通常動作時に **少なくとも1回（at-least-once）** の配信を保証し、持続的障害時は **ベストエフォート** 配信となります。以下のシナリオでメッセージが失われる可能性があります。
 
-When a queue partition exceeds `queue.max_total_bytes`, the oldest messages in
-that partition are silently discarded to make room for new data. A warning log
-(`mqtt_dq_buffer_overflow`) is emitted periodically (not per message).
+### ディスクキューのオーバーフロー
 
-**Mitigation**: increase `queue.max_total_bytes`, increase `buffer_pool_size`
-to spread load across more partitions, or reduce message throughput.
+キューパーティションが `queue.max_total_bytes` を超えると、そのパーティションの最も古いメッセージが新規データのために静かに破棄されます。警告ログ（`mqtt_dq_buffer_overflow`）が定期的に出力されます（メッセージ単位ではありません）。
 
-### Remote Broker Rejects a Publish
+**対策**：`queue.max_total_bytes` を増やす、`buffer_pool_size` を増やして負荷分散、またはメッセージスループットを減らす。
 
-When the remote broker returns a non-success MQTT reason code in PUBACK (QoS 1)
-or PUBREC (QoS 2), the connector retries the message up to 3 times. If all
-retries are exhausted, the message is dropped and a warning log
-(`mqtt_dq_publish_dropped`) is emitted.
+### リモートブローカーによるパブリッシュ拒否
 
-Common rejection reason codes include:
+リモートブローカーが PUBACK（QoS 1）または PUBREC（QoS 2）で非成功 MQTT 理由コードを返した場合、コネクターは最大3回までリトライします。すべてのリトライが失敗するとメッセージは破棄され、警告ログ（`mqtt_dq_publish_dropped`）が出力されます。
 
-| Code | Meaning (MQTT 5.0)              |
-|------|---------------------------------|
-| 16   | No matching subscribers         |
-| 128  | Unspecified error                |
-| 131  | Implementation specific error    |
-| 135  | Not authorized                  |
-| 144  | Topic Name invalid              |
-| 145  | Packet identifier in use        |
-| 151  | Quota exceeded                  |
+主な拒否理由コード：
 
-Note: reason code 0 (Success) and 16 (No matching subscribers) are treated as
-successful delivery and do not trigger retries.
+| コード | 意味（MQTT 5.0）               |
+|--------|-------------------------------|
+| 16     | サブスクライバーなし           |
+| 128    | 未指定のエラー                 |
+| 131    | 実装固有のエラー               |
+| 135    | 認可されていない               |
+| 144    | トピック名が無効             |
+| 145    | パケット識別子が使用中       |
+| 151    | クォータ超過                 |
 
-**Mitigation**: check remote broker ACLs and topic policies. Review logs for
-the specific reason code.
+注：理由コード 0（成功）および 16（サブスクライバーなし）は成功扱いでリトライしません。
 
-### Repeated Connection Failures
+**対策**：リモートブローカーの ACL やトピックポリシーを確認し、ログの理由コードを調査してください。
 
-Each time the connection to the remote broker drops, all pending (not yet
-acknowledged) messages lose one retry attempt. After 3 cumulative connection
-failures without a successful delivery, the message is dropped.
+### 接続障害の繰り返し
 
-For example, a message published during a network outage:
-1. Queued locally (retry counter = 3).
-2. Remote reconnects, message dispatched — remote disconnects again before ACK
-   (retry counter = 2).
-3. Reconnects, dispatched again — connection drops (retry counter = 1).
-4. Reconnects, dispatched — rejected or connection drops (retry counter = 0).
-5. Message dropped, warning logged.
+リモートブローカーとの接続が切断されるたびに、未アックのメッセージはリトライ回数を1回消費します。3回連続の接続障害で成功配信がない場合、メッセージは破棄されます。
 
-**Mitigation**: investigate why the remote broker is repeatedly unreachable.
-Transient network blips are handled transparently; this scenario requires
-sustained instability.
+例：
+1. ネットワーク障害中にメッセージがローカルキューに入る（リトライカウンタ=3）。
+2. リモート再接続、メッセージ送信：ACK 前に切断（リトライカウンタ=2）。
+3. 再接続、再送信：切断（リトライカウンタ=1）。
+4. 再接続、再送信：拒否または切断（リトライカウンタ=0）。
+5. メッセージ破棄、警告ログ出力。
 
-### Enqueue Backpressure (QoS > 0 Local Publishes)
+**対策**：リモートブローカーが繰り返し接続不能になる原因を調査。短時間のネットワーク断は透過的に処理されますが、持続的な不安定さは問題です。
 
-When a QoS 1 or 2 client publishes a message matching a bridge, the plugin
-sends the message to the buffer worker's mailbox and then blocks the publishing
-session process for up to `enqueue_timeout_ms` (default 5000 ms) waiting for
-disk-write confirmation.
+### エンキュー時のバックプレッシャー（QoS > 0 ローカルパブリッシュ）
 
-The message itself is **not lost** when this timeout fires — it is already in the
-buffer worker's Erlang mailbox and will eventually be written to the disk queue.
-The timeout only controls how long the local publish path blocks.
+QoS 1 または 2 のクライアントがブリッジにマッチするメッセージをパブリッシュすると、プラグインはバッファワーカーのメールボックスにメッセージを送信し、ディスク書き込み確認のため最大 `enqueue_timeout_ms`（デフォルト5000ms）までパブリッシュセッションをブロックします。
 
-Why this matters: the `message.publish` hook runs inside the MQTT session
-process. While the hook is blocking, the session cannot process other messages
-from that client. If the buffer worker is slow (e.g., disk I/O stall or
-high mailbox backlog), the timeout prevents one slow bridge from stalling the
-client session indefinitely.
+このタイムアウトが発生してもメッセージ自体は失われません。メッセージはすでにバッファワーカーの Erlang メールボックスにあり、最終的にディスクキューに書き込まれます。タイムアウトはローカルパブリッシュ経路のブロック時間制御のみです。
 
-When the timeout fires:
-1. The session process stops waiting and continues normally.
-2. The client receives PUBACK/PUBREC as usual — no error is surfaced.
-3. A warning log (`mqtt_dq_enqueue_timeout`) is emitted.
-4. The message remains in the buffer worker's mailbox and is written to the disk
-   queue when the worker catches up.
+重要な点は、`message.publish` フックが MQTT セッションプロセス内で動作するため、フックがブロック中はそのクライアントからの他メッセージ処理が停止することです。バッファワーカーが遅い場合（例：ディスク I/O ストールやメールボックスのバックログ増大）、タイムアウトによりクライアントセッションの無限停止を防止します。
 
-The risk is indirect: if buffer workers fall persistently behind, their mailbox
-grows without bound, increasing memory usage. This is a sign that the bridge
-cannot keep up with the incoming message rate.
+タイムアウト発生時の挙動：
+1. セッションプロセスは待機をやめ通常処理を継続。
+2. クライアントは通常通り PUBACK/PUBREC を受信し、エラーは発生しません。
+3. 警告ログ（`mqtt_dq_enqueue_timeout`）を出力。
+4. メッセージはバッファワーカーのメールボックスに残り、追いついた時点でディスクキューに書き込み。
 
-**Mitigation**: increase `buffer_pool_size` to spread load, use faster storage
-for `queue.base_dir`, or reduce the message rate for matched topics.
+リスクは間接的で、バッファワーカーが継続的に遅延するとメールボックスが無制限に増加しメモリ使用量が増えることです。これはブリッジが受信メッセージレートに追いつけていない兆候です。
 
-Note: QoS 0 local publishes never block — they are enqueued asynchronously with
-no backpressure applied to the publishing session.
+**対策**：`buffer_pool_size` を増やして負荷分散、`queue.base_dir` に高速ストレージを使用、またはマッチするトピックのメッセージレートを減らす。
 
-### Bridge Restart Window
+注：QoS 0 のローカルパブリッシュは非同期でエンキューされ、セッションにバックプレッシャーはかかりません。
 
-When a bridge restarts (due to config change, plugin reload, or enable/disable
-toggle), there is a brief window where matching messages may not be captured.
+### ブリッジ再起動時のウィンドウ
 
-**Mitigation**: apply config changes during low-traffic periods.
+ブリッジが再起動（設定変更、プラグインリロード、有効化／無効化切替）されると、マッチするメッセージが一時的にキャプチャされない可能性があります。
 
-### QoS 0 TCP-Level Delivery
+**対策**：トラフィックが少ない時間帯に設定変更を適用してください。
 
-For QoS 0 publishes to the remote broker, the connector considers delivery
-successful once the message reaches the local TCP send buffer. If the remote
-broker crashes after the TCP stack accepts the data but before the broker
-processes it, the message may be lost without any error reported back to the
-connector.
+### QoS 0 の TCP レベル配信
 
-This is inherent to MQTT QoS 0 and not specific to this plugin.
+リモートブローカーへの QoS 0 パブリッシュは、メッセージがローカルの TCP 送信バッファに到達した時点で成功とみなされます。リモートブローカーが TCP スタック受理後にクラッシュした場合、メッセージはコネクターにエラーを返さずに失われる可能性があります。
 
-## Operational Notes
+これは MQTT QoS 0 の仕様であり、本プラグイン固有の問題ではありません。
 
-### Persistence
+## 運用上の注意
 
-Buffered messages survive:
-- EMQX node restarts.
-- Plugin reloads and upgrades.
-- Temporary network outages to the remote broker.
+### 永続化
 
-### Queue Limit
+バッファされたメッセージは以下の状況で保持されます：
 
-When queue usage exceeds `queue.max_total_bytes` for a partition, oldest messages
-in that partition are discarded to make room for new data. Warning logs are emitted.
+- EMQX ノードの再起動
+- プラグインのリロードやアップグレード
+- リモートブローカーへの一時的なネットワーク障害
 
-### Pool Sizing
+### キュー制限
 
-Each buffer worker is assigned to exactly one connector by
-`BufferIndex rem pool_size`. For even load distribution:
+キュー使用量がパーティションごとの `queue.max_total_bytes` を超えると、古いメッセージが破棄されます。警告ログが出力されます。
 
-- `buffer_pool_size` should be **greater than or equal to** `pool_size`.
-- `buffer_pool_size` should be a **multiple of** `pool_size`
-  (i.e. `buffer_pool_size mod pool_size = 0`).
+### プールサイズ設定
 
-Good examples: `pool_size = 4, buffer_pool_size = 4` (1:1),
-`pool_size = 4, buffer_pool_size = 8` (2:1).
+各バッファワーカーは `BufferIndex rem pool_size` でちょうど1つのコネクターに割り当てられます。負荷分散のために：
 
-Bad example: `pool_size = 4, buffer_pool_size = 5` — connector 0 serves two
-buffers while others serve one, causing uneven throughput.
+- `buffer_pool_size` は `pool_size` 以上に設定してください。
+- `buffer_pool_size` は `pool_size` の倍数であるべきです（`buffer_pool_size mod pool_size = 0`）。
 
-If a connector drops, the buffer workers assigned to it pause and resume
-automatically once the connector reconnects.
+良い例：`pool_size = 4, buffer_pool_size = 4`（1:1）、`pool_size = 4, buffer_pool_size = 8`（2:1）。
 
-### Ordering
+悪い例：`pool_size = 4, buffer_pool_size = 5` は、コネクター0が2つのバッファを担当し他は1つでスループットが不均一になります。
 
-Per-topic ordering is preserved under stable bridge settings. If you change
-`buffer_pool_size`, ordering may be temporarily affected as described above.
+コネクターが切断されると、割り当てられたバッファワーカーは一時停止し、再接続後に自動的に再開します。
 
-### Publisher ACK Behavior (QoS 1/2)
+### 順序性
 
-For messages matching a bridge:
-- `PUBACK` (QoS 1) and `PUBREC` (QoS 2) to publishing clients may be delayed while
-  EMQX waits for disk-queue enqueue confirmation (`enqueue_timeout_ms`).
-- If that enqueue wait times out, EMQX still completes the client publish flow.
-  The client does not receive a publish error because of disk-queue enqueue timeout.
+安定したブリッジ設定下ではトピック単位の順序は維持されます。`buffer_pool_size` を変更すると一時的に順序が乱れる可能性があります（前述参照）。
+
+### パブリッシャーの ACK 挙動（QoS 1/2）
+
+ブリッジにマッチするメッセージについて：
+
+- クライアントへの `PUBACK`（QoS 1）や `PUBREC`（QoS 2）は、EMQX がディスクキューへのエンキュー確認（`enqueue_timeout_ms`）を待つ間、遅延する場合があります。
+- エンキュー待機がタイムアウトしても、EMQX はクライアントのパブリッシュフローを完了します。ディスクキューエンキュータイムアウトによるパブリッシュエラーはクライアントに通知されません。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
 ## ダウンロード
 
-各 EMQX リリースに対応するプラグインパッケージ:
+各 EMQX リリース用の tarball：
 
 | EMQX バージョン | プラグインバージョン | パッケージ |
-|---|---|---|
-| 6.2.0 | 0.5.1 | [emqx_bridge_mqtt_dq-0.5.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_bridge_mqtt_dq-0.5.1.tar.gz) |
+|-----------------|---------------------|------------|
+| 6.2.0           | 0.5.1               | [emqx_bridge_mqtt_dq-0.5.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_bridge_mqtt_dq-0.5.1.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
