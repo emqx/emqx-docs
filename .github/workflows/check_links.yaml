@@ -41,7 +41,7 @@ jobs:
           # Output file for the report
           output: ./lychee-report.md
           # Use the .lychee.toml config file
-          lycheeVersion: '0.23.0'
+          lycheeVersion: 'v0.23.0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
