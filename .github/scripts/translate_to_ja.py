@@ -2,6 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["requests"]
 # ///
+import json
 import os
 import sys
 import time
@@ -40,6 +41,7 @@ Translate EMQX documentation from **English → Japanese** for an audience of Ja
 | Element                          | Instruction                                                             |
 |----------------------------------|-------------------------------------------------------------------------|
 | Markdown structure               | Keep headings, lists, tables, emphasis, and links **unchanged**         |
+| Heading levels                   | Preserve heading levels exactly as in the source (`#`, `##`, `###`, `####`, …). The number of `#` symbols on each heading line **must match the source line-for-line**. Never add, remove, or skip levels (markdownlint MD001). |
 | Code blocks  (``` … ```)         | **Do not translate** code; translate comments inside                    |
 | Inline code  (`…`)               | **Do not translate, *unless* it is a term from the Glossary (Section 5) or Ambiguous/High-Risk Terms (Section 6).** |
 | Identifiers / API paths          | **Do not translate, *unless* it is a term from the Glossary (Section 5) or Ambiguous/High-Risk Terms (Section 6).** (e.g., `emqx_ctl`, `/api/v5/clients`) |
@@ -146,7 +148,20 @@ def log(msg):
         print(msg, flush=True)
 
 
-def translate_one(input_file_path):
+def collect_paths(items):
+    paths = []
+    for item in items:
+        if item.get('path'):
+            p = item['path']
+            if p.startswith(('http://', 'https://')):
+                continue
+            paths.append('en_US/index.md' if p == './' else f'en_US/{p}.md')
+        if item.get('children'):
+            paths += collect_paths(item['children'])
+    return paths
+
+
+def translate_one(input_file_path, copy_set):
     is_dir_yaml = input_file_path.endswith('dir.yaml')
     if not is_dir_yaml:
         if not input_file_path.endswith('.md') or 'en_US' not in input_file_path:
@@ -160,7 +175,7 @@ def translate_one(input_file_path):
     with open(input_file_path, 'r', encoding='utf-8') as f:
         markdown_text = f.read().strip()
 
-    if 'en_US/changes/' in input_file_path:
+    if 'en_US/changes/' in input_file_path or input_file_path in copy_set:
         with open(output_file_path, 'w', encoding='utf-8') as f:
             f.write(markdown_text + '\n')
         return {'path': input_file_path, 'status': 'copied'}
@@ -207,11 +222,21 @@ def translate_one(input_file_path):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print('Usage: translate_to_ja.py <file-list.txt>', file=sys.stderr)
+    if len(sys.argv) not in (2, 3):
+        print('Usage: translate_to_ja.py <file-list.txt> [directory.json]', file=sys.stderr)
         sys.exit(1)
 
     list_file = sys.argv[1]
+    directory_file = sys.argv[2] if len(sys.argv) > 2 else None
+
+    copy_set = set()
+    if directory_file:
+        with open(directory_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        en_paths = set(collect_paths(data.get('en', [])))
+        ja_paths = set(collect_paths(data.get('ja', [])))
+        copy_set = en_paths - ja_paths
+
     with open(list_file, 'r', encoding='utf-8') as f:
         files = [line.strip() for line in f if line.strip()]
 
@@ -221,7 +246,7 @@ def main():
 
     total = len(files)
     width = len(str(total))
-    log(f'Translating {total} files (concurrency={CONCURRENCY}, max_retries={MAX_RETRIES})')
+    log(f'Translating {total} files (concurrency={CONCURRENCY}, max_retries={MAX_RETRIES}, copy_as_is={len(copy_set)} en-only files)')
 
     ok = 0
     copied = 0
@@ -230,7 +255,7 @@ def main():
     total_completion = 0
 
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as executor:
-        future_to_path = {executor.submit(translate_one, f): f for f in files}
+        future_to_path = {executor.submit(translate_one, f, copy_set): f for f in files}
         for i, future in enumerate(as_completed(future_to_path), 1):
             result = future.result()
             path = result['path']
