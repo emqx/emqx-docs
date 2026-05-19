@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["requests"]
+# ///
 import os
 import sys
 import requests
@@ -133,7 +137,7 @@ if __name__ == '__main__':
 
     markdown_text = open(input_file_path, 'r', encoding='utf-8').read().strip()
 
-    if 'changes/changes-' in input_file_path:
+    if 'en_US/changes/' in input_file_path:
         with open(output_file_path, 'w', encoding='utf-8') as f:
             f.write(markdown_text.strip() + '\n')
         print(f'Changes file copied without translation: {output_file_path}')
