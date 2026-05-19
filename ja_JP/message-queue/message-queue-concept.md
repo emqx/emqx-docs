@@ -1,151 +1,165 @@
-# Message Queue
+# メッセージキュー
 
-The Message Queue feature introduced in EMQX 6.0 extends the MQTT subscribe/publish pattern with durable queue semantics, enabling reliable, asynchronous message delivery. It enhances native MQTT capabilities with features commonly found in enterprise-grade message queues, such as RabbitMQ, without requiring additional infrastructure.
+EMQX 6.0で導入されたメッセージキュー機能は、MQTTのサブスクライブ／パブリッシュパターンを耐久性のあるキューセマンティクスで拡張し、信頼性の高い非同期メッセージ配信を可能にします。RabbitMQのようなエンタープライズグレードのメッセージキューで一般的に見られる機能を、追加のインフラなしでネイティブMQTTの機能に付加しています。
 
-This page provides a complete overview of the Message Queue feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
+本ページでは、EMQXのメッセージキュー機能について、その設計動機、主要概念、内部アーキテクチャ、メッセージフロー、実際の適用シナリオまで包括的に解説します。
 
-## What is a Message Queue?
+## メッセージキューとは？
 
-A Message Queue in EMQX is a durable, server-side buffer that holds MQTT messages independently of subscriber availability. Each queue is associated with a specific topic filter, and automatically stores all messages that match the filter during its lifetime. 
+EMQXにおけるメッセージキューは、サブスクライバーの有無に関係なくMQTTメッセージを保持する耐久性のあるサーバー側バッファです。各キューは特定のトピックフィルターに紐づいており、その寿命の間にフィルターにマッチするすべてのメッセージを自動的に保存します。
 
-Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$q/{topic}` format.
+従来のMQTTの動作とは異なり、メッセージキューはクライアントがオンラインでない場合でもメッセージを永続化します。クライアントは特別な`$q/{topic}`形式にサブスクライブすることでこれらのメッセージを消費できます。
 
-## Why Use Message Queue?
+<img src="./assets/message_queque_routing_overview.png" alt="メッセージキューのルーティング概要" style="zoom:50%;" />
 
-MQTT is a lightweight and widely adopted publish/subscribe protocol. However, its default behavior tightly couples message delivery to subscriber availability, which can be limiting for asynchronous or delayed-consumption scenarios.
+## なぜメッセージキューを使うのか？
 
-### Limitations of MQTT
+MQTTは軽量で広く採用されているパブリッシュ／サブスクライブプロトコルですが、そのデフォルトの動作はメッセージ配信をサブスクライバーのオンライン状態に強く依存しており、非同期や遅延消費のシナリオでは制約となります。
 
-While MQTT supports some queue-like features through [shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/topic`), it has limitations:
+### MQTTの制約
 
-- **Messages are not retained** if no subscribers are online.
-- **No built-in support** for Time to Live (TTL), queue size limits, or overflow control.
-- **No message deduplication**, such as keeping only the latest value per key.
-- **No explicit lifecycle management** for queues.
+MQTTは[共有サブスクリプション](../messaging/mqtt-shared-subscription.md)（`$share/{group}/topic`）を通じてキューのような機能を一部サポートしていますが、以下の制約があります。
 
-These limitations make it difficult to implement patterns like:
+- オンラインのサブスクライバーがいない場合、メッセージは保持されません。
+- TTL（有効期限）、キューサイズ制限、オーバーフロー制御の組み込みサポートがありません。
+- キーごとに最新値のみを保持するようなメッセージの重複排除機能がありません。
+- キューの明示的なライフサイクル管理がありません。
 
-- Sending commands to devices before they come online.
-- Submitting tasks to workers who are not always connected.
-- Retaining only the latest state or configuration update.
+これらの制約により、以下のようなパターンの実装が困難です。
 
-### Extend MQTT with Message Queue
+- デバイスがオンラインになる前にコマンドを送信する。
+- 常時接続していないワーカーにタスクを送る。
+- 最新の状態や設定更新のみを保持する。
 
-Message Queue extends the MQTT protocol in EMQX. It allows messages to be persisted regardless of the subscribers' online status for further processing. It offers:
+### メッセージキューでMQTTを拡張
 
-- **Persistent message storage (even when clients are offline)**: While queues are not strictly ordered, they are designed for reliable and asynchronous delivery, bridging the gap between lightweight MQTT communication and more advanced enterprise messaging needs.
-- **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL, size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
-- **Optional Last-Value Semantics**: Messages with the same key overwrite previous ones, ideal for retaining only the latest state or configuration update.
+メッセージキューはEMQXのMQTTプロトコルを拡張し、サブスクライバーのオンライン状態に関係なくメッセージを永続化して後続処理を可能にします。主な特徴は以下の通りです。
 
-## Message Queue Concepts
+- **クライアントがオフラインでもメッセージを永続化**：キューは厳密な順序保証はしませんが、信頼性の高い非同期配信を実現し、軽量MQTT通信と高度なエンタープライズメッセージングの橋渡しをします。
+- **明示的なキュー宣言とプロパティ設定**：TTL、サイズ制限、ディスパッチ戦略などの設定を持つキューのライフサイクルを細かく制御できます。
+- **オプションの最新値セマンティクス**：同じキーを持つメッセージは前のものを上書きし、最新の状態や設定更新のみを保持する用途に適しています。
 
-- **Queue Name**
-   An MQTT topic or topic filter that identifies the queue. Messages published to matching topics are automatically enqueued.
-- **Queue Declaration**
-   The process of creating a durable queue and defining its behavior through configurable properties.
-- **Queue Deletion**
-   The removal of a queue along with all its stored messages.
-- **Last-Value Semantics**
-   An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the `queue key` from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
-- **Topic Prefix**
-   Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
-- **Queue Properties**
-   Customizable settings that control queue behavior, such as message retention time and dispatch strategy.
-- **Quality of Service (QoS)**
-   All messages in Message Queues are delivered with QoS 1 (at-least-once), regardless of the QoS level used when publishing or subscribing. This ensures reliable message delivery and unifies the queue's delivery behavior.
-- **Message Persistence**
-   Messages are retained even when no subscribers are connected. By default, queues apply last-value semantics. For regular queues (without a key expression), messages are stored in the order received.
+## メッセージキューの概念
 
-## How Message Queue Works
+- **キュー名**  
+  キューを識別するMQTTトピックまたはトピックフィルター。マッチするトピックにパブリッシュされたメッセージは自動的にキューに格納されます。
 
-The Message Queue feature in EMQX is implemented as a loosely coupled extension and intercepts publish and subscribe operations using internal hooks. These hooks interact with a registry and storage layer to persist and deliver messages reliably.
+- **キュー宣言**  
+  耐久性のあるキューを作成し、動作を設定可能なプロパティで定義するプロセス。
 
-### Main Components
+- **キュー削除**  
+  キューとその保存されたすべてのメッセージを削除する操作。
 
-The following main components are involved:
+- **最新値セマンティクス**  
+  キュー宣言時に**キューキー式**を設定することで有効化可能。EMQXはキューに入る各メッセージから`queue key`を抽出し、同じキーの未消費メッセージがあれば新しいメッセージで上書きします。状態管理や設定更新など、最新の値のみが重要なケースに適しています。
 
-- **Message Queue Registry**
-  Manages the lifecycle of all message queues. Responsible for creating, deleting, and looking up queues.
-- **Message Queue Message DB**
-  Stores the actual messages published to queues and is built on EMQX’s [Durable Storage](../durability/durability_introduction.md#durable-storage-architecture).
-- **Message Queue State Storage**
-  Persists consumption progress and queue metadata (e.g., TTL, properties).
-- **Message Queue Consumer**
-  Retrieves messages from the queue and dispatches them to connected subscribers based on the dispatch strategy.
-- **Message Queue Subscription Registry**
-  Tracks which channels (clients) are subscribed to which queues. Stores subscription state in each channel’s context.
-- **Message Queue Hooks**
-  Hook into publish and subscribe events to intercept messages and route them to queues or consumers.
+- **トピックプレフィックス**  
+  キューのサブスクライブは特別な`$q/{topic}`プレフィックスを使用し、通常のMQTTサブスクリプションと区別します。
 
-### Message Queue Data Flow Diagram
+- **キューのプロパティ**  
+  メッセージ保持時間やディスパッチ戦略など、キューの動作を制御するカスタマイズ可能な設定。
 
-The diagram below shows the data flow between major Message Queue components:
+- **QoS（サービス品質）**  
+  メッセージキュー内のすべてのメッセージは、パブリッシュやサブスクライブ時のQoSレベルに関わらずQoS 1（少なくとも1回配信）で配信されます。これにより信頼性の高い配信が保証され、キューの配信動作が統一されます。
+
+- **メッセージの永続化**  
+  サブスクライバーが接続していなくてもメッセージは保持されます。デフォルトでは最新値セマンティクスが適用されます。キー式がない通常のキューでは、受信順にメッセージが保存されます。
+
+## メッセージキューの動作
+
+EMQXのメッセージキュー機能は疎結合な拡張として実装されており、内部フックを使ってパブリッシュやサブスクライブ操作をインターセプトします。これらのフックはレジストリやストレージ層と連携し、メッセージの永続化と配信を信頼性高く行います。
+
+### 主なコンポーネント
+
+以下の主要コンポーネントが関与します。
+
+- **メッセージキューレジストリ**  
+  すべてのメッセージキューのライフサイクルを管理し、キューの作成、削除、検索を担当します。
+
+- **メッセージキューメッセージDB**  
+  キューにパブリッシュされた実際のメッセージを保存し、EMQXの[耐久ストレージ](../durability/durability_introduction.md#durable-storage-architecture)上に構築されています。
+
+- **メッセージキューステートストレージ**  
+  消費進捗やキューメタデータ（TTL、プロパティなど）を永続化します。
+
+- **メッセージキューコンシューマー**  
+  キューからメッセージを取得し、設定されたディスパッチ戦略に基づいて接続中のサブスクライバーに配信します。
+
+- **メッセージキューサブスクリプションレジストリ**  
+  どのチャネル（クライアント）がどのキューにサブスクライブしているかを追跡し、各チャネルのコンテキストにサブスクリプション状態を保存します。
+
+- **メッセージキューフック**  
+  パブリッシュおよびサブスクライブイベントにフックし、メッセージをキューやコンシューマーにルーティングします。
+
+### メッセージキューデータフローダイアグラム
+
+以下の図は主要なメッセージキューコンポーネント間のデータフローを示しています。
 
 ![message-queue-data-flow](./assets/message_queue_data_flow.png)
 
-### Publishing Workflow
+### パブリッシュのワークフロー
 
-1. A client publishes a message to a regular topic, such as `some/topic`.
-2. An internal MQ hook is triggered to process the message.
-3. The hook checks the Message Queue Registry for any queues whose topic filter matches the published topic.
-4. If a matching queue is found, the message is written to the queue’s message database.
+1. クライアントが通常のトピック（例：`some/topic`）にメッセージをパブリッシュします。  
+2. 内部のMQフックがトリガーされ、メッセージ処理を開始します。  
+3. フックはメッセージキューレジストリを参照し、パブリッシュされたトピックにマッチするキューがあるか確認します。  
+4. マッチするキューがあれば、そのキューのメッセージDBにメッセージを書き込みます。
 
-### Subscribing and Consuming Workflow
+### サブスクライブおよび消費のワークフロー
 
-1. A client subscribes to a topic.
-2. An MQ hook is triggered to handle the subscription.
-3. If the topic is a message queue topic (`$q/some/topic`), the hook initializes the subscription in the client session context and establishes a connection to the Message Queue Consumer.
-4. If no consumer exists for the queue, a new Message Queue Consumer is started.
-5. The consumer restores message consumption progress and starts to fetch data from the message database.
-6. The consumer dispatches received messages to the subscriber client sessions based on the configured dispatch strategy.
-7. The subscriber client sessions deliver the messages to the clients via standard MQTT mechanisms.
+1. クライアントがトピックにサブスクライブします。  
+2. MQフックがトリガーされ、サブスクリプション処理を行います。  
+3. トピックがメッセージキュートピック（`$q/some/topic`）の場合、フックはクライアントセッションのコンテキストにサブスクリプションを初期化し、メッセージキューコンシューマーへの接続を確立します。  
+4. キューに対応するコンシューマーが存在しなければ、新たにメッセージキューコンシューマーを起動します。  
+5. コンシューマーはメッセージ消費の進捗を復元し、メッセージDBからデータの取得を開始します。  
+6. コンシューマーは設定されたディスパッチ戦略に基づき、受信したメッセージをサブスクライバーのクライアントセッションに配信します。  
+7. サブスクライバーのクライアントセッションは標準的なMQTTメカニズムでクライアントにメッセージを届けます。
 
-## Message Queue Core Features
+## メッセージキューのコア機能
 
-The Message Queue feature in EMQX provides a set of core capabilities that enable reliable, decoupled, and configurable message delivery.
+EMQXのメッセージキュー機能は、信頼性が高く疎結合で設定可能なメッセージ配信を実現する一連のコア機能を提供します。
 
-- **Enqueueing Messages**
-  Messages published to topics matching a declared queue are automatically enqueued. 
+- **メッセージのエンキュー**  
+  宣言されたキューにマッチするトピックにパブリッシュされたメッセージは自動的にキューに格納されます。
 
-  If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
+  キューキー式（最新値セマンティクス用）が設定されている場合、EMQXは各メッセージに対して式を評価します。
 
-  - If a key is derived, it replaces any unconsumed message with the same key.
-  - If a key fails to evaluate for a last-value queue, the message is discarded.
+  - キーが導出されれば、同じキーの未消費メッセージを置き換えます。  
+  - 最新値キューでキーが評価できなければ、そのメッセージは破棄されます。
 
-- **Dequeueing Messages**
-  Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 to ensure reliable message delivery. Acknowledgments (for QoS 1) trigger message removal from the queue.
+- **メッセージのデキュー**  
+  サブスクライブしたクライアントは設定されたディスパッチ戦略に従ってキューからメッセージを受け取ります。すべてのメッセージはQoS 1で配信され、アック（ACK）を受けるとキューから削除されます。
 
-- **Dispatch Strategies**
-   You can define how messages are distributed across subscribers:
+- **ディスパッチ戦略**  
+  メッセージのサブスクライバー間の配布方法を定義できます。
 
-  - `random`: Distribute randomly.
-  - `round_robin`: Rotate among available subscribers.
-  - `least_inflight`: Prefer subscribers with fewer in-progress messages.
+  - `random`：ランダムに配布  
+  - `round_robin`：利用可能なサブスクライバー間で順番に配布  
+  - `least_inflight`：進行中メッセージ数が少ないサブスクライバーを優先
 
-- **Queue Management**
-   Full queue lifecycle operations (create, update, delete, query) are available via REST APIs.
+- **キュー管理**  
+  キューの作成、更新、削除、照会などのフルライフサイクル操作はREST APIで利用可能です。
 
-## Use Cases
+## ユースケース
 
-Message Queue enables reliable, asynchronous messaging patterns that are critical in many IoT and event-driven application scenarios, especially where devices or consumers may not always be online.
+メッセージキューは、デバイスやコンシューマーが常時オンラインでない場合でも重要な信頼性の高い非同期メッセージングパターンを実現します。特にIoTやイベント駆動型アプリケーションで有用です。
 
-- **Device Command Queuing**: Cloud applications queue commands for IoT devices, ensuring commands will not be lost when devices are offline.
-- **Batch Processing**: Break large datasets or workloads into smaller tasks and distribute them to worker clients for parallel or delayed processing.
-- **Sensor Data Processing**: Temporarily queue high-frequency sensor data for batch processing, aggregation, or analysis at a later time.
-- **Latest Configuration Dispatch**: Ensure devices always attempt to fetch and process the latest configuration command; older, unhandled commands (for the same config item/key) are superseded or marked obsolete in the queue.
+- **デバイスコマンドキューイング**：クラウドアプリケーションがIoTデバイス向けにコマンドをキューイングし、デバイスがオフラインでもコマンドが失われないようにする。  
+- **バッチ処理**：大規模データセットやワークロードを小さなタスクに分割し、ワーカークライアントに並列または遅延処理で配布する。  
+- **センサーデータ処理**：高頻度のセンサーデータを一時的にキューイングし、後でバッチ処理や集約、分析を行う。  
+- **最新設定の配信**：デバイスが常に最新の設定コマンドを取得・処理するようにし、同じ設定項目／キーの古い未処理コマンドはキュー内で上書きまたは無効化する。
 
-## Related Features Reference
+## 関連機能リファレンス
 
-Message Queue builds upon MQTT and complements other messaging features in EMQX:
+メッセージキューはMQTTを基盤とし、EMQXの他のメッセージング機能と補完関係にあります。
 
-- [Shared Subscriptions](../messaging/mqtt-shared-subscription.md): Distributes messages among multiple subscribers, but does not retain messages when no clients are online.
-- [Retained Messages](../messaging/mqtt-retained-message.md): Stores the last known message for a topic, but only delivers one retained message per topic to new subscribers.
-- [MQTT Durable Sessions](../durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
-- [Rule Engine](../data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
+- [共有サブスクリプション](../messaging/mqtt-shared-subscription.md)：複数のサブスクライバー間でメッセージを分散しますが、クライアントがオンラインでない場合はメッセージを保持しません。  
+- [保持メッセージ](../messaging/mqtt-retained-message.md)：トピックごとに最後のメッセージを保存しますが、新規サブスクライバーに1件のみ配信されます。  
+- [MQTT耐久セッション](../durability/durability_introduction.md)：クライアントごとのセッション状態（サブスクリプションやQoS 1/2メッセージ）を再接続間で保持します。  
+- [ルールエンジン](../data-integration/rules.md)：SQLライクなルールでキュー内メッセージをフィルタリング・処理し、変換や転送を可能にします。
 
-## Next Steps
+## 次のステップ
 
-Now that you understand the Message Queue fundamentals, explore how to put them into practice:
+メッセージキューの基本を理解したら、実際の利用方法を学びましょう。
 
-- [Create and Configure a Queue](./message-queue-task.md): Learn how to declare queues via Dashboard or REST API, define dispatch strategies, and set retention policies.
-- [Quick Start Tutorial](./message-queue-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.
+- [キューの作成と設定](./message-queue-task.md)：ダッシュボードやREST APIでキューを宣言し、ディスパッチ戦略や保持ポリシーを定義する方法を解説します。  
+- [クイックスタートチュートリアル](./message-queue-quick-start.md)：MQTTXを使った実践的なパブリッシャー／サブスクライバーシナリオのステップバイステップガイドです。

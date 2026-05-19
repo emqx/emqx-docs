@@ -1,48 +1,33 @@
 # eMQTT-Benchによるパフォーマンステスト
 
-EMQXをシングルモードまたはクラスターでデプロイした後、システムの性能を把握するためにパフォーマンステストを実施できます。本節では、[eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench)のインストール方法と使用方法を紹介します。eMQTT-BenchはErlangで書かれたシンプルかつ強力なMQTTプロトコルのベンチマークツールです。大規模シナリオや高度なカスタマイズが必要な場合は、テストサービスの[XMeter](https://www.xmeter.net/)を推奨します。
+EMQXをシングルモードまたはクラスターとしてデプロイした後、システムの処理能力や負荷時の挙動を評価するためにパフォーマンステストを実施できます。本節では、パフォーマンステストを行うための[eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench)のインストールおよび使用方法について説明します。
+
+eMQTT-BenchはErlangで書かれた軽量かつ強力なMQTTベンチマークツールで、多数のクライアントをシミュレートし、スループットやレイテンシなどの主要なパフォーマンス指標を測定できます。大規模なテストシナリオや高度でカスタマイズされたベンチマーク要件については、sales@emqx.ioまでお問い合わせください。
 
 ## eMQTT-Benchのインストール
 
-eMQTT-Benchのインストール方法は以下の3つがあります。
+eMQTT-Benchのインストール方法は以下の3つの選択肢があります。
 
-- Dockerイメージを実行する
-- バイナリパッケージをダウンロードしてインストールする
-- ソースコードからビルドする
+- Dockerイメージの実行
+- バイナリパッケージのダウンロードとインストール
+- ソースコードからのビルド
 
 ### Dockerイメージ
 
-[hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags)に公開されている`emqtt-bench`のDockerイメージを実行してインストールできます。`:latest`タグは新しいバージョンごとに更新されます。
+[hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags)に公開されている`emqtt-bench`のDockerイメージを実行してベンチマークツールをインストールできます。`:latest`タグは新しいバージョンごとに更新されます。
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-Dockerイメージ名はハイフン `-` を使用していますが、バイナリスクリプト名はアンダースコア `_` を使用している点にご注意ください。
+なお、Dockerイメージ名はハイフン `-` を使用していますが、バイナリスクリプト名はアンダースコア `_` を使用している点にご注意ください。
 
 ### バイナリパッケージ
 
-以下のプラットフォーム向けにリリースされたバイナリパッケージをダウンロードして`emqtt-bench`をインストールできます。
+[公式ダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)からリリース済みのバイナリパッケージをダウンロードし、対応プラットフォームに`emqtt-bench`をインストールできます。
 
-- Amazon Linux 2
-- Amazon Linux 2023
-- CentOS 7
-- Rocky Linux 8
-- Rocky Linux 9
-- Debian 9
-- Debian 10
-- Debian 11
-- Debian 12
-- Ubuntu 16.04
-- Ubuntu 18.04
-- Ubuntu 20.04
-- Ubuntu 22.04
-- MacOS 11 (Intel)
-- MacOS 12 (Intel)
-- MacOS 12 (Apple Silicon)
-
-各リリースの詳細は[Releases](https://github.com/emqx/emqtt-bench/releases)をご参照ください。
+各`emqtt-bench`リリースの詳細は[Releases](https://github.com/emqx/emqtt-bench/releases)をご参照ください。
 
 例として、Ubuntu 20.04に`emqtt-bench`をインストールする手順は以下の通りです。
 
@@ -56,11 +41,11 @@ rm emqtt-bench-0.4.12-ubuntu20.04-amd64.tar.gz
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-### ソースからビルド
+### ソースからのビルド
 
 eMQTT-BenchはErlangで書かれており、ビルドには[Erlang/OTP](https://www.erlang.org/) 22.3以上が必要です。Erlang/OTPのインストール手順はここでは省略します。詳細はオンラインのインストールチュートリアルをご参照ください。
 
-Erlang環境が整ったら、最新の`emqtt-bench`コードをダウンロードしてコンパイルします。
+Erlang環境をインストール後、`emqtt-bench`の最新コードをダウンロードし、コンパイルします。
 
 ```bash
 git clone https://github.com/emqx/emqtt-bench
@@ -69,7 +54,7 @@ cd emqtt-bench
 make
 ```
 
-コンパイル後、カレントディレクトリに`emqtt_bench`という実行可能スクリプトが生成されます。以下のコマンドを実行して正常に動作するか確認してください。
+コンパイル完了後、カレントディレクトリに`emqtt_bench`という実行可能スクリプトが生成されます。以下のコマンドを実行し、正常に動作することを確認してください。
 
 ```bash
 ./emqtt_bench
@@ -82,38 +67,38 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 `emqtt_bench`には以下の3つのサブコマンドがあります。
 
-1. `pub`：大量のクライアントを作成し、メッセージのパブリッシュ操作を行う
-2. `sub`：大量のクライアントを作成し、トピックをサブスクライブしてメッセージを受信する
-3. `conn`：大量の接続を作成する
+1. `pub`：多数のクライアントを作成し、メッセージをパブリッシュする操作を行います。
+2. `sub`：多数のクライアントを作成し、トピックをサブスクライブしてメッセージを受信します。
+3. `conn`：多数の接続を作成します。
 
 ### パブリッシュ
 
-`./emqtt_bench pub --help`を実行すると利用可能なパラメータが表示されます。
+`./emqtt_bench pub --help`を実行すると、利用可能なパラメータが表示されます。
 
-| パラメータ         | 省略形 | オプション値  | デフォルト値  | 説明                                                  |
-| ----------------- | ------ | ------------ | ------------ | ----------------------------------------------------- |
-| --host            | -h     | -            | localhost    | 接続するMQTTサーバーのアドレス                        |
-| --port            | -p     | -            | 1883         | MQTTサービスのポート番号                              |
-| --version         | -V     | 3<br />4<br />5 | 5            | 使用するMQTTプロトコルのバージョン                   |
-| --count           | -c     | -            | 200          | クライアントの総数                                    |
-| --startnumber     | -n     | -            | 0            | クライアントの開始番号                                |
-| --interval        | -i     | -            | 10           | クライアント作成の間隔（単位：ms）                    |
-| --interval_of_msg | -I     | -            | 1000         | メッセージのパブリッシュ間隔                          |
-| --username        | -u     | -            | なし（任意） | クライアントのユーザー名                              |
-| --password        | -P     | -            | なし（任意） | クライアントのパスワード                              |
-| --topic           | -t     | -            | なし（必須） | パブリッシュするトピック。プレースホルダー対応：<br />`%c`: ClientId<br />`%u`: Username<br />`%i`: クライアントの連番 |
-| --size            | -s     | -            | 256          | メッセージペイロードのサイズ（バイト単位）            |
-| --qos             | -q     | -            | 0            | QoSレベル                                             |
-| --retain          | -r     | true<br />false | false        | メッセージのRetainフラグを設定するかどうか           |
-| --keepalive       | -k     | -            | 300          | クライアントのキープアライブ時間                      |
-| --clean           | -C     | true<br />false | true         | セッションをクリアして接続を確立するかどうか          |
-| --ssl             | -S     | true<br />false | false        | SSLを有効にするかどうか                               |
-| --certfile        | -      | -            | なし         | クライアントのSSL証明書                               |
-| --keyfile         | -      | -            | なし         | クライアントのSSLキー                                 |
-| --ws              | -      | true<br />false | false        | WebSocket経由で接続を確立するかどうか                 |
-| --ifaddr          | -      | -            | なし         | クライアント接続に使用するローカルネットワークインターフェース |
+| パラメータ         | 省略形 | オプション値           | デフォルト値   | 説明                                                                                 |
+| ----------------- | ------ | --------------------- | -------------- | ------------------------------------------------------------------------------------ |
+| --host            | -h     | -                     | localhost      | 接続するMQTTサーバーのアドレス                                                     |
+| --port            | -p     | -                     | 1883           | MQTTサービスのポート                                                                 |
+| --version         | -V     | 3<br />4<br />5       | 5              | 使用するMQTTプロトコルバージョン                                                    |
+| --count           | -c     | -                     | 200            | クライアントの総数                                                                   |
+| --startnumber     | -n     | -                     | 0              | クライアントの開始番号                                                               |
+| --interval        | -i     | -                     | 10             | クライアント作成の間隔（単位：ms）                                                  |
+| --interval_of_msg | -I     | -                     | 1000           | メッセージパブリッシュの間隔                                                        |
+| --username        | -u     | -                     | なし（任意）   | クライアントのユーザー名                                                             |
+| --password        | -P     | -                     | なし（任意）   | クライアントのパスワード                                                             |
+| --topic           | -t     | -                     | なし（必須）   | パブリッシュするトピック。プレースホルダー対応：<br />`%c`：ClientId<br />`%u`：Username<br />`%i`：クライアントの連番 |
+| --size            | -s     | -                     | 256            | メッセージペイロードのサイズ（バイト単位）                                         |
+| --qos             | -q     | -                     | 0              | QoSレベル                                                                           |
+| --retain          | -r     | true<br />false       | false          | メッセージのRetainフラグ設定有無                                                   |
+| --keepalive       | -k     | -                     | 300            | クライアントのキープアライブ時間                                                    |
+| --clean           | -C     | true<br />false       | true           | セッションをクリアして接続を確立するかどうか                                       |
+| --ssl             | -S     | true<br />false       | false          | SSLを有効にするかどうか                                                             |
+| --certfile        | -      | -                     | なし           | クライアントのSSL証明書                                                             |
+| --keyfile         | -      | -                     | なし           | クライアントのSSLキー                                                               |
+| --ws              | -      | true<br />false       | false          | WebSocket経由で接続を確立するかどうか                                              |
+| --ifaddr          | -      | -                     | なし           | クライアント接続に使用するローカルネットワークインターフェースを指定                 |
 
-例として、10接続を開始し、1秒ごとにトピック`t`へQos0のメッセージを100件、ペイロードサイズ16バイトでパブリッシュするコマンドは以下の通りです。
+例として、10接続を開始し、1秒あたり100件のQoS0メッセージをトピック`t`に送信し、各メッセージペイロードのサイズを16バイトに設定する場合は以下のように実行します。
 
 ```bash
 ./emqtt_bench pub -t t -h emqx-server -s 16 -q 0 -c 10 -I 10
@@ -121,9 +106,9 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### サブスクライブ
 
-`./emqtt_bench sub --help`を実行すると、このサブコマンドの利用可能なパラメータが表示されます。説明は上記の表と重複するため省略します。
+`./emqtt_bench sub --help`を実行すると、このサブコマンドで利用可能なパラメータが表示されます。パラメータの説明は上記の表と同様のため省略します。
 
-例として、500接続を開始し、それぞれがQos0でトピック`t`をサブスクライブするコマンドは以下の通りです。
+例として、500接続を開始し、それぞれがトピック`t`をQoS0でサブスクライブする場合は以下のように実行します。
 
 ```bash
 ./emqtt_bench sub -t t -h emqx-server -c 500
@@ -131,9 +116,9 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### コネクト
 
-`./emqtt_bench conn --help`を実行すると、このサブコマンドの利用可能なパラメータが表示されます。説明は上記の表と重複するため省略します。
+`./emqtt_bench conn --help`を実行すると、このサブコマンドで利用可能なパラメータが表示されます。パラメータの説明は上記の表と同様のため省略します。
 
-例として、1000接続を開始するコマンドは以下の通りです。
+例として、1000接続を開始する場合は以下のように実行します。
 
 ```bash
 ./emqtt_bench conn -h emqx-server -c 1000
@@ -141,16 +126,16 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### SSL接続
 
-`emqtt-bench`はSSLによるセキュアな接続を確立し、テストを行うことができます。
+`emqtt-bench`はSSLによるセキュアな接続を確立し、テストを実施することが可能です。
 
-片方向証明書の場合：
+片方向認証の場合：
 
 ```bash
 ./emqtt_bench sub -c 100 -i 10 -t bench/%i -p 8883 -S
 ./emqtt_bench pub -c 100 -I 10 -t bench/%i -p 8883 -s 256 -S
 ```
 
-双方向証明書の場合：
+双方向認証の場合：
 
 ```bash
 ./emqtt_bench sub -c 100 -i 10 -t bench/%i -p 8883 --certfile path/to/client-cert.pem --keyfile path/to/client-key.pem
@@ -159,35 +144,35 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ## ストレステストの実施
 
-本節では、典型的な2つのシナリオ（接続数とスループット）におけるストレステストの実施方法を説明します。
+本節では、代表的な2つのシナリオ（接続数とスループット）におけるストレステストの実施方法を説明します。
 
-### 典型的なストレステストシナリオ
+### 代表的なストレステストシナリオ
 
-以下の2つの典型的なシナリオでツールの利用を検証します。
+以下の2つの代表的なシナリオでツールの利用を検証します。
 
-1. 接続数：`emqtt-bench`を使ってEMQXに数百万の接続を作成する
-2. スループット：`emqtt-bench`を使ってEMQXにおいて`100k/s Qos 0`のメッセージスループットを生成する
+1. 接続数：`emqtt-bench`を用いてEMQXに対して数百万の接続を作成する。
+2. スループット：`emqtt-bench`を用いてEMQXに対して秒間10万件のQoS0メッセージスループットを生成する。
 
-### デバイスとデプロイメントトポロジー
+### デバイスおよびデプロイトポロジー
 
-合計3台の8コア16GBメモリのサーバーを準備し、1台はEMQX用、2台はクライアント負荷用に使用します。
+EMQX用に1台、クライアント負荷用に2台の計3台の8コア16GBサーバーを用意します。
 
 - **システム**：`CentOS Linux release 7.7.1908 (Core)`
 - **CPU**：`Intel Xeon Processor (Skylake)` メインクロック：`2693.670 MHZ`
 - **サーバー**：`emqx-centos7-v4.0.2.zip`
-- **負荷用クライアント**：`emqtt-bench v0.3.1`、各負荷用クライアントは10個のネットワークカードを設定し、接続テストで大量のMQTTクライアント接続を確立するために使用
+- **負荷ツール**：`emqtt-bench v0.3.1`、各負荷サーバーは10個のネットワークインターフェースを設定し、接続テストで多数のMQTTクライアント接続を確立
 
 トポロジー構成は以下の通りです。
 
-![benchmark_topology](./assets/benchmark_topology.png)
+![ベンチマークトポロジー](./assets/benchmark_topology.png)
 
 ### チューニング
 
-クライアント負荷用とサーバーの両方でシステムパラメータのチューニングが必要です。詳細は[Tuning guide](../performance/tune.md)を参照してください。
+クライアント負荷サーバーとEMQXサーバー双方でシステムパラメータのチューニングを行います。詳細は[Tuning guide](../performance/tune.md)を参照してください。
 
 ### 接続テスト
 
-システムチューニング後にEMQXを起動し、`bench1`の各ネットワークカードごとに5万接続を開始します。合計で50万接続となります。
+システムチューニング後、EMQXを起動し、`bench1`の各ネットワークインターフェースごとに5万接続を開始します。合計で50万接続となります。
 
 ```bash
 ./emqtt_bench -h 192.168.0.99 -c 50000 --ifaddr 192.168.0.100
@@ -222,7 +207,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 ./emqtt_bench sub -t t -h 192.168.0.99 -c 500
 ```
 
-次に`bench2`で20のパブリッシャーを起動し、1秒あたり10メッセージをパブリッシュします。
+次に`bench2`で20のパブリッシャーを起動し、1秒あたり10件のメッセージをパブリッシュします。
 
 ```bash
 ./emqtt_bench pub -t t -h 192.168.0.99 -c 20 -I 100

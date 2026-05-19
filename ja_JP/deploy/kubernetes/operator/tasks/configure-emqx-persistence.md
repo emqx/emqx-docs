@@ -1,104 +1,109 @@
-# Enable Persistence in EMQX Cluster
+# EMQXクラスターでのパーシステンス有効化
 
-## Objective
+## 目的
 
-Configure persistence for the set of Core nodes of an EMQX cluster through the `volumeClaimTemplates` field.
+EMQXクラスターのCoreノード群に対して、`volumeClaimTemplates`フィールドを通じてパーシステンスを設定します。
 
-## Configure EMQX Cluster Persistence
+## EMQXクラスターのパーシステンス設定
 
-EMQX CRD `apps.emqx.io/v2beta1` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
+EMQX CRD `apps.emqx.io/v2beta1` は、各Coreノードのデータのパーシステンスを `.spec.coreTemplate.spec.volumeClaimTemplates` で設定することをサポートしています。
 
-The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
+`.spec.coreTemplate.spec.volumeClaimTemplates` フィールドの定義と意味は、Kubernetes APIで定義されている `PersistentVolumeClaimSpec` と一致しています。
 
-When you specify the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). As a result, when an EMQX Pod is deleted, the associated PV and PVC are retained, preserving EMQX runtime data.
+`.spec.coreTemplate.spec.volumeClaimTemplates` フィールドを指定すると、EMQXオペレーターはEMQXコンテナの `/opt/emqx/data` ボリュームをPersistent Volume Claim（PVC）でバックアップするように設定します。PVCは指定された[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を利用してPersistent Volume（PV）をプロビジョニングします。その結果、EMQX Podが削除されても、関連付けられたPVおよびPVCは保持され、EMQXのランタイムデータが保存されます。
 
-For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
+PVおよびPVCの詳細については、[Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)のドキュメントを参照してください。
 
-1. Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        volumeClaimTemplates:
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 20Mi
-          accessModes:
-            - ReadWriteOnce
-        replicas: 3
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         volumeClaimTemplates:
+           storageClassName: standard
+           resources:
+             requests:
+               storage: 20Mi
+           accessModes:
+             - ReadWriteOnce
+         replicas: 3
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  :::tip
-  Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
-  :::
+   ::: tip
 
-2. Wait for the EMQX cluster to become ready.
+   `storageClassName` フィールドを使って、EMQXデータに適した[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を選択してください。`kubectl get storageclass` コマンドでKubernetesクラスター内に存在するStorageClassを一覧表示できます。またはニーズに応じてStorageClassを作成してください。
 
-  Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
+   :::
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+2. EMQXクラスターが準備完了になるまで待機します。
 
-## Verify Persistence
+   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
-1. Create a test rule in the EMQX Dashboard.
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-  ```
+## パーシステンスの検証
 
-  - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
-  - Navigate to _Data Integration_ → _Rules_ to create a new rule.
-  - Attach a simple action to this rule.
-  - Click _Create_ to generate a rule, as shown in the following figure:
+1. EMQXダッシュボードでテスト用のルールを作成します。
 
-  ![](./assets/configure-emqx-persistent/emqx-core-action.png)
+   ```bash
+   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-  Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
+   - ブラウザで `http://${external_ip}:18083` にアクセスし、EMQXダッシュボードにログインします。
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
+   - **Integration** -> **Rules** に移動し、新しいルールを作成します。
 
-2. Delete the old EMQX cluster.
+   - このルールにシンプルなアクションを追加します。
 
-  Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
+   - **Save** をクリックしてルールを生成します。以下の図のように表示されます。
 
-  ```bash
-  $ kubectl delete -f emqx.yaml
-  emqx.apps.emqx.io "emqx" deleted
-  ```
+     ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
 
-3. Re-deploy the EMQX cluster.
+   ルールが正常に作成されると、`emqx-persistent-test` IDを持つ対応するレコードがページに表示されます。以下の図を参照してください。
 
-  Run the following command to re-deploy the EMQX cluster:
+   ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
-  ```bash
-  $ kubectl apply -f emqx.yaml
-  emqx.apps.emqx.io/emqx created
-  ```
+2. 既存のEMQXクラスターを削除します。
 
-  Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
+   以前にクラスターをデプロイした際に使用したファイル（ここでは`emqx.yaml`）を指定して、以下のコマンドを実行します。
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+   ```bash
+   $ kubectl delete -f emqx.yaml
+   emqx.apps.emqx.io "emqx" deleted
+   ```
 
-  The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.
+3. EMQXクラスターを再デプロイします。
+
+   以下のコマンドでEMQXクラスターを再デプロイしてください。
+
+   ```bash
+   $ kubectl apply -f emqx.yaml
+   emqx.apps.emqx.io/emqx created
+   ```
+
+4. EMQXクラスターが準備完了になるまで待機し、ブラウザでEMQXダッシュボードにアクセスして、以前作成したルールが残っていることを確認します。以下の図のように表示されます。
+
+   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+
+   古いクラスターで作成した `emqx-persistent-test` ルールが新しいクラスターにも存在していることから、パーシステンス設定が正しく機能していることが確認できます。
