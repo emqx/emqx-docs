@@ -1,34 +1,32 @@
-# Deploy EMQX on Google Kubernetes Engine
+# Google Kubernetes Engine に EMQX をデプロイする
 
-The EMQX Operator allows for the deployment of EMQX on Google Kubernetes Engine (GKE), which simplifies the process of deploying a managed Kubernetes cluster in GCP. With GKE, you can offload the operational overhead to GCP, enabling you to focus on your application deployment and management. By deploying EMQX on GKE, you can take advantage of the scalability and flexibility of Kubernetes, while benefiting from the simplicity and convenience of a managed service. With EMQX Operator and GKE, you can easily deploy and manage your MQTT broker on the cloud, allowing you to focus on your business goals and objectives.
+EMQX Operator を使用すると、Google Kubernetes Engine（GKE）上に EMQX をデプロイできます。これにより、GCP 上でマネージド Kubernetes クラスターを簡単にデプロイできるようになります。GKE を利用することで、運用のオーバーヘッドを GCP に委ね、アプリケーションのデプロイと管理に専念できます。EMQX を GKE 上にデプロイすることで、Kubernetes のスケーラビリティと柔軟性を活かしつつ、マネージドサービスのシンプルさと利便性を享受できます。EMQX Operator と GKE を組み合わせることで、クラウド上で MQTT ブローカーを簡単にデプロイおよび管理でき、ビジネスの目標に集中できます。
 
+## はじめに
 
-## Before You Begin
-Before you begin, you must have the following:
+以下の準備が必要です。
 
-- To create a GKE cluster on Google Cloud Platform, you will need to enable the GKE service in your GCP subscription. You can find more information on how to do this in the Google Kubernetes Engine documentation.
+- Google Cloud Platform 上で GKE クラスターを作成するには、GCP サブスクリプションで GKE サービスを有効にする必要があります。詳細は Google Kubernetes Engine のドキュメントをご参照ください。
 
+- kubectl コマンドを使って GKE クラスターに接続するには、ローカルマシンに kubectl ツールをインストールし、クラスターの KubeConfig を取得して接続します。あるいは、GCP コンソールの Cloud Shell を利用して kubectl でクラスターを管理することも可能です。
 
-- To connect to a GKE cluster using kubectl commands, you can install the kubectl tool on your local machine and obtain the cluster's KubeConfig to connect to the cluster. Alternatively, you can use Cloud Shell through the GCP Console to manage the cluster with kubectl.
+  - kubectl を使って GKE クラスターに接続するには、ローカルマシンに kubectl ツールをインストールし設定する必要があります。詳細は [Connect to a GKE cluster](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) のドキュメントをご覧ください。
 
-  - To connect to a GKE cluster using kubectl, you will need to install and configure the kubectl tool on your local machine. Refer to the [Connect to a GKE cluster](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) documentation for detailed instructions on how to do this.
+  - Cloud Shell を使って GKE クラスターに接続する場合は、GCP コンソールの Cloud Shell から直接接続し、kubectl でクラスターを管理できます。詳細は [Manage a GKE cluster with Cloud Shell](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster) のドキュメントをご参照ください。
 
-  - To connect to a GKE cluster using Cloud Shell, you can use the Cloud Shell directly from the GCP Console to connect to the GKE cluster and manage the cluster using kubectl. Refer to the [Manage a GKE cluster with Cloud Shell](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster) documentation for detailed instructions on how to connect to Cloud Shell and use kubectl.
+- EMQX Operator のインストールについては、[Install EMQX Operator](./getting-started.md) をご覧ください。
 
-- To install EMQX Operator, please refer to [Install EMQX Operator](./getting-started.md)
+## EMQX クラスターを素早くデプロイする
 
-## Quickly Deploy an EMQX Cluster
-
-Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](./operator.md):
+以下は EMQX カスタムリソースの関連設定例です。デプロイしたい EMQX のバージョンに応じて、対応する APIVersion を選択してください。詳細な互換性については [EMQX Operator Compatibility](./operator.md) をご参照ください。
 
   ::: warning
-  If you want to request CPU and memory resources, you need to ensure that the CPU is greater than or equal to 250m and the memory is greater than or equal to 512M.
+  CPU とメモリのリソースリクエストを行う場合、CPU は 250m 以上、メモリは 512M 以上である必要があります。
 
-  - [Resource requests in Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests)
+  - [Autopilot におけるリソースリクエスト](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests)
     :::
 
-Save the following content as a YAML file and deploy it using the `kubectl apply` command.
-
+以下の内容を YAML ファイルとして保存し、`kubectl apply` コマンドでデプロイしてください。
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -45,7 +43,7 @@ spec:
   coreTemplate:
     spec:
       volumeClaimTemplates:
-      ## more information about storage classes: https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
+      ## ストレージクラスの詳細：https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
         storageClassName: standard
         resources:
           requests:
@@ -54,25 +52,25 @@ spec:
         - ReadWriteOnce
   dashboardServiceTemplate:
     spec:
-      ## more information about load balancer: https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
+      ## ロードバランサーの詳細：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
       type: LoadBalancer
   listenersServiceTemplate:
     spec:
-      ## more information about load balancer: https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
+      ## ロードバランサーの詳細：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
       type: LoadBalancer
 ```
 
-Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster using the `kubectl get` command. Please ensure that the STATUS is `Running` which may take some time.
+EMQX クラスターが準備完了になるまで待ちます。`kubectl get` コマンドで EMQX クラスターの状態を確認できます。STATUS が `Running` になるまでしばらく時間がかかる場合がありますのでご注意ください。
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
+```bash
+$ kubectl get emqx emqx
+NAME   IMAGE                              STATUS    AGE
+emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+```
 
-Get the External IP of the EMQX cluster and access the EMQX console.
+EMQX クラスターの External IP を取得し、EMQX コンソールにアクセスします。
 
-The EMQX Operator will create two EMQX Service resources, one is `emqx-dashboard`, and the other is `emqx-listeners`, corresponding to the EMQX console and EMQX listening port, respectively.
+EMQX Operator は、EMQX コンソール用の `emqx-dashboard` と、EMQX リスニングポート用の `emqx-listeners` の2つの EMQX Service リソースを作成します。
 
 ```shell
 $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -80,46 +78,46 @@ $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].i
 34.122.174.166
 ```
 
-Access the EMQX console by opening a web browser and visiting http://34.122.174.166:18083. Login using the default username and password `admin/public`.
+Web ブラウザで http://34.122.174.166:18083 にアクセスし、デフォルトのユーザー名とパスワード `admin/public` でログインしてください。
 
-## Connect to EMQX Cluster to Publish/Subscribe Messages Using MQTTX CLI
+## MQTTX CLI を使って EMQX クラスターに接続しメッセージをパブリッシュ／サブスクライブする
 
-[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool designed to help developers develop and debug MQTT services and applications faster without the need for a GUI.
+[MQTTX CLI](https://mqttx.app/cli) は、開発者が GUI を使わずに MQTT サービスやアプリケーションの開発・デバッグを迅速に行うためのオープンソースの MQTT 5.0 コマンドラインクライアントツールです。
 
-- Retrieve External IP of the EMQX cluster
+- EMQX クラスターの External IP を取得
 
 ```shell
 external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
 ```
 
-- Subscribe to messages
+- メッセージをサブスクライブする
 
 ```shell
 $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
 
-[10:00:25] › …  Connecting...
-[10:00:25] › ✔  Connected
-[10:00:25] › …  Subscribing to hello...
-[10:00:25] › ✔  Subscribed to hello
+[10:00:25] › …  接続中...
+[10:00:25] › ✔  接続完了
+[10:00:25] › …  hello をサブスクライブ中...
+[10:00:25] › ✔  hello のサブスクライブ完了
 ```
 
-- Create a new terminal window and send a message
+- 新しいターミナルウィンドウを開き、メッセージを送信する
 
 ```shell
 $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
 
-[10:00:58] › …  Connecting...
-[10:00:58] › ✔  Connected
-[10:00:58] › …  Message Publishing...
-[10:00:58] › ✔  Message published
+[10:00:58] › …  接続中...
+[10:00:58] › ✔  接続完了
+[10:00:58] › …  メッセージをパブリッシュ中...
+[10:00:58] › ✔  メッセージのパブリッシュ完了
 ```
 
-- View messages received in the subscription terminal window
+- サブスクライブ側のターミナルウィンドウで受信したメッセージを確認
 
 ```shell
 [10:00:58] › payload: hello world
 ```
 
-## Use LoadBalancer for TLS Offloading
+## TLS オフロードに LoadBalancer を使用する
 
-Since Google LoadBalancer doesn't support TCP certificates, please check [discussion](https://github.com/emqx/emqx-operator/discussions/312) to address TCP certificate offloading issues.
+Google のロードバランサーは TCP 証明書をサポートしていないため、TCP 証明書のオフロード問題については [discussion](https://github.com/emqx/emqx-operator/discussions/312) をご確認ください。

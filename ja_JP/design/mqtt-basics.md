@@ -1,43 +1,43 @@
-# MQTT Basics
+# MQTTの基本
 
-## What is MQTT and Why Does It Matter
+## MQTTとは何か、そしてなぜ重要なのか
 
-MQTT (Message Queuing Telemetry Transport) is a lightweight, publish-subscribe messaging protocol optimized for high-latency or unreliable networks—perfect for IoT scenarios. It enables devices to communicate in real-time using a broker model, making it a standard for smart homes, industrial automation, and connected vehicles.
+MQTT（Message Queuing Telemetry Transport）は、遅延が大きいまたは信頼性の低いネットワークに最適化された軽量のパブリッシュ・サブスクライブ型メッセージングプロトコルであり、IoTシナリオに最適です。デバイスがブローカー方式を用いてリアルタイムに通信できるようにし、スマートホーム、産業オートメーション、コネクテッドカーの標準として広く採用されています。
 
-**Read more:** [Mastering MQTT: The Ultimate Beginner's Guide for 2025](https://www.emqx.com/en/blog/the-easiest-guide-to-getting-started-with-mqtt)
+**詳細はこちら：** [Mastering MQTT: The Ultimate Beginner's Guide for 2025](https://www.emqx.com/en/blog/the-easiest-guide-to-getting-started-with-mqtt)
 
-## MQTT Publish-Subscribe Pattern
+## MQTTのパブリッシュ・サブスクライブパターン
 
-The publish-subscribe pattern in MQTT decouples message producers (publishers) from consumers (subscribers). Publishers send messages to topics without knowledge of subscribers, and subscribers receive messages from topics without knowledge of publishers. This model enhances scalability and flexibility in message distribution.
+MQTTのパブリッシュ・サブスクライブパターンは、メッセージの送信者（パブリッシャー）と受信者（サブスクライバー）を疎結合にします。パブリッシャーはサブスクライバーの存在を知らずにトピックへメッセージをパブリッシュし、サブスクライバーはパブリッシャーの存在を知らずにトピックからメッセージを受信します。このモデルにより、メッセージ配信のスケーラビリティと柔軟性が向上します。
 
-**Read more:** [Introduction to MQTT Publish-Subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model)
+**詳細はこちら：** [Introduction to MQTT Publish-Subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model)
 
-## How to Establish an MQTT Connection?
+## MQTT接続の確立方法
 
-Establishing an MQTT connection involves a client initiating a connection to a broker, optionally providing authentication credentials, and specifying connection parameters like the keep-alive interval and clean session flag. Proper configuration ensures reliable and secure communication.
+MQTT接続の確立は、クライアントがブローカーに接続を開始し、必要に応じて認証情報を提供し、キープアライブ間隔やクリーンセッションフラグなどの接続パラメータを指定することで行います。適切な設定により、信頼性が高く安全な通信が実現します。
 
-**Read more:** [How to Set Parameters When Establishing an MQTT Connection?](https://www.emqx.com/en/blog/how-to-set-parameters-when-establishing-an-mqtt-connection)
+**詳細はこちら：** [How to Set Parameters When Establishing an MQTT Connection?](https://www.emqx.com/en/blog/how-to-set-parameters-when-establishing-an-mqtt-connection)
 
-## MQTT Topics and Wildcards
+## MQTTのトピックとワイルドカード
 
-MQTT topics define the routing structure for publish/subscribe messaging. By using hierarchical topic levels and wildcards (`+` for single-level, `#` for multi-level), developers can flexibly subscribe to entire device groups or sensor types. EMQX fully supports MQTT standard topic matching and enhances it with powerful features such as wildcard subscription management, shared subscriptions, and fine-grained access control. Understanding how topics and wildcards work is key to building scalable, secure, and efficient IoT applications with EMQX.
+MQTTのトピックはパブリッシュ／サブスクライブメッセージングのルーティング構造を定義します。階層的なトピックレベルとワイルドカード（単一レベルの`+`、複数レベルの`#`）を使うことで、開発者はデバイスグループやセンサー種別全体を柔軟にサブスクライブできます。EMQXはMQTT標準のトピックマッチングを完全にサポートし、ワイルドカードサブスクリプション管理、共有サブスクリプション、細粒度のアクセス制御など強力な機能を提供します。トピックとワイルドカードの仕組みを理解することは、EMQXでスケーラブルかつ安全で効率的なIoTアプリケーションを構築する鍵となります。
 
-**Read more:** [MQTT Topics and Wildcards: A Beginner's Guide](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics)
+**詳細はこちら：** [MQTT Topics and Wildcards: A Beginner's Guide](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics)
 
-## MQTT Session
+## MQTTセッション
 
-MQTT sessions help maintain client context across network interruptions, addressing issues like missed messages or re-subscription overheads. Sessions store critical data such as client subscriptions and QoS messages, allowing seamless communication even after disconnections. MQTT 5.0 introduces key parameters like **Clean Start** and **Session Expiry Interval** to control session lifecycles, offering flexibility in session retention. Clean Start determines whether to reuse an existing session, while Session Expiry Interval defines how long sessions are kept after disconnections. EMQX enhances session management by providing fine-tuned control over session expiration, improving resource efficiency and system reliability, especially for IoT scenarios with intermittent connectivity.
+MQTTセッションは、ネットワークの切断時にもクライアントのコンテキストを維持し、メッセージの取りこぼしや再サブスクライブのオーバーヘッドを解消します。セッションはクライアントのサブスクリプションやQoSメッセージなどの重要なデータを保存し、切断後もシームレスな通信を可能にします。MQTT 5.0では、**Clean Start**や**Session Expiry Interval**といったセッションのライフサイクルを制御する主要パラメータが導入され、セッション保持の柔軟性が向上しました。Clean Startは既存セッションの再利用の有無を決定し、Session Expiry Intervalは切断後にセッションを保持する期間を定義します。EMQXはセッションの有効期限管理を細かく制御できる機能を提供し、特に断続的な接続が多いIoT環境でのリソース効率とシステムの信頼性を向上させます。
 
-**Read more:** [Introduction to MQTT Clean Start and Session Expiry Interval | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-new-feature-clean-start-and-session-expiry-interval)
+**詳細はこちら：** [Introduction to MQTT Clean Start and Session Expiry Interval | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-new-feature-clean-start-and-session-expiry-interval)
 
-## MQTT QoS and Protocol Flows
+## MQTTのQoSとプロトコルフロー
 
-MQTT defines three Quality of Service (QoS) levels to balance message delivery reliability and network efficiency:
+MQTTはメッセージ配信の信頼性とネットワーク効率のバランスを取るために、3つのQoS（サービス品質）レベルを定義しています：
 
-- QoS 0: At most once delivery
-- QoS 1: At least once delivery
-- QoS 2: Exactly once delivery
+- QoS 0：最大1回の配信
+- QoS 1：少なくとも1回の配信
+- QoS 2：正確に1回の配信
 
-Each level dictates the protocol flow between client and broker to ensure the desired delivery guarantee.
+各レベルは、クライアントとブローカー間で望ましい配信保証を確実にするためのプロトコルフローを規定しています。
 
-**Read more:** [MQTT QoS 0, 1, 2 Explained: A Quickstart Guide](https://www.emqx.com/en/blog/introduction-to-mqtt-qos)
+**詳細はこちら：** [MQTT QoS 0, 1, 2 Explained: A Quickstart Guide](https://www.emqx.com/en/blog/introduction-to-mqtt-qos)

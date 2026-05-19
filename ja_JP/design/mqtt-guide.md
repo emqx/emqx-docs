@@ -1,15 +1,15 @@
-# MQTT Guide
+# MQTTガイド
 
-Welcome to EMQX's comprehensive MQTT Guide. Whether you're a beginner just getting started or a developer seeking deeper insights, this guide provides a clear, step-by-step journey through MQTT basic and advanced features, drawing from EMQX’s most valuable blog content. For each topic, you’ll find a link to the full article for in-depth exploration.
+EMQXの包括的なMQTTガイドへようこそ。初心者の方が基本を学ぶ場合でも、開発者がより深い知見を求める場合でも、本ガイドはEMQXの貴重なブログコンテンツをもとに、MQTTの基本から高度な機能までをわかりやすく段階的に解説します。各トピックには、詳細な記事へのリンクも掲載しています。
 
-## MQTT Basics
+## MQTTの基本
 
-The MQTT Basics section introduces the core concepts of MQTT, including how the protocol works, how devices connect, and how messages are exchanged. You’ll learn about topics and wildcards, session management, QoS levels, and the foundational publish/subscribe pattern. This section is ideal for developers new to MQTT or those who want a solid grounding before exploring more advanced features.
+MQTTの基本セクションでは、MQTTのコアコンセプトを紹介します。プロトコルの仕組み、デバイスの接続方法、メッセージのやり取りの仕組みについて学べます。トピックとワイルドカード、セッション管理、QoS（サービス品質）レベル、そして基本的なパブリッシュ／サブスクライブパターンについても解説しています。MQTT初心者や、より高度な機能を学ぶ前に基礎を固めたい開発者に最適な内容です。
 
-Go to [MQTT Basics](./mqtt-basics.md).
+[MQTTの基本](./mqtt-basics.md)へ移動。
 
-## MQTT Advanced
+## MQTTの応用
 
-The MQTT Advanced section builds on the basics and explores powerful MQTT 5.0 features such as retained and will messages, request/response communication, topic aliasing, user properties, and enhanced authentication. It’s perfect for users looking to optimize performance, scalability, and reliability in complex or large-scale deployments.
+MQTTの応用セクションでは、基本を踏まえた上で、MQTT 5.0の強力な機能を解説します。リテインドメッセージやウィルメッセージ、リクエスト／レスポンス通信、トピックエイリアス、ユーザープロパティ、強化された認証などが含まれます。複雑または大規模なデプロイメントでパフォーマンス、スケーラビリティ、信頼性を最適化したいユーザーに最適です。
 
-Go to [MQTT Advanced](./mqtt-advanced.md).
+[MQTTの応用](./mqtt-advanced.md)へ移動。

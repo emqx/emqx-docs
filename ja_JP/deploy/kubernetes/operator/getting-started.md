@@ -1,26 +1,26 @@
-# Install Operator and Deploy EMQX
+# OperatorのインストールとEMQXのデプロイ
 
-In this section, we will walk you through the steps required to efficiently set up the environment for the EMQX Operator, install the Operator, and then use it to deploy EMQX. By following the guidelines outlined in this section, you will be able to effectively install and manage EMQX using the EMQX Operator.
+本セクションでは、EMQX Operatorの環境を効率的に構築し、Operatorをインストールした後にEMQXをデプロイする手順についてご案内します。本セクションの手順に従うことで、EMQX Operatorを用いたEMQXの効果的なインストールおよび管理が可能になります。
 
-## Prepare the Environment
+## 環境の準備
 
-Before deploying EMQX Operator, please confirm that the following components have been ready:
+EMQX Operatorをデプロイする前に、以下のコンポーネントが準備されていることを確認してください。
 
-- A running [Kubernetes cluster](https://kubernetes.io/docs/concepts/overview/), for a version of Kubernetes, please check [How to selector Kubernetes version](./operator.md#how-to-selector-kubernetes-version)
+- 稼働中の[Kubernetesクラスター](https://kubernetes.io/docs/concepts/overview/)。Kubernetesのバージョンについては[How to selector Kubernetes version](./operator.md#how-to-selector-kubernetes-version)をご参照ください。
 
-- A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
+- Kubernetesクラスターにアクセス可能な[kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)ツール。`kubectl cluster-info`コマンドでKubernetesクラスターの状態を確認できます。
 
-- [Helm](https://helm.sh) 3 or higher
+- [Helm](https://helm.sh) 3以上
 
-## Install EMQX Operator
+## EMQX Operatorのインストール
 
-1. Install and start `cert-manager`.
+1. `cert-manager`をインストールして起動します。
 
    ::: tip
-   `cert-manager` version `1.1.6` or higher is required. Skip this step if the `cert-manager` is already installed and started.
+   `cert-manager`のバージョンは`1.1.6`以上が必要です。すでに`cert-manager`がインストールおよび起動されている場合は、この手順をスキップしてください。
    :::
 
-   You can use Helm to install `cert-manager`.
+   Helmを使って`cert-manager`をインストールできます。
 
    ```bash
    $ helm repo add jetstack https://charts.jetstack.io
@@ -31,14 +31,13 @@ Before deploying EMQX Operator, please confirm that the following components hav
      --set crds.enabled=true
    ```
 
-   Or you can follow the [cert-manager installation guide](https://cert-manager.io/docs/installation/) to install it.
+   または、[cert-managerインストールガイド](https://cert-manager.io/docs/installation/)に従ってインストールしてください。
 
    ::: warning
-   If you install cert-manager on Google Kubernetes Engine (GKE) with default configuration may cause bootstrapping issues. Therefore, by adding the configuration of `--set global.leaderElection.namespace=cert-manager`, configure to use a different namespace in leader election. Please check [cert-manager compatibility](https://cert-manager.io/docs/installation/compatibility/)
+   Google Kubernetes Engine（GKE）にデフォルト設定でcert-managerをインストールすると、ブートストラップの問題が発生する可能性があります。そのため、`--set global.leaderElection.namespace=cert-manager`の設定を追加し、リーダー選出に別のネームスペースを使用するように構成してください。詳細は[cert-manager互換性](https://cert-manager.io/docs/installation/compatibility/)をご確認ください。
    :::
 
-
-2. Install the EMQX Operator with the command below:
+2. 以下のコマンドでEMQX Operatorをインストールします。
 
    ```bash
    $ helm repo add emqx https://repos.emqx.io/charts
@@ -48,7 +47,7 @@ Before deploying EMQX Operator, please confirm that the following components hav
      --create-namespace
    ```
 
-3. Wait till EMQX Operator is ready:
+3. EMQX Operatorが準備完了になるまで待ちます。
 
    ```bash
    $ kubectl wait --for=condition=Ready pods -l "control-plane=controller-manager" -n emqx-operator-system
@@ -56,17 +55,17 @@ Before deploying EMQX Operator, please confirm that the following components hav
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
-Now that you have successfully installed the operator, you are ready to proceed to the next step. In the [Deploy EMQX](#deploy-emqx) section, you will learn how to use the EMQX Operator to deploy EMQX.
+Operatorのインストールが完了したので、次のステップに進む準備が整いました。[Deploy EMQX](#deploy-emqx)セクションでは、EMQX Operatorを使ってEMQXをデプロイする方法を学べます。
 
-Alternatively, if you are interested in learning how to upgrade or uninstall EMQX using the operator, you can continue reading this section.
+また、Operatorを使ったEMQXのアップグレードやアンインストール方法に興味がある場合は、本セクションの続きをご覧ください。
 
-## Deploy EMQX
+## EMQXのデプロイ
 
 :::: tabs type:card
 
 ::: tab EMQX Enterprise 5
 
-1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -82,9 +81,9 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
          }
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
+   EMQX CRDの詳細については、[リファレンスドキュメント](./api-reference.md)をご参照ください。
 
-2. Wait, and the EMQX cluster is running.
+2. EMQXクラスターが稼働するまで待ちます。
 
    ```bash
    $ kubectl get emqx
@@ -93,13 +92,13 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
    emqx-ee   emqx/emqx-enterprise:@EE_VERSION@  Running   2m55s
    ```
 
-   Make sure the `STATUS` is `Running`, it may take some time to wait for the EMQX cluster to be ready.
+   `STATUS`が`Running`になっていることを確認してください。EMQXクラスターの準備には時間がかかる場合があります。
 
 :::
 
 ::: tab EMQX Open Source 5
 
-1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -110,9 +109,9 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
       image: emqx/emqx:@CE_VERSION@
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
+   EMQX CRDの詳細については、[リファレンスドキュメント](./api-reference.md)をご参照ください。
 
-2. Wait the EMQX cluster is running.
+2. EMQXクラスターが稼働するまで待ちます。
 
    ```bash
    $ kubectl get emqx
@@ -121,15 +120,15 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
    emqx   emqx/emqx:@CE_VERSION@  Running   2m55s
    ```
 
-   Make sure the `STATUS` is `Running`, it maybe takes some time to wait for the EMQX cluster to be ready.
+   `STATUS`が`Running`になっていることを確認してください。EMQXクラスターの準備には時間がかかる場合があります。
 
 :::
 
 ::::
 
-## Deploy on Public Cloud
+## パブリッククラウドへのデプロイ
 
-Check out the following guides to deploy EMQX on public cloud platforms using the EMQX Operator:
+EMQX Operatorを使用してパブリッククラウドプラットフォームにEMQXをデプロイするには、以下のガイドをご参照ください。
 
 - [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)

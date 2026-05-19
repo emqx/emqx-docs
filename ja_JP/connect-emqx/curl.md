@@ -1,217 +1,217 @@
-# Use curl with EMQX
+# EMQXでcurlを使う
 
-curl is a widely used command-line tool for data transfer and automation. Since 2020, curl has supported the MQTT protocol, and starting from curl 8.19.0 (expected March 2026), it also supports MQTTS (MQTT over TLS).
+curlは広く使われているコマンドラインツールで、データ転送や自動化に利用されます。2020年以降、curlはMQTTプロトコルをサポートしており、curl 8.19.0（2026年3月予定）以降はMQTTS（TLS上のMQTT）もサポートします。
 
-With curl, developers can connect to EMQX, publish messages, and subscribe to topics directly from the command line, without installing any language-specific MQTT client SDKs. This makes curl a convenient choice for quick testing, scripting, and IoT prototyping.
+curlを使うことで、開発者は言語固有のMQTTクライアントSDKをインストールせずに、コマンドラインから直接EMQXに接続し、メッセージのパブリッシュやトピックのサブスクライブが可能です。これにより、迅速なテスト、スクリプト作成、IoTプロトタイピングに便利なツールとなっています。
 
-This page explains how to use curl with EMQX for MQTT and MQTTS communication, including connection, publish/subscribe, authentication, TLS configuration, and common troubleshooting scenarios.
+本ページでは、EMQXとcurlを使ったMQTTおよびMQTTS通信の接続、パブリッシュ／サブスクライブ、認証、TLS設定、よくあるトラブルシューティングについて解説します。
 
-## curl Version Requirements
+## curlのバージョン要件
 
-| Feature            | Minimum Version | Release          |
-| ------------------ | --------------- | ---------------- |
-| MQTT (`mqtt://`)   | 7.70.0          | April 2020       |
-| MQTTS (`mqtts://`) | 8.19.0          | Early March 2026 |
+| 機能               | 最低バージョン | リリース時期       |
+| ------------------ | -------------- | ------------------ |
+| MQTT (`mqtt://`)   | 7.70.0         | 2020年4月          |
+| MQTTS (`mqtts://`) | 8.19.0         | 2026年3月初旬予定  |
 
-Check your installed curl version:
+インストール済みのcurlバージョンを確認するには：
 
 ```bash
 curl --version
 ```
 
-Ensure that `mqtt` (and `mqtts` for curl ≥ 8.19.0) appears in the **Protocols** list.
+**Protocols**リストに`mqtt`（curl ≥ 8.19.0の場合は`mqtts`も）が含まれていることを確認してください。
 
-> If your curl version is too old, upgrade via your package manager or download from https://curl.se/download.
+> curlのバージョンが古い場合は、パッケージマネージャーでアップグレードするか、https://curl.se/download からダウンロードしてください。
 >
-> On macOS, use `brew install curl` to install the latest version.
+> macOSの場合は、`brew install curl`で最新バージョンをインストールできます。
 
-## MQTT Broker Setup
+## MQTTブローカーの準備
 
-You need an MQTT broker to connect to. This guide uses EMQX, which supports both MQTT and MQTTS.
+接続先としてMQTTブローカーが必要です。本ガイドではMQTTとMQTTSの両方をサポートするEMQXを使用します。
 
-### EMQX Public Broker (Testing)
+### EMQXパブリックブローカー（テスト用）
 
-For quick testing without deploying your own broker, you can use the EMQX public broker.
+独自にブローカーを構築せずに手軽にテストしたい場合は、EMQXのパブリックブローカーを利用できます。
 
-| Parameter  | Value            |
-| ---------- | ---------------- |
-| Broker     | `broker.emqx.io` |
-| MQTT Port  | `1883`           |
-| MQTTS Port | `8883`           |
+| パラメーター | 値                  |
+| ------------ | ------------------- |
+| ブローカー   | `broker.emqx.io`    |
+| MQTTポート   | `1883`              |
+| MQTTSポート  | `8883`              |
 
-The public broker is intended for testing and demonstration purposes only.
+パブリックブローカーはテストおよびデモ目的のみの利用を想定しています。
 
-### EMQX Enterprise Deployment
+### EMQX Enterpriseのデプロイ環境
 
-For production scenarios, connect curl to your own EMQX Enterprise deployment using the broker address, ports, authentication credentials, and TLS configuration defined in your environment.
+本番環境では、curlを自社のEMQX Enterpriseデプロイメントに接続します。ブローカーのアドレス、ポート、認証情報、TLS設定は環境に応じて設定してください。
 
-Typical configurations include:
+一般的な構成例：
 
-- Custom broker hostname or IP address
-- MQTT and/or MQTTS listeners enabled in EMQX Enterprise
-- Username/password authentication, token-based authentication, or mutual TLS
-- Access control rules (ACLs) applied to topics
+- カスタムブローカーのホスト名またはIPアドレス
+- EMQX Enterpriseで有効化されたMQTTおよび／またはMQTTSリスナー
+- ユーザー名／パスワード認証、トークン認証、または相互TLS認証
+- トピックに適用されるアクセス制御ルール（ACL）
 
-Refer to your EMQX Enterprise listener, authentication, and TLS configuration when constructing curl commands.
+curlコマンドを作成する際は、EMQX Enterpriseのリスナー設定、認証設定、TLS設定を参照してください。
 
-**Notes**
+**注意事項**
 
-- Replace `broker.emqx.io` with your EMQX Enterprise broker address in all examples when testing against your own deployment.
-- Ensure the corresponding MQTT or MQTTS listener is enabled in EMQX Enterprise before connecting.
+- 例示の`broker.emqx.io`は、自社のEMQX Enterpriseブローカーアドレスに置き換えてください。
+- 接続前にEMQX Enterpriseで対応するMQTTまたはMQTTSリスナーが有効になっていることを確認してください。
 
-> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated).
+> 自己管理型のEMQX Enterpriseに加え、完全マネージドMQTTサービスである[EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html)（ServerlessまたはDedicated）への接続にもcurlを利用可能です。
 >
-> The curl MQTT/MQTTS usage remains the same. Use the broker address, ports, and authentication information provided by EMQX Cloud.
+> curlのMQTT/MQTTS利用方法は同じで、EMQX Cloudから提供されるブローカーアドレス、ポート、認証情報を使用してください。
 
-### Connect to EMQX Enterprise with curl
+### curlでEMQX Enterpriseに接続する
 
-In MQTT, clients establish a connection to the broker as part of an operation, such as subscribing to a topic or publishing a message. There is no separate “connect” command.
+MQTTでは、クライアントはトピックのサブスクライブやメッセージのパブリッシュなどの操作時にブローカーへ接続を確立します。独立した「接続」コマンドはありません。
 
-When using curl with EMQX Enterprise, a connection is established automatically when you run a subscribe or publish command using your Enterprise broker address (and authentication or TLS settings, if configured).
+curlでEMQX Enterpriseを利用する場合、サブスクライブまたはパブリッシュコマンドを実行すると、自動的に接続が確立されます（Enterpriseブローカーアドレスや認証・TLS設定がある場合はそれに従います）。
 
-For example, the following command connects to EMQX Enterprise and subscribes to a topic in a single step:
+例えば、以下のコマンドはEMQX Enterpriseに接続し、トピックをサブスクライブします。
 
 ```bash
 curl -N mqtts://your-enterprise-broker.example.com/curl/test
 ```
 
-> **Note**: MQTTS (`mqtts://`) requires curl 8.19.0 or later. For curl versions 7.70.0 to 8.18.x, use `mqtt://` instead.
+> **注意**：MQTTS（`mqtts://`）はcurl 8.19.0以降が必要です。curl 7.70.0〜8.18.xの場合は`mqtt://`を使用してください。
 
-## Understand curl MQTT URL Scheme
+## curlのMQTT URLスキームの理解
 
-curl uses a URL-based syntax for MQTT operations:
+curlはMQTT操作にURLベースの構文を使用します：
 
 ```
 mqtt[s]://[user:password@]broker[:port]/topic
 ```
 
-Where:
-- `mqtt[s]` indicates the protocol (`mqtt` or `mqtts`).
-- `[user:password@]` is optional authentication.
-- `broker` is the broker hostname or IP address.
-- `[:port]` is the optional port number. If no port is specified, curl uses the default:
-  - `1883` for `mqtt://`
-  - `8883` for `mqtts://`
-- `/topic` is the MQTT topic path, for example, `/sensor/temperature`.
+各要素の意味：
 
-## curl MQTT Output Format
+- `mqtt[s]`：プロトコル（`mqtt`または`mqtts`）
+- `[user:password@]`：認証情報（省略可能）
+- `broker`：ブローカーのホスト名またはIPアドレス
+- `[:port]`：省略可能なポート番号。指定しない場合はデフォルトを使用：
+  - `mqtt://`は`1883`
+  - `mqtts://`は`8883`
+- `/topic`：MQTTトピックパス（例：`/sensor/temperature`）
 
-When subscribing to a topic, curl outputs raw MQTT message data in the following format:
+## curlのMQTT出力フォーマット
+
+トピックをサブスクライブすると、curlはMQTTメッセージを以下の形式で生データとして出力します：
 
 ```
-[2 bytes: topic length (big-endian)] [topic string] [payload]
+[2バイト: トピック長（ビッグエンディアン）] [トピック文字列] [ペイロード]
 ```
 
-For example, a message `"hello"` on the topic `curl/test` appears as:
+例えば、トピック`curl/test`にメッセージ`"hello"`が届くと、出力は次のようになります：
 
 ```
 curl/testhello
 ```
 
-The output is a binary format where the topic name and payload are concatenated together, making it difficult to read without parsing.
+この出力はトピック名とペイロードが連結されたバイナリ形式であり、そのままでは読みづらいです。
 
-This output is binary and not human-readable by default. See [Parse MQTT Messages](#parse-mqtt-messages) below for conversion examples.
+読みやすく変換する方法は後述の[MQTTメッセージの解析](#parse-mqtt-messages)を参照してください。
 
-## Subscribe to Topics
+## トピックのサブスクライブ
 
-Subscribing keeps the connection open and prints incoming messages to `stdout`.
+サブスクライブは接続を維持し、受信したメッセージを`stdout`に出力します。
 
-### Basic Subscription (Unencrypted)
+### 基本的なサブスクライブ（暗号化なし）
 
 ```bash
 curl -N mqtt://broker.emqx.io/curl/test --output messages.bin
 ```
 
-The `-N` option disables output buffering, allowing messages to appear immediately.
+`-N`オプションは出力バッファリングを無効化し、メッセージを即時表示します。
 
-### Secure Subscription with MQTTS (curl ≥ 8.19.0)
+### MQTTSによるセキュアサブスクライブ（curl ≥ 8.19.0）
 
 ```bash
 curl -N mqtts://broker.emqx.io/curl/test --output messages.bin
 ```
 
-### Subscription with Authentication
+### 認証付きサブスクライブ
 
 ```bash
 curl -N -u "username:password" \
   mqtts://your-broker.emqxsl.com/curl/test --output messages.bin
 ```
 
-## Parse MQTT Messages
+## MQTTメッセージの解析
 
-When subscribing to a topic, curl outputs MQTT messages in a **binary format** rather than a formatted text representation.
+curlのサブスクライブ出力は**バイナリ形式**であり、整形されたテキスト表示ではありません。
 
-Each incoming message is structured as:
+各メッセージは以下の構造です：
 
-- 2 bytes: topic length (big-endian)
-- topic string
-- payload (raw bytes)
+- 2バイト：トピック長（ビッグエンディアン）
+- トピック文字列
+- ペイロード（生バイト列）
 
-As a result, the output appears as a concatenation of topic and payload and is not human-readable by default.
+そのため、出力はトピックとペイロードが連結された形で表示され、人間には読みづらいです。
 
-### Bash One-Liner
+### Bashワンライナー
 
-To make subscription output readable, pipe curl output through a shell parser:
+curlの出力をシェルでパースし、読みやすくする例：
 
 ```bash
 curl -sN mqtt://broker.emqx.io/curl/test | \
   while IFS= read -r -d $'\0' d; do
     [ -z "$d" ] && continue
 
-    # curl's MQTT subscribe output is: 2-byte topic length (MSB,LSB), topic, payload.
-    # This loop uses NUL (0x00) as a delimiter, so we are seeing the LSB first and
-    # implicitly using MSB=0 (works for topic lengths 0..255).
+    # curlのMQTTサブスクライブ出力は2バイトのトピック長（MSB,LSB）、トピック、ペイロード。
+    # このループはNUL(0x00)を区切りにしているためLSBが先に見えており、
+    # MSB=0と暗黙的に仮定（トピック長0〜255バイトに対応）。
     lsb=$(printf "%d" "'${d:0:1}")
     topic_len=$((lsb))
     echo "[${d:1:$topic_len}] ${d:$((1 + topic_len))}"
   done
 ```
 
-Output format:
+出力例：
 
 ```
 [curl/test] hello
 ```
 
-This parser uses a simplified approach suitable for demonstration purposes.
+このパーサーは簡易的な方法で、デモ用途に適しています。
 
-It works as follows:
+動作概要：
 
-1. The stream is split on null bytes.
-2. The topic length is derived from the lower byte of the two-byte topic length field. This approach is valid only for topics shorter than 256 bytes, where the high byte is zero.
-3. The topic string and payload are extracted using the length prefix.
-4. Each message is printed as `[topic] payload`.
+1. ストリームをヌルバイトで分割
+2. トピック長の下位バイトを取得（上位バイトは0と仮定）
+3. トピック文字列とペイロードを長さに基づき抽出
+4. `[トピック] ペイロード`形式で表示
 
-### Save Raw Output for Inspection
+### 生データをファイルに保存して確認
 
-To better understand the binary structure of MQTT messages, you can save the raw subscription output to a file and inspect it manually.
+MQTTメッセージのバイナリ構造を理解するため、サブスクライブ出力をファイルに保存し、手動で確認できます。
 
-Save the output:
+保存例：
 
 ```bash
 curl -sN mqtt://broker.emqx.io/curl/test > messages.bin
 ```
 
-Inspect the file using `hexdump`:
+`hexdump`で内容を確認：
 
 ```bash
 hexdump -C messages.bin
 ```
 
-This allows you to clearly see the topic length prefix, topic bytes, and payload layout.
+トピック長のプレフィックスやトピック名、ペイロードの配置が明確に見えます。
 
-### Reusable Shell Function
+### 再利用可能なシェル関数
 
-For repeated use, the parser can be wrapped in a reusable shell function:
+繰り返し使う場合は、以下のように関数化できます：
 
 ```bash
 mqtt_subscribe() {
   curl -sN "$1" | while IFS= read -r -d $'\0' d; do
     [ -z "$d" ] && continue
 
-    # curl's MQTT subscribe output is: 2-byte topic length (MSB,LSB), topic, payload.
-    # This loop uses NUL (0x00) as a delimiter, so we are seeing the LSB first and
-    # implicitly using MSB=0 (works for topic lengths 0..255).
+    # curlのMQTTサブスクライブ出力は2バイトのトピック長（MSB,LSB）、トピック、ペイロード。
+    # このループはNUL(0x00)区切りでLSBが先に見え、MSB=0と仮定（トピック長0〜255バイト対応）。
     lsb=$(printf "%d" "'${d:0:1}")
     topic_len=$((lsb))
     echo "[${d:1:$topic_len}] ${d:$((1 + topic_len))}"
@@ -219,40 +219,40 @@ mqtt_subscribe() {
 }
 ```
 
-Usage example:
+使用例：
 
 ```bash
 mqtt_subscribe "mqtt://broker.emqx.io/curl/test"
 ```
 
-> For production use or complex parsing requirements, consider [MQTTX CLI](https://mqttx.app/cli), which provides properly formatted output, full MQTT 5.0 support, QoS handling, and wildcard subscriptions.
+> 本格的な利用や複雑な解析には、[MQTTX CLI](https://mqttx.app/cli)の利用を推奨します。MQTT 5.0対応、QoS制御、ワイルドカードサブスクライブなどが可能です。
 
-## Publish Messages
+## メッセージのパブリッシュ
 
-To publish, use curl's `-d` (data) flag with the message payload.
+メッセージをパブリッシュするには、curlの`-d`（データ）オプションでペイロードを指定します。
 
-### Basic Publish (Unencrypted)
+### 基本的なパブリッシュ（暗号化なし）
 
 ```bash
 curl -d "Hello from curl" \
   mqtt://broker.emqx.io/curl/test
 ```
 
-### Secure Publish with MQTTS (curl ≥ 8.19.0)
+### MQTTSによるセキュアパブリッシュ（curl ≥ 8.19.0）
 
 ```bash
 curl -d "Secure message from curl" \
   mqtts://broker.emqx.io/curl/test
 ```
 
-### Publish JSON Payloads
+### JSONペイロードのパブリッシュ
 
 ```bash
 curl -d '{"sensor_id":"temp-001","value":23.5}' \
   mqtt://broker.emqx.io/sensors/temperature
 ```
 
-### Publish with Authentication
+### 認証付きパブリッシュ
 
 ```bash
 curl -u "username:password" \
@@ -260,27 +260,27 @@ curl -u "username:password" \
   mqtts://your-broker.example.com/devices/status
 ```
 
-## Relevant curl Options
+## 主要なcurlオプション
 
-The following table summarizes curl command-line options used throughout this document.
+本ドキュメントで使用するcurlコマンドラインオプションの概要：
 
-| Option         | Description                                           | Typical Usage   |
-| -------------- | ----------------------------------------------------- | --------------- |
-| `-N`           | Disable output buffering (required for subscriptions) | Subscribe       |
-| `-d`           | Message payload to publish                            | Publish         |
-| `-u user:pass` | Username and password authentication                  | Authentication  |
-| `-v`           | Verbose output (shows MQTT handshake)                 | Troubleshooting |
-| `-s`           | Silent mode (suppress progress output)                | Scripts         |
-| `--cacert`     | CA certificate for TLS verification                   | MQTTS           |
-| `--cert`       | Client certificate for mutual TLS                     | MQTTS           |
-| `--key`        | Client private key for mutual TLS                     | MQTTS           |
-| `-k`           | Skip TLS verification (testing only)                  | Troubleshooting |
+| オプション       | 説明                                         | 主な用途         |
+| ---------------- | -------------------------------------------- | ---------------- |
+| `-N`             | 出力バッファリングを無効化（サブスクライブ時必須） | サブスクライブ   |
+| `-d`             | パブリッシュするメッセージペイロード         | パブリッシュ     |
+| `-u user:pass`   | ユーザー名とパスワードによる認証             | 認証             |
+| `-v`             | 詳細出力（MQTTハンドシェイク表示）           | トラブルシューティング |
+| `-s`             | サイレントモード（進捗表示抑制）             | スクリプト       |
+| `--cacert`       | TLS検証用のCA証明書指定                       | MQTTS            |
+| `--cert`         | 相互TLS用のクライアント証明書                 | MQTTS            |
+| `--key`          | 相互TLS用のクライアント秘密鍵                 | MQTTS            |
+| `-k`             | TLS検証をスキップ（テスト目的のみ）           | トラブルシューティング |
 
-> For a complete list of curl options, see the official curl documentation.
+> curlの全オプション一覧は公式ドキュメントを参照してください。
 
-## TLS Configuration (MQTTS)
+## TLS設定（MQTTS）
 
-### CA Certificate Verification
+### CA証明書検証
 
 ```bash
 curl --cacert /path/to/ca.crt \
@@ -288,7 +288,7 @@ curl --cacert /path/to/ca.crt \
   mqtts://your-broker.example.com/secure/topic
 ```
 
-### Mutual TLS (mTLS)
+### 相互TLS（mTLS）
 
 ```bash
 curl --cacert /path/to/ca.crt \
@@ -298,31 +298,31 @@ curl --cacert /path/to/ca.crt \
   mqtts://your-broker.example.com/secure/topic
 ```
 
-> Use `-k` to skip certificate verification for testing only.
+> 証明書検証をスキップするには`-k`を使用しますが、本番環境では推奨しません。
 
-## Common Use Cases
+## よくあるユースケース
 
-### Broker Connectivity Testing
+### ブローカー接続テスト
 
 ```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
-This verifies DNS resolution, TCP connectivity, and MQTT handshake.
+DNS解決、TCP接続、MQTTハンドシェイクの確認に使います。
 
-**Successful connection indicators**
+**接続成功の目安**
 
-When the connection is successful, the verbose output typically shows:
+成功時は詳細出力に以下が含まれます：
 
-- The broker hostname resolving to one or more IP addresses
-- A successful TCP connection to port `1883` (MQTT) or `8883` (MQTTS)
-- An MQTT handshake completed without errors
+- ブローカーのホスト名がIPアドレスに解決される
+- ポート`1883`（MQTT）または`8883`（MQTTS）へのTCP接続成功
+- MQTTハンドシェイクがエラーなく完了
 
-If no errors are printed and the command exits normally, the connection to the EMQX broker is established.
+エラーが表示されず正常終了すれば、EMQXブローカーへの接続が確立されています。
 
-### Shell Scripting and IoT Prototyping
+### シェルスクリプトやIoTプロトタイピング
 
-Example: Simulate a temperature sensor publishing data every 5 seconds.
+例：5秒ごとに温度センサーのデータをパブリッシュするシミュレーション
 
 ```bash
 #!/bin/bash
@@ -337,161 +337,164 @@ while true; do
 done
 ```
 
-## Limitations of curl for MQTT
+## curlのMQTTにおける制限
 
-While curl is useful for testing and scripting, it has the following limitations:
+curlはテストやスクリプト用途に便利ですが、以下の制限があります：
 
-| Limitation             | Description                          |
-| ---------------------- | ------------------------------------ |
-| QoS 0 only             | No support for QoS 1 or 2            |
-| Binary output          | Subscription output is not formatted |
-| No wildcards           | Cannot subscribe using `+` or `#`    |
-| Single topic           | One topic per command                |
-| No persistent sessions | Stateless connections                |
+| 制限事項               | 説明                                  |
+| ---------------------- | ------------------------------------- |
+| QoS 0のみ対応          | QoS 1や2はサポートされていません      |
+| バイナリ出力           | サブスクライブ出力は整形されていません |
+| ワイルドカード非対応   | `+`や`#`によるサブスクライブ不可       |
+| 単一トピックのみ対応   | 1コマンドで複数トピック不可            |
+| 永続セッション非対応   | ステートレス接続のみ                   |
 
-For advanced MQTT features, use [MQTTX CLI](https://mqttx.app/cli) or EMQX client SDKs.
+高度なMQTT機能が必要な場合は、[MQTTX CLI](https://mqttx.app/cli)やEMQXクライアントSDKの利用を推奨します。
 
-## Verify MQTT Support in curl
+## curlでMQTTサポートを確認する
 
 ```bash
 curl --version | grep -i mqtt
 ```
 
-If the command produces output containing `mqtt` (or `mqtts` for curl ≥ 8.19.0), your curl build includes MQTT support. If MQTT is missing, you may need to:
+`mqtt`（curl ≥ 8.19.0なら`mqtts`も）が表示されれば、MQTTサポート付きのcurlビルドです。表示されない場合は：
 
-- Upgrade curl to version 7.70.0 or later
-- Install a build with MQTT enabled
-- Compile curl from source with `--enable-mqtt`
+- curlを7.70.0以降にアップグレード
+- MQTT対応ビルドをインストール
+- ソースから`--enable-mqtt`オプション付きでビルド
 
-## Troubleshooting
+を検討してください。
 
-This section lists common issues when using curl with EMQX and how to resolve them.
+## トラブルシューティング
 
-### Connection Refused or Timeout
+curlとEMQXを使う際のよくある問題と対処法を紹介します。
 
-**Description**
+### 接続拒否やタイムアウト
+
+**症状**
 
 - `Connection refused`
 - `Failed to connect to broker`
-- Connection hangs and then times out
+- 接続がハングしタイムアウトする
 
-**Possible causes**
+**原因候補**
 
-- Incorrect broker address or port
-- Network firewall blocking MQTT/MQTTS ports
-- Broker is not running or is not listening on the specified port
+- ブローカーアドレスやポートが誤っている
+- ネットワークファイアウォールがMQTT/MQTTSポートを遮断
+- ブローカーが起動していない、または指定ポートで待ち受けていない
 
-**Solution**
+**対処法**
 
-- Verify the broker address and port:
-  - MQTT: `1883`
-  - MQTTS: `8883`
-- Check network connectivity using verbose mode:
+- ブローカーアドレスとポートを確認：
+  - MQTT：`1883`
+  - MQTTS：`8883`
+- 詳細モードでネットワーク接続を確認：
 
 ```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
-### MQTT or MQTTS Not Supported by curl
+### curlでMQTTやMQTTSがサポートされていない
 
-**Description**
+**症状**
 
 - `Protocol "mqtt" not supported`
 - `Unknown protocol`
 
-**Possible causes**
+**原因候補**
 
-- curl was built without MQTT support
-- curl version is too old
+- MQTTサポートなしでビルドされたcurl
+- curlのバージョンが古い
 
-**Solution**
+**対処法**
 
-- Verify protocol support:
+- プロトコルサポートを確認：
 
 ```bash
 curl --version
 ```
 
-Ensure `mqtt` (and `mqtts` for TLS) appears in the **Protocols** list.
+`mqtt`（およびTLS対応なら`mqtts`）が**Protocols**に含まれているか確認。
 
-- Upgrade curl or install a build with MQTT enabled.
+- curlをアップグレードまたはMQTT対応ビルドをインストール。
 
-### TLS Handshake or Certificate Errors (MQTTS)
+### TLSハンドシェイクや証明書エラー（MQTTS）
 
-**Description**
+**症状**
 
 - `SSL certificate problem`
 - `TLS handshake failed`
 - `Unable to get local issuer certificate`
 
-**Possible causes**
+**原因候補**
 
-- Missing or incorrect CA certificate
-- Broker uses a private or self-signed certificate
+- CA証明書が不足または誤っている
+- ブローカーがプライベートまたは自己署名証明書を使用
 
-**Solution**
+**対処法**
 
-- Specify the CA certificate explicitly:
+- CA証明書を明示的に指定：
 
 ```bash
 curl --cacert /path/to/ca.crt \
   mqtts://your-broker.example.com/topic
 ```
 
-- For testing only, skip verification (not recommended for production):
+- テスト目的で検証をスキップ（本番非推奨）：
 
 ```bash
 curl -k mqtts://your-broker.example.com/topic
 ```
 
-### No Messages Received When Subscribing
+### サブスクライブ時にメッセージが受信できない
 
-**Description**
+**症状**
 
-- Subscription command runs, but no output is displayed
+- サブスクライブコマンドは動作するが出力がない
 
-**Possible causes**
+**原因候補**
 
-- Output buffering enabled
-- No messages published to the topic
-- Topic name mismatch
+- 出力バッファリングが有効
+- トピックにメッセージがパブリッシュされていない
+- トピック名の不一致
 
-**Solution**
+**対処法**
 
-- Always use `-N` for subscriptions:
+- サブスクライブ時は必ず`-N`を使用：
 
 ```bash
 curl -N mqtt://broker.emqx.io/curl/test
 ```
 
-- Verify that messages are being published to the same topic.
+- メッセージが同じトピックにパブリッシュされているか確認。
 
-### Authentication Failed
+### 認証失敗
 
-**Description**
+**症状**
 
-- Connection closes immediately
-- Authorization or authentication errors in broker logs
+- 接続が即座に切断される
+- ブローカーのログに認証・認可エラー
 
-**Possible causes**
+**原因候補**
 
-- Incorrect username or password
-- ACL restrictions on the topic
+- ユーザー名またはパスワードの誤り
+- トピックに対するACL制限
 
-**Solution**
+**対処法**
 
-- Verify credentials:
+- 認証情報を確認：
 
 ```bash
 curl -u "username:password" \
   mqtts://your-broker.example.com/topic
 ```
 
-- Check authentication and ACL configuration in EMQX.
+- EMQXの認証設定とACLを確認。
 
-## More Information
+## さらに詳しく
 
-For a detailed, step-by-step walkthrough of using curl with MQTT and MQTTS, including background explanations, additional examples, and usage considerations, see the blog post: [Using curl for MQTT: Connect, Publish, and Subscribe with Secure IoT Communication](https://www.emqx.com/en/blog/using-curl-for-mqtt).
+curlを使ったMQTTおよびMQTTSの接続、パブリッシュ、サブスクライブの詳細な手順や背景解説、追加例、利用上の注意点は、以下のブログ記事を参照してください。
 
-The blog complements this Enterprise-focused guide by providing deeper explanations and extended examples.
+[Using curl for MQTT: Connect, Publish, and Subscribe with Secure IoT Communication](https://www.emqx.com/en/blog/using-curl-for-mqtt)
 
+本ブログは本Enterprise向けガイドを補完し、より深い解説と拡張例を提供しています。
