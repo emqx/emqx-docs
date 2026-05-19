@@ -596,6 +596,11 @@
       title_ja: EMQX Tables
       path: data-integration/emqx-tables
       lang: en
+    - title_en: EMQX Tables
+      title_cn: EMQX Tables
+      title_ja: EMQX Tables
+      path: data-integration/emqx-tables
+      lang: ja
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       title_ja: GCP PubSub
@@ -1228,16 +1233,26 @@
           title_cn: MQTT Advanced
           title_ja: MQTT 応用
           path: design/mqtt-advanced
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: design/mqtt-guide
+      collapsed: true
+      children:
+        - title_en: MQTT Basics
+          title_cn: MQTT Basics
+          title_ja: MQTT 基本
+          path: design/mqtt-basics
+        - title_en: MQTT Advanced
+          title_cn: MQTT Advanced
+          title_ja: MQTT 応用
+          path: design/mqtt-advanced
     - title_en: MQTT 教程
       title_cn: MQTT 教程
       title_ja: MQTT チュートリアル
       lang: cn
       path: https://www.emqx.com/zh/mqtt-guide
-    - title_en: MQTT Guide
-      title_cn: MQTT Guide
-      title_ja: MQTT ガイド
-      lang: ja
-      path: https://www.emqx.com/ja/mqtt-guide
     - title_en: Design and Implementation
       title_cn: 设计与实现
       title_ja: 設計と実装
