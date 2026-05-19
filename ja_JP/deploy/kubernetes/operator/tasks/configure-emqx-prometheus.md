@@ -1,18 +1,18 @@
-# Monitor EMQX cluster by Prometheus and Grafana
+# Prometheus と Grafana による EMQX クラスターの監視
 
-## Task Target
-Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter) and monitor EMQX cluster by Prometheus and Grafana.
+## タスク対象
+[EMQX Exporter](https://github.com/emqx/emqx-exporter) をデプロイし、Prometheus と Grafana によって EMQX クラスターを監視します。
 
-## Deploy Prometheus and Grafana
+## Prometheus と Grafana のデプロイ
 
-Prometheus' deployment documentation can refer to [Prometheus](https://github.com/prometheus-operator/prometheus-operator)
-Grafana' deployment documentation can refer to [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/)
+Prometheus のデプロイ方法については [Prometheus](https://github.com/prometheus-operator/prometheus-operator) を参照してください。  
+Grafana のデプロイ方法については [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) を参照してください。
 
-## Deploy EMQX Cluster
+## EMQX クラスターのデプロイ
 
-Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](../operator.md):
+以下は EMQX カスタムリソースの関連設定例です。デプロイしたい EMQX のバージョンに応じて対応する `apiVersion` を選択してください。詳細な対応関係は [EMQX Operator Compatibility](../operator.md) をご参照ください。
 
-EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, please refer to the document: [Integrate with Prometheus](../../../../observability/prometheus.md)
+EMQX は http インターフェースを通じて指標を公開することをサポートしています。クラスター全体の統計指標については、ドキュメント [Integrate with Prometheus](../../../../observability/prometheus.md) をご参照ください。
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -28,7 +28,7 @@ spec:
       }
 ```
 
-Save the above content as `emqx.yaml` and execute the following command to deploy the EMQX cluster:
+上記内容を `emqx.yaml` として保存し、以下のコマンドを実行して EMQX クラスターをデプロイします。
 
 ```bash
 $ kubectl apply -f emqx.yaml
@@ -36,20 +36,20 @@ $ kubectl apply -f emqx.yaml
 emqx.apps.emqx.io/emqx created
 ```
 
-Check the status of the EMQX cluster and make sure that `STATUS` is `Running`, which may take some time to wait for the EMQX cluster to be ready.
+EMQX クラスターのステータスを確認し、`STATUS` が `Running` になるまで待ちます。クラスターの準備には時間がかかる場合があります。
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
+```bash
+$ kubectl get emqx emqx
+NAME   IMAGE                              STATUS    AGE
+emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+```
 
-## Create API Secret
-emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an [API Key](../../../../dashboard/system.md#api-keys).
+## API シークレットの作成
+emqx-exporter と Prometheus は EMQX ダッシュボードの API からメトリクスを取得するため、ダッシュボードにログインして [API キー](../../../../dashboard/system.md#api-keys) を作成してください。
 
-## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
+## [EMQX Exporter](https://github.com/emqx/emqx-exporter) のデプロイ
 
-The `emqx-exporter` is designed to expose partial metrics that are not included in the EMQX Prometheus API.
+`emqx-exporter` は EMQX の Prometheus API に含まれていない一部のメトリクスを公開するために設計されています。
 
 ```yaml
 apiVersion: v1
@@ -89,7 +89,7 @@ spec:
           image: emqx-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            # "emqx-dashboard-service-name" is the service name that creating by operator for exposing 18083 port
+            # "emqx-dashboard-service-name" は operator により 18083 ポートを公開するために作成されたサービス名です
             - --emqx.nodes=${emqx-dashboard-service-name}:18083
             - --emqx.auth-username=${paste_your_new_api_key_here}
             - --emqx.auth-password=${paste_your_new_secret_here}
@@ -109,15 +109,16 @@ spec:
               memory: 20Mi
 ```
 
-> Set the arg "--emqx.nodes" to the service name that creating by operator for exposing 18083 port. Check out the service name by call `kubectl get svc`.
+> `--emqx.nodes` の引数は、operator によって 18083 ポートを公開するために作成されたサービス名に設定してください。サービス名は `kubectl get svc` コマンドで確認できます。
 
-Save the above content as `emqx-exporter.yaml`, replace `--emqx.auth-username` and `--emqx.auth-password` with your new creating API secret, then execute the following command to deploy the emqx-exporter:
+上記内容を `emqx-exporter.yaml` として保存し、`--emqx.auth-username` と `--emqx.auth-password` を作成した API シークレットに置き換えてから、以下のコマンドで emqx-exporter をデプロイします。
 
 ```bash
 kubectl apply -f emqx-exporter.yaml
 ```
 
-Check the status of emqx-exporter pod。
+emqx-exporter Pod のステータスを確認します。
+
 ```bash
 $ kubectl get po -l="app=emqx-exporter"
 
@@ -125,8 +126,8 @@ NAME      STATUS   AGE
 emqx-exporter-856564c95-j4q5v   Running  8m33s
 ```
 
-## Configure Prometheus Monitor
-Prometheus-operator uses [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#podmonitor) and [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#servicemonitor) CRD to define how to monitor a set of pods or services dynamically.
+## Prometheus モニターの設定
+Prometheus-operator は [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#podmonitor) と [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#servicemonitor) CRD を使用して、Pod やサービスの監視方法を動的に定義します。
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -139,29 +140,29 @@ spec:
   podMetricsEndpoints:
     - interval: 5s
       path: /api/v5/prometheus/stats
-      # the name of emqx dashboard containerPort
+      # emqx ダッシュボードの containerPort 名
       port: dashboard
       relabelings:
         - action: replace
-          # user-defined cluster name, requires unique
+          # ユーザー定義のクラスター名、ユニークである必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
-          # fix value, don't modify
+          # 固定値、変更しないでください
           replacement: emqx
           targetLabel: from
         - action: replace
-          # fix value, don't modify
+          # 固定値、変更しないでください
           sourceLabels: ['pod']
           targetLabel: "instance"
   selector:
     matchLabels:
-      # the label is the same as the label of emqx pod
+      # emqx Pod のラベルと同じ
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
     matchNames:
-      # modify the namespace if your EMQX cluster deployed in other namespace
+      # EMQX クラスターを別のネームスペースにデプロイしている場合は修正してください
       #- default
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -173,7 +174,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      # the label is the same as the label of emqx exporter svc
+      # emqx exporter サービスのラベルと同じ
       app: emqx-exporter
   endpoints:
     - port: metrics
@@ -181,48 +182,49 @@ spec:
       path: /metrics
       relabelings:
         - action: replace
-          # user-defined cluster name, requires unique
+          # ユーザー定義のクラスター名、ユニークである必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
-          # fix value, don't modify
+          # 固定値、変更しないでください
           replacement: exporter
           targetLabel: from
         - action: replace
-          # fix value, don't modify
+          # 固定値、変更しないでください
           sourceLabels: ['pod']
           regex: '(.*)-.*-.*'
           replacement: $1
           targetLabel: "instance"
         - action: labeldrop
-          # fix value, don't modify
+          # 固定値、変更しないでください
           regex: 'pod'
   namespaceSelector:
     matchNames:
-      # modify the namespace if your exporter deployed in other namespace
+      # exporter を別のネームスペースにデプロイしている場合は修正してください
       #- default
 ```
 
-<p> `path` indicates the path of the indicator collection interface. In EMQX 5, the path is: `/api/v5/prometheus/stats`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx`.</p>
-<p> The value of targetLabel `cluster` represents the name of current cluster, make sure its uniqueness. </p>
+<p> `path` は指標収集インターフェースのパスを示します。EMQX 5 では `/api/v5/prometheus/stats` です。`selector.matchLabels` はマッチする Pod のラベルを示し、`apps.emqx.io/instance: emqx` となっています。</p>
+<p> targetLabel の `cluster` の値は現在のクラスター名を表し、ユニークである必要があります。</p>
 
-Save the above content as `monitor.yaml` and execute the following command:
+上記内容を `monitor.yaml` として保存し、以下のコマンドを実行してください。
 
 ```bash
 $ kubectl apply -f monitor.yaml
 ```
 
-## View EMQX Indicators on Prometheus
+## Prometheus での EMQX 指標の確認
 
-Open the Prometheus interface, switch to the Graph page, and enter `emqx` to display as shown in the following figure:
+Prometheus インターフェースを開き、Graph ページに切り替えて `emqx` と入力すると、以下の図のように表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-Switch to the **Status** -> **Targets** page, the following figure is displayed, and you can see all monitored EMQX Pod information in the cluster:
+**Status** -> **Targets** ページに切り替えると、以下の図のようにクラスター内の監視対象 EMQX Pod の情報がすべて表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
-## Import Grafana Templates
-Import all dashboard [templates](https://github.com/emqx/emqx-exporter/tree/main/grafana-dashboard/template). Open the main dashboard **EMQX** and enjoy yourself!
+## Grafana テンプレートのインポート
+すべてのダッシュボード [テンプレート](https://github.com/emqx/emqx-exporter/tree/main/grafana-dashboard/template) をインポートしてください。  
+メインダッシュボード **EMQX** を開いてお楽しみください！
 
 ![](./assets/configure-emqx-prometheus/emqx-grafana-dashboard.png)

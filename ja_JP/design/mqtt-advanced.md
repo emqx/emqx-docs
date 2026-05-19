@@ -1,115 +1,115 @@
-# MQTT Advanced
+# MQTT アドバンスド
 
-## Retained Messages
+## Retained Messages（保持メッセージ）
 
-MQTT Retained Messages enable brokers to store the most recent message for each topic, allowing newly connected subscribers to instantly receive the latest available data, without waiting for the next publish event. This mechanism is particularly valuable in scenarios like smart homes and industrial IoT, where real-time state awareness is essential even if data updates are infrequent.
+MQTTのRetained Messagesは、ブローカーが各トピックの最新メッセージを保存し、新たに接続したサブスクライバーが次のパブリッシュイベントを待たずに最新のデータを即座に受信できるようにする機能です。この仕組みは、スマートホームや産業用IoTのように、データ更新が稀でもリアルタイムの状態把握が重要なシナリオで特に有用です。
 
-EMQX offers full support for retained messages in compliance with MQTT 5.0. It allows users to view, manage, and delete retained messages through an intuitive Dashboard or via management APIs. Users can configure storage modes (memory or disk), message expiration intervals, and maximum retained entries to align with system reliability and persistence requirements.
+EMQXはMQTT 5.0に準拠した保持メッセージを完全にサポートしており、直感的なダッシュボードや管理APIを通じて保持メッセージの閲覧、管理、削除が可能です。ユーザーはストレージモード（メモリまたはディスク）、メッセージの有効期限、最大保持エントリー数を設定し、システムの信頼性や永続化要件に合わせて調整できます。
 
-To try it out, simply run `docker run -d --name emqx -p 18083:18083 -p 1883:1883 emqx/emqx-enterprise` and access the built-in Dashboard to manage retained messages effortlessly. For more advanced use cases, EMQX also supports MQTT features such as session persistence, wildcard subscriptions, and message expiry, making it an ideal platform for building robust MQTT-based applications.
+試すには、単に `docker run -d --name emqx -p 18083:18083 -p 1883:1883 emqx/emqx-enterprise` を実行し、組み込みのダッシュボードにアクセスして保持メッセージを簡単に管理できます。より高度なユースケースには、セッション永続化、ワイルドカードサブスクライブ、メッセージ有効期限などのMQTT機能もサポートしており、堅牢なMQTTベースのアプリケーション構築に最適なプラットフォームです。
 
-**Read more:** [MQTT Retained Messages: Beginner's Guide with Example](https://www.emqx.com/en/blog/mqtt5-features-retain-message#mqtt-retained-messages-in-emqx)
+**詳細はこちら:** [MQTT Retained Messages: Beginner's Guide with Example](https://www.emqx.com/en/blog/mqtt5-features-retain-message#mqtt-retained-messages-in-emqx)
 
-## Will Messages
+## Will Messages（遺言メッセージ）
 
-The MQTT Will Message is a crucial feature for handling unexpected client disconnections, allowing for graceful actions like notifying other clients or switching backup devices. When a client connects, it can specify a Will Message, which is sent by the server if the client disconnects unexpectedly, without sending a proper DISCONNECT packet. This mechanism helps monitor client status and ensure reliability in IoT applications.
+MQTTのWill Messageは、クライアントが予期せず切断された場合に他のクライアントへ通知したりバックアップ機器に切り替えたりするための重要な機能です。クライアント接続時にWill Messageを指定でき、クライアントが正常なDISCONNECTパケットを送信せずに切断された場合にサーバーがそのメッセージを送信します。この仕組みはクライアントの状態監視とIoTアプリケーションの信頼性確保に役立ちます。
 
-In MQTT 5.0, the Will Delay Interval was introduced to delay the Will Message's publication, reducing unnecessary notifications during temporary network issues. The message is stored in the server session, and its delivery depends on whether the session expires or the delay interval is met first. EMQX supports Will Message features, including retaining the message for future subscribers and integrating with session expiry notifications for enhanced client status monitoring. This functionality is integral for building resilient, real-time IoT applications, ensuring that system operators are informed of any device or client status changes promptly.
+MQTT 5.0ではWill Delay Intervalが導入され、一時的なネットワーク障害時の不要な通知を減らすためにWill Messageの公開を遅延させることが可能です。メッセージはサーバーのセッション内に保存され、セッションの有効期限切れまたは遅延時間到達のいずれか早い方で配信されます。EMQXはWill Messageの保持やセッション有効期限通知との統合などの機能をサポートし、クライアント状態の高度な監視を実現します。この機能は、レジリエントでリアルタイムなIoTアプリケーション構築に不可欠であり、システム運用者にデバイスやクライアントの状態変化を迅速に通知します。
 
-**Read more:** [MQTT Will Message (Last Will & Testament) Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/use-of-mqtt-will-message)
+**詳細はこちら:** [MQTT Will Message (Last Will & Testament) Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/use-of-mqtt-will-message)
 
-## Request / Response
+## Request / Response（リクエスト／レスポンス）
 
-MQTT 5.0 improves the Request/Response pattern with three key features: **Response Topic**, which allows requesters to specify a unique topic for responses, reducing conflicts; **Correlation Data**, which helps match responses to requests, even in asynchronous or multiple-responder scenarios; and **Response Information**, which facilitates topic permission management by allowing the requester to receive server-specific information for building response topics. These features ensure more reliable and organized communication, especially in complex IoT environments.
+MQTT 5.0はリクエスト／レスポンスパターンを3つの主要機能で改善しました。**Response Topic**はリクエスターがレスポンス用の固有トピックを指定でき、競合を減らします。**Correlation Data**は非同期や複数レスポンダーのシナリオでもレスポンスとリクエストを対応付けるのに役立ちます。**Response Information**はリクエスターがサーバー固有情報を受け取り、レスポンストピックの構築やトピック権限管理を容易にします。これらの機能により、特に複雑なIoT環境で信頼性が高く整理された通信が可能になります。
 
-**Read more:** [MQTT Request / Response Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-request-response#suggestions-for-using-mqtt-request-response)
+**詳細はこちら:** [MQTT Request / Response Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-request-response#suggestions-for-using-mqtt-request-response)
 
-## User Properties
+## User Properties（ユーザープロパティ）
 
-User Properties in MQTT 5.0 enable clients to attach custom metadata to messages using key-value pairs, similar to HTTP headers. This greatly enhances protocol flexibility by supporting use cases like file transfer, resource format identification, and intelligent message routing. User Properties can be added when connecting, publishing, subscribing, or disconnecting, allowing seamless metadata exchange between clients and brokers. For instance, they can carry file info, data format, or region tags, helping servers process messages efficiently and enabling traceable, application-level routing. EMQX fully supports User Properties, offering rich compatibility in clients like MQTT.js and the upcoming MQTTX.
+MQTT 5.0のUser Propertiesは、クライアントがメッセージにHTTPヘッダーのようなキー・バリュー形式のカスタムメタデータを付加できる機能です。これにより、ファイル転送、リソースフォーマット識別、インテリジェントなメッセージルーティングなどのユースケースでプロトコルの柔軟性が大幅に向上します。User Propertiesは接続時、パブリッシュ時、サブスクライブ時、切断時に追加可能で、クライアントとブローカー間でシームレスなメタデータ交換を実現します。例えば、ファイル情報、データフォーマット、地域タグなどを運び、サーバー側で効率的なメッセージ処理やトレーサブルなアプリケーションレベルのルーティングを可能にします。EMQXはUser Propertiesを完全サポートし、MQTT.jsや今後のMQTTXなどのクライアントで豊富な互換性を提供します。
 
-Read more: [User Properties - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-user-properties)
+**詳細はこちら:** [User Properties - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-user-properties)
 
-## Topic Alias
+## Topic Alias（トピックエイリアス）
 
-Topic Alias allows users to reduce the possibly long and repeatedly used topic name to a 2-byte integer, so as to reduce the bandwidth consumption when publishing messages.
+Topic Aliasは、長く繰り返し使用されるトピック名を2バイトの整数に短縮し、メッセージのパブリッシュ時の帯域幅消費を削減する機能です。
 
-EMQX supports Topic Alias, optimizing message sizes and improving efficiency, especially in scenarios with limited bandwidth.
+EMQXはTopic Aliasをサポートしており、特に帯域幅が限られた環境でメッセージサイズを最適化し効率を向上させます。
 
-Read more: [Topic Alias - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-topic-alias)
+**詳細はこちら:** [Topic Alias - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-topic-alias)
 
-## Payload Format Indicator & Content Type
+## Payload Format Indicator & Content Type（ペイロードフォーマットインジケーター＆コンテンツタイプ）
 
-Payload Format Indicator and Content Type are two key MQTT 5.0 properties that make message parsing more transparent. The former identifies whether the payload is binary or UTF-8 text, while the latter describes the payload format using MIME types (e.g., `application/json`).
+Payload Format IndicatorとContent Typeは、MQTT 5.0のメッセージ解析をより明確にする2つの重要なプロパティです。前者はペイロードがバイナリかUTF-8テキストかを識別し、後者はMIMEタイプ（例：`application/json`）でペイロードのフォーマットを示します。
 
-Together, they help subscribers efficiently interpret messages and allow flexible content handling without relying on topic naming conventions. EMQX supports both properties, enabling smarter payload processing in diverse IoT and messaging applications.
+これらにより、サブスクライバーは効率的にメッセージを解釈でき、トピック名に依存しない柔軟なコンテンツ処理が可能になります。EMQXは両方のプロパティをサポートし、多様なIoTやメッセージングアプリケーションでスマートなペイロード処理を実現します。
 
-Read more: [Introduction to MQTT Payload Format Indicator and Content Type | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-new-features-payload-format-indicator-and-content-type)
+**詳細はこちら:** [Introduction to MQTT Payload Format Indicator and Content Type | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt5-new-features-payload-format-indicator-and-content-type)
 
-## Shared Subscriptions
+## Shared Subscriptions（共有サブスクライブ）
 
-Shared Subscriptions in MQTT 5.0 enable multiple clients to share the consumption of messages from a single topic, ensuring balanced load distribution and improved system scalability. EMQX fully supports this feature and even extends compatibility to MQTT 3.1.1 clients, allowing existing devices to benefit from shared consumption without code changes—just by using the `$share/{group}/{topic}` format.
+MQTT 5.0のShared Subscriptionsは、複数のクライアントが単一トピックのメッセージ消費を共有し、負荷分散とシステムのスケーラビリティ向上を実現します。EMQXはこの機能を完全にサポートし、MQTT 3.1.1クライアントにも互換性を拡張しているため、既存デバイスはコード変更なしで `$share/{group}/{topic}` フォーマットを使うだけで共有消費の恩恵を受けられます。
 
-This mechanism enhances throughput, prevents single-client bottlenecks, and ensures high availability. With built-in support for multiple load balancing strategies like round robin, hash, and local-first, EMQX helps developers flexibly manage traffic distribution across clustered environments.
+この仕組みはスループットを向上させ、単一クライアントのボトルネックを防ぎ、高可用性を確保します。ラウンドロビン、ハッシュ、ローカルファーストなど複数のロードバランシング戦略を内蔵し、クラスター環境でのトラフィック分散を柔軟に管理できます。
 
-Read more: [MQTT Shared Subscriptions: Practical Guidelines and Use Cases | MQTT 5 Features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription)
+**詳細はこちら:** [MQTT Shared Subscriptions: Practical Guidelines and Use Cases | MQTT 5 Features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription)
 
-## Subscription Options
+## Subscription Options（サブスクリプションオプション）
 
-MQTT Subscription Options empower clients to customize how they receive messages. MQTT 5.0 introduces four key options to enhance flexibility and control: QoS, No Local, Retain As Published, and Retain Handling. These options allow users to manage message quality, avoid message loops in bridging, preserve the Retain flag, and decide when to receive retained messages.
+MQTTのSubscription Optionsは、クライアントがメッセージ受信方法をカスタマイズできる機能です。MQTT 5.0では、QoS、No Local、Retain As Published、Retain Handlingの4つの主要オプションが導入され、柔軟性と制御性が向上しました。これらにより、メッセージ品質の管理、ブリッジでのメッセージループ回避、Retainフラグの保持、保持メッセージの受信タイミングの制御が可能です。
 
-EMQX fully supports all MQTT 5.0 subscription options, enabling fine-grained control over message delivery behavior. For example, it helps users prevent message storms in bridge setups with No Local, and ensures consistent retained message handling across brokers with Retain As Published.
+EMQXはMQTT 5.0の全サブスクリプションオプションを完全サポートし、例えばNo Localでブリッジ環境のメッセージ嵐を防ぎ、Retain As Publishedでブローカー間の保持メッセージ処理を一貫させます。
 
-Read more: [MQTT Subscription Options Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/an-introduction-to-subscription-options-in-mqtt)
+**詳細はこちら:** [MQTT Subscription Options Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/an-introduction-to-subscription-options-in-mqtt)
 
-## Subscription Identifier
+## Subscription Identifier（サブスクリプション識別子）
 
-The Subscription Identifier in MQTT 5.0 assigns a unique identifier to each subscription, allowing clients to manage and track multiple subscriptions efficiently. This feature is particularly useful in complex applications with numerous subscriptions.
+MQTT 5.0のSubscription Identifierは、各サブスクリプションに固有の識別子を割り当て、クライアントが複数のサブスクリプションを効率的に管理・追跡できる機能です。多数のサブスクリプションを持つ複雑なアプリケーションで特に有用です。
 
-EMQX fully supports this feature, allowing clients to accurately identify which subscription a message originates from, even in cases of wildcard or overlapping subscriptions. By including Subscription Identifiers in PUBLISH packets, EMQX eliminates the need for topic filter matching at the client side, significantly improving message processing efficiency and enabling precise callback execution.
+EMQXはこの機能を完全サポートし、ワイルドカードや重複サブスクリプションの場合でも、どのサブスクリプションからメッセージが来たかを正確に特定できます。PUBLISHパケットにSubscription Identifierを含めることで、クライアント側でのトピックフィルタマッチングが不要となり、メッセージ処理効率が大幅に向上し、正確なコールバック実行が可能になります。
 
-Read more: [MQTT Subscription Identifier Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/subscription-identifier-and-subscription-options)
+**詳細はこちら:** [MQTT Subscription Identifier Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/subscription-identifier-and-subscription-options)
 
-## Keep Alive
+## Keep Alive（キープアライブ）
 
-The MQTT Keep Alive mechanism prevents half-open TCP connections by requiring the client to send regular packets within a set interval. If no data is sent, a `PINGREQ` is used to confirm connectivity. EMQX fully supports both client-specified and server-enforced Keep Alive values, including MQTT 5.0’s Server Keep Alive feature. Through configuration fields like `server_keepalive` and `keepalive_backoff`, EMQX allows fine-grained control over connection timeouts, enhancing reliability in IoT deployments and ensuring timely Will Message delivery when clients disconnect unexpectedly.
+MQTTのKeep Alive機構は、クライアントが定期的にパケットを送信することで半開きTCP接続を防止します。データ送信がない場合は `PINGREQ` を使って接続確認を行います。EMQXはクライアント指定およびサーバー強制のKeep Alive値を完全にサポートし、MQTT 5.0のServer Keep Alive機能も対応しています。`server_keepalive` や `keepalive_backoff` といった設定項目により、接続タイムアウトを細かく制御でき、IoT環境での信頼性向上やクライアントの予期せぬ切断時のWill Message送信を確実にします。
 
-Read more: [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive)
+**詳細はこちら:** [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive)
 
-## Message Expiry Interval
+## Message Expiry Interval（メッセージ有効期限間隔）
 
-Message Expiry Interval in MQTT 5.0 allows clients to set a time limit for how long a message should be stored by the broker if it cannot be delivered immediately. After the interval expires, the message is discarded, preventing outdated information from being sent.
+MQTT 5.0のMessage Expiry Intervalは、ブローカーがメッセージを即時配信できない場合に保存する期間の上限をクライアントが設定できる機能です。有効期限が切れるとメッセージは破棄され、古い情報の送信を防ぎます。
 
-EMQX fully supports this feature, including decrementing the expiry interval during message forwarding or bridging, ensuring message timeliness across distributed deployments.
+EMQXはこの機能を完全にサポートし、メッセージの転送やブリッジ時に有効期限を減算することで、分散環境全体でメッセージの鮮度を維持します。
 
-Read more: [Introduction to MQTT Message Expiry Interval | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt-message-expiry-interval)
+**詳細はこちら:** [Introduction to MQTT Message Expiry Interval | MQTT 5 Features](https://www.emqx.com/en/blog/mqtt-message-expiry-interval)
 
-## Maximum Packet Size
+## Maximum Packet Size（最大パケットサイズ）
 
-The Maximum Packet Size property in MQTT 5.0 allows clients and servers to negotiate a safe upper limit for packet size, preventing resource exhaustion on constrained devices. Clients declare their receiving limit in the `CONNECT` packet, while servers respond with their limit via the `CONNACK` packet. EMQX enforces this bi-directional constraint and ensures protocol compliance, dropping oversized messages or stripping low-priority metadata (like User Properties) from response packets to maintain connection stability. In shared subscription scenarios, EMQX can redirect oversized messages to eligible group members.
+MQTT 5.0のMaximum Packet Sizeプロパティは、クライアントとサーバーがパケットサイズの安全な上限を交渉し、リソース制約のあるデバイスの過負荷を防ぐ機能です。クライアントは `CONNECT` パケットで受信可能な最大サイズを宣言し、サーバーは `CONNACK` パケットで自身の制限を返します。EMQXはこの双方向制約を厳格に適用し、サイズ超過のメッセージを破棄したり、レスポンスパケットから優先度の低いメタデータ（User Propertiesなど）を削除して接続安定性を維持します。共有サブスクリプションの場合は、サイズ超過メッセージを適格なグループメンバーにリダイレクトすることも可能です。
 
-Read more: [MQTT Maximum Packet Size Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/best-practices-of-maximum-packet-size-in-mqtt)
+**詳細はこちら:** [MQTT Maximum Packet Size Explained and Example | MQTT 5 Features](https://www.emqx.com/en/blog/best-practices-of-maximum-packet-size-in-mqtt)
 
-## Reason Codes
+## Reason Codes（理由コード）
 
-MQTT 5.0 introduces a comprehensive Reason Code system that significantly enhances protocol feedback compared to MQTT 3.1.1’s limited status responses. These Reason Codes provide detailed results for connection, publish, subscribe, and other operations, enabling developers to quickly diagnose issues and optimize device management and message interactions.
+MQTT 5.0は、MQTT 3.1.1の限定的なステータス応答に比べて大幅に強化された包括的なReason Codeシステムを導入しました。これにより、接続、パブリッシュ、サブスクライブなどの操作結果を詳細に示し、開発者が問題を迅速に診断し、デバイス管理やメッセージ処理を最適化できます。
 
-EMQX fully supports MQTT 5.0 Reason Codes, empowering users with precise error handling and intelligent operation management to improve IoT system stability and responsiveness.
+EMQXはMQTT 5.0のReason Codesを完全にサポートし、正確なエラー処理とインテリジェントな運用管理を可能にして、IoTシステムの安定性と応答性を向上させます。
 
-Read more: [MQTT Reason Code Introduction and Quick Reference](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)
+**詳細はこちら:** [MQTT Reason Code Introduction and Quick Reference](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)
 
-## Enhanced Authentication
+## Enhanced Authentication（拡張認証）
 
-MQTT 5.0 introduces Enhanced Authentication, a more secure framework beyond simple password authentication, addressing its vulnerabilities, such as plaintext password transmission and lack of mutual identity verification. Enhanced Authentication leverages the AUTH packet to support multiple message exchanges and SASL mechanisms like DIGEST-MD5, SCRAM, and Kerberos.
+MQTT 5.0は、単純なパスワード認証の脆弱性（平文パスワード送信や相互認証の欠如）を解決するために、より安全な拡張認証フレームワークを導入しました。AUTHパケットを利用し、複数回のメッセージ交換やDIGEST-MD5、SCRAM、KerberosなどのSASLメカニズムをサポートします。
 
-EMQX supports SCRAM, enabling users to choose stronger, flexible authentication methods to safeguard their IoT infrastructures.
+EMQXはSCRAMをサポートしており、ユーザーはより強力で柔軟な認証方式を選択してIoTインフラを保護できます。
 
-Read more: [Leveraging Enhanced Authentication for MQTT Security](https://www.emqx.com/en/blog/leveraging-enhanced-authentication-for-mqtt-security)
+**詳細はこちら:** [Leveraging Enhanced Authentication for MQTT Security](https://www.emqx.com/en/blog/leveraging-enhanced-authentication-for-mqtt-security)
 
-## Control Packets
+## Control Packets（制御パケット）
 
-MQTT control packets define how clients and brokers communicate, including 15 types covering operations like connecting, publishing, and subscribing. Each packet includes a Fixed Header, optional Variable Header, and optional Payload, structured for lightweight and efficient data exchange. MQTT 5.0 further enhances flexibility by introducing properties and improved authentication.
+MQTTの制御パケットは、クライアントとブローカー間の通信方法を定義し、接続、パブリッシュ、サブスクライブなど15種類の操作をカバーします。各パケットは固定ヘッダー、任意の可変ヘッダー、任意のペイロードで構成され、軽量かつ効率的なデータ交換を実現します。MQTT 5.0ではプロパティや認証機能の強化も行われています。
 
-Read more: [MQTT Control Packets: A Beginner's Guide](https://www.emqx.com/en/blog/introduction-to-mqtt-control-packets)
+**詳細はこちら:** [MQTT Control Packets: A Beginner's Guide](https://www.emqx.com/en/blog/introduction-to-mqtt-control-packets)
 
-For more information about MQTT, please visit: [MQTT Guide 2025: Beginner to Advanced](https://www.emqx.com/en/mqtt-guide)
+MQTTの詳細については、こちらをご覧ください: [MQTT Guide 2025: Beginner to Advanced](https://www.emqx.com/en/mqtt-guide)

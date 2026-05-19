@@ -1,18 +1,18 @@
-# Change EMQX Log Level
+# EMQXのログレベル変更
 
-## Task Target
+## 対象タスク
 
-Modify the log level of EMQX cluster.
+EMQXクラスターのログレベルを変更します。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
+以下はEMQXカスタムリソースの関連設定です。デプロイしたいEMQXのバージョンに応じて対応するAPIVersionを選択してください。具体的な互換性については[EMQX Operator Compatibility](../operator.md)を参照してください。
 
-`apps.emqx.io/v2beta1 EMQX` supports configuration of EMQX cluster log level through `.spec.config.data`. The configuration of config.data can refer to the document: [Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual).
+`apps.emqx.io/v2beta1 EMQX`では、`.spec.config.data`を通じてEMQXクラスターのログレベルを設定できます。`config.data`の設定方法は[Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual)を参照してください。
 
-> This field is only allowed to be configured when creating an EMQX cluster, and does not support updating. If you need to modify the cluster log level after creating EMQX, please modify it through EMQX Dashboard.
+> このフィールドはEMQXクラスター作成時のみ設定可能で、更新はサポートされていません。作成後にクラスターのログレベルを変更する場合は、EMQXダッシュボードから変更してください。
 
-+ Save the following content as a YAML file and deploy it with the kubectl apply command
++ 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -35,9 +35,9 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
         type: LoadBalancer
   ```
 
-  > The `.spec.config.data` field configures the EMQX cluster log level to `debug`.
+  > `.spec.config.data`フィールドでEMQXクラスターのログレベルを`debug`に設定しています。
 
-+ Wait for the EMQX cluster to be ready, you can check the status of the EMQX cluster through the kubectl get command, please make sure that `STATUS` is Running, this may take some time
++ EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
 
   ```bash
   $ kubectl get emqx emqx
@@ -45,7 +45,7 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
   emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
   ```
 
-+ EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
++ EMQX Operatorは2つのEMQX Serviceリソースを作成します。1つは`emqx-dashboard`、もう1つは`emqx-listeners`で、それぞれEMQXコンソールとEMQXのリスニングポートに対応しています。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -53,19 +53,19 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
   192.168.1.200
   ```
 
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
+  ブラウザで`http://192.168.1.200:18083`にアクセスし、デフォルトのユーザー名とパスワード`admin/public`でEMQXコンソールにログインします。
 
-## Verify Log Level
+## ログレベルの確認
 
-[MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers to more Quickly develop and debug MQTT services and applications.
+[MQTTX CLI](https://mqttx.app/cli)はオープンソースのMQTT 5.0コマンドラインクライアントツールで、開発者がMQTTサーバーやアプリケーションの開発・デバッグを迅速に行うために設計されています。
 
-+ Obtain the External IP of EMQX cluster
++ EMQXクラスターの外部IPを取得します。
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
 
-+ Use MQTTX CLI to connect to EMQX cluster
++ MQTTX CLIを使ってEMQXクラスターに接続します。
 
   ```bash
   $ mqttx conn -h ${external_ip} -p 1883
@@ -74,13 +74,13 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
   [4/17/2023] [5:17:31 PM] › ✔ Connected
   ```
 
-+ Use the command line to view EMQX cluster log information
++ コマンドラインでEMQXクラスターのログ情報を確認します。
 
   ```bash
   $ kubectl logs emqx-core-0 -c emqx
   ```
 
-  You can get a print similar to the following, which means that EMQX has received a CONNECT message from the client and replied a CONNACK message to the client:
+  以下のようなログが出力されれば、EMQXがクライアントからのCONNECTメッセージを受信し、CONNACKメッセージをクライアントに返信していることを示します。
 
   ```bash
   2023-04-17T09:11:35.993031+00:00 [debug] msg: mqtt_packet_received, mfa: emqx_channel:handle_in/2, line: 360, peername: 218.190.230.144:59457, clientid: mqttx_322680d9, packet: CONNECT(Q0, R0, D0, ClientId=mqttx_322680d9, ProtoName=MQTT, ProtoVsn=5, CleanStart=true, KeepAlive=30, Username=undefined, Password=), tag: MQTT

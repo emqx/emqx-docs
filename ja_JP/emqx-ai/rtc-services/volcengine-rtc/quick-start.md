@@ -1,22 +1,22 @@
-# Build a Real-Time Voice Agent with EMQX + Volcano Engine RTC
+# EMQX + Volcano Engine RTCでリアルタイム音声エージェントを構築する
 
-This document explains how to deploy an AI Agent demo using Docker Compose. The demo uses an intelligent doll in the browser to simulate a smart device, and demonstrates how to use [Volcano Engine RTC](https://www.volcengine.com/product/veRTC/ConversationalAI) to achieve low-latency voice interaction, invoke device-side capabilities (photo capture, expression switching, volume control, etc.) through the MCP over MQTT protocol, and integrate a custom AI Agent service via Volcano Engine `CustomLLM` mode for multi-turn conversations and tool calling. It showcases the complete workflow from voice conversation to device control.
+本ドキュメントでは、Docker Composeを使ったAIエージェントデモのデプロイ方法を説明します。このデモはブラウザ上の知能人形をスマートデバイスのシミュレーションとして使用し、[Volcano Engine RTC](https://www.volcengine.com/product/veRTC/ConversationalAI)を活用して低レイテンシの音声対話を実現します。さらに、MCPを介したMQTTプロトコルでデバイス側の機能（写真撮影、表情切替、音量制御など）を呼び出し、Volcano Engineの`CustomLLM`モードを使ったカスタムAIエージェントサービスと統合し、多ターン会話やツール呼び出しを実現します。音声対話からデバイス制御までの一連のワークフローを紹介します。
 
-Watch the [demo video](https://www.bilibili.com/video/BV1P2WTzBEu4/) to see the full effect.
+[デモ動画](https://www.bilibili.com/video/BV1P2WTzBEu4/)もぜひご覧ください。
 
-## Architecture Overview
+## アーキテクチャ概要
 
-### Components
+### コンポーネント
 
-The system consists of three core components:
+システムは以下の3つのコアコンポーネントで構成されています。
 
-| Component   | Role                  | Port | Key Responsibilities                                         |
-| ----------- | --------------------- | ---- | ------------------------------------------------------------ |
-| volc-server | Volcano Engine proxy  | 3002 | Manages RTC rooms/tokens; configures the CustomLLM callback address for Volcano Engine to call back into the app |
-| web         | MCP Server            | 8080 | Frontend UI; exposes hardware control tools (camera/expression/volume) |
-| app         | MCP Client + AI Agent | 8081 | Provides the `/chat-stream` endpoint; handles LLM/VLM inference and MCP tool calls |
+| コンポーネント | 役割                   | ポート | 主な責務                                                       |
+| -------------- | ---------------------- | ------ | -------------------------------------------------------------- |
+| volc-server    | Volcano Engineプロキシ | 3002   | RTCルーム・トークン管理、Volcano EngineがアプリにコールバックするCustomLLMコールバックアドレスの設定 |
+| web            | MCPサーバー            | 8080   | フロントエンドUI、ハードウェア制御ツール（カメラ／表情／音量）を公開 |
+| app            | MCPクライアント＋AIエージェント | 8081   | `/chat-stream`エンドポイントを提供、LLM/VLM推論とMCPツール呼び出しを処理 |
 
-### Communication Flow
+### 通信フロー
 
 ```mermaid
 sequenceDiagram
@@ -27,508 +27,504 @@ sequenceDiagram
     participant App as App
     participant Cloud as Volcano Cloud
 
-    WebUI ->> Volc: Request scenario configuration and RTC credentials
+    WebUI ->> Volc: シナリオ設定とRTC認証情報の要求
 
-    WebUI ->> RTC: Establish real-time audio/video connection
-    RTC ->> WebUI: Establish real-time audio/video connection
+    WebUI ->> RTC: リアルタイム音声/映像接続の確立
+    RTC ->> WebUI: リアルタイム音声/映像接続の確立
     note over WebUI, RTC: ASR / TTS
 
-    Cloud ->> App: CustomLLM callback to /chat-stream (SSE streaming response)
+    Cloud ->> App: CustomLLMコールバック（/chat-stream、SSEストリーミング応答）
 
-    App ->> WebUI: Invoke MCP tools via MQTT
-    WebUI ->> App: Camera / expressions, etc.
+    App ->> WebUI: MCPツールをMQTT経由で呼び出し
+    WebUI ->> App: カメラ／表情など
 
-    Cloud ->> WebUI: Play back TTS synthesized audio
-
-```
-
-Core capabilities:
-
-- MCP over MQTT: Cross-network tool invocation via an EMQX Broker; the AI Agent controls device capabilities (camera, expression, volume)
-- Multimodal understanding: Integrates a VLM for vision use cases such as “What am I holding?”
-- Real-time voice interaction: End-to-end low-latency speech recognition and synthesis based on Volcano Engine RTC + ASR/TTS
-- Parallel processing architecture: Tool calling and speech synthesis run asynchronously for a smoother user experience
-
-## Prerequisites
-
-### 1. Docker Environment
-
-Docker 24+ (verify by running `docker --version`).
-
-### 2. MQTT Broker
-
-This project requires an accessible EMQX Broker for the web service (MCP Server) and the app (MCP Client + AI Agent) containers to connect to.
-
-Deployment options (choose one):
-
-- Self-hosted: See the [EMQX installation guide](https://docs.emqx.com/zh/emqx/latest/deploy/install.html)
-- Managed service: Use [EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/)
-
-Example configuration:
+    Cloud ->> WebUI: TTS合成音声の再生
 
 ```
-MQTT_BROKER_HOST=localhost        # EMQX Broker host
-MQTT_BROKER_PORT=1883             # MQTT port
-MQTT_USERNAME=your_username       # Username (if authentication is enabled)
-MQTT_PASSWORD=your_password       # Password (if authentication is enabled)
-```
 
-### 3. LLM API Key
+コア機能：
 
-This project integrates a custom AI Agent through Volcano Engine CustomLLM mode. By default, it uses the Alibaba Cloud Bailian `qwen-flash` model.
+- MCP over MQTT：EMQXブローカーを介したクロスネットワークのツール呼び出し。AIエージェントがデバイス機能（カメラ、表情、音量）を制御
+- マルチモーダル理解：VLMを統合し、「今何を持っている？」などの視覚ユースケースに対応
+- リアルタイム音声対話：Volcano Engine RTC＋ASR/TTSによるエンドツーエンドの低レイテンシ音声認識・合成
+- 並列処理アーキテクチャ：ツール呼び出しと音声合成を非同期で実行し、スムーズなユーザー体験を実現
 
-#### Enable Alibaba Cloud Bailian
+## 前提条件
 
-1. Go to the [Alibaba Cloud Bailian Console](https://bailian.console.aliyun.com)
-2. If you see an enablement prompt at the top, click to enable the service (enabling is free; charges apply only when API usage exceeds the free quota)
-3. Complete real-name verification if required
+### 1. Docker環境
 
-#### Create an API Key
+Docker 24以上（`docker --version`で確認可能）。
 
-1. Go to [API-KEY Management](https://bailian.console.aliyun.com/#/api-key)
-2. Under the API-Key tab, click Create API-KEY
-3. Select the account and workspace (typically the default workspace), add a description, and confirm
-4. Click the copy icon next to the API key to obtain the secret
-5. Put the API key into `app/.env` as `DASHSCOPE_API_KEY`
+### 2. MQTTブローカー
 
-#### Use Other Model Services (Optional)
+本プロジェクトでは、webサービス（MCPサーバー）とapp（MCPクライアント＋AIエージェント）コンテナが接続可能なEMQXブローカーが必要です。
 
-To use another OpenAI-compatible model service, update `app/.env`:
+導入方法（いずれかを選択）：
+
+- 自己ホスト型： [EMQXインストールガイド](https://docs.emqx.com/zh/emqx/latest/deploy/install.html)を参照
+- マネージドサービス： [EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/)を利用
+
+設定例：
 
 ```
-LLM_API_BASE=https://your-model-service.com/v1  # Model service base URL
-LLM_API_KEY=your_api_key                        # Model service API key
-LLM_MODEL=your_model_name                       # Model name
+MQTT_BROKER_HOST=localhost        # EMQXブローカーのホスト
+MQTT_BROKER_PORT=1883             # MQTTポート
+MQTT_USERNAME=your_username       # 認証有効時のユーザー名
+MQTT_PASSWORD=your_password       # 認証有効時のパスワード
 ```
 
-Common model service endpoints:
+### 3. LLM APIキー
+
+本プロジェクトはVolcano Engine CustomLLMモードを通じてカスタムAIエージェントを統合しています。デフォルトではAlibaba Cloud Bailianの`qwen-flash`モデルを使用します。
+
+#### Alibaba Cloud Bailianの有効化
+
+1. [Alibaba Cloud Bailianコンソール](https://bailian.console.aliyun.com)にアクセス
+2. 上部に有効化の案内があればクリックしてサービスを有効化（無料枠内は無料、有料枠超過時のみ課金）
+3. 必要に応じて本人確認を完了
+
+#### APIキーの作成
+
+1. [API-KEY管理画面](https://bailian.console.aliyun.com/#/api-key)へ
+2. API-Keyタブで「API-KEY作成」をクリック
+3. アカウントとワークスペース（通常はデフォルト）を選択し、説明を入力して確定
+4. APIキー横のコピーアイコンでシークレットを取得
+5. `app/.env`の`DASHSCOPE_API_KEY`にAPIキーを設定
+
+#### 他モデルサービスの利用（任意）
+
+他のOpenAI互換モデルサービスを使う場合は`app/.env`を更新：
+
+```
+LLM_API_BASE=https://your-model-service.com/v1  # モデルサービスのベースURL
+LLM_API_KEY=your_api_key                        # モデルサービスのAPIキー
+LLM_MODEL=your_model_name                       # モデル名
+```
+
+代表的なモデルサービスエンドポイント：
 
 - OpenAI: `https://api.openai.com/v1`
 - DeepSeek: `https://api.deepseek.com/v1`
-- Other compatible services: refer to each provider’s documentation
+- その他互換サービス：各プロバイダーのドキュメント参照
 
-Latency and cost can vary significantly across LLM services. Choose based on your requirements. For best latency, the default Alibaba Cloud Bailian `qwen-flash` is recommended.
+LLMサービスによってレイテンシやコストは大きく異なります。要件に応じて選択してください。レイテンシ重視ならデフォルトのAlibaba Cloud Bailian `qwen-flash`がおすすめです。
 
-### 4. Volcano Engine Credentials
+### 4. Volcano Engine認証情報
 
-This project uses multiple Volcano Engine services. Register and log in via the [Volcano Engine Console](https://console.volcengine.com/home).
+本プロジェクトは複数のVolcano Engineサービスを利用します。 [Volcano Engineコンソール](https://console.volcengine.com/home)で登録・ログインしてください。
 
-Required services to enable:
+有効化が必要なサービス：
 
-1. RTC Service — [Enablement guide](https://www.volcengine.com/docs/6348/69865)
-   - After enabling, obtain `VOLC_RTC_APP_ID` and `VOLC_RTC_APP_KEY`
-   - Where to find: [RTC Console](https://console.volcengine.com/rtc/aigc/listRTC)
-2. ASR/TTS Speech Service — [Doubao Speech Console](https://console.volcengine.com/speech/app)
-   - When creating an app, select:
-     - ASR: Streaming speech recognition
-     - TTS: Speech synthesis
-   - Obtain the following credentials:
-     - `VOLC_ASR_APP_ID` - ASR application ID
-     - `VOLC_TTS_APP_ID` - TTS application ID
-     - `VOLC_TTS_APP_TOKEN` - TTS application token
-     - `VOLC_TTS_RESOURCE_ID` - TTS resource ID (depends on the selected voice)
-3. Account Credentials — [Key Management](https://console.volcengine.com/iam/keymanage/)
-   - `VOLC_ACCESS_KEY_ID` - Access Key ID
-   - `VOLC_SECRET_KEY` - Secret Access Key
+1. RTCサービス — [有効化ガイド](https://www.volcengine.com/docs/6348/69865)
+   - 有効化後、`VOLC_RTC_APP_ID`と`VOLC_RTC_APP_KEY`を取得
+   - 取得場所：[RTCコンソール](https://console.volcengine.com/rtc/aigc/listRTC)
+2. ASR/TTS音声サービス — [Doubao Speechコンソール](https://console.volcengine.com/speech/app)
+   - アプリ作成時に以下を選択：
+     - ASR：ストリーミング音声認識
+     - TTS：音声合成
+   - 以下の認証情報を取得：
+     - `VOLC_ASR_APP_ID` - ASRアプリID
+     - `VOLC_TTS_APP_ID` - TTSアプリID
+     - `VOLC_TTS_APP_TOKEN` - TTSアプリトークン
+     - `VOLC_TTS_RESOURCE_ID` - TTSリソースID（選択した音声に依存）
+3. アカウント認証情報 — [キー管理](https://console.volcengine.com/iam/keymanage/)
+   - `VOLC_ACCESS_KEY_ID` - アクセスキーID
+   - `VOLC_SECRET_KEY` - シークレットアクセスキー
 
-#### Permission Configuration
+#### 権限設定
 
-Required: Configure cross-service authorization in the RTC console; otherwise the agent cannot call ASR/TTS/LLM services correctly.
+必須：RTCコンソールでクロスサービス認可を設定しないと、エージェントがASR/TTS/LLMサービスを正しく呼び出せません。
 
-Main account invocation (recommended, simpler):
+メインアカウント呼び出し（推奨、簡単）：
 
-1. Log in to the [RTC Console](https://console.volcengine.com/rtc) with the main account
-2. Go to [Cross-service Authorization](https://console.volcengine.com/rtc/aigc/iam)
-3. Click One-click Enable Cross-service Authorization to configure the `VoiceChatRoleForRTC` role
-4. Use the main account AK/SK to call services
+1. [RTCコンソール](https://console.volcengine.com/rtc)にメインアカウントでログイン
+2. [クロスサービス認可](https://console.volcengine.com/rtc/aigc/iam)へ移動
+3. 「ワンクリックでクロスサービス認可を有効化」をクリックし、`VoiceChatRoleForRTC`ロールを設定
+4. メインアカウントのAK/SKでサービス呼び出し
 
-Sub-account invocation (optional, requires additional configuration):
+サブアカウント呼び出し（任意、追加設定必要）：
 
-Grant the sub-account permission to call Real-Time Conversational AI APIs:
+1. メインアカウントで[RTCコンソール](https://console.volcengine.com/rtc)にログイン
+2. [クロスサービス認可](https://console.volcengine.com/rtc/aigc/iam)で「サブアカウントに権限付与」をクリック
+3. サブアカウントを選択して権限を追加
 
-1. Log in to the [RTC Console](https://console.volcengine.com/rtc) with the main account
-2. Go to [Cross-service Authorization](https://console.volcengine.com/rtc/aigc/iam) and click Grant Permissions to Sub-account
-3. Find the sub-account and add permissions
+完全な有効化手順：[リアルタイム会話AIの前提条件](https://www.volcengine.com/docs/6348/1315561)
 
-Full enablement guide: [Real-Time Conversational AI Prerequisites](https://www.volcengine.com/docs/6348/1315561)
+#### LLM設定
 
-#### LLM Configuration
+本プロジェクトはCustomLLMモードを使用し、Volcano EngineがアプリのカスタムAIエージェントサービスにコールバックしてLLM応答を取得します。
 
-This project uses CustomLLM mode: Volcano Engine calls back into the app’s custom AI Agent service to obtain LLM responses.
+主な設定：
 
-Core settings:
+- `VOLC_LLM_URL` - アプリの`/chat-stream`エンドポイントを指す
+  - ローカルデプロイ：`http://app:8081/chat-stream`（コンテナネットワーク内）
+  - 本番環境：`https://your-domain.com/chat-stream`（公開可能なURLであること）
+- `VOLC_LLM_API_KEY` - カスタム認証キー。アプリの`CUSTOM_LLM_API_KEY`と一致させる必要があります（「ステップ2：環境変数設定」参照）
 
-- `VOLC_LLM_URL` - points to the app service `/chat-stream` endpoint
-  - Local deployment: `http://app:8081/chat-stream` (container network)
-  - Production: `https://your-domain.com/chat-stream` (must be publicly accessible)
-- `VOLC_LLM_API_KEY` - custom authentication key; must match the app’s `CUSTOM_LLM_API_KEY` (see “Step 2: Configure environment variables” below)
+任意のモデルソース：
 
-Optional model sources:
+- Volcano Ark： [Arkコンソール](https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint)で推論エンドポイントまたはアプリを作成
+- Cozeプラットフォーム： [Coze](https://www.coze.cn)でエージェントを作成 — [ガイド](https://www.coze.cn/open/docs/guides/quickstart)
+- サードパーティモデル：OpenAI互換のサービスURLを用意 — [要件](https://www.volcengine.com/docs/6348/1399966)
 
-- Volcano Ark: create an inference endpoint or app in the [Ark Console](https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint)
-- Coze platform: create an Agent on [Coze](https://www.coze.cn) — [guide](https://www.coze.cn/open/docs/guides/quickstart)
-- Third-party models: prepare an OpenAI-compatible service URL — [requirements](https://www.volcengine.com/docs/6348/1399966)
+注意：本プロジェクトのアプリサービスはすでにCustomLLMプロトコルを実装済みです。APIキー（`DASHSCOPE_API_KEY`など）を設定するだけで追加のモデルサービス展開は不要です。
 
-Note: The app service in this project already implements the CustomLLM protocol. You only need to configure the API key described in “3. LLM API Key” (such as `DASHSCOPE_API_KEY`). No additional model service deployment is required.
+#### パラメータの素早い取得
 
-#### Quickly Retrieve Parameters
+推奨：公式Volcano Engineデモで設定を素早く検証可能です。
 
-Recommended: Use the official Volcano Engine demo to validate your configuration quickly.
+1. [リアルタイム会話AIデモ](https://console.volcengine.com/rtc/aigc/run)を開く
+2. デモ実行後、右上の「APIアクセス」ボタンをクリック
+3. パラメータ設定スニペットをコピーし、必要な認証情報を抽出
 
-1. Open the [Real-Time Conversational AI Demo](https://console.volcengine.com/rtc/aigc/run)
-2. After running the demo, click the Access API button in the top-right
-3. Copy the parameter configuration snippet and extract the required credentials
+### 5. ネットワーク要件
 
-### 5. Network Requirements
-
-Ports to open (defaults; can be adjusted in the Compose file):
+開放するポート（デフォルト、Composeファイルで調整可能）：
 
 - `8080` - Web UI
-- `8081` - App backend (SSE endpoint)
-- `3002` - volc-server proxy (Volcano Engine service configuration)
+- `8081` - Appバックエンド（SSEエンドポイント）
+- `3002` - volc-serverプロキシ（Volcano Engineサービス設定）
 
-Accessibility requirements:
+アクセス要件：
 
-Important: To fully experience MCP over MQTT in this project, the app service `/chat-stream` endpoint must be deployed to a publicly accessible HTTPS environment so Volcano Engine can call it back.
+重要：本プロジェクトでMCP over MQTTを完全に体験するには、appサービスの`/chat-stream`エンドポイントを公開可能なHTTPS環境にデプロイし、Volcano Engineからのコールバックを受けられるようにする必要があります。
 
-- Production (recommended): deploy the app at a public HTTPS URL (e.g., `https://your-domain.com/chat-stream`), and ensure the SSE stream ends correctly with `data: [DONE]`
-- Local testing: in a non-public environment, you can only test LLM inference and MCP over MQTT tool invocation via APIs; you cannot fully experience Volcano Engine voice interaction
+- 本番環境（推奨）：appを公開HTTPS URL（例：`https://your-domain.com/chat-stream`）にデプロイし、SSEストリームが`data: [DONE]`で正しく終了することを確認
+- ローカルテスト：非公開環境ではLLM推論やAPI経由のMCPツール呼び出しのみテスト可能。Volcano Engineの音声対話は完全には体験できません
 
-## Quick Tutorial: Voice Interaction + Device Control Demo in 10 Minutes
+## クイックチュートリアル：10分で音声対話＋デバイス制御デモを動かす
 
-After completing all prerequisites, follow these steps to quickly set up the AI Agent demo with voice interaction and device control (the “device” is simulated in the web UI).
+前提条件をすべて満たしたら、以下の手順で音声対話＋デバイス制御のAIエージェントデモを素早くセットアップします（「デバイス」はWeb UIでシミュレーションしています）。
 
-### Step 1: Get the Code
+### ステップ1：コードを取得
 
 ```bash
 git clone -b volcengine/rtc https://github.com/emqx/mcp-ai-companion-demo.git
 cd mcp-ai-companion-demo
 ```
 
-### Step 2: Configure Environment Variables
+### ステップ2：環境変数を設定
 
-This is the most critical step. You must fill in credentials obtained in the prerequisites into the configuration files for the three services. Read the descriptions and sources for each field carefully.
+最も重要なステップです。前提条件で取得した認証情報を3つのサービスの設定ファイルに正確に入力してください。各項目の説明と取得元をよく確認してください。
 
-#### 2.1 Configure the app service (AI Agent backend)
+#### 2.1 appサービス（AIエージェントバックエンド）の設定
 
-Create the config file:
+設定ファイルを作成：
 
 ```bash
 cp app/.env.example app/.env
 ```
 
-Edit `app/.env` and fill in the following:
+`app/.env`を編集し、以下を入力：
 
 ```bash
-# ===== LLM configuration =====
-# Source: Prerequisite "3. LLM API Key"
-# Purpose: The AI Agent calls the LLM for conversational inference
-DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxx  # Replace with your Alibaba Cloud Bailian API key
+# ===== LLM設定 =====
+# 取得元：前提条件「3. LLM APIキー」
+# 目的：AIエージェントがLLMに会話推論を呼び出す
+DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxx  # Alibaba Cloud BailianのAPIキーに置き換え
 
-# If using another model service, also configure:
+# 他モデルサービスを使う場合は以下も設定：
 # LLM_API_BASE=https://api.openai.com/v1
 # LLM_MODEL=gpt-4
 
-# ===== CustomLLM authentication key =====
-# Source: Generate yourself (use a strong random string)
-# Purpose: Volcano Engine uses this key to validate callback requests
-# Requirement: Must exactly match volc-server VOLC_LLM_API_KEY
+# ===== CustomLLM認証キー =====
+# 取得元：自分で生成（強力なランダム文字列を推奨）
+# 目的：Volcano Engineがコールバックを検証するためのキー
+# 要件：volc-serverのVOLC_LLM_API_KEYと完全一致させること
 CUSTOM_LLM_API_KEY=your-strong-random-secret-key-here
 
-# Example generation (run in terminal):
+# 生成例（ターミナルで実行）：
 # openssl rand -base64 32
-# Or use an online tool: https://www.random.org/strings/
+# またはオンラインツール：https://www.random.org/strings/
 
-# ===== MQTT Broker configuration =====
-# Source: Prerequisite "2. MQTT Broker"
-# Purpose: Connect to EMQX Broker for MCP over MQTT communication
-MQTT_BROKER_HOST=localhost        # EMQX Broker host
-MQTT_BROKER_PORT=1883             # MQTT port
+# ===== MQTTブローカー設定 =====
+# 取得元：前提条件「2. MQTTブローカー」
+# 目的：EMQXブローカーに接続しMCP over MQTT通信を行う
+MQTT_BROKER_HOST=localhost        # EMQXブローカーのホスト
+MQTT_BROKER_PORT=1883             # MQTTポート
 
-# If EMQX authentication is enabled:
-MQTT_USERNAME=your_mqtt_username  # EMQX username (optional)
-MQTT_PASSWORD=your_mqtt_password  # EMQX password (optional)
+# EMQX認証有効時：
+MQTT_USERNAME=your_mqtt_username  # EMQXユーザー名（任意）
+MQTT_PASSWORD=your_mqtt_password  # EMQXパスワード（任意）
 
-# ===== Optional settings =====
-MCP_TOOLS_WAIT_SECONDS=5          # Seconds to wait for MCP tool registration
-PHOTO_UPLOAD_DIR=uploads          # Photo upload directory
-# APP_SSL_CERTFILE=/path/to/cert  # HTTPS cert (production)
-# APP_SSL_KEYFILE=/path/to/key    # HTTPS key (production)
+# ===== 任意設定 =====
+MCP_TOOLS_WAIT_SECONDS=5          # MCPツール登録待機秒数
+PHOTO_UPLOAD_DIR=uploads          # 写真アップロードディレクトリ
+# APP_SSL_CERTFILE=/path/to/cert  # HTTPS証明書（本番）
+# APP_SSL_KEYFILE=/path/to/key    # HTTPS秘密鍵（本番）
 ```
 
-Notes:
+補足：
 
-- Difference between `DASHSCOPE_API_KEY` and `CUSTOM_LLM_API_KEY`:
+- `DASHSCOPE_API_KEY`と`CUSTOM_LLM_API_KEY`の違い：
 
-  - `DASHSCOPE_API_KEY`: used when the app actively calls Alibaba Cloud Bailian (or another LLM service) to get AI responses
-  - `CUSTOM_LLM_API_KEY`: used to authenticate Volcano Engine callback requests received by the app (similar to an API gateway token)
+  - `DASHSCOPE_API_KEY`：アプリがAlibaba Cloud Bailian（または他のLLMサービス）を呼び出す際に使用
+  - `CUSTOM_LLM_API_KEY`：Volcano Engineからのコールバック認証に使用（APIゲートウェイのトークンのような役割）
 
-- Ways to generate `CUSTOM_LLM_API_KEY` (choose one):
+- `CUSTOM_LLM_API_KEY`の生成方法例（いずれかを選択）：
 
   ```bash
-  # Option 1: Generate with openssl (recommended)
+  # 方法1：opensslで生成（推奨）
   openssl rand -base64 32
   
-  # Option 2: Generate with Python
+  # 方法2：Pythonで生成
   python3 -c "import secrets; print(secrets.token_urlsafe(32))"
   
-  # Option 3: Online tool
-  # https://www.random.org/strings/ (length 32, alphanumeric)
+  # 方法3：オンラインツール
+  # https://www.random.org/strings/ （長さ32、英数字）
   ```
 
-#### 2.2 Configure the volc-server service (Volcano Engine proxy)
+#### 2.2 volc-serverサービス（Volcano Engineプロキシ）の設定
 
-Create the config file:
+設定ファイルを作成：
 
 ```bash
 cp volc-server/.env.example volc-server/.env
 ```
 
-Edit `volc-server/.env` and fill in Volcano Engine credentials:
+`volc-server/.env`を編集し、Volcano Engine認証情報を入力：
 
 ```bash
-# ===== Volcano Engine account credentials =====
-# Source: Prerequisite "4. Volcano Engine Credentials > Account credentials"
-# Where to find: https://console.volcengine.com/iam/keymanage/
+# ===== Volcano Engineアカウント認証情報 =====
+# 取得元：前提条件「4. Volcano Engine認証情報 > アカウント認証情報」
+# 取得場所：https://console.volcengine.com/iam/keymanage/
 VOLC_ACCESS_KEY_ID=AKLT*********************
 VOLC_SECRET_KEY=************************************
 
-# ===== RTC service credentials =====
-# Source: Prerequisite "4. Volcano Engine Credentials > RTC service"
-# Where to find: https://console.volcengine.com/rtc/aigc/listRTC
+# ===== RTCサービス認証情報 =====
+# 取得元：前提条件「4. Volcano Engine認証情報 > RTCサービス」
+# 取得場所：https://console.volcengine.com/rtc/aigc/listRTC
 VOLC_RTC_APP_ID=your_rtc_app_id
 VOLC_RTC_APP_KEY=your_rtc_app_key
 
-# ===== ASR/TTS speech service credentials =====
-# Source: Prerequisite "4. Volcano Engine Credentials > ASR/TTS speech service"
-# Where to find: https://console.volcengine.com/speech/app
+# ===== ASR/TTS音声サービス認証情報 =====
+# 取得元：前提条件「4. Volcano Engine認証情報 > ASR/TTS音声サービス」
+# 取得場所：https://console.volcengine.com/speech/app
 VOLC_ASR_APP_ID=your_asr_app_id
 VOLC_TTS_APP_ID=your_tts_app_id
 VOLC_TTS_APP_TOKEN=your_tts_app_token
 VOLC_TTS_RESOURCE_ID=your_tts_resource_id
 
-# ===== CustomLLM configuration =====
-# Purpose: Tell Volcano Engine which endpoint to call to obtain LLM responses
+# ===== CustomLLM設定 =====
+# 目的：Volcano EngineにLLM応答取得用エンドポイントを通知
 
-# VOLC_LLM_URL - app /chat-stream endpoint
-# Local testing: use Docker container networking
+# VOLC_LLM_URL - appの/chat-streamエンドポイント
+# ローカルテスト：Dockerコンテナネットワーク内のURL
 # VOLC_LLM_URL=http://app:8081/chat-stream
-# Production: must be a public HTTPS URL (for Volcano Engine callbacks)
+# 本番環境：公開可能なHTTPS URLである必要あり（Volcano Engineコールバック用）
 VOLC_LLM_URL=https://your-domain.com/chat-stream
 
-# VOLC_LLM_API_KEY - CustomLLM authentication key
-# Requirement: Must exactly match app/.env CUSTOM_LLM_API_KEY
-VOLC_LLM_API_KEY=your-strong-random-secret-key-here  # Keep consistent with app
+# VOLC_LLM_API_KEY - CustomLLM認証キー
+# 要件：app/.envのCUSTOM_LLM_API_KEYと完全一致させること
+VOLC_LLM_API_KEY=your-strong-random-secret-key-here  # appと一致させる
 ```
 
-Configuration checklist:
+設定チェックリスト：
 
-| Item                       | Setting                                                      | Source                                               |
-| -------------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| Volcano Engine credentials | `VOLC_ACCESS_KEY_ID`, `VOLC_SECRET_KEY`                      | Volcano Engine console                               |
-| RTC app config             | `VOLC_RTC_APP_ID`, `VOLC_RTC_APP_KEY`                        | RTC console                                          |
-| Speech service config      | `VOLC_ASR_APP_ID`, `VOLC_TTS_APP_ID`, `VOLC_TTS_APP_TOKEN`, `VOLC_TTS_RESOURCE_ID` | Doubao Speech console                                |
-| LLM key consistency        | `VOLC_LLM_API_KEY`                                           | Must exactly match `app/.env` `CUSTOM_LLM_API_KEY`   |
-| Permissions                | Cross-service authorization                                  | Complete the prerequisite “Permission configuration” |
+| 項目                      | 設定内容                                                    | 取得元                                               |
+| ------------------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
+| Volcano Engine認証情報    | `VOLC_ACCESS_KEY_ID`、`VOLC_SECRET_KEY`                     | Volcano Engineコンソール                             |
+| RTCアプリ設定             | `VOLC_RTC_APP_ID`、`VOLC_RTC_APP_KEY`                       | RTCコンソール                                        |
+| 音声サービス設定          | `VOLC_ASR_APP_ID`、`VOLC_TTS_APP_ID`、`VOLC_TTS_APP_TOKEN`、`VOLC_TTS_RESOURCE_ID` | Doubao Speechコンソール                              |
+| LLMキー整合性             | `VOLC_LLM_API_KEY`                                          | `app/.env`の`CUSTOM_LLM_API_KEY`と完全一致させること |
+| 権限設定                  | クロスサービス認可                                          | 前提条件「権限設定」を完了させること                 |
 
-#### 2.3 Configure the web service (frontend UI)
+#### 2.3 webサービス（フロントエンドUI）の設定
 
-The web service uses build-time environment variables. The default local development configuration is usually sufficient:
+webサービスはビルド時の環境変数を使用します。通常、ローカル開発用のデフォルト設定で十分です：
 
 ```bash
-VITE_AIGC_PROXY_HOST=http://localhost:3002  # volc-server proxy address
+VITE_AIGC_PROXY_HOST=http://localhost:3002  # volc-serverプロキシのアドレス
 ```
 
-You only need to customize this when:
+カスタマイズが必要な場合：
 
-- volc-server is deployed on a remote host, or
-- volc-server uses a non-3002 port
+- volc-serverがリモートホストにある場合
+- volc-serverが3002以外のポートを使う場合
 
-Customization (export before starting):
+起動前に環境変数をエクスポート：
 
 ```bash
 export VITE_AIGC_PROXY_HOST=http://your-remote-host:3002
 ```
 
-#### Configuration Mapping Summary
+#### 設定対応表まとめ
 
 ```text
-Prerequisites                             Config file location
-├─ 3. LLM API Key                 ──►  app/.env (DASHSCOPE_API_KEY)
-├─ 4. Volcano Engine credentials
-│  ├─ Account credentials         ──►  volc-server/.env (VOLC_ACCESS_KEY_ID/SECRET_KEY)
-│  ├─ RTC service                 ──►  volc-server/.env (VOLC_RTC_APP_ID/APP_KEY)
-│  ├─ ASR/TTS services            ──►  volc-server/.env (VOLC_ASR_*/VOLC_TTS_*)
-│  └─ LLM config                  ──►  volc-server/.env (VOLC_LLM_URL/API_KEY)
-└─ 2. MQTT Broker                 ──►  app/.env (MQTT_BROKER_HOST/PORT/USERNAME/PASSWORD)
+前提条件                             設定ファイル場所
+├─ 3. LLM APIキー              ──►  app/.env (DASHSCOPE_API_KEY)
+├─ 4. Volcano Engine認証情報
+│  ├─ アカウント認証情報        ──►  volc-server/.env (VOLC_ACCESS_KEY_ID/SECRET_KEY)
+│  ├─ RTCサービス              ──►  volc-server/.env (VOLC_RTC_APP_ID/APP_KEY)
+│  ├─ ASR/TTSサービス          ──►  volc-server/.env (VOLC_ASR_*/VOLC_TTS_*)
+│  └─ LLM設定                 ──►  volc-server/.env (VOLC_LLM_URL/API_KEY)
+└─ 2. MQTTブローカー           ──►  app/.env (MQTT_BROKER_HOST/PORT/USERNAME/PASSWORD)
 
-Self-generated
-└─ CUSTOM_LLM_API_KEY             ──►  app/.env + volc-server/.env (must match)
+自分で生成
+└─ CUSTOM_LLM_API_KEY          ──►  app/.env + volc-server/.env (完全一致必須)
 ```
 
-Key points:
+ポイント：
 
-1. `CUSTOM_LLM_API_KEY` is the only key you must generate yourself, and it must match exactly in both `app/.env` and `volc-server/.env`
-2. `DASHSCOPE_API_KEY` is used to call the LLM; `CUSTOM_LLM_API_KEY` is used to authenticate Volcano Engine callbacks
-3. In production, you must change `VOLC_LLM_URL` to a public HTTPS URL, otherwise Volcano Engine cannot call back into the app service
+1. `CUSTOM_LLM_API_KEY`は唯一自分で生成し、`app/.env`と`volc-server/.env`で完全に一致させる必要があります
+2. `DASHSCOPE_API_KEY`はLLM呼び出し用、`CUSTOM_LLM_API_KEY`はVolcano Engineコールバック認証用です
+3. 本番環境では`VOLC_LLM_URL`を公開HTTPS URLに変更しないとVolcano Engineからのコールバックができません
 
-### Step 3: Start the Services
+### ステップ3：サービスを起動
 
-Start all services with Docker Compose:
+Docker Composeで全サービスを起動：
 
 ```bash
 docker compose -f docker/docker-compose.web-volc.yml up --build
 ```
 
-Startup process:
+起動処理：
 
-1. Build images: `mcp-app`, `mcp-volc-server`, `mcp-web`
-2. Start containers and listen on:
+1. イメージビルド：`mcp-app`、`mcp-volc-server`、`mcp-web`
+2. コンテナ起動、以下ポートで待機：
    - `8080` - Web UI
-   - `8081` - AI Agent backend
-   - `3002` - Volcano Engine proxy
+   - `8081` - AIエージェントバックエンド
+   - `3002` - Volcano Engineプロキシ
 
-The first startup may take a few minutes to download dependencies and build images.
+初回起動は依存関係のダウンロードやビルドに数分かかる場合があります。
 
-View logs (optional):
+ログ確認（任意）：
 
 ```bash
-# Follow logs for all services
+# 全サービスのログをフォロー
 docker compose -f docker/docker-compose.web-volc.yml logs -f
 
-# Follow logs for a specific service
+# 特定サービスのログをフォロー
 docker compose -f docker/docker-compose.web-volc.yml logs -f app
 ```
 
-### Step 4: Validate Functionality
+### ステップ4：動作確認
 
-#### 4.1 Open the Web UI
+#### 4.1 Web UIを開く
 
-Open the browser at: http://localhost:8080
+ブラウザで http://localhost:8080 を開きます。
 
-You should see a virtual device interface with a chatbot avatar, microphone, camera button, and other UI elements.
+チャットボットのアバター、マイク、カメラボタンなどがある仮想デバイスインターフェースが表示されます。
 
-#### 4.2 Configure MQTT Connection (First Use)
+#### 4.2 MQTT接続設定（初回のみ）
 
-1. Click the settings icon in the top-right corner
-2. In the settings panel, enter EMQX Broker settings:
-   - Broker: `ws://localhost:8083/mqtt` (use WebSocket port 8083, not MQTT port 1883)
-   - Username: if EMQX authentication is enabled, enter the username
-   - Password: if EMQX authentication is enabled, enter the password
-3. Click Save
-4. In the confirmation dialog, click Confirm; the page refreshes automatically and applies the new configuration, and the MQTT connection is established automatically
+1. 右上の設定アイコンをクリック
+2. 設定パネルでEMQXブローカー情報を入力：
+   - ブローカー：`ws://localhost:8083/mqtt`（MQTTポート1883ではなくWebSocketポート8083を使用）
+   - ユーザー名：EMQX認証有効時に入力
+   - パスワード：EMQX認証有効時に入力
+3. 「保存」をクリック
+4. 確認ダイアログで「確認」をクリックするとページが自動リロードされ、新設定が適用されてMQTT接続が自動的に確立されます
 
-Notes:
+補足：
 
-- The device ID is generated automatically (format: `web-ui-hardware-controller/{randomID}`); no manual setup is required
-- After MQTT connects successfully, MCP tools are registered automatically and can be invoked by the AI Agent
-- If the connection fails, check whether the EMQX WebSocket listener is enabled (default port 8083)
+- デバイスIDは自動生成されます（形式：`web-ui-hardware-controller/{randomID}`）、手動設定不要
+- MQTT接続成功後、MCPツールが自動登録され、AIエージェントから呼び出し可能になります
+- 接続失敗時はEMQXのWebSocketリスナーが有効か（デフォルト8083）を確認してください
 
-#### 4.3 Start Voice Interaction
+#### 4.3 音声対話を開始
 
-Click the microphone button at the bottom of the page and allow microphone permissions. The system will establish an RTC connection automatically. When the connection succeeds, the microphone button turns purple and you can start speaking.
+ページ下部のマイクボタンをクリックし、マイク権限を許可します。システムが自動的にRTC接続を確立します。接続成功するとマイクボタンが紫色になり、話しかけられる状態になります。
 
-Suggested tests:
+推奨テスト例：
 
-- Say “Hello” or “Tell me a story” to test basic conversation
-- Say “What am I holding?” to trigger photo capture and vision recognition
-- Say “Set the volume to 80%” or “Switch to a happy expression” to test device control
+- 「こんにちは」や「物語を聞かせて」と話しかけて基本会話を試す
+- 「今何を持っている？」と言って写真撮影＋視覚認識をトリガー
+- 「音量を80%にして」や「嬉しい表情にして」と言ってデバイス制御を試す
 
-#### 4.4 Success Criteria
+#### 4.4 成功基準
 
-- Voice interaction: ASR transcription is correct, LLM streams responses, and TTS playback works
-- MCP tool calling: photo capture, expression switching, and volume adjustment all take effect
-- No errors in logs: app, volc-server, and browser console show no errors
+- 音声対話：ASRの文字起こしが正確、LLMがストリーミング応答し、TTS再生が正常に動作
+- MCPツール呼び出し：写真撮影、表情切替、音量調整がすべて反映される
+- ログにエラーなし：app、volc-server、ブラウザコンソールにエラーが表示されない
 
-#### 4.5 Partial Feature Test
+#### 4.5 一部機能のみテスト
 
-If you only want to validate the UI and Volcano Engine configuration (without using the custom AI Agent):
+UIとVolcano Engine設定のみ検証したい場合（カスタムAIエージェントを使わない）：
 
 ```
 docker compose -f docker/docker-compose.web-volc.yml up --build volc-server web
 ```
 
-Mode characteristics:
+モードの特徴：
 
-- Available: ASR, TTS, basic conversation
-- Not available: MCP tool calls (camera, expression, volume control, etc.)
+- 利用可能：ASR、TTS、基本会話
+- 利用不可：MCPツール呼び出し（カメラ、表情、音量制御など）
 
-Use Volcano Ark platform LLM for conversation:
+Volcano ArkプラットフォームのLLMを会話に使う場合：
 
-1. Create an inference endpoint or Agent app in the [Ark Console](https://console.volcengine.com/ark)
-
-2. Obtain `EndpointId` (inference endpoint) or `BotId` (Agent app)
-
-3. Configure the LLM in `volc-server/src/config.ts`:
+1. [Arkコンソール](https://console.volcengine.com/ark)で推論エンドポイントまたはAgentアプリを作成
+2. `EndpointId`（推論エンドポイント）または`BotId`（Agentアプリ）を取得
+3. `volc-server/src/config.ts`でLLM設定を変更：
 
    ```typescript
    llm: {
-     mode: 'ArkV3',                    // Use Ark platform LLM
-     endpointId: 'ep-xxx',             // Option 1: inference endpoint ID (choose one)
-     // botId: 'bot-xxx',               // Option 2: Agent app ID (choose one)
+     mode: 'ArkV3',                    // ArkプラットフォームLLMを使用
+     endpointId: 'ep-xxx',             // オプション1：推論エンドポイントID（どちらか一方）
+     // botId: 'bot-xxx',               // オプション2：AgentアプリID（どちらか一方）
      systemMessages: [
        { role: 'system', content: 'You are a friendly voice assistant' }
      ],
-     historyLength: 5,                 // Context history turns
+     historyLength: 5,                 // コンテキスト履歴ターン数
    }
    ```
 
-4. Restart the volc-server service to use the Ark platform LLM for conversation
+4. volc-serverサービスを再起動し、ArkプラットフォームLLMで会話を行う
 
-Tip: For smoother interactions, use non-deep-thinking models (such as the Doubao-pro series). For full configuration parameters, refer to the [Volcano Engine documentation](https://www.volcengine.com/docs/6348/1581714).
+ヒント：スムーズな対話には深い思考を要さないモデル（例：Doubao-proシリーズ）を使うと良いです。詳細な設定パラメータは[Volcano Engineドキュメント](https://www.volcengine.com/docs/6348/1581714)を参照してください。
 
-### Step 5: Stop the Services
+### ステップ5：サービス停止
 
 ```bash
 docker compose -f docker/docker-compose.web-volc.yml down
 ```
 
-## FAQ and Troubleshooting
+## FAQとトラブルシューティング
 
-### Configuration Adjustments
+### 設定調整
 
-#### Port Conflicts
+#### ポート競合
 
-If ports are in use, modify port mappings in `docker/docker-compose.web-volc.yml`:
+ポートが使用中の場合、`docker/docker-compose.web-volc.yml`のポートマッピングを変更：
 
 ```yaml
 services:
   web:
     ports:
-      - "8888:8080"  # Change Web UI port
+      - "8888:8080"  # Web UIポート変更
   app:
     ports:
-      - "8082:8081"  # Change app port
+      - "8082:8081"  # appポート変更
   volc-server:
     ports:
-      - "3003:3002"  # Change volc-server port
+      - "3003:3002"  # volc-serverポート変更
 ```
 
-Note: If you change the volc-server port, update the `VITE_AIGC_PROXY_HOST` environment variable accordingly.
+注意：volc-serverのポートを変更した場合は、`VITE_AIGC_PROXY_HOST`環境変数も更新してください。
 
-#### Enable HTTPS (Production)
+#### HTTPS有効化（本番環境）
 
-1. Prepare certificate files (`fullchain.pem`, `privkey.pem`)
+1. 証明書ファイルを用意（`fullchain.pem`、`privkey.pem`）
 
-   Important: You must use the fullchain (complete certificate chain), not a single certificate file. Volcano Engine callbacks validate the full chain; otherwise the SSL handshake will fail.
+   重要：必ずフルチェーン（完全な証明書チェーン）を使用してください。単一証明書ファイルではVolcano Engineのコールバック時にSSLハンドシェイクが失敗します。
 
-   - Let’s Encrypt: use `fullchain.pem` (includes certificate + intermediate certificate)
-   - Other CAs: ensure the cert file contains the full chain (server cert + intermediate certs)
+   - Let’s Encrypt：`fullchain.pem`（証明書＋中間証明書を含む）を使用
+   - その他CA：サーバー証明書＋中間証明書を含むフルチェーンファイルを用意
 
-2. Place the certificate files in the project directory (for example, `certs/`)
+2. プロジェクトディレクトリ（例：`certs/`）に配置
 
-3. Configure certificate paths in `app/.env`:
+3. `app/.env`に証明書パスを設定：
 
    ```bash
-   APP_SSL_CERTFILE=./certs/fullchain.pem  # Must be fullchain
+   APP_SSL_CERTFILE=./certs/fullchain.pem  # フルチェーンであること
    APP_SSL_KEYFILE=./certs/privkey.pem
    ```
 
-4. Update `VOLC_LLM_URL` in `volc-server/.env` to the HTTPS address (for example, `https://your-domain.com:8081`)
+4. `volc-server/.env`の`VOLC_LLM_URL`をHTTPSアドレス（例：`https://your-domain.com:8081`）に更新
 
-#### Build Images Separately
+#### イメージを個別にビルド
 
-To build a specific service image:
+特定サービスのイメージをビルド：
 
 ```bash
 docker build -t mcp-web:local ./web
@@ -536,66 +532,66 @@ docker build -t mcp-app:local ./app
 docker build -t volc-server:local ./volc-server
 ```
 
-### Common Issues
+### よくある問題
 
-#### Service Startup Issues
+#### サービス起動問題
 
-| Issue                             | Possible Cause         | Solution                                                     |
-| --------------------------------- | ---------------------- | ------------------------------------------------------------ |
-| Container fails to start          | Port is already in use | 1) Run `lsof -i :8080` to identify the process 2) Change Compose port mappings 3) Re-run `docker compose up --build` |
-| Environment variables not applied | `.env` file not loaded | 1) Ensure `.env` is in the correct directory 2) Check file permissions 3) Rebuild images |
+| 問題                          | 原因候補               | 対処方法                                                     |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------ |
+| コンテナが起動しない          | ポート使用中           | 1) `lsof -i :8080`でプロセス確認 2) Composeのポート変更 3) 再度`docker compose up --build`実行 |
+| 環境変数が反映されない        | `.env`ファイル未読込   | 1) `.env`が正しい場所にあるか確認 2) ファイル権限確認 3) イメージ再ビルド |
 
-#### Volcano Engine Service Issues
+#### Volcano Engineサービス問題
 
-| Issue                   | Possible Cause                             | Solution                                                     |
-| ----------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| Stuck on “AI preparing” | Cross-service authorization not configured | 1) Verify “Permission configuration” is completed 2) Ensure services are enabled and balance is sufficient 3) Verify parameter casing |
-| 401/403 errors          | Incorrect AK/SK or token                   | 1) Check `VOLC_ACCESS_KEY_ID`/`VOLC_SECRET_KEY` 2) Ensure the token is not expired 3) Verify cross-service authorization |
-| Sub-account quota limit | Default quota is insufficient              | Increase quota in the [Quota Center](https://console.volcengine.com/quota/productList/ParameterList?ProviderCode=iam) |
+| 問題                          | 原因候補                           | 対処方法                                                     |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| 「AI準備中」状態で停止        | クロスサービス認可未設定           | 1) 「権限設定」を完了させる 2) サービス有効化と残高確認 3) パラメータの大文字小文字確認 |
+| 401/403エラー                 | AK/SKまたはトークン誤り            | 1) `VOLC_ACCESS_KEY_ID`/`VOLC_SECRET_KEY`確認 2) トークン有効期限確認 3) クロスサービス認可確認 |
+| サブアカウントのクォータ不足 | デフォルトクォータ不足             | [クォータセンター](https://console.volcengine.com/quota/productList/ParameterList?ProviderCode=iam)で増加申請 |
 
-#### LLM Request Issues
+#### LLMリクエスト問題
 
-| Issue                    | Possible Cause               | Solution                                                     |
-| ------------------------ | ---------------------------- | ------------------------------------------------------------ |
-| LLM request fails        | Incorrect API key            | 1) Confirm `DASHSCOPE_API_KEY` is correct 2) Check network connectivity 3) View logs: `docker compose logs app` |
-| CustomLLM callback fails | Auth keys do not match       | 1) Ensure the two `CUSTOM_LLM_API_KEY` values match 2) Verify `VOLC_LLM_URL` 3) Check whether volc-server can reach the app |
-| HTTPS callback fails     | Incomplete certificate chain | You must use a fullchain cert: `APP_SSL_CERTFILE` must point to `fullchain.pem` (full chain), not a single `cert.pem`. Volcano Engine callbacks require full-chain validation or the SSL handshake will fail. |
+| 問題                          | 原因候補               | 対処方法                                                     |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------ |
+| LLMリクエスト失敗             | APIキー誤り            | 1) `DASHSCOPE_API_KEY`が正しいか確認 2) ネットワーク接続確認 3) ログ確認：`docker compose logs app` |
+| CustomLLMコールバック失敗     | 認証キー不一致          | 1) `CUSTOM_LLM_API_KEY`が両者で一致しているか確認 2) `VOLC_LLM_URL`確認 3) volc-serverからappへの到達確認 |
+| HTTPSコールバック失敗         | 証明書チェーン不完全    | フルチェーン証明書を使用：`APP_SSL_CERTFILE`は`fullchain.pem`を指す必要あり。単一の`cert.pem`では不可。Volcano Engineは完全なチェーン検証を要求。 |
 
-#### MCP Tool Invocation Issues
+#### MCPツール呼び出し問題
 
-| Issue                      | Possible Cause                     | Solution                                                     |
-| -------------------------- | ---------------------------------- | ------------------------------------------------------------ |
-| Tools unavailable          | MQTT connection or device_id issue | 1) Check MQTT status in the browser console 2) Confirm Device ID matches 3) Increase `MCP_TOOLS_WAIT_SECONDS=10` |
-| Camera photo capture fails | Permission not granted             | 1) Check browser camera permissions 2) Click Allow 3) Refresh the page |
+| 問題                          | 原因候補                     | 対処方法                                                     |
+| ----------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| ツールが利用できない          | MQTT接続またはdevice_id問題  | 1) ブラウザコンソールでMQTT状態確認 2) デバイスIDが一致しているか確認 3) `MCP_TOOLS_WAIT_SECONDS=10`に増やす |
+| カメラ写真撮影が失敗          | 権限未許可                   | 1) ブラウザのカメラ権限を確認 2) 許可をクリック 3) ページをリロード |
 
-#### MQTT Connection Issues
+#### MQTT接続問題
 
-| Issue                 | Possible Cause            | Solution                                                     |
-| --------------------- | ------------------------- | ------------------------------------------------------------ |
-| MQTT connection fails | Incorrect broker settings | 1) Ensure EMQX Broker is running 2) Check `MQTT_BROKER_HOST`/`PORT` 3) Verify credentials 4) Test network connectivity |
-| Web UI cannot connect | WebSocket port not open   | 1) Ensure WebSocket listener is enabled (default 8083) 2) Use the `ws://` scheme (e.g., `ws://localhost:8083/mqtt`) |
+| 問題                          | 原因候補                 | 対処方法                                                     |
+| ----------------------------- | ------------------------ | ------------------------------------------------------------ |
+| MQTT接続失敗                  | ブローカー設定誤り       | 1) EMQXブローカーが稼働中か確認 2) `MQTT_BROKER_HOST`/`PORT`確認 3) 認証情報確認 4) ネットワーク接続テスト |
+| Web UIが接続できない          | WebSocketポート未開放     | 1) WebSocketリスナーが有効（デフォルト8083）か確認 2) `ws://`スキームを使用（例：`ws://localhost:8083/mqtt`） |
 
-### Viewing Logs
+### ログの確認
 
 ```
-# Follow logs for all services
+# 全サービスのログをフォロー
 docker compose -f docker/docker-compose.web-volc.yml logs -f
 
-# Follow logs for a specific service
+# 特定サービスのログをフォロー
 docker compose -f docker/docker-compose.web-volc.yml logs -f app
 
-# Show the last 100 lines
+# 最後の100行を表示
 docker compose -f docker/docker-compose.web-volc.yml logs --tail=100 app
 ```
 
-### Performance Optimization
+### パフォーマンス最適化
 
-- LLM latency: use a low-latency model (recommended: Alibaba Cloud Bailian `qwen-flash`)
-- Voice quality: adjust ASR VAD thresholds and TTS voice selection in `volc-server/src/config.ts`
-- Tool call latency: ensure good network connectivity between app and web; reduce MQTT latency (deploy in the same LAN or a low-latency environment)
+- LLMレイテンシ：低レイテンシモデルを使用（推奨：Alibaba Cloud Bailian `qwen-flash`）
+- 音声品質：`volc-server/src/config.ts`でASRのVAD閾値やTTS音声選択を調整
+- ツール呼び出しレイテンシ：appとweb間のネットワーク接続を良好に保ち、MQTTレイテンシを減らす（同一LANや低レイテンシ環境での展開推奨）
 
-Local development (non-Docker):
+ローカル開発（非Docker）：
 
-- web: `pnpm dev`
-- app: `uv run ...`
-- volc-server: `bun run dev`
+- web：`pnpm dev`
+- app：`uv run ...`
+- volc-server：`bun run dev`
