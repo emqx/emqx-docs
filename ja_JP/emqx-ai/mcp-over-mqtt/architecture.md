@@ -1,16 +1,16 @@
-# MCP over MQTT Architecture
+# MCP over MQTT アーキテクチャ
 
-MCP over MQTT inherits the core concepts of the standard MCP architecture (Host, Client, Server), while introducing a centralized MQTT Broker as the transport layer. The broker enables message routing, service registration and discovery, authentication, and authorization.
+MCP over MQTT は、標準のMCPアーキテクチャ（Host、Client、Server）のコアコンセプトを継承しつつ、トランスポート層として中央集権型のMQTTブローカーを導入しています。ブローカーはメッセージのルーティング、サービス登録と検出、認証および認可を可能にします。
 
-This architecture not only preserves MCP’s original context interaction model but also leverages MQTT’s lightweight and broadly applicable design, providing the foundation for many-to-many communication, load balancing, and scalability in IoT and edge computing scenarios.
+このアーキテクチャは、MCPの元々のコンテキストインタラクションモデルを維持しながら、MQTTの軽量かつ広く適用可能な設計を活用し、IoTやエッジコンピューティングのシナリオにおける多対多通信、ロードバランシング、スケーラビリティの基盤を提供します。
 
-## Core Components of the MQTT Transport
+## MQTTトランスポートのコアコンポーネント
 
-In the MCP over MQTT architecture, a centralized MQTT Broker is introduced as the message router, while other components (Host, Client, Server) remain consistent with the standard MCP design.
+MCP over MQTTアーキテクチャでは、メッセージルーターとして中央集権型のMQTTブローカーが導入され、その他のコンポーネント（Host、Client、Server）は標準のMCP設計と一貫しています。
 
 ```mermaid
 graph LR
-    subgraph "Application Host Process"
+    subgraph "アプリケーションホストプロセス"
         H[Host]
         C1[Client 1]
         C2[Client 2]
@@ -20,55 +20,55 @@ graph LR
         H --> C3
     end
 
-    subgraph "MQTT Broker"
+    subgraph "MQTTブローカー"
         B[Broker]
         C1 --> B
         C2 --> B
         C3 --> B
     end
 
-    subgraph "Servers"
-        S1[Server A<br>External APIs]
-        R1[("Remote<br>Resource A")]
+    subgraph "サーバー群"
+        S1[Server A<br>外部API]
+        R1[("リモート<br>リソース A")]
         B --> S1
         S1 <--> R1
     end
 
-    subgraph "Servers"
-        S2[Server B<br>External APIs]
-        R2[("Remote<br>Resource B")]
+    subgraph "サーバー群"
+        S2[Server B<br>外部API]
+        R2[("リモート<br>リソース B")]
         B --> S2
         S2 <--> R2
     end
 ```
 
-### Host, Client, and Server
+### Host、Client、および Server
 
-The Host, Client, and Server components remain unchanged (see [MCP core concepts](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)):
+Host、Client、および Server のコンポーネントは変更されていません（詳細は[MCPコアコンセプト](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)を参照）：
 
-- **Host** acts as a container and coordinator for clients.
-- Each **Client** is created by the Host and maintains an independent connection with a Server.
-- **Server** provides dedicated context and capabilities.
+- **Host** はクライアントのコンテナおよびコーディネーターとして機能します。
+- 各 **Client** はHostによって作成され、Serverと独立した接続を維持します。
+- **Server** は専用のコンテキストと機能を提供します。
 
-The key difference is that Clients and Servers now communicate through the MQTT Broker, instead of directly. With the broker in place, the relationship between Clients and Servers becomes many-to-many rather than one-to-one.
+主な違いは、ClientとServerが直接通信するのではなく、MQTTブローカーを介して通信する点です。ブローカーの導入により、ClientとServerの関係は1対1から多対多へと変わります。
 
-### Role of the MQTT Broker
+### MQTTブローカーの役割
 
-The MQTT Broker serves as the centralized message router:
+MQTTブローカーは中央集権型のメッセージルーターとして機能します：
 
-- Forwards messages between Clients and Servers.
-- Supports service registration and discovery (via retained messages).
-- Handles authentication and authorization for Clients and Servers.
+- ClientとServer間のメッセージを転送します。
+- サービス登録と検出をサポートします（保持メッセージを介して）。
+- ClientおよびServerの認証と認可を処理します。
 
-## Server Scaling and Load Balancing
+## サーバースケーリングとロードバランシング
 
-To achieve scalability and load balancing, an MCP Server can launch multiple instances (processes). Each instance connects to the broker with a unique `server-id` as its MQTT Client ID, while all instances share the same `server-name`.
+スケーラビリティとロードバランシングを実現するために、MCP Serverは複数のインスタンス（プロセス）を起動できます。各インスタンスはMQTTクライアントIDとして一意の`server-id`でブローカーに接続し、すべてのインスタンスは同じ`server-name`を共有します。
 
-**Client interaction flow:**
+**Clientのインタラクションフロー:**
 
-1. The Client subscribes to the service discovery topic to obtain all available `server-id`s under the target `server-name`.
-2. The Client selects a Server instance based on a custom policy (e.g., random or round-robin) and sends an `initialize` request.
-3. After initialization, the Client communicates with the selected Server instance through a dedicated RPC topic.
+1. Clientはサービス検出トピックをサブスクライブし、対象の`server-name`に属するすべての利用可能な`server-id`を取得します。
+2. Clientはカスタムポリシー（例：ランダムまたはラウンドロビン）に基づいてServerインスタンスを選択し、`initialize`リクエストを送信します。
+3. 初期化後、Clientは専用のRPCトピックを通じて選択されたServerインスタンスと通信します。
 
 ```mermaid
 graph LR
@@ -78,19 +78,19 @@ graph LR
     C3["MCP Client3"]
     C4["MCP Client4"]
 
-    subgraph "MCP Server Instances (server-name-a)"
-        S1[Server Instance 1]
-        S2[Server Instance 2]
+    subgraph "MCPサーバーインスタンス (server-name-a)"
+        S1[サーバーインスタンス 1]
+        S2[サーバーインスタンス 2]
     end
 
-    C1 <-- "RPC topic of client-1 and server instance 1" --> S1
-    C2 <-- "RPC topic of client-2 and server instance 1" --> S1
-    C3 <-- "RPC topic of client-3 and server instance 2" --> S2
-    C4 <-- "RPC topic of client-4 and server instance 2" --> S2
+    C1 <-- "client-1 とサーバーインスタンス 1 の RPCトピック" --> S1
+    C2 <-- "client-2 とサーバーインスタンス 1 の RPCトピック" --> S1
+    C3 <-- "client-3 とサーバーインスタンス 2 の RPCトピック" --> S2
+    C4 <-- "client-4 とサーバーインスタンス 2 の RPCトピック" --> S2
 
 ```
 
-This approach enables high availability and scalability of MCP servers:
+この方法により、MCPサーバーの高可用性とスケーラビリティが実現されます：
 
-- **During scaling up**, existing MCP clients remain connected to old server instances, while new clients can initialize with newly added instances.
-- **During scaling down**, MCP clients can reinitialize and connect to other available server instances.
+- **スケールアップ時**、既存のMCPクライアントは古いサーバーインスタンスに接続したままで、新しいクライアントは新たに追加されたインスタンスで初期化できます。
+- **スケールダウン時**、MCPクライアントは再初期化して他の利用可能なサーバーインスタンスに接続できます。

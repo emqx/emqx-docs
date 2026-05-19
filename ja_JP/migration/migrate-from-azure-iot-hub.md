@@ -1,306 +1,304 @@
-# Migrating from Azure IoT Hub to EMQX
+# Azure IoT Hub から EMQX への移行
 
-This guide provides a practical walkthrough for migrating IoT devices from Azure IoT Hub to EMQX. It covers two migration paths:
+本ガイドでは、Azure IoT Hub から EMQX への IoT デバイス移行の実践的な手順を説明します。以下の2つの移行パスをカバーしています。
 
-1. **X.509 certificate authentication**: For devices using client certificates
-2. **SAS token authentication**: For devices using Shared Access Signature (SAS) tokens with HTTP-based authentication
+1. **X.509 証明書認証**：クライアント証明書を使用するデバイス向け
+2. **SAS トークン認証**：HTTP ベース認証で Shared Access Signature（SAS）トークンを使用するデバイス向け
 
-## Migration at a Glance
+## 移行の概要
 
-For devices using X.509 certificates, the migration is primarily a configuration change. Device certificates and private keys remain unchanged; only the broker endpoint and server CA certificate need updates. EMQX must be configured to trust the same CA that Azure trusts and to replicate Azure's identity mapping model, where the certificate Common Name (CN) equals the deviceId.
+X.509 証明書を使用するデバイスの場合、移行は主に設定変更です。デバイス証明書および秘密鍵は変更せず、ブローカーのエンドポイントとサーバー CA 証明書のみを更新します。EMQX は Azure と同じ CA を信頼し、証明書の Common Name（CN）が deviceId と等しい Azure の識別マッピングモデルを再現するよう設定する必要があります。
 
+移行プロセスは以下の3つのフェーズで構成されます。
 
-The migration process consists of three main phases:
+1. **CA 証明書の特定**：デバイス証明書に署名した CA 証明書を見つける。
+2. **EMQX の mTLS 設定**：EMQX ブローカーで SSL/TLS リスナーを設定し、ピア検証を必須化。CA 証明書を信頼し、証明書の CN を deviceId にマッピングするよう設定。
+3. **デバイスクライアントの更新**：デバイスコードを EMQX エンドポイントに接続するよう更新し、EMQX サーバー CA 証明書を信頼させる。デバイスは引き続き Azure IoT SDK を使用するか、標準 MQTT クライアントを利用可能。
 
-1. **Locate Your CA Certificate**. Find the CA certificate that signed your device certificates.
+以下の表はパラメータ変更の概要です。
 
-2. **Configure EMQX for mTLS**. Set up an SSL/TLS listener on the EMQX broker, enable mandatory peer verification, and configure the listener to trust your CA and map the certificate CN to deviceId.
+| **パラメータ** | **Azure IoT Hub（例）** | **EMQX（例）** | **備考** |
+| ------------- | ---------------------- | -------------- | -------- |
+| **エンドポイントホスト名** | `my-hub.azure-devices.net` | `mqtt.example.com` | デバイスクライアントコードを更新 |
+| **デバイス証明書** | `device-001.cert.pem` | `device-001.cert.pem` | 変更なし。既存証明書を継続使用 |
+| **デバイス秘密鍵** | `device-001.key.pem` | `device-001.key.pem` | 変更なし。既存秘密鍵を継続使用 |
+| **サーバー検証**（デバイスがサーバーを信頼） | デバイスは Azure の公開 CA を信頼 | デバイスは `emqx-server-ca.pem` を信頼 | EMQX サーバー CA をデバイスに配布 |
+| **クライアント検証**（サーバーがデバイスを信頼） | Azure はあなたの CA を信頼（CA アップロードまたはサムプリント登録） | EMQX の `cacertfile` にあなたの CA を設定 | Azure と同じ CA を使用 |
+| **識別マッピング** | Azure は `CN=deviceId` を抽出 | `mqtt.peer_cert_as_clientid = cn` を有効化 | deviceId ベースの認可を維持 |
 
-3. **Update Device Clients**. Update device code to connect to the EMQX endpoint and trust the EMQX server CA certificate. Devices can continue to use the Azure IoT SDK or utilize standard MQTT clients.
+## フェーズ 1：CA 証明書の特定
 
-The following table summarizes the parameter changes:
+**必要なもの**：デバイス証明書に署名した CA 証明書（PEM 形式、例：`device-ca.pem`）。この証明書は EMQX が mTLS 認証時にデバイスの識別を検証するために必須です。
 
-| **Parameter** | **Azure IoT Hub (Example)** | **EMQX (Example)** | **Notes** |
-| ------------- | -------------------------- | ------------------ | --------- |
-| **Endpoint Hostname** | `my-hub.azure-devices.net` | `mqtt.example.com` | Update device client code |
-| **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. Devices continue using the existing certificate |
-| **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. Devices continues using the existing private key |
-| **Server Verification** (Device trusts Server) | Device trusts Azure's public CA | Device must trust `emqx-server-ca.pem` | Deploy EMQX server CA to devices |
-| **Client Verification** (Server trusts Device) | Azure trusts your CA (registered via CA upload or thumbprint) | EMQX `cacertfile` must be set to your CA | Same CA used in Azure |
-| **Identity Mapping** | Azure extracts `CN=deviceId` | Enable `mqtt.peer_cert_as_clientid = cn` | Preserves deviceId-based authorization |
+Azure IoT Hub では X.509 登録方法が2種類あります。
+- **CA 登録**：CA を Azure IoT Hub にアップロードした場合。元々アップロードした CA ファイルを特定する必要があります。
+- **サムプリント登録**：各デバイスを証明書のサムプリントで個別登録した場合。Azure に CA はアップロードされていませんが、デバイス証明書は内部 CA、自己署名 CA、または企業 PKI などの CA によって署名されています。この署名した CA を特定する必要があります。
 
-## Phase 1: Locate Your CA Certificate
+どちらの方法でも証明書階層は同じで、デバイスは常に自分の CA によって署名されています。EMQX への移行には、この CA 証明書を入手し、EMQX がデバイスを検証できるようにする必要があります。
 
-**What you need**: The CA certificate that signed your device certificates (in PEM format, e.g., `device-ca.pem`). This certificate is essential for EMQX to verify device identities during mTLS authentication.
+### デバイス証明書を署名した CA の特定
 
-Azure IoT Hub supports two X.509 registration methods:
-- **CA registration**: You uploaded a CA to Azure IoT Hub. You must locate the same CA file that you originally uploaded.
-- **Thumbprint registration**: You registered each device individually by its certificate thumbprint. Although no CA was uploaded to Azure, the device certificates were still signed by a CA (such as an internal CA, a self-signed CA, or an enterprise PKI). You must locate the CA that issued these certificates.
-
-Regardless of the method, the certificate hierarchy is the same: your devices are always signed by your own CA. For migration to EMQX, you must obtain this CA certificate so EMQX can verify your devices.
-
-### Identify the CA That Issued Your Device Certificates
-
-Use OpenSSL to inspect the Issuer field in a device certificate:
+OpenSSL を使ってデバイス証明書の Issuer フィールドを確認します。
 
 ```bash
 openssl x509 -in device-001.cert.pem -noout -issuer
 ```
 
-Expected output:
+期待される出力例：
 
 ```
-issuer=CN = MyCompany-Device-CA
+issuer=CN = Azure-Device-CA
 ```
 
-The corresponding CA file (e.g., `MyCompany-Device-CA.pem`) is the CA certificate you must provide to EMQX. This is the most reliable way to determine the correct CA, especially when using thumbprint registration.
+対応する CA ファイル（例：`Azure-Device-CA.pem`）が EMQX に提供すべき CA 証明書です。特にサムプリント登録の場合、この方法が最も確実です。
 
-### Verify Certificate Requirements
+### 証明書要件の検証
 
-Azure requires that the certificate Subject Common Name (CN) match the deviceId (or `deviceId/moduleId` for modules). You can verify this using:
+Azure は証明書の Subject Common Name（CN）が deviceId（モジュールの場合は `deviceId/moduleId`）と一致することを要求します。以下のコマンドで確認可能です。
 
 ```bash
 openssl x509 -in device-001.cert.pem -noout -subject
 ```
 
-Expected output:
+期待される出力例：
+
 ```
 subject=CN = device-001
 ```
 
-EMQX extracts this CN during mTLS authentication and use it as the device’s identity.
+EMQX は mTLS 認証時にこの CN を抽出し、デバイスの識別子として使用します。
 
-### Confirm Device Credential Access
+### デバイス認証情報のアクセス確認
 
-Each device retains secure access to its own credentials:
-- The device's leaf certificate (`device-001.cert.pem`)
-- The device's private key (`device-001.key.pem`)
+各デバイスは自分の認証情報に安全にアクセスできます。
+- デバイスのリーフ証明書（`device-001.cert.pem`）
+- デバイスの秘密鍵（`device-001.key.pem`）
 
-Because Azure IoT Hub and EMQX both use standard X.509 authentication, no certificate re-provisioning is required for this migration path.
+Azure IoT Hub と EMQX はどちらも標準の X.509 認証を使用するため、この移行パスでは証明書の再プロビジョニングは不要です。
 
-## Phase 2: Configure EMQX for Azure-Compatible mTLS
+## フェーズ 2：Azure 互換の mTLS 用 EMQX 設定
 
-Configure EMQX to authenticate devices using the same CA and identity-mapping rules that Azure IoT Hub uses for X.509 authentication.
+EMQX を Azure IoT Hub と同じ CA と識別マッピングルールで X.509 認証できるよう設定します。
 
-### Enable and Configure the mTLS Listener
+### mTLS リスナーの有効化と設定
 
-Configure EMQX to enable two-way SSL/TLS authentication (mTLS) on the SSL listener. For detailed information on SSL/TLS configuration, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+EMQX で双方向 SSL/TLS 認証（mTLS）を有効にし、SSL リスナーを設定します。SSL/TLS 設定の詳細は [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md) を参照してください。
 
-Open the EMQX configuration file (`emqx.conf`) and configure the SSL/TLS listener, or use the Dashboard (**Management** -> **Listeners**):
+EMQX 設定ファイル（`emqx.conf`）を開き、SSL/TLS リスナーを設定するか、ダッシュボードの **Management** -> **Listeners** から設定します。
 
 ```hocon
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
 
   ssl_options {
-    # Your EMQX server's certificate
+    # EMQX サーバー証明書
     certfile = "etc/certs/server-cert.pem"
 
-    # Your EMQX server's private key
+    # EMQX サーバー秘密鍵
     keyfile = "etc/certs/server-key.pem"
 
-    # --- mTLS Configuration for Device Authentication ---
+    # --- デバイス認証用 mTLS 設定 ---
 
-    # The CA certificate that signed your device certificates
+    # デバイス証明書に署名した CA 証明書
     cacertfile = "etc/certs/azure-device-ca.pem"
 
-    # Enable client certificate verification
+    # クライアント証明書検証を有効化
     verify = verify_peer
 
-    # Reject clients that do not present a certificate
+    # 証明書を提示しないクライアントを拒否
     fail_if_no_peer_cert = true
   }
 }
 ```
 
 ::: tip
-Both Azure IoT Hub and EMQX use port `8883` as the default for MQTT over TLS/SSL, so no port changes are needed in device clients.
+Azure IoT Hub と EMQX はどちらも TLS/SSL 上の MQTT のデフォルトポートとして `8883` を使用するため、デバイスクライアント側のポート変更は不要です。
 :::
 
-**Key Configuration Parameters**:
-* `cacertfile`: Path to your CA certificate (or bundle of self-signed device certificates). EMQX will use this to verify device certificates.
-* `verify`: Must be set to `verify_peer` to enable mTLS.
-* `fail_if_no_peer_cert`: Must be set to `true` to enforce certificate requirement.
+**主な設定パラメータ**：
+* `cacertfile`：CA 証明書（または自己署名デバイス証明書のバンドル）へのパス。EMQX はこれを使ってデバイス証明書を検証します。
+* `verify`：`verify_peer` に設定し、mTLS を有効化。
+* `fail_if_no_peer_cert`：`true` に設定し、証明書提示を必須化。
 
-### Replicate Azure's CN=deviceId Identity Mapping
+### Azure の CN=deviceId 識別マッピングを再現
 
-Azure IoT Hub extracts the certificate's Common Name and uses it as the deviceId for authorization. Replicate this in EMQX:
+Azure IoT Hub は証明書の Common Name を抽出し、deviceId として認可に使用します。EMQX でも同様に設定します。
 
 ```hocon
 mqtt.peer_cert_as_clientid = cn
 mqtt.peer_cert_as_username = cn
 ```
 
-This configuration ensures that:
-- The MQTT ClientID is automatically set to the certificate CN (deviceId)
-- The username is also set to the certificate CN
-- You can configure EMQX ACL rules using `${clientid}` or `${username}` to match the deviceId, replicating Azure's authorization model
+この設定により、
+- MQTT の ClientID が証明書 CN（deviceId）に自動設定され、
+- ユーザー名も証明書 CN に設定され、
+- `${clientid}` や `${username}` を使った EMQX ACL ルールで deviceId ベースの認可モデルを再現できます。
 
-For devices using modules (`deviceId/moduleId` format), the CN contains both identifiers and can be used directly in EMQX ACLs.
+モジュール（`deviceId/moduleId` 形式）を使うデバイスも、CN に両方の識別子が含まれているため、そのまま EMQX ACL に利用可能です。
 
-### Apply Configuration Changes
+### 設定変更の適用
 
-After updating the configuration file, reload the configuration:
+設定ファイルを更新後、以下で設定をリロードします。
 
 ```bash
 emqx ctl conf reload
 ```
 
-If you made changes via the Dashboard, click **Update** to apply them. The listener will restart automatically to apply the new settings.
+ダッシュボードで変更した場合は **Update** をクリックして適用してください。リスナーは自動的に再起動されます。
 
-Verify the listener is enforcing mTLS:
+mTLS が有効かどうかは以下のコマンドで確認できます。
 
 ```bash
 openssl s_client -connect mqtt.example.com:8883 -showcerts
 ```
 
-The connection should fail without a client certificate.
+クライアント証明書なしでは接続が失敗するはずです。
 
-## Phase 3: Update Device Clients and Verify Migration
+## フェーズ 3：デバイスクライアントの更新と移行検証
 
-The final phase is to update the device client code to connect to EMQX instead of Azure IoT Hub.
+最後に、デバイスクライアントコードを Azure IoT Hub から EMQX へ接続するよう更新します。
 
-### Prepare EMQX Server CA Certificate
+### EMQX サーバー CA 証明書の準備
 
-Before updating the device code, you need to obtain the EMQX server's CA certificate. This is the CA that signed the EMQX server's TLS certificate.
+デバイスコードを更新する前に、EMQX サーバーの CA 証明書を入手してください。これは EMQX サーバーの TLS 証明書に署名した CA です。
 
-**For self-signed EMQX server certificates**, you must add the server CA to your device's trusted certificate store:
+**自己署名の EMQX サーバー証明書の場合**、サーバー CA をデバイスの信頼済み証明書ストアに追加する必要があります。
 
-**Linux**:
+**Linux**：
 
 ```bash
-# Copy CA to system trust store
+# CA をシステム信頼ストアにコピー
 sudo cp emqx-server-ca.pem /usr/local/share/ca-certificates/emqx-ca.crt
 sudo update-ca-certificates
 ```
 
-**macOS**:
+**macOS**：
 
 ```bash
-# Add to system keychain
+# システムキーチェーンに追加
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain emqx-server-ca.pem
 ```
 
-**Windows**:
+**Windows**：
 
 ```powershell
-# Import certificate to Trusted Root CA store
+# 信頼されたルート CA ストアにインポート
 Import-Certificate -FilePath emqx-server-ca.pem -CertStoreLocation Cert:\LocalMachine\Root
 ```
 
 ::: tip
-If your EMQX server uses a certificate from a public CA (like Let's Encrypt), this step is not needed as the CA is already trusted by the system.
+EMQX サーバーが Let's Encrypt などの公開 CA 証明書を使用している場合、この手順は不要です。システムは既に CA を信頼しています。
 :::
 
-### Update Device Client Code
+### デバイスクライアントコードの更新
 
-The Azure IoT SDK for Python (and other languages) supports connecting to custom MQTT brokers through the `server_verification_cert` and custom `hostname` parameters. This allows for minimal code changes.
+Azure IoT SDK（Python など）は `server_verification_cert` とカスタム `hostname` パラメータを使ってカスタム MQTT ブローカーに接続可能です。これにより最小限のコード変更で移行できます。
 
-**Python Example**:
+**Python の例**：
 
 ```python
 from azure.iot.device import IoTHubDeviceClient, X509
 
-# Load device credentials
+# デバイス認証情報の読み込み
 x509 = X509(
     cert_file="certs/device-001.cert.pem",
     key_file="certs/device-001.key.pem"
 )
 
-# Read EMQX server CA certificate content
+# EMQX サーバー CA 証明書の内容を読み込み
 with open("certs/emqx-server-ca.pem", "r") as f:
     emqx_server_ca = f.read()
 
-# Create client pointing to EMQX
+# EMQX を指すクライアント作成
 client = IoTHubDeviceClient.create_from_x509_certificate(
     x509=x509,
-    hostname="mqtt.example.com",  # EMQX hostname instead of Azure
+    hostname="mqtt.example.com",  # Azure ではなく EMQX のホスト名
     device_id="device-001",
-    server_verification_cert=emqx_server_ca  # CA cert content as string
+    server_verification_cert=emqx_server_ca  # CA 証明書の文字列
 )
 
-# Connect and use as before
+# 接続し、従来通り使用
 client.connect()
 client.send_message("Hello from migrated device")
 ```
 
 ::: tip
-- The `server_verification_cert` parameter expects the certificate **content as a string**, not a file path.
-- If you've added the EMQX server CA to your system's trusted certificate store (recommended), you can omit this parameter and let the system handle verification.
-- Using the Azure IoT SDK preserves your existing application code structure, requiring only configuration changes. This is the simplest migration path for devices already using X.509 authentication.
+- `server_verification_cert` パラメータはファイルパスではなく、証明書の**内容を文字列として**渡す必要があります。
+- EMQX サーバー CA をシステムの信頼済み証明書ストアに追加済みなら、このパラメータは省略可能で、システムが検証を担当します。
+- Azure IoT SDK を使うことで既存のアプリケーションコード構造を維持しつつ設定変更だけで移行できます。X.509 認証を使うデバイスにとって最も簡単な移行パスです。
 :::
 
-### Device-Side Parameter Summary
+### デバイス側パラメータまとめ
 
-These are the parameter changes needed:
+変更が必要なパラメータは以下の通りです。
 
-1. **Endpoint/Hostname**:
-   - Azure: `my-hub.azure-devices.net`
-   - EMQX: `mqtt.example.com`
+1. **エンドポイント／ホスト名**：
+   - Azure：`my-hub.azure-devices.net`
+   - EMQX：`mqtt.example.com`
 
-2. **Server CA Certificate**:
-   - Azure: Uses the system trust store or Azure CA
-   - EMQX: Must explicitly provide `emqx-server-ca.pem`
+2. **サーバー CA 証明書**：
+   - Azure：システム信頼ストアまたは Azure CA を使用
+   - EMQX：明示的に `emqx-server-ca.pem` を提供
 
-3. **Device Credentials** (no changes):
-   - Certificate: Keep the existing device certificate
-   - Private key: Keep the existing private key
+3. **デバイス認証情報**（変更なし）：
+   - 証明書：既存のデバイス証明書を継続使用
+   - 秘密鍵：既存の秘密鍵を継続使用
 
-4. **ClientId**: Set to deviceId (matching certificate CN)
+4. **ClientId**：証明書 CN と一致する deviceId に設定
 
-### Validation Checklist
+### 検証チェックリスト
 
-1. Device appears in EMQX Dashboard with `clientid = deviceId`.
-2. TLS handshake succeeds, and the device certificate is verified.
-3. The device can publish to authorized topics.
-4. The device can subscribe to authorized topics.
-5. No authentication errors in EMQX logs.
+- デバイスが EMQX ダッシュボードに `clientid = deviceId` で表示される。
+- TLS ハンドシェイクが成功し、デバイス証明書が検証される。
+- デバイスは許可されたトピックにパブリッシュできる。
+- デバイスは許可されたトピックをサブスクライブできる。
+- EMQX ログに認証エラーがない。
 
-## Variations of the Standard Migration Path
+## 標準移行パスのバリエーション
 
-Besides the core migration workflow described above, some device fleets follow simple variations that still fit within the same X.509-based migration process. This section highlights two common variations and explains how EMQX accommodates them without requiring changes to device certificates or firmware.
+基本的な移行ワークフローに加え、X.509 ベースの移行プロセス内で対応可能な簡単なバリエーションが存在します。以下に代表的な2つの例を示し、EMQX がどのように対応するか説明します。
 
-### CA-Signed Device Fleets
+### CA 署名済みデバイス群
 
-- Upload the CA certificate to EMQX.
-- All devices whose certificates were signed by this CA will be trusted automatically.
-- Certificate lifecycle management remains centralized and simple.
-- New devices can be added without any EMQX configuration changes.
+- CA 証明書を EMQX にアップロードするだけで、
+- その CA によって署名されたすべてのデバイス証明書が自動的に信頼されます。
+- 証明書のライフサイクル管理は一元化され、シンプルです。
+- 新規デバイス追加時に EMQX 設定変更は不要です。
 
-This scenario mirrors Azure IoT Hub’s CA-based provisioning model and offers the most scalable migration path for large fleets.
+このシナリオは Azure IoT Hub の CA ベースプロビジョニングモデルを模倣しており、大規模デバイス群の最もスケーラブルな移行パスとなります。
 
-### Devices Using Modules (`deviceId/moduleId`)
+### モジュールを使うデバイス（`deviceId/moduleId`）
 
-- Devices whose certificates include a Common Name (CN) in the format `deviceId/moduleId` are fully supported.
-- EMQX can use the full CN for identity mapping and authentication.
-- Authorization rules (ACLs) can reference the entire CN, preserving Azure’s module-level access control behavior.
+- 証明書の CN に `deviceId/moduleId` 形式を含むデバイスも完全にサポートします。
+- EMQX は CN 全体を識別マッピングと認証に利用可能です。
+- ACL ルールで CN 全体を参照でき、Azure のモジュールレベルアクセス制御を維持します。
 
-This allows devices using Azure’s module hierarchy to migrate seamlessly, without certificate modification or custom identity logic.
+これにより、Azure のモジュール階層を使うデバイスも証明書変更やカスタム識別ロジックなしにシームレスに移行できます。
 
-## Alternative: SAS Token Authentication with HTTP Authenticator
+## 代替：HTTP 認証を使った SAS トークン認証
 
-If your devices use Azure SAS tokens, you can continue using this authentication method in EMQX by implementing a simple HTTP authentication service. For detailed information on HTTP authentication, see [Use HTTP Service](../access-control/authn/http.md).
+デバイスが Azure SAS トークンを使う場合、EMQX で HTTP 認証サービスを実装することで同様の認証を継続可能です。HTTP 認証の詳細は [Use HTTP Service](../access-control/authn/http.md) を参照してください。
 
-### How SAS Token Authentication Works
+### SAS トークン認証の仕組み
 
-Azure IoT Hub sends SAS credentials through the MQTT username and password fields:
+Azure IoT Hub は MQTT のユーザー名とパスワードフィールドに SAS 認証情報を送信します。
 
-- **Username**: `{iothubhostname}/{deviceId}/?api-version=2021-04-12`
-- **Password**: `SharedAccessSignature sr={resource}&sig={signature}&se={expiry}`
+- **ユーザー名**：`{iothubhostname}/{deviceId}/?api-version=2021-04-12`
+- **パスワード**：`SharedAccessSignature sr={resource}&sig={signature}&se={expiry}`
 
-EMQX forwards these values to your HTTP service, which performs the actual SAS token validation.
+EMQX はこれらの値を HTTP サービスに転送し、実際の SAS トークン検証を行います。
 
-### Implement HTTP Authentication for SAS Tokens
+### SAS トークン用 HTTP 認証サービスの実装
 
-1. Create an HTTP authentication service. Your service should perform the following tasks:
-   - Receive the username and password from EMQX.
-   - Extract the `deviceId` from the username.
-   - Parse the SAS token from the password field.
-   - Validate the token signature using the device's symmetric key.
-   - Check the token expiry value (`se` field).
-   - Return `{"result": "allow"}` or `{"result": "deny"}` based on the validation result.
+1. HTTP 認証サービスを作成し、以下を実装します。
+   - EMQX から受け取ったユーザー名とパスワードを受信。
+   - ユーザー名から `deviceId` を抽出。
+   - パスワードから SAS トークンを解析。
+   - デバイスの対称鍵を使いトークン署名を検証。
+   - トークンの有効期限（`se` フィールド）をチェック。
+   - 検証結果に応じて `{"result": "allow"}` または `{"result": "deny"}` を返す。
 
-2. Configure EMQX HTTP Authenticator to use your HTTP service. Add an HTTP authenticator either through the Dashboard or configuration file:
+2. EMQX の HTTP 認証プラグインを設定し、HTTP サービスを指定します。設定例（`emqx.conf` またはダッシュボード）：
 
 ```hocon
 authentication = [
@@ -321,11 +319,11 @@ authentication = [
 ]
 ```
 
-3. Provision Device Credentials. Export device identities and symmetric keys from the Azure IoT Hub identity registry. Store them in the database used by your HTTP authentication service so it can validate SAS signatures.
+3. デバイス認証情報のプロビジョニング。Azure IoT Hub のアイデンティティレジストリからデバイス ID と対称鍵をエクスポートし、HTTP 認証サービスのデータベースに登録して署名検証に利用します。
 
-### Example HTTP Authentication Service Response
+### HTTP 認証サービスのレスポンス例
 
-Your service should respond with JSON similar to the following:
+サービスは以下のような JSON を返します。
 
 ```json
 {
@@ -338,29 +336,29 @@ Your service should respond with JSON similar to the following:
 ```
 
 ::: tip
-This approach allows SAS token-based devices to migrate without firmware changes. However, for long-term portability and security, migrating to X.509 certificate authentication is recommended.
+この方法により、SAS トークン認証デバイスはファームウェア変更なしで移行可能です。ただし、長期的な移植性とセキュリティ向上のため、X.509 証明書認証への移行を推奨します。
 :::
 
-## Conclusion
+## まとめ
 
-Migrating devices from Azure IoT Hub to EMQX can follow one of two authentication paths, depending on how your devices are currently provisioned.
+Azure IoT Hub から EMQX へのデバイス移行は、デバイスのプロビジョニング方法に応じて2つの認証パスに分かれます。
 
-### X.509 Certificate–Based Devices
+### X.509 証明書ベースのデバイス
 
-This is the simplest and most direct migration path. Your existing device certificates and private keys remain unchanged, and only the following updates are required:
+最もシンプルで直接的な移行パスです。既存のデバイス証明書と秘密鍵は変更せず、以下の更新のみ行います。
 
-- Configure EMQX to trust the same CA used in Azure
-- Enable mTLS and certificate-based identity mapping
-- Update device endpoints and server CA certificates
+- Azure と同じ CA を EMQX に信頼させる
+- mTLS と証明書ベースの識別マッピングを有効化
+- デバイスのエンドポイントとサーバー CA 証明書を更新
 
-With these adjustments, devices can connect to EMQX while preserving the same security model and certificate workflow.
+これにより、同じセキュリティモデルと証明書ワークフローを維持しつつ EMQX に接続可能です。
 
-### SAS Token–Based Devices
+### SAS トークンベースのデバイス
 
-Devices using Azure SAS tokens can continue using them in EMQX by implementing an HTTP authentication service that validates token signatures and expiry. This enables migration without firmware changes.
+Azure SAS トークンを使うデバイスは、EMQX で HTTP 認証サービスを実装することで継続利用可能です。これによりファームウェア変更なしで移行できます。
 
-However, for long-term portability and stronger security, transitioning to X.509 certificates is recommended.
+しかし、長期的な移植性とセキュリティ強化のため、X.509 証明書への移行を推奨します。
 
 ::: tip
-If your deployment includes both X.509 and SAS token devices, consider migrating the X.509 fleet first to reduce effort and accelerate validation. Then evaluate whether SAS token devices should use an HTTP authentication service for immediate compatibility or migrate to X.509 certificates for long-term maintainability.
+X.509 と SAS トークンの両方を含む環境では、まず X.509 デバイス群の移行を優先し、検証を加速することを検討してください。その後、SAS トークンデバイスを即時互換のため HTTP 認証サービスで対応するか、長期的には X.509 へ移行するか評価してください。
 :::

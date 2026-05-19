@@ -1,28 +1,28 @@
-# GB/T 32960 Gateway Data Exchange Format
+# GB/T 32960 ゲートウェイデータ交換フォーマット
 
-The GB/T 32960 gateway (`emqx_gbt32960`) bridges GB/T 32960-compliant electric vehicle terminals to EMQX over MQTT. This page defines the JSON message format used for that data exchange.
+GB/T 32960ゲートウェイ（`emqx_gbt32960`）は、GB/T 32960準拠の電気自動車端末とEMQXをMQTT経由でブリッジします。本ページでは、そのデータ交換に使用されるJSONメッセージフォーマットを定義します。
 
-## Protocol Version Support
+## プロトコルバージョン対応
 
-The gateway supports both **gbt32960-2016** and **gbt32960-2025** protocol versions. The protocol version is automatically detected from the frame header:
+ゲートウェイは、**gbt32960-2016** と **gbt32960-2025** の両プロトコルバージョンをサポートします。プロトコルバージョンはフレームヘッダーから自動検出されます：
 
-- **gbt32960-2016**: Frame header is `0x23 0x23` (ASCII `##`)
-- **gbt32960-2025**: Frame header is `0x24 0x24` (ASCII `$$`)
+- **gbt32960-2016**：フレームヘッダーは `0x23 0x23`（ASCII `##`）
+- **gbt32960-2025**：フレームヘッダーは `0x24 0x24`（ASCII `$$`）
 
-Where fields or behaviors differ between versions, this document notes those differences explicitly.
+バージョン間でフィールドや動作に差異がある場合は、本ドキュメントで明示的に記載します。
 
-## Convention
+## 表記規則
 
-- Payload is assembled in JSON format.
-- JSON key names use UpperCamelCase (PascalCase).
+- ペイロードはJSON形式で組み立てられます。
+- JSONのキー名はUpperCamelCase（パスカルケース）を使用します。
 
-## Upstream
+## アップストリーム
 
-Data flow: Terminal → emqx_gbt32960 → EMQX
+データフロー：端末 → emqx_gbt32960 → EMQX
 
-### Vehicle Login
+### 車両ログイン
 
-Topic: `gbt32960/${vin}/upstream/vlogin`
+トピック：`gbt32960/${vin}/upstream/vlogin`
 
 ```json
 // gbt32960-2016
@@ -72,42 +72,42 @@ Topic: `gbt32960/${vin}/upstream/vlogin`
 }
 ```
 
-Top-level fields:
+トップレベルフィールド：
 
-| Field     | Type    | Description                                                                                                                   |
-|-----------|---------|-------------------------------------------------------------------------------------------------------------------------------|
-| `Cmd`     | Integer | Command identifier; `1` means Vehicle Login                                                                                   |
-| `Encrypt` | Integer | Data encryption method: `1` = no encryption, `2` = RSA, `3` = AES128; `254` = error; `255` = invalid                        |
-| `Vin`     | String  | Vehicle Identification Number (VIN)                                                                                           |
-| `Data`    | Object  | Data unit, JSON object format                                                                                                 |
+| フィールド    | 型       | 説明                                                                                       |
+|--------------|----------|--------------------------------------------------------------------------------------------|
+| `Cmd`        | 整数     | コマンド識別子。`1`は車両ログインを意味します                                             |
+| `Encrypt`    | 整数     | データ暗号化方式：`1`=暗号化なし、`2`=RSA、`3`=AES128、`254`=エラー、`255`=無効           |
+| `Vin`        | 文字列   | 車両識別番号（VIN）                                                                        |
+| `Data`       | オブジェクト | データユニット、JSONオブジェクト形式                                                     |
 
-`Data` fields for **gbt32960-2016**:
+`Data`フィールド（**gbt32960-2016**）：
 
-| Field    | Type    | Description                                                              |
-|----------|---------|--------------------------------------------------------------------------|
-| `Time`   | Object  | Data collection time (Year, Month, Day, Hour, Minute, Second)            |
-| `Seq`    | Integer | Login sequence number                                                    |
-| `ICCID`  | String  | 20-character SIM card ICCID                                              |
-| `Num`    | Integer | Number of rechargeable energy storage sub-systems; valid range 0–250    |
-| `Length` | Integer | Encoding length of rechargeable energy storage systems; valid range 0–50 |
-| `Id`     | String  | System encodings; length = Num × Length                                  |
+| フィールド   | 型       | 説明                                                                                   |
+|-------------|----------|----------------------------------------------------------------------------------------|
+| `Time`      | オブジェクト | データ収集時刻（年、月、日、時、分、秒）                                             |
+| `Seq`       | 整数     | ログインシーケンス番号                                                                 |
+| `ICCID`     | 文字列   | 20文字のSIMカードICCID                                                                 |
+| `Num`       | 整数     | 充電式エネルギー貯蔵サブシステム数；有効範囲0～250                                    |
+| `Length`    | 整数     | 充電式エネルギー貯蔵システムのエンコーディング長；有効範囲0～50                       |
+| `Id`        | 文字列   | システムエンコーディング；長さは `Num × Length`                                       |
 
-`Data` fields for **gbt32960-2025**:
+`Data`フィールド（**gbt32960-2025**）：
 
-| Field                  | Type                 | Description                                                                    |
-|------------------------|----------------------|--------------------------------------------------------------------------------|
-| `Time`                 | Object               | Data collection time (Year, Month, Day, Hour, Minute, Second)                  |
-| `Seq`                  | Integer              | Login sequence number                                                          |
-| `ICCID`                | String               | 20-character SIM card ICCID                                                    |
-| `BmsNum`               | Integer              | Number of battery management systems                                           |
-| `BatteryPackCounts`    | Array                | Number of battery packs managed by each BMS                                    |
-| `BatteryPackEncodings` | Array\<Array\<String\>\> | Battery pack encoding lists per BMS; each encoding is a 24-character string |
+| フィールド              | 型             | 説明                                                                                   |
+|------------------------|----------------|----------------------------------------------------------------------------------------|
+| `Time`                 | オブジェクト   | データ収集時刻（年、月、日、時、分、秒）                                             |
+| `Seq`                  | 整数           | ログインシーケンス番号                                                                 |
+| `ICCID`                | 文字列         | 20文字のSIMカードICCID                                                                 |
+| `BmsNum`               | 整数           | バッテリーマネジメントシステム数                                                       |
+| `BatteryPackCounts`    | 配列           | 各BMSが管理するバッテリーパック数                                                     |
+| `BatteryPackEncodings` | 配列＜配列＜文字列＞＞ | 各BMSごとのバッテリーパックエンコーディングリスト。各エンコーディングは24文字の文字列 |
 
-### Vehicle Logout
+### 車両ログアウト
 
-Topic: `gbt32960/${vin}/upstream/vlogout`
+トピック：`gbt32960/${vin}/upstream/vlogout`
 
-The `Cmd` value is `4`. All other fields follow the same structure as Vehicle Login:
+`Cmd`の値は`4`です。他のフィールドは車両ログインと同じ構造です：
 
 ```json
 {
@@ -128,13 +128,13 @@ The `Cmd` value is `4`. All other fields follow the same structure as Vehicle Lo
 }
 ```
 
-### Real-Time Data Report
+### リアルタイムデータレポート
 
-Topic: `gbt32960/${vin}/upstream/info`
+トピック：`gbt32960/${vin}/upstream/info`
 
-Each report can include multiple info items in the `Infos` array. The `Type` field distinguishes the info type.
+各レポートは`Infos`配列に複数の情報アイテムを含めることができます。`Type`フィールドで情報タイプを区別します。
 
-#### Vehicle Data
+#### 車両データ
 
 ```json
 {
@@ -172,24 +172,24 @@ Each report can include multiple info items in the `Infos` array. The `Type` fie
 }
 ```
 
-| Field               | Type    | Description                                                                                                        |
-|---------------------|---------|--------------------------------------------------------------------------------------------------------------------|
-| `Type`              | String  | Info type; `Vehicle` for this structure                                                                            |
-| `Status`            | Integer | Vehicle status: `1` = running; `2` = stalled; `3` = other; `254` = error; `255` = invalid                         |
-| `Charging`          | Integer | Charge state: `1` = parked charging; `2` = driving charging; `3` = not charging; `4` = charge complete; `254` = error; `255` = invalid |
-| `Mode`              | Integer | Operating mode: `1` = pure electric; `2` = hybrid; `3` = fuel; `254` = error; `255` = invalid                     |
-| `Speed`             | Integer | Vehicle speed; valid range 0–2200 (0–220.0 km/h); unit: 0.1 km/h                                                  |
-| `Mileage`           | Integer | Cumulative mileage; valid range 0–9,999,999 (0–999,999.9 km); unit: 0.1 km                                        |
-| `Voltage`           | Integer | Total voltage; valid range 0–10000 (0–1000 V); unit: 0.1 V                                                        |
-| `Current`           | Integer | Total current; valid range 0–20000 (offset 1000, representing -1000 A to +1000 A); unit: 0.1 A                    |
-| `SOC`               | Integer | State of charge; valid range 0–100 (0%–100%)                                                                      |
-| `DC`                | Integer | DC/DC status: `1` = working; `2` = disconnected; `254` = error; `255` = invalid                                   |
-| `Gear`              | Integer | Gear position; integer representation of the gear table (see protocol Table A.1)                                   |
-| `Resistance`        | Integer | Insulation resistance; valid range 0–60000 (0–60000 kΩ)                                                           |
-| `AcceleratorPedal`  | Integer | **gbt32960-2016 only**: Accelerator pedal travel; valid range 0–100                                               |
-| `BrakePedal`        | Integer | **gbt32960-2016 only**: Brake pedal state; valid range 0–100                                                      |
+| フィールド           | 型       | 説明                                                                                             |
+|---------------------|----------|--------------------------------------------------------------------------------------------------|
+| `Type`              | 文字列   | 情報タイプ。この構造体は`Vehicle`                                                                 |
+| `Status`            | 整数     | 車両状態：`1`=走行中、`2`=停止中、`3`=その他、`254`=エラー、`255`=無効                         |
+| `Charging`          | 整数     | 充電状態：`1`=駐車充電、`2`=走行充電、`3`=非充電、`4`=充電完了、`254`=エラー、`255`=無効     |
+| `Mode`              | 整数     | 動作モード：`1`=純電気、`2`=ハイブリッド、`3`=燃料、`254`=エラー、`255`=無効                 |
+| `Speed`             | 整数     | 車速；有効範囲0～2200（0～220.0 km/h）、単位：0.1 km/h                                         |
+| `Mileage`           | 整数     | 累積走行距離；有効範囲0～9,999,999（0～999,999.9 km）、単位：0.1 km                            |
+| `Voltage`           | 整数     | 総電圧；有効範囲0～10000（0～1000 V）、単位：0.1 V                                             |
+| `Current`           | 整数     | 総電流；有効範囲0～20000（オフセット1000、-1000 A～+1000 A）、単位：0.1 A                      |
+| `SOC`               | 整数     | 充電状態（State of Charge）；有効範囲0～100（0%～100%）                                       |
+| `DC`                | 整数     | DC/DC状態：`1`=動作中、`2`=切断、`254`=エラー、`255`=無効                                    |
+| `Gear`              | 整数     | ギア位置；プロトコルの表A.1に基づく整数表現                                                    |
+| `Resistance`        | 整数     | 絶縁抵抗；有効範囲0～60000（0～60000 kΩ）                                                      |
+| `AcceleratorPedal`  | 整数     | **gbt32960-2016のみ**：アクセルペダル開度；有効範囲0～100                                      |
+| `BrakePedal`        | 整数     | **gbt32960-2016のみ**：ブレーキペダル状態；有効範囲0～100                                     |
 
-#### Drive Motor Data
+#### 駆動モーターデータ
 
 ```json
 {
@@ -237,26 +237,26 @@ Each report can include multiple info items in the `Infos` array. The `Type` fie
 }
 ```
 
-| Field    | Type    | Description                                |
-|----------|---------|--------------------------------------------|
-| `Type`   | String  | Info type; `DriveMotor` for this structure |
-| `Number` | Integer | Number of drive motors; valid range 1–253  |
-| `Motors` | Array   | List of drive motor data                   |
+| フィールド   | 型       | 説明                                  |
+|-------------|----------|-------------------------------------|
+| `Type`      | 文字列   | 情報タイプ。この構造体は`DriveMotor` |
+| `Number`    | 整数     | 駆動モーター数；有効範囲1～253       |
+| `Motors`    | 配列     | 駆動モーターのデータリスト            |
 
-Motor entry fields:
+モーターエントリのフィールド：
 
-| Field          | Type    | Description                                                                                                                                                                        |
-|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `No`           | Integer | Motor sequence number; valid range 1–253                                                                                                                                           |
-| `Status`       | Integer | Motor status: `1` = consuming power; `2` = generating; `3` = off; `4` = ready; `254` = error; `255` = invalid                                                                     |
-| `CtrlTemp`     | Integer | Controller temperature; valid range 0–250 (offset 40°C, -40°C to +210°C); unit: 1°C                                                                                              |
-| `Rotating`     | Integer | Rotor speed; valid range 0–65531 (offset 20000, -20000 to 45531 r/min); unit: 1 r/min                                                                                             |
-| `Torque`       | Integer | **gbt32960-2016**: motor torque; valid range 0–65531 (offset 20000, -2000 to 4553.1 N·m); unit: 0.1 N·m<br>**gbt32960-2025**: motor torque; valid range 0–429496729 (offset 200000, -20000 to 229496.729 N·m); unit: 0.001 N·m |
-| `MotorTemp`    | Integer | Motor temperature; valid range 0–250 (offset 40°C, -40°C to +210°C); unit: 1°C                                                                                                   |
-| `InputVoltage` | Integer | **gbt32960-2016 only**: Controller input voltage; valid range 0–60000 (0–6000 V); unit: 0.1 V                                                                                     |
-| `DCBusCurrent` | Integer | **gbt32960-2016 only**: DC bus current; valid range 0–20000 (offset 1000 A, -1000 A to +1000 A); unit: 0.1 A                                                                      |
+| フィールド       | 型       | 説明                                                                                                                                                  |
+|-----------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `No`            | 整数     | モーターシーケンス番号；有効範囲1～253                                                                                                               |
+| `Status`        | 整数     | モーター状態：`1`=消費中、`2`=発電中、`3`=停止、`4`=待機、`254`=エラー、`255`=無効                                                                 |
+| `CtrlTemp`      | 整数     | コントローラー温度；有効範囲0～250（オフセット40℃、-40℃～+210℃）、単位：1℃                                                                         |
+| `Rotating`      | 整数     | ローター回転数；有効範囲0～65531（オフセット20000、-20000～45531 r/min）、単位：1 r/min                                                              |
+| `Torque`        | 整数     | **gbt32960-2016**：モータートルク；有効範囲0～65531（オフセット20000、-2000～4553.1 N·m）、単位：0.1 N·m<br>**gbt32960-2025**：モータートルク；有効範囲0～429496729（オフセット200000、-20000～229496.729 N·m）、単位：0.001 N·m |
+| `MotorTemp`     | 整数     | モーター温度；有効範囲0～250（オフセット40℃、-40℃～+210℃）、単位：1℃                                                                             |
+| `InputVoltage`  | 整数     | **gbt32960-2016のみ**：コントローラー入力電圧；有効範囲0～60000（0～6000 V）、単位：0.1 V                                                          |
+| `DCBusCurrent`  | 整数     | **gbt32960-2016のみ**：DCバス電流；有効範囲0～20000（オフセット1000 A、-1000 A～+1000 A）、単位：0.1 A                                            |
 
-#### Fuel Cell Data
+#### 燃料電池データ
 
 ```json
 {
@@ -293,25 +293,25 @@ Motor entry fields:
 }
 ```
 
-| Field               | Type    | Description                                                                                              |
-|---------------------|---------|----------------------------------------------------------------------------------------------------------|
-| `Type`              | String  | Info type; `FuelCell` for this structure                                                                 |
-| `CellVoltage`       | Integer | **gbt32960-2016 only**: Fuel cell voltage; valid range 0–20000 (0–2000 V); unit: 0.1 V                  |
-| `CellCurrent`       | Integer | **gbt32960-2016 only**: Fuel cell current; valid range 0–20000 (0–2000 A); unit: 0.1 A                  |
-| `FuelConsumption`   | Integer | **gbt32960-2016 only**: Fuel consumption rate; valid range 0–60000 (0–600 kg/100km); unit: 0.01 kg/100km |
-| `ProbeNum`          | Integer | **gbt32960-2016 only**: Total number of fuel cell probes; valid range 0–65531                            |
-| `ProbeTemps`        | Array   | **gbt32960-2016 only**: Temperature values for each fuel cell probe                                      |
-| `H_MaxTemp`         | Integer | Max hydrogen system temperature; valid range 0–2400 (offset 40°C, -40°C to +200°C); unit: 0.1°C         |
-| `H_TempProbeCode`   | Integer | Probe code for max hydrogen temperature; valid range 1–252                                               |
-| `H_MaxConc`         | Integer | Max hydrogen concentration; valid range 0–60000 (0–50000 mg/kg); unit: 1 mg/kg                          |
-| `H_ConcSensorCode`  | Integer | Sensor code for max hydrogen concentration; valid range 1–252                                            |
-| `H_MaxPress`        | Integer | Max hydrogen pressure; valid range 0–1000 (0–100 MPa); unit: 0.1 MPa                                    |
-| `H_PressSensorCode` | Integer | Sensor code for max hydrogen pressure; valid range 1–252                                                 |
-| `DCStatus`          | Integer | High-voltage DC/DC status: `1` = working; `2` = disconnected                                            |
-| `RemainingH2`       | Integer | **gbt32960-2025 only**: Remaining hydrogen in the hydrogen system; unit: 1 kg                            |
-| `DCDCTemp`          | Integer | **gbt32960-2025 only**: High-voltage DCDC temperature; offset 40°C, -40°C to +210°C                     |
+| フィールド             | 型       | 説明                                                                                              |
+|-----------------------|----------|-------------------------------------------------------------------------------------------------|
+| `Type`                | 文字列   | 情報タイプ。この構造体は`FuelCell`                                                               |
+| `CellVoltage`         | 整数     | **gbt32960-2016のみ**：燃料電池電圧；有効範囲0～20000（0～2000 V）、単位：0.1 V                 |
+| `CellCurrent`         | 整数     | **gbt32960-2016のみ**：燃料電池電流；有効範囲0～20000（0～2000 A）、単位：0.1 A                 |
+| `FuelConsumption`     | 整数     | **gbt32960-2016のみ**：燃料消費率；有効範囲0～60000（0～600 kg/100km）、単位：0.01 kg/100km     |
+| `ProbeNum`            | 整数     | **gbt32960-2016のみ**：燃料電池プローブ総数；有効範囲0～65531                                  |
+| `ProbeTemps`          | 配列     | **gbt32960-2016のみ**：各燃料電池プローブの温度値                                               |
+| `H_MaxTemp`           | 整数     | 最大水素系統温度；有効範囲0～2400（オフセット40℃、-40℃～+200℃）、単位：0.1℃                   |
+| `H_TempProbeCode`     | 整数     | 最大水素温度のプローブコード；有効範囲1～252                                                    |
+| `H_MaxConc`           | 整数     | 最大水素濃度；有効範囲0～60000（0～50000 mg/kg）、単位：1 mg/kg                                |
+| `H_ConcSensorCode`    | 整数     | 最大水素濃度のセンサーコード；有効範囲1～252                                                    |
+| `H_MaxPress`          | 整数     | 最大水素圧力；有効範囲0～1000（0～100 MPa）、単位：0.1 MPa                                     |
+| `H_PressSensorCode`   | 整数     | 最大水素圧力のセンサーコード；有効範囲1～252                                                    |
+| `DCStatus`            | 整数     | 高電圧DC/DC状態：`1`=動作中、`2`=切断                                                          |
+| `RemainingH2`         | 整数     | **gbt32960-2025のみ**：水素系統の残量；単位：1 kg                                              |
+| `DCDCTemp`            | 整数     | **gbt32960-2025のみ**：高電圧DCDC温度；オフセット40℃、-40℃～+210℃                            |
 
-#### Engine Data
+#### エンジンデータ
 
 ```json
 {
@@ -339,14 +339,14 @@ Motor entry fields:
 }
 ```
 
-| Field             | Type    | Description                                                                                        |
-|-------------------|---------|----------------------------------------------------------------------------------------------------|
-| `Type`            | String  | Info type; `Engine` for this structure                                                             |
-| `Status`          | Integer | **gbt32960-2016 only**: Engine status: `1` = running; `2` = off                                   |
-| `CrankshaftSpeed` | Integer | Crankshaft speed; valid range 0–60000 (0–60000 r/min); unit: 1 r/min                              |
-| `FuelConsumption` | Integer | **gbt32960-2016 only**: Fuel consumption rate; valid range 0–60000 (0–600 L/100km); unit: 0.01 L/100km |
+| フィールド           | 型       | 説明                                                                                   |
+|---------------------|----------|----------------------------------------------------------------------------------------|
+| `Type`              | 文字列   | 情報タイプ。この構造体は`Engine`                                                       |
+| `Status`            | 整数     | **gbt32960-2016のみ**：エンジン状態：`1`=稼働中、`2`=停止                             |
+| `CrankshaftSpeed`   | 整数     | クランクシャフト回転数；有効範囲0～60000（0～60000 r/min）、単位：1 r/min             |
+| `FuelConsumption`   | 整数     | **gbt32960-2016のみ**：燃料消費率；有効範囲0～60000（0～600 L/100km）、単位：0.01 L/100km |
 
-#### Vehicle Location Data
+#### 車両位置データ
 
 ```json
 {
@@ -374,17 +374,17 @@ Motor entry fields:
 }
 ```
 
-| Field              | Type    | Description                                                        |
-|--------------------|---------|--------------------------------------------------------------------|
-| `Type`             | String  | Info type; `Location` for this structure                           |
-| `Status`           | Integer | Position status; integer value of all status bits (see protocol Table 15) |
-| `CoordinateSystem` | Integer | **gbt32960-2025 only**: Coordinate system: `1` = WGS-84; `2` = GCJ-02 |
-| `Longitude`        | Integer | Longitude in degrees × 10^6; accurate to one millionth of a degree |
-| `Latitude`         | Integer | Latitude in degrees × 10^6; accurate to one millionth of a degree |
+| フィールド           | 型       | 説明                                                                                      |
+|---------------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`              | 文字列   | 情報タイプ。この構造体は`Location`                                                       |
+| `Status`            | 整数     | 位置状態；全状態ビットの整数値（プロトコル表15参照）                                     |
+| `CoordinateSystem`  | 整数     | **gbt32960-2025のみ**：座標系：`1`=WGS-84、`2`=GCJ-02                                  |
+| `Longitude`         | 整数     | 経度（度×10^6）；1/100万度単位の精度                                                    |
+| `Latitude`          | 整数     | 緯度（度×10^6）；1/100万度単位の精度                                                    |
 
-#### Extreme Value Data
+#### 極値データ
 
-> **gbt32960-2016 only**
+> **gbt32960-2016のみ**
 
 ```json
 {
@@ -421,23 +421,23 @@ Motor entry fields:
 }
 ```
 
-| Field                       | Type    | Description                                                           |
-|-----------------------------|---------|-----------------------------------------------------------------------|
-| `Type`                      | String  | Info type; `Extreme` for this structure                               |
-| `MaxVoltageBatterySubsysNo` | Integer | Sub-system number with highest battery voltage; valid range 1–250     |
-| `MaxVoltageBatteryCode`     | Integer | Battery cell code with highest voltage; valid range 1–250             |
-| `MaxBatteryVoltage`         | Integer | Highest individual cell voltage; valid range 0–15000 (0–15 V); unit: 0.001 V |
-| `MinVoltageBatterySubsysNo` | Integer | Sub-system number with lowest battery voltage; valid range 1–250      |
-| `MinVoltageBatteryCode`     | Integer | Battery cell code with lowest voltage; valid range 1–250              |
-| `MinBatteryVoltage`         | Integer | Lowest individual cell voltage; valid range 0–15000 (0–15 V); unit: 0.001 V |
-| `MaxTempSubsysNo`           | Integer | Sub-system number with highest temperature; valid range 1–250         |
-| `MaxTempProbeNo`            | Integer | Probe number with highest temperature; valid range 1–250              |
-| `MaxTemp`                   | Integer | Highest temperature; valid range 0–250 (offset 40, -40°C to +210°C)  |
-| `MinTempSubsysNo`           | Integer | Sub-system number with lowest temperature; valid range 1–250          |
-| `MinTempProbeNo`            | Integer | Probe number with lowest temperature; valid range 1–250               |
-| `MinTemp`                   | Integer | Lowest temperature; valid range 0–250 (offset 40, -40°C to +210°C)   |
+| フィールド                  | 型       | 説明                                                                                     |
+|----------------------------|----------|------------------------------------------------------------------------------------------|
+| `Type`                     | 文字列   | 情報タイプ。この構造体は`Extreme`                                                       |
+| `MaxVoltageBatterySubsysNo`| 整数     | 最高電圧のバッテリーサブシステム番号；有効範囲1～250                                    |
+| `MaxVoltageBatteryCode`    | 整数     | 最高電圧のバッテリーセルコード；有効範囲1～250                                          |
+| `MaxBatteryVoltage`        | 整数     | 最高個別セル電圧；有効範囲0～15000（0～15 V）、単位：0.001 V                           |
+| `MinVoltageBatterySubsysNo`| 整数     | 最低電圧のバッテリーサブシステム番号；有効範囲1～250                                    |
+| `MinVoltageBatteryCode`    | 整数     | 最低電圧のバッテリーセルコード；有効範囲1～250                                          |
+| `MinBatteryVoltage`        | 整数     | 最低個別セル電圧；有効範囲0～15000（0～15 V）、単位：0.001 V                           |
+| `MaxTempSubsysNo`          | 整数     | 最高温度のサブシステム番号；有効範囲1～250                                              |
+| `MaxTempProbeNo`           | 整数     | 最高温度のプローブ番号；有効範囲1～250                                                  |
+| `MaxTemp`                  | 整数     | 最高温度；有効範囲0～250（オフセット40、-40℃～+210℃）                                 |
+| `MinTempSubsysNo`          | 整数     | 最低温度のサブシステム番号；有効範囲1～250                                              |
+| `MinTempProbeNo`           | 整数     | 最低温度のプローブ番号；有効範囲1～250                                                  |
+| `MinTemp`                  | 整数     | 最低温度；有効範囲0～250（オフセット40、-40℃～+210℃）                                 |
 
-#### Alarm Data
+#### アラームデータ
 
 ```json
 {
@@ -472,25 +472,25 @@ Motor entry fields:
 }
 ```
 
-| Field                       | Type    | Description                                                                                                                                |
-|-----------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `Type`                      | String  | Info type; `Alarm` for this structure                                                                                                      |
-| `MaxAlarmLevel`             | Integer | Highest alarm level. **gbt32960-2016**: valid range 0–3 ("0" = no fault, "1" = level 1 fault).<br>**gbt32960-2025**: valid range 0–4, new value "4" = thermal event fault |
-| `GeneralAlarmFlag`          | Integer | General alarm flag bits (see protocol Table 18)                                                                                            |
-| `FaultChargeableDeviceNum`  | Integer | Total faults in rechargeable energy storage devices; valid range 0–252                                                                     |
-| `FaultChargeableDeviceList` | Array   | Fault code list for rechargeable energy storage devices                                                                                    |
-| `FaultDriveMotorNum`        | Integer | Total drive motor faults; valid range 0–252                                                                                                |
-| `FaultDriveMotorList`       | Array   | Drive motor fault code list                                                                                                                |
-| `FaultEngineNum`            | Integer | Total engine faults; valid range 0–252                                                                                                     |
-| `FaultEngineList`           | Array   | Engine fault code list                                                                                                                     |
-| `FaultOthersNum`            | Integer | Total other faults                                                                                                                         |
-| `FaultOthersList`           | Array   | Other fault code list                                                                                                                      |
-| `FaultGeneralNum`           | Integer | **gbt32960-2025 only**: Total general fault count                                                                                          |
-| `FaultGeneralList`          | Array   | **gbt32960-2025 only**: General fault list; each entry is a JSON object `{"No": integer, "Level": integer}`                                |
+| フィールド                   | 型       | 説明                                                                                                          |
+|-----------------------------|----------|---------------------------------------------------------------------------------------------------------------|
+| `Type`                      | 文字列   | 情報タイプ。この構造体は`Alarm`                                                                               |
+| `MaxAlarmLevel`             | 整数     | 最高アラームレベル。**gbt32960-2016**：有効範囲0～3（"0"=異常なし、"1"=レベル1異常）。<br>**gbt32960-2025**：有効範囲0～4、新値"4"=熱イベント異常 |
+| `GeneralAlarmFlag`          | 整数     | 一般アラームフラグビット（プロトコル表18参照）                                                               |
+| `FaultChargeableDeviceNum`  | 整数     | 充電式エネルギー貯蔵装置の故障総数；有効範囲0～252                                                           |
+| `FaultChargeableDeviceList` | 配列     | 充電式エネルギー貯蔵装置の故障コードリスト                                                                   |
+| `FaultDriveMotorNum`        | 整数     | 駆動モーター故障総数；有効範囲0～252                                                                         |
+| `FaultDriveMotorList`       | 配列     | 駆動モーター故障コードリスト                                                                                   |
+| `FaultEngineNum`            | 整数     | エンジン故障総数；有効範囲0～252                                                                             |
+| `FaultEngineList`           | 配列     | エンジン故障コードリスト                                                                                       |
+| `FaultOthersNum`            | 整数     | その他故障総数                                                                                                |
+| `FaultOthersList`           | 配列     | その他故障コードリスト                                                                                        |
+| `FaultGeneralNum`           | 整数     | **gbt32960-2025のみ**：一般故障総数                                                                           |
+| `FaultGeneralList`          | 配列     | **gbt32960-2025のみ**：一般故障リスト。各エントリはJSONオブジェクト`{"No":整数, "Level":整数}`                 |
 
-#### Rechargeable Energy Storage Voltage Data
+#### 充電式エネルギー貯蔵電圧データ
 
-> **gbt32960-2016 only**
+> **gbt32960-2016のみ**
 
 ```json
 {
@@ -536,27 +536,27 @@ Motor entry fields:
 }
 ```
 
-| Field      | Type    | Description                                           |
-|------------|---------|-------------------------------------------------------|
-| `Type`     | String  | Info type; `ChargeableVoltage` for this structure     |
-| `Number`   | Integer | Number of rechargeable energy storage sub-systems; valid range 1–250 |
-| `SubSystems` | Array | List of sub-system voltage data                       |
+| フィールド      | 型       | 説明                                                                                     |
+|----------------|----------|------------------------------------------------------------------------------------------|
+| `Type`         | 文字列   | 情報タイプ。この構造体は`ChargeableVoltage`                                              |
+| `Number`       | 整数     | 充電式エネルギー貯蔵サブシステム数；有効範囲1～250                                      |
+| `SubSystems`   | 配列     | サブシステム電圧データのリスト                                                          |
 
-Sub-system voltage fields:
+サブシステム電圧フィールド：
 
-| Field                | Type    | Description                                                                                          |
-|----------------------|---------|------------------------------------------------------------------------------------------------------|
-| `ChargeableSubsysNo` | Integer | Sub-system number; valid range 1–250                                                                 |
-| `ChargeableVoltage`  | Integer | Sub-system voltage; valid range 0–10000 (0–1000 V); unit: 0.1 V                                     |
-| `ChargeableCurrent`  | Integer | Sub-system current; valid range 0–20000 (offset 1000 A, -1000 A to +1000 A); unit: 0.1 A            |
-| `CellsTotal`         | Integer | Total number of battery cells; valid range 1–65531                                                   |
-| `FrameCellsIndex`    | Integer | Starting cell index (1-based) of the cells reported in this frame; valid range 1–65531. Frames are split when the total cell count exceeds 200 per frame. |
-| `FrameCellsCount`    | Integer | Number of cells in this frame; valid range 1–200                                                     |
-| `CellsVoltage`       | Array   | Individual cell voltages; valid range 0–60000 (0–60.000 V); unit: 0.001 V                           |
+| フィールド             | 型       | 説明                                                                                              |
+|-----------------------|----------|-------------------------------------------------------------------------------------------------|
+| `ChargeableSubsysNo`  | 整数     | サブシステム番号；有効範囲1～250                                                               |
+| `ChargeableVoltage`   | 整数     | サブシステム電圧；有効範囲0～10000（0～1000 V）、単位：0.1 V                                   |
+| `ChargeableCurrent`   | 整数     | サブシステム電流；有効範囲0～20000（オフセット1000 A、-1000 A～+1000 A）、単位：0.1 A          |
+| `CellsTotal`          | 整数     | バッテリーセル総数；有効範囲1～65531                                                           |
+| `FrameCellsIndex`     | 整数     | 本フレームで報告するセルの開始インデックス（1ベース）；有効範囲1～65531。セル数が200を超える場合はフレーム分割されます。 |
+| `FrameCellsCount`     | 整数     | 本フレーム内のセル数；有効範囲1～200                                                            |
+| `CellsVoltage`        | 配列     | 個別セル電圧；有効範囲0～60000（0～60.000 V）、単位：0.001 V                                  |
 
-#### Rechargeable Energy Storage Temperature Data
+#### 充電式エネルギー貯蔵温度データ
 
-> **gbt32960-2016 only**
+> **gbt32960-2016のみ**
 
 ```json
 {
@@ -594,23 +594,23 @@ Sub-system voltage fields:
 }
 ```
 
-| Field        | Type    | Description                                           |
-|--------------|---------|-------------------------------------------------------|
-| `Type`       | String  | Info type; `ChargeableTemp` for this structure        |
-| `Number`     | Integer | Number of sub-systems in the temperature info list    |
-| `SubSystems` | Array   | List of sub-system temperature data                   |
+| フィールド      | 型       | 説明                                                                                     |
+|----------------|----------|------------------------------------------------------------------------------------------|
+| `Type`         | 文字列   | 情報タイプ。この構造体は`ChargeableTemp`                                               |
+| `Number`       | 整数     | 温度情報リスト内のサブシステム数                                                        |
+| `SubSystems`   | 配列     | サブシステム温度データのリスト                                                          |
 
-Sub-system temperature fields:
+サブシステム温度フィールド：
 
-| Field                | Type    | Description                                         |
-|----------------------|---------|-----------------------------------------------------|
-| `ChargeableSubsysNo` | Integer | Sub-system number; valid range 1–250                |
-| `ProbeNum`           | Integer | Number of temperature probes in this sub-system     |
-| `ProbesTemp`         | Array   | Temperature readings for each probe                 |
+| フィールド             | 型       | 説明                                                                                     |
+|-----------------------|----------|------------------------------------------------------------------------------------------|
+| `ChargeableSubsysNo`  | 整数     | サブシステム番号；有効範囲1～250                                                       |
+| `ProbeNum`            | 整数     | このサブシステム内の温度プローブ数                                                     |
+| `ProbesTemp`          | 配列     | 各プローブの温度読み値                                                                  |
 
-#### Power Battery Pack Voltage Data
+#### パワーバッテリーパック電圧データ
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -652,20 +652,20 @@ Sub-system temperature fields:
 }
 ```
 
-| Field                       | Type    | Description                                                  |
-|-----------------------------|---------|--------------------------------------------------------------|
-| `Type`                      | String  | `MinVoltageOfPowerBattery`                                   |
-| `Number`                    | Integer | Number of power battery packs                                |
-| `SubSystems`                | Array   | List of battery packs                                        |
-| `BatteryPackNo`             | Integer | Battery pack sequence number                                 |
-| `BatteryPackVoltage`        | Integer | Battery pack voltage; unit: 0.1 V                            |
-| `BatteryPackCurrent`        | Integer | Battery pack current; offset 1000 A; unit: 0.1 A             |
-| `MinParallelUnitTotal`      | Integer | Total number of minimum parallel units                       |
-| `MinParallelUnitVoltage`    | Array   | Voltage list for minimum parallel units; offset 4 V; unit: 1 mV |
+| フィールド               | 型       | 説明                                                                                      |
+|-------------------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`                  | 文字列   | `MinVoltageOfPowerBattery`                                                               |
+| `Number`                | 整数     | パワーバッテリーパック数                                                                 |
+| `SubSystems`            | 配列     | バッテリーパックのリスト                                                                  |
+| `BatteryPackNo`         | 整数     | バッテリーパックシーケンス番号                                                           |
+| `BatteryPackVoltage`    | 整数     | バッテリーパック電圧；単位：0.1 V                                                        |
+| `BatteryPackCurrent`    | 整数     | バッテリーパック電流；オフセット1000 A、単位：0.1 A                                      |
+| `MinParallelUnitTotal`  | 整数     | 最小並列ユニットの総数                                                                    |
+| `MinParallelUnitVoltage`| 配列     | 最小並列ユニットの電圧リスト；オフセット4 V、単位：1 mV                                  |
 
-#### Power Battery Pack Temperature Data
+#### パワーバッテリーパック温度データ
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -703,18 +703,18 @@ Sub-system temperature fields:
 }
 ```
 
-| Field           | Type    | Description                                          |
-|-----------------|---------|------------------------------------------------------|
-| `Type`          | String  | `TempOfPowerBattery`                                 |
-| `Number`        | Integer | Number of power battery packs                        |
-| `SubSystems`    | Array   | List of battery packs                                |
-| `BatteryPackNo` | Integer | Battery pack sequence number                         |
-| `ProbeNum`      | Integer | Number of temperature probes                         |
-| `ProbesTemp`    | Array   | Probe temperature list; offset 40°C; unit: 1°C       |
+| フィールド       | 型       | 説明                                                                                      |
+|-----------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`          | 文字列   | `TempOfPowerBattery`                                                                     |
+| `Number`        | 整数     | パワーバッテリーパック数                                                                 |
+| `SubSystems`    | 配列     | バッテリーパックのリスト                                                                  |
+| `BatteryPackNo` | 整数     | バッテリーパックシーケンス番号                                                           |
+| `ProbeNum`      | 整数     | 温度プローブ数                                                                           |
+| `ProbesTemp`    | 配列     | プローブ温度リスト；オフセット40℃、単位：1℃                                            |
 
-#### Fuel Cell Stack Data
+#### 燃料電池スタックデータ
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -752,23 +752,23 @@ Sub-system temperature fields:
 }
 ```
 
-| Field              | Type    | Description                                     |
-|--------------------|---------|-------------------------------------------------|
-| `Type`             | String  | `FuelCellStack`                                 |
-| `Number`           | Integer | Number of fuel cell stacks                      |
-| `Stacks`           | Array   | List of fuel cell stacks                        |
-| `FuelCellStackNo`  | Integer | Fuel cell stack sequence number                 |
-| `Voltage`          | Integer | Fuel cell stack voltage; unit: 0.1 V            |
-| `Current`          | Integer | Fuel cell stack current; unit: 0.1 A            |
-| `H2InletPressure`  | Integer | Hydrogen inlet pressure; unit: 0.1 bar          |
-| `AirInletPressure` | Integer | Air inlet pressure; unit: 0.1 bar               |
-| `AirInletTemp`     | Integer | Air inlet temperature; offset 40°C; unit: 1°C   |
-| `StackProbeNum`    | Integer | Number of stack temperature probes              |
-| `StackProbeTemp`   | Array   | Stack temperature probe readings                |
+| フィールド           | 型       | 説明                                                                                      |
+|---------------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`              | 文字列   | `FuelCellStack`                                                                           |
+| `Number`            | 整数     | 燃料電池スタック数                                                                        |
+| `Stacks`            | 配列     | 燃料電池スタックのリスト                                                                  |
+| `FuelCellStackNo`   | 整数     | 燃料電池スタックシーケンス番号                                                           |
+| `Voltage`           | 整数     | 燃料電池スタック電圧；単位：0.1 V                                                        |
+| `Current`           | 整数     | 燃料電池スタック電流；単位：0.1 A                                                        |
+| `H2InletPressure`   | 整数     | 水素入口圧力；単位：0.1 bar                                                              |
+| `AirInletPressure`  | 整数     | 空気入口圧力；単位：0.1 bar                                                              |
+| `AirInletTemp`      | 整数     | 空気入口温度；オフセット40℃、単位：1℃                                                  |
+| `StackProbeNum`     | 整数     | スタック温度プローブ数                                                                    |
+| `StackProbeTemp`    | 配列     | スタック温度プローブの読み値                                                              |
 
-#### Supercapacitor Data
+#### スーパーキャパシタデータ
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -800,20 +800,20 @@ Sub-system temperature fields:
 }
 ```
 
-| Field          | Type    | Description                                        |
-|----------------|---------|----------------------------------------------------|
-| `Type`         | String  | `SuperCapacitor`                                   |
-| `ManagerSysNo` | Integer | Management system number                           |
-| `TotalVoltage` | Integer | Total voltage; unit: 0.1 V                         |
-| `TotalCurrent` | Integer | Total current; offset 1000 A; unit: 0.1 A          |
-| `CellsTotal`   | Integer | Total number of cells                              |
-| `CellsVoltage` | Array   | Cell voltage list; unit: 1 mV                      |
-| `ProbeNum`     | Integer | Number of temperature probes                       |
-| `ProbeTemp`    | Array   | Probe temperature list; offset 40°C; unit: 1°C     |
+| フィールド        | 型       | 説明                                                                                      |
+|------------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`           | 文字列   | `SuperCapacitor`                                                                          |
+| `ManagerSysNo`   | 整数     | 管理システム番号                                                                          |
+| `TotalVoltage`   | 整数     | 総電圧；単位：0.1 V                                                                       |
+| `TotalCurrent`   | 整数     | 総電流；オフセット1000 A、単位：0.1 A                                                    |
+| `CellsTotal`     | 整数     | セル総数                                                                                 |
+| `CellsVoltage`   | 配列     | セル電圧リスト；単位：1 mV                                                               |
+| `ProbeNum`       | 整数     | 温度プローブ数                                                                           |
+| `ProbeTemp`      | 配列     | プローブ温度リスト；オフセット40℃、単位：1℃                                            |
 
-#### Supercapacitor Extreme Value Data
+#### スーパーキャパシタ極値データ
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -850,25 +850,25 @@ Sub-system temperature fields:
 }
 ```
 
-| Field                    | Type    | Description                         |
-|--------------------------|---------|-------------------------------------|
-| `Type`                   | String  | `SuperCapacitorExtreme`             |
-| `MaxVoltageManagerSysNo` | Integer | Management system number with max voltage |
-| `MaxVoltageCellCode`     | Integer | Cell code with max voltage          |
-| `MaxVoltageCellValue`    | Integer | Max voltage value; unit: 1 mV       |
-| `MinVoltageManagerSysNo` | Integer | Management system number with min voltage |
-| `MinVoltageCellCode`     | Integer | Cell code with min voltage          |
-| `MinVoltageCellValue`    | Integer | Min voltage value; unit: 1 mV       |
-| `MaxTempManagerSysNo`    | Integer | Management system number with max temperature |
-| `MaxTempProbeCode`       | Integer | Probe code with max temperature     |
-| `MaxTempValue`           | Integer | Max temperature value               |
-| `MinTempManagerSysNo`    | Integer | Management system number with min temperature |
-| `MinTempProbeCode`       | Integer | Probe code with min temperature     |
-| `MinTempValue`           | Integer | Min temperature value               |
+| フィールド                 | 型       | 説明                                                                                      |
+|---------------------------|----------|-------------------------------------------------------------------------------------------|
+| `Type`                    | 文字列   | `SuperCapacitorExtreme`                                                                   |
+| `MaxVoltageManagerSysNo`  | 整数     | 最大電圧の管理システム番号                                                                |
+| `MaxVoltageCellCode`      | 整数     | 最大電圧のセルコード                                                                      |
+| `MaxVoltageCellValue`     | 整数     | 最大電圧値；単位：1 mV                                                                    |
+| `MinVoltageManagerSysNo`  | 整数     | 最小電圧の管理システム番号                                                                |
+| `MinVoltageCellCode`      | 整数     | 最小電圧のセルコード                                                                      |
+| `MinVoltageCellValue`     | 整数     | 最小電圧値；単位：1 mV                                                                    |
+| `MaxTempManagerSysNo`     | 整数     | 最大温度の管理システム番号                                                                |
+| `MaxTempProbeCode`        | 整数     | 最大温度のプローブコード                                                                  |
+| `MaxTempValue`            | 整数     | 最大温度値                                                                               |
+| `MinTempManagerSysNo`     | 整数     | 最小温度の管理システム番号                                                                |
+| `MinTempProbeCode`        | 整数     | 最小温度のプローブコード                                                                  |
+| `MinTempValue`            | 整数     | 最小温度値                                                                               |
 
-#### Digital Signature
+#### デジタル署名
 
-> **gbt32960-2025 only**
+> **gbt32960-2025のみ**
 
 ```json
 {
@@ -898,25 +898,26 @@ Sub-system temperature fields:
 }
 ```
 
-| Field           | Type    | Description         |
-|-----------------|---------|---------------------|
-| `Type`          | String  | `Signature`         |
-| `SignatureType` | Integer | Signature type      |
-| `RLength`       | Integer | Length of R value   |
-| `RValue`        | String  | R value (hex-encoded string) |
-| `SLength`       | Integer | Length of S value   |
-| `SValue`        | String  | S value (hex-encoded string) |
-### Historical Data Retransmission
+| フィールド        | 型       | 説明                                      |
+|------------------|----------|-------------------------------------------|
+| `Type`           | 文字列   | `Signature`                               |
+| `SignatureType`  | 整数     | 署名タイプ                                |
+| `RLength`        | 整数     | R値の長さ                                |
+| `RValue`         | 文字列   | R値（16進エンコード文字列）               |
+| `SLength`        | 整数     | S値の長さ                                |
+| `SValue`         | 文字列   | S値（16進エンコード文字列）               |
 
-Topic: `gbt32960/${vin}/upstream/reinfo`
+### 過去データ再送信
 
-Data format: same as Real-Time Data Report.
+トピック：`gbt32960/${vin}/upstream/reinfo`
 
-### Activation
+データフォーマット：リアルタイムデータレポートと同じ。
 
-> **gbt32960-2025 only**
+### アクティベーション
 
-Topic: `gbt32960/${vin}/upstream/activation`
+> **gbt32960-2025のみ**
+
+トピック：`gbt32960/${vin}/upstream/activation`
 
 ```json
 {
@@ -947,28 +948,28 @@ Topic: `gbt32960/${vin}/upstream/activation`
 }
 ```
 
-| Field         | Type    | Description                                    |
-|---------------|---------|-------------------------------------------------|
-| `Cmd`         | Integer | Command identifier; `9` = Activation           |
-| `ChipID`      | String  | 16-byte chip identifier                        |
-| `PubKeyLen`   | Integer | Public key length                              |
-| `PubKey`      | String  | Public key (hex-encoded)                       |
-| `VIN`         | String  | Vehicle Identification Number                  |
-| `Signature`   | Object  | Digital signature (same structure as Signature info type) |
+| フィールド    | 型       | 説明                                  |
+|--------------|----------|-------------------------------------|
+| `Cmd`        | 整数     | コマンド識別子。`9`はアクティベーション |
+| `ChipID`     | 文字列   | 16バイトのチップ識別子               |
+| `PubKeyLen`  | 整数     | 公開鍵長                            |
+| `PubKey`     | 文字列   | 公開鍵（16進エンコード）             |
+| `VIN`        | 文字列   | 車両識別番号（VIN）                 |
+| `Signature`  | オブジェクト | デジタル署名（Signature情報タイプと同構造） |
 
-## Downstream
+## ダウンストリーム
 
-Request flow: EMQX → emqx_gbt32960 → Terminal
+リクエストフロー：EMQX → emqx_gbt32960 → 端末
 
-Response flow: Terminal → emqx_gbt32960 → EMQX
+レスポンスフロー：端末 → emqx_gbt32960 → EMQX
 
-Downstream topic: `gbt32960/${vin}/dnstream`
+ダウンストリームトピック：`gbt32960/${vin}/dnstream`
 
-Upstream response topic: `gbt32960/${vin}/upstream/response`
+アップストリームレスポンストピック：`gbt32960/${vin}/upstream/response`
 
-### Parameter Query
+### パラメータクエリ
 
-**Request:**
+**リクエスト：**
 
 ```json
 {
@@ -978,13 +979,13 @@ Upstream response topic: `gbt32960/${vin}/upstream/response`
 }
 ```
 
-| Field    | Type    | Description                                                    |
-|----------|---------|----------------------------------------------------------------|
-| `Action` | String  | Command type; `Query` for this operation                       |
-| `Total`  | Integer | Total number of parameters to query                            |
-| `Ids`    | Array   | List of parameter IDs; see protocol Table B.10 for ID meanings |
+| フィールド    | 型       | 説明                                                        |
+|--------------|----------|-------------------------------------------------------------|
+| `Action`     | 文字列   | コマンド種別。クエリ操作は`Query`                           |
+| `Total`      | 整数     | クエリするパラメータ総数                                    |
+| `Ids`        | 配列     | パラメータIDリスト。IDの意味はプロトコル表B.10参照          |
 
-**Response:**
+**レスポンス：**
 
 ```json
 {
@@ -1009,9 +1010,9 @@ Upstream response topic: `gbt32960/${vin}/upstream/response`
 }
 ```
 
-### Parameter Setting
+### パラメータ設定
 
-**Request:**
+**リクエスト：**
 
 ```json
 {
@@ -1022,13 +1023,13 @@ Upstream response topic: `gbt32960/${vin}/upstream/response`
 }
 ```
 
-| Field    | Type    | Description                                       |
-|----------|---------|---------------------------------------------------|
-| `Action` | String  | Command type; `Setting` for this operation        |
-| `Total`  | Integer | Total number of parameters to set                 |
-| `Params` | Array   | List of parameter IDs and their values to set     |
+| フィールド    | 型       | 説明                                                        |
+|--------------|----------|-------------------------------------------------------------|
+| `Action`     | 文字列   | コマンド種別。設定操作は`Setting`                           |
+| `Total`      | 整数     | 設定するパラメータ総数                                      |
+| `Params`     | 配列     | 設定するパラメータIDと値のリスト                            |
 
-**Response:**
+**レスポンス：**
 
 ```json
 {
@@ -1053,11 +1054,11 @@ Upstream response topic: `gbt32960/${vin}/upstream/response`
 }
 ```
 
-### Terminal Control
+### 端末制御
 
-Different commands carry different parameters; commands with no parameters omit the `Param` field.
+コマンドによってパラメータが異なり、パラメータなしのコマンドは`Param`フィールドを省略します。
 
-**Remote Upgrade request:**
+**リモートアップグレードリクエスト：**
 
 ```json
 {
@@ -1078,13 +1079,13 @@ Different commands carry different parameters; commands with no parameters omit 
 }
 ```
 
-| Field     | Type   | Description                                                  |
-|-----------|--------|--------------------------------------------------------------|
-| `Action`  | String | Command type; `Control` for this operation                   |
-| `Command` | String | Command ID (see protocol Table B.15)                         |
-| `Param`   | Object | Command parameters (varies by command; omitted when empty)   |
+| フィールド    | 型       | 説明                                                        |
+|--------------|----------|-------------------------------------------------------------|
+| `Action`     | 文字列   | コマンド種別。制御操作は`Control`                           |
+| `Command`    | 文字列   | コマンドID（プロトコル表B.15参照）                         |
+| `Param`      | オブジェクト | コマンドパラメータ（コマンドによって異なり、省略可能）     |
 
-**Vehicle terminal shutdown** (`0x02`, no parameters):
+**車両端末シャットダウン**（`0x02`、パラメータなし）：
 
 ```json
 {
@@ -1093,7 +1094,7 @@ Different commands carry different parameters; commands with no parameters omit 
 }
 ```
 
-**Vehicle terminal alarm** (`0x06`):
+**車両端末アラーム**（`0x06`）：
 
 ```json
 {

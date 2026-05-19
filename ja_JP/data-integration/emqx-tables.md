@@ -1,88 +1,89 @@
-# Ingest MQTT Data into EMQX Tables
+# EMQX Tables に MQTT データを取り込む
 
-EMQX Tables is a native, fully managed time-series data storage service built into [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/). It is optimized for high-throughput, low-latency ingestion and analysis of MQTT data, making it ideal for Internet of Things (IoT) use cases.
+EMQX Tables は、[EMQX Cloud](https://docs.emqx.com/en/cloud/latest/) に組み込まれたネイティブでフルマネージドの時系列データストレージサービスです。高スループットかつ低レイテンシで MQTT データの取り込みと解析を最適化しており、IoT（Internet of Things）ユースケースに最適です。
 
-Powered by GreptimeDB, EMQX Tables integrates seamlessly with EMQX Broker and supports InfluxDB Line Protocol, enabling efficient storage, querying, and visualization of telemetry data. To learn more, see the [EMQX Tables Overview](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_overview.html).
+GreptimeDB を基盤とする EMQX Tables は EMQX ブローカーとシームレスに統合され、InfluxDB Line Protocol をサポートすることで、テレメトリデータの効率的な保存、クエリ、可視化を可能にします。詳細は [EMQX Tables 概要](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_overview.html) をご覧ください。
 
-Starting from EMQX Enterprise 6.1, an EMQX Tables connector and Sink are provided, allowing on-premise EMQX Enterprise deployments to securely write MQTT data into an EMQX Tables deployment hosted in EMQX Cloud for centralized querying and processing.
+EMQX Enterprise 6.1 以降では、EMQX Tables コネクターとシンクが提供されており、オンプレミスの EMQX Enterprise 環境から EMQX Cloud 上の EMQX Tables へ MQTT データを安全に書き込み、集中クエリおよび処理が可能です。
 
 ![enterprise_tables_integration](./assets/enterprise_tables_integration.png)
 
-This page walks you through ingesting MQTT data from EMQX Enterprise into EMQX Tables in EMQX Cloud by:
+本ページでは、EMQX Enterprise から EMQX Cloud の EMQX Tables へ MQTT データを取り込む手順を以下の流れで説明します。
 
-- Establishing network connectivity between EMQX Enterprise and EMQX Tables
-- Creating an EMQX Tables connector
-- Creating a rule with an EMQX Tables action
-- Testing data ingestion and querying results
+- EMQX Enterprise と EMQX Tables 間のネットワーク接続を確立する
+- EMQX Tables コネクターを作成する
+- EMQX Tables アクションを含むルールを作成する
+- データ取り込みとクエリ結果をテストする
 
-## Prerequisites
+## 前提条件
 
-Before you start, ensure that you meet the following requirements:
+開始前に以下の要件を満たしていることを確認してください。
 
-- EMQX Enterprise version 6.1 or later is deployed in an on-premise or private environment.
+- オンプレミスまたはプライベート環境に EMQX Enterprise バージョン 6.1 以降がデプロイされていること。
 
-- An EMQX Tables deployment is created and running in [EMQX Cloud Console](https://accounts.emqx.com/signin?continue=https://cloud-intl.emqx.com/console/). 
+- [EMQX Cloud コンソール](https://accounts.emqx.com/signin?continue=https://cloud-intl.emqx.com/console/) 上に EMQX Tables のデプロイメントが作成され、稼働していること。
 
-  - For instructions on creating EMQX Tables, see [Create an EMQX Tables deployment](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_create_deployment.html).
-  - Retrieve the connection information on the **Deployment Overview** page:
+  - EMQX Tables の作成手順は [EMQX Tables デプロイメントの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_create_deployment.html) を参照してください。
+  - **Deployment Overview** ページで接続情報を取得します。
 
   ![emqx_tables_connection_info](./assets/emqx_tables_connection_info.png)
 
-- Your EMQX Enterprise deployment can reach the EMQX Tables endpoint over the network (public endpoint or private connectivity, depending on your setup).
+- EMQX Enterprise のデプロイメントから EMQX Tables のエンドポイントへネットワーク経由で到達可能であること（パブリックエンドポイントまたはプライベート接続は環境により異なります）。
 
-- You are familiar with:
-  - [EMQX Rules](./rules.md)
-  - [Data Integration](./data-bridges.md)
+- 以下に習熟していること：
+  - [EMQX ルール](./rules.md)
+  - [データ統合](./data-bridges.md)
   - [InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)
 
-## Create an EMQX Tables Connector
+## EMQX Tables コネクターを作成する
 
-Before writing data, create a connector to EMQX Tables in your EMQX Enterprise deployment.
+データを書き込む前に、EMQX Enterprise 環境で EMQX Tables へのコネクターを作成します。
 
-1. In the EMQX Enterprise Dashboard, navigate to **Data Integration** -> **Connectors**.
+1. EMQX Enterprise ダッシュボードで、**データ統合** -> **コネクター** に移動します。
 
-2. Click **+ New Connector** and select **EMQX Tables**.
+2. **+ 新しいコネクター** をクリックし、**EMQX Tables** を選択します。
 
-3. On the **Create Connector** page, configure the following settings:
-   - **Connector Name**: Enter a unique name for the connector.
+3. **コネクター作成** ページで以下の設定を行います。
+
+   - **コネクター名**：コネクターの一意の名前を入力します。
    
-   - **Description** (Optional): Add a brief description for identification purposes.
+   - **説明**（任意）：識別用の簡単な説明を追加します。
    
-   - **Server Host**: Enter the EMQX Tables service address in the format `<host>:<port>`. For example: `tables.example.emqx.com:4001`.
+   - **サーバーホスト**：EMQX Tables サービスのアドレスを `<host>:<port>` 形式で入力します。例：`tables.example.emqx.com:4001`
    
-   - **Database**: Specify the target database name in EMQX Tables, for example, `public`.
+   - **データベース**：EMQX Tables の対象データベース名を指定します。例：`public`
    
      ::: tip
-   
-     When you create the EMQX Tables deployment, the default `public` database is created. If you want to create a custom database, see [Create a Custom Database](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_quick_start.html#create-a-custom-database).
-   
+     
+     EMQX Tables デプロイメント作成時にデフォルトの `public` データベースが作成されます。カスタムデータベースを作成する場合は [カスタムデータベースの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_quick_start.html#create-a-custom-database) を参照してください。
+     
      :::
    
-   - **Username**: Enter the username provided by your EMQX Tables deployment.
+   - **ユーザー名**：EMQX Tables デプロイメントから提供されたユーザー名を入力します。
    
-   - **Password**: Enter the corresponding password.
+   - **パスワード**：対応するパスワードを入力します。
    
-   - **Enable TLS**: Enable this option to use TLS encryption when connecting to EMQX Tables. TLS is recommended for production environments.
+   - **TLS を有効化**：EMQX Tables への接続時に TLS 暗号化を使用する場合は有効にします。TLS は本番環境で推奨されます。
    
-   - **Advanced Settings** (Optional): Expand this section to configure advanced options such as connection pool size, timeouts, or retry behavior, if required.
+   - **詳細設定**（任意）：接続プールサイズ、タイムアウト、リトライ動作などの詳細オプションを必要に応じて設定します。
    
-4. Click **Test Connectivity** to verify connectivity. If the EMQX Tables service is reachable, a success message is displayed.
+4. **接続テスト** をクリックして接続確認を行います。EMQX Tables サービスに接続できれば成功メッセージが表示されます。
 
-5. Click **Create** to complete the connector creation.
+5. **作成** をクリックしてコネクター作成を完了します。
 
-You can now use this connector when defining rules and actions.
+このコネクターはルールやアクション定義時に利用可能です。
 
-## Create a Rule for Data Ingestion into EMQX Tables
+## EMQX Tables へのデータ取り込み用ルールを作成する
 
-Next, create a rule to specify which MQTT messages should be written and how they are stored in EMQX Tables.
+次に、どの MQTT メッセージをどのように EMQX Tables に書き込むかを指定するルールを作成します。
 
-### Define the SQL Rule
+### SQL ルールの定義
 
-1. Go to **Data Integration** -> **Rules**.
+1. **データ統合** -> **ルール** に移動します。
 
-2. Click **+ Create**.
+2. **+ 作成** をクリックします。
 
-3. In the **SQL Editor**, define the rule logic. In this example, the rule is triggered when a client publishes temperature and humidity data to the `temp_hum/emqx` topic:
+3. **SQL エディター**でルールロジックを定義します。例として、クライアントが `temp_hum/emqx` トピックに温度と湿度データをパブリッシュしたときにトリガーされるルールは以下の通りです。
 
    ```sql
    SELECT
@@ -95,81 +96,81 @@ Next, create a rule to specify which MQTT messages should be written and how the
 
    ::: tip
 
-   If you are new to EMQX Rules, click **Try It Out** to learn and test the SQL rule interactively.
+   EMQX ルールが初めての場合は、**Try It Out** をクリックして SQL ルールを対話的に学習・テストできます。
 
    :::
 
-4. Click **+ Add Action** to append an action to the rule.
+4. **+ アクション追加** をクリックしてルールにアクションを追加します。
 
-### Add an EMQX Tables Action
+### EMQX Tables アクションを追加する
 
-After defining the SQL rule, add an action to write the selected data into EMQX Tables when the rule is triggered.
+SQL ルールを定義した後、ルールがトリガーされた際に選択されたデータを EMQX Tables に書き込むアクションを追加します。
 
-1. In **Type of Action**, select **EMQX Tables**.
+1. **アクションの種類** で **EMQX Tables** を選択します。
 
-2. Keep **Action** set to **Create Action**.
+2. **アクション** は **アクション作成** のままにします。
 
-3. Configure the following fields:
+3. 以下の項目を設定します。
 
-   - **Name**: Enter a name for the action.
+   - **名前**：アクションの名前を入力します。
 
-   - **Connector**: Select the EMQX Tables connector you just created.
+   - **コネクター**：先ほど作成した EMQX Tables コネクターを選択します。
 
-   - **Description** (optional): Add a description for this action.
+   - **説明**（任意）：このアクションの説明を追加します。
 
-   - **Write Syntax**:  Define the InfluxDB Line Protocol format used to write data into EMQX Tables.
+   - **書き込み構文**：EMQX Tables への書き込みに使用する InfluxDB Line Protocol の形式を定義します。
 
-     The placeholders in the Write Syntax (for example, `${location}`, `${temp}`) must correspond to the fields selected in the SQL rule. When the rule is triggered, EMQX replaces these placeholders with the values produced by the SQL query.
+     書き込み構文内のプレースホルダー（例：`${location}`, `${temp}`）は SQL ルールで選択したフィールドに対応している必要があります。ルールがトリガーされると、EMQX はこれらのプレースホルダーを SQL クエリで生成された値に置き換えます。
 
-     The measurement at the beginning of the line protocol determines the table name. A table is created automatically when data is written successfully for the first time.
+     Line Protocol の先頭の measurement がテーブル名となります。データが初めて正常に書き込まれるとテーブルが自動作成されます。
 
-     Example:
+     例：
 
      ```pgsql
      temp_hum,location=${location} temp=${temp},hum=${hum} ${timestamp}
      ```
 
-     In this example:
+     この例では、
 
-     - `temp_hum` is the measurement and will be used as the table name.
-     - `location` is written as a tag.
-     - `temp` and `hum` are written as fields.
-     - `${timestamp}` provides the timestamp generated by the rule engine.
+     - `temp_hum` が measurement でテーブル名として使用されます。
+     - `location` はタグとして書き込まれます。
+     - `temp` と `hum` はフィールドとして書き込まれます。
+     - `${timestamp}` はルールエンジンで生成されたタイムスタンプを提供します。
 
-     > Note: 
+     > 注意：
      >
-     > - To write a signed integer value, append `i` after the placeholder, for example: `${payload.int}i`.
-     > - To write an unsigned integer value, append `u` after the placeholder, for example: `${payload.int}u`.
-     > - If you do not add a suffix, whole-number values are interpreted as signed integers by default, and values containing a decimal point are interpreted as floating-point numbers.
-     > - Use `i` when the value may be negative or must be stored as a signed integer, and use `u` for non-negative values that should be stored as unsigned integers (for example, counters, IDs, or monotonically increasing metrics).
+     > - 符号付き整数値を書き込む場合はプレースホルダーの後に `i` を付けます。例：`${payload.int}i`
+     > - 符号なし整数値の場合は `u` を付けます。例：`${payload.int}u`
+     > - サフィックスを付けない場合、整数値はデフォルトで符号付き整数として扱われ、小数点を含む値は浮動小数点数として扱われます。
+     > - 値が負の可能性があるか符号付き整数として保存する必要がある場合は `i` を使用し、非負の値で符号なし整数として保存したい場合（カウンター、ID、単調増加するメトリクスなど）は `u` を使用してください。
 
-   - **Time Precision**: Select the time precision for timestamps. The default value is `millisecond`.
+   - **時間精度**：タイムスタンプの時間精度を選択します。デフォルトは `millisecond` です。
 
-   - **Fallback Actions** (optional): Configure fallback actions to be executed if this action fails. By default, no fallback action is configured. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+   - **フォールバックアクション**（任意）：このアクションが失敗した場合に実行するフォールバックアクションを設定できます。デフォルトではフォールバックアクションは設定されていません。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-   - **Advanced Settings** (optional): Expand this section to configure advanced behavior such as batching or retry policies, if required.
+   - **詳細設定**（任意）：バッチ処理やリトライポリシーなどの詳細動作を必要に応じて設定します。
 
    ![emqx_tables_action](./assets/emqx_tables_action.png)
 
-4. Click **Create** to save the action.
+4. **作成** をクリックしてアクションを保存します。
 
-5. On the **Create Rule** page, click **Save** to save the rule.
+5. **ルール作成** ページで **保存** をクリックしてルールを保存します。
 
-## Test Rule and Query Data
+## ルールのテストとデータのクエリ
 
-You are recommended to use [MQTTX](https://mqttx.app/) or other client tools to simulate temperature and humidity data reporting. For quick demonstration, you can just use built-in diagnostic tool inside your Dashboard.
+[MQTTX](https://mqttx.app/) などのクライアントツールを使って温度・湿度データの送信をシミュレーションすることを推奨します。簡単なデモとしては、ダッシュボード内の組み込み診断ツールを使うことも可能です。
 
-### Publish Test Data Using Websocket Client
+### Websocket クライアントでテストデータをパブリッシュする
 
-1. In the EMQX Enterprise Dashboard, click **Diagnostic Tools** -> **Websocket Client** from the left menu.
+1. EMQX Enterprise ダッシュボードで、左メニューから **診断ツール** -> **Websocket クライアント** をクリックします。
 
-2. Connect as a simulated client using a username/password or auto-generated authentication.
+2. ユーザー名／パスワード認証または自動生成認証でシミュレートクライアントとして接続します。
 
-3. In the **Publish** section, publish a message with the following settings:
+3. **パブリッシュ** セクションで以下の設定でメッセージをパブリッシュします。
 
-   - **Topic**: `temp_hum/emqx`
+   - **トピック**：`temp_hum/emqx`
    
-   - **Payload**:
+   - **ペイロード**：
    
      ```json
      {
@@ -182,34 +183,36 @@ You are recommended to use [MQTTX](https://mqttx.app/) or other client tools to 
 
 ![emqx_tables_publish](./assets/emqx_tables_publish.png)
 
-The message should trigger the rule and be written into EMQX Tables.
+このメッセージによりルールがトリガーされ、EMQX Tables に書き込まれます。
 
-### Query Data in EMQX Tables
+### EMQX Tables でデータをクエリする
 
-1. Log in to the EMQX Cloud Console.
+1. EMQX Cloud コンソールにログインします。
 
-2. Navigate to your EMQX Tables deployment.
+2. EMQX Tables のデプロイメントに移動します。
 
-3. Click **Data Explorer**.
+3. **データエクスプローラー** をクリックします。
 
-4. Run the following SQL query:
+4. 以下の SQL クエリを実行します。
 
    ```sql
    SELECT * FROM "temp_hum"
    ```
 
-You should see the newly ingested record in the query results.
+クエリ結果に新しく取り込まれたレコードが表示されるはずです。
 
 ![emqx_tables_query](./assets/emqx_tables_query.png)
 
-## View Rule Statistics
+## ルール統計情報の確認
 
-To verify runtime behavior and performance:
+実行時の動作やパフォーマンスを確認するには：
 
-1. Return to your EMQX Enterprise Dashboard.
-2. Go to **Data Integration** -> **Rules**.
-3. Click the rule ID you created.
+1. EMQX Enterprise ダッシュボードに戻ります。
 
-You can view execution statistics for the rule and its associated EMQX Tables action, including success and failure counts.
+2. **データ統合** -> **ルール** に移動します。
+
+3. 作成したルール ID をクリックします。
+
+ルールおよび関連する EMQX Tables アクションの成功数や失敗数などの実行統計を確認できます。
 
 ![emqx_tables_statistics](./assets/emqx_tables_statistics.png)

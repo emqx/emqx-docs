@@ -1,117 +1,195 @@
 # MQTT Streams
 
-EMQX 6.1 introduces the MQTT Streams, a streaming and replay feature that extends MQTT’s real-time publish/subscribe model with persistent, replayable message streams. It enables Kafka-like streaming capabilities while preserving MQTT semantics.
+EMQX 6.1では、MQTTのリアルタイムなパブリッシュ／サブスクライブモデルを拡張し、永続的でリプレイ可能なメッセージストリームを実現するストリーミングおよびリプレイ機能であるMQTT Streamsを導入しました。これにより、MQTTのセマンティクスを維持しつつ、Kafkaのようなストリーミング機能を提供します。
 
-This page provides a complete overview of the MQTT Streams feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
+本ページでは、EMQXにおけるMQTT Streamsの機能全体像を、設計の動機、主要概念、内部アーキテクチャ、メッセージフロー、実際の適用シナリオにわたって解説します。
 
-## What Is an MQTT Stream?
+## MQTT Streamとは何か？
 
-An MQTT Stream is a logical collection of MQTT messages that automatically collects messages matching a topic filter during its lifetime. It stores matching messages durably and allows clients to replay historical data by subscribing to a stream-specific topic.
+MQTT Streamは、名前付きの論理リソースであり、設定されたトピックフィルターにマッチするMQTTメッセージを継続的に収集します。メッセージはストリームの保持ポリシーに従って永続的に保存され、後からサブスクライブするクライアントによってリプレイ可能です。
 
-## Why Use MQTT Streams?
+ストリームは一意の名前で識別されます。トピックフィルターはストリームの設定の一部であり、識別子ではありません。
 
-MQTT is optimized for real-time messaging, but it has inherent limitations:
+各ストリームは以下を持ちます：
 
-- Messages are typically delivered only to online subscribers.
-- Historical data replay is not natively supported.
-- Reprocessing past data requires external systems.
-- Maintaining an ordered, replayable message history is difficult.
+- 一意の名前
+- 設定されたトピックフィルター
+- 保持ポリシー（時間ベースおよび／またはサイズベース）
+- オプションのラストバリューセマンティクス
+- 明示的なライフサイクル（作成、更新、削除）
 
-MQTT Streams extends MQTT with durable message storage and replay. It allows consumers to read historical messages and retrieve the latest state of devices without changing how MQTT clients publish or subscribe.
+## なぜMQTT Streamsを使うのか？
 
-## MQTT Streams Key Concepts
+MQTTはリアルタイムメッセージングに最適化されていますが、以下のような制約があります：
+
+- メッセージは通常オンラインのサブスクライバーにのみ配信される。
+- 過去のデータリプレイはネイティブにはサポートされていない。
+- 過去データの再処理には外部システムが必要。
+- 順序付けられたリプレイ可能なメッセージ履歴の維持が困難。
+
+MQTT Streamsは、永続的なメッセージ保存とリプレイ機能をMQTTに拡張します。これにより、MQTTクライアントのパブリッシュやサブスクライブ方法を変更せずに、過去のメッセージを読み取ったり、デバイスの最新状態を取得したりできます。
+
+## MQTT Streamsの主要概念
 
 - **MQTT Stream**
 
-  A logical resource identified by an MQTT topic filter and managed with an explicit lifecycle. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
+  名前で識別・アドレス指定され、明示的なライフサイクルで管理される論理リソースです。アクティブな間は、設定された時間またはサイズの制限内でマッチするメッセージを継続的に保存します。保存されたメッセージは、パブリッシャー側の変更なしにサブスクライバーによってリプレイ可能です。
 
-  - **Regular MQTT Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay all messages published after any given point in time by subscribing with a timestamp.
-  - **Last-Value MQTT Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
+  ストリーム名に使用できる文字は以下のみです：
 
-- **Topic Filter**
+  - 英数字（`A–Z`、`a–z`、`0–9`）
+  - アンダースコア（`_`）
+  - ハイフン（`-`）
+  - ドット（`.`）
 
-  An MQTT topic filter, such as `sensors/+/data`, that determines which published messages are captured into a stream. Only matching messages are ingested, and a single message may belong to multiple streams.
+  2種類のストリームタイプをサポートしています：
 
-- **Stream Subscription**
+  - **レギュラーストリーム**：履歴データを上書きせずにすべてのマッチメッセージを保存します。`stream-offset`サブスクリプションプロパティを使い、指定したタイムスタンプやオフセットからリプレイ可能です。
+  - **ラストバリューストリーム**：[ラストバリューセマンティクス](#last-value-semantics)を有効にします。同じストリームキーを持つメッセージは新しいものが古いものを上書きし、各キーに対して最新のメッセージのみを保持します。
 
-  A special MQTT subscription used to consume messages from a stream. Clients subscribe using the `$s/<timestamp>/<topic_filter>` format. The timestamp specifies the replay starting point. Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
+- **トピックフィルター**
 
-- **Key Expression**
+  `sensors/+/data`のようなMQTTトピックフィルターで、どのパブリッシュメッセージをストリームに取り込むかを決定します。マッチするメッセージのみが取り込まれ、1つのメッセージが複数のストリームに属することもあります。
 
-  A user-defined expression evaluated on each incoming message to extract a key. The expression may reference message content or metadata. The extracted key is used to guarantee message ordering within a storage partition. When Last-Value semantics are enabled for the stream, the key also defines the overwrite scope: newer messages with the same key replace older ones.
+  ::: tip
 
-## MQTT Streams Architecture
+  トピックフィルターはストリームの識別子ではなく、名前付きストリームの設定メタデータです。
 
-MQTT Streams are implemented as a standalone EMQX application that is loosely coupled with the broker core and reuses existing infrastructure. Integration with EMQX is achieved through internal hooks and the External Subscription framework.
+  :::
+
+- **ストリームサブスクリプション**
+
+  ストリームからメッセージを消費するための特別なMQTTサブスクリプションです。クライアントは以下のいずれかの形式でサブスクライブします：
+
+    ```
+  SUBSCRIBE $stream/<name>
+  SUBSCRIBE $stream/<name>/<topic_filter>
+    ```
+
+   ここで：
+
+    - `<name>` はストリーム名（必須）。
+    - `<topic_filter>` は既存ストリームにサブスクライブする場合は省略可能。
+    - オートクリエーションが有効な場合、`$stream/<name>/<topic_filter>`は存在しない場合に指定されたトピックフィルターでストリームを作成します。
+
+  ストリームサブスクリプションは通常のMQTTサブスクリプションとは独立して動作し、External Subscription機構を通じて配信されます。
+
+- **ストリームオフセット（リプレイ開始位置）**
+
+  リプレイの開始位置はトピックパスではなく、MQTT 5のユーザーサブスクリプションプロパティ`stream-offset`で指定します。
+
+  `stream-offset`プロパティはリプレイ開始位置を決定します。例：
+
+  - タイムスタンプ
+  - 論理的オフセット
+  - 最も早い位置や最新位置などの特別な位置（対応している場合）
+
+  この設計により、トピック文字列からのオフセット解析が不要になり、MQTT 5のプロパティによるリプレイ制御と整合します。
+
+- **キー式**
+
+  各受信メッセージに対して評価されるユーザー定義の式で、キーを抽出します。式はメッセージの内容やメタデータを参照可能です。抽出されたキーはストレージパーティション内のメッセージ順序保証に使われます。ラストバリューセマンティクスが有効な場合、このキーが上書きの範囲を定義し、同じキーの新しいメッセージが古いものを置き換えます。
+
+## MQTT Streamsのアーキテクチャ
+
+MQTT Streamsは、ブローカーコアと疎結合で動作する独立したEMQXアプリケーションとして実装されており、既存のインフラを再利用しています。EMQXとの統合は内部フックとExternal Subscriptionフレームワークを通じて実現されています。
 
 ::: tip
 
-External Subscription is an EMQX mechanism that connects external message sources (messages originating outside the live MQTT publish path) to MQTT client sessions, allowing those messages to be delivered to MQTT clients through standard MQTT subscriptions without changing client behavior.
+External Subscriptionは、ライブMQTTパブリッシュ経路外から発生するメッセージなどの外部メッセージソースをMQTTクライアントセッションに接続し、クライアントの動作を変えずに標準MQTTサブスクリプション経由でメッセージを配信できるEMQXの仕組みです。
 
 :::
 
-### Main Components
+### 主なコンポーネント
 
-- **Streams Registry**: Manages the lifecycle of MQTT streams and maintains stream metadata and indexes. It uses a Mnesia table to efficiently look up streams by topic filter.
-- **Streams Message Database**: Provides durable storage for stream messages and is built on top of EMQX [Durable Storage](../design/durable-storage.md). It persists messages, enforces retention limits, applies Last-Value semantics when enabled, and supports efficient message retrieval until messages expire according to retention policies.
-- **Streams ExtSub Handler**: Integrates message streams with MQTT client sessions. It retrieves messages from Durable Storage and delivers them to subscribing clients through the External Subscription framework.
+- **Streams Registry**：MQTTストリームのライフサイクルを管理し、ストリーム名、トピックフィルター、保持ポリシー、キー式などのメタデータを保持します。Mnesiaテーブルを使って効率的にストリームを検索します。
+- **Streams Message Database**：ストリームメッセージの永続ストレージを提供し、EMQXの[パーシステントストレージ](../design/durable-storage.md)上に構築されています。メッセージの永続化、保持制限の適用、ラストバリューセマンティクスの適用、保持ポリシーに従った効率的なメッセージ取得をサポートします。
+- **Streams ExtSub Handler**：メッセージストリームとMQTTクライアントセッションを統合します。パーシステントストレージからメッセージを取得し、External Subscriptionフレームワークを通じてサブスクライバーに配信します。
 
-### MQTT Streams Data Flow Diagram
+### MQTT Streamsのデータフローダイアグラム
 
-The following diagram shows the data flow between the MQTT Streams components:
+以下の図はMQTT Streamsコンポーネント間のデータフローを示しています：
 
-![streams_data_flow](./assets/streams_data_flow.png)
+![streams_data_flow](./assets/mqtt_streams_data_flow.png)
 
-### Publishing Flow
+### パブリッシュフロー
 
-1. A client publishes a message to an MQTT topic.
-2. An MQTT Streams hook is triggered to process the publication.
-3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic. 
-4. For each matching stream, the message is written to the stream and persisted in Durable Storage.
+1. クライアントがMQTTトピックにメッセージをパブリッシュする。
+2. MQTT Streamsフックがトリガーされ、パブリッシュ処理を行う。
+3. フックはStreams Registryに問い合わせ、メッセージトピックにマッチするストリームを特定する。
+4. マッチした各ストリームに対してメッセージを書き込み、パーシステントストレージに永続化する。
 
-### Subscribing and Consuming Flow
+### サブスクライブおよび消費フロー
 
-1. A client subscribes to a stream topic (`$s/<timestamp>/<topic_filter>`).
-2. The External Subscription framework handles the subscription and initializes a Streams ExtSub handler for the stream topic.
-3. The handler retrieves messages from Durable Storage according to the specified timestamp and retention rules.
-4. Retrieved messages are passed to the External Subscription framework. 
-5. The ExtSub application delivers messages to the client via standard MQTT delivery.
+1. クライアントがストリームトピック（`$stream/<name>`または`$stream/<name>/<topic_filter>`）にサブスクライブし、必要に応じて`stream-offset`サブスクリプションプロパティを含める。
 
-## MQTT Streams Core Features
+   ::: warning Deprecated
 
-MQTT Streams provide a set of core capabilities that define how messages are stored, ordered, retained, and delivered for replay-based consumption.
+   従来の形式`$s/<offset>/<topic_filter>`は互換性のためにサポートされていますが非推奨です。詳細は[互換性に関する注意](#compatibility-notes)を参照してください。
 
-- **Timestamp-Based Replay**
+   :::
 
-  MQTT streams support replay starting from a specified timestamp. Consumers choose the timestamp when subscribing. Messages published before the timestamp are skipped.
+2. External Subscriptionフレームワークがサブスクリプションを処理し、ストリームトピック用のStreams ExtSubハンドラーを初期化する。
+3. ハンドラーは指定された`stream-offset`と保持ルールに従い、パーシステントストレージからメッセージを取得する。
+4. 取得したメッセージはExternal Subscriptionフレームワークに渡される。
+5. ExtSubアプリケーションが標準MQTT配信を通じてクライアントにメッセージを届ける。
 
-- **Retention**
+## MQTT Streamsのコア機能
 
-  The stream’s retention policy limits the message replay. Messages are retained for a limited time or size. Expired messages are removed automatically, regardless of whether they have been consumed.
+MQTT Streamsは、メッセージの保存、順序付け、保持、リプレイ消費のための配信方法を定義する一連のコア機能を提供します。
 
-- **Per-Key Ordering**
+- **オフセットベースのリプレイ**
 
-  MQTT streams do not guarantee a single global delivery order. Messages that share the same key are always delivered in the order in which they were published. Messages with different keys may be delivered in any order.
+  リプレイ開始位置は`stream-offset`サブスクリプションプロパティで指定し、トピックパスには含めません。指定されたオフセット以前にパブリッシュされたメッセージはスキップされます。
 
-- **Last-Value Semantics**
+- **保持**
 
-  A stream may enable Last-Value semantics. Messages with the same key overwrite earlier messages. Only the latest value is retained. Messages without a resolved key are stored normally.
+  ストリームの保持ポリシーによりリプレイ可能なメッセージが制限されます。メッセージは時間またはサイズの制限内で保持され、期限切れのメッセージは消費済みか否かに関わらず自動的に削除されます。
 
-- **MQTT-Native Delivery**
+- **キーごとの順序付け**
 
-  Stream messages are delivered using standard MQTT mechanisms. Publishers do not need to change their behavior. Message delivery to subscribers is integrated through External Subscription.
+  MQTT Streamsは単一のグローバルな配信順序を保証しません。同じキーを持つメッセージは必ず発行順に配信されますが、異なるキーのメッセージは任意の順序で配信される可能性があります。
 
-## Typical Use Cases
+- **ラストバリューセマンティクス**
 
-- **Historical Data Replay**: Reprocess past MQTT events for debugging or new business logic.
-- **Time-Series Analysis**: Store and replay sensor data for analytics and predictive maintenance.
-- **Event Sourcing**: Persist all state changes as an immutable event log.
-- **IoT Digital Twins**: Maintain the latest state of physical devices in digital form.
-- **Configuration Synchronization**: Ensure devices always receive the most recent configuration.
+  ストリームはラストバリューセマンティクスを有効にできます。同じキーを持つメッセージは新しいものが古いものを上書きし、最新の値のみが保持されます。キーが解決できないメッセージは通常通り保存されます。
 
-## Next Steps
+- **MQTTネイティブ配信**
 
-Now that you understand the MQTT Streams fundamentals, explore how to put them into practice:
+  ストリームメッセージは標準MQTTメカニズムを使って配信されます。パブリッシャーは動作を変更する必要がなく、サブスクライバーへのメッセージ配信はExternal Subscriptionを通じて統合されています。
 
-- [Create and Configure a Stream](./mqtt-stream-task.md): Learn how to declare streams via Dashboard or REST API, and set last-value semantics and retention policies.
-- [Quick Start Tutorial](./mqtt-stream-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.
+## 互換性に関する注意
+
+既存のデプロイメントにおける互換性の考慮点を説明します。
+
+### 名前付きストリーム
+
+- すべてのストリームは明示的に名前付きリソースとなりました。
+- ストリーム名は許可された文字セットのルールに従う必要があります。
+
+### レガシーストリーム
+
+以前に作成された名前なしストリームには、トピックフィルターから派生した名前が自動的に割り当てられます。
+
+派生名は`/<topic_filter>`となります。
+
+### 非推奨のプレフィックス
+
+ストリームサブスクライブ用の`$s`プレフィックスは互換性のためにまだサポートされていますが非推奨です。
+
+新規デプロイメントでは`$stream/<name>`を使用してください。
+
+## 典型的なユースケース
+
+- **過去データのリプレイ**：過去のMQTTイベントを再処理し、デバッグや新しいビジネスロジックに活用。
+- **時系列分析**：センサーデータを保存・リプレイし、分析や予知保全に利用。
+- **イベントソーシング**：すべての状態変化を不変のイベントログとして永続化。
+- **IoTデジタルツイン**：物理デバイスの最新状態をデジタルで保持。
+- **設定同期**：デバイスが常に最新の設定を受け取ることを保証。
+
+## 次のステップ
+
+MQTT Streamsの基本を理解したら、実際の利用方法を学びましょう：
+
+- [ストリームの作成と設定](./mqtt-stream-task.md)：ダッシュボードやREST APIを使ったストリーム宣言、ラストバリューセマンティクスや保持ポリシーの設定方法を解説。
+- [クイックスタートチュートリアル](./mqtt-stream-quick-start.md)：MQTTXを使った実践的なパブリッシャー／サブスクライバーシナリオのステップバイステップガイド。
