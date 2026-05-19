@@ -196,4 +196,4 @@ jobs:
             --body "$pr_body" \
             --base "${{ steps.get-branch.outputs.branch_name }}" \
             --head "${{ env.new_branch }}" \
-            --reviewer "SuncNoob"
+            --reviewer "Meggielqk"
