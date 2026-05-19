@@ -1,12 +1,15 @@
-name: Auto Translate to Japanese
+name: Translate to Japanese
 
 on:
   push:
     branches:
       - release-5.9
       - release-5.10
+      - release-[6-9].[0-9]
+      - release-[6-9].[0-9][0-9]
     paths:
       - 'en_US/**'
+      - 'dir.yaml'
   workflow_dispatch:
 
 concurrency:
@@ -26,8 +29,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           current_branch="${GITHUB_REF#refs/heads/}"
-          if [[ "$current_branch" != "release-5.9" && "$current_branch" != "release-5.10" ]]; then
-            echo "Error: Manual runs are only allowed on release-5.9 or release-5.10 branches"
+          if [[ ! "$current_branch" =~ ^release-(5\.9|5\.10|[6-9]\.[0-9]{1,2})$ ]]; then
+            echo "Error: Manual runs are only allowed on release-5.9, release-5.10, or release-[6-9].x branches"
             echo "Current branch: $current_branch"
             exit 1
           fi
@@ -42,19 +45,13 @@ jobs:
           owner: ${{ github.repository_owner }}
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: |
-          pip install requests pyyaml
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
       - name: Get current branch name
         id: get-branch
@@ -64,8 +61,7 @@ jobs:
       - name: Copy assets from en_US to ja_JP
         run: |
           cp -r en_US/* ja_JP/
-          git restore "ja_JP/*.md" || true
-          git restore "ja_JP/**/*.md" || true
+          git restore -- "ja_JP/**/*.md" || true
 
       - name: Get current English docs commit hash
         id: current-hash
@@ -78,23 +74,33 @@ jobs:
         id: last-hash
         run: |
           if [ ! -f "ja_JP/last_translation_commit" ]; then
-            echo "Error: ja_JP/last_translation_commit file not found"
-            echo "Please run initial translation manually first"
-            exit 1
+            echo "ja_JP/last_translation_commit not found, falling back to full translation"
+            echo "full_translation=true" >> $GITHUB_OUTPUT
+            exit 0
           fi
           last_hash=$(cat ja_JP/last_translation_commit | tr -d '\n')
+          if ! git cat-file -e "$last_hash" 2>/dev/null; then
+            echo "Last translation commit $last_hash does not exist in history, falling back to full translation"
+            echo "full_translation=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           echo "last_hash=$last_hash" >> $GITHUB_OUTPUT
+          echo "full_translation=false" >> $GITHUB_OUTPUT
           echo "Last translation hash: $last_hash"
+
+      - name: Generate directory.json
+        run: |
+          uv run --with pyyaml gen.py ce | tee directory.json > /dev/null
 
       - name: Get modified markdown files
         id: modified-files
         run: |
-          if ! git cat-file -e "${{ steps.last-hash.outputs.last_hash }}" 2>/dev/null; then
-            echo "Error: Last translation commit hash ${{ steps.last-hash.outputs.last_hash }} does not exist"
-            exit 1
+          if [ "${{ steps.last-hash.outputs.full_translation }}" == "true" ]; then
+            echo "Running full translation: listing files from directory.json (ja section)"
+            modified_files=$(uv run .github/scripts/list_translation_targets.py directory.json)
+          else
+            modified_files=$(git diff --name-only --diff-filter=ACMR ${{ steps.last-hash.outputs.last_hash }} ${{ steps.current-hash.outputs.current_hash }} -- 'en_US/**/*.md' || echo "")
           fi
-
-          modified_files=$(git diff --name-only ${{ steps.last-hash.outputs.last_hash }} ${{ steps.current-hash.outputs.current_hash }} -- 'en_US/**/*.md' || echo "")
 
           if [ -z "$modified_files" ]; then
             echo "No markdown files to translate, exiting workflow"
@@ -115,18 +121,10 @@ jobs:
           OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
           OPENAI_API_URL: ${{ secrets.OPENAI_API_URL }}
         run: |
-          echo "Starting translation process..."
-          while IFS= read -r file; do
-            if [ -n "$file" ]; then
-              echo "Translating: $file"
-              python3 .github/scripts/translate_to_ja.py "$file"
-            fi
-          done < modified_files.txt
-          python3 .github/scripts/translate_to_ja.py ./dir.yaml
+          echo "./dir.yaml" >> modified_files.txt
+          uv run .github/scripts/translate_to_ja.py modified_files.txt directory.json
 
-          ./gen.py ce | tee directory.json
-          python3 .github/scripts/remove_unused.py directory.json $(pwd)
-          git restore '*.md' ':!ja_JP/**/*.md'
+          uv run .github/scripts/remove_unused.py directory.json $(pwd) ja_JP
 
       - name: Update last translation commit hash
         if: steps.modified-files.outputs.has_changes == 'true'
@@ -152,7 +150,13 @@ jobs:
 
           last_short=$(echo "${{ steps.last-hash.outputs.last_hash }}" | cut -c1-7)
           current_short=$(echo "${{ steps.current-hash.outputs.current_hash }}" | cut -c1-7)
-          commit_msg="docs(ja): sync translations from ${last_short} to ${current_short}"
+          branch_name="${{ steps.get-branch.outputs.branch_name }}"
+          if [ -z "$last_short" ]; then
+            range_desc="initial..${current_short}"
+          else
+            range_desc="${last_short}..${current_short}"
+          fi
+          commit_msg="docs(ja): [${branch_name}] sync translations ${range_desc}"
 
           git commit -m "$commit_msg"
           git push origin "$new_branch"
@@ -165,19 +169,32 @@ jobs:
         run: |
           last_short=$(echo "${{ steps.last-hash.outputs.last_hash }}" | cut -c1-7)
           current_short=$(echo "${{ steps.current-hash.outputs.current_hash }}" | cut -c1-7)
+          branch_name="${{ steps.get-branch.outputs.branch_name }}"
+          if [ -z "$last_short" ]; then
+            range_desc="initial..${current_short}"
+            english_changes_url="https://github.com/emqx/emqx-docs/commit/${{ steps.current-hash.outputs.current_hash }}"
+          else
+            range_desc="${last_short}..${current_short}"
+            english_changes_url="https://github.com/emqx/emqx-docs/compare/${{ steps.last-hash.outputs.last_hash }}...${{ steps.current-hash.outputs.current_hash }}"
+          fi
 
-          pr_title="docs(ja): sync translations from ${last_short} to ${current_short}"
-          pr_body="Automatically sync Japanese translations for changes in en_US documentation.
+          pr_title="docs(ja): [${branch_name}] sync translations ${range_desc}"
+          pr_body=$(cat <<EOF
+          Syncs Japanese translations for English documentation changes in \`${range_desc}\`.
 
-          English Changes: https://github.com/emqx/emqx-docs/compare/${{ steps.last-hash.outputs.last_hash }}...${{ steps.current-hash.outputs.current_hash }}
+          - **Source diff**: ${english_changes_url}
+          - **Source branch**: \`${branch_name}\`
+          - Files under \`en_US/changes/\` are copied as-is without translation.
 
-          This PR was automatically generated by the translation workflow.
+          Generated by [.github/workflows/translate_to_ja.yaml](https://github.com/emqx/emqx-docs/blob/${branch_name}/.github/workflows/translate_to_ja.yaml).
 
-          **Note**: Please delete the branch after merging this PR."
+          **Note**: Please delete the branch after merging this PR.
+          EOF
+          )
 
           gh pr create \
             --title "$pr_title" \
             --body "$pr_body" \
             --base "${{ steps.get-branch.outputs.branch_name }}" \
             --head "${{ env.new_branch }}" \
-            --reviewer "SuncNoob"
+            --reviewer "Meggielqk"
