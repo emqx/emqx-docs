@@ -1,10 +1,23 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["requests"]
+# ///
+import json
 import os
 import sys
+import time
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import requests
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_MODEL = os.getenv('OPENAI_MODEL')
-OPENAI_API_URL = os.getenv('OPENAI_API_URL')  # https://api.openai.com/v1/chat/completions
+OPENAI_API_URL = os.getenv('OPENAI_API_URL')
+
+CONCURRENCY = int(os.getenv('TRANSLATION_CONCURRENCY', '10'))
+MAX_RETRIES = 3
+REQUEST_TIMEOUT = 600
 
 SYSTEM_PROMPT = '''
 # 1. Role & Objective
@@ -28,6 +41,7 @@ Translate EMQX documentation from **English → Japanese** for an audience of Ja
 | Element                          | Instruction                                                             |
 |----------------------------------|-------------------------------------------------------------------------|
 | Markdown structure               | Keep headings, lists, tables, emphasis, and links **unchanged**         |
+| Heading levels                   | Preserve heading levels exactly as in the source (`#`, `##`, `###`, `####`, …). The number of `#` symbols on each heading line **must match the source line-for-line**. Never add, remove, or skip levels (markdownlint MD001). |
 | Code blocks  (``` … ```)         | **Do not translate** code; translate comments inside                    |
 | Inline code  (`…`)               | **Do not translate, *unless* it is a term from the Glossary (Section 5) or Ambiguous/High-Risk Terms (Section 6).** |
 | Identifiers / API paths          | **Do not translate, *unless* it is a term from the Glossary (Section 5) or Ambiguous/High-Risk Terms (Section 6).** (e.g., `emqx_ctl`, `/api/v5/clients`) |
@@ -117,61 +131,162 @@ Translate EMQX documentation from **English → Japanese** for an audience of Ja
 Provide the translated Markdown, strictly following all rules, glossary entries, and mandatory term forms above.
 '''
 
-if __name__ == '__main__':
-    input_file_path = sys.argv[1]
-    if input_file_path.endswith('dir.yaml'):
-        pass
-    else:
+DIR_YAML_INSTRUCTION = (
+    'The following is a yaml file, the main content is the document catalog configuration. '
+    'Please translate the title_ja field according to the sibling title_en field, '
+    'add or overwrite the existing title_ja value, pay attention to comply with the '
+    'translation requirements, keep the comments unchanged, and keep the original formatting '
+    'unchanged, and return the modified yaml content directly, do not use code blocks or '
+    'other formats.\n\n'
+)
+
+log_lock = threading.Lock()
+
+
+def log(msg):
+    with log_lock:
+        print(msg, flush=True)
+
+
+def collect_paths(items):
+    paths = []
+    for item in items:
+        if item.get('path'):
+            p = item['path']
+            if p.startswith(('http://', 'https://')):
+                continue
+            paths.append('en_US/index.md' if p == './' else f'en_US/{p}.md')
+        if item.get('children'):
+            paths += collect_paths(item['children'])
+    return paths
+
+
+def translate_one(input_file_path, copy_set):
+    is_dir_yaml = input_file_path.endswith('dir.yaml')
+    if not is_dir_yaml:
         if not input_file_path.endswith('.md') or 'en_US' not in input_file_path:
-            print(f'Invalid input file path: {input_file_path}')
-            exit(-1)
+            return {'path': input_file_path, 'status': 'failed', 'error': 'invalid path'}
 
     output_file_path = input_file_path.replace('en_US', 'ja_JP')
-    if not os.path.exists(os.path.dirname(output_file_path)):
-        os.makedirs(os.path.dirname(output_file_path))
-    print(f'Translating {input_file_path} to {output_file_path}')
+    output_dir = os.path.dirname(output_file_path)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
-    markdown_text = open(input_file_path, 'r', encoding='utf-8').read().strip()
+    with open(input_file_path, 'r', encoding='utf-8') as f:
+        markdown_text = f.read().strip()
 
-    if 'changes/changes-' in input_file_path:
+    if 'en_US/changes/' in input_file_path or input_file_path in copy_set:
         with open(output_file_path, 'w', encoding='utf-8') as f:
-            f.write(markdown_text.strip() + '\n')
-        print(f'Changes file copied without translation: {output_file_path}')
-        exit(0)
+            f.write(markdown_text + '\n')
+        return {'path': input_file_path, 'status': 'copied'}
 
-    if input_file_path.endswith('dir.yaml'):
-        markdown_text = '''The following is a yaml file, the main content is the document catalog configuration. Please translate the title_ja field according to the sibling title_en field, add or overwrite the existing title_ja value, pay attention to comply with the translation requirements, keep the comments unchanged, and keep the original formatting unchanged, and return the modified yaml content directly, do not use code blocks or other formats.\n\n''' + markdown_text
-
-    translate_messages = [
-        {'role': 'system', 'content': SYSTEM_PROMPT},
-        {'role': 'user', 'content': markdown_text}
-    ]
-    timeout = 60 * 10
+    if is_dir_yaml:
+        markdown_text = DIR_YAML_INSTRUCTION + markdown_text
 
     request_body = {
         'model': OPENAI_MODEL,
-        'messages': translate_messages,
+        'messages': [
+            {'role': 'system', 'content': SYSTEM_PROMPT},
+            {'role': 'user', 'content': markdown_text},
+        ],
         'stream': False,
         'temperature': 0.3,
     }
-    headers = {
-        'api-key': OPENAI_API_KEY,
-    }
+    headers = {'api-key': OPENAI_API_KEY}
 
-    try:
-        response = requests.post(OPENAI_API_URL, json=request_body, headers=headers, timeout=timeout)
-    except Exception as e:
-        print(f'OpenAI translation failed: {e}')
-        exit(-1)
+    last_error = 'unknown'
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            response = requests.post(OPENAI_API_URL, json=request_body, headers=headers, timeout=REQUEST_TIMEOUT)
+        except Exception as e:
+            last_error = f'network error: {e}'
+            break
 
-    if response.status_code == 200:
-        print(f'Request time: {response.elapsed.total_seconds()} seconds')
-        translate_result = response.json()['choices'][0]['message']['content']
-        with open(output_file_path, 'w', encoding='utf-8') as f:
-            f.write(translate_result.strip() + '\n')
-        print(f'Translation completed with OpenAI.')
-        print('Usage:', response.json()['usage'])
-        print('Translated file saved to:', output_file_path)
-    else:
-        print(f'OpenAI translation failed with status code: {response.status_code}')
-        print(response.text)
+        if response.status_code == 200:
+            data = response.json()
+            translated = data['choices'][0]['message']['content']
+            with open(output_file_path, 'w', encoding='utf-8') as f:
+                f.write(translated.strip() + '\n')
+            return {'path': input_file_path, 'status': 'ok', 'usage': data.get('usage', {})}
+
+        if response.status_code == 429 and attempt < MAX_RETRIES:
+            wait = 2 ** attempt
+            log(f'  RETRY {input_file_path} attempt={attempt + 1}/{MAX_RETRIES} wait={wait}s (HTTP 429)')
+            time.sleep(wait)
+            continue
+
+        last_error = f'HTTP {response.status_code}'
+        break
+
+    return {'path': input_file_path, 'status': 'failed', 'error': last_error}
+
+
+def main():
+    if len(sys.argv) not in (2, 3):
+        print('Usage: translate_to_ja.py <file-list.txt> [directory.json]', file=sys.stderr)
+        sys.exit(1)
+
+    list_file = sys.argv[1]
+    directory_file = sys.argv[2] if len(sys.argv) > 2 else None
+
+    copy_set = set()
+    if directory_file:
+        with open(directory_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        en_paths = set(collect_paths(data.get('en', [])))
+        ja_paths = set(collect_paths(data.get('ja', [])))
+        copy_set = en_paths - ja_paths
+
+    with open(list_file, 'r', encoding='utf-8') as f:
+        files = [line.strip() for line in f if line.strip()]
+
+    if not files:
+        print(f'No files listed in {list_file}', file=sys.stderr)
+        sys.exit(0)
+
+    total = len(files)
+    width = len(str(total))
+    log(f'Translating {total} files (concurrency={CONCURRENCY}, max_retries={MAX_RETRIES}, copy_as_is={len(copy_set)} en-only files)')
+
+    ok = 0
+    copied = 0
+    failed = []
+    total_prompt = 0
+    total_completion = 0
+
+    with ThreadPoolExecutor(max_workers=CONCURRENCY) as executor:
+        future_to_path = {executor.submit(translate_one, f, copy_set): f for f in files}
+        for i, future in enumerate(as_completed(future_to_path), 1):
+            result = future.result()
+            path = result['path']
+            status = result['status']
+            prefix = f'[{i:>{width}}/{total}]'
+
+            if status == 'ok':
+                usage = result.get('usage', {})
+                p_tokens = usage.get('prompt_tokens', 0)
+                c_tokens = usage.get('completion_tokens', 0)
+                total_prompt += p_tokens
+                total_completion += c_tokens
+                log(f'{prefix} OK   {path} -- prompt={p_tokens} completion={c_tokens}')
+                ok += 1
+            elif status == 'copied':
+                log(f'{prefix} COPY {path}')
+                copied += 1
+            else:
+                log(f'{prefix} FAIL {path} -- {result["error"]}')
+                failed.append((path, result['error']))
+
+    log('')
+    log(f'Summary: ok={ok} copied={copied} failed={len(failed)} total={total}')
+    log(f'Tokens: prompt={total_prompt} completion={total_completion} total={total_prompt + total_completion}')
+
+    if failed:
+        log('Failures:')
+        for path, error in failed:
+            log(f'  {path}: {error}')
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()
