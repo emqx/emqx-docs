@@ -4,6 +4,7 @@ import json
 
 directory_file = sys.argv[1]
 docs_path = sys.argv[2]
+scan_subdir = sys.argv[3] if len(sys.argv) > 3 else None
 
 
 def get_markdown_file(dir_config, base_path):
@@ -26,7 +27,9 @@ if __name__ == '__main__':
     markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
     markdown_files += get_markdown_file(directory_config['ja'], f'{docs_path}/ja_JP')
 
-    for file_path, dir_list, file_list in os.walk(docs_path):
+    walk_root = f'{docs_path}/{scan_subdir}' if scan_subdir else docs_path
+
+    for file_path, dir_list, file_list in os.walk(walk_root):
         for file_name in file_list:
             if not file_name.endswith('.md'):
                 continue
@@ -39,7 +42,7 @@ if __name__ == '__main__':
                         include_file_path = os.path.normpath(include_file_path)
                         markdown_files.append(include_file_path)
 
-    for file_path, dir_list, file_list in os.walk(docs_path):
+    for file_path, dir_list, file_list in os.walk(walk_root):
         for file_name in file_list:
             if not file_name.endswith('.md'):
                 continue
