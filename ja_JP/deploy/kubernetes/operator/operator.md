@@ -1,24 +1,24 @@
-# EMQX Operator Overview
+# EMQX Operator 概要
 
-The EMQX Operator provides [Kubernetes](https://kubernetes.io/) native deployment and management of [EMQX](https://www.emqx.io/), including EMQX Broker and EMQX Enterprise. The purpose of this project is to simplify and automate the configuration of the EMQX cluster.
+EMQX Operator は、[Kubernetes](https://kubernetes.io/) ネイティブによる [EMQX](https://www.emqx.io/)（EMQX ブローカーおよび EMQX Enterprise を含む）のデプロイおよび管理を提供します。本プロジェクトの目的は、EMQX クラスターの構成を簡素化および自動化することです。
 
-The EMQX Operator includes, but is not limited to, the following features:
+EMQX Operator は、以下を含むがこれらに限定されない機能を備えています。
 
-* **Simplified Deployment**: Declare EMQX clusters with EMQX custom resources and deploy them quickly. For more details, please check [Getting Started](./getting-started.md).
+* **簡素化されたデプロイ**：EMQX カスタムリソースで EMQX クラスターを宣言し、迅速にデプロイできます。詳細は [Getting Started](./getting-started.md) をご参照ください。
 
-* **Manage EMQX Cluster**: Automate operations and maintenance for EMQX, including cluster upgrades, runtime data persistence, updating Kubernetes resources based on the status of EMQX, etc. For more details, please check [Manage EMQX](./tasks/overview.md).
+* **EMQX クラスターの管理**：クラスターのアップグレード、ランタイムデータのパーシステンス、EMQX の状態に基づく Kubernetes リソースの更新など、EMQX の運用と保守を自動化します。詳細は [Manage EMQX](./tasks/overview.md) をご参照ください。
 
-<img src="./assets/architecture.png" style="zoom:20%;" />
+<img src="./assets/architecture.png" style="zoom:20%;" alt="EMQX Operator アーキテクチャ" />
 
-## How to Selector Kubernetes Version
+## Kubernetes バージョンの選択方法
 
-The EMQX Operator requires a Kubernetes cluster of version `>=1.24`.
+EMQX Operator は Kubernetes クラスターのバージョン `>=1.24` を必要とします。
 
-| Kubernetes Versions     | EMQX Operator Compatibility                                  | Notes                                                        |
+| Kubernetes バージョン     | EMQX Operator 対応状況                                      | 備考                                                        |
 | ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1.24 or higher          | All functions supported                                      |                                                              |
-| 1.22 (included) ～ 1.23 | Supported, except [MixedProtocolLBService](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) | EMQX cluster can only use one protocol in `LoadBalancer` type of Service, for example TCP or UDP. |
-| 1.21 (included) ～ 1.22 | Supported, except  [pod-deletion-cost](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#pod-deletion-cost) | When using EMQX Core + Replicant mode cluster, updating the EMQX cluster cannot accurately delete Pods. |
-| 1.20 (included) ～ 1.21 | Supported, manual `.spec.ports[].nodePort` assignment required if using `NodePort` type of Service | For more details, please refer to [Kubernetes changelog](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#bug-or-regression-4). |
-| 1.16 (included) ～ 1.20 | Supported, not recommended due to lack of testing            |                                                              |
-| Lower than 1.16         | Not supported                                                | `apiextensions/v1` APIVersion is not supported.               |
+| 1.24 以上               | すべての機能がサポートされています                          |                                                              |
+| 1.22（含む）～ 1.23     | [MixedProtocolLBService](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) を除きサポート | EMQX クラスターは `LoadBalancer` タイプの Service において、TCP または UDP のいずれか一方のプロトコルのみ使用可能です。 |
+| 1.21（含む）～ 1.22     | [pod-deletion-cost](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#pod-deletion-cost) を除きサポート | EMQX Core + Replicant モードのクラスター使用時、EMQX クラスターの更新で Pod を正確に削除できません。 |
+| 1.20（含む）～ 1.21     | サポート、`NodePort` タイプの Service 使用時は `.spec.ports[].nodePort` の手動割り当てが必要 | 詳細は [Kubernetes changelog](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#bug-or-regression-4) をご参照ください。 |
+| 1.16（含む）～ 1.20     | サポート、ただしテスト不足のため推奨されません              |                                                              |
+| 1.16 未満               | 非サポート                                                  | `apiextensions/v1` API バージョンはサポートされていません。 |

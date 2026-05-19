@@ -1,50 +1,93 @@
-# HTTP API を使ったユーザーデータ管理
+# HTTP API を使用したユーザーデータ管理
 
-組み込みデータベースに保存されている認証データについては、EMQX ダッシュボードまたは HTTP API を使ってユーザー認証情報の作成、更新、削除、一覧取得が可能です。対象は以下の通りです：
+組み込みデータベースに保存された認証データについては、EMQX ダッシュボードまたは HTTP API を使用して、ユーザー認証情報の作成、更新、削除、一覧表示、およびインポートが可能です。
+
+対象となるのは以下の認証方式です：
 
 - [パスワード認証に組み込みデータベースを使用する](./mnesia.md)
 - [MQTT 5.0 強化認証](./scram.md)
 
-## API エンドポイント
+## ユーザー管理 API エンドポイント
 
-グローバル MQTT チェーンのユーザー用エンドポイントは `/api/v5/authentication/{id}/users` です。  
-特定の MQTT リスナーチェーンのユーザー用エンドポイントは `/api/v5/listeners/{listener_id}/authentication/{id}` です。  
-グローバルな `gateway` プロトコルチェーンのユーザー用エンドポイントは `/api/v5/gateway/{protocol}/authentication` です。  
-`gateway` プロトコルのリスナーチェーンのユーザー用エンドポイントは `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication` です。
+ユーザー管理のエンドポイントは認証チェーンのスコープによって異なります。
 
-識別子の規則については、[認証 API ドキュメント](./authn.md#http-api) を参照してください。
+- **グローバル MQTT 認証チェーン**
+
+  ```
+  /api/v5/authentication/{id}/users
+  ```
+
+- **MQTT リスナー固有の認証チェーン**
+
+  ```
+  /api/v5/listeners/{listener_id}/authentication/{id}/users
+  ```
+
+- **グローバルゲートウェイプロトコル認証チェーン**
+
+  ```
+  /api/v5/gateway/{protocol}/authentication/{id}/users
+  ```
+
+- **ゲートウェイプロトコルリスナー固有の認証チェーン**
+
+  ```
+  /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
+  ```
+
+識別子の命名規則やパラメータの詳細については、[REST API](../../admin/api.md) を参照してください。
 
 ## ユーザーのインポート
 
-`password_based:built_in_database` 認証方式に対してユーザーインポートがサポートされています。
+ユーザーインポートは `password_based:built_in_database` 認証器のみサポートしています。
 
-対応するチェーンにユーザーをインポートするためのエンドポイントは以下の通りです：
+この機能により、稼働中の EMQX インスタンスに対してユーザーを一括インポートできます。
+
+利用可能なエンドポイントは以下の通りです：
 
 - `/api/v5/authentication/{id}/import_users`
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-リクエストは multipart form-data の `POST` 形式で送信してください。
+リクエストは `multipart/form-data` の POST で送信する必要があります。
 
 例：
 
-```
+```bash
 curl -v -u admin:public -X 'POST' \
     -H 'Content-Type: multipart/form-data' \
     -F 'filename=@/tmp/myusers.csv' \
     'http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users'
 ```
 
-サポートされているファイル形式（拡張子で判別）は以下の通りです：
+### 対応ファイル形式
 
-* .csv
+ファイル形式は拡張子で判別されます。以下の形式がサポートされています：
+
+* `.csv`
+  
+  ヘッダー付き CSV ファイル例：
+  
   ```txt
   user_id,password_hash,salt,is_superuser
   myuser3,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true
   myuser4,ee68c985a69208b6eda8c6c9b4c7c2d2b15ee2352cdd64a903171710a99182e8,ad773b5be9dd0613fe6c2f4d8c403139,false
   ```
-
-* .json
+  
+  必須フィールド：
+  
+  - `user_id`
+  - `password_hash`
+  
+  任意フィールド：
+  
+  - `salt`（省略時は空文字列）
+  - `is_superuser`（省略時は `false`）
+  
+* `.json`
+  
+  オブジェクトの配列形式 JSON 例：
+  
   ```json
   [
     {
@@ -61,3 +104,5 @@ curl -v -u admin:public -X 'POST' \
     }
   ]
   ```
+  
+  フィールドの要件は CSV と同様です。

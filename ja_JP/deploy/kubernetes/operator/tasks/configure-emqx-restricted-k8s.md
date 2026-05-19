@@ -1,20 +1,20 @@
-# Deploy EMQX Cluster in k8s with Restricted Access
+# 制限付きアクセス環境での k8s 上への EMQX クラスターのデプロイ
 
-Here we are assuming k8s cluster does not have access to the internet, and the user does not have permissions to create and/or use `ClusterRole`.
+ここでは、k8s クラスターがインターネットにアクセスできず、ユーザーが `ClusterRole` の作成および使用権限を持っていないことを想定しています。
 
-+ Both `emqx-operator` and `emqx` are installed in the same namespace
-+ Cert manager may be available cluster-wide or in the same namespace as `emqx-operator`
-+ The `emqx-operator` is configured to use a private docker registry, and the `emqx` is configured to use a custom `securityContext`
++ `emqx-operator` と `emqx` は同一ネームスペースにインストールされている
++ Cert manager はクラスター全体または `emqx-operator` と同じネームスペースに存在している可能性がある
++ `emqx-operator` はプライベートな Docker レジストリを使用するように設定されており、`emqx` はカスタムの `securityContext` を使用するように設定されている
 
-## Task Target
+## タスクの対象
 
-- Push necessary images to a private docker registry
-- Override default parameters of `cert-manager` to use private registry
-- Manually install EMQX Operator CRDs
-- Override default parameters of `emqx-operator` to use private registry, single namespace, custom `securityContext`, and disabled webhook
-- Use custom `securityContext` for EMQX
+- 必要なイメージをプライベート Docker レジストリにプッシュする
+- `cert-manager` のデフォルトパラメータを上書きしてプライベートレジストリを使用する
+- EMQX Operator の CRD を手動でインストールする
+- `emqx-operator` のデフォルトパラメータを上書きし、プライベートレジストリ、単一ネームスペース、カスタム `securityContext`、および webhook 無効化を設定する
+- EMQX にカスタム `securityContext` を使用する
 
-## Push Necessary Docker Images to a Private Docker Registry
+## 必要な Docker イメージをプライベート Docker レジストリにプッシュする
 
 ```bash
 export CERT_MANAGER_VERSION='v1.16.2'
@@ -46,11 +46,11 @@ pull_retag_push "emqx/emqx-enterprise:$EMQX_VERSION" "$REGISTRY/emqx/emqx-enterp
 pull_retag_push "emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION" "$REGISTRY/emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION"
 ```
 
-## Deploy Cert-Manager
+## Cert-Manager のデプロイ
 
-Skip this step if cert-manager is installed in the cluster.
+cert-manager がクラスターにインストール済みの場合はこのステップをスキップしてください。
 
-Update namespace name if required.
+必要に応じてネームスペース名を更新してください。
 
 ```bash
 helm repo add jetstack https://charts.jetstack.io
@@ -71,19 +71,19 @@ helm upgrade --install cert-manager jetstack/cert-manager \
    --set startupapicheck.image.tag=$CERT_MANAGER_VERSION
 ```
 
-## Deploy EMQX Operator
+## EMQX Operator のデプロイ
 
-### Deploy CRDs Manually from Release Assets
+### リリースアセットから CRD を手動でデプロイ
 
 ```bash
 kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download/$EMQX_OPERATOR_VERSION/crds.yaml
 ```
 
-### Deploy Emqx-Operator
+### Emqx-Operator のデプロイ
 
-If cert-manager is installed cluster-wide already, add `--set cert-manager.enable=false`.
+cert-manager がすでにクラスター全体にインストールされている場合は、`--set cert-manager.enable=false` を追加してください。
 
-In this example `podSecurityContext` and `containerSecurityContext` contain default values, override as necessary.
+この例では `podSecurityContext` と `containerSecurityContext` にデフォルト値を設定しています。必要に応じて上書きしてください。
 
 ```bash
 helm repo add emqx https://repos.emqx.io/charts
@@ -100,15 +100,15 @@ helm upgrade --install emqx-operator emqx/emqx-operator \
   --set image.tag=$EMQX_OPERATOR_VERSION
 ```
 
-Ensure emqx-operator is up and running:
+`emqx-operator` が起動して稼働していることを確認します：
 
 ```bash
 kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-manager"
 ```
 
-## Configure EMQX Cluster
+## EMQX クラスターの設定
 
-+ Save the following content as a YAML file and deploy it with the `kubectl apply` command
++ 以下の内容を YAML ファイルとして保存し、`kubectl apply` コマンドでデプロイしてください
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -125,7 +125,7 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
         }
   ```
 
-+ Wait for the EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
++ EMQX クラスターが準備完了になるまで待ちます。`kubectl get` コマンドで EMQX クラスターのステータスを確認し、`STATUS` が `Running` であることを確認してください。準備完了までに時間がかかる場合があります。
 
   ```bash
   $ kubectl get emqx emqx

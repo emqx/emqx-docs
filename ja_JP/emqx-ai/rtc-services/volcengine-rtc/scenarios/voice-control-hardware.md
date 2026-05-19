@@ -1,144 +1,144 @@
-# Voice-Controlled Hardware Scenarios
+# 音声制御ハードウェアシナリオ
 
-Building on pure voice conversation, voice-controlled hardware scenarios enable users to control physical devices through speech. Users issue commands verbally, and the AI not only understands and responds but also performs real device operations to complete tasks.
+純粋な音声対話を基盤として、音声制御ハードウェアシナリオではユーザーが音声で物理デバイスを操作できます。ユーザーは口頭でコマンドを発し、AIは理解・応答するだけでなく、実際のデバイス操作を行いタスクを完了します。
 
-**Technical implementation**: Voice transport, ASR, and TTS are the same as in pure voice conversation scenarios. The key difference is that the AI Agent has tool-calling capabilities. When a control intent is detected, the Agent sends a tool invocation request to the device via the MCP over MQTT protocol. The device, acting as an MCP Server, executes the hardware operation (such as turning a camera on or off, adjusting volume, switching expressions, taking photos, etc.), returns the execution result to the Agent, and the Agent finally provides voice feedback to the user.
+**技術的実装**：音声伝送、ASR、TTSは純粋な音声対話シナリオと同様です。主な違いはAIエージェントがツール呼び出し機能を持つ点です。制御インテントが検出されると、エージェントはMCPを介してMQTTプロトコルでデバイスにツール呼び出しリクエストを送信します。デバイスはMCPサーバーとして動作し、カメラのオンオフ、音量調整、表情切替、撮影などのハードウェア操作を実行し、実行結果をエージェントに返します。エージェントは最終的にユーザーに音声フィードバックを提供します。
 
-**Architecture components**:
+**アーキテクチャ構成要素**：
 
-- **Volcano Engine RTC + ASR + TTS**: Real-time voice channel and speech recognition/synthesis (standard products)
-- **AI Agent (MCP Client)**: Intent understanding and tool invocation decisions (custom-developed)
-- **EMQX**: MQTT transport layer for the MCP protocol (standard product)
-- **Device (MCP Server)**: Exposes hardware capabilities as MCP tools (custom-developed)
+- **Volcano Engine RTC + ASR + TTS**：リアルタイム音声チャネルおよび音声認識・合成（標準製品）
+- **AIエージェント（MCPクライアント）**：インテント理解とツール呼び出し判断（カスタム開発）
+- **EMQX**：MCPプロトコルのMQTTトランスポート層（標準製品）
+- **デバイス（MCPサーバー）**：ハードウェア機能をMCPツールとして公開（カスタム開発）
 
-## Flow Diagram
+## フローダイアグラム
 
-![Voice-controlled hardware flow](./voice-control-hardware.png)
+![音声制御ハードウェアフロー](./voice-control-hardware.png)
 
-**Flow description**:
+**フロー説明**：
 
-1. Voice transport and ASR/TTS are the same as in the pure voice conversation scenario
-2. The AI Agent analyzes user intent and decides to invoke a tool
-3. A tool invocation request is sent via MCP over MQTT
-4. The device (MCP Server) receives the request and performs the hardware operation
-5. The execution result is returned to the AI Agent
-6. The Agent converts the result into voice feedback for the user
+1. 音声伝送およびASR/TTSは純粋な音声対話シナリオと同様
+2. AIエージェントがユーザーのインテントを解析しツール呼び出しを決定
+3. MCPを介してMQTTでツール呼び出しリクエストを送信
+4. デバイス（MCPサーバー）がリクエストを受信しハードウェア操作を実行
+5. 実行結果がAIエージェントに返される
+6. エージェントが結果を音声フィードバックに変換しユーザーに伝える
 
-## Typical Scenarios
+## 典型的なシナリオ
 
-### Smart Home — Whole-Home Voice Control
+### スマートホーム — 全館音声制御
 
-At 10:00 p.m., Xiao Zhang is getting ready for bed:
+午後10時、シャオ・ジャンは就寝準備中：
 
-> **Xiao Zhang**: “I’m going to sleep.”
->  **Speaker**: “Okay, good night mode has been activated.”
+> **シャオ・ジャン**：「寝るよ。」
+>  **スピーカー**：「わかりました、おやすみモードを起動しました。」
 >
-> *(Living room lights dim and turn off, bedroom curtains slowly close, the air conditioner switches to 26°C sleep mode, and the TV turns off.)*
+> *(リビングの照明が暗くなり消灯、寝室のカーテンがゆっくり閉まり、エアコンは26℃の睡眠モードに切り替わり、テレビがオフになります。)*
 >
-> **Xiao Zhang**: “Dim the bedside lamp a bit.”
->  **Speaker**: “The bedside lamp brightness has been set to 20%.”
+> **シャオ・ジャン**：「ベッドサイドランプを少し暗くして。」
+>  **スピーカー**：「ベッドサイドランプの明るさを20％に設定しました。」
 >
-> **Xiao Zhang**: “Open the curtains at 7 a.m. tomorrow.”
->  **Speaker**: “Okay, the bedroom curtains will open automatically at 7 a.m. tomorrow.”
+> **シャオ・ジャン**：「明日の朝7時にカーテンを開けて。」
+>  **スピーカー**：「わかりました。寝室のカーテンは明日朝7時に自動で開きます。」
 
-A single sentence triggers coordinated actions across multiple devices. The AI understands the contextual meaning of “sleep” and automatically executes a preset combination of device actions.
+一文で複数デバイスの連携動作をトリガーします。AIは「寝る」という文脈を理解し、あらかじめ設定された複数デバイスの動作を自動実行します。
 
-### In-Vehicle Systems — Safe Interaction While Driving
+### 車載システム — 運転中の安全な操作
 
-Ms. Li is driving on city roads:
+リーさんは市街地を運転中：
 
-> **Ms. Li**: “It’s a bit hot. Lower the air conditioner temperature by two degrees.”
->  **Car system**: “Okay. The air conditioner has been adjusted from 24°C to 22°C.”
+> **リーさん**：「ちょっと暑いね。エアコンの温度を2度下げて。」
+>  **車載システム**：「了解しました。エアコンの温度を24℃から22℃に調整しました。」
 >
-> *(The temperature is adjusted automatically.)*
+> *(温度が自動で調整されます。)*
 >
-> **Ms. Li**: “Open the sunroof for some air.”
->  **Car system**: “The sunroof has been opened.”
+> **リーさん**：「サンルーフを開けて風を入れて。」
+>  **車載システム**：「サンルーフを開けました。」
 >
-> *(The sunroof opens slowly.)*
+> *(サンルーフがゆっくり開きます。)*
 >
-> **Ms. Li**: “Close the rear windows, it’s too windy.”
->  **Car system**: “The rear windows have been closed.”
+> **リーさん**：「後部の窓を閉めて、風が強いから。」
+>  **車載システム**：「後部の窓を閉めました。」
 >
-> **Ms. Li**: “Turn on seat massage, lumbar mode.”
->  **Car system**: “Lumbar seat massage has been activated. Enjoy your drive.”
+> **リーさん**：「シートマッサージを腰モードでオンにして。」
+>  **車載システム**：「腰部マッサージを起動しました。安全運転をお楽しみください。」
 
-The driver never needs to look down or reach for controls, ensuring safer driving through voice-based operation.
+運転者は視線を落としたり操作パネルに手を伸ばす必要がなく、音声操作で安全な運転を実現します。
 
-### Medical Assistance — Voice Control in Operating Rooms
+### 医療支援 — 手術室での音声制御
 
-Chief Surgeon Wang is performing surgery:
+主任外科医のワン医師が手術中：
 
-> **Dr. Wang**: “Move the surgical light 10 degrees to the left.”
->  **System**: “The surgical light has been adjusted.”
+> **ワン医師**：「手術灯を左に10度動かして。」
+>  **システム**：「手術灯を調整しました。」
 >
-> *(The light moves automatically.)*
+> *(ライトが自動で動きます。)*
 >
-> **Dr. Wang**: “Increase the brightness.”
->  **System**: “Brightness increased to 90%.”
+> **ワン医師**：「明るさを上げて。」
+>  **システム**：「明るさを90％に上げました。」
 >
-> **Dr. Wang**: “Display the patient’s CT images, third slice.”
->  **System**: “Displaying the third CT slice.”
+> **ワン医師**：「患者のCT画像、3枚目を表示して。」
+>  **システム**：「3枚目のCTスライスを表示します。」
 >
-> *(The display switches to the specified image.)*
+> *(表示が指定画像に切り替わります。)*
 >
-> **Dr. Wang**: “Zoom in on the upper-right area.”
->  **System**: “Zoomed in.”
+> **ワン医師**：「右上の部分をズームインして。」
+>  **システム**：「ズームインしました。」
 
-In sterile environments where touching non-sterilized equipment is not allowed, voice control becomes essential, improving surgical efficiency and safety.
+滅菌環境で非滅菌機器に触れられないため、音声制御が必須となり、手術の効率と安全性を向上させます。
 
-### Industrial Production — Hands-Free Operation
+### 工業生産 — ハンズフリー操作
 
-Factory worker Lao Zhang is operating machinery:
+工場作業員のラオ・ジャンは機械を操作中：
 
-> **Lao Zhang** *(holding parts in both hands)*: “Start the conveyor belt.”
->  **System**: “The conveyor belt has started.”
+> **ラオ・ジャン**（両手に部品を持ちながら）：「コンベアベルトをスタートして。」
+>  **システム**：「コンベアベルトを起動しました。」
 >
-> **Lao Zhang**: “Set the speed to level two.”
->  **System**: “The conveyor belt speed is set to level two, 30 units per minute.”
+> **ラオ・ジャン**：「速度をレベル2に設定して。」
+>  **システム**：「コンベアベルトの速度をレベル2、毎分30ユニットに設定しました。」
 >
-> **Lao Zhang**: “Turn on the inspection camera.”
->  **System**: “The quality inspection camera has been turned on and real-time inspection is in progress.”
+> **ラオ・ジャン**：「検査用カメラをオンにして。」
+>  **システム**：「品質検査カメラを起動し、リアルタイム検査を開始しました。」
 >
-> **Lao Zhang**: “Record the current parameters.”
->  **System**: “Recorded: temperature 180°C, pressure 2.5 MPa, speed level two.”
+> **ラオ・ジャン**：「現在のパラメータを記録して。」
+>  **システム**：「記録しました：温度180℃、圧力2.5MPa、速度レベル2。」
 
-When workers’ hands are occupied, voice becomes the most natural control method, significantly improving productivity.
+作業者の手が塞がっている場合、音声が最も自然な操作手段となり、生産性を大幅に向上させます。
 
-## Core Capabilities
+## コア機能
 
-### MCP Tool Invocation
+### MCPツール呼び出し
 
-Devices act as MCP Servers exposing capabilities, while the AI Agent acts as an MCP Client invoking them:
+デバイスはMCPサーバーとして機能し機能を公開、AIエージェントはMCPクライアントとして呼び出します：
 
 ```
-User speech → ASR → AI Agent intent understanding → MCP tool invocation → Device execution → Voice feedback
+ユーザー音声 → ASR → AIエージェントのインテント理解 → MCPツール呼び出し → デバイス実行 → 音声フィードバック
 ```
 
-### Parallel Processing
+### 並列処理
 
-Voice feedback and device operations occur in parallel for a smoother user experience:
+音声フィードバックとデバイス操作は並列で行われ、スムーズなユーザー体験を実現します：
 
-- User says “Turn on the camera”
-- The AI immediately responds with “Okay, turning it on”
-- The camera starts up at the same time
+- ユーザーが「カメラをオンにして」と言う
+- AIは即座に「はい、オンにします」と応答
+- 同時にカメラが起動を開始
 
-Instead of waiting for the camera to fully start before responding, perceived latency is greatly reduced.
+カメラの起動完了を待たずに応答するため、体感レイテンシが大幅に低減されます。
 
-## Technical Highlights
+## 技術的ハイライト
 
-| Aspect                     | Description                                                |
-| -------------------------- | ---------------------------------------------------------- |
-| Intent parsing             | AI maps natural language to specific device actions        |
-| Multi-device orchestration | One command triggers coordinated actions across devices    |
-| State feedback             | Execution results are reported back via voice              |
-| Context awareness          | Understands references like “a bit higher” or “that light” |
+| 項目                       | 説明                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| インテント解析             | AIが自然言語を特定のデバイス操作にマッピング                 |
+| 複数デバイスのオーケストレーション | 1つのコマンドで複数デバイスの連携動作をトリガー               |
+| 状態フィードバック         | 実行結果を音声で報告                                         |
+| コンテキスト認識           | 「少し上げて」や「あのライト」などの参照を理解               |
 
-## Applicable Devices
+## 対応デバイス
 
-- Smart home gateways / control panels
-- Service robots / companion robots
-- In-vehicle control systems
-- Operating room medical equipment
-- Industrial control terminals
-- Smart conference room devices
+- スマートホームゲートウェイ／コントロールパネル
+- サービスロボット／コンパニオンロボット
+- 車載制御システム
+- 手術室医療機器
+- 産業制御端末
+- スマート会議室機器

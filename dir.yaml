@@ -110,83 +110,83 @@
                 - deploy/kubernetes/operator/getting-started
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
-                  title_ja: 在阿里云中部署 EMQX
+                  title_ja: アリババクラウドでの EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/alibaba-cloud
                 - title_en: 在华为云中部署 EMQX
                   title_cn: 在华为云中部署 EMQX
-                  title_ja: 在华为云中部署 EMQX
+                  title_ja: ファーウェイクラウドでの EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/huawei-cloud
                 - title_en: 在腾讯云中部署 EMQX
                   title_cn: 在腾讯云中部署 EMQX
-                  title_ja: 在腾讯云中部署 EMQX
+                  title_ja: テンセントクラウドでの EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/tencent-cloud
                 - title_en: Deploy EMQX on AWS
                   title_cn: 在 AWS 中部署 EMQX
-                  title_ja: Deploy EMQX on AWS
+                  title_ja: AWS 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/aws-eks
                 - title_en: Deploy EMQX on Google cloud
                   title_cn: 在 GCP 中部署 EMQX
-                  title_ja: Deploy EMQX on Google cloud
+                  title_ja: Google Cloud 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/gcp-gke
                 - title_en: Deploy EMQX on Azure
                   title_cn: 在 Azure 中部署 EMQX
-                  title_ja: Deploy EMQX on Azure
+                  title_ja: Azure 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/azure-aks
                 - title_en: Manage EMQX Cluster
                   title_cn: 管理 EMQX 集群
-                  title_ja: Manage EMQX Cluster
+                  title_ja: EMQX クラスター管理
                   path: deploy/kubernetes/operator/tasks/overview
                   collapsed: true
                   children:
                     - title_en: Configure License (Enterprise)
                       title_cn: 配置 License (企业版)
-                      title_ja: Configure License (Enterprise)
+                      title_ja: ライセンス設定（エンタープライズ）
                       path: deploy/kubernetes/operator/tasks/configure-emqx-license
                     - title_en: Enable TLS in EMQX
                       title_cn: 在 EMQX 中开启 TLS
-                      title_ja: Enable TLS in EMQX
+                      title_ja: EMQX で TLS を有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
                     - title_en: Change EMQX Configurations
                       title_cn: 修改 EMQX 配置
-                      title_ja: Change EMQX Configurations
+                      title_ja: EMQX 設定の変更
                       path: deploy/kubernetes/operator/tasks/configure-emqx-config
                     - title_en: Enable Core + Replicant Cluster
                       title_cn: 配置 Core + Replica 集群
-                      title_ja: Enable Core + Replicant Cluster
+                      title_ja: Core + レプリカクラスターの有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
                     - title_en: Enable Persistence
                       title_cn: 开启持久化
-                      title_ja: Enable Persistence
+                      title_ja: 永続化の有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
                     - title_en: Access EMQX Cluster by LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX Cluster
-                      title_ja: Access EMQX Cluster by LoadBalancer
+                      title_ja: ロードバランサー経由で EMQX クラスターにアクセス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
                     - title_en: Configure Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
-                      title_ja: Configure Blue-Green Upgrade
+                      title_ja: ブルーグリーンアップグレードの設定
                       path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
-                      title_ja: Collect EMQX Logs
+                      title_ja: EMQX ログの収集
                       path: deploy/kubernetes/operator/tasks/configure-emqx-log-collection
                     - title_en: Change EMQX Log Level
                       title_cn: 修改 EMQX 日志等级
-                      title_ja: Change EMQX Log Level
+                      title_ja: EMQX ログレベルの変更
                       path: deploy/kubernetes/operator/tasks/configure-emqx-log-level
                     - title_en: Monitor EMQX Cluster
                       title_cn: 监控 EMQX 集群
-                      title_ja: Monitor EMQX Cluster
+                      title_ja: EMQX クラスターの監視
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
                     - title_en: Load Balance EMQX Cluster
                       title_cn: 负载均衡 EMQX 集群
-                      title_ja: Load Balance EMQX Cluster
+                      title_ja: EMQX クラスターのロードバランス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
-                      title_ja: Deploy EMQX Cluster in k8s with Restricted Access
+                      title_ja: 制限付きアクセスの k8s 環境での EMQX クラスター展開
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
                 - deploy/kubernetes/operator/api-reference
@@ -930,7 +930,7 @@
       children:
         - title_en: Architecture
           title_cn: 架构
-          title_ja: Architecture
+          title_ja: アーキテクチャ
           path: emqx-ai/mcp-over-mqtt/architecture
         - emqx-ai/mcp-over-mqtt/specification
         - title_en: SDKs
@@ -952,7 +952,7 @@
       children:
         - title_en: Quick Start
           title_cn: 快速开始
-          title_ja: Quick Start
+          title_ja: クイックスタート
           path: emqx-ai/mcp-bridge/quick-start
     - title_en: Realtime Audio & Video AI
       title_cn: 实时音视频 AI
@@ -980,15 +980,15 @@
                   children:
                     - title_en: Pure Voice Conversation
                       title_cn: 纯语音对话
-                      title_ja: Pure Voice Conversation
+                      title_ja: ピュアボイス会話
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-chat
                     - title_en: Voice-Controlled Hardware
                       title_cn: 语音控制硬件
-                      title_ja: Voice-Controlled Hardware
+                      title_ja: 音声制御ハードウェア
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-control-hardware
                     - title_en: Device-Initiated Voice Feedback
                       title_cn: 设备感知语音反馈
-                      title_ja: Device_Initiated Voice Feedback
+                      title_ja: デバイス起動音声フィードバック
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
             - title_en: GPT-Realtime
               title_cn: GPT-Realtime
@@ -998,7 +998,7 @@
               children:
                 - title_en: Build Real-Time Voice Agent
                   title_cn: 构建实时语音智能体
-                  title_ja: Build Real-Time Voice Agent
+                  title_ja: リアルタイム音声エージェントの構築
                   path: emqx-ai/rtc-services/gpt-realtime/quick-start
             # - title_en: EMQX Multimedia Server
             #   title_cn: EMQX 多媒体服务器
@@ -1078,11 +1078,11 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
-          title_ja: MQTT Basics
+          title_ja: MQTT 基本
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
-          title_ja: MQTT Advanced
+          title_ja: MQTT 上級
           path: design/mqtt-advanced
     - title_en: MQTT Guide
       title_cn: MQTT Guide
@@ -1093,11 +1093,11 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
-          title_ja: MQTT Basics
+          title_ja: MQTT 基本
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
-          title_ja: MQTT Advanced
+          title_ja: MQTT 上級
           path: design/mqtt-advanced
     - title_en: MQTT 教程
       title_cn: MQTT 教程
