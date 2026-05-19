@@ -9,6 +9,7 @@ on:
       - release-[6-9].[0-9][0-9]
     paths:
       - 'en_US/**'
+      - 'dir.yaml'
   workflow_dispatch:
 
 concurrency:
