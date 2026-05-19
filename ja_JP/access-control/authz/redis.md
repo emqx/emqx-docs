@@ -1,10 +1,10 @@
-# Redisとの統合
+# Redisとの連携
 
-このオーソライザーは、Redisデータベースに保存されたルールのリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装します。
+このオーソライザーは、Redisデータベースに格納されたルールリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装しています。
 
 ::: tip 前提条件
 
-[EMQXの基本的な認可概念](./authz.md)の知識が必要です。
+[EMQX認可の基本概念](./authz.md)の知識が必要です。
 
 :::
 
@@ -14,10 +14,10 @@
 
 - `topic`：ルールが適用されるトピックを指定します。トピックフィルターや[トピックプレースホルダー](./authz.md#topic-placeholders)を使用できます。
 - `action`：ルールが適用されるアクションを指定します。利用可能な値は `publish`、`subscribe`、`all` です。
-- `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
-- `retain`（オプション）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトは保持メッセージを許可します。
+- `qos`（任意）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
+- `retain`（任意）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true`、`false` です。デフォルトは保持メッセージを許可します。
 
-例えば、ルールは[Redisのハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存できます。
+例えば、ルールは[Redisハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存できます。
 
 ユーザー `emqx_u` にトピック `t/1` のサブスクライブ権限を追加する例：
 
@@ -25,7 +25,7 @@
 HSET mqtt_acl:emqx_u t/1 subscribe
 ```
 
-Redisの構造上の制限により、`qos` と `retain` フィールドを使用する場合、トピック以外のフィールドはJSON文字列で格納する必要があります。例えば：
+Redisの構造上の制約により、`qos` と `retain` フィールドを使用する場合、トピック以外のフィールドはJSON文字列として格納する必要があります。例：
 
 - ユーザー `emqx_u` にトピック `t/2` のQoS 1およびQoS 2でのサブスクライブ権限を追加する例：
 
@@ -33,7 +33,7 @@ Redisの構造上の制限により、`qos` と `retain` フィールドを使�
 HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
 ```
 
-- ユーザー `emqx_u` にトピック `t/3` への保持メッセージのパブリッシュを禁止する権限を追加する例：
+- ユーザー `emqx_u` にトピック `t/3` への保持メッセージのパブリッシュを拒否する権限を追加する例：
 
 ```bash
 HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
@@ -45,40 +45,60 @@ HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 cmd = "HGETALL mqtt_acl:${username}"
 ```
 
-取得したルールは許可ルールとして扱われ、トピックフィルターとアクションが一致すればリクエストは許可されます。
+取得したルールは許可ルールとして扱われます。つまり、トピックフィルターとアクションが一致すればリクエストは許可されます。
 
 :::tip
-Redisオーソライザーに追加されたすべてのルールは**許可ルール**であるため、Redisオーソライザーはホワイトリストモードで使用する必要があります。
+Redisオーソライザーに追加されるすべてのルールは**許可ルール**であり、Redisオーソライザーはホワイトリストモードで使用する必要があります。
 :::
 
 ## ダッシュボードでの設定
 
-EMQXダッシュボードを使って、Redisをユーザー認可に利用する設定ができます。
+EMQXダッシュボードを使ってRedisをユーザー認可に利用する設定が可能です。
 
-1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
+1. EMQXダッシュボードの左側ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
 
 2. 右上の **作成** をクリックし、**バックエンド**として **Redis** を選択します。次に **次へ** をクリックします。以下のように **設定** タブが表示されます。
 
-   <img src="./assets/authz-Redis_ee.png" alt="Redis認可設定画面" style="zoom:67%;" />
+   <img src="./assets/authz-redis.png" alt="authz-Redis_ee" style="zoom:67%;" />
 
 3. 以下の指示に従って設定を行います。
 
-   **接続**：Redisへの接続に必要な情報を入力します。
+   - **Redisモード**：Redisのデプロイ方式を選択します。`Single`、`Sentinel`、`Cluster` があります。
 
-   - **Redisモード**：Redisの展開形態を選択します。**Single**、**Sentinel**、**Cluster**があります。
-   - **サーバー**：EMQXが接続するサーバーアドレスを指定します（`host:port`）。
-   - **データベース**：Redisのデータベース名。
-   - **パスワード**：ユーザーパスワードを指定します。
+   - **サーバー**：EMQXが接続するRedisサーバーのアドレス（`host:port`）を指定します。
 
-   **TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。
+   - **データベース**：Redisのデータベース番号を指定します。
 
-   **接続設定**：同時接続数と接続タイムアウトまでの待機時間を設定します。
+   - **ユーザー名**：Redisの認証に[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（Redis 6.0以降）を使用している場合は接続用のRedisユーザー名を指定します。デフォルトユーザー（ACL無効または未適用）を使用している場合は空欄のままで構いません。
 
-   - **プールサイズ**（任意）：EMQXノードからRedisへの同時接続数を整数で指定します。デフォルトは **8** です。
+     ::: tip
 
-   **認可設定**：認可に関する設定を入力します。
+     `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを利用する場合はこのバージョン以降を使用してください。
+
+     :::
+
+   - **パスワード**：Redisユーザーのパスワードを指定します。認証が有効なRedisインスタンスに接続する場合は必須です。
+
+     - ユーザー名を入力した場合は、Redis ACL設定の認証情報と一致する必要があります。
+     - ユーザー名を指定しない場合は、`default` ユーザーとして認証されます（有効な場合）。
+
+   - **互換モード**：EMQX 4.xのRedis ACLデータ形式との互換性を有効にするかを制御します。
+
+     - `Disabled (Default)`：現在のルール形式を使用します。
+     - `v4`：旧EMQX 4.xのRedis ACLデータとの互換性を有効にし、アップグレード時に既存データを変更せずに再利用可能にします。
+
+     ::: tip
+
+     このオプションはEMQX 4.xからのアップグレード時に既存のRedis ACLデータを変更せずに再利用する場合に使用します。新規導入の場合は無効のままにして現在のルール形式を使用することを推奨します。
+
+     :::
+
+   - **TLSを有効化**：TLSを有効にする場合はトグルスイッチをオンにします。
 
    - **CMD**：データスキーマに従ったクエリコマンドを入力します。
+
+   - **詳細設定**：同時接続数や接続タイムアウトまでの待機時間を設定します。
+     - **プールサイズ**（任意）：EMQXノードからRedisへの同時接続数を整数で指定します。デフォルトは `8` です。
 
 4. **作成** をクリックして設定を完了します。
 
@@ -86,7 +106,7 @@ EMQXダッシュボードを使って、Redisをユーザー認可に利用す�
 
 EMQXの設定項目を使ってRedisオーソライザーを設定できます。
 
-Redisオーソライザーは `redis` タイプで識別されます。オーソライザーはRedisの3種類の展開モードに対応しています。<!--詳細な設定情報は以下を参照してください：[redis_single](../../configuration/configuration-manual.html#authz:redis_single)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel)、[authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
+Redisオーソライザーは `redis` タイプで識別されます。3種類のRedisデプロイモードに対応しています。
 
 設定例：
 
@@ -94,7 +114,7 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
 
 ::: tab Single
 
-```bash
+```hocon
 {
     type = redis
 
@@ -104,7 +124,8 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -112,7 +133,7 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
 
 ::: tab Sentinel
 
-```bash
+```hocon
 {
     type = redis
 
@@ -123,7 +144,8 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -131,7 +153,7 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
 
 ::: tab Cluster
 
-```bash
+```hocon
 {
     type = redis
 
@@ -140,9 +162,13 @@ Redisオーソライザーは `redis` タイプで識別されます。オーソ
 
     cmd = "HGETALL mqtt_user:${username}"
     password = public
+    
+    compatibility_mode = disabled
 }
 ```
 
 :::
 
 ::::
+
+> `compatibility_mode` はEMQX 4.xからのアップグレードで既存のRedis ACLデータを再利用する場合に `v4` に設定できます。

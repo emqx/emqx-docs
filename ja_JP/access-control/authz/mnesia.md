@@ -1,6 +1,6 @@
 # 組み込みデータベースの使用
 
-EMQX は、組み込みデータベースを通じて低コストで即時に利用可能な認可ルールの保存方法を提供します。Dashboard または設定ファイルで組み込みデータベース（Mnesia）をデータソースとして設定し、Dashboard または HTTP API を通じて関連する認可チェックルールを追加できます。
+EMQX は、組み込みデータベースを通じて低コストで即利用可能な認可ルールの保存方法を提供しています。Dashboard または設定ファイルで組み込みデータベース（Mnesia）をデータソースとして設定し、Dashboard または HTTP API を通じて関連する認可チェックルールを追加できます。
 
 ::: tip 前提条件
 
@@ -8,19 +8,27 @@ EMQX は、組み込みデータベースを通じて低コストで即時に利
 
 :::
 
-## Dashboard での設定
+## Dashboard で組み込みデータベース認可者を作成する
 
-1. [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) の左側ナビゲーションツリーで **Access Control** -> **Authorization** をクリックし、**Authorization** ページに入ります。
+1. [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) の左メニューから **アクセス制御** > **認可** に移動し、**認可** ページを開きます。
 
-2. 右上の **Create** をクリックし、**Backend** に **Built-in Database** を選択して **Next** をクリックします。
+2. 右上の **作成** をクリックし、**バックエンド** に **組み込みデータベース** を選択してから **次へ** をクリックします。
 
-   <img src="./assets/authz-mnesia_ee.png" alt="組み込みデータベース認可設定画面" style="zoom:40%;" />
+   ![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
 
-3. 組み込みデータベース認可は設定パラメータを必要としないため、**Create** をクリックして完了します。
+3. **設定** ステップで、クライアントまたはユーザーごとに許可される最大認可ルール数を定義する **Max Rules**（デフォルト：`100`）の値を設定します。
 
-## 設定ファイルでの設定
+   ::: tip 注意
 
-組み込みデータベースの認可機能は、`type` が `built_in_database` で識別されます。
+   ルール数を多く設定するとシステムのパフォーマンスに影響を与える可能性があります。
+
+   :::
+
+4. **作成** をクリックして設定を完了します。
+
+## 設定ファイルで組み込みデータベース認可者を作成する
+
+組み込みデータベース認可者は `built_in_database` タイプで識別されます。
 
 設定例：
 
@@ -33,7 +41,7 @@ EMQX は、組み込みデータベースを通じて低コストで即時に利
 
 - `type`: 認可チェッカーのデータソースタイプ。ここでは `built_in_database` を指定します。
 
-- `enable`: このチェッカーを有効にするかどうか。オプション値は `true` または `false`。
+- `enable`: このチェッカーを有効化するかどうか。オプション値は `true`、`false`。
 
 <!--詳細なパラメータ一覧は [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia) を参照してください。-->
 
@@ -41,70 +49,231 @@ EMQX は、組み込みデータベースを通じて低コストで即時に利
 
 認可ルールは Dashboard または API を通じて作成できます。
 
-### Dashboard での作成
+### Dashboard で認可ルールを作成する
 
-Dashboard の **Authorization** ページで、**Built-in Database** バックエンドの **Actions** 列にある **Permissions** ボタンをクリックします。
+**組み込みデータベース** バックエンドの **権限** ページから直接認可ルールを定義できます。
 
-<img src="./assets/authz-config-built-in-rules_ee.png" alt="組み込みデータベース認可ルール設定画面" style="zoom:50%;" />
+#### 権限ページへのアクセス
 
-クライアント ID、ユーザー名、またはトピックに基づいて認可チェックを設定できます。
+1. Dashboard で **認可** ページに移動します。  
+2. **組み込みデータベース** バックエンドの **操作** 列にある **権限** をクリックします。
 
-- **Client ID**: **Client ID** タブで、このルールを適用するクライアントを指定します。
-- **Username**: **Username** タブで、このルールを適用するユーザーを指定します。
-- **Permission**: 現在のクライアント／ユーザーからの特定の操作リクエストを許可するか拒否するか。オプション値は **Allow** または **Deny**。
-- **Action**: このルールに対応する操作を設定。オプション値は **Publish**、**Subscribe**、**Publish & Subscribe**。
-- **Topic**: このルールに対応するトピックを設定。
+![authz-mnesia-rule](./assets/authz-mnesia-rule.png)
 
-EMQX は単一のクライアントまたはユーザーに対して複数の認可チェックルールを設定可能で、ページ上の **Move Up** と **Move Down** ボタンで異なるルールの実行順序や優先度を調整できます。
+#### 認可ルールのスコープ
 
-複数のクライアントやユーザーに対して同時に認可チェックルールを設定したい場合は、HTTP API を通じて関連設定をインポートできます。
+認可ルールは以下の3つのスコープで設定可能です：
 
-### API での作成
+- **クライアントID**：特定のクライアントIDに適用されるルール。
+- **ユーザー名**：特定のユーザー名に適用されるルール。
+- **全ユーザー**：すべてのクライアント／ユーザーに適用されるルール。パターンやIP範囲でフィルタリング可能。
 
-ルールは `/api/v5/authorization/sources/built_in_database` API で管理します。
+#### 共通ルールフィールド
 
-各ルールは以下に適用されます：
-* clientid で識別される特定のクライアント
-  * `/api/v5/authorization/sources/built_in_database/clientid`
-* username で識別される特定のクライアント
-  * `/api/v5/authorization/sources/built_in_database/username`
-* 全クライアント
-  * `/api/v5/authorization/sources/built_in_database/all`
+すべてのルールタイプで利用可能なフィールド：
 
-以下はクライアント (`client1`) に対するルール作成の簡単な例です：
+| フィールド              | 説明                                                                                   |
+| ----------------------- | -------------------------------------------------------------------------------------- |
+| **Action**              | ルールが適用される操作タイプ。選択肢：`Publish`、`Subscribe`、`Publish & Subscribe`。 |
+| **Permission**          | 操作を許可するか拒否するか。選択肢：`Allow`、`Deny`。                                |
+| **Topic**               | ルールが適用される MQTT トピック。ワイルドカード（`+`、`#`）対応。                   |
+| **QoS**                 | 許可される QoS レベル。複数選択可能：`0`、`1`、`2`。                                |
+| **Retain**              | 保持メッセージにルールを適用するか。選択肢：`true`、`false`、`All`。                 |
+| **IP Address Range**    | ルールが適用されるクライアントのIP範囲。CIDR表記（例：`192.168.1.0/24`）や特定IP対応。 |
+| **Listener**            | ルールが適用されるリスナー。`{type}:{name}` 形式（例：`tcp:default`、`ws:default`）。  |
+| **Zone**                | ルールが有効なゾーン。マルチゾーン環境で適用。                                       |
+
+#### スコープ別フィールド
+
+| ルールスコープ | フィールド                                                                                              |
+| -------------- | ----------------------------------------------------------------------------------------------------- |
+| **クライアントID** | **Client ID**：（必須）このルールが適用される正確なクライアントID。<br>**Username Pattern**：（任意）このルールが有効なユーザー名にマッチする正規表現。 |
+| **ユーザー名**     | **Username**：（必須）このルールが適用される正確なユーザー名。<br>**Client ID Pattern**：（任意）このルールが有効なクライアントIDにマッチする正規表現。 |
+| **全ユーザー**     | **Client ID Pattern**：（任意）このルールが有効なクライアントIDにマッチする正規表現。<br>**Username Pattern**：（任意）このルールが有効なユーザー名にマッチする正規表現。 |
+
+**パターン例：**
+
+- `^device-user-.*`：`device-user-` で始まるユーザー名にマッチ。
+- `^sensor-.*`：`sensor-` で始まるクライアントIDにマッチ。
+
+#### ルールの追加
+
+1. **権限** ページで対象のタブ（**Client ID**、**Username**、**All Users**）を選択します。  
+2. **追加** をクリックします。  
+3. [共通フィールド](#共通ルールフィールド)および[スコープ別フィールド](#スコープ別フィールド)を入力します。  
+4. （任意）**権限を追加** をクリックして複数ルールを追加可能。**上へ**、**下へ** ボタンでルールの実行順序を調整します。  
+5. **追加** をクリックしてルールを保存します。
+
+#### 複数ルールの管理（全ユーザーのみ）
+
+**全ユーザー** ルールは、**操作** 列の **その他** メニューからルールの順序を変更できます：
+
+- 上へ移動  
+- 下へ移動  
+- 先頭へ移動  
+- 末尾へ移動  
+
+ルールは上から順に評価されるため、順序が優先度を決定します。
+
+#### ルールの編集と管理
+
+**権限** ページで既存ルールの編集や削除が可能です：
+
+- 対応するルールの **操作** 列にある **編集** ボタンをクリックし、ルールフィールド、マッチングパターン、IP範囲設定を変更できます。  
+- **削除** ボタンをクリックしてルールを削除します。
+
+### REST API で認可ルールを作成する
+
+REST API を使っても認可ルールを管理できます。API エンドポイントは Dashboard の3つのスコープ（ユーザー名、クライアントID、全ユーザー）に対応しています。
+
+#### エンドポイント一覧
+
+- **ユーザー名ルール**  
+  - `POST /authorization/sources/built_in_database/rules/users`：ユーザーのルール作成  
+  - `PUT /authorization/sources/built_in_database/rules/users/:username`：特定ユーザーのルール置換  
+- **クライアントIDルール**  
+  - `POST /authorization/sources/built_in_database/rules/clients`：クライアントのルール作成  
+  - `PUT /authorization/sources/built_in_database/rules/clients/:clientid`：特定クライアントのルール置換  
+- **全ユーザールール**  
+  - `POST /authorization/sources/built_in_database/rules/all`：すべてのクライアント／ユーザーに適用されるグローバルルールの作成または置換  
+  - `PUT` リクエストはなく、`POST` で全ルールの更新または作成を行います。
+
+#### ステップ1：認証トークンの取得
+
+API アクセスのために EMQX Dashboard に認証し、トークンを取得します：
+
+```bash
+export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "admin","password": "public"}' | jq -r ".token")
+```
+
+#### ステップ2：組み込みデータベース認可ソースの作成
+
+ルール作成前に組み込みデータベース認可ソースを作成してください：
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+  'http://localhost:18083/api/v5/authorization/sources' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
   -H 'Content-Type: application/json' \
-  -d '[
-  {
-    "clientid": "client1",
-    "rules": [
-      {
-        "action": "publish",
-        "permission": "allow",
-        "topic": "test/topic/1"
-      },
-      {
-        "action": "subscribe",
-        "permission": "allow",
-        "topic": "test/topic/2"
-      },
-      {
-        "action": "all",
-        "permission": "deny",
-        "topic": "eq test/#"
-      }
-    ]
-  }
-]'
+  -d '{
+        "enable": true,
+        "max_rules": 100,
+        "type": "built_in_database"
+  }'
 ```
 
-各ルールは以下を含みます：
-* `permission`: 現在のクライアント／ユーザーからの特定の操作リクエストを許可するか拒否するか。オプション値は `allow` または `deny`。
-* `action`: このルールに対応する操作。オプション値は `publish`、`subscribe`、または `all`。
-* `topic`: このルールに対応するトピック。 [トピックプレースホルダー](./authz.md#topic-placeholders) をサポートします。
-* `qos`: （オプション）ルールが適用される QoS レベルを指定する数値配列。例：`[0, 1]`、`[1, 2]`。デフォルトはすべての QoS レベル。
-* `retain`: （オプション）現在のルールがリテインメッセージをサポートするかどうか。値は `true` または `false`。デフォルトはリテインメッセージを許可。
+#### ステップ3：認可ルールの作成
+
+以下のようにルールを作成できます：
+
+- **クライアントIDで特定のクライアントに対して**：
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/clients' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "clientid": "client1",
+      "rules": [
+        {
+          "action": "publish",
+          "permission": "allow",
+          "topic": "test/topic/1"
+        },
+        {
+          "action": "subscribe",
+          "permission": "allow",
+          "topic": "test/topic/2"
+        },
+        {
+          "action": "all",
+          "permission": "deny",
+          "topic": "eq test/#"
+        }
+      ]
+    }
+  ]'
+  ```
+
+- **ユーザー名で特定のユーザーに対して**：
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "username": "user1",
+      "rules": [
+        {
+          "topic": "v1/devices/#",
+          "permission": "allow",
+          "action": "publish",
+          "qos": [0,1,2],
+          "retain": "all"
+        }
+      ]
+    }
+  ]'
+  ```
+
+#### 例：ユーザーのルールを更新する
+
+```bash
+curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "user1",
+    "rules": [
+      {
+        "topic": "v1/devices/+/state",
+        "permission": "allow",
+        "action": "subscribe",
+        "qos": [0,1],
+        "retain": "all"
+      }
+    ]
+  }'
+```
+
+#### 例：全ユーザーのルールを作成する
+
+```bash
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \\
+  -H "Authorization: Bearer $EMQX_TOKEN" \\
+  -H 'Content-Type: application/json' \\
+  -d '[
+    {
+      "rules": [
+        {
+          "topic": "v1/#",
+          "permission": "deny",
+          "action": "all"
+        }
+      ]
+    }
+  ]'
+```
+
+#### ルールフィールド
+
+各ルールには以下のフィールドを含めることができます：
+
+| フィールド                  | 説明                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------ |
+| **username** / **clientid** | このルールが適用される正確なユーザー名またはクライアントID（エンドポイントにより異なる）。       |
+| **topic**                   | ルールが適用される MQTT トピック。ワイルドカード（`+`、`#`）および[トピックプレースホルダー](./authz.md#topic-placeholders)対応。 |
+| **permission**              | 現在のクライアント／ユーザーからの操作リクエストを許可するか拒否するか。選択肢：`allow`、`deny`。  |
+| **action**                  | 操作タイプ。選択肢：`publish`、`subscribe`、`all`。                                            |
+| **qos**                     | （任意）許可される QoS レベル。例：`[0,1]`。デフォルトはすべてのレベル。                      |
+| **retain**                  | （任意）保持メッセージにルールを適用するか。選択肢：`true`、`false`、`all`。                   |

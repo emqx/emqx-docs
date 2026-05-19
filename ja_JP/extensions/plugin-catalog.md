@@ -1,27 +1,27 @@
-# Plugin Catalog
+# プラグインカタログ
 
-This catalog collects plugin-specific documentation for custom EMQX plugins maintained outside the built-in product documentation.
+本カタログは、組み込み製品ドキュメント外で管理されているカスタムEMQXプラグインのプラグイン固有ドキュメントを集約しています。
 
-EMQX plugins are typically built when standard product features do not fully meet a requirement, or when a domain-specific problem is better solved as an extension rather than as a built-in capability.
+EMQXプラグインは、標準製品機能で要件を完全に満たせない場合や、ドメイン固有の問題を組み込み機能ではなく拡張として解決する方が適切な場合に構築されることが一般的です。
 
-Some plugins remain specialized, while others may later be promoted into standard EMQX features if they prove useful across a broader range of real-world use cases.
+一部のプラグインは専門的なままですが、実際の幅広いユースケースで有用と認められた場合、後に標準EMQX機能として昇格することもあります。
 
-The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
+本ページに掲載されているプラグインは、[`emqx.git`モノリポジトリ](https://github.com/emqx/emqx/tree/master/plugins)の一部として管理されています。
 
-## Data Integration
+## データ統合
 
 [MQTT Bridge with Disk Queue](./plugin-catalog/emqx-bridge-mqtt-dq.md)
 
-This plugin forwards MQTT messages from EMQX to a remote MQTT broker and uses a disk-backed queue to improve resilience during downstream outages or intermittent connectivity failures.
+本プラグインは、EMQXからリモートMQTTブローカーへMQTTメッセージを転送し、ディスクバックアップされたキューを使用して下流の障害や断続的な接続障害時のレジリエンスを向上させます。
 
-## Data Governance
+## データガバナンス
 
 [UNS Governance](./plugin-catalog/emqx-unsgov.md)
 
-This plugin enforces Unified Namespace topic structure and optional payload validation rules, helping you standardize topic hierarchies and data contracts at publish time.
+本プラグインは、Unified Namespaceトピック構造およびオプションのペイロード検証ルールを強制し、パブリッシュ時にトピック階層とデータ契約の標準化を支援します。
 
-## Access Control
+## アクセス制御
 
 [Per-username Session Quota](./plugin-catalog/emqx-username-quota.md)
 
-This plugin enforces cluster-wide concurrent session limits per username, with support for quota overrides, snapshot-based inspection APIs, and administrative session control.
+本プラグインは、クラスター全体でユーザー名ごとの同時セッション数制限を強制し、クォータのオーバーライド、スナップショットベースの検査API、および管理者によるセッション制御をサポートします。

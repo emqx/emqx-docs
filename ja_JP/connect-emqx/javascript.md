@@ -1,50 +1,50 @@
-# JavaScript SDK を使った接続
+# JavaScript SDKによる接続
 
-[MQTT.js](https://github.com/mqttjs/MQTT.js) は、JavaScript で実装された MQTT プロトコルクライアント機能のモジュールであり、ブラウザおよび Node.js 環境で利用できます。
+[MQTT.js](https://github.com/mqttjs/MQTT.js)は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールであり、ブラウザおよびNode.js環境で利用可能です。
 
-JavaScript のシングルスレッド特性により、MQTT.js は完全に非同期の MQTT クライアントです。MQTT.js は MQTT と MQTT over WebSocket をサポートしており、各環境での対応状況は以下の通りです。
+JavaScriptのシングルスレッド特性により、MQTT.jsは完全に非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各動作環境でのサポート状況は以下の通りです。
 
-- ブラウザ環境：MQTT over WebSocket（WeChat アプレット、Alipay アプレットなどのカスタマイズされたブラウザ環境を含む）
-- Node.js 環境：MQTT、MQTT over WebSocket
+- ブラウザ環境：MQTT over WebSocket（WeChatミニプログラム、Alipayミニプログラムなどのカスタマイズされたブラウザ環境を含む）
+- Node.js環境：MQTT、MQTT over WebSocket
 
-接続パラメータの一部は環境によって異なりますが、その他の API は共通です。
+一部の接続パラメータは環境によって異なりますが、それ以外のAPIは共通です。
 
-npm を使ったインストール方法：
+npmによるインストール：
 
 ```bash
 npm i mqtt
 ```
 
-CDN を使ったブラウザでのインストール方法：
+CDNによるインストール（ブラウザ）：
 
 ```html
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-    // グローバルに mqtt 変数を初期化
+    // グローバルにmqtt変数を初期化
     console.log(mqtt)
 </script>
 ```
 
-Node.js がインストールされている環境では、`npm i mqtt -g` コマンドで MQTT.js をグローバルに利用できます。
+Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用できます。
 
 ```bash
 npm i mqtt -g
 
 mqtt help
 
-> MQTT.js コマンドラインインターフェース、利用可能なコマンドは以下の通りです：
+> MQTT.jsコマンドラインインターフェース、利用可能なコマンドは以下の通りです：
 
   * publish     ブローカーへメッセージをパブリッシュする
   * subscribe   ブローカーからの更新をサブスクライブする
-  * version     現在の MQTT.js バージョンを表示
+  * version     現在のMQTT.jsのバージョンを表示
   * help        コマンドのヘルプを表示
 
-> 詳細は 'mqtt help [command]' を実行してください。
+> 'mqtt help [command]'を実行すると、各コマンドの詳細を確認できます。
 ```
 
 ## MQTT.js 使用例
 
-以下は、JavaScript で MQTT.js を使って EMQX に接続し、メッセージの送受信を行う完全なコード例です。
+以下は、JavaScriptでMQTT.jsを使ってEMQXに接続し、メッセージの送受信を行う完全なコード例です。
 
 ```javascript
 // const mqtt = require('mqtt')
@@ -60,13 +60,13 @@ const options = {
       password: 'emqx_test',
 }
 
-// 接続文字列、プロトコルで接続方法を指定
-// ws 暗号化されていない WebSocket 接続
-// wss 暗号化された WebSocket 接続
-// mqtt 暗号化されていない TCP 接続
-// mqtts 暗号化された TCP 接続
-// wxs WeChat アプレット接続
-// alis Alipay アプレット接続
+// 接続URL、プロトコルで接続方式を指定
+// ws 暗号化されていないWebSocket接続
+// wss 暗号化されたWebSocket接続
+// mqtt 暗号化されていないTCP接続
+// mqtts 暗号化されたTCP接続
+// wxs WeChatミニプログラム接続
+// alis Alipayミニプログラム接続
 const connectUrl = 'wss://broker.emqx.io:8084/mqtt'
 const client = mqtt.connect(connectUrl, options)
 
@@ -83,6 +83,6 @@ client.on('message', (topic, message) => {
 })
 ```
 
-## MQTT.js の MQTT 5.0 サポート
+## MQTT.jsのMQTT 5.0サポート
 
-現在、MQTT.js は MQTT 5.0 を完全にサポートしています。
+現在、MQTT.jsはMQTT 5.0を完全にサポートしています。

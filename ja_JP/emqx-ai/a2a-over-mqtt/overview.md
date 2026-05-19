@@ -1,32 +1,32 @@
-# A2A over MQTT
+# MQTTによるA2A
 
-A2A over MQTT is a broker-neutral transport profile that brings the [Agent-to-Agent (A2A) protocol](https://google.github.io/A2A/) to MQTT. It defines standardized topic conventions, MQTT v5 property mappings, and discovery behavior so that AI agents built on different frameworks can register, discover, and collaborate through an MQTT broker without requiring any point-to-point integration between them.
+MQTTによるA2Aは、[Agent-to-Agent (A2A) プロトコル](https://a2a-protocol.org/latest/)をMQTTに対応させるブローカーに依存しないトランスポートプロファイルです。標準化されたトピック規約、MQTT v5プロパティのマッピング、およびディスカバリ動作を定義しており、異なるフレームワークで構築されたAIエージェントが、相互にポイントツーポイントの統合を必要とせずに、MQTTブローカーを介して登録、発見、協調できるようにします。
 
-EMQX implements A2A over MQTT through the **A2A Registry**, a built-in feature that indexes Agent Cards published to discovery topics, tracks agent liveness, and provides management interfaces for operators.
+EMQXは、**A2Aレジストリ**という組み込み機能を通じてMQTTによるA2Aを実装しています。これは、ディスカバリトピックにパブリッシュされたエージェントカードをインデックス化し、エージェントの生存状態を追跡し、運用者向けの管理インターフェースを提供します。
 
-## Why MQTT for A2A
+## なぜMQTTをA2Aに使うのか
 
-The standard A2A protocol uses HTTP as its transport. This works well in cloud environments, but becomes limiting in distributed, IoT, or edge deployments where agents may run on constrained devices, behind NAT, or in environments where persistent HTTP connections are impractical.
+標準のA2AプロトコルはトランスポートにHTTPを使用しています。これはクラウド環境では有効ですが、分散型、IoT、エッジ環境では制約が多くなります。特に、エージェントが制約のあるデバイス上で動作したり、NATの背後にあったり、持続的なHTTP接続が実用的でない環境では制限となります。
 
-MQTT addresses these constraints directly:
+MQTTはこれらの制約に直接対応します：
 
-- **Lightweight and efficient**: Minimal protocol overhead, well-suited for low-bandwidth and unreliable networks.
-- **Broker-mediated routing**: Agents do not need to know each other's addresses; the broker handles routing.
-- **Retained messages for discovery**: Agents publish their Agent Card as a retained message, making it immediately available to any subscriber without a dedicated registry service.
-- **Native presence detection**: MQTT Last Will and Testament (LWT) provides automatic offline signaling when an agent disconnects unexpectedly.
-- **Centralized auth**: EMQX's existing authentication and authorization apply uniformly to all agent traffic.
+- **軽量かつ効率的**：最小限のプロトコルオーバーヘッドで、低帯域幅や信頼性の低いネットワークに適しています。
+- **ブローカー経由のルーティング**：エージェント同士が互いのアドレスを知る必要がなく、ブローカーがルーティングを担当します。
+- **ディスカバリのための保持メッセージ**：エージェントはエージェントカードを保持メッセージとしてパブリッシュし、専用のレジストリサービスなしにサブスクライバーが即座に利用可能です。
+- **ネイティブなプレゼンス検知**：MQTTのLast Will and Testament（LWT）により、エージェントが予期せず切断された場合に自動的にオフラインを通知します。
+- **集中認証**：EMQXの既存の認証および認可がすべてのエージェントトラフィックに一貫して適用されます。
 
-## Key Features
+## 主な機能
 
-- **Agent registration and discovery** via retained messages on standardized `$a2a/v1/discovery/` topics.
-- **Dashboard UI** for viewing, registering, and managing Agent Cards interactively.
-- **CLI management** via `emqx ctl a2a-registry` commands.
-- **Schema validation**: optional enforcement of A2A Agent Card schema on registration.
-- **Broker-managed liveness**: EMQX attaches `a2a-status` MQTT User Properties reflecting agent connection state.
-- **MQTT v5 request/reply**: standardized `Response Topic` and `Correlation Data` conventions for task delegation between agents.
+- 標準化された`$a2a/v1/discovery/`トピック上の保持メッセージによるエージェント登録とディスカバリ。
+- エージェントカードの閲覧、登録、管理を対話的に行うダッシュボードUI。
+- `emqx ctl a2a-registry`コマンドによるCLI管理。
+- エージェントカードのスキーマ検証：登録時にA2Aエージェントカードスキーマの任意の強制。
+- ブローカー管理の生存監視：EMQXがエージェント接続状態を反映する`a2a-status` MQTTユーザープロパティを付与。
+- MQTT v5のリクエスト／リプライ：エージェント間のタスク委譲のための標準化された`Response Topic`および`Correlation Data`規約。
 
-## Learn More
+## 詳細情報
 
-- [How A2A over MQTT Works](./architecture.md): components, topic model, and interaction patterns
-- [Manage Agents](./manage-agents.md): enable the registry, register agents, and use the Dashboard, CLI, and MQTT interfaces
-- [A2A over MQTT Specification](https://www.emqx.com/mqtt-for-ai/a2a-over-mqtt/specification/0.1/basic/mqtt_transport.html): full normative transport profile
+- [MQTTによるA2Aの仕組み](./architecture.md)：コンポーネント、トピックモデル、相互作用パターン
+- [エージェントの管理](./manage-agents.md)：レジストリの有効化、エージェント登録、ダッシュボード、CLI、MQTTインターフェースの利用
+- [MQTTによるA2A仕様](https://www.emqx.com/mqtt-for-ai/a2a-over-mqtt/specification/0.1/basic/mqtt_transport.html)：完全な規範的トランスポートプロファイル

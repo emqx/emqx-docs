@@ -1,6 +1,6 @@
-# EMQX Enterprise リリースノート
+# Release Notes for EMQX Enterprise
 
-EMQX Enterprise のリリースノートページでは、各バージョンに含まれる更新、機能強化、および修正の詳細な記録を提供しています。
+The release notes page for EMQX Enterprise provides a comprehensive, detailed record of updates, enhancements, and fixes included in each version.
 
 ## v6.2
 
@@ -32,6 +32,7 @@ EMQX Enterprise のリリースノートページでは、各バージョンに�
 
 ## v5.8
 
+- [5.8.10](./changes-ee-v5.md#_5-8-10): 2026-04-16
 - [5.8.9](./changes-ee-v5.md#_5-8-9): 2025-12-31
 - [5.8.8](./changes-ee-v5.md#_5-8-8): 2025-09-04
 - [5.8.7](./changes-ee-v5.md#_5-8-7): 2025-07-02
@@ -149,6 +150,9 @@ EMQX Enterprise のリリースノートページでは、各バージョンに�
 
 ## v4.2
 
+- [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
+- [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
+- [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26
 - [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
 - [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
 - [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26

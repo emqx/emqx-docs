@@ -1,107 +1,107 @@
 # UNS Governance
 
-This plugin enforces Unified Namespace topic structure at ACL check time.
+このプラグインは、ACLチェック時にUnified Namespaceのトピック構造を強制します。
 
-## Plugin API
+## プラグインAPI
 
-Base path: `/api/v5/plugin_api/emqx_unsgov`
+ベースパス: `/api/v5/plugin_api/emqx_unsgov`
 
-## Bootstrap Models
+## ブートストラップモデル
 
-- On startup, UNS Governance scans `priv/bootstrap_models/*.json`.
-- For each bootstrap model:
-  - If its `id` is not found in database, plugin stores it and marks it active.
-  - If its `id` already exists in database, plugin skips loading and logs at info level.
-- Bundled default bootstrap model: `priv/bootstrap_models/model-v1.json`.
+- 起動時にUNS Governanceは `priv/bootstrap_models/*.json` をスキャンします。
+- 各ブートストラップモデルについて：
+  - `id` がデータベースに存在しない場合、プラグインはそれを保存しアクティブとしてマークします。
+  - `id` が既にデータベースに存在する場合、プラグインは読み込みをスキップし、infoレベルでログを出力します。
+- バンドルされたデフォルトのブートストラップモデル：`priv/bootstrap_models/model-v1.json`
 
-> NOTE: Bootstrap models are loaded into the database when the first plugin starts up in the cluster, later plugin or node restarts will not cause a reload. Use API to update the models store in DB.
+> 注意：ブートストラップモデルはクラスター内で最初のプラグイン起動時にデータベースにロードされます。以降のプラグインやノードの再起動では再ロードされません。モデルの更新はAPIを使用してデータベース内のモデルストアを更新してください。
 
-### JSON Data Endpoints
+### JSONデータエンドポイント
 
-- `GET /status` — plugin status (on_mismatch, exempt_topics).
-- `GET /stats` — cluster-aggregated counters and recent drops.
-- `GET /models` — list all stored models (each entry includes an `active` flag).
-- `GET /models/:id` — get a specific model by ID. 404 if not found.
-- `POST /models` — create or update a model; optional `activate` flag.
-- `POST /models/:id/activate` — activate a stored model.
-- `POST /models/:id/deactivate` — deactivate a model.
-- `DELETE /models/:id` — delete a stored model.
-- `POST /validate/topic` — validate a topic against active models.
+- `GET /status`：プラグインのステータス（on_mismatch、exempt_topics）。
+- `GET /stats`：クラスター集約カウンターと最近のドロップ情報。
+- `GET /models`：保存されているすべてのモデルの一覧（各エントリに`active`フラグを含む）。
+- `GET /models/:id`：IDで特定のモデルを取得。見つからない場合は404。
+- `POST /models`：モデルの作成または更新。オプションで`activate`フラグあり。
+- `POST /models/:id/activate`：保存されたモデルをアクティブ化。
+- `POST /models/:id/deactivate`：モデルを非アクティブ化。
+- `DELETE /models/:id`：保存されたモデルを削除。
+- `POST /validate/topic`：アクティブなモデルに対してトピックの検証を実行。
 
-### Other Endpoints
+### その他のエンドポイント
 
-- `GET /ui` — interactive model editor UI.
-- `GET /metrics` — Prometheus text exposition format.
+- `GET /ui`：インタラクティブなモデルエディターUI。
+- `GET /metrics`：Prometheusテキストエクスポート形式。
 
-## UNS Model Schema
+## UNSモデルスキーマ
 
-This section defines the complete model JSON format accepted by UNS Governance.
+このセクションでは、UNS Governanceが受け入れる完全なモデルJSON形式を定義します。
 
-### Top-Level Keys
+### トップレベルキー
 
-- `id` (required, string): model ID. Must match `^[A-Za-z0-9_-]+$`. Controls evaluation order (alphabetical by ID).
-- `name` (optional, string): model display name. Defaults to `id`.
-- `variable_types` (optional, object): reusable variable constraints.
-- `tree` (required, object): topic tree definition.
-- `payload_types` (optional, object): reusable payload schemas.
+- `id`（必須、文字列）：モデルID。`^[A-Za-z0-9_-]+$` にマッチする必要があります。評価順序はIDのアルファベット順で制御されます。
+- `name`（任意、文字列）：モデルの表示名。省略時は`id`が使用されます。
+- `variable_types`（任意、オブジェクト）：再利用可能な変数制約。
+- `tree`（必須、オブジェクト）：トピックツリー定義。
+- `payload_types`（任意、オブジェクト）：再利用可能なペイロードスキーマ。
 
 ### `variable_types`
 
-Map of variable type name to constraint object.
+変数タイプ名を制約オブジェクトにマッピングします。
 
-Supported forms:
-- String regex matcher:
+サポートされる形式：
+- 文字列正規表現マッチャー：
   - `{"type":"string","pattern":"^...$"}`
-- Enum matcher:
+- 列挙型マッチャー：
   - `{"type":"enum","values":["A","B","C"]}`
 
-If a variable type is missing or invalid, matcher falls back to permissive `any`.
+変数タイプが欠落または無効な場合、マッチャーは許容的な`any`にフォールバックします。
 
 ### `payload_types`
 
-Map of payload schema name to schema object.
+ペイロードスキーマ名をスキーマオブジェクトにマッピングします。
 
-Validation uses JSON Schema, with one compatibility patch:
-- If top-level `type` is omitted, UNS Governance patches it to `"object"`.
-- Top-level payload schema must be object-root. Primitive roots are rejected.
+検証にはJSON Schemaを使用し、1つの互換性パッチがあります：
+- トップレベルの`type`が省略されている場合、UNS Governanceはこれを`"object"`に補正します。
+- トップレベルのペイロードスキーマはオブジェクトルートでなければなりません。プリミティブルートは拒否されます。
 
-This allows both:
-- Full self-contained object JSON Schema.
-- Existing shorthand object schema (for example only `required`/`properties`).
+これにより以下が可能です：
+- 完全な自己完結型オブジェクトJSON Schema。
+- 既存の省略形オブジェクトスキーマ（例：`required`や`properties`のみ）。
 
-Endpoint payload binding:
-- Endpoint `_payload` can reference a key in `payload_types`, or `"any"` to skip payload validation.
+エンドポイントのペイロードバインディング：
+- エンドポイントの`_payload`は`payload_types`内のキー、またはペイロード検証をスキップする`"any"`を参照できます。
 
 ### `tree`
 
-`tree` is an object where each key is a root topic segment and each value is a node object.
+`tree`は、各キーがルートトピックセグメントであり、各値がノードオブジェクトであるオブジェクトです。
 
-Node object keys:
-- `children` (optional, object): child segment map.
-- `_payload` (optional, string): payload type name for endpoint node, default `"any"`.
-- `_type` (optional, compatibility): explicit `namespace | variable | endpoint`.
-- `_var_type` (optional, compatibility): variable type name.
+ノードオブジェクトのキー：
+- `children`（任意、オブジェクト）：子セグメントのマップ。
+- `_payload`（任意、文字列）：エンドポイントノードのペイロードタイプ名。デフォルトは`"any"`。
+- `_type`（任意、互換性用）：明示的な`namespace | variable | endpoint`。
+- `_var_type`（任意、互換性用）：変数タイプ名。
 
-Node type inference:
-- If `children` exists: node is non-endpoint.
-- If `children` is absent: node is endpoint.
-- For non-endpoint keys:
-  - key `{name}` => variable node
-  - key `+` => variable wildcard node
-  - any other key => namespace node
+ノードタイプの推論：
+- `children`が存在する場合：ノードは非エンドポイント。
+- `children`がない場合：ノードはエンドポイント。
+- 非エンドポイントのキーについて：
+  - キーが`{name}`の場合は変数ノード。
+  - キーが`+`の場合は変数ワイルドカードノード。
+  - その他のキーはネームスペースノード。
 
-Variable type resolution:
-- For key `{name}`:
-  - use `_var_type` if provided
-  - otherwise use inferred type name `name`
-- For key `+`:
-  - matcher is `any` (matches one segment)
+変数タイプの解決：
+- キーが`{name}`の場合：
+  - `_var_type`があればそれを使用。
+  - なければ推論されたタイプ名`name`を使用。
+- キーが`+`の場合：
+  - マッチャーは`any`（1セグメントにマッチ）。
 
-Wildcard keys in tree:
-- `+`: match exactly one topic segment.
-- `#`: match remaining topic segments (including zero remaining segments).
+ツリー内のワイルドカードキー：
+- `+`：ちょうど1つのトピックセグメントにマッチ。
+- `#`：残りのトピックセグメントすべてにマッチ（0セグメントも含む）。
 
-### Full Example
+### 完全な例
 
 ```json
 {
@@ -150,77 +150,59 @@ Wildcard keys in tree:
 }
 ```
 
-## Enforcement Behavior
+## 強制動作
 
-UNS Governance validates both topic structure and (optionally) payload schema.
+UNS Governanceはトピック構造と（オプションで）ペイロードスキーマの両方を検証します。
 
-- Topic violations (`topic_nomatch`, `topic_invalid`, `not_endpoint`):
-  - `topic_nomatch`: no active model topic filter matched the topic.
-    (No model-specific validation is run.)
-    If there are no active models and UNS Governance is enabled, topics are
-    fail-closed as `topic_nomatch` (except `exempt_topics`).
-  - `topic_invalid`: selected model filter matched, but topic failed selected
-    model structure/segment constraints.
-  - `not_endpoint`: selected model matched topic path, but target node is not an
-    endpoint.
-  - QoS 0: message is ignored.
-  - QoS 1/2: publish is rejected and a protocol reason code is returned to client
-    (`Not Authorized`).
-  - If EMQX `authorization.deny_action` is set to `disconnect`, the client is
-    disconnected on topic authorization failure (the setting is `disconnect`,
-    not `drop`).
-  - If `authorization.deny_action` is `ignore` (default), no disconnect is done;
-    QoS 1/2 still receive reject reason codes.
-  - Observable counters: `messages_dropped`, `topic_nomatch`,
-    `topic_invalid`, `not_endpoint`, and per-model counters in `per_model`.
+- トピック違反（`topic_nomatch`、`topic_invalid`、`not_endpoint`）：
+  - `topic_nomatch`：アクティブなモデルのトピックフィルターにマッチしなかった。
+    （モデル固有の検証は実行されません。）
+    アクティブモデルが存在せずUNS Governanceが有効な場合、`exempt_topics`を除きトピックはフェイルクローズで`topic_nomatch`となります。
+  - `topic_invalid`：選択されたモデルのフィルターにはマッチしたが、トピックがモデルの構造・セグメント制約に違反。
+  - `not_endpoint`：選択されたモデルがトピックパスにマッチしたが、対象ノードがエンドポイントでない。
+  - QoS 0：メッセージは無視されます。
+  - QoS 1/2：パブリッシュは拒否され、クライアントにプロトコル理由コード（`Not Authorized`）が返されます。
+  - EMQXの`authorization.deny_action`が`disconnect`に設定されている場合、トピック認可失敗時にクライアントは切断されます（設定は`disconnect`であり`drop`ではありません）。
+  - `authorization.deny_action`が`ignore`（デフォルト）の場合、切断は行われず、QoS 1/2は拒否理由コードを受け取ります。
+  - 観測可能なカウンター：`messages_dropped`、`topic_nomatch`、`topic_invalid`、`not_endpoint`、および`per_model`内のモデル別カウンター。
 
-- Payload violations (`payload_invalid`):
-  - Message is dropped by UNS Governance in publish processing.
-  - No auth reject/disconnect is required for this path.
-  - Observable counters: `messages_dropped`, `payload_invalid`,
-    and per-model counters in `per_model`.
+- ペイロード違反（`payload_invalid`）：
+  - メッセージはUNS Governanceによってパブリッシュ処理中にドロップされます。
+  - この経路では認可拒否や切断は不要です。
+  - 観測可能なカウンター：`messages_dropped`、`payload_invalid`、および`per_model`内のモデル別カウンター。
 
-## Topic-Filter Pre-Check
+## トピックフィルタープリチェック
 
-When multiple models are active, UNS Governance pre-screens models before full
-validation:
+複数のモデルがアクティブな場合、UNS Governanceは完全検証の前にモデルをプリスクリーニングします：
 
-- Each model is compiled into topic-filter patterns derived from its tree paths.
-- Variable segments are converted to single-level wildcards (`+`).
-  - Example: `foo/{bar}/x` becomes `foo/+/x`.
-- Active models are ordered by model ID.
-- UNS Governance selects the first model (by ID order) whose compiled filter matches
-  the publish topic.
-- Pre-check uses direct topic/filter matching only; it does not implicitly expand
-  a publish topic prefix (for example appending `/#`).
-- Only that selected model is fully validated; UNS Governance does not continue to the
-  next model.
-- Models that fail this pre-check are skipped and do not contribute per-model
-  drop counters.
+- 各モデルはツリーパスから派生したトピックフィルターパターンにコンパイルされます。
+- 変数セグメントは単一レベルワイルドカード（`+`）に変換されます。
+  - 例：`foo/{bar}/x` は `foo/+/x` になります。
+- アクティブモデルはモデルID順に並べられます。
+- UNS Governanceは、パブリッシュトピックにマッチする最初のモデル（ID順）を選択します。
+- プリチェックは直接的なトピック/フィルタマッチングのみを使用し、パブリッシュトピックのプレフィックス拡張（例：`/#`の付加）は行いません。
+- 選択されたモデルのみが完全検証され、UNS Governanceは次のモデルに進みません。
+- プリチェックに失敗したモデルはスキップされ、モデル別ドロップカウンターには寄与しません。
 
-This avoids unrelated active models inflating counters and keeps model behavior
-deterministic. It also means overlapping topic trees across models should be
-avoided.
+これにより、無関係なアクティブモデルによるカウンターの膨張を防ぎ、モデルの動作を決定論的に保ちます。また、モデル間でトピックツリーの重複は避けるべきです。
 
-## Counters
+## カウンター
 
-`GET /stats` returns cluster-aggregated counters.
+`GET /stats`はクラスター集約カウンターを返します。
 
-Top-level counters:
-- `messages_total`: total handled messages (`messages_allowed + messages_dropped`);
-  exempt traffic is included.
-- `messages_allowed`: allowed messages plus exempt messages.
-- `messages_dropped`: dropped/rejected messages due to UNS validation failures.
-- `topic_nomatch`: dropped/rejected because no active model filter matched.
-- `topic_invalid`: dropped/rejected due to selected-model topic mismatch.
-- `not_endpoint`: dropped/rejected because topic matched a non-endpoint node.
-- `payload_invalid`: dropped due to payload schema mismatch.
-- `exempt`: messages skipped by `exempt_topics`.
-- `per_model`: per-model breakdown map keyed by model ID.
-- `recent_drops`: recent drop events (`topic`, `error_type`, `error_detail`,
-  `timestamp_ms`).
+トップレベルカウンター：
+- `messages_total`：処理されたメッセージの合計（`messages_allowed + messages_dropped`）。免除トラフィックも含む。
+- `messages_allowed`：許可されたメッセージと免除されたメッセージの合計。
+- `messages_dropped`：UNS検証失敗によりドロップ/拒否されたメッセージ。
+- `topic_nomatch`：アクティブモデルのフィルターにマッチしなかったためドロップ/拒否。
+- `topic_invalid`：選択されたモデルのトピック不一致によりドロップ/拒否。
+- `not_endpoint`：トピックが非エンドポイントノードにマッチしたためドロップ/拒否。
+- `payload_invalid`：ペイロードスキーマ不一致によりドロップ。
+- `exempt`：`exempt_topics`によりスキップされたメッセージ。
+- `per_model`：モデルIDをキーとしたモデル別内訳マップ。
+- `recent_drops`：最近のドロップイベント（`topic`、`error_type`、`error_detail`、`timestamp_ms`）。
 
-Per-model counters (`per_model.<model_id>`):
+モデル別カウンター（`per_model.<model_id>`）：
 - `messages_total`
 - `messages_allowed`
 - `messages_dropped`
@@ -228,21 +210,19 @@ Per-model counters (`per_model.<model_id>`):
 - `not_endpoint`
 - `payload_invalid`
 
-Counter semantics:
-- `record_allowed` bumps `messages_total` and `messages_allowed` for the matched model.
-- Topic/payload drops bump `messages_total`, `messages_dropped`, and the specific
-  reason counter for the selected model.
-- If no model passes the topic-filter pre-check, `topic_nomatch` is bumped
-  globally and no per-model drop counter is bumped.
-  This includes the case where the active model set is empty.
+カウンターの意味：
+- `record_allowed`は、該当モデルの`messages_total`と`messages_allowed`を増加させます。
+- トピック/ペイロードのドロップは、`messages_total`、`messages_dropped`、および該当理由のカウンターを増加させます。
+- どのモデルもトピックフィルタープリチェックを通過しなかった場合、グローバルに`topic_nomatch`が増加し、モデル別ドロップカウンターは増加しません。
+  これはアクティブモデルセットが空の場合も含みます。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
 ## ダウンロード
 
-各 EMQX リリースに対応するプラグインパッケージ:
+各EMQXリリースのTarball：
 
-| EMQX バージョン | プラグインバージョン | パッケージ |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.2.0 | 0.1.2 | [emqx_unsgov-0.1.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.tar.gz) |
 

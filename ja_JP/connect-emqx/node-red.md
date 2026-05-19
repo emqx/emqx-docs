@@ -1,277 +1,291 @@
-# Use Node-RED with EMQX
+# EMQXでNode-REDを使う
 
-[Node-RED](https://nodered.org/) is a flow-based programming tool that provides a browser-based editor for wiring together hardware devices, APIs, and online services. It uses a visual, node-based interface where you connect pre-built nodes to create data flows. Node-RED supports MQTT natively through its built-in `mqtt-in` (subscribe) and `mqtt-out` (publish) nodes, making it a popular choice for processing IoT data from EMQX.
+[Node-RED](https://nodered.org/)は、ハードウェアデバイス、API、オンラインサービスをブラウザベースのエディターで連携させるフローベースのプログラミングツールです。ビジュアルなノードベースのインターフェースを使い、あらかじめ用意されたノードを接続してデータフローを作成します。Node-REDは組み込みの`mqtt-in`（サブスクライブ）および`mqtt-out`（パブリッシュ）ノードを通じてMQTTをネイティブにサポートしており、EMQXからのIoTデータ処理に広く利用されています。
 
-This page explains how to install Node-RED, connect it to EMQX, and build a data processing pipeline that parses, filters, and transforms MQTT messages.
+本ページでは、Node-REDのインストール方法、EMQXへの接続方法、およびMQTTメッセージの解析、フィルタリング、変換を行うデータ処理パイプラインの構築方法について説明します。
 
-## Prerequisites
+## 前提条件
 
-- Node.js 14 or later (for NPM installation)
-- An EMQX deployment, or use the EMQX public broker for testing
-- [MQTTX](https://mqttx.app/) or another MQTT client for sending test messages
+- Node.js 18 LTS または 20 LTS（NPMインストール用）
+- EMQXのデプロイ環境、またはテスト用にEMQXパブリックブローカーを利用
+- テストメッセージ送信用の[MQTTX](https://mqttx.app/)などのMQTTクライアント
 
-## Install Node-RED
+## Node-REDのインストール
 
-**Via NPM:**
+**NPM経由の場合:**
 
 ```bash
 npm install -g --unsafe-perm node-red
 ```
 
-Then start Node-RED:
+続いてNode-REDを起動します:
 
 ```bash
 node-red
 ```
 
-**Via Docker:**
+**Docker経由の場合:**
 
 ```bash
 docker run -it -p 1880:1880 --name mynodered nodered/node-red
 ```
 
-After startup, open your browser and navigate to `http://127.0.0.1:1880` to access the Node-RED editor.
+起動後、ブラウザで`http://127.0.0.1:1880`にアクセスするとNode-REDエディターが開きます。
 
-![access_node_red_editor](./assets/access_node_red_editor.png)
+![Node-REDエディターへのアクセス](./assets/access_node_red_editor.png)
 
-> For more installation options including Raspberry Pi and cloud deployment, see the [Node-RED documentation](https://nodered.org/docs/getting-started/).
+> Raspberry Piやクラウド環境でのインストール方法など、その他のオプションについては[Node-REDドキュメント](https://nodered.org/docs/getting-started/)をご参照ください。
 
-## MQTT Broker Setup
+## MQTTブローカーの設定
 
-You need an MQTT broker for Node-RED to connect to. This guide uses EMQX, which supports MQTT 3.1, 3.1.1, and 5.0.
+Node-REDが接続するMQTTブローカーが必要です。本ガイドではMQTT 3.1、3.1.1、5.0をサポートするEMQXを使用します。
 
-### EMQX Public Broker (Testing)
+### EMQXパブリックブローカー（テスト用）
 
-For quick testing without deploying your own broker, you can use the EMQX public broker.
+独自のブローカーをデプロイせずに手軽にテストしたい場合は、EMQXパブリックブローカーを利用できます。
 
-| Parameter       | Value            |
-| --------------- | ---------------- |
-| Broker Address  | `broker.emqx.io` |
-| TCP Port        | `1883`           |
-| SSL/TLS Port    | `8883`           |
-| WebSocket Port  | `8083`           |
-| Secure WebSocket Port | `8084`     |
+| パラメーター       | 値                |
+| ------------------ | ----------------- |
+| ブローカーアドレス | `broker.emqx.io`  |
+| TCPポート          | `1883`            |
+| SSL/TLSポート      | `8883`            |
+| WebSocketポート    | `8083`            |
+| セキュアWebSocketポート | `8084`        |
 
-The public broker is intended for testing and demonstration purposes only.
+パブリックブローカーはテストおよびデモ目的の利用に限定されています。
 
-### EMQX Enterprise Deployment
+### EMQX Enterpriseデプロイメント
 
-For production scenarios, connect Node-RED to your own EMQX Enterprise deployment using the broker address, ports, and authentication credentials defined in your environment.
+本番環境では、EMQX Enterpriseを独自にデプロイし、Node-REDをブローカーアドレス、ポート、認証情報に基づいて接続します。
 
-Typical configurations include:
+一般的な構成例：
 
-- Custom broker hostname or IP address
-- Username/password authentication or mutual TLS
-- Access control rules (ACLs) applied to topics
+- カスタムブローカーのホスト名またはIPアドレス
+- ユーザー名/パスワード認証または相互TLS認証
+- トピックに対するアクセス制御ルール（ACL）
 
-Refer to your EMQX Enterprise listener and authentication configuration when setting up Node-RED broker connections.
+Node-REDのブローカー接続設定時には、EMQX Enterpriseのリスナー設定や認証設定を参照してください。
 
-> In addition to self-managed EMQX Enterprise deployments, you can also connect Node-RED to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated). Use the broker address, ports, and credentials provided by EMQX Cloud.
+> 自己管理型EMQX Enterpriseのほか、フルマネージドMQTTサービスである[EMQX Cloud](https://docs.emqx.com/en/cloud/latest/)（ServerlessまたはDedicated）への接続も可能です。EMQX Cloudが提供するブローカーアドレス、ポート、認証情報を利用してください。
 
-## Build a Basic MQTT Flow
+## 基本的なMQTTフローの構築
 
-The following steps create a minimal flow that subscribes to one topic and forwards received messages to another topic.
+以下の手順では、1つのトピックをサブスクライブし、受信したメッセージを別のトピックに転送する最小限のフローを作成します。
 
-### Step 1: Add an MQTT Subscribe Node
+### ステップ1: MQTTサブスクライブノードの追加
 
-1. In the Node-RED editor, drag an **mqtt-in** node from the left palette onto the canvas.
+1. Node-REDエディターで、左側パレットから**mqtt-in**ノードをキャンバスにドラッグします。
 
-2. Double-click the node to open its properties.
+2. ノードをダブルクリックしてプロパティを開きます。
 
-3. Click the pencil icon next to the **Server** field to create a new broker connection.
+3. **Server**欄の鉛筆アイコンをクリックし、新しいブローカー接続を作成します。
 
-4. Enter `broker.emqx.io` as the **Server** address and click **Add**.
+4. **Server**アドレスに`broker.emqx.io`を入力し、**Add**をクリックします。
 
-   ![add_subscribe_node](./assets/config_subscribe_node.png)
+   ![サブスクライブノードの設定](./assets/config_subscribe_node.png)
 
-5. Set the **Topic** to `test/node_red/in`.
+5. **Topic**に`test/node_red/in`を設定します。
 
-6. Set the **QoS** level as needed, then click **Done**.
+6. 必要に応じて**QoS**レベルを設定し、**Done**をクリックします。
 
-   ![subscribe_to_topic](./assets/subscribe_to_topic.png)
+   ![トピックのサブスクライブ設定](./assets/subscribe_to_topic.png)
 
-### Step 2: Add an MQTT Publish Node
+### ステップ2: MQTTパブリッシュノードの追加
 
-1. Drag an **mqtt-out** node onto the canvas.
+1. **mqtt-out**ノードをキャンバスにドラッグします。
 
-2. Double-click the node to open its properties.
+2. ノードをダブルクリックしてプロパティを開きます。
 
-3. Select the broker configured in Step 1 from the **Server** dropdown.
+3. ステップ1で設定したブローカーを**Server**ドロップダウンから選択します。
 
-4. Set the **Topic** to `test/node_red/out`.
+4. **Topic**に`test/node_red/out`を設定します。
 
-5. Configure **QoS** and **Retain** as needed, then click **Done**.
+5. 必要に応じて**QoS**と**Retain**を設定し、**Done**をクリックします。
 
-   ![config_publish_node](./assets/config_publish_node.png)
+   ![パブリッシュノードの設定](./assets/config_publish_node.png)
 
-### Step 3: Connect and Deploy
+### ステップ3: 接続とデプロイ
 
-1. Draw a wire from the output port of the **mqtt-in** node to the input port of the **mqtt-out** node.
-2. Click the **Deploy** button in the top-right corner.
-3. Verify that both nodes show a green **connected** status indicator.
+1. **mqtt-in**ノードの出力ポートから**mqtt-out**ノードの入力ポートへワイヤーを引きます。
 
-You now have a flow that forwards all messages received on `test/node_red/in` to `test/node_red/out`.
+2. 画面右上の**Deploy**ボタンをクリックします。
 
-![connect_nodes](./assets/connect_nodes.png)
+3. 両ノードのステータスが緑色の**connected**になっていることを確認します。
 
-## Build an Advanced Data Processing Pipeline
+これで、`test/node_red/in`で受信したすべてのメッセージが`test/node_red/out`に転送されるフローが完成しました。
 
-Node-RED's real power comes from chaining multiple nodes to filter and transform data before republishing. The following example builds a pipeline that:
+![ノードの接続](./assets/connect_nodes.png)
 
-1. Receives JSON-formatted sensor data via MQTT.
-2. Parses the raw payload into a JavaScript object.
-3. Filters out duplicate temperature readings.
-4. Formats the result and republishes it.
+## 高度なデータ処理パイプラインの構築
 
-The complete flow is: **mqtt-in** → **json** → **rbe** → **template** → **mqtt-out**
+Node-REDの真価は複数ノードを連結してデータをフィルタリング・変換し、再パブリッシュできる点にあります。以下の例では、
 
-### Step 1: Add a JSON Node
+1. MQTT経由でJSON形式のセンサーデータを受信
+2. 生のペイロードをJavaScriptオブジェクトにパース
+3. 重複する温度データをフィルタリング
+4. 結果を整形して再パブリッシュ
 
-1. Drag a **json** node from the palette onto the canvas.
-2. Double-click to configure it and set **Action** to **Always Convert to JavaScript Object**.
-3. Click **Done**.
-4. Connect the output of **mqtt-in** to the input of the **json** node.
+というパイプラインを構築します。
 
-This ensures the incoming payload is parsed into a JavaScript object so downstream nodes can access individual fields such as `msg.payload.temperature`.
+フロー全体は以下の通りです：**mqtt-in** -> **json** -> **rbe** -> **template** -> **mqtt-out**
 
-![connect_json_nodes](./assets/connect_json_nodes.png)
+### ステップ1: JSONノードの追加
 
-### Step 2: Add a Filter Node
+1. パレットから**json**ノードをキャンバスにドラッグします。
 
-1. Drag an **rbe** (report by exception) node onto the canvas.
-2. Double-click to configure it:
-   - Set **Mode** to **block unless value changes**.
-   - Set **Property** to `msg.payload.temperature`.
-3. Click **Done**.
-4. Connect the output of the **json** node to the input of the **rbe** node.
+2. ダブルクリックして設定を開き、**Action**を**常にJavaScriptオブジェクトに変換**に設定します。
 
-The filter node blocks messages when the `temperature` field has not changed since the previous message, reducing unnecessary traffic from repeated identical readings.
+3. **Done**をクリックします。
 
-![add_filter_node](./assets/add_filter_node.png)
+4. **mqtt-in**ノードの出力を**json**ノードの入力に接続します。
 
-### Step 3: Add a Template Node
+これにより、受信したペイロードがJavaScriptオブジェクトにパースされ、下流ノードで`msg.payload.temperature`などの個別フィールドにアクセス可能になります。
 
-1. Drag a **template** node onto the canvas.
+![jsonノードの接続](./assets/connect_json_nodes.png)
 
-2. Double-click to configure it and enter your desired output format using Mustache syntax, for example:
+### ステップ2: フィルタノードの追加
+
+1. **rbe**（例外時のみレポート）ノードをキャンバスにドラッグします。
+
+2. ダブルクリックして設定を開きます。
+
+   - **Mode**を**値が変わらない限りブロック**に設定
+
+   - **Property**を`msg.payload.temperature`に設定
+
+3. **Done**をクリックします。
+
+4. **json**ノードの出力を**rbe**ノードの入力に接続します。
+
+このフィルタノードは、前回のメッセージから`temperature`フィールドが変わらない場合にメッセージをブロックし、同一データの繰り返し送信を抑制します。
+
+![フィルタノードの追加](./assets/add_filter_node.png)
+
+### ステップ3: テンプレートノードの追加
+
+1. **template**ノードをキャンバスにドラッグします。
+
+2. ダブルクリックして設定を開き、Mustache構文で出力形式を入力します。例：
 
    ```
    {"temperature": {{payload.temperature}}, "humidity": {{payload.humidity}}}
    ```
 
-3. Click **Done**.
+3. **Done**をクリックします。
 
-4. Connect the output of the **rbe** node to the input of the **template** node.
+4. **rbe**ノードの出力を**template**ノードの入力に接続します。
 
-![add_template_node](./assets/add_template_node.png)
+![テンプレートノードの追加](./assets/add_template_node.png)
 
-### Step 4: Connect the Output Node and Deploy
+### ステップ4: 出力ノードの接続とデプロイ
 
-1. Connect the output of the **template** node to the input of the **mqtt-out** node.
-2. Click **Deploy**.
-3. Verify that all nodes show a green **connected** status.
+1. **template**ノードの出力を**mqtt-out**ノードの入力に接続します。
 
-> You can omit the **template** node if you want to republish the filtered data without reformatting. In that case, connect **rbe** directly to **mqtt-out**.
+2. **Deploy**をクリックします。
 
-![connect_advanced_nodes](./assets/connect_advanced_nodes.png)
+3. すべてのノードが緑色の**connected**ステータスを示していることを確認します。
 
-## Test the Flow
+> フィルタリングしたデータを再整形せずにそのままパブリッシュしたい場合は、**template**ノードを省略し、**rbe**ノードを直接**mqtt-out**ノードに接続してください。
 
-Use MQTTX or any MQTT client to test the pipeline:
+![高度なノードの接続](./assets/connect_advanced_nodes.png)
 
-1. Subscribe to `test/node_red/out` to observe the processed output.
+## フローのテスト
 
-2. Publish a test message to `test/node_red/in` with a JSON payload, for example:
+MQTTXなどのMQTTクライアントを使ってパイプラインをテストします。
+
+1. `test/node_red/out`をサブスクライブし、処理済み出力を監視します。
+
+2. `test/node_red/in`にJSONペイロードのテストメッセージをパブリッシュします。例：
 
    ```json
    {"temperature": 25, "humidity": 60}
    ```
 
-3. Confirm that the message appears on the output topic.
+3. 出力トピックにメッセージが表示されることを確認します。
 
-4. Publish the same message again. The **rbe** filter should suppress this duplicate and no output should appear.
+4. 同じメッセージを再度パブリッシュします。**rbe**フィルタが重複を抑制し、出力が表示されないはずです。
 
-5. Publish with a changed temperature value:
+5. 温度値を変更してパブリッシュします：
 
    ```json
    {"temperature": 26, "humidity": 60}
    ```
 
-6. Confirm that this message passes through the filter and appears on the output topic.
+6. このメッセージがフィルタを通過し、出力トピックに表示されることを確認します。
 
-![test_the_flow](./assets/test_the_flow.png)
+![フローのテスト](./assets/test_the_flow.png)
 
-## Troubleshooting
+## トラブルシューティング
 
-### Node Shows "disconnected" Status
+### ノードが「disconnected」ステータスを表示する
 
-**Description**
+**症状**
 
-- The **mqtt-in** or **mqtt-out** node shows a red **disconnected** indicator after deployment.
+- デプロイ後、**mqtt-in**または**mqtt-out**ノードが赤い**disconnected**表示になる。
 
-**Possible causes**
+**考えられる原因**
 
-- Incorrect broker address or port
-- Network firewall blocking port `1883` or `8883`
-- Broker is not running
+- ブローカーアドレスまたはポートの誤り
+- ネットワークファイアウォールがポート`1883`または`8883`をブロックしている
+- ブローカーが起動していない
 
-**Solution**
+**対処方法**
 
-- Double-click the node, click the pencil icon next to **Server**, and verify the broker address and port.
-- Test basic connectivity to the broker from your machine using another MQTT client such as MQTTX.
-- If using TLS, ensure the correct port (`8883`) and CA certificate are configured.
+- ノードをダブルクリックし、**Server**の鉛筆アイコンをクリックしてブローカーアドレスとポートを確認する。
+- MQTTXなど別のMQTTクライアントでブローカーへの基本接続をテストする。
+- TLS使用時は正しいポート（`8883`）とCA証明書が設定されているか確認する。
 
-### Messages Not Received on the Input Topic
+### 入力トピックでメッセージが受信されない
 
-**Description**
+**症状**
 
-- The **mqtt-in** node is connected but no messages arrive.
+- **mqtt-in**ノードは接続済みだがメッセージが届かない。
 
-**Possible causes**
+**考えられる原因**
 
-- Topic name mismatch between publisher and subscriber
-- QoS level incompatibility
-- ACL rules on the broker blocking the subscription
+- パブリッシャーとサブスクライバーのトピック名が一致していない
+- QoSレベルの不整合
+- ブローカーのACLルールでサブスクライブがブロックされている
 
-**Solution**
+**対処方法**
 
-- Verify that the publisher is sending to the exact topic configured in the **mqtt-in** node (`test/node_red/in`).
-- Use the Node-RED debug node to inspect messages at each stage of the flow.
-- Check the broker's authentication and ACL configuration.
+- パブリッシャーが**mqtt-in**ノードで設定したトピック（例：`test/node_red/in`）に正しく送信しているか確認する。
+- Node-REDのデバッグノードを使い、フロー内の各段階でメッセージを検査する。
+- ブローカーの認証およびACL設定を確認する。
 
-### Filter Node Blocks All Messages
+### フィルタノードがすべてのメッセージをブロックする
 
-**Description**
+**症状**
 
-- No messages appear on the output topic even when the temperature value changes.
+- 温度値が変わっても出力トピックにメッセージが表示されない。
 
-**Possible causes**
+**考えられる原因**
 
-- The **rbe** node property path is incorrect
-- The JSON node is not parsing the payload before the filter
+- **rbe**ノードのプロパティパスが誤っている
+- **json**ノードがフィルタ前にペイロードをパースしていない
 
-**Solution**
+**対処方法**
 
-- Verify that the **json** node is placed before the **rbe** node and is set to **Always Convert to JavaScript Object**.
-- Confirm the **rbe** node property is set to `msg.payload.temperature` (not `payload.temperature`).
-- Add a **debug** node after the **json** node to inspect `msg.payload` and confirm the structure.
+- **json**ノードが**rbe**ノードの前に配置され、**常にJavaScriptオブジェクトに変換**に設定されているか確認する。
+- **rbe**ノードのプロパティが`msg.payload.temperature`に設定されているか確認する（`payload.temperature`ではない）。
+- **json**ノードの後に**debug**ノードを追加し、`msg.payload`の構造を検査する。
 
-### Authentication Failed
+### 認証に失敗する
 
-**Description**
+**症状**
 
-- Node shows **disconnected** immediately after deployment and broker logs show authentication errors.
+- デプロイ直後にノードが**disconnected**となり、ブローカーのログに認証エラーが記録される。
 
-**Possible causes**
+**考えられる原因**
 
-- Missing or incorrect username and password in the broker configuration
-- ACL restrictions on the topic
+- ブローカー設定でユーザー名またはパスワードが未設定または誤っている
+- トピックに対するACL制限
 
-**Solution**
+**対処方法**
 
-- Double-click the node, open the broker configuration, and enter the correct username and password under the **Security** tab.
-- Verify authentication settings in EMQX.
+- ノードをダブルクリックし、ブローカー設定の**Security**タブで正しいユーザー名とパスワードを入力する。
+- EMQXの認証設定を確認する。
 
-## More Information
+## さらに詳しく
 
-For a detailed walkthrough with additional background and examples, see the blog post: [Using Node-RED to Process MQTT Data](https://www.emqx.com/en/blog/using-node-red-to-process-mqtt-data).
+詳細な解説や追加の例については、ブログ記事「[Node-REDを使ったMQTTデータ処理](https://www.emqx.com/en/blog/using-node-red-to-process-mqtt-data)」をご覧ください。

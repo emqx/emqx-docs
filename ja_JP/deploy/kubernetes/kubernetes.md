@@ -1,56 +1,55 @@
-# Deploy EMQX in Kubernetes
+# KubernetesにおけるEMQXのデプロイ
 
-EMQX can be deployed on Kubernetes using two fully supported methods:
+EMQXは、Kubernetes上で以下の2つの完全にサポートされた方法でデプロイできます。
 
 - **EMQX Operator**
 - **EMQX Helm Chart**
 
-Each method is suited for different use cases and operational requirements. This guide outlines the advantages and trade-offs of each approach to help you select the most appropriate deployment strategy.
+それぞれの方法は異なるユースケースや運用要件に適しています。本ガイドでは、各アプローチの利点とトレードオフを概説し、最適なデプロイ戦略の選択に役立てていただけます。
 
-## Recommended Method: Use EMQX Operator
+## 推奨方法：EMQX Operatorの利用
 
-The EMQX Operator is the recommended solution for deploying and managing EMQX clusters on Kubernetes, particularly in production environments or when advanced lifecycle automation is required.
+EMQX Operatorは、特に本番環境や高度なライフサイクル自動化が必要な場合に、Kubernetes上でEMQXクラスターをデプロイおよび管理するための推奨ソリューションです。
 
-Developed and maintained by the EMQX team, the Operator is purpose-built to help users deploy, configure, and manage EMQX clusters natively within Kubernetes, leveraging standard mechanisms such as Custom Resource Definitions (CRDs). By extending the Kubernetes API, it enables declarative cluster management and automates complex operational tasks such as scaling, upgrades, and failure recovery.
+EMQXチームによって開発および保守されているOperatorは、Kubernetesの標準機構であるカスタムリソース定義（CRD）を活用し、KubernetesネイティブでEMQXクラスターのデプロイ、設定、管理を支援することを目的としています。Kubernetes APIを拡張することで、宣言的なクラスター管理を可能にし、スケーリング、アップグレード、障害復旧などの複雑な運用タスクを自動化します。
 
-[View the Deployment Guide for EMQX Operator](./operator/operator.md)
+[EMQX Operatorのデプロイガイドを見る](./operator/operator.md)
 
-### Key Advantages
+### 主な利点
 
-- **Automated Operations:** The Operator automates complex tasks such as cluster scaling, upgrades, and failure recovery, reducing manual effort and potential for error.
-- **Advanced Lifecycle Management:** It supports sophisticated deployment strategies like blue-green updates, ensuring zero-downtime upgrades and graceful connection migration.
-- **Simplified Configuration:** Manages EMQX through a high-level CRD, making configuration more declarative and easier to manage than extensive Helm values.
-- **Encapsulated Expertise:** The Operator encapsulates the operational knowledge of running a stateful application like EMQX, ensuring best practices are followed.
+- **自動化された運用:** クラスターのスケーリング、アップグレード、障害復旧などの複雑なタスクを自動化し、手動作業やエラーの可能性を減らします。
+- **高度なライフサイクル管理:** ブルーグリーンアップデートのような高度なデプロイ戦略をサポートし、ダウンタイムゼロのアップグレードや接続のスムーズな移行を実現します。
+- **簡素化された設定:** 高レベルのCRDを通じてEMQXを管理し、Helmの大量の値設定よりも宣言的で管理しやすい構成を提供します。
+- **運用知識のカプセル化:** EMQXのようなステートフルアプリケーションの運用ノウハウをOperatorに内包し、ベストプラクティスの遵守を保証します。
 
-### Considerations
+### 注意点
 
-- **Require Operator Deployment:** An additional controller (the EMQX Operator) must be installed and maintained within your Kubernetes cluster.
-- **Steeper Learning Curve:** Users must become familiar with Kubernetes Operators and EMQX-specific custom resources.
+- **Operatorのデプロイが必要:** Kubernetesクラスター内に追加のコントローラー（EMQX Operator）をインストールおよび維持する必要があります。
+- **学習コストがやや高い:** Kubernetes OperatorやEMQX固有のカスタムリソースに習熟する必要があります。
 
-## Alternative Method: Use Helm Chart
+## 代替方法：Helm Chartの利用
 
-The EMQX Helm chart offers a flexible and streamlined approach to deploying EMQX on Kubernetes using Helm, the most widely used package manager in the Kubernetes ecosystem. This method is ideal for quick evaluations, development or testing environments, and for teams that prefer direct control over Kubernetes resources.
+EMQX Helm Chartは、Kubernetesエコシステムで最も広く使われているパッケージマネージャであるHelmを用いて、柔軟かつ簡便にEMQXをデプロイする方法です。この方法は、迅速な評価、開発やテスト環境、Kubernetesリソースを直接制御したいチームに最適です。
 
-Maintained by the EMQX team, the Helm chart packages all necessary Kubernetes objects into a reusable and configurable chart. Users can define deployment parameters in a `values.yaml` file, enabling repeatable and customizable EMQX installations without writing raw YAML manifests.
+EMQXチームがメンテナンスするHelm Chartは、必要なKubernetesオブジェクトを再利用可能かつ設定可能なチャートにまとめています。ユーザーは`values.yaml`ファイルでデプロイパラメータを定義でき、生のYAMLマニフェストを記述せずに繰り返し可能でカスタマイズ可能なEMQXインストールを実現します。
 
-[View the Deployment Guide for Helm Chart](./chart.md)
+[Helm Chartのデプロイガイドを見る](./chart.md)
 
-### Key Advantages
+### 主な利点
 
-- **Simplicity and Familiarity:** Helm is a widely adopted tool in the Kubernetes ecosystem, making it a familiar entry point for many users.
-- **Direct Control:** Provides direct, granular control over the generated Kubernetes resources, such as StatefulSets, Services, and ConfigMaps, through the `values.yaml` file.
-- **No Extra Dependencies:** Does not require a separate operator controller to be running in the cluster.
+- **シンプルで馴染みやすい:** HelmはKubernetesエコシステムで広く採用されており、多くのユーザーにとって馴染みのあるツールです。
+- **直接的な制御:** `values.yaml`ファイルを通じてStatefulSet、サービス、ConfigMapなど生成されるKubernetesリソースを細かく制御できます。
+- **追加の依存なし:** クラスター内で別のOperatorコントローラーを稼働させる必要がありません。
 
-### Considertaions
+### 注意点
 
-- **Manual Management:** Lifecycle operations such as upgrades, scaling, and complex configuration changes are more manual and less automated.
-- **Limited Automation:** Lacks built-in advanced features such as automated blue-green deployments. All Day-2 operations, including scaling, upgrades, and maintenance, must be performed manually by the user.
-- **Configuration Complexity:** For a production-grade setup, the `values.yaml` file can become large and complex to manage.
+- **手動管理が必要:** アップグレード、スケーリング、複雑な設定変更などのライフサイクル操作は手動で行う必要があり、自動化は限定的です。
+- **自動化機能の制限:** ブルーグリーンデプロイメントのような高度な自動化機能はなく、スケーリングやアップグレード、メンテナンスなどのDay-2運用はすべてユーザーが手動で実施する必要があります。
+- **設定の複雑化:** 本番環境向けのセットアップでは、`values.yaml`ファイルが大きく複雑になりがちです。
 
-## Choose the Right Deployment Method
+## 適切なデプロイ方法の選択
 
-Selecting between the EMQX Operator and the Helm Chart depends on your deployment goals, environment maturity, and operational preferences. The following guidance can help you determine which approach best fits your needs:
+EMQX OperatorとHelm Chartのどちらを選択するかは、デプロイの目的、環境の成熟度、運用の好みによって異なります。以下の指針を参考に、最適な方法を選んでください。
 
-- For most production and serious pre-production use cases, the EMQX Operator is strongly recommended. It simplifies long-term cluster management and reduces operational overhead.
-- For quick evaluations, development, testing, or scenarios where direct control over Kubernetes resources is preferred, the Helm chart offers a lightweight and flexible deployment option.
-
+- ほとんどの本番および本格的なプレプロダクション用途では、EMQX Operatorの利用を強く推奨します。長期的なクラスター管理を簡素化し、運用負荷を軽減します。
+- 迅速な評価、開発やテスト、またはKubernetesリソースを直接制御したい場合は、Helm Chartが軽量で柔軟なデプロイオプションとなります。

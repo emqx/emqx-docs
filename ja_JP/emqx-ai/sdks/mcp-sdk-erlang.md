@@ -1,10 +1,10 @@
 # Erlang SDK
 
-This document demonstrates how to use the [MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) to create a simple MCP over MQTT server and client.
+本ドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を示します。
 
-## Example
+## 例
 
-### Create a Simple MCP Client
+### シンプルな MCP クライアントの作成
 
 ```erlang
 -module(mcp_mqtt_erl_client_demo).
@@ -19,7 +19,7 @@ This document demonstrates how to use the [MCP over MQTT Erlang SDK](https://git
 ]).
 -export([start_link/0]).
 
-%% The client name, version, and capabilities. These details will be sent to the server during MCP initialization.
+%% クライアント名、バージョン、および機能。これらの情報は MCP 初期化時にサーバーへ送信されます。
 client_name() ->
     <<"emqx_tools/cli_demo">>.
 
@@ -28,12 +28,12 @@ client_version() ->
 
 client_capabilities() -> #{}.
 
-%% Callback for non-MCP messages
+%% MCP 以外のメッセージ受信時のコールバック
 received_non_mcp_message(MqttClient, Msg, State) ->
-    io:format("~p Received non-MCP message: ~p~n", [MqttClient, Msg]),
+    io:format("~p MCP以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
     State.
 
-%% Start the MCP over MQTT client
+%% MCP over MQTT クライアントの起動
 start_link() ->
     mcp_mqtt_erl_client:start_link(
         #{
@@ -48,11 +48,11 @@ start_link() ->
         }).
 ```
 
-Here, `server_name_filter` is used to subscribe to the MQTT topic filter for MCP servers, and `mqtt_options` are options passed to the underlying MQTT client.
+ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターへのサブスクライブに使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
 
-### Create a Simple MCP Server
+### シンプルな MCP サーバーの作成
 
-Below is a simple MCP server implementation that supports two tools: `tool1` and `tool2`.
+以下は、`tool1` と `tool2` の2つのツールをサポートするシンプルな MCP サーバーの実装例です。
 
 ```erlang
 -module(mcp_mqtt_erl_server_demo).
@@ -142,7 +142,7 @@ call_tool(ToolName, Args, LoopData) ->
     io:format("call_tool --- tool_name: ~p, args: ~p~n", [ToolName, Args]),
     Result = #{
         type => text,
-        text => <<"This is the result of the tool call">>
+        text => <<"これはツール呼び出しの結果です">>
     },
     {ok, Result, LoopData}.
 
@@ -152,34 +152,34 @@ list_tools(LoopData) ->
     Tools = [
         #{
             name => <<"tool1">>,
-            description => <<"This is tool 1">>,
+            description => <<"これはツール1です">>,
             inputSchema => #{
                 type => <<"object">>,
                 properties => #{
                     arg1 => #{
                         type => <<"string">>,
-                        description => <<"Argument 1">>
+                        description => <<"引数1">>
                     },
                     arg2 => #{
                         type => <<"integer">>,
-                        description => <<"Argument 2">>
+                        description => <<"引数2">>
                     }
                 }
             }
         },
         #{
             name => <<"tool2">>,
-            description => <<"This is tool 2">>,
+            description => <<"これはツール2です">>,
             inputSchema => #{
                 type => <<"object">>,
                 properties => #{
                     arg1 => #{
                         type => <<"string">>,
-                        description => <<"Argument 1">>
+                        description => <<"引数1">>
                     },
                     arg2 => #{
                         type => <<"boolean">>,
-                        description => <<"Argument 2">>
+                        description => <<"引数2">>
                     }
                 }
             }

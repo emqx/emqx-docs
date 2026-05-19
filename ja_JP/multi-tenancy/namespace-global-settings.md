@@ -1,218 +1,219 @@
-# Global Namespace Settings
+# グローバルネームスペース設定
 
-In EMQX 6.1, in addition to configuring individual namespace instances, a set of global namespace settings is available to control how namespaces are identified, how isolation behaviors are applied, and how topics and authorization are handled.
+EMQX 6.1では、個別のネームスペースインスタンスの設定に加えて、ネームスペースの識別方法、分離動作の適用方法、トピックおよび認可の取り扱いを制御する一連のグローバルネームスペース設定が利用可能です。
 
-These settings apply cluster-wide and affect all namespaces and client connections. They are typically configured before enabling and using namespace-related features.
+これらの設定はクラスター全体に適用され、すべてのネームスペースおよびクライアント接続に影響します。通常、ネームスペース関連機能を有効化して使用する前に設定されます。
 
-Global namespace settings can be managed through the Dashboard at: **Management -> Namespaces -> Settings**.
+グローバルネームスペース設定は、ダッシュボードの **Management -> Namespaces -> Settings** から管理できます。
 
-::: tip Note
+::: tip 注意
 
-To preserve backward compatibility, most global namespace settings in EMQX 6.1, such as Client ID Isolation, Namespace as Mountpoint, and Mount Prefix for Authorization, are disabled by default.
+後方互換性を保つため、EMQX 6.1のほとんどのグローバルネームスペース設定（Client ID Isolation、Namespace as Mountpoint、Mount Prefix for Authorizationなど）はデフォルトで無効になっています。
 
-To enable the corresponding isolation capabilities, you must explicitly turn them on under **Namespace Related Configurations**.
+対応する分離機能を有効にするには、**Namespace Related Configurations** で明示的にオンにする必要があります。
 
 :::
 
 ![namespace_global_settings](./assets/namespace_global_settings.png)
 
-## Allow Only Explicitly Created Namespaces
+## 明示的に作成されたネームスペースのみ許可
 
-This setting controls whether clients are allowed to connect only to namespaces that have been explicitly created.
+この設定は、クライアントが明示的に作成されたネームスペースにのみ接続を許可するかどうかを制御します。
 
-When this setting is enabled, EMQX validates the client’s namespace during the connection process and decides whether to allow or reject the connection.
+この設定を有効にすると、EMQXは接続時にクライアントのネームスペースを検証し、接続を許可するか拒否するかを判断します。
 
-- **Enabled**:
-  - Clients whose resolved namespace has not been explicitly created via the Dashboard or REST API will be denied connection.
-  - Clients whose namespace cannot be resolved (for example, when the namespace source is not configured or does not produce a valid value) will also be denied connection.
-- **Disabled**:
-  - Clients are allowed to connect to namespaces that have not been explicitly created.
-  - If a namespace source is configured, EMQX may automatically create namespaces as needed.
+- **有効**:
+  - ダッシュボードまたはREST APIで明示的に作成されていないネームスペースに属するクライアントは接続を拒否されます。
+  - ネームスペースが解決できないクライアント（例えば、ネームスペースソースが設定されていない、または有効な値を生成しない場合）も接続拒否されます。
+- **無効**:
+  - 明示的に作成されていないネームスペースへの接続も許可されます。
+  - ネームスペースソースが設定されている場合、EMQXは必要に応じてネームスペースを自動的に作成することがあります。
 
-::: tip
+::: tip 注意
 
-Before enabling this setting, ensure that **Namespace Source** is properly configured and that all valid clients can successfully resolve a namespace.
+この設定を無効にする前に、**Take Namespace From** が適切に設定されており、すべての有効なクライアントが正常にネームスペースを解決できることを確認してください。
 
-Otherwise, clients may be rejected because their namespace cannot be resolved.
+そうでないと、ネームスペースが解決できずにクライアントが拒否される可能性があります。
 
 :::
 
-## Default Max Number of Sessions
+## デフォルトの最大セッション数
 
-This setting defines the default maximum number of concurrent sessions for newly created namespaces.
+この設定は、新規作成されたネームスペースのデフォルトの最大同時セッション数を定義します。
 
-- **Enabled**:
-  - Newly created namespaces automatically inherit this maximum session limit.
-- **Disabled**:
-  - Newly created namespaces have no session limit (`infinity`) by default.
+- **有効**:
+  - 新規作成されたネームスペースは自動的にこの最大セッション数制限を継承します。
+- **無効**:
+  - 新規作成されたネームスペースはデフォルトでセッション数制限なし（`infinity`）となります。
 
-This setting applies only to namespaces created after the configuration takes effect. Existing namespaces are not affected and must be updated individually if needed.
+この設定は設定適用後に作成されたネームスペースにのみ適用されます。既存のネームスペースには影響せず、必要に応じて個別に更新する必要があります。
 
-## Namespace Source
+## Take Namespace From
 
-The namespace source defines how EMQX determines the namespace to which a client belongs.
+この設定は、EMQXがクライアントの所属ネームスペースをどのように決定するかを指定します。
 
-When a client connects, EMQX evaluates the configured namespace source rule and extracts a namespace identifier from the client’s connection metadata. The extracted value is stored in the client attribute `client_attrs.tns`.
+クライアントが接続すると、EMQXは設定された **Take Namespace From** ルールを評価し、クライアントの接続メタデータ（ユーザー名、SNI、その他属性など）からネームスペース識別子を抽出します。抽出された値はクライアント属性 `client_attrs.tns` として保存されます。
 
-This configuration is a prerequisite for the following features:
+::: tip
 
-- Automatic namespace creation
-- Namespace-based topic isolation
-- Namespace-based Client ID isolation
-- Namespace-level session limits and rate limits
+**Take Namespace From** ルールはVariform式で定義されます。構文や利用可能な関数の詳細は [Variform Expressions](../configuration/configuration.md#variform-expressions) を参照してください。
 
-If no namespace source is configured, clients will not be assigned to any namespace, and all namespace-related isolation and control features will remain inactive.
+:::
 
-### Example
+この設定は以下の機能の前提条件です：
 
-The following example extracts the namespace from the client username:
+- 自動ネームスペース作成
+- ネームスペースベースのトピック分離
+- ネームスペースベースのClient ID分離
+- ネームスペースレベルのセッション制限およびレート制限
 
-```
+**Take Namespace From** が設定されていない場合、`tns` 属性は生成されません。この場合、クライアントはどのネームスペースにも関連付けられず、ネームスペース関連の分離および制御機能はすべて無効のままになります。
+
+### 例
+
+以下は、クライアントのユーザー名からネームスペース識別子を抽出する **Take Namespace From** 設定の例です：
+
+```text
 nth(1, tokens(username, '-'))
 ```
 
-With this configuration:
+この設定では：
 
-- A client connects using the username `tenantA-user1`.
-- The namespace source rule extracts `tenantA`.
-- `tenantA` becomes the namespace identifier for the client.
-
-::: tip
-
-Namespace source rules are defined using Variform expressions. For details on the syntax and available functions, see [Variform Expressions](../configuration/configuration.md#variform-expressions).
-
-:::
+- クライアントはユーザー名 `tenantA-user1` で接続します。
+- EMQXは設定を評価し、ユーザー名から `tenantA` を抽出します。
+- 抽出された値はクライアント属性 `client_attrs.tns` に割り当てられます。
+- `tenantA` がクライアントのネームスペース識別子となります。
 
 ## Client ID Isolation
 
-Client ID isolation prevents conflicts when clients in different namespaces use the same Client ID.
+Client ID分離は、異なるネームスペースのクライアントが同じClient IDを使用した場合の競合を防ぎます。
 
-When enabled, EMQX internally prefixes the Client ID with the client’s namespace, while the original Client ID provided by the client remains unchanged.
+有効にすると、EMQXは内部的にClient IDの前にクライアントのネームスペースをプレフィックスとして付加しますが、クライアントが提供する元のClient IDは変更されません。
 
-When Client ID Isolation is enabled, the Dashboard automatically populates a recommended default expression:
+Client ID Isolationが有効な場合、ダッシュボードは推奨されるデフォルト式を自動的に入力します：
 
 ```
 concat([client_attrs.tns, '-', clientid])
 ```
 
-With this configuration:
+この設定により：
 
-- Clients in different namespaces can safely use the same Client ID.
-- The internally used Client ID always includes the namespace prefix.
+- 異なるネームスペースのクライアントは同じClient IDを安全に使用できます。
+- 内部的に使用されるClient IDは常にネームスペースプレフィックスを含みます。
 
-This expression is provided as an example. You may customize it to suit your business requirements, as long as the resulting Client ID remains globally unique.
+この式は例示であり、結果として生成されるClient IDがグローバルに一意であれば、ビジネス要件に合わせてカスタマイズ可能です。
 
-### Example Behavior
+### 動作例
 
-Assume a namespace source has been configured to extract the namespace from the username:
+ネームスペースソースがユーザー名からネームスペースを抽出するよう設定されていると仮定します：
 
 ```
 nth(1, tokens(username, '-'))
 ```
 
-Client ID isolation is enabled using the default expression:
+Client ID Isolationはデフォルト式で有効化されています：
 
 ```
 concat([client_attrs.tns, '-', clientid])
 ```
 
-#### Client Connection Details
+#### クライアント接続情報
 
-| Client | Username      | Client ID |
-| ------ | ------------- | --------- |
-| A      | tenantA-user1 | client1   |
-| B      | tenantB-user2 | client1   |
+| クライアント | ユーザー名       | Client ID |
+| ------------ | ---------------- | --------- |
+| A            | tenantA-user1    | client1   |
+| B            | tenantB-user2    | client1   |
 
-#### Internally Used Client IDs
+#### 内部的に使用されるClient ID
 
-| Namespace | Original Client ID | Actual Client ID |
-| --------- | ------------------ | ---------------- |
-| tenantA   | client1            | tenantA-client1  |
-| tenantB   | client1            | tenantB-client1  |
+| ネームスペース | 元のClient ID | 実際のClient ID    |
+| -------------- | ------------- | ------------------ |
+| tenantA        | client1       | tenantA-client1    |
+| tenantB        | client1       | tenantB-client1    |
 
 ## Namespace as Mountpoint
 
-When enabled, EMQX uses the client’s namespace as a topic mountpoint after the namespace has been successfully resolved. This enables namespace-level topic isolation.
+有効にすると、EMQXはクライアントのネームスペースをトピックのマウントポイントとして使用します（ネームスペースが正常に解決された後）。これによりネームスペースレベルのトピック分離が可能になります。
 
-If a listener already has a `mountpoint` configured, this setting is ignored and the listener-level configuration takes precedence.
+リスナーにすでに `mountpoint` が設定されている場合、この設定は無視され、リスナーレベルの設定が優先されます。
 
-### Behavior
+### 動作
 
-After **Namespace as Mountpoint** is enabled, EMQX isolates topics as follows:
+**Namespace as Mountpoint** が有効になると、EMQXは以下のようにトピックを分離します：
 
-- During `PUBLISH`, `SUBSCRIBE`, `UNSUBSCRIBE`, and Will message processing:
-  - EMQX automatically prepends `{namespace}/` to topics internally.
-- When delivering messages to clients:
-  - The namespace prefix is automatically stripped.
-- From the client’s perspective:
-  - Published and subscribed topic names remain unchanged.
-  - Clients are not aware of the namespace prefix.
+- `PUBLISH`、`SUBSCRIBE`、`UNSUBSCRIBE`、およびWillメッセージ処理時に：
+  - EMQXは内部的にトピックの先頭に `{namespace}/` を自動的に付加します。
+- クライアントへのメッセージ配信時に：
+  - ネームスペースプレフィックスは自動的に除去されます。
+- クライアントから見た場合：
+  - パブリッシュおよびサブスクライブするトピック名は変更されません。
+  - クライアントはネームスペースプレフィックスを認識しません。
 
-### Example
+### 例
 
-Assume the client belongs to namespace `n1` and **Namespace as Mountpoint** is enabled.
+クライアントがネームスペース `n1` に属し、**Namespace as Mountpoint** が有効な場合：
 
-#### Client-side Behavior
+#### クライアント側の動作
 
-- Client subscribes to: `sensors/#`
-- Client publishes to: `sensors/data`
+- クライアントは `sensors/#` をサブスクライブします。
+- クライアントは `sensors/data` にパブリッシュします。
 
-#### Internal Processing in EMQX
+#### EMQX内部処理
 
-- Broker registers the subscription as: `n1/sensors/#`
-- Broker routes messages using: `n1/sensors/data`
-- Message is delivered to the client as: `sensors/data`
+- ブローカーはサブスクリプションを `n1/sensors/#` として登録します。
+- ブローカーはメッセージを `n1/sensors/data` でルーティングします。
+- メッセージはクライアントに `sensors/data` として配信されます。
 
-As a result:
+結果として：
 
-- Namespace prefixes are used only internally.
-- Clients always interact with original topic names.
-- Clients in different namespaces using the same topics do not receive each other’s messages.
+- ネームスペースプレフィックスは内部でのみ使用されます。
+- クライアントは常に元のトピック名で操作します。
+- 異なるネームスペースのクライアントが同じトピックを使用しても互いのメッセージを受信しません。
 
 ## Mount Prefix for Authorization
 
-This setting controls whether the topic mountpoint prefix is added to target topics and topic filters before authorization (ACL) checks are performed.
+この設定は、認可（ACL）チェックの前にトピックマウントポイントのプレフィックスを対象トピックおよびトピックフィルターに付加するかどうかを制御します。
 
-The mountpoint prefix typically comes from the namespace when **Namespace as Mountpoint** is enabled, and follows the format:
+マウントポイントプレフィックスは通常、**Namespace as Mountpoint** が有効な場合にネームスペースから取得され、以下の形式になります：
 
 ```
 {namespace}/
 ```
 
-### Behavior
+### 動作
 
-When **Mount Prefix for Authorization** is enabled:
+**Mount Prefix for Authorization** が有効な場合：
 
-- EMQX prepends the topic mountpoint to the target topic or topic filter before matching ACL rules or authorization backends.
-- Authorization checks are performed using the prefixed topic.
+- EMQXはACLルールや認可バックエンドのマッチング前に、トピックマウントポイントを対象トピックまたはトピックフィルターの先頭に付加します。
+- 認可チェックはプレフィックス付きトピックを用いて行われます。
 
-This behavior applies to the following operations:
+この動作は以下の操作に適用されます：
 
 - `PUBLISH`
 - `SUBSCRIBE`
 - `UNSUBSCRIBE`
-- Will messages
+- Willメッセージ
 
-### Example
+### 例
 
-Assume the following configuration is enabled:
+以下の設定が有効であるとします：
 
 - **Namespace as Mountpoint**
 - **Mount Prefix for Authorization**
-- Client namespace: `n1`
+- クライアントのネームスペース：`n1`
 
-#### Client Action
+#### クライアントの操作
 
-The client attempts to subscribe to:
+クライアントは以下をサブスクライブしようとします：
 
 ```
 sensors/#
 ```
 
-#### Topic Used for Authorization
+#### 認可に使用されるトピック
 
-During authorization, EMQX evaluates `n1/sensors/#`.  Therefore, the corresponding ACL rule must be defined as `n1/sensors/#` rather than `sensors/#`.
+認可時、EMQXは `n1/sensors/#` を評価します。したがって、対応するACLルールは `sensors/#` ではなく `n1/sensors/#` として定義されている必要があります。
 
-### Recommendation
+### 推奨
 
-When **Namespace as Mountpoint** is enabled for topic isolation, it is recommended to enable **Mount Prefix for Authorization** as well. This ensures that authorization checks are performed against the same topic names used internally by the broker, avoiding inconsistencies between authorization results and actual message routing.
+トピック分離のために **Namespace as Mountpoint** を有効にしている場合は、**Mount Prefix for Authorization** も有効にすることを推奨します。これにより、認可チェックがブローカー内部で使用されるトピック名と一致し、認可結果と実際のメッセージルーティングの不整合を防止できます。

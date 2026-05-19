@@ -1,97 +1,97 @@
-# Pure Voice Conversation Scenarios
+# ピュアボイス会話シナリオ
 
-Pure voice conversation is the most fundamental and natural form of human–machine interaction. Users simply speak to the device, and the system responds in real time with spoken replies, enabling smooth, multi-turn conversational experiences.
+ピュアボイス会話は、人間と機械の最も基本的で自然な対話形式です。ユーザーは単にデバイスに話しかけるだけで、システムはリアルタイムで音声による応答を返し、スムーズなマルチターンの会話体験を実現します。
 
-**Technical implementation**: The device establishes a real-time audio channel via Volcano Engine RTC. User speech is converted to text by ASR and sent to an LLM for processing. The LLM’s response is then synthesized into speech via TTS and played back to the user. The end-to-end latency is approximately one second. Combined with VAD (voice activity detection) and interruption mechanisms, this delivers an interaction experience close to natural human conversation.
+**技術的な実装**：デバイスはVolcano Engine RTCを介してリアルタイムの音声チャネルを確立します。ユーザーの音声はASRによってテキストに変換され、LLMに送信されて処理されます。LLMの応答はTTSによって音声合成され、ユーザーに再生されます。エンドツーエンドのレイテンシは約1秒です。VAD（音声活動検出）と割り込み機構と組み合わせることで、人間の自然な会話に近いインタラクション体験を提供します。
 
-**Device requirements**: Only a microphone and speaker are required—no screen or camera—making this suitable for a wide range of voice-enabled devices.
+**デバイス要件**：マイクとスピーカーのみが必要で、画面やカメラは不要なため、幅広い音声対応デバイスに適しています。
 
-## Flow Diagram
+## フローダイアグラム
 
-![Pure voice conversation flow](./voice-chat.png)
+![ピュアボイス会話のフロー](./voice-chat.png)
 
-## Typical Scenarios
+## 代表的なシナリオ
 
-### Smart Speakers — The Home Information Hub
+### スマートスピーカー — 家庭の情報ハブ
 
-In the morning:
+朝の時間帯：
 
-> **User**: “What’s the weather like today?”
->  **Speaker**: “Today in Hangzhou it will be cloudy turning sunny, with temperatures between 18 and 26 degrees. Air quality is good and suitable for outdoor activities.”
+> **ユーザー**：「今日の天気はどう？」
+>  **スピーカー**：「今日の杭州は曇りのち晴れで、気温は18度から26度です。空気の質は良好で、屋外活動に適しています。」
 >
-> **User**: “Set an alarm for 3 p.m. to remind me of a meeting.”
->  **Speaker**: “Okay, the 3 p.m. alarm has been set with a meeting reminder.”
+> **ユーザー**：「午後3時に会議のリマインダーでアラームをセットして。」
+>  **スピーカー**：「はい、午後3時のアラームを会議のリマインダー付きで設定しました。」
 >
-> **User**: “What’s in the news today?”
->  **Speaker**: “Today’s top headlines include: first, a tech giant has released a new generation of AI chips…”
+> **ユーザー**：「今日のニュースは？」
+>  **スピーカー**：「本日のトップニュースは、まず、ある大手テック企業が新世代のAIチップを発表しました…」
 
-The speaker becomes the household’s information gateway, allowing users to access weather, news, schedules, and more hands-free.
+スピーカーは家庭の情報ゲートウェイとなり、ユーザーは天気、ニュース、スケジュールなどをハンズフリーで利用できます。
 
-### In-Vehicle Assistant — Hands-Free Driving
+### 車載アシスタント — ハンズフリー運転
 
-While driving on the highway:
+高速道路を走行中：
 
-> **User**: “Navigate to the nearest service area.”
->  **Car system**: “Okay. The Yangcheng Lake Service Area is 15 kilometers ahead. Estimated arrival time is 10 minutes. The route has been planned for you.”
+> **ユーザー**：「最寄りのサービスエリアまで案内して。」
+>  **車載システム**：「了解です。陽澄湖サービスエリアは15キロ先にあります。到着予定時刻は10分後です。ルートを設定しました。」
 >
-> **User**: “Call my wife.”
->  **Car system**: “Calling now…”
+> **ユーザー**：「妻に電話して。」
+>  **車載システム**：「通話を開始します…」
 >
-> **User**: “Play songs by Jay Chou.”
->  **Car system**: “Playing popular songs by Jay Chou for you.”
+> **ユーザー**：「周杰倫の曲を再生して。」
+>  **車載システム**：「周杰倫の人気曲を再生します。」
 
-Voice interaction keeps drivers focused on the road, improving driving safety.
+音声による操作でドライバーは道路に集中でき、安全運転を支援します。
 
-### Language Learning — AI Conversation Practice
+### 語学学習 — AIとの会話練習
 
-Practicing spoken English:
+英会話の練習中：
 
-> **User**: “Can you help me practice English conversation?”
->  **AI**: “Of course! Let’s start with a common scenario. Imagine you’re ordering food at a restaurant. I’ll be the waiter. Are you ready?”
+> **ユーザー**：「英会話の練習を手伝ってくれる？」
+>  **AI**：「もちろんです！まずはよくあるシチュエーションから始めましょう。レストランでの注文を想定します。私はウェイター役をします。準備はいいですか？」
 >
-> **User**: “Yes, I’m ready.”
->  **AI**: “Good evening! Welcome to our restaurant. Here’s the menu. What would you like to order tonight?”
+> **ユーザー**：「はい、準備できています。」
+>  **AI**：「こんばんは！当店へようこそ。こちらがメニューです。今夜は何を注文されますか？」
 >
-> **User**: “I want… a beef steak.”
->  **AI**: “Great choice! By the way, a more natural way to say that would be ‘I’d like a beef steak, please.’ How would you like it cooked?”
+> **ユーザー**：「ビーフステーキを…」
+>  **AI**：「いい選択ですね！ちなみに、より自然な言い方は ‘I’d like a beef steak, please.’ です。焼き加減はいかがなさいますか？」
 
-The AI not only engages in situational dialogue but also corrects grammar and word usage during the conversation, providing an immersive learning experience.
+AIは状況に応じた対話だけでなく、会話中に文法や語彙の訂正も行い、没入感のある学習体験を提供します。
 
-### Child Companionship — Educational Interaction and Bedtime Stories
+### 子どものお供 — 教育的な対話とおやすみストーリー
 
-At bedtime:
+就寝時：
 
-> **Child**: “I can’t sleep. Can you tell me a story?”
->  **Speaker**: “Sure! What kind of story would you like tonight? Little Red Riding Hood, The Three Little Pigs, or a brand-new story?”
+> **子ども**：「眠れないよ。お話を聞かせてくれる？」
+>  **スピーカー**：「いいですよ！今夜はどんなお話がいいですか？赤ずきんちゃん、三匹の子ぶた、それとも新しいお話？」
 >
-> **Child**: “A new one!”
->  **Speaker**: “Okay. Once upon a time, in a big forest, there lived a brave little rabbit…”
+> **子ども**：「新しいお話！」
+>  **スピーカー**：「わかりました。昔々、大きな森に勇敢な小さなウサギが住んでいました…」
 >
 > —
 >
-> **Child**: “Why did dinosaurs go extinct?”
->  **Speaker**: “That’s a great question! About 66 million years ago, a huge asteroid hit the Earth… Would you like to know more?”
+> **子ども**：「なぜ恐竜は絶滅したの？」
+>  **スピーカー**：「いい質問ですね！約6600万年前に巨大な小惑星が地球に衝突しました…もっと知りたいですか？」
 >
-> **Child**: “How big was the asteroid?”
->  **Speaker**: “It was about 10 kilometers wide—almost as big as a mountain!”
+> **子ども**：「小惑星はどれくらい大きかったの？」
+>  **スピーカー**：「約10キロメートルの大きさで、ほぼ山と同じくらいでした！」
 
-The AI becomes a “why-why encyclopedia” for children, satisfying curiosity while fostering a love of learning.
+AIは子どもの「なぜ？」に答える百科事典のような存在となり、好奇心を満たしながら学びへの興味を育みます。
 
-## Technical Highlights
+## 技術的な特徴
 
-| Aspect            | Description                                                |
-| ----------------- | ---------------------------------------------------------- |
-| Low latency       | ~1 second end-to-end response, close to human conversation |
-| Multi-turn dialog | Context memory with reference and ellipsis understanding   |
-| Interruption      | Users can interrupt AI responses at any time               |
-| Personalization   | Customizable persona, voice, and response style            |
+| 項目               | 説明                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| 低レイテンシ       | 約1秒のエンドツーエンド応答で、人間の会話に近い体験を実現       |
+| マルチターン対話   | コンテキストの記憶と省略理解による継続的な会話               |
+| 割り込み対応       | ユーザーはいつでもAIの応答を割り込むことが可能               |
+| パーソナライズ     | ペルソナ、声、応答スタイルのカスタマイズが可能               |
 
-## Applicable Devices
+## 対応デバイス
 
-- Smart speakers (e.g., Tmall Genie, Xiaodu, Echo-like devices)
-- In-vehicle head units / rearview mirrors
-- Mobile phone/tablet apps
-- Smartwatches
-- TVs / set-top boxes
-- Children’s educational devices
-- Voice-enabled IoT devices, such as smart desk lamps
+- スマートスピーカー（例：天猫精霊、百度小度、Echoなど）
+- 車載ヘッドユニット／ルームミラー
+- スマートフォン／タブレットアプリ
+- スマートウォッチ
+- テレビ／セットトップボックス
+- 子ども向け教育デバイス
+- スマートデスクライトなどの音声対応IoTデバイス

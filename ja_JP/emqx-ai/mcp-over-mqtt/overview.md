@@ -1,24 +1,24 @@
 # MCP over MQTT
 
-MCP over MQTT is an implementation of the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) that runs on top of the MQTT protocol.
+MCP over MQTTは、MQTTプロトコル上で動作する[Model Context Protocol（MCP）](https://modelcontextprotocol.io/docs/getting-started/intro)の実装です。
 
-By leveraging MQTT’s lightweight, efficient, and widely adopted characteristics, it extends MCP’s context and tool invocation capabilities to IoT and edge computing scenarios, enabling low-latency, seamless interaction between devices and AI services.
+MQTTの軽量で効率的かつ広く採用されている特性を活用することで、MCPのコンテキストおよびツール呼び出し機能をIoTおよびエッジコンピューティングのシナリオに拡張し、デバイスとAIサービス間の低レイテンシでシームレスなインタラクションを実現します。
 
-## Why Use MQTT for MCP
+## なぜMCPにMQTTを使うのか
 
-MQTT is a lightweight, publish/subscribe messaging protocol that is widely used in IoT and edge computing. It is specifically designed to handle unreliable networks and low-bandwidth environments, making it an ideal choice for communication between edge devices and cloud services.
+MQTTは、IoTやエッジコンピューティングで広く使われている軽量なパブリッシュ／サブスクライブ型のメッセージングプロトコルです。信頼性の低いネットワークや低帯域環境での通信に特化して設計されており、エッジデバイスとクラウドサービス間の通信に最適な選択肢です。
 
-By using MQTT as the transport layer for MCP, we extend MCP’s applicability to a broader range of scenarios, including edge computing, IoT, and cloud services, wherever MQTT is already in use.
+MCPのトランスポート層としてMQTTを利用することで、エッジコンピューティング、IoT、クラウドサービスなど、MQTTが既に利用されている幅広いシナリオでMCPの適用範囲を拡大します。
 
-## Key Features
+## 主な特徴
 
-In addition to preserving all the standard MCP capabilities, MCP over MQTT enhances and extends them with the following features:
+標準のMCP機能をすべて保持しつつ、MCP over MQTTは以下の機能で強化・拡張されています。
 
-- **Built-in Service Registration and Discovery**
-  MCP clients can automatically discover available MCP servers via the MQTT broker, simplifying service integration.
-- **Load Balancing and Horizontal Scalability**
-  MCP servers can be scaled horizontally by deploying multiple instances while maintaining state consistency, improving both availability and throughput.
-- **Centralized Authentication and Authorization**
-  By leveraging the MQTT broker’s authentication and access control mechanisms, MCP over MQTT ensures that only authorized clients can access designated MCP services.
-- **Service Name Management and Distribution**
-  On top of the standard MCP protocol, EMQX introduces the concept of **MCP service names** for service identification and classification. Administrators can centrally manage and distribute service names in EMQX, simplifying unified management and maintenance in multi-service environments.
+- **組み込みのサービス登録とディスカバリー**  
+  MCPクライアントはMQTTブローカーを介して利用可能なMCPサーバーを自動的に検出でき、サービス統合を簡素化します。
+- **ロードバランシングと水平スケーラビリティ**  
+  複数のMCPサーバーインスタンスを展開して水平スケールを実現し、状態の一貫性を保ちながら可用性とスループットを向上させます。
+- **集中認証と認可**  
+  MQTTブローカーの認証およびアクセス制御機構を活用し、MCP over MQTTは許可されたクライアントのみが指定されたMCPサービスにアクセスできるようにします。
+- **サービス名の管理と配布**  
+  標準MCPプロトコルに加え、EMQXはサービス識別と分類のための**MCPサービス名**の概念を導入しています。管理者はEMQX上でサービス名を集中管理・配布でき、マルチサービス環境での統一的な管理と保守を容易にします。

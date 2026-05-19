@@ -1,118 +1,128 @@
 # EMQX AI
 
-With the rapid advancement of large language models (LLMs), AI is reshaping industries at an unprecedented pace, and the Internet of Things (IoT) is undergoing a fundamental transformation. Traditional smart hardware was built around fixed functions and operated mainly as passive executors. Today, devices are evolving into intelligent agents with integrated capabilities for perception, understanding, interaction, and action, enabling autonomy and context-aware decision-making. This evolution is driving disruptive upgrades across many application domains.
+大規模言語モデル（LLM）の急速な進展により、AIは産業を前例のない速度で変革しており、IoTも根本的な変革を遂げています。従来のスマートハードウェアは固定機能を中心に構築され、主に受動的な実行者として動作していましたが、現在ではデバイスが知覚、理解、対話、行動の統合能力を備えたインテリジェントエージェントへと進化し、自律性とコンテキスト認識に基づく意思決定を可能にしています。この進化は多くの応用領域で破壊的なアップグレードを促進しています。
 
-In emotional companionship, simple electronic toys are becoming intelligent partners capable of emotion recognition, contextual understanding, and empathetic interaction. In smart homes, isolated devices are being replaced by coordinated, whole-home ecosystems controlled through natural language. In robotics, embodied intelligent systems, ranging from service and industrial robots to humanoid robots, require real-time perception, intent understanding, and immediate response. In the automotive sector, intelligent vehicles are emerging as mobile intelligent spaces, where in-vehicle AI assistants manage complex traffic scenarios and enhance driving experiences through continuous, natural voice interaction.
+感情的な伴侶としては、単純な電子玩具が感情認識、コンテキスト理解、共感的な対話が可能なインテリジェントパートナーへと変わりつつあります。スマートホームでは、孤立したデバイスが自然言語で制御される連携された全館エコシステムに置き換えられています。ロボティクス分野では、サービスロボットや産業用ロボットからヒューマノイドロボットに至るまで、実体を持つインテリジェントシステムがリアルタイムの知覚、意図理解、即時応答を必要としています。自動車分野では、インテリジェント車両が移動するインテリジェント空間として登場し、車載AIアシスタントが複雑な交通状況を管理し、継続的かつ自然な音声対話を通じて運転体験を向上させています。
 
 ![overview](./assets/overview1.png)
 
-## Core of AI Hardware: Real-Time, Accurate, and Context-Rich Perception with Multimodal Interaction
+## AIハードウェアの核：リアルタイムで正確かつコンテキスト豊かな知覚とマルチモーダルインタラクション
 
-Although large models possess powerful reasoning and generation capabilities, their performance is fundamentally constrained by the quality of the context they receive. When a system fails to accurately understand the current situation, environmental changes, or the user’s true intent, the model may hallucinate or produce irrelevant responses. Humans behave similarly—limited information leads to flawed judgments, while complete context enables accurate decisions. For intelligent hardware, enabling AI to *understand the real world* is critical to improving interaction stability and trustworthiness. A reliable AI agent must therefore possess the following three core capabilities.
+大規模モデルは強力な推論・生成能力を持ちますが、その性能は受け取るコンテキストの質に根本的に依存します。システムが現在の状況、環境の変化、ユーザーの真の意図を正確に理解できなければ、モデルは幻覚を起こしたり、無関係な応答を生成したりします。人間も同様で、情報が限られれば誤った判断をし、完全なコンテキストがあれば正確な意思決定が可能です。インテリジェントハードウェアにとって、AIが*現実世界を理解する*ことは、対話の安定性と信頼性を向上させるために不可欠です。信頼できるAIエージェントは、以下の3つのコア能力を備えている必要があります。
 
-### Multi-Source Data: Enabling AI to Understand the Real World
+### マルチソースデータ：AIに現実世界の理解を可能にする
 
-Data from diverse sources collectively form the AI’s *world model*:
+多様なソースからのデータがAIの*ワールドモデル*を形成します：
 
-- **Environmental data**: Physical signals such as temperature, humidity, brightness, and gravity provide real-time state awareness.
-- **Cloud-based knowledge**: Maps, weather, traffic conditions, charging station availability, and other services extend the device’s global awareness.
-- **Third-party context**: Content services and knowledge bases enable the device to handle more complex questions and user needs.
+- **環境データ**：温度、湿度、明るさ、重力などの物理信号がリアルタイムの状態認識を提供します。
+- **クラウドベースの知識**：地図、天気、交通状況、充電ステーションの空き情報などのサービスがデバイスのグローバルな認識を拡張します。
+- **サードパーティのコンテキスト**：コンテンツサービスや知識ベースにより、より複雑な質問やユーザーのニーズに対応できます。
 
-The richer the data sources, the more precisely the system can determine *what is happening now* and *what the user truly needs*.
+データソースが豊富であればあるほど、システムは*今何が起きているか*、*ユーザーが本当に必要としていること*をより正確に判断できます。
 
-### Real-Time Event Awareness: Understanding Changes at the Millisecond Level
+### リアルタイムイベント認識：ミリ秒単位の変化理解
 
-Events act as anchors for contextual understanding and are the key triggers that drive LLMs and VLMs:
+イベントはコンテキスト理解のアンカーであり、LLMやVLMを駆動する重要なトリガーです：
 
-- **Environmental changes**: For example, a sudden change in room brightness.
-- **State changes**: Such as a toy unexpectedly tipping over.
-- **Special scenarios**: For instance, abnormal rear-seat pressure sensor readings after a car has been locked.
+- **環境変化**：例えば、部屋の明るさの急激な変化。
+- **状態変化**：おもちゃが突然倒れた場合など。
+- **特殊シナリオ**：車が施錠された後の後部座席圧力センサーの異常検知など。
 
-The ability to capture events at millisecond-level latency directly determines how fast and how accurately the system can respond intelligently.
+ミリ秒レベルのレイテンシでイベントを捉える能力が、システムの応答速度と精度を直接決定します。
 
-### Multimodal Interaction: Enabling Natural Human–Machine Communication
+### マルチメディアインタラクション：自然な人機コミュニケーションを実現
 
-Multimodal interaction represents a fundamental leap from traditional “voice assistants” to truly immersive intelligent experiences:
+マルチメディアインタラクションは、従来の「音声アシスタント」から真に没入型のインテリジェント体験への根本的な飛躍を示します：
 
-- **Voice**: Emotional expression, natural prosody, and multilingual support.
-- **Video**: Facial expression recognition, scene understanding, and real-time visual feedback.
-- **Control capabilities**: Combining voice and visual understanding to drive more intelligent, context-aware scenarios.
+- **音声**：感情表現、自然な抑揚、多言語対応。
+- **映像**：表情認識、シーン理解、リアルタイムの視覚フィードバック。
+- **制御能力**：音声と視覚理解を組み合わせ、よりインテリジェントでコンテキストに即したシナリオを実現。
 
-## Six Essential Elements for Building Intelligent Hardware
+## インテリジェントハードウェア構築のための6つの必須要素
 
-From both input and output perspectives, we define six essential elements required to build qualified intelligent hardware.
+入力と出力の両面から、適格なインテリジェントハードウェアを構築するために必要な6つの必須要素を定義します。
 
-### Input Capabilities
+### 入力能力
 
-- **Perception**: The agent can perceive the physical world through various sensors: temperature sensors for environmental conditions, positioning systems for location awareness, and accelerometers for motion and posture detection.
-- **Hearing**: Microphones capture ambient sounds and user speech. With noise suppression and echo cancellation, combined with multilingual speech recognition, the device can truly “hear” natural human language.
-- **Vision**: Cameras collect visual information to enable image recognition, object detection, face recognition, and gesture recognition, allowing the device to “see” and understand its surroundings and user behavior.
+- **知覚**：エージェントは温度センサーによる環境情報、位置検出システムによる位置認識、加速度計による動作・姿勢検出など、多様なセンサーを通じて物理世界を知覚します。
+- **聴覚**：マイクロフォンが周囲の音やユーザーの発話を捉えます。ノイズ抑制やエコーキャンセレーション、多言語音声認識と組み合わせることで、デバイスは自然な人間の言語を「聴く」ことが可能です。
+- **視覚**：カメラが映像情報を収集し、画像認識、物体検出、顔認識、ジェスチャー認識を実現。デバイスは周囲やユーザーの行動を「見て」理解します。
 
-### Output Capabilities
+### 出力能力
 
-- **Understanding**: By integrating LLM and VLM models, the device achieves semantic understanding, emotion recognition, and contextual memory, enabling accurate intent comprehension and coherent multi-turn conversations.
-- **Speech**: High-quality speakers deliver synthesized speech with multiple voices, emotional expressiveness, and context-aware intonation, allowing natural and fluent communication with users.
-- **Action**: Through the MCP protocol, the device controls its functions, such as volume adjustment, camera activation, and multi-device coordination, executing user commands and producing tangible actions.
+- **理解**：LLMとVLMモデルを統合し、意味理解、感情認識、コンテキストメモリを実現。正確な意図把握と一貫したマルチターン対話を可能にします。
+- **音声**：高品質スピーカーが複数の声質、感情表現、コンテキストに応じたイントネーションで合成音声を出力し、自然で流暢なコミュニケーションを実現します。
+- **行動**：MCPプロトコルを通じて、音量調整、カメラ起動、複数デバイスの連携などの機能を制御。ユーザーの指示を実行し、具体的な行動を生み出します。
 
-## An Intelligent IoT Architecture Centered on EMQX and RTC Services
+## EMQXとRTCサービスを中心としたインテリジェントIoTアーキテクチャ
 
 ![overview2.png](./assets/overview2.png)
 
-The EMQX end-to-end solution adopts a layered architecture that integrates the device layer, communication layer, processing layer, and application layer into a cohesive system. From sensor data collection and edge processing, to real-time communication (MQTT + WebRTC), and onward to cloud-based large models, it forms a closed-loop chain of **“Perception** -> **Understanding** -> **Action.”** This architecture is suitable for both lightweight devices and complex scenarios such as robotics and in-vehicle systems.
+EMQXのエンドツーエンドソリューションは、デバイス層、通信層、処理層、アプリケーション層を統合した階層型アーキテクチャを採用しています。センサーデータの収集とエッジ処理から、リアルタイム通信（MQTT + WebRTC）、クラウドベースの大規模モデルまで、「**知覚** -> **理解** -> **行動**」の閉ループチェーンを形成。軽量デバイスからロボティクスや車載システムのような複雑なシナリオまで対応可能です。
 
-### Perception: EMQX as the Provider of Real-Time Context for AI World Models
+### 知覚：AIワールドモデルのリアルタイムコンテキストを提供するEMQX
 
-Perception is the foundation of all intelligent behavior. For humans, most input comes from vision, hearing, and touch, while spoken language accounts for only 6–10% of daily activity. Similarly, an AI agent without real-time world perception is merely an algorithm, not an entity operating in the physical world.
+知覚はすべてのインテリジェントな行動の基盤です。人間の場合、入力の大部分は視覚、聴覚、触覚から得られ、話し言葉は日常活動の6～10％に過ぎません。同様に、リアルタイムの現実世界知覚なしにAIエージェントは単なるアルゴリズムであり、物理世界で動作する実体とは言えません。
 
-EMQX provides a comprehensive *real-time context infrastructure* for devices:
+EMQXはデバイス向けに包括的な*リアルタイムコンテキスト基盤*を提供します：
 
-- **Millisecond-level data pipelines**: End-to-end message forwarding from devices to the cloud occurs with millisecond latency, ensuring immediate event processing.
-- **Full-spectrum SDKs**: Unified access from low-power MCUs to Linux-based devices simplifies sensor integration.
-- **Massive device management**: Supports large-scale concurrent connections, message processing, and state tracking, suitable for scenarios ranging from toys to automotive systems.
+- **ミリ秒レベルのデータパイプライン**：デバイスからクラウドへのエンドツーエンドメッセージ転送をミリ秒単位のレイテンシで実現し、即時のイベント処理を保証します。
+- **フルスペクトラムSDK**：低消費電力MCUからLinuxベースのデバイスまで統一的にアクセスでき、センサー統合を簡素化します。
+- **大規模デバイス管理**：大規模同時接続、メッセージ処理、状態追跡をサポートし、おもちゃから自動車システムまで幅広いシナリオに対応します。
 
-#### Further Reading
+#### 詳細はこちら
 
-[Building Perception-to-Control Feedback with EMQX](./rtc-services/volcengine-rtc/scenarios/device-triggered-voice.md)
+[EMQXで構築する知覚から制御までのフィードバック](./rtc-services/volcengine-rtc/scenarios/device-triggered-voice.md)
 
-### Hearing, Seeing, and Speaking: Audio and Video Stream Access and Processing
+### 聴覚・視覚・発話：音声・映像ストリームのアクセスと処理
 
-WebRTC is the core technology for real-time audio and video interaction. Its low latency and high compatibility make it the preferred solution for multimodal interaction in intelligent hardware.
+WebRTCはリアルタイム音声・映像インタラクションの中核技術です。低レイテンシかつ高い互換性により、インテリジェントハードウェアのマルチメディアインタラクションに最適なソリューションです。
 
-- **Voice input**: Enables devices to truly “understand” users. High-quality microphones combined with noise reduction and echo cancellation maintain speech clarity in complex environments. Real-time ASR converts speech to text with multilingual support, forming the basis for semantic understanding.
-- **Visual input**: Provides devices with “eyes.” High-definition cameras combined with object recognition, face recognition, and action understanding allow devices to perceive user states and actions. Gesture interaction enables touch-free, more natural operation.
-- **Voice output**: Makes communication more natural. Modern TTS supports multiple voices and emotional synthesis, automatically adjusting tone and rhythm to context, making machine responses more human-like and engaging.
+- **音声入力**：デバイスがユーザーを真に「理解」するために不可欠です。高品質マイクとノイズ抑制、エコーキャンセレーションにより複雑な環境でも音声の明瞭さを維持。リアルタイムASRが多言語対応で音声をテキスト化し、意味理解の基盤を形成します。
+- **映像入力**：デバイスに「目」を提供します。高解像度カメラと物体認識、顔認識、行動理解がユーザーの状態や行動を把握。ジェスチャー操作により非接触でより自然な操作を可能にします。
+- **音声出力**：コミュニケーションをより自然にします。最新のTTSは複数の声質や感情合成をサポートし、コンテキストに応じて自動でトーンやリズムを調整。機械の応答がより人間らしく魅力的になります。
 
-#### Further Reading
+#### 詳細はこちら
 
-[Building Audio and Video Access with Volcano Engine RTC](./rtc-services/volcengine-rtc/overview.md)
+[Volcano Engine RTCによる音声・映像アクセス構築](./rtc-services/volcengine-rtc/overview.md)
 
-### Understanding: Integrating LLMs and VLMs
+### 理解：LLMとVLMの統合
 
-LLMs handle language understanding and generation, while VLMs integrate vision and language. Together, they enable devices not only to “hear and see,” but to truly *understand*. Compared to traditional rule-based engines, modern large models offer powerful reasoning, memory, and generalization capabilities, making them suitable for highly complex and open-ended interaction scenarios.
+LLMは言語の理解と生成を担当し、VLMは視覚と言語を統合します。これによりデバイスは「聴き、見て」だけでなく、真に*理解*することが可能になります。従来のルールベースエンジンと比較して、最新の大規模モデルは強力な推論、記憶、一般化能力を備え、極めて複雑かつオープンエンドな対話シナリオに適しています。
 
-Further Reading:
+#### 参考情報
 
-- [Alibaba Tongyi Qianwen Model](https://www.aliyun.com/product/tongyi)
-- [Volcano Engine Doubao Large Model](https://www.volcengine.com/product/doubao)
+- [Alibaba Tongyi Qianwenモデル](https://www.aliyun.com/product/tongyi)
+- [Volcano Engine Doubao大規模モデル](https://www.volcengine.com/product/doubao)
 
-### Action: MCP Device Control — The Bridge Between AI and Devices
+### 行動：MCPデバイス制御 — AIとデバイスの架け橋
 
 ![overview3.png](./assets/overview3.png)
 
-The Model Context Protocol (MCP) enables AI to invoke device capabilities in a natural, standardized, and dynamic manner.
+Model Context Protocol（MCP）は、AIが自然かつ標準化された動的な方法でデバイス機能を呼び出すことを可能にします。
 
-- **MCP Server**: Deployed on the device side, responsible for registering device capabilities such as camera control, volume adjustment, and mechanical motion commands.
-- **MCP Client**: Runs in the cloud or at the edge, translating AI decisions into executable device control commands.
-- **MCP Hosts**: Embedded in AI applications, responsible for converting user intent into tool invocations and enabling bidirectional collaboration with devices.
+- **MCPサーバー**：デバイス側に展開され、カメラ制御、音量調整、機械的動作コマンドなどのデバイス機能を登録します。
+- **MCPクライアント**：クラウドまたはエッジで動作し、AIの意思決定を実行可能なデバイス制御コマンドに変換します。
+- **MCPホスト**：AIアプリケーションに組み込まれ、ユーザーの意図をツール呼び出しに変換し、デバイスとの双方向連携を実現します。
 
-Through MCP, AI gains the ability to act, while devices gain a unified control interface—making multi-device coordination and complex scenario control achievable.
+MCPにより、AIは行動力を得て、デバイスは統一された制御インターフェースを持ち、複数デバイスの連携や複雑なシナリオ制御が可能になります。
 
-#### Further Reading
+#### 詳細はこちら
 
-- [MCP over MQTT Protocol Overview](./mcp-over-mqtt/overview.md)
+- [MCP over MQTTプロトコル概要](./mcp-over-mqtt/overview.md)
 
-### Typical Intelligent Agent Interaction Scenarios
+### 連携：A2A over MQTT — エージェント間コラボレーション
 
-- **Pure voice interaction**: Voice as the sole input; real-time, high-quality interaction can be achieved using WebRTC alone.
-- **Voice/video-based device control**: Devices are operated via microphones or cameras, requiring both WebRTC and MQTT to ensure a stable control pipeline.
-- **Perception-driven control with multimodal interaction**: Devices detect events through sensors, AI makes decisions, and responses are delivered via voice and video, creating immersive intelligent experiences. Like the previous scenario, this requires integration of both WebRTC and MQTT.
+インテリジェントハードウェアやAIエージェントが増えるにつれ、個々のエージェントが他のエージェントにタスクを委譲し、協調する必要性が高まっています。Agent-to-Agent（A2A）プロトコルは、エージェント同士が互いを発見し、タスク要求を交換し、結果をストリーム配信する方法を定義し、単独のエージェントでは処理できない複雑なワークフローを実現するマルチエージェントシステムを形成します。
+
+EMQXは組み込みのA2Aレジストリを通じてMQTT上でA2Aを実装し、エージェントが公開するAgent Cardを記録、接続状態を追跡し、標準MQTTトピックを使ってタスク要求をルーティングします。
+
+#### 詳細はこちら
+
+- [A2A over MQTT概要](./a2a-over-mqtt/overview.md)
+
+### 典型的なインテリジェントエージェントの対話シナリオ
+
+- **純音声対話**：音声のみを入力とし、WebRTC単体でリアルタイムかつ高品質な対話を実現。
+- **音声・映像によるデバイス制御**：マイクやカメラを介してデバイスを操作し、安定した制御パイプラインのためにWebRTCとMQTTの両方を利用。
+- **知覚駆動の制御とマルチメディアインタラクション**：センサーでイベントを検知し、AIが判断、音声・映像で応答。没入型のインテリジェント体験を創出。前述のシナリオ同様、WebRTCとMQTTの統合が必要。
