@@ -1233,6 +1233,11 @@
       title_ja: MQTT チュートリアル
       lang: cn
       path: https://www.emqx.com/zh/mqtt-guide
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: https://www.emqx.com/ja/mqtt-guide
     - title_en: Design and Implementation
       title_cn: 设计与实现
       title_ja: 設計と実装
