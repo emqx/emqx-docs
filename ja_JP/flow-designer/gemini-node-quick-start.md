@@ -1,190 +1,140 @@
-# Quick Start: Create a Flow Using Gemini Node
+# クイックスタート：Geminiノードを使ったFlowの作成
 
-This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node. 
+このセクションでは、Geminiノードを使った実践的なユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成しテストする方法を説明します。
 
-This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages using dynamic input context, such as `clientid` and `payload.type`, by constructing a natural language prompt from multiple parameters. It breaks the limitation of single-field LLM input, enabling more flexible and context-aware AI processing. The workflow receives command-type messages from devices, generates a formatted response via the LLM, and republishes the result to a client-specific topic for further handling.
+この例では、構造化されたセンサーデータを含むMQTTデバイスのメッセージを処理しつつ、ルーティングのために`clientid`を保持するFlowの構築方法を示します。Geminiノードはメッセージのペイロードに基づいて返信を生成し、RepublishノードがAIの返信をクライアントごとのトピック`devices/${clientid}/reply`に送信することで、各デバイスにカスタマイズされた返信を届けます。
 
-## Scenario Description
+## シナリオの説明
 
-Assume a device reports a command request to the MQTT topic `commands/inbox/<clientid>`. Each message includes a command type, such as `restart`, in JSON format. The EMQX Flow will perform the following steps:
+産業用モニタリングのシナリオでは、各デバイスが定期的にJSON形式の構造化センサーデータをトピック`devices/<device_id>`にパブリッシュします。従来のルールベースのアラート（例：温度の閾値超過）では、隠れたパターンや異常指標の組み合わせを見逃す可能性があります。
 
-- **Data Processing**: Build a prompt that includes the client ID and requested command type contained in the message payload.
-- **LLM-Based Processing**: Use a Gemini-compatible model to generate an action instruction based on the request.
-- **Message Republish**: Publish the AI-generated result to a topic such as `device/<clientid>/command`.
+このFlowはGeminiを活用し、振動、温度、圧力など複数のフィールドの全体的な文脈を分析し、潜在的な機械故障を示唆する複雑な異常を検出します。例えば、振動と温度が同時に高い場合、Geminiはより深刻なリスク（例：ベアリングの過負荷）を推論し、正確かつ説明可能なアラートを出力します。
 
-**Sample message:**
+- **データ処理**：ペイロードからデバイスの計測値を抽出し、後続で利用できるように`clientid`（例：`device_1`）を公開します。
+- **LLMベースの処理**：全フィールドにわたる包括的な解析のためにペイロード全体をGeminiに送信します。
+- **メッセージ再パブリッシュ**：AI生成のアラートをクライアントごとのトピック`devices/<district_id>/reply`にパブリッシュします。
+
+**受信メッセージの例（`devices/device_1`宛）：**
 
 ```json
 {
-  "type": "restart"
+  "vibration": 9.5,
+  "temperature": 85,
+  "pressure": 1.2
 }
 ```
 
-**Expected output (AI-generated):**
+**期待される再パブリッシュ出力（`devices/device_1/reply`宛）：**
 
-```css
-action:restart;client:clientid
+```
+Critical Alert: Simultaneous severe vibration and high temperature detected, indicating an immediate critical equipment malfunction risk.
 ```
 
-## Create the Flow
+## Flowの作成
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Make sure you have a valid Gemini API Key.
+有効なGemini APIキーを用意してください。
 
 :::
 
-1. Click the **Create Flow** button on the **Flows** page.
+1. **Flows**ページで**Create Flow**ボタンをクリックします。
 
-2. Add a **Messages** node.
+2. **Messages**ノードを追加します。
 
-   - Drag a **Messages** node from the Source panel.
-   - Set the topic to `commands/inbox/+`.
-   - Click **Save**.
+   - ソースパネルから**Messages**ノードをドラッグします。
+   - トピックを`devices/+`に設定します。
+   - **Save**をクリックします。
 
-3. Add a **Data Processing** node.
+3. **Data Processing**ノードを追加します。
 
-   - Drag a **Data Processing** node from the **Processing** section.
+   - **Processing**セクションから**Data Processing**ノードをドラッグします。
+   - 以下の設定でフォームを入力します。この設定により、後続ノードで利用可能なように`clientid`を公開します（例：再パブリッシュのトピック内で`${clientid}`を使用可能にします）。
+     
+     - **Field**: `clientid`
+     - **Transform**: 空欄のまま
+     - **Alias**: `clientid`
+   - **Save**をクリックします。
+   
+4. **Gemini**ノードを追加します。
 
-   - Fill in the transformation form with the following configurations. These transformations construct a readable natural language prompt that includes the MQTT client ID and the requested action type that will be contained in the message payload. This prompt will be sent to the Gemini LLM for processing.
-     
-     - Concatenate `Client ` and `clientid` into a base string. Creates the beginning of the prompt by identifying the client.
-       - **Field**: `clientid`
-       - **Transform**: Select `String Functions` -> `concat`
-       - **Alias**: `base`
-       - **String1**: `Client ` (include a space after the word)
-       - **String2**: `clientid`
-     - Concatenate `base` and `requested ` into `base2`. Adds the verb to indicate the action being requested.
-       - **Field**: `base`
-       - **Transform**: `concat`
-       - **Alias**: `base2`
-       - **String1**: `base`
-       - **String2**:  `  requested  ` (include a space before and after the word)
-     
-     - Concatenate `base2` and `payload.type` into `prompt`. Completes the full sentence for the LLM prompt.
-     
-       - **Field**: `base2`
-     
-       - **Transform**: `concat`
-     
-       - **Alias**: `prompt`
-     
-       - **String1**: `base2`
-     
-       - **String2**: `payload.type`
-     
-       ::: tip Example prompt result
-     
-       If a client with ID `device123` sends a message with payload `{ "type": "restart" }`, the resulting prompt will be:
-     
-       ```
-       Client device123 requested restart
-       ```
-     
-       :::
-     
-     - Expose `clientid` for later use to ensures that it is accessible in downstream nodes (e.g., for `${clientid}` in republish topics).
-     
-       - **Field**: `clientid`
-     
-       - **Transform**: Leave empty
-     
-       - **Alias**: `clientid`
-     
-   - Click **Switch to SQL**. You should see a SQL expression similar to:
+   - **Processing**セクションから**Gemini**ノードをドラッグします。
 
-     ```sql
-     concat('Client ', clientid) as base, concat(base, ' requested ') as base2, concat(base2, payload.type) as prompt, clientid as clientid
-     ```
+   - ノードを設定します：
 
-     ::: tip
+     - **Input**: `payload`と入力します。
 
-     The `clientid` and `payload.type` should not be wrapped in quotes or treated as string literals.
-     They are field references, and quoting them would cause the rule to treat them as plain text instead of extracting their actual values from the message.
-
-     :::
-
-   - Click **Save**.
-
-4. Add a **Gemini** node.
-
-   - Drag a **Gemini** node from the Processing section and connect it to the Data Processing node.
-
-   - Configure the node:
-
-     - **Input**: Enter `prompt`.
-
-     - **System Message**: Enter the following message:
+     - **System Message**: 以下のプロンプトを入力します：
 
        ```
-       You are a device command formatter. Generate a short command in this format:
-       action:<type>;client:<clientid>
-       Only return a single line, no Markdown or extra formatting.
+       You are an industrial anomaly detection assistant.
+       Analyze the incoming sensor data (vibration, temperature, pressure) as a whole.
+       If multiple indicators exceed risk thresholds at the same time, for example, if vibration > 8 and temperature > 80 in the same reading, the combined risk is significantly higher than a single abnormal value. In such cases, generate a precise, high-priority alert.
+       Only return a single alert sentence—no extra explanation.
        ```
+       
+     - **Model**: デフォルトの`gemini-2.0-flash`のままで構いません。
 
-     - **Model**: Here you can keep the default model `gemini-2.0-flash`.
+     - **API Key**: GeminiのAPIキーを入力します。
 
-     - **API Key**: Enter your Gemini API key.
+     - **Base URL**: 空欄のままにしてGeminiのデフォルトエンドポイントを使用します。
 
-     - **Base URL**: Leave empty to use Gemini’s default endpoint.
+     - **Output Result Alias**: `ai_reply`と入力します。
 
-     - **Output Result Alias**: Enter `ai_reply`.
+   - **Save**をクリックします。
 
-   - Click **Save**.
+5. **Republish**ノードを追加します。
 
-5. Add a **Republish** node.
+   - **Sink**セクションから**Republish**ノードをドラッグします。
+   - トピックを`devices/${clientid}/reply`に設定します。
+   - ペイロードを`${ai_reply}`に設定します。
+   - **Save**をクリックします。
 
-   - Drag a **Republish** node from the Sink section and connect it to the Gemini node.
-   - Set the topic to `device/${clientid}/command`.
-   - Set the payload to `${ai_reply}`.
-   - Click **Save**.
-
-6. Connect all the nodes and click **Save** in the upper-right corner to save the Flow.
+6. すべてのノードを接続し、右上の**Save**をクリックしてFlowを保存します。
 
    ![openai_node_flow](./assets/gemini_node_flow.png)
 
-   Flows and form rules are interoperable. You can also view the SQL and related rule configurations on the Rule page.
+   Flowとフォームルールは連携可能です。ルールページでSQLや関連ルール設定を確認できます。
 
    ![openai_node_rule_page](./assets/gemini_node_rule_page.png)
 
-## Test the Flow
+## Flowのテスト
 
-1. Connect an MQTT client to EMQX.
+1. MQTTクライアントをEMQXに接続します。
 
-   To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)などのツールや実際のMQTTクライアントも利用可能です：
 
-   - Connect to your EMQX server.
-   - Subscribe to the topic, for example `device/c_emqx/command`.
+   - EMQXサーバーに接続します。
+   - 例えば`devices/device_1/reply`トピックをサブスクライブします。
 
-2. Start Testing.
+2. テストを開始します。
 
-   - In the Flow Designer, click any node to open the Edit panel.
+   - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
 
-   - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
+   - **Edit**をクリックし、続けて**Start Test**をクリックすると、画面下部にテストパネルが開きます。
 
-   - Click **Input Simulated Data** and publish this message to topic `commands/inbox/c_emqx` by clicking **Submit Test**:
+   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`devices/device_1`にパブリッシュするため**Submit Test**をクリックします：
 
      ```json
      {
-       "type": "restart"
+       "vibration": 9.5,
+       "temperature": 85,
+       "pressure": 1.2
      }
      ```
    
-3. Review results.
+3. 結果を確認します。
 
-   - You can see the successful execution result of the flow.
+   - Flowの実行結果が成功したことを確認できます。
 
      ![openai_node_test_result](./assets/gemini_node_test_result.png)
 
-   - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
+   - **WebSocket Client**ページに戻ると、以下のようなAI生成の要約メッセージを受信できます：
 
-     > “action:restart;client:c_emqx”
+     > 「High-priority alert: Simultaneous high vibration and high temperature detected.」
 
-   - If the test results are unsuccessful, error messages will be displayed accordingly.
+   - テストが失敗した場合は、エラーメッセージが表示されます。
 
-   - To view the running statistics and metrics of the **Gemini** node, exit the editing page, click the node to open the Edit panel and click the **Overview** tab.
+   - **Gemini**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じ、ノードをクリックして編集パネルを開き、**Overview**タブをクリックします。
 
      ![openai_node_statistics](./assets/gemini_node_statistics.png)
-
-
-

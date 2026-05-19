@@ -1,27 +1,27 @@
-# Deploy EMQX on Azure Kubernetes Service
+# Azure Kubernetes Service上でのEMQXのデプロイ
 
-EMQX Operator supports deploying EMQX on Azure Kubernetes Service (AKS). AKS simplifies deploying a managed Kubernetes cluster in Azure by offloading the operational overhead to Azure. As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. When an AKS cluster is created, Azure automatically provisions and manages the Kubernetes control plane at no additional cost.
+EMQX Operatorは、Azure Kubernetes Service（AKS）上でのEMQXのデプロイをサポートしています。AKSは、Azure上でマネージドKubernetesクラスターを簡単にデプロイできるようにし、運用の負荷をAzure側に委ねます。ホステッドKubernetesサービスとして、Azureはヘルスモニタリングやメンテナンスなどの重要なタスクを担当します。AKSクラスターが作成されると、Azureは追加費用なしでKubernetesコントロールプレーンのプロビジョニングと管理を自動的に行います。
 
-## Before You Begin
+## はじめる前に
 
-Before deploying EMQX on AKS, ensure the following prerequisites are met:
+AKS上でEMQXをデプロイする前に、以下の前提条件を満たしていることを確認してください。
 
-- An AKS cluster in your Azure subscription
-  * Refer to the [Azure Kubernetes Service documentation](https://learn.microsoft.com/en-us/azure/aks/) for guidance on creating and configuring an AKS cluster.
+- Azureサブスクリプション内にAKSクラスターがあること  
+  * AKSクラスターの作成および設定については、[Azure Kubernetes Serviceドキュメント](https://learn.microsoft.com/en-us/azure/aks/)を参照してください。
 
-- A working `kubectl` configuration for connecting to the AKS cluster
-  - To connect using the locally installed `kubectl`, follow the instructions in [Connect to an AKS cluster](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli).
-  - To connect using Azure Cloud Shell, see [Manage an AKS cluster in Azure CloudShell](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
+- AKSクラスターに接続するための動作する`kubectl`設定  
+  - ローカルにインストールされた`kubectl`を使用して接続する場合は、[AKSクラスターへの接続](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli)の手順に従ってください。  
+  - Azure Cloud Shellを使用して接続する場合は、[Azure CloudShellでのAKSクラスター管理](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli)を参照してください。
 
-- EMQX Operator installed on the cluster
-  - Refer to [Install EMQX Operator](./getting-started.md) for installation details.
+- クラスターにEMQX Operatorがインストールされていること  
+  - インストール手順については、[EMQX Operatorのインストール](./getting-started.md)を参照してください。
   
 
-## Deploy EMQX Cluster Quickly
+## EMQXクラスターの迅速なデプロイ
 
-The following example shows a basic configuration for an EMQX Custom Resource (CR).
+以下の例は、EMQXカスタムリソース（CR）の基本的な設定例です。
 
-1. Save it as a YAML file and deploy with `kubectl apply`.
+1. YAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -38,7 +38,7 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
      coreTemplate:
        spec:
          volumeClaimTemplates:
-           ## more information about storage classes: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
+           ## ストレージクラスの詳細：https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
            storageClassName: default
            resources:
              requests:
@@ -47,17 +47,17 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
            - ReadWriteOnce
      dashboardServiceTemplate:
        spec:
-         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## ロードバランサーの詳細：https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
          type: LoadBalancer
      listenersServiceTemplate:
        spec:
-         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## ロードバランサーの詳細：https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
          type: LoadBalancer
    ```
 
-2. Wait for the EMQX cluster to become ready.
+2. EMQXクラスターがReady状態になるまで待ちます。
 
-   Check the cluster status using `kubectl get` and verify that the `STATUS` is `Ready`. A startup may take some time.
+   `kubectl get`コマンドでクラスターの状態を確認し、`STATUS`が`Ready`になっていることを確認してください。起動には時間がかかる場合があります。
 
    ```shell
    $ kubectl get emqx
@@ -65,60 +65,60 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
    emqx   Ready     1m5s
    ```
 
-3. Retrieve the external IP of the EMQX Dashboard and access it.
+3. EMQXダッシュボードの外部IPを取得し、アクセスします。
 
-   The EMQX Operator automatically creates a Service based on the `dashboardServiceTemplate` configuration.
+   EMQX Operatorは`dashboardServiceTemplate`の設定に基づいて自動的にServiceを作成します。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    20.245.230.91
    ```
 
-4. Open the Dashboard at `http://20.245.230.91:18083`.
+4. ダッシュボードを`http://20.245.230.91:18083`で開きます。
 
-    Log in with the default credentials:
+    デフォルトの認証情報でログインしてください：
 
-     - **Username:** `admin`
-     - **Password:** `public`
+     - **ユーザー名:** `admin`
+     - **パスワード:** `public`
 
-## Use MQTTX to Subscribe and Publish
+## MQTTXを使ったサブスクライブとパブリッシュ
 
-This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.0 command-line client tool that helps developers quickly test the MQTT services and applications.
+この手順では、開発者がMQTTサービスやアプリケーションを素早くテストできるオープンソースのMQTT 5.0コマンドラインクライアントツールである[MQTTX CLI](https://mqttx.app/cli)を使用します。
 
-1. Obtain the external IP of the EMQX TCP listener.
+1. EMQX TCPリスナーの外部IPを取得します。
 
-   The EMQX Operator automatically creates a Service resource for each configured listener.
+   EMQX Operatorは、設定された各リスナーに対してServiceリソースを自動的に作成します。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Subscribe to a topic.
+2. トピックにサブスクライブします。
 
    ```shell
    $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
-   [10:00:25] › …  Connecting...
-   [10:00:25] › ✔  Connected
-   [10:00:25] › …  Subscribing to hello...
-   [10:00:25] › ✔  Subscribed to hello
+   [10:00:25] › …  接続中...
+   [10:00:25] › ✔  接続完了
+   [10:00:25] › …  helloにサブスクライブ中...
+   [10:00:25] › ✔  helloにサブスクライブしました
    ```
 
-3. In another terminal, connect to the EMQX cluster and publish a message.
+3. 別のターミナルでEMQXクラスターに接続し、メッセージをパブリッシュします。
 
    ```shell
    $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
-   [10:00:58] › …  Connecting...
-   [10:00:58] › ✔  Connected
-   [10:00:58] › …  Message Publishing...
-   [10:00:58] › ✔  Message published
+   [10:00:58] › …  接続中...
+   [10:00:58] › ✔  接続完了
+   [10:00:58] › …  メッセージをパブリッシュ中...
+   [10:00:58] › ✔  メッセージをパブリッシュしました
    ```
 
-4. Observe the subscriber receiving the message.
+4. サブスクライバーがメッセージを受信する様子を確認します。
 
    ```shell
    [10:00:58] › payload: hello world
    ```
 
-## Notes on TLS Offloading with LoadBalancer
+## LoadBalancerによるTLSオフロードについての注意点
 
-As an L3/L4 load balancer, Azure LoadBalancer does not support TLS termination. Please refer to this [discussion](https://github.com/emqx/emqx-operator/discussions/312) to understand possible workarounds.
+L3/L4ロードバランサーであるAzure LoadBalancerはTLS終端をサポートしていません。可能な回避策については、こちらの[ディスカッション](https://github.com/emqx/emqx-operator/discussions/312)を参照してください。

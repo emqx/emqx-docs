@@ -1,27 +1,27 @@
-# Manage EMQX Clusters
+# EMQXクラスターの管理
 
-This chapter provides step-by-step instructions for performing common tasks and operations with EMQX in a Kubernetes cluster.
+本章では、Kubernetesクラスター内でEMQXを使用して一般的なタスクや操作を実行するための手順を段階的に説明します。
 
-## Configuration and Setup
+## 設定とセットアップ
 
-- License and Security
-  - [Manage License](./configure-emqx-license.md)
-  - [Enable TLS for EMQX listeners](./configure-emqx-tls.md)
-- Cluster Configuration
-  - [Change EMQX Configuration](./configure-emqx-config.md)
-  - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
-  - [Enable Persistence](./configure-emqx-persistence.md)
-  - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
-  - [Rebalance Cluster Load](./configure-emqx-rebalance.md)
+- ライセンスとセキュリティ
+  - [ライセンスの管理](./configure-emqx-license.md)
+  - [EMQXリスナーのTLS有効化](./configure-emqx-tls.md)
+- クラスター設定
+  - [EMQX設定の変更](./configure-emqx-config.md)
+  - [コア-レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
+  - [パーシステンスの有効化](./configure-emqx-persistence.md)
+  - [ロードバランサー経由でEMQXクラスターにアクセス](./configure-emqx-service.md)
+  - [クラスター負荷のリバランス](./configure-emqx-rebalance.md)
 
-## Upgrades and Maintenance
+## アップグレードとメンテナンス
 
-- Upgrade
-  - [Perform Blue-Green Upgrade](./configure-emqx-blueGreenUpdate.md)
-- Log Management
-  - [Collect EMQX Logs](./configure-emqx-log-collection.md)
-  - [Change EMQX Log Level](./configure-emqx-log-level.md)
+- アップグレード
+  - [ブルーグリーンアップグレードの実行](./configure-emqx-blueGreenUpdate.md)
+- ログ管理
+  - [EMQXログの収集](./configure-emqx-log-collection.md)
+  - [EMQXログレベルの変更](./configure-emqx-log-level.md)
 
-## Monitoring and Performance
+## 監視とパフォーマンス
 
-- [Monitor EMQX Cluster using Prometheus](./configure-emqx-prometheus.md)
+- [Prometheusを使用したEMQXクラスターの監視](./configure-emqx-prometheus.md)
