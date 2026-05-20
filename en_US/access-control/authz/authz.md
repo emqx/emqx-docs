@@ -60,7 +60,7 @@ Authorizers also support preconditions. When an authorizer has `precondition` co
 
 The process of the authorization check is as follows:
 
-1. If the current authorizer has `precondition` configured, EMQX evaluates the expression first. If the result is not `true`, EMQX skips the current authorizer.
+1. If the current authorizer has `precondition` configured, EMQX evaluates the precondition expression first. If the result is not `true`, EMQX skips the current authorizer.
 2. If EMQX successfully retrieves the client's permission information, it matches the client's operation to the retrieved permission list.
    - If they match, EMQX allows or denies the operation based on permission setting.
    - If they do not match, EMQX switches to the next authorizer to continue the process.
@@ -79,9 +79,11 @@ For information on how to adjust the sequence of the authorizer in an authorizat
 
 ### Authorizer Preconditions
 
-`precondition` is a [Variform expression](../../configuration/configuration.md#variform-expressions) configured on an authorizer. It is used to decide whether to call an authorization data source based on client information and the current authorization request context. For example, you can route different business lines, client attributes, publish/subscribe actions, or topic ranges to different authorization backends.
+Starting from EMQX 6.3, you can assign a precondition to each authorizer to control whether it should be invoked for a given client. 
 
-An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain. When a precondition is configured, the expression must evaluate to the Boolean value `true` for EMQX to call the authorizer. Any other result causes EMQX to skip the authorizer.
+A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client attributes (such as `listener`, `username`, `clientid`, etc.). If the expression does not evaluate to `true`, the authorizer is skipped.
+
+For example, you can route different business lines, client attributes, publish/subscribe actions, or topic ranges to different authorization backends. An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain.
 
 Client variables available in `precondition` include:
 
