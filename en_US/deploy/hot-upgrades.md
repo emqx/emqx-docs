@@ -2,7 +2,7 @@
 
 Hot upgrade lets you apply a patch-version update to a running EMQX Enterprise node without stopping it. Connections stay alive throughout the upgrade; the node switches to the new release tree on its next restart.
 
-Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.3 to 5.10.4 is supported, but upgrading from 5.10.x to 5.11.0 is not.
+Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.4 to 5.10.5 is supported, but upgrading from 5.10.x to 5.11.0 is not.
 
 Hot upgrade is driven by the `emqx_relup` plugin and operated entirely through the `emqx ctl relup` CLI. There is no Dashboard or REST API surface.
 
@@ -96,14 +96,14 @@ After the upgrade command returns, confirm the node is healthy:
 emqx ctl status
 
 # Confirm the version marker was written
-cat <RootDir>/relup/version
+cat <RootDir>/relup/current
 
 # Check upgrade status and history
 emqx ctl relup status
 emqx ctl relup logs
 ```
 
-`relup/version` should contain the target version string, and `emqx ctl status` should report the node running.
+`relup/current` should contain the target version string, and `emqx ctl status` should report the node running.
 
 ## Step 6: Restart Into the New Release
 
@@ -113,7 +113,7 @@ The code-change upgrade takes effect in the running VM immediately. To fully swi
 emqx restart
 ```
 
-On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/version` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
+On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/current` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
 
 ## Step 7: Clean Up
 
@@ -135,7 +135,7 @@ Two limited recovery options are available:
 - **Before the next restart:** If the upgraded code is misbehaving but disk state is still compatible with the old release, delete the version marker and restart into the old tree:
 
   ```bash
-  rm <RootDir>/relup/version
+  rm <RootDir>/relup/current
   # optionally: rm -rf <RootDir>/relup/<TargetVsn>/
   emqx restart
   ```
