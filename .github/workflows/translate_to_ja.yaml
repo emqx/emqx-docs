@@ -96,7 +96,9 @@ jobs:
         id: modified-files
         run: |
           if [ "${{ steps.last-hash.outputs.full_translation }}" == "true" ]; then
-            echo "Running full translation: listing files from directory.json (ja section)"
+            echo "Running full translation: listing files from directory.json"
+            cp -r en_US/* ja_JP/
+            git restore -- "ja_JP/*.md" || true
             modified_files=$(uv run .github/scripts/list_translation_targets.py directory.json)
           else
             modified_files=$(git diff --name-only --diff-filter=ACMR ${{ steps.last-hash.outputs.last_hash }} ${{ steps.current-hash.outputs.current_hash }} -- 'en_US/*.md' || echo "")
