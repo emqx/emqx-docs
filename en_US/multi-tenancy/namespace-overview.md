@@ -89,6 +89,16 @@ However, note that isolation strategies still require **manual configuration** b
 
 ​       This rule adds the namespace as a prefix to the client ID to avoid conflicts.
 
+  ::: warning Required for Untrusted Multi-Tenant Deployments
+
+  If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure `mqtt.clientid_override` to namespace-qualify the client ID.
+
+  MQTT brokers maintain a single cluster-wide client ID space and disconnect any existing session that shares the same client ID with a new connection. Without client ID isolation, a client in one namespace can pick the same client ID as a client in another namespace and continuously kick it offline, hijack its persistent session, or cause a denial-of-service for that tenant. Authentication and authorization alone do not prevent this — both clients authenticate successfully against their own namespace, and the session takeover happens at the connection layer before topic-level ACLs come into play.
+
+  Pair this with [topic isolation using mount points](#isolation-mechanisms) so that topic-level access cannot cross namespace boundaries either.
+
+  :::
+
 - **Topic Isolation Using Mount Points**
 
   If clients in different namespaces need to publish or subscribe to the same topic names without affecting each other, you can use mount points to automatically add namespace prefixes:
