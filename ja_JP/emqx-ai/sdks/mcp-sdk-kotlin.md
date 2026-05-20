@@ -3,17 +3,17 @@
 このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。  
 リポジトリ：https://github.com/terry-xiaoyu/kotlin-sdk
 
-## 環境構築
+## 環境セットアップ
 
 ### Kotlin ツールチェーンのインストール
 
 以下のツールがインストールされていることを確認してください。
 
-- JDK 21+
-- Kotlin 2.2+
-- Gradle 9.2+
+- JDK 21以上
+- Kotlin 2.2以上
+- Gradle 9.2以上
 
-[SDKMAN](https://sdkman.io/) を使うと、これらのツールのインストールと管理が簡単です。
+これらのツールのインストールおよび管理には、[SDKMAN](https://sdkman.io/) の利用を推奨します。
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -26,7 +26,7 @@ sdk install gradle 9.2.1
 
 ### EMQX のインストールと起動
 
-[Getting Started](../../getting-started/getting-started.md) ガイドに従って、EMQX ブローカーをインストールし起動してください。
+EMQX ブローカーのインストールおよび起動については、[Getting Started](../../getting-started/getting-started.md) ガイドに従ってください。
 
 ## MCP サーバーのサンプルをダウンロードして実行
 
@@ -40,16 +40,16 @@ cd kotlin-mcp-server-demo
 このサンプルでは、以下の2つの MCP ツールを登録しています。
 
 - **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
-- **Light control tool**：ライトのオン/オフ状態と明るさを制御します。
+- **Light control tool**：ライトのオン／オフ状態と明るさを制御します。
 
 ツール登録のコードはこちらで確認できます。  
 https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
 
 ```bash
-// 計算ツールを追加
+// Calculator tool を追加
 server.addTool(
     name = "calculator",
-    description = "このツールは基本的な数学演算（加算、減算、乗算、除算）を実行できます。",
+    description = "このツールは基本的な算術演算（加算、減算、乗算、除算）を実行できます。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("num1") {
@@ -62,7 +62,7 @@ server.addTool(
             }
             putJsonObject("op") {
                 put("type", JsonPrimitive("string"))
-                put("description", JsonPrimitive("実行する演算子: +, -, *, /"))
+                put("description", JsonPrimitive("実行する演算子：+、-、*、/"))
             }
         },
         required = listOf("num1", "num2", "op"),
@@ -88,22 +88,22 @@ server.addTool(
     )
 }
 
-// ライト制御ツールを追加
+// Light control tool を追加
 server.addTool(
     name = "set_light_brightness",
-    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。明るさを 'last_value' に設定すると、前回の明るさに戻せます。これはライトが消えている状態から再度点灯させたい場合に便利です。",
+    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。'last_value'を設定すると前回の明るさに戻せます。これはライトが消えている状態から再度点灯させたい場合に便利です。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
                 put("type", JsonArray(listOf(JsonPrimitive("number"), JsonPrimitive("string"))))
-                put("description", JsonPrimitive("0から100の明るさの値、または前回の明るさに戻す場合は 'last_value'"))
+                put("description", JsonPrimitive("0から100の明るさの値、または前回の明るさに戻すための 'last_value'"))
             }
         },
         required = listOf("value")
     ),
 ) { request ->
     val value = request.params.arguments?.get("value")?.jsonPrimitive?.content
-    // リクエストを処理してライトの明るさを制御
+    // リクエストを処理し、ライトの明るさを制御
     CallToolResult(
         content = listOf(TextContent("ライトの明るさを ${value}% に設定しました")),
     )
@@ -123,10 +123,9 @@ server.addTool(
 
 ## MCP クライアントでのテスト
 
-現時点で Kotlin SDK には MCP クライアントの実装がありません。  
-テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
+現時点で Kotlin SDK には MCP クライアントの実装は含まれていません。テストには Python SDK を使ってシンプルな MCP クライアントを作成できます。
 
-Python 環境のセットアップ：
+Python 環境をセットアップします。
 
 ```bash
 uv init light_controller
@@ -149,7 +148,7 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-    logger.info(f"{server_name} を検出しました。接続中...")
+    logger.info(f"{server_name} を発見しました。接続中・・・")
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
@@ -188,7 +187,7 @@ async def main():
     ) as client:
         await client.start()
         while True:
-            # MQTT クライアントがバックグラウンドで動作している間、他の処理をシミュレート
+            # MQTT クライアントがバックグラウンドで動作している間に他の処理をシミュレート
             await anyio.sleep(20)
 
 if __name__ == "__main__":

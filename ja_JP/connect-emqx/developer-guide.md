@@ -1,10 +1,10 @@
-# 開発者ガイド
+# Developer Guide
 
-開発者ガイドは、開発者がEMQXを使い始め、EMQX上でアプリケーションを構築するための情報を提供することを目的としています。
+Developer Guideは、開発者がEMQXを使い始め、EMQX上でアプリケーションを構築するための情報を提供することを目的としています。
 
-本章では、MQTTのコア概念、MQTT固有の機能、およびEMQXの拡張機能について解説します。また、これらの機能をEMQXダッシュボードで設定し、クライアントツールを使ってテストする方法も説明します。ガイドで扱う機能は以下の通りです。
+本章では、MQTTのコアコンセプト、MQTT固有の機能、およびEMQXの拡張機能について解説します。また、これらの機能をEMQXダッシュボードで設定し、クライアントツールを使ってテストする方法も説明します。ガイドで扱う機能は以下の通りです。
 
-- [MQTTコア概念](../messaging/mqtt-concepts.md)
+- [MQTTのコアコンセプト](../messaging/mqtt-concepts.md)
 - [MQTTクライアントでのテスト](../messaging/publish-and-subscribe.md)
 - [共有サブスクライブ](../messaging/mqtt-shared-subscription.md)
 - [保持メッセージ](../messaging/mqtt-retained-message.md)
@@ -15,13 +15,13 @@
 - [自動サブスクライブ](../messaging/mqtt-auto-subscription.md)
 - [トピック書き換え](../messaging/mqtt-topic-rewrite.md)
 
-MQTTメッセージング機能に加え、開発者ガイドではEMQXとやり取りするさまざまな方法も紹介しています。
+MQTTメッセージング機能に加え、Developer GuideではEMQXとやり取りするさまざまな方法も紹介しています。
 
-- [curlを使ったEMQX操作](./curl.md)
+- [curlを使ったEMQXの操作](./curl.md)
 
 また、EMQXの[MQTT Durable Session](../durability/durability_introduction.md)機能についても紹介し、すぐに試せる手順を提供しています。
 
-MQTTプロトコルをサポートしているため、EMQXはほとんどのMQTTクライアントライブラリやSDKと互換性があります。本ガイドには、開発者がMQTTプロジェクトを迅速に開始できるように、[ステップバイステップの手順とコードサンプル](./introduction.md)を含んでいます。MQTTクライアントSDKの完全な一覧と比較については、[MQTTクライアントSDK](https://www.emqx.com/en/mqtt-client-sdk)をご覧ください。
+MQTTプロトコルをサポートしているため、EMQXはほとんどのMQTTクライアントライブラリやSDKと互換性があります。本ガイドには、開発者がMQTTプロジェクトを迅速に開始できるように、[ステップバイステップの手順とコードサンプル](./introduction.md)も含まれています。MQTTクライアントSDKの完全な一覧と比較については、[MQTTクライアントSDK](https://www.emqx.com/en/mqtt-client-sdk)をご覧ください。
 
 ::: tip
 
@@ -29,4 +29,4 @@ MQTTプロトコルをサポートしているため、EMQXはほとんどのMQT
 
 :::
 
-EMQXは開発を支援するためのAPIドキュメントも提供しています。[REST API](../admin/api.md)では、EMQXが公開するHTTP管理APIの迅速な利用開始方法を案内しています。
+さらに、EMQXは開発を支援するためのAPIドキュメントも提供しています。[REST API](../admin/api.md)では、EMQXが公開するHTTP管理APIの迅速な利用開始方法を案内しています。

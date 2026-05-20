@@ -1,21 +1,21 @@
 # JavaScript SDKによる接続
 
-[MQTT.js](https://github.com/mqttjs/MQTT.js)は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールであり、ブラウザおよびNode.js環境で利用可能です。
+[MQTT.js](https://github.com/mqttjs/MQTT.js) は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールで、ブラウザおよびNode.js環境で使用できます。
 
-JavaScriptのシングルスレッド特性により、MQTT.jsは完全に非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各動作環境でのサポート状況は以下の通りです。
+JavaScriptのシングルスレッドの特性により、MQTT.jsは完全非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各動作環境での対応は以下の通りです：
 
-- ブラウザ環境：MQTT over WebSocket（WeChatミニプログラム、Alipayミニプログラムなどのカスタマイズされたブラウザ環境を含む）
+- ブラウザ環境：MQTT over WebSocket（WeChatアプレット、Alipayアプレットなどのカスタマイズされたブラウザ環境を含む）
 - Node.js環境：MQTT、MQTT over WebSocket
 
 一部の接続パラメータは環境によって異なりますが、それ以外のAPIは共通です。
 
-npmによるインストール：
+npmを使ったインストール：
 
 ```bash
 npm i mqtt
 ```
 
-CDNによるインストール（ブラウザ）：
+CDNを使ったインストール（ブラウザ）：
 
 ```html
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -25,26 +25,26 @@ CDNによるインストール（ブラウザ）：
 </script>
 ```
 
-Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用できます。
+Node.jsがインストールされた環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用できます。
 
 ```bash
 npm i mqtt -g
 
 mqtt help
 
-> MQTT.jsコマンドラインインターフェース、利用可能なコマンドは以下の通りです：
+> MQTT.jsコマンドラインインターフェース、利用可能なコマンド：
 
-  * publish     ブローカーへメッセージをパブリッシュする
+  * publish     ブローカーにメッセージをパブリッシュする
   * subscribe   ブローカーからの更新をサブスクライブする
-  * version     現在のMQTT.jsのバージョンを表示
-  * help        コマンドのヘルプを表示
+  * version     現在のMQTT.jsのバージョン
+  * help        コマンドのヘルプ
 
-> 'mqtt help [command]'を実行すると、各コマンドの詳細を確認できます。
+> 詳細は 'mqtt help [command]' を実行してください。
 ```
 
 ## MQTT.js 使用例
 
-以下は、JavaScriptでMQTT.jsを使ってEMQXに接続し、メッセージの送受信を行う完全なコード例です。
+以下は、JavaScriptでMQTT.jsを使ってEMQXに接続し、メッセージの送受信を行う完全なコード例です：
 
 ```javascript
 // const mqtt = require('mqtt')
@@ -60,13 +60,13 @@ const options = {
       password: 'emqx_test',
 }
 
-// 接続URL、プロトコルで接続方式を指定
+// 接続文字列、プロトコルで接続方法を指定
 // ws 暗号化されていないWebSocket接続
 // wss 暗号化されたWebSocket接続
 // mqtt 暗号化されていないTCP接続
 // mqtts 暗号化されたTCP接続
-// wxs WeChatミニプログラム接続
-// alis Alipayミニプログラム接続
+// wxs WeChatアプレット接続
+// alis Alipayアプレット接続
 const connectUrl = 'wss://broker.emqx.io:8084/mqtt'
 const client = mqtt.connect(connectUrl, options)
 

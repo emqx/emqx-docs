@@ -1,31 +1,31 @@
 # Google Kubernetes Engine に EMQX をデプロイする
 
-EMQX Operator を使用すると、Google Kubernetes Engine（GKE）上に EMQX をデプロイできます。これにより、GCP 上でマネージド Kubernetes クラスターを簡単に展開できます。GKE を利用することで、運用のオーバーヘッドを GCP に委ねることが可能です。GKE 上に EMQX をデプロイすることで、Kubernetes のスケーラビリティと柔軟性を活用しつつ、マネージドサービスのシンプルさと利便性を享受できます。EMQX Operator を GKE で利用すれば、クラウド上で MQTT ブローカーを簡単にデプロイおよび管理でき、ビジネス目標に集中できます。
+EMQX Operator を使用すると、Google Kubernetes Engine（GKE）上に EMQX をデプロイできます。これにより、GCP 上でマネージド Kubernetes クラスターを簡単にデプロイできるようになります。GKE を利用することで、運用のオーバーヘッドを GCP に委ねることが可能です。GKE 上に EMQX をデプロイすることで、Kubernetes のスケーラビリティと柔軟性を活かしつつ、マネージドサービスの簡便さと利便性を享受できます。EMQX Operator を GKE 上で使用することで、クラウド上で MQTT ブローカーを簡単にデプロイおよび管理でき、ビジネス目標に集中できます。
 
 ## はじめる前に
 
-GKE に EMQX をデプロイする前に、以下の前提条件を満たしていることを確認してください。
+GKE 上に EMQX をデプロイする前に、以下の前提条件を満たしていることを確認してください。
 
-- Google Cloud Platform 上に GKE クラスターがあること
+- Google Cloud Platform 上の GKE クラスター
   - プロジェクトで GKE API を有効にする必要があります。セットアップ手順は [Google Kubernetes Engine ドキュメント](https://cloud.google.com/kubernetes-engine/) を参照してください。
 
-- GKE クラスターに接続するための動作中の `kubectl` 設定
+- GKE クラスターに接続するための動作する `kubectl` 設定
   - ローカルの `kubectl` インストールを使用して接続する場合は、[GKE クラスターへの接続](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) を参照してください。
   
-    GCP コンソールの Cloud Shell から直接接続する場合は、[Cloud Shell で GKE クラスターを管理する](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster) をご覧ください。
-  
+  - GCP コンソールの Cloud Shell から直接接続する場合は、[Cloud Shell で GKE クラスターを管理する](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster) を参照してください。
+
 - クラスターに EMQX Operator がインストールされていること
   - 詳細は [EMQX Operator のインストール](./getting-started.md) を参照してください。
 
-## EMQX クラスターを素早くデプロイする
+## EMQX クラスターの迅速なデプロイ
 
 以下の例は、基本的な EMQX カスタムリソース（CR）設定を示しています。
 
-1. 下記のドキュメントを YAML ファイルとして保存し、`kubectl apply` でデプロイします。
+1. 次のドキュメントを YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
     ::: warning 注意
 
-    CPU とメモリのリミットを指定する場合は、最低でも 250m CPU と 512Mi メモリを確保してください。詳細は [Autopilot のリソース要求](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests) を参照してください。
+    CPU とメモリの制限を指定する場合は、最低でも 250m CPU と 512Mi メモリを確保してください。詳細は [Autopilot のリソース要求](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests) を参照してください。
 
     :::
 
@@ -63,7 +63,7 @@ GKE に EMQX をデプロイする前に、以下の前提条件を満たして�
 
 2. EMQX クラスターが準備完了になるまで待ちます。
 
-   `kubectl get` を使って EMQX クラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
+   `kubectl get` コマンドで EMQX クラスターのステータスを確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```shell
    $ kubectl get emqx
@@ -82,18 +82,18 @@ GKE に EMQX をデプロイする前に、以下の前提条件を満たして�
 
 4. `http://34.122.174.166:18083` にアクセスしてダッシュボードを開きます。
 
-   デフォルトの認証情報でログインしてください。
+   デフォルトの認証情報でログインします：
    
     - **ユーザー名:** `admin`
     - **パスワード:** `public`
 
 ## サブスクライブとパブリッシュ
 
-このハンズオンでは、オープンソースの MQTT 5.0 コマンドラインクライアントツールである [MQTTX CLI](https://mqttx.app/cli) を使用し、MQTT サービスやアプリケーションの迅速なテストを支援します。
+このハンズオンでは、開発者が MQTT サービスやアプリケーションを迅速にテストできるオープンソースの MQTT 5.0 コマンドラインクライアントツールである [MQTTX CLI](https://mqttx.app/cli) を使用します。
 
 1. EMQX TCP リスナーの外部 IP を取得します。
 
-   EMQX Operator は設定された各リスナーに対して自動的に Service リソースを作成します。
+   EMQX Operator は、設定された各リスナーに対して自動的に Service リソースを作成します。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
@@ -120,7 +120,7 @@ GKE に EMQX をデプロイする前に、以下の前提条件を満たして�
    [10:00:58] › ✔  メッセージをパブリッシュしました
    ```
 
-4. サブスクライバーがメッセージを受信する様子を確認します。
+4. サブスクライバーがメッセージを受信するのを確認します。
 
    ```shell
    [10:00:58] › payload: hello world
@@ -128,4 +128,4 @@ GKE に EMQX をデプロイする前に、以下の前提条件を満たして�
 
 ## LoadBalancer による TLS オフロードについての注意点
 
-執筆時点で、Google LoadBalancer は TLS からプレーン TCP へのトラフィックの終了（ターミネーション）をサポートしていません。可能な回避策については、この[ディスカッション](https://github.com/emqx/emqx-operator/discussions/312)を参照してください。
+執筆時点で、Google LoadBalancer は TLS からプレーン TCP へのトラフィックの終端（TLS ターミネーション）をサポートしていません。可能な回避策については、この[ディスカッション](https://github.com/emqx/emqx-operator/discussions/312)を参照してください。
