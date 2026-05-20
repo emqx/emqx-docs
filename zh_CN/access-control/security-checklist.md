@@ -10,7 +10,7 @@
 - 使用安全组或防火墙规则限制节点间通信端口。关于集群内部使用的端口映射规则，详见[集群安全](../deploy/cluster/security.md)。
 - 如果节点存在多个网卡接口，应将 Erlang 分布式通信仅绑定到私网接口。
 - 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../deploy/cluster/lb.md)。
-- 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。
+- 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。可在 EMQX 中通过 `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]` 进行限制，并结合网络层控制（防火墙、私有网络或 Unix socket）。否则，能直接访问该端口的客户端可以伪造任意对端证书字段的 PROXY v2 帧，从而冒充任意身份。
 
 ## 阶段 2：Erlang 与集群
 
@@ -25,6 +25,7 @@
 - 根据组织的安全基线禁用过时的 TLS 协议版本和弱密码套件，并在发布前于测试环境验证监听器的最终配置。
 - 使用受信任 CA 或内部 PKI 签发的证书，并在证书到期前完成轮换。
 - 当设备身份需要通过客户端证书建立信任时，应启用双向 TLS。在该模式下，需要同时校验证书链以及客户端在 TLS 握手期间是否实际提供证书。详见[X.509 证书认证](./authn/x509.md)。
+- 若将对端证书字段映射为 MQTT 用户名或客户端 ID（`peer_cert_as_username` / `peer_cert_as_clientid`），监听器**必须**强制启用 mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`），并使用您自己掌控的 CA 证书集合。否则，客户端可以出示一张 CN/DN 任意填写的自签名证书，从而冒充任意身份。针对空用户名场景，可在监听器上同时设置 `listeners.{type}.{name}.enable_authn = quick_deny_anonymous` 作为补充防护。详见[证书信息映射](./authn/x509.md#证书信息映射)。
 - 如果您的环境要求校验证书吊销状态，可评估启用 [CRL 检查](../network/crl.md)或 [OCSP Stapling](../network/ocsp.md)。
 - 当 EMQX 连接外部资源（例如 HTTP 认证服务、数据库或其他集成组件）时，也应启用 TLS。
 

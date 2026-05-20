@@ -10,7 +10,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 - Restrict inter-node ports with security groups or firewall rules. For the port mapping used inside a cluster, see [Cluster Security](../deploy/cluster/security.md).
 - If nodes have multiple interfaces, bind Erlang distribution traffic to the private network interface only.
 - If you deploy EMQX behind a load balancer or TCP proxy, enable [Proxy Protocol](../deploy/cluster/lb.md) only on the listeners that need the real client IP address or client certificate details.
-- If Proxy Protocol is enabled for a listener, expose that address and port only to the designated proxy or load balancer. Do not expose the same listener directly to public clients.
+- If Proxy Protocol is enabled for a listener, expose that address and port only to the designated proxy or load balancer. Enforce this in EMQX with `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]`, combined with network-level controls (firewall, private network, or Unix socket). Otherwise, a client that reaches the port directly can craft a PROXY v2 frame with arbitrary peer-cert fields and impersonate any identity.
 
 ## Phase 2: Erlang and Cluster
 
@@ -25,6 +25,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 - Disable legacy protocol versions and weak cipher suites according to your organization's security baseline, and validate the final listener settings in staging before rollout.
 - Use certificates issued by a trusted CA or by your internal PKI, and rotate them before they expire.
 - Enable mutual TLS when device identity should be verified through client certificates. In this model, validate both client certificate chains and certificate presence during the TLS handshake. See [X.509 Certificate Authentication](./authn/x509.md).
+- If you map peer-certificate fields to the MQTT username or client ID (`peer_cert_as_username` / `peer_cert_as_clientid`), the listener **must** enforce mTLS (`verify = verify_peer`, `fail_if_no_peer_cert = true`) with a CA bundle you control. Without it, a client can present a self-signed certificate with an attacker-chosen CN/DN and impersonate any identity. As an additional layer for the empty-username case, set `listeners.{type}.{name}.enable_authn = quick_deny_anonymous`. See [Certificate Information Mapping](./authn/x509.md#certificate-information-mapping).
 - If certificate revocation matters in your environment, evaluate [CRL checks](../network/crl.md) or [OCSP stapling](../network/ocsp.md).
 - Enable TLS for outbound connections to external resources such as HTTP authenticators, databases, and other integrations.
 
