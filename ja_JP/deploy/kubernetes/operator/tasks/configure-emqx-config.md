@@ -1,4 +1,4 @@
-# EMQXの設定変更
+# EMQX設定の変更
 
 ## 目的
 
@@ -10,7 +10,7 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data`フィールドを通じてE
 
 EMQXは設定ファイル形式として[HOCON](../../../../configuration/configuration.md#hocon-configuration-format)を使用しています。
 
-1. 以下をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2
@@ -21,7 +21,7 @@ EMQXは設定ファイル形式として[HOCON](../../../../configuration/config
       image: emqx/emqx:@EE_VERSION@
       imagePullPolicy: IfNotPresent
       config:
-         # ポート1884でリッスンするTCPリスナー `test` を設定：
+         # ポート1884でリッスンするTCPリスナー`test`を設定：
          data: |
             listeners.tcp.test {
                bind = "0.0.0.0:1884"
@@ -42,7 +42,7 @@ EMQXは設定ファイル形式として[HOCON](../../../../configuration/config
    `.spec.config.data`フィールドの内容は、EMQXコンテナに対して[`emqx.conf`設定ファイル](../../../../configuration/configuration.md#immutable-configuration-file)として提供されます。
    :::
 
-2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`であることを確認してください。完了までに時間がかかる場合があります。
+2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`であることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -72,4 +72,4 @@ tcp:test
    max_conns : 1024000
 ```
 
-ここで、ポート1884で新たに追加したリスナーが稼働していることが確認できます。
+ここで、ポート1884で新たに設定したリスナーが稼働していることが確認できます。

@@ -1,17 +1,17 @@
 # C SDKによる接続
 
-[Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) と [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) は、Eclipse Pahoプロジェクトに属するC言語のクライアントライブラリ（MQTT Cクライアント）であり、ANSI Cで書かれたフル機能のMQTTクライアントです。
+[Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) および [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) は、Eclipse Pahoプロジェクトに属するC言語のクライアントライブラリ（MQTT Cクライアント）であり、ANSI Cで書かれたフル機能のMQTTクライアントです。
 
-Eclipse Paho Embedded CはデスクトップOS上でも使用可能ですが、主に[mbed](https://os.mbed.com/)、[Arduino](https://arduino.cc/)、[FreeRTOS](https://freertos.org/)などの組み込み環境向けに設計されています。
+Eclipse Paho Embedded CはデスクトップOS上でも使用可能ですが、主に [mbed](https://os.mbed.com/)、[Arduino](https://arduino.cc/)、[FreeRTOS](https://freertos.org/) といった組み込み環境向けに設計されています。
 
-クライアントは同期／非同期APIを備えており、それぞれ`MQTTClient`と`MQTTAsync`で始まります：
+クライアントは同期／非同期APIを備えており、`MQTTClient` と `MQTTAsync` で始まるAPIがあります：
 
-- 同期APIはよりシンプルで使いやすく設計されており、一部の呼び出しは処理完了までブロックされるため、プログラミングが容易です。
-- 非同期APIには`API-waitForCompletion`という呼び出しブロックが1つだけあり、コールバックを通じて通知されるため、メインスレッド以外の環境に適しています。
+- 同期APIはよりシンプルで使いやすく設計されており、一部の呼び出しは操作完了までブロックされるため、プログラミングが容易です。
+- 非同期APIには `API-waitForCompletion` の呼び出しブロックが1つだけあり、コールバックで通知されるため、メインスレッド以外の環境により適しています。
 
 ## Paho C 使用例
 
-C言語に関連する2つのMQTTクライアントライブラリの比較、ダウンロード、使用方法の詳細については、プロジェクトのホームページをご参照ください。以下の例は、EMQXに接続し、メッセージを送受信するPaho Cの完全なコードです。
+C言語に関連する2つのMQTTクライアントライブラリの比較、ダウンロード、使用方法の詳細については、プロジェクトのホームページをご参照ください。本例では、EMQXに接続し、メッセージを送受信するPaho CのC言語による完全なコードを示します：
 
 ```c
 #include "stdio.h"
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 
     if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
     {
-        printf("接続に失敗しました。戻りコード %d\n", rc);
+        printf("接続に失敗しました。戻り値コード %d\n", rc);
         exit(-1);
     }
   
@@ -54,8 +54,9 @@ int main(int argc, char* argv[])
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
     MQTTClient_publishMessage(client, TOPIC, &pubmsg, &token);
-    printf("%d秒以内にトピック%sに対してペイロード%sをクライアントID %s でパブリッシュするのを待機中\n",
-            (int)(TIMEOUT/1000), TOPIC, PAYLOAD, CLIENTID);
+    printf("%d秒以内に %s のパブリッシュを待機中\n"
+            "トピック %s、クライアントID: %s\n",
+            (int)(TIMEOUT/1000), PAYLOAD, TOPIC, CLIENTID);
     rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
     printf("デリバリートークン %d のメッセージが配信されました\n", token);
   
@@ -66,6 +67,6 @@ int main(int argc, char* argv[])
 }
 ```
 
-## Paho C の MQTT 5.0 サポート
+## Paho C MQTT 5.0対応
 
 Paho Cは現在、MQTT 5.0を完全にサポートしています。

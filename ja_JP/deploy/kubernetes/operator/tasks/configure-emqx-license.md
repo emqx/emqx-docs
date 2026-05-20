@@ -2,18 +2,18 @@
 
 ## 目的
 
-- EMQX Enterprise ライセンスの設定
-- EMQX Enterprise ライセンスの更新
+- EMQX Enterpriseライセンスの設定
+- EMQX Enterpriseライセンスの更新
 
 ## ライセンスの設定
 
-EMQX Enterprise ライセンスは、EMQX公式サイトで無料申請できます：[EMQX Enterprise ライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
+EMQX Enterpriseライセンスは、EMQX公式サイトで無料で申請できます：[EMQX Enterpriseライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
 
-## EMQX クラスターの設定
+## EMQXクラスターの設定
 
-EMQX CRD `apps.emqx.io/v2` では、`.spec.config.data` フィールドを通じて EMQX クラスターのライセンスを設定できます。詳細な設定リファレンスは[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
+EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じてEMQXクラスターのライセンス設定をサポートしています。完全な設定リファレンスは[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
 
-1. 以下の内容を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2
@@ -34,13 +34,13 @@ EMQX CRD `apps.emqx.io/v2` では、`.spec.config.data` フィールドを通じ
 
    ::: tip
 
-   `.spec.config.data` フィールド内の `license.key` はライセンスの内容を示します。この例ではライセンス内容は省略しています。ご自身のライセンスキーを必ず入力してください。
+   `.spec.config.data` フィールド内の `license.key` はライセンスの内容を表します。この例ではライセンス内容は省略されていますので、ご自身のライセンスキーを入力してください。
 
    :::
 
-2. EMQX クラスターが Ready 状態になるまで待ちます。
+2. EMQXクラスターが準備完了になるまで待ちます。
 
-   `kubectl get` コマンドで EMQX クラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。完了までに時間がかかる場合があります。
+   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -67,7 +67,7 @@ EMQX CRD `apps.emqx.io/v2` では、`.spec.config.data` フィールドを通じ
 
    出力には申請者情報、ライセンスでサポートされる最大接続数、期限などの基本的なライセンス情報が表示されます。
 
-2. EMQX CR を編集してライセンスを更新します。
+2. EMQX CRを編集してライセンスを更新します。
 
    ```bash
    $ kubectl edit emqx emqx
@@ -97,4 +97,4 @@ EMQX CRD `apps.emqx.io/v2` では、`.spec.config.data` フィールドを通じ
    expiry          : false
    ```
 
-   更新後の `max_connections` フィールドの値が変わっていることで、EMQX Enterprise ライセンスが正常に更新されたことが確認できます。ライセンスの反映には時間がかかる場合があるため、コマンドを再試行する必要があるかもしれません。
+   更新された `max_connections` フィールドにより、EMQX Enterpriseライセンスが正常に更新されたことが明確にわかります。ライセンスの更新には時間がかかる場合があるため、コマンドを再試行する必要があるかもしれません。

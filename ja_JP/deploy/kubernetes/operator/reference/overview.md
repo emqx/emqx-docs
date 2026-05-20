@@ -6,4 +6,4 @@
 
 - [apps.emqx.io/v2beta1](./v2beta1-reference.md)
 
-    部分的に非推奨であり、EMQX Operator 2.3.x / 2.2.xでサポートされています。
+    部分的に非推奨となっており、EMQX Operator 2.3.x / 2.2.xでサポートされています。

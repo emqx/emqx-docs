@@ -1,6 +1,6 @@
 # HTTP API を使ったユーザーデータ管理
 
-組み込みデータベースに保存された認証データについては、EMQX ダッシュボードまたは HTTP API を使って、ユーザー認証情報の作成、更新、削除、一覧表示、インポートが可能です。
+組み込みデータベースに保存された認証データは、EMQX ダッシュボードまたは HTTP API を使用して、ユーザー認証情報の作成、更新、削除、一覧表示、インポートが可能です。
 
 対象は以下の認証方式です：
 
@@ -23,23 +23,23 @@
   /api/v5/listeners/{listener_id}/authentication/{id}/users
   ```
 
-- **グローバル ゲートウェイプロトコル認証チェーン**
+- **グローバルゲートウェイプロトコル認証チェーン**
 
   ```
   /api/v5/gateway/{protocol}/authentication/{id}/users
   ```
 
-- **ゲートウェイプロトコル リスナー固有の認証チェーン**
+- **ゲートウェイプロトコルリスナー固有の認証チェーン**
 
   ```
   /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
   ```
 
-識別子の命名規則やパラメーターの説明は、[REST API](../../admin/api.md) をご参照ください。
+識別子の命名規則やパラメーターの説明については、[REST API](../../admin/api.md) を参照してください。
 
 ## ユーザーのインポート
 
-ユーザーインポートは `password_based:built_in_database` 認証方式のみサポートしています。
+ユーザーインポートは `password_based:built_in_database` 認証方式のみサポートされています。
 
 この機能により、稼働中の EMQX インスタンスに対してユーザーを一括インポートできます。
 
@@ -81,8 +81,8 @@ curl -v -u admin:public -X 'POST' \
   
   任意フィールド：
   
-  - `salt`（省略時は空文字列）
-  - `is_superuser`（省略時は `false`）
+  - `salt`（デフォルトは空文字列）
+  - `is_superuser`（デフォルトは `false`）
   
 * `.json`
   

@@ -1,6 +1,6 @@
 # OperatorのインストールとEMQXのデプロイ
 
-本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを用いたEMQXのデプロイ方法について説明します。以下の手順に従うことで、Operatorを使って効率的かつ安定的にEMQXをインストールおよび管理できます。
+本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを使用したEMQXのデプロイ方法について説明します。以下の手順に従うことで、Operatorを使って効率的かつ安定的にEMQXをインストールおよび管理できます。
 
 ## 環境の準備
 
@@ -18,7 +18,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   このコマンドは最新の2.3.xリリースをダウンロードし、クラスター全体のEMQX CRDをインストールし、`emqx-operator-system`という別のネームスペースにコントローラーサービスをデプロイします。
+   このコマンドは最新の2.3.xリリースをダウンロードし、クラスター全体にEMQXのCRDをインストールし、`emqx-operator-system`という別のネームスペースにコントローラーサービスをデプロイします。
 
 2. EMQX Operatorが準備完了になるまで待ちます。
 
@@ -47,7 +47,7 @@ Operatorが稼働したら、EMQXのデプロイに進めます。
          }
    ```
 
-   EMQX CRDの詳細については、[リファレンスドキュメント](./reference/v2beta1-reference.md)をご参照ください。
+   EMQXのCRDの詳細については、[リファレンスドキュメント](./reference/v2beta1-reference.md)をご参照ください。
 
 2. EMQXクラスターが準備完了になるまで待ちます。
 
@@ -57,7 +57,7 @@ Operatorが稼働したら、EMQXのデプロイに進めます。
    emqx      Ready     2m55s
    ```
 
-   `STATUS`が`Ready`になっていることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
+   `STATUS`が`Ready`であることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
 
 ## トラブルシューティング
 
@@ -67,15 +67,15 @@ EMQX OperatorはKubernetes APIに対して限定的なイベントのみを公�
 kubectl get events --sort-by=.lastTimestamp
 ```
 
-また、EMQXリソースが`Ready`ステータスに到達しない場合は、コントローラーマネージャーのログを確認してください。
+または、EMQXリソースが`Ready`状態にならない場合は、コントローラーマネージャーのログを確認してください。
 
 ```sh
 kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-operator-system
 ```
 
-## パブリッククラウドでのデプロイ
+## パブリッククラウドへのデプロイ
 
-EMQX Operatorを使ってマネージドKubernetesサービス上にEMQXをデプロイする場合は、以下のガイドをご利用ください。
+EMQX Operatorを使用してマネージドKubernetesサービス上にEMQXをデプロイする際は、以下のガイドをご利用ください。
 
 - [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)
