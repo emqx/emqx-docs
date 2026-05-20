@@ -31,15 +31,15 @@ MQTT streams must be explicitly created before they can store or replay messages
      - Hyphens (`-`)
      - Dots (`.`)
 
-     The stream is identified and managed by this name. 
+     The stream is identified and managed by this name.
 
    - **Topic Filter**: Enter the topic or topic filter (for example, `t/1` or `sensors/+/data`) that defines which published messages are captured into the stream. All messages published to topics matching this filter will be stored in the stream.
-   
+
      > Clients can consume messages using the following subscription formats:
      >
      > - `$stream/<name>` is used when the stream already exists.
      > - `$stream/<name>/<topic_filter>` is optional when subscribing to an existing stream. It can be used when auto-creation is enabled. If the stream does not yet exist, EMQX uses the provided `<topic_filter>` to create it automatically.
-     > 
+     >
      > The `<topic_filter>` segment must match the stream’s configured topic filter.
      >
      > To replay historical messages, specify the MQTT 5 subscription property `stream-offset`. The value can be:
@@ -47,40 +47,187 @@ MQTT streams must be explicitly created before they can store or replay messages
      > - A Unix timestamp in microseconds
      > - `earliest`
      > - `latest`
-     
+
    - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
-     
+
    - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
-     
+
    - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
-     
+
       ::: tip
-      
+
       The Stream Key Expression is similar to the Queue Key Expression in Message Queue. See [Queue Key Expression](../message-queue/message-queue-task.md#queue-key-expression) for examples of key extraction.
-      
+
       :::
-      
+
       The extracted key serves different purposes depending on the stream type:
-        - For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
-      
-        - For **regular** streams, the key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, preserving per-key ordering while enabling parallel storage across shards.
-      
+        - For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained. See [Stream Key Expression](#stream-key-expression) for more details and examples.
+
+        - For **regular** streams, the key is used as the sharding key to determine which storage shard a message is written to.
+
           ::: tip
-      
+
           For regular streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
-      
+
           :::
-      
+
    - **Limiter**: Configure limits for each shard of the stream to control storage usage:
-     
+
       - **Max Shard Message Count**: Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
      - **Max Shard Message Bytes**: Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
-     
+
       These limits are persisted to durable storage and work together with the retention period.
-   
+
 4. Click **Create** to save the stream.
 
 Once created, the MQTT stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
+
+## Stream Key Expression
+
+The Stream Key Expression specifies how to extract the key used for message deduplication in Last-Value Semantics mode. This expression is evaluated against a message's data and follows the syntax of [Variform expressions](../configuration/configuration.md#variform-expressions).
+
+The expression is evaluated against a message context that includes fields such as `from`, `topic`, `payload`, `headers.properties`, and more. For example, to use a user property as the key, you could set the expression to:
+
+```
+message.headers.properties.User-Property.user-prop
+```
+
+If the key cannot be extracted based on the expression (e.g., the field doesn't exist), the message will be discarded and not enqueued.
+
+### Message Context Example
+
+Stream Key Expressions are evaluated against the following message structure:
+
+<details>
+<summary><strong>JSON Example</strong></summary>
+
+```json
+{
+  "message": {
+    "qos": 0,
+    "topic": "some/topic",
+    "payload": "some-payload",
+    "headers": {
+      "client_attrs": {},
+      "proto_ver": 5,
+      "properties": {
+        "User-Property": {
+          "user-prop": "some-value"
+        }
+      },
+      "peerhost": "127.0.0.1",
+      "username": "undefined",
+      "protocol": "mqtt",
+      "peername": "127.0.0.1:49352"
+    },
+    "from": "clientid",
+    "timestamp": 1759238376252,
+    "id": "..non utf8 bytes...",
+    "flags": {
+      "retain": false,
+      "dup": false
+    },
+    "extra": {}
+  }
+}
+```
+
+
+</details>
+
+<details> <summary><strong>Erlang Term Example</strong></summary>
+
+```erlang
+#{message =>
+      #{extra => #{},
+        flags => #{dup => false, retain => false},
+        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
+        timestamp => 1759238376252, from => <<"clientid">>,
+        headers =>
+            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
+              username => undefined, peerhost => <<"127.0.0.1">>,
+              properties =>
+                  #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
+              proto_ver => 5, client_attrs => #{}
+            },
+        payload => <<"some-payload">>, topic => <<"some/topic">>,
+        qos => 0
+      }
+    }
+```
+
+</details>
+
+### Example of using Stream Key Expression
+
+#### Example 1
+
+Assume you set up a stream with
+* Last-Value Semantics enabled
+* Topic Filter set to `t/#`
+* Stream Key Expression set to `message.headers.properties.User-Property.stream-key`
+
+Assume the following messages are published to EMQX (and no clients are present to consume them):
+| N | Sender | Topic | User Property `stream-key` |
+|---|--------|-------|------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+When a client connects and subscribes to the stream, the following messages will be delivered:
+| N | Sender | Topic | User Property `stream-key` |
+|---|--------|-------|------------------------|
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+Only the most recent message for each unique `message.headers.properties.User-Property.stream-key` value is retained in the stream. Note, that the key expression takes effect for the whole stream across the topics: a message with `keyA` published to `t/1` is overwritten by a later message with `keyA` published to `t/3`.
+
+#### Example 2
+
+Assume you set up a stream with
+* Last-Value Semantics enabled
+* Topic Filter set to `t/#`
+* Stream Key Expression set to `message.from`
+
+Assume the same messages are published to EMQX as in Example 1:
+| N | Sender | Topic | User Property `stream-key` |
+|---|--------|-------|------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+Now, when a client connects and subscribes to the stream, the following messages will be delivered:
+| N | Sender | Topic | User Property `stream-key` |
+|---|--------|-------|------------------------|
+| 2 | `client1` | `t/2` | `keyB` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+Now, the messages with the same `message.from` are overwritten.
+
+#### Example 3
+
+Assume you set up a stream with
+* Last-Value Semantics enabled
+* Topic Filter set to `t/#`
+* Stream Key Expression set to `concat(message.headers.properties.User-Property.stream-key, '-', message.topic)`
+
+Assume the following messages are published to EMQX:
+| N | Sender | Topic | User Property `stream-key` |
+|---|--------|-------|------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client1` | `t/1` | `keyB` |
+| 4 | `client1` | `t/2` | `keyA` |
+
+When a client connects and subscribes to the stream, all the messages will be delivered because the combination of `message.headers.properties.User-Property.stream-key` and `message.from` is unique for each message:
+| N | Sender | Topic | User Property `stream-key` | Computed Key |
+|---|--------|-------|------------------------|--------------|
+| 1 | `client1` | `t/1` | `keyA` | `keyA-t/1` |
+| 2 | `client1` | `t/2` | `keyB` | `keyB-t/2` |
+| 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
+| 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
 
 ## Automatically Create Streams via Dashboard
 
@@ -92,7 +239,7 @@ Automatic stream creation is available only when the MQTT Stream feature is enab
 
 :::
 
-The streams may be auto-created either as regular streams or last-value semantics streams. 
+The streams may be auto-created either as regular streams or last-value semantics streams.
 
 ::: tip Note
 
@@ -126,7 +273,7 @@ This option can be enabled manually if you prefer regular streams where messages
 
 3. Configure the following:
 
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). 
+   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`).
 
      In Regular streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
 
@@ -165,13 +312,13 @@ You can update MQTT Streams settings directly from the EMQX Dashboard without re
 
    - **Data Retention Period**: Specifies the retention period for automatically created streams. Messages older than this period are removed automatically.
 
-   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`). 
+   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`).
 
    - **Max Shard Message Count**: Limits the maximum number of messages in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited messages (`infinity`).
 
      ::: tip
 
-     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a stream scales with the number of shards and the replication factor. 
+     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a stream scales with the number of shards and the replication factor.
 
      :::
 
