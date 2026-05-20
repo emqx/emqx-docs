@@ -61,7 +61,7 @@ jobs:
       - name: Copy assets from en_US to ja_JP
         run: |
           cp -r en_US/* ja_JP/
-          git restore -- "ja_JP/**/*.md" || true
+          git restore -- "ja_JP/*.md" || true
 
       - name: Get current English docs commit hash
         id: current-hash
@@ -99,7 +99,7 @@ jobs:
             echo "Running full translation: listing files from directory.json (ja section)"
             modified_files=$(uv run .github/scripts/list_translation_targets.py directory.json)
           else
-            modified_files=$(git diff --name-only --diff-filter=ACMR ${{ steps.last-hash.outputs.last_hash }} ${{ steps.current-hash.outputs.current_hash }} -- 'en_US/**/*.md' || echo "")
+            modified_files=$(git diff --name-only --diff-filter=ACMR ${{ steps.last-hash.outputs.last_hash }} ${{ steps.current-hash.outputs.current_hash }} -- 'en_US/*.md' || echo "")
           fi
 
           if [ -z "$modified_files" ]; then
