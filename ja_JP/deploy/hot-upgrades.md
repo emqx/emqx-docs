@@ -2,9 +2,9 @@
 
 Hot upgrade lets you apply a patch-version update to a running EMQX Enterprise node without stopping it. Connections stay alive throughout the upgrade; the node switches to the new release tree on its next restart.
 
-Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.3 to 5.10.4 is supported, but upgrading from 5.10.x to 5.11.0 is not.
+Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.4 to 5.10.5 is supported, but upgrading from 5.10.x to 5.11.0 is not.
 
-Hot upgrade is driven by the `emqx_relup` plugin and operated entirely through the `emqx ctl relup` CLI. There is no Dashboard or REST API surface.
+Hot upgrade is driven by the `emqx_relup` plugin. The plugin is installed from the Dashboard. All upgrade operations are performed through the `emqx ctl relup` CLI.
 
 ::: warning Important Notice
 Back up `data/`, `etc/`, and `log/` before running a hot upgrade. There is no in-place rollback once a hop is applied.
@@ -19,30 +19,9 @@ Back up `data/`, `etc/`, and `log/` before running a hot upgrade. There is no in
 
 ## Step 1: Install the emqx_relup Plugin
 
-Download and install the plugin on every node. Plugin packages are published at `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`.
+Install the plugin from the Dashboard following the [Install Packages via Dashboard](../extensions/plugin-management.md#install-packages-via-dashboard) instructions. Plugin packages are published at `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`.
 
-```bash
-# Download the plugin package
-curl -fLO https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/emqx_relup-<PLUGIN-VSN>.tar.gz
-
-# Copy to the plugin install directory
-#   deb/rpm install : /var/lib/emqx/plugins/
-#   tarball install : <RootDir>/plugins/
-cp emqx_relup-<PLUGIN-VSN>.tar.gz <plugin-install-dir>/
-
-# Install, enable, and start the plugin
-emqx ctl plugins install emqx_relup-<PLUGIN-VSN>
-emqx ctl plugins enable  emqx_relup-<PLUGIN-VSN>
-emqx ctl plugins start   emqx_relup-<PLUGIN-VSN>
-```
-
-Verify the plugin is running:
-
-```bash
-emqx ctl plugins list
-```
-
-The plugin should appear with status `running`.
+The plugin should appear with status `running` after installation.
 
 ## Step 2: Confirm the Upgrade Path Is Supported
 
@@ -83,7 +62,7 @@ The upgrade handler performs the following steps:
 3. Deploys only the runtime subdirectories (`bin/`, `erts-*/`, `lib/`, `releases/`) to `<RootDir>/relup/<TargetVsn>/`. Config, data, logs, and plugins remain at the original install root.
 4. Applies the matching code-change instructions from the plugin's `.relup` catalog.
 5. Runs post-upgrade callbacks.
-6. Writes `<RootDir>/relup/version` with the target version string.
+6. Writes `<RootDir>/relup/current` with the target version string.
 
 Rolling out across a cluster is the operator's responsibility. Upgrade nodes one at a time and verify each before proceeding.
 
@@ -96,14 +75,14 @@ After the upgrade command returns, confirm the node is healthy:
 emqx ctl status
 
 # Confirm the version marker was written
-cat <RootDir>/relup/version
+cat <RootDir>/relup/current
 
 # Check upgrade status and history
 emqx ctl relup status
 emqx ctl relup logs
 ```
 
-`relup/version` should contain the target version string, and `emqx ctl status` should report the node running.
+`relup/current` should contain the target version string, and `emqx ctl status` should report the node running.
 
 ## Step 6: Restart Into the New Release
 
@@ -113,7 +92,7 @@ The code-change upgrade takes effect in the running VM immediately. To fully swi
 emqx restart
 ```
 
-On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/version` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
+On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/current` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
 
 ## Step 7: Clean Up
 
@@ -135,7 +114,7 @@ Two limited recovery options are available:
 - **Before the next restart:** If the upgraded code is misbehaving but disk state is still compatible with the old release, delete the version marker and restart into the old tree:
 
   ```bash
-  rm <RootDir>/relup/version
+  rm <RootDir>/relup/current
   # optionally: rm -rf <RootDir>/relup/<TargetVsn>/
   emqx restart
   ```
@@ -152,6 +131,6 @@ Plan your upgrade window with these limitations in mind.
 |---|---|
 | `emqx ctl relup upgrade <TarballPath>` | Apply the upgrade hop from the given tarball. |
 | `emqx ctl relup list-supported-paths` | List supported `{from, target}` version hops in the plugin catalog. |
-| `emqx ctl relup status` | Show whether an upgrade is `in-progress` or `idle`. |
+| `emqx ctl relup status` | Show the current upgrade state: `idle`, `in-progress`, or `hot-upgraded to <vsn>; pending on restart to boot from the new version`. |
 | `emqx ctl relup logs` | Print this node's upgrade history from the persistent log table. |
 | `emqx ctl relup logs-clear` | Wipe this node's upgrade log table. |

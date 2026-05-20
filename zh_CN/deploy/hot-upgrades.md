@@ -2,9 +2,9 @@
 
 热升级允许在不停止 EMQX Enterprise 节点的情况下应用补丁版本更新。升级过程中连接保持不中断，节点在下次重启时切换到新的 Release 目录。
 
-热升级仅支持补丁版本（版本号第三位）跨度。例如，支持从 5.10.3 升级到 5.10.4，但不支持从 5.10.x 升级到 5.11.0。
+热升级仅支持补丁版本（版本号第三位）跨度。例如，支持从 5.10.4 升级到 5.10.5，但不支持从 5.10.x 升级到 5.11.0。
 
-热升级由 `emqx_relup` 插件驱动，通过 `emqx ctl relup` CLI 操作，不提供 Dashboard 或 REST API 界面。
+热升级由 `emqx_relup` 插件驱动。插件通过 Dashboard 安装，所有升级操作均通过 `emqx ctl relup` CLI 执行。
 
 ::: warning 重要提示
 执行热升级前，请备份 `data/`、`etc/` 和 `log/` 目录。升级完成后无法原地回滚。
@@ -19,30 +19,9 @@
 
 ## 步骤 1：安装 emqx_relup 插件
 
-在每个节点上下载并安装插件。插件包发布地址为 `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`。
+参照[通过 Dashboard 安装插件](../extensions/plugin-management.md#通过-dashboard-安装插件)的说明，通过 Dashboard 安装插件。插件包发布地址为 `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`。
 
-```bash
-# 下载插件包
-curl -fLO https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/emqx_relup-<PLUGIN-VSN>.tar.gz
-
-# 复制到插件安装目录
-#   deb/rpm 安装方式：/var/lib/emqx/plugins/
-#   压缩包安装方式：<RootDir>/plugins/
-cp emqx_relup-<PLUGIN-VSN>.tar.gz <plugin-install-dir>/
-
-# 安装、启用并启动插件
-emqx ctl plugins install emqx_relup-<PLUGIN-VSN>
-emqx ctl plugins enable  emqx_relup-<PLUGIN-VSN>
-emqx ctl plugins start   emqx_relup-<PLUGIN-VSN>
-```
-
-验证插件是否正在运行：
-
-```bash
-emqx ctl plugins list
-```
-
-插件的状态应显示为 `running`。
+安装完成后，插件状态应显示为 `running`。
 
 ## 步骤 2：确认升级路径受支持
 
@@ -83,7 +62,7 @@ emqx ctl relup upgrade /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.
 3. 仅将运行时子目录（`bin/`、`erts-*/`、`lib/`、`releases/`）部署到 `<RootDir>/relup/<TargetVsn>/`。配置、数据、日志和插件仍保留在原始安装根目录下。
 4. 应用插件 `.relup` 目录中匹配的代码变更指令。
 5. 运行升级后回调。
-6. 将目标版本号写入 `<RootDir>/relup/version`。
+6. 将目标版本号写入 `<RootDir>/relup/current`。
 
 集群范围的升级推进由操作者负责。建议逐节点升级，验证无误后再继续下一个节点。
 
@@ -96,14 +75,14 @@ emqx ctl relup upgrade /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.
 emqx ctl status
 
 # 确认版本标记文件已写入
-cat <RootDir>/relup/version
+cat <RootDir>/relup/current
 
 # 查看升级状态和历史记录
 emqx ctl relup status
 emqx ctl relup logs
 ```
 
-`relup/version` 文件应包含目标版本号字符串，`emqx ctl status` 应显示节点正在运行。
+`relup/current` 文件应包含目标版本号字符串，`emqx ctl status` 应显示节点正在运行。
 
 ## 步骤 6：重启切换到新版本
 
@@ -113,7 +92,7 @@ emqx ctl relup logs
 emqx restart
 ```
 
-重启时，`bin/emqx` 脚本检测到 `<RootDir>/relup/version` 后，会切换执行 `<RootDir>/relup/<TargetVsn>/` 中的程序。原始 `<RootDir>` 仍作为 `data/`、`etc/`、`log/` 和 `plugins/` 的权威目录。
+重启时，`bin/emqx` 脚本检测到 `<RootDir>/relup/current` 后，会切换执行 `<RootDir>/relup/<TargetVsn>/` 中的程序。原始 `<RootDir>` 仍作为 `data/`、`etc/`、`log/` 和 `plugins/` 的权威目录。
 
 ## 步骤 7：清理临时文件
 
@@ -135,7 +114,7 @@ rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256
 - **重启前：** 如果升级后代码出现异常，但磁盘状态仍与旧版本兼容，可删除版本标记文件并重启，恢复到旧版本目录：
 
   ```bash
-  rm <RootDir>/relup/version
+  rm <RootDir>/relup/current
   # 可选：rm -rf <RootDir>/relup/<TargetVsn>/
   emqx restart
   ```
@@ -152,6 +131,6 @@ rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256
 |---|---|
 | `emqx ctl relup upgrade <TarballPath>` | 使用指定压缩包应用升级跨度。 |
 | `emqx ctl relup list-supported-paths` | 列出插件目录中支持的 `{当前版本, 目标版本}` 升级路径。 |
-| `emqx ctl relup status` | 显示升级状态：`in-progress`（进行中）或 `idle`（空闲）。 |
+| `emqx ctl relup status` | 显示当前升级状态：`idle`（空闲）、`in-progress`（进行中）或 `hot-upgraded to <vsn>; pending on restart to boot from the new version`（已完成热升级，待重启切换到新版本）。 |
 | `emqx ctl relup logs` | 打印本节点持久化日志表中的升级历史记录。 |
 | `emqx ctl relup logs-clear` | 清空本节点的升级日志表。 |
