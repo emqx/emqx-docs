@@ -1,6 +1,5 @@
 # EMQX Enterprise Version 5
 
-<<<<<<< HEAD
 ## 5.10.3
 
 *Release Date: 2026-01-28*
@@ -367,9 +366,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15342](https://github.com/emqx/emqx/pull/15342) Fixed a crash in the NATS gateway caused by client info override templates referencing undefined packet fields. The system now returns an empty binary instead of undefined atom.
 
 ## 5.10.0
-=======
-## 5.9.2
->>>>>>> origin/release-5.10
 
 *Release Date: 2025-11-14*
 

@@ -1,18 +1,10 @@
 # HTTPサービスの利用
 
-<<<<<<< HEAD
 EMQXは、パスワード認証に外部HTTPサービスを利用することをサポートしています。有効化すると、クライアントが接続要求を開始した際に、EMQXは受け取った情報を使ってHTTPリクエストを構築し、クエリ結果に基づいて接続要求の受け入れを判断することで、複雑な認証ロジックを実現します。
 
 ::: tip 前提条件
 
 [基本的なEMQX認証の概念](../authn/authn.md)についての知識
-=======
-EMQXは、パスワード認証に外部HTTPサービスを使用することをサポートしています。有効化すると、クライアントが接続リクエストを開始した際に、EMQXは受け取った情報をもとにHTTPリクエストを構築し、そのクエリ結果に基づいてリクエストの受け入れ可否を判断し、複雑な認証ロジックを実現します。
-
-::: tip 前提条件
-
-[EMQX認証の基本概念](../authn/authn.md)の知識が必要です。
->>>>>>> origin/release-5.10
 
 :::
 
@@ -21,21 +13,12 @@ EMQXは、パスワード認証に外部HTTPサービスを使用することを
 認証プロセスはHTTP APIコールに似ており、EMQXはリクエストクライアントとして「API」が要求する形式でHTTPサービスへリクエストを構築・送信し、HTTPサービスは「クライアント」が要求する形式で結果を返します。
 
 - レスポンスのエンコード形式 `content-type` は `application/json` でなければなりません。
-<<<<<<< HEAD
 - 認証結果はボディ内の `result` で示し、値は `allow`、`deny`、`ignore` のいずれかです。
 - スーパーユーザーはボディ内の `is_superuser` で示し、値は `true` または `false` です。
 - EMQX v5.7.0以降、オプションの `client_attrs` フィールドで[クライアント属性](../../client-attributes/client-attributes.md)を設定できます。キーと値は両方とも文字列である必要があります。
 - EMQX v5.8.0以降、レスポンスボディにオプションの `acl` フィールドを設定してクライアントの権限を指定できます。詳細は[アクセスコントロールリスト（ACL）](./acl.md)を参照してください。
 - EMQX v5.8.0以降、レスポンスボディにオプションの `expire_at` フィールドを設定してクライアント認証の有効期限を指定できます。これによりクライアントは切断され、再接続時に再認証が強制されます。値は秒単位のUnixタイムスタンプです。
 - HTTPレスポンスのステータスコードは `200` または `204` が望ましく、`4xx/5xx` のステータスコードが返された場合はボディを無視し、結果を `ignore` と判断して認証チェーンを継続します。
-=======
-- 認証結果は本文中の `result` で示し、選択肢は `allow`、`deny`、`ignore` です。
-- スーパーユーザーは本文中の `is_superuser` で示し、選択肢は `true`、`false` です。
-- EMQX v5.7.0以降、オプションの `client_attrs` フィールドを使用して[クライアント属性](../../client-attributes/client-attributes.md)を設定できます。キーと値は両方とも文字列である必要があります。
-- EMQX v5.8.0以降、レスポンス本文にオプションの `acl` フィールドを設定してクライアントの権限を指定できます。詳細は[アクセス制御リスト（ACL）](./acl.md)を参照してください。
-- EMQX v5.8.0以降、レスポンス本文にオプションの `expire_at` フィールドを設定してクライアントの認証有効期限を指定できます。これによりクライアントは切断され、再接続時に再認証が強制されます。値は秒単位のUnixタイムスタンプです。
-- HTTPレスポンスのステータスコードは `200` または `204` であるべきです。`4xx/5xx` のステータスコードが返された場合は本文を無視し、結果を `ignore` と判断して認証チェーンを継続します。
->>>>>>> origin/release-5.10
 
 レスポンス例：
 
@@ -46,11 +29,7 @@ Headers: Content-Type: application/json
 Body:
 {
     "result": "allow", // "allow" | "deny" | "ignore"
-<<<<<<< HEAD
     "is_superuser": false, // オプション値: true | false、デフォルトは false
-=======
-    "is_superuser": false, // 選択肢: true | false、デフォルト値: false
->>>>>>> origin/release-5.10
     "client_attrs": { // オプション（v5.7.0以降）
         "role": "admin",
         "sn": "10c61f1a1f47"
@@ -75,13 +54,8 @@ Body:
 
 ::: tip EMQX 4.x 互換性について
 
-<<<<<<< HEAD
 EMQX 4.xではHTTPステータスコードのみが使用され、ボディは破棄されます。例えば、`200` は `allow`、`403` は `deny` を意味します。
 表現力の不足から、HTTPボディを利用する形に再設計されており、EMQX 5.0とは互換性がありません。
-=======
-EMQX 4.xではHTTPステータスコードのみが使用され、本文は破棄されます。例えば、`200` は `allow`、`403` は `deny` を意味します。
-表現力が不足しているため、HTTP本文を活用する形で再設計されており、EMQX 5.0とは互換性がありません。
->>>>>>> origin/release-5.10
 
 :::
 
@@ -89,7 +63,6 @@ EMQX 4.xではHTTPステータスコードのみが使用され、本文は破�
 
 EMQXダッシュボードを使って関連設定を完了できます。
 
-<<<<<<< HEAD
 1. EMQXダッシュボードの左ナビゲーションメニューから **アクセスコントロール** -> **認証** をクリックします。
 2. **認証** ページで右上の **作成** をクリックします。
 3. **メカニズム** に **パスワードベース** を選択し、**バックエンド** に **HTTPサーバー** を選択して、以下のように **設定** タブに移動します。
@@ -97,21 +70,11 @@ EMQXダッシュボードを使って関連設定を完了できます。
 <img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
 4. 以下の指示に従い認証バックエンドを設定します：
-=======
-1. EMQXダッシュボードの左ナビゲーションメニューから **Access Control** -> **Authentication** をクリックします。
-2. **Authentication** ページの右上にある **Create** をクリックします。
-3. **Mechanism** に **Password-Based**、**Backend** に **HTTP Server** を選択し、**Configuration** タブに移動します。以下のように表示されます。
-
-<img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
-
-4. 以下の指示に従って認証バックエンドを設定します。
->>>>>>> origin/release-5.10
 
    - **メソッド**：HTTPリクエストメソッドを選択します。選択肢は `get`、`post` です。
 
      :::tip
 
-<<<<<<< HEAD
      `POST` メソッドの使用を推奨します。`GET` メソッドを使用すると、平文パスワードなどの機密情報がHTTPサーバーログに露出する可能性があります。また、信頼できない環境ではHTTPSを使用してください。
       :::
 
@@ -130,41 +93,12 @@ EMQXダッシュボードを使って関連設定を完了できます。
      - **リクエストタイムアウト**（オプション）：EMQXがリクエストタイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
 
 5. 設定が完了したら **作成** をクリックします。
-=======
-     `POST` メソッドの使用を推奨します。`GET` メソッドを使用すると、平文パスワードなどの機密情報がHTTPサーバーのログに露出する可能性があります。また、信頼できない環境ではHTTPSを使用してください。
-
-     :::
-
-   - **URL**: HTTPサービスのURLアドレスを入力します。
-   - **Precondition**: [Variform式](../../configuration/configuration.md#variform-expressions)で、HTTPサーバー認証器をクライアント接続に適用するか制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、文字列 `"true"` の場合のみ認証器が呼び出されます。それ以外はスキップされます。詳細は[認証器の前提条件](./authn.md#authenticator-preconditions)を参照してください。
-   - **Headers**（オプション）: HTTPリクエストヘッダーを追加できます。キーと値は[プレースホルダー](./authn.md#authentication-placeholders)を使用可能です。
-   - **Enable TLS**: TLSを有効にする場合はトグルスイッチをオンにします。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
-   - **Body**: リクエストテンプレートです。`POST`リクエストの場合はJSON形式でリクエスト本文に送信され、`GET`リクエストの場合はURLのクエリ文字列にエンコードされます。マッピングのキーと値は[プレースホルダー](./authn.md#authentication-placeholders)を使用可能です。
-   - **詳細設定**:
-     - **Pool size**（オプション）: EMQXノードからHTTPサーバーへの同時接続数を整数で指定します。デフォルトは `8` です。
-
-     - **Connect Timeout**（オプション）: EMQXが接続タイムアウトと判断するまでの待機時間を指定します。ミリ秒、秒、分、時間単位が使用可能です。
-
-     - **HTTP Pipelining**（オプション）: レスポンスを待たずに送信可能なHTTPリクエストの最大数を正の整数で指定します。デフォルトは `100` です。
-
-     - **Request Timeout**（オプション）: EMQXがリクエストタイムアウトと判断するまでの待機時間を指定します。ミリ秒、秒、分、時間単位が使用可能です。
-
-     - **リクエストタイムアウト**（オプション）：EMQXがリクエストタイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
->>>>>>> origin/release-5.10
 
 5. 設定が完了したら **作成** をクリックします。
 
-<<<<<<< HEAD
 EMQXの設定項目を使ってHTTP認証器を設定できます。 <!--詳細は[authn-http:post](../../configuration/configuration-manual.html#authn-http:post)および[authn-http:get](../../configuration/configuration-manual.html#authn-http:get)を参照してください。-->
 
 以下はHTTPの `POST` と `GET` リクエスト例です：
-=======
-## 設定ファイルによる設定
-
-EMQXのHTTP認証器は設定ファイルの設定項目で構成可能です。<!--詳細は[authn-http:post](../../configuration/configuration-manual.html#authn-http:post)および[authn-http:get](../../configuration/configuration-manual.html#authn-http:get)を参照してください。-->
-
-以下にHTTPの `POST` と `GET` リクエストの例を示します。
->>>>>>> origin/release-5.10
 
 :::: tabs type:card
 

@@ -13,11 +13,7 @@ cd mcp_over_mqtt_demo
 
 ## シンプルな MCP サーバーの作成
 
-<<<<<<< HEAD
 `mcp_over_mqtt_demo` プロジェクト内で、計算ツールといくつかのリソースを公開するシンプルな MCP サーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください。
-=======
-`mcp_over_mqtt_demo` プロジェクト内で、計算機ツールといくつかのリソースを公開するシンプルな MCP サーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください。
->>>>>>> origin/release-5.10
 
 ```python
 # demo_mcp_server.py
@@ -61,11 +57,7 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-<<<<<<< HEAD
     logger.info(f"{server_name} を発見しました。接続中・・・")
-=======
-    logger.info(f"{server_name} を検出しました。接続中・・・")
->>>>>>> origin/release-5.10
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
@@ -107,11 +99,7 @@ async def main():
     ) as client:
         client.start()
         while True:
-<<<<<<< HEAD
             ## MQTTトランスポートクライアントがバックグラウンドで動作している間に他の処理をシミュレートします...
-=======
-            ## MQTTトランスポートクライアントがバックグラウンドで動作している間、他の処理をシミュレートします...
->>>>>>> origin/release-5.10
             await anyio.sleep(20)
 
 if __name__ == "__main__":

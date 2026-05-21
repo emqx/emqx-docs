@@ -10,41 +10,24 @@ EMQXでは、リスナーはMQTTクライアントからのリクエストを受
 ::: tip
 
 リスナーはダッシュボードの左側ナビゲーションメニューから **Management** -> **Listeners** をクリックして設定することも可能です。  
-<<<<<<< HEAD
 設定ファイルからリスナーを設定する場合は、`emqx.conf` ではなく `base.hocon` の使用を推奨します。  
 これは、`emqx.conf` に設定を記述すると、ダッシュボード経由での変更が一時的なものとなり、EMQX再起動時に失われてしまうためです。
-=======
-設定ファイルからリスナーを設定する場合は、`emqx.conf` ではなく `base.hocon` を使用することを推奨します。  
-これは、`emqx.conf` に設定を記述すると、ダッシュボードからの変更が一時的なものとなり、EMQX再起動時に失われるためです。
->>>>>>> origin/release-5.10
 
 :::
 
 ::: tip
 
-<<<<<<< HEAD
 EMQXはカスタマイズニーズに対応するため、さらに多くの設定項目を提供しています。詳細は[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご参照ください。
-=======
-EMQXはカスタマイズニーズに対応するため、より多くの設定項目を提供しています。詳細は[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご参照ください。
->>>>>>> origin/release-5.10
 
 :::
 
 ## TCPリスナーの設定
 
-<<<<<<< HEAD
 TCPリスナーは特定のネットワークポートで着信TCP接続を待ち受けるネットワークサービスです。TCP/IPネットワーク上でクライアントとEMQX間の接続を確立・管理する上で重要な役割を果たします。
 
 EMQXでTCPリスナーを設定するには、EMQXインストールディレクトリの `etc` フォルダ内にある `base.hocon` ファイルに `listeners.tcp` の設定項目を追加します。
 
 例えば、ポート `1883` でTCPリスナーを有効化し、最大1,024,000の同時接続を許可する場合は以下のように記述します。
-=======
-TCPリスナーは特定のネットワークポートで着信TCP接続を待ち受けるネットワークサービスです。クライアントとEMQX間のTCP/IPネットワーク上での接続確立および管理において重要な役割を果たします。
-
-EMQXでTCPリスナーを設定するには、EMQXインストールディレクトリの `etc` フォルダ内にある `base.hocon` ファイルに `listeners.tcp` の設定項目を追加します。
-
-例えば、ポート `1883` でTCPリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
->>>>>>> origin/release-5.10
 
 ```bash
 listeners.tcp.default {
@@ -55,11 +38,7 @@ listeners.tcp.default {
 
 ここで、
 
-<<<<<<< HEAD
 - `listeners.tcp.default` はリスナーを有効化する設定で、`default` はリスナー名です。任意の名前に変更可能です。  
-=======
-- `listeners.tcp.default` はリスナーを有効化する設定で、`default` はリスナー名です。任意のリスナー名に変更可能です。  
->>>>>>> origin/release-5.10
 - `bind` はリスナーのIPアドレスとポートを設定し、ここでは任意のIPアドレスからのポート `1883` への全ての着信トラフィックを待ち受けます。  
 - `max_connections` はリスナーが許可する最大同時接続数を設定します。デフォルト値は `infinity` です。
 
@@ -69,11 +48,7 @@ SSLリスナーはSSL（Secure Sockets Layer）接続の着信を待ち受ける
 
 EMQXでSSLリスナーを設定するには、`etc` フォルダ内の `base.hocon` ファイルに `listeners.ssl` の設定項目を追加します。
 
-<<<<<<< HEAD
 例えば、ポート `8883` でSSLリスナーを有効化し、最大1,024,000の同時接続を許可する場合は以下のように記述します。
-=======
-例えば、ポート `8883` でSSLリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
->>>>>>> origin/release-5.10
 
 ```bash
 listeners.ssl.default {
@@ -92,7 +67,6 @@ listeners.ssl.default {
 ここで、
 
 - `listeners.ssl.default` はリスナーを有効化する設定です。  
-<<<<<<< HEAD
 - `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート `8883` への全ての着信トラフィックを待ち受けます。  
 - `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは `infinity` です。  
 - `ssl_options` はリスナーのSSL/TLS設定オプションで、以下のプロパティを持ちます。  
@@ -111,26 +85,6 @@ MQTT over WebSocketの仕組みや典型的な利用シーンについては、[
 EMQXでWebSocketリスナーを設定するには、`etc` フォルダ内の `base.hocon` ファイルに `listeners.ws` の設定項目を追加します。
 
 例えば、ポート `8083` でWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する場合は以下のように記述します。
-=======
-- `bind` はリスナーのIPアドレスとポートを設定し、任意のIPアドレスからのポート `8883` への全ての着信トラフィックを待ち受けます。  
-- `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは `infinity` です。  
-- `ssl_options` はリスナーのSSL/TLS設定オプションで、以下のプロパティを持ちます。  
-  - `cacertfile`: クライアント証明書の真正性を検証するためにリスナーが使用する信頼されたCA（認証局）証明書を含むPEMファイル。  
-  - `certfile`: リスナーのSSL/TLS証明書チェーンを含むPEMファイル。証明書がルートCAから直接発行されていない場合、中間CA証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。  
-  - `keyfile`: SSL/TLS証明書に対応する秘密鍵を含むPEMファイル。  
-  - `verify`: クライアント証明書の真正性を検証する場合は `verify_peer`、検証しない場合は `verify_none` を設定します。  
-  - `fail_if_no_peer_cert`: `true` に設定すると、クライアントが証明書を送信しない（空の証明書を送る）場合に接続を失敗させます。`false` の場合は、クライアントが無効な証明書を送信した場合のみ失敗し、空の証明書は有効とみなされます。
-
-## WebSocketリスナーの設定
-
-WebSocketリスナーはWebSocket上でメッセージを受信・処理するネットワークサービスです。EMQXのWebSocketサポートにより、クライアントはWebSocketプロトコルを使用してEMQXに接続し、リアルタイムでデータを交換できます。
-
-MQTT over WebSocketの仕組みや典型的な利用シーンの概要については、[MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md)をご参照ください。
-
-EMQXでWebSocketリスナーを設定するには、`etc` フォルダ内の `base.hocon` ファイルに `listeners.ws` の設定項目を追加します。
-
-例えば、ポート `8083` でWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
->>>>>>> origin/release-5.10
 
 ```bash
 listeners.ws.default {
@@ -143,29 +97,17 @@ listeners.ws.default {
 ここで、
 
 - `listeners.ws.default` はリスナーを有効化する設定です。  
-<<<<<<< HEAD
 - `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート `8083` への全ての着信トラフィックを待ち受けます。  
-=======
-- `bind` はリスナーのIPアドレスとポートを設定し、任意のIPアドレスからのポート `8083` への全ての着信トラフィックを待ち受けます。  
->>>>>>> origin/release-5.10
 - `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは `infinity` です。  
 - `websocket.mqtt_path` はWebSocketのMQTTプロトコルのパスを設定し、デフォルトは `/mqtt` です。
 
 ## セキュアWebSocketリスナーの設定
 
-<<<<<<< HEAD
 セキュアWebSocketリスナーは、SSLまたはTLSプロトコルを使用してWebSocketクライアントとブローカー間で交換されるデータを暗号化するWebSocketリスナーです。EMQXにおいては、WebSocketクライアントとEMQX間で交換される機密データを保護する重要なセキュリティ対策となります。
 
 EMQXでセキュアWebSocketリスナーを設定するには、`etc` フォルダ内の `base.hocon` ファイルに `listeners.wss` の設定項目を追加します。
 
 例えば、ポート `8084` でセキュアWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する場合は以下のように記述します。
-=======
-セキュアWebSocketリスナーは、SSLまたはTLSプロトコルを使用してWebSocketクライアントとブローカー間で交換されるデータを暗号化するWebSocketリスナーです。EMQXにおけるセキュアWebSocketリスナーは、WebSocketクライアントとEMQX間で交換される機密データを保護する重要なセキュリティ対策です。
-
-EMQXでセキュアWebSocketリスナーを設定するには、`etc` フォルダ内の `base.hocon` ファイルに `listeners.wss` の設定項目を追加します。
-
-例えば、ポート `8084` でセキュアWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
->>>>>>> origin/release-5.10
 
 ```bash
 listeners.wss.default {
@@ -183,35 +125,21 @@ listeners.wss.default {
 ここで、
 
 - `listeners.wss.default` はリスナーを有効化する設定です。  
-<<<<<<< HEAD
 - `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート `8084` への全ての着信トラフィックを待ち受けます。  
-=======
-- `bind` はリスナーのIPアドレスとポートを設定し、任意のIPアドレスからのポート `8084` への全ての着信トラフィックを待ち受けます。  
->>>>>>> origin/release-5.10
 - `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは `infinity` です。  
 - `websocket.mqtt_path` はWebSocketのMQTTプロトコルのパスを設定し、デフォルトは `/mqtt` です。  
 - `ssl_options` はリスナーのSSL/TLS設定オプションで、以下のプロパティを持ちます。  
   - `cacertfile`: クライアント証明書の真正性を検証するためにリスナーが使用する信頼されたCA（認証局）証明書を含むPEMファイル。  
-<<<<<<< HEAD
   - `certfile`: リスナーのSSL/TLS証明書チェーンを含むPEMファイル。証明書がルートCAから直接発行されていない場合は、中間CA証明書をリスナー証明書の後に追加してチェーンを形成します。  
-=======
-  - `certfile`: リスナーのSSL/TLS証明書チェーンを含むPEMファイル。証明書がルートCAから直接発行されていない場合、中間CA証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。  
->>>>>>> origin/release-5.10
   - `keyfile`: SSL/TLS証明書に対応する秘密鍵を含むPEMファイル。
 
 <!--To add QUIC-->
 
 <!--To add code sample for adding multiple listeners.-->
 
-<<<<<<< HEAD
 ## リスナーと設定ゾーンのリンク
 
 EMQXの各リスナーはゾーンに紐づけられており、デフォルトでは `default` という論理ゾーンに設定されています。
-=======
-## リスナーと設定ゾーンの関連付け
-
-EMQXの各リスナーはゾーンに関連付けられており、デフォルトでは `default` という論理ゾーンに設定されています。
->>>>>>> origin/release-5.10
 
 リスナーが特定のゾーンにリンクされると、そのリスナーに接続するMQTTクライアントはそのゾーンの設定を継承します。
 
