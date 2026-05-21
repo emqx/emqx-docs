@@ -1,6 +1,6 @@
 # OperatorのインストールとEMQXのデプロイ
 
-本セクションでは、EMQX Operatorの環境を効率的にセットアップし、Operatorをインストールした後にEMQXをデプロイする手順をご案内します。本セクションの手順に従うことで、EMQX Operatorを用いたEMQXの効果的なインストールおよび管理が可能になります。
+本セクションでは、EMQX Operatorの環境を効率的に構築し、Operatorをインストールした後にEMQXをデプロイする手順についてご案内します。本セクションの手順に従うことで、EMQX Operatorを用いたEMQXの効果的なインストールおよび管理が可能になります。
 
 ## 環境の準備
 
@@ -17,7 +17,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
 1. `cert-manager`をインストールして起動します。
 
    ::: tip
-   `cert-manager`のバージョンは`1.1.6`以上が必要です。既に`cert-manager`がインストールされ起動している場合は、このステップはスキップしてください。
+   `cert-manager`のバージョンは`1.1.6`以上が必要です。すでに`cert-manager`がインストールおよび起動されている場合は、この手順をスキップしてください。
    :::
 
    Helmを使って`cert-manager`をインストールできます。
@@ -34,7 +34,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
    または、[cert-managerインストールガイド](https://cert-manager.io/docs/installation/)に従ってインストールしてください。
 
    ::: warning
-   Google Kubernetes Engine (GKE)にデフォルト設定でcert-managerをインストールすると、ブートストラップの問題が発生する可能性があります。そのため、`--set global.leaderElection.namespace=cert-manager`の設定を追加し、リーダー選出時に別のネームスペースを使用するように構成してください。詳細は[cert-manager互換性](https://cert-manager.io/docs/installation/compatibility/)をご確認ください。
+   Google Kubernetes Engine（GKE）にデフォルト設定でcert-managerをインストールすると、ブートストラップの問題が発生する可能性があります。そのため、`--set global.leaderElection.namespace=cert-manager`の設定を追加し、リーダー選出に別のネームスペースを使用するように構成してください。詳細は[cert-manager互換性](https://cert-manager.io/docs/installation/compatibility/)をご確認ください。
    :::
 
 2. 以下のコマンドでEMQX Operatorをインストールします。
@@ -55,9 +55,9 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
-Operatorのインストールが完了したので、次のステップに進む準備ができました。[Deploy EMQX](#deploy-emqx)セクションでは、EMQX Operatorを使ったEMQXのデプロイ方法を学べます。
+Operatorのインストールが完了したので、次のステップに進む準備が整いました。[Deploy EMQX](#deploy-emqx)セクションでは、EMQX Operatorを使ってEMQXをデプロイする方法を学べます。
 
-また、Operatorを使ったEMQXのアップグレードやアンインストール方法に興味がある場合は、本セクションの続きをご参照ください。
+また、Operatorを使ったEMQXのアップグレードやアンインストール方法に興味がある場合は、本セクションの続きをご覧ください。
 
 ## EMQXのデプロイ
 
@@ -83,7 +83,7 @@ Operatorのインストールが完了したので、次のステップに進む
 
    EMQX CRDの詳細については、[リファレンスドキュメント](./api-reference.md)をご参照ください。
 
-2. EMQXクラスターが起動するまで待ちます。
+2. EMQXクラスターが稼働するまで待ちます。
 
    ```bash
    $ kubectl get emqx
@@ -111,7 +111,7 @@ Operatorのインストールが完了したので、次のステップに進む
 
    EMQX CRDの詳細については、[リファレンスドキュメント](./api-reference.md)をご参照ください。
 
-2. EMQXクラスターが起動するまで待ちます。
+2. EMQXクラスターが稼働するまで待ちます。
 
    ```bash
    $ kubectl get emqx
@@ -128,7 +128,7 @@ Operatorのインストールが完了したので、次のステップに進む
 
 ## パブリッククラウドへのデプロイ
 
-EMQX Operatorを使ってパブリッククラウドプラットフォームにEMQXをデプロイする方法は、以下のガイドをご参照ください。
+EMQX Operatorを使用してパブリッククラウドプラットフォームにEMQXをデプロイするには、以下のガイドをご参照ください。
 
 - [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)
