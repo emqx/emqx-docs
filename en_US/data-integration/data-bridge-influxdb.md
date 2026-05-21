@@ -71,7 +71,6 @@ The following steps assume that you run both EMQX and InfluxDB on the local mach
 3. On the **Create Connector** page, select **InfluxDB** and then click **Next**.
 
 4. In the **Configuration** step, configure the following information:
-<<<<<<< HEAD
 
    The following settings are common to all InfluxDB versions:
 
@@ -104,33 +103,6 @@ The following steps assume that you run both EMQX and InfluxDB on the local mach
 6. Click **Create** to complete the connector creation.
 
 After the connector is created, you can choose **Back to Connector List** or continue by clicking **Create Rule** to define rules and Sinks for forwarding MQTT data to InfluxDB. For more details, see [Create a Rule with InfluxDB Sink](#create-a-rule-with-influxdb-sink).
-=======
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_influxdb`.
-   
-   - For the **Server Host**, enter `127.0.0.1:8086`. If using InfluxDB Cloud, specify port 443, i.e., enter `{url}:443` and click **Enable TLS** to activate TLS connection.
-
-   - Select the **Version of InfluxDB**. The required authentication fields differ by version, as shown in the table below. For InfluxDB v2, use the Organization, Bucket, and Token values configured in [Install and Set Up InfluxDB](#install-and-set-up-influxdb). For InfluxDB v1, enter the database name and, if configured on your InfluxDB server, the username and password for that database.
-   
-     | Field        | InfluxDB v1 | InfluxDB v2 |
-     | ------------ | ----------- | ----------- |
-     | **Token**    | —           | Required    |
-     | **Username** | Optional    | —           |
-     | **Password** | Optional    | —           |
-     | **Organization** | —       | Required    |
-     | **Bucket**   | —           | Required    |
-     | **Database** | Required    | —           |
-   
-     - For InfluxDB v1, EMQX writes data directly to the specified database, authenticating with the optional username and password.
-     - For InfluxDB v2, EMQX uses the organization and bucket model. The token must have write permission to the specified bucket.
-   
-   - Toggle **Ping With Auth** to control whether EMQX includes connector credentials in `/ping` health-check requests. Enable this option if your InfluxDB service requires authentication on `/ping`. The default is disabled, which preserves the previous behavior and sends `/ping` without authentication.
-   
-   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
-   
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the InfluxDB server.
-
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to InfluxDB. For detailed steps, see [Create a Rule with InfluxDB Sink](#create-a-rule-with-influxdb-sink).
->>>>>>> origin/release-5.10
 
 ## Create a Rule with InfluxDB Sink
 
