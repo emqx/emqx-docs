@@ -8,11 +8,15 @@ This feature is referred to as Namespace in EMQX 5.9, even though it follows mul
 
 :::
 
+Beginning with EMQX 6.1, namespace-related capabilities have been enhanced without changing their original semantics. These enhancements simplify multi-tenant isolation configuration and unify the behavior of topic isolation.
+
 ## What Is a Namespace
 
 A Namespace in EMQX Enterprise is a mechanism used for logical isolation and resource management of MQTT clients. It allows users to divide clients from different businesses or tenants into separate namespaces within a shared EMQX cluster, achieving isolation in connections, messages, quotas, and more.
 
-Namespaces are identified by a special client attribute `tns` (tenant namespace), which can be extracted from the client's connection metadata, such as the username or Server Name Indication (SNI).
+A namespace is identified by a special client attribute named `tns` (tenant namespace). This attribute is not created automatically; instead, it must be derived from client connection metadata, such as the username or Server Name Indication (SNI), through configuration.
+
+A namespace becomes effective once it is created, regardless of whether it is created explicitly via the Dashboard or REST API, or automatically during client connection based on a defined rule.
 
 > **Typical use cases include**: multiple business units sharing a cluster within an enterprise, tenant-level resource isolation management, centralized access control, etc.
 
@@ -56,7 +60,6 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   - Namespaced users only see and operate on resources within their assigned namespace.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
   - This ensures secure, tenant-specific administrative access alongside data isolation.
-  
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
@@ -75,11 +78,13 @@ For details, see [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../d
 
 ## Isolation Mechanisms
 
-EMQX offers high flexibility and has supported various isolation methods even before the namespace feature. The namespace feature provides a unified tenant identifier field (`client_attrs.tns`), allowing configurations like client ID and topic mount points to be organized and managed around unified tenant information.
+EMQX is highly flexible and supports multiple isolation mechanisms even before namespaces were introduced.
 
-However, note that isolation strategies still require **manual configuration** by users based on business needs; the system will not automatically enable client ID or topic isolation features.
+Namespaces provide a unified tenant identifier (`client_attrs.tns`) that allows Client IDs, topic mountpoints, and related configurations to be organized around a consistent tenant context.
 
-- **Client ID Override**
+However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled.
+
+- **Client ID override**
 
   ::: warning Required for Untrusted Multi-Tenant Deployments
 
@@ -89,72 +94,70 @@ However, note that isolation strategies still require **manual configuration** b
 
   :::
 
-  If you want clients in different namespaces to use the same client ID to connect to EMQX, you can set a client ID override rule. For example:
+  To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
 
   ```hocon
   mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
   ```
 
-  This rule adds the namespace as a prefix to the client ID to avoid conflicts.
+  This rule prefixes the Client ID with the namespace to avoid conflicts.
 
-- **Topic Isolation Using Mount Points**
+- **Topic isolation using mountpoints**
 
-  If clients in different namespaces need to publish or subscribe to the same topic names without affecting each other, you can use mount points to automatically add namespace prefixes:
+  If clients in different namespaces need to publish or subscribe to the same topic names without interfering with each other, a mountpoint can be used to automatically prefix topics with the namespace.
 
-  ```
+  In EMQX 6.0 and earlier, mountpoints were typically configured at the listener level, for example:
+
+  ```hocon
   listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
   ```
 
-  This setting adds a namespace prefix to the topic name.
+  In environments with multiple listeners, this required repetitive configuration.
 
-As of version 5.9, namespaces are only applicable to MQTT clients. The Dashboard and REST API are not yet isolated based on namespaces. EMQX plans to implement unified management namespaces and MQTT namespaces in future versions. For details, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+  Starting from EMQX 6.1, namespaces can be used as a unified topic mountpoint. Once a namespace is successfully identified, EMQX internally applies `{namespace}/` as the topic prefix, achieving the same isolation effect as listener mountpoints without requiring per-listener configuration.
 
-## Enable Namespaces
+  To maintain backward compatibility, authorization (ACL) checks do not include the mountpoint prefix by default.
 
-To enable the namespace feature, you must first tell EMQX how to determine which namespace a client belongs to. This is done by setting a special client attribute called `tns` (tenant namespace).
+  From EMQX 6.1 onward, you can enable this behavior by setting:
 
-### Enable Namespaces via Configuration File
+  ```hocon
+  authorization.include_mountpoint = true
+  ```
 
-You can extract the `tns` attribute from the connection metadata, such as the client's username, SNI, or other fields.
+  This allows authorization backends to receive topics with the mountpoint prefix.
 
-For example, to use the client's username as the namespace identifier, you can apply the following configuration:
+## Multi-Tenancy Capability Support
 
-```
-mqtt.client_attrs_init = [{expression = username, set_as_attr = tns}]
-```
+Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9 and enhanced in 6.1, namespaces now support tenant isolation across multiple subsystems. The current support status is as follows:
 
-### Enable Namespaces via Dashboard
+- **Unified management and MQTT namespaces** (6.0)
 
-You can also enable namespaces using the EMQX Dashboard:
+  The management plane (Dashboard, CLI, APIs) and the MQTT data plane share the same namespace model.
 
-1. Navigate to **Management** -> **MQTT Settings** -> **General** tab, and locate the **Client Attributes** section.
-2. Click **Add**, and fill in the following information:
-   - **Attribute**: `tns`
-   - **Attribute Expression**: For example, if you want to use the client's username as the namespace identifier, enter `username`. You may also use other variables. For more information on attribute expressions, refer to [Set Client Attributes](../client-attributes/client-attributes.md#set-client-attributes).
-3. Click **Save Changes**.
+- **Isolation for built-in database authentication** (6.1)
 
-## Multi-Tenancy Roadmap
+  Authentication data stored in the built-in database can be isolated by namespace.
 
-The following features are being rolled out progressively:
+- **Isolation for built-in database authorization** (6.1)
 
-- Unify management namespaces and MQTT namespaces.
-- Implement isolation for built-in database authentication.
-- Implement isolation for built-in database authorization.
-- Implement quota isolation for retained messages.
-- Implement isolation for Prometheus metrics.
+  Authorization rules can be scoped to specific namespaces.
 
-::: tip Update
+- **Prometheus metrics isolation** (6.1)
 
-As of EMQX 6.0, isolation for Rules, Actions, Sources, and Connectors has been fully implemented and is no longer part of the roadmap.
-:::
+  Metrics can be exposed and aggregated by namespace, enabling better observability in multi-tenant environments.
+
+- **Retained message quota isolation**
+
+  Resource usage related to retained messages can be limited per namespace.
+
+In addition, starting from EMQX 6.0, namespace isolation has been fully implemented for rules, actions, sources, and connectors, and is no longer part of the future roadmap.
 
 ## What's Next
 
 Now that you understand what namespaces are and what they can achieve, here are the next steps to start using them in EMQX:
 
-- **[Create Namespaces](./create-namespace.md)**
-  Learn how to create namespaces explicitly via the Dashboard or REST API, or automatically based on client metadata.
-- **[Configure and Manage Namespaces](./configure-manage-namespace.md)**
-  Set rate limits and session quotas using either the Dashboard or REST API.
-- **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**
-  Follow a hands-on guide using MQTTX to quickly try out namespace-based client and topic isolation.
+- **[Create Namespaces](./create-namespace.md)**: Learn how to create namespaces explicitly via the Dashboard or REST API, or automatically based on client metadata.
+- **[Configure and Manage Namespaces](./configure-manage-namespace.md)**: Set rate limits and session quotas using either the Dashboard or REST API.
+- **[Namespace Global Settings](./namespace-global-settings.md)**: Configure cluster-wide namespace behaviors, including namespace resolution, isolation mechanisms, topic mount points, and authorization handling.
+- **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**: Follow a hands-on guide using MQTTX to try out namespace-based client and topic isolation quickly.
+
