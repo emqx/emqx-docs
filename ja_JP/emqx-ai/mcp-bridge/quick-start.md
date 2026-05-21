@@ -1,38 +1,38 @@
 # EMQX MCP ブリッジを使って IoT デバイスにアクセスする
 
-本ガイドでは、EMQX MCP ブリッジを使用して MCP 対応モデルや AI エージェントと EMQX を統合し、IoT デバイスへのアクセスおよび制御を可能にする方法について説明します。
+本ガイドでは、EMQX MCP ブリッジを使用して、MCP対応モデルやAIエージェントとEMQXを連携させ、IoTデバイスへのアクセスおよび制御を可能にする方法を説明します。
 
 ## 前提条件
 
-EMQX サーバーがバージョン 5.7.0 以降でインストールおよび稼働していること。
+EMQXサーバーがバージョン5.7.0以降でインストールおよび稼働していること。
 
 ## MCP ブリッジプラグインのインストールと設定
 
-1. 以下から MCP ブリッジプラグインの最新バージョンをダウンロードします。  
+1. 以下から最新のMCPブリッジプラグインをダウンロードします。  
    https://github.com/emqx/emqx_mcp_bridge/releases
 
-2. 「プラグインのインストール」の手順に従って、EMQX サーバーにプラグインをインストールします。
+2. 「プラグインのインストール」の手順に従い、EMQXサーバーにプラグインをインストールします。
 
-3. プラグインを設定します：
+3. プラグインの設定を行います：
 
-   ブラウザで http://localhost:18083/#/plugins/ にアクセスし、MCP ブリッジプラグインをクリックして設定ページを開きます。ここで、リッスンアドレスや証明書などの設定を変更できます。**保存**をクリックすると設定が自動的に適用され、プラグインの手動再起動は不要です。
+   ブラウザで http://localhost:18083/#/plugins/ にアクセスし、MCPブリッジプラグインをクリックして設定ページを開きます。ここで、リッスンアドレスや証明書などの設定を変更できます。**保存**をクリックすると設定が自動的に適用され、プラグインの手動再起動は不要です。
 
-   リッスンアドレスを `https://your-hostname:9909/mcp` に設定した場合、MCP プラグインは指定ポートで以下の2つの HTTP エンドポイントを起動します：
+   リッスンアドレスを `https://your-hostname:9909/mcp` に設定した場合、MCPプラグインは指定ポートで以下の2つのHTTPエンドポイントを起動します：
 
-   - `/sse`：SSE プロトコルを使った MCP 接続用  
-   - `/mcp`：Streamable HTTP プロトコルを使った MCP 接続用
+   - `/sse`：SSEプロトコルを使用するMCP接続用  
+   - `/mcp`：Streamable HTTPプロトコルを使用するMCP接続用
 
-   SSE プロトコルのみをサポートしたい場合は、リッスンアドレスを `https://your-hostname:9909/sse` に設定してください。
+   SSEプロトコルのみをサポートしたい場合は、リッスンアドレスを `https://your-hostname:9909/sse` に設定できます。
 
-   また、一部のモデルや AI エージェントでは MCP サーバーへの HTTPS アクセスが必要な場合があります。この場合は、MCP ブリッジプラグインに有効かつ信頼された SSL 証明書を設定し、URL が公開アクセス可能であることを確認してください。
+   また、一部のモデルやAIエージェントではMCPサーバーへのHTTPSアクセスが必要な場合があります。その場合は、MCPブリッジプラグインに有効かつ信頼されたSSL証明書を設定し、URLが公開アクセス可能であることを確認してください。
 
-   **Target MQTT Client ID acquisition method** を **Tool Parameter** に設定します。これにより、MCP クライアントは接続時に HTTP ヘッダーで固定の Client ID を指定する代わりに、ツール呼び出し時にデバイスの MQTT クライアント ID をパラメータとして渡せるようになります。
+   **ターゲットMQTTクライアントID取得方法**を**ツールパラメータ**に設定してください。これにより、MCPクライアントはツール呼び出し時にデバイスのMQTTクライアントIDをパラメータとして渡し、接続確立時にHTTPヘッダーで固定のクライアントIDを指定する必要がなくなります。
 
    ![MCP ブリッジプラグイン設定](./assets/mcp-bridge-config.png)
 
-## MCP over MQTT SDK を使ったデバイスのシミュレーション
+## MCP over MQTT SDKを使ったデバイスのシミュレーション
 
-まず、[MCP SDK のインストール](../sdks/mcp-sdk-python.md) ガイドに従い、Python 用 MCP SDK をインストールします：
+まず、[MCP SDKのインストール](../sdks/mcp-sdk-python.md)ガイドに従い、Python用MCP SDKをインストールします：
 
 ```bash
 uv init smart_light
@@ -51,11 +51,11 @@ from mcp.server.fastmcp import FastMCP
 
 status = "off"
 
-# サーバーを作成
+# サーバー作成
 mcp = FastMCP(
     "devices/light",
     log_level="DEBUG",
-    mqtt_server_description="ライトデバイスを制御するシンプルな FastMCP サーバーです。ライトのオン・オフや明るさの変更が可能です。",
+    mqtt_server_description="ライトデバイスを制御するシンプルなFastMCPサーバーです。ライトのオン・オフや明るさの変更が可能です。",
     mqtt_client_id = os.getenv("MQTT_CLIENT_ID"),
     mqtt_options={
         "username": "aaa",
@@ -68,93 +68,93 @@ mcp = FastMCP(
 def change_brightness(level: int) -> str:
     """ライトの明るさを変更します。レベルは0から100の間で指定してください。"""
     if 0 <= level <= 100:
-        return f"明るさを {level} に変更しました"
+        return f"明るさを{level}に変更しました"
     return "無効な明るさレベルです。0から100の間で指定してください。"
 
 @mcp.tool()
 def turn_on() -> str:
-    """ライトを点灯します。"""
+    """ライトをオンにします。"""
     global status
     if status == "on":
-        return "OKですが、ライトはすでに点灯しています"
+        return "OKですが、ライトはすでにオンです"
     status = "on"
-    return "ライトを点灯しました"
+    return "ライトをオンにしました"
 
 @mcp.tool()
 def turn_off() -> str:
-    """ライトを消灯します。"""
+    """ライトをオフにします。"""
     global status
     if status == "off":
-        return "OKですが、ライトはすでに消灯しています"
+        return "OKですが、ライトはすでにオフです"
     status = "off"
-    return "ライトを消灯しました"
+    return "ライトをオフにしました"
 ```
 
-上記の Python コードは、MCP over MQTT プロトコルを使ってスマートライトデバイスをシミュレートする MCP サーバーを起動します。ライトのオン・オフや明るさ調整の MCP ツールを公開しています。サーバー名は `devices/light` に設定されています。
+上記のPythonコードは、MCP over MQTTプロトコルを使ってスマートライトデバイスをシミュレートするMCPサーバーを起動します。ライトのオン・オフや明るさ調整のMCPツールを公開しています。サーバー名は `devices/light` に指定しています。
 
-次に、2つの別々のターミナルで以下のコマンドを実行し、デバイス ID がそれぞれ `abc123` と `abc456` の2台の MCP サーバーを起動します：
+次に、別々の2つのターミナルで以下のコマンドを実行し、デバイスIDがそれぞれ `abc123` と `abc456` の2台のMCPサーバーを起動します：
 
 ```bash
 MQTT_CLIENT_ID=abc123 mcp run -t mqtt ./smart_light.py
 MQTT_CLIENT_ID=abc456 mcp run -t mqtt ./smart_light.py
 ```
 
-## Cherry Studio クライアントでのテスト
+## Cherry Studioクライアントでのテスト
 
-ここでは、MCP 対応の Cherry Studio クライアントを MCP クライアントとして使用し、EMQX MCP ブリッジプラグインの動作をテストします。
+ここでは、MCP対応のCherry StudioクライアントをMCPクライアントとして使用し、EMQX MCPブリッジプラグインをテストします。
 
-1. Cherry Studio クライアントを Cherry Studio のドキュメントに従ってインストールします：  
+1. Cherry Studioクライアントを、Cherry Studioのドキュメントに従ってインストールします：  
    https://docs.cherry-ai.com/
 
-2. **Model Provider** ページで LLM プロバイダーを追加し、モデルエンドポイント、API キーなど必要な情報を設定します。
+2. **Model Provider** ページでLLMプロバイダーを追加し、モデルエンドポイント、APIキーなど必要な情報を設定します。
 
    ![モデルプロバイダーの追加](./assets/cherry-studio-mcp-config-model-providers.png)
 
-3. **MCP** ページで以下の設定で MCP サーバーを追加します：
+3. **MCP** ページで以下の設定でMCPサーバーを追加します：
 
    - 名前：`MQTT MCP Tools`
 
-   - タイプ：SSE または Streamable HTTP（本例では Streamable HTTP を使用）
+   - タイプ：SSE または Streamable HTTP（本例では Streamable HTTPを使用）
 
-   - URL：MCP ブリッジが提供する Streamable HTTP エンドポイント `http://localhost:9909/mcp`
+   - URL：MCPブリッジが提供するStreamable HTTPエンドポイント `http://localhost:9909/mcp`
 
-   - ヘッダー：モデルに不要なツールを多く公開しないように、`devices/light` タイプのツールのみをロードするため以下のヘッダーを追加します：
+   - ヘッダー：モデルに不要なツールを多く公開しないように、`devices/light` タイプのツールのみを読み込むために以下のヘッダーを追加します：
 
      ```
      Tool-Types=devices/light
      ```
 
-   ここで `devices/light` は前述の Python デバイス側コードで指定した MCP サーバー名です。
+   ここで `devices/light` は前述のPythonデバイス側コードで指定したMCPサーバー名です。
 
-   Cherry Studio は HTTP と SSE の両方のプロトコルをサポートしています。ローカルテストの場合は `http://localhost:9909/mcp` を使用できます。
+   Cherry StudioはHTTPおよびSSE両方のプロトコルをサポートしています。ローカルテストでは `http://localhost:9909/mcp` を使用できます。
 
-   ![MCP サーバーの追加](./assets/cherry-studio-mcp-config-mcp-bridge.png)
+   ![MCPサーバーの追加](./assets/cherry-studio-mcp-config-mcp-bridge.png)
 
-4. 「Device Assistant」という新しいアシスタントを作成し、その中に「MQTT Device Control」という新しい会話トピックを作成します。アシスタントと会話トピックのシステムプロンプトを以下のように設定します：
+4. 「Device Assistant」という新しいアシスタントを作成し、その中に「MQTT Device Control」という会話トピックを作成します。アシスタントと会話トピックのシステムプロンプトを以下のように設定します：
 
    アシスタントのシステムプロンプト：
 
    ```
-   あなたはデバイスアシスタントです。デバイスのアクセスと制御に関する質問にのみ回答してください。それ以外の質問には「私はデバイスアシスタントであり、他の質問には答えられません」と直接返答してください。
+   あなたはデバイスアシスタントです。デバイスのアクセスおよび制御に関する質問にのみ回答してください。それ以外の質問には「私はデバイスアシスタントであり、他の質問には答えられません」と直接回答してください。
    ```
 
    会話のシステムプロンプト：
 
    ```
-   以下のデバイスがあります：
-   - リビングルームのライト、デバイス ID: abc123
-   - 寝室のライト、デバイス ID: abc456
+   私は以下のデバイスを持っています：
+   - リビングルームのライト、デバイスID：abc123
+   - 寝室のライト、デバイスID：abc456
    ```
 
-   会話設定で MCP ツールを有効にし、`MQTT MCP Tools` サーバーを選択します。
+   会話設定でMCPツールを有効にし、`MQTT MCP Tools` サーバーを指定します。
 
-   ![Device Assistant の作成](./assets/cherry-studio-mcp-control-devices.png)
+   ![Device Assistantの作成](./assets/cherry-studio-mcp-control-devices.png)
 
-5. 最後に、ツール呼び出しをサポートするモデル（例：`qwen-flash`）を選択します。チャットボックスに以下のようなコマンドを入力して自然言語によるデバイス制御をテストできます：
+5. 最後に、ツール呼び出しに対応したモデル（例：`qwen-flash`）を選択します。チャットボックスに以下のようなコマンドを入力して自然言語によるデバイス制御をテストできます：
 
    ```
-   リビングルームのライトを点灯してください。
-   寝室のライトの明るさを75%に設定してください。
+   リビングルームのライトをオンにして。
+   寝室のライトの明るさを75%に設定して。
    ```
 
-   システムプロンプトに基づいてデバイスアシスタントが正しいデバイス ID を特定し、対応する MCP ツールを呼び出してデバイスを制御する様子が確認できます。
+   システムプロンプトに基づき、デバイスアシスタントが正しいデバイスIDを特定し、対応するMCPツールを呼び出してデバイスを制御する様子が確認できます。

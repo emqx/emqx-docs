@@ -1,20 +1,20 @@
 # クイックスタート：Geminiノードを使ったFlowの作成
 
-このセクションでは、Geminiノードを使用した実践的なユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成・テストする方法を説明します。
+このセクションでは、Geminiノードを使った実践的なユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成しテストする方法を説明します。
 
-この例では、構造化されたセンサーデータを含むMQTTデバイスのメッセージを処理しつつ、ルーティングのために`clientid`を保持するFlowを構築します。Geminiノードはメッセージのペイロードに基づいて返信を生成し、RepublishノードがAIの返信をクライアントごとのトピック`devices/${clientid}/reply`に送信することで、各デバイスにカスタマイズされた返信を確実に届けます。
+この例では、構造化されたセンサーデータを含むMQTTデバイスのメッセージを処理しつつ、ルーティングのために`clientid`を保持するFlowの構築方法を示します。Geminiノードはメッセージのペイロードに基づいて返信を生成し、RepublishノードがAIの返信をクライアントごとのトピック`devices/${clientid}/reply`に送信することで、各デバイスにカスタマイズされた返信を届けます。
 
-## シナリオ説明
+## シナリオの説明
 
-産業用モニタリングのシナリオでは、各デバイスがJSON形式の構造化センサーデータを定期的にトピック`devices/<device_id>`にパブリッシュします。従来のルールベースのアラート（例：温度の閾値超過）では、隠れたパターンや異常指標の組み合わせを見逃す可能性があります。
+産業用モニタリングのシナリオでは、各デバイスが定期的にJSON形式の構造化センサーデータをトピック`devices/<device_id>`にパブリッシュします。従来のルールベースのアラート（例：温度の閾値超過）では、隠れたパターンや異常指標の組み合わせを見逃す可能性があります。
 
-このFlowはGeminiを活用し、振動、温度、圧力など複数のフィールドの全体的な文脈を分析して、潜在的な機械故障を示唆する複雑な異常を検出します。例えば、振動と温度が同時に高い場合、Geminiはより深刻なリスク（例：ベアリングの過負荷）を推測し、正確で説明可能なアラートを出力します。
+このFlowはGeminiを活用し、振動、温度、圧力など複数のフィールドの全体的な文脈を分析し、潜在的な機械故障を示唆する複雑な異常を検出します。例えば、振動と温度が同時に高い場合、Geminiはより深刻なリスク（例：ベアリングの過負荷）を推論し、正確かつ説明可能なアラートを出力します。
 
-- **データ処理**：ペイロードからデバイスの読み取り値を抽出し、後続処理で使用できるように`clientid`（例：`device_1`）を公開します。
-- **LLMベース処理**：全ペイロードをGeminiに送信し、全フィールドを横断的に分析します。
+- **データ処理**：ペイロードからデバイスの計測値を抽出し、後続で利用できるように`clientid`（例：`device_1`）を公開します。
+- **LLMベースの処理**：全フィールドにわたる包括的な解析のためにペイロード全体をGeminiに送信します。
 - **メッセージ再パブリッシュ**：AI生成のアラートをクライアントごとのトピック`devices/<district_id>/reply`にパブリッシュします。
 
-**受信メッセージの例（`devices/device_1`宛て）：**
+**受信メッセージの例（`devices/device_1`宛）：**
 
 ```json
 {
@@ -24,7 +24,7 @@
 }
 ```
 
-**期待される再パブリッシュ出力（`devices/device_1/reply`宛て）：**
+**期待される再パブリッシュ出力（`devices/device_1/reply`宛）：**
 
 ```
 Critical Alert: Simultaneous severe vibration and high temperature detected, indicating an immediate critical equipment malfunction risk.
@@ -49,7 +49,7 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
 3. **Data Processing**ノードを追加します。
 
    - **Processing**セクションから**Data Processing**ノードをドラッグします。
-   - 以下の設定でフォームを入力します。この設定により、`clientid`が後続ノードで利用可能になります（例：再パブリッシュトピックの`${clientid}`）。
+   - 以下の設定でフォームを入力します。この設定により、後続ノードで利用可能なように`clientid`を公開します（例：再パブリッシュのトピック内で`${clientid}`を使用可能にします）。
      
      - **Field**: `clientid`
      - **Transform**: 空欄のまま
@@ -60,9 +60,9 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
 
    - **Processing**セクションから**Gemini**ノードをドラッグします。
 
-   - ノードを以下のように設定します：
+   - ノードを設定します：
 
-     - **Input**: `payload`を入力します。
+     - **Input**: `payload`と入力します。
 
      - **System Message**: 以下のプロンプトを入力します：
 
@@ -77,9 +77,9 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
 
      - **API Key**: GeminiのAPIキーを入力します。
 
-     - **Base URL**: 空欄のままにして、Geminiのデフォルトエンドポイントを使用します。
+     - **Base URL**: 空欄のままにしてGeminiのデフォルトエンドポイントを使用します。
 
-     - **Output Result Alias**: `ai_reply`を入力します。
+     - **Output Result Alias**: `ai_reply`と入力します。
 
    - **Save**をクリックします。
 
@@ -94,7 +94,7 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
 
    ![openai_node_flow](./assets/gemini_node_flow.png)
 
-   Flowとフォームルールは相互運用可能です。SQLや関連するルール設定はルールページで確認できます。
+   Flowとフォームルールは連携可能です。ルールページでSQLや関連ルール設定を確認できます。
 
    ![openai_node_rule_page](./assets/gemini_node_rule_page.png)
 
@@ -102,18 +102,18 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
 
 1. MQTTクライアントをEMQXに接続します。
 
-   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** -> **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントも利用可能です：
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)などのツールや実際のMQTTクライアントも利用可能です：
 
    - EMQXサーバーに接続します。
-   - 例えばトピック`devices/device_1/reply`をサブスクライブします。
+   - 例えば`devices/device_1/reply`トピックをサブスクライブします。
 
 2. テストを開始します。
 
    - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
 
-   - **Edit**をクリックし、続けて**Start Test**をクリックして画面下部にテストパネルを表示します。
+   - **Edit**をクリックし、続けて**Start Test**をクリックすると、画面下部にテストパネルが開きます。
 
-   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`devices/device_1`にパブリッシュするために**Submit Test**をクリックします：
+   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`devices/device_1`にパブリッシュするため**Submit Test**をクリックします：
 
      ```json
      {
@@ -125,16 +125,16 @@ Critical Alert: Simultaneous severe vibration and high temperature detected, ind
    
 3. 結果を確認します。
 
-   - Flowの正常な実行結果が表示されます。
+   - Flowの実行結果が成功したことを確認できます。
 
      ![openai_node_test_result](./assets/gemini_node_test_result.png)
 
    - **WebSocket Client**ページに戻ると、以下のようなAI生成の要約メッセージを受信できます：
 
-     > “High-priority alert: Simultaneous high vibration and high temperature detected.”
+     > 「High-priority alert: Simultaneous high vibration and high temperature detected.」
 
    - テストが失敗した場合は、エラーメッセージが表示されます。
 
-   - **Gemini**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じてノードをクリックし、編集パネルの**Overview**タブを開きます。
+   - **Gemini**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じ、ノードをクリックして編集パネルを開き、**Overview**タブをクリックします。
 
      ![openai_node_statistics](./assets/gemini_node_statistics.png)

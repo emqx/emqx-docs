@@ -2,11 +2,11 @@
 
 このページでは、EMQXのメッセージキュー機能の実践的な使い方を解説します。キューの作成から動作設定、ダッシュボード、REST API、設定ファイルを使った管理方法までを順を追って説明します。
 
-## ダッシュボードからキューを手動で作成する
+## ダッシュボードからメッセージキューを手動で作成する
 
 メッセージキューは、メッセージを格納または配信する前に明示的に宣言／作成する必要があります。キューは手動または自動で作成可能です。自動作成の詳細は[ダッシュボードからメッセージキューを自動作成する](#automatically-create-message-queues-via-dashboard)をご覧ください。
 
-1. 左メニューの **Queues** に移動します。
+EMQXダッシュボードを使ってメッセージキューを手動で作成する手順は以下の通りです。
 
 2. ページ上の **Create** ボタンをクリックします。
 
@@ -147,7 +147,7 @@ message.headers.properties.User-Property.user-prop
 
 クライアントが `$queue/` プレフィックス付きのトピックにサブスクライブするときに、メッセージキューを自動的に作成できます。これにより、手動設定なしで動的にキューをプロビジョニング可能です。
 
-自動作成が有効な場合：
+EMQX 6.0.1以降、クライアントが `$q/` プレフィックス付きのトピックをサブスクライブすると、メッセージキューが自動的に作成されるようになりました。これにより手動設定なしで動的にキューをプロビジョニングできます。
 
 - `$queue/<name>` へのサブスクライブは、キューが既に存在する場合のみ機能します。
 - `$queue/<name>/<topic_filter>` へのサブスクライブは、キューが存在しない場合に指定された `<topic_filter>` を使ってEMQXがキューを自動作成します。
@@ -160,15 +160,15 @@ message.headers.properties.User-Property.user-prop
 
 :::
 
-### Last Value Semanticsキューの自動作成
+### Auto Create Last Value Semantics Queue
 
 このオプションはデフォルトで **Management** -> **MQTT Settings** -> **Queues** タブの中で有効になっています。これにより、Last-Value Semanticsをサポートするキューが自動作成され、キーごとに最新のメッセージのみが保持されます。
 
-1. **Management** -> **MQTT Settings** -> **Queues** タブに移動します。
+1. **Management** -> **MQTT Settings** -> **Message Queue** タブに移動します。
 
-2. デフォルトで **Enable Auto Create Queue** -> **Last Value Semantics Queue** が有効です。
+2. デフォルトで **Enable Auto Create Last Value Semantics Queue** が有効です。
 
-   以下を設定します：
+   以下を設定します。
 
    - **Queue Key Expression**：必須。各メッセージから一意のキーを抽出する方法を定義します（デフォルト：`message.from`）。
    - **Dispatch Strategy**：メッセージをサブスクライバーに配信する方法を決定します（デフォルト：`Random`）。
@@ -178,7 +178,7 @@ message.headers.properties.User-Property.user-prop
 
 クライアントが `$queue/my_queue/test` のようなトピックにサブスクライブすると、`my_queue` が存在しない場合はEMQXが `test` をトピックフィルターとしてLast-Value Semanticsキューを自動作成します。作成されたキューは **Queues** 一覧に表示されます。
 
-### 通常キューの自動作成
+### Auto Create Regular Message Queue
 
 メッセージを上書きせず独立して保存する通常キューを好む場合、このオプションを手動で有効にできます。
 
@@ -189,7 +189,7 @@ message.headers.properties.User-Property.user-prop
    - **Data Retention Period**：メッセージの保持期間。
 4. **Save Changes** をクリックします。
 
-## キュー設定の構成
+## メッセージキュー設定の構成
 
 このセクションでは、EMQX内のすべてのメッセージキューに適用されるグローバル設定の構成方法を説明します。これらの設定はメッセージの保持、クリーンアップ間隔、内部キューの動作、キューの自動作成動作を制御します。ダッシュボード、REST API、設定ファイルから設定可能です。
 
@@ -197,36 +197,36 @@ message.headers.properties.User-Property.user-prop
 
 EMQXダッシュボードからメッセージキューの設定を直接更新でき、ブローカーの再起動は不要です。システム全体の動作をランタイムで変更する際に便利です。
 
-1. **Management** -> **MQTT Settings** -> **Queues** タブに移動します。
+ダッシュボードでグローバル設定を構成する手順：
 
-   または、**Queues** ページ右上の **Settings** ボタンをクリックします。
+1. **Management** -> **MQTT Settings** -> **Message Queue** タブに移動します。
 
 2. **Queues** パネルで以下の設定が可能です：
    - **Enable Queues**：メッセージキュー機能を有効化します。
 
      > ダッシュボードからはキュー機能を無効化できません。無効化するには設定ファイルを直接編集してください。
 
-   - **Max Queue Count**：作成可能なキューの最大数を設定します。
+     > 無効化するには設定ファイルを直接編集してください。
 
-   - **GC Interval**：期限切れメッセージをキューからクリーンアップする間隔。デフォルトは `1` 時間です。
+   - **Max Queue Count**: 作成可能なキューの最大数を設定します。
 
-   - **Regular Queue Retention Period**：通常キューでメッセージを保持する最大期間。デフォルトは `7` 日です。
+   - **GC Interval**: 有効期限切れメッセージをキューからクリーンアップする間隔。デフォルトは1時間。
 
-   - **Find Queue Retry Interval**：クライアントが `$queue/<name>` にサブスクライブした際、対応するキューが見つからない場合に再試行する間隔。デフォルトは `10` 秒です。
+   - **Regular Queue Retention Period**: 通常キューでメッセージを保持する最大期間。デフォルトは7日。
 
    - **Enable Auto Create Queue**：キューが存在しない場合にクライアントのサブスクライブに応じてキューを自動作成します。
 
-   - **Auto Create Queue Type**：自動作成するキューのタイプを指定します：
+   - **Auto-Creation Options**: EMQXは自動作成機能で動的にキューをプロビジョニング可能です。
 
      - **Last Value Semantics Queue**（デフォルト有効）：クライアントが `$queue/<name>/<topic_filter>` にサブスクライブし、キューが存在しない場合にLast-Value Semanticsキューを自動作成します。
 
-       詳細は[Last Value Semanticsキューの自動作成](#auto-create-last-value-semantics-queues)を参照してください。
+       詳細は[Auto Create Last Value Semantics Queue](#auto-create-last-value-semantics-queue)を参照してください。
 
      - **Regular Queue**：有効にすると、`$queue/<name>/<topic_filter>` のサブスクライブ時に通常のキューを自動作成します。
 
-       詳細は[通常キューの自動作成](#auto-create-regular-queues)を参照してください。
+       詳細は[Auto Create Regular Message Queue](#auto-create-regular-message-queue)を参照してください。
 
-3. 変更後、**Save Changes** をクリックして設定を適用します。
+3. 設定変更後、**Save Changes** をクリックして反映します。
 
 ### REST API
 
@@ -250,7 +250,7 @@ mq {
 }
 ```
 
-#### 設定の説明
+#### 設定項目の説明
 
 - **`gc_interval`**：メッセージキューが期限切れメッセージをクリーンアップする間隔を定義します。
 - **`regular_queue_retention_period`**：通常キューでメッセージを保持する最大期間を設定します。この期間を過ぎるとメッセージは削除されます。
@@ -276,14 +276,14 @@ EMQXはメッセージキューのライフサイクル管理のためのREST AP
 ```bash
 curl -s -u key:secret -X POST -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues \
--d '{"name": "my_queue", "topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
+-d '{"topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
 レスポンスには作成されたキューの詳細（`name` や設定内容）が含まれます。
 
 ### すべてのキューの一覧取得
 
-既存のメッセージキュー一覧を取得します：
+既存のメッセージキュー一覧を取得します。
 
 ```bash
 curl -s -u key:secret -X GET -H "Content-Type: application/json" \
@@ -296,17 +296,17 @@ http://localhost:18083/api/v5/message_queues | jq
 
 ```bash
 curl -s -u key:secret -X PUT -H "Content-Type: application/json" \
-http://localhost:18083/api/v5/message_queues/my_queue \
+http://localhost:18083/api/v5/message_queues/t1%2F%23 \
 -d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
 ### キューの削除
 
-メッセージキューとその中に保持されているすべてのメッセージを削除します：
+メッセージキューとその中に保持されているすべてのメッセージを削除します。
 
 ```bash
 curl -s -u key:secret -X DELETE \
-http://localhost:18083/api/v5/message_queues/my_queue
+http://localhost:18083/api/v5/message_queues/t1%2F%23
 ```
 
 削除後はキューが新しいメッセージの受け入れを停止し、保存データも消去されます。
@@ -330,6 +330,6 @@ EMQXのメッセージキューは複数の容量制限をサポートしてい�
   - **最大メッセージ数**（`max_shard_message_count`）
   - **最大メッセージサイズ合計（バイト）**（`max_shard_message_bytes`）
 
-  これらの制限はソフト制限であり、リアルタイムではなくGC時に適用されます。GCサイクル間は一時的に制限を超える場合があります。
+  これらの制限はソフト制限であり、リアルタイムではなくGC時に適用されます。GCサイクル間では一時的に制限を超えることがあります。
 
   なお、これらの制限は永続ストレージのシャード単位で適用されます。シャード数の設定方法は[シャード数](../durability/managing-replication.md#number-of-shards)を参照してください。また、サイズ制限は[レプリケーションファクター](../durability/managing-replication.md#replication-factor)を考慮していません。実際の物理ストレージ使用量はレプリケーションファクターに応じて増加します。

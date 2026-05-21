@@ -1,6 +1,6 @@
 # EMQXクラスターの管理
 
-本章では、Kubernetesクラスター上でEMQXを操作・管理するための一般的なタスクと手順をステップバイステップで説明します。
+本章では、Kubernetesクラスター内でEMQXを使用して一般的なタスクや操作を実行するための手順を段階的に説明します。
 
 ## 設定とセットアップ
 
@@ -9,19 +9,19 @@
   - [EMQXリスナーのTLS有効化](./configure-emqx-tls.md)
 - クラスター設定
   - [EMQX設定の変更](./configure-emqx-config.md)
-  - [コア・レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
+  - [コア-レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
   - [パーシステンスの有効化](./configure-emqx-persistence.md)
-  - [ロードバランサー経由でのEMQXクラスターアクセス](./configure-emqx-service.md)
-  - [クラスターのロード再分散](./configure-emqx-rebalance.md)
+  - [ロードバランサー経由でEMQXクラスターにアクセス](./configure-emqx-service.md)
+  - [クラスター負荷のリバランス](./configure-emqx-rebalance.md)
 
 ## アップグレードとメンテナンス
 
 - アップグレード
-  - [ブルーグリーンアップグレードの実施](./configure-emqx-blueGreenUpdate.md)
+  - [ブルーグリーンアップグレードの実行](./configure-emqx-blueGreenUpdate.md)
 - ログ管理
   - [EMQXログの収集](./configure-emqx-log-collection.md)
   - [EMQXログレベルの変更](./configure-emqx-log-level.md)
 
 ## 監視とパフォーマンス
 
-- [PrometheusによるEMQXクラスターの監視](./configure-emqx-prometheus.md)
+- [Prometheusを使用したEMQXクラスターの監視](./configure-emqx-prometheus.md)

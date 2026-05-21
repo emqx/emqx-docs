@@ -1,16 +1,16 @@
 # ExProto ゲートウェイ
 
-Extension Protocol（ExProto）は、gRPC通信を用いて実装されたカスタムプロトコル解析ゲートウェイです。ユーザーはJava、Python、Goなどの好みのプログラミング言語でgRPCサービスを開発できます。これらのサービスはデバイスのネットワークプロトコルを解析し、デバイス接続、認証、メッセージ送信などの機能を実現します。
+Extension Protocol（ExProto）は、gRPC通信を用いて実装されたカスタムプロトコル解析ゲートウェイです。ユーザーはJava、Python、Goなどの好みのプログラミング言語でgRPCサービスを開発でき、これらのサービスはデバイスのネットワークプロトコルを解析し、デバイスの接続、認証、メッセージ送信などの機能を実現します。
 
-本ページでは、ExProtoゲートウェイの動作原理とEMQXでのExProtoゲートウェイの設定および利用方法を紹介します。
+本ページでは、ExProtoゲートウェイの動作原理とEMQXにおけるExProtoゲートウェイの設定および使用方法を紹介します。
 
 <!--アーキテクチャの簡単な紹介-->
 
 ## ExProtoゲートウェイとgRPCサービスの動作
 
-EMQXでExProtoゲートウェイを有効にすると、特定のポート（例：7993）でデバイス接続を待ち受けます。クライアントデバイスから接続があると、クライアントデバイスから生成されたバイトデータやイベントをユーザーのgRPCサービスに渡します。これは、ExProtoゲートウェイ内のgRPCクライアントがユーザーのgRPCサーバーで実装された`ConnectionUnaryHandler`サービスのメソッドを呼び出すことを意味します。
+EMQXでExProtoゲートウェイを有効にすると、特定のポート（例：7993）でデバイスの接続を待ち受けます。クライアントデバイスから接続があると、そのバイトデータやイベントをユーザーのgRPCサービスに渡します。これには、ExProtoゲートウェイ内のgRPCクライアントが、ユーザーのgRPCサーバーで実装された`ConnectionUnaryHandler`サービスのメソッドを呼び出す必要があります。
 
-ユーザーのgRPCサーバー内のgRPCサービスは、ExProtoゲートウェイから送られてきたバイトデータやイベントを受け取り、クライアントのネットワークプロトコルを解析し、バイトデータやイベントをPub/Subリクエストに変換してExProtoゲートウェイに返します。ExProtoゲートウェイで実装された`ConnectionAdapter`サービスは、ユーザーのgRPCサーバーとやり取りするためのインターフェースを提供します。これにより、クライアントデバイスはExProtoゲートウェイを通じてEMQXにメッセージをパブリッシュしたり、トピックをサブスクライブしたり、クライアント接続を管理したりできます。
+ユーザーのgRPCサーバーにあるgRPCサービスは、ExProtoゲートウェイから受け取ったバイトデータやイベントを解析し、クライアントのネットワークプロトコルをパースしてバイトデータやイベントをPub/Subリクエストに変換し、ExProtoゲートウェイに返します。ExProtoゲートウェイに実装された`ConnectionAdapter`サービスは、ユーザーのgRPCサーバーとやり取りするためのインターフェースを提供します。これにより、クライアントデバイスはEMQXにメッセージをパブリッシュしたり、トピックをサブスクライブしたり、クライアント接続を管理したりできます。
 
 以下の図は、ExProtoゲートウェイとgRPCサービスの動作アーキテクチャを示しています。
 
@@ -20,24 +20,24 @@ EMQXでExProtoゲートウェイを有効にすると、特定のポート（例
 
 `exproto.proto`ファイルは、ExProtoゲートウェイとユーザーのgRPCサービス間のインターフェースを定義しています。ファイルには以下の2つのサービスが指定されています。
 
-- `ConnectionAdapter`サービス：ExProtoゲートウェイが実装し、gRPCサーバーへのインターフェースを提供。
-- `ConnectionUnaryHandler`サービス：ユーザーのgRPCサーバーが実装し、クライアントソケットの接続とバイト解析を処理するメソッドを定義。
+- `ConnectionAdapter`サービス：ExProtoゲートウェイによって実装され、gRPCサーバーへのインターフェースを提供します。
+- `ConnectionUnaryHandler`サービス：ユーザーのgRPCサーバーによって実装され、クライアントソケットの接続およびバイト解析のためのメソッドを定義します。
 
 ### `ConnectionUnaryHandler` サービス
 
-`ConnectionUnaryHandler`サービスは、ユーザーのgRPCサーバーが実装し、クライアントソケットの接続管理とバイト解析を担当します。
+`ConnectionUnaryHandler`サービスは、ユーザーのgRPCサーバーによって実装され、クライアントソケットの接続管理とバイト解析を行います。
 
 このサービスには以下のメソッドが含まれます。
 
 | メソッド名           | 説明                                                         |
 | -------------------- | ------------------------------------------------------------ |
-| OnSocketCreated      | 新しいソケットがExProtoゲートウェイに接続されるたびに呼び出されるコールバック。 |
-| OnSocketClosed       | ソケットが閉じられたときに呼び出されるコールバック。         |
-| OnReceivedBytes      | クライアントのソケットからデータを受信したときに呼び出されるコールバック。 |
-| OnTimerTimeout       | タイマーがタイムアウトしたときに呼び出されるコールバック。     |
-| OnReceivedMessages   | サブスクライブされたトピックにメッセージが届いたときに呼び出されるコールバック。 |
+| OnSocketCreated      | 新しいソケットがExProtoゲートウェイに接続された際に呼び出されるコールバックです。 |
+| OnSocketClosed       | ソケットが閉じられた際に呼び出されるコールバックです。       |
+| OnReceivedBytes      | クライアントのソケットからデータを受信した際に呼び出されるコールバックです。 |
+| OnTimerTimeout       | タイマーがタイムアウトした際に呼び出されるコールバックです。   |
+| OnReceivedMessages   | サブスクライブされたトピックのメッセージを受信した際に呼び出されるコールバックです。 |
 
-ExProtoゲートウェイがこれらのメソッドを呼び出す際、どのソケットがこのイベントを発生させたかを識別するために、パラメータに一意の識別子`conn`が渡されます。例えば、`OnSocketCreated`の関数パラメータは以下のようになります。
+ExProtoゲートウェイがこれらのメソッドを呼び出す際、どのソケットからのイベントかを識別するために、パラメータに一意の識別子`conn`が渡されます。例えば、`OnSocketCreated`関数のパラメータは以下のようになります。
 
 ```
 message SocketCreatedRequest {
@@ -48,50 +48,50 @@ message SocketCreatedRequest {
 
 ::: tip
 
-ExProtoゲートウェイはプライベートプロトコルのメッセージフレームの開始・終了を認識できないため、TCPパケットのスティッキングや分割が発生した場合は`OnReceivedBytes`コールバック内で処理する必要があります。
+ExProtoゲートウェイはプライベートプロトコルのメッセージフレームの開始と終了を認識できないため、TCPパケットのスティッキングや分割が発生した場合は、`OnReceivedBytes`コールバック内で処理する必要があります。
 
 :::
 
 ### `ConnectionAdapter` サービス
 
-`ConnectionAdapter`サービスはExProtoゲートウェイが実装し、gRPCサービスがサブスクリプションの開始、メッセージのパブリッシュ、タイマーの開始、接続のクローズなどの接続管理機能を呼び出せるようにします。以下のメソッドを含みます。
+`ConnectionAdapter`サービスはExProtoゲートウェイによって実装され、gRPCサービスがサブスクリプションの開始、メッセージのパブリッシュ、タイマーの開始、接続のクローズなどの接続管理機能を呼び出すためのインターフェースを提供します。以下のメソッドが含まれます。
 
-| メソッド名       | 説明                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| Send             | 指定した接続にバイトデータを送信する。                       |
-| Close            | 指定した接続を閉じる。                                       |
-| Authenticate     | クライアントをExProtoゲートウェイに登録し、認証を完了する。   |
-| StartTimer       | 指定した接続のためにタイマーを開始する。通常は生存確認に使用。 |
-| Publish          | 指定した接続からEMQXにメッセージをパブリッシュする。          |
-| Subscribe        | 指定した接続のためにサブスクリプションを作成する。           |
-| Unsubscribe      | 指定した接続のサブスクリプションを削除する。                 |
-| RawPublish       | EMQXにメッセージをパブリッシュする。                         |
+| メソッド名     | 説明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| Send           | 指定された接続にバイトデータを送信します。                   |
+| Close          | 指定された接続を閉じます。                                   |
+| Authenticate   | クライアントをExProtoゲートウェイに登録し、認証を完了します。 |
+| StartTimer     | 指定された接続のタイマーを開始します。通常はキープアライブ検出に使用されます。 |
+| Publish        | 指定された接続からEMQXにメッセージをパブリッシュします。     |
+| Subscribe      | 指定された接続のサブスクリプションを作成します。             |
+| Unsubscribe    | 指定された接続のサブスクリプションを削除します。             |
+| RawPublish     | EMQXにメッセージをパブリッシュします。                       |
 
 ## ExProtoゲートウェイの有効化
 
-EMQXのExProtoゲートウェイは、ダッシュボード、REST API、または設定ファイル`base.hocon`を通じて設定・有効化できます。本節ではダッシュボードを使った有効化方法を説明します。
+EMQXのExProtoゲートウェイは、ダッシュボード、REST API、または設定ファイル`base.hocon`を通じて設定および有効化できます。本節では、ダッシュボードを使ったExProtoゲートウェイの有効化方法を説明します。
 
-EMQXダッシュボードの左側ナビゲーションメニューから **Management** -> **Gateways** をクリックします。**Gateways**ページにはサポートされているゲートウェイが一覧表示されます。**ExProto**を探し、**Actions**列の**Setup**をクリックすると、**Initialize ExProto**ページに遷移します。
+EMQXダッシュボードの左側ナビゲーションメニューから **Management** -> **Gateways** をクリックします。**Gateways**ページにはサポートされているすべてのゲートウェイが一覧表示されます。**ExProto**を探し、**Actions**列の**Setup**をクリックすると、**Initialize ExProto**ページに遷移します。
 
 ::: tip
 
-EMQXをクラスターで運用している場合、ダッシュボードやREST APIで行った設定はクラスター全体に影響します。特定のノードだけ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)でゲートウェイを設定してください。
+EMQXをクラスターで運用している場合、ダッシュボードやREST APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)でゲートウェイを設定してください。
 
 :::
 
-設定を簡略化するため、EMQXは**Gateways**ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合は、以下の3クリックでExProtoゲートウェイを有効化できます。
+設定を簡素化するため、EMQXは**Gateways**ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合は、以下の3クリックでExProtoゲートウェイを有効化できます。
 
 1. **Basic Configuration**ステップページで**Next**をクリックし、すべてのデフォルト設定を受け入れます。
-2. 続いて表示される**Listeners**ステップページでは、EMQXがポート7993でTCPリスナーを事前設定しています。**Next**をクリックして設定を確認します。
+2. **Listeners**ステップページに遷移し、EMQXがポート7993でTCPリスナーを事前設定しているので、再度**Next**をクリックして設定を確定します。
 3. **Enable**ボタンをクリックしてExProtoゲートウェイを有効化します。
 
-有効化が完了すると、**Gateways**ページに戻り、ExProtoゲートウェイのステータスが**Enabled**と表示されます。
+ゲートウェイの有効化が完了すると、**Gateways**ページに戻り、ExProtoゲートウェイのステータスが**Enabled**と表示されます。
 
 <img src="./assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:50%;" />
 
 上記の設定はREST APIでも行えます。
 
-**例:**
+**例：**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
@@ -120,75 +120,74 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/exproto' \
 }'
 ```
 
-REST APIの詳細は[REST API](../admin/api.md)を参照してください。
+詳細なREST APIの説明は[REST API](../admin/api.md)を参照してください。
 
-カスタマイズが必要な場合やリスナーの追加、認証ルールの追加を行いたい場合は、[ExProtoゲートウェイのカスタマイズ](#customize-your-exproto-gateway)を参照してください。
-
+カスタマイズが必要で、リスナーを追加したり認証ルールを設定したい場合は、[Customize Your ExProto Gateway](#customize-your-exproto-gateway)を参照してください。
 
 ## ExProtoゲートウェイのカスタマイズ
 
-デフォルト設定に加え、EMQXはさまざまな設定オプションを提供し、ビジネス要件に合わせて柔軟に対応できます。本節では**Gateways**ページで利用可能な設定オプションを詳しく解説します。
+デフォルト設定に加え、EMQXはさまざまな設定オプションを提供し、特定のビジネス要件に対応できます。本節では、**Gateways**ページで利用可能な設定オプションを詳しく解説します。
 
 ### 基本設定
 
-**Gateways**ページで**ExProto**を探し、**Actions**列の**Settings**をクリックします。**Settings**タブで、`ConnectionUnaryHandler`サービスのアドレス、`ConnectionAdapter`のリスニングポート、ゲートウェイのMountPoint文字列をカスタマイズできます。
+**Gateways**ページで**ExProto**を探し、**Actions**列の**Settings**をクリックします。**Settings**タブでは、`ConnectionUnaryHandler`サービスのアドレス、`ConnectionAdapter`のリスニングポート、ゲートウェイのMountPoint文字列をカスタマイズできます。
 
 <img src="./assets/exproto-basic-config.png" alt="Basic Configuration" style="zoom:50%;" />
 
-- **Enable Statistics**：ゲートウェイによる統計収集・報告を許可するか設定。デフォルトは`true`。選択肢は`true`または`false`。
-- **Idle Timeout**：接続されたクライアントが非アクティブとみなされ切断されるまでの秒数。デフォルトは`30秒`。
-- **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックに接頭辞として付与される文字列。異なるプロトコル間でメッセージルーティングの分離を実現します（例：`mqttsn/`）。このトピック接頭辞はゲートウェイが管理し、クライアントは明示的に付与する必要はありません。
-- **gRPC ConnectionAdapter**：`ConnectionAdapter`サービス起動のための設定。
-  - **Bind**：gRPCサーバーのリスニングアドレスとポート。デフォルトは`0.0.0.0:9100`。
-    - **TLS Verify Client**：ピア認証の有効・無効。デフォルトは無効。有効にすると、関連する**TLS Cert**、**TLS Key**、**CA Cert**をファイルの内容入力またはアップロードで設定可能。詳細は[SSL/TLS接続の有効化](../network/emqx-mqtt-tls.md)を参照。
+- **Enable Statistics**：ゲートウェイが統計情報を収集・報告するかどうかを設定します。デフォルトは`true`。選択肢は`true`、`false`。
+- **Idle Timeout**：接続クライアントが非アクティブとみなされるまでの秒数を設定します。デフォルトは`30秒`。
+- **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックにプレフィックスとして付加される文字列を設定します。異なるプロトコル間でメッセージルーティングの分離を実現するために使用されます（例：`mqttsn/`）。このトピックプレフィックスはゲートウェイが管理し、クライアントは明示的に追加する必要はありません。
+- **gRPC ConnectionAdapter**：`ConnectionAdapter`サービスの起動設定を行います。
+  - **Bind**：gRPCサーバーのリッスンアドレスとポート。デフォルトは`0.0.0.0:9100`。
+    - **TLS Verify Client**：ピア認証の有効/無効。デフォルトは無効。有効にすると、関連する**TLS Cert**、**TLS Key**、**CA Cert**をファイル内容の入力またはファイル選択ボタンでアップロードして設定できます。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
 - **gRPC ConnectionHandler**：`ConnectionUnaryHandler`を実装したコールバックサーバーの設定。
   - **Server**：コールバックgRPCサーバーのアドレス。
-    - **Enable TLS**：gRPCサーバーのTLS接続を有効化。デフォルトは無効。有効にすると以下の設定が可能。
-      - **TLS Verify**：ピア認証の有効・無効。デフォルトは無効。有効にすると関連する証明書情報を設定可能。
-      - **SNI**：TLS Server Name Indication拡張で使用するホスト名を指定。
+    - **Enable TLS**：gRPCサーバーのTLS接続を有効にします。デフォルトは無効。有効にすると以下の設定が可能です。
+      - **TLS Verify**：ピア認証の有効/無効。デフォルトは無効。設定方法は上記と同様です。
+      - **SNI**：TLSのServer Name Indication拡張で使用するホスト名を指定します。
 
 ### リスナーの追加
 
-デフォルトで、ポート`7993`に名前`default`のTCPリスナーが設定されています。これは1秒あたり最大1,000接続、最大1,024,000同時接続をサポートします。より詳細な設定は**Listeners**タブで編集、削除、新規追加が可能です。
+デフォルトで、ポート`7993`に名前`default`のTCPリスナーが1つ設定されています。これは1秒あたり最大1,000接続、最大1,024,000の同時接続をサポートします。より詳細な設定を行いたい場合は、**Listeners**タブをクリックして編集、削除、新規追加が可能です。
 
 <img src="./assets/exproto-listener.png" alt="exproto-listener" style="zoom:50%;" />
 
-**+ Add Listener**をクリックすると**Add Listener**ページが開き、以下の設定が行えます。
+**+ Add Listener**をクリックすると**Add Listener**ページが開き、以下の設定項目を入力できます。
 
 **基本設定**
 
-- **Name**：リスナーの一意識別子を設定。
-- **Type**：プロトコルタイプを選択。ExProtoでは`udp`または`dtls`が選択可能。
-- **Bind**：リスナーが接続を受け付けるポート番号を設定。
-- **MountPoint**（任意）：パブリッシュやサブスクライブ時にすべてのトピックに付与される接頭辞文字列。
+- **Name**：リスナーの一意識別子を設定します。
+- **Type**：プロトコルタイプを選択します。ExProtoでは`udp`または`dtls`が選択可能です。
+- **Bind**：リスナーが接続を受け付けるポート番号を設定します。
+- **MountPoint**（任意）：パブリッシュやサブスクライブ時にトピックに付加されるプレフィックス文字列を設定し、異なるプロトコル間でのメッセージルーティング分離を実現します。
 
 **リスナー設定**
 
-- **Acceptor**：アクセプタープールのサイズ。デフォルトは`16`。
+- **Acceptor**：アクセプタープールのサイズを設定します。デフォルトは`16`。
 - **Max Connections**：リスナーが処理可能な最大同時接続数。デフォルトは`1024000`。
 - **Max Connection Rate**：リスナーが1秒あたり受け入れ可能な新規接続の最大レート。デフォルトは`1000`。
-- **Proxy Protocol**：EMQXクラスターがHAProxyやNGINXの背後にある場合にProxy Protocol V1/2を有効化。デフォルトは`false`。
-- **Proxy Protocol Timeout**：Proxy Protocolパケット受信のタイムアウト。タイムアウト内にパケットが受信されない場合、EMQXはTCP接続を切断。デフォルトは`3秒`。
+- **Proxy Protocol**：EMQXクラスターがHAProxyやNGINXの背後にある場合、Proxy Protocol V1/V2を有効にします。デフォルトは`false`。
+- **Proxy Protocol Timeout**：Proxy Protocolパケット受信のタイムアウト。タイムアウト内に受信できない場合、EMQXはTCP接続を閉じます。デフォルトは`3秒`。
 
 **TCP設定**
 
-- **ActiveN**：ソケットの`{active, N}`オプション。ソケットが積極的に処理可能な受信パケット数。詳細は[Erlangドキュメント - setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2)参照。
-- **Buffer**：受信・送信パケットを格納するバッファサイズ（KB単位）。
-- **TCP_NODELAY**：接続に対してTCP_NODELAYフラグを設定。デフォルトは`false`。
-- **SO_REUSEADDR**：ローカルポート番号の再利用許可設定。デフォルトは`true`。
-- **Send Timeout**：接続のTCP送信タイムアウト。デフォルトは`15秒`。
-- **Send Timeout Close**：送信タイムアウト時に接続を閉じるか。デフォルトは`true`。
+- **ActiveN**：ソケットの`{active, N}`オプションを設定します。これはソケットが能動的に処理可能な受信パケット数を意味します。詳細は[Erlang Documentation - setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2)を参照してください。
+- **Buffer**：受信および送信パケットを格納するバッファサイズ（KB単位）を設定します。
+- **TCP_NODELAY**：接続に対してTCP_NODELAYフラグを設定します。デフォルトは`false`。
+- **SO_REUSEADDR**：ローカルポート番号の再利用を許可するかどうかを設定します。デフォルトは`true`。
+- **Send Timeout**：接続のTCP送信タイムアウト時間。デフォルトは`15秒`。
+- **Send Timeout Close**：送信タイムアウト時に接続を閉じるかどうか。デフォルトは`true`。
 
 **TLS設定**（SSLリスナーのみ）
 
-TLS Verifyの有効化はトグルスイッチで設定可能ですが、その前に関連する**TLS Cert**、**TLS Key**、**CA Cert**をファイル内容入力またはアップロードで設定してください。詳細は[SSL/TLS接続の有効化](../network/emqx-mqtt-tls.md)を参照。
+TLS Verifyの有効/無効をトグルスイッチで設定できます。ただし事前に関連する**TLS Cert**、**TLS Key**、**CA Cert**をファイル内容の入力またはファイル選択ボタンでアップロードして設定する必要があります。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
 
-続けて以下を設定できます。
+続いて以下を設定できます。
 
-- **SSL Versions**：サポートするTLSバージョン。デフォルトは`tlsv1`、`tlsv1.1`、`tlsv1.2`、`tlsv1.3`。
-- **SSL Fail If No Peer Cert**：クライアントが空の証明書を送信した場合に接続を拒否するか。デフォルトは`false`。選択肢は`true`または`false`。
-- **CACert Depth**：ピア証明書に続く有効な認証パスに含まれる自己発行でない中間証明書の最大数。デフォルトは`10`。
-- **Key File Passphrase**：プライベートキーがパスワード保護されている場合に使用するパスワード。
+- **SSL Versions**：サポートするTLSバージョンを設定します。デフォルトは`tlsv1`、`tlsv1.1`、`tlsv1.2`、`tlsv1.3`。
+- **SSL Fail If No Peer Cert**：クライアントが空の証明書を送信した場合に接続を拒否するかどうか。デフォルトは`false`。選択肢は`true`、`false`。
+- **CACert Depth**：ピア証明書に続く有効な認証パスに含まれる非自己署名中間証明書の最大数。デフォルトは`10`。
+- **Key File Passphrase**：秘密鍵がパスワード保護されている場合のパスワード。
 
 ### 認証の設定
 
@@ -209,13 +208,13 @@ ExProtoゲートウェイは以下のような多様な認証方式をサポー�
 
 ExProtoページで**Authentication**タブをクリックします。
 
-**+ Create Authentication**をクリックし、**Mechanism**に`Password-Based`を選択、**Backend**に`HTTP Server`を選択して**Next**をクリックします。**Configuration**で認証ルールを設定できます。各フィールドの詳細は[HTTPサーバー認証](../access-control/authn/http.md)を参照してください。
+**+ Create Authentication**をクリックし、**Mechanism**に`Password-Based`を選択、**Backend**に`HTTP Server`を選択して**Next**をクリックします。**Configuration**では認証ルールを設定できます。各フィールドの詳細は[HTTPサーバー認証](../access-control/authn/http.md)を参照してください。
 
 <img src="./assets/exproto-authn-config.png" alt="mqttsn authentication" style="zoom:43%;" />
 
-上記設定はREST APIでも実行可能です。
+上記設定はREST APIでも可能です。
 
-**例:**
+**例：**
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
@@ -247,20 +246,20 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
 
 ## テスト用のサンプルgRPCサービスの起動
 
-本節では、ExProtoゲートウェイとgRPCサービスがどのように連携するかを示すため、サンプルのgRPCサービスを起動する方法を説明します。
+本節では、ExProtoゲートウェイとgRPCサービスが連携して動作する様子を、サンプルgRPCサービスを起動して示します。
 
-このデモでは、`telnet`コマンドを使ってTCPプロトコルを用いるクライアントをシミュレートします。実際の環境では、カスタムプライベートプロトコルを実装したデバイスがポート7993のTCPリスナーに接続します。ExProtoゲートウェイはポート7993でクライアント接続を待ち受け、ポート9100で`exproto.proto`ファイルで定義された`ConnectionAdapter`サービスを提供します。
+このデモでは、`telnet`コマンドを使ってTCPプロトコルのクライアントをシミュレートし、メッセージの送受信を行います。実際の環境では、カスタムプライベートプロトコルを実装したデバイスがポート7993のTCPリスナーに接続します。ExProtoゲートウェイはポート7993でクライアント接続を受け付け、ポート9100で`exproto.proto`ファイルで定義された`ConnectionAdapter`サービスを提供しています。
 
-[emqx-extension-examples](https://github.com/emqx/emqx-extension-examples)には様々な言語で書かれたサンプルgRPCサービスがあります。本デモではPythonで実装されたエコーサーバー`exproto-svr-python`を例に`ConnectionUnaryHandler`サービスを実装します。このサーバーはTCPクライアントから受信したデータをそのまま返します。実際の環境では、これらのアップストリームメッセージをEMQXにパブリッシュしたり、トピックをサブスクライブしてEMQXからのメッセージをクライアント接続に配信したりします。
+[emqx-extension-examples](https://github.com/emqx/emqx-extension-examples)には、さまざまな言語で実装されたサンプルgRPCサービスが用意されています。本デモでは、Pythonで`ConnectionUnaryHandler`サービスを実装したエコープログラム`exproto-svr-python`を例に使います。これはTCPクライアントから受け取ったデータをそのまま返すだけのシンプルなサービスです。実際の環境では、これらのアップストリームメッセージをEMQXにパブリッシュしたり、トピックをサブスクライブしてEMQXからのメッセージをクライアント接続に届けたりします。
 
-以下の手順は`exproto-svr-python`を例にしています。
+以下は`exproto-svr-python`を例にした手順です。
 
 ::: tip 前提条件
 
 開始前に以下を完了していることを確認してください。
 
-- EMQX 5.1.0以降を実行し、デフォルト設定でExProtoゲートウェイを有効化済み。
-- Python 3.7以降をインストールし、以下の依存パッケージをインストール済み。
+- EMQX 5.1.0以上を起動し、ExProtoゲートウェイをデフォルト設定で有効化していること。
+- Python 3.7以上をインストールし、以下の依存パッケージをインストールしていること。
 
   ```
   python -m pip install grpcio
@@ -269,7 +268,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
 
 :::
 
-1. EMQXが動作している同一マシン上でサンプルコードをクローンし、`exproto-svr-python`ディレクトリに移動します。
+1. EMQXが稼働している同じマシンで、サンプルコードをクローンし、`exproto-svr-python`ディレクトリに移動します。
 
    ```bash
    git clone https://github.com/emqx/emqx-extension-examples
@@ -295,7 +294,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
    Waiting for client connections...
    ```
 
-3. `telnet`を使ってExProtoゲートウェイが待ち受けているポート`7993`にアクセスします。`Hi, this is tcp client!`と入力し、gRPCサーバーが正常に動作しているかテストします。例：
+3. `telnet`コマンドでExProtoゲートウェイがリッスンしているポート`7993`にアクセスし、`Hi, this is tcp client!`と入力してgRPCサーバーが正常に動作しているかを確認します。例：
 
    ```
    $ telnet 127.0.0.1 7993
@@ -312,7 +311,7 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
 
 ### サンプルのシーケンス図
 
-以下の図は、本例における接続とメッセージ配信のシーケンスを示しています。
+以下の図は、本サンプルにおける接続とメッセージ配送のシーケンスを示しています。
 
 <img src="./assets/exproto-sequence-diagram.png" alt="exproto-sequence-diagram" style="zoom:80%;" />
 

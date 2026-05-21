@@ -86,6 +86,14 @@ However, isolation policies still need to be explicitly configured based on busi
 
 - **Client ID override**
 
+  ::: warning Required for Untrusted Multi-Tenant Deployments
+
+  If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure `mqtt.clientid_override`. Without it, a client in one namespace can reuse another tenant's client ID, kicking it offline, hijacking its persistent session, or causing a denial-of-service for that tenant. Authentication does not prevent this: session takeover happens at the connection layer before ACLs apply.
+
+  Pair this with [topic isolation using mount points](#isolation-mechanisms) so that topic-level access cannot cross namespace boundaries either.
+
+  :::
+
   To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
 
   ```hocon
