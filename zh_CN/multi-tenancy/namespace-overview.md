@@ -88,12 +88,7 @@ EMQX 拥有极高的灵活性，在命名空间功能实现之前，就已支持
   :::
 
   若希望不同命名空间中的客户端使用相同的客户端 ID 连接 EMQX，可设置客户端 ID 覆盖规则。例如：
-
-  ```hocon
-  mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
-  ```
-
-  此规则会将命名空间作为前缀添加到客户端 ID 中，避免冲突。
+  `mqtt.clientid_override="concat([client_attrs.tns, '-', clientid])"`，此规则会将命名空间作为前缀添加到客户端 ID 中，避免冲突。
   
 - **使用挂载点进行主题隔离**
 
