@@ -1,10 +1,10 @@
 # Erlang SDK
 
-本ドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルなMCP over MQTTサーバーおよびクライアントを作成する方法を示します。
+このドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を示します。
 
 ## Example
 
-### シンプルなMCPクライアントの作成
+### シンプルな MCP クライアントの作成
 
 ```erlang
 -module(mcp_mqtt_erl_client_demo).
@@ -19,7 +19,7 @@
 ]).
 -export([start_link/0]).
 
-%% クライアント名、バージョン、および機能。これらの情報はMCP初期化時にサーバーへ送信されます。
+%% クライアント名、バージョン、および機能。これらの情報は MCP 初期化時にサーバーへ送信されます。
 client_name() ->
     <<"emqx_tools/cli_demo">>.
 
@@ -28,12 +28,12 @@ client_version() ->
 
 client_capabilities() -> #{}.
 
-%% MCP以外のメッセージ受信時のコールバック
+%% MCP 以外のメッセージ受信時のコールバック
 received_non_mcp_message(MqttClient, Msg, State) ->
-    io:format("~p MCP以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
+    io:format("~p MCP 以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
     State.
 
-%% MCP over MQTTクライアントの起動
+%% MCP over MQTT クライアントの起動
 start_link() ->
     mcp_mqtt_erl_client:start_link(
         #{
@@ -48,11 +48,11 @@ start_link() ->
         }).
 ```
 
-ここで、`server_name_filter` はMCPサーバーのMQTTトピックフィルターへのサブスクライブに使用され、`mqtt_options` は基盤となるMQTTクライアントに渡されるオプションです。
+ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターにサブスクライブするために使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
 
-### シンプルなMCPサーバーの作成
+### シンプルな MCP サーバーの作成
 
-以下は、`tool1` と `tool2` の2つのツールをサポートするシンプルなMCPサーバーの実装例です。
+以下は、`tool1` と `tool2` の2つのツールをサポートするシンプルな MCP サーバーの実装例です。
 
 ```erlang
 -module(mcp_mqtt_erl_server_demo).
