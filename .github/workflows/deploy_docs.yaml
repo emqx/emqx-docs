@@ -233,7 +233,11 @@ jobs:
         chmod +x /tmp/coscli
         /tmp/coscli config set --secret_id ${{ secrets.TENCENT_COS_ID }} --secret_key ${{ secrets.TENCENT_COS_KEY }} --init-skip
         /tmp/coscli config add -b docs-1302406139 -e cos.accelerate.myqcloud.com -a docs-bucket
+<<<<<<< HEAD
         for lang in en zh ja; do
+=======
+        for lang in en zh; do
+>>>>>>> origin/release-5.8
           /tmp/coscli rm -r -f cos://docs-bucket/${lang}/${DOCS_TYPE}/${VERSION}/ || true
         done
 
@@ -249,7 +253,11 @@ jobs:
         tccli configure set secretId ${{ secrets.TENCENT_COS_ID }}
         tccli configure set secretKey ${{ secrets.TENCENT_COS_KEY }}
         tccli configure set region ap-shanghai
+<<<<<<< HEAD
         tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/emqx/ https://docs.emqx.com/en/emqx/ https://docs.emqx.com/ja/emqx/ https://docs.emqx.com/zh/enterprise/ https://docs.emqx.com/en/enterprise/ https://docs.emqx.com/api/ --FlushType delete
+=======
+        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/emqx/ https://docs.emqx.com/en/emqx/ https://docs.emqx.com/zh/enterprise/ https://docs.emqx.com/en/enterprise/ https://docs.emqx.com/api/ --FlushType delete
+>>>>>>> origin/release-5.8
         tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
     - name: update search index
