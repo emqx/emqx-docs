@@ -1,6 +1,6 @@
 # 組み込みSQL関数
 
-ルールエンジンは多様な組み込み関数を提供しています。これらの関数はSQL内で利用でき、基本的なデータ処理を実現します。主なカテゴリは以下の通りです：
+ルールエンジンは多様な組み込み関数を提供しています。これらの関数はSQL内で利用でき、以下のような基本的なデータ処理を実現できます。
 
 - [数学関数](#mathematical-functions)
 - [データ型判定関数](#data-type-judgment-functions)
@@ -18,26 +18,26 @@
 - [システム関数](#system-function)
 - [条件関数](#conditional-functions)
 
-本節の関数宣言はすべて以下の形式に準拠しています：
+本節の関数宣言はすべて以下の形式に準拠しています。
 
 ```bash
-FuncName(引数1: 型1 | ..., ...) -> 型1 | ...
+FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
-例えば、`acos(X: integer | float) -> float` は、引数 `X` のデータ型が整数または浮動小数点数であり、戻り値のデータ型は浮動小数点数であることを示します。
+例えば、`acos(X: integer | float) -> float` は引数 `X` のデータ型が整数または浮動小数点数のいずれかであり、返り値のデータ型は浮動小数点数であることを示します。
 
-指定された引数が範囲外であったり、サポートされていないデータ型を使用した場合、現在のSQL実行は失敗し、失敗回数が1増加しますのでご注意ください。
+引数が指定された範囲を超えたり、サポートされていないデータ型を使用した場合、現在のSQL実行は失敗し、失敗カウントが1増加しますのでご注意ください。
 
 :::tip
 
-1. 一部のエスケープシーケンスは使用時にアンエスケープが必要です。詳細は[unescape関数](#unescapestring-string---string)をご参照ください。  
-2. EMQX 5.0以降、複雑なデータ変換に[jq構文](https://stedolan.github.io/jq/manual/)の利用が可能です。詳細は[jq関数](./rule-sql-jq.md)をご覧ください。
+1. 一部のエスケープシーケンスは使用時にアンエスケープが必要です。詳細は [unescape関数](#unescapestring-string---string) を参照してください。  
+2. EMQX 5.0以降、複雑なデータ変換のために [jq構文](https://stedolan.github.io/jq/manual/) の使用もサポートしています。詳細は [jq関数](./rule-sql-jq.md) をご覧ください。
 
 :::
 
 ## 数学関数
 
-EMQXは幅広い数学関数をサポートしています：
+EMQXは幅広い数学関数をサポートしています。
 
 - 三角関数および双曲線関数：sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh
 - 数値関数：abs, ceil, floor, round, sqrt, fmod
@@ -52,7 +52,7 @@ abs(-12) = 12
 ```
 
 :::tip
-浮動小数点数の絶対値計算には、`ceil` または `floor` 関数の使用を推奨します。
+浮動小数点数の絶対値演算には、代わりに `ceil` または `floor` 関数を使用してください。
 :::
 
 ### acos(X: integer | float) -> float
@@ -97,7 +97,7 @@ atan(0.5) = 0.46364760900080615
 
 ### atanh(X: integer | float) -> float
 
-`X` の双曲線アークタンジェントを返します。`X` は `(-1, 1)` の範囲です。例：
+`X` の双曲線アークタンジェントを返します。`X` の範囲は `(-1, 1)` です。例：
 
 ```bash
 atanh(0.5) = 0.5493061443340549
@@ -129,7 +129,7 @@ cosh(0.5) = 1.1276259652063807
 
 ### exp(X: integer | float) -> float
 
-自然対数の底 `e` の `X` 乗を返します。例：
+自然対数の底 e の `X` 乗を返します。例：
 
 ```bash
 exp(1) = 2.718281828459045
@@ -194,7 +194,7 @@ power(2, 3) = 8.0
 
 ### random() -> float
 
-`[0, 1)` 範囲のランダムな浮動小数点数を返します。例：
+`[0, 1)` の範囲でランダムな浮動小数点数を返します。例：
 
 ```bash
 random() = 0.5400050092601868
@@ -246,7 +246,7 @@ tanh(0.5) = 0.46211715726000974
 
 ### is_array(Term: any) -> boolean
 
-`Term` が配列型か判定します。例：
+`Term` が配列型かどうか判定します。`any` はすべてのデータ型を意味します。例：
 
 ```bash
 is_array([1, 2]) = true
@@ -258,7 +258,7 @@ is_array('[1, 2]') = false
 
 ### is_bool(Term: any) -> boolean
 
-`Term` がブール型か判定します。例：
+`Term` がブール型かどうか判定します。例：
 
 ```bash
 is_bool(true) = true
@@ -277,7 +277,7 @@ is_float(123) = false
 
 ### is_int(Term: any) -> boolean
 
-`Term` が整数型か判定します。例：
+`Term` が整数型かどうか判定します。例：
 
 ```bash
 is_int(123) = true
@@ -286,7 +286,7 @@ is_int(123.4) = false
 
 ### is_map(Term: any) -> boolean
 
-`Term` がマップ型か判定します。例：
+`Term` がマップ型かどうか判定します。例：
 
 ```bash
 is_map(json_decode('{"value": 1}')) = true
@@ -295,7 +295,8 @@ is_map(json_decode('[{"value": 1}]')) = false
 
 ### is_null(Term: any) -> boolean
 
-変数 `Term` が未定義か判定します。値がJSONの `null` であっても割り当て済みとみなされます。
+変数 `Term` が未定義か判定します。  
+この関数は変数に値が割り当てられているかを判定しますが、値がJSONの `null` であっても未定義とはみなしません。
 
 例：
 
@@ -307,7 +308,7 @@ is_null(map_get('b', json_decode('{"b": null}'))) = false
 
 ### is_null_var(Term: any) -> boolean
 
-変数 `Term` が未定義または `null` か判定します。例：
+変数 `Term` が未定義または `null` かどうか判定します。例：
 
 ```sql
 is_null_var(this_is_an_unassigned_variable) = true
@@ -317,7 +318,7 @@ is_null_var(map_get('b', json_decode('{"b": null}'))) = true
 
 ### is_not_null_var(Term: any) -> boolean
 
-`is_null_var` の逆で、変数 `Term` が定義済みかつ `null` でないか判定します。
+`is_null_var` の逆で、変数 `Term` が定義されておりかつ `null` でないかを判定します。
 
 ### is_num(Term: any) -> boolean
 
@@ -331,7 +332,7 @@ is_num('123') = false
 
 ### is_str(Term: any) -> boolean
 
-`Term` が文字列型か判定します。例：
+`Term` が文字列型かどうか判定します。例：
 
 ```bash
 is_str('123') = true
@@ -340,7 +341,7 @@ is_str(123) = false
 
 ### is_empty(Array or Map) -> boolean
 
-配列またはマップが空か判定します。例：
+配列またはマップが空かどうか判定します。例：
 
 ```bash
 is_empty(json_decode('{}')) = true
@@ -354,17 +355,17 @@ is_empty(map_get('key', '{"key" : [1}')) = false
 
 ### bool(Term: boolean | integer | string) -> boolean
 
-`Term` をブール型に変換します。`Term` はブール型、整数型の0または1、文字列型の `"true"` または `"false"` のいずれかである必要があります。
+`Term` をブール型に変換します。`Term` はブール型、整数型（0または1）、または文字列型（"true"または"false"）のみ許容されます。
 
 例：
 
 ```bash
-# 正しい例
+# 正常
 bool(true) = true
 bool(0) = false
 bool('false') = false
 
-# 間違い例
+# 誤った例
 bool(20)
 bool('True')
 ```
@@ -373,7 +374,7 @@ bool('True')
 
 `Term` を浮動小数点数に変換します。
 
-`Term` が文字列の場合、科学的記数法も使用可能です（例：`float('3.14e4')`）。浮動小数点数は最大16桁の有効数字をサポートします。文字列で表現された浮動小数点数の有効数字が16桁を超えると、変換時に丸め誤差が生じる可能性があります。
+`Term` が文字列の場合、科学的記数法も使用可能です（例：`float('3.14e4')`）。浮動小数点数は最大16桁の有効数字をサポートします。有効数字が16桁を超える場合、変換時に丸め誤差が発生する可能性があります。
 
 例：
 
@@ -386,14 +387,14 @@ float('3.14e+4') = 31400
 float('3.14e-4') = 0.000314
 float('3.14E-4') = 0.000314
 
-# 有効数字が16桁を超えると丸め誤差により異なる入力が同一出力になることがある
+# 有効数字が16桁を超えると丸め誤差により異なる入力が同じ出力になることがあります。
 float('0.12345678901234566') = 0.12345678901234566
 float('0.12345678901234567') = 0.12345678901234566
 ```
 
 ### float(Term: float | integer | string, Decimals: integer) -> float
 
-`Term` を小数点以下最大 `Decimals` 桁の浮動小数点数に変換します。`Decimals` の範囲は `(0, 253]` です。その他の動作は `float/1` と同様です。例：
+`Term` を小数点以下最大 `Decimals` 桁の浮動小数点数に変換します。`Decimals` の範囲は `(0, 253]` です。その他の挙動は `float/1` と同様です。例：
 
 ```bash
 float('3.1415926', 3) = 3.142
@@ -402,9 +403,9 @@ float('0.000012345', 5) = 0.00001
 
 ### float2str(Float: float, Decimals: integer) -> string
 
-浮動小数点数 `Float` を小数点以下最大 `Decimals` 桁の文字列に変換し、末尾のゼロは切り捨てます。`Decimals` の範囲は `[0, 253]` です。`Float` の有効数字が16桁を超える場合、変換時に丸め誤差が生じる可能性があります。
+浮動小数点数 `Float` を小数点以下最大 `Decimals` 桁の文字列に変換し、末尾のゼロは切り捨てます。`Decimals` の範囲は `[0, 253]` です。`Float` の有効数字が16桁を超える場合、変換時に丸め誤差が発生する可能性があります。
 
-浮動小数点数はコンピュータ上で正確に保存できないため、`Decimals` が `Float` の小数桁数（先頭のゼロを含む）を超える場合、`float2str` は `Float` の2進近似の10進表現を返すことがあります。
+浮動小数点数はコンピュータ上で正確に格納できないため、`Decimals` が `Float` の小数点以下桁数（先行ゼロ含む）より大きい場合、`float2str` は `Float` の2進近似の10進表現を返すことがあります。
 
 例：
 
@@ -417,7 +418,7 @@ float2str(0.00000000001, 20) = '0.00000000001'
 # 末尾のゼロは切り捨てられる
 float2str(0.100001, 5) = '0.1'
 
-# 有効数字が16桁を超えると丸め誤差により異なる入力が同一出力になることがある
+# 有効数字が16桁を超えると丸め誤差により異なる入力が同じ出力になることがあります。
 float2str(123456789.01234565, 8) = '123456789.01234566'
 float2str(123456789.01234566, 8) = '123456789.01234566'
 ```
@@ -426,15 +427,15 @@ float2str(123456789.01234566, 8) = '123456789.01234566'
 
 `Term` を整数に変換します。
 
-- `Term` がブール型の場合、`true` は1、`false` は0に変換されます。
+- `Term` がブール型の場合、true は 1、false は 0 に変換されます。
 - `Term` が浮動小数点数の場合、`Term` 以下の最大の整数に切り捨てられます。
-- `Term` が文字列の場合、少なくとも1つの数字を含み、先頭に `+` または `-` の1文字の接頭辞を持つことができ、先頭のゼロは無視されます。数学的表記もサポートされます。
+- `Term` が文字列の場合、数値文字を1つ以上含み、先頭に `+` または `-` の1文字の接頭辞を持つことができ、先行ゼロは無視されます。数学的表記もサポートします。
 - `Term` が整数の場合、そのまま返されます。
 
 例：
 
 ```bash
-# 正しい例
+# 正常
 int(true) = 1
 int(3.14) = 3
 int(-3.14) = 4
@@ -444,17 +445,17 @@ int('0010') = 10
 int('3.1415e2') = 314
 int(substr('Number 100', 7)) = 100
 
-# 間違い例
+# 誤った例
 int('-100+200')
 int('Number 100')
 ```
 
 ### str(Term: any) -> string
 
-任意の型の `Term` を文字列に変換します。
+任意の `Term` を文字列に変換します。
 
 - `Term` がマップまたは配列の場合、`str` 関数は `Term` をJSONエンコードしようとします。
-- `Term` が浮動小数点数の場合、末尾のゼロを切り捨てた対応する文字列を返します。返される文字列は小数点以下最大10桁を保持します。より多くの小数桁を返すには `float2str` 関数を使用してください。
+- `Term` が浮動小数点数の場合、末尾のゼロを切り捨てた対応する文字列を返します。返される文字列は小数点以下最大10桁を含みます。より多くの小数点以下桁数を返すには `float2str` 関数を使用してください。
 
 例：
 
@@ -464,13 +465,13 @@ str(nth(1, json_decode('[false]'))) = 'false'
 str(json_decode({"msg": "hello"})) = '{"msg":"hello"}'
 str(json_decode('[{"msg": "hello"}]')) = '[{"msg":"hello"}]'
 
-# 末尾のゼロは切り捨てられる
-# 小数点以下最大10桁を保持
+# 末尾のゼロは切り捨てられます
+# 小数点以下最大10桁まで保持
 str(0.30000000040) = '0.3000000004'
 str(0.30000000004) = '0.3'
 
-# 小数点以下10桁で丸められる
-# 10桁目以降で丸め
+# 小数点以下10桁で四捨五入
+# 10桁目以降で丸められます
 str(3.14159265359) = '3.1415926536'
 str(0.000000314159265359) = '0.0000003142'
 ```
@@ -479,7 +480,7 @@ str(0.000000314159265359) = '0.0000003142'
 
 任意の `Term` をUTF-8エンコードされた文字列に変換します。
 
-その他の動作は `str(Any)` と同一です。
+動作は `str(Any)` と同様です。
 
 ```bash
 str_utf8(100) = '100'
@@ -487,13 +488,13 @@ str_utf8(nth(1, json_decode('[false]'))) = 'false'
 str_utf8(json_decode({"msg": "hello"})) = '{"msg":"hello"}'
 str_utf8(json_decode('[{"msg": "hello"}]')) = '[{"msg":"hello"}]'
 
-# 末尾のゼロは切り捨てられる
-# 小数点以下最大10桁を保持
+# 末尾のゼロは切り捨てられます
+# 小数点以下最大10桁まで保持
 str_utf8(0.30000000040) = '0.3000000004'
 str_utf8(0.30000000004) = '0.3'
 
-# 小数点以下10桁で丸められる
-# 10桁目以降で丸め
+# 小数点以下10桁で四捨五入
+# 10桁目以降で丸められます
 str_utf8(3.14159265359) = '3.1415926536'
 str_utf8(0.000000314159265359) = '0.0000003142'
 ```
@@ -504,8 +505,8 @@ str_utf8(0.000000314159265359) = '0.0000003142'
 
 ::: tip
 
-UTF-16リトルエンディアンエンコードされた文字列はJSONオブジェクト内で正しく表示されないことがあります。EMQXでは通常バイナリデータとして扱われます。可読な16進数文字列に変換するには `bin2hexstr` 関数を使用してください。  
-このエンコードはMicrosoft SQL ServerのようなリトルエンディアンUTF-16を利用するシステムで一般的に使用されます。
+UTF-16リトルエンディアンエンコード文字列はJSONオブジェクト内で正しく表示されない場合があります。EMQXでは通常バイナリデータとして扱われます。読みやすい16進数文字列に変換するには `bin2hexstr` 関数を使用してください。  
+このエンコードはMicrosoft SQL Serverなど、リトルエンディアンUTF-16を使用するシステムで一般的に利用されます。
 
 :::
 
@@ -523,11 +524,11 @@ bin2hexstr(str_utf16_le('hello')) = '680065006C006C006F00'
 
 ## 文字列操作関数
 
-文字列の大文字小文字変換、空白除去、部分文字列抽出、置換、エスケープ／アンエスケープなどに利用できます。
+文字列の大文字・小文字変換、空白除去、部分文字列抽出、置換、エスケープ／アンエスケープなどに使用します。
 
 ### ascii(Char: string) -> integer
 
-文字 `Char` のASCIIコードを返します。`Char` に複数文字が含まれる場合は最初の1文字のコードのみ返します。例：
+文字 `Char` のASCIIコードを返します。複数文字の場合は最初の1文字のコードを返します。例：
 
 ```bash
 ascii('a') = 97
@@ -536,7 +537,7 @@ ascii('abc') = 97
 
 ### concat(Str1: string, Str2: string) -> string
 
-`Str1` と `Str2` を連結して1つの文字列にします。例：
+`Str1` と `Str2` を連結して返します。例：
 
 ```bash
 concat('Name:', 'John') = 'Name:John'
@@ -544,7 +545,7 @@ concat('Name:', 'John') = 'Name:John'
 
 ### find(String: string, SearchPattern: string) -> string
 
-`String` 内で部分文字列 `SearchPattern` を検索し、`SearchPattern` より前の部分を削除して残りを返します。`SearchPattern` が見つからない場合は空文字列を返します。`find(String, SearchPattern, 'leading')` と同じ動作です。
+`String` 内で部分文字列 `SearchPattern` を検索し、`SearchPattern` より前の内容を削除して残りを返します。`SearchPattern` が見つからない場合は空文字列を返します。`find(String, SearchPattern)` は `find(String, SearchPattern, 'leading')` と同等です。
 
 例：
 
@@ -564,7 +565,7 @@ find('Front, Middle, End', ', ', 'trailing') = ', End'
 
 ### join_to_string(Sep: string, Array: array) -> string
 
-配列 `Array` の要素を区切り文字 `Sep` で連結した文字列を返します。例：
+`Array` の要素を区切り文字 `Sep` で連結して返します。例：
 
 ```bash
 join_to_string(', ', ['a', 'b', 'c']) = 'a, b, c'
@@ -572,7 +573,7 @@ join_to_string(', ', ['a', 'b', 'c']) = 'a, b, c'
 
 ### lower(String: string) -> string
 
-文字列 `String` の大文字を小文字に変換します。例：
+`String` の大文字を小文字に変換します。例：
 
 ```bash
 lower('Hello') = 'hello'
@@ -580,7 +581,7 @@ lower('Hello') = 'hello'
 
 ### ltrim(String: string) -> string
 
-`trim/1` と同様ですが、先頭の空白文字のみを削除します。例：
+`trim/1` と同様ですが、先頭の空白文字のみ削除します。例：
 
 ```bash
 ltrim('\t  hello  \n') = 'hello  \n'
@@ -589,7 +590,7 @@ ltrim('\t  hello \r\n') = 'hello  \r\n'
 
 ### pad(String: string, Length: integer) -> string
 
-`String` の末尾に空白を追加して指定長にパディングします。例：
+`String` の末尾にスペースを追加し、指定した長さにパディングします。例：
 
 ```bash
 pad('hello', 8) = 'hello   '
@@ -597,9 +598,9 @@ pad('hello', 8) = 'hello   '
 
 ### pad(String: string, Length: integer, Direction: string) -> string
 
-`pad/2` と同様ですが、`Direction` でパディング方向を指定できます。`leading` は先頭に空白、`trailing` は末尾に空白、`both` は両端に空白を追加します。
-
-`both` 指定時、追加する空白数が奇数の場合は末尾に多く空白が入ります。
+`pad/2` と同様ですが、`Direction` でパディング方向を指定できます。  
+`leading` は先頭にスペースを埋め、`trailing` は末尾に埋め、`both` は両端に埋めます。  
+`both` 指定時、埋めるスペース数が奇数の場合は最後のスペースが末尾に追加されます。
 
 例：
 
@@ -613,7 +614,7 @@ pad('hello', 8, 'both') = ' hello  '
 
 `pad/3` と同様ですが、指定したグラフェムクラスタ `Char` でパディングします。
 
-ルールエンジンは `Char` の合法性をチェックしないため、`Char` が複数文字でも1文字分として扱われます。例：
+ルールエンジンは `Char` が合法なグラフェムクラスタかをチェックしないため、`Char` の文字数に関わらず1文字として処理されます。例：
 
 ```bash
 pad('hello', 8, 'trailing', '!') = 'hello!!!'
@@ -623,7 +624,7 @@ pad('hello', 8, 'trailing', 'abc') = 'helloabcabcabc'
 
 ### regex_match(String: string, Expression: string) -> boolean
 
-文字列 `String` が正規表現 `Expression` にマッチするか判定します。例：
+`String` が正規表現 `Expression` にマッチするか判定します。例：
 
 ```bash
 regex_match('123', '^\d+$') = true
@@ -632,7 +633,7 @@ regex_match('a23', '^\d+$') = false
 
 ### regex_replace(String: string, Expression: string, Replacement: string) -> string
 
-正規表現 `Expression` にマッチした部分を文字列 `Replacement` に置換します。マッチなしの場合は元の文字列を返します。例：
+`String` の正規表現 `Expression` にマッチする部分を `Replacement` に置換します。マッチがなければ元の文字列を返します。例：
 
 ```bash
 regex_replace('hello 123', '\d+', 'world') = 'hello world'
@@ -643,11 +644,13 @@ regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 
 ::: tip
 
-EMQX v5.7.1以降で利用可能です。
+この関数はEMQX v5.7.1以降で利用可能です。
 
 :::
 
-正規表現のキャプチャグループを用いて文字列から部分抽出します。完全一致部分は含まず、キャプチャグループにマッチした部分のみリストで返します。マッチなしまたはキャプチャなしの場合は空リストを返します。
+正規表現のキャプチャグループを用いて文字列から部分文字列を抽出します。完全一致部分は含まれません。
+
+マッチがあればキャプチャされたすべてのグループのリストを返し、マッチなしまたはキャプチャなしの場合は空リストを返します。
 
 例：
 
@@ -671,11 +674,11 @@ replace('ab..cd..ef', '..', '') = 'abcdef'
 
 `String` 内の `SearchPattern` を `Replacement` に置換します。
 
-`Where` の値は以下の通りです：
+`Where` は以下の値を取ります：
 
-- `all`: すべて置換（`replace/3` と同等）
-- `leading`: 先頭のみ置換
-- `trailing`: 末尾のみ置換
+- `all`: すべての `SearchPattern` を置換（`replace/3` と同等）
+- `leading`: 先頭の `SearchPattern` のみ置換
+- `trailing`: 末尾の `SearchPattern` のみ置換
 
 例：
 
@@ -695,7 +698,7 @@ reverse('hello') = 'olleh'
 
 ### rm_prefix(String: string, Prefix: string) -> string
 
-`String` の先頭に `Prefix` があれば削除し、なければ元の文字列を返します。例：
+`String` の先頭にある `Prefix` を削除します。`String` が `Prefix` で始まらない場合は元の文字列を返します。例：
 
 ```bash
 rm_prefix('foo/bar', 'foo/') = 'bar'
@@ -704,7 +707,7 @@ rm_prefix('foo/bar', 'xxx/') = 'foo/bar'
 
 ### rtrim(String: string) -> string
 
-`trim/1` と同様ですが、末尾の空白文字のみを削除します。例：
+`trim/1` と同様ですが、末尾の空白文字のみ削除します。例：
 
 ```bash
 rtrim('\t  hello  \n') = '\t  hello'
@@ -713,11 +716,11 @@ rtrim('\t  hello \r\n') = '\t  hello'
 
 ### split(String: string, Separator: string) -> array
 
-`String` を区切り文字 `Separator` で分割し、部分文字列の配列を返します。
+`String` を区切り文字 `Separator` で分割し、配列で返します。
 
-連続する複数の区切り文字は1つとして扱われません。そのため空文字列が結果に含まれることがあります。`split/2` はデフォルトで結果をトリムし空文字列を除外します。空文字列を残したい場合は `split(String, Separator, 'notrim')` を使用してください。
+連続する複数の区切り文字は1つとして扱われず、空文字列が結果に含まれる場合があります。`split/2` はデフォルトで結果をトリムし空文字列を除外します。空文字列を残したい場合は `split(String, Separator, 'notrim')` を使用してください。
 
-区切り文字は複数文字でも可能ですが、全体で1つの区切り文字として扱われます。複数の区切り文字を同時に指定したい場合は `tokens` 関数を使用してください。
+区切り文字は複数文字でも可能ですが、1つのまとまりとして扱われます。複数の区切り文字を指定したい場合は `tokens` 関数を使用してください。
 
 例：
 
@@ -733,15 +736,15 @@ split('Sienna Blake; Howell Wise', '; ') = ['Sienna Blake', 'Howell Wise']
 
 ### split(String: string, Separator: string, Option: string) -> array
 
-`split/2` と同様ですが、`Option` で処理する区切り文字の位置や空文字列の返却有無を指定できます。
+`split/2` と同様ですが、`Option` で処理対象の区切り文字の位置や空文字列の返却有無を指定できます。
 
-`Option` の値は以下の通りです：
+`Option` の値は以下の通り：
 
 - `notrim`: 文字列内のすべての区切り文字を処理し、空文字列を含む結果を返す
-- `leading`: 先頭の区切り文字のみ処理し、空文字列は含まない
-- `leading_notrim`: 先頭の区切り文字のみ処理し、空文字列を含む可能性あり
-- `trailing`: 末尾の区切り文字のみ処理し、空文字列は含まない
-- `trailing_notrim`: 末尾の区切り文字のみ処理し、空文字列を含む可能性あり
+- `leading`: 先頭の区切り文字のみ処理し、空文字列を含まない結果を返す
+- `leading_notrim`: 先頭の区切り文字のみ処理し、空文字列を含む結果を返す
+- `trailing`: 末尾の区切り文字のみ処理し、空文字列を含まない結果を返す
+- `trailing_notrim`: 末尾の区切り文字のみ処理し、空文字列を含む結果を返す
 
 例：
 
@@ -755,11 +758,11 @@ split('a;b;c;', ';', 'trailing_notrim') = ['a;b;c', '']
 
 ### sprintf(Format, ...) -> string
 
-`Format` に従い文字列をフォーマットして返します。`Format` 文字列は通常文字と制御シーケンスで構成されます。
+`Format` に従ってフォーマットされた文字列を返します。`Format` 文字列は通常の文字とフォーマット制御シーケンスを含みます。
 
-制御シーケンスの形式は一般的に `~F.P.PadModC` です。
+制御シーケンスの形式は一般に `~F.P.PadModC` です。
 
-文字 `C` は制御シーケンスの種類を決定し、唯一必須の項目です。`F`、`P`、`Pad`、`Mod` はすべて任意です。詳細は https://www.erlang.org/doc/apps/stdlib/io.html#fwrite-1 をご参照ください。
+`C` は制御シーケンスの種類を示し必須です。`F`, `P`, `Pad`, `Mod` は任意です。詳細は https://www.erlang.org/doc/apps/stdlib/io.html#fwrite-1 を参照してください。
 
 例：
 
@@ -796,7 +799,7 @@ substr('hello world!', 6, 5) = 'world'
 
 ### tokens(String: string, SeparatorList: string) -> array
 
-`String` を `SeparatorList` に含まれる文字で分割し、空文字列を含まない配列を返します。連続する区切り文字は1つとして扱われます。
+`String` を `SeparatorList` に含まれる任意の文字で分割し、空文字列を含まない配列を返します。連続する区切り文字は1つとして扱われます。
 
 例：
 
@@ -807,7 +810,7 @@ tokens('a;;b', ';') = ['a', 'b']
 
 ### tokens(String: string, SeparatorList:string, NoCRLF: string) -> array
 
-`tokens/2` と同様ですが、`NoCRLF` に `nocrlf` を指定すると改行コードも区切り文字として扱います。例：
+`tokens/2` と同様ですが、`NoCRLF` に `nocrlf` を指定すると改行コード（CR, LF）も区切り文字として扱います。例：
 
 ```bash
 tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
@@ -815,7 +818,7 @@ tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
 
 ### trim(String: string) -> string
 
-`String` の先頭と末尾から空白文字（スペース、タブ、改ページ、改行など）を削除します。Unicode標準において `\r\n` はグラフェムクラスタとして扱われるため、`trim` はこれをまとめて削除します。例：
+`String` の先頭および末尾の空白文字（スペース、タブ、改ページ、改行など）を削除します。Unicode標準で `\r\n` はグラフェムクラスタとして扱われるため、`\r\n` はまとめて削除されます。例：
 
 ```bash
 trim('\t  hello  \n') = 'hello'
@@ -824,11 +827,11 @@ trim('\t  hello \r\n') = 'hello'
 
 ### unescape(String: string) -> string
 
-エスケープシーケンスを元の文字に戻します。SQL内でエスケープシーケンスを使用する場合は、正しく処理するためにこの関数でアンエスケープしてください。
+エスケープシーケンスを元の文字に戻します。SQLでエスケープシーケンスを使う場合は、正しく処理するためにこの関数でアンエスケープしてください。
 
 ::: tip
 
-EMQX v5.7.0以降で利用可能です。
+この関数はEMQX v5.7.0以降で利用可能です。
 
 :::
 
@@ -841,7 +844,7 @@ EMQX v5.7.0以降で利用可能です。
 my-device
 ```
 
-`\n` で分割したい場合、以下のSQLは期待通りに動作しません：
+`\n` で分割したい場合、以下のSQLは期待通りに動作しません。
 
 ```sql
 SELECT split(payload, '\n') as device_info FROM 't/#'
@@ -857,7 +860,7 @@ SELECT split(payload, '\n') as device_info FROM 't/#'
 }
 ```
 
-`unescape` 関数で `\n` をアンエスケープすると期待通りの結果が得られます：
+`unescape` 関数で `\n` をアンエスケープすると期待通りの結果が得られます。
 
 ```sql
 SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
@@ -876,27 +879,27 @@ SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
 }
 ```
 
-**unescape関数がサポートするエスケープシーケンス：**
+**`unescape` 関数がサポートするエスケープシーケンス：**
 
 - 標準Cエスケープシーケンス：
 
-  - `\n`（改行 LF）
-  - `\t`（水平タブ HT）
-  - `\r`（復帰 CR）
-  - `\b`（バックスペース BS）
-  - `\f`（改ページ FF）
-  - `\v`（垂直タブ VT）
-  - `\'`（シングルクォート '）
-  - `\"`（ダブルクォート "）
-  - `\\`（バックスラッシュ \）
-  - `\?`（疑問符 ?）
-  - `\a`（アラート（ベル）BEL）
+  - `\n`：改行（LF）
+  - `\t`：水平タブ（HT）
+  - `\r`：復帰（CR）
+  - `\b`：バックスペース（BS）
+  - `\f`：改ページ（FF）
+  - `\v`：垂直タブ（VT）
+  - `\'`：シングルクォート（'）
+  - `\"`：ダブルクォート（"）
+  - `\\`：バックスラッシュ（\）
+  - `\?`：疑問符（?）
+  - `\a`：警告音（ベル、BEL）
 
 - 16進エスケープコード：
 
-  - `\xH...` （`H...` は1つ以上の16進数字（0-9, A-F, a-f））、任意のutf32文字をエンコード可能
+  - `\xH...`：`H...` は1文字以上の16進数（0-9, A-F, a-f）で任意のUTF-32文字をエンコード可能。
 
-認識されないエスケープシーケンスや無効なUnicode文字の場合は例外をスローします。
+認識できないエスケープシーケンスや無効なUnicode文字の場合、例外が発生します。
 
 ### upper(String: string) -> string
 
@@ -910,7 +913,7 @@ upper('hello') = 'HELLO'
 
 ### map_get(Key: string, Map: map) -> any
 
-`Map` 内の指定した `Key` の値を返します。`Key` が存在しない場合は `undefined` を返します。例：
+`Map` の指定した `Key` の値を返します。存在しなければ `undefined` を返します。例：
 
 ```bash
 map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
@@ -919,7 +922,7 @@ map_get('data', json_decode('{"msg": "hello"}')) = undefined
 
 ### map_get(Key: string, Map: map, Default: any) -> any
 
-`map_get/2` と同様ですが、`Key` が存在しない場合は指定した `Default` を返します。例：
+`map_get/2` と同様ですが、`Key` が存在しない場合は `Default` を返します。例：
 
 ```bash
 map_get('data', json_decode('{"msg": "hello"}'), '') = ''
@@ -928,7 +931,7 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 
 ### map_keys(Map: map) -> array
 
-`Map` のすべてのキーの配列を返します。例：
+`Map` のすべてのキーを配列で返します。例：
 
 ```bash
 map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
@@ -936,7 +939,7 @@ map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 
 ### map_put(Key: string, Value: any, Map: map) -> map
 
-`Map` に `Key` と対応する `Value` を挿入し、更新済みのマップを返します。`Key` が既に存在する場合は値を上書きします。例：
+`Map` に `Key` と対応する `Value` を挿入し、更新されたマップを返します。既存の `Key` があれば値を上書きします。例：
 
 ```bash
 map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
@@ -947,15 +950,15 @@ map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 
 ::: tip
 
-EMQX v5.7.1以降で利用可能です。
+この関数はEMQX v5.7.1以降で利用可能です。
 
 :::
 
 マップをRedisの `HSET`（または `HMSET`）コマンド用のフィールド名と値のリストに変換します。
 
-例：`SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1` のように使用し、Redisアクションコマンドテンプレートで `HMSET name1 ${hset_fields}` として利用します。
+例：`SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1` のように使い、Redisアクションのテンプレートで `HMSET name1 ${hset_fields}` として利用します。
 
-例えば、`payload.value` が `{"a" : 1, "b": 2}` の場合、コマンドは `HMSET name1 b 2 a 1` のようになります。マップのフィールド順序は非決定的です。
+例えば、`payload.value` が `{"a" : 1, "b": 2}` の場合、生成されるコマンドは `HMSET name1 b 2 a 1` となります。マップのフィールドの順序は非決定的です。
 
 ### map_to_entries(Map: map) -> array
 
@@ -967,7 +970,7 @@ map_to_entries(json_decode('{"a": 1, "b": 2}')) = [{"key": "a", "value": 1},{"ke
 
 ### map_values(Map: map) -> array
 
-`Map` のすべての値の配列を返します。例：
+`Map` のすべての値を配列で返します。例：
 
 ```bash
 map_values(json_decode('{"a": 1, "b": 2}')) = [1, 2]
@@ -975,7 +978,7 @@ map_values(json_decode('{"a": 1, "b": 2}')) = [1, 2]
 
 ### mget(Key: string | array, Map: map) -> any
 
-`Map` 内の指定した `Key` の値を返します。`Key` が存在しない場合は `undefined` を返します。配列を指定するとネストしたマップから複数キーの値を取得できます。例：
+`Map` の指定した `Key` の値を返します。`Key` が存在しない場合は `undefined` を返します。配列で複数のキーを指定すると、ネストしたマップから対応する値を取得できます。例：
 
 ```bash
 mget('c', json_decode('{"a": {"b": 1}}')) = undefined
@@ -985,7 +988,7 @@ mget(['a', 'b'], json_decode('{"a": {"b": 1}}')) = 1
 
 ### mput(Key: string | array, Value: any, Map: map) -> map
 
-`Map` に `Key` と対応する `Value` を挿入し、更新済みのマップを返します。`Key` が既に存在する場合は値を上書きします。配列を指定するとネストしたマップに複数キーの値を挿入できます。例：
+`Map` に `Key` と対応する `Value` を挿入し、更新されたマップを返します。既存の `Key` があれば値を上書きします。配列で複数のキーを指定すると、ネストしたマップにデータを挿入できます。例：
 
 ```bash
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
@@ -1005,7 +1008,7 @@ map_size(json_decode('{"msg": "hello"}')) = 1
 
 ### contains(Item: any, Array: array) -> boolean
 
-配列 `Array` が指定した `Item` を含むか判定します。例：
+配列 `Array` に指定した `Item` が含まれるか判定します。例：
 
 ```bash
 contains(2, [1, 2, 3]) = true
@@ -1020,10 +1023,10 @@ contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2
 配列 `Array` の最初の要素を返します。`Array` は空であってはなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 first(['John', 'David']) = 'John'
 
-# 間違い例
+# 誤った例
 first([])
 ```
 
@@ -1032,10 +1035,10 @@ first([])
 配列 `Array` の最後の要素を返します。`Array` は空であってはなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 last(['John', 'David']) = 'David'
 
-# 間違い例
+# 誤った例
 last([])
 ```
 
@@ -1050,13 +1053,13 @@ length([]) = 0
 
 ### nth(N: integer, Array: array) -> any
 
-`Array` のN番目の要素を返します。`N` は `Array` の長さ以下でなければなりません。例：
+配列 `Array` の `N` 番目の要素を返します。`N` は `Array` の長さ以下でなければなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 nth(1, [1,2,3]) = 1
 
-# 間違い例
+# 誤った例
 nth(0, [1,2,3])
 nth(4, [1,2,3])
 ```
@@ -1072,7 +1075,7 @@ sublist(10, [1,2,3,4]) = [1,2,3,4]
 
 ### sublist(Start: integer, Length: integer, Array:array) -> any
 
-`sublist/2` と同様ですが、`Start` で開始位置を指定できます。`Start` + `Length` が `Array` の長さを超える場合は全体を返します。例：
+`sublist/2` と同様ですが、`Start` で返す開始要素を指定できます。`Start` + `Length` が `Array` の長さを超える場合は全体を返します。例：
 
 ```bash
 sublist(2, 10, [1,2,3,4]) = [2,3,4]
@@ -1082,7 +1085,9 @@ sublist(2, 10, [1,2,3,4]) = [2,3,4]
 
 ### md5(String: string) -> string
 
-任意長の文字列 `String` の128ビット固定長MD5ハッシュ値を計算し、32桁の16進小文字文字列で返します。例：
+任意長の文字列 `String` の128ビット固定長MD5ハッシュ値を計算します。ハッシュ値は32桁の16進数文字列（小文字）で返されます。
+
+例：
 
 ```bash
 md5('hello') = '5d41402abc4b2a76b9719d911017c592'
@@ -1090,7 +1095,9 @@ md5('hello') = '5d41402abc4b2a76b9719d911017c592'
 
 ### sha(String: string) -> string
 
-任意長の文字列 `String` の160ビット固定長SHA-1ハッシュ値を計算し、40桁の16進小文字文字列で返します。例：
+任意長の文字列 `String` の160ビット固定長SHA-1ハッシュ値を計算します。ハッシュ値は40桁の16進数文字列（小文字）で返されます。
+
+例：
 
 ```bash
 sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
@@ -1098,7 +1105,9 @@ sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 
 ### sha256(String: string) -> string
 
-任意長の文字列 `String` の256ビット固定長SHA-2ハッシュ値を計算し、64桁の16進小文字文字列で返します。例：
+任意長の文字列 `String` の256ビット固定長SHA-2ハッシュ値を計算します。ハッシュ値は64桁の16進数文字列（小文字）で返されます。
+
+例：
 
 ```bash
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
@@ -1106,7 +1115,7 @@ sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9
 
 ## 圧縮・解凍関数
 
-注：バイナリデータは直接JSONエンコードできないため、16進文字列に変換するには `bin2hexstr` 関数を使用してください。
+注：バイナリデータは直接JSONエンコードできないため、16進数文字列に変換するには `bin2hexstr` 関数を使用してください。
 
 ### gunzip(Data: binary) -> binary | string
 
@@ -1160,7 +1169,7 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 
 ### bitand(Num1: integer, Num2: integer) -> integer
 
-`Num1` と `Num2` のビットごとのANDを返します。入力と出力は符号付き整数です。例：
+`Num1` と `Num2` のビットごとのAND演算結果を返します。入力・出力は符号付き整数です。例：
 
 ```bash
 bitand(10, 8) = 8
@@ -1169,7 +1178,7 @@ bitand(-10, -8) = -16
 
 ### bitnot(Num: integer) -> integer
 
-`Num` のビットごとの否定を返します。入力と出力は符号付き整数です。例：
+`Num` のビットごとの否定演算結果を返します。入力・出力は符号付き整数です。例：
 
 ```bash
 bitnot(10) = -11
@@ -1178,7 +1187,7 @@ bitnot(-12) = 11
 
 ### bitsl(Num: integer, Shift: integer) -> integer
 
-`Num` を左に `Shift` ビットシフトし、右端を0で埋めます。例：
+`Num` を左に `Shift` ビットシフトし、右側を0で埋めます。例：
 
 ```bash
 bitsl(8, 2) = 32
@@ -1187,7 +1196,7 @@ bitsl(-8, 2) = -32
 
 ### bitsr(Num: integer, Shift: integer) -> integer
 
-`Num` を右に `Shift` ビットシフトし、左端を符号ビットで埋めます（正数は0、負数は1）。例：
+`Num` を右に `Shift` ビットシフトし、左端を符号ビット（正数は0、負数は1）で埋めます。例：
 
 ```bash
 bitsr(8, 2) = 2
@@ -1198,7 +1207,7 @@ bitsr(-8, 6) = -1
 
 ### bitor(Num1: integer, Num2: integer) -> integer
 
-`Num1` と `Num2` のビットごとのORを返します。例：
+`Num1` と `Num2` のビットごとのOR演算結果を返します。例：
 
 ```bash
 bitor(10, 8) = 10
@@ -1207,7 +1216,7 @@ bitor(-10, -8) = -2
 
 ### bitxor(Num1: integer, Num2: integer) -> integer
 
-`Num1` と `Num2` のビットごとのXORを返します。例：
+`Num1` と `Num2` のビットごとのXOR演算結果を返します。例：
 
 ```bash
 bitxor(10, 8) = 2
@@ -1216,15 +1225,16 @@ bitxor(-10, -8) = 14
 
 ## ビット列操作関数
 
-ルールエンジンはビット列操作用の関数を提供しています。例えば `subbits` はビット列から指定長のビットを抽出し、指定型に変換します。
+ルールエンジンはビット列を操作する関数を提供しています。例えば `subbits` はビット列から指定長のビットを抽出し、指定データ型に変換します。
 
 :::tip
 
-`binary` 型はバイト列を表し、1バイトは8ビットなので、`binary` のビット数は8の倍数です。`bitstring` 型は任意のビット数のビット列を表します。
+`binary` 型はバイト列を表し、1バイトは8ビットなので、`binary` のビット数は8の倍数でなければなりません。  
+`bitstring` 型は任意長のビット列を表し、8の倍数でなくてもよいです。
 
-つまり、すべての `binary` は `bitstring` ですが、その逆は必ずしも真ではありません。
+簡単に言うと、すべての `binary` は `bitstring` ですが、逆は必ずしも真ではありません。
 
-`bitstring` は長さが8の倍数でない場合、JSONなど外部形式に直接シリアライズできません。通常は整数などに変換する前の中間値として使われます。
+`bitstring` は長さが8の倍数でない場合、JSONなどの外部形式に直接シリアライズできません。通常は整数などに変換する前の中間値として使います。
 
 :::
 
@@ -1282,13 +1292,13 @@ subbits(base64_decode('n05Y'), 9, 4) = 4
 
 ### subbits(Bin: binary, Start: integer, BitNum: integer, OutputType: string, Signedness: string, Endianness: string) -> bitstring | integer | float
 
-バイト列 `Bin` の `Start` 位置（1始まり）から `BitNum` ビットを抽出し、指定のバイト順 `Endianness` と符号属性 `Signedness` に従い、指定型 `OutputType` に変換します。
+バイト列 `Bin` の `Start` 位置（1始まり）から `BitNum` ビットを抽出し、指定されたバイト順 `Endianness` と符号属性 `Signedness` に従い、指定データ型 `OutputType` に変換します。
 
 - `OutputType` の値：`bits`（bitstringの略）、`integer`、`float`
 - `Signedness` の値：`signed`、`unsigned`
 - `Endianness` の値：`big`、`little`
 
-`OutputType` が `float` の場合、`Signedness` は無視されます。`OutputType` が `bits` の場合、`Signedness` と `Endianness` は無視されます。
+`OutputType` が `float` の場合、`Signedness` は無効です。`OutputType` が `bits` の場合、`Signedness` と `Endianness` は無効です。
 
 例：
 
@@ -1308,7 +1318,7 @@ subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.007133483886
 
 ### base64_decode(Data: string) -> bytes | string
 
-`Data` をBase64形式からデコードします。例：
+`Data` をbase64形式からデコードします。例：
 
 ```bash
 base64_decode('aGVsbG8=') = 'hello'
@@ -1319,18 +1329,18 @@ bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 
 ::: tip
 
-EMQX 6.0.2以降で利用可能です。
+このオプション付き関数はEMQX 6.0.2以降で導入されました。
 
 :::
 
-オプション付きでBase64デコードを行います。
+オプションを指定してBase64形式からデコードします。
 
 **オプション：**
 
-- `no_padding`: パディング文字 `=` を期待せずにデコードします。パディングなしBase64文字列に有効です。
-- `urlsafe`: URLセーフBase64形式（`-` と `_` を使用）でデコードします。
+- `no_padding`：パディング文字（`=`）なしでデコード。パディングが省略されたBase64文字列に有用。
+- `urlsafe`：URLセーフBase64形式（`-` と `_` を使用）でデコード。
 
-オプションは単独または組み合わせて使用可能で、順序は結果に影響しません。
+単独または組み合わせて使用可能。順序は結果に影響しません。
 
 例：
 
@@ -1344,7 +1354,7 @@ SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
 
 ### base64_encode(Data: binary | string) -> string
 
-`Data` をBase64形式にエンコードします。例：
+`Data` をbase64形式にエンコードします。例：
 
 ```bash
 base64_encode('hello') = 'aGVsbG8='
@@ -1355,18 +1365,18 @@ base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
 
 ::: tip
 
-EMQX 6.0.2以降で利用可能です。
+このオプション付き関数はEMQX 6.0.2以降で導入されました。
 
 :::
 
-オプション付きでBase64エンコードを行います。
+オプションを指定してBase64形式にエンコードします。
 
 **オプション：**
 
-- `no_padding`: パディング文字 `=` を付加せずにエンコードします。
-- `urlsafe`: URLセーフBase64形式（`-` と `_` を使用）でエンコードします。
+- `no_padding`：パディング文字（`=`）なしでエンコード。
+- `urlsafe`：URLセーフBase64形式でエンコードし、`+` と `/` の代わりに `-` と `_` を使用。
 
-オプションは単独または組み合わせて使用可能で、順序は結果に影響しません。
+単独または組み合わせて使用可能。順序は結果に影響しません。
 
 例：
 
@@ -1399,7 +1409,7 @@ json_encode([1,2,3]) = '[1,2,3]'
 
 ### bin2hexstr(Data: binary) -> string
 
-バイナリデータを16進文字列に変換します。例：
+バイナリデータを対応する16進数文字列に変換します。例：
 
 ```bash
 bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
@@ -1407,7 +1417,7 @@ bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 
 ### hexstr2bin(Data: string) -> binary
 
-16進文字列をバイナリデータに変換します。例：
+16進数文字列を対応するバイナリデータに変換します。例：
 
 ```bash
 unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
@@ -1415,11 +1425,11 @@ unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 
 ### sqlserver_bin2hexstr(Data: binary | string) -> string
 
-任意のバイナリデータをMicrosoft SQL Serverのバイナリ型（`0x` プレフィックス付きHEX文字列）に変換します。
+任意のバイナリデータをMicrosoft SQL Serverのバイナリ型に変換します。`0x` プレフィックス付きの16進数文字列になります。
 
 ::: tip
 
-Microsoft SQL Serverの `CONVERT` 関数と組み合わせて、UTF-16リトルエンディアンエンコードされたUnicode文字列をUTF-8非対応のSQL Serverバージョンに書き込む際に利用可能です。
+この関数はMicrosoft SQL Serverの `CONVERT` 関数と組み合わせて使用し、UTF-16リトルエンディアンエンコードされたUnicode文字列をUTF-8非対応のSQL Serverに書き込むのに使えます。
 
 :::
 
@@ -1431,52 +1441,52 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### スキーマレジストリ関数
 
-EMQXは指定したスキーマに従い、[Protobuf](https://developers.google.com/protocol-buffers) および [Avro](https://avro.apache.org/) データのエンコード・デコードを行う `schema_encode` と `schema_decode` 関数をサポートしています。詳細は[スキーマレジストリ](./schema-registry.md)をご参照ください。
+EMQXは `schema_encode` と `schema_decode` 関数を使い、指定したスキーマに従って [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) や [Avro](https://avro.apache.org/) データのエンコード・デコードをサポートしています。詳細は [スキーマレジストリ](./schema-registry.md) をご覧ください。
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
-指定したAvroスキーマで `Data` をエンコードします。スキーマレジストリでスキーマを作成しIDを取得してください。
+指定したAvroスキーマで `Data` をエンコードします。スキーマレジストリにスキーマを作成しIDを取得します。
 
 ### schema_encode(SchemaID: string, Data: map, MsgType: string) -> binary
 
-指定したProtobufスキーマで `Data` をエンコードします。スキーマレジストリでスキーマを作成しIDを取得してください。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
+指定したProtobufスキーマで `Data` をエンコードします。スキーマレジストリにスキーマを作成しIDを取得します。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
 
 ### schema_decode(SchemaID: string, Bin: binary) -> map
 
-指定したAvroスキーマで `Bin` をデコードします。スキーマレジストリでスキーマを作成しIDを取得してください。
+指定したAvroスキーマで `Bin` をデコードします。スキーマレジストリにスキーマを作成しIDを取得します。
 
 ### schema_decode(SchemaID: string, Bin: binary, MsgType: string) -> map
 
-指定したProtobufスキーマで `Bin` をデコードします。スキーマレジストリでスキーマを作成しIDを取得してください。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
+指定したProtobufスキーマで `Bin` をデコードします。スキーマレジストリにスキーマを作成しIDを取得します。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
 
-### **Sparkplug B関数**
+### **Sparkplug B 関数**
 
-EMQXはSparkplug Bメッセージのデコード・エンコード用関数（`spb_decode` と `spb_encode`）も備えています。詳細は[Sparkplug B](./sparkplug.md)をご覧ください。
+EMQXはSparkplug Bメッセージのデコード・エンコード用に特別な関数（`spb_decode` と `spb_encode`）も持っています。詳細は [Sparkplug B](./sparkplug.md) をご覧ください。
 
 ## 日時変換関数
 
 ### date_to_unix_ts(Unit: string, FormatString: string, DateTimeString: string) -> integer
 
-日時文字列 `DateTimeString` をフォーマット文字列 `FormatString` に従い解析し、指定単位 `Unit` のUnix時間に変換します。
+日時文字列 `DateTimeString` をフォーマット文字列 `FormatString` に従って解析し、指定した時間単位 `Unit` のUnix時間に変換します。
 
-利用可能な単位は `second`、`millisecond`、`microsecond`、`nanosecond` です。
+使用可能な `Unit` は `second`, `millisecond`, `microsecond`, `nanosecond` です。
 
-`FormatString` で使用可能なプレースホルダーは以下の通りです：
+`FormatString` で使用可能なプレースホルダー：
 
 | プレースホルダー | 意味 | 値の範囲 |
 | ----------- | ------- | ------------|
 | `%Y` | 4桁の年 | 0000 - 9999 |
 | `%m` | 2桁の月 | 01 - 12 |
 | `%d` | 2桁の日 | 01 - 31 |
-| `%H` | 24時間表記の2桁の時 | 00 - 24 |
+| `%H` | 24時間制の2桁の時 | 00 - 24 |
 | `%M` | 2桁の分 | 00 - 59 |
 | `%S` | 2桁の秒 | 00 - 59 |
 | `%N` | ナノ秒 | 000000000 - 999999999 |
-| `%6N` | マイクロ秒（ナノ秒の先頭6桁） | 000000 - 999999 |
-| `%3N` | ミリ秒（ナノ秒の先頭3桁） | 000 - 999 |
-| `%z` | タイムゾーンオフセット（±hhmm形式） | -1159 - +1159 |
-| `%:z` | タイムゾーンオフセット（±hh:mm形式） | -11:59 - +11:59 |
-| `%::z` | タイムゾーンオフセット（±hh:mm:ss形式） | -11:59:59 - +11:59:59 |
+| `%6N` | マイクロ秒（ナノ秒の最初の6桁） | 000000 - 999999 |
+| `%3N` | ミリ秒（ナノ秒の最初の3桁） | 000 - 999 |
+| `%z` | タイムゾーンオフセット（±hhmm） | -1159 - +1159 |
+| `%:z` | タイムゾーンオフセット（±hh:mm） | -11:59 - +11:59 |
+| `%::z` | タイムゾーンオフセット（±hh:mm:ss） | -11:59:59 - +11:59:59 |
 
 例：
 
@@ -1486,13 +1496,13 @@ date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00+08:00') =
 
 ### date_to_unix_ts(Unit: string, Offset: string | integer, FormatString: string, DateTimeString: string) -> integer
 
-`DateTimeString` にタイムゾーンオフセットが含まれない場合、`Offset` で手動指定できます。その他の動作は `date_to_unix_ts/3` と同様です。`Offset` は文字列または秒数の整数で指定可能です。
+`DateTimeString` にタイムゾーンオフセットが含まれない場合、`Offset` で手動指定できます。その他の挙動は `date_to_unix_ts/3` と同様です。`Offset` は文字列または秒数の整数で指定可能です。
 
-文字列の場合、以下の形式が利用可能です：
+文字列の場合、以下の形式が使えます：
 
 - `Z` または `z`：UTCオフセット00:00
-- `±hh[:mm][:ss]` または `±hh[mm][ss]`：UTCからの正負の時刻オフセット
-- `local`：システムのローカルタイムゾーンに対応するオフセット
+- `±hh[:mm][:ss]` または `±hh[mm][ss]`：UTCからの正負の時間オフセット
+- `local`：システムのローカルタイムゾーンのオフセット
 
 例：
 
@@ -1504,7 +1514,7 @@ date_to_unix_ts('second', 14400, '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') 
 
 ### format_date(Unit: string, Offset: string | integer, FormatString: string, Time: Integer) -> string
 
-Unix時間 `Time` を指定フォーマットの日時文字列に変換します。`Unit` はUnix時間の単位、`Offset` は出力日時のタイムゾーンオフセット、`FormatString` は出力日時のフォーマットを表します。
+Unix時間 `Time` を指定フォーマットの日時文字列に変換します。`Unit` はUnix時間の単位、`Offset` は出力日時のタイムゾーンオフセット、`FormatString` は出力日時のフォーマットです。
 
 `date_to_unix_ts/3, 4` を参照してください。
 
@@ -1520,7 +1530,7 @@ format_date('millisecond', 28800, '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '
 
 ### now_rfc3339() -> string
 
-現在時刻を秒単位のRFC3339形式日時文字列で返します。例：
+現在のシステム時刻を秒単位のRFC3339日時文字列で返します。例：
 
 ```bash
 now_rfc3339() = '2024-02-23T10:26:20+08:00'
@@ -1528,7 +1538,7 @@ now_rfc3339() = '2024-02-23T10:26:20+08:00'
 
 ### now_rfc3339(Unit: string) -> string
 
-`now_rfc3339/0` と同様ですが、`Unit` で時間単位を指定できます。`second`、`millisecond`、`microsecond`、`nanosecond` をサポートします。例：
+`now_rfc3339/0` と同様ですが、`Unit` で時間単位を指定できます。`second`, `millisecond`, `microsecond`, `nanosecond` をサポート。例：
 
 ```bash
 now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
@@ -1536,7 +1546,7 @@ now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
 
 ### now_timestamp() -> integer
 
-現在時刻を秒単位のUnixタイムスタンプで返します。例：
+現在のシステム時刻をUnixタイムスタンプ（秒単位）で返します。例：
 
 ```bash
 now_timestamp() = 1708913853
@@ -1561,7 +1571,7 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30+08:00') = 1708674990
 
 ### rfc3339_to_unix_ts(DateTimeString: string, Unit: string) -> integer
 
-`rfc3339_to_unix_ts/1` と同様ですが、`Unit` で返却単位を指定できます。例：
+`rfc3339_to_unix_ts/1` と同様ですが、`Unit` で返却するUnixタイムスタンプの単位を指定できます。例：
 
 ```bash
 rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'second') = 1708703790
@@ -1572,11 +1582,11 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30.535904509Z', 'nanosecond') = 17087037905
 
 ### timezone_to_offset_seconds(Offset: string) -> integer
 
-タイムゾーンオフセット文字列を秒数の整数に変換します。対応形式は以下の通りです：
+タイムゾーンオフセット文字列を秒数の整数に変換します。対応する形式は以下の通りです：
 
 - `Z` または `z`：UTCオフセット00:00
-- `±hh[:mm][:ss]` または `±hh[mm][ss]`：UTCからの正負の時刻オフセット
-- `local`：システムのローカルタイムゾーンに対応するオフセット
+- `±hh[:mm][:ss]` または `±hh[mm][ss]`：UTCからの正負の時間オフセット
+- `local`：システムのローカルタイムゾーンのオフセット
 
 例：
 
@@ -1588,7 +1598,7 @@ timezone_to_offset_seconds('local') = 28800
 
 ### unix_ts_to_rfc3339(Time: integer) -> string
 
-秒単位のUnixタイムスタンプをシステムローカルタイムゾーンのRFC3339形式日時文字列に変換します。例：
+Unixタイムスタンプ（秒単位）をシステムのローカルタイムゾーンのRFC3339準拠日時文字列に変換します。例：
 
 ```bash
 unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
@@ -1596,7 +1606,7 @@ unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
 
 ### unix_ts_to_rfc3339(Time: integer, Unit: string) -> string
 
-`unix_ts_to_rfc3339/1` と同様ですが、`Unit` で時間単位を指定できます。例：
+`unix_ts_to_rfc3339/0` と同様ですが、`Unit` で時間単位を指定できます。例：
 
 ```bash
 unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:00'
@@ -1606,7 +1616,7 @@ unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:0
 
 ### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
-現在時刻をMongoDBのISODate型または文字列で返します。MongoDB関連アクションとSQLテストでのみサポートされ、SQLテストでは文字列（例：`ISODate("2024-02-23T15:00:00.123Z")`）を返します。その他の関数の入力としては文字列以外は現在サポートされていません。
+現在時刻をMongoDBのISODate型または文字列で返します。MongoDB関連のアクションやSQLテストでのみサポートされ、SQLテストでは文字列（例：`ISODate("2024-02-23T15:00:00.123Z")`）を返します。文字列以外は他関数の入力としては未対応です。
 
 例：
 
@@ -1616,7 +1626,7 @@ mongo_date() = 'ISODate("2024-02-23T15:00:00.123Z")'
 
 ### mongo_date(Timestamp: integer) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
-指定したミリ秒単位UnixタイムスタンプをMongoDB ISODate型または文字列に変換します。その他は `mongo_date/0` と同様です。
+ミリ秒単位のUnixタイムスタンプをMongoDB ISODate型または文字列に変換します。その他は `mongo_date/0` と同様です。
 
 例：
 
@@ -1626,9 +1636,9 @@ mongo_date(now_timestamp('millisecond')) = 'ISODate(2024-02-23T15:48:57.871Z)'
 
 ### mongo_date(Timestamp: integer, Unit: string) -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
-指定したUnixタイムスタンプをMongoDB ISODate型または文字列に変換します。`Unit` で入力タイムスタンプの単位を指定可能です。その他は `mongo_date/0` と同様です。
+UnixタイムスタンプをMongoDB ISODate型または文字列に変換します。`Unit` で入力タイムスタンプの単位を指定可能です。その他は `mongo_date/0` と同様です。
 
-利用可能な単位：
+`Unit` の値：
 
 - `second`
 - `millisecond`
@@ -1666,32 +1676,29 @@ uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 環境変数 `Name` の値を返します。以下の制約があります：
 
 - OS環境変数から読み取る際に接頭辞 `EMQXVAR_` が付加されます。例えば、`getenv('FOO_BAR')` は `EMQXVAR_FOO_BAR` を読み取ります。
-- OS環境変数から読み込まれた値は不変です。
+- OS環境から読み込んだ値は不変です。
 
 ## 条件関数
 
 ### coalesce(Value1: any, Value2: any) -> any
 
-`Value1` がnullの場合に `Value2` を返します。
+`Value1` がnullの場合に `Value2` を返します。データフィールドがnullかどうかを判定し、デフォルト値に置き換えたい場合に便利です。
 
-データフィールドがnullかどうかをチェックし、デフォルト値に置き換えたい場合に便利です。
-
-例えば、`coalesce(payload.value, 0)` は `payload.value` がnullでなければその値を、nullなら `0` を返します。
-
-SQL式の `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END` と同等ですが、より簡潔です。
+例えば、`coalesce(payload.value, 0)` は `payload.value` がnullでなければその値を返し、nullなら0を返します。  
+SQL式の `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END` と同等ですが簡潔です。
 
 ::: tip 注意
 
-EMQXルールSQLでは、null値の文字列表現はデフォルトで `'undefined'` です。
+EMQXルールSQLではnull値の文字列表現はデフォルトで `'undefined'` です。
 
 :::
 
 ### coalesce_ne(Value1: any, Value2: any) -> any
 
-`coalesce` と似ていますが、`Value1` がnullまたは空文字列の場合に `Value2` を返します。
+`coalesce` に似ていますが、`Value1` がnullまたは空文字列の場合に `Value2` を返します。
 
 ::: tip 注意
 
-EMQXルールSQLでは、null値の文字列表現はデフォルトで `'undefined'` です。
+EMQXルールSQLではnull値の文字列表現はデフォルトで `'undefined'` です。
 
 :::

@@ -28,9 +28,9 @@ client_version() ->
 
 client_capabilities() -> #{}.
 
-%% MCP 以外のメッセージ受信時のコールバック
+%% MCP 以外のメッセージを受信した際のコールバック
 received_non_mcp_message(MqttClient, Msg, State) ->
-    io:format("~p MCP 以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
+    io:format("~p MCP以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
     State.
 
 %% MCP over MQTT クライアントの起動
@@ -48,7 +48,7 @@ start_link() ->
         }).
 ```
 
-ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターへのサブスクライブに使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
+ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターにサブスクライブするために使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
 
 ### シンプルな MCP サーバーの作成
 

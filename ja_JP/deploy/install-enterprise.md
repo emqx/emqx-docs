@@ -4,34 +4,34 @@ EMQX は各リリースごとに対応する Docker イメージおよび各種�
 
 :::tip
 
-上記のデプロイ方法に加えて、完全マネージド型の IoT 向け MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウド接続にあたっては、[アカウント登録](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/)のみで、インフラの保守は一切不要です。
+上記のデプロイ方法に加えて、完全マネージド型の MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウドへの接続にあたって、インフラのメンテナンスは一切不要で、[アカウント登録](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/)のみでご利用いただけます。
 :::
 
 以下のページでは EMQX Enterprise のインストール手順を説明しています。
 
 **[Docker を使ったインストール](./install-docker.md)**
 
-公式 Docker イメージを使用して EMQX Enterprise をインストールおよび起動し、Docker Compose で EMQX クラスターを構築します。
+公式 Docker イメージを使用して EMQX Enterprise をインストールおよび起動し、Docker Compose を使って EMQX クラスターを構築します。
 
 **[Debian へのインストール](./install-debian.md)**
 
-Debian システムに deb および tar.gz パッケージを用いて EMQX Enterprise をインストールします。
+Debian システムに deb および tar.gz パッケージで EMQX Enterprise をインストールします。
 
 **[Ubuntu へのインストール](./install-ubuntu.md)**
 
-Ubuntu システムに deb および tar.gz パッケージを用いて EMQX Enterprise をインストールします。
+Ubuntu システムに deb および tar.gz パッケージで EMQX Enterprise をインストールします。
 
 **[CentOS/RHEL へのインストール](./install-rhel.md)**
 
-CentOS/RHEL システムに rpm および tar.gz パッケージを用いて EMQX Enterprise をインストールします。
+CentOS/RHEL システムに rpm および tar.gz パッケージで EMQX Enterprise をインストールします。
 
 **[macOS へのインストール](./install-macOS.md)**
 
-macOS に zip パッケージを用いて EMQX Enterprise をインストールします。
+macOS に zip パッケージで EMQX Enterprise をインストールします。
 
 **[Kubernetes へのデプロイ](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
-EMQX Operator を使用して EMQX Enterprise をデプロイします。
+EMQX Operator を使って EMQX Enterprise をデプロイします。
 
 **[ライセンスの取り扱い](./license.md)**
 
