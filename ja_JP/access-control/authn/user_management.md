@@ -2,11 +2,7 @@
 
 組み込みデータベースに保存された認証データについては、EMQX ダッシュボードまたは HTTP API を使用して、ユーザー認証情報の作成、更新、削除、一覧表示、およびインポートが可能です。
 
-<<<<<<< HEAD
-対象となるのは以下の認証方式です：
-=======
 対象となるのは以下です：
->>>>>>> origin/release-5.9
 
 - [パスワード認証に組み込みデータベースを使用する](./mnesia.md)
 - [MQTT 5.0 強化認証](./scram.md)
@@ -39,19 +35,11 @@
   /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
   ```
 
-<<<<<<< HEAD
-識別子の命名規則やパラメータの詳細については、[REST API](../../admin/api.md) を参照してください。
-
-## ユーザーのインポート
-
-ユーザーインポートは `password_based:built_in_database` 認証器のみサポートしています。
-=======
 識別子の規則やパラメータの説明については、[REST API](../../admin/api.md) を参照してください。
 
 ## ユーザーのインポート
 
 ユーザーインポートは `password_based:built_in_database` 認証器のみサポートされています。
->>>>>>> origin/release-5.9
 
 この機能により、稼働中の EMQX インスタンスに対してユーザーを一括インポートできます。
 
@@ -61,11 +49,7 @@
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-<<<<<<< HEAD
-リクエストは `multipart/form-data` の POST で送信する必要があります。
-=======
 リクエストは `multipart/form-data` の POST である必要があります。
->>>>>>> origin/release-5.9
 
 例：
 
@@ -78,19 +62,11 @@ curl -v -u admin:public -X 'POST' \
 
 ### 対応ファイル形式
 
-<<<<<<< HEAD
-ファイル形式は拡張子で判別されます。以下の形式がサポートされています：
-
-* `.csv`
-  
-  ヘッダー付き CSV ファイル例：
-=======
 ファイル形式は拡張子によって判別されます。以下の形式がサポートされています：
 
 * `.csv`
   
   ヘッダー付き CSV ファイル：
->>>>>>> origin/release-5.9
   
   ```txt
   user_id,password_hash,salt,is_superuser
@@ -105,21 +81,12 @@ curl -v -u admin:public -X 'POST' \
   
   任意フィールド：
   
-<<<<<<< HEAD
-  - `salt`（省略時は空文字列）
-  - `is_superuser`（省略時は `false`）
-  
-* `.json`
-  
-  オブジェクトの配列形式 JSON 例：
-=======
   - `salt`（デフォルトは空文字列）
   - `is_superuser`（デフォルトは `false`）
   
 * `.json`
   
   オブジェクトの JSON 配列：
->>>>>>> origin/release-5.9
   
   ```json
   [

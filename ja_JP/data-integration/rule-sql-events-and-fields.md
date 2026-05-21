@@ -6,15 +6,9 @@ EMQXのルールは、**MQTTメッセージ**、**MQTTイベント**、または
 
 ## MQTTメッセージ
 
-<<<<<<< HEAD
-EMQXルールを使ってメッセージのパブリッシュを処理する場合、`FROM`句でメッセージのトピックを指定する必要があります。
-
-例えば、以下のステートメントでは、トピックパターン`t/#`にパブリッシュされた任意のメッセージから、`payload.msg`（`AS`句で`msg`にリネーム）、`clientid`、`username`、`payload`、`topic`、`qos`のフィールドを選択しています。
-=======
 EMQXのルールを使用してメッセージのパブリッシュを処理する場合、`FROM`句でメッセージのトピックを指定する必要があります。
 
 例えば、以下のステートメントでは、トピックパターン`t/#`にパブリッシュされたメッセージから、`payload.msg`（`AS`句で`msg`に名前変更）、`clientid`、`username`、`payload`、`topic`、`qos`のフィールドを選択しています。
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -44,23 +38,6 @@ FROM
 
 以下の表は、受信したMQTTメッセージから選択可能なフィールドを示しています： <!--技術レビュー必要 @WIVWIV-->
 
-<<<<<<< HEAD
-| フィールド             | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `clientid`            | パブリッシャーのクライアントID                           |
-| `username`            | パブリッシャーのユーザー名                               |
-| `payload`             | MQTTペイロード                                           |
-| `peerhost`            | クライアントのIPアドレス                                 |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | QoSレベル                                                |
-| `flags`               | フラグ <!--詳細説明が必要か？-->                          |
-| `headers`             | メッセージ処理に関連する内部データ                       |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0クライアントのみ）            |
-| `timestamp`           | タイムスタンプ（単位：ミリ秒）                           |
-| `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）   |
-| `node`                | イベントが発生したノード                                  |
-=======
 | フィールド             | 説明                                                     |
 | :-------------------- | :------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                         |
@@ -76,24 +53,15 @@ FROM
 | `timestamp`           | タイムスタンプ（単位：ミリ秒）                          |
 | `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）  |
 | `node`                | イベントが発生したノード<!--技術レビュー必要-->          |
->>>>>>> origin/release-5.9
 | `client_attrs`        | [クライアント属性](../client-attributes/client-attributes.md) |
 
 ## MQTTイベント
 
-<<<<<<< HEAD
-EMQXルールを使って、クライアントのオンライン・オフラインやサブスクリプションなどのイベント通知を取得するために、イベントトピックからデータを抽出できます。イベントトピックは`"$events/"`で始まり、例えば`"$events/client/connected"`などがあり、ルールの`FROM`句で指定可能です。
-
-::: tip
-
-デフォルトでは、クライアントはMQTTイベントメッセージを直接サブスクライブできません。このセクションでは、ルールを使ってこれらのメッセージをサブスクライブする方法を説明しています。MQTTイベントメッセージのデータは、[システムトピック](../observability/mqtt-system-topics.md)をサブスクライブすることでも取得可能です。
-=======
 EMQXのルールを使用して、クライアントのオンライン・オフラインやサブスクリプションなどのイベント通知を取得するためにイベントトピックからデータを抽出できます。イベントトピックは`"$events/"`で始まり、例えば`"$events/client_connected"`などがあり、ルールの`FROM`句で指定可能です。
 
 ::: tip
 
 デフォルトでは、クライアントはMQTTイベントメッセージを直接サブスクライブできません。本セクションはルールを使ってこれらのメッセージをサブスクライブする方法を説明しています。MQTTイベントメッセージのデータは、[システムトピック](../observability/mqtt-system-topics.md)をサブスクライブすることでも取得可能です。
->>>>>>> origin/release-5.9
 
 :::
 
@@ -103,23 +71,6 @@ EMQXのルールを使用して、クライアントのオンライン・オフ�
 
 | イベントトピック名                                             | 説明                           |
 | ------------------------------------------------------------ | :------------------------------ |
-<<<<<<< HEAD
-| [$events/message/delivered](#message-delivery-event-events-message-delivered) | メッセージ配信完了               |
-| [$events/message/acked](#message-acknowledged-event-events-message-acked) | メッセージ配信アック受信         |
-| [$events/message/dropped](#message-dropped-when-routing-event-events-message-dropped) | ルーティング時のメッセージ破棄   |
-| [$events/message/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | 配信時のメッセージ破棄           |
-| [$events/client/connected](#connection-complete-event-events-client-connected) | 接続完了                       |
-| [$events/client/disconnected](#disconnect-event-events-client-disconnected) | 切断                           |
-| [$events/client/connack](#connection-acknowledge-event-events-client-connack) | 接続応答                       |
-| [$events/auth/check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | 認可チェック完了                 |
-| [$events/auth/check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | 認証チェック完了                 |
-| [$events/session/subscribed](#subscriber-event-events-session-subscribed) | サブスクライブ完了               |
-| [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | サブスクライブ解除完了           |
-| [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | システムアラーム発動             |
-| [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | システムアラーム解除             |
-
-::: tip
-=======
 | [$events/message_delivered](#message-delivery-event-events-message-delivered) | メッセージ配信                  |
 | [$events/message_acked](#message-acknowledged-event-events-message-acked) | メッセージ受領確認              |
 | [$events/message_dropped](#message-dropped-when-routing-event-events-message-dropped) | ルーティング時のメッセージ破棄 |
@@ -135,7 +86,6 @@ EMQXのルールを使用して、クライアントのオンライン・オフ�
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | システムアラーム解除          |
 
 ### メッセージ配信イベント ("$events/message_delivered")
->>>>>>> origin/release-5.9
 
 EMQX 5.10.0以降、イベントトピックにネームスペースが導入され、論理的かつ階層的な構造に再編成されました。これにより、イベントトピックの明確化、フィルタリング、管理が向上しています。
 
@@ -190,24 +140,6 @@ FROM
 ```
 以下は各フィールドの詳細説明です。
 
-<<<<<<< HEAD
-| コード                 | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `from_clientid`       | パブリッシャーのクライアントID                           |
-| `from_username`       | パブリッシャーのユーザー名                               |
-| `clientid`            | サブスクライバーのクライアントID                         |
-| `username`            | サブスクライバーのユーザー名                             |
-| `payload`             | MQTTペイロード                                           |
-| `peerhost`            | クライアントのIPアドレス                                 |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | QoSレベル                                                |
-| `flags`               | フラグ                                                   |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0クライアントのみ）            |
-| `timestamp`           | イベント発生時刻（単位：ミリ秒）                         |
-| `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）   |
-| `node`                | イベントが発生したEMQXノード                             |
-=======
 | コード                 | 説明                                                     |
 | :-------------------- | :------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                         |
@@ -224,21 +156,9 @@ FROM
 | `timestamp`           | イベント発生時刻（単位：ミリ秒）                        |
 | `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）  |
 | `node`                | イベントが発生したEMQXノード                            |
->>>>>>> origin/release-5.9
 
 ### メッセージ配信アック受信イベント ("$events/message/acked")
 
-<<<<<<< HEAD
-このイベントトピックは、メッセージ配信のアック受信時にルールをトリガーできます。
-
-::: tip
-
-QoS 1およびQoS 2のメッセージのみ利用可能です。
-
-:::
-
-例えば、`"$events/message/acked"`イベントトピックから、パブリッシャーのIDとユーザー名、メッセージトピック、メッセージQoS、イベントが発生したEMQXノード、イベント発生時刻のフィールドを抽出するには、以下のステートメントを使用します。 <!--node部分の確認必要-->
-=======
 このイベントトピックは、メッセージ配信が受領確認された際にルールをトリガーするために使用できます。
 
 ::: tip
@@ -248,7 +168,6 @@ QOS 1およびQOS 2のメッセージのみ対応しています。
 :::
 
 例えば、`"$events/message_acked"`イベントトピックから、パブリッシャーのIDとユーザー名、メッセージトピック、メッセージのQoS、イベントが発生したEMQXノード、イベント発生時刻のフィールドを抽出するには、以下のステートメントを使用します。 <!--node部分の確認必要-->
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -277,27 +196,6 @@ FROM
 
 以下は各フィールドの詳細説明です。
 
-<<<<<<< HEAD
-| コード                 | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `from_clientid`       | パブリッシャーのクライアントID                           |
-| `from_username`       | パブリッシャーのユーザー名                               |
-| `clientid`            | サブスクライバーのクライアントID                         |
-| `username`            | サブスクライバーのユーザー名                             |
-| `payload`             | MQTTペイロード                                           |
-| `peerhost`            | クライアントのIPアドレス                                 |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | QoSレベル                                                |
-| `flags`               | フラグ                                                   |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0のみ）                        |
-| `puback_props`        | PUBACKプロパティ（MQTT 5.0のみ）                         |
-| `timestamp`           | イベント発生時刻（ミリ秒単位）                           |
-| `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）   |
-| `node`                | イベントが発生したEMQXノード                             |
-
-### ルーティング時のメッセージ破棄イベント ("$events/message/dropped")
-=======
 | コード                 | 説明                                                     |
 | :-------------------- | :------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                         |
@@ -317,15 +215,10 @@ FROM
 | `node`                | イベントが発生したEMQXノード                            |
 
 ### ルーティング時のメッセージ破棄イベント ("$events/message_dropped")
->>>>>>> origin/release-5.9
 
 このイベントトピックは、メッセージがルーティング中に破棄された際にルールをトリガーできます。
 
-<<<<<<< HEAD
-例えば、`"$events/message/dropped"`イベントトピックから、破棄理由、メッセージトピック、メッセージQoS、イベントが発生したEMQXノード、イベント発生時刻のフィールドを抽出するには、以下のステートメントを使用します。
-=======
 例えば、`"$events/message_dropped"`イベントトピックから、破棄理由、メッセージトピック、メッセージのQoS、イベントが発生したEMQXノード、イベント発生時刻のフィールドを抽出するには、以下のステートメントを使用します。
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -349,25 +242,6 @@ FROM
 }
 ```
 
-<<<<<<< HEAD
-| フィールド             | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `reason`              | 破棄理由：<br/><br/>`no_subscribers`: トピックにサブスクライブするクライアントがいない<br/><br/>`receive_maximum_exceeded`: `awaiting_rel`キューが満杯<br/><br/>`packet_identifier_inuse`: 未解放のパケットIDを持つQoS 2メッセージを受信した |
-| `clientid`            | パブリッシャーのクライアントID                           |
-| `username`            | パブリッシャーのユーザー名                               |
-| `payload`             | MQTTペイロード                                           |
-| `peerhost`            | クライアントのIPアドレス                                 |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | QoSレベル                                                |
-| `flags`               | フラグ                                                   |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0のみ）                        |
-| `timestamp`           | イベント発生時刻（単位：ミリ秒）                         |
-| `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）   |
-| `node`                | イベントが発生したノード                                 |
-
-### 配信時のメッセージ破棄イベント ("$events/message/delivery_dropped")
-=======
 | フィールド             | 説明                                                                                   |
 | :-------------------- | :------------------------------------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                                                       |
@@ -385,15 +259,10 @@ FROM
 | `node`                | イベントが発生したノード                                                              |
 
 ### 配信時のメッセージ破棄イベント ("$events/delivery_dropped")
->>>>>>> origin/release-5.9
 
 このイベントトピックは、メッセージが配信中に破棄された際にルールをトリガーできます。
 
-<<<<<<< HEAD
-例えば、`"$events/message/delivery_dropped"`イベントトピックから、パブリッシャーのIDとユーザー名、破棄理由、メッセージトピックとQoSのフィールドを抽出するには、以下のステートメントを使用します。
-=======
 例えば、`"$events/delivery_dropped"`イベントトピックから、パブリッシャーIDとユーザー名、破棄理由、メッセージトピックとQoSのフィールドを抽出するには、以下のステートメントを使用します。
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -417,25 +286,6 @@ FROM "$events/message/delivery_dropped"
 ```
 以下は各フィールドの詳細説明です。
 
-<<<<<<< HEAD
-| フィールド             | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `reason`              | 破棄理由：<br/><br/>`queue_full`: QoS>0のメッセージキューが満杯<br/><br/>`no_local`: クライアント自身がパブリッシュしたメッセージの受信を禁止<br/><br/>`expired`: メッセージまたはセッションの有効期限切れ<br/><br/>`qos0_msg`: QoS 0のメッセージキューが満杯 |
-| `from_clientid`       | パブリッシャーのクライアントID                           |
-| `from_username`       | パブリッシャーのユーザー名                               |
-| `clientid`            | サブスクライバーのクライアントID                         |
-| `username`            | サブスクライバーのユーザー名                             |
-| `payload`             | MQTTペイロード                                           |
-| `peerhost`            | クライアントのIPアドレス                                 |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | メッセージのQoS                                          |
-| `flags`               | フラグ                                                   |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0クライアントのみ）            |
-| `timestamp`           | イベント発生時刻（単位：ミリ秒）                         |
-| `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）   |
-| `node`                | イベントが発生したEMQXノード                             |
-=======
 | フィールド             | 説明                                                                                   |
 | :-------------------- | :------------------------------------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                                                       |
@@ -453,7 +303,6 @@ FROM "$events/message/delivery_dropped"
 | `timestamp`           | イベント発生時刻（単位：ミリ秒）                                                      |
 | `publish_received_at` | PUBLISHメッセージがEMQXに到達した時間（単位：ミリ秒）                                |
 | `node`                | イベントが発生したEMQXノード                                                          |
->>>>>>> origin/release-5.9
 
 ### 接続完了イベント ("$events/client/connected")
 
@@ -483,25 +332,6 @@ FROM
 
 以下の表は、受信したMQTTメッセージから選択可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド         | 説明                                                      |
-| :---------------- | :-------------------------------------------------------- |
-| `clientid`        | クライアントID                                           |
-| `username`        | クライアントのユーザー名                                 |
-| `mountpoint`      | ブリッジメッセージのマウントポイント                   |
-| `peername`        | クライアントのIPアドレスとポート番号                    |
-| `sockname`        | EMQXがリッスンしているIPアドレスとポート番号           |
-| `proto_name`      | プロトコル名                                             |
-| `proto_ver`       | プロトコルバージョン                                     |
-| `keepalive`       | MQTTキープアライブ間隔                                   |
-| `clean_start`     | MQTTのclean_startフラグ                                  |
-| `expiry_interval` | MQTTセッションの有効期限                                 |
-| `is_bridge`       | クライアントがブリッジとして動作しているかどうか       |
-| `connected_at`    | クライアント接続完了時刻（単位：ミリ秒）                |
-| `conn_props`      | CONNECTプロパティ（MQTT 5.0クライアントのみ）            |
-| `timestamp`       | イベント発生時刻（単位：ミリ秒）                         |
-| `node`            | イベントが発生したEMQXノード                             |
-=======
 | フィールド         | 説明                                                     |
 | :---------------- | :------------------------------------------------------- |
 | `clientid`        | クライアントID                                           |
@@ -519,18 +349,13 @@ FROM
 | `conn_props`      | CONNECTプロパティ（MQTT 5.0クライアントのみ）            |
 | `timestamp`       | イベント発生時刻（単位：ミリ秒）                        |
 | `node`            | イベントが発生したEMQXノード                            |
->>>>>>> origin/release-5.9
 | `client_attrs`    | [クライアント属性](../client-attributes/client-attributes.md) |
 
 ### 切断イベント ("$events/client/disconnected")
 
 このイベントトピックは、クライアントが切断された際にルールをトリガーできます。
 
-<<<<<<< HEAD
-例えば、`"$events/client/disconnected"`イベントトピックから、クライアントID、ユーザー名、切断理由、接続時間、切断時間、イベントが発生したEMQXノードのフィールドを抽出するには、以下のステートメントを使用します。
-=======
 例えば、`"$events/client_disconnected"`イベントトピックから、クライアントID、ユーザー名、切断理由、接続開始時刻、切断時刻、イベントが発生したEMQXノードのフィールドを抽出するには、以下のステートメントを使用します。
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -556,20 +381,6 @@ FROM
 }
 ```
 
-<<<<<<< HEAD
-| フィールド         | 説明                                                      |
-| :---------------- | :-------------------------------------------------------- |
-| `reason`          | 切断理由：<br/><br/>`normal`: クライアントが意図的に切断<br/><br/>`kicked`: REST APIによりEMQXが強制切断<br/><br/>`keepalive_timeout`: キープアライブ時間切れ<br/><br/>`not_authorized`: 認可失敗<br/><br/>`tcp_closed`: ピアがネットワーク接続を閉じた<br/><br/>`discarded`: 同じClientIDで`clean_start=true`の別クライアントが接続し、前の接続が切断された<br/><br/>`takenover`: 同じClientIDで`clean_start=false`の別クライアントが接続し、前の接続を引き継いだ<br/><br/>`internal_error`: 不正なメッセージ形式やその他不明なエラー |
-| `clientid`        | クライアントID                                           |
-| `username`        | クライアントのユーザー名                                 |
-| `peername`        | IPアドレスとポート番号                                   |
-| `sockname`        | EMQXがリッスンしているIPアドレスとポート番号           |
-| `connected_at`    | クライアント接続開始時刻（単位：ミリ秒）。このタイムスタンプは現在のセッション確立時刻を示し、どの接続セッションの切断イベントか識別するために使用されます。遅延した切断イベントが新しい接続状態を上書きしないようにします。 |
-| `disconnected_at` | クライアント切断完了時刻（単位：ミリ秒）                |
-| `disconn_props`   | DISCONNECTプロパティ（MQTT 5.0クライアントのみ）         |
-| `timestamp`       | イベント発生時刻（単位：ミリ秒）                         |
-| `node`            | イベントが発生したEMQXノード                             |
-=======
 | フィールド         | 説明                                                                                   |
 | :---------------- | :------------------------------------------------------------------------------------- |
 | `reason`          | 切断理由<br/><br/>`normal`: クライアントが意図的に切断<br/><br/>`kicked`: REST API経由でEMQXが強制切断<br/><br/>`keepalive_timeout`: 指定されたキープアライブ時間の期限切れ<br/><br/>`not_authorized`: 認可失敗<br/><br/>`tcp_closed`: ピアがネットワーク接続を閉じた<br/><br/>`discarded`: `clean_start`が`true`の別クライアントが同じClientIDで接続し、前の接続が切断された<br/><br/>`takenover`: `clean_start`が`false`の別クライアントが同じClientIDで接続し、前の接続を引き継いだ<br/><br/>`internal_error`: 不正なメッセージ形式やその他不明なエラーが発生 |
@@ -582,7 +393,6 @@ FROM
 | `disconn_props`   | DISCONNECTプロパティ（MQTT 5.0クライアントのみ）                                       |
 | `timestamp`       | イベント発生時刻（単位：ミリ秒）                                                      |
 | `node`            | イベントが発生したEMQXノード                                                          |
->>>>>>> origin/release-5.9
 | `client_attrs`    | [クライアント属性](../client-attributes/client-attributes.md) |
 
 ### 接続応答イベント ("$events/client/connack")
@@ -615,25 +425,6 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド         | 説明                                                      |
-| ----------------- | :-------------------------------------------------------- |
-| `reason_code`     | 理由コード*                                              |
-| `clientid`        | パブリッシャーのクライアントID                           |
-| `username`        | パブリッシャーのユーザー名                               |
-| `peername`        | IPアドレスとポート                                       |
-| `sockname`        | EMQXがリッスンしているIPアドレスとポート                |
-| `proto_name`      | プロトコル名                                             |
-| `proto_ver`       | プロトコルバージョン                                     |
-| `keepalive`       | MQTTキープアライブ間隔                                   |
-| `clean_start`     | MQTTのclean_startフラグ                                  |
-| `expiry_interval` | MQTTセッションの有効期限                                 |
-| `conn_props`      | CONNECTプロパティ（MQTT 5.0クライアントのみ）            |
-| `timestamp`       | イベント発生時刻（単位：ミリ秒）                         |
-| `node`            | イベントが発生したEMQXノード                             |
-
-[^*]: MQTT v5.0プロトコルでは、リターンコードが理由コードに名称変更され、より多様なエラー種別を示す理由コードが追加されています（[Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)）。
-=======
 | フィールド         | 説明                                                     |
 | ----------------- | :------------------------------------------------------- |
 | `reason_code`     | 理由コード*                                              |
@@ -651,7 +442,6 @@ FROM
 | `node`            | イベントが発生したEMQXノード                            |
 
 [^*]: MQTT v5.0プロトコルでは、リターンコードが理由コードに名称変更され、より多様なエラーを示す理由コードが追加されています（[Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)）。
->>>>>>> origin/release-5.9
 
 以下はMQTT v3.1.1とMQTT v5.0の理由コード一覧です。
 
@@ -659,16 +449,6 @@ FROM
 
 ::: tab MQTT v3.1.1
 
-<<<<<<< HEAD
-| 理由コード                      | 説明                                                      |
-| -------------------------------- | -------------------------------------------------------- |
-| `connection_accepted`            | 接続が受理された                                        |
-| `unacceptable_protocol_version`  | クライアントが要求したMQTTプロトコルバージョンをEMQXがサポートしていない |
-| `client_identifier_not_valid`    | クライアントIDがEMQXで許可されていない                  |
-| `server_unavaliable`             | ネットワーク接続は確立したが、MQTTサービスが利用不可    |
-| `malformed_username_or_password` | ユーザー名またはパスワードのデータ形式が不正            |
-| `unauthorized_client`            | クライアントの接続が認可されていない                    |
-=======
 | 理由コード                      | 説明                                                       |
 | -------------------------------- | ---------------------------------------------------------- |
 | `connection_accepted`            | 接続が承認された                                          |
@@ -677,37 +457,11 @@ FROM
 | `server_unavaliable`             | ネットワーク接続は確立されたが、MQTTサービスが利用不可    |
 | `malformed_username_or_password` | ユーザー名またはパスワードのデータ形式が不正             |
 | `unauthorized_client`            | クライアントの接続が認可されていない                      |
->>>>>>> origin/release-5.9
 
 :::
 
 ::: tab MQTT v5.0
 
-<<<<<<< HEAD
-| 理由コード                     | 説明                                                      |
-| ------------------------------- | -------------------------------------------------------- |
-| `success`                       | 接続成功                                                |
-| `unspecified_error`             | 不明なエラー                                            |
-| `malformed_packet`              | パケットの形式不正                                      |
-| `protocol_error`                | プロトコルエラー                                        |
-| `implementation_specific_error` | 実装固有のエラー                                        |
-| `unsupported_protocol_version`  | サポートされていないプロトコルバージョン              |
-| `client_identifier_not_valid`   | 無効なクライアントID                                    |
-| `bad_username_or_password`      | 無効なユーザー名またはパスワード                        |
-| `not_authorized`                | 認可されていない                                        |
-| `server_unavailable`            | サーバー利用不可                                        |
-| `server_busy`                   | サーバーがビジー状態                                    |
-| `banned`                        | 接続禁止                                                |
-| `bad_authentication_method`     | 無効な認証方式                                          |
-| `topic_name_invalid`            | 無効なトピック名                                        |
-| `packet_too_large`              | パケットが大きすぎる                                    |
-| `quota_exceeded`                | クォータ超過                                            |
-| `retain_not_supported`          | Retainメッセージ機能がサポートされていない             |
-| `qos_not_supported`             | サポートされていないQoSレベル                           |
-| `use_another_server`            | 別のブローカーを使用してください                        |
-| `server_moved`                  | ブローカーが移動した                                    |
-| `connection_rate_exceeded`      | 接続レート制限に達した                                  |
-=======
 | 理由コード                     | 説明                                                       |
 | ------------------------------- | ---------------------------------------------------------- |
 | `success`                       | 接続成功                                                  |
@@ -731,7 +485,6 @@ FROM
 | `use_another_server`            | 別のブローカーを使用してください                          |
 | `server_moved`                  | ブローカーが移動した                                      |
 | `connection_rate_exceeded`      | 接続レート制限に達した                                    |
->>>>>>> origin/release-5.9
 
 :::
 
@@ -772,20 +525,6 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド       | 説明                                                      |
-| ----------- | :-------------------------------------------------------- |
-| `clientid`  | クライアントID                                           |
-| `username`  | ユーザー名                                               |
-| `peerhost`  | クライアントのIPアドレス                                 |
-| `topic`     | MQTTトピック                                            |
-| `action`    | パブリッシュまたはサブスクライブのアクション             |
-| `result`    | アクセス制御チェックの結果                               |
-| `authz_source` | 認可のソース                                            |
-| `timestamp` | タイムスタンプ（単位：ミリ秒）                           |
-| `node`      | イベントが発生したEMQXノード                            |
-| `client_attrs` | [クライアント属性](../client-attributes/client-attributes.md) |
-=======
 | フィールド         | 説明                                                     |
 | ----------- | :------------------------------------------------------- |
 | `clientid`  | クライアントID                                           |
@@ -798,7 +537,6 @@ FROM
 | `timestamp` | タイムスタンプ（単位：ミリ秒）                          |
 | `node`      | イベントが発生したEMQXノード                            |
 | `client_attrs`    | [クライアント属性](../client-attributes/client-attributes.md) |
->>>>>>> origin/release-5.9
 
 ### 認証チェック完了イベント ("$events/auth/check_authn_complete")
 
@@ -831,19 +569,6 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド       | 説明                                                      |
-| ----------- | :-------------------------------------------------------- |
-| `clientid`  | クライアントID                                           |
-| `username`  | ユーザー名                                               |
-| `peername`  | クライアントのIPアドレス                                 |
-| `reason_code`     | 認証結果                                               |
-| `is_superuser`    | スーパーユーザーかどうか                               |
-| `is_anonymous`    | 匿名ユーザーかどうか                                   |
-| `client_attrs` | [クライアント属性](../client-attributes/client-attributes.md) |
-
-### サブスクライバーイベント ("$events/session/subscribed")
-=======
 | フィールド         | 説明                                                     |
 | ----------- | :------------------------------------------------------- |
 | `clientid`  | クライアントID                                           |
@@ -855,7 +580,6 @@ FROM
 | `client_attrs`    | [クライアント属性](../client-attributes/client-attributes.md) |
 
 ### サブスクライバーイベント ("$events/session_subscribed")
->>>>>>> origin/release-5.9
 
 このイベントトピックは、クライアントが正常にサブスクライブした際にルールをトリガーできます。
 
@@ -884,23 +608,6 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド       | 説明                                                      |
-| :---------- | :-------------------------------------------------------- |
-| `clientid`  | クライアントID                                           |
-| `username`  | クライアントのユーザー名                                 |
-| `peerhost`  | クライアントのIPアドレス                                 |
-| `topic`     | MQTTトピック                                            |
-| `qos`       | QoSレベル                                               |
-| `sub_props` | SUBSCRIBEプロパティ（MQTT 5.0クライアントのみ）          |
-| `timestamp` | イベント発生時刻（単位：ミリ秒）                         |
-| `node`      | イベントが発生したEMQXノード                            |
-| `client_attrs` | [クライアント属性](../client-attributes/client-attributes.md) |
-
-### サブスクライブ解除イベント ("$events/session/unsubscribed")
-
-このイベントトピックは、クライアントのサブスクライブ解除が成功した際にルールをトリガーできます。
-=======
 | フィールド         | 説明                                                     |
 | :---------- | :------------------------------------------------------- |
 | `clientid`  | クライアントID                                           |
@@ -916,7 +623,6 @@ FROM
 ### サブスクリプション解除イベント ("$events/session_unsubscribed")
 
 このルールは、クライアントのサブスクリプション解除が正常に完了した際にトリガーされます。
->>>>>>> origin/release-5.9
 
 例：
 ```sql
@@ -939,19 +645,6 @@ FROM
 ```
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド         | 説明                                                      |
-| ------------- | :-------------------------------------------------------- |
-| `clientid`    | クライアントID                                           |
-| `username`    | クライアントのユーザー名                                 |
-| `peerhost`    | クライアントのIPアドレス                                 |
-| `topic`       | MQTTトピック                                            |
-| `qos`         | QoSレベル                                               |
-| `unsub_props` | UNSUBSCRIBEプロパティ（MQTT 5.0クライアントのみ）        |
-| `timestamp`   | イベント発生時刻（単位：ミリ秒）                         |
-| `node`        | イベントが発生したEMQXノード                            |
-| `client_attrs` | [クライアント属性](../client-attributes/client-attributes.md) |
-=======
 | フィールド         | 説明                                                     |
 | ------------- | :------------------------------------------------------- |
 | `clientid`    | クライアントID                                           |
@@ -963,7 +656,6 @@ FROM
 | `timestamp`   | イベント発生時刻（単位：ミリ秒）                        |
 | `node`        | イベントが発生したEMQXノード                            |
 | `client_attrs`    | [クライアント属性](../client-attributes/client-attributes.md) |
->>>>>>> origin/release-5.9
 
 ### システムアラーム発動イベント ("$events/sys/alarm_activated")
 
@@ -1001,30 +693,17 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド      | 説明                                                      |
-| -------------- | :-------------------------------------------------------- |
-| `name`         | アラームの短い識別子（例："too_many_processes"）         |
-| `details`      | アラームの追加詳細を含むJSONオブジェクト（スキーマは固定されていない）（例：`{"usage": "99%", "high_watermark": "80%"}`） |
-| `message`      | アラームの説明メッセージ（例："99% process usage"）      |
-| `activated_at` | アラーム発動時のUnixタイムスタンプ（マイクロ秒単位）      |
-=======
 | フィールド         | 説明                                                     |
 | -------------- | :------------------------------------------------------- |
 | `name`         | アラームの短い識別子（例：`"too_many_processes"`）      |
 | `details`      | アラームに関する追加詳細を含むJSONオブジェクト（スキーマは固定されていません）（例：`{"usage": "99%", "high_watermark": "80%"}`） |
 | `message`      | アラームの説明メッセージ（例：`"99% process usage"`）   |
 | `activated_at` | アラームが発動したUnixタイムスタンプ（マイクロ秒単位）   |
->>>>>>> origin/release-5.9
 | `node`         | イベントが発生したEMQXノード                            |
 
 ### システムアラーム解除イベント ("$events/sys/alarm_deactivated")
 
-<<<<<<< HEAD
-このイベントトピックは、EMQXのシステムアラームが解除された際にルールをトリガーできます。
-=======
 このルールは、EMQXのシステムアラームが解除された際にトリガーされます。
->>>>>>> origin/release-5.9
 
 例えば、`"$events/sys/alarm_deactivated"`イベントトピックから、アラーム名、詳細、説明メッセージ、発動タイムスタンプ、解除タイムスタンプのフィールドを抽出するには、以下のSQLステートメントを使用します。
 
@@ -1060,15 +739,6 @@ FROM
 
 以下の表は抽出可能なフィールドを示しています。
 
-<<<<<<< HEAD
-| フィールド        | 説明                                                      |
-| ---------------- | :-------------------------------------------------------- |
-| `name`           | アラームの短い識別子（例："too_many_processes"）         |
-| `details`        | アラームの追加詳細を含むJSONオブジェクト（スキーマは固定されていない）（例：`{"usage": "99%", "high_watermark": "80%"}`） |
-| `message`        | アラームの説明メッセージ（例："99% process usage"）      |
-| `activated_at`   | アラーム発動時のUnixタイムスタンプ（マイクロ秒単位）      |
-| `deactivated_at` | アラーム解除時のUnixタイムスタンプ（マイクロ秒単位）      |
-=======
 | フィールド         | 説明                                                     |
 | ---------------- | :------------------------------------------------------- |
 | `name`           | アラームの短い識別子（例：`"too_many_processes"`）      |
@@ -1076,16 +746,11 @@ FROM
 | `message`        | アラームの説明メッセージ（例：`"99% process usage"`）   |
 | `activated_at`   | アラームが発動したUnixタイムスタンプ（マイクロ秒単位）   |
 | `deactivated_at` | アラームが解除されたUnixタイムスタンプ（マイクロ秒単位） |
->>>>>>> origin/release-5.9
 | `node`           | イベントが発生したEMQXノード                            |
 
 ## データブリッジ
 
-<<<<<<< HEAD
-ルールは、データブリッジによって送信されたメッセージやイベントを表すトピックに`$bridges/`プレフィックスを付けて使用します。形式は以下の通りです。
-=======
 ルールは、データブリッジによってトリガーされたメッセージやイベントを、`$bridges/`で始まるトピックを使って参照します。形式は以下の通りです。
->>>>>>> origin/release-5.9
 
 `$bridges/<type>:<name>`
 
@@ -1138,19 +803,6 @@ FROM
 
 返される各フィールドの説明は以下の通りです。
 
-<<<<<<< HEAD
-| フィールド             | 説明                                                      |
-| :-------------------- | :-------------------------------------------------------- |
-| `id`                  | MQTTメッセージID                                          |
-| `server`              | リモートMQTTブローカーのサーバー名（例："broker.emqx.io:1883"） |
-| `payload`             | MQTTペイロード                                           |
-| `topic`               | MQTTトピック                                             |
-| `qos`                 | MQTTのQoS                                               |
-| `dup`                 | MQTTのDUPフラグ                                         |
-| `retain`              | MQTTのRetainフラグ                                      |
-| `pub_props`           | PUBLISHプロパティ（MQTT 5.0クライアントのみ）            |
-| `message_received_at` | メッセージ受信時のタイムスタンプ（単位：ミリ秒）         |
-=======
 | フィールド             | 説明                                                     |
 | :-------------------- | :------------------------------------------------------- |
 | `id`                  | MQTTメッセージID                                         |
@@ -1162,4 +814,3 @@ FROM
 | `retain`              | MQTTのRetainフラグ                                     |
 | `pub_props`           | PUBLISHプロパティ（MQTT 5.0クライアントのみ）          |
 | `message_received_at` | メッセージ受信時のタイムスタンプ（単位：ミリ秒）       |
->>>>>>> origin/release-5.9

@@ -143,19 +143,11 @@
                   children:
                     - title_en: Configure License (Enterprise)
                       title_cn: 配置 License (企业版)
-<<<<<<< HEAD
-                      title_ja: ライセンス設定（エンタープライズ）
-                      path: deploy/kubernetes/operator/tasks/configure-emqx-license
-                    - title_en: Enable TLS in EMQX
-                      title_cn: 在 EMQX 中开启 TLS
-                      title_ja: EMQX で TLS を有効化
-=======
                       title_ja: ライセンスの設定（エンタープライズ）
                       path: deploy/kubernetes/operator/tasks/configure-emqx-license
                     - title_en: Enable TLS in EMQX
                       title_cn: 在 EMQX 中开启 TLS
                       title_ja: EMQX での TLS 有効化
->>>>>>> origin/release-5.9
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
                     - title_en: Change EMQX Configurations
                       title_cn: 修改 EMQX 配置
@@ -171,11 +163,7 @@
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
                     - title_en: Access EMQX Cluster by LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX Cluster
-<<<<<<< HEAD
-                      title_ja: ロードバランサー経由で EMQX クラスターにアクセス
-=======
                       title_ja: ロードバランサー経由での EMQX クラスターアクセス
->>>>>>> origin/release-5.9
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
                     - title_en: Configure Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
@@ -198,11 +186,7 @@
                       title_ja: EMQX クラスターのロードバランス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
-<<<<<<< HEAD
-                      title_ja: 制限付きアクセスの k8s 環境での EMQX クラスター展開
-=======
                       title_ja: アクセス制限付き k8s 環境での EMQX クラスター展開
->>>>>>> origin/release-5.9
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
                 - deploy/kubernetes/operator/api-reference
@@ -1238,24 +1222,7 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
-<<<<<<< HEAD
         - changes/breaking-changes-5.10
-        - changes/breaking-changes-ee-5.9
-        - changes/breaking-changes-ee-5.8
-        - changes/breaking-changes-ee-5.7
-        - changes/breaking-changes-ee-5.6
-        - changes/breaking-changes-ee-5.5
-        - changes/breaking-changes-ee-5.4
-    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-      title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
-      path: changes/breaking-changes-5.1.0
-      collapsed: true
-      children:
-        - changes/auth-4.4-to-5.1-compatibility
-        - changes/data-integration-4.4-to-5.1-incompatibility
-        - changes/gateway-4.4-to-5.1-incompatibility
-=======
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9
@@ -1298,7 +1265,6 @@
               title_cn: 网关
               title_ja: ゲートウェイ
               path: changes/gateway-4.4-to-5.1-incompatibility
->>>>>>> origin/release-5.9
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日

@@ -1,10 +1,6 @@
 # Redisとの統合
 
-<<<<<<< HEAD
-EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は現在、Single、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、および[Redis Cluster](https://redis.io/docs/manual/scaling/)の3つの異なるモードで動作するRedisへの接続をサポートしています。本セクションでは、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
-=======
 EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は、現在、Single、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、および[Redis Cluster](https://redis.io/docs/manual/scaling/)の3つの異なるモードで動作するRedisへの接続をサポートしています。本節では、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
->>>>>>> origin/release-5.9
 
 ::: tip 前提条件：
 
@@ -20,11 +16,7 @@ Redis認証は、あらかじめ定義されたフィールド名を持つ[Redis
 - `salt`：任意。`salt = ""` またはこのフィールドを削除すると、ソルト値が追加されないことを示します。
 - `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかを示すフラグ。デフォルトは `false`。
 
-<<<<<<< HEAD
-例えば、ユーザー名 `user123`、パスワード `secret`、プレフィックス付きソルト `salt`、パスワードハッシュ `sha256` を持つスーパーユーザー（`is_superuser`: `true`）のドキュメントを追加する場合、クエリ文は以下のようになります。
-=======
 例えば、ユーザー名 `user123` のスーパーユーザー（`is_superuser`: `true`）、パスワード `secret`、プレフィックスとしてのソルト `salt`、およびパスワードハッシュ `sha256` を追加する場合、クエリ文は以下のようになります。
->>>>>>> origin/release-5.9
 
 ```bash
 >redis-cli
@@ -44,22 +36,14 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
 ::: tip
-<<<<<<< HEAD
-`password_hash` という名前はハッシュ化されたパスワードの保存を推奨する意図を示しています。ただし、RedisにはMySQLのような `as` 構文がないため、EMQX 5.0ではEMQX 4.xの `password` フィールドとの互換性を維持しています。
-=======
 `password_hash` という名前はハッシュ化されたパスワードの保存を推奨する意味合いがあります。しかし、RedisにはMySQLのような `as` 構文がないため、EMQX 5.0ではEMQX 4.xの `password` フィールドとの互換性を維持しています。
->>>>>>> origin/release-5.9
 
 そのため、`cmd` を `HMGET mqtt:${username} password salt is_superuser` と設定することも可能です。
 :::
 
 ## ダッシュボードでの設定
 
-<<<<<<< HEAD
-EMQXダッシュボードを使ってRedisをパスワード認証に利用する設定ができます。
-=======
 EMQXダッシュボードを使って、Redisをパスワード認証に使用する設定ができます。
->>>>>>> origin/release-5.9
 
 1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
 2. **認証** ページの右上にある **作成** をクリックします。
@@ -67,25 +51,6 @@ EMQXダッシュボードを使って、Redisをパスワード認証に使用�
 
 <img src="./assets/authn-redis.png" alt="Redisによる認証" style="zoom:67%;" />
 
-<<<<<<< HEAD
-以下の手順に従って認証設定を行ってください。
-
-**接続**：Redisへの接続情報を入力します。
-
-- **Redisモード**：Redisの展開形態を選択します。`Single`、`Sentinel`、`Cluster` のいずれかです。
-
-- **サーバー**：EMQXが接続するRedisサーバーのアドレスを指定します。**Redisモード** が `Sentinel` または `Cluster` の場合は、接続するすべてのRedisサーバーをカンマ（`,`）区切りで入力してください。
-
-- **Sentinel名**：使用する名前を指定します。文字列型です。**Redisモード** が `Sentinel` の場合のみ必要です。
-
-- **データベース**：Redisのデータベース名。文字列型です。
-
-- **ユーザー名**：Redisへの接続に使用するユーザー名を指定します。Redis 6.0で導入された[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)を認証に使用している場合は必須です。Redisサーバーがデフォルトユーザー（ACLが無効または適用されていない状態）を使用している場合は空欄のままで構いません。
-
-  ::: tip
-
-  `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを使用する場合は、このバージョン以降でのデプロイを確認してください。
-=======
 以下の指示に従って認証の設定を行ってください。
 
 **接続**：Redisへの接続情報を入力します。
@@ -103,23 +68,15 @@ EMQXダッシュボードを使って、Redisをパスワード認証に使用�
   ::: tip
 
   `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを使用する場合は、EMQXのバージョンが5.2.0以上であることを確認してください。
->>>>>>> origin/release-5.9
 
   :::
 
 - **パスワード**：Redisユーザーのパスワードを指定します。認証が有効なRedisインスタンスに接続する場合は必須です。
 
-<<<<<<< HEAD
-  - ユーザー名を入力した場合、このパスワードはRedis ACL設定で構成された認証情報と一致する必要があります。
-  - ユーザー名が指定されていない場合、このパスワードは `default` ユーザー（有効な場合）として認証に使用されます。
-
-**TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。TLSの有効化については、[ネットワークとTLS](../../network/overview.md)を参照してください。
-=======
   - ユーザー名を入力した場合は、このパスワードはRedis ACL設定の認証情報と一致する必要があります。
   - ユーザー名がない場合は、このパスワードが `default` ユーザーとして認証に使用されます（有効な場合）。
 
 **TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
->>>>>>> origin/release-5.9
 
 **接続設定**：同時接続数を設定します。
 
@@ -127,21 +84,6 @@ EMQXダッシュボードを使って、Redisをパスワード認証に使用�
 
 **認証設定**：認証に関する設定を行います。
 
-<<<<<<< HEAD
-- **パスワードハッシュ**：プレーンテキストパスワードに適用するハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
-  - `md5`、`sha`、`sha256`、`sha512` の場合：
-    - **ソルト位置**：ソルト（ランダムデータ）をパスワードに混ぜる位置を指定します。`suffix`、`prefix`、`disable` のいずれかです。外部ストレージからユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
-    - 結果のハッシュは16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
-  - `plain` の場合：
-    - **ソルト位置** は `disable` にしてください。
-  - `bcrypt` の場合：
-    - **ソルトラウンド**：ハッシュ関数の適用回数を定義します。値は _2<sup>ソルトラウンド</sup>_ として表され、コストファクターとも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにはより高い値が推奨されます。注意：コストファクターを1増やすと認証に必要な時間が倍増します。
-  - `pbkdf2` の場合：
-    - **疑似乱数関数**：キー生成に使用するハッシュ関数を選択します（例：`sha256`）。
-    - **反復回数**：ハッシュ関数の実行回数を設定します。デフォルトは `4096` です。
-    - **派生キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数のデフォルト長になります。
-    - 結果のハッシュは16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
-=======
 - **パスワードハッシュ**：プレーンテキストのパスワードに適用され、データベースに保存される前のハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、および `pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
   - `md5`、`sha`、`sha256`、`sha512` の場合：
     - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`（後置）、`prefix`（前置）、`disable`（無効）から選択可能です。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
@@ -155,18 +97,13 @@ EMQXダッシュボードを使って、Redisをパスワード認証に使用�
     - **反復回数**：ハッシュ関数の実行回数を設定します。デフォルトは `4096` です。
     - **派生キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数により決定されます。
     - 結果のハッシュは16進数文字列で表現され、大文字小文字を区別せずに保存された認証情報と比較されます。
->>>>>>> origin/release-5.9
 - **CMD**：Redisクエリコマンド。
 
 設定が完了したら、**作成** をクリックしてください。
 
 ## 設定項目による設定
 
-<<<<<<< HEAD
-EMQXの設定項目を使ってRedis認証を構成することもできます。 <!--詳細な操作手順については、[authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel)、および[authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster)を参照してください。-->
-=======
 EMQXの設定項目を使ってRedis認証機能を設定できます。<!--詳細な操作手順は [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel)、および [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster) を参照してください。-->
->>>>>>> origin/release-5.9
 
 Redis認証は `mechanism = password_based` と `backend = redis` で識別されます。
 

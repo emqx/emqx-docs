@@ -6,19 +6,11 @@ ELKを使用してEMQXクラスターのログを収集します。
 
 ## ELKのデプロイ
 
-<<<<<<< HEAD
-ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフレームワークの頭文字を取った略称で、Elastic Stackとも呼ばれます。[Elasticsearch](https://www.elastic.co/elasticsearch/)はLuceneをベースにしたほぼリアルタイムの検索プラットフォームフレームワークで、分散型かつRestfulを通じてインタラクティブに操作可能で、esとも呼ばれます。[Logstash](https://www.elastic.co/logstash/)はELKの中心的なデータフローエンジンで、異なる形式のデータを様々なターゲット（ファイル／データストレージ／MQ）から収集し、フィルタリング後に異なる宛先（ファイル／MQ／redis／elasticsearch／kafkaなど）へ出力をサポートします。[Kibana](https://www.elastic.co/kibana/)はesのデータをページ上に表示し、リアルタイム分析機能を提供します。
-
-### シングルノードElasticsearchのデプロイ
-
-シングルノードElasticsearchのデプロイ方法は比較的簡単です。以下のYAMLオーケストレーションファイルを参照して、迅速にElasticsearchクラスターをデプロイできます。
-=======
 ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフレームワークの頭文字を取った略称で、Elastic Stackとも呼ばれます。[Elasticsearch](https://www.elastic.co/elasticsearch/)はLuceneをベースにしたほぼリアルタイム検索プラットフォームフレームワークで、分散型かつRestfulを通じてインタラクティブに利用でき、esとも呼ばれます。[Logstash](https://www.elastic.co/logstash/)はELKの中央データフローエンジンで、異なるターゲット（ファイル／データストレージ／MQ）から異なるフォーマットのデータを収集し、フィルタリング後に異なる宛先（ファイル／MQ／redis／elasticsearch／kafkaなど）へ出力することをサポートします。[Kibana](https://www.elastic.co/kibana/)はesのデータをページ上に表示し、リアルタイム分析機能を提供します。
 
 ### シングルノードElasticsearchのデプロイ
 
 シングルノードElasticsearchのデプロイ方法は比較的簡単です。以下のYAMLオーケストレーションファイルを参照して、Elasticsearchクラスターを素早くデプロイできます。
->>>>>>> origin/release-5.9
 
 - 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -137,13 +129,8 @@ ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフ�
             value: "single-node"
           - name: ES_JAVA_OPTS
             value: "-Xms512m -Xmx2g"
-<<<<<<< HEAD
-        # Elasticsearchはvm.max_map_countが少なくとも262144である必要があります。
-        # OSが既にこれより高い値に設定している場合、このinitコンテナは削除して構いません。
-=======
         # Elasticsearchはvm.max_map_countを少なくとも262144に設定する必要があります。
         # OSで既にこれ以上の値が設定されている場合は、このinitコンテナは削除して構いません。
->>>>>>> origin/release-5.9
         initContainers:
         - name: elasticsearch-logging-init
           image: alpine:3.6
@@ -176,11 +163,7 @@ ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフ�
           requests:
             storage: 10Gi
   ```
-<<<<<<< HEAD
-  > `storageClassName`フィールドは`StorageClass`の名前を示します。`kubectl get storageclass`コマンドでKubernetesクラスター内に存在するStorageClassを確認するか、必要に応じて独自にStorageClassを作成してください。
-=======
   > `storageClassName`フィールドは`StorageClass`の名前を示します。`kubectl get storageclass`コマンドでKubernetesクラスターに既存のStorageClassを確認するか、必要に応じてStorageClassを作成してください。
->>>>>>> origin/release-5.9
 
 - Elasticsearchが準備完了になるまで待ちます。`kubectl get`コマンドでesのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
@@ -192,11 +175,7 @@ ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフ�
 
 ### Kibanaのデプロイ
 
-<<<<<<< HEAD
-本稿では、収集したログを可視化するために`Deployment`でKibanaをデプロイし、`Service`は`NodePort`を使用します。
-=======
 本記事では`Deployment`を使ってKibanaをデプロイし、収集したログを可視化します。`Service`は`NodePort`を使用します。
->>>>>>> origin/release-5.9
 
 - 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -270,11 +249,7 @@ ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフ�
 
 ### Filebeatのデプロイ
 
-<<<<<<< HEAD
-[Filebeat](https://www.elastic.co/beats/filebeat)は軽量なログ収集コンポーネントで、Elastic Stackの一部としてLogstash、Elasticsearch、Kibanaとシームレスに連携できます。Logstashでログやファイルを変換・強化したり、Elasticsearchでデータ分析を行ったり、Kibanaでダッシュボードを構築・共有したりする際に、Filebeatはデータを必要な場所に簡単に届けます。
-=======
 [Filebeat](https://www.elastic.co/beats/filebeat)は軽量なログ収集コンポーネントで、Elastic Stackの一部です。Logstash、Elasticsearch、Kibanaとシームレスに連携できます。ログを変換・強化したり、Elasticsearchでデータ分析を行ったり、Kibanaでダッシュボードを作成・共有したりする際に、Filebeatはデータを必要な場所に簡単に届けます。
->>>>>>> origin/release-5.9
 
 - 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -434,11 +409,7 @@ ELKはElasticsearch、Logstash、Kibanaという3つのオープンソースフ�
 
 ### Logstashのデプロイ
 
-<<<<<<< HEAD
-主にビジネスニーズに合わせてログの二次利用を行うためにLogstashを追加し、ログのクレンジングを行います。本稿ではLogstashの[Beats Inputプラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html)でログを収集し、[Rubyフィルタープラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html)でログをフィルタリングします。Logstashは他にも多くの入力およびフィルタープラグインを提供しており、ビジネスニーズに応じて適切なプラグインを設定可能です。
-=======
 主にビジネスニーズやログの二次利用に対応するために、Logstashを追加してログのクレンジングを行います。本記事ではLogstashの[Beats Inputプラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html)を使ってログを収集し、[Rubyフィルタープラグイン](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html)でログをフィルタリングします。Logstashは他にも多くの入力およびフィルタープラグインを提供しており、ビジネスニーズに応じて適切なプラグインを設定可能です。
->>>>>>> origin/release-5.9
 
 - 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -597,19 +568,11 @@ EMQXクラスターのデプロイについては、ドキュメント[Deploy EM
 
 ## ログ収集の検証
 
-<<<<<<< HEAD
-- まずKibanaのインターフェースにログインし、メニューのスタック管理モジュールを開き、インデックス管理をクリックすると、既に収集されたログインデックスが存在することが確認できます。
-
-  ![](./assets/configure-log-collection/index-manage.png)
-
-- Kibanaでログを発見・閲覧できるようにするため、インデックスマッチを設定します。インデックスパターンを選択し、Createをクリックします。
-=======
 - まずKibanaのインターフェースにログインし、メニューのスタック管理モジュールを開き、インデックス管理をクリックすると、すでに収集されたログインデックスが確認できます。
 
   ![](./assets/configure-log-collection/index-manage.png)
 
 - Kibanaでログを検出・閲覧できるようにするため、インデックスマッチを設定します。インデックスパターンを選択し、Createをクリックします。
->>>>>>> origin/release-5.9
 
   ![](./assets/configure-log-collection/create-index-0.png)
 

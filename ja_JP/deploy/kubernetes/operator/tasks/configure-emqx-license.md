@@ -7,15 +7,6 @@
 
 ## ライセンスの設定
 
-<<<<<<< HEAD
-EMQX Enterprise ライセンスは、EMQ公式サイトで無料申請できます：[EMQX Enterprise ライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
-
-## EMQX クラスターの設定
-
-`apps.emqx.io/v2beta1 EMQX` は、`.spec.config.data` を通じて EMQX クラスターのライセンス設定をサポートしています。`config.data` の設定方法については、以下のドキュメントをご参照ください：[設定マニュアル](../../../../configuration/configuration.md)。このフィールドは EMQX クラスター作成時のみ設定可能で、更新はサポートされていません。
-
-> EMQX クラスター作成後にライセンスを更新する場合は、EMQX ダッシュボードから更新してください。
-=======
 EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請できます：[EMQX Enterprise ライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
 
 ## EMQX クラスターの設定
@@ -23,7 +14,6 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
 `apps.emqx.io/v2beta1 EMQX` では、`.spec.config.data` を通じて EMQX クラスターのライセンスを設定できます。`config.data` の設定方法については、以下のドキュメントを参照してください：[設定マニュアル](../../../../configuration/configuration.md)。このフィールドは EMQX クラスター作成時のみ設定可能で、更新はサポートされていません。
 
 > EMQX クラスター作成後にライセンスを更新する必要がある場合は、EMQX ダッシュボードから更新してください。
->>>>>>> origin/release-5.9
 
 + 以下の内容を YAML ファイルとして保存し、`kubectl apply` コマンドでデプロイします。
 
@@ -44,15 +34,9 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
         type: LoadBalancer
   ```
 
-<<<<<<< HEAD
-  > `config.data` フィールド内の `license.key` はライセンスの内容を表します。本例ではライセンス内容は省略しているため、ユーザーが適宜入力してください。
-
-+ EMQX クラスターが準備完了になるまで待ちます。`kubectl get` コマンドでクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。完了までに時間がかかる場合があります。
-=======
   > `config.data` フィールド内の `license.key` はライセンスの内容を表します。本例ではライセンス内容を省略していますので、ユーザーが適宜入力してください。
 
 + EMQX クラスターの準備が整うまで待機します。`kubectl get` コマンドでクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。準備には時間がかかる場合があります。
->>>>>>> origin/release-5.9
 
   ```bash
   $ kubectl get emqx emqx
@@ -62,11 +46,7 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
 
 + EMQX クラスターのダッシュボード外部IPを取得し、EMQX コンソールにアクセスします。
 
-<<<<<<< HEAD
-  EMQX Operator は 2 つの EMQX Service リソースを作成します。1つは emqx-dashboard、もう1つは emqx-listeners で、それぞれ EMQX コンソールと EMQX のリスニングポートに対応しています。
-=======
   EMQX Operator は、EMQX コンソール用の `emqx-dashboard` と EMQX リスニングポート用の `emqx-listeners` の2つの Service リソースを作成します。
->>>>>>> origin/release-5.9
 
   ```bash
   $ kubectl get svc emqx-ee-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -74,11 +54,7 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
   192.168.1.200
   ```
 
-<<<<<<< HEAD
-  ブラウザで `http://192.168.1.200:18083` にアクセスし、デフォルトのユーザー名・パスワード `admin/public` で EMQX コンソールにログインしてください。
-=======
   ブラウザで `http://192.168.1.200:18083` にアクセスし、デフォルトのユーザー名とパスワード `admin/public` で EMQX コンソールにログインしてください。
->>>>>>> origin/release-5.9
 
 ## ライセンスの更新
 
@@ -125,11 +101,7 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
   $ kubectl exec -it ${pod_name} -c emqx -- emqx_ctl license info
   ```
 
-<<<<<<< HEAD
-  `max_connections` フィールドの値が変わっていれば、ライセンス内容が更新されており、EMQX Enterprise Edition ライセンスの更新が成功したことを示します。証明書情報がすぐに反映されない場合は、更新に遅延がある可能性があるため、しばらく待ってから再度ご確認ください。
-=======
   `max_connections` フィールドの値が変わっていれば、ライセンスの内容が更新されていることを示し、EMQX Enterprise エディションのライセンス更新が成功したことを意味します。証明書情報がすぐに更新されない場合は、ライセンス更新に遅延がある可能性があるため、しばらく待ってから再度確認してください。
->>>>>>> origin/release-5.9
 
   ```bash
   customer        : Evaluation
