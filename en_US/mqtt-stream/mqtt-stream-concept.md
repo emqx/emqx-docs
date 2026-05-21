@@ -45,7 +45,7 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
   Two stream types are supported:
 
   - **Regular Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay messages starting from a specified timestamp or offset using the `stream-offset` subscription property.
-  - **Last-Value Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
+  - **Last-Value Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key. See the [Stream Key Expression](./mqtt-stream-task.md#stream-key-expression) section for more details about how to use this feature.
 
 - **Topic Filter**
 
@@ -116,7 +116,7 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 1. A client publishes a message to an MQTT topic.
 2. An MQTT Streams hook is triggered to process the publication.
-3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic. 
+3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic.
 4. For each matching stream, the message is written to the stream and persisted in Durable Storage.
 
 ### Subscribing and Consuming Flow
@@ -133,7 +133,7 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 3. The handler retrieves messages from Durable Storage according to the specified `stream-offset` and retention rules.
 
-4. Retrieved messages are passed to the External Subscription framework. 
+4. Retrieved messages are passed to the External Subscription framework.
 
 5. The ExtSub application delivers messages to the client via standard MQTT delivery.
 
