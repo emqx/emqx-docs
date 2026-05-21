@@ -60,6 +60,8 @@ EMQXのメトリクスはカウンターとして実装されており、ノー�
 
 <img src="./assets/dashboard-event-metrics-ee.png" alt="ダッシュボードイベントメトリクス" style="zoom:50%;" />
 
+### 接続とセッションのメトリクス
+
 #### Connections（接続）
 
 | メトリクス             | 説明                                                         |
