@@ -112,10 +112,15 @@ EMQX は REST API または Thrift プロトコルを通じて IoTDB と通信�
 
 このセクションでは、EMQX でルールを作成し、ソース MQTT トピック `root/#` からのメッセージを処理して、設定済みの Apache IoTDB Sink を通じて時系列データを Apache IoTDB に保存する方法を示します。
 
-1. EMQX ダッシュボードで **Integration -> Rules** をクリックします。  
-2. ページ右上の **Create** をクリックします。  
-3. ルール ID を入力します。例：`my_rule`。  
-4. SQL エディターに以下のステートメントを入力します。これはトピックパターン `root/#` にマッチする MQTT メッセージを転送します：
+### SQL を定義したルールの作成
+
+1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+
+2. ページ右上の **Create** をクリックします。
+
+3. ルール ID を入力します。例：`my_rule`。
+
+4. **SQL エディター**に以下のステートメントを入力します。これはトピックパターン `root/#` にマッチする MQTT メッセージを転送します：
 
    ```sql
    SELECT
@@ -130,61 +135,84 @@ EMQX は REST API または Thrift プロトコルを通じて IoTDB と通信�
 
    :::
 
-5. **Add Action** ボタンをクリックして、ルールでトリガーされるアクションを定義します。**Type of Action** ドロップダウンから `Apache IoTDB` を選択します。このアクションにより、EMQX はルールで処理したデータを Apache IoTDB に送信します。  
-6. **Action** ドロップダウンは `Create Action` のままにするか、既存の Apache IoTDB Sink を選択できます。ここでは新しい Sink を作成してルールに追加します。  
-7. Sink の名前と説明を入力します。  
-8. **Connector** ドロップダウンから先ほど作成したコネクター `my_iotdb` を選択します。新規作成も可能です。設定パラメータは [コネクターの作成](#create-connector) を参照してください。  
-9. Sink の設定情報を入力します：
+5. 処理結果を IoTDB に書き込むため、ルールに Apache IoTDB Sink を追加します。詳細な手順は [Apache IoTDB Sink の追加](#add-an-apache-iotdb-sink) を参照してください。
 
-    * **Device ID**（任意）：IoTDB インスタンスに時系列データを転送・挿入する際のデバイス名として使用する特定のデバイス ID を入力します。
+6. **Create Rule** ページで設定内容を確認し、**Save** をクリックしてルールを作成します。
 
-ルール作成後、**Rules**一覧に表示されます。**Actions (Sink)**タブをクリックすると、このルールに紐づくIoTDBシンクを確認できます。
+ルール作成後、**Rules** 一覧に表示されます。**Actions (Sink)** タブをクリックすると、このルールに紐づく IoTDB Sink を確認できます。
 
-      空欄の場合でも、パブリッシュされたメッセージ内やルール内でデバイス ID を指定できます。例えば、JSON エンコードされたメッセージに `device_id` フィールドがあれば、その値が出力デバイス ID になります。ルールエンジンで抽出するには、以下のような SQL を使えます：
+**Integrations** -> **Flow Designer** からトポロジーグラフを確認することもできます。トピック `root/#` のメッセージがルール `my_rule` によって処理され、IoTDB に書き込まれていることが分かります。
 
-### Apache IoTDBシンクの追加
+### Apache IoTDB Sink の追加
 
-      ただし、このフィールドに固定で設定したデバイス ID が優先されます。
+1. 右側の **Add Action** ボタンをクリックして、ルールマッチ時にトリガーされるアクションを定義します。このアクションにより、処理済みデータが IoTDB に転送されます。
 
-2. **Type of Action**ドロップダウンで`Apache IoTDB`を選択します。**Action**はデフォルトの`Create Action`のままにするか、既存のIoTDBシンクを選択できます。ここでは新規シンク作成を前提とします。
+2. **Type of Action** ドロップダウンで `Apache IoTDB` を選択します。**Action** はデフォルトの `Create Action` のままにするか、既存の IoTDB Sink を選択できます。ここでは新規 Sink 作成を前提とします。
 
-    - **Align Timeseries**：デフォルトで無効です。有効にすると、グループ化されたアラインド時系列のタイムスタンプ列が IoTDB に一度だけ保存され、グループ内の各時系列で重複保存されなくなります。詳細は [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries) をご参照ください。
+3. Sink の名前と説明を入力します。
 
-10. **Write Data** を設定し、MQTT メッセージから IoTDB データを生成する方法を指定します。
+4. **Connector** ドロップダウンから先ほど作成したコネクター `my_iotdb` を選択します。利用可能なコネクターがない場合は、隣のボタンをクリックして作成できます。[IoTDB コネクターの作成](#create-an-iotdb-connector) を参照してください。
 
-    **Write Data** セクションでは、必要な数だけ項目を含むテンプレートを定義できます。テンプレートが提供されると、システムはそれを MQTT メッセージに適用して IoTDB データを生成します。書き込みテンプレートは CSV ファイルによる一括設定もサポートしています。詳細は [一括設定](#batch-setting) を参照してください。
+5. Sink に関する以下の情報を設定します：
 
-    例として、以下のテンプレートを考えます：
+      * **SQL Dialect**：Apache IoTDB Sink が IoTDB にデータを書き込む方法を選択します。コネクターで選択した SQL ダイアレクトと一致させる必要があります。
 
-        * `Tree Model`：IoTDBの時系列パスとしてデータを書き込みます。各シンクレコードはデバイスパスに挿入され、計測はそのデバイス下の個別時系列として書き込まれます。このモデルを選択すると**Device ID**フィールドを指定できます。
-        * `Table Model`：IoTDBのリレーショナルテーブルにデータを書き込みます。各シンクレコードは指定テーブルの行として挿入され、フィールドはテーブルの列にマッピングされます。このモデルを選択すると**Table**フィールドの指定が必須です。
-        
-      * **Device ID**（任意）：IoTDBインスタンスに時系列データを転送・挿入する際のデバイス名として使用する特定のデバイスIDを入力します。
+        * `Tree Model`：IoTDB の時系列パスとしてデータを書き込みます。各 Sink レコードはデバイスパスに挿入され、計測はそのデバイス下の個別時系列として書き込まれます。このモデルを選択すると **Device ID** フィールドを指定できます。
+        * `Table Model`：IoTDB のリレーショナルテーブルにデータを書き込みます。各 Sink レコードは指定テーブルの行として挿入され、フィールドはテーブルの列にマッピングされます。このモデルを選択すると **Table** フィールドの指定が必須です。
 
-        :::tip
+      * **Device ID**（任意）：IoTDB インスタンスに時系列データを転送・挿入する際のデバイス名として使用する特定のデバイス ID を入力します。
 
-    `Timestamp` と `Value` はプレースホルダー構文をサポートし、変数で埋められます。  
-    `Timestamp` を省略すると、現在のシステム時刻（ミリ秒単位）が自動で設定されます。
+        ::: tip
 
-        ただし、このフィールドに固定で設定したデバイスIDが優先されます。
+        空欄の場合でも、パブリッシュされたメッセージ内やルール内でデバイス ID を指定できます。例えば、JSON エンコードされたメッセージに `device_id` フィールドがあれば、その値が出力デバイス ID になります。ルールエンジンで抽出するには、以下のような SQL を使えます：
 
-    MQTT メッセージは以下のように構成できます：
+        ```sql
+        SELECT
+          payload,
+          `my_device` as payload.device_id
+        ```
 
-      - **Table**：データを書き込むIoTDBテーブル名を指定します。
+        ただし、このフィールドに固定で設定したデバイス ID が優先されます。
 
-11. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。プライマリ Sink がメッセージ処理に失敗した場合にこれらがトリガーされます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) をご覧ください。
+        :::
 
-12. **高度な設定（任意）**：詳細は [高度な設定](#advanced-configurations) を参照してください。
+      - **Table**：データを書き込む IoTDB テーブル名を指定します。
 
-13. **Create** をクリックする前に、**Test Connectivity** をクリックして Sink が Apache IoTDB サーバーに接続できるかテスト可能です。
+      - **Align Timeseries**：デフォルトで無効です。有効にすると、グループ化されたアラインド時系列のタイムスタンプ列が IoTDB に一度だけ保存され、グループ内の各時系列で重複保存されなくなります。詳細は [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries) をご参照ください。
 
-14. **Create** をクリックして Sink の作成を完了します。**Create Rule** ページの **Action Outputs** タブに新しい Sink が表示されます。
+      - **Write Data** を設定し、MQTT メッセージから IoTDB データを生成する方法を指定します。
 
-15. **Create Rule** ページで設定内容を確認し、**Create** ボタンをクリックしてルールを生成します。
+        **Write Data** セクションでは、必要な数だけ項目を含むテンプレートを定義できます。テンプレートが提供されると、システムはそれを MQTT メッセージに適用して IoTDB データを生成します。書き込みテンプレートは CSV ファイルによる一括設定もサポートしています。詳細は [一括設定](#batch-setting) を参照してください。
 
-これでルールが正常に作成され、**Rule** ページに新しいルールが表示されます。**Actions(Sink)** タブをクリックすると、新しい Apache IoTDB Sink が確認できます。
+        例として、以下のテンプレートを考えます：
 
-**Integration** -> **Flow Designer** をクリックしてトポロジーを確認できます。トピック `root/#` のメッセージがルール `my_rule` によって解析され、Apache IoTDB に転送されていることが分かります。
+        ::: tip Note
+
+        **Column Category** は SQL ダイアレクトで `Table Model` を選択した場合にのみ表示されます。
+
+        :::
+
+        | Column Category | Timestamp | Measurement | Data Type | Value    |
+        | --------------- | --------- | ----------- | --------- | -------- |
+        | field           |           | index       | INT32     | ${index} |
+        |                 |           | temperature | FLOAT     | ${temp}  |
+
+        `Timestamp` と `Value` はプレースホルダー構文をサポートし、変数で埋められます。`Timestamp` を省略すると、現在のシステム時刻（ミリ秒単位）が自動で設定されます。
+
+        MQTT メッセージは以下のように構成できます：
+
+        ```json
+        {
+          "index": "42",
+          "temp": "32.67"
+        }
+        ```
+
+6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。プライマリ Sink がメッセージ処理に失敗した場合にこれらがトリガーされます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) をご覧ください。
+
+7. **高度な設定（任意）**：詳細は [高度な設定](#advanced-configurations) を参照してください。
+
+8. **Test Connectivity** をクリックして、Sink が Apache IoTDB サーバーに接続できるかテストできます（任意）。
 
 ### 一括設定
 
