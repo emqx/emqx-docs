@@ -26,7 +26,7 @@ FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 
 例えば、`acos(X: integer | float) -> float` は引数 `X` のデータ型が整数または浮動小数点数のいずれかであり、返り値のデータ型は浮動小数点数であることを示します。
 
-指定された引数が範囲外であったり、サポートされていないデータ型を使用した場合、現在のSQL実行は失敗し、失敗回数が1増加しますのでご注意ください。
+引数が指定された範囲を超えたり、サポートされていないデータ型を使用した場合、現在のSQL実行は失敗し、失敗カウントが1増加しますのでご注意ください。
 
 :::tip
 
@@ -65,7 +65,7 @@ acos(0.5) = 1.0471975511965976
 
 ### acosh(X: integer | float) -> float
 
-`X` の双曲線アークコサイン（ラジアン単位）を返します。`X` は1以上でなければなりません。例：
+`X` の双曲線アークコサイン（ラジアン単位）を返します。`X` は1以上である必要があります。例：
 
 ```bash
 acosh(1.5) = 0.9624236501192069
@@ -194,7 +194,7 @@ power(2, 3) = 8.0
 
 ### random() -> float
 
-`[0, 1)` の範囲のランダムな浮動小数点数を返します。例：
+`[0, 1)` の範囲でランダムな浮動小数点数を返します。例：
 
 ```bash
 random() = 0.5400050092601868
@@ -246,7 +246,7 @@ tanh(0.5) = 0.46211715726000974
 
 ### is_array(Term: any) -> boolean
 
-`Term` が配列型か判定します。例：
+`Term` が配列型かどうか判定します。`any` はすべてのデータ型を意味します。例：
 
 ```bash
 is_array([1, 2]) = true
@@ -258,7 +258,7 @@ is_array('[1, 2]') = false
 
 ### is_bool(Term: any) -> boolean
 
-`Term` がブール型か判定します。例：
+`Term` がブール型かどうか判定します。例：
 
 ```bash
 is_bool(true) = true
@@ -277,7 +277,7 @@ is_float(123) = false
 
 ### is_int(Term: any) -> boolean
 
-`Term` が整数型か判定します。例：
+`Term` が整数型かどうか判定します。例：
 
 ```bash
 is_int(123) = true
@@ -286,7 +286,7 @@ is_int(123.4) = false
 
 ### is_map(Term: any) -> boolean
 
-`Term` がマップ型か判定します。例：
+`Term` がマップ型かどうか判定します。例：
 
 ```bash
 is_map(json_decode('{"value": 1}')) = true
@@ -308,7 +308,7 @@ is_null(map_get('b', json_decode('{"b": null}'))) = false
 
 ### is_null_var(Term: any) -> boolean
 
-変数 `Term` が未定義または `null` か判定します。例：
+変数 `Term` が未定義または `null` かどうか判定します。例：
 
 ```sql
 is_null_var(this_is_an_unassigned_variable) = true
@@ -332,7 +332,7 @@ is_num('123') = false
 
 ### is_str(Term: any) -> boolean
 
-`Term` が文字列型か判定します。例：
+`Term` が文字列型かどうか判定します。例：
 
 ```bash
 is_str('123') = true
@@ -341,7 +341,7 @@ is_str(123) = false
 
 ### is_empty(Array or Map) -> boolean
 
-配列またはマップが空か判定します。例：
+配列またはマップが空かどうか判定します。例：
 
 ```bash
 is_empty(json_decode('{}')) = true
@@ -360,7 +360,7 @@ is_empty(map_get('key', '{"key" : [1}')) = false
 例：
 
 ```bash
-# 正しい例
+# 正常
 bool(true) = true
 bool(0) = false
 bool('false') = false
@@ -394,7 +394,7 @@ float('0.12345678901234567') = 0.12345678901234566
 
 ### float(Term: float | integer | string, Decimals: integer) -> float
 
-`Term` を小数点以下最大 `Decimals` 桁の浮動小数点数に変換します。`Decimals` の範囲は `(0, 253]` です。その他の動作は `float/1` と同様です。例：
+`Term` を小数点以下最大 `Decimals` 桁の浮動小数点数に変換します。`Decimals` の範囲は `(0, 253]` です。その他の挙動は `float/1` と同様です。例：
 
 ```bash
 float('3.1415926', 3) = 3.142
@@ -403,7 +403,7 @@ float('0.000012345', 5) = 0.00001
 
 ### float2str(Float: float, Decimals: integer) -> string
 
-浮動小数点数 `Float` を文字列に変換します。小数点以下最大 `Decimals` 桁まで含み、末尾のゼロは切り捨てられます。`Decimals` の範囲は `[0, 253]` です。`Float` の有効数字が16桁を超える場合、変換時に丸め誤差が発生する可能性があります。
+浮動小数点数 `Float` を小数点以下最大 `Decimals` 桁の文字列に変換し、末尾のゼロは切り捨てます。`Decimals` の範囲は `[0, 253]` です。`Float` の有効数字が16桁を超える場合、変換時に丸め誤差が発生する可能性があります。
 
 浮動小数点数はコンピュータ上で正確に格納できないため、`Decimals` が `Float` の小数点以下桁数（先行ゼロ含む）より大きい場合、`float2str` は `Float` の2進近似の10進表現を返すことがあります。
 
@@ -415,7 +415,7 @@ float2str(0.1, 20) = '0.10000000000000000555'
 float2str(0.1, 25) = '0.1000000000000000055511151'
 float2str(0.00000000001, 20) = '0.00000000001'
 
-# 末尾のゼロは切り捨てられます
+# 末尾のゼロは切り捨てられる
 float2str(0.100001, 5) = '0.1'
 
 # 有効数字が16桁を超えると丸め誤差により異なる入力が同じ出力になることがあります。
@@ -435,7 +435,7 @@ float2str(123456789.01234566, 8) = '123456789.01234566'
 例：
 
 ```bash
-# 正しい例
+# 正常
 int(true) = 1
 int(3.14) = 3
 int(-3.14) = 4
@@ -545,7 +545,7 @@ concat('Name:', 'John') = 'Name:John'
 
 ### find(String: string, SearchPattern: string) -> string
 
-`String` 内で部分文字列 `SearchPattern` を検索し、`SearchPattern` より前の部分を削除して残りを返します。`SearchPattern` が見つからない場合は空文字列を返します。`find(String, SearchPattern, 'leading')` と同等です。
+`String` 内で部分文字列 `SearchPattern` を検索し、`SearchPattern` より前の内容を削除して残りを返します。`SearchPattern` が見つからない場合は空文字列を返します。`find(String, SearchPattern)` は `find(String, SearchPattern, 'leading')` と同等です。
 
 例：
 
@@ -644,7 +644,7 @@ regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
 
 ::: tip
 
-この関数はEMQX v5.7.1以降で導入されました。
+この関数はEMQX v5.7.1以降で利用可能です。
 
 :::
 
@@ -674,7 +674,7 @@ replace('ab..cd..ef', '..', '') = 'abcdef'
 
 `String` 内の `SearchPattern` を `Replacement` に置換します。
 
-`Where` の値は以下の通りです：
+`Where` は以下の値を取ります：
 
 - `all`: すべての `SearchPattern` を置換（`replace/3` と同等）
 - `leading`: 先頭の `SearchPattern` のみ置換
@@ -716,7 +716,7 @@ rtrim('\t  hello \r\n') = '\t  hello'
 
 ### split(String: string, Separator: string) -> array
 
-`String` を区切り文字 `Separator` で分割し、部分文字列の配列を返します。
+`String` を区切り文字 `Separator` で分割し、配列で返します。
 
 連続する複数の区切り文字は1つとして扱われず、空文字列が結果に含まれる場合があります。`split/2` はデフォルトで結果をトリムし空文字列を除外します。空文字列を残したい場合は `split(String, Separator, 'notrim')` を使用してください。
 
@@ -729,7 +729,7 @@ split('a;', ';') = ['a']
 split('a;b;c', ';') = ['a', 'b', 'c']
 split('a;;b;;c', ';') = ['a', 'b', 'c']
 
-# Howell Wise の前の空白に注意
+# Howell Wise の前のスペースに注意
 split('Sienna Blake; Howell Wise', ';') = ['Sienna Blake', ' Howell Wise']
 split('Sienna Blake; Howell Wise', '; ') = ['Sienna Blake', 'Howell Wise']
 ```
@@ -738,7 +738,7 @@ split('Sienna Blake; Howell Wise', '; ') = ['Sienna Blake', 'Howell Wise']
 
 `split/2` と同様ですが、`Option` で処理対象の区切り文字の位置や空文字列の返却有無を指定できます。
 
-`Option` の値は以下の通りです：
+`Option` の値は以下の通り：
 
 - `notrim`: 文字列内のすべての区切り文字を処理し、空文字列を含む結果を返す
 - `leading`: 先頭の区切り文字のみ処理し、空文字列を含まない結果を返す
@@ -831,7 +831,7 @@ trim('\t  hello \r\n') = 'hello'
 
 ::: tip
 
-この関数はEMQX v5.7.0以降で導入されました。
+この関数はEMQX v5.7.0以降で利用可能です。
 
 :::
 
@@ -879,7 +879,7 @@ SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
 }
 ```
 
-**unescape関数がサポートするエスケープシーケンス：**
+**`unescape` 関数がサポートするエスケープシーケンス：**
 
 - 標準Cエスケープシーケンス：
 
@@ -906,14 +906,14 @@ SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
 `String` の小文字を大文字に変換します。例：
 
 ```bash
-upper('hello') = 'Hello'
+upper('hello') = 'HELLO'
 ```
 
 ## マップ操作関数
 
 ### map_get(Key: string, Map: map) -> any
 
-`Map` の指定した `Key` の値を返します。`Key` が存在しない場合は `undefined` を返します。例：
+`Map` の指定した `Key` の値を返します。存在しなければ `undefined` を返します。例：
 
 ```bash
 map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
@@ -922,7 +922,7 @@ map_get('data', json_decode('{"msg": "hello"}')) = undefined
 
 ### map_get(Key: string, Map: map, Default: any) -> any
 
-`map_get/2` と同様ですが、`Key` が存在しない場合は指定した `Default` を返します。例：
+`map_get/2` と同様ですが、`Key` が存在しない場合は `Default` を返します。例：
 
 ```bash
 map_get('data', json_decode('{"msg": "hello"}'), '') = ''
@@ -950,7 +950,7 @@ map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 
 ::: tip
 
-この関数はEMQX v5.7.1以降で導入されました。
+この関数はEMQX v5.7.1以降で利用可能です。
 
 :::
 
@@ -997,7 +997,7 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 
 ### map_size(Map: map) -> any
 
-`Map` のキーの数を返します。例：
+`Map` のキー数を返します。例：
 
 ```bash
 map_size(json_decode('{}')) = 0
@@ -1023,7 +1023,7 @@ contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2
 配列 `Array` の最初の要素を返します。`Array` は空であってはなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 first(['John', 'David']) = 'John'
 
 # 誤った例
@@ -1035,7 +1035,7 @@ first([])
 配列 `Array` の最後の要素を返します。`Array` は空であってはなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 last(['John', 'David']) = 'David'
 
 # 誤った例
@@ -1056,7 +1056,7 @@ length([]) = 0
 配列 `Array` の `N` 番目の要素を返します。`N` は `Array` の長さ以下でなければなりません。例：
 
 ```bash
-# 正しい例
+# 正常
 nth(1, [1,2,3]) = 1
 
 # 誤った例
@@ -1187,7 +1187,7 @@ bitnot(-12) = 11
 
 ### bitsl(Num: integer, Shift: integer) -> integer
 
-`Num` を左に `Shift` ビットシフトし、右端を0で埋めます。例：
+`Num` を左に `Shift` ビットシフトし、右側を0で埋めます。例：
 
 ```bash
 bitsl(8, 2) = 32
@@ -1196,7 +1196,7 @@ bitsl(-8, 2) = -32
 
 ### bitsr(Num: integer, Shift: integer) -> integer
 
-`Num` を右に `Shift` ビットシフトし、左端を符号ビットで埋めます（正数は0、負数は1）。例：
+`Num` を右に `Shift` ビットシフトし、左端を符号ビット（正数は0、負数は1）で埋めます。例：
 
 ```bash
 bitsr(8, 2) = 2
@@ -1318,7 +1318,7 @@ subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.007133483886
 
 ### base64_decode(Data: string) -> bytes | string
 
-`Data` をBase64形式からデコードします。例：
+`Data` をbase64形式からデコードします。例：
 
 ```bash
 base64_decode('aGVsbG8=') = 'hello'
@@ -1354,7 +1354,7 @@ SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
 
 ### base64_encode(Data: binary | string) -> string
 
-`Data` をBase64形式にエンコードします。例：
+`Data` をbase64形式にエンコードします。例：
 
 ```bash
 base64_encode('hello') = 'aGVsbG8='
@@ -1445,19 +1445,19 @@ EMQXは `schema_encode` と `schema_decode` 関数を使い、指定したスキ
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
-指定したAvroスキーマで `Data` をエンコードします。スキーマレジストリでスキーマを作成しIDを取得してください。
+指定したAvroスキーマで `Data` をエンコードします。スキーマレジストリにスキーマを作成しIDを取得します。
 
 ### schema_encode(SchemaID: string, Data: map, MsgType: string) -> binary
 
-指定したProtobufスキーマで `Data` をエンコードします。スキーマレジストリでスキーマを作成しIDを取得してください。`MsgType` はProtobufスキーマ内の `Data` に対応するメッセージタイプを指定します。
+指定したProtobufスキーマで `Data` をエンコードします。スキーマレジストリにスキーマを作成しIDを取得します。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
 
 ### schema_decode(SchemaID: string, Bin: binary) -> map
 
-指定したAvroスキーマで `Bin` をデコードします。スキーマレジストリでスキーマを作成しIDを取得してください。
+指定したAvroスキーマで `Bin` をデコードします。スキーマレジストリにスキーマを作成しIDを取得します。
 
 ### schema_decode(SchemaID: string, Bin: binary, MsgType: string) -> map
 
-指定したProtobufスキーマで `Bin` をデコードします。スキーマレジストリでスキーマを作成しIDを取得してください。`MsgType` はProtobufスキーマ内の `Data` に対応するメッセージタイプを指定します。
+指定したProtobufスキーマで `Bin` をデコードします。スキーマレジストリにスキーマを作成しIDを取得します。`MsgType` はProtobufスキーマ内のメッセージタイプを指定します。
 
 ### **Sparkplug B 関数**
 
@@ -1478,7 +1478,7 @@ EMQXはSparkplug Bメッセージのデコード・エンコード用に特別�
 | `%Y` | 4桁の年 | 0000 - 9999 |
 | `%m` | 2桁の月 | 01 - 12 |
 | `%d` | 2桁の日 | 01 - 31 |
-| `%H` | 24時間表記の2桁の時 | 00 - 24 |
+| `%H` | 24時間制の2桁の時 | 00 - 24 |
 | `%M` | 2桁の分 | 00 - 59 |
 | `%S` | 2桁の秒 | 00 - 59 |
 | `%N` | ナノ秒 | 000000000 - 999999999 |
@@ -1496,7 +1496,7 @@ date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00+08:00') =
 
 ### date_to_unix_ts(Unit: string, Offset: string | integer, FormatString: string, DateTimeString: string) -> integer
 
-`DateTimeString` にタイムゾーンオフセットが含まれない場合、`Offset` で手動指定できます。その他の動作は `date_to_unix_ts/3` と同様です。`Offset` は文字列または秒数の整数で指定可能です。
+`DateTimeString` にタイムゾーンオフセットが含まれない場合、`Offset` で手動指定できます。その他の挙動は `date_to_unix_ts/3` と同様です。`Offset` は文字列または秒数の整数で指定可能です。
 
 文字列の場合、以下の形式が使えます：
 
@@ -1546,7 +1546,7 @@ now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
 
 ### now_timestamp() -> integer
 
-現在のシステム時刻を秒単位のUnixタイムスタンプで返します。例：
+現在のシステム時刻をUnixタイムスタンプ（秒単位）で返します。例：
 
 ```bash
 now_timestamp() = 1708913853
@@ -1582,7 +1582,7 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30.535904509Z', 'nanosecond') = 17087037905
 
 ### timezone_to_offset_seconds(Offset: string) -> integer
 
-タイムゾーンオフセット文字列を秒数の整数に変換します。以下の形式をサポートします：
+タイムゾーンオフセット文字列を秒数の整数に変換します。対応する形式は以下の通りです：
 
 - `Z` または `z`：UTCオフセット00:00
 - `±hh[:mm][:ss]` または `±hh[mm][ss]`：UTCからの正負の時間オフセット
@@ -1598,7 +1598,7 @@ timezone_to_offset_seconds('local') = 28800
 
 ### unix_ts_to_rfc3339(Time: integer) -> string
 
-秒単位のUnixタイムスタンプをシステムのローカルタイムゾーンでRFC3339準拠の日時文字列に変換します。例：
+Unixタイムスタンプ（秒単位）をシステムのローカルタイムゾーンのRFC3339準拠日時文字列に変換します。例：
 
 ```bash
 unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
@@ -1689,16 +1689,16 @@ SQL式の `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END` と�
 
 ::: tip 注意
 
-EMQXルールSQLでは、null値の文字列表現はデフォルトで `'undefined'` です。
+EMQXルールSQLではnull値の文字列表現はデフォルトで `'undefined'` です。
 
 :::
 
 ### coalesce_ne(Value1: any, Value2: any) -> any
 
-`coalesce` と似ていますが、`Value1` がnullまたは空文字列の場合に `Value2` を返します。
+`coalesce` に似ていますが、`Value1` がnullまたは空文字列の場合に `Value2` を返します。
 
 ::: tip 注意
 
-EMQXルールSQLでは、null値の文字列表現はデフォルトで `'undefined'` です。
+EMQXルールSQLではnull値の文字列表現はデフォルトで `'undefined'` です。
 
 :::

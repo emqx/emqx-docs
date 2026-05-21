@@ -23,7 +23,7 @@ listeners.ssl.default {
   ssl_options {
     # リスナーがクライアントの信頼性を検証するために使用する信頼済み CA（認証局）証明書を含む PEM 形式ファイル
     cacertfile = "/etc/emqx/certs/ca.pem"
-    # リスナーの SSL/TLS 証明書チェーンを含む PEM 形式ファイル。証明書がルート CA によって直接発行されていない場合、中間 CA 証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。
+    # リスナーの SSL/TLS 証明書チェーンを含む PEM 形式のファイル。証明書がルート CA によって直接発行されていない場合、中間 CA 証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。
     certfile = "/etc/emqx/certs/server.pem"
     # SSL/TLS 証明書に対応する秘密鍵を含む PEM 形式ファイル
     keyfile = "/etc/emqx/certs/server.key"

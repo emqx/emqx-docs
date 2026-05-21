@@ -6,7 +6,7 @@ Sparkplug エンコーディングスキームのバージョン B（Sparkplug B
 
 本ページでは、EMQX における Sparkplug B の実装方法について、データ形式、機能、実践例を交えて解説します。
 
-## Sparkplug B データ形式
+## Sparkplug Bのデータ形式
 
 Sparkplug B は、データ通信の標準化のために明確に定義されたペイロード構造を利用します。その中核には、Sparkplug メッセージの構造化に [Protocol Buffers（Protobuf）](https://developers.google.com/protocol-buffers) を採用しており、軽量で効率的かつ柔軟なデータ交換を実現しています。
 
@@ -21,7 +21,7 @@ EMQX は [スキーマレジストリ](./schema-registry.md) 機能を通じて 
 
 ::::
 
-## Sparkplug B 関数
+:::: tip
 
 EMQX は Sparkplug B データのエンコードおよびデコード用に、ルールエンジン SQL 関数 `spb_encode` と `spb_decode` を提供しています。  
 [実践例](#examples-for-using-spb_decode-and-spb_encode)では、これらの関数を様々なシナリオでどのように使うかを解説しています。
@@ -292,11 +292,11 @@ MQTTX の `decoded/sparkplug/data` サブスクライバーは以下を受信し
 }
 ```
 
-### データ抽出
+### データの抽出
 
 デバイスからトピック `my/sparkplug/topic` でメッセージを受け取り、`counter_group1/counter1_run` メトリクスのみを JSON 形式でトピック `interesting_counters/counter1_run_updates` に転送したい場合の手順を示します。EMQX ダッシュボードでルールを作成し、[MQTTX](https://mqttx.app/) クライアントツールで動作を確認します。
 
-#### ダッシュボードでルール作成
+#### ダッシュボードでのルール作成
 
 1. EMQX ダッシュボードの左メニューから **Integration** -> **Rules** を選択し、**+ Create** をクリックしてルール作成画面へ。
 
@@ -355,7 +355,7 @@ MQTTX クライアントツールを使って、Sparkplug B メッセージを�
    }
    ```
 
-### データ更新
+### データの更新
 
 誤ったメトリクス `counter_group1/counter1_run` を検出し、転送前に Sparkplug B エンコード済みペイロードから削除したい場合を考えます。
 
@@ -366,11 +366,11 @@ FOREACH
 jq('
    # ペイロードを保存
    . as $payload |
-   # 削除対象のメトリクス名を保存
+   # 削除するメトリクス名を保存
    "counter_group1/counter1_run" as $to_delete |
    # $to_delete 以外のメトリクスを抽出
    [ .metrics[] | select(.name != $to_delete) ] as $updated_metrics |
-   # 新しいメトリクス配列でペイロードを更新
+   # 新しいメトリクスでペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    spb_decode(payload)) AS item
@@ -399,7 +399,7 @@ jq('
         else .
      end
    ] as $updated_metrics |
-   # 新しいメトリクス配列でペイロードを更新
+   # 新しいメトリクスでペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    spb_decode(payload)) AS item
@@ -424,7 +424,7 @@ jq('
    } as $new_value |
    # 新しいメトリクス配列を作成
    ($old_metrics + [ $new_value ]) as $updated_metrics |
-   # 新しいメトリクス配列でペイロードを更新
+   # 新しいメトリクスでペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    spb_decode(payload)) AS item
@@ -466,7 +466,7 @@ jq('
    # 各メトリクスごとにメッセージを出力
    .metrics[] |
         . as $metric |
-        # 現在のメトリクスのみをメトリクス配列に設定
+        # 現在のメトリクスだけを含む配列に置き換え
         $payload | .metrics = [ $metric ]
    ',
    spb_decode(payload)) AS item
@@ -488,7 +488,7 @@ jq('
    # 各メトリクスごとにメッセージを出力
    .metrics[] |
         . as $metric |
-        # 現在のメトリクスのみをメトリクス配列に設定
+        # 現在のメトリクスだけを含む配列に置き換え
         $payload | .metrics = [ $metric ]
    ',
    spb_decode(payload)) AS item

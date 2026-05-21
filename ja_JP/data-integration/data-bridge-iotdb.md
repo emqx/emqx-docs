@@ -1,4 +1,4 @@
-# Apache IoTDBへのMQTTデータ取り込み
+# Apache IoTDB への MQTT データ取り込み
 
 [Apache IoTDB](https://iotdb.apache.org/)は、多種多様なIoTデバイスやシステムから生成される膨大な時系列データを効率的に処理するために設計された高性能かつスケーラブルな時系列データベースです。
 
@@ -55,7 +55,7 @@ IoTDBとのデータ統合は、効果的なデータ処理と保存を実現す
 - EMQXデータ統合の[ルール](./rules.md)に関する知識
 - [データ統合](./data-bridges.md)に関する知識
 
-### Apache IoTDBサーバーの起動
+### Apache IoTDB サーバーの起動
 
 ここでは[Docker](https://www.docker.com/)を使ってApache IoTDBサーバーを起動する方法を紹介します。IoTDBの設定で`enable_rest_service=true`が有効になっていることを確認してください。
 
@@ -243,7 +243,7 @@ Apache IoTDBでは、ダッシュボード上で数百件のデータを同時�
 
 **Write Data**の設定時に、CSVファイルから挿入操作用のフィールドを一括インポートできます。
 
-1. **Write Data**テーブルの**Batch Setting**ボタンをクリックし、**Import Batch Setting**ポップアップを開きます。
+1. **Write Data** テーブルの **Batch Setting** ボタンをクリックし、**Import Batch Setting** ポップアップを開きます。
 
 2. 指示に従いバッチ設定テンプレートファイルをダウンロードし、テンプレートにデータ書き込み設定を記入します。デフォルトテンプレートの内容は以下の通りです：
 
@@ -275,7 +275,7 @@ Apache IoTDBでは、ダッシュボード上で数百件のデータを同時�
 
 3. 記入済みテンプレートファイルを保存し、**Import Batch Setting**ポップアップにアップロード後、**Import**をクリックしてバッチ設定を完了します。
 
-4. インポート後、**Write Data**テーブル内のデータをさらに調整可能です。
+4. インポート後、**Write Data** テーブル内でさらにデータを調整できます。
 
 ## ルールのテスト
 

@@ -1,30 +1,30 @@
-# GCP Pub/Sub への MQTT データ取り込み
+# GCP Pub/Sub に MQTT データを取り込む
 
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) は、非常に高い信頼性とスケーラビリティを実現するために設計された非同期メッセージングサービスです。EMQX は、MQTT データのリアルタイム抽出、処理、分析のために Google Cloud Pub/Sub とのシームレスな統合をサポートしています。Cloud Functions、App Engine、Cloud Run、Kubernetes Engine、Compute Engine などのさまざまな Google Cloud サービスへデータをプッシュできます。あるいは、Google Cloud から MQTT へのデータ配信も可能で、ユーザーが GCP 上で迅速に IoT アプリケーションを構築するのに役立ちます。
 
 本ページでは、EMQX と GCP Pub/Sub 間のデータ統合について包括的に紹介し、データ統合の作成および検証方法を実践的に説明します。
 
-## 動作概要
+## 動作の仕組み
 
 GCP Pub/Sub データ統合は、EMQX の標準機能として提供されており、MQTT データストリームを Google Cloud とシームレスに統合し、IoT アプリケーション開発における豊富なサービスと機能を活用できるよう設計されています。
 
 ![GCP_bridge_architect](./assets/gcp_pubsub/GCP_bridge_architect.png)
 
-EMQX はルールエンジンと Sink を介して MQTT データを GCP Pub/Sub に転送します。GCP Pub/Sub のプロデューサー役割の例を挙げると、全体の流れは以下の通りです。
+EMQX はルールエンジンと Sink を通じて MQTT データを GCP Pub/Sub に転送します。GCP Pub/Sub のプロデューサー役割の例を挙げると、全体の流れは以下の通りです。
 
 1. **IoT デバイスがメッセージをパブリッシュ**: デバイスは特定のトピックを通じてテレメトリや状態データをパブリッシュし、ルールエンジンをトリガーします。
 2. **ルールエンジンがメッセージを処理**: 組み込みのルールエンジンは、トピックマッチングに基づき特定のソースからの MQTT メッセージを処理します。ルールエンジンは対応するルールをマッチさせ、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
 3. **GCP Pub/Sub へのブリッジング**: ルールはメッセージを GCP Pub/Sub に転送するアクションをトリガーし、データプロパティ、オーダーキー、MQTT トピックと GCP Pub/Sub トピックのマッピングを簡単に設定できます。これにより、より豊富なコンテキスト情報と順序保証を持つデータ統合が可能となり、柔軟な IoT データ処理を実現します。
 
-MQTT メッセージデータが GCP Pub/Sub に書き込まれた後は、以下のような柔軟なアプリケーション開発が可能です。
+MQTT メッセージデータが GCP Pub/Sub に書き込まれた後、以下のような柔軟なアプリケーション開発が可能です。
 
 - リアルタイムデータ処理と分析: Dataflow、BigQuery、Pub/Sub のストリーミング機能など強力な Google Cloud のデータ処理・分析ツールを活用し、メッセージデータのリアルタイム処理と分析を行い、価値あるインサイトや意思決定支援を得られます。
 - イベント駆動型機能: Cloud Functions や Cloud Run などの Google Cloud イベント処理をトリガーし、動的かつ柔軟な機能トリガーと処理を実現します。
 - データ保存と共有: Cloud Storage や Firestore などの Google Cloud ストレージサービスにメッセージデータを送信し、大量データの安全な保存と管理を行います。これにより、他の Google Cloud サービスと連携してデータの共有や分析を行い、多様なビジネスニーズに対応できます。
 
-## 特長とメリット
+## 特長と利点
 
-GCP Pub/Sub とのデータ統合は以下のような特長とメリットを提供します。
+GCP Pub/Sub とのデータ統合は、以下のような特長と利点を提供します。
 
 - **堅牢なメッセージングサービス**: EMQX と GCP Pub/Sub は共に高可用性とスケーラビリティを備え、大規模なメッセージストリームの信頼性の高い受信、配信、処理を保証します。IoT データの順序付け、メッセージの QoS（サービス品質）保証、パーシステンス（永続化）をサポートし、メッセージの確実な伝送と処理を実現します。
 - **柔軟なルールエンジン**: 組み込みのルールエンジンにより、トピックマッチングに基づいて特定のソースメッセージやイベントを処理できます。データ形式変換、特定情報のフィルタリング、コンテキスト情報の付加など、メッセージやイベントの操作が可能です。これと GCP Pub/Sub を組み合わせることで、さらなる処理や分析が可能になります。
@@ -41,9 +41,9 @@ GCP Pub/Sub とのデータ統合は以下のような特長とメリットを�
 - EMQX データ統合の [ルール](./rules.md) に関する知識
 - [データ統合](./data-bridges.md) に関する知識
 
-### GCP でのサービスアカウントキーの作成
+### GCP でサービスアカウントキーを作成する
 
-GCP Pub/Sub サービスを利用するには、サービスアカウントとサービスアカウントキーの作成が必要です。
+GCP Pub/Sub サービスを利用するには、サービスアカウントとサービスアカウントキーを作成する必要があります。
 
 1. GCP アカウントで [サービスアカウント](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) を作成します。サービスアカウントには、対象トピックへのメッセージの検査/読み取りおよびパブリッシュ権限（例：Pub/Sub Editor ロール）が付与されていることを確認してください。
 
@@ -57,7 +57,7 @@ GCP Pub/Sub サービスを利用するには、サービスアカウントと�
 
    <img src="./assets/gcp_pubsub/service-account-key.png" alt="サービスアカウントキー" style="zoom:50%;" />
 
-### GCP でのトピックの作成と管理
+### GCP でトピックを作成・管理する
 
 EMQX で GCP Pub/Sub データ統合を設定する前に、トピックを作成し、GCP での基本的な管理操作に慣れておく必要があります。
 
@@ -69,16 +69,16 @@ EMQX で GCP Pub/Sub データ統合を設定する前に、トピックを作�
 
    :::
 
-2. **Topic ID** フィールドにトピックの ID を入力し、**Create topic** をクリックします。
+2. **トピック ID** フィールドにトピックの ID を入力し、**トピックを作成** をクリックします。
 
    <img src="./assets/gcp_pubsub/create-topic-GCP-console.png" alt="GCP コンソールでのトピック作成" style="zoom:50%;" />
 
 3. **Subscriptions** ページに移動し、リストの中から作成したトピックの **Topic ID** をクリックします。トピックに対するサブスクリプションを作成します。
 
-   - **Delivery type** で **Pull** を選択します。
-   - **Message retention duration** で `7` 日を選択します。
+   - **配信タイプ** で **Pull** を選択します。
+   - **メッセージ保持期間** に `7` 日を選択します。
 
-   詳細は [GCP Pub/Sub サブスクリプション](https://cloud.google.com/pubsub/docs/subscriber) を参照してください。
+   詳細は[GCP Pub/Sub サブスクリプション](https://cloud.google.com/pubsub/docs/subscriber)を参照してください。
 
    <img src="./assets/gcp_pubsub/add-subscription-to-topic.png" alt="トピックへのサブスクリプション追加" style="zoom:50%;" />
 
@@ -88,7 +88,7 @@ EMQX で GCP Pub/Sub データ統合を設定する前に、トピックを作�
 
    <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="サブスクリプションのメッセージプル" style="zoom:50%;" />
 
-## GCP Pub/Sub プロデューサーコネクターの作成
+## GCP Pub/Sub プロデューサーコネクターを作成する
 
 GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EMQX と GCP Pub/Sub 間の接続を確立するための GCP Pub/Sub プロデューサーコネクターを作成する必要があります。
 
@@ -103,13 +103,13 @@ GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EM
 
 ここでは、GCP Pub/Sub に保存するデータを指定するルールの作成方法を示します。
 
-1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+1. EMQX ダッシュボードで、**Integration** -> **Rules** をクリックします。
 
 2. ページ右上の **Create** をクリックします。
 
-3. ルール ID に `my_rule` を入力します。
+3. ルール ID に `my_rule` と入力します。
 
-4. **SQL Editor** でルールを設定します。例えば、トピック `/devices/+/events` の MQTT メッセージを GCP Pub/Sub に保存したい場合、以下の SQL 文を使用します。
+4. **SQL Editor** でルールを設定します。例えば、トピック `/devices/+/events` の MQTT メッセージを GCP Pub/Sub に保存したい場合、以下の SQL を使用できます。
 
    注意: 独自の SQL 文を指定する場合、`SELECT` 部分に Sink のペイロードテンプレートで必要なすべてのフィールドが含まれていることを確認してください。
 
@@ -130,9 +130,9 @@ GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EM
 
 8. **Connector** ドロップダウンから先ほど作成した `my_pubsubprodcer` を選択します。ドロップダウン横のボタンから新しいコネクターを作成することも可能です。設定パラメータの詳細は [コネクターの作成](#create-a-connector) を参照してください。
 
-9. **GCP PubSub Topic** に、[GCP でのトピックの作成と管理](#gcp-でのトピックの作成と管理) で作成したトピック ID `my-iot-core` を入力します。
+9. **GCP PubSub Topic** に、[GCP でトピックを作成・管理する](#gcp-でトピックを作成・管理する) で作成したトピック ID `my-iot-core` を入力します。
 
-10. **Payload Template** にテンプレートを定義するか空欄のままにします。
+10. **Payload Template** にテンプレートを定義するか、空欄のままにします。
 
     - 空欄の場合、クライアントID、トピック、ペイロードなど MQTT メッセージのすべての可視入力を JSON 形式でエンコードします。
     - 定義済みテンプレートを使用する場合、`${variable_name}` 形式のプレースホルダーは MQTT コンテキストの対応する値で置き換えられます。例：`${topic}` は MQTT メッセージのトピックが `my/topic` なら `my/topic` に置き換わります。
@@ -156,7 +156,7 @@ GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EM
 
 また、**Integration** -> **Flow Designer** をクリックするとトポロジーを確認でき、トピック `/devices/+/events` のメッセージがルール `my_rule` によって解析され、GCP Pub/Sub に送信・保存されていることが視覚的に確認できます。
 
-## プロデューサールールのテスト
+## パブリッシャールールのテスト
 
 1. MQTTX を使ってトピック `/devices/+/events` にメッセージを送信します。
 
@@ -168,7 +168,7 @@ GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EM
 
 3. GCP の **Pub/Sub** -> **Subscriptions** に移動し、**MESSAGES** タブをクリックするとメッセージが表示されます。
 
-## GCP Pub/Sub コンシューマーコネクターの作成
+## GCP Pub/Sub コンシューマーコネクターを作成する
 
 GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/Sub 間の接続を確立するための GCP Pub/Sub コンシューマーコネクターを作成する必要があります。
 
@@ -183,15 +183,15 @@ GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/
 
 ここでは、GCP Pub/Sub からメッセージを消費し、EMQX に転送するルールの作成方法を示します。Google PubSub コンシューマーソースを作成・設定し、ルールのデータ入力として追加します。また、メッセージを EMQX に転送するために Republish アクションをルールに追加します。
 
-1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+1. EMQX ダッシュボードで、**Integration** -> **Rules** をクリックします。
 
 2. ページ右上の **Create** をクリックします。
 
-3. ルール ID に `my_rule_source` を入力します。
+3. ルール ID に `my_rule_source` と入力します。
 
 4. 右側の **Data Inputs** タブで、デフォルトの入力 `Messages` を削除し、**Add Input** をクリックします。
 
-5. **Input Type** ドロップダウンから `Google PubSub Consumer` を選択します。
+5. **Input Type** のドロップダウンから `Google PubSub Consumer` を選択します。
 
 6. **Source** ドロップダウンはデフォルトの `Create Source` のままにします。この例では新しいソースを作成し、ルールに追加します。
 
@@ -208,7 +208,7 @@ GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/
 
 11. **Create** をクリックする前に、**Test Connectivity** をクリックして GCP Pub/Sub サーバーへの接続が成功するかテストできます。
 
-12. **Create** をクリックしてソースの作成を完了します。ソースはルールの **Data Inputs** タブに追加され、**SQL Editor** のルールは以下のようになります。
+12. **Create** をクリックしてソース作成を完了します。ソースはルールの **Data Inputs** タブに追加され、**SQL Editor** のルールは以下のようになります。
 
     ```sql
     SELECT
@@ -234,13 +234,13 @@ GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/
 
 これで GCP Pub/Sub コンシューマーソースの作成は完了しましたが、メッセージはまだ直接 EMQX にパブリッシュされません。次に、[ルールへの Republish アクションの追加](#add-republish-action-to-the-rule) の手順を続けて、Republish アクションを作成しルールに追加してください。
 
-### ルールへの Republish アクションの追加
+### ルールに Republish アクションを追加する
 
 ここでは、GCP Pub/Sub コンシューマーソースから消費したメッセージを転送し、EMQX トピック `t/1` にパブリッシュするためにルールに Republish アクションを追加する方法を示します。
 
 1. ページ右側の **Action Output** タブを選択し、**Add Action** ボタンをクリックします。**Type of Action** ドロップダウンリストから `Republish` アクションを選択します。
 
-2. メッセージ再パブリッシュの設定を入力します。
+2. メッセージの再パブリッシュ設定を入力します。
 
    - **Topic**: MQTT にパブリッシュするトピックを入力します。ここでは `t/1` とします。
 
@@ -269,7 +269,7 @@ GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/
 
 3. **Create** をクリックしてアクションの作成を完了します。作成成功後、ルール作成ページに戻り、Republish アクションが **Action Outputs** タブに追加されます。
 
-4. ルール作成ページで **Create** ボタンをクリックしてルール全体の作成を完了します。
+4. ルール作成ページで **Create** ボタンをクリックし、ルール全体の作成を完了します。
 
 これでルールの作成が完了しました。**Rules** ページで新規作成したルールを確認できます。**Sources** タブで新規作成した GCP Pub/Sub コンシューマーソースが表示されます。
 

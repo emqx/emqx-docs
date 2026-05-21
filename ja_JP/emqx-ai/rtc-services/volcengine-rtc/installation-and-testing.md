@@ -132,7 +132,7 @@ Response: { success: boolean }
 
 Volcano EngineはWeb統合用に`@volcengine/rtc` SDKを提供しています。クライアントとサーバー間のやり取りの流れは以下の通りです。
 
-![Call Flow](https://lf3-static.bytednsdoc.com/obj/eden-cn/UJjvKJ%5BY/ljhwZthlaukjlkulzlp/1310560_plantuml_diagram2.png)
+![通話フロー](https://lf3-static.bytednsdoc.com/obj/eden-cn/UJjvKJ%5BY/ljhwZthlaukjlkulzlp/1310560_plantuml_diagram2.png)
 
 ### SDKのインストール
 

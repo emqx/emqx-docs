@@ -71,7 +71,7 @@ OCPP ゲートウェイが稼働したら、OCPP クライアントツールを�
    docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge-point:latest
    ```
 
-   接続成功時は以下のようなログが出力されます。
+   接続成功時には以下のようなログが出力されます。
 
    ```css
    INFO[2023-12-01T03:08:39Z] connecting to server logger=websocket

@@ -147,9 +147,9 @@ macOSでSnowflake ODBCドライバーをインストールおよび設定する�
 
 3. [Snowflake ODBCドライバーをダウンロードおよびインストール](https://sfc-repo.snowflakecomputing.com/odbc/macuniversal/3.3.2/snowflake_odbc_mac_64universal-3.3.2.dmg)。
 
-4. 詳細なインストールおよび設定手順は[macOS向けODBCドライバーのインストールと設定](https://docs.snowflake.com/en/developer-guide/odbc/odbc-mac)を参照。
+4. 詳細なインストールおよび設定手順は[macOS向けODBCドライバーのインストールと設定](https://docs.snowflake.com/en/developer-guide/odbc/odbc-mac)を参照してください。
 
-5. インストール後、以下の設定ファイルを更新：
+5. インストール後、以下の設定ファイルを更新します。
 
    - Snowflake ODBCドライバーの権限と設定を更新：
 

@@ -1,4 +1,4 @@
-# JavaScript SDK を使った接続
+# JavaScript SDKによる接続
 
 [MQTT.js](https://github.com/mqttjs/MQTT.js) は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールで、ブラウザおよびNode.js環境で利用できます。
 
@@ -39,7 +39,7 @@ mqtt help
   * version     現在のMQTT.jsのバージョン
   * help        コマンドのヘルプ
 
-> 詳細は 'mqtt help [command]' を実行してください。
+> コマンドの詳細は 'mqtt help [command]' を実行してください。
 ```
 
 ## MQTT.js 使用例
@@ -53,7 +53,7 @@ import mqtt from 'mqtt'
 // 接続オプション
 const options = {
   		clean: true, // セッションを保持しない
-      connectTimeout: 4000, // タイムアウト時間（ミリ秒）
+      connectTimeout: 4000, // タイムアウト時間
       // 認証情報
       clientId: 'emqx_test',
       username: 'emqx_test',
@@ -83,6 +83,6 @@ client.on('message', (topic, message) => {
 })
 ```
 
-## MQTT.js の MQTT 5.0 サポート
+## MQTT.js MQTT 5.0対応状況
 
 現在、MQTT.jsはMQTT 5.0を完全にサポートしています。

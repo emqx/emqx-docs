@@ -51,7 +51,7 @@ EMQX 5.8.4以降、`etc`ディレクトリに`base.hocon`というベース設�
 `node`や`cluster`のような不変設定は`base.hocon`に設定することは**推奨されません**。詳細は[Immutable Configuration File](#immutable-configuration-file)をご参照ください。
 
 ::: tip
-`base.hocon`ファイルはクラスター間で同期されず、そのノードにのみ適用されます。
+`base.hocon`ファイルはクラスター間で同期されず、配置されたノードにのみ適用されます。
 :::
 
 ## 設定書き換えファイル
@@ -138,7 +138,7 @@ node {
 変換例：
 
 ```bash
-# 環境変数
+# 環境変数例
 
 ## localhost:1883は構造体{"localhost": 1883}として解析されるため、ダブルクォートで囲む必要があります
 export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
@@ -147,7 +147,7 @@ export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
 export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 
 
-# 設定ファイル
+# 設定ファイル例
 listeners.ssl.default {
     ...
     bind = "127.0.0.1:8883"
@@ -177,11 +177,11 @@ EMQXでは設定値は階層的に適用され、以下の上書きルールが�
 - 同一ファイル内では後に定義された値が前の値を上書きします。
 - 上位の設定ファイルは下位の設定を置き換えます。
 
-設定の優先順位は以下の通りです。
+優先順位は以下の通りです。
 
 `base.hocon < cluster.hocon < emqx.conf < 環境変数`
 
-つまり、`base.hocon`の設定は最も優先度が低く、上位のファイルで上書き可能です。`EMQX_`で始まる環境変数が最も優先されます。
+つまり、`base.hocon`の設定は最も優先度が低く、より優先度の高いファイルの設定で上書きされます。`EMQX_`で始まる環境変数が最も優先されます。
 
 ::: tip
 バージョン5.8.4以前は`base.hocon`ファイルが存在しませんでした。優先順位は同じですが、`base.hocon`は含まれません。
@@ -209,7 +209,7 @@ log {
   }
 }
 
-## コンソールログのレベルをdebugに設定し、他の設定は維持
+## コンソールログの出力レベルをdebugに設定し、他の設定は保持
 log.console.level = debug
 ```
 
@@ -250,13 +250,13 @@ authentication  = [
   }
 ]
 
-# 1番目の要素の`enable`フィールドを以下のように上書き可能
+# 最初の要素の`enable`フィールドを以下のように上書き可能
 authentication.1.enable = false
 ```
 
 ::: tip
 
-リスト形式の配列は完全に上書きされ、元の値は保持されません。例えば：
+リスト形式の配列は完全に上書きされ、元の値は保持できません。例えば：
 
 ```bash
 authentication = [
@@ -348,7 +348,7 @@ HOCONオブジェクトの型安全性を確保するため、EMQXはスキー�
 
 #### Integer(Min..Max)
 
-指定範囲内の整数。例：`1..+inf`は1以上の正の整数を意味します。
+指定された範囲内の整数。例：`1..+inf`は1から正の無限大までの整数を意味し、正の整数のみ許容されます。
 
 #### Enum(symbol1, symbol2, ...)
 
@@ -356,7 +356,7 @@ HOCONオブジェクトの型安全性を確保するため、EMQXはスキー�
 
 #### String
 
-文字列型で、複数の形式をサポートします。
+文字列型で、用途に応じて複数の形式をサポートします。
 
 - **非引用文字列**：特殊文字を含まない識別子や名前に適します（詳細は下記参照）。
 - **引用文字列**：特殊文字や空白を含む場合はダブルクォート`"`で囲み、必要に応じてバックスラッシュ`\`でエスケープします。例：`"line1\nline2"`。
@@ -387,7 +387,7 @@ rule_xlu4 {
 }
 ```
 
-HOCONの文字列引用規則の詳細は[HOCON仕様](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)を参照してください。
+HOCONの文字列クォート規則の詳細は[HOCON仕様](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)を参照してください。
 
 EMQX独自のインデント付き三重引用文字列の詳細は[emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats)をご覧ください。
 
@@ -435,7 +435,7 @@ Structに似ていますが、フィールド名が事前定義されていな�
 
 #### Array `Array(Type)`
 
-指定型の要素からなる配列。
+指定された`Type`の要素からなる配列。
 
 ::: tip
 
@@ -497,7 +497,7 @@ Variform式を含む設定例：
 mqtt {
     client_attrs_init = [
         {
-            # clientidの最初の'-'までのプレフィックスを抽出
+            # client IDの最初の`-`までのプレフィックスを抽出
             expression = "nth(1, tokens(clientid, '-'))"
             # client_attrs.groupとして設定
             set_as_attr = group
@@ -521,7 +521,7 @@ expression = """nth(1, tokens(clientid, unescape('\n')))"""
 
 EMQXはルールエンジンの文字列関数に似た豊富な文字列、配列、乱数、ハッシュ関数を備えています。これらは抽出データの操作や整形に利用できます。例えば`lower()`、`upper()`、`concat()`は文字列のフォーマット調整に、`hash()`や`hash_to_range()`はハッシュ化や範囲マッピングに使います。
 
-利用可能な関数例：
+利用可能な関数：
 
 - **文字列関数**：
   - [文字列操作関数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)

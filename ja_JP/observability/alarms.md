@@ -49,9 +49,9 @@ EMQX ダッシュボードでのアラーム管理の完全なガイドは、[�
 
 <img src="./assets/view-alarms.png" alt="アラームの表示" style="zoom:50%;" />
 
-### システムトピック経由でアラームを取得する
+### システムトピックでアラームを取得する
 
-アラームがトリガーまたは解除されると、EMQX は MQTT メッセージをシステムトピック `$SYS/brokers/<Node>/alarms/activate` または `$SYS/brokers/<Node>/alarms/deactivate` にパブリッシュします。ユーザーはこれらのトピックをサブスクライブしてアラーム通知を受け取れます。
+アラームが発動または解除されると、EMQX は MQTT メッセージをシステムトピック `$SYS/brokers/<Node>/alarms/activate` または `$SYS/brokers/<Node>/alarms/deactivate` にパブリッシュします。ユーザーはこれらのトピックをサブスクライブしてアラーム通知を受け取れます。
 
 アラーム通知メッセージのペイロードは JSON 形式で、以下のフィールドを含みます。
 
@@ -82,7 +82,7 @@ API を通じてアラームの照会や管理が可能です。UI の左ナビ�
 
 <img src="./assets/view-alarms-api.png" alt="APIでのアラーム表示" style="zoom:45%;" />
 
-### Webhook 統合によるアラームイベント送信
+### Webhook 統合でアラームイベントを送信する
 
 EMQX バージョン 5.8.5 以降、ルールエンジンは以下の2つの新しいアラームイベントをサポートしています。
 

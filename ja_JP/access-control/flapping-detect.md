@@ -17,7 +17,7 @@ Banned Clients機能に基づき、EMQXは頻繁にログインするクライ�
 
 <img src="./assets/flapping-detect.png" alt="フラッピング検出" style="zoom:67%;" />
 
-## 設定ファイルでFlapping Detectを有効化する
+## 設定ファイルでFlapping Detectを有効化する方法
 
 以下の設定を追加することで、フラッピング検出機能を有効にすることも可能です。
 
@@ -32,7 +32,7 @@ flapping_detect {
   ## システムがクライアントのフラッピング動作を監視する期間
   window_time = 1m
 
-  ## クライアントIDがバンされる期間
+  ## クライアントIDをバンする期間
   ban_time = 5m
 
 }

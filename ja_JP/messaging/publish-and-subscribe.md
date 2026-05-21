@@ -36,7 +36,7 @@ EMQXをローカルにデプロイする前でも、[EMQ](https://www.emqx.com)�
 
 2. 新しい接続をメッセージをパブリッシュするクライアントとして設定します。
 
-   **General**セクションでクライアントの一般情報を入力します。
+   **General**セクションでクライアントの基本情報を入力します。
 
    - **Name**: 接続の`Name`を入力します。
    - **Client ID**: デフォルトのままで構いません。クライアント接続の一意識別子であり、リフレッシュボタンをクリックすると自動生成されます。
@@ -49,7 +49,7 @@ EMQXをローカルにデプロイする前でも、[EMQ](https://www.emqx.com)�
 
    <img src="./assets/New-connection-fill-parameters.png" alt="新規接続パラメータ入力" style="zoom:35%;" />
 
-3. 接続成功後、テキストボックスにトピック名`test`を入力し、スクリーンショットのようにメッセージを作成します。送信ボタンをクリックすると、トピック`test`にメッセージが表示されます。
+3. 接続に成功したら、テキストボックスにトピック名`test`を入力し、スクリーンショットのようにメッセージを作成します。送信ボタンをクリックすると、`test`トピックにメッセージが表示されます。
 
    <img src="./assets/Publish-test-message.png" alt="テストメッセージのパブリッシュ" style="zoom:35%;" />
 
@@ -84,39 +84,39 @@ EMQXをローカルにデプロイする前でも、[EMQ](https://www.emqx.com)�
    ```bash
    # Homebrew
    brew install emqx/mqttx/mqttx-cli
-   # Intelチップ
+   # Intelチップ用
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
    sudo install ./mqttx-cli-macos-x64 /usr/local/bin/mqttx
-   # Apple Silicon
+   # Apple Silicon用
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
    sudo install ./mqttx-cli-macos-arm64 /usr/local/bin/mqttx
    ```
 
-2. コマンドラインツールで以下のコマンドを実行し、EMQXに接続して`testtopic/#`トピックをサブスクライブします。
+2. コマンドラインで以下のコマンドを実行し、EMQXに接続して`testtopic/#`トピックをサブスクライブします。
 
    ```shell
    mqttx sub -t 'testtopic/#' -q 1 -h 'localhost' -p 1883 'public' -v
    ```
 
-   パラメータの説明:
+   パラメータの説明：
 
-   - `-t`: サブスクライブするトピック
-   - `-q`: メッセージのQoS（デフォルト: 0）
-   - `-h`: リスナーのIPアドレス（デフォルト: `localhost`）
-   - `-p`: ブローカーのポート（デフォルト: `1883`）
-   - `-v`: メッセージの前にトピックを表示
+   - `-t`：サブスクライブするトピック
+   - `-q`：メッセージのQoS（デフォルト：0）
+   - `-h`：リスナーのIPアドレス（デフォルト：`localhost`）
+   - `-p`：ブローカーのポート（デフォルト：`1883`）
+   - `-v`：メッセージの前にトピックを表示
 
    実行成功後、コマンドラインは受信待機状態となり、メッセージ受信時に内容を表示します。
 
    その他のパラメータについては[MQTTX CLI - サブスクライブ](https://mqttx.app/docs/cli/get-started#subscribe)をご参照ください。
 
-3. 新しいコマンドラインウィンドウを開き、以下のコマンドを実行してEMQXに接続し、トピック`testtopic/#`にメッセージをパブリッシュします。
+3. 新しいコマンドラインウィンドウを開き、以下のコマンドを実行してEMQXに接続し、`testtopic/#`トピックにメッセージをパブリッシュします。
 
    ```bash
    mqttx pub -t 'testtopic/1' -q 1 -h 'localhost' -p 1883 -m 'from MQTTX CLI'
    ```
 
-   パラメータ:
+   パラメータ：
 
    - `-t`: パブリッシュ先のトピック
    - `-q`: メッセージのQoS（デフォルト: 0）
@@ -124,7 +124,7 @@ EMQXをローカルにデプロイする前でも、[EMQ](https://www.emqx.com)�
    - `-p`: ブローカーのポート（デフォルト: `1883`）
    - `-m`: メッセージ本文
 
-   実行成功後、コマンドラインは接続を確立しメッセージをパブリッシュし、ブローカーから切断します。ステップ2のコマンドラインウィンドウには以下のメッセージが表示されます。
+   実行に成功すると、コマンドラインは接続を確立し、メッセージをパブリッシュした後にブローカーから切断します。ステップ2のコマンドラインウィンドウには以下のメッセージが表示されます。
 
    ```bash
    topic:  testtopic/1

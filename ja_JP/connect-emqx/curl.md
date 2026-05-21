@@ -396,7 +396,7 @@ curl -v mqtt://broker.emqx.io/curl/test
 
 **症状**
 
-- `Protocol "mqtt" not supported`
+- `Protocol "mqtt" not supported`  
 - `Unknown protocol`
 
 **原因例**
@@ -420,8 +420,8 @@ curl --version
 
 **症状**
 
-- `SSL certificate problem`
-- `TLS handshake failed`
+- `SSL certificate problem`  
+- `TLS handshake failed`  
 - `Unable to get local issuer certificate`
 
 **原因例**

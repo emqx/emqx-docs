@@ -49,7 +49,7 @@ scrape_configs:
 
 EMQXのOpenTelemetryメトリクス機能との統合は、EMQX Dashboardまたは設定ファイルで行えます。EMQX Dashboardでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブでメトリクスの設定を行います。
 
-EMQXがローカルで動作している場合、以下の設定をEMQXの `cluster.hocon` ファイルに追加してください。
+以下の設定をEMQXの`cluster.hocon`ファイルに追加してください（EMQXがローカルで動作している場合の例です）：
 
 ```bash
 opentelemetry {
@@ -67,5 +67,5 @@ opentelemetry {
 
 ## PrometheusでEMQXメトリクスを可視化する
 
-EMQXのメトリクスは、PrometheusのWebコンソール（http://otel-collector:9090）で確認できます。  
+EMQXのメトリクスは、PrometheusのWebコンソール（http://otel-collector:9090）で確認できます：
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)

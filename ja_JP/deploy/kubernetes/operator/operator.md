@@ -14,7 +14,7 @@ EMQX Operator には、以下を含むがこれに限定されない機能があ
 
     詳細は、[EMQX の管理](./tasks/overview.md) セクションをご覧ください。
 
-<img src="./assets/architecture.png" style="zoom:20%;" />
+<img src="./assets/architecture.png" style="zoom:20%;" alt="EMQX Operator アーキテクチャ" />
 
 ## EMQX と EMQX Operator の互換性
 

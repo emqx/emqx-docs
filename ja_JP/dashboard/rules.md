@@ -4,13 +4,13 @@ EMQXは強力かつ効率的な組み込みデータ処理機能であるルー�
 
 ルールエンジンはEMQXのデータ統合機能の中核コンポーネントです。データ統合を用いた柔軟なビジネス統合ソリューションを提供し、ビジネス開発プロセスを簡素化し、ユーザーの利便性を向上させ、ビジネスシステムとEMQX間の結合度を低減します。詳細は[ルールエンジン](../data-integration/rules.md)をご参照ください。
 
-ルールの作成および管理は、左メニューの**Integration** -> **Rules**をクリックして**Rules**ページにアクセスします。
+ルールの作成および管理は、左メニューの **Integration** -> **Rules** をクリックして **Rules** ページにアクセスします。
 
 ## ルールの作成
 
 ルールを作成するには、Rulesページ右上の**Create**をクリックします。また、Connectorページの既存コネクターの**Action**列にある**Create Rule**をクリックして素早くルールを作成することも可能です。
 
-### SQLエディター
+### SQL エディター
 
 Create RuleページにはSQLエディターがあり、SQL文を用いてルールロジックを定義できます。これにより、クライアントやシステム間で交換されるデータのリアルタイムな操作（クエリ、フィルタリング、変換、拡張など）が可能です。
 
@@ -49,13 +49,13 @@ SQL実行時に`412`エラーコードが表示される場合、テストデー
 
 その他のイベントでは、以下のクライアントおよびセッションイベントを選択してデータをシミュレートできます。
 
-- クライアント接続済み（$events/client/connected）
-- クライアント切断済み（$events/client/disconnected）
-- クライアントconnack（$events/client/connack）
-- クライアント認可チェック完了（$events/auth/check_authz_complete）
-- クライアント認証チェック完了（$events/auth/check_authn_complete）
-- サブスクライブ済み（$events/session/subscribed）
-- サブスクライブ解除済み（$events/session/unsubscribed）
+- クライアント接続（$events/client_connected）
+- クライアント切断（$events/client_disconnected）
+- クライアント connack（$events/client_connack）
+- クライアント認可チェック完了（$events/client_check_authz_complete）
+- クライアント認証チェック完了（$events/client_check_authn_complete）
+- サブスクライブ済み（$events/session_subscribed）
+- サブスクライブ解除済み（$events/session_unsubscribed）
 
 対応するデータソースはSQLエディター内のSQL文と一致させる必要があります。メッセージイベントを利用してデータを取得する場合は、`FROM`キーワードの後に対応するイベントトピック（括弧内の内容）をSQL文に記入してください。ルールは複数イベントの利用をサポートしています。データソースやイベントの詳細は[SQLデータソースとフィールド](../data-integration/rule-sql-events-and-fields.md)をご参照ください。
 

@@ -111,7 +111,7 @@ confluent kafka cluster use <kafka_cluster_id>
 
 ##### APIキーとシークレットの利用
 
-既存のAPIキーを使う場合は、以下のコマンドでCLIに登録します。
+既存のAPIキーを使う場合は、以下のコマンドでCLIに追加します。
 
 ```bash
 confluent api-key store --resource <kafka_cluster_id>
@@ -162,7 +162,7 @@ confluent kafka topic produce testtopic-in
 
 ##### トピックからのメッセージコンシューム
 
-以下のコマンドでコンシューマーを作成できます。該当トピックの全メッセージを出力します。
+以下のコマンドでコンシューマーを作成できます。該当トピックの全メッセージが出力されます。
 
 ```bash
 confluent kafka topic consume -b testtopic-in
@@ -181,7 +181,7 @@ Confluent Sinkアクションを追加する前に、EMQXとConfluent Cloud間�
    - その他のオプションはデフォルトのままか、ビジネスニーズに応じて設定してください。
 5. **Create**ボタンをクリックしてコネクターの作成を完了します。
 
-作成後、コネクターは自動的にConfluent Cloudに接続します。次に、このコネクターを基にルールを作成し、コネクターで設定したConfluentクラスターへデータを転送します。
+作成後、コネクターは自動的にConfluent Cloudに接続します。次に、このコネクターを基にしたルールを作成し、コネクターで設定したConfluentクラスターへデータを転送します。
 
 ## Confluent Sinkを用いたルールの作成
 
@@ -212,7 +212,7 @@ Confluent Sinkアクションを追加する前に、EMQXとConfluent Cloud間�
 
 7. **Connector**のドロップダウンから先ほど作成した`my-confluent`コネクターを選択します。ドロップダウン横のボタンをクリックするとポップアップで新規コネクターを素早く作成でき、設定パラメーターは[コネクターの作成](#コネクターの作成)を参照してください。
 
-8. Sinkのデータ送信方法を設定します。
+8. Sinkのデータ送信方法を設定します：
 
    - **Kafka Topic**: `testtopic-in`を入力します。EMQX v5.7.2以降、このフィールドは動的トピック設定もサポートします。詳細は[Kafka動的トピックの設定](./data-bridge-kafka.md#configure-kafka-dynamic-topics)を参照してください。
    - **Kafka Headers**: Kafkaメッセージに関連するメタデータやコンテキスト情報を入力します（任意）。プレースホルダーの値はオブジェクトである必要があります。ヘッダー値のエンコードタイプは**Kafka Header Value Encod Type**のドロップダウンから選択可能です。**Add**をクリックしてキー・バリューのペアを追加できます。
@@ -223,7 +223,7 @@ Confluent Sinkアクションを追加する前に、EMQXとConfluent Cloud間�
 
 9. **フォールバックアクション（任意）**: メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。プライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **詳細設定（任意）**: [詳細設定](#advanced-configuration)を参照してください。
+10. **詳細設定（任意）**：[詳細設定](#詳細設定)を参照してください。
 
 11. **Create**ボタンをクリックしてSinkの作成を完了します。作成後、ページは**Create Rule**に戻り、新しいSinkがルールアクションに追加されます。
 
@@ -287,16 +287,16 @@ Confluent Producerルールが期待通りに動作するかテストするた�
 
 ### <!-- Confluent Consumer Source設定 -->
 
-## 追加情報
+## 参考情報
 
 EMQXはConfluent/Kafkaとのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクもご参照ください。
 
-**ブログ:**
+**ブログ：**
 
 - [MQTTとKafkaによるコネクテッドビークルのストリーミングデータパイプライン構築](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
 - [MQTTとKafka | IoTメッセージングとストリームデータ統合の実践](https://www.emqx.com/en/blog/mqtt-and-kafka)
 - [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
 
-**ベンチマークレポート:**
+**ベンチマークレポート：**
 
 - [EMQX Enterpriseパフォーマンスベンチマークテスト：Kafka統合](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)

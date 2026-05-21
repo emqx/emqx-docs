@@ -57,7 +57,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 
 ## コネクターの作成
 
-このセクションでは、SinkをInfluxDBサーバーに接続するためのコネクター作成方法を説明します。
+本節では、SinkをInfluxDBサーバーに接続するためのコネクター作成手順を示します。
 
 以下の手順は、EMQXとInfluxDBをローカルマシンで実行していることを前提としています。リモート環境の場合は設定を適宜調整してください。
 
@@ -217,7 +217,7 @@ InfluxDB UIの**Data Explorer**ウィンドウで、メッセージがInfluxDB�
 | Query Mode             | メッセージ送信の最適化のため、`asynchronous`（非同期）または`synchronous`（同期）モードを選択可能。非同期モードではInfluxDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、InfluxDBへの到達前にクライアントがメッセージを受信する可能性があります。 | `Async`               |
 | Inflight Window        | SinkがInfluxDBと通信中に同時に存在可能な未応答のクエリ数を制御します。**Query Mode**が`async`の場合、同一MQTTクライアントからのメッセージを厳密な順序で処理したい場合は`1`に設定してください。 | `100`                 |
 
-## 参考情報
+## さらに詳しく
 
 以下のリンクもご参照ください：
 

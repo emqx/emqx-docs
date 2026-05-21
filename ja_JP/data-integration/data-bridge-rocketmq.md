@@ -81,7 +81,7 @@ services:
       - mqnamesrv
 ```
 
-2. RocketMQの実行に必要なフォルダと設定を作成します。
+2. RocketMQの実行に必要なフォルダと設定を準備します。
 
 ```bash
 mkdir rocketmq
@@ -90,7 +90,7 @@ mkdir rocketmq/store
 mkdir rocketmq/conf
 ```
 
-3. 以下の内容を`rocketmq/conf/broker.conf`に保存します。
+3. 以下の内容を `rocketmq/conf/broker.conf` に保存します。
 
 ```bash
 brokerClusterName=DefaultCluster
@@ -131,7 +131,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 ::: tip
 
-Linux環境では、`host.docker.internal`を実際のIPアドレスに変更してください。
+Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変更してください。
 
 :::
 
@@ -158,13 +158,13 @@ Linux環境では、`host.docker.internal`を実際のIPアドレスに変更し
 
 このセクションでは、ダッシュボード上でMQTTソーストピック`t/#`からのメッセージを処理し、処理済みデータを設定済みSink経由でRocketMQトピック`TopicTest`に転送するルールの作成方法を示します。
 
-1. EMQXダッシュボードで**Integration** -> **Rules**をクリックします。
+1. EMQXダッシュボードで **Integration** -> **Rules** をクリックします。
 
-2. ページ右上の**Create**をクリックします。
+2. 画面右上の **Create** をクリックします。
 
 3. ルールIDに`my_rule`を入力し、**SQL Editor**に以下のステートメントを入力します。これはトピック`t/#`配下のMQTTメッセージをRocketMQに保存することを意味します。
 
-   注意：独自のSQL文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
+   注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めていることを確認してください。
 
    ```sql
    SELECT 
@@ -222,7 +222,7 @@ Linux環境では、`host.docker.internal`を実際のIPアドレスに変更し
 
 このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みSink経由でRocketMQトピック`TestTopic`に転送するルール作成方法を示します。
 
-ルール作成手順は[メッセージ保存用RocketMQ Sinkのルール作成](#create-a-rule-with-rocketmq-sink-for-message-storage)とほぼ同様ですが、SQLルールの文法が異なります。
+ルール作成手順は[メッセージ保存用RocketMQ Sinkのルール作成](#create-a-rule-with-rocketmq-sink-for-message-storage)とほぼ同様ですが、SQLルール構文が異なります。
 
 オンライン／オフライン状態記録用のSQLルール文法は以下の通りです：
 
@@ -241,7 +241,7 @@ FROM
 
 ## ルールのテスト
 
-MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン／オフラインイベントをトリガーします。
+MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
@@ -249,7 +249,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
 
 Sinkの稼働状況を確認すると、新規の受信メッセージと送信メッセージがそれぞれ1件ずつあるはずです。
 
-データが`TopicTest`トピックに転送されているか確認してください。
+データが `TopicTest` トピックに転送されているか確認してください。
 
 以下のようなデータがコンシューマーにより出力されます。
 

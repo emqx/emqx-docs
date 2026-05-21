@@ -1,4 +1,4 @@
-# Listener Configuration
+# Listenerの設定
 
 EMQXでは、リスナーはMQTTクライアントからのリクエストを受信するために設定されます。EMQXは以下のメッセージ転送プロトコルをサポートしています。
 
@@ -143,4 +143,4 @@ EMQXの各リスナーはゾーンに紐づけられており、デフォルト�
 
 リスナーが特定のゾーンにリンクされると、そのリスナーに接続するMQTTクライアントはそのゾーンの設定を継承します。
 
-詳細は設定ドキュメントの[Zone Override](./configuration.md#zone-override)セクションをご参照ください。
+詳細は設定ドキュメントの[ゾーンオーバーライド](./configuration.md#zone-override)セクションをご参照ください。

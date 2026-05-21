@@ -1,6 +1,6 @@
-# PostgreSQLとの統合
+# PostgreSQLとの連携
 
-EMQXはパスワード認証のためにPostgreSQLとの統合をサポートしています。
+EMQXは、パスワード認証のためにPostgreSQLとの連携をサポートしています。
 
 ::: tip
 
@@ -96,11 +96,11 @@ EMQXダッシュボードを使って、PostgreSQLをパスワード認証に利
 
 設定が完了したら、**作成** をクリックします。
 
-## 設定項目による設定
+## 設定項目による構成
 
 EMQXの設定項目を使ってPostgreSQL認証機能を設定することも可能です。<!-- 詳細な操作手順は[authn-postgresql:authentication](../../configuration/configuration-manual.html#authn-postgresql:authentication)を参照してください。 -->
 
-PostgreSQL認証は `mechanism = password_based` と `backend = postgresql` で識別されます。
+PostgreSQL認証は、`mechanism = password_based` および `backend = postgresql` で識別されます。
 
 設定例：
 

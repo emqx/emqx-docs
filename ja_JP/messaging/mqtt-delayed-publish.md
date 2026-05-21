@@ -1,6 +1,6 @@
 # 遅延パブリッシュ
 
-遅延パブリッシュは、EMQXがサポートする拡張MQTT機能です。クライアントがトピックプレフィックス `$delayed/{DelayInterval}` を付けてEMQXにメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされます。メッセージはユーザーが事前に定義した時間経過後にパブリッシュされます。
+遅延パブリッシュは、EMQXがサポートする拡張されたMQTT機能です。クライアントがトピックプレフィックス `$delayed/{DelayInterval}` を付けてEMQXにメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされます。メッセージはユーザーが事前に定義した時間経過後にパブリッシュされます。
 
 遅延パブリッシュのトピックの具体的な形式は以下の通りです。
 
@@ -34,7 +34,7 @@ $delayed/{DelayInterval}/{TopicName}
 
 :::tip 前提条件
 
-[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を使った基本的なパブリッシュとサブスクライブ操作
+[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を使った基本的なパブリッシュおよびサブスクライブ操作
 
 :::
 
@@ -52,7 +52,7 @@ $delayed/{DelayInterval}/{TopicName}
 
    <img src="./assets/Configure-new-connection-general.png" alt="新規接続の一般設定" style="zoom:35%;" />
 
-2. もう一つMQTT接続を作成し、サブスクライバーとして設定します。
+2. 別のMQTT接続を作成し、サブスクライバーとして設定します。
 
 3. **Connections** ペインで `Demo` という接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
 
@@ -74,11 +74,11 @@ $delayed/{DelayInterval}/{TopicName}
 
 ::: tip 前提条件
 
-[MQTTX CLI](./publish-and-subscribe.md#mqttx-cli) を使った基本的なパブリッシュとサブスクライブ操作
+[MQTTX CLI](./publish-and-subscribe.md#mqttx-cli) を使った基本的なパブリッシュおよびサブスクライブ操作
 
 :::
 
-1. サブスクライバーとして新しい接続を作成し、トピック `t/1` をサブスクライブします。
+1. 新しい接続をサブスクライバーとして作成し、トピック `t/1` をサブスクライブします。
 
    ```bash
    mqttx sub -t t/1 -v

@@ -143,7 +143,9 @@ directory       /usr/local/etc/openldap/data
 
 ## ダッシュボードでLDAP認証を設定する
 
-EMQXダッシュボードでパスワード認証にLDAPを使用する設定が可能です。
+EMQXダッシュボードでLDAPをパスワード認証に使用する方法を設定できます。
+
+1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
 
 1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
 
@@ -179,7 +181,7 @@ EMQXダッシュボードでパスワード認証にLDAPを使用する設定が
 
      - **パスワードハッシュ属性**：認証方式に`ローカルパスワード比較`を選択した場合に適用される、ユーザーのパスワードを表す属性を指定します。この属性の値は[RFC 3112](https://datatracker.ietf.org/doc/html/rfc3112)に準拠している必要があり、サポートされるアルゴリズムは`md5`、`sha`、`sha256`、`sha384`、`sha512`、`ssha`です。
 
-     - **スーパーユーザー属性**：認証方式に`ローカルパスワード比較`を選択した場合に適用される、ユーザーがスーパーユーザーかどうかを示す属性を指定します。この属性の値はブール値で、存在しない場合は`false`とみなされます。
+     - **スーパーユーザー属性**：認証方式に`ローカルパスワード比較`を選択した場合に適用される、ユーザーがスーパーユーザーかどうかを示す属性を指定します。この属性の値はブール値で表され、存在しない場合は`false`とみなされます。
 
      - **クライアントID上書き属性**：接続時にクライアントが提供したクライアントIDを上書きするために使用されるLDAP属性の名前を指定します。これにより認証データに基づいて一意のクライアントIDを割り当てられ、多様なテナント環境などでのセッション競合を防止できます。
 
@@ -306,7 +308,7 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
   MUST ( uid $ userPassword ))
 ```
 
-### ACL属性を含むLDIFエントリの例
+### ACL属性を含むLDIFエントリ例
 
 以下は上記スキーマに基づくACL属性を含むLDAP認証データの[LDAPデータ交換形式（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/)の例です。
 
@@ -318,15 +320,15 @@ objectclass: organization
 dc:emqx
 o:emqx,Inc.
 
-# create testdevice.emqx.io
+# testdevice.emqx.io作成
 dn:ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectclass:organizationalUnit
 ou:testdevice
 
-## create user=mqttuser0002
-#         password=mqttuser0002,
-#         passhash={SSHA}n9XdtoG4Q/TQ3TQF4Y+khJbMBH4qXj4M
+## ユーザー作成: mqttuser0002
+#         パスワード=mqttuser0002,
+#         パスワードハッシュ={SSHA}n9XdtoG4Q/TQ3TQF4Y+khJbMBH4qXj4M
 #         base64passhash=e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top

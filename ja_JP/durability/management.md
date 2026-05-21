@@ -1,17 +1,17 @@
-# Durable Sessions の設定と管理
+# Durable Sessionsの設定と管理
 
-本ドキュメントでは、EMQX における [MQTT Durable Sessions](./durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
+本ドキュメントでは、EMQXにおける[MQTT Durable Sessions](./durability_introduction.md)機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
 
 ## 設定パラメータ
 
 MQTT Durable Sessions の設定は大きく2つのカテゴリに分かれています。
 
-- `durable_sessions`：MQTT クライアントのセッションに関する設定で、耐久ストレージからのデータ消費方法やデータ保持パラメータを含みます。
+- `durable_sessions`：MQTT クライアントのセッションに関する設定を含み、耐久ストレージからのデータ消費方法やデータ保持パラメータを管理します。
 - `durable_storage`：MQTT メッセージデータを保持する耐久ストレージシステムの設定を管理します。
 
-### Durable Sessions の設定
+### Durable Sessionsの設定
 
-Dashboard で Durable Sessions のパラメータを設定できます。Dashboard の左メニューから **Management** -> **MQTT Settings** をクリックし、**Durable Session** タブを選択してパラメータを設定してください。
+Dashboard の左メニューから **Management** -> **MQTT Settings** をクリックし、**Durable Session** タブを選択すると、Durable Sessions のパラメータを設定できます。
 
 <img src="./assets/dashboard_session_config.png" alt="ダッシュボードのセッション設定" style="zoom:67%;" />
 
@@ -28,7 +28,7 @@ Dashboard で Durable Sessions のパラメータを設定できます。Dashboa
 - `durable_sessions.batch_size`
 - `durable_sessions.checkpoint_interval`
 
-### Durable Storage の設定
+### Durable Storageの設定
 
 `<DS>` は「durable storage（耐久ストレージ）」を表すプレースホルダーです。現在、利用可能な `<DS>` のパラメータは `message` です。
 
@@ -81,7 +81,7 @@ EMQX はクライアントからの MQTT メッセージを耐久ストレージ
 | `bytes_per_topic_level` | トピックレベルのハッシュサイズを決定します。              |
 | `topic_index_bytes`     | ストリーム識別子のバイトサイズを指定します。                |
 
-## CLI コマンド
+## CLIコマンド
 
 耐久ストレージの管理に利用可能な CLI コマンドは以下の通りです。
 
@@ -139,7 +139,7 @@ SHARDS:
 `-------------`------------------`-------------`
 ```
 
-このコマンドの出力には以下が含まれます。
+このコマンドの出力には以下が含まれます：
 
 - `THIS SITE`：ローカル EMQX ノードが管理するサイトの ID。
 - `SITES`：既知のすべてのサイトの一覧。EMQX ノード名とそのステータスを含みます。
@@ -160,7 +160,7 @@ $ emqx ctl ds set-replicas all 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EB
 ok
 ```
 
-このコマンド実行後、`ds info` の出力は以下のようになる場合があります。
+このコマンド実行後、`ds info` の出力例：
 
 ```bash
 $ emqx ctl ds info
@@ -220,7 +220,7 @@ SHARDS:
 `-------------`------------------`--------------------`
 ```
 
-新たに追加された `REPLICA TRANSITIONS` セクションは保留中の操作を示します。すべての操作が完了すると、このリストは空になります。
+新たに追加された `REPLICA TRANSITIONS` セクションは保留中の操作を示します。すべての操作が完了するとこのリストは空になります。
 
 ### `emqx ctl ds join all <site>` / `emqx ctl ds leave all <site>`
 
@@ -233,7 +233,7 @@ $ emqx ctl ds join all B2A7DBB2413CD6EE
 ok
 ```
 
-詳細は [Add Sites](./managing-replication.md#add-sites) および [Remove Sites](./managing-replication.md#remove-sites) を参照してください。
+詳細は[サイトの追加](./managing-replication.md#add-sites)および[サイトの削除](./managing-replication.md#remove-sites)を参照してください。
 
 ## REST API
 
@@ -246,11 +246,11 @@ ok
 - `/ds/storages/:ds/replicas`：耐久ストレージのレプリカを保持するサイトの一覧取得および更新を行います。
 - `/ds/storages/:ds/replicas/:site`：特定サイトの耐久ストレージレプリカの追加または削除を行います。
 
-詳細は EMQX OpenAPI スキーマを参照してください。
+詳細はEMQX OpenAPIスキーマを参照してください。
 
 ## メトリクス
 
-Durable Sessions に関連する Prometheus メトリクスは以下の通りです。
+Durable Sessionsに関連するPrometheusメトリクスは以下の通りです。
 
 ### `emqx_ds_egress_batches`
 

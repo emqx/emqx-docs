@@ -21,7 +21,7 @@ LLMの呼び出しとデータ処理には時間がかかります。モデル�
 
 ### 動作の仕組み
 
-FlowデザイナーでMQTTメッセージを受信すると、AI Completion Nodeは内部で組み込みのSQL関数`ai_completion/2,3`を呼び出し、設定されたLLMにデータを送信します。
+FlowデザイナーでMQTTメッセージを受信すると、AIコンプリーションノードは内部的に組み込みのSQL関数`ai_completion/2,3`を呼び出して、設定されたLLMにデータを送信します。
 
 ```mermaid
 graph LR
@@ -75,7 +75,7 @@ OpenAIノードを使用するには：
 
 3. 以下の項目を設定します：
 
-   - **Input**：ソースフィールドを入力または選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
+   - **Input**：入力フィールドをタイプまたは選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
 
    - **System Message**：AIモデルに期待される出力を生成させるためのプロンプトメッセージを入力します。例：「入力JSONデータの数値キーの値を合計し、その結果のみを出力してください」。
 
@@ -112,7 +112,7 @@ Anthropicノードを使用するには：
 
 3. 以下の項目を入力します：
 
-   - **Input**：ソースフィールドを入力または選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
+   - **Input**：入力フィールドをタイプまたは選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
 
    - **System Message**：AIモデルに期待される出力を生成させるためのプロンプトメッセージを入力します。例：「入力JSONデータの数値キーの値を合計し、その結果のみを出力してください」。
 

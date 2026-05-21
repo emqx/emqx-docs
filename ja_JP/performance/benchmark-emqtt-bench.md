@@ -29,7 +29,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 各`emqtt-bench`リリースの詳細は[Releases](https://github.com/emqx/emqtt-bench/releases)をご参照ください。
 
-例として、Ubuntu 20.04に`emqtt-bench`をインストールする手順は以下の通りです。
+例えば、Ubuntu 20.04に`emqtt-bench`をインストールする手順は以下の通りです。
 
 ```bash
 mkdir emqtt-bench && cd emqtt-bench
@@ -43,7 +43,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### ソースからのビルド
 
-eMQTT-BenchはErlangで書かれており、ビルドには[Erlang/OTP](https://www.erlang.org/) 22.3以上が必要です。Erlang/OTPのインストール手順はここでは省略します。詳細はオンラインのインストールチュートリアルをご参照ください。
+eMQTT-BenchはErlangで書かれており、ビルドには[Erlang/OTP](https://www.erlang.org/) 22.3以上が必要です。Erlang/OTPのインストール方法はここでは省略します。詳細はオンラインのインストールチュートリアルをご参照ください。
 
 Erlang環境をインストール後、`emqtt-bench`の最新コードをダウンロードし、コンパイルします。
 
@@ -61,7 +61,7 @@ make
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-上記の出力が表示されれば、`emqtt-bench`がホストに正しくインストールされたことを示します。
+上記の出力が表示されれば、ホストに`emqtt-bench`が正しくインストールされたことを示します。
 
 ## eMQTT-Benchの使い方
 
@@ -189,7 +189,7 @@ EMQX用に1台、クライアント負荷用に2台の計3台の8コア16GBサ�
 
 同様の操作を`bench2`でも実施します。
 
-すべての接続が確立した後、`./bin/emqx ctl listeners`を実行すると、EMQXの接続数に関する以下の情報が確認できます。
+すべての接続が確立したら、`./bin/emqx ctl listeners`を実行し、EMQXの接続数情報を確認します。
 
 ```bash
 listener on mqtt:tcp:0.0.0.0:1883
@@ -201,7 +201,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 
 ### スループットテスト
 
-同様に、まずEMQXを起動し、`bench1`で500のサブスクライブクライアントを起動します。
+同様に、まずEMQXを起動し、`bench1`で500のサブスクライブクライアントを開始します。
 
 ```bash
 ./emqtt_bench sub -t t -h 192.168.0.99 -c 500
@@ -213,7 +213,7 @@ listener on mqtt:tcp:0.0.0.0:1883
 ./emqtt_bench pub -t t -h 192.168.0.99 -c 20 -I 100
 ```
 
-`bench1`のサブスクライブクライアントに戻ると、現在の受信メッセージレートが確認できます。
+`bench1`のサブスクライブクライアントに戻ると、現在のメッセージ受信レートを確認できます。
 
 ```bash
 recv(28006): total=2102563, rate=99725(msg/sec)

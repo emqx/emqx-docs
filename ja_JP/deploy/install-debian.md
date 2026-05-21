@@ -8,7 +8,7 @@
 - Debian 12
 - Debian 11
 
-他のシステムへのインストールや別バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
+他のシステムへのインストールや他バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
 
 ## debパッケージでのインストール
 
@@ -40,7 +40,7 @@ sudo apt remove --purge emqx
 
 ### EMQXの起動
 
-インストール後、以下のコマンドを実行してEMQXを起動します。
+インストール後、以下のコマンドでEMQXを起動します。
 
 ```bash
 ./emqx/bin/emqx foreground

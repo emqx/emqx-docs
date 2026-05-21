@@ -39,13 +39,13 @@ HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
 HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 ```
 
-対応する設定パラメータは以下の通りです：
+対応する設定パラメータは以下の通りです。
 
 ```bash
 cmd = "HGETALL mqtt_acl:${username}"
 ```
 
-取得したルールは許可ルールとして扱われ、トピックフィルターとアクションが一致すればリクエストは許可されます。
+取得したルールは許可ルールとして扱われます。つまり、トピックフィルターとアクションが一致すればリクエストは許可されます。
 
 :::tip
 Redisオーソライザーに追加されるすべてのルールは**許可ルール**であるため、Redisオーソライザーはホワイトリストモードで使用する必要があります。
@@ -61,7 +61,7 @@ EMQXダッシュボードを使ってRedisをユーザー認可に利用する�
 
    <img src="./assets/authz-redis.png" alt="authz-Redis_ee" style="zoom:67%;" />
 
-3. 以下の指示に従って設定を行います。
+3. 以下の指示に従い設定を行います。
 
    - **Redisモード**：Redisのデプロイ方法を選択します。`Single`、`Sentinel`、`Cluster` があります。
    - **サーバー**：EMQXが接続するRedisサーバーのアドレスを指定します（`host:port`）。

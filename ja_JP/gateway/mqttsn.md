@@ -10,7 +10,7 @@ MQTT-SN ゲートウェイは [MQTT-SN v1.2](https://www.oasis-open.org/committe
 
 :::
 
-<!--a brief introduction of the architecture-->
+<!--アーキテクチャの簡単な紹介-->
 
 ## MQTT-SN ゲートウェイの有効化
 
@@ -20,14 +20,14 @@ EMQX ダッシュボードの左側ナビゲーションメニューで **Manage
 
 ::: tip
 
-EMQX をクラスターで運用している場合、ダッシュボードや REST API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
+EMQX をクラスターで運用している場合、ダッシュボードや REST API で行った設定はクラスター全体に影響します。特定のノードだけ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
 
 :::
 
 設定を簡略化するため、EMQX は **Gateways** ページのすべての必須項目にデフォルト値を用意しています。大幅なカスタマイズが不要な場合は、以下の3ステップで MQTT-SN ゲートウェイを有効化できます。
 
 1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。
-2. 次に **Listeners** タブに遷移し、EMQX はポート1884で UDP リスナーを事前設定しています。ここでも **Next** をクリックして設定を確定します。
+2. 次に表示される **Listeners** タブでは、EMQX がポート1884の UDP リスナーを事前設定しています。設定を確認して再度 **Next** をクリックします。
 3. 最後に **Enable** ボタンをクリックして MQTT-SN ゲートウェイを有効化します。
 
 ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、MQTT-SN ゲートウェイの状態が **Enabled** と表示されていることを確認できます。
@@ -90,7 +90,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 
 ![基本設定](./assets/mqttsn-basic-config.png)
 
-- **Gateway ID**：ゲートウェイの一意の識別子を設定します。例：1。
+- **Gateway ID**: ゲートウェイの一意の識別子を設定します。例：1。
 
 - **Enable Broadcast**：ゲートウェイがクライアントに対してゲートウェイ広告をブロードキャストするかどうかを設定します。指定した Gateway ID を含むメッセージをブロードキャストします。デフォルト：`true`。選択肢：`true`、`false`。
 
@@ -142,7 +142,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 
 TLS Verify の有効化はトグルスイッチで設定できますが、その前に関連する **TLS Cert**、**TLS Key**、および **CA Cert** の情報を設定する必要があります。ファイルの内容を直接入力するか、**Select File** ボタンでアップロードしてください。詳細は [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md) をご参照ください。
 
-続いて以下の設定が可能です。
+続けて以下の設定が可能です。
 
 - **DTLS Versions**：サポートする DTLS バージョンを設定します。デフォルトは **dtlsv1.2** と **dtlsv1**。
 - **Fail If No Peer Cert**：クライアントが空の証明書を送信した場合に接続を拒否するかどうかを設定します。デフォルトは **false**。選択肢は **true**、**false**。
@@ -159,7 +159,7 @@ MQTT-SN プロトコルの接続メッセージはクライアントの Client I
 - Username：未定義。
 - Password：未定義。
 
-ここではダッシュボードを例に認証設定の手順を説明します。
+以下はダッシュボードを例にした認証設定の手順です。
 
 **Gateways** ページで **MQTT-SN** を見つけ、**Actions** 列の **Setup** をクリックし、**Authentication** タブに入ります。
 
@@ -167,7 +167,7 @@ MQTT-SN プロトコルの接続メッセージはクライアントの Client I
 
 ![mqttsn 認証設定](./assets/mqttsn-authn-config.png)
 
-各フィールドの詳細は [HTTP サーバー認証](../access-control/authn/http.md) をご参照ください。
+各フィールドの詳細は [HTTP サーバー認証](../access-control/authn/http.md) を参照してください。
 
 上記の設定は REST API でも実行可能です。
 

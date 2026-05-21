@@ -4,7 +4,7 @@ EMQXクラスターは手動または自動のいずれかの方法で作成で�
 
 ::: tip 注意
 
-クラスター機能は有効なライセンスキーがある場合にのみ利用可能です。
+クラスター モードは有効なライセンスキーがある場合のみ利用可能です。
 
 :::
 
@@ -146,7 +146,7 @@ node {
        emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-4. いずれかのノード上で以下のコマンドを実行し、現在のノードを他のノードに接続してクラスターを作成します。コマンドの詳細は[手動クラスタリング](#manual-clustering)を参照してください。
+4. 任意のノード上で以下のコマンドを実行し、現在のノードを他のノードに接続してクラスターを作成します。コマンドの詳細は[Manual Clustering](#manual-clustering)をご参照ください。
 
    ```bash
    docker exec -it emqx2 \
@@ -242,7 +242,7 @@ Cluster status: #{running_nodes =>
 
 このセクションでは、手動でクラスターを作成する手順を説明します。手動クラスタリングでは、クラスター内の各ノードを手動で設定し、ノード間のネットワーク接続も手動で構築する必要があります。自動クラスタリングに比べて、カスタムネットワークトポロジーの細かい調整が可能であり、自動クラスタリングが利用できないまたは適さない場合に適しています。
 
-:::tip 
+:::tip
 
 手動クラスタリングはコアノードにのみ使用可能です。コア-レプリカノード構成を利用している場合は、自動クラスタリングでクラスターを管理してください。
 
@@ -312,7 +312,7 @@ cluster {
 ```
 
 <!--v5.0.23 e5.0.4 以前は ["emqx1", "emqx2"] のみ対応
-v5.0.23e5.0.4 以降は両方対応-->
+v5.0.23以降は両方対応-->
 
 - `discovery_strategy` はノードディスカバリー戦略で、`static` に設定します。
 - `seeds` は配列で、クラスターに参加するノード名を複数カンマ区切りで追加します。
@@ -329,7 +329,7 @@ v5.0.23e5.0.4 以降は両方対応-->
 
 ### DNSレコードによる自動クラスタリングの設定
 
-DNSサービスが準備できたら、`emqx.conf` の `cluster.dns` 設定項目でクラスターに参加するすべてのノードを指定します。
+DNSサービスが準備できたら、`emqx.conf`の`cluster.dns`設定項目でクラスターに参加するすべてのノードを追加します。
 
 **設定例:**
 
@@ -338,7 +338,7 @@ cluster {
     discovery_strategy = dns
     dns {
         name = "localhost"
-        ## DNS AレコードおよびDNS SRVレコードをサポート
+        ## DNS AレコードとDNS SRVレコードをサポート
         record_type = a
     }
 }
@@ -423,9 +423,9 @@ Kubernetes上でEMQX自動クラスタリングを利用する場合、Fannelプ
 
 :::
 
-## クラスターの管理
+## クラスター管理
 
-クラスター作成後は、クラスター状態の監視やノード管理が可能です。
+クラスター作成後は、クラスターの状態を監視し、クラスター内のノードを管理できます。
 
 ### クラスター状態の確認
 
@@ -439,7 +439,7 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 ### クラスターからの離脱
 
-クラスターから離脱する方法は2通りあります。
+クラスターから離脱する方法は2つあります。
 
 1. `cluster leave` コマンドを実行する方法：現在のノードがクラスターから離脱します。クラスター内の他ノードに通知し、クラスター運用から外れます。離脱前に進行中のタスクは完了します。
 2. `cluster force-leave <node@host>` コマンドを実行する方法：指定ノードを強制的にクラスターから除外します。対象ノードが故障や応答不能の場合に使用します。
@@ -460,9 +460,9 @@ Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 
 クラスター作成後、ノード間のネットワークプロトコルを設定できます。EMQXはTCPまたはTLSでノード間接続をサポートしており、接続方式は `emqx.conf` で設定します。
 
-TCP IPv4およびTCP IPv6を使用する場合は、`emqx.conf` の `cluster.proto_dist` を設定します。
+TCP IPv4およびTCP IPv6を使用する場合は、`emqx.conf`の`cluster.proto_dist`を設定します。
 
-- TCP IPv4: `inet_tcp` （デフォルト）
+- TCP IPv4: `inet_tcp`（デフォルト）
 - TCP IPv6: `inet6_tcp`
 
 SSLを有効にする場合は、まず `cluster.proto_dist` を `inet_tls` に設定し、`etc` フォルダ内の `ssl_dist.conf` ファイルでTLS証明書を指定します。詳細は[Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html)を参照してください。

@@ -143,7 +143,7 @@ EMQXのインストールディレクトリに移動します。
   ## パッケージインストールの場合
 $ cd emqx
 
-  ## brewインストールの場合
+  ## brewでインストールした場合
 $ cd /usr/local/Cellar/emqx/<version>/
 ```
 
@@ -170,7 +170,7 @@ ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or director
 $ brew install openssl@1.1
 ```
 
-インストール完了後、EMQXを正常に起動できます。
+インストール完了後、EMQXを通常通り起動できます。
 
 ## EMQX起動時に「libatomic.so.1: cannot open shared object file: No such file or directory」というログが出る場合の対処法は？
 
@@ -225,7 +225,7 @@ sudo docker volume create --name emqx-log
 sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v emqx-data:/opt/emqx/data -v emqx-log:/opt/emqx/log emqx:latest
 ```
 
-## EMQX起動時に「ポートが使用中（eaddrinuse）」と表示された場合の対処法は？
+## EMQX起動時に「ポートが使用中（eaddrinuse）」と表示された場合はどうすればよいですか？
 
 EMQXは起動時にデフォルトで7つのポートを使用します。これらは以下の通りです。
 
@@ -251,13 +251,13 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 
 2つ目の警告はcookieの変更方法を示しており、`emqx.conf`の`node.cookie`設定を編集するか、環境変数`EMQX_NODE__COOKIE`を設定する方法があります。
 
-## EMQX Dockerコンテナを再起動すると、設定したルールやリソースなどのデータが消失する理由は？
+## EMQX Dockerコンテナを再起動すると、設定したルールやリソースなどのデータが消えるのはなぜですか？
 
 EMQXのランタイムデータは`/opt/emqx/data`ディレクトリに保存されており、設定ルール、リソース、保持メッセージなどが含まれます。コンテナ再起動時にデータ永続化を確保するには、`/opt/emqx/data`ディレクトリをホストのローカルディレクトリやデータボリュームにマウントする必要があります。
 
 しかし、`/opt/emqx/data`ディレクトリを正しくマウントしていても、コンテナ再起動後にデータが消失する場合があります。これはEMQXのランタイムデータが`/opt/emqx/data/mnesia/${Node Name}`ディレクトリに保存されており、コンテナ再起動時にEMQXのノード名が変わるため新しいストレージディレクトリが作成されるためです。
 
-EMQXのノード名はNameとHostで構成され、HostはデフォルトでコンテナのIPアドレスから取得されます。デフォルトネットワーク設定ではコンテナのIPが再起動時に変わるため、固定IPを維持する必要があります。
+EMQXのノード名はNameとHostで構成され、HostはデフォルトでコンテナのIPアドレスから取得されます。デフォルトネットワーク設定では、コンテナのIPが再起動時に変わる可能性があるため、コンテナに固定IPを割り当てる必要があります。
 
 この問題に対処するため、EMQXは環境変数`EMQX_HOST`を提供しており、ノード名のHost部分を設定できます。ただし、このHost値は他のノードから到達可能である必要があるため、ネットワークエイリアスと併用してください。以下は`EMQX_HOST`環境変数とネットワークエイリアスを指定してEMQX Dockerコンテナを起動する例です。
 

@@ -39,15 +39,15 @@ EMQXのMongoDB認証機能は、認証データをMongoDBドキュメントと�
 
  :::
 
-このMongoDBデータスキーマに対応するダッシュボードの設定パラメータは以下の通りです。
+このMongoDBデータスキーマに対応するダッシュボードの設定パラメータは以下の通りです：
 
-- **Password Hash**: `sha256`
-- **Salt Position**: `suffix`
-- **Collection**: `mqtt_user`
-- **Filter**: `{ username = "${username}" }`
-- **Password Hash field**: `password_hash`
-- **Salt Field**: `salt`
-- **is_superuser Field**： `is_superuser`
+- **Password Hash**：`sha256`
+- **Salt Position**：`suffix`
+- **Collection**：`mqtt_user`
+- **Filter**：`{ username = "${username}" }`
+- **Password Hash field**：`password_hash`
+- **Salt Field**：`salt`
+- **is_superuser Field**：`is_superuser`
 
 ## ダッシュボードでの設定
 
@@ -59,7 +59,7 @@ EMQXダッシュボードを使ってMongoDBをパスワード認証に利用す
 
 ![authn-MongoDB_ee](./assets/authn-MongoDB_ee.png)
 
-4. 以下の手順に従って認証バックエンドを設定します。
+4. 以下の手順に従い認証バックエンドの設定を行います：
 
    - MongoDBへの接続情報を入力します：
      - **MongoDB Mode**：MongoDBの展開形態を選択します。`Single`、`Replica Set`、`Sharding` のいずれかです。
@@ -99,14 +99,14 @@ EMQXダッシュボードを使ってMongoDBをパスワード認証に利用す
        - **Connection Pool size**（任意）：EMQXノードからMongoDBサーバーへの同時接続数を指定します。デフォルトは `8` です。
        - **Connect Timeout**（任意）：接続がタイムアウトと見なされるまでの待機時間を指定します。単位はミリ秒、秒、分、時間に対応。デフォルトは `20` 秒です。
 
-5. 設定が完了したら、**Create** をクリックします。
+5. 設定が完了したら、**Create** をクリックしてください。
 
-## 設定ファイルでの設定
+## 設定項目による設定
 
 EMQXのMongoDB認証機能は設定ファイルでも設定可能です。  
 <!--詳細な操作手順は [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)、[authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)、[authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set) を参照してください。-->
 
-以下は参考となるコード例です。
+以下は参考となるコード例です：
 
 :::: tabs type:card
 

@@ -18,7 +18,7 @@ EMQXがサポートする認証メカニズムは以下の通りです。
 
 - X.509証明書認証
 - JWT認証
-- ユーザー名／パスワード認証
+- ユーザー名/パスワード認証
 - MQTT 5.0の拡張認証
 - PSK認証
 
@@ -52,7 +52,7 @@ EMQXにおけるパスワード認証の流れは以下の通りです。クラ�
 
 EMQXの[PSK認証](../../network/psk-authentication.md)は、証明書ベースのTLSに代わるシンプルかつ安全な認証方式を提供します。クライアントとサーバーが共有する秘密鍵に基づき、デジタル証明書を必要としません。この方式は、証明書の管理にかかるオーバーヘッドが大きいリソース制約のある環境で特に有用です。
 
-## EMQX認証器
+## EMQX認証機
 
 EMQXは使用する認証メカニズムおよびバックエンドデータベースに基づき、以下の認証方式（以下「認証器」と呼びます）をサポートしています。
 
@@ -104,7 +104,7 @@ X.509証明書ベースの認証を適用している場合は、認証チェー
 
 ![](./assets/authn-chain.png)
 
-### 認証器の前提条件
+### 認証機の前提条件
 
 EMQX 5.9以降、各認証器に前提条件を割り当てることが可能になり、特定のクライアントに対して認証器を呼び出すかどうかを制御できます。前提条件は[Variform式](../../configuration/configuration.md#variform-expressions)で、クライアント属性（`listener`、`username`、`clientid`など）を評価します。式が`true`でない場合、認証器はスキップされます。
 
@@ -126,15 +126,15 @@ EMQX 5.9以降、各認証器に前提条件を割り当てることが可能に
 
 #### 前提条件の例
 
-異なるリスナー経由のクライアントに異なる認証器を適用する例：
+異なるリスナー経由のクライアントに異なる認証機を適用する例：
 
-- `tcp:default`のクライアントに対してHTTP認証器を適用：
+- `tcp:default`のクライアントに対してHTTP認証機を適用：
 
   ```
   str_eq(listener, 'tcp:default')
   ```
 
-- `ssl:default`のクライアントに対してPostgreSQL認証器を適用：
+- `ssl:default`のクライアントに対してPostgreSQL認証機を適用：
 
   ```
   str_eq(listener, 'ssl:default')
@@ -194,7 +194,7 @@ EMQXダッシュボードから外部リソースキャッシュを有効化お�
 
 :::
 
-ユーザーがスーパーユーザーかどうかは、データベースクエリ、HTTPレスポンス、JWTクレームの`is_superuser`フィールドで確認できます。
+データベースクエリ、HTTPレスポンス、JWTクレームの`is_superuser`フィールドでユーザーがスーパーユーザーかどうかを確認できます。
 
 ## パスワードハッシュ化
 
@@ -285,7 +285,7 @@ EMQXダッシュボードは認証器の状態確認や設定カスタマイズ�
 
 ### 設定ファイルによる認証設定
 
-設定ファイルでもEMQX認証器を設定可能です。
+設定ファイルでもEMQX認証機を設定可能です。
 
 例えば、以下の`authentication`フィールドでは複数の認証器からなる認証チェーンを作成しており、設定ファイル内の順序で認証器が実行されます。
 
@@ -307,7 +307,7 @@ listeners.tcp.default {
 
 gateway.stomp {
   ...
-  # すべてのSTOMPリスナーに対するグローバル認証器
+  # すべてのSTOMPリスナーに対するグローバル認証機
   authentication = {
     ...
   }
@@ -315,7 +315,7 @@ gateway.stomp {
 }
 ```
 
-認証器の種類によって設定項目は異なります。詳細は設定章を参照してください。<!--後続で対応章へのリンク挿入予定-->
+認証機の種類により設定項目は異なります。詳細は設定章を参照してください。<!--後続で対応する章へのリンク挿入予定-->
 
 ### HTTP APIによる認証設定
 
@@ -323,11 +323,11 @@ gateway.stomp {
 
 EMQX認証APIを使って認証チェーンや認証器を管理可能です。例えばグローバル認証器の作成や特定認証器の設定更新などが行えます。
 
-- `/api/v5/authentication`: グローバルMQTT認証管理用APIエンドポイント  
-- `/api/v5/gateway/{protocol}/authentication`: 他アクセスプロトコルのグローバル認証管理用APIエンドポイント  
-- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 他アクセスプロトコルのリスナー認証管理用APIエンドポイント  
+- `/api/v5/authentication`：グローバルMQTT認証管理用APIエンドポイント
+- `/api/v5/gateway/{protocol}/authentication`：他のアクセスプロトコル向けグローバル認証管理APIエンドポイント
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`：他のアクセスプロトコルのリスナー認証管理APIエンドポイント
 
-#### 認証器ID
+#### 認証機ID
 
 特定の認証器を操作するには、上記エンドポイントに認証器IDを付加します。例：`/api/v5/authentication/{id}`。メンテナンスを容易にするため、IDはEMQXが自動生成してAPIで返すのではなく、以下の仕様に従います。
 
@@ -343,9 +343,9 @@ EMQX認証APIを使って認証チェーンや認証器を管理可能です。�
 
 例：
 
-1. `password_based:built_in_database`  
-2. `jwt`  
-3. `scram:built_in_database`  
+1. `password_based:built_in_database`
+2. `jwt`
+3. `scram:built_in_database`
 
 リスナーIDにも同様の規則があります。
 
@@ -369,4 +369,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 [組み込みデータベース](./mnesia.md)および[MQTT 5.0拡張認証](./scram.md)を用いた認証では、認証データの作成、更新、削除、一覧取得などを行うHTTP APIを提供しています。詳細は[HTTP APIでの認証データ管理](./user_management.md)を参照してください。
 
-詳細なAPIリクエストやパラメータは[HTTP API](../../admin/api.md)を参照してください。
+APIリクエストやパラメータの詳細は[HTTP API](../../admin/api.md)を参照してください。

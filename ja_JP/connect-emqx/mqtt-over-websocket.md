@@ -53,8 +53,8 @@ EMQX Enterprise では以下のリスナーを提供しています。
 
 詳細な設定手順については以下を参照してください。
 
-- [Configure WebSocket Listener](../configuration/listener.md#configure-websocket-listener)
-- [Configure Secure WebSocket Listener](../configuration/listener.md#configure-secure-websocket-listener)
+- [WebSocket リスナーの設定](../configuration/listener.md#configure-websocket-listener)
+- [セキュア WebSocket リスナーの設定](../configuration/listener.md#configure-secure-websocket-listener)
 
 ## はじめに
 
@@ -85,10 +85,10 @@ const client = mqtt.connect("wss://broker.example.com:8084/mqtt", {
 });
 
 client.on("connect", () => {
-  console.log("Connected over WebSockets");
+  console.log("WebSocket 経由で接続されました");
 
   client.subscribe("test/topic", () => {
-    client.publish("test/topic", "Hello from browser");
+    client.publish("test/topic", "ブラウザからのメッセージ");
   });
 });
 

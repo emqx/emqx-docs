@@ -35,7 +35,7 @@ EMQX は MQTT の共有サブスクライブ機能を実装しています。共
 
 MQTT v5 を使用するクライアントでは、セッション有効期限を短く設定（0以外の場合）することが望ましいです。これにより、クライアントは一時的に切断しても、切断期間中にパブリッシュされたメッセージを再接続時に受信できます。セッションが期限切れになると、送信キュー内の QoS1 と QoS2 のメッセージや、インフライトキュー内の QoS1 メッセージは同じグループ内の他のセッションに再配信されます。最後のセッションが期限切れになると、すべての保留中メッセージは破棄されます。
 
-パーシステントセッションの詳細は、[MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session) を参照してください。
+パーシステントセッションの詳細は、[MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session) をご参照ください。
 
 ## 共有サブスクライブ戦略の設定
 
@@ -115,7 +115,7 @@ EMQX ダッシュボードで以下の手順で設定できます：
    - `Subscriber1` と `Subscriber2` の **Topic** を `$share/a/t/1` に設定します。
    - `Subscriber3` と `Subscriber4` の **Topic** を `$share/b/t/1` に設定します。
 
-   これらの例のトピックでは：
+   これらの例のトピックにおいて：
 
    - プレフィックス `$share` は共有サブスクライブであることを示します。
    - `{group}` は `a` と `b` で、任意の名前に変更可能です。

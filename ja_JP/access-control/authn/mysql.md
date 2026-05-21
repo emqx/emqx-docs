@@ -43,7 +43,7 @@ CREATE TABLE `mqtt_user` (
 例えば、スーパーユーザー（`is_superuser`: `true`）として、ユーザー名`emqx_u`、パスワード`public`、サフィックス付きソルト`salt_foo123`、パスワードハッシュ`sha256`を追加したい場合、クエリ文は以下のようになります。
 
 ```bash
-mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'slat_foo123'), 256), 'slat_foo123', 1);
+mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'salt_foo123'), 256), 'salt_foo123', 1);
 Query OK, 1 row affected (0,01 sec)
 ```
 
@@ -115,7 +115,7 @@ EMQXダッシュボードを使用して、MySQLをパスワード認証に利�
 
 EMQXの設定項目を用いてMySQL認証機能を構成することも可能です。
 
-MySQL認証は `mechanism = password_based` および `backend = mysql` で識別されます。
+MySQL認証は `mechanism = password_based` と `backend = mysql` で識別されます。
 
 設定例：
 

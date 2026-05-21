@@ -35,7 +35,7 @@ EMQXでOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
          exporters: [logging]
    ```
 
-2. 同じディレクトリにDocker Composeファイル`docker-compose-otel-logs.yaml`を作成します。
+2. 同じディレクトリに、`docker-compose-otel-logs.yaml`というDocker Composeファイルを作成します。
 
    ```yaml
    version: '3.9'
@@ -95,7 +95,7 @@ EMQXでOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
 
    ![Otel-collector-logs-debug-output](./assets/otel-collector-logs-debug-output.png)
 
-## ログ過負荷の管理
+## ログの過負荷管理
 
 EMQXはログイベントを蓄積し、定期的にバッチでエクスポートします。
 このエクスポート頻度は`opentelemetry.logs.scheduled_delay`パラメータで制御され、デフォルトは1秒です。

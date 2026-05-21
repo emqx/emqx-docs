@@ -1,5 +1,5 @@
 ---
-description: このページでは、公式Dockerイメージを使ってEMQXをインストールおよび起動する方法と、Docker Composeを使ってEMQXクラスターを構築する方法を紹介します。
+description: このページでは、公式Dockerイメージを使用してEMQXをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 ---
 
 # Dockerを使ったEMQXのインストール
@@ -54,11 +54,15 @@ description: このページでは、公式Dockerイメージを使ってEMQXを
 
    **注意:** ノード名は`emqx@<hostname>`の形式で、`<hostname>`はコンテナのホスト名または安定したFQDNと一致させる必要があります。
 
-## Docker Composeを使ってEMQXクラスターを構築する
+   単一ノードのデプロイでノード名を設定するには、`EMQX_NODE_NAME`環境変数に`emqx@hostname`の形式で設定します。また、コンテナのホスト名もこれに合わせて設定してください。上記の例を参照してください。
 
 Docker Composeは複数コンテナのDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
 
-なお、このセクションのDocker Composeの例はローカルテスト用です。本番環境でクラスターをデプロイする場合は、[クラスター](./cluster/introduction.md)を参照してください。
+   単一ノード構成でノード名を設定するには、`EMQX_NODE_NAME`環境変数を`emqx@hostname`形式で指定します。また、コンテナのホスト名もこれに合わせて設定してください。上記の例を参照してください。
+
+Docker Composeは複数のコンテナからなるDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
+
+なお、このセクションのDocker Composeの例ファイルはローカルテスト用です。実運用環境でクラスターをデプロイする場合は、[クラスター](./cluster/introduction.md)を参照してください。
 
 :::tip
 
@@ -121,7 +125,7 @@ Docker ComposeはDocker Desktopに標準で含まれています。もしDocker 
        driver: bridge
    ```
 
-2. コマンドラインツールで`docker-compose.yml`があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します。
+2. コマンドラインツールで`docker-compose.yml`があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します：
 
    ```bash
    docker-compose up -d

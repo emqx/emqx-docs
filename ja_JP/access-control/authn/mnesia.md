@@ -37,9 +37,9 @@ EMQXダッシュボードを使って、パスワード認証に組み込みデ�
 
    - **Precondition**：[Variform式](../../configuration/configuration.md#variform-expressions)で、この組み込みデータベース認証器をクライアント接続に適用するか制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列の `"true"` の場合のみ認証器が呼び出されます。それ以外はスキップされます。詳細は[認証器の前提条件](./authn.md#authenticator-preconditions)を参照してください。
 
-5. 設定が完了したら **作成** をクリックします。
+5. 設定が完了したら **Create** をクリックします。
 
-## 設定項目による設定
+## 設定項目での設定
 
 設定項目を使って認証を設定することも可能です。 <!--詳細な手順は[authn-builtin_db:authentication](../../configuration/configuration-manual.html#authn-builtin_db:authentication)を参照してください。-->
 

@@ -45,7 +45,7 @@ ACL設定ファイルは、ピリオドで終わるErlangタプルのリスト�
 - タプルの第2要素は、ルールが適用されるクライアントを表します。以下の指定方法とその組み合わせが利用可能です：
   * `{username, "dashboard"}`：ユーザー名が `dashboard` のクライアント。`{user, "dashboard"}` も可。
   * `{username, {re, "^dash"}}`：ユーザー名が正規表現 `^dash` にマッチするクライアント。
-  * `{clientid, "dashboard"}`：クライアントIDが `dashboard` のクライアント。`{client, "dashboard"}` も可。
+  * `{clientid, "dashboard"}`：クライアントIDが `dashboard` のクライアント。`{client, "dashboard"}` とも記述可能。
   * `{clientid, {re, "^dash"}}`：クライアントIDが正規表現 `^dash` にマッチするクライアント。
   * `{client_attr, "name", "dashboard"}`：クライアント属性 `name` が `dashboard` と等しいクライアント。
   * `{client_attr, "name", {re, "^dash"}}`：クライアント属性 `name` が正規表現 `^dash` にマッチするクライアント。
@@ -77,7 +77,7 @@ ACL設定ファイルは、ピリオドで終わるErlangタプルのリスト�
 
 EMQXはデフォルトでファイルベースの認可機能を有効にしています。**Actions**列の**Settings**ボタンをクリックすると、**ACLファイル**エリアに設定された認可ルールを表示・編集できます。ファイル形式やフィールドの詳細については、[ACLファイル形式](#acl-file-format)を参照してください。
 
-<img src="./assets/dashboard-edit-ACL-file_ee.png" alt="ダッシュボードでACLファイルを編集" style="zoom:67%;" />
+<img src="./assets/dashboard-edit-ACL-file_ee.png" alt="ダッシュボードでのACLファイル編集" style="zoom:67%;" />
 
 ## 設定ファイルでの設定
 
@@ -105,7 +105,7 @@ authorization {
 - `enable`：認可機能を有効化するかどうか。オプション値は `true` または `false`。
 - `path`：設定ファイルのパス。デフォルトは `etc/acl.conf`。ダッシュボードやREST APIでファイルベースの認可機能を編集した場合、EMQXは新しいファイルを `data/authz/acl.conf` に保存し、元のファイルの読み込みを停止します。
 
-<!--詳細なパラメータ一覧は[authz-file](../../configuration/configuration-manual.html#authz-file)を参照してください。リンクは後で更新予定です-->
+<!--詳細なパラメータ一覧は[authz-file](../../configuration/configuration-manual.html#authz-file)を参照してください。リンクは後で更新予定です。-->
 
 ::: tip
 

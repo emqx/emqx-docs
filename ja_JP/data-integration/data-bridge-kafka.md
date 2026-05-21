@@ -1,4 +1,4 @@
-# Apache KafkaへのMQTTデータストリーミング
+# Apache Kafka に MQTT データをストリームする
 
 [Apache Kafka](https://kafka.apache.org/)は、アプリケーションやシステム間でのデータストリームのリアルタイム転送を処理できる、広く利用されているオープンソースの分散イベントストリーミングプラットフォームです。しかし、KafkaはエッジIoT通信向けに設計されておらず、Kafkaクライアントは安定したネットワーク接続とより多くのハードウェアリソースを必要とします。IoTの領域では、デバイスやアプリケーションから生成されるデータは軽量なMQTTプロトコルを用いて送信されます。EMQXのKafkaとの統合により、ユーザーはMQTTデータをKafkaへシームレスにストリーミングできます。MQTTのデータストリームはKafkaのトピックに取り込まれ、リアルタイムの処理、保存、分析が可能になります。逆に、KafkaのトピックデータはMQTTデバイスに配信され、タイムリーなアクションを実現します。
 
@@ -43,16 +43,16 @@ Apache Kafkaとのデータ統合は、以下の特長とメリットをビジ�
 
 ## はじめる前に
 
-このセクションでは、EMQX DashboardでKafka SinkおよびSourceを作成する前に必要な準備について説明します。
+このセクションでは、EMQX DashboardでKafka SinkおよびSourceを作成する前に必要な準備事項を説明します。
 
 ### 前提条件
 
 - EMQXデータ統合の[ルール](./rules.md)に関する知識
 - [データ統合](./data-bridges.md)に関する知識
 
-### Kafkaサーバーのセットアップ
+### Kafka サーバーのセットアップ
 
-ここではmacOSを例にインストールと起動手順を示します。以下のコマンドでKafkaをインストールし起動できます。
+ここでは macOS を例にインストールと起動手順を示します。以下のコマンドで Kafka をインストールし起動できます。
 
 ```bash
 wget https://archive.apache.org/dist/kafka/3.3.1/kafka_2.13-3.3.1.tgz
@@ -61,7 +61,7 @@ tar -xzf  kafka_2.13-3.3.1.tgz
 
 cd kafka_2.13-3.3.1
 
-# KRaftモードでKafkaを起動
+# KRaft モードで Kafka を起動
 KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
 
 bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
@@ -71,7 +71,7 @@ bin/kafka-server-start.sh config/kraft/server.properties
 
 詳細な操作手順は、[Kafkaドキュメントのクイックスタート](https://kafka.apache.org/41/getting-started/quickstart/)を参照してください。
 
-### Kafkaトピックの作成
+### Kafka トピックの作成
 
 EMQXでデータ統合を作成する前に、関連するKafkaトピックを作成しておく必要があります。以下のコマンドでKafkaに2つのトピックを作成します：`testtopic-in`（Sink用）と`testtopic-out`（Source用）。
 
@@ -81,7 +81,7 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-## Kafkaプロデューサーコネクターの作成
+## Kafka プロデューサーコネクターの作成
 
 Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確立するためKafkaプロデューサーコネクターを作成する必要があります。
 
@@ -89,6 +89,8 @@ Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確�
 
 2. ページ右上の **Create** をクリックし、コネクター選択画面で **Kafka Producer** を選択して **Next** をクリックします。
 
+1. EMQX Dashboardで **Integration** -> **Connector** を開きます。
+2. ページ右上の **Create** をクリックし、コネクター選択画面で **Kafka Producer** を選択して **Next** をクリックします。
 3. 名前と説明を入力します。例：`my-kafka`。名前はKafka Sinkとコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
 
 4. Kafka接続に必要なパラメータを設定します：
@@ -151,7 +153,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 ## Kafka Sinkを使ったルールの作成
 
-このセクションでは、MQTTトピック`t/#`からのメッセージを処理し、Kafka Sinkを使ってKafkaの`testtopic-in`トピックに送信するルールの作成方法を示します。
+このセクションでは、MQTTトピック`t/#`からのメッセージを処理し、Kafkaの`testtopic-in`トピックへ処理結果を送信するルールの作成方法を示します。
 
 1. EMQX Dashboardで **Integration** -> **Rules** を開きます。
 
@@ -220,7 +222,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 EMQX v5.7.2以降、Kafka Producer Sink設定で環境変数や変数テンプレートを用いてKafkaトピックを動的に設定できます。本節ではこれら2つのユースケースを紹介します。
 
-#### 環境変数の利用
+#### 環境変数の使用
 
 EMQX v5.7.2では、ルールSQL処理段階で[環境変数](../configuration/configuration.md#environment-variables)から取得した値をメッセージ内のフィールドに動的に割り当てる機能が追加されました。この機能はルールエンジンの組み込みSQL関数[getenv](../data-integration/rule-sql-builtin-functions.md#system-function)を用いてEMQXの環境変数を取得し、その値をSQL処理結果に設定します。この機能の応用例として、Kafka SinkルールアクションのKafkaトピック設定にルール出力結果のフィールドを参照してトピックを設定できます。以下はその例です。
 
@@ -238,7 +240,7 @@ EMQX v5.7.2では、ルールSQL処理段階で[環境変数](../configuration/c
    EMQXVAR_KAFKA_TOPIC=testtopic-in bin/emqx start
    ```
 
-3. コネクターを作成します。[Kafkaプロデューサーコネクターの作成](#create-a-kafka-producer-connector)を参照してください。
+3. コネクターを作成します。[Kafka プロデューサーコネクターの作成](#create-a-kafka-producer-connector)を参照してください。
 
 4. Kafka Sinkルールを設定します。**SQL Editor**に以下を入力：
 
@@ -281,7 +283,7 @@ EMQX v5.7.2では、ルールSQL処理段階で[環境変数](../configuration/c
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
 
-#### 変数テンプレートの利用
+#### 変数テンプレートの使用
 
 **Kafka Topic**フィールドに静的なトピック名を設定する以外に、変数テンプレートを用いて動的にトピックを生成可能です。これによりメッセージ内容に基づいてKafkaトピックを構築でき、柔軟なメッセージ処理・分配が可能になります。例えば、`device-${payload.device}`のように指定すると、特定デバイスからのメッセージをデバイスIDを付加したトピック（例：`device-1`）に送信できます。
 
@@ -302,7 +304,7 @@ EMQX v5.7.2では、ルールSQL処理段階で[環境変数](../configuration/c
 
 また、Kafkaには`device-1`、`device-2`などの解決済みトピックを事前作成しておく必要があります。テンプレートが存在しないトピック名に解決された場合も、メッセージは破棄されます。
 
-## Kafkaプロデューサールールのテスト
+## Kafka プロデューサールールのテスト
 
 Kafkaプロデューサールールが期待通り動作するかをテストするため、[MQTTX](https://mqttx.app/en)を使ってEMQXにMQTTメッセージをパブリッシュするクライアントをシミュレートできます。
 
@@ -322,7 +324,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 
 <!--TODO 5.4 refactor-->
 
-## Kafkaコンシューマーコネクターの作成
+## Kafka コンシューマーコネクターの作成
 
 Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を確立するためKafkaコンシューマーコネクターを作成する必要があります。
 
@@ -334,6 +336,10 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 
 4. ソースの名前を入力します。大文字・小文字の英数字の組み合わせで、例：`my-kafka-source`。
 
+1. EMQX Dashboardで **Integration** -> **Connector** を開きます。
+2. ページ右上の **Create** をクリックします。
+3. **Create Connector**ページで **Kafka Consumer** を選択し、**Next**をクリックします。
+4. ソースの名前を入力します。英数字の組み合わせで、例：`my-kafka-source`。
 5. ソースの接続情報を入力します。
    - **Bootstrap Hosts**：`127.0.0.1:9092`と入力します。ローカル起動前提のため、リモート環境の場合は適宜調整してください。
    
@@ -358,7 +364,7 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 
 このセクションでは、設定済みのKafkaコンシューマーSourceから転送されたメッセージをさらに処理し、MQTTトピックに再パブリッシュするルールの作成方法を示します。
 
-### ルールSQLの作成
+このセクションでは、設定済みの Kafka コンシューマーソースから転送されたメッセージをさらに処理し、MQTT トピックに再パブリッシュするルールの作成方法を説明します。
 
 1. EMQX Dashboardで **Integration** -> **Rules** を開きます。
 
@@ -405,7 +411,6 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 ### 再パブリッシュアクションの追加
 
 1. **Action Outputs**タブを選択し、+ **Add Action**ボタンをクリックしてルールでトリガーされるアクションを定義します。
-
 2. **Type of Action**ドロップダウンから**Republish**を選択します。
 
 3. **Topic**および**Payload**フィールドに再パブリッシュしたいメッセージのトピックとペイロードを入力します。例として、`t/1`と`${.}`を入力します。
@@ -416,7 +421,7 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
-## Kafka Sourceルールのテスト
+## Kafka ソースルールのテスト
 
 Kafka Sourceとルールが期待通り動作するかテストするため、[MQTTX](https://mqttx.app/)を使ってEMQXのトピックをサブスクライブするクライアントをシミュレートし、KafkaプロデューサーでKafkaトピックにデータを生成します。その後、KafkaからのデータがEMQXによってクライアントがサブスクライブするトピックに再パブリッシュされるか確認します。
 
@@ -483,7 +488,7 @@ Kafka Sourceとルールが期待通り動作するかテストするため、[M
 
 ## 参考情報
 
-EMQXはApache Kafkaとのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクから詳細を学べます。
+EMQX は Apache Kafka とのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクから詳細を学べます。
 
 **ブログ：**
 
@@ -493,7 +498,7 @@ EMQXはApache Kafkaとのデータ統合に関する豊富な学習リソース�
 
 **ベンチマークレポート：**
 
-- [EMQX Enterpriseパフォーマンスベンチマークテスト：Kafka統合](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
+- [EMQX Enterprise パフォーマンスベンチマークテスト：Kafka 統合](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
 **動画：**
 

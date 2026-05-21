@@ -71,7 +71,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
 
 カスタマイズが必要な場合やリスナーの追加、認証ルールの追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションを参照してください。
 
-CoAP ゲートウェイは UDP および DTLS タイプリスナーのみをサポートしています。設定可能なパラメータの完全な一覧は [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) を参照してください。
+CoAP ゲートウェイは UDP および DTLS タイプリスナーのみをサポートしています。設定可能なパラメータの完全な一覧は [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
 
 ## CoAP クライアントとの連携
 
@@ -86,7 +86,7 @@ CoAP ゲートウェイを構築した後、CoAP クライアントツールを�
 
 CoAP ゲートウェイは [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) 標準で定義された URI パスとメソッドを使用します。
 
-詳細なパラメータは [メッセージパブリッシュ](#message-publish)、[トピックサブスクライブ](#topic-subscribe)、[トピックサブスクライブ解除](#topic-unsubscribe) を参照してください。
+詳細なパラメータは [メッセージパブリッシュ](#message-publish)、[トピックサブスクライブ](#topic-subscribe)、[トピックのサブスクライブ解除](#topic-unsubscribe) を参照してください。
 
 ## CoAP ゲートウェイのカスタマイズ
 
@@ -155,7 +155,7 @@ TLS Verify の有効化をトグルスイッチで設定可能です。ただし
 
 ### 認証の設定
 
-クライアント ID、ユーザー名、パスワードはクライアントの [Create Connection](#create-connection) リクエストで提供されます。CoAP ゲートウェイは以下の認証方式をサポートします。
+クライアント ID、ユーザー名、パスワードはクライアントの [Create Connection](#create-connection) リクエストで提供されます。CoAP ゲートウェイは以下の認証方式をサポートしています。
 
 - [組み込みデータベース認証](../access-control/authn/mnesia.md)
 - [MySQL 認証](../access-control/authn/mysql.md)
@@ -262,7 +262,7 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
   - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
 - ペイロード: ステータスコードが `2.01` の場合は `Token`、それ以外は `ErrorMessage`。
 
-例:
+例：
 
 ```bash
 coap-client -m delete -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=3404490787"
@@ -290,7 +290,7 @@ coap-client -m delete -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token
   - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
 - ペイロード: ステータスコードが `2.01` の場合は `Token`、それ以外は `ErrorMessage`。
 
-例:
+例：
 
 ```bash
 coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=3404490787"
@@ -322,7 +322,7 @@ coap-client -m put -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&token=34
 
 - ステータスコード:
   - `2.04`: パブリッシュ成功
-  - `4.00`: 不正なリクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
   - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
 - ペイロード: ステータスコードが `2.04` の場合は空、その他は `ErrorMessage`。
 
@@ -361,7 +361,7 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 
 - ステータスコード:
   - `2.05`: サブスクライブ成功
-  - `4.00`: 不正なリクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
   - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
 - ペイロード: ステータスコードが `2.05` の場合は空、その他は `ErrorMessage`。
 
@@ -377,7 +377,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### トピックサブスクライブ解除
+### トピックのサブスクライブ解除
 
 このインターフェースは CoAP クライアントがトピックのサブスクライブを解除するために使用します。
 
@@ -398,7 +398,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 
 - ステータスコード:
   - `2.07`: サブスクライブ解除成功
-  - `4.00`: 不正なリクエスト。詳細なエラー情報がメッセージボディに返されます。
+  - `4.00`: 不正リクエスト。詳細なエラー情報がメッセージボディに返されます。
   - `4.01`: 認可失敗。リクエスト形式は正しいが認可に失敗。
 - ペイロード: ステータスコードが `2.07` の場合は空、その他は `ErrorMessage`。
 
@@ -408,13 +408,13 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### 短縮パラメータ名
+### パラメータ名の短縮
 
 メッセージサイズ削減のため、CoAP ゲートウェイは短縮パラメータ名をサポートしています。
 
 例えば、`clientid=barx` は `c=bar` と書くことができます。サポートされる短縮パラメータ名は以下の通りです。
 
-| パラメータ名   | 短縮名  |
+| パラメータ名   | 短縮名 |
 | -------------- | ------- |
 | `clientid`     | `c`     |
 | `username`     | `u`     |
