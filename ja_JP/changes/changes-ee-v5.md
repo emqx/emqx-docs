@@ -1,5 +1,6 @@
 # EMQX Enterprise Version 5
 
+<<<<<<< HEAD
 ## 5.10.3
 
 *Release Date: 2026-01-28*
@@ -567,6 +568,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15216](https://github.com/emqx/emqx/pull/15216) Fixed a crash of `emqx_telemetry` process when there are plugins activated.
 
+=======
+>>>>>>> origin/release-5.9
 ## 5.9.2
 
 *Release Date: 2025-11-14*
@@ -633,7 +636,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15712](https://github.com/emqx/emqx/pull/15712) Fixed node boot-up failure during rolling upgrade from older versions (before 5.9)
 
+<<<<<<< HEAD
   In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid "seconds" value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
+=======
+  In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid “seconds” value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
+>>>>>>> origin/release-5.9
 
 - [#15863](https://github.com/emqx/emqx/pull/15863) Fixed the license quota alarm message to correctly reflect session quotas instead of live connections.
 
@@ -729,7 +736,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16138](https://github.com/emqx/emqx/pull/16138) Fixed a Redis cluster failover issue that could cause the Connector to remain stuck in a "connecting" state.
 
+<<<<<<< HEAD
   Previously, EMQX's Redis cluster client only refreshed the cluster topology when regular queries (such as `GET`) failed. However, failures in periodic `PING` commands did not trigger a refresh. As a result, after a failover, the connector could continue using the outdated cluster topology if no other commands were issued, preventing recovery.
+=======
+  Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (such as `GET`) failed. However, failures in periodic `PING` commands did not trigger a refresh. As a result, after a failover, the connector could continue using the outdated cluster topology if no other commands were issued, preventing recovery.
+>>>>>>> origin/release-5.9
 
   With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that the connector can detect failovers and recover promptly.
 

@@ -2,20 +2,27 @@
 description: このページでは、公式Dockerイメージを使用してEMQXをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 ---
 
+<<<<<<< HEAD
 # Dockerを使用したEMQXのインストール
 このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 
 ## Dockerを使用して単一のEMQXノードを起動する
+=======
+# Dockerを使ったEMQXのインストール
+このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
+
+## Dockerを使って単一のEMQXノードを起動する
+>>>>>>> origin/release-5.9
 
 このセクションでは、Dockerイメージを使用して最新バージョンのEMQXをインストールする方法を紹介します。EMQX公式Dockerイメージの詳細については、[Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)をご覧ください。
 
-1. Dockerイメージを取得するには、以下を実行します。
+1. Dockerイメージを取得するには、以下を実行します：
 
    ```bash
    docker pull emqx/emqx-enterprise:@EE_VERSION@
    ```
 
-2. Dockerコンテナを起動するには、以下を実行します。
+2. Dockerコンテナを起動するには、以下を実行します：
 
    ```bash
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
@@ -46,12 +53,21 @@ description: このページでは、公式Dockerイメージを使用してEMQX
      emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-2. Docker環境では、`localhost`や`127.0.0.1`はコンテナ自身の内部ネットワークインターフェースを指し、ホストマシンのものではありません。ホストマシン上で動作するサービスにアクセスするには、ホストのIPアドレスを使用するか、[ホストネットワーク設定](https://docs.docker.com/network/host/)を利用してください。Docker for MacやDocker for Windowsを使用している場合は、`host.docker.internal`をホストアドレスとして使用できます。
+2. Docker環境では、`localhost`や`127.0.0.1`はコンテナ自身の内部ネットワークインターフェースを指し、ホストマシンのものではありません。ホストマシン上で稼働しているサービスにアクセスする場合は、ホストのIPアドレスを使用するか、[ホストネットワーク設定](https://docs.docker.com/network/host/)を利用してください。Docker for MacやDocker for Windowsを使用している場合は、`host.docker.internal`をホストアドレスとして使用できます。
 
+<<<<<<< HEAD
 3. EMQXはデータ保存に`data/mnesia/<node_name>`ディレクトリを使用します。ノード名には安定した識別子（FQDNなど）を使用することが重要です。これにより、ノード名の変更によるデータ損失を防止できます。
+=======
+3. EMQXはデータ保存のために`data/mnesia/<node_name>`ディレクトリを使用します。ノード名は安定した識別子（例えばFQDN）を選択することが重要です。これにより、ノード名の変更によるデータ損失を防げます。
+
+   単一ノードのデプロイでノード名を設定するには、`EMQX_NODE_NAME`環境変数に`emqx@hostname`の形式で設定します。また、コンテナのホスト名もこれに合わせて設定してください。上記の例を参照してください。
+
+   **注意:** ノード名は`emqx@<hostname>`の形式で、`<hostname>`はコンテナのホスト名または安定したFQDNと一致させる必要があります。
+>>>>>>> origin/release-5.9
 
    単一ノード構成でノード名を設定するには、`EMQX_NODE_NAME`環境変数を`emqx@hostname`形式で指定します。また、コンテナのホスト名もこれに合わせて設定してください。上記の例を参照してください。
 
+<<<<<<< HEAD
    **注意:** ノード名は`emqx@<hostname>`形式である必要があり、`<hostname>`はコンテナのホスト名または安定したFQDNと一致させてください。
 
 ## Docker Composeを使用してEMQXクラスターを構築する
@@ -67,6 +83,19 @@ Docker ComposeはDocker Desktopに含まれています。もしDocker Compose�
 :::
 
 1. 任意のディレクトリに`docker-compose.yml`ファイルを作成し、以下の内容を記述します。
+=======
+Docker Composeは複数のコンテナからなるDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
+
+なお、このセクションのDocker Composeの例ファイルはローカルテスト用です。実運用環境でクラスターをデプロイする場合は、[クラスター](./cluster/introduction.md)を参照してください。
+
+:::tip
+
+Docker ComposeはDocker Desktopに既に含まれています。もしDocker Composeがまだインストールされていない場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/)を参照して詳細な手順を確認してください。
+
+:::
+
+1. 任意のディレクトリに`docker-compose.yml`ファイルを作成し、以下の内容を記述します：
+>>>>>>> origin/release-5.9
 
    ```yml
    version: '3'
@@ -121,13 +150,13 @@ Docker ComposeはDocker Desktopに含まれています。もしDocker Compose�
        driver: bridge
    ```
 
-2. コマンドラインツールで`docker-compose.yml`があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します。
+2. コマンドラインツールで`docker-compose.yml`があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します：
 
    ```bash
    docker-compose up -d
    ```
 
-3. クラスターの状態を確認するには、以下を実行します。
+3. クラスターの状態を確認するには、以下を実行します：
 
    ```bash
    $ docker exec -it emqx1 sh -c "emqx ctl cluster status"
@@ -137,8 +166,14 @@ Docker ComposeはDocker Desktopに含まれています。もしDocker Compose�
 
 ## 次のステップ
 
+<<<<<<< HEAD
 MQTTクライアントを使用してEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)を参照してください。
 
 - EMQXのパラメータ設定やその他の機能については、[設定](../configuration/configuration.md)をご覧ください。
+=======
+MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)を参照してください。
+
+- EMQXのパラメーター設定やその他機能については、[設定](../configuration/configuration.md)をご覧ください。
+>>>>>>> origin/release-5.9
 
 - 複数ノードによるEMQXクラスターの構築方法については、[クラスター](./cluster/introduction.md)を参照してください。

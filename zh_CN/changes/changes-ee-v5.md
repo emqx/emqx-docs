@@ -836,19 +836,19 @@
 
 - [#14884](https://github.com/emqx/emqx/pull/14884) 添加了 HTTP API 用于管理命名空间配置。
 
-- [#14840](https://github.com/emqx/emqx/pull/14840) Added HTTP API endpoints to configure client and tenant rate limiters for multi-tenancy feature.
+- [#14840](https://github.com/emqx/emqx/pull/14840) 为多租户功能新增了 HTTP API 接口，用于配置客户端和租户的速率限制器。
 
 #### 认证与授权
 
 - [#14584](https://github.com/emqx/emqx/pull/14584) 支持应用身份验证器通过 2FA（多因素认证）登录 Dashboard。
 
-  [#14979](https://github.com/emqx/emqx/pull/14979) 在认证和授权模板中支持使用 `zone` 和 `listener`。 同时，将 `zone` 和 `listener` 添加到 ACL 规则中的 `who` 匹配条件。
+- [#14979](https://github.com/emqx/emqx/pull/14979) 在认证和授权模板中支持使用 `zone` 和 `listener`。 同时，将 `zone` 和 `listener` 添加到 ACL 规则中的 `who` 匹配条件。
 
   这使得可以实现基于监听器或区域的访问控制。 示例：
 
   - 使用如下模板向 HTTP 认证器的请求发送 `zone` 名称： `{"username": "${username}", "zone": "${zone}"}`
   - 在 `acl.conf` 中，仅当通过 SSL 监听器连接时，允许客户端订阅 `${username}/#`： `{allow, {listener, "ssl:default"}, subscribe, ["${username}/#"]}.`
-
+  
 - [#14976](https://github.com/emqx/emqx/pull/14976) 支持配置认证器调用条件。允许根据客户端信息选择性地调用认证器，避免不必要的认证请求。 例如，要仅为通过 `tcp:default` 连接的客户端触发 HTTP 认证器，并为通过 `ssl:default` 连接的客户端触发 Postgre 认证器，可以使用类似 `str_eq(listener, 'tcp:default')` 或 `str_eq(listener, 'ssl:default')` 的调用条件。
 
 - [#14966](https://github.com/emqx/emqx/pull/14966) 增加了删除默认 Dashboard 管理员用户的功能。为此，必须至少存在一个其他的管理员用户。

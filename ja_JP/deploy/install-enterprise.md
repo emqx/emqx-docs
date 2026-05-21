@@ -4,7 +4,11 @@ EMQX は各リリースごとに対応する Docker イメージおよび各種�
 
 :::tip
 
+<<<<<<< HEAD
 上記のデプロイ方法に加えて、完全マネージド型の MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウド接続にあたり、インフラの保守は一切不要で、[アカウント登録](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud)だけでご利用いただけます。
+=======
+上記のデプロイ方法に加えて、完全マネージド型の MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウドへの接続にあたって、インフラの保守は不要で、[アカウント登録](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud)のみでご利用いただけます。
+>>>>>>> origin/release-5.9
 :::
 
 以下のページでは EMQX Enterprise のインストール手順を案内しています。
@@ -27,7 +31,11 @@ CentOS/RHEL システムに rpm および tar.gz パッケージで EMQX Enterpr
 
 **[macOS へのインストール](./install-macOS.md)**
 
+<<<<<<< HEAD
 zip パッケージで macOS に EMQX Enterprise をインストールします。
+=======
+macOS に zip パッケージで EMQX Enterprise をインストールします。
+>>>>>>> origin/release-5.9
 
 **[Kubernetes へのデプロイ](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
