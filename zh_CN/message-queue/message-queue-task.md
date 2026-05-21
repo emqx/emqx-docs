@@ -58,95 +58,84 @@
 
 新队列将出现在**队列**列表中，并显示其名称、过滤主题、派发策略、是否启用了最后值语义以及数据保留时间。你可以通过**操作**栏中的按钮编辑队列设置或删除队列。
 
-### 队列键表达式
+## 队列键表达式
 
-队列键表达式用于指定在启用“最后值语义”模式下，如何从消息元数据中提取用于消息去重的键。该表达式会针对每条消息的元数据进行求值，并遵循 [Variform 表达式](../configuration/configuration.md#variform-表达式)的语法。
+队列键表达式用于指定在启用”最后值语义”模式下，如何从消息数据中提取用于消息去重的键。该表达式会针对每条消息的数据进行求值，并遵循 [Variform 表达式](../configuration/configuration.md#variform-表达式)的语法。
 
 该表达式会在包含 `from`、`topic`、`payload`、`headers.properties` 等字段的消息上下文中进行求值。例如，如果希望使用用户属性（User Property）作为键，可以将表达式设置为：
 
 ```
-message.headers.properties.'User-Property'.user-prop
+message.headers.properties.User-Property.user-prop
 ```
 
 如果无法根据表达式提取出队列键（例如字段不存在），该消息将被丢弃，不会被加入队列。
 
-#### 消息上下文示例
+### 消息上下文示例
 
-队列键表达式会在如下结构的消息上下文中进行求值：
+<!--@include: ../shared/key-expression-message-context.md-->
 
-<details>
+### 队列键表达式示例
 
-<summary><strong>JSON 示例</strong></summary>
+#### 示例 1
 
-```json
-{
-  "message": {
-    "qos": 0,
-    "topic": "some/topic",
-    "payload": "some-payload",
-    "headers": {
-      "client_attrs": {},
-      "proto_ver": 5,
-      "properties": {
-        "User-Property": {
-          "user-prop": "some-value"
-        }
-      },
-      "peerhost": "127.0.0.1",
-      "username": "undefined",
-      "protocol": "mqtt",
-      "peername": "127.0.0.1:49352"
-    },
-    "from": "clientid",
-    "timestamp": 1759238376252,
-    "id": "..non utf8 bytes...",
-    "flags": {
-      "retain": false,
-      "dup": false
-    },
-    "extra": {}
-  }
-}
-```
+假设已创建如下队列：
+- 启用最后值语义
+- 过滤主题设置为 `t/#`
+- 队列键表达式设置为 `message.headers.properties.User-Property.mq-key`
 
-</details>
+假设以下消息被发布到 EMQX（期间无客户端消费）：
+| 编号 | 发送方 | 主题 | 用户属性 `mq-key` |
+|------|--------|------|-------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
 
-<details>
+当客户端连接并订阅该队列时，将收到以下消息：
+| 编号 | 发送方 | 主题 | 用户属性 `mq-key` |
+|------|--------|------|-------------------|
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
 
-<summary><strong>Erlang Term 示例</strong></summary>
+队列中每个唯一 `message.headers.properties.User-Property.mq-key` 值只保留最新一条消息。注意，键表达式对整个队列跨主题生效：发布到 `t/1` 的 `keyA` 消息会被后续发布到 `t/3` 的 `keyA` 消息覆盖。
 
-```erlang
-#{
-  message =>
-      #{
-        extra => #{},
-        flags => #{dup => false, retain => false},
-        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
-        timestamp => 1759238376252,
-        from => <<"clientid">>,
-        headers =>
-            #{
-              peername => <<"127.0.0.1:49352">>,
-              protocol => mqtt,
-              username => undefined,
-              peerhost => <<"127.0.0.1">>,
-              properties =>
-                  #{
-                    'User-Property' => #{
-                      <<"user-prop">> => <<"some-value">>
-                    }
-                  },
-              proto_ver => 5,
-              client_attrs => #{}
-            },
-        payload => <<"some-payload">>,
-        topic => <<"some/topic">>,
-        qos => 0
-      }
-}
-```
+#### 示例 2
 
-</details>
+假设已创建如下队列：
+- 启用最后值语义
+- 过滤主题设置为 `t/#`
+- 队列键表达式设置为 `message.from`
+
+假设发布与示例 1 相同的消息。当客户端连接并订阅该队列时，将收到以下消息：
+| 编号 | 发送方 | 主题 | 用户属性 `mq-key` |
+|------|--------|------|-------------------|
+| 2 | `client1` | `t/2` | `keyB` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+`message.from` 值相同的消息相互覆盖，每个发送方只保留最后一条消息。
+
+#### 示例 3
+
+假设已创建如下队列：
+- 启用最后值语义
+- 过滤主题设置为 `t/#`
+- 队列键表达式设置为 `concat(message.headers.properties.User-Property.mq-key, '-', message.topic)`
+
+假设以下消息被发布到 EMQX：
+| 编号 | 发送方 | 主题 | 用户属性 `mq-key` |
+|------|--------|------|-------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client1` | `t/1` | `keyB` |
+| 4 | `client1` | `t/2` | `keyA` |
+
+由于每条消息的 `message.headers.properties.User-Property.mq-key` 与 `message.topic` 的组合唯一，客户端连接并订阅队列后，所有消息均会被投递：
+| 编号 | 发送方 | 主题 | 用户属性 `mq-key` | 计算键 |
+|------|--------|------|-------------------|--------|
+| 1 | `client1` | `t/1` | `keyA` | `keyA-t/1` |
+| 2 | `client1` | `t/2` | `keyB` | `keyB-t/2` |
+| 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
+| 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
 
 ## 通过 Dashboard 自动创建队列
 

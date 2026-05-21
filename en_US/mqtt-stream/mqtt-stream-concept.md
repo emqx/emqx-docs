@@ -45,7 +45,7 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
   Two stream types are supported:
 
   - **Regular Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay messages starting from a specified timestamp or offset using the `stream-offset` subscription property.
-  - **Last-Value Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key. See
+  - **Last-Value Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key. See the [Stream Key Expression](../mqtt-stream/mqtt-stream-task.md#stream-key-expression) section for more details about how to use this feature.
 
 - **Topic Filter**
 

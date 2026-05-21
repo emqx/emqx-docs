@@ -96,76 +96,16 @@ If the key cannot be extracted based on the expression (e.g., the field doesn't 
 
 ### Message Context Example
 
-Stream Key Expressions are evaluated against the following message structure:
+<!--@include: ../shared/key-expression-message-context.md-->
 
-<details>
-<summary><strong>JSON Example</strong></summary>
-
-```json
-{
-  "message": {
-    "qos": 0,
-    "topic": "some/topic",
-    "payload": "some-payload",
-    "headers": {
-      "client_attrs": {},
-      "proto_ver": 5,
-      "properties": {
-        "User-Property": {
-          "user-prop": "some-value"
-        }
-      },
-      "peerhost": "127.0.0.1",
-      "username": "undefined",
-      "protocol": "mqtt",
-      "peername": "127.0.0.1:49352"
-    },
-    "from": "clientid",
-    "timestamp": 1759238376252,
-    "id": "..non utf8 bytes...",
-    "flags": {
-      "retain": false,
-      "dup": false
-    },
-    "extra": {}
-  }
-}
-```
-
-
-</details>
-
-<details> <summary><strong>Erlang Term Example</strong></summary>
-
-```erlang
-#{message =>
-      #{extra => #{},
-        flags => #{dup => false, retain => false},
-        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
-        timestamp => 1759238376252, from => <<"clientid">>,
-        headers =>
-            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
-              username => undefined, peerhost => <<"127.0.0.1">>,
-              properties =>
-                  #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
-              proto_ver => 5, client_attrs => #{}
-            },
-        payload => <<"some-payload">>, topic => <<"some/topic">>,
-        qos => 0
-      }
-    }
-```
-
-</details>
-
-### Example of using Stream Key Expression
+### Stream Key Expression Examples
 
 #### Example 1
 
 Assume you set up a stream with
-* Last-Value Semantics enabled
-* Topic Filter set to `t/#`
-* Stream Key Expression set to `message.headers.properties.User-Property.stream-key`
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Stream Key Expression set to `message.headers.properties.User-Property.stream-key`
 
 Assume the following messages are published to EMQX (and no clients are present to consume them):
 | N | Sender | Topic | User Property `stream-key` |
@@ -181,37 +121,29 @@ When a client connects and subscribes to the stream, the following messages will
 | 3 | `client2` | `t/3` | `keyA` |
 | 4 | `client2` | `t/4` | `keyB` |
 
-Only the most recent message for each unique `message.headers.properties.User-Property.stream-key` value is retained in the stream. Note, that the key expression takes effect for the whole stream across the topics: a message with `keyA` published to `t/1` is overwritten by a later message with `keyA` published to `t/3`.
+Only the most recent message for each unique `message.headers.properties.User-Property.stream-key` value is retained in the stream. Note that the key expression takes effect for the whole stream across topics: a message with `keyA` published to `t/1` is overwritten by a later message with `keyA` published to `t/3`.
 
 #### Example 2
 
 Assume you set up a stream with
-* Last-Value Semantics enabled
-* Topic Filter set to `t/#`
-* Stream Key Expression set to `message.from`
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Stream Key Expression set to `message.from`
 
-Assume the same messages are published to EMQX as in Example 1:
-| N | Sender | Topic | User Property `stream-key` |
-|---|--------|-------|------------------------|
-| 1 | `client1` | `t/1` | `keyA` |
-| 2 | `client1` | `t/2` | `keyB` |
-| 3 | `client2` | `t/3` | `keyA` |
-| 4 | `client2` | `t/4` | `keyB` |
-
-Now, when a client connects and subscribes to the stream, the following messages will be delivered:
+Assume the same messages are published to EMQX as in Example 1. When a client connects and subscribes to the stream, the following messages will be delivered:
 | N | Sender | Topic | User Property `stream-key` |
 |---|--------|-------|------------------------|
 | 2 | `client1` | `t/2` | `keyB` |
 | 4 | `client2` | `t/4` | `keyB` |
 
-Now, the messages with the same `message.from` are overwritten.
+Messages with the same `message.from` value overwrite each other, so only the last message from each sender is retained.
 
 #### Example 3
 
 Assume you set up a stream with
-* Last-Value Semantics enabled
-* Topic Filter set to `t/#`
-* Stream Key Expression set to `concat(message.headers.properties.User-Property.stream-key, '-', message.topic)`
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Stream Key Expression set to `concat(message.headers.properties.User-Property.stream-key, '-', message.topic)`
 
 Assume the following messages are published to EMQX:
 | N | Sender | Topic | User Property `stream-key` |
@@ -221,7 +153,7 @@ Assume the following messages are published to EMQX:
 | 3 | `client1` | `t/1` | `keyB` |
 | 4 | `client1` | `t/2` | `keyA` |
 
-When a client connects and subscribes to the stream, all the messages will be delivered because the combination of `message.headers.properties.User-Property.stream-key` and `message.from` is unique for each message:
+When a client connects and subscribes to the stream, all the messages will be delivered because the combination of `message.headers.properties.User-Property.stream-key` and `message.topic` is unique for each message:
 | N | Sender | Topic | User Property `stream-key` | Computed Key |
 |---|--------|-------|------------------------|--------------|
 | 1 | `client1` | `t/1` | `keyA` | `keyA-t/1` |
