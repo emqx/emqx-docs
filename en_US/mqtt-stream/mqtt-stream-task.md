@@ -92,7 +92,7 @@ The expression is evaluated against a message context that includes fields such 
 message.headers.properties.User-Property.user-prop
 ```
 
-If the key cannot be extracted based on the expression (e.g., the field doesn't exist), the message will be discarded and not enqueued.
+If the key cannot be extracted based on the expression (e.g., the field doesn't exist), the message will be discarded and not stored in the stream.
 
 ### Message Context Example
 
