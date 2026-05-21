@@ -1,25 +1,38 @@
 # コマンドラインインターフェース
 
+<<<<<<< HEAD
 このページでは、EMQXがサポートする各種起動および管理コマンドを紹介し、ctl管理コマンドについて詳細に説明します。
+=======
+このページでは、EMQXがサポートする各種起動および管理コマンドを紹介し、`ctl`管理コマンドについて詳細に解説します。
+>>>>>>> origin/release-5.10
 
 ## 起動コマンド
 
-EMQXは基本的な起動および管理コマンドをサポートしており、`emqx <command>` コマンドで実行できます。
+EMQXは基本的な起動および管理コマンドをサポートしており、`emqx <command>`コマンドで実行できます。
 
 よく使われる起動および管理コマンドは以下の通りです：
 
 | コマンド    | 説明                                                        |
 | ---------- | ------------------------------------------------------------ |
+<<<<<<< HEAD
 | start      | EMQXをデーモンモードで起動します。実行中に対話型シェルは不要です。 |
 | console    | EMQXをErlangまたはElixirの対話型シェルで起動します。開発環境でのデバッグに使用し、EMQXとの対話が必要です。 |
 | foreground | EMQXをフォアグラウンドモードで起動します。対話型シェルは使用しません。開発環境でバックグラウンド実行せずに起動する際に使用します。 |
 | stop       | 実行中のEMQXノードを停止します。                           |
 | ctl        | EMQXの管理および監視を行います。`emqx ctl help`で詳細情報を取得可能です。 |
+=======
+| start      | EMQXをデーモンモードで起動し、実行中に対話型シェルを必要としません。 |
+| console    | EMQXをErlangまたはElixirの対話型シェルで起動します。開発環境でのデバッグに使用し、EMQXとの対話が必要です。 |
+| foreground | EMQXをフォアグラウンドモードで起動し、対話型シェルは使用しません。開発環境でバックグラウンド実行せずに起動する場合に使用します。 |
+| stop       | 実行中のEMQXノードを停止します。                           |
+| ctl        | EMQXの管理および監視を行います。`emqx ctl help`で詳細情報を取得できます。 |
+>>>>>>> origin/release-5.10
 
 以下は開発やデバッグ向けの高度なコマンドで、通常のユーザーはあまり気にする必要はありません：
 
 | コマンド        | 説明                                                        |
 | -------------- | ------------------------------------------------------------ |
+<<<<<<< HEAD
 | remote_console | リモートのEMQXノードの対話型シェルに接続します。              |
 | attach         | 実行中のEMQXノードにアタッチし、対話的操作を行います。         |
 | ertspath       | EMQXのErlangライブラリのパスを取得します。                    |
@@ -29,12 +42,24 @@ EMQXは基本的な起動および管理コマンドをサポートしており�
 | check_config   | EMQXの設定ファイルが正しいかどうかを検証します。              |
 | console_clean  | 対話型シェルのコンソール出力をクリアします。                   |
 | escript        | EMQXノード上でEscriptスクリプトを実行します。                  |
+=======
+| remote_console | リモートのEMQXノードの対話型シェルに接続します。             |
+| attach         | 実行中のEMQXノードにアタッチして対話操作を行います。         |
+| ertspath       | EMQXのErlangライブラリのパスを取得します。                   |
+| root_dir       | EMQXのルートディレクトリのパスを取得します。                 |
+| pid            | 実行中のEMQXノードのプロセスIDを取得します。                 |
+| ping           | EMQXノードが稼働しているか確認します。                       |
+| check_config   | EMQXの設定ファイルが正しいか検証します。                     |
+| console_clean  | 対話型シェルのコンソール出力をクリアします。                 |
+| escript        | EMQXノード上でEscriptスクリプトを実行します。                 |
+>>>>>>> origin/release-5.10
 
 ## ctlコマンド
 
 EMQXの`ctl`コマンドは、EMQXの管理および監視のための複数のサブコマンドを提供します。`ctl`コマンドはEMQXサービス起動後に実行する必要があります。
 
 > EMQXは`emqx_ctl`コマンドも提供しており、これは`emqx ctl`のエイリアスです。  
+<<<<<<< HEAD
 > `ctl`コマンドは隠しのErlangノードを起動して指定したEMQXノードにリモート接続し、Erlangのリモートコールを実行し、結果を表示します。したがって、`ctl`コマンドの過度な使用は避けることが推奨されます。
 
 以下は`ctl`コマンドのサブコマンド一覧と簡単な説明です。詳細なパラメータ情報は`help`コマンドで確認できます。
@@ -42,6 +67,15 @@ EMQXの`ctl`コマンドは、EMQXの管理および監視のための複数の�
 ## status
 
 ブローカーが起動しているかどうかを簡単に確認するコマンドです。
+=======
+> `ctl`コマンドは隠れたErlangノードを起動して指定したEMQXノードにリモート接続し、Erlangのリモートコールを実行し、結果を出力します。したがって、`ctl`コマンドの過剰な使用は避けることが推奨されます。
+
+以下に`ctl`コマンドの全サブコマンドと簡単な説明を示します。詳細なパラメータ情報は`help`コマンドで確認してください。
+
+## status
+
+ブローカーが起動して稼働しているかを簡単に確認するコマンドです。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl status
@@ -50,7 +84,11 @@ Node 'emqx@127.0.0.1' 5.8.7 is started
 
 ## broker
 
+<<<<<<< HEAD
 ローカルのブローカーの稼働状況、統計、メトリクスを確認するコマンドです。
+=======
+ローカルブローカーの稼働状況、統計およびメトリクスを確認するコマンドです。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl broker
@@ -62,7 +100,11 @@ uptime    : 52 seconds
 
 ### broker stats
 
+<<<<<<< HEAD
 ローカルブローカーの統計情報を表示します。接続数、セッション数、サブスクリプション数、トピック数などのメトリクスを含みます。
+=======
+ローカルブローカーの統計情報を表示します。接続数、セッション数、サブスクリプション数、トピック数などのメトリクスが含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl broker stats
@@ -96,7 +138,11 @@ topics.max                    : 0
 
 ### broker metrics
 
+<<<<<<< HEAD
 認証、認可、メッセージ配信、パケット処理、過負荷保護などのメトリクスを表示します。
+=======
+ローカルブローカーのメトリクスを表示します。認証、認可、メッセージ配信、パケット処理、オーバーロード保護などのメトリクスが含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl broker metrics
@@ -199,18 +245,32 @@ session.discarded             : 0
 session.resumed               : 0
 session.takenover             : 0
 session.terminated            : 0
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-5.10
 ```
 
 ## cluster
 
 ノードのクラスター状態を表示および管理するコマンドです。
 
+<<<<<<< HEAD
 EMQXの`join`コマンドは、指定したノードに対してクラスター参加の「リクエスト」を送るものであり、「招待」ではありません。つまり、`emqx ctl cluster join <OneOfTheClusteredNodes>`は、`<OneOfTheClusteredNodes>`のクラスターに参加するようリクエストを送るコマンドです。
 
 ### cluster join \<Node\>
 
 指定したノードが存在しアクセス可能であることを確認した上で、そのノードのクラスターに参加します。
+=======
+EMQXの`join`コマンドは、指定したノードに対してクラスター参加の「リクエスト」を送るものであり、「招待」ではありません。  
+つまり、`emqx ctl cluster join <OneOfTheClusteredNodes>`は、`<OneOfTheClusteredNodes>`のクラスターに参加するリクエストを送るコマンドです。
+
+### cluster join \<Node\>
+
+指定したノードが所属するEMQXクラスターにノードを参加させます。
+
+指定ノードが稼働中でアクセス可能であることを確認してください。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl cluster join emqx2@127.0.0.1
@@ -219,7 +279,11 @@ Failed to join the cluster: {node_down,'emqx2@127.0.0.1'}
 
 ### cluster leave
 
+<<<<<<< HEAD
 現在のクラスターからノードを離脱させます。
+=======
+現在のEMQXクラスターからノードを離脱させます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl cluster leave
@@ -243,9 +307,15 @@ Failed to remove the node from cluster: node_not_in_cluster
 
 ### cluster status [--json]
 
+<<<<<<< HEAD
 クラスターの状態を表示します。
 
 オプションの`--json`パラメータを指定すると、JSON形式で表示されます。
+=======
+EMQXクラスターの状態を表示します。
+
+オプションの`--json`を付けるとJSON形式で表示されます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl cluster status
@@ -266,7 +336,11 @@ $ emqx ctl cluster status --json
 
 ### cluster discovery enable
 
+<<<<<<< HEAD
 自動クラスター検出を有効化して実行します（設定済みの場合）。
+=======
+自動クラスター検出を有効化し、実行します（設定されている場合）。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl cluster discovery enable
@@ -279,10 +353,17 @@ Automatic cluster discovery enabled.
 
 ### clients list
 
+<<<<<<< HEAD
 現在EMQXに接続中のすべてのクライアントを表示します。アクティブなクライアントや接続数の監視に使用します。
 
 :::tip
 大量のクライアントが接続している場合、`list`コマンドは時間がかかりリソースを多く消費します。
+=======
+現在EMQXに接続中の全クライアントを表示します。アクティブなクライアントや接続数の監視に利用できます。
+
+:::tip
+大量のクライアントが接続している場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
+>>>>>>> origin/release-5.10
 :::
 
 ```bash
@@ -293,7 +374,11 @@ Client(emqx_a, username=undefined, peername=127.0.0.1:59444, clean_start=true, k
 
 ### clients show \<ClientId\>
 
+<<<<<<< HEAD
 特定のクライアントの接続詳細情報を表示します。
+=======
+特定クライアントの詳細な接続情報を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl clients show emqx_c
@@ -309,6 +394,7 @@ $ emqx ctl clients kick emqx_c
 ok
 ```
 
+<<<<<<< HEAD
 ### clients stats --file <path/to/file.csv>
 
 クライアントごとの統計情報をCSVファイルに出力し、システム管理者がクライアントの活動状況や負荷の高いクライアントを把握できます。
@@ -361,6 +447,19 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 :::tip 注意
 
 クラスター内に大量のトピックサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費します。
+=======
+## topics
+
+現在のシステムでサブスクライブされている全トピックを表示します。
+
+### topics list
+
+全トピックを一覧表示します。トピック数や分布の監視に利用できます。
+
+:::tip 注意
+
+クラスター内に大量のトピックサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
+>>>>>>> origin/release-5.10
 :::
 
 ```bash
@@ -370,7 +469,11 @@ t/1 -> emqx@127.0.0.1
 
 ### topics show \<Topic\>
 
+<<<<<<< HEAD
 特定のトピックの詳細情報を表示します。
+=======
+特定トピックの詳細情報を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl topics show t/1
@@ -383,7 +486,11 @@ t/1 -> emqx@127.0.0.1
 
 ### subscriptions list
 
+<<<<<<< HEAD
 すべてのサブスクリプションを一覧表示します。
+=======
+全サブスクリプションを一覧表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl subscriptions list
@@ -419,7 +526,11 @@ ok
 ```
 
 :::tip
+<<<<<<< HEAD
 システム内に大量のサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費します。
+=======
+システム内に大量のサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
+>>>>>>> origin/release-5.10
 :::
 
 ## plugins
@@ -428,7 +539,11 @@ ok
 
 ### plugins list
 
+<<<<<<< HEAD
 インストール済みプラグインを一覧表示します。
+=======
+インストール済みプラグインの一覧を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl plugins list
@@ -445,7 +560,11 @@ emqx ctl plugins describe emqx_auth_mnesia-3.0.1
 
 ### plugins allow \<Name-Vsn\>
 
+<<<<<<< HEAD
 Dashboardからの指定プラグインインストールを許可します。
+=======
+ダッシュボード経由で指定プラグインのインストールを許可します。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl plugins allow emqx_auth_mnesia-3.0.1
@@ -458,7 +577,11 @@ emqx ctl plugins allow emqx_auth_mnesia-3.0.1
 
 ### plugins disallow \<Name-Vsn\>
 
+<<<<<<< HEAD
 Dashboardからの指定プラグインインストールを禁止します。
+=======
+ダッシュボード経由で指定プラグインのインストールを禁止します。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
@@ -525,6 +648,7 @@ emqx ctl plugins disable emqx_auth_mnesia-3.0.1
 emqx ctl plugins enable emqx_auth_mnesia-3.0.1 front
 ```
 
+<<<<<<< HEAD
 `front`、`rear`、または`before Other-Vsn`を使って起動順序の相対位置を指定できます。位置を指定しない場合は既存のプラグインの位置を維持し、新しいプラグインは末尾に追加されます。
 
 ## vm
@@ -534,6 +658,17 @@ Erlang仮想マシンの統計データを調査します。
 ### vm all
 
 CPU負荷、メモリ使用量など、Erlang VMの全情報を表示します。
+=======
+`front`、`rear`、または`before Other-Vsn`を使って起動順序の相対位置を指定できます。位置を指定しない場合は既存のプラグインの位置は変わらず、新しいプラグインは末尾に追加されます。
+
+## vm
+
+Erlang仮想マシンから収集された統計データを検査します。
+
+### vm all
+
+Erlang VMのCPU負荷、メモリ使用量など全情報を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl vm all
@@ -570,7 +705,11 @@ cpu/load15              : 1.05
 
 ### vm memory
 
+<<<<<<< HEAD
 Erlang VMのメモリ使用状況を表示します。総メモリ、プロセスメモリ、アトムメモリ、バイナリメモリ、ETSメモリを含みます。
+=======
+Erlang VMのメモリ使用量を表示します。合計メモリ、プロセスメモリ、アトムメモリ、バイナリメモリ、ETSメモリが含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl vm memory
@@ -587,7 +726,11 @@ memory/ets              : 17414480
 
 ### vm process
 
+<<<<<<< HEAD
 Erlang VMのプロセス情報を表示します。プロセス数とプロセス上限を含みます。
+=======
+Erlang VMのプロセス情報を表示します。プロセス数とプロセス制限が含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl vm process
@@ -597,7 +740,11 @@ process/count           : 870
 
 ### vm io
 
+<<<<<<< HEAD
 Erlang VMのI/O情報を表示します。最大ファイルディスクリプタ数とアクティブなファイルディスクリプタ数を含みます。
+=======
+Erlang VMのI/O情報を表示します。最大ファイルディスクリプタ数とアクティブなファイルディスクリプタ数が含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl vm io
@@ -607,7 +754,11 @@ io/active_fds           : 0
 
 ### vm ports
 
+<<<<<<< HEAD
 Erlang VMのポート情報を表示します。ポート数とポート上限を含みます。
+=======
+Erlang VMのポート情報を表示します。ポート数とポート制限が含まれます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl vm ports
@@ -681,7 +832,11 @@ debug
 
 ### log primary-level
 
+<<<<<<< HEAD
 現在のプライマリログレベルを表示します。`primary-level`はEMQXのデフォルトログレベルを示し、特定のログハンドラが独自のレベルを持たない限り、すべてのログ出力に影響します。
+=======
+現在のプライマリログレベルを表示します。`primary-level`はEMQXのデフォルトログレベルを示し、特定のログハンドラに独立したレベル設定がない限り全体に影響します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl log primary-level
@@ -699,7 +854,11 @@ info
 
 ### log handlers list
 
+<<<<<<< HEAD
 ログハンドラ一覧を表示します。ログハンドラはログの処理方法や保存方法を定義し、独自のログレベルを設定可能です。
+=======
+ログハンドラの一覧を表示します。ログハンドラはログの処理・保存方法を独立して設定できます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl log handlers list
@@ -709,7 +868,11 @@ LogHandler(id=console, level=debug, destination=console, status=started)
 
 ### log handlers start \<HandlerId\>
 
+<<<<<<< HEAD
 指定したログハンドラを起動します。
+=======
+特定のログハンドラを起動します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl log handlers start console
@@ -718,7 +881,11 @@ log handler console started
 
 ### log handlers stop \<HandlerId\>
 
+<<<<<<< HEAD
 指定したログハンドラを停止します。
+=======
+特定のログハンドラを停止します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl log handlers stop console
@@ -727,7 +894,11 @@ log handler console stopped
 
 ### log handlers set-level \<HandlerId\> \<Level\>
 
+<<<<<<< HEAD
 指定したログハンドラのログレベルを設定します。
+=======
+特定のログハンドラのログレベルを設定します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl log handlers set-level console debug
@@ -736,11 +907,19 @@ debug
 
 ## trace
 
+<<<<<<< HEAD
 特定のクライアントやトピックなどのイベントをトレース（ログ記録）するコマンドです。
 
 ### trace list
 
 ローカルノードで開始されているすべてのトレースを一覧表示します。
+=======
+特定クライアントやトピックなどのイベントをトレース（ログ出力）するコマンドです。
+
+### trace list
+
+ローカルノードで開始されているトレース一覧を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl trace list
@@ -802,7 +981,11 @@ stop tracing ip_address 127.0.0.1 successfully
 ```
 
 ::: tip
+<<<<<<< HEAD
 コマンドラインからトレースログファイルを指定する際は絶対パスの使用を推奨します。  
+=======
+トレースログファイルはコマンドラインから起動する場合、絶対パスの使用を推奨します。  
+>>>>>>> origin/release-5.10
 例：`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
 :::
 
@@ -812,11 +995,19 @@ stop tracing ip_address 127.0.0.1 successfully
 
 ## traces
 
+<<<<<<< HEAD
 `trace`コマンドに似ていますが、クラスター全ノードでトレーサーを開始または停止します。
 
 ### traces list
 
 クラスターで開始されているすべてのトレースを一覧表示します。
+=======
+`trace`コマンドと似ていますが、クラスター全ノードにまたがってトレーサーを開始・停止します。
+
+### traces list
+
+開始されているクラスター全体のトレース一覧を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl traces list
@@ -825,7 +1016,11 @@ Trace(mytraces_ip: ip_address=127.0.0.1, waiting, LogSize:#{'emqx@127.0.0.1' => 
 
 ### traces start \<Name\> client \<ClientId\> [\<Duration\>]
 
+<<<<<<< HEAD
 クラスター内のクライアントのトレースを開始します。
+=======
+クラスター内のクライアントに対するトレースを開始します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl traces start mytraces client emqx_c 1200
@@ -834,7 +1029,11 @@ cluster_trace clientid emqx_c mytraces successfully
 
 ### traces start \<Name\> topic \<Topic\> [\<Duration\>]
 
+<<<<<<< HEAD
 クラスター内のトピックのトレースを開始します。
+=======
+クラスター内のトピックに対するトレースを開始します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl traces start mytraces_ip topic t/1 1200
@@ -843,7 +1042,11 @@ cluster_trace topic t/1 mytraces_ip successfully
 
 ### traces start \<Name\> ip_address \<IPAddr\> [\<Duration\>]
 
+<<<<<<< HEAD
 クラスター内のクライアントIPのトレースを開始します。
+=======
+クラスター内のクライアントIPに対するトレースを開始します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl traces start mytraces_ip ip_address 127.0.0.1 1200
@@ -874,7 +1077,11 @@ Del cluster_trace mytraces_ip successfully
 
 ### listeners
 
+<<<<<<< HEAD
 すべてのリスナー情報を一覧表示します。
+=======
+全リスナーの情報を一覧表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl listeners
@@ -911,7 +1118,11 @@ wss:default
 
 #### 一般的なシャットダウン理由
 
+<<<<<<< HEAD
 TCPリスナーでは、`shutdown_count`フィールドにクライアント切断数が理由別に記録されます。これにより、TCPリスナーからの切断理由を特定できます。
+=======
+TCPリスナーでは、`shutdown_count`フィールドにクライアント切断数が理由別に記録されます。これにより、TCPリスナーからの切断理由を把握できます。
+>>>>>>> origin/release-5.10
 
 ```bash
 shutdown_count  : [{takenover,2},{discarded,1}]
@@ -920,6 +1131,7 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 上記例では：
 
 - 2件は同じ`clientid`で新しいセッションが既存セッションを引き継いだための切断
+<<<<<<< HEAD
 - 1件は新しいクリーンセッションが既存セッションを置き換えたための切断
 
 以下はよくあるシャットダウン理由一覧です。
@@ -952,6 +1164,40 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 ### listeners stop \<Identifier\>
 
 リスナーを停止します。識別子は`{type}:{name}`形式（例：`tcp:default`）。一時的な効果で、EMQX再起動後に元の状態に戻ります。
+=======
+- 1件は同じ`clientid`で新しいクリーンセッションが既存セッションを置き換えたための切断
+
+以下は`shutdown_count`に現れる一般的な理由一覧です。
+
+| 理由                          | 説明                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| `banned`                      | ACL違反、レート制限、IP制限によりクライアントがブラックリストに登録された。 |
+| `closed`                      | サーバーまたはクライアントによって接続が閉じられた。       |
+| `discarded`                   | 同じ`clientid`かつ`clean_start = true`の新クライアントが接続し、既存セッションが破棄された。 |
+| `takenover`                   | 同じ`clientid`かつ`clean_start = false`の新クライアントが接続し、既存セッションが引き継がれた。 |
+| `einval`                      | 無効な引数またはソケットエラー。通常、既に閉じられたソケットに書き込みを試みた競合状態による。 |
+| `frame_too_large`             | MQTTパケットが最大許容フレームサイズを超過した。             |
+| `idle_timeout`                | TCP/SSL接続確立後、許容時間内に`CONNECT`パケットが受信されなかった。 |
+| `invalid_proto_name`          | `CONNECT`パケットのプロトコル名が無効、または`"MQTT"`でない。 |
+| `invalid_topic`               | クライアントが無効なトピック（不正文字含む、ブローカーで禁止）を使用した。 |
+| `keepalive_timeout`           | キープアライブ間隔内にパケット送信がなかった。               |
+| `malformed_packet`            | MQTTパケットが破損しているかMQTT仕様に準拠していない。       |
+| `not_authorized`              | クライアントが認可されていない操作を試み、ACLで拒否された。   |
+| `ssl_closed`                  | SSL/TLS接続がピアによって閉じられた。                         |
+| `ssl_error`                   | SSL/TLSハンドシェイクまたはデータ送信中にエラーが発生した。   |
+| `ssl_upgrade_timeout`         | SSL/TLSハンドシェイクが許容時間内に完了しなかった。           |
+| `unexpected_packet`           | 現在の接続状態で予期しないパケットが送信された。             |
+| `zero_remaining_len`          | パケットの残長フィールドがゼロであり、多くの文脈で無効。       |
+| `bad_username_or_password`    | ユーザー名またはパスワードの誤りによる認証失敗。             |
+| `client_identifier_not_valid` | ログイン時に提供された`clientid`が無効または他クライアントによりロックされている。 |
+| `protocol_error`              | 一般的なMQTTプロトコル違反が発生した。                       |
+| `tcp_closed`                  | TCP接続がクライアントまたはネットワーク障害により閉じられた。 |
+| `timeout`                     | 認証などの処理中に一般的なタイムアウトが発生した。           |
+
+### listeners stop \<Identifier\>
+
+リスナーを停止します。識別子は`{type}:{name}`形式（例：`tcp:default`）。一時的な効果で、EMQX再起動後に元に戻ります。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl listeners stop tcp:default
@@ -959,12 +1205,20 @@ Stop tcp:default listener successfully.
 ```
 
 ::: tip
+<<<<<<< HEAD
 リスナー停止により、接続中のすべてのクライアントが切断されます。
+=======
+リスナー停止により接続中の全クライアントが切断されます。
+>>>>>>> origin/release-5.10
 :::
 
 ### listeners start \<Identifier\>
 
+<<<<<<< HEAD
 リスナーを起動します（一時的な効果、再起動で元に戻る）。
+=======
+リスナーを起動します（一時的な効果で、再起動で元に戻ります）。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl listeners start tcp:default
@@ -981,12 +1235,20 @@ Restarted tcp:default listener successfully.
 ```
 
 ::: tip
+<<<<<<< HEAD
 リスナー再起動により、接続中のすべてのクライアントが切断されます。
+=======
+リスナー再起動により接続中の全クライアントが切断されます。
+>>>>>>> origin/release-5.10
 :::
 
 ### listeners enable \<Identifier\> \<true/false\>
 
+<<<<<<< HEAD
 リスナーの有効化または無効化を行います（設定に永続化され、恒久的に有効）。
+=======
+リスナーを有効化または無効化します（設定に永続化され、恒久的に有効）。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl listeners enable tcp:default true
@@ -1000,11 +1262,19 @@ Disabled tcp:default listener successfully.
 
 ## authz cache-clean
 
+<<<<<<< HEAD
 認可（ACL）キャッシュを強制的に削除したい場合に使用します。
 
 ### authz cache-clean all
 
 すべてのノードの認可キャッシュをクリアします。
+=======
+認可（ACL）キャッシュを強制的にクリアしたい場合に便利なコマンドです。
+
+### authz cache-clean all
+
+全ノードの認可キャッシュをクリアします。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl authz cache-clean all
@@ -1031,11 +1301,19 @@ Drain mqttx_9502dc8a authz cache OK
 
 ## pem_cache
 
+<<<<<<< HEAD
 更新されたpem（x509鍵・証明書）ファイルをEMQXに再読み込みさせるコマンドです。
 
 ### pem_cache clean all
 
 すべてのノードのx509証明書キャッシュをクリアします。
+=======
+更新されたpem（x509キー・証明書）ファイルをEMQXに強制リロードさせるコマンドです。
+
+### pem_cache clean all
+
+全ノードのx509証明書キャッシュをクリアします。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl pem_cache clean all
@@ -1053,8 +1331,13 @@ emqx@127.0.0.1 PEM cache clean OK
 
 ## olp
 
+<<<<<<< HEAD
 OLPは過負荷保護（overload protection）の略です。  
 `olp`コマンドは過負荷状態の確認や過負荷保護の有効／無効を操作します。
+=======
+OLPはオーバーロード保護を意味します。  
+`olp`コマンドはオーバーロード状態の確認や、システムのオーバーロード保護の有効/無効を制御します。
+>>>>>>> origin/release-5.10
 
 詳細は`overload_protection`設定ドキュメントを参照してください。
 
@@ -1064,7 +1347,11 @@ OLPは過負荷保護（overload protection）の略です。
 
 ### olp status
 
+<<<<<<< HEAD
 システムが過負荷状態の場合はその状態を返し、そうでなければ「not overloaded」と報告します。
+=======
+システムがオーバーロード状態かどうかを返します。オーバーロードでなければ「not overloaded」と報告します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl olp status
@@ -1073,7 +1360,11 @@ $ emqx ctl olp status
 
 ### olp enable
 
+<<<<<<< HEAD
 過負荷保護を有効化します。
+=======
+オーバーロード保護を有効化します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl olp enable
@@ -1082,7 +1373,11 @@ Enable overload protection 'emqx@127.0.0.1' : {ok,<0.5703.0>}
 
 ### olp disable
 
+<<<<<<< HEAD
 過負荷保護を無効化します。
+=======
+オーバーロード保護を無効化します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl olp disable
@@ -1091,7 +1386,11 @@ Disable overload protetion 'emqx@127.0.0.1' : ok
 
 ## data
 
+<<<<<<< HEAD
 ノードのデータをtarアーカイブファイルにエクスポート／インポートするコマンドです。
+=======
+ノードのデータをtarアーカイブファイルにエクスポート/インポートするコマンドです。
+>>>>>>> origin/release-5.10
 
 ### data export
 
@@ -1102,6 +1401,7 @@ data export \
   [--dir out_dir]
 ```
 
+<<<<<<< HEAD
 EMQXノードからデータをtarアーカイブファイルにエクスポートします。バックアップやノード間データ移行に便利です。
 
 含まれるデータ：
@@ -1110,6 +1410,16 @@ EMQXノードからデータをtarアーカイブファイルにエクスポー�
 - 組み込みデータベース
 
 `--root-keys`および`--table-sets`オプションでエクスポート対象を指定可能。未指定の場合はすべてエクスポートされます。
+=======
+EMQXノードのデータをtarアーカイブファイルにエクスポートします。バックアップやノード間データ移行に便利です。
+
+含まれるデータ：  
+- クラスター設定  
+- EMQXデータディレクトリの追加ファイル（SSL証明書など）  
+- 組み込みデータベース  
+
+`--root-keys`や`--table-sets`オプションでエクスポート対象を指定可能。指定しない場合は全データをエクスポートします。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl data export --root-keys listeners,connectors,actions,rule_engine --dir /tmp
@@ -1134,7 +1444,11 @@ Data has been successfully exported to /tmp/emqx-export-2025-08-06-12-00-19.334.
 
 指定したtarアーカイブファイルからデータをインポートします。バックアップからの復元や新ノードへのデータ移行に使用します。
 
+<<<<<<< HEAD
 ```
+=======
+```bash
+>>>>>>> origin/release-5.10
 emqx ctl data import /tmp/emqx-export-2025-08-06-12-00-19.334.tar.gz
 Importing data from "/tmp/emqx-export-2025-08-06-12-00-19.334.tar.gz"...
 Importing cluster configuration for namespace global...
@@ -1200,7 +1514,11 @@ Durable Storageのレプリカセットを変更します。
 
 ## exclusive
 
+<<<<<<< HEAD
 現在のシステムにあるすべての排他トピックを表示、または排他トピックを削除するコマンドです。
+=======
+現在のシステムのすべての排他トピックを表示または削除するコマンドです。
+>>>>>>> origin/release-5.10
 
 ### exclusive list
 
@@ -1222,7 +1540,12 @@ ok
 
 ## retainer
 
+<<<<<<< HEAD
 retainerコマンドは保持されたメッセージの調査や管理に使用します。`emqx ctl retainer reindex`コマンドで保持メッセージのインデックス作成や更新も可能です。
+=======
+`retainer`コマンドは保持されたメッセージの検査や管理に使用できます。  
+`emqx ctl retainer reindex`コマンドで保持メッセージのインデックス作成・更新も可能です。
+>>>>>>> origin/release-5.10
 
 ### retainer info
 
@@ -1235,7 +1558,11 @@ Number of retained messages: 3
 
 ### retainer topics
 
+<<<<<<< HEAD
 保持メッセージが存在するすべてのトピックを表示します。
+=======
+保持メッセージがあるすべてのトピックを表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl retainer topics
@@ -1254,7 +1581,11 @@ emqx ctl retainer clean
 
 ### retainer clean \<Topic\>
 
+<<<<<<< HEAD
 指定トピックフィルターに基づいて保持メッセージをクリアします。
+=======
+特定トピックフィルターに基づき保持メッセージをクリアします。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl retainer clean t/1
@@ -1271,7 +1602,12 @@ Reindexing is not running
 
 ### retainer reindex start [force]
 
+<<<<<<< HEAD
 設定に基づき保持メッセージトピックの新しいインデックスを生成します。`true`を`<force>`パラメータに渡すと、既存の再インデックス処理を無視して強制的に開始します。
+=======
+設定に基づき保持メッセージトピックの新しいインデックスを生成します。  
+`<force>`に`true`を渡すと、既に開始されている再インデックス処理を無視して強制実行します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl retainer reindex start true
@@ -1282,7 +1618,11 @@ Reindexing finished
 
 ## observer
 
+<<<<<<< HEAD
 Erlang仮想マシンの情報をリアルタイムに監視できるコマンドです。Linuxの`top`コマンドのようなビューを提供します。
+=======
+Erlang仮想マシンの状況をリアルタイムで監視するコマンドです。Linuxの`top`コマンドのようなビューを提供します。
+>>>>>>> origin/release-5.10
 
 ### observer status
 
@@ -1294,7 +1634,11 @@ $ emqx ctl observer status
 
 ### observer bin_leak
 
+<<<<<<< HEAD
 すべてのプロセスにガベージコレクションを強制実行し、最大のバイナリデータを解放した上位100プロセスを表示します。メモリリークの可能性を特定するのに役立ちます。
+=======
+全プロセスにガベージコレクションを強制し、最大のバイナリデータを解放した上位100プロセスを表示します。メモリリークの可能性を調査できます。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl observer bin_leak
@@ -1313,7 +1657,11 @@ $ emqx ctl observer bin_leak
 
 ### observer load Mod
 
+<<<<<<< HEAD
 EMQXクラスター内のすべてのノードに指定モジュールをロードします。クラスター全体でモジュールの利用を保証する際に使用します。
+=======
+EMQXクラスター内の全ノードに指定モジュールをロードします。クラスター全体でモジュールの利用を保証したい場合に使用します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl observer load Mod
@@ -1326,6 +1674,7 @@ EMQXクラスター設定の検査および変更に使用します。
 
 ### conf reload --replace|--merge
 
+<<<<<<< HEAD
 ローカルノードの`etc/emqx.conf`をリロードします。新しい設定値は既存値に上書きされます。`--replace`フラグを付けると既存値を完全に置き換えます。
 
 ### conf show_keys
@@ -1360,11 +1709,52 @@ EMQXはクラスター内の設定変更ごとにID（`tnx_id`）を生成し、
 
 ::: tip
 `skip`や`fast_forward`コマンドはノード間で設定の不整合を引き起こす可能性があります。
+=======
+ローカルノードの`etc/emqx.conf`をリロードします。デフォルトは既存設定に新設定をマージ。`--replace`を指定すると既存設定を置換します。
+
+### conf show_keys
+
+現在使用中の全設定キーを表示します。
+
+### conf show [\<key\>]
+
+指定キー以下の設定（デフォルト値含む）を表示します。キー未指定時は全キーを表示します。
+
+### conf load --replace|--merge \<path\>
+
+HOCON形式の設定ファイルを読み込みます。デフォルトは既存設定にマージ。`--replace`で置換。  
+現在のノードがクラスター全体に設定変更を同期するトランザクションを開始します。
+
+注意：ローリングアップグレード中はランタイム設定変更を行わないでください。
+
+## conf cluster_sync
+
+クラスター内ノード間の設定変更同期に問題がある場合のトラブルシューティング用コマンドです。
+
+::: tip
+
+EMQX 5.0.xでは`cluster_call`という名前でした。5.1でも旧コマンドは利用可能ですが、ヘルプには表示されません。
+
+:::
+
+EMQX HTTP APIやダッシュボード操作で設定変更が行われると、変更内容はまずローカルの`data/configs/cluster.hocon`に書き込まれ、データベースに記録され、非同期で他ノードに複製されます。
+
+複製が何らかの理由で他ノードに適用できない場合、本コマンドで状態確認や修復が可能です。
+
+EMQXはクラスター範囲の設定変更に対して増分ID（`tnx_id`）を生成し、変更をデータベースに記録します。
+
+::: tip
+`skip`や`fast_forward`コマンドはクラスター内ノード間で設定の不整合を生じる可能性があります。
+>>>>>>> origin/release-5.10
 :::
 
 ### conf cluster_sync status
 
+<<<<<<< HEAD
 すべてのノードのクラスター設定同期状態の概要を表示します。
+=======
+全ノードのクラスター設定同期状態の概要を表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl conf cluster_sync status
@@ -1373,11 +1763,19 @@ All configuration synchronized(tnx_id=0) successfully
 -----------------------------------------------
 ```
 
+<<<<<<< HEAD
 ### conf cluster_sync inspect \<tnx\_id\>
 
 指定した`tnx_id`の設定変更トランザクションの詳細を調査します。
 
 以下は2番目の変更（`tnx_id=2`）でTLSリスナーを有効化する操作を表示した例です。
+=======
+### conf cluster_sync inspect \<tnx_id\>
+
+指定した`tnx_id`の設定変更トランザクションの詳細を表示します。
+
+以下は2番目の変更（`tnx_id=2`）でTLSリスナー有効化操作の内容を表示した例です。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl conf cluster_sync inspect 2
@@ -1393,11 +1791,19 @@ $ emqx ctl conf cluster_sync inspect 2
 
 ### conf cluster_sync skip [node]
 
+<<<<<<< HEAD
 指定ノードの（現在失敗中の）コミットをインクリメントします。
 
 ::: warning 注意
 
 クラスター内ノード間で設定の不整合が生じる可能性があります。
+=======
+指定ノードで失敗中のコミットをスキップして進めます。
+
+::: warning 注意
+
+クラスター内ノード間で設定不整合が生じる可能性があります。
+>>>>>>> origin/release-5.10
 
 :::
 
@@ -1407,17 +1813,29 @@ $ emqx ctl conf cluster_sync inspect 2
 
 ::: warning 注意
 
+<<<<<<< HEAD
 クラスター内ノード間で設定の不整合が生じる可能性があります。
+=======
+クラスター内ノード間で設定不整合が生じる可能性があります。
+>>>>>>> origin/release-5.10
 
 :::
 
 ### conf cluster_sync fix
 
+<<<<<<< HEAD
 最も包括的な設定を持つノード（通常は設定リーダーで最大の`tnx_id`を持つ）から他ノードへ同期します。
 
 ## eviction status
 
 現在のノードのエビクション状態を取得します。
+=======
+最も包括的な設定を持つノード（通常は設定リーダーで最高の`tnx_id`を持つ）から他ノードに同期します。
+
+## eviction status
+
+現在のノードのエビクション（退避）状態を取得します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl eviction
@@ -1430,7 +1848,11 @@ Eviction status: disabled
 
 ### rebalance start --evacuation
 
+<<<<<<< HEAD
 現在ノードの退避を開始し、オプションで指定したサーバーへリダイレクトします。
+=======
+現在ノードの退避を開始し、オプションで指定サーバーへのリダイレクトを行います。
+>>>>>>> origin/release-5.10
 
 ```
 rebalance start --evacuation \
@@ -1469,7 +1891,11 @@ rebalance start \
 
 ### rebalance status
 
+<<<<<<< HEAD
 クラスター内のすべてのリバランス／退避処理の状態を取得します。
+=======
+クラスター全体の現在のリバランス/退避処理の状態を取得します。
+>>>>>>> origin/release-5.10
 
 ### rebalance stop
 
@@ -1477,11 +1903,19 @@ rebalance start \
 
 ## gateway
 
+<<<<<<< HEAD
 ゲートウェイのロード状況や稼働状況を調査・管理するコマンドです。
 
 ### gateway list
 
 すべてのゲートウェイ情報を一覧表示します。
+=======
+ゲートウェイのロードや稼働状態を検査・管理するコマンドです。
+
+### gateway list
+
+全ゲートウェイの情報を一覧表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl gateway list
@@ -1565,6 +1999,7 @@ ok
 * mqttsn
 * stomp
 
+<<<<<<< HEAD
 EMQXはプラグイン可能な設計であり、追加のゲートウェイをプラグインとしてインストールし、ランタイムで登録可能です。  
 登録後は管理APIやCLI（`gateway`コマンド参照）で管理できます。
 
@@ -1575,6 +2010,18 @@ EMQXはプラグイン可能な設計であり、追加のゲートウェイを�
 ### gateway-clients list \<Name\>
 
 指定ゲートウェイのすべてのクライアントを一覧表示します。
+=======
+EMQXはプラグイン可能な設計であり、追加のゲートウェイをプラグインとしてインストールし、ランタイムにEMQXへ登録できます。  
+登録後は管理APIやCLI（`gateway`コマンド）で管理可能です。
+
+## gateway-clients
+
+ゲートウェイクライアントを検査するコマンドです。
+
+### gateway-clients list \<Name\>
+
+指定ゲートウェイの全クライアントを一覧表示します。
+>>>>>>> origin/release-5.10
 
 ### gateway-clients lookup \<Name\> \<ClientId\>
 
@@ -1586,7 +2033,11 @@ EMQXはプラグイン可能な設計であり、追加のゲートウェイを�
 
 ## gateway-metrics \<Name\>
 
+<<<<<<< HEAD
 指定ゲートウェイのすべてのメトリクスを一覧表示します。
+=======
+指定ゲートウェイの全メトリクスを一覧表示します。
+>>>>>>> origin/release-5.10
 
 ## license
 
@@ -1625,7 +2076,11 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 ### license update default
 
+<<<<<<< HEAD
 デフォルトのCommunity Licenseに戻します。
+=======
+デフォルトのCommunityライセンスに戻します。
+>>>>>>> origin/release-5.10
 
 ```bash
 emqx ctl license update default
@@ -1668,7 +2123,11 @@ ok
 
 ### rules list
 
+<<<<<<< HEAD
 ルールID、名前などの情報を含むすべてのルールを一覧表示します。
+=======
+ルールID、名前などの情報を含む全ルールを一覧表示します。
+>>>>>>> origin/release-5.10
 
 ```bash
 $ emqx ctl rules list
@@ -1705,4 +2164,8 @@ Actions:
              user_properties => <<"${user_properties}">>}
 ```
 
+<<<<<<< HEAD
 CLIは検査用であり、ルールやアクションの管理はダッシュボードから行います。
+=======
+CLIは検査用であり、ルールやアクションの管理はダッシュボードで行います。
+>>>>>>> origin/release-5.10

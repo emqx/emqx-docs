@@ -1,6 +1,10 @@
 # DebianへのEMQXインストール
 
+<<<<<<< HEAD
 このページでは、Debianシステムに最新のEMQXをインストールし、起動する手順を案内します。
+=======
+このページでは、Debianシステムに最新のEMQXをインストールし、起動する方法を案内します。
+>>>>>>> origin/release-5.10
 
 対応バージョン：
 
@@ -8,13 +12,19 @@
 - Debian 12
 - Debian 11
 
-他のシステムへのインストールや別バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
+他のシステムへのインストールや他バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
 
 ## debパッケージでのインストール
 
+<<<<<<< HEAD
 1. ダウンロードサイトにアクセスし、[**Debian**タブ](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian)を選択します。
 2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、DebianのバージョンとCPUアーキテクチャに応じた`deb`パッケージを選択してください。
 3. 下のリンクをクリックしてダウンロードします。ページ内のコマンド指示に従うことも可能です。
+=======
+1. ダウンロードサイトにアクセスし、[**Debianタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian)を選択します。
+2. 最新バージョン `@EE_VERSION@` を選択します。**パッケージタイプ**のドロップダウンから、DebianのバージョンとCPUアーキテクチャに応じた `deb` パッケージを選択してください。
+3. 下のリンクをクリックしてダウンロードします。ページ内のコマンド手順に従うことも可能です。
+>>>>>>> origin/release-5.10
 
 ### EMQXの起動
 
@@ -34,13 +44,19 @@ sudo apt remove --purge emqx
 
 ## tar.gzパッケージでのインストール
 
+<<<<<<< HEAD
 1. ダウンロードサイトにアクセスし、[**Debian**タブ](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian)を選択します。
 2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、DebianのバージョンとCPUアーキテクチャに応じた`tar.gz`パッケージを選択してください。
 3. 下のリンクをクリックしてダウンロードします。ページ内のコマンド指示に従うことも可能です。
+=======
+1. ダウンロードサイトにアクセスし、[**Debianタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian)を選択します。
+2. 最新バージョン `@EE_VERSION@` を選択します。**パッケージタイプ**のドロップダウンから、DebianのバージョンとCPUアーキテクチャに応じた `tar.gz` パッケージを選択してください。
+3. 下のリンクをクリックしてダウンロードします。ページ内のコマンド手順に従うことも可能です。
+>>>>>>> origin/release-5.10
 
 ### EMQXの起動
 
-インストール後、以下のコマンドを実行してEMQXを起動します。
+インストール後、以下のコマンドでEMQXを起動します。
 
 ```bash
 ./emqx/bin/emqx foreground

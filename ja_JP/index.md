@@ -9,13 +9,22 @@ As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://w
 
 - [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): A single node stably supports 1.5M MQTT device connections, and the cluster can scale horizontally to handle up to 100M concurrent MQTT connections.
 - [**Business-Critical Reliability**](./deploy/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
+<<<<<<< HEAD
 - [**Data Security**](./access-control/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
 - [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
+=======
+- [**Data Security**](https://www.emqx.com/en/use-cases/mqtt-security): End-to-end data encryption and fine-grained access control to protect your data.
+- [**Multiple Protocols**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): Support MQTT, QUIC, CoAP, STOMP, LwM2M, and more.
+>>>>>>> origin/release-5.10
 - [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 - [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
+<<<<<<< HEAD
 - [**Cloud-Native & K8s**](./deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
+=======
+- [**Cloud-Native & K8s**](https://www.emqx.com/en/emqx-kubernetes-operator): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator** and **Terraform**.
+>>>>>>> origin/release-5.10
 
 ## Main Components
 
@@ -173,6 +182,7 @@ EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and So
 
 ## Industry Solutions
 
+<<<<<<< HEAD
 EMQX Enterprise provides versatile IoT solutions across industries, delivering reliable real-time connectivity for mission-critical applications. From connected vehicles to smart manufacturing, EMQX powers innovation at scale.
 
 ### Automotive & Connected Vehicles
@@ -278,3 +288,78 @@ EMQX connects millions of retail devices and consumer IoT endpoints, enabling re
 - **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
 
 Signify (formerly Philips Lighting) uses EMQX to power global smart lighting solutions, ensuring reliable real-time control for millions of connected lights. JAGAT, a location-based social app, handles millions of users with EMQX for reliable real-time messaging. [**Read Case Study →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
+=======
+EMQX Enterprise offers versatile IoT solutions across various industries, ensuring reliable data connectivity, efficient transmission, and flexible processing to drive innovation and operational excellence.
+
+### Automotive
+
+#### Internet of Vehicle and Telematics Service Provider
+
+The future of TSP platforms is to be "data-driven" and "service-oriented". To succeed, the TSP platform needs to ensure reliable connections with cars, efficient data transmission, and flexible data processing. EMQX is essential to make a robust, high-performance, and easy-to-maintain data infrastructure. [**Learn More →**](https://www.emqx.com/en/blog/revolutionizing-tsp-platforms)
+
+![use_case_5](./assets/use_case_5.png)
+
+
+
+#### Smart Cockpit and In-Vehicle Infotainment
+
+Based on EMQ's cloud-side end-to-end collaborative software architecture, we help car manufacturers build the core capabilities of the smart cockpit with vehicle-cloud collaboration. [**Learn More →**](https://www.emqx.com/en/use-cases/smart-cockpit)
+
+![use_case_6](./assets/use_case_6.png)
+
+#### Electric Vehicle Charging Network
+
+EV Power uses EMQX to empower the charging piles operation platform, solving the problems of scattered equipment areas that are difficult to control, harsh deployment environments, etc. [**Learn More →**](https://www.emqx.com/en/customers/ev-power)
+
+![use_case_7](./assets/use_case_7.png)
+
+### Traffic and Transportation
+
+#### Logistics Asset Management
+
+EMQ provides a comprehensive data-driven solution for logistics asset management with capabilities to collect, transmit, and process data. This helps companies monitor their assets in real-time and gain useful information, leading to informed decisions for management and improved competitiveness. [**Learn More →**](https://www.emqx.com/en/blog/a-data-driven-solution-for-logistics-asset-tracking-and-maintenance)
+
+![use_case_8](./assets/use_case_8.png)
+
+#### Fleet Management
+
+With the logistics industry's complex and dynamic nature, effective monitoring, scheduling, and optimization of vehicle fleets are essential throughout the transportation and delivery processes. The timely and reliable delivery of goods, cost optimization, and customer satisfaction heavily rely on efficient fleet management practices. [**Learn More →**](https://www.emqx.com/en/blog/how-emqx-revolutionizes-logistics-fleet-management)
+
+<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
+
+#### Vehicle to Everything Communication (V2X)
+
+[V2X (vehicle-to-everything)](https://www.emqx.com/en/blog/what-is-v2x-and-the-future-of-vehicle-to-everything-connectivity) is a communication technology that enables vehicles to exchange data with various elements in their environment, including other vehicles (V2V), pedestrians (V2P), infrastructure (V2I), and networks (V2N). CVIS(Cooperative Vehicle-Infrastructure System) is a promising direction of the intelligent transportation system that requires V2X technology integrating with various sensor technologies, cloud computing, edge computing, and traffic control. See how EMQX plays an important role in the whole picture. [**Learn More →**](https://www.emqx.com/en/blog/enhancing-v2x-connectivity-with-emq)
+
+![use_case_10](./assets/use_case_10.png)
+
+### Manufacturing and IIoT
+
+EMQ smart factory solution is designed to establish comprehensive data collection, transmission, distribution, and other mechanisms. This solution empowers factories to rapidly deploy a wide array of intelligent applications, including equipment health management, optimization of energy consumption equipment, production monitoring and analysis, product quality traceability, parameter optimization in the supply chain, predictive maintenance, and defect detection. [**Learn More →**](https://www.emqx.com/en/blog/data-infrastructure-for-smart-factory)
+
+![use_case_11](./assets/use_case_11.png)
+
+### Oil and Gas
+
+EMQ provides IoT data collection solutions for the oil industry that support real-time data collection and cloud-side collaborative management of oilfield IoT terminal devices. [**Learn More →**](https://www.emqx.com/en/use-cases/oil-extraction-transportation)
+
+![use_case_12](./assets/use_case_12.png)
+
+### Finance and Payment
+
+EMQ financial payment industry solutions help customers realize 7*24h continuous service, and it has continuously provided more than five years of stable operation and service for enterprise-level users. [**Learn More →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
+
+![use_case_13](./assets/use_case_13.png)
+
+### Energy and Utilities
+
+Leveraging EMQ's technological leadership in IoT messaging middleware and SGITG's strengths in national grid technology and markets, the two companies are working closely together to create next-generation power IoT products. [**Learn More →**](https://www.emqx.com/en/customers/sgitg-sgcc)
+
+### Carrier
+
+Through in-depth cooperation with EMQ, E-Surfing IoT has built CTWing into the world's largest group-level NB-IoT device access platform. The cumulative number of connected devices on this IoT platform has reached millions. [**Learn More →**](https://www.emqx.com/en/customers/china-telecom)
+
+### Consumer Electronics and AIoT
+
+An IoT data access platform based on EMQX provides a stable and efficient data access service for an intelligent service robot company, helping it to reach more than 5000 end customers. [**Learn More →**](https://www.emqx.com/en/customers/intelligent-service-robot-aiot)
+>>>>>>> origin/release-5.10

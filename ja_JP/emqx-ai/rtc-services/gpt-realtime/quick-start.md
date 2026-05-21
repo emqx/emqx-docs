@@ -1,10 +1,18 @@
 # EMQX + GPT-Realtimeでリアルタイム音声エージェントを構築する
 
+<<<<<<< HEAD
 本ガイドでは、GPT-RealtimeモデルとEMQXを組み合わせてリアルタイム音声エージェントアプリケーションを素早く構築する方法を説明します。
 
 ## 一時的なAPIキーを取得する
 
 ネイティブWebRTCを使用してブラウザからGPT-Realtimeに接続するには、まず一時的（エフェメラル）なAPIキーを取得する必要があります。このキーはOpenAIのREST APIを通じて生成できます。
+=======
+本ガイドでは、GPT-RealtimeモデルとEMQXを組み合わせてリアルタイム音声エージェントアプリケーションを迅速に構築する方法を説明します。
+
+## 一時的なAPIキーを取得する
+
+ネイティブWebRTCを使ってブラウザからGPT-Realtimeに接続するには、まず一時的（エフェメラル）なAPIキーを取得する必要があります。このキーはOpenAIのREST APIを通じて生成できます。
+>>>>>>> origin/release-5.10
 
 ```bash
 export OPENAI_API_KEY="sk-xxxxxx"
@@ -16,7 +24,11 @@ curl -s -X POST https://api.openai.com/v1/realtime/client_secrets \
 
 ## リアルタイム音声チャットを実装する
 
+<<<<<<< HEAD
 以下の例は、ネイティブWebRTCを使用してGPT-Realtimeモデルに接続し、リアルタイム音声チャットを実装する方法を示しています。
+=======
+以下の例は、ネイティブWebRTCを使ってGPT-Realtimeモデルに接続し、リアルタイム音声チャットを実装する方法を示しています。
+>>>>>>> origin/release-5.10
 
 ```javascript
 // 取得したエフェメラルキーをここに設定
@@ -36,10 +48,17 @@ const ms = await navigator.mediaDevices.getUserMedia({
 });
 pc.addTrack(ms.getTracks()[0]);
 
+<<<<<<< HEAD
 // イベント送受信用のデータチャネルを設定
 const dc = pc.createDataChannel("oai-events");
 
 // セッションをSession Description Protocol（SDP）で開始
+=======
+// イベント送受信用のデータチャネルをセットアップ
+const dc = pc.createDataChannel("oai-events");
+
+// セッションをSession Description Protocol (SDP)で開始
+>>>>>>> origin/release-5.10
 const offer = await pc.createOffer();
 await pc.setLocalDescription(offer);
 
@@ -58,13 +77,18 @@ const answer = {
 };
 await pc.setRemoteDescription(answer);
 
+<<<<<<< HEAD
 // サーバーからのイベントを監視
+=======
+// サーバーからのイベントを受信
+>>>>>>> origin/release-5.10
 dc.addEventListener("message", (e) => {
     const event = JSON.parse(e.data);
     console.log("Received event:", event);
 });
 ```
 
+<<<<<<< HEAD
 このコードはWebRTCの音声チャネルを作成するだけでなく、GPT-Realtimeモデルとのイベント送受信用にデータチャネルも作成しています。受信したすべてのイベントはコンソールにログ出力されます。テスト時に音声が出ないなどの問題があれば、詳細なエラー情報をコンソールで確認してください。
 
 ## MCPを使ったデバイス制御
@@ -81,13 +105,35 @@ dc.addEventListener("message", (e) => {
 
    ```javascript
    // サーバーからのイベントを監視
+=======
+このコードはWebRTCの音声チャネルを作成するだけでなく、GPT-Realtimeモデルとのイベント送受信用にデータチャネルも作成しています。受信したすべてのイベントはコンソールにログ出力されます。テスト時に音声が聞こえないなどの問題があれば、詳細なエラー情報をコンソールで確認してください。
+
+## MCPを使ったデバイス制御
+
+1. EMQXを起動し、MCPブリッジプラグインをインストール・設定します。
+
+2. スマートライトをシミュレートするMCPサーバーを起動します。詳細な手順は[EMQX MCPブリッジを使ってIoTデバイスにアクセスする](../../mcp-bridge/quick-start.md)を参照してください。
+
+   なお、EMQXはパブリックネットワーク環境にデプロイされている必要があり、MCPブリッジプラグインは有効なSSL証明書で設定されている必要があります。これによりGPT-RealtimeはHTTPS経由でMCPサービスにアクセス可能となります。
+
+3. フロントエンドコードをMCPツール対応に修正します。
+
+   MCPツールを有効にするため、GPT-Realtimeイベントを処理する`handle_event()`関数を追加します。
+
+   ```javascript
+   // サーバーイベントを受信
+>>>>>>> origin/release-5.10
    dc.addEventListener("message", (e) => {
        const event = JSON.parse(e.data);
        handle_event(event);
    });
    ```
 
+<<<<<<< HEAD
    この関数内で`session.created`イベントを処理し、セッション作成時に`session.update`イベントを送信してMCPツールを有効化します。MCPサーバーのアドレスは`https://your-emqx-host:port/mcp`に設定してください。
+=======
+   この関数内で`session.created`イベントを処理し、セッション作成時にMCPツールを有効にするため`session.update`イベントを送信します。MCPサーバーのアドレスは`https://your-emqx-host:port/mcp`に設定してください。
+>>>>>>> origin/release-5.10
 
    ```javascript
    function handle_event(event) {
@@ -98,7 +144,11 @@ dc.addEventListener("message", (e) => {
                session: {
                    type: "realtime",
                    model: "gpt-realtime",
+<<<<<<< HEAD
                    // "text"に設定することも可能
+=======
+                   // "text"にも設定可能
+>>>>>>> origin/release-5.10
                    output_modalities: ["audio"],
                    tools: [
                        {
@@ -110,7 +160,11 @@ dc.addEventListener("message", (e) => {
                        }
                    ],
                    tool_choice: "auto",
+<<<<<<< HEAD
                    // 直接セッションフィールドを設定可能。プロンプトフィールドと重複する場合はこちらが優先されます：
+=======
+                   // 直接セッションフィールドを設定可能。プロンプトフィールドより優先されます:
+>>>>>>> origin/release-5.10
                    instructions: "I have a smart light and its client ID is abc123"
                }
            };
@@ -123,6 +177,7 @@ dc.addEventListener("message", (e) => {
    }
    ```
 
+<<<<<<< HEAD
 これでブラウザでフロントエンドページにアクセスし、GPT-Realtimeと音声会話を行うと、モデルはMCPツールを通じてIoTデバイスにアクセス・制御できるようになります。
 
 ::: tip
@@ -130,10 +185,20 @@ dc.addEventListener("message", (e) => {
 
 - MCPプラグインに有効かつ自己署名でないSSL証明書が設定されていること
 - URLはIPアドレスではなくドメイン名を使用し、パブリックにアクセス可能であること
+=======
+これでブラウザのフロントエンドページにアクセスし、GPT-Realtimeと音声で会話すると、モデルはMCPツールを通じてIoTデバイスにアクセス・制御できるようになります。
+
+::: tip
+ GPT-RealtimeはHTTPS経由でのみMCPサーバーにアクセス可能です。以下を必ず満たしてください：
+
+- MCPプラグインは有効かつ自己署名でないSSL証明書で設定されていること
+- URLはIPアドレスではなくドメイン名を使い、パブリックにアクセス可能であること
+>>>>>>> origin/release-5.10
    :::
 
 ::: tip
 
+<<<<<<< HEAD
 GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを使用するため、EMQX MCPブリッジプラグインの`/mcp`エンドポイントを使用し、`/sse`エンドポイントは使用しないでください。
 
 :::
@@ -141,6 +206,15 @@ GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを使�
 ## モデルへメッセージを送信する
 
 前述のコードでは、システムインストラクションを使ってデバイスのクライアントIDを事前にモデルに伝えていました。
+=======
+GPT-RealtimeはMCPサーバーへのアクセスにStreamable HTTPを使用するため、EMQX MCPブリッジプラグインの`/mcp`エンドポイントを使用し、`/sse`エンドポイントは使わないでください。
+
+:::
+
+## モデルへのメッセージ送信
+
+前述のコードでは、システムインストラクションでデバイスのクライアントIDを事前にモデルに伝えていました。
+>>>>>>> origin/release-5.10
 
 ```javascript
 const session_update_event = {

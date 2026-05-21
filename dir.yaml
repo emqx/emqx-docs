@@ -110,17 +110,29 @@
                 - deploy/kubernetes/operator/getting-started
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: Alibaba Cloud 上での EMQX デプロイ
+=======
+                  title_ja: アリババクラウドでの EMQX デプロイ
+>>>>>>> origin/release-5.10
                   lang: cn
                   path: deploy/kubernetes/operator/alibaba-cloud
                 - title_en: 在华为云中部署 EMQX
                   title_cn: 在华为云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: Huawei Cloud 上での EMQX デプロイ
+=======
+                  title_ja: ファーウェイクラウドでの EMQX デプロイ
+>>>>>>> origin/release-5.10
                   lang: cn
                   path: deploy/kubernetes/operator/huawei-cloud
                 - title_en: 在腾讯云中部署 EMQX
                   title_cn: 在腾讯云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: Tencent Cloud 上での EMQX デプロイ
+=======
+                  title_ja: テンセントクラウドでの EMQX デプロイ
+>>>>>>> origin/release-5.10
                   lang: cn
                   path: deploy/kubernetes/operator/tencent-cloud
                 - title_en: Deploy EMQX on AWS
@@ -137,6 +149,7 @@
                   path: deploy/kubernetes/operator/azure-aks
                 - title_en: Manage EMQX Cluster
                   title_cn: 管理 EMQX 集群
+<<<<<<< HEAD
                   title_ja: EMQX クラスターの管理
                   path: deploy/kubernetes/operator/tasks/overview
                   collapsed: true
@@ -148,11 +161,25 @@
                     - title_en: Enable TLS for Listeners
                       title_cn: 为监听器启用 TLS
                       title_ja: リスナーの TLS 有効化
+=======
+                  title_ja: EMQX クラスター管理
+                  path: deploy/kubernetes/operator/tasks/overview
+                  collapsed: true
+                  children:
+                    - title_en: Configure License (Enterprise)
+                      title_cn: 配置 License (企业版)
+                      title_ja: ライセンスの設定（エンタープライズ）
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-license
+                    - title_en: Enable TLS in EMQX
+                      title_cn: 在 EMQX 中开启 TLS
+                      title_ja: EMQX での TLS 有効化
+>>>>>>> origin/release-5.10
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
                     - title_en: Change EMQX Configuration
                       title_cn: 修改 EMQX 配置
                       title_ja: EMQX 設定の変更
                       path: deploy/kubernetes/operator/tasks/configure-emqx-config
+<<<<<<< HEAD
                     - title_en: Enable Core-Replicant Deployment
                       title_cn: 配置 Core-Replicant 集群
                       title_ja: Core-Replicant デプロイの有効化
@@ -164,10 +191,27 @@
                     - title_en: Access EMQX Cluster through LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX 集群
                       title_ja: ロードバランサー経由で EMQX クラスターにアクセス
+=======
+                    - title_en: Enable Core + Replicant Cluster
+                      title_cn: 配置 Core + Replica 集群
+                      title_ja: Core + レプリカクラスターの有効化
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+                    - title_en: Enable Persistence
+                      title_cn: 开启持久化
+                      title_ja: 永続化の有効化
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Access EMQX Cluster by LoadBalancer
+                      title_cn: 通过 LoadBalancer 访问 EMQX Cluster
+                      title_ja: ロードバランサー経由での EMQX クラスターアクセス
+>>>>>>> origin/release-5.10
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
                     - title_en: Perform Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
+<<<<<<< HEAD
                       title_ja: ブルーグリーンアップグレードの実施
+=======
+                      title_ja: ブルーグリーンアップグレードの設定
+>>>>>>> origin/release-5.10
                       path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
@@ -181,12 +225,21 @@
                       title_cn: 监控 EMQX 集群
                       title_ja: EMQX クラスターの監視
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
+<<<<<<< HEAD
                     - title_en: Rebalance Cluster Load
                       title_cn: 重新平衡集群负载
                       title_ja: クラスター負荷の再バランス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
                       title_ja: 制限付き k8s 環境での EMQX クラスターのデプロイ
+=======
+                    - title_en: Load Balance EMQX Cluster
+                      title_cn: 负载均衡 EMQX 集群
+                      title_ja: EMQX クラスターのロードバランス
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+                    - title_en: Deploy EMQX Cluster in k8s with Restricted Access
+                      title_ja: アクセス制限付き k8s 環境での EMQX クラスター展開
+>>>>>>> origin/release-5.10
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
                 - title_en: API Reference
@@ -375,6 +428,9 @@
   path: access-control/security-guide
   collapsed: true
   children:
+    - title_en: Security Checklist
+      title_cn: 安全检查清单
+      path: access-control/security-checklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       title_ja: ネットワークと TLS
@@ -1137,7 +1193,41 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
+<<<<<<< HEAD
           title_ja: MQTT 基礎
+=======
+          title_ja: MQTT 基本
+          path: design/mqtt-basics
+        - title_en: MQTT Advanced
+          title_cn: MQTT Advanced
+          title_ja: MQTT 上級
+          path: design/mqtt-advanced
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: design/mqtt-guide
+      collapsed: true
+      children:
+        - title_en: MQTT Basics
+          title_cn: MQTT Basics
+          title_ja: MQTT 基本
+          path: design/mqtt-basics
+        - title_en: MQTT Advanced
+          title_cn: MQTT Advanced
+          title_ja: MQTT 上級
+          path: design/mqtt-advanced
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: design/mqtt-guide
+      collapsed: true
+      children:
+        - title_en: MQTT Basics
+          title_cn: MQTT Basics
+          title_ja: MQTT Basics
+>>>>>>> origin/release-5.10
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
@@ -1224,24 +1314,55 @@
       title_ja: MQTT リーズンコード
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
-  title_ja: EMQX エンタープライズ版リリースノート
+- title_en: Release Notes
+  title_cn: 版本发布历史
+  title_ja: リリースノート
   collapsed: true
   path: changes/all-changes-ee
   children:
+<<<<<<< HEAD
     - changes/changes-ee-v6
     - changes/changes-ee-v5
     - changes/changes-ee-v4
+=======
+    - title_en: Version 5
+      title_cn: V5 版本
+      title_ja: バージョン 5
+      path: changes/changes-ee-v5
+    - title_en: Version 4
+      title_cn: V4 版本
+      title_ja: バージョン 4
+      path: changes/changes-ee-v4
+>>>>>>> origin/release-5.10
     - title_en: Known Issues
       title_cn: 已知问题
       title_ja: 既知の問題
+      collapsed: true
       children:
+<<<<<<< HEAD
         - changes/known-issues-6.0
         - changes/known-issues-5.9
         - changes/known-issues-5.8
         - changes/known-issues-5.3
         - changes/known-issues-5.1
+=======
+        - title_en: EMQX 5.9
+          title_cn: EMQX 5.9
+          title_ja: EMQX 5.9
+          path: changes/known-issues-5.9
+        - title_en: EMQX 5.8
+          title_cn: EMQX 5.8
+          title_ja: EMQX 5.8
+          path: changes/known-issues-5.8
+        - title_en: EMQX 5.3
+          title_cn: EMQX 5.3
+          title_ja: EMQX 5.3
+          path: changes/known-issues-5.3
+        - title_en: EMQX 5.1
+          title_cn: EMQX 5.1
+          title_ja: EMQX 5.1
+          path: changes/known-issues-5.1
+>>>>>>> origin/release-5.10
     - title_en: Incompatible Changes
       title_cn: 不兼容变更
       title_ja: 非互換の変更
@@ -1249,6 +1370,7 @@
       children:
         - changes/breaking-changes-6.0
         - changes/breaking-changes-5.10
+<<<<<<< HEAD
         - changes/breaking-changes-ee-5.9
         - changes/breaking-changes-ee-5.8
         - changes/breaking-changes-ee-5.7
@@ -1265,6 +1387,50 @@
         - changes/auth-4.4-to-5.1-compatibility
         - changes/data-integration-4.4-to-5.1-incompatibility
         - changes/gateway-4.4-to-5.1-incompatibility
+=======
+        - title_en: EMQX 5.9
+          title_cn: EMQX 5.9
+          title_ja: EMQX 5.9
+          path: changes/breaking-changes-ee-5.9
+        - title_en: EMQX 5.8
+          title_cn: EMQX 5.8
+          title_ja: EMQX 5.8
+          path: changes/breaking-changes-ee-5.8
+        - title_en: EMQX 5.7
+          title_cn: EMQX 5.7
+          title_ja: EMQX 5.7
+          path: changes/breaking-changes-ee-5.7
+        - title_en: EMQX 5.6
+          title_cn: EMQX 5.6
+          title_ja: EMQX 5.6
+          path: changes/breaking-changes-ee-5.6
+        - title_en: EMQX 5.5
+          title_cn: EMQX 5.5
+          title_ja: EMQX 5.5
+          path: changes/breaking-changes-ee-5.5
+        - title_en: EMQX 5.4
+          title_cn: EMQX 5.4
+          title_ja: EMQX 5.4
+          path: changes/breaking-changes-ee-5.4
+        - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
+          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+          title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
+          path: changes/breaking-changes-5.1.0
+          collapsed: true
+          children:
+            - title_en: Authentication
+              title_cn: 认证
+              title_ja: 認証
+              path: changes/auth-4.4-to-5.1-compatibility
+            - title_en: Data Integration
+              title_cn: 数据集成
+              title_ja: データ統合
+              path: changes/data-integration-4.4-to-5.1-incompatibility
+            - title_en: Gateway
+              title_cn: 网关
+              title_ja: ゲートウェイ
+              path: changes/gateway-4.4-to-5.1-incompatibility
+>>>>>>> origin/release-5.10
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日
