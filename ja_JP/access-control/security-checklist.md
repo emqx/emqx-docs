@@ -1,58 +1,58 @@
-# Security Checklist
+# セキュリティチェックリスト
 
-This checklist helps you review an EMQX deployment before exposing it to production traffic. It is organized by security layers so you can validate the full path from the operating system to the Dashboard. Use it during the initial rollout, after major topology changes, and as part of periodic security reviews.
+このチェックリストは、EMQXのデプロイメントを本番トラフィックに公開する前に確認するためのものです。セキュリティレイヤーごとに整理されており、オペレーティングシステムからダッシュボードまでの全経路を検証できます。初回展開時、主要なトポロジー変更後、および定期的なセキュリティレビューの一環としてご利用ください。
 
-## Phase 1: Infrastructure and OS
+## フェーズ1：インフラストラクチャとOS
 
-- Raise operating system file descriptor limits and service-level `LimitNOFILE` settings to match your connection scale so the node does not fail under normal or hostile connection pressure.
-- Harden the TCP stack and firewall posture for long-lived MQTT traffic, including SYN flood protection, connection tracking capacity, and listener exposure on trusted interfaces only.
-- Expose only the listeners your clients actually need. On untrusted networks, prefer encrypted listeners such as `8883` and `8084`, and restrict plaintext listeners such as `1883` to internal or transitional use cases. See [Listener Configuration](../configuration/listener.md) and [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
-- Restrict inter-node ports with security groups or firewall rules. For the port mapping used inside a cluster, see [Cluster Security](../deploy/cluster/security.md).
-- If nodes have multiple interfaces, bind Erlang distribution traffic to the private network interface only.
-- If you deploy EMQX behind a load balancer or TCP proxy, enable [Proxy Protocol](../deploy/cluster/lb.md) only on the listeners that need the real client IP address or client certificate details.
-- If Proxy Protocol is enabled for a listener, expose that address and port only to the designated proxy or load balancer. Enforce this in EMQX with `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]`, combined with network-level controls (firewall, private network, or Unix socket). Otherwise, a client that reaches the port directly can craft a PROXY v2 frame with arbitrary peer-cert fields and impersonate any identity.
+- ノードが通常または悪意のある接続負荷下で失敗しないように、オペレーティングシステムのファイルディスクリプタ制限およびサービスレベルの`LimitNOFILE`設定を接続規模に合わせて引き上げてください。
+- SYNフラッド保護、接続追跡容量、信頼できるインターフェースのみでのリスナー公開など、長時間接続されるMQTTトラフィックに対してTCPスタックとファイアウォールの強化を行ってください。
+- クライアントが実際に必要とするリスナーのみを公開してください。信頼できないネットワークでは、`8883`や`8084`などの暗号化リスナーを優先し、`1883`などの平文リスナーは内部または移行用ケースに制限してください。[Listener Configuration](../configuration/listener.md)および[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
+- クラスター内部で使用されるポートマッピングについては、[Cluster Security](../deploy/cluster/security.md)を参照し、ノード間ポートをセキュリティグループやファイアウォールルールで制限してください。
+- ノードに複数のインターフェースがある場合は、Erlang分散トラフィックをプライベートネットワークインターフェースのみにバインドしてください。
+- ロードバランサーやTCPプロキシの背後にEMQXをデプロイする場合、実際のクライアントIPアドレスやクライアント証明書の詳細が必要なリスナーでのみ[Proxy Protocol](../deploy/cluster/lb.md)を有効にしてください。
+- リスナーでProxy Protocolが有効な場合、そのアドレスとポートは指定されたプロキシまたはロードバランサーのみに公開してください。EMQXでは`listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]`とネットワークレベルの制御（ファイアウォール、プライベートネットワーク、Unixソケット）を組み合わせてこれを強制してください。そうしないと、ポートに直接アクセスしたクライアントが任意のpeer-certフィールドを持つPROXY v2フレームを作成し、任意のIDをなりすますことが可能になります。
 
-## Phase 2: Erlang and Cluster
+## フェーズ2：Erlangとクラスター
 
-- Replace the default node cookie on every node in the cluster, and use the same high-entropy secret on all members. See [Set Node Cookie](../deploy/cluster/security.md#set-node-cookie).
-- Protect `emqx.conf`, ACL files, certificates, private keys, and other secret material with strict file permissions and secure secret-management processes.
-- Keep clustering ports internal, and enable TLS for inter-node communication when traffic crosses less-trusted networks or public cloud boundaries. See [Cluster Security](../deploy/cluster/security.md).
-- Re-check firewall rules, certificates, and cluster membership controls after adding nodes, moving networks, or changing deployment topology.
+- クラスター内のすべてのノードでデフォルトのノードクッキーを置き換え、すべてのメンバーで同じ高エントロピーのシークレットを使用してください。[Set Node Cookie](../deploy/cluster/security.md#set-node-cookie)を参照してください。
+- `emqx.conf`、ACLファイル、証明書、秘密鍵、その他の秘密情報は厳格なファイル権限と安全なシークレット管理プロセスで保護してください。
+- クラスタリングポートは内部に限定し、トラフィックが信頼度の低いネットワークやパブリッククラウド境界を越える場合はノード間通信にTLSを有効にしてください。[Cluster Security](../deploy/cluster/security.md)を参照してください。
+- ノード追加、ネットワーク移動、デプロイトポロジー変更後は、ファイアウォールルール、証明書、クラスター参加制御を再確認してください。
 
-## Phase 3: Transport Security
+## フェーズ3：トランスポートセキュリティ
 
-- Use TLS for production MQTT listeners whenever traffic crosses untrusted networks. See [Network and TLS](../network/overview.md).
-- Disable legacy protocol versions and weak cipher suites according to your organization's security baseline, and validate the final listener settings in staging before rollout.
-- Use certificates issued by a trusted CA or by your internal PKI, and rotate them before they expire.
-- Enable mutual TLS when device identity should be verified through client certificates. In this model, validate both client certificate chains and certificate presence during the TLS handshake. See [X.509 Certificate Authentication](./authn/x509.md).
-- If you map peer-certificate fields to the MQTT username or client ID (`peer_cert_as_username` / `peer_cert_as_clientid`), the listener **must** enforce mTLS (`verify = verify_peer`, `fail_if_no_peer_cert = true`) with a CA bundle you control. Without it, a client can present a self-signed certificate with an attacker-chosen CN/DN and impersonate any identity. As an additional layer for the empty-username case, set `listeners.{type}.{name}.enable_authn = quick_deny_anonymous`. See [Certificate Information Mapping](./authn/x509.md#certificate-information-mapping).
-- If certificate revocation matters in your environment, evaluate [CRL checks](../network/crl.md) or [OCSP stapling](../network/ocsp.md).
-- Enable TLS for outbound connections to external resources such as HTTP authenticators, databases, and other integrations.
+- トラフィックが信頼できないネットワークを越える場合は、本番MQTTリスナーでTLSを使用してください。[Network and TLS](../network/overview.md)を参照してください。
+- レガシープロトコルバージョンや弱い暗号スイートは組織のセキュリティ基準に従って無効化し、ステージング環境で最終リスナー設定を検証してください。
+- 信頼されたCAまたは内部PKIが発行した証明書を使用し、有効期限前にローテーションしてください。
+- クライアント証明書によるデバイス認証が必要な場合は相互TLSを有効にしてください。このモデルではTLSハンドシェイク中にクライアント証明書チェーンと証明書の存在を検証します。[X.509 Certificate Authentication](./authn/x509.md)を参照してください。
+- ピア証明書フィールドをMQTTのユーザー名やクライアントIDにマッピングする場合（`peer_cert_as_username` / `peer_cert_as_clientid`）、リスナーは**必ず**mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`）をCAバンドルで強制してください。これをしないと、クライアントが攻撃者が選択したCN/DNを持つ自己署名証明書を提示し、任意のIDをなりすますことが可能です。空のユーザー名の場合の追加対策として、`listeners.{type}.{name}.enable_authn = quick_deny_anonymous`を設定してください。[Certificate Information Mapping](./authn/x509.md#certificate-information-mapping)を参照してください。
+- 証明書失効が重要な環境では、[CRLチェック](../network/crl.md)や[OCSPスタップリング](../network/ocsp.md)の評価を行ってください。
+- HTTP認証器、データベース、その他の統合先など外部リソースへのアウトバウンド接続にTLSを有効にしてください。
 
-## Phase 4: MQTT Access Control and Resource Protection
+## フェーズ4：MQTTアクセス制御とリソース保護
 
-- Configure at least one authenticator before exposing public listeners. By default, EMQX allows all clients to connect if authentication is not enabled. See [Authentication](./authn/authn.md).
-- Prefer per-device or per-application credentials instead of shared usernames, passwords, or certificates.
-- Choose an authentication mechanism that matches your trust model, such as X.509, JWT, SCRAM, or password-based authentication backed by a secure database.
-- When using password-based authentication, store salted password hashes instead of plaintext secrets, and prefer strong algorithms such as `bcrypt` or `pbkdf2`.
-- Define topic permissions as narrowly as possible and review wildcard usage carefully. See [Authorization](./authz/authz.md).
-- Remove or adjust permissive default rules before relying on authorization in production.
-- For file-based ACLs, use a deny-by-default posture where appropriate, such as ending rules with `{deny, all}` and setting `authorization.no_match = deny`. See [Use ACL File](./authz/file.md).
-- Review authorization cache settings and authorizer order so that policy changes take effect as expected.
-- Constrain MQTT resource usage to reduce the impact of malformed or abusive clients. Review limits such as packet size, topic levels, subscriptions, inflight windows, and queued messages. See [MQTT Configuration](../configuration/mqtt.md).
-- Apply listener-level rate controls where needed to limit connection and publish bursts. See [Rate Limiter Configuration](../configuration/limiter.md).
-- Use [Banned Clients](./blacklist.md) and [Flapping Detect](./flapping-detect.md) to contain abusive or unstable clients when needed.
+- 公開リスナーを公開する前に少なくとも1つの認証機構を設定してください。デフォルトでは、認証が有効でない場合、EMQXはすべてのクライアントの接続を許可します。[Authentication](./authn/authn.md)を参照してください。
+- 共有ユーザー名、パスワード、証明書の代わりに、デバイス単位またはアプリケーション単位の資格情報を推奨します。
+- X.509、JWT、SCRAM、または安全なデータベースに裏付けられたパスワード認証など、信頼モデルに合った認証方式を選択してください。
+- パスワード認証を使用する場合は、平文の秘密情報ではなくソルト付きパスワードハッシュを保存し、`bcrypt`や`pbkdf2`などの強力なアルゴリズムを推奨します。
+- トピック権限は可能な限り厳密に定義し、ワイルドカードの使用は慎重にレビューしてください。[Authorization](./authz/authz.md)を参照してください。
+- 本番環境で認可に依存する前に、許容的なデフォルトルールを削除または調整してください。
+- ファイルベースのACLでは、適切な場合に`{deny, all}`でルールを終了し、`authorization.no_match = deny`を設定するなど、デフォルト拒否の姿勢を推奨します。[Use ACL File](./authz/file.md)を参照してください。
+- ポリシー変更が期待通りに反映されるように、認可キャッシュ設定や認可者の順序を確認してください。
+- 不正または悪意のあるクライアントの影響を軽減するため、パケットサイズ、トピックレベル、サブスクリプション数、インフライトウィンドウ、キューイングされたメッセージなどのMQTTリソース使用制限を見直してください。[MQTT Configuration](../configuration/mqtt.md)を参照してください。
+- 接続やパブリッシュのバーストを制限するために必要に応じてリスナーレベルのレート制御を適用してください。[Rate Limiter Configuration](../configuration/limiter.md)を参照してください。
+- 必要に応じて[禁止クライアント](./blacklist.md)や[フラッピング検出](./flapping-detect.md)を使用して、悪質または不安定なクライアントを制御してください。
 
-## Phase 5: Administration and Maintenance
+## フェーズ5：管理とメンテナンス
 
-- Change the default Dashboard password before production use, and review who has administrative access. See [System](../dashboard/system.md).
-- Keep the Dashboard on trusted networks only. Prefer HTTPS for administrator access, and bind Dashboard listeners to localhost, a private interface, or a protected management network where possible. See [Dashboard Configuration](../configuration/dashboard.md).
-- If you expose the management API, use API keys instead of Dashboard credentials, grant only the minimum role required, and set expiration dates where possible. See [REST API](../admin/api.md) and [System](../dashboard/system.md#api-key).
-- If you use EMQX Enterprise, consider [Single Sign-On (SSO)](../dashboard/sso.md) for administrative users, and enforce MFA in your identity provider when available.
-- Schedule regular backups and rehearse restore procedures. Note that certificates or ACL files stored outside the EMQX data directory require separate backup. See [Backup and Restore](../operations/backup-restore.md).
-- Enable audit trails where available, and centralize logs and metrics in your observability stack for anomaly detection and incident response. See [Audit Log](../dashboard/audit-log.md), [Logs Configuration](../configuration/logs.md), and [Logs and Observability](../observability/overview.md).
+- 本番利用前にデフォルトのダッシュボードパスワードを変更し、管理アクセス権を持つユーザーを確認してください。[System](../dashboard/system.md)を参照してください。
+- ダッシュボードは信頼できるネットワークのみに限定してください。管理者アクセスにはHTTPSを推奨し、ダッシュボードリスナーは可能な限りlocalhost、プライベートインターフェース、または保護された管理ネットワークにバインドしてください。[Dashboard Configuration](../configuration/dashboard.md)を参照してください。
+- 管理APIを公開する場合は、ダッシュボードの資格情報ではなくAPIキーを使用し、必要最小限のロールを付与し、可能な場合は有効期限を設定してください。[REST API](../admin/api.md)および[System](../dashboard/system.md#api-key)を参照してください。
+- EMQX Enterpriseを使用している場合は、管理ユーザー向けに[シングルサインオン（SSO）](../dashboard/sso.md)を検討し、利用可能な場合はIDプロバイダーで多要素認証（MFA）を強制してください。
+- 定期的なバックアップをスケジュールし、復元手順のリハーサルを行ってください。証明書やACLファイルがEMQXデータディレクトリ外に保存されている場合は別途バックアップが必要です。[Backup and Restore](../operations/backup-restore.md)を参照してください。
+- 可能な場合は監査ログを有効にし、ログやメトリクスをオブザーバビリティスタックに集約して異常検知やインシデント対応に活用してください。[Audit Log](../dashboard/audit-log.md)、[Logs Configuration](../configuration/logs.md)、[Logs and Observability](../observability/overview.md)を参照してください。
 
-## Revalidate After Change
+## 変更後の再検証
 
-- Re-run this checklist after certificate rotation, listener changes, load balancer updates, cluster expansion, backup policy changes, or any change to the authentication and authorization chain.
-- Validate the expected failure modes before production cutover, such as rejected anonymous clients, failed TLS handshakes for invalid certificates, and denied publish or subscribe operations outside allowed topics.
+- 証明書ローテーション、リスナー変更、ロードバランサー更新、クラスター拡張、バックアップポリシー変更、認証・認可チェーンの変更後には、このチェックリストを再実行してください。
+- 本番切り替え前に、匿名クライアントの拒否、無効な証明書によるTLSハンドシェイク失敗、許可されていないトピックでのパブリッシュやサブスクライブの拒否など、期待される失敗モードを検証してください。
