@@ -76,7 +76,7 @@ If the key cannot be extracted based on the expression (e.g., the field doesn't 
 
 #### Example 1
 
-Assume you set up a queue with
+Assume you set up a queue with:
 - Last-Value Semantics enabled
 - Topic Filter set to `t/#`
 - Queue Key Expression set to `message.headers.properties.User-Property.mq-key`
@@ -99,7 +99,7 @@ Only the most recent message for each unique `message.headers.properties.User-Pr
 
 #### Example 2
 
-Assume you set up a queue with
+Assume you set up a queue with:
 - Last-Value Semantics enabled
 - Topic Filter set to `t/#`
 - Queue Key Expression set to `message.from`
@@ -114,7 +114,7 @@ Messages with the same `message.from` value overwrite each other, so only the la
 
 #### Example 3
 
-Assume you set up a queue with
+Assume you set up a queue with:
 - Last-Value Semantics enabled
 - Topic Filter set to `t/#`
 - Queue Key Expression set to `concat(message.headers.properties.User-Property.mq-key, '-', message.topic)`
