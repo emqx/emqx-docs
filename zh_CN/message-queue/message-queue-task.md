@@ -60,7 +60,7 @@
 
 ## 队列键表达式
 
-队列键表达式用于指定在启用”最后值语义”模式下，如何从消息数据中提取用于消息去重的键。该表达式会针对每条消息的数据进行求值，并遵循 [Variform 表达式](../configuration/configuration.md#variform-表达式)的语法。
+队列键表达式用于指定在启用“最后值语义”模式下，如何从消息数据中提取用于消息去重的键。该表达式会针对每条消息的数据进行求值，并遵循 [Variform 表达式](../configuration/configuration.md#variform-表达式)的语法。
 
 该表达式会在包含 `from`、`topic`、`payload`、`headers.properties` 等字段的消息上下文中进行求值。例如，如果希望使用用户属性（User Property）作为键，可以将表达式设置为：
 
