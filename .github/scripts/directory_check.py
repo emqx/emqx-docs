@@ -20,14 +20,6 @@ def check_md_content(md_file):
     md_content = re.sub(r'<!--([\s\S]*?)-->', '', open(md_file, 'r').read())
     md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
 
-<<<<<<< HEAD
-=======
-    if 'ee' in directory_file:
-        md_content = re.sub(r'{% emqxce %}([\s\S]*?){% endemqxce %}', '', md_content)
-    else:
-        md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
-
->>>>>>> origin/release-5.8
     image_list = re.findall(r'(.*?)!\[(.*?)\]\((.*?)\)', md_content)
     url_list = re.findall(r'(.*?)\[(.*?)\]\((.*?)\)', md_content)
     for url in url_list:
