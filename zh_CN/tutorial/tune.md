@@ -99,6 +99,31 @@ node.process_limit = 2097152
 ## Sets the maximum number of simultaneously existing ports for this system
 node.max_ports = 1048576
 ```
+
+## 集群节点间连接调优
+
+在集群部署中，EMQX 使用 Erlang 分布式通信通道进行节点间 RPC。调整这些连接的 TCP Socket 缓冲区大小，可以显著降低 RPC 延迟并提升集群稳定性，在高网络延迟或大消息量场景下效果尤为明显。
+
+以下选项控制本节点向其他节点发起的出站连接的 TCP Socket 参数：
+
+```bash
+node.dist_connect_options.nodelay = false
+node.dist_connect_options.sndbuf = 1MB
+node.dist_connect_options.recbuf = 1MB
+node.dist_connect_options.buffer = 1MB
+```
+
+以下选项控制接受其他节点入站连接的 TCP 监听器的 Socket 参数：
+
+```bash
+node.dist_listen_options.nodelay = false
+node.dist_listen_options.sndbuf = 1MB
+node.dist_listen_options.recbuf = 1MB
+node.dist_listen_options.buffer = 1MB
+```
+
+建议将 `buffer` 设置为不小于 `max(sndbuf, recbuf)` 的值。如果在高吞吐量或跨数据中心集群中观察到 RPC 延迟较高或集群不稳定，可适当增大这些值。完整参数说明请参见[配置项](../configuration/configuration.md)。
+
 ## docker 参数调优
 
 通常调优应该在docker的主机上做，但是如果一定要从docker内部做，可以参考如下例子:

@@ -130,6 +130,30 @@ node.process_limit = 2097152
 node.max_ports = 2097152
 ```
 
+## Cluster Inter-Node Connection Tuning
+
+For clustered deployments, EMQX uses Erlang's distributed communication channels for inter-node RPC. Tuning the TCP socket buffers for these connections can significantly reduce RPC latency and improve cluster stability, especially under high network latency or large message volumes.
+
+The following options control TCP socket buffers for outgoing connections this node makes to other nodes:
+
+```bash
+node.dist_connect_options.nodelay = false
+node.dist_connect_options.sndbuf = 1MB
+node.dist_connect_options.recbuf = 1MB
+node.dist_connect_options.buffer = 1MB
+```
+
+The following options control the TCP listener that accepts incoming connections from other nodes:
+
+```bash
+node.dist_listen_options.nodelay = false
+node.dist_listen_options.sndbuf = 1MB
+node.dist_listen_options.recbuf = 1MB
+node.dist_listen_options.buffer = 1MB
+```
+
+It is recommended to keep `buffer` at or above `max(sndbuf, recbuf)`. Increase these values if you observe high RPC latency or instability in clusters with high throughput or inter-datacenter links. For a full parameter reference, see [Configuration](../configuration/configuration.md).
+
 ## When running in docker
 
 Usually you should tune the linux docker host by following the above guide.
