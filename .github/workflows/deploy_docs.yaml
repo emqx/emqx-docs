@@ -60,26 +60,37 @@ jobs:
         echo "DOCS_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
         echo "VERSION=${{ matrix.version }}" >> $GITHUB_ENV
 
+    - name: Generate GitHub App token
+      id: app-token
+      uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+      with:
+        app-id: ${{ vars.AUTH_APP_ID }}
+        private-key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+
     - name: clone frontend
-      uses: actions/checkout@main
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       with:
         repository: 'emqx/docs-emqx-com-frontend'
         ref: next
-        token: ${{ secrets.CI_GIT_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         path: frontend
 
     - name: use python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
-        python-version: 3.8
+        python-version: '3.10'
 
     - name: use node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version-file: 'frontend/.nvmrc'
 
+    - name: enable corepack
+      run: corepack enable
+
     - name: use pnpm
-      uses: pnpm/action-setup@v2
+      uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
       with:
           version: 8
 
@@ -100,6 +111,7 @@ jobs:
       run: |
         rm frontend/docs/en/index.md || true
         rm frontend/docs/zh/index.md || true
+        rm frontend/docs/ja/index.md || true
         rm frontend/docs/*.md || true
         rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
@@ -110,6 +122,7 @@ jobs:
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/ || true
         cp docs-files/directory.json frontend/docs/.vitepress/config/directory.json
+        cp docs-files/directory.json frontend/docs/public/api/${DOCS_TYPE}_${VERSION}_directory.json
 
     - name: generate version config
       run: |
@@ -155,7 +168,7 @@ jobs:
     - name: build docs
       run: |
         cd frontend
-        export NODE_OPTIONS=--max_old_space_size=4096
+        export NODE_OPTIONS=--max_old_space_size=12288
         pnpm install
         pnpm build
 
@@ -175,28 +188,31 @@ jobs:
 
     - name: upload files to tencent cos
       run: |
-        pip3 install coscmd
-        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -r ap-shanghai
-        coscmd delete -r -f en/${DOCS_TYPE}/${VERSION} || true
-        coscmd delete -r -f zh/${DOCS_TYPE}/${VERSION} || true
-        coscmd config -a ${{ secrets.TENCENT_COS_ID }} -s ${{ secrets.TENCENT_COS_KEY }} -b docs-1302406139 -e cos.accelerate.myqcloud.com
-        coscmd upload -r frontend/docs/.vitepress/dist/ /
+        curl -fsSL -o /tmp/coscli https://github.com/tencentyun/coscli/releases/download/v1.0.8/coscli-v1.0.8-linux-amd64
+        chmod +x /tmp/coscli
+        /tmp/coscli config set --secret_id ${{ secrets.TENCENT_COS_ID }} --secret_key ${{ secrets.TENCENT_COS_KEY }} --init-skip
+        /tmp/coscli config add -b docs-1302406139 -e cos.accelerate.myqcloud.com -a docs-bucket
+        for lang in en zh ja; do
+          /tmp/coscli rm -r -f cos://docs-bucket/${lang}/${DOCS_TYPE}/${VERSION}/ || true
+        done
 
-    - name: set tccli
+        cd frontend/docs/.vitepress/dist/
+        /tmp/coscli cp -r --disable-log --process-log=false --routines 20 --fail-output-path /tmp/coscli_output --meta "Content-Type:text/markdown; charset=utf-8" --include ".*\.md$" ./ cos://docs-bucket/
+        find . -name '*.md' -delete
+        /tmp/coscli cp -r --disable-log --process-log=false --routines 20 --fail-output-path /tmp/coscli_output ./ cos://docs-bucket/
+
+    - name: flush cdn
       run: |
         pip3 install tccli
         tccli configure set secretId ${{ secrets.TENCENT_COS_ID }}
         tccli configure set secretKey ${{ secrets.TENCENT_COS_KEY }}
         tccli configure set region ap-shanghai
-
-    - name: flush cdn
-      run: |
-        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
-        tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
+        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/emqx/ https://docs.emqx.com/en/emqx/ https://docs.emqx.com/ja/emqx/ https://docs.emqx.com/zh/enterprise/ https://docs.emqx.com/en/enterprise/ https://docs.emqx.com/api/ --FlushType delete
+        tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
     - name: update ee search index
       if: matrix.docs_type == 'enterprise'
-      uses: Swilder-M/docsearch-scraper-simple@next
+      uses: emqx/docsearch-scraper@main
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
@@ -206,7 +222,7 @@ jobs:
 
     - name: update ce search index
       if: matrix.docs_type == 'emqx'
-      uses: Swilder-M/docsearch-scraper-simple@next
+      uses: emqx/docsearch-scraper@main
       env:
         APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
         API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
