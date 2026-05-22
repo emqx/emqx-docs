@@ -48,7 +48,7 @@ Starting from EMQX 5.8.4, there is a base configuration file named `base.hocon` 
 
 For example, you may want to start the deployment with a basic authentication configuration, and then override it with a more complex configuration at runtime from the Dashboard UI.
 
-For immutable configurations such as `node` and `cluster` configs, it is **NOT** recommended to set them in the `base.hocon` file. See the [Immutable Configurations File](#immutable-configuration-file) for more details.
+For immutable configurations such as `node` and `cluster` configs, you can also use environment variables when the values are deployment-specific and should not be changed at runtime. See [Environment Variables](#environment-variables) and [Config Override Rules](#config-override-rules) for more details.
 
 ::: tip
 The `base.hocon` file is not synchronized across the cluster and only applies to the node where it is located.
@@ -67,7 +67,7 @@ Since EMQX version 5.1, any changes to the cluster configuration will trigger a 
 
 ## Immutable Configuration File
 
-For backward compatibility, the `emqx.conf` file remains the primary configuration file for critical system settings, including `node` and `cluster` configurations. This file has a higher priority than both `base.hocon` and `cluster.hocon`, but with a lower priority than environment variables.
+For backward compatibility, the `emqx.conf` file remains available for critical system settings, including `node` and `cluster` configurations. This file has a higher priority than both `base.hocon` and `cluster.hocon`, but with a lower priority than environment variables. Avoid changing it unless you intentionally want this priority and understand that package upgrades may update the shipped defaults in this file.
 
 For more details on configuration overrides, refer to the [Config Override Rules](#config-override-rules) section.
 
@@ -328,6 +328,55 @@ listeners.tcp.default {
     ...
 }
 ```
+
+## Configuration-as-Code Best Practices
+
+When you manage EMQX configuration from source control or an automation system, use the following rule of thumb:
+
+- Put configuration-as-code settings in `base.hocon`.
+- Do not edit `cluster.hocon` manually or mount your own `cluster.hocon` file.
+- Avoid changing `emqx.conf` unless you understand its higher priority in the configuration layers and the upgrade consequences.
+- Use environment variables for simple overrides that you do not expect to change from the Dashboard, API, or CLI at runtime.
+
+The recommended source of truth for configuration-as-code is `base.hocon`. It is read from the static configuration directory during node startup and can be managed by your packaging, image build, configuration management, or GitOps workflow. Runtime changes made from the Dashboard, REST API, or CLI are persisted to `cluster.hocon` and layered on top of `base.hocon`.
+
+For example, a deployment can keep its listener, log, authentication, authorization, and data integration baseline in `base.hocon`:
+
+```bash
+# base.hocon
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+}
+
+log.console {
+  enable = true
+  level = warning
+}
+
+authentication = [
+  {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+  }
+]
+```
+
+Do not use `cluster.hocon` as the source of truth for configuration-as-code. EMQX owns this file at runtime: the Dashboard, REST API, and CLI rewrite it, EMQX creates backups before overwriting it, and cluster nodes can copy it from each other. Manually editing or mounting this file can cause your changes to conflict with runtime updates or be overwritten.
+
+`emqx.conf` is shipped with distribution packages as a baseline configuration file. Keeping it unchanged makes upgrades easier because your installation can pick up conservative default changes delivered by new EMQX versions. If you set a configurable item in `emqx.conf`, it has higher priority than both `base.hocon` and `cluster.hocon`, so runtime changes to the same item may appear to work but be reverted after a node restart. Use `emqx.conf` only when you intentionally need that behavior.
+
+Environment variables have the highest priority. They are useful for simple deployment-specific values, especially values already provided by the runtime environment and values that should not be mutated at runtime:
+
+```bash
+export EMQX_NODE__NAME='emqx@node1.example.net'
+export EMQX_NODE__COOKIE='mysecret'
+export EMQX_CLUSTER__DISCOVERY_STRATEGY='static'
+export EMQX_CLUSTER__STATIC__SEEDS='["emqx@node1.example.net", "emqx@node2.example.net"]'
+```
+
+Because environment variables override all configuration files, avoid using them for settings that operators are expected to tune later from the Dashboard, API, or CLI.
 
 ## Schema
 
