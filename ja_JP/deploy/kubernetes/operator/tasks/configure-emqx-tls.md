@@ -6,11 +6,11 @@
 
 ## TLS証明書に基づくSecretの作成
 
-Secretは、パスワード、トークン、キーなどの少量の機密情報を含むオブジェクトです。本デモではTLS証明書情報を保存するためにSecretを使用するため、EMQXクラスターを作成する前にSecretを作成する必要があります。
+Secretは、パスワード、トークン、キーなどの少量の機密情報を格納するオブジェクトです。本デモではTLS証明書情報を保存するためにSecretを使用するため、EMQXクラスターを作成する前にSecretを作成する必要があります。
 
-詳細は[Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets)のドキュメントをご参照ください。
+詳細については、[Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets)のドキュメントをご参照ください。
 
-以下をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
+以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
 ```yaml
 apiVersion: v1
@@ -35,27 +35,27 @@ stringData:
 
 :::tip
 上記3つのフィールドの内容は省略しています。ご自身の証明書内容で埋めてください。
-* `ca.crt` にはCA証明書を含めてください。
-* `tls.crt` にはサーバー証明書を含めてください。
-* `tls.key` にはサーバーの秘密鍵を含めてください。
+* `ca.crt` はCA証明書を含めてください。
+* `tls.crt` はサーバー証明書を含めてください。
+* `tls.key` はサーバーの秘密鍵を含めてください。
 :::
 
 ## EMQXクラスターの設定
 
-EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリュームおよびマウントポイントを設定するために以下のフィールドを提供しています：
+EMQXのCRD `apps.emqx.io/v2beta1` には、EMQXクラスターに追加のボリュームおよびマウントポイントを設定するための以下のフィールドがあります：
 * `.spec.coreTemplate.extraVolumes`
 * `.spec.coreTemplate.extraVolumeMounts`
 * `.spec.replicantTemplate.extraVolumes`
 * `.spec.replicantTemplate.extraVolumeMounts`
 
-本デモでは、これらのフィールドを使ってTLS証明書をEMQXクラスターに提供します。
+本デモでは、これらのフィールドを使用してTLS証明書をEMQXクラスターに提供します。
 
-ボリュームには多くの種類があります。ボリュームの詳細は[Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret)のドキュメントをご参照ください。ここでは `secret` ボリュームタイプを使用します。
+ボリュームには多くの種類があります。ボリュームの詳細については、[Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret)のドキュメントをご参照ください。ここでは `secret` ボリュームタイプを使用します。
 
-1. 以下をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v2beta1
    kind: EMQX
    metadata:
      name: emqx
@@ -107,7 +107,7 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
 
 2. EMQXクラスターが準備完了になるまで待ちます。
 
-   `kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`になっていることを確認してください。完了までに時間がかかる場合があります。
+   `kubectl get`コマンドでEMQXクラスターのステータスを確認し、`STATUS`が`Ready`になっていることを確認してください。完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx
@@ -115,9 +115,9 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    emqx   Ready    10m
    ```
 
-## MQTTXを使ったTLS接続の検証
+## MQTTXでTLS接続を検証する
 
-[MQTTX CLI](https://mqttx.app/cli)は、開発者がMQTTサービスやアプリケーションを素早く開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
+[MQTTX CLI](https://mqttx.app/cli)は、開発者がMQTTサービスやアプリケーションを迅速に開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
 
 1. EMQXリスナーサービスの外部IPを取得します。
 
@@ -147,7 +147,7 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    [10:00:58] › ✔ Message published
    ```
 
-4. サブスクライバー側でメッセージを受信していることを確認します。
+4. サブスクライバークライアントがメッセージを受信することを確認します。
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -157,4 +157,4 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    [10:00:58] › ✔ Message published
    ```
 
-   これにより、パブリッシャーおよびサブスクライバーのクライアントがTLS接続を介してブローカーと正常に通信できていることが確認できます。
+   これにより、パブリッシャーとサブスクライバーの両クライアントがTLS接続を介してブローカーと正常に通信できていることが示されます。

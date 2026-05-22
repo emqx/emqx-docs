@@ -6,12 +6,12 @@ EMQXクラスターのログレベルを変更します。
 
 ## EMQXクラスターの設定
 
-EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラスターのログレベルを設定することをサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
+EMQX CRD `apps.emqx.io/v2beta1` は、`.spec.config.data` を通じてEMQXクラスターのログレベルを設定することをサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v2beta1
    kind: EMQX
    metadata:
      name: emqx
@@ -34,7 +34,7 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラス�
 
 2. EMQXクラスターが準備完了になるまで待ちます。
 
-   `kubectl get` コマンドでEMQXクラスターのステータスを確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
+   `kubectl get`コマンドでEMQXクラスターのステータスを確認し、`STATUS`が`Ready`になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx
@@ -52,7 +52,7 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラス�
 
 2. MQTTX CLIを使ってEMQXクラスターに接続します。
 
-   [MQTTX CLI](https://mqttx.app/cli) は、開発者がMQTTサービスやアプリケーションをより迅速に利用開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
+   [MQTTX CLI](https://mqttx.app/cli)は、開発者がMQTTサービスやアプリケーションをより迅速に利用開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
 
    ```
    $ mqttx conn -h ${external_ip} -p 1883

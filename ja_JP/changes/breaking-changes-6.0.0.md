@@ -1,4 +1,4 @@
-# Incompatible Changes from EMQX 5.x to EMQX 6.0
+# Incompatible Changes between EMQX 5.x and EMQX 6.0
 
 ## Deprecated Packages
 

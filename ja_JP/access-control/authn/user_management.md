@@ -1,15 +1,15 @@
-# HTTP API を使ったユーザーデータ管理
+# HTTP API を使用したユーザーデータ管理
 
-組み込みデータベースに保存された認証データは、EMQX ダッシュボードまたは HTTP API を使用して、ユーザー認証情報の作成、更新、削除、一覧表示、インポートが可能です。
+組み込みデータベースに保存された認証データは、EMQX ダッシュボードまたは HTTP API を使って、ユーザー認証情報の作成、更新、削除、一覧表示、インポートが可能です。
 
-対象は以下の認証方式です：
+対象となるのは以下の認証方式です：
 
 - [パスワード認証に組み込みデータベースを使用する](./mnesia.md)
 - [MQTT 5.0 強化認証](./scram.md)
 
 ## ユーザー管理 API エンドポイント
 
-ユーザー管理のエンドポイントは、認証チェーンのスコープによって異なります。
+ユーザー管理のエンドポイントは認証チェーンのスコープによって異なります。
 
 - **グローバル MQTT 認証チェーン**
 
@@ -35,7 +35,7 @@
   /api/v5/gateway/{protocol}/listeners/{listener_id}/authentication/{id}/users
   ```
 
-識別子の命名規則やパラメーターの説明については、[REST API](../../admin/api.md) を参照してください。
+識別子の規則やパラメータの説明については、[REST API](../../admin/api.md) を参照してください。
 
 ## ユーザーのインポート
 
@@ -49,7 +49,7 @@
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-リクエストは `multipart/form-data` の POST で送信してください。
+リクエストは `multipart/form-data` の POST で送信する必要があります。
 
 例：
 
@@ -81,8 +81,8 @@ curl -v -u admin:public -X 'POST' \
   
   任意フィールド：
   
-  - `salt`（デフォルトは空文字列）
-  - `is_superuser`（デフォルトは `false`）
+  - `salt`（省略時は空文字列）
+  - `is_superuser`（省略時は `false`）
   
 * `.json`
   

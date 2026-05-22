@@ -1,16 +1,16 @@
 # MCP over MQTT アーキテクチャ
 
-MCP over MQTT は、標準の MCP アーキテクチャ（Host、Client、Server）のコアコンセプトを継承しつつ、トランスポート層として中央集約型の MQTT ブローカーを導入しています。ブローカーはメッセージのルーティング、サービスの登録と検出、認証および認可を可能にします。
+MCP over MQTT は、標準のMCPアーキテクチャ（Host、Client、Server）のコアコンセプトを継承しつつ、トランスポート層として中央集権型のMQTT ブローカーを導入しています。ブローカーはメッセージのルーティング、サービスの登録と検出、認証および認可を可能にします。
 
-このアーキテクチャは MCP の元々のコンテキストインタラクションモデルを保持しつつ、MQTT の軽量で広範に適用可能な設計を活用し、IoT やエッジコンピューティングのシナリオにおける多対多通信、ロードバランシング、スケーラビリティの基盤を提供します。
+このアーキテクチャは、MCPの元々のコンテキストインタラクションモデルを維持しつつ、MQTTの軽量で広く適用可能な設計を活用し、IoTやエッジコンピューティングのシナリオにおける多対多通信、ロードバランシング、スケーラビリティの基盤を提供します。
 
 ## MQTT トランスポートのコアコンポーネント
 
-MCP over MQTT アーキテクチャでは、メッセージルーターとして中央集約型の MQTT ブローカーが導入され、その他のコンポーネント（Host、Client、Server）は標準の MCP 設計と一致しています。
+MCP over MQTT アーキテクチャでは、メッセージルーターとして中央集権型のMQTT ブローカーが導入され、その他のコンポーネント（Host、Client、Server）は標準のMCP設計と同様です。
 
 ```mermaid
 graph LR
-    subgraph "Application Host Process"
+    subgraph "アプリケーション ホストプロセス"
         H[Host]
         C1[Client 1]
         C2[Client 2]
@@ -20,23 +20,23 @@ graph LR
         H --> C3
     end
 
-    subgraph "MQTT Broker"
-        B[Broker]
+    subgraph "MQTT ブローカー"
+        B[ブローカー]
         C1 --> B
         C2 --> B
         C3 --> B
     end
 
-    subgraph "Servers"
-        S1[Server A<br>External APIs]
-        R1[("Remote<br>Resource A")]
+    subgraph "サーバー"
+        S1[Server A<br>外部API]
+        R1[("リモート<br>リソース A")]
         B --> S1
         S1 <--> R1
     end
 
-    subgraph "Servers"
-        S2[Server B<br>External APIs]
-        R2[("Remote<br>Resource B")]
+    subgraph "サーバー"
+        S2[Server B<br>外部API]
+        R2[("リモート<br>リソース B")]
         B --> S2
         S2 <--> R2
     end
@@ -44,53 +44,53 @@ graph LR
 
 ### Host、Client、および Server
 
-Host、Client、および Server のコンポーネントは変更されていません（詳細は [MCP コアコンセプト](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp) を参照してください）：
+Host、Client、および Server のコンポーネントは変更されていません（詳細は[MCPコアコンセプト](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)を参照してください）：
 
 - **Host** はクライアントのコンテナおよびコーディネーターとして機能します。
-- 各 **Client** は Host によって作成され、Server と独立した接続を維持します。
+- 各 **Client** はHostによって作成され、Serverと独立した接続を維持します。
 - **Server** は専用のコンテキストと機能を提供します。
 
-主な違いは、Client と Server が直接通信するのではなく、MQTT ブローカーを介して通信する点です。ブローカーの導入により、Client と Server の関係は一対一から多対多へと変わります。
+主な違いは、ClientとServerが直接通信するのではなく、MQTT ブローカーを介して通信する点です。ブローカーの導入により、ClientとServer間の関係は1対1から多対多へと変わります。
 
 ### MQTT ブローカーの役割
 
-MQTT ブローカーは中央集約型のメッセージルーターとして機能します：
+MQTT ブローカーは中央集権型のメッセージルーターとして機能します：
 
-- Client と Server 間のメッセージを転送します。
-- サービスの登録と検出をサポートします（保持メッセージを介して）。
-- Client と Server の認証および認可を処理します。
+- ClientとServer間のメッセージを転送します。
+- サービスの登録および検出をサポートします（保持メッセージを介して）。
+- ClientおよびServerの認証と認可を処理します。
 
-## Server のスケーリングとロードバランシング
+## サーバースケーリングとロードバランシング
 
-スケーラビリティとロードバランシングを実現するために、MCP Server は複数のインスタンス（プロセス）を起動できます。各インスタンスは MQTT クライアント ID として一意の `server-id` を持ち、すべてのインスタンスは同じ `server-name` を共有します。
+スケーラビリティとロードバランシングを実現するために、MCP Serverは複数のインスタンス（プロセス）を起動できます。各インスタンスは一意の `server-id` をMQTT クライアントIDとしてブローカーに接続し、すべてのインスタンスは同じ `server-name` を共有します。
 
-**Client のインタラクションフロー：**
+**Clientのインタラクションフロー：**
 
-1. Client はサービス検出トピックをサブスクライブし、対象の `server-name` の下にあるすべての利用可能な `server-id` を取得します。
-2. Client はカスタムポリシー（例えばランダムやラウンドロビン）に基づいて Server インスタンスを選択し、`initialize` リクエストを送信します。
-3. 初期化後、Client は専用の RPC トピックを通じて選択した Server インスタンスと通信します。
+1. Clientはサービス検出トピックをサブスクライブし、対象の `server-name` 配下のすべての利用可能な `server-id` を取得します。
+2. Clientはカスタムポリシー（例：ランダムまたはラウンドロビン）に基づいてServerインスタンスを選択し、`initialize` リクエストを送信します。
+3. 初期化後、Clientは専用のRPCトピックを通じて選択されたServerインスタンスと通信します。
 
 ```mermaid
 graph LR
 
-    C1["MCP Client1"]
-    C2["MCP Client2"]
-    C3["MCP Client3"]
-    C4["MCP Client4"]
+    C1["MCP クライアント1"]
+    C2["MCP クライアント2"]
+    C3["MCP クライアント3"]
+    C4["MCP クライアント4"]
 
-    subgraph "MCP Server Instances (server-name-a)"
-        S1[Server Instance 1]
-        S2[Server Instance 2]
+    subgraph "MCP サーバーインスタンス (server-name-a)"
+        S1[サーバーインスタンス 1]
+        S2[サーバーインスタンス 2]
     end
 
-    C1 <-- "RPC topic of client-1 and server instance 1" --> S1
-    C2 <-- "RPC topic of client-2 and server instance 1" --> S1
-    C3 <-- "RPC topic of client-3 and server instance 2" --> S2
-    C4 <-- "RPC topic of client-4 and server instance 2" --> S2
+    C1 <-- "クライアント1とサーバーインスタンス1のRPCトピック" --> S1
+    C2 <-- "クライアント2とサーバーインスタンス1のRPCトピック" --> S1
+    C3 <-- "クライアント3とサーバーインスタンス2のRPCトピック" --> S2
+    C4 <-- "クライアント4とサーバーインスタンス2のRPCトピック" --> S2
 
 ```
 
-このアプローチにより、MCP Server の高可用性とスケーラビリティが実現されます：
+この方式により、MCPサーバーの高可用性とスケーラビリティが可能になります：
 
-- **スケールアップ時**、既存の MCP クライアントは従来のサーバーインスタンスに接続したままで、新規クライアントは新たに追加されたインスタンスで初期化できます。
-- **スケールダウン時**、MCP クライアントは再初期化して他の利用可能なサーバーインスタンスに接続できます。
+- **スケールアップ時**、既存のMCPクライアントは旧サーバーインスタンスに接続したままで、新規クライアントは新たに追加されたインスタンスで初期化できます。
+- **スケールダウン時**、MCPクライアントは再初期化して他の利用可能なサーバーインスタンスに接続できます。

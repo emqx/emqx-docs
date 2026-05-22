@@ -1,6 +1,6 @@
 # Amazon Elastic Kubernetes Service 上での EMQX デプロイ
 
-EMQX Operator は Amazon Container Service の EKS（Elastic Kubernetes Service）上での実行をサポートしています。Amazon EKS はコンテナ化されたアプリケーションのデプロイ、管理、スケーリングを簡素化するマネージド Kubernetes サービスです。EKS は Kubernetes のコントロールプレーンとノードグループを提供し、ノードの置き換え、アップグレード、パッチ適用を自動的に処理します。また、Load Balancer、RDS、IAM などの AWS サービスをサポートし、他の Kubernetes エコシステムツールとシームレスに統合されます。
+EMQX Operator は Amazon Container Service EKS（Elastic Kubernetes Service）上での実行をサポートしています。Amazon EKS は、コンテナ化されたアプリケーションのデプロイ、管理、スケーリングを簡素化するマネージド Kubernetes サービスです。EKS は Kubernetes のコントロールプレーンとノードグループを提供し、ノードの置き換え、アップグレード、パッチ適用を自動で処理します。また、Load Balancer、RDS、IAM などの AWS サービスをサポートし、他の Kubernetes エコシステムツールとシームレスに統合されます。
 
 詳細な紹介については、[Amazon EKS とは](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)をご参照ください。
 
@@ -8,25 +8,25 @@ EMQX Operator は Amazon Container Service の EKS（Elastic Kubernetes Service�
 
 EKS 上に EMQX をデプロイする前に、以下の前提条件を完了していることを確認してください。
 
-- EKS クラスターを作成する。<br/>詳細は[Amazon EKS クラスターの作成](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)をご参照ください。
+- EKS クラスターを作成する。<br/>詳細は[Amazon EKS クラスターの作成](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)をご覧ください。
 
-- `kubectl` を設定して EKS クラスターに接続する。<br/>詳細は[クラスターへの kubectl 接続](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)をご参照ください。
+- kubectl を設定し、EKS クラスターに接続できるようにする。<br/>詳細は[クラスターへの接続に kubectl を使用する](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)をご覧ください。
 
-- クラスターに AWS Load Balancer Controller をデプロイする。<br/>詳細は[Network Load Balancer の作成](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)をご参照ください。
+- クラスターに AWS Load Balancer Controller をデプロイする。<br/>詳細は[ネットワーク Load Balancer の作成](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)をご覧ください。
 
-- クラスターに Amazon EBS CSI ドライバーをインストールする。<br/>詳細は[Amazon EBS CSI ドライバー](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)をご参照ください。
+- クラスターに Amazon EBS CSI ドライバーをインストールする。<br/>詳細は[Amazon EBS CSI ドライバー](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)をご覧ください。
 
 - EMQX Operator をインストールする。<br/>詳細は[EMQX Operator のインストール](./getting-started.md)をご参照ください。
 
 ## EMQX クラスターの迅速なデプロイ
 
-以下の例は、EKS 上でのデプロイに必要な EMQX カスタムリソース（CR）設定を示しています。
+以下の例は、EKS 上でのデプロイに必要な EMQX カスタムリソース（CR）の設定例です。
 
-1. 以下の内容を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
+1. 下記の内容を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
    ```yaml
-   # WaitForFirstConsumer バインディングモードを持つ EBS StorageClass の設定
-   # これにより、ボリュームはそれを使用する Pod と同じ AZ に作成されます
+   # WaitForFirstConsumer バインディングモードを持つ EBS StorageClass を設定
+   # これにより、ボリュームはそれを使用するポッドと同じ AZ に作成されます
    apiVersion: storage.k8s.io/v1
    kind: StorageClass
    metadata:
@@ -59,7 +59,7 @@ EKS 上に EMQX をデプロイする前に、以下の前提条件を完了し�
        metadata:
          ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## NLB がインターネット向けか内部向けかを指定します。指定しない場合は内部がデフォルトです。
+           ## NLB がインターネット向けか内部向けかを指定。未指定の場合は内部向けがデフォルト。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
@@ -70,7 +70,7 @@ EKS 上に EMQX をデプロイする前に、以下の前提条件を完了し�
        metadata:
          ## 詳細: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## NLB がインターネット向けか内部向けかを指定します。指定しない場合は内部がデフォルトです。
+           ## NLB がインターネット向けか内部向けかを指定。未指定の場合は内部向けがデフォルト。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
@@ -91,16 +91,16 @@ EKS 上に EMQX をデプロイする前に、以下の前提条件を完了し�
 
 3. EMQX ダッシュボードの外部 IP を取得し、アクセスします。
 
-   EMQX Operator は `dashboardServiceTemplate` の設定に基づき、EMQX ダッシュボード用の Service を作成します。
+   EMQX Operator は `dashboardServiceTemplate` の設定に基づいて EMQX ダッシュボード用の Service を作成します。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    192.168.1.200
    ```
 
-4. ダッシュボードにアクセスします：`http://192.168.1.200:18083`。
+4. ダッシュボードにアクセスします：`http://192.168.1.200:18083`
 
-   デフォルトの認証情報でログインします：
+   デフォルトの認証情報でログインしてください。
 
      - **ユーザー名:** `admin`
      - **パスワード:** `public`
@@ -139,31 +139,31 @@ EKS 上に EMQX をデプロイする前に、以下の前提条件を完了し�
    [10:00:58] › ✔ メッセージをパブリッシュしました
    ```
 
-4. サブスクライバーがメッセージを受信する様子を確認します。
+4. サブスクライバーがメッセージを受信するのを確認します。
 
    ```shell
    [10:00:58] › payload: hello world
    ```
 
-## LoadBalancer での TLS 暗号化の終了
+## LoadBalancer で TLS 暗号化を終了する
 
-AWS Network Load Balancer（NLB）を使用して EMQX の TLS トラフィックを終了させることができます。以下の手順に従ってください。
+AWS ネットワーク Load Balancer（NLB）を使用して EMQX の TLS トラフィックを終了することができます。以下の手順に従ってください。
 
-1. [AWS コンソール](https://us-east-2.console.aws.amazon.com/acm/home)で関連する証明書をインポートします。証明書 ID をクリックして証明書詳細ページを開き、証明書 ARN を控えてください。
+1. [AWS コンソール](https://us-east-2.console.aws.amazon.com/acm/home)で関連する証明書をインポートします。証明書 ID をクリックして証明書の詳細ページを開き、証明書 ARN を控えてください。
 
     ::: tip
 証明書／キーのインポート形式については、[証明書のインポート](https://docs.aws.amazon.com/acm/latest/userguide/import-certificate-format.html)をご参照ください。
     :::
 
-2. EMQX Service のメタデータに以下のようなアノテーションを追加します。
+2. EMQX Service のメタデータに以下のようにアノテーションを追加します。
 
     ```yaml
-    ## AWS Certificate Manager で管理されている 1 つ以上の証明書の ARN を指定します。
+    ## AWS Certificate Manager が管理する 1 つ以上の証明書の ARN を指定します。
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:xxxxx:certificate/xxxxxxx
-    ## ロードバランサーと Kubernetes Pod 間のバックエンドトラフィックに TLS を使用するかどうかを指定します。
+    ## ロードバランサーと Kubernetes ポッド間のバックエンドトラフィックに TLS を使用するかどうかを指定します。
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
     ## TLS リスナーを持つフロントエンドポートを指定します。これにより、AWS NLB サービス経由でポート 1883 にアクセスする際は TLS 認証が必要ですが、
-    ## K8S サービスのポートへの直接アクセスは TLS 認証不要となります。
+    ## K8S サービスのポートへの直接アクセスでは TLS 認証は不要です。
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "1883"
     ```
 

@@ -38,7 +38,7 @@ Message queues must be explicitly declared/created before they can store or disp
 
    - **Data Retention Period**: Specify how long messages should be retained in the queue. You can set the time unit (e.g., days).
 
-   - **Last Value Semantics**: This option is enabled by default. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the same queue. This ensures only the most recent message per key is retained. The default key is the client ID of the message publisher.
+   - **Last Value Semantics**: This option is enabled by default. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the same queue. This ensures only the most recent message per key is retained. The default key is the client ID of the message publisher. See examples below for how to configure the queue key.
 
      - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
@@ -56,81 +56,84 @@ Message queues must be explicitly declared/created before they can store or disp
 
 The new queue will appear in the Queues list, showing its name, topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
 
-### Queue Key Expression
+## Queue Key Expression
 
-The Queue Key Expression specifies how to extract the key used for message deduplication in Last-Value Semantics mode. This expression is evaluated against a message's metadata and follows the syntax of [Variform expressions](../configuration/configuration.md#variform-expressions).
+The Queue Key Expression specifies how to extract the key used for message deduplication in Last-Value Semantics mode. This expression is evaluated against a message's data and follows the syntax of [Variform expressions](../configuration/configuration.md#variform-expressions).
 
 The expression is evaluated against a message context that includes fields such as `from`, `topic`, `payload`, `headers.properties`, and more. For example, to use a user property as the key, you could set the expression to:
 
 ```
-message.headers.properties.'User-Property'.user-prop
+message.headers.properties.User-Property.user-prop
 ```
 
 If the key cannot be extracted based on the expression (e.g., the field doesn't exist), the message will be discarded and not enqueued.
 
-#### Message Context Example
+### Message Context Example
 
-Queue Key Expressions are evaluated against the following message structure:
+<!--@include: ../shared/key-expression-message-context.md-->
 
-<details>
-<summary><strong>JSON Example</strong></summary>
+### Queue Key Expression Examples
 
-```json
-{
-  "message": {
-    "qos": 0,
-    "topic": "some/topic",
-    "payload": "some-payload",
-    "headers": {
-      "client_attrs": {},
-      "proto_ver": 5,
-      "properties": {
-        "User-Property": {
-          "user-prop": "some-value"
-        }
-      },
-      "peerhost": "127.0.0.1",
-      "username": "undefined",
-      "protocol": "mqtt",
-      "peername": "127.0.0.1:49352"
-    },
-    "from": "clientid",
-    "timestamp": 1759238376252,
-    "id": "..non utf8 bytes...",
-    "flags": {
-      "retain": false,
-      "dup": false
-    },
-    "extra": {}
-  }
-}
-```
+#### Example 1
 
+Assume you set up a queue with:
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Queue Key Expression set to `message.headers.properties.User-Property.mq-key`
 
-</details>
+Assume the following messages are published to EMQX (and no clients are present to consume them):
+| N | Sender | Topic | User Property `mq-key` |
+|---|--------|-------|------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
 
-<details> <summary><strong>Erlang Term Example</strong></summary>
+When a client connects and subscribes to the queue, the following messages will be delivered:
+| N | Sender | Topic | User Property `mq-key` |
+|---|--------|-------|------------------------|
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
 
-```erlang
-#{message =>
-      #{extra => #{},
-        flags => #{dup => false, retain => false},
-        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
-        timestamp => 1759238376252, from => <<"clientid">>,
-        headers =>
-            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
-              username => undefined, peerhost => <<"127.0.0.1">>,
-              properties =>
-                  #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
-              proto_ver => 5, client_attrs => #{}
-            },
-        payload => <<"some-payload">>, topic => <<"some/topic">>,
-        qos => 0
-      }
-    }
-```
+Only the most recent message for each unique `message.headers.properties.User-Property.mq-key` value is retained in the queue. Note that the key expression takes effect for the whole queue across topics: a message with `keyA` published to `t/1` is overwritten by a later message with `keyA` published to `t/3`.
 
-</details>
+#### Example 2
+
+Assume you set up a queue with:
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Queue Key Expression set to `message.from`
+
+Assume the same messages are published to EMQX as in Example 1. When a client connects and subscribes to the queue, the following messages will be delivered:
+| N | Sender | Topic | User Property `mq-key` |
+|---|--------|-------|------------------------|
+| 2 | `client1` | `t/2` | `keyB` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+Messages with the same `message.from` value overwrite each other, so only the last message from each sender is retained.
+
+#### Example 3
+
+Assume you set up a queue with:
+- Last-Value Semantics enabled
+- Topic Filter set to `t/#`
+- Queue Key Expression set to `concat(message.headers.properties.User-Property.mq-key, '-', message.topic)`
+
+Assume the following messages are published to EMQX:
+| N | Sender | Topic | User Property `mq-key` |
+|---|--------|-------|------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client1` | `t/1` | `keyB` |
+| 4 | `client1` | `t/2` | `keyA` |
+
+When a client connects and subscribes to the queue, all the messages will be delivered because the combination of `message.headers.properties.User-Property.mq-key` and `message.topic` is unique for each message:
+| N | Sender | Topic | User Property `mq-key` | Computed Key |
+|---|--------|-------|------------------------|--------------|
+| 1 | `client1` | `t/1` | `keyA` | `keyA-t/1` |
+| 2 | `client1` | `t/2` | `keyB` | `keyB-t/2` |
+| 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
+| 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
 
 ## Automatically Create Queues via Dashboard
 
@@ -141,7 +144,7 @@ When auto-creation is enabled:
 - Subscribing to `$queue/<name>` works only if the queue already exists.
 - Subscribing to `$queue/<name>/<topic_filter>` allows EMQX to automatically create the queue using the provided `<topic_filter>` if it does not already exist.
 
-Queues may be auto-created either as regular queues or last-value semantics queues. 
+Queues may be auto-created either as regular queues or last-value semantics queues.
 
 ::: tip Note
 
@@ -207,14 +210,14 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
    - **Auto Create Queue Type**: Specifies the type of queues to create automatically:
 
-     - **Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$queue/<name>/<topic_filter>` topic and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled. 
+     - **Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$queue/<name>/<topic_filter>` topic and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled.
 
        For details of the settings, see [Auto Create Last Value Semantics Queues](#auto-create-last-value-semantics-queues).
 
      - **Regular Queue**: When enabled, EMQX automatically creates regular (non-overwriting) queues for `$queue/<name>/<topic_filter>` subscriptions.
 
        For details of the settings, see [Auto Create Regular Queues](#auto-create-regular-queues).
-   
+
 3. After making changes, click **Save Changes** to apply the new settings.
 
 ### REST API
@@ -320,7 +323,7 @@ Message Queues in EMQX now support multiple types of capacity limits. If any of 
   - **Max total size of messages in bytes** (`max_shard_message_bytes`)
 
   These limits are soft and applied during GC, not in real time. Queues may temporarily exceed the configured thresholds between GC cycles.
-  
+
   Note that these limits apply per shard in durable storage. For information on how to configure the number of shards, see [Number of Shards](../durability/managing-replication.md#number-of-shards). In addition, size limits do not account for the [replication factor](../durability/managing-replication.md#replication-factor); the actual physical storage used by a queue will be multiplied by the replication factor.
-  
+
 
