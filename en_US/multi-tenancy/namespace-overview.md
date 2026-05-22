@@ -84,47 +84,47 @@ Namespaces provide a unified tenant identifier (`client_attrs.tns`) that allows 
 
 However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled.
 
-- **Client ID override**
+### Client ID Override
 
-  ::: warning Required for Untrusted Multi-Tenant Deployments
+::: warning Required for Untrusted Multi-Tenant Deployments
 
-  If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure `mqtt.clientid_override`. Without it, a client in one namespace can reuse another tenant's client ID, kicking it offline, hijacking its persistent session, or causing a denial-of-service for that tenant. Authentication does not prevent this: session takeover happens at the connection layer before ACLs apply.
+If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure `mqtt.clientid_override`. Without it, a client in one namespace can reuse another tenant's client ID, kicking it offline, hijacking its persistent session, or causing a denial-of-service for that tenant. Authentication does not prevent this: session takeover happens at the connection layer before ACLs apply.
 
-  Pair this with [topic isolation using mount points](#isolation-mechanisms) so that topic-level access cannot cross namespace boundaries either.
+Pair this with [topic isolation using mountpoints](#topic-isolation-using-mountpoints) so that topic-level access cannot cross namespace boundaries either.
 
-  :::
+:::
 
-  To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
+To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
 
-  ```hocon
-  mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
-  ```
+```hocon
+mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
+```
 
-  This rule prefixes the Client ID with the namespace to avoid conflicts.
+This rule prefixes the Client ID with the namespace to avoid conflicts.
 
-- **Topic isolation using mountpoints**
+### Topic Isolation Using Mountpoints
 
-  If clients in different namespaces need to publish or subscribe to the same topic names without interfering with each other, a mountpoint can be used to automatically prefix topics with the namespace.
+If clients in different namespaces need to publish or subscribe to the same topic names without interfering with each other, a mountpoint can be used to automatically prefix topics with the namespace.
 
-  In EMQX 6.0 and earlier, mountpoints were typically configured at the listener level, for example:
+In EMQX 6.0 and earlier, mountpoints were typically configured at the listener level, for example:
 
-  ```hocon
-  listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
-  ```
+```hocon
+listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
+```
 
-  In environments with multiple listeners, this required repetitive configuration.
+In environments with multiple listeners, this required repetitive configuration.
 
-  Starting from EMQX 6.1, namespaces can be used as a unified topic mountpoint. Once a namespace is successfully identified, EMQX internally applies `{namespace}/` as the topic prefix, achieving the same isolation effect as listener mountpoints without requiring per-listener configuration.
+Starting from EMQX 6.1, namespaces can be used as a unified topic mountpoint. Once a namespace is successfully identified, EMQX internally applies `{namespace}/` as the topic prefix, achieving the same isolation effect as listener mountpoints without requiring per-listener configuration.
 
-  To maintain backward compatibility, authorization (ACL) checks do not include the mountpoint prefix by default.
+To maintain backward compatibility, authorization (ACL) checks do not include the mountpoint prefix by default.
 
-  From EMQX 6.1 onward, you can enable this behavior by setting:
+From EMQX 6.1 onward, you can enable this behavior by setting:
 
-  ```hocon
-  authorization.include_mountpoint = true
-  ```
+```hocon
+authorization.include_mountpoint = true
+```
 
-  This allows authorization backends to receive topics with the mountpoint prefix.
+This allows authorization backends to receive topics with the mountpoint prefix.
 
 ## Multi-Tenancy Capability Support
 
