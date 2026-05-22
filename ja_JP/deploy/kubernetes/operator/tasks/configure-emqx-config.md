@@ -6,11 +6,7 @@ EMQXカスタムリソースの`.spec.config.data`フィールドを使用して
 
 ## EMQXクラスターの設定
 
-<<<<<<< HEAD
-EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
-=======
 EMQX CRD `apps.emqx.io/v2beta1`は、`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
->>>>>>> origin/release-6.1
 
 EMQXは設定ファイル形式として[HOCON](../../../../configuration/configuration.md#hocon-configuration-format)を使用しています。
 
@@ -25,11 +21,7 @@ EMQXは設定ファイル形式として[HOCON](../../../../configuration/config
       image: emqx/emqx:@EE_VERSION@
       imagePullPolicy: IfNotPresent
       config:
-<<<<<<< HEAD
-         # ポート1884でリッスンするTCPリスナー`test`を設定：
-=======
          # ポート1884で待ち受けるTCPリスナー`test`を設定します：
->>>>>>> origin/release-6.1
          data: |
             listeners.tcp.test {
                bind = "0.0.0.0:1884"
@@ -50,11 +42,7 @@ EMQXは設定ファイル形式として[HOCON](../../../../configuration/config
    `.spec.config.data`フィールドの内容は、EMQXコンテナに対して[`emqx.conf`設定ファイル](../../../../configuration/configuration.md#immutable-configuration-file)として提供されます。
    :::
 
-<<<<<<< HEAD
-2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Ready`であることを確認してください。準備完了までに時間がかかる場合があります。
-=======
 2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターのステータスを確認し、`STATUS`が`Ready`であることを確認してください。完了までに時間がかかる場合があります。
->>>>>>> origin/release-6.1
 
    ```bash
    $ kubectl get emqx emqx

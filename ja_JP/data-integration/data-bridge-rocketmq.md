@@ -12,40 +12,14 @@ Alibaba Cloudが提供するRocketMQサービスを利用する場合、本デ�
 
 ## 動作概要
 
-<<<<<<< HEAD
-RocketMQデータ統合はEMQXに標準搭載された機能であり、EMQXのリアルタイムデータキャプチャと送信能力とRocketMQの強力なメッセージキュー処理能力を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからRocketMQへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
-
-以下の図は、EMQXとRocketMQ間の典型的なデータ統合アーキテクチャを示しています。
-=======
 RocketMQデータ統合は、EMQXに標準搭載された機能であり、EMQXのリアルタイムデータキャプチャと送信機能とRocketMQの強力なメッセージキュー処理機能を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからRocketMQへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
 
 以下の図は、EMQXとRocketMQ間のデータ統合の典型的なアーキテクチャを示しています。
->>>>>>> origin/release-6.1
 
 ![EMQX Integration RocketMQ](./assets/emqx-integration-rocketmq.png)
 
 MQTTデータをRocketMQに取り込む流れは以下の通りです：
 
-<<<<<<< HEAD
-1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを通じてEMQXに正常に接続し、リアルタイムのMQTTデータをEMQXにパブリッシュします。EMQXがメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
-2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQXで定義されたルールにより処理されます。ルールは事前定義された条件に基づき、どのメッセージをRocketMQにルーティングするかを決定します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、ペイロードの追加コンテキストによる拡充などが適用されます。
-3. **RocketMQへのデータ取り込み**：ルールによる処理が完了すると、メッセージをRocketMQに転送するアクションがトリガーされます。処理済みデータはシームレスにRocketMQに書き込まれます。
-4. **データの保存と活用**：データがRocketMQに保存された後、企業はそのクエリ機能を活用して様々なユースケースに利用できます。例えば金融業界では、RocketMQを高信頼・高性能なメッセージキューとして利用し、決済端末や取引システムのデータを管理します。メッセージをデータ分析や規制プラットフォームに連携し、リスク管理、不正検知・防止、規制遵守などの要件を満たします。
-
-## 特長とメリット
-
-RocketMQとのデータ統合により、以下の特長と利点が得られます：
-
-- **信頼性の高いIoTデータメッセージ配信**：EMQXはMQTTメッセージを信頼性高くバッチ送信でき、IoTデバイスとRocketMQおよびアプリケーションシステムの統合を実現します。
-- **MQTTメッセージの変換**：ルールエンジンを利用し、EMQXはMQTTメッセージの抽出、フィルタリング、拡充、変換を行い、RocketMQへ送信します。
-- **クラウドネイティブな弾力的スケーリング**：EMQXとRocketMQは共にクラウドネイティブアーキテクチャ上に構築されており、Kubernetes（K8s）との親和性が高く、クラウドネイティブエコシステムと連携可能です。ビジネスの急速な成長に対応し、無限かつ弾力的にスケールします。
-- **柔軟なトピックマッピング**：RocketMQデータ統合はMQTTトピックとRocketMQトピックの柔軟なマッピングをサポートし、RocketMQメッセージ内のキー（Key）や値（Value）の設定を容易に行えます。
-- **高スループットシナリオでの処理能力**：RocketMQデータ統合は同期・非同期の書き込みモードをサポートし、シナリオに応じてレイテンシとスループットのバランスを柔軟に調整可能です。
-
-## はじめる前に
-
-本節では、RocketMQデータ統合の作成を始める前に必要な準備やRocketMQサーバーのセットアップ方法について説明します。
-=======
 1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを介してEMQXに正常に接続し、リアルタイムのMQTTデータをEMQXにパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
 2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQXで定義されたルールに従って処理されます。ルールは事前に定義された条件に基づき、RocketMQへルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、ペイロードへの追加コンテキスト付与などの処理が適用されます。
 3. **RocketMQへのデータ取り込み**：ルールによる処理が完了すると、メッセージをRocketMQに転送するアクションがトリガーされます。処理済みデータはシームレスにRocketMQに書き込まれます。
@@ -64,7 +38,6 @@ RocketMQとのデータ統合は、以下の特長と利点をビジネスにも
 ## はじめる前に
 
 このセクションでは、RocketMQデータ統合の作成を開始する前に必要な準備、特にRocketMQサーバーのセットアップ方法を説明します。
->>>>>>> origin/release-6.1
 
 ### 前提条件
 
@@ -73,11 +46,7 @@ RocketMQとのデータ統合は、以下の特長と利点をビジネスにも
 
 ### RocketMQのインストール
 
-<<<<<<< HEAD
-1. RocketMQをセットアップするためのdocker-composeファイル `rocketmq.yaml` を用意します。
-=======
 1. RocketMQをセットアップするためのdocker-composeファイル`rocketmq.yaml`を用意します。
->>>>>>> origin/release-6.1
 
 ```yaml
 version: '3.9'
@@ -162,46 +131,12 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 ::: tip
 
-<<<<<<< HEAD
-Linux環境では、`host.docker.internal` を実際のIPアドレスに変更してください。
-=======
 Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変更してください。
->>>>>>> origin/release-6.1
 
 :::
 
 ## コネクターの作成
 
-<<<<<<< HEAD
-本節では、SinkをRocketMQサーバーに接続するためのコネクター作成方法を示します。
-
-以下の手順はEMQXとRocketMQをローカルマシンで実行している場合を想定しています。リモートで実行している場合は設定を適宜調整してください。
-
-1. EMQXダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
-2. ページ右上の **Create** をクリックします。
-3. **Create Connector** ページで **RocketMQ** を選択し、**Next** をクリックします。
-4. **Configuration** ステップで以下を設定します：
-   - **Connector name**：コネクター名を入力します。英数字の組み合わせで例：`my_rocketmq`
-   - **Servers**：`127.0.0.1:9876` と入力します。
-   - **Namespace**：RocketMQサービスにネームスペースが設定されていなければ空欄のままにします。
-   - **AccessKey**、**SecretKey**、**Secret Token**：RocketMQサービスの設定に応じて空欄のままか適宜入力します。
-   - その他はデフォルトのままにします。
-5. 詳細設定（任意）：詳細は[Sinkの特長](./data-bridges.md#features-of-sink)を参照してください。
-6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがRocketMQサーバーに接続可能かテストできます。
-7. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**か**Create Rule**を選択可能です。ルール作成に進み、RocketMQへの転送やクライアントイベント記録を指定できます。詳細は[メッセージ保存用RocketMQ Sinkのルール作成](#create-a-rule-with-rocketmq-sink-for-message-storage)および[イベント記録用RocketMQ Sinkのルール作成](#create-a-rule-with-rocketmq-sink-for-events-recording)を参照してください。
-
-## メッセージ保存用RocketMQ Sinkのルール作成
-
-本節では、EMQXダッシュボードでソースMQTTトピック `t/#` からのメッセージを処理し、処理済みデータを設定済みSink経由でRocketMQトピック `TopicTest` に転送するルールの作成方法を示します。
-
-1. EMQXダッシュボードで **Integration** -> **Rules** をクリックします。
-
-2. ページ右上の **Create** をクリックします。
-
-3. ルールIDに `my_rule` と入力し、メッセージ保存用のルールとして以下のSQL文を **SQL Editor** に入力します。これはトピック `t/#` 配下のMQTTメッセージをRocketMQに保存することを意味します。
-
-   注意：独自のSQL文を指定する場合は、Sinkが必要とする全フィールドを `SELECT` 部分に含めてください。
-=======
 このセクションでは、SinkをRocketMQサーバーに接続するためのコネクター作成手順を示します。
 
 以下の手順は、EMQXとRocketMQをローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
@@ -230,7 +165,6 @@ Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変
 3. ルールIDに`my_rule`を入力し、**SQL Editor**に以下のステートメントを入力します。これはトピック`t/#`配下のMQTTメッセージをRocketMQに保存することを意味します。
 
    注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めていることを確認してください。
->>>>>>> origin/release-6.1
 
    ```sql
    SELECT 
@@ -241,32 +175,6 @@ Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変
 
    ::: tip
 
-<<<<<<< HEAD
-   初心者の方は **SQL Examples** と **Enable Test** をクリックしてSQLルールの学習・テストを行うことを推奨します。
-
-   :::
-
-4. + **Add Action** ボタンをクリックし、ルールでトリガーされるアクションを定義します。このアクションによりEMQXはルールで処理したデータをRocketMQに送信します。
-
-5. **Type of Action** ドロップダウンリストから `RocketMQ` を選択します。**Action** はデフォルトの `Create Action` のままにします。既に作成済みのSinkがあれば選択可能です。本例では新規Sinkを作成します。
-
-6. Sinkの名前を入力します。英数字の組み合わせにしてください。
-
-7. **Connector** ドロップダウンから先に作成した `my_rocketmq` を選択します。新規コネクターはドロップダウン横のボタンから作成可能です。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
-
-8. 以下のRocketMQ固有フィールドを入力します：
-
-   - **RocketMQ Topic**：メッセージを転送するトピック名を入力します。例：`TopicTest`
-   - **Tag**（任意）：RocketMQタグを動的に割り当てるテンプレートフィールドです。値にはルールSQLの結果を用いたプレースホルダー（例：`${msg_type}`、`${clientid}`）を含められます。空欄の場合はタグは付きません。
-   - **Key**（任意）：各メッセージにキーを割り当てるテンプレートフィールドです。メッセージのトレースや重複排除に有用です。例：`${device_id}`、`${username}`。こちらもルールSQLの結果を用いたプレースホルダーをサポートします。
-
-9. **Message Template** フィールドでRocketMQに送信するメッセージペイロードの構造をカスタマイズできます：
-
-   > デフォルトは空欄です。空欄の場合はメッセージ全体がRocketMQに転送されます。
-   >
-
-   テンプレートは有効な文字列であれば何でも構い、プレースホルダーを含められます。例：
-=======
    初心者の方は、**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールを学習・テストしてください。
 
    :::
@@ -290,40 +198,20 @@ Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変
    > デフォルトは空欄で、空欄の場合はメッセージ全体がRocketMQに転送されます。
 
    テンプレートは任意の有効な文字列で、プレースホルダーを含められます。例：
->>>>>>> origin/release-6.1
 
    - `${id}`, `${username}`, `${clientid}`, `${timestamp}`
    - `{"id": ${id}, "username": ${username}}`
 
-<<<<<<< HEAD
-   プレースホルダーはルールSQLで選択されたフィールドに基づき実行時に置換されます。
-
-10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
-
-11. **詳細設定（任意）**：詳細は[Sinkの特長](./data-bridges.md#features-of-sink)を参照してください。
-=======
    実際の値は文字列で、JSON形式のテンプレートも可能です。プレースホルダーはルールSQLで選択したフィールドで実行時に置換されます。
 
 10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
 11. **詳細設定（任意）**：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
->>>>>>> origin/release-6.1
 
 12. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがRocketMQサーバーに接続可能かテストできます。
 
 13. **Create**ボタンをクリックしてSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-<<<<<<< HEAD
-14. **Create Rule**ページで設定内容を確認し、**Save**ボタンをクリックしてルールを生成します。
-
-これでRocketMQ Sink用のルールが正常に作成されました。**Integration** -> **Rules** ページで新規ルールを確認できます。**Actions(Sink)** タブをクリックすると新しいRocketMQ Sinkが表示されます。
-
-また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/#` 配下のメッセージがルール `my_rule` により解析され、RocketMQに送信・保存されていることを確認できます。
-
-## イベント記録用RocketMQ Sinkのルール作成
-
-本節では、クライアントのオンライン/オフライン状態を記録し、イベントデータを設定済みSink経由でRocketMQトピック `TestTopic` に転送するルールの作成方法を示します。
-=======
 14. **Create Rule**ページで設定内容を確認し、**Save**をクリックしてルールを生成します。
 
 これでRocketMQ Sink用のルール作成が完了しました。**Integration** -> **Rules**ページで新規ルールを確認できます。**Actions(Sink)**タブをクリックすると、新しいRocketMQ Sinkが表示されます。
@@ -333,15 +221,10 @@ Linux環境の場合は、`host.docker.internal`を実際のIPアドレスに変
 ## イベント記録用RocketMQ Sinkのルール作成
 
 このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みSink経由でRocketMQトピック`TestTopic`に転送するルール作成方法を示します。
->>>>>>> origin/release-6.1
 
 ルール作成手順は[メッセージ保存用RocketMQ Sinkのルール作成](#create-a-rule-with-rocketmq-sink-for-message-storage)とほぼ同様ですが、SQLルール構文が異なります。
 
-<<<<<<< HEAD
-オンライン/オフライン状態記録用のSQLルール文は以下の通りです：
-=======
 オンライン／オフライン状態記録用のSQLルール文法は以下の通りです：
->>>>>>> origin/release-6.1
 
 ```sql
 SELECT
@@ -352,21 +235,13 @@ FROM
 
 ::: tip
 
-<<<<<<< HEAD
-利便性のため、オンライン/オフラインイベントの受け取りには `TopicTest` トピックを再利用します。
-=======
 便宜上、オンライン／オフラインイベントの受け取りに`TopicTest`トピックを再利用します。
->>>>>>> origin/release-6.1
 
 :::
 
 ## ルールのテスト
 
-<<<<<<< HEAD
-MQTTXを使い、トピック `t/1` にメッセージを送信してオンライン/オフラインイベントをトリガーします。
-=======
 MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
->>>>>>> origin/release-6.1
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
@@ -376,11 +251,7 @@ Sinkの稼働状況を確認すると、新規の受信メッセージと送信�
 
 データが `TopicTest` トピックに転送されているか確認してください。
 
-<<<<<<< HEAD
-以下のデータがコンシューマーにより出力されます。
-=======
 以下のようなデータがコンシューマーにより出力されます。
->>>>>>> origin/release-6.1
 
 ```bash
 ConsumeMessageThread_please_rename_unique_group_name_4_1 Receive New Messages: [MessageExt [brokerName=broker-a, queueId=3, storeSize=581, queueOffset=0, sysFlag=0, bornTimestamp=1679037578889, bornHost=/172.26.83.106:43920, storeTimestamp=1679037578891, storeHost=/172.26.83.106:10911, msgId=AC1A536A00002A9F000000000000060E, commitLogOffset=1550, bodyCRC=7414108, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='TopicTest', flag=0, properties={MIN_OFFSET=0, MAX_OFFSET=8, CONSUME_START_TIME=1679037605342, CLUSTER=DefaultCluster}, body=[...], transactionId='null'}]]

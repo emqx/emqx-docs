@@ -3,11 +3,7 @@
 このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。  
 リポジトリ：https://github.com/terry-xiaoyu/kotlin-sdk
 
-<<<<<<< HEAD
-## 環境セットアップ
-=======
 ## 環境構築
->>>>>>> origin/release-6.1
 
 ### Kotlin ツールチェーンのインストール
 
@@ -17,11 +13,7 @@
 - Kotlin 2.2以上
 - Gradle 9.2以上
 
-<<<<<<< HEAD
-これらのツールのインストールおよび管理には、[SDKMAN](https://sdkman.io/) の利用を推奨します。
-=======
 [SDKMAN](https://sdkman.io/) を使用すると、これらのツールを簡単にインストールおよび管理できます。
->>>>>>> origin/release-6.1
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -36,11 +28,7 @@ sdk install gradle 9.2.1
 
 EMQX ブローカーのインストールおよび起動については、[Getting Started](../../getting-started/getting-started.md) ガイドに従ってください。
 
-<<<<<<< HEAD
-## MCP サーバーのサンプルをダウンロードして実行
-=======
 ## MCP サーバーのサンプルをダウンロードして実行する
->>>>>>> origin/release-6.1
 
 サンプルプロジェクトをクローンします。
 
@@ -52,11 +40,7 @@ cd kotlin-mcp-server-demo
 このサンプルでは、以下の2つの MCP ツールを登録しています。
 
 - **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
-<<<<<<< HEAD
-- **Light control tool**：ライトのオン／オフ状態と明るさを制御します。
-=======
 - **Light control tool**：ライトのオン/オフ状態と明るさを制御します。
->>>>>>> origin/release-6.1
 
 ツール登録のコードはこちらで確認できます。  
 https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
@@ -65,11 +49,7 @@ https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a4575
 // Calculator tool を追加
 server.addTool(
     name = "calculator",
-<<<<<<< HEAD
-    description = "このツールは基本的な算術演算（加算、減算、乗算、除算）を実行できます。",
-=======
     description = "このツールは基本的な数学演算（加算、減算、乗算、除算）を実行できます。",
->>>>>>> origin/release-6.1
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("num1") {
@@ -82,30 +62,18 @@ server.addTool(
             }
             putJsonObject("op") {
                 put("type", JsonPrimitive("string"))
-<<<<<<< HEAD
-                put("description", JsonPrimitive("実行する演算子：+、-、*、/"))
-=======
                 put("description", JsonPrimitive("実行する演算子：+, -, *, /"))
->>>>>>> origin/release-6.1
             }
         },
         required = listOf("num1", "num2", "op"),
     ),
 ) { request : CallToolRequest ->
     val num1 = request.params.arguments?.get("num1")?.jsonPrimitive?.content?.toDoubleOrNull()
-<<<<<<< HEAD
-        ?: throw IllegalArgumentException("無効または不足している引数: num1")
-    val num2 = request.params.arguments?.get("num2")?.jsonPrimitive?.content?.toDoubleOrNull()
-        ?: throw IllegalArgumentException("無効または不足している引数: num2")
-    val op = request.params.arguments?.get("op")?.jsonPrimitive?.content?.firstOrNull()
-        ?: throw IllegalArgumentException("無効または不足している引数: op")
-=======
         ?: throw IllegalArgumentException("無効または欠落している引数: num1")
     val num2 = request.params.arguments?.get("num2")?.jsonPrimitive?.content?.toDoubleOrNull()
         ?: throw IllegalArgumentException("無効または欠落している引数: num2")
     val op = request.params.arguments?.get("op")?.jsonPrimitive?.content?.firstOrNull()
         ?: throw IllegalArgumentException("無効または欠落している引数: op")
->>>>>>> origin/release-6.1
     val x = num1.toDouble()
     val y = num2.toDouble()
     val result = when(op) {
@@ -123,11 +91,7 @@ server.addTool(
 // Light control tool を追加
 server.addTool(
     name = "set_light_brightness",
-<<<<<<< HEAD
-    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。'last_value'を設定すると前回の明るさに戻せます。これはライトが消えている状態から再度点灯させたい場合に便利です。",
-=======
     description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。明るさを 'last_value' に設定すると、前回の明るさに戻せます。これはライトがオフのときに再度オンにする場合に便利です。",
->>>>>>> origin/release-6.1
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
@@ -154,16 +118,6 @@ server.addTool(
 
 パラメーターの説明：
 
-<<<<<<< HEAD
-- **MQTT クライアントID**：`kt001`
-- **MCP サーバー名**：`demo/kotlin-mcp-server`
-
-## MCP クライアントでのテスト
-
-現時点で Kotlin SDK には MCP クライアントの実装は含まれていません。テストには Python SDK を使ってシンプルな MCP クライアントを作成できます。
-
-Python 環境をセットアップします。
-=======
 - **MQTT クライアント ID**：`kt001`
 - **MCP サーバー名**：`demo/kotlin-mcp-server`
 
@@ -172,7 +126,6 @@ Python 環境をセットアップします。
 現在、Kotlin SDK には MCP クライアントの実装がありません。テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
 
 Python 環境のセットアップ：
->>>>>>> origin/release-6.1
 
 ```bash
 uv init light_controller
@@ -182,11 +135,7 @@ uv add "mcp[cli]"
 source .venv/bin/activate
 ```
 
-<<<<<<< HEAD
-`light_controller.py` というファイルを作成し、以下の内容を記述してください。
-=======
 `light_controller.py` というファイルを作成し、以下の内容を記述します。
->>>>>>> origin/release-6.1
 
 ```bash
 # light_controller.py
@@ -199,11 +148,7 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-<<<<<<< HEAD
-    logger.info(f"{server_name} を発見しました。接続中・・・")
-=======
     logger.info(f"{server_name} を検出しました。接続しています...")
->>>>>>> origin/release-6.1
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
@@ -226,11 +171,7 @@ async def on_mcp_connect(client, server_name, connect_result):
                     arguments={"value": 50}
                 )
                 logger.info(
-<<<<<<< HEAD
-                    f"set_light_brightness(value=50) を呼び出しました。結果: {result}"
-=======
                     f"set_light_brightness(value=50) ツールを呼び出しました。結果: {result}"
->>>>>>> origin/release-6.1
                 )
 
 async def main():
@@ -246,28 +187,17 @@ async def main():
     ) as client:
         await client.start()
         while True:
-<<<<<<< HEAD
-            # MQTT クライアントがバックグラウンドで動作している間に他の処理をシミュレート
-=======
             # MQTT クライアントがバックグラウンドで動作している間、他の処理をシミュレート
->>>>>>> origin/release-6.1
             await anyio.sleep(20)
 
 if __name__ == "__main__":
     anyio.run(main)
 ```
 
-<<<<<<< HEAD
-この Python クライアントは、`demo/kotlin-mcp-server` という名前の MCP サーバーを自動検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します。
-
-```bash
-INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) を呼び出しました。結果: meta=None
-=======
 この Python クライアントは、`demo/kotlin-mcp-server` という MCP サーバーを自動検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します。
 
 ```bash
 INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) ツールを呼び出しました。結果: meta=None
->>>>>>> origin/release-6.1
                              content=[TextContent(type='text', text='ライトの明るさを 50% に設定しました',
                              annotations=None)] isError=False
 ```

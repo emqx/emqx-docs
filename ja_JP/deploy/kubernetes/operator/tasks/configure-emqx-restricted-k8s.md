@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-# 制限付きアクセス環境での k8s 上への EMQX クラスターのデプロイ
-
-ここでは、k8s クラスターがインターネットにアクセスできず、ユーザーに `ClusterRole` の作成および使用権限がないことを前提としています。
-
-+ `emqx-operator` と `emqx` は同じネームスペースにインストールされます
-+ Cert manager はクラスター全体または `emqx-operator` と同じネームスペースに存在する可能性があります
-+ `emqx-operator` はプライベートな Docker レジストリを使用するように設定されており、`emqx` はカスタムの `securityContext` を使用するように設定されています
-
-## タスクの目的
-
-- 必要なイメージをプライベート Docker レジストリにプッシュする
-- `cert-manager` のデフォルトパラメータをプライベートレジストリ使用に上書きする
-- EMQX Operator の CRD を手動でインストールする
-- `emqx-operator` のデフォルトパラメータをプライベートレジストリ、単一ネームスペース、カスタム `securityContext`、および webhook 無効化に上書きする
-- EMQX にカスタム `securityContext` を使用する
-
-## 必要な Docker イメージをプライベート Docker レジストリにプッシュする
-=======
 # k8sでアクセス制限付きEMQXクラスターをデプロイする
 
 ここでは、k8sクラスターがインターネットにアクセスできず、ユーザーが`ClusterRole`の作成および使用権限を持っていないことを前提としています。
@@ -34,7 +15,6 @@
 - EMQXにカスタム`securityContext`を使用する
 
 ## 必要なDockerイメージをプライベートDockerレジストリにプッシュする
->>>>>>> origin/release-6.1
 
 ```bash
 export CERT_MANAGER_VERSION='v1.16.2'
@@ -66,15 +46,9 @@ pull_retag_push "emqx/emqx-enterprise:$EMQX_VERSION" "$REGISTRY/emqx/emqx-enterp
 pull_retag_push "emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION" "$REGISTRY/emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION"
 ```
 
-<<<<<<< HEAD
-## Cert-Manager のデプロイ
-
-cert-manager がクラスターにインストール済みの場合はこのステップをスキップしてください。
-=======
 ## Cert-Managerのデプロイ
 
 クラスターにcert-managerがインストールされている場合はこのステップをスキップしてください。
->>>>>>> origin/release-6.1
 
 必要に応じてネームスペース名を更新してください。
 
@@ -97,33 +71,19 @@ helm upgrade --install cert-manager jetstack/cert-manager \
    --set startupapicheck.image.tag=$CERT_MANAGER_VERSION
 ```
 
-<<<<<<< HEAD
-## EMQX Operator のデプロイ
-
-### リリースアセットから CRD を手動でデプロイ
-=======
 ## EMQX Operatorのデプロイ
 
 ### リリースアセットからCRDを手動でデプロイ
->>>>>>> origin/release-6.1
 
 ```bash
 kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download/$EMQX_OPERATOR_VERSION/crds.yaml
 ```
 
-<<<<<<< HEAD
-### Emqx-Operator のデプロイ
-
-cert-manager がクラスター全体にインストール済みの場合は `--set cert-manager.enable=false` を追加してください。
-
-この例では `podSecurityContext` と `containerSecurityContext` にデフォルト値が含まれています。必要に応じて上書きしてください。
-=======
 ### Emqx-Operatorのデプロイ
 
 cert-managerがすでにクラスター全体にインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
 
 この例では`podSecurityContext`と`containerSecurityContext`はデフォルト値を含みます。必要に応じて上書きしてください。
->>>>>>> origin/release-6.1
 
 ```bash
 helm repo add emqx https://repos.emqx.io/charts
@@ -140,25 +100,15 @@ helm upgrade --install emqx-operator emqx/emqx-operator \
   --set image.tag=$EMQX_OPERATOR_VERSION
 ```
 
-<<<<<<< HEAD
-emqx-operator が起動して稼働していることを確認してください：
-=======
 emqx-operatorが起動して正常に稼働していることを確認してください：
->>>>>>> origin/release-6.1
 
 ```bash
 kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-manager"
 ```
 
-<<<<<<< HEAD
-## EMQX クラスターの設定
-
-1. 以下の内容を YAML ファイルとして保存し、`kubectl apply` コマンドでデプロイします：
-=======
 ## EMQXクラスターの設定
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします：
->>>>>>> origin/release-6.1
 
    ```bash
    apiVersion: apps.emqx.io/v2beta1
@@ -175,11 +125,7 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
          }
    ```
 
-<<<<<<< HEAD
-2. EMQX クラスターが準備完了になるまで待ちます。`kubectl get` コマンドで EMQX クラスターのステータスを確認し、`STATUS` が `Running` であることを確認してください。準備完了までに時間がかかる場合があります。
-=======
 2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターのステータスを確認できます。`STATUS`が`Running`になっていることを確認してください。完了までに時間がかかる場合があります。
->>>>>>> origin/release-6.1
 
    ```bash
    $ kubectl get emqx emqx

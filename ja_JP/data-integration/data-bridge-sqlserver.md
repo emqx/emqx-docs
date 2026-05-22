@@ -1,14 +1,8 @@
 # Microsoft SQL Server への MQTT データ取り込み
 
-<<<<<<< HEAD
-[SQL Server](https://www.microsoft.com/en-us/sql-server/) は、企業や組織の規模や種類を問わず広く利用されている主要な商用リレーショナルデータベースソリューションの一つです。EMQX は SQL Server との統合をサポートしており、MQTT メッセージやクライアントイベントを SQL Server に保存することが可能です。これにより、複雑なデータパイプラインや分析プロセスの構築、データ管理・分析、デバイス接続管理、さらには ERP、CRM、BI などの他の企業システムとの統合が容易になります。
-
-本ページでは、EMQX と Microsoft SQL Server 間のデータ統合について詳細に解説し、データ統合の作成および検証方法を実践的に説明します。
-=======
 [SQL Server](https://www.microsoft.com/en-us/sql-server/)は、企業や組織の規模や種類を問わず広く利用されている主要なリレーショナル商用データベースソリューションの一つです。EMQXはSQL Serverとの連携をサポートしており、MQTTメッセージやクライアントイベントをSQL Serverに保存できます。これにより、複雑なデータパイプラインや分析処理を構築し、データ管理・分析やデバイス接続管理、ERP、CRM、BIなどの他の企業システムとの統合が可能になります。
 
 本ページでは、EMQXとMicrosoft SQL Server間のデータ統合について詳細に解説し、データ統合の作成および検証手順を実践的に説明します。
->>>>>>> origin/release-6.1
 
 ::: tip
 
@@ -18,20 +12,6 @@ Microsoft SQL Server とのデータ統合は EMQX Enterprise 5.0.3 以降でサ
 
 ## 動作概要
 
-<<<<<<< HEAD
-Microsoft SQL Server とのデータ統合は EMQX の標準機能として提供されており、EMQX のデバイス接続およびメッセージ送受信機能と Microsoft SQL Server の強力なデータ保存機能を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントと Sink を利用して、MQTT メッセージやクライアントイベントを Microsoft SQL Server に保存できます。さらに、イベントをトリガーとして Microsoft SQL Server 内のデータ更新や削除を行うことも可能で、デバイスのオンライン状態や接続履歴の記録などに活用できます。この統合により、EMQX から SQL Server へのデータ取り込みが簡素化され、複雑なコーディングなしでデータの保存・管理が実現します。
-
-以下の図は、EMQX と SQL Server 間の典型的なデータ統合アーキテクチャを示しています。
-
-![EMQX Integration SQL Server](./assets/emqx-integration-sql_server.png)
-
-Microsoft SQL Server への MQTT データ取り込みは以下のように動作します：
-
-1. **メッセージのパブリッシュと受信**：産業用 IoT デバイスは MQTT プロトコルを介して EMQX に正常に接続し、機械、センサー、製造ラインの稼働状態や計測値、トリガーイベントに基づくリアルタイム MQTT データを EMQX にパブリッシュします。EMQX はこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
-2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQX に定義されたルールで処理されます。ルールは事前定義された条件に基づき、Microsoft SQL Server にルーティングすべきメッセージを判定します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、ペイロードの付加情報による拡充などの処理が適用されます。
-3. **SQL Server へのデータ取り込み**：ルールはメッセージの Microsoft SQL Server への書き込みをトリガーします。SQL テンプレートを活用してルール処理結果からデータを抽出し、SQL を構築して SQL Server に送信・実行します。これにより、メッセージの特定フィールドをデータベースの対応するテーブル・カラムに書き込んだり更新したりできます。
-4. **データの保存と活用**：Microsoft SQL Server にデータが保存された後、企業はそのクエリ機能を活用して様々なユースケースに対応できます。
-=======
 Microsoft SQL Serverとのデータ統合はEMQXの標準機能であり、EMQXのデバイス接続およびメッセージ送受信機能とMicrosoft SQL Serverの強力なデータ保存機能を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントとSinkを利用して、MQTTメッセージやクライアントイベントをMicrosoft SQL Serverに保存できます。さらに、イベントによりMicrosoft SQL Server内のデータの更新や削除をトリガーし、デバイスのオンライン状態や接続履歴などの情報を記録可能です。この統合により、EMQXからSQL Serverへのデータ取り込みが簡素化され、複雑なコーディングを必要としません。
 
 以下の図は、EMQXとSQL Server間の典型的なデータ統合アーキテクチャを示しています。
@@ -44,22 +24,9 @@ Microsoft SQL ServerへのMQTTデータ取り込みは以下のように動作�
 2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQXに定義されたルールで処理されます。ルールは事前定義された条件に基づき、どのメッセージをMicrosoft SQL Serverにルーティングするかを判断します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などの変換が適用されます。
 3. **SQL Serverへのデータ取り込み**：ルールはメッセージをMicrosoft SQL Serverに書き込む処理をトリガーします。SQLテンプレートを用いて、ルール処理結果からデータを抽出しSQLを構築してSQL Serverに送信し、メッセージの特定フィールドを対応するデータベースのテーブルやカラムに書き込んだり更新したりします。
 4. **データ保存と活用**：データがMicrosoft SQL Serverに保存されることで、企業はそのクエリ機能を活用し、多様なユースケースに対応できます。
->>>>>>> origin/release-6.1
 
 ## 特長と利点
 
-<<<<<<< HEAD
-Microsoft SQL Server とのデータ統合は、効率的なデータ送信・保存・活用を実現するために以下の特長とメリットを備えています：
-
-- **リアルタイムデータストリーミング**：EMQX はリアルタイムデータストリームの処理に最適化されており、ソースシステムから Microsoft SQL Server への効率的かつ信頼性の高いデータ送信を実現します。即時の洞察やアクションが必要なユースケースに最適です。
-- **高性能かつスケーラブル**：EMQX と Microsoft SQL Server は共に拡張性と信頼性を備え、大規模な IoT データの処理に対応可能です。需要の増加に応じて水平・垂直方向の拡張を継続的に行え、IoT アプリケーションの継続性と信頼性を確保します。
-- **柔軟なデータ変換**：EMQX の強力な SQL ベースのルールエンジンにより、Microsoft SQL Server に保存する前にデータの前処理が可能です。フィルタリング、ルーティング、集約、拡充など多様なデータ変換機能をサポートし、ニーズに応じたデータ整形を実現します。
-- **高度な分析機能**：Microsoft SQL Server は Analysis Services による多次元データモデル構築など強力な分析機能を提供し、複雑なデータ分析やデータマイニングを支援します。Reporting Services によりレポート作成・公開も可能で、IoT データの洞察や分析結果を関係者に提示できます。
-
-## はじめる前に
-
-本セクションでは、Microsoft SQL Server とのデータ統合を作成する前に必要な準備として、ODBC ドライバーのインストールと設定、Microsoft SQL Server のインストールと接続、データベースおよびデータテーブルの作成方法を説明します。
-=======
 Microsoft SQL Serverとのデータ統合は、効率的なデータ送信、保存、活用を実現するために以下の特長と利点を備えています。
 
 - **リアルタイムデータストリーミング**：EMQXはリアルタイムデータストリーム処理に最適化されており、ソースシステムからMicrosoft SQL Serverへの効率的かつ信頼性の高いデータ送信を実現します。リアルタイムのデータ取得と分析が可能で、即時の洞察やアクションが必要なユースケースに適しています。
@@ -70,7 +37,6 @@ Microsoft SQL Serverとのデータ統合は、効率的なデータ送信、保
 ## はじめる前に
 
 本節では、Microsoft SQL Serverデータ統合の作成を始める前に必要な準備について説明します。ODBCドライバーのインストールと設定、Microsoft SQL Serverのインストールと接続、データベースおよびデータテーブルの作成方法を解説します。
->>>>>>> origin/release-6.1
 
 ### 前提条件
 
@@ -79,40 +45,12 @@ Microsoft SQL Serverとのデータ統合は、効率的なデータ送信、保
 
 ### ODBC ドライバーのインストールと設定
 
-<<<<<<< HEAD
-Microsoft SQL Server データベースにアクセスするために ODBC ドライバーの設定が必要です。ODBC ドライバーとしては、FreeTDS または Microsoft 提供の msodbcsql18 ドライバーを使用できます。
-
-EMQX は `odbcinst.ini` 設定で指定された DSN 名を参照してドライバーの動的ライブラリのパスを特定します。以下の例では DSN 名を `ms-sql` としています。詳細は [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties) を参照してください。
-=======
 Microsoft SQL ServerデータベースにアクセスするためにODBCドライバーを設定する必要があります。ODBCドライバーとしては、FreeTDSまたはMicrosoftが提供するmsodbcsql18ドライバーのいずれかを使用できます。
 
 EMQXは`odbcinst.ini`設定に指定されたDSN名を使ってドライバーの動的ライブラリのパスを判別します。以下の例ではDSN名を`ms-sql`としています。詳細は[接続プロパティ](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties)を参照してください。
->>>>>>> origin/release-6.1
 
 ::: tip 補足
 
-<<<<<<< HEAD
-DSN 名は任意に設定可能ですが、英字のみの使用を推奨します。また、DSN 名は大文字小文字を区別します。
-
-:::
-
-#### msodbcsql18 ドライバーのインストールと設定
-
-<!-- TODO: コマンドや Dockerfile のタグバージョンを更新してください -->
-
-msodbcsql18 ドライバーを ODBC ドライバーとして使用する場合は、Microsoft の公式手順を参照してください：
-
-- [Microsoft ODBC ドライバーのインストール（Linux）](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
-- [Microsoft ODBC ドライバーのインストール（macOS）](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
-
-Microsoft の EULA 条項により、EMQX が提供する Docker イメージには msodbcsql18 ドライバーは含まれていません。Docker や Kubernetes で使用する場合は、[EMQX Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) が提供するイメージをベースに ODBC ドライバーをインストールした新しいイメージを作成する必要があります。新しいイメージを使用することは、[Microsoft SQL Server EULA](https://go.microsoft.com/fwlink/?linkid=857698) に同意したことを意味します。
-
-以下の手順で新しいイメージをビルドします：
-
-1. 以下の Dockerfile を使用して新しいイメージをビルドします。
-
-   この例のベースイメージバージョンは `emqx/emqx-enterprise:5.8.1` です。必要な EMQX Enterprise バージョンに応じてビルドするか、最新バージョンの `emqx/emqx-enterprise:latest` を使用してください。
-=======
 DSN 名は任意に設定可能ですが、英字のみの使用を推奨します。また、DSN 名は大文字・小文字を区別します。
 
 :::
@@ -133,7 +71,6 @@ MicrosoftのEULA条項により、EMQXが提供するDockerイメージにはmso
 1. 以下のDockerfileを用いて新しいイメージをビルドします。
 
    例のベースイメージバージョンは`emqx/emqx-enterprise:5.8.1`です。必要なEMQX Enterpriseバージョンに応じてビルドするか、最新の`emqx/emqx-enterprise:latest`を使用してください。
->>>>>>> origin/release-6.1
 
 ```dockerfile
 FROM emqx/emqx-enterprise:5.8.1
@@ -153,29 +90,12 @@ RUN apt-get -qq update && apt-get install -yqq curl gpg && \
 USER emqx
 ```
 
-<<<<<<< HEAD
-2. コマンド `docker build -t emqx/emqx-enterprise:5.8.1-msodbc` を実行して新しいイメージをビルドします。
-
-3. ビルド後、`docker image ls` でローカルイメージ一覧を確認できます。イメージのアップロードや保存も可能です。
-=======
 2. `docker build -t emqx/emqx-enterprise:5.8.1-msodbc`コマンドでイメージをビルドします。
 
 3. ビルド後、`docker image ls`でローカルイメージ一覧を確認できます。必要に応じてイメージをアップロードまたは保存してください。
->>>>>>> origin/release-6.1
 
 ::: tip 補足
 
-<<<<<<< HEAD
-この例で msodbcsql18 ドライバーをインストールした場合、`odbcinst.ini` の DSN 名は `ms-sql` になっていることを確認してください。必要に応じて DSN 名は変更可能です。
-
-:::
-
-#### FreeTDS を ODBC ドライバーとしてインストール・設定
-
-ここでは主流のディストリビューションで FreeTDS を ODBC ドライバーとしてインストール・設定する方法を紹介します。
-
-MacOS での FreeTDS ODBC ドライバーのインストールと設定：
-=======
 この例でmsodbcsql18ドライバーをインストールした場合、`odbcinst.ini`のDSN名は`ms-sql`になっていることを確認してください。必要に応じてDSN名を変更可能です。
 
 :::
@@ -185,7 +105,6 @@ MacOS での FreeTDS ODBC ドライバーのインストールと設定：
 ここでは主要なディストリビューションでのFreeTDSのインストールと設定例を示します。
 
 MacOSでのFreeTDS ODBCドライバーのインストールと設定例：
->>>>>>> origin/release-6.1
 
 ```bash
 $ brew install unixodbc freetds
@@ -198,11 +117,7 @@ Setup       = /usr/local/lib/libtdsodbc.so
 FileUsage   = 1
 ```
 
-<<<<<<< HEAD
-CentOS での FreeTDS ODBC ドライバーのインストールと設定：
-=======
 CentOSでのFreeTDS ODBCドライバーのインストールと設定例：
->>>>>>> origin/release-6.1
 
 ```bash
 $ yum install unixODBC unixODBC-devel freetds freetds-devel perl-DBD-ODBC perl-local-lib
@@ -217,11 +132,7 @@ Setup64     = /usr/lib64/libtdsS.so.2
 FileUsage   = 1
 ```
 
-<<<<<<< HEAD
-Ubuntu での FreeTDS ODBC ドライバーのインストールと設定（Ubuntu 20.04 を例に、他バージョンは公式 ODBC ドキュメントを参照）：
-=======
 UbuntuでのFreeTDS ODBCドライバーのインストールと設定例（Ubuntu20.04の場合。他バージョンは公式ODBCドキュメントを参照）：
->>>>>>> origin/release-6.1
 
 ```bash
 $ apt-get install unixodbc unixodbc-dev tdsodbc freetds-bin freetds-common freetds-dev libdbd-odbc-perl liblocal-lib-perl
@@ -236,19 +147,11 @@ FileUsage   = 1
 
 ### Microsoft SQL Server のインストールと接続
 
-<<<<<<< HEAD
-このセクションでは、Linux/MacOS 上で Docker イメージを使って Microsoft SQL Server 2019 を起動し、`sqlcmd` で接続する方法を説明します。その他のインストール方法は [Microsoft SQL Server インストールガイド](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16) を参照してください。
-
-1. Docker で Microsoft SQL Server をインストールし、以下のコマンドで Docker イメージを起動します。パスワードは `mqtt_public1` を使用します。Microsoft SQL Server のパスワードポリシーは [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity) を参照してください。
-
-   注意：環境変数 `ACCEPT_EULA=Y` を設定して Docker コンテナを起動することで、Microsoft EULA の条件に同意したことになります。詳細は [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698) をご覧ください。
-=======
 本節では、Dockerイメージを用いてLinux/MacOS上でMicrosoft SQL Server 2019を起動し、`sqlcmd`で接続する方法を説明します。その他のインストール方法は[Microsoft SQL Serverインストールガイド](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16)を参照してください。
 
 1. DockerでMicrosoft SQL Serverをインストールし、以下のコマンドで起動します。パスワードは`mqtt_public1`を使用します。Microsoft SQL Serverのパスワードポリシーは[パスワードの複雑さ](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)を参照してください。
 
    注意：環境変数`ACCEPT_EULA=Y`を指定してDockerコンテナを起動することで、MicrosoftのEULAに同意したことになります。詳細は[エンドユーザー使用許諾契約](https://go.microsoft.com/fwlink/?linkid=857698)を参照してください。
->>>>>>> origin/release-6.1
 
    ```bash
    # Microsoft SQL Server Docker イメージを起動し、パスワードを `mqtt_public1` に設定
@@ -261,11 +164,7 @@ FileUsage   = 1
    docker exec -it sqlserver bash
    ```
 
-<<<<<<< HEAD
-3. コンテナ内で設定したパスワードを入力してサーバーに接続します。パスワード入力時は文字が表示されません。入力後はそのまま `Enter` を押してください。
-=======
 3. コンテナ内で設定したパスワードを使ってサーバーに接続します。パスワード入力時は文字が表示されません。入力後はEnterを押してください。
->>>>>>> origin/release-6.1
 
    ```bash
    $ /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P mqtt_public1 -N -C
@@ -274,27 +173,6 @@ FileUsage   = 1
 
    ::: tip
 
-<<<<<<< HEAD
-   Microsoft が提供する Microsoft SQL Server コンテナには `mssql-tools18` パッケージがインストールされていますが、実行ファイルは `$PATH` に含まれていません。そのため、`sqlcmd` を実行する際はパスを指定する必要があります。本例の Docker 環境では `/opt` 配下にあります。
-
-   `mssql-tools18` の使い方は [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16) を参照してください。
-
-   :::
-
-これで Microsoft SQL Server 2022 インスタンスのデプロイと接続が完了しました。
-
-### データベースとデータテーブルの作成
-
-前節で作成した接続を利用し、以下の SQL 文でデータテーブルを作成します。
-
-::: tip
-
-ODBC インターフェースの制限により、CJK 文字や絵文字などの Unicode 文字を挿入する場合は、挿入前にバイナリ形式に変換する関数を使用する必要があります。テーブル作成時には Unicode 文字を格納するカラムの型を `NVARCHAR` に設定してください。
-
-:::
-
-- MQTT メッセージを保存するためのデータテーブルを作成します。メッセージ ID、トピック、QoS、ペイロード、パブリッシュ時刻を含みます。
-=======
    Microsoftが提供するMicrosoft SQL Serverコンテナには`mssql-tools18`パッケージがインストールされていますが、実行ファイルは`$PATH`に含まれていません。そのため、`sqlcmd`を使用する際は実行ファイルのパスを指定する必要があります。今回のDocker環境では`/opt`配下にあります。
 
    `mssql-tools18`の使い方の詳細は[sqlcmdユーティリティ](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)を参照してください。
@@ -314,7 +192,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 :::
 
 - MQTTメッセージを保存するためのデータテーブルを作成します。メッセージID、トピック、QoS、ペイロード、パブリッシュ時間を含みます。
->>>>>>> origin/release-6.1
 
   ```sql
   CREATE TABLE dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
@@ -326,11 +203,7 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
   GO
   ```
 
-<<<<<<< HEAD
-- クライアントのオンライン／オフライン状態を記録するためのデータテーブルを作成します。
-=======
 - クライアントのオンライン/オフライン状態を記録するデータテーブルを作成します。
->>>>>>> origin/release-6.1
 
   ```sql
   CREATE TABLE dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
@@ -342,36 +215,16 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
 ## コネクターの作成
 
-<<<<<<< HEAD
-このセクションでは、Sink を Microsoft SQL Server に接続するためのコネクターの作成方法を示します。
-
-以下の手順は、EMQX と Microsoft SQL Server の両方をローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
-
-1. EMQX ダッシュボードにアクセスし、**Integration** -> **Connectors** をクリックします。
-=======
 本節では、SinkをMicrosoft SQL Serverに接続するためのコネクターの作成方法を説明します。
 
 以下の手順は、EMQXとMicrosoft SQL Serverの両方をローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
 
 1. EMQX ダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
->>>>>>> origin/release-6.1
 
 2. ページ右上の **Create** をクリックします。
 
 3. **Create Connector** ページで **Microsoft SQL Server** を選択し、**Next** をクリックします。
 
-<<<<<<< HEAD
-4. **Configuration** ステップで以下の情報を設定します：
-   - **Connector name**：コネクター名を入力します。英数字の組み合わせで、例：`my_sqlserver`
-   
-   - **Server Host**：`127.0.0.1:1433` または Microsoft SQL Server がリモートの場合はその URL を入力します。
-   
-     ::: tip
-   
-     Named Instance を使用している場合は、インスタンスが稼働するポート番号を明示的に指定する必要があります。ドライバーは指定ポートでインスタンスに接続し、EMQX はヘルスチェック時にインスタンス名を推測します。
-   
-     Server Host にインスタンス名のみ（例：`MYSERVER\SQL2022`）を指定しても正しいインスタンスに接続できる保証はありません。必ずポート設定を確認してください。
-=======
 4. **Configuration**ステップで以下の情報を設定します：
    - **Connector name**：コネクター名を入力します。英大文字・小文字と数字の組み合わせが望ましく、例：`my_sqlserver`
    
@@ -382,7 +235,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
      Named Instanceを使用している場合は、インスタンスが動作するポート番号を明示的に指定する必要があります。ドライバーは指定ポートでインスタンスに接続し、ヘルスチェック時にEMQXがインスタンス名を推測します。
    
      Server Host欄にインスタンス名のみ（例：`MYSERVER\SQL2022`）を指定しても正しいインスタンスに接続できる保証はありません。ポート設定を必ず確認してください。
->>>>>>> origin/release-6.1
    
      :::
    
@@ -390,29 +242,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
    
    - **Username**：`sa` を入力します。
    
-<<<<<<< HEAD
-   - **Password**：設定したパスワード `mqtt_public1` または実際のパスワードを入力します。
-   
-   - **SQL Server Driver Name**：`ms-sql` を入力します。これは `odbcinst.ini` で設定した DSN 名です。
-   
-5. 高度な設定（任意）：詳細は [Features of Sink](./data-bridges.md#features-of-sink) を参照してください。
-
-6. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが Microsoft SQL Server に接続できるかテストできます。
-
-7. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックして Sink を利用したルールの作成に進めます。ルール作成の詳細は [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) および [Create a Rule with Microsoft SQL Server Sink for Events Recording](#create-a-rule-with-microsoft-sql-server-sink-for-events-recording) を参照してください。
-
-## Microsoft SQL Server Sink を使ったメッセージ保存ルールの作成
-
-このセクションでは、ソース MQTT トピック `t/#` からのメッセージを処理し、処理済みデータを設定済みの Sink 経由で Microsoft SQL Server のテーブル `dbo.t_mqtt_msg` に保存するルールをダッシュボードで作成する方法を示します。
-
-1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
-
-2. ページ右上の **Create** をクリックします。
-
-3. ルール ID に `my_rule` を入力します。メッセージ保存用ルールを作成するため、**SQL Editor** に以下のステートメントを入力します。これはトピック `t/#` 以下の MQTT メッセージを Microsoft SQL Server に保存することを意味します。
-
-   注意：独自の SQL 構文を指定する場合は、Sink が必要とするすべてのフィールドを `SELECT` 部分に含めてください。
-=======
    - **Password**：事前設定したパスワード`mqtt_public1`を入力、または実際のパスワードを使用します。
    
    - **SQL Server Driver Name**：`ms-sql` を入力します。これは `odbcinst.ini` で設定した DSN 名です。
@@ -434,7 +263,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 3. ルールIDに`my_rule`を入力します。メッセージ保存用ルールを作成するため、**SQL Editor**に以下の文を入力します。これはトピック`t/#`配下のMQTTメッセージをMicrosoft SQL Serverに保存することを意味します。
 
    注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
->>>>>>> origin/release-6.1
 
    ```sql
    SELECT
@@ -445,15 +273,9 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
    ::: tip
 
-<<<<<<< HEAD
-   ODBC インターフェースの制限により、CJK 文字や絵文字などの Unicode 文字を挿入する場合は、挿入前にバイナリ形式に変換する関数を使用してください。
-
-   ルール作成時に組み込み関数を使って文字列を UTF-16 リトルエンディアンエンコードのバイナリ文字列に変換できます。例：
-=======
    ODBCインターフェースの制約により、CJK文字やEmojiなどのUnicode文字を書き込む場合は、挿入前にバイナリ形式に変換する関数を使用する必要があります。
 
    ルール作成時に組み込み関数を使って文字列をUTF-16リトルエンディアンエンコードのバイナリ文字列に変換可能です。例：
->>>>>>> origin/release-6.1
 
    ```sql
    SELECT
@@ -467,23 +289,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
    ::: tip
 
-<<<<<<< HEAD
-   初心者の方は **SQL Examples** と **Enable Test** をクリックして SQL ルールの学習とテストを行ってください。
-
-   :::
-
-4. + **Add Action** ボタンをクリックして、ルールによってトリガーされるアクションを定義します。このアクションにより、EMQX はルール処理済みデータを Microsoft SQL Server に送信します。
-
-5. **Type of Action** ドロップダウンリストから `Microsoft SQL Server` を選択します。**Action** ドロップダウンはデフォルトの `Create Action` のままにします。既に作成済みの Microsoft SQL Server Sink を選択することもできますが、ここでは新規 Sink を作成します。
-
-6. Sink 名を入力します。英数字の組み合わせで指定してください。
-
-7. **Connector** ドロップダウンから先に作成した `my_sqlserver` を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは [Create a Connector](#create-a-connector) を参照してください。
-
-8. メッセージ保存用の **SQL Template** を以下の SQL 文で設定します。
-
-   注意：これは前処理済みの SQL なので、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
-=======
    初心者の方は**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールを学習・テストできます。
 
    :::
@@ -499,7 +304,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 8. メッセージ保存用の **SQL Template** を以下の SQL 文で設定します。
 
    注意：これは前処理済みSQLのため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
->>>>>>> origin/release-6.1
 
    ```sql
    insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
@@ -507,15 +311,9 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
    ::: tip
 
-<<<<<<< HEAD
-   ODBC インターフェースの制限により、CJK 文字や絵文字などの Unicode 文字を挿入する場合は、挿入前にバイナリ形式に変換する関数を使用してください。
-
-   Microsoft SQL Server 側で対応するバイナリデータを文字列に変換するには、SQL テンプレート内で `CONVERT` 関数を使用できます。
-=======
    ODBCインターフェースの制約により、CJK文字やEmojiなどのUnicode文字を書き込む場合は、挿入前にバイナリ形式に変換する関数を使用する必要があります。
 
    SQL テンプレート内で `CONVERT` 関数を使い、Microsoft SQL Server 側で対応するバイナリデータを文字列に変換可能です。
->>>>>>> origin/release-6.1
 
    ```sql
    insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, CONVERT(NVARCHAR(100), ${payload}) )
@@ -523,19 +321,11 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
    :::
 
-<<<<<<< HEAD
-   SQL テンプレート内でプレースホルダー変数が未定義の場合、**SQL template** 上部の **Undefined Vars as Null** スイッチでルールエンジンの動作を切り替えられます：
-
-   - **Disabled**（デフォルト）：ルールエンジンは文字列 `undefined` をデータベースに挿入します。
-
-   - **Enabled**：変数が未定義の場合、ルールエンジンは `NULL` を挿入します。
-=======
    SQLテンプレート内でプレースホルダー変数が未定義の場合、**SQL template**上部の**Undefined Vars as Null**スイッチでルールエンジンの動作を切り替えられます：
 
    - **Disabled**（デフォルト）：ルールエンジンは文字列`undefined`をデータベースに挿入します。
 
    - **Enabled**：変数が未定義の場合、`NULL`を挿入します。
->>>>>>> origin/release-6.1
 
      ::: tip
 
@@ -543,27 +333,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 
      :::
 
-<<<<<<< HEAD
-9. フォールバックアクション（任意）：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は [Fallback Actions](./data-bridges.md#fallback-actions) を参照してください。
-
-10. 高度な設定（任意）：詳細は [Features of Sink](./data-bridges.md#features-of-sink) を参照してください。
-
-11. **Create** をクリックする前に、**Test Connectivity** をクリックして Sink が Microsoft SQL Server に接続できるかテストできます。
-
-12. **Create** ボタンをクリックして Sink の設定を完了します。新しい Sink が **Action Outputs** に追加されます。
-
-13. **Create Rule** ページに戻り、設定内容を確認して **Create** ボタンをクリックし、ルールを生成します。
-
-これで Microsoft SQL Server Sink 用のルールが正常に作成されました。**Integration** -> **Rules** ページで新規作成したルールを確認できます。**Actions(Sink)** タブをクリックすると、新しい Microsoft SQL Server Sink が表示されます。
-
-また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/#` 以下のメッセージがルール `my_rule` によって解析され Microsoft SQL Server に送信・保存される様子を確認できます。
-
-## Microsoft SQL Server Sink を使ったイベント記録ルールの作成
-
-このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済み Sink 経由で Microsoft SQL Server のテーブル `dbo.t_mqtt_events` に保存するルールの作成方法を示します。
-
-手順は [Microsoft SQL Server Sink を使ったメッセージ保存ルールの作成](#microsoft-sql-server-sink-を使ったメッセージ保存ルールの作成) とほぼ同様ですが、SQL テンプレートと SQL ルール文が異なります。
-=======
 9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
 10. 詳細設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
@@ -583,7 +352,6 @@ ODBCインターフェースの制約により、CJK文字やEmojiなどのUnico
 本節では、クライアントのオンライン/オフライン状態を記録し、イベントデータを設定済みSink経由でMicrosoft SQL Serverのテーブル`dbo.t_mqtt_events`に保存するルールの作成方法を説明します。
 
 手順は[メッセージ保存用Microsoft SQL Server Sink付きルールの作成](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage)とほぼ同様ですが、SQLテンプレートとSQLルール文が異なります。
->>>>>>> origin/release-6.1
 
 オンライン／オフライン状態記録用のルール SQL 文は以下の通りです。
 
@@ -604,25 +372,15 @@ insert into dbo.t_mqtt_events(clientid, event_type, event_time) values ( ${clien
 
 ## ルールのテスト
 
-<<<<<<< HEAD
-MQTT X を使ってトピック `t/1` にメッセージを送信し、オンライン／オフラインイベントをトリガーします。
-=======
 MQTT Xを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
->>>>>>> origin/release-6.1
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 ```
 
-<<<<<<< HEAD
-Microsoft SQL Server Sink の稼働状況を確認します。
-
-- メッセージ保存用 Sink では、新たに 1 件のマッチングと 1 件の送信済みメッセージがあるはずです。`dbo.t_mqtt_msg` テーブルにデータが書き込まれているか確認してください。
-=======
 Microsoft SQL Server Sinkの稼働状況を確認します。
 
 - メッセージ保存用Sinkでは、新たに1件のマッチングと1件の送信メッセージがあるはずです。`dbo.t_mqtt_msg`データテーブルにデータが書き込まれているか確認してください。
->>>>>>> origin/release-6.1
 
 ```bash
 1> SELECT * from dbo.t_mqtt_msg
@@ -635,11 +393,7 @@ id          msgid                                                            top
 1>
 ```
 
-<<<<<<< HEAD
-- オンライン／オフライン状態記録用 Sink では、新たに 2 件のイベント（クライアント接続、切断）が記録されているはずです。`dbo.t_mqtt_events` テーブルに状態記録が書き込まれているか確認してください。
-=======
 - オンライン/オフライン状態記録用Sinkでは、新たに2件のイベント（クライアント接続・切断）が記録されているはずです。`dbo.t_mqtt_events`データテーブルに状態記録が書き込まれているか確認してください。
->>>>>>> origin/release-6.1
 
 ```bash
 1> SELECT * from dbo.t_mqtt_events

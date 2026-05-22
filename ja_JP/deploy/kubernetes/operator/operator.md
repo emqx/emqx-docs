@@ -4,17 +4,6 @@ EMQX Operator は、[Kubernetes](https://kubernetes.io/) 上での [EMQX](https:
 
 EMQX Operator は Kubernetes 1.24 以降が必要です。
 
-<<<<<<< HEAD
-EMQX Operator は以下を含む機能を提供しますが、これに限定されません：
-
-* **簡素化されたデプロイ**：EMQX カスタムリソースを宣言することで EMQX クラスターを迅速にデプロイできます。
-
-    詳細は [Getting Started](./getting-started.md) ガイドをご参照ください。
-
-* **クラスター管理**：ワークロードの移行を伴うクラスターアップグレード、ランタイムデータのパーシステンス、Kubernetes 管理リソースの最新状態維持など、EMQX クラスターの運用・保守を自動化します。
-
-    詳細は [Manage EMQX](./tasks/overview.md) セクションをご参照ください。
-=======
 EMQX Operator には、以下を含むがこれに限定されない機能があります：
 
 * **簡素化されたデプロイ**：EMQX カスタムリソースを宣言して EMQX クラスターを迅速にデプロイできます。
@@ -24,50 +13,22 @@ EMQX Operator には、以下を含むがこれに限定されない機能があ
 * **クラスター管理**：ワークロードの移行を伴うクラスターアップグレード、ランタイムデータのパーシステンス、Kubernetes 管理リソースの最新状態維持など、EMQX クラスターの運用・保守を自動化します。
 
     詳細は、[EMQX の管理](./tasks/overview.md) セクションをご覧ください。
->>>>>>> origin/release-6.1
 
 <img src="./assets/architecture.png" style="zoom:20%;" alt="EMQX Operator アーキテクチャ" />
 
 ## EMQX と EMQX Operator の互換性
 
-<<<<<<< HEAD
-### EMQX Operator 2.3.x
-
-EMQX Operator 2.3.x リリースシリーズは、以下の EMQX バージョンと完全に互換性があります：
-- EMQX 5.9 および 5.10
-- EMQX 6.0 以降
-
-サポートされている API バージョンは以下の通りです：
-- [apps.emqx.io/v2](./reference/v2-reference.md)
-- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)（非推奨）
-
-### 過去のリリース
-
-#### EMQX Operator 2.2.x
-
-EMQX Operator 2.2.x リリースシリーズは、以下の EMQX バージョンと互換性があります：
-- EMQX Open Source & Enterprise 5.1.1 – 5.8.x
-- EMQX 5.9 & 5.10（限定的サポート<sup>*</sup>）
-- EMQX 6.0 以降（限定的サポート<sup>*</sup>）
-
-サポートされている API バージョンは以下の通りです：
-=======
 現在の EMQX Operator リリースシリーズ 2.2.x は、以下の EMQX バージョンに対応しています：
 - EMQX オープンソース版およびエンタープライズ版 5.1.1 ～ 5.8.x
 - EMQX 5.9 および 5.10 <sup>*</sup>
 - EMQX 6.0 以降 <sup>*</sup>
 
 対応している API バージョンは以下の通りです：
->>>>>>> origin/release-6.1
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
 - apps.emqx.io/v2alpha1（非推奨）
 - apps.emqx.io/v1beta4
 - apps.emqx.io/v1beta3（非推奨）
 
 ::: tip
-<<<<<<< HEAD
-<sup>*</sup> これらのバージョンでは Durable Storage レプリケーションの自動管理はサポートされていません。
-=======
 <sup>*</sup> Durable Storage レプリケーションの自動管理はこれらのバージョンではサポートされておらず、次期 2.3.0 リリースで対応予定です。
->>>>>>> origin/release-6.1
 :::

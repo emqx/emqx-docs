@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-# Kubernetes上でHelmチャートを使用してEMQXをデプロイする
-
-このページでは、公式Helmチャートを使用してKubernetesクラスター上にEMQXをデプロイする手順を段階的に説明します。
-
-公式のEMQX Helmチャートは、StatefulSet、Service、ConfigMap、Ingressルールなど、必要なEMQXコンポーネントをすべてパッケージ化し、単一の設定可能なHelmチャートとして提供することで、Kubernetesベースのデプロイを簡素化します。
-=======
 # Helmチャートを使ったKubernetes上へのEMQXデプロイ
 
 本ページでは、公式Helmチャートを使用してKubernetesクラスター上にEMQXをデプロイする手順を段階的に説明します。
 
 公式のEMQX Helmチャートは、StatefulSet、Service、ConfigMap、Ingressルールなど、EMQXに必要なすべてのコンポーネントを単一の設定可能なHelmチャートにまとめることで、Kubernetesベースのデプロイを簡素化します。
->>>>>>> origin/release-6.1
 
 ## 前提条件
 
@@ -21,11 +13,7 @@
 
 ## EMQX Helmチャートのインストール
 
-<<<<<<< HEAD
-EMQX Helmチャートは、EMQXのGitHubリポジトリまたは公式Helmチャートリポジトリからインストールできます。
-=======
 EMQX Helmチャートは、EMQXのGitHubリポジトリまたは公式Helmチャートリポジトリのいずれかからインストールできます。
->>>>>>> origin/release-6.1
 
 ### GitHubからのインストール
 
@@ -72,77 +60,6 @@ $ helm del my-emqx
 EMQX Helmチャートは、`values.yaml`ファイルを通じて幅広い設定パラメータを提供しています。以下の表は主要なパラメータとデフォルト値を示しています。
 
 | パラメータ                            | 説明                                                  | デフォルト値                                           |
-<<<<<<< HEAD
-| ------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------- |
-| `replicaCount`                       | ネットワーク分断時の自動回復のため、奇数のノード数を推奨します。 | 3                                                       |
-| `image.repository`                   | EMQXイメージ名                                        | emqx/emqx-enterprise                                    |
-| `image.pullPolicy`                   | イメージのプルポリシー                                | IfNotPresent                                            |
-| `image.pullSecrets `                 | イメージプルシークレット                              | `[]`（デプロイされたポッドにイメージプルシークレットは追加されません） |
-| `serviceAccount.create`              | `true`の場合、新しいサービスアカウントを作成します。 | `true`                                                  |
-| `serviceAccount.name`                | 使用するサービスアカウント。未設定かつ`serviceAccount.create`が`true`の場合、フルネームテンプレートで名前が生成されます。 |                                                         |
-| `serviceAccount.annotations`         | サービスアカウントに追加するアノテーション            |                                                         |
-| `envFromSecret`                      | 同じKubernetesネームスペース内のシークレット名。環境変数に追加される値を含みます。 | nil                                                     |
-| `recreatePods`                       | アップグレード時にポッドの再作成を強制し、最新の設定を常に適用できます。 | false                                                   |
-| `podAnnotations `                    | ポッドに付与するアノテーション                         | `{}`                                                    |
-| `podManagementPolicy`                | 既存のPVCを持つチャートを再デプロイする場合、デッドロックを避けるために`Parallel`に設定する必要があります。 | `Parallel`                                              |
-| `persistence.enabled`                | PVCを使用したEMQXのパーシステンスを有効化します。    | false                                                   |
-| `persistence.storageClass`           | バックエンドPVCのストレージクラス                      | `nil`（alphaストレージクラスアノテーションを使用）       |
-| `persistence.existingClaim`          | EMQXデータ用の既存のPersistent Volumeクレーム名（テンプレートとして評価されます） | ""                                                      |
-| `persistence.accessMode`             | EMQXボリューム用PVCのアクセスモード                   | ReadWriteOnce                                           |
-| `persistence.size`                   | EMQXボリューム用PVCのストレージリクエスト             | 20Mi                                                    |
-| `initContainers`                     | EMQXコンテナ作成前に実行されるコンテナ。ユーティリティやセットアップスクリプトを含めることができます。 | `{}`                                                    |
-| `resources`                          | CPU/メモリのリソースリクエスト/制限                    | {}                                                      |
-| `extraVolumeMounts`                  | デフォルトのバックエンドコンテナに追加するvolumeMounts | []                                                      |
-| `extraVolumes`                       | デフォルトのバックエンドポッドに追加するボリューム    | []                                                      |
-| `nodeSelector`                       | ポッド割り当て用のノードラベル                         | `{}`                                                    |
-| `tolerations`                        | ポッド割り当て用のトレランス                           | `[]`                                                    |
-| `affinity`                           | ノード/ポッドのアフィニティマップ                       | `{}`                                                    |
-| `service.type`                       | Kubernetes Serviceのタイプ                             | ClusterIP                                               |
-| `service.mqtt`                       | MQTT用ポート                                          | 1883                                                    |
-| `service.mqttssl`                    | MQTT(SSL)用ポート                                     | 8883                                                    |
-| `service.ws`                         | WebSocket/HTTP用ポート                                | 8083                                                    |
-| `service.wss`                        | WSS/HTTPS用ポート                                    | 8084                                                    |
-| `service.dashboard`                  | ダッシュボードおよびAPI用ポート                        | 18083                                                   |
-| `service.customPorts`                | Serviceで公開するカスタムポート                        | {}                                                      |
-| `service.nodePorts.mqtt`             | MQTT用Kubernetesノードポート                          | nil                                                     |
-| `service.nodePorts.mqttssl`          | MQTT(SSL)用Kubernetesノードポート                     | nil                                                     |
-| `service.nodePorts.ws`               | WebSocket/HTTP用Kubernetesノードポート                | nil                                                     |
-| `service.nodePorts.wss`              | WSS/HTTPS用Kubernetesノードポート                     | nil                                                     |
-| `service.nodePorts.dashboard`        | ダッシュボード用Kubernetesノードポート                | nil                                                     |
-| `service.customNodePorts`            | カスタムポート用Kubernetesノードポート                | {}                                                      |
-| `service.loadBalancerClass`          | このServiceが属するロードバランサーの実装クラス       |                                                         |
-| `service.loadBalancerIP`             | ServiceのloadBalancerIP                                | nil                                                     |
-| `service.loadBalancerSourceRanges`   | LoadBalancerサービスで許可されるアドレス               | []                                                      |
-| `service.externalIPs`                | ServiceのExternalIPs                                   | []                                                      |
-| `service.externalTrafficPolicy`      | Serviceの外部トラフィックポリシー                      | `Cluster`                                               |
-| `service.annotations`                | Service/ServiceMonitorのアノテーション                  | {}（テンプレートとして評価されます）                     |
-| `service.labels`                     | Service/ServiceMonitorのラベル                          | {}（テンプレートとして評価されます）                     |
-| `ingress.dashboard.enabled`          | EMQXダッシュボード用Ingressを有効化                    | false                                                   |
-| `ingress.dashboard.ingressClassName` | EMQXダッシュボード用Ingressクラスを設定                |                                                         |
-| `ingress.dashboard.path`             | EMQXダッシュボード用Ingressパス                        | /                                                       |
-| `ingress.dashboard.pathType`         | EMQXダッシュボード用Ingressパスタイプ                  | `ImplementationSpecific`                                |
-| `ingress.dashboard.hosts`            | EMQXダッシュボード用Ingressホスト                      | dashboard.emqx.local                                    |
-| `ingress.dashboard.tls`              | EMQXダッシュボード用Ingress TLS                         | []                                                      |
-| `ingress.dashboard.annotations`      | EMQXダッシュボード用Ingressアノテーション              | {}                                                      |
-| `ingress.dashboard.ingressClassName` | EMQXダッシュボード用Ingressクラスを設定                |                                                         |
-| `ingress.mqtt.enabled`               | MQTT用Ingressを有効化                                   | false                                                   |
-| `ingress.mqtt.ingressClassName`      | MQTT用Ingressクラスを設定                               |                                                         |
-| `ingress.mqtt.path`                  | MQTT用Ingressパス                                      | /                                                       |
-| `ingress.mqtt.pathType`              | MQTT用Ingressパスタイプ                                | `ImplementationSpecific`                                |
-| `ingress.mqtt.hosts`                 | MQTT用Ingressホスト                                    | mqtt.emqx.local                                         |
-| `ingress.mqtt.tls`                   | MQTT用Ingress TLS                                      | []                                                      |
-| `ingress.mqtt.annotations`           | MQTT用Ingressアノテーション                            | {}                                                      |
-| `ingress.mqtt.ingressClassName`      | MQTT用Ingressクラスを設定                               |                                                         |
-| `metrics.enable`                     | `true`に設定すると、[prometheus-operator](https://github.com/prometheus-operator/prometheus-operator)のインストールとemqx_prometheusの有効化が必要です。 | false                                                   |
-| `metrics.type`                       | 現在サポートされているのは"prometheus"のみです。        | "prometheus"                                            |
-| `ssl.enabled`                        | SSLサポートを有効化                                    | false                                                   |
-| `ssl.useExisting`                    | 既存の証明書を使用するか、cert-managerに生成させるかを指定 | false                                                   |
-| `ssl.existingName`                   | 既存証明書の名前                                      | emqx-tls                                                |
-| `ssl.dnsnames`                       | 生成される証明書のDNS名                                | {}                                                      |
-| `ssl.commonName`                     | 生成される証明書の共通名                              |                                                         |
-| `ssl.issuer.name`                    | 証明書生成用のIssuer名                                | letsencrypt-dns                                         |
-| `ssl.issuer.kind`                    | 証明書生成用のIssuer種類                              | ClusterIssuer                                           |
-=======
 | ------------------------------------ | ----------------------------------------------------- | ----------------------------------------------------- |
 | `replicaCount`                       | ネットワーク分断時の自動回復のため、ノード数は奇数を推奨します。 | 3                                                     |
 | `image.repository`                   | EMQXイメージ名                                        | emqx/emqx-enterprise                                  |
@@ -212,24 +129,12 @@ EMQX Helmチャートは、`values.yaml`ファイルを通じて幅広い設定�
 | `ssl.commonName`                     | 生成する証明書の共通名                                 |                                                       |
 | `ssl.issuer.name`                    | 証明書生成用のIssuer名                                | letsencrypt-dns                                       |
 | `ssl.issuer.kind`                    | 証明書生成用のIssuer種別                              | ClusterIssuer                                         |
->>>>>>> origin/release-6.1
 
 ### EMQX固有のパラメータ
 
 以下の表は、チャートの設定可能なEMQX固有パラメータとそのデフォルト値を示します。
 
 | パラメータ                                                                                                                                                              | 説明                                                                   | デフォルト値 |
-<<<<<<< HEAD
-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|---------------|
-| `emqxConfig`                                                                                                                                                           | [環境変数](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html#environment-variables)（`EMQX_`プレフィックスは任意）またはEMQX設定ファイルで使用される名前空間付きドット表記を用いて定義された[設定](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html)項目のマップ。 | `nil`         |
-| `emqxLicenseSecretName`                                                                                                                                                | ライセンス情報を保持するシークレットの名前（非推奨）                 | `nil`         |
-| `emqxLicenseSecretRef.name`                                                                                                                                         | ライセンス情報を保持するシークレットの名前                             | `""`         |
-| `emqxLicenseSecretRef.key`                                                                                                                                          | ライセンス情報を保持するシークレットのキー                             | `""`         |
-
-## SSL設定
-
-`cert-manager`を使用する場合、TLS証明書はKubernetesシークレットに標準キー`tls.crt`および`tls.key`で保存されます。EMQX Helmチャートはこれらの証明書ファイルをコンテナ内の以下のディレクトリに自動的にマウントします：
-=======
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-------------|
 | `emqxConfig`                                                                                                                                                           | [環境変数](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html#environment-variables)（`EMQX_`プレフィックスは任意）またはEMQX設定ファイルで使用される名前空間付きドット表記を使って定義された[設定](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html)項目のマップ。 | `nil`       |
 | `emqxLicenseSecretName`                                                                                                                                                | ライセンス情報を保持するシークレットの名前（非推奨）                   | `nil`       |
@@ -239,7 +144,6 @@ EMQX Helmチャートは、`values.yaml`ファイルを通じて幅広い設定�
 ## SSL設定
 
 `cert-manager`を使用する場合、TLS証明書はKubernetesシークレットに標準キーの`tls.crt`および`tls.key`で保存されます。EMQX Helmチャートはこれらの証明書ファイルを自動的にコンテナ内の以下のディレクトリにマウントします：
->>>>>>> origin/release-6.1
 
 ```
 /tmp/ssl/
@@ -254,11 +158,7 @@ EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__KEYFILE: /tmp/ssl/tls.key
 
 ::: tip
 
-<<<<<<< HEAD
-既存のTLS証明書（`cert-manager`による生成ではないもの）を使用する場合は、ファイルパスが実際にマウントされている場所と一致していることを確認してください。
-=======
 既存のTLS証明書（`cert-manager`で生成されたものではない）を使用する場合は、ファイルパスがデプロイ時に実際にマウントされているファイルの場所と一致していることを確認してください。
->>>>>>> origin/release-6.1
 
 :::
 
@@ -276,8 +176,4 @@ HAProxy Ingress Controllerを使用する場合は、以下のアノテーショ
 haproxy-ingress.github.io/proxy-protocol: "v2"
 ```
 
-<<<<<<< HEAD
-これにより、プロキシ経由で転送される元のクライアントIPアドレスが保持されます。
-=======
 これにより、プロキシを経由して転送される元のクライアントIPアドレスが保持されます。
->>>>>>> origin/release-6.1

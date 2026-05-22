@@ -1,29 +1,5 @@
 # JT/T 808 ゲートウェイデータ交換フォーマット
 
-<<<<<<< HEAD
-本ページでは、**emqx_jt808** と **EMQX** 間のデータ交換フォーマットを定義します。
-
-## プロトコルバージョン対応
-
-ゲートウェイは **JT/T 808-2013** および **JT/T 808-2019** の両方のプロトコルバージョンに対応しています。  
-プロトコルバージョンはメッセージヘッダーのバージョンフラグに基づき自動判別されます：
-
-- **2013年版**：メッセージヘッダーのプロパティ bit14 = 0
-  - 端末電話番号：BCD[6]（12桁）
-  - メッセージヘッダー長：12 / 16 バイト
-- **2019年版**：メッセージヘッダーのプロパティ bit14 = 1
-  - 端末電話番号：BCD[10]（20桁）
-  - メッセージヘッダー長：17 / 21 バイト
-
-JSONベースのデータ交換では、2019年版のメッセージは `header` 内に `proto_ver` フィールドを含み、プロトコルバージョンを示します。
-
-## 慣例
-
-- ペイロードは JSON 形式で組み立てられます。
-- JSONのキー名はすべて小文字です。
-
-## JSON構造例
-=======
 本ページでは、**emqx_jt808** と **EMQX** 間のデータ交換フォーマットについて定義します。
 
 ## プロトコルバージョン対応
@@ -37,7 +13,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 - **2019年版**: メッセージヘッダーのプロパティ bit14 = 1
   - 端末電話番号: BCD[10]（20桁）
   - メッセージヘッダー長: 17 / 21 バイト
->>>>>>> origin/release-6.1
 
 JSONベースのデータ交換では、2019年版のメッセージは `header` 内に `proto_ver` フィールドを含み、プロトコルバージョンを示します。
 
@@ -87,60 +62,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 
 ## データ型対応表
 
-<<<<<<< HEAD
-| JT808 定義型 | JSON型 | コメント |
-| :----------: | :----: | :-------: |
-|     BYTE     | integer | 10進数表記 |
-|     WORD     | integer | 10進数表記 |
-|    DWORD     | integer | 10進数表記 |
-|   BYTE(n)    | string  |           |
-|    BCD(n)    | string  |           |
-|   STRING     | string  |           |
-
-## フィールドマッピング表
-
-### メッセージヘッダーフィールド
-
-#### JT/T 808-2013 メッセージヘッダー
-
-|    フィールド     | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------: | :------: | :----: | :------------: |
-|    メッセージID   |  msg_id  |  word  |    integer     |
-|  暗号化方式       | encrypt  |  word  |    integer     |
-| 端末電話番号      |  phone   | bcd(6) |    string      |
-| メッセージシリアル番号 | msg_sn  |  word  |    integer     |
-
-オプションフィールド：
-
-|       フィールド        | JSONキー  | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------: | :----: | :------------: |
-| 断片総数                | frag_total|  word  |    integer     |
-| 断片番号                | frag_sn   |  word  |    integer     |
-
-#### JT/T 808-2019 メッセージヘッダー
-
-|    フィールド     | JSONキー  | 値の型 | JSONでの値の型 |
-| :---------------: | :-------: | :----: | :------------: |
-|    メッセージID   |  msg_id   |  word  |    integer     |
-|  暗号化方式       |  encrypt  |  word  |    integer     |
-|  プロトコルバージョン | proto_ver |  byte  |    integer     |
-| 端末電話番号      |   phone   | bcd(10)|    string      |
-| メッセージシリアル番号 |  msg_sn   |  word  |    integer     |
-
-オプションフィールド：
-
-|       フィールド        | JSONキー  | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------: | :----: | :------------: |
-| 断片総数                | frag_total|  word  |    integer     |
-| 断片番号                | frag_sn   |  word  |    integer     |
-
-**補足**：
-
-- `proto_ver` はJT/T 808-2019のみ存在し、現在のバージョン値は `1` です。
-- `frag_total` と `frag_sn` が存在する場合、メッセージ本文は分割された長いメッセージです。
-
-### メッセージ本文フィールド
-=======
 | JT808 定義型 | JSON型     | コメント          |
 | :----------: | :--------: | :---------------- |
 | BYTE         | integer    | 10進数            |
@@ -169,17 +90,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | :----------------: | :--------: | :-------:| :----------: |
 | 総分割数           | frag_total | word     | integer     |
 | 分割番号           | frag_sn    | word     | integer     |
->>>>>>> origin/release-6.1
 
 #### JT/T 808-2019 メッセージヘッダー
 
-<<<<<<< HEAD
-|        フィールド        | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------------: | :------: | :----: | :------------: |
-| 応答シリアル番号         |   seq    |  word  |    integer     |
-| 応答ID                   |    id    |  word  |    integer     |
-| 結果                     |  result  |  byte  |    integer     |
-=======
 | フィールド名           | JSONキー   | 値の型   | JSON内の型   |
 | :--------------------: | :--------: | :-------:| :----------: |
 | メッセージID           | msg_id     | word     | integer     |
@@ -187,69 +100,25 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | プロトコルバージョン   | proto_ver  | byte     | integer     |
 | 端末電話番号           | phone      | bcd(10)  | string      |
 | メッセージシリアル番号 | msg_sn     | word     | integer     |
->>>>>>> origin/release-6.1
 
 オプションフィールド:
 
-<<<<<<< HEAD
-|        フィールド        | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------------: | :------: | :----: | :------------: |
-| 応答シリアル番号         |   seq    |  word  |    integer     |
-| 応答ID                   |    id    |  word  |    integer     |
-| 結果                     |  result  |  byte  |    integer     |
-=======
 | フィールド名       | JSONキー   | 値の型   | JSON内の型   |
 | :----------------: | :--------: | :-------:| :----------: |
 | 総分割数           | frag_total | word     | integer     |
 | 分割番号           | frag_sn    | word     | integer     |
->>>>>>> origin/release-6.1
 
 **補足**:
 
-<<<<<<< HEAD
-空のJSON
-=======
 - `proto_ver` はJT/T 808-2019のみ存在し、現在のバージョン値は `1` です。
 - `frag_total` と `frag_sn` が存在する場合、メッセージ本文は分割された長いメッセージです。
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー    | 値の型 | JSONでの型 |
 | :----------------: | :---------: | :----- | :--------- |
 | 総分割数           | frag_total  | word   | integer    |
 | 分割番号           | frag_sn     | word   | integer    |
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|             フィールド              | JSONキー |   値の型    | JSONでの値の型 |
-| :-------------------------------: | :------: | :---------: | :------------: |
-| 元メッセージシリアル番号           |   seq    |    word     |    integer     |
-| 再送パッケージ総数                 |  length  |    byte     |    integer     |
-| 再送パッケージIDリスト             |   ids    | byte(2*length) | list of integer |
-
-##### JT/T 808-2019
-
-|             フィールド              | JSONキー |   値の型    | JSONでの値の型 |
-| :-------------------------------: | :------: | :---------: | :------------: |
-| 元メッセージシリアル番号           |   seq    |    word     |    integer     |
-| 再送パッケージ総数                 |  length  |    word     |    integer     |
-| 再送パッケージIDリスト             |   ids    | byte(2*length) | list of integer |
-
-**補足**：2019年版では再送パッケージ総数の型がBYTEからWORDに変更されています。
-
-#### サーバー時刻照会応答 `"msg_id": 32772` (0x8004、2019年追加)
-
-| フィールド | JSONキー | 値の型 | JSONでの値の型 |
-| :--------: | :------: | :----: | :------------: |
-| 年         |   year   |  word  |    integer     |
-| 月         |  month   |  byte  |    integer     |
-| 日         |   day    |  byte  |    integer     |
-| 時         |   hour   |  byte  |    integer     |
-| 分         |  minute  |  byte  |    integer     |
-| 秒         |  second  |  byte  |    integer     |
-=======
 #### JT/T 808-2019 メッセージヘッダー
->>>>>>> origin/release-6.1
 
 | フィールド名           | JSONキー   | 値の型   | JSONでの型   |
 | :--------------------: | :--------: | :------- | :----------: |
@@ -259,218 +128,30 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 端末電話番号           | phone      | bcd(10)  | string       |
 | メッセージシリアル番号 | msg_sn     | word     | integer      |
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|        フィールド         |   JSONキー    | 値の型 | JSONでの値の型 |
-| :----------------------: | :-----------: | :----: | :------------: |
-| 省ID                     |   province    |  word  |    integer     |
-| 市ID                     |     city      |  word  |    integer     |
-| 製造商ID                 | manufacturer  | byte(5)|    string      |
-| 端末モデル               |    model      | byte(20)|   string      |
-| 端末ID                   |    dev_id     | byte(7)|    string      |
-| 車両色                   |    color      |  byte  |    integer     |
-| 車両識別番号             | license_number| string |    string      |
-
-##### JT/T 808-2019
-
-|        フィールド         |   JSONキー    | 値の型 | JSONでの値の型 |
-| :----------------------: | :-----------: | :----: | :------------: |
-| 省ID                     |   province    |  word  |    integer     |
-| 市ID                     |     city      |  word  |    integer     |
-| 製造商ID                 | manufacturer  | byte(11)|   string      |
-| 端末モデル               |    model      | byte(30)|   string      |
-| 端末ID                   |    dev_id     | byte(30)|   string      |
-| 車両色                   |    color      |  byte  |    integer     |
-| 車両識別番号             | license_number| string |    string      |
-
-**補足**：2019年版では製造商ID（5→11バイト）、端末モデル（20→30バイト）、端末ID（7→30バイト）のフィールド長が拡張されています。
-=======
 オプション項目:
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー    | 値の型 | JSONでの型 |
 | :----------------: | :---------: | :----- | :--------- |
 | 総分割数           | frag_total  | word   | integer    |
 | 分割番号           | frag_sn     | word   | integer    |
 
-<<<<<<< HEAD
-|        フィールド        | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------------: | :------: | :----: | :------------: |
-| 応答シリアル番号         |   seq    |  word  |    integer     |
-| 結果                     |  result  |  byte  |    integer     |
-
-登録成功後のみ存在するフィールド：
-
-|    オプションフィールド    | JSONキー  | 値の型 | JSONでの値の型 |
-| :-----------------------: | --------- | ------ | ------------- |
-| 認証コード                | auth_code | string | string        |
-=======
 **補足**:
 
 - `proto_ver` は JT/T 808-2019 のみ存在し、現在の値は `1` です。
 - `frag_total` と `frag_sn` が存在する場合、メッセージ本文は分割された長文メッセージです。
 
 ### メッセージ本文項目
->>>>>>> origin/release-6.1
 
 #### 端末からの一般応答 `"msg_id": 1` (0x0001)
 
-<<<<<<< HEAD
-空のJSON
-
-#### サーバー時刻照会要求 `"msg_id": 4` 0x0004 (2019年追加)
-
-空のJSON
-
-#### 端末再送サブパケット要求 `"msg_id": 5` 0x0005 (2019年追加)
-
-|         フィールド          | JSONキー |   値の型    | JSONでの値の型 |
-| :------------------------: | :------: | :---------: | :------------: |
-| 元メッセージシリアル番号    |   seq    |    word     |    integer     |
-| 再送総数                   |  length  |    word     |    integer     |
-| 再送パケットIDリスト       |   ids    | byte(2*length) | list of integer |
-=======
 | フィールド名           | JSONキー | 値の型 | JSON内の型 |
 | :--------------------: | :------: | :-----:| :---------:|
 | 応答シリアル番号       | seq      | word   | integer    |
 | 応答ID                 | id       | word   | integer    |
 | 結果                   | result   | byte   | integer    |
->>>>>>> origin/release-6.1
 
 #### プラットフォームからの一般応答 `"msg_id": 32769` (0x8001)
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | -------- | ------ | ------------- |
-| 認証コード             | code     | string | string        |
-
-##### JT/T 808-2019
-
-|           フィールド           | JSONキー名    | 値の型 | JSONでの値の型 |
-| :----------------------------: | :-----------: | :----: | :------------: |
-| 認証コード長さ                 | code_len     |  byte  |    integer     |
-| 認証コード                     | code         | string | string        |
-| 端末IMEI                      | imei         | byte(15)| string        |
-| ソフトウェアバージョン長さ    | sw_version_len|  byte  |    integer     |
-| ソフトウェアバージョン        | sw_version   | string | string        |
-
-**補足**：2019年版では認証コード長さ、端末IMEI、ソフトウェアバージョン情報のフィールドが追加されています。
-
-#### 端末パラメータ設定 `"msg_id": 33027”` 0x8103
-
-|          フィールド           | JSONキー |                値の型                 |                 JSONでの値の型                 |
-| :---------------------------: | :------: | :---------------------------------: | :--------------------------------------------: |
-| パラメータ総数                |  length  |               byte                  |                  integer                       |
-| パラメータ項目リスト          |  params  |                list                 | list of id and value. `[{"id":ID, "value": VAL}, ...]` |
-| パラメータ項目ID              |    id    |               dword                 |                  integer                       |
-| パラメータ値                  |  value   | [パラメータ値型マッピング](#parameter-value-type-mapping)参照 | [パラメータ値型マッピング](#parameter-value-type-mapping)参照 |
-
-プロトコルに基づくパラメータIDの説明。
-
-##### パラメータ値型マッピング
-
-パラメータ値のJSON型は、パラメータIDに対応するデータ型により決定されます：
-
-| パラメータID範囲 | データ型 | JSONでの値の型 | 説明 |
-| :--------------: | :------: | :------------: | :---: |
-| BYTE型パラメータ |  byte    | integer        | 例：0x0084、0x0090–0x0095 |
-| WORD型パラメータ |  word    | integer        | 例：0x0031、0x0081–0x0082 |
-| DWORD型パラメータ|  dword   | integer        | 例：0x0001–0x0007、0x0018–0x001C |
-| STRING型パラメータ| string  | string         | 例：0x0010–0x0017、0x0040–0x0049、0x0083 |
-| 0x0110–0x01FF    | byte[8]  | string（base64エンコード） | CANバスID独立取得パラメータ |
-| その他不明パラメータ | byte[n] | string（base64エンコード） | 予約パラメータまたはベンダー定義パラメータ |
-
-例：
-
-```json
-{
-  "header": { "msg_id": 33027, ... },
-  "body": {
-    "length": 3,
-    "params": [
-      {"id": 1, "value": 60},
-      {"id": 16, "value": "cmnet"},
-      {"id": 272, "value": "AQIDBAUG"}
-    ]
-  }
-}
-```
-
-#### 端末パラメータ照会 `"msg_id": 33028”` 0x8104
-
-空のJSON
-
-#### 特定端末パラメータ照会 `"msg_id": 33030”` 0x8106
-
-|          フィールド          | JSONキー |   値の型    | JSONでの値の型          |
-| :-------------------------: | :------: | :---------: | :---------------------: |
-| パラメータ総数              |  length  |    byte     |        integer          |
-| パラメータIDリスト          |   ids    | byte(2*length) | list of id. `[1, 2, 3, 4, ...]` |
-
-パラメータIDリストの要素は整数です。
-
-#### 端末応答パラメータ `"msg_id": 260”` 0x0104
-
-|           フィールド           | JSONキー | 値の型 |               JSONでの値の型                |
-| :----------------------------: | :------: | :----: | :----------------------------------------: |
-| 応答シリアル番号                |   seq    |  word  |                  integer                   |
-| 応答パラメータ数                |  length  |  byte  |                  integer                   |
-| パラメータ項目リスト            |  params  |  list  | list of id and value. `[{"id":ID, "value": VAL}, ...]` |
-| パラメータ項目ID                |    id    | dword  |                  integer                   |
-| パラメータ値                    |  value   |   --   | [0x8103 パラメータ値型マッピング](#parameter-value-type-mapping)参照 |
-
-プロトコルに基づくパラメータIDの説明。
-
-#### 端末制御 `"msg_id": 33029”` 0x8105
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| コマンドワード         | command  |  byte  |    integer     |
-| コマンドパラメータ     |  param   | string |    string      |
-
-#### 端末属性照会 `"msg_id": 33031”` 0x8107
-
-空のJSON
-
-#### 端末属性照会応答 `"msg_id": 263”` 0x0107
-
-##### JT/T 808-2013
-
-|            フィールド             |    JSONキー     | 値の型 | JSONでの値の型 |
-| :------------------------------: | :-------------: | :----: | :------------: |
-| 端末タイプ                      |      type       |  word  |    integer     |
-| 製造商ID                       |  manufacturer   | byte(5)|    string      |
-| 端末モデル                     |     model       | byte(20)|   string      |
-| 端末ID                         |       id        | byte(7)|    string      |
-| 端末SIMカードICCID             |     iccid       | byte(10)|   string      |
-| 端末ハードウェアバージョン番号 | hardware_version| string |    string      |
-| 端末ファームウェア番号         | firmware_version| string |    string      |
-| GNSSモジュール属性             |    gnss_prop    |  byte  |    integer     |
-| 通信モジュール属性             |    comm_prop    |  byte  |    integer     |
-
-##### JT/T 808-2019
-
-|            フィールド             |    JSONキー     | 値の型 | JSONでの値の型 |
-| :------------------------------: | :-------------: | :----: | :------------: |
-| 端末タイプ                      |      type       |  word  |    integer     |
-| 製造商ID                       |  manufacturer   | byte(11)|   string      |
-| 端末モデル                     |     model       | byte(30)|   string      |
-| 端末ID                         |       id        | byte(30)|   string      |
-| 端末SIMカードICCID             |     iccid       | byte(10)|   string      |
-| 端末ハードウェアバージョン番号 | hardware_version| string |    string      |
-| 端末ファームウェア番号         | firmware_version| string |    string      |
-| GNSSモジュール属性             |    gnss_prop    |  byte  |    integer     |
-| 通信モジュール属性             |    comm_prop    |  byte  |    integer     |
-
-**補足**：
-
-- 2019年版では製造商ID（5→11バイト）、端末モデル（20→30バイト）、端末ID（7→30バイト）のフィールド長が拡張されています。
-- 端末タイプにbit8が追加され、トレーラーのサポート／接続を示します。
-- 端末ハードウェアバージョン番号およびファームウェア番号の長さはバイナリメッセージ解析に使用され、外部には公開されません。
-=======
 | フィールド名           | JSONキー | 値の型 | JSON内の型 |
 | :--------------------: | :------: | :-----:| :---------:|
 | 応答シリアル番号       | seq      | word   | integer    |
@@ -546,119 +227,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | :--------------------: | :------: | :-----:| :---------:|
 | 応答シリアル番号       | seq      | word   | integer    |
 | 結果                   | result   | byte   | integer    |
->>>>>>> origin/release-6.1
 
 登録成功後のみ存在するフィールド:
 
-<<<<<<< HEAD
-|         フィールド         |   JSONキー   | 値の型 | JSONでの値の型           |
-| :-----------------------: | :----------: | :----: | :----------------------: |
-| アップグレードタイプ      |     type     |  byte  |        integer           |
-| 製造商ID                 | manufacturer | byte(5)|        string            |
-| バージョン番号長さ       |   ver_len    |  byte  |        integer           |
-| バージョン番号           |   version    | string |        string            |
-| アップグレードパッケージ長 |    fw_len    | dword  |        integer           |
-| アップグレードパッケージ |   firmware   | binary | string(base64エンコード) |
-
-#### 端末アップグレード結果通知 `"msg_id": 264` 0x0108
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| アップグレードタイプ   |   type   |  byte  |    integer     |
-| アップグレード結果     |  result  |  byte  |    integer     |
-
-#### 位置情報報告 `"msg_id": 512` 0x0200
-
-|       フィールド       | JSONキー  | 値の型 | JSONでの値の型 |
-| :--------------------: | :-------: | :----: | :------------: |
-| 警報フラグ             |   alarm   | dword  |    integer     |
-| 状態                   |  status   | dword  |    integer     |
-| 緯度                   | latitude  | dword  |    integer     |
-| 経度                   | longitude | dword  |    integer     |
-| 高度                   | altitude  |  word  |    integer     |
-| 速度                   |   speed   |  word  |    integer     |
-| 方向                   | direction |  word  |    integer     |
-| 時刻                   |   time    | bcd(6) |    string      |
-
-|         オプションフィールド          | JSONキー | 値の型 | JSONでの値の型 |
-| :----------------------------------: | :------: | :----: | :------------: |
-| 追加の位置情報項目                  |  extra   |   -    |      map       |
-
-##### JT/T 808-2019の変更点
-
-- **新しい警報フラグ**：  
-  - bit15（違法運転警報）  
-  - bit16（タイヤ空気圧警告）  
-  - bit17（右折死角異常警報）
-
-- **変更された警報フラグ**：  
-  - bit29（衝突警告 → 衝突・転覆警報）  
-  - bit31（違法ドア開放警報 → 予約）
-
-- **新しい状態ビット**：  
-  - bit6（緊急制動システムによる前方衝突警告）  
-  - bit7（車線逸脱警告）  
-  - bit22（車両が走行状態）
-
-- **新しい追加情報項目**：  
-  - 0x05（タイヤ空気圧）  
-  - 0x06（車内温度）
-
-<!-- TODO: 警報の詳細をさらに精査 -->
-
-- 位置情報の追加情報項目は `extra` に含まれます。
-
-|       フィールド（追加情報説明）       |    JSONキー    | 値の型 | JSONでの値の型           |
-| :-----------------------------------: | :------------: | :----: | :----------------------: |
-| 走行距離                            |    mileage     | dword  |        integer           |
-| 燃料計                             |   fuel_meter   |  word  |        integer           |
-| 運転記録機能による速度             |     speed     |  word  |        integer           |
-| 手動確認が必要な警報イベントID     |    alarm_id    |  word  |        integer           |
-| タイヤ空気圧（2019年追加）          |  tire_pressure |   -    | string(base64エンコード) |
-| 車内温度（2019年追加）              | carriage_temp  |  word  |        integer           |
-| 速度超過警報追加情報（長さ1または5） | overspeed_alarm|   -    |          map             |
-| 進入/退出エリア・ルート警報追加情報  |  in_out_alarm  |   -    |          map             |
-| ルート走行時間短すぎ/長すぎ警報追加情報 | path_time_alarm|   -    |          map             |
-| 拡張車両信号状態ビット             | See Status Bit Table | -  |            -             |
-| IO状態ビット                      |   io_status    |   -    |          map             |
-| アナログ                         |    analog     |   -    |          map             |
-| 無線通信ネットワーク信号強度      |     rssi      |  byte  |        integer           |
-| GNSS衛星数                      |  gnss_sat_num |  byte  |        integer           |
-| 続くカスタム情報の長さ           |    custome    |   -    | string(base64エンコード) |
-
-- 速度超過警報追加情報（長さ1または5）は `overspeed_alarm` マップに含まれます。
-
-|     フィールド     | JSONキー | 値の型 | JSONでの値の型 |
-| :----------------: | :------: | :----: | :------------: |
-| 位置タイプ         |   type   |  byte  |    integer     |
-
-|    オプションフィールド    | JSONキー | 値の型 | JSONでの値の型 |
-| :-----------------------: | :------: | :----: | :------------: |
-| エリアまたは区間ID       |    id    | dword  |    integer     |
-
-- 進入/退出エリア・ルート警報追加情報は `in_out_alarm` マップに含まれます。
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 位置タイプ             |   type   |  byte  |    integer     |
-| エリアまたは区間ID     |    id    | dword  |    integer     |
-| 方向                   | direction|  byte  |    integer     |
-
-- ルート走行時間短すぎ/長すぎ警報追加情報は `path_time_alarm` マップに含まれます。
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 区間ID                 |    id    | dword  |    integer     |
-| ルート走行時間         |   time   |  word  |    integer     |
-| 結果                   |  result  |  byte  |    integer     |
-
-- IO状態ビットは `io_status` マップに含まれます。
-
-|       フィールド       | JSONキー  | 値の型 | JSONでの値の型 |
-| :--------------------: | :-------: | :----: | :------------: |
-| ディープスリープ状態   | deep_sleep| 1 bit  |    integer     |
-| スリープ状態           |  sleep   | 1 bit  |    integer     |
-=======
 | オプションフィールド   | JSONキー  | 値の型 | JSON内の型 |
 | :-------------------: | --------- | :-----:| :---------:|
 | 認証コード             | auth_code | string | string     |
@@ -953,7 +524,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | :--------------: | :-------: | :-----:| :---------:|
 | ロービーム信号   | low_beam  | 1ビット | integer    |
 | ハイビーム信号   | high_beam | 1ビット | integer    |
->>>>>>> origin/release-6.1
 
 - アナログは `analog` マップに含まれます。
 
@@ -1063,63 +633,20 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 
 #### 位置情報照会応答 `"msg_id": 513` (0x0201)
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 応答シーケンス         |   seq    |  word  |    integer     |
-| 位置情報報告           |  params  |   -    |      map       |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型 |
 | :----------------: | :------: | :-----:| :---------:|
 | 応答シーケンス     | seq      | word   | integer    |
 | 位置情報報告       | params   | -      | map        |
->>>>>>> origin/release-6.1
 
 #### 一時位置追跡制御 `"msg_id": 33282` (0x8202)
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 間隔                   |  period  |  word  |    integer     |
-| 追跡期間               |  expiry  | dword  |    integer     |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型 |
 | :----------------: | :------: | :-----:| :---------:|
 | 間隔               | period   | word   | integer    |
 | 追跡期間           | expiry   | dword  | integer    |
->>>>>>> origin/release-6.1
 
 #### 手動アラーム確認メッセージ `"msg_id": 33283` (0x8203)
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 警報メッセージシーケンス |   seq    |  word  |    integer     |
-| 手動警報タイプ         |   type   | dword  |    integer     |
-
-#### サーバー発信端末リンク検出要求 `"msg_id": 33284` 0x8204 (2019年追加)
-
-空のJSON
-
-#### テキストメッセージ配信 `"msg_id": 33536` 0x8300
-
-##### JT/T 808-2013
-
-|   フィールド   | JSONキー | 値の型 | JSONでの値の型 |
-| :------------: | :------: | :----: | :------------: |
-| フラグ         |   flag   |  byte  |    integer     |
-| テキスト情報   |   text   | string |    string      |
-
-##### JT/T 808-2019
-
-|   フィールド   | JSONキー  | 値の型 | JSONでの値の型 |
-| :------------: | :-------: | :----: | :------------: |
-| フラグ         |   flag    |  byte  |    integer     |
-| テキストタイプ | text_type |  byte  |    integer     |
-| テキスト情報   |   text    | string |    string      |
-
-**補足**：2019年版ではテキストタイプフィールドが追加され、フラグのbit0–1の意味が変更されています。
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型 |
 | :----------------: | :------: | :-----:| :---------:|
 | アラームメッセージシーケンス | seq      | word   | integer    |
@@ -1128,45 +655,16 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 #### サーバー発信端末リンク検測要求 `"msg_id": 33284` (0x8204、2019年追加)
 
 空のJSON
->>>>>>> origin/release-6.1
 
 #### テキストメッセージ配信 `"msg_id": 33536` (0x8300)
 
-<<<<<<< HEAD
-|      フィールド      | JSONキー | 値の型 |               JSONでの値の型                |
-| :------------------: | :------: | :----: | :----------------------------------------: |
-| 設定タイプ           |   type   |  byte  |                  integer                   |
-| イベント総数         |  length  |  byte  |                  integer                   |
-| イベントリスト       |  events  |  list  | list of event. `[{"id": ID, "length": LEN, "content": CON}, ...]` |
-| イベントID           |    id    |  byte  |                  integer                   |
-| イベント長           |  length  |  byte  |                  integer                   |
-| イベント内容         | content  | string |                  string                    |
-=======
 ##### JT/T 808-2013
->>>>>>> origin/release-6.1
 
 | フィールド名 | JSONキー | 値の型 | JSON内の型 |
 | :----------: | :------: | :-----:| :---------:|
 | フラグ       | flag     | byte   | integer    |
 | テキスト情報 | text     | string | string     |
 
-<<<<<<< HEAD
-|   フィールド   | JSONキー | 値の型 | JSONでの値の型 |
-| :------------: | :------: | :----: | :------------: |
-| イベントID     |    id    |  byte  |    integer     |
-
-#### 質問配信 `"msg_id": 33538` 0x8302
-
-|         フィールド         | JSONキー | 値の型 |               JSONでの値の型                |
-| :-----------------------: | :------: | :----: | :----------------------------------------: |
-| フラグ                    |   flag   |  byte  |                  integer                   |
-| 質問長                    |  length  |  byte  |                  integer                   |
-| 質問                      | question | string |                  string                    |
-| 回答候補リスト            | answers  |  list  | list of answer. `[{"id": ID, "len": LEN, "answer": ANS}, ...]` |
-| 回答ID                    |    id    |  byte  |                  integer                   |
-| 回答内容長                |   len    |  byte  |                  integer                   |
-| 回答内容                  |  answer  | string |                  string                    |
-=======
 ##### JT/T 808-2019
 
 | フィールド名 | JSONキー  | 値の型 | JSON内の型 |
@@ -1176,16 +674,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | テキスト情報 | text      | string | string     |
 
 **補足**: 2019年版ではテキストタイプフィールドが追加され、フラグのbit0–1の意味が変更されています。
->>>>>>> origin/release-6.1
 
 #### イベント設定 `"msg_id": 33537` (0x8301)
 
-<<<<<<< HEAD
-|     フィールド      | JSONキー | 値の型 | JSONでの値の型 |
-| :-----------------: | :------: | :----: | :------------: |
-| 応答シーケンス      |   seq    |  word  |    integer     |
-| 回答ID              |    id    |  byte  |    integer     |
-=======
 | フィールド名     | JSONキー | 値の型 | JSON内の型                             |
 | :--------------: | :------: | :-----:| :-----------------------------------: |
 | 設定タイプ       | type     | byte   | integer                             |
@@ -1194,33 +685,15 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | イベントID       | id       | byte   | integer                             |
 | イベント長       | length   | byte   | integer                             |
 | イベント内容     | content  | string | string                              |
->>>>>>> origin/release-6.1
 
 #### イベント報告 `"msg_id": 769` (0x0301)
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 設定タイプ             |   type   |  byte  |    integer     |
-| 情報項目総数           |  length  |  byte  |    integer     |
-| 情報項目リスト         |  menus   |  list  | list of menu   |
-| 情報タイプ             |   type   |  byte  |    integer     |
-| 情報名長               |  length  |  word  |    integer     |
-| 情報名                 |   info   | string |    string      |
-=======
 | フィールド名 | JSONキー | 値の型 | JSON内の型 |
 | :----------: | :------: | :-----:| :---------:|
 | イベントID   | id       | byte   | integer    |
->>>>>>> origin/release-6.1
 
 #### 質問配信 `"msg_id": 33538` (0x8302)
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| 情報タイプ             |    id    |  byte  |    integer     |
-| ダイヤル／キャンセルフラグ |   flag   |  byte  |    integer     |
-=======
 | フィールド名         | JSONキー | 値の型 | JSON内の型                             |
 | :------------------: | :------: | :-----:| :-----------------------------------: |
 | フラグ               | flag     | byte   | integer                             |
@@ -1230,31 +703,16 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 回答ID               | id       | byte   | integer                             |
 | 回答内容長           | len      | byte   | integer                             |
 | 回答内容             | answer   | string | string                              |
->>>>>>> origin/release-6.1
 
 #### 質問応答 `"msg_id": 770` (0x0302)
 
-<<<<<<< HEAD
-|      フィールド      | JSONキー | 値の型 | JSONでの値の型 |
-| :------------------: | :------: | :----: | :------------: |
-| 情報タイプ           |   type   |  byte  |    integer     |
-| 情報長               |  length  |  word  |    integer     |
-| 情報内容             |   info   | string |    string      |
-=======
 | フィールド名   | JSONキー | 値の型 | JSON内の型 |
 | :------------: | :------: | :-----:| :---------:|
 | 応答シーケンス | seq      | word   | integer    |
 | 回答ID         | id       | byte   | integer    |
->>>>>>> origin/release-6.1
 
 #### 情報サービスメニュー設定 `"msg_id": 33539` (0x8303)
 
-<<<<<<< HEAD
-|      フィールド      | JSONキー | 値の型 | JSONでの値の型 |
-| :------------------: | :------: | :----: | :------------: |
-| フラグ               |   type   |  byte  |    integer     |
-| 電話番号             |  phone   | string |    string      |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型 |
 | :----------------: | :------: | :-----:| :---------:|
 | 設定タイプ         | type     | byte   | integer    |
@@ -1263,24 +721,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 情報タイプ         | type     | byte   | integer    |
 | 情報名長           | length   | word   | integer    |
 | 情報名             | info     | string | string     |
->>>>>>> origin/release-6.1
 
 #### 情報サービス／キャンセル `"msg_id": 771` (0x0303)
 
-<<<<<<< HEAD
-|        フィールド        | JSONキー  | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------: | :----: | :------------: |
-| 設定タイプ              |   type    |  byte  |    integer     |
-| 連絡先総数              |  length   |  byte  |    integer     |
-| 連絡先項目              | contacts  |  list  | list of contact|
-| フラグ                  |   type    |  byte  |    integer     |
-| 電話番号長              | phone_len |  byte  |    integer     |
-| 電話番号                |   phone   | string |    string      |
-| 連絡先名長              | name_len  |  byte  |    integer     |
-| 連絡先名                |   name    | string |    string      |
-
-連絡先項目例：
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型 |
 | :----------------: | :------: | :-----:| :---------:|
 | 情報タイプ         | id       | byte   | integer    |
@@ -1315,7 +758,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 連絡先名           | name      | string | string     |
 
 連絡先項目例:
->>>>>>> origin/release-6.1
 
 ```json
 [{"type": TYPE, "phone_len", PH_LEN, "phone": PHONE, "name_len": NAME_LEN, "name": NAME}, ...]
@@ -1324,38 +766,12 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 #### 車両制御 `"msg_id": 34048` (0x8500)
 
 ##### JT/T 808-2013
-<<<<<<< HEAD
-
-|     フィールド     | JSONキー | 値の型 | JSONでの値の型 |
-| :----------------: | :------: | :----: | :------------: |
-| 制御フラグ         |   flag   |  byte  |    integer     |
-
-##### JT/T 808-2019
-
-|          フィールド          | JSONキー | 値の型 |        JSONでの値の型         |
-| :-------------------------: | :------: | :----: | :---------------------------: |
-| 制御フラグ                 |   flag   |  word  |          integer              |
-| 制御タイプ数               |  length  |  byte  |          integer              |
-| 制御タイプリスト           | controls |  list  |       list of control         |
-| 制御タイプID               | type_id  |  byte  |          integer              |
-| 制御タイプパラメータ       |  param   | binary | string(base64エンコード)      |
-
-**補足**：2019年版ではメッセージ構造が完全に再設計され、制御タイプ数＋制御タイプリストで構成されます。
-=======
->>>>>>> origin/release-6.1
 
 | フィールド名   | JSONキー | 値の型 | JSON内の型 |
 | :------------: | :------: | :-----:| :---------:|
 | 制御フラグ     | flag     | byte   | integer    |
 
-<<<<<<< HEAD
-|        フィールド         | JSONキー | 値の型 | JSONでの値の型 |
-| :----------------------: | :------: | :----: | :------------: |
-| 応答シリアル             |   seq    |  word  |    integer     |
-| 位置情報報告本文         | location |   map  |  map of location |
-=======
 ##### JT/T 808-2019
->>>>>>> origin/release-6.1
 
 | フィールド名         | JSONキー | 値の型 | JSON内の型               |
 | :------------------: | :------: | :-----:| :----------------------: |
@@ -1365,36 +781,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 制御タイプID         | type_id  | byte   | integer                 |
 | 制御タイプパラメータ | param    | binary | string(base64エンコード) |
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|         フィールド         |     JSONキー      | 値の型 | JSONでの値の型 |
-| :-----------------------: | :---------------: | :----: | :------------: |
-| 設定属性                  |       type        |  byte  |    integer     |
-| エリア総数                |      length       |  byte  |    integer     |
-| エリア項目                |      areas        |  list  | list of area   |
-| エリアID                  |        id         | dword  |    integer     |
-| エリアプロパティ          |       flag        |  word  |    integer     |
-| 中心緯度                  |  center_latitude  | dword  |    integer     |
-| 中心経度                  | center_longitude  | dword  |    integer     |
-| 半径                      |      radius       | dword  |    integer     |
-| 開始時刻                  |    start_time     | string |    string      |
-| 終了時刻                  |     end_time      | string |    string      |
-| 最大速度                  |     max_speed     |  word  |    integer     |
-| 速度超過継続時間          | overspeed_duration |  byte  |    integer     |
-
-##### JT/T 808-2019 追加フィールド
-
-|        フィールド        |    JSONキー     | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------------: | :----: | :------------: |
-| 夜間最大速度            | night_max_speed |  word  |    integer     |
-| 地域名長                |    name_len     |  word  |    integer     |
-| 地域名                  |      name       | string |    string      |
-
-**補足**：2019年版では地域項目に夜間最大速度、地域名長、地域名のフィールドが追加されています。
-
-エリアリスト例：
-=======
 **補足**: 2019年版ではメッセージ構造が大幅に変更され、制御タイプ数と制御タイプリストで構成されます。
 
 #### 車両制御応答 `"msg_id": 1280` (0x0500)
@@ -1434,7 +820,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 **補足**: 2019年版では地域項目に夜間最高速度、地域名長、地域名のフィールドが追加されました。
 
 区域リスト例:
->>>>>>> origin/release-6.1
 
 ```json
 [{"id": ID,
@@ -1456,19 +841,11 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 
 #### 円形区域削除 `"msg_id": 34305` (0x8601)
 
-<<<<<<< HEAD
-|      フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :------------------: | :------: | :----: | :------------: |
-| エリア数             |  length  |  byte  |    integer     |
-| エリアIDリスト       |   ids    |  list  | list of id     |
-| エリアID 1～n        |    -     | dword  |    integer     |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型     |
 | :----------------: | :------: | :-----:| :-------------:|
 | 区域数             | length   | byte   | integer        |
 | 区域IDリスト       | ids      | list   | idのリスト     |
 | 区域ID 1～n        | -        | dword  | integer        |
->>>>>>> origin/release-6.1
 
 ```
 [ID1, ID2, ...]
@@ -1477,35 +854,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 #### 矩形区域設定 `"msg_id": 34306` (0x8602)
 
 ##### JT/T 808-2013
-<<<<<<< HEAD
-
-|         フィールド         |     JSONキー      | 値の型 |       JSONでの値の型        |
-| :-----------------------: | :---------------: | :----: | :-------------------------: |
-| 設定属性                  |       type        |  byte  |          integer            |
-| エリア総数                |      length       |  byte  |          integer            |
-| エリア項目                |      areas        |  list  | list of rectangle area      |
-| エリアID                  |        id         | dword  |          integer            |
-| エリアプロパティ          |       flag        |  word  |          integer            |
-| 左上緯度                  |       lt_lat      | dword  |          integer            |
-| 左上経度                  |       lt_lng      | dword  |          integer            |
-| 右下緯度                  |       rb_lat      | dword  |          integer            |
-| 右下経度                  |       rb_lng      | dword  |          integer            |
-| 開始時刻                  |    start_time     | string |          string             |
-| 終了時刻                  |     end_time      | string |          string             |
-| 最大速度                  |     max_speed     |  word  |          integer            |
-| 速度超過継続時間          | overspeed_duration |  byte  |          integer            |
-
-##### JT/T 808-2019 追加フィールド
-
-|        フィールド        |    JSONキー     | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------------: | :----: | :------------: |
-| 夜間最大速度            | night_max_speed |  word  |    integer     |
-| 地域名長                |    name_len     |  word  |    integer     |
-| 地域名                  |      name       | string |    string      |
-
-**補足**：2019年版では地域項目に夜間最大速度、地域名長、地域名のフィールドが追加されています。
-=======
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー         | 値の型 | JSON内の型       |
 | :----------------: | :--------------: | :-----:| :---------------:|
@@ -1523,15 +871,7 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 最高速度           | max_speed        | word   | integer          |
 | 超速継続時間       | overspeed_duration| byte  | integer          |
 
-<<<<<<< HEAD
-|      フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :------------------: | :------: | :----: | :------------: |
-| エリア数             |  length  |  byte  |    integer     |
-| エリアIDリスト       |   ids    |  list  | list of id     |
-| エリアID 1～n        |    -     | dword  |    integer     |
-=======
 ##### JT/T 808-2019 追加フィールド
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー         | 値の型 | JSON内の型 |
 | :----------------: | :--------------: | :-----:| :---------:|
@@ -1539,86 +879,19 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 地域名長           | name_len         | word   | integer    |
 | 地域名             | name             | string | string     |
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|           フィールド           |     JSONキー      | 値の型 | JSONでの値の型 |
-| :----------------------------: | :---------------: | :----: | :------------: |
-| エリアID                      |        id         | dword  |    integer     |
-| エリアプロパティ              |       flag        | dword  |    integer     |
-| 開始時刻                      |    start_time     | string |    string      |
-| 終了時刻                      |     end_time      | string |    string      |
-| 最大速度                      |     max_speed     |  word  |    integer     |
-| 速度超過継続時間              | overspeed_duration |  byte  |    integer     |
-| 頂点総数                      |      length       |  word  |    integer     |
-| 頂点リスト                    |      points       |  list  | list of point  |
-| 頂点緯度                      |       lat         | dword  |    integer     |
-| 頂点経度                      |       lng         | dword  |    integer     |
-
-##### JT/T 808-2019 追加フィールド
-
-|        フィールド        |    JSONキー     | 値の型 | JSONでの値の型 |
-| :---------------------: | :-------------: | :----: | :------------: |
-| 夜間最大速度            | night_max_speed |  word  |    integer     |
-| 地域名長                |    name_len     |  word  |    integer     |
-| 地域名                  |      name       | string |    string      |
-
-**補足**：2019年版では夜間最大速度、地域名長、地域名のフィールドが追加されています。
-=======
 **補足**: 2019年版では地域項目に夜間最高速度、地域名長、地域名のフィールドが追加されました。
->>>>>>> origin/release-6.1
 
 #### 矩形区域削除 `"msg_id": 34307` (0x8603)
 
-<<<<<<< HEAD
-|      フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :------------------: | :------: | :----: | :------------: |
-| エリア数             |  length  |  byte  |    integer     |
-| エリアIDリスト       |   ids    |  list  | list of id     |
-| エリアID 1～n        |    -     | dword  |    integer     |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型     |
 | :----------------: | :------: | :-----:| :-------------:|
 | 区域数             | length   | byte   | integer        |
 | 区域IDリスト       | ids      | list   | idのリスト     |
 | 区域ID 1～n        | -        | dword  | integer        |
->>>>>>> origin/release-6.1
 
 #### 多角形区域設定 `"msg_id": 34308` (0x8604)
 
 ##### JT/T 808-2013
-<<<<<<< HEAD
-
-|             フィールド             |     JSONキー      | 値の型 | JSONでの値の型 |
-| :-------------------------------: | :---------------: | :----: | :------------: |
-| ルートID                        |        id         | dword  |    integer     |
-| ルートプロパティ                |       flag        |  word  |    integer     |
-| 開始時刻                      |    start_time     | string |    string      |
-| 終了時刻                      |     end_time      | string |    string      |
-| 曲がり角総数                  |      length       |  word  |    integer     |
-| 曲がり角項目                  |      points       |  list  | list of point  |
-| 曲がり角ID                    |     point_id      | dword  |    integer     |
-| 区間ID                       |      path_id      | dword  |    integer     |
-| 曲がり角緯度                 |     point_lat     | dword  |    integer     |
-| 曲がり角経度                 |     point_lng     | dword  |    integer     |
-| 区間幅                       |      width        |  byte  |    integer     |
-| 区間属性                     |      attrib       |  byte  |    integer     |
-| 区間走行過長閾値           |      passed       |  word  |    integer     |
-| 区間走行不足閾値           |     uncovered     |  word  |    integer     |
-| 区間最大速度                 |     max_speed     |  word  |    integer     |
-| 区間速度超過継続時間       | overspeed_duration |  byte  |    integer     |
-
-##### JT/T 808-2019 追加フィールド
-
-|               フィールド               |    JSONキー     | 値の型 | JSONでの値の型 |
-| :----------------------------------: | :-------------: | :----: | :------------: |
-| 区間夜間最大速度                    | night_max_speed |  word  |    integer     |
-| ルート名長                        |    name_len     |  word  |    integer     |
-| ルート名                          |      name       | string |    string      |
-
-**補足**：2019年版では区間夜間最大速度、ルート名長、ルート名のフィールドが追加されています。
-=======
->>>>>>> origin/release-6.1
 
 | フィールド名           | JSONキー         | 値の型 | JSON内の型     |
 | :--------------------: | :--------------: | :-----:| :-------------:|
@@ -1633,39 +906,7 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 頂点緯度               | lat              | dword  | integer        |
 | 頂点経度               | lng              | dword  | integer        |
 
-<<<<<<< HEAD
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| ルート数               |  length  |  byte  |    integer     |
-| ルートIDリスト         |   ids    |  list  | list of id     |
-| ルートID               |    -     | dword  |    integer     |
-
-#### エリアまたはルートデータ照会 `"msg_id": 34312` 0x8608 (2019年追加)
-
-|       フィールド       | JSONキー |   値の型    | JSONでの値の型 |
-| :--------------------: | :------: | :---------: | :------------: |
-| 照会タイプ             |   type   |    byte     |    integer     |
-| 照会件数               |  length  |   dword     |    integer     |
-| エリア／ルートIDリスト |   ids    | byte(4*length) | list of integer |
-
-照会タイプ値：  
-- 1 – 円形エリア  
-- 2 – 矩形エリア  
-- 3 – 多角形エリア  
-- 4 – ルート
-
-#### エリアまたはルートデータ応答 `"msg_id": 1544` 0x0608 (2019年追加)
-
-|        フィールド        | JSONキー | 値の型 |       JSONでの値の型        |
-| :---------------------: | :------: | :----: | :-------------------------: |
-| 照会タイプ              |   type   |  byte  |          integer            |
-| エリア／ルート件数      |  length  | dword  |          integer            |
-| エリア／ルート項目リスト |  items   | binary | string(base64エンコード)    |
-
-エリア／ルート項目リストの内容は照会タイプにより異なります。詳細はプロトコル仕様を参照してください。
-=======
 ##### JT/T 808-2019 追加フィールド
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー         | 値の型 | JSON内の型 |
 | :----------------: | :--------------: | :-----:| :---------:|
@@ -1673,41 +914,19 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 地域名長           | name_len         | word   | integer    |
 | 地域名             | name             | string | string     |
 
-<<<<<<< HEAD
-|    フィールド    | JSONキー |       値の型        | JSONでの値の型 |
-| :--------------: | :------: | :-----------------: | :------------: |
-| コマンド         | command  |        byte         |    integer     |
-| データブロック   |  param   | string(base64エンコード) |    string      |
-=======
 **補足**: 2019年版では夜間最高速度、地域名長、地域名のフィールドが追加されました。
->>>>>>> origin/release-6.1
 
 #### 多角形区域削除 `"msg_id": 34309` (0x8605)
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー |       値の型        | JSONでの値の型 |
-| :---------------------------: | :------: | :-----------------: | :------------: |
-| 応答シリアル番号              |   seq    |        word         |    integer     |
-| コマンド                     | command  |        byte         |    integer     |
-| データブロック               |   data   | string(base64エンコード) |    string      |
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型     |
 | :----------------: | :------: | :-----:| :-------------:|
 | 区域数             | length   | byte   | integer        |
 | 区域IDリスト       | ids      | list   | idのリスト     |
 | 区域ID 1～n        | -        | dword  | integer        |
->>>>>>> origin/release-6.1
 
 #### ルート設定 `"msg_id": 34310` (0x8606)
 
-<<<<<<< HEAD
-|    フィールド    | JSONキー |       値の型        | JSONでの値の型 |
-| :--------------: | :------: | :-----------------: | :------------: |
-| コマンド         | command  |        byte         |    integer     |
-| データブロック   |  param   | string(base64エンコード) |    string      |
-=======
 ##### JT/T 808-2013
->>>>>>> origin/release-6.1
 
 | フィールド名               | JSONキー         | 値の型 | JSON内の型     |
 | :------------------------: | :--------------: | :-----:| :-------------:|
@@ -1728,14 +947,7 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 区間最高速度              | max_speed        | word   | integer        |
 | 区間超速継続時間          | overspeed_duration| byte  | integer        |
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー |       値の型        | JSONでの値の型 |
-| :---------------------------: | :------: | :-----------------: | :------------: |
-| 電子運送状長さ               |  length  |       dword         |    integer     |
-| 電子運送状内容               |   data   | string(base64エンコード) |    string      |
-=======
 ##### JT/T 808-2019 追加フィールド
->>>>>>> origin/release-6.1
 
 | フィールド名               | JSONキー         | 値の型 | JSON内の型 |
 | :------------------------: | :--------------: | :-----:| :---------:|
@@ -1743,57 +955,23 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | ルート名長                 | name_len         | word   | integer    |
 | ルート名                   | name             | string | string     |
 
-<<<<<<< HEAD
-空のJSON
-=======
 **補足**: 2019年版では道路区間の夜間最高速度、ルート名長、ルート名のフィールドが追加されました。
->>>>>>> origin/release-6.1
 
 #### ルート削除 `"msg_id": 34311` (0x8607)
 
-<<<<<<< HEAD
-##### JT/T 808-2013
-
-|            フィールド             |   JSONキー   | 値の型 | JSONでの値の型 |
-| :------------------------------: | :----------: | :----: | :------------: |
-| ステータス                     |    status    |  byte  |    integer     |
-| 時刻                           |     time     | string |    string      |
-| ICカード読み取り結果           |  ic_result   |  byte  |    integer     |
-| 運転者名                       | driver_name  | string |    string      |
-| 職業資格証コード              | certificate  | string |    string      |
-| 発行機関名                   | organization | string |    string      |
-| 証明書有効期限               | cert_expiry  | string |    string      |
-
-##### JT/T 808-2019 追加フィールド
-
-|         フィールド         | JSONキー | 値の型 | JSONでの値の型 |
-| :-----------------------: | :------: | :----: | :------------: |
-| 運転者身分証番号          | id_card  | string |    string      |
-
-**補足**：2019年版では運転者身分証番号フィールドが追加されています。
-=======
 | フィールド名       | JSONキー | 値の型 | JSON内の型     |
 | :----------------: | :------: | :-----:| :-------------:|
 | ルート数           | length   | byte   | integer        |
 | ルートIDリスト     | ids      | list   | idのリスト     |
 | ルートID           | -        | dword  | integer        |
->>>>>>> origin/release-6.1
 
 #### 区域またはルートデータ照会 `"msg_id": 34312` (0x8608、2019年追加)
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー | 値の型 | JSONでの値の型 |
-| :----------------------------: | :------: | :----: | :------------: |
-| 位置データタイプ              |   type   |  byte  |    integer     |
-| データ件数                    |  length  |  word  |    integer     |
-| 位置報告データ項目           | location |  list  | list of location |
-=======
 | フィールド名       | JSONキー | 値の型         | JSON内の型       |
 | :----------------: | :------: | :-------------:| :---------------:|
 | 照会タイプ         | type     | byte           | integer          |
 | 照会数             | length   | dword          | integer          |
 | 区域／ルートIDリスト | ids      | byte(4*length) | 整数のリスト     |
->>>>>>> origin/release-6.1
 
 照会タイプの値:  
 - 1 – 円形区域  
@@ -1801,20 +979,7 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 - 3 – 多角形区域  
 - 4 – ルート
 
-<<<<<<< HEAD
-|           フィールド            |  JSONキー   | 値の型 |        JSONでの値の型         |
-| :-----------------------------: | :---------: | :----: | :---------------------------: |
-| データ件数                     |   length    |  word  |          integer              |
-| CANバスデータ受信時刻          |    time     |  bcd(5)|          integer              |
-| CANバスデータ項目              |  can_data   |  list  |       list of can data        |
-| CANバスチャネル番号            |   channel   | 1 bit  |          integer              |
-| フレームタイプ                 | frame_type  | 1 bit  |          integer              |
-| データ収集方法                 | data_method | 1 bit  |          integer              |
-| CANバスID                     |     id      | 29 bits|          integer              |
-| CANデータ                     |    data     | binary | string(base64エンコード)      |
-=======
 #### 区域またはルートデータ照会応答 `"msg_id": 1544` (0x0608、2019年追加)
->>>>>>> origin/release-6.1
 
 | フィールド名       | JSONキー | 値の型 | JSON内の型               |
 | :----------------: | :------: | :-----:| :----------------------: |
@@ -1822,138 +987,32 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 区域／ルート数     | length   | dword  | integer                 |
 | 区域／ルート項目リスト | items    | binary | string(base64エンコード) |
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------------------: | :------: | :----: | :------------: |
-| マルチメディアデータID       |    id    | dword  |    integer     |
-| マルチメディアタイプ         |   type   |  byte  |    integer     |
-| マルチメディアエンコード形式 |  format  |  byte  |    integer     |
-| イベント項目コード           |  event   |  byte  |    integer     |
-| チャンネルID                | channel  |  byte  |    integer     |
-=======
 区域／ルート項目リストの内容は照会タイプにより異なります。詳細はプロトコル仕様を参照してください。
->>>>>>> origin/release-6.1
 
 #### 運行記録データ収集コマンド `"msg_id": 34560` (0x8700)
 
-<<<<<<< HEAD
-|           フィールド           |  JSONキー  | 値の型 |        JSONでの値の型         |
-| :---------------------------: | :--------: | :----: | :---------------------------: |
-| マルチメディアID             |     id     | dword  |          integer              |
-| マルチメディアタイプ         |    type    |  byte  |          integer              |
-| マルチメディアエンコード形式 |   format   |  byte  |          integer              |
-| イベント項目コード           |   event    |  byte  |          integer              |
-| チャンネルID                |  channel   |  byte  |          integer              |
-| 位置情報報告                 |  location  | byte(28)|          map                 |
-| マルチメディアデータパッケージ | multimedia | binary | string(base64エンコード)      |
-=======
 | フィールド名   | JSONキー | 値の型               | JSON内の型 |
 | :------------: | :------: | :------------------: | :---------:|
 | コマンド       | command  | byte                 | integer    |
 | データブロック | param    | string(base64エンコード) | string     |
->>>>>>> origin/release-6.1
 
 #### 運行記録データアップロード `"msg_id": 1792` (0x0700)
 
-<<<<<<< HEAD
-|                フィールド                 | JSONキー名 | 値の型 | JSONでの値の型 |
-| :-------------------------------------: | :--------: | :----: | :------------: |
-| マルチメディアID                       |   mm_id    | dword  |    integer     |
-| 再送パッケージ総数                     |   length   |  byte  |    integer     |
-| 再送パッケージIDリスト                 |  retx_ids  |  list  | list of retry IDs |
-=======
 | フィールド名           | JSONキー | 値の型               | JSON内の型 |
 | :--------------------: | :------: | :------------------: | :---------:|
 | 応答シリアル番号       | seq      | word                 | integer    |
 | コマンド               | command  | byte                 | integer    |
 | データブロック         | data     | string(base64エンコード) | string     |
->>>>>>> origin/release-6.1
 
 #### 運行記録パラメータ下行コマンド `"msg_id": 34561` (0x8701)
 
-<<<<<<< HEAD
-|          フィールド          |   JSONキー   | 値の型 | JSONでの値の型 |
-| :-------------------------: | :----------: | :----: | :------------: |
-| チャンネルID               |  channel_id  |  byte  |    integer     |
-| 撮影コマンド               |   command    |  word  |    integer     |
-| 間隔／録画時間             |    period    |  word  |    integer     |
-| 保存フラグ                 |     save     |  byte  |    integer     |
-| 解像度                     |  resolution  |  byte  |    integer     |
-| 画像／動画品質             |   quality    |  byte  |    integer     |
-| 明るさ                     |    bright    |  byte  |    integer     |
-| コントラスト               |   contrast   |  byte  |    integer     |
-| 彩度                       |   saturate   |  byte  |    integer     |
-| 色相                       | chromaticity |  byte  |    integer     |
-
-**補足**：2019年版では解像度フィールドに新しい値 `0x00`（最低画質圧縮）および `0xFF`（最高画質圧縮）が追加されています。
-=======
 | フィールド名   | JSONキー | 値の型               | JSON内の型 |
 | :------------: | :------: | :------------------: | :---------:|
 | コマンド       | command  | byte                 | integer    |
 | データブロック | param    | string(base64エンコード) | string     |
->>>>>>> origin/release-6.1
 
 #### 電子運送状報告 `"msg_id": 1793` (0x0701)
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー |   値の型   | JSONでの値の型 |
-| :----------------------------: | :------: | :--------: | :------------: |
-| 応答シリアル番号               |   seq    |    word    |    integer     |
-| 結果                           |  result  |    byte    |    integer     |
-| マルチメディアID数             |  length  |    word    |    integer     |
-| マルチメディアIDリスト         |   ids    | byte(4*length) |    integer     |
-
-#### 記憶マルチメディアデータ取得 `"msg_id": 34818` 0x8802
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| マルチメディアタイプ   |          |  byte  |                |
-| チャンネルID          |          |  byte  |                |
-| イベント項目コード     |          |  byte  |                |
-| 開始時刻              |          | string |                |
-| 終了時刻              |          | string |                |
-
-#### 記憶マルチメディアデータ取得応答 `"msg_id": 2050` 0x0802
-
-##### JT/T 808-2013
-
-|             フィールド             | JSONキー | 値の型 |       JSONでの値の型        |
-| :------------------------------: | :------: | :----: | :-------------------------: |
-| 応答シリアル番号                |   seq    |  word  |          integer            |
-| マルチメディアデータ総数        |  length  |  word  |          integer            |
-| 検索結果項目                   |  result  |  list  | list of search result       |
-| マルチメディアID               |    id    | dword  |          integer            |
-| マルチメディアタイプ           |   type   |  byte  |          integer            |
-| チャンネルID                  | channel  |  byte  |          integer            |
-| イベント項目コード             |  event   |  byte  |          integer            |
-| 位置情報報告                  | location | byte(28)|          map               |
-
-##### JT/T 808-2019
-
-|             フィールド             | JSONキー | 値の型 |       JSONでの値の型        |
-| :------------------------------: | :------: | :----: | :-------------------------: |
-| 応答シリアル番号                |   seq    |  word  |          integer            |
-| マルチメディアデータ総数        |  length  |  word  |          integer            |
-| 検索結果項目                   |  result  |  list  | list of search result       |
-| マルチメディアID               |    id    | dword  |          integer            |
-| マルチメディアタイプ           |   type   |  byte  |          integer            |
-| チャンネルID                  | channel  |  byte  |          integer            |
-| イベント項目コード             |  event   |  byte  |          integer            |
-| 位置情報報告                  | location | variable |          map               |
-
-**補足**：2019年版では位置情報報告のメッセージ本文が固定長28バイトから可変長に変更されています。
-
-#### 記憶マルチメディアデータアップロードコマンド `"msg_id": 34819` 0x8803
-
-|       フィールド       |  JSONキー  | 値の型 | JSONでの値の型 |
-| :--------------------: | :--------: | :----: | :------------: |
-| マルチメディアタイプ   |    type    |  byte  |    integer     |
-| チャンネルID          |  channel   |  byte  |    integer     |
-| イベント項目コード     |   event    |  byte  |    integer     |
-| 開始時刻              | start_time | string |    string      |
-| 終了時刻              |  end_time  | string |    string      |
-| 削除フラグ            |   delete   |  byte  |    integer     |
-=======
 | フィールド名           | JSONキー | 値の型               | JSON内の型 |
 | :--------------------: | :------: | :------------------: | :---------:|
 | 電子運送状長           | length   | dword                | integer    |
@@ -1978,27 +1037,11 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 証明書有効期限               | cert_expiry  | string | string     |
 
 ##### JT/T 808-2019 追加フィールド
->>>>>>> origin/release-6.1
 
 | フィールド名           | JSONキー | 値の型 | JSON内の型 |
 | :--------------------: | :------: | :-----:| :---------:|
 | 運転者IDカード番号     | id_card  | string | string     |
 
-<<<<<<< HEAD
-|        フィールド        | JSONキー | 値の型 | JSONでの値の型 |
-| :---------------------: | :------: | :----: | :------------: |
-| 録音コマンド            | command  |  byte  |    integer     |
-| 録音時間                |   time   |  word  |    integer     |
-| 保存フラグ              |   save   |  byte  |    integer     |
-| 音声サンプリングレート  |   rate   |  byte  |    integer     |
-
-#### 単一記憶マルチメディア項目取得アップロードコマンド `"msg_id": 34821` 0x8805
-
-|       フィールド       | JSONキー | 値の型 | JSONでの値の型 |
-| :--------------------: | :------: | :----: | :------------: |
-| マルチメディアID       |    id    | dword  |    integer     |
-| 削除フラグ            |   flag   |  byte  |    integer     |
-=======
 **補足**: 2019年版では運転者IDカード番号フィールドが追加されました。
 
 #### 位置データ一括アップロード `"msg_id": 1796` (0x0704)
@@ -2008,16 +1051,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | 位置データタイプ       | type     | byte   | integer    |
 | データ項目数           | length   | word   | integer    |
 | 位置報告データ項目     | location | list   | 位置情報のリスト |
->>>>>>> origin/release-6.1
 
 #### CANバスデータアップロード `"msg_id": 1797` (0x0705)
 
-<<<<<<< HEAD
-|            フィールド            | JSONキー | 値の型 |        JSONでの値の型         |
-| :-----------------------------: | :------: | :----: | :---------------------------: |
-| 送信メッセージタイプ           |   type   |  byte  |          integer              |
-| 送信メッセージ内容             |   data   | binary | string(base64エンコード)      |
-=======
 | フィールド名           | JSONキー   | 値の型     | JSON内の型               |
 | :--------------------: | :--------: | :---------:| :----------------------: |
 | データ項目数           | length     | word       | integer                 |
@@ -2028,16 +1064,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | データ収集方法         | data_method| 1ビット    | integer                 |
 | CANバスID              | id         | 29ビット   | integer                 |
 | CANデータ              | data       | binary     | string(base64エンコード) |
->>>>>>> origin/release-6.1
 
 #### マルチメディアイベント情報アップロード `"msg_id": 2048` (0x0800)
 
-<<<<<<< HEAD
-|            フィールド            | JSONキー | 値の型 |        JSONでの値の型         |
-| :-----------------------------: | :------: | :----: | :---------------------------: |
-| 送信メッセージタイプ           |   type   |  byte  |          integer              |
-| 送信メッセージ内容             |   data   | binary | string(base64エンコード)      |
-=======
 | フィールド名           | JSONキー | 値の型 | JSON内の型 |
 | :--------------------: | :------: | :-----:| :---------:|
 | マルチメディアデータID | id       | dword  | integer    |
@@ -2045,16 +1074,9 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | マルチメディアエンコード形式 | format | byte   | integer    |
 | イベント項目コード     | event    | byte   | integer    |
 | チャンネルID           | channel  | byte   | integer    |
->>>>>>> origin/release-6.1
 
 #### マルチメディアデータアップロード `"msg_id": 2049` (0x0801)
 
-<<<<<<< HEAD
-|           フィールド           | JSONキー | 値の型 |        JSONでの値の型         |
-| :----------------------------: | :------: | :----: | :---------------------------: |
-| 圧縮メッセージ長さ            | length   | dword  |          integer              |
-| 圧縮メッセージ本文            | data     | binary | string(base64エンコード)      |
-=======
 | フィールド名           | JSONキー  | 値の型     | JSON内の型               |
 | :--------------------: | :-------: | :---------:| :----------------------: |
 | マルチメディアID       | id        | dword      | integer                 |
@@ -2064,31 +1086,17 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | チャンネルID           | channel   | byte       | integer                 |
 | 位置情報報告           | location  | byte(28)   | map                     |
 | マルチメディアデータパッケージ | multimedia | binary     | string(base64エンコード) |
->>>>>>> origin/release-6.1
 
 #### マルチメディアデータアップロード応答 `"msg_id": 34816` (0x8800)
 
-<<<<<<< HEAD
-| フィールド | JSONキー | 値の型    |        JSONでの値の型         |
-| :--------: | :------: | :-------: | :---------------------------: |
-|     e      |    e     | dword     |          integer              |
-|     n      |    n     | byte(128) | string(base64エンコード)      |
-=======
 | フィールド名               | JSONキー | 値の型 | JSON内の型         |
 | :------------------------: | :------: | :-----:| :-----------------:|
 | マルチメディアID           | mm_id    | dword  | integer            |
 | 再送パッケージ総数         | length   | byte   | integer            |
 | 再送パッケージIDリスト     | retx_ids | list   | 再送IDのリスト     |
->>>>>>> origin/release-6.1
 
 #### 即時カメラ撮影コマンド `"msg_id": 34817` (0x8801)
 
-<<<<<<< HEAD
-| フィールド | JSONキー | 値の型    |        JSONでの値の型         |
-| :--------: | :------: | :-------: | :---------------------------: |
-|     e      |    e     | dword     |          integer              |
-|     n      |    n     | byte(128) | string(base64エンコード)      |
-=======
 | フィールド名           | JSONキー    | 値の型 | JSON内の型 |
 | :--------------------: | :---------: | :-----:| :---------:|
 | チャンネルID           | channel_id  | byte   | integer    |
@@ -2214,7 +1222,6 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | :----------: | :------: | :---------:| :----------------------: |
 | e            | e        | dword      | integer                 |
 | n            | n        | byte(128)  | string(base64エンコード) |
->>>>>>> origin/release-6.1
 
 #### 予約済み 0x8F00 ～ 0x8FFF
 
@@ -2222,16 +1229,8 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 
 #### ベンダー定義上行メッセージ 0xE000 ～ 0xEFFF (2019年追加)
 
-<<<<<<< HEAD
-ベンダー定義メッセージ。メッセージ本文フォーマットはベンダーが定義します。
-
-#### ベンダー定義下行メッセージ 0xF000 ～ 0xFFFF (2019年追加)
-
-ベンダー定義メッセージ。メッセージ本文フォーマットはベンダーが定義します。
-=======
 ベンダー定義のメッセージ。メッセージ本文フォーマットはベンダーが定義します。
 
 #### ベンダー定義下行メッセージ 0xF000 ～ 0xFFFF (2019年追加)
 
 ベンダー定義のメッセージ。メッセージ本文フォーマットはベンダーが定義します。
->>>>>>> origin/release-6.1

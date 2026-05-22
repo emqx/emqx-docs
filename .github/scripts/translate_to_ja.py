@@ -18,13 +18,10 @@ OPENAI_API_URL = os.getenv('OPENAI_API_URL')
 CONCURRENCY = int(os.getenv('TRANSLATION_CONCURRENCY', '10'))
 MAX_RETRIES = 3
 REQUEST_TIMEOUT = 600
-<<<<<<< HEAD
 
 SKIP_TRANSLATION_PATHS = {
     'en_US/connect-emqx/introduction.md',
 }
-=======
->>>>>>> origin/release-6.1
 
 SYSTEM_PROMPT = '''
 # 1. Role & Objective
@@ -185,11 +182,7 @@ def translate_one(input_file_path, copy_set):
     with open(input_file_path, 'r', encoding='utf-8') as f:
         markdown_text = f.read().strip()
 
-<<<<<<< HEAD
     if 'en_US/changes/' in input_file_path or input_file_path in copy_set or input_file_path in SKIP_TRANSLATION_PATHS:
-=======
-    if 'en_US/changes/' in input_file_path or input_file_path in copy_set:
->>>>>>> origin/release-6.1
         with open(output_file_path, 'w', encoding='utf-8') as f:
             f.write(markdown_text + '\n')
         return {'path': input_file_path, 'status': 'copied'}

@@ -28,15 +28,9 @@ client_version() ->
 
 client_capabilities() -> #{}.
 
-<<<<<<< HEAD
-%% MCP 以外のメッセージ受信時のコールバック
-received_non_mcp_message(MqttClient, Msg, State) ->
-    io:format("~p MCP 以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
-=======
 %% MCP 以外のメッセージを受信した際のコールバック
 received_non_mcp_message(MqttClient, Msg, State) ->
     io:format("~p MCP以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
->>>>>>> origin/release-6.1
     State.
 
 %% MCP over MQTT クライアントの起動

@@ -9,11 +9,7 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`：`$delayed`で始まるメッセージは遅延が必要なメッセージとして扱われます。遅延時間は次のトピックレベルの内容で決まります。
-<<<<<<< HEAD
-- `{DelayTime}`：このMQTTメッセージのパブリッシュを遅延させる時間間隔またはタイムスタンプを秒単位で指定します。間隔の場合、最大許容間隔は42949669秒（約497日）です。タイムスタンプの場合は、現在のシステム時刻から前後42949669秒を超えてはなりません。`{DelayTime}`が整数として解析できないか、有効範囲外の場合はメッセージは破棄されます。
-=======
 - `{DelayTime}`：このMQTTメッセージのパブリッシュを遅延させる時間間隔またはタイムスタンプを秒単位で指定します。時間間隔の場合、最大許容間隔は42949669秒（約497日）です。タイムスタンプの場合、現在のシステム時刻から42949669秒より前または後であってはなりません。`{DelayTime}`が整数として解析できないか、有効範囲外の場合はメッセージは破棄されます。
->>>>>>> origin/release-6.1
 - `{TopicName}`：MQTTメッセージのトピック名です。
 
 例：
@@ -31,10 +27,6 @@ $delayed/{DelayInterval}/{TopicName}
 
    - **Enable**：遅延パブリッシュの有効／無効を切り替えます。デフォルトでは有効です。
    - **Max Delayed Messages**：遅延メッセージの最大数を指定できます。
-<<<<<<< HEAD
-   
-=======
->>>>>>> origin/release-6.1
 
 <img src="./assets/configure-delayed-publish-dashboard.png" alt="遅延パブリッシュのダッシュボード設定" style="zoom:45%;" />
 
@@ -42,11 +34,7 @@ $delayed/{DelayInterval}/{TopicName}
 
 :::tip 前提条件
 
-<<<<<<< HEAD
-[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を使った基本的なパブリッシュとサブスクライブの操作
-=======
 [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を使った基本的なパブリッシュおよびサブスクライブ操作
->>>>>>> origin/release-6.1
 
 :::
 
@@ -66,25 +54,12 @@ $delayed/{DelayInterval}/{TopicName}
 
 2. 別のMQTT接続を作成し、サブスクライバーとして設定します。
 
-<<<<<<< HEAD
-3. **Connections** ペインで `Demo` 接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
-=======
 3. **Connections** ペインで `Demo` という接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
->>>>>>> origin/release-6.1
 
    - `$delayed`：遅延メッセージであることを示します。
    - `10`：遅延時間が10秒であることを示します。
    - `x/y`：メッセージのトピック名を示します。
 
-<<<<<<< HEAD
-4. **Connections** ペインで `Subscriber` 接続を選択します。**New Subscription** ボタンをクリックしてサブスクリプションを作成します。**Topic** テキストボックスに `x/y` と入力してこのトピックをサブスクライブします。**Confirm** をクリックします。
-
-   <img src="./assets/subscribe-delayed-message.png" alt="遅延メッセージのサブスクライブ" style="zoom:35%;" />
-
-5. **Connections** ペインで `Demo` 接続を選択します。送信ボタンをクリックして、トピック `$delayed/10/x/y` で `Delayed Message` を送信します。
-
-6. 10秒待ちます。`Subscriber` 接続が10秒後に遅延メッセージを受信するのが確認できます。
-=======
 4. **Connections** ペインで `Subscriber` という接続を選択します。**New Subscription** ボタンをクリックしてサブスクリプションを作成します。**Topic** テキストボックスに `x/y` と入力してこのトピックをサブスクライブし、**Confirm** をクリックします。
 
    <img src="./assets/subscribe-delayed-message.png" alt="遅延メッセージのサブスクライブ" style="zoom:35%;" />
@@ -92,7 +67,6 @@ $delayed/{DelayInterval}/{TopicName}
 5. **Connections** ペインで `Demo` という接続を選択し、送信ボタンをクリックしてトピック `$delayed/10/x/y` で `Delayed Message` を送信します。
 
 6. 10秒待ちます。`Subscriber` という接続が10秒後に遅延メッセージを受信するのが確認できます。
->>>>>>> origin/release-6.1
 
    <img src="./assets/receive-delayed-message.png" alt="遅延メッセージの受信" style="zoom:35%;" />
 
@@ -100,11 +74,7 @@ $delayed/{DelayInterval}/{TopicName}
 
 ::: tip 前提条件
 
-<<<<<<< HEAD
-[MQTTX CLI](./publish-and-subscribe.md#mqttx-cli) を使った基本的なパブリッシュとサブスクライブの操作
-=======
 [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli) を使った基本的なパブリッシュおよびサブスクライブ操作
->>>>>>> origin/release-6.1
 
 :::
 

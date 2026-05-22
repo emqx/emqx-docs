@@ -1,32 +1,5 @@
 # TimescaleDBへのMQTTデータ取り込み
 
-<<<<<<< HEAD
-[TimescaleDB](https://www.timescale.com/)（Timescale）は時系列データの保存と解析に特化したデータベースです。優れたデータスループットと信頼性の高いパフォーマンスにより、IoT（Internet of Things）分野に最適であり、IoTアプリケーション向けに効率的かつスケーラブルなデータ保存と解析ソリューションを提供します。
-
-本ページでは、EMQXとTimescaleDB間のデータ統合について包括的に紹介し、データ統合の作成および検証方法を実践的に解説します。
-
-## 動作概要
-
-TimescaleDBデータ統合はEMQXに組み込まれた機能であり、EMQXのリアルタイムデータキャプチャと送信能力とTimescaleDBのデータ保存および解析能力を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからTimescaleDBへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
-
-以下の図は、産業用IoTにおけるEMQXとTimescaleDBの典型的なデータ統合アーキテクチャを示しています。
-
-![MQTT to Timescale](./assets/mqtt-to-timescaledb.jpg)
-
-EMQXとTimescaleDBは、エネルギー消費データをリアルタイムに効率的に収集・解析するためのスケーラブルなIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがデバイス接続、メッセージ送信、データルーティングを担うIoTプラットフォームとして機能し、TimescaleDBがデータ保存および解析プラットフォームとして役割を果たします。
-
-EMQXはルールエンジンとSinkを介してデバイスデータをTimescaleDBに転送します。TimescaleDBはSQL文を用いてデータを解析し、レポートやチャートなどの解析結果を生成し、TimescaleDBの可視化ツールを通じてユーザーに表示します。ワークフローは以下の通りです：
-
-1. **メッセージのパブリッシュと受信**：産業用デバイスはMQTTプロトコルを介してEMQXに正常に接続し、定期的にエネルギー消費データをパブリッシュします。このデータには生産ライン識別子やエネルギー消費値が含まれます。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
-2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンはトピックマッチングに基づき特定のソースからのメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールとマッチングしてメッセージデータを処理します。これにはデータ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などが含まれます。
-3. **TimescaleDBへのデータ取り込み**：ルールエンジンで定義されたルールがトリガーとなり、メッセージをTimescaleDBに書き込む操作を実行します。TimescaleDB SinkはSQLテンプレートを提供し、特定のメッセージフィールドをTimescaleDBの対応テーブルやカラムに柔軟に書き込む定義が可能です。
-
-エネルギー消費データがTimescaleDBに書き込まれた後は、SQL文を用いて柔軟にデータ解析が行えます。例えば：
-
-- Grafanaなどの可視化ツールに接続し、チャートを生成してエネルギー消費データを表示。
-- ERPなどのアプリケーションシステムに接続し、生産分析や生産計画の調整に活用。
-- 業務システムに接続し、リアルタイムのエネルギー使用分析を実施し、データ駆動型のエネルギー管理を支援。
-=======
 [TimescaleDB](https://www.timescale.com/)（Timescale）は、時系列データの保存と解析に特化したデータベースです。優れたデータスループットと信頼性の高いパフォーマンスにより、IoT分野に最適な選択肢であり、IoTアプリケーション向けに効率的かつスケーラブルなデータ保存と解析ソリューションを提供します。
 
 本ページでは、EMQXとTimescaleDB間のデータ統合について、実践的な手順を交えて包括的に紹介します。
@@ -52,22 +25,9 @@ EMQXはルールエンジンとSinkを介してデバイスデータをTimescale
 - Grafanaなどの可視化ツールに接続し、チャートを生成してエネルギー消費データを表示。
 - ERPなどのアプリケーションシステムに接続し、生産分析や生産計画の調整に活用。
 - 業務システムに接続し、リアルタイムのエネルギー使用状況分析を行い、データ駆動型のエネルギー管理を実現。
->>>>>>> origin/release-6.1
 
 ## 特長と利点
 
-<<<<<<< HEAD
-EMQXのTimescaleDBデータ統合は、以下の特長と利点をビジネスにもたらします：
-
-- **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを効率的に処理可能。TimescaleDBはデータ書き込み、保存、クエリに優れ、IoTシナリオのデータ処理要件をシステムに負荷をかけずに満たします。
-- **メッセージ変換**：メッセージはEMQXルール内で豊富な処理や変換を経てからTimescaleDBに書き込まれます。
-- **効率的な保存とスケーラビリティ**：EMQXとTimescaleDBは共にクラスターのスケールアウト機能を持ち、ビジネスの成長に応じて柔軟に水平スケーリングが可能です。
-- **高度なクエリ機能**：TimescaleDBはタイムスタンプデータの効率的なクエリと解析のために最適化された関数、演算子、インデックス技術を提供し、IoT時系列データから正確な洞察を抽出します。
-
-## はじめる前に
-
-このセクションでは、TimescaleDBデータ統合の作成を開始する前に必要な準備、TimescaleDBのインストールおよびデータテーブルの作成について説明します。
-=======
 EMQXのTimescaleDBデータ統合は、以下の特長と利点をもたらします：
 
 - **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを効率的に処理可能。TimescaleDBはデータ書き込み、保存、クエリに優れており、IoTシナリオのデータ処理要件をシステム負荷をかけずに満たします。
@@ -78,7 +38,6 @@ EMQXのTimescaleDBデータ統合は、以下の特長と利点をもたらし�
 ## はじめる前に
 
 本節では、TimescaleDBデータ統合の作成に先立ち必要な準備（TimescaleDBのインストールやデータテーブルの作成）について説明します。
->>>>>>> origin/release-6.1
 
 ### 前提条件
 
@@ -87,11 +46,7 @@ EMQXのTimescaleDBデータ統合は、以下の特長と利点をもたらし�
 
 ### Timescaleのインストールとデータテーブル作成
 
-<<<<<<< HEAD
-EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサービスとの統合をサポートします。Timescaleサービスをクラウドサービスとして利用するか、Dockerを使ってTimescaleDBインスタンスをデプロイできます。
-=======
 EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサービスとの統合をサポートしています。Timescaleサービスをクラウドサービスとして利用するか、Dockerを用いてTimescaleDBインスタンスをデプロイできます。
->>>>>>> origin/release-6.1
 
 :::: tabs 
 ::: tab Timescale Service
@@ -102,11 +57,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
 
 3. サービス概要ページから接続情報を取得します。EMQXで必要な項目は**データベース名**、**ホスト**、**ポート**、**ユーザー名**です。
 
-<<<<<<< HEAD
-4. `psql client`で[サービスに接続](https://www.tigerdata.com/docs/getting-started/latest/services#connect-to-your-service)します。
-=======
 4. `psql client`を使って[サービスに接続](https://www.tigerdata.com/docs/getting-started/latest/services#connect-to-your-service)します。
->>>>>>> origin/release-6.1
 
    ```bash
    # サービスURLで接続
@@ -115,11 +66,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
    Password for user tsdbadmin:
    ```
 
-<<<<<<< HEAD
-5. クライアントからのメッセージデータを保存するために`sensor_data`テーブルを作成します。
-=======
 5. クライアントからのメッセージデータを保存するためのテーブル`sensor_data`を作成します。
->>>>>>> origin/release-6.1
 
    ```sql
    CREATE TABLE sensor_data (
@@ -162,11 +109,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
    > \c tsdb;
    ```
 
-<<<<<<< HEAD
-4. クライアントからのメッセージデータを保存するために`sensor_data`テーブルを作成します。
-=======
 4. クライアントからのメッセージデータを保存するためのテーブル`sensor_data`を作成します。
->>>>>>> origin/release-6.1
 
    ```sql
    CREATE TABLE sensor_data (
@@ -186,18 +129,6 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
 
 TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用にTimescaleDBコネクターを作成する必要があります。
 
-<<<<<<< HEAD
-以下の手順は、EMQXとTimescaleDB（セルフホストの場合）をローカルマシンで実行していることを前提としています。リモートで稼働している場合は設定を適宜調整してください。
-
-1. EMQXダッシュボードにアクセスし、左側ナビゲーションメニューから **Integration** -> **Connector** をクリックします。
-2. 画面右上の **Create** をクリックします。
-3. コネクター一覧から **TimescaleDB** を選択し、**Next** をクリックします。
-4. **Connector Name** に名前を入力します。例：`my-timescale`。名前は大文字・小文字の英数字の組み合わせにしてください。
-5. TimescaleDBのデプロイ方法に応じて接続情報を入力します。Dockerでデプロイした場合は、**Server Host** に `127.0.0.1:5432`、**Database Name** に `tsdb`、**Username** に `postgres`、**Password** に `public` を入力します。
-6. 詳細設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
-7. **Create**をクリックする前に、**Test Connectivity** をクリックしてコネクターがTimescaleDBサーバーに接続できるかテストできます。
-8. **Create** ボタンをクリックしてコネクター作成を完了します。
-=======
 以下の手順は、EMQXとTimescaleDB（セルフホストの場合）をローカルマシンで実行していることを前提としています。リモート環境で実行している場合は設定を適宜調整してください。
 
 1. EMQXダッシュボードにアクセスし、左側ナビゲーションメニューから**Integration** -> **Connector**をクリックします。
@@ -208,21 +139,11 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
 6. 詳細設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 7. **Create**をクリックする前に、**Test Connectivity**を押してコネクターがTimescaleDBサーバーに接続できるか確認できます。
 8. **Create**ボタンをクリックしてコネクター作成を完了します。
->>>>>>> origin/release-6.1
 
 これでTimescaleDBコネクターが作成されました。次に、ルールとSinkを作成してTimescaleDBに書き込むデータを指定します。
 
 ## TimescaleDB Sinkを用いたルールの作成
 
-<<<<<<< HEAD
-このセクションでは、ダッシュボードでルールを作成し、MQTTトピック `t/#` からのメッセージを処理して、処理結果を設定済みのTimescaleDB Sink経由でTimescaleDBに送信する方法を示します。
-
-1. EMQXダッシュボードにアクセスし、左側ナビゲーションメニューから **Integration** -> **Rules** をクリックします。
-
-2. 画面右上の **+ Create** をクリックします。
-
-3. ルール作成画面で、ルールIDに `my_rule` を入力します。
-=======
 この節では、ダッシュボードでMQTTトピック`t/#`からのメッセージを処理し、処理結果を設定済みのSinkを通じてTimescaleDBに送信するルールの作成方法を説明します。
 
 1. EMQXダッシュボードにアクセスし、左側ナビゲーションメニューから**Integration** -> **Rules**をクリックします。
@@ -230,7 +151,6 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
 2. 画面右上の**+ Create**をクリックします。
 
 3. ルール作成画面で、ルールIDに`my_rule`を入力します。
->>>>>>> origin/release-6.1
 
 4. **SQL Editor** に以下のSQLルールを入力し、トピック `t/#` のMQTTメッセージをTimescaleDBに保存します：
 
@@ -243,21 +163,6 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
        "t/#"
    ```
 
-<<<<<<< HEAD
-   補足：初心者の方は **SQL Examples** をクリックし、**Enable Test** を有効にしてSQLルールの学習とテストが可能です。
-
-5. **+ Add Action** ボタンをクリックして、ルールでトリガーされるアクションを定義します。**Type of Action** ドロップダウンリストから `TimescaleDB` を選択し、EMQXがルールで処理したデータをTimescaleDBに送信するようにします。
-
-   **Action** ドロップダウンは `Create Action` のままにするか、既存のTimescaleDBアクションを選択できます。本デモでは新しいSinkを作成してルールに追加します。
-
-6. Sinkの名前と説明を **Name** と **Description** テキストボックスに入力します。
-
-7. **Connector** ドロップダウンから先ほど作成した `my-timescale` を選択します。隣のボタンから新規コネクター作成も可能です。設定パラメーターの詳細は[コネクターの作成](#コネクターの作成)を参照してください。
-
-8. データ挿入用の**SQL Template**を以下のSQL文で設定します。
-
-   補足：これは前処理済みのSQLのため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
-=======
    注：初心者の場合は、**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールの学習とテストが可能です。
 
 5. **+ Add Action**ボタンをクリックし、ルールでトリガーされるアクションを定義します。**Type of Action**ドロップダウンから`TimescaleDB`を選択すると、EMQXはルールで処理されたデータをTimescaleDBに送信します。
@@ -271,7 +176,6 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
 8. 以下のSQL文で**SQL Template**を設定します。
 
    注：これは前処理済みSQLのため、フィールド名は引用符で囲まず、文末にセミコロンを付けないでください。
->>>>>>> origin/release-6.1
 
    ```sql
      INSERT INTO
@@ -284,19 +188,6 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
 
 10. **詳細設定（任意）**：[詳細設定](#advanced-configurations)を参照してください。
 
-<<<<<<< HEAD
-11. **Add** ボタンをクリックしてSinkの設定を完了します。ルール作成画面の **Action Outputs** タブに新しいSinkが表示されます。
-
-12. ルール作成画面で設定内容を確認し、**Create** ボタンをクリックしてルールを生成します。作成したルールはルール一覧に表示され、**status** は `connected` となっているはずです。
-
-これでルールの作成が完了し、**Rule** ページで新しいルールが確認できます。**Actions(Sink)** タブをクリックすると、新しいTimescaleDB Sinkが表示されます。
-
-また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/#` のメッセージがルール `my_rule` によって解析されTimescaleDBに送信・保存されていることが確認できます。
-
-### ルールのテスト
-
-MQTTXを使ってトピック `t/1` にメッセージを送信し、同時にオンライン／オフラインイベントをトリガーします：
-=======
 11. **Add**ボタンをクリックしてSink設定を完了します。ルール作成画面の**Action Outputs**タブに新規Sinkが表示されます。
 
 12. ルール作成画面で設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。作成したルールはルール一覧に表示され、**status**は`connected`であるべきです。
@@ -308,7 +199,6 @@ MQTTXを使ってトピック `t/1` にメッセージを送信し、同時に�
 ### ルールのテスト
 
 MQTTXを使い、トピック`t/1`にメッセージを送信し、同時にオンライン/オフラインイベントをトリガーします：
->>>>>>> origin/release-6.1
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30,"location":"hangzhou"}'
@@ -330,21 +220,6 @@ tsdb=# select * from sensor_data;
 
 ## 詳細設定
 
-<<<<<<< HEAD
-このセクションでは、TimescaleDB Sinkの詳細設定オプションについて説明します。ダッシュボードでSinkを設定する際、**Advanced Settings** タブにて以下のパラメーターをニーズに合わせて調整できます。
-
-| **項目**                  | **説明**                                                                                     | **推奨値**            |
-| ------------------------- | -------------------------------------------------------------------------------------------- | --------------------- |
-| **Connection Pool Size**  | Timescaleサービスとの接続プールで同時に維持可能な接続数を指定します。EMQXとTimescaleDB間のアクティブ接続数を制限または増加させることで、アプリケーションのスケーラビリティとパフォーマンスを管理します。<br/>**注意**：適切な接続プールサイズはシステムリソース、ネットワークレイテンシ、アプリケーションのワークロードに依存します。大きすぎるとリソース枯渇、小さすぎるとスループット制限の原因となります。 | `8`                   |
-| **Start Timeout**         | コネクターが自動起動したリソース（例：TimescaleDBインスタンス）が正常状態になるまで待機する最大秒数です。これにより、リソースが完全に稼働しデータ処理準備が整うまで処理を進めないようにします。 | `5`                   |
-| **Buffer Pool Size**      | EMQXとTimescaleDB間の送信（egress）タイプSinkでデータフローを管理するバッファワーカーの数を指定します。これらのワーカーはデータ送信前に一時的にデータを保持・処理します。受信（ingress）専用のSinkには適用されず、0に設定可能です。 | `16`                  |
-| **Request TTL**           | バッファに入ったリクエストが有効とみなされる最大秒数です。TTLを超えてバッファに滞留するか、送信後にTimescaleDBからの応答やアックが得られない場合、リクエストは期限切れとみなされます。 | `45`                  |
-| **Health Check Interval** | SinkがTimescaleDBへの接続状態を自動的にヘルスチェックする間隔（秒）です。 | `15`                  |
-| **Max Buffer Queue Size** | TimescaleDB Sinkの各バッファワーカーがバッファリング可能な最大バイト数です。バッファワーカーはデータ送信前に一時的にデータを保持し、データフローを効率化します。システム性能やデータ転送要件に応じて調整してください。 | `256`                 |
-| **Max Batch Size**        | EMQXからTimescaleDBへ一度に送信するデータバッチの最大サイズです。サイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。<br />`1`に設定すると、データレコードは個別に送信され、バッチ処理されません。 | `1`                   |
-| **Query Mode**            | メッセージ送信要件に応じて `asynchronous` または `synchronous` のクエリモードを選択できます。非同期モードではTimescaleDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがTimescaleDBへの書き込み前にメッセージを受信する可能性があります。 | `Async`               |
-| **Inflight Window**       | "インフライトクエリ"とは、送信済みで応答やアックをまだ受け取っていないクエリを指します。SinkがTimescaleDBと通信する際に同時に存在可能な最大インフライトクエリ数を制御します。<br/>**Query Mode** が `async` の場合、このパラメーターは特に重要です。同一MQTTクライアントからのメッセージを厳密な順序で処理する必要がある場合は、値を1に設定してください。 | `100`                 |
-=======
 本節では、TimescaleDB Sinkの詳細設定オプションについて説明します。ダッシュボードでSinkを設定する際、**Advanced Settings**に移動して以下のパラメータをニーズに合わせて調整できます。
 
 | **項目**                  | **説明**                                                       | **推奨値**           |
@@ -358,7 +233,6 @@ tsdb=# select * from sensor_data;
 | **Max Batch Size**        | EMQXからTimescaleDBへ一度に転送するデータバッチの最大サイズを指定します。サイズを調整することでデータ転送効率とパフォーマンスを最適化できます。<br />「1」に設定すると、データレコードはバッチ化せず個別に送信されます。 | `1`                   |
 | **Query Mode**            | メッセージ送信要件に応じて`asynchronous`または`synchronous`のクエリモードを選択できます。非同期モードではTimescaleDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージをTimescaleDB到着前に受信する可能性があります。 | `Async`               |
 | **Inflight Window**       | 「インフライトクエリ」とは、開始されて応答やアックをまだ受け取っていないクエリを指します。SinkがTimescaleDBと通信する際の最大同時インフライトクエリ数を制御します。<br/>**Query Mode**が`async`の場合、このパラメータは特に重要です。同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は、この値を1に設定してください。 | `100`                 |
->>>>>>> origin/release-6.1
 
 ## 参考情報
 
@@ -368,8 +242,4 @@ tsdb=# select * from sensor_data;
 
 [MQTTパフォーマンスベンチマークテスト：EMQX-TimescaleDB統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-series-emqx-timescaledb-integration)
 
-<<<<<<< HEAD
-[MQTTとTimescaleを用いた産業用エネルギー監視向けIoT時系列データアプリケーションの構築](https://www.emqx.com/en/blog/build-an-iot-time-series-data-application-for-energy-storage-with-mqtt-and-timescale)
-=======
 [MQTTとTimescaleで産業用エネルギー監視向けIoT時系列データアプリケーションを構築](https://www.emqx.com/en/blog/build-an-iot-time-series-data-application-for-energy-storage-with-mqtt-and-timescale)
->>>>>>> origin/release-6.1

@@ -1,29 +1,17 @@
 # EMQX Enterprise のインストール
 
-<<<<<<< HEAD
-EMQX は各リリースごとに対応する Docker イメージおよび各種オペレーティングシステムやプラットフォーム向けのインストールパッケージを提供しています。ダウンロードは[こちら](https://www.emqx.com/en/try?product=enterprise)から可能です。
-
-:::tip
-
-上記のデプロイ方法に加えて、完全マネージド型の MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウド接続にあたり、インフラの保守は不要で、[アカウント登録](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/)のみでご利用いただけます。
-=======
 EMQX は各リリースごとに対応する Docker イメージおよび各種オペレーティングシステムやプラットフォーム向けのインストールパッケージを公開しています。ダウンロードは[こちら](https://www.emqx.com/en/try?product=enterprise)から可能です。
 
 :::tip
 
 上記のデプロイ方法に加えて、完全マネージド型の MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウドへの接続にあたって、インフラのメンテナンスは一切不要で、[アカウント登録](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/)のみでご利用いただけます。
->>>>>>> origin/release-6.1
 :::
 
 以下のページでは EMQX Enterprise のインストール手順を説明しています。
 
 **[Docker を使ったインストール](./install-docker.md)**
 
-<<<<<<< HEAD
-公式の Docker イメージを使用して EMQX Enterprise をインストールおよび起動し、Docker Compose で EMQX クラスターを構築します。
-=======
 公式 Docker イメージを使用して EMQX Enterprise をインストールおよび起動し、Docker Compose を使って EMQX クラスターを構築します。
->>>>>>> origin/release-6.1
 
 **[Debian へのインストール](./install-debian.md)**
 
@@ -39,11 +27,7 @@ CentOS/RHEL システムに rpm および tar.gz パッケージで EMQX Enterpr
 
 **[macOS へのインストール](./install-macOS.md)**
 
-<<<<<<< HEAD
-zip パッケージを使って macOS に EMQX Enterprise をインストールします。
-=======
 macOS に zip パッケージで EMQX Enterprise をインストールします。
->>>>>>> origin/release-6.1
 
 **[Kubernetes へのデプロイ](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
