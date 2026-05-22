@@ -13,16 +13,13 @@ Webhookは、EMQXのクライアントメッセージやイベントを外部の
   playsinline
   style="width: 100%; border-radius: 8px;"></video>
 
+## 仕組み
 
 クライアントが特定のトピックにメッセージをパブリッシュしたり、特定の操作を行うとWebhookがトリガーされます。Webhookはルールエンジンがサポートするすべてのメッセージおよびイベントに対応しています。
 
 Webhookは以下のシナリオでトリガーされるよう設定できます。各イベントのリクエスト内容については、[SQLデータソースとフィールド](./rule-sql-events-and-fields.md)を参照してください。
 
-クライアントが特定のトピックにメッセージをパブリッシュしたり、特定の操作を行うと、Webhook がトリガーされます。Webhook はルールエンジンがサポートするすべてのメッセージとイベントに対応しています。
-
-Webhook は以下のシナリオでトリガーされるよう設定可能です。各イベントのリクエスト内容は [SQL Data Source and Fields](./rule-sql-events-and-fields.md) を参照してください。
-
-![EMQX Webhook 集成](./assets/emqx-integration-http.png)
+![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
 
 ### メッセージ
 

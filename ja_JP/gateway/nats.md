@@ -8,14 +8,14 @@ NATS プロトコルゲートウェイは現在、以下の主要機能をサポ
 
 ### プロトコルサポート
 
-- **NATS プロトコルのメッセージタイプをフルサポート**：
+- **NATS プロトコルのメッセージタイプを完全サポート**：
   - 接続およびセッション管理：`INFO`、`CONNECT`
   - メッセージのパブリッシュ／サブスクライブ：`PUB`、`HPUB`、`SUB`、`UNSUB`
   - メッセージ配信および応答：`MSG`、`HMSG`
   - ハートビートおよびステータス：`PING`、`PONG`、`+OK`、`-ERR`
 - **冗長モード（Verbose mode）対応**：クライアントが `CONNECT verbose=true` で接続した際に応答確認を有効化。
 
-### MQTT との相互運用
+### MQTT との相互運用性
 
 - **MQTT との双方向メッセージ相互運用**：
   - NATS クライアントからパブリッシュされたメッセージは MQTT パブリッシュに変換されます。
@@ -184,7 +184,7 @@ NATS ゲートウェイは TCP、SSL、WS、WSS タイプのリスナーをサ�
 
    **ピア検証設定**（SSL および WSS リスナーのみ適用）
 
-   相互 TLS はデフォルトで有効です。TLS 証明書、秘密鍵、CA 証明書を設定する必要があります。これらはアップロードまたはフォームに直接貼り付け可能です。詳細は [SSL/TLS 接続の有効化](../network/emqx-mqtt-tls.md) を参照してください。
+   相互 TLS はデフォルトで有効です。TLS 証明書、秘密鍵、CA 証明書を設定する必要があります。これらはアップロードまたは直接フォームに貼り付け可能です。詳細は [SSL/TLS 接続の有効化](../network/emqx-mqtt-tls.md) を参照してください。
 
    - **TLS 証明書**：TLS 証明書ファイルのパスまたは内容。
    - **TLS 秘密鍵**：TLS 秘密鍵ファイルのパスまたは内容。
@@ -214,7 +214,7 @@ NATS ゲートウェイは `CONNECT` パケットから認証情報を抽出し�
 - **ユーザー名**：`user` フィールドの値。
 - **パスワード**：`pass` フィールドの値。
 
-MQTT プロトコルとは異なり、ゲートウェイ認証は単一の認証機構のみをサポートし、リスト（チェーン）形式はサポートしません。
+#### ダッシュボードでの設定
 
 以下は HTTP サーバーを使ったパスワード認証の設定例です。
 
@@ -223,12 +223,9 @@ MQTT プロトコルとは異なり、ゲートウェイ認証は単一の認証
 3. 設定パラメータを入力します。各オプションの詳細は [HTTP パスワード認証](../access-control/authn/http.md) を参照してください。
 4. **作成** をクリックし、設定内容を確認後 **更新** をクリックして確定します。
 
-1. NATS ゲートウェイ設定の **認証** タブに移動。
-2. **+ 認証作成** をクリックし、メカニズムに **パスワードベース** を選択、データソースに **HTTP サーバー** を選択して **次へ**。
-3. 設定パラメータを入力します。詳細は [HTTP パスワード認証](../access-control/authn/http.md) を参照してください。
-4. **作成** をクリックし、設定内容を確認後 **更新** をクリック。
+#### REST API での設定
 
-##### REST API での設定例
+以下は組み込みデータベース認証を REST API で設定する例です。
 
 ```bash
 curl -X 'POST' \
@@ -247,9 +244,9 @@ curl -X 'POST' \
 }'
 ```
 
-##### 設定ファイルでの設定例
+#### 設定ファイルでの設定
 
-組み込みデータベース認証を設定ファイルで設定する例：
+以下は設定ファイルで組み込みデータベース認証を設定する例です。
 
 ```properties
 gateway.nats {
@@ -267,114 +264,6 @@ gateway.nats {
 ```
 
 その他の認証タイプについては、[EMQX 認証器](../access-control/authn/authn.md#emqx-authenticators) のドキュメントを参照してください。
-
-#### 内部認証（`internal_authn`）の設定
-
-これは NATS ゲートウェイ固有の認証機能で、NATS サーバー標準の3種類の認証方式をサポートします。
-
-##### トークン認証
-
-- NATS `CONNECT` パケットの `auth_token` フィールドを使用。
-- プレーンなトークンおよび bcrypt ハッシュ（`$2a$`、`$2b$`、`$2y$`）をサポート。
-- NATS リファレンス：[Token authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens)
-
-ダッシュボード設定例：
-
-![nats-auth-token](assets/nats-auth-token.png)
-
-設定ファイル例：
-
-```properties
-gateway.nats {
-  internal_authn = [
-    {
-      type = token
-      token = "nats_token"
-    }
-  ]
-}
-```
-
-##### NKey 認証
-
-- NATS `CONNECT` パケットの `nkey` + `sig` チャレンジ／レスポンスを使用。
-- `nkeys` は有効な NATS ユーザーパブリックキー（`U...`）である必要があります。
-- NATS リファレンス：[NKey authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth)
-
-ダッシュボード設定例：
-
-![nats-auth-nkey](assets/nats-auth-nkey.png)
-
-設定ファイル例：
-
-```properties
-gateway.nats {
-  internal_authn = [
-    {
-      type = nkey
-      nkeys = [
-        "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      ]
-    }
-  ]
-}
-```
-
-##### JWT 認証（ACL サポート付き）
-
-- NATS `CONNECT` パケットの `jwt` + `sig`（およびオプションの `nkey`）を使用。
-- 信頼されたオペレーターリストと JWT プリロードリストの両方が必要。
-- リゾルバータイプは現在 `memory` のみサポート。つまり有効なアカウント JWT は設定で事前ロードされます。
-- NATS リファレンス：[JWT authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/jwt)
-
-ダッシュボード設定例：
-
-![nats-auth-jwt](assets/nats-auth-jwt.png)
-
-設定ファイル例：
-
-```properties
-gateway.nats {
-  internal_authn = [
-    {
-      type = jwt
-      trusted_operators = [
-        "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      ]
-      resolver {
-        type = memory
-        resolver_preload = [
-          {
-            pubkey = "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-            jwt = "<your-account-jwt>"
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-JWT ユーザークレームは ACL ルールも保持可能です。EMQX は `permissions` と `nats.pub` / `nats.sub` クレームをサポートし、最終的な認可結果は JWT ACL と EMQX 認可ルールの積集合となります。
-
-JWT ACL クレームの例：
-
-```json
-{
-  "sub": "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "iss": "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "nats": {
-    "pub": {
-      "allow": ["sensors.>"],
-      "deny": ["sensors.secret.>"]
-    },
-    "sub": {
-      "allow": ["alerts.>"],
-      "deny": ["alerts.internal.>"]
-    }
-  }
-}
-```
 
 ### ユーザーレベルインターフェースの設定
 
