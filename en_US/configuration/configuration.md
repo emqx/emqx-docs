@@ -605,6 +605,95 @@ Set a TCP port range together with `node.dist_listen_min`. This port range is us
 
 
 
+### node.dist_connect_options.nodelay
+
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| boolean | `true`, `false`  | `false` |
+
+#### Description
+
+Enable TCP_NODELAY for outgoing inter-node distribution connections. When set to `true`, disables Nagle's algorithm, reducing latency at the cost of higher packet overhead.
+
+
+### node.dist_connect_options.sndbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+TCP send buffer size for outgoing inter-node distribution connections. Increase this value to improve throughput under high network latency or large message volumes.
+
+
+### node.dist_connect_options.recbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+TCP receive buffer size for outgoing inter-node distribution connections. Increase this value to improve throughput under high network latency or large message volumes.
+
+
+### node.dist_connect_options.buffer
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+User-level software buffer size for outgoing inter-node distribution connections. It is recommended to set this to a value greater than or equal to `max(sndbuf, recbuf)`.
+
+
+### node.dist_listen_options.nodelay
+
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| boolean | `true`, `false`  | `false` |
+
+#### Description
+
+Enable TCP_NODELAY for the distribution listener socket. When set to `true`, disables Nagle's algorithm, reducing latency at the cost of higher packet overhead.
+
+
+### node.dist_listen_options.sndbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+TCP send buffer size for the distribution listener. Increase this value to improve throughput under high network latency or large message volumes.
+
+
+### node.dist_listen_options.recbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+TCP receive buffer size for the distribution listener. Increase this value to improve throughput under high network latency or large message volumes.
+
+
+### node.dist_listen_options.buffer
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### Description
+
+User-level software buffer size for the distribution listener. It is recommended to set this to a value greater than or equal to `max(sndbuf, recbuf)`.
+
+
+
 ### rpc.mode
 
 | Type | Optional Value  | Default |

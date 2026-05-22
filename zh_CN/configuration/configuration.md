@@ -610,6 +610,95 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 <br />
 
+### node.dist_connect_options.nodelay
+
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| boolean | `true`, `false`  | `false` |
+
+#### 说明
+
+是否为节点间出站分布式连接启用 TCP_NODELAY。设置为 `true` 时，禁用 Nagle 算法，可降低延迟，但会增加网络包数量。
+
+
+### node.dist_connect_options.sndbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+节点间出站分布式连接的 TCP 发送缓冲区大小。在高网络延迟或大消息量的场景下，可适当增大此值以提升吞吐量。
+
+
+### node.dist_connect_options.recbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+节点间出站分布式连接的 TCP 接收缓冲区大小。在高网络延迟或大消息量的场景下，可适当增大此值以提升吞吐量。
+
+
+### node.dist_connect_options.buffer
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+节点间出站分布式连接的用户态软件缓冲区大小。建议设置为不小于 `max(sndbuf, recbuf)` 的值。
+
+
+### node.dist_listen_options.nodelay
+
+| Type    | Optional Value   | Default |
+| ------- | ---------------- | ------- |
+| boolean | `true`, `false`  | `false` |
+
+#### 说明
+
+是否为分布式连接监听器套接字启用 TCP_NODELAY。设置为 `true` 时，禁用 Nagle 算法，可降低延迟，但会增加网络包数量。
+
+
+### node.dist_listen_options.sndbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+分布式连接监听器的 TCP 发送缓冲区大小。在高网络延迟或大消息量的场景下，可适当增大此值以提升吞吐量。
+
+
+### node.dist_listen_options.recbuf
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+分布式连接监听器的 TCP 接收缓冲区大小。在高网络延迟或大消息量的场景下，可适当增大此值以提升吞吐量。
+
+
+### node.dist_listen_options.buffer
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `1MB`   |
+
+#### 说明
+
+分布式连接监听器的用户态软件缓冲区大小。建议设置为不小于 `max(sndbuf, recbuf)` 的值。
+
+<br />
+
 ## RPC
 
 ### rpc.mode
