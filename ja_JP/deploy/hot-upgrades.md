@@ -1,136 +1,136 @@
 # Hot Upgrade
 
-Hot upgrade lets you apply a patch-version update to a running EMQX Enterprise node without stopping it. Connections stay alive throughout the upgrade; the node switches to the new release tree on its next restart.
+Hot upgradeでは、稼働中のEMQX Enterpriseノードに対して停止せずにパッチバージョンのアップデートを適用できます。接続はアップグレード中も維持され、ノードは次回の再起動時に新しいリリースツリーに切り替わります。
 
-Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.4 to 5.10.5 is supported, but upgrading from 5.10.x to 5.11.0 is not.
+Hot upgradeはパッチバージョンの差分アップ（バージョン番号の3番目の数字）にのみ対応しています。例えば、5.10.4から5.10.5へのアップグレードはサポートされていますが、5.10.xから5.11.0へのアップグレードはサポートされていません。
 
-Hot upgrade is driven by the `emqx_relup` plugin. The plugin is installed from the Dashboard. All upgrade operations are performed through the `emqx ctl relup` CLI.
+Hot upgradeは`emqx_relup`プラグインによって実行されます。このプラグインはダッシュボードからインストールします。すべてのアップグレード操作は`emqx ctl relup` CLIを通じて行われます。
 
-::: warning Important Notice
-Back up `data/`, `etc/`, and `log/` before running a hot upgrade. There is no in-place rollback once a hop is applied.
+::: warning 重要なお知らせ
+Hot upgradeを実行する前に、`data/`、`etc/`、および`log/`のバックアップを必ず取得してください。アップグレード適用後のインプレースロールバックはできません。
 :::
 
-## Prerequisites
+## 前提条件
 
-- EMQX Enterprise is running on each node.
-- You have shell access and can run `emqx ctl` commands on each node.
-- The `emqx_relup` plugin version matches your current EMQX Enterprise version.
-- The target version is listed as a supported hop by the plugin (verify in step 2).
+- 各ノードでEMQX Enterpriseが稼働していること。
+- 各ノードにシェルアクセスがあり、`emqx ctl`コマンドを実行できること。
+- `emqx_relup`プラグインのバージョンが現在のEMQX Enterpriseのバージョンと一致していること。
+- プラグインが対象バージョンをサポートされたアップグレードパスとして認識していること（ステップ2で確認）。
 
-## Step 1: Install the emqx_relup Plugin
+## ステップ1: emqx_relupプラグインのインストール
 
-Install the plugin from the Dashboard following the [Install Packages via Dashboard](../extensions/plugin-management.md#install-packages-via-dashboard) instructions. Plugin packages are published at `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`.
+ダッシュボードから[ダッシュボード経由でのパッケージインストール](../extensions/plugin-management.md#install-packages-via-dashboard)の手順に従ってプラグインをインストールしてください。プラグインパッケージは`https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`に公開されています。
 
-The plugin should appear with status `running` after installation.
+インストール後、プラグインは`running`ステータスで表示されるはずです。
 
-## Step 2: Confirm the Upgrade Path Is Supported
+## ステップ2: アップグレードパスのサポート確認
 
-List the version hops the installed plugin knows about:
+インストール済みプラグインが認識しているバージョンホップを一覧表示します。
 
 ```bash
 emqx ctl relup list-supported-paths
 ```
 
-Confirm that your `{from, target}` version pair appears in the output before continuing.
+`{from, target}`のバージョンペアが出力に含まれていることを確認してから次に進んでください。
 
-## Step 3: Prepare the Tarball and SHA256 Sidecar
+## ステップ3: タールボールとSHA256サイドカーの準備
 
-Copy two files to each node. They can be placed anywhere readable by the EMQX process:
+以下の2つのファイルを各ノードにコピーします。EMQXプロセスが読み取れる任意の場所に配置可能です。
 
-- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz`: The EMQX Enterprise target release tarball.
-- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256`: The SHA256 digest of the tarball. Both the bare digest format and the `sha256sum` output format (`<digest>  <filename>`) are accepted.
+- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz`：EMQX Enterpriseの対象リリースのタールボール
+- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256`：タールボールのSHA256ダイジェスト。ダイジェストのみの形式と`sha256sum`の出力形式（`<digest>  <filename>`）の両方が受け入れられます。
 
 ```bash
 scp emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz      node1:/opt/upgrade/
 scp emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256 node1:/opt/upgrade/
 ```
 
-The `.sha256` sidecar must sit next to the tarball and share the same base name with a `.sha256` extension.
+`.sha256`サイドカーはタールボールと同じディレクトリに置き、同じベース名で`.sha256`拡張子を持つ必要があります。
 
-## Step 4: Run the Upgrade
+## ステップ4: アップグレードの実行
 
-On each node, trigger the upgrade by pointing `relup upgrade` at the tarball:
+各ノードで、`relup upgrade`コマンドにタールボールのパスを指定してアップグレードを開始します。
 
 ```bash
 emqx ctl relup upgrade /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz
 ```
 
-The upgrade handler performs the following steps:
+アップグレードハンドラーは以下の手順を実行します：
 
-1. Verifies the SHA256 digest and refuses to proceed if there is a mismatch.
-2. Extracts the tarball and reads the target version from `releases/emqx_vars`.
-3. Deploys only the runtime subdirectories (`bin/`, `erts-*/`, `lib/`, `releases/`) to `<RootDir>/relup/<TargetVsn>/`. Config, data, logs, and plugins remain at the original install root.
-4. Applies the matching code-change instructions from the plugin's `.relup` catalog.
-5. Runs post-upgrade callbacks.
-6. Writes `<RootDir>/relup/current` with the target version string.
+1. SHA256ダイジェストを検証し、不一致の場合は処理を中止します。
+2. タールボールを展開し、`releases/emqx_vars`から対象バージョンを読み取ります。
+3. ランタイムのサブディレクトリ（`bin/`、`erts-*/`、`lib/`、`releases/`）のみを`<RootDir>/relup/<TargetVsn>/`に展開します。設定、データ、ログ、プラグインは元のインストールルートに残ります。
+4. プラグインの`.relup`カタログから該当するコード変更指示を適用します。
+5. アップグレード後のコールバックを実行します。
+6. `<RootDir>/relup/current`に対象バージョン文字列を書き込みます。
 
-Rolling out across a cluster is the operator's responsibility. Upgrade nodes one at a time and verify each before proceeding.
+クラスター全体への展開は運用者の責任です。ノードを1台ずつアップグレードし、各ノードの正常性を確認してから次に進んでください。
 
-## Step 5: Verify the Node
+## ステップ5: ノードの検証
 
-After the upgrade command returns, confirm the node is healthy:
+アップグレードコマンドが完了したら、ノードの正常性を確認します。
 
 ```bash
-# Check the node is running
+# ノードが稼働中か確認
 emqx ctl status
 
-# Confirm the version marker was written
+# バージョンマーカーが書き込まれているか確認
 cat <RootDir>/relup/current
 
-# Check upgrade status and history
+# アップグレードの状態と履歴を確認
 emqx ctl relup status
 emqx ctl relup logs
 ```
 
-`relup/current` should contain the target version string, and `emqx ctl status` should report the node running.
+`relup/current`には対象バージョン文字列が含まれており、`emqx ctl status`はノードが稼働中であることを報告するはずです。
 
-## Step 6: Restart Into the New Release
+## ステップ6: 新しいリリースでの再起動
 
-The code-change upgrade takes effect in the running VM immediately. To fully switch to the new ERTS runtime and binaries, restart the node:
+コード変更によるアップグレードは実行中のVM上で即時に有効になります。新しいERTSランタイムとバイナリに完全に切り替えるには、ノードを再起動してください。
 
 ```bash
 emqx restart
 ```
 
-On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/current` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
+再起動時、`bin/emqx`ラッパーは`<RootDir>/relup/current`を検出し、`<RootDir>/relup/<TargetVsn>/`から起動します。元の`<RootDir>`は`data/`、`etc/`、`log/`、および`plugins/`の管理を継続します。
 
-## Step 7: Clean Up
+## ステップ7: クリーンアップ
 
-Once the entire cluster is running the target version, remove the staging files:
+クラスター全体が対象バージョンで稼働していることを確認したら、ステージングファイルを削除します。
 
 ```bash
 rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz
 rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256
 ```
 
-The plugin does not track the source path, so no cleanup is needed inside the plugin itself.
+プラグインはソースパスを追跡しないため、プラグイン内部でのクリーンアップは不要です。
 
-## Rollback
+## ロールバック
 
-There is no in-place rollback for an applied hop. Code changes run against the live VM, and post-upgrade callbacks may have mutated data on disk; reversing those is not supported.
+適用済みのホップに対するインプレースロールバックはありません。コード変更はライブVM上で実行され、アップグレード後のコールバックがディスク上のデータを変更している可能性があるため、元に戻すことはサポートされていません。
 
-Two limited recovery options are available:
+限定的なリカバリーオプションは以下の通りです：
 
-- **Before the next restart:** If the upgraded code is misbehaving but disk state is still compatible with the old release, delete the version marker and restart into the old tree:
+- **次回再起動前の場合：** アップグレード後のコードに問題があるがディスク状態が旧リリースと互換性がある場合、バージョンマーカーを削除して旧ツリーで再起動できます。
 
   ```bash
   rm <RootDir>/relup/current
-  # optionally: rm -rf <RootDir>/relup/<TargetVsn>/
+  # 必要に応じて: rm -rf <RootDir>/relup/<TargetVsn>/
   emqx restart
   ```
 
-  This recovers only the boot path. Live state changes made by the upgrade are already in effect.
+  これは起動パスのみを回復します。アップグレードによるライブ状態の変更は既に反映されています。
 
-- **Full restore:** Restore `data/` from the pre-upgrade backup and reinstall the old EMQX release.
+- **完全復元：** アップグレード前のバックアップから`data/`を復元し、旧EMQXリリースを再インストールします。
 
-Plan your upgrade window with these limitations in mind.
+これらの制約を踏まえてアップグレードの時間帯を計画してください。
 
-## CLI Reference
+## CLIリファレンス
 
-| Command | Description |
+| コマンド | 説明 |
 |---|---|
-| `emqx ctl relup upgrade <TarballPath>` | Apply the upgrade hop from the given tarball. |
-| `emqx ctl relup list-supported-paths` | List supported `{from, target}` version hops in the plugin catalog. |
-| `emqx ctl relup status` | Show the current upgrade state: `idle`, `in-progress`, or `hot-upgraded to <vsn>; pending on restart to boot from the new version`. |
-| `emqx ctl relup logs` | Print this node's upgrade history from the persistent log table. |
-| `emqx ctl relup logs-clear` | Wipe this node's upgrade log table. |
+| `emqx ctl relup upgrade <TarballPath>` | 指定したタールボールからアップグレードホップを適用します。 |
+| `emqx ctl relup list-supported-paths` | プラグインカタログに登録されたサポート対象の`{from, target}`バージョンホップを一覧表示します。 |
+| `emqx ctl relup status` | 現在のアップグレード状態を表示します：`idle`、`in-progress`、または`hot-upgraded to <vsn>; pending on restart to boot from the new version`。 |
+| `emqx ctl relup logs` | このノードのアップグレード履歴を永続ログテーブルから表示します。 |
+| `emqx ctl relup logs-clear` | このノードのアップグレードログテーブルをクリアします。 |
