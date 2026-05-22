@@ -111,17 +111,29 @@
                 - deploy/kubernetes/operator/upgrade-operator
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: 阿里クラウドでの EMQX デプロイ
+=======
+                  title_ja: Alibaba Cloud 上での EMQX デプロイ
+>>>>>>> origin/release-6.1
                   lang: cn
                   path: deploy/kubernetes/operator/alibaba-cloud
                 - title_en: 在华为云中部署 EMQX
                   title_cn: 在华为云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: Huawei クラウドでの EMQX デプロイ
+=======
+                  title_ja: Huawei Cloud 上での EMQX デプロイ
+>>>>>>> origin/release-6.1
                   lang: cn
                   path: deploy/kubernetes/operator/huawei-cloud
                 - title_en: 在腾讯云中部署 EMQX
                   title_cn: 在腾讯云中部署 EMQX
+<<<<<<< HEAD
                   title_ja: Tencent クラウドでの EMQX デプロイ
+=======
+                  title_ja: Tencent Cloud 上での EMQX デプロイ
+>>>>>>> origin/release-6.1
                   lang: cn
                   path: deploy/kubernetes/operator/tencent-cloud
                 - title_en: Deploy EMQX on AWS
@@ -156,6 +168,7 @@
                       path: deploy/kubernetes/operator/tasks/configure-emqx-config
                     - title_en: Enable Core-Replicant Deployment
                       title_cn: 配置 Core-Replicant 集群
+<<<<<<< HEAD
                       title_ja: Core-Replicant デプロイの有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
                     - title_en: Enable Persistence
@@ -169,6 +182,21 @@
                     - title_en: Perform Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
                       title_ja: ブルーグリーンアップグレードの実施
+=======
+                      title_ja: Core-Replicant デプロイ有効化
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+                    - title_en: Enable Persistence
+                      title_cn: 开启持久化
+                      title_ja: 永続化有効化
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Access EMQX Cluster through LoadBalancer
+                      title_cn: 通过 LoadBalancer 访问 EMQX 集群
+                      title_ja: ロードバランサー経由で EMQX クラスターにアクセス
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-service
+                    - title_en: Perform Blue-Green Upgrade
+                      title_cn: 配置蓝绿发布
+                      title_ja: ブルーグリーンアップグレード実施
+>>>>>>> origin/release-6.1
                       path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
@@ -200,7 +228,7 @@
                     - deploy/kubernetes/operator/reference/v2beta1-reference
             - title_en: EMQX Helm Chart
               title_cn: EMQX Helm Chart
-              title_ja: EMQX Helm Chart
+              title_ja: EMQX Helm チャート
               path: deploy/kubernetes/chart
         - title_en: Work with License
           title_cn: 配置 License
@@ -376,6 +404,9 @@
   path: access-control/security-guide
   collapsed: true
   children:
+    - title_en: Security Checklist
+      title_cn: 安全检查清单
+      path: access-control/security-checklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       title_ja: ネットワークと TLS
@@ -1062,7 +1093,7 @@
         - emqx-ai/mcp-over-mqtt/specification
         - title_en: SDKs
           title_cn: SDKs
-          title_ja: SDKs
+          title_ja: SDK
           collapsed: true
           children:
             - emqx-ai/sdks/mcp-sdk-erlang
@@ -1227,7 +1258,11 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
+<<<<<<< HEAD
           title_ja: MQTT 基本
+=======
+          title_ja: MQTT 基礎
+>>>>>>> origin/release-6.1
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
@@ -1242,7 +1277,11 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
+<<<<<<< HEAD
           title_ja: MQTT 基本
+=======
+          title_ja: MQTT 基礎
+>>>>>>> origin/release-6.1
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced

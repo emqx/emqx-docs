@@ -63,8 +63,11 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 以下步骤假定 EMQX 与 InfluxDB 均在本地运行，如您在远程运行 EMQX 及 InfluxDB，请根据实际情况调整相应配置。
 
 1. 进入 EMQX Dashboard，点击**集成** -> **连接器**。
+
 2. 点击页面右上角的**创建**。
+
 3. 在 **创建连接器**页面，点击选择 **InfluxDB**，然后点击**下一步**。
+
 4. 在**配置信息**步骤页中配置以下信息：
 
    以下配置项适用于所有 InfluxDB 版本：

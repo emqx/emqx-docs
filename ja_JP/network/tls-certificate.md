@@ -1,5 +1,6 @@
 # SSL/TLS証明書
 
+<<<<<<< HEAD
 SSL/TLS証明書はEMQXのセキュリティアーキテクチャの中核を成す要素です。これにより、ネットワーク通信の認証、暗号化、およびデータの整合性が提供されます。EMQXでは、以下のシナリオで安全な接続を確立するためにSSL/TLS証明書が必要です。
 
 - TLS経由のMQTT接続（MQTTS）
@@ -50,6 +51,16 @@ TLS証明書は以下の方法で取得可能です。
 ### 自己署名CA証明書の作成
 
 自己署名証明書はテスト、開発、プライベート環境で有用です。
+=======
+SSL/TLS証明書は以下の2つの方法で取得できます。
+
+1. 自己署名証明書：自身で発行する証明書を使用することを指します。ただし、自己署名証明書は多くのセキュリティリスクがあり、テストや検証環境での利用のみ推奨されます。
+2. 証明書の申請または購入：無料証明書は[Let's Encrypt](https://letsencrypt.org)やHuawei Cloud、Tencent Cloudなどのクラウドベンダーから申請できます。また、有料証明書は[DigiCert](https://www.digicert.com/)などの組織から購入可能です。企業ユーザーの場合、より高いセキュリティ保護を得るために、有料のOV以上の証明書の申請を一般的に推奨します。
+
+本ページでは、自己署名の認証局（CA）証明書を作成し、サーバーおよびクライアント証明書を発行する方法を紹介します。
+
+## セルフサインCA証明書の作成
+>>>>>>> origin/release-6.1
 
 ::: tip 前提条件
 
@@ -57,13 +68,21 @@ TLS証明書は以下の方法で取得可能です。
 
 :::
 
+<<<<<<< HEAD
 1. 以下のコマンドを実行し、鍵ペアを生成します。コマンド実行時に鍵を保護するパスワードの入力を求められます。このパスワードは証明書の生成、発行、検証時に必要となるため、安全に管理してください。
+=======
+1. 以下のコマンドを実行して鍵ペアを生成します。コマンド実行時に鍵を保護するためのパスワードの入力を求められます。このパスワードは証明書の生成、発行、検証時に必要となるため、鍵とパスワードは安全に保管してください。
+>>>>>>> origin/release-6.1
 
    ```bash
    openssl genrsa -des3 -out rootCA.key 2048
    ```
 
+<<<<<<< HEAD
 2. 次に、鍵ペアの秘密鍵を使ってCA証明書を生成します。コマンド実行時に証明書の識別名（DN）の設定を求められます。
+=======
+2. 次に、鍵ペアの秘密鍵を使ってCA証明書を生成します。コマンド実行時に証明書の識別名（Distinguished Name, DN）を設定するよう求められます。
+>>>>>>> origin/release-6.1
 
    ```bash
    openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
@@ -71,7 +90,11 @@ TLS証明書は以下の方法で取得可能です。
 
 ### サーバー証明書の発行
 
+<<<<<<< HEAD
 先ほど作成したCA証明書を使い、EMQXのリスナーがクライアントに対して自身の身元を証明するためのサーバー証明書を発行します。サーバー証明書は通常、ホスト名、サーバー名、またはドメイン名（例：[www.emqx.com](https://www.emqx.com/en)）に発行されます。サーバー証明書の生成には、CAの秘密鍵（rootCA.key）、CA証明書（rootCA.crt）、およびサーバーの証明書署名要求（CSR）（server.csr）が必要です。
+=======
+先ほど作成したCA証明書を使って、サーバー証明書を発行します。サーバー証明書はサーバー所有者の身元を検証するために使用され、通常はホスト名、サーバー名、またはドメイン名（例：[www.emqx.com](https://www.emqx.com/en)）に発行されます。サーバー証明書の生成には、CA鍵（rootCA.key）、CA証明書（rootCA.crt）、およびサーバーの証明書署名要求（CSR）（server.csr）が必要です。
+>>>>>>> origin/release-6.1
 
 1. サーバー証明書用の鍵ペアを生成します。
 
@@ -79,13 +102,21 @@ TLS証明書は以下の方法で取得可能です。
    openssl genrsa -out server.key 2048
    ```
 
+<<<<<<< HEAD
 2. サーバー鍵ペアを使ってCSRを作成します。CSRはCAの秘密鍵で署名され、証明書の公開鍵ファイルが生成されてユーザーに発行されます。コマンド実行時に証明書の識別名（DN）の設定を求められます。
+=======
+2. サーバー鍵ペアを使ってCSRを作成します。CSRはCAのルート証明書の秘密鍵で署名されることで、証明書の公開鍵ファイルが生成されユーザーに発行されます。コマンド実行時に証明書の識別名（DN）を設定するよう求められます。
+>>>>>>> origin/release-6.1
 
    ```bash
    openssl req -new -key server.key -out server.csr
    ```
 
+<<<<<<< HEAD
    以下のような情報入力を求められます。各項目の意味は以下の通りです。
+=======
+   以下の情報入力を求められます。各項目の意味は以下の通りです。
+>>>>>>> origin/release-6.1
 
    ```bash
    You are about to be asked to enter information that will be incorporated
@@ -95,6 +126,7 @@ TLS証明書は以下の方法で取得可能です。
    For some fields there will be a default value,
    If you enter '.', the field will be left blank.
    -----
+<<<<<<< HEAD
    Country Name (2 letter code) [AU]: # 国・地域
    State or Province Name (full name) [Some-State]: # 州・都道府県
    Locality Name (eg, city) []: # 市区町村
@@ -105,12 +137,28 @@ TLS証明書は以下の方法で取得可能です。
    ```
 
 3. CSRを使ってサーバー証明書を生成し、有効期限を365日に設定します。
+=======
+   Country Name (2 letter code) [AU]: # 国/地域
+   State or Province Name (full name) [Some-State]: # 州/県名
+   Locality Name (eg, city) []: # 市区町村名
+   Organization Name (eg, company) [Internet Widgets Pty Ltd]: # 組織名（会社名）、例：EMQ
+   Organizational Unit Name (eg, section) []: # 部署名、例：EMQX
+   Common Name (e.g. server FQDN or YOUR name) []: # サーバーの完全修飾ドメイン名（FQDN）、例：mqtt.emqx.com
+   ...
+   ```
+
+3. サーバーCSRを使ってサーバー証明書を生成し、有効期限を指定します。ここでは365日に設定しています。
+>>>>>>> origin/release-6.1
 
    ```bash
    openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365
    ```
 
+<<<<<<< HEAD
    これで証明書一式が揃います。
+=======
+   これで証明書一式が生成されます。
+>>>>>>> origin/release-6.1
 
    ```bash
    .
@@ -124,6 +172,7 @@ TLS証明書は以下の方法で取得可能です。
 
 ### クライアント証明書の発行
 
+<<<<<<< HEAD
 クライアント証明書は双方向（相互）TLS認証に使用されます。
 
 発行手順はサーバー証明書とほぼ同様ですが、以下の点が異なります。
@@ -498,9 +547,18 @@ ACME有効化後：
 - 手動での証明書アップロードは不要です。
 - リスナーは同じ管理証明書バンドルを参照し続けます。
 - 証明書ローテーションはサービス停止なしに行われます。-->
+=======
+クライアント証明書の発行手順はサーバー証明書の発行とほぼ同様です。唯一の違いはCSR作成時に、Common Nameをクライアントのユーザー名やクライアントIDなどの一意の識別子に設定する点です。
+
+クライアント証明書はサーバー証明書と同じCA証明書で署名されるため、上記のCA証明書でクライアント証明書も署名可能です。
+>>>>>>> origin/release-6.1
 
 ## 次のステップ
 
 SSL/TLS証明書を取得したら、クライアントのSSL/TLS接続を有効化できます。
 
 - [SSL/TLS接続の有効化](./emqx-mqtt-tls.md)
+<<<<<<< HEAD
+=======
+- [証明書の更新](./emqx-mqtt-tls.md#update-ssl-tls-certificates)
+>>>>>>> origin/release-6.1

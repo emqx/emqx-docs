@@ -5,17 +5,26 @@
 ## API概要
 
 | API | 説明 |
+<<<<<<< HEAD
 |-----|-------|
+=======
+|-----|-------------|
+>>>>>>> origin/release-6.1
 | [StartVoiceChat](#startvoicechat) | AI音声セッションを開始し、指定したルームにAIエージェントを作成します |
 | [StopVoiceChat](#stopvoicechat) | 音声セッションを停止し、AIエージェントのリソースを解放します |
 | [UpdateVoiceChat](#updatevoicechat) | 進行中の音声セッションを更新します（割り込み、カスタムアナウンスなど） |
 
+<<<<<<< HEAD
 すべてのAPIはAccessKeyによるV4署名が必要です。詳細は[認証プロキシサービス](./installation-and-testing.md#authentication-proxy-service)をご参照ください。
+=======
+すべてのAPIはAccessKeyによるV4署名が必要です。詳細は[認証プロキシサービス](./installation-and-testing.md#authentication-proxy-service)を参照してください。
+>>>>>>> origin/release-6.1
 
 ## StartVoiceChat
 
 AI音声セッションを開始し、指定したルームにAIエージェントを作成します。
 
+<<<<<<< HEAD
 **リクエストエンドポイント**：`POST https://rtc.volcengineapi.com?Action=StartVoiceChat&Version=2024-12-01`
 
 ### リクエストパラメータ
@@ -51,6 +60,43 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `TTSConfig`     | object   | 音声合成設定、詳細は[TTSConfig](#ttsconfig)参照    |
 | `LLMConfig`     | object   | 大規模言語モデル設定、詳細は[LLMConfig](#llmconfig)参照 |
 | `InterruptMode` | number   | 割り込みモード（0:意味的割り込み、1:手動割り込み） |
+=======
+**リクエストエンドポイント**: `POST https://rtc.volcengineapi.com?Action=StartVoiceChat&Version=2024-12-01`
+
+### リクエストパラメータ
+
+| パラメータ     | 型       | 必須   | 説明                                               |
+| ------------- | -------- | ------ | -------------------------------------------------- |
+| `AppId`       | string   | 必須   | RTCアプリケーションID                              |
+| `RoomId`      | string   | 必須   | ルームID                                           |
+| `TaskId`      | string   | 必須   | セッション識別用のタスクID                          |
+| `AgentConfig` | object   | 必須   | エージェント設定、詳細は[AgentConfig](#agentconfig)参照 |
+| `Config`      | object   | 必須   | セッション設定（ASR、TTS、LLMパラメータ含む）、詳細は[Config](#config)参照 |
+
+### AgentConfig
+
+エージェント設定:
+
+| パラメータ                         | 型         | 必須   | 説明                                   |
+| --------------------------------- | ---------- | ------ | -------------------------------------- |
+| `TargetUserId`                    | string[]   | 必須   | 対象ユーザーIDリスト（クライアントユーザーID） |
+| `UserId`                          | string     | 必須   | エージェントユーザーID（AIボット識別子）        |
+| `WelcomeMessage`                  | string     | 任意   | セッション開始時に自動再生されるウェルカムメッセージ |
+| `EnableConversationStateCallback` | boolean    | 任意   | 聴取・思考・発話状態の会話状態コールバックを有効化 |
+| `AnsMode`                         | number     | 任意   | AIノイズリダクションモード（0: オフ、1: 低、2: 中、3: 高、推奨は3） |
+| `VoicePrint`                      | object     | 任意   | ボイスプリント認識設定：`Mode`（0: オフ、1: オン）、`IdList`（ボイスプリントIDリスト） |
+
+### Config
+
+セッション設定:
+
+| パラメータ       | 型       | 説明                                                     |
+| --------------- | -------- | -------------------------------------------------------- |
+| `ASRConfig`     | object   | 音声認識設定、詳細は[ASRConfig](#asrconfig)参照          |
+| `TTSConfig`     | object   | 音声合成設定、詳細は[TTSConfig](#ttsconfig)参照          |
+| `LLMConfig`     | object   | 大規模言語モデル設定、詳細は[LLMConfig](#llmconfig)参照   |
+| `InterruptMode` | number   | 割り込みモード（0: セマンティック割り込み、1: 手動割り込み） |
+>>>>>>> origin/release-6.1
 
 ### レスポンス
 
@@ -73,12 +119,17 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 `StartVoiceChat`は既存のルーム内でAIエージェントを開始するために使用します。
 :::
 
+<<<<<<< HEAD
 公式ドキュメント：[StartVoiceChat](https://www.volcengine.com/docs/6348/1404673)
+=======
+公式ドキュメント: [StartVoiceChat](https://www.volcengine.com/docs/6348/1404673)
+>>>>>>> origin/release-6.1
 
 ## StopVoiceChat
 
 音声セッションを停止し、AIエージェントのリソースを解放します。
 
+<<<<<<< HEAD
 **リクエストエンドポイント**：`POST https://rtc.volcengineapi.com?Action=StopVoiceChat&Version=2024-12-01`
 
 ### リクエストパラメータ
@@ -88,6 +139,17 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `AppId`    | string | 必須   | RTCアプリケーションID（StartVoiceChatと同じ） |
 | `RoomId`   | string | 必須   | ルームID（StartVoiceChatと同じ）    |
 | `TaskId`   | string | 必須   | タスクID（StartVoiceChatと同じ）    |
+=======
+**リクエストエンドポイント**: `POST https://rtc.volcengineapi.com?Action=StopVoiceChat&Version=2024-12-01`
+
+### リクエストパラメータ
+
+| パラメータ | 型     | 必須   | 説明                                  |
+| --------- | ------ | ------ | ------------------------------------- |
+| `AppId`   | string | 必須   | RTCアプリケーションID（StartVoiceChatと同じ） |
+| `RoomId`  | string | 必須   | ルームID（StartVoiceChatと同じ）       |
+| `TaskId`  | string | 必須   | タスクID（StartVoiceChatと同じ）       |
+>>>>>>> origin/release-6.1
 
 ### レスポンス
 
@@ -104,12 +166,17 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 
 成功時は`Result`が空オブジェクトです。失敗時は`ResponseMetadata.Error`にエラー情報が含まれます。
 
+<<<<<<< HEAD
 公式ドキュメント：[StopVoiceChat](https://www.volcengine.com/docs/6348/1404672)
+=======
+公式ドキュメント: [StopVoiceChat](https://www.volcengine.com/docs/6348/1404672)
+>>>>>>> origin/release-6.1
 
 ## UpdateVoiceChat
 
 進行中の音声セッションを更新します。割り込み、関数呼び出し、カスタムアナウンスに対応しています。
 
+<<<<<<< HEAD
 **リクエストエンドポイント**：`POST https://rtc.volcengineapi.com?Action=UpdateVoiceChat&Version=2024-12-01`
 
 ### リクエストパラメータ
@@ -130,11 +197,34 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `Interrupt`            | 現在のエージェント出力を割り込み |
 | `ExternalTextToSpeech` | カスタムテキスト読み上げ再生   |
 | `FunctionCallResult`   | 関数呼び出し結果を返す         |
+=======
+**リクエストエンドポイント**: `POST https://rtc.volcengineapi.com?Action=UpdateVoiceChat&Version=2024-12-01`
+
+### リクエストパラメータ
+
+| パラメータ       | 型       | 必須   | 説明                                   |
+| --------------- | -------- | ------ | -------------------------------------- |
+| `AppId`         | string   | 必須   | RTCアプリケーションID                   |
+| `RoomId`        | string   | 必須   | ルームID                              |
+| `TaskId`        | string   | 必須   | タスクID                              |
+| `Command`       | string   | 必須   | コマンドタイプ                         |
+| `Message`       | string   | 任意   | アナウンステキスト（最大200文字）       |
+| `InterruptMode` | number   | 任意   | アナウンスの優先度                     |
+
+### コマンドタイプ
+
+| コマンド                | 説明                                |
+| ---------------------- | ---------------------------------- |
+| `Interrupt`            | 現在のエージェントの出力を割り込む |
+| `ExternalTextToSpeech` | カスタムテキスト読み上げ再生       |
+| `FunctionCallResult`   | 関数呼び出し結果を返す             |
+>>>>>>> origin/release-6.1
 
 ### InterruptModeの優先度
 
 `ExternalTextToSpeech`でアナウンスの優先度を指定します：
 
+<<<<<<< HEAD
 | 値   | 説明                                                    |
 | ---- | ------------------------------------------------------- |
 | 1    | 高優先度：現在の対話を停止して即時再生                  |
@@ -144,6 +234,17 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 ### 例
 
 **エージェントを割り込む**：
+=======
+| 値   | 説明                                         |
+| ----- | -------------------------------------------- |
+| 1     | 高優先度：現在の対話を停止して即時再生       |
+| 2     | 中優先度：現在の対話終了後に再生             |
+| 3     | 低優先度：対話中の場合は破棄                   |
+
+### 例
+
+**エージェントを割り込む例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -154,7 +255,11 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 }
 ```
 
+<<<<<<< HEAD
 **カスタムアナウンス**：
+=======
+**カスタムアナウンスの例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -182,6 +287,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 
 成功時は`Result`が空オブジェクトです。失敗時は`ResponseMetadata.Error`にエラー情報が含まれます。
 
+<<<<<<< HEAD
 公式ドキュメント：[UpdateVoiceChat](https://www.volcengine.com/docs/6348/1404671)
 
 ## 設定詳細
@@ -200,6 +306,26 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `VolumeGain`        | number   | 任意   | 音量ゲイン（0.0～1.0）、デフォルト`0.5` |
 | `TurnDetectionMode` | number   | 任意   | ターン検出モード                      |
 | `InterruptConfig`   | object   | 任意   | 割り込み設定                         |
+=======
+公式ドキュメント: [UpdateVoiceChat](https://www.volcengine.com/docs/6348/1404671)
+
+## 設定詳細
+
+以下の設定は`StartVoiceChat`の`Config`パラメータで使用されます。
+
+### ASRConfig
+
+音声認識設定:
+
+| パラメータ           | 型       | 必須   | 説明                                         |
+| ------------------- | -------- | ------ | -------------------------------------------- |
+| `Provider`          | string   | 必須   | サービスプロバイダー、固定値 `volcano`       |
+| `ProviderParams`    | object   | 必須   | プロバイダー固有のパラメータ                 |
+| `VADConfig`         | object   | 任意   | 音声活動検出設定                             |
+| `VolumeGain`        | number   | 任意   | 音量ゲイン（0.0～1.0）、デフォルトは`0.5`    |
+| `TurnDetectionMode` | number   | 任意   | ターン検出モード                             |
+| `InterruptConfig`   | object   | 任意   | 割り込み設定                                 |
+>>>>>>> origin/release-6.1
 
 **ProviderParams**：
 
@@ -207,6 +333,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | ------------------- | -------- | -------------------------------------------- |
 | `AppId`             | string   | ASRアプリケーションID                        |
 | `Mode`              | string   | 認識モード：`smallmodel`または`bigmodel`     |
+<<<<<<< HEAD
 | `Cluster`           | string   | サービスクラスター、デフォルト`volcengine_streaming_common` |
 | `context`           | string   | ホットワードコンテキスト（JSON形式）         |
 | `boosting_table_id` | string   | ホットワードテーブルID                       |
@@ -222,15 +349,41 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `SuffixTime`  | number   | サフィックス時間（ms）                    |
 | `Sensitivity` | number   | 感度                                     |
 | `AIVAD`       | boolean  | AI VADを有効化                           |
+=======
+| `Cluster`           | string   | サービスクラスター、デフォルトは`volcengine_streaming_common` |
+| `context`           | string   | ホットワードコンテキスト（JSON形式）         |
+| `boosting_table_id` | string   | ホットワードテーブルID                        |
+| `correct_table_id`  | string   | 補正テーブルID                               |
+
+**VADConfig**（音声活動検出）:
+
+| パラメータ     | 型       | 説明                                         |
+| ------------- | -------- | -------------------------------------------- |
+| `SilenceTime` | number   | 無音継続時間閾値（ms）、デフォルトは`600`   |
+| `SpeechTime`  | number   | 発話継続時間閾値（ms）                       |
+| `PrefixTime`  | number   | プレフィックス時間（ms）                      |
+| `SuffixTime`  | number   | サフィックス時間（ms）                        |
+| `Sensitivity` | number   | 感度                                         |
+| `AIVAD`       | boolean  | AI VADを有効化                               |
+>>>>>>> origin/release-6.1
 
 **InterruptConfig**：
 
+<<<<<<< HEAD
 | パラメータ                 | 型         | 説明                                     |
 | ------------------------- | ---------- | ---------------------------------------- |
 | `InterruptSpeechDuration` | number     | 割り込み発話時間（ms）、デフォルト`400`  |
 | `InterruptKeywords`       | string[]   | 意味的割り込みキーワードリスト             |
 
 **設定例**：
+=======
+| パラメータ                 | 型         | 説明                                         |
+| ------------------------- | ---------- | -------------------------------------------- |
+| `InterruptSpeechDuration` | number     | 割り込み発話時間（ms）、デフォルトは`400`    |
+| `InterruptKeywords`       | string[]   | セマンティック割り込みキーワードリスト       |
+
+**設定例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -254,6 +407,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 
 ### TTSConfig
 
+<<<<<<< HEAD
 音声合成設定：
 
 | パラメータ           | 型         | 必須   | 説明                                   |
@@ -261,9 +415,19 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `Provider`          | string     | 必須   | サービスプロバイダー、固定値`volcano` |
 | `ProviderParams`    | object     | 必須   | プロバイダー固有のパラメータ           |
 | `IgnoreBracketText` | number[]   | 任意   | 無視する括弧タイプ                     |
+=======
+音声合成設定:
+
+| パラメータ           | 型         | 必須   | 説明                                         |
+| ------------------- | ---------- | ------ | -------------------------------------------- |
+| `Provider`          | string     | 必須   | サービスプロバイダー、固定値 `volcano`       |
+| `ProviderParams`    | object     | 必須   | プロバイダー固有のパラメータ                 |
+| `IgnoreBracketText` | number[]   | 任意   | 無視する括弧タイプ                           |
+>>>>>>> origin/release-6.1
 
 **ProviderParams**：
 
+<<<<<<< HEAD
 | パラメータ    | 型       | 説明                 |
 | ------------ | -------- | -------------------- |
 | `app`        | object   | アプリケーション設定  |
@@ -313,6 +477,57 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 詳細：[Volcano Engine TTS音声リスト](https://www.volcengine.com/docs/6561)
 
 **設定例**：
+=======
+| パラメータ    | 型       | 説明                       |
+| ------------ | -------- | -------------------------- |
+| `app`        | object   | アプリケーション設定       |
+| `audio`      | object   | オーディオ設定             |
+| `ResourceId` | string   | TTSリソースID              |
+| `Additions`  | object   | 追加設定                   |
+
+**app設定**:
+
+| パラメータ | 型       | 説明                           |
+| --------- | -------- | ------------------------------ |
+| `appid`   | string   | TTSアプリケーションID          |
+| `token`   | string   | TTSアプリケーショントークン    |
+| `cluster` | string   | サービスクラスター、デフォルトは`volcano_tts` |
+
+**audio設定**:
+
+パラメータはTTSモードによって若干異なります：
+
+| パラメータ          | 型       | 説明                              | 適用モード        |
+| ------------------ | -------- | -------------------------------- | ----------------- |
+| `voice_type`       | string   | 音声タイプ                       | 全モード          |
+| `volume_ratio`     | number   | 音量（0.5～2.0）                | 全モード          |
+| `speed_ratio`      | number   | 発話速度（0.5～2.0）            | standard          |
+| `pitch_ratio`      | number   | ピッチ（0.5～2.0）              | standard          |
+| `speech_ratio`     | number   | 発話速度（0.5～2.0）            | bigtts            |
+| `pitch_rate`       | number   | ピッチレート                    | bigtts            |
+| `speech_rate`      | number   | 発話速度                       | bidirection       |
+| `emotion`          | string   | 感情：`happy`、`sad`、`angry`、`neutral` | 感情対応音声       |
+| `emotion_strength` | number   | 感情強度（0.0～1.0）            | 感情対応時         |
+
+::: tip TTSモード
+- `standard`: 標準モード、`speed_ratio`、`pitch_ratio`を使用
+- `bigtts`: 大規模モデルTTS、`speech_ratio`、`pitch_rate`を使用
+- `bidirection`: 双方向ストリーミング、`speech_rate`を使用し、`Additions`設定をサポート
+:::
+
+**代表的な音声**:
+
+| 音声ID             | 説明           |
+| ------------------ | -------------- |
+| `BV033_streaming`  | 女性、優しい声 |
+| `BV001_streaming`  | 男性、落ち着いた声 |
+| `BV700_streaming`  | 女性、甘い声   |
+| `BV406_streaming`  | 男性、穏やかな声 |
+
+詳細は[Volcano Engine TTS音声一覧](https://www.volcengine.com/docs/6561)を参照してください。
+
+**設定例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -338,6 +553,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 
 ### LLMConfig
 
+<<<<<<< HEAD
 大規模言語モデル設定：
 
 | パラメータ        | 型         | 必須       | 説明                                               |
@@ -358,6 +574,28 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `Custom`         | string     | 任意       | カスタムパラメータ（JSON文字列）、CustomLLMに渡される |
 
 **UserPrompts**（事前設定された会話履歴）：
+=======
+大規模言語モデル設定:
+
+| パラメータ        | 型         | 必須       | 説明                                                       |
+| ---------------- | ---------- | ---------- | ---------------------------------------------------------- |
+| `Mode`           | string     | 必須       | モード：`ArkV3`（Ark）または`CustomLLM`（カスタム）         |
+| `Url`            | string     | CustomLLMのみ | CustomLLMコールバックURL                                   |
+| `APIKey`         | string     | 任意       | API認証キー                                               |
+| `EndPointId`     | string     | ArkV3のみ  | ArkモデルエンドポイントID                                 |
+| `ModelName`      | string     | 任意       | モデル名                                                  |
+| `SystemMessages` | string[]   | 任意       | システムプロンプト                                        |
+| `UserPrompts`    | object[]   | 任意       | 事前設定された会話履歴                                    |
+| `Temperature`    | number     | 任意       | サンプリング温度（0.0～1.0）、デフォルトは`0.5`           |
+| `TopP`           | number     | 任意       | Top-pサンプリング（0.0～1.0）、デフォルトは`0.9`           |
+| `MaxTokens`      | number     | 任意       | 最大トークン数、デフォルトは`256`                         |
+| `HistoryLength`  | number     | 任意       | 保持する履歴ターン数、デフォルトは`15`                     |
+| `EnableRoundId`  | boolean    | 任意       | ラウンドIDを有効化                                        |
+| `VisionConfig`   | object     | 任意       | ビジョン理解設定：`Enable`（boolean）、`SnapshotConfig`（object） |
+| `Custom`         | string     | 任意       | カスタムパラメータ（JSON文字列）、CustomLLMに透過的に渡される |
+
+**UserPrompts**（事前設定された会話履歴）:
+>>>>>>> origin/release-6.1
 
 ```json
 [
@@ -366,7 +604,11 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 ]
 ```
 
+<<<<<<< HEAD
 **CustomLLMモード例**：
+=======
+**CustomLLMモード例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -388,7 +630,11 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 }
 ```
 
+<<<<<<< HEAD
 **ArkV3モード例**：
+=======
+**ArkV3モード例**:
+>>>>>>> origin/release-6.1
 
 ```json
 {
@@ -401,7 +647,11 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 
 ## CustomLLMコールバック
 
+<<<<<<< HEAD
 CustomLLMモード使用時、Volcano Engineはユーザーの音声認識結果をカスタムサービスに送信します。
+=======
+CustomLLMモードを使用する場合、Volcano Engineはユーザーの音声認識結果をカスタムサービスに送信します。
+>>>>>>> origin/release-6.1
 
 ### コールバックフロー
 
@@ -411,7 +661,11 @@ CustomLLMモード使用時、Volcano Engineはユーザーの音声認識結果
 
 ### リクエスト形式
 
+<<<<<<< HEAD
 Volcano EngineからCustomLLMサービスへのリクエスト：
+=======
+Volcano EngineからCustomLLMサービスへのリクエスト:
+>>>>>>> origin/release-6.1
 
 ```http
 POST /chat-stream HTTP/1.1
@@ -430,6 +684,7 @@ Content-Type: application/json
 }
 ```
 
+<<<<<<< HEAD
 **リクエストフィールド**：
 
 | フィールド     | 説明                                   |
@@ -439,6 +694,17 @@ Content-Type: application/json
 | `temperature` | サンプリング温度                      |
 | `max_tokens`  | 最大生成長                           |
 | `device_id`   | カスタムパラメータ、`LLMConfig.Custom`から渡される |
+=======
+**リクエストフィールド**:
+
+| フィールド     | 説明                                         |
+| ------------- | -------------------------------------------- |
+| `messages`    | OpenAIフォーマットの会話履歴                 |
+| `stream`      | 固定値`true`、ストリーミングレスポンスを要求 |
+| `temperature` | サンプリング温度                             |
+| `max_tokens`  | 最大生成長さ                                |
+| `device_id`   | カスタムパラメータ、`LLMConfig.Custom`から透過的に渡される |
+>>>>>>> origin/release-6.1
 
 ### レスポンス形式
 
@@ -454,18 +720,30 @@ data: {"id":"resp-1","object":"chat.completion.chunk","choices":[{"index":0,"del
 data: [DONE]
 ```
 
+<<<<<<< HEAD
 **レスポンス要件**：
+=======
+**レスポンス要件**:
+>>>>>>> origin/release-6.1
 
 - SSEストリーミングレスポンスであること
 - Content-Typeは`text/event-stream`
 - 各行は`data: `で始まること
 - 最終行は`data: [DONE]`であること
 
+<<<<<<< HEAD
 公式ドキュメント：[CustomLLM連携](https://www.volcengine.com/docs/6348/1399966)
 
 ## RTCトークン
 
 クライアントはRTCルームに参加するためにトークンが必要です。トークンはサーバー側で`AppKey`を用いて生成します。
+=======
+公式ドキュメント: [CustomLLM統合](https://www.volcengine.com/docs/6348/1399966)
+
+## RTCトークン
+
+クライアントはRTCルームに参加するためにトークンが必要です。トークンはサーバー側で`AppKey`を使って生成します。
+>>>>>>> origin/release-6.1
 
 ### トークン構造
 
@@ -473,6 +751,7 @@ data: [DONE]
 Token = Version + AppId + Base64(Message + Signature)
 ```
 
+<<<<<<< HEAD
 - **Version**：固定値`001`
 - **AppId**：24文字のアプリケーション識別子
 - **Message**：バイナリエンコードされたペイロード（RoomId、UserId、有効期限、権限）
@@ -484,6 +763,19 @@ Token = Version + AppId + Base64(Message + Signature)
 | --------------------- | ------------------------ |
 | `PrivPublishStream`   | オーディオ／ビデオのパブリッシュ |
 | `PrivSubscribeStream` | ストリームのサブスクライブ   |
+=======
+- **Version**: 固定値 `001`
+- **AppId**: 24文字のアプリケーション識別子
+- **Message**: バイナリエンコードされたペイロード（RoomId、UserId、有効期限、権限）
+- **Signature**: AppKeyを用いたHMAC-SHA256署名
+
+### トークン権限
+
+| 権限                 | 説明                   |
+| --------------------- | ---------------------- |
+| `PrivPublishStream`   | 音声・映像のパブリッシュ |
+| `PrivSubscribeStream` | ストリームのサブスクライブ |
+>>>>>>> origin/release-6.1
 
 ### 有効期限
 
@@ -502,7 +794,11 @@ token.expireTime(expireAt)
 const tokenString = token.serialize()
 ```
 
+<<<<<<< HEAD
 トークン生成ライブラリについては[インストールとテスト - RTCトークンの生成](./installation-and-testing.md#generating-an-rtc-token)をご参照ください。
+=======
+トークン生成ライブラリについては[インストールとテスト - RTCトークンの生成](./installation-and-testing.md#generating-an-rtc-token)を参照してください。
+>>>>>>> origin/release-6.1
 
 ## エラーコード
 
@@ -521,6 +817,7 @@ const tokenString = token.serialize()
 }
 ```
 
+<<<<<<< HEAD
 ### 共通エラーコード
 
 | エラーコード             | HTTPステータス | 説明                         |
@@ -552,6 +849,39 @@ const tokenString = token.serialize()
 | `InvalidToken`   | RTCトークンが無効または期限切れ |
 
 公式ドキュメント：[共通エラーコード](https://www.volcengine.com/docs/6369/68677)
+=======
+### よくあるエラーコード
+
+| エラーコード             | HTTPステータス | 説明                             |
+| ------------------------ | -------------- | -------------------------------- |
+| `MissingParameter`       | 400            | 必須パラメータが不足している       |
+| `InvalidParameter`       | 400            | パラメータ形式が不正               |
+| `MissingRequestInfo`     | 400            | リクエスト情報が不足している       |
+| `InvalidTimestamp`       | 400            | タイムスタンプが無効または期限切れ |
+| `InvalidAuthorization`   | 400            | Authorizationヘッダーが無効       |
+| `InvalidCredential`      | 400            | 認証情報の形式が不正               |
+| `InvalidAccessKey`       | 401            | AccessKeyが無効                   |
+| `SignatureDoesNotMatch`  | 401            | 署名検証に失敗                   |
+| `InvalidSecretToken`     | 401            | STSトークンが無効または期限切れ   |
+| `AccessDenied`           | 403            | IAM権限が不足                     |
+| `ServiceNotFound`        | 404            | サービスが見つからない             |
+| `InvalidActionOrVersion` | 404            | APIアクションまたはバージョンが無効 |
+| `FlowLimitExceeded`      | 429            | レート制限超過                   |
+| `InternalError`          | 500            | 内部エラー                       |
+| `InternalServiceError`   | 502            | ゲートウェイエラー               |
+| `ServiceUnavailableTemp` | 503            | 一時的にサービス利用不可         |
+| `InternalServiceTimeout` | 504            | サービスタイムアウト             |
+
+### ビジネスエラーコード
+
+| エラーコード     | 説明                         |
+| ---------------- | ---------------------------- |
+| `RoomNotExist`   | ルームが存在しない           |
+| `TaskNotExist`   | タスクが存在しない           |
+| `InvalidToken`   | RTCトークンが無効または期限切れ |
+
+公式ドキュメント: [共通エラーコード](https://www.volcengine.com/docs/6369/68677)
+>>>>>>> origin/release-6.1
 
 ## 関連リソース
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Incompatible Changes from EMQX 4.4 to EMQX 5.1
+=======
+# Incompatible Changes between EMQX 4.4 and EMQX 5.1
+>>>>>>> origin/release-6.1
 
 EMQX 5.0 series versions introduces several changes that may affect compatibility with older versions of EMQX. These breaking changes are also documented in the EMQX 5.1 release notes.
 

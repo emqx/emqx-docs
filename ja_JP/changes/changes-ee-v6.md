@@ -1,5 +1,6 @@
 # EMQX Enterprise Version 6
 
+<<<<<<< HEAD
 ## 6.2.0
 
 *Release Date: 2026-03-31*
@@ -855,6 +856,8 @@ Added centralized certificate management via HTTP API, allowing certificates to 
 
 - [#16311](https://github.com/emqx/emqx/pull/16311) Updated error codes to correct terminology from misspelled `REST_FAILED` to `RESET_FAILED`.
 
+=======
+>>>>>>> origin/release-6.1
 ## 6.0.2
 
 *Release Date: 2026-01-16*
@@ -902,31 +905,46 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   **Examples in rule SQL:**
 
   Encode without padding:
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-6.1
   ```sql
   SELECT base64_encode(payload, 'no_padding') as encoded FROM "t/#"
   ```
 
   Encode with URL-safe characters:
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-6.1
   ```sql
   SELECT base64_encode(payload, 'urlsafe') as encoded FROM "t/#"
   ```
 
   Encode with both options (no padding and URL-safe):
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-6.1
   ```sql
   SELECT base64_encode(payload, 'no_padding', 'urlsafe') as encoded FROM "t/#"
   ```
 
   Decode URL-safe base64:
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-6.1
   ```sql
   SELECT base64_decode(payload, 'urlsafe') as decoded FROM "t/#"
   ```
 
   Decode unpadded URL-safe base64:
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/release-6.1
   ```sql
   SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
   ```
@@ -1440,7 +1458,7 @@ New `cluster.description` configuration option allows users to set and display c
 
   ```protobuf
   syntax = "proto3";
-  
+
   message test {
   map<string, string> args = 1;
   }

@@ -2,6 +2,7 @@
 
 [Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) および [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) は、Eclipse Pahoプロジェクトに属するC言語のクライアントライブラリ（MQTT Cクライアント）であり、ANSI Cで書かれたフル機能のMQTTクライアントです。
 
+<<<<<<< HEAD
 Eclipse Paho Embedded CはデスクトップOS上でも使用可能ですが、主に [mbed](https://os.mbed.com/)、[Arduino](https://arduino.cc/)、[FreeRTOS](https://freertos.org/) といった組み込み環境向けに設計されています。
 
 クライアントは同期／非同期APIを備えており、`MQTTClient` と `MQTTAsync` で始まるAPIがあります：
@@ -12,6 +13,18 @@ Eclipse Paho Embedded CはデスクトップOS上でも使用可能ですが、�
 ## Paho C 使用例
 
 C言語に関連する2つのMQTTクライアントライブラリの比較、ダウンロード、使用方法の詳細については、プロジェクトのホームページをご参照ください。本例では、EMQXに接続し、メッセージを送受信するPaho CのC言語による完全なコードを示します：
+=======
+Eclipse Paho Embedded CはデスクトップOS上でも使用可能ですが、主に[mbed](https://os.mbed.com/)、[Arduino](https://arduino.cc/)、[FreeRTOS](https://freertos.org/)などの組み込み環境向けに設計されています。
+
+クライアントは同期／非同期のAPIを備えており、`MQTTClient` と `MQTTAsync` で始まるAPIがあります：
+
+- 同期APIはよりシンプルで使いやすく設計されており、一部の呼び出しは操作が完了するまでブロックされるため、プログラミングが容易です。
+- 非同期APIでは呼び出しブロックは `API-waitForCompletion` のみで、コールバックを通じて通知されるため、メインスレッド以外の環境に適しています。
+
+## Paho C 使用例
+
+C言語に関連する2つのMQTTクライアントライブラリの比較、ダウンロード、使用方法の詳細については、プロジェクトのホームページをご覧ください。本例は、C言語で書かれたPaho CによるEMQXへの接続、メッセージの送受信を含む完全なコード例です：
+>>>>>>> origin/release-6.1
 
 ```c
 #include "stdio.h"
@@ -54,8 +67,12 @@ int main(int argc, char* argv[])
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
     MQTTClient_publishMessage(client, TOPIC, &pubmsg, &token);
+<<<<<<< HEAD
     printf("%d秒以内に %s のパブリッシュを待機中\n"
             "トピック %s、クライアントID: %s\n",
+=======
+    printf("%d秒以内にメッセージ %s をトピック %s にクライアントID %s でパブリッシュするのを待機中\n",
+>>>>>>> origin/release-6.1
             (int)(TIMEOUT/1000), PAYLOAD, TOPIC, CLIENTID);
     rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
     printf("デリバリートークン %d のメッセージが配信されました\n", token);

@@ -21,7 +21,11 @@ MQTTメッセージング機能に加え、Developer GuideではEMQXとやり取
 
 また、EMQXの[MQTT Durable Session](../durability/durability_introduction.md)機能についても紹介し、すぐに試せる手順を提供しています。
 
+<<<<<<< HEAD
 MQTTプロトコルをサポートしているため、EMQXはほとんどのMQTTクライアントライブラリやSDKと互換性があります。本ガイドには、開発者がMQTTプロジェクトを迅速に開始できるように、[ステップバイステップの手順とコードサンプル](./introduction.md)も含まれています。MQTTクライアントSDKの完全な一覧と比較については、[MQTTクライアントSDK](https://www.emqx.com/en/mqtt-client-sdk)をご覧ください。
+=======
+EMQXはMQTTプロトコルをサポートしているため、ほとんどのMQTTクライアントライブラリやSDKと互換性があります。本ガイドには、開発者がMQTTプロジェクトを迅速に開始できるよう、[ステップバイステップの手順とコードサンプル](./introduction.md)を含んでいます。MQTTクライアントSDKの完全な一覧と比較については、[MQTTクライアントSDK](https://www.emqx.com/en/mqtt-client-sdk)をご覧ください。
+>>>>>>> origin/release-6.1
 
 ::: tip
 
@@ -29,4 +33,8 @@ MQTTプロトコルをサポートしているため、EMQXはほとんどのMQT
 
 :::
 
+<<<<<<< HEAD
 さらに、EMQXは開発を支援するためのAPIドキュメントも提供しています。[REST API](../admin/api.md)では、EMQXが公開するHTTP管理APIの迅速な利用開始方法を案内しています。
+=======
+さらに、EMQXは開発を支援するAPIドキュメントも提供しています。[REST API](../admin/api.md)では、EMQXが公開するHTTP管理APIの迅速な利用開始方法を案内しています。
+>>>>>>> origin/release-6.1

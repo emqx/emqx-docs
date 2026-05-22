@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Paho MQTTを使用したC SDK
 
 このガイドでは、[Paho MQTTを使用したMCP over MQTT C SDK](https://github.com/mqtt-ai/paho-mcp-over-mqtt)を使って、シンプルな**MCP over MQTTサーバー**を作成する方法を説明します。現在、MCPサーバーのみがサポートされています。Python SDKを使用して、MCPクライアントを作成し、相互作用させることが可能です。
@@ -5,6 +6,15 @@
 ## MCPサーバーの作成
 
 [C SDK with Paho MQTT README](https://github.com/mqtt-ai/paho-mcp-over-mqtt)の手順に従い、依存関係とSDKをインストールした後、`demo_mcp_server.c`というファイルを作成し、以下のコードを追加してください。
+=======
+# Paho MQTTを用いたC SDK
+
+本ガイドでは、[MCP over MQTT C SDK with Paho MQTT](https://github.com/mqtt-ai/paho-mcp-over-mqtt) を使用して、シンプルな**MCP over MQTTサーバー**を作成する方法を示します。現時点ではMCPサーバーのみがサポートされています。MCPクライアントを作成してやり取りを行う場合は、Python SDKをご利用ください。
+
+## MCPサーバーの作成
+
+[C SDK with Paho MQTT README](https://github.com/mqtt-ai/paho-mcp-over-mqtt) の手順に従い、依存関係とSDKをインストールした後、`demo_mcp_server.c` というファイルを作成し、以下のコードを追加してください。
+>>>>>>> origin/release-6.1
 
 ```c
 #include "mcp_server.h"
@@ -14,7 +24,11 @@ const char* get_temperature_callback(int n_args, property_t *args) {
     // センサーからデータを読み取る
     float temp = read_temperature_sensor();
 
+<<<<<<< HEAD
     // JSON形式で結果を返す
+=======
+    // JSON形式の結果を返す
+>>>>>>> origin/release-6.1
     static char result[64];
     snprintf(result, sizeof(result), "{\"temperature\": %.2f}", temp);
     return result;
@@ -24,7 +38,11 @@ const char* get_temperature_callback(int n_args, property_t *args) {
 mcp_tool_t my_tools[] = {
     {
         .name = "get_temperature",
+<<<<<<< HEAD
         .description = "デバイスの温度を取得する",
+=======
+        .description = "デバイスの温度を取得",
+>>>>>>> origin/release-6.1
         .property_count = 0,
         .properties = NULL,
         .call = get_temperature_callback
@@ -51,6 +69,7 @@ mcp_server_run(server);
 
 ## Python SDKでMCPクライアントを作成・実行する
 
+<<<<<<< HEAD
 上記で作成したMCPサーバーに接続し、`get_temperature`ツールを呼び出すMCPクライアントの作成方法については、[Python SDK](./mcp-sdk-python.md)のドキュメントを参照してください。
 
 ## CMakeでMCPサーバーをビルド・コンパイルする
@@ -58,6 +77,15 @@ mcp_server_run(server);
 [paho-mcp-over-mqttリポジトリ](https://github.com/mqtt-ai/paho-mcp-over-mqtt)にある**CMakeの例**に従ってビルドしてください。
 
 ビルド後、生成された実行ファイルを実行してMCPサーバーを起動します。
+=======
+上記で作成したMCPサーバーに接続し、`get_temperature` ツールを呼び出すMCPクライアントの作成方法は、[Python SDK](./mcp-sdk-python.md) のドキュメントをご参照ください。
+
+## CMakeによるMCPサーバーのビルドとコンパイル
+
+[paho-mcp-over-mqttリポジトリ](https://github.com/mqtt-ai/paho-mcp-over-mqtt) にある**CMakeの例**に従ってビルドを行えます。
+
+ビルド後、生成された実行ファイルを実行してMCPサーバーを起動してください。
+>>>>>>> origin/release-6.1
 
 ```bash
 ./demo_mcp_server

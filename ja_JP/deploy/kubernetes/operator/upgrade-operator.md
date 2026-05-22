@@ -6,7 +6,11 @@
 
 1. アップグレードを開始する前に、すべての EMQX カスタムリソースが `v2beta1` API バージョンを使用していることを確認してください。EMQX Operator 2.3.0 は `v2beta1` より前の API バージョンをサポートしていません。
 
+<<<<<<< HEAD
    もしリソースがまだ `v2alpha1` または `v1beta4` API バージョンを使用している場合は、`v2beta1` に更新してください。多くの場合、`apiVersion` フィールドをパッチ適用することで対応可能です。
+=======
+   リソースがまだ `v2alpha1` または `v1beta4` API バージョンを使用している場合は、`v2beta1` に更新してください。ほとんどの場合、`apiVersion` フィールドをパッチすることで対応可能です。
+>>>>>>> origin/release-6.1
 
    ```sh
    kubectl patch emqx emqx --type=merge -p '{"apiVersion":"apps.emqx.io/v2beta1"}'
@@ -19,7 +23,11 @@
    kubectl patch crd rebalances.apps.emqx.io --type=json -p='[{"op":"replace", "path":"/spec/conversion", "value":{"strategy":"None"}}]'
    ```
 
+<<<<<<< HEAD
 3. EMQX CRD のパッチ適用後、既存のコントローラマネージャーのデプロイメントおよび関連リソースを削除します。
+=======
+3. EMQX CRD のパッチ適用後、既存のコントローラーマネージャーのデプロイメントおよび関連リソースを削除します。
+>>>>>>> origin/release-6.1
 
    ```sh
    kubectl delete --ignore-not-found clusterrole emqx-operator-manager-role
@@ -35,4 +43,8 @@
    kubectl delete --ignore-not-found crd emqxbrokers.apps.emqx.io emqxenterprises.apps.emqx.io emqxplugins.apps.emqx.io
    ```
 
+<<<<<<< HEAD
 5. [インストール手順](./getting-started.md) に従って、新しい EMQX Operator をデプロイしてください。
+=======
+5. [インストール手順](./getting-started.md) に従って、新しい EMQX Operator をデプロイします。
+>>>>>>> origin/release-6.1
