@@ -1,5 +1,99 @@
 # 版本发布
 
+## e4.4.36
+
+*发布日期: 2026-05-22*
+
+### 增强
+
+- 通过 Prometheus 指标暴露每个节点的 License 信息。
+
+  增加了三个 Prometheus 指标：`emqx_license_max_sessions`、`emqx_license_expiry_at`、`emqx_license_issued_at`。时间戳为 Unix epoch 秒数（UTC）。当 License 不可用时三个指标均返回 0。
+
+- RabbitMQ 规则动作支持使用 RabbitMQ 的默认（未命名）Exchange。
+
+  `exchange` 参数不再是必填项，默认值为空字符串 `""`。当留空时，规则动作通过默认 direct Exchange 发送消息，消息会被路由到名称与 `routing_key` 一致的 Queue；此时桥接不会执行 `exchange.declare`/`exchange.delete`，因为默认 Exchange 由 Broker 保留管理。详见 https://www.rabbitmq.com/docs/exchanges#default-exchange。
+
+- 默认关闭 Erlang 虚拟机的调度器负载压缩功能。
+
+  通过在 `vm.args` 中添加配置 `+scl false` 禁用调度器负载压缩，以提升高低负载切换时的调度稳定性，降低消息时延。
+
+  注意，在某些 CPU 拓扑上，禁用负载压缩后，EMQX 在低负载下的 CPU 使用率可能会明显升高，尤其是存在多个 NUMA 节点、或者逻辑 CPU 核心数非常多的系统中。这种情况下可以考虑重新启用负载压缩（`+scl true`），以提升 EMQX 在低负载时的表现，但在负载逐渐增大时可能出现更明显的性能波动。通过 `+S Schedulers:SchedulerOnline` 减少调度器数量、关闭 CPU 超线程（从而让 Erlang 虚拟机启动更少的调度器线程），或仅绑定单个 NUMA 节点的 CPU 核心等方式，都有助于缓解这一问题。
+
+- 优化修改 MQTT 连接的堆内存上限时的性能。
+
+  对某个 ClientID 开启日志追踪后，会调整该 ClientID 对应的 MQTT 连接进程堆内存上限，以避免日志量过大导致进程被杀死。此次优化中，我们使用 ETS 替代 `persistent_term` 存储堆内存上限配置，避免在修改配置时系统对大量 MQTT 连接进程触发 GC 所造成的性能损耗。
+
+- 新增 Erlang 分布式通信端口的缓冲区相关的配置，并增大其默认值以提升集群的稳定性。
+
+  此前 buffer 默认值为 1460B。本版本将其增大到 1MB，以适应更高网络时延和更大消息量，可显著降低 RPC 延迟并提升集群稳定性。本次新增配置项如下：
+
+  ```
+  node.dist_connect_options.nodelay = false
+  node.dist_connect_options.sndbuf = 1MB
+  node.dist_connect_options.recbuf = 1MB
+  node.dist_connect_options.buffer = 1MB
+  node.dist_listen_options.nodelay = false
+  node.dist_listen_options.sndbuf = 1MB
+  node.dist_listen_options.recbuf = 1MB
+  node.dist_listen_options.buffer = 1MB
+  ```
+
+- 增大热升级脚本的默认超时时间。
+
+  将热升级脚本的默认超时时间从 5 分钟增大到 25 分钟，以避免热升级超时。注意，由于热升级使用的是旧版本的热升级脚本，因此只有从此版本开始的 EMQX 升级到后续版本时，才会使用这个新的默认超时时间。
+
+- 在节点疏散/重平衡功能，以及集群分布式锁 (`ekka_locker`) 中，使用 `erpc` 替代 `rpc` 进行多节点调用，以改善在高并发调用时的性能和稳定性。
+
+- 将 Erlang/OTP 升级到 24.3.4.17-2。
+
+  注意无法通过热升级在运行时应用 Erlang/OTP 中的修复，只有重启 EMQX 后才能生效。
+
+### 修复
+
+- 修复 EMQX 集群在网络不稳定的情况下自愈失败的问题。
+
+- 修复 Redis Sentinel 连接支持为 Redis 数据节点和 Sentinel 节点分别配置认证信息。
+
+- 修复某些 HTTP API 中的 RPC 自调用的问题。
+
+  修复前，Dashboard 页面获取消息速率统计的接口 `nodes/:node/monitor/metrics` 可能会发生 RPC 死循环调用，并泄露大量 `gen_rpc` 进程。该问题仅在集群模式下，其中某一个节点名的 IP 地址被错误地配置为本机回环地址时出现，即 `emqx@127.0.0.1` (默认的单节点配置)。
+
+  此改动会影响 `emqx_management`、Dashboard、热配置、主题监控、客户端标签等模块下大部分需要跨节点 RPC 的 HTTP API，包括：
+
+  - 集群节点信息
+  - 客户端/订阅查询
+  - 监听器与告警列表
+  - ACL 缓存清理
+  - 数据备份下载
+  - Dashboard 速率统计
+  - 热配置应用
+  - 主题监控管理
+
+  在滚动升级过程中，由于集群中存在旧版本节点，相关接口可能返回不准确或失败。
+
+- 修复进程邮箱过长的告警中，邮箱长度打印不准确的问题。
+
+- 修复 `emqx_broker_helper` 和 `username_quota` 进程无法从过长的进程邮箱中恢复的风险。
+
+- 修复 RocketMQ 资源无法释放老版本代码模块的问题。
+
+  修复前，即便热升级工作已经完成很久，RocketMQ 资源进程仍会阻止系统卸载老版本代码，导致系统反复扫描还使用老版本代码模块的进程，带来不必要的性能损耗。
+
+  注意，热升级时会重启 RocketMQ 资源，可能会导致少量的 RocketMQ 消息丢失。
+
+- 修复 RocketMQ Producer 的内存泄露问题。
+
+- 修复 e4.4.34 引入 API key 权限控制后，`management.default_application` 和 `management.bootstrap_apps_file` 中的 AppID 被当作兼容模式（无权限记录）AppID 处理的问题。
+
+  修复前，通过 `management.default_application` 配置或从 `management.bootstrap_apps_file` 加载的 AppID 没有权限记录，会被视为兼容模式 AppID，每次 API 请求都会重复打印 `AppId 'xxx' accessing '/api/v4/resources' in compatibility mode (no permission record)` 的 warning 日志。修复后，这些 AppID 将被视为拥有全部权限的 AppID；同时，兼容模式 AppID（无权限记录）的相关日志级别也已从 `warning` 降低为 `info`。
+
+- 修复 SAML SSO 登录失败时响应体可能泄露 EMQX 内部错误信息的问题。
+
+  修复前，当用户通过 SAML 完成身份验证、但在 EMQX 侧创建账号或建立会话的环节失败时，EMQX 会把内部错误细节直接写入返回给浏览器的响应体中。修复后，响应体统一改为通用的英文错误提示，详细信息仅写入服务端日志供运维排查。
+
+- 修复节点间 MQTT 消息转发速率极高的情况下，gen_rpc 会 spawn 出大量 worker 进程，导致进程总数超过系统限制的问题。
+
 ## e4.4.35
 
 *发布日期: 2026-04-03*
