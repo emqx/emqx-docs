@@ -187,7 +187,6 @@ jobs:
         aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
 
     - name: upload files to tencent cos
-      if: github.event_name == 'push'
       run: |
         curl -fsSL -o /tmp/coscli https://github.com/tencentyun/coscli/releases/download/v1.0.8/coscli-v1.0.8-linux-amd64
         chmod +x /tmp/coscli
@@ -203,7 +202,6 @@ jobs:
         /tmp/coscli cp -r --disable-log --process-log=false --routines 20 --fail-output-path /tmp/coscli_output ./ cos://docs-bucket/
 
     - name: flush cdn
-      if: github.event_name == 'push'
       run: |
         pip3 install tccli
         tccli configure set secretId ${{ secrets.TENCENT_COS_ID }}
