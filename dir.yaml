@@ -837,6 +837,7 @@
         - observability/mqtt-system-topics
         - observability/prometheus
         - observability/datadog
+        - observability/mria-alarms
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
           title_ja: OpenTelemetry との統合

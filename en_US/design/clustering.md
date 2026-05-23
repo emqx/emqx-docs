@@ -258,4 +258,4 @@ including scalability, automatic failover,
 network partition tolerance, and so on,
 and how EMQX can help you achieve these goals.
 
-See also: [Mria Logs and Alarms](../operations/mria-alarms.md)
+See also: [Mria Logs and Alarms](../observability/mria-alarms.md)
