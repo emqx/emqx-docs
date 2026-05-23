@@ -32,7 +32,7 @@ When designing a cluster, there are several key aspects that need to be consider
 
 EMQX utilizes a variety of approaches to ensure that these goals are met in the most efficient way.
 In the following sections,
-we will discuss the key aspects of clustering in details.
+we will discuss the key aspects of clustering in detail.
 
 ## Data Replication Channels
 
@@ -45,7 +45,7 @@ In an EMQX cluster, there are two data replication channels:
   enabling each node to function as both a client and server.
   The default listening port number for this protocol is 4370.
 
-* Message delivery, such as when forwarding messages from one node to another.
+- Message delivery, such as when forwarding messages from one node to another.
   In contrast,
   the message delivery channel employs a connection pool,
   and each node is configured to listen on port number 5370 by default (5369 when running in a Docker container).
@@ -64,7 +64,7 @@ EMQX stores different kinds of internal data in one of two built-in database man
   used for read-heavy workloads,
   such as the routing table and runtime configuration.
 
-  In terms of CAP theorem,
+  In terms of the CAP theorem,
   this database is designed for *availability*.
 
 - *Durable Storage (DS)* -- a disk-based streaming database,
@@ -83,7 +83,7 @@ please read the following document: [Durable Storage](./durable-storage.md).
 *Mria* tables can be further split into two categories:
 
 - *Regular*, with contents of the table being globally uniform.
-  The majority of mria tables are regular.
+  The majority of Mria tables are regular.
 
 - *Merge*, a special type of table where each record is owned by a particular EMQX node.
   Only EMQX node owning the record can modify it,
@@ -91,9 +91,9 @@ please read the following document: [Durable Storage](./durable-storage.md).
 
 ### Node Roles: Core and Replicant
 
-Mria uses a mixed network topology that consists two type of node roles: `core` and `replicant`.
+Mria uses a mixed network topology that consists of two type of node roles: `core` and `replicant`.
 
-<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
+<img src="./assets/mria-cluster.png" alt="Mria Cluster" style="zoom: 40%;" />
 
 Each EMQX cluster should have at least one Core node,
 and any number of Replicant nodes.
@@ -109,7 +109,7 @@ Typical number of core nodes in a cluster is 3.
 Replicant nodes are not directly involved in the processing of transactions.
 They connect to Core nodes and passively replicate data updates from Core nodes.
 Replicant nodes are not allowed to perform any write operations.
-Instead, they are handed over to the Core node for execution.
+Instead, write requests are forwarded to a Core node for execution.
 In addition,
 because Replicants will replicate data from Core nodes,
 they have a complete local copy of data to achieve the highest efficiency of read operations,
@@ -120,7 +120,7 @@ the latency of write operations will not be affected when more Replicant nodes j
 This allows the creation of larger EMQX clusters with tens of Replicant nodes.
 
 For performance reasons,
-the replication of irrelevant data can be divided into independent data streams,
+data replication is divided into independent data streams,
 that is, multiple related data tables can be assigned to the same RLOG Shard (replicated log shard),
 and transactions are sequentially replicated from Core nodes to the Replicant node.
 But different RLOG Shards are independent.
@@ -130,7 +130,7 @@ But different RLOG Shards are independent.
 Merge tables are a special type of Mria table,
 where each record can be unambiguously associated with a particular EMQX node.
 One such example is the EMQX routing table.
-Routing table is the most important distributed data structure in an MQTT broker,
+The routing table is the most important distributed data structure in an MQTT broker,
 which is used to store the routing information of all topics.
 The routing table is used to determine which nodes should receive a message published to a particular topic.
 
@@ -146,7 +146,7 @@ This design has the following advantages:
 - Reduced write latency
 - Reduced load on the Core nodes
 - Improved partition tolerance:
-  even in a fully partition network,
+  even in a fully partitioned network,
   it is guaranteed that each node retains at least its own routes.
 
 When a network partition heals,
@@ -155,9 +155,14 @@ hence the name.
 
 ## Centralized Management
 
-EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages. The console is accessible via a web browser and provides a user-friendly interface for managing the cluster. Any `core` type node can serve as the management HTTP API endpoint (we will discuss the different node types in the next section).
+EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console.
+This makes it easy to manage a large number of devices and messages.
+The console is accessible via a web browser and provides a user-friendly interface for managing the cluster.
+Any `core` type node can serve as the management HTTP API endpoint.
 
-The online configuration management feature allows you to make configuration changes to all nodes the cluster without having to restart the nodes. This is especially useful when you need to make changes to the cluster configuration, such as adding or removing nodes.
+The online configuration management feature allows to make configuration changes on all nodes in the cluster without having to restart the nodes.
+This is especially useful the cluster configuration updates,
+such as adding or removing nodes.
 
 ## Easy to Scale
 
@@ -241,7 +246,7 @@ This allows them to retain client connections.
 They take the following steps instead:
 
 1. Replicants in the minority partition re-initialize their replicas of *regular* Mria tables.
-1. Contents of the routing table is merged:
+1. The routing table contents are merged:
    nodes in the majority partition re-establish routes to the minority and vice versa.
 1. Clients re-establish their presence in the global session registry.
 
@@ -253,4 +258,4 @@ including scalability, automatic failover,
 network partition tolerance, and so on,
 and how EMQX can help you achieve these goals.
 
-See also: [Cluster Partition Logs and Alarms](../operations/mria-alarms.md)
+See also: [Mria Logs and Alarms](../operations/mria-alarms.md)

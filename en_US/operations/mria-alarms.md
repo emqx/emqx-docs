@@ -1,8 +1,10 @@
 # Mria Logs and Alarms
 
+This document describes various errors reported by Mria database management system.
+
 ## Network Partition
 
-When network partition is detected,
+When a network partition is detected,
 the following log messages appear in the logs on all nodes (Cores or Replicants):
 
 ```
@@ -11,7 +13,7 @@ the following log messages appear in the logs on all nodes (Cores or Replicants)
 [notice] msg: Remote RLOG agent died, reason: noconnection, repl_state: ...
 ```
 
-When partition heals the following logs will appear on all core nodes,
+When the partition heals the following logs will appear on all core nodes,
 as EMQX detects that the previously lost peers reconnect:
 
 ```
@@ -20,14 +22,14 @@ as EMQX detects that the previously lost peers reconnect:
 [critical] msg: Core cluster partition, context: running_partitioned_network, from: 'emqx@remote.host'
 ```
 
-Also `partition` alarm is raised:
+Also, a `partition` alarm is raised:
 
 ```
 [warning] msg: alarm_is_activated, message: <<"Partition occurs at node emqx@remote.host">>, name: partition
 ```
 
 In addition,
-on the minority Core node partition the following logs will appear:
+on Core nodes in the minority partition the following logs will appear:
 
 ```
 [notice] msg: Mria is restarting to join the cluster, seed: 'emqx@remote.node'
@@ -51,7 +53,7 @@ Replicants:
 [notice] msg: Shard fully up, node: 'emqx@remote.host', shard: ...
 ```
 
-Another indication of the partition recovery is `broker_heal` alarm that is raised on all nodes:
+Another indication of the partition recovery is the `broker_heal` alarm that is raised on all nodes:
 
 ```
 [warning] msg: broker_heal_initiated, pid: <0.8705.0>, results: ...
