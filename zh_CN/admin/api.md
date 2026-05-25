@@ -54,7 +54,7 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
    - **到期时间**：留空表示永不过期。
    - **是否启用**：默认为启用。
    - **角色**：选择角色（可选），参见[角色与权限](#角色与权限)。
-   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 范围（Scope）](#api-范围-scope)。
+   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 范围（Scope）](#api-范围scope)。
    - **备注**：可选，填写密钥的描述信息。
 3. 单击**确认**，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
 
@@ -83,7 +83,7 @@ api_key = {
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
 - **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围-scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
+- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
 
 例如：
 
@@ -151,7 +151,7 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 | `audit` | 审计日志 | `/audit` |
 | `license` | 许可证 | `/license*` |
 
-除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围scope)。
+除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围scopes)。
 
 | Scope | 所需角色 | 用途 |
 | --- | --- | --- |
