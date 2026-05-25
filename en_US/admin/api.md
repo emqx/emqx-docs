@@ -85,7 +85,7 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
 - **Role (optional)**: Specify the key's [role](#roles-and-permissions).
-- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases).
+- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases). Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
 
 For example:
 
@@ -108,6 +108,10 @@ The REST API implements role-based access control. When creating an API key, you
 - **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
 - **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
 - **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
+
+::: tip Note
+`publisher` keys only accept the `publish` scope. When assigning scopes, any scope other than `publish` returns HTTP 400. If you change a key's role to `publisher`, include `"scopes": ["publish"]` or an empty list in the same request; otherwise the request is rejected if the key's existing scopes contain anything other than `publish`.
+:::
 
 #### API Scopes
 
@@ -134,7 +138,7 @@ Scopes let you assign keys using the principle of least privilege: grant only th
 
 ##### Built-in Scopes
 
-EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
+EMQX 5.10 ships with 10 scopes that you can combine freely when creating an API key:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -149,11 +153,20 @@ EMQX 5.10 ships with 10 scopes that you can combine freely when creating a key:
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
 
+In addition to these API-key scopes, Dashboard login users have four login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](../dashboard/system.md#login-user-scopes).
+
+| Scope | Required role | Purpose |
+| --- | --- | --- |
+| `user_management` | Administrator | Manage Dashboard users. |
+| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
+| `api_key_management` | Administrator | Manage API keys. |
+| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
+
 ::: tip
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-Dashboard login, SSO callbacks, and API key self-management endpoints (for example,`/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ##### Default Behaviour of `scopes`
 
@@ -167,12 +180,23 @@ The `scopes` field on an API key follows these rules:
 
 When a bootstrap file entry omits the scopes segment, the key is explicitly written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
 
+The same three-state model applies to Dashboard login users. When a login user's `scopes` field is absent, the user receives a role-derived default set: administrators get all scopes, including the four login-only ones; viewers get all 10 API-key scopes, but none of the four login-only scopes (including `mfa_management`) unless explicitly assigned.
+
 ##### List Available Scopes
 
-EMQX exposes `GET /api/v5/api_key/scopes` to return the current version's user-visible scope catalogue with descriptions. Use it to populate a scope-picker UI or validate automation scripts:
+EMQX exposes two endpoints to query the available scope catalogues:
+
+- `GET /api/v5/api_key/scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
+- `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the four login-only scopes. Authenticate with a bearer token.
+
+Use these endpoints to populate a scope-picker UI or validate automation scripts:
 
 ```bash
+# API key scopes
 curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+
+# Login user scopes (requires bearer token)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 ```
 
 ##### Assign Scopes

@@ -26,7 +26,7 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 
 ### 登录用户权限范围（Scopes）
 
-从 EMQX 5.10 开始，Dashboard 登录用户可以被分配权限范围（Scope），用于在角色基础上进一步限制用户可访问的功能区域。Scope 的限制逻辑与 [API 密钥的权限范围](../admin/api.md#api-范围（scope）)相同，Dashboard 用户共享全部通用 API 密钥 Scope，并额外拥有 4 个仅登录用户可用的 Scope：
+从 EMQX 5.10 开始，您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。除 [10 个 API 密钥 Scope](../admin/api.md#内置范围) 外，Dashboard 用户还拥有 4 个仅适用于浏览器会话的专属 Scope：
 
 | Scope | 所需角色 | 用途 |
 | --- | --- | --- |
@@ -35,14 +35,18 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
 | `mfa_management` | 任意 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
 
-其中 `user_management`、`sso_management` 和 `api_key_management` 仅限管理员持有，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但效果有限。持有 `mfa_management` 的查看者只能管理自己账号的 MFA（重新绑定 TOTP 或禁用），无法操作其他用户的 MFA。这样可以让查看者在不获得其他高权限的前提下，自助轮换或恢复自己的认证设备。
+其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此 Scope 非常有用。
 
 在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
 
 - **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
 - **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
 
-<!-- TODO: Screenshot of "Create user" dialog showing the Scopes multi-select with role-derived defaults and the four login-only scopes -->
+#### 角色变更与 Scope 兼容性
+
+变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
+
+例如，如果您将一个管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个 Scope 需要管理员角色。请在同一请求中提供一个仅包含查看者兼容 Scope 的列表以完成变更。（`mfa_management` 不是仅限管理员的 Scope，不会导致此拒绝。）
 
 ### 默认管理员保护
 

@@ -83,7 +83,7 @@ api_key = {
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
 - **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围-scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。
+- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围-scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
 
 例如：
 
@@ -106,6 +106,10 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 - **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
 - **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
 - **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
+
+::: tip 注意
+`publisher` 密钥只接受 `publish` 范围。分配 Scope 时，除 `publish` 以外的任何 Scope 都会返回 HTTP 400。如果您将某个密钥的角色更改为 `publisher`，请在同一请求中包含 `"scopes": ["publish"]` 或空列表；否则，若该密钥已有的 Scope 中包含 `publish` 以外的项，请求将被拒绝。
+:::
 
 #### API 范围（Scope）
 
@@ -132,7 +136,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 ##### 内置范围
 
-EMQX 5.10 提供 10 个 Scope，可在创建密钥时自由组合：
+EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 
 | Scope 标识 | 名称 | 涵盖的典型 API 领域 |
 | --- | --- | --- |
@@ -147,11 +151,20 @@ EMQX 5.10 提供 10 个 Scope，可在创建密钥时自由组合：
 | `audit` | 审计日志 | `/audit` |
 | `license` | 许可证 | `/license*` |
 
+除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围scope)。
+
+| Scope | 所需角色 | 用途 |
+| --- | --- | --- |
+| `user_management` | 管理员 | 管理 Dashboard 用户。 |
+| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 管理员 | 管理 API 密钥。 |
+| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
+
 ::: tip 提示
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口不支持使用 API 密钥进行认证/授权；例如，API 密钥管理接口 `/api_key` 仅允许使用 bearer token。这与密钥的业务范围无关，属于 Dashboard 的内置安全边界。
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
 
 ##### Scope 的默认行为
 
@@ -165,12 +178,23 @@ Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口不�
 
 Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
 
+同样的三态模型也适用于 Dashboard 登录用户。当登录用户的 `scopes` 字段未设置时，用户将获得由角色推导出的默认 Scope 集：管理员获得全部 Scope（包括 4 个登录专属 Scope）；查看者获得全部 10 个 API 密钥 Scope，但不包括 4 个登录专属 Scope（含 `mfa_management`），除非显式分配。
+
 ##### 查询可用范围
 
-EMQX 提供 `GET /api/v5/api_key/scopes` 端点返回当前版本支持的用户可见 Scope 列表及其描述，可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
+EMQX 提供两个端点用于查询可用的 Scope 列表：
+
+- `GET /api/v5/api_key/scopes`：返回可分配给 API 密钥的 Scope（即上述 10 个业务领域 Scope）。使用 API 密钥认证。
+- `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部 Scope，包含 4 个登录专属 Scope。使用 Bearer Token 认证。
+
+可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
 
 ```bash
+# API 密钥 Scope
 curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+
+# 登录用户 Scope（需要 Bearer Token）
+curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 ```
 
 ##### 如何分配 Scope
