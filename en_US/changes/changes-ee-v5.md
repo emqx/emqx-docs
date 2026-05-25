@@ -8,43 +8,49 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
-#### Deployment
+#### Security Hardening
 
-- [#16853](https://github.com/emqx/emqx/pull/16853) Make v5 license parser forward compatible with v6 license keys.
+- [#17039](https://github.com/emqx/emqx/pull/17039) Restricted API key access to Dashboard user-account management endpoints.
 
-#### Observability
+  Previously, an API key with the `administrator` role could call the Dashboard user management endpoints `POST/DELETE /users/:username/mfa` and `POST /users/:username/change_pwd` via HTTP Basic authentication. This meant an API key could reset or disable another Dashboard user's MFA, or change another Dashboard user's password, bypassing the intended separation between human Dashboard sessions and machine API keys.
 
-- [#17161](https://github.com/emqx/emqx/pull/17161) Exposed per-node License info via Prometheus gauges (`emqx_license_max_sessions`, `emqx_license_expiry_at`, `emqx_license_issued_at`) so cluster-wide License consistency can be alerted on without per-node CLI checks.
+  These endpoints now return `401 API_KEY_NOT_ALLOW` when accessed via an API key, matching the existing policy that already blocks API key access to `/users`, `/users/:username`, `/logout`, and `/api_key`. Dashboard users can still manage their own MFA and password from the Dashboard UI using bearer-token (JWT) sessions as before.
 
-  Timestamps are Unix epoch seconds at UTC midnight of the license's issue/expiry date. All three metrics emit `0` when the License is unavailable; use `emqx_license_expiry_at == 0` as the "unavailable" signal in alerting rules (since `max_sessions == 0` may also indicate an expired trial license).
+- [#17169](https://github.com/emqx/emqx/pull/17169) Restricted API keys from exporting or importing Dashboard accounts and API keys via the data backup endpoints.
 
-- [#17074](https://github.com/emqx/emqx/pull/17074) Added `emqx_routes_count` and `emqx_routes_max` Prometheus metrics to export the number of route table entries per node, similar to the `emqx_routes_count` metric in EMQX v4.
-- [#16746](https://github.com/emqx/emqx/pull/16746) Set `os_mon` to collect only system-wide memory statistics by default, reducing per-process memory scanning overhead.
-- [#16911](https://github.com/emqx/emqx/pull/16911) Reduced the overhead of Prometheus metrics collection by avoiding accidental repeated queries of Mria statistics.
+  `POST /data/export` called with an API key now silently omits the `dashboard_users` and `api_keys` mnesia table sets from the resulting archive. `POST /data/import` called with an API key now returns `403 FORBIDDEN` when the uploaded backup contains either of those table sets.
 
-#### Access Control
+  Dashboard bearer-token (login) callers are unaffected and continue to be able to back up and restore the full database, including Dashboard users and API keys.
 
-- [#16792](https://github.com/emqx/emqx/pull/16792) Added two new Variform expression helper functions `json_value` and `jwt_value` to extract values from JSON data and JWT tokens using dot-separated key paths.
+  This closes a privilege-escalation gap. The existing `/users` and `/api_key` endpoints already deny API keys access to Dashboard login credentials and API key records, but an API key holder could bypass those restrictions by going through the data backup endpoints instead.
 
-  The `json_value` function extracts values from JSON binary strings using a dot-separated path to navigate nested structures. The `jwt_value` function decodes JWT token payloads and extracts claim values using the same path syntax.
+- [#17188](https://github.com/emqx/emqx/pull/17188) Removed the EMQX release version (`rel_vsn`) from the unauthenticated `GET /status?format=json` response to avoid disclosing the broker version to unauthenticated callers. The version remains available via the authenticated node-info APIs.
 
-  For example, if `username` is a JSON object, you can access field with `json_value(username, 'shop.floor')`; if `password` is JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`.
+- [#17200](https://github.com/emqx/emqx/pull/17200) Hardened the plugin install endpoint against path traversal in uploaded tarballs. The install path now refuses to extract any tarball whose entries would resolve to a path outside the plugin install directory.
 
-- [#16942](https://github.com/emqx/emqx/pull/16942) Added scope-based permission control for API keys.
+  This is defense in depth: the endpoint was already gated by both Dashboard login / API-key authentication and an explicit `emqx ctl plugins allow <name-vsn>` allowlist entry, so an unauthenticated or unauthorized caller could not reach this code path. The new check protects the install directory even when both gates are intentionally opened to upload a plugin.
 
-  API keys can now be restricted to specific API path categories using scopes derived from OpenAPI tags. Keys without scopes retain full access (backward compatible). An empty scopes list denies all scoped API paths. A new `GET /api_key/scopes` endpoint lists all available scopes and preset groups for Dashboard UI consumption.
+- [#17202](https://github.com/emqx/emqx/pull/17202) A successful plugin install via `POST /api/v5/plugins/install` (and the Dashboard upload that wraps it) now immediately revokes the cluster-wide `emqx ctl plugins allow <name-vsn>` entry that authorized the upload, so the same grant cannot be reused for a subsequent (potentially different) tarball. The 5-minute TTL still applies; this change closes the window earlier on the common path.
 
-- [#16943](https://github.com/emqx/emqx/pull/16943) Added per-backend `force_mfa` option for SSO (OIDC/SAML/LDAP).
+- [#17253](https://github.com/emqx/emqx/pull/17253) Published `.sha256` checksum sidecars alongside plugin packages on the official download site, so users can verify the integrity of downloaded plugin archives.
 
-  When enabled, SSO users must complete TOTP MFA setup or verification before receiving a Dashboard token, regardless of IDP-side MFA settings. Supports three MFA states: `not_configured` (force setup), `enabled` (require verification), and `admin_disabled` (skip MFA). New API endpoints `POST /sso/mfa/setup` and `POST /sso/mfa/verify` handle the MFA flow.
+- [#17276](https://github.com/emqx/emqx/pull/17276) Hardened the official EMQX docker image to clear image-scanner findings:
 
-#### Gateway
+  - Applied Debian security upgrades during the runtime image build, so the image picks up the latest patched `libssl3t64`.
+  - Removed the unused `libgnutls30t64` package. EMQX talks TLS via OpenSSL through Erlang/OTP and never links GnuTLS, so it was only present as a transitive dependency of `curl` and showed up in scanner reports.
+  - Replaced the Debian `curl` package, which would have transitively re-introduced `libgnutls30t64` via `librtmp1`, with a statically-linked `curl` binary from <https://github.com/stunnel/static-curl> (OpenSSL, HTTP/2, HTTP/3; no RTMP, no GnuTLS). Container healthchecks that call `curl` continue to work unchanged.
 
-- [#16655](https://github.com/emqx/emqx/pull/16655) Added support for custom `msg_sn` in JT/T 808 gateway downlink messages.
+- [#17314](https://github.com/emqx/emqx/pull/17314) Sanitized PROXY-Protocol v2 SSL Common Name / Subject before they enter client identity.
 
-  When a downlink MQTT message payload contains a `msg_sn` field in the header, the gateway will use that value instead of the auto-generated channel sequence number. This allows external systems to control message sequencing for specific use cases.
+  When a listener is configured with `proxy_protocol = true`, the broker now rejects connections whose PROXY-Protocol SSL TLV bytes contain ASCII control characters (the same byte class already rejected on MQTT-ingested clientid/username/password). This blocks attacker-controlled bytes from being smuggled into outbound HTTP authentication, authorization, or rule-engine header values via `${cert_common_name}` and `${cert_subject}` templates.
 
-  Also fixed JT/T 808 gateway `string_encoding` not applied to downlink message serialization. Previously, the `string_encoding` configuration (e.g., `gbk`) was only used for parsing uplink messages, but not for serializing downlink messages. Now when `string_encoding: gbk` is configured, both uplink parsing (GBK to UTF-8) and downlink serialization (UTF-8 to GBK) work correctly.
+  As an additional defense layer, the HTTP authentication and authorization clients now refuse to send a request when a rendered header name or value contains a CR, LF, or NUL byte.
+
+- [#17322](https://github.com/emqx/emqx/pull/17322) Extended the byte-class check applied to MQTT clientid / username / password to other fields that feed `ClientInfo` and HTTP request templating:
+
+  - `peersni` (TLS Server Name Indication; also accepted from the PROXY-Protocol v2 `authority` TLV) is now validated at the connection ingestion boundary. Control characters cause the connection to be rejected and a warning logged.
+  - Client attribute values produced by `mqtt.client_attrs_init` Variform expressions are dropped (with a warning) when they contain control characters, so templates such as `${client_attrs.tns}` cannot carry injected bytes downstream.
+  - HTTP action / bridge connector header rendering now drops any header whose rendered name or value contains NUL, CR, or LF.
 
 #### Clustering
 
@@ -62,10 +68,68 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   emqx eval 'emqx_router:get_schema_vsn()'
   ```
 
+- [#17156](https://github.com/emqx/emqx/pull/17156) Added support for configuring Erlang inet port options for the distribution port, with a default `buffer` size of 1 MB.
+
+  Previously, the Erlang distribution port used an extremely small default port buffer (1460 bytes, or ~9 KB on some platforms), which caused performance bottlenecks even when the distribution port buffer (`+zdbbl`) was configured to a much larger value (e.g., 32 MB). This affected cluster communication reliability and could manifest as `erpc timeout` errors, Mnesia transaction congestions, and degraded multi-core node support.
+
+#### Observability
+
+- [#17074](https://github.com/emqx/emqx/pull/17074) Added `emqx_routes_count` and `emqx_routes_max` Prometheus metrics to export the number of route table entries per node, similar to the `emqx_routes_count` metric in EMQX v4.
+- [#16746](https://github.com/emqx/emqx/pull/16746) Set `os_mon` to collect only system-wide memory statistics by default, reducing per-process memory scanning overhead.
+- [#16911](https://github.com/emqx/emqx/pull/16911) Reduced the overhead of Prometheus metrics collection by avoiding accidental repeated queries of Mria statistics.
+
+- [#17161](https://github.com/emqx/emqx/pull/17161) Exposed per-node License info via Prometheus gauges (`emqx_license_max_sessions`, `emqx_license_expiry_at`, `emqx_license_issued_at`) so cluster-wide License consistency can be alerted on without per-node CLI checks.
+
+  Timestamps are Unix epoch seconds at UTC midnight of the license's issue/expiry date. All three metrics emit `0` when the License is unavailable; use `emqx_license_expiry_at == 0` as the "unavailable" signal in alerting rules (since `max_sessions == 0` may also indicate an expired trial license).
+
+#### Access Control
+
+- [#16792](https://github.com/emqx/emqx/pull/16792) Added two new Variform expression helper functions `json_value` and `jwt_value` to extract values from JSON data and JWT tokens using dot-separated key paths.
+
+  The `json_value` function extracts values from JSON binary strings using a dot-separated path to navigate nested structures. The `jwt_value` function decodes JWT token payloads and extracts claim values using the same path syntax.
+
+  For example, if `username` is a JSON object, you can access the field with `json_value(username, 'shop.floor')`; if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`.
+
+- [#16942](https://github.com/emqx/emqx/pull/16942) [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for both API keys and Dashboard login users.
+
+  API keys can now be restricted to specific API path categories using scopes derived from OpenAPI tags. Keys without scopes retain full access (backward compatible). An empty scopes list denies all scoped API paths.
+
+  Dashboard login users now also carry an optional `scopes` field; when set, requests are authorized against the same path-to-scope catalog used for API keys, layered on top of the existing role-based check. Four new scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) cover Dashboard-only endpoints and are admin-only except `mfa_management`, which any role may hold for self-exemption from forced MFA. API keys cannot hold any of the four login-only scopes, and the `publisher` API-key role is now constrained to `[publish]` only. Both checks apply to the HTTP API and to bootstrap-file loading (incompatible scopes are dropped with a warning).
+
+  New public catalog endpoints expose the scope vocabulary for UI consumption: `GET /api_key_scopes` and `GET /user_scopes`, both accessible to any bearer-authenticated caller. The `scopes` field is also surfaced in `GET /users`, `POST /users`, and `PUT /users/:username` responses; when not explicitly set, the response projects the role-default scope list.
+
+  Added per-SSO-backend `force_mfa` enforcement. Each backend (LDAP, OIDC, SAML) accepts an independent `force_mfa` flag. New SSO logins from a backend with `force_mfa = true` require MFA setup; administrators can exempt or require individual users via `DELETE`/`POST` on `/users/:username/mfa`, and that decision overrides the live backend policy until the administrator changes it.
+
+  Additional behavior changes that follow from the new scope model:
+
+  - The `dashboard.default_username` user is protected as a break-glass account. It cannot be deleted, demoted from administrator, or have its `scopes` field set; only its `description` may be changed. This guarantees an operator always retains administrative access if other administrators lose or misconfigure their scopes.
+  - Self-service on a user's own record now respects scopes. Only the dedicated change-password and MFA self endpoints still bypass scope checks; other operations such as `PUT /users/:self` are subject to the user's scopes.
+  - `PUT /users/:username` and `PUT /api_key/:name` validate role changes against the effective persisted scopes when the request body omits the `scopes` field. Demoting a user or changing an API key role is rejected if the persisted scopes are incompatible with the new role.
+
+- [#16943](https://github.com/emqx/emqx/pull/16943) Added per-backend `force_mfa` option for SSO (OIDC/SAML/LDAP).
+
+  When enabled, SSO users must complete TOTP MFA setup or verification before receiving a Dashboard token, regardless of IDP-side MFA settings. Three MFA states are supported: `not_configured` (force setup), `enabled` (require verification), and `admin_disabled` (skip MFA). New API endpoints `POST /sso/mfa/setup` and `POST /sso/mfa/verify` handle the MFA flow.
+
+- [#17200](https://github.com/emqx/emqx/pull/17200) Plugin install allowlist entries (`emqx ctl plugins allow <name-vsn>`) now expire 5 minutes after they are issued, and may be pinned to a SHA-256 hash of the package.
+
+  `emqx ctl plugins allow <name-vsn> sha256:<HEX>` accepts a 64-character lowercase hex digest; uploads whose contents do not hash to that value are rejected with `403 Forbidden`. The previous behavior of accepting any payload named `<name-vsn>.tar.gz` is preserved when the optional `sha256:` argument is omitted.
+
+#### Gateway
+
+- [#16655](https://github.com/emqx/emqx/pull/16655) Added support for custom `msg_sn` in JT/T 808 gateway downlink messages.
+
+  When a downlink MQTT message payload contains a `msg_sn` field in the header, the gateway will use that value instead of the auto-generated channel sequence number. This allows external systems to control message sequencing for specific use cases.
+
+  Also fixed JT/T 808 gateway `string_encoding` not applied to downlink message serialization. Previously, the `string_encoding` configuration (e.g., `gbk`) was only used for parsing uplink messages, but not for serializing downlink messages. Now when `string_encoding: gbk` is configured, both uplink parsing (GBK to UTF-8) and downlink serialization (UTF-8 to GBK) work correctly.
+
 #### Data Integration
 
 - [#16961](https://github.com/emqx/emqx/pull/16961) Improved Kafka source polling behavior by ensuring fetch requests wait briefly for data instead of returning empty batches immediately when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
 - [#17098](https://github.com/emqx/emqx/pull/17098) Upgraded influxdb-client-erl from 1.1.13 to 1.1.18, and added the `ping_with_auth` option (default false) for InfluxDB connectors, enabling health checks to include credentials when required by some InfluxDB-compatible services.
+
+#### Deployment
+
+- [#16853](https://github.com/emqx/emqx/pull/16853) Made the v5 license parser forward compatible with v6 license keys.
 
 ### Bug Fixes
 
@@ -83,7 +147,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16732](https://github.com/emqx/emqx/pull/16732) Fixed a crash in `emqx ctl subscriptions list` that could happen when shared subscriptions were present.
 
-  Before this fix, listing subscriptions could fail for some clients and return no output. After this fix, `emqx ctl subscriptions list` works reliably with both regular and shared subscriptions.
+  Previously, listing subscriptions could fail for some clients and return no output. The command now works reliably with both regular and shared subscriptions.
 
 #### Rule Engine
 
@@ -101,19 +165,19 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16854](https://github.com/emqx/emqx/pull/16854) Fixed bridge config import crash.
 
-  Previously when bulk importing configs, the request may fail with a crash message like below.
+  Previously, when bulk importing configs, the request could fail with a crash message like the following.
 
   `Failed to import the following config path: "actions", reason: {error, {config_update_crashed, {badarity, {#Fun<emqx_bridge_v2.16.79877859>, ['_computed',...`
 
 - [#16935](https://github.com/emqx/emqx/pull/16935) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could timeout if the container contained too many blobs.
 
-- [#16971](https://github.com/emqx/emqx/pull/16971) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
+- [#16971](https://github.com/emqx/emqx/pull/16971) Fixed HTTP and GCP PubSub Actions to treat transient connection errors with reason `closing` as recoverable, reducing log noise.
 
 - [#17085](https://github.com/emqx/emqx/pull/17085) Fixed an issue with MQTT Sources in which, if its Connector used `clean_start = false` and reconnected to a broker with a session containing messages, those messages would not trigger rule actions.
 
-- [#17105](https://github.com/emqx/emqx/pull/17105) Fixed the InfluxDB connector/action to preserve Unicode text, when writing values from `write_syntax` literals or MQTT payloads.
+- [#17105](https://github.com/emqx/emqx/pull/17105) Fixed the InfluxDB connector/action to preserve Unicode text when writing values from `write_syntax` literals or MQTT payloads.
 
-- [#17109](https://github.com/emqx/emqx/pull/17109) Fixed query execution for PostgreSQL connectors in disable prepared statements mode. Previously, concurrent queries could interleave and produce errors.
+- [#17109](https://github.com/emqx/emqx/pull/17109) Fixed query execution for PostgreSQL connectors when prepared statements are disabled. Previously, concurrent queries could interleave and produce errors.
 
 - [#17112](https://github.com/emqx/emqx/pull/17112) Fixed RocketMQ connector isolation: a misconfigured or unreachable RocketMQ connector no longer destabilises other RocketMQ connectors on the same node. Previously, one connector with an unreachable broker could stall the shared client supervisor for up to 60 seconds, causing sibling connectors to flap with `resource_health_check_timed_out` and for Dashboard operations on them to hang.
 
@@ -127,6 +191,19 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   {"stacktrace":["{emqx_mongodb,on_query,3,...}","{emqx_resource_buffer_worker,apply_query_fun,9,...}",...],"request":"...","name":"call_query","id":"action:mongodb:xxx:connector:mongodb:xxx","error":"{error,{case_clause,{error,{timeout,{gen_server,call,[...,{checkout,...},5000]}}}}}"}
   ```
 
+- [#17256](https://github.com/emqx/emqx/pull/17256) Fixed Redis Sentinel connectors to support separate authentication settings for Redis data nodes and Sentinel nodes.
+
+- [#17292](https://github.com/emqx/emqx/pull/17292) Fixed an issue where writing a Parquet file with an object that has a required key set to `undefined` or `null` would produce a corrupt file instead of raising an error.
+
+- [#17301](https://github.com/emqx/emqx/pull/17301) Upgraded Kafka client libraries: `brod` from 4.5.2 to 4.5.4 and `wolff` from 4.1.7 to 4.1.10.
+
+  This brings the following fixes to Kafka producer and consumer integrations:
+
+  - Fixed a connection race condition during SASL re-authentication that could drop queued produce requests and cause `sync` produce calls to time out.
+  - Improved leader-connection reconnection so that stale dead connections are no longer returned right after an idle-timeout disconnect.
+
+- [#17346](https://github.com/emqx/emqx/pull/17346) Upgraded the RocketMQ client dependency to `v0.7.2` to fix memory growth in async producer requests.
+
 #### Clustering
 
 - [#16729](https://github.com/emqx/emqx/pull/16729) Improved recovery time of a cluster after a simultaneous restart of all nodes.
@@ -135,9 +212,25 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17164](https://github.com/emqx/emqx/pull/17164) Upgraded Erlang/OTP from 27.3.4.2-6 to 27.3.4.2-7.
 
-  This addresses a race condition which may cause MQTT routing table inconsistency if a node experiences network partition from other nodes in the cluster during boot-up.
+  This addresses a race condition that could cause MQTT routing table inconsistency if a node experiences a network partition during boot-up.
 
 - [#17195](https://github.com/emqx/emqx/pull/17195) Upgraded to emqx-OTP 27.3.4.2-8. Without this fix, Mria app boot could get stuck during EMQX startup if the node was not connected to the cluster.
+
+- [#17220](https://github.com/emqx/emqx/pull/17220) Fixed `bin/emqx` and `bin/emqx_ctl` invocations triggering `nodeup`/`nodedown` events on the running broker, which previously surfaced as misleading `cm_registry_node_down` warnings in the broker log. The temporary helper nodes started by these scripts now register as hidden Erlang nodes, as intended.
+
+- [#17257](https://github.com/emqx/emqx/pull/17257) Improved cluster recovery after a network partition.
+
+  Previously, part of the clients connected to replicant nodes could be lost from the global registry, leading to inconsistent behavior during session takeover and incorrect information displayed in the Dashboard.
+
+  This fix adds a background process that re-registers existing clients when a network partition is healed. It also introduces a new alarm, "Broker is recovering after a network partition", which is raised while the global registry is being rebuilt.
+
+- [#17270](https://github.com/emqx/emqx/pull/17270) Improved cluster recovery from network partitions by introducing a new auto-heal algorithm that can automatically recover overlapping network partitions.
+
+- [#17306](https://github.com/emqx/emqx/pull/17306) Fixed cluster configuration import failing with a `required_field: node.cookie` schema check error when the exported `cluster.hocon` contained a partial `node` section. Read-only configuration roots (`node`, `rpc`) are now dropped before the pre-flight schema check, letting the running node's own values be used for validation.
+
+- [#17313](https://github.com/emqx/emqx/pull/17313) Fixed noisy and misleading `emqx ctl conf cluster_sync status` diagnostics when clustered nodes have the same effective configuration but different raw configuration representations.
+
+  The command now suppresses raw-only representation differences that do not correspond to actual configuration changes, while still warning when effective configuration is inconsistent. It also avoids crashing when a raw configuration key exists on one node but is absent on another.
 
 #### Access Control
 
@@ -147,31 +240,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, if a client connected without a password, the first password-based authenticator (built-in database, MySQL, PostgreSQL, MongoDB, Redis, or LDAP) in the chain would return an error, blocking any subsequent authenticators from being tried.
 
-- [#17039](https://github.com/emqx/emqx/pull/17039) Restricted API key access to Dashboard user-account management endpoints.
-
-  Previously, an API key with the `administrator` role could call the Dashboard user management endpoints `POST/DELETE /users/:username/mfa` and `POST /users/:username/change_pwd` via HTTP Basic authentication. This meant an API key could reset or disable another Dashboard user's MFA, or change another Dashboard user's password, bypassing the intended separation between human Dashboard sessions and machine API keys.
-
-  These endpoints now return `401 API_KEY_NOT_ALLOW` when accessed via an API key, matching the existing policy that already blocks API key access to `/users`, `/users/:username`, `/logout`, and `/api_key`. Dashboard users can still manage their own MFA and password from the Dashboard UI using bearer-token (JWT) sessions as before.
-
 - [#17101](https://github.com/emqx/emqx/pull/17101) Fixed OIDC SSO login failing with `provider_not_ready` when the identity provider returns a JWKS response whose `Content-Type` uses the `+json` structured syntax suffix (for example, `application/jwk-set+json; charset=utf-8`). Such responses are now accepted as valid JWKS content.
 
 - [#17122](https://github.com/emqx/emqx/pull/17122) Fixed Dashboard RBAC checks for SSO users with URL-encoded usernames such as email addresses, so viewer self-service MFA disable requests work correctly when `force_mfa` is disabled.
 
-- [#17169](https://github.com/emqx/emqx/pull/17169) Restricted API keys from exporting or importing Dashboard accounts and API keys via the data backup endpoints.
-
-  `POST /data/export` called with an API key now silently omits the `dashboard_users` and `api_keys` table sets from the resulting archive. `POST /data/import` called with an API key returns `403 FORBIDDEN` when the uploaded backup contains either of those table sets. Dashboard bearer-token callers are unaffected and can continue to back up and restore the full database.
-
-  This closes a privilege-escalation gap where an API key holder could read or write dashboard login credentials and API key records (material that the existing `/users` and `/api_key` endpoints already deny to API keys) by going through the data backup endpoints instead.
-
-- [#17188](https://github.com/emqx/emqx/pull/17188) Removed the `rel_vsn` field (EMQX release version) from the unauthenticated `GET /status?format=json` response to prevent version disclosure to unauthenticated callers. The version remains available via the authenticated node-info APIs.
-
-- [#17200](https://github.com/emqx/emqx/pull/17200) Fixed a path-traversal vulnerability in the plugin install endpoint. A tarball whose entry names contained `..` segments could cause file writes outside the plugin install directory. EMQX now refuses to extract any tarball whose entries would escape the install directory.
-
-- [#17202](https://github.com/emqx/emqx/pull/17202) A successful plugin install via `POST /api/v5/plugins/install` (and the Dashboard upload that wraps it) now immediately revokes the cluster-wide `emqx ctl plugins allow <name-vsn>` grant that authorized the upload, so the same grant cannot be reused for a subsequent (potentially different) tarball. The 5-minute TTL still applies; this change closes the window earlier on the common path.
-
 #### Observability
 
-- [#16672](https://github.com/emqx/emqx/pull/16672) Ensure Erlang pid is printed as a log data field.
+- [#16672](https://github.com/emqx/emqx/pull/16672) Ensured that Erlang PID is printed as a log data field.
 
 - [#16699](https://github.com/emqx/emqx/pull/16699) Previously, under certain race conditions, long and cryptic logs like the following could be printed:
 
@@ -179,15 +254,19 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   2026-02-03T13:53:54.576326+00:00 [error] Generic server <0.11323236.0> terminating. Reason: {{badkey,'actions.success'},[{erlang,map_get,['actions.success',#{}],[{error_info,#{module => erl_erts_errors}}]},{emqx_metrics_worker,idx_metric,4,[{file,"emqx_metrics_worker.erl"},{line,683}]},{emqx_metrics_worker,inc,4,[{file,"emqx_metrics_worker.erl"},{line,322}]},{emqx_rule_runtime,do_eval_action_reply_t...
   ```
 
-  Now, we print more meaningful information to help debug the issue.
+  EMQX now logs more meaningful information to help debug the issue.
 
 - [#16785](https://github.com/emqx/emqx/pull/16785) Reduced noisy plugin startup warnings in single-node deployments.
 
   EMQX no longer tries to fetch plugin config from the local node during cluster config sync, avoiding repeated `config_not_found_on_node` warnings at startup.
 
-- [#16862](https://github.com/emqx/emqx/pull/16862) Added a warning log when an async reply is received for an already-expired request.
+- [#16862](https://github.com/emqx/emqx/pull/16862) Added a warning log when an asynchronous reply is received for an already-expired request.
 
 - [#16954](https://github.com/emqx/emqx/pull/16954) Log client connection termination at warning level instead of info when the reason is `emsgsize` (received packet exceeds `mqtt.max_packet_size`).
+
+- [#17255](https://github.com/emqx/emqx/pull/17255) Improved memory-usage reporting inside containers.
+
+  The broker now picks the most constraining memory reading among cgroup v2, cgroup v1, and the host's `/proc/meminfo` (smallest non-zero total wins, larger usage ratio breaks ties). Previously the reading could be misleading: on containers with a tight cgroup limit, the host view could indicate high usage while the cgroup limit was nearly exhausted (or the reverse); on hosts where a cgroup is mounted with no memory limit set, the cgroup reading could collapse the reported usage ratio to ~0%. Overload-protection thresholds and the `Memory used` metric now reflect the limit that actually constrains the process.
 
 ## 5.10.3
 
