@@ -1,24 +1,24 @@
-# GPT-Realtime Overview
+# GPT-Realtime 概要
 
-GPT-Realtime is a multimodal, real-time model developed by OpenAI that can receive live voice input and generate voice output in real time. It is trained on large-scale speech datasets and is designed to align closely with natural human conversational patterns.
+GPT-Realtime は、OpenAI によって開発されたマルチモーダルのリアルタイムモデルで、ライブの音声入力を受け取り、リアルタイムで音声出力を生成できます。大規模な音声データセットでトレーニングされており、自然な人間の会話パターンに密接に連動するよう設計されています。
 
-Key characteristics include:
+主な特徴は以下の通りです：
 
-- **Protocols**: Supports WebRTC, WebSocket, and SIP. It can process text and speech inputs in real time and stream responses continuously.
-- **Conversation experience**: Low latency, natural and fluent speech synthesis, and robust handling of multiple interruptions during a conversation, closely resembling human dialogue.
-- **Function calling and tools**: Supports function calling and MCP tools.
-- **Developer experience**: For WebRTC integration, it offers two levels of integration:
-  - **Voice Agents SDK**: Higher-level abstractions with out-of-the-box capabilities.
-  - **WebRTC SDK**: Lower-level audio/video transport with greater flexibility and customization.
+- **プロトコル**：WebRTC、WebSocket、SIP をサポートし、テキストおよび音声入力をリアルタイムで処理し、レスポンスを継続的にストリーミングできます。
+- **会話体験**：低レイテンシ、自然で流暢な音声合成、会話中の複数の割り込みに対する堅牢な対応を実現し、人間の対話に非常に近い体験を提供します。
+- **関数呼び出しおよびツール**：関数呼び出しと MCP ツールをサポートします。
+- **開発者体験**：WebRTC 統合のために、2つの統合レベルを提供しています：
+  - **Voice Agents SDK**：すぐに使える高レベルの抽象化機能を備えています。
+  - **WebRTC SDK**：より柔軟でカスタマイズ可能な低レベルの音声／映像トランスポートを提供します。
 
-## Traditional RTC Real-Time Voice Pipelines with Multiple Models
+## 複数モデルを用いた従来の RTC リアルタイム音声パイプライン
 
-In traditional RTC real-time voice solutions, multiple types of models are typically chained together to enable voice interaction: speech is first transcribed into text, then processed by a large language model, and finally synthesized back into speech and streamed to the user.
+従来の RTC リアルタイム音声ソリューションでは、音声対話を実現するために複数のモデルが連結されることが一般的です。音声はまずテキストに文字起こしされ、その後大規模言語モデルで処理され、最後に音声合成されてユーザーにストリーミングされます。
 
 ![traditional models pipeline](./assets/traditional-models-pipeline.png)
 
-## GPT-Realtime: Unified Capabilities in a Single Model
+## GPT-Realtime：単一モデルによる統合機能
 
-GPT-Realtime eliminates the need to chain multiple model types. The entire speech-to-speech process is handled within a single model, resulting in significantly lower end-to-end latency.
+GPT-Realtime は複数モデルの連結を不要にします。音声から音声への全プロセスを単一モデルで処理するため、エンドツーエンドのレイテンシを大幅に低減します。
 
 ![GPT-Realtime](./assets/diagram-speech-to-speech.png)

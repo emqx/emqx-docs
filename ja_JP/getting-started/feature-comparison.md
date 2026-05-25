@@ -1,1508 +1,245 @@
 # 機能比較
 
-このページでは、さまざまなデプロイタイプでサポートされている機能を詳細に一覧化しています。
+このページでは、異なるデプロイタイプでサポートされている機能を詳細に一覧化しています。
 
-## コア／エンタープライズ機能
+## コア / エンタープライズ機能
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">機能</th>
-    <th colspan="1">セルフホスト</th>
-    <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">備考およびリンク</th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>MQTT 5.0 ブローカー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> 完全なMQTT 5.0プロトコル実装</td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> 世界初のサポート<br>クラウド向け開発中</td>
-  </tr>
-  <tr>
-    <td><b>MQTT アドオン</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">共有サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-exclusive-subscription.html">排他サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-delayed-publish.html">遅延パブリッシュ</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-auto-subscription.html">自動サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-topic-rewrite.html">トピック書き換え</a><br>その他のカスタマイズオプション</td>
-  </tr>
-  <tr>
-    <td><b>マルチプロトコルゲートウェイ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> より多くの業界デバイスアクセス</td>
-  </tr>
-  <tr>
-    <td><b>マルチテナンシー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> システムの柔軟性と利用率向上<br>（近日公開予定）</td>
-  </tr>
-  <tr>
-    <td><b>クラスターリンク</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> デバイスとアプリケーションデータのシームレス接続<br>（近日公開予定）</td>
-  </tr>
-  <tr>
-    <td><b>イベント履歴</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> クライアントの障害診断および行動監査</td>
-  </tr>
-  <tr>
-    <td><b>メッセージキューイング</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> データ送受信と分析の統一アーキテクチャ<br>（近日公開予定）</td>
-  </tr>
-  <tr>
-    <td><b>ストリーム処理</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> 高い信頼性と災害復旧機能<br>（近日公開予定）</td>
-  </tr>
-  <tr>
-    <td><b>データパーシステンス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内蔵RocksDBバックエンドまたは外部データベース</td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">安定性と信頼性の向上</a></td>
-  </tr>
-  <tr>
-    <td><b>スキーマレジストリ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html">スキーマレジストリ</a> によりデータの一貫性と互換性を保証</td>
-  </tr>
-  <tr>
-    <td><b>メッセージコーデック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>柔軟なメッセージフォーマット変換：<br>JSON<br>Avro<br>Protobuf<br>カスタムコーデック（HTTP/gRPC）</td>
-  </tr>
-<tr>
-    <td><b>スキーマバリデーション</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td> メッセージの整合性と合法性を保証</td>
-  </tr>
-  <tr>
-    <td><b>ルールエンジン</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQLベースの組み込みルールエンジンとリアルタイムデータ処理</a></td>
-  </tr>
-<tr>
-    <td><b>フローデザイナー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">データ統合の簡単なオーケストレーション</a></td>
-  </tr>
-  <tr>
-    <td><b>ファイル転送</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td>統一プラットフォームのデータ送信</td>
-  </tr>
-  <tr>
-    <td><b>Kafka統合</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html">Apache KafkaへのMQTTデータストリーム</a></td>
-  </tr>
-  <tr>
-    <td><b>エンタープライズデータ統合</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40以上</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40以上</td>
-    <td><a href="https://www.emqx.com/en/integrations">ビジネス開発と提供速度の加速</a></td>
-  </tr>
-  <tr>
-    <td><b>トラブルシューティング</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/observability/tracer.html">ログトレース</a><br><a href="https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html">遅延サブスクリプション</a></td>
-  </tr>
-  <tr>
-    <td><b>クラウドネイティブ＆K8s</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/deployments">システムのデプロイおよび管理コスト削減</a></td>
-  </tr>
-  <tr>
-    <td><b>エッジコンピューティング</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> データ送信のレイテンシとコスト削減<br><a href="https://www.emqx.com/en/products/neuronex">Neuron</a><br><a href="https://www.emqx.com/en/products/nanomq">NanoMQ</a></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| 機能                             | セルフホスト（エンタープライズ）                  | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| -------------------------------- | ------------------------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **MQTT 5.0 ブローカー**           | ✅                                                | ✅                                | ✅                                  | 完全なMQTT 5.0プロトコル実装                                |
+| **MQTT over QUIC**               | ✅                                                | ✅                                | ✅                                  | 世界初のサポート<br>クラウド向け開発中                        |
+| **MQTT アドオン**                | ✅                                                | ❌                                | ✅                                  | [共有サブスクリプション](../messaging/mqtt-shared-subscription.md)<br>[排他サブスクリプション](../messaging/mqtt-exclusive-subscription.md)<br>[遅延パブリッシュ](../messaging/mqtt-delayed-publish.md)<br>[自動サブスクリプション](../messaging/mqtt-auto-subscription.md)<br>[トピック書き換え](../messaging/mqtt-topic-rewrite.md)<br>その他多彩なカスタマイズオプション |
+| **マルチプロトコルゲートウェイ** | ✅                                                | ❌                                | ✅                                  | より多くの業界デバイスアクセスを実現                         |
+| **マルチテナンシー**             | ✅                                                | ❌                                | ✅                                  | システムの柔軟性と利用効率の向上（近日対応予定）              |
+| **クラスターリンク**             | ✅                                                | ❌                                | ✅                                  | デバイスとアプリケーションデータのシームレス接続              |
+| **メッセージキュー**             | ✅                                                | ❌                                | ✅                                  | データ送受信と分析の統合アーキテクチャ（近日対応予定）        |
+| **ストリーム処理**               | ✅                                                | ❌                                | ✅                                  | 高信頼性と災害復旧機能<br>（近日対応予定）                    |
+| **データパーシステンス**         | ✅ RocksDB組み込みバックエンドまたは外部データベース | N/A                              | N/A                                | [安定性と信頼性の向上](../durability/durability_introduction.md) |
+| **スキーマレジストリ**           | ✅                                                | ❌                                | ✅                                  | [スキーマレジストリ](../data-integration/schema-registry.md) によりデータの整合性と互換性を保証 |
+| **メッセージコーデック**         | ✅                                                | ❌                                | ✅                                  | JSON、Avro、Protobuf、カスタムコーデック（HTTP/gRPC）など柔軟なメッセージフォーマット変換 |
+| **スキーマバリデーション**       | ✅                                                | ✅                                | ✅                                  | メッセージの整合性と合法性を保証                              |
+| **ルールエンジン**               | ✅                                                | ✅                                | ✅                                  | [SQLベースの組み込みルールエンジンとリアルタイムデータ処理](../data-integration/rules.md) |
+| **Flowデザイナー**               | ✅                                                | ❌                                | ✅                                  | [データ統合の簡単なオーケストレーション](../flow-designer/introduction.md) |
+| **ファイル転送**                 | ✅                                                | ❌                                | ✅ 製品ロードマップにあり           | 統合プラットフォームのデータ送受信                            |
+| **Kafka連携**                   | ✅                                                | ✅                                | ✅                                  | [Apache KafkaへのMQTTデータストリーム](../data-integration/data-bridge-kafka.md) |
+| **エンタープライズデータ統合**   | ✅ 40以上                                          | ✅                                | ✅ 40以上                          | [ビジネス開発と提供速度の加速](https://www.emqx.com/en/integrations) |
+| **トラブルシューティング**       | ✅                                                | ❌                                | ✅                                  | [ログトレース](../observability/tracer.md)<br>[遅延サブスクリバー](../observability/slow-subscribers-statistics.md) |
+| **クラウドネイティブ＆K8s**     | ✅                                                | N/A                              | N/A                                | [システムのデプロイと管理コスト削減](https://www.emqx.com/en/deployments) |
+| **エッジコンピューティング**     | ✅                                                | ✅                                | ✅                                  | データ送信のレイテンシとコスト削減<br>[Neuron](https://www.emqx.com/en/products/neuronex)<br>[NanoMQ](https://www.emqx.com/en/products/nanomq) |
 
 ## スケーラビリティとパフォーマンス
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">スケーラビリティ／パフォーマンス</th>
-    <th colspan="1">セルフホスト</th>
-    <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">備考およびリンク</th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>スケーラビリティ</b></td>
-    <td><span style="font-weight:normal">最大100ノードクラスター<br>クラスターあたり最大1億MQTT接続</span></td>
-    <td><span style="font-weight:normal">1000自動スケール</span></td>
-    <td><span style="font-weight:normal">1000～無制限</span></td>
-    <td><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">EMQX 5.0で1億MQTT接続を達成</a></td>
-  </tr>
-  <tr>
-    <td><b>可用性</b></td>
-    <td><span style="font-weight:normal">コア-レプリカクラスター</span></td>
-    <td><span style="font-weight:normal">マスターレスクラスター</span></td>
-    <td><span style="font-weight:normal">マスターレスクラスター</span></td>
-    <td><span style="font-weight:normal"> </span></td>
-  </tr>
-  <tr>
-    <td><b>信頼性</b></td>
-    <td><span style="font-weight:normal">高可用レプリケーションを備えたRocksDBによるデータパーシステンス</span></td>
-    <td><span style="font-weight:normal">セッションパーシステンス</span></td>
-    <td><span style="font-weight:normal">セッションパーシステンス</span></td>
-    <td><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">RocksDBに基づく高信頼MQTTデータパーシステンス</a></td>
-  </tr>
-  <tr>
-    <td><b>パフォーマンス</b></td>
-    <td><span style="font-weight:normal">毎秒500万以上のMQTTメッセージ</span></td>
-    <td><span style="font-weight:normal">毎秒1000のMQTTメッセージ</span></td>
-    <td><span style="font-weight:normal">毎秒500万以上のMQTTメッセージ</span></td>
-    <td><span style="font-weight:normal"> </span></td>
-  </tr>
-  <tr>
-    <td><b>レイテンシ</b></td>
-    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
-    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
-    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
-    <td><span style="font-weight:normal"> </span></td>
-  </tr>
-  <tr>
-    <td><b>SLA</b></td>
-    <td><span style="font-weight:normal">該当なし</span></td>
-    <td><span style="font-weight:normal">99.9% アップタイム</span></td>
-    <td><span style="font-weight:normal">最大99.99%</span><br><span style="font-weight:normal">アップタイム</span></td>
-    <td><span style="font-weight:normal"> </span></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
-
+| スケーラビリティ / パフォーマンス | セルフホスト（エンタープライズ）                         | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| --------------------------------- | -------------------------------------------------------- | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **スケーラビリティ**               | 最大100ノードクラスター<br>クラスターあたり最大1億MQTT接続 | 1000自動スケール                  | 1000～無制限                      | [EMQX 5.0で1億MQTT接続を達成](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0) |
+| **可用性**                       | コア-レプリカクラスター                                  | マスターレスクラスター            | マスターレスクラスター            |                                                              |
+| **信頼性**                       | RocksDBによるデータパーシステンスと高可用レプリケーション | セッションパーシステンス          | セッションパーシステンス          | [RocksDBベースの高信頼MQTTデータパーシステンス](https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb) |
+| **パフォーマンス**               | 1秒あたり500万以上のMQTTメッセージ                       | 1秒あたり1000 MQTTメッセージ      | 1秒あたり500万以上のMQTTメッセージ |                                                              |
+| **レイテンシ**                   | 1～5ミリ秒                                               | 1～5ミリ秒                      | 1～5ミリ秒                      |                                                              |
+| **SLA**                         | N/A                                                      | 99.9% アップタイム                | 最大99.99% アップタイム            |                                                              |
 
 ## クラスタリングアーキテクチャ
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">MQTT & 接続性<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>MQTT 3.x</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT リテーナー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over TCP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over TLS</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over WebSocket</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQXは現在、QUICトランスポートをサポートする唯一のMQTTブローカーです。</td>
-  </tr>
-  <tr>
-    <td><b>LB（プロキシプロトコル）</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>プロキシプロトコル v1、v2</td>
-  </tr>
-  <tr>
-    <td><b>LB（カスタム）</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>GmSSL<br>スムーズな接続移行</td>
-  </tr>
-  <tr>
-    <td><b>IPv6サポート</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>マルチプロトコルゲートウェイ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT-SN</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>STOMP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>CoAP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>LwM2M</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ExProto</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>OCPP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>JT/808</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>GBT32960</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
+| クラスタリングアーキテクチャ         | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ------------------------------------ | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **クラスターのノード数**             | 100以上                        | 機密情報                         | 機密情報                           | 大規模クラスター                                             |
+| **実行時の弾力的かつレジリエントなスケーリング** | ✅                              | ❌                                | ✅                                  | システムの安定性とリソース利用効率の向上                     |
+| **オートスケーリング**               | ✅                              | ✅                                | ✅                                  |                                                              |
+| **整合性**                         | ✅                              | ✅                                | ✅                                  |                                                              |
+| **トランザクション**                 | ✅                              | ✅                                | ✅                                  | データ操作の原子性と信頼性を保証                             |
+| **ネットワーク分割復旧**             | ✅                              | ✅                                | ✅                                  | クラスター障害の自動修復                                     |
+| **ノード退避＆クラスター再バランス** | ✅                              | N/A                              | N/A                                | ノンストップのクラスター保守                                 |
+| **オートクラスター検出**             | ✅                              | N/A                              | N/A                                | static: 静的ノードリストによる検出<br>mcast: UDPマルチキャストモードによる検出<br>dns: DNSレコードによる検出<br>etcd: etcd経由の検出<br>k8s: Kubernetesサービス経由の検出 |
+| **ゼロダウンタイム / ホットアップグレード** | ✅                              | N/A                              | N/A                                | システム脆弱性の即時修復                                   |
+| **ホットパッチ**                   | ✅                              | N/A                              | N/A                                | 安定したシステム運用を保証                                 |
+| **過負荷保護**                   | ✅                              | N/A                              | N/A                                | システム管理効率の向上                                     |
+| **マルチクラスター管理**             | ✅                              | N/A                              | N/A                                | システム安定性の強化                                       |
+| **クラスター指標**                 | ✅                              | N/A                              | N/A                                |                                                              |
 
+## MQTTと接続性
 
-
-## MQTT と接続性
-
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">MQTT & 接続性<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>MQTT 3.x</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT リテーナー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over TCP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over TLS</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over WebSocket</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT over QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQXは現在、QUICトランスポートをサポートする唯一のMQTTブローカーです。</td>
-  </tr>
-  <tr>
-    <td><b>LB（プロキシプロトコル）</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>プロキシプロトコル v1、v2</td>
-  </tr>
-  <tr>
-    <td><b>LB（カスタム）</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>GmSSL<br>スムーズな接続移行</td>
-  </tr>
-  <tr>
-    <td><b>IPv6サポート</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>マルチプロトコルゲートウェイ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>MQTT-SN</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>STOMP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>CoAP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>LwM2M</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ExProto</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>OCPP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>JT/808</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>GBT32960</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| MQTT & 接続性                 | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **MQTT 3.x**                 | ✅                              | ✅                                | ✅                                  |                                                              |
+| **MQTT 5.0**                 | ✅                              | ✅                                | ✅                                  |                                                              |
+| **MQTT リテーナー**          | ✅                              | ✅                                | ✅                                  |                                                              |
+| **MQTT over TCP**            | ✅                              | ❌                                | ✅                                  |                                                              |
+| **MQTT over TLS**            | ✅                              | ✅                                | ✅                                  |                                                              |
+| **MQTT over WebSocket**      | ✅                              | ✅                                | ✅                                  |                                                              |
+| **MQTT over QUIC**           | ✅                              | ❌                                | ✅                                  | EMQXはQUICトランスポートをサポートする唯一のMQTTブローカーです。 |
+| **ロードバランサー（プロキシプロトコル）** | ✅                              | ❌                                | ✅                                  | プロキシプロトコルv1、v2                                     |
+| **ロードバランサー（カスタム）** | ✅                              | ❌                                | ✅                                  | GmSSL<br>スムーズな接続移行                                  |
+| **IPv6サポート**             | ✅                              | ❌                                | ✅                                  |                                                              |
+| **マルチプロトコルゲートウェイ** | ✅                              | ❌                                | ✅                                  |                                                              |
+| **MQTT-SN**                  | ✅                              | ❌                                | ✅                                  |                                                              |
+| **STOMP**                    | ✅                              | ❌                                | ❌                                  |                                                              |
+| **CoAP**                     | ✅                              | ❌                                | ✅                                  |                                                              |
+| **LwM2M**                    | ✅                              | ❌                                | ❌                                  |                                                              |
+| **ExProto**                  | ✅                              | ❌                                | ❌                                  |                                                              |
+| **OCPP**                     | ✅                              | ❌                                | ❌                                  |                                                              |
+| **JT/808**                   | ✅                              | ❌                                | ✅                                  |                                                              |
+| **GB/T 32960**               | ✅                              | ❌                                | ❌                                  |                                                              |
 
 ## セキュリティ
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">セキュリティ<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>TLS/SSL</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>データ送信のセキュリティ保護：TLS 1.1、1.2、1.3</td>
-  </tr>
-  <tr>
-    <td><b>QUIC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>弱いネットワークやモバイルネットワークのデータ送信効率を向上</td>
-  </tr>
-  <tr>
-    <td><b>OCSP Stapling</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>より柔軟なセキュリティ運用を提供</td>
-  </tr>
-  <tr>
-    <td><b>フラッピング検出</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td>頻繁なオンライン・オフライン接続を検出・遮断</td>
-  </tr>
-  <tr>
-    <td><b>監査ログ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>重要操作の監査トレーシングをサポート</td>
-  </tr>
-  <tr>
-    <td><b>ダッシュボードSSO</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>安全かつ簡素化された認証プロセス</td>
-  </tr>
-  <tr>
-    <td><b>ダッシュボード／REST API RBAC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>権限を最小限に抑えシステムの安全性を確保</td>
-  </tr>
-  <tr>
-    <td><b>Black Duck解析</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td>安全かつ簡素化された認証プロセス</td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| セキュリティ                   | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ------------------------------ | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **TLS/SSL**                   | ✅                              | ✅                                | ✅                                  | データ送信のセキュリティ保護：TLS 1.1、1.2、1.3              |
+| **QUIC**                      | ✅                              | ❌                                | ✅                                  | 弱いネットワークやモバイルネットワークのデータ送信効率向上  |
+| **OCSPステープリング**         | ✅                              | ❌                                | ✅                                  | より柔軟なセキュリティ運用を提供                             |
+| **フラッピング検知**           | ✅                              | ✅                                | ✅ 製品ロードマップにあり           | 頻繁なオンライン・オフライン接続を検知・遮断                 |
+| **監査ログ**                  | ✅                              | ✅                                | ✅                                  | 重要操作の監査トレースをサポート                             |
+| **ダッシュボードSSO**          | ✅                              | ✅                                | ✅                                  | 安全かつ簡素化された認証プロセス                             |
+| **ダッシュボード / REST API RBAC** | ✅                              | ✅                                | ✅                                  | システムセキュリティを確保するための最小権限設定             |
 
 ## 認証と認可
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">認証／認可<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>ユーザー名／パスワード</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html">パスワード認証</a></td>
-  </tr>
-  <tr>
-    <td><b>JWT</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT認証</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT 5.0 強化認証</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html">MQTT 5.0 強化認証</a></td>
-  </tr>
-  <tr>
-    <td><b>LDAP認証</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>PSK認証</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication">PSK認証の有効化</a></td>
-  </tr>
-  <tr>
-    <td><b>X.509証明書</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> EMQX Cloudで管理</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>細粒度アクセス制御</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>認証データベースバックエンド</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ACLデータベースバックエンド</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| 認証 / 認可                    | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ----------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **ユーザー名 / パスワード**     | ✅                              | ✅                                | ✅                                  | [パスワードベース認証](../access-control/authn/pwoverview.md) |
+| **JWT**                       | ✅                              | ❌                                | ✅                                  | [JWT認証](../access-control/authn/jwt.md)                     |
+| **MQTT 5.0 拡張認証**          | ✅                              | N/A                              | N/A                                | [MQTT 5.0 拡張認証](../access-control/authn/scram.md)          |
+| **LDAP認証**                  | ✅                              | ❌                                | ✅ 製品ロードマップにあり           |                                                              |
+| **PSK認証**                   | ✅                              | ❌                                | ✅                                  | [PSK認証の有効化](../network/psk-authentication.md#enable-psk-authentication) |
+| **X.509証明書**               | ✅                              | ✅ EMQX Cloud管理                 | ✅                                  |                                                              |
+| **細粒度アクセス制御**         | ✅                              | ✅                                | ✅                                  |                                                              |
+| **認証データベースバックエンド** | ✅                              | ❌                                | ✅                                  |                                                              |
+| **ACLデータベースバックエンド** | ✅                              | ❌                                | ✅                                  |                                                              |
 
 ## データ統合
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">データ統合<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>MQTTブリッジ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Webhook/HTTPサーバー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Apache Kafka/Confluent</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Apache IoTDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Apache Pulsar</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>AWS Kinesis</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>AWS S3</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Azure Event Hubs</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Cassandra</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>ClickHouse</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>DynamoDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Elasticsearch</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>GCP PubSub</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>GreptimeDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>HStreamDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>InfluxDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Microsoft SQL Server</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MongoDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>MySQL</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>OpenTSDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Oracle Database</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>PostgreSQL</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>RabbitMQ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Redis</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>RocketMQ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Syskeeper</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>TDengine</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>TimeScaleDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-</tbody>
-</table>
-</div>
+EMQXは進化を続け、以下に示すものを含む多様なデータ統合をサポートしています。
 
-
+| データ統合                   | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- |
+| **MQTT ブリッジ**            | ✅                              | ❌                                | ✅                                  |
+| **Webhook / HTTPサーバー**    | ✅                              | ✅                                | ✅                                  |
+| **Aliyun Tablestore**        | ✅                              | ✅                                | ✅                                  |
+| **Apache Kafka / Confluent** | ✅                              | ✅                                | ✅                                  |
+| **Apache IoTDB**             | ✅                              | ❌                                | ✅                                  |
+| **Apache Pulsar**            | ✅                              | ❌                                | ✅                                  |
+| **AWS Kinesis**              | ✅                              | ❌                                | ✅                                  |
+| **AWS S3**                   | ✅                              | ❌                                | ✅                                  |
+| **Azure Event Hubs**         | ✅                              | ❌                                | ✅                                  |
+| **Azure Blob Storage**       | ✅                              | ❌                                | ✅                                  |
+| **Cassandra**                | ✅                              | ❌                                | ✅                                  |
+| **ClickHouse**               | ✅                              | ❌                                | ✅                                  |
+| **Couchbase**                | ✅                              | ❌                                | ✅                                  |
+| **DynamoDB**                 | ✅                              | ❌                                | ✅                                  |
+| **Elasticsearch**            | ✅                              | ❌                                | ✅                                  |
+| **GCP PubSub**               | ✅                              | ❌                                | ✅                                  |
+| **GreptimeDB**               | ✅                              | ❌                                | ✅                                  |
+| **HStreamDB**                | ✅                              | ❌                                | ✅                                  |
+| **InfluxDB**                 | ✅                              | ❌                                | ✅                                  |
+| **Microsoft SQL Server**     | ✅                              | ❌                                | ✅                                  |
+| **MongoDB**                  | ✅                              | ❌                                | ✅                                  |
+| **MySQL**                    | ✅                              | ❌                                | ✅                                  |
+| **OpenTSDB**                 | ✅                              | ❌                                | ✅                                  |
+| **Oracle Database**          | ✅                              | ❌                                | ✅                                  |
+| **PostgreSQL**               | ✅                              | ❌                                | ✅                                  |
+| **RabbitMQ**                 | ✅                              | ❌                                | ✅                                  |
+| **Redis**                    | ✅                              | ❌                                | ✅                                  |
+| **RocketMQ**                 | ✅                              | ❌                                | ✅                                  |
+| **Snowflake**                | ✅                              | ❌                                | ✅                                  |
+| **Syskeeper**                | ✅                              | ❌                                | ✅                                  |
+| **TDengine**                 | ✅                              | ❌                                | ✅                                  |
+| **TimeScaleDB**              | ✅                              | ❌                                | ✅                                  |
 
 ## ルールエンジン
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">ルールエンジン<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>スキーマレジストリ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>データフォーマットの一貫性を保証</td>
-  </tr>
-  <tr>
-    <td><b>JSONコーデック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Avroコーデック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Protobufコーデック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Sparkplug Bコーデック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>JSONスキーマバリデーション</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Avroバリデーション</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ProtoBufバリデーション</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>組み込み関数</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html">SQL文で利用可能な関数、豊富な組み込みライブラリ、カスタム拡張対応</a></td>
-  </tr>
-  <tr>
-    <td><b>jq関数</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>効率的なJSONデータ処理</td>
-  </tr>
-  <tr>
-    <td><b>イベントトリガー</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">クライアントイベント</a>、イベント駆動型ビジネス開発</td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| ルールエンジン               | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **スキーマレジストリ**       | ✅                              | ❌                                | ✅                                  | データフォーマットの整合性を保証                             |
+| **JSONコーデック**           | ✅                              | ❌                                | ✅                                  |                                                              |
+| **Avroコーデック**           | ✅                              | ❌                                | ✅                                  |                                                              |
+| **Protobufコーデック**       | ✅                              | ❌                                | ✅                                  |                                                              |
+| **Sparkplug Bコーデック**    | ✅                              | ❌                                | ✅                                  |                                                              |
+| **JSONスキーマバリデーション** | ✅                              | ❌                                | ✅                                  |                                                              |
+| **Avroバリデーション**       | ✅                              | ❌                                | ✅                                  |                                                              |
+| **ProtoBufバリデーション**   | ✅                              | ❌                                | ✅                                  |                                                              |
+| **組み込み関数**             | ✅                              | ❌                                | ✅                                  | [SQL文で使用可能な関数、豊富な組み込みライブラリ、カスタム拡張対応](../data-integration/rule-sql-builtin-functions.md) |
+| **jq関数**                   | ✅                              | ❌                                | ✅                                  | 効率的なJSONデータ処理                                     |
+| **イベントトリガー**         | ✅                              | ❌                                | ✅                                  | [クライアントイベント](../data-integration/rule-sql-events-and-fields.md#mqtt-events)、イベント駆動型ビジネス開発 |
+| **スキーマバリデーション**   | ✅                              | ❌                                | ✅                                  |                                                              |
+| **メッセージ変換**           | ✅                              | ❌                                | ✅                                  |                                                              |
 
 ## 拡張性
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">拡張性<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>フック</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks">フック</a></td>
-  </tr>
-  <tr>
-    <td><b>プラグイン</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins">プラグイン</a></td>
-  </tr>
-  <tr>
-    <td><b>プラグインホットロード</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>プラグインホット設定</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ゲートウェイ</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ExHooks/gRPC</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| 拡張性                       | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                             |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------- |
+| **フック**                   | ✅                              | N/A                              | N/A                                | [フック](../extensions/hooks.md#hooks)       |
+| **プラグイン**               | ✅                              | N/A                              | N/A                                | [プラグイン](../extensions/plugins.md#plugins) |
+| **プラグインホットロード**   | ✅                              | N/A                              | N/A                                |                                             |
+| **プラグインホット設定変更** | ✅                              | N/A                              | N/A                                |                                             |
+| **ゲートウェイ**             | ✅                              | N/A                              | N/A                                |                                             |
+| **ExHooks / gRPC**           | ✅                              | N/A                              | N/A                                |                                             |
 
 ## 運用性
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">運用性<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>ダッシュボード</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQXダッシュボードは多機能です。<br>設定はダッシュボードからホットアップデート可能です。</td>
-  </tr>
-  <tr>
-    <td><b>設定</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> HOCON</td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td>HOCON形式はシンプルかつ簡潔です。</td>
-  </tr>
-  <tr>
-    <td><b>HTTP API</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>CLI</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>設定ホットアップデート</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>運用監査</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| 運用性                       | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **ダッシュボード**           | ✅                              | ✅                                | ✅                                  | EMQXダッシュボードは多機能です。<br>設定はダッシュボードからホットアップデート可能。 |
+| **設定**                     | ✅ HOCON                       | N/A                              | N/A                                | HOCONフォーマットはシンプルかつ簡潔です。                    |
+| **HTTP API**                 | ✅                              | ✅                                | ✅                                  |                                                              |
+| **CLI**                      | ✅                              | ✅                                | ✅                                  |                                                              |
+| **設定ホットアップデート**   | ✅                              | N/A                              | N/A                                |                                                              |
+| **運用監査**                 | ✅                              | ✅                                | ✅                                  |                                                              |
 
 ## 可観測性
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">可観測性<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>ダッシュボード</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>エレガントなダッシュボードでクラスターをリアルタイム監視</td>
-  </tr>
-  <tr>
-    <td><b>メトリクス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>ノードメトリクス</td>
-  </tr>
-  <tr>
-    <td><b>Grafana</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Prometheus</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Datadog</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><b>OpenTelemetry</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><b>クラスター メトリクス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>アラーム通知</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>遅延サブスクリプション監視</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>トピック監視</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>クライアント監視</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>ログトレース</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
+| 可観測性                     | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                         |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------- |
+| **ダッシュボード**           | ✅                              | ✅                                | ✅                                  | エレガントなダッシュボードでクラスターをリアルタイム監視 |
+| **メトリクス**               | ✅                              | ✅                                | ✅                                  | ノードメトリクス                                        |
+| **Grafana**                  | ✅                              | ❌                                | ✅                                  |                                                         |
+| **Prometheus**               | ✅                              | ❌                                | ✅                                  |                                                         |
+| **Datadog**                  | ✅                              | ❌                                | ✅                                  |                                                         |
+| **OpenTelemetry**            | ✅                              | ❌                                | ✅                                  |                                                         |
+| **クラスター指標**           | ✅                              | N/A                              | N/A                                |                                                         |
+| **アラーム通知**             | ✅                              | ✅                                | ✅                                  |                                                         |
+| **遅延サブスクリプション監視** | ✅                              | ❌                                | ✅                                  |                                                         |
+| **トピック監視**             | ✅                              | ❌                                | ✅                                  |                                                         |
+| **クライアント監視**         | ✅                              | ✅                                | ✅                                  |                                                         |
+| **ログトレース**             | ✅                              | ✅                                | ✅                                  |                                                         |
 
+## クラウドネイティブとK8s
 
+| クラウドネイティブ＆K8s       | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ----------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **Docker**                    | ✅                              | N/A                              | N/A                                | [emqx - 公式イメージ \| Docker Hub](https://hub.docker.com/_/emqx)<br>[Docker](https://hub.docker.com/r/emqx/emqx) |
+| **Kubernetesオペレーター**     | ✅                              | N/A                              | N/A                                | [EMQX Kubernetesオペレーター](https://www.emqx.com/en/emqx-kubernetes-operator) |
+| **Terraform**                 | ✅                              | N/A                              | N/A                                | [EMQX Terraform](https://www.emqx.com/en/emqx-terraform)     |
 
-## クラウドネイティブとK8S
+## クラウドプラットフォーム対応状況
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">クラウドネイティブ＆K8s<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>Docker</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
-  </tr>
-  <tr>
-    <td><b>Kubernetesオペレーター</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
-  </tr>
-  <tr>
-    <td><b>Terraform</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/emqx-terraform">EMQX Terraform</a></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
-
-## クラウドプラットフォームの対応状況
-
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">クラウドプラットフォーム<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>AWSマーケットプレイス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQXはAWSマーケットプレイスで利用可能です。<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
-  </tr>
-  <tr>
-    <td><b>Azureマーケットプレイス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>GCPマーケットプレイス</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><b>AWS</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><b>Azure</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><b>GCP</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| クラウドプラットフォーム       | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ----------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **AWSマーケットプレイス**      | ✅                              | ✅                                | ✅                                  | [AWS Marketplace: EMQX Platform (従量課金)](https://aws.amazon.com/marketplace/pp/prodview-g6zejrbcad6mu) |
+| **Azureマーケットプレイス**    | ✅                              | ✅                                | ✅                                  | [Azure Marketplace: EMQX Platform](https://marketplace.microsoft.com/en-us/product/saas/emqtechnologiesincorporated1678779968155.emqx_cloud?tab=Overview) |
+| **GCPマーケットプレイス**      | ✅                              | ✅                                | ✅                                  | [GCP Marketplace](https://console.cloud.google.com/marketplace/product/emq-public-380104/emqx-cloudpay-as-you-go) |
+| **AWS**                       | ✅                              | ✅                                | ✅                                  |                                                              |
+| **Azure**                     | ✅                              | ✅                                | ✅                                  |                                                              |
+| **GCP**                       | ✅                              | ✅                                | ✅                                  |                                                              |
 
 ## MQTTツールとSDK
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">MQTTツール＆SDK<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>MQTTデスクトップクライアント</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>MQTT X - MQTT学習に最適なツール。<br><a href="https://mqttx.app/">MQTTX: オールインワンMQTTクライアントツールボックス</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT CLI</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://mqttx.app/cli">MQTTX CLI: 強力で使いやすいMQTT CLIツール</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT Webツール</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>多機能で使いやすい。<br><a href="https://mqttx.app/web">MQTTX Web: 使いやすいMQTT WebSocketクライアントツール</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTTベンチマーク</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Erlangで書かれた軽量MQTTベンチマークツール</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT負荷テスト</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>XMeter - 世界No.1のMQTT負荷テストツール</td>
-  </tr>
-  <tr>
-    <td><b>MQTT & JMeter</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeterプラグイン</a></td>
-  </tr>
-  <tr>
-    <td><b>C向けMQTT SDK</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> NanoSDK</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/nanomq/NanoSDK">GitHub - nanomq/NanoSDK: NNGフレーバーでQUIC対応のMQTT 5.0準拠SDK</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT Erlang SDK</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/emqtt">GitHub - emqx/emqtt: Erlang MQTT 5.0クライアント</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT iOS SDK</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/CocoaMQTT">GitHub - emqx/CocoaMQTT: Swiftで書かれたiOS/macOS向けMQTT 5.0クライアントライブラリ</a></td>
-  </tr>
-  <tr>
-    <td><b>MQTT QUICクライアント</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/quic">GitHub - emqx/quic: Erlang & Elixir向けQUICプロトコル</a></td>
-  </tr>
-</tbody>
-</table>
-</div>
-
-
+| MQTTツール＆SDK               | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考およびリンク                                              |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| **MQTTデスクトップクライアント** | ✅                              | ✅                                | ✅                                  | MQTT X - MQTT学習に最適なツール。<br>[MQTTX: オールインワンMQTTクライアントツールボックス](https://mqttx.app/) |
+| **MQTT CLI**                 | ✅                              | ✅                                | ✅                                  | [MQTTX CLI: 強力で使いやすいMQTT CLIツール](https://mqttx.app/cli) |
+| **MQTT Webツール**           | ✅                              | ✅                                | ✅                                  | 多機能かつ使いやすい。<br>[MQTTX Web: 使いやすいMQTT WebSocketクライアントツール](https://mqttx.app/web) |
+| **MQTTベンチマーク**          | ✅                              | ✅                                | ✅                                  | [GitHub - emqx/emqtt-bench: Erlangで書かれた軽量MQTTベンチマークツール](https://github.com/emqx/emqtt-bench) |
+| **MQTT & JMeter**            | ✅ JMeterプラグイン             | ✅                                | ✅                                  | [GitHub - emqx/mqtt-jmeter: MQTT JMeterプラグイン](https://github.com/emqx/mqtt-jmeter) |
+| **MQTT C用SDK**              | ✅ NanoSDK                      | ✅                                | ✅                                  | [GitHub - nanomq/NanoSDK: QUIC対応のNNG風MQTT 5.0準拠SDK](https://github.com/nanomq/NanoSDK) |
+| **MQTT Erlang SDK**          | ✅                              | ✅                                | ✅                                  | [GitHub - emqx/emqtt: Erlang MQTT 5.0クライアント](https://github.com/emqx/emqtt) |
+| **MQTT iOS SDK**             | ✅                              | ✅                                | ✅                                  | [GitHub - emqx/CocoaMQTT: Swiftで書かれたiOS/macOS向けMQTT 5.0クライアントライブラリ](https://github.com/emqx/CocoaMQTT)<br />[GitHub - emqx/swift-mqtt: TCPおよびQUICプロトコル対応MQTTクライアント](https://github.com/emqx/swift-mqtt) |
+| **MQTT QUICクライアント**    | ✅                              | ✅                                | ✅                                  | [GitHub - emqx/quic: Erlang & Elixir向けQUICプロトコル](https://github.com/emqx/quic) |
 
 ## サポートサービス
 
-<div style="text-align: center;">
-<table>
-<thead>
-  <tr>
-    <th rowspan="2">サポートサービス<br></th>
-    <th colspan="1">セルフホスト<br></th>
-    <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">備考およびリンク<br></th>
-  </tr>
-  <tr>
-    <td>EMQX Enterprise</td>
-    <td>EMQX Serverless</td>
-    <td>EMQX Dedicated</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><b>テクニカルサポート</b></td>
-    <td>5*8、7*24 グローバルサポート</td>
-    <td>5*8 グローバルサポート</td>
-    <td>5*8、7*24 グローバルサポート</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>アーキテクチャコンサルティング</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>プロジェクト統合</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>カスタム開発</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-</tbody>
-</table>
-</div>
+| サポートサービス             | セルフホスト（エンタープライズ） | MQTT as a Service（サーバーレス） | MQTT as a Service（専用フレックス） | 備考                                |
+| ---------------------------- | ------------------------------ | -------------------------------- | ---------------------------------- | ---------------------------------- |
+| **テクニカルサポート**       | 5×8、7×24グローバルサポート     | 5×8グローバルサポート             | 5×8、7×24グローバルサポート         |                                    |
+| **アーキテクチャコンサルティング** | ✅                              | ❌                                | ✅                                  |                                    |
+| **プロジェクト統合支援**     | ✅                              | ❌                                | ❌                                  |                                    |
+| **カスタム開発**             | ✅                              | ❌                                | ❌                                  |                                    |

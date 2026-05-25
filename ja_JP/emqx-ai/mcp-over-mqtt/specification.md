@@ -1,148 +1,149 @@
-# Specification
+# 仕様
 
-This specification defines the MQTT-specific requirements like MQTT topics and client ID formats. It also outlines the lifecycle of the MQTT transport, including service discovery, initialization, capability list changes, resource updates, and shutdown procedures.
+本仕様は、MQTT固有の要件（MQTTトピックやクライアントIDの形式など）を定義しています。また、サービスディスカバリー、初期化、機能リストの変更、リソース更新、シャットダウン手順など、MQTTトランスポートのライフサイクルについても概説しています。
 
-It should be read in conjunction with the [MCP Specification](https://modelcontextprotocol.io/specification/2025-06-18).
+本仕様は、[MCP仕様](https://modelcontextprotocol.io/specification/2025-06-18)と併せて参照してください。
 
-## Terminology
+## 用語
 
-- **server-name**: The server name is the identifier of a MCP server, which will be included in the topic.
+- **server-name**: MCPサーバーの識別子であり、トピックに含まれます。
 
-  Multiple connections with the same `server-name` are considered multiple instances of the same MCP server and provide exactly the same service. When the MCP client sends an initialize message, it should select one of them according to a client-side determined strategy.
+  同じ`server-name`を持つ複数の接続は、同一のMCPサーバーの複数インスタンスとみなされ、まったく同じサービスを提供します。MCPクライアントが初期化メッセージを送信する際は、クライアント側で決定した戦略に従ってそのうちの一つを選択すべきです。
 
-  Multiple MCP servers with different `server-name`s may still provide similar functions. In this case, when the client sends an initialize message, it should select one of them to establish a connection as needed. The selection criteria can be based on the client's permissions, recommendations from a LLM, or the user's choice.
+  異なる`server-name`を持つ複数のMCPサーバーは、類似の機能を提供する場合があります。この場合、クライアントは初期化メッセージを送信する際に必要に応じて一つを選択して接続を確立します。選択基準はクライアントの権限、LLMからの推奨、ユーザーの選択などに基づくことができます。
 
-  After connected to the MQTT broker, the broker may suggest a `server-name` to the MCP server by including a `MCP-SERVER-NAME` user property in the MQTT CONNECT message. If so, the MCP server **MUST** use this `server-name` as its server name. If the broker does not suggest a `server-name`, the MCP server **SHOULD** use a default `server-name` based on the functionality it provides.
+  MQTTブローカーに接続後、ブローカーはMQTT CONNECTメッセージのユーザープロパティに`MCP-SERVER-NAME`を含めてMCPサーバーに`server-name`を提案する場合があります。その場合、MCPサーバーは**必ず**この`server-name`をサーバー名として使用しなければなりません。ブローカーが`server-name`を提案しない場合、MCPサーバーは提供する機能に基づいたデフォルトの`server-name`を**推奨**します。
 
-  The `server-name` must be a hierarchical topic style separated by `/` so that the client can subscribe to a certain type of MCP server using MQTT topic wildcards, for example: `server-type/sub-type/name`.
+  `server-name`は階層的なトピック形式で`/`区切りとし、クライアントがMQTTトピックのワイルドカードを使って特定のタイプのMCPサーバーをサブスクライブできるようにします。例：`server-type/sub-type/name`。
 
-  The `server-name` should not `+` and `#` characters.
+  `server-name`には`+`や`#`の文字を含めてはいけません。
 
-  The `server-name` should be unique among all MCP servers.
+  `server-name`はすべてのMCPサーバー間で一意である必要があります。
 
-- **server-name-filter**: The MQTT topic filter to match the `server-name`, it may include `/`, `+` and `#` characters. See descriptions about **server-name** for more details.
+- **server-name-filter**: `server-name`にマッチするMQTTトピックフィルターで、`/`、`+`、`#`の文字を含むことができます。詳細は**server-name**の説明を参照してください。
 
-  After connected to the MQTT broker, the broker may suggest a `server-name-filter` to the MCP client by including a `MCP-SERVER-NAME-FILTERS` user property in the MQTT CONNACK message. If so, the MCP client **MUST** use this `server-name-filter` to subscribe to the server's presence topic. The value of the `MCP-SERVER-NAME-FILTERS` is a JSON array of strings, each string is a MQTT topic filter.
-  If the broker does not suggest a `server-name-filter`, the MCP client **SHOULD** use a default `server-name-filter` based on the functionality it provides.
+  MQTTブローカーに接続後、ブローカーはMQTT CONNACKメッセージのユーザープロパティに`MCP-SERVER-NAME-FILTERS`を含めてMCPクライアントに`server-name-filter`を提案する場合があります。その場合、MCPクライアントは**必ず**この`server-name-filter`を使ってサーバーのプレゼンストピックをサブスクライブしなければなりません。`MCP-SERVER-NAME-FILTERS`の値は文字列のJSON配列であり、各文字列はMQTTトピックフィルターです。ブローカーが`server-name-filter`を提案しない場合、MCPクライアントは提供する機能に基づいたデフォルトの`server-name-filter`を**推奨**します。
 
-- **server-id**: The MQTT Client ID of a MCP server instance. Any string except `/`, `+` and `#`. It must be globally unique and will also be included in the topic.
+- **server-id**: MCPサーバーインスタンスのMQTTクライアントID。`/`、`+`、`#`を除く任意の文字列で、グローバルに一意である必要があり、トピックにも含まれます。
 
-- **mcp-client-id**: The MQTT Client ID of the client. Any string except `/`, `+` and `#`. It must be globally unique and will be included in the topic. Each time an initialization request is made, a different client-id must be used.
+- **mcp-client-id**: クライアントのMQTTクライアントID。`/`、`+`、`#`を除く任意の文字列で、グローバルに一意である必要があり、トピックに含まれます。初期化要求を行うたびに異なるクライアントIDを使用しなければなりません。
 
-## Message Topics
+## メッセージトピック
 
-MCP over MQTT transmits messages through MQTT topics. This protocol includes the following message topics:
+MCP over MQTTはMQTTトピックを通じてメッセージを送受信します。本プロトコルには以下のメッセージトピックがあります。
 
-| Topic Name                       | Topic Name                                                          | Description                                                                        |
-|----------------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| Server's Control Topic           | `$mcp-server/{server-id}/{server-name}`                             | Used for sending and receiving initialization messages and other control messages. |
-| Server's Capability Change Topic | `$mcp-server/capability/{server-id}/{server-name}`     | Used for sending and receiving server capability list changed or the resource updated notification.        |
-| Server's Presence Topic          | `$mcp-server/presence/{server-id}/{server-name}`                    | Used for sending and receiving server's online/offline status messages.            |
-| Client's Presence Topic          | `$mcp-client/presence/{mcp-client-id}`                              | Used for sending and receiving client's online/offline status messages.            |
-| Client's Capability Change Topic | `$mcp-client/capability/{mcp-client-id}`               | Used for sending and receiving client capability list changed notification.        |
-| RPC Topic                        | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`                   | Used for sending and receiving RPC requests/responses, and notification messages.  |
+| トピック名                       | トピック名                                                          | 説明                                                                        |
+|----------------------------------|---------------------------------------------------------------------|------------------------------------------------------------------------------|
+| サーバー制御トピック             | `$mcp-server/{server-id}/{server-name}`                             | 初期化メッセージやその他制御メッセージの送受信用。                           |
+| サーバー機能変更トピック         | `$mcp-server/capability/{server-id}/{server-name}`                  | サーバーの機能リスト変更やリソース更新通知の送受信用。                       |
+| サーバープレゼンストピック       | `$mcp-server/presence/{server-id}/{server-name}`                    | サーバーのオンライン／オフライン状態メッセージの送受信用。                   |
+| クライアントプレゼンストピック   | `$mcp-client/presence/{mcp-client-id}`                              | クライアントのオンライン／オフライン状態メッセージの送受信用。               |
+| クライアント機能変更トピック     | `$mcp-client/capability/{mcp-client-id}`                            | クライアントの機能リスト変更通知の送受信用。                                 |
+| RPCトピック                     | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`                | RPCリクエスト／レスポンスおよび通知メッセージの送受信用。                   |
 
-## MQTT Protocol Version
+## MQTTプロトコルバージョン
 
-The MCP server and client **MUST** use MQTT Protocol version 5.0.
+MCPサーバーおよびクライアントは**必ず**MQTTプロトコルバージョン5.0を使用しなければなりません。
 
-## User Property
+## ユーザープロパティ
 
-For `CONNECT` messages, the following user properties **MUST** be set:
-- `MCP-COMPONENT-TYPE`: `mcp-client` or `mcp-server`.
-- `MCP-META`: A JSON object containing metadata about the MCP component, such as its version, implementation details, and location. This metadata can be used by the broker to suggest a server name to the MCP server or a server name filter to the MCP client.
+`CONNECT`メッセージでは、以下のユーザープロパティを**必ず**設定します：
 
-For `CONNACK` messages sent by the broker, the following user properties **MAY** be set:
-- `MCP-SERVER-NAME`: The broker suggested server name for the MCP server. Only present if it's a MCP server.
-- `MCP-RBAC`: A JSON array of server names and its corresponding role names, which can be used by the MCP client to determine the roles it has for the MCP server. Each element in the array is a JSON object with two fields: `server_name` and `role_name`. Only present if it's a MCP client.
-- `MCP-SERVER-NAME-FILTERS`: The broker suggested server name filters. It's a JSON array of strings, each string is a MQTT topic filter that the MCP client can use to subscribe to the server's presence topic. This allows the client to filter the servers it is interested in based on its permissions or other criteria. Only present if it's a MCP client.
+- `MCP-COMPONENT-TYPE`: `mcp-client` または `mcp-server`
+- `MCP-META`: MCPコンポーネントのバージョン、実装情報、場所などのメタデータを含むJSONオブジェクト。ブローカーはこれを用いてMCPサーバーにサーバー名を、MCPクライアントにサーバー名フィルターを提案できます。
 
-For `PUBLISH` messages, the following user properties **MUST** be set:
-- `MCP-COMPONENT-TYPE`: `mcp-client` or `mcp-server`.
-- `MCP-MQTT-CLIENT-ID`: MQTT client ID of the sender.
+ブローカーが送信する`CONNACK`メッセージでは、以下のユーザープロパティを**任意で**設定できます：
 
-## Session Expiry Interval
+- `MCP-SERVER-NAME`: MCPサーバー向けにブローカーが提案するサーバー名。MCPサーバーの場合のみ存在。
+- `MCP-RBAC`: MCPクライアントがMCPサーバーに対して持つロールを判定するための、サーバー名と対応するロール名のJSON配列。各要素は`server_name`と`role_name`の2フィールドを持つJSONオブジェクト。MCPクライアントの場合のみ存在。
+- `MCP-SERVER-NAME-FILTERS`: MCPクライアントに提案するサーバー名フィルターのJSON配列。各文字列はMQTTトピックフィルターで、クライアントはこれを使ってサーバーのプレゼンストピックをサブスクライブできる。MCPクライアントの場合のみ存在。
 
-The session expiry interval **MUST** be set to 0, meaning the session will be cleaned up when the client disconnects.
+`PUBLISH`メッセージでは、以下のユーザープロパティを**必ず**設定します：
 
-## MQTT Client ID
+- `MCP-COMPONENT-TYPE`: `mcp-client` または `mcp-server`
+- `MCP-MQTT-CLIENT-ID`: 送信者のMQTTクライアントID
 
-### MCP Server
+## セッション有効期限
 
-The Client ID of the MCP server can be any string except `/`, `+` and `#`, referred to as `server-id`.
+セッション有効期限は**必ず**0に設定し、クライアントが切断された際にセッションがクリーンアップされるようにします。
 
-### MCP Client
+## MQTTクライアントID
 
-The Client ID of the MCP client, referred to as `mcp-client-id`, can be any string except `/`, `+` and `#`, each time an initialization request is made, a different client-id must be used.
+### MCPサーバー
 
-## MQTT Topics and Topic Filters
+MCPサーバーのクライアントIDは`/`、`+`、`#`を含まない任意の文字列で、`server-id`と呼ばれます。
 
-### MCP Server Subscriptions
+### MCPクライアント
 
-| Topic Filter                                          | Explanation                                                                                              |
-|-------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| `$mcp-server/{server-id}/{server-name}`                         | The control topic of the MCP server to receive control messages.                                         |
-| `$mcp-client/capability/{mcp-client-id}` | The MCP client’s capability change topic to receive capability list changed notification of the clients. |
-| `$mcp-client/presence/{mcp-client-id}`                | The MCP client’s presence topic to receive the disconnected notification of the clients.                 |
-| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`    | The RPC topic to receive RPC requests, RPC responses, and notifications from a MCP client.               |
+MCPクライアントのクライアントIDは`/`、`+`、`#`を含まない任意の文字列で、`mcp-client-id`と呼ばれます。初期化要求を行うたびに異なるクライアントIDを使用しなければなりません。
 
-::: info
-- The server **MUST** set the **No Local** option for the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`) subscription to avoid receiving its own messages.
-:::
+## MQTTトピックおよびトピックフィルター
 
-### MCP Server Publications
+### MCPサーバーのサブスクライブ
 
-| Topic Name                                                             | Messages                                                                                               |
-|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `$mcp-server/capability/{server-id}/{server-name}`     | capability list changed or resource updated notification.                                                                  |
-| `$mcp-server/presence/{server-id}/{server-name}`                    | Presence messages for the MCP server. <br> See [ServiceDiscovery](#service-discovery) for more details |
-| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`                     | RPC requests, responses and notifications.                                                             |
+| トピックフィルター                                         | 説明                                                                                   |
+|------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `$mcp-server/{server-id}/{server-name}`                     | MCPサーバーの制御メッセージを受信するための制御トピック。                             |
+| `$mcp-client/capability/{mcp-client-id}`                    | MCPクライアントの機能変更通知を受信するためのクライアント機能変更トピック。           |
+| `$mcp-client/presence/{mcp-client-id}`                      | MCPクライアントの切断通知を受信するためのクライアントプレゼンストピック。             |
+| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`        | MCPクライアントからのRPCリクエスト、レスポンス、通知を受信するRPCトピック。           |
 
 ::: info
-- The server **MUST** set the **RETAIN** flag to `True` for the topic `$mcp-server/presence/{server-id}/{server-name}` when publishing the server presence message.
-- When connecting to the MQTT broker, the server **MUST** set `$mcp-server/presence/{server-id}/{server-name}` as the will topic with an empty payload to clear the retain message in case of an unexpected disconnection.
+- サーバーはRPCトピック（`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`）のサブスクライブに対して**No Local**オプションを設定し、自身のメッセージを受信しないようにしなければなりません。
 :::
 
+### MCPサーバーのパブリッシュ
 
-### MCP Client Subscriptions
+| トピック名                                                 | メッセージ内容                                                                                  |
+|------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `$mcp-server/capability/{server-id}/{server-name}`         | 機能リスト変更またはリソース更新通知。                                                         |
+| `$mcp-server/presence/{server-id}/{server-name}`           | MCPサーバーのプレゼンス（オンライン状態）メッセージ。<br>詳細は[サービスディスカバリー](#service-discovery)参照。 |
+| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`       | RPCリクエスト、レスポンス、通知。                                                              |
 
-| Topic Filter                                                       | Explanation                                                                                    |
-|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| `$mcp-server/capability/{server-id}/{server-name-filter}`     | The capability change topic to receive capability list changed or resource updated notification of the MCP server. |
-| `$mcp-server/presence/+/{server-name-filter}`                    | The presence topic to receive the presence message of the MCP server.                          |
-| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`          | The RPC topic to receive PRC requests, responses and notifications sent by the MCP server.     |
-
-::: tip Note
-
-The client **MUST** set the **No Local** option for the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`) subscription to avoid receiving its own messages.
+::: info
+- サーバーはサーバープレゼンスメッセージをパブリッシュする際、トピック`$mcp-server/presence/{server-id}/{server-name}`に対して**RETAIN**フラグを`True`に設定しなければなりません。
+- MQTTブローカーに接続時、サーバーは予期しない切断に備え、`$mcp-server/presence/{server-id}/{server-name}`をウィルトピックとして設定し、ペイロードは空にしてリテインメッセージをクリアする必要があります。
 :::
 
-### MCP Client Publications
+### MCPクライアントのサブスクライブ
 
-| Topic Name                                           | Messages                                                           |
-|------------------------------------------------------|--------------------------------------------------------------------|
-| `$mcp-server/{server-id}/{server-name}`              | Send control messages like the initialize request.                 |
-| `$mcp-client/capability/{mcp-client-id}`             | Send client capability list changed notification                   |
-| `$mcp-client/presence/{mcp-client-id}`               | Send disconnected notification for the MCP client.                 |
-| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` | The RPC topic to send RPC requests/responses to a specific server. |
+| トピックフィルター                                         | 説明                                                                                   |
+|------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| `$mcp-server/capability/{server-id}/{server-name-filter}`  | MCPサーバーの機能リスト変更やリソース更新通知を受信する機能変更トピック。               |
+| `$mcp-server/presence/+/{server-name-filter}`              | MCPサーバーのプレゼンスメッセージを受信するプレゼンストピック。                         |
+| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`| MCPサーバーから送信されるRPCリクエスト、レスポンス、通知を受信するRPCトピック。        |
 
-::: tip Note
+::: tip 注意
 
-When connecting to the MQTT broker, the client **MUST** set `$mcp-client/presence/{mcp-client-id}` as the will topic with a "disconnected" notification as the payload to notify the server in case of an unexpected disconnection.
+クライアントはRPCトピック（`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`）のサブスクライブに対して**必ず**No Localオプションを設定し、自身のメッセージを受信しないようにしなければなりません。
 :::
 
-## Service Discovery
+### MCPクライアントのパブリッシュ
 
-### Service Registration
+| トピック名                                               | メッセージ内容                                                           |
+|----------------------------------------------------------|------------------------------------------------------------------------|
+| `$mcp-server/{server-id}/{server-name}`                  | 初期化要求などの制御メッセージ送信用。                                 |
+| `$mcp-client/capability/{mcp-client-id}`                 | クライアントの機能リスト変更通知送信用。                               |
+| `$mcp-client/presence/{mcp-client-id}`                   | MCPクライアントの切断通知送信用。                                     |
+| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`     | 特定サーバーへのRPCリクエスト／レスポンス送信用。                     |
 
-After the MCP server starts, it registers its service with the MQTT broker. The presence topic for service discovery and registration is: `$mcp-server/presence/{server-id}/{server-name}`.
+::: tip 注意
 
-The MCP server **MUST** publish a "server/online" notification to the service presence topic when they start, with the **RETAIN** flag set to `True`.
+MQTTブローカーに接続時、クライアントは予期しない切断に備え、`$mcp-client/presence/{mcp-client-id}`をウィルトピックとして設定し、ペイロードに「disconnected」通知を設定してサーバーに通知しなければなりません。
+:::
 
-The "server/online" notification **SHOULD** provide only limited information about the server to avoid the message size being too large. The client can request more detailed information after initialization.
+## サービスディスカバリー
 
-- A brief description of the MCP server's functionality to help clients determine which MCP servers they need to initialize.
-- Some metadata, such as roles and permissions, to help clients understand the access control policies of the MCP server. The `rbac` field in the metadata can include roles, each with a name, description, allowed methods, allowed tools, and allowed resources, which maybe used by the MQTT broker to implement role-based access control (RBAC) for the MCP server.
+### サービス登録
+
+MCPサーバー起動後、MQTTブローカーにサービス登録を行います。サービスディスカバリーおよび登録のためのプレゼンストピックは`$mcp-server/presence/{server-id}/{server-name}`です。
+
+MCPサーバーは起動時に、サービスプレゼンストピックに対して「server/online」通知を**必ず**パブリッシュし、**RETAIN**フラグを`True`に設定しなければなりません。
+
+「server/online」通知はメッセージサイズが大きくなりすぎないよう、サーバーの限定的な情報のみを提供することが**推奨**されます。クライアントは初期化後に詳細情報を要求できます。
+
+- MCPサーバーの機能概要説明。クライアントが必要に応じてどのMCPサーバーを初期化すべきか判断するための情報。
+- ロールや権限などのメタデータ。クライアントがMCPサーバーのアクセス制御ポリシーを理解するための情報。メタデータの`rbac`フィールドにはロールの一覧が含まれ、各ロールは名前、説明、許可されたメソッド、ツール、リソースを持ち、MQTTブローカーがMCPサーバーのロールベースアクセス制御（RBAC）を実装する際に利用される可能性があります。
 
 ```json
 {
@@ -150,13 +151,13 @@ The "server/online" notification **SHOULD** provide only limited information abo
   "method": "notifications/server/online",
   "params": {
       "server_name": "example/server",
-      "description": "This is a brief description about the functionalities provided by this MCP server to allow clients to choose as needed. If tools are provided, it explains what tools are available but does not include tool parameters to reduce message size.",
+      "description": "このMCPサーバーが提供する機能の簡単な説明です。クライアントが必要に応じて選択できるようにします。ツールが提供されている場合は利用可能なツールを説明しますが、メッセージサイズ削減のためツールのパラメータは含みません。",
       "meta": {
         "rbac": {
           "roles": [
             {
               "name": "admin",
-              "description": "Administrator role with full access",
+              "description": "フルアクセス権を持つ管理者ロール",
               "allowed_methods": [
                 "notifications/initialized",
                 "ping", "tools/list", "tools/call", "resources/list", "resources/read",
@@ -167,7 +168,7 @@ The "server/online" notification **SHOULD** provide only limited information abo
             },
             {
               "name": "user",
-              "description": "User role with limited access",
+              "description": "限定的なアクセス権を持つユーザーロール",
               "allowed_methods": [
                 "notifications/initialized",
                 "ping", "tools/list", "tools/call", "resources/list", "resources/read"
@@ -186,77 +187,77 @@ The "server/online" notification **SHOULD** provide only limited information abo
 }
 ```
 
-More detailed information, such as parameter details of the tools, **SHOULD** only be fetched by the client when needed, by sending `**/list` requests to the server.
+ツールのパラメータ詳細などのより詳細な情報は、クライアントが必要に応じて`**/list`リクエストを送信して取得することが**推奨**されます。
 
-The client can subscribe to the `$mcp-server/presence/+/{server-name-filter}` topic at any time, where `{server-name-filter}` is a filter for the server name.
+クライアントはいつでも`$mcp-server/presence/+/{server-name-filter}`トピックをサブスクライブできます。ここで`{server-name-filter}`はサーバー名のフィルターです。
 
-For example, if the server name is `{server-type}/{sub-type}/{name}`, and the client determines through its permissions that it can only access MCP servers of type `{server-type}/{sub-type}`, it can subscribe to `$mcp-server/presence/+/{server-type}/{sub-type}/#`, thereby subscribing to the service presence topic for all MCP servers of the `{sub-type}` type at once.
+例えば、サーバー名が`{server-type}/{sub-type}/{name}`であり、クライアントが権限により`{server-type}/{sub-type}`タイプのMCPサーバーのみアクセス可能と判断した場合、`$mcp-server/presence/+/{server-type}/{sub-type}/#`をサブスクライブすることで、`{sub-type}`タイプのすべてのMCPサーバーのサービスプレゼンスを一括で受信できます。
 
-Although the client can subscribe to `$mcp-server/presence/+/#` to get all types of MCP servers, the administrator might restrict it through ACL (Access Control List) on the MQTT broker to only send and receive messages on RPC topics like `$mcp-rpc/{mcp-client-id}/{server-id}/{server-type}/{sub-type}/#`. Therefore, subscribing to overly broad topics is not useful. By designing the `{server-name-filter}` appropriately, the client can reduce interference from irrelevant information.
+クライアントは`$mcp-server/presence/+/#`をサブスクライブしてすべてのタイプのMCPサーバーを取得可能ですが、管理者がMQTTブローカーのACL（アクセス制御リスト）で制限し、RPCトピック（例：`$mcp-rpc/{mcp-client-id}/{server-id}/{server-type}/{sub-type}/#`）のみ送受信可能にしている場合があります。そのため、過度に広範囲なトピックのサブスクライブは有用ではありません。`{server-name-filter}`を適切に設計することで、クライアントは不要な情報の干渉を減らせます。
 
-### Service Unregistration
+### サービス登録解除
 
-When connecting to the MQTT broker, the server must set `$mcp-server/presence/{server-id}/{server-name}` as the will topic, with an empty payload will message, to clear the registration information in case of an unexpected disconnection.
+MQTTブローカーに接続時、サーバーは予期しない切断に備え、`$mcp-server/presence/{server-id}/{server-name}`をウィルトピックとして空ペイロードで設定し、登録情報をクリアする必要があります。
 
-Before actively disconnecting from the MQTT broker, the server **MUST** send an empty payload message to the `$mcp-server/presence/{server-id}/{server-name}` topic to clear the registration information.
+MQTTブローカーから積極的に切断する前に、サーバーは`$mcp-server/presence/{server-id}/{server-name}`トピックに空ペイロードのメッセージを送信し、登録情報をクリアしなければなりません。
 
-On the `$mcp-server/presence/{server-id}/{server-name}` topic:
+`$mcp-server/presence/{server-id}/{server-name}`トピックにおいて：
 
-- When the client receives a `server/online` notification, it should record the `{server-id}` as one of the instances of that `{server-name}`.
-- When the client receives an empty payload message, it should clear the cached `{server-id}`. As long as any instance of that `{server-name}` is online, the client should consider the MCP server to be online.
+- クライアントが`server/online`通知を受信した場合、その`{server-id}`を当該`{server-name}`のインスタンスとして記録します。
+- クライアントが空ペイロードメッセージを受信した場合、キャッシュされた`{server-id}`をクリアします。`{server-name}`のいずれかのインスタンスがオンラインであれば、クライアントはMCPサーバーがオンラインとみなします。
 
-The message flow for service registration and unregistration is as follows:
-
-```mermaid
-sequenceDiagram
-    participant MCP_Server as MCP Server
-    participant MQTT_Broker as MQTT Broker
-    participant MCP_Client as MCP Client
-
-    MCP_Server ->> MQTT_Broker: Register Service<br/>Topic: $mcp-server/presence/{server-id}/{server-name}<br/>Retain: True
-    Note right of MQTT_Broker: Store Retained Messages
-
-    MCP_Client ->> MQTT_Broker: Subscribe Services<br/>Topic Filter: $mcp-server/presence/+/ {server-name-filter}
-
-    MQTT_Broker ->> MCP_Client: Description of Service<br/>Topic: $mcp-server/presence/{server-id}/{server-name}<br/>Payload: "notifications/server/online"
-    Note left of MCP_Client: Record the server-id for a server-name.
-
-    MCP_Server ->> MQTT_Broker: Unregister Service<br/>Topic: $mcp-server/presence/{server-id}/{server-name}<br/>Retain: True<br/>Payload: Empty
-    Note right of MQTT_Broker: Clean Retained Messages
-
-    MQTT_Broker ->> MCP_Client: Description of Service<br/>Topic: $mcp-server/presence/{server-id}/{server-name}<br/>Payload: Empty
-    Note left of MCP_Client: Remove the server-id
-```
-
-## Initialization
-
-This section only describes the MQTT transport specific parts of the initialization phase, please see [Lifecycle](https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#initialization) for more details.
-
-The initialization phase **MUST** be the first interaction between client and server.
-
-The client **MUST** subscribe to the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`) before sending the initialization request, with the **No Local** subscription option.
-
-The server **MUST** subscribe to the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`) before responding to the initialization response, with the **No Local** subscription option.
+サービス登録および登録解除のメッセージフローは以下の通りです：
 
 ```mermaid
 sequenceDiagram
-  participant MCP_Client as MCP Client
-  participant MCP_Server as MCP Server
+    participant MCP_Server as MCPサーバー
+    participant MQTT_Broker as MQTTブローカー
+    participant MCP_Client as MCPクライアント
 
-  Note right of MCP_Client: Subscribe the<br/>server's RPC topic
-  MCP_Client ->> MCP_Server: Initialize Request<br/>Topic: $mcp-server/{server-id}/{server-name}
-  Note left of MCP_Server: Subscribe the<br/>client's RPC topic
-  MCP_Server ->> MCP_Client: Initialize Response<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
-  MCP_Client ->> MCP_Server: Initialized<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
-  MCP_Client ->> MCP_Server: RPC Req/Resp/Notification<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
-  MCP_Server ->> MCP_Client: RPC Req/Resp/Notification<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+    MCP_Server ->> MQTT_Broker: サービス登録<br/>トピック: $mcp-server/presence/{server-id}/{server-name}<br/>リテイン: True
+    Note right of MQTT_Broker: リテインメッセージを保存
+
+    MCP_Client ->> MQTT_Broker: サービスサブスクライブ<br/>トピックフィルター: $mcp-server/presence/+/ {server-name-filter}
+
+    MQTT_Broker ->> MCP_Client: サービス説明<br/>トピック: $mcp-server/presence/{server-id}/{server-name}<br/>ペイロード: "notifications/server/online"
+    Note left of MCP_Client: server-idをserver-nameのインスタンスとして記録
+
+    MCP_Server ->> MQTT_Broker: サービス登録解除<br/>トピック: $mcp-server/presence/{server-id}/{server-name}<br/>リテイン: True<br/>ペイロード: 空
+    Note right of MQTT_Broker: リテインメッセージをクリア
+
+    MQTT_Broker ->> MCP_Client: サービス説明<br/>トピック: $mcp-server/presence/{server-id}/{server-name}<br/>ペイロード: 空
+    Note left of MCP_Client: server-idを削除
 ```
 
-The client **MUST** initiate this phase by sending an `initialize` request to the topic `$mcp-server/{server-id}/{server-name}` containing:
+## 初期化
 
-- Protocol version supported
-- Client capabilities
-- Client implementation information
+本節は初期化フェーズのMQTTトランスポート固有の部分のみを記述しています。詳細は[ライフサイクル](https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle#initialization)を参照してください。
+
+初期化フェーズはクライアントとサーバー間の最初のやり取りである必要があります。
+
+クライアントは初期化要求を送信する前に、RPCトピック（`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`）を**No Local**サブスクライブオプション付きでサブスクライブしなければなりません。
+
+サーバーは初期化応答を返す前に、RPCトピック（`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`）を**No Local**サブスクライブオプション付きでサブスクライブしなければなりません。
+
+```mermaid
+sequenceDiagram
+  participant MCP_Client as MCPクライアント
+  participant MCP_Server as MCPサーバー
+
+  Note right of MCP_Client: サーバーのRPCトピックをサブスクライブ
+  MCP_Client ->> MCP_Server: 初期化要求<br/>トピック: $mcp-server/{server-id}/{server-name}
+  Note left of MCP_Server: クライアントのRPCトピックをサブスクライブ
+  MCP_Server ->> MCP_Client: 初期化応答<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+  MCP_Client ->> MCP_Server: 初期化完了通知<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+  MCP_Client ->> MCP_Server: RPCリクエスト／レスポンス／通知<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+  MCP_Server ->> MCP_Client: RPCリクエスト／レスポンス／通知<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+```
+
+クライアントは`initialize`リクエストをトピック`$mcp-server/{server-id}/{server-name}`に送信して初期化フェーズを開始し、以下を含めます：
+
+- サポートするプロトコルバージョン
+- クライアントの機能
+- クライアントの実装情報
 
 ```json
 {
@@ -279,7 +280,7 @@ The client **MUST** initiate this phase by sending an `initialize` request to th
 }
 ```
 
-The server **MUST** respond with its own capabilities to the topic `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` and information:
+サーバーは自身の機能情報をトピック`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`に応答として返さなければなりません。
 
 ```json
 {
@@ -308,7 +309,7 @@ The server **MUST** respond with its own capabilities to the topic `$mcp-rpc/{mc
 }
 ```
 
-After successful initialization, the client **MUST** send an initialized notification to indicate it is ready to begin normal operations, to the topic `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`:
+初期化が成功した後、クライアントは通常の操作を開始する準備ができたことを示すために、トピック`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`に初期化完了通知を送信しなければなりません。
 
 ```json
 {
@@ -317,85 +318,84 @@ After successful initialization, the client **MUST** send an initialized notific
 }
 ```
 
-## Capability List Changed
+## 機能リスト変更
 
-Before initiating the Initialize request, the MCP client **MUST** subscribe to the MCP server's capability list changed topic: `$mcp-server/capability/{server-id}/{server-name-filter}`, where `{server-name-filter}` is a filter for the server name.
+初期化要求を送信する前に、MCPクライアントはMCPサーバーの機能リスト変更トピック`$mcp-server/capability/{server-id}/{server-name-filter}`をサブスクライブしなければなりません。ここで`{server-name-filter}`はサーバー名のフィルターです。
 
-Before the MCP server responds to the initialization request, it **MUST** first subscribe to the MCP client's capability list changed topic: `$mcp-client/capability/{mcp-client-id}`.
+MCPサーバーは初期化応答を返す前に、MCPクライアントの機能リスト変更トピック`$mcp-client/capability/{mcp-client-id}`をサブスクライブしなければなりません。
 
-If there are subsequent capability list updates:
+機能リストの更新があった場合：
 
-- The server will send a notification to: `$mcp-server/capability/{server-id}/{server-name}`
-- The client will send a notification to: `$mcp-client/capability/{mcp-client-id}`
+- サーバーは`$mcp-server/capability/{server-id}/{server-name}`に通知を送信します。
+- クライアントは`$mcp-client/capability/{mcp-client-id}`に通知を送信します。
 
-The payload of the capability list changed notification depends on the specific capability that has changed. For example "notifications/tools/list_changed" for tools. After receiving a capability list change notification, the client or server needs to retrieve the updated capability list. See the specific capability documentation for details.
-
-```mermaid
-
-sequenceDiagram
-    participant MCP_Client as MCP Client
-    participant MCP_Server as MCP Server
-
-    Note right of MCP_Client: Client subscribes the server's<br/>capability change topic
-    MCP_Client ->> MCP_Server: Initialize
-
-    Note left of MCP_Server: Server subscribes the client's<br/>capability change topic
-    MCP_Server ->> MCP_Client: Initialize Response
-    MCP_Client ->> MCP_Server: Initialized
-
-    MCP_Server -->> MCP_Client: Capability List Changed<br/>Topic: $mcp-server/capability/{server-id}/{server-name}
-
-    MCP_Client ->> MCP_Server: List Capability<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
-
-    MCP_Server -->> MCP_Client: List Capability Response<br/>$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
-```
-
-## Resource Update
-
-The MCP protocol specifies that the client can subscribe to changes of a specific resource.
-
-If the server provides the capability to subscribe to resources, the client can subscribe to the resource changes before sending the initialized notification.
-
-The topic for the client to subscribe to resource changes is: `$mcp-server/capability/{server-id}/{server-name}`.
-
-When a resource changes, the server **SHOULD** send a notification to `$mcp-server/capability/{server-id}/{server-name}`.
+機能リスト変更通知のペイロードは変更された特定の機能に依存します。例えばツールの場合は`notifications/tools/list_changed`などです。機能リスト変更通知を受信した後、クライアントまたはサーバーは更新された機能リストを取得する必要があります。詳細は各機能のドキュメントを参照してください。
 
 ```mermaid
-
 sequenceDiagram
-    participant MCP_Client as MCP Client
-    participant MCP_Server as MCP Server
+    participant MCP_Client as MCPクライアント
+    participant MCP_Server as MCPサーバー
 
-    MCP_Client ->> MCP_Server: Initialize
-    MCP_Server ->> MCP_Client: Initialize Response
-    Note right of MCP_Client: Client subscribes the server's<br/>resource update topic
-    MCP_Client ->> MCP_Server: Initialized
+    Note right of MCP_Client: クライアントはサーバーの<br/>機能変更トピックをサブスクライブ
+    MCP_Client ->> MCP_Server: 初期化
 
-    MCP_Client ->> MCP_Server: List Resources<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+    Note left of MCP_Server: サーバーはクライアントの<br/>機能変更トピックをサブスクライブ
+    MCP_Server ->> MCP_Client: 初期化応答
+    MCP_Client ->> MCP_Server: 初期化完了通知
 
-    MCP_Server -->> MCP_Client: List Resources Response<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URIs: [{resource-uri}, {resource-uri}, ...]
+    MCP_Server -->> MCP_Client: 機能リスト変更通知<br/>トピック: $mcp-server/capability/{server-id}/{server-name}
 
-    MCP_Server -->> MCP_Client: Resource Updated<br/>Topic: $mcp-server/capability/{server-id}/{server-name}<br/>URI: {resource-uri}
+    MCP_Client ->> MCP_Server: 機能リスト取得リクエスト<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
 
-    MCP_Client ->> MCP_Server: Read Resource<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URI: {resource-uri}
-
-    MCP_Server -->> MCP_Client: Read Resource Response<br/>Topic: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URI: {resource-uri}
+    MCP_Server -->> MCP_Client: 機能リスト取得レスポンス<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
 ```
 
-## Shutdown
+## リソース更新
 
-### Server Disconnect
+MCPプロトコルでは、クライアントが特定リソースの変更をサブスクライブできます。
 
-The server **MUST** connect with a will message to notify the client when it disconnects unexpectedly, the will topic is `$mcp-server/presence/{server-id}/{server-name}` and the payload is empty.
+サーバーがリソースのサブスクライブ機能を提供する場合、クライアントは初期化完了通知を送信する前にリソース変更をサブスクライブできます。
 
-Before a MCP server disconnects from the MQTT broker, the server **MUST** send an empty message to the presence topic `$mcp-server/presence/{server-id}/{server-name}`.
+クライアントがリソース変更をサブスクライブするトピックは`$mcp-server/capability/{server-id}/{server-name}`です。
 
-The MCP server may want to 'de-initialize' with a MCP client but still keep the connection with the MQTT broker, in this case it **MUST** send a "disconnected" notification to the rpc topic `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` and then unsubscribe from the following topics:
+リソースが変更された場合、サーバーは`$mcp-server/capability/{server-id}/{server-name}`に通知を送信することが**推奨**されます。
+
+```mermaid
+sequenceDiagram
+    participant MCP_Client as MCPクライアント
+    participant MCP_Server as MCPサーバー
+
+    MCP_Client ->> MCP_Server: 初期化
+    MCP_Server ->> MCP_Client: 初期化応答
+    Note right of MCP_Client: クライアントはサーバーの<br/>リソース更新トピックをサブスクライブ
+    MCP_Client ->> MCP_Server: 初期化完了通知
+
+    MCP_Client ->> MCP_Server: リソース一覧取得リクエスト<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}
+
+    MCP_Server -->> MCP_Client: リソース一覧取得レスポンス<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URI一覧: [{resource-uri}, {resource-uri}, ...]
+
+    MCP_Server -->> MCP_Client: リソース更新通知<br/>トピック: $mcp-server/capability/{server-id}/{server-name}<br/>URI: {resource-uri}
+
+    MCP_Client ->> MCP_Server: リソース読み取りリクエスト<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URI: {resource-uri}
+
+    MCP_Server -->> MCP_Client: リソース読み取りレスポンス<br/>トピック: $mcp-rpc/{mcp-client-id}/{server-id}/{server-name}<br/>URI: {resource-uri}
+```
+
+## シャットダウン
+
+### サーバー切断
+
+サーバーは予期しない切断時にクライアントに通知するため、ウィルメッセージを設定して接続しなければなりません。ウィルトピックは`$mcp-server/presence/{server-id}/{server-name}`で、ペイロードは空です。
+
+MCPサーバーがMQTTブローカーから切断する前に、`$mcp-server/presence/{server-id}/{server-name}`トピックに空メッセージを送信し、登録情報をクリアしなければなりません。
+
+MCPサーバーがMCPクライアントとの「非初期化」状態にしたいがMQTTブローカーとの接続は維持したい場合、RPCトピック`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`に「disconnected」通知を送信し、その後以下のトピックのサブスクライブを解除しなければなりません：
+
 - `$mcp-client/capability/{mcp-client-id}`
 - `$mcp-client/presence/{mcp-client-id}`
 - `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`
 
-The message format for the MCP server's "disconnected" notification is:
+MCPサーバーの「disconnected」通知のメッセージ形式は以下の通りです：
 
 ```json
 {
@@ -404,28 +404,31 @@ The message format for the MCP server's "disconnected" notification is:
 }
 ```
 
-When a MCP client receives an empty payload message on the server's presence topic or a "disconnected" notification on the rpc topic, it **MUST** consider the server to be offline and clear the cached `{server-id}` for that `{server-name}` and unsubscribe from the following topics:
+MCPクライアントがサーバーのプレゼンストピックで空ペイロードメッセージまたはRPCトピックで「disconnected」通知を受信した場合、サーバーがオフラインとみなし、当該`{server-name}`のキャッシュされた`{server-id}`をクリアし、以下のトピックのサブスクライブを解除しなければなりません：
+
 - `$mcp-server/capability/{server-id}/{server-name-filter}`
 - `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`
 
-### Client Disconnect
+### クライアント切断
 
-The server **MUST** subscribe to the client's presence topic (`$mcp-client/presence/{mcp-client-id}`) before sending the initialization response.
+サーバーは初期化応答を送信する前に、クライアントのプレゼンストピック（`$mcp-client/presence/{mcp-client-id}`）をサブスクライブしなければなりません。
 
-The client **MUST** connect with a will message to notify the server when it disconnects unexpectedly, the will topic is `$mcp-client/presence/{mcp-client-id}` and the payload is a "disconnected" notification.
+クライアントは予期しない切断時にサーバーに通知するため、ウィルメッセージを設定して接続しなければなりません。ウィルトピックは`$mcp-client/presence/{mcp-client-id}`で、ペイロードは「disconnected」通知です。
 
-Before the client disconnects from the MQTT broker, it **MUST** send a "disconnected" notification to the topic `$mcp-client/presence/{mcp-client-id}`.
+クライアントがMQTTブローカーから切断する前に、`$mcp-client/presence/{mcp-client-id}`トピックに「disconnected」通知を送信しなければなりません。
 
-The client may want to 'de-initialize' with a MCP server but still keep the connection with the MQTT broker, in this case it **MUST** send a "disconnected" notification to the rpc topic `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` and then unsubscribe from the following topics:
+クライアントがMCPサーバーとの「非初期化」状態にしたいがMQTTブローカーとの接続は維持したい場合、RPCトピック`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`に「disconnected」通知を送信し、その後以下のトピックのサブスクライブを解除しなければなりません：
+
 - `$mcp-server/capability/{server-id}/{server-name-filter}`
 - `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`
 
-After the MCP server receives the "disconnected" notification, it **MUST** unsubscribe from the following topics:
+MCPサーバーが「disconnected」通知を受信した後、以下のトピックのサブスクライブを解除しなければなりません：
+
 - `$mcp-client/capability/{mcp-client-id}`
 - `$mcp-client/presence/{mcp-client-id}`
 - `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`
 
-The message format for the MCP client's "disconnected" notification is:
+MCPクライアントの「disconnected」通知のメッセージ形式は以下の通りです：
 
 ```json
 {
@@ -434,53 +437,52 @@ The message format for the MCP client's "disconnected" notification is:
 }
 ```
 
-## Health Checks
+## ヘルスチェック
 
-The client or the server **MAY** send `ping` requests to the server at any time to check the health of their counterpart.
+クライアントまたはサーバーは任意のタイミングでサーバーに`ping`リクエストを送信して相手の状態を確認できます。
 
-- If the client does not receive a `ping` response from the server within a reasonable time, it **MUST** send a "disconnected" notification to the topic `$mcp-client/presence/{mcp-client-id}` and disconnect itself.
-- If the server does not receive a `ping` response from the client within a reasonable time, it **MUST** send any other PRC requests to the client.
+- クライアントが合理的な時間内にサーバーから`ping`応答を受信しない場合、クライアントはトピック`$mcp-client/presence/{mcp-client-id}`に「disconnected」通知を送信し、自身を切断しなければなりません。
+- サーバーが合理的な時間内にクライアントからの`ping`応答を受信しない場合、サーバーはクライアントに対するその他のRPCリクエストを送信しなければなりません。
 
-For more information, see [Ping](https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/ping).
+詳細は[Ping](https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/ping)を参照してください。
 
-## Timeouts
+## タイムアウト
 
-All RPC requests are sent asynchronously via MQTT messages, so timeout issues need to be considered. The timeout duration may vary for different RPC requests, but it should be configurable.
+すべてのRPCリクエストはMQTTメッセージを介して非同期に送信されるため、タイムアウトの考慮が必要です。タイムアウト時間はRPCリクエストの種類によって異なる場合がありますが、設定可能であるべきです。
 
-Below are the recommended default timeout values for each type of RPC request in this protocol:
+本プロトコルにおける各RPCリクエストの推奨デフォルトタイムアウト値は以下の通りです：
 
-- "initialize": 30 seconds
-- "ping": 10 seconds
-- "roots/list": 30 seconds
-- "resources/list": 30 seconds
-- "tools/list": 30 seconds
-- "prompts/list": 30 seconds
-- "prompts/get": 30 seconds
-- "sampling/createMessage": 60 seconds
-- "resources/read": 30 seconds
-- "resources/templates/list": 30 seconds
-- "resources/subscribe": 30 seconds
-- "tools/call": 60 seconds
-- "completion/complete": 60 seconds
-- "logging/setLevel": 30 seconds
+- "initialize": 30秒
+- "ping": 10秒
+- "roots/list": 30秒
+- "resources/list": 30秒
+- "tools/list": 30秒
+- "prompts/list": 30秒
+- "prompts/get": 30秒
+- "sampling/createMessage": 60秒
+- "resources/read": 30秒
+- "resources/templates/list": 30秒
+- "resources/subscribe": 30秒
+- "tools/call": 60秒
+- "completion/complete": 60秒
+- "logging/setLevel": 30秒
 
 <!-- {< callout type="info" >}
-Progress requests are sent as notifications and do not require a response, so no timeout is needed.
+進捗リクエストは通知として送信され、応答を必要としないため、タイムアウトは不要です。
 {< /callout >} -->
 
-## Error Handling
+## エラーハンドリング
 
-Implementations **SHOULD** be prepared to handle these error cases:
+実装は以下のエラーケースに対応できるようにすることが**推奨**されます：
 
-- Protocol version mismatch
-- Failure to negotiate required capabilities
-- Initialize request timeout
-- Shutdown timeout
+- プロトコルバージョンの不一致
+- 必須機能のネゴシエーション失敗
+- 初期化要求のタイムアウト
+- シャットダウンのタイムアウト
 
-Implementations **SHOULD** implement appropriate timeouts for all requests, to prevent
-hung connections and resource exhaustion.
+すべてのリクエストに対して適切なタイムアウトを実装し、接続のハングやリソース枯渇を防止することが**推奨**されます。
 
-Example initialization error:
+初期化エラーの例：
 
 ```json
 {

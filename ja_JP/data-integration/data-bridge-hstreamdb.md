@@ -1,8 +1,8 @@
-# HStreamDBへのMQTTデータストリーミング
+# Stream MQTT Data into HStreamDB
 
-[HStreamDB](https://hstream.io/)は、リアルタイムのメッセージ、イベント、その他のデータストリームを効率的に取り込み、保存、処理、配信できるオープンソースのストリーミングデータプラットフォームです。EMQXとHStreamDBの統合により、MQTTメッセージやクライアントイベントをHStreamDBに保存でき、大規模なIoTデータの収集、伝送、保存を実現し、標準SQLやマテリアライズドビューを用いたデータストリームのリアルタイム処理、監視、分析が可能になります。
+[HStreamDB](https://hstream.io/) は、リアルタイムのメッセージ、イベント、その他のデータストリームを一元的に効率よく取り込み、保存、処理、配信できるオープンソースのストリーミングデータプラットフォームです。EMQXとHStreamDBの統合により、MQTTメッセージやクライアントイベントをHStreamDBに保存でき、大規模なIoTデータの収集、伝送、保存を実現し、標準SQLやマテリアライズドビューを使用したデータストリームのリアルタイム処理、監視、分析が可能になります。
 
-本ページでは、EMQXとHStreamDB間のデータ統合について包括的に紹介し、データ統合の作成と検証に関する実践的な手順を提供します。
+本ページでは、EMQXとHStreamDB間のデータ統合について包括的に紹介し、データ統合の作成および検証に関する実践的な手順を提供します。
 
 ::: tip
 
@@ -10,42 +10,48 @@ HStreamDBデータ統合はEMQX 5.2.0以降でのみサポートされていま�
 
 :::
 
-## 動作の仕組み
+::: tip
 
-HStreamDBデータ統合は、EMQXのデバイス接続およびメッセージ伝送機能とHStreamDBの堅牢なデータ保存・処理機能を組み合わせたEMQXの標準機能です。組み込みのルールエンジンコンポーネントにより、両プラットフォーム間のデータストリーミングと処理が簡素化されています。
+HStreamDBデータ統合はEMQX 6.0で削除されます。
 
-以下の図は、EMQXとHStreamDB間のデータ統合の典型的なアーキテクチャを示しています：
+:::
+
+## 動作概要
+
+HStreamDBデータ統合はEMQXの標準機能であり、EMQXのデバイス接続およびメッセージ伝送機能とHStreamDBの強力なデータ保存・処理機能を組み合わせています。組み込みのルールエンジンコンポーネントにより、両プラットフォーム間のデータストリーミングと処理が簡素化されています。
+
+以下の図は、EMQXとHStreamDB間のデータ統合の典型的なアーキテクチャを示しています。
 
 ![EMQX Integration HStreamDB](./assets/emqx-integration-hstreamdb.png)
 
-EMQXはルールエンジンと設定されたSinkを通じてMQTTデータをHStreamDBに転送し、処理の流れは以下の通りです：
+EMQXはルールエンジンと設定済みのSinkを通じてMQTTデータをHStreamDBに転送し、全体の流れは以下の通りです：
 
-1. **メッセージのパブリッシュと受信**：IoTデバイスはMQTTプロトコルで正常に接続し、特定のトピックにテレメトリや状態データをパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
-2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンを使い、特定のソースからのMQTTメッセージをトピックマッチングに基づいて処理します。ルールエンジンは対応するルールをマッチさせ、データ形式変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
-3. **HStreamDBへのデータストリーミング**：ルールがトリガーされると、メッセージをHStreamDBに転送するアクションが実行されます。データはHStreamDBのストリーム名、パーティションキー、レコードに簡単に設定でき、その後のデータ処理や分析を容易にします。
+1. **メッセージのパブリッシュと受信**：IoTデバイスはMQTTプロトコルを介して正常に接続し、特定のトピックにテレメトリやステータスデータをパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンを使用して、特定のトピックに基づくMQTTメッセージを処理します。ルールエンジンは対応するルールとマッチングし、データフォーマット変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
+3. **HStreamDBへのデータストリーミング**：ルールがトリガーされると、メッセージがHStreamDBに転送されます。データはHStreamDBのストリーム名、パーティションキー、レコードに簡単に設定でき、後続のデータ処理や分析を容易にします。
 
-MQTTメッセージデータがApache HStreamDBに書き込まれた後は、以下のような柔軟なアプリケーション開発が可能です：
+MQTTメッセージデータがApache HStreamDBに書き込まれた後は、以下のような柔軟なアプリケーション開発が可能です。
 
 - 特定のMQTTメッセージ受信時にHStreamDBのルールエンジンコンポーネントを使って対応するアクションやイベントをトリガーし、システム間やアプリケーション間のイベント駆動機能を実現。
-- HStreamDB内でMQTTデータストリームをリアルタイムに分析し、異常や特定のイベントパターンを検出してアラート通知や対応アクションを実行。
+- HStreamDB内でMQTTデータストリームをリアルタイムに分析し、異常や特定のイベントパターンを検知してアラート通知や対応アクションを実行。
 - 複数のMQTTトピックからのデータを統合し、HStreamDBの計算機能を活用してリアルタイム集計、計算、分析を行い、より包括的なデータインサイトを獲得。
 
-## 特徴と利点
+## 特長と利点
 
-HStreamDBとのデータ統合は、ビジネスに以下の特徴と利点をもたらします：
+HStreamDBとのデータ統合は、以下の特長と利点をビジネスにもたらします：
 
-- **信頼性の高いIoTデータメッセージ配信**：EMQXはMQTTメッセージをバッチ処理で確実にHStreamDBに送信でき、IoTデバイスとHStreamDBおよびアプリケーションシステムの統合を実現します。
-- **MQTTメッセージの変換**：ルールエンジンを用いて、EMQXはMQTTメッセージの抽出、フィルタリング、付加、変換を行い、HStreamDBに送信します。
-- **大規模データストリーム保存**：HStreamDBは分散型でフォールトトレラントなログストレージクラスターを備え、数百万のデータストリームを信頼性高く保存します。必要に応じてリアルタイムのデータストリーム更新をアプリケーションに再生またはプッシュ可能です。EMQXのメッセージモデルと完全に統合し、大規模なIoTデータ収集、伝送、保存を実現します。
-- **クラスターとスケーラビリティ**：クラウドネイティブアーキテクチャを採用し、EMQXとHStreamDBはオンラインスケーリングやクラスターの動的な拡張・縮小をサポートし、増大するビジネス需要に柔軟に対応します。
-- **柔軟な処理能力**：HStreamDBではおなじみのSQLを使って複数のデータストリームのフィルタリング、変換、集約、結合が可能です。標準SQLやマテリアライズドビューを使ったリアルタイム処理、監視、分析をサポートし、リアルタイムのデータインサイトを提供します。
-- **高スループットシナリオでの処理能力**：HStreamDBデータ統合は同期・非同期の両書き込みモードをサポートし、シナリオに応じてレイテンシとスループットのバランスを柔軟に調整できます。
+- **信頼性の高いIoTデータメッセージ配信**：EMQXはMQTTメッセージをバッチで確実にHStreamDBに送信でき、IoTデバイスとHStreamDBおよびアプリケーションシステムの統合を実現します。
+- **MQTTメッセージ変換**：ルールエンジンを用いてMQTTメッセージのフィルタリングや変換が可能です。データ抽出、フィルタリング、付加情報の追加、変換を行った上でHStreamDBに送信できます。
+- **大規模データストリーム保存**：HStreamDBは数百万のデータストリームを分散型でフォールトトレラントなログストレージクラスターに信頼性高く保存可能です。必要に応じてリアルタイムのデータストリーム更新をアプリケーションにリプレイまたはプッシュできます。EMQXのメッセージモデルと完全に統合し、大規模なIoTデータ収集・伝送・保存を実現します。
+- **クラスターとスケーラビリティ**：クラウドネイティブアーキテクチャにより、EMQXとHStreamDBはオンラインスケールやクラスターの動的な拡張・縮小をサポートし、増大するビジネスニーズに柔軟に対応可能です。
+- **柔軟な処理能力**：HStreamDBでは馴染みのあるSQLを使い、複数のデータストリームのフィルタリング、変換、集計、結合が可能です。標準SQLやマテリアライズドビューを用いたリアルタイム処理、監視、分析に対応し、リアルタイムのデータインサイトを提供します。
+- **高スループットシナリオでの処理能力**：HStreamDBデータ統合は同期・非同期の書き込みモードをサポートし、シナリオに応じてレイテンシとスループットのバランスを柔軟に調整できます。
 
 ## はじめる前に
 
-このセクションでは、HStreamDBデータ統合の作成を始める前に必要な準備、HStreamDBサービスの起動方法とストリームの作成方法について説明します。
+このセクションでは、HStreamDBデータ統合の作成を始める前に必要な準備、HStreamDBサービスの起動およびストリームの作成方法について説明します。
 
-以下のサブセクションでは、Linux/MacOS環境でDockerイメージを使ってHStreamDBをインストールし接続する方法を説明します。Dockerがインストールされており、可能であればDocker Compose v2を使用してください。その他のHStreamDBおよびHStreamDBプラットフォームのインストール方法は、[Quickstart with Docker-Compose](https://docs.hstream.io/start/quickstart-with-docker.html)および[Getting Started with HStream Platform](https://docs.hstream.io/start/try-out-hstream-platform.html)を参照してください。
+以下のサブセクションでは、Linux/MacOSでDockerイメージを使用してHStreamDBをインストールし接続する方法を説明します。Dockerがインストールされており、可能であればDocker Compose v2を使用してください。その他のHStreamDBおよびHStreamDBプラットフォームのインストール方法は、[Quickstart with Docker-Compose](https://docs.hstream.io/start/quickstart-with-docker.html)および[Getting Started with HStream Platform](https://docs.hstream.io/start/try-out-hstream-platform.html)を参照してください。
 
 ### 前提条件
 
@@ -58,15 +64,15 @@ HStreamDBとのデータ統合は、ビジネスに以下の特徴と利点を�
 
 :::: tab HStreamDB TCPサービスの起動とストリーム作成
 
-このセクションでは、ローカルのDocker環境で単一ノードのHStreamDB TCPサービスを起動し、その後HStreamDBでストリームを作成する方法を説明します。
+このセクションでは、ローカルDocker環境で単一ノードのHStreamDB TCPサービスを起動し、HStreamDBにストリームを作成する方法を説明します。
 
 ::: tip 注意
 
-HStreamDBリソースが接続状態になった後、ストリームの削除や再作成などの操作を行う場合は、HStreamDBへの再接続（つまりHStreamDBリソースの再起動）が必要です。
+HStreamDBリソースが接続状態の場合、ストリームの削除や再作成などの操作を行うと、HStreamDBへの再接続（つまりHStreamDBリソースの再起動）が必要になります。
 
 :::
 
-1. 以下の内容で`docker-compose-tcp.yaml`ファイルを作成します。
+1. 以下の内容で `docker-compose-tcp.yaml` ファイルを作成します。
 
    ::: details `docker-compose-tcp.yaml`
 
@@ -161,31 +167,31 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
    docker compose -f docker-compose-tcp.yaml up --build
    ```
 
-3. HStreamコンテナに入り、`mqtt_connect`と`mqtt_message`という2つのストリームを作成します。
+3. HStreamDBコンテナに入り、`mqtt_connect`と`mqtt_message`という2つのストリームを作成します。
 
    ::: tip
 
-   HStreamDBの対話型SQL CLIを使ってストリームを作成することも可能です。`hstream --help`で`hstream`コマンドの使用方法を確認してください。
+   HStreamDBのインタラクティブSQL CLIを使ってストリームを作成することも可能です。`hstream --help`でコマンドの詳細を確認してください。
 
    :::
 
    ```bash
    $ docker container exec -it quickstart-tcp-hserver bash
-   # Stream `mqtt_connect`を作成
+   # Stream `mqtt_connect` の作成
    root@9c7ce2f51860:/# hstream stream create mqtt_connect
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
    +--------------+---------+----------------+-------------+
    | mqtt_connect | 1       | 604800 seconds | 1           |
    +--------------+---------+----------------+-------------+
-   # Stream `mqtt_message`を作成
+   # Stream `mqtt_message` の作成
    root@9c7ce2f51860:/# hstream stream create mqtt_message
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
    +--------------+---------+----------------+-------------+
    | mqtt_message | 1       | 604800 seconds | 1           |
    +--------------+---------+----------------+-------------+
-   # 全ストリーム一覧表示
+   # すべてのストリームを一覧表示
    root@9c7ce2f51860:/# hstream stream list
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
@@ -199,31 +205,31 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
 ::::
 :::: tab HStreamDB TLSサービスの起動とストリーム作成
 
-このセクションでは、ローカルのDocker環境で2ノードのHStreamDB TLSサービスを起動し、その後HStreamDBでストリームを作成する方法を説明します。
+このセクションでは、ローカルDocker環境で二ノードのHStreamDB TLSサービスを起動し、HStreamDBにストリームを作成する方法を説明します。
 
 ::: tip 注意
 
-HStreamDBリソースが接続状態になった後、ストリームの削除や再作成などの操作を行う場合は、HStreamDBへの再接続（つまりHStreamDBリソースの再起動）が必要です。
+HStreamDBリソースが接続状態の場合、ストリームの削除や再作成などの操作を行うと、HStreamDBへの再接続（つまりHStreamDBリソースの再起動）が必要になります。
 
 :::
 
 ::: tip Dockerネットワーク環境と証明書ファイルについて
 
-- このDocker Composeファイルは`172.100.0.0/24`のネットワークサブネットをDockerネットワークブリッジとして使用しています。別のネットワーク設定が必要な場合はDocker Composeファイルを適宜修正してください。
-- 現バージョンのHStreamでは、コンテナ間通信に影響を与える可能性があるため、`http_proxy`、`https_proxy`、`all_proxy`などのデフォルト環境変数をコンテナに設定しないでください。詳細は[_Docker Network Proxy_](https://docs.docker.com/network/proxy/)を参照してください。
-- ルート証明書と自己署名証明書は[_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca)コンテナを使って自動生成され、`172.100.0.10`と`172.100.0.11`の2つのサブジェクト代替名で設定されています。
-- 別の証明書要件がある場合は、証明書ファイルをHStreamDBコンテナにマウントするか、[_Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)を参照してください。
-  - step-caのデフォルト設定で生成される証明書は有効期限が1日です。有効期限を変更したい場合は`ca`ディレクトリ内の証明書を削除し、[_step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options)に従って設定を変更してください。
+- このDocker Composeファイルは`172.100.0.0/24`のネットワークサブネットをDockerネットワークブリッジとして使用しています。別のネットワーク設定が必要な場合は、Docker Composeファイルを適宜修正してください。
+- 現バージョンのHStreamでは、コンテナ間通信に影響を与える可能性があるため、`http_proxy`、`https_proxy`、`all_proxy`などの環境変数をコンテナに設定しないよう注意してください。詳細は[_Docker Network Proxy_](https://docs.docker.com/network/proxy/)を参照してください。
+- ルート証明書および自己署名証明書は[_smallstep/step-ca_](https://hub.docker.com/r/smallstep/step-ca)コンテナを使って自動生成され、`172.100.0.10`と`172.100.0.11`の2つのSubject Alternative Nameが設定されています。
+- 他の証明書要件がある場合は、証明書ファイルをHStreamDBコンテナにマウントするか、[_Configuring step-ca_](https://smallstep.com/docs/step-ca/configuration/index.html)を参照してください。
+  - step-caのデフォルト設定で生成された証明書は有効期限が1日です。証明書の有効期限を変更したい場合は、`ca`ディレクトリ内の証明書を削除し、[_step-ca-configuration-options_](https://smallstep.com/docs/step-ca/configuration/#configuration-options)に従って設定を変更してください。
 
 :::
 
-1. 証明書を保存するために`tls-deploy/ca`ディレクトリを作成します。
+1. 証明書を保存するために `tls-deploy/ca` ディレクトリを作成します。
 
    ```bash
    mkdir tls-deploy/ca
    ```
 
-2. `tls-deploy`配下に以下の内容で`docker-compose-tls.yaml`ファイルを作成します。
+2. `tls-deploy` 配下に以下の内容で `docker-compose-tls.yaml` ファイルを作成します。
 
    ::: details `docker-compose-tls.yaml`
 
@@ -443,7 +449,7 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
 
    :::
 
-   これでディレクトリ構造は以下のようになります：
+   これでディレクトリ構成は以下のようになります。
 
    ```bash
    $ tree tls-deploy
@@ -454,37 +460,37 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
    2 directories, 1 file
    ```
 
-3. `tls-deploy`ディレクトリに入り、以下のシェルコマンドを実行してHStreamDB TLSサービスを起動します。
+3. `tls-deploy`ディレクトリに移動し、以下のシェルコマンドを実行してHStreamDB TLSサービスを起動します。
 
    ```bash
    env step_ca=$PWD/ca docker compose -f docker-compose-tls.yaml up --build
    ```
 
-4. HStreamDBコンテナに入り、`mqtt_connect`と`mqtt_message`という2つのストリームを作成します。
+4. HStreamDBコンテナに入り、`mqtt_connect` と `mqtt_message` という名前のストリームを作成します。
 
-   :::tip TLS接続コマンドオプション
+   :::tip TLS接続時のコマンドオプション
 
-   TCPサービスと同様に、コマンドラインに`--tls-ca [CA_PATH]`オプションを追加するだけで接続可能です。`quickstart-tls-hserver-1`ノードでコマンドを実行する場合は、docker-composeファイルで指定されたポートと一致させるために`--port 6572`オプションを追加してください。
+   TCPサービスと同様に、コマンドに`--tls-ca [CA_PATH]`オプションを追加するだけで接続できます。ノード`quickstart-tls-hserver-1`でコマンドを実行する場合は、docker-composeファイルで指定されたポートと一致させるために`--port 6572`オプションも指定してください。
 
    :::
 
    ```bash
    $ docker container exec -it quickstart-tls-hserver-0 bash
-   # Stream `mqtt_connect`を作成
+   # Stream `mqtt_connect` の作成
    root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_connect
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
    +--------------+---------+----------------+-------------+
    | mqtt_connect | 1       | 604800 seconds | 1           |
    +--------------+---------+----------------+-------------+
-   # Stream `mqtt_message`を作成
+   # Stream `mqtt_message` の作成
    root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream create mqtt_message
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
    +--------------+---------+----------------+-------------+
    | mqtt_message | 1       | 604800 seconds | 1           |
    +--------------+---------+----------------+-------------+
-   # 全ストリーム一覧表示
+   # すべてのストリームを一覧表示
    root@75c9351cbb38:/# hstream --tls-ca /data/server/certs/root_ca.crt stream list
    +--------------+---------+----------------+-------------+
    | Stream Name  | Replica | Retention Time | Shard Count |
@@ -500,42 +506,42 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
 
 ## コネクターの作成
 
-このセクションでは、SinkをHStreamDBサーバーに接続するためのコネクターの作成方法を示します。
+このセクションでは、SinkをHStreamDBサーバーに接続するためのコネクターを作成する方法を示します。
 
-以下の手順は、EMQXとHStreamDBをローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
+以下の手順は、EMQXとHStreamDBの両方をローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
 
-1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
-2. ページ右上の**Create**をクリックします。
+1. EMQXダッシュボードにログインし、**Integration** -> **Connectors**をクリックします。
+2. 画面右上の**Create**をクリックします。
 3. **Create Connector**ページで**HStreamDB**を選択し、**Next**をクリックします。
-4. **Configuration**ステップで以下の情報を設定します（*印のある項目は必須です）：
-   - **Connector name**：コネクター名を英数字の組み合わせで入力します。例：`my_hstreamdb`
-   - **HStreamDB Server URL**：`hstream://127.0.0.1:6570`または実際のHStreamDBのアドレスとポートを入力します。
+4. **Configuration**ステップで以下の情報を設定します（アスタリスク付きは必須項目です）：
+   - **Connector name**：コネクター名を入力します。英数字の組み合わせで、例：`my_hstreamdb`。
+   - **HStreamDB Server URL**：`hstream://127.0.0.1:6570`、または実際のHStreamDBのアドレスとポートを指定します。
      - スキームは`http`、`https`、`hstream`、`hstreams`をサポートします。
-     - TLS接続の場合はスキームを`hstreams`または`https`にします。例：`hstreams://127.0.0.1:6570`
-   - **HStreamDB Stream Name**：事前に作成したストリーム名を入力します。
-     - クライアントメッセージ保存用は`mqtt_message`
-     - イベント記録用は`mqtt_connect`
-   - **HStreamDB Partition Key**：HStreamDB内のパーティションやノードのどこにデータを保存するかを決定するためのパーティションキーを指定します。例として`${topic}`を指定すると、同じトピックのメッセージがHStreamDB内で順序を保って書き込まれます。未指定の場合はデフォルトキーが使用され、データはデフォルトのシャードにマッピングされます。
+     - TLS接続の場合はスキームを`hstreams`または`https`にします。例：`hstreams://127.0.0.1:6570`。
+   - **HStreamDB Stream Name**：前述で作成したストリーム名を入力します。
+     - クライアントメッセージ保存用は`mqtt_message`。
+     - イベント記録用は`mqtt_connect`。
+   - **HStreamDB Partition Key**：HStreamDBのパーティションやノード内のデータ保存先を決定するためのパーティションキーを指定します。例として`${topic}`を指定すると、同じトピックのメッセージが順序通りに書き込まれます。未指定の場合はデフォルトキーが使われ、データはデフォルトのシャードにマッピングされます。
    - **HStreamDB gRPC Timeout**：gRPCリクエスト時にHStreamDBサーバーからの応答を待つ最大時間（秒）を指定します。デフォルトは`30`秒です。
-   - **Enable TLS**：必要に応じてTLS接続を有効にするためにトグルスイッチをクリックします。TLS有効時は**TLS Verify**を無効にします。`tls-deploy/ca`ディレクトリで生成した証明書とキーをアップロードします：
-     - `ca/hstream.crt`を**TLS Cert**にアップロード
-     - `ca/hstream.key`を**TLS Key**にアップロード
-     - `ca/certs/root_ca.crt`を**CA Cert**にアップロード
-5. 詳細設定（任意）：詳細は[Features of Sink](./data-bridges.md#features-of-sink)を参照してください。
+   - **Enable TLS**：必要に応じてTLS接続を有効にするためのトグルスイッチです。TLSを有効にした場合は**TLS Verify**を無効にしてください。`tls-deploy/ca`ディレクトリに生成された証明書とキーをアップロードします：
+     - `ca/hstream.crt`を**TLS Cert**にアップロード。
+     - `ca/hstream.key`を**TLS Key**にアップロード。
+     - `ca/certs/root_ca.crt`を**CA Cert**にアップロード。
+5. 高度な設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがHStreamDBサーバーに接続できるかテストできます。
-7. ページ下部の**Create**ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてSink付きのルール作成に進み、HStreamDBに転送するデータやクライアントイベントの記録を指定します。詳細は[Create a Rule with HStreamDB Sink for Message Storage](#create-a-rule-with-hstreamdb-sink-for-message-storage)および[Create a Rule with HStreamDB Sink for Events Recording](#create-a-rule-with-hstreamdb-sink-for-events-recording)を参照してください。
+7. 画面下部の**Create**ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてSinkを指定したルールの作成に進めます。詳細は[メッセージ保存用HStreamDB Sinkのルール作成](#create-a-rule-with-hstreamdb-sink-for-message-storage)および[イベント記録用HStreamDB Sinkのルール作成](#create-a-rule-with-hstreamdb-sink-for-events-recording)を参照してください。
 
-## HStreamDB Sinkを使ったメッセージ保存ルールの作成
+## メッセージ保存用HStreamDB Sinkのルール作成
 
-このセクションでは、ダッシュボード上でソースMQTTトピック`t/#`からのメッセージを処理し、処理済みデータを設定したSink経由でHStreamDBストリーム`mqtt_message`に書き込むルールの作成方法を示します。
+このセクションでは、ダッシュボードでMQTTトピック`t/#`のメッセージを処理し、処理済みデータを設定済みのSink経由でHStreamDBストリーム`mqtt_message`に書き込むルールを作成する方法を示します。
 
-1. EMQXダッシュボードにアクセスし、**Integration** -> **Rules**をクリックします。
+1. EMQXダッシュボードにアクセスし、**Integration** -> **Rules** をクリックします。
 
-2. ページ右上の**Create**をクリックします。
+2. 画面右上の**Create**をクリックします。
 
-3. ルールIDに`my_rule`を入力し、**SQL Editor**で以下のステートメントを設定します。これはトピック`t/#`以下のMQTTメッセージをHStreamDBに保存することを意味します。
+3. ルールIDに`my_rule`を入力します。**SQL Editor**で以下のステートメントを設定します。これはトピック`t/#`配下のMQTTメッセージをHStreamDBに保存することを意味します。
 
-   注意：独自のSQL構文を指定する場合は、Sinkで必要なすべてのフィールドを`SELECT`句に含めていることを確認してください。
+   注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
 
    ```sql
    SELECT
@@ -546,45 +552,45 @@ HStreamDBリソースが接続状態になった後、ストリームの削除�
 
    ::: tip
 
-   初心者の方は**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールを学習・テストできます。
+   初心者の方は、**SQL Examples** をクリックし、**Enable Test** を有効にしてSQLルールを学習・テストできます。
 
    :::
 
-4. + **Add Action**ボタンをクリックし、ルールがトリガーするアクションを定義します。このアクションにより、EMQXはルールで処理したデータをHStreamDBに送信します。
+4. + **Add Action**ボタンをクリックして、ルールがトリガーするアクションを定義します。このアクションにより、EMQXはルールで処理したデータをHStreamDBに送信します。
 
-5. **Type of Action**ドロップダウンリストから`HStreamDB`を選択します。**Action**ドロップダウンはデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、このデモでは新しいSinkを作成します。
+5. **Type of Action**ドロップダウンから`HStreamDB`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、ここでは新規Sinkを作成します。
 
-6. Sinkの名前を入力します。名前は英数字の組み合わせにしてください。
+6. Sinkの名前を入力します。英数字の組み合わせにしてください。
 
-7. **Connector**ドロップダウンから先ほど作成した`my_hstreamdb`を選択します。新しいコネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは[Create a Connector](#create-a-connector)を参照してください。
+7. **Connector**ドロップダウンから先ほど作成した`my_hstreamdb`を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-8. メッセージを特定のトピックに転送するための**HStream Record Template**を以下のテンプレートで設定します：
+8. メッセージを特定トピックに転送するための**HStream Record Template**を以下のテンプレートで設定します。
 
    ```json
    {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
    ```
 
-9. **Fallback Actions（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **詳細設定（任意）**：必要に応じて**sync**または**async**クエリモードを選択します。詳細は[Features of Sink](./data-bridges.md#features-of-sink)を参照してください。
+10. **高度な設定（任意）**：必要に応じて**sync**または**async**クエリモードを選択します。詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-11. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがHStreamDBサーバーに接続できるかテストします。
+11. **Create**をクリックする前に、**Test Connectivity**を押してSinkがHStreamDBサーバーに接続できるかテストします。
 
-12. **Create**ボタンをクリックしてSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
+12. **Create**ボタンをクリックしてSinkの設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-13. **Create Rule**ページに戻り、設定内容を確認して**Create**をクリックしルールを生成します。
+13. **Create Rule** ページに戻り、設定内容を確認して **Create** をクリックしルールを生成します。
 
-これでHStreamDB Sinkを通じたデータ転送とオンライン/オフライン状態の記録ルールが正常に作成されました。**Integration** -> **Rules**ページで新規作成ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいHStreamDB Sinkが表示されます。
+これで、HStreamDB Sinkを通じてデータ転送およびオンライン/オフライン状態の記録用ルールが正常に作成されました。**Integration** -> **Rules**ページで新規ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいHStreamDB Sinkが表示されます。
 
-また、**Integration** -> **Flow Designer**をクリックするとトポロジーが表示され、トピック`t/#`のメッセージがルール`my_rule`で解析されHStreamDBに送信・保存されている様子が確認できます。
+また、**Integration** -> **Flow Designer**でトポロジーを確認すると、トピック`t/#`配下のメッセージがルール`my_rule`で解析され、HStreamDBに送信・保存されていることが分かります。
 
-## HStreamDB Sinkを使ったイベント記録ルールの作成
+## イベント記録用HStreamDB Sinkのルール作成
 
-このセクションでは、クライアントのオンライン/オフライン状態を記録し、イベントデータを設定したSink経由でHStreamDBストリーム`mqtt_connect`に書き込むルールの作成方法を示します。
+このセクションでは、クライアントのオンライン/オフライン状態を記録し、イベントデータを設定済みSink経由でHStreamDBストリーム`mqtt_connect`に書き込むルールの作成方法を示します。
 
-ルール作成手順は[メッセージ保存用のStream Sinkでルールを作成](#create-a-rule-with-hstreamdb-sink-for-message-storage)とほぼ同様ですが、SQLルール構文とStream Recordテンプレートが異なります。
+ルール作成手順は[メッセージ保存用HStreamDB Sinkのルール作成](#create-a-rule-with-hstreamdb-sink-for-message-storage)とほぼ同様ですが、SQLルール構文とストリームレコードテンプレートが異なります。
 
-オンライン/オフライン状態記録用のSQLルール構文は以下の通りです：
+オンライン/オフライン状態記録用のSQLルール構文は以下の通りです。
 
 ```sql
 SELECT
@@ -593,7 +599,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-Sinkの**Stream Record Template**は以下の通りです：
+Sinkの**ストリームレコードテンプレート**は以下の通りです。
 
 ```sql
 {"clientid": "${clientid}", "event_type": "${event}", "event_time": ${timestamp}}
@@ -601,27 +607,27 @@ Sinkの**Stream Record Template**は以下の通りです：
 
 ## ルールのテスト
 
-MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
+MQTTXを使ってトピック `t/1` にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello HStreamDB" }'
 ```
 
-2つのSinkの稼働状況を確認します。
+2つのSinkの動作状況を確認します。
 
-- メッセージ保存用Sinkでは、新規の受信メッセージと送信メッセージが1件ずつあるはずです。ストリーム`mqtt_message`にデータが書き込まれているか確認します：
+- メッセージ保存用Sinkでは、新規の受信メッセージと送信メッセージが1件ずつあるはずです。ストリーム`mqtt_message`にデータが書き込まれているか確認します。
 
 ```bash
-# ストリーム`mqtt_message`の読み取り後、Control-Cで停止
+# ストリーム`mqtt_message`の読み取りを停止するにはCtrl-Cを押します
 root@9c7ce2f51860:/# hstream stream read-stream mqtt_message
 timestamp: "1693903488278", id: 1947758763121538-8589934593-0, key: "", record: {"id": 00060498A3B3C4F8F4400100127E0002, "topic": "t/1", "qos": 0, "payload": { "msg": "Hello HStreamDB" }}
 ^CRead Done.
 ```
 
-- オンライン/オフライン状態記録用Sinkでは、新たに2件のイベント（クライアント接続・切断）が記録されているはずです。ストリーム`mqtt_connect`に状態記録が書き込まれているか確認します：
+- オンライン/オフライン状態記録用Sinkでは、クライアント接続および切断の2つの新規イベントが記録されているはずです。ストリーム`mqtt_connect`に状態記録が書き込まれているか確認します。
 
 ```bash
-# ストリーム`mqtt_connect`の読み取り後、Control-Cで停止
+# ストリーム`mqtt_connect`の読み取りを停止するにはCtrl-Cを押します
 root@9c7ce2f51860:/# hstream stream read-stream mqtt_connect
 timestamp: "1693903488274", id: 1947758827604597-8589934593-0, key: "", record: {"clientid": "emqx_c", "event_type": "client.connected", "event_time": 1693903488266}
 timestamp: "1693903488294", id: 1947758827604597-8589934594-0, key: "", record: {"clientid": "emqx_c", "event_type": "client.disconnected", "event_time": 1693903488271}

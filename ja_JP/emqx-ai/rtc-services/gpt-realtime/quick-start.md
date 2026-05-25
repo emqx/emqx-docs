@@ -1,10 +1,10 @@
-# Build a Real-Time Voice Agent with EMQX + GPT-Realtime
+# EMQX + GPT-Realtimeでリアルタイム音声エージェントを構築する
 
-This guide explains how to quickly build a real-time voice agent application using the GPT-Realtime model together with EMQX.
+本ガイドでは、GPT-RealtimeモデルとEMQXを組み合わせてリアルタイム音声エージェントアプリケーションを素早く構築する方法を説明します。
 
-## Obtain a Temporary API Key
+## 一時的なAPIキーを取得する
 
-To connect to GPT-Realtime from a browser using native WebRTC, you must first obtain a temporary (ephemeral) API key. This key can be generated via the OpenAI REST API:
+ブラウザからネイティブWebRTCを使ってGPT-Realtimeに接続するには、まず一時的（エフェメラル）なAPIキーを取得する必要があります。このキーはOpenAIのREST APIを通じて生成できます。
 
 ```bash
 export OPENAI_API_KEY="sk-xxxxxx"
@@ -14,32 +14,32 @@ curl -s -X POST https://api.openai.com/v1/realtime/client_secrets \
   -d '{"session": {"type": "realtime", "model": "gpt-realtime"}}' | jq .value
 ```
 
-## Implement Real-Time Voice Chat
+## リアルタイム音声チャットを実装する
 
-The following example shows how to connect to the GPT-Realtime model using native WebRTC to implement real-time voice chat:
+以下の例は、ネイティブWebRTCを使用してGPT-Realtimeモデルに接続し、リアルタイム音声チャットを実装する方法を示しています。
 
 ```javascript
-// Put the obtained ephemeral key here
+// 取得したエフェメラルキーをここに設定
 const EPHEMERAL_KEY = "ek_xxxxxx";
 
-// Create a peer connection
+// ピアコネクションを作成
 const pc = new RTCPeerConnection();
 
-// Set up to play remote audio from the model
+// モデルからのリモート音声を再生する設定
 audioElement.current = document.createElement("audio");
 audioElement.current.autoplay = true;
 pc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
 
-// Add local audio track for microphone input in the browser
+// ブラウザのマイク入力用にローカル音声トラックを追加
 const ms = await navigator.mediaDevices.getUserMedia({
     audio: true,
 });
 pc.addTrack(ms.getTracks()[0]);
 
-// Set up data channel for sending and receiving events
+// イベント送受信用のデータチャネルを設定
 const dc = pc.createDataChannel("oai-events");
 
-// Start the session using the Session Description Protocol (SDP)
+// セッションをSession Description Protocol（SDP）で開始
 const offer = await pc.createOffer();
 await pc.setLocalDescription(offer);
 
@@ -58,47 +58,47 @@ const answer = {
 };
 await pc.setRemoteDescription(answer);
 
-// Listen for server events
+// サーバーからのイベントを監視
 dc.addEventListener("message", (e) => {
     const event = JSON.parse(e.data);
     console.log("Received event:", event);
 });
 ```
 
-In addition to creating a WebRTC audio channel, this code also creates a Data Channel for sending and receiving events from the GPT-Realtime model. All received events are logged to the console. If you encounter issues such as missing audio during testing, check the console output for detailed error information.
+このコードはWebRTCの音声チャネルを作成するだけでなく、GPT-Realtimeモデルとのイベント送受信用にデータチャネルも作成しています。受信したすべてのイベントはコンソールにログ出力されます。テスト中に音声が聞こえないなどの問題があれば、詳細なエラー情報をコンソールで確認してください。
 
-## Control Devices Using MCP
+## MCPを使ってデバイスを制御する
 
-1. Start EMQX, install and configure the MCP Bridge plugin.
+1. EMQXを起動し、MCPブリッジプラグインをインストール・設定します。
 
-2. Run an MCP Server to simulate a smart light. For detailed steps, refer to [Use the EMQX MCP Bridge to Access IoT Devices](../../mcp-bridge/quick-start.md).
+2. スマートライトをシミュレートするMCPサーバーを起動します。詳細な手順は[EMQX MCPブリッジを使ってIoTデバイスにアクセスする](../../mcp-bridge/quick-start.md)を参照してください。
 
-   Note that EMQX must be deployed in a public network environment, and the MCP Bridge plugin must be configured with a valid SSL certificate so that GPT-Realtime can access the MCP service over HTTPS.
+   なお、EMQXはパブリックネットワーク環境にデプロイされている必要があり、GPT-RealtimeがHTTPS経由でMCPサービスにアクセスできるようにMCPブリッジプラグインには有効なSSL証明書を設定してください。
 
-3. Modify Frontend Code to Use MCP Tools.
+3. フロントエンドコードをMCPツール対応に修正します。
 
-   To enable MCP tools, add a function `handle_event()` to process GPT-Realtime events:
+   MCPツールを有効にするため、GPT-Realtimeイベントを処理する関数`handle_event()`を追加します。
 
    ```javascript
-   // Listen for server events
+   // サーバーからのイベントを監視
    dc.addEventListener("message", (e) => {
        const event = JSON.parse(e.data);
        handle_event(event);
    });
    ```
 
-   Within this function, handle the `session.created` event so that a `session.update` event is sent when the session is created to enable MCP tools. Set the MCP server address to `https://your-emqx-host:port/mcp`:
+   この関数内で`session.created`イベントを処理し、セッション作成時に`session.update`イベントを送信してMCPツールを有効にします。MCPサーバーのアドレスは`https://your-emqx-host:port/mcp`に設定してください。
 
    ```javascript
    function handle_event(event) {
        if (event.type === "session.created") {
-           // Send client events
+           // クライアントイベントを送信
            const session_update_event = {
                type: "session.update",
                session: {
                    type: "realtime",
                    model: "gpt-realtime",
-                   // can be set to "text"
+                   // "text"に設定することも可能
                    output_modalities: ["audio"],
                    tools: [
                        {
@@ -110,7 +110,7 @@ In addition to creating a WebRTC audio channel, this code also creates a Data Ch
                        }
                    ],
                    tool_choice: "auto",
-                   // You can still set direct session fields; these override prompt fields if they overlap:
+                   // 直接セッションフィールドを設定可能。プロンプトフィールドと重複した場合は上書きされます：
                    instructions: "I have a smart light and its client ID is abc123"
                }
            };
@@ -123,24 +123,24 @@ In addition to creating a WebRTC audio channel, this code also creates a Data Ch
    }
    ```
 
-Now, when you access the frontend page in a browser and have a voice conversation with GPT-Realtime, the model can access and control IoT devices through MCP tools.
+これでブラウザのフロントエンドページにアクセスし、GPT-Realtimeと音声で会話すると、モデルがMCPツールを通じてIoTデバイスにアクセス・制御できるようになります。
 
 ::: tip
- GPT-Realtime can access MCP servers only over HTTPS. Make sure that:
+ GPT-RealtimeはMCPサーバーにHTTPS経由でのみアクセス可能です。以下を必ず満たしてください：
 
-- The MCP plugin is configured with a valid, non-self-signed SSL certificate
-- The URL uses a domain name instead of an IP address and is publicly accessible
+- MCPプラグインに有効かつ自己署名でないSSL証明書が設定されていること
+- URLがIPアドレスではなくドメイン名を使用し、パブリックにアクセス可能であること
    :::
 
 ::: tip
 
-GPT-Realtime requires Streamable HTTP to access MCP servers, so you must use the `/mcp` endpoint of the EMQX MCP Bridge plugin rather than the `/sse` endpoint.
+GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを必要とするため、EMQX MCPブリッジプラグインの`/mcp`エンドポイントを使用し、`/sse`エンドポイントは使用しないでください。
 
 :::
 
-## Send Messages to the Model
+## モデルにメッセージを送信する
 
-In the earlier code, system instructions were used to inform the model of the device’s client ID in advance:
+前述のコードでは、システム指示であらかじめデバイスのクライアントIDをモデルに伝えていました。
 
 ```javascript
 const session_update_event = {
@@ -152,10 +152,10 @@ const session_update_event = {
 };
 ```
 
-GPT-Realtime also supports sending messages to the model during an ongoing conversation via the WebRTC Data Channel to add contextual information:
+GPT-Realtimeは、会話中にWebRTCデータチャネルを通じてメッセージを送信し、コンテキスト情報を追加することもサポートしています。
 
 ```javascript
-// Send client events
+// クライアントイベントを送信
 const event = {
     type: "conversation.item.create",
     item: {

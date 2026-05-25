@@ -1,16 +1,16 @@
-# Change EMQX Configurations
+# EMQXの設定変更
 
-## Task Target
+## 対象タスク
 
-Change EMQX configuration by `config.data` in EMQX Custom Resource.
+EMQXカスタムリソースの`config.data`によってEMQXの設定を変更します。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5.0, EMQX adopts [HOCON](https://www.emqx.io/docs/en/v5.1/configuration/configuration.html#hocon-configuration-format) as the configuration file format.
+EMQXのメイン設定ファイルは`/etc/emqx.conf`です。バージョン5.0以降、EMQXは設定ファイル形式として[HOCON](https://www.emqx.io/docs/en/v5.1/configuration/configuration.html#hocon-configuration-format)を採用しています。
 
-`apps.emqx.io/v2beta1 EMQX` supports configuring EMQX cluster through `.spec.config.data` field. For config.data configuration, please refer to the document: [Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual).
+`apps.emqx.io/v2beta1 EMQX`は`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。`config.data`による設定については、以下のドキュメントを参照してください：[設定マニュアル](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual)。
 
-+ Save the following content as a YAML file and deploy it with the `kubectl apply` command
++ 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -37,9 +37,9 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
             type: LoadBalancer
    ```
 
-   > In the `.spec.config.data` field, we have configured a TCP listener for the EMQX cluster. The name of this listener is: test, and the listening port is: 1884.
+   > `.spec.config.data`フィールドでは、EMQXクラスター用のTCPリスナーを設定しています。リスナー名は`test`で、リッスンポートは`1884`です。
 
-+ Wait for the EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
++ EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -47,9 +47,9 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
    emqx   emqx/emqx-enterprise:5.10.0   Running   10m
    ```
 
-+ Obtain the Dashboard External IP of EMQX cluster and access EMQX console
++ EMQXクラスターのダッシュボード外部IPを取得し、EMQXコンソールにアクセスします。
 
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
+  EMQXオペレーターは2つのEMQX Serviceリソースを作成します。1つは`emqx-dashboard`、もう1つは`emqx-listeners`で、それぞれEMQXコンソールとEMQXのリスニングポートに対応しています。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -57,17 +57,17 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
   192.168.1.200
   ```
 
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
+  ブラウザで`http://192.168.1.200:18083`にアクセスし、デフォルトのユーザー名とパスワード`admin/public`でEMQXコンソールにログインします。
 
-## Verify Configuration
+## 設定の確認
 
-+ View EMQX cluster listener information
++ EMQXクラスターのリスナー情報を表示します。
 
    ```bash
    $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
    ```
 
-   You can get a print similar to the following, which means that the listener named `test` configured by us has taken effect.
+   以下のような出力が得られます。これは、設定した`test`という名前のリスナーが有効になっていることを示しています。
 
    ```bash
    tcp:default

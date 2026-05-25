@@ -1,96 +1,96 @@
-# MCP Bridge Plugin
+# MCP ブリッジプラグイン
 
-The [EMQX MCP Bridge Plugin](https://github.com/emqx/emqx_mcp_bridge) is a plugin used to integrate EMQX with MCP (Model Context Protocol)–enabled devices. With this plugin, users can access and control IoT devices using MCP-compatible large language models or AI agents.
+[EMQX MCP ブリッジプラグイン](https://github.com/emqx/emqx_mcp_bridge) は、EMQX と MCP（Model Context Protocol）対応デバイスを統合するためのプラグインです。このプラグインを使うことで、ユーザーは MCP 対応の大規模言語モデルや AI エージェントを用いて IoT デバイスにアクセスし、制御することができます。
 
-## How MCP Bridge Plugin Works
+## MCP ブリッジプラグインの仕組み
 
-The MCP Bridge Plugin is installed and runs inside EMQX. After startup, it exposes an HTTP endpoint that converts MCP connections based on Streamable HTTP or SSE into the MQTT protocol.
+MCP ブリッジプラグインは EMQX 内にインストールされて動作します。起動後、Streamable HTTP または SSE に基づく MCP 接続を MQTT プロトコルに変換する HTTP エンドポイントを公開します。
 
-IoT devices connect to the EMQX broker using MQTT, while MCP-enabled large models or AI agents connect to the HTTP endpoint exposed by the MCP Bridge Plugin.
+IoT デバイスは MQTT を使って EMQX ブローカーに接続し、MCP 対応の大規模モデルや AI エージェントは MCP ブリッジプラグインが公開する HTTP エンドポイントに接続します。
 
 ```mermaid
 graph LR
     subgraph "EMQX"
-        MB[MCP Bridge Plugin]
+        MB[MCP ブリッジプラグイン]
     end
     subgraph "AI Agents"
-        M1[LLM / MCP Client]
+        M1[LLM / MCP クライアント]
         M1 --> |MCP-HTTP| MB
     end
     subgraph "Devices"
-        D1[Device 1]
-        D2[Device 2]
-        D3[Device 3]
+        D1[デバイス 1]
+        D2[デバイス 2]
+        D3[デバイス 3]
         MB --> |MQTT| D1
         MB --> |MQTT| D2
         MB --> |MQTT| D3
     end
 ```
 
-## Access Devices Using MCP over MQTT
+## MCP over MQTT を使ったデバイスアクセス
 
-On the device side, devices can use the MCP over MQTT protocol and act as MCP Servers that directly expose their tools and capabilities. The plugin aggregates the tools registered by devices based on tool type. In the MCP Bridge Plugin, the Server Name concept from the MCP over MQTT protocol is mapped to a tool type.
+デバイス側では、MCP over MQTT プロトコルを使い、MCP サーバーとして自らのツールや機能を直接公開できます。プラグインはデバイスが登録したツールをツールタイプごとに集約します。MCP ブリッジプラグインでは、MCP over MQTT プロトコルの Server Name の概念をツールタイプにマッピングしています。
 
-In other words, tools registered by multiple devices of the same type are aggregated by the bridge plugin into a single logical tool that can be invoked by an MCP Client.
+つまり、同じタイプの複数デバイスが登録したツールは、ブリッジプラグインによって単一の論理的なツールとして集約され、MCP クライアントから呼び出せる形になります。
 
-This approach is suitable for scenarios where a single client accesses one or a small number of devices, such as smart homes, industrial control systems, or voice-enabled toys. In these scenarios, users typically only need access to their own devices rather than managing large fleets of devices.
+この方式は、スマートホームや産業制御システム、音声対応玩具など、単一または少数のデバイスにクライアントがアクセスするシナリオに適しています。これらのシナリオでは、ユーザーは大規模なデバイス群の管理ではなく、自分のデバイスへのアクセスだけを必要とする場合が多いです。
 
-Because tools from multiple devices of the same type are aggregated into a single logical tool, the MCP Bridge Plugin injects a required parameter named `target-mqtt-client-id` into the tool definition. When an AI agent invokes the tool, it must determine the target device ID according to business logic and provide it via this parameter, allowing the MCP request to be routed to the specific device.
+同じタイプの複数デバイスのツールが単一の論理ツールに集約されるため、MCP ブリッジプラグインはツール定義に必須パラメータとして `target-mqtt-client-id` を注入します。AI エージェントがツールを呼び出す際には、ビジネスロジックに従って対象デバイスの ID を特定し、このパラメータで指定する必要があります。これにより MCP リクエストが特定のデバイスへルーティングされます。
 
 ```mermaid
 graph LR
     subgraph "EMQX"
-        MB[MCP Bridge Plugin]
+        MB[MCP ブリッジプラグイン]
     end
     subgraph "AI Agents"
-        M1[LLM / MCP Client]
+        M1[LLM / MCP クライアント]
         M1 --> |MCP tools/call<br>target-mqtt-client-id: aec1| MB
     end
     subgraph "Devices"
-        D1[Light: aec1]
-        D2[Light: ec82]
-        D3[Fan: 3cfa]
+        D1[ライト: aec1]
+        D2[ライト: ec82]
+        D3[ファン: 3cfa]
         MB --> |MCP over MQTT| D1
         MB -.-> |MCP over MQTT| D2
         MB -.-> |MCP over MQTT| D3
     end
 ```
 
-## Access Devices Using Standard MQTT
+## 標準 MQTT を使ったデバイスアクセス
 
-Devices can also connect to EMQX using the standard MQTT protocol instead of MCP over MQTT. In this case, users can implement MCP tools directly within the MCP Bridge Plugin to indirectly access these regular MQTT devices.
+デバイスは MCP over MQTT ではなく、標準の MQTT プロトコルを使って EMQX に接続することも可能です。この場合、ユーザーは MCP ブリッジプラグイン内に MCP ツールを直接実装し、これらの通常の MQTT デバイスに間接的にアクセスできます。
 
-This approach is suitable for scenarios that require more flexible device access, such as smart cities, connected vehicles, and industrial IoT. Within the MCP Bridge Plugin, arbitrary business logic can be implemented, including accessing user-defined external services or APIs, or querying external databases to retrieve device-reported data.
+この方式は、スマートシティ、コネクテッドビークル、産業用 IoT など、より柔軟なデバイスアクセスが求められるシナリオに適しています。MCP ブリッジプラグイン内では、任意のビジネスロジックを実装でき、ユーザー定義の外部サービスや API へのアクセス、外部データベースからのデバイス報告データの取得などが可能です。
 
-For examples on how to implement MCP tools in code, refer to [Create Custom MCP Tools](https://github.com/emqx/emqx_mcp_bridge?tab=readme-ov-file#create-custom-mcp-tools).
+MCP ツールのコード実装例については、[Create Custom MCP Tools](https://github.com/emqx/emqx_mcp_bridge?tab=readme-ov-file#create-custom-mcp-tools) を参照してください。
 
 ```mermaid
 graph LR
     subgraph "AI Agents"
-        M1[LLM / MCP Client]
+        M1[LLM / MCP クライアント]
     end
     subgraph "Devices"
-        D1[Device 1]
-        D2[Device 2]
-        D3[Device 3]
+        D1[デバイス 1]
+        D2[デバイス 2]
+        D3[デバイス 3]
     end
     subgraph EMQX["EMQX"]
         direction BT
-        MB[MCP Bridge Plugin]
-        CM[User-Provided Module<br>Tools: tool1,tool2,...]
+        MB[MCP ブリッジプラグイン]
+        CM[ユーザー提供モジュール<br>ツール: tool1,tool2,...]
         MB --> |MQTT| D1
         MB -.-> |MQTT| D2
         MB -.-> |MQTT| D3
         M1 --> |MCP tools/call<br>userid=ee| MB
     end
-    subgraph TSDB["Time Series Database"]
-        R1[Records:<br>t1,device1,status1<br>t2,device2,status2<br>...]
+    subgraph TSDB["時系列データベース"]
+        R1[レコード:<br>t1,device1,status1<br>t2,device2,status2<br>...]
     end
-    subgraph "User-Defined Service"
+    subgraph "ユーザー定義サービス"
         UDS[HTTP API]
     end
-    CM --> |query| TSDB
-    TSDB --> |result| CM
-    CM --> |Get the device of<br>userid=ee| UDS
-    UDS --> |Device 1| CM
+    CM --> |クエリ| TSDB
+    TSDB --> |結果| CM
+    CM --> |userid=ee のデバイス取得| UDS
+    UDS --> |デバイス 1| CM
 ```
