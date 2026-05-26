@@ -204,6 +204,13 @@
 
 - [#17346](https://github.com/emqx/emqx/pull/17346) 将 RocketMQ 客户端依赖升级至 `v0.7.2`，修复异步生产者请求中的内存持续增长问题。
 
+- [#17298](https://github.com/emqx/emqx/pull/17298) 将 `emqtt` MQTT 客户端依赖从 `1.14.6` 升级至 `1.15.1`。
+
+  此次升级为 MQTT Bridge、MQTT Source 及其他出站 MQTT 连接器带来以下用户可见的改进：
+
+  - 从 keepalive 定时器而非独立定时器追踪 pingresp 超时，使 pingresp 处理与配置的 `keepalive` 间隔保持一致。
+  - QUIC：对端触发 `recv` 中止后，仅中止发送方向，而非同时关闭双向通道，从而避免半关闭 QUIC 流上的待发送数据被静默丢弃。
+
 #### 集群
 
 - [#16729](https://github.com/emqx/emqx/pull/16729) 改善集群所有节点同时重启后的恢复时间。
@@ -267,6 +274,10 @@
 - [#17255](https://github.com/emqx/emqx/pull/17255) 改善容器环境中的内存用量报告。
 
   Broker 现在会从 cgroup v2、cgroup v1 和宿主机 `/proc/meminfo` 三者中选取限制最严格的内存读数（最小非零总量优先，使用率更高的作为次选）。此前的读数可能在两种情况下出现误差：在设置了较紧 cgroup 限制的容器中，宿主机视图可能显示较高使用率而 cgroup 限制实际已接近耗尽（或反之）；在挂载了无内存限制 cgroup 的宿主机上，cgroup 读数可能将使用率折叠为接近 0%。过载保护阈值和 `Memory used` 指标现在反映实际约束进程的限制。
+
+#### 管理
+
+- [#17365](https://github.com/emqx/emqx/pull/17365) 修复 `emqx ctl trace` 不接受 `ruleid` 作为追踪过滤器类型的问题。此前，`emqx ctl trace start <name> ruleid <rule-id> <log-level>`（以及对应的 `trace add ...` 形式）会因 CLI 参数解析器缺少 `ruleid` 过滤器而直接返回通用错误。其他过滤器类型（`client`、`topic`、`ip_address`）不受影响。
 
 ## 5.10.3
 
