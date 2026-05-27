@@ -124,7 +124,7 @@ Scopes are a per-key permission dimension introduced in EMQX 5.10 that declare w
 
 Every request is checked against both dimensions: the role check and the scope check. A request is accepted only when both checks pass.
 
-##### Why Scopes
+##### Why Scopes are needed
 
 In microservice and integration scenarios, external systems typically need access to only a subset of EMQX's management surface:
 
@@ -186,14 +186,14 @@ The same three-state model applies to Dashboard login users. When a login user's
 
 EMQX exposes two endpoints to query the available scope catalogues:
 
-- `GET /api/v5/api_key/scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
+- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
 - `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the four login-only scopes. Authenticate with a bearer token.
 
 Use these endpoints to populate a scope-picker UI or validate automation scripts:
 
 ```bash
 # API key scopes
-curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
 
 # Login user scopes (requires bearer token)
 curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes

@@ -184,14 +184,14 @@ Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可�
 
 EMQX 提供两个端点用于查询可用的 Scope 列表：
 
-- `GET /api/v5/api_key/scopes`：返回可分配给 API 密钥的 Scope（即上述 10 个业务领域 Scope）。使用 API 密钥认证。
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的 Scope（即上述 10 个业务领域 Scope）。使用 API 密钥认证。
 - `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部 Scope，包含 4 个登录专属 Scope。使用 Bearer Token 认证。
 
 可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
 
 ```bash
 # API 密钥 Scope
-curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key/scopes
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
 
 # 登录用户 Scope（需要 Bearer Token）
 curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
