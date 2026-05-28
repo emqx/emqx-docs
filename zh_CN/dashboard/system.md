@@ -42,6 +42,8 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 - **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
 - **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
 
+![user_scopes](./assets/user_scopes.png)
+
 #### 角色变更与 Scope 兼容性
 
 变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。

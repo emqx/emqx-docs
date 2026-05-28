@@ -6,7 +6,7 @@ The **System** menu in the EMQX Dashboard provides access to system management o
 
 The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
 
-To add new users, click the + Create button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
+To add new users, click the **+ Create** button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
 
 > For security reasons, starting with EMQX 5.0.0, Dashboard users cannot be used for REST API authentication.
 
@@ -42,6 +42,8 @@ When you create or edit a user, the **Scopes** field is optional. If you leave i
 
 - **Administrator**: All scopes, including the four login-only ones above.
 - **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
+
+![user_scopes](./assets/user_scopes.png)
 
 #### Role Changes and Scope Compatibility
 
