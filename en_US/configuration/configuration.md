@@ -132,7 +132,7 @@ Configuration items and environment variables can be converted by the following 
 
 1. Since the `.` separator in the configuration file cannot be used in environment variables, EMQX uses double underscores `__` as the configuration separator;
 2. To distinguish the converted configuration items from other environment variables, EMQX also adds a prefix `EMQX_` to the environment variable;
-3. The value of the environment variable is parsed according to the HOCON value, making it possible to use the environment variable to pass the value of complex data types, but please note that special characters such as `：` and `=` need to be wrapped in double quotes `"`.
+3. The value of the environment variable is parsed as a HOCON value, making it possible to pass complex data types through environment variables. Values that contain HOCON special characters such as `:`, `=`, or `#` must be wrapped in double quotes `"` so the parser treats them as a literal string. In particular, `#` starts a HOCON line comment — without quoting, the parser silently drops everything from `#` to the end of the line.
 
 Conversion example:
 
@@ -156,6 +156,34 @@ listeners.ssl.default {
   }
 }
 ```
+
+::: warning Values that contain `#`, `:`, or `=`
+
+A common gotcha is passing a password (or any string) that contains a `#`. Because `#` starts a HOCON line comment, this:
+
+```bash
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="MQtt#123"
+```
+
+results in the password being parsed as `MQtt` — the `#123` is dropped as a comment. To pass the literal value through, wrap it in **HOCON-level** double quotes (not just shell quotes), so the parser sees `"MQtt#123"` including the quotes:
+
+```bash
+# Correct — value seen by the HOCON parser is: "MQtt#123"
+export EMQX_DASHBOARD__DEFAULT_PASSWORD='"MQtt#123"'
+
+# Same effect, with the inner quotes escaped for the shell
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="\"MQtt#123\""
+```
+
+The same applies to values containing `:` or `=`. URL-encoding (e.g. `%23` for `#`) does not work — EMQX does not URL-decode environment variable values.
+
+:::
+
+::: tip Why some unquoted values pass through and others don't
+
+Internally, EMQX wraps each environment variable value as `fake_key=<value>` and tries to parse it as HOCON. If that succeeds, the parsed value is used; if it fails because the value is not valid HOCON syntax, EMQX falls back to the raw string. That is why `EMQX_..._PASSWORD="abc#def"` becomes `abc` (valid HOCON, `#def` is a comment) while `EMQX_..._PASSWORD=".abc#def"` is kept as the literal `.abc#def` (invalid HOCON syntax, fallback to raw). Wrapping the value in HOCON quotes makes the behavior deterministic.
+
+:::
 
 ::: tip
 
