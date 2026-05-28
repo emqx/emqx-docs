@@ -836,7 +836,14 @@
         - observability/tracer
         - observability/mqtt-system-topics
         - observability/prometheus
-        - observability/broker-health-indicators
+        - title_en: Broker Health Indicators
+          title_cn: Broker 健康指标
+          path: observability/broker-health-indicators
+          lang: en
+        - title_en: Broker Health Indicators
+          title_cn: Broker 健康指标
+          path: observability/broker-health-indicators
+          lang: cn
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
