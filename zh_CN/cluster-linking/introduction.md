@@ -93,3 +93,4 @@
 
 - [集群连接快速开始](./quick-start.md)
 - [配置集群连接](./configuration.md)
+- [集群连接安全加固](./security.md)
