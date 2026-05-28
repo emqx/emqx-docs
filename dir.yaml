@@ -836,6 +836,7 @@
         - observability/tracer
         - observability/mqtt-system-topics
         - observability/prometheus
+        - observability/broker-health-indicators
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
