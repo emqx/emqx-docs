@@ -299,17 +299,6 @@
           ]
         }
       },
-      "relup.node_name": {
-        "description": "The node to be upgraded",
-        "example": "emqx@127.0.0.1",
-        "in": "path",
-        "name": "node",
-        "required": true,
-        "schema": {
-          "default": "all",
-          "type": "string"
-        }
-      },
       "trace.bytes": {
         "description": "Maximum number of bytes to send in response",
         "in": "query",
@@ -2899,6 +2888,28 @@
           "data_type",
           "measurement",
           "value"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "username"
         ],
         "type": "object"
       },
@@ -9191,7 +9202,6 @@
           },
           "enable": {
             "default": true,
-            "deprecated": true,
             "description": "Enable retainer feature",
             "type": "boolean"
           },
@@ -9592,6 +9602,48 @@
         ],
         "type": "object"
       },
+      "dashboard_sso.login_success_response": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "license": {
+            "properties": {
+              "edition": {
+                "description": "EMQX License. opensource or enterprise",
+                "enum": [
+                  "opensource",
+                  "enterprise"
+                ],
+                "example": "opensource",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "User role",
+            "example": "administrator",
+            "type": "string"
+          },
+          "token": {
+            "description": "Dashboard Auth Token",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "version": {
+            "description": "EMQX Version",
+            "example": "5.0.0",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "syskeeper_forwarder.connector_resource_opts": {
         "properties": {
           "health_check_interval": {
@@ -9727,6 +9779,27 @@
             "description": "User role",
             "example": "administrator",
             "type": "string"
+          },
+          "scopes": {
+            "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+            "example": [
+              "user_management",
+              "mfa_management"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "username": {
             "description": "Dashboard Username",
@@ -13123,6 +13196,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso.mfa_setup_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_setup",
+            "example": "mfa_setup",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "MFA mechanism",
+            "example": "totp",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token for MFA binding",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "bridge_azure_event_hub.post_bridge_v2": {
         "properties": {
           "connector": {
@@ -16260,6 +16360,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -18544,6 +18654,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "username": {
             "description": "InfluxDB username.",
             "type": "string"
@@ -19621,6 +19736,11 @@
             "description": "Whether to enable this backend.",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "idp_metadata_url": {
             "default": "https://idp.example.com",
             "description": "The URL of the IdP metadata.",
@@ -19751,6 +19871,33 @@
         },
         "required": [
           "cluster_identifier"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_verify_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token from SSO login flow.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "totp_code",
+          "username",
+          "verify_token"
         ],
         "type": "object"
       },
@@ -20786,6 +20933,7 @@
           "SERVICE_UNAVAILABLE",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
+          "UNAUTHORIZED",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -21371,6 +21519,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -22012,6 +22165,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -23044,6 +23202,108 @@
           "mechanism",
           "public_key"
         ],
+        "type": "object"
+      },
+      "api_key.app_response": {
+        "properties": {
+          "api_key": {
+            "description": "TODO:uses HMAC-SHA256 for signing.",
+            "example": "a4697a5c75a769f6",
+            "type": "string"
+          },
+          "api_secret": {
+            "description": "An API secret is a simple encrypted string that identifiesan application without any principal.They are useful for accessing public data anonymously,and are used to associate API requests.",
+            "example": "MzAyMjk3ODMwMDk0NjIzOTUxNjcwNzQ0NzQ3MTE2NDYyMDI",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "ApiKey create datetime",
+            "example": "2021-12-01T00:00:00.000Z",
+            "oneOf": [
+              {
+                "description": "epoch-second",
+                "example": 1640995200,
+                "type": "integer"
+              },
+              {
+                "example": "2022-01-01T00:00:00.000Z",
+                "format": "date-time",
+                "type": "string"
+              }
+            ]
+          },
+          "desc": {
+            "example": "Note",
+            "type": "string"
+          },
+          "enable": {
+            "description": "Enable/Disable",
+            "type": "boolean"
+          },
+          "expired": {
+            "description": "Expired",
+            "type": "boolean"
+          },
+          "expired_at": {
+            "default": "infinity",
+            "description": "No longer valid datetime",
+            "example": "2021-12-05T02:01:34.186Z",
+            "oneOf": [
+              {
+                "oneOf": [
+                  {
+                    "description": "epoch-second",
+                    "example": 1640995200,
+                    "type": "integer"
+                  },
+                  {
+                    "example": "2022-01-01T00:00:00.000Z",
+                    "format": "date-time",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "description": "Unique and format by [a-zA-Z0-9-_]",
+            "example": "EMQX-API-KEY-1",
+            "type": "string"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "Role for this API",
+            "example": "administrator",
+            "type": "string"
+          },
+          "scopes": {
+            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+            "example": [
+              "clients",
+              "rules"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
         "type": "object"
       },
       "emqx_mgmt_api_publish.publish_error": {
@@ -25860,6 +26120,28 @@
         },
         "type": "object"
       },
+      "dashboard_sso.token_exchange_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "code": {
+            "description": "One-time SSO code",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "code",
+          "username"
+        ],
+        "type": "object"
+      },
       "bridge_mongodb.get_sharded": {
         "properties": {
           "auth_source": {
@@ -27776,6 +28058,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -28755,6 +29047,11 @@
             "description": "The filter for matching users in LDAP is by default `(&(objectClass=person)(uid=${username}))`. For Active Directory, it should be set to `(&(objectClass=user)(sAMAccountName=${username}))` by default. Please refer to [LDAP Filters](https://ldap.com/ldap-filters/) for more details.",
             "example": "(& (objectClass=person) (uid=${username}))",
             "type": "string"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
           },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
@@ -30031,6 +30328,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "totp_code",
+          "username"
+        ],
+        "type": "object"
+      },
       "emqx_gateway_api.ws_listener": {
         "properties": {
           "acceptors": {
@@ -30868,14 +31192,19 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
           "enable": {
             "default": false,
             "description": "Whether to enable this backend.",
+            "type": "boolean"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
             "type": "boolean"
           },
           "last_error": {
@@ -30910,85 +31239,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
                 ],
                 "type": "string"
               },
@@ -31000,43 +31251,13 @@
               },
               {
                 "enum": [
-                  "cassandra"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
+                  "disk_log"
                 ],
                 "type": "string"
               },
@@ -31048,61 +31269,19 @@
               },
               {
                 "enum": [
-                  "http"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
+                  "pulsar"
                 ],
                 "type": "string"
               },
@@ -31114,13 +31293,25 @@
               },
               {
                 "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mqtt"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
@@ -31132,7 +31323,145 @@
               },
               {
                 "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -36091,62 +36420,6 @@
         },
         "type": "object"
       },
-      "relup.upgrade_history": {
-        "properties": {
-          "finished_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade finished",
-            "example": "2024-07-16T11:00:01.875627+08:00",
-            "type": "string"
-          },
-          "from_vsn": {
-            "description": "The version before the upgrade",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "result": {
-            "description": "The upgrade result",
-            "example": "success",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/relup.upgrade_error"
-              },
-              {
-                "enum": [
-                  "success"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "started_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade started",
-            "example": "2024-07-15T13:48:02.648559+08:00",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of the node",
-            "enum": [
-              "in-progress",
-              "finished"
-            ],
-            "example": "in-progress",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "The target version of the upgrade",
-            "example": "5.8.2",
-            "type": "string"
-          },
-          "upgrade_opts": {
-            "description": "The options used for the upgrade",
-            "example": {
-              "deploy_inplace": false
-            },
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
       "dashboard.sso": {
         "properties": {
           "ldap": {
@@ -39772,7 +40045,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "F1D4FE4A74F0634E",
             "type": "string"
           },
           "status": {
@@ -39791,24 +40064,6 @@
               "leaving"
             ],
             "example": "joining",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.upgrade_error": {
-        "properties": {
-          "details": {
-            "description": "The details of the error",
-            "example": {
-              "dir": "emqx/relup",
-              "msg": "no write permission in dir 'emqx/relup'"
-            },
-            "type": "object"
-          },
-          "err_type": {
-            "description": "The type of the error",
-            "example": "no_write_permission",
             "type": "string"
           }
         },
@@ -42628,87 +42883,6 @@
         ],
         "type": "object"
       },
-      "api_key.app": {
-        "properties": {
-          "api_key": {
-            "description": "TODO:uses HMAC-SHA256 for signing.",
-            "example": "a4697a5c75a769f6",
-            "type": "string"
-          },
-          "api_secret": {
-            "description": "An API secret is a simple encrypted string that identifiesan application without any principal.They are useful for accessing public data anonymously,and are used to associate API requests.",
-            "example": "MzAyMjk3ODMwMDk0NjIzOTUxNjcwNzQ0NzQ3MTE2NDYyMDI",
-            "type": "string"
-          },
-          "created_at": {
-            "description": "ApiKey create datetime",
-            "example": "2021-12-01T00:00:00.000Z",
-            "oneOf": [
-              {
-                "description": "epoch-second",
-                "example": 1640995200,
-                "type": "integer"
-              },
-              {
-                "example": "2022-01-01T00:00:00.000Z",
-                "format": "date-time",
-                "type": "string"
-              }
-            ]
-          },
-          "desc": {
-            "example": "Note",
-            "type": "string"
-          },
-          "enable": {
-            "description": "Enable/Disable",
-            "type": "boolean"
-          },
-          "expired": {
-            "description": "Expired",
-            "type": "boolean"
-          },
-          "expired_at": {
-            "default": "infinity",
-            "description": "No longer valid datetime",
-            "example": "2021-12-05T02:01:34.186Z",
-            "oneOf": [
-              {
-                "oneOf": [
-                  {
-                    "description": "epoch-second",
-                    "example": 1640995200,
-                    "type": "integer"
-                  },
-                  {
-                    "example": "2022-01-01T00:00:00.000Z",
-                    "format": "date-time",
-                    "type": "string"
-                  }
-                ]
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "name": {
-            "description": "Unique and format by [a-zA-Z0-9-_]",
-            "example": "EMQX-API-KEY-1",
-            "type": "string"
-          },
-          "role": {
-            "default": "administrator",
-            "description": "Role for this API",
-            "example": "administrator",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "prometheus.push_gateway": {
         "properties": {
           "enable": {
@@ -44001,6 +44175,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -44597,62 +44776,6 @@
         },
         "type": "object"
       },
-      "relup.running_status": {
-        "properties": {
-          "current_vsn": {
-            "description": "The current version of the node",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "live_connections": {
-            "description": "The number of live connections",
-            "example": 100,
-            "type": "integer"
-          },
-          "node": {
-            "example": "emqx@127.0.0.1",
-            "type": "string"
-          },
-          "role": {
-            "description": "The role of the node",
-            "enum": [
-              "core",
-              "replicant"
-            ],
-            "example": "core",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of a node:<br/>1. in-progress: hot upgrade is in progress.<br/>2. idle: hot upgrade is not started.<br/>",
-            "enum": [
-              "in-progress",
-              "idle"
-            ],
-            "type": "string"
-          },
-          "upgrade_history": {
-            "description": "The upgrade history of the node",
-            "example": [
-              {
-                "finished_at": "2024-07-16T11:00:01.875627+08:00",
-                "from_vsn": "5.8.0",
-                "result": "success",
-                "started_at": "2024-07-15T13:48:02.648559+08:00",
-                "status": "finished",
-                "target_vsn": "5.8.1",
-                "upgrade_opts": {
-                  "deploy_inplace": false
-                }
-              }
-            ],
-            "items": {
-              "$ref": "#/components/schemas/relup.upgrade_history"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "action_azure_blob_storage.get_bridge_v2": {
         "properties": {
           "connector": {
@@ -44816,6 +44939,11 @@
           "org": {
             "description": "Organization name of InfluxDB.",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -44983,6 +45111,11 @@
           "org": {
             "description": "Organization name of InfluxDB.",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -45196,6 +45329,23 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_response": {
+        "properties": {
+          "mechanism": {
+            "description": "MFA mechanism type (e.g. totp).",
+            "type": "string"
+          },
+          "secret": {
+            "description": "TOTP secret for QR code generation.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism",
+          "secret"
+        ],
         "type": "object"
       },
       "bridge_elasticsearch.post_bridge_v2": {
@@ -45434,6 +45584,11 @@
             },
             "type": "array"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "issuer": {
             "description": "The URL of the OIDC issuer.",
             "example": "https://issuer.com",
@@ -45578,6 +45733,16 @@
           },
           "sentinel": {
             "description": "The cluster name in Redis sentinel mode.",
+            "type": "string"
+          },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
             "type": "string"
           },
           "servers": {
@@ -46495,6 +46660,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -46768,6 +46943,18 @@
           "servers",
           "type"
         ],
+        "type": "object"
+      },
+      "api_key.scopes_response": {
+        "properties": {
+          "scopes": {
+            "description": "All available scopes with their names and descriptions.",
+            "items": {
+              "$ref": "#/components/schemas/api_key.scope_info"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "retainer.message_summary": {
@@ -47507,6 +47694,21 @@
         ],
         "type": "object"
       },
+      "api_key.scope_info": {
+        "properties": {
+          "desc": {
+            "description": "Human-readable description of the scope's coverage.",
+            "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
+            "type": "string"
+          },
+          "name": {
+            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "example": "connections",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "authn.cinfo": {
         "properties": {
           "checks": {
@@ -48173,55 +48375,6 @@
             "type": "object"
           },
           "node": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.package": {
-        "properties": {
-          "applicable_vsns": {
-            "description": "The emqx versions that this package can be applied to.",
-            "example": [
-              "5.8.0",
-              "5.8.1"
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "build_date": {
-            "description": "The date when the package was built.",
-            "example": "2021-12-25",
-            "type": "string"
-          },
-          "built_on_otp_release": {
-            "example": "24",
-            "type": "string"
-          },
-          "change_logs": {
-            "description": "Changes that this package brings",
-            "example": [
-              "1. Fix a bug foo in the plugin.2. Add a new bar feature."
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "md5_sum": {
-            "example": "d41d8cd98f00b204e9800998ecf8427e",
-            "type": "string"
-          },
-          "name": {
-            "description": "File name of the package",
-            "example": "emqx_relup-5.8.2.tar.gz",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "Target emqx version for this package",
-            "example": "5.8.2",
             "type": "string"
           }
         },
@@ -51337,6 +51490,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -53257,6 +53420,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "token": {
             "description": "InfluxDB token.",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -53700,6 +53868,28 @@
           "name",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.mfa_verify_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_verify",
+            "example": "mfa_verify",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token for MFA verification",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_disk_log.get_connector": {
@@ -54680,6 +54870,16 @@
           },
           "sentinel": {
             "description": "The cluster name in Redis sentinel mode.",
+            "type": "string"
+          },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
             "type": "string"
           },
           "servers": {
@@ -62212,6 +62412,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -63009,7 +63214,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.3"
+    "version": "5.10.4-rc.5"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -63390,8 +63595,24 @@
     },
     "/users/{username}/mfa": {
       "delete": {
-        "description": "Delete MFA state for a dashboard user.<br/>After the state is deleted, the user will have MFA explicitly disabled, to re-enabled MFA, call the `POST` method.",
+        "description": "Disable MFA for a dashboard user. To reset or re-key TOTP, call the `POST` method.",
         "parameters": [
+          {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml",
+                "oidc"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -63405,7 +63626,7 @@
         ],
         "responses": {
           "204": {
-            "description": "MFA setting is deleted"
+            "description": "MFA setting is disabled"
           },
           "404": {
             "content": {
@@ -63443,8 +63664,24 @@
         ]
       },
       "post": {
-        "description": "Setup MFA for a dashboard user.",
+        "description": "Set up or reset MFA for a dashboard user. Calling this endpoint generates a fresh TOTP secret.",
         "parameters": [
+          {
+            "description": "Backend name",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "saml",
+                "oidc"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -63479,7 +63716,7 @@
         },
         "responses": {
           "204": {
-            "description": "MFA setting is reset"
+            "description": "MFA setting is updated"
           },
           "404": {
             "content": {
@@ -63942,73 +64179,6 @@
         ],
         "tags": [
           "Banned"
-        ]
-      }
-    },
-    "/relup/upgrade": {
-      "post": {
-        "description": "Upgrade all nodes to the target version with the installed package.",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "Upgrade is started successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of invalid input or environment",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of internal errors",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade all nodes",
-        "tags": [
-          "Relup"
         ]
       }
     },
@@ -66160,6 +66330,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -66338,6 +66510,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -72147,6 +72320,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -72325,6 +72500,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -73234,6 +73410,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -73407,6 +73585,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -74235,6 +74414,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -74413,6 +74594,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -75179,7 +75361,7 @@
                       "type": "object"
                     },
                     "password_expire_in_seconds": {
-                      "description": "Time in seconds until the password expiresc.",
+                      "description": "Time in seconds until the password expires.",
                       "example": 3600,
                       "type": "integer"
                     },
@@ -75638,42 +75820,42 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "kafka_producer",
-                      "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
+                      "rocketmq",
                       "influxdb",
                       "hstreamdb",
-                      "greptimedb",
-                      "azure_event_hub_producer",
-                      "confluent_producer",
-                      "pulsar",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "greptimedb",
+                      "kafka_producer",
+                      "iotdb",
+                      "pulsar",
                       "mongodb",
+                      "sqlserver",
+                      "confluent_producer",
                       "doris",
-                      "kinesis",
-                      "datalayers",
                       "s3",
-                      "redis",
                       "opents",
                       "s3tables",
+                      "datalayers",
+                      "kinesis",
+                      "redis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
                       "tdengine",
                       "timescale",
+                      "azure_blob_storage",
+                      "oracle",
                       "couchbase",
+                      "clickhouse",
+                      "tablestore",
+                      "snowflake",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75682,42 +75864,42 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "kafka_producer",
-                      "iotdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
+                      "rocketmq",
                       "influxdb",
                       "hstreamdb",
-                      "greptimedb",
-                      "azure_event_hub_producer",
-                      "confluent_producer",
-                      "pulsar",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "greptimedb",
+                      "kafka_producer",
+                      "iotdb",
+                      "pulsar",
                       "mongodb",
+                      "sqlserver",
+                      "confluent_producer",
                       "doris",
-                      "kinesis",
-                      "datalayers",
                       "s3",
-                      "redis",
                       "opents",
                       "s3tables",
+                      "datalayers",
+                      "kinesis",
+                      "redis",
                       "mqtt",
-                      "clickhouse",
-                      "tablestore",
-                      "oracle",
-                      "azure_blob_storage",
-                      "snowflake",
                       "tdengine",
                       "timescale",
+                      "azure_blob_storage",
+                      "oracle",
                       "couchbase",
+                      "clickhouse",
+                      "tablestore",
+                      "snowflake",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -79931,6 +80113,81 @@
         ]
       }
     },
+    "/sso/mfa/verify": {
+      "post": {
+        "description": "Verify SSO MFA TOTP code and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_verify_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/listeners": {
       "get": {
         "description": "List all running node's listeners for the specified type.",
@@ -80937,6 +81194,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -81036,6 +81314,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -81119,6 +81408,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -81278,6 +81588,32 @@
         "summary": "Upsert namespace configurations in bulk",
         "tags": [
           "Multi-tenancy"
+        ]
+      }
+    },
+    "/api_key_scopes": {
+      "get": {
+        "description": "List all available API key scopes. This API can only be requested using a bearer token.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_key.scopes_response"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "API Keys"
         ]
       }
     },
@@ -81810,6 +82146,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -82217,6 +82555,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -82785,7 +83124,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -84631,6 +84970,7 @@
         "description": "Get Dashboard Auth Token.",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -84638,8 +84978,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -84651,10 +84991,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -84669,38 +85009,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "license": {
-                      "properties": {
-                        "edition": {
-                          "description": "EMQX License. opensource or enterprise",
-                          "enum": [
-                            "opensource",
-                            "enterprise"
-                          ],
-                          "example": "opensource",
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
                     },
-                    "role": {
-                      "default": "administrator",
-                      "description": "User role",
-                      "example": "administrator",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
                     },
-                    "token": {
-                      "description": "Dashboard Auth Token",
-                      "type": "string"
-                    },
-                    "version": {
-                      "description": "EMQX Version",
-                      "example": "5.0.0",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
                     }
-                  },
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -84775,7 +85094,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -85209,99 +85528,6 @@
         ],
         "tags": [
           "Topics"
-        ]
-      }
-    },
-    "/relup/upgrade/{node}": {
-      "post": {
-        "description": "Upgrade a specified node to the target version with the installed package.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Upgrade is started successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of invalid input or environment",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Node not found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of internal errors",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade a specified node",
-        "tags": [
-          "Relup"
         ]
       }
     },
@@ -85937,7 +86163,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "F1D4FE4A74F0634E",
             "in": "path",
             "name": "site",
             "required": true,
@@ -88529,73 +88755,6 @@
         ]
       }
     },
-    "/relup/status": {
-      "get": {
-        "description": "Get the hot upgrade status of all nodes",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/relup.running_status"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the hot upgrade status of all nodes",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/status/{node}": {
-      "get": {
-        "description": "Get the hot upgrade status of a specified node",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.running_status"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the hot upgrade status of a specified node",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/authentication/settings": {
       "get": {
         "description": "Get authentication settings.",
@@ -88701,6 +88860,7 @@
         "description": "Delete dashboard user",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88709,8 +88869,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -88792,6 +88952,7 @@
         "description": "Update dashboard user description",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88800,8 +88961,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -88832,6 +88993,17 @@
                     "description": "User role",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -88871,10 +89043,54 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "scopes": {
+                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
+                    },
                     "username": {
                       "description": "Dashboard Username",
                       "example": "admin",
                       "maxLength": 100,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST",
+                        "NOT_ALLOWED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
                       "type": "string"
                     }
                   },
@@ -88925,6 +89141,7 @@
         "description": "Dashboard user logout.<br/>This endpoint is only for the Dashboard, not the `API Key`.<br/>The token from the `/login` endpoint must be a bearer authorization in the headers.",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88933,8 +89150,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -94049,7 +94266,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -94145,7 +94362,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "F1D4FE4A74F0634E",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94230,7 +94447,7 @@
           },
           {
             "description": "Site ID",
-            "example": "55ED8A6A9EAF23C4",
+            "example": "F1D4FE4A74F0634E",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96538,6 +96755,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -96695,6 +96914,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -97540,6 +97760,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -97718,6 +97940,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -98552,6 +98775,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -98730,6 +98955,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -101009,8 +101235,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -101023,7 +101249,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -103010,7 +103236,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -106600,6 +106826,33 @@
         ]
       }
     },
+    "/user_scopes": {
+      "get": {
+        "description": "List all scope names that a dashboard login user may hold, with their descriptions and an `admin_only` flag indicating whether the scope is restricted to administrator role.<br/><br/>Returned to any authenticated login user — the endpoint exists to populate the dashboard UI's scope selector and does not itself require a specific scope.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List all scope names that a dashboard login user may hold, with their descriptions and an `admin_only` flag indicating whether the scope is restricted to administrator role.<br/><br/>Returned to any authenticated login user — the endpoint exists to populate the dashboard UI's scope selector and does not itself require a specific scope."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
     "/connectors/{id}": {
       "delete": {
         "description": "Delete a connector by id.",
@@ -106960,6 +107213,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -107538,6 +107793,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -108339,6 +108595,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -108708,6 +108966,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -109366,6 +109625,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -109944,6 +110205,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -110684,6 +110946,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -110759,6 +111042,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -110771,7 +111065,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/api_key.app"
+                  "$ref": "#/components/schemas/api_key.app_response"
                 }
               }
             },
@@ -112393,6 +112687,69 @@
         ]
       }
     },
+    "/sso/token_exchange": {
+      "post": {
+        "description": "Exchange a one-time SSO code for the actual login result (JWT token or MFA metadata). The code is consumed after a single use.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso.token_exchange_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Invalid or expired SSO code.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard SSO"
+        ]
+      }
+    },
     "/rule_test": {
       "post": {
         "description": "Test a rule",
@@ -113055,73 +113412,6 @@
         ]
       }
     },
-    "/relup/package/upload": {
-      "post": {
-        "description": "Upload a hot upgrade package (emqx_relup-vsn.tar.gz).<br/>Note that only one package is alllowed to be installed at a time.",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "encoding": {
-                "plugin": {
-                  "contentType": "application/gzip"
-                }
-              },
-              "schema": {
-                "properties": {
-                  "plugin": {
-                    "format": "binary",
-                    "type": "string"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Package is uploaded successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR",
-                        "ALREADY_INSTALLED",
-                        "BAD_PLUGIN_INFO"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Possible error reason codes for invalid requests.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upload a hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/schema_registry_protobuf/bundle": {
       "post": {
         "description": "Upload a Protobuf bundle for a new schema",
@@ -113480,6 +113770,81 @@
         ],
         "tags": [
           "GCP Devices"
+        ]
+      }
+    },
+    "/sso/mfa/setup": {
+      "post": {
+        "description": "Complete SSO MFA TOTP setup: bind the TOTP authenticator and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -114743,79 +115108,6 @@
         ]
       }
     },
-    "/relup/package": {
-      "delete": {
-        "description": "Delete the installed hot upgrade package.<br/>",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "Packages are deleted successfully"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Delete the installed hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      },
-      "get": {
-        "description": "Get information of the installed hot upgrade package.<br/>",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.package"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "No relup package is installed",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the installed hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/authorization/node_cache/reset": {
       "post": {
         "description": "Reset node-wise authorization cache.",
@@ -114888,7 +115180,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -116789,6 +117081,7 @@
         "description": "Delete a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116796,8 +117089,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116839,13 +117132,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "get": {
         "description": "Get details of a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116853,8 +117147,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116867,10 +117161,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -116913,13 +117207,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "put": {
         "description": "Update a backend",
         "parameters": [
           {
+            "description": "Backend name",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116927,8 +117222,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116940,10 +117235,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -116960,10 +117255,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -117006,7 +117301,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -120696,6 +120991,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -121211,6 +121508,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -121944,6 +122242,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -122351,6 +122651,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -123055,6 +123356,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -123633,6 +123936,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -124560,6 +124864,17 @@
                     "example": "administrator",
                     "type": "string"
                   },
+                  "scopes": {
+                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
                   "username": {
                     "description": "Dashboard Username",
                     "example": "admin",
@@ -124588,11 +124903,42 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "mfa": {
+                      "description": "MFA status.<br/>- `none`: no MFA enabled<br/>- `disabled`: MFA is disabled for the user<br/>- Otherwise: The MFA mechanism in use, e.g. `totp`",
+                      "enum": [
+                        "none",
+                        "disabled",
+                        "totp"
+                      ],
+                      "example": "totp",
+                      "type": "string"
+                    },
                     "role": {
                       "default": "administrator",
                       "description": "User role",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     },
                     "username": {
                       "description": "Dashboard Username",
@@ -124992,6 +125338,59 @@
         ]
       }
     },
+    "/sso/mfa/setup_info": {
+      "post": {
+        "description": "Retrieve TOTP setup info (secret, mechanism) for QR code display. Requires a valid setup token in the request body.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/ai/providers/{name}": {
       "delete": {
         "description": "Delete provider entry for an AI provider.",
@@ -125325,7 +125724,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       },
       "put": {
@@ -125451,7 +125850,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       }
     }
