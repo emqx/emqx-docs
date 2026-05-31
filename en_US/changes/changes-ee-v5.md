@@ -149,6 +149,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, listing subscriptions could fail for some clients and return no output. The command now works reliably with both regular and shared subscriptions.
 
+- [#17386](https://github.com/emqx/emqx/pull/17386) Fixed channel info reflected by the Dashboard and REST API (`mqueue_len`, `inflight_cnt`) so it now updates immediately after a session takeover replay completes, rather than waiting for the next 15-second stats refresh tick.
+
 #### Rule Engine
 
 - [#17210](https://github.com/emqx/emqx/pull/17210) Added the missing `connected_at` field to the `$events/client/connack` rule event. The field was documented but absent from the actual event data.
@@ -238,6 +240,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17313](https://github.com/emqx/emqx/pull/17313) Fixed noisy and misleading `emqx ctl conf cluster_sync status` diagnostics when clustered nodes have the same effective configuration but different raw configuration representations.
 
   The command now suppresses raw-only representation differences that do not correspond to actual configuration changes, while still warning when effective configuration is inconsistent. It also avoids crashing when a raw configuration key exists on one node but is absent on another.
+
+- [#17382](https://github.com/emqx/emqx/pull/17382) Fixed corruption of the global channel registry that could occur when the cluster experienced a network partition.
+
+- [#17387](https://github.com/emqx/emqx/pull/17387) Fixed misleading `emqx ctl conf cluster_sync status` warnings caused by generated timestamp metadata.
+
+  Previously, data import or boot-time configuration loading could leave `created_at` or `last_modified_at` metadata different across nodes for otherwise identical actions, sources, bridges, or rule metadata. The command now ignores those timestamp-only differences when checking cluster configuration consistency, while still reporting real configuration differences.
+
+- [#17402](https://github.com/emqx/emqx/pull/17402) Improved Cluster Link responsiveness when route replication was stuck connecting to an unresponsive target cluster. Deleting such a Cluster Link now finishes sooner.
 
 #### Access Control
 

@@ -149,6 +149,8 @@
 
   修复前，对某些客户端列出订阅可能失败且无任何输出。修复后，`emqx ctl subscriptions list` 在普通订阅和共享订阅场景下均可稳定运行。
 
+- [#17386](https://github.com/emqx/emqx/pull/17386) 修复 Dashboard 与 REST API 暴露的通道信息（`mqueue_len`、`inflight_cnt`），使其在会话接管回放完成后立即更新，不再等待下一次 15 秒的统计刷新周期。
+
 #### 规则引擎
 
 - [#17210](https://github.com/emqx/emqx/pull/17210) 补充了 `$events/client/connack` 规则事件中缺失的 `connected_at` 字段。该字段在文档中已有说明，但此前在实际事件数据中未被包含。
@@ -238,6 +240,14 @@
 - [#17313](https://github.com/emqx/emqx/pull/17313) 修复集群节点具有相同有效配置但不同原始配置表示时，`emqx ctl conf cluster_sync status` 输出噪音且具有误导性的问题。
 
   该命令现在会抑制与有效配置变更无关的原始表示差异，同时在有效配置不一致时仍会输出警告。此外，当某个原始配置键在一个节点上存在而另一个节点上不存在时，也不再崩溃。
+
+- [#17382](https://github.com/emqx/emqx/pull/17382) 修复集群发生网络分区时全局通道注册表可能损坏的问题。
+
+- [#17387](https://github.com/emqx/emqx/pull/17387) 修复由生成的时间戳元数据引起的 `emqx ctl conf cluster_sync status` 误报警告。
+
+  此前，数据导入或启动时配置加载可能使各节点上原本相同的 action、source、bridge 或规则元数据的 `created_at`/`last_modified_at` 不一致。该命令在比较集群配置一致性时现在会忽略这类纯时间戳差异，同时仍会报告真实的配置差异。
+
+- [#17402](https://github.com/emqx/emqx/pull/17402) 改善 Cluster Link 在目标集群无响应、路由复制卡在连接阶段时的响应能力。删除此类 Cluster Link 现在会更快完成。
 
 #### 访问控制
 
