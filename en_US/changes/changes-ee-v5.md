@@ -4,7 +4,7 @@
 
 ### Enhancements
 
-- [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for dashboard login users. Each user record now carries an optional `scopes` field; when set, requests are authorized against the same path-to-scope catalog used for API keys, layered on top of the existing role-based check. Four new scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) cover dashboard-only endpoints and are admin-only except `mfa_management`, which any role may hold for self-exemption from forced MFA. API keys cannot hold any of the four login-only scopes, and the `publisher` API-key role is now constrained to `[publish]` only — both checks apply to the HTTP API and to bootstrap-file loading (incompatible scopes are dropped with a warning).
+- [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for dashboard login users. Each user record now carries an optional `scopes` field; when set, requests are authorized against the same path-to-scope catalog used for API keys, layered on top of the existing role-based check. Four new scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) cover dashboard-only endpoints and are admin-only except `mfa_management`, which any role may hold for self-exemption from forced MFA. API keys cannot hold any of the four login-only scopes, and the `publisher` API-key role is now constrained to `[publish]` only; both checks apply to the HTTP API and to bootstrap-file loading (incompatible scopes are dropped with a warning).
 
   Two new public catalog endpoints expose the scope vocabulary for UI consumption: `GET /api_key_scopes` and `GET /user_scopes`. Both are top-level paths so they cannot be intercepted by sibling wildcard routes, and both are accessible to any bearer-authenticated caller. The `scopes` field is now also surfaced in `GET /users`, `POST /users` and `PUT /users/:username` responses; when not explicitly set, the response projects the role-default scope list (administrator: full catalog; viewer: generic scopes only).
 
@@ -19,6 +19,10 @@
 - [#17161](https://github.com/emqx/emqx/pull/17161) Expose per-node License info via Prometheus gauges (`emqx_license_max_sessions`, `emqx_license_expiry_at`, `emqx_license_issued_at`) so cluster-wide License consistency can be alerted on without per-node CLI checks.
 
   Timestamps are Unix epoch seconds at UTC midnight of the license's issue/expiry date. All three metrics emit `0` when the License is unavailable; use `emqx_license_expiry_at == 0` as the "unavailable" signal in alerting rules (since `max_sessions == 0` may also indicate an expired trial license).
+
+- [#17156](https://github.com/emqx/emqx/pull/17156) Added support for configuring Erlang inet port options for the distribution port, with a default `buffer` size of 1 MB.
+
+  Previously, the Erlang distribution port used an extremely small default port buffer (1460 bytes, or ~9 KB on some platforms), which caused performance bottlenecks even when the distribution port buffer (`+zdbbl`) was configured to a much larger value (e.g., 32 MB). This affected cluster communication reliability and could manifest as `erpc timeout` errors, Mnesia transaction congestions, and degraded multi-core node support.
 
 - [#17098](https://github.com/emqx/emqx/pull/17098) Upgraded influxdb-client-erl from 1.1.13 to 1.1.18, and added the `ping_with_auth` option (default false) for InfluxDB connectors, enabling health checks to include credentials when required by some InfluxDB-compatible services.
 
@@ -92,6 +96,16 @@
 
 ### Bug Fixes
 
+- [#17402](https://github.com/emqx/emqx/pull/17402) Improved responsiveness of a Cluster Link in situations when route replication was stuck connecting to an unresponsive target cluster. Now, deleting such Cluster Link should finish slightly sooner.
+
+- [#17387](https://github.com/emqx/emqx/pull/17387) Fixed misleading `emqx ctl conf cluster_sync status` warnings caused by generated timestamp metadata.
+
+  Previously, data import or boot-time configuration loading could leave `created_at` or `last_modified_at` metadata different across nodes for otherwise identical actions, sources, bridges, or rule metadata. The command now ignores those timestamp-only differences when checking cluster configuration consistency, while still reporting real configuration differences.
+
+- [#17386](https://github.com/emqx/emqx/pull/17386) After a session takeover, the channel info reflected by the dashboard and REST API (`mqueue_len`, `inflight_cnt`) now updates immediately after the takeover replay completes, rather than waiting for the next 15-second stats refresh tick.
+
+- [#17382](https://github.com/emqx/emqx/pull/17382) Fix corruption of global channel registry that may occur when cluster experiences a network partition.
+
 - [#17365](https://github.com/emqx/emqx/pull/17365) Fixed `emqx ctl trace` to accept `ruleid` as a trace filter type. Previously, `emqx ctl trace start <name> ruleid <rule-id> <log-level>` (and the corresponding `trace add ...` form) fell through to a generic error because the `ruleid` filter was missing from the CLI argument parser. The other filter types (`client`, `topic`, `ip_address`) were unaffected.
 
 - [#17346](https://github.com/emqx/emqx/pull/17346) Upgraded the RocketMQ client dependency to `v0.7.2` to fix memory growth in async producer requests.
@@ -156,8 +170,8 @@
   - Removed the unused `libgnutls30t64` package. EMQX talks TLS via OpenSSL
     through Erlang/OTP and never links GnuTLS, so it was only present as a
     transitive dependency of `curl` and showed up in scanner reports.
-  - Replaced the Debian `curl` package — which would have transitively
-    re-introduced `libgnutls30t64` via `librtmp1` — with a statically-linked
+  - Replaced the Debian `curl` package, which would have transitively
+    re-introduced `libgnutls30t64` via `librtmp1`, with a statically-linked
     `curl` binary from <https://github.com/stunnel/static-curl> (OpenSSL,
     HTTP/2, HTTP/3; no RTMP, no GnuTLS). Container healthchecks that call
     `curl` continue to work unchanged.
@@ -209,7 +223,7 @@
 
   Dashboard bearer-token (login) callers are unaffected and continue to be able to back up and restore the full database, including dashboard users and API keys.
 
-  This closes a privilege-escalation gap where an API key holder could read or write dashboard login credentials and API key records — material that the existing `/users` and `/api_key` endpoints already deny to API keys — by going through the data backup endpoints instead.
+  This closes a privilege-escalation gap where an API key holder could read or write dashboard login credentials and API key records, which the existing `/users` and `/api_key` endpoints already deny to API keys, by going through the data backup endpoints instead.
 
 - [#17164](https://github.com/emqx/emqx/pull/17164) Upgrade Erlang/OTP from 27.3.4.2-6 to 27.3.4.2-7.
 
