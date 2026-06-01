@@ -2,7 +2,7 @@
 
 ## 5.10.4
 
-*Release Date: 2026-05-29*
+*Release Date: 2026-06-01*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.4.
 
