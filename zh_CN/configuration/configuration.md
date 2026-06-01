@@ -585,6 +585,10 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
     - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
     - 这些值一旦从操作系统环境加载便不会再改变。
 
+- **数据提取函数**：
+  - `json_value(Data, Path)`: 使用点分隔路径从 JSON 字符串中提取值，以导航嵌套结构。例如，如果 `username` 是一个 JSON 对象，可以使用 `json_value(username, 'shop.floor')` 访问字段。
+  - `jwt_value(Data, Path)`: 解码 JWT 令牌负载并使用点分隔路径提取声明值。例如，如果 `password` 是一个带有自定义声明的 JWT，可以使用 `jwt_value(password, 'client_attrs.unitid')` 访问嵌套值。
+
 #### 条件
 
 到目前为止，Variform 表达式没有全面的控制流程。
