@@ -1,5 +1,11 @@
 # Incompatible Changes in EMQX 5.10
 
+## 5.10.4
+
+- [#17244](https://github.com/emqx/emqx/pull/17244) Removed the hot-upgrade REST API endpoints (`/api/v5/relup/*`). Hot-upgrade is now operated exclusively through the `emqx ctl relup` CLI on each node, with no Dashboard surface.
+
+  The target release tarball can be placed anywhere readable by the EMQX process (no special staging directory). Trigger the upgrade with `emqx ctl relup upgrade <TarballPath>`. A `<TarballPath>.sha256` sidecar file is required next to the tarball; the target version is read from the tarball's own `releases/emqx_vars` (`REL_VSN`).
+
 ## 5.10.3
 
 - [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura).
