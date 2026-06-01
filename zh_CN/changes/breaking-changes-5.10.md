@@ -1,5 +1,11 @@
 # EMQX 5.10 中的不兼容变更
 
+## 5.10.4
+
+- [#17244](https://github.com/emqx/emqx/pull/17244) 移除了热升级 REST API 端点（`/api/v5/relup/*`）。热升级现在完全通过各节点上的 `emqx ctl relup` CLI 操作，Dashboard 中不再提供对应入口。
+
+  目标版本的发布包可放置在 EMQX 进程可读的任意位置（无需特定暂存目录）。通过 `emqx ctl relup upgrade <TarballPath>` 触发升级。发布包旁边需提供 `<TarballPath>.sha256` 校验文件，目标版本号从发布包自身的 `releases/emqx_vars`（`REL_VSN`）中读取。
+
 ## 5.10.3
 
 - [#16491](https://github.com/emqx/emqx/pull/16491) 停止为 macOS 13（Ventura）发布安装包。
