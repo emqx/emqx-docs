@@ -299,17 +299,6 @@
           ]
         }
       },
-      "relup.node_name": {
-        "description": "The node to be upgraded",
-        "example": "emqx@127.0.0.1",
-        "in": "path",
-        "name": "node",
-        "required": true,
-        "schema": {
-          "default": "all",
-          "type": "string"
-        }
-      },
       "trace.bytes": {
         "description": "单个 HTTP 相应中包含 trace 日志的字节数。",
         "in": "query",
@@ -2899,6 +2888,28 @@
           "data_type",
           "measurement",
           "value"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO 后端类型（例如 saml, oidc）。",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "来自 SSO 登录流程的临时设置令牌。",
+            "type": "string"
+          },
+          "username": {
+            "description": "来自登录元数据的 SSO 用户名。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "username"
         ],
         "type": "object"
       },
@@ -9191,7 +9202,6 @@
           },
           "enable": {
             "default": true,
-            "deprecated": true,
             "description": "是否开启消息保留功能",
             "type": "boolean"
           },
@@ -9592,6 +9602,48 @@
         ],
         "type": "object"
       },
+      "dashboard_sso.login_success_response": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "license": {
+            "properties": {
+              "edition": {
+                "description": "EMQX License 类型。可为 opensource 或 enterprise",
+                "enum": [
+                  "opensource",
+                  "enterprise"
+                ],
+                "example": "opensource",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "用户角色",
+            "example": "administrator",
+            "type": "string"
+          },
+          "token": {
+            "description": "Dashboard 认证 Token",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "version": {
+            "description": "EMQX 版本",
+            "example": "5.0.0",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "syskeeper_forwarder.connector_resource_opts": {
         "properties": {
           "health_check_interval": {
@@ -9727,6 +9779,27 @@
             "description": "用户角色",
             "example": "administrator",
             "type": "string"
+          },
+          "scopes": {
+            "description": "控制台用户范围——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有控制台用户范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。<br/><br/>登录用户可以拥有任何 API 密钥目录范围加上四个仅限登录的范围：`user_management`，`mfa_management`，`sso_management`，`api_key_management`。这四个中有三个仅限管理员（`user_management`，`sso_management`，`api_key_management`）；`mfa_management` 也可以分配给非管理员用户——对于非管理员持有者，它作为一个自我豁免密钥，允许用户仅绕过其自身 MFA 的 force_mfa 和 admin_required 锁。",
+            "example": [
+              "user_management",
+              "mfa_management"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "username": {
             "description": "Dashboard 用户名",
@@ -13123,6 +13196,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso.mfa_setup_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_setup",
+            "example": "mfa_setup",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "MFA mechanism",
+            "example": "totp",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token for MFA binding",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "bridge_azure_event_hub.post_bridge_v2": {
         "properties": {
           "connector": {
@@ -16260,6 +16360,16 @@
             "description": "Redis sentinel 模式下的集群名称。",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
+            "type": "string"
+          },
           "servers": {
             "description": "集群将要连接的节点列表。 节点之间用逗号分隔，如：Node[,Node]。每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。主机名具有以下形式：Host[:Port]。如果未指定 [:Port]，则使用 Redis 默认端口 6379。",
             "type": "string"
@@ -18544,6 +18654,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
+          },
           "username": {
             "description": "InfluxDB 用户名。",
             "type": "string"
@@ -19621,6 +19736,11 @@
             "description": "是否启用该后端",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "是否强制 SSO 用户使用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证才能接收 Dashboard 令牌。",
+            "type": "boolean"
+          },
           "idp_metadata_url": {
             "default": "https://idp.example.com",
             "description": "身份提供商的元数据地址。",
@@ -19751,6 +19871,33 @@
         },
         "required": [
           "cluster_identifier"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_verify_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO 后端类型（例如 saml, oidc）。",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "来自认证器应用的 TOTP 代码。",
+            "type": "string"
+          },
+          "username": {
+            "description": "来自登录元数据的 SSO 用户名。",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "来自 SSO 登录流程的临时验证令牌。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "totp_code",
+          "username",
+          "verify_token"
         ],
         "type": "object"
       },
@@ -20786,6 +20933,7 @@
           "SERVICE_UNAVAILABLE",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
+          "UNAUTHORIZED",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -21371,6 +21519,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -22012,6 +22165,11 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -23044,6 +23202,108 @@
           "mechanism",
           "public_key"
         ],
+        "type": "object"
+      },
+      "api_key.app_response": {
+        "properties": {
+          "api_key": {
+            "description": "TODO:uses HMAC-SHA256 for signing.",
+            "example": "a4697a5c75a769f6",
+            "type": "string"
+          },
+          "api_secret": {
+            "description": "An API secret is a simple encrypted string that identifiesan application without any principal.They are useful for accessing public data anonymously,and are used to associate API requests.",
+            "example": "MzAyMjk3ODMwMDk0NjIzOTUxNjcwNzQ0NzQ3MTE2NDYyMDI",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "ApiKey create datetime",
+            "example": "2021-12-01T00:00:00.000Z",
+            "oneOf": [
+              {
+                "description": "epoch-second",
+                "example": 1640995200,
+                "type": "integer"
+              },
+              {
+                "example": "2022-01-01T00:00:00.000Z",
+                "format": "date-time",
+                "type": "string"
+              }
+            ]
+          },
+          "desc": {
+            "example": "Note",
+            "type": "string"
+          },
+          "enable": {
+            "description": "Enable/Disable",
+            "type": "boolean"
+          },
+          "expired": {
+            "description": "Expired",
+            "type": "boolean"
+          },
+          "expired_at": {
+            "default": "infinity",
+            "description": "No longer valid datetime",
+            "example": "2021-12-05T02:01:34.186Z",
+            "oneOf": [
+              {
+                "oneOf": [
+                  {
+                    "description": "epoch-second",
+                    "example": 1640995200,
+                    "type": "integer"
+                  },
+                  {
+                    "example": "2022-01-01T00:00:00.000Z",
+                    "format": "date-time",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "description": "Unique and format by [a-zA-Z0-9-_]",
+            "example": "EMQX-API-KEY-1",
+            "type": "string"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "用于此 API 的角色",
+            "example": "administrator",
+            "type": "string"
+          },
+          "scopes": {
+            "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+            "example": [
+              "clients",
+              "rules"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
         "type": "object"
       },
       "emqx_mgmt_api_publish.publish_error": {
@@ -25860,6 +26120,28 @@
         },
         "type": "object"
       },
+      "dashboard_sso.token_exchange_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO 后端类型（例如 saml, oidc）。",
+            "type": "string"
+          },
+          "code": {
+            "description": "One-time SSO code",
+            "type": "string"
+          },
+          "username": {
+            "description": "来自登录元数据的 SSO 用户名。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "code",
+          "username"
+        ],
+        "type": "object"
+      },
       "bridge_mongodb.get_sharded": {
         "properties": {
           "auth_source": {
@@ -27776,6 +28058,16 @@
             "description": "Redis sentinel 模式下的集群名称。",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
+            "type": "string"
+          },
           "servers": {
             "description": "集群将要连接的节点列表。 节点之间用逗号分隔，如：Node[,Node]。每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。主机名具有以下形式：Host[:Port]。如果未指定 [:Port]，则使用 Redis 默认端口 6379。",
             "type": "string"
@@ -28755,6 +29047,11 @@
             "description": "LDAP 中匹配用户的过滤器默认为 `(&(objectClass=person)(uid=${username}))`。 对于 Active Directory，默认过滤器是 `(&(objectClass=user)(sAMAccountName=${username}))`。更多详细内容，请参考 [LDAP Filters](https://ldap.com/ldap-filters/)。",
             "example": "(& (objectClass=person) (uid=${username}))",
             "type": "string"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "是否强制 SSO 用户使用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证才能接收 Dashboard 令牌。",
+            "type": "boolean"
           },
           "password": {
             "description": "内部数据库密码。",
@@ -30031,6 +30328,33 @@
         },
         "type": "object"
       },
+      "dashboard_sso_mfa.mfa_setup_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO 后端类型（例如 saml, oidc）。",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "来自 SSO 登录流程的临时设置令牌。",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "来自认证器应用的 TOTP 代码。",
+            "type": "string"
+          },
+          "username": {
+            "description": "来自登录元数据的 SSO 用户名。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "totp_code",
+          "username"
+        ],
+        "type": "object"
+      },
       "emqx_gateway_api.ws_listener": {
         "properties": {
           "acceptors": {
@@ -30878,6 +31202,11 @@
             "description": "是否启用该后端",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "是否强制 SSO 用户使用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证才能接收 Dashboard 令牌。",
+            "type": "boolean"
+          },
           "last_error": {
             "description": "该后端的最后一个错误",
             "type": "string"
@@ -30910,25 +31239,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -30940,31 +31251,7 @@
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
+                  "snowflake"
                 ],
                 "type": "string"
               },
@@ -30976,19 +31263,49 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -31000,19 +31317,13 @@
               },
               {
                 "enum": [
-                  "cassandra"
+                  "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
+                  "rocketmq"
                 ],
                 "type": "string"
               },
@@ -31024,25 +31335,31 @@
               },
               {
                 "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
+                  "s3tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
@@ -31054,13 +31371,49 @@
               },
               {
                 "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
                 ],
                 "type": "string"
               },
@@ -31078,37 +31431,7 @@
               },
               {
                 "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -31120,19 +31443,25 @@
               },
               {
                 "enum": [
-                  "timescale"
+                  "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -36091,62 +36420,6 @@
         },
         "type": "object"
       },
-      "relup.upgrade_history": {
-        "properties": {
-          "finished_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade finished",
-            "example": "2024-07-16T11:00:01.875627+08:00",
-            "type": "string"
-          },
-          "from_vsn": {
-            "description": "The version before the upgrade",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "result": {
-            "description": "The upgrade result",
-            "example": "success",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/relup.upgrade_error"
-              },
-              {
-                "enum": [
-                  "success"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "started_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade started",
-            "example": "2024-07-15T13:48:02.648559+08:00",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of the node",
-            "enum": [
-              "in-progress",
-              "finished"
-            ],
-            "example": "in-progress",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "The target version of the upgrade",
-            "example": "5.8.2",
-            "type": "string"
-          },
-          "upgrade_opts": {
-            "description": "The options used for the upgrade",
-            "example": {
-              "deploy_inplace": false
-            },
-            "type": "object"
-          }
-        },
-        "type": "object"
-      },
       "dashboard.sso": {
         "properties": {
           "ldap": {
@@ -39772,7 +40045,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "A2AA7CF8A8C1526D",
             "type": "string"
           },
           "status": {
@@ -39791,24 +40064,6 @@
               "leaving"
             ],
             "example": "joining",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.upgrade_error": {
-        "properties": {
-          "details": {
-            "description": "The details of the error",
-            "example": {
-              "dir": "emqx/relup",
-              "msg": "no write permission in dir 'emqx/relup'"
-            },
-            "type": "object"
-          },
-          "err_type": {
-            "description": "The type of the error",
-            "example": "no_write_permission",
             "type": "string"
           }
         },
@@ -42628,87 +42883,6 @@
         ],
         "type": "object"
       },
-      "api_key.app": {
-        "properties": {
-          "api_key": {
-            "description": "TODO:uses HMAC-SHA256 for signing.",
-            "example": "a4697a5c75a769f6",
-            "type": "string"
-          },
-          "api_secret": {
-            "description": "An API secret is a simple encrypted string that identifiesan application without any principal.They are useful for accessing public data anonymously,and are used to associate API requests.",
-            "example": "MzAyMjk3ODMwMDk0NjIzOTUxNjcwNzQ0NzQ3MTE2NDYyMDI",
-            "type": "string"
-          },
-          "created_at": {
-            "description": "ApiKey create datetime",
-            "example": "2021-12-01T00:00:00.000Z",
-            "oneOf": [
-              {
-                "description": "epoch-second",
-                "example": 1640995200,
-                "type": "integer"
-              },
-              {
-                "example": "2022-01-01T00:00:00.000Z",
-                "format": "date-time",
-                "type": "string"
-              }
-            ]
-          },
-          "desc": {
-            "example": "Note",
-            "type": "string"
-          },
-          "enable": {
-            "description": "Enable/Disable",
-            "type": "boolean"
-          },
-          "expired": {
-            "description": "Expired",
-            "type": "boolean"
-          },
-          "expired_at": {
-            "default": "infinity",
-            "description": "No longer valid datetime",
-            "example": "2021-12-05T02:01:34.186Z",
-            "oneOf": [
-              {
-                "oneOf": [
-                  {
-                    "description": "epoch-second",
-                    "example": 1640995200,
-                    "type": "integer"
-                  },
-                  {
-                    "example": "2022-01-01T00:00:00.000Z",
-                    "format": "date-time",
-                    "type": "string"
-                  }
-                ]
-              },
-              {
-                "enum": [
-                  "infinity"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "name": {
-            "description": "Unique and format by [a-zA-Z0-9-_]",
-            "example": "EMQX-API-KEY-1",
-            "type": "string"
-          },
-          "role": {
-            "default": "administrator",
-            "description": "用于此 API 的角色",
-            "example": "administrator",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "prometheus.push_gateway": {
         "properties": {
           "enable": {
@@ -44001,6 +44175,11 @@
             "description": "InfluxDB 组织名称。",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池的大小，指向桥接目标服务的连接池大小。",
@@ -44597,62 +44776,6 @@
         },
         "type": "object"
       },
-      "relup.running_status": {
-        "properties": {
-          "current_vsn": {
-            "description": "The current version of the node",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "live_connections": {
-            "description": "The number of live connections",
-            "example": 100,
-            "type": "integer"
-          },
-          "node": {
-            "example": "emqx@127.0.0.1",
-            "type": "string"
-          },
-          "role": {
-            "description": "The role of the node",
-            "enum": [
-              "core",
-              "replicant"
-            ],
-            "example": "core",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of a node:<br/>1. in-progress: hot upgrade is in progress.<br/>2. idle: hot upgrade is not started.<br/>",
-            "enum": [
-              "in-progress",
-              "idle"
-            ],
-            "type": "string"
-          },
-          "upgrade_history": {
-            "description": "The upgrade history of the node",
-            "example": [
-              {
-                "finished_at": "2024-07-16T11:00:01.875627+08:00",
-                "from_vsn": "5.8.0",
-                "result": "success",
-                "started_at": "2024-07-15T13:48:02.648559+08:00",
-                "status": "finished",
-                "target_vsn": "5.8.1",
-                "upgrade_opts": {
-                  "deploy_inplace": false
-                }
-              }
-            ],
-            "items": {
-              "$ref": "#/components/schemas/relup.upgrade_history"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "action_azure_blob_storage.get_bridge_v2": {
         "properties": {
           "connector": {
@@ -44816,6 +44939,11 @@
           "org": {
             "description": "InfluxDB 组织名称。",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -44983,6 +45111,11 @@
           "org": {
             "description": "InfluxDB 组织名称。",
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
           },
           "pool_size": {
             "default": 8,
@@ -45196,6 +45329,23 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_response": {
+        "properties": {
+          "mechanism": {
+            "description": "MFA 机制类型（例如 totp）。",
+            "type": "string"
+          },
+          "secret": {
+            "description": "用于二维码生成的 TOTP 密钥。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism",
+          "secret"
+        ],
         "type": "object"
       },
       "bridge_elasticsearch.post_bridge_v2": {
@@ -45434,6 +45584,11 @@
             },
             "type": "array"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "是否强制 SSO 用户使用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证才能接收 Dashboard 令牌。",
+            "type": "boolean"
+          },
           "issuer": {
             "description": "OIDC 发行者的 URL。",
             "example": "https://issuer.com",
@@ -45578,6 +45733,16 @@
           },
           "sentinel": {
             "description": "Redis sentinel 模式下的集群名称。",
+            "type": "string"
+          },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
             "type": "string"
           },
           "servers": {
@@ -46495,6 +46660,16 @@
             "description": "Redis sentinel 模式下的集群名称。",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
+            "type": "string"
+          },
           "servers": {
             "description": "集群将要连接的节点列表。 节点之间用逗号分隔，如：Node[,Node]。每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。主机名具有以下形式：Host[:Port]。如果未指定 [:Port]，则使用 Redis 默认端口 6379。",
             "type": "string"
@@ -46768,6 +46943,18 @@
           "servers",
           "type"
         ],
+        "type": "object"
+      },
+      "api_key.scopes_response": {
+        "properties": {
+          "scopes": {
+            "description": "所有可用范围及其名称和描述。",
+            "items": {
+              "$ref": "#/components/schemas/api_key.scope_info"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "retainer.message_summary": {
@@ -47507,6 +47694,21 @@
         ],
         "type": "object"
       },
+      "api_key.scope_info": {
+        "properties": {
+          "desc": {
+            "description": "范围覆盖的可读描述。",
+            "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
+            "type": "string"
+          },
+          "name": {
+            "description": "范围名称——API 端点功能类别的稳定标识符。",
+            "example": "connections",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "authn.cinfo": {
         "properties": {
           "checks": {
@@ -48173,55 +48375,6 @@
             "type": "object"
           },
           "node": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.package": {
-        "properties": {
-          "applicable_vsns": {
-            "description": "The emqx versions that this package can be applied to.",
-            "example": [
-              "5.8.0",
-              "5.8.1"
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "build_date": {
-            "description": "The date when the package was built.",
-            "example": "2021-12-25",
-            "type": "string"
-          },
-          "built_on_otp_release": {
-            "example": "24",
-            "type": "string"
-          },
-          "change_logs": {
-            "description": "Changes that this package brings",
-            "example": [
-              "1. Fix a bug foo in the plugin.2. Add a new bar feature."
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "md5_sum": {
-            "example": "d41d8cd98f00b204e9800998ecf8427e",
-            "type": "string"
-          },
-          "name": {
-            "description": "File name of the package",
-            "example": "emqx_relup-5.8.2.tar.gz",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "Target emqx version for this package",
-            "example": "5.8.2",
             "type": "string"
           }
         },
@@ -51337,6 +51490,16 @@
             "description": "Redis sentinel 模式下的集群名称。",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
+            "type": "string"
+          },
           "servers": {
             "description": "集群将要连接的节点列表。 节点之间用逗号分隔，如：Node[,Node]。每个节点的配置为：将要连接的 IPv4 或 IPv6 地址或主机名。主机名具有以下形式：Host[:Port]。如果未指定 [:Port]，则使用 Redis 默认端口 6379。",
             "type": "string"
@@ -53257,6 +53420,11 @@
             "description": "InfluxDB 组织名称。",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
+          },
           "token": {
             "description": "InfluxDB token。",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -53700,6 +53868,28 @@
           "name",
           "type"
         ],
+        "type": "object"
+      },
+      "dashboard_sso.mfa_verify_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action: mfa_verify",
+            "example": "mfa_verify",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token for MFA verification",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_disk_log.get_connector": {
@@ -54680,6 +54870,16 @@
           },
           "sentinel": {
             "description": "Redis sentinel 模式下的集群名称。",
+            "type": "string"
+          },
+          "sentinel_password": {
+            "description": "用于与 Redis Sentinel 进行身份验证的密码。当 Sentinel 不需要身份验证时，保持未设置。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "用于与 Redis Sentinel 进行身份验证的用户名。当 Sentinel 不需要 ACL 用户名身份验证时，保持未设置。",
             "type": "string"
           },
           "servers": {
@@ -62212,6 +62412,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭证。如果您的 InfluxDB 服务需要在 `/ping` 上进行认证，请启用此选项。默认值为 `false`，这将保留之前的行为，并在没有认证的情况下发送 `/ping`。",
+            "type": "boolean"
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池的大小，指向桥接目标服务的连接池大小。",
@@ -63009,7 +63214,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.3"
+    "version": "5.10.4-rc.5"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -63390,8 +63595,24 @@
     },
     "/users/{username}/mfa": {
       "delete": {
-        "description": "删除 Dashboard 用户的多重身份认证（MFA）状态。<br/>删除后，该用户的 MFA 将被显式禁用。如需重新启用 MFA，请调用 `POST` 方法。",
+        "description": "禁用 Dashboard 用户的多重身份认证（MFA）。如需重置或重新生成 TOTP，请调用 `POST` 方法。",
         "parameters": [
+          {
+            "description": "后端名称",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard 用户名",
             "example": "admin",
@@ -63405,7 +63626,7 @@
         ],
         "responses": {
           "204": {
-            "description": "MFA setting is deleted"
+            "description": "MFA setting is disabled"
           },
           "404": {
             "content": {
@@ -63443,8 +63664,24 @@
         ]
       },
       "post": {
-        "description": "为 Dashboard 用户设置多重身份认证（MFA）。",
+        "description": "为 Dashboard 用户设置或重置多重身份认证（MFA）。调用此端点会生成一个新的 TOTP 密钥。",
         "parameters": [
+          {
+            "description": "后端名称",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard 用户名",
             "example": "admin",
@@ -63479,7 +63716,7 @@
         },
         "responses": {
           "204": {
-            "description": "MFA setting is reset"
+            "description": "MFA setting is updated"
           },
           "404": {
             "content": {
@@ -63942,73 +64179,6 @@
         ],
         "tags": [
           "Banned"
-        ]
-      }
-    },
-    "/relup/upgrade": {
-      "post": {
-        "description": "Upgrade all nodes to the target version with the installed package.",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "Upgrade is started successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of invalid input or environment",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of internal errors",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade all nodes",
-        "tags": [
-          "Relup"
         ]
       }
     },
@@ -66160,6 +66330,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -66338,6 +66510,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -72147,6 +72320,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -72325,6 +72500,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -73234,6 +73410,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -73407,6 +73585,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -74235,6 +74414,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -74413,6 +74594,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -75638,42 +75820,42 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "iotdb",
-                      "sqlserver",
+                      "rocketmq",
                       "influxdb",
-                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
                       "hstreamdb",
                       "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "pulsar",
+                      "syskeeper_forwarder",
                       "kafka_producer",
+                      "greptimedb",
+                      "sqlserver",
+                      "iotdb",
+                      "pulsar",
                       "mongodb",
-                      "doris",
+                      "confluent_producer",
                       "opents",
-                      "kinesis",
-                      "datalayers",
+                      "doris",
                       "s3",
-                      "redis",
                       "s3tables",
+                      "datalayers",
+                      "kinesis",
+                      "redis",
                       "mqtt",
+                      "tdengine",
+                      "azure_blob_storage",
+                      "oracle",
+                      "couchbase",
                       "clickhouse",
                       "tablestore",
                       "timescale",
-                      "azure_blob_storage",
-                      "oracle",
                       "snowflake",
-                      "tdengine",
-                      "couchbase",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75682,42 +75864,42 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "iotdb",
-                      "sqlserver",
+                      "rocketmq",
                       "influxdb",
-                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
                       "hstreamdb",
                       "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "pulsar",
+                      "syskeeper_forwarder",
                       "kafka_producer",
+                      "greptimedb",
+                      "sqlserver",
+                      "iotdb",
+                      "pulsar",
                       "mongodb",
-                      "doris",
+                      "confluent_producer",
                       "opents",
-                      "kinesis",
-                      "datalayers",
+                      "doris",
                       "s3",
-                      "redis",
                       "s3tables",
+                      "datalayers",
+                      "kinesis",
+                      "redis",
                       "mqtt",
+                      "tdengine",
+                      "azure_blob_storage",
+                      "oracle",
+                      "couchbase",
                       "clickhouse",
                       "tablestore",
                       "timescale",
-                      "azure_blob_storage",
-                      "oracle",
                       "snowflake",
-                      "tdengine",
-                      "couchbase",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -79931,6 +80113,81 @@
         ]
       }
     },
+    "/sso/mfa/verify": {
+      "post": {
+        "description": "验证 SSO MFA TOTP 代码并发放 JWT 会话令牌。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_verify_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/listeners": {
       "get": {
         "description": "列出所有节点上的指定类型的监听器",
@@ -80937,6 +81194,27 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -81036,6 +81314,17 @@
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。创建时如果省略，服务器将实现角色默认值——管理员/查看者获得所有管理范围，发布者仅获得 `publish`。发送一个显式的空列表 `[]` 来创建一个拒绝所有的密钥（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -81119,6 +81408,27 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -81278,6 +81588,32 @@
         "summary": "Upsert namespace configurations in bulk",
         "tags": [
           "Multi-tenancy"
+        ]
+      }
+    },
+    "/api_key_scopes": {
+      "get": {
+        "description": "列出所有可用的 API 密钥范围。此 API 只能使用持有者令牌请求。",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_key.scopes_response"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "API Keys"
         ]
       }
     },
@@ -81810,6 +82146,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -82217,6 +82555,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -82785,7 +83124,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -84631,6 +84970,7 @@
         "description": "获取 Dashboard 认证令牌。",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -84669,38 +85009,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "license": {
-                      "properties": {
-                        "edition": {
-                          "description": "EMQX License 类型。可为 opensource 或 enterprise",
-                          "enum": [
-                            "opensource",
-                            "enterprise"
-                          ],
-                          "example": "opensource",
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
                     },
-                    "role": {
-                      "default": "administrator",
-                      "description": "用户角色",
-                      "example": "administrator",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
                     },
-                    "token": {
-                      "description": "Dashboard 认证 Token",
-                      "type": "string"
-                    },
-                    "version": {
-                      "description": "EMQX 版本",
-                      "example": "5.0.0",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
                     }
-                  },
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -84775,7 +85094,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -85209,99 +85528,6 @@
         ],
         "tags": [
           "Topics"
-        ]
-      }
-    },
-    "/relup/upgrade/{node}": {
-      "post": {
-        "description": "Upgrade a specified node to the target version with the installed package.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Upgrade is started successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of invalid input or environment",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Node not found",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Upgrade failed because of internal errors",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade a specified node",
-        "tags": [
-          "Relup"
         ]
       }
     },
@@ -85937,7 +86163,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "A2AA7CF8A8C1526D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -88529,73 +88755,6 @@
         ]
       }
     },
-    "/relup/status": {
-      "get": {
-        "description": "Get the hot upgrade status of all nodes",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/relup.running_status"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the hot upgrade status of all nodes",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/status/{node}": {
-      "get": {
-        "description": "Get the hot upgrade status of a specified node",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.running_status"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the hot upgrade status of a specified node",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/authentication/settings": {
       "get": {
         "description": "获取认证设置。",
@@ -88701,6 +88860,7 @@
         "description": "删除 Dashboard 用户",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88792,6 +88952,7 @@
         "description": "更新 Dashboard 用户备注",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -88832,6 +88993,17 @@
                     "description": "用户角色",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "控制台用户范围——在角色之上应用的细粒度访问列表。<br/><br/>创建时如果省略，服务器将实现角色默认值——管理员获得所有管理范围加上四个仅限登录的范围；查看者获得所有管理范围；发布者（如适用）仅获得 `publish` 范围。发送一个显式的空列表 `[]` 来创建一个拒绝所有的用户（只有诸如 `/status` 之类的匿名端点仍然可访问）。<br/><br/>登录用户可以拥有任何 API 密钥目录范围加上四个仅限登录的范围：`user_management`，`mfa_management`，`sso_management`，`api_key_management`。这四个中有三个仅限管理员（`user_management`，`sso_management`，`api_key_management`）；`mfa_management` 也可以分配给非管理员用户——对于非管理员持有者，它作为一个自我豁免密钥，允许用户仅绕过其自身 MFA 的 force_mfa 和 admin_required 锁。",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -88871,10 +89043,54 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "scopes": {
+                      "description": "控制台用户范围——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有控制台用户范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。<br/><br/>登录用户可以拥有任何 API 密钥目录范围加上四个仅限登录的范围：`user_management`，`mfa_management`，`sso_management`，`api_key_management`。这四个中有三个仅限管理员（`user_management`，`sso_management`，`api_key_management`）；`mfa_management` 也可以分配给非管理员用户——对于非管理员持有者，它作为一个自我豁免密钥，允许用户仅绕过其自身 MFA 的 force_mfa 和 admin_required 锁。",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
+                    },
                     "username": {
                       "description": "Dashboard 用户名",
                       "example": "admin",
                       "maxLength": 100,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST",
+                        "NOT_ALLOWED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "登录失败。用户名或密码错误",
                       "type": "string"
                     }
                   },
@@ -88925,6 +89141,7 @@
         "description": "Dashboard 用户退出登录",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "local",
             "in": "query",
             "name": "backend",
@@ -94049,7 +94266,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -94145,7 +94362,7 @@
           },
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "A2AA7CF8A8C1526D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94230,7 +94447,7 @@
           },
           {
             "description": "Site ID",
-            "example": "0C7295070A19153C",
+            "example": "A2AA7CF8A8C1526D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96538,6 +96755,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -96695,6 +96914,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -97540,6 +97760,8 @@
                       "batch_time": "20ms"
                     },
                     "sentinel": "mymaster",
+                    "sentinel_password": "******",
+                    "sentinel_username": "sentinel_user",
                     "servers": [
                       "127.0.0.1:26379"
                     ],
@@ -97718,6 +97940,7 @@
                     "local_topic": "local/topic/#",
                     "name": "demo",
                     "password": "******",
+                    "ping_with_auth": false,
                     "precision": "ms",
                     "resource_opts": {
                       "batch_size": 100,
@@ -98552,6 +98775,8 @@
                         "batch_time": "20ms"
                       },
                       "sentinel": "mymaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": [
                         "127.0.0.1:26379"
                       ],
@@ -98730,6 +98955,7 @@
                       "local_topic": "local/topic/#",
                       "name": "demo",
                       "password": "******",
+                      "ping_with_auth": false,
                       "precision": "ms",
                       "resource_opts": {
                         "batch_size": 100,
@@ -101023,7 +101249,7 @@
         },
         "security": [],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -103010,7 +103236,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -106600,6 +106826,33 @@
         ]
       }
     },
+    "/user_scopes": {
+      "get": {
+        "description": "列出控制台登录用户可能拥有的所有范围名称，包括它们的描述和一个 `admin_only` 标志，指示该范围是否仅限于管理员角色。<br/><br/>返回给任何经过身份验证的登录用户——该端点用于填充控制台 UI 的范围选择器，本身不需要特定的范围。",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": "列出控制台登录用户可能拥有的所有范围名称，包括它们的描述和一个 `admin_only` 标志，指示该范围是否仅限于管理员角色。<br/><br/>返回给任何经过身份验证的登录用户——该端点用于填充控制台 UI 的范围选择器，本身不需要特定的范围。"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
     "/connectors/{id}": {
       "delete": {
         "description": "通过 id 删除一个连接器。",
@@ -106960,6 +107213,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -107538,6 +107793,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -108339,6 +108595,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -108708,6 +108966,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -109366,6 +109625,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -109944,6 +110205,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -110684,6 +110946,27 @@
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+                      "example": [
+                        "clients",
+                        "rules"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -110759,6 +111042,17 @@
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "授予此 API 密钥的范围名称列表。每个范围都是一个稳定的功能类别（例如，connections，publish，monitoring）。创建时如果省略，服务器将实现角色默认值——管理员/查看者获得所有管理范围，发布者仅获得 `publish`。发送一个显式的空列表 `[]` 来创建一个拒绝所有的密钥（只有诸如 `/status` 之类的匿名端点仍然可访问）。",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -110771,7 +111065,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/api_key.app"
+                  "$ref": "#/components/schemas/api_key.app_response"
                 }
               }
             },
@@ -112393,6 +112687,69 @@
         ]
       }
     },
+    "/sso/token_exchange": {
+      "post": {
+        "description": "将一次性 SSO 代码交换为实际的登录结果（JWT 令牌或 MFA 元数据）。代码在单次使用后被消耗。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso.token_exchange_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "错误请求。无效或过期的 SSO 代码。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard SSO"
+        ]
+      }
+    },
     "/rule_test": {
       "post": {
         "description": "测试一个规则",
@@ -113055,73 +113412,6 @@
         ]
       }
     },
-    "/relup/package/upload": {
-      "post": {
-        "description": "Upload a hot upgrade package (emqx_relup-vsn.tar.gz).<br/>Note that only one package is alllowed to be installed at a time.",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "encoding": {
-                "plugin": {
-                  "contentType": "application/gzip"
-                }
-              },
-              "schema": {
-                "properties": {
-                  "plugin": {
-                    "format": "binary",
-                    "type": "string"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Package is uploaded successfully"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR",
-                        "ALREADY_INSTALLED",
-                        "BAD_PLUGIN_INFO"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "无效请求的可能错误原因代码。",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upload a hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/schema_registry_protobuf/bundle": {
       "post": {
         "description": "为新 Schema 上传 Protobuf 包",
@@ -113480,6 +113770,81 @@
         ],
         "tags": [
           "GCP Devices"
+        ]
+      }
+    },
+    "/sso/mfa/setup": {
+      "post": {
+        "description": "完成 SSO MFA TOTP 设置：绑定 TOTP 认证器并发放 JWT 会话令牌。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad Request",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
         ]
       }
     },
@@ -114743,79 +115108,6 @@
         ]
       }
     },
-    "/relup/package": {
-      "delete": {
-        "description": "Delete the installed hot upgrade package.<br/>",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "Packages are deleted successfully"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Delete the installed hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      },
-      "get": {
-        "description": "Get information of the installed hot upgrade package.<br/>",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.package"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "No relup package is installed",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get the installed hot upgrade package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
     "/authorization/node_cache/reset": {
       "post": {
         "description": "重置节点级别授权缓存。",
@@ -114888,7 +115180,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -116789,6 +117081,7 @@
         "description": "删除一个后端",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116839,13 +117132,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "get": {
         "description": "获取后端的详细信息",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -116913,13 +117207,14 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       },
       "put": {
         "description": "更新一个后端",
         "parameters": [
           {
+            "description": "后端名称",
             "example": "ldap",
             "in": "path",
             "name": "backend",
@@ -117006,7 +117301,7 @@
           }
         ],
         "tags": [
-          "Dashboard Single Sign-On"
+          "Dashboard SSO"
         ]
       }
     },
@@ -120696,6 +120991,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -121211,6 +121508,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -121944,6 +122242,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -122351,6 +122651,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -123055,6 +123356,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -123633,6 +123936,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -124560,6 +124864,17 @@
                     "example": "administrator",
                     "type": "string"
                   },
+                  "scopes": {
+                    "description": "控制台用户范围——在角色之上应用的细粒度访问列表。<br/><br/>创建时如果省略，服务器将实现角色默认值——管理员获得所有管理范围加上四个仅限登录的范围；查看者获得所有管理范围；发布者（如适用）仅获得 `publish` 范围。发送一个显式的空列表 `[]` 来创建一个拒绝所有的用户（只有诸如 `/status` 之类的匿名端点仍然可访问）。<br/><br/>登录用户可以拥有任何 API 密钥目录范围加上四个仅限登录的范围：`user_management`，`mfa_management`，`sso_management`，`api_key_management`。这四个中有三个仅限管理员（`user_management`，`sso_management`，`api_key_management`）；`mfa_management` 也可以分配给非管理员用户——对于非管理员持有者，它作为一个自我豁免密钥，允许用户仅绕过其自身 MFA 的 force_mfa 和 admin_required 锁。",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
                   "username": {
                     "description": "Dashboard 用户名",
                     "example": "admin",
@@ -124588,11 +124903,42 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "mfa": {
+                      "description": "多重身份认证（MFA）状态。<br/>- `none`：未启用 MFA<br/>- `disabled`：用户的 MFA 已禁用<br/>- 其他值：正在使用的 MFA 机制，例如 `totp`。",
+                      "enum": [
+                        "none",
+                        "disabled",
+                        "totp"
+                      ],
+                      "example": "totp",
+                      "type": "string"
+                    },
                     "role": {
                       "default": "administrator",
                       "description": "用户角色",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "控制台用户范围——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是一个仅用于遗留的标记，用于那些从没有控制台用户范围功能的版本升级过来的记录；运行时会回退到这些记录的角色默认值，客户端应将其视为“尚无明确的范围策略”。空列表 `[]` 表示拒绝所有（只有诸如 `/status` 之类的匿名端点仍然可访问）。<br/><br/>登录用户可以拥有任何 API 密钥目录范围加上四个仅限登录的范围：`user_management`，`mfa_management`，`sso_management`，`api_key_management`。这四个中有三个仅限管理员（`user_management`，`sso_management`，`api_key_management`）；`mfa_management` 也可以分配给非管理员用户——对于非管理员持有者，它作为一个自我豁免密钥，允许用户仅绕过其自身 MFA 的 force_mfa 和 admin_required 锁。",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     },
                     "username": {
                       "description": "Dashboard 用户名",
@@ -124992,6 +125338,59 @@
         ]
       }
     },
+    "/sso/mfa/setup_info": {
+      "post": {
+        "description": "检索用于二维码显示的 TOTP 设置信息（密钥，机制）。请求体中需要有效的设置令牌。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
     "/ai/providers/{name}": {
       "delete": {
         "description": "删除 AI 提供商的提供商条目。",
@@ -125325,7 +125724,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       },
       "put": {
@@ -125451,7 +125850,7 @@
           }
         ],
         "tags": [
-          "Monitor"
+          "Opentelemetry"
         ]
       }
     }
