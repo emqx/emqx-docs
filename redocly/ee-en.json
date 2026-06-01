@@ -31239,19 +31239,37 @@
             "oneOf": [
               {
                 "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "matrix"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
                 ],
                 "type": "string"
               },
@@ -31263,13 +31281,7 @@
               },
               {
                 "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
+                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -31281,7 +31293,19 @@
               },
               {
                 "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
                 ],
                 "type": "string"
               },
@@ -31293,31 +31317,25 @@
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -31341,19 +31359,13 @@
               },
               {
                 "enum": [
-                  "s3tables"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -31365,13 +31377,13 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "opents"
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -31383,13 +31395,7 @@
               },
               {
                 "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -31401,7 +31407,7 @@
               },
               {
                 "enum": [
-                  "doris"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
@@ -31413,31 +31419,31 @@
               },
               {
                 "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "oracle"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "timescale"
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -31456,12 +31462,6 @@
               {
                 "enum": [
                   "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -40045,7 +40045,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "F1D4FE4A74F0634E",
+            "example": "533701BF253465D6",
             "type": "string"
           },
           "status": {
@@ -63214,7 +63214,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.4-rc.5"
+    "version": "5.10.4"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -70896,8 +70896,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -70906,8 +70906,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -75824,32 +75824,32 @@
                       "rabbitmq",
                       "rocketmq",
                       "influxdb",
-                      "hstreamdb",
-                      "gcp_pubsub_producer",
+                      "confluent_producer",
                       "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "greptimedb",
                       "kafka_producer",
+                      "azure_event_hub_producer",
+                      "hstreamdb",
+                      "sqlserver",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
                       "iotdb",
                       "pulsar",
                       "mongodb",
-                      "sqlserver",
-                      "confluent_producer",
-                      "doris",
-                      "s3",
-                      "opents",
-                      "s3tables",
-                      "datalayers",
                       "kinesis",
+                      "datalayers",
                       "redis",
+                      "s3tables",
+                      "opents",
+                      "s3",
+                      "doris",
                       "mqtt",
                       "tdengine",
-                      "timescale",
                       "azure_blob_storage",
-                      "oracle",
-                      "couchbase",
+                      "timescale",
                       "clickhouse",
+                      "oracle",
                       "tablestore",
+                      "couchbase",
                       "snowflake",
                       "disk_log",
                       "elasticsearch",
@@ -75868,32 +75868,32 @@
                       "rabbitmq",
                       "rocketmq",
                       "influxdb",
-                      "hstreamdb",
-                      "gcp_pubsub_producer",
+                      "confluent_producer",
                       "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "greptimedb",
                       "kafka_producer",
+                      "azure_event_hub_producer",
+                      "hstreamdb",
+                      "sqlserver",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
                       "iotdb",
                       "pulsar",
                       "mongodb",
-                      "sqlserver",
-                      "confluent_producer",
-                      "doris",
-                      "s3",
-                      "opents",
-                      "s3tables",
-                      "datalayers",
                       "kinesis",
+                      "datalayers",
                       "redis",
+                      "s3tables",
+                      "opents",
+                      "s3",
+                      "doris",
                       "mqtt",
                       "tdengine",
-                      "timescale",
                       "azure_blob_storage",
-                      "oracle",
-                      "couchbase",
+                      "timescale",
                       "clickhouse",
+                      "oracle",
                       "tablestore",
+                      "couchbase",
                       "snowflake",
                       "disk_log",
                       "elasticsearch",
@@ -86163,7 +86163,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "F1D4FE4A74F0634E",
+            "example": "533701BF253465D6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94362,7 +94362,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F1D4FE4A74F0634E",
+            "example": "533701BF253465D6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94447,7 +94447,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F1D4FE4A74F0634E",
+            "example": "533701BF253465D6",
             "in": "path",
             "name": "site",
             "required": true,
