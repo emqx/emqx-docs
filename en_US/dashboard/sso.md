@@ -2,7 +2,11 @@
 
 Single Sign-On (SSO) is an authentication mechanism that allows users to log in to multiple applications or systems using a single set of credentials, such as a username and password, without the need for separate authentication in each application. When EMQX Dashboard enables the SSO feature, users can conveniently log in to the EMQX Dashboard using their enterprise account credentials. Organizations can centrally manage user identities and permissions and simplify their user management processes. This feature enhances the security of enterprise data and systems while ensuring user convenience.
 
+<<<<<<< HEAD
 EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP), the Security Assertion Markup Language (SAML) 2.0 standard, and OpenID Connect (OIDC), supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
+=======
+EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP), the Security Assertion Markup Language (SAML) 2.0 standard, and OpenID Connect (OIDC), supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID)](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more.
+>>>>>>> origin/release-5.10
 
 ## LDAP-Based SSO
 
@@ -20,19 +24,31 @@ With SAML SSO, users only need to authenticate themselves once with the Identity
 
 EMQX Dashboard allows you to integrate Identity Provider (IdP) services that support OIDC for SSO. OIDC is an identity layer built on top of the OAuth 2.0 protocol, providing a standardized way to verify user identity and obtain user information.
 
+<<<<<<< HEAD
 With OIDC SSO, users authenticate with the Identity Provider, which then returns an ID token containing user information to the EMQX Dashboard. Upon receiving and successfully validating the ID token, EMQX Dashboard creates user session information and logs the user into the Dashboard. OIDC provides a modern, RESTful approach to authentication, making it easy to integrate with contemporary identity services and enabling secure, convenient access to EMQX services.
+=======
+With OIDC SSO, users authenticate with the Identity Provider, which returns an ID token containing user information to the EMQX Dashboard. Upon receiving and successfully validating the ID token, EMQX Dashboard creates user session information and logs the user into the Dashboard. OIDC provides a modern, RESTful approach to authentication, making it easy to integrate with contemporary identity services.
+>>>>>>> origin/release-5.10
 
 ## Configuration and Usage Workflow
 
 1. Administrators configure and enable SSO in the Dashboard. Once configured, the EMQX Dashboard displays an SSO entry point on the login page.
 2. User information is configured on the Identity Provider (IdP) side.
 3. Users are guided to choose different Single Sign-On methods on the Dashboard login page.
-4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard.
+4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard. If `force_mfa` is enabled for the backend, users are also required to complete TOTP verification before the session is issued.
 5. Administrators assign roles and permissions to different users. Users can access corresponding resources after refreshing their login.
+
+## MFA for SSO Users
+
+Starting from EMQX 5.10, you can require SSO users to complete a TOTP second factor at login by enabling `force_mfa` on each SSO backend. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Configuration Examples
 
+<<<<<<< HEAD
 Below are configuration examples for SSO based on LDAP, SAML 2.0, and OIDC:
+=======
+Below are configuration examples for each SSO method:
+>>>>>>> origin/release-5.10
 
 - [Configure LDAP Single Sign-On](./sso-ldap.md)
 - [Configure SAML Single Sign-On](./sso-saml.md)

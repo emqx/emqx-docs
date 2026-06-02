@@ -4,7 +4,11 @@
 
 ## 一時的なAPIキーを取得する
 
+<<<<<<< HEAD
 ネイティブWebRTCを使用してブラウザからGPT-Realtimeに接続するには、まず一時的（エフェメラル）なAPIキーを取得する必要があります。このキーはOpenAIのREST APIを通じて生成できます。
+=======
+ブラウザからネイティブWebRTCを使ってGPT-Realtimeに接続するには、まず一時的（エフェメラル）なAPIキーを取得する必要があります。このキーはOpenAIのREST APIを通じて生成できます。
+>>>>>>> origin/release-5.10
 
 ```bash
 export OPENAI_API_KEY="sk-xxxxxx"
@@ -30,7 +34,7 @@ audioElement.current = document.createElement("audio");
 audioElement.current.autoplay = true;
 pc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
 
-// ブラウザのマイク入力用ローカル音声トラックを追加
+// ブラウザのマイク入力用にローカル音声トラックを追加
 const ms = await navigator.mediaDevices.getUserMedia({
     audio: true,
 });
@@ -65,19 +69,31 @@ dc.addEventListener("message", (e) => {
 });
 ```
 
+<<<<<<< HEAD
 このコードはWebRTCの音声チャネルを作成するだけでなく、GPT-Realtimeモデルとのイベント送受信用にデータチャネルも作成しています。受信したすべてのイベントはコンソールにログ出力されます。テスト時に音声が出ないなどの問題があれば、詳細なエラー情報をコンソールで確認してください。
+=======
+このコードはWebRTCの音声チャネルを作成するだけでなく、GPT-Realtimeモデルとのイベント送受信用にデータチャネルも作成しています。受信したすべてのイベントはコンソールにログ出力されます。テスト中に音声が聞こえないなどの問題があれば、詳細なエラー情報をコンソールで確認してください。
+>>>>>>> origin/release-5.10
 
-## MCPを使ったデバイス制御
+## MCPを使ってデバイスを制御する
 
 1. EMQXを起動し、MCPブリッジプラグインをインストールおよび設定します。
 
 2. スマートライトをシミュレートするMCPサーバーを起動します。詳細な手順は[EMQX MCPブリッジを使ってIoTデバイスにアクセスする](../../mcp-bridge/quick-start.md)を参照してください。
 
+<<<<<<< HEAD
    注意点として、EMQXはパブリックネットワーク環境にデプロイされている必要があり、GPT-RealtimeがHTTPS経由でMCPサービスにアクセスできるようにMCPブリッジプラグインには有効なSSL証明書が設定されている必要があります。
 
 3. フロントエンドコードをMCPツール対応に修正します。
 
    MCPツールを有効にするには、GPT-Realtimeイベントを処理する`handle_event()`関数を追加します。
+=======
+   なお、EMQXはパブリックネットワーク環境にデプロイされている必要があり、GPT-RealtimeがHTTPS経由でMCPサービスにアクセスできるようにMCPブリッジプラグインには有効なSSL証明書を設定してください。
+
+3. フロントエンドコードをMCPツール対応に修正します。
+
+   MCPツールを有効にするため、GPT-Realtimeイベントを処理する関数`handle_event()`を追加します。
+>>>>>>> origin/release-5.10
 
    ```javascript
    // サーバーからのイベントを監視
@@ -87,7 +103,11 @@ dc.addEventListener("message", (e) => {
    });
    ```
 
+<<<<<<< HEAD
    この関数内で`session.created`イベントを処理し、セッション作成時に`session.update`イベントを送信してMCPツールを有効化します。MCPサーバーのアドレスは`https://your-emqx-host:port/mcp`に設定してください。
+=======
+   この関数内で`session.created`イベントを処理し、セッション作成時に`session.update`イベントを送信してMCPツールを有効にします。MCPサーバーのアドレスは`https://your-emqx-host:port/mcp`に設定してください。
+>>>>>>> origin/release-5.10
 
    ```javascript
    function handle_event(event) {
@@ -110,7 +130,11 @@ dc.addEventListener("message", (e) => {
                        }
                    ],
                    tool_choice: "auto",
+<<<<<<< HEAD
                    // 直接セッションフィールドを設定可能。プロンプトフィールドと重複する場合はこちらが優先されます：
+=======
+                   // 直接セッションフィールドを設定可能。プロンプトフィールドと重複した場合は上書きされます：
+>>>>>>> origin/release-5.10
                    instructions: "I have a smart light and its client ID is abc123"
                }
            };
@@ -123,17 +147,26 @@ dc.addEventListener("message", (e) => {
    }
    ```
 
+<<<<<<< HEAD
 これでブラウザでフロントエンドページにアクセスし、GPT-Realtimeと音声会話を行うと、モデルはMCPツールを通じてIoTデバイスにアクセス・制御できるようになります。
+=======
+これでブラウザのフロントエンドページにアクセスし、GPT-Realtimeと音声で会話すると、モデルがMCPツールを通じてIoTデバイスにアクセス・制御できるようになります。
+>>>>>>> origin/release-5.10
 
 ::: tip
  GPT-RealtimeはMCPサーバーにHTTPS経由でのみアクセス可能です。以下を必ず満たしてください：
 
 - MCPプラグインに有効かつ自己署名でないSSL証明書が設定されていること
+<<<<<<< HEAD
 - URLはIPアドレスではなくドメイン名を使用し、パブリックにアクセス可能であること
+=======
+- URLがIPアドレスではなくドメイン名を使用し、パブリックにアクセス可能であること
+>>>>>>> origin/release-5.10
    :::
 
 ::: tip
 
+<<<<<<< HEAD
 GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを使用するため、EMQX MCPブリッジプラグインの`/mcp`エンドポイントを使用し、`/sse`エンドポイントは使用しないでください。
 
 :::
@@ -141,6 +174,15 @@ GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを使�
 ## モデルへメッセージを送信する
 
 前述のコードでは、システムインストラクションを使ってデバイスのクライアントIDを事前にモデルに伝えていました。
+=======
+GPT-RealtimeはMCPサーバーにアクセスする際にStreamable HTTPを必要とするため、EMQX MCPブリッジプラグインの`/mcp`エンドポイントを使用し、`/sse`エンドポイントは使用しないでください。
+
+:::
+
+## モデルにメッセージを送信する
+
+前述のコードでは、システム指示であらかじめデバイスのクライアントIDをモデルに伝えていました。
+>>>>>>> origin/release-5.10
 
 ```javascript
 const session_update_event = {
@@ -152,7 +194,7 @@ const session_update_event = {
 };
 ```
 
-GPT-Realtimeは会話中にWebRTCデータチャネルを通じてメッセージを送信し、コンテキスト情報を追加することもサポートしています。
+GPT-Realtimeは、会話中にWebRTCデータチャネルを通じてメッセージを送信し、コンテキスト情報を追加することもサポートしています。
 
 ```javascript
 // クライアントイベントを送信

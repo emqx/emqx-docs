@@ -2,7 +2,11 @@
 
 单点登录（Single Sign-On, SSO）是一种身份验证机制，它允许用户使用一组凭据（例如用户名和密码）登录到多个应用程序或系统中，而无需在每个应用程序中单独进行身份验证。EMQX Dashboard 开启单点登录后，用户可以方便地使用企业账号管理系统登录到 EMQX Dashboard。 企业能够集中管理用户身份和权限，简化用户管理流程，在提高企业数据和系统的安全性的同时，兼顾了用户使用的便捷性。
 
+<<<<<<< HEAD
 EMQX 基于轻量级目录访问协议（LDAP）、安全断言标记语言（SAML ）2.0 标准以及 OpenID Connect (OIDC) 实施 SSO 功能，支持集成例如 [OpenLDAP](https://www.openldap.org/)、[Azure AD（Microsoft Entra ID）](https://azure.microsoft.com/en-in/products/active-directory) 以及 [Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/) 等主流身份服务提供商。
+=======
+EMQX 基于轻量级目录访问协议（LDAP）、安全断言标记语言（SAML）2.0 标准以及 OpenID Connect（OIDC）实施 SSO 功能，支持集成例如 [OpenLDAP](https://www.openldap.org/)、[Azure AD（Microsoft Entra ID）](https://azure.microsoft.com/en-in/products/active-directory) 以及 [Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/) 等主流身份服务提供商。
+>>>>>>> origin/release-5.10
 
 ## 基于 LDAP 的单点登录
 
@@ -20,19 +24,31 @@ EMQX Dashboard 允许您集成支持 SAML 的身份提供商服务实现单点�
 
 EMQX Dashboard 允许您集成支持 OIDC 的身份提供商服务实现单点登录。OIDC 是建立在 OAuth 2.0 协议之上的身份层，提供了一种标准化的方式来验证用户身份并获取用户信息。
 
+<<<<<<< HEAD
 使用 OIDC 单点登录时，用户在身份提供商处进行身份验证，身份提供商会返回包含用户信息的 ID 令牌给 EMQX Dashboard。EMQX Dashboard 收到并验证 ID 令牌成功后，即可创建用户会话信息并登录进入 Dashboard。OIDC 提供了现代化的 RESTful 身份验证方式，便于与现代身份服务集成，使用户能够安全、便捷地访问 EMQX 提供的服务。
+=======
+使用 OIDC 单点登录时，用户在身份提供商处进行身份验证，身份提供商会返回包含用户信息的 ID 令牌给 EMQX Dashboard。EMQX Dashboard 收到并验证 ID 令牌成功后，即可创建用户会话信息并登录进入 Dashboard。OIDC 提供了现代化的 RESTful 身份验证方式，便于与现代身份服务集成。
+>>>>>>> origin/release-5.10
 
 ## 配置和使用流程
 
 1. 管理员在 Dashboard 中配置并启用单点登录，配置完成后，EMQX Dashboard 会在登录页面展示单点登录入口。
 2. 在身份服务提供商（Identity Provider，IdP）侧配置用户信息。
 3. 引导用户在 Dashboard 登录页面选择不同的单点登录方式。
-4. 登录成功后，EMQX Dashboard 会根据用户信息创建会话，用户即可访问 Dashboard。
+4. 登录成功后，EMQX Dashboard 会根据用户信息创建会话，用户即可访问 Dashboard。如果该后端开启了 `force_mfa`，用户还需完成 TOTP 验证后才能获得会话凭据。
 5. 管理员为不同用户分配角色与权限，用户刷新登录后即可访问对应的资源。
+
+## 为 SSO 用户启用 MFA
+
+EMQX 5.10 起支持为 SSO 用户强制启用多因素认证（MFA），通过在各 SSO 后端配置 `force_mfa` 要求用户在完成 IdP 认证后额外通过 TOTP 验证。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
 
 ## 配置示例
 
+<<<<<<< HEAD
 以下为您提供基于 LDAP、SAML 2.0 和 OIDC 的 SSO 配置示例：
+=======
+以下为各 SSO 方式的配置示例：
+>>>>>>> origin/release-5.10
 
 - [配置 LDAP 单点登录](./sso-ldap.md)
 - [配置 SAML 单点登录](./sso-saml.md)
