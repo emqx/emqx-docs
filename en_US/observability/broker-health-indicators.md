@@ -6,7 +6,10 @@ The indicators are organized into four areas:
 
 1. **System** — operating system and Erlang VM resources.
 2. **Broker** — connection and message traffic, plus broker state.
-3. **Authentication and authorization** — connect-time identity checks and per-message ACL decisions.
+1. **System**: operating system and Erlang VM resources.
+2. **Broker**: connection and message traffic, plus broker state.
+3. **Authentication and Authorization**: connect-time identity checks and per-message ACL decisions.
+4. **Data integration**: rules, actions, connectors, and bridges.
 4. **Data integration** — rules, actions, connectors, and bridges.
 
 All metrics are exposed on the EMQX Prometheus endpoints (`/api/v5/prometheus/stats`, `/api/v5/prometheus/auth`, and `/api/v5/prometheus/data_integration`). For endpoint details and `mode` query parameters, see [Integrate with Prometheus](./prometheus.md#configure-pull-mode-integration).
