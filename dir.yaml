@@ -841,14 +841,7 @@
           path: observability/prometheus
           collapsed: true
           children:
-            - title_en: Broker Health Indicators
-              title_cn: Broker 健康指标
-              path: observability/broker-health-indicators
-              lang: en
-            - title_en: Broker Health Indicators
-              title_cn: Broker 健康指标
-              path: observability/broker-health-indicators
-              lang: cn
+            - observability/broker-health-indicators
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
