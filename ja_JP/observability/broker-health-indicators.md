@@ -9,7 +9,7 @@ The indicators are organized into four areas:
 3. **Authentication and Authorization**: connect-time identity checks and per-message ACL decisions.
 4. **Data Integration**: rules, actions, connectors, and bridges.
 
-All metrics are exposed on the EMQX Prometheus endpoints (`/api/v5/prometheus/stats`, `/api/v5/prometheus/auth`, and `/api/v5/prometheus/data_integration`). For endpoint details and `mode` query parameters, see [Integrate with Prometheus](./prometheus.md#configure-pull-mode-integration).
+All metrics are exposed on the EMQX Prometheus endpoints (`/api/v5/prometheus/stats`, `/api/v5/prometheus/auth`, and `/api/v5/prometheus/data_integration`). For endpoint details and `mode` query parameters, see [Integrate with Prometheus](./prometheus.md).
 
 ::: tip Note on collector defaults
 
