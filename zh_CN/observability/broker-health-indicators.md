@@ -78,7 +78,7 @@
 - `emqx_conf_sync_txid` —— 最近一次应用的集群配置事务 ID。各节点之间不一致表示同步异常。
 
 ### License（企业版）
-
+- `emqx_vm_uptime_ms` —— broker 已运行时间（毫秒）。突然降到很小的值意味着节点重启。
 - `emqx_license_expiry_at` —— License 过期时间（UNIX epoch 秒）。
 - `emqx_license_issued_at` —— License 签发时间。
 - `emqx_license_max_sessions` —— License 允许的最大会话数。
