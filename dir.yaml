@@ -835,7 +835,13 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus
+        - title_en: Integrate with Prometheus
+          title_cn: 集成 Prometheus
+          title_ja: Prometheus との統合
+          path: observability/prometheus
+          collapsed: true
+          children:
+            - observability/broker-health-indicators
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry

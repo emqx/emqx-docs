@@ -12,8 +12,7 @@ EMQX supports two methods for integrating Prometheus metrics monitoring:
 
 - **Pull Mode**: Prometheus directly collects metrics through EMQX's REST API.
 - **Push Mode**: EMQX pushes metrics to the Pushgateway service, from which Prometheus collects the metrics.
-
-This page introduces the configuration steps for both methods. You can click **Management** -> **Monitoring** in the left navigation menu of the EMQX Dashboard, and in the **Integration** tab, select **Prometheus** to perform the configuration. You can also click the **Help** button on the page to view specific configuration steps for each mode.
+This page introduces the configuration steps for both methods. For a curated reference of the metric series exposed on the endpoints below — including the ones worth alerting on — see [Broker Health Indicators](./broker-health-indicators.md). You can click **Management** -> **Monitoring** in the left navigation menu of the EMQX Dashboard, and in the **Integration** tab, select **Prometheus** to perform the configuration. You can also click the **Help** button on the page to view specific configuration steps for each mode.
 
 ## Configure Pull Mode Integration
 
