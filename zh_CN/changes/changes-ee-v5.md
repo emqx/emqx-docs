@@ -92,15 +92,13 @@
 
 - [#16942](https://github.com/emqx/emqx/pull/16942) [#17235](https://github.com/emqx/emqx/pull/17235) 为 API 密钥和 Dashboard 登录用户引入基于范围（Scope）的细粒度访问控制。
 
-  API 密钥现在可通过 OpenAPI 标签派生的范围限制访问特定 API 路径分类。未设置范围的密钥保持完整访问权限（向后兼容）；空范围列表将拒绝访问所有受范围保护的 API 路径。
+  API 密钥现在可通过 OpenAPI 标签派生的范围限制访问特定 API 路径分类。未设置范围的密钥保持完整访问权限（向后兼容）；空范围列表将拒绝访问所有受范围保护的路径。`publisher` API 密钥角色现已限制为仅 `[publish]`。
 
-  Dashboard 登录用户记录现在同样包含可选的 `scopes` 字段；设置后，请求将在现有角色检查的基础上，按照与 API 密钥相同的路径-范围映射进行授权。新增四个范围（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）用于覆盖仅限 Dashboard 的接口，除 `mfa_management` 外均为管理员专属（任意角色均可持有 `mfa_management` 以自行豁免强制 MFA）。API 密钥不可持有这四个登录专属范围，`publisher` API 密钥角色现已限制为仅 `[publish]`。上述检查同时适用于 HTTP API 和 Bootstrap 文件加载（不兼容的范围将被丢弃并记录警告）。
+  Dashboard 登录用户记录包含可选的 `scopes` 字段，在现有角色检查的基础上叠加授权。新增四个范围用于覆盖仅限 Dashboard 的接口：`user_management`、`sso_management` 和 `api_key_management` 为管理员专属；`mfa_management` 可由任意角色持有，用于自行豁免强制 MFA。API 密钥不可持有这四个登录专属范围。
 
   新增两个公开的目录接口供 UI 获取范围词汇表：`GET /api_key_scopes` 和 `GET /user_scopes`，任何通过 Bearer Token 认证的调用方均可访问。`scopes` 字段现在也出现在 `GET /users`、`POST /users` 和 `PUT /users/:username` 的响应中；未显式设置时，响应将投影该角色的默认范围列表。
 
-  新增按 SSO 后端独立配置并强制执行 `force_mfa` 的能力。每个后端（LDAP、OIDC、SAML）可独立配置 `force_mfa` 标志；管理员可通过 `DELETE`/`POST /users/:username/mfa` 为特定用户豁免或强制执行 MFA，该决策将覆盖当前后端策略。
-
-  新范围模型下的其他行为变更：
+  行为变更：
 
   - `dashboard.default_username` 用户受保护，不可删除、不可降级为非管理员角色，也不可设置 `scopes` 字段，仅允许修改 `description`。这保证了当其他管理员丢失或错误配置其范围时，运维人员始终保有管理员访问权限。
   - 用户对自身记录的自助操作现在受范围约束，仅修改密码和 MFA 的专用接口仍可绕过范围检查；`PUT /users/:self` 等其他操作均受用户自身范围的约束。
@@ -248,6 +246,9 @@
   此前，数据导入或启动时配置加载可能使各节点上原本相同的 action、source、bridge 或规则元数据的 `created_at`/`last_modified_at` 不一致。该命令在比较集群配置一致性时现在会忽略这类纯时间戳差异，同时仍会报告真实的配置差异。
 
 - [#17402](https://github.com/emqx/emqx/pull/17402) 改善 Cluster Link 在目标集群无响应、路由复制卡在连接阶段时的响应能力。删除此类 Cluster Link 现在会更快完成。
+
+- [#17424](https://github.com/emqx/emqx/pull/17424) 修复了一个问题：网络分区后 Mnesia 自动修复过程中，全局会话注册表可能残留同一客户端 ID 的重复或过期条目。
+  丢弃（discard）和踢除（takeover-kick）RPC 处理器现在也会在目标进程不再存活时删除注册表条目；连接路径上的注册节流逻辑现在能识别墓碑行（tombstone row，即无本地通道状态的条目）并主动清除，不再因此无限期阻塞同一客户端 ID 的新连接。
 
 #### 访问控制
 

@@ -90,17 +90,15 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   For example, if `username` is a JSON object, you can access the field with `json_value(username, 'shop.floor')`; if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`.
 
-- [#16942](https://github.com/emqx/emqx/pull/16942) [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for both API keys and Dashboard login users.
+- [#16942](https://github.com/emqx/emqx/pull/16942) [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for API keys and Dashboard login users.
 
-  API keys can now be restricted to specific API path categories using scopes derived from OpenAPI tags. Keys without scopes retain full access (backward compatible). An empty scopes list denies all scoped API paths.
+  API keys can now be restricted to specific API path categories using scopes derived from OpenAPI tags. Keys without scopes retain full access (backward compatible); an empty scopes list denies all scoped paths. The `publisher` API-key role is now constrained to `[publish]` only.
 
-  Dashboard login users now also carry an optional `scopes` field; when set, requests are authorized against the same path-to-scope catalog used for API keys, layered on top of the existing role-based check. Four new scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) cover Dashboard-only endpoints and are admin-only except `mfa_management`, which any role may hold for self-exemption from forced MFA. API keys cannot hold any of the four login-only scopes, and the `publisher` API-key role is now constrained to `[publish]` only. Both checks apply to the HTTP API and to bootstrap-file loading (incompatible scopes are dropped with a warning).
+  Dashboard login users carry an optional `scopes` field that layers on top of the existing role check. Four new scopes cover Dashboard-only endpoints: `user_management`, `sso_management`, and `api_key_management` are admin-only; `mfa_management` is available to any role for self-exemption from forced MFA. API keys cannot hold these login-only scopes.
 
-  New public catalog endpoints expose the scope vocabulary for UI consumption: `GET /api_key_scopes` and `GET /user_scopes`, both accessible to any bearer-authenticated caller. The `scopes` field is also surfaced in `GET /users`, `POST /users`, and `PUT /users/:username` responses; when not explicitly set, the response projects the role-default scope list.
+  Two new catalog endpoints expose the scope vocabulary: `GET /api_key_scopes` and `GET /user_scopes`, both accessible to any bearer-authenticated caller. The `scopes` field is also surfaced in `GET /users`, `POST /users`, and `PUT /users/:username` responses; when not explicitly set, the response projects the role-default scope list.
 
-  Added per-SSO-backend `force_mfa` enforcement. Each backend (LDAP, OIDC, SAML) accepts an independent `force_mfa` flag. New SSO logins from a backend with `force_mfa = true` require MFA setup; administrators can exempt or require individual users via `DELETE`/`POST` on `/users/:username/mfa`, and that decision overrides the live backend policy until the administrator changes it.
-
-  Additional behavior changes that follow from the new scope model:
+  Behavior changes:
 
   - The `dashboard.default_username` user is protected as a break-glass account. It cannot be deleted, demoted from administrator, or have its `scopes` field set; only its `description` may be changed. This guarantees an operator always retains administrative access if other administrators lose or misconfigure their scopes.
   - Self-service on a user's own record now respects scopes. Only the dedicated change-password and MFA self endpoints still bypass scope checks; other operations such as `PUT /users/:self` are subject to the user's scopes.
@@ -248,6 +246,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, data import or boot-time configuration loading could leave `created_at` or `last_modified_at` metadata different across nodes for otherwise identical actions, sources, bridges, or rule metadata. The command now ignores those timestamp-only differences when checking cluster configuration consistency, while still reporting real configuration differences.
 
 - [#17402](https://github.com/emqx/emqx/pull/17402) Improved Cluster Link responsiveness when route replication was stuck connecting to an unresponsive target cluster. Deleting such a Cluster Link now finishes sooner.
+
+- [#17424](https://github.com/emqx/emqx/pull/17424) Fixed a global session registry leak that could leave duplicate or stale entries for the same client ID after a network partition followed by Mnesia autoheal.
+  Discard and takeover-kick RPC handlers now also remove the registry row when the target process is no longer alive, and the registration throttle on the connect path now recognizes tombstone rows (no local channel state) and reaps them instead of blocking new connections for the same client ID indefinitely.
 
 #### Access Control
 
