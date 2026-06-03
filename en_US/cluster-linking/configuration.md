@@ -82,7 +82,7 @@ Other MQTT protocol aspects, such as authentication and authorization parameters
 
 This rule allows MQTT clients with ClientIDs that match the regex pattern `^clink-us-east` to publish and subscribe to any topic that starts with `$LINK/`. The `$LINK/` is the control topic prefix used for Cluster Linking-related messages. This ensures that the subscribing entity receives all relevant messages under the `$LINK/` namespace, which are necessary for maintaining and managing the cluster link.
 
-The single rule above is the minimum that lets a link function. For production, a complete authorization configuration also needs to forbid non-cluster-link clients from touching `$LINK/`, and finish with a default-deny rule — see [Secure Cluster Linking](./security.md) for a full example and the matching `authorization.no_match = deny` setting.
+The single rule above is the minimum that lets a link function. For production, a complete authorization configuration also needs to forbid non-cluster-link clients from touching `$LINK/`, and finish with a default-deny rule. See [Secure Cluster Linking](./security.md) for a full example and the matching `authorization.no_match = deny` setting.
 
 Cluster Linking supports [TLS connections](../network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
 
