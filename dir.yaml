@@ -261,7 +261,10 @@
           title_ja: Kubernetes での EMQX アップグレード
           lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
-      # - deploy/hot-upgrades
+        - title_en: Hot Upgrade
+          title_cn: 版本热升级
+          title_ja: ホットアップグレード
+          path: deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
@@ -1275,8 +1278,14 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
-        - changes/breaking-changes-6.0
-        - changes/breaking-changes-5.10
+        - title_en: EMQX 6.0
+          title_cn: EMQX 6.0
+          title_ja: EMQX 6.0
+          path: changes/breaking-changes-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/breaking-changes-5.10
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9
