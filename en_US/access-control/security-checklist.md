@@ -42,6 +42,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 - Constrain MQTT resource usage to reduce the impact of malformed or abusive clients. Review limits such as packet size, topic levels, subscriptions, inflight windows, and queued messages. See [MQTT Configuration](../configuration/mqtt.md).
 - Apply listener-level rate controls where needed to limit connection and publish bursts. See [Rate Limiter Configuration](../configuration/limiter.md).
 - Use [Banned Clients](./blacklist.md) and [Flapping Detect](./flapping-detect.md) to contain abusive or unstable clients when needed.
+- If Cluster Linking is enabled, enforce authentication on the listener that accepts peer connections, restrict the `$LINK/` control namespace to the dedicated Cluster Linking ClientIDs, and deny it for everyone else. See [Secure Cluster Linking](../cluster-linking/security.md).
 
 ## Phase 5: Administration and Maintenance
 
