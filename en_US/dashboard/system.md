@@ -27,6 +27,52 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
     Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
 
+### Login User Scopes
+
+Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-scopes), Dashboard users have four additional scopes that apply only to browser sessions:
+
+| Scope | Required role | Purpose |
+| --- | --- | --- |
+| `user_management` | Administrator | Manage Dashboard users (create / update / delete). |
+| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
+| `api_key_management` | Administrator | Manage API keys. |
+| `mfa_management` | Any | Manage own MFA; administrators can manage other users’ MFA. |
+
+Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) require the Administrator role and cannot be assigned to Viewers. The exception is `mfa_management`: Viewers can hold it, but it only allows them to manage MFA on their own account. It does not grant access to other users’ MFA settings. This is useful when you want Viewer accounts to be able to re-enroll or recover their own authenticator without gaining any additional privileges.
+
+When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
+
+- **Administrator**: All scopes, including the four login-only ones above.
+- **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
+
+![user_scopes](./assets/user_scopes.png)
+
+#### Role Changes and Scope Compatibility
+
+When you change a user’s role, EMQX checks whether the user’s current scopes are compatible with the new role. If they are not, the request is rejected with HTTP 400. To resolve this, include a `scopes` list in the same request that is valid for the new role.
+
+For example, if you demote an Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. (`mfa_management` is not admin-only and does not cause this rejection.)
+
+### Default Administrator Protection
+
+The `dashboard.default_username` account (created with the password configured in `dashboard.default_password`) is a break-glass account. To make sure the system can always be recovered when other administrators are misconfigured or have lost access, the default user is protected from accidental lockout:
+
+- It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
+- Its role **cannot be changed** away from `administrator`.
+- Its scope set **cannot be customized**; it always retains the full administrator scope.
+- Its description and password **can** be edited normally.
+
+Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
+
+### Self-Service Boundaries
+
+Every Dashboard user is allowed to perform two self-service actions regardless of their scopes:
+
+- Change their own password.
+- Enroll or re-enroll their own TOTP / MFA. Disabling MFA is also allowed, unless an administrator has explicitly required MFA for the user’s account. In that case, the `mfa_management` scope is needed to disable it.
+
+All other profile updates (description, role, scopes assigned by an administrator) require the appropriate scope on the acting user and are not bypassed, even when the target is the acting user.
+
 ### Namespaced Roles
 
 Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, in which each user can be restricted to operating only within a specific namespace.
@@ -87,52 +133,6 @@ For example:
 
 - **Administrator**: Full control (create, update, delete, and read) over resources in the assigned namespace.
 - **Viewer**: Read-only access (equivalent to `GET` requests) within the assigned namespace.
-
-### Login User Scopes
-
-Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-scopes), Dashboard users have four additional scopes that apply only to browser sessions:
-
-| Scope | Required role | Purpose |
-| --- | --- | --- |
-| `user_management` | Administrator | Manage Dashboard users (create / update / delete). |
-| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
-| `api_key_management` | Administrator | Manage API keys. |
-| `mfa_management` | Any | Manage own MFA; administrators can manage other users’ MFA. |
-
-Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) require the Administrator role and cannot be assigned to Viewers. The exception is `mfa_management`: Viewers can hold it, but it only allows them to manage MFA on their own account. It does not grant access to other users’ MFA settings. This is useful when you want Viewer accounts to be able to re-enroll or recover their own authenticator without gaining any additional privileges.
-
-When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
-
-- **Administrator**: All scopes, including the four login-only ones above.
-- **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
-
-![user_scopes](./assets/user_scopes.png)
-
-#### Role Changes and Scope Compatibility
-
-When you change a user’s role, EMQX checks whether the user’s current scopes are compatible with the new role. If they are not, the request is rejected with HTTP 400. To resolve this, include a `scopes` list in the same request that is valid for the new role.
-
-For example, if you demote an Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. (`mfa_management` is not admin-only and does not cause this rejection.)
-
-### Default Administrator Protection
-
-The `dashboard.default_username` account (created with the password configured in `dashboard.default_password`) is a break-glass account. To make sure the system can always be recovered when other administrators are misconfigured or have lost access, the default user is protected from accidental lockout:
-
-- It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
-- Its role **cannot be changed** away from `administrator`.
-- Its scope set **cannot be customized**; it always retains the full administrator scope.
-- Its description and password **can** be edited normally.
-
-Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
-
-### Self-Service Boundaries
-
-Every Dashboard user is allowed to perform two self-service actions regardless of their scopes:
-
-- Change their own password.
-- Enroll or re-enroll their own TOTP / MFA. Disabling MFA is also allowed, unless an administrator has explicitly required MFA for the user’s account. In that case, the `mfa_management` scope is needed to disable it.
-
-All other profile updates (description, role, scopes assigned by an administrator) require the appropriate scope on the acting user and are not bypassed, even when the target is the acting user.
 
 ## Audit Logs
 

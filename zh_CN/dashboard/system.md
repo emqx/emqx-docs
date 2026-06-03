@@ -26,7 +26,52 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
     查看者可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
 
-<<<<<<< HEAD
+### 登录用户权限范围（Scopes）
+
+从 EMQX 5.10 开始，您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。除 [10 个 API 密钥 Scope](../admin/api.md#内置范围) 外，Dashboard 用户还拥有 4 个仅适用于浏览器会话的专属 Scope：
+
+| Scope | 所需角色 | 用途 |
+| --- | --- | --- |
+| `user_management` | 管理员 | 管理 Dashboard 用户（创建 / 修改 / 删除）。 |
+| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 管理员 | 管理 API 密钥。 |
+| `mfa_management` | 任意 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
+
+其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此 Scope 非常有用。
+
+在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
+
+- **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
+- **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
+
+![user_scopes](./assets/user_scopes.png)
+
+#### 角色变更与 Scope 兼容性
+
+变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
+
+例如，如果您将一个管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个 Scope 需要管理员角色。请在同一请求中提供一个仅包含查看者兼容 Scope 的列表以完成变更。（`mfa_management` 不是仅限管理员的 Scope，不会导致此拒绝。）
+
+### 默认管理员保护
+
+`dashboard.default_username` 账号（其密码由 `dashboard.default_password` 配置）是一个应急（break-glass）账号。为了保证在其他管理员配置错误或失联时系统仍可恢复，默认用户受到下列保护，以防止误操作导致整个系统失去管理入口：
+
+- **不能被删除**：无论是从 Dashboard 还是 REST API，**删除**按钮始终不可用。
+- 角色**不能被更改**，始终保持 `administrator`。
+- Scope 集**不能被自定义**，始终拥有完整的管理员 Scope。
+- 描述和密码**可以**正常修改。
+
+其他管理员不受此限制，只要系统中至少还存在一个管理员，就可以被删除。
+
+### 自助操作边界
+
+每个 Dashboard 用户无论持有哪些 Scope，都被允许执行以下两类自助操作：
+
+- 修改自己的密码。
+- 绑定或重新绑定自己的 TOTP / MFA。禁用 MFA 同样允许，但若管理员已为该用户账号显式要求启用 MFA，则需持有 `mfa_management` Scope 方可禁用。
+
+其他个人信息变更（描述、角色、由管理员授予的 Scope）都需要操作者持有对应 Scope，即使目标用户就是操作者自己也不能绕过此检查。
+
 ### 命名空间角色
 
 从 EMQX 6.0 开始，Dashboard 支持命名空间角色功能。该特性扩展了基于角色的访问控制（RBAC），以支持多租户场景：每个用户仅被授权访问特定的命名空间，实现资源隔离与权限精细化管理。
@@ -89,53 +134,6 @@ ns:<NAMESPACE>::<ROLE>
 
 - **管理员**：对指定命名空间下的资源拥有完整权限（创建、读取、更新、删除）。
 - **查看者**：仅具备只读权限（等同于 GET 请求）权限，仅可查看资源数据。
-=======
-### 登录用户权限范围（Scopes）
-
-从 EMQX 5.10 开始，您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。除 [10 个 API 密钥 Scope](../admin/api.md#内置范围) 外，Dashboard 用户还拥有 4 个仅适用于浏览器会话的专属 Scope：
-
-| Scope | 所需角色 | 用途 |
-| --- | --- | --- |
-| `user_management` | 管理员 | 管理 Dashboard 用户（创建 / 修改 / 删除）。 |
-| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
-| `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
-
-其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此 Scope 非常有用。
-
-在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
-
-- **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
-- **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
-
-![user_scopes](./assets/user_scopes.png)
-
-#### 角色变更与 Scope 兼容性
-
-变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
-
-例如，如果您将一个管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个 Scope 需要管理员角色。请在同一请求中提供一个仅包含查看者兼容 Scope 的列表以完成变更。（`mfa_management` 不是仅限管理员的 Scope，不会导致此拒绝。）
-
-### 默认管理员保护
-
-`dashboard.default_username` 账号（其密码由 `dashboard.default_password` 配置）是一个应急（break-glass）账号。为了保证在其他管理员配置错误或失联时系统仍可恢复，默认用户受到下列保护，以防止误操作导致整个系统失去管理入口：
-
-- **不能被删除**：无论是从 Dashboard 还是 REST API，**删除**按钮始终不可用。
-- 角色**不能被更改**，始终保持 `administrator`。
-- Scope 集**不能被自定义**，始终拥有完整的管理员 Scope。
-- 描述和密码**可以**正常修改。
-
-其他管理员不受此限制，只要系统中至少还存在一个管理员，就可以被删除。
-
-### 自助操作边界
-
-每个 Dashboard 用户无论持有哪些 Scope，都被允许执行以下两类自助操作：
-
-- 修改自己的密码。
-- 绑定或重新绑定自己的 TOTP / MFA。禁用 MFA 同样允许，但若管理员已为该用户账号显式要求启用 MFA，则需持有 `mfa_management` Scope 方可禁用。
-
-其他个人信息变更（描述、角色、由管理员授予的 Scope）都需要操作者持有对应 Scope，即使目标用户就是操作者自己也不能绕过此检查。
->>>>>>> origin/release-5.10
 
 ## 审计日志
 
