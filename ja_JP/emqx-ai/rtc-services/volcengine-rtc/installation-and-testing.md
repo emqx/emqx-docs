@@ -4,19 +4,11 @@
 
 ## 前提条件
 
-<<<<<<< HEAD
 統合を開始する前に、必要なVolcano Engineサービスが有効化され、認証情報が設定されていることを確認してください。詳細な手順は[クイックスタート – Volcano Engine認証情報](./quick-start.md#4-volcano-engine-credentials)を参照してください。
 
 必要な認証情報：
 
 | 認証情報                                   | 用途                                   |
-=======
-統合を開始する前に、必要なVolcano Engineサービスが有効化されており、認証情報が設定されていることを確認してください。詳細な手順は[クイックスタート – Volcano Engine認証情報](./quick-start.md#4-volcano-engine-credentials)を参照してください。
-
-必要な認証情報：
-
-| 認証情報                                   | 用途                                      |
->>>>>>> origin/release-5.10
 | -------------------------------------------- | ---------------------------------------- |
 | `AppId` / `AppKey`                           | RTCルーム接続およびトークン生成           |
 | `AccessKeyId` / `SecretKey`                  | OpenAPIリクエスト署名                     |
@@ -25,27 +17,19 @@
 
 ## 認証プロキシサービス
 
-<<<<<<< HEAD
 クライアントはRTCルームに参加するためにトークンが必要であり、そのトークンは`AppKey`を用いて生成されます。音声セッションの開始には`StartVoiceChat` APIの呼び出しが必要で、こちらは`AccessKey`で署名しなければなりません。これらの認証情報はクライアントに公開してはならないため、認証プロキシサービスを用意します。
-=======
-クライアントはRTCルームに参加するためにトークンが必要であり、そのトークンは`AppKey`を使って生成されます。音声セッションを開始するには`StartVoiceChat` APIを呼び出す必要があり、こちらは`AccessKey`で署名しなければなりません。これらの認証情報はクライアントに公開できないため、認証プロキシサービスが必要です。
->>>>>>> origin/release-5.10
 
 プロキシサービスの役割：
 
-- `AppKey`を使ったRTCトークンの生成
-- `AccessKey`を使ったVolcano Engine OpenAPIの呼び出し
+- `AppKey`を用いたRTCトークンの生成
+- `AccessKey`を用いたVolcano Engine OpenAPIの呼び出し
 - クライアントへの`Token`およびルーム情報の返却
 
 ### RTCトークンの生成
 
 `Token`はHMAC-SHA256アルゴリズムを用いて`AppKey`から生成されます。
 
-<<<<<<< HEAD
 | 言語          | 参照実装                                                         |
-=======
-| 言語          | 参考実装例                                                   |
->>>>>>> origin/release-5.10
 | ------------- | ------------------------------------------------------------ |
 | Node.js / Bun | [token.ts](https://github.com/emqx/mcp-ai-companion-demo/tree/volcengine/rtc/volc-server/src/lib/token.ts) |
 
@@ -140,7 +124,6 @@ Response: { success: boolean }
 
 サーバー側実装のポイント：
 
-<<<<<<< HEAD
 - **シーン設定**：サーバーは初期化時に各シーンごとに`roomId`（UUID）と`userId`を生成し、`AppKey`で対応するRTCトークン（有効期限24時間）を生成します。クライアントは`/api/scenes`経由でこれらの情報を取得し、RTCルームに参加します。
 - **トークン利用**：クライアントはRTC SDKの`joinRoom`メソッドにトークンを渡して認証します。
 - **音声セッションの開始/停止**：サーバーは`sceneId`でシーン設定を検索し、`roomId`などのパラメータを取得後、Volcano Engine OpenAPIの`StartVoiceChat`や`StopVoiceChat`を呼び出します。
@@ -148,15 +131,6 @@ Response: { success: boolean }
 ## Web統合
 
 Volcano EngineはWeb統合用に`@volcengine/rtc` SDKを提供しています。クライアントとサーバー間のやり取りの流れは以下の通りです。
-=======
-- **シーン設定**：初期化時にサーバーが各シーンの`roomId`（UUID）と`userId`を生成し、`AppKey`で対応するRTCトークン（有効期限24時間）を生成します。クライアントは`/api/scenes`経由でこれらを取得し、RTCルームに参加します。
-- **トークン利用**：クライアントはRTC SDKの`joinRoom`メソッドにトークンを渡して認証します。
-- **音声セッションの開始／停止**：サーバーは`sceneId`でシーン設定を検索し、`roomId`などのパラメータを取得後、Volcano Engine OpenAPIの`StartVoiceChat`や`StopVoiceChat`を呼び出します。
-
-## Web統合
-
-Volcano EngineはWeb統合向けに`@volcengine/rtc` SDKを提供しています。クライアントとサーバー間のやり取りは以下の通りです。
->>>>>>> origin/release-5.10
 
 ![通話フロー](https://lf3-static.bytednsdoc.com/obj/eden-cn/UJjvKJ%5BY/ljhwZthlaukjlkulzlp/1310560_plantuml_diagram2.png)
 
@@ -168,7 +142,7 @@ npm install @volcengine/rtc
 
 AIノイズリダクションには`@volcengine/rtc/extension-ainr`拡張機能が含まれています。
 
-### 基本統合フロー
+### 基本的な統合フロー
 
 #### 1. シーン設定の取得
 
@@ -189,45 +163,37 @@ const { appId, roomId, token, userId } = scene.rtcConfig
 ```typescript
 import VERTC, { RoomProfileType, MediaType } from '@volcengine/rtc'
 
-// サーバーから取得したappIdでエンジンを作成
+// サーバーから取得したappIdを使ってエンジンを作成
 const engine = VERTC.createEngine(appId)
 ```
 
 #### 3. イベントリスナーの登録
 
 ```typescript
-// エラー検知
+// エラーを監視
 engine.on(VERTC.events.onError, (event) => {
   console.error('RTCエラー:', event.errorCode)
 })
 
-// リモートユーザーのストリーム公開検知（AI音声応答）
+// リモートユーザーのストリーム公開を監視（AI音声応答）
 engine.on(VERTC.events.onUserPublishStream, async (event) => {
   const { userId, mediaType } = event
-  // リモート音声ストリームをサブスクライブ
+  // リモートの音声ストリームをサブスクライブ
   await engine.subscribeStream(userId, mediaType)
 })
 
-<<<<<<< HEAD
 // バイナリメッセージ（字幕、ステータスなど）を受信
 engine.on(VERTC.events.onRoomBinaryMessageReceived, (event) => {
   const { message } = event
   // messageはTLV形式のArrayBuffer
   // ASR結果、TTSテキスト、エージェントステータスなどを含む
-=======
-// バイナリメッセージ受信（字幕、ステータスなど）
-engine.on(VERTC.events.onRoomBinaryMessageReceived, (event) => {
-  const { message } = event
-  // messageはTLV形式のArrayBuffer
-  // ASR結果、TTSテキスト、エージェント状態などを含む
->>>>>>> origin/release-5.10
 })
 ```
 
-#### 4. ルームへの参加
+#### 4. ルームに参加
 
 ```typescript
-// ステップ1で取得したtoken, roomId, userIdを使ってルームに参加
+// ステップ1で取得したtoken、roomId、userIdを使ってルームに参加
 await engine.joinRoom(
   token,
   roomId,
@@ -246,14 +212,10 @@ await engine.joinRoom(
 )
 ```
 
-<<<<<<< HEAD
 #### 5. マイクを開始し音声をパブリッシュ
-=======
-#### 5. マイクの開始と音声のパブリッシュ
->>>>>>> origin/release-5.10
 
 ```typescript
-// マイクキャプチャ開始
+// マイクキャプチャを開始
 await engine.startAudioCapture()
 
 // 音声ストリームをルームにパブリッシュ
@@ -273,13 +235,9 @@ await fetch('/api/voice/start', {
 })
 ```
 
-<<<<<<< HEAD
 ここで音声対話が開始されます。ユーザーの発話はASRで認識され、LLMで処理され、TTSで再生されます。
-=======
-この時点で音声対話が開始されます。ユーザーの発話はASRで認識され、LLMで処理され、TTSで再生されます。
->>>>>>> origin/release-5.10
 
-#### 7. ルームからの退出
+#### 7. ルームから退出
 
 ```typescript
 // パブリッシュ停止
@@ -325,19 +283,15 @@ if (supported) {
 
 ### リモート音声ストリームの受信
 
-<<<<<<< HEAD
 リモートストリームをサブスクライブした後、`MediaStream`を取得して再生できます。
-=======
-リモートストリームをサブスクライブした後、再生用の`MediaStream`を取得できます。
->>>>>>> origin/release-5.10
 
 ```typescript
 import { StreamIndex } from '@volcengine/rtc'
 
-// リモートユーザーの音声トラック取得
+// リモートユーザーの音声トラックを取得
 const audioTrack = engine.getRemoteStreamTrack(userId, StreamIndex.STREAM_INDEX_MAIN, 'audio')
 
-// MediaStreamを作成して再生
+// MediaStreamを作成し再生
 const stream = new MediaStream()
 if (audioTrack) {
   stream.addTrack(audioTrack)
@@ -356,11 +310,7 @@ Volcano Engine RTC SDKはソフトウェアアプリケーションとハード�
 
 参照：[リアルタイム会話型AI統合（ソフトウェアアプリケーション）](https://www.volcengine.com/docs/6348/1310560)
 
-<<<<<<< HEAD
 | プラットフォーム | SDK               | ドキュメント                                                |
-=======
-| プラットフォーム | SDK               | ドキュメント                                               |
->>>>>>> origin/release-5.10
 | -------- | ----------------- | ------------------------------------------------------------ |
 | Web      | `@volcengine/rtc` | [Web SDKドキュメント](https://www.volcengine.com/docs/6348/104398)  |
 | iOS      | VolcEngineRTC     | [iOS SDKドキュメント](https://www.volcengine.com/docs/6348/70080)   |
@@ -385,34 +335,23 @@ Embedded Linux、RTOS、Androidなどのハードウェアプラットフォー�
 
 ```typescript
 engine.on(VERTC.events.onUserJoined, (event) => {
-  console.log('ユーザー参加:', event.userInfo.userId)
+  console.log('ユーザーが参加しました:', event.userInfo.userId)
 })
 ```
 
 ### 音声認識の確認
 
-<<<<<<< HEAD
 マイクに向かって話し、`onRoomBinaryMessageReceived`でバイナリメッセージを受信します。メッセージはTLVエンコードされており、以下を含みます。
 
 - 字幕メッセージ：ASR結果およびLLM応答テキスト
 - ステータスメッセージ：エージェント状態（リスニング／思考中／発話中）
-=======
-マイクに向かって話し、`onRoomBinaryMessageReceived`でバイナリメッセージを受信します。メッセージはTLVエンコードされ、以下を含みます。
-
-- 字幕メッセージ：ASR結果およびLLM応答テキスト
-- ステータスメッセージ：エージェント状態（待機／思考中／発話中）
->>>>>>> origin/release-5.10
 - 関数呼び出し：ツール呼び出しリクエスト
 
 ### 音声合成の確認
 
 AI応答はリモート音声ストリームで再生されます。以下を確認してください。
 
-<<<<<<< HEAD
 1. `onUserPublishStream`が処理されている
-=======
-1. `onUserPublishStream`がハンドルされている
->>>>>>> origin/release-5.10
 2. `subscribeStream`が呼ばれている
 3. 音声トラックが`<audio>`要素にバインドされている
 
@@ -420,7 +359,6 @@ AI応答はリモート音声ストリームで再生されます。以下を確
 
 #### 接続と認証
 
-<<<<<<< HEAD
 | 問題                             | 考えられる原因                         | 対処方法                                                     |
 | -------------------------------- | ------------------------------------ | ------------------------------------------------------------ |
 | 無効なトークン（`token_error`） | トークンの有効期限切れまたはパラメータ不一致 | トークン生成時のUserIdとRoomIdが参加時と一致しているか確認、またはトークンを再生成 |
@@ -452,39 +390,6 @@ AI応答はリモート音声ストリームで再生されます。以下を確
 | ------------------------------------ | ------------------------------------------------------------ |
 | サードパーティモデルやCoze Botを使用 | `LLMConfig`でモデルパラメータを設定し、`Mode`を`CustomLLM`にしてコールバックURLを指定 |
 | 会話で応答がない                    | LLM設定を検証し、CustomLLMコールバックサービスが稼働しているか確認 |
-=======
-| 問題                             | 原因例                                     | 対策                                                         |
-| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| トークン無効（`token_error`）    | トークン期限切れまたはパラメータ不一致    | トークン生成時のUserIdとRoomIdが参加時と一致しているか確認、またはトークンを再生成 |
-| ルームに参加できない             | ネットワーク障害またはAppId誤り            | ネットワーク接続を確認し、AppIdが正しいか検証                 |
-| `Invalid 'Authorization' header` | AK/SK設定誤り                             | サーバー側のAccessKeyIdとSecretKeyを確認                     |
-| クロスサービス呼び出し失敗       | クロスサービス認可未設定                    | RTCコンソールでクロスサービス認可を完了                       |
-
-#### エージェント起動
-
-| 問題                                   | 原因例                                               | 対策                                                         |
-| --------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------ |
-| StartVoiceChat失敗                      | 署名エラーまたはパラメータ不足                       | API署名と必須パラメータを検証                                 |
-| `The task has been started`エラー       | 固定RoomId/UserIdで繰り返し呼び出し                 | 先にStopVoiceChatを呼び出し、その後StartVoiceChatを再度呼ぶ   |
-| 「AI準備中」で停止                      | 権限不足／パラメータ誤り／残高不足                   | 1) コンソールの権限確認 2) パラメータ型・大文字小文字確認 3) サービス有効化と残高確認 |
-| デジタルアバターが準備中のまま         | 同時接続数制限または設定誤り                         | アバターのAppId/Tokenを確認し、同時接続数制限を超えていないか確認 |
-
-#### デバイスとメディア
-
-| 問題                          | 原因例                               | 対策                                                         |
-| ------------------------------ | ------------------------------------ | ------------------------------------------------------------ |
-| マイク／カメラが起動しない     | セキュアでないコンテキスト           | ページが`localhost`または`https`でアクセスされているか確認   |
-| デバイス権限拒否               | ブラウザが許可していない             | [Webデバイス権限トラブルシューティング](https://www.volcengine.com/docs/6348/1169947)を参照 |
-| ASR結果がない                  | マイク未許可またはASR未有効          | ブラウザのマイク権限とASRサービスの有効化を確認               |
-| TTS音声が再生されない          | リモート音声をサブスクライブしていない | リモート音声ストリームに対して`subscribeStream`が呼ばれているか確認 |
-
-#### モデル設定
-
-| 問題                                | 対策                                                         |
-| ------------------------------------ | ------------------------------------------------------------ |
-| サードパーティモデルやCoze Botを使用 | `LLMConfig`でモデルパラメータを設定し、`Mode`を`CustomLLM`にしてコールバックURLを指定 |
-| 会話に応答がない                    | LLM設定を検証し、CustomLLMのコールバックサービスが稼働しているか確認 |
->>>>>>> origin/release-5.10
 
 ## 関連リソース
 
