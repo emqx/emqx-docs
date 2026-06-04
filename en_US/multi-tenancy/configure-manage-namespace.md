@@ -119,6 +119,37 @@ Always check the corresponding Swagger API documentation for detailed and up-to-
 
 :::
 
+### List Namespaces via REST API
+
+EMQX provides two endpoints for listing namespaces with details, depending on which namespaces you need:
+
+| Endpoint | Scope | Config included |
+| -------- | ----- | --------------- |
+| `GET /mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
+| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | No |
+
+Both endpoints support the same query parameters:
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| `last_ns` | String | `""` | Pagination cursor. Pass the `name` of the last item from the previous page to retrieve the next page. |
+| `limit` | Integer | `100` | Maximum number of namespaces to return per page. |
+
+Each item in the response contains:
+- `name`: The namespace identifier.
+- `created_at`: Unix timestamp (seconds) of when the namespace was created.
+
+**Response Example**
+
+```json
+[
+  { "name": "ns1", "created_at": 1747917753 },
+  { "name": "ns2", "created_at": 1747917754 }
+]
+```
+
+To retrieve the full configuration of a specific namespace, use `GET /mt/ns/<namespace>/config`.
+
 ### Configure a Namespace via REST API
 
 After the namespace is created, it can be configured using the `PUT /mt/ns/<namespace>/config` API.
