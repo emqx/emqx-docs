@@ -13,11 +13,7 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
 - **Pull 模式**：Prometheus 直接通过 EMQX 的 REST API 采集指标。
 - **Push 模式**：EMQX 推送指标到 Pushgateway 服务，再由 Prometheus 从 Pushgateway 服务中采集指标。
 
-<<<<<<< HEAD
 配置 Prometheus 集成步骤如下：
-=======
-本页将介绍这两种方式的配置步骤。如需查看下方端点所暴露的指标精选参考（包括建议告警的指标），请参见 [Broker 健康指标](./broker-health-indicators.md)。您可以在 EMQX Dashboard 中点击左侧导航目录中的**管理** -> **监控**，在**监控集成**标签页，选择 **Prometheus** 进行相关的集成配置。您还可以点击页面上的**帮助**按钮查看每个模式的具体配置步骤。
->>>>>>> origin/release-6.0
 
 1. 在 EMQX Dashboard 中进入**管理** -> **监控**。
 2. 切换到**监控集成**标签页。
