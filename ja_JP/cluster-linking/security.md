@@ -1,71 +1,71 @@
-# Secure Cluster Linking
+# セキュアなクラスターリンク
 
-Cluster Linking uses standard MQTT under the hood: each cluster connects to its peer as one or more MQTT clients, carrying forwarded user messages and control-plane traffic (route synchronization and response channels). Because these connections cross the network boundary between clusters, the listener that accepts them requires the same hardening as any other public-facing MQTT listener.
+クラスターリンクは内部的に標準のMQTTを使用しています。各クラスターは1つ以上のMQTTクライアントとしてピアに接続し、転送されたユーザーメッセージやコントロールプレーントラフィック（ルート同期およびレスポンスチャネル）を運びます。これらの接続はクラスター間のネットワーク境界を越えるため、受け入れ側のリスナーは他の公開向けMQTTリスナーと同様の強化が必要です。
 
-The configuration below is recommended for every production deployment. Each cluster must apply it to the listener that accepts incoming link connections from its peers. The cluster being connected *to* is the one that enforces these checks.
+以下の設定はすべての本番環境で推奨されます。各クラスターはピアからのリンク接続を受け入れるリスナーに対してこの設定を適用しなければなりません。接続先のクラスターがこれらのチェックを強制します。
 
-## Plan ClientIDs and Usernames
+## ClientIDとユーザー名の設計
 
-Every Cluster Linking MQTT connection uses a ClientID derived from the `clientid` prefix configured on the link. EMQX appends suffixes such as `:msg:<node>` to form the final ClientID. The prefix must meet the following requirements:
+すべてのクラスターリンクMQTT接続は、リンクで設定された`clientid`プレフィックスから派生したClientIDを使用します。EMQXは`:msg:<node>`などのサフィックスを付加して最終的なClientIDを形成します。プレフィックスは以下の要件を満たす必要があります。
 
-- It is unique to the source cluster (for example, `clink-A-` on a cluster whose `cluster.name` is `A`).
-- It ends with a separator character such as `-` so an anchored regex like `^clink-A-` matches only that cluster's connections without accidentally matching a hypothetical `clink-AB-...` peer.
-- It does not overlap with any prefix used by application clients.
+- ソースクラスターに固有であること（例：`cluster.name`が`A`のクラスターでは`clink-A-`）。
+- `-`などの区切り文字で終わり、`^clink-A-`のようなアンカー付き正規表現で、`clink-AB-...`のような別のピアと誤ってマッチしないこと。
+- アプリケーションクライアントで使用されるプレフィックスと重複しないこと。
 
-If you use password authentication, allocate a dedicated username for each peer cluster (for example, `clink-user:A`) and never reuse it for regular MQTT clients.
+パスワード認証を使用する場合は、各ピアクラスターに専用のユーザー名を割り当て（例：`clink-user:A`）、通常のMQTTクライアントで再利用しないでください。
 
-These ClientIDs and usernames are the identifiers your authentication and authorization rules match against, so decide on them before configuring either layer.
+これらのClientIDとユーザー名は認証・認可ルールの識別子として使用されるため、両レイヤーの設定前に決定してください。
 
-## Enable Authentication
+## 認証を有効化する
 
-Enable authentication on the listener that accepts incoming Cluster Linking connections. Without it, any party that can reach the listener can impersonate a peer cluster, inject traffic into the `$LINK/` control namespace, and disrupt or eavesdrop on inter-cluster communication.
+クラスターリンク接続を受け入れるリスナーで認証を有効にしてください。認証がなければ、接続可能な第三者がピアクラスターを偽装し、`$LINK/`コントロール名前空間にトラフィックを注入してクラスター間通信を妨害または盗聴される恐れがあります。
 
-Two mechanisms are commonly used for Cluster Linking:
+クラスターリンクで一般的に使われる認証方式は以下の2つです。
 
-- **TLS mutual authentication (mTLS):** the peer cluster presents a client certificate issued by a CA you control; the listener verifies it with `verify = verify_peer` and `fail_if_no_peer_cert = true`. This is the strongest option because it pins the peer's identity at the transport layer and doubles as the authentication check, removing the need for a separate password authenticator. See [X.509 Certificate Authentication](../access-control/authn/x509.md).
-- **Username and password:** configure `username` and `password` on the link, and set up a matching authenticator on the peer's listener. Store credentials securely and rotate them on a regular schedule.
+- **TLS相互認証（mTLS）**：ピアクラスターが管理下のCA発行のクライアント証明書を提示し、リスナーは`verify = verify_peer`および`fail_if_no_peer_cert = true`で検証します。これはトランスポート層でピアのIDを固定し、認証チェックも兼ねるため最も強力です。パスワード認証は不要になります。[X.509証明書認証](../access-control/authn/x509.md)を参照してください。
+- **ユーザー名とパスワード**：リンクに`username`と`password`を設定し、ピアのリスナーに対応する認証器を用意します。資格情報は安全に管理し、定期的にローテーションしてください。
 
-You can also combine the two: mTLS at the transport layer with password authentication layered on top.
+両者を組み合わせることも可能です。トランスポート層でmTLSを使用し、その上にパスワード認証を重ねる形です。
 
-For any link traversing untrusted networks (public internet, cross-cloud peering, partner networks), TLS is mandatory. mTLS additionally pins the peer cluster's identity at the transport layer, complementing the credential checks above.
+信頼できないネットワーク（パブリックインターネット、クラウド間ピアリング、パートナーネットワーク）を経由するリンクにはTLSが必須です。mTLSはトランスポート層でピアクラスターのIDを固定し、上記の資格情報チェックを補完します。
 
-For the full list of supported mechanisms, see the [Authentication](../access-control/authn/authn.md) overview. TLS configuration for the link connection itself is covered in [Configure MQTT Connections](./configuration.md#configure-mqtt-connections).
+サポートされる認証方式の一覧は[認証](../access-control/authn/authn.md)の概要を参照してください。リンク接続自体のTLS設定は[MQTT接続の設定](./configuration.md#configure-mqtt-connections)に記載があります。
 
-## Enable Authorization
+## 認可を有効化する
 
-Once authenticated, Cluster Linking clients must be restricted to the `$LINK/` namespace, and no other client should be permitted to use it. Without this boundary, an authenticated but unrelated client could inject forged route updates or forwarded messages into the link.
+認証後、クラスターリンククライアントは`$LINK/`名前空間に制限され、他のクライアントがこの名前空間を使用することは許可されてはなりません。この境界がなければ、認証済みでも無関係なクライアントが偽造されたルート更新や転送メッセージをリンクに注入できます。
 
-A peer cluster communicates with the local broker over the following control topics. `<Cluster>` is the peer's own `cluster.name` (the value of `cluster.name` configured on the side that initiated the link); it appears verbatim in the topic and is not a wildcard or runtime substitution. `<Actor>` is an internal sub-identifier assigned per replication actor; match it with `+` in your rules.
+ピアクラスターは以下のコントロールトピックを介してローカルブローカーと通信します。`<Cluster>`はピア自身の`cluster.name`（リンクを開始した側の`cluster.name`の値）で、トピックにそのまま現れ、ワイルドカードや実行時置換ではありません。`<Actor>`はレプリケーションアクターごとに割り当てられる内部サブ識別子で、ルールでは`+`でマッチさせます。
 
-| Operation | Topic | Purpose |
+| 操作 | トピック | 用途 |
 | --- | --- | --- |
-| Publish | `$LINK/cluster/msg/<Cluster>` | Forwarded user messages |
-| Publish | `$LINK/cluster/route/<Cluster>` | Route (subscription) synchronization |
-| Subscribe | `$LINK/cluster/resp/<Cluster>/<Actor>` | Responses from the local broker |
+| パブリッシュ | `$LINK/cluster/msg/<Cluster>` | 転送ユーザーメッセージ |
+| パブリッシュ | `$LINK/cluster/route/<Cluster>` | ルート（サブスクリプション）同期 |
+| サブスクライブ | `$LINK/cluster/resp/<Cluster>/<Actor>` | ローカルブローカーからのレスポンス |
 
-### ACL Configuration
+### ACL設定例
 
-The examples below use the [ACL file](../access-control/authz/file.md) source. The same rules apply equally with any other authorizer.
+以下は[ACLファイル](../access-control/authz/file.md)ソースを使った例です。他の認可方式でも同様のルールが適用されます。
 
-Granting publish and subscribe access on the catch-all `$LINK/#` is the recommended starting point. The wildcard covers all current and future control topics, so you do not need to update rules when upgrading EMQX.
+`$LINK/#`のキャッチオールに対するパブリッシュ・サブスクライブ許可は推奨される出発点です。ワイルドカードは現在および将来のすべてのコントロールトピックをカバーするため、EMQXのアップグレード時にルールを更新する必要がありません。
 
-Assume this broker accepts links from two peer clusters whose `cluster.name` values are `A` and `C`, and the link configuration on each peer sets `clientid` to `clink-A-` and `clink-C-` respectively. The rules below allow each peer to use the `$LINK/` namespace, deny anyone else from touching it, and finish with a default-deny so unrelated clients cannot publish or subscribe anywhere unless an earlier `allow` rule matches:
+このブローカーが`cluster.name`が`A`と`C`の2つのピアクラスターからのリンクを受け入れ、各ピアのリンク設定で`clientid`をそれぞれ`clink-A-`と`clink-C-`にしていると仮定します。以下のルールは各ピアに`$LINK/`名前空間の使用を許可し、その他のクライアントはアクセスを拒否し、最後にデフォルト拒否を設定して無関係なクライアントがどこにもパブリッシュやサブスクライブできないようにします。
 
 ```erlang
-%% Allow each peer cluster to use the $LINK control namespace.
+%% 各ピアクラスターに$LINKコントロール名前空間の使用を許可
 {allow, {clientid, {re, "^clink-A-"}}, all, ["$LINK/#"]}.
 {allow, {clientid, {re, "^clink-C-"}}, all, ["$LINK/#"]}.
 
-%% Deny any other client from touching the $LINK namespace.
+%% その他のクライアントによる$LINK名前空間へのアクセスを拒否
 {deny, all, all, ["$LINK/#"]}.
 
-%% ... your application's allow rules go here ...
+%% ... アプリケーションの許可ルールをここに追加 ...
 
-%% Catch-all: deny everything not matched by an earlier allow.
+%% キャッチオール：前のallowにマッチしないものはすべて拒否
 {deny, all}.
 ```
 
-Pair the catch-all `{deny, all}` with the deny-by-default authorizer setting so non-matching authorization checks fail closed:
+キャッチオールの`{deny, all}`は認可器のdeny-by-default設定と組み合わせて、マッチしない認可チェックを閉じる（fail closed）ようにします。
 
 ```hocon
 authorization {
@@ -73,7 +73,7 @@ authorization {
 }
 ```
 
-If you prefer an enumerated allow list over the wildcard (more restrictive but more fragile: new control topics introduced in future EMQX versions would have to be added by hand), the equivalent rules for the same two peers `A` and `C` look like this:
+ワイルドカードではなく列挙された許可リストを好む場合（より制限的ですが脆弱：将来のEMQXバージョンで新たに追加されるコントロールトピックを手動で追加する必要があります）、同じ2つのピア`A`と`C`に対する等価ルールは以下の通りです。
 
 ```erlang
 {allow, {clientid, {re, "^clink-A-"}}, publish,   ["$LINK/cluster/msg/A", "$LINK/cluster/route/A"]}.
@@ -83,13 +83,13 @@ If you prefer an enumerated allow list over the wildcard (more restrictive but m
 {deny, all}.
 ```
 
-Notice how each `<Cluster>` in the topic table is replaced with the peer's actual `cluster.name` (`A` and `C` here), and each ClientID regex is the prefix you configured in the peer's `clientid` field. The two values are independent and you must keep them in sync yourself when naming a new peer.
+トピック表中の各`<Cluster>`はピアの実際の`cluster.name`（ここでは`A`と`C`）に置き換えられ、ClientID正規表現はピアの`clientid`フィールドで設定したプレフィックスです。これら2つの値は独立しており、新しいピアを命名する際は自分で同期を保つ必要があります。
 
-For the available authorization sources and configuration options, see the [Authorization](../access-control/authz/authz.md) overview.
+利用可能な認可ソースと設定オプションの詳細は[認可](../access-control/authz/authz.md)の概要を参照してください。
 
-## See Also
+## 関連項目
 
-- [Authentication](../access-control/authn/authn.md)
-- [Authorization](../access-control/authz/authz.md)
-- [Use ACL File](../access-control/authz/file.md)
-- [Security Checklist](../access-control/security-checklist.md)
+- [認証](../access-control/authn/authn.md)
+- [認可](../access-control/authz/authz.md)
+- [ACLファイルの使用](../access-control/authz/file.md)
+- [セキュリティチェックリスト](../access-control/security-checklist.md)
