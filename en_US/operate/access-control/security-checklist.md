@@ -7,16 +7,16 @@ This checklist helps you review an EMQX deployment before exposing it to product
 - Raise operating system file descriptor limits and service-level `LimitNOFILE` settings to match your connection scale so the node does not fail under normal or hostile connection pressure.
 - Harden the TCP stack and firewall posture for long-lived MQTT traffic, including SYN flood protection, connection tracking capacity, and listener exposure on trusted interfaces only.
 - Expose only the listeners your clients actually need. On untrusted networks, prefer encrypted listeners such as `8883` and `8084`, and restrict plaintext listeners such as `1883` to internal or transitional use cases. See [Listener Configuration](../configuration/listener.md) and [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
-- Restrict inter-node ports with security groups or firewall rules. For the port mapping used inside a cluster, see [Cluster Security](../deploy/cluster/security.md).
+- Restrict inter-node ports with security groups or firewall rules. For the port mapping used inside a cluster, see [Cluster Security](../cluster/security.md).
 - If nodes have multiple interfaces, bind Erlang distribution traffic to the private network interface only.
-- If you deploy EMQX behind a load balancer or TCP proxy, enable [Proxy Protocol](../deploy/cluster/lb.md) only on the listeners that need the real client IP address or client certificate details.
+- If you deploy EMQX behind a load balancer or TCP proxy, enable [Proxy Protocol](../cluster/lb.md) only on the listeners that need the real client IP address or client certificate details.
 - If Proxy Protocol is enabled for a listener, expose that address and port only to the designated proxy or load balancer. Enforce this in EMQX with `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]`, combined with network-level controls (firewall, private network, or Unix socket). Otherwise, a client that reaches the port directly can craft a PROXY v2 frame with arbitrary peer-cert fields and impersonate any identity.
 
 ## Phase 2: Erlang and Cluster
 
-- Replace the default node cookie on every node in the cluster, and use the same high-entropy secret on all members. See [Set Node Cookie](../deploy/cluster/security.md#set-node-cookie).
+- Replace the default node cookie on every node in the cluster, and use the same high-entropy secret on all members. See [Set Node Cookie](../cluster/security.md#set-node-cookie).
 - Protect `emqx.conf`, ACL files, certificates, private keys, and other secret material with strict file permissions and secure secret-management processes.
-- Keep clustering ports internal, and enable TLS for inter-node communication when traffic crosses less-trusted networks or public cloud boundaries. See [Cluster Security](../deploy/cluster/security.md).
+- Keep clustering ports internal, and enable TLS for inter-node communication when traffic crosses less-trusted networks or public cloud boundaries. See [Cluster Security](../cluster/security.md).
 - Re-check firewall rules, certificates, and cluster membership controls after adding nodes, moving networks, or changing deployment topology.
 
 ## Phase 3: Transport Security
@@ -48,10 +48,10 @@ This checklist helps you review an EMQX deployment before exposing it to product
 
 - Change the default Dashboard password before production use, and review who has administrative access. See [System](../dashboard/system.md).
 - Keep the Dashboard on trusted networks only. Prefer HTTPS for administrator access, and bind Dashboard listeners to localhost, a private interface, or a protected management network where possible. See [Dashboard Configuration](../configuration/dashboard.md).
-- If you expose the management API, use API keys instead of Dashboard credentials, grant only the minimum role required, and set expiration dates where possible. See [REST API](../admin/api.md) and [System](../dashboard/system.md#api-key).
-- If you use EMQX Enterprise, consider [Single Sign-On (SSO)](../dashboard/sso.md) for administrative users, and enforce MFA in your identity provider when available.
-- Schedule regular backups and rehearse restore procedures. Note that certificates or ACL files stored outside the EMQX data directory require separate backup. See [Backup and Restore](../operations/backup-restore.md).
-- Enable audit trails where available, and centralize logs and metrics in your observability stack for anomaly detection and incident response. See [Audit Log](../dashboard/audit-log.md), [Logs Configuration](../configuration/logs.md), and [Logs and Observability](../observability/overview.md).
+- If you expose the management API, use API keys instead of Dashboard credentials, grant only the minimum role required, and set expiration dates where possible. See [REST API](../../develop/api.md) and [System](../dashboard/system.md#api-key).
+- If you use EMQX Enterprise, consider [Single Sign-On (SSO)](../sso.md) for administrative users, and enforce MFA in your identity provider when available.
+- Schedule regular backups and rehearse restore procedures. Note that certificates or ACL files stored outside the EMQX data directory require separate backup. See [Backup and Restore](../backup-restore.md).
+- Enable audit trails where available, and centralize logs and metrics in your observability stack for anomaly detection and incident response. See [Audit Log](../audit-log.md), [Logs Configuration](../configuration/logs.md), and [Logs and Observability](../observability/overview.md).
 
 ## Revalidate After Change
 

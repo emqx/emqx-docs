@@ -84,7 +84,7 @@ This rule allows MQTT clients with ClientIDs that match the regex pattern `^clin
 
 The single rule above is the minimum that lets a link function. For production, a complete authorization configuration also needs to forbid non-cluster-link clients from touching `$LINK/`, and finish with a default-deny rule. See [Secure Cluster Linking](./security.md) for a full example and the matching `authorization.no_match = deny` setting.
 
-Cluster Linking supports [TLS connections](../network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
+Cluster Linking supports [TLS connections](../../operate/network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
 
 ## Manage Cluster Linking via REST API
 
