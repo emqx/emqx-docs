@@ -16,6 +16,8 @@ Cluster Linking requires the MQTT listener of each cluster to be reachable from 
 
 Before going to production, follow the dedicated [Secure Cluster Linking](./security.md) guide to harden authentication, authorization, and the `$LINK/` topic namespace on each cluster.
 
+Before going to production, follow the dedicated [Secure Cluster Linking](./security.md) guide to harden authentication, authorization, and the `$LINK/` topic namespace on each cluster.
+
 ## Set Up the First Cluster (cluster-us-east)
 
 Set up the first cluster `cluster-us-east` using the following configuration snippet in the cluster's configuration file:

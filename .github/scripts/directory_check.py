@@ -24,8 +24,8 @@ def check_md_content(md_file):
     else:
         md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
 
-    image_list = re.findall('(.*?)!\[(.*?)\]\((.*?)\)', md_content)
-    url_list = re.findall('(.*?)\[(.*?)\]\((.*?)\)', md_content)
+    image_list = re.findall(r'(.*?)!\[(.*?)\]\((.*?)\)', md_content)
+    url_list = re.findall(r'(.*?)\[(.*?)\]\((.*?)\)', md_content)
     for url in url_list:
         if url[0].endswith('!'):
             continue
