@@ -1,6 +1,6 @@
-# Subscription Filterの使い方
+# サブスクリプションフィルターの使い方
 
-このページでは、EMQXでSubscription Filter機能を有効化し、実際に動作を確認する手順を説明します。MQTTX CLIを使ってパブリッシャーと複数のサブスクライバーをシミュレートし、フィルター式が各サブスクライバーに届くメッセージをどのように制御するかを観察します。
+このページでは、EMQXでサブスクリプションフィルター機能を有効化し、実際に動作を確認する手順を説明します。MQTTX CLIを使ってパブリッシャーと複数のサブスクライバーをシミュレートし、フィルター式がどのように各サブスクライバーに届くメッセージを制御するかを観察します。
 
 ## 前提条件
 
@@ -9,21 +9,21 @@
 - EMQX 6.2以上が稼働していること
 - [MQTTX CLI](https://mqttx.app/cli) がインストールされていること
 
-## ステップ1: Subscription Filterを有効化する
+## ステップ1：サブスクリプションフィルターを有効化する
 
-Subscription Filterはデフォルトで無効化されています。無効時は、`?`文字はトピック文字列の通常の一部として扱われ、既存のサブスクリプションとの完全な互換性が保たれます。
+サブスクリプションフィルターはデフォルトで無効になっています。無効時は、`?`文字はトピック文字列の通常の一部として扱われ、既存のサブスクリプションとの完全な互換性が保たれます。
 
-### ダッシュボードから有効化
+### ダッシュボードからの設定
 
-1. **Management** -> **MQTT Settings** -> **General**タブに移動します。
-2. **Subscription Message Filter**フィールドを見つけて、**enable**に設定します。
-3. **Save Changes**をクリックします。
+1. **Management** -> **MQTT Settings** -> **General** タブに移動します。
+2. **Subscription Message Filter** フィールドを **enable** に設定します。
+3. **Save Changes** をクリックします。
 
 変更はブローカーの再起動なしに即時反映されます。
 
-### 設定ファイルから有効化
+### 設定ファイルからの設定
 
-`emqx.conf`に以下を追加します。
+`emqx.conf` に以下を追加します。
 
 ```hocon
 mqtt.subscription_message_filter = enable
@@ -31,7 +31,7 @@ mqtt.subscription_message_filter = enable
 
 変更を反映するにはEMQXを再起動するか、デプロイ環境が対応していれば設定のリロードを行ってください。
 
-### REST APIから有効化
+### REST APIからの設定
 
 ```bash
 curl -s -u key:secret -X PUT \
@@ -40,11 +40,11 @@ curl -s -u key:secret -X PUT \
   -d '{"subscription_message_filter": "enable"}'
 ```
 
-有効化後、クライアントはサブスクリプションにフィルター式を付加できます。構文の詳細や例は、Subscription Filter概要の[Filter Syntax](./subscription-filter-concept.md#filter-syntax)を参照してください。
+有効化後、クライアントはサブスクリプションにフィルター式を付与できます。構文の詳細や例は、サブスクリプションフィルター概要の[Filter Syntax](./subscription-filter-concept.md#filter-syntax)を参照してください。
 
-## ステップ2: サブスクライバーを起動する
+## ステップ2：サブスクライバーを起動する
 
-この例では、センサーが`sensor/1/temperature`に温度データをパブリッシュし、各メッセージには`location`というUser Propertyが含まれています。3つのサブスクライバーが同じトピックを異なるフィルター式でサブスクライブします。
+この例では、センサーが `sensor/1/temperature` に温度データをパブリッシュし、各メッセージには `location` ユーザープロパティが含まれます。3つのサブスクライバーが同じトピックを異なるフィルター式でサブスクライブします。
 
 | サブスクライバー | サブスクリプション | 受信するメッセージ条件 |
 |---|---|---|
@@ -54,7 +54,7 @@ curl -s -u key:secret -X PUT \
 
 3つのターミナルを開き、それぞれのサブスクライバーを起動します。
 
-**ターミナル1: roomAサブスクライバー**
+**ターミナル1：roomAサブスクライバー**
 
 ```bash
 mqttx sub -h localhost -p 1883 \
@@ -63,7 +63,7 @@ mqttx sub -h localhost -p 1883 \
   -t "sensor/+/temperature?location=roomA"
 ```
 
-**ターミナル2: roomBサブスクライバー**
+**ターミナル2：roomBサブスクライバー**
 
 ```bash
 mqttx sub -h localhost -p 1883 \
@@ -72,7 +72,7 @@ mqttx sub -h localhost -p 1883 \
   -t "sensor/+/temperature?location=roomB"
 ```
 
-**ターミナル3: フィルターなしサブスクライバー**
+**ターミナル3：フィルターなしサブスクライバー**
 
 ```bash
 mqttx sub -h localhost -p 1883 \
@@ -83,13 +83,13 @@ mqttx sub -h localhost -p 1883 \
 
 ::: tip
 
-`--mqtt-version 5`フラグは必須です。Subscription FilterはMQTT 5.0の機能に依存しています。
+`--mqtt-version 5` フラグは必須です。サブスクリプションフィルターはMQTT 5.0の機能に依存しています。
 
 :::
 
-## ステップ3: Room A向けメッセージをパブリッシュする
+## ステップ3：Room A向けのメッセージをパブリッシュする
 
-4つ目のターミナルで、User Propertiesに`location=roomA`を含むメッセージをパブリッシュします。
+4つ目のターミナルで、User Propertiesに `location=roomA` を含むメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -h localhost -p 1883 \
@@ -100,15 +100,15 @@ mqttx pub -h localhost -p 1883 \
   --user-properties "location: roomA"
 ```
 
-**期待される結果:**
+**期待される結果：**
 
-| サブスクライバー | メッセージ受信の有無 |
+| サブスクライバー | メッセージ受信 |
 |---|---|
 | `sub-roomA` | 受信（`location=roomA`が一致） |
-| `sub-roomB` | 非受信（`location`値が一致しない） |
+| `sub-roomB` | 非受信（`location`値が不一致） |
 | `sub-all` | 受信（フィルターなし） |
 
-## ステップ4: Room B向けメッセージをパブリッシュする
+## ステップ4：Room B向けのメッセージをパブリッシュする
 
 ```bash
 mqttx pub -h localhost -p 1883 \
@@ -119,17 +119,17 @@ mqttx pub -h localhost -p 1883 \
   --user-properties "location: roomB"
 ```
 
-**期待される結果:**
+**期待される結果：**
 
-| サブスクライバー | メッセージ受信の有無 |
+| サブスクライバー | メッセージ受信 |
 |---|---|
-| `sub-roomA` | 非受信（`location`値が一致しない） |
+| `sub-roomA` | 非受信（`location`値が不一致） |
 | `sub-roomB` | 受信（`location=roomB`が一致） |
 | `sub-all` | 受信（フィルターなし） |
 
-## ステップ5: 複数条件（ANDロジック）のテスト
+## ステップ5：複数条件（AND論理）のテスト
 
-Subscription Filterは`&`で複数条件を結合できます。`location`と`unit`の両方が一致する必要があるサブスクライバーを起動します。
+サブスクリプションフィルターは `&` で複数条件を結合できます。`location` と `unit` の両方が一致する必要がある新しいサブスクライバーを起動します。
 
 ```bash
 mqttx sub -h localhost -p 1883 \
@@ -150,7 +150,7 @@ mqttx pub -h localhost -p 1883 \
   --user-properties "unit: celsius"
 ```
 
-`sub-roomA-celsius`サブスクライバーはメッセージを受信します。次に`unit`が不一致のメッセージをパブリッシュします。
+`sub-roomA-celsius` サブスクライバーはメッセージを受信します。次に、`unit` が不一致のメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -h localhost -p 1883 \
@@ -162,11 +162,11 @@ mqttx pub -h localhost -p 1883 \
   --user-properties "unit: fahrenheit"
 ```
 
-`sub-roomA-celsius`サブスクライバーはこのメッセージを受信しません。`location=roomA`は一致していますが、`unit`条件が満たされていないためです。
+`sub-roomA-celsius` サブスクライバーは、このメッセージを受信しません。`location=roomA` は一致しても、`unit` 条件が満たされていないためです。
 
-## ステップ6: User Propertiesなしのメッセージをパブリッシュする
+## ステップ6：ユーザープロパティなしのメッセージをパブリッシュする
 
-User Propertiesなしのメッセージをパブリッシュします。
+ユーザープロパティなしのメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -h localhost -p 1883 \
@@ -176,26 +176,26 @@ mqttx pub -h localhost -p 1883 \
   -m '{"value": 20.0}'
 ```
 
-**期待される結果:**
+**期待される結果：**
 
-| サブスクライバー | メッセージ受信の有無 |
+| サブスクライバー | メッセージ受信 |
 |---|---|
 | `sub-roomA` | 非受信（`location`キーが存在しない） |
 | `sub-roomB` | 非受信（`location`キーが存在しない） |
 | `sub-all` | 受信（フィルターなし） |
 
-これは、必須のUser Propertyキーが欠落している場合、フィルター式付きサブスクライバーにはメッセージがフィルタリングされることを示しています。
+これは、必要なユーザープロパティキーが欠落している場合、フィルター式付きサブスクリプションのメッセージは除外されることを示しています。
 
 ## まとめ
 
-| シナリオ | 動作 |
+| シナリオ | 挙動 |
 |---|---|
-| メッセージのUser Propertiesがフィルター式に一致する | 配信される |
-| メッセージのUser Propertiesが部分的に一致（AND条件未達成） | 配信されない |
-| 必須のUser Propertyキーが存在しない | 配信されない |
-| サブスクリプションにフィルター式がない | トピックにマッチする全メッセージが配信される |
+| メッセージのユーザープロパティがフィルター式に完全一致 | 配信される |
+| メッセージのユーザープロパティが部分一致（AND条件未達成） | 配信されない |
+| 必須ユーザープロパティキーが存在しない | 配信されない |
+| サブスクリプションにフィルター式がない | トピック一致する全メッセージが配信される |
 
 ## 次のステップ
 
-- [Subscription Filter概要](./subscription-filter-concept.md): 設計、概念、ユースケースを詳しく理解する
-- [ワイルドカードサブスクリプション](../messaging/mqtt-wildcard-subscription.md): ワイルドカードトピックフィルターとSubscription Filterを組み合わせて柔軟なルーティングを実現する
+- [サブスクリプションフィルター概要](./subscription-filter-concept.md)：設計、概念、ユースケースを詳しく理解する。
+- [ワイルドカードサブスクリプション](../messaging/mqtt-wildcard-subscription.md)：ワイルドカートピックフィルターとサブスクリプションフィルターを組み合わせて柔軟なルーティングを実現する。
