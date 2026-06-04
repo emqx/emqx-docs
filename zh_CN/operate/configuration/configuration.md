@@ -135,7 +135,7 @@ node {
 
 1. 由于配置文件中的 `.` 分隔符不能使用于环境变量，因此 EMQX 选用双下划线 `__` 作为配置分割；
 2. 为了与其他的环境变量有所区分，EMQX 还增加了一个前缀 `EMQX_` 来用作环境变量命名空间;
-3. 环境变量的值是按 HOCON 值解析的，这也使得环境变量可以用来传递复杂数据类型的值，但要注意特殊字符如`:` 和 `=` 需要用双引号 `"` 包裹。
+3. 环境变量的值是按 HOCON 值解析的，这也使得环境变量可以用来传递复杂数据类型的值。如果值中包含 HOCON 特殊字符（例如 `:`、`=` 或 `#`），需要用双引号 `"` 包裹，让解析器将其视为字符串字面量。特别地，`#` 在 HOCON 中表示行注释 —— 未加引号时，解析器会静默丢弃 `#` 到行尾的所有内容。
 
 转换示例：
 
@@ -159,6 +159,34 @@ listeners.ssl.default {
   }
 }
 ```
+
+::: warning 包含 `#`、`:`、`=` 的值
+
+一个常见的坑是传递包含 `#` 字符的密码（或任意字符串）。由于 `#` 在 HOCON 中表示行注释，下面这样写：
+
+```bash
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="MQtt#123"
+```
+
+实际解析出的密码是 `MQtt` —— `#123` 被当作注释丢弃了。要让字面值原样传入，需要用 **HOCON 层面的**双引号包裹（不仅仅是 shell 引号），让解析器看到包含引号在内的 `"MQtt#123"`：
+
+```bash
+# 正确写法 —— HOCON 解析器看到的值是 "MQtt#123"
+export EMQX_DASHBOARD__DEFAULT_PASSWORD='"MQtt#123"'
+
+# 等价写法，将内部的双引号在 shell 中转义
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="\"MQtt#123\""
+```
+
+同样的规则适用于包含 `:` 或 `=` 的值。URL 编码（例如用 `%23` 代替 `#`）不起作用 —— EMQX 不会对环境变量值做 URL 解码。
+
+:::
+
+::: tip 为什么有些未加引号的值能传过去，有些不能
+
+EMQX 内部会将每个环境变量值包装为 `fake_key=<value>` 并尝试按 HOCON 解析。解析成功则使用解析出的值；如果因为不是合法 HOCON 语法而失败，则回退为原始字符串。因此 `EMQX_..._PASSWORD="abc#def"` 会变成 `abc`（HOCON 合法，`#def` 是注释），而 `EMQX_..._PASSWORD=".abc#def"` 会保留为 `.abc#def`（HOCON 语法非法，回退为原始字符串）。用 HOCON 引号包裹值后，行为是确定的。
+
+:::
 
 ::: tip
 未定义的根路径会被 EMQX 忽略，例如 `EMQX_UNKNOWN_ROOT__FOOBAR` 这个环境变量会被 EMQX 忽略，因为 `UNKNOWN_ROOT` 不是预先定义好的根路径。
@@ -547,15 +575,15 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 以下是可以在表达式中使用的函数：
 
 - **字符串函数**：
-  - [字符串操作函数](../../develop/data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - 还添加了一个新函数 `any_to_string/1`，用于将任何中间非字符串值转换为字符串。
-- **数组函数**：[nth/2](../../develop/data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
 - **随机函数**：rand_str, rand_int
 - **无模式编码/解码函数**：
-  - [bin2hexstr/1](../../develop/data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
-  - [hexstr2bin/1](../../develop/data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
-  - [base64_decode/1](../../develop/data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
-  - [base64_encode/1](../../develop/data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
+  - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
+  - [hexstr2bin/1](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
+  - [base64_decode/1](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
+  - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
