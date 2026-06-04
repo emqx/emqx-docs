@@ -25,6 +25,7 @@
 
    | 选项         | 说明                                                         |
    | ------------ | ------------------------------------------------------------ |
+   | 强制启用 MFA | 开启后，该 SSO 后端的所有用户在登录时须完成 MFA 设置或验证。默认关闭。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。 |
    | 服务         | LDAP服务器的地址，例如`localhost:389`。                      |
    | 用户名       | 访问 LDAP 服务器的绑定 DN（Bind DN）。                       |
    | 密码         | 访问 LDAP 服务器的用户密码。                                 |
@@ -71,6 +72,7 @@
 1. 转到 Dashboard **系统设置** -> **单点登录** 页面。
 2. 选择 **LDAP** 选项，点击 **启用** 按钮。
 3. 在配置页面中，输入 LDAP 服务器的基本信息：
+   - **强制启用 MFA**：可选。开启后，该后端的所有用户在登录时须完成 TOTP 验证。默认关闭。
    - **服务**：填写 `ip:port`，其中 IP 为 Microsoft Entra ID 的安全 LDAP 外部 IP 地址，端口为加密 LDAP `636`.
    - **用户名**、**密码**：填写 Entra ID 中创建的用于连接 Entra ID 的用户以及其密码。
    - **基本 DN**：根据 Azure AD 的域名填写，例如 `emqxqa.onmicrosoft.com` 填写为 `DC=emqxqa,DC=onmicrosoft,DC=com`。可以添加其他属性，将用户限制在某个部门或者分组内。
@@ -89,7 +91,7 @@
 
 <img src="./assets/ldap_login.png" alt="image-20230926182543521" style="zoom:67%;" />
 
-成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。
+成功进行 LDAP 身份验证后，EMQX 会自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中进行管理，例如为其分配角色与权限。如需要求 LDAP 用户在登录时完成 TOTP 二次验证，请参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
 
 ## 退出登录
 

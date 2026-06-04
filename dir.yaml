@@ -262,7 +262,10 @@
           title_ja: Kubernetes での EMQX アップグレード
           lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
-      # - deploy/hot-upgrades
+        - title_en: Hot Upgrade
+          title_cn: 版本热升级
+          title_ja: ホットアップグレード
+          path: deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
@@ -860,7 +863,13 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus
+        - title_en: Integrate with Prometheus
+          title_cn: 集成 Prometheus
+          title_ja: Prometheus との統合
+          path: observability/prometheus
+          collapsed: true
+          children:
+            - observability/broker-health-indicators
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
@@ -985,6 +994,10 @@
           title_cn: 快速开始
           title_ja: クイックスタート
           path: cluster-linking/quick-start
+        - title_en: Security
+          title_cn: 安全设置
+          title_ja: セキュリティ
+          path: cluster-linking/security
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       title_ja: MQTT ベースのファイル転送
@@ -1415,7 +1428,10 @@
           title_cn: EMQX 5.4
           title_ja: EMQX 5.4
           path: changes/breaking-changes-ee-5.4
-    - changes/breaking-changes-6.0.0
+    - title_en: Incompatible Changes from EMQX 5.x to EMQX 6.0
+      title_cn: 从 EMQX 5.x 到 EMQX 6.0 的不兼容变更
+      title_ja: EMQX 5.x から EMQX 6.0 への非互換変更
+      path: changes/breaking-changes-6.0.0
     - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
