@@ -986,7 +986,6 @@
       path: cluster-linking/introduction
       collapsed: true
       children:
-<<<<<<< HEAD
         - title_en: User Guide
           title_cn: 用户指南
           title_ja: ユーザーガイド
@@ -995,11 +994,10 @@
           title_cn: 快速开始
           title_ja: クイックスタート
           path: cluster-linking/quick-start
-=======
-        - cluster-linking/quick-start
-        - cluster-linking/configuration
-        - cluster-linking/security
->>>>>>> origin/release-6.1
+        - title_en: Security
+          title_cn: 安全设置
+          title_ja: セキュリティ
+          path: cluster-linking/security
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       title_ja: MQTT ベースのファイル転送
@@ -1390,7 +1388,6 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
-<<<<<<< HEAD
         - title_en: EMQX 6.2
           title_cn: EMQX 6.2
           title_ja: EMQX 6.2
@@ -1399,8 +1396,6 @@
           title_cn: EMQX 6.1
           title_ja: EMQX 6.1
           path: changes/breaking-changes-6.1
-=======
->>>>>>> origin/release-6.1
         - title_en: EMQX 6.0
           title_cn: EMQX 6.0
           title_ja: EMQX 6.0
@@ -1433,8 +1428,10 @@
           title_cn: EMQX 5.4
           title_ja: EMQX 5.4
           path: changes/breaking-changes-ee-5.4
-<<<<<<< HEAD
-    - changes/breaking-changes-6.0.0
+    - title_en: Incompatible Changes from EMQX 5.x to EMQX 6.0
+      title_cn: 从 EMQX 5.x 到 EMQX 6.0 的不兼容变更
+      title_ja: EMQX 5.x から EMQX 6.0 への非互換変更
+      path: changes/breaking-changes-6.0.0
     - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
@@ -1453,27 +1450,6 @@
           title_cn: 网关
           title_ja: ゲートウェイ
           path: changes/gateway-4.4-to-5.1-incompatibility
-=======
-        - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
-          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-          title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
-          path: changes/breaking-changes-5.1.0
-          collapsed: true
-          children:
-            - title_en: Authentication
-              title_cn: 认证
-              title_ja: 認証
-              path: changes/auth-4.4-to-5.1-compatibility
-            - title_en: Data Integration
-              title_cn: 数据集成
-              title_ja: データ統合
-              path: changes/data-integration-4.4-to-5.1-incompatibility
-            - title_en: Gateway
-              title_cn: 网关
-              title_ja: ゲートウェイ
-              path: changes/gateway-4.4-to-5.1-incompatibility
-    - changes/breaking-changes-6.0.0
->>>>>>> origin/release-6.1
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日

@@ -4,7 +4,6 @@ EMQX exposes an HTTP management API designed following the OpenAPI (Swagger) 3.0
 
 EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
-<<<<<<< HEAD
 | Endpoint | Format | Description |
 | --- | --- | --- |
 | `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
@@ -15,9 +14,6 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
 
 This section introduces how to work with the EMQX REST API.
-=======
-The section introduces how to work with the EMQX REST API.
->>>>>>> origin/release-6.1
 
 ## Basic Path
 

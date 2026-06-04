@@ -1,4 +1,4 @@
-# SAMLベースのSSO設定
+# SAMLベースのSSOの設定
 
 このページでは、Security Assertion Markup Language（SAML）2.0標準プロトコルに基づくシングルサインオン（SSO）の設定および使用方法について説明します。
 
@@ -94,24 +94,6 @@ EMQXダッシュボードは、SAML 2.0プロトコルをサポートするア�
 
 6. **Feedback** タブで、**I'm an Okta customer adding an internal app** を選択し、必要に応じてその他の情報を入力して、**Finish** をクリックしアプリケーション作成を完了します。
 
-<<<<<<< HEAD
-2. **Applications -> Applications** ページに移動し、**Create App integration** ボタンをクリックします。ポップアップでサインイン方法として `SAML 2.0` を選択し、**Next** をクリックします。
-
-3. **General Settings** タブでアプリケーション名を入力します（例：`EMQX Dashboard`）。**Next** をクリックします。
-
-4. **Configure SAML** タブで、ステップ1のダッシュボードで提供された以下の情報を設定します：
-
-   - **Single sign-on URL**：ダッシュボードで提供された **SSO Address** を入力します。例：`http://localhost:18083/api/v5/sso/saml/acs`
-   - **Audience URI (SP Entity ID)**：ダッシュボードで提供された **Metadata Address** を入力します。例：`http://localhost:18083/api/v5/sso/saml/metadata`
-
-   その他の情報は任意で、実際の要件に応じて設定可能です。
-
-5. 設定内容を確認し、**Next** をクリックします。
-
-6. **Feedback** タブで **I'm an Okta customer adding an internal app** を選択し、必要に応じて他の情報を入力して、**Finish** をクリックしてアプリケーション作成を完了します。
-
-=======
->>>>>>> origin/release-6.1
 <img src="./assets/okta_config.png" alt="okta_config" style="zoom:67%;" />
 
 ### ステップ3：Oktaでの設定完了とユーザー・グループの割り当て
