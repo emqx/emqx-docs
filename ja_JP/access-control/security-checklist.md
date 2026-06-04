@@ -4,6 +4,7 @@
 
 ## フェーズ1：インフラストラクチャとOS
 
+<<<<<<< HEAD
 - ノードが通常または悪意のある接続負荷下で失敗しないように、オペレーティングシステムのファイルディスクリプタ制限およびサービスレベルの`LimitNOFILE`設定を接続規模に合わせて引き上げてください。
 - SYNフラッド保護、接続追跡容量、信頼できるインターフェースのみでのリスナー公開など、長時間接続されるMQTTトラフィックに対してTCPスタックとファイアウォールの強化を行ってください。
 - クライアントが実際に必要とするリスナーのみを公開してください。信頼できないネットワークでは、`8883`や`8084`などの暗号化リスナーを優先し、`1883`などの平文リスナーは内部または移行用ケースに制限してください。[Listener Configuration](../configuration/listener.md)および[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
@@ -51,6 +52,56 @@
 - EMQX Enterpriseを使用している場合は、管理ユーザー向けに[シングルサインオン（SSO）](../dashboard/sso.md)を検討し、利用可能な場合はIDプロバイダーで多要素認証（MFA）を強制してください。
 - 定期的なバックアップをスケジュールし、復元手順のリハーサルを行ってください。証明書やACLファイルがEMQXデータディレクトリ外に保存されている場合は別途バックアップが必要です。[Backup and Restore](../operations/backup-restore.md)を参照してください。
 - 可能な場合は監査ログを有効にし、ログやメトリクスをオブザーバビリティスタックに集約して異常検知やインシデント対応に活用してください。[Audit Log](../dashboard/audit-log.md)、[Logs Configuration](../configuration/logs.md)、[Logs and Observability](../observability/overview.md)を参照してください。
+=======
+- ノードが通常または攻撃的な接続負荷下で失敗しないように、オペレーティングシステムのファイルディスクリプタ制限およびサービスレベルの `LimitNOFILE` 設定を接続規模に合わせて引き上げます。
+- 長時間接続されるMQTTトラフィック向けにTCPスタックとファイアウォールの設定を強化します。具体的にはSYNフラッド保護、接続追跡容量の確保、信頼できるインターフェースのみでのリスナー公開などを行います。
+- クライアントが実際に必要とするリスナーのみを公開します。信頼されていないネットワークでは、`8883` や `8084` のような暗号化リスナーを優先し、`1883` のような平文リスナーは内部または移行用ケースに限定してください。[Listener Configuration](../configuration/listener.md) および [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md) を参照してください。
+- クラスター内で使用されるポートマッピングについては、セキュリティグループやファイアウォールルールでノード間ポートを制限します。[Cluster Security](../deploy/cluster/security.md) を参照してください。
+- ノードに複数のインターフェースがある場合は、Erlang分散トラフィックをプライベートネットワークインターフェースのみにバインドします。
+- ロードバランサーやTCPプロキシの背後にEMQXをデプロイする場合は、実際のクライアントIPアドレスやクライアント証明書情報が必要なリスナーにのみ [Proxy Protocol](../deploy/cluster/lb.md) を有効にします。
+- Proxy Protocolがリスナーで有効な場合、そのアドレスとポートは指定されたプロキシまたはロードバランサーのみに公開します。EMQXでは `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]` とネットワークレベルの制御（ファイアウォール、プライベートネットワーク、Unixソケットなど）を組み合わせてこれを強制してください。そうしないと、ポートに直接アクセスしたクライアントが任意のピア証明書フィールドを持つPROXY v2フレームを作成し、任意のIDをなりすますことが可能になります。
+
+## フェーズ2：Erlangとクラスター
+
+- クラスター内のすべてのノードでデフォルトのノードクッキーを置き換え、すべてのメンバーで同じ高エントロピーのシークレットを使用してください。[Set Node Cookie](../deploy/cluster/security.md#set-node-cookie) を参照してください。
+- `emqx.conf`、ACLファイル、証明書、秘密鍵、その他の機密情報は厳格なファイル権限と安全なシークレット管理プロセスで保護します。
+- クラスタリングポートは内部に限定し、トラフィックが信頼性の低いネットワークやパブリッククラウド境界を越える場合はノード間通信にTLSを有効にします。[Cluster Security](../deploy/cluster/security.md) を参照してください。
+- ノードの追加、ネットワークの移動、デプロイメントトポロジーの変更後は、ファイアウォールルール、証明書、クラスター参加制御を再確認してください。
+
+## フェーズ3：トランスポートセキュリティ
+
+- トラフィックが信頼されていないネットワークを越える場合は、本番MQTTリスナーにTLSを使用してください。[Network and TLS](../network/overview.md) を参照してください。
+- 組織のセキュリティ基準に従い、レガシープロトコルバージョンや弱い暗号スイートは無効にし、ステージング環境で最終的なリスナー設定を検証してください。
+- 信頼されたCAまたは社内PKIが発行した証明書を使用し、有効期限前にローテーションしてください。
+- デバイスのIDをクライアント証明書で検証する場合は相互TLSを有効にします。このモデルではTLSハンドシェイク中にクライアント証明書チェーンと証明書の存在を検証します。[X.509 Certificate Authentication](./authn/x509.md) を参照してください。
+- ピア証明書フィールドをMQTTのユーザー名やクライアントIDにマッピングする場合（`peer_cert_as_username` / `peer_cert_as_clientid`）、リスナーは必ずmTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`）をCAバンドルで強制してください。これがないと、クライアントは攻撃者が選択したCN/DNを持つ自己署名証明書を提示して任意のIDをなりすますことが可能です。空のユーザー名の場合の追加保護として、`listeners.{type}.{name}.enable_authn = quick_deny_anonymous` を設定してください。[Certificate Information Mapping](./authn/x509.md#certificate-information-mapping) を参照してください。
+- 証明書失効が重要な環境では、[CRLチェック](../network/crl.md) または [OCSPスタップリング](../network/ocsp.md) の評価を行ってください。
+- HTTP認証サーバー、データベース、その他の統合先へのアウトバウンド接続にもTLSを有効にしてください。
+
+## フェーズ4：MQTTアクセス制御とリソース保護
+
+- 公開リスナーを公開する前に少なくとも1つの認証機構を設定してください。デフォルトでは、認証が有効でない場合、EMQXはすべてのクライアントの接続を許可します。[Authentication](./authn/authn.md) を参照してください。
+- 共有ユーザー名、パスワード、証明書の代わりに、デバイス単位またはアプリケーション単位の認証情報を推奨します。
+- X.509、JWT、SCRAM、または安全なデータベースに基づくパスワード認証など、信頼モデルに合った認証方式を選択してください。
+- パスワード認証を使用する場合は、平文の秘密情報ではなくソルト付きパスワードハッシュを保存し、`bcrypt` や `pbkdf2` のような強力なアルゴリズムを推奨します。
+- トピック権限は可能な限り狭く定義し、ワイルドカードの使用は慎重にレビューしてください。[Authorization](./authz/authz.md) を参照してください。
+- 本番環境で認可に依存する前に、許容的なデフォルトルールは削除または調整してください。
+- ファイルベースのACLを使用する場合は、適切にデフォルト拒否の姿勢を取ります。例えば、ルールの末尾に `{deny, all}` を付け、`authorization.no_match = deny` を設定します。[Use ACL File](./authz/file.md) を参照してください。
+- ポリシー変更が期待通りに反映されるよう、認可キャッシュ設定や認可順序を確認してください。
+- 不正または悪意のあるクライアントの影響を軽減するため、MQTTリソース使用を制限します。パケットサイズ、トピックレベル、サブスクリプション数、インフライトウィンドウ、キューイングされたメッセージ数などの制限を見直してください。[MQTT Configuration](../configuration/mqtt.md) を参照してください。
+- 接続やパブリッシュのバーストを制限するために、必要に応じてリスナーレベルのレート制御を適用してください。[Rate Limiter Configuration](../configuration/limiter.md) を参照してください。
+- 悪質または不安定なクライアントを制御するために、[Banned Clients](./blacklist.md) および [Flapping Detect](./flapping-detect.md) を活用してください。
+- Cluster Linkingを有効にしている場合は、ピア接続を受け入れるリスナーで認証を強制し、`$LINK/` コントロールネームスペースを専用のCluster Linking ClientIDに制限し、それ以外は拒否してください。[Secure Cluster Linking](../cluster-linking/security.md) を参照してください。
+
+## フェーズ5：管理とメンテナンス
+
+- 本番利用前にデフォルトのダッシュボードパスワードを変更し、管理アクセス権を持つユーザーを確認してください。[System](../dashboard/system.md) を参照してください。
+- ダッシュボードは信頼できるネットワーク内に限定します。管理者アクセスにはHTTPSを推奨し、可能な場合はダッシュボードリスナーをlocalhost、プライベートインターフェース、または保護された管理ネットワークにバインドしてください。[Dashboard Configuration](../configuration/dashboard.md) を参照してください。
+- 管理APIを公開する場合は、ダッシュボードの認証情報ではなくAPIキーを使用し、必要最小限のロールを付与し、有効期限を設定してください。[REST API](../admin/api.md) および [System](../dashboard/system.md#api-key) を参照してください。
+- EMQX Enterpriseを利用している場合は、管理ユーザー向けに [Single Sign-On (SSO)](../dashboard/sso.md) の導入を検討し、可能な場合はIDプロバイダーでMFAを強制してください。
+- 定期的なバックアップをスケジュールし、復元手順のリハーサルを行ってください。EMQXデータディレクトリ外に保存されている証明書やACLファイルは別途バックアップが必要です。[Backup and Restore](../operations/backup-restore.md) を参照してください。
+- 監査ログが利用可能な場合は有効化し、ログやメトリクスを可観測性スタックに集中させて異常検知やインシデント対応に備えてください。[Audit Log](../dashboard/audit-log.md)、[Logs Configuration](../configuration/logs.md)、[Logs and Observability](../observability/overview.md) を参照してください。
+>>>>>>> origin/release-5.10
 
 ## 変更後の再検証
 
