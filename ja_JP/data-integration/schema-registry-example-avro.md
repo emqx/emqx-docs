@@ -4,7 +4,11 @@
 
 ## デコードシナリオ
 
+<<<<<<< HEAD
 デバイスがAvroでエンコードされたバイナリメッセージをパブリッシュし、ルールエンジンがそれをマッチさせて、`name`フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は `avro_user/${name}` です。
+=======
+デバイスがAvroでエンコードされたバイナリメッセージをパブリッシュし、ルールエンジンでマッチングした後、`name`フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は`avro_user/${name}`です。
+>>>>>>> origin/release-6.1
 
 例えば、`name`フィールドが`Shawn`のメッセージをトピック`avro_user/Shawn`に再パブリッシュする必要があります。
 
@@ -16,9 +20,9 @@
 
 2. **Internal Schema** タブの下で、**Create** をクリックします。
 
-3. 以下のパラメータでAvroスキーマを作成します：
+3. 次のパラメータでAvroスキーマを作成します：
 
-   - **Name**: `avro_user`。この名前はエンコードおよびデコード関数で使用されます。
+   - **Name**: `avro_user`。この名前はエンコード・デコード関数で使用されます。
 
    - **Type**: `Avro`
 
@@ -41,12 +45,15 @@
 ![](./assets/schema_registry/avro_create1.png)
 
 ### ルールの作成
-
 1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. **Rules** ページの右上にある **Create** をクリックします。
+2. **Rules** ページで、右上の **Create** をクリックします。
 
+<<<<<<< HEAD
 3. 先ほど作成したスキーマを使用して、以下のルールSQL文を記述します：
+=======
+3. 先ほど作成したスキーマを使って、以下のルールSQL文を書きます：
+>>>>>>> origin/release-6.1
 
    ```sql
    SELECT
@@ -59,6 +66,7 @@
 
    ここでのポイントは `schema_decode('avro_user', payload)` です：
 
+<<<<<<< HEAD
    - `schema_decode` 関数は、スキーマ `avro_user` に従ってペイロードフィールドの内容をデコードします。
    - `as avro_user` はデコードされた値を変数 `avro_user` に格納します。
 
@@ -67,6 +75,16 @@
 5. **Topic** フィールドに、送信先トピックとして `avro_user/${avro_user.name}` と入力します。
 
 6. **Payload** フィールドにメッセージ内容のテンプレートとして `${avro_user}` と入力します。
+=======
+   - `schema_decode` 関数は、`avro_user`スキーマに従ってペイロードの内容をデコードします。
+   - `as avro_user` はデコードした値を変数 `avro_user` に格納します。
+
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
+
+5. **Topic** フィールドに、宛先トピックとして `avro_user/${avro_user.name}` を入力します。
+
+6. **Payload** フィールドに、メッセージ内容のテンプレートとして `${avro_user}` を入力します。
+>>>>>>> origin/release-6.1
 
 このアクションにより、デコードされたメッセージがJSON形式でトピック `avro_user/${avro_user.name}` に送信されます。`${avro_user.name}` は変数プレースホルダーであり、実行時にデコードされたメッセージの `name` フィールドの値に置き換えられます。
 
@@ -89,20 +107,26 @@ def publish_msg(client):
 ```
 
 ### ルール実行結果の確認
-
-1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
+<<<<<<< HEAD
 
    - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
 
    - 認証設定などでEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
 
 3. **Connect** をクリックし、MQTTクライアントとしてEMQXインスタンスに接続します。
+=======
+   - ローカルでEMQXを実行している場合は、デフォルト値を使用できます。
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードの入力が必要です。
+
+3. **Connect** をクリックして、EMQXインスタンスにMQTTクライアントとして接続します。
+>>>>>>> origin/release-6.1
 
 4. **Subscription** エリアの **Topic** フィールドに `avro_user/#` と入力し、**Subscribe** をクリックします。
 
-5. Pythonの依存関係をインストールし、デバイス側コードを実行します：
+5. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install avro paho-mqtt
@@ -120,7 +144,11 @@ def publish_msg(client):
 
 ## エンコードシナリオ
 
+<<<<<<< HEAD
 デバイスがトピック `avro_out` をサブスクライブし、Avroでエンコードされたバイナリメッセージを受信することを想定しています。ルールエンジンはそのようなメッセージをエンコードし、対応するトピックにパブリッシュします。
+=======
+デバイスがトピック `avro_out` をサブスクライブし、Avroでエンコードされたバイナリメッセージを受信することを想定しています。ルールエンジンはこのようなメッセージをエンコードし、対応するトピックにパブリッシュします。
+>>>>>>> origin/release-6.1
 
 ### スキーマの作成
 
@@ -130,9 +158,13 @@ def publish_msg(client):
 
 1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. **Rules** ページの右上にある **Create** をクリックします。
+2. **Rules** ページで、右上の **Create** をクリックします。
 
+<<<<<<< HEAD
 3. 先ほど作成したスキーマを使用して、以下のルールSQL文を記述します：
+=======
+3. 先ほど作成したスキーマを使って、以下のルールSQL文を書きます：
+>>>>>>> origin/release-6.1
 
    ```sql
    SELECT
@@ -143,6 +175,7 @@ def publish_msg(client):
 
    ここでのポイントは `schema_encode('avro_user', json_decode(payload))` です：
 
+<<<<<<< HEAD
    - `schema_encode` 関数は、スキーマ `avro_user` に従ってペイロードフィールドの内容をエンコードします。
    - `as avro_user` はエンコードされた値を変数 `avro_user` に格納します。
    - `json_decode(payload)` は、`payload` が一般的にJSONエンコードされたバイナリであるため必要であり、`schema_encode` はMap型の入力を要求します。
@@ -154,12 +187,29 @@ def publish_msg(client):
 6. **Payload** フィールドにメッセージ内容のテンプレートとして `${avro_user}` と入力します。
 
 このアクションにより、Avroでエンコードされたメッセージがトピック `avro_out` に送信されます。`${avro_user}` は変数プレースホルダーであり、`schema_encode` の結果（バイナリ値）に実行時に置き換えられます。
+=======
+   - `schema_encode` 関数は、`avro_user`スキーマに従ってペイロードの内容をエンコードします。
+   - `as avro_user` はエンコードした値を変数 `avro_user` に格納します。
+   - `json_decode(payload)` は、`payload` が一般的にJSONエンコードされたバイナリであり、`schema_encode` の入力にはMap型が必要なため使用します。
+
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
+
+5. **Topic** フィールドに、宛先トピックとして `avro_out` を入力します。
+
+6. **Payload** フィールドに、メッセージ内容のテンプレートとして `${avro_user}` を入力します。
+
+このアクションにより、Avroでエンコードされたメッセージがトピック `avro_out` に送信されます。`${avro_user}` は、`schema_encode` の結果（バイナリ値）に実行時に置き換えられる変数プレースホルダーです。
+>>>>>>> origin/release-6.1
 
 ### デバイス側コードの準備
 
 ルールが作成されたら、テスト用にデータをシミュレートできます。
 
+<<<<<<< HEAD
 以下のコードはPython言語を使用してユーザーメッセージを受信し、バイナリデータをデコードして表示します。詳細は[フルコード](https://gist.github.com/thalesmg/02046f89e9ceb70b9806dc98e6ed8b55)をご覧ください。
+=======
+以下のコードはPython言語を使用し、Userメッセージを受信してデコードし、内容を表示します。詳細は[フルコード](https://gist.github.com/thalesmg/02046f89e9ceb70b9806dc98e6ed8b55)を参照してください。
+>>>>>>> origin/release-6.1
 
 ```python
 def on_message(client, userdata, msg):
@@ -172,15 +222,22 @@ def on_message(client, userdata, msg):
 
 ### ルール実行結果の確認
 
-1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
+<<<<<<< HEAD
 
    - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
 
    - 認証設定などでEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
 
 3. **Connect** をクリックし、MQTTクライアントとしてEMQXインスタンスに接続します。
+=======
+   - ローカルでEMQXを実行している場合は、デフォルト値を使用できます。
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードの入力が必要です。
+
+3. **Connect** をクリックして、EMQXインスタンスにMQTTクライアントとして接続します。
+>>>>>>> origin/release-6.1
 
 4. **Publish** エリアの **Topic** フィールドに `avro_in` と入力し、**Payload** フィールドに以下のメッセージを入力します：
 
@@ -190,7 +247,7 @@ def on_message(client, userdata, msg):
 
 5. **Publish** をクリックします。
 
-6. Pythonの依存関係をインストールし、デバイス側コードを実行します：
+6. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install avro paho-mqtt

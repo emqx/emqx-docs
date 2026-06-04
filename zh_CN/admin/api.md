@@ -45,51 +45,13 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 
 ### 使用 API 密钥的基本认证
 
-在这种方法中，您通过使用 API 密钥和密钥作为用户名和密码来对 API 请求进行身份验证。EMQX 的 REST API 基于 HTTP 基本认证框架，要求提供这些凭据。使用 EMQX REST API 之前，您需要先创建一个 API 密钥。
+在这种方法中，您通过使用 API 密钥和密钥作为用户名和密码来对 API 请求进行身份验证。EMQX 的 REST API 基于 HTTP 基本认证框架，要求提供这些凭据。使用 EMQX REST API 之前，您需要先创建一个 API 密钥，详见 [API 密钥管理](#api-密钥管理)。
 
 ::: tip 注意
 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。
 :::
 
-#### 创建 API 密钥
-
-您可以在 Dashboard **系统设置** -> **API 密钥** 页面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
-
-您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
-
-```bash
-api_key = {
-  bootstrap_file = "etc/default_api_key.conf"
-}
-```
-
-在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}` 的格式添加多个 API 密钥：
-
-- **API Key**：任意字符串作为密钥标识。
-- **Secret Key**：使用随机字符串作为密钥。
-- **Role （可选）**：指定密钥的[角色](#角色与权限)。
-
-例如：
-
-```bash
-my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
-ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
-foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
-```
-
-通过此方式创建的 API 密钥有效期为永久有效。
-
-每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
-
-#### 角色与权限
-
-在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下3个预定义的角色：
-
-- **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
-- **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
-- **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
-
-#### 认证方式
+#### 使用 API 密钥认证
 
 使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
 
@@ -273,6 +235,161 @@ POST http://your-emqx-address:8483/api/v5/login
 ```bash
 --header "Authorization: Bearer <your-token>"
 ```
+
+## API 密钥管理
+
+### 创建 API 密钥
+
+#### Dashboard
+
+您可以在 Dashboard **系统设置** -> **API 密钥**页面中手动创建 API 密钥：
+
+1. 单击页面右上角的**创建**按钮，打开创建对话框。
+2. 配置 API 密钥详细信息：
+   - **密钥名称**（必填）：输入 API 密钥的名称。
+   - **到期时间**：留空表示永不过期。
+   - **是否启用**：默认为启用。
+   - **角色**：选择角色（可选），参见[角色与权限](#角色与权限)。
+   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 范围（Scope）](#api-范围scope)。
+   - **备注**：可选，填写密钥的描述信息。
+3. 单击**确认**，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
+
+   ::: warning 重要提示
+
+   请立即保存 API Key 和 Secret Key。Secret Key 后续将不再显示。
+
+   :::
+
+4. 单击**关闭**按钮关闭对话框。
+
+已创建的密钥可在列表页查看详情，通过**编辑**按钮修改到期时间、状态和备注，或通过**删除**按钮移除。
+
+#### Bootstrap 文件
+
+您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
+
+```bash
+api_key = {
+  bootstrap_file = "etc/default_api_key.conf"
+}
+```
+
+在指定的文件中通过多行分割的 `{API Key}:{Secret Key}:{?Role}:{?Scopes}` 的格式添加多个 API 密钥：
+
+- **API Key**：任意字符串作为密钥标识。
+- **Secret Key**：使用随机字符串作为密钥。
+- **Role（可选）**：指定密钥的[角色](#角色与权限)。
+- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
+
+例如：
+
+```bash
+my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
+ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
+foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
+rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+```
+
+通过此方式创建的 API 密钥有效期为永久有效。
+
+每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key、Role 与 Scopes。
+
+### 角色与权限
+
+在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下 3 个预定义的角色：
+
+- **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
+- **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
+- **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
+
+::: tip 注意
+`publisher` 密钥只接受 `publish` 范围。分配 Scope 时，除 `publish` 以外的任何 Scope 都会返回 HTTP 400。如果您将某个密钥的角色更改为 `publisher`，请在同一请求中包含 `"scopes": ["publish"]` 或空列表；否则，若该密钥已有的 Scope 中包含 `publish` 以外的项，请求将被拒绝。
+:::
+
+### API 范围（Scope）
+
+**Scope（范围）** 是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些业务领域的 API。它与[角色与权限](#角色与权限)相互独立、共同生效，形成两层权限控制：
+
+| 维度 | 作用 | 粒度 |
+| ---- | ---- | ---- |
+| **Role（角色）** | 限制 HTTP 方法（只读 vs 可写、只能发布等） | 请求动作 |
+| **Scope（范围）** | 限制可访问的 API 领域（客户端、规则、监控等） | 资源领域 |
+
+一次请求会先后通过两个检查：Role 校验 + Scope 校验。只有两个检查都通过，请求才会被接受。
+
+在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：监控平台只需要 `monitoring` 范围的接口，规则发布服务只需要 `data_integration` 范围的接口，集群运维工具只需要 `cluster_operations` 范围的接口。通过 Scope，您可以按最小权限原则分配密钥，降低单个密钥被泄露带来的影响面。
+
+#### 内置范围
+
+EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
+
+| Scope | 涵盖的典型 API 领域 |
+| --- | --- |
+| `connections`（连接管理） | `/clients`、`/subscriptions`、`/topics`、`/banned`、`/retainer`、`/file_transfer`、`/mqtt/delayed`、`/mqtt/topic_rewrite` 等 |
+| `publish`（消息发布） | `/publish`、`/publish/bulk` |
+| `data_integration`（数据集成） | `/rules`、`/connectors`、`/actions`、`/schema_registry`、`/schema_validations`、`/message_transformations`、`/exhooks`、`/ai/*` |
+| `access_control`（访问控制） | `/authentication`、`/authorization/*` |
+| `gateways`（协议网关） | `/gateways`、`/coap/*`、`/lwm2m/*`、`/gcp_devices` 等 |
+| `monitoring`（监控数据） | `/metrics`、`/stats`、`/monitor*`、`/alarms`、`/trace`、`/slow_subscriptions`、`/telemetry`、`/prometheus/{auth,stats,data_integration,...}` 等 |
+| `cluster_operations`（集群运维） | `/cluster*`、`/nodes`、`/load_rebalance`、`/node_eviction`、`/mt/*` 等 |
+| `system`（系统配置） | `/configs*`、`/listeners*`、`/plugins*`、`/ds/*`、`/data/*`、`/status`、`/relup`、`/opentelemetry*`、`/prometheus` 等 |
+| `audit`（审计日志） | `/audit` |
+| `license`（许可证） | `/license*` |
+
+除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围scopes)。
+
+| Scope | 所需角色 | 用途 |
+| --- | --- | --- |
+| `user_management` | 管理员 | 管理 Dashboard 用户。 |
+| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 管理员 | 管理 API 密钥。 |
+| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
+
+::: tip 提示
+Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
+:::
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
+
+#### Scope 的默认行为
+
+`scopes` 字段在 API 密钥中的行为遵循以下规则：
+
+| `scopes` 字段的值 | 语义 |
+| --- | --- |
+| **未设置**（字段不存在） | 放行所有业务端点。主要用于历史升级场景，保持与旧版本兼容。 |
+| **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
+| 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
+
+Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
+
+同样的三态模型也适用于 Dashboard 登录用户。当登录用户的 `scopes` 字段未设置时，用户将获得由角色推导出的默认 Scope 集：管理员获得全部 Scope（包括 4 个登录专属 Scope）；查看者获得全部 10 个 API 密钥 Scope，但不包括 4 个登录专属 Scope（含 `mfa_management`），除非显式分配。
+
+#### 查询可用范围
+
+EMQX 提供两个端点用于查询可用的 Scope 列表：
+
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的 Scope（即上述 10 个业务领域 Scope）。使用 API 密钥认证。
+- `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部 Scope，包含 4 个登录专属 Scope。使用 Bearer Token 认证。
+
+可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
+
+```bash
+# API 密钥 Scope
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
+
+# 登录用户 Scope（需要 Bearer Token）
+curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
+```
+
+#### 如何分配 Scope
+
+Scope 可以在以下任一入口指定：
+
+- **Dashboard**：在**系统设置** -> **API 密钥**创建或编辑密钥时，勾选需要授予的范围。
+- **REST API**：在创建 / 更新 API 密钥时，请求体加入 `"scopes": ["monitoring", "cluster_operations"]`。
+- **Bootstrap 文件**：在每一行的第四段以逗号分隔范围名，例如 `my-app:my-secret:administrator:monitoring,cluster_operations`。
 
 ## 分页
 

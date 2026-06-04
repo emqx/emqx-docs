@@ -21,6 +21,8 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
 
 根据所选择的模式，部分配置项仅适用于 Pull 模式，而部分配置项同时适用于两种模式。您可以点击 Dashboard 页面上的**帮助**按钮查看每种模式的详细配置步骤。
 
+如需查看下方端点所暴露的指标精选参考（包括建议告警的指标），请参见 [Broker 健康指标](./broker-health-indicators.md)。
+
 <img src="./assets/config_pushgateway.png" alt="config_pushgateway" style="zoom:67%;" />
 
 ## Prometheus 配置选项
