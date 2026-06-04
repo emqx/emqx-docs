@@ -262,7 +262,10 @@
           title_ja: Kubernetes での EMQX アップグレード
           lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
-      # - deploy/hot-upgrades
+        - title_en: Hot Upgrade
+          title_cn: 版本热升级
+          title_ja: ホットアップグレード
+          path: deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
@@ -852,7 +855,13 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus
+        - title_en: Integrate with Prometheus
+          title_cn: 集成 Prometheus
+          title_ja: Prometheus との統合
+          path: observability/prometheus
+          collapsed: true
+          children:
+            - observability/broker-health-indicators
         - observability/datadog
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
@@ -940,6 +949,7 @@
       children:
         - cluster-linking/quick-start
         - cluster-linking/configuration
+        - cluster-linking/security
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       title_ja: MQTT ベースのファイル転送
@@ -1282,24 +1292,57 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
-        - changes/breaking-changes-6.0
-        - changes/breaking-changes-5.10
-        - changes/breaking-changes-ee-5.9
-        - changes/breaking-changes-ee-5.8
-        - changes/breaking-changes-ee-5.7
-        - changes/breaking-changes-ee-5.6
-        - changes/breaking-changes-ee-5.5
-        - changes/breaking-changes-ee-5.4
+        - title_en: EMQX 6.0
+          title_cn: EMQX 6.0
+          title_ja: EMQX 6.0
+          path: changes/breaking-changes-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/breaking-changes-5.10
+        - title_en: EMQX 5.9
+          title_cn: EMQX 5.9
+          title_ja: EMQX 5.9
+          path: changes/breaking-changes-ee-5.9
+        - title_en: EMQX 5.8
+          title_cn: EMQX 5.8
+          title_ja: EMQX 5.8
+          path: changes/breaking-changes-ee-5.8
+        - title_en: EMQX 5.7
+          title_cn: EMQX 5.7
+          title_ja: EMQX 5.7
+          path: changes/breaking-changes-ee-5.7
+        - title_en: EMQX 5.6
+          title_cn: EMQX 5.6
+          title_ja: EMQX 5.6
+          path: changes/breaking-changes-ee-5.6
+        - title_en: EMQX 5.5
+          title_cn: EMQX 5.5
+          title_ja: EMQX 5.5
+          path: changes/breaking-changes-ee-5.5
+        - title_en: EMQX 5.4
+          title_cn: EMQX 5.4
+          title_ja: EMQX 5.4
+          path: changes/breaking-changes-ee-5.4
+        - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
+          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+          title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
+          path: changes/breaking-changes-5.1.0
+          collapsed: true
+          children:
+            - title_en: Authentication
+              title_cn: 认证
+              title_ja: 認証
+              path: changes/auth-4.4-to-5.1-compatibility
+            - title_en: Data Integration
+              title_cn: 数据集成
+              title_ja: データ統合
+              path: changes/data-integration-4.4-to-5.1-incompatibility
+            - title_en: Gateway
+              title_cn: 网关
+              title_ja: ゲートウェイ
+              path: changes/gateway-4.4-to-5.1-incompatibility
     - changes/breaking-changes-6.0.0
-    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
-      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-      title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
-      path: changes/breaking-changes-5.1.0
-      collapsed: true
-      children:
-        - changes/auth-4.4-to-5.1-compatibility
-        - changes/data-integration-4.4-to-5.1-incompatibility
-        - changes/gateway-4.4-to-5.1-incompatibility
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日

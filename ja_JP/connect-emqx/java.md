@@ -1,24 +1,24 @@
 # Java SDKで接続する
 
-[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) は、Javaで書かれたMQTTクライアントライブラリ（MQTT Javaクライアント）であり、JVMやAndroidなどのJava互換プラットフォームで利用できます。
+[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) はJavaで書かれたMQTTクライアントライブラリ（MQTT Javaクライアント）で、JVMやAndroidなどのJava互換プラットフォームで使用できます。
 
-Eclipse Paho Java Clientは、非同期APIのMqttAsyncClientと同期APIのMqttClientを提供しています。
+Eclipse Paho Java Clientは、非同期および同期のAPIとしてMqttAsyncClientとMqttClientを提供しています。
 
 ## MavenでPaho Javaをインストールする
 
-Paho Javaクライアントライブラリは、パッケージ管理ツールMavenを使って簡単にインストールできます。最新バージョンは以下のように指定します。
+Paho Javaクライアントライブラリは、パッケージ管理ツールのMavenを使って簡単にインストールできます。最新バージョンは以下のようにインストールします。
 
 ```xml
 <dependency>
   <groupId>org.eclipse.paho</groupId>
-  <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-  <version>1.2.5</version>
+	<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+       <version>1.2.5</version>
 </dependency>
 ```
 
-## Paho Javaの使用例
+## Paho Java使用例
 
-Java環境では、Paho Javaは比較的安定して広く使われているMQTTクライアントライブラリです。以下の例は、Java言語でEMQXに接続し、メッセージの送受信を行うPaho Javaの完全なコードです。
+Java環境において、Paho Javaは比較的安定して広く使われているMQTTクライアントライブラリです。この例では、Java言語でEMQXに接続し、メッセージの送受信を行うPaho Javaの完全なコードを示します。
 
 **App.java**
 
@@ -49,13 +49,13 @@ public class App {
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setUserName("emqx_test");
             connOpts.setPassword("emqx_test_password".toCharArray());
-            // セッションを保持しない
+            // セッションを保持する
             connOpts.setCleanSession(true);
 
             // コールバックを設定
             client.setCallback(new PushCallback());
 
-            // 接続を確立
+            // 接続を確立する
             System.out.println("ブローカーに接続中: " + broker);
             client.connect(connOpts);
 
@@ -65,7 +65,7 @@ public class App {
             // サブスクライブ
             client.subscribe(subTopic);
 
-            // メッセージパブリッシュに必要なパラメータ設定
+            // メッセージパブリッシュに必要なパラメータ
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
             client.publish(pubTopic, message);
@@ -88,7 +88,7 @@ public class App {
 
 ```
 
-**メッセージコールバック処理クラス OnMessageCallback.java**
+**メッセージ受信処理用コールバッククラス OnMessageCallback.java**
 
 ```java
 package io.emqx;
@@ -99,7 +99,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class OnMessageCallback implements MqttCallback {
     public void connectionLost(Throwable cause) {
-        // 接続が失われた後、通常ここで再接続を行う
+        // 接続が切断された後、通常ここで再接続を行う
         System.out.println("切断されました。再接続可能です");
     }
 
@@ -116,6 +116,6 @@ public class OnMessageCallback implements MqttCallback {
 }
 ```
 
-## Paho JavaのMQTT 5.0対応状況
+## Paho JavaのMQTT 5.0サポート
 
-現時点で、Paho JavaはMQTT 5.0に対応中であり、まだ完全にはサポートされていません。
+現在、Paho JavaはMQTT 5.0に対応中であり、まだ完全なサポートはされていません。
