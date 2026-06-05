@@ -4,7 +4,7 @@
 
 - [#17157](https://github.com/emqx/emqx/pull/17157) Introduced a new Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, whose default value is `true`. When enabled, rules will only trigger on messages published by clients on the same namespace as the rule itself.
 
-- [#17244](https://github.com/emqx/emqx/pull/17244) Removed the hot-upgrade REST API endpoints (`/api/v5/relup/*`). Hot-upgrade is now operated exclusively through the `emqx ctl relup` CLI on each node, with no Dashboard surface.
+- [#17325](https://github.com/emqx/emqx/pull/17325) Removed the hot-upgrade REST API endpoints (`/api/v5/relup/*`). Hot-upgrade is now operated exclusively through the `emqx ctl relup` CLI on each node, with no Dashboard surface.
 
   Place the target release tarball and its `.sha256` sidecar (same base name, same directory) anywhere readable by the EMQX process. Run `emqx ctl relup upgrade <TarballPath>` on each node to apply the upgrade; the target version is read from `releases/emqx_vars` (`REL_VSN`) inside the tarball.
 

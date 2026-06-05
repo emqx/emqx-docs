@@ -4,7 +4,7 @@
 
 - [#17157](https://github.com/emqx/emqx/pull/17157) 新增规则引擎配置项 `rule_engine.limit_selects_in_namespace`，默认值为 `true`。启用后，规则仅对与规则自身处于同一命名空间的客户端所发布的消息触发。
 
-- [#17244](https://github.com/emqx/emqx/pull/17244) 移除热升级 REST API 端点（`/api/v5/relup/*`）。热升级现在仅通过在每个节点上执行 `emqx ctl relup` CLI 命令进行操作，Dashboard 不再提供对应界面。
+- [#17325](https://github.com/emqx/emqx/pull/17325) 移除热升级 REST API 端点（`/api/v5/relup/*`）。热升级现在仅通过在每个节点上执行 `emqx ctl relup` CLI 命令进行操作，Dashboard 不再提供对应界面。
 
   将目标版本的 tarball 及其 `.sha256` 附件（文件名相同，位于同一目录）放置到 EMQX 进程可读的任意路径下。在每个节点上运行 `emqx ctl relup upgrade <TarballPath>` 以应用升级；目标版本号从 tarball 内的 `releases/emqx_vars`（`REL_VSN`）中读取。
 
