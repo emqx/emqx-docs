@@ -81,7 +81,7 @@ The Namespace feature in EMQX provides logical isolation for different client gr
 
 EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF).
 
-The **Rule Engine Security** page lets you configure the built-in SSRF protection policy from the Dashboard. When enabled, EMQX validates outbound targets at configuration update time and rejects connections to blocked addresses before they are established.
+Starting from EMQX 6.0.3, the **Rule Engine Security** page lets you configure the built-in SSRF protection policy from the Dashboard. When enabled, EMQX validates outbound targets at configuration create or update time. Targets that resolve to a blocked address are rejected at that point. This check does not run at connection time, so DNS rebinding or other post-validation address changes are not covered.
 
 ::: tip
 For runtime network enforcement and deployments with delegated administrators, the Dashboard-level SSRF policy should be supplemented with host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules) for the full guidance.
