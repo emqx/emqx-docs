@@ -121,7 +121,6 @@ A list of CIDR ranges that EMQX will refuse to connect to. The default set cover
 | `224.0.0.0/4` | IPv4 multicast |
 | `ff00::/8` | IPv6 multicast |
 | `100.100.100.200/32` | Alibaba Cloud metadata service |
-| `169.254.169.253/32` | AWS external metadata service |
 
 ::: warning Important Notice
 Removing entries from the default rejected CIDR list may expose EMQX to SSRF attacks. Only remove an entry if you have a specific operational requirement and understand the security implications.
