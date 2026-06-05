@@ -48,7 +48,7 @@
 
 - 在生产环境使用前修改 Dashboard 默认密码，并定期审查谁拥有管理权限。详见[系统](../dashboard/system.md)。
 - 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../configuration/dashboard.md)。
-- 在**管理** > **集群配置** > **规则引擎安全**中启用 SSRF 防护，以在配置更新时校验连接器、数据桥接和动作的出站目标。在允许委派管理员创建或修改规则引擎资源的部署中尤为重要。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
+- 在**管理** -> **集群配置** -> **规则引擎安全**中启用 SSRF 防护，以在配置更新时校验连接器、数据桥接和动作的出站目标。在允许委派管理员创建或修改规则引擎资源的部署中尤为重要。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 - 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../admin/api.md)和[系统](../dashboard/system.md#api-key)。
 - 如果您使用的是 EMQX 企业版，可为管理用户配置[单点登录（SSO）](../dashboard/sso.md)，并在身份提供方侧启用 MFA（如果可用）。
 - 定期执行备份并演练恢复流程。请注意，若证书或 ACL 文件存放在 EMQX 数据目录之外，则需要单独备份。详见[备份与恢复](../operations/backup-restore.md)。
