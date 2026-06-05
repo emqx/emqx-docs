@@ -81,7 +81,7 @@ Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature ex
 
 Namespaced admin access is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidental cross-team configuration changes. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-If you allow delegated administrators to manage namespace-scoped resources, enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** > **Cluster Settings** > **[Rule Engine Security](./cluster_settings.md#rule-engine-security)** to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 :::
 
