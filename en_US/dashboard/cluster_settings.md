@@ -91,19 +91,19 @@ For runtime network enforcement and deployments with delegated administrators, t
 
 Toggle **Enable SSRF Protection** to turn the policy on or off. When enabled, EMQX validates outbound targets each time a connector, bridge, or action is created or updated. The evaluation order is:
 
-1. Exact hostname match against **Rejected Hostnames**: rejected immediately if matched.
+1. Exact hostname match against **Denied Hostnames**: rejected immediately if matched.
 2. Resolved IPs checked against **Allowed CIDR Ranges**: allowed if matched.
-3. Resolved IPs checked against **Rejected CIDR Ranges**: rejected if matched.
+3. Resolved IPs checked against **Denied CIDR Ranges**: rejected if matched.
 
-This policy is disabled by default for compatibility with existing deployments. Enable it for all deployments unless your connectors or actions must reach internal services. In that case, review and adjust the allowed and rejected CIDR ranges before enabling.
+This policy is disabled by default for compatibility with existing deployments. Enable it for all deployments unless your connectors or actions must reach internal services. In that case, review and adjust the allowed and denied CIDR ranges before enabling.
 
 ### Allowed CIDR Ranges
 
-A list of CIDR ranges whose resolved IP addresses are always permitted, regardless of the rejected CIDR ranges. Use this field to explicitly allow specific internal subnets that your connectors must reach.
+A list of CIDR ranges whose resolved IP addresses are always permitted, regardless of the denied CIDR ranges. Use this field to explicitly allow specific internal subnets that your connectors must reach.
 
-If a resolved IP matches an entry in this list, it bypasses the rejected CIDR check.
+If a resolved IP matches an entry in this list, it bypasses the denied CIDR check.
 
-### Rejected CIDR Ranges
+### Denied CIDR Ranges
 
 A list of CIDR ranges that EMQX will refuse to connect to. The default set covers addresses that are commonly abused in SSRF attacks:
 
@@ -127,13 +127,13 @@ A list of CIDR ranges that EMQX will refuse to connect to. The default set cover
 Removing entries from the default rejected CIDR list may expose EMQX to SSRF attacks. Only remove an entry if you have a specific operational requirement and understand the security implications.
 :::
 
-If your connectors must reach an address in the default rejected list (for example, AWS connectors that retrieve credentials from the instance metadata service at `169.254.169.254`), add that address to **Allowed CIDR Ranges** rather than removing it from the rejected list. The allowed list takes precedence.
+If your connectors must reach an address in the default denied list (for example, AWS connectors that retrieve credentials from the instance metadata service at `169.254.169.254`), add that address to **Allowed CIDR Ranges** rather than removing it from the denied list. The allowed list takes precedence.
 
-### Rejected Hostnames
+### Denied Hostnames
 
 A list of hostnames that EMQX will refuse to connect to regardless of their resolved IP address. Hostname matching is exact and case-insensitive. This field is useful for blocking known cloud metadata endpoints by name.
 
-Click **Save** to apply the changes.
+Click **Save Changes** to apply the changes.
 
 ## Listeners
 
