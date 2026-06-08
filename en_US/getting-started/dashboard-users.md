@@ -78,6 +78,66 @@ Users can change their own passwords. Administrators can change the password for
 - Must contain at least 2 different character types from: letters, numbers, special characters
 - ASCII characters only
 
+## Category-Based Permission Control
+
+In addition to the role-based access control described above, EMQX Enterprise supports category-based fine-grained permission control for Dashboard users. This allows administrators to narrow a user's access beyond their role by assigning specific permission categories (scopes).
+
+### Permission Categories
+
+EMQX defines a vocabulary of 9 permission categories:
+
+| Category | Applies to | Description |
+|----------|-----------|-------------|
+| `banned` | API keys + Dashboard users | Blacklist management |
+| `rule_engine` | API keys + Dashboard users | Rule engine and actions |
+| `resources` | API keys + Dashboard users | Connectors and bridges |
+| `plugins` | API keys + Dashboard users | Plugin management |
+| `modules` | API keys + Dashboard users | Module configuration |
+| `others` | API keys + Dashboard users | Miscellaneous endpoints |
+| `user_management` | Dashboard users only | Manage other Dashboard accounts |
+| `mfa_management` | Dashboard users only | Manage other users' MFA |
+| `app_management` | Dashboard users only | Manage API keys |
+
+Categories 1–6 (pre-existing business categories) apply to both API keys and Dashboard users. Categories 7–9 are exclusive to Dashboard users and cannot be assigned to API keys.
+
+### Role-Scope Compatibility
+
+| Role | Allowed Scopes | Role Default (no explicit scopes) |
+|------|---------------|-----------------------------------|
+| `administrator` | All 9 categories | Pre-upgrade behaviour: access to all endpoints |
+| `viewer` | 4 common + 3 dashboard-only categories. `user_management` and `app_management` are **not** allowed for viewers. | 4 common + `mfa_management`. GET-only endpoints remain accessible because GET bypasses the scope layer. |
+
+The self-service paths — a user changing their own password, managing their own MFA, and logging out — are always permitted regardless of scopes.
+
+### Setting Scopes for a User
+
+When creating or updating a user, administrators can set an optional `scopes` field to restrict the user's permissions:
+
+- **Omitted** (no change / use role default): The user receives the pre-upgrade role-based behaviour.
+- **Empty array `[]`**: The user is denied access to all scope-gated endpoints (self-service paths remain available).
+- **Non-empty array**: The user can only access endpoints that belong to the listed categories.
+
+:::tip Example
+To create a viewer who can only see monitoring data and manage their own MFA:
+```
+scopes: ["modules", "mfa_management"]
+```
+:::
+
+:::warning
+Viewers cannot be assigned `user_management` or `app_management`. Attempting to do so will return an error.
+:::
+
+### Default Administrator Protection
+
+The default administrator account configured by `dashboard.default_user.login` has additional safeguard:
+
+- It cannot be demoted to the `viewer` role.
+- It cannot have an explicit `scopes` field (it always holds the full category set).
+- It cannot be deleted.
+
+These protections ensure the cluster always has a break-glass administrator account that can recover from accidental permission misconfigurations.
+
 ## SSO Users
 
 When a user logs in through SAML Single Sign-On (SSO) for the first time, EMQX automatically creates a Dashboard account for that user with the `viewer` role.
