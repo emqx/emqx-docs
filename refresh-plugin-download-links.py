@@ -345,12 +345,6 @@ def main() -> int:
             f"error: no plugin-catalog dirs found under {docs_root} "
             f"(looked for {'/'.join(LOCALES)}/{CATALOG_SUBPATH})"
         )
-    missing = sorted(set(LOCALES) - set(present_locales))
-    if missing:
-        print(
-            f"note: skipping locale(s) without plugin-catalog dir: {', '.join(missing)}",
-            file=sys.stderr,
-        )
 
     series = resolve_series(args.series, docs_root)
     print(f"Targeting release series {series[0]}.{series[1]}", file=sys.stderr)
