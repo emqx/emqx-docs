@@ -57,11 +57,11 @@ You cannot update the username or password through this operation. To change a p
 2. Click the **Delete** button for the target user.
 3. Click **Confirm** in the confirmation dialog.
 
-:::danger
+::: warning Important Notice
 The built-in `admin` user cannot be deleted. Attempting to delete it will return an error.
 :::
 
-:::warning
+:::warning Important Notice
 Deleting a user immediately removes their MFA configuration and invalidates all their active tokens. Any active sessions for that user will be terminated.
 :::
 
@@ -109,7 +109,7 @@ Categories 1–6 (pre-existing business categories) apply to both API keys and D
 
 The self-service paths — a user changing their own password, managing their own MFA, and logging out — are always permitted regardless of scopes.
 
-### Setting Scopes for a User
+### Set Scopes for a User
 
 When creating or updating a user, administrators can set an optional `scopes` field to restrict the user's permissions:
 
@@ -124,7 +124,7 @@ scopes: ["modules", "mfa_management"]
 ```
 :::
 
-:::warning
+:::warning Important Notice
 Viewers cannot be assigned `user_management` or `app_management`. Attempting to do so will return an error.
 :::
 

@@ -57,11 +57,11 @@ EMQX Dashboard 内置两种角色：
 2. 在用户列表中点击目标用户的**删除**按钮。
 3. 在确认弹窗中点击**确认**。
 
-:::danger
+::: warning 重要提示
 内置的 `admin` 用户不可删除，尝试删除将返回错误。
 :::
 
-:::warning
+::: warning 重要提示
 删除用户后，该用户的 MFA 配置将立即被清除，所有有效 Token 也会失效。该用户的所有活跃会话将被终止。
 :::
 
@@ -78,13 +78,13 @@ EMQX Dashboard 内置两种角色：
 - 至少包含以下两种字符类型：字母、数字、特殊字符
 - 仅支持 ASCII 字符
 
-## 基于 Category 的精细权限控制
+## 基于权限类别的精细权限控制
 
-除了上述基于角色的访问控制，EMQX Enterprise 还支持对 Dashboard 用户进行基于 Category（权限类别）的细粒度权限控制。管理员可以通过分配具体的权限类别（scope），在角色权限的基础上进一步收窄用户的访问能力。
+除了上述基于角色的访问控制，EMQX Enterprise 还支持对 Dashboard 用户进行基于权限类别的细粒度权限控制。管理员可以通过分配具体的权限范围（scope），在角色权限的基础上进一步收窄用户的访问能力。
 
 ### 权限类别
 
-EMQX 定义了 9 个权限类别（Category）：
+EMQX 定义了 9 个权限类别：
 
 | 类别 | 适用对象 | 说明 |
 |------|---------|------|
@@ -105,7 +105,7 @@ EMQX 定义了 9 个权限类别（Category）：
 | 角色 | 可分配的 Scope | 角色默认值（未设置 scopes 时） |
 |------|--------------|---------------------------|
 | `administrator` | 全部 9 个类别 | 保持升级前行为：可访问所有端点 |
-| `viewer` | 4 个通用类别 + 3 个 Dashboard 类别。`user_management` 和 `app_management` **不允许**分配给浏览者。 | 4 个通用类别 + `mfa_management`。只读（GET）端点不受 scope 限制，因为 GET 请求在 scope 层之上被短路。 |
+| `viewer` | 4 个通用类别 + 3 个 Dashboard 类别。`user_management` 和 `app_management` **不允许**分配给查看者。 | 4 个通用类别 + `mfa_management`。只读（GET）端点不受 scope 限制，因为 GET 请求在 scope 层之上被短路。 |
 
 用户修改自己的密码、管理自己的 MFA 以及登出操作始终允许，与 scope 设置无关。
 
@@ -118,14 +118,15 @@ EMQX 定义了 9 个权限类别（Category）：
 - **非空数组**：用户只能访问属于所列类别的端点。
 
 :::tip 示例
-创建一个只能查看监控数据和自助管理 MFA 的浏览者：
+创建一个只能查看监控数据和自助管理 MFA 的查看者：
+
 ```
 scopes: ["modules", "mfa_management"]
 ```
 :::
 
-:::warning
-浏览者无法被分配 `user_management` 或 `app_management`。尝试分配将返回错误。
+:::warning 重要提示
+查看者无法被分配 `user_management` 或 `app_management`。尝试分配将返回错误。
 :::
 
 ### 默认管理员保护
