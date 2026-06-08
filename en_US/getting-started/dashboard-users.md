@@ -80,7 +80,7 @@ Users can change their own passwords. Administrators can change the password for
 
 ## Category-Based Permission Control
 
-In addition to the role-based access control described above, EMQX Enterprise supports category-based fine-grained permission control for Dashboard users. This allows administrators to narrow a user's access beyond their role by assigning specific permission categories (scopes).
+In addition to the role-based access control described above, EMQX Enterprise supports category-based fine-grained permission control for Dashboard users. This allows administrators to narrow a user's access beyond their role by assigning specific permission categories.
 
 ### Permission Categories
 
@@ -100,16 +100,16 @@ EMQX defines a vocabulary of 9 permission categories:
 
 Categories 1–6 (pre-existing business categories) apply to both API keys and Dashboard users. Categories 7–9 are exclusive to Dashboard users and cannot be assigned to API keys.
 
-### Role-Scope Compatibility
+### Role-Permission Compatibility
 
-| Role | Allowed Scopes | Role Default (no explicit scopes) |
+| Role | Allowed Permission Categories | Role Default (no explicit categories) |
 |------|---------------|-----------------------------------|
 | `administrator` | All 9 categories | Pre-upgrade behaviour: access to all endpoints |
-| `viewer` | 4 common + 3 dashboard-only categories. `user_management` and `app_management` are **not** allowed for viewers. | 4 common + `mfa_management`. GET-only endpoints remain accessible because GET bypasses the scope layer. |
+| `viewer` | 4 common + 3 Dashboard-only categories. `user_management` and `app_management` are **not** allowed for viewers. | 4 common + `mfa_management`. GET-only endpoints remain accessible because GET bypasses the scope layer. |
 
-The self-service paths — a user changing their own password, managing their own MFA, and logging out — are always permitted regardless of scopes.
+The self-service paths, for example, a user changing their own password, managing their own MFA, and logging out, are always permitted regardless of categories.
 
-### Set Scopes for a User
+### Set Permissions for a User
 
 When creating or updating a user, administrators can set an optional `scopes` field to restrict the user's permissions:
 
