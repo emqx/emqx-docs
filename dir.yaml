@@ -856,11 +856,8 @@
               path: extensions/plugin-catalog
               collapsed: true
               children:
-                - extensions/plugin-catalog/emqx-bridge-mqtt-dq
                 - extensions/plugin-catalog/emqx-offline-messages
                 - extensions/plugin-catalog/emqx-relup
-                - extensions/plugin-catalog/emqx-unsgov
-                - extensions/plugin-catalog/emqx-username-quota
         # - extensions/lang-lua
         - extensions/exhook
     - title_en: Telemetry

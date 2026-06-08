@@ -8,24 +8,6 @@
 
 本页面列出的插件均维护在 [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins) 中。
 
-## 数据集成
-
-[MQTT Bridge with Disk Queue](./plugin-catalog/emqx-bridge-mqtt-dq.md)
-
-该插件将 MQTT 消息从 EMQX 转发到远端 MQTT Broker，并通过磁盘队列在下游故障或间歇性网络中断时提升传输韧性。
-
-## 数据治理
-
-[UNS Governance](./plugin-catalog/emqx-unsgov.md)
-
-该插件用于强制执行 Unified Namespace 主题结构，并可选地校验消息负载模式，帮助您在发布阶段统一主题层级与数据契约。
-
-## 访问控制
-
-[Per-username Session Quota](./plugin-catalog/emqx-username-quota.md)
-
-该插件按用户名实施集群范围内的并发会话配额控制，并提供配额覆盖、基于快照的查询 API 以及管理级会话控制能力。
-
 ## 消息持久化
 
 [离线消息](./plugin-catalog/emqx-offline-messages.md)
