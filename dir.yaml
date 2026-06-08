@@ -850,6 +850,15 @@
             - extensions/plugin-development
             - extensions/plugin-example
             - extensions/plugin-management
+            - title_en: Plugin Catalog
+              title_cn: 插件目录
+              title_ja: プラグインカタログ
+              path: extensions/plugin-catalog
+              collapsed: true
+              children:
+                - extensions/plugin-catalog/emqx-bridge-mqtt-dq
+                - extensions/plugin-catalog/emqx-unsgov
+                - extensions/plugin-catalog/emqx-username-quota
         # - extensions/lang-lua
         - extensions/exhook
     - title_en: Telemetry
