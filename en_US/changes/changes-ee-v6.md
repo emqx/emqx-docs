@@ -40,7 +40,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17252](https://github.com/emqx/emqx/pull/17252) Published `.sha256` checksum sidecars alongside plugin packages on the official download site, allowing users to verify the integrity of downloaded plugin archives.
 
-- [#17271](https://github.com/emqx/emqx/pull/17271) Hardened the official EMQX docker image to clear image-scanner findings:
+- [#17271](https://github.com/emqx/emqx/pull/17271) Hardened the official EMQX Docker image to clear image-scanner findings:
 
   - Applied Debian security upgrades during the runtime image build, so the image picks up the latest patched `libssl3t64`.
   - Removed the unused `libgnutls30t64` package. EMQX talks TLS via OpenSSL through Erlang/OTP and never links GnuTLS, so it was only present as a transitive dependency of `curl` and showed up in scanner reports.
