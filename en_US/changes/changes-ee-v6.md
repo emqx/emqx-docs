@@ -14,13 +14,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, an API key with the `administrator` role could call the Dashboard user management endpoints `POST/DELETE /users/:username/mfa` and `POST /users/:username/change_pwd` via HTTP Basic authentication. This meant an API key could reset or disable another Dashboard user's MFA, or change another Dashboard user's password, bypassing the intended separation between human Dashboard sessions and machine API keys.
 
-  These endpoints now return `401 API_KEY_NOT_ALLOW` when accessed via an API key, matching the existing policy that already blocks API key access to `/users`, `/users/:username`, `/logout`, and `/api_key`. Dashboard users can still manage their own MFA and password from the Dashboard UI using bearer-token (JWT) sessions as before.
+  These endpoints now return `401 API_KEY_NOT_ALLOW` when accessed via an API key, consistent with the existing policy that blocks API key access to `/users`, `/users/:username`, `/logout`, and `/api_key`. Dashboard users can still manage their own MFA and password from the Dashboard UI using bearer-token (JWT) sessions.
 
 - [#17065](https://github.com/emqx/emqx/pull/17065) Added SSRF protection for rule-engine-reachable connector and bridge configurations.
 
-  When `rule_engine.ssrf.enable` is set to `true`, EMQX applies an outbound SSRF policy to connector, bridge and action configurations. Exact matches in `rule_engine.ssrf.deny_hosts` are rejected immediately, resolved target IPs are checked against `rule_engine.ssrf.allow_cidrs` before `rule_engine.ssrf.deny_cidrs`, and the default denied ranges cover loopback, link-local (including cloud instance-metadata endpoints), RFC1918, ULA, unspecified and multicast ranges. The check runs at config-update time and covers HTTP `url` fields as well as `server` / `servers` / `bootstrap_hosts` style fields across all connector families.
+  When `rule_engine.ssrf.enable` is set to `true`, EMQX applies an outbound SSRF policy to connector, bridge, and action configurations. The policy evaluates each target as follows: exact matches in `rule_engine.ssrf.deny_hosts` are rejected immediately; resolved target IPs are then checked against `rule_engine.ssrf.allow_cidrs` before `rule_engine.ssrf.deny_cidrs`. The default denied ranges cover loopback, link-local (including cloud instance-metadata endpoints), RFC 1918, ULA, unspecified, and multicast ranges. The check runs at config-update time and covers HTTP `url` fields as well as `server`, `servers`, and `bootstrap_hosts` fields across all connector families.
 
-  The feature is disabled by default to preserve compatibility with deployments whose connectors legitimately point at internal services. Operators in multi-tenant or externally-exposed setups are encouraged to enable it, alongside a network-layer egress firewall.
+  The feature is disabled by default to preserve compatibility with deployments whose connectors legitimately point at internal services. Operators in multi-tenant or externally-exposed setups are encouraged to enable it together with a network-layer egress firewall.
 
 - [#17173](https://github.com/emqx/emqx/pull/17173) Restricted API keys from exporting or importing Dashboard accounts and API keys via the data backup endpoints.
 
@@ -35,22 +35,22 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17201](https://github.com/emqx/emqx/pull/17201) Hardened the plugin install endpoint against path traversal in uploaded tarballs and tightened the install allowlist.
 
   - The install path now refuses to extract any tarball whose entries would resolve outside the plugin install directory.
-  - `emqx ctl plugins allow <name-vsn>` entries now expire 5 minutes after they are issued, and may be pinned to a SHA-256 hash of the package via `emqx ctl plugins allow <name-vsn> sha256:<HEX>`. Uploads whose contents do not hash to the pinned value are rejected with `403 Forbidden`. The previous behavior of accepting any payload named `<name-vsn>.tar.gz` is preserved when the optional `sha256:` argument is omitted.
-  - A successful install via the HTTP plugin install endpoint (and the Dashboard upload that wraps it) immediately revokes the allow entry cluster-wide, so the same grant cannot be reused for a subsequent (potentially different) tarball.
+  - `emqx ctl plugins allow <name-vsn>` entries now expire 5 minutes after they are issued, and can be pinned to a SHA-256 hash of the package via `emqx ctl plugins allow <name-vsn> sha256:<HEX>`. Uploads whose contents do not match the pinned hash are rejected with `403 Forbidden`. When the optional `sha256:` argument is omitted, the previous behavior of accepting any payload named `<name-vsn>.tar.gz` is preserved.
+  - A successful install via the HTTP plugin install endpoint (and the Dashboard upload that wraps it) immediately revokes the allow entry cluster-wide, preventing the same grant from being reused for a different tarball.
 
-- [#17252](https://github.com/emqx/emqx/pull/17252) Published `.sha256` checksum sidecars alongside plugin packages on the official download site, so users can verify the integrity of downloaded plugin archives.
+- [#17252](https://github.com/emqx/emqx/pull/17252) Published `.sha256` checksum sidecars alongside plugin packages on the official download site, allowing users to verify the integrity of downloaded plugin archives.
 
 - [#17271](https://github.com/emqx/emqx/pull/17271) Hardened the official EMQX docker image to clear image-scanner findings:
 
   - Applied Debian security upgrades during the runtime image build, so the image picks up the latest patched `libssl3t64`.
   - Removed the unused `libgnutls30t64` package. EMQX talks TLS via OpenSSL through Erlang/OTP and never links GnuTLS, so it was only present as a transitive dependency of `curl` and showed up in scanner reports.
-  - Replaced the Debian `curl` package, which would have transitively re-introduced `libgnutls30t64` via `librtmp1`, with a statically-linked `curl` binary from https://github.com/stunnel/static-curl (OpenSSL, HTTP/2, HTTP/3; no RTMP, no GnuTLS). Container healthchecks that call `curl` continue to work unchanged.
+  - Replaced the Debian `curl` package with a statically-linked `curl` binary from [stunnel/static-curl](https://github.com/stunnel/static-curl) (OpenSSL, HTTP/2, HTTP/3; no RTMP, no GnuTLS). The Debian package would have transitively re-introduced `libgnutls30t64` via `librtmp1`; the static binary avoids this while keeping container health checks that call `curl` working unchanged.
 
-- [#17309](https://github.com/emqx/emqx/pull/17309) Sanitized PROXY-Protocol v2 SSL Common Name / Subject before they enter client identity.
+- [#17309](https://github.com/emqx/emqx/pull/17309) Sanitized PROXY-Protocol v2 SSL Common Name and Subject fields to prevent control characters from being smuggled into client identity.
 
-  When a listener is configured with `proxy_protocol = true`, the broker now rejects connections whose PROXY-Protocol SSL TLV bytes contain ASCII control characters (the same byte class already rejected on MQTT-ingested clientid/username/password). This blocks attacker-controlled bytes from being smuggled into outbound HTTP authentication, authorization, or rule-engine header values via `${cert_common_name}` and `${cert_subject}` templates.
+  When a listener is configured with `proxy_protocol = true`, the broker now rejects connections whose PROXY-Protocol SSL TLV bytes contain ASCII control characters (the same byte class already rejected for MQTT-ingested `clientid`, `username`, and `password`). This blocks attacker-controlled bytes from reaching outbound HTTP authentication, authorization, or rule-engine header values via `${cert_common_name}` and `${cert_subject}` templates.
 
-  As an additional defense layer, the HTTP authentication and authorization clients now refuse to send a request when a rendered header name or value contains a CR, LF, or NUL byte.
+  The HTTP authentication and authorization clients also now refuse to send a request when a rendered header name or value contains a CR, LF, or NUL byte.
 
 - [#17315](https://github.com/emqx/emqx/pull/17315) Extended the byte-class check applied to MQTT clientid / username / password to other fields that feed `ClientInfo` and HTTP request templating:
 
@@ -58,7 +58,24 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Client attribute values produced by `mqtt.client_attrs_init` Variform expressions are dropped (with a warning) when they contain control characters, so templates such as `${client_attrs.tns}` cannot carry injected bytes downstream.
   - HTTP action / bridge connector header rendering now drops any header whose rendered name or value contains NUL, CR, or LF.
 
-- [#17440](https://github.com/emqx/emqx/pull/17440) Restricted downloading of stored backup files (`GET /api/v5/data/files/<filename>`) to the global Dashboard administrator. Backup archives may contain Dashboard accounts (with password hashes and MFA / TOTP state) and API key records, so API key callers, Dashboard viewers, and namespaced administrators are no longer permitted to download them. Listing the backup directory (`GET /api/v5/data/files`) remains available to all roles that previously had access.
+- [#17440](https://github.com/emqx/emqx/pull/17440) Restricted `GET /api/v5/data/files/<filename>` (backup file download) to the global Dashboard administrator. Backup archives can contain Dashboard accounts (including password hashes and MFA/TOTP state) and API key records, so API key callers, Dashboard viewers, and namespaced administrators are no longer permitted to download them. Listing the backup directory (`GET /api/v5/data/files`) remains available to all roles that previously had access.
+
+- [#17491](https://github.com/emqx/emqx/pull/17491) Fixed passwords and secrets being exposed in gateway authentication APIs, error paths, and debug logs. Gateway authentication API responses now redact secrets while preserving the raw configuration structure. The following log paths no longer print raw passwords or secrets: gateway authentication failures, listener start errors, ExProto authentication logs, CoAP token-required logs, and LwM2M invalid-register logs.
+
+- [#17501](https://github.com/emqx/emqx/pull/17501) Blocked namespaced Dashboard users from reading MQTT message content across namespace boundaries.
+
+  - The following endpoints now return `403 FORBIDDEN` for any non-global caller, because they can expose MQTT payloads outside the caller's namespace. Previously, a namespaced user could read or delete messages produced by other namespaces.
+
+    - `GET /clients/:clientid/mqueue_messages`
+    - `GET /clients/:clientid/inflight_messages`
+    - `GET|DELETE /mqtt/retainer/messages`
+    - `GET|DELETE /mqtt/retainer/message/:topic`
+    - `GET /mqtt/delayed/messages`
+    - `GET|DELETE /mqtt/delayed/messages/:node/:msgid`
+    - `DELETE /mqtt/delayed/messages/:topic`
+
+  - Trace APIs are now namespace-scoped: `GET /trace` lists only traces created by the caller's namespace. The per-trace endpoints (`/trace/:name`, `/trace/:name/download`, `/trace/:name/log`, `/trace/:name/log_detail`, `/trace/:name/stop`) return `404` when the trace belongs to a different namespace, preventing callers from discovering that other-namespace traces exist. The bulk `DELETE /trace` is reserved for the global administrator; namespaced callers receive `403`. Namespaced administrators retain full access to their own traces, including creating, listing, downloading, streaming, stopping, and deleting them.
+
 
 #### Clustering
 
@@ -193,7 +210,22 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17089](https://github.com/emqx/emqx/pull/17089) MQTT ingress bridges now support consuming from remote message queues exposed as `$queue/{name}/{bind-filter}` when the remote broker supports MQTT 5 Subscription Identifiers. Queue subscriptions are rejected when Subscription Identifiers are unavailable, and regular topic subscriptions automatically retry without Subscription Identifiers if the remote broker does not accept them.
 
-- [#17104](https://github.com/emqx/emqx/pull/17104) Blob name templates in aggregated upload actions (Azure Blob Storage, Amazon S3, GCS, Snowflake, S3 Tables) now accept date-part placeholders `${datetime.YYYY}`, `${datetime.MM}`, `${datetime.DD}`, `${datetime.hh}`, `${datetime.mm}`, `${datetime.ss}`, and `${datetime.DOY}` (day of year), defaulting to UTC and rendered against the aggregation start time. Each part token may be prefixed with an explicit timezone: `utc` (same as no prefix) or `local` (EMQX node's system timezone), e.g. `${datetime.local.YYYY}` or `${datetime.utc.hh}`. This enables Hive-partitioned object layouts (e.g. `year=2025/month=04/day=22/hour=07/...`) that are directly consumable by Spark, Databricks, and Synapse.
+- [#17104](https://github.com/emqx/emqx/pull/17104) Added date-part placeholders to blob name templates in aggregated upload actions (Azure Blob Storage, Amazon S3, GCS, Snowflake, S3 Tables). Placeholders are rendered against the aggregation start time and default to UTC. This enables Hive-partitioned object layouts (e.g. `year=2025/month=04/day=22/hour=07/...`) directly consumable by Spark, Databricks, and Synapse.
+
+  Supported placeholders:
+
+  - `${datetime.YYYY}`
+  - `${datetime.MM}`
+  - `${datetime.DD}`
+  - `${datetime.hh}`
+  - `${datetime.mm}`
+  - `${datetime.ss}`
+  - `${datetime.DOY}` (day of year)
+
+  Each placeholder can be prefixed with an explicit timezone:
+
+  - `utc` (default): e.g. `${datetime.utc.YYYY}`
+  - `local` (EMQX node's system timezone): e.g. `${datetime.local.YYYY}`
 
 - [#17120](https://github.com/emqx/emqx/pull/17120) Added a new query string filter option to `GET /clients_v2`: `node`. When specified, online clients connected to the supplied node name will be returned, as well as disconnected clients last connected to them.
 
@@ -478,7 +510,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16901](https://github.com/emqx/emqx/pull/16901) Fixed RPM package OpenSSL dependency for RHEL 9.6 LTS: pinned `openssl >= 3.5.1` for RHEL >= 9.7 and `openssl >= 3.0.7` for older RHEL 9 versions.
 - [#17311](https://github.com/emqx/emqx/pull/17311) Fixed Docker startup when the container hostname cannot be resolved. The entrypoint now falls back to the interface IP address before auto-generating the node name, and fails with a clear error if no node host can be determined.
-- [#17369](https://github.com/emqx/emqx/pull/17369) Moved the Dashboard listener defaults (`http.bind` and the placeholder HTTPS `ssl_options`) from the user-editable `etc/emqx.conf` into the shipped `etc/base.hocon`. Runtime updates (including those made through the Dashboard, the REST API, or the `emqx_acme` plugin's automatic HTTPS configuration) are now correctly preserved across restarts instead of being silently reverted to the default self-signed certificate by the hardcoded `emqx.conf` block.
+- [#17369](https://github.com/emqx/emqx/pull/17369) Moved the Dashboard listener defaults (`http.bind` and the placeholder HTTPS `ssl_options`) from the user-editable `etc/emqx.conf` into the shipped `etc/base.hocon`. Previously, the hardcoded `emqx.conf` block silently reverted runtime updates to the default self-signed certificate on restart. Runtime updates made through the Dashboard, the REST API, or the `emqx_acme` plugin's automatic HTTPS configuration are now correctly preserved across restarts.
+
+- [#17504](https://github.com/emqx/emqx/pull/17504) Fixed `bin/emqx` failing to detect a running node when its command line is wider than the terminal. The process discovery call was changed from `ps -ef` to `ps -efww`, preventing long `-root <path>` arguments from being truncated and ensuring the running EMQX process is reliably matched.
 
 ## 6.1.1
 

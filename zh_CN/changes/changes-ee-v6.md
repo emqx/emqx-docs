@@ -14,13 +14,13 @@
 
   此前，具有 `administrator` 角色的 API 密钥可通过 HTTP Basic 认证调用 Dashboard 用户管理端点 `POST/DELETE /users/:username/mfa` 和 `POST /users/:username/change_pwd`，这意味着 API 密钥可以重置或禁用其他 Dashboard 用户的 MFA，或修改其密码，绕过了人工 Dashboard 会话与机器 API 密钥之间的预期隔离。
 
-  这些接口现在在通过 API 密钥访问时返回 `401 API_KEY_NOT_ALLOW`，与现有策略保持一致。该策略已阻止 API 密钥访问 `/users`、`/users/:username`、`/logout` 和 `/api_key`。Dashboard 用户仍可通过 Bearer Token（JWT）会话在 Dashboard UI 中管理自己的 MFA 和密码。
+  这些接口现在在通过 API 密钥访问时返回 `401 API_KEY_NOT_ALLOW`，与已阻止 API 密钥访问 `/users`、`/users/:username`、`/logout` 和 `/api_key` 的现有策略保持一致。Dashboard 用户仍可通过 Bearer Token（JWT）会话在 Dashboard UI 中管理自己的 MFA 和密码。
 
 - [#17065](https://github.com/emqx/emqx/pull/17065) 为规则引擎可访问的连接器和 Bridge 配置添加 SSRF 防护。
 
-  当 `rule_engine.ssrf.enable` 设置为 `true` 时，EMQX 对连接器、Bridge 和动作配置应用出站 SSRF 策略。`rule_engine.ssrf.deny_hosts` 中的精确匹配项立即被拒绝，解析后的目标 IP 先经 `rule_engine.ssrf.allow_cidrs` 检查，再经 `rule_engine.ssrf.deny_cidrs` 检查，默认拒绝范围涵盖回环地址、链路本地地址（包括云实例元数据端点）、RFC1918、ULA、未指定地址和多播地址。检查在配置更新时执行，覆盖所有连接器类型的 HTTP `url` 字段及 `server`/`servers`/`bootstrap_hosts` 类字段。
+  当 `rule_engine.ssrf.enable` 设置为 `true` 时，EMQX 对连接器、Bridge 和动作配置应用出站 SSRF 策略。策略对每个目标的评估流程如下：`rule_engine.ssrf.deny_hosts` 中的精确匹配项立即被拒绝；解析后的目标 IP 先经 `rule_engine.ssrf.allow_cidrs` 检查，再经 `rule_engine.ssrf.deny_cidrs` 检查。默认拒绝范围涵盖回环地址、链路本地地址（包括云实例元数据端点）、RFC 1918、ULA、未指定地址和多播地址。检查在配置更新时执行，覆盖所有连接器类型的 HTTP `url` 字段及 `server`、`servers`、`bootstrap_hosts` 字段。
 
-  该功能默认禁用，以保持与连接器合法指向内部服务的部署的兼容性。建议在多租户或对外暴露的环境中启用此功能，并配合网络层出站防火墙使用。
+  该功能默认禁用，以保持与连接器合法指向内部服务的部署的兼容性。建议在多租户或对外暴露的环境中启用此功能，并配合网络层出站防火墙一同使用。
 
 - [#17173](https://github.com/emqx/emqx/pull/17173) 限制 API 密钥通过数据备份端点导出或导入 Dashboard 账户及 API 密钥。
 
@@ -35,22 +35,22 @@
 - [#17201](https://github.com/emqx/emqx/pull/17201) 加强插件安装端点对上传 tarball 中路径穿越的防护，并收紧安装白名单。
 
   - 安装路径现在拒绝解压任何条目会解析到插件安装目录以外的 tarball。
-  - `emqx ctl plugins allow <name-vsn>` 条目在签发后 5 分钟过期，并可通过 `emqx ctl plugins allow <name-vsn> sha256:<HEX>` 固定到软件包的 SHA-256 哈希值。内容哈希与固定值不符的上传将被拒绝并返回 `403 Forbidden`。省略可选的 `sha256:` 参数时，保留原有的接受任何名为 `<name-vsn>.tar.gz` 的载荷的行为。
-  - 通过 HTTP 插件安装端点（及其封装的 Dashboard 上传）成功安装后，白名单条目会立即在集群范围内撤销，同一授权不可再次用于后续（可能不同的）tarball。
+  - `emqx ctl plugins allow <name-vsn>` 条目在签发后 5 分钟过期，并可通过 `emqx ctl plugins allow <name-vsn> sha256:<HEX>` 固定到软件包的 SHA-256 哈希值。内容与固定哈希值不匹配的上传将被拒绝并返回 `403 Forbidden`。省略可选的 `sha256:` 参数时，保留原有的接受任何名为 `<name-vsn>.tar.gz` 的载荷的行为。
+  - 通过 HTTP 插件安装端点（及其封装的 Dashboard 上传）成功安装后，白名单条目会立即在集群范围内撤销，防止同一授权被重复用于不同的 tarball。
 
-- [#17252](https://github.com/emqx/emqx/pull/17252) 在官方下载站点的插件包旁发布 `.sha256` 校验和附件，方便用户验证下载的插件归档完整性。
+- [#17252](https://github.com/emqx/emqx/pull/17252) 在官方下载站点的插件包旁发布 `.sha256` 校验和附件，允许用户验证下载的插件归档完整性。
 
 - [#17271](https://github.com/emqx/emqx/pull/17271) 加固官方 EMQX Docker 镜像，清除镜像扫描器报告的问题：
 
   - 在运行时镜像构建期间应用 Debian 安全升级，使镜像获取最新修复版 `libssl3t64`。
   - 移除未使用的 `libgnutls30t64` 包。EMQX 通过 Erlang/OTP 使用 OpenSSL 进行 TLS 通信，从不链接 GnuTLS，该包仅作为 `curl` 的传递依赖存在并出现在扫描报告中。
-  - 将 Debian `curl` 包（会通过 `librtmp1` 重新引入 `libgnutls30t64`）替换为来自 https://github.com/stunnel/static-curl 的静态链接 `curl` 二进制文件（OpenSSL、HTTP/2、HTTP/3；无 RTMP，无 GnuTLS）。调用 `curl` 的容器健康检查继续正常工作。
+  - 将 Debian `curl` 包替换为来自 [stunnel/static-curl](https://github.com/stunnel/static-curl) 的静态链接 `curl` 二进制文件（OpenSSL、HTTP/2、HTTP/3；无 RTMP，无 GnuTLS）。Debian 包会通过 `librtmp1` 重新引入 `libgnutls30t64`；静态二进制文件避免了这一问题，同时保持调用 `curl` 的容器健康检查正常工作。
 
-- [#17309](https://github.com/emqx/emqx/pull/17309) 对 PROXY Protocol v2 SSL Common Name/Subject 进入客户端身份信息之前进行净化处理。
+- [#17309](https://github.com/emqx/emqx/pull/17309) 对 PROXY Protocol v2 SSL Common Name 和 Subject 字段进行净化处理，防止控制字符被带入客户端身份信息。
 
-  当监听器配置了 `proxy_protocol = true` 时，Broker 现在会拒绝 PROXY Protocol SSL TLV 字节中包含 ASCII 控制字符的连接（与已应用于 MQTT 摄取的 clientid/username/password 的字节类检查相同）。这阻止了攻击者控制的字节通过 `${cert_common_name}` 和 `${cert_subject}` 模板被带入出站 HTTP 认证、授权或规则引擎头部值。
+  当监听器配置了 `proxy_protocol = true` 时，Broker 现在会拒绝 PROXY Protocol SSL TLV 字节中包含 ASCII 控制字符的连接（与已应用于 MQTT 摄取的 `clientid`、`username` 和 `password` 的字节类检查相同）。这阻止了攻击者控制的字节通过 `${cert_common_name}` 和 `${cert_subject}` 模板到达出站 HTTP 认证、授权或规则引擎头部值。
 
-  作为额外防御层，HTTP 认证和授权客户端现在在渲染后的请求头名称或值包含 CR、LF 或 NUL 字节时拒绝发送请求。
+  HTTP 认证和授权客户端现在也会在渲染后的请求头名称或值包含 CR、LF 或 NUL 字节时拒绝发送请求。
 
 - [#17315](https://github.com/emqx/emqx/pull/17315) 将 MQTT clientid/username/password 的字节类检查扩展至其他填充 `ClientInfo` 和 HTTP 请求模板的字段：
 
@@ -58,7 +58,23 @@
   - 由 `mqtt.client_attrs_init` Variform 表达式生成的客户端属性值，若包含控制字符则被丢弃（并记录警告），从而防止 `${client_attrs.tns}` 等模板将注入字节传播至下游。
   - HTTP 动作/Bridge 连接器渲染头部时，任何渲染后名称或值包含 NUL、CR 或 LF 的头部都会被丢弃。
 
-- [#17440](https://github.com/emqx/emqx/pull/17440) 将存储备份文件的下载权限（`GET /api/v5/data/files/<filename>`）限制为全局 Dashboard 管理员。备份归档可能包含 Dashboard 账户（含密码哈希及 MFA/TOTP 状态）和 API 密钥记录，因此 API 密钥调用方、Dashboard 查看者和命名空间管理员不再被允许下载。列出备份目录（`GET /api/v5/data/files`）的权限对之前有访问权限的所有角色保持不变。
+- [#17440](https://github.com/emqx/emqx/pull/17440) 将 `GET /api/v5/data/files/<filename>`（备份文件下载）限制为全局 Dashboard 管理员。备份归档可能包含 Dashboard 账户（含密码哈希及 MFA/TOTP 状态）和 API 密钥记录，因此 API 密钥调用方、Dashboard 查看者和命名空间管理员不再被允许下载。列出备份目录（`GET /api/v5/data/files`）的权限对之前有访问权限的所有角色保持不变。
+
+- [#17491](https://github.com/emqx/emqx/pull/17491) 修复了网关认证 API、错误路径和调试日志中密码和密钥被暴露的问题。网关认证 API 响应现在在保留原始配置结构的同时对密钥进行脱敏处理。以下日志路径不再打印原始密码或密钥：网关认证失败日志、监听器启动错误日志、ExProto 认证日志、CoAP 令牌必需日志和 LwM2M 无效注册日志。
+
+- [#17501](https://github.com/emqx/emqx/pull/17501) 阻止命名空间 Dashboard 用户跨命名空间读取 MQTT 消息内容。
+
+  - 以下接口对任何非全局调用方返回 `403 FORBIDDEN`，因为它们可能暴露调用方命名空间之外的 MQTT Payload。此前，命名空间用户可以读取或删除其他命名空间产生的消息。
+
+    - `GET /clients/:clientid/mqueue_messages`
+    - `GET /clients/:clientid/inflight_messages`
+    - `GET|DELETE /mqtt/retainer/messages`
+    - `GET|DELETE /mqtt/retainer/message/:topic`
+    - `GET /mqtt/delayed/messages`
+    - `GET|DELETE /mqtt/delayed/messages/:node/:msgid`
+    - `DELETE /mqtt/delayed/messages/:topic`
+
+  - Trace API 现已按命名空间隔离：`GET /trace` 仅列出由调用方命名空间创建的追踪。单个追踪的端点（`/trace/:name`、`/trace/:name/download`、`/trace/:name/log`、`/trace/:name/log_detail`、`/trace/:name/stop`）在追踪属于其他命名空间时返回 `404`，防止调用方发现其他命名空间的追踪记录。批量 `DELETE /trace` 仅限全局管理员使用，命名空间调用方将收到 `403`。命名空间管理员对自己的追踪仍拥有完整权限，包括创建、列出、下载、流式传输、停止和删除。
 
 #### 集群
 
@@ -193,7 +209,22 @@
 
 - [#17089](https://github.com/emqx/emqx/pull/17089) MQTT 入口 Bridge 现在支持在远端 Broker 支持 MQTT 5 订阅标识符时，从以 `$queue/{name}/{bind-filter}` 形式暴露的远端消息队列中消费消息。当订阅标识符不可用时，队列订阅将被拒绝；若远端 Broker 不接受订阅标识符，普通主题订阅会自动重试（不带订阅标识符）。
 
-- [#17104](https://github.com/emqx/emqx/pull/17104) 聚合上传动作（Azure Blob Storage、Amazon S3、GCS、Snowflake、S3 Tables）中的 Blob 名称模板现在支持日期部分占位符：`${datetime.YYYY}`、`${datetime.MM}`、`${datetime.DD}`、`${datetime.hh}`、`${datetime.mm}`、`${datetime.ss}` 和 `${datetime.DOY}`（年中第几天），默认使用 UTC，以聚合开始时间为基准进行渲染。每个时间令牌可添加显式时区前缀：`utc`（与无前缀相同）或 `local`（EMQX 节点的系统时区），如 `${datetime.local.YYYY}` 或 `${datetime.utc.hh}`。这支持 Hive 分区对象布局（如 `year=2025/month=04/day=22/hour=07/...`），可直接供 Spark、Databricks 和 Synapse 使用。
+- [#17104](https://github.com/emqx/emqx/pull/17104) 为聚合上传动作（Azure Blob Storage、Amazon S3、GCS、Snowflake、S3 Tables）的 Blob 名称模板新增日期部分占位符。占位符以聚合开始时间为基准渲染，默认使用 UTC。这支持 Hive 分区对象布局（如 `year=2025/month=04/day=22/hour=07/...`），可直接供 Spark、Databricks 和 Synapse 使用。
+
+  支持的占位符：
+
+  - `${datetime.YYYY}`
+  - `${datetime.MM}`
+  - `${datetime.DD}`
+  - `${datetime.hh}`
+  - `${datetime.mm}`
+  - `${datetime.ss}`
+  - `${datetime.DOY}`（年中第几天）
+
+  每个占位符可添加显式时区前缀：
+
+  - `utc`（默认）：如 `${datetime.utc.YYYY}`
+  - `local`（EMQX 节点的系统时区）：如 `${datetime.local.YYYY}`
 
 - [#17120](https://github.com/emqx/emqx/pull/17120) 为 `GET /clients_v2` 新增查询字符串过滤选项 `node`。指定后，将返回连接到该节点的在线客户端，以及上次连接到该节点的离线客户端。
 
@@ -478,6 +509,10 @@
 
 - [#16901](https://github.com/emqx/emqx/pull/16901) 修复了 RHEL 9.6 LTS 的 RPM 包 OpenSSL 依赖问题：RHEL >= 9.7 固定为 `openssl >= 3.5.1`，旧版 RHEL 9 固定为 `openssl >= 3.0.7`。
 - [#17311](https://github.com/emqx/emqx/pull/17311) 修复了容器主机名无法解析时 Docker 启动失败的问题。入口点现在在自动生成节点名称前回退到网络接口 IP 地址，若无法确定节点主机则以清晰的错误信息退出。
+
+- [#17369](https://github.com/emqx/emqx/pull/17369) 将 Dashboard 监听器默认值（`http.bind` 和占位符 HTTPS `ssl_options`）从用户可编辑的 `etc/emqx.conf` 迁移至随附的 `etc/base.hocon`。此前，硬编码的 `emqx.conf` 块会在重启时静默将运行时更新回滚为默认自签名证书。现在，通过 Dashboard、REST API 或 `emqx_acme` 插件自动 HTTPS 配置所做的运行时更新可在重启后正确保留。
+
+- [#17504](https://github.com/emqx/emqx/pull/17504) 修复了 `bin/emqx` 在命令行宽度超过终端宽度时无法检测到运行中节点的问题。进程发现调用由 `ps -ef` 改为 `ps -efww`，防止长 `-root <path>` 参数被截断，确保运行中的 EMQX 进程能被可靠匹配。
 
 ## 6.1.1
 
