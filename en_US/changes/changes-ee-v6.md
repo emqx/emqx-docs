@@ -354,7 +354,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17132](https://github.com/emqx/emqx/pull/17132) Fixed an issue where adding or removing topic metrics could fail on a replicate node when its raw config or runtime state had drifted, raising a `cluster_rpc_apply_failed` alarm and stalling cluster RPC replication. Duplicate-add and missing-remove are now rejected on the initiator only, while replicates apply the change idempotently.
 
-- [#17182](https://github.com/emqx/emqx/pull/17182) Bump to emqx-OTP 27.3.4.2-8 for mria.
+- [#17182](https://github.com/emqx/emqx/pull/17182) Bumped emqx-OTP to 27.3.4.2-8 for mria.
 
   Without this change, during EMQX startup, Mria app boot may get stuck if it's not connected to the cluster.
 
