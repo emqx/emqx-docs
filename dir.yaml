@@ -1280,6 +1280,7 @@
     - title_en: Known Issues
       title_cn: 已知问题
       title_ja: 既知の問題
+      collapsed: true
       children:
         - changes/known-issues-6.1
         - changes/known-issues-6.0
@@ -1292,6 +1293,10 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+        - title_en: EMQX 6.1
+          title_cn: EMQX 6.1
+          title_ja: EMQX 6.1
+          path: changes/breaking-changes-6.1
         - title_en: EMQX 6.0
           title_cn: EMQX 6.0
           title_ja: EMQX 6.0
