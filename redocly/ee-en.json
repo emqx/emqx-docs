@@ -2,7 +2,7 @@
   "components": {
     "parameters": {
       "api_key.name": {
-        "description": "^[A-Za-z]+[A-Za-z0-9-_]*$",
+        "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters.",
         "example": "EMQX-API-KEY-1",
         "in": "path",
         "name": "name",
@@ -308,17 +308,6 @@
               "type": "string"
             }
           ]
-        }
-      },
-      "relup.node_name": {
-        "description": "Upgrade a specified node to the target version with the installed package.",
-        "example": "emqx@127.0.0.1",
-        "in": "path",
-        "name": "node",
-        "required": true,
-        "schema": {
-          "default": "all",
-          "type": "string"
         }
       },
       "trace.bytes": {
@@ -891,6 +880,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -973,7 +971,7 @@
             "description": "Set of parameters governing the aggregation process."
           },
           "blob": {
-            "description": "Template for the Azure Blob Storage blob name of an aggregated upload.<br/><br/>  Template may contain placeholders for the following variables:<br/>  <ul><br/>  <li><code>${action}</code>: name of the action (required).</li><br/>  <li><code>${node}</code>: name of the EMQX node conducting the upload (required).</li><br/>  <li><code>${datetime.{format}}</code>: date and time when aggregation started, formatted according to the <code>{format}</code> string (required):<br/>      <ul><br/>      <li><code>${datetime.rfc3339utc}</code>: RFC3339-formatted date and time in UTC,</li><br/>      <li><code>${datetime.rfc3339}</code>: RFC3339-formatted date and time in local timezone,</li><br/>      <li><code>${datetime.unix}</code>: Unix timestamp.</li><br/>      </ul><br/>  </li><br/>  <li><code>${datetime_until.{format}}</code>: date and time when aggregation ended, with the same formatting options.</li><br/>  <li><code>${sequence}</code>: sequence number of the aggregated upload within the same time interval (required).</li><br/>  </ul><br/>  All other placeholders are considered invalid. Note that placeholders marked as required will be added as a path suffix to the Azure Blob Storage blob name if they are missing from the template.",
+            "description": "Template for the Azure Blob Storage blob name of an aggregated upload.<br/><br/>  Template may contain placeholders for the following variables:<br/>  <ul><br/>  <li><code>${action}</code>: name of the action (required).</li><br/>  <li><code>${node}</code>: name of the EMQX node conducting the upload (required).</li><br/>  <li><code>${datetime.{format}}</code>: date and time when aggregation started, formatted according to the <code>{format}</code> string (required):<br/>      <ul><br/>      <li><code>${datetime.rfc3339utc}</code>: RFC3339-formatted date and time in UTC,</li><br/>      <li><code>${datetime.rfc3339}</code>: RFC3339-formatted date and time in local timezone,</li><br/>      <li><code>${datetime.unix}</code>: Unix timestamp,</li><br/>      <li><code>${datetime.YYYY}</code>, <code>${datetime.MM}</code>, <code>${datetime.DD}</code>: zero-padded year, month and day (UTC),</li><br/>      <li><code>${datetime.hh}</code>, <code>${datetime.mm}</code>, <code>${datetime.ss}</code>: zero-padded hour, minute and second (UTC),</li><br/>      <li><code>${datetime.DOY}</code>: zero-padded day of year 001-366 (UTC).</li><br/>      </ul><br/>      Each date/time part token may be prefixed with an explicit timezone: <code>utc</code> (same as no prefix) or <code>local</code> (EMQX node's system timezone). Example: <code>${datetime.local.YYYY}</code>, <code>${datetime.utc.hh}</code>. No other timezones are accepted.<br/>      Example Hive-partitioned layout: <code>year=${datetime.YYYY}/month=${datetime.MM}/day=${datetime.DD}/hour=${datetime.hh}/${action}_${node}_N${sequence}.json</code>.<br/>  </li><br/>  <li><code>${datetime_until.{format}}</code>: date and time when aggregation ended, with the same formatting options.</li><br/>  <li><code>${sequence}</code>: sequence number of the aggregated upload within the same time interval (required).</li><br/>  </ul><br/>  All other placeholders are considered invalid. Note that placeholders marked as required will be added as a path suffix to the Azure Blob Storage blob name if they are missing from the template.",
             "type": "string"
           },
           "container": {
@@ -1323,6 +1321,15 @@
             "default": "500ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -1833,6 +1840,15 @@
       },
       "action_couchbase.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -2169,6 +2185,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -2484,6 +2509,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -2781,6 +2815,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -3649,6 +3692,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -4024,6 +4076,15 @@
             "default": "10ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -4488,6 +4549,15 @@
             "default": "10ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -5216,6 +5286,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -5309,12 +5388,106 @@
             "oneOf": [
               {
                 "enum": [
+<<<<<<< HEAD
+=======
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+>>>>>>> origin/release-6.1
                   "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+<<<<<<< HEAD
                   "greptimedb"
                 ],
                 "type": "string"
@@ -5388,6 +5561,9 @@
               {
                 "enum": [
                   "azure_event_hub_producer"
+=======
+                  "s3"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               },
@@ -5399,12 +5575,17 @@
               },
               {
                 "enum": [
+<<<<<<< HEAD
                   "oracle"
+=======
+                  "timescale"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+<<<<<<< HEAD
                   "http"
                 ],
                 "type": "string"
@@ -5424,6 +5605,9 @@
               {
                 "enum": [
                   "rocketmq"
+=======
+                  "disk_log"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               },
@@ -5447,6 +5631,7 @@
               },
               {
                 "enum": [
+<<<<<<< HEAD
                   "redis"
                 ],
                 "type": "string"
@@ -5544,6 +5729,9 @@
               {
                 "enum": [
                   "sqlserver"
+=======
+                  "tablestore"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               },
@@ -5567,19 +5755,134 @@
               },
               {
                 "enum": [
-                  "doris"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+<<<<<<< HEAD
                   "azure_event_grid"
+=======
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "gcp_pubsub_producer"
+<<<<<<< HEAD
+=======
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+>>>>>>> origin/release-6.1
                 ],
                 "type": "string"
               }
@@ -6535,20 +6838,20 @@
         },
         "type": "object"
       },
-      "api_key.app": {
+      "api_key.app_response": {
         "properties": {
           "api_key": {
-            "description": "API Key.",
+            "description": "The API key string. Used as the username in Basic authentication.",
             "example": "a4697a5c75a769f6",
             "type": "string"
           },
           "api_secret": {
-            "description": "An API secret is a simple encrypted string that identifies an application without any principal. They are useful for accessing public data anonymously, and are used to associate API requests.",
+            "description": "The API secret string. Used as the password in Basic authentication. Returned only when the key is created; cannot be retrieved later.",
             "example": "MzAyMjk3ODMwMDk0NjIzOTUxNjcwNzQ0NzQ3MTE2NDYyMDI",
             "type": "string"
           },
           "created_at": {
-            "description": "API Key create datetime.",
+            "description": "Time the API key was created (ISO 8601 / epoch second).",
             "example": "2021-12-01T00:00:00.000Z",
             "oneOf": [
               {
@@ -6568,16 +6871,16 @@
             "type": "string"
           },
           "enable": {
-            "description": "Enable/Disable.",
+            "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
             "type": "boolean"
           },
           "expired": {
-            "description": "Expired.",
+            "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
             "type": "boolean"
           },
           "expired_at": {
             "default": "infinity",
-            "description": "Date time when the APP was expired.",
+            "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
             "example": "2021-12-05T02:01:34.186Z",
             "oneOf": [
               {
@@ -6603,7 +6906,7 @@
             ]
           },
           "name": {
-            "description": "Unique name which must match regex pattern `[a-zA-Z0-9-_]`.",
+            "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters. Pattern: ^[A-Za-z]+[A-Za-z0-9-_]*$",
             "example": "EMQX-API-KEY-1",
             "type": "string"
           },
@@ -6612,6 +6915,54 @@
             "description": "Role for this API",
             "example": "administrator",
             "type": "string"
+          },
+          "scopes": {
+            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+            "example": [
+              "connections",
+              "monitoring"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "api_key.scope_info": {
+        "properties": {
+          "desc": {
+            "description": "Human-readable description of the scope's coverage.",
+            "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
+            "type": "string"
+          },
+          "name": {
+            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "example": "connections",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "api_key.scopes_response": {
+        "properties": {
+          "scopes": {
+            "description": "All available scopes with their names and descriptions.",
+            "items": {
+              "$ref": "#/components/schemas/api_key.scope_info"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -8796,6 +9147,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -10429,6 +10790,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -11410,6 +11781,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -12028,6 +12408,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -12664,6 +13053,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -13292,6 +13690,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -13955,6 +14362,15 @@
       },
       "bridge_elasticsearch.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -14375,6 +14791,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -14952,6 +15377,15 @@
       },
       "bridge_http.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -15696,6 +16130,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -16475,6 +16918,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -17907,6 +18359,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -18936,6 +19397,15 @@
       },
       "bridge_mongodb.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -19644,6 +20114,15 @@
       },
       "bridge_mqtt_publisher.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -20180,6 +20659,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -20841,6 +21329,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -21149,6 +21646,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -21779,6 +22285,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -22164,6 +22679,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -23223,7 +23747,7 @@
             "type": "object"
           },
           "key": {
-            "description": "Template for the S3 object key of an aggregated upload.<br/><br/>Template may contain placeholders for the following variables:<br/><ul><br/><li><code>${action}</code>: name of the action (required).</li><br/><li><code>${node}</code>: name of the EMQX node conducting the upload (required).</li><br/><li><code>${datetime.{format}}</code>: date and time when aggregation started, formatted according to the <code>{format}</code> string (required):<br/>    <ul><br/>    <li><code>${datetime.rfc3339utc}</code>: RFC3339-formatted date and time in UTC,</li><br/>    <li><code>${datetime.rfc3339}</code>: RFC3339-formatted date and time in local timezone,</li><br/>    <li><code>${datetime.unix}</code>: Unix timestamp.</li><br/>    </ul><br/></li><br/><li><code>${datetime_until.{format}}</code>: date and time when aggregation ended, with the same formatting options.</li><br/><li><code>${sequence}</code>: sequence number of the aggregated upload within the same time interval (required).</li><br/></ul><br/>All other placeholders are considered invalid. Note that placeholders marked as required will be added as a path suffix to the S3 object key if they are missing from the template.",
+            "description": "Template for the S3 object key of an aggregated upload.<br/><br/>Template may contain placeholders for the following variables:<br/><ul><br/><li><code>${action}</code>: name of the action (required).</li><br/><li><code>${node}</code>: name of the EMQX node conducting the upload (required).</li><br/><li><code>${datetime.{format}}</code>: date and time when aggregation started, formatted according to the <code>{format}</code> string (required):<br/>    <ul><br/>    <li><code>${datetime.rfc3339utc}</code>: RFC3339-formatted date and time in UTC,</li><br/>    <li><code>${datetime.rfc3339}</code>: RFC3339-formatted date and time in local timezone,</li><br/>    <li><code>${datetime.unix}</code>: Unix timestamp,</li><br/>    <li><code>${datetime.YYYY}</code>, <code>${datetime.MM}</code>, <code>${datetime.DD}</code>: zero-padded year, month and day (UTC),</li><br/>    <li><code>${datetime.hh}</code>, <code>${datetime.mm}</code>, <code>${datetime.ss}</code>: zero-padded hour, minute and second (UTC),</li><br/>    <li><code>${datetime.DOY}</code>: zero-padded day of year 001-366 (UTC).</li><br/>    </ul><br/>    Each date/time part token may be prefixed with an explicit timezone: <code>utc</code> (same as no prefix) or <code>local</code> (EMQX node's system timezone). Example: <code>${datetime.local.YYYY}</code>, <code>${datetime.utc.hh}</code>. No other timezones are accepted.<br/>    Example Hive-partitioned layout: <code>year=${datetime.YYYY}/month=${datetime.MM}/day=${datetime.DD}/hour=${datetime.hh}/${action}_${node}_N${sequence}.json</code>.<br/></li><br/><li><code>${datetime_until.{format}}</code>: date and time when aggregation ended, with the same formatting options.</li><br/><li><code>${sequence}</code>: sequence number of the aggregated upload within the same time interval (required).</li><br/></ul><br/>All other placeholders are considered invalid. Note that placeholders marked as required will be added as a path suffix to the S3 object key if they are missing from the template.",
             "type": "string"
           },
           "max_part_size": {
@@ -23371,6 +23895,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -23474,6 +24007,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -24138,6 +24680,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -24828,6 +25379,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -25613,6 +26173,15 @@
               }
             ]
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "enable_queue": {
             "default": false,
             "deprecated": true,
@@ -25770,6 +26339,10 @@
               "enable": false
             },
             "description": "SSL configuration for connecting to the remote EMQX cluster."
+          },
+          "tcp_opts": {
+            "$ref": "#/components/schemas/emqx.client_tcp_opts",
+            "description": "TCP socket options for the outbound cluster link MQTT connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
           },
           "topics": {
             "description": "MQTT topics to be forwarded by the linked remote EMQX broker to the local broker. Messages are only forwarded if the local EMQX broker has matching subscriber(s).<br/>Wildcards are supported. Setting empty topics list on one side of the link can be used to establish unidirectional links: the side with the empty topics won't receive remote messages, but it can forward relevant messages to its linked counterpart (according to the topics configured on that side of the link).",
@@ -25944,6 +26517,10 @@
               "inconsistent"
             ],
             "type": "string"
+          },
+          "tcp_opts": {
+            "$ref": "#/components/schemas/emqx.client_tcp_opts",
+            "description": "TCP socket options for the outbound cluster link MQTT connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
           },
           "topics": {
             "description": "MQTT topics to be forwarded by the linked remote EMQX broker to the local broker. Messages are only forwarded if the local EMQX broker has matching subscriber(s).<br/>Wildcards are supported. Setting empty topics list on one side of the link can be used to establish unidirectional links: the side with the empty topics won't receive remote messages, but it can forward relevant messages to its linked counterpart (according to the topics configured on that side of the link).",
@@ -30009,6 +30586,11 @@
             "format": "password",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "username": {
             "description": "InfluxDB username.",
             "type": "string"
@@ -30038,6 +30620,11 @@
             "description": "Organization name of InfluxDB.",
             "type": "string"
           },
+          "ping_with_auth": {
+            "default": false,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
+          },
           "token": {
             "description": "InfluxDB token.",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -30066,6 +30653,11 @@
               "influxdb_api_v3"
             ],
             "type": "string"
+          },
+          "ping_with_auth": {
+            "default": true,
+            "description": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+            "type": "boolean"
           },
           "token": {
             "description": "InfluxDB token.",
@@ -30231,6 +30823,10 @@
             },
             "type": "array"
           },
+          "tcp_opts": {
+            "$ref": "#/components/schemas/emqx.client_tcp_opts",
+            "description": "TCP socket options for the outbound MQTT client connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
+          },
           "type": {
             "description": "The type of the connector.",
             "enum": [
@@ -30368,6 +30964,10 @@
             },
             "type": "array"
           },
+          "tcp_opts": {
+            "$ref": "#/components/schemas/emqx.client_tcp_opts",
+            "description": "TCP socket options for the outbound MQTT client connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
+          },
           "type": {
             "description": "The type of the connector.",
             "enum": [
@@ -30500,6 +31100,10 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "tcp_opts": {
+            "$ref": "#/components/schemas/emqx.client_tcp_opts",
+            "description": "TCP socket options for the outbound MQTT client connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
           },
           "username": {
             "description": "The username of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific username associated with the static clientid.",
@@ -32922,6 +33526,11 @@
             "description": "Whether to enable this backend.",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "idp_metadata_url": {
             "default": "https://idp.example.com",
             "description": "The URL of the IdP metadata.",
@@ -33162,6 +33771,27 @@
             "example": "administrator",
             "type": "string"
           },
+          "scopes": {
+            "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+            "example": [
+              "user_management",
+              "mfa_management"
+            ],
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "enum": [
+                  "unset"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "username": {
             "description": "Dashboard Username",
             "example": "admin",
@@ -33187,6 +33817,11 @@
             "description": "Whether to enable this backend.",
             "type": "boolean"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "last_error": {
             "description": "Last error of this backend",
             "type": "string"
@@ -33198,6 +33833,212 @@
         },
         "required": [
           "backend"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso.login_success_response": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "license": {
+            "properties": {
+              "edition": {
+                "description": "EMQX License. opensource or enterprise",
+                "enum": [
+                  "opensource",
+                  "enterprise"
+                ],
+                "example": "opensource",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "role": {
+            "default": "administrator",
+            "description": "User role",
+            "example": "administrator",
+            "type": "string"
+          },
+          "token": {
+            "description": "Dashboard Auth Token",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "version": {
+            "description": "EMQX Version",
+            "example": "5.0.0",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "dashboard_sso.mfa_setup_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action indicator: mfa_setup. Returned by SSO login when the user must complete TOTP setup before issuing a session JWT.",
+            "example": "mfa_setup",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "MFA mechanism type. Currently only `totp` is supported.",
+            "example": "totp",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token for MFA binding. Single-use, short-lived (5 minutes).",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "dashboard_sso.mfa_verify_response": {
+        "properties": {
+          "action": {
+            "description": "MFA action indicator: mfa_verify. Returned by SSO login when the user must verify a TOTP code before issuing a session JWT.",
+            "example": "mfa_verify",
+            "type": "string"
+          },
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token for MFA verification. Single-use, short-lived (5 minutes).",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "dashboard_sso.token_exchange_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "code": {
+            "description": "One-time SSO code obtained from the IdP redirect callback. Single-use; consumed by token exchange.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "code",
+          "username"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "username"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_info_response": {
+        "properties": {
+          "mechanism": {
+            "description": "MFA mechanism type (e.g. totp).",
+            "type": "string"
+          },
+          "secret": {
+            "description": "TOTP secret for QR code generation.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mechanism",
+          "secret"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_setup_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "setup_token": {
+            "description": "Temporary setup token from SSO login flow.",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "setup_token",
+          "totp_code",
+          "username"
+        ],
+        "type": "object"
+      },
+      "dashboard_sso_mfa.mfa_verify_request": {
+        "properties": {
+          "backend": {
+            "description": "SSO backend type (e.g. saml, oidc).",
+            "type": "string"
+          },
+          "totp_code": {
+            "description": "TOTP code from the authenticator app.",
+            "type": "string"
+          },
+          "username": {
+            "description": "SSO username from login metadata.",
+            "type": "string"
+          },
+          "verify_token": {
+            "description": "Temporary verify token from SSO login flow.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "backend",
+          "totp_code",
+          "username",
+          "verify_token"
         ],
         "type": "object"
       },
@@ -33613,6 +34454,44 @@
           },
           "set_as_attr": {
             "description": "The name of the client attribute extracted from the client data.<br/>The extracted attribute will be stored in the `client_attrs` property with this name.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx.client_tcp_opts": {
+        "properties": {
+          "active_n": {
+            "default": 10,
+            "description": "Specify the {active, N} option for this Socket.<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "buffer": {
+            "description": "The size of the user-space buffer used by the Erlang VM for the outbound MQTT connection.",
+            "example": "4KB",
+            "type": "string"
+          },
+          "delay_send": {
+            "description": "When enabled, `gen_tcp` may briefly queue small writes to coalesce them into larger TCP segments.<br/>Improves throughput for publishers that send many small messages, at the cost of a small added latency.<br/>Default: `false`.",
+            "type": "boolean"
+          },
+          "keepalive": {
+            "description": "Enable the TCP `SO_KEEPALIVE` socket option for the outbound MQTT connection.<br/>This is the OS-level TCP keepalive probe and is independent of the MQTT-level keepalive.",
+            "type": "boolean"
+          },
+          "nodelay": {
+            "description": "The `TCP_NODELAY` flag for the outbound TCP connection.<br/>When set to `true`, data is sent immediately, regardless of size.",
+            "type": "boolean"
+          },
+          "recbuf": {
+            "description": "The TCP receive buffer (OS kernel) size for the outbound MQTT connection.",
+            "example": "4KB",
+            "type": "string"
+          },
+          "sndbuf": {
+            "description": "The TCP send buffer (OS kernel) size for the outbound MQTT connection.",
+            "example": "4KB",
             "type": "string"
           }
         },
@@ -36072,6 +36951,10 @@
             "description": "Number of Action executions (failures + successes) in the last sample window.",
             "type": "integer"
           },
+          "actions_messages": {
+            "description": "Number of messages handled by Action executions (failures + successes) in the last sample window. An Action execution may handle a batch of messages, so this count is greater than or equal to the number of Action executions.",
+            "type": "integer"
+          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -36144,6 +37027,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -36233,6 +37120,10 @@
         "properties": {
           "actions_executed_rate": {
             "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
+          "actions_messages_rate": {
+            "description": "Rate of messages handled by Action executions in the last sampling window. Equal to or greater than the action execution rate because a single Action execution may handle a batch of messages.",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -40233,7 +41124,11 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
+<<<<<<< HEAD
             "example": "071482C060FAD5B4",
+=======
+            "example": "415DBF0FE8BC5DF9",
+>>>>>>> origin/release-6.1
             "type": "string"
           },
           "status": {
@@ -40314,6 +41209,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -40391,6 +41291,11 @@
           },
           "client.disconnected": {
             "description": "Number of client disconnects",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -40824,6 +41729,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "actions.messages": {
+            "description": "Number of messages handled by rule-engine action executions. An action execution may handle a batch of messages, so this count is greater than or equal to the number of action executions.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -40901,6 +41811,11 @@
           },
           "client.disconnected": {
             "description": "Number of client disconnects",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "client.post_authn": {
+            "description": "Number of invocations of the 'client.post_authn' hook (runs after the authentication chain succeeds)",
             "minimum": 0,
             "type": "integer"
           },
@@ -44582,6 +45497,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -46772,6 +47696,52 @@
         ],
         "type": "object"
       },
+<<<<<<< HEAD
+=======
+      "license_http_api.session_hwm_history": {
+        "properties": {
+          "count": {
+            "description": "Number of data rows returned.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "data": {
+            "description": "Array of high-watermark rows, newest first.",
+            "items": {
+              "$ref": "#/components/schemas/license_http_api.session_hwm_row"
+            },
+            "type": "array"
+          },
+          "period": {
+            "description": "The aggregation period used for this response (`daily` or `monthly`).",
+            "enum": [
+              "daily",
+              "monthly"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "license_http_api.session_hwm_row": {
+        "properties": {
+          "high_watermark": {
+            "description": "Peak session count observed during this period.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "observed_at": {
+            "description": "Timestamp (RFC 3339) when the peak was observed.",
+            "type": "string"
+          },
+          "period": {
+            "description": "Calendar period label, e.g. `2026-04-18` for daily or `2026-04` for monthly.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+>>>>>>> origin/release-6.1
       "limiter.mqtt_shared_limiters": {
         "properties": {
           "bytes_burst": {
@@ -50104,6 +51074,7 @@
           "STALE_CURSOR",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
+          "UNAUTHORIZED",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -51033,6 +52004,20 @@
           },
           "rate": {
             "default": "infinity",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "mt.managed_ns_with_details_out": {
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/mt.config_out"
+          },
+          "created_at": {
+            "type": "integer"
+          },
+          "name": {
             "type": "string"
           }
         },
@@ -52190,6 +53175,15 @@
       },
       "pulsar.action_resource_opts": {
         "properties": {
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -53076,6 +54070,15 @@
             "example": "32s",
             "type": "string"
           },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
+            "type": "string"
+          },
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
@@ -53680,6 +54683,16 @@
             "description": "The cluster name in Redis sentinel mode.",
             "type": "string"
           },
+          "sentinel_password": {
+            "description": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "sentinel_username": {
+            "description": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+            "type": "string"
+          },
           "servers": {
             "description": "A Node list for Cluster to connect to. The nodes should be separated with commas, such as: `Node[,Node].`<br/>For each Node should be: The IPv4 or IPv6 address or the hostname to connect to.<br/>A host entry has the following form: `Host[:Port]`.<br/>The Redis default port 6379 is used if `[:Port]` is not specified.",
             "type": "string"
@@ -53741,185 +54754,6 @@
         "required": [
           "server"
         ],
-        "type": "object"
-      },
-      "relup.package": {
-        "properties": {
-          "applicable_vsns": {
-            "description": "The EMQX versions that this package can be applied to.",
-            "example": [
-              "5.8.0",
-              "5.8.1"
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "build_date": {
-            "description": "The date when the package was built.",
-            "example": "2021-12-25",
-            "type": "string"
-          },
-          "built_on_otp_release": {
-            "example": "24",
-            "type": "string"
-          },
-          "change_logs": {
-            "description": "Changes that this package brings.",
-            "example": [
-              "1. Fix a bug foo in the plugin.2. Add a new bar feature."
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "md5_sum": {
-            "example": "d41d8cd98f00b204e9800998ecf8427e",
-            "type": "string"
-          },
-          "name": {
-            "description": "File name of the package.",
-            "example": "emqx_relup-5.8.2.tar.gz",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "Target EMQX version for this package.",
-            "example": "5.8.2",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.running_status": {
-        "properties": {
-          "current_vsn": {
-            "description": "The current version of the node.",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "live_connections": {
-            "description": "The number of live connections.",
-            "example": 100,
-            "type": "integer"
-          },
-          "node": {
-            "example": "emqx@127.0.0.1",
-            "type": "string"
-          },
-          "role": {
-            "description": "The role of the node.",
-            "enum": [
-              "core",
-              "replicant"
-            ],
-            "example": "core",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of a node:<br/><br/>1. in-progress: hot upgrade is in progress.<br/><br/>2. idle: hot upgrade is not started.",
-            "enum": [
-              "in-progress",
-              "idle"
-            ],
-            "type": "string"
-          },
-          "upgrade_history": {
-            "description": "The upgrade history of the node.",
-            "example": [
-              {
-                "finished_at": "2024-07-16T11:00:01.875627+08:00",
-                "from_vsn": "5.8.0",
-                "result": "success",
-                "started_at": "2024-07-15T13:48:02.648559+08:00",
-                "status": "finished",
-                "target_vsn": "5.8.1",
-                "upgrade_opts": {
-                  "deploy_inplace": false
-                }
-              }
-            ],
-            "items": {
-              "$ref": "#/components/schemas/relup.upgrade_history"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "relup.upgrade_error": {
-        "properties": {
-          "details": {
-            "description": "The details of the error.",
-            "example": {
-              "dir": "emqx/relup",
-              "msg": "no write permission in dir 'emqx/relup'"
-            },
-            "type": "object"
-          },
-          "err_type": {
-            "description": "The type of the error.",
-            "example": "no_write_permission",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "relup.upgrade_history": {
-        "properties": {
-          "finished_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade finished.",
-            "example": "2024-07-16T11:00:01.875627+08:00",
-            "type": "string"
-          },
-          "from_vsn": {
-            "description": "The version before the upgrade.",
-            "example": "5.8.0",
-            "type": "string"
-          },
-          "result": {
-            "description": "The upgrade result.",
-            "example": "success",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/relup.upgrade_error"
-              },
-              {
-                "enum": [
-                  "success"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "started_at": {
-            "description": "The timestamp (in format of RFC3339) when the upgrade started.",
-            "example": "2024-07-15T13:48:02.648559+08:00",
-            "type": "string"
-          },
-          "status": {
-            "description": "The upgrade status of the node.",
-            "enum": [
-              "in-progress",
-              "finished"
-            ],
-            "example": "in-progress",
-            "type": "string"
-          },
-          "target_vsn": {
-            "description": "The target version of the upgrade.",
-            "example": "5.8.2",
-            "type": "string"
-          },
-          "upgrade_opts": {
-            "description": "The options used for the upgrade.",
-            "example": {
-              "deploy_inplace": false
-            },
-            "type": "object"
-          }
-        },
         "type": "object"
       },
       "retainer.message": {
@@ -54077,7 +54911,6 @@
           },
           "enable": {
             "default": true,
-            "deprecated": true,
             "description": "Enable retainer feature",
             "type": "boolean"
           },
@@ -54203,6 +55036,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "health_check_interval": {
@@ -56131,6 +56973,38 @@
             "description": "Default timeout for the `jq` rule engine function",
             "example": "32s",
             "type": "string"
+          },
+          "limit_selects_in_namespace": {
+            "default": true,
+            "description": "When enabled, rules will only trigger on messages published by clients on the same namespace as the rule itself.",
+            "type": "boolean"
+          },
+          "ssrf": {
+            "$ref": "#/components/schemas/rule_engine.ssrf",
+            "default": {
+              "allow_cidrs": [],
+              "deny_cidrs": [
+                "127.0.0.0/8",
+                "::1/128",
+                "fe80::/10",
+                "10.0.0.0/8",
+                "172.16.0.0/12",
+                "192.168.0.0/16",
+                "fc00::/7",
+                "0.0.0.0/32",
+                "224.0.0.0/4",
+                "ff00::/8",
+                "100.100.100.200/32",
+                "169.254.0.0/16"
+              ],
+              "deny_hosts": [
+                "metadata.tencentyun.com",
+                "metadata.google.internal",
+                "metadata.azure.internal"
+              ],
+              "enable": false
+            },
+            "description": "SSRF protection for outbound target addresses configured via rule-engine connectors, bridges and actions.<br/><br/>When enabled, exact `deny_hosts` matches are rejected first, then resolved target IPs are checked against `allow_cidrs` before `deny_cidrs`.<br/><br/>This is a config-validation-time defense layer only: it does not protect against malicious DNS changes after validation has passed.<br/><br/>Combine it with network-layer egress controls such as firewall, `iptables` or `nftables` rules."
           }
         },
         "type": "object"
@@ -56396,6 +57270,57 @@
         "required": [
           "sql"
         ],
+        "type": "object"
+      },
+      "rule_engine.ssrf": {
+        "properties": {
+          "allow_cidrs": {
+            "default": [],
+            "description": "List of CIDR ranges that are explicitly allowed before the deny list is checked.<br/><br/>Use this to carve out approved internal targets without disabling SSRF protection globally.<br/><br/>The default is empty.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "deny_cidrs": {
+            "default": [
+              "127.0.0.0/8",
+              "::1/128",
+              "fe80::/10",
+              "10.0.0.0/8",
+              "172.16.0.0/12",
+              "192.168.0.0/16",
+              "fc00::/7",
+              "0.0.0.0/32",
+              "224.0.0.0/4",
+              "ff00::/8",
+              "100.100.100.200/32",
+              "169.254.0.0/16"
+            ],
+            "description": "List of CIDR ranges considered private or otherwise unsafe as outbound targets.<br/><br/>The default covers loopback, link-local (including cloud IMDS), RFC1918, ULA, unspecified and multicast ranges, plus known cloud metadata IPs (Aliyun 100.100.100.200 and AWS 69.254.169.253).<br/><br/>Use `allow_cidrs` for explicit exceptions when legitimately needed.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "deny_hosts": {
+            "default": [
+              "metadata.tencentyun.com",
+              "metadata.google.internal",
+              "metadata.azure.internal"
+            ],
+            "description": "List of hostnames to deny by exact match (case-insensitive).<br/><br/>The default covers cloud metadata hostnames: metadata.tencentyun.com, metadata.google.internal, metadata.azure.internal.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "enable": {
+            "default": false,
+            "description": "When true, apply the SSRF policy under `rule_engine.ssrf` to outbound connector/bridge/action targets.<br/><br/>Checked at config-update time only — runtime DNS re-resolution is not blocked.<br/><br/>Use network-layer egress controls as the enforcement layer for post-validation DNS changes.",
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "rule_engine.user_provided_function": {
@@ -57424,6 +58349,11 @@
             "example": "(& (objectClass=person) (uid=${username}))",
             "type": "string"
           },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
+          },
           "password": {
             "description": "The password associated with the bridge, used for authentication with the external database.",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -57534,6 +58464,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "force_mfa": {
+            "default": false,
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "type": "boolean"
           },
           "issuer": {
             "description": "The URL of the OIDC issuer.",
@@ -58178,6 +59113,15 @@
             "default": "100ms",
             "description": "Maximum waiting interval when accumulating a batch at a low message rates for more efficient resource usage.",
             "example": "32s",
+            "type": "string"
+          },
+          "dispatch_strategy": {
+            "default": "per_clientid",
+            "description": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+            "enum": [
+              "per_clientid",
+              "random"
+            ],
             "type": "string"
           },
           "enable_queue": {
@@ -59308,7 +60252,11 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
+<<<<<<< HEAD
     "version": "6.2.0"
+=======
+    "version": "6.1.2"
+>>>>>>> origin/release-6.1
   },
   "openapi": "3.0.0",
   "paths": {
@@ -59745,6 +60693,7 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
+<<<<<<< HEAD
                       "gcp_pubsub_producer",
                       "azure_event_grid",
                       "doris",
@@ -59791,12 +60740,59 @@
                       "mongodb",
                       "greptimedb",
                       "bigquery"
+=======
+                      "mongodb",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "clickhouse",
+                      "elasticsearch",
+                      "opents",
+                      "redshift",
+                      "aws_timestream",
+                      "iotdb",
+                      "influxdb",
+                      "snowflake",
+                      "matrix",
+                      "alloydb",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "datalayers",
+                      "gcp_pubsub_producer",
+                      "kinesis",
+                      "oracle",
+                      "redis",
+                      "confluent_producer",
+                      "tablestore",
+                      "tdengine",
+                      "disk_log",
+                      "timescale",
+                      "kafka_producer",
+                      "s3",
+                      "bigquery",
+                      "http",
+                      "s3tables",
+                      "doris",
+                      "mqtt",
+                      "dynamo",
+                      "pulsar",
+                      "pgsql",
+                      "cockroachdb",
+                      "greptimedb",
+                      "mysql",
+                      "couchbase",
+                      "sqlserver",
+                      "emqx_tables",
+                      "cassandra",
+                      "azure_blob_storage"
+>>>>>>> origin/release-6.1
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
+<<<<<<< HEAD
                       "gcp_pubsub_producer",
                       "azure_event_grid",
                       "doris",
@@ -59843,6 +60839,52 @@
                       "mongodb",
                       "greptimedb",
                       "bigquery"
+=======
+                      "mongodb",
+                      "azure_event_hub_producer",
+                      "rocketmq",
+                      "clickhouse",
+                      "elasticsearch",
+                      "opents",
+                      "redshift",
+                      "aws_timestream",
+                      "iotdb",
+                      "influxdb",
+                      "snowflake",
+                      "matrix",
+                      "alloydb",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "datalayers",
+                      "gcp_pubsub_producer",
+                      "kinesis",
+                      "oracle",
+                      "redis",
+                      "confluent_producer",
+                      "tablestore",
+                      "tdengine",
+                      "disk_log",
+                      "timescale",
+                      "kafka_producer",
+                      "s3",
+                      "bigquery",
+                      "http",
+                      "s3tables",
+                      "doris",
+                      "mqtt",
+                      "dynamo",
+                      "pulsar",
+                      "pgsql",
+                      "cockroachdb",
+                      "greptimedb",
+                      "mysql",
+                      "couchbase",
+                      "sqlserver",
+                      "emqx_tables",
+                      "cassandra",
+                      "azure_blob_storage"
+>>>>>>> origin/release-6.1
                     ],
                     "type": "string"
                   },
@@ -71904,12 +72946,12 @@
                 "schema": {
                   "properties": {
                     "api_key": {
-                      "description": "API Key.",
+                      "description": "The API key string. Used as the username in Basic authentication.",
                       "example": "a4697a5c75a769f6",
                       "type": "string"
                     },
                     "created_at": {
-                      "description": "API Key create datetime.",
+                      "description": "Time the API key was created (ISO 8601 / epoch second).",
                       "example": "2021-12-01T00:00:00.000Z",
                       "oneOf": [
                         {
@@ -71929,16 +72971,16 @@
                       "type": "string"
                     },
                     "enable": {
-                      "description": "Enable/Disable.",
+                      "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
                       "type": "boolean"
                     },
                     "expired": {
-                      "description": "Expired.",
+                      "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
                       "type": "boolean"
                     },
                     "expired_at": {
                       "default": "infinity",
-                      "description": "Date time when the APP was expired.",
+                      "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
                         {
@@ -71964,7 +73006,7 @@
                       ]
                     },
                     "name": {
-                      "description": "Unique name which must match regex pattern `[a-zA-Z0-9-_]`.",
+                      "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters. Pattern: ^[A-Za-z]+[A-Za-z0-9-_]*$",
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
@@ -71973,6 +73015,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "connections",
+                        "monitoring"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -72005,16 +73068,16 @@
                     "type": "string"
                   },
                   "enable": {
-                    "description": "Enable/Disable.",
+                    "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
                     "type": "boolean"
                   },
                   "expired": {
-                    "description": "Expired.",
+                    "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
                     "type": "boolean"
                   },
                   "expired_at": {
                     "default": "infinity",
-                    "description": "Date time when the APP was expired.",
+                    "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
                       {
@@ -72040,7 +73103,7 @@
                     ]
                   },
                   "name": {
-                    "description": "Unique name which must match regex pattern `[a-zA-Z0-9-_]`.",
+                    "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters. Pattern: ^[A-Za-z]+[A-Za-z0-9-_]*$",
                     "example": "EMQX-API-KEY-1",
                     "type": "string"
                   },
@@ -72049,6 +73112,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -72061,7 +73135,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/api_key.app"
+                  "$ref": "#/components/schemas/api_key.app_response"
                 }
               }
             },
@@ -72111,7 +73185,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Delete successfully."
+            "description": "Delete successfully"
           },
           "404": {
             "content": {
@@ -72163,12 +73237,12 @@
                 "schema": {
                   "properties": {
                     "api_key": {
-                      "description": "API Key.",
+                      "description": "The API key string. Used as the username in Basic authentication.",
                       "example": "a4697a5c75a769f6",
                       "type": "string"
                     },
                     "created_at": {
-                      "description": "API Key create datetime.",
+                      "description": "Time the API key was created (ISO 8601 / epoch second).",
                       "example": "2021-12-01T00:00:00.000Z",
                       "oneOf": [
                         {
@@ -72188,16 +73262,16 @@
                       "type": "string"
                     },
                     "enable": {
-                      "description": "Enable/Disable.",
+                      "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
                       "type": "boolean"
                     },
                     "expired": {
-                      "description": "Expired.",
+                      "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
                       "type": "boolean"
                     },
                     "expired_at": {
                       "default": "infinity",
-                      "description": "Date time when the APP was expired.",
+                      "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
                         {
@@ -72223,7 +73297,7 @@
                       ]
                     },
                     "name": {
-                      "description": "Unique name which must match regex pattern `[a-zA-Z0-9-_]`.",
+                      "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters. Pattern: ^[A-Za-z]+[A-Za-z0-9-_]*$",
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
@@ -72232,6 +73306,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "connections",
+                        "monitoring"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -72293,16 +73388,16 @@
                     "type": "string"
                   },
                   "enable": {
-                    "description": "Enable/Disable.",
+                    "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
                     "type": "boolean"
                   },
                   "expired": {
-                    "description": "Expired.",
+                    "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
                     "type": "boolean"
                   },
                   "expired_at": {
                     "default": "infinity",
-                    "description": "Date time when the APP was expired.",
+                    "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
                       {
@@ -72332,6 +73427,17 @@
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "example": [
+                      "clients",
+                      "rules"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -72346,12 +73452,12 @@
                 "schema": {
                   "properties": {
                     "api_key": {
-                      "description": "API Key.",
+                      "description": "The API key string. Used as the username in Basic authentication.",
                       "example": "a4697a5c75a769f6",
                       "type": "string"
                     },
                     "created_at": {
-                      "description": "API Key create datetime.",
+                      "description": "Time the API key was created (ISO 8601 / epoch second).",
                       "example": "2021-12-01T00:00:00.000Z",
                       "oneOf": [
                         {
@@ -72371,16 +73477,16 @@
                       "type": "string"
                     },
                     "enable": {
-                      "description": "Enable/Disable.",
+                      "description": "Whether the API key is enabled. Disabled keys are rejected at authentication time.",
                       "type": "boolean"
                     },
                     "expired": {
-                      "description": "Expired.",
+                      "description": "Whether the API key has expired. Read-only; derived from `expired_at`.",
                       "type": "boolean"
                     },
                     "expired_at": {
                       "default": "infinity",
-                      "description": "Date time when the APP was expired.",
+                      "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                       "example": "2021-12-05T02:01:34.186Z",
                       "oneOf": [
                         {
@@ -72406,7 +73512,7 @@
                       ]
                     },
                     "name": {
-                      "description": "Unique name which must match regex pattern `[a-zA-Z0-9-_]`.",
+                      "description": "API key name. Must start with a letter, may contain letters, digits, hyphen and underscore. Length 1-256 characters. Pattern: ^[A-Za-z]+[A-Za-z0-9-_]*$",
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
@@ -72415,6 +73521,27 @@
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "example": [
+                        "connections",
+                        "monitoring"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -72455,6 +73582,33 @@
           }
         ],
         "summary": "Update the specific api_key",
+        "tags": [
+          "API Keys"
+        ]
+      }
+    },
+    "/api_key_scopes": {
+      "get": {
+        "description": "List all available API key scopes. This API can only be requested using a bearer token.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_key.scopes_response"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "List API key scopes",
         "tags": [
           "API Keys"
         ]
@@ -80164,7 +81318,7 @@
     },
     "/clients/{clientid}/subscribe": {
       "post": {
-        "description": "Subscribe",
+        "description": "Force the broker to add a subscription on the named client's behalf.<br/>The subscription is installed directly in the client's channel and persists for the channel's lifetime, just like a client-issued SUBSCRIBE.<br/>This operation bypasses MQTT authorization (ACL) rules by design: the REST API key / dashboard role is the authorization boundary, not the broker's `authorization` configuration.",
         "log_meta": {
           "importance": "low"
         },
@@ -80237,7 +81391,7 @@
     },
     "/clients/{clientid}/subscribe/bulk": {
       "post": {
-        "description": "Subscribe bulk",
+        "description": "Force the broker to add multiple subscriptions on the named client's behalf, in a single request.<br/>Each subscription is installed directly in the client's channel and persists for the channel's lifetime, just like a client-issued SUBSCRIBE.<br/>This operation bypasses MQTT authorization (ACL) rules by design: the REST API key / dashboard role is the authorization boundary, not the broker's `authorization` configuration.",
         "log_meta": {
           "importance": "low"
         },
@@ -80380,7 +81534,7 @@
     },
     "/clients/{clientid}/unsubscribe": {
       "post": {
-        "description": "Unsubscribe",
+        "description": "Force the broker to remove a subscription on the named client's behalf.<br/>This operation bypasses MQTT authorization (ACL) rules by design: the REST API key / dashboard role is the authorization boundary, not the broker's `authorization` configuration.",
         "log_meta": {
           "importance": "low"
         },
@@ -80446,7 +81600,7 @@
     },
     "/clients/{clientid}/unsubscribe/bulk": {
       "post": {
-        "description": "Unsubscribe bulk",
+        "description": "Force the broker to remove multiple subscriptions on the named client's behalf, in a single request.<br/>This operation bypasses MQTT authorization (ACL) rules by design: the REST API key / dashboard role is the authorization boundary, not the broker's `authorization` configuration.",
         "log_meta": {
           "importance": "low"
         },
@@ -80693,6 +81847,12 @@
                       }
                     ],
                     "pool_size": 10,
+                    "resource_opts": {
+                      "dispatch_strategy": "per_clientid",
+                      "health_check_interval": "15s",
+                      "request_ttl": "45s",
+                      "worker_pool_size": 16
+                    },
                     "server": "emqxcl_b.host:1883",
                     "ssl": {
                       "enable": false
@@ -80713,6 +81873,12 @@
                       }
                     ],
                     "pool_size": 10,
+                    "resource_opts": {
+                      "dispatch_strategy": "random",
+                      "health_check_interval": "10s",
+                      "request_ttl": "30s",
+                      "worker_pool_size": 16
+                    },
                     "server": "emqxcl_c.host:1883",
                     "ssl": {
                       "enable": false
@@ -80758,6 +81924,12 @@
                 "enable": true,
                 "name": "emqxcl_b",
                 "pool_size": 10,
+                "resource_opts": {
+                  "dispatch_strategy": "per_clientid",
+                  "health_check_interval": "15s",
+                  "request_ttl": "45s",
+                  "worker_pool_size": 16
+                },
                 "server": "emqxcl_b.host:1883",
                 "ssl": {
                   "enable": false
@@ -80787,6 +81959,12 @@
                     }
                   ],
                   "pool_size": 10,
+                  "resource_opts": {
+                    "dispatch_strategy": "per_clientid",
+                    "health_check_interval": "15s",
+                    "request_ttl": "45s",
+                    "worker_pool_size": 16
+                  },
                   "server": "emqxcl_b.host:1883",
                   "ssl": {
                     "enable": false
@@ -80925,6 +82103,12 @@
                     }
                   ],
                   "pool_size": 10,
+                  "resource_opts": {
+                    "dispatch_strategy": "per_clientid",
+                    "health_check_interval": "15s",
+                    "request_ttl": "45s",
+                    "worker_pool_size": 16
+                  },
                   "server": "emqxcl_b.host:1883",
                   "ssl": {
                     "enable": false
@@ -81045,6 +82229,10 @@
                     },
                     "description": "SSL configuration for connecting to the remote EMQX cluster."
                   },
+                  "tcp_opts": {
+                    "$ref": "#/components/schemas/emqx.client_tcp_opts",
+                    "description": "TCP socket options for the outbound cluster link MQTT connection.<br/>All fields are optional; unset fields keep the OS / `gen_tcp` defaults."
+                  },
                   "topics": {
                     "description": "MQTT topics to be forwarded by the linked remote EMQX broker to the local broker. Messages are only forwarded if the local EMQX broker has matching subscriber(s).<br/>Wildcards are supported. Setting empty topics list on one side of the link can be used to establish unidirectional links: the side with the empty topics won't receive remote messages, but it can forward relevant messages to its linked counterpart (according to the topics configured on that side of the link).",
                     "items": {
@@ -81080,6 +82268,12 @@
                     }
                   ],
                   "pool_size": 10,
+                  "resource_opts": {
+                    "dispatch_strategy": "per_clientid",
+                    "health_check_interval": "15s",
+                    "request_ttl": "45s",
+                    "worker_pool_size": 16
+                  },
                   "server": "emqxcl_b.host:1883",
                   "ssl": {
                     "enable": false
@@ -83272,6 +84466,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -83919,6 +85115,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -85139,6 +86336,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -85489,6 +86687,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -86575,6 +87775,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -87093,6 +88294,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -88446,6 +89649,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -88964,6 +90168,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -89960,6 +91166,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -90280,6 +91487,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -91344,6 +92553,7 @@
                         "database": "example_database",
                         "influxdb_type": "influxdb_api_v1",
                         "password": "******",
+                        "ping_with_auth": false,
                         "username": "example_username"
                       },
                       "pool_size": 8,
@@ -91862,6 +93072,8 @@
                         "pool_size": 8,
                         "redis_type": "sentinel",
                         "sentinel": "myredismaster",
+                        "sentinel_password": "******",
+                        "sentinel_username": "sentinel_user",
                         "servers": "127.0.0.1:6379,127.0.0.2:6379",
                         "username": "test"
                       },
@@ -93168,6 +94380,7 @@
                       "database": "example_database",
                       "influxdb_type": "influxdb_api_v1",
                       "password": "******",
+                      "ping_with_auth": false,
                       "username": "example_username"
                     },
                     "pool_size": 8,
@@ -93518,6 +94731,8 @@
                       "pool_size": 8,
                       "redis_type": "sentinel",
                       "sentinel": "myredismaster",
+                      "sentinel_password": "******",
+                      "sentinel_username": "sentinel_user",
                       "servers": "127.0.0.1:6379,127.0.0.2:6379",
                       "username": "test"
                     },
@@ -94483,7 +95698,11 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
+<<<<<<< HEAD
             "example": "071482C060FAD5B4",
+=======
+            "example": "415DBF0FE8BC5DF9",
+>>>>>>> origin/release-6.1
             "in": "path",
             "name": "site",
             "required": true,
@@ -94546,7 +95765,11 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
+<<<<<<< HEAD
             "example": "071482C060FAD5B4",
+=======
+            "example": "415DBF0FE8BC5DF9",
+>>>>>>> origin/release-6.1
             "in": "path",
             "name": "site",
             "required": true,
@@ -94960,7 +96183,11 @@
           },
           {
             "description": "The identifier of the site.",
+<<<<<<< HEAD
             "example": "071482C060FAD5B4",
+=======
+            "example": "415DBF0FE8BC5DF9",
+>>>>>>> origin/release-6.1
             "in": "path",
             "name": "site",
             "required": true,
@@ -95046,7 +96273,11 @@
           },
           {
             "description": "The identifier of the site.",
+<<<<<<< HEAD
             "example": "071482C060FAD5B4",
+=======
+            "example": "415DBF0FE8BC5DF9",
+>>>>>>> origin/release-6.1
             "in": "path",
             "name": "site",
             "required": true,
@@ -104822,6 +106053,61 @@
         ]
       }
     },
+    "/license/session_hwm_history": {
+      "get": {
+        "description": "Get session high-watermark history. Returns daily or monthly peak session counts.",
+        "parameters": [
+          {
+            "description": "Aggregation period: `daily` returns one row per day, `monthly` folds daily peaks into month-level maximums. Defaults to `monthly`.",
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "monthly",
+              "enum": [
+                "daily",
+                "monthly"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maximum number of rows to return. Defaults to 30 for `daily` and 24 for `monthly` (matching the 24-month retention window).",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/license_http_api.session_hwm_history"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Session High-Watermark History",
+        "tags": [
+          "License"
+        ]
+      }
+    },
     "/license/setting": {
       "get": {
         "description": "Update license setting",
@@ -104843,6 +106129,21 @@
                       "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -104884,6 +106185,21 @@
                     "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                     "example": "75%",
                     "type": "string"
+                  },
+                  "high_watermark_timezone": {
+                    "default": "system",
+                    "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "enum": [
+                          "system"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -104908,6 +106224,21 @@
                       "description": "Low watermark limit below which license connection quota usage alarms are deactivated",
                       "example": "75%",
                       "type": "string"
+                    },
+                    "high_watermark_timezone": {
+                      "default": "system",
+                      "description": "Timezone used to determine the local day boundary for session high-watermark history.<br/>Use `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "enum": [
+                            "system"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     }
                   },
                   "type": "object"
@@ -106327,7 +107658,7 @@
                       "type": "object"
                     },
                     "password_expire_in_seconds": {
-                      "description": "Time in seconds until the password expiresc.",
+                      "description": "Time in seconds until the password expires.",
                       "example": 3600,
                       "type": "integer"
                     },
@@ -109377,13 +110708,23 @@
     },
     "/mt/managed_ns_list": {
       "get": {
-        "description": "List all managed namespaces<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.",
+        "description": "List all managed namespaces<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.<br/>When more pages are available, the response carries a<br/>`Link: <?last_ns=...&limit=...>; rel=\"next\"` header (RFC 8288)<br/>whose URI-reference resolves against the request URL.<br/>Absence of the header indicates the current page is the last.",
         "parameters": [
           {
-            "description": "The last namespace from the previous page.<br/>For the first page, use empty string.",
+            "description": "Exclusive keyset cursor: return namespaces lexicographically<br/>greater than this value. For the first page, omit or use the<br/>empty string. Mutually exclusive with `first_ns`.",
             "example": "ns1",
             "in": "query",
             "name": "last_ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive keyset cursor: return namespaces lexicographically<br/>greater than or equal to this value. Useful for exact-match<br/>lookup (e.g. `first_ns=foo&limit=1`). Mutually exclusive with<br/>`last_ns`.",
+            "example": "ns1",
+            "in": "query",
+            "name": "first_ns",
             "required": false,
             "schema": {
               "type": "string"
@@ -109423,6 +110764,28 @@
               }
             },
             "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The request carried both an inclusive (`first_*`) and an<br/>exclusive (`last_*`) keyset cursor. They are mutually exclusive;<br/>use at most one.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -109441,13 +110804,23 @@
     },
     "/mt/managed_ns_list_details": {
       "get": {
-        "description": "List all managed namespaces with extra details.<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.",
+        "description": "List all managed namespaces with extra details, including the namespace<br/>configuration (session and limiter).<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.<br/>When more pages are available, the response carries a<br/>`Link: <?last_ns=...&limit=...>; rel=\"next\"` header (RFC 8288)<br/>whose URI-reference resolves against the request URL.<br/>Absence of the header indicates the current page is the last.",
         "parameters": [
           {
-            "description": "The last namespace from the previous page.<br/>For the first page, use empty string.",
+            "description": "Exclusive keyset cursor: return namespaces lexicographically<br/>greater than this value. For the first page, omit or use the<br/>empty string. Mutually exclusive with `first_ns`.",
             "example": "ns1",
             "in": "query",
             "name": "last_ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive keyset cursor: return namespaces lexicographically<br/>greater than or equal to this value. Useful for exact-match<br/>lookup (e.g. `first_ns=foo&limit=1`). Mutually exclusive with<br/>`last_ns`.",
+            "example": "ns1",
+            "in": "query",
+            "name": "first_ns",
             "required": false,
             "schema": {
               "type": "string"
@@ -109474,10 +110847,38 @@
                     "summary": "List Example",
                     "value": [
                       {
+                        "config": {
+                          "limiter": {
+                            "client": {
+                              "bytes": {
+                                "burst": "200MB/1m",
+                                "rate": "10MB/10s"
+                              },
+                              "messages": {
+                                "burst": "40/1m",
+                                "rate": "3000/1s"
+                              }
+                            },
+                            "tenant": {
+                              "bytes": {
+                                "burst": "200MB/1m",
+                                "rate": "10MB/10s"
+                              },
+                              "messages": {
+                                "burst": "40/1m",
+                                "rate": "3000/1s"
+                              }
+                            }
+                          },
+                          "session": {
+                            "max_sessions": 10
+                          }
+                        },
                         "created_at": 1747917753,
                         "name": "ns1"
                       },
                       {
+                        "config": {},
                         "created_at": 1747917754,
                         "name": "ns2"
                       }
@@ -109486,9 +110887,31 @@
                 },
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/mt.ns_with_details_out"
+                    "$ref": "#/components/schemas/mt.managed_ns_with_details_out"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The request carried both an inclusive (`first_*`) and an<br/>exclusive (`last_*`) keyset cursor. They are mutually exclusive;<br/>use at most one.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             },
@@ -109691,7 +111114,7 @@
     },
     "/mt/ns/{ns}/client_list": {
       "get": {
-        "description": "List all clients in a namespace",
+        "description": "List all clients in a namespace.<br/>When more pages are available, the response carries a<br/>`Link: <?last_clientid=...&limit=...>; rel=\"next\"` header (RFC 8288)<br/>whose URI-reference resolves against the request URL.<br/>Absence of the header indicates the current page is the last.",
         "parameters": [
           {
             "description": "Namespace in path parameter.",
@@ -109704,10 +111127,20 @@
             }
           },
           {
-            "description": "Last client ID cursor for pagination.",
+            "description": "Exclusive keyset cursor: return client IDs lexicographically greater than<br/>this value. For the first page, omit or use the empty string. Mutually<br/>exclusive with `first_clientid`.",
             "example": "clientid1",
             "in": "query",
             "name": "last_clientid",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive keyset cursor: return client IDs lexicographically<br/>greater than or equal to this value. Useful for exact-match<br/>lookup (e.g. `first_clientid=foo&limit=1`). Mutually exclusive<br/>with `last_clientid`.",
+            "example": "clientid1",
+            "in": "query",
+            "name": "first_clientid",
             "required": false,
             "schema": {
               "type": "string"
@@ -109743,6 +111176,28 @@
                     "type": "string"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The request carried both an inclusive (`first_*`) and an<br/>exclusive (`last_*`) keyset cursor. They are mutually exclusive;<br/>use at most one.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             },
@@ -110178,13 +111633,23 @@
     },
     "/mt/ns_list": {
       "get": {
-        "description": "List all namespaces<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.",
+        "description": "List all namespaces<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.<br/>When more pages are available, the response carries a<br/>`Link: <?last_ns=...&limit=...>; rel=\"next\"` header (RFC 8288)<br/>whose URI-reference resolves against the request URL.<br/>Absence of the header indicates the current page is the last.",
         "parameters": [
           {
-            "description": "The last namespace from the previous page.<br/>For the first page, use empty string.",
+            "description": "Exclusive keyset cursor: return namespaces lexicographically<br/>greater than this value. For the first page, omit or use the<br/>empty string. Mutually exclusive with `first_ns`.",
             "example": "ns1",
             "in": "query",
             "name": "last_ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive keyset cursor: return namespaces lexicographically<br/>greater than or equal to this value. Useful for exact-match<br/>lookup (e.g. `first_ns=foo&limit=1`). Mutually exclusive with<br/>`last_ns`.",
+            "example": "ns1",
+            "in": "query",
+            "name": "first_ns",
             "required": false,
             "schema": {
               "type": "string"
@@ -110224,6 +111689,28 @@
               }
             },
             "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The request carried both an inclusive (`first_*`) and an<br/>exclusive (`last_*`) keyset cursor. They are mutually exclusive;<br/>use at most one.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -110242,13 +111729,23 @@
     },
     "/mt/ns_list_details": {
       "get": {
-        "description": "List all namespaces, along with some extra details.<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.",
+        "description": "List all namespaces, along with some extra details.<br/>The namespaces are sorted in lexicographical order,<br/>so this API can be used for prefix based fuzzy search.<br/>When more pages are available, the response carries a<br/>`Link: <?last_ns=...&limit=...>; rel=\"next\"` header (RFC 8288)<br/>whose URI-reference resolves against the request URL.<br/>Absence of the header indicates the current page is the last.",
         "parameters": [
           {
-            "description": "The last namespace from the previous page.<br/>For the first page, use empty string.",
+            "description": "Exclusive keyset cursor: return namespaces lexicographically<br/>greater than this value. For the first page, omit or use the<br/>empty string. Mutually exclusive with `first_ns`.",
             "example": "ns1",
             "in": "query",
             "name": "last_ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive keyset cursor: return namespaces lexicographically<br/>greater than or equal to this value. Useful for exact-match<br/>lookup (e.g. `first_ns=foo&limit=1`). Mutually exclusive with<br/>`last_ns`.",
+            "example": "ns1",
+            "in": "query",
+            "name": "first_ns",
             "required": false,
             "schema": {
               "type": "string"
@@ -110290,6 +111787,28 @@
                     "$ref": "#/components/schemas/mt.ns_with_details_out"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The request carried both an inclusive (`first_*`) and an<br/>exclusive (`last_*`) keyset cursor. They are mutually exclusive;<br/>use at most one.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
                 }
               }
             },
@@ -113937,373 +115456,6 @@
         "summary": "Update Message Queue Config",
         "tags": [
           "Message Queue"
-        ]
-      }
-    },
-    "/relup/package": {
-      "delete": {
-        "description": "Delete the installed hot upgrade package.",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "The packages have been deleted successfully."
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Delete Package",
-        "tags": [
-          "Relup"
-        ]
-      },
-      "get": {
-        "description": "Get information of the installed hot upgrade package.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.package"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "No relup package is currently installed.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get Package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/package/upload": {
-      "post": {
-        "description": "Upload a hot upgrade package (emqx_relup-vsn.tar.gz). Note that only one package is allowed to be installed at a time.",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "encoding": {
-                "plugin": {
-                  "contentType": "application/gzip"
-                }
-              },
-              "schema": {
-                "properties": {
-                  "plugin": {
-                    "format": "binary",
-                    "type": "string"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "The package has been uploaded successfully."
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR",
-                        "ALREADY_INSTALLED",
-                        "BAD_PLUGIN_INFO"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "Possible error reason codes for invalid requests.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upload Package",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/status": {
-      "get": {
-        "description": "Get the hot upgrade status of all nodes.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/relup.running_status"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get Status All",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/status/{node}": {
-      "get": {
-        "description": "Get the hot upgrade status of a specified node.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/relup.running_status"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get Status Node",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/upgrade": {
-      "post": {
-        "description": "Upgrade all nodes to the target version with the installed package.",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": "The upgrade process has been started successfully."
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "The upgrade failed due to invalid input or environment configuration.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "The upgrade failed due to internal system errors.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade All",
-        "tags": [
-          "Relup"
-        ]
-      }
-    },
-    "/relup/upgrade/{node}": {
-      "post": {
-        "description": "Upgrade a specified node to the target version with the installed package.",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/relup.node_name"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "The upgrade process has been started successfully."
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "UNEXPECTED_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "The upgrade failed due to invalid input or environment configuration.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "NOT_FOUND"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "The specified node was not found.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "enum": [
-                        "INTERNAL_ERROR"
-                      ],
-                      "type": "string"
-                    },
-                    "message": {
-                      "description": "The upgrade failed due to internal system errors.",
-                      "type": "string"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Upgrade Node",
-        "tags": [
-          "Relup"
         ]
       }
     },
@@ -119252,38 +120404,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "license": {
-                      "properties": {
-                        "edition": {
-                          "description": "EMQX License. opensource or enterprise",
-                          "enum": [
-                            "opensource",
-                            "enterprise"
-                          ],
-                          "example": "opensource",
-                          "type": "string"
-                        }
-                      },
-                      "type": "object"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
                     },
-                    "role": {
-                      "default": "administrator",
-                      "description": "User role",
-                      "example": "administrator",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
                     },
-                    "token": {
-                      "description": "Dashboard Auth Token",
-                      "type": "string"
-                    },
-                    "version": {
-                      "description": "EMQX Version",
-                      "example": "5.0.0",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
                     }
-                  },
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -119358,6 +120489,212 @@
         },
         "security": [],
         "summary": "Get Dashboard Auth Token",
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/mfa/setup": {
+      "post": {
+        "description": "Complete SSO MFA TOTP setup: bind the TOTP authenticator and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Missing or invalid fields.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized. Invalid or expired token.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "MFA Setup",
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/mfa/setup_info": {
+      "post": {
+        "description": "Retrieve TOTP setup info (secret, mechanism) for QR code display. Requires a valid setup token in the request body.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_setup_info_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized. Invalid or expired token.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "MFA Setup Info",
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/mfa/verify": {
+      "post": {
+        "description": "Verify SSO MFA TOTP code and issue a JWT session token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso_mfa.mfa_verify_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Missing or invalid fields.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Unauthorized. Invalid or expired token.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "MFA Verify",
         "tags": [
           "Dashboard Single Sign-On"
         ]
@@ -119663,15 +121000,72 @@
             "description": ""
           }
         },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [],
         "summary": "SP SAML Metadata",
+        "tags": [
+          "Dashboard Single Sign-On"
+        ]
+      }
+    },
+    "/sso/token_exchange": {
+      "post": {
+        "description": "Exchange a one-time SSO code for the actual login result (JWT token or MFA metadata). The code is consumed after a single use.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dashboard_sso.token_exchange_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_verify_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.mfa_setup_response"
+                    },
+                    {
+                      "$ref": "#/components/schemas/dashboard_sso.login_success_response"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request. Invalid or expired SSO code.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "SSO Token Exchange",
         "tags": [
           "Dashboard Single Sign-On"
         ]
@@ -121659,6 +123053,34 @@
         ]
       }
     },
+    "/user_scopes": {
+      "get": {
+        "description": "List all scope names that a dashboard login user may hold, with their descriptions and an `admin_only` flag indicating whether the scope is restricted to administrator role.<br/>Returned to any authenticated login user — the endpoint exists to populate the dashboard UI's scope selector and does not itself require a specific scope.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": "List all scope names that a dashboard login user may hold, with their descriptions and an `admin_only` flag indicating whether the scope is restricted to administrator role.<br/>Returned to any authenticated login user — the endpoint exists to populate the dashboard UI's scope selector and does not itself require a specific scope."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "List dashboard user scopes",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
     "/users": {
       "get": {
         "description": "Dashboard list users",
@@ -121713,6 +123135,17 @@
                     "example": "administrator",
                     "type": "string"
                   },
+                  "scopes": {
+                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
                   "username": {
                     "description": "Dashboard Username",
                     "example": "admin",
@@ -121741,11 +123174,42 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "mfa": {
+                      "description": "MFA status.<br/>- `none`: no MFA enabled<br/>- `disabled`: MFA is disabled for the user<br/>- Otherwise: The MFA mechanism in use, e.g. `totp`",
+                      "enum": [
+                        "none",
+                        "disabled",
+                        "totp"
+                      ],
+                      "example": "totp",
+                      "type": "string"
+                    },
                     "role": {
                       "default": "administrator",
                       "description": "User role",
                       "example": "administrator",
                       "type": "string"
+                    },
+                    "scopes": {
+                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
                     },
                     "username": {
                       "description": "Dashboard Username",
@@ -121911,6 +123375,17 @@
                     "description": "User role",
                     "example": "administrator",
                     "type": "string"
+                  },
+                  "scopes": {
+                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "example": [
+                      "user_management",
+                      "mfa_management"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
                   }
                 },
                 "type": "object"
@@ -121950,10 +123425,54 @@
                       "example": "administrator",
                       "type": "string"
                     },
+                    "scopes": {
+                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "example": [
+                        "user_management",
+                        "mfa_management"
+                      ],
+                      "oneOf": [
+                        {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        {
+                          "enum": [
+                            "unset"
+                          ],
+                          "type": "string"
+                        }
+                      ]
+                    },
                     "username": {
                       "description": "Dashboard Username",
                       "example": "admin",
                       "maxLength": 100,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST",
+                        "NOT_ALLOWED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
                       "type": "string"
                     }
                   },
@@ -122100,8 +123619,24 @@
     },
     "/users/{username}/mfa": {
       "delete": {
-        "description": "Delete MFA state for a dashboard user.<br/>After the state is deleted, the user will have MFA explicitly disabled, to re-enabled MFA, call the `POST` method.",
+        "description": "Disable MFA for a dashboard user. To reset or re-key TOTP, call the `POST` method.",
         "parameters": [
+          {
+            "description": "SSO backend name from query string.",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -122115,7 +123650,7 @@
         ],
         "responses": {
           "204": {
-            "description": "MFA setting is deleted"
+            "description": "MFA setting is disabled"
           },
           "404": {
             "content": {
@@ -122154,8 +123689,24 @@
         ]
       },
       "post": {
-        "description": "Setup MFA for a dashboard user.",
+        "description": "Set up or reset MFA for a dashboard user. Calling this endpoint generates a fresh TOTP secret.",
         "parameters": [
+          {
+            "description": "SSO backend name from query string.",
+            "example": "local",
+            "in": "query",
+            "name": "backend",
+            "required": false,
+            "schema": {
+              "enum": [
+                "local",
+                "ldap",
+                "oidc",
+                "saml"
+              ],
+              "type": "string"
+            }
+          },
           {
             "description": "Dashboard Username",
             "example": "admin",
@@ -122190,7 +123741,7 @@
         },
         "responses": {
           "204": {
-            "description": "MFA setting is reset"
+            "description": "MFA setting is updated"
           },
           "404": {
             "content": {

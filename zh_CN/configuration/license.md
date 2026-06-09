@@ -9,6 +9,7 @@ license {
   key  =  "MjIwMTExCjAKMTAKRXZhbHVhdGlvbgpjb250YWN0QGVtcXguaW8KZGVmYXVsdAoyMDIzMDEwOQoxODI1CjEwMAo=.MEUCIG62t8W15g05f1cKx3tA3YgJoR0dmyHOPCdbUxBGxgKKAiEAhHKh8dUwhU+OxNEaOn8mgRDtiT3R8RZooqy6dEsOmDI="
   connection_low_watermark  =  "60%"
   connection_high_watermark  =  "80%"
+  high_watermark_timezone   =  "system"
 }
 ```
 
@@ -17,6 +18,7 @@ license {
 - `key` 字段包含以 base64 格式编码的 License 密钥。
 - `connection_low_watermark` 用于设置 License 连接配额使用率报警解除的阈值；默认值：`"75%"`。
 - `connection_high_watermark` 用于设置 License 连接配额使用率报警激活的阈值；默认值：`"80%"`。
+- `high_watermark_timezone` 用于指定记录每日会话峰值水位线历史时所使用的时区，以确定自然日的划分边界。使用 `"system"` 表示跟随节点所在主机的本地时区，或提供显式的 UTC 偏移量，例如 `"+08:00"`。默认值：`"system"`。
 
 执行后，您可以运行 `emqx ctl license info` 来确认新的 License 文件已生效。
 

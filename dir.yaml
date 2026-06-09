@@ -1388,10 +1388,13 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+<<<<<<< HEAD
         - title_en: EMQX 6.2
           title_cn: EMQX 6.2
           title_ja: EMQX 6.2
           path: changes/breaking-changes-6.2
+=======
+>>>>>>> origin/release-6.1
         - title_en: EMQX 6.1
           title_cn: EMQX 6.1
           title_ja: EMQX 6.1
