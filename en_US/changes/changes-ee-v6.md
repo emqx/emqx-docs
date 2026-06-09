@@ -187,7 +187,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The new limiters are only supported for memory sessions (`durable_sessions.enable = false`).
 
-  If unspecified, the default values are unlimited, thus keeping backwards compatibility.
+  If unspecified, the default values are unlimited, thus keeping backward compatibility.
 
 - [#16962](https://github.com/emqx/emqx/pull/16962) Improved Kafka source polling behavior by ensuring fetch requests wait briefly for data instead of returning empty batches immediately when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
 
