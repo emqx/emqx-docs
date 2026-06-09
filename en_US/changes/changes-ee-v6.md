@@ -500,7 +500,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17406](https://github.com/emqx/emqx/pull/17406) Now, events captured by a trace initiated by a namespaced admin are limited to the namespace of such admin, for traces of types topic, IP address, and clientid. Traces of type rule ID already had such behavior.
 
-- [#17473](https://github.com/emqx/emqx/pull/17473) Lower the log level of `unabled_to_stop_plugin_apps` from warning to info when the plugin's Erlang applications cannot be stopped because other running applications still depend on them. This is an expected, non-actionable condition during plugin unload and no longer raises a warning.
+- [#17473](https://github.com/emqx/emqx/pull/17473) Lowered the log level of `unabled_to_stop_plugin_apps` from warning to info when the plugin's Erlang applications cannot be stopped because other running applications still depend on them. This is an expected, non-actionable condition during plugin unload and no longer raises a warning.
 
 #### Plugin
 
