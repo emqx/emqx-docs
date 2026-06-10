@@ -2,7 +2,7 @@
 
 ## 6.1.2
 
-*Release Date: 2026-06-05*
+*Release Date: 2026-06-09*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.1.2.
 
