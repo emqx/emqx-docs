@@ -9,7 +9,7 @@ The Namespace feature in EMQX consists of two parts:
 
 ::: warning Trusted Deployments Only
 
-The **admin user namespace** is intended for trusted internal deployments — separating teams or business units within one organization to reduce the risk of accidentally changing each other's configurations. It does **not** provide strong isolation guarantees and is **not** a security boundary for public or untrusted multi-tenant deployments. If you are considering admin user namespaces for a public multi-tenant deployment, please contact EMQ sales — this use case is not currently supported out of the box.
+The **admin user namespace** is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations. It does **not** provide strong isolation guarantees and is **not** a security boundary for public or untrusted multi-tenant deployments. If you are considering admin user namespaces for a public multi-tenant deployment, please contact EMQ sales: this use case is not currently supported out of the box.
 
 For the **MQTT client namespace**, isolation between clients across namespaces is opt-in and must be explicitly configured. When clients across namespaces are not mutually trusted, see [Isolation Mechanisms](#isolation-mechanisms) for the required client ID overrides and topic mount points.
 
@@ -106,7 +106,7 @@ However, note that isolation strategies still require **manual configuration** b
 
   This setting adds a namespace prefix to the topic name.
 
-As of version 5.9, namespaces are only applicable to MQTT clients. The Dashboard and REST API are not yet isolated based on namespaces. EMQX plans to implement unified management namespaces and MQTT namespaces in future versions. For details, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+For details on planned enhancements, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
 
 ## Enable Namespaces
 
