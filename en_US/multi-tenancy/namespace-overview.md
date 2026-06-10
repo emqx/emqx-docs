@@ -12,10 +12,7 @@ This feature is referred to as Namespace in EMQX 5.9, even though it follows mul
 
 Namespaces provide logical isolation for MQTT clients and administrative users, but they are **not** a security boundary for public or untrusted multi-tenant deployments. Use namespaces for trusted internal scenarios — separating teams, business units, or known customers within one organization — to reduce the risk of unintended cross-tenant interference.
 
-If your deployment involves clients or administrators that are not mutually trusted, additional safeguards are required:
-
-- **For untrusted MQTT clients across namespaces**, you must configure `mqtt.clientid_override` and topic mount points to prevent session takeover and topic-level access leakage. See [Isolation Mechanisms](#isolation-mechanisms).
-- **For delegated namespace administrators**, enable `rule_engine.ssrf` (where available) and apply host-level egress controls. See [Operational Security for Admin Namespaces](#operational-security-for-admin-namespaces).
+If you are considering namespaces for a public multi-tenant deployment, please contact EMQ sales — this use case is not currently supported out of the box.
 
 :::
 
