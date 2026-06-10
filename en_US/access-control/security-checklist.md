@@ -33,6 +33,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 
 - Configure at least one authenticator before exposing public listeners. By default, EMQX allows all clients to connect if authentication is not enabled. See [Authentication](./authn/authn.md).
 - Prefer per-device or per-application credentials instead of shared usernames, passwords, or certificates.
+- Bind the MQTT client ID to the authenticated identity whenever the authentication mechanism allows it — for example by verifying a JWT `clientid` claim, mapping a certificate field with [`peer_cert_as_clientid`](./authn/x509.md#certificate-information-mapping), having the HTTP authenticator reject mismatches, or pairing the authenticator with a [Client-Info](./authn/cinfo.md) rule. Without this binding, a leaked credential lets an attacker open unbounded sessions under random client IDs with a long [Session Expiry Interval](../messaging/mqtt-concepts.md), accumulating idle persistent sessions until broker memory is exhausted.
 - Choose an authentication mechanism that matches your trust model, such as X.509, JWT, SCRAM, or password-based authentication backed by a secure database.
 - When using password-based authentication, store salted password hashes instead of plaintext secrets, and prefer strong algorithms such as `bcrypt` or `pbkdf2`.
 - Define topic permissions as narrowly as possible and review wildcard usage carefully. See [Authorization](./authz/authz.md).

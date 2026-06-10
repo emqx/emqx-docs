@@ -33,6 +33,7 @@
 
 - 在将公共监听器暴露到生产环境之前，至少配置一种认证方式。默认情况下，如果未启用认证，EMQX 将允许所有客户端连接。详见[认证](./authn/authn.md)。
 - 优先使用每设备或每应用独立凭据，避免多个客户端共享用户名、密码或证书。
+- 在认证机制允许的前提下，将 MQTT 客户端 ID 与认证身份绑定，例如校验 JWT 的 `clientid` 声明、使用 [`peer_cert_as_clientid`](./authn/x509.md#certificate-information-mapping) 映射证书字段、让 HTTP 认证拒绝不一致的请求，或配合 [Client-Info](./authn/cinfo.md) 规则。如果缺少此类绑定，一旦凭据泄露，攻击者就可以使用随机客户端 ID 配合较长的[会话过期间隔](../messaging/mqtt-concepts.md)创建大量会话，持续累积空闲的持久会话，直至耗尽 Broker 内存。
 - 根据实际信任模型选择认证机制，例如 X.509、JWT、SCRAM，或基于安全后端数据库的密码认证。
 - 使用密码认证时，应存储加盐哈希后的密码，而不是明文密码，并优先采用 `bcrypt`、`pbkdf2` 等强哈希算法。
 - 尽可能最小化主题权限范围，并谨慎审查通配符规则。详见[授权](./authz/authz.md)。
