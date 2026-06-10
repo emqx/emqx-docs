@@ -345,6 +345,22 @@ In addition to these API-key scopes, Dashboard login users have four login-only 
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
+**Namespaced callers** (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Even with the `connections` or `monitoring` scope granted, namespaced callers cannot access endpoints that expose raw MQTT message content across the entire cluster. The following endpoints return `403 Forbidden` for namespaced callers regardless of their assigned scopes:
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+- `DELETE /trace` (bulk-delete all traces)
+
+For trace listing (`GET /trace`), namespaced callers see only traces within their own namespace. Per-trace operations (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found` when the trace belongs to a different namespace, so the existence of cross-namespace traces is not leaked.
+
 Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 #### Default Behavior of `scopes`

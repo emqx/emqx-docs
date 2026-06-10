@@ -107,7 +107,7 @@ However, note that isolation strategies still require **manual configuration** b
 
   This setting adds a namespace prefix to the topic name.
 
-As of version 5.9, namespaces are only applicable to MQTT clients. The Dashboard and REST API are not yet isolated based on namespaces. EMQX plans to implement unified management namespaces and MQTT namespaces in future versions. For details, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+For details on the current state of namespace isolation and planned future work, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
 
 ## Enable Namespaces
 

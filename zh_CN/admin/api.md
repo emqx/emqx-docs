@@ -341,6 +341,22 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
+**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在 Scope 检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` Scope，命名空间调用方也无法访问以下暴露集群范围内原始 MQTT 消息内容的端点，调用时将返回 `403 Forbidden`：
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+- `DELETE /trace`（批量删除所有追踪记录）
+
+对于追踪列表端点（`GET /trace`），命名空间调用方仅能看到其命名空间内的追踪记录。单条追踪操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）在追踪记录属于其他命名空间时返回 `404 Not Found`，不会泄露跨命名空间追踪是否存在。
+
 Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
 
 #### Scope 的默认行为
