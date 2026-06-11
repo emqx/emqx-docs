@@ -341,7 +341,7 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
-**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在 Scope 检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` Scope，命名空间调用方也无法访问以下暴露集群范围内原始 MQTT 消息内容的端点，调用时将返回 `403 Forbidden`：
+**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在 Scope 检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` Scope，命名空间调用方也无法访问以下可读取或操作集群范围内原始 MQTT 消息内容（含保留/延迟消息存储）的端点，调用时将返回 `403 Forbidden`：
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
