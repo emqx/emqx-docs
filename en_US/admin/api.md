@@ -345,8 +345,7 @@ In addition to these API-key scopes, Dashboard login users have four login-only 
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-**Namespaced callers** (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Even with the `connections` or `monitoring` scope granted, namespaced callers cannot access endpoints that expose raw MQTT message content across the entire cluster. The following endpoints return `403 Forbidden` for namespaced callers regardless of their assigned scopes:
-
+**Namespaced callers** (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Even with the `connections` or `monitoring` scope granted, namespaced callers cannot access endpoints that read or manipulate raw MQTT message content (including retained/delayed message stores) across the entire cluster. The following endpoints return `403 Forbidden` for namespaced callers regardless of their assigned scopes:
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
 - `GET /mqtt/retainer/messages`
