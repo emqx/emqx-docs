@@ -127,7 +127,7 @@ ns:<NAMESPACE>::<ROLE>
 
 - **资源作用域限制**：命名空间用户只能查看和管理其所属命名空间下的资源，包括连接器、动作、数据源、规则等支持命名空间的模块。
 - **集群级设置访问限制**：尚未支持命名空间隔离的全局配置项对命名空间用户为只读，只有系统管理员可进行修改。
-- **消息内容端点限制**：部分暴露原始 MQTT 消息内容的 REST API 端点对命名空间用户不可用，调用时将返回 `403 Forbidden`。这些端点仅供全局管理员使用：
+- **消息内容端点限制**：部分访问或操作原始 MQTT 消息内容的 REST API 端点对命名空间用户不可用，调用时将返回 `403 Forbidden`。这些端点仅供全局管理员使用：
   - 消息队列消息：`GET /clients/:clientid/mqueue_messages`
   - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
