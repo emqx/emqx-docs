@@ -126,7 +126,7 @@ For example:
 
 - **Scoped resources**: Namespaced users can view and manage only the resources within their assigned namespace, such as Connectors, Actions, Sources, Rules, and other namespace-aware modules.
 - **Cluster-level settings**: Configurations not yet namespace-aware remain read-only for namespaced users. Only global administrators can modify them.
-- **Blocked message-content endpoints**: Certain REST API endpoints that expose raw MQTT message content are unavailable to namespaced users and return `403 Forbidden`. These endpoints are accessible only to global administrators:
+- **Blocked message-content endpoints**: Certain REST API endpoints that access or manipulate raw MQTT message content are unavailable to namespaced users and return `403 Forbidden`. These endpoints are accessible only to global administrators:
   - Mqueue messages: `GET /clients/:clientid/mqueue_messages`
   - Inflight messages: `GET /clients/:clientid/inflight_messages`
   - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
