@@ -2,9 +2,16 @@
 
 Starting from EMQX 5.9.0, the Namespace feature allows users to logically group MQTT clients and apply traffic limits within a single EMQX cluster. This feature enables scalable deployments where multiple client groups (such as business units, applications, or customers) share the same infrastructure while remaining logically separated.
 
-::: tip Note
+The Namespace feature in EMQX consists of two parts:
 
-This feature is referred to as Namespace in EMQX 5.9, even though it follows multi-tenancy design principles.
+- **MQTT client namespace** — logical grouping of MQTT clients (by username, SNI, or other connection metadata) with per-namespace quotas, rate limits, and isolation knobs for client IDs and topics.
+- **Admin user namespace** — Dashboard, CLI, and API users scoped to a specific namespace via [namespaced roles](../dashboard/system.md/#namespaced-roles), so delegated administrators only see and operate on resources within their assigned namespace. Available since EMQX 6.0.
+
+::: warning Trusted Deployments Only
+
+The **admin user namespace** is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations. It does **not** provide strong isolation guarantees and is **not** a security boundary for public or untrusted multi-tenant deployments. If you are considering admin user namespaces for a public multi-tenant deployment, please contact EMQ sales: this use case is not currently supported out of the box.
+
+For the **MQTT client namespace**, isolation between clients across namespaces is opt-in and must be explicitly configured. When clients across namespaces are not mutually trusted, see [Isolation Mechanisms](#isolation-mechanisms) for the required client ID overrides and topic mount points.
 
 :::
 
@@ -42,16 +49,8 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
 
 - **Admin User Isolation**
   
-  Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
+  Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles). See the [Trusted Deployments Only](#namespace) notice at the top of this page for the trust model and required safeguards.
 
-  ::: warning Trusted Deployments Only
-
-  Admin namespaces are intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidentally changing each other's configurations. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
-
-  If you allow delegated administrators to manage namespace-scoped resources, see [Operational Security for Admin Namespaces](#operational-security-for-admin-namespaces).
-
-  :::
-  
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
