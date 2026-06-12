@@ -74,7 +74,7 @@ EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for on
      
    - **Intermediate Certificate Depth**: The allowed maximum depth of certification path; the default value is `10`.
 
-   - **Key Password**: Type the password if the private key file is password-protected. To load the password from a file rather than embedding it inline, use the form `file://<path-to-file>`; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes. See [Load Secrets from a File](../configuration/secret-from-file.md) for details.
+   - **Key Password**: Type the password if the private key file is password-protected. To load the password from a file rather than embedding it inline, use the form `file://<path-to-file>`; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes. See [Load Secrets from a File](../access-control/secret-from-file.md) for details.
 
    - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toggle switch. For more information, see [OCSP Stapling](./ocsp.md).
 
