@@ -1,12 +1,12 @@
-# Mria Logs and Alarms
+# Mria ログとアラーム
 
-This document describes log messages and alarms reported by the Mria database management system. Currently, it covers network partition events. Additional error types may be added in future revisions.
+本書は Mria データベース管理システムによって報告されるログメッセージとアラームについて説明します。現在はネットワークパーティションイベントに関する内容を扱っており、将来的に追加のエラータイプが追加される可能性があります。
 
-## Network Partition
+## ネットワークパーティション
 
-### Partition Detected
+### パーティション検出
 
-When a network partition is detected, the following log messages appear on all nodes (Core or Replicant):
+ネットワークパーティションが検出されると、すべてのノード（Core または Replicant）で以下のログメッセージが表示されます。
 
 ```text
 [error] ** Node 'emqx@remote.host' not responding **, ** Removing (timedout) connection **
@@ -14,9 +14,9 @@ When a network partition is detected, the following log messages appear on all n
 [notice] msg: Remote RLOG agent died, reason: noconnection, repl_state: ...
 ```
 
-### Partition Healed
+### パーティション回復
 
-When the partition heals, the following logs appear on all Core nodes as EMQX detects that the previously lost peers reconnect:
+パーティションが回復すると、以前に失われたピアが再接続されたことを EMQX が検知し、すべての Core ノードで以下のログが表示されます。
 
 ```text
 [error] Mnesia('emqx@local.host'): ** ERROR ** mnesia_event got {inconsistent_database, running_partitioned_network, 'emqx@remote.host'}
@@ -24,15 +24,15 @@ When the partition heals, the following logs appear on all Core nodes as EMQX de
 [critical] msg: Core cluster partition, context: running_partitioned_network, from: 'emqx@remote.host'
 ```
 
-Also, a `partition` alarm is raised:
+また、`partition` アラームが発生します。
 
 ```text
 [warning] msg: alarm_is_activated, message: <<"Partition occurs at node emqx@remote.host">>, name: partition
 ```
 
-### Core Node Recovery
+### Core ノードの復旧
 
-On Core nodes in the minority partition, the following logs will appear:
+マイノリティパーティションにある Core ノードでは、以下のログが表示されます。
 
 ```text
 [notice] msg: Mria is restarting to join the cluster, seed: 'emqx@remote.node'
@@ -40,7 +40,7 @@ On Core nodes in the minority partition, the following logs will appear:
 [notice] msg: stopping_emqx_apps, ...
 ```
 
-When the minority reboot is complete, the rebooted Core nodes will print a standard EMQX hello message:
+マイノリティの再起動が完了すると、再起動した Core ノードは標準の EMQX の起動メッセージを出力します。
 
 ```text
 ...
@@ -50,23 +50,23 @@ Listener ws:default on 0.0.0.0:8083 started.
 Listener wss:default on 0.0.0.0:8084 started.
 ```
 
-### Replicant Recovery
+### Replicant の復旧
 
-On Replicant nodes, the following log confirms that replication has fully resumed:
+Replicant ノードでは、レプリケーションが完全に再開されたことを示す以下のログが表示されます。
 
 ```text
 [notice] msg: Shard fully up, node: 'emqx@remote.host', shard: ...
 ```
 
-### Broker Heal Alarm
+### ブローカー回復アラーム
 
-Another indication of partition recovery is the `broker_heal` alarm, raised on all nodes:
+パーティション回復のもう一つの指標として、すべてのノードで `broker_heal` アラームが発生します。
 
 ```text
 [warning] msg: broker_heal_initiated, pid: <0.8705.0>, results: ...
 ```
 
-This alarm clears automatically:
+このアラームは自動的にクリアされます。
 
 ```text
 [warning] msg: alarm_is_deactivated, pid: <0.4506.0>, name: broker_heal
