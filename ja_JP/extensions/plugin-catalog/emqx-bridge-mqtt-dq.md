@@ -545,5 +545,6 @@ QoS 1 または 2 のクライアントがブリッジにマッチするメッ�
 | EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.2.0 | 0.5.1 | [emqx_bridge_mqtt_dq-0.5.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_bridge_mqtt_dq-0.5.1.tar.gz) |
+| 6.2.1 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.1/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
