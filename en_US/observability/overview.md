@@ -40,5 +40,6 @@ EMQX provides a series of observability-related features to help with system mon
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
 
+- [Mria Logs and Alarms](./mria-alarms.md)
 
-
+  Describes the log messages and alarms reported by the Mria database management system, including how to identify and interpret network partition events and cluster recovery progress.
