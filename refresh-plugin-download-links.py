@@ -17,7 +17,11 @@ the script maps between them by replacing `-` with `_`.
 
 Generated content is bounded by HTML-comment markers so the script is
 idempotent. If the markers are missing, a new Download section is
-appended at the end of the file.
+appended at the end of the file. When the markers are already present,
+the script preserves the existing prose (heading, intro, column
+headers) and only appends data rows for release tags that are not yet
+listed — translator-polished wording in locales such as `ja_JP` is
+left intact instead of being overwritten by the `LOCALES` constants.
 """
 
 from __future__ import annotations
@@ -201,17 +205,86 @@ def render_section(
     return "\n".join(lines)
 
 
-def splice_section(original: str, new_section: str) -> str:
-    """Replace an existing marker block, or append one at end of file."""
+# A markdown table row whose first column is an emqx version like "6.2.0"
+# and third column is the package link `[name](url)`. The middle column
+# (plugin version) is matched loosely.
+DATA_ROW_RE = re.compile(
+    r"^\|\s*(?P<emqx_ver>\d+\.\d+\.\d+)\s*\|\s*[^|]+\|\s*\[[^\]]+\]\([^)]+\)\s*\|\s*$"
+)
+SEPARATOR_ROW_RE = re.compile(r"^\|\s*-+\s*(?:\|\s*-+\s*)+\|\s*$")
+
+
+def parse_existing_versions(block: str) -> set[str]:
+    """Return EMQX versions already listed as data rows inside an existing block."""
+    return {
+        m.group("emqx_ver")
+        for line in block.splitlines()
+        if (m := DATA_ROW_RE.match(line)) is not None
+    }
+
+
+def render_data_row(plugin: str, emqx_ver: str, plugin_ver: str) -> str:
+    url = PACKAGE_URL_TEMPLATE.format(
+        emqx_ver=emqx_ver, plugin=plugin, plugin_ver=plugin_ver
+    )
+    filename = f"{plugin}-{plugin_ver}.tar.gz"
+    return f"| {emqx_ver} | {plugin_ver} | [{filename}]({url}) |"
+
+
+def append_new_rows(block: str, plugin: str, missing: list[tuple[str, str]]) -> str:
+    """Append data rows for `missing` tags into an existing block, preserving prose.
+
+    Looks for the markdown table inside the block (the separator row or any
+    existing data row) and inserts the new rows after the last such line so
+    the heading, intro, and column headers are left untouched. If no table
+    is found inside the block, falls back to appending a minimal table
+    before the trailing whitespace of the block.
+    """
+    lines = block.split("\n")
+    insert_after = -1
+    for i, line in enumerate(lines):
+        if DATA_ROW_RE.match(line) or SEPARATOR_ROW_RE.match(line):
+            insert_after = i
+    new_rows = [render_data_row(plugin, ev, pv) for ev, pv in missing]
+    if insert_after >= 0:
+        return "\n".join(lines[: insert_after + 1] + new_rows + lines[insert_after + 1 :])
+    last_nonblank = len(lines) - 1
+    while last_nonblank >= 0 and lines[last_nonblank].strip() == "":
+        last_nonblank -= 1
+    table = ["|---|---|---|"] + new_rows
+    return "\n".join(lines[: last_nonblank + 1] + table + lines[last_nonblank + 1 :])
+
+
+def splice_section(
+    original: str,
+    locale: str,
+    plugin: str,
+    entries: list[tuple[str, str]],
+) -> str:
+    """Update or insert the Download section, preserving translator-polished prose.
+
+    - No existing marker block: append a freshly-rendered section.
+    - Existing marker block: keep the prose (heading, intro, column headers),
+      and only append data rows for tags not already listed. This is
+      important for non-source locales (e.g. `ja_JP`) where translators
+      reword the auto-generated intro after a script run; a wholesale
+      replacement would silently revert those edits on the next run.
+    """
     begin_idx = original.find(BEGIN_MARKER)
     end_idx = original.find(END_MARKER)
-    if begin_idx != -1 and end_idx != -1 and end_idx > begin_idx:
-        after = original[end_idx + len(END_MARKER):]
-        return original[:begin_idx] + new_section + after
+    if begin_idx == -1 or end_idx == -1 or end_idx <= begin_idx:
+        new_section = render_section(locale, plugin, entries)
+        trimmed = original.rstrip() + "\n\n"
+        return trimmed + new_section + "\n"
 
-    # Append; ensure exactly one blank line before the new block.
-    trimmed = original.rstrip() + "\n\n"
-    return trimmed + new_section + "\n"
+    block_start = begin_idx + len(BEGIN_MARKER)
+    existing_block = original[block_start:end_idx]
+    existing_versions = parse_existing_versions(existing_block)
+    missing = [(ev, pv) for ev, pv in entries if ev not in existing_versions]
+    if not missing:
+        return original
+    updated_block = append_new_rows(existing_block, plugin, missing)
+    return original[:block_start] + updated_block + original[end_idx:]
 
 
 def md_filename_for(plugin: str) -> str:
@@ -234,9 +307,8 @@ def update_catalog_files(
                     file=sys.stderr,
                 )
                 continue
-            new_section = render_section(locale, plugin, entries)
             original = path.read_text(encoding="utf-8")
-            updated = splice_section(original, new_section)
+            updated = splice_section(original, locale, plugin, entries)
             if updated == original:
                 print(f"unchanged: {path.relative_to(docs_root)}", file=sys.stderr)
                 continue

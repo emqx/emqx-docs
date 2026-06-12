@@ -216,9 +216,9 @@ APIクライアントへのガイダンス:
 
 ## ダウンロード
 
-各 EMQX リリースに対応するプラグインパッケージ:
+各EMQXリリースのtarball:
 
-| EMQX バージョン | プラグインバージョン | パッケージ |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.2.0 | 1.2.0 | [emqx_username_quota-1.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_username_quota-1.2.0.tar.gz) |
 | 6.2.1 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.1/emqx_username_quota-1.2.1.tar.gz) |
