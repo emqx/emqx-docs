@@ -106,7 +106,7 @@ However, note that isolation strategies still require **manual configuration** b
 
   This setting adds a namespace prefix to the topic name.
 
-For details on planned enhancements, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+For details on the current state of namespace isolation and planned future work, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
 
 ## Enable Namespaces
 

@@ -127,6 +127,12 @@ ns:<NAMESPACE>::<ROLE>
 
 - **资源作用域限制**：命名空间用户只能查看和管理其所属命名空间下的资源，包括连接器、动作、数据源、规则等支持命名空间的模块。
 - **集群级设置访问限制**：尚未支持命名空间隔离的全局配置项对命名空间用户为只读，只有系统管理员可进行修改。
+- **消息内容端点限制**：部分访问或操作原始 MQTT 消息内容的 REST API 端点对命名空间用户不可用，调用时将返回 `403 Forbidden`。这些端点仅供全局管理员使用：
+  - 消息队列消息：`GET /clients/:clientid/mqueue_messages`
+  - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
+  - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
+  - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
+- **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
 

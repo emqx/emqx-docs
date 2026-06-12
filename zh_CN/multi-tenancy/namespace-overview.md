@@ -96,7 +96,7 @@ EMQX 拥有极高的灵活性，在命名空间功能实现之前，就已支持
 
   `listener.{TYPE}.{NAME}.mountpoint="${client_attrs.tns}/"`，该设置会为主题名称添加命名空间前缀。
 
-详细的后续功能计划，请参见[多租户功能路线图](#multi-tenancy-roadmap)。
+有关命名空间隔离的当前状态与后续规划，请参见[多租户功能路线图](#multi-tenancy-roadmap)。
 
 ## 启用命名空间
 
