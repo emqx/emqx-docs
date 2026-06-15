@@ -1,13 +1,13 @@
 # Offline Messages
 
-This plugin persists MQTT messages to an external database so that subscribers can retrieve them after coming back online, even when they were disconnected at publish time.
+This plugin persists MQTT messages to an external database so that subscribers can retrieve them after they reconnect, even when they were disconnected at publish time.
 
-It is useful for scenarios where standard MQTT session persistence is not enough — for example when retention has to outlive a session, or when other systems also need to read the message history.
+It is useful for scenarios where standard MQTT session persistence is not enough, for example when retention has to outlive a session, or when other systems also need to read the message history.
 
 Supported backends:
 
-- **MySQL** — uses two tables (`mqtt_msg`, `mqtt_sub`) with configurable SQL statements.
-- **Redis** — uses hashes for subscriptions/messages and a sorted set as a per-topic index. Supports single, sentinel, and cluster deployments.
+- **MySQL**: Uses two tables (`mqtt_msg`, `mqtt_sub`) with configurable SQL statements.
+- **Redis**: Uses hashes for subscriptions/messages and a sorted set as a per-topic index. Supports single, sentinel, and cluster deployments.
 
 Only one backend is active at a time; enable either `mysql.enable` or `redis.enable`.
 
@@ -17,25 +17,25 @@ The plugin ships with a default `config.hocon` covering both backends. The Dashb
 
 Common top-level fields:
 
-- `topics` — list of topic filters the plugin should track. An empty list means the plugin is inactive for that backend.
-- `pool_size` — connection pool size to the backend.
-- `batch_size` / `batch_time` — write batching parameters (set both to `1`/`0` to disable batching).
-- `ssl.*` — TLS settings for the backend connection.
+- `topics`: List of topic filters the plugin should track. An empty list means the plugin is inactive for that backend.
+- `pool_size`: Connection pool size to the backend.
+- `batch_size` / `batch_time`: Write batching parameters (set both to `1`/`0` to disable batching).
+- `ssl.*`: TLS settings for the backend connection.
 
 ### MySQL Specific
 
-- `server` — `host:port`.
-- `username`, `password`, `database` — credentials.
-- `init_default_schema` — when `true`, the plugin creates the default `mqtt_msg` / `mqtt_sub` tables on startup. Leave `false` if you manage the schema yourself.
-- `insert_message_sql`, `delete_message_sql`, `select_message_sql`, `insert_subscription_sql`, `select_subscriptions_sql`, `delete_subscription_sql` — overridable SQL templates with `${var}` placeholders bound to MQTT message fields (`id`, `from`, `topic`, `qos`, `payload`, `flags.retain`, `timestamp`) and subscription fields (`clientid`, `topic`, `qos`).
+- `server`: `host:port`.
+- `username`, `password`, `database`: Credentials.
+- `init_default_schema`: When `true`, the plugin creates the default `mqtt_msg` / `mqtt_sub` tables on startup. Leave `false` if you manage the schema yourself.
+- `insert_message_sql`, `delete_message_sql`, `select_message_sql`, `insert_subscription_sql`, `select_subscriptions_sql`, `delete_subscription_sql`: Overridable SQL templates with `${var}` placeholders bound to MQTT message fields (`id`, `from`, `topic`, `qos`, `payload`, `flags.retain`, `timestamp`) and subscription fields (`clientid`, `topic`, `qos`).
 
 ### Redis Specific
 
-- `servers` — comma-separated `host:port` list. For sentinel mode, set `redis_type = "sentinel"` and `sentinel` to the master name.
-- `redis_type` — one of `single`, `sentinel`, `cluster`.
-- `username`, `password`, `database` — credentials and logical DB (cluster mode ignores `database`).
-- `message_key_prefix` (default `mqtt:msg`), `subscription_key_prefix` (default `mqtt:sub`) — key namespaces.
-- `message_ttl` — per-message TTL in seconds; messages older than the TTL are cleaned up from the per-topic sorted-set index.
+- `servers`: Comma-separated `host:port` list. For sentinel mode, set `redis_type = "sentinel"` and `sentinel` to the master name.
+- `redis_type`: One of `single`, `sentinel`, `cluster`.
+- `username`, `password`, `database`: Credentials and logical DB (cluster mode ignores `database`).
+- `message_key_prefix` (default `mqtt:msg`), `subscription_key_prefix` (default `mqtt:sub`): Key namespaces.
+- `message_ttl`: Per-message TTL in seconds; messages older than the TTL are cleaned up from the per-topic sorted-set index.
 
 ## Database Schema
 
@@ -67,11 +67,11 @@ Set `init_default_schema = true` to let the plugin create these tables on first 
 
 ### Redis
 
-Redis structures are created on demand — no schema migration step is needed.
+Redis structures are created on demand; no schema migration step is needed.
 
-- `mqtt:sub:{clientid}` — hash, `{topic} -> {qos}`.
-- `mqtt:msg:{msgid}` — hash, fields `id`, `from`, `qos`, `topic`, `payload`, `ts`, `retain`. `msgid` is base62-encoded.
-- `mqtt:msg:{topic}` — sorted set, members are base62 message IDs, scores are timestamps. Used for expiration cleanup.
+- `mqtt:sub:{clientid}`: Hash, `{topic} -> {qos}`.
+- `mqtt:msg:{msgid}`: Hash, fields `id`, `from`, `qos`, `topic`, `payload`, `ts`, `retain`. `msgid` is base62-encoded.
+- `mqtt:msg:{topic}`: Sorted set, members are base62 message IDs, scores are timestamps. Used for expiration cleanup.
 
 If Redis ACLs are in use, grant the connecting user `HSET`, `HDEL`, `HGETALL`, `HMSET`, `DEL`, `EXPIRE`, `ZADD`, `ZRANGE`, `ZREMRANGEBYSCORE`, `ZREM` on keys matching `mqtt:sub:*` and `mqtt:msg:*`.
 
@@ -99,7 +99,7 @@ mqttx pub -q 1 -t 't/2' -m 'hello-from-offline2'
 mqttx pub -q 1 -t 't/2' -m 'hello-from-offline3'
 ```
 
-Subscribe afterwards with a fresh client ID — messages stored by the plugin are replayed.
+Subscribe afterwards with a fresh client ID. Messages stored by the plugin are replayed.
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 

@@ -12,7 +12,7 @@ The plugins listed on this page are maintained as part of the [`emqx.git` monore
 
 [Offline Messages](./plugin-catalog/emqx-offline-messages.md)
 
-This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after coming back online, beyond what standard MQTT session persistence provides.
+This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
 
 ## Operations
 

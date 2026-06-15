@@ -6,11 +6,11 @@ Operators drive it through the `emqx ctl relup ...` CLI on each node; cluster-wi
 
 ## When to Use
 
-Hot upgrade is appropriate when:
+A hot upgrade is appropriate when:
 
 - The hop you want to apply is listed by `emqx ctl relup list-supported-paths` (only declared `{from, target}` hops are supported).
 - You can verify the target node before moving on to the next.
-- You have a backup of `data/` — there is no in-place rollback for an applied hop (see [Rollback](#rollback)).
+- You have a backup of `data/`. There is no in-place rollback for an applied hop (see [Rollback](#rollback)).
 
 If you cannot satisfy these, do a normal rolling restart instead.
 
@@ -26,14 +26,14 @@ Download the tarball matching your EMQX version from the [Download](#download) s
 emqx ctl relup list-supported-paths
 ```
 
-The output lists the `{from, target}` hops bundled in `priv/relup/` of this plugin version. If your hop is missing, hot upgrade for that path is not available — fall back to a normal restart-based upgrade.
+The output lists the `{from, target}` hops bundled in `priv/relup/` of this plugin version. If your hop is missing, hot upgrade for that path is not available; fall back to a normal restart-based upgrade.
 
 ### 3. Stage the target release on every node
 
 For each node, copy two files to a path the EMQX process can read:
 
-- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz` — the EMQX target release tarball.
-- `<tarball>.sha256` — the sha256 digest. The standard `sha256sum` format (`<digest>  <filename>`) is accepted.
+- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz`: The EMQX target release tarball.
+- `<tarball>.sha256`: The sha256 digest. The standard `sha256sum` format (`<digest>  <filename>`) is accepted.
 
 ### 4. Trigger the upgrade
 
@@ -51,7 +51,7 @@ The handler:
 
 ### 5. Verify the node
 
-Two cheap signals before moving on:
+Check these signals before moving on:
 
 - `emqx ctl status` reports the node running.
 - `cat <RootDir>/relup/current` matches the target version, and `<RootDir>/relup/<TargetVsn>/` contains `bin/`, `erts-*/`, `lib/`, `releases/`.
@@ -64,7 +64,7 @@ Once the cluster is fully on the target version, manually remove the staged tarb
 
 ## Upgrade History
 
-Each node keeps its own audit trail in the `emqx_relup_log` table (disc-backed, local content). The history survives plugin uninstall — reinstalling re-attaches and the rows are still there.
+Each node keeps its own audit trail in the `emqx_relup_log` table (disc-backed, local content). The history survives plugin uninstall; reinstalling re-attaches and the rows are still there.
 
 Inspect or clear via CLI:
 
@@ -95,7 +95,7 @@ Practical fallback paths:
 
 To add a new hop, for each release that needs one:
 
-1. Add `priv/relup/<from>-to-<to>.relup` declaring the `code_changes` and `post_upgrade_callbacks` for the hop. See `priv/relup/README.md` in the plugin source for the schema, the supported instructions, and the post-upgrade callback contract. In particular, when adding a `pr_NNNNN_*` callback to the new EMQX's `emqx_post_upgrade`, the relup hop must reload that module before invoking the callback — or ship the callback in this plugin as `emqx_post_upgrade_<TargetVsn>.erl`.
+1. Add `priv/relup/<from>-to-<to>.relup` declaring the `code_changes` and `post_upgrade_callbacks` for the hop. See `priv/relup/README.md` in the plugin source for the schema, the supported instructions, and the post-upgrade callback contract. In particular, when adding a `pr_NNNNN_*` callback to the new EMQX's `emqx_post_upgrade`, the relup hop must reload that module before invoking the callback, or ship the callback in this plugin as `emqx_post_upgrade_<TargetVsn>.erl`.
 2. Bump this plugin's `VERSION` and re-publish.
 
 The plugin validates every `priv/relup/*.relup` at app start and logs a warning for malformed entries; bad files are skipped, not fatal.
