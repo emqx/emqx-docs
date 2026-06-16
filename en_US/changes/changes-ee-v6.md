@@ -176,7 +176,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The gateway now automatically detects the protocol version by frame header (`##` for 2016, `$$` for 2025) and handles version-specific parsing and serialization, including:
 
-  - New 2025 info types: Vehicle, DriveMotor, FuelCell, Engine, Location, Alarm, PowerBatteryVoltage/Temp, FuelCellStack, SuperCapacitor, SuperCapacitorExtreme, and digital Signature.
+  - New 2025 info types: Vehicle, DriveMotor, FuelCell, Engine, Location, Alarm, PowerBatteryVoltage/Temp, FuelCellStack, SuperCapacitor, SuperCapacitorExtreme, and Digital Signature.
   - New command: Activation (0x09/0x0A).
   - Version-aware parameter sizes for parameter query/setting (0x02/0x03: BYTE in 2025 vs WORD in 2016).
   - 2025 vehicle login with BMS battery pack encoding fields.
@@ -407,7 +407,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The built-in Mria database management system no longer waits for the full synchronization of an internal table used to generate transaction synchronization events.
 
-- [#17132](https://github.com/emqx/emqx/pull/17132) Fixed an issue where adding or removing topic metrics could fail on a replicate node when its raw config or runtime state had drifted, raising a `cluster_rpc_apply_failed` alarm and stalling cluster RPC replication. Duplicate-add and missing-remove are now rejected on the initiator only, while replicates apply the change idempotently.
+- [#17132](https://github.com/emqx/emqx/pull/17132) Fixed an issue where adding or removing topic metrics could fail on a replicant node when its raw config or runtime state had drifted, raising a `cluster_rpc_apply_failed` alarm and stalling cluster RPC replication. Duplicate-add and missing-remove are now rejected on the initiator only, while replicants apply the change idempotently.
 
 - [#17182](https://github.com/emqx/emqx/pull/17182) Bumped emqx-OTP to 27.3.4.2-8 for mria.
 
