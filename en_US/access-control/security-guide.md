@@ -8,7 +8,7 @@ Security is a critical aspect of any MQTT-based application, and this guide is d
 
 - [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
 
-- [Load Secrets from a File](./secret-from-file.md)
+- [Load Secrets from a File](../configuration/secret-from-file.md)
 
   Use the `file://` prefix on any secret-typed configuration field to have EMQX read the value from a file at startup and on every reload, rather than embedding it directly in `emqx.conf` or an API request.
 

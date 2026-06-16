@@ -10,7 +10,7 @@
 
   介绍了 EMQX 如何支持端对端加密通信，包括如何启用 SSL/TLS 连接和获取 SSL/TLS 证书。
 
-- [从文件加载 Secret](./secret-from-file.md)
+- [从文件加载 Secret](../configuration/secret-from-file.md)
 
   在任何机密类型（secret）的配置字段上使用 `file://` 前缀，EMQX 将在启动及每次配置重载时从指定文件读取实际值，无需将机密直接写入 `emqx.conf` 或 API 请求中。
 

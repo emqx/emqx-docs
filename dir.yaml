@@ -398,10 +398,6 @@
           lang: cn
           path: network/gmssl
         - network/ipv6
-    - title_en: Load Secrets from a File
-      title_cn: 从文件加载 Secret
-      title_ja: ファイルからシークレットを読み込む
-      path: access-control/secret-from-file
     - title_en: Authentication
       title_cn: 认证
       title_ja: 認証
@@ -727,6 +723,10 @@
           title_cn: License
           title_ja: ライセンス
           path: configuration/license
+        - title_en: Load Secrets from a File
+          title_cn: 从文件加载 Secret
+          title_ja: ファイルからシークレットを読み込む
+          path: configuration/secret-from-file
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
       title_ja: EMQX エンタープライズ設定マニュアル
