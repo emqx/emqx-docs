@@ -46,7 +46,7 @@ emqx ctl relup upgrade <TarballPath> [--force]
 升级流程：
 
 - 用 `<TarballPath>.sha256` 校验 tarball 实际摘要，不匹配则拒绝解压。
-- 如果 `data/patches/` 目录下存在任何 `*.beam` 文件，则拒绝升级。该目录通过 `vm.args -pa` 被前置到代码路径中，这些热补丁文件会覆盖升级目标中的同名模块；如果新版本已经包含了被热补丁修复的模块，旧的 beam 文件会被悄悄地继续运行。请先删除这些补丁文件，或在确实希望它们继续叠加在目标版本之上时使用 `--force` 跳过该检查。
+- 如果 `data/patches/` 目录下存在任何 `*.beam` 文件，则拒绝继续升级。该目录通过 `vm.args -pa` 被前置到代码路径中，因此其中的热补丁文件会优先于目标版本中的同名模块被加载。如果目标版本已经包含相应修复，旧的 beam 文件仍可能被加载并继续运行。请先删除这些补丁文件；仅当确实希望它们继续叠加在目标版本之上时，才使用 `--force` 跳过该检查。
 - 解压 tarball 并读取 `releases/emqx_vars` 中的 `REL_VSN`。
 - 在 `priv/relup/*.relup` 中查找匹配的 `{from, target}` 跳转，执行代码变更指令与升级后回调。
 

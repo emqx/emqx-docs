@@ -46,7 +46,7 @@ emqx ctl relup upgrade <TarballPath> [--force]
 The handler:
 
 - Verifies `<TarballPath>.sha256` against the actual digest and refuses to extract on mismatch.
-- Refuses if `data/patches/` contains any `*.beam`. Those would shadow modules from the upgrade target (the patches dir is prepended to the code path via `vm.args -pa`), so if the new release already supersedes a hot-patched module, the stale beam would silently keep running. Delete the patches first, or pass `--force` if you intend them to remain applied on top of the target.
+- Refuses to continue if `data/patches/` contains any `*.beam` files. This directory is prepended to the code path through `vm.args -pa`, so those files would take precedence over modules from the upgrade target. If the target release already includes the hot-patched fix, a stale beam file could still be loaded. Delete the patch files first, or pass `--force` only if you intend to keep them applied on top of the target release.
 - Extracts the tarball and reads `REL_VSN` from `releases/emqx_vars`.
 - Looks up the matching `{from, target}` hop in `priv/relup/*.relup` and runs the declared code-change instructions and post-upgrade callbacks.
 
