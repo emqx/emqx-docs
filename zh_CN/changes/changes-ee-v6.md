@@ -230,6 +230,8 @@
 
   这使 EMQX 数据库会话更容易在 PostgreSQL 日志和 `pg_stat_activity` 等视图中识别。
 
+- [#17594](https://github.com/emqx/emqx/pull/17594) 支持为 Google Cloud Pub/Sub 和 BigQuery 连接器的 `service_account_json` 配置 `file://` 密钥文件，从而可以从外部文件注入服务账号凭证。
+
 #### 插件
 
 - [#16735](https://github.com/emqx/emqx/pull/16735) EMQX 现在支持插件在 `/api/v5/plugin_api/{plugin}/...` 下定义 HTTP API 回调。
@@ -239,6 +241,8 @@
 - [#16849](https://github.com/emqx/emqx/pull/16849) 为插件 API 端点新增基于 Cookie 的认证回退机制。
 
   由 Dashboard 嵌入的插件 UI iframe 在没有 `Authorization` 头部时，现在可以通过 `emqx_auth` cookie 进行认证。此功能仅适用于 `/api/v5/plugin_api/...` 路径。
+
+- [#17549](https://github.com/emqx/emqx/pull/17549) 新增 EMQX Backup Sync 插件，通过数据备份 API 定期将选定配置从主集群同步到备集群。该插件支持为对主集群的 HTTPS 调用配置 TLS 选项。
 
 #### REST API
 
@@ -399,6 +403,12 @@
 
 - [#17579](https://github.com/emqx/emqx/pull/17579) 修复 Redis Sentinel 连接器，使其为每个资源使用独立的 Sentinel 管理器，并在资源停止时清理这些管理器，避免连接器之间共享 Sentinel 状态。
 
+- [#17584](https://github.com/emqx/emqx/pull/17584) 限制了 Snowflake 聚合连接器健康检查期间返回的数据量。仅当已有 schema 列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
+- [#17588](https://github.com/emqx/emqx/pull/17588) 限制了 Kinesis 集成的连接器和动作健康检查期间返回的数据量。仅当已有 schema 列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
+- [#17595](https://github.com/emqx/emqx/pull/17595) 限制了 S3 和 S3 Tables 集成的连接器健康检查期间返回的数据量。仅当已有桶（bucket）列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
 #### 集群
 
 - [#16393](https://github.com/emqx/emqx/pull/16393) 提升了不稳定网络条件下集群连接路由复制的稳定性。
@@ -455,6 +465,8 @@
   [warning] tag: RESOURCE, msg: handle_resource_metrics_failed, reason: {badkey, matched}, event: matched, ...
   ```
 
+- [#17586](https://github.com/emqx/emqx/pull/17586) 定期清理全局会话注册表中的陈旧条目。此前，当会话的属主进程在未正常注销的情况下退出（例如，短暂网络分区导致注销操作未能复制，或在 down 事件清理期间某个 core 节点的一致性检查超时），如果相同的客户端 ID 再也没有重新连接，注册表行可能会永久残留。现在每个 core 节点上有一个受限流控制的后台清理任务来移除此类行。该任务限制为每个节点每秒最多 500 行，且运行间隔不短于 10 分钟，因此即使在持有数百万会话的注册表上也不会对 Broker 吞吐量产生可观测影响。
+
 #### 访问控制
 
 - [#16692](https://github.com/emqx/emqx/pull/16692) 修复 CRL 缓存回归问题：`emqx_crl_cache:evict/1` 未完全清除内部 URL 状态。驱逐后，相同 CRL URL 现在可在下次使用时正确重新注册、恢复刷新定时器，并避免每次连接都重复发起 HTTP 获取。
@@ -506,6 +518,8 @@
 - [#17258](https://github.com/emqx/emqx/pull/17258) 修复了 MQTT-SN 网关中，已连接客户端在同一会话上发送第二个 CONNECT 包会导致连接进程崩溃的问题。网关现在以 DISCONNECT 响应并优雅关闭会话。
 
 - [#17287](https://github.com/emqx/emqx/pull/17287) 修复了 MQTT-SN 客户端因在意外连接或 Will 状态下收到包而崩溃的问题，包括连接设置期间的 `DISCONNECT`、Will 握手完成前的 `REGISTER`，以及 Will topic 不存在时的 `WILLMSGUPD`。
+
+- [#17581](https://github.com/emqx/emqx/pull/17581) 修复 JT/T 808 网关，使其使用认证期间接受的手机号作为连接身份，拒绝不匹配的注册码认证尝试以及手机号不同的后续上行帧。
 
 #### 多租户
 

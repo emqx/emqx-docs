@@ -230,6 +230,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   This makes EMQX database sessions easier to identify in PostgreSQL logs and views such as `pg_stat_activity`.
 
+- [#17594](https://github.com/emqx/emqx/pull/17594) Added support for configuring Google Cloud Pub/Sub and BigQuery connector `service_account_json` values with `file://` secret files, so service account credentials can be injected from external files.
+
 #### Plugins
 
 - [#16735](https://github.com/emqx/emqx/pull/16735) EMQX now supports plugin-defined HTTP API callbacks under `/api/v5/plugin_api/{plugin}/...`.
@@ -239,6 +241,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication fallback for plugin API endpoints.
 
   Plugin UI iframes served by the Dashboard can now authenticate via the `emqx_auth` cookie when no `Authorization` header is present. This only applies to `/api/v5/plugin_api/...` paths.
+
+- [#17549](https://github.com/emqx/emqx/pull/17549) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
 
 #### REST API
 
@@ -399,6 +403,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17579](https://github.com/emqx/emqx/pull/17579) Fixed Redis Sentinel connectors to use isolated Sentinel managers per resource and clean them up when resources stop, avoiding shared Sentinel state across connectors.
 
+- [#17584](https://github.com/emqx/emqx/pull/17584) Limited the amount of data returned during Connector health checks of Snowflake Aggregated Connectors. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+
+- [#17588](https://github.com/emqx/emqx/pull/17588) Limited the amount of data returned during Connector and Action health checks of Kinesis integrations. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+
+- [#17595](https://github.com/emqx/emqx/pull/17595) Limited the amount of data returned during Connector health checks of S3 and S3 Tables integrations. This only has observable effects if the list of existing buckets was very large, in which case the health check will take far less time to execute.
+
 #### Clustering
 
 - [#16393](https://github.com/emqx/emqx/pull/16393) Improved the stability of the Cluster Link route replication under unstable network conditions.
@@ -455,6 +465,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   [warning] tag: RESOURCE, msg: handle_resource_metrics_failed, reason: {badkey, matched}, event: matched, ...
   ```
 
+- [#17586](https://github.com/emqx/emqx/pull/17586) Periodically purge stale entries from the global session registry. Previously, when a session's owner process died without a clean unregister (for example, after a brief network split that prevented the unregister from replicating, or when one core's consensus check timed out during the down-event cleanup), the registry row could remain forever if the same client ID never reconnected. A new throttled background sweep on each core node now removes such rows. The sweep is bounded to at most 500 registry rows per second per node and runs no more often than once every 10 minutes, so it does not measurably affect broker throughput even on registries holding millions of sessions.
+
 #### Access Control
 
 - [#16692](https://github.com/emqx/emqx/pull/16692) Fixed a CRL cache regression where `emqx_crl_cache:evict/1` did not fully clear internal URL state. After eviction, the same CRL URL now re-registers correctly on next use, restores its refresh timer, and avoids repeated HTTP fetches per connection.
@@ -504,6 +516,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17258](https://github.com/emqx/emqx/pull/17258) Fixed an issue in the MQTT-SN gateway where a connected client sending a second CONNECT packet on the same session would crash its connection process. The gateway now responds with a DISCONNECT and closes the session gracefully.
 
 - [#17287](https://github.com/emqx/emqx/pull/17287) Fixed MQTT-SN clients crash caused by packets received in unexpected connection or Will states, including `DISCONNECT` during connection setup, `REGISTER` before the Will handshake completes, and `WILLMSGUPD` before a Will topic exists.
+
+- [#17581](https://github.com/emqx/emqx/pull/17581) Fixed the JT/T 808 gateway to use the phone number accepted during authentication as the connection identity, rejecting mismatched registration-code authentication attempts and subsequent uplink frames with a different phone number.
 
 #### Multi-tenancy
 
