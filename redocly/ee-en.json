@@ -3896,7 +3896,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "cassandra"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -3908,25 +3908,13 @@
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "greptimedb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
+                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -3938,7 +3926,7 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -3950,49 +3938,19 @@
               },
               {
                 "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "rocketmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
+                  "opents"
                 ],
                 "type": "string"
               },
@@ -4004,7 +3962,37 @@
               },
               {
                 "enum": [
-                  "matrix"
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -4016,7 +4004,31 @@
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -4028,7 +4040,13 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4046,49 +4064,7 @@
               },
               {
                 "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -4100,31 +4076,61 @@
               },
               {
                 "enum": [
-                  "redshift"
+                  "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3tables"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4137,12 +4143,6 @@
               {
                 "enum": [
                   "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
                 ],
                 "type": "string"
               }
@@ -28826,7 +28826,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -28873,7 +28873,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -29227,8 +29227,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -36886,7 +36886,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "BBFD0B1EE327C7D1",
+            "example": "04D3F628E98FC50A",
             "type": "string"
           },
           "status": {
@@ -54483,46 +54483,46 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
+                      "cassandra",
                       "rabbitmq",
                       "rocketmq",
-                      "cassandra",
                       "mongodb",
-                      "syskeeper_forwarder",
-                      "cockroachdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "confluent_producer",
                       "alloydb",
-                      "influxdb",
+                      "sqlserver",
+                      "confluent_producer",
                       "azure_event_hub_producer",
+                      "cockroachdb",
+                      "kafka_producer",
+                      "influxdb",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
-                      "kafka_producer",
                       "iotdb",
-                      "s3tables",
-                      "opents",
+                      "redis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
-                      "kinesis",
-                      "redis",
+                      "opents",
+                      "s3tables",
                       "mqtt",
                       "redshift",
                       "snowflake",
                       "timescale",
-                      "couchbase",
-                      "tablestore",
                       "clickhouse",
                       "tdengine",
-                      "oracle",
+                      "tablestore",
                       "azure_blob_storage",
+                      "oracle",
+                      "couchbase",
                       "snowflake_streaming",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -54531,46 +54531,46 @@
                   "items": {
                     "enum": [
                       "http",
+                      "cassandra",
                       "rabbitmq",
                       "rocketmq",
-                      "cassandra",
                       "mongodb",
-                      "syskeeper_forwarder",
-                      "cockroachdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "confluent_producer",
                       "alloydb",
-                      "influxdb",
+                      "sqlserver",
+                      "confluent_producer",
                       "azure_event_hub_producer",
+                      "cockroachdb",
+                      "kafka_producer",
+                      "influxdb",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
-                      "kafka_producer",
                       "iotdb",
-                      "s3tables",
-                      "opents",
+                      "redis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
-                      "kinesis",
-                      "redis",
+                      "opents",
+                      "s3tables",
                       "mqtt",
                       "redshift",
                       "snowflake",
                       "timescale",
-                      "couchbase",
-                      "tablestore",
                       "clickhouse",
                       "tdengine",
-                      "oracle",
+                      "tablestore",
                       "azure_blob_storage",
+                      "oracle",
+                      "couchbase",
                       "snowflake_streaming",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -67287,26 +67287,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -67317,26 +67317,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -68310,9 +68310,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0,
                         "total": 0
                       },
@@ -68323,9 +68323,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68336,9 +68336,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68353,9 +68353,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -69131,26 +69131,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -69161,26 +69161,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -71432,9 +71432,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -71443,9 +71443,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71456,9 +71456,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71473,9 +71473,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -77902,7 +77902,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -79414,7 +79414,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -81142,7 +81142,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82308,7 +82308,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -83809,7 +83809,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85303,7 +85303,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -86128,7 +86128,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "BBFD0B1EE327C7D1",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86191,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "BBFD0B1EE327C7D1",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +86605,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "BBFD0B1EE327C7D1",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +86691,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "BBFD0B1EE327C7D1",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98126,8 +98126,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -108674,8 +108674,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -108684,8 +108684,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -110241,8 +110241,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -110254,10 +110254,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -110697,8 +110697,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -110952,8 +110952,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -111011,8 +111011,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -111025,10 +111025,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -111087,8 +111087,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -111100,10 +111100,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -111120,10 +111120,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -112469,8 +112469,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -112562,8 +112562,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -112850,8 +112850,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -112920,8 +112920,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
