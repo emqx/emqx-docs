@@ -39,7 +39,7 @@ bridges.mqtt.upstream.password = "file:///run/secrets/upstream-mqtt-password"
 只要配置 schema 中字段类型为 secret，`file://` 写法即生效。典型示例：
 
 - **SSL/TLS 监听器**：`listeners.<type>.<name>.ssl_options.password`（密钥口令）。详见 [启用 SSL/TLS](../network/emqx-mqtt-tls.md)。
-- **桥接和连接器**：密码、API Key、Secret Access Key、JWT Token 等。
+- **桥接和连接器**：密码、API Key、Secret Access Key、JWT Token，以及 `service_account_json` 等服务账户 JSON 凭证。
 - **集群连接（Cluster Linking）**：`cluster.links[].password`。
 - **Dashboard SSO（OIDC）**：`dashboard.sso.oidc.secret`。
 - **许可证**：`license.key`（许可证字符串本身）。详见 [License 配置](../configuration/license.md)。
