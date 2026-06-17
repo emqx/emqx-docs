@@ -3908,13 +3908,13 @@
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
@@ -3926,7 +3926,7 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -3974,13 +3974,13 @@
               },
               {
                 "enum": [
-                  "influxdb"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
+                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -3992,19 +3992,13 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -4016,19 +4010,25 @@
               },
               {
                 "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "tdengine"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -4040,25 +4040,7 @@
               },
               {
                 "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
                 ],
                 "type": "string"
               },
@@ -4106,12 +4088,6 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "elasticsearch"
                 ],
                 "type": "string"
@@ -4130,7 +4106,25 @@
               },
               {
                 "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4143,6 +4137,12 @@
               {
                 "enum": [
                   "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               }
@@ -29227,8 +29227,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
@@ -36886,7 +36886,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "0027EC0952AFF3E7",
+            "example": "BBFD0B1EE327C7D1",
             "type": "string"
           },
           "status": {
@@ -54483,28 +54483,28 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
                       "mongodb",
-                      "cockroachdb",
                       "syskeeper_forwarder",
-                      "kafka_producer",
-                      "confluent_producer",
+                      "cockroachdb",
                       "sqlserver",
                       "gcp_pubsub_producer",
+                      "confluent_producer",
                       "alloydb",
                       "influxdb",
                       "azure_event_hub_producer",
                       "pulsar",
                       "greptimedb",
+                      "kafka_producer",
                       "iotdb",
+                      "s3tables",
                       "opents",
                       "datalayers",
-                      "s3tables",
                       "s3",
-                      "kinesis",
                       "doris",
+                      "kinesis",
                       "redis",
                       "mqtt",
                       "redshift",
@@ -54516,8 +54516,8 @@
                       "tdengine",
                       "oracle",
                       "azure_blob_storage",
-                      "disk_log",
                       "snowflake_streaming",
+                      "disk_log",
                       "elasticsearch",
                       "matrix",
                       "bigquery",
@@ -54531,28 +54531,28 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
                       "mongodb",
-                      "cockroachdb",
                       "syskeeper_forwarder",
-                      "kafka_producer",
-                      "confluent_producer",
+                      "cockroachdb",
                       "sqlserver",
                       "gcp_pubsub_producer",
+                      "confluent_producer",
                       "alloydb",
                       "influxdb",
                       "azure_event_hub_producer",
                       "pulsar",
                       "greptimedb",
+                      "kafka_producer",
                       "iotdb",
+                      "s3tables",
                       "opents",
                       "datalayers",
-                      "s3tables",
                       "s3",
-                      "kinesis",
                       "doris",
+                      "kinesis",
                       "redis",
                       "mqtt",
                       "redshift",
@@ -54564,8 +54564,8 @@
                       "tdengine",
                       "oracle",
                       "azure_blob_storage",
-                      "disk_log",
                       "snowflake_streaming",
+                      "disk_log",
                       "elasticsearch",
                       "matrix",
                       "bigquery",
@@ -77902,7 +77902,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -79414,7 +79414,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -81142,7 +81142,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82308,7 +82308,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -83809,7 +83809,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85303,7 +85303,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -86128,7 +86128,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "0027EC0952AFF3E7",
+            "example": "BBFD0B1EE327C7D1",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86191,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "0027EC0952AFF3E7",
+            "example": "BBFD0B1EE327C7D1",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +86605,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "0027EC0952AFF3E7",
+            "example": "BBFD0B1EE327C7D1",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +86691,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "0027EC0952AFF3E7",
+            "example": "BBFD0B1EE327C7D1",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92195,6 +92195,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -92295,73 +92362,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -98126,8 +98126,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -108674,8 +108674,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -108684,8 +108684,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -110241,8 +110241,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -110254,10 +110254,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -110697,8 +110697,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -110952,8 +110952,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -111011,8 +111011,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -111025,10 +111025,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -111087,8 +111087,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -111100,10 +111100,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -111120,10 +111120,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -112469,8 +112469,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -112562,8 +112562,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -112850,8 +112850,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -112920,8 +112920,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
