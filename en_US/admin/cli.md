@@ -671,7 +671,7 @@ disc_only_copies   = []
 
 ## log
 
-This command can be used to manage log handlers states, such as setting logging level etc.
+This command can be used to manage log levels and configured log outputs.
 
 ### log set-level \<Level\>
 
@@ -684,7 +684,7 @@ debug
 
 ### log primary-level
 
-Show the current primary log level. `primary-level` represents the primary log level of EMQX, which is used to specify the default log level for the entire system. Setting `primary-level` will affect all log outputs unless specific log handlers have their own independent log levels.
+Show the current primary log level. `primary-level` represents the primary log level of EMQX, which is used to specify the default log level for the entire system. Setting `primary-level` will affect all log outputs unless specific log outputs have their own independent log levels.
 
 ```bash
 $ emqx ctl log primary-level
@@ -700,41 +700,41 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
-Show the log handlers. `handlers` refer to the collection of log handlers used for handling logs. Each log handler can set its own log level independently and define how to handle and store log messages.
+Show the configured log outputs. `outputs` include the console output `console`, the default file output `file`, and configured named file outputs. Each log output can have its own log level, destination, and status.
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
-Start a specific handler.
+Enable a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
-Stop a specific handler。
+Disable a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log outputs set-level \<name\> \<Level\>
 
-Set the log level for a specific handler.
+Set the log level for a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace

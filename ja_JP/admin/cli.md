@@ -562,17 +562,17 @@ disc_only_copies   = []
 
 ## log
 
-ログハンドラーの状態管理（ログレベル設定など）に使用するコマンドです。
+ログレベルや設定済みログ出力の状態管理に使用するコマンドです。
 
-| コマンド                                        | 説明                                                         |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| log set-level \<Level\>                        | 全体のログレベルを設定します。                              |
-| log primary-level                              | 現在のプライマリログレベルを表示します。`primary-level`はEMQXの全体のデフォルトログレベルを示し、特定のハンドラーが独自のレベルを持たない限りすべてに影響します。 |
-| log primary-level \<Level\>                    | プライマリログレベルを設定します。                          |
-| log handlers list                              | ログハンドラー一覧を表示します。ハンドラーはログの処理・保存方法を定義し、独自のログレベルを設定できます。 |
-| log handlers start \<HandlerId\>               | 指定したハンドラーを起動します。                            |
-| log handlers stop \<HandlerId\>                | 指定したハンドラーを停止します。                            |
-| log handlers set-level \<HandlerId\> \<Level\> | 指定したハンドラーのログレベルを設定します。                |
+| コマンド                                      | 説明                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| log set-level \<Level\>                      | 全体のログレベルを設定します。                              |
+| log primary-level                            | 現在のプライマリログレベルを表示します。`primary-level`はEMQXの全体のデフォルトログレベルを示し、特定のログ出力が独自のレベルを持たない限りすべてに影響します。 |
+| log primary-level \<Level\>                  | プライマリログレベルを設定します。                          |
+| log outputs list                             | 設定済みログ出力の一覧を表示します。ログ出力には `console`、既定のファイル出力 `file`、設定済みの名前付きファイル出力が含まれます。 |
+| log outputs enable \<name\>                  | 指定したログ出力を有効にします。                            |
+| log outputs disable \<name\>                 | 指定したログ出力を無効にします。                            |
+| log outputs set-level \<name\> \<Level\>     | 指定したログ出力のログレベルを設定します。                  |
 
 ### log set-level \<Level\>
 
@@ -595,33 +595,33 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level>
+### log outputs set-level \<name\> \<Level\>
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace

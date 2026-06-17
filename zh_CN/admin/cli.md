@@ -673,7 +673,7 @@ disc_only_copies   = []
 
 ## log
 
-用于管理日志参数，例如日志级别等。
+用于管理日志级别和已配置的日志输出。
 
 ### log set-level \<Level\>
 
@@ -686,7 +686,7 @@ debug
 
 ### log primary-level
 
-显示当前主要日志级别。`primary-level`代表 EMQX 的主要日志级别，用于指定整个系统的默认日志级别。设置`primary-level`会影响所有的日志输出，除非特定的日志处理程序有自己独立的日志级别。
+显示当前主要日志级别。`primary-level`代表 EMQX 的主要日志级别，用于指定整个系统的默认日志级别。设置`primary-level`会影响所有的日志输出，除非特定的日志输出设置了独立的日志级别。
 
 ```bash
 $ emqx ctl log primary-level
@@ -702,41 +702,41 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
-显示日志处理 handlers。`handlers`是指定用于处理日志的日志处理程序的集合。每个日志处理程序可以独立设置自己的日志级别，并定义如何处理和存储日志消息。
+显示已配置的日志输出。`outputs` 包括控制台输出 `console`、默认文件输出 `file`，以及已配置的命名文件输出。每个日志输出可以有独立的日志级别、输出目标和启用状态。
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
-启动某个 handler。
+启用指定日志输出。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
-停止某个 handler。
+禁用指定日志输出。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log outputs set-level \<name\> \<Level\>
 
-设置某个 handler 的日志级别。
+设置指定日志输出的日志级别。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace
