@@ -496,7 +496,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-ssl_options-S-listener_ssl_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -1300,7 +1300,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-ssl_options-S-listener_wss_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -1626,7 +1626,7 @@
                               "type": "Enum(verify_peer,verify_none)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-listeners-S-listeners-quic-S-mqtt_quic_listener-ssl_options-S-listener_quic_ssl_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -1903,7 +1903,7 @@
                   "doc": "指定如何初始化客户端属性。每个属性可被初始化为 `client_attrs.{NAME}` ，其中 `{NAME}` 是在配置字段 `set_as_attr` 中指定的属性名称。初始化的客户端属性将以指定的名称存储在 `client_attrs` 属性中，并使用指定的名称，可以作为变量来渲染挂载点、身份认证和授权请求的模板。例如，当 `set_as_attr = alias` 时，使用 `${client_attrs.alias}` 来渲染 HTTP POST 请求体，或者为主题命名空间渲染监听器配置 `moutpoint = devices/${client_attrs.alias}/`。",
                   "fields": [
                     {
-                      "doc": "单行表达式，用于解析一组预定义的字符串函数（类似规则引擎 SQL 语句中的函数）。\n表达式可以是带有嵌套调用的函数调用，或直接变量引用。\n目前，它不提供用户定义的变量绑定（如 `var a=1`）或用户定义的函数。\n例如，提取以点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`。\n\n预绑定的变量包括：\n- `clientid`：MQTT 客户端 ID。\n- `username`：MQTT 客户端的用户名。\n- `user_property.{NAME}`：连接包中的用户属性。\n- `zone`：监听器的配置区域。\n- `listener`：客户端连接的监听器 ID（如 `tcp:default`）。\n对于 TLS 客户端，直接连接或通过启用代理协议（v2）负载均衡器连接时，\n还可以使用一些额外的变量：\n- `cn`：客户端的 TLS 证书公共名称。\n- `dn`：客户端的 TLS 证书区分名称（主体）。\n- `peersni`：客户端发送的 TLS 服务器名称指示。\n\n您可以在 EMQX 文档中阅读更多关于变量表达式的信息。",
+                      "doc": "单行表达式，用于解析一组预定义的字符串函数（类似规则引擎 SQL 语句中的函数）。\n表达式可以是带有嵌套调用的函数调用，或直接变量引用。\n目前，它不提供用户定义的变量绑定（如 `var a=1`）或用户定义的函数。\n例如，提取以点分隔的客户端 ID 的前缀：`nth(1, tokens(clientid, '.'))`。\n\n预绑定的变量包括：\n- `clientid`：MQTT 客户端 ID。\n- `username`：MQTT 客户端的用户名。\n- `user_property.{NAME}`：CONNECT 报文中的用户属性。\n- `zone`：监听器的配置区域。\n- `listener`：客户端连接的监听器 ID（如 `tcp:default`）。\n对于 TLS 客户端，直接连接或通过启用代理协议（v2）负载均衡器连接时，\n还可以使用一些额外的变量：\n- `cn`：客户端的 TLS 证书公共名称。\n- `cert_common_name`：`cn` 的别名。\n- `dn`：客户端的 TLS 证书区分名称（主体）。\n- `cert_subject`：`dn` 的别名。\n- `peersni`：客户端发送的 TLS 服务器名称指示。\n\n您可以在 EMQX 文档中阅读更多关于变量表达式的信息。",
                       "hash": "V-mqtt-S-mqtt-client_attrs_init-S-client_attrs_init-expression",
                       "text": "expression",
                       "type": "String"
@@ -2339,7 +2339,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-mysql-password",
               "text": "password",
               "type": "Secret"
@@ -2404,7 +2404,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-mysql-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -2622,7 +2622,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-postgresql-password",
               "text": "password",
               "type": "Secret"
@@ -2687,7 +2687,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-postgresql-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -2948,7 +2948,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-mongo_single-password",
               "text": "password",
               "type": "Secret"
@@ -3102,7 +3102,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-mongo_single-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -3376,7 +3376,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-mongo_rs-password",
               "text": "password",
               "type": "Secret"
@@ -3530,7 +3530,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-mongo_rs-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -3791,7 +3791,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-mongo_sharded-password",
               "text": "password",
               "type": "Secret"
@@ -3945,7 +3945,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-mongo_sharded-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -4157,7 +4157,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-redis_single-password",
               "text": "password",
               "type": "Secret"
@@ -4229,7 +4229,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-redis_single-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -4441,7 +4441,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-redis_cluster-password",
               "text": "password",
               "type": "Secret"
@@ -4506,7 +4506,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-redis_cluster-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -4711,13 +4711,13 @@
               "type": "String"
             },
             {
-              "doc": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+              "doc": "用于与 Redis Sentinel 进行认证的用户名。若 Sentinel 不要求 ACL 用户名认证，请保持未设置。",
               "hash": "V-authentication-S-redis_sentinel-sentinel_username",
               "text": "sentinel_username",
               "type": "String"
             },
             {
-              "doc": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "用于与 Redis Sentinel 进行认证的密码。若 Sentinel 不要求认证，请保持未设置。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-redis_sentinel-sentinel_password",
               "text": "sentinel_password",
               "type": "Secret"
@@ -4736,7 +4736,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-redis_sentinel-password",
               "text": "password",
               "type": "Secret"
@@ -4808,7 +4808,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-redis_sentinel-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -5051,7 +5051,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-http_get-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -5334,7 +5334,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-http_post-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -5675,7 +5675,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-jwt_jwks-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -5932,7 +5932,7 @@
               "type": "String"
             },
             {
-              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
               "hash": "V-authentication-S-ldap-password",
               "text": "password",
               "type": "Secret"
@@ -5998,7 +5998,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-ldap-ssl-S-ssl-password",
                       "text": "password",
                       "type": "Secret"
@@ -6393,7 +6393,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-scram_restapi_get-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -6690,7 +6690,7 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authentication-S-scram_restapi_post-ssl-S-ssl_client_opts-password",
                       "text": "password",
                       "type": "Secret"
@@ -7189,7 +7189,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-http_get-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -7459,7 +7459,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-http_post-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -7592,7 +7592,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-redis_single-password",
                       "text": "password",
                       "type": "Secret"
@@ -7664,7 +7664,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_single-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -7783,13 +7783,13 @@
                       "type": "String"
                     },
                     {
-                      "doc": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+                      "doc": "用于与 Redis Sentinel 进行认证的用户名。若 Sentinel 不要求 ACL 用户名认证，请保持未设置。",
                       "hash": "V-authorization-S-authorization-sources-S-redis_sentinel-sentinel_username",
                       "text": "sentinel_username",
                       "type": "String"
                     },
                     {
-                      "doc": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "用于与 Redis Sentinel 进行认证的密码。若 Sentinel 不要求认证，请保持未设置。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-redis_sentinel-sentinel_password",
                       "text": "sentinel_password",
                       "type": "Secret"
@@ -7808,7 +7808,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-redis_sentinel-password",
                       "text": "password",
                       "type": "Secret"
@@ -7880,7 +7880,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_sentinel-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -8006,7 +8006,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-redis_cluster-password",
                       "text": "password",
                       "type": "Secret"
@@ -8071,7 +8071,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-redis_cluster-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -8197,7 +8197,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-mysql-password",
                       "text": "password",
                       "type": "Secret"
@@ -8262,7 +8262,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-mysql-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -8400,7 +8400,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-postgresql-password",
                       "text": "password",
                       "type": "Secret"
@@ -8465,7 +8465,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-postgresql-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -8638,7 +8638,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-mongo_single-password",
                       "text": "password",
                       "type": "Secret"
@@ -8792,7 +8792,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_single-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -8966,7 +8966,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-mongo_rs-password",
                       "text": "password",
                       "type": "Secret"
@@ -9120,7 +9120,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_rs-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -9281,7 +9281,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-mongo_sharded-password",
                       "text": "password",
                       "type": "Secret"
@@ -9435,7 +9435,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-mongo_sharded-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -9596,7 +9596,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-authorization-S-authorization-sources-S-ldap-password",
                       "text": "password",
                       "type": "Secret"
@@ -9662,7 +9662,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-authorization-S-authorization-sources-S-ldap-ssl-S-ssl-password",
                               "text": "password",
                               "type": "Secret"
@@ -9836,14 +9836,14 @@
             },
             {
               "default": "\"[{buffer,1048576}]\"",
-              "doc": "Erlang's distribution listener port options for performance tuning.\nDefines a list of extra socket options to be used when opening the listening socket for a distributed Erlang node.\nSee https://www.erlang.org/doc/apps/kernel/gen_tcp.html#listen/2",
+              "doc": "用于性能调优的 Erlang 分布式监听端口选项。\n定义打开分布式 Erlang 节点监听 socket 时使用的额外 socket 选项列表。\n参见 https://www.erlang.org/doc/apps/kernel/gen_tcp.html#listen/2",
               "hash": "V-node-S-node-dist_listen_options",
               "text": "dist_listen_options",
               "type": "String"
             },
             {
               "default": "\"[{buffer,1048576}]\"",
-              "doc": "Erlang's distribution port connect options for performance tuning.\nDefines a list of extra socket options to be used when connecting to other distributed Erlang nodes.\nSee https://www.erlang.org/doc/apps/kernel/gen_tcp.html#connect/4",
+              "doc": "用于性能调优的 Erlang 分布式端口连接选项。\n定义连接到其他分布式 Erlang 节点时使用的额外 socket 选项列表。\n参见 https://www.erlang.org/doc/apps/kernel/gen_tcp.html#connect/4",
               "hash": "V-node-S-node-dist_connect_options",
               "text": "dist_connect_options",
               "type": "String"
@@ -10079,7 +10079,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-cluster-S-cluster-etcd-S-cluster_etcd-ssl_options-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -10270,7 +10270,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "用于连接到远程 EMQX 集群的密码（可选）。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "用于连接到远程 EMQX 集群的 MQTT 密码（可选）。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-cluster-S-cluster-links-S-link-password",
                       "text": "password",
                       "type": "Secret"
@@ -10329,7 +10329,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-cluster-S-cluster-links-S-link-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -10437,11 +10437,11 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "TCP socket options for the outbound cluster link MQTT connection.\nAll fields are optional; unset fields keep the OS / `gen_tcp` defaults.",
+                      "doc": "用于出站集群连接 MQTT 连接的 TCP 套接字选项。\n所有字段均为可选；未设置的字段保持操作系统 / `gen_tcp` 默认值。",
                       "hash": "V-cluster-S-cluster-links-S-link-tcp_opts",
                       "refs": [
                         {
-                          "doc": "TCP socket options for outbound MQTT client connections.\nAll fields are optional; unset fields keep the operating system or `gen_tcp` defaults.",
+                          "doc": "用于出站 MQTT 客户端连接的 TCP Socket 选项。\n所有字段均为可选；未设置的字段保持操作系统或 `gen_tcp` 默认值。",
                           "fields": [
                             {
                               "default": "10",
@@ -10451,37 +10451,37 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "The `TCP_NODELAY` flag for the outbound TCP connection.\nWhen set to `true`, data is sent immediately, regardless of size.",
+                              "doc": "出站 TCP 连接的 `TCP_NODELAY` 标志。\n设置为 `true` 时，无论大小都会立即发送数据。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-nodelay",
                               "text": "nodelay",
                               "type": "Boolean"
                             },
                             {
-                              "doc": "The TCP send buffer (OS kernel) size for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "出站 MQTT 连接的 TCP 发送缓冲区（OS 内核）大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-sndbuf",
                               "text": "sndbuf",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The TCP receive buffer (OS kernel) size for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "出站 MQTT 连接的 TCP 接收缓冲区（OS 内核）大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-recbuf",
                               "text": "recbuf",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The size of the user-space buffer used by the Erlang VM for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "Erlang VM 用于出站 MQTT 连接的用户态缓冲区大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "Enable the TCP `SO_KEEPALIVE` socket option for the outbound MQTT connection.\nThis is the OS-level TCP keepalive probe and is independent of the MQTT-level keepalive.",
+                              "doc": "为出站 MQTT 连接启用 TCP `SO_KEEPALIVE` 套接字选项。\n这是 OS 级的 TCP keepalive 探测，与 MQTT 层 keepalive 无关。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-keepalive",
                               "text": "keepalive",
                               "type": "Boolean"
                             },
                             {
-                              "doc": "When enabled, `gen_tcp` may briefly queue small writes to coalesce them into larger TCP segments.\nImproves throughput for publishers that send many small messages, at the cost of a small added latency.\nDefault: `false`.",
+                              "doc": "启用后，`gen_tcp` 可能会短暂排队小写入以合并为更大的 TCP 报文段。\n可提升发送大量小消息的发布者吞吐量，但会增加少量延迟。\n默认值：`false`。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-delay_send",
                               "text": "delay_send",
                               "type": "Boolean"
@@ -10511,7 +10511,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-cluster-S-cluster-links-S-link-resource_opts-S-creation_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -10899,7 +10899,7 @@
                         "max_filter_size"
                       ],
                       "default": "5000",
-                      "doc": "Store the latest N log entries in a database for allow `/audit` HTTP API to filter and retrieval of log data.\nThe interval for purging redundant log records is maintained within a range of 10~20 seconds.",
+                      "doc": "在数据库中存储最近 N 条日志记录，以允许 `/audit` HTTP API 过滤和获取日志数据。\n清理冗余日志记录的间隔维持在 10~20 秒之间。",
                       "hash": "V-log-S-log-audit-S-log_audit_handler-cache_size",
                       "text": "cache_size",
                       "type": "Integer(10..30000)"
@@ -13378,7 +13378,7 @@
                     },
                     {
                       "default": "\"\"",
-                      "doc": "RocketMQ 服务器的 `secretKey`。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "RocketMQ 服务器的 `secretKey`。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-rocketmq-S-config_connector-secret_key",
                       "text": "secret_key",
                       "type": "Secret"
@@ -13451,7 +13451,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-rocketmq-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -13623,7 +13623,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-cockroachdb-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -13688,7 +13688,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-cockroachdb-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -13886,7 +13886,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-clickhouse-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -13995,7 +13995,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-cassandra-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -14060,7 +14060,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-cassandra-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -14315,7 +14315,7 @@
                                       "type": "String"
                                     },
                                     {
-                                      "doc": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-connectors-S-connectors-mqtt-S-config_connector-static_clientids-S-static_clientid_entry-ids-S-static_clientid_entry_tuple-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -14363,7 +14363,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-mqtt-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -14404,11 +14404,11 @@
                       "type": "Integer(0..+inf)"
                     },
                     {
-                      "doc": "TCP socket options for the outbound MQTT client connection.\nAll fields are optional; unset fields keep the OS / `gen_tcp` defaults.",
+                      "doc": "用于出站 MQTT 客户端连接的 TCP 套接字选项。\n所有字段均为可选；未设置的字段保持操作系统 / `gen_tcp` 默认值。",
                       "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts",
                       "refs": [
                         {
-                          "doc": "TCP socket options for outbound MQTT client connections.\nAll fields are optional; unset fields keep the operating system or `gen_tcp` defaults.",
+                          "doc": "用于出站 MQTT 客户端连接的 TCP Socket 选项。\n所有字段均为可选；未设置的字段保持操作系统或 `gen_tcp` 默认值。",
                           "fields": [
                             {
                               "default": "10",
@@ -14418,37 +14418,37 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "The `TCP_NODELAY` flag for the outbound TCP connection.\nWhen set to `true`, data is sent immediately, regardless of size.",
+                              "doc": "出站 TCP 连接的 `TCP_NODELAY` 标志。\n设置为 `true` 时，无论大小都会立即发送数据。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-nodelay",
                               "text": "nodelay",
                               "type": "Boolean"
                             },
                             {
-                              "doc": "The TCP send buffer (OS kernel) size for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "出站 MQTT 连接的 TCP 发送缓冲区（OS 内核）大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-sndbuf",
                               "text": "sndbuf",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The TCP receive buffer (OS kernel) size for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "出站 MQTT 连接的 TCP 接收缓冲区（OS 内核）大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-recbuf",
                               "text": "recbuf",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "The size of the user-space buffer used by the Erlang VM for the outbound MQTT connection.<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "Erlang VM 用于出站 MQTT 连接的用户态缓冲区大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
                             },
                             {
-                              "doc": "Enable the TCP `SO_KEEPALIVE` socket option for the outbound MQTT connection.\nThis is the OS-level TCP keepalive probe and is independent of the MQTT-level keepalive.",
+                              "doc": "为出站 MQTT 连接启用 TCP `SO_KEEPALIVE` 套接字选项。\n这是 OS 级的 TCP keepalive 探测，与 MQTT 层 keepalive 无关。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-keepalive",
                               "text": "keepalive",
                               "type": "Boolean"
                             },
                             {
-                              "doc": "When enabled, `gen_tcp` may briefly queue small writes to coalesce them into larger TCP segments.\nImproves throughput for publishers that send many small messages, at the cost of a small added latency.\nDefault: `false`.",
+                              "doc": "启用后，`gen_tcp` 可能会短暂排队小写入以合并为更大的 TCP 报文段。\n可提升发送大量小消息的发布者吞吐量，但会增加少量延迟。\n默认值：`false`。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-delay_send",
                               "text": "delay_send",
                               "type": "Boolean"
@@ -14515,7 +14515,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -14657,7 +14657,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-sqlserver-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -14862,7 +14862,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-datalayers-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -15103,7 +15103,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-iotdb-S-config_restapi-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -15493,7 +15493,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-iotdb-S-config_thrift-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -15796,7 +15796,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-azure_event_hub_producer-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -15976,7 +15976,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-pgsql-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -16041,7 +16041,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-pgsql-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -16213,7 +16213,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "S3 桶的密钥访问密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "S3 桶的 secret access key。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-s3-S-config_connector-secret_access_key",
                       "text": "secret_access_key",
                       "type": "Secret"
@@ -16325,7 +16325,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-connectors-S-connectors-s3-S-config_connector-transport_options-S-transport_options-ssl-S-ssl_client_opts-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -16524,7 +16524,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-redshift-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -16589,7 +16589,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redshift-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -16877,7 +16877,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-mongodb-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -17031,7 +17031,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-mongodb-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -17308,7 +17308,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-rabbitmq-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -17395,7 +17395,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-rabbitmq-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -17770,7 +17770,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-http-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -18080,7 +18080,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-oracle-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -18338,7 +18338,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-kafka_consumer-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -18639,7 +18639,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-confluent_producer-S-config_connector-authentication-S-auth_username_password-password",
                               "text": "password",
                               "type": "Secret"
@@ -18747,7 +18747,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-confluent_producer-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -18955,7 +18955,7 @@
                             },
                             {
                               "default": "false",
-                              "doc": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+                              "doc": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭据。如果你的 InfluxDB 服务在 `/ping` 上需要认证，请启用。默认值为 `false`，保持此前行为并在不认证的情况下发送 `/ping`。",
                               "hash": "V-connectors-S-connectors-influxdb-S-config_connector-parameters-S-connector_influxdb_api_v1-ping_with_auth",
                               "text": "ping_with_auth",
                               "type": "Boolean"
@@ -18994,7 +18994,7 @@
                             },
                             {
                               "default": "false",
-                              "doc": "Controls whether EMQX includes connector credentials in `/ping` health-check requests. Enable this if your InfluxDB service requires authentication on `/ping`. The default is `false`, which preserves the previous behavior and sends `/ping` without authentication.",
+                              "doc": "控制 EMQX 是否在 `/ping` 健康检查请求中包含连接器凭据。如果你的 InfluxDB 服务在 `/ping` 上需要认证，请启用。默认值为 `false`，保持此前行为并在不认证的情况下发送 `/ping`。",
                               "hash": "V-connectors-S-connectors-influxdb-S-config_connector-parameters-S-connector_influxdb_api_v2-ping_with_auth",
                               "text": "ping_with_auth",
                               "type": "Boolean"
@@ -19061,7 +19061,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-influxdb-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -19285,7 +19285,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-snowflake-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -19394,7 +19394,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-snowflake-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -19629,7 +19629,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-connectors-S-connectors-s3tables-S-config_connector-s3_client-S-s3_client_params-transport_options-S-transport_options-ssl-S-ssl_client_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -20000,7 +20000,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-snowflake_streaming-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -20197,7 +20197,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-elasticsearch-S-config-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -20564,7 +20564,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-kafka_producer-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -20758,7 +20758,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-parameters-S-redis_single_connector-password",
                               "text": "password",
                               "type": "Secret"
@@ -20803,13 +20803,13 @@
                               "type": "String"
                             },
                             {
-                              "doc": "Username used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require ACL username authentication.",
+                              "doc": "用于与 Redis Sentinel 进行认证的用户名。若 Sentinel 不要求 ACL 用户名认证，请保持未设置。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-parameters-S-redis_sentinel_connector-sentinel_username",
                               "text": "sentinel_username",
                               "type": "String"
                             },
                             {
-                              "doc": "Password used to authenticate with Redis Sentinel. Leave it unset when Sentinel does not require authentication.<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "用于与 Redis Sentinel 进行认证的密码。若 Sentinel 不要求认证，请保持未设置。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-parameters-S-redis_sentinel_connector-sentinel_password",
                               "text": "sentinel_password",
                               "type": "Secret"
@@ -20828,7 +20828,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-parameters-S-redis_sentinel_connector-password",
                               "text": "password",
                               "type": "Secret"
@@ -20880,7 +20880,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-parameters-S-redis_cluster_connector-password",
                               "text": "password",
                               "type": "Secret"
@@ -20997,7 +20997,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-redis-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -21289,7 +21289,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-tablestore-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -21461,7 +21461,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-matrix-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -21526,7 +21526,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-matrix-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -21923,7 +21923,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-timescale-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -21988,7 +21988,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-timescale-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -22173,7 +22173,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-tdengine-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -22282,7 +22282,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-alloydb-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -22347,7 +22347,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-alloydb-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -22603,7 +22603,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-greptimedb-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -22956,7 +22956,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-doris-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -23021,7 +23021,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-doris-S-config_connector-ssl-S-ssl-password",
                               "text": "password",
                               "type": "Secret"
@@ -23194,7 +23194,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "基本认证密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "基本认证密码。`username:password` 认证字符串中的 `password` 部分。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-pulsar-S-config_connector-authentication-S-auth_basic-password",
                               "text": "password",
                               "type": "Secret"
@@ -23207,7 +23207,7 @@
                           "doc": "Token 认证的参数。",
                           "fields": [
                             {
-                              "doc": "JWT 认证 token。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "JWT 认证 token。<br/>\n要从文件加载 token 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 token 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-pulsar-S-config_connector-authentication-S-auth_token-jwt",
                               "text": "jwt",
                               "type": "Secret"
@@ -23281,7 +23281,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-pulsar-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -23460,7 +23460,7 @@
                       "type": "String"
                     },
                     {
-                      "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-mysql-S-config_connector-password",
                       "text": "password",
                       "type": "Secret"
@@ -23525,7 +23525,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-mysql-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -23821,7 +23821,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-connectors-S-connectors-couchbase-S-config_connector-ssl-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -24184,7 +24184,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-rocketmq-S-rocketmq_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -24491,7 +24491,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-cockroachdb-S-cockroachdb-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -24812,7 +24812,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-clickhouse-S-clickhouse_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -25119,7 +25119,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-cassandra-S-cassandra_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -25445,7 +25445,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-mqtt-S-mqtt_publisher_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -25745,7 +25745,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-sqlserver-S-sqlserver_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -26072,7 +26072,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-datalayers-S-datalayers_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -26519,7 +26519,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-iotdb-S-action_config-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -27245,7 +27245,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-pgsql-S-pgsql_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -27436,7 +27436,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "聚合上传的 S3 对象键模板。<br/>\n此模板可以包含以下变量的占位符：\n<ul>\n<li><code>${action}</code>: 操作的名称（必须）。<li/>\n<li><code>${node}</code>: 执行上传的 EMQX 节点的名称（必需）。<li/>\n<li><code>${datetime.{format}}</code>: 聚合开始的日期和时间，按照 <code>{format}</code> 字符串格式化（必需），包括：\n    <ul>\n    <li><code>${datetime.rfc3339utc}</code>: 使用 RFC3339 格式化的 UTC 日期和时间。<li/>\n    <li><code>${datetime.rfc3339}</code>: 使用 RFC3339 格式化的本地时区日期和时间。<li/>\n    <li><code>${datetime.unix}</code>: Unix 时间戳。<li/>\n    </ul>\n<li/>\n<li><code>${datetime_until.{format}}</code>: 聚合结束的日期和时间，使用相同的格式化选项。<li/>\n<li><code>${sequence}</code>: 同一时间间隔内聚合上传的序列号（必需）。<li/>\n</ul>\n所有其他占位符均被视为无效。请注意，标记为必需的占位符如果在模板中缺失，将作为路径后缀添加到 S3 对象键中。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "聚合上传的 S3 对象 key 模板。<br/>\n模板可以包含以下变量的占位符：\n<ul>\n<li><code>${action}</code>：动作名称（必需）。</li>\n<li><code>${node}</code>：执行上传的 EMQX 节点名称（必需）。</li>\n<li><code>${datetime.{format}}</code>：聚合开始的日期和时间，按 <code>{format}</code> 字符串格式化（必需）：\n    <ul>\n    <li><code>${datetime.rfc3339utc}</code>：RFC3339 格式的 UTC 日期和时间，</li>\n    <li><code>${datetime.rfc3339}</code>：RFC3339 格式的本地时区日期和时间，</li>\n    <li><code>${datetime.unix}</code>：Unix 时间戳，</li>\n    <li><code>${datetime.YYYY}</code>、<code>${datetime.MM}</code>、<code>${datetime.DD}</code>：零填充的年、月、日（UTC），</li>\n    <li><code>${datetime.hh}</code>、<code>${datetime.mm}</code>、<code>${datetime.ss}</code>：零填充的时、分、秒（UTC），</li>\n    <li><code>${datetime.DOY}</code>：零填充的一年中的第几天 001-366（UTC）。</li>\n    </ul>\n    每个日期/时间部分 token 可带显式时区前缀：<code>utc</code>（与无前缀相同）或 <code>local</code>（EMQX 节点的系统时区）。示例：<code>${datetime.local.YYYY}</code>、<code>${datetime.utc.hh}</code>。不接受其他时区。\n    Hive 分区布局示例：<code>year=${datetime.YYYY}/month=${datetime.MM}/day=${datetime.DD}/hour=${datetime.hh}/${action}_${node}_N${sequence}.json</code>。\n</li>\n<li><code>${datetime_until.{format}}</code>：聚合结束的日期和时间，包含相同的格式选项。</li>\n<li><code>${sequence}</code>：同一时间间隔内聚合上传的序列号（必需）。</li>\n</ul>\n所有其他占位符都被视为无效。注意，如果模板中缺少标记为必需的占位符，它们将作为路径后缀添加到 S3 对象 key 中。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-s3-S-s3-parameters-S-s3_aggregated_upload_parameters-key",
                               "text": "key",
                               "type": "String"
@@ -27705,7 +27705,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-s3-S-s3-resource_opts-S-s3_upload_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -28012,7 +28012,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-redshift-S-redshift-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -28325,7 +28325,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-mongodb-S-mongodb_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -28630,7 +28630,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-kinesis-S-kinesis_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -29027,7 +29027,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-rabbitmq-S-publisher_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -29359,7 +29359,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-dynamo-S-dynamo_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -29695,7 +29695,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-http-S-http_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -30029,7 +30029,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-gcp_pubsub_producer-S-producer_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -30336,7 +30336,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-oracle-S-oracle_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -30676,7 +30676,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-opents-S-action_config-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -31415,7 +31415,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-influxdb-S-influxdb_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -31884,7 +31884,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-snowflake-S-snowflake-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -32297,7 +32297,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-s3tables-S-s3tables-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -32650,7 +32650,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-snowflake_streaming-S-snowflake_streaming-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -33095,7 +33095,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-elasticsearch-S-action_config-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -33820,7 +33820,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-redis-S-redis_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -34204,7 +34204,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-tablestore-S-tablestore_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -34511,7 +34511,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-matrix-S-pgsql_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -34823,7 +34823,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-bigquery-S-bigquery-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -35143,7 +35143,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-syskeeper_forwarder-S-config-resource_opts-S-creation_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -35476,7 +35476,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-timescale-S-pgsql_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -35796,7 +35796,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-tdengine-S-action_config-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -36103,7 +36103,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-alloydb-S-alloydb-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -36416,7 +36416,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-greptimedb-S-greptimedb_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -36730,7 +36730,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-disk_log-S-disk_log-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -36921,7 +36921,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "用于聚合上传的 Azure Blob Storage blob 名称模板。<br/>\n  模板可以包含以下变量的占位符：\n  <ul>\n  <li><code>${action}</code>: 动作名称（必需）。</li>\n  <li><code>${node}</code>: 执行上传的 EMQX 节点名称（必需）。</li>\n  <li><code>${datetime.{format}}</code>: 聚合上传开始的日期和时间，格式根据 <code>{format}</code> 字符串制定（必需）:\n      <ul>\n      <li><code>${datetime.rfc3339utc}</code>： RFC3339 格式的 UTC 日期和时间，</li>\n      <li><code>${datetime.rfc3339}</code>： RFC3339 格式的本地时区日期和时间，</li>\n      <li><code>${datetime.unix}</code>： Unix 时间戳。</li>\n      </ul>\n  </li>\n  <li><code>${datetime_until.{format}}</code>：聚合上传结束的日期和时间，包含相同的格式选项。</li>\n  <li><code>${sequence}</code>：同一时间间隔内聚合上传的序列号（必需）。</li>\n  </ul>\n  所有其他占位符都被视为无效。注意，如果模板中缺少标记为必需的占位符，它们将作为路径后缀添加到 Azure Blob Storage blob 名称中。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "用于聚合上传的 Azure Blob Storage blob 名称模板。<br/>\n  模板可以包含以下变量的占位符：\n  <ul>\n  <li><code>${action}</code>：动作名称（必需）。</li>\n  <li><code>${node}</code>：执行上传的 EMQX 节点名称（必需）。</li>\n  <li><code>${datetime.{format}}</code>：聚合开始的日期和时间，按 <code>{format}</code> 字符串格式化（必需）：\n      <ul>\n      <li><code>${datetime.rfc3339utc}</code>：RFC3339 格式的 UTC 日期和时间，</li>\n      <li><code>${datetime.rfc3339}</code>：RFC3339 格式的本地时区日期和时间，</li>\n      <li><code>${datetime.unix}</code>：Unix 时间戳，</li>\n      <li><code>${datetime.YYYY}</code>、<code>${datetime.MM}</code>、<code>${datetime.DD}</code>：零填充的年、月、日（UTC），</li>\n      <li><code>${datetime.hh}</code>、<code>${datetime.mm}</code>、<code>${datetime.ss}</code>：零填充的时、分、秒（UTC），</li>\n      <li><code>${datetime.DOY}</code>：零填充的一年中的第几天 001-366（UTC）。</li>\n      </ul>\n      每个日期/时间部分 token 可带显式时区前缀：<code>utc</code>（与无前缀相同）或 <code>local</code>（EMQX 节点的系统时区）。示例：<code>${datetime.local.YYYY}</code>、<code>${datetime.utc.hh}</code>。不接受其他时区。\n      Hive 分区布局示例：<code>year=${datetime.YYYY}/month=${datetime.MM}/day=${datetime.DD}/hour=${datetime.hh}/${action}_${node}_N${sequence}.json</code>。\n  </li>\n  <li><code>${datetime_until.{format}}</code>：聚合结束的日期和时间，包含相同的格式选项。</li>\n  <li><code>${sequence}</code>：同一时间间隔内聚合上传的序列号（必需）。</li>\n  </ul>\n  所有其他占位符都被视为无效。注意，如果模板中缺少标记为必需的占位符，它们将作为路径后缀添加到 Azure Blob Storage blob 名称中。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-azure_blob_storage-S-azure_blob_storage-parameters-S-aggreg_parameters-blob",
                               "text": "blob",
                               "type": "String"
@@ -37151,7 +37151,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-azure_blob_storage-S-azure_blob_storage-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -37465,7 +37465,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-doris-S-doris-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -37892,7 +37892,7 @@
                           "fields": [
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-pulsar-S-publisher_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -38171,7 +38171,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-mysql-S-mysql_action-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -38484,7 +38484,7 @@
                             },
                             {
                               "default": "per_clientid",
-                              "doc": "The strategy for dispatching queries when a query does not set an explicit pick key. The default value <code>per_clientid</code> preserves the existing behavior. Set to <code>random</code> to spread such queries across multiple workers.",
+                              "doc": "当查询未设置显式 pick key 时的分发策略。默认值 <code>per_clientid</code> 保持现有行为。设置为 <code>random</code> 可将此类查询分散到多个 worker。",
                               "hash": "V-actions-S-actions-couchbase-S-couchbase-resource_opts-S-action_resource_opts-dispatch_strategy",
                               "text": "dispatch_strategy",
                               "type": "Enum(per_clientid,random)"
@@ -38709,7 +38709,7 @@
                             },
                             {
                               "default": "true",
-                              "doc": "Whether to set the MQTT 5.0 Retain As Published subscription option on the remote subscription.  When set to true (the default), the upstream broker preserves the `retain` flag on messages forwarded to this subscription; when set to false, the upstream clears the `retain` flag.  Only takes effect when the connector's `proto_ver` is `v5`.",
+                              "doc": "是否在远端订阅上设置 MQTT 5.0 的 Retain As Published 订阅选项。设置为 true（默认）时，上游 broker 保留转发到该订阅的消息的 `retain` 标志；设置为 false 时，上游清除 `retain` 标志。仅当连接器的 `proto_ver` 为 `v5` 时生效。",
                               "hash": "V-sources-S-sources-mqtt-S-mqtt_subscriber_source-parameters-S-ingress_parameters-retain_as_published",
                               "text": "retain_as_published",
                               "type": "Boolean"
@@ -39442,7 +39442,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-dashboard-S-dashboard-listeners-S-listeners-https-S-https-ssl_options-S-ssl_options-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -39645,7 +39645,7 @@
             },
             {
               "default": "true",
-              "doc": "启用或禁用对 Swagger API 文档的支持。",
+              "doc": "启用或禁用对 API 规范/文档的支持。",
               "hash": "V-dashboard-S-dashboard-swagger_support",
               "text": "swagger_support",
               "type": "Boolean"
@@ -39693,7 +39693,7 @@
                             },
                             {
                               "default": "false",
-                              "doc": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+                              "doc": "是否强制为 SSO 用户启用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证后才能获得控制台 token。",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-ldap-S-ldap-force_mfa",
                               "text": "force_mfa",
                               "type": "Boolean"
@@ -39731,7 +39731,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "内部数据库密码。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "与 bridge 关联的密码，用于与外部数据库进行认证。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-ldap-S-ldap-password",
                               "text": "password",
                               "type": "Secret"
@@ -39797,7 +39797,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-dashboard-S-dashboard-sso-S-sso-ldap-S-ldap-ssl-S-ssl-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -39913,7 +39913,7 @@
                             },
                             {
                               "default": "false",
-                              "doc": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+                              "doc": "是否强制为 SSO 用户启用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证后才能获得控制台 token。",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-force_mfa",
                               "text": "force_mfa",
                               "type": "Boolean"
@@ -39937,7 +39937,7 @@
                               "type": "String"
                             },
                             {
-                              "doc": "客户端密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "客户端密钥。<br/>\n要从文件加载密钥而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为密钥使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-secret",
                               "text": "secret",
                               "type": "Secret"
@@ -40079,7 +40079,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-ssl-S-ssl_client_opts-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -40182,7 +40182,7 @@
                             },
                             {
                               "default": "false",
-                              "doc": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+                              "doc": "是否强制为 SSO 用户启用 MFA（TOTP）。启用后，SSO 用户必须完成 MFA 设置或验证后才能获得控制台 token。",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-saml-S-saml-force_mfa",
                               "text": "force_mfa",
                               "type": "Boolean"
@@ -40636,7 +40636,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-coap-S-coap-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -40944,7 +40944,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-gateway-S-gateway-exproto-S-exproto-server-S-exproto_grpc_server-ssl_options-S-ssl_server_opts-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -41126,7 +41126,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-gateway-S-gateway-exproto-S-exproto-handler-S-exproto_grpc_handler-ssl_options-S-ssl_client_opts-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -41621,7 +41621,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-exproto-S-exproto-listeners-S-tcp_udp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -42102,7 +42102,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-exproto-S-exproto-listeners-S-tcp_udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -42769,7 +42769,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -43564,7 +43564,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -44323,7 +44323,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-lwm2m-S-lwm2m-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -44942,7 +44942,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-mqttsn-S-mqttsn-listeners-S-udp_listeners-dtls-S-dtls_listener-dtls_options-S-dtls_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -45853,7 +45853,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-ssl_options-S-listener_wss_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -46633,7 +46633,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -47648,7 +47648,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-ssl_options-S-listener_wss_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -48151,7 +48151,7 @@
                                               "type": "Integer(0..+inf)"
                                             },
                                             {
-                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-ssl_options-S-listener_ssl_opts-password",
                                               "text": "password",
                                               "type": "Secret"
@@ -48641,36 +48641,36 @@
             },
             {
               "default": "{allow_cidrs = [], deny_cidrs = [\"127.0.0.0/8\", \"::1/128\", \"fe80::/10\", \"10.0.0.0/8\", \"172.16.0.0/12\", \"192.168.0.0/16\", \"fc00::/7\", \"0.0.0.0/32\", \"224.0.0.0/4\", \"ff00::/8\", \"100.100.100.200/32\", \"169.254.0.0/16\"], deny_hosts = [\"metadata.tencentyun.com\", \"metadata.google.internal\", \"metadata.azure.internal\"], enable = false}",
-              "doc": "SSRF protection for outbound target addresses configured via rule-engine connectors, bridges and actions.<br/>\nWhen enabled, exact `deny_hosts` matches are rejected first, then resolved target IPs are checked against `allow_cidrs` before `deny_cidrs`.<br/>\nThis is a config-validation-time defense layer only: it does not protect against malicious DNS changes after validation has passed.<br/>\nCombine it with network-layer egress controls such as firewall, `iptables` or `nftables` rules.",
+              "doc": "针对通过规则引擎连接器、bridge 和动作配置的出站目标地址的 SSRF 防护。<br/>\n启用后，先拒绝与 `deny_hosts` 精确匹配的主机名，然后在 `deny_cidrs` 之前检查解析得到的目标 IP 是否在 `allow_cidrs` 中。<br/>\n这只是配置验证时的防护层：验证通过后，对 DNS 的恶意更改不提供保护。<br/>\n请与防火墙、`iptables` 或 `nftables` 等网络层出站控制配合使用。",
               "hash": "V-rule_engine-S-rule_engine-ssrf",
               "refs": [
                 {
-                  "doc": "SSRF protection for outbound target addresses configured via rule-engine connectors, bridges and actions.<br/>\nWhen enabled, exact `deny_hosts` matches are rejected first, then resolved target IPs are checked against `allow_cidrs` before `deny_cidrs`.<br/>\nThis is a config-validation-time defense layer only: it does not protect against malicious DNS changes after validation has passed.<br/>\nCombine it with network-layer egress controls such as firewall, `iptables` or `nftables` rules.",
+                  "doc": "针对通过规则引擎连接器、bridge 和动作配置的出站目标地址的 SSRF 防护。<br/>\n启用后，先拒绝与 `deny_hosts` 精确匹配的主机名，然后在 `deny_cidrs` 之前检查解析得到的目标 IP 是否在 `allow_cidrs` 中。<br/>\n这只是配置验证时的防护层：验证通过后，对 DNS 的恶意更改不提供保护。<br/>\n请与防火墙、`iptables` 或 `nftables` 等网络层出站控制配合使用。",
                   "fields": [
                     {
                       "default": "false",
-                      "doc": "When true, apply the SSRF policy under `rule_engine.ssrf` to outbound connector/bridge/action targets.<br/>\nChecked at config-update time only — runtime DNS re-resolution is not blocked.<br/>\nUse network-layer egress controls as the enforcement layer for post-validation DNS changes.",
+                      "doc": "为 true 时，对出站连接器/bridge/动作目标应用 `rule_engine.ssrf` 下的 SSRF 策略。<br/>\n仅在配置更新时检查——运行时的 DNS 重新解析不会被阻止。<br/>\n对验证后的 DNS 变化，请使用网络层出站控制作为执行层。",
                       "hash": "V-rule_engine-S-rule_engine-ssrf-S-ssrf-enable",
                       "text": "enable",
                       "type": "Boolean"
                     },
                     {
                       "default": "[]",
-                      "doc": "List of CIDR ranges that are explicitly allowed before the deny list is checked.<br/>\nUse this to carve out approved internal targets without disabling SSRF protection globally.<br/>\nThe default is empty.",
+                      "doc": "在检查拒绝列表之前显式允许的 CIDR 范围列表。<br/>\n用于在不全局关闭 SSRF 保护的情况下划定已批准的内部目标。<br/>\n默认为空。",
                       "hash": "V-rule_engine-S-rule_engine-ssrf-S-ssrf-allow_cidrs",
                       "text": "allow_cidrs",
                       "type": "Array(String)"
                     },
                     {
                       "default": "[\"127.0.0.0/8\", \"::1/128\", \"fe80::/10\", \"10.0.0.0/8\", \"172.16.0.0/12\", \"192.168.0.0/16\", \"fc00::/7\", \"0.0.0.0/32\", \"224.0.0.0/4\", \"ff00::/8\", \"100.100.100.200/32\", \"169.254.0.0/16\"]",
-                      "doc": "List of CIDR ranges considered private or otherwise unsafe as outbound targets.<br/>\nThe default covers loopback, link-local (including cloud IMDS), RFC1918, ULA, unspecified and multicast ranges, plus known cloud metadata IPs (Aliyun 100.100.100.200 and AWS 69.254.169.253).<br/>\nUse `allow_cidrs` for explicit exceptions when legitimately needed.",
+                      "doc": "被视为私有或不安全的出站目标 CIDR 范围列表。<br/>\n默认覆盖回环、链路本地（含云 IMDS）、RFC1918、ULA、未指定和多播范围，以及已知云元数据 IP（阿里云 100.100.100.200 和 AWS 69.254.169.253）。<br/>\n需要例外时使用 `allow_cidrs` 明确放行。",
                       "hash": "V-rule_engine-S-rule_engine-ssrf-S-ssrf-deny_cidrs",
                       "text": "deny_cidrs",
                       "type": "Array(String)"
                     },
                     {
                       "default": "[\"metadata.tencentyun.com\", \"metadata.google.internal\", \"metadata.azure.internal\"]",
-                      "doc": "List of hostnames to deny by exact match (case-insensitive).<br/>\nThe default covers cloud metadata hostnames: metadata.tencentyun.com, metadata.google.internal, metadata.azure.internal.",
+                      "doc": "按精确匹配（不区分大小写）拒绝的主机名列表。<br/>\n默认包含云元数据主机名：metadata.tencentyun.com、metadata.google.internal、metadata.azure.internal。",
                       "hash": "V-rule_engine-S-rule_engine-ssrf-S-ssrf-deny_hosts",
                       "text": "deny_hosts",
                       "type": "Array(String)"
@@ -48685,7 +48685,7 @@
             },
             {
               "default": "true",
-              "doc": "When enabled, rules will only trigger on messages published by clients on the same namespace as the rule itself.",
+              "doc": "启用后，规则仅在与规则所在命名空间相同的客户端发布的消息上触发。",
               "hash": "V-rule_engine-S-rule_engine-limit_selects_in_namespace",
               "text": "limit_selects_in_namespace",
               "type": "Boolean"
@@ -48996,7 +48996,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-exhook-S-exhook-servers-S-server-ssl-S-ssl_conf-password",
                               "text": "password",
                               "type": "Secret"
@@ -49537,7 +49537,7 @@
                               "type": "Integer(0..+inf)"
                             },
                             {
-                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                               "hash": "V-opentelemetry-S-opentelemetry-exporter-S-otel_exporter-ssl_options-S-ssl_client_opts-password",
                               "text": "password",
                               "type": "Secret"
@@ -49641,7 +49641,7 @@
           "fields": [
             {
               "default": "\"\"",
-              "doc": "用于在启动 EMQX 时，添加 API 密钥，其格式为 {appid}:{secret}，多个密钥用换行分隔。：\n      ```\n      7e729ae70d23144b:2QILI9AcQ9BYlVqLDHQNWN2saIjBV4egr1CZneTNKr9CpK\n      ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL\n      ```",
+              "doc": "bootstrap 文件为 EMQX 提供 API key。\nEMQX 会在启动时加载这些 key 以授权 API 请求。\n\n每个非空行用冒号分隔，包含 2、3 或 4 个字段：API key、secret、可选角色以及可选的 scope 列表。第 4 个字段若存在，为逗号分隔的 scope 名称列表；如果写了末尾冒号但字段留空，则创建的 key 的 scope 列表为空。例如，`mykey:mysecret:administrator:connections,publish` 授予这两个 scope；`mykey:mysecret:administrator:` 不授予任何 scope。\n\n- 角色字段（可选）是预定义的访问角色：`administrator`（默认）、`viewer` 或 `publisher`。在 5.4 中引入；旧的 2 字段行仍然有效，并被视为 `administrator`。\n- scope 字段（可选，自 5.10 起）来自 API key scope 目录。若完全省略（3 字段行），该 key 无 scope 限制，可访问所有未被拒绝的路径（向后兼容）。若字段存在但为空，则映射到已知 scope 的路径都会被拒绝。未映射的公共端点（status、metrics 等）仍可访问，因此运维仍可观察节点并从 UI 重新配置 key。\n- 行中未知的 scope 名称会被丢弃并记录告警日志。该条目仍会以剩余的有效 scope 创建，避免因拼写错误中止整个 bootstrap。\n- 空行会被忽略。不支持注释，每个非空行都必须是有效条目。",
               "hash": "V-api_key-S-api_key-bootstrap_file",
               "text": "bootstrap_file",
               "type": "String"
@@ -49684,7 +49684,7 @@
             },
             {
               "default": "system",
-              "doc": "Timezone used to determine the local day boundary for session high-watermark history.\nUse `system` to follow the node host local timezone, or provide an explicit offset such as `+02:00`.",
+              "doc": "用于确定会话高水位线历史本地日边界的时区。\n使用 `system` 跟随节点主机本地时区，或提供显式偏移量如 `+02:00`。",
               "hash": "V-license-S-key_license-high_watermark_timezone",
               "text": "high_watermark_timezone",
               "type": "OneOf(String(\"system\"),String)"
@@ -50010,7 +50010,7 @@
                                       "type": "Integer(0..+inf)"
                                     },
                                     {
-                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                      "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                       "hash": "V-schema_registry-S-schema_registry-schemas-S-external_http-parameters-S-external_http_params-ssl-S-ssl_client_opts-password",
                                       "text": "password",
                                       "type": "Secret"
@@ -50141,15 +50141,15 @@
       "hash": "V-schema_validation",
       "refs": [
         {
-          "doc": "Schema validation configuration.",
+          "doc": "Schema 验证配置。",
           "fields": [
             {
               "default": "[]",
-              "doc": "List of schema validation rules.",
+              "doc": "Schema 验证规则列表。",
               "hash": "V-schema_validation-S-schema_validation-validations",
               "refs": [
                 {
-                  "doc": "A single schema validation rule.",
+                  "doc": "单条 Schema 验证规则。",
                   "fields": [
                     {
                       "doc": "连接器的标签",
@@ -50201,7 +50201,7 @@
                       "hash": "V-schema_validation-S-schema_validation-validations-S-validation-log_failure",
                       "refs": [
                         {
-                          "doc": "Configuration for logging validation failures.",
+                          "doc": "记录验证失败的配置。",
                           "fields": [
                             {
                               "default": "info",
@@ -50223,7 +50223,7 @@
                       "hash": "V-schema_validation-S-schema_validation-validations-S-validation-checks",
                       "refs": [
                         {
-                          "doc": "Validate using a SQL expression.",
+                          "doc": "使用 SQL 表达式进行验证。",
                           "fields": [
                             {
                               "default": "sql",
@@ -50243,7 +50243,7 @@
                           "text": "check_sql"
                         },
                         {
-                          "doc": "Validate using a JSON schema.",
+                          "doc": "使用 JSON Schema 进行验证。",
                           "fields": [
                             {
                               "default": "json",
@@ -50263,7 +50263,7 @@
                           "text": "check_json"
                         },
                         {
-                          "doc": "Validate using an Avro schema.",
+                          "doc": "使用 Avro Schema 进行验证。",
                           "fields": [
                             {
                               "default": "avro",
@@ -50283,7 +50283,7 @@
                           "text": "check_avro"
                         },
                         {
-                          "doc": "Validate using a Protobuf schema.",
+                          "doc": "使用 Protobuf Schema 进行验证。",
                           "fields": [
                             {
                               "default": "protobuf",
@@ -50309,7 +50309,7 @@
                           "text": "check_protobuf"
                         },
                         {
-                          "doc": "Validate using an external HTTP schema.",
+                          "doc": "使用外部 HTTP Schema 进行验证。",
                           "fields": [
                             {
                               "default": "external_http",
@@ -50352,15 +50352,15 @@
       "hash": "V-message_transformation",
       "refs": [
         {
-          "doc": "Message transformation configuration.",
+          "doc": "消息转换配置。",
           "fields": [
             {
               "default": "[]",
-              "doc": "List of message transformation rules.",
+              "doc": "消息转换规则列表。",
               "hash": "V-message_transformation-S-message_transformation-transformations",
               "refs": [
                 {
-                  "doc": "A single message transformation rule.",
+                  "doc": "单条消息转换规则。",
                   "fields": [
                     {
                       "doc": "连接器的标签",
@@ -50399,7 +50399,7 @@
                       "hash": "V-message_transformation-S-message_transformation-transformations-S-transformation-log_failure",
                       "refs": [
                         {
-                          "doc": "Configuration for logging transformation failures.",
+                          "doc": "记录转换失败的配置。",
                           "fields": [
                             {
                               "default": "info",
@@ -50436,7 +50436,7 @@
                       "hash": "V-message_transformation-S-message_transformation-transformations-S-transformation-operations",
                       "refs": [
                         {
-                          "doc": "A transformation operation that assigns a value to a key.",
+                          "doc": "为某个键赋值的转换操作。",
                           "fields": [
                             {
                               "doc": "要更新的目标键路径。",
@@ -50624,7 +50624,7 @@
                                               "type": "String"
                                             },
                                             {
-                                              "doc": "S3 桶的密钥访问密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                              "doc": "S3 桶的 secret access key。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                               "hash": "V-file_transfer-S-file_transfer-storage-S-storage_backend-local-S-local_storage-exporter-S-local_storage_exporter_backend-s3-S-s3_exporter-secret_access_key",
                                               "text": "secret_access_key",
                                               "type": "Secret"
@@ -50736,7 +50736,7 @@
                                                               "type": "Integer(0..+inf)"
                                                             },
                                                             {
-                                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                                                              "doc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/>\n要从文件加载密码而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code>。文件内容（去除末尾空白）将作为密码使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                                                               "hash": "V-file_transfer-S-file_transfer-storage-S-storage_backend-local-S-local_storage-exporter-S-local_storage_exporter_backend-s3-S-s3_exporter-transport_options-S-transport_options-ssl-S-ssl_client_opts-password",
                                                               "text": "password",
                                                               "type": "Secret"
@@ -50972,7 +50972,7 @@
                       "type": "Enum(openai,openai_response,anthropic)"
                     },
                     {
-                      "doc": "AI 提供商的 API 密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "AI 提供商的 API key。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-ai-S-ai-providers-S-anthropic_provider-api_key",
                       "text": "api_key",
                       "type": "Secret"
@@ -51056,7 +51056,7 @@
                       "type": "Enum(openai,openai_response,anthropic)"
                     },
                     {
-                      "doc": "AI 提供商的 API 密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "AI 提供商的 API key。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-ai-S-ai-providers-S-openai_provider-api_key",
                       "text": "api_key",
                       "type": "Secret"
@@ -51133,7 +51133,7 @@
                       "type": "Enum(openai,openai_response,anthropic)"
                     },
                     {
-                      "doc": "AI 提供商的 API 密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "AI 提供商的 API key。<br/>\n要从文件加载 key 而不是内联嵌入，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；文件内容（去除末尾空白）将作为 key 使用。集群环境下，该文件必须存在于所有 EMQX 节点上。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-ai-S-ai-providers-S-openai_response_provider-api_key",
                       "text": "api_key",
                       "type": "Secret"
