@@ -39,7 +39,7 @@ A common pattern is to provision the secret file via your deployment tooling (Ku
 The `file://` convention works wherever the configuration schema uses the secret type. Notable examples:
 
 - **SSL/TLS listeners**: `listeners.<type>.<name>.ssl_options.password` (the key passphrase). See [Enable SSL/TLS](../network/emqx-mqtt-tls.md).
-- **Bridges and connectors**: passwords, API keys, secret access keys, JWT tokens, etc.
+- **Bridges and connectors**: passwords, API keys, secret access keys, JWT tokens, and service account JSON credentials such as `service_account_json`.
 - **Cluster Linking**: `cluster.links[].password`.
 - **Dashboard SSO (OIDC)**: `dashboard.sso.oidc.secret`.
 - **License**: `license.key` (the license string itself). See [License Configuration](../configuration/license.md).
