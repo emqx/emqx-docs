@@ -3896,103 +3896,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -4004,25 +3908,13 @@
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -4034,31 +3926,19 @@
               },
               {
                 "enum": [
-                  "influxdb"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -4070,31 +3950,13 @@
               },
               {
                 "enum": [
-                  "opents"
+                  "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -4106,31 +3968,31 @@
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
+                  "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mqtt"
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -4142,7 +4004,145 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
                 ],
                 "type": "string"
               }
@@ -24872,6 +24872,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "status": {
@@ -24964,6 +24966,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -25037,6 +25041,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -36880,7 +36886,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "1D201CD80DAE112F",
+            "example": "0027EC0952AFF3E7",
             "type": "string"
           },
           "status": {
@@ -40405,6 +40411,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "status": {
@@ -40578,6 +40586,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -40710,6 +40720,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -41065,6 +41077,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "status": {
@@ -41231,6 +41245,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -41365,6 +41381,8 @@
           },
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with PubSub.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "tags": {
@@ -54448,7 +54466,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.3-rc.1"
+    "version": "6.0.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -54468,43 +54486,43 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "sqlserver",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "kafka_producer",
-                      "pulsar",
-                      "alloydb",
-                      "gcp_pubsub_producer",
-                      "influxdb",
-                      "confluent_producer",
-                      "iotdb",
-                      "syskeeper_forwarder",
-                      "greptimedb",
                       "mongodb",
+                      "cockroachdb",
+                      "syskeeper_forwarder",
+                      "kafka_producer",
+                      "confluent_producer",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "influxdb",
+                      "azure_event_hub_producer",
+                      "pulsar",
+                      "greptimedb",
+                      "iotdb",
                       "opents",
-                      "redis",
+                      "datalayers",
                       "s3tables",
                       "s3",
                       "kinesis",
                       "doris",
-                      "datalayers",
+                      "redis",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "tablestore",
-                      "clickhouse",
+                      "snowflake",
                       "timescale",
                       "couchbase",
-                      "snowflake",
+                      "tablestore",
+                      "clickhouse",
                       "tdengine",
                       "oracle",
-                      "snowflake_streaming",
+                      "azure_blob_storage",
                       "disk_log",
-                      "matrix",
+                      "snowflake_streaming",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ]
                   }
@@ -54516,43 +54534,43 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "sqlserver",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "kafka_producer",
-                      "pulsar",
-                      "alloydb",
-                      "gcp_pubsub_producer",
-                      "influxdb",
-                      "confluent_producer",
-                      "iotdb",
-                      "syskeeper_forwarder",
-                      "greptimedb",
                       "mongodb",
+                      "cockroachdb",
+                      "syskeeper_forwarder",
+                      "kafka_producer",
+                      "confluent_producer",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "influxdb",
+                      "azure_event_hub_producer",
+                      "pulsar",
+                      "greptimedb",
+                      "iotdb",
                       "opents",
-                      "redis",
+                      "datalayers",
                       "s3tables",
                       "s3",
                       "kinesis",
                       "doris",
-                      "datalayers",
+                      "redis",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "tablestore",
-                      "clickhouse",
+                      "snowflake",
                       "timescale",
                       "couchbase",
-                      "snowflake",
+                      "tablestore",
+                      "clickhouse",
                       "tdengine",
                       "oracle",
-                      "snowflake_streaming",
+                      "azure_blob_storage",
                       "disk_log",
-                      "matrix",
+                      "snowflake_streaming",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -86110,7 +86128,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "1D201CD80DAE112F",
+            "example": "0027EC0952AFF3E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86173,7 +86191,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "1D201CD80DAE112F",
+            "example": "0027EC0952AFF3E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86587,7 +86605,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "1D201CD80DAE112F",
+            "example": "0027EC0952AFF3E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86673,7 +86691,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "1D201CD80DAE112F",
+            "example": "0027EC0952AFF3E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -108656,8 +108674,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -108666,8 +108684,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
