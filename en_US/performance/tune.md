@@ -72,21 +72,21 @@ Persist the maximum number of opened file handles for users in `/etc/security/li
 
 ### Disable Transparent HugePages (THP)
 
-EMQX includes a built-in database workload. Therefore, as recommended for other database systems, it is highly recommended to disable Transparent HugePages (THP) before starting EMQX.
+EMQX includes built-in database workloads. As with other database systems, it is strongly recommended to disable Transparent HugePages (THP) before starting EMQX.
 
 ```bash
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
 ```
 
-If you experience the following symptoms after running EMQX for long period on a high-memory machine (>16 GB), we recommend disabling THP to rule out THP-related issues.
+If you experience the following symptoms after running EMQX for a long period on a high-memory machine (>16 GB), disable THP to rule out THP-related issues:
 
 - Unstable message latency.
 - Unexpected memory usage spikes.
-- EMQX long_schedule warning logs.
-- EMQX runq_overload alarm.
+- EMQX `long_schedule` warning logs.
+- EMQX `runq_overload` alarms.
 
-If you are running a cluster, we recommend disabling THP on a subset of nodes for comparison. Note that some workloads may actually benefit from having THP enabled.
+If you are running a cluster, disable THP on a subset of nodes first for comparison. Note that some workloads may benefit from having THP enabled.
 
 To make these changes persistent across reboots, consult your OS documentation for the appropriate method.
 
