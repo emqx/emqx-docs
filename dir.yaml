@@ -841,8 +841,8 @@
    title_cn: 版本发布历史
    collapsed: true
    children:
-       - title_en: Release Notes
-         title_cn: 版本发布历史
+       - title_en: EMQX Enterprise Release Notes
+         title_cn: EMQX 企业版版本发布历史
          collapsed: true
          path: changes/all-changes-ee
          children:
