@@ -52,7 +52,7 @@
 
 - [#17085](https://github.com/emqx/emqx/pull/17085) Fixed an issue with MQTT Sources in which, if its Connector used `clean_start = false` and reconnected to a broker with a session containing messages, those messages would not trigger rule actions.
 
-- [#17109](https://github.com/emqx/emqx/pull/17109) Fixed query execution for PostgreSQL connectors in disable prepared statements mode. Previously, concurrent queries could interleave and produce errors.
+- [#17109](https://github.com/emqx/emqx/pull/17109) Fixed query execution for PostgreSQL connectors when prepared statements are disabled. Previously, concurrent queries could interleave and produce errors.
 
 - [#17112](https://github.com/emqx/emqx/pull/17112) Fixed RocketMQ connector isolation: a misconfigured or unreachable RocketMQ connector no longer destabilizes other RocketMQ connectors on the same node. Previously, one connector with an unreachable broker could stall the shared client supervisor for up to 60 seconds, causing sibling connectors to flap with `resource_health_check_timed_out` and for Dashboard operations on them to hang.
 
