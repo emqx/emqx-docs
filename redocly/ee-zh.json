@@ -3938,7 +3938,7 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -3974,25 +3974,13 @@
               },
               {
                 "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -4010,13 +3998,19 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -4052,19 +4046,31 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "cockroachdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
+                  "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
                 ],
                 "type": "string"
               },
@@ -4077,12 +4083,6 @@
               {
                 "enum": [
                   "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -4112,19 +4112,7 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -4142,7 +4130,19 @@
               },
               {
                 "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               }
@@ -28826,7 +28826,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -28873,7 +28873,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -36886,7 +36886,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "7DBFF6F373CC79C9",
+            "example": "BC5B23883E328309",
             "type": "string"
           },
           "status": {
@@ -54486,25 +54486,25 @@
                       "rabbitmq",
                       "cassandra",
                       "rocketmq",
+                      "kafka_producer",
                       "mongodb",
-                      "sqlserver",
                       "alloydb",
                       "confluent_producer",
-                      "gcp_pubsub_producer",
                       "azure_event_hub_producer",
-                      "kafka_producer",
                       "cockroachdb",
-                      "syskeeper_forwarder",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
                       "influxdb",
+                      "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
                       "iotdb",
                       "redis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
                       "opents",
-                      "kinesis",
                       "s3tables",
                       "mqtt",
                       "redshift",
@@ -54534,25 +54534,25 @@
                       "rabbitmq",
                       "cassandra",
                       "rocketmq",
+                      "kafka_producer",
                       "mongodb",
-                      "sqlserver",
                       "alloydb",
                       "confluent_producer",
-                      "gcp_pubsub_producer",
                       "azure_event_hub_producer",
-                      "kafka_producer",
                       "cockroachdb",
-                      "syskeeper_forwarder",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
                       "influxdb",
+                      "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
                       "iotdb",
                       "redis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
                       "opents",
-                      "kinesis",
                       "s3tables",
                       "mqtt",
                       "redshift",
@@ -67287,26 +67287,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -67317,26 +67317,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -68310,9 +68310,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0,
                         "total": 0
                       },
@@ -68323,9 +68323,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68336,9 +68336,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68353,9 +68353,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -69131,26 +69131,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -69161,26 +69161,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -71432,9 +71432,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -71443,9 +71443,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71456,9 +71456,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71473,9 +71473,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -86128,7 +86128,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "7DBFF6F373CC79C9",
+            "example": "BC5B23883E328309",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86191,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "7DBFF6F373CC79C9",
+            "example": "BC5B23883E328309",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +86605,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "7DBFF6F373CC79C9",
+            "example": "BC5B23883E328309",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +86691,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "7DBFF6F373CC79C9",
+            "example": "BC5B23883E328309",
             "in": "path",
             "name": "site",
             "required": true,

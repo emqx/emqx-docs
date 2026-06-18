@@ -3926,6 +3926,12 @@
               },
               {
                 "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "pulsar"
                 ],
                 "type": "string"
@@ -3950,7 +3956,25 @@
               },
               {
                 "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -3974,7 +3998,7 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "s3"
                 ],
                 "type": "string"
               },
@@ -3986,25 +4010,13 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -4028,7 +4040,13 @@
               },
               {
                 "enum": [
-                  "s3"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4070,12 +4088,6 @@
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "azure_event_hub_producer"
                 ],
                 "type": "string"
@@ -4100,6 +4112,12 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "matrix"
                 ],
                 "type": "string"
@@ -4107,12 +4125,6 @@
               {
                 "enum": [
                   "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -4131,18 +4143,6 @@
               {
                 "enum": [
                   "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
                 ],
                 "type": "string"
               }
@@ -28826,7 +28826,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -28873,7 +28873,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 20,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -36886,7 +36886,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "8690935B03523500",
+            "example": "04D3F628E98FC50A",
             "type": "string"
           },
           "status": {
@@ -54483,25 +54483,25 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rabbitmq",
                       "cassandra",
+                      "rabbitmq",
                       "rocketmq",
                       "mongodb",
-                      "sqlserver",
                       "alloydb",
+                      "sqlserver",
                       "confluent_producer",
                       "azure_event_hub_producer",
                       "cockroachdb",
                       "kafka_producer",
-                      "gcp_pubsub_producer",
                       "influxdb",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
                       "iotdb",
                       "redis",
-                      "kinesis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
                       "opents",
@@ -54531,25 +54531,25 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rabbitmq",
                       "cassandra",
+                      "rabbitmq",
                       "rocketmq",
                       "mongodb",
-                      "sqlserver",
                       "alloydb",
+                      "sqlserver",
                       "confluent_producer",
                       "azure_event_hub_producer",
                       "cockroachdb",
                       "kafka_producer",
-                      "gcp_pubsub_producer",
                       "influxdb",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
                       "pulsar",
                       "greptimedb",
                       "iotdb",
                       "redis",
-                      "kinesis",
                       "datalayers",
+                      "kinesis",
                       "s3",
                       "doris",
                       "opents",
@@ -67287,26 +67287,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -67317,26 +67317,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -68310,9 +68310,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0,
                         "total": 0
                       },
@@ -68323,9 +68323,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68336,9 +68336,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68353,9 +68353,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -69131,26 +69131,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0.0,
-                        "last5m": 0.0,
-                        "max": 0.0
+                        "current": 0,
+                        "last5m": 0,
+                        "max": 0
                       },
                       "value": 1
                     },
@@ -69161,26 +69161,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0.0,
-                            "last5m": 0.0,
-                            "max": 0.0
+                            "current": 0,
+                            "last5m": 0,
+                            "max": 0
                           },
                           "value": 1
                         },
@@ -71432,9 +71432,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -71443,9 +71443,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71456,9 +71456,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0,
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71473,9 +71473,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0,
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0,
                         "success": 0
                       },
                       "status": "connected"
@@ -86128,7 +86128,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "8690935B03523500",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86191,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "8690935B03523500",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +86605,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "8690935B03523500",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +86691,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "8690935B03523500",
+            "example": "04D3F628E98FC50A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92195,6 +92195,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -92295,73 +92362,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
