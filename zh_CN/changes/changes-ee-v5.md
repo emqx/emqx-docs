@@ -2,7 +2,7 @@
 
 ## 5.8.11
 
-*发布日期：2026-06-18*
+*发布日期：2026-06-1*
 
 ### 增强
 
@@ -83,6 +83,8 @@
 
 - [#17597](https://github.com/emqx/emqx/pull/17597) 修复了 MongoDB 8.0+ 在需要认证时的连接失败问题。此前，驱动会在认证前查询 `buildInfo` 以选择认证机制；MongoDB 8.0 将该命令限制为仅认证调用方可用。现在驱动会跳过该探测，并直接使用所有受支持 MongoDB 版本都接受的 SCRAM-SHA-1。
 
+- [#17624](https://github.com/emqx/emqx/pull/17624) 修复了 GCP Pub/Sub Consumer Source 的一个问题：如果 Source 最初使用的 service account 缺少为配置的 topic 创建 subscription 的必要权限，即使之后为该 service account 授予了权限，Source 也可能无法变为 `connected` 状态。
+
 #### 网关
 
 - [#17426](https://github.com/emqx/emqx/pull/17426) 修复了 JT/T 808 网关的 schema 校验问题：当 `allow_anonymous` 设置为 `true` 时，允许 `registry` 和 `authentication` URL 为空或省略。此前，无论 `allow_anonymous` 如何设置，`not_empty` 校验器都会应用于这两个字段，导致提交空字符串时返回 400 错误，即使这些 URL 在匿名模式下并不会被使用。
@@ -100,6 +102,8 @@
 - [#17451](https://github.com/emqx/emqx/pull/17451) [#17553](https://github.com/emqx/emqx/pull/17553) 限制备份文件下载：只有 Dashboard 管理员可以下载包含 Dashboard 账号或 API key 记录的归档。API key 调用方仍可下载不包含这些敏感记录的归档。
 
 - [#17539](https://github.com/emqx/emqx/pull/17539) 将 `esaml` 依赖升级到 `v1.1.5`，以在解析 SAML 响应和元数据时禁用 XML 实体展开，防止构造的 SAML XML 在 SAML SSO 处理期间展开外部实体或自定义实体。
+
+- [#17645](https://github.com/emqx/emqx/pull/17645) 修复了 JWT authentication 使用的 JWKS 获取客户端中一个不符合 HTTP/1.1 协议的问题。此前，由于 Erlang/OTP `inets` HTTP 客户端中长期存在的默认行为，EMQX 会发送空的 `TE:` header；该问题已在上游 inets 9.4.2 / OTP 28.1 中修复。部分 identity provider（尤其是 PingFederate）会以 `503` 或 TCP reset 拒绝这类请求。现在，EMQX 在获取 JWKS 时会发送明确且有效的 `TE: trailers` header。
 
 #### 集群
 

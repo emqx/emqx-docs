@@ -2,7 +2,7 @@
 
 ## 5.8.11
 
-*Release Date: 2026-06-18*
+*Release Date: 2026-06-22*
 
 ### Enhancements
 
@@ -83,6 +83,8 @@
 
 - [#17597](https://github.com/emqx/emqx/pull/17597) Fixed connection failures to MongoDB 8.0+ when authentication is required. The driver previously queried `buildInfo` before authentication to pick the auth mechanism; MongoDB 8.0 restricted that command to authenticated callers. The driver now skips the probe and uses SCRAM-SHA-1 directly, which all supported MongoDB versions accept.
 
+- [#17624](https://github.com/emqx/emqx/pull/17624) Fixed an issue with GCP Pub/Sub Consumer Source where, if a Source was initially created with a service account that lacked the necessary permissions to create subscriptions for the configured topic, the Source would fail to become `connected` even after the permissions were later granted to the service account.
+
 #### Gateway
 
 - [#17426](https://github.com/emqx/emqx/pull/17426) Fixed the JT/T 808 gateway schema validation to allow empty or omitted `registry` and `authentication` URLs when `allow_anonymous` is set to `true`. Previously, the `not_empty` validator was applied to both fields regardless of the `allow_anonymous` setting, causing a 400 error when submitting empty strings for these URLs even though they are not used in anonymous mode.
@@ -100,6 +102,8 @@
 - [#17451](https://github.com/emqx/emqx/pull/17451) [#17553](https://github.com/emqx/emqx/pull/17553) Restricted backup file downloads so only Dashboard administrators can download archives containing Dashboard accounts or API key records. API key callers can still download archives that do not contain those sensitive records.
 
 - [#17539](https://github.com/emqx/emqx/pull/17539) Upgraded the `esaml` dependency to `v1.1.5` to disable XML entity expansion when parsing SAML responses and metadata, preventing crafted SAML XML from expanding external or custom entities during SAML SSO processing.
+
+- [#17645](https://github.com/emqx/emqx/pull/17645) Fixed an HTTP/1.1 protocol-conformance issue in the JWKS retrieval client used by JWT authentication. Earlier versions sent an empty `TE:` header due to a long-standing default in Erlang/OTP's `inets` HTTP client, which is fixed upstream in inets 9.4.2 / OTP 28.1. Some identity providers, notably PingFederate, reject such requests with `503` or a TCP reset. EMQX now sends an explicit valid `TE: trailers` header when fetching JWKS.
 
 #### Clustering
 
