@@ -4,9 +4,9 @@ prev:
   link: '/en/emqx/latest/guides/telemetry/telemetry'
 ---
 
-# Developer Guide
+# Developer Guides
 
-The Developer Guide is designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, API usage, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
+The Developer Guides are designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, API usage, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
 
 - [Client SDK](./connect-emqx/introduction.md) provides step-by-step instructions and code samples for connecting to EMQX using popular MQTT client libraries in C, Java, Go, Python, and JavaScript.
 

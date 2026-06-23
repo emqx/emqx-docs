@@ -1,6 +1,6 @@
 ---
 next:
-  text: 'Developer Guide'
+  text: 'Developer Guides'
   link: '/en/emqx/latest/develop/developer-guide'
 ---
 
