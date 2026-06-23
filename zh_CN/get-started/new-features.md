@@ -18,7 +18,7 @@
 
 ## 消息转换
 
-[消息转换](../develop/data-integration/message-transformation.md)允许用户定义消息转换管道，在投递前对消息进行解码、修改和重新编码。系统支持嵌套转换、多个编码器/解码器，并可通过 [Variform 表达式](../operate/configuration/configuration.md#variform-表达式)实现动态字段赋值。
+[消息转换](../develop/data-integration/message-transformation.md)允许用户定义消息转换管道，在投递前对消息进行解码、修改和重新编码。系统支持嵌套转换、多个编码器/解码器，并可通过 [Variform 表达式](../guides/configuration/configuration.md#variform-表达式)实现动态字段赋值。
 
 ## 数据集成功能扩展
 
@@ -32,10 +32,10 @@
 
 EMQX 在近期版本中新增了多种认证与授权机制，提供更灵活、细粒度的访问控制能力。新增支持的功能包括：
 
-- **[使用 LDAP 进行密码认证](../operate/access-control/authn/ldap.md)**：通过外部 LDAP 目录验证用户，支持企业级用户管理。
-- **[基于 REST API 的 MQTT 5.0 SCRAM 认证](../operate/access-control/authn/scram_restapi.md)**：支持符合 MQTT 5.0 标准的 SCRAM 认证方式，基于 RESTful API 实现。
-- **[Kerberos 认证](../operate/access-control/authn/kerberos.md)**：集成 Kerberos 单点登录系统，实现安全的集中式用户认证。
-- **[Client-Info 认证](../operate/access-control/authn/cinfo.md)**：基于客户端元信息（如 IP 地址、设备 ID 或用户名）实现灵活的访问控制。
+- **[使用 LDAP 进行密码认证](../guides/access-control/authn/ldap.md)**：通过外部 LDAP 目录验证用户，支持企业级用户管理。
+- **[基于 REST API 的 MQTT 5.0 SCRAM 认证](../guides/access-control/authn/scram_restapi.md)**：支持符合 MQTT 5.0 标准的 SCRAM 认证方式，基于 RESTful API 实现。
+- **[Kerberos 认证](../guides/access-control/authn/kerberos.md)**：集成 Kerberos 单点登录系统，实现安全的集中式用户认证。
+- **[Client-Info 认证](../guides/access-control/authn/cinfo.md)**：基于客户端元信息（如 IP 地址、设备 ID 或用户名）实现灵活的访问控制。
 
 ## OpenTelemetry 集成：指标、日志与追踪
 
@@ -48,7 +48,7 @@ EMQX 现已全面支持 OpenTelemetry，使用户可以更轻松地监控和排�
 - **追踪**：支持在 EMQX 节点间对 MQTT 消息流进行分布式追踪，有助于发现延迟、路由问题或特定节点的性能瓶颈。
 - **端到端追踪模式**：可完整追踪消息路径和客户端操作，支持按客户端 ID、主题或 QoS 等维度过滤，用户可自定义采样率与导出频率以平衡系统负载。
 
-借助 OpenTelemetry，您可以通过开放的标准工具全面掌握 EMQX 的性能与消息流动情况。详细信息请参阅 [OpenTelemetry 集成](../operate/observability/opentelemetry/opentelemetry.md)。
+借助 OpenTelemetry，您可以通过开放的标准工具全面掌握 EMQX 的性能与消息流动情况。详细信息请参阅 [OpenTelemetry 集成](../guides/observability/opentelemetry/opentelemetry.md)。
 
 ## 新增协议网关
 
@@ -76,7 +76,7 @@ EMQX 在 5.2 至 5.8 版本中新增了多种行业协议网关，支持交通�
 
 **监控工具集成**
 
-- 提供 Webhook 集成功能，用于发送告警事件，便于实现自动化监控与异常响应。参见 [Webhook 告警集成配置](../operate/observability/alarms.md#通过-webhook-集成发送告警事件通知)。
+- 提供 Webhook 集成功能，用于发送告警事件，便于实现自动化监控与异常响应。参见 [Webhook 告警集成配置](../guides/observability/alarms.md#通过-webhook-集成发送告警事件通知)。
 
 ## 更多功能
 

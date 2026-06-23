@@ -8,13 +8,13 @@ description: EMQX Enterprise already includes a trial license, which is valid fo
 
 EMQX Enterprise is the commercial version of EMQX, which requires a license certificate (License) when using it.
 
-As part of the installation package, EMQX Enterprise already includes a trial license, which is valid for a maximum of 25 concurrent sessions. However,  if you want to satisfy higher concurrent demands, you need a formal license. 
+As part of the installation package, EMQX Enterprise already includes a trial license, which is valid for a maximum of 25 concurrent sessions. However,  if you want to satisfy higher concurrent demands, you need a formal license.
 
 This page guides you through the process of obtaining a license and importing it into EMQX.
 
 ## Apply for a License
 
-To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a License. Our sales representative will contact you as soon as possible. 
+To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a License. Our sales representative will contact you as soon as possible.
 
 If you prefer to try EMQX Enterprise before purchasing, you can apply for a trial license on our [trial license application page](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
 
@@ -41,7 +41,7 @@ You can update your license file and configure the settings for the license conn
 
 ### Dashboard
 
-1. On EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information. 
+1. On EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information.
 
 2. Click the **Update License** button. Paste your License Key in the popup dialog box, and click **Save**. The license information on the page automatically refreshes following your submission.
 
@@ -61,15 +61,15 @@ You can update your license file and configure the settings for the license conn
 You can also use the following command to update your EMQX Enterprise License:
 
 ```bash
-./bin/emqx ctl 
+./bin/emqx ctl
 
-    license info             # Show license info 
+    license info             # Show license info
     license update <License> # Update license given as a string
 ```
 
 ### Configuration File
 
-You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../../operate/cli.md) to reload the license. 
+You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../../guides/cli.md) to reload the license.
 
 ```bash
 license {

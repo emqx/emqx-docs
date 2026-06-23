@@ -1928,7 +1928,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
   For more information about the Client Attributes feature, see [Client Attributes](../develop/client-attributes/client-attributes.md).
 
-- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. It is also possible to annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and [plugin documentation](../operate/extensions/plugins.md).
+- [#12910](https://github.com/emqx/emqx/pull/12910) Added plugin configuration management and schema validation. It is also possible to annotate the schema with metadata to facilitate UI rendering in the Dashboard. See more details in the [plugin template](https://github.com/emqx/emqx-plugin-template/pull/126) and [plugin documentation](../guides/extensions/plugins.md).
 
 #### Operations and Management
 
@@ -2404,7 +2404,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
 - [#12085](https://github.com/emqx/emqx/pull/12085) EMQX has been upgraded to leverage the capabilities of OTP version 26.1.2-2. NOTE: Docker images are still built with OTP 25.3.2.
 
-- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../operate/access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
+- [#12189](https://github.com/emqx/emqx/pull/12189) Enhanced the [ACL](../guides/access-control/authn/jwt.md#access-control-list-optional) claim format in EMQX JWT authentication for greater versatility. The updated format now supports an array structure, aligning more closely with the file-based ACL rules.
 
   For example:
 

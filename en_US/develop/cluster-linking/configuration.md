@@ -72,7 +72,7 @@ Cluster Linking uses standard MQTT as the underlying protocol, requiring you to 
 
 Depending on the cluster size and configuration, multiple MQTT client connections may be established to the remote cluster, and each client must have a unique ClientID. You can control how these ClientIDs are allocated by setting the `clientid` parameter, which serves as a *ClientID prefix* for these connections. 
 
-Other MQTT protocol aspects, such as authentication and authorization parameters (`username`, `password`), are also configurable. The remote cluster must be able to [authenticate](../../operate/access-control/authn/authn.md) these connections and [authorize](../../operate/access-control/authz/authz.md) them to publish messages to the specific MQTT topics designated for inter-cluster communication by the Cluster Linking setup. For example, with the configuration above, the remote cluster can have the following [ACL rule](../../operate/access-control/authz/file.md) to function correctly:
+Other MQTT protocol aspects, such as authentication and authorization parameters (`username`, `password`), are also configurable. The remote cluster must be able to [authenticate](../../guides/access-control/authn/authn.md) these connections and [authorize](../../guides/access-control/authz/authz.md) them to publish messages to the specific MQTT topics designated for inter-cluster communication by the Cluster Linking setup. For example, with the configuration above, the remote cluster can have the following [ACL rule](../../guides/access-control/authz/file.md) to function correctly:
 
 ```erlang
 %% Allow Cluster Linking MQTT clients to operate with "$LINK/#" topics
@@ -84,7 +84,7 @@ This rule allows MQTT clients with ClientIDs that match the regex pattern `^clin
 
 The single rule above is the minimum that lets a link function. For production, a complete authorization configuration also needs to forbid non-cluster-link clients from touching `$LINK/`, and finish with a default-deny rule. See [Secure Cluster Linking](./security.md) for a full example and the matching `authorization.no_match = deny` setting.
 
-Cluster Linking supports [TLS connections](../../operate/network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
+Cluster Linking supports [TLS connections](../../guides/network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
 
 ## Manage Cluster Linking via REST API
 

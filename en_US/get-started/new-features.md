@@ -22,7 +22,7 @@ To get started with the Cluster Linking, see [Quick Start with Cluster Linking](
 
 ## Message Transformation
 
-[Message Transformation](../develop/data-integration/message-transformation.md) allows users to define transformation pipelines that decode, modify, and re-encode messages before delivery or further processing. The system supports nested transformations, multiple encoders/decoders, and dynamic value assignments using [Variform expressions](../operate/configuration/configuration.md#variform-expressions).
+[Message Transformation](../develop/data-integration/message-transformation.md) allows users to define transformation pipelines that decode, modify, and re-encode messages before delivery or further processing. The system supports nested transformations, multiple encoders/decoders, and dynamic value assignments using [Variform expressions](../guides/configuration/configuration.md#variform-expressions).
 
 ## Expanded Support in Data Integration
 
@@ -36,10 +36,10 @@ Recent versions of EMQX have significantly enhanced the data integration capabil
 
 In recent versions, EMQX supports more authentication and authorization methods, providing more flexible and fine-grained access control capabilities. Newly supported features include:
 
-- **[LDAP Integration](../operate/access-control/authn/ldap.md)**: Authenticate users against an external LDAP directory, supporting enterprise-grade user management.
-- **[REST API-Based MQTT 5.0 SCRAM Authentication](../operate/access-control/authn/scram_restapi.md)**: Leverage a RESTful API for SCRAM-based authentication in compliance with MQTT 5.0 standards.
-- **[Kerberos Authentication](../operate/access-control/authn/kerberos.md)**: Integrate with Kerberos-based SSO systems for secure, centralized user authentication.
-- **[Client-Info Authentication](../operate/access-control/authn/cinfo.md)**: Allow flexible access control based on client metadata like IP, device ID, or username.
+- **[LDAP Integration](../guides/access-control/authn/ldap.md)**: Authenticate users against an external LDAP directory, supporting enterprise-grade user management.
+- **[REST API-Based MQTT 5.0 SCRAM Authentication](../guides/access-control/authn/scram_restapi.md)**: Leverage a RESTful API for SCRAM-based authentication in compliance with MQTT 5.0 standards.
+- **[Kerberos Authentication](../guides/access-control/authn/kerberos.md)**: Integrate with Kerberos-based SSO systems for secure, centralized user authentication.
+- **[Client-Info Authentication](../guides/access-control/authn/cinfo.md)**: Allow flexible access control based on client metadata like IP, device ID, or username.
 
 ## OpenTelemetry Integration for Metrics, Logs, and Traces
 
@@ -52,7 +52,7 @@ EMQX now supports OpenTelemetry, making it easier to monitor and troubleshoot yo
 - **Tracing**: Enables distributed tracing of MQTT message flows across EMQX nodes. Useful for finding delays, routing issues, or node-specific performance bottlenecks.
 - **End-to-End Tracing Mode**: Tracks full message paths and client actions. Filter by client ID, topic, or QoS. Control sampling and export rate to manage system load.
 
-OpenTelemetry helps you get full visibility into EMQX performance and message flows using open, standard tools. Refer to [Integrate with OpenTelemetry](../operate/observability/opentelemetry/opentelemetry.md) for details.
+OpenTelemetry helps you get full visibility into EMQX performance and message flows using open, standard tools. Refer to [Integrate with OpenTelemetry](../guides/observability/opentelemetry/opentelemetry.md) for details.
 
 ## New Protocol Gateways
 
@@ -80,7 +80,7 @@ The EMQX Dashboard has delivered a more intuitive and powerful interface for man
 
 **Monitoring Tools**
 
-Introduced a simplified webhook setup for alarm events, making it easier to automate monitoring and stay proactive. For more information, see [Integrate Webhook to Send Alarm Events](../operate/observability/alarms.md#integrate-webhook-to-send-alarm-events).
+Introduced a simplified webhook setup for alarm events, making it easier to automate monitoring and stay proactive. For more information, see [Integrate Webhook to Send Alarm Events](../guides/observability/alarms.md#integrate-webhook-to-send-alarm-events).
 
 ## More Features
 

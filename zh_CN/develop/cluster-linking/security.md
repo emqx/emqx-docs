@@ -22,12 +22,12 @@
 
 集群连接场景下常用以下两种认证方式：
 
-- **TLS 双向认证（mTLS）：** 对端集群提供由您控制的 CA 签发的客户端证书，监听器以 `verify = verify_peer` 与 `fail_if_no_peer_cert = true` 验证证书。这是安全性最强的选项，因为它在传输层就固定了对端身份，同时兼作认证检查，无需额外配置密码认证器。详见 [X.509 证书认证](../../operate/access-control/authn/x509.md)。
+- **TLS 双向认证（mTLS）：** 对端集群提供由您控制的 CA 签发的客户端证书，监听器以 `verify = verify_peer` 与 `fail_if_no_peer_cert = true` 验证证书。这是安全性最强的选项，因为它在传输层就固定了对端身份，同时兼作认证检查，无需额外配置密码认证器。详见 [X.509 证书认证](../../guides/access-control/authn/x509.md)。
 - **用户名和密码：** 在连接配置中设置 `username` 和 `password`，并在对端监听器上配置匹配的认证器。请妥善保管凭据并定期轮换。
 
 也可以两者结合：传输层使用 mTLS，再叠加密码认证。
 
-对于跨越不受信任网络（公共互联网、跨云互联、合作伙伴网络等）的连接，TLS 是必须的。mTLS 在传输层进一步固定对端集群的身份，与上面的凭据校验形成互补。完整的认证机制列表请参阅[认证](../../operate/access-control/authn/authn.md)总览。连接侧的 TLS 配置详见[配置 MQTT 连接](./configuration.md#配置-mqtt-连接)。
+对于跨越不受信任网络（公共互联网、跨云互联、合作伙伴网络等）的连接，TLS 是必须的。mTLS 在传输层进一步固定对端集群的身份，与上面的凭据校验形成互补。完整的认证机制列表请参阅[认证](../../guides/access-control/authn/authn.md)总览。连接侧的 TLS 配置详见[配置 MQTT 连接](./configuration.md#配置-mqtt-连接)。
 
 ## 启用授权
 
@@ -43,7 +43,7 @@
 
 ### ACL 配置
 
-下文示例使用 [ACL 文件](../../operate/access-control/authz/file.md)源，相同规则同样适用于其他授权器。
+下文示例使用 [ACL 文件](../../guides/access-control/authz/file.md)源，相同规则同样适用于其他授权器。
 
 为每个对端集群授予 `$LINK/#` 的发布与订阅权限。通配符覆盖所有当前及未来的控制主题，升级 EMQX 版本时无需修改规则。禁止其他所有客户端访问该命名空间，并以兜底拒绝规则收尾：
 
@@ -81,11 +81,11 @@ authorization {
 
 注意，主题中的 `<Cluster>` 占位符被替换为对端集群的实际 `cluster.name`（这里是 `A` 与 `C`），而 ClientID 正则匹配的则是对端连接配置中 `clientid` 字段的前缀，两者相互独立，新增对端集群时需要您手工保持一致。
 
-可用的授权数据源与配置选项详见[授权](../../operate/access-control/authz/authz.md)总览。
+可用的授权数据源与配置选项详见[授权](../../guides/access-control/authz/authz.md)总览。
 
 ## 参见
 
-- [认证](../../operate/access-control/authn/authn.md)
-- [授权](../../operate/access-control/authz/authz.md)
-- [使用 ACL 文件](../../operate/access-control/authz/file.md)
-- [安全检查清单](../../operate/access-control/security-checklist.md)
+- [认证](../../guides/access-control/authn/authn.md)
+- [授权](../../guides/access-control/authz/authz.md)
+- [使用 ACL 文件](../../guides/access-control/authz/file.md)
+- [安全检查清单](../../guides/access-control/security-checklist.md)

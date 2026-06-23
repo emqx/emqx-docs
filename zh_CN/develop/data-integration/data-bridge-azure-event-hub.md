@@ -74,7 +74,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
    - **引导主机**：输入命名空间的主机名。默认端口为 `9093`。其他字段按实际情况设置。
    - **连接字符串**：输入命名空间的连接字符串。可以在命名空间共享访问策略的“连接字符串 - 主键”中找到。有关详细信息，请参阅 [获取事件中心连接字符串](https://learn.microsoft.com/zh-cn/azure/event-hubs/event-hubs-get-connection-string)。
-   - **启用 TLS**：连接到 Azure Event Hub 时默认启用 TLS。有关 TLS 连接选项的详细信息，请参阅 [外部资源访问的 TLS](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
+   - **启用 TLS**：连接到 Azure Event Hub 时默认启用 TLS。有关 TLS 连接选项的详细信息，请参阅 [外部资源访问的 TLS](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
 
 6. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 Azure Event Hubs 服务器。
 

@@ -66,7 +66,7 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 
 ## 认证
 
-由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../../operate/access-control/authn/http.md)
+由于 MQTT-SN 协议的连接报文只定义了 Client ID 的概念，没有 Username 和 Password 。所以 MQTT-SN 网关目前仅支持 [HTTP Server 认证](../../guides/access-control/authn/http.md)
 
 其客户端信息生成规则如下：
 - Client ID：为 CONNECT 报文中的 Client ID 字段。
@@ -142,7 +142,7 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 - MQTT-SN 协议的 SUBSCRIBE 报文，作为订阅操作，其主题和 QoS 都由该报文指定。
 - MQTT-SN 协议的 UNSUBSCRIBE 报文，作为取消订阅操作，其主题由该报文指定。
 
-网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../operate/access-control/authz/authz.md) 中管理。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中管理。
 
 ## 用户层接口
 

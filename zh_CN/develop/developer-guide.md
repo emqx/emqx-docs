@@ -1,7 +1,7 @@
 ---
 prev:
-  text: 'LLM 资源'
-  link: '../get-started/llms-txt'
+  text: '遥测'
+  link: '/zh/emqx/latest/guides/telemetry/telemetry'
 ---
 
 # 开发者指南

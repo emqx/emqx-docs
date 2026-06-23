@@ -142,7 +142,7 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
 
 ## Dashboard WebSocket
 
-[EMQX Dashboard](../../operate/dashboard/introduction.md) provides a WebSocket client as a quick and highly effective MQTT test tool. With this MQTT over WebSocket, you can test connecting to EMQX, subscribing to topics, and publishing messages.
+[EMQX Dashboard](../../guides/dashboard/introduction.md) provides a WebSocket client as a quick and highly effective MQTT test tool. With this MQTT over WebSocket, you can test connecting to EMQX, subscribing to topics, and publishing messages.
 
 1. In EMQX Dashboard, click **Diagnose** -> **WebSocket Client** on the left navigation menu.
 

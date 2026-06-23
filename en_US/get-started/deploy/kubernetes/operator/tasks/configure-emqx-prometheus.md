@@ -12,7 +12,7 @@ Grafana' deployment documentation can refer to [Grafana](https://grafana.com/doc
 
 Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](../operator.md):
 
-EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, please refer to the document: [Integrate with Prometheus](../../../../../operate/observability/prometheus.md)
+EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, please refer to the document: [Integrate with Prometheus](../../../../../guides/observability/prometheus.md)
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -45,7 +45,7 @@ Check the status of the EMQX cluster and make sure that `STATUS` is `Running`, w
   ```
 
 ## Create API Secret
-emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an [API Key](../../../../../operate/dashboard/system.md#api-keys).
+emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an [API Key](../../../../../guides/dashboard/system.md#api-keys).
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 

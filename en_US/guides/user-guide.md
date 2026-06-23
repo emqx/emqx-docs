@@ -1,12 +1,14 @@
 ---
 prev:
-  text: 'MQTT Reference'
-  link: '../develop/mqtt-reference'
+  text: 'LLM Resources'
+  link: '/en/emqx/latest/get-started/llms-txt'
 ---
 
-# Administration Guide
+# User Guides
 
-This Administration Guide is designed to assist administrators and operators in effectively managing and maintaining EMQX. In this chapter, you can explore various administrative tasks and learn comprehensive instructions and best practices to ensure the smooth and efficient operation of your EMQX deployments. The main contents in this chapter include:
+Instructions on performing various EMQX operations.
+
+These guides help administrators and operators manage, configure, secure, monitor, and maintain EMQX deployments. The main contents in this chapter include:
 
 - [Cluster Management](./cluster/create-cluster.md) covers how to create and manage an EMQX cluster, including cluster security, load balancer configuration, node evacuation, cluster load rebalancing, and performance tuning.
 - [Configure EMQX](./configuration/configuration.md) provides basic information about the configuration file, configuration options, and references for detailed configurations.
@@ -18,4 +20,3 @@ This Administration Guide is designed to assist administrators and operators in 
 - [Logs and Observability](./observability/overview.md) introduces metric observation and monitoring features in EMQX, facilitating system monitoring and debugging.
 - [Plugin and Extension](./extensions/introduction.md) helps you extend the functionality of EMQX by developing plugins.
 - [Telemetry](./telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product. The telemetry function is only for the EMQX Open Source edition.
-

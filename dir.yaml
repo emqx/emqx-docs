@@ -14,36 +14,36 @@
 #   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
 # - A node with 'title_en' 'title_cn' and 'path'
 
-/operate/:
-- title_en: Administration Guide
-  title_cn: 管理员指南
-  path: operate/admin-guide
+/guides/:
+- title_en: User Guides
+  title_cn: 使用指南
+  path: guides/user-guide
 - title_en: Cluster Management
   title_cn: 集群管理
-  path: operate/cluster/create-cluster
+  path: guides/cluster/create-cluster
   collapsed: true
   children:
-    - operate/cluster/security
+    - guides/cluster/security
     - title_en: Configure Load Balancer
       title_cn: 集群负载均衡
-      path: operate/cluster/lb
+      path: guides/cluster/lb
       children:
-        - operate/cluster/lb-nginx
-        - operate/cluster/lb-haproxy
-        - operate/cluster/proxy-protocol
+        - guides/cluster/lb-nginx
+        - guides/cluster/lb-haproxy
+        - guides/cluster/proxy-protocol
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
-      path: operate/cluster/rebalancing
+      path: guides/cluster/rebalancing
     - title_en: Performance and Tuning
       title_cn: 性能与调优
-      path: operate/performance/overview
+      path: guides/performance/overview
       children:
-        - operate/performance/tune
-        - operate/performance/benchmark-emqtt-bench
-        - operate/performance/performance-reference
+        - guides/performance/tune
+        - guides/performance/benchmark-emqtt-bench
+        - guides/performance/performance-reference
 - title_en: Configure EMQX
   title_cn: 配置 EMQX
-  path: operate/configuration/configuration
+  path: guides/configuration/configuration
   collapsed: true
   children:
     - title_en: Basic Configurations
@@ -51,31 +51,31 @@
       children:
          - title_en: Cluster
            title_cn: 集群
-           path: operate/configuration/cluster
+           path: guides/configuration/cluster
          - title_en: Listener
            title_cn: 监听器
-           path: operate/configuration/listener
+           path: guides/configuration/listener
          - title_en: MQTT
            title_cn: MQTT
-           path: operate/configuration/mqtt
+           path: guides/configuration/mqtt
          - title_en: Flapping Detection
            title_cn: 连接抖动
-           path: operate/configuration/flapping
+           path: guides/configuration/flapping
          - title_en: Limiter
            title_cn: 速率限制器
-           path: operate/configuration/limiter
+           path: guides/configuration/limiter
          - title_en: Logs
            title_cn: 日志
-           path: operate/configuration/logs
+           path: guides/configuration/logs
          - title_en: Prometheus
            title_cn: Prometheus
-           path: operate/configuration/prometheus
+           path: guides/configuration/prometheus
          - title_en: Dashboard
            title_cn: Dashboard
-           path: operate/configuration/dashboard
+           path: guides/configuration/dashboard
          - title_en: License
            title_cn: License
-           path: operate/configuration/license
+           path: guides/configuration/license
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
       lang: cn
@@ -115,166 +115,166 @@
       path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
 - title_en: Command Line Interface
   title_cn: 命令行接口
-  path: operate/cli
+  path: guides/cli
 - title_en: Security Guide
   title_cn: 安全指南
-  path: operate/security-guide
+  path: guides/security-guide
   collapsed: true
   children:
     - title_en: Security Checklist
       title_cn: 安全检查清单
-      path: operate/access-control/security-checklist
+      path: guides/access-control/security-checklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
-      path: operate/network/overview
+      path: guides/network/overview
       collapsed: true
       children:
-        - operate/network/emqx-mqtt-tls
-        - operate/network/mqtt-client-tls
-        - operate/network/tls-certificate
-        - operate/network/crl
-        - operate/network/ocsp
+        - guides/network/emqx-mqtt-tls
+        - guides/network/mqtt-client-tls
+        - guides/network/tls-certificate
+        - guides/network/crl
+        - guides/network/ocsp
         - title_en: GMSSL
           title_cn: 国密 SSL
           lang: cn
-          path: operate/network/gmssl
+          path: guides/network/gmssl
       # - network/ipv6
     - title_en: Authentication
       title_cn: 认证
-      path: operate/access-control/authn/authn
+      path: guides/access-control/authn/authn
       collapsed: true
       children:
-        - operate/access-control/authn/x509
-        - operate/access-control/authn/jwt
+        - guides/access-control/authn/x509
+        - guides/access-control/authn/jwt
         - title_en: Password-Based Authentication
           title_cn: 密码认证
-          path: operate/access-control/authn/pwoverview
+          path: guides/access-control/authn/pwoverview
           collapsed: true
           children:
-            - operate/access-control/authn/mnesia
-            - operate/access-control/authn/mysql
-            - operate/access-control/authn/mongodb
-            - operate/access-control/authn/postgresql
-            - operate/access-control/authn/redis
-            - operate/access-control/authn/ldap
-            - operate/access-control/authn/http
-        - operate/access-control/authn/scram
-        - operate/access-control/authn/scram_restapi
-        - operate/access-control/authn/kerberos
-        - operate/access-control/authn/cinfo
-        - operate/network/psk-authentication
-        - operate/access-control/authn/user_management
-        - operate/access-control/authn/acl
+            - guides/access-control/authn/mnesia
+            - guides/access-control/authn/mysql
+            - guides/access-control/authn/mongodb
+            - guides/access-control/authn/postgresql
+            - guides/access-control/authn/redis
+            - guides/access-control/authn/ldap
+            - guides/access-control/authn/http
+        - guides/access-control/authn/scram
+        - guides/access-control/authn/scram_restapi
+        - guides/access-control/authn/kerberos
+        - guides/access-control/authn/cinfo
+        - guides/network/psk-authentication
+        - guides/access-control/authn/user_management
+        - guides/access-control/authn/acl
     - title_en: Authorization
       title_cn: 授权
-      path: operate/access-control/authz/authz
+      path: guides/access-control/authz/authz
       collapsed: true
       children:
-        - operate/access-control/authz/file
-        - operate/access-control/authz/mnesia
-        - operate/access-control/authz/mysql
-        - operate/access-control/authz/mongodb
-        - operate/access-control/authz/postgresql
-        - operate/access-control/authz/redis
-        - operate/access-control/authz/ldap
-        - operate/access-control/authz/http
-    - operate/access-control/blacklist
-    - operate/access-control/flapping-detect
+        - guides/access-control/authz/file
+        - guides/access-control/authz/mnesia
+        - guides/access-control/authz/mysql
+        - guides/access-control/authz/mongodb
+        - guides/access-control/authz/postgresql
+        - guides/access-control/authz/redis
+        - guides/access-control/authz/ldap
+        - guides/access-control/authz/http
+    - guides/access-control/blacklist
+    - guides/access-control/flapping-detect
     - title_en: Single Sign-On (SSO)
       title_cn: 单点登录 (SSO)
-      path: operate/sso
+      path: guides/sso
       collapsed: true
       children:
-        - operate/sso-ldap
-        - operate/sso-saml
-        - operate/sso-oidc
-    - operate/api-keys
+        - guides/sso-ldap
+        - guides/sso-saml
+        - guides/sso-oidc
+    - guides/api-keys
 
-    - operate/audit-log
-    - operate/rate-limit
-    - operate/backup-restore
+    - guides/audit-log
+    - guides/rate-limit
+    - guides/backup-restore
 - title_en: MQTT Durable Sessions
   title_cn: MQTT 会话持久化
   collapsed: true
   children:
-    - operate/durability/management
-    - operate/durability/managing-replication
+    - guides/durability/management
+    - guides/durability/managing-replication
 - title_en: EMQX Dashboard
   title_cn: EMQX Dashboard
-  path: operate/dashboard/introduction
+  path: guides/dashboard/introduction
   collapsed: true
   children:
-    - operate/dashboard/dashboard
+    - guides/dashboard/dashboard
     - title_en: Monitoring
       title_cn: 监控
-      path: operate/dashboard/monitoring
+      path: guides/dashboard/monitoring
       children:
-        - operate/dashboard/connections
-        - operate/dashboard/subscription-management
-        - operate/dashboard/retained
-        - operate/dashboard/delay-pub
+        - guides/dashboard/connections
+        - guides/dashboard/subscription-management
+        - guides/dashboard/retained
+        - guides/dashboard/delay-pub
     - title_en: Access Control
       title_cn: 访问控制
-      path: operate/dashboard/acloverview
+      path: guides/dashboard/acloverview
       children:
-        - operate/dashboard/authn
-        - operate/dashboard/authz
+        - guides/dashboard/authn
+        - guides/dashboard/authz
     - title_en: Integration
       title_cn: 集成
-      path: operate/dashboard/data-integration
+      path: guides/dashboard/data-integration
       children:
-        - operate/dashboard/rules
+        - guides/dashboard/rules
     - title_en: Management
       title_cn: 管理
-      path: operate/dashboard/configuration
+      path: guides/dashboard/configuration
       children:
-        - operate/dashboard/cluster_settings
-        - operate/dashboard/advanced_mqtt
-        - operate/dashboard/extensions
-    - operate/dashboard/diagnose
-    - operate/dashboard/system
+        - guides/dashboard/cluster_settings
+        - guides/dashboard/advanced_mqtt
+        - guides/dashboard/extensions
+    - guides/dashboard/diagnose
+    - guides/dashboard/system
 - title_en: Logs and Observability
   title_cn: 日志及可观测性
-  path: operate/observability/overview
+  path: guides/observability/overview
   collapsed: true
   children:
-    - operate/observability/metrics-and-stats
-    - operate/observability/alarms
-    - operate/observability/log
-    - operate/observability/topic-metrics
-    - operate/observability/slow-subscribers-statistics
-    - operate/observability/tracer
-    - operate/observability/mqtt-system-topics
-    - operate/observability/prometheus
-    - operate/observability/datadog
+    - guides/observability/metrics-and-stats
+    - guides/observability/alarms
+    - guides/observability/log
+    - guides/observability/topic-metrics
+    - guides/observability/slow-subscribers-statistics
+    - guides/observability/tracer
+    - guides/observability/mqtt-system-topics
+    - guides/observability/prometheus
+    - guides/observability/datadog
     - title_en: Integrate with OpenTelemetry
       title_cn: 集成 OpenTelemetry
-      path: operate/observability/opentelemetry/opentelemetry
+      path: guides/observability/opentelemetry/opentelemetry
       collapsed: true
       children:
         - title_en: Metrics
           title_cn: 指标
-          path: operate/observability/opentelemetry/metrics
+          path: guides/observability/opentelemetry/metrics
         - title_en: Logs
           title_cn: 日志
-          path: operate/observability/opentelemetry/logs
+          path: guides/observability/opentelemetry/logs
         - title_en: Traces
           title_cn: 追踪
-          path: operate/observability/opentelemetry/traces
+          path: guides/observability/opentelemetry/traces
         - title_en: End-to-end Traces
           title_cn: 端到端追踪
-          path: operate/observability/opentelemetry/e2e-traces
+          path: guides/observability/opentelemetry/e2e-traces
 - title_en: Plugin and Extension
   title_cn: 插件与扩展
-  path: operate/extensions/introduction
+  path: guides/extensions/introduction
   collapsed: true
   children:
-    - operate/extensions/hooks
-    - operate/extensions/plugins
-    - operate/extensions/exhook
+    - guides/extensions/hooks
+    - guides/extensions/plugins
+    - guides/extensions/exhook
 - title_en: Telemetry
   title_cn: 遥测
-  path: operate/telemetry/telemetry
+  path: guides/telemetry/telemetry
 
 /develop/:
 - title_en: Developer Guide
@@ -536,8 +536,8 @@
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
 /release-notes/:
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
+- title_en: EMQX Enterprise
+  title_cn: EMQX 企业版
   collapsed: true
   path: release-notes/all-changes-ee
   children:
@@ -596,8 +596,8 @@
             - title_en: End of Life Dates
               title_cn: 产品生命周期结束日期
               path: release-notes/eol-ee
-- title_en: EMQX Open Source Release Notes
-  title_cn: EMQX 开源版版本发布历史
+- title_en: EMQX Open Source
+  title_cn: EMQX 开源版
   collapsed: true
   path: release-notes/all-changes-ce
   children:

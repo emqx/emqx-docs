@@ -1,7 +1,7 @@
 ---
 next:
-  text: '管理员指南'
-  link: '../operate/admin-guide'
+  text: '版本发布说明'
+  link: '/zh/emqx/latest/release-notes/all-changes-ee'
 ---
 
 # MQTT 参考指南

@@ -14,7 +14,7 @@ EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布
 - [**多协议**](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
 - [**全面支持 MQTT 5.0 标准**](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)：100% 符合 MQTT 5.0 和 3.x 标准，具有更好的可扩展性、安全性和可靠性。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。[毫秒级](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)消息交付时延。
-- [**易运维**](./operate/dashboard/introduction.md)：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
+- [**易运维**](./guides/dashboard/introduction.md)：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
 - [**云原生**](https://www.emqx.com/zh/emqx-kubernetes-operator)：通过 Kubernetes Operator 和 Terraform，可以轻松地在企业内部和公共云中进行部署。
 
 ## 核心组件
@@ -43,11 +43,11 @@ EMQX 企业版提供原生的[集群](./develop/cluster/introduction.md)能力�
 
 ### 访问控制和数据安全
 
-通过 [TLS/SSL 加密](./operate/network/overview.md)、[认证](./operate/access-control/authn/authn.md)和[授权](./operate/access-control/authz/authz.md)机制，EMQX 企业版能够保障设备数据传输的机密性和完整性。
+通过 [TLS/SSL 加密](./guides/network/overview.md)、[认证](./guides/access-control/authn/authn.md)和[授权](./guides/access-control/authz/authz.md)机制，EMQX 企业版能够保障设备数据传输的机密性和完整性。
 
 EMQX 企业版内置了多重客户端认证机制，包括用户名密码、JWT、增强认证以及 PSK、X.509 证书，提供了基于 ACL 的发布订阅授权机制。认证与授权数据支持通过 LDAP、HTTP 服务、SQL 和 NoSQL 数据库等外部企业安全系统进行集成管理，实现灵活多样的客户端安全保护方案。
 
-同时，EMQX 企业版还提供了[审计日志](./operate/audit-log.md)、角色与权限管理以及[单点登录](./operate/sso.md)，以满足 SOC 2 合规性要求和 GDPR 数据隐私保护。全面的安全功能，帮助企业构建符合行业安全标准的可信赖的物联网应用。
+同时，EMQX 企业版还提供了[审计日志](./guides/audit-log.md)、角色与权限管理以及[单点登录](./guides/sso.md)，以满足 SOC 2 合规性要求和 GDPR 数据隐私保护。全面的安全功能，帮助企业构建符合行业安全标准的可信赖的物联网应用。
 
 ### 规则引擎与数据集成
 
@@ -63,7 +63,7 @@ EMQX 企业版包含一个强大的[规则引擎](./develop/data-integration/rul
 
 ### 管理与监控 Dashboard
 
-EMQX 企业版提供图形化的管理系统 [Dashboard](./operate/dashboard/introduction.md)，能够实时监控关键指标与运行状态，轻松管理客户端连接与功能配置。它还允许对客户端和集群异常行为进行诊断与调试，在线进行 MQTT 设备端到端的问题分析，大大缩短故障排查的时间。除此之外，还支持将可观测性指标集成到外部 Prometheus，Datadog 以及支持 OpenTelemetry 的服务中，实现更完善的运维监控能力。
+EMQX 企业版提供图形化的管理系统 [Dashboard](./guides/dashboard/introduction.md)，能够实时监控关键指标与运行状态，轻松管理客户端连接与功能配置。它还允许对客户端和集群异常行为进行诊断与调试，在线进行 MQTT 设备端到端的问题分析，大大缩短故障排查的时间。除此之外，还支持将可观测性指标集成到外部 Prometheus，Datadog 以及支持 OpenTelemetry 的服务中，实现更完善的运维监控能力。
 
 ## 部署模式和版本对比
 

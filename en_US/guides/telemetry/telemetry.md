@@ -1,7 +1,7 @@
 ---
 next:
-  text: 'Release Notes'
-  link: '/en/emqx/latest/release-notes/all-changes-ee'
+  text: 'Developer Guide'
+  link: '/en/emqx/latest/develop/developer-guide'
 ---
 
 # Telemetry

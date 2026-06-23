@@ -117,7 +117,7 @@ The following steps assume that you run both EMQX and RabbitMQ on the local mach
    - **Username**: Enter `guest`.
    - **Password**: Enter `guest`.
    - **Virtual Host**: Enter RabbitMQ virtual host;  `/` by default.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the RabbitMQ server.
 7. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or **Create Rule**. By clicking **Create Rule**, you have the following options:
    - **Action Outputs**: creating a rule with RabbitMQ Sink to specify the data to be forwarded to RabbitMQ. You can also follow the steps in [Create a Rule with RabbitMQ Sink](#create-a-rule-with-rabbitmq-sink).

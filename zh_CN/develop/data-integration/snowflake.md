@@ -216,7 +216,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **数据源名称**：输入 `snowflake`，与您在 ODBC 驱动设置中配置的 `.odbc.ini` 文件中的 DSN 名称相对应。
    - **用户名**：输入 `snowpipeuser`，这是之前设置过程中定义的用户名。
    - **密码**：输入 `Snowpipeuser99`，这是之前设置过程中定义的密码。
-6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../../operate/network/overview.md#tls-for-external-resource-access)。
+6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../../guides/network/overview.md#tls-for-external-resource-access)。
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
 8. 在点击**创建**之前，可以点击 **测试连接** 来测试连接器是否能够连接到 Snowflake。
 9. 点击页面底部的**创建**按钮，完成连接器创建。

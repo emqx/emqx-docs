@@ -1,12 +1,14 @@
 ---
 prev:
-  text: 'MQTT 参考指南'
-  link: '../develop/mqtt-reference'
+  text: 'LLM 资源'
+  link: '/zh/emqx/latest/get-started/llms-txt'
 ---
 
-# 管理员指南
+# 使用指南
 
-本章节旨在帮助管理员和运维人员有效地管理和维护 EMQX。在本章节中，我们将探讨各种管理任务，并提供全面的指导和最佳实践，以确保您的 EMQX 集群平稳、高效地运行。本章节主要涵盖以下内容：
+介绍如何执行各类 EMQX 操作。
+
+本章节帮助管理员和运维人员管理、配置、保护、监控和维护 EMQX 部署。本章节主要涵盖以下内容：
 
 - [集群管理](./cluster/create-cluster.md)介绍了如何创建和管理 EMQX 集群，包括集群安全、负载均衡配置、节点疏散与集群负载重平衡以及性能调优。
 - [配置 EMQX](./configuration/configuration.md) 为您提供了配置文件基本信息、配置项以及详细的配置参考信息。
@@ -18,4 +20,3 @@ prev:
 - [日志及可观测性](./observability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。
 - [插件与扩展](./extensions/introduction.md)帮助您通过开发插件来扩展 EMQX 的功能。
 - [遥测](./telemetry/telemetry.md)介绍了通过启用遥测来共享您的使用情况以帮助产品改进。遥测功能仅针对 EMQX 开源版。
-

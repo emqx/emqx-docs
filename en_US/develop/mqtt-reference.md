@@ -1,7 +1,7 @@
 ---
 next:
-  text: 'Administration Guide'
-  link: '../operate/admin-guide'
+  text: 'Release Notes'
+  link: '/en/emqx/latest/release-notes/all-changes-ee'
 ---
 
 # MQTT Reference

@@ -62,7 +62,7 @@ You can use EMQX rules to extract data from event topics to get event notificati
 
 ::: tip
 
-By default, clients are unable to subscribe directly to MQTT event messages. This section describes using rules to subscribe to these messages. You can also obtain the data from MQTT event messages by subscribing to [system topics](../../operate/observability/mqtt-system-topics.md).
+By default, clients are unable to subscribe directly to MQTT event messages. This section describes using rules to subscribe to these messages. You can also obtain the data from MQTT event messages by subscribing to [system topics](../../guides/observability/mqtt-system-topics.md).
 
 :::
 

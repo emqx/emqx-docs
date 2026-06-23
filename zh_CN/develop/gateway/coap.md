@@ -97,14 +97,14 @@ gateway.coap {
 
 客户端 ID、用户名、密码由客户端的[创建连接](#创建连接)请求提供，CoAP 网关支持以下认证器类型：
 
-- [内置数据库认证](../../operate/access-control/authn/mnesia.md)
-- [MySQL 认证](../../operate/access-control/authn/mysql.md)
-- [MongoDB 认证](../../operate/access-control/authn/mongodb.md)
-- [PostgreSQL 认证](../../operate/access-control/authn/postgresql.md)
-- [Redis 认证](../../operate/access-control/authn/redis.md)
-- [HTTP Server 认证](../../operate/access-control/authn/http.md)
-- [JWT 认证](../../operate/access-control/authn/jwt.md)
-- [LDAP 认证](../../operate/access-control/authn/ldap.md)
+- [内置数据库认证](../../guides/access-control/authn/mnesia.md)
+- [MySQL 认证](../../guides/access-control/authn/mysql.md)
+- [MongoDB 认证](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../../guides/access-control/authn/postgresql.md)
+- [Redis 认证](../../guides/access-control/authn/redis.md)
+- [HTTP Server 认证](../../guides/access-control/authn/http.md)
+- [JWT 认证](../../guides/access-control/authn/jwt.md)
+- [LDAP 认证](../../guides/access-control/authn/ldap.md)
 
 例如，通过 HTTP API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
 
@@ -155,7 +155,7 @@ gateway.coap {
 
 与 MQTT 协议不同，**网关仅支持创建一个认证器，而不是认证器列表（或认证链）**。当不启用任何认证器时，表示所有的 CoAP 客户端都具有接入的权限。
 
-其他类型的认证器的配置格式参考：[安全 - 认证器](../../operate/access-control/authn/authn.md)
+其他类型的认证器的配置格式参考：[安全 - 认证器](../../guides/access-control/authn/authn.md)
 
 
 ## 发布订阅
@@ -165,7 +165,7 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 详情参考下文中的 [消息发布](#消息发布)、[订阅主题](#订阅主题)、[取消订阅](#取消订阅)
 
-网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../operate/access-control/authz/authz.md) 中管理。
+网关内无独立的发布订阅的权限控制，其对主题的权限控制需要统一在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中管理。
 
 
 ## 用户层接口

@@ -1,7 +1,7 @@
 ---
 next:
-  text: 'EMQX 企业版版本发布历史'
-  link: '/zh/emqx/latest/release-notes/all-changes-ee'
+  text: '开发者指南'
+  link: '/zh/emqx/latest/develop/developer-guide'
 ---
 
 # 遥测

@@ -30,7 +30,7 @@
 
 EMQX 会周期性地发布自身运行状态、MQTT 报文收发计数和客户端上下线事件等消息到 `$SYS/` 开头的系统主题，客户端可以订阅系统主题来获取相关的信息。
 
-系统主题的完整介绍可参考 [此处](../operate/observability/mqtt-system-topics.md)。
+系统主题的完整介绍可参考 [此处](../guides/observability/mqtt-system-topics.md)。
 
 ## EMQX 支持客户端以共享订阅的方式订阅系统主题吗？
 
@@ -50,7 +50,7 @@ EMQX 默认从 `acl.conf` 文件中查询 ACL 规则，用户也可以配置数�
 
 通常我们推荐在 `acl.conf` 中添加针对多个客户端生效的规则，例如仅允许同一网段内的客户端订阅系统主题；在数据库中添加针对单个客户端生效的规则，例如允许客户端 client1 订阅主题 example。
 
-授权的完整介绍可参考 [此处](../operate/access-control/authz/authz.md)。
+授权的完整介绍可参考 [此处](../guides/access-control/authz/authz.md)。
 
 ## EMQX 的客户端消息接收速率有限制吗？
 
@@ -60,15 +60,15 @@ EMQX 或 MQTT 协议并没有直接对每个客户端的消息接收速率进行
 
 ## EMQX 支持流量控制吗？
 
-支持。EMQX 支持连接速率和消息流入速率控制，从入口处避免系统过载，完整介绍可参考 [此处](../operate/rate-limit.md)。
+支持。EMQX 支持连接速率和消息流入速率控制，从入口处避免系统过载，完整介绍可参考 [此处](../guides/rate-limit.md)。
 
 ## EMQX 支持集群自动发现吗？有哪些实现方式？
 
-除了手动创建集群，EMQX 也支持 DNS、etcd 等多种节点发现策略以实现自动集群，详情可参考 [创建与管理集群](../operate/cluster/create-cluster.md)。
+除了手动创建集群，EMQX 也支持 DNS、etcd 等多种节点发现策略以实现自动集群，详情可参考 [创建与管理集群](../guides/cluster/create-cluster.md)。
 
 ## EMQX 支持用户在服务端侧主动断开 MQTT 连接吗？
 
-支持。EMQX 提供了 [命令行接口](../operate/cli.md#clients) `emqx ctl clients kick <Client ID>` 与 REST API `DELETE /clients/{clientid}`，允许用户手动踢除 MQTT 连接，用户也可以在 Dashboard 的客户端列表页完成此操作。
+支持。EMQX 提供了 [命令行接口](../guides/cli.md#clients) `emqx ctl clients kick <Client ID>` 与 REST API `DELETE /clients/{clientid}`，允许用户手动踢除 MQTT 连接，用户也可以在 Dashboard 的客户端列表页完成此操作。
 
 详细的 REST API 使用，请参考[开源版 API 文档](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)和[企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
@@ -77,7 +77,7 @@ EMQX 或 MQTT 协议并没有直接对每个客户端的消息接收速率进行
 EMQX 提供了三种监听设备上下线事件的方式：
 
 - 使用 [WebHook](../develop/data-integration/data-bridge-webhook.md) 功能将上下线事件消息转发给外部 HTTP 服务。
-- 使用 MQTT 客户端订阅 [系统主题](../operate/observability/mqtt-system-topics.md) 获取上下线事件通知。
+- 使用 MQTT 客户端订阅 [系统主题](../guides/observability/mqtt-system-topics.md) 获取上下线事件通知。
 - 使用 [规则引擎](../develop/data-integration/rules.md) 监听 `client.connected` 和 `client.disconnected` 事件，配合 [数据集成](../develop/data-integration/data-bridges.md) 功能将事件消息写入到指定数据库。（仅限企业版）
 
 ## 服务端使用 MQTT 与 EMQX 集成时，如何提高数据吞吐性能和可靠性？

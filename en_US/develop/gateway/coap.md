@@ -24,7 +24,7 @@ On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../../operate/configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../../guides/configuration/configuration.md).
 
 :::
 
@@ -157,14 +157,14 @@ You can set whether to enable the TLS Verify by setting the toggle switch. But b
 
 The client ID, username, and password are provided by the client's [Create Connection](#create-connection) request. The CoAP gateway supports the following authenticator types:
 
-- [Built-in Database Authentication](../../operate/access-control/authn/mnesia.md)
-- [MySQL Authentication](../../operate/access-control/authn/mysql.md)
-- [MongoDB Authentication](../../operate/access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../../operate/access-control/authn/postgresql.md)
-- [Redis Authentication](../../operate/access-control/authn/redis.md)
-- [HTTP Server Authentication](../../operate/access-control/authn/http.md)
-- [JWT Authentication](../../operate/access-control/authn/jwt.md)
-- [LDAP Authentication](../../operate/access-control/authn/ldap.md)
+- [Built-in Database Authentication](../../guides/access-control/authn/mnesia.md)
+- [MySQL Authentication](../../guides/access-control/authn/mysql.md)
+- [MongoDB Authentication](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../../guides/access-control/authn/postgresql.md)
+- [Redis Authentication](../../guides/access-control/authn/redis.md)
+- [HTTP Server Authentication](../../guides/access-control/authn/http.md)
+- [JWT Authentication](../../guides/access-control/authn/jwt.md)
+- [LDAP Authentication](../../guides/access-control/authn/ldap.md)
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 

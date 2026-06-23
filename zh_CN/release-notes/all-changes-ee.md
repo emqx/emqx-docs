@@ -1,7 +1,7 @@
 ---
 prev:
-  text: '遥测'
-  link: '../operate/telemetry/telemetry'
+  text: 'MQTT 参考指南'
+  link: '/zh/emqx/latest/develop/mqtt-reference'
 ---
 
 # EMQX 企业版版本发布历史

@@ -1,7 +1,7 @@
 ---
 prev:
-  text: 'Telemetry'
-  link: '../operate/telemetry/telemetry'
+  text: 'MQTT Reference'
+  link: '/en/emqx/latest/develop/mqtt-reference'
 ---
 
 # Release Notes for EMQX Enterprise

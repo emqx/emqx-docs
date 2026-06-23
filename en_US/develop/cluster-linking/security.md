@@ -22,14 +22,14 @@ Enable authentication on the listener that accepts incoming Cluster Linking conn
 
 Two mechanisms are commonly used for Cluster Linking:
 
-- **TLS mutual authentication (mTLS):** the peer cluster presents a client certificate issued by a CA you control; the listener verifies it with `verify = verify_peer` and `fail_if_no_peer_cert = true`. This is the strongest option because it pins the peer's identity at the transport layer and doubles as the authentication check, removing the need for a separate password authenticator. See [X.509 Certificate Authentication](../../operate/access-control/authn/x509.md).
+- **TLS mutual authentication (mTLS):** the peer cluster presents a client certificate issued by a CA you control; the listener verifies it with `verify = verify_peer` and `fail_if_no_peer_cert = true`. This is the strongest option because it pins the peer's identity at the transport layer and doubles as the authentication check, removing the need for a separate password authenticator. See [X.509 Certificate Authentication](../../guides/access-control/authn/x509.md).
 - **Username and password:** configure `username` and `password` on the link, and set up a matching authenticator on the peer's listener. Store credentials securely and rotate them on a regular schedule.
 
 You can also combine the two: mTLS at the transport layer with password authentication layered on top.
 
 For any link traversing untrusted networks (public internet, cross-cloud peering, partner networks), TLS is mandatory. mTLS additionally pins the peer cluster's identity at the transport layer, complementing the credential checks above.
 
-For the full list of supported mechanisms, see the [Authentication](../../operate/access-control/authn/authn.md) overview. TLS configuration for the link connection itself is covered in [Configure MQTT Connections](./configuration.md#configure-mqtt-connections).
+For the full list of supported mechanisms, see the [Authentication](../../guides/access-control/authn/authn.md) overview. TLS configuration for the link connection itself is covered in [Configure MQTT Connections](./configuration.md#configure-mqtt-connections).
 
 ## Enable Authorization
 
@@ -45,7 +45,7 @@ A peer cluster communicates with the local broker over the following control top
 
 ### ACL Configuration
 
-The examples below use the [ACL file](../../operate/access-control/authz/file.md) source. The same rules apply equally with any other authorizer.
+The examples below use the [ACL file](../../guides/access-control/authz/file.md) source. The same rules apply equally with any other authorizer.
 
 Granting publish and subscribe access on the catch-all `$LINK/#` is the recommended starting point. The wildcard covers all current and future control topics, so you do not need to update rules when upgrading EMQX.
 
@@ -85,11 +85,11 @@ If you prefer an enumerated allow list over the wildcard (more restrictive but m
 
 Notice how each `<Cluster>` in the topic table is replaced with the peer's actual `cluster.name` (`A` and `C` here), and each ClientID regex is the prefix you configured in the peer's `clientid` field. The two values are independent and you must keep them in sync yourself when naming a new peer.
 
-For the available authorization sources and configuration options, see the [Authorization](../../operate/access-control/authz/authz.md) overview.
+For the available authorization sources and configuration options, see the [Authorization](../../guides/access-control/authz/authz.md) overview.
 
 ## See Also
 
-- [Authentication](../../operate/access-control/authn/authn.md)
-- [Authorization](../../operate/access-control/authz/authz.md)
-- [Use ACL File](../../operate/access-control/authz/file.md)
-- [Security Checklist](../../operate/access-control/security-checklist.md)
+- [Authentication](../../guides/access-control/authn/authn.md)
+- [Authorization](../../guides/access-control/authz/authz.md)
+- [Use ACL File](../../guides/access-control/authz/file.md)
+- [Security Checklist](../../guides/access-control/security-checklist.md)

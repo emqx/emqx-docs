@@ -57,7 +57,7 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 ### 配置文件
 
-您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../../operate/cli.md) 中执行 `emqx ctl license reload` 重新加载 License：
+您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../../guides/cli.md) 中执行 `emqx ctl license reload` 重新加载 License：
 
 ```bash
 license {

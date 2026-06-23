@@ -216,7 +216,7 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
    - **Password**: Enter `Snowpipeuser99`, as defined during the previous setup process.
-6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 6. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
 7. Click the **Create** button at the bottom to complete the connector creation.

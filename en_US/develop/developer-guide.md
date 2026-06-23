@@ -1,7 +1,7 @@
 ---
 prev:
-  text: 'LLM Resources'
-  link: '../get-started/llms-txt'
+  text: 'Telemetry'
+  link: '/en/emqx/latest/guides/telemetry/telemetry'
 ---
 
 # Developer Guide

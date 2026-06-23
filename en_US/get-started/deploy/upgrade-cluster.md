@@ -79,7 +79,7 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 - You have read the [release notes](../../release-notes/all-changes-ee.md).
 - Your deployment environment is capable of running VMs with one of the [operating systems supported by EMQX](./install.md), or docker containers.
 - You have sufficient disk space and memory available for the upgrade.
-- You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../../operate/performance/tune.md).
+- You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../../guides/performance/tune.md).
 
 :::
 

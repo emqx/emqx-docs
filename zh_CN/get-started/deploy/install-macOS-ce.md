@@ -70,7 +70,7 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 emqx ctl status
 ```
 
-打开你的 Web 浏览器，在地址栏中输入 `http://localhost:18083/`（`localhost` 可替换为你的 IP 地址）访问 [EMQX Dashboard](../../operate/dashboard/introduction.md)，从中你可以连接到客户端或查看运行状态。
+打开你的 Web 浏览器，在地址栏中输入 `http://localhost:18083/`（`localhost` 可替换为你的 IP 地址）访问 [EMQX Dashboard](../../guides/dashboard/introduction.md)，从中你可以连接到客户端或查看运行状态。
 
 默认的用户名和密码为 `admin` 和 `public`。登录后，你将被要求更改默认密码。
 

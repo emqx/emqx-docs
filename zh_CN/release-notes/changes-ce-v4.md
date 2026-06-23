@@ -1863,7 +1863,7 @@ EMQX 4.2.0 现已发布，主要包含以下改动:
 
 - 支持使用第三方语言编写扩展插件接入其他非 MQTT 协议，目前已支持 Java 和 Python 两种编程语言。访问 [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) 获取更多相关信息
 - 支持修订版本间的热升级
-- 新增遥测功能，收集有关 EMQX Broker 使用情况的信息以帮助我们改进产品，此功能默认开启，支持手动关闭。访问[遥测](../operate/telemetry/telemetry.md)获取更多遥测相关信息。
+- 新增遥测功能，收集有关 EMQX Broker 使用情况的信息以帮助我们改进产品，此功能默认开启，支持手动关闭。访问[遥测](../guides/telemetry/telemetry.md)获取更多遥测相关信息。
 - 支持配额形式的消息流控
 
 **增强:**

@@ -78,7 +78,7 @@
 - 您已阅读[更新日志](../../release-notes/all-changes-ee.md)。
 - 部署环境支持运行 [EMQX 支持的操作系统](./install.md) 的虚拟机或 Docker 容器。
 - 您有足够的磁盘空间和可用内存进行升级。
-- 您已查看了[性能调优 (Linux)](../../operate/performance/tune.md) 中提到的任何特定前提条件。
+- 您已查看了[性能调优 (Linux)](../../guides/performance/tune.md) 中提到的任何特定前提条件。
 
 :::
 

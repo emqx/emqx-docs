@@ -41,12 +41,12 @@
 
 对于 PUB/SUB 类型的协议网关，例如 MQTT-SN，Stomp 通常定义了主题和消息负载的概念；则：
 - 网关在处理其消息收发时直接使用客户端指定的主题和消息内容，即可接入到 EMQX 的消息系统。
-- 需要在 [授权（Authorization）](../../operate/access-control/authz/authz.md) 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中为其配置主题发布订阅权限。
 
 但对于非 PUB/SUB 类型的协议，它缺少对主题、发布、订阅等概念的定义；则
 - 需要为其指定消息主题。例如 LwM2M 网关，用户可以配置各个类型消息的主题。
 - 需要为其设计消息内容的格式。每种类型的网关都可能会使用不同的消息格式。
-- 需要在 [授权（Authorization）](../../operate/access-control/authz/authz.md) 中为其配置主题发布订阅权限。
+- 需要在 [授权（Authorization）](../../guides/access-control/authz/authz.md) 中为其配置主题发布订阅权限。
 
 ::: tip
 认证（Authentication）是可以在网关中进行配置，并且分属于每个网关自身他们之间是相互独立的；

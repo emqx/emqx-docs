@@ -1,3 +1,7 @@
+---
+next: false
+---
+
 # Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
 
 This page presents the compatibility information for gateway configurations between EMQX 4.4 and EMQX 5.1.

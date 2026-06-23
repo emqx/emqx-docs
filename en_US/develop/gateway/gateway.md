@@ -65,7 +65,7 @@ For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](.
 
 Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization. 
 
-Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../../operate/access-control/authn/http.md). See the table below for the authentication types supported:
+Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../../guides/access-control/authn/http.md). See the table below for the authentication types supported:
 
 |            | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  | LDAP |
 | ---------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- |
@@ -120,5 +120,5 @@ However, due to the differences in semantics among various gateways, only a subs
 
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
 
-For a detailed explanation of hooks, see [Hooks](../../operate/extensions/hooks.md).
+For a detailed explanation of hooks, see [Hooks](../../guides/extensions/hooks.md).
 

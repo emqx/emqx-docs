@@ -11,7 +11,7 @@ EMQX 企业版 License 可以在 EMQ 官网免费申请：[申请 EMQX 企业版
 
 ## 配置 EMQX 集群
 
-`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.config.data` 配置 EMQX 集群 License，EMQX 配置可以参考文档：[配置手册](../../../../../operate/configuration/configuration.md)。
+`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.config.data` 配置 EMQX 集群 License，EMQX 配置可以参考文档：[配置手册](../../../../../guides/configuration/configuration.md)。
 
 > 在创建 EMQX 集群之后，如果需要更新 License，请通过 EMQX Dashboard 进行更新。
 

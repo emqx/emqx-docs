@@ -20,7 +20,7 @@ On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation m
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../../operate/configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../../guides/configuration/configuration.md).
 
 :::
 
@@ -193,7 +193,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Acceptor**: Set the size of the acceptor pool, default `16`.
 - **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: `1024000`.
 - **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: `1000`.
-- **Proxy Protocol**: Set to enable protocol V1/2 if EMQX is configured behind the [load balancer](../../operate/cluster/lb.md).
+- **Proxy Protocol**: Set to enable protocol V1/2 if EMQX is configured behind the [load balancer](../../guides/cluster/lb.md).
 - **Proxy Protocol Timeout**: Set the maximum amount of time in seconds that the gateway will wait for the proxy protocol package before closing the connection due to inactivity, default: `3s`.
 
 **TCP Settings**
@@ -207,7 +207,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **SSL Settings** (for wss listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md).
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../guides/network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
@@ -220,14 +220,14 @@ Then you can continue to set:
 
 As the concept of username and password is already defined in the connection message of the OCPP protocol, the OCPP supports a variety of authenticator types, such as:
 
-- [Built-in Database Authentication](../../operate/access-control/authn/mnesia.md)
-- [MySQL Authentication](../../operate/access-control/authn/mysql.md)
-- [MongoDB Authentication](../../operate/access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../../operate/access-control/authn/postgresql.md)
-- [Redis Authentication](../../operate/access-control/authn/redis.md)
-- [HTTP Server Authentication](../../operate/access-control/authn/http.md)
-- [JWT Authentication](../../operate/access-control/authn/jwt.md)
-- [LDAP Authentication](../../operate/access-control/authn/ldap.md)
+- [Built-in Database Authentication](../../guides/access-control/authn/mnesia.md)
+- [MySQL Authentication](../../guides/access-control/authn/mysql.md)
+- [MongoDB Authentication](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../../guides/access-control/authn/postgresql.md)
+- [Redis Authentication](../../guides/access-control/authn/redis.md)
+- [HTTP Server Authentication](../../guides/access-control/authn/http.md)
+- [JWT Authentication](../../guides/access-control/authn/jwt.md)
+- [LDAP Authentication](../../guides/access-control/authn/ldap.md)
 
 OCPP gateway uses the information in the Basic Authentication of the Websocket handshake message to generate the authentication fields for the client:
 

@@ -13,11 +13,11 @@ This chapter provides a comprehensive overview of EMQX clustering and how to app
 - The [benefits of clustering](#why-use-emqx-clustering)
 - The [working principle of EMQX Clustering](#how-clustering-in-emqx-works)
 - The [Mria and RLOG architecture](./mria-introduction.md)
-- How to [create a cluster manually or automatically](../../operate/cluster/create-cluster.md)
-- How to [secure communication between nodes](../../operate/cluster/security.md)
-- How to [implement load balancing](../../operate/cluster/lb.md)
-- How to [rebalance cluster load and evacuate nodes](../../operate/cluster/rebalancing.md)
-- How to [perform system tuning and performance testing](../../operate/performance/overview.md)
+- How to [create a cluster manually or automatically](../../guides/cluster/create-cluster.md)
+- How to [secure communication between nodes](../../guides/cluster/security.md)
+- How to [implement load balancing](../../guides/cluster/lb.md)
+- How to [rebalance cluster load and evacuate nodes](../../guides/cluster/rebalancing.md)
+- How to [perform system tuning and performance testing](../../guides/performance/overview.md)
 
 Whether you're building a highly available MQTT platform or preparing for production scale, this guide will help you get started with confidence.
 
@@ -179,7 +179,7 @@ EMQX supports multiple node discovery mechanisms, allowing clusters to form auto
 | `etcd`   | Autocluster through etcd                |
 | `k8s`    | Autocluster provided by Kubernetes      |
 
-For detailed information, see [Create and Manage Cluster](../../operate/cluster/create-cluster.md).
+For detailed information, see [Create and Manage Cluster](../../guides/cluster/create-cluster.md).
 
 ### Network Partition Autoheal
 
@@ -225,5 +225,5 @@ The Core nodes should be under the same private network. In Mria+RLOG mode, it i
 You can continue with the following sections to learn how to create an EMQX cluster:
 
 - [Cluster Architecture](./mria-introduction.md)
-- [Create a Cluster](../../operate/cluster/create-cluster.md)
-- [Cluster Security](../../operate/cluster/security.md)
+- [Create a Cluster](../../guides/cluster/create-cluster.md)
+- [Cluster Security](../../guides/cluster/security.md)

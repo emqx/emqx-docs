@@ -19,7 +19,7 @@ When a message is published, it undergoes the following workflow:
 2. **Message Transformation Pipeline**: 
 
    - **Transformation Matching**: The message is matched against a list of user-defined transformations based on its topic. Multiple transformations can be set for different topics or topic filters.
-   - **Transformation Execution**: The matched transformations are executed in the order they are configured. The pipeline supports various encoders and decoders, such as JSON, Protobuf, and Avro, and allows for [Variform expressions](../../operate/configuration/configuration.md#variform-expressions) to enrich or modify the message.
+   - **Transformation Execution**: The matched transformations are executed in the order they are configured. The pipeline supports various encoders and decoders, such as JSON, Protobuf, and Avro, and allows for [Variform expressions](../../guides/configuration/configuration.md#variform-expressions) to enrich or modify the message.
    - **Post-Transformation Processing**: Once the message successfully passes through the transformation pipeline, it proceeds to the next steps, such as triggering the rule engine or dispatching the message to subscribers.
 
 3. **Failure Handling**: If a transformation fails, user-configured actions are executed:
@@ -49,7 +49,7 @@ This section demonstrates how to create and configure a message transformation i
      - **Target Format**: Specifies the payload encoder to encode the final message payload at the end of the transformation pipeline as a binary value. The encoder options are the same as those for the **Source Format**: `None`, `JSON`, `Avro`, or `Protobuf`. Only the last transformation in the pipeline needs to ensure the payload is encoded as a binary value; intermediate transformations do not need to handle binary encoding.
    - **Message Properties Transformation**:
      - **Properties**: Specifies the destination where the transformed value, resulting from an expression, will be written. Valid destinations include `payload`, `topic`, `qos`, `retain` (to set the corresponding flag), and `user_property` (for the `User-Property` MQTT property). When using `user_property`, exactly one key must be specified under this field (e.g., `user_property.my_custom_prop`). The `payload` can either be used as-is, overwriting the entire message payload, or a specific nested key path can be designated, treating the payload like a nested JSON object (e.g., `payload.x.y`).
-     - **Target Value**: Defines the value to be written to the configured property. This value can either be copied from other fields such as `qos`, `retain`, `topic`, `payload`, and `payload.x.y`, or it can be generated using a [variform expression](../../operate/configuration/configuration.md#variform-expressions).
+     - **Target Value**: Defines the value to be written to the configured property. This value can either be copied from other fields such as `qos`, `retain`, `topic`, `payload`, and `payload.x.y`, or it can be generated using a [variform expression](../../guides/configuration/configuration.md#variform-expressions).
    - **Transformation Failure Operation**:
      - **Action After Failure**: Select the actions to perform if a transformation fails:
        - **Drop Message**: Terminate the publishing process and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.

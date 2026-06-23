@@ -17,7 +17,7 @@ making them more search-friendly, for example:
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-Find more details in [Logs](../../operate/observability/log.md).
+Find more details in [Logs](../../guides/observability/log.md).
 
 ## Default Listeners
 
@@ -171,8 +171,8 @@ Now EMQX uses the new syntax `${}`, such as `${username}`, `${clientid}`, which 
 
 For supported placeholders, please refer to:
 
-- [Authentication Placeholders](../../operate/access-control/authn/authn.md#authentication-placeholders)
-- [Authorization Placeholders](../../operate/access-control/authz/authz.md#placeholders-in-data-queries)
+- [Authentication Placeholders](../../guides/access-control/authn/authn.md#authentication-placeholders)
+- [Authorization Placeholders](../../guides/access-control/authz/authz.md#placeholders-in-data-queries)
 
 ::: details Usage example
 
@@ -370,7 +370,7 @@ EMQX 5.1 uses one algorithm at a time only, which is set in the global config.
 #### MongoDB
 
 1. MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`;
-2. You need to select documents containing the `action`, `permission` and `topics` fields from MongoDB. For details, see [AuthZ-MongoDB](../../operate/access-control/authz/mongodb.md).
+2. You need to select documents containing the `action`, `permission` and `topics` fields from MongoDB. For details, see [AuthZ-MongoDB](../../guides/access-control/authz/mongodb.md).
 
 If you want to continue using the data from in 4.x, please make necessary migrations manually.
 
@@ -475,7 +475,7 @@ You can use `curl` command to inspect the metrics:
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-If you want to enable push-gateway, please refer to [Integrate with Prometheus](../../operate/observability/prometheus.md).
+If you want to enable push-gateway, please refer to [Integrate with Prometheus](../../guides/observability/prometheus.md).
 
 ::: details Changes in Prometheus metrics
 

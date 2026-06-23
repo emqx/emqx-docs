@@ -50,7 +50,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
    ```
 
 
-2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    Default user name and password:
 
@@ -70,7 +70,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
    ```
 
-2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    Default user name and password:
 
@@ -116,7 +116,7 @@ Considering all the runtime dependencies, it is recommended to use installation 
    ./emqx/bin/emqx start
    ```
 
-6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
@@ -151,7 +151,7 @@ To uninstall EMQX after your testing, simply delete the EMQX folder.
    ./emqx/bin/emqx start
    ```
 
-5. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+5. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
@@ -225,7 +225,7 @@ On the Cluster Overview page in the EMQX Dashboard, you can check metrics such a
 
 ## Next Steps
 
-So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../operate/access-control/authn/authn.md) and integration with [Rule Engine](../develop/data-integration/rules.md).
+So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../guides/access-control/authn/authn.md) and integration with [Rule Engine](../develop/data-integration/rules.md).
 
 ## Frequently Asked Questions
 

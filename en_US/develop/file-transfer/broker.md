@@ -165,7 +165,7 @@ You can configure the following general settings:
   - **Port**: The port used to connect to the S3 service, for example, `443`, indicating a secure HTTPS connection.
   - **Access Key ID** and **Secret Access Key**: Credentials required for accessing the S3 bucket. These should be securely stored.
   - **Bucket**: The name of the S3 bucket where files are stored, for example `my-bucket`.
-  - **Enable TLS**: Determine whether to use TLS (Transport Layer Security) for secure file transfers. For more information, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+  - **Enable TLS**: Determine whether to use TLS (Transport Layer Security) for secure file transfers. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 - **Files Root Directory**: Specify the root directory for file storage and need to be an absolute path. This directory is used for storing assembled files when `Local Storage` is selected as the file storage method.
 
 ### Advanced Settings

@@ -2,7 +2,7 @@
 
 EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
 
-After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../operate/configuration/dashboard.md).
+After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../guides/configuration/dashboard.md).
 
 The section introduces how to work with EMQX REST API.
 
@@ -46,7 +46,7 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 #### Create API Keys
 
-You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [API Keys](../operate/api-keys.md).
+You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [API Keys](../guides/api-keys.md).
 
 You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
 

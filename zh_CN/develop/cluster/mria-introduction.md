@@ -68,7 +68,7 @@ Mria 架构融合了“无主复制”与“主从复制”的优点，具有以
 
 ## 启用 Core + Replicant 模式
 
-要启用 Core + Replicant 模式，需要将某些节点指定为复制节点。这可以通过设置 `node.role` 参数为 `replicant` 来实现。此外，您需要启用一个自动集群[发现策略](../../operate/cluster/create-cluster.md#节点发现)（`cluster.discovery_strategy`）。
+要启用 Core + Replicant 模式，需要将某些节点指定为复制节点。这可以通过设置 `node.role` 参数为 `replicant` 来实现。此外，您需要启用一个自动集群[发现策略](../../guides/cluster/create-cluster.md#节点发现)（`cluster.discovery_strategy`）。
 
 :::tip
 Replicant 节点不能使用 `manual` 策略来发现 Core 节点集群。

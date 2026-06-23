@@ -139,6 +139,6 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
 
 Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md). 
 
-- On how to configure EMQX parameters and other features, see [Configuration](../../operate/configuration/configuration.md).
+- On how to configure EMQX parameters and other features, see [Configuration](../../guides/configuration/configuration.md).
 
 - On how to build an EMQX cluster with multiple nodes, see  [Clustering](../../develop/cluster/introduction.md).

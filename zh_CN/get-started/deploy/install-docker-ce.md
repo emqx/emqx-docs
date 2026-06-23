@@ -130,6 +130,6 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
 
 使用客户端连接到 EMQX，进行消息收发请参考[发布订阅操作](../messaging/publish-and-subscribe.md)。
 
-配置 EMQX 参数及其他功能请参考 [配置文件手册](../../operate/configuration/configuration.md)。
+配置 EMQX 参数及其他功能请参考 [配置文件手册](../../guides/configuration/configuration.md)。
 
 将多个 EMQX 节点组建为一个集群请参考 [构建集群](../../develop/cluster/introduction.md)。

@@ -6,7 +6,7 @@
 
 ### SSL选项
 
-EMQX 5.1 提供了当需要访问外部资源时可以启用 TLS 的选项，例如连接到数据库（MySQL、PostgreSQL、MongoDB、Redis）进行身份验证，或者通过 HTTPS 访问 Web 服务器进行基于密码的身份验证。更多信息，请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+EMQX 5.1 提供了当需要访问外部资源时可以启用 TLS 的选项，例如连接到数据库（MySQL、PostgreSQL、MongoDB、Redis）进行身份验证，或者通过 HTTPS 访问 Web 服务器进行基于密码的身份验证。更多信息，请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
 ### 占位符
 
@@ -114,9 +114,9 @@ EMQX 5.1
 
 - `query_timeout   `不再使用。
 
-- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
-- `auth_cmd` 已更改为 `cmd`。仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构和 `HGET` 和 `HMGET` 查询命令。在命令中使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#authentication-placeholders)。命令应至少获取 `password`（与 4.x 兼容）或 `password_hash` 字段，以及可选的 `salt` 和 `is_superuser` 字段。
+- `auth_cmd` 已更改为 `cmd`。仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构和 `HGET` 和 `HMGET` 查询命令。在命令中使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#authentication-placeholders)。命令应至少获取 `password`（与 4.x 兼容）或 `password_hash` 字段，以及可选的 `salt` 和 `is_superuser` 字段。
 
 - 不再使用 `super_cmd`。请在 `cmd` 中提供 `is_superuser` 字段。如果需要给客户端提供超级用户权限，请将 `is_superuser` 字段添加到 Redis 查询命令中。
 
@@ -208,11 +208,11 @@ authentication {
 
 - `pool   `已更改为 `pool_size`。
 
-- `ssl.*    `选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.*    `选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
 - `password_hash` 已更改为 `common password_hash_algorithm` 参数。
 
-- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt `和 `is_superuser` 列。
+- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt `和 `is_superuser` 列。
 
 - 不再使用` `，请在查询中提供 `is_superuser` 列。如果需要给客户端提供超级用户权限，请确保认证 SQL 结果包含 `is_superuser` 字段。
 
@@ -303,11 +303,11 @@ authentication {
 
 - `pool ` 已更改为 `pool_size`。
 
-- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
 - `password_hash ` 已更改为通用的 `password_hash_algorithm` 参数。
 
-- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt` 和 `is_superuser` 列。
+- `auth_query ` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。查询应至少获取 `password` 或 `password_hash` 列，并可选地获取`salt` 和 `is_superuser` 列。
 
 - 不再使用 `super_query`，请在查询中提供 `is_superuser` 列。如果需要给客户端提供超级用户权限，请确保认证 SQL 结果包含 `is_superuser` 字段。
 
@@ -401,9 +401,9 @@ backend = mongodb
 
 - `pool` 更改为 `pool_size`.
 
-- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.* ` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
-- `auth_query.selector` 更改为 `filter`。查询 Filter 应该不再是一个字符串，而是整个 selector 数据结构。在 selector 值中可使用  `${var}` 格式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。
+- `auth_query.selector` 更改为 `filter`。查询 Filter 应该不再是一个字符串，而是整个 selector 数据结构。在 selector 值中可使用  `${var}` 格式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。
 
 - `auth_query.salt_field` 更改为 `salt_field`。
 
@@ -596,7 +596,7 @@ backend = http
 - `auth_req.headers` 已更改为 `headers`。
 - `auth_req.params` 已更改为 `body`。
 - `timeout` 已更改为 `request_timeout`。
-- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 - `super_req` 不再可用。客户端的超级用户身份通过认证响应中的 body 设置，需要在服务响应中提供 `is_superuser` 字段。
 
 与 4.4 版本不同，`url`、`headers` 和 `body` 参数允许使用占位符。在 5.1 版本中，`body` 不再是一个字符串，而是一个映射。它将使用 JSON 或 X-WWW-Form-Urlencoded 格式进行序列化（用于 POST 请求），或作为查询参数（用于 GET 请求）。
@@ -769,7 +769,7 @@ type = http
 - `acl_req.headers` 已更改为 `headers`。
 - `acl_req.params` 已更改为 `body`。
 - `timeout` 已更改为 `request_timeout`。
-- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
+- `ssl.*` 已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
 
 与 4.4 版本不同，`url`、`headers` 和 `body` 参数允许使用占位符。
 
@@ -877,8 +877,8 @@ EMQX 5.1
 - `pool` 已更改为 `pool_size`。
 - `password` 仍为 `password`。
 - 不再使用 `query_timeout` 选项。
-- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
-- `auth_cmd` 已更改为 `cmd`。应在命令中使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
+- `auth_cmd` 已更改为 `cmd`。应在命令中使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。
 - Redis 数据源仍然仅支持白名单模式，需要设置 `acl_nomatch = deny`；
 - `access` 字段名称更改为 `action`，数据由数字变为动作全称字符串，对应关系见下表。
 
@@ -985,8 +985,8 @@ EMQX 5.1
 
 - `server`、`username`、`password`、`database`、`query_timeout` 参数保留不变。
 - `pool` 已更改为 `pool_size`。
-- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
-- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
+- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。
 - 您可以使用 `auto_reconnect` 在 MySQL 连接失败时自动重新连接。
 
 存储模式已更改。
@@ -1081,8 +1081,8 @@ type = postgresql
 - `query_timeout` 不再使用。
 - `encoding` 不再使用。
 - `pool` 已更改为 `pool_size`。
-- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
-- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
+- `acl_query` 已更改为 `query`。应使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。
 
 存储模式已更改。
 
@@ -1156,8 +1156,8 @@ type = mongodb
 - `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` 参数保留不变。
 - `r_mode` 仅适用于 `rs` 类型。
 - `pool` 已更改为 `pool_size`。
-- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../operate/network/overview.md#tls-for-external-resource-access)。
-- `auth_query.selector` 已更改为 `filter`。过滤器不应该是一个字符串，而是整个选择器数据结构。应在选择器值中使用 `${var}` 样式的[占位符](../operate/access-control/authn/authn.md#认证占位符)。
+- `ssl.*` 选项已更改为通用的 SSL 选项。请参阅[启用 TLS 加密访问外部资源](../guides/network/overview.md#tls-for-external-resource-access)。
+- `auth_query.selector` 已更改为 `filter`。过滤器不应该是一个字符串，而是整个选择器数据结构。应在选择器值中使用 `${var}` 样式的[占位符](../guides/access-control/authn/authn.md#认证占位符)。
 - 不再使用 `query_timeout`。
 
 存储模式已更改。在 EMQX 4.4 中，生成的数据存储文档应该按照 action 键包含主题列表，类似于 Redis 或 JWT：
@@ -1170,7 +1170,7 @@ type = mongodb
 }
 ```
 
-在 EMQX 5.1 中, MongoDB 数据源可用于黑/白名单模式下，此前仅支持白名单模式，并要求设置 `acl_nomatch = deny`。 MongoDB 数据存储文档中应包含 `action` `permission` `topics` 字段的单独规则，`topic` 字段应该是一个主题数组。具体使用方式详见 [基于 MongoDB 进行授权](../operate/access-control/authz/mongodb.md)。如需继续使用 4.x 中的数据，请手动迁移适配。
+在 EMQX 5.1 中, MongoDB 数据源可用于黑/白名单模式下，此前仅支持白名单模式，并要求设置 `acl_nomatch = deny`。 MongoDB 数据存储文档中应包含 `action` `permission` `topics` 字段的单独规则，`topic` 字段应该是一个主题数组。具体使用方式详见 [基于 MongoDB 进行授权](../guides/access-control/authz/mongodb.md)。如需继续使用 4.x 中的数据，请手动迁移适配。
 
 ::: details 5.1 版本中数据示例
 

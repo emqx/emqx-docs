@@ -1,7 +1,7 @@
 ---
 next:
-  text: '开发者指南'
-  link: '../develop/developer-guide'
+  text: '使用指南'
+  link: '/zh/emqx/latest/guides/user-guide'
 ---
 
 # LLMs.txt
