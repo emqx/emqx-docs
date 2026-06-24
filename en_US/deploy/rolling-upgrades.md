@@ -29,11 +29,10 @@ Do not perform cluster-wide config changes during a rolling upgrade. Configurati
 Below are the matrices of supported rolling upgrade paths since 5.0.
 Tables are split for readability; the late-v5 versions (5.8 – 5.10) appear in both.
 
-- Version numbers end with `?` (e.g. `6.3?`) are future releases.
+- Version numbers ending with `?` (e.g. `6.3?`) are future releases.
 - ✅: Supported, or planned to support.
-- ⚠️:  Supported, but with limitations.
+- ⚠️: Supported, but with limitations.
 - ❌: Not supported.
-- 🔄: Tentative full support for future versions.
 
 See release notes for detailed information.
 
@@ -55,9 +54,7 @@ See release notes for detailed information.
 
 - [1] Old limiter configs should be deleted from the config files (`etc/emqx.conf` and `data/configs/cluster-override.conf`) before upgrade.
 - [2] Pre-5.4 routing table will be deleted. Upgrade to 5.9 first, then perform a full-cluster restart (not rolling) before upgrade to 5.10 or later.
-- [3] Opentelemetry headers configuration support was introduced in 5.8.7. This release date is later than 5.9.0 and 5.10.0.
-      5.8 versions running 5.8.7 or later require a rolling upgrade to version 5.9.1 or 5.10.1.
-      Alternatively, remove the header configuration for OpenTelemetry integration during the upgrade.
+- [3] Support for OpenTelemetry header configuration was introduced in 5.8.7, which was released after 5.9.0 and 5.10.0. 5.8 versions running 5.8.7 or later require a rolling upgrade to version 5.9.1 or 5.10.1. Alternatively, remove the header configuration for OpenTelemetry integration during the upgrade.
 
 ### Into v6 (5.8 – 6.3?)
 
