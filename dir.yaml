@@ -16,7 +16,7 @@
 
 - title_en: EMQX Overview
   title_cn: EMQX 概览
-  title_ja: EMQX 概観
+  title_ja: EMQX 概要
   path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   children:
