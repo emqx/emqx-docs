@@ -1,6 +1,6 @@
 # Erlang SDK
 
-このドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を示します。
+このドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーおよびクライアントを作成する方法を示します。
 
 ## Example
 
@@ -48,7 +48,7 @@ start_link() ->
         }).
 ```
 
-ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターにサブスクライブするために使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
+ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターへのサブスクライブに使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
 
 ### シンプルな MCP サーバーの作成
 

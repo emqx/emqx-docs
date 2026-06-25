@@ -16,7 +16,7 @@
 
 - title_en: EMQX Overview
   title_cn: EMQX 概览
-  title_ja: EMQX 概要
+  title_ja: EMQX 概観
   path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
   children:
@@ -64,7 +64,7 @@
 
 - title_en: Installation and Deployment
   title_cn: 安装部署
-  title_ja: インストールとデプロイ
+  title_ja: インストールとデプロイメント
   path: deploy/install
   collapsed: true
   children:
@@ -468,7 +468,7 @@
     - data-integration/message-transformation
 - title_en: Flow Designer
   title_cn: Flow 设计器
-  title_ja: Flow デザイナー
+  title_ja: Flowデザイナー
   path: flow-designer/introduction
   collapsed: true
   children:

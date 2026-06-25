@@ -1,19 +1,19 @@
 # Kotlin SDK
 
 このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。  
-リポジトリ：https://github.com/terry-xiaoyu/kotlin-sdk
+リポジトリはこちらです: https://github.com/terry-xiaoyu/kotlin-sdk
 
-## 環境セットアップ
+## 環境構築
 
 ### Kotlin ツールチェーンのインストール
 
-以下のツールがインストールされていることを確認してください。
+以下のツールがインストールされていることを確認してください：
 
 - JDK 21以上
 - Kotlin 2.2以上
 - Gradle 9.2以上
 
-[SDKMAN](https://sdkman.io/) を使う方法が、これらのツールをインストールおよび管理する推奨方法です。
+[SDKMAN](https://sdkman.io/) を使う方法が推奨されています。ツールのインストールと管理が簡単に行えます。
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -26,23 +26,23 @@ sdk install gradle 9.2.1
 
 ### EMQX のインストールと起動
 
-EMQX ブローカーのインストールと起動については、[Getting Started](../../getting-started/getting-started.md) ガイドに従ってください。
+[Getting Started](../../getting-started/getting-started.md) ガイドに従い、EMQX ブローカーをインストールして起動してください。
 
-## MCP サーバーのサンプルをダウンロードして実行
+## MCP サーバーのサンプルをダウンロードして実行する
 
-サンプルプロジェクトをクローンします。
+サンプルプロジェクトをクローンします：
 
 ```bash
 git clone https://github.com/terry-xiaoyu/kotlin-mcp-server-demo.git
 cd kotlin-mcp-server-demo
 ```
 
-このサンプルでは、以下の2つの MCP ツールを登録しています。
+このサンプルでは、以下の2つの MCP ツールを登録しています：
 
 - **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
 - **Light control tool**：ライトのオン／オフ状態と明るさを制御します。
 
-ツール登録のコードはこちらで確認できます。  
+ツール登録のコードはこちらで確認できます：  
 https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
 
 ```bash
@@ -62,7 +62,7 @@ server.addTool(
             }
             putJsonObject("op") {
                 put("type", JsonPrimitive("string"))
-                put("description", JsonPrimitive("実行する演算子： +, -, *, /"))
+                put("description", JsonPrimitive("実行する演算子：+, -, *, /"))
             }
         },
         required = listOf("num1", "num2", "op"),
@@ -91,7 +91,7 @@ server.addTool(
 // Light control tool を追加
 server.addTool(
     name = "set_light_brightness",
-    description = "パネル上のライトを制御します。明るさを変更できます。ライトをオフにするには明るさを0に設定してください。'last_value' に設定すると前回の明るさに戻せます。これはライトがオフのときに再度オンにする場合に便利です。",
+    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定してください。明るさを 'last_value' に設定すると、前回の明るさに戻せます。ライトが消えている状態から再度点灯させたい場合に便利です。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
@@ -105,12 +105,12 @@ server.addTool(
     val value = request.params.arguments?.get("value")?.jsonPrimitive?.content
     // リクエストを処理し、ライトの明るさを制御
     CallToolResult(
-        content = listOf(TextContent("ライトの明るさを ${value}% に設定しました")),
+        content = listOf(TextContent("ライトの明るさを設定しました: ${value}%")),
     )
 }
 ```
 
-以下のコマンドで MCP サーバーのサンプルを起動します。
+以下のコマンドで MCP サーバーのサンプルを起動します：
 
 ```bash
 ./gradlew run --args="--mqtt kt001 demo/kotlin-mcp-server"
@@ -123,9 +123,10 @@ server.addTool(
 
 ## MCP クライアントでのテスト
 
-現在、Kotlin SDK には MCP クライアントの実装がありません。テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
+現時点で Kotlin SDK には MCP クライアントの実装は含まれていません。  
+テスト用として、Python SDK を使ってシンプルな MCP クライアントを作成できます。
 
-Python 環境をセットアップします。
+Python 環境のセットアップ：
 
 ```bash
 uv init light_controller
@@ -135,7 +136,7 @@ uv add "mcp[cli]"
 source .venv/bin/activate
 ```
 
-`light_controller.py` というファイルを作成し、以下の内容を記述してください。
+`light_controller.py` というファイルを作成し、以下の内容を記述してください：
 
 ```bash
 # light_controller.py
@@ -161,7 +162,7 @@ async def on_mcp_connect(client, server_name, connect_result):
     if capabilities.tools:
         toolsResult = await client.list_tools(server_name)
         tools = toolsResult.tools
-        logger.info(f"{server_name} のツール: {tools}")
+        logger.info(f"{server_name} のツール一覧: {tools}")
         for tool in tools:
             logger.info(f" - {tool.name}: {tool.description}")
             if tool.name == "set_light_brightness":
@@ -194,10 +195,10 @@ if __name__ == "__main__":
     anyio.run(main)
 ```
 
-この Python クライアントは自動的に `demo/kotlin-mcp-server` という MCP サーバーを検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します。
+この Python クライアントは、`demo/kotlin-mcp-server` という名前の MCP サーバーを自動検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します：
 
 ```bash
 INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) を呼び出しました。結果: meta=None
-                             content=[TextContent(type='text', text='ライトの明るさを 50% に設定しました',
+                             content=[TextContent(type='text', text='ライトの明るさを設定しました: 50%',
                              annotations=None)] isError=False
 ```
