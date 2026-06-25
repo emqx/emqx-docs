@@ -953,8 +953,6 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | `protocol_error`              | 出现通用的 MQTT 协议错误。                                   |
 | `tcp_closed`                  | TCP 连接被客户端或网络层关闭。                               |
 | `timeout`                     | 发生通用超时错误（如在认证或握手过程中）。                   |
-
->>>>>>> origin/release-5.10
 ### listeners stop \<Identifier\>
 
 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。（临时生效，当 EMQX 重启后将恢复原先状态。）
