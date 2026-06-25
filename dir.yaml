@@ -1213,6 +1213,10 @@
       title_ja: 既知の問題
       collapsed: true
       children:
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/known-issues-5.10
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9
