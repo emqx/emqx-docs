@@ -1342,7 +1342,7 @@
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
       path: changes/breaking-changes-5.1.0
       collapsed: true
-        children:
+      children:
           - title_en: Authentication
             title_cn: 认证
             title_ja: 認証
