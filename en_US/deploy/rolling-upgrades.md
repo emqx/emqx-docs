@@ -3,7 +3,6 @@
 In a clustered deployment, EMQX nodes can be upgraded one at a time without incurring any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../deploy/cluster/rebalancing.md).
 
 ## Important Licensing Notice for Upgrades to EMQX 5.9 or Later
-
 Starting from version 5.9.0, EMQX Enterprise is released under the Business Source License (BSL) 1.1, replacing the previous model that separated Open Source and Enterprise editions.
 
 ::: tip
@@ -23,6 +22,52 @@ While the technical steps for upgrading EMQX (like replacing binaries) are simil
 If a License configuration is added to `emqx.conf`, any runtime changes made from the Dashboard, HTTP API, or CLI will be lost after the node is restarted. This is because `emqx.conf` and environment variables have the highest priority when loading configurations during startup.
 
 :::
+
+## Supported Rolling Upgrade Paths Since 5.0
+
+Below are the matrices of supported rolling upgrade paths since 5.0.
+Tables are split for readability; the late-v5 versions (5.8 – 5.10) appear in both.
+
+- Version numbers ending with `?` (e.g. `6.3?`) are future releases.
+- ✅: Supported, or planned to support.
+- ⚠️: Supported, but with limitations.
+- ❌: Not supported.
+
+See release notes for detailed information.
+
+### Within v5 (5.0 – 5.10)
+
+| From\To | 5.1  | 5.2  | 5.3  | 5.4  | 5.5  | 5.6  | 5.7  | 5.8  | 5.9  | 5.10 |
+| ------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 5.0     | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ⚠️[1] | ❌[2] |
+| 5.1     | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] |
+| 5.2     |      | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] |
+| 5.3     |      |      | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] |
+| 5.4     |      |      |      | ✅    | ✅    | ⚠️    | ✅    | ✅    | ✅    | ✅    |
+| 5.5     |      |      |      |      | ✅    | ⚠️    | ✅    | ✅    | ✅    | ✅    |
+| 5.6     |      |      |      |      |      | ✅    | ✅    | ✅    | ✅    | ✅    |
+| 5.7     |      |      |      |      |      |      | ✅    | ✅    | ✅    | ✅    |
+| 5.8     |      |      |      |      |      |      |      | ✅    | ⚠️[3] | ⚠️[3] |
+| 5.9     |      |      |      |      |      |      |      |      | ✅    | ✅    |
+| 5.10    |      |      |      |      |      |      |      |      |      | ✅    |
+
+- [1] Old limiter configs should be deleted from the config files (`etc/emqx.conf` and `data/configs/cluster-override.conf`) before upgrade.
+- [2] Pre-5.4 routing table will be deleted. Upgrade to 5.9 first, then perform a full-cluster restart (not rolling) before upgrade to 5.10 or later.
+- [3] Support for OpenTelemetry header configuration was introduced in 5.8.7, which was released after 5.9.0 and 5.10.0. 5.8 versions running 5.8.7 or later require a rolling upgrade to version 5.9.1 or 5.10.1. Alternatively, remove the header configuration for OpenTelemetry integration during the upgrade.
+
+### Into v6 (5.8 – 6.3?)
+
+| From\To | 5.8  | 5.9  | 5.10 | 6.0  | 6.1  | 6.2  | 6.3? |
+| ------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 5.8     | ✅    | ⚠️[3] | ⚠️[3] | ⚠️[4] | ⚠️[4] | ⚠️[4] | ⚠️[4] |
+| 5.9     |      | ✅    | ✅    | ⚠️[4] | ⚠️[4] | ⚠️[4] | ⚠️[4] |
+| 5.10    |      |      | ✅    | ⚠️[4] | ⚠️[4] | ⚠️[4] | ⚠️[4] |
+| 6.0     |      |      |      | ✅    | ✅    | ✅    | ✅    |
+| 6.1     |      |      |      |      | ✅    | ✅    | ✅    |
+| 6.2     |      |      |      |      |      | ✅    | ✅    |
+| 6.3?    |      |      |      |      |      |      | ✅    |
+
+- [4] Durable session states will be lost after upgrading from v5 to v6. After clients reconnect, the sessions created in the new nodes will appear to be clean.
 
 ## Rolling Upgrade Considerations for EMQX 5.10 or Later
 
@@ -81,19 +126,18 @@ Do not perform cluster-wide config changes during a rolling upgrade. Configurati
 
 ## Rolling Upgrade Using RPM and DEB Packages
 
+
 When using RPM or DEB packages, you can upgrade EMQX by simply installing the newer version package.
 
 ## Rolling Upgrade Using Docker
 
 When using Docker, you can upgrade EMQX by simply pulling the newer version image and restarting the container.
 
-## Rolling Upgrade from Open Source to Enterprise Edition
+## Rolling Upgrade from Open Source Edition to Enterprise Edition
 
-If you are running an open-source version of EMQX and would like to upgrade to the Enterprise Edition, the process is the same as upgrading to a newer version of the Open Source Edition.
+If you are running EMQX Open Source Edition and want to upgrade to EMQX Enterprise Edition, the process is the same as upgrading to a newer version of the Open Source Edition.
 
-There is no difference in installation and upgrade between the Open Source and Enterprise Editions of EMQX.
-The only thing special is that you need to manually [configure your License](./license.md) for the Enterprise edition nodes after each upgrade.
-You cannot apply the License key to the whole cluster before all nodes are upgraded.
+There is no difference in installation and upgrade procedures between EMQX Open Source Edition and EMQX Enterprise Edition. The only additional step is that you need to manually [configure your License](./license.md) for the Enterprise Edition nodes after each upgrade. You cannot apply the License key to the whole cluster before all nodes are upgraded.
 
 For example, add the following line to `etc/base.hocon` (`etc/emqx.conf` if upgrade target version is before `e5.8.5`):
 ```
