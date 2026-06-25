@@ -1,13 +1,13 @@
 # TypeScript SDK
 
-このガイドでは、[@emqx-ai/mcp-mqtt-sdk](https://github.com/emqx/mcp-typescript-sdk) を使用して、MQTT上のMCPサーバーとクライアントを作成する方法を説明します。  
-このSDKはブラウザおよびNode.js環境の両方をサポートし、完全なTypeScriptの型安全性を提供します。
+このガイドでは、[@emqx-ai/mcp-mqtt-sdk](https://github.com/emqx/mcp-typescript-sdk) を使って、MQTT上のMCPサーバーとクライアントを作成する方法を説明します。  
+このSDKはブラウザとNode.js環境の両方をサポートし、完全なTypeScriptの型安全性を提供します。
 
-便宜上、このチュートリアルではNode.js環境でデモを実行しますが、VueやReactなどのフレームワークと統合してブラウザ環境で使用することも簡単にできます。
+便宜上、このチュートリアルではNode.js環境でデモを実行しますが、VueやReactなどのフレームワークと組み合わせてブラウザ環境に簡単に統合することも可能です。
 
 ## デモプロジェクトの作成
 
-まず、新しいNode.jsプロジェクトを作成します（Node.js >= 18が必要です）：
+まず、新しいNode.jsプロジェクトを作成します（Node.js >= 18が必要です）:
 
 ```bash
 mkdir mcp_typescript_demo
@@ -17,7 +17,7 @@ npm init -y
 
 ## 依存関係のインストール
 
-TypeScript用MCP SDKをインストールします：
+TypeScript用MCP SDKをインストールします:
 
 ```bash
 # npmを使用する場合
@@ -35,8 +35,8 @@ pnpm add -D typescript @types/node ts-node
 
 ## シンプルなMCPサーバーの作成
 
-`mcp_typescript_demo` プロジェクト内で、計算ツールとリソースを公開するシンプルなMCPサーバーを作成します。  
-`demo_mcp_server.ts` というファイルを作成し、以下のコードを追加してください：
+`mcp_typescript_demo`プロジェクト内に、計算機ツールとリソースを公開するシンプルなMCPサーバーを作成します。  
+`demo_mcp_server.ts`というファイルを作成し、以下のコードを追加してください。
 
 ```typescript
 // demo_mcp_server.ts
@@ -194,8 +194,8 @@ startServer();
 
 ## シンプルなMCPクライアントの作成
 
-同じプロジェクト内で、サーバーに接続し利用可能なツールとリソースを一覧表示するシンプルなMCPクライアントを作成します。  
-`demo_mcp_client.ts` というファイルを作成し、以下のコードを追加してください：
+同じプロジェクト内に、サーバーに接続して利用可能なツールやリソースを一覧表示するシンプルなMCPクライアントを作成します。  
+`demo_mcp_client.ts`というファイルを作成し、以下のコードを追加してください。
 
 ```typescript
 // demo_mcp_client.ts
@@ -222,7 +222,7 @@ async function onServerConnected(server: any, initResult: any) {
   console.log(`Connected to ${server.name}`);
   const capabilities = initResult.capabilities;
 
-  // ツールの一覧表示
+  // ツール一覧を取得
   if (capabilities.tools) {
     try {
       const tools = await client.listTools(server.serverId);
@@ -231,7 +231,7 @@ async function onServerConnected(server: any, initResult: any) {
         tools.map((t) => t.name),
       );
 
-      // 加算ツールのテスト
+      // 加算ツールをテスト
       if (tools.some((t) => t.name === "add")) {
         const result = await client.callTool(server.serverId, "add", {
           a: 1,
@@ -240,7 +240,7 @@ async function onServerConnected(server: any, initResult: any) {
         console.log("Result of add(a=1, b=2):", result.content[0]?.text);
       }
 
-      // 乗算ツールのテスト
+      // 乗算ツールをテスト
       if (tools.some((t) => t.name === "multiply")) {
         const result = await client.callTool(server.serverId, "multiply", {
           a: 3,
@@ -253,7 +253,7 @@ async function onServerConnected(server: any, initResult: any) {
     }
   }
 
-  // リソースの一覧表示と読み取り
+  // リソース一覧を取得し読み込み
   if (capabilities.resources) {
     try {
       const resources = await client.listResources(server.serverId);
@@ -262,7 +262,7 @@ async function onServerConnected(server: any, initResult: any) {
         resources.map((r) => r.uri),
       );
 
-      // サーバーステータスの読み取り
+      // サーバーステータスを読み込み
       if (resources.some((r) => r.uri === "status://server")) {
         const status = await client.readResource(
           server.serverId,
@@ -271,7 +271,7 @@ async function onServerConnected(server: any, initResult: any) {
         console.log("Server status:", status.contents[0]?.text);
       }
 
-      // 動的な挨拶リソースの読み取り
+      // 動的な挨拶リソースを読み込み
       const greeting = await client.readResource(
         server.serverId,
         "greeting://Alice",
@@ -287,7 +287,7 @@ async function onServerDisconnected(serverId: string) {
   console.log(`Disconnected from server ${serverId}`);
 }
 
-// イベントハンドラの登録
+// イベントハンドラ登録
 client.on("serverDiscovered", onServerDiscovered);
 client.on("serverInitialized", (server) => {
   // デモ用に初期化結果をモック
@@ -304,9 +304,9 @@ async function startClient() {
     await client.connect();
     console.log("Demo MCP Client started");
 
-    // 実行を継続
+    // 動作継続
     while (true) {
-      // MQTTクライアントがバックグラウンドで動作する間に他の処理をシミュレート
+      // MQTTクライアントがバックグラウンドで動作する間、他の処理をシミュレート
       await new Promise((resolve) => setTimeout(resolve, 20000));
     }
   } catch (error) {
@@ -327,9 +327,9 @@ startClient();
 
 ## プロジェクトの設定
 
-SDKはESモジュールを使用しているため、プロジェクトをモダンなJavaScriptモジュール構文に対応させる必要があります。
+SDKはESモジュールを使用しているため、プロジェクトをモダンなJavaScriptモジュール構文に対応させます。
 
-`package.json` にモジュールタイプとスクリプトを追加します：
+`package.json`にモジュールタイプとスクリプトを追加してください:
 
 ```json
 {
@@ -341,7 +341,7 @@ SDKはESモジュールを使用しているため、プロジェクトをモダ
 }
 ```
 
-`tsconfig.json` ファイルを作成します：
+`tsconfig.json`ファイルを作成します:
 
 ```json
 {
@@ -363,22 +363,22 @@ SDKはESモジュールを使用しているため、プロジェクトをモダ
 
 ## デモの実行
 
-1. クライアントを起動します：
+1. クライアントを起動します:
 
 ```bash
 npm run start:client
 ```
 
-2. 新しいターミナルを開き、サーバーを起動します：
+2. 新しいターミナルを開き、サーバーを起動します:
 
 ```bash
 npm run start:server
 ```
 
 クライアントがサーバーより先に起動しても、サーバーが利用可能になると自動的に検出して接続します。  
-クライアントは利用可能なツールを一覧表示し、`add` ツールにパラメータ `a=1` と `b=2` を渡して呼び出し、`multiply` ツールにパラメータ `a=3` と `b=4` を渡して呼び出します。
+クライアントは利用可能なツールを一覧表示し、`add`ツールにパラメータ `a=1` と `b=2` を渡して呼び出し、`multiply`ツールにパラメータ `a=3` と `b=4` を渡して呼び出します。
 
 ## まとめ
 
-このエンドツーエンドのデモにより、MQTT上の完全に機能するMCPシステムを作成できました。  
-これにより、DeepSeek、Claude、GPT、Geminiなどの大規模モデルがMCPプロトコルを介して公開された計算ツールを検出・呼び出しでき、外部サービスとのシームレスな統合とインテリジェントな連携が可能になります。
+このエンドツーエンドのデモを通じて、MQTT上の完全なMCPシステムを構築できました。  
+これにより、DeepSeek、Claude、GPT、Geminiなどの大規模モデルがMCPプロトコルを介して公開された計算機ツールを検出・呼び出しでき、外部サービスとのシームレスな統合と高度なインテリジェントな対話が可能になります。

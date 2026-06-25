@@ -1,19 +1,19 @@
 # Python SDK
 
-このガイドでは、[MCP over MQTT Python SDK](https://github.com/emqx/mcp-python-sdk) を使って、シンプルなMCP over MQTTサーバーとクライアントを作成する方法を説明します。
+このガイドでは、[MCP over MQTT Python SDK](https://github.com/emqx/mcp-python-sdk) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を説明します。
 
 ## デモプロジェクトの作成
 
-[uv](https://docs.astral.sh/uv/) を使ってデモプロジェクトを作成しましょう。
+[uv](https://docs.astral.sh/uv/) を使ってデモプロジェクトを作成します。
 
 ```bash
 uv init mcp_over_mqtt_demo
 cd mcp_over_mqtt_demo
 ```
 
-## シンプルなMCPサーバーの作成
+## シンプルな MCP サーバーの作成
 
-`mcp_over_mqtt_demo` プロジェクト内で、計算ツールといくつかのリソースを公開するシンプルなMCPサーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください。
+`mcp_over_mqtt_demo` プロジェクト内に、計算機ツールといくつかのリソースを公開するシンプルな MCP サーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください。
 
 ```python
 # demo_mcp_server.py
@@ -32,19 +32,19 @@ mcp = FastMCP(
 # 足し算ツールを追加
 @mcp.tool()
 def add(a: int, b: int) -> int:
-    """2つの数値を足し算する"""
+    """2つの数値を足す"""
     return a + b
 
 # 動的な挨拶リソースを追加
 @mcp.resource("greeting://{name}")
 def get_greeting(name: str) -> str:
-    """名前に応じた挨拶を取得する"""
+    """パーソナライズされた挨拶を取得"""
     return f"Hello, {name}!"
 ```
 
-## シンプルなMCPクライアントの作成
+## シンプルな MCP クライアントの作成
 
-同じプロジェクト内で、サーバーに接続し利用可能なツールやリソースを一覧表示するシンプルなMCPクライアントを作成します。`demo_mcp_client.py` というファイルを作成し、以下のコードを追加してください。
+同じプロジェクト内に、サーバーに接続して利用可能なツールやリソースを一覧表示するシンプルな MCP クライアントを作成します。`demo_mcp_client.py` というファイルを作成し、以下のコードを追加してください。
 
 ```python
 # demo_mcp_client.py
@@ -81,7 +81,7 @@ async def on_mcp_connect(client, server_name, connect_result):
         logger.info(f"{server_name} のツール: {tools}")
         if tools[0].name == "add":
             result = await client.call_tool(server_name, name=tools[0].name, arguments={"a": 1, "b": 2})
-            logger.info(f"ツール add(a=1, b=2) を呼び出し、結果: {result}")
+            logger.info(f"ツール add(a=1, b=2) を呼び出しました。結果: {result}")
 
 async def on_mcp_disconnect(client, server_name):
     logger.info(f"{server_name} から切断されました")
@@ -99,7 +99,7 @@ async def main():
     ) as client:
         client.start()
         while True:
-            ## MQTTトランスポートクライアントがバックグラウンドで動作している間に他の処理をシミュレート...
+            ## MQTTトランスポートクライアントがバックグラウンドで動作している間に他の作業をシミュレート...
             await anyio.sleep(20)
 
 if __name__ == "__main__":
@@ -127,4 +127,4 @@ uv run demo_mcp_client.py
 uv run mcp run --transport mqtt ./demo_mcp_server.py
 ```
 
-クライアントがサーバーより先に起動しても、サーバーを検出して接続します。クライアントは利用可能なツールやリソースを一覧表示し、`add` ツールをパラメータ `a=1`、`b=2` で呼び出します。
+クライアントがサーバーより先に起動しても、サーバーを検出して接続します。クライアントは利用可能なツールやリソースを一覧表示し、`add` ツールをパラメータ `a=1` と `b=2` で呼び出します。

@@ -1,18 +1,18 @@
 # クイックスタート：Anthropicノードを使ったFlowの作成
 
-このページでは、Claude 3 Sonnetを使用して故障分類を行い、受信したテレメトリに基づいて是正推奨を生成する方法を示します。これは、スマートファクトリーやスマートビルディングなどのIoTシステムがデバイスからのステータスメッセージを受信し、その問題を自動的かつインテリジェントに解釈する実際のシナリオをシミュレートしています。
+このページでは、Claude 3 Sonnetを使用してフォールト分類を行い、受信したテレメトリに基づいて是正推奨を生成する方法を示します。これは、スマートファクトリーやスマートビルディングなどのIoTシステムがデバイスからのステータスメッセージを受信し、それらの問題を自動かつインテリジェントに解釈する実際のシナリオをシミュレートしています。
 
 ## シナリオの説明
 
-多くの産業用またはスマートビルディングのシナリオでは、IoTデバイスが1つのMQTTメッセージ内で複数のメトリクスを報告します。例えば、電力監視デバイスが複数の回路にわたる消費電力を1つのペイロードで送信する場合があります。
+多くの産業やスマートビルディングのシナリオでは、IoTデバイスが単一のMQTTメッセージで複数のメトリクスを報告します。例えば、電力監視デバイスが複数の回路の電力消費を1つのペイロードで送信する場合があります。
 
 各メッセージはトピック `devices/power_report` にパブリッシュされ、以下を含みます：
 
 - `device_id`：デバイスの識別子
-- `circuit_1`、`circuit_2`、`circuit_3`などの複数の数値メトリクス
+- `circuit_1`、`circuit_2`、`circuit_3` などの複数の数値メトリクス
 - `status` や `timestamp` のような数値以外の追加フィールド
 
-このシナリオの目的は、LLM（Claude 3 Sonnet）を使ってメッセージ内のすべての数値の合計（すなわち回路全体の総消費電力）を計算し、その数値結果のみを下流の処理や課金に向けて再パブリッシュすることです。
+このシナリオでは、メッセージ内のすべての数値を合計（すなわち回路全体の総電力消費）し、LLM（Claude 3 Sonnet）を使って計算し、その数値結果のみを下流処理や課金のために再パブリッシュすることが目標です。
 
 ## サンプルメッセージ
 
@@ -39,27 +39,27 @@
 
 ::: tip 前提条件
 
-有効な **Anthropic APIキー** を用意し、正しいAPIバージョン（例：`2023-06-01`）を設定してください。
+有効な**Anthropic APIキー**を用意し、正しいAPIバージョン（例：`2023-06-01`）を設定してください。
 
 :::
 
-1. **Flows** ページで **Create Flow** ボタンをクリックします。
+1. **Flows**ページで**Create Flow**ボタンをクリックします。
 
-2. **Messages** ノードを追加します。
+2. **Messages**ノードを追加します。
 
-   - ソースパネルから **Messages** ノードをドラッグします。
+   - ソースパネルから**Messages**ノードをドラッグします。
    - トピックを `devices/power_report` に設定します。
-   - **Save** をクリックします。
+   - **Save**をクリックします。
 
-3. **Anthropic** ノードを追加します。
+3. **Anthropic**ノードを追加します。
 
-   - 処理セクションから **Anthropic** ノードをドラッグし、データ処理ノードに接続します。
+   - 処理セクションから**Anthropic**ノードをドラッグし、データ処理ノードに接続します。
    - ノードを設定します：
      - **Input**：`payload` と入力します。
      - **System Message**：以下のような動的プロンプトを入力できます。  
        
        ```
-       You are a power consumption calculator. Given an input JSON object with various keys, sum all numeric values (e.g., circuit readings) and return only the total.
+       あなたは電力消費計算機です。様々なキーを持つJSONオブジェクトが入力された場合、すべての数値（例：回路の読み取り値）を合計し、合計値のみを返してください。
        ```
      - **Model**：`claude-3-sonnet-20240620` を選択します。
      - **Max Tokens**：`50` と入力します。
@@ -67,20 +67,20 @@
      - **API Key**：AnthropicのAPIキーを入力します。
      - **Base URL**：空欄のままにします。
      - **Output Result Alias**：`total_power` と入力します。
-   - **Save** をクリックします。
+   - **Save**をクリックします。
 
-4. **Republish** ノードを追加します。
+4. **Republish**ノードを追加します。
 
-   - シンクセクションから **Republish** ノードをドラッグし、Anthropicノードに接続します。
+   - シンクセクションから**Republish**ノードをドラッグし、Anthropicノードに接続します。
    - トピックを `devices/power_total` に設定します。
    - ペイロードを `${total_power}` に設定します。
-   - **Save** をクリックします。
+   - **Save**をクリックします。
 
-5. 右上の **Save** をクリックしてFlowを保存します。
+5. 右上の**Save**をクリックしてFlowを保存します。
 
    ![anthropic_node_flow](./assets/anthropic_node_flow.png)
 
-6. Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
+6. Flowとフォームルールは相互運用可能です。ルールページでSQLや関連ルール設定も確認できます。
 
    ![anthropic_node_rule_page](./assets/anthropic_node_rule_page.png)
 
@@ -88,7 +88,7 @@
 
 1. MQTTクライアントをEMQXに接続します。
 
-   Flowを素早くテストするには、ダッシュボードの **Diagnostic Tools** -> **WebSocket Client** を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/) ツールや実際のMQTTクライアントを使用してもかまいません：
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントを使用しても構いません：
 
    - EMQXサーバーに接続します。
    - トピック `devices/power_total` をサブスクライブします。
@@ -96,8 +96,8 @@
 2. テストを開始します。
 
    - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
-   - **Edit** をクリックし、続いて **Start Test** をクリックして画面下部にテストパネルを表示します。
-   - **Input Simulated Data** をクリックし、以下のメッセージをトピック `devices/power_report` にパブリッシュするために **Submit Test** をクリックします：
+   - **Edit**をクリックし、続いて**Start Test**をクリックして下部にテストパネルを開きます。
+   - **Input Simulated Data**をクリックし、以下のメッセージをトピック `devices/power_report` にパブリッシュするために**Submit Test**をクリックします：
 
      ```json
      {
@@ -110,18 +110,20 @@
      }
      ```
 
-3. 結果とノード処理のメトリクスを確認します。
+3. 結果とノードの処理メトリクスを確認します。
 
    - Flowの正常な実行結果を確認できます。
 
      ![anthropic_node_test_result](./assets/anthropic_node_test_result.png)
 
-   - **WebSocket Client** ページに戻ると、AIによって生成された要約を受信できます：
-   
-     > 322.4
+   - **WebSocket Client**ページに戻ると、AI生成の要約（例：  
      
-   - テスト結果が正常でない場合は、エラーメッセージが表示されます。
+     > 322.4  
+     
+     ）を受信しているはずです。
    
-   - **Anthropic** ノードの稼働状況やメトリクスを確認するには、ノードをクリックして編集パネルを開き、**Overview** タブをクリックします。
+   - テストが失敗した場合は、エラーメッセージが表示されます。
+   
+   - **Anthropic**ノードの実行統計やメトリクスを確認するには、ノードをクリックして編集パネルを開き、**Overview**タブをクリックします。
    
      ![anthropic_node_statis](./assets/anthropic_node_statistics.png)
