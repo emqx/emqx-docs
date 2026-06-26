@@ -5403,139 +5403,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -5547,13 +5415,7 @@
               },
               {
                 "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
+                  "mysql"
                 ],
                 "type": "string"
               },
@@ -5565,91 +5427,13 @@
               },
               {
                 "enum": [
-                  "tdengine"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_grid"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -5661,7 +5445,115 @@
               },
               {
                 "enum": [
-                  "aws_timestream"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_grid"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -5673,7 +5565,115 @@
               },
               {
                 "enum": [
-                  "mongodb"
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               }
@@ -6036,7 +6036,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6084,7 +6084,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6132,7 +6132,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6270,7 +6270,7 @@
       "ai.openai_provider": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6310,7 +6310,7 @@
       "ai.openai_provider_api_get": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6350,7 +6350,7 @@
       "ai.openai_provider_api_put": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6488,7 +6488,7 @@
       "ai.openai_response_provider": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6528,7 +6528,7 @@
       "ai.openai_response_provider_api_get": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6568,7 +6568,7 @@
       "ai.openai_response_provider_api_put": {
         "properties": {
           "api_key": {
-            "description": "API key for the AI provider.",
+            "description": "API key for the AI provider.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6708,7 +6708,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
             "example": [
               "connections",
               "monitoring"
@@ -6739,7 +6739,7 @@
             "type": "string"
           },
           "name": {
-            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "description": "Scope name: a stable identifier for a functional category of API endpoints.",
             "example": "connections",
             "type": "string"
           }
@@ -7544,6 +7544,145 @@
         ],
         "type": "object"
       },
+      "authn.jwks_client_ssl_opts": {
+        "properties": {
+          "cacertfile": {
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM format certificates chain file.<br/><br/>The certificates in this file should be in reversed order of the certificate<br/>issue chain. That is, the host's certificate should be placed in the beginning<br/>of the file, followed by the immediate issuer certificate and so on.<br/>Although the root CA certificate is optional, it should be placed at the end of<br/>the file if it is to be added.",
+            "type": "string"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "depth": {
+            "default": 10,
+            "description": "Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.<br/>So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/><br/>if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/><br/>if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable TLS.",
+            "type": "boolean"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
+            "example": "12m",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM format private key file.",
+            "type": "string"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "The minimum level of logging allowed for SSL output.<br/><br/>The default is `notice`, set to a lower `debug` level for more detailed logging that can be used to investigate SSL handshake issues.",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
+          "partial_chain": {
+            "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
+            "enum": [
+              true,
+              false,
+              "two_cacerts_from_cacertfile",
+              "cacert_from_cacertfile"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": false,
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "type": "boolean"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "Specify the host name to be used in TLS Server Name Indication extension.<br/><br/>For instance, when connecting to \"server.example.net\", the genuine server<br/>which accepts the connection and performs TLS handshake may differ from the<br/>host the TLS client initially connects to, e.g. when connecting to an IP address<br/>or when the host has multiple resolvable DNS records <br/><br/>If not specified, it will default to the host name string which is used<br/>to establish the connection, unless it is IP address used.<br/><br/>The host name is then also used in the host name verification of the peer<br/>certificate.<br/> The special value 'disable' prevents the Server Name<br/>Indication extension from being sent and disables the hostname<br/>verification check.",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "verify_peer_ext_key_usage": {
+            "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
+            "example": "",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "All TLS/DTLS versions to be supported.<br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/><br/>In case PSK cipher suites are intended, make sure to configure<br/><code>['tlsv1.2', 'tlsv1.1']</code> here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "authn.jwt_hmac": {
         "properties": {
           "acl_claim_name": {
@@ -7581,6 +7720,15 @@
             "description": "Authentication mechanism.",
             "enum": [
               "jwt"
+            ],
+            "type": "string"
+          },
+          "on_missing_jwt": {
+            "default": "ignore",
+            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "enum": [
+              "deny",
+              "ignore"
             ],
             "type": "string"
           },
@@ -7657,6 +7805,15 @@
             ],
             "type": "string"
           },
+          "on_missing_jwt": {
+            "default": "ignore",
+            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "enum": [
+              "deny",
+              "ignore"
+            ],
+            "type": "string"
+          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -7671,12 +7828,14 @@
           "refresh_interval": {
             "default": 300,
             "description": "JWKS refresh interval.",
+            "minimum": 1,
             "type": "integer"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/authn.jwks_client_ssl_opts",
             "default": {
-              "enable": false
+              "enable": false,
+              "verify": "verify_none"
             },
             "description": "SSL options."
           },
@@ -7738,6 +7897,15 @@
             "description": "Authentication mechanism.",
             "enum": [
               "jwt"
+            ],
+            "type": "string"
+          },
+          "on_missing_jwt": {
+            "default": "ignore",
+            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "enum": [
+              "deny",
+              "ignore"
             ],
             "type": "string"
           },
@@ -7861,7 +8029,7 @@
             ]
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8054,7 +8222,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8223,7 +8391,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8378,7 +8546,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8518,7 +8686,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8692,7 +8860,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8788,7 +8956,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8892,7 +9060,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -9011,7 +9179,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -9855,7 +10023,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -9959,7 +10127,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10089,7 +10257,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10205,7 +10373,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10310,7 +10478,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10398,7 +10566,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10474,7 +10642,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10558,7 +10726,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10657,7 +10825,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -11482,7 +11650,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -11827,7 +11995,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -11990,7 +12158,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12121,7 +12289,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12462,7 +12630,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12625,7 +12793,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12756,7 +12924,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -18048,7 +18216,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -18820,7 +18988,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -18989,7 +19157,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19126,7 +19294,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19455,7 +19623,7 @@
             ]
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19644,7 +19812,7 @@
             ]
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19801,7 +19969,7 @@
             ]
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -20166,6 +20334,11 @@
             "maximum": 2,
             "minimum": 0,
             "type": "integer"
+          },
+          "retain_as_published": {
+            "default": true,
+            "description": "Whether to set the MQTT 5.0 Retain As Published subscription option on the remote subscription.  When set to true (the default), the upstream broker preserves the `retain` flag on messages forwarded to this subscription; when set to false, the upstream clears the `retain` flag.  Only takes effect when the connector's `proto_ver` is `v5`.",
+            "type": "boolean"
           },
           "topic": {
             "description": "Receive messages from which topic of the remote broker",
@@ -20707,7 +20880,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -20871,7 +21044,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21003,7 +21176,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21690,7 +21863,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21859,7 +22032,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21996,7 +22169,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22338,7 +22511,7 @@
       "bridge_pulsar.auth_basic": {
         "properties": {
           "password": {
-            "description": "Basic authentication password. The `password` part of the `username:password` authentication string.",
+            "description": "Basic authentication password. The `password` part of the `username:password` authentication string.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22357,7 +22530,7 @@
       "bridge_pulsar.auth_token": {
         "properties": {
           "jwt": {
-            "description": "JWT authentication token.",
+            "description": "JWT authentication token.<br/><br/>To load the token from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the token. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23172,7 +23345,7 @@
             "description": "Resource options."
           },
           "secret_access_key": {
-            "description": "The secret access key of the S3 bucket.",
+            "description": "The secret access key of the S3 bucket.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23337,7 +23510,7 @@
             "description": "Resource options."
           },
           "secret_access_key": {
-            "description": "The secret access key of the S3 bucket.",
+            "description": "The secret access key of the S3 bucket.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23470,7 +23643,7 @@
             "description": "Resource options."
           },
           "secret_access_key": {
-            "description": "The secret access key of the S3 bucket.",
+            "description": "The secret access key of the S3 bucket.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24060,7 +24233,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24222,7 +24395,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24352,7 +24525,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -25569,7 +25742,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -25738,7 +25911,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -25875,7 +26048,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26099,7 +26272,7 @@
             "type": "string"
           },
           "password": {
-            "description": "Optional MQTT username for connecting to the remote EMQX cluster.",
+            "description": "Optional MQTT password for connecting to the remote EMQX cluster.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26267,7 +26440,7 @@
             "type": "string"
           },
           "password": {
-            "description": "Optional MQTT username for connecting to the remote EMQX cluster.",
+            "description": "Optional MQTT password for connecting to the remote EMQX cluster.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26426,7 +26599,7 @@
       "confluent.auth_username_password": {
         "properties": {
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27139,6 +27312,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "enable": {
+            "default": true,
+            "description": "Enable TLS.",
+            "type": "boolean"
+          },
           "hibernate_after": {
             "default": "5s",
             "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
@@ -27186,7 +27364,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -27222,6 +27400,15 @@
                 "type": "string"
               }
             ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
           },
           "verify_peer_ext_key_usage": {
             "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
@@ -27474,7 +27661,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27576,7 +27763,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27659,7 +27846,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28248,7 +28435,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28404,7 +28591,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28541,7 +28728,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28695,6 +28882,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -28794,6 +28988,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -28874,6 +29075,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -28936,7 +29144,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29038,7 +29246,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29121,7 +29329,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29726,7 +29934,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29823,7 +30031,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29901,7 +30109,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30028,7 +30236,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -30550,7 +30758,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30706,7 +30914,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30843,7 +31051,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30990,7 +31198,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31054,7 +31262,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31156,7 +31364,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31239,7 +31447,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31625,7 +31833,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31727,7 +31935,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31810,7 +32018,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32145,7 +32353,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32271,7 +32479,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32397,7 +32605,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -33479,7 +33687,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -33575,7 +33783,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+            "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
             "example": [
               "user_management",
               "mfa_management"
@@ -34649,7 +34857,7 @@
             ]
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -34788,7 +34996,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -34950,7 +35158,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -35713,7 +35921,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -36161,6 +36369,11 @@
       },
       "emqx_authn_api.request_authn_settings": {
         "properties": {
+          "ignore_backend_failures": {
+            "default": false,
+            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
+            "type": "boolean"
+          },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
             "default": {
@@ -36193,11 +36406,22 @@
         ],
         "type": "object"
       },
+      "emqx_authn_api.request_user_delete": {
+        "properties": {
+          "namespace": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "emqx_authn_api.request_user_update": {
         "properties": {
           "is_superuser": {
             "default": false,
             "type": "boolean"
+          },
+          "namespace": {
+            "type": "string"
           },
           "password": {
             "type": "string"
@@ -36210,6 +36434,11 @@
       },
       "emqx_authn_api.response_authn_settings": {
         "properties": {
+          "ignore_backend_failures": {
+            "default": false,
+            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
+            "type": "boolean"
+          },
           "node_cache": {
             "$ref": "#/components/schemas/auth_cache.config",
             "default": {
@@ -40927,7 +41156,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "FCFE9358761AA749",
+            "example": "E6ED1A674CB17509",
             "type": "string"
           },
           "status": {
@@ -43322,7 +43551,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -43560,7 +43789,7 @@
             "type": "integer"
           },
           "secret_access_key": {
-            "description": "The secret access key of the S3 bucket.",
+            "description": "The secret access key of the S3 bucket.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -43818,7 +44047,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -44305,7 +44534,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -44585,6 +44814,8 @@
         "properties": {
           "service_account_json": {
             "description": "JSON containing the GCP Service Account credentials to be used with GCP.<br/>When a GCP Service Account is created (as described in https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount), you have the option of downloading the credentials in JSON form.  That's the file needed.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
           },
           "type": {
@@ -44814,6 +45045,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -44994,6 +45232,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -45132,6 +45377,13 @@
             "$ref": "#/components/schemas/gcp_pubsub_consumer.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -45593,6 +45845,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -45766,6 +46025,13 @@
             "default": {},
             "description": "Resource options."
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -45906,6 +46172,13 @@
             "$ref": "#/components/schemas/gcp_pubsub_producer.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -47408,7 +47681,7 @@
             "type": "string"
           },
           "password": {
-            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "description": "String containing the user's password. Only used if the private key file is password-protected.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>. The file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "",
             "format": "password",
             "type": "string"
@@ -53594,7 +53867,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -53696,7 +53969,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -53788,7 +54061,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54408,7 +54681,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54456,7 +54729,7 @@
             "type": "integer"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54519,7 +54792,7 @@
             "type": "integer"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55100,7 +55373,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ server `secretKey`.",
+            "description": "RocketMQ server `secretKey`.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55265,7 +55538,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ server `secretKey`.",
+            "description": "RocketMQ server `secretKey`.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55398,7 +55671,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ server `secretKey`.",
+            "description": "RocketMQ server `secretKey`.<br/><br/>To load the key from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the key. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -58151,7 +58424,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -58355,7 +58628,7 @@
             "type": "array"
           },
           "secret": {
-            "description": "The client secret.",
+            "description": "The client secret.<br/><br/>To load the secret from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the secret. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -59572,7 +59845,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -59660,7 +59933,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -59729,7 +60002,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "The password associated with the bridge, used for authentication with the external database.",
+            "description": "The password associated with the bridge, used for authentication with the external database.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -60048,7 +60321,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.2.1"
+    "version": "6.2.2-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -60598,104 +60871,104 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "mongodb",
-                      "azure_blob_storage",
-                      "aws_timestream",
-                      "redshift",
-                      "tablestore",
-                      "elasticsearch",
-                      "datalayers",
-                      "rabbitmq",
-                      "azure_event_hub_producer",
-                      "pulsar",
-                      "azure_event_grid",
-                      "s3",
-                      "redis",
-                      "matrix",
-                      "kafka_producer",
-                      "dynamo",
-                      "snowflake_streaming",
-                      "s3tables",
-                      "tdengine",
-                      "syskeeper_forwarder",
-                      "emqx_tables",
-                      "cassandra",
-                      "pgsql",
-                      "mysql",
-                      "cockroachdb",
                       "doris",
-                      "iotdb",
-                      "disk_log",
-                      "timescale",
-                      "quasardb",
-                      "kinesis",
-                      "confluent_producer",
-                      "opents",
-                      "sqlserver",
-                      "http",
-                      "mqtt",
-                      "oracle",
-                      "alloydb",
-                      "rocketmq",
+                      "pulsar",
+                      "cassandra",
+                      "s3tables",
+                      "aws_timestream",
                       "clickhouse",
-                      "snowflake",
-                      "greptimedb",
-                      "couchbase",
+                      "dynamo",
                       "influxdb",
+                      "matrix",
+                      "s3",
+                      "tablestore",
+                      "azure_event_hub_producer",
                       "bigquery",
-                      "gcp_pubsub_producer"
+                      "opents",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
+                      "iotdb",
+                      "tdengine",
+                      "elasticsearch",
+                      "azure_blob_storage",
+                      "confluent_producer",
+                      "sqlserver",
+                      "timescale",
+                      "couchbase",
+                      "kafka_producer",
+                      "azure_event_grid",
+                      "cockroachdb",
+                      "disk_log",
+                      "rabbitmq",
+                      "datalayers",
+                      "http",
+                      "emqx_tables",
+                      "quasardb",
+                      "redis",
+                      "mqtt",
+                      "rocketmq",
+                      "snowflake",
+                      "alloydb",
+                      "kinesis",
+                      "redshift",
+                      "oracle",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "mysql",
+                      "pgsql",
+                      "snowflake_streaming"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "mongodb",
-                      "azure_blob_storage",
-                      "aws_timestream",
-                      "redshift",
-                      "tablestore",
-                      "elasticsearch",
-                      "datalayers",
-                      "rabbitmq",
-                      "azure_event_hub_producer",
-                      "pulsar",
-                      "azure_event_grid",
-                      "s3",
-                      "redis",
-                      "matrix",
-                      "kafka_producer",
-                      "dynamo",
-                      "snowflake_streaming",
-                      "s3tables",
-                      "tdengine",
-                      "syskeeper_forwarder",
-                      "emqx_tables",
-                      "cassandra",
-                      "pgsql",
-                      "mysql",
-                      "cockroachdb",
                       "doris",
-                      "iotdb",
-                      "disk_log",
-                      "timescale",
-                      "quasardb",
-                      "kinesis",
-                      "confluent_producer",
-                      "opents",
-                      "sqlserver",
-                      "http",
-                      "mqtt",
-                      "oracle",
-                      "alloydb",
-                      "rocketmq",
+                      "pulsar",
+                      "cassandra",
+                      "s3tables",
+                      "aws_timestream",
                       "clickhouse",
-                      "snowflake",
-                      "greptimedb",
-                      "couchbase",
+                      "dynamo",
                       "influxdb",
+                      "matrix",
+                      "s3",
+                      "tablestore",
+                      "azure_event_hub_producer",
                       "bigquery",
-                      "gcp_pubsub_producer"
+                      "opents",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
+                      "iotdb",
+                      "tdengine",
+                      "elasticsearch",
+                      "azure_blob_storage",
+                      "confluent_producer",
+                      "sqlserver",
+                      "timescale",
+                      "couchbase",
+                      "kafka_producer",
+                      "azure_event_grid",
+                      "cockroachdb",
+                      "disk_log",
+                      "rabbitmq",
+                      "datalayers",
+                      "http",
+                      "emqx_tables",
+                      "quasardb",
+                      "redis",
+                      "mqtt",
+                      "rocketmq",
+                      "snowflake",
+                      "alloydb",
+                      "kinesis",
+                      "redshift",
+                      "oracle",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "mysql",
+                      "pgsql",
+                      "snowflake_streaming"
                     ],
                     "type": "string"
                   },
@@ -72828,7 +73101,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -72925,7 +73198,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
@@ -73119,7 +73392,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -73240,7 +73513,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
@@ -73334,7 +73607,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -75632,6 +75905,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -75776,6 +76057,18 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "namespace": "ns1"
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_authn_api.request_user_delete"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": "User deleted"
@@ -82008,7 +82301,7 @@
                     "type": "integer"
                   },
                   "password": {
-                    "description": "Optional MQTT username for connecting to the remote EMQX cluster.",
+                    "description": "Optional MQTT password for connecting to the remote EMQX cluster.<br/><br/>To load the password from a file instead of embedding it inline, use the form <code>file://&lt;path-to-file&gt;</code>; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes.",
                     "example": "R4ND0M/S∃CЯ∃T",
                     "format": "password",
                     "type": "string"
@@ -86628,7 +86921,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -88270,7 +88563,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -90144,7 +90437,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91417,7 +91710,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -93048,7 +93341,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -94672,7 +94965,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95509,7 +95802,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "FCFE9358761AA749",
+            "example": "E6ED1A674CB17509",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95572,7 +95865,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "FCFE9358761AA749",
+            "example": "E6ED1A674CB17509",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95986,7 +96279,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "FCFE9358761AA749",
+            "example": "E6ED1A674CB17509",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96072,7 +96365,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "FCFE9358761AA749",
+            "example": "E6ED1A674CB17509",
             "in": "path",
             "name": "site",
             "required": true,
@@ -101594,6 +101887,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -101694,73 +102054,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -122931,7 +123224,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>If this field is omitted when a user is created, the server applies the default scopes for the role. An administrator receives all management scopes plus the four login-only scopes. A viewer receives all management scopes. A publisher, where applicable, receives only the `publish` scope. To create a deny-all user, send an explicit empty list `[]`; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -122986,7 +123279,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                       "example": [
                         "user_management",
                         "mfa_management"
@@ -123172,7 +123465,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>If this field is omitted when a user is created, the server applies the default scopes for the role. An administrator receives all management scopes plus the four login-only scopes. A viewer receives all management scopes. A publisher, where applicable, receives only the `publish` scope. To create a deny-all user, send an explicit empty list `[]`; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -123221,7 +123514,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                       "example": [
                         "user_management",
                         "mfa_management"
