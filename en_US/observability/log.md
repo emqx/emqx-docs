@@ -4,7 +4,7 @@ Logs provide a reliable source of information for troubleshooting and system per
 
 EMQX supports both console logs and file logs. There are two different ways of outputting log data. You can choose the output method as needed or keep both. Console log refers to outputting log data to the console or command line interface. It is typically used during development and debugging, as it allows developers to quickly view log data in real-time as EMQX runs. File log refers to outputting log data to a file. This is typically used in production environments, where it is important to persist log data over time for analysis and troubleshooting.
 
-The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
+The system's default log output can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
 
 - `file`: Directs log output to files.
 - `console`: Channels log output to the console.
@@ -43,9 +43,9 @@ On the **Logging** page, select the **Console Log** tab.
 
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
 
-Configure the following settings for the console log handler:
+Configure the following settings for the console log output:
 
-- **Enable Log Handler**: Click the toggle switch to enable the console log handler.
+- **Enable Log Output**: Click the toggle switch to enable the console log output.
 
 - **Log Level**: Select the log level to use from the drop-down list. The default value is `warning`.
 
@@ -67,9 +67,9 @@ On the **Logging** page, select the **File Log** tab.
 
 <img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
 
-Configure the following settings for file log handler:
+Configure the following settings for the file log output:
 
-- **Enable Log Handler**: Click the toggle switch to enable the file log handler.
+- **Enable Log Output**: Click the toggle switch to enable the file log output.
 
 - **Log File Name**: Type the name of the log file. The default name is `log/emqx.log`.
 
