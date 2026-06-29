@@ -4,27 +4,27 @@ IoTアプリケーションでは通常、多数のデバイスと大量のデ�
 
 最適化の目的は、以下のパフォーマンス面を最大化することです。
 
-- **メッセージ処理能力**：EMQXがメッセージを迅速かつ効率的に処理し、デバイスから生成されたメッセージを速やかに受信、処理、転送できる能力の向上。
-- **スループット**：システムがデバイスからのメッセージをタイムリーに処理・配信できるスループットの増加。
-- **安定性**：高負荷時のレイテンシを低減し、システムの応答性を改善、システムクラッシュや障害のリスクを抑制。
+- **メッセージ処理能力**：EMQXがメッセージを迅速かつ効率的に処理し、デバイスからのメッセージを速やかに受信、処理、転送できる能力を向上させること。
+- **スループット**：システムがデバイスからのメッセージをタイムリーに処理・配信できるスループットの向上。
+- **安定性**：高負荷時のレイテンシを低減し、システムの応答性を改善するとともに、クラッシュや障害のリスクを軽減すること。
 
-本ページでは、ベンチマークやデプロイメントに向けた一般的なチューニングの提案を紹介します。
+本ページでは、ベンチマークやデプロイメントにおける一般的なチューニングの提案を紹介します。
 
 ## スワップの無効化
 
-Linuxのスワップパーティションは、Erlang仮想マシンに対して非決定的なメモリレイテンシを引き起こし、システムの安定性に大きな影響を与える可能性があります。スワップは恒久的に無効化することを推奨します。
+Linuxのスワップパーティションは、Erlang仮想マシンに対して非決定的なメモリレイテンシを引き起こし、システムの安定性に大きく影響します。スワップは恒久的に無効化することを推奨します。
 
-- 即時にスワップを無効化するには、以下のコマンドを実行してください。
+- 即座にスワップを無効化するには、以下のコマンドを実行します。
 
-```bash
-sudo swapoff -a
-```
+  ```bash
+  sudo swapoff -a
+  ```
 
-- 恒久的にスワップを無効化するには、`/etc/fstab`の`swap`行をコメントアウトし、ホストを再起動してください。
+- 恒久的にスワップを無効化するには、`/etc/fstab`のスワップ行をコメントアウトし、ホストを再起動してください。
 
 ## Linuxカーネルチューニング
 
-システム全体の最大オープンファイルハンドル数の制限設定：
+システム全体の最大オープンファイルハンドル数の制限：
 
 ```bash
 # システム全体で200万
@@ -41,13 +41,15 @@ ulimit -n 2097152
 
 ### `/etc/sysctl.conf`
 
-`fs.file-max`の設定を永続化するために、`/etc/sysctl.conf`に以下を追加します。
+`fs.file-max`の設定を永続化するには、`/etc/sysctl.conf`に以下を追記します。
 
 ```bash
 fs.file-max = 2097152
 ```
 
-サービスの最大ファイルハンドル数を`/etc/systemd/system.conf`に設定：
+### `/etc/systemd/system.conf`
+
+サービスの最大ファイルハンドル数を設定するには、`/etc/systemd/system.conf`に以下を追記します。
 
 ```bash
 DefaultLimitNOFILE=2097152
@@ -55,7 +57,7 @@ DefaultLimitNOFILE=2097152
 
 ### `emqx.service`
 
-Linuxディストリビューションに応じて、以下のいずれかのパスにある`emqx.service`ファイルに最大ファイルハンドル数を設定します。
+使用しているLinuxディストリビューションに応じて、以下のいずれかのパスにある`emqx.service`ファイルに最大ファイルハンドル数を設定します。
 
 - `/usr/lib/systemd/system/emqx.service`
 - `/lib/systemd/system/emqx.service`
@@ -66,7 +68,7 @@ LimitNOFILE=2097152
 
 ### `/etc/security/limits.conf`
 
-ユーザーの最大オープンファイルハンドル数を永続化するために、`/etc/security/limits.conf`に以下を追加します。
+ユーザーの最大オープンファイルハンドル数を永続化するには、`/etc/security/limits.conf`に以下を追記します。
 
 ```bash
 *      soft   nofile      2097152
@@ -75,27 +77,27 @@ LimitNOFILE=2097152
 
 ### Transparent HugePages（THP）の無効化
 
-EMQXは組み込みのデータベースワークロードを含みます。ほかのデータベースシステムと同様に、EMQX起動前にTransparent HugePages（THP）を無効化することを強く推奨します。
+EMQXは組み込みのデータベースワークロードを含みます。他のデータベースシステムと同様に、EMQX起動前にTransparent HugePages（THP）を無効化することを強く推奨します。
 
 ```bash
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
 ```
 
-16GB以上のメモリを搭載したマシンで長時間EMQXを稼働させた際に以下のような症状が発生する場合は、THPを無効化してTHP関連の問題を除外してください。
+メモリ容量が16GB以上の高メモリマシンで長時間EMQXを稼働させた際に以下の症状が発生した場合、THPを無効化してTHP関連の問題を除外してください。
 
 - メッセージレイテンシの不安定化
 - 予期しないメモリ使用量の急増
 - EMQXの`long_schedule`警告ログ
 - EMQXの`runq_overload`アラーム
 
-クラスター環境の場合は、まず一部のノードでTHPを無効化して比較検証してください。なお、一部のワークロードではTHPを有効にしたほうがパフォーマンスが向上する場合もあります。
+クラスター運用中の場合は、比較のためにまず一部のノードでTHPを無効化してください。なお、一部のワークロードではTHPを有効にした方がパフォーマンスが向上する場合もあります。
 
 これらの設定を再起動後も維持するには、OSのドキュメントを参照し適切な方法で設定してください。
 
 ## TCPネットワークチューニング
 
-受け入れ可能な接続のバックログ数を増加させます。
+受け入れ可能な接続待ち行列の数を増やします。
 
 ```bash
 sysctl -w net.core.somaxconn=32768
@@ -109,7 +111,7 @@ sysctl -w net.core.netdev_max_backlog=16384
 sysctl -w net.ipv4.ip_local_port_range='1024 65535'
 ```
 
-TCPソケットの読み書きバッファ：
+TCPソケットの読み書きバッファ設定：
 
 ```bash
 sysctl -w net.core.rmem_default=262144
@@ -123,7 +125,7 @@ sysctl -w net.ipv4.tcp_rmem='1024 4096 16777216'
 sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 ```
 
-TCPコネクション追跡の設定：
+TCPコネクション追跡設定：
 
 ```bash
 sysctl -w net.nf_conntrack_max=1000000
@@ -131,7 +133,7 @@ sysctl -w net.netfilter.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
 
-TIME-WAITバケットプール、リサイクル、および再利用：
+TIME-WAITバケットプール、リサイクル、再利用：
 
 ```bash
 sysctl -w net.ipv4.tcp_max_tw_buckets=1048576
@@ -149,7 +151,7 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VMチューニング
 
-`etc/emqx.conf`ファイルでErlang VMのチューニングを行います。
+`etc/emqx.conf`ファイルでErlang VMをチューニングします。
 
 ```bash
 ## システムで同時に存在可能な最大ポート数を設定
@@ -160,9 +162,9 @@ node.max_ports = 2097152
 
 ### リスナーアクセプター
 
-`etc/base.hocon`にてアクセプタープールのサイズと`max_connections`制限を調整します。
+`etc/base.hocon`にてアクセプタープールサイズと`max_connections`制限を調整します。
 
-接続処理を最適化するために、`etc/emqx.conf`の設定ファイルでアクセプタープールサイズと`max_connections`制限を調整可能です。
+接続処理を最適化するため、`etc/emqx.conf`の設定ファイルでアクセプタープールサイズと`max_connections`制限を調整できます。
 
 TCPリスナーの例：
 
@@ -172,21 +174,21 @@ listeners.tcp.$name.acceptors = 64
 listeners.tcp.$name.max_connections = 1024000
 ```
 
-- `acceptors`：受け入れ接続を処理するアクセプターのプロセス数。
-- `max_connections`：許可される同時接続の最大数。
+- `acceptors`：受け入れ接続を処理するアクセプタープロセスの数。
+- `max_connections`：同時接続の最大数。
 
 ### ディストリビューションポートバッファサイズ
 
-多数のレプリカノードを持つ大規模クラスターでは、コアノードの`node.dist_buffer_size`パラメータを調整してディストリビューションポートのバッファサイズをチューニングすることを推奨します。
+多数のレプリカノードを持つ大規模クラスターでは、コアノードの`node.dist_buffer_size`パラメータを調整してディストリビューションポートのバッファサイズを最適化することを推奨します。
 
 ```bash
-# バッファサイズ（KB）。以下は最大約2GBに設定。
+# バッファサイズ（KB単位）。以下は最大約2GBに設定。
 node.dist_buffer_size=2097151
 ```
 
-この調整により、コアノードは大量のクライアント再接続によるトラフィック急増をより適切に処理できます。
+この調整により、コアノードは大量のクライアント再接続によるトラフィックスパイクをより適切に処理できます。
 
-また、以下のような警告ログが出る場合は、このバッファサイズを増やすことで問題が軽減されます。
+また、以下のような警告ログが出る場合は、このバッファサイズを増やすことで問題を軽減できます。
 
 ```
 [warning] msg: busy_dist_port ...
@@ -194,7 +196,7 @@ node.dist_buffer_size=2097151
 
 ## クライアントマシンのチューニング
 
-EMQXのベンチマークを行うクライアントマシンのチューニング例：
+EMQXのベンチマーク用にクライアントマシンをチューニングします。
 
 ```bash
 sysctl -w net.ipv4.ip_local_port_range="500 65535"
@@ -204,4 +206,4 @@ ulimit -n 100000
 
 ### MQTTベンチマーク
 
-同時接続数のテストツール：[emqtt_bench](https://github.com/emqx/emqtt_bench)。
+同時接続数のテストツール：[emqtt_bench](https://github.com/emqx/emqtt_bench)をご利用ください。
