@@ -49,7 +49,7 @@
 - [#17540](https://github.com/emqx/emqx/pull/17540) 修复在 SSL 监听器上设置 `password = "file://..."` 时，如果 keyfile 已加密，配置校验会因 `bad_password_or_invalid_keyfile` 失败的问题。现在，`file://` 引用会在校验期间解析，而不只是在运行时解析。
 - [#17569](https://github.com/emqx/emqx/pull/17569) 将 MQTT v5 User Property 解析成本从平方复杂度降低为线性复杂度。
 
-  此前，当 CONNECT、PUBLISH 或 SUBSCRIBE 报文携带大量 User Property 时，每个解析出的属性都会追加到累积列表末尾，导致拥有该连接的进程出现超线性的调度耗时。现在，解析会在保留属性线序的同时按条目数量线性扩展。
+  此前，当 CONNECT、PUBLISH 或 SUBSCRIBE 报文携带大量 User Property 时，每个解析出的属性都会追加到累积列表末尾，导致拥有该连接的进程出现超线性的调度耗时。现在，解析会在保留属性顺序的同时按条目数量线性扩展。
 
 - [#17731](https://github.com/emqx/emqx/pull/17731) 修复更新 WS 或 WSS 监听器选项时可能出现的临时性 “address already in use” 错误（例如轮换 TLS 证书时）。更新此类监听器会重新绑定端口，而操作系统可能尚未释放旧 socket；现在 EMQX 会短暂重试重新绑定，而不是直接让更新失败。
 
