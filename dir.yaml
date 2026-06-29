@@ -64,7 +64,7 @@
 
 - title_en: Installation and Deployment
   title_cn: 安装部署
-  title_ja: インストールとデプロイ
+  title_ja: インストールとデプロイメント
   path: deploy/install
   collapsed: true
   children:
@@ -476,7 +476,7 @@
     - data-integration/message-transformation
 - title_en: Flow Designer
   title_cn: Flow 设计器
-  title_ja: Flow デザイナー
+  title_ja: Flowデザイナー
   path: flow-designer/introduction
   collapsed: true
   children:
@@ -886,6 +886,14 @@
             - extensions/plugin-development
             - extensions/plugin-example
             - extensions/plugin-management
+            - title_en: Plugin Catalog
+              title_cn: 插件目录
+              title_ja: プラグインカタログ
+              path: extensions/plugin-catalog
+              collapsed: true
+              children:
+                - extensions/plugin-catalog/emqx-offline-messages
+                - extensions/plugin-catalog/emqx-relup
         # - extensions/lang-lua
         - extensions/exhook
     - title_en: Telemetry
@@ -1247,7 +1255,10 @@
   collapsed: true
   path: changes/all-changes-ee
   children:
-    - changes/changes-ee-v6
+    - title_en: Version 6
+      title_cn: V6 版本
+      title_ja: バージョン 6
+      path: changes/changes-ee-v6
     - title_en: Version 5
       title_cn: V5 版本
       title_ja: バージョン 5
@@ -1261,7 +1272,14 @@
       title_ja: 既知の問題
       collapsed: true
       children:
-        - changes/known-issues-6.0
+        - title_en: EMQX 6.0
+          title_cn: EMQX 6.0
+          title_ja: EMQX 6.0
+          path: changes/known-issues-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/known-issues-5.10
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9
@@ -1315,25 +1333,28 @@
           title_cn: EMQX 5.4
           title_ja: EMQX 5.4
           path: changes/breaking-changes-ee-5.4
-        - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
-          title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-          title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
-          path: changes/breaking-changes-5.1.0
-          collapsed: true
-          children:
-            - title_en: Authentication
-              title_cn: 认证
-              title_ja: 認証
-              path: changes/auth-4.4-to-5.1-compatibility
-            - title_en: Data Integration
-              title_cn: 数据集成
-              title_ja: データ統合
-              path: changes/data-integration-4.4-to-5.1-incompatibility
-            - title_en: Gateway
-              title_cn: 网关
-              title_ja: ゲートウェイ
-              path: changes/gateway-4.4-to-5.1-incompatibility
-    - changes/breaking-changes-6.0.0
+    - title_en: Incompatible Changes from EMQX 5.x to EMQX 6.0
+      title_cn: 从 EMQX 5.x 到 EMQX 6.0 的不兼容变更
+      title_ja: EMQX 5.x から EMQX 6.0 への非互換変更
+      path: changes/breaking-changes-6.0.0
+    - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
+      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+      title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
+      path: changes/breaking-changes-5.1.0
+      collapsed: true
+      children:
+          - title_en: Authentication
+            title_cn: 认证
+            title_ja: 認証
+            path: changes/auth-4.4-to-5.1-compatibility
+          - title_en: Data Integration
+            title_cn: 数据集成
+            title_ja: データ統合
+            path: changes/data-integration-4.4-to-5.1-incompatibility
+          - title_en: Gateway
+            title_cn: 网关
+            title_ja: ゲートウェイ
+            path: changes/gateway-4.4-to-5.1-incompatibility
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
       title_ja: 製品ライフサイクル終了日
