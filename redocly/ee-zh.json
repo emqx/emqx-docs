@@ -4647,133 +4647,19 @@
             "oneOf": [
               {
                 "enum": [
-                  "sqlserver"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -4791,79 +4677,13 @@
               },
               {
                 "enum": [
-                  "oracle"
+                  "s3tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
@@ -4875,13 +4695,61 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
                 ],
                 "type": "string"
               },
@@ -4899,13 +4767,145 @@
               },
               {
                 "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
                 ],
                 "type": "string"
               }
@@ -19363,6 +19363,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "retain_as_published": {
+            "default": true,
+            "description": "Whether to set the MQTT 5.0 Retain As Published subscription option on the remote subscription.  When set to true (the default), the upstream broker preserves the `retain` flag on messages forwarded to this subscription; when set to false, the upstream clears the `retain` flag.  Only takes effect when the connector's `proto_ver` is `v5`.",
+            "type": "boolean"
+          },
           "topic": {
             "description": "从远程代理接收消息的主题",
             "type": "string"
@@ -26335,6 +26340,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "enable": {
+            "default": true,
+            "description": "启用 TLS。",
+            "type": "boolean"
+          },
           "hibernate_after": {
             "default": "5s",
             "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
@@ -26418,6 +26428,15 @@
                 "type": "string"
               }
             ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "启用或禁用对等验证。",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
           },
           "verify_peer_ext_key_usage": {
             "description": "验证对等证书中的扩展密钥用法<br/>为了额外的对等证书验证，这里定义的值必须出现在对等证书的 '扩展密钥用法' 中，<br/>如 [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12) 中定义。<br/><br/>允许的值有<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- 原始 OID，例如：\"OID:1.3.6.1.5.5.7.3.2\" 表示 `id-pk 2`，相当于 `clientAuth`<br/><br/>也支持用逗号分隔的字符串来验证多个密钥用法。<br/><br/>例如，`\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
@@ -27440,7 +27459,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
@@ -27532,7 +27560,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -27605,7 +27642,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -34664,11 +34710,22 @@
         ],
         "type": "object"
       },
+      "emqx_authn_api.request_user_delete": {
+        "properties": {
+          "namespace": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "emqx_authn_api.request_user_update": {
         "properties": {
           "is_superuser": {
             "default": false,
             "type": "boolean"
+          },
+          "namespace": {
+            "type": "string"
           },
           "password": {
             "type": "string"
@@ -39380,7 +39437,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "D84F6434DC1E5122",
+            "example": "B8B87558B55256D0",
             "type": "string"
           },
           "status": {
@@ -43017,7 +43074,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
@@ -43190,7 +43256,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -43322,7 +43397,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -43775,7 +43859,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
@@ -43941,7 +44034,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -44075,7 +44177,16 @@
           },
           "service_account_json": {
             "description": "包含将与 PubSub 一起使用的 GCP 服务账户凭证的 JSON。<br/>当创建 GCP 服务账户时（如 https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount），可以选择下载 JSON 形式的凭证，然后在该配置项中使用。",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -58183,7 +58294,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.2"
+    "version": "6.1.3-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58199,100 +58310,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
+                      "couchbase",
+                      "tablestore",
+                      "cockroachdb",
+                      "redshift",
+                      "alloydb",
+                      "azure_blob_storage",
+                      "oracle",
+                      "matrix",
+                      "dynamo",
+                      "tdengine",
+                      "s3",
+                      "emqx_tables",
+                      "doris",
+                      "syskeeper_forwarder",
+                      "snowflake",
+                      "pgsql",
+                      "bigquery",
+                      "mysql",
+                      "aws_timestream",
                       "mongodb",
+                      "sqlserver",
+                      "elasticsearch",
                       "azure_event_hub_producer",
+                      "disk_log",
                       "rocketmq",
                       "snowflake_streaming",
-                      "clickhouse",
-                      "kinesis",
-                      "rabbitmq",
-                      "elasticsearch",
-                      "opents",
-                      "s3",
-                      "redshift",
-                      "aws_timestream",
-                      "iotdb",
+                      "http",
+                      "timescale",
                       "influxdb",
-                      "snowflake",
-                      "matrix",
-                      "alloydb",
-                      "datalayers",
-                      "bigquery",
-                      "oracle",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "opents",
+                      "kafka_producer",
+                      "clickhouse",
+                      "mqtt",
+                      "cassandra",
+                      "rabbitmq",
+                      "greptimedb",
+                      "s3tables",
                       "redis",
                       "confluent_producer",
-                      "tablestore",
-                      "tdengine",
-                      "disk_log",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "syskeeper_forwarder",
-                      "http",
-                      "s3tables",
-                      "doris",
-                      "mqtt",
-                      "dynamo",
-                      "pulsar",
-                      "pgsql",
-                      "cockroachdb",
-                      "greptimedb",
-                      "mysql",
-                      "couchbase",
-                      "kafka_producer",
-                      "emqx_tables",
-                      "cassandra",
-                      "azure_blob_storage",
-                      "sqlserver"
+                      "iotdb",
+                      "kinesis",
+                      "datalayers"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
+                      "couchbase",
+                      "tablestore",
+                      "cockroachdb",
+                      "redshift",
+                      "alloydb",
+                      "azure_blob_storage",
+                      "oracle",
+                      "matrix",
+                      "dynamo",
+                      "tdengine",
+                      "s3",
+                      "emqx_tables",
+                      "doris",
+                      "syskeeper_forwarder",
+                      "snowflake",
+                      "pgsql",
+                      "bigquery",
+                      "mysql",
+                      "aws_timestream",
                       "mongodb",
+                      "sqlserver",
+                      "elasticsearch",
                       "azure_event_hub_producer",
+                      "disk_log",
                       "rocketmq",
                       "snowflake_streaming",
-                      "clickhouse",
-                      "kinesis",
-                      "rabbitmq",
-                      "elasticsearch",
-                      "opents",
-                      "s3",
-                      "redshift",
-                      "aws_timestream",
-                      "iotdb",
+                      "http",
+                      "timescale",
                       "influxdb",
-                      "snowflake",
-                      "matrix",
-                      "alloydb",
-                      "datalayers",
-                      "bigquery",
-                      "oracle",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "opents",
+                      "kafka_producer",
+                      "clickhouse",
+                      "mqtt",
+                      "cassandra",
+                      "rabbitmq",
+                      "greptimedb",
+                      "s3tables",
                       "redis",
                       "confluent_producer",
-                      "tablestore",
-                      "tdengine",
-                      "disk_log",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "syskeeper_forwarder",
-                      "http",
-                      "s3tables",
-                      "doris",
-                      "mqtt",
-                      "dynamo",
-                      "pulsar",
-                      "pgsql",
-                      "cockroachdb",
-                      "greptimedb",
-                      "mysql",
-                      "couchbase",
-                      "kafka_producer",
-                      "emqx_tables",
-                      "cassandra",
-                      "azure_blob_storage",
-                      "sqlserver"
+                      "iotdb",
+                      "kinesis",
+                      "datalayers"
                     ],
                     "type": "string"
                   },
@@ -72773,6 +72884,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "ns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -72917,6 +73036,18 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "namespace": "ns1"
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_authn_api.request_user_delete"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": "用户已删除"
@@ -83479,7 +83610,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -85065,7 +85196,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -86883,7 +87014,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -88114,7 +88245,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -89689,7 +89820,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91267,7 +91398,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -92098,7 +92229,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "D84F6434DC1E5122",
+            "example": "B8B87558B55256D0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92161,7 +92292,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "D84F6434DC1E5122",
+            "example": "B8B87558B55256D0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92575,7 +92706,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "D84F6434DC1E5122",
+            "example": "B8B87558B55256D0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92661,7 +92792,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "D84F6434DC1E5122",
+            "example": "B8B87558B55256D0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98183,6 +98314,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -98283,73 +98481,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
