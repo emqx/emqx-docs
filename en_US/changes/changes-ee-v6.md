@@ -114,7 +114,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Access Control
 
-- [#17575](https://github.com/emqx/emqx/pull/17575) Fixed a race condition in the emqx_username_quota plugin that could cause the per-username session counter to become inconsistent with the actual number of tracked client records. The counter could be decremented past zero and then be deleted while a concurrent session registration incremented it, losing the increment permanently.
+- [#17575](https://github.com/emqx/emqx/pull/17575) Fixed a race condition in the `emqx_username_quota` plugin that could cause the per-username session counter to become inconsistent with the actual number of tracked client records. The counter could be decremented past zero and then be deleted while a concurrent session registration incremented it, losing the increment permanently.
 
 - [#17644](https://github.com/emqx/emqx/pull/17644) Fixed an issue where the `plain` password hash algorithm accepted passwords that differed only by letter case during authentication.
 
@@ -126,9 +126,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17657](https://github.com/emqx/emqx/pull/17657) Fixed a security issue where raw `authorization` and `cookie` headers were forwarded to plugin API callbacks. These credential-bearing headers are now redacted before reaching plugin code.
 
-- [#17711](https://github.com/emqx/emqx/pull/17711) Creating or updating a built-in database user that targets a namespace which is not a known managed namespace is now rejected with "Managed namespace not found". Previously a user supplied with a namespace in the request body could be created even when that namespace did not exist.
+- [#17711](https://github.com/emqx/emqx/pull/17711) Creating or updating a built-in database user now fails with "Managed namespace not found" if the target namespace is not a known managed namespace. Previously, a user could be created with a nonexistent namespace when the namespace was supplied in the request body.
 
-  In addition, a global administrator can now delete a built-in database user that belongs to a namespace which has already been deleted, instead of receiving a "Managed namespace not found" error.
+  In addition, global administrators can now delete built-in database users that belong to namespaces that have already been deleted, instead of receiving a "Managed namespace not found" error.
 
 - [#17736](https://github.com/emqx/emqx/pull/17736) Fixed JWT authentication to verify tokens only with JWS algorithms appropriate for the configured key type. HMAC-based authenticators now accept only `HS256`, `HS384`, and `HS512`. Public-key and JWKS authenticators accept `RS*`, `PS*`, `ES*`, and `EdDSA` algorithms. This rejects `alg=none` tokens and algorithm-confusion tokens.
 
@@ -136,9 +136,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Multi-Tenancy
 
-- [#17715](https://github.com/emqx/emqx/pull/17715) Fixed a multi-tenancy gating gap. When `multi_tenancy.post_auth_tns_expression` is configured and the expression evaluates to an empty string or raises an error, the namespace gate (`allow_only_managed_namespaces` enforcement, session quota, etc.) was previously skipped, allowing the client through.
+- [#17715](https://github.com/emqx/emqx/pull/17715) Fixed a multi-tenancy gating gap. When `multi_tenancy.post_auth_tns_expression` was configured and evaluated to an empty string or an error, the namespace gate (`allow_only_managed_namespaces` enforcement, session quota, etc.) was previously skipped, allowing the client through.
 
-  The empty and error outcomes are now treated as "no namespace assigned" and pass through the same gate as a client that supplied no namespace before authentication: the client is rejected when `allow_only_managed_namespaces = true`, and accepted without a namespace when it is `false`. Any namespace value carried in `client_attrs.tns` from before authentication is also cleared in this case, so it is not retained when the expression declined to assign one.
+  Empty-string and error outcomes are now treated as "no namespace assigned" and pass through the same gate as clients that supplied no namespace before authentication. The client is rejected when `allow_only_managed_namespaces = true`, and accepted without a namespace when it is `false`. In this case, any namespace value carried in `client_attrs.tns` from before authentication is also cleared, so it is not retained when the expression declines to assign one.
 
 - [#17757](https://github.com/emqx/emqx/pull/17757) Fixed `/prometheus/namespaced_stats` so that namespaced admins/API keys can only see data from their own namespace. Global admins/API keys can still see data from all namespaces.
 
