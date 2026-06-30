@@ -15,13 +15,13 @@
 
 #### 多租户
 
-- [#17711](https://github.com/emqx/emqx/pull/17711) 当创建或更新内置数据库用户时，如果目标命名空间不是已知托管命名空间，现在会失败并返回 "Managed namespace not found"。此前，当命名空间在请求体中提供时，即使该命名空间不存在，也可能创建用户。
-
-  此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 "Managed namespace not found" 错误。
-
 - [#17665](https://github.com/emqx/emqx/pull/17665) 为多租户应用新增按命名空间统计的消息丢弃计数器和投递丢弃计数器。这些计数器通过 `/api/v5/prometheus/namespaced_stats` 暴露，并带有 `namespace` 标签，与现有按命名空间划分的指标族一起提供。运维人员现在可以直接通过 Prometheus 按租户诊断丢弃率，而无需依赖日志排查。
 
   已知限制：QoS 2 PUBREL 等待超时导致的丢弃目前还无法按命名空间归因，因为该丢弃路径只递增全局计数器，且不会触发 `message.dropped` hook。
+
+- [#17711](https://github.com/emqx/emqx/pull/17711) 统一了内置数据库认证用户 HTTP API 中的命名空间选择方式，并允许清理已删除命名空间遗留的记录。
+
+  此前，只有创建用户时支持在请求体中传入 `namespace` 字段；更新和删除用户时只能通过 `ns` 查询参数指定目标命名空间。现在，更新和删除端点也支持在请求体中传入 `namespace` 字段。当二者同时提供时，`ns` 查询参数优先。用户列表仍继续使用 `ns` 查询参数。
 
 #### 访问控制
 
@@ -34,7 +34,7 @@
 
 - [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实重新发布来自上游的保留消息。默认值为 `false`，以保持现有行为。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
 
-  此外，当同时配置 `bridge_mode = true` 和 `proto_ver = v5` 时，连接器现在会输出一条警告日志，因为旧版 bridge-mode 标志在 MQTT 5.0 下不生效；请改为在各个订阅上设置 `retain_as_published`。
+  此外，当同时配置 `bridge_mode = true` 和 `proto_ver = v5` 时，连接器现在会输出一条警告日志，因为旧版 bridge-mode 标志在 MQTT 5.0 下不生效；请改为在单个订阅上设置 `retain_as_published`。
 
 - [#17508](https://github.com/emqx/emqx/pull/17508) 为 PostgreSQL 和 TimescaleDB 连接器连接设置 PostgreSQL `application_name` 启动参数为 `emqx`。
 
@@ -81,7 +81,7 @@
 
 - [#17725](https://github.com/emqx/emqx/pull/17725) 修复 6.0.3、6.1.2 和 6.2.1 中引入的问题：当发布客户端携带租户命名空间（`client_attrs.tns`）时，全局规则可能无法再匹配其 `FROM` 主题上的消息。
 
-  当启用 `rule_engine.limit_selects_in_namespace`（默认启用）时，全局规则现在会保留系统级可见性，并匹配来自任意命名空间的消息。在命名空间内创建的规则仍隔离在各自命名空间内。若运维人员希望完全禁用命名空间限制，仍可设置 `rule_engine.limit_selects_in_namespace = false`。
+  当启用 `rule_engine.limit_selects_in_namespace`（默认启用）时，全局规则现在会保留系统范围可见性，并匹配来自任意命名空间的消息。在命名空间内创建的规则仍隔离在各自命名空间内。若运维人员希望完全禁用命名空间限制，仍可设置 `rule_engine.limit_selects_in_namespace = false`。
 
 #### 数据集成
 
@@ -147,9 +147,9 @@
 
 #### 多租户
 
-- [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户门控缺口。此前，当配置了 `multi_tenancy.post_auth_tns_expression` 且表达式求值为空字符串或错误时，命名空间门控（`allow_only_managed_namespaces` 强制检查、会话配额等）会被跳过，从而允许客户端通过。
+- [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户准入检查缺口。此前，当配置了 `multi_tenancy.post_auth_tns_expression` 且表达式求值为空字符串或错误时，命名空间准入检查（`allow_only_managed_namespaces` 强制检查、会话配额等）会被跳过，从而允许客户端通过。
 
-  空字符串和错误结果现在会被视为 "no namespace assigned"，并与认证前未提供命名空间的客户端一样经过同一门控。当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。在这种情况下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
+  空字符串和错误结果现在会被视为 "no namespace assigned"，并与认证前未提供命名空间的客户端一样经过同一准入检查。当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。在这种情况下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
 
 - [#17757](https://github.com/emqx/emqx/pull/17757) 修复 `/prometheus/namespaced_stats`，使命名空间管理员和 API 密钥只能查看其所属命名空间的数据。全局管理员和 API 密钥仍可查看所有命名空间的数据。
 
