@@ -2,7 +2,7 @@
 
 ## 6.1.3
 
-*Release Date: 2026-06-29*
+*Release Date: 2026-06-30*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.1.3.
 
@@ -40,6 +40,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17717](https://github.com/emqx/emqx/pull/17717) Added an option to enable TLS peer verification for Confluent Producer connectors.
 
 - [#17718](https://github.com/emqx/emqx/pull/17718) Added an option to enable TLS peer verification for GCP PubSub Producer/Consumer and BigQuery connectors.
+
+#### Observability
+
+- [#17712](https://github.com/emqx/emqx/pull/17712) Added `emqx_session_tool`, a diagnostic module that operators can call from the remote console. Use `emqx_session_tool:top_by(mqueue_len)` to find the top-K sessions by gauge or counter value in clusters with many connections. Other session metrics, such as `mqueue_dropped` and `inflight_cnt`, are also supported. This helps operators find the busiest sessions without paging through the client list manually.
+
+  The scan streams the channel registry, keeps only a bounded top-K result, and reads cached per-session metrics without sending messages to connection processes. `emqx_session_tool:cluster_top_by/1` aggregates the result across all cluster nodes.
 
 ### Bug Fixes
 
@@ -92,6 +98,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, concurrent batches on the same connection could interleave raw SQL parsing and fail with PostgreSQL protocol errors. Table-existence checks are also serialized through the connector worker to avoid interleaving with batch execution.
 
+- [#17701](https://github.com/emqx/emqx/pull/17701) Fixed a confusing `badarith` error from PostgreSQL actions when a batched SQL template returns rows, for example `SELECT ...`.
+
+  PostgreSQL action batching does not support row-returning SQL. EMQX now returns a clear unsupported SQL error instead of crashing the batch result handler.
+
 #### Clustering
 
 - [#17586](https://github.com/emqx/emqx/pull/17586) Periodically purge stale entries from the global session registry.
@@ -99,6 +109,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, if a session's owner process died without a clean unregister, the registry row could remain forever when the same client ID never reconnected. This could happen, for example, after a brief network split that prevented the unregister from replicating, or when one core node's consensus check timed out during down-event cleanup.
 
   A new throttled background sweep on each core node now removes such rows. The sweep is bounded to at most 500 registry rows per second per node and runs no more often than once every 10 minutes, so it does not measurably affect broker throughput even on registries holding millions of sessions.
+
+- [#17773](https://github.com/emqx/emqx/pull/17773) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted unexpectedly. For example, this could happen with `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
 
 #### Access Control
 
@@ -120,16 +132,22 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17736](https://github.com/emqx/emqx/pull/17736) Fixed JWT authentication to verify tokens only with JWS algorithms appropriate for the configured key type. HMAC-based authenticators now accept only `HS256`, `HS384`, and `HS512`. Public-key and JWKS authenticators accept `RS*`, `PS*`, `ES*`, and `EdDSA` algorithms. This rejects `alg=none` tokens and algorithm-confusion tokens.
 
+- [#17739](https://github.com/emqx/emqx/pull/17739) Improved redaction of sensitive data in logs, traces, and audit records.
+
 #### Multi-Tenancy
 
 - [#17715](https://github.com/emqx/emqx/pull/17715) Fixed a multi-tenancy gating gap. When `multi_tenancy.post_auth_tns_expression` is configured and the expression evaluates to an empty string or raises an error, the namespace gate (`allow_only_managed_namespaces` enforcement, session quota, etc.) was previously skipped, allowing the client through.
 
   The empty and error outcomes are now treated as "no namespace assigned" and pass through the same gate as a client that supplied no namespace before authentication: the client is rejected when `allow_only_managed_namespaces = true`, and accepted without a namespace when it is `false`. Any namespace value carried in `client_attrs.tns` from before authentication is also cleared in this case, so it is not retained when the expression declined to assign one.
 
+- [#17757](https://github.com/emqx/emqx/pull/17757) Fixed `/prometheus/namespaced_stats` so that namespaced admins/API keys can only see data from their own namespace. Global admins/API keys can still see data from all namespaces.
+
 #### Gateway
 
+- [#17556](https://github.com/emqx/emqx/pull/17556) Fixed an issue where the OCPP gateway did not pass the listener `enable_authn` option to the shared authentication flow. This happened because the option was stored under a misspelled client-info key.
 - [#17581](https://github.com/emqx/emqx/pull/17581) Fixed the JT/T 808 gateway to use the phone number accepted during authentication as the connection identity, rejecting mismatched registration-code authentication attempts and subsequent uplink frames with a different phone number.
 - [#17604](https://github.com/emqx/emqx/pull/17604) Fixed GBT32960 gateway routing: vehicle responses to downstream commands (Parameter Query, Parameter Setting, Terminal Control) are now correctly published to `upstream/response` instead of `upstream/transparent`.
+- [#17765](https://github.com/emqx/emqx/pull/17765) Fixed missing authorization checks in several gateway publishing and subscription flows. Authorization is now checked before the following operations: MQTT-SN Will message publishing; JT808 upstream publishing and automatic downlink subscription; GBT32960 upstream publishing and automatic downlink subscription; and OCPP upstream publishing and automatic downlink subscription.
 
 #### Observability
 

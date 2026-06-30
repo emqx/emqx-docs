@@ -2,7 +2,7 @@
 
 ## 6.1.3
 
-*发布日期: 2026-06-29*
+*发布日期: 2026-06-30*
 
 在升级到 EMQX 6.1.3 之前，请务必查阅不兼容变更和已知问题。
 
@@ -40,6 +40,12 @@
 - [#17717](https://github.com/emqx/emqx/pull/17717) 为 Confluent Producer 连接器新增启用 TLS 对端验证的选项。
 
 - [#17718](https://github.com/emqx/emqx/pull/17718) 为 GCP PubSub Producer/Consumer 和 BigQuery 连接器新增启用 TLS 对端验证的选项。
+
+### 可观测性
+
+- [#17712](https://github.com/emqx/emqx/pull/17712) 新增 `emqx_session_tool` 诊断模块，运维人员可通过远程控制台调用。使用 `emqx_session_tool:top_by(mqueue_len)`，可在连接数较多的集群中按 gauge 或 counter 值查找 top-K 会话。还支持其他会话指标，例如 `mqueue_dropped` 和 `inflight_cnt`。这有助于运维人员定位最繁忙的会话，而无需手动翻阅客户端列表。
+
+  该扫描会流式遍历 channel registry，仅保留有界的 top-K 结果，并读取缓存的单会话指标，而不会向连接进程发送消息。`emqx_session_tool:cluster_top_by/1` 会汇总所有集群节点上的结果。
 
 ### 问题修复
 
@@ -92,6 +98,10 @@
 
   此前，同一连接上的并发批次可能会交错执行原始 SQL 解析，并导致 PostgreSQL 协议错误。表存在性检查现在也会通过连接器 worker 串行执行，以避免与批量执行交错。
 
+- [#17701](https://github.com/emqx/emqx/pull/17701) 修复 PostgreSQL 动作在批处理中使用会返回结果行的 SQL 模板（例如 `SELECT ...`）时，出现含义不清的 `badarith` 错误的问题。
+
+  PostgreSQL 动作批处理不支持返回结果行的 SQL。现在 EMQX 会返回明确的不支持 SQL 错误，而不是让批处理结果处理器崩溃。
+
 #### 集群
 
 - [#17586](https://github.com/emqx/emqx/pull/17586) 定期清理全局会话注册表中的陈旧条目。
@@ -99,6 +109,8 @@
   此前，如果会话的属主进程在未正常注销的情况下退出，并且相同的客户端 ID 再也没有重新连接，注册表行可能会永久残留。例如，短暂网络分区导致注销操作未能复制，或在 down 事件清理期间某个 core 节点的一致性检查超时，都可能触发该问题。
 
   现在，每个 core 节点上都有一个受限流控制的后台清理任务来移除此类行。该任务限制为每个节点每秒最多 500 行，且运行间隔不短于 10 分钟，因此即使在持有数百万会话的注册表上也不会对 Broker 吞吐量产生可观测影响。
+
+- [#17773](https://github.com/emqx/emqx/pull/17773) 修复配置更新命令（REST API 和 CLI）在底层集群 RPC 层意外中止时，可能触发 `function_clause` 崩溃报告的问题。例如，当节点启动或恢复期间集群 RPC 表尚不可用时，可能会出现 `{no_exists, cluster_rpc_mfa}`。现在，此类失败会作为结构化错误返回给调用方。
 
 #### 访问控制
 
@@ -120,16 +132,22 @@
 
 - [#17736](https://github.com/emqx/emqx/pull/17736) 修复 JWT 认证，使其只使用与配置密钥类型匹配的 JWS 算法验证令牌。基于 HMAC 的认证器现在只接受 `HS256`、`HS384` 和 `HS512`。公钥和 JWKS 认证器接受 `RS*`、`PS*`、`ES*` 和 `EdDSA` 算法。此修复会拒绝 `alg=none` 令牌和算法混淆令牌。
 
+- [#17739](https://github.com/emqx/emqx/pull/17739) 改进了日志、追踪和审计记录中敏感数据的脱敏处理。
+
 #### 多租户
 
 - [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户门控缺口。当配置了 `multi_tenancy.post_auth_tns_expression`，且表达式求值为空字符串或抛出错误时，命名空间门控（`allow_only_managed_namespaces` 强制检查、会话配额等）此前会被跳过，从而允许客户端通过。
 
   现在，空值和错误结果会被视为“未分配命名空间”，并与认证前未提供命名空间的客户端一样经过同一门控：当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。此场景下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
 
+- [#17757](https://github.com/emqx/emqx/pull/17757) 修复 `/prometheus/namespaced_stats`，使命名空间管理员和 API 密钥只能查看其所属命名空间的数据。全局管理员和 API 密钥仍可查看所有命名空间的数据。
+
 #### 网关
 
+- [#17556](https://github.com/emqx/emqx/pull/17556) 修复 OCPP 网关未将监听器 `enable_authn` 选项传递给共享认证流程的问题。该问题是由于该选项存储在拼写错误的 client-info key 下导致的。
 - [#17581](https://github.com/emqx/emqx/pull/17581) 修复 JT/T 808 网关，使其使用认证期间接受的手机号作为连接身份，拒绝不匹配的注册码认证尝试以及手机号不同的后续上行帧。
 - [#17604](https://github.com/emqx/emqx/pull/17604) 修复 GBT32960 网关路由：车辆对下行命令（参数查询、参数设置、终端控制）的响应现在会正确发布到 `upstream/response`，而不是 `upstream/transparent`。
+- [#17765](https://github.com/emqx/emqx/pull/17765) 修复多个网关发布和订阅流程中缺少授权检查的问题。现在，以下操作会在发布或订阅前执行授权检查：MQTT-SN Will 消息发布；JT/T 808 上行发布和自动下行订阅；GBT32960 上行发布和自动下行订阅；以及 OCPP 上行发布和自动下行订阅。
 
 #### 可观测性
 
