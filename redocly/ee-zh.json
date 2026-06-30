@@ -5403,25 +5403,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -5433,25 +5415,7 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -5463,7 +5427,25 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
                 ],
                 "type": "string"
               },
@@ -5475,25 +5457,25 @@
               },
               {
                 "enum": [
-                  "redis"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "quasardb"
+                  "aws_timestream"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "emqx_tables"
+                  "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -5505,19 +5487,25 @@
               },
               {
                 "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "disk_log"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5535,79 +5523,25 @@
               },
               {
                 "enum": [
-                  "azure_event_grid"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "doris"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
+                  "redshift"
                 ],
                 "type": "string"
               },
@@ -5619,37 +5553,7 @@
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -5661,7 +5565,85 @@
               },
               {
                 "enum": [
-                  "cassandra"
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_grid"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -5673,7 +5655,25 @@
               },
               {
                 "enum": [
-                  "doris"
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               }
@@ -6036,7 +6036,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6084,7 +6084,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6132,7 +6132,7 @@
             "type": "string"
           },
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6270,7 +6270,7 @@
       "ai.openai_provider": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6310,7 +6310,7 @@
       "ai.openai_provider_api_get": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6350,7 +6350,7 @@
       "ai.openai_provider_api_put": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6488,7 +6488,7 @@
       "ai.openai_response_provider": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6528,7 +6528,7 @@
       "ai.openai_response_provider_api_get": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -6568,7 +6568,7 @@
       "ai.openai_response_provider_api_put": {
         "properties": {
           "api_key": {
-            "description": "AI 提供商的 API 密钥。",
+            "description": "AI 提供商的 API key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -7625,7 +7625,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -7725,7 +7725,7 @@
           },
           "on_missing_jwt": {
             "default": "ignore",
-            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "description": "当配置的 JWT 凭据字段缺失时采取的动作。使用 <code>deny</code> 立即拒绝认证，或使用 <code>ignore</code> 跳过此认证器并让认证链继续。",
             "enum": [
               "deny",
               "ignore"
@@ -7807,7 +7807,7 @@
           },
           "on_missing_jwt": {
             "default": "ignore",
-            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "description": "当配置的 JWT 凭据字段缺失时采取的动作。使用 <code>deny</code> 立即拒绝认证，或使用 <code>ignore</code> 跳过此认证器并让认证链继续。",
             "enum": [
               "deny",
               "ignore"
@@ -7902,7 +7902,7 @@
           },
           "on_missing_jwt": {
             "default": "ignore",
-            "description": "Action to take when the configured JWT credential field is missing. Use <code>deny</code> to reject authentication immediately, or <code>ignore</code> to skip this authenticator and let the authentication chain continue.",
+            "description": "当配置的 JWT 凭据字段缺失时采取的动作。使用 <code>deny</code> 立即拒绝认证，或使用 <code>ignore</code> 跳过此认证器并让认证链继续。",
             "enum": [
               "deny",
               "ignore"
@@ -8029,7 +8029,7 @@
             ]
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8222,7 +8222,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8391,7 +8391,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8546,7 +8546,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8686,7 +8686,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8860,7 +8860,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -8956,7 +8956,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -9060,7 +9060,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -9179,7 +9179,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10023,7 +10023,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10127,7 +10127,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10257,7 +10257,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10373,7 +10373,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10478,7 +10478,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10566,7 +10566,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10642,7 +10642,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10726,7 +10726,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -10825,7 +10825,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -11650,7 +11650,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -11995,7 +11995,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12158,7 +12158,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12289,7 +12289,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12630,7 +12630,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12793,7 +12793,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12924,7 +12924,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -18216,7 +18216,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -18988,7 +18988,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19157,7 +19157,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19294,7 +19294,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19623,7 +19623,7 @@
             ]
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19812,7 +19812,7 @@
             ]
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -19969,7 +19969,7 @@
             ]
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -20337,7 +20337,7 @@
           },
           "retain_as_published": {
             "default": true,
-            "description": "Whether to set the MQTT 5.0 Retain As Published subscription option on the remote subscription.  When set to true (the default), the upstream broker preserves the `retain` flag on messages forwarded to this subscription; when set to false, the upstream clears the `retain` flag.  Only takes effect when the connector's `proto_ver` is `v5`.",
+            "description": "是否在远程订阅上设置 MQTT 5.0 Retain As Published 订阅选项。设置为 true（默认）时，上游 broker 会保留转发到该订阅的消息的 `retain` 标志；设置为 false 时，上游会清除 `retain` 标志。仅在连接器的 `proto_ver` 为 `v5` 时生效。",
             "type": "boolean"
           },
           "topic": {
@@ -20880,7 +20880,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21044,7 +21044,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21176,7 +21176,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -21863,7 +21863,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22032,7 +22032,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22169,7 +22169,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22511,7 +22511,7 @@
       "bridge_pulsar.auth_basic": {
         "properties": {
           "password": {
-            "description": "基本认证密码。",
+            "description": "基本认证密码。`username:password` 认证字符串中的 `password` 部分。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -22530,7 +22530,7 @@
       "bridge_pulsar.auth_token": {
         "properties": {
           "jwt": {
-            "description": "JWT 认证 token。",
+            "description": "JWT 认证 token。<br/><br/>如需从文件加载 token 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 token。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23345,7 +23345,7 @@
             "description": "资源相关的选项。"
           },
           "secret_access_key": {
-            "description": "S3 桶的密钥访问密钥。",
+            "description": "S3 桶的 secret access key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23510,7 +23510,7 @@
             "description": "资源相关的选项。"
           },
           "secret_access_key": {
-            "description": "S3 桶的密钥访问密钥。",
+            "description": "S3 桶的 secret access key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -23643,7 +23643,7 @@
             "description": "资源相关的选项。"
           },
           "secret_access_key": {
-            "description": "S3 桶的密钥访问密钥。",
+            "description": "S3 桶的 secret access key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24233,7 +24233,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24395,7 +24395,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -24525,7 +24525,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -25742,7 +25742,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -25911,7 +25911,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26048,7 +26048,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26272,7 +26272,7 @@
             "type": "string"
           },
           "password": {
-            "description": "用于连接到远程 EMQX 集群的密码（可选）。",
+            "description": "用于连接到远程 EMQX 集群的 MQTT 密码（可选）。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26440,7 +26440,7 @@
             "type": "string"
           },
           "password": {
-            "description": "用于连接到远程 EMQX 集群的密码（可选）。",
+            "description": "用于连接到远程 EMQX 集群的 MQTT 密码（可选）。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -26599,7 +26599,7 @@
       "confluent.auth_username_password": {
         "properties": {
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27364,7 +27364,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -27661,7 +27661,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27763,7 +27763,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27846,7 +27846,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28435,7 +28435,7 @@
             "type": "array"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28591,7 +28591,7 @@
             "type": "string"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28728,7 +28728,7 @@
             "type": "string"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29144,7 +29144,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29246,7 +29246,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29329,7 +29329,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -29934,7 +29934,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30031,7 +30031,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30109,7 +30109,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30236,7 +30236,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -30758,7 +30758,7 @@
             "type": "array"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -30914,7 +30914,7 @@
             "type": "string"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31051,7 +31051,7 @@
             "type": "string"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31198,7 +31198,7 @@
             "type": "string"
           },
           "password": {
-            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。",
+            "description": "MQTT 协议的密码。使用静态 clientid 时，如果定义了该值且该静态 clientid 没有关联特定密码，则使用此值。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31262,7 +31262,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31364,7 +31364,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31447,7 +31447,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31833,7 +31833,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31935,7 +31935,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32018,7 +32018,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32353,7 +32353,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32479,7 +32479,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -32605,7 +32605,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -33687,7 +33687,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -33783,7 +33783,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "控制台用户作用域——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域功能的旧版本升级记录；运行时会回退到角色默认值，客户端应将其视为“尚无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅可访问如 `/status` 等匿名端点）。<br/><br/>登录用户可拥有 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中有三个仅限管理员（`user_management`、`sso_management`、`api_key_management`）；`mfa_management` 也可分配给非管理员用户——对非管理员持有者，它作为自我豁免键，允许用户仅对自身 MFA 绕过 force_mfa 和 admin_required 锁。",
+            "description": "控制台用户作用域：在用户角色之外额外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域的旧版本升级记录。运行时此类记录会回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅可访问如 `/status` 等匿名端点。<br/><br/>登录用户可分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中，`user_management`、`sso_management`、`api_key_management` 仅限管理员；`mfa_management` 也可分配给非管理员用户。对非管理员用户，它仅作为自我豁免键，允许用户对自身 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
             "example": [
               "user_management",
               "mfa_management"
@@ -34857,7 +34857,7 @@
             ]
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -34996,7 +34996,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -35158,7 +35158,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -35921,7 +35921,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -36371,7 +36371,7 @@
         "properties": {
           "ignore_backend_failures": {
             "default": false,
-            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
+            "description": "在强化安全配置文件中忽略认证后端失败，并继续到认证链中的下一个认证器。",
             "type": "boolean"
           },
           "node_cache": {
@@ -36436,7 +36436,7 @@
         "properties": {
           "ignore_backend_failures": {
             "default": false,
-            "description": "Ignore authentication backend failures in hardened security profile and continue to the next authenticator in the chain.",
+            "description": "在强化安全配置文件中忽略认证后端失败，并继续到认证链中的下一个认证器。",
             "type": "boolean"
           },
           "node_cache": {
@@ -41156,7 +41156,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "A6B1E660E33B535C",
+            "example": "BFF9004F1122B64C",
             "type": "string"
           },
           "status": {
@@ -41459,6 +41459,11 @@
           },
           "messages.received": {
             "description": "从客户端接收到的消息数量，等于 messages.qos0.received、messages.qos1.received 和 messages.qos2.received 的总和",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "messages.retained": {
+            "description": "Number of retained message writes",
             "minimum": 0,
             "type": "integer"
           },
@@ -41979,6 +41984,11 @@
           },
           "messages.received": {
             "description": "从客户端接收到的消息数量，等于 messages.qos0.received、messages.qos1.received 和 messages.qos2.received 的总和",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "messages.retained": {
+            "description": "Number of retained message writes",
             "minimum": 0,
             "type": "integer"
           },
@@ -43551,7 +43561,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -43789,7 +43799,7 @@
             "type": "integer"
           },
           "secret_access_key": {
-            "description": "S3 桶的密钥访问密钥。",
+            "description": "S3 桶的 secret access key。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -44047,7 +44057,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -44534,7 +44544,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -47681,7 +47691,7 @@
             "type": "string"
           },
           "password": {
-            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+            "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code>。随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "",
             "format": "password",
             "type": "string"
@@ -53867,7 +53877,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -53969,7 +53979,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54061,7 +54071,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54681,7 +54691,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54729,7 +54739,7 @@
             "type": "integer"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -54792,7 +54802,7 @@
             "type": "integer"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55373,7 +55383,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ 服务器的 `secretKey`。",
+            "description": "RocketMQ 服务器的 `secretKey`。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55538,7 +55548,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ 服务器的 `secretKey`。",
+            "description": "RocketMQ 服务器的 `secretKey`。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -55671,7 +55681,7 @@
           },
           "secret_key": {
             "default": "",
-            "description": "RocketMQ 服务器的 `secretKey`。",
+            "description": "RocketMQ 服务器的 `secretKey`。<br/><br/>如需从文件加载 key 而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为 key。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -58424,7 +58434,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -58628,7 +58638,7 @@
             "type": "array"
           },
           "secret": {
-            "description": "客户端密钥。",
+            "description": "客户端密钥。<br/><br/>如需从文件加载密钥而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密钥。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -59845,7 +59855,7 @@
             "type": "array"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -59933,7 +59943,7 @@
             "type": "string"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -60002,7 +60012,7 @@
             "type": "boolean"
           },
           "password": {
-            "description": "内部数据库密码。",
+            "description": "与桥接关联的密码，用于与外部数据库进行认证。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -60321,7 +60331,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.2.2-rc.1"
+    "version": "6.2.2-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -60871,104 +60881,104 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "doris",
-                      "pulsar",
-                      "cassandra",
-                      "s3tables",
-                      "aws_timestream",
-                      "clickhouse",
-                      "influxdb",
-                      "matrix",
-                      "tablestore",
-                      "azure_event_hub_producer",
-                      "opents",
-                      "greptimedb",
-                      "iotdb",
-                      "tdengine",
-                      "elasticsearch",
                       "azure_blob_storage",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "kafka_producer",
+                      "alloydb",
+                      "mongodb",
                       "syskeeper_forwarder",
+                      "pulsar",
+                      "pgsql",
+                      "redis",
+                      "iotdb",
+                      "s3",
                       "couchbase",
-                      "sqlserver",
+                      "tablestore",
+                      "kinesis",
+                      "datalayers",
+                      "mysql",
+                      "emqx_tables",
+                      "snowflake_streaming",
                       "azure_event_grid",
+                      "greptimedb",
+                      "quasardb",
+                      "s3tables",
+                      "rabbitmq",
+                      "opents",
+                      "redshift",
+                      "doris",
+                      "disk_log",
+                      "gcp_pubsub_producer",
                       "cockroachdb",
                       "dynamo",
-                      "disk_log",
-                      "datalayers",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
                       "bigquery",
-                      "http",
-                      "kinesis",
-                      "emqx_tables",
-                      "quasardb",
-                      "redis",
-                      "mqtt",
                       "rocketmq",
+                      "http",
+                      "influxdb",
+                      "cassandra",
+                      "aws_timestream",
+                      "elasticsearch",
+                      "mqtt",
+                      "clickhouse",
+                      "confluent_producer",
+                      "timescale",
+                      "matrix",
                       "snowflake",
-                      "rabbitmq",
-                      "alloydb",
-                      "redshift",
-                      "snowflake_streaming",
+                      "sqlserver",
                       "oracle",
-                      "mongodb",
-                      "s3",
-                      "mysql",
-                      "pgsql"
+                      "tdengine"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "doris",
-                      "pulsar",
-                      "cassandra",
-                      "s3tables",
-                      "aws_timestream",
-                      "clickhouse",
-                      "influxdb",
-                      "matrix",
-                      "tablestore",
-                      "azure_event_hub_producer",
-                      "opents",
-                      "greptimedb",
-                      "iotdb",
-                      "tdengine",
-                      "elasticsearch",
                       "azure_blob_storage",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "kafka_producer",
+                      "alloydb",
+                      "mongodb",
                       "syskeeper_forwarder",
+                      "pulsar",
+                      "pgsql",
+                      "redis",
+                      "iotdb",
+                      "s3",
                       "couchbase",
-                      "sqlserver",
+                      "tablestore",
+                      "kinesis",
+                      "datalayers",
+                      "mysql",
+                      "emqx_tables",
+                      "snowflake_streaming",
                       "azure_event_grid",
+                      "greptimedb",
+                      "quasardb",
+                      "s3tables",
+                      "rabbitmq",
+                      "opents",
+                      "redshift",
+                      "doris",
+                      "disk_log",
+                      "gcp_pubsub_producer",
                       "cockroachdb",
                       "dynamo",
-                      "disk_log",
-                      "datalayers",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
                       "bigquery",
-                      "http",
-                      "kinesis",
-                      "emqx_tables",
-                      "quasardb",
-                      "redis",
-                      "mqtt",
                       "rocketmq",
+                      "http",
+                      "influxdb",
+                      "cassandra",
+                      "aws_timestream",
+                      "elasticsearch",
+                      "mqtt",
+                      "clickhouse",
+                      "confluent_producer",
+                      "timescale",
+                      "matrix",
                       "snowflake",
-                      "rabbitmq",
-                      "alloydb",
-                      "redshift",
-                      "snowflake_streaming",
+                      "sqlserver",
                       "oracle",
-                      "mongodb",
-                      "s3",
-                      "mysql",
-                      "pgsql"
+                      "tdengine"
                     ],
                     "type": "string"
                   },
@@ -82301,7 +82311,7 @@
                     "type": "integer"
                   },
                   "password": {
-                    "description": "用于连接到远程 EMQX 集群的密码（可选）。",
+                    "description": "用于连接到远程 EMQX 集群的 MQTT 密码（可选）。<br/><br/>如需从文件加载密码而不是内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用文件内容（去除末尾空白）作为密码。集群模式下，该文件必须存在于所有 EMQX 节点上。",
                     "example": "R4ND0M/S∃CЯ∃T",
                     "format": "password",
                     "type": "string"
@@ -86921,7 +86931,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -88563,7 +88573,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -90437,7 +90447,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91710,7 +91720,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -93341,7 +93351,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -94965,7 +94975,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95802,7 +95812,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "A6B1E660E33B535C",
+            "example": "BFF9004F1122B64C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95865,7 +95875,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "A6B1E660E33B535C",
+            "example": "BFF9004F1122B64C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96279,7 +96289,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "A6B1E660E33B535C",
+            "example": "BFF9004F1122B64C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96365,7 +96375,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "A6B1E660E33B535C",
+            "example": "BFF9004F1122B64C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -101887,6 +101897,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -101987,73 +102064,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -123224,7 +123234,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "控制台用户作用域——在角色之上应用的细粒度访问列表。<br/><br/>创建时若省略，服务器会采用角色默认值——administrator 获得所有管理作用域加四个仅登录作用域；viewer 获得所有管理作用域；publisher（如适用）仅获得 `publish` 作用域。发送显式空列表 `[]` 可创建拒绝所有的用户（仅可访问如 `/status` 等匿名端点）。<br/><br/>登录用户可拥有 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中有三个仅限管理员（`user_management`、`sso_management`、`api_key_management`）；`mfa_management` 也可分配给非管理员用户——对非管理员持有者，它作为自我豁免键，允许用户仅对自身 MFA 绕过 force_mfa 和 admin_required 锁。",
+                    "description": "控制台用户作用域：在用户角色之外额外应用的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会采用角色的默认作用域。administrator 获得所有管理作用域加四个仅登录作用域；viewer 获得所有管理作用域；publisher（如适用）仅获得 `publish` 作用域。发送显式空列表 `[]` 可创建拒绝所有的用户；仅可访问如 `/status` 等匿名端点。<br/><br/>登录用户可分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中，`user_management`、`sso_management`、`api_key_management` 仅限管理员；`mfa_management` 也可分配给非管理员用户。对非管理员用户，它仅作为自我豁免键，允许用户对自身 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -123279,7 +123289,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "控制台用户作用域——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域功能的旧版本升级记录；运行时会回退到角色默认值，客户端应将其视为“尚无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅可访问如 `/status` 等匿名端点）。<br/><br/>登录用户可拥有 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中有三个仅限管理员（`user_management`、`sso_management`、`api_key_management`）；`mfa_management` 也可分配给非管理员用户——对非管理员持有者，它作为自我豁免键，允许用户仅对自身 MFA 绕过 force_mfa 和 admin_required 锁。",
+                      "description": "控制台用户作用域：在用户角色之外额外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域的旧版本升级记录。运行时此类记录会回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅可访问如 `/status` 等匿名端点。<br/><br/>登录用户可分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中，`user_management`、`sso_management`、`api_key_management` 仅限管理员；`mfa_management` 也可分配给非管理员用户。对非管理员用户，它仅作为自我豁免键，允许用户对自身 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
                       "example": [
                         "user_management",
                         "mfa_management"
@@ -123465,7 +123475,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "控制台用户作用域——在角色之上应用的细粒度访问列表。<br/><br/>创建时若省略，服务器会采用角色默认值——administrator 获得所有管理作用域加四个仅登录作用域；viewer 获得所有管理作用域；publisher（如适用）仅获得 `publish` 作用域。发送显式空列表 `[]` 可创建拒绝所有的用户（仅可访问如 `/status` 等匿名端点）。<br/><br/>登录用户可拥有 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中有三个仅限管理员（`user_management`、`sso_management`、`api_key_management`）；`mfa_management` 也可分配给非管理员用户——对非管理员持有者，它作为自我豁免键，允许用户仅对自身 MFA 绕过 force_mfa 和 admin_required 锁。",
+                    "description": "控制台用户作用域：在用户角色之外额外应用的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会采用角色的默认作用域。administrator 获得所有管理作用域加四个仅登录作用域；viewer 获得所有管理作用域；publisher（如适用）仅获得 `publish` 作用域。发送显式空列表 `[]` 可创建拒绝所有的用户；仅可访问如 `/status` 等匿名端点。<br/><br/>登录用户可分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中，`user_management`、`sso_management`、`api_key_management` 仅限管理员；`mfa_management` 也可分配给非管理员用户。对非管理员用户，它仅作为自我豁免键，允许用户对自身 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -123514,7 +123524,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "控制台用户作用域——在角色之上应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域功能的旧版本升级记录；运行时会回退到角色默认值，客户端应将其视为“尚无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅可访问如 `/status` 等匿名端点）。<br/><br/>登录用户可拥有 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中有三个仅限管理员（`user_management`、`sso_management`、`api_key_management`）；`mfa_management` 也可分配给非管理员用户——对非管理员持有者，它作为自我豁免键，允许用户仅对自身 MFA 绕过 force_mfa 和 admin_required 锁。",
+                      "description": "控制台用户作用域：在用户角色之外额外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于兼容的哨兵值，来自未支持控制台用户作用域的旧版本升级记录。运行时此类记录会回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅可访问如 `/status` 等匿名端点。<br/><br/>登录用户可分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。这四个中，`user_management`、`sso_management`、`api_key_management` 仅限管理员；`mfa_management` 也可分配给非管理员用户。对非管理员用户，它仅作为自我豁免键，允许用户对自身 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
                       "example": [
                         "user_management",
                         "mfa_management"
