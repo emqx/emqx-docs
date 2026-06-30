@@ -23,6 +23,21 @@ The Log Trace feature is an effective tool for debugging and monitoring in produ
 - **Reliability**: This feature ensures that trace logging does not impact the overall message throughput of EMQX and provides a reliable and efficient way to store and retrieve log data.
 - **Agility**: Log Trace can be used for various scenarios, such as debugging messages or data loss, client disconnections, or subscription failures. For issues that occur at a specific time, you can schedule the trace to start and stop automatically for convenient log collection.
 
+## Namespace Scoping for Log Traces
+
+Starting from EMQX 6.0.3, log trace access is scoped by namespace when namespaced roles are in use:
+
+- Namespaced users see only traces that belong to their namespace in `GET /trace` responses.
+- The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace, so the existence of cross-namespace traces is not leaked:
+  - `PUT /trace/:name/stop`
+  - `GET /trace/:name/download`
+  - `GET /trace/:name/log`
+  - `GET /trace/:name/log_detail`
+  - `DELETE /trace/:name`
+- The bulk-delete operation (`DELETE /trace`) is restricted to global administrators. Namespaced users receive `403 Forbidden`.
+
+Global administrators can view and manage all traces regardless of namespace.
+
 ## Create a Log Trace
 
 This section demonstrates how to create Log Trace rules from the Dashboard. You can trace interactions based on Client ID, Topic, IP address, or Rule ID.
