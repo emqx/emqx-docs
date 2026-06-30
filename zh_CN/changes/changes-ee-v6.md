@@ -19,13 +19,13 @@
 
   此前，只有创建用户时支持在请求体中传入 `namespace` 字段；更新和删除用户时只能通过 `ns` 查询参数指定目标命名空间。现在，更新和删除端点也支持在请求体中传入 `namespace` 字段。当二者同时提供时，`ns` 查询参数优先。用户列表仍继续使用 `ns` 查询参数。
 
-- [#17665](https://github.com/emqx/emqx/pull/17665) 为多租户应用新增按命名空间统计的消息丢弃和投递丢弃计数器。这些计数器通过 `/api/v5/prometheus/namespaced_stats` 暴露，并带有 `namespace` 标签，与现有按命名空间划分的指标族一起提供。运维人员现在可以直接通过 Prometheus 按租户诊断丢弃率，而无需依赖日志排查。
+- [#17665](https://github.com/emqx/emqx/pull/17665) 为多租户应用新增按命名空间统计的消息丢弃计数器和投递丢弃计数器。这些计数器通过 `/api/v5/prometheus/namespaced_stats` 暴露，并带有 `namespace` 标签，与现有按命名空间划分的指标族一起提供。运维人员现在可以直接通过 Prometheus 按租户诊断丢弃率，而无需依赖日志排查。
 
-  已知限制：QoS 2 PUBREL 等待超时导致的丢弃目前还无法按命名空间归因，因为该丢弃路径只递增全局计数器，且不会触发 `message.dropped` hook。
+  已知限制：QoS 2 PUBREL 等待超时导致的丢弃目前还无法按命名空间归因，因为该丢弃路径只递增全局计数器，且不会触发 `message.dropped` 钩子。
 
 #### 数据集成
 
-- [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实转发上游保留消息。默认值为 `false`，以保持现有行为。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
+- [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实重新发布来自上游的保留消息。默认值为 `false`，以保持现有行为。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
 
   此外，当同时配置 `bridge_mode = true` 和 `proto_ver = v5` 时，连接器现在会输出一条警告日志，因为旧版 bridge-mode 标志在 MQTT 5.0 下不生效；请改为在单个订阅上设置 `retain_as_published`。
 
@@ -57,7 +57,7 @@
 
   此前，当 CONNECT、PUBLISH 或 SUBSCRIBE 报文携带大量 User Property 时，每个解析出的属性都会追加到累积列表末尾，导致拥有该连接的进程出现超线性的调度耗时。现在，解析会在保留属性顺序的同时按条目数量线性扩展。
 
-- [#17731](https://github.com/emqx/emqx/pull/17731) 修复更新 WS 或 WSS 监听器选项时可能出现的临时性 “address already in use” 错误（例如轮换 TLS 证书时）。更新此类监听器会重新绑定端口，而操作系统可能尚未释放旧 socket；现在 EMQX 会短暂重试重新绑定，而不是直接让更新失败。
+- [#17731](https://github.com/emqx/emqx/pull/17731) 修复更新 WS 或 WSS 监听器选项时可能出现的临时性 "address already in use" 错误（例如轮换 TLS 证书时）。更新此类监听器会重新绑定端口，而操作系统可能尚未释放旧 socket；现在 EMQX 会短暂重试重新绑定，而不是直接让更新失败。
 
 #### 队列与流
 
@@ -126,9 +126,9 @@
 
 - [#17657](https://github.com/emqx/emqx/pull/17657) 修复原始 `authorization` 和 `cookie` 头被转发到插件 API 回调的安全问题。现在这些包含凭据的头在到达插件代码前会被脱敏。
 
-- [#17711](https://github.com/emqx/emqx/pull/17711) 当创建或更新内置数据库用户时，如果目标命名空间不是已知的托管命名空间，现在会以 “Managed namespace not found” 拒绝请求。此前，即使请求体中的命名空间不存在，用户也可能被创建。
+- [#17711](https://github.com/emqx/emqx/pull/17711) 当创建或更新内置数据库用户时，如果目标命名空间不是已知托管命名空间，现在会失败并返回 "Managed namespace not found"。此前，当命名空间在请求体中提供时，即使该命名空间不存在，也可能创建用户。
 
-  此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 “Managed namespace not found” 错误。
+  此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 "Managed namespace not found" 错误。
 
 - [#17736](https://github.com/emqx/emqx/pull/17736) 修复 JWT 认证，使其只使用与配置密钥类型匹配的 JWS 算法验证令牌。基于 HMAC 的认证器现在只接受 `HS256`、`HS384` 和 `HS512`。公钥和 JWKS 认证器接受 `RS*`、`PS*`、`ES*` 和 `EdDSA` 算法。此修复会拒绝 `alg=none` 令牌和算法混淆令牌。
 
@@ -136,9 +136,9 @@
 
 #### 多租户
 
-- [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户门控缺口。当配置了 `multi_tenancy.post_auth_tns_expression`，且表达式求值为空字符串或抛出错误时，命名空间门控（`allow_only_managed_namespaces` 强制检查、会话配额等）此前会被跳过，从而允许客户端通过。
+- [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户准入检查缺口。此前，当配置了 `multi_tenancy.post_auth_tns_expression` 且表达式求值为空字符串或错误时，命名空间准入检查（`allow_only_managed_namespaces` 强制检查、会话配额等）会被跳过，从而允许客户端通过。
 
-  现在，空值和错误结果会被视为“未分配命名空间”，并与认证前未提供命名空间的客户端一样经过同一门控：当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。此场景下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
+  空字符串和错误结果现在会被视为 "no namespace assigned"，并与认证前未提供命名空间的客户端一样经过同一准入检查。当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。在这种情况下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
 
 - [#17757](https://github.com/emqx/emqx/pull/17757) 修复 `/prometheus/namespaced_stats`，使命名空间管理员和 API 密钥只能查看其所属命名空间的数据。全局管理员和 API 密钥仍可查看所有命名空间的数据。
 
