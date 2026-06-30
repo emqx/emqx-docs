@@ -345,6 +345,14 @@ In addition to these API-key scopes, Dashboard login users have four login-only 
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
+::: warning Treat `system` as administrator-equivalent
+
+`system` covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree and import backup archives, both of which can be used to change settings that other, finer-grained scopes (such as `audit`, `access_control`, or `monitoring`) would normally protect.
+
+Combining `system` with a restricted scope list on the same key does not reliably enforce the restriction. Reserve `system` for keys that already have administrative trust, and apply the principle of least privilege by granting only the scopes the integration actually needs.
+
+:::
+
 Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 #### Default Behavior of `scopes`
