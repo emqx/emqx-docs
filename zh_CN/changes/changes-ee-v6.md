@@ -1,5 +1,179 @@
 # EMQX 企业版 v6 版本
 
+## 6.2.2
+
+*发布日期: 2026-07-01*
+
+在升级到 EMQX 6.2.2 之前，请务必查阅不兼容变更和已知问题。
+
+### 增强
+
+#### 集群
+
+- [#17530](https://github.com/emqx/emqx/pull/17530) 集群连接现在需要非社区版 License。在默认社区版 License 下，已配置的连接会保持非活动状态（不转发消息，也不复制路由），REST API 在尝试启用连接时会拒绝请求，并明确提示需要加载非社区版 License。禁用和删除连接仍可使用，以便清理遗留配置。升级 License 后，可通过 Dashboard 或 REST API 启用连接，无需重启节点。
+- [#17549](https://github.com/emqx/emqx/pull/17549) 新增 EMQX Backup Sync 插件，通过数据备份 API 定期将选定配置从主集群同步到备集群。该插件支持为对主集群的 HTTPS 调用配置 TLS 选项。
+
+#### 多租户
+
+- [#17711](https://github.com/emqx/emqx/pull/17711) 当创建或更新内置数据库用户时，如果目标命名空间不是已知托管命名空间，现在会失败并返回 "Managed namespace not found"。此前，当命名空间在请求体中提供时，即使该命名空间不存在，也可能创建用户。
+
+  此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 "Managed namespace not found" 错误。
+
+- [#17665](https://github.com/emqx/emqx/pull/17665) 为多租户应用新增按命名空间统计的消息丢弃计数器和投递丢弃计数器。这些计数器通过 `/api/v5/prometheus/namespaced_stats` 暴露，并带有 `namespace` 标签，与现有按命名空间划分的指标族一起提供。运维人员现在可以直接通过 Prometheus 按租户诊断丢弃率，而无需依赖日志排查。
+
+  已知限制：QoS 2 PUBREL 等待超时导致的丢弃目前还无法按命名空间归因，因为该丢弃路径只递增全局计数器，且不会触发 `message.dropped` hook。
+
+#### 访问控制
+
+- [#17564](https://github.com/emqx/emqx/pull/17564) 为加固安全配置下的授权后端故障新增失败关闭（fail-closed）行为。在加固模式下，后端故障和无效的后端响应现在会拒绝访问；旧模式保留现有的忽略和回退行为。
+- [#17589](https://github.com/emqx/emqx/pull/17589) 为加固安全配置下的访问控制钩子回调故障新增失败关闭（fail-closed）处理。认证或授权钩子回调崩溃时，现在会拒绝访问，而不是被忽略。
+- [#17674](https://github.com/emqx/emqx/pull/17674) 在加固安全配置下，当认证后端发生故障或返回格式错误的响应时，认证后端现在会采用失败即拒绝行为。可通过 `authentication_settings.ignore_backend_failures` 保留旧行为。
+- [#17696](https://github.com/emqx/emqx/pull/17696) 加固使用 JWKS 的 JWT 认证：在加固安全配置下，默认验证 JWKS 端点的 TLS 证书；当 JWKS 密钥不可用时拒绝提交的 JWT；在加固模式下拒绝缺失 JWT 凭据的连接。
+
+#### 数据集成
+
+- [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实重新发布来自上游的保留消息。默认值为 `false`，以保持现有行为。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
+
+  此外，当同时配置 `bridge_mode = true` 和 `proto_ver = v5` 时，连接器现在会输出一条警告日志，因为旧版 bridge-mode 标志在 MQTT 5.0 下不生效；请改为在各个订阅上设置 `retain_as_published`。
+
+- [#17508](https://github.com/emqx/emqx/pull/17508) 为 PostgreSQL 和 TimescaleDB 连接器连接设置 PostgreSQL `application_name` 启动参数为 `emqx`。
+
+  这使得 EMQX 数据库会话更容易在 PostgreSQL 日志和 `pg_stat_activity` 等视图中识别。
+
+- [#17576](https://github.com/emqx/emqx/pull/17576) 通过现有 `ssl.ciphers` 字段为 GreptimeDB 连接器新增 TLS 密码套件配置支持。指定密码套件列表后，TLS 协商将被限制为这些套件。不支持的密码套件会在连接器启动时被拒绝。
+
+- [#17594](https://github.com/emqx/emqx/pull/17594) 支持为 Google Cloud Pub/Sub 和 BigQuery 连接器的 `service_account_json` 配置 `file://` 密钥文件，从而可以从外部文件注入服务账号凭证。
+
+- [#17717](https://github.com/emqx/emqx/pull/17717) 为 Confluent Producer 连接器新增启用 TLS 对端验证的选项。
+
+- [#17718](https://github.com/emqx/emqx/pull/17718) 为 GCP PubSub Producer/Consumer 和 BigQuery 连接器新增启用 TLS 对端验证的选项。
+
+#### 可观测性
+
+- [#17558](https://github.com/emqx/emqx/pull/17558) 在 `GET /monitor_current` HTTP API 中新增两个指标及其对应速率：`rules_matched` 和 `actions_executed`。它们分别跟踪规则匹配情况和动作执行速率，其中动作执行速率包括执行成功和执行失败的情况。
+
+  此更新还修复了非批处理模式（`batch_size = 1`）下 `actions.executed` 计数偏低的问题：该计数器现在会在每次动作回调调用时递增一次，不再依赖 buffer worker 遥测刷新窗口。
+
+- [#17712](https://github.com/emqx/emqx/pull/17712) 新增 `emqx_session_tool` 诊断模块，运维人员可通过远程控制台调用。使用 `emqx_session_tool:top_by(mqueue_len)`，可在连接数较多的集群中按 gauge 或 counter 值查找 top-K 会话。还支持其他会话指标，例如 `mqueue_dropped` 和 `inflight_cnt`。这有助于运维人员定位最繁忙的会话，而无需手动翻阅客户端列表。
+
+  该扫描会流式遍历 channel registry，仅保留有界的 top-K 结果，并读取缓存的单会话指标，而不会向连接进程发送消息。`emqx_session_tool:cluster_top_by/1` 会汇总所有集群节点上的结果。
+
+- [#17758](https://github.com/emqx/emqx/pull/17758) Prometheus `emqx_messages_retained` 计数器现在会报告实际的保留消息写入次数。此前该指标虽已暴露，但从未递增，因此始终为 0。现在，每次成功存储保留消息都会递增该计数器。
+
+### 问题修复
+
+#### 核心 MQTT 功能
+
+- [#17529](https://github.com/emqx/emqx/pull/17529) 修复了通过消息队列订阅投递的 QoS 0 消息可能在内部保持未确认状态的问题。该问题会导致队列订阅者在达到本地 inflight 限制后停止接收更多消息。
+- [#17540](https://github.com/emqx/emqx/pull/17540) 修复在 SSL 监听器上设置 `password = "file://..."` 时，如果 keyfile 已加密，配置校验会因 `bad_password_or_invalid_keyfile` 失败的问题。现在，`file://` 引用会在校验期间解析，而不只是在运行时解析。
+- [#17569](https://github.com/emqx/emqx/pull/17569) 将 MQTT v5 User Property 解析成本从平方复杂度降低为线性复杂度。
+
+  此前，当 CONNECT、PUBLISH 或 SUBSCRIBE 报文携带大量 User Property 时，每个解析出的属性都会追加到累积列表末尾，导致拥有该连接的进程出现超线性的调度耗时。现在，解析会在保留属性顺序的同时按条目数量线性扩展。
+
+- [#17731](https://github.com/emqx/emqx/pull/17731) 修复更新 WS 或 WSS 监听器选项时可能出现的临时性 "address already in use" 错误（例如轮换 TLS 证书时）。更新此类监听器会重新绑定端口，而操作系统可能尚未释放旧 socket；现在 EMQX 会短暂重试重新绑定，而不是直接让更新失败。
+
+#### 队列与流
+
+- [#17515](https://github.com/emqx/emqx/pull/17515) 修复了使用 QoS 0 的消息队列订阅在队列订阅者本地 inflight 窗口满后可能停止接收消息的问题。
+- [#17733](https://github.com/emqx/emqx/pull/17733) 修复消息队列消费者在持久存储订阅恢复后，可能无法恢复空流缓冲区的问题。
+
+#### 规则引擎
+
+- [#17725](https://github.com/emqx/emqx/pull/17725) 修复 6.0.3、6.1.2 和 6.2.1 中引入的问题：当发布客户端携带租户命名空间（`client_attrs.tns`）时，全局规则可能无法再匹配其 `FROM` 主题上的消息。
+
+  当启用 `rule_engine.limit_selects_in_namespace`（默认启用）时，全局规则现在会保留系统级可见性，并匹配来自任意命名空间的消息。在命名空间内创建的规则仍隔离在各自命名空间内。若运维人员希望完全禁用命名空间限制，仍可设置 `rule_engine.limit_selects_in_namespace = false`。
+
+#### 数据集成
+
+- [#17568](https://github.com/emqx/emqx/pull/17568) 将 Kafka 客户端库 `brod` 升级到 4.5.5。
+
+  消费者组：当 join 响应携带 `member_id_required` 错误码（由不支持静态成员实例 ID 的旧版 Kafka Broker 返回，例如 2.2.0）时，尊重 Broker 分配的 member ID。此前，错误返回中的 member ID 会被丢弃，导致重试无法成功。
+
+- [#17579](https://github.com/emqx/emqx/pull/17579) 修复 Redis Sentinel 连接器，使其为每个资源使用独立的 Sentinel 管理器，并在资源停止时清理这些管理器，避免连接器之间共享 Sentinel 状态。
+
+- [#17584](https://github.com/emqx/emqx/pull/17584) 限制了 Snowflake 聚合连接器健康检查期间返回的数据量。仅当已有 schema 列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
+- [#17588](https://github.com/emqx/emqx/pull/17588) 限制了 Kinesis 集成的连接器和动作健康检查期间返回的数据量。仅当已有 schema 列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
+- [#17595](https://github.com/emqx/emqx/pull/17595) 限制了 S3 和 S3 Tables 集成的连接器健康检查期间返回的数据量。仅当已有桶（bucket）列表非常大时才有可观察影响，此时健康检查的执行时间将大幅缩短。
+
+- [#17598](https://github.com/emqx/emqx/pull/17598) 修复 MongoDB 8.0+ 在需要认证时的连接失败问题。此前，驱动会在认证前查询 `buildInfo` 以选择认证机制；MongoDB 8.0 将该命令限制为只有已认证调用方可用。现在驱动会跳过该探测，并直接使用所有受支持 MongoDB 版本都接受的 SCRAM-SHA-1。
+
+- [#17605](https://github.com/emqx/emqx/pull/17605) 修复 Oracle 动作的 prepare/status 检查，使其在不执行 SQL 的情况下解析动作 SQL，并拒绝不受支持的顶层 DDL/DCL/TCL 语句。同时改进了对超过 4000 字节文本 Payload 的支持，适用于 Payload 占位符是最后一个绑定参数的场景。
+
+- [#17625](https://github.com/emqx/emqx/pull/17625) 修复 GCP PubSub Consumer Source 的问题：如果 Source 初始创建时使用的服务账号缺少为配置主题创建订阅所需的权限，即使后来向该服务账号授予了权限，该 Source 也无法变为 `connected`。
+
+- [#17633](https://github.com/emqx/emqx/pull/17633) 修复 6.1.2 和 6.2.1 中引入的问题：MQTT Bridge 和集群连接的 TLS 连接在短时间流量后可能停滞。受影响节点会反复记录来自 `emqtt` 客户端的类似 `unexpected_event ... ssl_passive ...` 的错误消息。EMQX 现在内置 `emqtt` 1.15.3，在 [#17617](https://github.com/emqx/emqx/issues/17617) 首次报告该问题后恢复了正常流量传输。
+
+- [#17649](https://github.com/emqx/emqx/pull/17649) 提升启动和停止 GCP PubSub Consumer 连接器的响应性。此前，如果连接较慢或繁忙，可能出现超时，导致连接器仍在运行且状态与配置不一致。
+
+- [#17681](https://github.com/emqx/emqx/pull/17681) 修复禁用预处理语句时 PostgreSQL 连接器的批量写入问题。
+
+  此前，同一连接上的并发批次可能会交错执行原始 SQL 解析，并导致 PostgreSQL 协议错误。表存在性检查现在也会通过连接器 worker 串行执行，以避免与批量执行交错。
+
+- [#17701](https://github.com/emqx/emqx/pull/17701) 修复 PostgreSQL 动作在批处理中使用会返回结果行的 SQL 模板（例如 `SELECT ...`）时，出现含义不清的 `badarith` 错误的问题。
+
+  PostgreSQL 动作批处理不支持返回结果行的 SQL。现在 EMQX 会返回明确的不支持 SQL 错误，而不是让批处理结果处理器崩溃。
+
+#### 集群
+
+- [#17586](https://github.com/emqx/emqx/pull/17586) 定期清理全局会话注册表中的陈旧条目。
+
+  此前，如果会话的属主进程在未正常注销的情况下退出，并且相同的客户端 ID 再也没有重新连接，注册表行可能会永久残留。例如，短暂网络分区导致注销操作未能复制，或在 down 事件清理期间某个 core 节点的一致性检查超时，都可能触发该问题。
+
+  现在，每个 core 节点上都有一个受限流控制的后台清理任务来移除此类行。该任务限制为每个节点每秒最多 500 行，且运行间隔不短于 10 分钟，因此即使在持有数百万会话的注册表上也不会对 Broker 吞吐量产生可观测影响。
+
+- [#17773](https://github.com/emqx/emqx/pull/17773) 修复配置更新命令（REST API 和 CLI）在底层集群 RPC 层意外中止时，可能触发 `function_clause` 崩溃报告的问题。例如，当节点启动或恢复期间集群 RPC 表尚不可用时，可能会出现 `{no_exists, cluster_rpc_mfa}`。现在，此类失败会作为结构化错误返回给调用方。
+
+#### 访问控制
+
+- [#17575](https://github.com/emqx/emqx/pull/17575) 修复 `emqx_username_quota` 插件中的竞争条件。该问题可能导致按用户名统计的会话计数器与实际跟踪的客户端记录数量不一致。计数器可能被递减到零以下，随后被删除；与此同时，并发会话注册又递增该计数器，导致该增量永久丢失。
+
+- [#17644](https://github.com/emqx/emqx/pull/17644) 修复 `plain` 密码哈希算法在认证时接受仅大小写不同的密码的问题。
+
+- [#17646](https://github.com/emqx/emqx/pull/17646) 修复 JWT 认证中 JWKS 获取客户端的 HTTP/1.1 协议合规性问题。早期版本由于 Erlang/OTP `inets` HTTP 客户端中的长期默认行为（已在 inets 9.4.2 / OTP 28.1 中修复），会发送空值 `TE:` 头。一些身份提供商（尤其是 PingFederate）会拒绝此类请求。EMQX 现在在获取 JWKS 时发送显式且有效的 `TE: trailers` 头。
+
+- [#17653](https://github.com/emqx/emqx/pull/17653) 修复 Prometheus 配置 API 在响应中返回 Pushgateway 头部里已存储的 `Authorization` 头值的安全问题。现在 API 会在响应中对这些值进行脱敏。
+
+- [#17654](https://github.com/emqx/emqx/pull/17654) 修复通过 `POST /authentication` 创建认证器时，返回的新认证器配置未对提供方密钥进行脱敏的问题，这些密钥包括 JWT HMAC 密钥、HTTP `Authorization` 头以及请求体密码等。创建响应现在会应用与 list 和 get 端点相同的脱敏处理。
+
+- [#17657](https://github.com/emqx/emqx/pull/17657) 修复原始 `authorization` 和 `cookie` 头被转发到插件 API 回调的安全问题。现在这些包含凭据的头在到达插件代码前会被脱敏。
+
+- [#17711](https://github.com/emqx/emqx/pull/17711) 当创建或更新内置数据库用户时，如果目标命名空间不是已知托管命名空间，现在会以 "Managed namespace not found" 失败。此前，当命名空间在请求体中提供时，即使该命名空间不存在，也可能创建用户。
+
+  此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 "Managed namespace not found" 错误。
+
+- [#17739](https://github.com/emqx/emqx/pull/17739) 改进了日志、追踪和审计记录中敏感数据的脱敏处理。
+
+#### 多租户
+
+- [#17715](https://github.com/emqx/emqx/pull/17715) 修复一个多租户门控缺口。此前，当配置了 `multi_tenancy.post_auth_tns_expression` 且表达式求值为空字符串或错误时，命名空间门控（`allow_only_managed_namespaces` 强制检查、会话配额等）会被跳过，从而允许客户端通过。
+
+  空字符串和错误结果现在会被视为 "no namespace assigned"，并与认证前未提供命名空间的客户端一样经过同一门控。当 `allow_only_managed_namespaces = true` 时客户端会被拒绝；当其为 `false` 时，客户端会在不带命名空间的情况下被接受。在这种情况下，认证前 `client_attrs.tns` 中携带的任何命名空间值也会被清除，因此当表达式拒绝分配命名空间时，该值不会被保留。
+
+- [#17757](https://github.com/emqx/emqx/pull/17757) 修复 `/prometheus/namespaced_stats`，使命名空间管理员和 API 密钥只能查看其所属命名空间的数据。全局管理员和 API 密钥仍可查看所有命名空间的数据。
+
+#### 网关
+
+- [#17556](https://github.com/emqx/emqx/pull/17556) 修复 OCPP 网关未将监听器 `enable_authn` 选项传递给共享认证流程的问题。该问题是由于该选项存储在拼写错误的 client-info key 下导致的。
+- [#17581](https://github.com/emqx/emqx/pull/17581) 修复 JT/T 808 网关，使其使用认证期间接受的手机号作为连接身份，拒绝不匹配的注册码认证尝试以及手机号不同的后续上行帧。
+- [#17604](https://github.com/emqx/emqx/pull/17604) 修复 GBT32960 网关路由：车辆对下行命令（参数查询、参数设置、终端控制）的响应现在会正确发布到 `upstream/response`，而不是 `upstream/transparent`。
+- [#17528](https://github.com/emqx/emqx/pull/17528) 修复多个网关发布和订阅流程中缺少授权检查的问题。现在，以下操作会在发布或订阅前执行授权检查：MQTT-SN Will 消息发布；JT/T 808 上行发布和自动下行订阅；GBT32960 上行发布和自动下行订阅；以及 OCPP 上行发布和自动下行订阅。
+
+#### 可观测性
+
+- [#17497](https://github.com/emqx/emqx/pull/17497) 修复非批处理模式（`batch_size = 1`）下配置的动作中，`actions.executed` 指标低于 `actions.messages` 的问题。
+
+  此前实现会在每次 buffer-worker 遥测刷新时递增一次 `actions.executed`，一次刷新可能聚合多个单独完成事件，因此即使未配置批处理，`actions.executed` 也会落后于 `actions.messages`。
+
+  现在，这两个指标会在独立调用点递增：`actions.executed` 按动作回调调用次数递增（批处理模式下每批一次，单条模式下每条消息一次），`actions.messages` 按处理的消息数递增。
+
+- [#17513](https://github.com/emqx/emqx/pull/17513) 修复 Prometheus 匹配授权允许/拒绝指标，使其反映实际匹配到的授权决策。
+
+- [#17536](https://github.com/emqx/emqx/pull/17536) 在 Dashboard 中为 SSL 监听器 `password` 以及其他 secret 类型配置字段（MQTT Bridge 密码、集群连接密码、Dashboard OIDC 客户端密钥、S3 Secret Access Key、AI Completion API Key、Pulsar/RocketMQ 凭据等）的工具提示补充 `file://` 选项说明。通用 secret 类型描述已提到这一约定，但字段级描述会覆盖该说明，导致用户误以为这些字段只接受字面值。
+
+- [#17708](https://github.com/emqx/emqx/pull/17708) 修复 logger JSON formatter 崩溃可能导致部分 debug 级别追踪事件被替换为 `FORMATTER CRASH` 行的问题。
+
 ## 6.2.1
 
 *发布日期: 2026-06-11*
