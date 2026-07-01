@@ -45,15 +45,15 @@ When you create or edit a user, the **Scopes** field is optional. If you leave i
 
 ![user_scopes](./assets/user_scopes.png)
 
-::: warning Treat `system`, `user_management`, and `api_key_management` as administrator-equivalent
+::: warning Treat broad scopes as administrator-equivalent
 
-A few scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
 
-- `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree and import backup archives that include stored user and key records.
+- `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
 
-Granting any of these together with a restricted scope list on the same user does not reliably enforce the restriction — the user can reach the restricted areas via configuration changes, backup import, or by provisioning a new account or key for themselves. Reserve these three scopes for users you fully trust, and apply the principle of least privilege by granting only the specific scopes a user actually needs.
+Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
 
 :::
 

@@ -341,6 +341,14 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
+::: warning 将 `system` 视为等同管理员权限
+
+`system` 覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度 Scope（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
+
+将 `system` 与受限 Scope 列表组合到同一个密钥上，并不能可靠地强制执行该限制。仅将 `system` 授予已具备管理员信任级别的密钥，并遵循最小权限原则，只授予该密钥实际需要的 Scope。
+
+:::
+
 Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
 
 #### Scope 的默认行为
