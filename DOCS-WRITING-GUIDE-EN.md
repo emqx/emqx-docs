@@ -24,12 +24,13 @@ Structure content according to the purpose of the page or section. A page can co
 
 ### Concept Topics
 
-Use a concept topic to explain what something is, why it matters, and when to use it.
+Use a concept topic to explain what something is, why it matters, how it works at a high level, and when to use it.
 
 A concept topic should:
 
 - Start with a short definition or summary.
 - Explain the problem, use case, or relationship to other EMQX features.
+- Explain the feature's core mechanism or workflow at a conceptual level.
 - Avoid step-by-step instructions unless they are needed as a short example.
 - Link to task or reference pages for configuration and operation details.
 
