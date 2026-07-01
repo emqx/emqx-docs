@@ -45,6 +45,18 @@ When you create or edit a user, the **Scopes** field is optional. If you leave i
 
 ![user_scopes](./assets/user_scopes.png)
 
+::: warning Treat broad scopes as administrator-equivalent
+
+The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+
+- `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
+- `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
+- `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
+
+Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
+
+:::
+
 #### Role Changes and Scope Compatibility
 
 When you change a user's role, EMQX checks whether the user's current scopes are compatible with the new role. If they are not, the request is rejected with HTTP 400. To resolve this, include a `scopes` list in the same request that is valid for the new role.
