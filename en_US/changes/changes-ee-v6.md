@@ -13,6 +13,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17530](https://github.com/emqx/emqx/pull/17530) Cluster linking now requires a non-community license. Under the default community license, configured links stay inactive (no message forwarding or route replication) and the REST API rejects attempts to enable a link with a clear hint to load a non-community license. Disabling and deleting links remain available so that legacy configuration can be tidied up. After upgrading the license, links can be enabled from the Dashboard or REST API without restarting the node.
 - [#17549](https://github.com/emqx/emqx/pull/17549) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
 
+- [#17620](https://github.com/emqx/emqx/pull/17620) Added an operator-facing diagnostics module `emqx_router_tool` for inspecting and reconciling routing tables. Intended to be run via `emqx ctl eval`, it provides three helpers:
+
+  - `cluster_schema_view/0` reports the route storage schema each cluster node is running.
+  - `scan_missing_routes/0,1` streams the local subscription table and reports topics whose route entry is missing for this node. The scan runs in two passes, is throttled, and tolerates concurrent subscribes and unsubscribes.
+  - `reconcile_missing_routes/0,1` re-adds the missing routes via the existing `emqx_router:add_route/2` API.
+
+  The module is schema-agnostic and safe to run on a live cluster.
+
 #### Multi-Tenancy
 
 - [#17711](https://github.com/emqx/emqx/pull/17711) Made namespace selection consistent across the built-in database authentication user HTTP APIs, and allowed cleanup of records left over from a deleted namespace.
@@ -47,6 +55,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The scan streams the channel registry, keeps only a bounded top-K result, and reads cached per-session metrics without sending messages to connection processes. `emqx_session_tool:cluster_top_by/1` aggregates the result across all cluster nodes.
 
+- [#17558](https://github.com/emqx/emqx/pull/17558) Added two new metrics and corresponding rates to the `GET /monitor_current` HTTP API: `rules_matched` and `actions_executed`. They track the number of rules matched and the action execution rate (success + failure), respectively.
+
+  Also fixed `actions.executed` undercounting action invocations in non-batch mode (`batch_size = 1`): the counter is now incremented once per action callback invocation, independently of the buffer-worker telemetry flush window.
+
 ### Bug Fixes
 
 #### Core MQTT Functionalities
@@ -58,6 +70,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously a CONNECT, PUBLISH or SUBSCRIBE packet carrying many user-properties caused super-linear scheduler time on the owning connection process, because each parsed property was appended to the end of the accumulated list. Parsing now scales linearly with the number of entries while preserving their wire order.
 
 - [#17731](https://github.com/emqx/emqx/pull/17731) Fixed a transient "address already in use" error that could occur when updating the options of a WS or WSS listener (for example when rotating TLS certificates). Updating such a listener rebinds its port, and the operating system may not have released the old socket yet; EMQX now retries the rebind briefly instead of failing the update.
+
+- [#17798](https://github.com/emqx/emqx/pull/17798) Fixed an issue where retained messages could be delivered with the original publish QoS instead of the wildcard subscription QoS limit.
+
+- [#17801](https://github.com/emqx/emqx/pull/17801) The `ssl_opts.ciphers` validator now accepts cipher names in either OpenSSL or IANA/RFC naming convention. Previously, only OpenSSL-format names were recognized, so a valid TLS 1.2 cipher supplied in its IANA name (for example, `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`) was rejected as `bad_ciphers` even though Erlang's `ssl` module would have accepted it. TLS 1.3 ciphers were unaffected because their IANA and OpenSSL names are identical.
 
 #### Queue and Stream
 
@@ -112,6 +128,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted unexpectedly. For example, this could happen with `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
 
+- [#17764](https://github.com/emqx/emqx/pull/17764) Fixed stale plugin entries after a node rejoins a cluster where the plugin was uninstalled while the node was offline. EMQX now removes local plugin packages that are no longer present in the cluster plugin configuration during plugin startup.
+
 #### Access Control
 
 - [#17575](https://github.com/emqx/emqx/pull/17575) Fixed a race condition in the `emqx_username_quota` plugin that could cause the per-username session counter to become inconsistent with the actual number of tracked client records. The counter could be decremented past zero and then be deleted while a concurrent session registration incremented it, losing the increment permanently.
@@ -130,9 +148,19 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   In addition, global administrators can now delete built-in database users that belong to namespaces that have already been deleted, instead of receiving a "Managed namespace not found" error.
 
-- [#17736](https://github.com/emqx/emqx/pull/17736) Fixed JWT authentication to verify tokens only with JWS algorithms appropriate for the configured key type. HMAC-based authenticators now accept only `HS256`, `HS384`, and `HS512`. Public-key and JWKS authenticators accept `RS*`, `PS*`, `ES*`, and `EdDSA` algorithms. This rejects `alg=none` tokens and algorithm-confusion tokens.
+- [#17736](https://github.com/emqx/emqx/pull/17736) Restricted the JWT authenticator to verify tokens using only JWS algorithms consistent with the configured key type. HMAC-based authenticators now accept only `HS256`, `HS384`, and `HS512`. Public-key and JWKS authenticators accept `RS*`, `PS*`, `ES*`, and `EdDSA` algorithms. Tokens whose `alg` header does not match the configured key type, including `alg=none`, are rejected.
 
 - [#17739](https://github.com/emqx/emqx/pull/17739) Improved redaction of sensitive data in logs, traces, and audit records.
+
+- [#17787](https://github.com/emqx/emqx/pull/17787) Stopped HTTP connector error logs from including request headers when an `ehttpc` worker is killed mid-request.
+
+  When the HTTP connector's `ehttpc` worker was killed while a request was in flight (for example, by deleting the source while the request had not yet returned), the resulting EXIT reason carried the original `gen_server:call` arguments, which include the request headers. These headers were then written verbatim to the error log. The call arguments are now dropped from the reason before it is logged.
+
+- [#17790](https://github.com/emqx/emqx/pull/17790) Stopped writing the TOTP shared secret to the `dashboard_login_failed` server log. The secret was previously included in this log entry during first-time MFA setup.
+
+- [#17791](https://github.com/emqx/emqx/pull/17791) Improved log redaction so that JWT HMAC key bytes no longer appear in `cluster_rpc_apply_result` and `cluster_rpc_apply_ok` debug log lines emitted during configuration updates.
+
+  The redactor now recognizes the internal JWK record shape and replaces it with a placeholder before logging, and also treats the `jwk` field as sensitive.
 
 #### Multi-Tenancy
 
