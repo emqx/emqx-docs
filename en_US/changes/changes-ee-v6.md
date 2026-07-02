@@ -13,7 +13,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#17530](https://github.com/emqx/emqx/pull/17530) Cluster linking now requires a non-community license. Under the default community license, configured links stay inactive (no message forwarding or route replication) and the REST API rejects attempts to enable a link with a clear hint to load a non-community license. Disabling and deleting links remain available so that legacy configuration can be tidied up. After upgrading the license, links can be enabled from the Dashboard or REST API without restarting the node.
 - [#17549](https://github.com/emqx/emqx/pull/17549) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
 
-- [#17620](https://github.com/emqx/emqx/pull/17620) Added an operator-facing diagnostics module `emqx_router_tool` for inspecting and reconciling routing tables. Intended to be run via `emqx ctl eval`, it provides three helpers:
+- [#17620](https://github.com/emqx/emqx/pull/17620) Added an operator-facing diagnostics module `emqx_router_tool` for inspecting and reconciling routing tables. The module is intended to be run via `emqx ctl eval` and provides three helpers:
 
   - `cluster_schema_view/0` reports the route storage schema each cluster node is running.
   - `scan_missing_routes/0,1` streams the local subscription table and reports topics whose route entry is missing for this node. The scan runs in two passes, is throttled, and tolerates concurrent subscribes and unsubscribes.
@@ -128,7 +128,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted unexpectedly. For example, this could happen with `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
 
-- [#17764](https://github.com/emqx/emqx/pull/17764) Fixed stale plugin entries after a node rejoins a cluster where the plugin was uninstalled while the node was offline. EMQX now removes local plugin packages that are no longer present in the cluster plugin configuration during plugin startup.
+- [#17764](https://github.com/emqx/emqx/pull/17764) Fixed an issue where stale plugin entries could remain on a node after it rejoined the cluster if the plugin had been uninstalled while the node was offline. During plugin startup, EMQX now removes local plugin packages that are no longer present in the cluster plugin configuration.
 
 #### Access Control
 
@@ -152,9 +152,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17739](https://github.com/emqx/emqx/pull/17739) Improved redaction of sensitive data in logs, traces, and audit records.
 
-- [#17787](https://github.com/emqx/emqx/pull/17787) Stopped HTTP connector error logs from including request headers when an `ehttpc` worker is killed mid-request.
+- [#17787](https://github.com/emqx/emqx/pull/17787) Prevented HTTP connector error logs from including request headers when an `ehttpc` worker is terminated before a request returns.
 
-  When the HTTP connector's `ehttpc` worker was killed while a request was in flight (for example, by deleting the source while the request had not yet returned), the resulting EXIT reason carried the original `gen_server:call` arguments, which include the request headers. These headers were then written verbatim to the error log. The call arguments are now dropped from the reason before it is logged.
+  Previously, if the HTTP connector's `ehttpc` worker was terminated while a request was in flight (for example, by deleting the source before the request returned), the resulting EXIT reason carried the original `gen_server:call` arguments. Because those arguments include the request headers, the headers were written verbatim to the error log. EMQX now removes the call arguments from the reason before it is logged.
 
 - [#17790](https://github.com/emqx/emqx/pull/17790) Stopped writing the TOTP shared secret to the `dashboard_login_failed` server log. The secret was previously included in this log entry during first-time MFA setup.
 

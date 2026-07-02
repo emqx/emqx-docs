@@ -55,9 +55,9 @@
 
   该扫描会流式遍历 channel registry，仅保留有界的 top-K 结果，并读取缓存的单会话指标，而不会向连接进程发送消息。`emqx_session_tool:cluster_top_by/1` 会汇总所有集群节点上的结果。
 
-- [#17558](https://github.com/emqx/emqx/pull/17558) 在 `GET /monitor_current` HTTP API 中新增两个指标及其对应速率：`rules_matched` 和 `actions_executed`。它们分别用于跟踪规则匹配数量和动作执行速率（成功 + 失败）。
+- [#17558](https://github.com/emqx/emqx/pull/17558) 在 `GET /monitor_current` HTTP API 中新增两个指标及其对应速率：`rules_matched` 和 `actions_executed`，分别用于跟踪规则匹配数量和动作执行速率（成功 + 失败）。
 
-  同时修复了非批处理模式（`batch_size = 1`）下 `actions.executed` 对动作调用计数偏低的问题：该计数器现在会按每次动作回调调用递增，不再依赖 buffer-worker 遥测刷新窗口。
+  同时修复了非批处理模式（`batch_size = 1`）下 `actions.executed` 少计动作调用次数的问题：计数器现在会在每次动作回调调用时递增，不再依赖缓冲区 Worker 的遥测刷新窗口。
 
 ### 问题修复
 
@@ -128,7 +128,7 @@
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) 修复配置更新命令（REST API 和 CLI）在底层集群 RPC 层意外中止时，可能触发 `function_clause` 崩溃报告的问题。例如，当节点启动或恢复期间集群 RPC 表尚不可用时，可能会出现 `{no_exists, cluster_rpc_mfa}`。现在，此类失败会作为结构化错误返回给调用方。
 
-- [#17764](https://github.com/emqx/emqx/pull/17764) 修复节点重新加入集群后可能残留过期插件条目的问题。当节点离线期间集群中已卸载某个插件时，EMQX 现在会在插件启动过程中移除本地不再存在于集群插件配置中的插件包。
+- [#17764](https://github.com/emqx/emqx/pull/17764) 修复某节点离线期间插件已从集群卸载时，该节点重新加入集群后本地仍可能残留过期插件条目的问题。现在，EMQX 会在插件启动过程中移除本地不再存在于集群插件配置中的插件包。
 
 #### 访问控制
 
@@ -152,9 +152,9 @@
 
 - [#17739](https://github.com/emqx/emqx/pull/17739) 改进了日志、追踪和审计记录中敏感数据的脱敏处理。
 
-- [#17787](https://github.com/emqx/emqx/pull/17787) 修复当 `ehttpc` worker 在请求过程中被终止时，HTTP 连接器错误日志中可能包含请求头的问题。
+- [#17787](https://github.com/emqx/emqx/pull/17787) 防止当 `ehttpc` worker 在请求过程中被终止时，HTTP 连接器错误日志中包含请求头。
 
-  当 HTTP 连接器的 `ehttpc` worker 在请求尚未返回时被终止（例如删除对应 Source）时，生成的 EXIT reason 会携带原始 `gen_server:call` 参数，其中包含请求头。这些请求头此前会被原样写入错误日志。现在，调用参数会在记录日志前从 reason 中移除。
+  此前，如果 HTTP 连接器的 `ehttpc` worker 在请求尚未返回时被终止（例如在请求返回前删除对应 Source），生成的 EXIT reason 会携带原始 `gen_server:call` 参数。由于这些参数包含请求头，请求头会被原样写入错误日志。现在，EMQX 会在记录日志前从 reason 中移除这些调用参数。
 
 - [#17790](https://github.com/emqx/emqx/pull/17790) 停止将 TOTP 共享密钥写入 `dashboard_login_failed` 服务器日志。此前，在首次设置 MFA 期间，该密钥会包含在此日志条目中。
 
