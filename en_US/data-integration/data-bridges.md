@@ -122,6 +122,7 @@ EMQX supports data integrations with the following types of data systems:
 - [TDengine](./data-bridge-tdengine.md)
 - [Elasticsearch](./elasticsearch.md)
 - [EMQX Tables](./emqx-tables.md)
+- [Bigtable](./bigtable.md)
 
 **Message Queue**
 
