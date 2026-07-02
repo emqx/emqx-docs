@@ -5409,49 +5409,7 @@
               },
               {
                 "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -5463,19 +5421,61 @@
               },
               {
                 "enum": [
-                  "aws_timestream"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -5493,49 +5493,7 @@
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
+                  "matrix"
                 ],
                 "type": "string"
               },
@@ -5547,25 +5505,67 @@
               },
               {
                 "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3tables"
+                  "couchbase"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "quasardb"
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -5577,19 +5577,25 @@
               },
               {
                 "enum": [
-                  "azure_event_grid"
+                  "snowflake"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "emqx_tables"
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
                 ],
                 "type": "string"
               },
@@ -5607,25 +5613,19 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "azure_event_grid"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
+                  "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5637,13 +5637,13 @@
               },
               {
                 "enum": [
-                  "redis"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -5655,7 +5655,13 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -5667,13 +5673,7 @@
               },
               {
                 "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
+                  "confluent_producer"
                 ],
                 "type": "string"
               }
@@ -41156,7 +41156,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "BFF9004F1122B64C",
+            "example": "8D1510CE46FC575D",
             "type": "string"
           },
           "status": {
@@ -60331,7 +60331,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.2.2-rc.2"
+    "version": "6.2.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -60380,6 +60380,28 @@
         ],
         "responses": {
           "204": {
+            "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "未找到。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
             "description": ""
           },
           "503": {
@@ -60671,6 +60693,28 @@
             },
             "description": ""
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "未找到。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "500": {
             "content": {
               "application/json": {
@@ -60832,6 +60876,28 @@
             },
             "description": ""
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "未找到。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "503": {
             "content": {
               "application/json": {
@@ -60881,51 +60947,51 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "azure_blob_storage",
-                      "alloydb",
+                      "confluent_producer",
                       "mongodb",
-                      "syskeeper_forwarder",
+                      "oracle",
+                      "s3tables",
                       "pulsar",
-                      "pgsql",
-                      "redis",
-                      "iotdb",
-                      "s3",
-                      "couchbase",
                       "tablestore",
-                      "kinesis",
+                      "azure_blob_storage",
+                      "iotdb",
+                      "kafka_producer",
+                      "cassandra",
+                      "azure_event_grid",
                       "datalayers",
                       "mysql",
-                      "emqx_tables",
-                      "snowflake_streaming",
-                      "azure_event_grid",
-                      "greptimedb",
                       "quasardb",
-                      "s3tables",
-                      "rabbitmq",
-                      "opents",
-                      "redshift",
-                      "doris",
-                      "disk_log",
-                      "gcp_pubsub_producer",
                       "cockroachdb",
-                      "dynamo",
-                      "kafka_producer",
-                      "azure_event_hub_producer",
+                      "rabbitmq",
+                      "snowflake",
+                      "greptimedb",
+                      "doris",
+                      "timescale",
+                      "alloydb",
                       "bigquery",
+                      "azure_event_hub_producer",
+                      "couchbase",
+                      "dynamo",
+                      "opents",
+                      "disk_log",
+                      "sqlserver",
+                      "aws_timestream",
+                      "redshift",
+                      "matrix",
                       "rocketmq",
                       "http",
+                      "pgsql",
                       "influxdb",
-                      "cassandra",
-                      "aws_timestream",
-                      "elasticsearch",
+                      "kinesis",
+                      "emqx_tables",
                       "mqtt",
+                      "redis",
+                      "syskeeper_forwarder",
                       "clickhouse",
-                      "confluent_producer",
-                      "timescale",
-                      "matrix",
-                      "snowflake",
-                      "sqlserver",
-                      "oracle",
+                      "snowflake_streaming",
+                      "s3",
+                      "elasticsearch",
+                      "gcp_pubsub_producer",
                       "tdengine"
                     ]
                   }
@@ -60933,51 +60999,51 @@
                 "schema": {
                   "items": {
                     "enum": [
-                      "azure_blob_storage",
-                      "alloydb",
+                      "confluent_producer",
                       "mongodb",
-                      "syskeeper_forwarder",
+                      "oracle",
+                      "s3tables",
                       "pulsar",
-                      "pgsql",
-                      "redis",
-                      "iotdb",
-                      "s3",
-                      "couchbase",
                       "tablestore",
-                      "kinesis",
+                      "azure_blob_storage",
+                      "iotdb",
+                      "kafka_producer",
+                      "cassandra",
+                      "azure_event_grid",
                       "datalayers",
                       "mysql",
-                      "emqx_tables",
-                      "snowflake_streaming",
-                      "azure_event_grid",
-                      "greptimedb",
                       "quasardb",
-                      "s3tables",
-                      "rabbitmq",
-                      "opents",
-                      "redshift",
-                      "doris",
-                      "disk_log",
-                      "gcp_pubsub_producer",
                       "cockroachdb",
-                      "dynamo",
-                      "kafka_producer",
-                      "azure_event_hub_producer",
+                      "rabbitmq",
+                      "snowflake",
+                      "greptimedb",
+                      "doris",
+                      "timescale",
+                      "alloydb",
                       "bigquery",
+                      "azure_event_hub_producer",
+                      "couchbase",
+                      "dynamo",
+                      "opents",
+                      "disk_log",
+                      "sqlserver",
+                      "aws_timestream",
+                      "redshift",
+                      "matrix",
                       "rocketmq",
                       "http",
+                      "pgsql",
                       "influxdb",
-                      "cassandra",
-                      "aws_timestream",
-                      "elasticsearch",
+                      "kinesis",
+                      "emqx_tables",
                       "mqtt",
+                      "redis",
+                      "syskeeper_forwarder",
                       "clickhouse",
-                      "confluent_producer",
-                      "timescale",
-                      "matrix",
-                      "snowflake",
-                      "sqlserver",
-                      "oracle",
+                      "snowflake_streaming",
+                      "s3",
+                      "elasticsearch",
+                      "gcp_pubsub_producer",
                       "tdengine"
                     ],
                     "type": "string"
@@ -76675,6 +76741,11 @@
                       ],
                       "type": "string"
                     },
+                    "ignore_backend_failures": {
+                      "default": false,
+                      "description": "启用后，即使当前安全配置文件会拒绝，也会忽略授权后端失败。",
+                      "type": "boolean"
+                    },
                     "include_mountpoint": {
                       "default": false,
                       "description": "启用后，目标主题和主题过滤器在与 ACL 规则或授权后端匹配之前，会被主题挂载点前缀。",
@@ -76734,6 +76805,11 @@
                     ],
                     "type": "string"
                   },
+                  "ignore_backend_failures": {
+                    "default": false,
+                    "description": "启用后，即使当前安全配置文件会拒绝，也会忽略授权后端失败。",
+                    "type": "boolean"
+                  },
                   "include_mountpoint": {
                     "default": false,
                     "description": "启用后，目标主题和主题过滤器在与 ACL 规则或授权后端匹配之前，会被主题挂载点前缀。",
@@ -76775,6 +76851,11 @@
                         "disconnect"
                       ],
                       "type": "string"
+                    },
+                    "ignore_backend_failures": {
+                      "default": false,
+                      "description": "启用后，即使当前安全配置文件会拒绝，也会忽略授权后端失败。",
+                      "type": "boolean"
                     },
                     "include_mountpoint": {
                       "default": false,
@@ -86931,7 +87012,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -88573,7 +88654,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -90447,7 +90528,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91720,7 +91801,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -93351,7 +93432,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -94975,7 +95056,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95812,7 +95893,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BFF9004F1122B64C",
+            "example": "8D1510CE46FC575D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95875,7 +95956,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BFF9004F1122B64C",
+            "example": "8D1510CE46FC575D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96289,7 +96370,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BFF9004F1122B64C",
+            "example": "8D1510CE46FC575D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -96375,7 +96456,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BFF9004F1122B64C",
+            "example": "8D1510CE46FC575D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -101897,73 +101978,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -102064,6 +102078,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
