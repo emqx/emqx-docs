@@ -1,21 +1,21 @@
 # JavaScript SDKによる接続
 
-[MQTT.js](https://github.com/mqttjs/MQTT.js) は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールで、ブラウザおよびNode.js環境で利用できます。
+[MQTT.js](https://github.com/mqttjs/MQTT.js)は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールであり、ブラウザおよびNode.js環境で利用できます。
 
-JavaScriptのシングルスレッドの特性により、MQTT.jsは完全非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各環境でのサポート状況は以下の通りです。
+JavaScriptのシングルスレッド特性により、MQTT.jsは完全に非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各種動作環境でのサポート状況は以下の通りです。
 
-- ブラウザ環境：MQTT over WebSocket（WeChatアプレット、Alipayアプレット、その他カスタマイズされたブラウザ環境を含む）
+- ブラウザ環境：MQTT over WebSocket（WeChatアプレット、Alipayアプレットなどのカスタマイズされたブラウザ環境を含む）
 - Node.js環境：MQTT、MQTT over WebSocket
 
 接続パラメータの一部は環境によって異なりますが、それ以外のAPIは共通です。
 
-npmでのインストール：
+npmによるインストール：
 
 ```bash
 npm i mqtt
 ```
 
-CDNを使ったインストール（ブラウザ）：
+CDNによるインストール（ブラウザ）：
 
 ```html
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -25,14 +25,14 @@ CDNを使ったインストール（ブラウザ）：
 </script>
 ```
 
-Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用できます。
+Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用可能です。
 
 ```bash
 npm i mqtt -g
 
 mqtt help
 
-> MQTT.js コマンドラインインターフェース、利用可能なコマンド：
+> MQTT.jsコマンドラインインターフェース。利用可能なコマンドは以下の通りです：
 
   * publish     ブローカーにメッセージをパブリッシュする
   * subscribe   ブローカーからの更新をサブスクライブする
@@ -44,7 +44,7 @@ mqtt help
 
 ## MQTT.js 使用例
 
-以下は、JavaScriptでMQTT.jsを使ってEMQXに接続し、メッセージの送受信を行う完全なコード例です。
+以下はJavaScriptでMQTT.jsを用いてEMQXに接続し、メッセージの送受信を行う完全なコード例です。
 
 ```javascript
 // const mqtt = require('mqtt')
@@ -60,12 +60,12 @@ const options = {
       password: 'emqx_test',
 }
 
-// 接続文字列。プロトコルで接続方法を指定
-// ws   暗号化されていないWebSocket接続
-// wss  暗号化されたWebSocket接続
+// 接続URL。プロトコルで接続方式を指定
+// ws 暗号化されていないWebSocket接続
+// wss 暗号化されたWebSocket接続
 // mqtt 暗号化されていないTCP接続
 // mqtts 暗号化されたTCP接続
-// wxs  WeChatアプレット接続
+// wxs WeChatアプレット接続
 // alis Alipayアプレット接続
 const connectUrl = 'wss://broker.emqx.io:8084/mqtt'
 const client = mqtt.connect(connectUrl, options)
@@ -83,6 +83,6 @@ client.on('message', (topic, message) => {
 })
 ```
 
-## MQTT.js MQTT 5.0対応状況
+## MQTT.jsのMQTT 5.0サポート
 
 現在、MQTT.jsはMQTT 5.0を完全にサポートしています。
