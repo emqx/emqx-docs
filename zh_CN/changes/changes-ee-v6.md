@@ -2,7 +2,7 @@
 
 ## 6.2.2
 
-*发布日期: 2026-07-01*
+*发布日期: 2026-07-02*
 
 在升级到 EMQX 6.2.2 之前，请务必查阅不兼容变更和已知问题。
 
@@ -12,6 +12,13 @@
 
 - [#17530](https://github.com/emqx/emqx/pull/17530) 集群连接现在需要非社区版 License。在默认社区版 License 下，已配置的连接会保持非活动状态（不转发消息，也不复制路由），REST API 在尝试启用连接时会拒绝请求，并明确提示需要加载非社区版 License。禁用和删除连接仍可使用，以便清理遗留配置。升级 License 后，可通过 Dashboard 或 REST API 启用连接，无需重启节点。
 - [#17549](https://github.com/emqx/emqx/pull/17549) 新增 EMQX Backup Sync 插件，通过数据备份 API 定期将选定配置从主集群同步到备集群。该插件支持为对主集群的 HTTPS 调用配置 TLS 选项。
+- [#17620](https://github.com/emqx/emqx/pull/17620) 新增面向运维人员的诊断模块 `emqx_router_tool`，用于检查和修复路由表。该模块可通过 `emqx ctl eval` 运行，提供三个辅助函数：
+
+  - `cluster_schema_view/0` 用于报告每个集群节点正在使用的路由存储 schema。
+  - `scan_missing_routes/0,1` 会流式扫描本地订阅表，并报告本节点缺少对应路由条目的主题。该扫描会执行两遍、限流运行，并可容忍并发订阅和取消订阅。
+  - `reconcile_missing_routes/0,1` 会通过现有 `emqx_router:add_route/2` API 重新添加缺失的路由。
+
+  该模块不依赖特定 schema，可安全用于运行中的集群。
 
 #### 多租户
 
@@ -60,7 +67,7 @@
 
 - [#17758](https://github.com/emqx/emqx/pull/17758) Prometheus `emqx_messages_retained` 计数器现在会报告实际的保留消息写入次数。此前该指标虽已暴露，但从未递增，因此始终为 0。现在，每次成功存储保留消息都会递增该计数器。
 
-### 问题修复
+### 修复
 
 #### 核心 MQTT 功能
 
@@ -71,6 +78,10 @@
   此前，当 CONNECT、PUBLISH 或 SUBSCRIBE 报文携带大量 User Property 时，每个解析出的属性都会追加到累积列表末尾，导致拥有该连接的进程出现超线性的调度耗时。现在，解析会在保留属性顺序的同时按条目数量线性扩展。
 
 - [#17731](https://github.com/emqx/emqx/pull/17731) 修复更新 WS 或 WSS 监听器选项时可能出现的临时性 "address already in use" 错误（例如轮换 TLS 证书时）。更新此类监听器会重新绑定端口，而操作系统可能尚未释放旧 socket；现在 EMQX 会短暂重试重新绑定，而不是直接让更新失败。
+
+- [#17798](https://github.com/emqx/emqx/pull/17798) 修复保留消息可能使用原始发布 QoS 投递，而不是使用通配符订阅 QoS 上限投递的问题。
+
+- [#17801](https://github.com/emqx/emqx/pull/17801) `ssl_opts.ciphers` 校验器现在接受 OpenSSL 或 IANA/RFC 命名格式的密码套件名称。此前，仅支持 OpenSSL 格式的名称，因此以 IANA 名称提供的有效 TLS 1.2 密码套件（例如 `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`）会被错误地拒绝为 `bad_ciphers`，即使 Erlang 的 `ssl` 模块本可以接受该名称。TLS 1.3 密码套件不受影响，因为它们的 IANA 名称和 OpenSSL 名称相同。
 
 #### 队列与流
 
@@ -125,6 +136,8 @@
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) 修复配置更新命令（REST API 和 CLI）在底层集群 RPC 层意外中止时，可能触发 `function_clause` 崩溃报告的问题。例如，当节点启动或恢复期间集群 RPC 表尚不可用时，可能会出现 `{no_exists, cluster_rpc_mfa}`。现在，此类失败会作为结构化错误返回给调用方。
 
+- [#17764](https://github.com/emqx/emqx/pull/17764) 修复某节点离线期间插件已从集群卸载时，该节点重新加入集群后本地仍可能残留过期插件条目的问题。现在，EMQX 会在插件启动过程中移除本地不再存在于集群插件配置中的插件包。
+
 #### 访问控制
 
 - [#17575](https://github.com/emqx/emqx/pull/17575) 修复 `emqx_username_quota` 插件中的竞争条件。该问题可能导致按用户名统计的会话计数器与实际跟踪的客户端记录数量不一致。计数器可能被递减到零以下，随后被删除；与此同时，并发会话注册又递增该计数器，导致该增量永久丢失。
@@ -143,7 +156,19 @@
 
   此外，全局管理员现在可以删除属于已删除命名空间的内置数据库用户，而不再收到 "Managed namespace not found" 错误。
 
+- [#17736](https://github.com/emqx/emqx/pull/17736) 限制 JWT 认证器只能使用与配置密钥类型一致的 JWS 算法验证令牌。基于 HMAC 的认证器现在只接受 `HS256`、`HS384` 和 `HS512`。公钥和 JWKS 认证器接受 `RS*`、`PS*`、`ES*` 和 `EdDSA` 算法。`alg` 头与配置密钥类型不匹配的令牌（包括 `alg=none`）都会被拒绝。
+
 - [#17739](https://github.com/emqx/emqx/pull/17739) 改进了日志、追踪和审计记录中敏感数据的脱敏处理。
+
+- [#17787](https://github.com/emqx/emqx/pull/17787) 防止当 `ehttpc` worker 在请求过程中被终止时，HTTP 连接器错误日志中包含请求头。
+
+  此前，如果 HTTP 连接器的 `ehttpc` worker 在请求尚未返回时被终止（例如在请求返回前删除对应 Source），生成的 EXIT reason 会携带原始 `gen_server:call` 参数。由于这些参数包含请求头，请求头会被原样写入错误日志。现在，EMQX 会在记录日志前从 reason 中移除这些调用参数。
+
+- [#17790](https://github.com/emqx/emqx/pull/17790) 停止将 TOTP 共享密钥写入 `dashboard_login_failed` 服务器日志。此前，在首次设置 MFA 期间，该密钥会包含在此日志条目中。
+
+- [#17791](https://github.com/emqx/emqx/pull/17791) 改进日志脱敏，避免 JWT HMAC 密钥字节出现在配置更新期间输出的 `cluster_rpc_apply_result` 和 `cluster_rpc_apply_ok` 调试日志中。
+
+  脱敏器现在可以识别内部 JWK record 结构，并在记录日志前将其替换为占位符，同时也会将 `jwk` 字段视为敏感字段。
 
 #### 多租户
 
