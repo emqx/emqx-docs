@@ -46,6 +46,18 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 ![user_scopes](./assets/user_scopes.png)
 
+::: warning 将宽泛 Scope 视为等同管理员权限
+
+以下 Scope 天然覆盖范围较广，即使未分配其他 Scope，也实际上授予管理员能力：
+
+- `system` 覆盖配置管理（`/configs*`、`/data/*` 等）。持有 `system` 的用户可以更新任意配置子树，或恢复包含已存储用户和 API 密钥记录的备份文件。
+- `user_management` 允许持有者创建或修改其他 Dashboard 用户，包括具有任意 Scope 集的用户。
+- `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
+
+将其中任一 Scope 与受限 Scope 列表组合到同一个用户上，并不能可靠地强制执行该限制。该用户可通过配置变更、备份恢复，或为自己创建新的账号或密钥来访问受限区域。仅将这三个 Scope 授予您完全信任的用户，并遵循最小权限原则，只授予用户实际需要的具体 Scope。
+
+:::
+
 #### 角色变更与 Scope 兼容性
 
 变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
