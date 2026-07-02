@@ -551,6 +551,10 @@
       title_cn: BigQuery
       title_ja: BigQuery
       path: data-integration/bigquery
+    - title_en: Bigtable
+      title_cn: Bigtable
+      title_ja: Bigtable
+      path: data-integration/bigtable
     - title_en: Cassandra
       title_cn: Cassandra
       title_ja: Cassandra
