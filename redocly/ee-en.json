@@ -4659,6 +4659,12 @@
               },
               {
                 "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "cockroachdb"
                 ],
                 "type": "string"
@@ -4689,13 +4695,25 @@
               },
               {
                 "enum": [
-                  "s3"
+                  "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -4731,6 +4749,12 @@
               },
               {
                 "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "doris"
                 ],
                 "type": "string"
@@ -4738,6 +4762,12 @@
               {
                 "enum": [
                   "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4767,7 +4797,7 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -4785,12 +4815,6 @@
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "tablestore"
                 ],
                 "type": "string"
@@ -4803,19 +4827,19 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4833,18 +4857,6 @@
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "mongodb"
                 ],
                 "type": "string"
@@ -4852,12 +4864,6 @@
               {
                 "enum": [
                   "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -4875,19 +4881,13 @@
               },
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "confluent_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "s3"
                 ],
                 "type": "string"
               },
@@ -32136,8 +32136,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -39437,7 +39437,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "CCE2D49E36DE37C2",
+            "example": "5405BA0CDA3C57ED",
             "type": "string"
           },
           "status": {
@@ -58294,7 +58294,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.3-rc.3"
+    "version": "6.1.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58313,45 +58313,45 @@
                       "azure_event_hub_producer",
                       "snowflake",
                       "pgsql",
-                      "snowflake_streaming",
+                      "s3",
                       "confluent_producer",
-                      "s3tables",
                       "couchbase",
                       "oracle",
-                      "sqlserver",
                       "greptimedb",
                       "mongodb",
-                      "rabbitmq",
-                      "kinesis",
                       "timescale",
                       "datalayers",
-                      "syskeeper_forwarder",
                       "aws_timestream",
-                      "bigquery",
+                      "sqlserver",
+                      "kinesis",
                       "redis",
                       "tablestore",
-                      "kafka_producer",
                       "rocketmq",
                       "dynamo",
-                      "gcp_pubsub_producer",
+                      "snowflake_streaming",
                       "pulsar",
                       "clickhouse",
                       "disk_log",
                       "mysql",
+                      "syskeeper_forwarder",
                       "influxdb",
                       "doris",
+                      "gcp_pubsub_producer",
                       "cassandra",
                       "opents",
                       "http",
                       "redshift",
                       "alloydb",
+                      "s3tables",
+                      "rabbitmq",
                       "emqx_tables",
-                      "s3",
+                      "bigquery",
                       "mqtt",
                       "iotdb",
                       "tdengine",
                       "matrix",
                       "cockroachdb",
+                      "kafka_producer",
                       "azure_blob_storage",
                       "elasticsearch"
                     ]
@@ -58363,45 +58363,45 @@
                       "azure_event_hub_producer",
                       "snowflake",
                       "pgsql",
-                      "snowflake_streaming",
+                      "s3",
                       "confluent_producer",
-                      "s3tables",
                       "couchbase",
                       "oracle",
-                      "sqlserver",
                       "greptimedb",
                       "mongodb",
-                      "rabbitmq",
-                      "kinesis",
                       "timescale",
                       "datalayers",
-                      "syskeeper_forwarder",
                       "aws_timestream",
-                      "bigquery",
+                      "sqlserver",
+                      "kinesis",
                       "redis",
                       "tablestore",
-                      "kafka_producer",
                       "rocketmq",
                       "dynamo",
-                      "gcp_pubsub_producer",
+                      "snowflake_streaming",
                       "pulsar",
                       "clickhouse",
                       "disk_log",
                       "mysql",
+                      "syskeeper_forwarder",
                       "influxdb",
                       "doris",
+                      "gcp_pubsub_producer",
                       "cassandra",
                       "opents",
                       "http",
                       "redshift",
                       "alloydb",
+                      "s3tables",
+                      "rabbitmq",
                       "emqx_tables",
-                      "s3",
+                      "bigquery",
                       "mqtt",
                       "iotdb",
                       "tdengine",
                       "matrix",
                       "cockroachdb",
+                      "kafka_producer",
                       "azure_blob_storage",
                       "elasticsearch"
                     ],
@@ -92229,7 +92229,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "CCE2D49E36DE37C2",
+            "example": "5405BA0CDA3C57ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92292,7 +92292,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "CCE2D49E36DE37C2",
+            "example": "5405BA0CDA3C57ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92706,7 +92706,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "CCE2D49E36DE37C2",
+            "example": "5405BA0CDA3C57ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92792,7 +92792,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "CCE2D49E36DE37C2",
+            "example": "5405BA0CDA3C57ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -104245,8 +104245,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -116731,8 +116731,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -116744,10 +116744,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -117187,8 +117187,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -117442,8 +117442,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -117501,8 +117501,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -117515,10 +117515,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -117577,8 +117577,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -117590,10 +117590,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -117610,10 +117610,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -119608,8 +119608,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -119701,8 +119701,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -119989,8 +119989,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120059,8 +120059,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
