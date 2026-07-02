@@ -1,5 +1,208 @@
 # EMQX Enterprise Version 6
 
+## 6.2.2
+
+*Release Date: 2026-07-02*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 6.2.2.
+
+### Enhancements
+
+#### Clustering
+
+- [#17530](https://github.com/emqx/emqx/pull/17530) Cluster linking now requires a non-community license. Under the default community license, configured links stay inactive (no message forwarding or route replication) and the REST API rejects attempts to enable a link with a clear hint to load a non-community license. Disabling and deleting links remain available so that legacy configuration can be tidied up. After upgrading the license, links can be enabled from the Dashboard or REST API without restarting the node.
+- [#17549](https://github.com/emqx/emqx/pull/17549) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
+- [#17620](https://github.com/emqx/emqx/pull/17620) Added an operator-facing diagnostics module `emqx_router_tool` for inspecting and reconciling routing tables. The module is intended to be run via `emqx ctl eval` and provides three helpers:
+
+  - `cluster_schema_view/0` reports the route storage schema each cluster node is running.
+  - `scan_missing_routes/0,1` streams the local subscription table and reports topics whose route entry is missing for this node. The scan runs in two passes, is throttled, and tolerates concurrent subscribes and unsubscribes.
+  - `reconcile_missing_routes/0,1` re-adds the missing routes via the existing `emqx_router:add_route/2` API.
+
+  The module is schema-agnostic and safe to run on a live cluster.
+
+#### Multi-Tenancy
+
+- [#17665](https://github.com/emqx/emqx/pull/17665) Added per-namespace counters for dropped messages and dropped deliveries in the multi-tenancy app. These are exposed at `/api/v5/prometheus/namespaced_stats` with a `namespace` label, alongside the existing per-namespace metric families. Operators can now diagnose drop rates per tenant from Prometheus without resorting to log inspection.
+
+  Known limitation: QoS 2 PUBREL await-timeout drops do not yet have per-namespace attribution because that drop path bumps the global counter without firing the `message.dropped` hook.
+
+- [#17711](https://github.com/emqx/emqx/pull/17711) Made namespace selection consistent across the built-in database authentication user HTTP APIs, and allowed cleanup of records left over from a deleted namespace.
+
+  Previously only user creation accepted a `namespace` field in the request body; updating and deleting a user accepted the target namespace only through the `ns` query parameter. The update and delete endpoints now also accept a `namespace` field in the request body. When both are provided, the `ns` query parameter takes precedence. Listing users continues to use the `ns` query parameter.
+
+#### Access Control
+
+- [#17564](https://github.com/emqx/emqx/pull/17564) Added fail-closed behavior for authorization backend failures in the hardened security profile. In hardened mode, backend failures and invalid backend responses now deny access; legacy mode preserves the existing ignore and fallback behavior.
+- [#17589](https://github.com/emqx/emqx/pull/17589) Added fail-closed handling for access-control hook callback failures in the hardened security profile. Authentication or authorization hook callback crashes now deny access instead of being ignored.
+- [#17674](https://github.com/emqx/emqx/pull/17674) Authentication backends now fail closed in hardened security profile when backend failures or malformed backend responses occur. Legacy behavior can be preserved with `authentication_settings.ignore_backend_failures`.
+- [#17696](https://github.com/emqx/emqx/pull/17696) Hardened JWT authentication with JWKS by verifying the JWKS endpoint TLS certificate by default in the hardened security profile, rejecting presented JWTs when JWKS keys are unavailable, and denying missing JWT credentials in hardened mode.
+
+#### Data Integration
+
+- [#17481](https://github.com/emqx/emqx/pull/17481) Added a `retain_as_published` option to MQTT bridge ingress (source) subscriptions. When the bridge connects to the remote broker using MQTT 5.0 and `retain_as_published = true`, the original `retain` flag on forwarded messages is preserved instead of being cleared, allowing the bridge to faithfully republish retained messages from upstream. The default is `false` to keep existing behavior. The option has no effect when `proto_ver` is `v3` or `v4`.
+
+  Also, the connector now emits a warning log when `bridge_mode = true` is configured together with `proto_ver = v5`, since the legacy bridge-mode flag has no effect under MQTT 5.0; set `retain_as_published` on individual subscriptions instead.
+
+- [#17508](https://github.com/emqx/emqx/pull/17508) Set the PostgreSQL `application_name` startup parameter to `emqx` for PostgreSQL and TimescaleDB connector connections.
+
+  This makes EMQX database sessions easier to identify in PostgreSQL logs and views such as `pg_stat_activity`.
+
+- [#17576](https://github.com/emqx/emqx/pull/17576) Added TLS cipher suite configuration support for the GreptimeDB connector via the existing `ssl.ciphers` field. When a cipher list is specified, TLS negotiation is restricted to those suites. Unsupported ciphers are rejected at connector startup.
+
+- [#17594](https://github.com/emqx/emqx/pull/17594) Added support for configuring Google Cloud Pub/Sub and BigQuery connector `service_account_json` values with `file://` secret files, so service account credentials can be injected from external files.
+
+#### Observability
+
+- [#17558](https://github.com/emqx/emqx/pull/17558) Added two new metrics and corresponding rates to the `GET /monitor_current` HTTP API: `rules_matched` and `actions_executed`. They track matched rules and action execution rates, including both successful and failed executions.
+
+  This also fixes the `actions.executed` undercount in non-batch mode (`batch_size = 1`): the counter is now incremented once per action callback invocation, independently of the buffer-worker telemetry flush window.
+
+- [#17712](https://github.com/emqx/emqx/pull/17712) Added `emqx_session_tool`, a diagnostic module that operators can call from the remote console. Use `emqx_session_tool:top_by(mqueue_len)` to find the top-K sessions by gauge or counter value in clusters with many connections. Other session metrics, such as `mqueue_dropped` and `inflight_cnt`, are also supported. This helps operators find the busiest sessions without paging through the client list manually.
+
+  The scan streams the channel registry, keeps only a bounded top-K result, and reads cached per-session metrics without sending messages to connection processes. `emqx_session_tool:cluster_top_by/1` aggregates the result across all cluster nodes.
+
+- [#17758](https://github.com/emqx/emqx/pull/17758) The Prometheus `emqx_messages_retained` counter now reports actual retained-message writes. Previously the metric was exposed but never incremented, so it always read 0. Each successful retained-message store now increments the counter.
+
+### Bug Fixes
+
+#### Core MQTT Functionalities
+
+- [#17540](https://github.com/emqx/emqx/pull/17540) Fixed a bug where setting `password = "file://..."` on an SSL listener caused config validation to fail with `bad_password_or_invalid_keyfile` when the keyfile was encrypted. The `file://` reference is now resolved during validation, not only at runtime.
+
+- [#17569](https://github.com/emqx/emqx/pull/17569) Reduced MQTT v5 user-property parsing cost from quadratic to linear.
+
+  Previously a CONNECT, PUBLISH or SUBSCRIBE packet carrying many user-properties caused super-linear scheduler time on the owning connection process, because each parsed property was appended to the end of the accumulated list. Parsing now scales linearly with the number of entries while preserving their wire order.
+
+- [#17731](https://github.com/emqx/emqx/pull/17731) Fixed a transient "address already in use" error that could occur when updating the options of a WS or WSS listener (for example when rotating TLS certificates). Updating such a listener rebinds its port, and the operating system may not have released the old socket yet; EMQX now retries the rebind briefly instead of failing the update.
+
+- [#17798](https://github.com/emqx/emqx/pull/17798) Fixed an issue where retained messages could be delivered with the original publish QoS instead of the wildcard subscription QoS limit.
+
+- [#17801](https://github.com/emqx/emqx/pull/17801) The `ssl_opts.ciphers` validator now accepts cipher names in either OpenSSL or IANA/RFC naming convention. Previously, only OpenSSL-format names were recognized, so a valid TLS 1.2 cipher supplied in its IANA name (for example, `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`) was rejected as `bad_ciphers` even though Erlang's `ssl` module would have accepted it. TLS 1.3 ciphers were unaffected because their IANA and OpenSSL names are identical.
+
+#### Queue and Stream
+
+- [#17515](https://github.com/emqx/emqx/pull/17515) Fixed an issue where Message Queue subscriptions using QoS 0 could stop receiving messages after the queue subscriber's local inflight window became full.
+- [#17529](https://github.com/emqx/emqx/pull/17529) Fixed an issue where QoS 0 messages delivered through Message Queue subscriptions could remain unacknowledged internally, causing the queue subscriber to stop receiving more messages after reaching its local inflight limit.
+- [#17733](https://github.com/emqx/emqx/pull/17733) Fixed an issue where Message Queue consumers could fail to restore an empty stream buffer after durable storage subscription recovery.
+
+#### Rule Engine
+
+- [#17725](https://github.com/emqx/emqx/pull/17725) Fixed a bug introduced in 6.0.3, 6.1.2 and 6.2.1 where a global rule could stop matching messages on its `FROM` topic when publishing clients carried a tenant namespace (`client_attrs.tns`).
+
+  With `rule_engine.limit_selects_in_namespace` enabled (the default), global rules now retain system-wide visibility and match messages from any namespace. Rules created inside a namespace remain isolated to their own namespace. Operators who prefer to disable namespace restriction entirely can still set `rule_engine.limit_selects_in_namespace = false`.
+
+#### Data Integration
+
+- [#17568](https://github.com/emqx/emqx/pull/17568) Upgraded the Kafka client library `brod` to 4.5.5.
+
+  Consumer group: respect the broker-assigned member ID when the join response carries the `member_id_required` error code (returned by older Kafka brokers, e.g. 2.2.0, that do not support static member instance IDs). Previously the member ID was discarded on error, preventing the retry from succeeding.
+
+- [#17579](https://github.com/emqx/emqx/pull/17579) Fixed Redis Sentinel connectors to use isolated Sentinel managers per resource and clean them up when resources stop, avoiding shared Sentinel state across connectors.
+
+- [#17584](https://github.com/emqx/emqx/pull/17584) Limited the amount of data returned during connector health checks of Snowflake aggregated connectors. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+
+- [#17588](https://github.com/emqx/emqx/pull/17588) Limited the amount of data returned during connector and action health checks of Kinesis integrations. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+
+- [#17595](https://github.com/emqx/emqx/pull/17595) Limited the amount of data returned during connector health checks of S3 and S3 Tables integrations. This only has observable effects if the list of existing buckets was very large, in which case the health check will take far less time to execute.
+
+- [#17598](https://github.com/emqx/emqx/pull/17598) Fixed a connection failure to MongoDB 8.0+ when authentication is required. The driver previously queried `buildInfo` before authentication to pick the auth mechanism; MongoDB 8.0 restricted that command to authenticated callers. The driver now skips the probe and uses SCRAM-SHA-1 directly, which all supported MongoDB versions accept.
+
+- [#17605](https://github.com/emqx/emqx/pull/17605) Fixed Oracle action prepare/status checks to parse action SQL without executing it, and reject unsupported top-level DDL/DCL/TCL statements. Also improved support for text payloads over 4000 bytes when the payload placeholder is the last bind parameter.
+
+- [#17625](https://github.com/emqx/emqx/pull/17625) Fixed an issue with GCP PubSub Consumer source where, if a source was initially created with a service account lacking necessary permissions to create subscriptions for the configured topic, the source would fail to become `connected` even after granting the permissions to the service account.
+
+- [#17633](https://github.com/emqx/emqx/pull/17633) Fixed an issue introduced in 6.1.2 and 6.2.1 where MQTT bridges and Cluster Link connections over TLS could stall after a short period of traffic. Affected nodes log a recurring error message like `unexpected_event ... ssl_passive ...` from the `emqtt` client. EMQX now bundles `emqtt` 1.15.3, which restores normal traffic flow after the bug was first reported in [#17617](https://github.com/emqx/emqx/issues/17617).
+
+- [#17649](https://github.com/emqx/emqx/pull/17649) Improved the responsiveness of starting and stopping GCP PubSub Consumer connectors. Previously, if the connections were slow or busy, timeouts could leave the connectors running in a state inconsistent with the configuration.
+
+- [#17681](https://github.com/emqx/emqx/pull/17681) Fixed PostgreSQL connector batch writes when prepared statements are disabled.
+
+  Previously, concurrent batches on the same connection could interleave raw SQL parsing and fail with PostgreSQL protocol errors. Table-existence checks are also serialized through the connector worker to avoid interleaving with batch execution.
+
+- [#17701](https://github.com/emqx/emqx/pull/17701) Fixed a confusing `badarith` error from PostgreSQL actions when a batched SQL template returns rows, for example `SELECT ...`.
+
+  PostgreSQL action batching does not support row-returning SQL. EMQX now returns a clear unsupported SQL error instead of crashing the batch result handler.
+
+- [#17717](https://github.com/emqx/emqx/pull/17717) Added an option to enable TLS peer verification for Confluent Producer connectors.
+
+- [#17718](https://github.com/emqx/emqx/pull/17718) Added an option to enable TLS peer verification for GCP PubSub Producer/Consumer and BigQuery connectors.
+
+#### Clustering
+
+- [#17586](https://github.com/emqx/emqx/pull/17586) Periodically purge stale entries from the global session registry.
+
+  Previously, if a session's owner process died without a clean unregister, the registry row could remain forever when the same client ID never reconnected. This could happen, for example, after a brief network split that prevented the unregister from replicating, or when one core node's consensus check timed out during down-event cleanup.
+
+  A new throttled background sweep on each core node now removes such rows. The sweep is bounded to at most 500 registry rows per second per node and runs no more often than once every 10 minutes, so it does not measurably affect broker throughput even on registries holding millions of sessions.
+
+- [#17773](https://github.com/emqx/emqx/pull/17773) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted unexpectedly. For example, this could happen with `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
+
+- [#17764](https://github.com/emqx/emqx/pull/17764) Fixed an issue where stale plugin entries could remain on a node after it rejoined the cluster if the plugin had been uninstalled while the node was offline. During plugin startup, EMQX now removes local plugin packages that are no longer present in the cluster plugin configuration.
+
+#### Access Control
+
+- [#17575](https://github.com/emqx/emqx/pull/17575) Fixed a race condition in the `emqx_username_quota` plugin that could cause the per-username session counter to become inconsistent with the actual number of tracked client records. The counter could be decremented past zero and then be deleted while a concurrent session registration incremented it, losing the increment permanently.
+
+- [#17644](https://github.com/emqx/emqx/pull/17644) Fixed an issue where the `plain` password hash algorithm accepted passwords that differed only by letter case during authentication.
+
+- [#17646](https://github.com/emqx/emqx/pull/17646) Fixed an HTTP/1.1 protocol-conformance issue in the JWKS retrieval client used by JWT authentication. Earlier versions sent an empty `TE:` header value due to a long-standing default in Erlang/OTP's `inets` HTTP client (fixed upstream in inets 9.4.2 / OTP 28.1). Some identity providers (notably PingFederate) reject such requests. EMQX now sends an explicit, valid `TE: trailers` header on JWKS fetches.
+
+- [#17653](https://github.com/emqx/emqx/pull/17653) Fixed a security issue where the Prometheus configuration API returned stored `Authorization` header values in push gateway headers. The API now redacts these values in responses.
+
+- [#17654](https://github.com/emqx/emqx/pull/17654) Fixed an issue where creating an authenticator via `POST /authentication` returned the new authenticator config without redacting provider secrets (such as JWT HMAC secrets, HTTP `Authorization` headers, and request body passwords). The creation response now applies the same redaction as the list and get endpoints.
+
+- [#17657](https://github.com/emqx/emqx/pull/17657) Fixed a security issue where raw `authorization` and `cookie` headers were forwarded to plugin API callbacks. These credential-bearing headers are now redacted before reaching plugin code.
+
+- [#17711](https://github.com/emqx/emqx/pull/17711) Creating or updating a built-in database user now fails with "Managed namespace not found" if the target namespace is not a known managed namespace. Previously, a user could be created with a nonexistent namespace when the namespace was supplied in the request body.
+
+  In addition, global administrators can now delete built-in database users that belong to namespaces that have already been deleted, instead of receiving a "Managed namespace not found" error.
+
+- [#17736](https://github.com/emqx/emqx/pull/17736) Restricted the JWT authenticator to verify tokens using only JWS algorithms consistent with the configured key type. HMAC-based authenticators now accept only `HS256`, `HS384`, and `HS512`. Public-key and JWKS authenticators accept `RS*`, `PS*`, `ES*`, and `EdDSA` algorithms. Tokens whose `alg` header does not match the configured key type, including `alg=none`, are rejected.
+
+- [#17739](https://github.com/emqx/emqx/pull/17739) Improved redaction of sensitive data in logs, traces, and audit records.
+
+- [#17787](https://github.com/emqx/emqx/pull/17787) Prevented HTTP connector error logs from including request headers when an `ehttpc` worker is terminated before a request returns.
+
+  Previously, if the HTTP connector's `ehttpc` worker was terminated while a request was in flight (for example, by deleting the source before the request returned), the resulting EXIT reason carried the original `gen_server:call` arguments. Because those arguments include the request headers, the headers were written verbatim to the error log. EMQX now removes the call arguments from the reason before it is logged.
+
+- [#17790](https://github.com/emqx/emqx/pull/17790) Stopped writing the TOTP shared secret to the `dashboard_login_failed` server log. The secret was previously included in this log entry during first-time MFA setup.
+
+- [#17791](https://github.com/emqx/emqx/pull/17791) Improved log redaction so that JWT HMAC key bytes no longer appear in `cluster_rpc_apply_result` and `cluster_rpc_apply_ok` debug log lines emitted during configuration updates.
+
+  The redactor now recognizes the internal JWK record shape and replaces it with a placeholder before logging, and also treats the `jwk` field as sensitive.
+
+#### Multi-Tenancy
+
+- [#17715](https://github.com/emqx/emqx/pull/17715) Fixed a multi-tenancy gating gap. When `multi_tenancy.post_auth_tns_expression` was configured and evaluated to an empty string or an error, the namespace gate (`allow_only_managed_namespaces` enforcement, session quota, etc.) was previously skipped, allowing the client through.
+
+  Empty-string and error outcomes are now treated as "no namespace assigned" and pass through the same gate as clients that supplied no namespace before authentication. The client is rejected when `allow_only_managed_namespaces = true`, and accepted without a namespace when it is `false`. In this case, any namespace value carried in `client_attrs.tns` from before authentication is also cleared, so it is not retained when the expression declines to assign one.
+
+- [#17757](https://github.com/emqx/emqx/pull/17757) Fixed `/prometheus/namespaced_stats` so that namespaced admins/API keys can only see data from their own namespace. Global admins/API keys can still see data from all namespaces.
+
+#### Gateway
+
+- [#17528](https://github.com/emqx/emqx/pull/17528) Fixed missing authorization checks in several gateway publishing and subscription flows. Authorization is now checked before the following operations: MQTT-SN Will message publishing; JT/T 808 upstream publishing and automatic downlink subscription; GBT32960 upstream publishing and automatic downlink subscription; and OCPP upstream publishing and automatic downlink subscription.
+
+- [#17556](https://github.com/emqx/emqx/pull/17556) Fixed an issue where the OCPP gateway did not pass the listener `enable_authn` option to the shared authentication flow. This happened because the option was stored under a misspelled client-info key.
+
+- [#17581](https://github.com/emqx/emqx/pull/17581) Fixed the JT/T 808 gateway to use the phone number accepted during authentication as the connection identity, rejecting mismatched registration-code authentication attempts and subsequent uplink frames with a different phone number.
+
+- [#17604](https://github.com/emqx/emqx/pull/17604) Fixed GBT32960 gateway routing: vehicle responses to downstream commands (Parameter Query, Parameter Setting, Terminal Control) are now correctly published to `upstream/response` instead of `upstream/transparent`.
+
+#### Observability
+
+- [#17497](https://github.com/emqx/emqx/pull/17497) Fixed the `actions.executed` metric undercounting `actions.messages` for actions configured in non-batch mode (`batch_size = 1`).
+
+  The previous implementation incremented `actions.executed` once per buffer-worker telemetry flush, which could aggregate many individual completions into one event, so `actions.executed` fell behind `actions.messages` even when no batching was configured.
+
+  The two metrics are now incremented at independent call sites: `actions.executed` once per action callback invocation (one per batch in batch mode, one per message in single mode), `actions.messages` per message handled.
+
+- [#17513](https://github.com/emqx/emqx/pull/17513) Fixed Prometheus matched authorization allow/deny metrics so they reflect real matched authorization decisions.
+
+- [#17536](https://github.com/emqx/emqx/pull/17536) Documented the `file://` option in Dashboard tooltips for the SSL listener `password` and other secret-typed configuration fields (MQTT bridge password, cluster link password, Dashboard OIDC client secret, S3 secret access key, AI completion API key, Pulsar/RocketMQ credentials, etc.). The generic secret type description already mentioned this convention, but field-specific descriptions shadowed it in the Dashboard, causing users to assume the field accepted only literal values.
+
+- [#17708](https://github.com/emqx/emqx/pull/17708) Fixed a logger JSON formatter crash that could replace some debug-level trace events with a `FORMATTER CRASH` line.
+
 ## 6.2.1
 
 *Release Date: 2026-06-11*
