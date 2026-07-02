@@ -1,6 +1,6 @@
 # OperatorのインストールとEMQXのデプロイ
 
-本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを使用したEMQXのデプロイ方法について説明します。以下の手順に従うことで、Operatorを使って効率的かつ安定的にEMQXをインストールおよび管理できます。
+本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを使用したEMQXのデプロイ方法について説明します。以下の手順に従うことで、Operatorを用いて効率的かつ安定的にEMQXをインストールおよび管理できます。
 
 ## 環境の準備
 
@@ -8,7 +8,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
 
 - Kubernetesバージョン1.24以上が稼働している[Kubernetes](https://kubernetes.io/docs/concepts/overview/)環境
 
-- Kubernetesクラスターにアクセス可能な[kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)ツール。`kubectl cluster-info`コマンドでクラスターの状態を確認できます。
+- Kubernetesクラスターにアクセス可能な[kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)ツール。`kubectl cluster-info`コマンドでKubernetesクラスターの状態を確認できます。
 
 - [Helm](https://helm.sh) 3以上
 
@@ -17,7 +17,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
 1. `cert-manager`をインストールして起動します。
 
    ::: tip
-   `cert-manager`のバージョンは`1.1.6`以上が必要です。すでに`cert-manager`がインストールおよび起動している場合は、この手順をスキップしてください。
+   `cert-manager`のバージョンは`1.1.6`以上が必要です。すでに`cert-manager`がインストールされて起動している場合は、この手順をスキップしてください。
    :::
 
    Helmを使って`cert-manager`をインストールできます。
@@ -84,7 +84,7 @@ Operatorが起動したら、EMQXのデプロイに進めます。
    emqx-ee   Ready     2m55s
    ```
 
-   `STATUS`が`Ready`になっていることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
+   `STATUS`が`Ready`であることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
 
 :::
 
@@ -111,15 +111,15 @@ Operatorが起動したら、EMQXのデプロイに進めます。
    emqx      Ready     2m55s
    ```
 
-   `STATUS`が`Ready`になっていることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。内部で多くの処理が行われています。
+   `STATUS`が`Ready`であることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。内部で多くの処理が行われています。
 
 :::
 
 ::::
 
-## パブリッククラウドへのデプロイ
+## パブリッククラウドでのデプロイ
 
-EMQX Operatorを使用してマネージドKubernetesサービス上にEMQXをデプロイするには、以下のガイドをご利用ください。
+EMQX Operatorを使用してマネージドKubernetesサービス上にEMQXをデプロイするには、以下のガイドをご参照ください。
 
 - [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)

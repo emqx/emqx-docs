@@ -1,29 +1,29 @@
-# Prometheusとの連携
+# Prometheusとの統合
 
-EMQXは、[Prometheus](https://prometheus.io/)などのサードパーティ監視システムとの連携をサポートしています。PrometheusはSoundCloudがオープンソース化した監視ソリューションで、多次元データモデルのサポート、柔軟なクエリ言語、強力なアラーム管理など多彩な機能を提供します。
+EMQXは、[Prometheus](https://prometheus.io/)などのサードパーティ監視システムとの統合をサポートしています。PrometheusはSoundCloudがオープンソース化した監視ソリューションで、多次元データモデルのサポート、柔軟なクエリ言語、強力なアラーム管理など多彩な機能を備えています。
 
-サードパーティ監視システムを利用することで、以下のようなメリットがあります。
+サードパーティ監視システムを利用することで、以下のような利点があります。
 
-- EMQXの監視データを他のシステムの監視データと統合した完全な監視システムを構築可能。例えば、サーバーホストの監視情報も取得できます。
-- [Grafanaダッシュボード](#use-grafana-to-visualize-EMQX-metrics)を用いたEMQXメトリクスの可視化など、より直感的な監視レポートを作成可能。
-- Prometheus Alertmanagerを使ったアラームルールや通知方法の設定など、多様なアラーム通知オプションを利用可能。
+- EMQXの監視データが他のシステムの監視データと統合され、完全な監視システムを構築可能です。例えば、サーバーホストの監視情報も取得できます。
+- [Grafanaダッシュボード](#use-grafana-to-visualize-EMQX-metrics)などを使って、図やグラフによるより直感的な監視レポートが可能です。
+- Prometheus Alertmanagerを利用したアラームルールや通知方法の多様な設定が可能です。
 
-EMQXはPrometheusメトリクス監視の統合方法として、以下の2つの方式をサポートしています。
+EMQXはPrometheusのメトリクス監視統合に対し、以下の2つの方法をサポートしています。
 
-- **Pullモード**：PrometheusがEMQXのREST APIを通じてメトリクスを直接収集する方式。
-- **Pushモード**：EMQXがメトリクスをPushgatewayサービスにプッシュし、Prometheusがそこからメトリクスを収集する方式。
+- **プルモード**：PrometheusがEMQXのREST APIを通じてメトリクスを直接収集する方法。
+- **プッシュモード**：EMQXがメトリクスをPushgatewayサービスにプッシュし、Prometheusがそこからメトリクスを収集する方法。
 
-本ページでは両方式の設定手順を紹介します。以下のエンドポイントで公開されるメトリクスシリーズの厳選リファレンス（アラート対象に適したものを含む）は、[Broker Health Indicators](./broker-health-indicators.md)をご参照ください。EMQXダッシュボードの左ナビゲーションメニューから**Management** -> **Monitoring**をクリックし、**Integration**タブで**Prometheus**を選択すると設定が可能です。また、ページ内の**Help**ボタンから各モードの具体的な設定手順を確認できます。
+本ページでは両モードの設定手順を紹介します。以下のエンドポイントで公開されるメトリクスシリーズの厳選リファレンス（アラート設定に適したものを含む）は、[Broker Health Indicators](./broker-health-indicators.md)を参照してください。EMQXダッシュボードの左ナビゲーションメニューから**Management** -> **Monitoring**をクリックし、**Integration**タブで**Prometheus**を選択すると設定が行えます。ページ内の**Help**ボタンをクリックすると各モードの具体的な設定手順も確認できます。
 
-## Pullモード連携の設定
+## プルモード統合の設定
 
-EMQXはPrometheusがシステムメトリクスを収集するために、以下のREST APIを提供しています。
+EMQXはPrometheusがシステムメトリクスを収集するための以下のREST APIを提供しています。
 
-- `/api/v5/prometheus/stats`：EMQXの基本的なメトリクスとカウンター。
-- `/api/v5/prometheus/auth`：認証・認可を含むアクセス制御に関する主要メトリクスとカウンター。
+- `/api/v5/prometheus/stats`：EMQXの基本メトリクスとカウンター。
+- `/api/v5/prometheus/auth`：認証・認可を含むアクセス制御の主要メトリクスとカウンター。
 - `/api/v5/prometheus/data_integration`：ルールエンジン、コネクター、アクション、Sink/Source、エンコード/デコードに関連するメトリクスとカウンター。
 
-これらのAPIを呼び出してメトリクスを取得する際、URLクエリパラメータ`mode`を使用して異なるタイプのメトリクスデータを取得できます。各パラメータの意味は以下の通りです。
+上記APIを呼び出してメトリクスを取得する際、URLのクエリパラメータ`mode`を使って異なる種類のメトリクスデータを取得できます。各パラメータの意味は以下の通りです。
 
 :::: tabs type: card
 
@@ -43,21 +43,21 @@ mode=node
 mode=all_nodes_aggregated
 ```
 
-クラスター内の全稼働ノードのメトリクスを集約し、*算術和*または*論理和*を返します。
+クラスターのメトリクスを集約し、クラスター内で稼働中のすべてのノードのメトリクスの*算術和*または*論理和*を返します。
 
-- 「オン状態」や「稼働状態」などのメトリクスは論理和で返されます。すべてのノードがオンまたは稼働中なら1、それ以外は0を返します。
+- 「オン状態」や「稼働状態」のようなメトリクスは論理和を返します。すべてのノードがオンまたは稼働中なら1を返し、それ以外は0を返します。
 
-- CPUやメモリ使用率などノードごとに独立したメトリクスは集約値を返さず、ノード名をラベルとして付与して区別します。例：
+- CPUやメモリ使用率のようにノードごとに独立したメトリクスは集約値を返しません。ノード名をラベルとして付与し、ノードごとのメトリクスを区別します。例：
 
   ```bash
   emqx_vm_cpu_use{node="emqx@172.17.0.2"} 7.6669163995887715
   emqx_vm_cpu_idle{node="emqx@172.17.0.2"} 92.33308360041123
-
+  
   emqx_vm_cpu_use{node="emqx@172.17.0.3"} 7.676007766679973
   emqx_vm_cpu_idle{node="emqx@172.17.0.3"} 92.32399223332003
   ```
 
-- クラスター内のどのノードでも値が一貫しているべきメトリクスは、APIリクエストを受けたノードの値をそのまま返します。集約せず、ノード名のラベルも付きません。例：
+- クラスター内のどのノードでも値が一貫しているべきメトリクスは、APIリクエストを受けたノードの値を直接返します。集約せず、ノード名のラベルも付与しません。例：
 
   ```bash
   emqx_topics_count 3
@@ -65,7 +65,7 @@ mode=all_nodes_aggregated
   emqx_cert_expiry_at{listener_type="wss",listener_name="default"} 1904285225
   ```
 
-- その他のメトリクスは算術和を返します。すなわち、全ノードのメトリクスの合計値が返されます。
+- その他のメトリクスは算術和を返します。つまり、全ノードのメトリクスの合計値が返されます。
 
 :::
 
@@ -75,7 +75,7 @@ mode=all_nodes_aggregated
 mode=all_nodes_unaggregated
 ```
 
-クラスター内の全稼働ノードの個別メトリクスを返すモードです。
+クラスター非集約モードで、クラスター内の稼働中すべてのノードの個別メトリクスを返します。
 
 - ノード名をラベルとして付与し、ノードごとのメトリクスを区別します。例：
 
@@ -83,7 +83,7 @@ mode=all_nodes_unaggregated
   emqx_connections_count{node="emqx@127.0.0.1"} 0
   ```
 
-- クラスター内のどのノードでも値が一貫しているべきメトリクス（例：「ブラックリスト数」「保持メッセージ数」など）は、APIリクエストを受けたノードの値をそのまま返し、ノード名ラベルは付きません。例：
+- 「ブラックリスト数」や「保持メッセージ数」など、クラスター内のどのノードでも値が一貫しているべきメトリクスは、APIリクエストを受けたノードの値を直接返します。ノード名のラベルは付与しません。例：
 
   ```bash
   emqx_retained_count 3
@@ -93,11 +93,11 @@ mode=all_nodes_unaggregated
 
 ::::
 
-PrometheusのPullエンドポイントの詳細は、[EMQX Enterprise APIドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)をご参照ください。
+Prometheusのプルエンドポイントの詳細は、[EMQX Enterprise APIドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)を参照してください。
 
-::: tip
+::: tip 
 
-PullモードAPIはデフォルトで認証不要です。ページ上の**Enable Basic Auth**スイッチをオンにすると、インターフェースにベーシック認証を有効化できます。有効化後は、EMQX上で[APIキー](../admin/api.md#authentication)を作成し、Prometheus設定に適用してメトリクスを取得してください。
+プルモードAPIはデフォルトで認証不要です。ページ上の**Enable Basic Auth**スイッチをオンにすると、インターフェースにベーシック認証を有効化できます。有効化後はEMQXで[APIキー](../admin/api.md#authentication)を作成し、Prometheus設定に適用してメトリクスデータを取得してください。
 
 :::
 
@@ -106,9 +106,9 @@ PullモードAPIはデフォルトで認証不要です。ページ上の**Enabl
 ```yaml
 # prometheus.yaml
 global:
-  scrape_interval:     10s # デフォルトのスクレイプ間隔は10秒ごと
-  evaluation_interval: 10s # デフォルトの評価間隔は10秒ごと
-  # このマシン上の全時系列がデフォルトでエクスポートされます
+  scrape_interval:     10s # デフォルトのスクレイプ間隔は10秒ごとです。
+  evaluation_interval: 10s # デフォルトの評価間隔は10秒ごとです。
+  # このマシン上のすべての時系列はデフォルトでエクスポートされます。
   external_labels:
     monitor: 'emqx-monitor'
 scrape_configs:
@@ -140,28 +140,28 @@ scrape_configs:
       password: ''
 ```
 
-## Pushモード連携の設定
+## プッシュモード統合の設定
 
-EMQXはメトリクスをPushgatewayにプッシュし、Prometheusがそこから収集する方式をサポートしています。Pushgatewayサービスはデフォルトで無効化されています。DashboardのPrometheus設定ページで**Enable Pushgateway**トグルスイッチをオンにすると有効化できます。
+EMQXはメトリクスをPushgatewayにプッシュし、Prometheusがそこから収集することをサポートしています。Pushgatewayへのプッシュはデフォルトで無効化されています。Pushgatewayサービスを有効化するには、ダッシュボードのPrometheus設定ページで**Enable Pushgateway**トグルスイッチをクリックしてください。
 
-<img src="./assets/enable-push-gateway.png" alt="Pushgateway有効化" style="zoom:40%;" />
+<img src="./assets/enable-push-gateway.png" alt="Pushgatewayの有効化" style="zoom:40%;" />
 
-ビジネス要件に応じて以下の項目を設定し、**Save Changes**をクリックしてください。
+ビジネスニーズに応じて以下の項目を設定し、**Save Changes**をクリックします。
 
-- **Interval**：Pushgatewayに監視メトリクスデータを報告する間隔を秒単位で指定します。デフォルトは`15`秒です。
+- **Interval**：Pushgatewayへ監視メトリクスデータを報告する時間間隔を指定します。デフォルトは`15`秒です。
 - **Pushgateway Server**：PrometheusサーバーのURLを入力します。デフォルトは`http://127.0.0.1:9091`です。
-- **Job Name**：EMQXクラスター名、ノード名、ホスト名を含む変数を指定します。デフォルトは`${name}/instance/${name}~${host}`です。例えば、EMQXノード名が`emqx@127.0.0.1`の場合、`name`変数は`emqx`、`host`変数は`127.0.0.1`となります。
-- **Headers**：Pushgatewayにプッシュする監視メトリクスのHTTPヘッダーのキーと値を入力します。**Add**ボタンをクリックして複数のヘッダーを追加可能です。型は文字列で、例：{ Authorization = "some-authz-tokens"}。
+- **Job Name**：EMQXクラスター名、ノード名、ホスト名を含む変数を指定します。デフォルトは`${name}/instance/${name}~${host}`です。例えば、EMQXノード名が`emqx@127.0.0.1`の場合、`name`変数は`emqx`、`host`変数は`127.0.0.1`の値を取ります。
+- **Headers**：Pushgatewayにプッシュする監視メトリクスのHTTPヘッダーのキーと値を入力します。**Add**ボタンをクリックして複数のヘッダーを追加可能です。型は文字列で、例として `{ Authorization = "some-authz-tokens"}` などがあります。
 
 同時に、**Help**ボタンをクリックし、**Use Pushgateway**タブの手順を参照して設定してください。
 
-::: tip
+::: tip 
 
-Pushモードは現状、`/api/v5/prometheus/stats`エンドポイントの基本的なメトリクスとカウンターのみを含むため、Pullモードの利用がより推奨されます。
+プッシュモードは現状、`/api/v5/prometheus/stats`エンドポイントのEMQX基本メトリクスとカウンターのみを含むため、プルモードの利用がより推奨されます。
 
 :::
 
-また、設定ファイルに以下の設定を追加してPushgatewayを有効化・設定することも可能です。設定項目の詳細は[Configuration - Prometheus](../configuration/prometheus.md)をご参照ください。
+Pushgatewayの有効化および設定は、設定ファイルに以下の内容を追加して行うことも可能です。設定項目の詳細は[Configuration - Prometheus](../configuration/prometheus.md)を参照してください。
 
 ```bash
 prometheus {
@@ -172,12 +172,12 @@ prometheus {
 }
 ```
 
-## GrafanaでEMQXメトリクスを可視化する
+## Grafanaを使ってEMQXメトリクスを可視化する
 
-GrafanaとPrometheusを組み合わせてEMQXメトリクスを可視化することも可能です。GrafanaにEMQXのテンプレートファイルをインポートすることで実現できます。テンプレートのダウンロードは、[EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/)をクリックするか、**Monitoring**ページの**Integration**タブ下部の**Help**ボタンから行えます。
+PrometheusとGrafanaを組み合わせてEMQXメトリクスを可視化することも可能です。GrafanaにEMQXのテンプレートファイルをインポートすることで実現できます。テンプレートのダウンロードは[EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/)をクリックするか、**Monitoring**ページの**Integration**タブ下部にある**Help**ボタンをクリックしてください。
 
 ::: tip
 
-詳細な操作手順は[Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana)をご参照ください。
+詳細な操作手順は[Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana)を参照してください。
 
 :::

@@ -1,52 +1,52 @@
 # REST API
 
-EMQXは、OpenAPI（Swagger）3.0仕様に基づいて設計されたHTTP管理APIを公開しています。
+EMQXはOpenAPI（Swagger）3.0仕様に準拠したHTTP管理APIを公開しています。
 
-EMQX起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスすると、APIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトでは、ダッシュボードの設定で `swagger_support` が `true` に設定されており、Swagger UIのサポートが有効になっています。これにより、インタラクティブなAPIドキュメントの生成など、Swagger関連の機能がすべて有効になります。無効にしたい場合は `false` に設定できます。詳細は [ダッシュボード設定](../configuration/dashboard.md) をご参照ください。
+EMQXを起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスするとAPIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトではダッシュボード設定の`swagger_support`が`true`に設定されており、Swagger UIが有効で、インタラクティブなAPIドキュメント生成などのSwagger関連機能がすべて有効になっています。`false`に設定するとこれらの機能を無効化できます。詳細は[ダッシュボード設定](../configuration/dashboard.md)をご参照ください。
 
-本章では、EMQX REST APIの利用方法について説明します。
+本節ではEMQX REST APIの利用方法について説明します。
 
 ## 基本パス
 
-EMQXのREST APIはバージョン管理されており、EMQX 5.0.0以降のすべてのAPIパスは `/api/v5` で始まります。
+EMQXのREST APIはバージョン管理されており、EMQX 5.0.0以降のすべてのAPIパスは`/api/v5`から始まります。
 
 ## HTTPヘッダー
 
-ほとんどのAPIリクエストでは、`Accept` ヘッダーに `application/json` を設定する必要があります。これにより、レスポンスはJSON形式で返されます（特に指定がない限り）。
+ほとんどのAPIリクエストでは`Accept`ヘッダーに`application/json`を設定する必要があり、特に指定がない限りレスポンスはJSON形式で返されます。
 
 ## HTTPレスポンスステータスコード
 
-EMQXは[HTTPレスポンスステータスコード](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)の標準に従っています。主なステータスコードは以下の通りです。
+EMQXは[HTTPレスポンスステータスコード](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)の標準に準拠しています。主なステータスコードは以下の通りです。
 
 | コード | 説明                                                         |
 | ------ | ------------------------------------------------------------ |
-| 200    | リクエスト成功。返却されるJSONデータに詳細が含まれます。     |
+| 200    | リクエスト成功。返却されるJSONデータに詳細情報が含まれます。 |
 | 201    | 作成成功。新規オブジェクトがBodyに返されます。               |
 | 204    | リクエスト成功。通常は削除や更新操作で返却Bodyは空です。     |
 | 400    | 不正なリクエスト。リクエストボディやパラメータのエラー。     |
-| 401    | 認証失敗。APIキーが期限切れ、または存在しません。             |
-| 403    | 禁止。オブジェクトが使用中、または依存関係制約があります。   |
-| 404    | 見つかりません。Bodyの `message` フィールドで理由を確認可能。 |
-| 409    | 競合。オブジェクトが既に存在するか、数の上限を超えています。 |
-| 500    | サーバ内部エラー。Bodyやログで原因を確認してください。       |
+| 401    | 認証エラー。APIキーの期限切れまたは存在しません。             |
+| 403    | 禁止。オブジェクトが使用中または依存関係制約があります。     |
+| 404    | 見つかりません。Bodyの`message`フィールドで理由を確認可能。  |
+| 409    | コンフリクト。オブジェクトが既に存在するか数の上限超過。      |
+| 500    | サーバ内部エラー。Bodyやログで原因を確認してください。        |
 
 ## 認証
 
-EMQXのREST APIは、主にAPIキーを用いたベーシック認証とベアラートークン認証の2つの方法をサポートしています。
+EMQXのREST APIは主にAPIキーを用いたベーシック認証とベアラートークン認証の2種類をサポートしています。
 
 ### APIキーを用いたベーシック認証
 
-この方法では、APIキーとシークレットキーをそれぞれユーザー名とパスワードとして使用し、APIリクエストを認証します。EMQXのREST APIは[HTTPベーシック認証](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework)に準拠しており、これらの認証情報が必要です。EMQX REST APIを利用する前に、APIキーを作成する必要があります。詳細は [APIキー管理](#api-key-management) をご覧ください。
+この方法ではAPIキーとシークレットキーをそれぞれユーザー名とパスワードとして使用し、APIリクエストを認証します。EMQXのREST APIは[HTTPベーシック認証](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework)に準拠しており、これらの認証情報が必要です。利用前にAPIキーを作成してください。詳細は[APIキー管理](#apiキー管理)をご覧ください。
 
 ::: tip 注意
 
-セキュリティ上の理由から、EMQX 5.0.0以降はダッシュボードのユーザー認証情報をREST API認証に使用できません。代わりにAPIキーを作成して認証に使用してください。
+セキュリティ上の理由から、EMQX 5.0.0以降はダッシュボードのユーザー認証情報をREST API認証に使用できません。代わりにAPIキーを作成して認証に利用してください。
 
 :::
 
-#### APIキーでの認証例
+#### APIキーで認証する
 
-APIキーとシークレットキーを取得したら、APIキーをユーザー名、シークレットキーをパスワードとしてベーシック認証を行います。
+APIキーとシークレットキーを用意したら、APIキーをユーザー名、シークレットキーをパスワードとしてベーシック認証を行います。
 
 各言語での例：
 
@@ -195,11 +195,11 @@ axios
 
 ### ベアラートークン認証
 
-APIキー認証の代替として、ベアラートークンを使った安全かつプログラム的なEMQX REST APIアクセスも可能です。ベアラートークンは、以下のログインAPIエンドポイントにリクエストを送ることで取得します。
+APIキー認証の代替として、ベアラートークンを用いてEMQX REST APIに安全かつプログラム的にアクセスできます。ベアラートークンは以下のログインAPIエンドポイントにリクエストを送信して取得します。
 
 #### ベアラートークンの取得
 
-以下のログインAPIエンドポイントにHTTP `POST` リクエストを送信してください。
+以下のログインAPIエンドポイントにHTTP `POST`リクエストを送信してください。
 
 ```bash
 POST http://your-emqx-address:8483/api/v5/login
@@ -218,14 +218,14 @@ POST http://your-emqx-address:8483/api/v5/login
 }
 ```
 
-- `your-emqx-address` はEMQXノードのアドレスまたはIPに置き換えてください。
-- `"admin"` と `"yourpassword"` はEMQXダッシュボードの認証情報に置き換えてください。
+- `your-emqx-address`はEMQXノードのアドレスまたはIPに置き換えてください。
+- `"admin"`と`"yourpassword"`はEMQXダッシュボードの認証情報に置き換えてください。
 
-レスポンスにベアラートークンが含まれます。このトークンをAPIリクエストの認証に使用します。
+レスポンスにベアラートークンが含まれ、これをAPIリクエストの認証に使用します。
 
-#### ベアラートークンの利用方法
+#### ベアラートークンを用いた認証
 
-取得したベアラートークンは、APIリクエストの `Authorization` ヘッダーに以下のように含めます。
+取得したベアラートークンはAPIリクエストの`Authorization`ヘッダーに以下のように含めてください。
 
 ```bash
 --header "Authorization: Bearer <your-token>"
@@ -237,17 +237,17 @@ POST http://your-emqx-address:8483/api/v5/login
 
 #### ダッシュボード
 
-ダッシュボードの **システム** -> **APIキー** から手動でAPIキーを作成できます。
+ダッシュボードの **System** -> **API Key** からAPIキーを手動で作成できます。
 
-1. 右上の **+ 作成** ボタンをクリックして作成ダイアログを開きます。
+1. 右上の **+ Create** ボタンをクリックして作成ダイアログを開きます。
 2. APIキーの詳細を設定します：
-   - **名前**（必須）：APIキーの名前を入力します。
-   - **有効期限**：空欄の場合は期限なしとなります。
-   - **有効化**：デフォルトで有効です。
-   - **ロール**：任意でロールを選択します。詳細は [ロールと権限](#roles-and-permissions) を参照してください。
-   - **スコープ**：付与するスコープを選択します（任意）。デフォルトはすべてのスコープ権限です。詳細は [APIスコープ](#api-scopes) を参照してください。
-   - **備考**：任意で説明を入力できます。
-3. **確認** をクリックすると、作成成功ダイアログにAPIキーとシークレットキーが表示されます。
+   - **Name**（必須）：APIキーの名前を入力します。
+   - **Expire At**：空欄の場合は期限なしとなります。
+   - **Is Enable**：デフォルトで有効です。
+   - **Role**：ロールを選択（任意）。[ロールと権限](#roles-and-permissions)を参照してください。
+   - **Scopes**：付与するスコープを選択（任意）。デフォルトはすべてのスコープ権限。詳細は[APIスコープ](#api-scopes)を参照してください。
+   - **Note**：任意で説明を入力できます。
+3. **Confirm**をクリックすると、作成成功ダイアログにAPIキーとシークレットキーが表示されます。
 
    ::: warning 重要
 
@@ -255,13 +255,13 @@ POST http://your-emqx-address:8483/api/v5/login
 
    :::
 
-4. **閉じる** をクリックしてダイアログを閉じます。
+4. **Close**をクリックしてダイアログを閉じます。
 
-キー名をクリックすると詳細を確認でき、**編集** ボタンで有効期限や状態、備考を変更、**削除** ボタンでキーを削除できます。
+キー名をクリックすると詳細を確認でき、**Edit**ボタンで有効期限、状態、説明を編集可能です。**Delete**ボタンで削除できます。
 
 #### ブートストラップファイル
 
-ブートストラップファイルを使ってAPIキーを作成することも可能です。以下の設定でファイルの場所を指定します。
+ブートストラップファイルを使ってAPIキーを作成することも可能です。以下の設定を追加してファイルの場所を指定します。
 
 ```bash
 api_key = {
@@ -269,12 +269,16 @@ api_key = {
 }
 ```
 
-指定したファイルに、複数のAPIキーを `{API Key}:{Secret Key}:{?Role}:{?Scopes}` の形式で改行区切りで記述します。
+指定したファイルに複数のAPIキーを以下の形式で改行区切りで記述します。
 
-- **API Key**：任意の文字列をキー識別子として使用。
+```
+{API Key}:{Secret Key}:{?Role}:{?Scopes}
+```
+
+- **API Key**：任意の文字列でキー識別子。
 - **Secret Key**：ランダムな文字列をシークレットキーとして使用。
 - **Role（任意）**：キーの[ロール](#roles-and-permissions)を指定。
-- **Scopes（任意）**：キーがアクセス可能な[APIスコープ](#api-scopes)をカンマ区切りで指定。省略時はすべてのユーザー可視スコープが付与されます（管理者全許可、旧バージョンとの互換性のため）。ログイン専用スコープ（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）はAPIキーには無効です。これらがブートストラップファイルに含まれている場合、EMQX起動時に削除され警告ログが出力されます。キーは作成されますが、該当スコープは付与されません。
+- **Scopes（任意）**：キーがアクセス可能な[APIスコープ](#api-scopes)をカンマ区切りで指定。省略時はすべてのユーザー可視スコープ（管理者全許可）が付与されます。ログイン専用スコープ（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）はAPIキーには無効です。これらがブートストラップファイルに含まれている場合、EMQX起動時に削除され警告ログが出力されます。キーは作成されますが該当スコープは付与されません。
 
 例：
 
@@ -288,70 +292,72 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 この方法で作成されたAPIキーは無期限で有効です。
 
-EMQX起動時にファイルの内容がAPIキーリストに追加されます。既存のAPIキーがあれば、シークレットキー、ロール、スコープが更新されます。
+EMQX起動時にファイルの内容がAPIキーリストに追加され、既存キーがあればシークレットキー、ロール、スコープが更新されます。
 
 ### ロールと権限
 
 REST APIはロールベースアクセス制御を実装しています。APIキー作成時に以下の3つのプリセットロールのいずれかを割り当てられます。
 
-- **administrator（管理者）**：すべてのリソースにアクセス可能。ロール未指定時のデフォルト。
-- **viewer（閲覧者）**：リソースやデータの閲覧のみ可能。REST APIのすべてのGETリクエストに対応。
-- **publisher（パブリッシャー）**：MQTTメッセージのパブリッシュ専用。パブリッシュ関連APIのみアクセス可能。
+- **Administrator**：すべてのリソースにアクセス可能。指定がなければデフォルト。ロール識別子は`administrator`。
+- **Viewer**：リソースやデータの閲覧のみ可能。REST APIの全GETリクエストに対応。ロール識別子は`viewer`。
+- **Publisher**：MQTTメッセージのパブリッシュ専用。メッセージパブリッシュ関連APIのみアクセス可能。ロール識別子は`publisher`。
 
 ::: tip 注意
-`publisher` ロールのキーは `publish` スコープのみ許容します。スコープ割り当て時に `publish` 以外が含まれるとHTTP 400が返されます。既存のキーのロールを `publisher` に変更する場合は、同時に `"scopes": ["publish"]` または空リストをリクエストに含めてください。そうしないと、既存スコープに `publish` 以外がある場合リクエストは拒否されます。
+`publisher`ロールのキーは`publish`スコープのみ許容します。スコープ割り当て時に`publish`以外が含まれるとHTTP 400エラーとなります。ロールを`publisher`に変更する場合、同時リクエストで`"scopes": ["publish"]`または空リストを含めてください。既存スコープに`publish`以外があるとリクエストは拒否されます。
 :::
 
 ### APIスコープ
 
-スコープはEMQX 5.10で導入された、APIキーごとの権限の粒度を示す新しい概念です。どのREST APIのビジネス領域にアクセスを許可するかを宣言します。スコープと[ロールと権限](#roles-and-permissions)は独立しており、両方のチェックを通過した場合のみアクセスが許可されます。これにより2層のアクセス制御が実現します。
+スコープはEMQX 5.10で導入されたAPIキーごとの権限次元で、キーがアクセス可能なREST APIの業務領域を宣言します。スコープと[ロールと権限](#roles-and-permissions)は独立しており、両方のチェックを通過した場合のみアクセスが許可される2層のアクセス制御を形成します。
 
-| 次元 | 目的 | 粒度 |
-| ---- | ---- | ---- |
-| **ロール** | HTTP動詞の制限（読み取り専用、書き込み専用、パブリッシュ専用など） | リクエストアクション |
-| **スコープ** | APIのドメイン制限（クライアント、ルール、監視など） | リソース領域 |
+| 次元       | 目的                             | 粒度               |
+| ---------- | -------------------------------- | ------------------ |
+| **ロール** | HTTPメソッド制限（読み取り専用、書き込み、パブリッシュ専用など） | リクエストの操作種別 |
+| **スコープ** | APIドメイン制限（クライアント、ルール、監視など）           | リソース領域       |
 
-マイクロサービスや統合シナリオでは、外部システムがEMQX管理領域の一部のみを必要とする場合が多いです。例えば監視プラットフォームは `monitoring` スコープのみ、ルールパブリッシュサービスは `data_integration` のみ、クラスター運用ツールは `cluster_operations` のみが必要です。スコープにより最小権限の原則を適用し、キー漏洩時の影響範囲を最小化できます。
+すべてのリクエストはロールチェックとスコープチェックの両方を通過する必要があります。
+
+マイクロサービスや統合シナリオでは、外部システムがEMQX管理機能の一部のみアクセスすることが多いため、監視プラットフォームは`monitoring`スコープのみ、ルール公開サービスは`data_integration`のみ、クラスター運用ツールは`cluster_operations`のみ必要とします。スコープにより最小権限の原則でキーを割り当てられ、キー漏洩時の影響範囲を最小化できます。
 
 #### 組み込みスコープ
 
-EMQX 5.10には以下の10個のスコープがあり、APIキー作成時に自由に組み合わせ可能です。
+EMQX 5.10には以下の10種類のスコープがあり、APIキー作成時に自由に組み合わせ可能です。
 
-| スコープ | 名称 | 主なAPI領域 |
-| --- | --- | --- |
-| `connections` | 接続管理 | `/clients`, `/subscriptions`, `/topics`, `/banned`, `/retainer`, `/file_transfer`, `/mqtt/delayed`, `/mqtt/topic_rewrite` など |
-| `publish` | メッセージパブリッシュ | `/publish`, `/publish/bulk` |
-| `data_integration` | データ統合 | `/rules`, `/connectors`, `/actions`, `/schema_registry`, `/schema_validations`, `/message_transformations`, `/exhooks`, `/ai/*` |
-| `access_control` | アクセス制御 | `/authentication`, `/authorization/*` |
-| `gateways` | プロトコルゲートウェイ | `/gateways`, `/coap/*`, `/lwm2m/*`, `/gcp_devices` など |
-| `monitoring` | 監視データ | `/metrics`, `/stats`, `/monitor*`, `/alarms`, `/trace`, `/slow_subscriptions`, `/telemetry`, `/prometheus/{auth,stats,data_integration,...}` など |
-| `cluster_operations` | クラスター運用 | `/cluster*`, `/nodes`, `/load_rebalance`, `/node_eviction`, `/mt/*` など |
-| `system` | システム設定 | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus` など |
-| `audit` | 監査ログ | `/audit` |
-| `license` | ライセンス | `/license*` |
+| スコープ               | 名称               | 主なAPI領域                                                                                  |
+| ---------------------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| `connections`          | 接続管理           | `/clients`, `/subscriptions`, `/topics`, `/banned`, `/retainer`, `/file_transfer`, `/mqtt/delayed`, `/mqtt/topic_rewrite`, ... |
+| `publish`              | メッセージパブリッシュ | `/publish`, `/publish/bulk`                                                                  |
+| `data_integration`     | データ統合         | `/rules`, `/connectors`, `/actions`, `/schema_registry`, `/schema_validations`, `/message_transformations`, `/exhooks`, `/ai/*` |
+| `access_control`       | アクセス制御       | `/authentication`, `/authorization/*`                                                        |
+| `gateways`             | プロトコルゲートウェイ | `/gateways`, `/coap/*`, `/lwm2m/*`, `/gcp_devices`, ...                                       |
+| `monitoring`           | 監視データ         | `/metrics`, `/stats`, `/monitor*`, `/alarms`, `/trace`, `/slow_subscriptions`, `/telemetry`, `/prometheus/{auth,stats,data_integration,...}`, ... |
+| `cluster_operations`   | クラスター運用     | `/cluster*`, `/nodes`, `/load_rebalance`, `/node_eviction`, `/mt/*`, ...                      |
+| `system`               | システム設定       | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
+| `audit`                | 監査ログ           | `/audit`                                                                                    |
+| `license`              | ライセンス         | `/license*`                                                                                  |
 
-これらAPIキー用スコープに加え、ダッシュボードログインユーザーにはブラウザセッション専用の4つのログイン専用スコープがあり、APIキーには割り当てられません。詳細は [ログインユーザースコープ](../dashboard/system.md#login-user-scopes) を参照してください。
+これらAPIキー用スコープに加え、ダッシュボードログインユーザーにはブラウザセッション専用の4つのログイン専用スコープがあり、APIキーには割り当てられません。詳細は[ログインユーザースコープ](../dashboard/system.md#login-user-scopes)をご覧ください。
 
-| スコープ | 必要ロール | 目的 |
-| --- | --- | --- |
-| `user_management` | 管理者 | ダッシュボードユーザー管理 |
-| `sso_management` | 管理者 | SSOバックエンドおよびSSOユーザーレコード管理 |
-| `api_key_management` | 管理者 | APIキー管理 |
-| `mfa_management` | 任意 | 自アカウントのMFA管理。管理者は他ユーザーのMFAも管理可能 |
+| スコープ              | 必要ロール    | 目的                                |
+| --------------------- | ------------ | ---------------------------------- |
+| `user_management`     | Administrator | ダッシュボードユーザー管理          |
+| `sso_management`      | Administrator | SSOバックエンドおよびSSOユーザー管理 |
+| `api_key_management`  | Administrator | APIキー管理                        |
+| `mfa_management`      | いずれか      | 自身のアカウントのMFA管理。管理者は他ユーザーのMFAも管理可能 |
 
 ::: tip
-スコープ名はEMQXのアップグレードに伴い変更されない安定した識別子です。OpenAPIタグ名が変更されても、同じスコープを持つキーは引き続き動作します。
+スコープ名はEMQXのアップグレード間で変更されない安定した識別子です。OpenAPIタグ名が変更されても、同じスコープを持つキーは引き続き動作します。
 :::
 
-::: warning `system` は管理者相当とみなす
+::: warning `system`は管理者相当とみなす
 
-`system` は設定管理エンドポイント（`/configs*`、`/data/*`、`/listeners*` など）をカバーします。`system` を持つキーは、任意の設定サブツリーを更新したり、バックアップアーカイブからEMQXデータを復元したりできます。どちらの操作も、`audit`、`access_control`、`monitoring` などのより細かいスコープで通常保護される設定を変更できる可能性があります。
+`system`は設定管理系エンドポイント(`/configs*`, `/data/*`, `/listeners*`など)をカバーします。このスコープを持つキーは設定のサブツリーを更新したり、バックアップアーカイブからEMQXデータを復元可能です。これらの操作は通常`audit`、`access_control`、`monitoring`などの細かいスコープで保護される設定を変更するため、`system`は管理者相当とみなしてください。
 
-`system` を制限付きスコープリストと同じキーに付与しても、制限は確実には強制されません。`system` は、すでに管理者として信頼できるキーにのみ付与し、最小権限の原則に従って、そのキーに実際に必要なスコープだけを付与してください。
+`system`と制限付きスコープを同一キーに組み合わせても制限は確実に適用されません。`system`は管理者に信頼されたキーにのみ割り当て、最小権限の原則に従って必要なスコープのみ付与してください。
 
 :::
 
-**ネームスペース制限付き呼び出し元**（特定のネームスペースにロールが制限されたユーザーやAPIキー）は、スコープチェックに加えてエンドポイントレベルの追加制限を受けます。たとえ `connections` や `monitoring` スコープが付与されていても、クラスター全体のMQTTメッセージの生データ（保持・遅延メッセージストアを含む）を読み書きするエンドポイントにはアクセスできません。以下のエンドポイントは、ネームスペース制限付き呼び出し元に対して常に `403 Forbidden` を返します。
+**ネームスペース制限付き呼び出し元**（特定のネームスペースにロールが制限されたユーザーやAPIキー）は、スコープチェックに加えエンドポイントレベルの追加制限を受けます。`connections`や`monitoring`スコープが付与されていても、クラスター全体の生のMQTTメッセージコンテンツ（保持メッセージや遅延メッセージストアを含む）を読み書きするエンドポイントにはアクセスできません。以下のエンドポイントはネームスペース制限付き呼び出し元に対して常に`403 Forbidden`を返します。
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
@@ -363,58 +369,58 @@ EMQX 5.10には以下の10個のスコープがあり、APIキー作成時に自
 - `GET /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
-- `DELETE /trace` （すべてのトレース一括削除）
+- `DELETE /trace`（全トレース一括削除）
 
-トレース一覧取得（`GET /trace`）では、ネームスペース制限付き呼び出し元は自身のネームスペース内のトレースのみ閲覧可能です。個別トレース操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）は、他のネームスペースのトレースの場合 `404 Not Found` を返し、存在情報を漏らしません。
+トレース一覧取得（`GET /trace`）では、ネームスペース制限付き呼び出し元は自身のネームスペース内のトレースのみ閲覧可能です。個別トレース操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）は別ネームスペースのトレースに対して`404 Not Found`を返し、クロスネームスペースのトレース存在を漏らしません。
 
-ダッシュボードログイン、SSOコールバック、APIキー自己管理エンドポイント（例：`/api_key`）は、キーの `scopes` 設定に関わらずAPIキー認証を受け付けません。これはスコープモデルとは無関係のダッシュボードのセキュリティ境界です。
+ダッシュボードログイン、SSOコールバック、APIキー自身の管理エンドポイント（例：`/api_key`）は、キーの`scopes`設定に関わらずAPIキー認証を受け付けません。これはスコープモデルとは無関係なダッシュボードのセキュリティ境界です。
 
-#### `scopes` のデフォルト動作
+#### `scopes`のデフォルト動作
 
-APIキーの `scopes` フィールドは以下のルールに従います。
+APIキーの`scopes`フィールドは以下のルールに従います。
 
-| `scopes` の値 | 意味 |
-| --- | --- |
-| **未設定**（フィールドなし） | すべてのビジネスエンドポイントが許可されます。スコープ機能導入前に作成されたキーの互換性維持用デフォルト。 |
-| **空リスト** `[]` | すべてのビジネスエンドポイントが拒否されます。キーを削除せずに無効化したい場合に有用。 |
+| `scopes`の値          | 意味                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| **未設定**（フィールドなし） | すべての業務エンドポイントが許可されます。スコープ機能導入前に作成されたキーの互換デフォルトです。 |
+| **空リスト** `[]`      | すべての業務エンドポイントが拒否されます。キーの一時無効化に便利です。 |
 | **明示的リスト**（例：`["monitoring", "cluster_operations"]`） | 指定されたスコープのリクエストのみ許可されます。 |
 
-ブートストラップファイルでスコープ指定を省略した場合、キーは明示的にすべてのユーザー可視スコープ（管理者全許可）で作成されるため、アップグレード時に既存キーの権限が不意に削除されることはありません。
+ブートストラップファイルでスコープ指定を省略すると、キーはすべてのユーザー可視スコープ（管理者全許可）で明示的に書き込まれ、アップグレード時に既存キーの権限が静かに剥奪されることを防ぎます。
 
-同様の3状態モデルがダッシュボードログインユーザーにも適用されます。ログインユーザーの `scopes` フィールドが未設定の場合、ロールに基づくデフォルトセットが割り当てられます。管理者は4つのログイン専用スコープを含むすべてのスコープを、閲覧者は10個のAPIキー用スコープすべてを受け取りますが、ログイン専用スコープ（`mfa_management`含む）は明示的に割り当てない限り付与されません。
+同様の3状態モデルはダッシュボードログインユーザーにも適用されます。ログインユーザーの`scopes`フィールドがない場合、ロールに基づくデフォルトセットが割り当てられます。管理者は4つのログイン専用スコープを含むすべてのスコープを取得し、ビューアは10個のAPIキー用スコープすべてを取得しますが、4つのログイン専用スコープ（`mfa_management`含む）は明示的に割り当てない限り付与されません。
 
-#### 利用可能なスコープの一覧取得
+#### 利用可能なスコープ一覧の取得
 
-EMQXは以下の2つのエンドポイントでスコープカタログを取得可能です。
+EMQXは以下の2つのエンドポイントでスコープカタログを取得できます。
 
-- `GET /api/v5/api_key_scopes`：APIキーに割り当て可能なスコープ（上記10個のビジネスドメインスコープ）を返します。APIキー認証が必要です。
-- `GET /api/v5/user_scopes`：ダッシュボードログインユーザーに割り当て可能なすべてのスコープ（ログイン専用4スコープ含む）を返します。ベアラートークン認証が必要です。
+- `GET /api/v5/api_key_scopes`：APIキーに割り当て可能なスコープ（上記10個の業務ドメインスコープ）を返します。APIキー認証が必要です。
+- `GET /api/v5/user_scopes`：ダッシュボードログインユーザーが利用可能なすべてのスコープ（4つのログイン専用スコープ含む）を返します。ベアラートークン認証が必要です。
 
-これらを使い、スコープ選択UIの生成や自動化スクリプトの検証が可能です。
+スコープ選択UIの構築や自動化スクリプトの検証に利用してください。
 
 ```bash
-# APIキー用スコープ一覧取得
+# APIキー用スコープ取得
 curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
 
-# ログインユーザースコープ一覧取得（ベアラートークン必要）
+# ログインユーザースコープ取得（ベアラートークン必要）
 curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 ```
 
 #### スコープの割り当て
 
-スコープは以下のいずれかの方法で設定できます。
+スコープは以下のいずれかの方法で設定可能です。
 
-- **ダッシュボード**：**システム** -> **APIキー** の作成・編集画面で付与するスコープを選択。
-- **REST API**：作成・更新リクエストボディに `"scopes": ["monitoring", "cluster_operations"]` を含める。
-- **ブートストラップファイル**：各行の4番目のセグメントとしてカンマ区切りのスコープリストを指定（例：`my-app:my-secret:administrator:monitoring,cluster_operations`）。
+- **ダッシュボード**：**System** -> **API Key**でキー作成・編集時に付与するスコープをチェック。
+- **REST API**：作成・更新リクエストボディに`"scopes": ["monitoring", "cluster_operations"]`を含める。
+- **ブートストラップファイル**：各行の4番目のセグメントにカンマ区切りでスコープを指定。例：`my-app:my-secret:administrator:monitoring,cluster_operations`
 
 ## ページネーション
 
-大量データを扱うAPIではページネーション機能が提供されています。データの性質に応じて2種類のページネーション方式があります。
+大量データを扱うAPIではページネーション機能が提供されています。データ特性に応じて2種類のページネーション方式があります。
 
 ### ページ番号ページネーション
 
-ページネーション対応APIの多くは、`page`（ページ番号）と `limit`（ページサイズ）パラメータでページ制御が可能です。最大ページサイズは `10000` です。`limit` が指定されない場合はデフォルトで `100` となります。
+ページネーション対応APIの多くは、`page`（ページ番号）と`limit`（ページサイズ）パラメータで制御可能です。最大ページサイズは`10000`です。`limit`未指定時はデフォルト`100`となります。
 
 例：
 
@@ -422,7 +428,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 GET /clients?page=1&limit=100
 ```
 
-レスポンスの `meta` フィールドにページネーション情報が含まれます。EMQXは検索条件付きリクエストの総件数を予測できないため、`meta.hasnext` フィールドで次ページの有無を示します。
+レスポンスの`meta`フィールドにページネーション情報が含まれます。EMQXは検索条件付きリクエストの総データ数を予測できないため、`meta.hasnext`フィールドで次ページの有無を示します。
 
 ```json
 {
@@ -438,9 +444,9 @@ GET /clients?page=1&limit=100
 
 ### カーソルページネーション
 
-データ変動が激しくページ番号ページネーションが非効率なAPIでは、カーソルページネーションを採用しています。
+データ変動が激しくページ番号ページネーションが非効率なAPIではカーソルページネーションを採用しています。
 
-`position` または `cursor`（開始位置）パラメータで読み込み開始位置を指定し、`limit`（ページサイズ）パラメータで開始位置からの件数を指定します。最大ページサイズは `10000` です。`limit` が指定されない場合はデフォルトで `100` です。
+`position`または`cursor`（開始位置）パラメータでデータの開始位置を指定し、`limit`（ページサイズ）パラメータで開始位置からの取得件数を指定します。最大ページサイズは`10000`です。`limit`未指定時はデフォルト`100`です。
 
 例：
 
@@ -448,7 +454,7 @@ GET /clients?page=1&limit=100
 GET /clients/{clientid}/mqueue_messages?position=1716187698257189921_0&limit=100
 ```
 
-レスポンスの `meta` フィールドにページネーション情報が含まれ、`meta.position` または `meta.cursor` に次ページの開始位置が示されます。
+レスポンスの`meta`フィールドにページネーション情報が含まれ、`meta.position`または`meta.cursor`に次ページの開始位置が示されます。
 
 ```json
 {
@@ -472,13 +478,13 @@ GET /clients/{clientid}/mqueue_messages?position=1716187698257189921_0&limit=100
 }
 ```
 
-この方式はデータ変動が激しい場合に効率的かつ連続的なデータ取得を実現します。
+この方式はデータ変動が激しい場合でも連続性と効率性を保ってデータ取得を可能にします。
 
 ## エラーコード
 
 HTTPレスポンスステータスコードに加え、EMQXは特定のエラーを識別するためのエラーコード一覧を定義しています。
 
-エラー発生時は、BodyにJSON形式でエラーコードが返されます。
+エラー発生時はBodyにJSON形式でエラーコードが返されます。
 
 ```bash
 # GET /clients/foo
@@ -490,34 +496,34 @@ HTTPレスポンスステータスコードに加え、EMQXは特定のエラー
 ```
 
 | エラーコード                                   | 説明                                                         |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| WRONG_USERNAME_OR_PWD                          | ユーザー名またはパスワードが間違っています                  |
-| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | ユーザー名＆パスワード、またはキー＆シークレットが間違っています |
-| BAD_REQUEST                                    | リクエストパラメータが不正です                              |
-| NOT_MATCH                                      | 条件が一致しません                                          |
-| ALREADY_EXISTS                                 | リソースが既に存在します                                    |
-| BAD_CONFIG_SCHEMA                              | 設定データが不正です                                        |
-| BAD_LISTENER_ID                                | リスナーIDが不正です                                        |
-| BAD_NODE_NAME                                  | ノード名が不正です                                          |
-| BAD_RPC                                        | RPC失敗。クラスター状態と対象ノードの状態を確認してください  |
-| BAD_TOPIC                                      | トピック構文エラー。MQTTプロトコル仕様に準拠する必要があります |
-| EXCEED_LIMIT                                   | 作成リソースが最大または最小制限を超えています               |
-| INVALID_PARAMETER                              | リクエストパラメータが不正、または境界値を超えています       |
-| CONFLICT                                       | リクエストリソースが競合しています                          |
-| NO_DEFAULT_VALUE                               | リクエストパラメータにデフォルト値が使われていません         |
-| DEPENDENCY_EXISTS                              | リソースが他のリソースに依存しています                      |
-| MESSAGE_ID_SCHEMA_ERROR                        | メッセージIDの解析エラー                                    |
-| INVALID_ID                                     | IDスキーマが不正です                                        |
-| MESSAGE_ID_NOT_FOUND                           | メッセージIDが存在しません                                  |
-| NOT_FOUND                                      | リソースが見つかりません                                    |
-| CLIENTID_NOT_FOUND                             | クライアントIDが見つかりません                              |
-| CLIENT_NOT_FOUND                               | クライアントが見つかりません（通常はMQTTクライアントではない） |
-| RESOURCE_NOT_FOUND                             | リソースが見つかりません                                    |
-| TOPIC_NOT_FOUND                                | トピックが見つかりません                                    |
-| USER_NOT_FOUND                                 | ユーザーが見つかりません                                    |
-| INTERNAL_ERROR                                 | サーバ内部エラー                                            |
-| SERVICE_UNAVAILABLE                            | サービス利用不可                                            |
-| SOURCE_ERROR                                   | ソースエラー                                               |
-| UPDATE_FAILED                                  | 更新失敗                                                  |
-| REST_FAILED                                    | リセットソースまたは設定失敗                                |
-| CLIENT_NOT_RESPONSE                            | クライアントが応答しません                                  |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| WRONG_USERNAME_OR_PWD                         | ユーザー名またはパスワードが間違っています                   |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | ユーザー名＆パスワードまたはAPIキー＆シークレットが間違っています |
+| BAD_REQUEST                                   | リクエストパラメータが不正です                               |
+| NOT_MATCH                                     | 条件が一致しません                                           |
+| ALREADY_EXISTS                                | リソースが既に存在します                                     |
+| BAD_CONFIG_SCHEMA                             | 設定データが不正です                                         |
+| BAD_LISTENER_ID                               | リスナーIDが不正です                                         |
+| BAD_NODE_NAME                                 | ノード名が不正です                                           |
+| BAD_RPC                                       | RPC失敗。クラスター状態および対象ノードの状態を確認してください |
+| BAD_TOPIC                                     | トピック構文エラー。トピックはMQTTプロトコル標準に準拠する必要があります |
+| EXCEED_LIMIT                                  | 作成リソースが最大または最小制限を超えています               |
+| INVALID_PARAMETER                             | リクエストパラメータが不正または境界値を超えています         |
+| CONFLICT                                      | リクエストリソースに競合があります                           |
+| NO_DEFAULT_VALUE                              | リクエストパラメータにデフォルト値が使用されていません       |
+| DEPENDENCY_EXISTS                             | リソースが他のリソースに依存しています                       |
+| MESSAGE_ID_SCHEMA_ERROR                       | メッセージIDの解析エラー                                     |
+| INVALID_ID                                    | IDスキーマが不正です                                         |
+| MESSAGE_ID_NOT_FOUND                          | メッセージIDが存在しません                                   |
+| NOT_FOUND                                     | リソースが見つかりません                                     |
+| CLIENTID_NOT_FOUND                            | クライアントIDが見つかりません                               |
+| CLIENT_NOT_FOUND                              | クライアントが見つかりません（通常はMQTTクライアントではありません） |
+| RESOURCE_NOT_FOUND                            | リソースが見つかりません                                     |
+| TOPIC_NOT_FOUND                               | トピックが見つかりません                                     |
+| USER_NOT_FOUND                                | ユーザーが見つかりません                                     |
+| INTERNAL_ERROR                                | サーバ内部エラー                                             |
+| SERVICE_UNAVAILABLE                           | サービス利用不可                                             |
+| SOURCE_ERROR                                  | ソースエラー                                                 |
+| UPDATE_FAILED                                 | 更新失敗                                                   |
+| REST_FAILED                                   | リセット元または設定の失敗                                   |
+| CLIENT_NOT_RESPONSE                           | クライアントが応答しません                                   |

@@ -1,78 +1,78 @@
-# EMQX Overview
-EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. EMQX has accumulated more than 20,000 corporate users from more than 50 countries, connecting more than 100 million IoT devices worldwide, serving enterprises' digital, real-time, and intelligent transformation.
+# EMQX概要
+EMQXは「無制限の接続、シームレスな統合、どこでもデプロイ」を実現する大規模分散型MQTTメッセージングプラットフォームです。高性能かつスケーラブルなMQTTメッセージサーバーとして、EMQX EnterpriseはIoTアプリケーション向けに信頼性の高いリアルタイムメッセージ伝送とデバイス接続ソリューションを提供します。EMQXは50か国以上の2万社以上の企業ユーザーを有し、世界中で1億台以上のIoTデバイスを接続し、企業のデジタル化、リアルタイム化、インテリジェント化の変革を支えています。
 
-As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://www.emqx.com/en/products/emqx) supports up to 100 million concurrent MQTT connections per cluster. A single server can handle and process millions of MQTT messages per second, all while maintaining millisecond-level latency. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
+商用のセルフホスト型MQTTメッセージングプラットフォームである[EMQX Enterprise](https://www.emqx.com/en/products/emqx)は、クラスターあたり最大1億の同時MQTT接続をサポートします。単一サーバーで毎秒数百万のMQTTメッセージを処理しつつ、ミリ秒単位のレイテンシを維持します。強力な組み込みルールエンジンとデータ統合機能により、EMQX Enterpriseは大量のIoTデータのリアルタイム処理、変換、ルーティングを実現します。IoTデータを様々なバックエンドデータベースや分析ツールとシームレスに統合し、企業が競争力のあるIoTプラットフォームとアプリケーションを迅速に構築できるよう支援します。
 
 <img src="./assets/emqx_platform.png" alt="emqx_platform" style="zoom:70%;" />
 
-## Key Benefits
+## 主なメリット
 
-- [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): A single node stably supports 1.5M MQTT device connections, and the cluster can scale horizontally to handle up to 100M concurrent MQTT connections.
-- [**Business-Critical Reliability**](./deploy/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
-- [**Data Security**](./access-control/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
-- [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
-- [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
-- [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
-- [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
-- [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
-- [**Cloud-Native & K8s**](./deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
+- [**大規模スケール**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)：単一ノードで150万MQTTデバイス接続を安定サポートし、クラスターは水平スケールで最大1億の同時MQTT接続を処理可能。
+- [**業務重要性の高い信頼性**](./deploy/cluster/mria-introduction.md)：組み込みのRocksDBによるデータパーシステンスでデータ損失を防止。
+- [**データセキュリティ**](./access-control/security-guide.md)：エンドツーエンドの暗号化と細粒度のアクセス制御でデータを保護。
+- [**複数プロトコル対応**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m)：MQTT、QUIC、CoAP、Stomp、LwM2Mなどに対応。
+- [**完全なMQTT 5.0対応**](https://www.emqx.com/en/blog/introduction-to-mqtt-5)：EMQXはMQTT 5.0および3.x規格に完全準拠し、優れたスケーラビリティ、セキュリティ、信頼性を提供。
+- [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：ノードごとに毎秒数百万のMQTTメッセージを効率的に処理。
+- [**低レイテンシ**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)：ソフトリアルタイムランタイムによりミリ秒以下のメッセージ伝送を保証。
+- [**完全な可観測性**](./dashboard/introduction.md)：リアルタイムMQTTトレーシングによる監視、アラート、高度なエンドツーエンド分析。
+- [**クラウドネイティブ＆K8s対応**](./deploy/kubernetes/kubernetes.md)：**Kubernetes Operator**を利用しオンプレミスやパブリッククラウドに容易にデプロイ可能。
 
-## Main Components
+## 主なコンポーネント
 
-EMQX Enterprise consists of multiple components that together build a powerful and scalable MQTT messaging platform. Here are the core components of EMQX Enterprise:
+EMQX Enterpriseは複数のコンポーネントで構成され、強力かつスケーラブルなMQTTメッセージングプラットフォームを構築します。以下はEMQX Enterpriseの主要コンポーネントです。
 
-### Device Connectivity
+### デバイス接続
 
-EMQX Enterprise is 100% compatible with MQTT 5.0 and 3.x specifications, and its exceptional scalability allows it to easily handle a massive number of MQTT device client [connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0). At the same time, it provides support for other open-standard protocols, including HTTP, QUIC, and LwM2M/CoAP, enabling connectivity for a wide range of IoT devices and scenarios. EMQX Enterprise also extends its capabilities to include features such as file transfer and delayed publishing, enriching its use cases.
+EMQX EnterpriseはMQTT 5.0および3.x仕様に100％準拠し、卓越したスケーラビリティにより膨大な数のMQTTデバイスクライアント[接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections)を容易に処理します。同時にHTTP、QUIC、LwM2M/CoAPなどの他のオープン標準プロトコルもサポートし、幅広いIoTデバイスとシナリオの接続を可能にします。さらにファイル転送や遅延パブリッシュなどの機能も拡張し、利用ケースを豊富にしています。
 
 #### MQTT over QUIC
 
-EMQX Enterprise pioneeringly introduces the [MQTT over QUIC](./mqtt-over-quic/introduction.md) protocol, allowing IoT clients to establish connections with EMQX via QUIC for communication. Devices using QUIC can improve connection and message throughput performance while reducing message latency. This is particularly beneficial in scenarios such as the Internet of Vehicles (IoV), which commonly face weak network conditions, frequent link changes, and unstable network environments. MQTT over QUIC meets the requirements for real-time and efficient message transmission in such scenarios.
+EMQX Enterpriseは先駆的に[MQTT over QUIC](./mqtt-over-quic/introduction.md)プロトコルを導入し、IoTクライアントがQUIC経由でEMQXに接続して通信可能にします。QUICを利用するデバイスは接続性能とメッセージスループットを向上させ、メッセージレイテンシを低減します。これは特にネットワーク環境が不安定でリンクの変動が多いIoV（Internet of Vehicles）などのシナリオに適しています。MQTT over QUICはリアルタイムかつ効率的なメッセージ伝送の要件を満たします。
 
-#### Multi-Protocol Gateways
+#### マルチプロトコルゲートウェイ
 
-[Multi-protocol gateways](./gateway/gateway.md) enable EMQX Enterprise to support device connections using different communication protocols other than MQTT. These gateways listen to device connection requests, identify the communication protocols used by devices, and then parse the messages, commands, and data sent by devices according to the respective protocol specifications. The gateways convert this data into MQTT message formats for further message processing.
+[マルチプロトコルゲートウェイ](./gateway/gateway.md)は、MQTT以外の異なる通信プロトコルを用いたデバイス接続をEMQX Enterpriseに可能にします。これらのゲートウェイはデバイスの接続要求を受け付け、使用されている通信プロトコルを識別し、各プロトコル仕様に基づいてデバイスから送信されたメッセージ、コマンド、データを解析します。解析したデータはMQTTメッセージ形式に変換され、以降のメッセージ処理に渡されます。
 
-### Message Routing
+### メッセージルーティング
 
-EMQX Enterprise provides a highly reliable message transmission mechanism through its support for the [publish/subscribe](./messaging/introduction.md) pattern. This ensures that messages are reliably delivered to the intended devices or applications. With QoS mechanisms and session retention capability, data can be quickly and reliably delivered even in unstable network environments, ensuring business continuity and stability.
+EMQX Enterpriseは[パブリッシュ／サブスクライブ](./messaging/introduction.md)パターンをサポートし、高信頼性のメッセージ伝送機構を提供します。これによりメッセージは対象デバイスやアプリケーションに確実に届きます。QoS機構とセッション保持機能により、不安定なネットワーク環境下でも迅速かつ確実にデータを届け、業務の継続性と安定性を確保します。
 
-### Distributed Clustering
+### 分散クラスター
 
-EMQX Enterprise offers native [clustering](./deploy/cluster/introduction.md) capabilities, enabling seamless and elastic scaling, while avoiding single points of failure. With extreme optimization, a single node can process and distribute millions of MQTT messages per second with [low latency](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time). Through cluster horizontal scaling, it supports up to 100 million concurrent MQTT connections, making it crucial for large-scale IoT deployments in areas such as the IoV, industrial automation, and smart homes.
+EMQX Enterpriseはネイティブな[クラスタリング](./deploy/cluster/introduction.md)機能を備え、シームレスかつ弾力的なスケールアウトを可能にし、単一障害点を排除します。徹底的な最適化により単一ノードで毎秒数百万のMQTTメッセージを[低レイテンシ](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)で処理・配信可能です。クラスターの水平スケールにより最大1億の同時MQTT接続をサポートし、IoV、産業オートメーション、スマートホームなど大規模IoT展開に不可欠です。
 
-### Access Control and Data Security
+### アクセス制御とデータセキュリティ
 
-Through [TLS/SSL encryption](./network/overview.md) and [authentication](./access-control/authn/authn.md)/[authorization](./access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
+[TLS/SSL暗号化](./network/overview.md)および[認証](./access-control/authn/authn.md)/[認可](./access-control/authz/authz.md)機構により、EMQX Enterpriseはデバイスデータ伝送の機密性と完全性を保証します。
 
-EMQX Enterprise includes multiple client authentication mechanisms, including username/password, JWT, enhanced authentication, PSK, and X.509 certificates. It provides publish/subscribe authorization mechanisms based on ACLs. Authentication and authorization data can be integrated and managed through external enterprise security systems, such as LDAP, HTTP services, SQL, and NoSQL databases, allowing for flexible and diverse client security protection solutions.
+EMQX Enterpriseはユーザー名／パスワード、JWT、拡張認証、PSK、X.509証明書など複数のクライアント認証方式を備えています。ACLに基づくパブリッシュ／サブスクライブの認可機構も提供します。認証・認可データはLDAP、HTTPサービス、SQL／NoSQLデータベースなど外部企業セキュリティシステムと統合・管理可能で、多様かつ柔軟なクライアントセキュリティ保護を実現します。
 
-Additionally, the EMQX Enterprise offers [audit logs](./dashboard/audit-log.md), role and permission management, and [single sign-on](./dashboard/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
+さらにEMQX Enterpriseは[監査ログ](./dashboard/audit-log.md)、ロール・権限管理、[シングルサインオン](./dashboard/sso.md)を備え、SOC 2準拠やGDPRデータプライバシー保護に対応。包括的なセキュリティ機能により、企業が業界セキュリティ基準に準拠した信頼性の高いIoTアプリケーションを構築できます。
 
-### Rule Engine and Data Integration
+### ルールエンジンとデータ統合
 
-EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's Sink feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
+EMQX Enterpriseは強力な[ルールエンジン](./data-integration/rules.md)を内蔵し、EMQX内でルールを設定して受信データを要件に応じて処理・ルーティング可能です。Sink機能を使い、クラウドサービスやデータベースと連携してIoTデータをクラウドに転送し、保存・分析を行うこともできます。
 
-#### Real-Time Data Processing
+#### リアルタイムデータ処理
 
-With a built-in SQL-based rule engine, Schema Registry, message codecs, and [Flow Designer](./flow-designer/introduction.md), you can easily create and edit device events and message processing flows. This enables real-time extraction, validation, filtering, and transformation of IoT data.
+SQLベースのルールエンジン、スキーマレジストリ、メッセージコーデック、[Flowデザイナー](./flow-designer/introduction.md)を活用し、デバイスイベントやメッセージ処理フローを簡単に作成・編集可能。IoTデータのリアルタイム抽出、検証、フィルタリング、変換を実現します。
 
-#### Enterprise Data Integration
+#### 企業向けデータ統合
 
-Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
+標準搭載のWebhookやSink/Sourceを通じて、Kafka、AWS RDS、MongoDB、Oracle、SAP、時系列データベースなど40以上のクラウドサービスや企業システムとシームレスに[統合](./data-integration/data-bridges.md)可能。企業はIoTデバイスからのデータを効果的に管理・分析・活用し、多様なアプリケーションや業務ニーズを支援します。
 
-### Management and Monitoring Dashboard
+### 管理・監視ダッシュボード
 
-EMQX Enterprise provides a graphical management system called the [Dashboard](./dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
+EMQX Enterpriseは[ダッシュボード](./dashboard/introduction.md)というグラフィカル管理システムを提供し、主要指標や運用状況をリアルタイムに監視可能です。クライアント接続や機能設定の管理を簡素化し、クライアントやクラスターの異常診断・デバッグを支援。MQTTデバイスのオンライン状態をエンドツーエンドでトラブルシューティングでき、問題解決時間を大幅に短縮します。また、Prometheus、Datadog、OpenTelemetry対応サービスなど外部サービスへの可観測性指標の統合もサポートし、運用監視機能を強化します。
 
-## Deployment Modes and Edition Comparison
+## デプロイモードとエディション比較
 
-EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
+EMQはEMQXのデプロイに3つの選択肢を提供しています。2つのマネージドサービス（EMQX Serverless、EMQX Dedicated）と1つのセルフホスト型（EMQX Enterprise）です。要件に最適なデプロイを選ぶため、以下の表に各デプロイタイプの機能サポート比較を示します。詳細な機能比較は[機能比較](./getting-started/feature-comparison.md)を参照してください。
 
 <table>
 <thead>
   <tr>
-    <th colspan="1">Self-Hosted</th>
+    <th colspan="1">セルフホスト</th>
     <th colspan="2">MQTT as a Service</th>
   </tr>
 </thead>
@@ -83,198 +83,196 @@ EMQ provides three deployment options for EMQX: two managed services (EMQX Serve
     <td>EMQX Dedicated</td>
   </tr>
   <tr>
-    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Started Free</a></td>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Start a Free 14-Day Trial</a></td>
+    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">無料トライアルライセンス取得</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">無料で始める</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14日間無料トライアル開始</a></td>
   </tr>
   <tr>
-    <td>✔️ Business Source License (BSL) 1.1<br>✔️ MQTT over QUIC<br>✔️ Session persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
-    <td>✔️ Pay as you go<br>✔️ Free quota every month<br>✔️ 1000 maximum connections<br>✔️ Start deployment in seconds<br>✔️ Auto scaling<br>✔️ 8/5 global technical support</td>
-    <td>✔️ 14-days free trial<br>✔️ Hourly billing<br>✔️ Multi-cloud regions worldwide<br>✔️ Flexible specifications<br>✔️ VPC peering, NAT gateway, load balance and more<br>✔️ Out-of-box integration with over 40+ cloud services<br>✔️ 24/7 global technical support<br> </td>
+    <td>✔️ Business Source License (BSL) 1.1<br>✔️ MQTT over QUIC<br>✔️ RocksDBによるセッションパーシステンス<br>✔️ Kafka/Confluent、Timescale、InfluxDB、PostgreSQL、Redisなど40以上の企業システムとのデータ統合<br>✔️ 監査ログとシングルサインオン（SSO）<br>✔️ ロールベースアクセス制御（RBAC）<br>✔️ ファイル転送<br>✔️ メッセージコーデック<br>✔️ OCPP、JT/808、GBT32960対応のマルチプロトコルゲートウェイ<br>✔️ 24時間365日のグローバル技術サポート<br> </td>
+    <td>✔️ 従量課金制<br>✔️ 毎月無料クォータあり<br>✔️ 最大1000接続<br>✔️ 数秒でデプロイ開始<br>✔️ 自動スケーリング<br>✔️ 8時〜17時のグローバル技術サポート</td>
+    <td>✔️ 14日間無料トライアル<br>✔️ 時間単位課金<br>✔️ 世界各地のマルチクラウドリージョン<br>✔️ 柔軟なスペック選択<br>✔️ VPCピアリング、NATゲートウェイ、ロードバランサーなど<br>✔️ 40以上のクラウドサービスとの標準統合<br>✔️ 24時間365日のグローバル技術サポート<br> </td>
   </tr>
 </tbody>
 </table>
 
+## ユースケース
 
+EMQX Enterpriseは包括的なIoTメッセージングプラットフォームとして、IoTデバイス接続やデータ伝送の各段階で重要な役割を果たし、多様なビジネスニーズに強力な機能と柔軟性を提供します。
 
-## Use Cases
+パブリッシュ・サブスクライブのメッセージ配信モデルに基づき、数百万のトピックと多様なモードで柔軟なメッセージ通信を実現し、様々なシナリオのリアルタイムメッセージ伝送要件に対応します。組み込みルールエンジンとSink/Sourceを通じて、メッセージを各種クラウドサービスに送信し、デバイスデータを企業システムとシームレスに統合可能です。データ処理、保存、分析、業務指令発行などのユースケースを容易にサポートします。以下は代表的なユースケースです。
 
-EMQX Enterprise is a comprehensive IoT messaging platform that plays a crucial role in different stages of IoT device connectivity and data transmission, providing powerful functionality and flexibility for various business needs.
+### 双方向通信
 
-Based on the publish-subscribe message delivery model, it can achieve flexible message communication with millions of topics and in different modes, meeting the real-time message delivery needs under various scenarios. Through its built-in rule engine and Sink/Source, EMQX Enterprise allows you to send messages to various cloud services, enabling seamless device data integration with enterprise systems. It can easily support use cases such as data processing, storage, analysis, and business command issuance. Here are some typical use cases:
-
-### Bidirectional Communication
-
-EMQX Enterprise supports connections between various devices and application endpoints, providing bidirectional communication between them. For example, in a smart home scenario, a mobile app can retrieve sensor data from various devices and send control commands to the devices when needed. This mode enables flexible one-to-one or one-to-many communication between devices and between devices and applications.
+EMQX Enterpriseは様々なデバイスとアプリケーションエンドポイント間の接続をサポートし、双方向通信を実現します。例えばスマートホームでは、モバイルアプリが複数のデバイスからセンサーデータを取得し、必要に応じて制御コマンドを送信できます。このモードはデバイス間およびデバイスとアプリケーション間の1対1または1対多の柔軟な通信を可能にします。
 
 <img src="./assets/use_case_1.png" alt="use_case_1" style="zoom:50%;" />
 
-Bidirectional communication in mission-critical applications brings you key benefits as follows:
+ミッションクリティカルなアプリケーションにおける双方向通信の主な利点は以下の通りです。
 
-- **Topic-Based Pub/Sub Messaging**: EMQX's topic-based publish/subscribe model streamlines the data flow to ensure efficient and flexible message routing.
-- **Ultra-Low Latency Delivery**: Achieve rapid data transfer with latencies as low as 1 millisecond, ensuring real-time responsiveness.
-- **Comprehensive Quality of Service (QoS) Guarantees**: EMQX offers end-to-end multi-level QoS guarantees, providing reliable and flexible message delivery.
+- **トピックベースのパブリッシュ／サブスクライブメッセージング**：EMQXのトピックベースモデルにより効率的かつ柔軟なメッセージルーティングを実現。
+- **超低レイテンシ配信**：1ミリ秒以下のレイテンシで高速データ転送を実現し、リアルタイム応答性を確保。
+- **包括的なQoS保証**：EMQXはエンドツーエンドの多層QoS保証を提供し、信頼性と柔軟性の高いメッセージ配信を実現。
 
-Below are more specific using scenarios:
+以下により具体的な利用シナリオを示します。
 
-#### Peer-to-Peer Communication
+#### ピアツーピア通信
 
-You can build up peer-to-peer communications with EMQX. In the asynchronous Pub/Sub model, the message publisher and subscriber are decoupled from each other, as they can be dynamically added or removed as needed. This decoupling provides flexibility to your applications and message communication.
+EMQXを用いてピアツーピア通信を構築可能です。非同期のパブリッシュ／サブスクライブモデルでは、メッセージパブリッシャーとサブスクライバーは動的に追加・削除でき、相互に疎結合となります。この疎結合性がアプリケーションとメッセージ通信に柔軟性をもたらします。
 
 ![use_case_1_ce](./assets/use_case_1_ce.png)
 
-#### Message Broadcasting to a Large Audience
+#### 大規模向けメッセージブロードキャスト
 
-EMQX excels in scenarios where one-to-many messaging is vital, such as financial market updates. It effectively broadcasts messages to a large number of clients, ensuring timely information dissemination.
+EMQXは金融市場の情報配信など、1対多メッセージングが重要なシナリオに強みを発揮します。多数のクライアントに対して効果的にメッセージをブロードキャストし、タイムリーな情報伝達を実現します。
 
 ![use_case_2_ce](./assets/use_case_2_ce.png)
 
-#### Data Consolidation from Massive Endpoints
+#### 大規模エンドポイントからのデータ集約
 
-The many-to-one message pattern in EMQX is ideal for consolidating data in large-scale networks, such as factory plats, modern buildings, retail chains, or electricity grids. EMQX can help you transfer and transmit the data from the endpoints in the network to your centralized backend servers on the cloud or on-premise.
+EMQXの多対1メッセージパターンは、工場プラント、近代的なビル、小売チェーン、電力網など大規模ネットワークのデータ集約に最適です。ネットワーク内のエンドポイントからのデータをクラウドまたはオンプレミスの集中バックエンドサーバーへ転送・伝送できます。
 
 ![use_case_3_ce](./assets/use_case_3_ce.png)
 
-#### Traceable Communication with Request-Response Awareness
+#### リクエスト・レスポンス認識によるトレーサブル通信
 
-EMQX supports the MQTT 5.0 feature Request-Response. With this feature, you can now increase communication awareness and traceability in your asynchronous communication architect.
+EMQXはMQTT 5.0のRequest-Response機能をサポートしています。この機能により非同期通信アーキテクチャにおける通信認識性とトレーサビリティを向上可能です。
 
 ![use_case_4_ce](./assets/use_case_4_ce.png)
 
-### Flowing Data Transformation
+### 流れるデータの変換
 
-With a built-in powerful SQL-based [rules engine](./data-integration/rules.md), EMQX can extract, filter, enrich, and transform the flowing data in real-time. Processed data can be easily ingested into external HTTP servers and MQTT services. If you are using EMQX Enterprise, you can also ingest data into mainstream databases, data storage, and message queues.
+強力なSQLベースの[ルールエンジン](./data-integration/rules.md)を内蔵し、EMQXは流れるデータをリアルタイムに抽出、フィルタリング、強化、変換できます。処理済みデータは外部HTTPサーバーやMQTTサービスに容易に取り込めます。EMQX Enterpriseでは主流のデータベース、データストレージ、メッセージキューへの取り込みも可能です。
 
 ![use_case_6_ce](./assets/use_case_6_ce.png)
 
-### Data Integration Across Different Networks
+### 異なるネットワーク間のデータ統合
 
-In a partitioned, or limited network environment, EMQX can create the data integrations, and provide you with a seamless messaging environment.
+パーティション化された、または制限されたネットワーク環境でも、EMQXはデータ統合を構築し、シームレスなメッセージング環境を提供します。
 
 ![use_case_5_ce](./assets/use_case_5_ce.png)
 
-### Telemetry Data Upload
+### テレメトリデータアップロード
 
-EMQX Enterprise supports uploading device data to the cloud and processing and storing data from specified topics in the cloud. For example, in an industrial production scenario, EMQX can process various industrial equipment data from the factory floor in real-time and store it in a database for product quality traceability and production analysis. This mode can be configured visually and leverages rich data processing capabilities for rapid development.
+EMQX Enterpriseはデバイスデータのクラウドへのアップロードと、クラウド上での指定トピックのデータ処理・保存をサポートします。例えば産業生産シナリオでは、工場フロアの各種産業機器データをリアルタイムに処理し、製品品質のトレーサビリティや生産分析のためにデータベースに保存します。このモードは視覚的に設定可能で、豊富なデータ処理機能を活用した迅速な開発を実現します。
 
 <img src="./assets/use_case_2.png" alt="use_case_2" style="zoom:50%;" />
 
-### Large File Upload
+### 大容量ファイルアップロード
 
-EMQX Enterprise provides MQTT protocol [file transfer](./file-transfer/introduction.md) capability, allowing devices to upload large file data and store it locally or in S3 storage. For example, in an IoV scenario, machine learning log files and packaged CAN Bus data can be transmitted to cloud storage to drive updates to intelligent driving algorithm models. This mode combines structured data and file-type data through a unified data channel, reducing application complexity and maintenance costs.
+EMQX EnterpriseはMQTTプロトコルの[ファイル転送](./file-transfer/introduction.md)機能を提供し、デバイスが大容量ファイルデータをアップロードし、ローカルまたはS3ストレージに保存可能です。例えばIoVシナリオでは、機械学習ログファイルやパッケージ化されたCANバスデータをクラウドストレージに送信し、インテリジェント運転アルゴリズムモデルの更新に活用します。このモードは構造化データとファイル型データを統一チャネルで扱い、アプリケーションの複雑性と保守コストを削減します。
 
 <img src="./assets/use_case_3.png" alt="use_case_3" style="zoom:50%;" />
 
-### Cloud-Based Control Command Issuance
+### クラウドベースの制御コマンド発行
 
-EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and Source with, for example, Kafka, enabling data push or remote device control. For example, cloud services can push real-time data based on user watchlists in groups in a financial trading scenario. This mode provides topic mapping, data processing for issuance, and data reach statistics, enabling flexible and reliable data issuance.
+EMQX EnterpriseはMQTTメッセージ、REST API、KafkaなどのSourceを通じてメッセージ発行を可能にし、データプッシュやリモートデバイス制御を実現します。例えば金融取引シナリオでは、クラウドサービスがユーザーのウォッチリストに基づくリアルタイムデータをグループにプッシュします。このモードはトピックマッピング、発行用データ処理、データ到達統計を提供し、柔軟かつ信頼性の高いデータ発行を可能にします。
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
 
-## Industry Solutions
+## 業界別ソリューション
 
-EMQX Enterprise provides versatile IoT solutions across industries, delivering reliable real-time connectivity for mission-critical applications. From connected vehicles to smart manufacturing, EMQX powers innovation at scale.
+EMQX Enterpriseは多様な業界向けに汎用的なIoTソリューションを提供し、ミッションクリティカルなアプリケーションに信頼性の高いリアルタイム接続を実現します。コネクテッドビークルからスマート製造まで、EMQXは大規模なイノベーションを支えます。
 
-### Automotive & Connected Vehicles
+### 自動車・コネクテッドビークル
 
-EMQX powers the future of software-defined vehicles (SDVs), connecting 30+ million vehicles across 100+ car models for 5 of the 10 largest automobile companies worldwide. The platform provides the real-time data backbone for mission-critical V2X and telematics applications, with [MQTT over QUIC](./mqtt-over-quic/introduction.md) optimized for unstable network conditions.
+EMQXはソフトウェア定義車両（SDV）の未来を支え、世界の主要自動車メーカー上位10社のうち5社の100以上の車種、3000万台以上の車両を接続しています。プラットフォームはミッションクリティカルなV2Xやテレマティクスアプリケーションのリアルタイムデータ基盤を提供し、不安定なネットワーク環境に最適化された[MQTT over QUIC](./mqtt-over-quic/introduction.md)を採用しています。
 
 ![architecture_vehicle_to_cloud](./assets/architecture-v2c.svg)
 
-- **Connected Cars & SDVs**: Enable remote diagnostics, bidirectional command and control, and over-the-air (OTA) updates across global fleets. [**Learn More →**](https://www.emqx.com/en/solutions/internet-of-vehicles)
-- **Fleet Telematics**: Real-time geo-location tracking, usage-based insurance (UBI), and predictive maintenance with ultra-low latency data streams. [**Learn More →**](https://www.emqx.com/en/solutions/fleet-telematics)
-- **EV Charging Networks**: Scalable MQTT connectivity for charging station management, smart charging, and vehicle-to-grid (V2G) applications.
-- **Automotive Manufacturing**: Unify data from factory floors by connecting robots, PLCs, and sensors for continuous monitoring and quality assurance. [**Learn More →**](https://www.emqx.com/en/solutions/industrial-iot)
+- **コネクテッドカー＆SDV**：グローバル車両群のリモート診断、双方向コマンド制御、OTAアップデートを実現。[**詳細はこちら →**](https://www.emqx.com/en/solutions/internet-of-vehicles)
+- **フリートテレマティクス**：リアルタイムの位置追跡、利用ベース保険（UBI）、予知保全を超低レイテンシデータストリームで提供。[**詳細はこちら →**](https://www.emqx.com/en/solutions/fleet-telematics)
+- **EV充電ネットワーク**：充電ステーション管理、スマート充電、V2G対応のスケーラブルMQTT接続。
+- **自動車製造**：工場フロアのロボット、PLC、センサーを接続し、継続的な監視と品質保証を実現。[**詳細はこちら →**](https://www.emqx.com/en/solutions/industrial-iot)
 
-SAIC Volkswagen relies on EMQX to power their next-generation IoV platform for over 1.6 million connected vehicles, supporting remote control and real-time data monitoring. [**Read Case Study →**](https://www.emqx.com/en/customers/saic-volkswagen)
+SAICフォルクスワーゲンはEMQXを活用し、160万台超のコネクテッド車両向け次世代IoVプラットフォームを構築。リモート制御とリアルタイムデータ監視を支えています。[**事例紹介 →**](https://www.emqx.com/en/customers/saic-volkswagen)
 
-### Transportation & Logistics
+### 輸送・物流
 
-In an industry where every second counts, EMQX provides real-time fleet visibility, reliable data transmission over unstable networks, and geo-distributed deployment to minimize latency. The platform connects hundreds of thousands of vehicles and devices to a single, unified backbone.
+一秒を争う業界で、EMQXはリアルタイムの車両可視化、不安定ネットワーク下での信頼性あるデータ伝送、地理分散デプロイによるレイテンシ最小化を提供。数十万台の車両とデバイスを単一の統合基盤に接続します。
 
 ![architecture-transportation-logistics](./assets/architecture-transportation-logistics.svg)
 
-- **Fleet Management**: Track vehicle location, monitor driver behavior, and optimize routes in real time to reduce fuel costs and improve delivery times. [**Learn More →**](https://www.emqx.com/en/solutions/fleet-management)
-- **Smart Urban Transport**: Process massive amounts of traffic data for real-time analysis and intelligent transportation systems.
-- **V2X Communication**: Enable Vehicle-to-Everything communication for enhanced safety, traffic efficiency, and autonomous driving applications. [**Learn More →**](https://www.emqx.com/en/solutions/software-defined-vehicles)
-- **Cold Chain Monitoring**: Monitor temperature and humidity of sensitive cargo in real time to ensure compliance and prevent spoilage.
+- **フリート管理**：車両位置追跡、ドライバー行動監視、リアルタイムルート最適化で燃料コスト削減と配送時間短縮を実現。[**詳細はこちら →**](https://www.emqx.com/en/solutions/fleet-management)
+- **スマート都市交通**：大量の交通データを処理し、リアルタイム分析とインテリジェント交通システムを実現。
+- **V2X通信**：安全性向上、交通効率化、自動運転支援のためのVehicle-to-Everything通信を可能に。[**詳細はこちら →**](https://www.emqx.com/en/solutions/software-defined-vehicles)
+- **コールドチェーン監視**：温度・湿度をリアルタイム監視し、コンプライアンス遵守と腐敗防止を実現。
 
-The Shenzhen Urban Transport Planning Center (SUTPC) uses EMQX to process data from over 1.7 million vehicles, enabling real-time traffic analysis and intelligent transportation systems. [**Read Case Study →**](https://www.emqx.com/en/customers/sutpc)
+深圳都市交通計画センター（SUTPC）はEMQXを用いて170万台超の車両データを処理し、リアルタイム交通分析とインテリジェント交通システムを実現しています。[**事例紹介 →**](https://www.emqx.com/en/customers/sutpc)
 
-### Manufacturing & IIoT
+### 製造・IIoT
 
-EMQX connects all machines, systems, and applications from the factory floor to the cloud, bridging OT and IT with an AI-native data backbone. With support for 100+ industrial protocols, including Modbus, OPC-UA, and Siemens S7, EMQX enables a [Unified Namespace (UNS)](https://www.emqx.com/en/solutions/unified-namespace) architecture with Sparkplug B for true plug-and-play interoperability.
+EMQXは工場フロアからクラウドまで全ての機械、システム、アプリケーションを接続し、OTとITをAIネイティブなデータ基盤で橋渡しします。Modbus、OPC-UA、Siemens S7など100以上の産業プロトコルをサポートし、Sparkplug B対応の[統一ネームスペース（UNS）](https://www.emqx.com/en/solutions/unified-namespace)アーキテクチャを実現します。
 
 ![architecture-manufacturing](./assets/architecture-manufacturing.svg)
 
-- **Predictive Maintenance**: Use real-time sensor data and AI to predict machine failures, prevent unplanned downtime, and extend equipment life.
-- **OEE Optimization**: Boost factory output by tracking Overall Equipment Effectiveness in real time. Manufacturers report up to 25% increase in OEE and 40% reduction in downtime.
-- **Quality & Traceability**: Detect quality deviations the moment they occur, monitor production parameters in real-time, and enable full product traceability.
-- **Live Performance Monitoring**: Visualize your entire production line with live dashboards using EMQX [metrics and observability](./observability/overview.md) features, with integration to Prometheus and Datadog.
+- **予知保全**：リアルタイムセンサーデータとAIで機械故障を予測し、計画外ダウンタイムを防止、設備寿命を延長。
+- **OEE最適化**：リアルタイムで総合設備効率を追跡し、最大25％のOEE向上と40％のダウンタイム削減を実現。
+- **品質・トレーサビリティ**：品質異常を即検知、生産パラメータをリアルタイム監視し、製品の完全なトレーサビリティを提供。
+- **ライブパフォーマンス監視**：EMQXの[メトリクスと可観測性](./observability/overview.md)機能を活用し、PrometheusやDatadogと連携した生産ライン全体のライブダッシュボードを実現。
 
-Leading semiconductor fabs use EMQX to unify equipment data, handling 3.5M+ data tags per plant with 100ms collection rates and 100% data integrity for precision manufacturing. [**Learn More →**](https://www.emqx.com/en/solutions/industrial-iot)
+主要半導体ファブはEMQXを活用し、1プラントあたり350万以上のデータタグを100ms収集率で処理、100％のデータ完全性を維持し精密製造を支えています。[**詳細はこちら →**](https://www.emqx.com/en/solutions/industrial-iot)
 
-### Energy & Utilities
+### エネルギー・公益事業
 
-EMQX powers the modern energy grid, connecting 10M+ endpoints with sub-100ms latency for critical grid control and protection applications. The platform bridges legacy OT protocols with modern IT systems using [multi-protocol gateways](./gateway/gateway.md).
+EMQXは現代のエネルギーグリッドを支え、1,000万以上のエンドポイントを100ms以下のレイテンシで接続し、重要なグリッド制御と保護アプリケーションを実現。レガシーOTプロトコルと最新ITシステムを[マルチプロトコルゲートウェイ](./gateway/gateway.md)で橋渡しします。
 
 ![architecture-energy-utilities](./assets/architecture-energy-utilities.svg)
 
-**Smart Grid & Renewables**
-- **Grid Balancing**: Integrate distributed energy resources (DERs) and respond to supply/demand changes in real time for grid stability.
-- **EV Charging Management**: Build scalable EV charging networks with smart charging and vehicle-to-grid (V2G) capabilities.
-- **Predictive Asset Maintenance**: Monitor substations, transformers, and renewable assets in real time to predict failures and optimize maintenance.
+**スマートグリッド＆再生可能エネルギー**
+- **グリッドバランシング**：分散型エネルギー資源（DER）を統合し、需給変動にリアルタイム対応してグリッド安定性を確保。
+- **EV充電管理**：スマート充電とV2G機能を備えたスケーラブルなEV充電ネットワークを構築。
+- **予知資産保全**：変電所、変圧器、再生可能エネルギー資産をリアルタイム監視し、故障予測と保全最適化を実現。
 
-**Oil & Gas**
-- **Remote Asset Monitoring**: Monitor and control remote assets such as wellheads, pumps, and pipelines in real time.
-- **Pipeline Leak Detection**: Instantly detect and locate leaks by analyzing real-time pressure and flow data from sensors.
+**石油・ガス**
+- **遠隔資産監視**：井戸口、ポンプ、パイプラインなど遠隔資産をリアルタイム監視・制御。
+- **パイプライン漏洩検知**：センサーのリアルタイム圧力・流量データを解析し、漏洩を即時検知・特定。
 
-Huabei Oilfield Company uses EMQX to connect over 40,000 data collection points, enabling real-time monitoring and intelligent analysis of their oilfield operations. [**Read Case Study →**](https://www.emqx.com/en/customers/huabei-oilfield-company)
+華北油田はEMQXを用いて4万以上のデータ収集ポイントを接続し、油田運用のリアルタイム監視とインテリジェント分析を実現しています。[**事例紹介 →**](https://www.emqx.com/en/customers/huabei-oilfield-company)
 
-### Healthcare
+### ヘルスケア
 
-EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./access-control/security-guide.md). The platform provides HIPAA-ready security features, including [TLS/SSL encryption](./network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
+EMQXはリアルタイム患者モニタリング、医療機器統合、次世代テレヘルスソリューションをスケーラブルかつ[セキュアなデータ基盤](./access-control/security-guide.md)で実現します。HIPAA準拠のセキュリティ機能として、[TLS/SSL暗号化](./network/overview.md)、堅牢な認証、細粒度アクセス制御を提供し、機微な患者データを保護します。
 
 ![architecture-healthcare](./assets/architecture-healthcare.svg)
 
-- **Remote Patient Monitoring (RPM)**: Continuously monitor patients' vital signs and health status from their homes, enabling early intervention and reducing hospital readmissions.
-- **Medical Device Integration**: Connect and integrate data from infusion pumps, ventilators, and lab equipment for a unified view of patient care.
-- **Smart Hospital Automation**: Automate hospital operations from tracking medical assets to optimizing patient flow and environmental conditions.
-- **Telehealth & Telemedicine**: Enable real-time communication and data exchange between patients and healthcare providers for remote consultations.
+- **遠隔患者モニタリング（RPM）**：患者のバイタルサインや健康状態を自宅から継続監視し、早期介入と再入院削減を支援。
+- **医療機器統合**：輸液ポンプ、人工呼吸器、検査機器のデータを統合し、患者ケアの統一ビューを提供。
+- **スマート病院オートメーション**：医療資産管理から患者フロー、環境条件最適化まで病院運営を自動化。
+- **テレヘルス・遠隔医療**：患者と医療提供者間のリアルタイム通信とデータ交換を実現し、遠隔診療を支援。
 
-### Financial Services
+### 金融サービス
 
-EMQX powers real-time financial applications with millisecond-level latency, bank-grade security, and 7×24 continuous service. The platform has provided more than five years of stable operation for enterprise-level financial users.
+EMQXはミリ秒レベルのレイテンシ、銀行グレードのセキュリティ、24時間365日の連続稼働を備えたリアルタイム金融アプリケーションを支えています。企業レベルの金融ユーザーに5年以上安定稼働を提供しています。
 
 ![architecture-financial](./assets/architecture-financial.svg)
 
-- **Real-Time POS Monitoring**: Connect millions of POS terminals to monitor transaction data and device status in real time, enabling proactive maintenance.
-- **Fraud Detection**: Instantly analyze transaction data as it occurs to detect and prevent fraudulent activity before it impacts customers.
-- **Modern Payment Systems**: Build reliable, low-latency infrastructure for mobile payments, digital wallets, and real-time clearing and settlement.
-- **Market Data Distribution**: Reliably distribute real-time market data such as stock quotes and trades to thousands of clients with minimal latency.
+- **リアルタイムPOS監視**：数百万のPOS端末を接続し、取引データとデバイス状態をリアルタイム監視、予防保全を実現。
+- **不正検知**：取引データを即時分析し、不正行為を顧客影響前に検出・防止。
+- **モダン決済システム**：モバイル決済、デジタルウォレット、リアルタイム決済・清算の信頼性高い低レイテンシ基盤を構築。
+- **市場データ配信**：株価や取引などのリアルタイム市場データを数千クライアントに最小レイテンシで配信。
 
-[**Read Case Study →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
+[**事例紹介 →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
 
-### Telecommunications
+### 通信
 
-EMQX provides carrier-grade scalability for 5G IoT services, supporting 100+ million concurrent device connections on a single platform. The platform enables seamless IT/OT/CT integration with multi-protocol support including MQTT, CoAP, and LwM2M.
+EMQXはキャリアグレードのスケーラビリティを備え、単一プラットフォームで1億以上の同時デバイス接続をサポート。MQTT、CoAP、LwM2Mなどのマルチプロトコル対応によりIT/OT/CTのシームレス統合を実現します。
 
 ![architecture-telecom](./assets/architecture-telecom.svg)
 
-- **5G IoT Platform**: Reliably connect hundreds of millions of IoT devices over 5G networks, providing a stable foundation for value-added services.
-- **Network Monitoring**: Continuously monitor the health and performance of network infrastructure in real time to proactively identify and resolve issues.
-- **Smart City Backbone**: Build the data backbone for smart cities, connecting traffic systems, public transportation, utilities, and emergency services.
+- **5G IoTプラットフォーム**：5Gネットワーク上で数億のIoTデバイスを安定接続し、付加価値サービスの基盤を提供。
+- **ネットワーク監視**：ネットワークインフラの健全性・性能をリアルタイム監視し、問題を事前に検知・解決。
+- **スマートシティ基盤**：交通システム、公共交通、公益事業、緊急サービスを接続するスマートシティのデータ基盤を構築。
 
-China Telecom, one of the world's largest telecom providers, uses EMQX to power its national IoT platform CTWing, supporting over 100 million concurrent device connections. [**Read Case Study →**](https://www.emqx.com/en/customers/china-telecom)
+中国電信はEMQXを活用し、全国IoTプラットフォームCTWingを構築。1億以上の同時デバイス接続を支えています。[**事例紹介 →**](https://www.emqx.com/en/customers/china-telecom)
 
-### Retail & Consumer IoT
+### 小売・コンシューマIoT
 
-EMQX connects millions of retail devices and consumer IoT endpoints, enabling real-time data movement for omnichannel experiences, smart home automation, and interactive applications.
+EMQXは数百万の小売デバイスとコンシューマIoTエンドポイントを接続し、オムニチャネル体験、スマートホームオートメーション、インタラクティブアプリケーションのリアルタイムデータ移動を可能にします。
 
 ![architecture-retail](./assets/architecture-retail.svg)
 
-- **Smart Retail**: Power real-time inventory management, POS monitoring, personalized customer engagement, and dynamic pricing across all store locations. Connect thousands of self-service kiosks, ensuring seamless customer experiences even during peak hours.
-- **Smart Home**: Connect millions of smart home devices with a scalable [pub/sub messaging](./messaging/introduction.md) backbone, enabling home automation, energy monitoring, and integration with platforms like Alexa and Google Assistant.
-- **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
+- **スマートリテール**：リアルタイム在庫管理、POS監視、パーソナライズ顧客エンゲージメント、動的価格設定を全店舗で実現。数千のセルフサービスキオスクを接続し、ピーク時もシームレスな顧客体験を提供。
+- **スマートホーム**：数百万のスマートホームデバイスをスケーラブルな[パブリッシュ／サブスクライブメッセージング](./messaging/introduction.md)基盤で接続し、ホームオートメーション、エネルギー監視、AlexaやGoogle Assistantとの統合を実現。
+- **ゲーム＆ソーシャル**：数百万の同時ユーザー向けに超低レイテンシ通信で応答性の高いオンラインゲームやソーシャルアプリを構築。ゲーム内チャット、リアルタイム通知、ライブイベントをサポート。
 
-Signify (formerly Philips Lighting) uses EMQX to power global smart lighting solutions, ensuring reliable real-time control for millions of connected lights. JAGAT, a location-based social app, handles millions of users with EMQX for reliable real-time messaging. [**Read Case Study →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
+Signify（旧Philips Lighting）はEMQXを活用し、数百万の接続照明の信頼性高いリアルタイム制御を実現。位置情報ベースのソーシャルアプリJAGATはEMQXで数百万ユーザーのリアルタイムメッセージングを支えています。[**事例紹介 →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
