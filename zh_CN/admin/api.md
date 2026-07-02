@@ -341,6 +341,14 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
+::: warning 将 `system` 视为等同管理员权限
+
+`system` 覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度 Scope（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
+
+将 `system` 与受限 Scope 列表组合到同一个密钥上，并不能可靠地强制执行该限制。仅将 `system` 授予已具备管理员信任级别的密钥，并遵循最小权限原则，只授予该密钥实际需要的 Scope。
+
+:::
+
 **命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在 Scope 检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` Scope，命名空间调用方也无法访问以下可读取或操作集群范围内原始 MQTT 消息内容（含保留/延迟消息存储）的端点，调用时将返回 `403 Forbidden`：
 
 - `GET /clients/:clientid/mqueue_messages`
