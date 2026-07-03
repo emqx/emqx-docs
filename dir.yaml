@@ -64,7 +64,7 @@
 
 - title_en: Installation and Deployment
   title_cn: 安装部署
-  title_ja: インストールとデプロイ
+  title_ja: インストールとデプロイメント
   path: deploy/install
   collapsed: true
   children:
@@ -477,7 +477,7 @@
     - data-integration/message-transformation
 - title_en: Flow Designer
   title_cn: Flow 设计器
-  title_ja: Flow デザイナー
+  title_ja: Flowデザイナー
   path: flow-designer/introduction
   collapsed: true
   children:
@@ -746,6 +746,10 @@
           title_cn: License
           title_ja: ライセンス
           path: configuration/license
+        - title_en: Load Secrets from a File
+          title_cn: 从文件加载 Secret
+          title_ja: ファイルからシークレットを読み込む
+          path: configuration/secret-from-file
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
       title_ja: EMQX エンタープライズ設定マニュアル
@@ -919,6 +923,8 @@
             - extensions/plugin-catalog/emqx-bridge-mqtt-dq
             - extensions/plugin-catalog/emqx-unsgov
             - extensions/plugin-catalog/emqx-username-quota
+            - extensions/plugin-catalog/emqx-offline-messages
+            - extensions/plugin-catalog/emqx-relup
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ
@@ -1344,16 +1350,16 @@
   path: changes/all-changes-ee
   children:
     - title_en: Version 6
-      title_cn: v6 版本
-      title_ja: Version 6
+      title_cn: V6 版本
+      title_ja: バージョン 6
       path: changes/changes-ee-v6
     - title_en: Version 5
-      title_cn: v5 版本
-      title_ja: Version 5
+      title_cn: V5 版本
+      title_ja: バージョン 5
       path: changes/changes-ee-v5
     - title_en: Version 4
-      title_cn: v4 版本
-      title_ja: Version 4
+      title_cn: V4 版本
+      title_ja: バージョン 4
       path: changes/changes-ee-v4
     - title_en: Known Issues
       title_cn: 已知问题
@@ -1368,6 +1374,10 @@
           title_cn: EMQX 6.0
           title_ja: EMQX 6.0
           path: changes/known-issues-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/known-issues-5.10
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9

@@ -47,6 +47,18 @@ When you create or edit a user, the **Scopes** field is optional. If you leave i
 
 ![user_scopes](./assets/user_scopes.png)
 
+::: warning Treat broad scopes as administrator-equivalent
+
+The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+
+- `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
+- `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
+- `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
+
+Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
+
+:::
+
 #### Role Changes and Scope Compatibility
 
 When you change a user’s role, EMQX checks whether the user’s current scopes are compatible with the new role. If they are not, the request is rejected with HTTP 400. To resolve this, include a `scopes` list in the same request that is valid for the new role.
@@ -81,7 +93,7 @@ Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature ex
 
 Namespaced admin access is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidental cross-team configuration changes. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-If you allow delegated administrators to manage namespace-scoped resources, enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** > **Cluster Settings** > **[Rule Engine Security](./cluster_settings.md#rule-engine-security)** to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 :::
 
@@ -126,6 +138,12 @@ For example:
 
 - **Scoped resources**: Namespaced users can view and manage only the resources within their assigned namespace, such as Connectors, Actions, Sources, Rules, and other namespace-aware modules.
 - **Cluster-level settings**: Configurations not yet namespace-aware remain read-only for namespaced users. Only global administrators can modify them.
+- **Blocked message-content endpoints**: Certain REST API endpoints that access or manipulate raw MQTT message content are unavailable to namespaced users and return `403 Forbidden`. These endpoints are accessible only to global administrators:
+  - Mqueue messages: `GET /clients/:clientid/mqueue_messages`
+  - Inflight messages: `GET /clients/:clientid/inflight_messages`
+  - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
+  - Delayed messages: `GET /mqtt/delayed/messages`, `GET /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:topic`
+- **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
 - **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
 - **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
 

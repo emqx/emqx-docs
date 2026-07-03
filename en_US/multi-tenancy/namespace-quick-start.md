@@ -26,13 +26,15 @@ You can also configure the namespace source in the Dashboard:
 
 1. Navigate to **Management** -> **Namespace** -> **Settings**.
 
-2. In **Take Namespace From**, enter the expression:
+2. Under **When to Resolve Namespace**, keep the default **Before Authentication**.
+
+3. In **Take Namespace From**, enter the expression:
 
    ```
    nth(1, tokens(username, '-'))
    ```
 
-3. Click **Confirm** to save the configuration.
+4. Click **Confirm** to save the configuration.
 
 ![namespace_source](./assets/namespace_source.png)
 
