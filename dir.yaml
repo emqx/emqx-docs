@@ -94,7 +94,7 @@
       path: https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/
 - title_en: REST API
   title_cn: REST API
-  path: develop/api
+  path: guides/api
   collapsed: true
   children:
     - title_en: EMQX Enterprise API Docs
