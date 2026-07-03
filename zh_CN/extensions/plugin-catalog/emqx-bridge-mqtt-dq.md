@@ -1,4 +1,4 @@
-# MQTT Bridge with Disk Queue
+# MQTT 磁盘队列桥接
 
 使用该插件可将本地 MQTT 消息转发到另一个 MQTT Broker，并通过磁盘缓冲提升系统韧性。
 

@@ -953,8 +953,6 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | `protocol_error`              | 出现通用的 MQTT 协议错误。                                   |
 | `tcp_closed`                  | TCP 连接被客户端或网络层关闭。                               |
 | `timeout`                     | 发生通用超时错误（如在认证或握手过程中）。                   |
-
->>>>>>> origin/release-5.10
 ### listeners stop \<Identifier\>
 
 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。（临时生效，当 EMQX 重启后将恢复原先状态。）
@@ -1591,12 +1589,6 @@ EMQX 的网关设计成可插拔。所以网关应用可以在启动/运行时�
 
 ## license
 
-::: tip
-
-本节内容仅适用于 EMQX 企业版。
-
-:::
-
 ### license info
 
 ```bash
@@ -1626,6 +1618,49 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 
 ```bash
 emqx ctl license update default
+```
+
+### license history
+
+查看会话峰值水位线历史记录。EMQX Enterprise 会记录每日的会话数峰值，并保留至少 24 个月的历史数据，以供计费审计使用。
+
+```bash
+emqx ctl license history [N] [--period daily|monthly] [--json]
+```
+
+- `N`：可选正整数，限制返回的记录条数（按月统计时默认为 24）
+- `--period daily|monthly`：聚合粒度；`daily` 按自然日返回记录，`monthly` 将每日峰值聚合为月度最大值（默认：`monthly`）
+- `--json`：以 JSON 格式输出，而非纯文本
+
+**示例：纯文本输出**
+
+```bash
+$ emqx ctl license history
+period=2026-04 high_watermark=25000 observed_at=2026-04-18T13:53:05.000Z
+period=2026-03 high_watermark=23500 observed_at=2026-03-31T22:10:42.000Z
+```
+
+**示例：JSON 输出**
+
+```bash
+$ emqx ctl license history --json
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+当尚未记录任何数据时，纯文本输出显示：
+
+```
+No session high-watermark history recorded.
 ```
 
 ## admins

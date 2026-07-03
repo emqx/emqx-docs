@@ -1,4 +1,4 @@
-# Per-username Session Quota
+# 用户名会话配额
 
 该插件用于按用户名实施会话配额限制。
 

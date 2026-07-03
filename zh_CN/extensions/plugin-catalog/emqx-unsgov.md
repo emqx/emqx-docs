@@ -1,4 +1,4 @@
-# UNS Governance
+# UNS 治理
 
 该插件在 ACL 检查阶段强制执行 Unified Namespace 主题结构。
 

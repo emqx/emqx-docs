@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """Refresh plugin download-link tables in plugin-catalog docs.
 
-Starting with EMQX 6.2.0, plugins live in the emqx.git monorepo under
-`plugins/<name>/` and each has a `VERSION` file. For every stable 6.x.y
-(>= 6.2.0) release tag, the CI publishes a tarball at:
+Starting with EMQX 5.10 (enterprise) and 6.2 (unified), plugins live in
+the emqx.git monorepo under `plugins/<name>/` and each has a `VERSION`
+file. For every stable release tag in the chosen series, the CI
+publishes a tarball at:
 
-    https://packages.emqx.io/emqx-plugins/<emqx-ver>/<plugin>-<plugin-ver>.tar.gz
+    https://packages.emqx.io/emqx-plugins/<tag>/<plugin>-<plugin-ver>.tar.gz
 
-This script walks the stable v6 tags, reads each plugin's VERSION file,
-and regenerates a "Download" table inside every matching markdown file
-under `en_US|zh_CN|ja_JP/extensions/plugin-catalog/`.
+where `<tag>` is the literal git tag — bare semver for 6.x (e.g. `6.2.0`)
+and `e`-prefixed for 5.x enterprise (e.g. `e5.10.4`).
+
+This script walks the stable tags of one series (e.g. 5.10 or 6.2),
+reads each plugin's VERSION file, and regenerates a "Download" table
+inside every matching markdown file under
+`en_US|zh_CN|ja_JP/extensions/plugin-catalog/`. The series defaults
+to the current docs-root branch (`release-N.M`); override with
+`--series N.M`.
 
 Markdown filenames use dashes (e.g. `emqx-bridge-mqtt-dq.md`) whereas
 plugin directory names use underscores (e.g. `emqx_bridge_mqtt_dq`);
@@ -38,14 +45,17 @@ from pathlib import Path
 from typing import Iterable
 
 DEFAULT_EMQX_REMOTE = "https://github.com/emqx/emqx.git"
-MIN_MINOR = 2  # 6.2.0 is the first release with monorepo plugins.
 PACKAGE_URL_TEMPLATE = (
-    "https://packages.emqx.io/emqx-plugins/{emqx_ver}/{plugin}-{plugin_ver}.tar.gz"
+    "https://packages.emqx.io/emqx-plugins/{tag}/{plugin}-{plugin_ver}.tar.gz"
 )
 
-# Starting with 6.0.0, tags are bare semver (no v/e prefix). Stable only
-# — pre-release suffixes like -rc.1 / -alpha.1 / -M2 are excluded.
-STABLE_TAG_RE = re.compile(r"^(6)\.(\d+)\.(\d+)$")
+# Stable release tags. Two conventions are in use:
+#   - 6.x:  bare semver, e.g. "6.2.0"
+#   - 5.x:  enterprise prefix, e.g. "e5.10.4"
+# Pre-release suffixes (-rc.1 / -alpha.1 / -M2) are excluded.
+STABLE_TAG_RE = re.compile(r"^(?P<prefix>e)?(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
+SERIES_RE = re.compile(r"^(\d+)\.(\d+)$")
+BRANCH_RE = re.compile(r"^release-(\d+)\.?(\d+)$")
 
 BEGIN_MARKER = "<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->"
 END_MARKER = "<!-- PLUGIN-DOWNLOADS:END -->"
@@ -79,13 +89,14 @@ CATALOG_SUBPATH = Path("extensions/plugin-catalog")
 
 @dataclass(frozen=True)
 class ReleaseTag:
-    raw: str  # original tag, e.g. "e6.2.0"
+    raw: str  # original tag, used verbatim in URL: "6.2.0" or "e5.10.4"
     major: int
     minor: int
     patch: int
 
     @property
-    def emqx_version(self) -> str:
+    def display_version(self) -> str:
+        """Human-readable semver shown in the table (no 'e' prefix)."""
         return f"{self.major}.{self.minor}.{self.patch}"
 
     @property
@@ -133,17 +144,32 @@ def ensure_repo(supplied: Path | None, workdir: Path) -> Path:
     return target
 
 
-def list_release_tags(repo: Path) -> list[ReleaseTag]:
+def list_release_tags(repo: Path, series: tuple[int, int]) -> list[ReleaseTag]:
+    """Return stable tags matching the given (major, minor) series.
+
+    `series` is e.g. (5, 10) or (6, 2). Only tags using the conventional
+    prefix for that major are accepted (5.x → 'e' prefix; 6.x → no prefix).
+    """
     out = run_git(repo, "tag", "--list")
+    want_major, want_minor = series
     tags: list[ReleaseTag] = []
     for line in out.splitlines():
-        m = STABLE_TAG_RE.match(line.strip())
+        raw = line.strip()
+        m = STABLE_TAG_RE.match(raw)
         if not m:
             continue
-        major, minor, patch = int(m.group(1)), int(m.group(2)), int(m.group(3))
-        if minor < MIN_MINOR:
+        has_prefix = bool(m.group("prefix"))
+        major = int(m.group("major"))
+        minor = int(m.group("minor"))
+        patch = int(m.group("patch"))
+        if (major, minor) != (want_major, want_minor):
             continue
-        tags.append(ReleaseTag(raw=line.strip(), major=major, minor=minor, patch=patch))
+        # Enforce prefix convention: 5.x uses 'e', 6.x uses none.
+        if major == 5 and not has_prefix:
+            continue
+        if major >= 6 and has_prefix:
+            continue
+        tags.append(ReleaseTag(raw=raw, major=major, minor=minor, patch=patch))
     tags.sort(key=lambda t: t.sort_key)
     return tags
 
@@ -166,21 +192,21 @@ def read_plugin_version(repo: Path, tag: str, plugin: str) -> str | None:
 
 def build_rows(
     repo: Path, tags: Iterable[ReleaseTag]
-) -> dict[str, list[tuple[str, str]]]:
-    """Return plugin -> [(emqx_ver, plugin_ver), ...] sorted by emqx_ver asc."""
-    rows: dict[str, list[tuple[str, str]]] = {}
+) -> dict[str, list[tuple[ReleaseTag, str]]]:
+    """Return plugin -> [(tag, plugin_ver), ...] sorted by tag asc."""
+    rows: dict[str, list[tuple[ReleaseTag, str]]] = {}
     for tag in tags:
         plugins = list_plugins_at(repo, tag.raw)
         for plugin in plugins:
             pver = read_plugin_version(repo, tag.raw, plugin)
             if not pver:
                 continue
-            rows.setdefault(plugin, []).append((tag.emqx_version, pver))
+            rows.setdefault(plugin, []).append((tag, pver))
     return rows
 
 
 def render_section(
-    locale: str, plugin: str, entries: list[tuple[str, str]]
+    locale: str, plugin: str, entries: list[tuple[ReleaseTag, str]]
 ) -> str:
     labels = LOCALES[locale]
     lines: list[str] = []
@@ -194,22 +220,24 @@ def render_section(
         f"| {labels['col_emqx']} | {labels['col_plugin']} | {labels['col_link']} |"
     )
     lines.append("|---|---|---|")
-    for emqx_ver, plugin_ver in entries:
+    for tag, plugin_ver in entries:
         url = PACKAGE_URL_TEMPLATE.format(
-            emqx_ver=emqx_ver, plugin=plugin, plugin_ver=plugin_ver
+            tag=tag.raw, plugin=plugin, plugin_ver=plugin_ver
         )
         filename = f"{plugin}-{plugin_ver}.tar.gz"
-        lines.append(f"| {emqx_ver} | {plugin_ver} | [{filename}]({url}) |")
+        lines.append(
+            f"| {tag.display_version} | {plugin_ver} | [{filename}]({url}) |"
+        )
     lines.append("")
     lines.append(END_MARKER)
     return "\n".join(lines)
 
 
-# A markdown table row whose first column is an emqx version like "6.2.0"
-# and third column is the package link `[name](url)`. The middle column
-# (plugin version) is matched loosely.
+# A markdown table row whose first column is an EMQX version like "5.10.4"
+# or "6.2.0" and third column is the package link `[name](url)`. The middle
+# column (plugin version) is matched loosely.
 DATA_ROW_RE = re.compile(
-    r"^\|\s*(?P<emqx_ver>\d+\.\d+\.\d+)\s*\|\s*[^|]+\|\s*\[[^\]]+\]\([^)]+\)\s*\|\s*$"
+    r"^\|\s*(?P<display_version>\d+\.\d+\.\d+)\s*\|\s*[^|]+\|\s*\[[^\]]+\]\([^)]+\)\s*\|\s*$"
 )
 SEPARATOR_ROW_RE = re.compile(r"^\|\s*-+\s*(?:\|\s*-+\s*)+\|\s*$")
 
@@ -217,35 +245,30 @@ SEPARATOR_ROW_RE = re.compile(r"^\|\s*-+\s*(?:\|\s*-+\s*)+\|\s*$")
 def parse_existing_versions(block: str) -> set[str]:
     """Return EMQX versions already listed as data rows inside an existing block."""
     return {
-        m.group("emqx_ver")
+        m.group("display_version")
         for line in block.splitlines()
         if (m := DATA_ROW_RE.match(line)) is not None
     }
 
 
-def render_data_row(plugin: str, emqx_ver: str, plugin_ver: str) -> str:
+def render_data_row(plugin: str, tag: ReleaseTag, plugin_ver: str) -> str:
     url = PACKAGE_URL_TEMPLATE.format(
-        emqx_ver=emqx_ver, plugin=plugin, plugin_ver=plugin_ver
+        tag=tag.raw, plugin=plugin, plugin_ver=plugin_ver
     )
     filename = f"{plugin}-{plugin_ver}.tar.gz"
-    return f"| {emqx_ver} | {plugin_ver} | [{filename}]({url}) |"
+    return f"| {tag.display_version} | {plugin_ver} | [{filename}]({url}) |"
 
 
-def append_new_rows(block: str, plugin: str, missing: list[tuple[str, str]]) -> str:
-    """Append data rows for `missing` tags into an existing block, preserving prose.
-
-    Looks for the markdown table inside the block (the separator row or any
-    existing data row) and inserts the new rows after the last such line so
-    the heading, intro, and column headers are left untouched. If no table
-    is found inside the block, falls back to appending a minimal table
-    before the trailing whitespace of the block.
-    """
+def append_new_rows(
+    block: str, plugin: str, missing: list[tuple[ReleaseTag, str]]
+) -> str:
+    """Append rows for `missing` tags into an existing block, preserving prose."""
     lines = block.split("\n")
     insert_after = -1
     for i, line in enumerate(lines):
         if DATA_ROW_RE.match(line) or SEPARATOR_ROW_RE.match(line):
             insert_after = i
-    new_rows = [render_data_row(plugin, ev, pv) for ev, pv in missing]
+    new_rows = [render_data_row(plugin, tag, pver) for tag, pver in missing]
     if insert_after >= 0:
         return "\n".join(lines[: insert_after + 1] + new_rows + lines[insert_after + 1 :])
     last_nonblank = len(lines) - 1
@@ -259,17 +282,9 @@ def splice_section(
     original: str,
     locale: str,
     plugin: str,
-    entries: list[tuple[str, str]],
+    entries: list[tuple[ReleaseTag, str]],
 ) -> str:
-    """Update or insert the Download section, preserving translator-polished prose.
-
-    - No existing marker block: append a freshly-rendered section.
-    - Existing marker block: keep the prose (heading, intro, column headers),
-      and only append data rows for tags not already listed. This is
-      important for non-source locales (e.g. `ja_JP`) where translators
-      reword the auto-generated intro after a script run; a wholesale
-      replacement would silently revert those edits on the next run.
-    """
+    """Update or insert the Download section, preserving translator-polished prose."""
     begin_idx = original.find(BEGIN_MARKER)
     end_idx = original.find(END_MARKER)
     if begin_idx == -1 or end_idx == -1 or end_idx <= begin_idx:
@@ -280,7 +295,11 @@ def splice_section(
     block_start = begin_idx + len(BEGIN_MARKER)
     existing_block = original[block_start:end_idx]
     existing_versions = parse_existing_versions(existing_block)
-    missing = [(ev, pv) for ev, pv in entries if ev not in existing_versions]
+    missing = [
+        (tag, pver)
+        for tag, pver in entries
+        if tag.display_version not in existing_versions
+    ]
     if not missing:
         return original
     updated_block = append_new_rows(existing_block, plugin, missing)
@@ -293,13 +312,14 @@ def md_filename_for(plugin: str) -> str:
 
 def update_catalog_files(
     docs_root: Path,
-    rows: dict[str, list[tuple[str, str]]],
+    rows: dict[str, list[tuple[ReleaseTag, str]]],
+    locales: list[str],
     dry_run: bool,
 ) -> int:
     changed = 0
     for plugin, entries in sorted(rows.items()):
         fname = md_filename_for(plugin)
-        for locale in LOCALES:
+        for locale in locales:
             path = docs_root / locale / CATALOG_SUBPATH / fname
             if not path.exists():
                 print(
@@ -319,6 +339,33 @@ def update_catalog_files(
                 path.write_text(updated, encoding="utf-8")
                 print(f"updated: {path.relative_to(docs_root)}", file=sys.stderr)
     return changed
+
+
+def detect_series_from_branch(docs_root: Path) -> tuple[int, int] | None:
+    """Read the docs-root git branch and parse 'release-N.M' / 'release-NM'."""
+    out = try_git(docs_root, "rev-parse", "--abbrev-ref", "HEAD")
+    if out is None:
+        return None
+    branch = out.strip()
+    m = BRANCH_RE.match(branch)
+    if not m:
+        return None
+    return int(m.group(1)), int(m.group(2))
+
+
+def resolve_series(flag: str | None, docs_root: Path) -> tuple[int, int]:
+    if flag is not None:
+        m = SERIES_RE.match(flag)
+        if not m:
+            sys.exit(f"error: --series must look like 'N.M' (got {flag!r})")
+        return int(m.group(1)), int(m.group(2))
+    detected = detect_series_from_branch(docs_root)
+    if detected is None:
+        sys.exit(
+            "error: could not auto-detect release series from docs-root branch; "
+            "pass --series N.M (e.g. --series 5.10)"
+        )
+    return detected
 
 
 def main() -> int:
@@ -344,12 +391,26 @@ def main() -> int:
         action="store_true",
         help="Show which files would change without writing.",
     )
+    parser.add_argument(
+        "--series",
+        default=None,
+        help="Release series to scan, e.g. '5.10' or '6.2'. "
+             "Default: auto-detect from the docs-root branch name (release-N.M).",
+    )
     args = parser.parse_args()
 
     docs_root: Path = args.docs_root.resolve()
-    for locale in LOCALES:
-        if not (docs_root / locale / CATALOG_SUBPATH).is_dir():
-            sys.exit(f"error: missing {locale}/{CATALOG_SUBPATH} under {docs_root}")
+    present_locales = [
+        loc for loc in LOCALES if (docs_root / loc / CATALOG_SUBPATH).is_dir()
+    ]
+    if not present_locales:
+        sys.exit(
+            f"error: no plugin-catalog dirs found under {docs_root} "
+            f"(looked for {'/'.join(LOCALES)}/{CATALOG_SUBPATH})"
+        )
+
+    series = resolve_series(args.series, docs_root)
+    print(f"Targeting release series {series[0]}.{series[1]}", file=sys.stderr)
 
     tmp_ctx: tempfile.TemporaryDirectory | None = None
     try:
@@ -360,13 +421,16 @@ def main() -> int:
             workdir = Path(".")
         repo = ensure_repo(args.emqx_repo.resolve() if args.emqx_repo else None, workdir)
 
-        tags = list_release_tags(repo)
+        tags = list_release_tags(repo, series)
         if not tags:
-            print("warning: no stable v6 tags found (>= 6.2.0)", file=sys.stderr)
+            print(
+                f"warning: no stable tags found for series {series[0]}.{series[1]}",
+                file=sys.stderr,
+            )
             return 0
         print(
-            f"Found {len(tags)} stable v6 tag(s): "
-            f"{tags[0].emqx_version} ... {tags[-1].emqx_version}",
+            f"Found {len(tags)} stable tag(s): "
+            f"{tags[0].raw} ... {tags[-1].raw}",
             file=sys.stderr,
         )
 
@@ -376,7 +440,7 @@ def main() -> int:
             return 0
         print(f"Discovered {len(rows)} plugin(s): {', '.join(sorted(rows))}", file=sys.stderr)
 
-        changed = update_catalog_files(docs_root, rows, args.dry_run)
+        changed = update_catalog_files(docs_root, rows, present_locales, args.dry_run)
         print(f"Done. {changed} file(s) {'to update' if args.dry_run else 'updated'}.", file=sys.stderr)
         return 0
     finally:

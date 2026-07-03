@@ -46,6 +46,18 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 ![user_scopes](./assets/user_scopes.png)
 
+::: warning 将宽泛 Scope 视为等同管理员权限
+
+以下 Scope 天然覆盖范围较广，即使未分配其他 Scope，也实际上授予管理员能力：
+
+- `system` 覆盖配置管理（`/configs*`、`/data/*` 等）。持有 `system` 的用户可以更新任意配置子树，或恢复包含已存储用户和 API 密钥记录的备份文件。
+- `user_management` 允许持有者创建或修改其他 Dashboard 用户，包括具有任意 Scope 集的用户。
+- `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
+
+将其中任一 Scope 与受限 Scope 列表组合到同一个用户上，并不能可靠地强制执行该限制。该用户可通过配置变更、备份恢复，或为自己创建新的账号或密钥来访问受限区域。仅将这三个 Scope 授予您完全信任的用户，并遵循最小权限原则，只授予用户实际需要的具体 Scope。
+
+:::
+
 #### 角色变更与 Scope 兼容性
 
 变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
@@ -80,7 +92,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 命名空间管理员访问仅适用于受信任的内部部署场景，例如在同一组织内隔离不同团队或业务单元，以降低误修改其他配置的风险。命名空间功能不提供强隔离保障，不适合作为面向公共环境或非受信任用户的多租户安全边界。
 
-如果您允许委派管理员管理命名空间范围内的资源，建议在可用版本中优先启用 `rule_engine.ssrf` 来校验规则引擎管理的出站目标。如果还需要运行时网络边界，再增加主机级出站访问控制，例如 `iptables` 或 `nftables`。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md)。
+如果您允许委派管理员管理命名空间范围内的资源，建议在**管理** > **集群配置** > **[规则引擎安全](./cluster_settings.md#规则引擎安全)**中启用 SSRF 防护，以校验规则引擎管理的出站目标。如果还需要运行时网络边界，再增加主机级出站访问控制，例如 `iptables` 或 `nftables`。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 
 :::
 
@@ -127,6 +139,12 @@ ns:<NAMESPACE>::<ROLE>
 
 - **资源作用域限制**：命名空间用户只能查看和管理其所属命名空间下的资源，包括连接器、动作、数据源、规则等支持命名空间的模块。
 - **集群级设置访问限制**：尚未支持命名空间隔离的全局配置项对命名空间用户为只读，只有系统管理员可进行修改。
+- **消息内容端点限制**：部分访问或操作原始 MQTT 消息内容的 REST API 端点对命名空间用户不可用，调用时将返回 `403 Forbidden`。这些端点仅供全局管理员使用：
+  - 消息队列消息：`GET /clients/:clientid/mqueue_messages`
+  - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
+  - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
+  - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
+- **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
 
