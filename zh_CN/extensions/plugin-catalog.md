@@ -8,14 +8,18 @@
 
 本页面列出的插件均维护在 [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins) 中。
 
-## 消息持久化
-
-[离线消息](./plugin-catalog/emqx-offline-messages.md)
-
-该插件将 MQTT 消息持久化到 MySQL 或 Redis，使订阅者重新上线后可以获取在离线期间到达的消息，覆盖标准 MQTT 会话持久化能力之外的场景。
-
 ## 运维
 
 [热升级（Relup）](./plugin-catalog/emqx-relup.md)
 
 该插件在运行中的 EMQX 节点上应用 `.relup` 代码变更指令，使运维人员可以在不重启 VM 的情况下发布补丁版本。
+
+[备份同步（Backup Sync）](./plugin-catalog/emqx-backup-sync.md)
+
+该插件通过数据备份 API，定期将选定的备份数据从主 EMQX 集群同步到备用集群，使备用集群保持同步以用于灾难恢复。
+
+## 连接管理
+
+[按用户名的会话配额](./plugin-catalog/emqx-username-quota.md)
+
+该插件在集群范围内按用户名强制执行会话配额，当某个用户名达到配置的上限时，以 `quota_exceeded` 拒绝其认证。
