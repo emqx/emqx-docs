@@ -8,14 +8,18 @@ EMQXプラグインは、標準の製品機能が要件を完全に満たさな�
 
 このページに掲載されているプラグインは、[`emqx.git`モノリポジトリ](https://github.com/emqx/emqx/tree/master/plugins)の一部として管理されています。
 
-## メッセージパーシステンス
-
-[オフラインメッセージ](./plugin-catalog/emqx-offline-messages.md)
-
-このプラグインは、MQTTメッセージをMySQLまたはRedisにパーシステンスし、標準のMQTTセッションパーシステンスを超えて、サブスクライバーが再接続後にメッセージを取得できるようにします。
-
 ## 運用
 
 [ホットアップグレード（Relup）](./plugin-catalog/emqx-relup.md)
 
 このプラグインは、実行中のEMQXノードに対して`.relup`コード変更指示を適用し、オペレーターがVMを再起動せずにパッチリリースを展開できるようにします。
+
+[バックアップ同期（Backup Sync）](./plugin-catalog/emqx-backup-sync.md)
+
+このプラグインは、データバックアップAPIを使用して、選択したバックアップデータをプライマリEMQXクラスターからセカンダリクラスターに定期的に同期し、災害復旧のためにセカンダリを同期状態に保ちます。
+
+## 接続管理
+
+[ユーザー名ごとのセッションクォータ](./plugin-catalog/emqx-username-quota.md)
+
+このプラグインは、クラスター全体でユーザー名ごとのセッションクォータを適用し、ユーザー名が設定された上限に達すると`quota_exceeded`で認証を拒否します。
