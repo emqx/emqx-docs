@@ -290,4 +290,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 对于通过内置数据库存储认证数据的认证方式，例如 [使用内置数据库进行密码认证](./mnesia.md) 和 [MQTT 5.0 增强认证](./scram.md)，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
 
-详细的请求方式与参数请参考 [HTTP API](../../../develop/api.md)。
+详细的请求方式与参数请参考 [HTTP API](../../api.md)。

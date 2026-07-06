@@ -95,7 +95,7 @@ EMQX 提供多种方式获取告警并查看详细信息。其中一种方式是
 
 ### 通过 REST API 获取告警
 
-您可以通过 API 查询和管理告警。在 UI 的左侧导航菜单中点击 **Alarms** 来执行此 API 请求。有关如何使用 EMQX API，请参阅 [REST API 文档](../../develop/api.md)。
+您可以通过 API 查询和管理告警。在 UI 的左侧导航菜单中点击 **Alarms** 来执行此 API 请求。有关如何使用 EMQX API，请参阅 [REST API 文档](../api.md)。
 
 <img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
 

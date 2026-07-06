@@ -32,7 +32,7 @@ License 和单点登录仅适用于 EMQX 企业版。
 
 ## API 密钥
 
-**API 密钥**页面用于创建和管理访问 [HTTP API](../../develop/api.md) 所需的 API 密钥。详细操作请参阅 [API 密钥](../api-keys.md)。
+**API 密钥**页面用于创建和管理访问 [HTTP API](../api.md) 所需的 API 密钥。详细操作请参阅 [API 密钥](../api-keys.md)。
 
 ## License
 

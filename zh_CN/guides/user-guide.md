@@ -12,7 +12,7 @@ prev:
 
 - [集群管理](./cluster/create-cluster.md)介绍了如何创建和管理 EMQX 集群，包括集群安全、负载均衡配置、节点疏散与集群负载重平衡以及性能调优。
 - [配置 EMQX](./configuration/configuration.md) 为您提供了配置文件基本信息、配置项以及详细的配置参考信息。
-- [REST API](../develop/api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
+- [REST API](./api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
 - [命令行接口](./cli.md)介绍了 EMQX 支持的各类启动与管理命令。
 - [安全指南](./security-guide.md)涵盖了网络与 TLS 配置、认证、授权、禁用客户端、连接抖动检测、身份管理、API 密钥以及审计日志等内容。
 - [MQTT 会话持久化](./durability/management.md)指导您如何配置和管理会话持久化功能以及如何为高可用性数据副本设置参数。

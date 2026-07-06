@@ -8,7 +8,7 @@ The Audit Log feature is only available in the EMQX Enterprise edition.
 
 The Audit Log feature allows you to track important operation changes in your EMQX cluster in real-time. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security auditing during their operations.
 
-EMQX Audit Log supports recording change-related operations from the [Dashboard](./dashboard/introduction.md), [REST API](../develop/api.md) and [CLI](./cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. 
+EMQX Audit Log supports recording change-related operations from the [Dashboard](./dashboard/introduction.md), [REST API](./api.md) and [CLI](./cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. 
 
 EMQX offers a Dashboard view and integration with log systems to help enterprises manage audit logs. Through these methods EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
 
@@ -114,7 +114,7 @@ The following table shows the fields contained in the above log message samples.
 | source           | String  | The Dashboard username or API key name that performed the operation. |
 | node             | String  | Node name, indicating the node or server where the operation was executed. |
 | method           | String  | HTTP request method, `post`, `put`, `delete` correspond to create, update, delete operations. |
-| operate_id       | String  | The REST API path of the request, please refer to [REST API](../develop/api.md). |
+| operate_id       | String  | The REST API path of the request, please refer to [REST API](./api.md). |
 
 ### Operation Records from CLI or Erlang Console
 

@@ -8,7 +8,7 @@
 
 审计日志（Audit Log）功能让您实时跟踪 EMQX 集群的重要操作变更，是企业用户遵守合规要求、确保数据安全的关键工具。
 
-EMQX 审计日志支持记录来自 [Dashboard](./dashboard/introduction.md) 、[REST API](../develop/api.md) 以及 [CLI](./cli.md) 和控制台的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。而指标获取、客户端列表查询等只读操作则不会被记录。
+EMQX 审计日志支持记录来自 [Dashboard](./dashboard/introduction.md) 、[REST API](./api.md) 以及 [CLI](./cli.md) 和控制台的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。而指标获取、客户端列表查询等只读操作则不会被记录。
 
 EMQX 提供了 Dashboard 查看以及日志系统集成的方式帮助企业管理审计日志。通过审计日志，企业用户可以方便地查看谁通过何种方式，在何时执行了哪些关键操作，以实现运营过程中的合规性和安全性审计。
 
@@ -116,7 +116,7 @@ log.audit {
 | source           | 字符 | 执行操作的 Dashboard 用户名或 API 密钥名称。                 |
 | node             | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
 | method           | 字符 | HTTP 请求方法，`post`, `put`, `delete` 对应创建、更新、删除操作。 |
-| operate_id       | 字符 | 请求的 REST API 路径，请参考 [REST API](../develop/api.md)。   |
+| operate_id       | 字符 | 请求的 REST API 路径，请参考 [REST API](./api.md)。   |
 | bindings         | 对象 | 具体的请求对象信息，对应 `operate_id` 中的占位符。           |
 | code             | 整数 | HTTP 响应码，表示操作的结果状态。                            |
 | headers          | 对象 | HTTP 请求头信息，包括客户端标识、请求来源等。                |

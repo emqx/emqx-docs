@@ -50,7 +50,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 
 - Change the default Dashboard password before production use, and review who has administrative access. See [System](../dashboard/system.md).
 - Keep the Dashboard on trusted networks only. Prefer HTTPS for administrator access, and bind Dashboard listeners to localhost, a private interface, or a protected management network where possible. See [Dashboard Configuration](../configuration/dashboard.md).
-- If you expose the management API, use API keys instead of Dashboard credentials, grant only the minimum role required, and set expiration dates where possible. See [REST API](../../develop/api.md) and [System](../dashboard/system.md#api-key).
+- If you expose the management API, use API keys instead of Dashboard credentials, grant only the minimum role required, and set expiration dates where possible. See [REST API](../api.md) and [System](../dashboard/system.md#api-key).
 - If you use EMQX Enterprise, consider [Single Sign-On (SSO)](../sso.md) for administrative users, and enforce MFA in your identity provider when available.
 - Schedule regular backups and rehearse restore procedures. Note that certificates or ACL files stored outside the EMQX data directory require separate backup. See [Backup and Restore](../backup-restore.md).
 - Enable audit trails where available, and centralize logs and metrics in your observability stack for anomaly detection and incident response. See [Audit Log](../audit-log.md), [Logs Configuration](../configuration/logs.md), and [Logs and Observability](../observability/overview.md).

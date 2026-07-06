@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
   ]
 }'
 ```
-For a detailed HTTP API description, see [HTTP API - Gateway](../api.md).
+For a detailed HTTP API description, see [HTTP API - Gateway](../../guides/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 

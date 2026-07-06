@@ -250,6 +250,6 @@ There are several API endpoints for managing authorization:
 * `/api/v5/authorization/cache`: for cleaning authorization cache;
 * `/api/v5/authorization/sources/built_in_database`:  for managing authorization rules of `built_in_database` authorizer.
 
-For detailed operation steps, see [HTTP API](../../../develop/api.md).
+For detailed operation steps, see [HTTP API](../../api.md).
 
 

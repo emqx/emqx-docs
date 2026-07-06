@@ -35,7 +35,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ## API Key
 
-The **API Key** page lets you create and manage API keys for authenticating [HTTP API](../../develop/api.md) requests. For instructions, see [API Keys](../api-keys.md).
+The **API Key** page lets you create and manage API keys for authenticating [HTTP API](../api.md) requests. For instructions, see [API Keys](../api-keys.md).
 
 ## License
 

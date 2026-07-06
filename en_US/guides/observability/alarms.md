@@ -98,7 +98,7 @@ The log level is `warning`, and the `msg` field is `alarm_is_activated` and `ala
 
 ### Get Alarms via REST API
 
-You can query and manage alarms through the API. Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../../develop/api.md).
+You can query and manage alarms through the API. Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../api.md).
 
 <img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
 

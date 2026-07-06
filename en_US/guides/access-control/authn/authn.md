@@ -299,4 +299,4 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 
 For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
 
-For more detailed API requests and parameters, see [HTTP API](../../../develop/api.md).
+For more detailed API requests and parameters, see [HTTP API](../../api.md).
