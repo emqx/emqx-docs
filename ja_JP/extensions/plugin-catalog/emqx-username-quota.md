@@ -1,130 +1,130 @@
 # Per-username Session Quota
 
-This plugin enforces a per-username session quota.
+このプラグインは、ユーザー名ごとのセッションクォータを強制します。
 
-- Session counters are maintained per username and synchronized cluster-wide.
-- Authentication is rejected with `quota_exceeded` when the configured quota is reached.
-- Reconnects with an existing `clientid` do not consume additional quota.
-- Per-username quota overrides allow custom limits, unlimited sessions, or connection blocking.
+- セッションカウンターはユーザー名ごとに管理され、クラスター全体で同期されます。
+- 設定されたクォータに達すると、認証は `quota_exceeded` で拒否されます。
+- 既存の `clientid` での再接続は追加のクォータを消費しません。
+- ユーザー名ごとのクォータオーバーライドにより、カスタム制限、無制限セッション、または接続ブロックが可能です。
 
-:::: tip Note
-If your deployment can use the username as the namespace by setting `client_attrs.tns` in the `client_attrs_init` configuration, you can enforce this type of session limit through namespace-based limits.
-Use this plugin only when namespace assignment follows a different scheme.
+:::: tip 注意
+`client_attrs_init` の設定で `client_attrs.tns` を使用してユーザー名をネームスペースとして利用できる場合は、ネームスペースベースの制限を通じてこの種のセッション制限を強制できます。
+ネームスペースの割り当てが異なるスキームに従う場合のみ、このプラグインを使用してください。
 ::::
 
-## Configuration
+## 設定
 
-| Field | Default | Validation | Description |
+| フィールド | デフォルト | バリデーション | 説明 |
 |-------|---------|------------|-------------|
-| `max_sessions_per_username` | `100` | Must be a positive integer (`>= 1`). Values less than `1` or non-numeric values are rejected. | Default maximum concurrent sessions per username. Individual usernames can override this value through the overrides API. |
-| `snapshot_min_age_ms` | `300000` | Must be within `120000` to `900000`. Values outside the range are clamped. | Minimum age, in milliseconds, of a snapshot before a rebuild is triggered. This prevents frequent rebuilds on large clusters. |
-| `snapshot_request_timeout_ms` | `5000` | String values are accepted if they can be converted to positive integers. | Timeout budget for list API snapshot request handling. |
+| `max_sessions_per_username` | `100` | 正の整数（`>= 1`）でなければなりません。1未満または非数値は拒否されます。 | ユーザー名ごとのデフォルト最大同時セッション数。個別のユーザー名はオーバーライドAPIでこの値を上書き可能です。 |
+| `snapshot_min_age_ms` | `300000` | `120000` から `900000` の範囲内でなければなりません。範囲外の値はクランプされます。 | スナップショットの最小経過時間（ミリ秒）。これにより大規模クラスターでの頻繁な再構築を防止します。 |
+| `snapshot_request_timeout_ms` | `5000` | 正の整数に変換可能な文字列値も受け入れます。 | リストAPIのスナップショット要求処理のタイムアウト時間（ミリ秒）。 |
 
-Update plugin config through the standard plugin config API:
+プラグイン設定は標準のプラグイン設定APIで更新します：
 
 `PUT /api/v5/plugins/<name-vsn>/config`
 
-## Runtime API
+## ランタイムAPI
 
-The plugin exposes runtime APIs through plugin API gateway.
+プラグインはプラグインAPIゲートウェイを通じてランタイムAPIを公開します。
 
-Base path: `/api/v5/plugin_api/emqx_username_quota`
+ベースパス：`/api/v5/plugin_api/emqx_username_quota`
 
-### Session Queries
+### セッション照会
 
-- `GET /quota/usernames`: List all usernames with active sessions.
-- `GET /quota/usernames/:username`: Get details for a single username.
-- `GET /metrics`: Export plugin metrics in Prometheus text format.
-- `POST /kick/:username`: Kick all sessions for a username.
+- `GET /quota/usernames`: アクティブなセッションを持つすべてのユーザー名を一覧表示します。
+- `GET /quota/usernames/:username`: 単一ユーザー名の詳細を取得します。
+- `GET /metrics`: プラグインのメトリクスをPrometheusテキスト形式でエクスポートします。
+- `POST /kick/:username`: 指定ユーザー名のすべてのセッションをキックします。
 
-### Snapshot Management
+### スナップショット管理
 
-- `DELETE /quota/snapshot`: Force snapshot rebuild.
+- `DELETE /quota/snapshot`: スナップショットの再構築を強制します。
 
-### Quota Overrides
+### クォータオーバーライド
 
-- `POST /quota/overrides`: Set per-username quota overrides.
-- `DELETE /quota/overrides`: Delete per-username quota overrides.
-- `GET /quota/overrides`: List all quota overrides.
+- `POST /quota/overrides`: ユーザー名ごとのクォータオーバーライドを設定します。
+- `DELETE /quota/overrides`: ユーザー名ごとのクォータオーバーライドを削除します。
+- `GET /quota/overrides`: すべてのクォータオーバーライドを一覧表示します。
 
 ### `GET /quota/usernames`
 
-This endpoint serves results from a pre-built snapshot rather than scanning the live session data on every request.
+このエンドポイントは、毎回ライブのセッションデータをスキャンする代わりに、事前に構築されたスナップショットの結果を返します。
 
-A snapshot is a point-in-time copy of per-username session counts, sorted by count for efficient cursor-based pagination. Snapshots are built asynchronously in the background and cached. A new build is triggered only when the current snapshot is older than `snapshot_min_age_ms`.
+スナップショットはユーザー名ごとのセッション数の時点コピーで、カウント順にソートされており、効率的なカーソルベースのページネーションを可能にします。スナップショットは非同期でバックグラウンドに構築されキャッシュされます。現在のスナップショットが `snapshot_min_age_ms` より古い場合にのみ新しい構築がトリガーされます。
 
-When the first request arrives and no snapshot exists yet, the server waits for the in-progress build to complete. The wait time is up to the request deadline minus 1 second. If the build finishes in time, the endpoint returns a normal `200` response. If not, it returns `503` with partial data.
+最初のリクエストが到着しスナップショットがまだ存在しない場合、サーバーは進行中の構築完了を待ちます。待機時間はリクエストのタイムアウトから1秒を引いた時間までです。構築が間に合えば通常の `200` レスポンスを返し、間に合わなければ `503` と部分データを返します。
 
-Query params:
+クエリパラメータ：
 
-- `limit`: positive integer, capped at `100` (default `100`)
-- `used_gte`: **required** when no cursor is provided. This is the minimum session count filter. Only usernames with at least this many sessions are included. Must be a positive integer `>= 1`.
-- `cursor`: optional opaque cursor returned by previous list call. If missing, the first page is returned.
+- `limit`: 正の整数、最大100（デフォルト100）
+- `used_gte`: **カーソルがない場合は必須**。これは最小セッション数のフィルターです。この数以上のセッションを持つユーザー名のみが含まれます。正の整数 `>= 1` でなければなりません。
+- `cursor`: 以前のリスト呼び出しで返された不透明なカーソル。省略すると最初のページが返されます。
 
-Parameter rules:
+パラメータルール：
 
-- `used_gte` without `cursor`: OK (first page)
-- `cursor` without `used_gte`: OK (`used_gte` is embedded in the cursor)
-- Both `used_gte` and `cursor`: **400** `BAD_REQUEST`. The filter is locked in the cursor.
-- Neither `used_gte` nor `cursor`: **400** `BAD_REQUEST`
+- `used_gte` のみ（カーソルなし）：OK（最初のページ）
+- `cursor` のみ（`used_gte`なし）：OK（`used_gte`はカーソルに埋め込まれている）
+- `used_gte` と `cursor` 両方：**400** `BAD_REQUEST`。フィルターはカーソルに固定されているため。
+- どちらもなし：**400** `BAD_REQUEST`
 
-Behavior:
+動作：
 
-- Results are always sorted by session count then username.
-- Pagination is cursor-based. Omit `cursor` for the first page.
-- Each item includes `username`, realtime `used`, and `limit` (effective quota).
-- If realtime `used` differs from the snapshot count, `snapshot_used` is included so callers can see both the cached and current counts.
+- 結果は常にセッション数、次にユーザー名でソートされます。
+- ページネーションはカーソルベースです。最初のページは `cursor` を省略します。
+- 各項目には `username`、リアルタイムの `used`、および `limit`（有効なクォータ）が含まれます。
+- リアルタイムの `used` がスナップショットのカウントと異なる場合、`snapshot_used` が含まれ、呼び出し元はキャッシュされた値と現在の値の両方を確認できます。
 
-Successful response shape:
+成功時のレスポンス構造：
 
-- `data`: username quota entries
-- `meta.limit`: page size (pagination limit)
-- `meta.count`: number of entries in this page
-- `meta.total`: total entries in snapshot
-- `meta.next_cursor`: cursor for next page (when available)
-- `meta.snapshot`: snapshot metadata:
+- `data`: ユーザー名クォータエントリ
+- `meta.limit`: ページサイズ（ページネーション制限）
+- `meta.count`: このページのエントリ数
+- `meta.total`: スナップショット内の総エントリ数
+- `meta.next_cursor`: 次ページ用カーソル（存在する場合）
+- `meta.snapshot`: スナップショットメタデータ：
   - `node`
-  - `generation` (incremental snapshot id)
-  - `taken_at_ms` (snapshot timestamp in milliseconds)
+  - `generation`（インクリメンタルスナップショットID）
+  - `taken_at_ms`（スナップショットのタイムスタンプ、ミリ秒）
 
-Error responses:
+エラー応答：
 
-- `400 BAD_REQUEST`: missing `used_gte`, or `used_gte` provided with cursor
-- `400 INVALID_CURSOR`: cursor references an unavailable node or is malformed
-- `503 SERVICE_UNAVAILABLE`: snapshot is being rebuilt
-  - Body includes `snapshot_build_in_progress: true`, `data`, and `meta`
-  - `data`: partial first page read from the in-progress snapshot (may be empty if the build just started)
-  - `meta.count`: number of partial entries, `meta.partial: true`
-  - Retry the same request with bounded backoff
+- `400 BAD_REQUEST`: `used_gte` がない、または `used_gte` とカーソルが同時に指定された場合
+- `400 INVALID_CURSOR`: カーソルが存在しないノードを参照しているか不正な形式
+- `503 SERVICE_UNAVAILABLE`: スナップショットが再構築中
+  - ボディに `snapshot_build_in_progress: true`、`data`、`meta` を含む
+  - `data`: 進行中のスナップショットから部分的に読み取った最初のページ（構築開始直後の場合は空の場合あり）
+  - `meta.count`: 部分的なエントリ数、`meta.partial: true`
+  - 制限付きバックオフで同じリクエストを再試行してください
 
 ### `DELETE /quota/snapshot`
 
-Force an immediate snapshot rebuild. Returns `200` with `{"status": "ok"}` after initiating the rebuild asynchronously. The snapshot will be rebuilt in the background.
+即時にスナップショットの再構築を強制します。非同期で再構築を開始した後、`{"status": "ok"}` を含む `200` を返します。スナップショットはバックグラウンドで再構築されます。
 
 ### `GET /quota/usernames/:username`
 
-Returns details for a single username. Response fields: `username`, `used`, `limit`, `clientids`.
+単一ユーザー名の詳細を返します。レスポンスフィールドは `username`、`used`、`limit`、`clientids` です。
 
-Returns `404 NOT_FOUND` if the username has no active sessions.
+アクティブなセッションがないユーザー名の場合は `404 NOT_FOUND` を返します。
 
 ### `GET /metrics`
 
-Returns Prometheus text format metrics for the plugin.
-On replicant nodes, the request is forwarded to the snapshot owner core node.
+プラグインのPrometheusテキスト形式メトリクスを返します。
+レプリカントノードではリクエストがスナップショット所有コアノードに転送されます。
 
-Currently exported:
+現在エクスポートされているメトリクス：
 
-- `emqx_username_count`: Total number of usernames in the active snapshot.
+- `emqx_username_count`: アクティブスナップショット内のユーザー名総数
 
 ### `POST /kick/:username`
 
-Kicks all sessions for a username. Returns `{"kicked": N}` where N is the number of sessions kicked.
+指定ユーザー名のすべてのセッションをキックします。キックしたセッション数を `{"kicked": N}` で返します。
 
-Returns `404 NOT_FOUND` if the username has no active sessions.
+アクティブなセッションがないユーザー名の場合は `404 NOT_FOUND` を返します。
 
 ### `POST /quota/overrides`
 
-Set per-username quota overrides. Body is a JSON array:
+ユーザー名ごとのクォータオーバーライドを設定します。ボディはJSON配列です：
 
 ```json
 [
@@ -134,19 +134,19 @@ Set per-username quota overrides. Body is a JSON array:
 ]
 ```
 
-Override semantics:
+オーバーライドの意味：
 
-| `quota` value    | Meaning                                        |
+| `quota` の値    | 意味                                        |
 |------------------|------------------------------------------------|
-| positive integer | Custom session limit for this username         |
-| `"nolimit"`      | Unlimited sessions (no quota enforcement)      |
-| `0`              | Ban: reject all new connections                |
+| 正の整数         | このユーザー名のカスタムセッション制限         |
+| `"nolimit"`      | 無制限セッション（クォータ未適用）             |
+| `0`              | 接続禁止：新規接続をすべて拒否                |
 
-Overrides are persisted to disk and replicated cluster-wide. When no override exists for a username, the global `max_sessions_per_username` config is used.
+オーバーライドはディスクに永続化され、クラスター全体でレプリケートされます。ユーザー名にオーバーライドがない場合は、グローバル設定の `max_sessions_per_username` が使用されます。
 
 ### `DELETE /quota/overrides`
 
-Delete overrides by username. Body is a JSON array of username strings:
+ユーザー名によるオーバーライドを削除します。ボディはユーザー名文字列のJSON配列です：
 
 ```json
 ["user1", "blocked"]
@@ -154,66 +154,65 @@ Delete overrides by username. Body is a JSON array of username strings:
 
 ### `GET /quota/overrides`
 
-List all overrides. Returns `{"data": [{"username": "...", "quota": ...}, ...]}`.
+すべてのオーバーライドを一覧表示します。`{"data": [{"username": "...", "quota": ...}, ...]}` を返します。
 
-## How Snapshot-based Listing Works
+## スナップショットベースの一覧表示の仕組み
 
-This section explains how the plugin builds and serves snapshots for list-style APIs such as `GET /quota/usernames` and `GET /metrics`.
+このセクションでは、`GET /quota/usernames` や `GET /metrics` のようなリスト形式APIのためにプラグインがスナップショットをどのように構築し提供するかを説明します。
 
-### Snapshot Owner Routing
+### スナップショット所有ノードのルーティング
 
-Snapshots are built on core nodes. `GET /quota/usernames` and `GET /metrics` are routed to the snapshot owner core node, selected as the first node in the sorted running core node list.
+スナップショットはコアノード上で構築されます。`GET /quota/usernames` と `GET /metrics` は、稼働中のコアノードのソート済みリストの最初のノードに選ばれたスナップショット所有コアノードにルーティングされます。
 
-### Blue/Green Snapshots
+### ブルー/グリーンスナップショット
 
-Two snapshot buffers (blue and green) are maintained. While one serves read requests, the other is used for building the next snapshot. Once a build completes, the roles are swapped. This eliminates data gaps during rebuilds because the old snapshot remains available until the new one is ready.
+2つのスナップショットバッファ（ブルーとグリーン）を維持します。1つは読み取りリクエストに使用され、もう1つは次のスナップショット構築に使用されます。構築が完了すると役割を入れ替えます。これにより、再構築中も古いスナップショットが利用可能なためデータのギャップが発生しません。
 
-### Background Snapshot Build
+### バックグラウンドスナップショット構築
 
-Snapshot rebuilds run in a background process with yield-based throttling to avoid blocking the server. The list API remains responsive while a build is in progress.
+スナップショットの再構築はバックグラウンドプロセスで実行され、サーバーのブロックを避けるためにイールドベースのスロットリングが行われます。構築中もリストAPIは応答可能です。
 
-## Operational Considerations and Limitations
+## 運用上の考慮事項と制限
 
-This section describes runtime behaviors and limitations to consider when operating the plugin in production.
+このセクションでは、本プラグインを本番環境で運用する際のランタイム動作と制限について説明します。
 
-### Quota Overshoot During Connection Bursts
+### 接続バースト時のクォータ超過
 
-Quota decisions are made during authentication, while session counters are finalized on session lifecycle hooks. Under high concurrent connect bursts (especially in clusters), this creates a short synchronization window where the observed concurrent sessions for one username can temporarily exceed `max_sessions_per_username`.
+クォータの判断は認証時に行われ、セッションカウンターの確定はセッションライフサイクルフックで行われます。高い同時接続バースト（特にクラスター環境）では、1つのユーザー名の同時セッション数が一時的に `max_sessions_per_username` を超える短い同期ウィンドウが発生します。
 
-Practical implication:
+実際の意味：
 
-- This plugin provides cluster-wide quota enforcement with eventual consistency under burst load.
-- Under extreme connection fan-in, the plugin does not guarantee strict per-connection quota enforcement at every instant.
+- 本プラグインはバースト負荷下で最終的整合性を持つクラスター全体のクォータ強制を提供します。
+- 極端な接続集中時には、常に厳密な接続単位のクォータ強制を保証しません。
 
-### Bootstrap Behavior on Plugin Startup
+### プラグイン起動時のブートストラップ動作
 
-When the plugin is installed on a running cluster, existing client sessions were established before hooks were registered. On startup, the plugin bootstraps quota state by traversing all local channels and registering each session.
+プラグインが稼働中のクラスターにインストールされると、既存のクライアントセッションはフック登録前に確立されています。起動時にプラグインはローカルチャネルをすべて走査し、各セッションを登録してクォータ状態をブートストラップします。
 
-To avoid overloading the Core nodes with a storm of DB write operations (especially when replicant nodes have a large number of existing connections), the bootstrap loop is throttled:
+コアノードへのDB書き込み負荷を避けるため（特にレプリカントノードに大量の接続がある場合）、ブートストラップループはスロットリングされます：
 
-- Sessions are registered in batches of 100.
-- After each batch, the bootstrap waits for the last written record to be replicated back to the local table before continuing. It polls every 10ms.
-- If replication does not complete within 10 seconds, an error is logged and bootstrap is aborted with an `error` level log.
-  Sessions registered before the timeout are retained; remaining sessions will be picked up naturally through subsequent hook-based registration on reconnect.
+- セッションは100件ずつバッチ登録されます。
+- 各バッチ後、最後に書き込んだレコードのローカルテーブルへのレプリケーション完了を待ちます。10msごとにポーリングします。
+- 10秒以内にレプリケーションが完了しない場合、エラーがログに記録され、ブートストラップは中止されます。タイムアウト前に登録されたセッションは保持され、残りは再接続時のフック登録で自然に拾われます。
 
-### Handling `503` Responses from List APIs
+### リストAPIの `503` 応答の扱い
 
-When the server is busy or building a snapshot, the list API returns `503`.
+サーバーがビジー状態またはスナップショット構築中の場合、リストAPIは `503` を返します。
 
-The `503` response body includes a `data` array with a partial first page read from the in-progress snapshot table. This gives callers best-effort data immediately rather than an empty response. The `meta.partial: true` flag indicates the data is incomplete. The partial page may be empty if the build has just started.
+`503` のレスポンスボディには、進行中のスナップショットテーブルから部分的に読み取った最初のページの `data` 配列が含まれます。これにより呼び出し元は空レスポンスではなく即時にベストエフォートのデータを得られます。`meta.partial: true` フラグはデータが不完全であることを示します。構築開始直後の場合は部分ページが空の場合もあります。
 
-API Client Guidance:
+APIクライアントへのガイダンス：
 
-- Inspect `data` for any partial results available immediately.
-- Retry with bounded backoff.
+- 可能な限り `data` を確認してください。
+- 制限付きバックオフで再試行してください。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
-## Download
+## ダウンロード
 
-Tarballs for each EMQX release:
+各EMQXリリースのtarball：
 
-| EMQX Version | Plugin Version | Package |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) |
 
