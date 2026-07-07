@@ -142,7 +142,7 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
 
   This method requires:
 
-  - **Roles Anywhere Endpoint**: The endpoint where the AWS IAM Roles Anywhere credential process serves its API. Enter a full HTTP endpoint with scheme and port, for example, `http://127.0.0.1:9911`.
+  - **Roles Anywhere Endpoint**: The endpoint where the AWS IAM Roles Anywhere credential helper process serves its API. Enter a full HTTP endpoint with scheme and port, for example, `http://127.0.0.1:9911`.
   - **AWS Region**: The AWS region where the MSK cluster is running.
 
 - **OAuth**: Uses OAuth 2.0–based authentication to connect EMQX to Kafka clusters that support OAuth or OIDC (such as Confluent Cloud or self-managed Kafka with OAuth enabled).
