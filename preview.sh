@@ -27,7 +27,11 @@ THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 
 docker rm "$CONTAINER_NAME" > /dev/null 2>&1 || true
 
-python3 "$THIS_DIR/gen.py" ce > directory.json
+if command -v uv >/dev/null 2>&1; then
+    uv run --with PyYAML python3 "$THIS_DIR/gen.py" "$PRODUCT" > directory.json
+else
+    python3 "$THIS_DIR/gen.py" "$PRODUCT" > directory.json
+fi
 docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
     -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
     -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \

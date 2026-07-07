@@ -1,0 +1,148 @@
+# 将 EMQX 集群从版本 4.4 升级到 5.x
+
+本页面提供了如何将您的 EMQX 集群升级到最新版本的说明。
+
+由于 EMQX 5.x 在配置、管理 API 和集群 API 方面与 4.x 版本不兼容，不支持从早期版本进行[滚动升级](./rolling-upgrades.md)。为确保成功升级，请在开始升级过程之前仔细阅读[开始前的注意事项](#开始前的注意事项)。
+
+如果在升级过程中遇到任何问题，请联系 [EMQX 技术支持](https://www.emqx.com/zh/support)。
+
+::: tip
+
+请注意，重新安装当前版本将不会保留您现有的集群配置。您可以参考[安装指南](./install.md)进行全新安装。
+
+:::
+
+## 适用读者
+
+本指南适用于需要从早期版本的 EMQX 进行升级的用户，以及熟悉数据中心操作的有经验的 Linux 系统管理员。
+
+## 开始前的注意事项
+
+在开始升级之前，请了解本节中描述的要求、不兼容更改和潜在问题。
+
+### 升级路径
+
+要将现有的 EMQX 集群升级到 5.1 或更高版本，您当前必须运行 4.4.x 版本。
+
+如果您运行的是早于 4.4.x 版本的版本，您必须首先逐个升级到 4.4.x 版本。例如，如果您当前运行的是 4.3.x 版本，则必须先升级到 4.4 版本，然后再升级到 5.x 版本。请参考 [4.4 升级指南](https://docs.emqx.com/zh/enterprise/v4.4/changes/upgrade-4.4.html#data-and-config-backup)获取指导。
+
+### 不兼容更改
+
+在开始升级之前，您需要解决当前部署中的所有不兼容性或冲突。为了确定可能影响您的应用程序和部署的潜在兼容性问题和重大更改，请参考 [从 EMQX 4.4 到 EMQX 5.1 的不兼容变更](../../release-notes/breaking-changes-5.1.0.md)，以及以下版本中的不兼容变更文档：
+
+:::: tabs type:card
+
+::: tab EMQX 企业版
+
+- [EMQX 5.4 中的不兼容变更](../../release-notes/breaking-changes-ee-5.4.md)
+- [EMQX 5.5 中的不兼容变更](../../release-notes/breaking-changes-ee-5.5.md)
+- [EMQX 5.6 中的不兼容变更](../../release-notes/breaking-changes-ee-5.6.md)
+- [EMQX 5.7 中的不兼容变更](../../release-notes/breaking-changes-ee-5.7.md)
+- [EMQX 5.8 中的不兼容变更](../../release-notes/breaking-changes-ee-5.8.md)
+
+:::
+
+::: tab EMQX 开源版
+
+- [EMQX 5.4 中的不兼容变更](../../release-notes/breaking-changes-ce-5.4.md)
+- [EMQX 5.5 中的不兼容变更](../../release-notes/breaking-changes-ce-5.5.md)
+- [EMQX 5.6 中的不兼容变更](../../release-notes/breaking-changes-ce-5.6.md)
+- [EMQX 5.7 中的不兼容变更](../../release-notes/breaking-changes-ce-5.7.md)
+- [EMQX 5.8 中的不兼容变更](../../release-notes/breaking-changes-ce-5.8.md)
+
+:::
+
+::::
+
+此外，建议在将升级部署到生产环境之前，在测试环境中充分测试您的应用程序。这将有助于确保平稳过渡并最小化潜在的中断。
+
+#### 客户端应用程序和数据桥接兼容性
+
+使用不兼容的客户端和数据桥接版本运行升级部署可能会导致意外或未定义的行为。因此，务必确保您的客户端应用程序和数据桥接后端服务与 EMQX 最新版本兼容。您可以参考[客户端 SDK](../../develop/connect-emqx/introduction.md) 来验证与 EMQX 5.x 的兼容性。
+
+### 潜在问题
+
+在升级过程中，要注意以下常见潜在问题：
+
+- 升级后的 EMQX 版本与客户端应用程序之间的不兼容性。
+- 可能需要进行的配置更改，以适应新版本。
+- 对可能需要更新或重新配置的外部系统或服务的依赖。
+
+为了避免这些问题，请仔细阅读 EMQX 最新版本的文档，并在将升级应用于生产环境之前，在测试环境中进行全面测试。此外，考虑使用 EMQX 提供的支持服务，以确保平稳和成功的升级。
+
+## 升级 EMQX 集群
+
+::: tip 前置准备
+
+- 确保您正在运行 EMQX 集群版本 4.4.x。
+- 您已阅读[更新日志](../../release-notes/all-changes-ee.md)。
+- 部署环境支持运行 [EMQX 支持的操作系统](./install.md) 的虚拟机或 Docker 容器。
+- 您有足够的磁盘空间和可用内存进行升级。
+- 您已查看了[性能调优 (Linux)](../../guides/performance/tune.md) 中提到的任何特定前提条件。
+
+:::
+
+:::: tabs type:card
+
+::: tab EMQX 企业版
+
+1. 下载 EMQX `@EE_VERSION@` 软件包。
+
+   - **使用软件包管理器：** 检查您的操作系统的软件包管理器是否提供 EMQX `@EE_VERSION@` 二进制文件。如果可用，使用软件包管理器下载并安装这些二进制文件。
+   - **手动下载二进制文件：** 如果软件包管理器未提供 EMQX `@EE_VERSION@` 二进制文件，或者服务器网络受限，您可以从 [EMQX 官方网站](https://www.emqx.com/zh/downloads-and-install/enterprise)手动下载。
+
+2. 使用二进制文件部署一个新的 EMQX 集群。有关详细的安装步骤，请参阅[安装指南](../deploy/install.md)。这将确保最新版本的全新安装。
+
+3. 迁移 EMQX 集群。
+
+   - 使用 API 或 Dashboard 备份您的 EMQX 4.4 集群的配置和数据。
+
+   - 将 4.4 版本的配置文件格式转换为与 EMQX `@EE_VERSION@` 兼容的新格式。
+
+   - 使用以下命令将迁移后的配置文件恢复到 EMQX `@EE_VERSION@` 集群中：`emqx ctl data import <文件>`。
+
+     ::: tip
+
+     EMQX 提供了一个[迁移工具](https://github.com/emqx/emqx-data-converter/releases)可以帮助将现有的 EMQX 4.4 集群的配置迁移到新的 EMQX `@EE_VERSION@` 集群中。该工具能够自动化迁移过程，确保平稳过渡。迁移后，请务必检查生成的配置，确保它们符合预期。
+
+     :::
+
+:::
+
+::: tab EMQX 开源版
+
+1. 下载 EMQX `@CE_VERSION@` 软件包。
+
+   - **使用软件包管理器：** 检查您的操作系统的软件包管理器是否提供 EMQX `@CE_VERSION@` 二进制文件。如果可用，使用软件包管理器下载并安装这些二进制文件。
+   - **手动下载二进制文件：** 如果软件包管理器未提供 EMQX `@CE_VERSION@` 二进制文件，或者服务器网络受限，您可以从 [EMQX 官方网站](https://www.emqx.com/zh/downloads-and-install/broker)手动下载。
+
+2. 使用二进制文件部署一个新的 EMQX 集群。有关详细的安装步骤，请参阅 [安装指南](../deploy/install.md)。这确保了最新版本的全新安装。
+
+3. 迁移 EMQX 集群。
+
+   - 使用 API 或 Dashboard 备份您的 EMQX 4.4 集群的配置和数据。
+
+   - 将 4.4 版本的配置文件格式转换为与 EMQX `@CE_VERSION@` 兼容的新格式。
+
+   - 使用以下命令将迁移后的配置文件恢复到 EMQX `@CE_VERSION@` 集群中：`emqx ctl data import <文件>`。
+
+     ::: tip
+
+     EMQX 提供了一个[迁移工具](https://github.com/emqx/emqx-data-converter/releases)可以帮助将现有的 EMQX 4.4 集群的配置迁移到新的 EMQX `@CE_VERSION@` 集群中。该工具能够自动化迁移过程，确保平稳过渡。迁移后，请务必检查生成的配置，确保它们符合预期。
+
+     :::
+
+
+:::
+
+::::
+
+4. 彻底验证新的 EMQX 集群，以确保其按预期运行。测试其连接性、消息传递功能以及其他相关功能，以确认升级成功。
+
+   ::: tip
+
+   不支持降级到先前的版本，因此请确保在销毁旧集群之前完全验证新集群。
+
+   :::
+
+5. 将生产环境切换到升级后的集群。更新您的 DNS 记录、负载均衡器或任何其他相关配置，以将流量定向到新的集群。在切换后密切监控系统，确保运行平稳。
