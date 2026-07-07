@@ -142,7 +142,7 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
 
   This method requires:
 
-  - **Roles Anywhere Endpoint**: The endpoint where the AWS IAM Roles Anywhere credential helper process serves its API. Enter a full HTTP endpoint with scheme and port, for example, `http://127.0.0.1:9911`.
+  - **Roles Anywhere Endpoint**: The endpoint where the AWS IAM Roles Anywhere credential helper serves its API. Enter a full HTTP endpoint with scheme and port, for example, `http://127.0.0.1:9911`.
   - **AWS Region**: The AWS region where the MSK cluster is running.
 
 - **OAuth**: Uses OAuth 2.0–based authentication to connect EMQX to Kafka clusters that support OAuth or OIDC (such as Confluent Cloud or self-managed Kafka with OAuth enabled).
@@ -381,8 +381,8 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
 
      - `None`: No authentication.
-     - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
-     - `MSK IAM Roles Anywhere`: For use with AWS MSK clusters from environments outside EC2 by using the AWS IAM Roles Anywhere credential helper.
+     - `AWS IAM for MSK`: For use with Amazon MSK clusters when EMQX is deployed on EC2 instances.
+     - `MSK IAM Roles Anywhere`: For use with Amazon MSK clusters from environments outside EC2 by using the AWS IAM Roles Anywhere credential helper.
      - `OAuth`: Specify parameters to authenticate using [OAuth 2.0](https://oauth.net/2/).
      - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.

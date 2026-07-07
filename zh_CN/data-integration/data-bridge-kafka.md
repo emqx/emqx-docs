@@ -98,8 +98,8 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    - **认证**：选择 Kafka 集群所需的认证机制。EMQX 支持以下几种方式：
    
      - `无`：无需认证。
-     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
-     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证进程连接到 AWS MSK 集群的场景。
+     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 Amazon MSK 集群的场景。
+     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
      - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式，连接支持 OAuth 或 OIDC 的 Kafka 集群。
      - `基础认证`：使用用户名和密码进行身份认证。需要选择 SASL 机制（`plain`、`scram_sha_256` 或 `scram_sha_512`）。
      - `Kerberos`：使用 Kerberos（GSSAPI）进行身份认证。需要指定 Kerberos Principal 和 Kerberos keytab 文件。
@@ -132,13 +132,13 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
   :::
 
-- **MSK IAM Roles Anywhere**：适用于 EMQX 部署在 EC2 以外的环境（例如本地数据中心），并通过 AWS IAM Roles Anywhere 凭证进程连接到 Amazon MSK 集群的场景。
+- **MSK IAM Roles Anywhere**：适用于 EMQX 部署在 EC2 以外的环境（例如本地数据中心），并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
 
-  在该模式下，AWS IAM Roles Anywhere 凭证进程必须以 `serve` 模式运行，并将其 HTTP API 暴露给 EMQX。EMQX 通过该 API 获取临时 AWS 凭据，并使用这些凭据生成用于 MSK IAM 认证的 SASL/OAUTHBEARER 令牌。
+  在该模式下，AWS IAM Roles Anywhere 凭证助手必须以 `serve` 模式运行，并将其 HTTP API 暴露给 EMQX。EMQX 通过该 API 获取临时 AWS 凭据，并使用这些凭据生成用于 MSK IAM 认证的 SASL/OAUTHBEARER 令牌。
 
   该认证方式需要配置以下参数：
 
-  - **Roles Anywhere 端点**：AWS IAM Roles Anywhere 凭证进程提供 API 的端点。请输入包含协议和端口的完整 HTTP 端点，例如 `http://127.0.0.1:9911`。
+  - **Roles Anywhere 端点**：AWS IAM Roles Anywhere 凭证助手提供 API 的端点。请输入包含协议和端口的完整 HTTP 端点，例如 `http://127.0.0.1:9911`。
   - **AWS 区域**：MSK 集群运行所在的 AWS 区域。
 
 - **OAuth**：使用基于 OAuth 2.0 的身份认证方式，将 EMQX 连接到支持 OAuth 或 OIDC 的 Kafka 集群（例如 Confluent Cloud，或启用了 OAuth 的自建 Kafka 集群）。
@@ -368,8 +368,8 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
    - **认证**：选择 Kafka 集群所需的认证机制。EMQX 支持以下几种方式：
 
      - `无`：无需认证。
-     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
-     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证进程连接到 AWS MSK 集群的场景。
+     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 Amazon MSK 集群的场景。
+     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
      - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式。
      - `基础认证`：需要选择认证方法（`plain`、`scram_sha_256` 或 `scram_sha_512`），并提供用户名和密码。
      - `Kerberos`：需要指定 Kerberos Principal 和 Kerberos Keytab 文件。
