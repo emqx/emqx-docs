@@ -1,12 +1,12 @@
 # EMQX Backup Sync
 
-This plugin periodically synchronizes selected backup data from a primary EMQX cluster to a secondary EMQX cluster by using the existing Data Backup APIs.
+このプラグインは、既存のデータバックアップAPIを使用して、プライマリEMQXクラスターからセカンダリEMQXクラスターへ選択されたバックアップデータを定期的に同期します。
 
-The secondary cluster calls the primary cluster to export a backup file, then downloads that file, uploads it locally, and imports it. Selected configuration roots are imported with EMQX's existing configuration import semantics. Selected Mnesia table sets are imported as a snapshot, so records in those table sets that only exist on the secondary cluster are removed. Roots and table sets that are not selected are left unchanged.
+セカンダリクラスターはプライマリクラスターに対してバックアップファイルのエクスポートを呼び出し、そのファイルをダウンロードし、ローカルにアップロードしてインポートします。選択された設定ルートはEMQXの既存の設定インポートのセマンティクスに従ってインポートされます。選択されたMnesiaテーブルセットはスナップショットとしてインポートされるため、セカンダリクラスターにのみ存在するレコードは削除されます。選択されていないルートおよびテーブルセットは変更されません。
 
-## Configuration
+## 設定
 
-Install and start the plugin on each secondary cluster. The primary cluster does not need this plugin installed; it only needs Dashboard Data Backup APIs reachable from the secondary cluster.
+各セカンダリクラスターにプラグインをインストールして起動してください。プライマリクラスターにはこのプラグインのインストールは不要で、セカンダリクラスターからアクセス可能なDashboardのデータバックアップAPIがあれば十分です。
 
 ```hocon
 primary {
@@ -44,31 +44,31 @@ sync {
 }
 ```
 
-The configured API key must be allowed to access Data Backup endpoints on the primary cluster. `primary.api_key` and `primary.api_secret` can be set directly or as `file://` paths, for example `file:///etc/emqx/backup-sync-api-key`.
+設定されたAPIキーはプライマリクラスターのデータバックアップエンドポイントへのアクセスが許可されている必要があります。`primary.api_key`および`primary.api_secret`は直接設定するか、`file://`パス（例: `file:///etc/emqx/backup-sync-api-key`）として指定できます。
 
-Supported `sync.root_keys` values are `connectors`, `actions`, `sources`, `rule_engine`, `listeners`, `schema_registry`, `authentication`, and `authorization`.
+サポートされている`sync.root_keys`の値は`connectors`、`actions`、`sources`、`rule_engine`、`listeners`、`schema_registry`、`authentication`、および`authorization`です。
 
-Rules commonly depend on connectors, actions, sources, and schema registry objects. If `rule_engine` is synchronized without its dependencies, imports may fail or create incomplete runtime behavior. Include those dependent roots in `sync.root_keys` unless they already exist on the secondary cluster.
+ルールは通常、コネクター、アクション、ソース、およびスキーマレジストリのオブジェクトに依存します。`rule_engine`を依存関係なしに同期すると、インポートが失敗したり不完全なランタイム動作を引き起こす可能性があります。これらの依存ルートがセカンダリクラスターに存在しない場合は、`sync.root_keys`に含めてください。
 
-By default, synchronization also includes the `banned`, `builtin_authn`, and `builtin_authz` table sets. These selected table sets are replaced on the secondary cluster. Set `sync.table_sets = []` when configuration-only synchronization is required. Supported `sync.table_sets` values are `banned`, `builtin_authn`, `builtin_authz`, `builtin_retainer`, `psk`, and `mt`. The primary Data Backup API does not include `dashboard_users` or `api_keys` when called with an API key.
+デフォルトでは、同期には`banned`、`builtin_authn`、`builtin_authz`のテーブルセットも含まれます。これらの選択されたテーブルセットはセカンダリクラスター上で置き換えられます。設定のみの同期が必要な場合は`sync.table_sets = []`に設定してください。サポートされている`sync.table_sets`の値は`banned`、`builtin_authn`、`builtin_authz`、`builtin_retainer`、`psk`、および`mt`です。プライマリのデータバックアップAPIはAPIキーで呼び出した場合、`dashboard_users`や`api_keys`は含みません。
 
 ## CLI
 
-Use the following command on a secondary node to inspect the local sync worker:
+セカンダリノード上で以下のコマンドを使用してローカルの同期ワーカーを確認できます。
 
 ```bash
 emqx ctl backup_sync status
 ```
 
-The command prints the local node, health, worker state, selected core node, next scheduled sync, and the non-sensitive sync configuration.
+このコマンドはローカルノード、ヘルス状態、ワーカー状態、選択されたコアノード、次回の同期予定、および非機密の同期設定を表示します。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
-## Download
+## ダウンロード
 
-Tarballs for each EMQX release:
+各EMQXリリースのtarball：
 
-| EMQX Version | Plugin Version | Package |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.0.3 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_backup_sync-0.1.0.tar.gz) |
 
