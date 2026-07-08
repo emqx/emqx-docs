@@ -306,6 +306,8 @@ authentication = [{ enable = true }]
 
 A zone in EMQX is a concept for grouping configurations. Zones can be associated with listeners by setting the `zone` field to the name of the desired zone. MQTT clients connected to listeners associated with a zone will inherit the configurations from that zone, which may override global settings.
 
+Starting from EMQX v6.1.0, clients authenticated by an HTTP authenticator can also have their zone overridden by the authentication result. If the HTTP authentication response returns `zone_override` with the name of an existing zone, EMQX applies that zone to the client after successful authentication. For details, see [Use HTTP Service](../access-control/authn/http.md#http-request-and-response).
+
 ::: tip
 By default, listeners are linked to a zone named `default`. The `default` zone is a logical grouping and does not exist in the configuration files.
 :::

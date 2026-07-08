@@ -1207,6 +1207,10 @@ MQTT 消息流提供了一种基于主题过滤器的持久化消息集合，并
 
 #### 访问控制
 
+- [#15988](https://github.com/emqx/emqx/pull/15988) 新增支持根据认证结果覆盖客户端所属的 Zone。如果 HTTP 认证后端在认证成功响应中返回 `zone_override` 属性，EMQX 会将指定的已存在 Zone 应用于该客户端。
+
+  该功能可用于在运行时应用不同的 Zone 级别配置，例如速率限制器。注意，当监听器配置了 `parse_unit = frame` 时，新 Zone 中的 `max_packet_size` 设置不会在覆盖后生效。
+
 - [#16132](https://github.com/emqx/emqx/pull/16132) 新增用于集中管理证书的 HTTP API。
 - [#16154](https://github.com/emqx/emqx/pull/16154) 新增支持在监听器和客户端的 SSL 配置选项中引用受管证书文件。
 - [#16266](https://github.com/emqx/emqx/pull/16266) 新增 `authorization.include_mountpoint` 配置项。启用后，在进行授权校验之前，主题将自动加上监听器的挂载点前缀。

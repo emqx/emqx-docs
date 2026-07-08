@@ -312,6 +312,8 @@ authentication = [{ enable = true }]
 
 EMQX 中的 Zone 是一种配置分组的概念。可以通过将监听器的 `zone` 字段设置为所需 Zone 的名称，将 Zone 与监听器关联。与某个 Zone 关联的监听器连接的 MQTT 客户端将继承该 Zone 的配置，这些配置可能会覆盖全局设置。
 
+从 EMQX v6.1.0 开始，通过 HTTP 认证器认证的客户端也可以由认证结果覆盖其所属 Zone。如果 HTTP 认证响应返回 `zone_override`，且该字段的值为已存在的 Zone 名称，EMQX 将在认证成功后把该 Zone 应用于客户端。详情请参见[使用 HTTP 服务进行密码认证](../access-control/authn/http.md#请求格式与返回结果)。
+
 ::: tip
 
 默认情况下，监听器与一个名为 `default` 的 Zone 关联。`default` Zone 是一个逻辑分组，在配置文件中并不存在。

@@ -18,6 +18,7 @@ The authentication process is similar to an HTTP API call where EMQX, as the req
 - Starting from EMQX v5.7.0, you can set [client attributes](../../client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
 - Starting from EMQX v5.8.0, you can set an optional `acl` field in the response body to specify the client's permissions. See [Access Control List (ACL)](./acl.md) for more information.
 - Starting from EMQX v5.8.0, you can set an optional `expire_at` field in the response body to specify the expiration time of the client's authenticity, forcing the client to disconnect and get reauthenticated at reconnection. The value is a Unix timestamp in seconds.
+- Starting from EMQX v6.1.0, you can set an optional `zone_override` field in the response body to override the client's zone after successful authentication. The value must be the name of an existing [zone](../../configuration/configuration.md#zone-override). This is useful for applying different per-zone configurations, such as rate limiters, based on the authentication result. If the specified zone does not exist, EMQX ignores this field and keeps the client's original zone.
 - The HTTP response status code `Status Code` should be `200` or `204`, the `4xx/5xx` status code returned will ignore the body and determine the result to be `ignore` and continue with the authentication chain.
 
 Example response:
@@ -33,8 +34,9 @@ Body:
     "client_attrs": { // optional (since v5.7.0)
         "role": "admin",
         "sn": "10c61f1a1f47"
-    }
+    },
     "expire_at": 1654254601, // optional (since v5.8.0)
+    "zone_override": "vip", // optional (since v6.1.0)
     "acl": // optional (since v5.8.0)
     [
         {
@@ -51,6 +53,10 @@ Body:
     ]
 }
 ```
+
+::: tip
+If the listener is configured with `parse_unit = frame`, the `max_packet_size` setting from the new zone does not take effect after `zone_override` is applied.
+:::
 
 ::: tip EMQX 4.x Compatibility Notes
 

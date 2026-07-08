@@ -17,6 +17,7 @@ EMQX 支持通过外部 HTTP 服务进行密码认证。客户端连接时，EMQ
 - 从 EMQX v5.7.0 版本开始，您可以使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
 - 从 EMQX v5.8.0 版本开始，您可以在响应体中设置一个可选的 `acl` 字段，用于指定客户端的权限。有关更多信息，请参阅[权限列表（ACL）](./acl.md)。
 - 从 EMQX v5.8.0 版本开始，您可以在响应体中设置一个可选的 `expire_at` 字段，用于指定客户端的认证到期时间，并强制客户端断开连接以便重新认证。该值为 Unix 时间戳（秒）。
+- 从 EMQX v6.1.0 版本开始，您可以在响应体中设置一个可选的 `zone_override` 字段，用于在认证成功后覆盖客户端所属的 Zone。该值必须是已存在的 [Zone](../../configuration/configuration.md#zone-覆盖) 名称。该字段适用于根据认证结果动态应用不同 Zone 配置的场景，例如应用不同的 Zone 级别速率限制器。如果指定的 Zone 不存在，EMQX 将忽略该字段，并保留客户端原有的 Zone。
 - HTTP 响应状态码 `Status Code` 应当为 `200` 或 `204`，返回 `4xx/5xx` 状态码时将忽略 body 并判定结果为 `ignore`，继续执行认证链。
 
 响应示例：
@@ -32,8 +33,9 @@ Body:
     "client_attrs": { // 可选 (自 v5.7.0 起)
         "role": "admin",
         "sn": "10c61f1a1f47"
-    }
+    },
     "expire_at": 1654254601, // 可选 (自 v5.8.0 起)
+    "zone_override": "vip", // 可选 (自 v6.1.0 起)
     "acl": // 可选 (自 v5.8.0 起)
     [
         {
@@ -50,6 +52,10 @@ Body:
     ]
 }
 ```
+
+::: tip
+如果监听器配置了 `parse_unit = frame`，则应用 `zone_override` 后，新 Zone 中的 `max_packet_size` 设置不会生效。
+:::
 
 ::: tip EMQX 4.x 兼容性说明
 在 4.x 中，EMQX 仅用到了 HTTP API 返回的状态码，而内容则被丢弃。例如 `200` 表示 `allow`，`403` 表示 `deny`。因为缺乏丰富的表达能力，在 5.0 中对这一机制进行了不兼容的调整。

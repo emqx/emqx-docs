@@ -1225,6 +1225,10 @@ Added centralized certificate management via HTTP API, allowing certificates to 
 
 #### Access Control
 
+- [#15988](https://github.com/emqx/emqx/pull/15988) Added support for overriding a client's zone based on authentication results. If an HTTP authentication backend returns a `zone_override` attribute in a successful authentication response, EMQX applies the specified existing zone to the client.
+
+  This can be used to apply per-zone configurations, such as rate limiters, at runtime. Note that when the listener is configured with `parse_unit = frame`, `max_packet_size` from the new zone does not take effect after the override.
+
 - [#16132](https://github.com/emqx/emqx/pull/16132) Added an HTTP API to manage certificates in a centralized manner.
 
 - [#16154](https://github.com/emqx/emqx/pull/16154) Added support for referencing managed certificate files in SSL options of listeners and clients.
