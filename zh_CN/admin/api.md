@@ -15,6 +15,10 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 本节将指导您快速开始使用 EMQX REST API。
 
+::: tip
+从 EMQX 6.3.0 开始，[功能门控](../deploy/feature-gates.md)可以在启动阶段禁用可选功能。已禁用功能提供的 REST API 路径不会加载为可访问的 API 端点。启用 `dashboard` 功能后，可以调用 `GET /api/v5/features` 查看解析后的功能集。
+:::
+
 ## 基本路径
 
 EMQX 在 REST API 上做了版本控制，EMQX 5.0.0 以后的所有 API 调用均以 `/api/v5` 开头。

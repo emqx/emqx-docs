@@ -21,6 +21,29 @@ This section will introduce how to use the Docker image to install the latest ve
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
    ```
 
+### Start EMQX with Feature Gates
+
+Starting from EMQX 6.3.0, you can use the `EMQX_FEATURES` environment variable to control which optional features are available at startup. For example, to start EMQX with only core applications, run:
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=ESSENTIAL" \
+  -p 1883:1883 -p 8083:8083 \
+  -p 8084:8084 -p 8883:8883 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+To start EMQX with a custom feature set, run:
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -p 1883:1883 -p 18083:18083 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+For the full feature list and dependency behavior, see [Feature Gates](./feature-gates.md).
+
 ### Docker Deployment Precautions
 
 1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
@@ -77,6 +100,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -102,6 +126,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -120,6 +145,8 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
      emqx-bridge:
        driver: bridge
    ```
+
+   If you set `EMQX_FEATURES` in a Docker Compose cluster, use the same value for all EMQX services.
 
 2. In the command line tool, switch to the directory where  `docker-compose.yml` is stored, and run the following command to start the EMQX cluster:
 

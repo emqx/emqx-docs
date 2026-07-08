@@ -13,6 +13,10 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
 - **Pull 模式**：Prometheus 直接通过 EMQX 的 REST API 采集指标。
 - **Push 模式**：EMQX 推送指标到 Pushgateway 服务，再由 Prometheus 从 Pushgateway 服务中采集指标。
 
+::: tip
+从 EMQX 6.3.0 开始，Prometheus 指标由 `metrics` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `metrics` 时也会自动启用其依赖的 `dashboard` 和 `auth`。更多信息请参见[功能门控](../deploy/feature-gates.md)。
+:::
+
 配置 Prometheus 集成步骤如下：
 
 1. 在 EMQX Dashboard 中进入**管理** -> **监控**。

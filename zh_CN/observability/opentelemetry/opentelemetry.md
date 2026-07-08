@@ -3,6 +3,10 @@
 
 EMQX 支持通过 gRPC OTEL 协议直接把遥测数据推送到 OpenTelemetry Collector，再经 Collector 中转、过滤或转换数据到任意你想要集成的后台中作存储和可视化，例如 Jaeger 和 [Prometheus](../../observability/prometheus.md)。通过与 OpenTelemetry 集成，可以优化 EMQX 的指标收集、消息发布的分布式追踪以及日志的统一收集与上下文关联。这种集成能够帮助用户实现 EMQX 的可视化监控和告警通知，跟踪消息在不同系统和服务之间的流动。这对于持续性能优化、更快地定位问题和进行系统监控有很大的帮助。
 
+::: tip
+从 EMQX 6.3.0 开始，OpenTelemetry 由 `opentelemetry` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `opentelemetry` 时也会自动启用其依赖的 `dashboard`。更多信息请参见[功能门控](../../deploy/feature-gates.md)。
+:::
+
 <img src="./assets/emqx-opentelemetry.jpg" alt="emqx-opentelemetry" style="zoom:67%;" />
 
 本章节介绍了 EMQX 如何将遥测数据与 OpenTelemetry Collector 集成，完整实现对以下可观测性信息的 OpenTelemetry 内置支持：

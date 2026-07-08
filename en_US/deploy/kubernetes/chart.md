@@ -140,6 +140,17 @@ The following table lists the configurable EMQX-specific parameters of the chart
 | `emqxLicenseSecretRef.name`                                                                                                                                         | Name of the secret that holds the license information                         | `""`         |
 | `emqxLicenseSecretRef.key`                                                                                                                                          | Key of the secret that holds the license information                          | `""`         |
 
+### Configure Feature Gates
+
+Starting from EMQX 6.3.0, you can set `EMQX_FEATURES` to control which optional features are available at startup. For example:
+
+```yaml
+emqxConfig:
+  EMQX_FEATURES: "dashboard,auth,metrics"
+```
+
+Feature gates are resolved only when EMQX starts. If you change this value, recreate or restart the EMQX pods. For the full feature list and dependency behavior, see [Feature Gates](../feature-gates.md).
+
 ## SSL Settings
 When using `cert-manager`, TLS certificates are stored in Kubernetes secrets using the standard keys: `tls.crt` and `tls.key`. The EMQX Helm chart automatically mounts these certificate files to the following directory within the container:
 

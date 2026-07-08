@@ -15,6 +15,10 @@ All of the above endpoints require `swagger_support` to be set to `true` (the de
 
 This section introduces how to work with the EMQX REST API.
 
+::: tip
+Starting from EMQX 6.3.0, [feature gates](../deploy/feature-gates.md) can disable optional features at startup. REST API paths provided by disabled features are not loaded as accessible API endpoints. When the `dashboard` feature is enabled, you can call `GET /api/v5/features` to view the resolved feature set.
+:::
+
 ## Basic Path
 
 EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
@@ -391,4 +395,3 @@ When an error happens, the error code is returned in JSON format by the Body:
 | UPDATE_FAILED                                  | Update fails                                                 |
 | REST_FAILED                                    | Reset source or configuration fails                          |
 | CLIENT_NOT_RESPONSE                            | Client not responding                                        |
-

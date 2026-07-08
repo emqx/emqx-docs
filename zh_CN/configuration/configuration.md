@@ -174,6 +174,10 @@ listeners.ssl.default {
 
 :::
 
+::: tip
+从 EMQX 6.3.0 开始，`EMQX_FEATURES` 是用于[功能门控](../deploy/feature-gates.md)的特殊启动环境变量。它不会映射到 HOCON 配置路径，不会写入 `cluster.hocon`，并且只在 EMQX 启动时解析。
+:::
+
 ## 配置覆盖规则
 
 HOCON 的值是分层覆盖的，最简单的规则如下：
