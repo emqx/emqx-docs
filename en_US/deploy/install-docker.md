@@ -18,7 +18,7 @@ This section will introduce how to use the Docker image to install the latest ve
 2. To start the Docker container, run:
 
    ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
+   docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
    ```
 
 ### Start EMQX with Feature Gates
