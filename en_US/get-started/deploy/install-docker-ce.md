@@ -9,9 +9,9 @@ This page introduces how to use the official Docker image to install and run the
 
 ## Use Docker to Run A Single EMQX Node
 
-This section will introduce how to use the Docker image to install the latest version of EMQX.For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx). 
+This section will introduce how to use the Docker image to install the latest version of EMQX.For more information about EMQX official docker image, see [Docker Hub - emqx](https://hub.docker.com/_/emqx).
 
-1. To get the Docker image, run: 
+1. To get the Docker image, run:
 
    ```bash
    docker pull emqx/emqx:@CE_VERSION@
@@ -55,7 +55,7 @@ This section will introduce how to use the Docker image to install the latest ve
 
 Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster.
 
-Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](../../operate/cluster/create-cluster.md).
+Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](../../guides/cluster/create-cluster.md).
 
 :::tip
 
@@ -67,7 +67,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
 
    ```yml
    version: '3'
-   
+
    services:
      emqx1:
        image: emqx/emqx:@CE_VERSION@
@@ -90,10 +90,10 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
          - 8083:8083
          - 8084:8084
          - 8883:8883
-         - 18083:18083 
+         - 18083:18083
        # volumes:
        #   - $PWD/emqx1_data:/opt/emqx/data
-   
+
      emqx2:
        image: emqx/emqx:@CE_VERSION@
        container_name: emqx2
@@ -112,7 +112,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
            - node2.emqx.io
        # volumes:
        #   - $PWD/emqx2_data:/opt/emqx/data
-   
+
    networks:
      emqx-bridge:
        driver: bridge
@@ -134,8 +134,8 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
 
 ## Next Steps
 
-Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md). 
+Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md).
 
-- On how to configure EMQX parameters and other features, see [Configuration](../../operate/configuration/configuration.md).
+- On how to configure EMQX parameters and other features, see [Configuration](../../guides/configuration/configuration.md).
 
-- On how to build an EMQX cluster with multiple nodes, see  [Clustering](../../operate/cluster/create-cluster.md).
+- On how to build an EMQX cluster with multiple nodes, see  [Clustering](../../guides/cluster/create-cluster.md).

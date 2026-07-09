@@ -12,7 +12,7 @@
 - [#12947](https://github.com/emqx/emqx/pull/12947) JWT 認証に新しいブールオプション `disconnect_after_expire` が追加され、デフォルト値は `true` です。有効にすると、JWT トークンの有効期限切れ後にクライアントは切断されます。
 
   以前は、有効な JWT を持つクライアントは JWT トークンが期限切れになってもブローカーに接続し続けることができました。現在は JWT トークンの期限切れ後にクライアントが切断されます。以前の動作を維持したい場合は、`disconnect_after_expire` を `false` に設定してください。
-  
+
 - [#12957](https://github.com/emqx/emqx/pull/12957) macOS 12 向けのパッケージのビルドを停止しました。
 
 - [#12895](https://github.com/emqx/emqx/pull/12895) DynamoDB コネクターおよびアクションに必要ながら抜けていたキーを補完しました。古い設定はこの修正前は正しく機能していなかったため廃止されます。具体的には、DynamoDB コネクターには新しいキー `region` の追加が必須となりました。さらに、DynamoDB アクションでは `hash_key` と `range_key` がサポートされ、`hash_key` は必須です。

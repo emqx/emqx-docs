@@ -52,7 +52,7 @@ Before deploying EMQX Operator, please confirm that the following components hav
 
    ```bash
    $ kubectl wait --for=condition=Ready pods -l "control-plane=controller-manager" -n emqx-operator-system
-   
+
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
@@ -88,7 +88,7 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
 
    ```bash
    $ kubectl get emqx
-   
+
    NAME      IMAGE                              STATUS    AGE
    emqx-ee   emqx/emqx-enterprise:@EE_VERSION@  Running   2m55s
    ```
@@ -116,7 +116,7 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
 
    ```bash
    $ kubectl get emqx
-   
+
    NAME   IMAGE                   STATUS    AGE
    emqx   emqx/emqx:@CE_VERSION@  Running   2m55s
    ```

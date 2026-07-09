@@ -20,7 +20,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into RocketMQ works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to RocketMQ. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 3. **Data ingestion into RocketMQ**: Once the rule has processed the message, it triggers an action of forwarding the messages to RocketMQ. Processed data will be seamlessly written into RocketMQ.
 4. **Data Storage and Utilization**: With the data now stored in RocketMQ, businesses can harness its querying power for various use cases. For example, in the financial industry, RocketMQ can be used as a reliable high-performance message queue to store and manage data from payment terminals and transaction systems. It can connect messages to data analysis and regulatory platforms, fulfilling requirements such as risk management, fraud detection and prevention, and regulatory compliance.
@@ -44,7 +44,7 @@ This section describes the preparations you need to complete before you start to
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data integration](./data-bridges.md)
 
-### Install RocketMQ 
+### Install RocketMQ
 
 1. Prepare a docker-compose file, `rocketmq.yaml`, to set up the RocketMQ.
 
@@ -166,7 +166,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -174,7 +174,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -204,7 +204,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RocketMQ Sink.
 
@@ -221,7 +221,7 @@ The SQL rule syntax for online/offline status recording is as follows:
 ```sql
 SELECT
   *
-FROM 
+FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
@@ -233,15 +233,15 @@ For convenience, the `TopicTest` topic will be reused to receive online/offline 
 
 ## Test the Rules
 
-Use MQTTX to send a message to topic `t/1` to trigger an online/offline event. 
+Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello RocketMQ" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message. 
+Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
-Check whether the data is forwarded to the `TopicTest` topic. 
+Check whether the data is forwarded to the `TopicTest` topic.
 
 The following data will be printed by the consumer.
 ```bash

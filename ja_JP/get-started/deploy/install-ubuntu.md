@@ -36,8 +36,8 @@ EMQXはdebパッケージまたはtar.gzパッケージによるインストー�
 
 ### debパッケージによるインストール
 
-1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。  
-2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`deb`パッケージを選択します。  
+1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。
+2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`deb`パッケージを選択します。
 3. 下記リンクをクリックしてダウンロードします。コマンドラインによるダウンロードおよびインストール手順もご利用いただけます。
 
 #### EMQXの起動
@@ -58,8 +58,8 @@ sudo apt remove --purge emqx
 
 ### tar.gzパッケージによるインストール
 
-1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。  
-2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`tar.gz`パッケージを選択します。  
+1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。
+2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`tar.gz`パッケージを選択します。
 3. 下記リンクをクリックしてダウンロードします。コマンドラインによるダウンロードおよびインストール手順もご利用いただけます。
 
 #### EMQXの起動

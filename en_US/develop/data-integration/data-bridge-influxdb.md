@@ -1,12 +1,12 @@
 # Ingest MQTT Data into InfluxDB
 
-[InfluxDB](https://www.influxdata.com/) is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
+[InfluxDB](https://www.influxdata.com/) is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise.
 
 This page provides a comprehensive introduction to the data integration between EMQX and InfluxDB with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
-InfluxDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with InfluxDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to InfluxDB for storage and analysis, eliminating the need for complex coding. EMQX forwards device data to InfluxDB for storage and analysis through the rule engine and Sink. After analyzing the data, InfluxDB generates reports, charts, and other data analysis results, and then presents them to users through InfluxDB's visualization tools. 
+InfluxDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with InfluxDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to InfluxDB for storage and analysis, eliminating the need for complex coding. EMQX forwards device data to InfluxDB for storage and analysis through the rule engine and Sink. After analyzing the data, InfluxDB generates reports, charts, and other data analysis results, and then presents them to users through InfluxDB's visualization tools.
 
 The diagram below illustrates the typical data integration architecture between EMQX and InfluxDB in an energy storage scenario.
 
@@ -14,7 +14,7 @@ The diagram below illustrates the typical data integration architecture between 
 
 EMQX and InfluxDB provide an extensible IoT platform for efficiently collecting and analyzing energy consumption data in real-time. In this architecture, EMQX serves as the IoT platform, handling device access, message transmission, and data routing, while InfluxDB serves as the data storage and analysis platform, responsible for data storage and analysis functions. The workflow is as follows:
 
-1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
 3. **Data ingestion into InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB Sink provides Line Protocol templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding measurement and field in InfluxDB.
 
@@ -73,13 +73,13 @@ The following steps assume that you run both EMQX and InfluxDB on the local mach
    - Enter the InfluxDB server connection information:
      - For the **Server Host**, enter `127.0.0.1:8086`. If using InfluxDB Cloud, specify port 443, i.e., enter `{url}:443` and click **Enable TLS** to activate TSL connection.
      - Complete the **Token**, **Organization**, and **Bucket** settings according to the setup in [Install and Set Up InfluxDB](#install-and-set-up-influxdb). Note: If choosing InfluxDB v1, please complete the settings for **Database**, **Username**, and **Password**.
-   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../../operate/network/overview.md#enabling-tls-for-external-resource-access).
+   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the InfluxDB server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to InfluxDB. For detailed steps, see [Create a Rule with InfluxDB Sink](#create-a-rule-with-influxdb-sink).
 
 ## Create a Rule with InfluxDB Sink
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to InfluxDB. 
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to InfluxDB.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -87,7 +87,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 3. On the Create Rule page, enter `my_rule` as the rule ID.
 
-4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to InfluxDB, you can use the SQL syntax below. 
+4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to InfluxDB, you can use the SQL syntax below.
 
    ::: tip
 
@@ -102,9 +102,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to InfluxDB. 
+5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to InfluxDB.
 
 6. Select `InfluxDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -112,7 +112,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 8. From the **Connector** dropdown box, select the `my_influxdb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-9. Specify the **Time Precision**: Select `millisecond` by default. 
+9. Specify the **Time Precision**: Select `millisecond` by default.
 
 10. Select **Data Format** as `JSON` or `Line Protocol` for how data should be parsed and written into InfluxDB.
 

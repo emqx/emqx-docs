@@ -29,18 +29,18 @@ When a client successfully connects to EMQX, EMQX triggers connection and authen
 
 ### Extract from Client Metadata
 
-Through preset configurations, substrings are extracted and processed from client connection metadata such as usernames and client IDs and set as client attributes. This extraction happens before the authentication process, ensuring that the attributes are ready to be used in subsequent steps, such as used in the HTTP request body template or SQL template for composing authentication and authorization requests. 
+Through preset configurations, substrings are extracted and processed from client connection metadata such as usernames and client IDs and set as client attributes. This extraction happens before the authentication process, ensuring that the attributes are ready to be used in subsequent steps, such as used in the HTTP request body template or SQL template for composing authentication and authorization requests.
 
 You can configure the client attribute functionality via the configuration file or Dashboard. To configure the attribute extraction via the Dashboard, click **Management** -> **MQTT Settings**. At **Client Attributes**, click **Add** to add the attribute name and attribute expression.
 
 ![client_attributes_config_ee](./assets/client_attributes_config_ee.png)
 
-Where, 
+Where,
 
-- **Attribute** is the name of the attribute. 
+- **Attribute** is the name of the attribute.
 - **Attribute Expression** is the configuration for extracting the attribute.
 
-The attribute expression supports using [Variform expressions](../../operate/configuration/configuration.md#variform-expressions) and [predefined functions](../../operate/configuration/configuration.md#pre-defined-functions) to dynamically process values. For example:
+The attribute expression supports using [Variform expressions](../../guides/configuration/configuration.md#variform-expressions) and [predefined functions](../../guides/configuration/configuration.md#pre-defined-functions) to dynamically process values. For example:
 
 - To extract the prefix of a client ID delimited by a dot: `nth(1, tokens(clientid, '.'))`
 - To truncate part of the username: `substr(username, 0, 5)`
@@ -82,8 +82,8 @@ For detailed information about the client attributes configurations, see [EMQX E
 
 During the client authentication process, client attributes can be set based on information returned by the authenticator, currently supported:
 
-- [JWT Authentication](../../operate/access-control/authn/jwt.md): Set client attributes in the `client_attrs` field in the Token payload when issuing a Token.
-- [HTTP Authentication](../../operate/access-control/authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
+- [JWT Authentication](../../guides/access-control/authn/jwt.md): Set client attributes in the `client_attrs` field in the Token payload when issuing a Token.
+- [HTTP Authentication](../../guides/access-control/authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
 
 The key and value of the attributes must be string. This method allows for dynamic setting of attributes based on the results of authentication, adding flexibility in use.
 
@@ -100,14 +100,14 @@ In other EMQX functionalities, client attributes can be extracted using the `${c
 
 ### Client Authentication
 
-Use [authentication placeholders](../../operate/access-control/authn/authn.md#authentication-placeholders) for SQL statements, query commands, or HTTP request bodies as dynamic parameters, for example:
+Use [authentication placeholders](../../guides/access-control/authn/authn.md#authentication-placeholders) for SQL statements, query commands, or HTTP request bodies as dynamic parameters, for example:
 
 ```sql
 # MySQL/PostgreSQL - Authentication query SQL
 SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attrs.sn} LIMIT 1
 
 # HTTP - Authentication request Body
-{ 
+{
  "sn": "${client_attrs.sn}",
  "password": "${password}"
 }
@@ -123,7 +123,7 @@ Client authentication can only use attributes set from client metadata.
 
 ### Client Authorization
 
-Use [data query placeholders](../../operate/access-control/authz/authz.md#placeholders-in-data-queries) and [topic placeholders](../../operate/access-control/authz/authz.md#topic-placeholders) for SQL statements, query commands, and topics.
+Use [data query placeholders](../../guides/access-control/authz/authz.md#placeholders-in-data-queries) and [topic placeholders](../../guides/access-control/authz/authz.md#topic-placeholders) for SQL statements, query commands, and topics.
 
 #### Example Scenario:
 
@@ -135,7 +135,7 @@ Client attributes such as `role`, `productId`, `deviceId` are set for each clien
   - Publish: `up/{productId}/{deviceId}`
   - Subscribe: `down/{productId}/{deviceId}`
 
-Use [Authorization - Built-in Database](../../operate/access-control/authz/mnesia.md) to configure the following rules to implement:
+Use [Authorization - Built-in Database](../../guides/access-control/authz/mnesia.md) to configure the following rules to implement:
 
 | Permission | Operation           | Topic                                                     |
 | ---------- | ------------------- | --------------------------------------------------------- |

@@ -8,7 +8,7 @@ Supported versions:
 - Debian 12
 - Debian 11
 
-For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise). 
+For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise).
 
 ## Install with deb
 

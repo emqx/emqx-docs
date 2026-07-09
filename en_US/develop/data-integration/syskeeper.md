@@ -8,7 +8,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 The Nari SysKeeper data bridge is an out-of-the-box feature in EMQX, combining MQTT's real-time data capture and bridging capabilities with SysKeeper's powerful security isolation abilities. Through the built-in [rule engine](./rules.md) component, the integration simplifies the process of EMQX bridging through SysKeeper, eliminating the need for complex coding.
 
-The diagram below illustrates a typical architecture of the data bridge between EMQX and SysKeeper. 
+The diagram below illustrates a typical architecture of the data bridge between EMQX and SysKeeper.
 
 <img src="./assets/syskeeper_bridge_architecture.png" alt="syskeeper_bridge_architecture" style="zoom:67%;" />
 
@@ -87,7 +87,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      *
    FROM
      "t/#"
-   
+
    ```
 
    ::: tip

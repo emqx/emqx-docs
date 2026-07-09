@@ -773,7 +773,7 @@
 - 隐藏 redis 客户端错误日志中的密码参数 [#9071](https://github.com/emqx/emqx/pull/9071)
   也包含了如下一些改进：
   - 修复一些其他可能导致密码泄漏的隐患 [eredis#19](https://github.com/emqx/eredis/pull/19)。
-  - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22) 
+  - 修复了 eredis_cluster 中连接池命名冲突的问题 [eredis_cluster#22](https://github.com/emqx/eredis_cluster/pull/22)
     同时对这个库也进行了密码泄漏隐患对修复。
 
 - 修复共享订阅消息转发逻辑 [#9094](https://github.com/emqx/emqx/pull/9094)。
@@ -1863,7 +1863,7 @@ EMQX 4.2.0 现已发布，主要包含以下改动:
 
 - 支持使用第三方语言编写扩展插件接入其他非 MQTT 协议，目前已支持 Java 和 Python 两种编程语言。访问 [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) 获取更多相关信息
 - 支持修订版本间的热升级
-- 新增遥测功能，收集有关 EMQX Broker 使用情况的信息以帮助我们改进产品，此功能默认开启，支持手动关闭。访问[遥测](../operate/telemetry/telemetry.md)获取更多遥测相关信息。
+- 新增遥测功能，收集有关 EMQX Broker 使用情况的信息以帮助我们改进产品，此功能默认开启，支持手动关闭。访问[遥测](../guides/telemetry/telemetry.md)获取更多遥测相关信息。
 - 支持配额形式的消息流控
 
 **增强:**
@@ -2106,11 +2106,11 @@ EMQX 4.0.6 现已发布，主要包含以下改动：
 - 修复 flapping 检查没有删除过期数据的问题
 
   Github PR: [emqx/emqx#3407](https://github.com/emqx/emqx/pull/3407)
-  
+
 - 修复使用 WebSocket 时 Proxy Protocol 功能无法使用的问题
 
   Github PR: [emqx/emqx#3372](https://github.com/emqx/emqx/pull/3372)
-  
+
 ### emqx-bridge-mqtt
 
 **错误修复:**
@@ -2144,12 +2144,12 @@ EMQX 4.0.5 现已发布。此版本主要进行了错误修复。
 - 修复 GC 策略
 
   Github PR: [emqx/emqx#3317](https://github.com/emqx/emqx/pull/3317)
-  
+
 - 修复了 `Maximum-QoS` 属性的值设置错误的问题
 
   Github issue: [emqx/emqx#3304](https://github.com/emqx/emqx/issues/3304), [emqx/emqx#3315](https://github.com/emqx/emqx/issues/3315)
   Github PR: [emqx/emqx#3321](https://github.com/emqx/emqx/pull/3321)
-  
+
 - 修复了 EMQX 运行在 Docker 环境中时 CPU 占用率每隔 15 秒异常升高的问题
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
@@ -2190,28 +2190,28 @@ EMQX 4.0.4 现已发布。此版本主要进行了错误修复。
 **错误修复:**
 
   - 修复 `acl_deny_action` 配置项不生效的问题
-    
+
     Github issue:
     [emqx/emqx\#3266](https://github.com/emqx/emqx/issues/3266)
-    
+
     Github PR: [emqx/emqx\#3286](https://github.com/emqx/emqx/pull/3286)
 
   - 修复 `mountpoint` 配置项的错误类型
-    
+
     Github issue:
     [emqx/emqx\#3271](https://github.com/emqx/emqx/issues/3271)
-    
+
     Github PR: [emqx/emqx\#3272](https://github.com/emqx/emqx/pull/3272)
 
   - 修复 `peer_cert_as_username` 配置项不生效的问题
-    
+
     Github issue:
     [emqx/emqx\#3281](https://github.com/emqx/emqx/issues/3281)
-    
+
     Github PR: [emqx/emqx\#3291](https://github.com/emqx/emqx/pull/3291)
 
   - 修复连接正常关闭后仍打印错误日志的问题
-    
+
     Github PR: [emqx/emqx\#3290](https://github.com/emqx/emqx/pull/3290)
 
 ### emqx-dashboard (plugin)
@@ -2219,10 +2219,10 @@ EMQX 4.0.4 现已发布。此版本主要进行了错误修复。
 **错误修复:**
 
   - 修复 Dashboard 节点下拉列表中显示空白的问题
-    
+
     Github issue:
     [emqx/emqx\#3278](https://github.com/emqx/emqx/issues/3278)
-    
+
     Github PR:
     [emqx/emqx-dashboard\#206](https://github.com/emqx/emqx-dashboard/pull/206)
 
@@ -2231,7 +2231,7 @@ EMQX 4.0.4 现已发布。此版本主要进行了错误修复。
 **错误修复:**
 
   - 保留消息达到最大存储数量后的行为由无法存储任何保留消息更正为可以替换已存在主题的保留消息
-    
+
     Github PR:
     [emqx/emqx-retainer\#136](https://github.com/emqx/emqx-retainer/pull/136)
 
@@ -2246,13 +2246,13 @@ EMQX 4.0.3 现已发布。此版本主要进行了错误修复。
 **功能增强:**
 
   - 添加允许客户端绕过认证插件登录的选项
-    
+
     Github PR: [emqx/emqx\#3253](https://github.com/emqx/emqx/pull/3253)
 
 **错误修复:**
 
   - 修复某些竞争条件下会打印不必要的错误日志的问题
-    
+
     Github PR: [emqx/emqx\#3246](https://github.com/emqx/emqx/pull/3253)
 
 ### emqx-management (plugin)
@@ -2260,22 +2260,22 @@ EMQX 4.0.3 现已发布。此版本主要进行了错误修复。
 **错误修复:**
 
   - 移除不再使用的字段和函数以及修复字段值异常的问题
-    
+
     Github PR:
     [emqx/emqx-management\#176](https://github.com/emqx/emqx-management/pull/176)
 
   - 修复集群环境下无法获取客户端列表的问题
-    
+
     Github PR:
     [emqx/emqx-management\#173](https://github.com/emqx/emqx-management/pull/173)
 
   - 修复 HTTPS 监听选项
-    
+
     Github PR:
     [emqx/emqx-management\#172](https://github.com/emqx/emqx-management/pull/172)
 
   - 修复应用列表的返回格式
-    
+
     Github PR:
     [emqx/emqx-management\#169](https://github.com/emqx/emqx-management/pull/169)
 
@@ -2290,24 +2290,24 @@ EMQX 4.0.2 现已发布。此版本主要进行了错误修复和性能优�
 **功能增强:**
 
   - 提升 Json 编解码性能
-    
+
     Github PR:
     [emqx/emqx\#3213](https://github.com/emqx/emqx/pull/3213),
     [emqx/emqx\#3230](https://github.com/emqx/emqx/pull/3230),
     [emqx/emqx\#3235](https://github.com/emqx/emqx/pull/3235)
 
   - 压缩生成的项目大小
-    
+
     Github PR: [emqx/emqx\#3214](https://github.com/emqx/emqx/pull/3214)
 
 **错误修复:**
 
   - 修复某些情况下没有发送 DISCONNECT 报文的问题
-    
+
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
 
   - 修复收到相同 PacketID 的 PUBLISH 报文时会断开连接的问题
-    
+
     Github PR: [emqx/emqx\#3233](https://github.com/emqx/emqx/pull/3233)
 
 ### emqx-stomp (plugin)
@@ -2315,7 +2315,7 @@ EMQX 4.0.2 现已发布。此版本主要进行了错误修复和性能优�
 **错误修复:**
 
   - 修复最大连接数限制不生效的问题
-    
+
     Github PR:
     [emqx/emqx-stomp\#93](https://github.com/emqx/emqx-stomp/pull/93)
 
@@ -2324,7 +2324,7 @@ EMQX 4.0.2 现已发布。此版本主要进行了错误修复和性能优�
 **错误修复:**
 
   - 修复内部模块启动失败的问题
-    
+
     Github PR:
     [emqx/emqx-auth-redis\#151](https://github.com/emqx/emqx-auth-redis/pull/151)
 
@@ -2333,7 +2333,7 @@ EMQX 4.0.2 现已发布。此版本主要进行了错误修复和性能优�
 **错误修复:**
 
   - 修复 Websocket 连接某些情况下不会发送遗嘱消息的问题
-    
+
     Github Commit:
     [emqx/cowboy\#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
 
@@ -2348,21 +2348,21 @@ EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优�
 **功能增强:**
 
   - force\_shutdown\_policy 默认关闭
-    
+
     Github PR: [emqx/emqx\#3184](https://github.com/emqx/emqx/pull/3184)
 
   - 支持定时全局 GC 并提供配置项
-    
+
     Github PR: [emqx/emqx\#3190](https://github.com/emqx/emqx/pull/3190)
 
   - 优化 `force_gc_policy` 的默认配置
-    
+
     Github PR:
     [emqx/emqx\#3192](https://github.com/emqx/emqx/pull/3192),
     [emqx/emqx\#3201](https://github.com/emqx/emqx/pull/3201)
 
   - 优化 Erlang VM 参数配置
-    
+
     Github PR:
     [emqx/emqx\#3195](https://github.com/emqx/emqx/pull/3195),
     [emqx/emqx\#3197](https://github.com/emqx/emqx/pull/3197)
@@ -2370,19 +2370,19 @@ EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优�
 **错误修复:**
 
   - 修复使用错误的单位导致黑名单功能异常的问题
-    
+
     Github PR: [emqx/emqx\#3188](https://github.com/emqx/emqx/pull/3188)
 
   - 修复对 `Retain As Publish` 标志位的处理并且在桥接模式下保持 `Retain` 标识位的值
-    
+
     Github PR: [emqx/emqx\#3189](https://github.com/emqx/emqx/pull/3189)
 
   - 修复无法使用多个 Websocket 监听端口的问题
-    
+
     Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
 
   - 修复会话 takeover 时 EMQX 可能不发送 DISCONNECT 报文的问题
-    
+
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
 
 ### emqx-rule-engine
@@ -2390,12 +2390,12 @@ EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优�
 **功能增强:**
 
   - 提供更多操作数组的 SQL 函数
-    
+
     Github PR:
     [emqx/emqx-rule-engine\#136](https://github.com/emqx/emqx-rule-engine/pull/136)
 
   - 减少未配置任何规则时对性能的影响
-    
+
     Github PR:
     [emqx/emqx-rule-engine\#138](https://github.com/emqx/emqx-rule-engine/pull/138)
 
@@ -2404,7 +2404,7 @@ EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优�
 **错误修复:**
 
   - 修复参数不匹配导致的崩溃问题
-    
+
     Github PR:
     [emqx/emqx-web-hook\#167](https://github.com/emqx/emqx-web-hook/pull/167)
 

@@ -22,7 +22,7 @@ EMQX 5.0以前では、この機能は**Proxy Subscription**と呼ばれてい�
 
    - **Retained Handling**: 選択肢は`0`、`1`、`2`です。
 
-     <img src="./assets/config-auto-subscribe-dashboard.png" alt="Auto SubscribeのDashboard設定画面" style="zoom:35%;" /> 
+     <img src="./assets/config-auto-subscribe-dashboard.png" alt="Auto SubscribeのDashboard設定画面" style="zoom:35%;" />
 
    ダイアログボックスの**Add**ボタンをクリックします。これで自動サブスクライブトピック`a/1`が正常に作成されます。
 

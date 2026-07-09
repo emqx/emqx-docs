@@ -111,7 +111,7 @@ The following steps assume that you run both EMQX and RabbitMQ on the local mach
    - **Username**: Enter `guest`.
    - **Password**: Enter `guest`.
    - **Virtual Host**: Enter RabbitMQ virtual host;  `/` by default.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the RabbitMQ server.
 7. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or **Create Rule**. By clicking **Create Rule**, you have the following options:
    - **Action Outputs**: creating a rule with RabbitMQ Sink to specify the data to be forwarded to RabbitMQ. You can also follow the steps in [Create a Rule with RabbitMQ Sink](#create-a-rule-with-rabbitmq-sink).
@@ -205,7 +205,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. **Advanced settings (optional)**:  
+11. **Advanced settings (optional)**:
 
     - **Publish Confirmation Timeout**: `30` seconds by default. The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
     - Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).

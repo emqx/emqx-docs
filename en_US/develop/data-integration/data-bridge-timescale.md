@@ -16,7 +16,7 @@ EMQX and TimescaleDB provide a scalable IoT platform for efficiently collecting 
 
 EMQX forwards device data to TimescaleDB through the rule engine and Sink. TimescaleDB analyzes the data using SQL statements, generates reports, charts, and other data analysis results, and displays them to users through TimescaleDB's visualization tools. The workflow is as follows:
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.
 3. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
 4. **Data ingestion into TimescaleDB**: Rules defined in the rule engine trigger operations to write messages to TimescaleDB. The TimescaleDB Sink provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in TimescaleDB.
 
@@ -48,7 +48,7 @@ This section describes the preparations you need to complete before you start to
 
 EMQX supports integration with self-deployed TimescaleDB or Timescale Service on the cloud. You can use Timescale Service as a cloud service or deploy a TimescaleDB instance using Docker.
 
-:::: tabs 
+:::: tabs
 ::: tab Timescale Service
 
 1. If you do not have a Timescale account, create an account by referring to [Create your Timescale account](https://docs.timescale.com/getting-started/latest/services/#create-your-timescale-account).
@@ -75,7 +75,7 @@ EMQX supports integration with self-deployed TimescaleDB or Timescale Service on
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -102,10 +102,10 @@ After the table is successfully created, you can view the information of the tab
 
    ```bash
    docker exec -it timescaledb psql -U postgres
-   
+
    ## create tsdb database
    > CREATE database tsdb;
-   
+
    > \c tsdb;
    ```
 
@@ -118,7 +118,7 @@ After the table is successfully created, you can view the information of the tab
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -144,13 +144,13 @@ Now you have created a TimescaleDB Connector. Next, you need to create a rule an
 
 ## Create a Rule with TimescaleDB Sink
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and sending the processed results to TimescaleDB via a configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and sending the processed results to TimescaleDB via a configured Sink.
 
 1. Go to EMQX Dashboard and click **Integration** -> **Rules** from the left navigation menu.
 
 2. Click **+ Create** on the top right corner of the page.
 
-3. On the Create Rule page, enter a rule ID `my_rule`. 
+3. On the Create Rule page, enter a rule ID `my_rule`.
 
 4. Enter the following SQL rule in **SQL Editor** to save the MQTT message with the topic `t/#` to TimescaleDB：
 
@@ -163,9 +163,9 @@ This section demonstrates how to create a rule in the Dashboard for processing m
        "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `TimescaleDB` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to TimescaleDB. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `TimescaleDB` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to TimescaleDB.
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a TimescaleDB action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
@@ -192,12 +192,12 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new TimescaleDB Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new TimescaleDB Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TimescaleDB after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to TimescaleDB after parsing by the rule `my_rule`.
 
 
-### Test the Rule 
+### Test the Rule
 
 Use MQTTX to send a message to topic `t/1` and trigger an online/offline event at the same time：
 
@@ -211,7 +211,7 @@ Verify the TimescaleDB table `sensor_data`. New records should be inserted:
 
 ```bash
 tsdb=# select * from sensor_data;
-             time              | location | temperature | humidity 
+             time              | location | temperature | humidity
 -------------------------------+----------+-------------+----------
  2023-07-10 08:28:48.813988+00 | hangzhou |          24 |       30
  2023-07-10 08:28:57.737768+00 | hangzhou |          24 |       30

@@ -109,7 +109,7 @@ docker run -it --rm --name rabbitmq -p 127.0.0.1:5672:5672 -p 127.0.0.1:15672:15
    - **用户名**: 输入 `guest`。
    - **密码**: 输入 `guest`。
    - **虚拟主机**: 输入RabbitMQ 虚拟主机; 默认值为 `/` 。
-   - 如果您想建立加密连接，请点击 **启用 TLS** 切换开关。有关 TLS 连接的更多信息，请参见[启用 TLS 访问外部资源](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
+   - 如果您想建立加密连接，请点击 **启用 TLS** 切换开关。有关 TLS 连接的更多信息，请参见[启用 TLS 访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
 6. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 RabbitMQ 服务器。
 7. 点击**创建**按钮完成连接器的创建。在弹出的对话框中，您可以点击**返回连接器列表**或点击**创建规则**继续创建规则以指定转发到 RabbitMQ 的数据（作为动作输出）或从 RabbitMQ 消费数据（作为数据输入）。具体步骤请参见[创建 RabbitMQ Sink 规则](#创建-rabbitmq-sink-规则) 和[创建 RabbitMQ Source 规则](#创建-rabbitmq-source-规则)。
 

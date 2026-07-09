@@ -1,6 +1,6 @@
 # Connector
 
-The EMQX connector is a key concept in data integration, serving as the underlying connection channel for Sink/Source, used to connect to external data systems. 
+The EMQX connector is a key concept in data integration, serving as the underlying connection channel for Sink/Source, used to connect to external data systems.
 
 ## Basic Concepts
 
@@ -22,9 +22,9 @@ When creating Sinks/Sources, users can choose an existing connector without worr
 
 When you create a data integration, you must create a connector for the Sink/Source for the integration to work. You can create and manage connectors via the Dashboard. One connector can be reused for different Sink/Source.
 
-:::tip 
+:::tip
 
-You can also create a connector during the process of creating a Sink/Source, which will automatically enter the connector creation process. 
+You can also create a connector during the process of creating a Sink/Source, which will automatically enter the connector creation process.
 
 :::
 
@@ -42,7 +42,7 @@ You can also create a connector during the process of creating a Sink/Source, wh
 
 ## View and Manage Connectors
 
-After a connector is created, you can view its basic information on the Connectors page. You can also enable or disable it, and manage it, such as editing the settings, creating rules, duplicating the connector, or deleting it through the **Actions** column of the connector list. 
+After a connector is created, you can view its basic information on the Connectors page. You can also enable or disable it, and manage it, such as editing the settings, creating rules, duplicating the connector, or deleting it through the **Actions** column of the connector list.
 
 <img src="./assets/view_connector.png" alt="view_connector"  />
 

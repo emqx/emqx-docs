@@ -63,12 +63,12 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
 5. Configure the connection details.
    - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Set other fields as per your actual setup.
    - **Connection String**: Enter the connection string for your namespace, which can be found in the "Connection string - primary key" of the namespace's Shared access policies. For more details, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
-   - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../../operate/network/overview.md#enable-tls-encryption-for-accessing-external-resources).
-6. Click the **Create** button at the bottom to complete the Connector creation. 
+   - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enable-tls-encryption-for-accessing-external-resources).
+6. Click the **Create** button at the bottom to complete the Connector creation.
 
 Now, Azure Event Hubs should be listed in the connector list (**Integration** -> **Connector**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
 
-## Create a Rule with Azure Event Hubs Sink 
+## Create a Rule with Azure Event Hubs Sink
 
 This section demonstrates how to create a rule with an Azure Event Hubs Sink added to the rule.
 
@@ -89,7 +89,7 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
      "t/#"
    ```
 
-5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `Azure Event Hubs` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Azure Event Hubs. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `Azure Event Hubs` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to Azure Event Hubs.
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select an Azure Event Hubs action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
@@ -98,7 +98,7 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
 7. Select the `my-azure-event-hubs` you just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
 
 8. Configure the Sink information.
-   - **Event Hub Name**: Enter the name of the Event Hub to be used. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Configure Kafka Dynamic Topics](./data-bridge-kafka.md#configure-kafka-dynamic-topics) for details. 
+   - **Event Hub Name**: Enter the name of the Event Hub to be used. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Configure Kafka Dynamic Topics](./data-bridge-kafka.md#configure-kafka-dynamic-topics) for details.
    - **Azure Event Hub Headers**: Enter a placeholder to be used as headers that will be added to the messages when being published to Azure Event Hub.
    - **Azure Event Hub Header value encode mode**: Select the value encode mode for the header; optional values are `none` or `json`.
    - **Extra Azure Event Hub headers**: You can click **Add** to provide more key-value pairs for Azure Event Hubs headers.
@@ -117,9 +117,9 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
 
 12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list.
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Azure Event Hubs Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Azure Event Hubs Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Azure Event Hubs after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Azure Event Hubs after parsing by the rule `my_rule`.
 
 ## Test the Rule
 

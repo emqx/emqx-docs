@@ -12,7 +12,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 ![EMQX Integration GreptimeDB](./assets/emqx-integration-greptimedb.png)
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
 3. **Data ingestion into GreptimeDB**: Rules defined in the rule engine trigger operations to write messages to GreptimeDB. The GreptimeDB Sink provides Line Protocol templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in GreptimeDB.
 
@@ -80,13 +80,13 @@ The following steps assume that you run both EMQX and GreptimeDB on the local ma
 
 ## Create a Rule with GreptimeDB Sink
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to GreptimeDB. 
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to GreptimeDB.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to GreptimeDB, we can use the SQL syntax below. 
+3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to GreptimeDB, we can use the SQL syntax below.
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
@@ -120,11 +120,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    ::: tip
 
    - To write a signed integer type value to GreptimeDB, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`.
-   - To write an unsigned integer type value to GreptimeDB, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. 
+   - To write an unsigned integer type value to GreptimeDB, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`.
 
    :::
 
-9. Specify the **Time Precision**: Select `millisecond` by default. 
+9. Specify the **Time Precision**: Select `millisecond` by default.
 
 10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
@@ -134,7 +134,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data through the GreptimeDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new GreptimeDB Sink.
 

@@ -2,7 +2,7 @@
 
 The whole concept of Data Integration was upgraded in EMQX 5.1.
 
-- The previous **Rule** -> **Action** -> **Resources** process is changed to **Rules** -> **Data Bridge**. 
+- The previous **Rule** -> **Action** -> **Resources** process is changed to **Rules** -> **Data Bridge**.
 
    In EMQX 4.4, there was a configuration entity for Action. But in EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output.
 
@@ -39,7 +39,7 @@ The configuration name `nodes` is changed to `servers`.
 
 ### Kafka Producer
 
-- Changed configuration items: 
+- Changed configuration items:
   - `servers` to `bootstrap_hosts`
   - `authentication_mechanism` to `authentication`
   - `sync_timeout` to `sync_query_timeout`
@@ -52,7 +52,7 @@ The configuration name `nodes` is changed to `servers`.
 - No equivalent in EMQX 5.1:
   - `query_api_versions`
   - `kafka_ext_headers`
-- Nested `replayq` related options (e.g.: `max_batch_bytes`) under `kafka` key 
+- Nested `replayq` related options (e.g.: `max_batch_bytes`) under `kafka` key
 - Now, message key is templatable, whereas before it could be only a few option.
 
 ### Kafka Consumer

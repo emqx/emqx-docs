@@ -101,7 +101,7 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 ## Authentication
 
 Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
-Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../../operate/access-control/authn/http.md).
+Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
 
 For example, to create an HTTP authentication for LwM2M gateway via HTTP API or configuration file:
 
@@ -177,7 +177,7 @@ we need to make a Message Format to compatible these message models.
 
 the **Register** message is sent by the LwM2M client to the LwM2M server to
 register itself with the server. It contains information about the client and
-its capabilities like endpoint name, lifetime, LwM2M version, objects, object 
+its capabilities like endpoint name, lifetime, LwM2M version, objects, object
 instances, etc.
 
 The Register message is the first message sent by the client to initiate
@@ -384,7 +384,7 @@ Variables:
 The "Read" operation is used to access the value of a Resource, an array of Resource
 Instances, an Object Instance or all the Object Instance of an Object.
 
-In request command, when the **MsgType** is `"read"`, the structure of the 
+In request command, when the **MsgType** is `"read"`, the structure of the
 **RequestData** should be as follows:
 
 ```json
@@ -457,7 +457,7 @@ given Object Instance.
 The returned payload is a list of application/link-format CoRE Links [RFC6690]
 for each targeted Object, Object Instance, or Resource.
 
-In request command, when the **MsgType** is `"discover"`, the structure of the 
+In request command, when the **MsgType** is `"discover"`, the structure of the
 **RequestData** should be as follows:
 
 ```json
@@ -593,7 +593,7 @@ In LwM2M 1.0, only Attributes from the `<NOTIFICATION>` class MAY be changed in 
 
 The operation permits multiple Attributes to be modified within the same operation.
 
-In request command, when the **MsgType** is `"write-attr"`, the structure of the 
+In request command, when the **MsgType** is `"write-attr"`, the structure of the
 **RequestData** should be as follows:
 
 ```json
@@ -618,7 +618,7 @@ Variables:
 The "Execute" operation is used by the LwM2M Server to initiate some action,
 and can only be performed on individual Resources.
 
-In the request command, when the **MsgType** is `"execute"`, the structure of the 
+In the request command, when the **MsgType** is `"execute"`, the structure of the
 **RequestData** should be as follows:
 ```json
 {
@@ -635,7 +635,7 @@ Variables:
 The "Create" operation is used by the LwM2M Server to create Object Instance(s)
 within the LwM2M Client. The "Create" operation MUST target an Object.
 
-In request command, when the **MsgType** is `"create"`, the structure of the 
+In request command, when the **MsgType** is `"create"`, the structure of the
 **RequestData** should be as follows:
 
 ```json
@@ -658,7 +658,7 @@ Variables:
 The "Delete" operation is used for LwM2M Server to delete an Object Instance
 within the LwM2M Client.
 
-In request command, when the **MsgType** is `"create"`, the structure of the 
+In request command, when the **MsgType** is `"create"`, the structure of the
 **RequestData** should be as follows:
 ```json
 {
@@ -817,7 +817,7 @@ Variables:
 ## User Interfaces
 
 - Detailed configuration options: [Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-- Detailed HTTP APIs Description: [HTTP API - Gateway](../api.md)
+- Detailed HTTP APIs Description: [HTTP API - Gateway](../../guides/api.md)
 
 ## Client libraries
 

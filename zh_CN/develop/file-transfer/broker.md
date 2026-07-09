@@ -44,7 +44,7 @@ file_transfer {
   storage.local.segments = {
     # 分片存储目录，建议优先设置到高 I/O 性能的磁盘上。
     root = "./data/file_transfer/segments"
-    
+
     # 定时清理已过期的分片文件
     gc {
       # 清理间隔
@@ -170,7 +170,7 @@ file_transfer {
   - **端口**：用于连接 S3 服务的端口，例如 `443`，表示安全的 HTTPS 连接。
   - **访问密钥 ID** 和 **访问密钥**：用于访问 S3 存储桶的凭据。应安全地保存。
   - **存储桶**：存储文件的 S3 存储桶的名称，例如 `my-bucket`。
-  - **启用 TLS**：确定是否使用 TLS（传输层安全性）进行安全文件传输。有关更多信息，请参阅[启用 TLS 加密访问外部资源](../../operate/network/overview.md#tls-for-external-resource-access)。
+  - **启用 TLS**：确定是否使用 TLS（传输层安全性）进行安全文件传输。有关更多信息，请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#tls-for-external-resource-access)。
 - **文件存储目录**：指定文件存储的目录，需要为绝对路径。当选择 `本地存储` 作为文件存储方法时，此目录用于存储已合并的文件。
 
 ### 高级设置

@@ -276,7 +276,7 @@ Output is similar to:
 
   ```bash
   $ kubectl get emqx
-  
+
   NAME      STATUS   AGE
   emqx-ee   Ready    8m33s
   ```

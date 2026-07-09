@@ -12,7 +12,7 @@ Couchbaseとのデータ統合は、EMQXに標準搭載された機能で、MQTT
 
 MQTTデータをCouchbaseに取り込む流れは以下の通りです：
 
-1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを介してEMQXに接続し、機械やセンサー、製品ラインの稼働状況、計測値、トリガーイベントに基づくリアルタイムMQTTデータをEMQXにパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを介してEMQXに接続し、機械やセンサー、製品ラインの稼働状況、計測値、トリガーイベントに基づくリアルタイムMQTTデータをEMQXにパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
 2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQXで定義されたルールに基づいて処理されます。ルールは事前定義された条件により、どのメッセージをCouchbaseにルーティングするかを決定します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などが適用されます。
 3. **Couchbaseへのデータ取り込み**：ルールエンジンがCouchbaseへの保存対象メッセージを特定すると、メッセージをCouchbaseに転送するアクションをトリガーします。処理済みデータはCouchbaseデータセットにシームレスに書き込まれます。
 4. **データの保存と活用**：データがCouchbaseに保存されることで、企業はクエリ機能を活用し、動的製品カタログの管理やリアルタイム在庫更新、パーソナライズされたレコメンデーションの提供など、多様なユースケースに活用できます。これにより購買体験が向上し、売上増加に寄与します。
@@ -46,14 +46,14 @@ Couchbaseとのデータ統合は、効率的なデータ送信、保存、活�
    ```bash
    docker run -t --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase/server:enterprise-7.2.0
    ```
-   
+
    コマンド実行時にDockerがCouchbase Serverをダウンロード・インストールします。Docker仮想環境でCouchbase Serverが起動すると、以下のメッセージが表示されます：
-   
+
    ```
    Starting Couchbase Server -- Web UI available at http://<ip>:8091
    and logs available in /opt/couchbase/var/lib/couchbase/logs
    ```
-   
+
 2. ブラウザで `http://localhost:8091` にアクセスし、Couchbase Webコンソールを開きます。
 
 <img src="./assets/couchbase-consoleSetup.png" alt="Couchbaseコンソールセットアップ" style="zoom:67%;" />
@@ -109,7 +109,7 @@ DockerでのCouchbase実行に関する詳細は、[公式ドキュメントペ�
 4. SQLエディターのステートメントはそのままにしておきます。これはトピックパターン `t/#` にマッチするMQTTメッセージを転送します。
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -159,7 +159,7 @@ EMQXダッシュボード内蔵のWebSocketクライアントを使って、ル�
    * **Topic**：`t/test`
    * **Payload**：`Hello World Couchbase from EMQX`
    * **QoS**：2
-   
+
 4. **Publish** をクリックしてメッセージを送信します。Couchbaseサーバーの `emqx_data` バケットにアイテムが挿入されているはずです。以下のコマンドをターミナルで実行して確認できます：
 
    ```bash

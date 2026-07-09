@@ -14,7 +14,7 @@ The diagram below illustrates the typical data integration architecture between 
 
 EMQX and Tablestore provide an extensible IoT platform for efficiently collecting and analyzing energy consumption data in real-time. In this architecture, EMQX serves as the IoT platform, handling device access, message transmission, and data routing, while Tablestore serves as the data storage and analysis platform, responsible for data storage and analysis functions. The workflow is as follows:
 
-1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
 3. **Data ingestion into Tablestore**: Rules defined in the rule engine trigger the operation of writing messages to Tablestore. The Tablestore Sink provides configurable fields that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding measurement and field in Tablestore.
 
@@ -93,13 +93,13 @@ The following steps assume that you run both EMQX and Tablestore on the local ma
      - **Access Key ID**: The Access Key ID used to authenticate with Tablestore. This key is issued by Alibaba Cloud for accessing Tablestore resources securely.
      - **Access Key Secret**: The Access Key Secret used for authentication, associated with the Access Key ID.
      - **Storage Model Type**: Currently only `TimeSeries` is supported.
-   - Configure TLS Parameters. Tablestore uses HTTPS endpoints, so TLS is enabled by default and no additional TLS parameter configuration is required. For detailed information on TLS connection options, see [TLS for External Resource Access](../../operate/network/overview.md#enabling-tls-for-external-resource-access).
+   - Configure TLS Parameters. Tablestore uses HTTPS endpoints, so TLS is enabled by default and no additional TLS parameter configuration is required. For detailed information on TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Tablestore server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Tablestore. For detailed steps, see [Create a Rule with Tablestore Sink](#create-a-rule-with-tablestore-sink).
 
 ## Create a Rule with Tablestore Sink
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to Tablestore. 
+This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to Tablestore.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -107,7 +107,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 3. On the Create Rule page, enter `my_rule` as the rule ID.
 
-4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to Tablestore, you can use the SQL syntax below. 
+4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to Tablestore, you can use the SQL syntax below.
 
    ::: tip
 
@@ -122,9 +122,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to Tablestore. 
+5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to Tablestore.
 
 6. Select `Alibaba Tablestore` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -154,7 +154,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      - **Message value**: The value to be assigned to the column. The value can be a dynamic reference (like `${value}`), a boolean (`true`), a number (`1.3`), or binary data.
      - **Is Int**: If the column is of numeric type, EMQX will, by default, insert it into Tablestore as a floating-point type. To insert integer values, this flag needs to be set to `true`. When configuring through the configuration file, variables (e.g., `${isint}`) can be used to dynamically assign this flag.
      - **Is Binary**: If the column is binary, EMQX will, by default, insert it into Tablestore as a string type. To insert binary data, this flag needs to be set to `true`. When configuring through the configuration file, variables (e.g., `${isbinary}`) can be used to dynamically assign this flag.
-     
+
    - **Timestamp**: The timestamp recorded in Tablestore, represented as an integer value in microseconds. This specifies the timestamp to be inserted into Tablestore. You can provide a fixed value, use the string "NOW" to indicate that EMQX should dynamically fill in the current time when processing the message, or use a variable placeholder (e.g., `${microsecond_timestamp}`) for dynamic assignment.
 
    - **Meta Update Model**: Defines the update strategy for metadata in Tablestore:
@@ -185,9 +185,9 @@ You can also click **Integration** -> **Flow Designer** to view the topology. It
 
 2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
-3. Go to the [Tablestore Console](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6) to check if the data has been written into Tablestore. 
+3. Go to the [Tablestore Console](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6) to check if the data has been written into Tablestore.
 
-   - In **Metric Name**, enter the measurement name (in this demo, it is `foo`). 
+   - In **Metric Name**, enter the measurement name (in this demo, it is `foo`).
    - In **Tag**, use `location=office1` and `device=sensor1` as the query condition, then click **Search**.
 
    ![tablestore_query_data](./assets/tablestore_query_data.png)

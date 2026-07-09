@@ -227,25 +227,25 @@ The following steps assume that you run both EMQX and Microsoft SQL Server on th
 
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_sqlserver`.
-   
+
    - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
-   
+
      ::: tip
-   
+
      If you are using a Named Instance, you must explicitly specify the port number on which the instance runs. The driver connects to the instance using the provided port, and during health checks, EMQX attempts to infer the instance name.
-   
+
      Specifying only the instance name (e.g., `MYSERVER\SQL2022`) in the Server Host field does not guarantee a connection to the correct instance. Therefore, always double-check the port configuration to ensure proper connectivity.
-   
+
      :::
-   
+
    - **Database Name**: Enter `master`.
-   
+
    - **Username**: Enter `sa`.
-   
+
    - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
-   
+
    - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`.
-   
+
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Microsoft SQL Server.

@@ -6,9 +6,9 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
 ## Configure Auto Subscribe via Dashboard
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Auto Subscribe**. 
+1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Auto Subscribe**.
 
-2. On the **Auto Subscribe** page, click the **+ Add** button at the upper right corner. 
+2. On the **Auto Subscribe** page, click the **+ Add** button at the upper right corner.
 
 3. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default.
 
@@ -22,7 +22,7 @@ Before EMQX 5.0, this feature is called **Proxy Subscription**.
 
    - **Retained Handling**: Options: `0`, `1`, and `2`.
 
-     <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" /> 
+     <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" />
 
    Click the **Add** button on the dialogue box. The auto subscribe topic `a/1` is created successfully.
 

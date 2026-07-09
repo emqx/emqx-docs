@@ -14,19 +14,19 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 ## Enable the MQTT-SN Gateway
 
-In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
 
 On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../../operate/configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../../guides/configuration/configuration.md).
 
 :::
 
 To simplify the configuration process, EMQX offers default values for all required fields on the **Gateways** page. If you don't need extensive customization, you can enable the MQTT-SN Gateway in just 3 clicks:
 
-1. Click **Next** in the **Basic Configuration** tab to accept all the default settings. 
+1. Click **Next** in the **Basic Configuration** tab to accept all the default settings.
 2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a UDP listener on port 1884. Click **Next** again to confirm the setting.
 3. Then click the **Enable** button to activate the MQTT-SN Gateway.
 
@@ -59,7 +59,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-For a detailed HTTP API description, see [HTTP API - Gateway](../api.md)
+For a detailed HTTP API description, see [HTTP API - Gateway](../../guides/api.md)
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your MQTT-SN Gateway section](#customize-your-mqtt-sn-gateway).
 
@@ -67,7 +67,7 @@ If you have some customization needs, want to add more listeners, or add authent
 
 ### Client Libraries
 
-After establishing the MQTT-SN gateway, you can use the MQTT-SN client tools to test the connections and ensure everything works as expected. Below are some of the recommended MQTT-SN client tools. 
+After establishing the MQTT-SN gateway, you can use the MQTT-SN client tools to test the connections and ensure everything works as expected. Below are some of the recommended MQTT-SN client tools.
 
 - [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
 - [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
@@ -86,11 +86,11 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
 ### Basic Configuration
 
-In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list, and set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field. 
+In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list, and set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field.
 
 ![Basic Configuration](./assets/mqttsn-basic-config.png)
 
-- **Gateway ID**: Set the unique identifier of the gateway, for example, 1. 
+- **Gateway ID**: Set the unique identifier of the gateway, for example, 1.
 
 - **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified. Default: `true`; Options: `true`, `false`.
 
@@ -100,7 +100,7 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 - **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
-- **Predefined Topic List**: Set the predefined topic IDs and corresponding topic names. Click **Add** to add a new entry. 
+- **Predefined Topic List**: Set the predefined topic IDs and corresponding topic names. Click **Add** to add a new entry.
 
   - **Topic ID**: Set the topic ID, which should be an integer between 1 and 65535.
   - **Topic**: Set the topic names.<!--, multiple topics can be added here, separated with a `,`-->
@@ -109,7 +109,7 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
   **Note**: This topic prefix is managed by the gateway. MQTT-SN clients do not need to add this prefix explicitly when publishing and subscribing.
 
-### Add Listeners 
+### Add Listeners
 
 By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
 
@@ -124,34 +124,34 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols
 
-**Listener Settings** 
+**Listener Settings**
 
-- **Acceptor **(for DTLS listeners only): Set the size of the acceptor pool, default: **16**. 
+- **Acceptor **(for DTLS listeners only): Set the size of the acceptor pool, default: **16**.
 - **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: **1024000**.
 - **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: **1000**.
 
-**UDP Settings** 
+**UDP Settings**
 
 - **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **Receive Buffer**: Set the size of the receive buffer,  unit: KB.
-- **Send Buffer**: Set the size of the send buffer,  unit: KB. 
+- **Send Buffer**: Set the size of the send buffer,  unit: KB.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
 
 **DTLS Settings** (for DTLS listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../operate/network/emqx-mqtt-tls.md).
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../../guides/network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
-- **DTLS Versions**: Set the DTLS versions supported, default, **dtlsv1.2** and **dtlsv1**. 
-- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**. 
+- **DTLS Versions**: Set the DTLS versions supported, default, **dtlsv1.2** and **dtlsv1**.
+- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**.
 - **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
-- **Key Password**: Set the user's password, used only when the private key is password-protected. 
+- **Key Password**: Set the user's password, used only when the private key is password-protected.
 
 ### Configure Authentication
 
-Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../../operate/access-control/authn/http.md).
+Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
 
 The client information generation rules are as follows:
 
@@ -159,15 +159,15 @@ The client information generation rules are as follows:
 - Username: undefined
 - Password: undefined
 
-This part takes the Dashboard as an example to illustrate how to do the authentication configuration. 
+This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 
-On the **Gateways** page, locate **MQTT-SN** and click **Setup** in the **Actions** column and click **Authentication** to enter the **Authentication** tab. 
+On the **Gateways** page, locate **MQTT-SN** and click **Setup** in the **Actions** column and click **Authentication** to enter the **Authentication** tab.
 
-Click **Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules. 
+Click **Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules.
 
 ![mqttsn authentication](./assets/mqttsn-authn-config.png)
 
-For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../../operate/access-control/authn/http.md).
+For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../../guides/access-control/authn/http.md).
 
 The above configuration can also be performed via HTTP API.
 

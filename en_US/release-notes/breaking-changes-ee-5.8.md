@@ -25,17 +25,17 @@
 - [#14360](https://github.com/emqx/emqx/pull/14360) When requesting Prometheus metrics in JSON format, the `client` top-level key will now always be an array of JSON objects, rather than a single JSON object. This change may affect how your monitoring tools process the data.
 
 - [#14370](https://github.com/emqx/emqx/pull/14370) IoTDB data integration configuration changes:
-  
+
   - The self-describing template has been removed. EMQX now only processes messages using the configured data templates and no longer attempts to extract the template from the message payload.
-  
+
   - Each MQTT message can now only carry a single `payload`. Arrays of payloads are no longer supported. As a result, an MQTT message is processed as a single atomic insert operation (either a single or batch insert) into IoTDB. Generating multiple IoTDB operations from a single MQTT message is no longer possible.
-  
+
   - The `data type` is now treated as a plain value rather than a template value.
-  
+
   - The REST API driver now only supports IoTDB 1.3.x and later versions.
-  
-  - The Thrift driver now supports "batch" mode. 
-  
+
+  - The Thrift driver now supports "batch" mode.
+
     **Important**: To prevent overlapping timestamps in batch mode, it’s recommended to use the MQTT message timestamp (`${timestamp}`) or include a time field in the payload (e.g., `${payload.time}`).
 
 ## e5.8.3
@@ -45,7 +45,7 @@
 ## e5.8.2
 
 - [#14004](https://github.com/emqx/emqx/pull/14004) Fixed an issue in Cluster Linking where overlapping topic filters in the `topics` configuration caused inconsistent and incomplete cross-cluster message routing. Each topic filter is now handled individually. Therefore, redundant topic filters (e.g. `t/1` and `t/+`) in the `topics` configuration are now considered invalid. The link will fail to start if such a configuration is detected.
-  
+
 - [#14015](https://github.com/emqx/emqx/pull/14015) Kafka/Confluent/Azure Event Hub Producers with a dynamic topic (i.e., a topic that contains placeholders) no longer support disk buffering. Only memory and hybrid modes are now supported.
 
 - [#14106](https://github.com/emqx/emqx/pull/14106) Added a validation that forbids a single Kafka Consumer connector from containing sources with repeated Kafka topics. If you want to repeat topics, create a new connector and source(s).

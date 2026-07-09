@@ -10,7 +10,7 @@ This section explains how Cluster Linking provides an efficient solution for cli
 
 ### Challengers with a Single Cluster
 
-A single EMQX cluster can serve thousands of geographically distributed MQTT clients effectively. However, when clients are spread globally, issues with high latency and poor network connectivity arise. Deploying multiple EMQX clusters in different regions can mitigate these problems by serving clients locally. 
+A single EMQX cluster can serve thousands of geographically distributed MQTT clients effectively. However, when clients are spread globally, issues with high latency and poor network connectivity arise. Deploying multiple EMQX clusters in different regions can mitigate these problems by serving clients locally.
 
 ### Cluster Linking vs. MQTT Bridge
 
@@ -87,3 +87,4 @@ Next, you can learn how to use the Cluster Linking feature and configure its fun
 
 - [Quick Start with Cluster Linking](./quick-start.md)
 - [Configure Cluster Linking](./configuration.md)
+- [Secure Cluster Linking](./security.md)

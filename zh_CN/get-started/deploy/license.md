@@ -31,11 +31,11 @@
 
 更多连接以及试用时长的 License 可以向销售人员申请。
 
-## 更新和设置 License 
+## 更新和设置 License
 
 您可以通过 Dashboard、命令行或配置文件更新 License 并且设置 License 连接配额使用水位线。
 
-### Dashboard 
+### Dashboard
 
 1. 打开 EMQX Dashboard，从左侧导航目录点击**系统设置**-> **License**, 在 **License** 页面的**基础信息**区域，您可以看到 EMQX 当前 License 的基础信息，包括 License 连接配额使用情况、EMQX 版本信息和 License 签发信息等。
 
@@ -75,16 +75,16 @@ EMQX Dashboard 允许用户将系统恢复为默认的单节点社区版 License
 您还可以使用以下命令来更新您的 EMQX 企业版 License：
 
 ```bash
-./bin/emqx ctl 
+./bin/emqx ctl
 
-    license info             # 显示 license 信息 
+    license info             # 显示 license 信息
     license update <License> # 更新 license，<License> 为 license 字符串
     license update default   # 恢复为默认社区版 License
 ```
 
 ### 配置文件
 
-您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../../operate/cli.md)中执行 `emqx ctl license reload` 重新加载 License：
+您可以通过配置文件设置 License，设置完成后请在 [EMQX 命令行](../../guides/cli.md)中执行 `emqx ctl license reload` 重新加载 License：
 
 ```bash
 license {

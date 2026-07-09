@@ -109,7 +109,7 @@ Couchbase 数据集成是 EMQX 中开箱即用的功能，旨在将 MQTT 的实�
 4. 在 SQL 编辑器中输入规则，例如希望将 `t/#` 主题的 MQTT 消息转发至 Couchbase，可通过如下规则 SQL 实现：
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"

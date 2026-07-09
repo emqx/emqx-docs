@@ -14,7 +14,7 @@ The diagram below illustrates the typical architecture of EMQX and TDengine data
 
 Taking the industrial energy consumption management scenario as an example, the workflow is as follows:
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
 3. **Data ingestion into TDengine**: Rules defined in the rule engine trigger operations to write messages to TDengine. The TDengine Sink provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in TDengine.
 
@@ -30,7 +30,7 @@ The TDengine data integration brings the following features and advantages to yo
 
 - **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. TDengine excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
 - **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to TDengine.
-- **Cluster and Scalability**: EMQX and TDengine support clustering capabilities and are built on cloud-native architecture, enabling full utilization of the cloud platform's elastic storage, computing, and network resources, allowing for flexible horizontal scaling as your business grows to meet expanding demands. 
+- **Cluster and Scalability**: EMQX and TDengine support clustering capabilities and are built on cloud-native architecture, enabling full utilization of the cloud platform's elastic storage, computing, and network resources, allowing for flexible horizontal scaling as your business grows to meet expanding demands.
 - **Advanced Querying Capabilities**: TDengine provides optimized functions, operators, and indexing techniques for efficient querying and analysis of timestamp data, enabling precise insights to be extracted from IoT time-series data.
 
 ## Before You Start
@@ -51,7 +51,7 @@ You can use the following two methods to start the TDengine or connect to a TDen
 ::: tab Docker
 
 ```bash
-# To start the TDengine docker image 
+# To start the TDengine docker image
 docker run --name TDengine -p 6041:6041 tdengine/tdengine
 
 # Access the container
@@ -88,9 +88,9 @@ use mqtt;
 
 ### Create Data Tables in TDengine
 
-You need to create two data tables in TDengine database for message storage and status recording. 
+You need to create two data tables in TDengine database for message storage and status recording.
 
-1. Use the following SQL statements to create data table `t_mqtt_msg` in TDengine database. The data table stores the client ID, topic, payload, and creation time of every message. 
+1. Use the following SQL statements to create data table `t_mqtt_msg` in TDengine database. The data table stores the client ID, topic, payload, and creation time of every message.
 
 ```sql
    CREATE TABLE t_mqtt_msg (
@@ -103,7 +103,7 @@ You need to create two data tables in TDengine database for message storage and 
      );
 ```
 
-2. Use the following SQL statements to create data table `emqx_client_events` in TDengine database. This data table stores the client ID, event type, and creation time of every event. 
+2. Use the following SQL statements to create data table `emqx_client_events` in TDengine database. This data table stores the client ID, event type, and creation time of every event.
 
 ```sql
      CREATE TABLE emqx_client_events (
@@ -156,9 +156,9 @@ This section demonstrates how to create a Connector to connect the Sink to the T
       - **Username**: Left empty
       - **Password**: Left empty
       - **Token**: Enter the value of `TDENGINE_CLOUD_TOKEN` provided by the TDengine Cloud. In this demonstration, it is `a2ba69cc6****f0c18cd`.
-   
+
       :::
-   
+
       ::::
 
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
@@ -169,7 +169,7 @@ This section demonstrates how to create a Connector to connect the Sink to the T
 
 ## Create a Rule with TDengine Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the TDengine data table `t_mqtt_msg` via configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the TDengine data table `t_mqtt_msg` via configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -189,7 +189,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -210,7 +210,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    :::
 
    ```sql
-   INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
+   INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived)
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
 
@@ -230,11 +230,11 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine.
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for the TDengine Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new TDengine Sink.
 
@@ -283,7 +283,7 @@ The SQL rule syntax for online/offline status recording is as follows:
 SELECT
       *,
       now_timestamp('millisecond')  as ts
-    FROM 
+    FROM
       "$events/client_connected", "$events/client_disconnected"
 ```
 
@@ -301,7 +301,7 @@ INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
 
 ## Test the Rules
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
+Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello TDengine" }'
@@ -309,7 +309,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello TDengine" }'
 
 Check the running status of the two Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
 
-Check whether the data is written into the `t_mqtt_msg` data table. 
+Check whether the data is written into the `t_mqtt_msg` data table.
 
 ```bash
 taos> select * from t_mqtt_msg;

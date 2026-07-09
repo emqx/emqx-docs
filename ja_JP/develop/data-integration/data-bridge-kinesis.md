@@ -65,7 +65,7 @@ AWS Kinesis Data Streams を利用したストリーミングデータパイプ�
    ```bash
    # LocalStack の Docker イメージをローカルで起動
    docker run --name localstack -p '4566:4566' -e 'KINESIS_LATENCY=0' -d localstack/localstack:2.1
-   
+
    # コンテナにアクセス
    docker exec -it localstack bash
    ```
@@ -204,7 +204,7 @@ LocalStack を利用している場合、以下の手順で受信データを確
        "NextShardIterator": "AAAAAAAAAAFj5M3+6XUECflJAlkoSNHV/LBciTYY9If2z1iP+egC/PtdVI2t1HCf3L0S6efAxb01UtvI+3ZSh6BO02+L0BxP5ssB6ONBPfFgqvUIjbfu0GOmzUaPiHTqS8nNjoBtqk0fkYFDOiATdCCnMSqZDVqvARng5oiObgigmxq8InciH+xry2vce1dF9+RRFkKLBc0=",
        "MillisBehindLatest": 0
    }
-   
+
    echo 'eyAibXNnIjogImhlbGxvIEFtYXpvbiBLaW5lc2lzIiB9' | base64 -d
    { "msg": "hello Amazon Kinesis" }
    ```

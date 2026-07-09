@@ -1052,7 +1052,7 @@
 
   更多关于客户端属性功能的详细信息，参见[客户端属性](../develop/client-attributes/client-attributes.md)。
 
-- [#12910](https://github.com/emqx/emqx/pull/12910) 添加了插件配置管理和 schema 验证功能。还可以使用元数据注释 schema，以便在 Dashboard 中进行 UI 渲染。更多详细信息请参见[插件模板](https://github.com/emqx/emqx-plugin-template/pull/126)和[插件文档](../operate/extensions/plugins.md)。
+- [#12910](https://github.com/emqx/emqx/pull/12910) 添加了插件配置管理和 schema 验证功能。还可以使用元数据注释 schema，以便在 Dashboard 中进行 UI 渲染。更多详细信息请参见[插件模板](https://github.com/emqx/emqx-plugin-template/pull/126)和[插件文档](../guides/extensions/plugins.md)。
 
 #### 运维和管理
 
@@ -1469,7 +1469,7 @@
 
 - [#12085](https://github.com/emqx/emqx/pull/12085) EMQX 已升级，以利用 OTP 版本 26.1.2-2 的功能。注意：Docker 镜像仍然使用 OTP 25.3.2 构建。
 
-- [#12189](https://github.com/emqx/emqx/pull/12189) 增强了 EMQX JWT 认证中的[权限列表](../operate/access-control/authn/jwt.md#权限列表)声明格式，使其具有更高的灵活性。更新后的格式现在支持数组结构，更加符合基于文件的 ACL 规则。
+- [#12189](https://github.com/emqx/emqx/pull/12189) 增强了 EMQX JWT 认证中的[权限列表](../guides/access-control/authn/jwt.md#权限列表)声明格式，使其具有更高的灵活性。更新后的格式现在支持数组结构，更加符合基于文件的 ACL 规则。
 
   例如：
 
@@ -1532,7 +1532,7 @@
   - 添加了 `/api/v5/prometheus/auth` 端点，提供所有认证器和授权器的执行次数和运行状态等指标。
   - 添加了 `/api/v5/prometheus/data_integration` 端点，提供所有规则、动作和连接器的执行次数和状态等指标。
 
-  限制： 
+  限制：
 
   Prometheus push gateway 仅支持 `/api/v5/prometheus/stats?mode=node` 中的内容。
 
@@ -1642,7 +1642,7 @@
 - [#11971](https://github.com/emqx/emqx/pull/11971) 将 `/api/v5/load_rebalance/availability_check` 接口设为公共接口，即不再需要进行身份验证。这一变更简化了负载均衡器的设置。
 
   此外，它还改善了等待健康检查阶段的负载均衡重平衡/疏散过程的流畅性。现在，在此阶段，不会禁止连接到被标记为要疏散的节点。这个调整是因为无法确定负载均衡器是否已将所有这些节点标记为不健康。禁止连接到它们可能会导致多次不成功的重新连接尝试。
-  
+
 - [#12013](https://github.com/emqx/emqx/pull/12013) 调整数据桥接设计，将其拆分为连接器与动作（Sink）。连接用于管理数据集成与外部系统的连接，可以在多个动作之间重复使用，动作仅用于配置数据操作方式。这个设计能够提供更大的灵活性和更好的可扩展性，实现更清晰的数据集成配置与管理。
 
   已调整的数据桥接有包括 PostgreSQL, Timescale 和 Matrix，现在拆分为连接器和动作 API，不过它们仍然与旧的数据桥接 API 兼容。
@@ -1650,7 +1650,7 @@
 - [#12016](https://github.com/emqx/emqx/pull/12016) 增强了许可证密钥管理。
 
   EMQX 现在可以从指定文件加载许可证密钥。通过将 `license.key` 配置设置为文件路径，并使用 `"file://"` 作为前缀来启用此功能。 还添加了通过设置 `license.key = default` 来恢复到默认试用许可证的功能。此选项简化了在需要时返回试用许可证的过程。
-  
+
 - [#12129](https://github.com/emqx/emqx/pull/12129) 续期默认的 License，替换了 2023 年 1 月发布的旧 License。与此同时还将 License 规格从 100 并发连接调整为 25 个并发连接。
 
 ### 修复
@@ -1763,7 +1763,7 @@
 - [#11728](https://github.com/emqx/emqx/pull/11728) 改进了 LDAP 过滤字符串解析器，具体改进如下：
   - 自动转义过滤字符串中的特殊字符。
   - 修复了先前阻止使用 `dn` 作为过滤值的错误。
-  
+
 - [#11733](https://github.com/emqx/emqx/pull/11733) 解决了一个不兼容性问题，该问题导致在会话接管或通道驱逐时，如果会话位于运行 EMQX v5.2.x 或更早版本的远程节点上，可能会导致崩溃。
 
 - [#11750](https://github.com/emqx/emqx/pull/11750) 日志不再输出使用 HTTP 服务进行认证和 HTTP 服务数据桥接的请求 Body。
@@ -1811,11 +1811,11 @@
 - [#11682](https://github.com/emqx/emqx/pull/11682) 修复了在文件日志处理程序上将“轮换大小”设置为`infinity`时日志记录停止的问题。
 
 - [#11567](https://github.com/emqx/emqx/pull/11567) 改进了 EMQX 的优雅关闭（`emqx stop` 命令）：
-  
+
   - 将超时时间从1分钟增加到2分钟。
   - 如果 EMQX 无法在配置的超时时间内优雅地停止，则打印错误消息。
   - 在 EMQX 关闭过程中定期打印状态消息。
-  
+
 - [#11584](https://github.com/emqx/emqx/pull/11584) 修复了在 Windows 上当 os_mon 模块不可用时的遥测报告错误。
 
 - [#11605](https://github.com/emqx/emqx/pull/11605) 降低了 CMD_overridden 的日志严重程度，从警告（warning）降至信息（info）。
@@ -2075,7 +2075,7 @@
     ```
     FOREACH payload.sensors FROM "t/#"
     ```
-  
+
   - 在选择 `payload` 字段和所有字段的情况下，例如：
 
     ```

@@ -61,7 +61,7 @@ EMQX 5.x は設定、管理 API、クラスタリング API の点で 4.x と互
 - [リリースノート](../../release-notes/all-changes-ee.md)を読んでいること。
 - デプロイ環境が EMQX がサポートする[対応 OS](./install.md)の VM または Docker コンテナを実行可能であること。
 - アップグレードに十分なディスク容量とメモリがあること。
-- [パフォーマンスチューニング（Linux）](../../operate/performance/tune.md)に記載された特定の前提条件を確認済みであること。
+- [パフォーマンスチューニング（Linux）](../../guides/performance/tune.md)に記載された特定の前提条件を確認済みであること。
 
 :::
 

@@ -27,7 +27,7 @@ $delayed/{DelayInterval}/{TopicName}
 
    - **启用**: 启用或禁用延迟发布。默认情况下，已启用。
    - **最大延迟消息数**：可以指定延迟消息的最大数量。
-   
+
 
 <img src="./assets/delay-publish-dashboard.png" alt="delay-publish-dashboard" style="zoom:45%;" />
 

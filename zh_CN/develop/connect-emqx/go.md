@@ -33,7 +33,7 @@ func main() {
 	mqtt.DEBUG = log.New(os.Stdout, "", 0)
 	mqtt.ERROR = log.New(os.Stdout, "", 0)
 	opts := mqtt.NewClientOptions().AddBroker("tcp://broker.emqx.io:1883").SetClientID("emqx_test_client")
-	
+
 	opts.SetKeepAlive(60 * time.Second)
 	// 设置消息回调处理函数
 	opts.SetDefaultPublishHandler(f)
@@ -49,7 +49,7 @@ func main() {
 		fmt.Println(token.Error())
 		os.Exit(1)
 	}
-	
+
 	// 发布消息
 	token := c.Publish("testtopic/1", 0, false, "Hello World")
 	token.Wait()
@@ -61,7 +61,7 @@ func main() {
 		fmt.Println(token.Error())
 		os.Exit(1)
 	}
-  
+
   // 断开连接
 	c.Disconnect(250)
 	time.Sleep(1 * time.Second)

@@ -14,7 +14,7 @@ InfluxDBデータ連携はEMQXに標準搭載された機能であり、EMQXの�
 
 EMQXとInfluxDBは、エネルギー消費データをリアルタイムで効率的に収集・分析するための拡張可能なIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがデバイス接続、メッセージ転送、データルーティングを担当するIoTプラットフォームとして機能し、InfluxDBがデータ保存・分析プラットフォームとして役割を担います。ワークフローは以下の通りです：
 
-1. **メッセージのパブリッシュと受信**：エネルギー貯蔵機器や産業用IoT機器はMQTTプロトコルを用いてEMQXに接続し、電力消費量、入出力電力などのデータを定期的にパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+1. **メッセージのパブリッシュと受信**：エネルギー貯蔵機器や産業用IoT機器はMQTTプロトコルを用いてEMQXに接続し、電力消費量、入出力電力などのデータを定期的にパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
 2. **メッセージデータの処理**：内蔵のルールエンジンを使い、特定のトピックに基づいてメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールにマッチしてデータ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
 3. **InfluxDBへのデータ取り込み**：ルールエンジンで定義されたルールにより、InfluxDBへの書き込み操作がトリガーされます。InfluxDB SinkはLine Protocolテンプレートを提供し、メッセージの特定フィールドをInfluxDBの対応するmeasurementやfieldに柔軟にマッピングできます。
 
@@ -70,7 +70,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
    - InfluxDBサーバー接続情報を入力：
      - **Server Host**に`127.0.0.1:8086`を入力。InfluxDB Cloudを使う場合はポート443を指定し、`{url}:443`と入力して**Enable TLS**を有効にします。
      - [InfluxDBのインストールとセットアップ](#install-and-set-up-influxdb)に従い、**Token**、**Organization**、**Bucket**を設定。InfluxDB v1を選択した場合は、**Database**、**Username**、**Password**を設定してください。
-   - TLSを有効にするかどうかを決定します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../../operate/network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+   - TLSを有効にするかどうかを決定します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../../guides/network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
 5. **Create**をクリックする前に、**Test Connectivity**でInfluxDBサーバーへの接続テストが可能です。
 6. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択可能です。続けてルールとSinkを作成し、InfluxDBに転送するデータを指定できます。詳細は[InfluxDB Sink付きルールの作成](#create-a-rule-with-influxdb-sink)を参照してください。
 

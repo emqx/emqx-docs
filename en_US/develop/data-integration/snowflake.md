@@ -77,7 +77,7 @@ The script automatically downloads the Snowflake ODBC `.deb` installation packag
 Run the following command to view the configurations in the `/etc/odbc.ini` file:
 
 ```
-emqx@emqx-0:~$ cat /etc/odbc.ini 
+emqx@emqx-0:~$ cat /etc/odbc.ini
 
 [snowflake]
 Description=SnowflakeDB
@@ -93,7 +93,7 @@ snowflake = SnowflakeDSIIDriver
 Run the following command to view the configurations in the  `/etc/odbcinst.ini` file:
 
 ```
-emqx@emqx-0:~$ cat /etc/odbcinst.ini 
+emqx@emqx-0:~$ cat /etc/odbcinst.ini
 
 [ODBC Driver 18 for SQL Server]
 Description=Microsoft ODBC Driver 18 for SQL Server
@@ -147,13 +147,13 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
      [ODBC]
      Trace=no
      TraceFile=
-     
+
      [ODBC Drivers]
      Snowflake = Installed
-     
+
      [ODBC Data Sources]
      snowflake = Snowflake
-     
+
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -194,20 +194,20 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
 
    ```sql
    USE ROLE accountadmin;
-   
+
    CREATE DATABASE IF NOT EXISTS testdatabase;
-   
+
    CREATE OR REPLACE TABLE testdatabase.public.emqx (
        clientid STRING,
        topic STRING,
        payload STRING,
        publish_received_at TIMESTAMP_LTZ
    );
-   
+
    CREATE STAGE IF NOT EXISTS testdatabase.public.emqx
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
-   
+
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
@@ -220,7 +220,7 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
    CREATE USER IF NOT EXISTS snowpipeuser
        PASSWORD = 'Snowpipeuser99'
        MUST_CHANGE_PASSWORD = FALSE;
-   
+
    ALTER USER snowpipeuser SET RSA_PUBLIC_KEY = '
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_1>
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_2>
@@ -239,7 +239,7 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-   
+
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
@@ -263,32 +263,32 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 
 5. Enter the connection information.
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
-   
+
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
-   
+
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
-   
+
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
-   
+
    - **Password**: The password for authenticating with Snowflake via ODBC using username/password authentication. This field is optional:
-   
+
      - You may enter the password here, e.g., `Snowpipeuser99`, as defined during the previous setup process;
      - Or configure it in `/etc/odbc.ini`;
      - If using key-pair authentication instead, leave this field blank.
-   
+
      ::: tip
-   
+
      Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
-   
+
      :::
-   
+
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
    - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example: `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
-   
-6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 
@@ -324,9 +324,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    :::
    ::: tip
-   
-   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
-   
+
+   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`.
+
    :::
 
 

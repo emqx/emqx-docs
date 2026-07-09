@@ -14,8 +14,8 @@
 
 ## rpmによるインストール
 
-1. 公式ダウンロードページの[**CentOS/RHELタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL)にアクセスします。  
-2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、必要なCPUアーキテクチャに応じて `RHEL 8 (CentOS 8) amd64` または `RHEL 8 (CentOS 8) arm64` -> `rpm` パッケージを選択します。  
+1. 公式ダウンロードページの[**CentOS/RHELタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL)にアクセスします。
+2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、必要なCPUアーキテクチャに応じて `RHEL 8 (CentOS 8) amd64` または `RHEL 8 (CentOS 8) arm64` -> `rpm` パッケージを選択します。
 3. 下記リンクをクリックしてダウンロードします。コマンドラインでのダウンロードおよびインストール手順も併せてご利用いただけます。
 
 ### EMQXの起動
@@ -36,8 +36,8 @@ sudo yum remove emqx
 
 ## tar.gzによるインストール
 
-1. 公式ダウンロードページの[**CentOS/RHELタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL)にアクセスします。  
-2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、必要なCPUアーキテクチャに応じて `RHEL 8 (CentOS 8) amd64` または `RHEL 8 (CentOS 8) arm64` -> `tar.gz` パッケージを選択します。  
+1. 公式ダウンロードページの[**CentOS/RHELタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL)にアクセスします。
+2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、必要なCPUアーキテクチャに応じて `RHEL 8 (CentOS 8) amd64` または `RHEL 8 (CentOS 8) arm64` -> `tar.gz` パッケージを選択します。
 3. 下記リンクをクリックしてダウンロードします。コマンドラインでのダウンロードおよびインストール手順も併せてご利用いただけます。
 
 ### EMQXの起動

@@ -1,6 +1,6 @@
 ---
 title: Work with EMQX Enterprise License
-description: EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a commercial license. 
+description: EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a commercial license.
 ---
 
 
@@ -14,13 +14,13 @@ For detailed information about the licensing changes, see the [EMQX Licensing FA
 
 :::
 
-As part of the installation package, EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a Commercial License. 
+As part of the installation package, EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a Commercial License.
 
 This page guides you through the process of obtaining a Commercial License and importing it into EMQX.
 
 ## Apply for a License
 
-To apply for a Commercial License with a valid License Key, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a commercial license. Our sales representative will contact you as soon as possible. 
+To apply for a Commercial License with a valid License Key, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a commercial license. Our sales representative will contact you as soon as possible.
 
 Suppose you prefer to try EMQX Enterprise before purchasing. In that case, you can apply for a Trial License on our [Trial License application page,](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
 
@@ -43,7 +43,7 @@ You can update your license file and configure the settings for the license conn
 
 ### Dashboard
 
-1. On the EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information. 
+1. On the EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information.
 
 2. Click the **Update License** button. Paste your License Key in the pop-up dialog box, and click **Save**. The license information on the page automatically refreshes following your submission.
 
@@ -84,16 +84,16 @@ The Community License does not allow full commercial use and supports only singl
 You can also use the following command to update your EMQX Enterprise License:
 
 ```bash
-./bin/emqx ctl 
+./bin/emqx ctl
 
-    license info             # Show license info 
+    license info             # Show license info
     license update <License> # Update license given as a string
     license update default   # Revert to default Community License
 ```
 
 ### Configuration File
 
-You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../../operate/cli.md) to reload the license. 
+You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../../guides/cli.md) to reload the license.
 
 ```bash
 license {

@@ -12,7 +12,7 @@ The Developer Guide is designed to help developers get started with EMQX and bui
 
 - [Tutorials](./tutorial/tutorial.md) offers practical guides on a wide range of topics including client connection, data collection, MQTT communication optimization, integrations, security, and deployment.
 
-- [REST API](./api.md) guides you on getting started with the HTTP management API exposed by EMQX for managing clients, topics, subscriptions, and more.
+- [REST API](../guides/api.md) guides you on getting started with the HTTP management API exposed by EMQX for managing clients, topics, subscriptions, and more.
 
 - [Rule Engine](./data-integration/rules.md) introduces the built-in data processing engine that lets you extract, filter, enrich, and transform IoT data in real time, working in conjunction with Data Integration.
 

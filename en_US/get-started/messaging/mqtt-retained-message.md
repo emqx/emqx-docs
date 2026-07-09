@@ -38,9 +38,9 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
    <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:35%;" />
 
-5. Click the **+** -> **New Connection** in the **Connections** pane to create a subscription `Subscriber` as a client that receives messages. 
+5. Click the **+** -> **New Connection** in the **Connections** pane to create a subscription `Subscriber` as a client that receives messages.
 
-5. Click **+ New Subscription** to subscribe to the topic `sensor/+`. Click the **Confirm** button. 
+5. Click **+ New Subscription** to subscribe to the topic `sensor/+`. Click the **Confirm** button.
 
    :::tip
 
@@ -48,7 +48,7 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
    :::
 
-   You will see that the client `Subscriber` only receives the last retained message but not the first message with the topic `sensor/t1` and the first retained message with the topic `sensor/t2`, because EMQX only stores the latest retained message of each topic. 
+   You will see that the client `Subscriber` only receives the last retained message but not the first message with the topic `sensor/t1` and the first retained message with the topic `sensor/t2`, because EMQX only stores the latest retained message of each topic.
 
    <img src="./assets/Receive-retained-message.png" alt="Receive-retained-message" style="zoom:35%;" />
 

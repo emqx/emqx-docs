@@ -14,7 +14,7 @@ This page lists features supported across different deployment types in detail.
 | **Cluster Linking**              | ✅                                                | ❌                              | ✅                                  | Seamless connection of devices and application data          |
 | **Message Queue**                | ✅                                                | ❌                              | ✅                                  | Unified architecture for data transmission and analysis (Coming soon) |
 | **Stream Processing**            | ✅                                                | ❌                              | ✅                                  | Higher reliability and disaster recovery capabilities<br>(Coming soon) |
-| **Data Persistence**             | ✅ Built-in RocksDB backend or external databases | N/A                            | N/A                                | [Improved stability and reliability](../operate/durability/management.md) |
+| **Data Persistence**             | ✅ Built-in RocksDB backend or external databases | N/A                            | N/A                                | [Improved stability and reliability](../guides/durability/management.md) |
 | **Schema Registry**              | ✅                                                | ❌                              | ✅                                  | [Schema Registry](../develop/data-integration/schema-registry.md) ensures data consistency and compatibility |
 | **Message Codec**                | ✅                                                | ❌                              | ✅                                  | Flexible message format conversion for:<br>JSON, Avro, Protobuf, Custom codec (HTTP/gRPC) |
 | **Schema Validation**            | ✅                                                | ✅                              | ✅                                  | Ensuring integrity and legality of messages                  |
@@ -23,7 +23,7 @@ This page lists features supported across different deployment types in detail.
 | **File Transfer**                | ✅                                                | ❌                              | ✅ In product roadmap               | Unified platform data transmission                           |
 | **Kafka Integration**            | ✅                                                | ✅                              | ✅                                  | [Stream MQTT Data into Apache Kafka](../develop/data-integration/data-bridge-kafka.md) |
 | **Enterprise Data Integrations** | ✅ 40+                                            | ✅                              | ✅ 40+                              | [Accelerate business development and delivery speed](https://www.emqx.com/en/integrations) |
-| **Troubleshooting**              | ✅                                                | ❌                              | ✅                                  | [Log Trace](../operate/observability/tracer.md)<br>[Slow Subscriptions](../operate/observability/slow-subscribers-statistics.md) |
+| **Troubleshooting**              | ✅                                                | ❌                              | ✅                                  | [Log Trace](../guides/observability/tracer.md)<br>[Slow Subscriptions](../guides/observability/slow-subscribers-statistics.md) |
 | **Cloud-Native & K8s**           | ✅                                                | N/A                            | N/A                                | [Reduce system deployment and management costs](https://www.emqx.com/en/deployments) |
 | **Edge Computing**               | ✅                                                | ✅                              | ✅                                  | Reduce data transmission latency and costs<br>[Neuron](https://www.emqx.com/en/products/neuronex)<br>[NanoMQ](https://www.emqx.com/en/products/nanomq) |
 
@@ -96,11 +96,11 @@ This page lists features supported across different deployment types in detail.
 
 | Authentication / Authorization       | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
 | ------------------------------------ | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **Username / Password**              | ✅                        | ✅                              | ✅                                  | [Password-Based Authentication](../operate/access-control/authn/pwoverview.md) |
-| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](../operate/access-control/authn/jwt.md)         |
-| **MQTT 5.0 Enhanced Authentication** | ✅                        | N/A                            | N/A                                | [MQTT 5.0 Enhanced Authentication](../operate/access-control/authn/scram.md) |
+| **Username / Password**              | ✅                        | ✅                              | ✅                                  | [Password-Based Authentication](../guides/access-control/authn/pwoverview.md) |
+| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](../guides/access-control/authn/jwt.md)         |
+| **MQTT 5.0 Enhanced Authentication** | ✅                        | N/A                            | N/A                                | [MQTT 5.0 Enhanced Authentication](../guides/access-control/authn/scram.md) |
 | **LDAP Authentication**              | ✅                        | ❌                              | ✅ In product roadmap               |                                                              |
-| **PSK Authentication**               | ✅                        | ❌                              | ✅                                  | [Enable PSK Authentication](../operate/network/psk-authentication.md#enable-psk-authentication) |
+| **PSK Authentication**               | ✅                        | ❌                              | ✅                                  | [Enable PSK Authentication](../guides/network/psk-authentication.md#enable-psk-authentication) |
 | **X.509 Certificates**               | ✅                        | ✅ Managed by EMQX Cloud        | ✅                                  |                                                              |
 | **Fine-grained Access Control**      | ✅                        | ✅                              | ✅                                  |                                                              |
 | **Authentication Database Backends** | ✅                        | ❌                              | ✅                                  |                                                              |
@@ -167,8 +167,8 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 
 | Extensibility                | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                             |
 | ---------------------------- | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------- |
-| **Hooks**                    | ✅                        | N/A                            | N/A                                | [Hooks](../operate/extensions/hooks.md#hooks)       |
-| **Plugins**                  | ✅                        | N/A                            | N/A                                | [Plugins](../operate/extensions/plugins.md#plugins) |
+| **Hooks**                    | ✅                        | N/A                            | N/A                                | [Hooks](../guides/extensions/hooks.md#hooks)       |
+| **Plugins**                  | ✅                        | N/A                            | N/A                                | [Plugins](../guides/extensions/plugins.md#plugins) |
 | **Plugin Hot Loading**       | ✅                        | N/A                            | N/A                                |                                             |
 | **Plugin Hot Configuration** | ✅                        | N/A                            | N/A                                |                                             |
 | **Gateways**                 | ✅                        | N/A                            | N/A                                |                                             |

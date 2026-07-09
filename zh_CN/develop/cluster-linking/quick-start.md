@@ -12,7 +12,9 @@
 - 唯一的集群名称
 - 集群之间的网络通信
 
-集群连接要求每个集群的 MQTT 监听器在另一个集群的网络中可访问。建议将这些 MQTT 监听器置于负载均衡器之后，以实现均匀的流量分配。为了安全，如果使用公共互联网，确保集群之间的通信使用 [TLS](./configuration.md) 和严格的 [TLS 或 MQTT 客户端认证](../../operate/access-control/authn/authn.md) 进行保护。
+集群连接要求每个集群的 MQTT 监听器在另一个集群的网络中可访问。建议将这些 MQTT 监听器置于负载均衡器之后，以实现均匀的流量分配。为了安全，如果使用公共互联网，确保集群之间的通信使用 [TLS](./configuration.md) 和严格的 [TLS 或 MQTT 客户端认证](../../guides/access-control/authn/authn.md) 进行保护。
+
+在上线生产前，请参照专门的[集群连接安全加固](./security.md)指南，对各集群的认证、授权以及 `$LINK/` 主题命名空间进行加固。
 
 ## 设置第一个集群（cluster-us-east）
 

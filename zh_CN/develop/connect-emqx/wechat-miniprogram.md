@@ -29,11 +29,11 @@
 
 ```bash
 server {
-    listen  443 ssl;        
-    server_name xxx.emqx.io; 
+    listen  443 ssl;
+    server_name xxx.emqx.io;
     ssl_certificate   cert/***.pem;
     ssl_certificate_key  cert/***.key;
-    ssl_session_timeout  5m;      
+    ssl_session_timeout  5m;
     ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
@@ -47,7 +47,7 @@ server {
       # client_max_body_size 35m;
       proxy_http_version 1.1;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "Upgrade";    
+      proxy_set_header Connection "Upgrade";
     }
 
 }

@@ -166,7 +166,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
    注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"

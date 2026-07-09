@@ -55,15 +55,15 @@ EMQX uses Semantic Versioning (`MAJOR.MINOR.PATCH`, e.g., `5.8.1`) as the founda
 
 ### Internal Releases (e.g., `5.9.0-M3.202506`)
 
-*   **Format:** `X.Y.Z-M[1-3].YYYYMM` (e.g., `5.9.0-M2.202505`, `5.9.1-M3.202506`). 
-*   `X.Y` often aligns with the upcoming or current public Feature Release minor version being developed. 
+*   **Format:** `X.Y.Z-M[1-3].YYYYMM` (e.g., `5.9.0-M2.202505`, `5.9.1-M3.202506`).
+*   `X.Y` often aligns with the upcoming or current public Feature Release minor version being developed.
 *   `Z` can increment with internal iterations. Ad-hoc fixes may apply.
 
 ### Feature Releases (e.g., `5.7.0`, `5.9.0`, `5.10.0`)
 
-*   Public minor releases that deliver new features, improvements, and bug fixes quarterly. 
+*   Public minor releases that deliver new features, improvements, and bug fixes quarterly.
 *   Backward-compatible (API and functionality) with previous minor releases within the same major version (e.g., `5.x`) and support rolling cluster upgrades.
-*   **Format:** `X.Y.0`. 
+*   **Format:** `X.Y.0`.
 *   `Y` (minor version) increments with each quarterly release.
 *   **Naming:** EMQX Enterprise X.Y.0.
 

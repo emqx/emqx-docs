@@ -1,13 +1,20 @@
-# EMQX Enterprise リリースノート
+# Release Notes for EMQX Enterprise
 
-EMQX Enterprise のリリースノートページでは、各バージョンに含まれるアップデート、機能強化、および修正の詳細な記録を提供しています。
+The release notes page for EMQX Enterprise provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX Enterprise.
 
 ## v5.9
 
+- [5.9.2](./changes-ee-v5.md#_5-9-2): 2025-11-14
+- [5.9.1](./changes-ee-v5.md#_5-9-1): 2025-07-02
 - [5.9.0](./changes-ee-v5.md#_5-9-0): 2025-05-02
 
 ## v5.8
 
+- [5.8.11](./changes-ee-v5.md#_5-8-11): 2026-06-22
+- [5.8.10](./changes-ee-v5.md#_5-8-10): 2026-04-16
+- [5.8.9](./changes-ee-v5.md#_5-8-9): 2025-12-31
+- [5.8.8](./changes-ee-v5.md#_5-8-8): 2025-09-04
+- [5.8.7](./changes-ee-v5.md#_5-8-7): 2025-07-02
 - [5.8.6](./changes-ee-v5.md#_5-8-6): 2025-03-25
 - [5.8.5](./changes-ee-v5.md#_5-8-5): 2025-02-25
 - [5.8.4](./changes-ee-v5.md#_5-8-4): 2024-12-26
@@ -63,6 +70,19 @@ EMQX Enterprise のリリースノートページでは、各バージョンに�
 
 ## v4.4
 
+- [4.4.36](./changes-ee-v4.md#_4-4-36): 2026-05-22
+- [4.4.35](./changes-ee-v4.md#_4-4-35): 2026-04-03
+- [4.4.34](./changes-ee-v4.md#_4-4-34): 2026-03-25
+- [4.4.33](./changes-ee-v4.md#_4-4-33): 2025-11-26
+- [4.4.32](./changes-ee-v4.md#_4-4-32): 2025-07-30
+- [4.4.31](./changes-ee-v4.md#_4-4-31): 2025-07-15
+- [4.4.30](./changes-ee-v4.md#_4-4-30): 2025-06-20
+- [4.4.29](./changes-ee-v4.md#_4-4-29): 2025-03-07
+- [4.4.28](./changes-ee-v4.md#_4-4-28): 2025-01-23
+- [4.4.27](./changes-ee-v4.md#_4-4-27): 2024-11-28
+- [4.4.26](./changes-ee-v4.md#_4-4-26): 2024-09-26
+- [4.4.25](./changes-ee-v4.md#_4-4-25): 2024-09-13
+- [4.4.24](./changes-ee-v4.md#_4-4-24): 2024-04-16
 - [4.4.23](./changes-ee-v4.md#_4-4-23): 2023-11-24
 - [4.4.22](./changes-ee-v4.md#_4-4-22): 2023-11-01
 - [4.4.21](./changes-ee-v4.md#_4-4-21): 2023-10-16
@@ -113,6 +133,9 @@ EMQX Enterprise のリリースノートページでは、各バージョンに�
 
 ## v4.2
 
+- [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
+- [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
+- [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26
 - [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
 - [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
 - [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26

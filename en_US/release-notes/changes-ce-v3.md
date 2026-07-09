@@ -1136,7 +1136,7 @@ Create a shared subscription with $queue/ or $share/\<group>/ prefix:
 
 Prefix          |  Examples
 ----------------|---------------------------------------
-$queue/         |  mosquitto_sub -t '$queue/topic  
+$queue/         |  mosquitto_sub -t '$queue/topic
 $share/\<group>/ |  mosquitto_sub -t '$share/group/topic
 
 ### Local Subscription

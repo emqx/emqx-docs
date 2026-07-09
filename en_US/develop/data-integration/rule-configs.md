@@ -90,7 +90,7 @@ bridges.mqtt.my_egress_mqtt_bridge {
 
 The above configuration is slightly more complicated than the previous rule configuration, but it just to create an MQTT bridge.
 
-We use the `bridges` namespace to create data bridges, `bridges.mqtt.my_egress_mqtt_bridge` creates a data bridge with type `mqtt` and name `my_egress_mqtt_bridge`. 
+We use the `bridges` namespace to create data bridges, `bridges.mqtt.my_egress_mqtt_bridge` creates a data bridge with type `mqtt` and name `my_egress_mqtt_bridge`.
 The bridge id is of format `<type>:<name>`, i.e. `mqtt:my_egress_mqtt_bridge`.
 This ID is referenced as an action by the previous rule.
 
@@ -100,10 +100,10 @@ For details of data bridges, see [Data Integration](./data-bridges.md)
 
 ## Configure Rules to Handle Messages
 
-We can use rules to handle messages with specific topics. 
+We can use rules to handle messages with specific topics.
 An example of a rule for processing mqtt messages is given below.
 
-Add the following configs to the end of the `base.hocon` file, 
+Add the following configs to the end of the `base.hocon` file,
 
 ```js
 rule_engine {
@@ -135,7 +135,7 @@ The rule first executes the SQL statement, selects the `qos` field from the mess
 
 The rule uses **event-topics** starting with **$events/** to process EMQX events. An example of a rule that handles the "client connected" event is given below.
 
-Add the following configs to the end of the `base.hocon` file, 
+Add the following configs to the end of the `base.hocon` file,
 
 ```js
 rule_engine {
@@ -157,7 +157,7 @@ For the event types supported by the rule and the available fields, see: [events
 
 Some data bridges (such as the MQTT bridge) can also be used as the data source of rules. Rules use **data bridge topics** starting with **$bridges/** to handle events triggered by data bridge. An example of a rule that uses "MQTT bridge" as a data source is given below.
 
-Add the following configs to the end of the `base.hocon` file, 
+Add the following configs to the end of the `base.hocon` file,
 
 ```js
 rule_engine {

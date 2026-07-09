@@ -82,12 +82,12 @@ Before creating a Lindorm Sink (via MySQL protocol), you need to create a MySQL 
    - **Connector Name**: Alphanumeric, e.g., `my_lindorm`.
 
    - **Server Host**:
-     
+
      - If EMQX is deployed within Alibaba Cloud VPC network (such as ECS instances), fill in the internal SQL address of the Lindorm instance. The format is typically the internal domain provided by Lindorm, for example: `ld-xxxx-proxy-sql-lindorm.lindorm.rds.aliyuncs.com:33060`.
      - If EMQX is deployed in a local data center or other non-Alibaba Cloud environments, ensure that public access has been enabled in the Lindorm console, and fill in the assigned public SQL address. The format is typically: `ld-xxxx-proxy-sql-public.lindorm.rds.aliyuncs.com:33060`.
-     
+
      Ensure that the IP address of the host where EMQX is deployed has been added to the Lindorm access whitelist.
-     
+
    - **Database Name**: `emqx_data`.
 
    - **Username**: `root`.
@@ -121,11 +121,11 @@ This section shows how to create a rule to handle MQTT messages from topic `#` a
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Lindorm. 
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Lindorm.
 
 5. Select `MySQL` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -163,11 +163,11 @@ This section shows how to create a rule to handle MQTT messages from topic `#` a
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MySQL Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `#`  are sent and saved to MySQL. 
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `#`  are sent and saved to MySQL.
 
 ## Test the Rule
 
@@ -179,7 +179,7 @@ mqttx pub -i emqx_test -t sensor/1 -m '{ "msg": "hello lindorm" }'
 
 Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
-Use API to query if data are written in Lindorm successfully: 
+Use API to query if data are written in Lindorm successfully:
 
 ```bash
 curl -X POST http://${LINDORM_SERVER}:8242/api/v2/sql?database=emqx_data \

@@ -95,7 +95,7 @@ There are many types of Volumes. For the description of Volumes, please refer to
 
   > The `.spec.coreTemplate.extraVolumeMounts` field configures the directory where the TLS certificate is mounted to EMQX: `/mounted/cert`.
 
-  > The `.spec.config.data` field configures the TLS listener certificate path. For more TLS listener configurations, please refer to the document: [Configuration Manual](../../../../../operate/configuration/configuration.md).
+  > The `.spec.config.data` field configures the TLS listener certificate path. For more TLS listener configurations, please refer to the document: [Configuration Manual](../../../../../guides/configuration/configuration.md).
 
 + Wait for EMQX cluster to be ready, you can check the status of EMQX cluster through the `kubectl get` command, please make sure that `STATUS` is `Running`, this may take some time
 
@@ -111,7 +111,7 @@ There are many types of Volumes. For the description of Volumes, please refer to
 
    ```bash
    $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+
    192.168.1.200
    ```
 

@@ -49,7 +49,7 @@ EMQX 通过规则引擎与 Sink 将设备数据转发至 TimescaleDB，Timescale
 
 EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集成。您可以使用 Timescale Service 云服务或者 Docker 部署一个 TimescaleDB 实例。
 
-:::: tabs 
+:::: tabs
 ::: tab Timescale Service
 
 1. 如果您没有 Timescale 账户，参考[创建一个 Timescale 账户](https://docs.timescale.com/getting-started/latest/services/#create-your-timescale-account)。
@@ -76,7 +76,7 @@ EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集�
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -103,10 +103,10 @@ EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集�
 
    ```bash
    docker exec -it timescaledb psql -U postgres
-   
+
    ## create tsdb database
    > CREATE database tsdb;
-   
+
    > \c tsdb;
    ```
 
@@ -119,7 +119,7 @@ EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集�
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -216,7 +216,7 @@ mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30,"location":"hangzhou"}'
 
 ```bash
 tsdb=# select * from sensor_data;
-             time              | location | temperature | humidity 
+             time              | location | temperature | humidity
 -------------------------------+----------+-------------+----------
  2023-07-10 08:28:48.813988+00 | hangzhou |          24 |       30
  2023-07-10 08:28:57.737768+00 | hangzhou |          24 |       30

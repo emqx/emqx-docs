@@ -1,8 +1,8 @@
 # Features and Benefits
 
-EMQX designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios. 
+EMQX designs a unique message transmission mechanism and management method for MQTT over QUIC, providing a more efficient and secure way to transmit MQTT messages over modern complex networks, thus improving the performance of MQTT in certain scenarios.
 
-This page introduces the advantages of MQTT over QUIC, and the benefits of each QUIC operation mode along with use cases. 
+This page introduces the advantages of MQTT over QUIC, and the benefits of each QUIC operation mode along with use cases.
 
 ## Advantages of MQTT over QUIC
 
@@ -94,7 +94,7 @@ The multi-streams mode has the following features and benefits
      For example, a client can use one stream to publish QoS1 messages and handle PUBACK over that same stream, while receiving QoS 0 messages from its subscriptions on another stream from the broker.
 
    - Prioritize different data
-     MQTT over QUIC also provides the ability to prioritize data from different MQTT topics through multi-streams. This means that topic data can be prioritized and delivered accordingly, improving the overall performance and responsiveness of the connection. 
+     MQTT over QUIC also provides the ability to prioritize data from different MQTT topics through multi-streams. This means that topic data can be prioritized and delivered accordingly, improving the overall performance and responsiveness of the connection.
 
    - Improve the parallelism of processing on the client and EMQX side
 

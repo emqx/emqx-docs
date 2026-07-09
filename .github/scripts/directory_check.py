@@ -20,8 +20,8 @@ def check_md_content(md_file):
     md_content = re.sub(r'<!--([\s\S]*?)-->', '', open(md_file, 'r').read())
     md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
 
-    image_list = re.findall('(.*?)!\[(.*?)\]\((.*?)\)', md_content)
-    url_list = re.findall('(.*?)\[(.*?)\]\((.*?)\)', md_content)
+    image_list = re.findall(r'(.*?)!\[(.*?)\]\((.*?)\)', md_content)
+    url_list = re.findall(r'(.*?)\[(.*?)\]\((.*?)\)', md_content)
     for url in url_list:
         if url[0].endswith('!'):
             continue
@@ -51,7 +51,7 @@ def check_md_content(md_file):
 
 
 def flatten_config(dir_config):
-    """Accept either a list or a dict-of-lists (new multi-section format) and return a flat list."""
+    """Accept either a list or a dict-of-lists and return a flat list."""
     if isinstance(dir_config, dict):
         flat = []
         for items in dir_config.values():
@@ -64,8 +64,12 @@ def get_md_files(dir_config, path):
     global success
     md_list = []
     for i in flatten_config(dir_config):
-        md_name = i.get('path')
-        md_children = i.get('children')
+        if isinstance(i, str):
+            md_name = i
+            md_children = None
+        else:
+            md_name = i.get('path')
+            md_children = i.get('children')
 
         if md_name:
             if md_name.startswith(('http://', 'https://')):

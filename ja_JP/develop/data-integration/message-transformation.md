@@ -11,7 +11,7 @@
 2. **メッセージ変換パイプライン**：
 
    - **変換マッチング**：メッセージはトピックに基づいてユーザー定義の変換リストと照合されます。異なるトピックやトピックフィルターに対して複数の変換を設定可能です。
-   - **変換実行**：マッチした変換は設定された順序で実行されます。パイプラインはJSON、Protobuf、Avroなどの各種エンコーダー・デコーダーをサポートし、[Variform式](../../operate/configuration/configuration.md#variform-expressions)を用いてメッセージの拡張や変更が可能です。
+   - **変換実行**：マッチした変換は設定された順序で実行されます。パイプラインはJSON、Protobuf、Avroなどの各種エンコーダー・デコーダーをサポートし、[Variform式](../../guides/configuration/configuration.md#variform-expressions)を用いてメッセージの拡張や変更が可能です。
    - **変換後処理**：メッセージが変換パイプラインを正常に通過すると、ルールエンジンの起動やサブスクライバーへの配信など次の処理に進みます。
 
 3. **失敗時の処理**：変換が失敗した場合、ユーザー設定のアクションが実行されます：
@@ -36,43 +36,43 @@
 
 3. 「Create Message Transform」ページで以下を設定します：
    - **Name**：変換の名前を入力します。
-   
+
    - **Message Source Topic**：変換対象のメッセージのトピックを設定します。複数のトピックやトピックフィルターを設定可能です。
-   
+
    - **Note**（任意）：メモを入力します。
-   
+
    - **Message Format Transformation**：
      - **Source Format**：変換パイプラインに入るメッセージのペイロードに適用するデコーダーを指定します。選択肢は以下の通りです：
-     
+
        - `None`（デコードなし）
        - `JSON`
        - `Avro`
        - `Protobuf`
        - `Custom (External HTTP)`
-     
+
        これらのデコーダーはバイナリの入力ペイロードを構造化マップに変換します。`Avro`、`Protobuf`、`Custom (External HTTP)`を選択する場合は、[スキーマレジストリ](./schema-registry.md)にて事前に作成済みである必要があります。
-     
+
        複数の変換が連なるパイプラインでは、各ステップでのデコードは必須ではありません。例えば、変換`T1`で既にペイロードをデコード済みなら、後続の変換`T2`はデコードをスキップし、正しい形式のペイロードを利用できます。
-     
+
      - **Target Format**：変換パイプラインの最後にメッセージペイロードをバイナリ値としてエンコードするエンコーダーを指定します。エンコーダーの選択肢は**Source Format**と同じです。
-     
+
        パイプラインの最後の変換のみがバイナリエンコードを行えばよく、中間の変換はバイナリエンコードを扱う必要はありません。
-     
+
    - **Message Properties Transformation**：
-     
+
      - **Properties**：式によって生成された変換後の値を書き込む宛先を指定します。有効な宛先は`payload`、`topic`、`qos`、`retain`（対応するフラグを設定）、`user_property`（MQTTのUser-Property）です。`user_property`を使う場合は、必ず1つのキーを指定します（例：`user_property.my_custom_prop`）。`payload`はそのまま使いメッセージペイロード全体を上書きするか、ネストされたJSONオブジェクトのように特定のキーのパスを指定できます（例：`payload.x.y`）。
-     - **Target Value**：設定したプロパティに書き込む値を定義します。この値は`qos`、`retain`、`topic`、`payload`、`payload.x.y`など他のフィールドからコピーするか、[variform式](../../operate/configuration/configuration.md#variform-expressions)で生成可能です。
-     
+     - **Target Value**：設定したプロパティに書き込む値を定義します。この値は`qos`、`retain`、`topic`、`payload`、`payload.x.y`など他のフィールドからコピーするか、[variform式](../../guides/configuration/configuration.md#variform-expressions)で生成可能です。
+
    - **Transformation Failure Operation**：
      - **Action After Failure**：変換失敗時に実行するアクションを選択します：
        - **Drop Message**：パブリッシュ処理を終了しメッセージを破棄、QoS 1およびQoS 2メッセージにはPUBACKで特定の理由コードを返します。
        - **Disconnect and Drop Message**：メッセージを破棄し、パブリッシュしたクライアントを切断します。
        - **Ignore**：追加の処理は行いません。
-     
+
    - **Output Logs**：変換失敗時にログを生成するか選択します。ログはデフォルトで有効です。
-   
+
    - **Logs Level**：ログの出力レベルを設定します。デフォルトは`warning`です。
-   
+
 4. **Create** をクリックして設定を完了します。
 
 作成前に **Preview** をクリックすると、変換のテストが可能です。新しいペインが開き、QoS、ペイロード、リテインフラグの有無、パブリッシャーのユーザー名やクライアントIDなどの入力欄が表示されます。必要な情報を入力後、**Execute Transformation** をクリックすると指定したコンテキストで変換を実行し、結果を確認できます。

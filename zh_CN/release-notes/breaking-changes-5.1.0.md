@@ -25,7 +25,7 @@ EMQX 5.0 系列引入了一些重大变更，可能会影响与旧版本 EMQX �
 
 ## HTTP APIs
 
-之前，API 认证凭证通过 **Dashboard** 中的**应用**来管理。现在，必须使用 **[API Key](../operate/dashboard/system.md#api-key)** 来创建凭证。这些凭证由 API Key 和 Secret Key 组成，分别可以作为 HTTP 基本认证的用户名和密码来使用。创建凭证时，Secret Key 只显示一次，之后将无法再次获取。
+之前，API 认证凭证通过 **Dashboard** 中的**应用**来管理。现在，必须使用 **[API Key](../guides/dashboard/system.md#api-key)** 来创建凭证。这些凭证由 API Key 和 Secret Key 组成，分别可以作为 HTTP 基本认证的用户名和密码来使用。创建凭证时，Secret Key 只显示一次，之后将无法再次获取。
 
 - 端口 8081 已被关闭，所有 API 请求现在都使用端口 18083。
 - 不能再使用用户名/密码来访问 HTTP API，必须使用 API Key。
@@ -209,8 +209,8 @@ Auth 被称为 **Authentication** and ACL 也被称为 **Authorization**。
 
 有关支持的占位符，请参考：
 
-- [Authentication Placeholders](../operate/access-control/authn/authn.md#authentication-placeholders)
-- [Authorization Placeholders](../operate/access-control/authz/authz.md#placeholders-in-data-queries)
+- [Authentication Placeholders](../guides/access-control/authn/authn.md#authentication-placeholders)
+- [Authorization Placeholders](../guides/access-control/authz/authz.md#placeholders-in-data-queries)
 
 ::: details 使用示例
 
@@ -238,7 +238,7 @@ authentication = [
 - 移除了超级用户查询。应该返回具有散列凭据和 `is_superuser` 标志的单个查询。
 - HTTP 认证
   - 在 EMQX 4.x 中，只使用 HTTP 状态码，而且 body 被丢弃（例如 `200` 表示 `allow`，`403`表示 `deny`）。
-  - 在 EMQX 5.x 中，HTTP 认证经过重新设计，使用 HTTP body。更多详细信息请参阅 [HTTP 服务认证](../operate/access-control/authn/http.md#http-request-and-response)。
+  - 在 EMQX 5.x 中，HTTP 认证经过重新设计，使用 HTTP body。更多详细信息请参阅 [HTTP 服务认证](../guides/access-control/authn/http.md#http-request-and-response)。
 - SCRAM 认证
   - 不再支持 SHA1 哈希模式（版本 4.4 中唯一支持的模式）。现在使用 SHA256/SHA512 哈希。
 - 内置数据库
@@ -260,7 +260,7 @@ authentication = [
 - HTTP
 
   - 在 EMQX 4.x 中，使用 HTTP 状态码，但 body 被丢弃（除了 “ignore” 案例）。例如，`200`表示 `allow`，`403`表示 `deny`。
-  - 在 EMQX 5.0 中，HTTP 授权经过重新设计，使用 HTTP body。有关更多信息，请参阅 [HTTP 请求格式与返回结果](../operate/access-control/authz/http.md#http-request-and-response)。
+  - 在 EMQX 5.0 中，HTTP 授权经过重新设计，使用 HTTP body。有关更多信息，请参阅 [HTTP 请求格式与返回结果](../guides/access-control/authz/http.md#http-request-and-response)。
 
 - MySQL, PostgreSQL
 
@@ -344,7 +344,7 @@ EMQX 5.1 中的日志文件可以是与 EMQX 4.4 中相同的平面日志文件�
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-更多详细信息，参阅[日志](../operate/observability/log.md)。
+更多详细信息，参阅[日志](../guides/observability/log.md)。
 
 ## Prometheus
 
@@ -356,7 +356,7 @@ EMQX 5.1 中的日志文件可以是与 EMQX 4.4 中相同的平面日志文件�
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-如果要启用推送网关，请参考[集成 Prometheus](../operate/observability/prometheus.md)。
+如果要启用推送网关，请参考[集成 Prometheus](../guides/observability/prometheus.md)。
 
 ::: details Prometheus 指标的变更
 

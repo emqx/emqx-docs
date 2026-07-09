@@ -58,7 +58,7 @@ To uninstall EMQX, run:
 sudo apt remove --purge emqx
 ```
 
-### Install with tar.gz 
+### Install with tar.gz
 
 1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/broker?os=Ubuntu), then select **Package**.
 2. Select the latest version `@CE_VERSION@` and select the `tar.gz` package according to the required version and CPU architecture in the **Package Type** dropdown.

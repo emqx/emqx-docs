@@ -113,7 +113,7 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
    - **Database Name**: Enter `emqx_data`.
    - **Username**: Enter `postgres`.
    - **Password**: Enter `public`.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
 8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
@@ -143,7 +143,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -178,7 +178,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created PostgreSQL Sink in the **Action (Sink)** tab.
 

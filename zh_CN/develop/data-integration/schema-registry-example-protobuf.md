@@ -97,7 +97,7 @@ def publish_msg(client):
    ```shell
    $ pip3 install protobuf
    $ pip3 install paho-mqtt
-   
+
    $ python3 ./pb2_mqtt.py
    Connected with result code 0
    publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\rliuxy@emqx.io'
@@ -189,7 +189,7 @@ def publish_msg(client):
 
    ```shell
    $ pip3 install protobuf paho-mqtt
-   
+
    $ python3 protobuf_mqtt_sub.py
    Connected with result code 0
    msg payload b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'

@@ -16,7 +16,7 @@ EMQXとTimescaleDBは、エネルギー消費データをリアルタイムに�
 
 EMQXはルールエンジンとSinkを通じてデバイスデータをTimescaleDBに転送します。TimescaleDBはSQL文でデータを分析し、レポートやチャートなどの分析結果を生成し、TimescaleDBの可視化ツールを通じてユーザーに表示します。ワークフローは以下の通りです：
 
-1. **メッセージのパブリッシュと受信**：産業用デバイスはMQTTプロトコルを介してEMQXに正常に接続し、定期的にエネルギー消費データをパブリッシュします。このデータには生産ライン識別子や消費値が含まれます。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+1. **メッセージのパブリッシュと受信**：産業用デバイスはMQTTプロトコルを介してEMQXに正常に接続し、定期的にエネルギー消費データをパブリッシュします。このデータには生産ライン識別子や消費値が含まれます。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
 2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づき特定のソースからのメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールとマッチングしてメッセージデータを処理します。これにはデータ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などが含まれます。
 3. **TimescaleDBへのデータ取り込み**：ルールエンジンで定義されたルールがメッセージをTimescaleDBに書き込む操作をトリガーします。TimescaleDB SinkはSQLテンプレートを提供し、特定のメッセージフィールドをTimescaleDBの対応テーブル・カラムに柔軟に書き込めるようにします。
 
@@ -48,7 +48,7 @@ EMQXのTimescaleDBデータ連携は、以下の特長と利点をビジネス�
 
 EMQXはセルフホストのTimescaleDBまたはクラウドのTimescale Serviceとの連携をサポートしています。Timescale Serviceをクラウドサービスとして利用するか、DockerでTimescaleDBインスタンスをデプロイできます。
 
-:::: tabs 
+:::: tabs
 ::: tab Timescale Service
 
 1. Timescaleアカウントをお持ちでない場合は、[Create your Timescale account](https://docs.timescale.com/getting-started/latest/services/#create-your-timescale-account)を参照してアカウントを作成してください。
@@ -75,7 +75,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウドのTimescale Service
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -102,10 +102,10 @@ EMQXはセルフホストのTimescaleDBまたはクラウドのTimescale Service
 
    ```bash
    docker exec -it timescaledb psql -U postgres
-   
+
    ## tsdbデータベースを作成
    > CREATE database tsdb;
-   
+
    > \c tsdb;
    ```
 
@@ -118,7 +118,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウドのTimescale Service
        temperature DOUBLE PRECISION  NULL,
        humidity    DOUBLE PRECISION  NULL
    );
-   
+
    SELECT create_hypertable('sensor_data', 'time');
    ```
 
@@ -210,7 +210,7 @@ TimescaleDBの`sensor_data`テーブルを確認すると、新しいレコー�
 
 ```bash
 tsdb=# select * from sensor_data;
-             time              | location | temperature | humidity 
+             time              | location | temperature | humidity
 -------------------------------+----------+-------------+----------
  2023-07-10 08:28:48.813988+00 | hangzhou |          24 |       30
  2023-07-10 08:28:57.737768+00 | hangzhou |          24 |       30

@@ -14,7 +14,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into Oracle Database works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Oracle Database. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 3. **Data ingestion into Oracle Database**: The rule triggers the writing of messages to Oracle Database. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to Oracle Database for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
 4. **Data Storage and Utilization**: With the data now stored in Oracle Database, businesses can harness its querying power for various use cases. For instance, by utilizing Oracle's advanced analytics and predictive capabilities, users can extract valuable information and insights from IoT data.
@@ -103,7 +103,7 @@ The following steps assume that you run both EMQX and Oracle Database on the loc
    - **Oracle Database SID**: Enter `XE`.
    - **Username**: Enter `system`.
    - **Password**: Enter `oracle`.
-   - **Role**: Select the role used to connect to the Oracle database. 
+   - **Role**: Select the role used to connect to the Oracle database.
      - **normal**: Do not use any special roles.
      - **sysdba**: Use the system database administrator role with advanced privileges.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
@@ -112,7 +112,7 @@ The following steps assume that you run both EMQX and Oracle Database on the loc
 
 ## Create a Rule with Oracle Database Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Oracle data table `t_mqtt_msgs` via a configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Oracle data table `t_mqtt_msgs` via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -123,15 +123,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database. 
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database.
 
 5. Select `Oracle Database` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select an Oracle Database Sink if you have created one. This demonstration will create a new Sink.
 
@@ -163,7 +163,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data through the Oracle Database Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Oracle Database Sink.
 

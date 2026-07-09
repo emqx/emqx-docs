@@ -6,7 +6,7 @@ EMQX provides users with the rule engine feature for data processing, which work
 
 EMQX rule engine is especially useful for transforming or rerouting incoming messages. For instance, you can create rules that filter out irrelevant data, perform transformations, and trigger alerts or notifications based on specific events or conditions.
 
-This chapter provides an in-depth exploration of the rule engine and its capabilities. 
+This chapter provides an in-depth exploration of the rule engine and its capabilities.
 
 ## How Rule Engine Works
 
@@ -48,9 +48,9 @@ In the above SQL statement:
 - Data source: Messages with the topic `t/#`;
 - Data processing: If the client ID of the message sender is `foo`, select the `data` field from the message content and assign it to a new variable `d`.
 
-::: tip 
+::: tip
 
-The "." syntax requires the data to be in JSON or Map format. If it's in another data type, SQL functions must be used for data type conversion. 
+The "." syntax requires the data to be in JSON or Map format. If it's in another data type, SQL functions must be used for data type conversion.
 
 :::
 

@@ -7,7 +7,7 @@ description: Without limits on connections or data transmission, MQTT broker per
 
 ## Background
 
-If there are no limitations on connection numbers or data transmission, users may experience reduced MQTT broker performance, such as a slow network connection or operation response, prolonged message latency, message accumulation, or even message discards, and other issues. On the other hand, the protocol limitation also specify the usage limits.  
+If there are no limitations on connection numbers or data transmission, users may experience reduced MQTT broker performance, such as a slow network connection or operation response, prolonged message latency, message accumulation, or even message discards, and other issues. On the other hand, the protocol limitation also specify the usage limits.
 
 EMQX has therefore specified the following quotas and usage limits for some of the major features.
 

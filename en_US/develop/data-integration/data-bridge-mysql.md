@@ -112,7 +112,7 @@ The following steps assume that you run both EMQX and MySQL on the local machine
 
 ## Create a Rule with MySQL Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the MySQL data table `emqx_messages` via configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the MySQL data table `emqx_messages` via configured Sink.
 
 This demonstration assumes that you run both EMQX and MySQL on the local machine. If you have MySQL and EMQX running remotely, adjust the settings accordingly.
 
@@ -133,11 +133,11 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to MySQL. 
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to MySQL.
 
 5. Select `MySQL` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -176,11 +176,11 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MySQL Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to MySQL. 
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to MySQL.
 
 ## Create a Rule with MySQL Sink for Events Recording
 

@@ -1,7 +1,7 @@
 ---
 next:
-  text: 'Administration Guide'
-  link: '../operate/admin-guide'
+  text: 'User Guides'
+  link: '../guides/user-guide'
 ---
 
 # MQTT Reference

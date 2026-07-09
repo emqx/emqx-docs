@@ -115,7 +115,7 @@ Made release permanent: "5.0.1"
 
 ## Downgrade to previous versions
 
-You can execute the version downgrade command if you find a problem and want to roll back after the upgrade. 
+You can execute the version downgrade command if you find a problem and want to roll back after the upgrade.
 For example, the following example will roll back emqx to version 5.0.0:
 
 ```bash

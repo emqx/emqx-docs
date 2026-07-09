@@ -4,23 +4,12 @@ import json
 
 directory_file = sys.argv[1]
 docs_path = sys.argv[2]
-
-
-def flatten_config(dir_config):
-    if isinstance(dir_config, dict):
-        flat = []
-        for items in dir_config.values():
-            flat += items
-        return flat
-    return dir_config
+scan_subdir = sys.argv[3] if len(sys.argv) > 3 else None
 
 
 def get_markdown_file(dir_config, base_path):
     current_files = []
-    for row in flatten_config(dir_config):
-        if isinstance(row, str):
-            current_files.append(f'{base_path}/{row}.md')
-            continue
+    for row in dir_config:
         if row.get('path'):
             current_files.append(
                 f'{base_path}/index.md' if row['path'] == './'
@@ -38,7 +27,9 @@ if __name__ == '__main__':
     markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
     markdown_files += get_markdown_file(directory_config['ja'], f'{docs_path}/ja_JP')
 
-    for file_path, dir_list, file_list in os.walk(docs_path):
+    walk_root = f'{docs_path}/{scan_subdir}' if scan_subdir else docs_path
+
+    for file_path, dir_list, file_list in os.walk(walk_root):
         for file_name in file_list:
             if not file_name.endswith('.md'):
                 continue
@@ -51,7 +42,7 @@ if __name__ == '__main__':
                         include_file_path = os.path.normpath(include_file_path)
                         markdown_files.append(include_file_path)
 
-    for file_path, dir_list, file_list in os.walk(docs_path):
+    for file_path, dir_list, file_list in os.walk(walk_root):
         for file_name in file_list:
             if not file_name.endswith('.md'):
                 continue

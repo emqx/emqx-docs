@@ -18,7 +18,7 @@
    - **保留发布**: 指定是否保留使用指定主题发送的消息。选项：`False` 或 `True`。
    - **保留处理**: 选项：`0`、`1` 和 `2`。
 
-   <img src="./assets/auto-sub-dashboard.png" alt="auto-sub-dashboard" style="zoom:50%;" /> 
+   <img src="./assets/auto-sub-dashboard.png" alt="auto-sub-dashboard" style="zoom:50%;" />
 
    点击对话框中的**添加**按钮。自动订阅主题 `a/1` 创建成功。
 

@@ -92,7 +92,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+
   192.168.1.200
   ```
 
@@ -163,7 +163,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+
   192.168.1.200
   ```
 
@@ -199,7 +199,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
-  
+
   [10:00:25] › …  Connecting...
   [10:00:25] › ✔  Connected
   [10:00:25] › …  Subscribing to hello...
@@ -210,7 +210,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
-  
+
   [10:00:58] › …  Connecting...
   [10:00:58] › ✔  Connected
   [10:00:58] › …  Message Publishing...

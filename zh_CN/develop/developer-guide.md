@@ -12,7 +12,7 @@ prev:
 
 - [实用教程](./tutorial/tutorial.md) 提供了涵盖客户端连接、数据采集、MQTT 通信优化、系统集成、安全以及部署等多个主题的实践指南。
 
-- [REST API](./api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
+- [REST API](../guides/api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
 
 - [规则引擎](./data-integration/rules.md) 介绍了 EMQX 内置的数据处理引擎，可实时对物联网数据进行提取、过滤、丰富和转换，并与数据集成功能配合使用。
 

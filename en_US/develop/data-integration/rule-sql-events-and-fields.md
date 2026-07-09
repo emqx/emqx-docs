@@ -2,11 +2,11 @@
 
 Rules in EMQX can process data from various data sources, including **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
-As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [MQTT Messages](#mqtt-message), [MQTT Events](#mqtt-events), and [Data Bridges](#data-bridges). 
+As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [MQTT Messages](#mqtt-message), [MQTT Events](#mqtt-events), and [Data Bridges](#data-bridges).
 
 ## MQTT Message
 
-You can use EMQX rules to handle message publishing, in this case, you need to specify the message topics with the `FROM` clause. 
+You can use EMQX rules to handle message publishing, in this case, you need to specify the message topics with the `FROM` clause.
 
 For example, in the following statement, you will select fields `payload.msg` (then rename as msg with the `AS` clause), `clientid`, `username`, `payload`, `topic`, and `qos` for any message published to topics following the pattern `t/#`.
 
@@ -62,11 +62,11 @@ You can use EMQX rules to extract data from event topics to get event notificati
 
 ::: tip
 
-By default, clients are unable to subscribe directly to MQTT event messages. This section describes using rules to subscribe to these messages. You can also obtain the data from MQTT event messages by subscribing to [system topics](../../operate/observability/mqtt-system-topics.md).
+By default, clients are unable to subscribe directly to MQTT event messages. This section describes using rules to subscribe to these messages. You can also obtain the data from MQTT event messages by subscribing to [system topics](../../guides/observability/mqtt-system-topics.md).
 
 :::
 
-See the table below for the supported event topic list. 
+See the table below for the supported event topic list.
 
 ### Event Topic List
 
@@ -115,7 +115,7 @@ Output:
   "from_clientid": "c_emqx_1"
 }
 ```
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Code                  | Explanation                                             |
 | :-------------------- | :------------------------------------------------------ |
@@ -136,7 +136,7 @@ Below are detailed explanations of each field.
 
 ### Message Acknowledged Event ("$events/message_acked")
 
-This event topic can be used to trigger a rule when the message delivery is acknowledged. 
+This event topic can be used to trigger a rule when the message delivery is acknowledged.
 
 ::: tip
 
@@ -171,7 +171,7 @@ Output:
 }
 ```
 
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Code                  | Explanation                                       |
 | :-------------------- | :------------------------------------------------ |
@@ -193,9 +193,9 @@ Below are detailed explanations of each field.
 
 ### Message Dropped When Routing Event ("$events/message_dropped")
 
-This event topic can be used to trigger a rule when a message is dropped during routing. 
+This event topic can be used to trigger a rule when a message is dropped during routing.
 
-For example, to extract data from the `"$events/message_dropped"` event topic that includes the following data fields: drop reason, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below: 
+For example, to extract data from the `"$events/message_dropped"` event topic that includes the following data fields: drop reason, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below:
 
 Example:
 ```sql
@@ -237,9 +237,9 @@ Output:
 
 ### Message Dropped When Delivering Event ("$events/delivery_dropped")
 
-This event topic can trigger a rule when a message is dropped during delivery. 
+This event topic can trigger a rule when a message is dropped during delivery.
 
-For example, to extract data from the `"$events/delivery_dropped"` event topic that includes the following data fields: publisher ID and username, drop reason, message topic and QoS, you can use the statement below: 
+For example, to extract data from the `"$events/delivery_dropped"` event topic that includes the following data fields: publisher ID and username, drop reason, message topic and QoS, you can use the statement below:
 
 Example:
 ```sql
@@ -261,7 +261,7 @@ Output:
   "from_clientid": "c_emqx_1"
 }
 ```
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Explanation           |                                                              |
 | :-------------------- | ------------------------------------------------------------ |
@@ -285,7 +285,7 @@ Below are detailed explanations of each field.
 
 This event topic can be used to trigger a rule when a client is connected successfully.
 
-For example, to extract data from the `"$events/client_connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and whether the connected MQTT client is acting as a bridge, you can use the statement below: 
+For example, to extract data from the `"$events/client_connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and whether the connected MQTT client is acting as a bridge, you can use the statement below:
 
 Example:
 ```sql
@@ -307,7 +307,7 @@ Output:
 }
 ```
 
-Refer to the table below for fields that can be selected from the received MQTT messages: 
+Refer to the table below for fields that can be selected from the received MQTT messages:
 
 | Field             | Explanation                                                  |
 | :---------------- | :----------------------------------------------------------- |
@@ -374,7 +374,7 @@ Output:
 
 ### Connection Acknowledge Event ("$events/client_connack")
 
-This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client. 
+This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client.
 
 Example:
 
@@ -420,7 +420,7 @@ Refer to the table below for fields that can be extracted:
 
 [^*]: The MQTT v5.0 protocol renames the return code to a reason code, adding a reason code to indicate more types of errors ([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)).
 
-Here is the reason code for MQTT v3.1.1 and MQTT v5.0. 
+Here is the reason code for MQTT v3.1.1 and MQTT v5.0.
 
 :::: tabs type:card
 
@@ -736,8 +736,8 @@ Rules use topics prefixed by `$bridges/` to present messages or events triggered
 
 Where
 
--  `<type>:<name>` is the bridge Id, 
--  `<type>` is the bridge type, 
+-  `<type>:<name>` is the bridge Id,
+-  `<type>` is the bridge type,
 -  `<name>` is the bridge name.
 
 For example, the MQTT Bridge events can be referred to in the format of  `"$bridges/mqtt:*`. To set a rule for all messages sent by the MQTT data bridge named `my_mqtt_bridge`, you can use the statement below:

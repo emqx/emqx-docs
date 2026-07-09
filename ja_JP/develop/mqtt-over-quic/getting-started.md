@@ -4,7 +4,7 @@ EMQX 5.0 では、MQTT over QUIC リスナーを導入し、IoT ユーザーが 
 
 ::: tip 前提条件
 
-[MQTT over QUIC](./introduction.md) の知識が必要です。  
+[MQTT over QUIC](./introduction.md) の知識が必要です。
 :::
 
 ## 環境

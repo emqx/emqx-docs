@@ -14,7 +14,7 @@
 | **集群连接**           | ✅                                 | ❌                   | ✅               | 设备和应用数据的无缝连接                                     |
 | **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构（即将发布）                         |
 | **流处理**             | ✅                                 | ❌                   | ✅               | 更高的可靠性和灾难恢复能力<br>（即将发布）                   |
-| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../operate/durability/management.md) |
+| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../guides/durability/management.md) |
 | **Schema Registry**    | ✅                                 | ❌                   | ✅               | [编解码](../develop/data-integration/schema-registry.md)保证数据一致性和可兼容性 |
 | **消息编解码**         | ✅                                 | ❌                   | ✅               | 灵活的消息格式转换：JSON / Avro / Protobuf / HTTP / gRPC     |
 | **消息验证**           | ✅                                 | ❌                   | ✅               | 确保消息的完整性和合法性                                     |
@@ -23,7 +23,7 @@
 | **文件传输**           | ✅                                 | ❌                   | ✅ 已规划        | 统一平台数据传输                                             |
 | **Kafka 集成**         | ✅                                 | ✅                   | ✅               | [将 MQTT 数据传输到 Apache Kafka](../develop/data-integration/data-bridge-kafka.md) |
 | **企业级数据集成**     | ✅ 40+                             | ✅                   | ✅ 40+           | [提升业务开发和发布速度](https://www.emqx.com/zh/integrations) |
-| **故障排查**           | ✅                                 | ❌                   | ✅               | [日志追踪](../operate/observability/tracer.md)<br>[慢订阅统计](https://docs.emqx.com/zh/emqx/latest/observability/slow-subscribers-statistics.html) |
+| **故障排查**           | ✅                                 | ❌                   | ✅               | [日志追踪](../guides/observability/tracer.md)<br>[慢订阅统计](https://docs.emqx.com/zh/emqx/latest/observability/slow-subscribers-statistics.html) |
 | **Cloud-Native & K8s** | ✅                                 | N/A                 | N/A             | [降低系统部署和管理成本](https://www.emqx.com/zh/deployments) |
 | **边缘计算**           | ✅                                 | ✅                   | ✅               | 降低数据传输延迟和成本<br>[Neuron](https://www.emqx.com/zh/products/neuronex)<br>[NanoMQ](https://www.emqx.com/zh/products/nanomq) |
 
@@ -89,18 +89,18 @@
 | **OCSP Stapling**                                | ✅               | ❌                   | ✅               | 提供更灵活的安全实践                      |
 | **连接抖动**                                     | ✅               | ✅                   | ✅ 规划中        | 检测并拦截频繁上下线的连接                |
 | **审计日志**                                     | ✅               | ✅                   | ✅               | 支持重要操作的审计追踪                    |
-| **Dashboard 单点登录（SSO）**                    | ✅               | ✅                   | ✅               | [安全简便的认证流程](../operate/sso.md) |
+| **Dashboard 单点登录（SSO）**                    | ✅               | ✅                   | ✅               | [安全简便的认证流程](../guides/sso.md) |
 | **Dashboard/REST API 基于角色的访问控制 (RBAC)** | ✅               | ✅                   | ✅               | 最小化权限以确保系统安全                  |
 
 ## 认证与授权
 
 | 认证与授权            | 自托管 (企业版) | 云服务 (Serverless)     | 云服务 (专有版) | 备注与链接                                                   |
 | --------------------- | --------------- | ----------------------- | --------------- | ------------------------------------------------------------ |
-| **用户名/密码**       | ✅               | ✅                       | ✅               | [密码认证](../operate/access-control/authn/pwoverview.md)            |
-| **JWT**               | ✅               | ❌                       | ✅               | [JWT 认证](../operate/access-control/authn/jwt.md)                   |
-| **MQTT 5.0 增强认证** | ✅               | N/A                     | N/A             | [MQTT 5.0 增强认证](../operate/access-control/authn/scram.md)        |
+| **用户名/密码**       | ✅               | ✅                       | ✅               | [密码认证](../guides/access-control/authn/pwoverview.md)            |
+| **JWT**               | ✅               | ❌                       | ✅               | [JWT 认证](../guides/access-control/authn/jwt.md)                   |
+| **MQTT 5.0 增强认证** | ✅               | N/A                     | N/A             | [MQTT 5.0 增强认证](../guides/access-control/authn/scram.md)        |
 | **LDAP**              | ✅               | ❌                       | ✅ 已规划        |                                                              |
-| **PSK 验证**          | ✅               | ❌                       | ✅               | [启用 PSK 认证](../operate/network/psk-authentication.md#enable-psk-authentication) |
+| **PSK 验证**          | ✅               | ❌                       | ✅               | [启用 PSK 认证](../guides/network/psk-authentication.md#enable-psk-authentication) |
 | **X.509 证书**        | ✅               | ✅（由 EMQX Cloud 管理） | ✅               |                                                              |
 | **细粒度访问控制**    | ✅               | ✅                       | ✅               |                                                              |
 | **认证数据源**        | ✅               | ❌                       | ✅               |                                                              |
@@ -166,8 +166,8 @@
 
 | 可扩展性         | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                       |
 | ---------------- | --------------- | ------------------- | --------------- | -------------------------------- |
-| **钩子**         | ✅               | N/A                 | N/A             | [钩子](../operate/extensions/hooks.md)   |
-| **插件**         | ✅               | N/A                 | N/A             | [插件](../operate/extensions/plugins.md) |
+| **钩子**         | ✅               | N/A                 | N/A             | [钩子](../guides/extensions/hooks.md)   |
+| **插件**         | ✅               | N/A                 | N/A             | [插件](../guides/extensions/plugins.md) |
 | **插件热加载**   | ✅               | N/A                 | N/A             |                                  |
 | **插件热配置**   | ✅               | N/A                 | N/A             |                                  |
 | **网关**         | ✅               | N/A                 | N/A             |                                  |

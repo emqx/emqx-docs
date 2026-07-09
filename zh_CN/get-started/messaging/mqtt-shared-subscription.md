@@ -146,7 +146,7 @@ EMQX 允许对共享订阅组内消息的分发方式进行精细控制。共享
    ```bash
    # 客户端 A 和 B 订阅主题 `$share/my_group1/t/1`
    mqttx sub -t '$share/my_group1/t/1' -h 'localhost' -p 1883
-   
+
    ## 客户端 C 和 D 订阅主题 `$share/my_group2/t/1`
    mqttx sub -t '$share/my_group2/t/1' -h 'localhost' -p 1883
    ```

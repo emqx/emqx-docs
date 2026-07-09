@@ -83,7 +83,7 @@ Lindorm Sink（MySQLプロトコル経由）を作成する前に、EMQXでMySQL
    - **Server Host**：
      - EMQXがAlibaba Cloud VPCネットワーク（ECSなど）内にある場合は、Lindormインスタンスの内部SQLアドレスを入力します。形式は通常Lindormが提供する内部ドメインで、例：`ld-xxxx-proxy-sql-lindorm.lindorm.rds.aliyuncs.com:33060`。
      - EMQXがオンプレミスや非Alibaba Cloud環境の場合は、Lindormコンソールでパブリックアクセスを有効にし、割り当てられたパブリックSQLアドレスを入力します。形式は通常：`ld-xxxx-proxy-sql-public.lindorm.rds.aliyuncs.com:33060`。
-     
+
      EMQXをデプロイしているホストのIPがLindormのアクセスホワイトリストに追加されていることを確認してください。
    - **Database Name**：`emqx_data`
    - **Username**：`root`

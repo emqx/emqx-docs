@@ -6,5 +6,5 @@
 
   旧バージョンからの設定については、[Bridge with Other MQTT Services](../develop/data-integration/data-bridge-mqtt.md) の設定手順に従って手動で移行する必要があります。この移行作業には時間と労力がかかる場合がありますが、完了すれば新バージョンの改善点を活用できます。
 
-- [#12283](https://github.com/emqx/emqx/pull/12283) GCP PubSub Producer コネクターの `resource_opts` 設定スキーマを修正し、関連するフィールドのみを含むようにしました。  
+- [#12283](https://github.com/emqx/emqx/pull/12283) GCP PubSub Producer コネクターの `resource_opts` 設定スキーマを修正し、関連するフィールドのみを含むようにしました。
   これにより、HOCON 設定（`connectors.gcp_pubsub_producer.*.resource_opts`）およびこのコネクタータイプに対する HTTP API の `POST /connectors` / `PUT /connectors/:id` による作成に影響があります。

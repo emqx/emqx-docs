@@ -6,7 +6,7 @@ In some scenarios, you might need to apply custom encoding or decoding logic tha
 
 ## External HTTP API Specification
 
-To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single `POST` endpoint that handles the encoding or decoding requests from EMQX.  
+To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single `POST` endpoint that handles the encoding or decoding requests from EMQX.
 
 ### Request Format
 
@@ -109,7 +109,7 @@ Use the EMQX rule engine to create a rule that applies your schema for message e
 
 5. In the **Topic** field, type `external_http/out` as the destination topic.
 
-6. In the **Payload** field, type message content template: `${.}`. 
+6. In the **Payload** field, type message content template: `${.}`.
 
 7. Click **Add** to add the action to the rule.
 

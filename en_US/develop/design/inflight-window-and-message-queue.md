@@ -6,11 +6,11 @@ To improve message throughput and reduce the impact of network fluctuations, EMQ
 
 When the number of in-flight messages exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX will no longer send subsequent messages, but will store these messages in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
 
-If the number of in-flight QoS 1, 2 messages reaches the maximum limit of the Inflight Window (see `max_inflight`), the newly arrived messages will not be forwarded immediately, but will be temporarily stored in the Message Queue. 
+If the number of in-flight QoS 1, 2 messages reaches the maximum limit of the Inflight Window (see `max_inflight`), the newly arrived messages will not be forwarded immediately, but will be temporarily stored in the Message Queue.
 
 Messages in the Message Queue are sent in FIFO order and added to the Inflight Window only after previous messages have been confirmed and removed. QoS 0 messages, however, are not affected by this process and are always forwarded immediately.
 
-If the Message Queue also reaches the length limit, subsequent messages will still be cached to the Message Queue, but the oldest message in the Message Queue will be discarded. Therefore, it is very important to set a suitable Message Queue length limit (see `max_mqueue_len`) 
+If the Message Queue also reaches the length limit, subsequent messages will still be cached to the Message Queue, but the oldest message in the Message Queue will be discarded. Therefore, it is very important to set a suitable Message Queue length limit (see `max_mqueue_len`)
 
 The Message Queue is also used to store messages (including QoS 0 messages) that arrive while the subscriber is offline and that will be sent the next time the subscriber comes online. Considering that QoS 0 messages may have a lower importance, you can choose to disable EMQX from storing QoS 0 messages to the queue, see `mqueue_store_qos0`.
 

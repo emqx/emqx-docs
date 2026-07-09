@@ -25,7 +25,7 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 
 **Marketing:** [marketing@emqx.io](mailto:marketing@emqx.io)
 
-**Address**: 
+**Address**:
 
 - Headquarter: #A301, Building 3, No.88 Longyuan Road, Yuhang District, Hangzhou, Zhejiang, China
 - Global R&D center: Klarabergsgatan 60, 111 21 Stockholm, Sweden

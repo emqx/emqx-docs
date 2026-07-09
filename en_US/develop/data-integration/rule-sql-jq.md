@@ -1,14 +1,14 @@
 # jq Functions
 
-[jq](https://stedolan.github.io/jq/) is a powerful command-line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html). 
+[jq](https://stedolan.github.io/jq/) is a powerful command-line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html).
 
-EMQX rules allow users to define SQL-like rules to process and route messages. These rules can include jq functions to perform complex transformations on JSON payloads as they pass through the broker. 
+EMQX rules allow users to define SQL-like rules to process and route messages. These rules can include jq functions to perform complex transformations on JSON payloads as they pass through the broker.
 
-If you are new to jq function, you can refer to the [Reference](#references) section to speedily get started. 
+If you are new to jq function, you can refer to the [Reference](#references) section to speedily get started.
 
 ::: tip
 
-jq functions can be convenient for transformations that are difficult to do with only the rule SQL language. 
+jq functions can be convenient for transformations that are difficult to do with only the rule SQL language.
 
 However, to maintain efficient message processing, you are recommended to avoid long-running computations in the rule and use the timeouts feature (with configuration item `rule_engine.jq_function_default_timeout`) to prevent buggy jq programs. <!--tech review-->
 
@@ -22,7 +22,7 @@ The basic format of a `jq` statement in the rule engine SQL is as follows:
 jq('<JQ_program>', '<JSON_input>', <timeout_value>)
 ```
 
-Where, 
+Where,
 
 1. `<JQ_program>`: A string containing a valid jq program.
 2. `<JSON_input>`: A JSON-encoded string or object as the input for the jq program.
@@ -37,7 +37,7 @@ and their results:
 
 ### JSON Data Manipulation
 
-This example illustrates various ways to manipulate JSON data using `jq`, including accessing, transforming, and calculating values within JSON objects, 
+This example illustrates various ways to manipulate JSON data using `jq`, including accessing, transforming, and calculating values within JSON objects,
 
 Code Example:
 
@@ -132,7 +132,7 @@ Message 3:
 
 The example code processes an input message containing multiple sensor measurements and splits it into separate messages for each sensor type. This is how it works:
 
-- The `FOREACH` uses the jq function to transform the input message into an array of objects containing `sensor_type` and `value` fields. 
+- The `FOREACH` uses the jq function to transform the input message into an array of objects containing `sensor_type` and `value` fields.
 - The `DO` clause selects relevant fields for the output messages.
 - The `FROM` clause applies the rule to messages with a matching [topic filter](./rule-sql-events-and-fields.md), `car/measurements`.
 
@@ -164,7 +164,7 @@ FOREACH
          sensor_type: "speed",
          value: .speed
         }]',
-        payload) as sensor  
+        payload) as sensor
 DO
     payload.client_id,
     payload.timestamp,
@@ -175,42 +175,42 @@ FROM "car/measurements"
 
 ### Alternative Way for Splitting Messages
 
-This example illustrates an alternative approach to splitting an input message containing multiple sensor measurements into separate messages for each sensor type. 
+This example illustrates an alternative approach to splitting an input message containing multiple sensor measurements into separate messages for each sensor type.
 
-The jq function within the `FOREACH` clause saves the input and all sensor types, then outputs an object for each sensor type with relevant fields. 
+The jq function within the `FOREACH` clause saves the input and all sensor types, then outputs an object for each sensor type with relevant fields.
 
 ```sql
 FOREACH
     jq('
        # Save the input
        . as $payload |
-       
+
        # All sensor types
-       [ 
+       [
          "temperature",
          "humidity",
          "pressure",
          "light",
          "battery",
-         "speed" 
+         "speed"
        ] as $sensor_types |
-       
+
        # Output an object for each sensor type
        $sensor_types[] |
        {
          client_id: $payload.client_id,
          timestamp: $payload.timestamp,
          sensor_type: .,
-         value: $payload[.] 
+         value: $payload[.]
        }
        ',
-       payload) as sensor  
+       payload) as sensor
 FROM "car/measurements"
 ```
 
 ## References
 
-If you are new to the jq function, the following materials are recommended: 
+If you are new to the jq function, the following materials are recommended:
 
 -  [jq documentation](https://stedolan.github.io/jq/manual/)
 - [Online jq programming playground](https://jqplay.org/)

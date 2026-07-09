@@ -72,7 +72,7 @@ docker run --name influxdb -p 8086:8086 influxdb:2.5.1
    - 输入 InfluxDB 服务器连接信息：
      - 服务器地址填写 `127.0.0.1:8086`。如果是 InfluxDB Cloud 需要指定端口为 443，即填入 `{url}:443` 并点击**启用 TLS** 以启用 TSL 连接。
      - 按照[安装和设置 InfluxDB](#安装和设置-influxdb) 中的设定完成 **Token**、**组织**及 **Bucket** 设置。注：如选择 InfluxDB v1 版本，请完成**数据库**、**用户名**及**密码**的设定。
-   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅 [启用 TLS 加密访问外部资源](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
+   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅 [启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 InfluxDB 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 InfluxDB 的数据。具体步骤请参见[创建 InfluxDB Sink 规则](#创建-influxdb-sink-规则)。
 

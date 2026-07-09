@@ -19,7 +19,7 @@ In addition to MQTT messaging features, the Developer Guide also covers differen
 
 - [Use curl with EMQX](./curl.md)
 
-The guide also introduces EMQX's [MQTT Durable Session](../../operate/durability/durability_introduction.md) feature and provides instructions for quickly trying it out.
+The guide also introduces EMQX's [MQTT Durable Session](../../guides/durability/durability_introduction.md) feature and provides instructions for quickly trying it out.
 
 Thanks to its support for the MQTT protocol, EMQX is compatible with most MQTT client libraries and SDKs. This guide includes [step-by-step instructions and code samples](./introduction.md) to help developers start building their MQTT projects quickly. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
 
@@ -29,4 +29,4 @@ Not all SDKs are displayed in the document.
 
 :::
 
-EMQX also provides API documents to facilitate your development. [REST API](../../operate/api.md) guides you on quickly getting started with the HTTP management API exposed by EMQX.
+EMQX also provides API documents to facilitate your development. [REST API](../../guides/api.md) guides you on quickly getting started with the HTTP management API exposed by EMQX.

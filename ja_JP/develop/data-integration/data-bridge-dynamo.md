@@ -155,7 +155,7 @@ DynamoDBとのデータ連携は、効率的なデータ伝送、保存、活用
    注意：独自のSQL文を指定する場合は、Sinkが必要とする全フィールドを`SELECT`に含めてください。
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -234,7 +234,7 @@ DynamoDBとのデータ連携は、効率的なデータ伝送、保存、活用
 ```sql
 SELECT
   str(event) + timestamp as id, *
-FROM 
+FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 

@@ -14,7 +14,7 @@ EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16
 
 ::: tip
 
-如果您使用集群方式运行 EMQX，通过 Dashboard 或 HTTP API 进行的设置将会在整个集群范围生效。如果您只想更改一个节点的设置，请使用 [`emqx.conf`](../../operate/configuration/configuration.md) 进行配置。
+如果您使用集群方式运行 EMQX，通过 Dashboard 或 HTTP API 进行的设置将会在整个集群范围生效。如果您只想更改一个节点的设置，请使用 [`emqx.conf`](../../guides/configuration/configuration.md) 进行配置。
 
 :::
 
@@ -145,7 +145,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 - **心跳检查退避倍数**：网关以多少倍的心跳时间来启动心跳定时器, 默认：`1` 倍。
 
 - **消息格式检查**：是否启用消息格式合法性检查。OCPP 网关会将上行数据流和下行数据流的消息格式与 JSON Schema 中定义的格式进行检查。当检查失败时，OCPP 网关会回复相应的错误消息。检查策略可以是以下值之一：
-    - `all`：检查上下行所有消息。 
+    - `all`：检查上下行所有消息。
     - `upstream_only`：仅检查上行消息。
     - `dnstream_only`：仅检查下行消息。
     - `disable`：不检查任何消息。
@@ -191,7 +191,7 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 - **接收器**：设置接收器线程池的大小，默认为16。
 - **最大连接数**：设置监听器可以处理的最大并发连接数，默认值为 `1024000`。
 - **最大连接速率**：设置监听器每秒可以接受的新连接的最大速率，默认为 `1000`。
-- **代理协议**：设置是否需要处理 Proxy Protocol 当 EMQX 部署在 [负载均衡](../../operate/cluster/lb.md) 后面时.
+- **代理协议**：设置是否需要处理 Proxy Protocol 当 EMQX 部署在 [负载均衡](../../guides/cluster/lb.md) 后面时.
 - **代理协议超时**：设置网关在等待 Proxy Protocol 包超时之前的最大时间（单位：秒），如果超时则关闭该 TCP 连接，默认值为3秒。
 
 **TCP 设置**
@@ -205,7 +205,7 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 
 **SSL 设置**(仅需要在 wss 类型的监听器上配置)
 
-您可以通过切换监听器类型设置是否启用 TLS 验证。但在此之前，您需要配置相关的 TLS 证书（TLS Cert）、TLS密钥（TLS Key）和 CA 证书（CA Cert）信息，可以通过输入文件内容或使用 **选择文件**按钮上传。详情请参考[启用SSL/TLS连接](../../operate/network/emqx-mqtt-tls.md)。
+您可以通过切换监听器类型设置是否启用 TLS 验证。但在此之前，您需要配置相关的 TLS 证书（TLS Cert）、TLS密钥（TLS Key）和 CA 证书（CA Cert）信息，可以通过输入文件内容或使用 **选择文件**按钮上传。详情请参考[启用SSL/TLS连接](../../guides/network/emqx-mqtt-tls.md)。
 
 然后，您可以继续设置以下内容：
 
@@ -218,14 +218,14 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 
 鉴于 OCPP 协议的连接消息中已经定义了用户名和密码的概念，OCPP 可支持多种身份验证器类型，例如：
 
-- [内置数据库认证](../../operate/access-control/authn/mnesia.md)
-- [MySQL 认证](../../operate/access-control/authn/mysql.md)
-- [MongoDB 认证](../../operate/access-control/authn/mongodb.md)
-- [PostgreSQL 认证](../../operate/access-control/authn/postgresql.md)
-- [Redis 认证](../../operate/access-control/authn/redis.md)
-- [HTTP 服务器认证](../../operate/access-control/authn/http.md)
-- [JWT 认证](../../operate/access-control/authn/jwt.md)
-- [LDAP 认证](../../operate/access-control/authn/ldap.md)
+- [内置数据库认证](../../guides/access-control/authn/mnesia.md)
+- [MySQL 认证](../../guides/access-control/authn/mysql.md)
+- [MongoDB 认证](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL 认证](../../guides/access-control/authn/postgresql.md)
+- [Redis 认证](../../guides/access-control/authn/redis.md)
+- [HTTP 服务器认证](../../guides/access-control/authn/http.md)
+- [JWT 认证](../../guides/access-control/authn/jwt.md)
+- [LDAP 认证](../../guides/access-control/authn/ldap.md)
 
 OCPP 网关使用 Websocket 握手消息中的 Basic Authentication 信息来生成客户端的认证字段：
 

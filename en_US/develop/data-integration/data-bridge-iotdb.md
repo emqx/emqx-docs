@@ -261,14 +261,14 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your Apa
        "device_id": "root.sg27"
       }
      ```
-     
+
       ::: tip
-     
+
       The `Write Data` template is:
           ```now, "temp", float, "${payload.value}"```
-     
+
       :::
-     
+
    - **QoS**: `2`
 
 7. Click **Publish** to send the message.

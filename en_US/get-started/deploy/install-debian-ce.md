@@ -33,7 +33,7 @@ EMQX supports installing with Apt source to provide our users with a convenient 
 
 ## Install with Package
 
-The section below illustrate how to download the latest version of EMQX. For other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker). 
+The section below illustrate how to download the latest version of EMQX. For other versions, visit the [EMQX Open Source download site](https://www.emqx.com/en/downloads-and-install/broker).
 
 ### Install with deb
 

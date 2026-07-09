@@ -65,7 +65,7 @@ To facilitate the development and test, you can emulate the Amazon Kinesis Data 
    ```bash
    # To start the LocalStack docker image locally
    docker run --name localstack -p '4566:4566' -e 'KINESIS_LATENCY=0' -d localstack/localstack:2.1
-   
+
    # Access the container
    docker exec -it localstack bash
    ```
@@ -93,7 +93,7 @@ This section demonstrates how to create a Connector to connect the Sink to the A
 
 ## Create a Rule with Amazon Kinesis Sink
 
-This section demonstrates how to create a rule for processing messages from the source MQTT topic `t/#`  and streaming the processed results to the Amazon data stream `my_stream` through an action with configured Sink. 
+This section demonstrates how to create a rule for processing messages from the source MQTT topic `t/#`  and streaming the processed results to the Amazon data stream `my_stream` through an action with configured Sink.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
@@ -145,7 +145,7 @@ This section demonstrates how to create a rule for processing messages from the 
 
 14. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-15. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+15. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data through the Amazon Kinesis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Amazon Kinesis Sink.
 
@@ -168,14 +168,14 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 If you use LocalStack, follow the steps below to check the received data.
 
 1. Use the following command to get the *ShardIterator* before sending the message to the EMQX.
-   
+
    ```bash
    awslocal kinesis get-shard-iterator --stream-name my_stream --shard-id shardId-000000000000 --shard-iterator-type LATEST
    {
    "ShardIterator": "AAAAAAAAAAG3YjBK9sp0uSIFGTPIYBI17bJ1RsqX4uJmRllBAZmFRnjq1kPLrgcyn7RVigmH+WsGciWpImxjXYLJhmqI2QO/DrlLfp6d1IyJFixg1s+MhtKoM6IOH0Tb2CPW9NwPYoT809x03n1zL8HbkXg7hpZjWXPmsEvkXjn4UCBf5dBerq7NLKS3RtAmOiXVN6skPpk="
    }
    ```
-   
+
 2. Use MQTTX to send messages on the topic `t/my_topic`.
 
    ```bash
@@ -198,7 +198,7 @@ If you use LocalStack, follow the steps below to check the received data.
        "NextShardIterator": "AAAAAAAAAAFj5M3+6XUECflJAlkoSNHV/LBciTYY9If2z1iP+egC/PtdVI2t1HCf3L0S6efAxb01UtvI+3ZSh6BO02+L0BxP5ssB6ONBPfFgqvUIjbfu0GOmzUaPiHTqS8nNjoBtqk0fkYFDOiATdCCnMSqZDVqvARng5oiObgigmxq8InciH+xry2vce1dF9+RRFkKLBc0=",
        "MillisBehindLatest": 0
    }
-   
+
    echo 'eyAibXNnIjogImhlbGxvIEFtYXpvbiBLaW5lc2lzIiB9' | base64 -d
    { "msg": "hello Amazon Kinesis" }
    ```

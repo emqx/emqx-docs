@@ -5,9 +5,9 @@ This page provides guidance on how to create rules for data processing and attac
 The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
 
 ## Define a Data Source
-Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. 
+Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu.
 
-Click the **Create** button on the **Rules** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages. 
+Click the **Create** button on the **Rules** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages.
 
 Enter a name for your rule and add a note to facilitate future management. In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
 
@@ -48,7 +48,7 @@ On the **Create Rule** page, click the **Add Action** button on the right side t
 
 ### Add Republish Action
 
-This section demonstrates how to add an action to republish the original messages received from the topic `t/#` to another topic `a/1`. 
+This section demonstrates how to add an action to republish the original messages received from the topic `t/#` to another topic `a/1`.
 
 On the **Add Action** page, select **Republish** from the **Type of Action** drop-down menu, and configure the following settings before clicking the **Add** button to confirm:
 
@@ -70,9 +70,9 @@ On the **Add Action** page, select **Republish** from the **Type of Action** dro
   - **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
   - **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
 
-- **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule. 
+- **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule.
 
-On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page. 
+On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page.
 
 ::: tip
 The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".

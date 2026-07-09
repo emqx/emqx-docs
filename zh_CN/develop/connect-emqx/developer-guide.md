@@ -17,7 +17,7 @@
 
 - [使用 curl 连接 EMQX](./curl.md)
 
-此外，本指南中还介绍了EMQX 的 [MQTT 会话持久化](../../operate/durability/durability_introduction.md)功能，同时提供了快速体验该功能的步骤。
+此外，本指南中还介绍了EMQX 的 [MQTT 会话持久化](../../guides/durability/durability_introduction.md)功能，同时提供了快速体验该功能的步骤。
 
 由于 EMQX 支持 MQTT 协议，所以能够兼容大多数 MQTT 客户端库和 SDK。开发者指南提供了多种[代码示例](./introduction.md)，帮助开发者快速开始构建其 MQTT 项目。有关 MQTT 客户端 SDK 及其比较的完整列表，参见 [MQTT 客户端 & SDKs](https://www.emqx.com/zh/mqtt-client-sdk)。
 
@@ -27,4 +27,4 @@
 
 :::
 
-EMQX 还为开发者提供了 API 文档来帮助开发。[REST API](../../operate/api.md) 指导您快速上手使用管理监控 API。
+EMQX 还为开发者提供了 API 文档来帮助开发。[REST API](../../guides/api.md) 指导您快速上手使用管理监控 API。

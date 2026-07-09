@@ -18,13 +18,13 @@ Below is the feature list supported in connection mode and connectionless mode.
 
 ## Enable the CoAP Gateway
 
-In EMQX 5, CoAP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5, CoAP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
 
 On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **CoAP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize CoAP** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../../operate/configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../../guides/configuration/configuration.md).
 
 :::
 
@@ -35,7 +35,7 @@ You can choose whether to enable the connection or connectionless mode by select
 
 After confirming the connection mode, you can continue with the settings. If you don't need extensive customization, you can enable the CoAP Gateway in just 3 clicks:
 
-1. Click **Next** in the **Basic Configuration** tab to accept all the default settings. 
+1. Click **Next** in the **Basic Configuration** tab to accept all the default settings.
 2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a UDP listener on port `5683`. Click **Next** again to confirm the setting.
 3. Then click the **Enable** button to activate the CoAP Gateway.
 
@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
   ]
 }'
 ```
-For a detailed HTTP API description, see [HTTP API - Gateway](../api.md).
+For a detailed HTTP API description, see [HTTP API - Gateway](../../guides/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
@@ -77,7 +77,7 @@ The CoAP gateway only supports UDP and DTLS type listeners, for a complete list 
 
 ### Client Libraries
 
-After establishing the CoAP gateway, you can use the CoAP client tools to test the connections and ensure everything works as expected. Below are some of the recommended CoAP client tools. 
+After establishing the CoAP gateway, you can use the CoAP client tools to test the connections and ensure everything works as expected. Below are some of the recommended CoAP client tools.
 
 - [libcoap](https://github.com/obgm/libcoap)
 - [californium](https://github.com/eclipse/californium)
@@ -90,21 +90,21 @@ Detailed parameters refer to [Message Publish](#message-publish), [Topic Subscri
 
 ## Customize Your CoAP Gateway
 
-In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page. See the texts below the screenshot for a comprehensive explanation of each field. 
+In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page. See the texts below the screenshot for a comprehensive explanation of each field.
 
 <img src="./assets/coap-basic-conf.png" alt="image-20230420152920254" style="zoom:50%;" />
 
 - **Connection Required**: Set whether to enable connectionless or connection mode, default: `false` (connectionless), optional values: `false` (connectionless), `true` (connection).
 
-- **Notification Message Type**: Set the type of CoAP messages to be delivered, default: `qos`; optional values: 
+- **Notification Message Type**: Set the type of CoAP messages to be delivered, default: `qos`; optional values:
 
-  - **qos**: Whether the CoAP notification needs to be acknowledged depends on the QoS level of the received message. 
-    - QoS 0, no acknowledgment is required from the client, 
-    - QoS 1/2, acknowledgment is required from the client. 
-  - **con**: The CoAP notification should be acknowledged by the client. 
-  - **non**: The CoAP notification need not be acknowledged by the client. 
+  - **qos**: Whether the CoAP notification needs to be acknowledged depends on the QoS level of the received message.
+    - QoS 0, no acknowledgment is required from the client,
+    - QoS 1/2, acknowledgment is required from the client.
+  - **con**: The CoAP notification should be acknowledged by the client.
+  - **non**: The CoAP notification need not be acknowledged by the client.
 
-- **Heartbeat**: Only needed if **Connection Required** is set to `true`, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
+- **Heartbeat**: Only needed if **Connection Required** is set to `true`, set the minimum heartbeat interval to keep the connection alive; default: 30s.
 
 - **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
@@ -121,7 +121,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
 
   **Note**: This topic prefix is managed by the gateway. CoAP clients do not need to add this prefix explicitly when publishing and subscribing.
 
-### Add Listeners 
+### Add Listeners
 
 By default, one UDP listener with the name of **default** is already configured on port `5683`, which supports up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **Add Listener** to add a new listener.
 
@@ -136,12 +136,12 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols.
 
-**Listener Settings** 
+**Listener Settings**
 
 - **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: 1024000.
 - **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: 1000.
 
-**UDP Settings** 
+**UDP Settings**
 
 - **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
@@ -157,22 +157,22 @@ You can set whether to enable the TLS Verify by setting the toggle switch. But b
 
 The client ID, username, and password are provided by the client's [Create Connection](#create-connection) request. The CoAP gateway supports the following authenticator types:
 
-- [Built-in Database Authentication](../../operate/access-control/authn/mnesia.md)
-- [MySQL Authentication](../../operate/access-control/authn/mysql.md)
-- [MongoDB Authentication](../../operate/access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../../operate/access-control/authn/postgresql.md)
-- [Redis Authentication](../../operate/access-control/authn/redis.md)
-- [HTTP Server Authentication](../../operate/access-control/authn/http.md)
-- [JWT Authentication](../../operate/access-control/authn/jwt.md)
-- [LDAP Authentication](../../operate/access-control/authn/ldap.md)
+- [Built-in Database Authentication](../../guides/access-control/authn/mnesia.md)
+- [MySQL Authentication](../../guides/access-control/authn/mysql.md)
+- [MongoDB Authentication](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL Authentication](../../guides/access-control/authn/postgresql.md)
+- [Redis Authentication](../../guides/access-control/authn/redis.md)
+- [HTTP Server Authentication](../../guides/access-control/authn/http.md)
+- [JWT Authentication](../../guides/access-control/authn/jwt.md)
+- [LDAP Authentication](../../guides/access-control/authn/ldap.md)
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration.
 
 On the **Gateways** page, locate **CoAP** and click **Setup** in the **Actions** column and click **Authentication** to enter the **Authentication** tab.
 
-Click **Create Authentication**, choose **Password-Based** or **JWT** as the **Mechanism**, and select the **Backend** as needed. 
+Click **Create Authentication**, choose **Password-Based** or **JWT** as the **Mechanism**, and select the **Backend** as needed.
 
-For a detailed explanation of how to configure the authenticators, you may refer to the pages listed at the beginning of this section. 
+For a detailed explanation of how to configure the authenticators, you may refer to the pages listed at the beginning of this section.
 
 Besides the Dashboard, you can also use HTTP API to configure the authenticator. For example, to create a built-in database authentication for CoAP gateway, you can use the code below:
 

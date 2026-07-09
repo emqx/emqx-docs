@@ -1,4 +1,4 @@
-# Ingest MQTT Data into ClickHouse 
+# Ingest MQTT Data into ClickHouse
 
 [ClickHouse](https://clickhouse.com/) is a high-performance, column-oriented SQL database management system (DBMS) for online analytical processing (OLAP), that excels in processing and analyzing large volumes of data with minimal latency. It features excellent query performance, a flexible data model, and scalable distributed architecture, making it suitable for various data analytics scenarios. EMQX supports integration with ClickHouse, which enables you to ingest the MQTT messages and events data into ClickHouse for further analysis and processing.
 
@@ -12,7 +12,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into ClickHouse works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
 3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to ClickHouse. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 4. **Data ingestion into ClickHouse**: Once the rule engine identifies a message for ClickHouse storage, it triggers an action of forwarding the messages to ClickHouse. Processed data will be seamlessly written into the collection of the ClickHouse database.
 5. **Data Storage and Utilization**: With the data now stored in ClickHouse, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
@@ -37,11 +37,11 @@ This section describes the preparations you need to complete before you start to
 
 - Knowledge about [data integration](./data-bridges.md)
 
-- Basic knowledge of UNIX terminal and commands 
+- Basic knowledge of UNIX terminal and commands
 
 ### Start a ClickHouse Server
 
-This section introduces how to start a ClickHouse server using [Docker](https://www.docker.com/). 
+This section introduces how to start a ClickHouse server using [Docker](https://www.docker.com/).
 
 1. Create a file called `init.sql` using the following initialization SQL statements. This file helps to initialize the database when the container starts up.
 
@@ -95,7 +95,7 @@ The following steps assume that you run both EMQX and ClickHouse on the local ma
 
 ## Create a Rule with Clickhouse Sink
 
-This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to ClickHouse via a configured Sink. 
+This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to ClickHouse via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -103,19 +103,19 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
 3. Enter the rule ID, for example, `my_rule`.
 
-4. Enter the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`. 
+4. Enter the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`.
 
    ```sql
-   SELECT 
+   SELECT
      payload as data,
      now_timestamp() as timestamp
    FROM
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to ClickHouse. 
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to ClickHouse.
 
 6. Select `ClickHouse` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a ClickHouse Sink if you have created one. This demonstration will create a new Sink.
 
@@ -156,9 +156,9 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 15. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new ClickHouse Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new ClickHouse Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to ClickHouse after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to ClickHouse after parsing by the rule `my_rule`.
 
 ## Test the Rule
 
@@ -166,7 +166,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test if the r
 
 Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard to access the WebSocket Client. Follow the steps below to set up a WebSocket client and send a message to the topic `t/test`:
 
-1. Fill in the connection information for the current EMQX instance. If you are running EMQX locally, you can use the default values unless you have changed EMQX's default configuration (for example, you might have configured authentication which may require you to type in a username and password). 
+1. Fill in the connection information for the current EMQX instance. If you are running EMQX locally, you can use the default values unless you have changed EMQX's default configuration (for example, you might have configured authentication which may require you to type in a username and password).
 
 2. Click **Connect** to connect the client to the EMQX instance.
 
@@ -174,7 +174,7 @@ Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Da
    * **Topic**: `t/test`
    * **Payload**: `Hello World Clickhouse from EMQX`
    * **QoS**: 2
-   
+
 4. Click **Publish** to send the message. An entry should have been inserted in the table `messages` in the database `mqtt_data` in the ClickHouse server. You can check this by running the following command from a terminal:
 
    ```bash

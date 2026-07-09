@@ -150,7 +150,7 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 15. Click the **Create** button to complete the Sink configuration and you will see the new Sink appear under the **Action Outputs** tab.
 
-16. Back on the **Create Rule** page, click **Create** to create the rule. 
+16. Back on the **Create Rule** page, click **Create** to create the rule.
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
 

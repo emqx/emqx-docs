@@ -99,7 +99,7 @@ def publish_msg(client):
 
    ```shell
    $ pip3 install avro paho-mqtt
-   
+
    $ python3 avro_mqtt.py
    Connected with result code 0
    publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
@@ -113,7 +113,7 @@ def publish_msg(client):
 
 ## 编码场景
 
-设备订阅了主题为 `avro_out` 的消息，希望收到使用 Avro 编码的二进制消息。规则引擎将对消息进行编码并发送到相关主题。 
+设备订阅了主题为 `avro_out` 的消息，希望收到使用 Avro 编码的二进制消息。规则引擎将对消息进行编码并发送到相关主题。
 
 ### 创建 Schema
 
@@ -186,7 +186,7 @@ def on_message(client, userdata, msg):
 
    ```shell
    $ pip3 install avro paho-mqtt
-   
+
    $ python3 avro_mqtt_sub.py
    Connected with result code 0
    msg payload b'\nShawn\x00\xb4\n\x00\x06red'

@@ -44,7 +44,7 @@ MQTT over QUIC 默认禁用，请通过以下配置手动开启。
 
     该配置表示启用 QUIC 监听器并绑定 UDP `14567` 端口，保存成功后请重启 EMQX 以应用配置。
 
-   
+
 
 2. 通过 CLI 执行 `emqx ctl listeners` 命令，可在结果中看到 MQTT over QUIC 监听器已启用：
 

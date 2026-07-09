@@ -164,7 +164,7 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
 6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 消费者 Source 的规则，以消费来自 GCP Pub/Sub 的数据并转发到 EMQX 本地。详细步骤请参见 [创建 GCP Pub/Sub 消费者 Source 规则](#创建-gcp-pub-sub-消费者-source-规则)。
 
-## 创建 GCP Pub/Sub 消费者 Source 规则 
+## 创建 GCP Pub/Sub 消费者 Source 规则
 
 本节演示如何在 EMQX 中创建规则，以消费来自 GCP Pub/Sub 的消息并将消息转发给 EMQX。您需要创建并配置一个 Google PubSub 消费者 Source，并将其作为数据输入添加到规则中。您还需要向规则中添加一个重发布动作，以将消息从 GCP Pub/Sub 转发至 EMQX。
 

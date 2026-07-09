@@ -22,7 +22,7 @@
 
 - [#11984](https://github.com/emqx/emqx/pull/11984) Implemented Open Telemetry distributed tracing feature.
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data. 
+- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data.
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 

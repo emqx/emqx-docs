@@ -2,7 +2,7 @@
 
 The MQTT is designed to work on top of the TCP protocol, which provides a reliable, ordered, and lossless stream of bytes in both directions. However, in the field of the Internet of Vehicles (IoV), there is an increasing demand for real-time and efficient message transmission, and the limitations of TCP are becoming apparent. With the increasing interconnection of vehicles, sensors, and infrastructure, overcoming the bottlenecks of TCP transmission is essential for building a safer, smarter, and more agile transportation ecosystem.
 
-To address this, EMQX 5.0 introduced the MQTT over Quick UDP Internet Connections (QUIC) protocol. While retaining compatibility with all MQTT protocol features, this protocol allows IoT clients to establish connections and communicate with EMQX via QUIC. This brings significant advantages to client connections. Clients using QUIC can improve connection and message throughput performance while reducing latency, especially in common scenarios like Internet of Vehicles (IoV), where weak networks, frequently changing links, and unstable network environments are prevalent. 
+To address this, EMQX 5.0 introduced the MQTT over Quick UDP Internet Connections (QUIC) protocol. While retaining compatibility with all MQTT protocol features, this protocol allows IoT clients to establish connections and communicate with EMQX via QUIC. This brings significant advantages to client connections. Clients using QUIC can improve connection and message throughput performance while reducing latency, especially in common scenarios like Internet of Vehicles (IoV), where weak networks, frequently changing links, and unstable network environments are prevalent.
 
 This chapter explains why and how MQTT over QUIC is implemented in EMQX. In [Features and Benefits](./features-mqtt-over-quic.md), it introduces two interaction modes between clients and EMQX on the QUIC stream and the features and benefits of each mode. In [Use MQTT over QUIC](./getting-started.md), it demonstrates how to enable MQTT over QUIC in EMQX using client SDKs and tools.
 
@@ -21,11 +21,11 @@ As the next-generation internet transport protocol, it is the underlying transpo
 
 ## Application Scenarios of MQTT over TCP
 
-MQTT over QUIC is particularly suitable for businesses with high requirements for real-time and stable data transmission. For example, connected vehicles driving in mountains, mines, and tunnels, where connection can be interrupted when entering signal blind spots or switching base stations passively. With the advantages of QUIC, MQTT over QUIC can overcome the shortcomings of traditional MQTT over TCP in the following scenarios: 
+MQTT over QUIC is particularly suitable for businesses with high requirements for real-time and stable data transmission. For example, connected vehicles driving in mountains, mines, and tunnels, where connection can be interrupted when entering signal blind spots or switching base stations passively. With the advantages of QUIC, MQTT over QUIC can overcome the shortcomings of traditional MQTT over TCP in the following scenarios:
 
 - Slow connection establishment for TCP/TLS
   The initial handshake between the client and server requires multiple round trips to establish a connection. The round trip time (RTT)  is critical for the connection establishment speed. A longer RTT can result in increased latency and slower connection establishment.
-- A slow ramp-up of traffic due to a slow start using a congestion window 
+- A slow ramp-up of traffic due to a slow start using a congestion window
 - Head of line blocking
   When a packet is lost, the whole transmission is blocked until it is recovered. This increases the latency significantly.
 - No awareness of the upper-layer protocols
@@ -50,7 +50,7 @@ Currently, MQTT over QUIC has the following limitations:
 - Preserving session state is currently not supported. This means that if a client needs to reconnect, it must resubscribe to the topics it previously subscribed to over a data stream.
 
 
-- If the data stream is closed unexpectedly by either peer, the QoS 1 and QoS 2 message states are not preserved. 
+- If the data stream is closed unexpectedly by either peer, the QoS 1 and QoS 2 message states are not preserved.
 
 ## Future Work
 
@@ -58,4 +58,4 @@ As of now, the MQTT over QUIC is ready for production, users are already testing
 
 Still, EMQX has not utilized all the features provided by QUIC, such as broker-side stream prioritization, broker-side flow control, and unreliable datagram. These features will be addressed in the later releases and, hopefully, become an OASIS standard.
 
-Further investigation is also required on how to preserve the message states and resume the subscription without reconnection, as mentioned in [Limitations](#limitations). 
+Further investigation is also required on how to preserve the message states and resume the subscription without reconnection, as mentioned in [Limitations](#limitations).

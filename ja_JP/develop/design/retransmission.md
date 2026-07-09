@@ -33,8 +33,8 @@ EMQXがMQTTプロトコルの再送信をどのように処理するかの詳細
 
 ### 再送信対象
 
-まず、EMQXの再送信メカニズム設計を理解する前に、QoS 1およびQoS 2の送信プロセスを理解している必要があります。未確認の場合は以下をご参照ください。  
-[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101)  
+まず、EMQXの再送信メカニズム設計を理解する前に、QoS 1およびQoS 2の送信プロセスを理解している必要があります。未確認の場合は以下をご参照ください。
+[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101)
 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
 
 ここでは簡単に異なるQoSにおける再送信対象を説明します。
@@ -124,7 +124,7 @@ EMQXがPUBLISHメッセージの受信者として動作する場合、再送信
 
 重複したメッセージが存在しますが、これはプロトコル仕様に完全に準拠しています。各メッセージの最初の出現は順序通りであり、繰り返し受信されるメッセージ`2`と`3`には再送信であることを示す識別ビットが付与されます。
 
-MQTTプロトコルとEMQXはこのトピックを`Ordered Topic`として扱います。詳細は以下を参照してください：  
+MQTTプロトコルとEMQXはこのトピックを`Ordered Topic`として扱います。詳細は以下を参照してください：
 [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)
 
 これにより、同じトピックかつQoSレベルでメッセージが順序通りに配信および応答されることが保証されます。

@@ -32,7 +32,7 @@ Shared subscriptions are useful in data collection scenarios where there are man
 
 EMQX periodically publishes its operational status, MQTT message counts, and client online/offline events to system topics starting with `$SYS/`. Clients can subscribe to the system topic to obtain relevant information.
 
-For a complete introduction to the system topic, please refer to [here](../operate/observability/mqtt-system-topics.md).
+For a complete introduction to the system topic, please refer to [here](../guides/observability/mqtt-system-topics.md).
 
 ## Does EMQX support clients subscribing to system topics via a shared subscription?
 
@@ -46,17 +46,17 @@ For details, please refer to [ExProto Protocol Gateway](../develop/gateway/expro
 
 ## Does EMQX support limiting the topics that clients can publish or subscribe to?
 
-Yes. The authorization management mechanism in EMQX can achieve fine-grained management of client permissions. 
+Yes. The authorization management mechanism in EMQX can achieve fine-grained management of client permissions.
 
 EMQX queries ACL rules from the `acl.conf` file by default. Users can also configure a database as the data source for ACL rules, such as EMQX's built-in database, MySQL, Redis, etc.
 
 We usually recommend adding rules that are effective for multiple clients in `acl.conf`, such as only allowing clients in the same network segment to subscribe to system topics; and adding rules that are effective for a single client in the database, such as allowing client `client1` to subscribe to the topic `example`.
 
-For a complete introduction to authorization, please refer to [here](../operate/access-control/authz/authz.md).
+For a complete introduction to authorization, please refer to [here](../guides/access-control/authz/authz.md).
 
 ## Does EMQX support rate limit?
 
-Yes. EMQX supports connection rate and message inflow rate control to avoid system overload at the inlet. For a complete introduction, please refer to [here](../operate/rate-limit.md).
+Yes. EMQX supports connection rate and message inflow rate control to avoid system overload at the inlet. For a complete introduction, please refer to [here](../guides/rate-limit.md).
 
 ## Is there a limit to the message receive rate for EMQX clients?
 
@@ -66,11 +66,11 @@ If the message receive rate exceeds this recommendation, you can use [Shared Sub
 
 ## Does EMQX support cluster autodiscovery? What are the implementation methods?
 
-In addition to creating clusters manually, EMQX also supports DNS, etcd and other node discovery strategies to achieve automatic clustering, see [Create and Manage Cluster](../operate/cluster/create-cluster.md).
+In addition to creating clusters manually, EMQX also supports DNS, etcd and other node discovery strategies to achieve automatic clustering, see [Create and Manage Cluster](../guides/cluster/create-cluster.md).
 
 ## Does EMQX support users to actively disconnect MQTT connections on the server side?
 
-Yes. EMQX provides the [Command Line Interface](../operate/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
+Yes. EMQX provides the [Command Line Interface](../guides/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
 
 For detailed instructions on the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
@@ -79,7 +79,7 @@ For detailed instructions on the REST API, see [EMQX Enterprise API](https://doc
 EMQX provides three ways to monitor the online and offline events of the device:
 
 - Use the [WebHook](../develop/data-integration/data-bridge-webhook.md) to forward the online and offline event messages to the external HTTP service.
-- Use the MQTT client to subscribe to the [System Topic](../operate/observability/mqtt-system-topics.md) to obtain the online and offline event notifications.
+- Use the MQTT client to subscribe to the [System Topic](../guides/observability/mqtt-system-topics.md) to obtain the online and offline event notifications.
 - Use the [Rule Engine](../develop/data-integration/rules.md) to monitor the `client.connected` and `client.disconnected` events, and cooperate with the [Data Integration](../develop/data-integration/data-bridges.md) to write the event messages to the specified database. (EMQX Enterprise only)
 
 ## How can data throughput and reliability be improved when integrating server with EMQX using MQTT?

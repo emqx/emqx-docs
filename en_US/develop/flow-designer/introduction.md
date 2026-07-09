@@ -127,18 +127,18 @@ Sample data to be republished:
 6. You will see the newly created Flow on the page. Click **Save** in the upper right corner to save the Flow.
 
    ![flow_created](./assets/flow_created.png)
-   
+
    Flows and form rules are interoperable. You can also view the SQL and related configurations of the rules created earlier on the Rule page.
-   
+
    ![rule_in_sql_editor](./assets/rule_in_sql_editor.png)
 
 ### Test the Flow
 
 1. In the Flow Designer, click any node of the Flow to open an editing panel. Click the **Edit Flow** button at the end of the panel.
 
-2. Click **Start Test** next to the **Save** button to open a bottom pop-up. 
+2. Click **Start Test** next to the **Save** button to open a bottom pop-up.
 
-   You can click **Input Simulated Data** to enter simulated data in the pop-up panel or use a real client to publish messages to see the results. This demonstration will use [MQTTX](https://mqttx.app) to publish real data. 
+   You can click **Input Simulated Data** to enter simulated data in the pop-up panel or use a real client to publish messages to see the results. This demonstration will use [MQTTX](https://mqttx.app) to publish real data.
 
    ![start_test](./assets/start_test.png)
 
@@ -161,7 +161,7 @@ Sample data to be republished:
 
    ![message_publish_2](./assets/message_publish_2.png)
 
-7. Return to the testing page to view the successful test results. 
+7. Return to the testing page to view the successful test results.
 
    ![test_success](./assets/test_success.png)
 
@@ -169,4 +169,4 @@ Sample data to be republished:
 
    ![test_fail](./assets/test_fail.png)
 
-   
+

@@ -96,7 +96,7 @@ The following steps assume you are running EMQX and Elasticsearch on the same lo
 
 Now you have created the Connector. Next, you need to create a rule to specify the data that needs to be written into Elasticsearch.
 
-## Create a Rule with Elasticsearch Sink 
+## Create a Rule with Elasticsearch Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the `device_data` index in Elasticsearch through the configured Sink.
 
@@ -156,7 +156,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      ```
 
 8. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-9. Keep the rest of the parameters at their default values. 
+9. Keep the rest of the parameters at their default values.
 10. Click the **Create** button to complete the creation of the Sink. The new Sink will be added to the **Action Outputs**.
 11. Back on the Create Rule page, click the **Create** button to complete the entire rule creation.
 

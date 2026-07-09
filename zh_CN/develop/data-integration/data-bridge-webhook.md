@@ -101,7 +101,7 @@ python3 http_server.py
 3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息发送到 HTTP 服务，此处规则 SQL 如下：
 
   ```sql
-  SELECT 
+  SELECT
     *
   FROM
     "t/#"

@@ -74,9 +74,9 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
 
    ```dockerfile
    FROM emqx/emqx-enterprise:5.8.1
-   
+
    USER root
-   
+
    RUN apt-get -qq update && apt-get install -yqq curl gpg && \
        . /etc/os-release && \
        curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg && \
@@ -86,7 +86,7 @@ EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路�
        sed -i 's/ODBC Driver 18 for SQL Server/ms-sql/g' /etc/odbcinst.ini && \
        apt-get clean && \
        rm -rf /var/lib/apt/lists/*
-   
+
    USER emqx
    ```
 
@@ -226,25 +226,25 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
 3. 在 **配置** 步骤，配置以下信息：
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_sqlserver`。
-   
+
    - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口。
-   
+
      ::: tip
-   
+
      如果您使用的是命名实例（Named Instance），则必须明确指定实例运行的端口号。驱动程序会使用提供的端口号连接到实例，在运行健康检查时，EMQX 会尝试推断实例名称。
-   
+
      在服务器地址字段中仅指定实例名称（例如 `MYSERVER\SQL2022`）无法保证连接到正确的实例，因此请务必检查并确认端口配置，以确保连接正常。
-   
+
      :::
-   
+
    - **数据库名字**： `master`
-   
+
    - **用户名**： `sa`
-   
+
    - **密码**： `mqtt_public1`
-   
+
    - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name。
-   
+
 4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 Microsoft SQL Server 服务器。

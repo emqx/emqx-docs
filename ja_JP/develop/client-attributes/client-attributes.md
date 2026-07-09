@@ -40,7 +40,7 @@ EMQX の他の機能では、関連設定項目内で `${client_attrs.NAME}` プ
 - **Attribute** は属性の名前です。
 - **Attribute Expression** は属性を抽出するための設定式です。
 
-属性式は [Variform expressions](../../operate/configuration/configuration.md#variform-expressions) と [事前定義関数](../../operate/configuration/configuration.md#pre-defined-functions) を用いて動的に値を処理できます。例：
+属性式は [Variform expressions](../../guides/configuration/configuration.md#variform-expressions) と [事前定義関数](../../guides/configuration/configuration.md#pre-defined-functions) を用いて動的に値を処理できます。例：
 
 - ドット区切りのクライアントIDのプレフィックスを抽出：`nth(1, tokens(clientid, '.'))`
 - ユーザー名の一部を切り出す：`substr(username, 0, 5)`
@@ -77,8 +77,8 @@ mqtt {
 
 クライアント認証の過程で、認証結果に基づきクライアント属性を設定できます。現在サポートされているのは以下です。
 
-- [JWT 認証](../../operate/access-control/authn/jwt.md)：トークン発行時のペイロード内 `client_attrs` フィールドにクライアント属性を設定
-- [HTTP 認証](../../operate/access-control/authn/http.md)：HTTP 認証成功レスポンスの `client_attrs` フィールドにクライアント属性を設定
+- [JWT 認証](../../guides/access-control/authn/jwt.md)：トークン発行時のペイロード内 `client_attrs` フィールドにクライアント属性を設定
+- [HTTP 認証](../../guides/access-control/authn/http.md)：HTTP 認証成功レスポンスの `client_attrs` フィールドにクライアント属性を設定
 
 属性のキーと値は文字列である必要があります。この方法により認証結果に応じて動的に属性を設定でき、利用の柔軟性が向上します。
 
@@ -95,14 +95,14 @@ EMQX の他機能では、`${client_attrs.NAME}` プレースホルダーを用�
 
 ### クライアント認証
 
-SQL 文、クエリコマンド、HTTP リクエストボディで [認証用プレースホルダー](../../operate/access-control/authn/authn.md#authentication-placeholders) を動的パラメータとして利用可能です。例：
+SQL 文、クエリコマンド、HTTP リクエストボディで [認証用プレースホルダー](../../guides/access-control/authn/authn.md#authentication-placeholders) を動的パラメータとして利用可能です。例：
 
 ```sql
 # MySQL/PostgreSQL - 認証クエリ SQL
 SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attrs.sn} LIMIT 1
 
 # HTTP - 認証リクエストボディ
-{ 
+{
  "sn": "${client_attrs.sn}",
  "password": "${password}"
 }
@@ -118,7 +118,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE sn = ${client_attr
 
 ### クライアント認可
 
-SQL 文、クエリコマンド、トピックで [認可用データクエリプレースホルダー](../../operate/access-control/authz/authz.md#placeholders-in-data-queries) および [トピックプレースホルダー](../../operate/access-control/authz/authz.md#topic-placeholders) を利用可能です。
+SQL 文、クエリコマンド、トピックで [認可用データクエリプレースホルダー](../../guides/access-control/authz/authz.md#placeholders-in-data-queries) および [トピックプレースホルダー](../../guides/access-control/authz/authz.md#topic-placeholders) を利用可能です。
 
 #### 利用例シナリオ
 
@@ -130,7 +130,7 @@ SQL 文、クエリコマンド、トピックで [認可用データクエリ�
   - パブリッシュ：`up/{productId}/{deviceId}`
   - サブスクライブ：`down/{productId}/{deviceId}`
 
-[認可 - 組み込みデータベース](../../operate/access-control/authz/mnesia.md) を用いて以下のルールを設定し実現します。
+[認可 - 組み込みデータベース](../../guides/access-control/authz/mnesia.md) を用いて以下のルールを設定し実現します。
 
 | 許可       | 操作                 | トピック                                                     |
 | ---------- | -------------------- | ------------------------------------------------------------ |

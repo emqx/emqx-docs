@@ -20,7 +20,7 @@ Clustering improves system availability and reduces the likelihood of a single p
 
 ## How to troubleshoot when EMQX fails to start?
 
-When EMQX fails to start, you can check `emqx.log.N` or `erlang.log.N` under [Log Directory](./deploy/install.md#files-and-directories) to get detailed error prompts. 
+When EMQX fails to start, you can check `emqx.log.N` or `erlang.log.N` under [Log Directory](./deploy/install.md#files-and-directories) to get detailed error prompts.
 
 Or execute `emqx console` to start EMQX from the console, so that the error log will be output directly to the console. Then, according to the log content, find the corresponding solution in this page, or post on [GitHub](https://github.com/emqx/emqx/issues) for support.
 

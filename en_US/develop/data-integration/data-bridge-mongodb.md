@@ -8,7 +8,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 MongoDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and MongoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to MongoDB for storage and management, eliminating the need for complex coding.
 
-The diagram below illustrates a typical architecture of data integration between EMQX and MongoDB. 
+The diagram below illustrates a typical architecture of data integration between EMQX and MongoDB.
 
 <img src="./assets/mongdb_bridge_architecture.png" alt="mongdb_bridge_architecture" style="zoom:67%;" />
 
@@ -28,7 +28,7 @@ The data integration with MongoDB offers a range of features and benefits tailor
 - **Streamlined IoT Data Management**
 
   You can ingest, store, process, and analyze your IoT data all in one place, eliminating the need for complicated integrations and tedious data migrations. Say goodbye to data silos and hello to a unified view of your IoT data.
-  
+
 - **Real-time Data Processing**
 
   EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to MongoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
@@ -132,8 +132,8 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
    - **Password**: Enter `public`.
    - **Auth Source**: Enter the aatabase name associated with the user's credentials.
    - **Use Legacy Protocol**: Determine if MongoDB's legacy communication protocol should be used (MongoDB introduced a new wire protocol in version 3.6, with the legacy protocol retained for backward compatibility.). This setting can be set to `true`, `false`, or `auto`. In `auto` mode (default option), EMQX will automatically determine which protocol to use based on the detected MongoDB version.
-   - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string. 
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string.
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 6. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 7. **Advanced settings (optional)**:  For details, see [Advanced Configurations](#advanced-configurations).
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
@@ -141,13 +141,13 @@ The following steps assume that you run both EMQX and MongoDB on the local machi
 
 ## Create a Rule with MongoDB Sink
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to MongoDB via a configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to MongoDB via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#`  to MongoDB, you can use the SQL syntax below. 
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#`  to MongoDB, you can use the SQL syntax below.
 
    Note: If you want to specify your own SQL syntax, ensure you have included all fields required by the Sink in the `SELECT` part.
 
@@ -169,7 +169,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
 4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to MongoDB.
 
@@ -199,13 +199,13 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    - Auto-derivation of the data type of "value" is not supported:
      - Characters need to be wrapped with `"`, otherwise, an error will be reported;
      - Values do not need to be wrapped, otherwise, they will be recognized as characters;
-     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions). 
+     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions).
 
    - Nested objects are allowed when the value is a JSON object:
      - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
      - Objects will be nested and stored according to their own structure;
 
-   - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
+   - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`.
 
 10. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
 
@@ -213,7 +213,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new MongoDB Sink.
 
@@ -247,7 +247,7 @@ To test if the rule and Sink work as you expected, you can use the [MQTTX](https
    }
    ```
 
-   If you use the second SQL syntax in rule configuration, the returned information should be: 
+   If you use the second SQL syntax in rule configuration, the returned information should be:
 
    ```
    > db.emqx_messages.find().pretty()

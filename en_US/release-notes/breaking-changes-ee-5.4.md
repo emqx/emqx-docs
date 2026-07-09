@@ -1,4 +1,4 @@
-# Incompatible Changes in EMQX 5.4 
+# Incompatible Changes in EMQX 5.4
 
 ## e5.4.0
 

@@ -40,7 +40,7 @@ EMQX 实现了 MQTT 的保留消息功能。您可以将某个特定主题下发
 
 4. 点击**连接**窗格中的 **+** -> **新建连接**创建另一个新连接作为消息接收客户端。将名称设置为 `Subscriber`，其他连接基础信息与客户端`Demo` 相同。
 
-5. 点击 **+ 添加订阅**，设置订阅 **Topic** 为 `sensor/+` ，点击**确定**。 
+5. 点击 **+ 添加订阅**，设置订阅 **Topic** 为 `sensor/+` ，点击**确定**。
 
    :::tip
 
@@ -50,7 +50,7 @@ EMQX 实现了 MQTT 的保留消息功能。您可以将某个特定主题下发
 
    您将看到客户端 `Subscriber` 只收到了最后一条保留消息，而没有收到主题 `sensor/t1` 的第一条消息和主题 `sensor/t2` 的第一条保留消息，因为 EMQX 仅存储每个主题的最新保留消息。
 
-   
+
 
    <img src="./assets/retain-message-receive.png" alt="retain-message-receive" style="zoom:35%;" />
 

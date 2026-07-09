@@ -35,7 +35,7 @@ In addition, you can also deploy EMQX with one click through [EMQX Terraform](ht
 
 ### Install EMQX Using Docker
 
-Container deployment is the quickest way to start exploring EMQX. This quick start guide shows you how to install and run EMQX through Docker. 
+Container deployment is the quickest way to start exploring EMQX. This quick start guide shows you how to install and run EMQX through Docker.
 
 1. To download and start the latest version of EMQX, enter the command below.
 
@@ -46,7 +46,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
    ```
 
 
-2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    Default user name and password:
 
@@ -82,7 +82,7 @@ Considering all the runtime dependencies, it is recommended to use installation 
    ./emqx/bin/emqx start
    ```
 
-6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../operate/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
@@ -138,7 +138,7 @@ After the connection is successfully established, you can continue to subscribe 
 
 1. Click **+ New Subscription**. MQTTX Web has already filled in some fields, according to the setting, you will subscribe to topic `testtopic/#`  with QoS level of 0. You can repeat this step to subscribe to different topics, and MQTTX Web will differentiate topics with colors.
 
-2. In the right corner of the chat area at the bottom, click the send icon to test the message publishing/receiving. The messages successfully sent will appear in the chat window. 
+2. In the right corner of the chat area at the bottom, click the send icon to test the message publishing/receiving. The messages successfully sent will appear in the chat window.
 
 <img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web test" style="zoom: 25%;" />
 
@@ -152,7 +152,7 @@ On the Cluster Overview page in the EMQX Dashboard, you can check metrics such a
 
 ## Next Steps
 
-So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../operate/access-control/authn/authn.md) and integration with [Rule Engine](../develop/data-integration/rules.md).
+So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../guides/access-control/authn/authn.md) and integration with [Rule Engine](../develop/data-integration/rules.md).
 
 ## Frequently Asked Questions
 

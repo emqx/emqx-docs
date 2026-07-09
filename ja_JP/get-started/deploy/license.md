@@ -83,7 +83,7 @@ Community ライセンスは完全な商用利用を許可しておらず、シ�
 以下のコマンドでも EMQX Enterprise ライセンスの更新が可能です。
 
 ```bash
-./bin/emqx ctl 
+./bin/emqx ctl
 
     license info             # ライセンス情報を表示
     license update <License> # 文字列としてライセンスを更新
@@ -92,7 +92,7 @@ Community ライセンスは完全な商用利用を許可しておらず、シ�
 
 ### 設定ファイル
 
-設定ファイルでライセンスファイルを指定することもできます。設定後、[EMQX コマンドラインツール](../../operate/cli.md)で `emqx ctl license reload` を実行してライセンスをリロードしてください。
+設定ファイルでライセンスファイルを指定することもできます。設定後、[EMQX コマンドラインツール](../../guides/cli.md)で `emqx ctl license reload` を実行してライセンスをリロードしてください。
 
 ```bash
 license {

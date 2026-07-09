@@ -271,6 +271,6 @@ hostname: docker.emqx.com
       - EMQX_HOST=docker.emqx.com
 ```
 
-由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，使用 hostname 或者 FQDN 等固定的信息作为节点名（不推荐使用 IP），还可以避免因为节点名称变动导致数据丢失。 
+由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，使用 hostname 或者 FQDN 等固定的信息作为节点名（不推荐使用 IP），还可以避免因为节点名称变动导致数据丢失。
 
 推荐使用 [EMQX Docker Compose 一键生成器](https://docker.emqx.dev/) 一键生成生产就绪的 `docker-compose.yml` 文件。

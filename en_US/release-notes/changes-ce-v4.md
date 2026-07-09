@@ -1930,7 +1930,7 @@ EMQX 4.2.0 is released now, it mainly includes the following changes:
 
 - Support the use of third-party languages to write extension plugins to access other non-MQTT protocols, and currently supports Java and Python two programming languages. Visit [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) for more information
 - Support hot upgrade between revisions
-- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [Telemetry](../operate/telemetry/telemetry.md) for more telemetry-related information.
+- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [Telemetry](../guides/telemetry/telemetry.md) for more telemetry-related information.
 - Support message flow control in the form of quotas
 
 **Enhancement:**
@@ -2017,7 +2017,7 @@ EMQX 4.1.3 is released now, it mainly includes the following changes:
 
 **Bug fixes:**
 
-- Fix the issue that the retained message will not be sent when the subscription topic contains both '+' and '#' 
+- Fix the issue that the retained message will not be sent when the subscription topic contains both '+' and '#'
 
   Github PR: [emqx/emqx-retainer#146](https://github.com/emqx/emqx-retainer/pull/146)
 
@@ -2139,8 +2139,8 @@ EMQX 4.0.7 is released now, which mainly includes the following changes:
 - Fix the issue that the browser doesn't support the current SSL / TLS certificates
 
   Github PR: [emqx/emqx#3448](https://github.com/emqx/emqx/pull/3448)
-  
-- Fix the issue of connection process crashing in some cases, which is the feedback from [Github issue#3455](https://github.com/emqx/emqx/issues/3455) 
+
+- Fix the issue of connection process crashing in some cases, which is the feedback from [Github issue#3455](https://github.com/emqx/emqx/issues/3455)
 
   Github PR: [emqx/emqx#3458](https://github.com/emqx/emqx/pull/3458)
 
@@ -2165,11 +2165,11 @@ EMQX 4.0.6 is released now, it mainly includes the following changes:
 - Fix the issue that abnormal client detection did not delete expired data
 
   Github PR: [emqx/emqx#3407](https://github.com/emqx/emqx/pull/3407)
-  
+
 - Fix the issue that the Proxy Protocol function does not work when using WebSocket
 
   Github PR: [emqx/emqx#3372](https://github.com/emqx/emqx/pull/3372)
-  
+
 ### emqx-bridge-mqtt
 
 **Bug fixes:**
@@ -2202,17 +2202,17 @@ EMQX 4.0.5 is released now. This version mainly focuses on bug fixes.
 - Fix GC policy
 
   Github PR: [emqx/emqx#3317](https://github.com/emqx/emqx/pull/3317)
-  
+
 - Fix the issue that the value of the `Maximum-QoS` property was set incorrectly
 
   Github issue: [emqx/emqx#3304](https://github.com/emqx/emqx/issues/3304), [emqx/emqx#3315](https://github.com/emqx/emqx/issues/3315)
   Github PR: [emqx/emqx#3321](https://github.com/emqx/emqx/pull/3321)
-  
+
 - Fix the issue that CPU usage would increase abnormally every 15 seconds when EMQX Broker was running in the docker environment
 
 	Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
-  
+
 - Fixed the issue that configuration items named "node.*" don't take effect in `emqx.conf`
 
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)
@@ -2248,30 +2248,30 @@ EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
 
   - Fix the issue that the `acl_deny_action` configuration item does not
     working
-    
+
     Github issue:
     [emqx/emqx\#3266](https://github.com/emqx/emqx/issues/3266)
-    
+
     Github PR: [emqx/emqx\#3286](https://github.com/emqx/emqx/pull/3286)
 
   - Fix wrong type of `mountpoint` configuration item
-    
+
     Github issue:
     [emqx/emqx\#3271](https://github.com/emqx/emqx/issues/3271)
-    
+
     Github PR: [emqx/emqx\#3272](https://github.com/emqx/emqx/pull/3272)
 
   - Fix the issue that the `peer_cert_as_username` configuration item
     does not working
-    
+
     Github issue:
     [emqx/emqx\#3281](https://github.com/emqx/emqx/issues/3281)
-    
+
     Github PR: [emqx/emqx\#3291](https://github.com/emqx/emqx/pull/3291)
 
   - Fix the issue that the error log is still printed after the
     connection is closed normally
-    
+
     Github PR: [emqx/emqx\#3290](https://github.com/emqx/emqx/pull/3290)
 
 ### emqx-dashboard (plugin)
@@ -2279,10 +2279,10 @@ EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
 **Bug fixes:**
 
   - Fix blank issue in Dashboard node drop-down list
-    
+
     Github issue:
     [emqx/emqx\#3278](https://github.com/emqx/emqx/issues/3278)
-    
+
     Github PR:
     [emqx/emqx-dashboard\#206](https://github.com/emqx/emqx-dashboard/pull/206)
 
@@ -2293,7 +2293,7 @@ EMQX 4.0.4 is released now. This version mainly focuses on bug fixes.
   - The behavior after the maximum number of retained messages has been
     stored is corrected by the inability to store any retained messages
     to retained messages that can replace existing topics
-    
+
     Github PR:
     [emqx/emqx-retainer\#136](https://github.com/emqx/emqx-retainer/pull/136)
 
@@ -2308,14 +2308,14 @@ EMQX 4.0.3 is released now. This version mainly focuses on bug fixes.
 **Enhancements:**
 
   - Add an option to allow client bypass auth plugins
-    
+
     Github PR: [emqx/emqx\#3253](https://github.com/emqx/emqx/pull/3253)
 
 **Bug fixes:**
 
   - Fix the issue of printing unnecessary error logs under some
     competitive conditions
-    
+
     Github PR: [emqx/emqx\#3246](https://github.com/emqx/emqx/pull/3253)
 
 ### emqx-management (plugin)
@@ -2324,23 +2324,23 @@ EMQX 4.0.3 is released now. This version mainly focuses on bug fixes.
 
   - Remove fields and functions that are no longer in use and fix wrong
     field values
-    
+
     Github PR:
     [emqx/emqx-management\#176](https://github.com/emqx/emqx-management/pull/176)
 
   - Fix the issue that the client list cannot be returned correctly in
     the cluster
-    
+
     Github PR:
     [emqx/emqx-management\#173](https://github.com/emqx/emqx-management/pull/173)
 
   - Fix HTTPS Listening Options
-    
+
     Github PR:
     [emqx/emqx-management\#172](https://github.com/emqx/emqx-management/pull/172)
 
   - Fix the return format of the application list
-    
+
     Github PR:
     [emqx/emqx-management\#169](https://github.com/emqx/emqx-management/pull/169)
 
@@ -2356,25 +2356,25 @@ and performance optimizes.
 **Enhancements:**
 
   - Enhance performance of json encode/decode
-    
+
     Github PR:
     [emqx/emqx\#3213](https://github.com/emqx/emqx/pull/3213),
     [emqx/emqx\#3230](https://github.com/emqx/emqx/pull/3230),
     [emqx/emqx\#3235](https://github.com/emqx/emqx/pull/3235)
 
   - Compress the generated object code
-    
+
     Github PR: [emqx/emqx\#3214](https://github.com/emqx/emqx/pull/3214)
 
 **Bug fixes:**
 
   - Fix the issue that DISCONNECT packet will not be sent in some cases
-    
+
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
 
   - Fix the issue that the connection will be closed when broker
     received the same Packet ID
-    
+
     Github PR: [emqx/emqx\#3233](https://github.com/emqx/emqx/pull/3233)
 
 ### emqx-stomp (plugin)
@@ -2383,7 +2383,7 @@ and performance optimizes.
 
   - Fix the issue that the maximum number of connections doesn't take
     effect
-    
+
     Github PR:
     [emqx/emqx-stomp\#93](https://github.com/emqx/emqx-stomp/pull/93)
 
@@ -2392,7 +2392,7 @@ and performance optimizes.
 **Bug fixes:**
 
   - Fix the issue that internal module start failed
-    
+
     Github PR:
     [emqx/emqx-auth-redis\#151](https://github.com/emqx/emqx-auth-redis/pull/151)
 
@@ -2402,10 +2402,10 @@ and performance optimizes.
 
   - Fix the issue that will message will not be sent in some cases when
     using Websocket connection
-    
+
     Github Issue:
     [emqx/emqx\#3221](https://github.com/emqx/emqx/issues/3221)
-    
+
     Github Commit:
     [emqx/cowboy\#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
 
@@ -2421,21 +2421,21 @@ and performance optimizes.
 **Enhancements:**
 
   - force\_shutdown\_policy defaults to disable
-    
+
     Github PR: [emqx/emqx\#3184](https://github.com/emqx/emqx/pull/3184)
 
   - Support timed global GC and provide configuration items
-    
+
     Github PR: [emqx/emqx\#3190](https://github.com/emqx/emqx/pull/3190)
 
   - Tune the default value of `force_gc_policy`
-    
+
     Github PR:
     [emqx/emqx\#3192](https://github.com/emqx/emqx/pull/3192),
     [emqx/emqx\#3201](https://github.com/emqx/emqx/pull/3201)
 
   - Tune and optimize the Erlang VM
-    
+
     Github PR:
     [emqx/emqx\#3195](https://github.com/emqx/emqx/pull/3195),
     [emqx/emqx\#3197](https://github.com/emqx/emqx/pull/3197)
@@ -2444,21 +2444,21 @@ and performance optimizes.
 
   - Fix the issue that the feature of ban is abnormal due to using the
     wrong unit
-    
+
     Github PR: [emqx/emqx\#3188](https://github.com/emqx/emqx/pull/3188)
 
   - Fix the handling of `Retain As Publish` and keep the value of
     `Retain` in bridge mode
-    
+
     Github PR: [emqx/emqx\#3189](https://github.com/emqx/emqx/pull/3189)
 
   - Fix the issue of unable to use multiple websocket listening ports
-    
+
     Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
 
   - Fix the issue that EMQX may not send DISCONNECT packet when session
     is takeovered
-    
+
     Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
 
 ### emqx-rule-engine
@@ -2466,12 +2466,12 @@ and performance optimizes.
 **Enhancements:**
 
   - Provide more arrays functions of SQL
-    
+
     Github PR:
     [emqx/emqx-rule-engine\#136](https://github.com/emqx/emqx-rule-engine/pull/136)
 
   - Reduce performance impact when no rules are configured
-    
+
     Github PR:
     [emqx/emqx-rule-engine\#138](https://github.com/emqx/emqx-rule-engine/pull/138)
 
@@ -2480,7 +2480,7 @@ and performance optimizes.
 **Bug fixes:**
 
   - Fix crash due to parameter mismatch
-    
+
     Github PR:
     [emqx/emqx-web-hook\#167](https://github.com/emqx/emqx-web-hook/pull/167)
 

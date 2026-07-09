@@ -17,9 +17,9 @@ docker run -d --name emqx-builder \
 
 ## Dependencies
 
-To compile and install EMQX from the source code, the following dependencies are needed: 
+To compile and install EMQX from the source code, the following dependencies are needed:
 
-- Erlang/OTP OTP 24 or 25 
+- Erlang/OTP OTP 24 or 25
 - GCC 4.8 or higher versions
 - Git
 - make
@@ -30,7 +30,7 @@ To compile and install EMQX from the source code, the following dependencies are
 
 The EMQX repository is located at <https://github.com/emqx/emqx>, where the `master` branch is the latest EMQX 5.0 version, and the `main-*` branch corresponds to different minor versions (such as 4.4.x, 5.1. x).
 
-To compile and run the latest version of EMQX, run: 
+To compile and run the latest version of EMQX, run:
 
 ```bash
 # docker exec -it emqx-builder bash

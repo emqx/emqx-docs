@@ -91,7 +91,7 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 4. Configure the parameters required to connect to Kafka:
    - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
    - Leave other options as default or configure them according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 5. Click the **Create** button to complete the creation of the connector.
 
@@ -170,7 +170,7 @@ Starting from EMQX v5.7.2, you can dynamically configure the Kafka topics in the
 
 #### Use Environment Variables
 
-EMQX v5.7.2 introduces a new functionality of dynamically assigning the values retrieved from [environment variables](../../operate/configuration/configuration.md#environment-variables) to a field within messages during the SQL processing phase. This functionality uses the [getenv](../data-integration/rule-sql-builtin-functions.md#system-function) function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results. As an application of this feature, when configuring Kafka topics in Kafka Sink rule actions, you can reference fields from rule output results to set the Kafka topic. The following is a demonstration of this application:
+EMQX v5.7.2 introduces a new functionality of dynamically assigning the values retrieved from [environment variables](../../guides/configuration/configuration.md#environment-variables) to a field within messages during the SQL processing phase. This functionality uses the [getenv](../data-integration/rule-sql-builtin-functions.md#system-function) function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results. As an application of this feature, when configuring Kafka topics in Kafka Sink rule actions, you can reference fields from rule output results to set the Kafka topic. The following is a demonstration of this application:
 
 ::: tip Note
 

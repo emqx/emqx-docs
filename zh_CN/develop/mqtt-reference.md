@@ -1,7 +1,7 @@
 ---
 next:
-  text: '管理员指南'
-  link: '../operate/admin-guide'
+  text: '使用指南'
+  link: '../guides/user-guide'
 ---
 
 # MQTT 参考指南

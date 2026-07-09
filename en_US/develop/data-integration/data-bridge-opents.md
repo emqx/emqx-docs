@@ -14,7 +14,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 EMQX inserts device data to OpenTSDB through the rule engine and Sink. OpenTSDB provides extensive query capabilities, supporting the generation of reports, charts, and other data analysis results. Taking industrial energy management scenarios as an example, the workflow is as follows:
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
 3. **Data ingestion into OpenTSDB**: Rules defined in the rule engine trigger operations to write messages to OpenTSDB.
 
@@ -44,7 +44,7 @@ This section describes the preparations you need to complete before you start to
 
 ### Install OpenTSDB
 
-Install OpenTSDB via Docker, and then run the docker image (Only x86 platform is supported now). 
+Install OpenTSDB via Docker, and then run the docker image (Only x86 platform is supported now).
 
 ```bash
 docker pull petergrace/opentsdb-docker
@@ -72,7 +72,7 @@ The following steps assume that you run both EMQX and OpenTSDB on the local mach
 
 ## Create a Rule with OpenTSDB Sink
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to OpenTSDB via a configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to OpenTSDB via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -89,9 +89,9 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      		"t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-4. Click the **+ Add Action** button to define an action to be triggered by the rule.  With this action, EMQX sends the data processed by the rule to OpenTSDB. 
+4. Click the **+ Add Action** button to define an action to be triggered by the rule.  With this action, EMQX sends the data processed by the rule to OpenTSDB.
 
 5. Select `OpenTSDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -129,7 +129,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data through the OpenTSDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new OpenTSDB Sink.
 
@@ -137,15 +137,15 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Test the Rule
 
-Use MQTTX to publish a message on topic `t/opents`. 
+Use MQTTX to publish a message on topic `t/opents`.
 
 ```bash
 mqttx pub -i emqx_c -t t/opents -m '{"metric":"cpu","tags":{"host":"serverA"},"value":12}'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message. 
+Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
-Check whether the data is written into the OpenTSDB: 
+Check whether the data is written into the OpenTSDB:
 
 ```bash
 curl -X POST -H "Accept: Application/json" -H "Content-Type: application/json" http://localhost:4242/api/query -d '{
@@ -213,7 +213,7 @@ The formatted output of the query result is as follows:
       "1683532519": 12
     }
   }
-]% 
+]%
 ```
 
 

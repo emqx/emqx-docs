@@ -48,9 +48,9 @@ EMQX 4.x では、管理用の専用 HTTP API やウェブページはありま�
 
 EMQX 5.x では、これらの機能を実現するために専用のインターフェースを多数提供しています。例えば、`GET /api/v5/gateways/mqttsn/clients` や以下の新規 HTTP API があります：
 
-- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways)  
-- [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)  
-- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients)  
+- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways)
+- [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
+- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients)
 
 また、クライアント管理、ゲートウェイ設定、リスナー管理などの専用ダッシュボードページも提供しています。
 
@@ -121,8 +121,8 @@ gateway.coap {
 
 ### MQTT-SN
 
-- DTLS タイプのリスナーは EMQX 5.1 でサポートされていますが、EMQX 4.x では未対応です。  
-- `mqtt.sn.username`、`mqtt.sn.password`、`mqtt.sn.subs_resume` は削除されていません。  
+- DTLS タイプのリスナーは EMQX 5.1 でサポートされていますが、EMQX 4.x では未対応です。
+- `mqtt.sn.username`、`mqtt.sn.password`、`mqtt.sn.subs_resume` は削除されていません。
 - `mqtt.sn.advertise_duration` は `gateway.mqttsn.broadcast` に名称変更されました。
 
 ### ExProto

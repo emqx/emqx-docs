@@ -4,9 +4,9 @@ The HTTP server data integration provides a quick way to integrate EMQX with ext
 
 This page provides a detailed overview of the features and capabilities of the data integration with HTTP server and offers practical guidance on setting up an HTTP server data integration.
 
-:::tip 
+:::tip
 
-For users who need to integrate with HTTP services but do not require data processing using rules, we recommend using [Webhook](./webhook.md) as it is simpler and easier to use. 
+For users who need to integrate with HTTP services but do not require data processing using rules, we recommend using [Webhook](./webhook.md) as it is simpler and easier to use.
 
 :::
 
@@ -86,7 +86,7 @@ This section demonstrates how to configure an HTTP server Connector that is used
 
 2. Click **Create** on the top right corner of the page. Click to select the **HTTP Server** and click **Next**:
 
-3. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_httpserver`. 
+3. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_httpserver`.
 
 4. Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
 
@@ -107,7 +107,7 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. 
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**.
 
 4. Enter the following statement in the **SQL Editor** as an example, which means the MQTT messages under topic `t/#`  will be saved to the HTTP server.
 
@@ -120,7 +120,7 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
      "t/#"
    ```
 
-5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `HTTP Server` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to the HTTP Server. 
+5. Click the **+ Add Action** button to define an action to be triggered by the rule. Select `HTTP Server` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to the HTTP Server.
 
    Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select an HTTP Server action previously created. In this demonstration, you create a new Sink and add it to the rule.
 
@@ -134,11 +134,11 @@ This section demonstrates how to create a rule with an HTTP Server Sink added to
 
 10. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 
-11. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. 
+11. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule.
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new HTTP Server Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new HTTP Server Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to the HTTP Server after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to the HTTP Server after parsing by the rule `my_rule`.
 
 ## Test the Rule
 

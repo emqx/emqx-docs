@@ -4,9 +4,9 @@ EMQX Multi-Protocol Gateway enables handling all non-MQTT protocol connections, 
 
 Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different designs and implementations, making it challenging to use them.
 
-Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
+Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use.
 
-The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
+The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details.
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
@@ -20,7 +20,7 @@ The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2
 
 ## How the Multi-Protocol Gateway Works
 
-EMQX Multi-Protocol Gateway defines a unified conceptual and operational model for several key components, including listeners, connections/sessions, publish/subscribe, authentication, and authorization. 
+EMQX Multi-Protocol Gateway defines a unified conceptual and operational model for several key components, including listeners, connections/sessions, publish/subscribe, authentication, and authorization.
 
 <img src="./assets/gateway_struct.png" alt="gateway_struct" style="zoom:50%;" />
 
@@ -61,9 +61,9 @@ For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](.
 
 ### Authentications
 
-Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization. 
+Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization.
 
-Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../../operate/access-control/authn/http.md). See the table below for the authentication types supported:
+Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../../guides/access-control/authn/http.md). See the table below for the authentication types supported:
 
 |            | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  | LDAP |
 | ---------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- |
@@ -76,7 +76,7 @@ Different gateways may support different types of authenticators, but all gatewa
 | GB/T 32960 | ✔︎           |                   |       |         |            |       |      |      |
 | JT/T 808   | N/A         | N/A               | N/A   | N/A     | N/A        | N/A   | N/A  |      |
 
-Note: Any client can log in if no authenticator is configured. 
+Note: Any client can log in if no authenticator is configured.
 
 #### How Authentication Works on the Gateway
 
@@ -103,7 +103,7 @@ Client connection-related hooks with the following supportability:
 
 For improved interoperability with external systems, the gateway is designed to support hooks as defined in EMQX.
 
-However, due to the differences in semantics among various gateways, only a subset of the core hooks can be utilized, see the table below for the client connection-related hooks supported: 
+However, due to the differences in semantics among various gateways, only a subset of the core hooks can be utilized, see the table below for the client connection-related hooks supported:
 
 | Name                  | Required or Not | Description                                                  | Supported Protocols |
 | --------------------- | --------------- | ------------------------------------------------------------ | ------------------- |
@@ -118,5 +118,5 @@ However, due to the differences in semantics among various gateways, only a subs
 
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
 
-For a detailed explanation of hooks, see [Hooks](../../operate/extensions/hooks.md).
+For a detailed explanation of hooks, see [Hooks](../../guides/extensions/hooks.md).
 

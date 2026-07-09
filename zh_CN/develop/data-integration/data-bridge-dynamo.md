@@ -44,7 +44,7 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
    - 访问 ID：`root`
    - 访问密钥：`public`
    - 区域： `us-west-2`
-   
+
    ```bash
    docker run -d -p 8000:8000 --name dynamodb-local \
      -e AWS_ACCESS_KEY_ID=root \
@@ -59,7 +59,7 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
    - 定义 `timestamp` 为主键中的范围键（排序键）。
    - 定义一个名为 `device_id` 的属性，其类型为字符串（S）。
    - 定义一个名为 `timestamp` 的属性，其类型为数字（N）。
-   
+
    ```json
    {
        "TableName": "mqtt_msg",
@@ -152,7 +152,7 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
    注意：如果您希望制定自己的 SQL 语法，需要确保规则选出的字段（SELECT 部分）包含所有 SQL 模板中用到的变量。
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -225,7 +225,7 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
 ```sql
 SELECT
   str(event) + timestamp as id, *
-FROM 
+FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 

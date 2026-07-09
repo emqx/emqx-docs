@@ -92,7 +92,7 @@ EMQX 与 Tablestore 的数据集成目前仅支持时序模型。因此，以下
      - **访问密钥 ID**：用于与 Tablestore 认证的 Access Key ID。此密钥由阿里云颁发，用于安全访问 Tablestore 资源。
      - **访问密钥**：与 Access Key ID 相关联的用于认证的 Access Key Secret。
      - **存储模型类型**：目前仅支持`时序`。
-   - 配置 TLS 参数。Tablestore 使用 HTTPS 端点，故默认情况下 TLS 已经启用，并且无需配置 TLS 参数。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../../operate/network/overview.md#启用-tls-加密访问外部资源)。
+   - 配置 TLS 参数。Tablestore 使用 HTTPS 端点，故默认情况下 TLS 已经启用，并且无需配置 TLS 参数。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 Tablestore 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 Tablestore 的数据。具体步骤请参见[创建 Tablestore Sink 规则](#创建-tablestore-sink-规则)。
 
@@ -153,12 +153,12 @@ EMQX 与 Tablestore 的数据集成目前仅支持时序模型。因此，以下
      | `device`   | `sensor1` |
 
    - **字段**：字段列表，指定哪些数据将发送到 Tablestore。每个字段都映射到 Tablestore 表中的一列。您可以点击**添加**来添加以下内容：
-     
+
      - **列**：Tablestore 中的列名。列名可以用变量。如 `${column_name}`。
      - **消息的值**：分配给列的值。该值可以是动态引用（如 `${value}`）、布尔值（`true`）、数字（`1.3`）或二进制数据。
      - **是否为整数**：如果列是数值类型，EMQX 默认按照浮点类型插入 Tablestore。如果想要插入整数值，需要将此标志设置为 `true`。若通过配置文件配置，可以使用变量（如：`${isint}`）动态分配。
      - **是否为二进制**：若该列为二进制，EMQX 默认按照字符串类型插入 Tablestore。如果想要插入二进制数据，需要此标志设置为 `true`。若通过配置文件配置，可以使用变量（如：`${isbinary}`）动态分配。
-     
+
    - **时间戳**：Tablestore 中记录的时间戳，整数值，单位为微秒。表示要插入到 Tablestore 的时间戳。您可以指定一个固定值，或者填写 "NOW" 字符串来表示希望 EMQX 动态填入处理消息时的当前时间，也可以使用变量占位符（如 `${microsecond_timestamp}`) 动态分配。
 
    - **元数据更新模式**：定义 Tablestore 中元数据的更新策略：

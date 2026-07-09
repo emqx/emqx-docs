@@ -12,7 +12,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into Couchbase works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
 3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Couchbase. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 4. **Data ingestion into Couchbase**: Once the rule engine identifies a message for Couchbase storage, it triggers an action of forwarding the messages to Couchbase. Processed data will be seamlessly written into the dataset of the Couchbase database.
 5. **Data Storage and Utilization**: With the data now stored in Couchbase, businesses can harness its querying power for various use cases. For example, in the context of dynamic product catalogs, businesses can use Couchbase to efficiently manage and retrieve product information, support real-time inventory updates, and deliver personalized recommendations to customers, enhancing the shopping experience and increasing sales.
@@ -37,25 +37,25 @@ This section describes the preparations you need to complete before you start to
 
 - Knowledge about [data integration](./data-bridges.md)
 
-- Basic knowledge of UNIX terminal and commands 
+- Basic knowledge of UNIX terminal and commands
 
 ### Start a Couchbase Server
 
-This section introduces how to start a Couchbase server using [Docker](https://www.docker.com/). 
+This section introduces how to start a Couchbase server using [Docker](https://www.docker.com/).
 
 1. Start a Couchbase server using the following command.
 
    ```bash
    docker run -t --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase/server:enterprise-7.2.0
    ```
-   
+
    When you run the command, Docker downloads and installs Couchbase Server. You should see the following message once Couchbase Server is started in a Docker virtual environment:
-   
+
    ```
    Starting Couchbase Server -- Web UI available at http://<ip>:8091
    and logs available in /opt/couchbase/var/lib/couchbase/logs
    ```
-   
+
 2. Open Couchbase Web Console in your browser by visiting `http://localhost:8091`.
 
 <img src="./assets/couchbase-consoleSetup.png" alt="couchbase-consoleSetup" style="zoom:67%;" />
@@ -100,7 +100,7 @@ The following steps assume that you run both EMQX and Couchbase on the local mac
 
 ## Create a Rule with Couchbase Sink
 
-This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to Couchbase via a configured Sink. 
+This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to Couchbase via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
@@ -108,16 +108,16 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
 3. Enter the rule ID, for example, `my_rule`.
 
-4. Leave the statement in the SQL editor, it will forward the MQTT messages matching the topic pattern `t/#`. 
+4. Leave the statement in the SQL editor, it will forward the MQTT messages matching the topic pattern `t/#`.
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
    ```
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Couchbase. 
+5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Couchbase.
 
 6. Select `Couchbase` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Couchbase Sink if you have created one. This demonstration will create a new Sink.
 
@@ -144,9 +144,9 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 14. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Couchbase Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Couchbase Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Couchbase after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Couchbase after parsing by the rule `my_rule`.
 
 ## Test the Rule
 
@@ -154,7 +154,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test if the r
 
 Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard to access the WebSocket Client. Follow the steps below to set up a WebSocket client and send a message to the topic `t/test`:
 
-1. Fill in the connection information for the current EMQX instance. If you are running EMQX locally, you can use the default values unless you have changed EMQX's default configuration (for example, you might have configured authentication which may require you to type in a username and password). 
+1. Fill in the connection information for the current EMQX instance. If you are running EMQX locally, you can use the default values unless you have changed EMQX's default configuration (for example, you might have configured authentication which may require you to type in a username and password).
 
 2. Click **Connect** to connect the client to the EMQX instance.
 
@@ -162,7 +162,7 @@ Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Da
    * **Topic**: `t/test`
    * **Payload**: `Hello World Couchbase from EMQX`
    * **QoS**: 2
-   
+
 4. Click **Publish** to send the message. An item should have been inserted in the `emqx_data` bucket in the Couchbase server. You can check this by running the following command from a terminal:
 
    ```bash

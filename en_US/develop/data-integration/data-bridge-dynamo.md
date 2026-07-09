@@ -6,7 +6,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-DynamoDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with DynamoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to DynamoDB for storage and management, eliminating the need for complex coding. 
+DynamoDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with DynamoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to DynamoDB for storage and management, eliminating the need for complex coding.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and DynamoDB:
 
@@ -144,7 +144,7 @@ The following steps assume that you run both EMQX and DynamoDB on the local mach
 
 ## Create a Rule with DynamoDB Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the DynamoDB table `mqtt_msg` via a configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the DynamoDB table `mqtt_msg` via a configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -155,7 +155,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
@@ -163,7 +163,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -190,17 +190,17 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
 
      :::
-     
+
      If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **Message template** to define the rule engine behavior:
-     
+
      - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-     
+
      - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
-     
+
        ::: tip
-     
+
        If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
-     
+
        :::
 
 9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
@@ -211,7 +211,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data through the DynamoDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new DynamoDB Sink.
 
@@ -234,13 +234,13 @@ The SQL rule syntax for online/offline status recording is as follows:
 ```sql
 SELECT
   str(event) + timestamp as id, *
-FROM 
+FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
 ### Test the Rules
 
-Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
+Use MQTT X to send a message to topic `t/1` to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
@@ -248,7 +248,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 
 Check the running status of the Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
 
-Check whether the data is written into the `mqtt_msg`  data table. 
+Check whether the data is written into the `mqtt_msg`  data table.
 
 ```bash
 docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb scan --table-name=mqtt_msg --endpoint-url http://host.docker.internal:8000

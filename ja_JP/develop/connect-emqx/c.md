@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     MQTTClient_create(&client, ADDRESS, CLIENTID,
         MQTTCLIENT_PERSISTENCE_NONE, NULL);
-  
+
     // MQTT接続パラメータ
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         printf("接続に失敗しました。戻りコード %d\n", rc);
         exit(-1);
     }
-  
+
     // メッセージのパブリッシュ
     pubmsg.payload = PAYLOAD;
     pubmsg.payloadlen = strlen(PAYLOAD);
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
             (int)(TIMEOUT/1000), PAYLOAD, TOPIC, CLIENTID);
     rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
     printf("デリバリートークン %d のメッセージが配信されました\n", token);
-  
+
     // 切断
     MQTTClient_disconnect(client, 10000);
     MQTTClient_destroy(&client);

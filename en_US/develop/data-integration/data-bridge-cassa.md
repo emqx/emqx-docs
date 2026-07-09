@@ -87,32 +87,32 @@ The following steps assume that you run both EMQX and Cassandra on the local mac
 4. In the **Configuration** step, configure the following information:
    - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_cassandra`.
    - Enter `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
-   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../../operate/network/overview.md#enabling-tls-for-external-resource-access).
+   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Cassandra server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink).
 
 ## Create a Rule with Cassandra Sink
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`  and saving the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`  and saving the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
 2. Click **Create** on the top right corner of the page.
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below. 
+3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below.
 
    Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
 
    ```sql
-   SELECT 
+   SELECT
      *
    FROM
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-4. Click the **+ Add Action** button to define an action that will be triggered by the rule.  With this action, EMQX sends the data processed by the rule to Cassandra. 
+4. Click the **+ Add Action** button to define an action that will be triggered by the rule.  With this action, EMQX sends the data processed by the rule to Cassandra.
 
 5. Select `Cassandra` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -135,9 +135,9 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Cassandra Sink. 
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Cassandra Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by the rule `my_rule`. 
+You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by the rule `my_rule`.
 
 ## Test the Rule
 

@@ -2,7 +2,7 @@
 
 本章节提供了从 EMQX 4.4 版本迁移至 EMQX 5.1 及以上版本的指南，尽管 EMQX 5 不保证向后兼容（Backward Compatibility），但绝大部分功能运行机制没有太大的变化，你仍然可以通过手动迁移的方式来实现升级。
 
-<!-- 要了解我们在 EMQX 5.1 中增加的新功能，请查看 [全新功能](../getting-started/new-features.md)。 -->
+<!-- 要了解我们在 EMQX 5.1 中增加的新功能，请查看 [全新功能](../new-features.md)。 -->
 
 ## 日志
 
@@ -13,7 +13,7 @@
 2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index
 ```
 
-详细的格式请参照[日志 - 日志格式](../../operate/observability/log.md#日志格式)。
+详细的格式请参照[日志 - 日志格式](../../guides/observability/log.md#日志格式)。
 
 ## 默认监听器
 
@@ -156,8 +156,8 @@ Auth 被称为**认证**，ACL 也被称为**授权**。
 
 支持的占位符请参考：
 
-- [认证占位符](../../operate/access-control/authn/authn.md#认证占位符)
-- [授权占位符](../../operate/access-control/authz/authz.md#占位符)
+- [认证占位符](../../guides/access-control/authn/authn.md#认证占位符)
+- [授权占位符](../../guides/access-control/authz/authz.md#占位符)
 
 以下是前后版本配置对比：
 
@@ -232,8 +232,8 @@ authentication = [
 SELECT
   password as password_hash,
   salt,
-  is_superuser 
-FROM mqtt_user 
+  is_superuser
+FROM mqtt_user
   where username = ${username} LIMIT 1
 ```
 
@@ -334,7 +334,7 @@ HMGET emqx_user:${username} password_hash is_superuser
 #### MongoDB 变动
 
 1. MongoDB 数据源可用于黑/白名单模式下，此前仅支持白名单模式，要求设置 `authorization.no_match = deny`；
-2. 需要从 MongoDB 中查询出包含 `action` `permission` `topics` 字段的数据列表，使用方式详见 [AuthZ-MongoDB](../../operate/access-control/authz/mongodb.md)。
+2. 需要从 MongoDB 中查询出包含 `action` `permission` `topics` 字段的数据列表，使用方式详见 [AuthZ-MongoDB](../../guides/access-control/authz/mongodb.md)。
 
 如需继续使用 4.x 中的数据，请手动迁移适配。
 
@@ -430,7 +430,7 @@ MQTT 桥接插件 (`emqx_bridge_mqtt`) 已被移除，请使用数据集成中�
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-如果您想要使用 push-gateway，可参考[集成 Prometheus](../../operate/observability/prometheus.md)。
+如果您想要使用 push-gateway，可参考[集成 Prometheus](../../guides/observability/prometheus.md)。
 
 除了配置方式外，Prometheus 的指标也发生了变化：
 

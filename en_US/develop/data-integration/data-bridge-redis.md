@@ -14,7 +14,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 Ingesting MQTT data into Redis works as follows:
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
+1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
 2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Redis. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 3. **Data ingestion into Redis**: Once the rules engine has processed the data, it triggers actions to execute preset Redis commands for caching, counting, and other operations on the data.
 4. **Data storage and utilization**: By reading data stored in Redis, enterprises can leverage its rich data operation capabilities to implement various use cases. For example, in the logistics field, it's possible to obtain the latest status of devices, as well as carry out GPS geographical location analysis based on data and perform operations like real-time data analysis and sorting. This facilitates functionalities like real-time tracking, route recommendations, and more.
@@ -73,19 +73,19 @@ The following steps assume that you run both EMQX and Redis on the local machine
 3. On the **Create Connector** page, select **Redis** and then click **Next**.
 4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_redis`.
 5. Set **Redis Mode** as the business needs, for example, `single`.
-6. Enter the connection information. 
+6. Enter the connection information.
    - **Server Host**: Enter `127.0.0.1:6379`.
    - **Username**: Enter `admin`.
    - **Password**: Enter `public`.
    - **Database ID**: Enter `0`.
    - Configure the other options according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../operate/network/overview.md#tls-for-external-resource-access).
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the Redis server.
 9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Redis. For detailed steps, see [Create a Rule and Redis Sink](#create-a-rule-and-redis-sink).
 
 ## Create a Rule with Redis Sink
 
-This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics. 
+This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics.
 
 You need to create 2 separate Redis Sinks for the messaging caching and statistics features. Follow the specific **Redis Command Template** configuration instructions based on what type of Sinks you need to create.
 
@@ -124,7 +124,7 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -162,7 +162,7 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created a rule for the Redis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Redis Sink.
 

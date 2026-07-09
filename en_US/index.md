@@ -14,7 +14,7 @@ As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://w
 - [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 - [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
-- [**Complete Observability**](./operate/dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
+- [**Complete Observability**](./guides/dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
 - [**Cloud-Native & K8s**](https://www.emqx.com/en/emqx-kubernetes-operator): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator** and **Terraform**.
 
 ## Main Components
@@ -39,15 +39,15 @@ EMQX Enterprise provides a highly reliable message transmission mechanism throug
 
 ### Distributed Clustering
 
-EMQX Enterprise offers native [clustering](./operate/cluster/create-cluster.md) capabilities, enabling seamless and elastic scaling, while avoiding single points of failure. With extreme optimization, a single node can process and distribute millions of MQTT messages per second with [low latency](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time). Through cluster horizontal scaling, it supports up to 100 million concurrent MQTT connections, making it crucial for large-scale IoT deployments in areas such as the IoV, industrial automation, and smart homes.
+EMQX Enterprise offers native [clustering](./guides/cluster/create-cluster.md) capabilities, enabling seamless and elastic scaling, while avoiding single points of failure. With extreme optimization, a single node can process and distribute millions of MQTT messages per second with [low latency](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time). Through cluster horizontal scaling, it supports up to 100 million concurrent MQTT connections, making it crucial for large-scale IoT deployments in areas such as the IoV, industrial automation, and smart homes.
 
 ### Access Control and Data Security
 
-Through [TLS/SSL encryption](./operate/network/overview.md) and [authentication](./operate/access-control/authn/authn.md)/[authorization](./operate/access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
+Through [TLS/SSL encryption](./guides/network/overview.md) and [authentication](./guides/access-control/authn/authn.md)/[authorization](./guides/access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
 
 EMQX Enterprise includes multiple client authentication mechanisms, including username/password, JWT, enhanced authentication, PSK, and X.509 certificates. It provides publish/subscribe authorization mechanisms based on ACLs. Authentication and authorization data can be integrated and managed through external enterprise security systems, such as LDAP, HTTP services, SQL, and NoSQL databases, allowing for flexible and diverse client security protection solutions.
 
-Additionally, the EMQX Enterprise offers [audit logs](./operate/audit-log.md), role and permission management, and [single sign-on](./operate/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
+Additionally, the EMQX Enterprise offers [audit logs](./guides/audit-log.md), role and permission management, and [single sign-on](./guides/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
 
 ### Rule Engine and Data Integration
 
@@ -63,11 +63,11 @@ Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](
 
 ### Management and Monitoring Dashboard
 
-EMQX Enterprise provides a graphical management system called the [Dashboard](./operate/dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
+EMQX Enterprise provides a graphical management system called the [Dashboard](./guides/dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
 
 ## Deployment Modes and Edition Comparison
 
-EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./get-started/feature-comparison.md). 
+EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./get-started/feature-comparison.md).
 
 <table>
 <thead>

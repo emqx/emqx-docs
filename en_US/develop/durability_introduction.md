@@ -43,7 +43,7 @@ EMQX provides 2 different client session implementations, each optimized for spe
 - **Regular sessions**: Sessions that keep their state in the memory of a running EMQX node. Their state is lost when the EMQX node restarts.
 - **Durable sessions**: Sessions that back up their state and received messages in the durable storage. They can be resumed after restart of the EMQX node.
 
-The choice of session implementation depends on the session expiry interval and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../operate/configuration/configuration.md#zone-override). The implementation can be selected based on the following criteria:
+The choice of session implementation depends on the session expiry interval and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../guides/configuration/configuration.md#zone-override). The implementation can be selected based on the following criteria:
 
 | `durable_sessions.enable` | Session Expiry Interval = 0 | Session Expiry Interval > 0 |
 | ------------------------- | --------------------------- | --------------------------- |
@@ -75,13 +75,13 @@ However, there are some drawbacks:
 
 Introduced in EMQX v5.7.0, the durable session implementation stores session state and messages routed to the durable sessions on disk. This feature is disabled by default and can be enabled by setting the `durable_sessions.enable` configuration parameter to be `true`.
 
-When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable." This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`. 
+When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable." This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`.
 
 It is important to note that message dispatch protocol depends on the durability of the subscriber's session rather than the publisher's.
 
 Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This ensures efficient message fan-out and minimizes disk writes.
 
-Durable storage provides robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](../operate/durability/managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+Durable storage provides robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](../guides/durability/managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
 
 ::: tip Note
 
@@ -187,7 +187,7 @@ Storage encapsulates all data of a certain type, such as MQTT messages or MQTT s
 
 ### Shard
 
-Messages are segregated by clients and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](../operate/durability/managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
+Messages are segregated by clients and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](../guides/durability/managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
 
 ### Generation
 
@@ -223,5 +223,5 @@ The disk space requirements can be estimated according to the following guidelin
 
 To learn how to configure and manage the Durable Sessions feature, as well as how to initially set up and modify durable sessions in an EMQX cluster, please refer to the following pages:
 
-- [Configure and Manage Durable Sessions](../operate/durability/management.md)
-- [Manage Data Replication](../operate/durability/managing-replication.md)
+- [Configure and Manage Durable Sessions](../guides/durability/management.md)
+- [Manage Data Replication](../guides/durability/managing-replication.md)

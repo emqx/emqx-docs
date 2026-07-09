@@ -1,6 +1,6 @@
 # Introduction to Data Integration
 
-Data integration is a data processing and distribution component of EMQX based on the publish/subscribe model. 
+Data integration is a data processing and distribution component of EMQX based on the publish/subscribe model.
 Through simple and visual configuration, message flow and device events can be integrated with messaging brokers such as Kafka and RabbitMQ, as well as various SQL/NoSQL or time series databases.
 
 EMQX provides a real-time, concise and efficient data integration scheme by combining **Rules** and **Data Bridges**.

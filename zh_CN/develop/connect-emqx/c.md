@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     MQTTClient_create(&client, ADDRESS, CLIENTID,
         MQTTCLIENT_PERSISTENCE_NONE, NULL);
-  
+
     // MQTT 连接参数
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         printf("Failed to connect, return code %d\n", rc);
         exit(-1);
     }
-  
+
     // 发布消息
     pubmsg.payload = PAYLOAD;
     pubmsg.payloadlen = strlen(PAYLOAD);
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
             (int)(TIMEOUT/1000), PAYLOAD, TOPIC, CLIENTID);
     rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
     printf("Message with delivery token %d delivered\n", token);
-  
+
     // 断开连接
     MQTTClient_disconnect(client, 10000);
     MQTTClient_destroy(&client);

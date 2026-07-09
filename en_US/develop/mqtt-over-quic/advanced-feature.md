@@ -1,6 +1,6 @@
 # Advanced Features
 
-As MQTT brokers evolve, EMQX stays ahead of the curve, introducing new features and capabilities to meet the complex demands of IoT applications. This chapter delves into the following powerful features: 
+As MQTT brokers evolve, EMQX stays ahead of the curve, introducing new features and capabilities to meet the complex demands of IoT applications. This chapter delves into the following powerful features:
 
 - [MQTT over QUIC](./introduction.md) introduces this groundbreaking feature in EMQX and explains how to enable it in EMQX.
 - [Cluster Linking](../cluster-linking/introduction.md) introduces the feature that connects multiple, separate clusters and facilitates client communication on geographically dispersed clusters.

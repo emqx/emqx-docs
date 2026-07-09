@@ -86,11 +86,11 @@ MQTTX 客户端是一款跨平台的 MQTT 桌面客户端工具。它提供用�
    ```bash
    # Homebrew
    brew install emqx/mqttx/mqttx-cli
-   
+
    # Intel Chip
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-x64
    sudo install ./mqttx-cli-macos-x64 /usr/local/bin/mqttx
-   
+
    # Apple Silicon
    curl -LO https://www.emqx.com/zh/downloads/MQTTX/v1.9.0/mqttx-cli-macos-arm64
    sudo install ./mqttx-cli-macos-arm64 /usr/local/bin/mqttx
@@ -146,7 +146,7 @@ MQTTX 客户端是一款跨平台的 MQTT 桌面客户端工具。它提供用�
 
 ## WebSocket 客户端
 
-[EMQX Dashboard](../../operate/dashboard/introduction.md) 包含了一个 WebSocket 客户端工具，旨在于提供一个简易但有效的 MQTT 测试工具，能够通过 MQTT over WebSocket 连接到 EMQX 进行连接、订阅和发布操作。
+[EMQX Dashboard](../../guides/dashboard/introduction.md) 包含了一个 WebSocket 客户端工具，旨在于提供一个简易但有效的 MQTT 测试工具，能够通过 MQTT over WebSocket 连接到 EMQX 进行连接、订阅和发布操作。
 
 1. 打开 EMQX Dashboard，在左侧导航目录中点击**问题分析** -> **WebSocket 客户端**。
 2. 填入连接配置信息，**主机名**填写对应监听器的 IP 地址，默认为 `localhost`，**端口** `8083`，根据情况填入用户名密码，没有启用访问控制的情况下留空即可。

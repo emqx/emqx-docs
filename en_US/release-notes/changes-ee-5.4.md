@@ -22,7 +22,7 @@
 
 - [#11984](https://github.com/emqx/emqx/pull/11984) Implemented Open Telemetry distributed tracing feature.
 
-- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data. 
+- [#12017](https://github.com/emqx/emqx/pull/12017) Implemented a dedicated REST API for the import and export of configuration and user data.
 
 - [#12040](https://github.com/emqx/emqx/pull/12040) Upgraded QUIC protocol stack.
 
@@ -59,18 +59,18 @@
 
   `role` is optional and its default value is `administrator`.
 
-- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new GB/T 32960 gateway, enabling vehicles to connect with EMQX via the GBT32960 vehicular networking protocol. 
+- [#11852](https://github.com/emqx/emqx/pull/11852) Introduced a new GB/T 32960 gateway, enabling vehicles to connect with EMQX via the GBT32960 vehicular networking protocol.
 
-- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new JT/T808 gateway, enabling vehicles to connect with EMQX via the JT/T 808 vehicular networking protocol. 
+- [#11883](https://github.com/emqx/emqx/pull/11883) Introduced a new JT/T808 gateway, enabling vehicles to connect with EMQX via the JT/T 808 vehicular networking protocol.
 
-- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new OCPP gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol). 
+- [#11885](https://github.com/emqx/emqx/pull/11885) Introduced a new OCPP gateway for Electric vehicle (EV) charging stations to access EMQX through the OCPP (Open Charge Point Protocol).
 
 - [#11971](https://github.com/emqx/emqx/pull/11971) Made `/api/v5/load_rebalance/availability_check` public, meaning it no longer requires authentication. This change simplifies the setup of load balancers.
 
   It improved the gracefulness of the rebalance/evacuation process during the wait health check phase. The connections to nodes marked for eviction are now not prohibited during this phase.
   During this phase it is unknown whether these nodes are all marked unhealthy by the load balancer, so prohibiting connections to them may cause multiple unsuccessful reconnection attempts.
 
-- [#12013](https://github.com/emqx/emqx/pull/12013) The data bridging design has been adjusted to split it into connectors and actions (Sinks). Connectors are used to manage the integration of data with external systems and can be reused across multiple actions, while actions are used to configure how data is processed. This design provides greater flexibility and scalability, resulting in clearer data integration configuration and management. 
+- [#12013](https://github.com/emqx/emqx/pull/12013) The data bridging design has been adjusted to split it into connectors and actions (Sinks). Connectors are used to manage the integration of data with external systems and can be reused across multiple actions, while actions are used to configure how data is processed. This design provides greater flexibility and scalability, resulting in clearer data integration configuration and management.
 
   The adjusted data bridges includes PostgreSQL, Timescale, and Matrix, which have now been split into connectors and actions APIs, but they remain backward compatible with the old data bridge API.
 
@@ -91,9 +91,9 @@
 - [#12078](https://github.com/emqx/emqx/pull/12078) Upgraded grpc-erl to 0.6.12. This update addresses a potential deadlock issue where the grpc client started dependent apps lazily.
 
 - [#12081](https://github.com/emqx/emqx/pull/12081) Updated `gen_rpc` library to version 3.3.1. The new version includes several performance improvements:
-  
+
   - Avoiding allocating extra memory for the packets before they are sent to the wire in some cases.
-  
+
   - Bypassing network for the local calls.
 
   - Avoid sensitive data leaking in debug logs [#12202](https://github.com/emqx/emqx/pull/12202)

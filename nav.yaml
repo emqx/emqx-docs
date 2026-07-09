@@ -3,13 +3,13 @@
   title_cn: 快速开始
   path: ./
 
+- title_en: Guides
+  title_cn: 使用指南
+  path: guides/user-guide
+
 - title_en: Develop
   title_cn: 开发者指南
   path: develop/developer-guide
-
-- title_en: Operate
-  title_cn: 管理员指南
-  path: operate/admin-guide
 
 - title_en: Release Notes
   title_cn: 版本发布说明

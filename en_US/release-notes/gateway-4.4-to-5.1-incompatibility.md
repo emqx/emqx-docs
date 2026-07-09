@@ -48,15 +48,15 @@ In EMQX 4.x, there is no separate HTTP API and webpage for management. For examp
 
 In EMQX 5.x, we provided more proprietary interfaces to accomplish these functions. For example, `GET /api/v5/gateways/mqttsn/clients`, and more newly added HTTP APIs:
 
-- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways) 
+- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways)
 - [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
-- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients) 
+- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients)
 
 It also provides dedicated Dashboard pages for managing clients, gateway configurations, listeners, and more.
 
 ### Listeners
 
-In EMQX 4.x, each gateway has its own format for listener configuration. However, in EMQX 5.1, the configuration format for all listeners has been standardized. 
+In EMQX 4.x, each gateway has its own format for listener configuration. However, in EMQX 5.1, the configuration format for all listeners has been standardized.
 
 For example, in EMQX 4.x
 
