@@ -27,4 +27,3 @@ The chapter is divided into sections covering
 **Monitoring and Performance**
 
 - [Monitor EMQX cluster by Prometheus](./configure-emqx-prometheus.md)
-

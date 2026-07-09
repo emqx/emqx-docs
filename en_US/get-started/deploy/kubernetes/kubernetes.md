@@ -53,4 +53,3 @@ Selecting between the EMQX Operator and the Helm Chart depends on your deploymen
 
 - For most production and serious pre-production use cases, the EMQX Operator is strongly recommended. It simplifies long-term cluster management and reduces operational overhead.
 - For quick evaluations, development, testing, or scenarios where direct control over Kubernetes resources is preferred, the Helm chart offers a lightweight and flexible deployment option.
-

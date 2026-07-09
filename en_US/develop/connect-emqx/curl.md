@@ -494,4 +494,3 @@ curl -u "username:password" \
 For a detailed, step-by-step walkthrough of using curl with MQTT and MQTTS, including background explanations, additional examples, and usage considerations, see the blog post: [Using curl for MQTT: Connect, Publish, and Subscribe with Secure IoT Communication](https://www.emqx.com/en/blog/using-curl-for-mqtt).
 
 The blog complements this Enterprise-focused guide by providing deeper explanations and extended examples.
-
