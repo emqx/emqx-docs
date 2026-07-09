@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'MQTT Reference'
+  link: '../develop/mqtt-reference'
+---
+
 # Release Notes for EMQX Enterprise
 
 The release notes page for EMQX Enterprise provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX Enterprise.

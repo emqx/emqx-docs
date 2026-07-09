@@ -1,7 +1,7 @@
 ---
 next:
-  text: '使用指南'
-  link: '../guides/user-guide'
+  text: '版本发布说明'
+  link: '../release-notes/all-changes-ee'
 ---
 
 # MQTT 参考指南

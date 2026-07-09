@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'MQTT 参考指南'
+  link: '../develop/mqtt-reference'
+---
+
 # EMQX 企业版版本发布历史
 
 EMQX 企业版版本发布页面全面详细地记录了 EMQX 企业版每个版本中的更新、增强功能和 BUG 修复。

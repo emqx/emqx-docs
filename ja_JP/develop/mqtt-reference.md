@@ -1,7 +1,7 @@
 ---
 next:
-  text: 'User Guides'
-  link: '../guides/user-guide'
+  text: 'Release Notes'
+  link: '../release-notes/all-changes-ee'
 ---
 
 # MQTT Reference

@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'LLM Resources'
+  link: '../get-started/llms-txt'
+---
+
 # User Guides
 
 Instructions on performing various EMQX operations.

@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'LLM 资源'
+  link: '../get-started/llms-txt'
+---
+
 # 使用指南
 
 本章节介绍如何执行各类 EMQX 运维和管理操作。
