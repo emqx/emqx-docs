@@ -93,15 +93,15 @@ Typically, you can use these default listeners by specifying the corresponding p
 
 In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
 
-![image](./assets/config-listener-add.png)
-
 #### Rate Limiting
 
-In the **Limiter** section of the **Add Listener** form, you can limit the message receiving and publishing rates during EMQX operation, such as:
+In the **Limiter** section of the **Add Listener** form, you can configure limits on connection, message publishing, and subscribe packet rates, including:
 
 - Maximum Connection Rate (Listener)
 - Maximum Message Publishing Rate (Per Client)
 - Maximum Message Publishing Rraffic (Per Client)
+- Subscribe Rate
+- Subscribe Burst
 
 Configuring rate limiting ensures the stability of the system and network when message data overload or excessive client requests occur.
 

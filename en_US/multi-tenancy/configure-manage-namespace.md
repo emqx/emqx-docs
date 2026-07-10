@@ -45,6 +45,8 @@ Both tenant and client rate limiters support the following dimensions:
 - **Message rate limit**: The maximum number of messages that a client or tenant can publish within a specified period
 - **Byte throughput limit**: The maximum effective payload size that can be transmitted within a specified period
 
+The client rate limiter also supports a **subscribe packet rate limit**, which controls how many `SUBSCRIBE` packets an individual client can send within a specified period. This dimension is not available for the shared tenant rate limiter.
+
 :::
 
 For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-limit/rate-limit.md).
@@ -96,6 +98,8 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
      - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
      - **Messages Publish Rate**: Limits the maximum number of messages a client can send per second.
      - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
+     - **Subscribe Rate**: Limits the maximum number of `SUBSCRIBE` packets a client can send within the configured period.
+     - **Subscribe Burst**: Allows additional `SUBSCRIBE` packets during bursts.
 
 2. After completing the configuration, click **Create**. The new namespace will appear in the list.
 
@@ -166,6 +170,10 @@ PUT /mt/ns/ns1/config
       "messages": {
         "rate": "3000/1s",
         "burst": "40/30s"
+      },
+      "subscribes": {
+        "rate": "120/1m",
+        "burst": "10/10s"
       }
     },
     "tenant": {
@@ -185,7 +193,7 @@ PUT /mt/ns/ns1/config
 }
 ```
 
-This configuration applies both client-specific and shared tenant-wide rate limits and sets a maximum of 100 sessions for the namespace.
+This configuration applies both client-specific and shared tenant-wide rate limits and sets a maximum of 100 sessions for the namespace. The `subscribes` setting limits each client to 120 `SUBSCRIBE` packets per minute, with up to 10 additional packets allowed in a burst every 10 seconds. The namespace-level `subscribes` setting overrides the listener-level subscribe packet rate limit for clients in this namespace.
 
 ##### Disable Namespace Rate Limiters
 
