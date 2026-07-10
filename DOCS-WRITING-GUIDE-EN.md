@@ -358,7 +358,7 @@ Use `click` for mouse actions and `press` for keyboard actions.
 
 Avoid keyboard shortcuts unless the shortcut is essential to the task.
 
-## EMQX Technical Writing Rules
+## EMQX Technical Content Writing Rules
 
 ### Configuration Files and HOCON
 
@@ -573,7 +573,7 @@ Rules:
 
 - Use semantic headings that describe the content, not generic headings such as `Overview` repeated across a page.
 - Keep each section focused on one topic or task.
-- Make examples self-contained.
+- Make examples self-contained by including the required context, inputs, key settings, and expected result.
 - Include required context before code blocks.
 - Do not hide important requirements only in screenshots.
 - Use stable terms for the same concept across pages.
