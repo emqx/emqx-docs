@@ -64,6 +64,7 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
   - `/api/v5/prometheus/stats`
   - `/api/v5/prometheus/auth`
   - `/api/v5/prometheus/data_integration`
+  - `/api/v5/prometheus/topic_metrics`
 - 您需要在 EMQX 中创建一个 [API 密钥](../admin/api.md#创建-api-密钥)。
 - 在 `prometheus.yaml` 的 `basic_auth` 部分进行配置。
 
@@ -129,6 +130,10 @@ Push 模式允许 EMQX 将指标推送到 Pushgateway 实例。默认情况下�
 
 ## 配置 Pull 模式集成
 
+在 Pull 模式下，Prometheus 通过 REST API 从 EMQX 抓取指标。
+
+### Prometheus 指标端点
+
 EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 
 - `/api/v5/prometheus/stats`：EMQX 的基础指标及计数器。
@@ -136,6 +141,12 @@ EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 - `/api/v5/prometheus/auth`：包含访问控制中认证和鉴权的关键指标及计数器。
 
 - `/api/v5/prometheus/data_integration`：包含规则引擎，连接器，动作，Sink/Source，编解码相关指标及计数器。
+
+- `/api/v5/prometheus/topic_metrics`：命名主题指标集合的计数器。此端点从 EMQX 6.3 开始提供。
+
+更多 Prometheus pull 端点相关信息，请参考 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
+
+### 指标采集模式
 
 在调用以上的 API 来获取指标时，我们可以使用 URL 查询参数 `mode` 来获取不同模式的指标数据。不同参数的含义如下：
 
@@ -198,7 +209,33 @@ EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 
 ::::
 
-更多 Prometheus pull 端点相关信息，请参考 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
+### 主题指标
+
+从 EMQX 6.3 开始，`GET /api/v5/prometheus/topic_metrics` 可以暴露通过主题监控 REST API 创建的命名指标集合计数器。抓取此端点前，请至少创建一个指标集合。操作步骤参见[通过 REST API 管理主题指标集合](./topic-metrics.md#通过-rest-api-管理主题指标集合)。
+
+此端点提供以下计数器：
+
+| 指标 | 说明 |
+| --- | --- |
+| `emqx_topic_metric_messages_in_count` | 发布到匹配集合过滤器主题的消息数量。 |
+| `emqx_topic_metric_messages_out_count` | 投递给订阅者的匹配消息数量。 |
+| `emqx_topic_metric_messages_dropped_count` | EMQX 丢弃的匹配消息数量。 |
+| `emqx_topic_metric_bytes_in` | 匹配发布消息的主题和 Payload 总大小。 |
+| `emqx_topic_metric_bytes_out` | 匹配投递消息的主题和 Payload 总大小。 |
+
+每个时间序列都包含 `name` 和 `topic_filter` 标签。归属于命名空间的集合还包含 `namespace` 标签。使用 `mode=all_nodes_unaggregated` 时，每个时间序列还包含 `node` 标签。
+
+所有主题指标值均为单调递增计数器。请使用 PromQL `rate()` 等函数计算每秒速率。例如：
+
+```text
+rate(emqx_topic_metric_messages_in_count[5m])
+```
+
+::: warning 重要提示
+
+每个指标集合会暴露 5 个计数器。在非聚合模式下，EMQX 会为每个节点生成独立的时间序列。请限制指标集合数量，避免产生过多 Prometheus 时间序列。
+
+:::
 
 ### 认证（可选）
 
@@ -263,6 +300,15 @@ scrape_configs:
     static_configs:
       - targets: ['127.0.0.1:18083']
     metrics_path: '/api/v5/prometheus/data_integration'
+    scheme: 'http'
+    basic_auth:
+      username: ''
+      password: ''
+
+  - job_name: 'emqx_topic_metrics'
+    static_configs:
+      - targets: ['127.0.0.1:18083']
+    metrics_path: '/api/v5/prometheus/topic_metrics'
     scheme: 'http'
     basic_auth:
       username: ''

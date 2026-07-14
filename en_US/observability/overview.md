@@ -30,7 +30,7 @@ EMQX provides a series of observability-related features to help with system mon
 
 - [Topic Metrics](./topic-metrics.md)
 
-  EMQX provides a topic monitoring feature(called Topic Metrics) that allows you to count the number of messages sent and received, the rate, and other metrics for a given topic. You can view and use this feature through the **Diagnose** -> **Topic Metrics** page on Dashboard, or you can configure it through the HTTP API.
+  Topic Metrics tracks incoming, outgoing, and dropped messages for selected MQTT topics. You can monitor a specific topic in the Dashboard. Starting from EMQX 6.3, you can also create named collections with wildcard topic filters through the REST API and export their counters to Prometheus.
 
 - [Slow Subscriptions](./slow-subscribers-statistics.md)
 
@@ -39,6 +39,5 @@ EMQX provides a series of observability-related features to help with system mon
 - [Log Trace](./tracer.md)
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
-
 
 

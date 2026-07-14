@@ -64,6 +64,7 @@ By default, Prometheus Pull mode APIs do not require authentication. When this o
   - `/api/v5/prometheus/stats`
   - `/api/v5/prometheus/auth`
   - `/api/v5/prometheus/data_integration`
+  - `/api/v5/prometheus/topic_metrics`
 - You must create an [API Key](../admin/api.md#authentication) in EMQX.
 - Configure the `basic_auth` section in your `prometheus.yaml`.
 
@@ -135,11 +136,16 @@ Click **Add** to insert additional headers.
 
 In Pull mode, Prometheus scrapes metrics from EMQX through REST APIs.
 
+### Prometheus Metrics Endpoints
+
 EMQX provides the following endpoints for metric collection:
 
 - `/api/v5/prometheus/stats`: Basic metrics and counters of EMQX.
 - `/api/v5/prometheus/auth`: Key metrics and counters in access control, including authentication and authorization.
 - `/api/v5/prometheus/data_integration`: Metrics and counters related to the rule engine, connectors, actions, Sink/Source, and encoding/decoding.
+- `/api/v5/prometheus/topic_metrics`: Counters for named topic metric collections. This endpoint is available starting from EMQX 6.3.
+
+For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
 ### Metric Collection Modes
 
@@ -213,7 +219,33 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 ::::
 
-For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+### Topic Metrics
+
+Starting from EMQX 6.3, `GET /api/v5/prometheus/topic_metrics` exposes counters for the named collections created through the Topic Metrics REST API. Create at least one collection before scraping this endpoint. For instructions, see [Manage Topic Metric Collections with the REST API](./topic-metrics.md#manage-topic-metric-collections-with-the-rest-api).
+
+The endpoint exposes the following counters:
+
+| Metric | Description |
+| --- | --- |
+| `emqx_topic_metric_messages_in_count` | Number of messages published to topics that match the collection filter. |
+| `emqx_topic_metric_messages_out_count` | Number of matching messages delivered to subscribers. |
+| `emqx_topic_metric_messages_dropped_count` | Number of matching messages dropped by EMQX. |
+| `emqx_topic_metric_bytes_in` | Combined size of the topic and payload for matching published messages. |
+| `emqx_topic_metric_bytes_out` | Combined size of the topic and payload for matching delivered messages. |
+
+Each time series includes the `name` and `topic_filter` labels. Collections owned by a namespace also include the `namespace` label. When `mode=all_nodes_unaggregated`, each series includes the `node` label.
+
+All Topic Metrics values are monotonic counters. Use a PromQL function such as `rate()` to calculate a per-second rate. For example:
+
+```text
+rate(emqx_topic_metric_messages_in_count[5m])
+```
+
+::: warning Important Notice
+
+Each collection exposes five counters. In unaggregated mode, EMQX creates a separate time series for each node. Limit the number of collections to avoid creating excessive Prometheus time series.
+
+:::
 
 ### Authentication (Optional)
 
@@ -278,6 +310,15 @@ scrape_configs:
     static_configs:
       - targets: ['127.0.0.1:18083']
     metrics_path: '/api/v5/prometheus/data_integration'
+    scheme: 'http'
+    basic_auth:
+      username: ''
+      password: ''
+
+  - job_name: 'emqx_topic_metrics'
+    static_configs:
+      - targets: ['127.0.0.1:18083']
+    metrics_path: '/api/v5/prometheus/topic_metrics'
     scheme: 'http'
     basic_auth:
       username: ''

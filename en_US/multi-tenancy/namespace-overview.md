@@ -120,11 +120,15 @@ However, isolation policies still need to be explicitly configured based on busi
 
 ## Multi-Tenancy Capability Support
 
-Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9 and enhanced in 6.1, namespaces now support tenant isolation across multiple subsystems. The current support status is as follows:
+Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9, namespace support has gradually expanded across multiple subsystems. EMQX supports the following multi-tenancy capabilities:
 
 - **Unified management and MQTT namespaces** (6.0)
 
   The management plane (Dashboard, CLI, APIs) and the MQTT data plane share the same namespace model.
+
+- **Rule and data integration isolation** (6.0)
+
+  Namespace isolation is available for rules, actions, sources, and connectors.
 
 - **Isolation for built-in database authentication** (6.1)
 
@@ -138,11 +142,13 @@ Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX
 
   Metrics can be exposed and aggregated by namespace, enabling better observability in multi-tenant environments.
 
+- **Topic Metrics collection isolation** (6.3)
+
+  A Topic Metrics collection created by a namespaced administrator counts only messages published by clients in the same namespace. Namespaced administrators can manage only collections owned by their namespace, while global administrators can list collections across all namespaces. For more information, see [Topic Metrics](../observability/topic-metrics.md#namespace-isolation).
+
 - **Retained message quota isolation**
 
   Resource usage related to retained messages can be limited per namespace.
-
-In addition, starting from EMQX 6.0, namespace isolation has been fully implemented for rules, actions, sources, and connectors, and is no longer part of the future roadmap.
 
 ## What's Next
 
@@ -152,4 +158,3 @@ Now that you understand what namespaces are and what they can achieve, here are 
 - **[Configure and Manage Namespaces](./configure-manage-namespace.md)**: Set rate limits and session quotas using either the Dashboard or REST API.
 - **[Namespace Global Settings](./namespace-global-settings.md)**: Configure cluster-wide namespace behaviors, including namespace resolution, isolation mechanisms, topic mount points, and authorization handling.
 - **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**: Follow a hands-on guide using MQTTX to try out namespace-based client and topic isolation quickly.
-
