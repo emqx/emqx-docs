@@ -222,7 +222,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17474](https://github.com/emqx/emqx/pull/17474) Reduced the overhead of IoTDB REST API connector health checks by using a bounded version query instead of listing all databases on each check.
 
-- [#17481](https://github.com/emqx/emqx/pull/17481) Added a `retain_as_published` option to MQTT bridge ingress (source) subscriptions. When the bridge connects to the remote broker using MQTT 5.0 and `retain_as_published = true`, the original `retain` flag on forwarded messages is preserved instead of being cleared, allowing the bridge to faithfully republish retained messages from upstream. The default is `false` to keep existing behavior. The option has no effect when `proto_ver` is `v3` or `v4`.
+- [#17481](https://github.com/emqx/emqx/pull/17481) Added a `retain_as_published` option to MQTT bridge ingress (source) subscriptions. When the bridge connects to the remote broker using MQTT 5.0 and `retain_as_published = true`, the original `retain` flag on forwarded messages is preserved instead of being cleared, allowing the bridge to faithfully republish retained messages from upstream. The option is enabled by default and has no effect when `proto_ver` is `v3` or `v4`.
 
   Also, the connector now emits a warning log when `bridge_mode = true` is configured together with `proto_ver = v5`, since the legacy bridge-mode flag has no effect under MQTT 5.0; set `retain_as_published` on individual subscriptions instead.
 
