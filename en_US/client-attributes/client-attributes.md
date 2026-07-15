@@ -72,11 +72,48 @@ The attribute expression supports the configuration of the following values:
 
 - `dn`: DN field of the TLS certificate
 
+- `cert_san.dns`: DNS names in the TLS client certificate
+
+- `cert_san.ip`: IPv4 and IPv6 addresses in the TLS client certificate
+
+- `cert_san.email`: Email addresses in the TLS client certificate
+
+- `cert_san.uri`: URIs in the TLS client certificate
+
 - `user_property.*`: Extracts attribute values from User-Property in the MQTT CONNECT packet, e.g., `user_property.foo`
 
 - `zone`: The zone name inherited from MQTT listener
 
 For detailed information about the client attributes configurations, see [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+#### Initialize Client Attributes from Certificate Subject Alternative Names
+
+Starting from EMQX Enterprise 6.3.0, `mqtt.client_attrs_init` expressions can extract subject alternative names (SANs) from a client certificate when the TLS connection terminates at EMQX. Each `cert_san.*` variable is an array. Use a Variform array function to select an entry, or join multiple entries into one client attribute.
+
+For example, the following configuration sets `client_attrs.san_dns` to the first DNS name and `client_attrs.san_dns_all` to all DNS names separated by commas:
+
+```hocon
+mqtt {
+    client_attrs_init = [
+        {
+            expression = "nth(1, cert_san.dns)"
+            set_as_attr = san_dns
+        },
+        {
+            expression = "join_to_string(',', cert_san.dns)"
+            set_as_attr = san_dns_all
+        }
+    ]
+}
+```
+
+The `cert_san.*` variables are available only when initializing client attributes. To use a SAN value in authentication, authorization, or another supported feature, first save it as a client attribute and then reference it through `${client_attrs.NAME}`.
+
+If the certificate does not contain the requested SAN type, the corresponding variable is an empty array. When `nth()` selects an entry that does not exist, EMQX does not set the target client attribute. EMQX rejects the connection if an extracted SAN value contains non-printable control characters, such as carriage returns (`\r`) or line feeds (`\n`).
+
+::: warning Important Notice
+EMQX can extract SANs only when the TLS connection terminates at EMQX and the client presents its certificate to an EMQX TLS listener. Proxy Protocol v2 does not carry SAN information. If a load balancer terminates TLS, `cert_san.*` values are unavailable to EMQX. If the load balancer forwards the TLS connection to EMQX without terminating it, EMQX can still extract SANs from the client certificate.
+:::
 
 ### Set During the Client Authentication Process
 
