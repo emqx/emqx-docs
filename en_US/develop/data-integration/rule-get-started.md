@@ -1,0 +1,273 @@
+# Create Rules
+
+This page provides guidance on how to create rules for data processing and attach an action to a rule using the EMQX Dashboard. It also introduces how to test rules and view rules after the rule creation.
+
+The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
+
+## Define Rule SQL
+Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. 
+
+Click the **Create** button on the **Rules** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages.
+
+Enter a name for your rule and add a note to facilitate future management. In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
+
+::: tip
+
+This tutorial assumes the message payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
+
+EMQX has embedded rich SQL statement samples to help you get started. You can click the **SQL Examples** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
+
+:::
+
+<img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:50%;" />
+
+### SQL Generator
+
+Starting from EMQX 5.10.0, the SQL Editor supports generating rule SQL using natural language through an AI-powered SQL Generator. This feature allows you to describe their intent in natural language, and the system will automatically generate the appropriate SQL statement for your rule.
+
+The SQL Generator is enabled by default. You can disable it using the toggle switch from the **Settings** menu in the upper right corner of the Dashboard.
+
+To use this feature:
+
+1. On the **Create Rule** page, navigate to the **SQL Editor** section.
+
+2. Click the **SQL Generator** button below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
+
+   - **Task Description** (required): Describe in natural language what you want the SQL to do.
+     
+      Example:
+       *"Extract `clientid` from the MQTT message metadata, and extract `device_id` and `temperature` from the payload. Only apply to messages from topic `sensors/temperature` where the temperature is greater than 30."*
+      
+   - **Related Topics** (optional): Specify topic filters such as `sensors/temperature`.
+
+   - **Input Example (JSON)** (optional but recommended): Provide a sample MQTT message payload to help the AI understand your data structure.
+     Example:
+
+     ```json
+     {
+       "device_id": "sensor001",
+       "temperature": 32.5,
+       "unit": "C"
+     }
+     ```
+
+   - **Output Example (JSON)** (optional): Specify the expected result format.
+     Example:
+
+     ```json
+     {
+       "clientid": "client_a1b2c3",
+       "device_id": "sensor001",
+       "temperature": 32.5
+     }
+     ```
+     
+     ::: tip 
+     
+     Including input/output examples improves the accuracy of the generated SQL.
+     
+     :::
+
+3. Click **Generate** to preview the generated SQL.
+
+4. In the preview dialog, you can:
+
+   - Review and manually edit the generated SQL.
+   - Click **Apply SQL** to insert it into the SQL Editor.
+   - Or click **Back to Form** to revise your input and regenerate the SQL.
+
+5. If you insert it into the SQL Editor, the SQL will automatically appear in the **SQL Editor**, where you can review and edit it.
+
+#### Example Output
+
+Using the sample task and input above, the generated SQL might be:
+
+```sql
+SELECT
+  clientid,
+  payload.device_id AS device_id,
+  payload.temperature AS temperature
+FROM
+  "sensors/temperature"
+WHERE
+  payload.temperature > 30
+```
+
+This rule extracts the `clientid`, `device_id`, and `temperature` fields from messages on the `sensors/temperature` topic where the temperature is greater than 30.
+
+#### When to Use the SQL Generator
+
+The SQL Generator is especially useful when:
+
+- You are unfamiliar with EMQX SQL syntax.
+- You want to quickly prototype a rule.
+- You're working with structured JSON payloads.
+
+For more customization and syntax options, see the [Rule SQL Syntax](./rule-sql-syntax.md) documentation.
+
+### Test SQL Statement
+
+You can use simulated data to execute SQL statements. Before adding actions and creating rules, you can verify whether the SQL execution results meet expectations. This is an optional step, but it is recommended if you are new to EMQX rules. If you want to test the execution of the entire rule, refer to [Test Rule](#test-rule).
+
+Follow the instructions below to test the SQL statement:
+
+1. Turn on the **Try It Out** toggle switch on the **Create Rule** page to enable the SQL statement testing.
+2. Select the **Data Source** that matches the SQL and ensure it is consistent with the specified source in the rule (FROM clause).
+3. Enter test data. Once you select the data source, EMQX provides default values for all simulated data fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them to appropriate values as needed.
+4. Click the **Run Test** button to submit the test. If everything is normal, a **Test Passed** prompt will be displayed.
+
+![test-sql](./assets/test-sql.png)
+
+The processing result of SQL will be presented in the **Output Result** section in JSON format. All the fields in SQL processing results can be referenced in the form of `${key}` by the subsequent actions (built-in actions or Sink). For a detailed explanation of the fields, see [SQL Data Sources and Fields](./rule-sql-events-and-fields.md).
+
+This demonstration assumes that the Payload is in JSON format. In actual use, you can also use [Schema Registry](./schema-registry.md) to handle messages in other formats.
+
+Next, you can click the **Add Action** button on the right side of the **Create Rule** page to add different types of actions to the rule.
+
+## Add Actions
+
+On the **Create Rule** page, click the **Add Action** button on the right side to bring up the **Add Action** page. You can select either of the three types of actions from the **Action** drop-down list: Republish, Console Output, and Forwarding with Data Bridge.
+
+<img src="./assets/add_action.png" alt="add_action" style="zoom:67%;" />
+
+### Add Republish Action
+
+This section demonstrates how to add an action to republish the original messages received from the topic `t/#` to another topic `a/1`.
+
+On the **Add Action** page, select **Republish** from the **Type of Action** drop-down menu, and configure the following settings before clicking the **Add** button to confirm:
+
+- **Topic**: Set the target topic, "a/1" in this example;
+
+- **QoS**: Set the QoS of the republished message, "0" in this example;
+
+- **Retain**: Set whether to forward this message as a retained message; for this tutorial, keep the default setting, **false**;
+
+- **Payload**: Enter "${payload}", indicating the republished message will have the same payload as the original message, without any modifications.
+
+- **MQTT 5.0 Message Properties**: Click the toggle switch to configure the user properties and MQTT properties as necessary. The properties options allow you to add rich message metadata descriptions for the republished message.
+
+  <!-- - **User Properties**: You can add custom key-value pairs to configure the [user properties](https://www.emqx.com/en/blog/mqtt5-user-properties) of the republished message, which represent custom message metadata. -->
+
+  - **Payload Format Indicator**: Enter a value to indicate whether the payload of the message is in a specific format. When the value is set to `false`, the message is considered as undetermined bytes. When set to `true`, it indicates that the payload within the message body is UTF-8 encoded character data. This will help MQTT clients or MQTT servers parse message content more efficiently without the need for explicit formatting or type identification for the message body.
+  - **Message Expiry Interval**: Enter a value (in seconds) to specify a time interval after which the message should expire and be considered invalid if it hasn't been delivered to the intended recipient.
+  - **Content Type**: Enter a value to specify the type or format of the payload content within the republished message (MIME type), for example, `text/plain` represents a text file, `audio/aac` represents an audio file, and `application/json` signifies an application message in JSON format.
+  - **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
+  - **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
+
+- **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule.
+
+On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page.
+
+::: tip
+The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".
+:::
+
+### Add Console Output Action
+
+::: tip
+The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
+:::
+
+The console output action is used to view the output results of the rule. The result messages will be printed to the console or log file.
+
+- When EMQX is launched in either `console` or `foreground` mode, with `foreground` being the default mode in Docker environments, its output is directed to the console.
+- If EMQX is started via systemd, the output is captured and stored by the journal system. This can be examined using the `journalctl` command.
+
+The output will be in the format below:
+
+```bash
+[rule action] rule_id1
+    Action Data: #{key1 => val1}
+    Envs: #{key1 => val1, key2 => val2}
+```
+
+Where
+
+-  `[rule action]` is the rule ID where the republish action is triggered.
+-  `Action Data` is the output result of the rule, indicating the data or parameter that should be passed to the action when it is executed, that is, the payload part when you set up the republish action.
+-  `Envs` is the environment variable that should be set when republishing, which could be the data source and other internal information related to the execution of this action.
+
+### Add Forwarding with Sinks Action
+
+You can also add actions to forward the processed results using sinks. All you need is to select the target Sink from the Type of Action drop-down list in the Dashboard. For details on each sink in EMQX, see [Data Integration](./data-bridges.md).
+
+## Test Rules
+
+The rule engine provides a rule testing feature, which allows you to trigger rules using simulated data or real client data, execute rule SQL, and perform all actions added to the rule, obtaining the execution results for each step.
+
+By testing rules, you can verify whether the rules work as expected, and quickly identify and solve any issues. This not only speeds up the development process but also ensures that the rules can run as expected in real environments, avoiding failures in production.
+
+### Testing Steps
+
+1. Toggle the **Try It Out** switch and select **Rule** as the test target. Note that before starting the test, you need to save the rule.
+2. Click the **Start Test** button to begin the test. The browser will wait for the current rule to be triggered to generate the test results.
+3. Trigger the rule for testing. The following 2 methods are supported:
+   - **Use simulated data**: Click the **Input Simulated Data** button, select the **Data Source** that matches the SQL in the pop-up window, and ensure it matches the specified source in the rule (FROM clause). EMQX provides default values for all fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them as needed, and click the **Submit Test** button to trigger the rule for testing once.
+   - **Use real device data**: Keep the current page open, connect to EMQX using a real client or MQTT client tool, trigger the corresponding events, and perform testing.
+4. View the test results: When the rule is triggered, the execution results will be output to the Dashboard, displaying detailed execution results for each step.
+
+### Testing Example
+
+You can use [MQTTX](https://mqttx.app/) to test the rule with the republish action. Create one client, and use this client to subscribe to the `a/1` topic and send a `t/1` message. You will see in the dialog box that this message is republished to the topic `a/1`.
+
+For details on how to build the connection between the MQTTX client tool and EMQX, see [MQTTX - Get Started](https://mqttx.app/docs/get-started).
+
+<img src="./assets/rules/en_rule_overview_mqttx.png" alt="image" style="zoom: 50%;" />
+
+Correspondingly, on the Dashboard test interface, the execution results of the entire rule will be displayed, with the following contents:
+
+- On the left are the rule execution records. Each time the rule is triggered, a record is generated. Clicking on it can switch to the corresponding message or event details.
+- On the right is the list of actions recorded by the selected rule. Clicking on it can expand to view the action execution results and logs.
+
+When the execution of the rule SQL or any action fails, the entire rule record will be marked as failed. You can select the record to view the corresponding action's error information for troubleshooting.
+
+<img src="./assets/rule-test-result.png" alt="test-rules" style="zoom:50%;" />
+
+From the above example, it can be seen that the rule was triggered 4 times, with 3 times the rule execution being completely successful. The 4th time failed due to the **HTTP Server** action execution failure, with the error reason being a response with a 302 status code.
+
+For more usage guides on testing rules, you can refer to the blog [Enhancing Data Integration Stability: A Guide on EMQX Platform E2E Rule Testing](https://www.emqx.com/en/blog/emqx-platform-e2e-rule-testing-guide).
+
+## View Rules
+
+The **Rules** page provides a comprehensive list of all the rules you have created.
+
+Each entry in the list displays basic information, including the rule ID, associated source, enable status, and the number of actions. Hovering over the source reveals the corresponding SQL statement details. To modify a rule's configuration, click **Settings** in the **Actions** column. You can also use the **More** button to duplicate or delete a rule.
+
+![view_rules](./assets/view_rules.png)
+
+You can also view rules in the [Flow Designer](../flow-designer/introduction.md) by navigating to **Integration** -> **Flow Designer**. Rules created on the **Rules** page and those created through the Flow Designer are fully interoperable.
+
+To view the rule statistics and action execution information for a rule, click the rule ID on **Rules** page or the rule name on the **Flows** page.
+
+![view_rules_flows](./assets/view_rules_flows.png)
+
+::: tip
+
+If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
+
+:::
+
+![Rule Statistics](./assets/rule_statistics.png)
+
+### Search Rules
+
+When there are many rules in the list, you can use the filter to narrow down your search and display the rules you want to view. You can filter rules by rule ID, incoming message topic or wildcard, enable status, rule notes, and the actions or sources associated with the rule.
+
+![search_rules](./assets/search_rules.png)
+
+### View Actions (Sink) and Sources
+
+The **Actions (Sink)** and **Sources** tabs on the **Rule** page display all created actions (sinks) and sources. These tabs provide essential details, such as names, connection statuses, associated rules, enable statuses, created time, and last modified time. You can sort the entries by clicking the arrows beside column names.
+
+Clicking the toggle switch in the **Enable** column allows you to enable or disable a sink or source. Clicking **View Rules** in the **Associated Rules** column opens a list of rules containing that specific sink or source, making it easier to manage your data integration settings.
+
+You can reconnect or modify the settings of a sink or source through the **Action** column. By clicking **More**, you can delete the sink or source or create a new rule using it.
+
+When there are many sink or source entries in the list, you can use the filter to narrow down your search and display the entries you want to view. You can filter sinks or sources by name, status, or enable status.
+
+![view_sink_source](./assets/view_sink_source.png)
+
+To view the statistics and rate indicators for a sink or source, click the name of the sink or source.
+
+![action_statistics](./assets/action_statistics.png)
+

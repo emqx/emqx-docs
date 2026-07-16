@@ -1,0 +1,112 @@
+# 使用 MySQL 进行密码认证
+
+作为密码认证方式的一种，EMQX 支持通过集成 MySQL 进行密码认证。
+
+::: tip 前置准备
+
+熟悉 [EMQX 认证基本概念](../authn/authn.md)
+:::
+
+## SQL 表结构与查询语句
+
+MySQL 认证器可以支持任何表结构，甚至是多个表联合查询、或从视图中查询。用户需要提供一个查询 SQL 模板，且确保查询结果包含以下字段：
+
+- `password_hash`: 必需，数据库中的明文或散列密码字段
+- `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
+- `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
+
+示例表结构：
+
+```sql
+CREATE TABLE `mqtt_user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `password_hash` varchar(100) DEFAULT NULL,
+  `salt` varchar(35) DEFAULT NULL,
+  `is_superuser` tinyint(1) DEFAULT 0,
+  `created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mqtt_username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+::: tip
+上面的示例创建了一个有助于查询的隐式 `UNIQUE` 索引字段（ `username` ）。当系统中有大量用户时，请确保查询使用的表已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。
+:::
+
+在此表中使用 `username` 作为查找条件。
+
+例如，我们希望添加一名用户名为 `emqx_u`、密码为 `public`、盐值为 `slat_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
+
+```bash
+mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'slat_foo123'), 256), 'slat_foo123', 1);
+Query OK, 1 row affected (0,01 sec)
+```
+
+对应的查询语句和密码散列方法配置参数为：
+
+- 密码加密方式：`sha256`
+- 加盐方式：`suffix`
+- SQL：
+
+```sql
+SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1
+```
+
+## 通过 Dashboard 配置
+
+1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**.
+2. 在**客户端认证**页面，点击**+ 创建**。
+3. 依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，点击**下一步**进入**配置参数**页签：
+
+<img src="./assets/authn-mysql.png" alt="Authentication with mysql" style="zoom:67%;" />
+
+4. 按照以下说明配置数据源：
+   - MySQL 数据库的连接设置：
+     - **服务**：填入 MySQL 服务器地址 (`host:port`) 。
+     - **数据库**：填入 MySQL 的数据库名称。
+     - **用户名**：填入用户名称。
+     - **密码**：填入用户密码。
+   - 认证加密算法相关的配置：
+     - **密码加密方式**：选择应用于明文密码的哈希算法，用于在将结果存储到数据库之前对密码进行加密。可用选项包括 `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt` 和 `pbkdf2`。具体配置取决于所选择的算法：
+       - 选择  `md5`、`sha`、`sha256` 或 `sha512`算法，需配置：
+
+         - **加盐方式**：用于指定盐和密码的组合方式，可选值：`suffix`（在密码尾部加盐）、`prefix`（在密码头部加盐）、`disable`（不启用）。如果无需从外部存储迁移用户凭据到 EMQX 内置数据库，可以保持默认值。
+         - 生成的哈希以十六进制字符串形式表示，并与存储的凭据进行不区分大小写的比对。
+       - 选择 `plain`：
+         - **加盐方式**：应设置为 `disable`。
+       - 选择 `bcrypt` 算法，需配置:
+         - **Salt Rounds**：指定散列需要的计算次数（2^Salt Rounds），也称成本因子。默认值：`10`，可选值：`5` 到 `10`；数值越高，加密的安全性越高，因此建议采用较大的值，但相应的用户验证的耗时也会增加，您可根据业务需求进行配置。
+       - 选择 `pbkdf2` 算法，需配置：
+         - **伪随机函数**：指定生成密钥使用的散列函数，如 `sha256` 等。
+         - **迭代次数**：指定散列次数，默认值：`4096`。<!--后续补充取值范围-->
+         - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
+         - 生成的哈希以十六进制字符串形式表示，并与存储的凭据进行不区分大小写的比对。
+   - **调用条件**：一个 Variform 表达式，用于控制是否将此 MySQL 认证器应用于客户端连接。该表达式会根据客户端的属性（例如 `username`、`clientid`、`listener` 等）进行评估。如果表达式的结果为字符串 `"true"`，则会触发认证器。否则，认证器将被跳过。有关调用条件的更多信息，请参见[认证器调用条件](./authn.md#认证器调用条件)。
+   - **启用 TLS**：如果要启用TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和 TLS](../../network/overview.md)。
+   - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
+   - **高级设置**：在此部分设置并发连接以及连接超时等待时间。
+     - **连接池大小**（可选）：填入一个整数用于指定从 EMQX 节点到 MySQL 数据库的并发连接数；默认值：`8`。
+     - **查询超时**：填入连接超时等待时长。默认值：`5` 秒。
+5. 点击**创建**完成相关配置。
+
+## 通过配置文件配置
+
+您也可以通过配置文件完成以上配置。<!--具体操作，请参考[配置手册](../../configuration/configuration-manual.html)。-->
+
+```bash
+{
+  backend = "mysql"
+  mechanism = "password_based"
+
+  server = "127.0.0.1:3306"
+  username = "root"
+  database = "mqtt_user"
+  password = ""
+  pool_size = 8
+
+  password_hash_algorithm {name = "sha256", salt_position = "suffix"}
+  query = "SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1"
+  query_timeout = "5s"
+}
+```
