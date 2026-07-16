@@ -14,7 +14,7 @@ Follow these principles for all EMQX documentation:
 - **Be complete**: Include the prerequisites, steps, examples, expected results, and limitations that readers need to complete the task.
 - **Be consistent**: Use consistent terminology, formatting, capitalization, and UI wording across the page and related pages.
 - **Be user-focused**: Explain what users can do with EMQX, not only how EMQX is implemented.
-- **Be AI-friendly**: Use semantic headings, self-contained examples, and structured content that can be consumed by search, retrieval, and AI tools.
+- **Be structured and discoverable**: Use semantic headings, self-contained examples, and structured content that users can understand and search engines, retrieval systems, and AI tools can process accurately.
 
 Unless a page is explicitly written for beginners, assume that the reader is a technical user.
 
@@ -565,9 +565,9 @@ Content for EMQX Enterprise.
 
 Keep opening and closing tags on separate lines when the content is more than one short phrase.
 
-## AI-Friendly Writing
+## Structured and Discoverable Writing
 
-Write content that is easy for users, search engines, and AI tools to parse.
+Write clear, well-structured content that is easy for users to understand and for search engines, retrieval systems, and AI tools to process accurately. Write for users first. Do not sacrifice technical accuracy, completeness, or natural language for discoverability.
 
 Rules:
 
