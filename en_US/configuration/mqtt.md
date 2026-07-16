@@ -1,8 +1,8 @@
 # MQTT Configuration
 
-[MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
+[MQTT](https://mqtt.org/) is a lightweight publish/subscribe messaging protocol for connecting Internet of Things (IoT) devices. EMQX supports MQTT 3.1, 3.1.1, and 5.0.
 
-EMQX is 100% MQTT 5.0 and 3.x compliant. This section introduces the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+This page describes how to configure MQTT protocol behavior in EMQX, including packet validation and limits, subscriptions, delayed publishing, Keep Alive handling, and sessions.
 
 ## Basic MQTT Configurations
 
