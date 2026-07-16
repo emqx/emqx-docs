@@ -291,7 +291,7 @@
   path: guides/telemetry/telemetry
 
 /develop/:
-- title_en: Developer Guide
+- title_en: Developer Guides
   title_cn: 开发者指南
   path: develop/developer-guide
 - title_en: Client SDK
