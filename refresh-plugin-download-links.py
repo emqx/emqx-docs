@@ -13,10 +13,20 @@ and `e`-prefixed for 5.x enterprise (e.g. `e5.10.4`).
 
 This script walks the stable tags of one series (e.g. 5.10 or 6.2),
 reads each plugin's VERSION file, and regenerates a "Download" table
-inside every matching markdown file under
-`en_US|zh_CN|ja_JP/extensions/plugin-catalog/`. The series defaults
-to the current docs-root branch (`release-N.M`); override with
-`--series N.M`.
+inside every matching markdown file under the version-scoped catalog dir
+`en_US|zh_CN|ja_JP/extensions/plugin-catalog/<major>.<minor>/` (e.g.
+`.../plugin-catalog/6.0/`). Pages are namespaced by series so that
+release branches never edit the same page files, keeping
+release-6.N -> release-6.(N+1) sync merges free of content conflicts on
+the plugin pages. The series defaults to the current docs-root branch
+(`release-N.M`); override with `--series N.M`.
+
+If an `en_US` catalog page does not yet exist for a discovered plugin,
+the script bootstraps it by copying the plugin's `README.md` from the
+latest stable tag of the series, then splices the Download table onto
+the end. Missing `zh_CN`/`ja_JP` pages are left alone (the established
+workflow hand-translates them from the seeded `en_US` page); pass
+`--bootstrap-locales en_US,zh_CN` to opt zh_CN in as well.
 
 Markdown filenames use dashes (e.g. `emqx-bridge-mqtt-dq.md`) whereas
 plugin directory names use underscores (e.g. `emqx_bridge_mqtt_dq`);
@@ -80,7 +90,18 @@ LOCALES: dict[str, dict[str, str]] = {
     },
 }
 
-CATALOG_SUBPATH = Path("extensions/plugin-catalog")
+CATALOG_BASE = Path("extensions/plugin-catalog")
+
+
+def catalog_subpath(series: tuple[int, int]) -> Path:
+    """Version-scoped catalog dir, e.g. extensions/plugin-catalog/6.0.
+
+    Pages live under a `<major>.<minor>` subdir so that release branches
+    (release-6.0, release-6.1, ...) never edit the same page files; this
+    keeps release-6.N -> release-6.(N+1) sync merges free of content
+    conflicts on the plugin pages.
+    """
+    return CATALOG_BASE / f"{series[0]}.{series[1]}"
 
 
 @dataclass(frozen=True)
@@ -186,6 +207,13 @@ def read_plugin_version(repo: Path, tag: str, plugin: str) -> str | None:
     return version or None
 
 
+def read_plugin_readme(repo: Path, tag: str, plugin: str) -> str | None:
+    out = try_git(repo, "show", f"{tag}:plugins/{plugin}/README.md")
+    if out is None:
+        return None
+    return out
+
+
 def build_rows(
     repo: Path, tags: Iterable[ReleaseTag]
 ) -> dict[str, list[tuple[ReleaseTag, str]]]:
@@ -199,6 +227,19 @@ def build_rows(
                 continue
             rows.setdefault(plugin, []).append((tag, pver))
     return rows
+
+
+def collect_readmes(
+    repo: Path, rows: dict[str, list[tuple[ReleaseTag, str]]]
+) -> dict[str, str]:
+    """Return plugin -> README.md content from the latest tag where it appears."""
+    readmes: dict[str, str] = {}
+    for plugin, entries in rows.items():
+        latest_tag = entries[-1][0].raw
+        readme = read_plugin_readme(repo, latest_tag, plugin)
+        if readme:
+            readmes[plugin] = readme
+    return readmes
 
 
 def render_section(
@@ -249,32 +290,37 @@ def md_filename_for(plugin: str) -> str:
 def update_catalog_files(
     docs_root: Path,
     rows: dict[str, list[tuple[ReleaseTag, str]]],
+    readmes: dict[str, str],
     locales: list[str],
+    subpath: Path,
+    bootstrap_locales: set[str],
     dry_run: bool,
 ) -> int:
     changed = 0
     for plugin, entries in sorted(rows.items()):
         fname = md_filename_for(plugin)
         for locale in locales:
-            path = docs_root / locale / CATALOG_SUBPATH / fname
-            if not path.exists():
-                print(
-                    f"skip: {path.relative_to(docs_root)} (no such doc for plugin {plugin})",
-                    file=sys.stderr,
-                )
-                continue
+            path = docs_root / locale / subpath / fname
+            existed = path.exists()
             new_section = render_section(locale, plugin, entries)
-            original = path.read_text(encoding="utf-8")
+            if existed:
+                original = path.read_text(encoding="utf-8")
+            elif locale in bootstrap_locales and plugin in readmes:
+                original = readmes[plugin].rstrip() + "\n"
+            else:
+                continue
             updated = splice_section(original, new_section)
-            if updated == original:
+            if existed and updated == original:
                 print(f"unchanged: {path.relative_to(docs_root)}", file=sys.stderr)
                 continue
             changed += 1
+            verb = "create" if not existed else "update"
             if dry_run:
-                print(f"would update: {path.relative_to(docs_root)}", file=sys.stderr)
+                print(f"would {verb}: {path.relative_to(docs_root)}", file=sys.stderr)
             else:
+                path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(updated, encoding="utf-8")
-                print(f"updated: {path.relative_to(docs_root)}", file=sys.stderr)
+                print(f"{verb}d: {path.relative_to(docs_root)}", file=sys.stderr)
     return changed
 
 
@@ -334,20 +380,34 @@ def main() -> int:
         help="Release series to scan, e.g. '5.10' or '6.2'. "
              "Default: auto-detect from the docs-root branch name (release-N.M).",
     )
+    parser.add_argument(
+        "--bootstrap-locales",
+        default="en_US",
+        help="Comma-separated list of locales whose missing catalog pages "
+             "should be seeded from the plugin README (latest stable tag). "
+             "Locales not in this list silently skip missing files. "
+             "Only locales whose plugin-catalog dir already exists are "
+             "considered. Default: en_US.",
+    )
     args = parser.parse_args()
 
     docs_root: Path = args.docs_root.resolve()
     present_locales = [
-        loc for loc in LOCALES if (docs_root / loc / CATALOG_SUBPATH).is_dir()
+        loc for loc in LOCALES if (docs_root / loc / CATALOG_BASE).is_dir()
     ]
     if not present_locales:
         sys.exit(
             f"error: no plugin-catalog dirs found under {docs_root} "
-            f"(looked for {'/'.join(LOCALES)}/{CATALOG_SUBPATH})"
+            f"(looked for {'/'.join(LOCALES)}/{CATALOG_BASE})"
         )
 
     series = resolve_series(args.series, docs_root)
-    print(f"Targeting release series {series[0]}.{series[1]}", file=sys.stderr)
+    subpath = catalog_subpath(series)
+    print(
+        f"Targeting release series {series[0]}.{series[1]} "
+        f"(catalog dir: {subpath})",
+        file=sys.stderr,
+    )
 
     tmp_ctx: tempfile.TemporaryDirectory | None = None
     try:
@@ -377,8 +437,30 @@ def main() -> int:
             return 0
         print(f"Discovered {len(rows)} plugin(s): {', '.join(sorted(rows))}", file=sys.stderr)
 
-        changed = update_catalog_files(docs_root, rows, present_locales, args.dry_run)
-        print(f"Done. {changed} file(s) {'to update' if args.dry_run else 'updated'}.", file=sys.stderr)
+        bootstrap_locales = {
+            loc.strip() for loc in args.bootstrap_locales.split(",") if loc.strip()
+        }
+        unknown = bootstrap_locales - set(LOCALES)
+        if unknown:
+            sys.exit(
+                f"error: --bootstrap-locales contains unknown locale(s): "
+                f"{', '.join(sorted(unknown))}; valid: {', '.join(LOCALES)}"
+            )
+
+        readmes = collect_readmes(repo, rows) if bootstrap_locales else {}
+        missing_readmes = sorted(set(rows) - set(readmes))
+        if bootstrap_locales and missing_readmes:
+            print(
+                f"warning: no README.md found for: {', '.join(missing_readmes)} "
+                f"(missing pages in {sorted(bootstrap_locales)} will be skipped)",
+                file=sys.stderr,
+            )
+
+        changed = update_catalog_files(
+            docs_root, rows, readmes, present_locales, subpath,
+            bootstrap_locales, args.dry_run
+        )
+        print(f"Done. {changed} file(s) {'to change' if args.dry_run else 'changed'}.", file=sys.stderr)
         return 0
     finally:
         if tmp_ctx is not None:
