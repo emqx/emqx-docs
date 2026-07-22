@@ -6,7 +6,7 @@
 
 ## 設定
 
-各セカンダリクラスターにプラグインをインストールして起動してください。プライマリクラスターにはこのプラグインのインストールは不要で、セカンダリクラスターからアクセス可能なDashboardのデータバックアップAPIがあれば十分です。
+各セカンダリクラスターにプラグインをインストールして起動してください。プライマリクラスターにはこのプラグインのインストールは不要で、セカンダリクラスターからアクセス可能なDashboardのデータバックアップAPIが必要です。
 
 ```hocon
 primary {
@@ -44,23 +44,23 @@ sync {
 }
 ```
 
-設定されたAPIキーはプライマリクラスターのデータバックアップエンドポイントへのアクセスが許可されている必要があります。`primary.api_key`および`primary.api_secret`は直接設定するか、`file://`パス（例: `file:///etc/emqx/backup-sync-api-key`）として指定できます。
+設定されたAPIキーはプライマリクラスターのデータバックアップエンドポイントへのアクセスが許可されている必要があります。`primary.api_key`および`primary.api_secret`は直接設定するか、`file://`パス（例：`file:///etc/emqx/backup-sync-api-key`）として設定可能です。
 
-サポートされている`sync.root_keys`の値は`connectors`、`actions`、`sources`、`rule_engine`、`listeners`、`schema_registry`、`authentication`、および`authorization`です。
+サポートされる`sync.root_keys`の値は`connectors`、`actions`、`sources`、`rule_engine`、`listeners`、`schema_registry`、`authentication`、および`authorization`です。
 
-ルールは通常、コネクター、アクション、ソース、およびスキーマレジストリのオブジェクトに依存します。`rule_engine`を依存関係なしに同期すると、インポートが失敗したり不完全なランタイム動作を引き起こす可能性があります。これらの依存ルートがセカンダリクラスターに存在しない場合は、`sync.root_keys`に含めてください。
+ルールは一般的にコネクター、アクション、ソース、およびスキーマレジストリのオブジェクトに依存します。`rule_engine`のみを同期し、依存関係を含めない場合、インポートに失敗するか不完全なランタイム動作を引き起こす可能性があります。セカンダリクラスターに既に存在しない限り、依存するルートを`sync.root_keys`に含めてください。
 
-デフォルトでは、同期には`banned`、`builtin_authn`、`builtin_authz`のテーブルセットも含まれます。これらの選択されたテーブルセットはセカンダリクラスター上で置き換えられます。設定のみの同期が必要な場合は`sync.table_sets = []`に設定してください。サポートされている`sync.table_sets`の値は`banned`、`builtin_authn`、`builtin_authz`、`builtin_retainer`、`psk`、および`mt`です。プライマリのデータバックアップAPIはAPIキーで呼び出した場合、`dashboard_users`や`api_keys`は含みません。
+デフォルトでは、同期は`banned`、`builtin_authn`、`builtin_authz`のテーブルセットも含みます。これらの選択されたテーブルセットはセカンダリクラスター上で置き換えられます。設定のみの同期が必要な場合は、`sync.table_sets = []`に設定してください。サポートされる`sync.table_sets`の値は`banned`、`builtin_authn`、`builtin_authz`、`builtin_retainer`、`psk`、および`mt`です。プライマリのデータバックアップAPIはAPIキーで呼び出された場合、`dashboard_users`や`api_keys`は含みません。
 
 ## CLI
 
-セカンダリノード上で以下のコマンドを使用してローカルの同期ワーカーを確認できます。
+セカンダリノードで以下のコマンドを使用してローカルの同期ワーカーを確認できます。
 
 ```bash
 emqx ctl backup_sync status
 ```
 
-このコマンドはローカルノード、ヘルス状態、ワーカー状態、選択されたコアノード、次回の同期予定、および非機密の同期設定を表示します。
+このコマンドはローカルノード、ヘルス状態、ワーカーの状態、選択されたコアノード、次回の同期予定、そして機密情報を含まない同期設定を表示します。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
