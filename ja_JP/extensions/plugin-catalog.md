@@ -10,16 +10,16 @@ EMQXプラグインは、標準製品機能が要件を完全に満たさない�
 
 ## オペレーション
 
-[ホットアップグレード（Relup）](./plugin-catalog/emqx-relup.md)
+[ホットアップグレード（Relup）](./plugin-catalog/6.0/emqx-relup.md)
 
 このプラグインは、実行中のEMQXノードに対して`.relup`コード変更指示を適用し、オペレーターがVMを再起動せずにパッチリリースを展開できるようにします。
 
-[バックアップ同期](./plugin-catalog/emqx-backup-sync.md)
+[バックアップ同期](./plugin-catalog/6.0/emqx-backup-sync.md)
 
 このプラグインは、Data Backup APIを使用してプライマリEMQXクラスターからセカンダリクラスターへ選択されたバックアップデータを定期的に同期し、災害復旧のためにセカンダリを最新状態に保ちます。
 
 ## 接続管理
 
-[ユーザー名ごとのセッションクォータ](./plugin-catalog/emqx-username-quota.md)
+[ユーザー名ごとのセッションクォータ](./plugin-catalog/6.0/emqx-username-quota.md)
 
 このプラグインは、クラスター全体でユーザー名ごとのセッションクォータを強制し、ユーザー名が設定された上限に達した場合に`quota_exceeded`で認証を拒否します。
