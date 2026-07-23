@@ -120,12 +120,12 @@ sysctl -w net.ipv4.tcp_rmem='1024 4096 16777216'
 sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 ```
 
-TCP connection tracking:
+Unless necessary, please DO NOT enable the `nf_conntrack` feature.
+If it is already enabled, please set the maximum allowed number of connections based on the estimated number of connections.
 
 ```bash
 sysctl -w net.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_max=1000000
-sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
 
 TIME-WAIT Bucket Pool, Recycling, and Reuse:
