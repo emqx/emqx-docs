@@ -4,20 +4,15 @@ EMQX 集群是指多个 EMQX 节点协同工作，组成一个统一系统。各
 
 相比单节点模式需要独立处理所有连接与数据，集群架构可在节点间分担负载，在节点故障时自动重路由流量，确保服务持续可用。该架构非常适合构建大规模、关键业务的 MQTT 消息平台与物联网系统。
 
-## 本章导读
+## 本节内容
 
-本章节将全面介绍 EMQX 集群的核心概念与实践应用，包括：
+本节介绍 EMQX 集群的架构与运行原理，包括：
 
 - [集群部署的优势](#为什么使用-emqx-集群)
 - [EMQX 集群工作原理](#emqx-集群工作原理)
 - [Mria 与 RLOG 架构](./mria-introduction.md)
-- [如何通过手动或自动方式创建集群](../../guides/cluster/create-cluster.md)
-- [如何保障节点通信安全](../../guides/cluster/security.md)
-- [如何配置负载均衡](../../guides/cluster/lb.md)
-- [如何进行集群负载重平衡与节点疏散](../../guides/cluster/rebalancing.md)
-- [如何进行系统调优和性能测试](../../guides/performance/overview.md)
-
-无论您是构建高可用 MQTT 平台，还是准备部署生产级集群，本章节都将为您提供清晰的指导。
+- [集群的主要特性](#集群特性概览)
+- [EMQX 集群设计原理](../design/clustering.md)
 
 ## 为什么使用 EMQX 集群
 
@@ -210,10 +205,10 @@ cluster.autoclean = 24h
 
 建议将核心节点部署在同一私有网络中。在 Mria+RLOG 架构下，也推荐将副本节点部署在同一私有网络内。
 
-## 下一步：创建 EMQX 集群
+## 后续步骤
 
-您可继续阅读以下章节了解如何创建 EMQX 集群。
+继续阅读以下架构和集群管理文档：
 
-- [部署架构与集群要求](./mria-introduction.md)
-- [创建集群](../../guides/cluster/create-cluster.md)
-- [集群安全](../../guides/cluster/security.md)
+- [Mria 与 RLOG 架构](./mria-introduction.md)
+- [EMQX 集群设计](../design/clustering.md)
+- [创建和管理 EMQX 集群](../../guides/cluster/create-cluster.md)
