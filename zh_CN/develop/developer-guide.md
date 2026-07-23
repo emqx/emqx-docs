@@ -16,6 +16,8 @@ prev:
 
 - [规则引擎](./data-integration/rules.md) 介绍了 EMQX 内置的数据处理引擎，可实时对物联网数据进行提取、过滤、丰富和转换，并与数据集成功能配合使用。
 
+- [数据智能中心](./data-integration/smart-data-hub.md) 提供一站式 MQTT 数据处理能力，用于管理 Schema、验证数据并实时转换消息。
+
 - [数据集成](./data-integration/data-bridges.md) 介绍了如何通过 Sink 和 Source 组件将 EMQX 与数据库、消息队列、云服务等外部数据系统进行连接。
 
 - [Flow 设计器](./flow-designer/introduction.md)（企业版功能）是一款可视化无代码工具，通过图形化界面将规则、动作和集成连接起来，快速构建数据处理流水线。
