@@ -12,6 +12,7 @@ These guides help administrators and operators manage, configure, secure, monito
 
 - [Cluster Management](./cluster/create-cluster.md) covers how to create and manage an EMQX cluster, including cluster security, load balancer configuration, node evacuation, cluster load rebalancing, and performance tuning.
 - [Configure EMQX](./configuration/configuration.md) provides basic information about the configuration file, configuration options, and references for detailed configurations.
+- [Namespace](./multi-tenancy/namespace-overview.md) explains how to logically group MQTT clients and manage tenant-level isolation, quotas, and rate limits within a shared EMQX cluster.
 - [REST API](./api.md) guides you on getting started with the HTTP management API exposed by EMQX for managing clients, topics, subscriptions, and more.
 - [Command Line Interface](./cli.md) introduces various startup and management commands supported by EMQX.
 - [Security Guide](./security-guide.md) covers network and TLS configuration, authentication, authorization, banned clients, flapping detection, identity governance, API keys, and audit logs.
