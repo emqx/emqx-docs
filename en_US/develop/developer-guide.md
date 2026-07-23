@@ -16,6 +16,8 @@ The Developer Guides are designed to help developers get started with EMQX and b
 
 - [Rule Engine](./data-integration/rules.md) introduces the built-in data processing engine that lets you extract, filter, enrich, and transform IoT data in real time, working in conjunction with Data Integration.
 
+- [Smart Data Hub](./data-integration/smart-data-hub.md) provides an all-in-one solution for managing schemas, validating data, and transforming MQTT messages in real time.
+
 - [Data Integration](./data-integration/data-bridges.md) explains how to connect EMQX with external data systems, including databases, message queues, and cloud services, using Sink and Source components.
 
 - [Flow Designer](./flow-designer/introduction.md) (EMQX Enterprise feature) is a visual, no-code tool for building data processing pipelines by connecting rules, actions, and integrations in a graphical interface.
