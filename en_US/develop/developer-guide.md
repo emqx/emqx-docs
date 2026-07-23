@@ -6,9 +6,11 @@ prev:
 
 # Developer Guides
 
-The Developer Guides are designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, API usage, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
+The Developer Guides are designed to help developers get started with EMQX and build IoT applications on top of it. This chapter covers client connectivity, command-line MQTT testing, data processing, integration with external systems, and advanced protocol features. The main contents in this chapter include:
 
 - [Client SDK](./connect-emqx/introduction.md) provides step-by-step instructions and code samples for connecting to EMQX using popular MQTT client libraries in C, Java, Go, Python, and JavaScript.
+
+- [Use curl with EMQX](./connect-emqx/curl.md) explains how to connect to EMQX, publish messages to MQTT topics, and subscribe to topics from the command line using MQTT or MQTTS.
 
 - [Tutorials](./tutorial/tutorial.md) offers practical guides on a wide range of topics including client connection, data collection, MQTT communication optimization, integrations, security, and deployment.
 

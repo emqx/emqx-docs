@@ -6,9 +6,11 @@ prev:
 
 # 开发者指南
 
-开发者指南旨在帮助开发者快速入门 EMQX，并构建物联网应用程序。本章节涵盖客户端连接、API 使用、数据处理、外部系统集成以及高级协议特性等内容，主要包括以下主题：
+开发者指南旨在帮助开发者快速入门 EMQX，并构建物联网应用程序。本章节涵盖客户端连接、MQTT 命令行测试、数据处理、外部系统集成以及高级协议特性等内容，主要包括以下主题：
 
 - [客户端 SDK](./connect-emqx/introduction.md) 提供了使用 C、Java、Go、Python 和 JavaScript 等主流 MQTT 客户端库连接 EMQX 的分步说明和代码示例。
+
+- [使用 curl 连接 EMQX](./connect-emqx/curl.md) 介绍如何通过命令行使用 MQTT 或 MQTTS 连接 EMQX，并发布消息和订阅主题。
 
 - [实用教程](./tutorial/tutorial.md) 提供了涵盖客户端连接、数据采集、MQTT 通信优化、系统集成、安全以及部署等多个主题的实践指南。
 
