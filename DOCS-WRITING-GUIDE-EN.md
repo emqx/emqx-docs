@@ -268,7 +268,7 @@ Do not create acronyms from product names or feature names.
 
 Use full product names when the distinction matters. For example, use `EMQX Enterprise` when a feature is Enterprise-only.
 
-Use `Dashboard` when referring to the EMQX Dashboard after the first mention on a page.
+On the first mention in a page, use `EMQX Dashboard`. Use `Dashboard` for subsequent mentions.
 
 ## Acronyms
 
