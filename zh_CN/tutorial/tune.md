@@ -47,6 +47,27 @@ DefaultLimitNOFILE=1048576
 *      soft   nofile      1048576
 *      hard   nofile      1048576
 ```
+
+### 禁用透明大页（THP）
+
+EMQX 包含内置数据库工作负载。与其他数据库系统一样，强烈建议在启动 EMQX 前禁用透明大页（Transparent HugePages，THP）。
+
+```bash
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+```
+
+如果 EMQX 在高内存机器（>16 GB）上长时间运行后出现以下现象，请禁用 THP，以排除 THP 相关问题：
+
+- 消息延迟不稳定。
+- 内存使用量异常突增。
+- EMQX `long_schedule` 警告日志。
+- EMQX `runq_overload` 告警。
+
+如果运行的是集群，建议先在部分节点上禁用 THP，以便对比效果。请注意，某些工作负载可能会从启用 THP 中受益。
+
+如需使这些更改在重启后仍然生效，请参考操作系统文档选择合适的方法。
+
 ## TCP 协议栈网络参数
 
 并发连接 backlog 设置:
