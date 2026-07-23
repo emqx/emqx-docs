@@ -73,11 +73,15 @@ FROM
 }
 ```
 
+从 EMQX 6.0.3 开始，启用命名空间且 `rule_engine.limit_selects_in_namespace` 设置为 `true` 时，属于某个命名空间的规则只会被同一命名空间内客户端发布的消息触发。该配置默认启用。
+
 ## 客户端事件
 
 规则的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
 
 事件主题以 `$events/` 开头，比如 `$events/client/connected`，`$events/session/subscribed`。
+
+从 EMQX 6.0.3 开始，启用命名空间且 `rule_engine.limit_selects_in_namespace` 设置为 `true` 时，属于某个命名空间的规则只会被同一命名空间内客户端相关事件触发。系统告警事件不关联任何客户端命名空间；该配置启用时，`$events/sys/alarm_activated` 和 `$events/sys/alarm_deactivated` 不会触发规则。
 
 ::: tip
 
