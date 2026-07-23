@@ -22,7 +22,8 @@ Thank you for your contributions to EMQX open-source project.
 
 To ensure consistency throughout all EMQX documentation,
 we kindly request all contributors reference our [Documentation Writing Guide](./DOCS-WRITING-GUIDE-EN.md).
-This guideline provides detailed instructions on document **directory configuration** and **Markdown writing specifications**.
+This guideline provides detailed instructions on document structure, technical writing style,
+EMQX terminology, Markdown and VitePress usage, and review standards.
 
 
 ## How to contribute
