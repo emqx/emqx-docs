@@ -109,12 +109,11 @@ sysctl -w net.ipv4.tcp_rmem='1024 4096 16777216'
 sysctl -w net.ipv4.tcp_wmem='1024 4096 16777216'
 ```
 
-TCP 连接追踪设置:
+除非必要，请不要打开`nf_conntrack`功能。如已打开,请根据预估连接数设置允许的最大连接数:
 
 ```bash
 sysctl -w net.nf_conntrack_max=1000000
 sysctl -w net.netfilter.nf_conntrack_max=1000000
-sysctl -w net.netfilter.nf_conntrack_tcp_timeout_time_wait=30
 ```
 
 TIME-WAIT Socket 最大数量、回收与重用设置:
