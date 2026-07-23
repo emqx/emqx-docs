@@ -8,24 +8,19 @@ Clustering is available during the trial period, but once the trial period ends,
 
 :::
 
-This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](../../guides/cluster/create-cluster.md), how to [implement load balancing](../../guides/cluster/lb.md), and how to ensure [communication security](../../guides/cluster/security.md) within a cluster.
+This section introduces the [benefits of clustering](#why-use-emqx-clustering), how [clustering works in EMQX](#how-clustering-in-emqx-works), and the [Mria and RLOG architecture](./mria-introduction.md).
 
 This architecture is ideal for large-scale, mission-critical IoT and messaging platforms built on MQTT.
 
-## Chapter Preview
+## In This Section
 
-This chapter provides a comprehensive overview of EMQX clustering and how to apply it in real-world deployments. You'll learn about:
+This section covers the architecture and operating principles of EMQX clustering, including:
 
 - The [benefits of clustering](#why-use-emqx-clustering)
 - The [working principle of EMQX Clustering](#how-clustering-in-emqx-works)
 - The [Mria and RLOG architecture](./mria-introduction.md)
-- How to [create a cluster manually or automatically](../../guides/cluster/create-cluster.md)
-- How to [secure communication between nodes](../../guides/cluster/security.md)
-- How to [implement load balancing](../../guides/cluster/lb.md)
-- How to [rebalance cluster load and evacuate nodes](../../guides/cluster/rebalancing.md)
-- How to [perform system tuning and performance testing](../../guides/performance/overview.md)
-
-Whether you're building a highly available MQTT platform or preparing for production scale, this guide will help you get started with confidence.
+- The [key clustering features](#clustering-features-overview)
+- The [design principles of EMQX clustering](../design/clustering.md)
 
 ## Why Use EMQX Clustering
 
@@ -226,10 +221,10 @@ To ensure optimal performance, the network latency for operating EMQX clusters s
 
 The Core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
 
-## Next Step: Create an EMQX Cluster
+## Next Steps
 
-You can continue with the following sections to learn how to create an EMQX cluster:
+Continue with the following architecture and cluster management guides:
 
-- [Cluster Architecture](./mria-introduction.md)
-- [Create a Cluster](../../guides/cluster/create-cluster.md)
-- [Cluster Security](../../guides/cluster/security.md)
+- [Mria and RLOG Architecture](./mria-introduction.md)
+- [Design for EMQX Clustering](../design/clustering.md)
+- [Create and Manage an EMQX Cluster](../../guides/cluster/create-cluster.md)
