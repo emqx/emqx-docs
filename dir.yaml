@@ -309,18 +309,25 @@
     - develop/data-integration/rule-sql-events-and-fields
     - develop/data-integration/rule-sql-builtin-functions
     - develop/data-integration/rule-sql-jq
-  # - data-integration/rule-sql-user-defined-function
+  # - develop/data-integration/rule-sql-user-defined-function
+- title_en: Smart Data Hub
+  title_cn: 数据智能中心
+  title_ja: スマートデータハブ
+  path: develop/data-integration/smart-data-hub
+  collapsed: true
+  children:
     - title_en: Schema Registry
-      title_cn: Schema
+      title_cn: Schema Registry
+      title_ja: スキーマレジストリ
       path: develop/data-integration/schema-registry
       collapsed: true
       children:
         - develop/data-integration/schema-registry-example-avro
         - develop/data-integration/schema-registry-example-protobuf
         - develop/data-integration/schema-registry-example-external-http
+        - develop/data-integration/sparkplug
     - develop/data-integration/schema-validation
     - develop/data-integration/message-transformation
-    - develop/data-integration/sparkplug
 - title_en: Data Integration
   title_cn: 数据集成
   path: develop/data-integration/data-bridges
