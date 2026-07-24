@@ -126,12 +126,34 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VM Tuning
 
-Tune and optimize the Erlang VM in `etc/emqx.conf` file:
+Starting from EMQX 6.3.0, EMQX automatically sets Erlang VM resource limits based on the CPU resources available to the node. Configure the following settings in `etc/emqx.conf`. The settings take effect after the node restarts.
 
-```bash
-## Sets the maximum number of simultaneously existing ports for this system
+### Port and Process Limits
+
+`node.max_ports` controls the maximum number of files and sockets that the Erlang VM can open simultaneously. The default value is `auto`, which sets the Erlang VM port limit (`+Q`) as follows:
+
+- On nodes with 1 to 8 available logical CPUs, the limit is 65,536 ports per CPU.
+- On nodes with more than 8 available logical CPUs, the limit is 1,048,576 ports.
+
+::: warning Important Notice
+When upgrading from an earlier EMQX version, nodes with 8 or fewer available logical CPUs will start with a lower port limit. If your deployment requires more connections than the automatically calculated limit supports, explicitly set `node.max_ports` and restart the node before upgrading.
+:::
+
+EMQX sets the Erlang process limit (`+P`) to twice the resolved `node.max_ports` value. If you explicitly configure `node.process_limit`, only a value greater than the derived process limit takes effect.
+
+If the automatically calculated port limit does not meet the connection requirements of a high-concurrency workload, set `node.max_ports` explicitly. For example:
+
+```hocon
 node.max_ports = 2097152
 ```
+
+Before increasing `node.max_ports`, ensure that the operating system file descriptor limit and available memory can support the configured value. You can view the effective port and process limits on the node monitoring page in EMQX Dashboard.
+
+### Erlang Schedulers
+
+`node.schedulers` controls the number of Erlang schedulers through the Erlang VM `+S` flag. The default value is `auto`, which uses the number of logical processors available to the Erlang VM, including the CPU resources available to a container.
+
+Set `node.schedulers` to a positive integer only when you need to override the detected value, for example, to reserve CPU capacity for other workloads on the same host.
 
 ## EMQX Tuning
 
