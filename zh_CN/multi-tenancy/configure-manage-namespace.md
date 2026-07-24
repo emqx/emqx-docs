@@ -111,7 +111,7 @@
 
 ::: tip 提示
 
-查看相应的 Swagger API 文档，确保了解最新的请求和响应端点模式。这些文档由 Dashboard 监听器通过 `/api-docs` 提供。
+要查看与当前 EMQX 实例版本一致的请求和响应 Schema，请访问 Dashboard 监听地址下的 `/api-spec.html`，例如 `http://localhost:18083/api-spec.html`。
 
 :::
 

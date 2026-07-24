@@ -1,6 +1,6 @@
 # REST API
 
-EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
+EMQX 提供遵循 OpenAPI 3.0 规范的管理 REST API。
 
 EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，以下 API 规范端点可用：
 
@@ -9,9 +9,11 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 | `/api-spec.html` | HTML | 逐层展开式 API 参考页面，适合人工阅读。 |
 | `/api-spec.md` | Markdown | Markdown 格式的 API 参考，适合 AI 代理和自动化工具使用。 |
 | `/api-spec.json` | JSON | OpenAPI 3.0 规范的 JSON 格式，适合脚本和程序化工具使用。 |
-| `/api-docs/index.html` | HTML | 交互式 Swagger UI，支持在浏览器中直接测试 API 调用。 |
+| `/api-docs/swagger.json` | JSON | 完整的 OpenAPI 3.0 规范，适用于外部 Swagger UI 部署及其他兼容工具。 |
 
 以上所有端点均需要 Dashboard 配置中的 `swagger_support` 设置为 `true`（默认值）。将其设置为 `false` 可禁用所有 API 文档端点。更多信息请参阅 [Dashboard 配置](../configuration/dashboard.md)。
+
+从 EMQX 6.3.0 开始，EMQX 不再内置 Swagger UI。为保持向后兼容，访问 `/api-docs` 或 `/api-docs/index.html` 时，EMQX 将返回 HTTP 308 并重定向到 `/api-spec.html`。除 `/api-docs/index.html` 和 `/api-docs/swagger.json` 外，此前用于提供 Swagger UI 资源的其他 `/api-docs/*` 子路径将返回 HTTP 404。
 
 本节将指导您快速开始使用 EMQX REST API。
 

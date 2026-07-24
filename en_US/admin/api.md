@@ -1,6 +1,6 @@
 # REST API
 
-EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
+EMQX exposes an HTTP management API that follows the OpenAPI 3.0 specification.
 
 EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
@@ -9,9 +9,11 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 | `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
 | `/api-spec.md` | Markdown | API reference in Markdown format, suited for AI agents and automation tools. |
 | `/api-spec.json` | JSON | OpenAPI 3.0 specification in JSON format, suited for scripts and programmatic tooling. |
-| `/api-docs/index.html` | HTML | Interactive Swagger UI with "Try it" support for testing API calls directly in the browser. **Deprecated**: will be removed in v7. |
+| `/api-docs/swagger.json` | JSON | Full OpenAPI 3.0 specification for external Swagger UI deployments and other compatible tools. |
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
+
+Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
 
 This section introduces how to work with the EMQX REST API.
 
@@ -391,4 +393,3 @@ When an error happens, the error code is returned in JSON format by the Body:
 | UPDATE_FAILED                                  | Update fails                                                 |
 | REST_FAILED                                    | Reset source or configuration fails                          |
 | CLIENT_NOT_RESPONSE                            | Client not responding                                        |
-

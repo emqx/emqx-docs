@@ -2,7 +2,7 @@
 
 The EMQX Dashboard is a web-based graphical interface that enables real-time management and monitoring of EMQX and its connected devices. 
 
-EMQX Dashboard configuration includes many configuration items. For example, you can enable the Swagger UI through the `swagger_support` configuration and configure a listener for the EMQX Dashboard to accept all incoming connections. In addition, the following common configuration items are also available:
+EMQX Dashboard configuration includes many configuration items. For example, you can enable the API specification endpoints through the `swagger_support` configuration and configure a listener for the EMQX Dashboard to accept all incoming connections. In addition, the following common configuration items are also available:
 
 - `listeners`
 - `token_expired_time`
@@ -128,7 +128,7 @@ Where,
 
 - `swagger_support = true`
 
-  Enable API documentation endpoints, including the API spec pages (`/api-spec.html`, `/api-spec.md`, `/api-spec.json`) and the Swagger UI (`/api-docs`, deprecated and will be removed in v7). Set to `false` to disable all API documentation endpoints.
+  Enable API documentation endpoints, including `/api-spec.html`, `/api-spec.md`, `/api-spec.json`, and the full OpenAPI specification at `/api-docs/swagger.json`. For backward compatibility, `/api-docs` and `/api-docs/index.html` redirect to `/api-spec.html`. Set this option to `false` to disable all API documentation endpoints.
 
 - `default_password`
 
