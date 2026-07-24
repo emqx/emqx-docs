@@ -92,6 +92,51 @@ python3 http_server.py
 7. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 HTTP 服务。
 8. 点击最下方**创建**按钮完成规则创建。
 
+### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，HTTP 服务连接器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token Endpoint 获取、缓存并自动刷新 Access Token。EMQX 调用目标 HTTP 服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由目标服务验证 EMQX 的身份。
+
+创建或编辑连接器时，配置以下 OAuth2 设置：
+
+| 配置项 | 说明 |
+| --- | --- |
+| `enable` | 是否启用 OAuth2 客户端凭证认证。默认值为 `false`。 |
+| `grant_type` | OAuth2 授权类型。仅支持 `client_credentials`，默认值为 `client_credentials`。 |
+| `token_endpoint` | OAuth2 Token Endpoint 的 URL。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| `client_id` | 请求 Access Token 时使用的 Client ID。 |
+| `client_secret` | 请求 Access Token 时使用的 Client Secret。 |
+| `scope` | 请求 Access Token 时使用的可选 scope。 |
+| `timeout` | 连接 Token Endpoint 并请求 Token 的超时时间。默认值为 `5s`。 |
+| `ssl` | HTTPS Token Endpoint 的 TLS 配置，默认启用 TLS。此配置独立于目标 HTTP 服务的连接器 TLS 配置。 |
+
+通过 API 或 HOCON 配置时，使用以下 `oauth2` 配置块：
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "messages.write"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要在 HTTP 服务连接器或其 Sink 中配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token Endpoint 必须从请求体的表单字段中接收 Client ID 和 Client Secret。不支持通过 HTTP Basic `Authorization` 请求头向 Token Endpoint 发送客户端凭证。
+
+:::
+
+如果 EMQX 无法获取 Access Token，连接器健康检查会将连接器状态报告为 `disconnected`。
+
 至此您已经完成连接器创建，接下来将继续创建一条规则和 Sink 来指定需要写入的数据。
 
 ## 创建 HTTP 服务 Sink 规则

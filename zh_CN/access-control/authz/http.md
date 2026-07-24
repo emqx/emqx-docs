@@ -18,6 +18,7 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**页签：
 
+<!-- TODO: Dashboard OAuth2 客户端凭证认证表单定稿后，替换或删除此截图。 -->
 <img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
 
 **HTTP**：<!--插入简要说明，这快要配置什么-->
@@ -47,6 +48,31 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 最后点击**创建**完成相关配置。
 
+### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，HTTP 授权器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token Endpoint 获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 授权服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
+
+在 Dashboard 中配置以下 OAuth2 设置：
+
+| 配置项 | 说明 |
+| --- | --- |
+| `enable` | 是否启用 OAuth2 客户端凭证认证。默认值为 `false`。 |
+| `grant_type` | OAuth2 授权类型。仅支持 `client_credentials`，默认值为 `client_credentials`。 |
+| `token_endpoint` | OAuth2 Token Endpoint 的 URL。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| `client_id` | 请求 Access Token 时使用的 Client ID。 |
+| `client_secret` | 请求 Access Token 时使用的 Client Secret。 |
+| `scope` | 请求 Access Token 时使用的可选 scope。 |
+| `timeout` | 连接 Token Endpoint 并请求 Token 的超时时间。默认值为 `5s`。 |
+| `ssl` | HTTPS Token Endpoint 的 TLS 配置，默认启用 TLS。此配置独立于授权服务 URL 的 TLS 配置。 |
+
+EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要为 HTTP 授权器配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token Endpoint 必须从请求体的表单字段中接收 Client ID 和 Client Secret。不支持通过 HTTP Basic `Authorization` 请求头向 Token Endpoint 发送客户端凭证。
+
+:::
 
 ## 请求格式与返回结果
 
@@ -149,6 +175,27 @@ HTTP 授权必需使用 `type=http`的配置。
     }
 }
 ```
+
+### OAuth2 客户端凭证配置
+
+从 EMQX 6.0.4 开始，可以在 HTTP 授权器中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证：
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "authorization.check"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+如果授权服务器不要求 `scope`，可以省略该配置项。有关请求格式和限制，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
 
 ### method
 

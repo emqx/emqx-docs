@@ -78,6 +78,7 @@ For untrusted environments, HTTPS should be used.
 
 2. Click **Create** at the top right corner, select **HTTP Server** as **Backend**, and click **Next**. The **Configuration** tab is shown as below.
 
+   <!-- TODO: Replace or remove this screenshot after the Dashboard OAuth2 Client Credentials form is finalized. -->
    <img src="./assets/authz-http_ee.png" alt="authz-http_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
@@ -99,6 +100,32 @@ For untrusted environments, HTTPS should be used.
    **Authorization Configuration**: Complete the configuration of the HTTP request body here. <!--Related information needs to be added.-->
 
 4. Click **Create** to finish the setting.
+
+### Configure OAuth2 Client Credentials
+
+Starting from EMQX 6.0.4, an HTTP authorizer supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the external HTTP authorization service, it sends the token in the `Authorization: Bearer <access_token>` request header so that the external service can authenticate EMQX.
+
+Configure the following OAuth2 settings in Dashboard:
+
+| Setting | Description |
+| --- | --- |
+| `enable` | Enables OAuth2 Client Credentials authentication. The default is `false`. |
+| `grant_type` | OAuth2 grant type. Only `client_credentials` is supported. The default is `client_credentials`. |
+| `token_endpoint` | URL of the OAuth2 token endpoint. The URL must use HTTP or HTTPS and must not contain user information. |
+| `client_id` | Client ID used to request an access token. |
+| `client_secret` | Client secret used to request an access token. |
+| `scope` | Optional scope requested for the access token. |
+| `timeout` | Timeout for connecting to and requesting the token endpoint. The default is `5s`. |
+| `ssl` | TLS options for an HTTPS token endpoint. TLS is enabled by default. These options are independent of the TLS settings for the authorization service URL. |
+
+EMQX sends a `POST` request with the `application/x-www-form-urlencoded` content type to the token endpoint. The request body contains `grant_type`, `client_id`, `client_secret`, and the optional `scope`. The token endpoint must return a `200` response with a JSON body containing an `access_token`. It can also return `token_type` and `expires_in`. If present, `token_type` must be `Bearer`, and `expires_in` must be a positive integer.
+
+::: warning Important Notice
+
+- Do not configure an `Authorization` header for the HTTP authorizer when OAuth2 is enabled. EMQX rejects the configuration because it conflicts with the automatically generated Bearer authorization header.
+- The token endpoint must accept the client ID and client secret as form fields in the request body. Authenticating to the token endpoint with an HTTP Basic `Authorization` header is not supported.
+
+:::
 
 ## Configure with Configuration Items
 
@@ -145,3 +172,23 @@ Example of an HTTP authorizer configured with `GET` request:
 }
 ```
 
+### OAuth2 Client Credentials Configuration
+
+Starting from EMQX 6.0.4, add an `oauth2` block to the HTTP authorizer to enable OAuth2 Client Credentials:
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "authorization.check"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+Omit `scope` if the authorization server does not require it. For the request format and restrictions, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
