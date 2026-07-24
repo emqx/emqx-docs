@@ -1,0 +1,95 @@
+# Integrate with PostgreSQL
+
+This authorizer implements authorization checks through matching publish/subscription requests against lists of rules stored in the PostgreSQL database.
+
+::: tip Prerequisite
+
+Knowledge about [basic EMQX authorization concepts](./authz.md)
+
+:::
+
+## Data Schema and Query Statement
+
+PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules and access them: using one or multiple tables, views, etc.
+
+Users need to provide a query statement template and ensure the following fields are included:
+* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
+* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
+* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (Optional) value specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. The default is all QoS levels.
+* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0` and `1`. The default is to allow retained messages.
+
+Example table structure for storing credentials:
+
+```sql
+CREATE TABLE mqtt_acl(
+  id serial PRIMARY KEY,
+  username text NOT NULL,
+  permission text NOT NULL,
+  action text NOT NULL,
+  topic text NOT NULL,
+  qos smallint,
+  retain smallint
+);
+CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
+```
+
+In this table, MQTT users are identified by `username`.
+
+For example, if you want to add an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`, the query statement should be:
+
+```bash
+postgres=# INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
+INSERT 0 1
+```
+
+The corresponding config parameters are:
+```bash
+query = "SELECT permission, action, topic, ipaddress, qos, retain FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
+```
+
+## Configure with Dashboard
+
+You can use EMQX Dashboard to configure how to use PostgreSQL for user authorization.
+
+1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page.
+
+2. Click **Create** at the top right corner, then click to select **PostgreSQL** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
+
+   <img src="./assets/authz-PostgreSQL_ee.png" alt="authz-PostgreSQL_ee" style="zoom:67%;" />
+
+3. Follow the instructions below to configure the settings:
+
+   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+   - **Database**: PostgreSQL database name.
+   - **Username**: Specify user name.
+   - **Password**: Specify user password.
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS.
+
+   - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**.
+   - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
+
+   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement).
+
+4. Click **Create** to finish the settings.
+
+## Configure with Configuration Items
+
+You can configure the EMQX PostgresSQL authorizer with EMQX configuration items.
+
+The PostgreSQL authorizer is identified by type `postgresql`. <!--For detailed configuration, see [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql).-->
+
+Sample configuration:
+
+```bash
+{
+  type = postgresql
+
+  database = "mqtt"
+  username = "postgres"
+  password = "public"
+  server = "127.0.0.1:5432"
+  query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
+}
+```
+
