@@ -25,7 +25,7 @@
 - 根据组织的安全基线禁用过时的 TLS 协议版本和弱密码套件，并在发布前于测试环境验证监听器的最终配置。
 - 使用受信任 CA 或内部 PKI 签发的证书，并在证书到期前完成轮换。
 - 当设备身份需要通过客户端证书建立信任时，应启用双向 TLS。在该模式下，需要同时校验证书链以及客户端在 TLS 握手期间是否实际提供证书。详见[X.509 证书认证](./authn/x509.md)。
-- 若将对端证书字段映射为 MQTT 用户名或客户端 ID（`peer_cert_as_username` / `peer_cert_as_clientid`），监听器**必须**强制启用 mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`），并使用您自己掌控的 CA 证书集合。否则，客户端可以出示一张 CN/DN 任意填写的自签名证书，从而冒充任意身份。针对空用户名场景，可在监听器上同时设置 `listeners.{type}.{name}.enable_authn = quick_deny_anonymous` 作为补充防护。详见[证书信息映射](./authn/x509.md#证书信息映射)。
+- 若将对端证书字段映射进 MQTT 身份——作为用户名或客户端 ID（`peer_cert_as_username` / `peer_cert_as_clientid`），或通过读取 `cn`、`dn` 的 [`client_attrs_init`](../../develop/client-attributes/client-attributes.md) 表达式映射进 `client_attrs`——请注意这些是全局 `mqtt` 配置，会对所有共享它们的监听器生效，因此**每个**可能服务这些客户端的 TLS 监听器都**必须**强制启用 mTLS（`verify = verify_peer`、`fail_if_no_peer_cert = true`），并使用您自己掌控的 CA 证书集合。EMQX 不会替您强制这一点：只要有一个监听器保留 `verify_none` / `fail_if_no_peer_cert = false` 默认值，客户端就可以出示一张 CN/DN 任意填写的自签名证书从而冒充任意身份——包括把伪造的值注入 `${client_attrs.X}` 等授权模板——或者完全不出示证书连接、静默回退到使用 `CONNECT` 报文中的用户名/客户端 ID。针对空用户名场景，可在监听器上同时设置 `listeners.{type}.{name}.enable_authn = quick_deny_anonymous` 作为补充防护。详见[证书信息映射](./authn/x509.md#证书信息映射)。
 - 如果您的环境要求校验证书吊销状态，可评估启用 [CRL 检查](../network/crl.md)或 [OCSP Stapling](../network/ocsp.md)。
 - 当 EMQX 连接外部资源（例如 HTTP 认证服务、数据库或其他集成组件）时，也应启用 TLS。
 
