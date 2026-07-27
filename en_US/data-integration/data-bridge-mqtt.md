@@ -259,6 +259,10 @@ This section demonstrates how to create a rule for forwarding data from a remote
 
    - **QoS**: The subscription QoS, select `0` or `1` from the dropdown.
 
+   - **No Local**: Enable this option if you use the same connector to publish messages to a topic that this Source also subscribes to and want to prevent the remote MQTT broker from forwarding those messages back to the Source. This option is disabled by default and takes effect only when the connector uses MQTT 5.0.
+
+   - **Retain As Published**: Enable this option to preserve the original `retain` flag on messages forwarded by the upstream MQTT broker. When disabled, the upstream MQTT broker clears the `retain` flag. This option is enabled by default and takes effect only when the connector uses MQTT 5.0.
+
 9. Use the default settings for other configurations and click the **Create** button to complete the Source creation, adding the Source to the rule data input. You will also notice that the rule SQL has changed to:
 
    ```sql
@@ -274,7 +278,7 @@ This section demonstrates how to create a rule for forwarding data from a remote
    | ----------------------------- | ------------------------------------------------------------ |
    | topic                         | Originating message topic                                    |
    | server                        | Server address of the connected Source                       |
-   | retain                        | Whether the message is a retained message, value is false    |
+   | retain                        | Whether the message carries the `retain` flag received from the upstream MQTT broker. When **Retain As Published** is disabled, this value is `false` |
    | qos                           | Message Quality of Service                                   |
    | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other attributes |
    | pub_props.User-Property-Pairs | Array of user property pairs, each containing a key-value pair, e.g., `{"key":"foo", "value":"bar"}` |
@@ -295,7 +299,7 @@ Now you have completed the creation of the MQTT Source, but the subscribed data 
    - **QoS**: Select from `0`, `1`, `2`, or `${qos}`. You can also use placeholders to set QoS from other fields. Here, select `${qos}` to follow the QoS of the original message.
    - **Retain**: Select `true` or `false` to confirm whether to publish the message as a retained message. You can also use placeholders to set the retain flag from other fields. In this case, you can select `false`.
      - Since the data source is MQTT Source, the `${flags.retain}` option is not applicable here.
-     - You can also enter `${retain}` to follow the retain flag of the original message, but it only works when the message is retained through the external MQTT service's retention mechanism, not when the original message is published to EMQX locally.
+     - You can also enter `${retain}` to follow the retain flag received by the MQTT Source. For an MQTT 5.0 connection, enable **Retain As Published** in the Source to preserve the upstream retain flag.
    - **Payload**: Used to generate the payload of the forwarded message. Leave it blank by default to forward the rule output result. Here, you can enter `${payload}` to only forward the Payload.
 
 3. Click the **Add** button to complete the action creation. You will be directed back to the Create Rule page and the new action will be added under the **Action Outputs** tab.

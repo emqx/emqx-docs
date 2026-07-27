@@ -11,6 +11,8 @@
 <img src="./assets/sql_process.png" alt="sql_process" style="zoom:67%;" />
 
 - **数据来源**：规则的[数据源](./rule-sql-events-and-fields.md)可以是消息或事件，也可以是外部的数据系统 (Source)。规则通过 SQL 的 FROM 子句指定数据的来源；
+
+  从 EMQX 6.0.3 开始，启用命名空间后，规则引擎默认会按命名空间限制规则触发范围。属于某个命名空间的规则只会被同一命名空间内客户端产生的消息和客户端相关事件触发。详情参见[命名空间](../multi-tenancy/namespace-overview.md#隔离机制)。
 - **数据处理过程**：规则通过 [SQL 语句](./rule-sql-syntax.md)和[函数](./rule-sql-builtin-functions.md)来描述数据的处理过程。SQL 的 WHERE 子句用于过滤数据，SELECT 子句以及 SQL 函数用于提取和转换数据；
 - **处理结果去向**：规则可以定义一个或多个动作来处理 SQL 的输出结果。如果 SQL 执行通过，规则将按顺序执行相应的动作，比如将处理结果存储到数据库、或者重新发布到另一个 MQTT 主题等。支持的动作如下：
   - [消息重发布](./rule-get-started.md#添加消息重发布动作)：将结果发布到指定 MQTT 主题
