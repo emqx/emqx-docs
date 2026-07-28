@@ -125,8 +125,8 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
    SELECT
      clientid,
      topic,
-     payload,
-     publish_received_at
+     base64_encode(payload) AS payload,
+     timestamp/1000 AS publish_received_at
    FROM
      "t/bq"
    ```

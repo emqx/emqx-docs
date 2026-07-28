@@ -8,14 +8,42 @@ Some plugins remain specialized, while others may later be promoted into standar
 
 The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
 
-## Message Persistence
+## Security
 
-[Offline Messages](./plugin-catalog/emqx-offline-messages.md)
+[EMQX ACME Plugin](./plugin-catalog/6.1/emqx-acme.md)
 
-This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
+This plugin automatically issues and renews TLS certificates for EMQX SSL listeners through ACME-compatible certificate authorities such as Let's Encrypt.
 
 ## Operations
 
-[Hot Upgrade (Relup)](./plugin-catalog/emqx-relup.md)
+[Hot Upgrade (Relup)](./plugin-catalog/6.1/emqx-relup.md)
 
 This plugin applies `.relup` code-change instructions to a running EMQX node, allowing operators to roll out patched releases without restarting the VM.
+
+[Backup Sync](./plugin-catalog/6.1/emqx-backup-sync.md)
+
+This plugin periodically synchronizes selected backup data from a primary EMQX cluster to a secondary cluster using the Data Backup APIs, keeping the secondary in step for disaster recovery.
+
+## Data Integration
+
+[MQTT Bridge with Disk Queue](./plugin-catalog/6.1/emqx-bridge-mqtt-dq.md)
+
+This plugin forwards local MQTT messages to another MQTT broker, buffering them on disk for better resilience across network interruptions.
+
+## Message Persistence
+
+[Offline Messages](./plugin-catalog/6.1/emqx-offline-messages.md)
+
+This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
+
+## Connection Management
+
+[Per-username Session Quota](./plugin-catalog/6.1/emqx-username-quota.md)
+
+This plugin enforces a per-username session quota across the cluster, rejecting authentication with `quota_exceeded` once a username reaches its configured limit.
+
+## Namespace Governance
+
+[UNS Governance](./plugin-catalog/6.1/emqx-unsgov.md)
+
+This plugin enforces a Unified Namespace (UNS) topic structure at ACL check time, so publishing and subscribing must conform to the governed namespace hierarchy.

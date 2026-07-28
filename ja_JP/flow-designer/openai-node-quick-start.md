@@ -1,16 +1,16 @@
 # クイックスタート：OpenAIノードを使ったFlowの作成
 
-このセクションでは、実際のユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成・テストする方法を説明します。
+このセクションでは、実用的なユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成しテストする方法を説明します。
 
-本デモでは、MQTTトピックからセンサーのデータを受信し、LLM（例：OpenAI GPT）を使ってデータを解釈し、その意味を自然言語で要約するワークフローを構築します。生成された要約は新しいトピック `ai/summary` に再パブリッシュされ、下流で利用されます。
+このデモでは、MQTTトピックからセンサーデータを受信し、LLM（例：OpenAI GPT）を使ってデータを解釈し、その意味を自然言語で要約するワークフローの構築方法を示します。生成された要約は新しいトピック `ai/summary` に再パブリッシュされ、下流で利用されます。
 
 ## シナリオ説明
 
-デバイスが温度と湿度の読み取り値をMQTTトピック `sensors/temp_humid` に報告すると仮定します。各メッセージはJSON形式の生データを含みます。EMQX Flowは以下の処理を行います。
+デバイスがMQTTトピック `sensors/temp_humid` に温度と湿度の読み取り値を報告すると仮定します。各メッセージはJSON形式の生センサーデータを含みます。EMQX Flowは以下のステップを実行します：
 
-- **データ処理**：デバイスIDとセンサー値を抽出する。
-- **LLMベースの処理**：OpenAIモデルを使ってセンサーの読み取り値を要約する。
-- **メッセージの再パブリッシュ**：AI生成の要約を新しいトピック `ai/summary` にパブリッシュする。
+- **データ処理**：デバイスIDとセンサー値を抽出します。
+- **LLMベースの処理**：OpenAIモデルを使ってセンサー読み取り値を要約します。
+- **メッセージ再パブリッシュ**：AI生成の要約を新しいトピック `ai/summary` にパブリッシュします。
 
 **サンプルメッセージ：**
 
@@ -43,16 +43,16 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
    - ソースパネルから**Messages**ノードをドラッグします。
    - トピックを`sensors/temp_humid`に設定します。
-   - **Save**をクリックします。
+   - **保存**をクリックします。
 
 3. **Data Processing**ノードを追加します。
 
    - **Processing**セクションから**Data Processing**ノードをドラッグします。
    - 以下のマッピングを追加します：
-     - `payload.device_id` → エイリアス`device_id`
-     - `payload.temperature` → エイリアス`temperature`
-     - `payload.humidity` → エイリアス`humidity`
-   - **Save**をクリックします。
+     - `payload.device_id` → エイリアス `device_id`
+     - `payload.temperature` → エイリアス `temperature`
+     - `payload.humidity` → エイリアス `humidity`
+   - **保存**をクリックします。
 
 4. **OpenAI**ノードを追加します。
 
@@ -67,26 +67,26 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
        
        ::: tip
        
-       このフィールドにプロバイダーのAPIベースURLとAPIキーを入力することで、OpenAI互換の他のサービスに接続できます。
+       このフィールドにプロバイダーのAPIベースURLとAPIキーを入力することで、OpenAI互換の他サービスに接続可能です。
        
        :::
-       
+     
      - **Output Result Alias**：`summary`と入力します。
      
-   - **Save**をクリックします。
+   - **保存**をクリックします。
 
 5. **Republish**ノードを追加します。
 
    - **Sink**セクションから**Republish**ノードをドラッグし、OpenAIノードに接続します。
    - トピックを`ai/summary`に設定します。
    - ペイロードを`${summary}`に設定します。
-   - **Save**をクリックします。
+   - **保存**をクリックします。
 
-6. すべてのノードを接続し、右上の**Save**をクリックしてFlowを保存します。
+6. すべてのノードを接続し、右上の**保存**をクリックしてFlowを保存します。
 
    ![openai_node_flow](./assets/openai_node_flow.png)
 
-   Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
+   Flowとフォームルールは相互運用可能です。SQLおよび関連ルール設定はRuleページで確認できます。
 
    ![openai_node_rule_page](./assets/openai_node_rule_page.png)
 
@@ -94,7 +94,7 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
 1. MQTTクライアントをEMQXに接続します。
 
-   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントも利用可能です。
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントも利用可能です：
 
    - EMQXサーバーに接続します。
    - トピック`ai/summary`をサブスクライブします。
@@ -102,8 +102,8 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 2. テストを開始します。
 
    - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
-   - **Edit**をクリックし、続けて**Start Test**をクリックして画面下部にテストパネルを開きます。
-   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`sensors/temp_humid`にパブリッシュするために**Submit Test**をクリックします。
+   - **編集**をクリックし、続けて**テスト開始**をクリックして画面下部にテストパネルを表示します。
+   - **シミュレートデータ入力**をクリックし、以下のメッセージをトピック`sensors/temp_humid`にパブリッシュするため**テスト送信**をクリックします：
 
      ```json
      {
@@ -115,16 +115,16 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
 3. 結果を確認します。
 
-   - Flowの実行結果が成功したことを確認できます。
+   - Flowの正常な実行結果が表示されます。
 
      ![openai_node_test_result](./assets/openai_node_test_result.png)
 
-   - **WebSocket Client**ページに戻ると、以下のようなAI生成の要約メッセージを受信できます。
+   - **WebSocket Client**ページに戻ると、以下のようなAI生成の要約を受信できます：
 
      > “The sensor readings from device "device123" indicate that the current temperature is 38.2°C and the humidity level is 75%.”
 
-   - テスト結果が失敗した場合は、エラーメッセージが表示されます。
+   - テストが失敗した場合は、エラーメッセージが表示されます。
    
-   - **OpenAI**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じてノードをクリックし、編集パネルの**Overview**タブを開きます。
+   - **OpenAI**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じてノードをクリックし、編集パネルの**概要**タブを開いてください。
    
      ![openai_node_statistics](./assets/openai_node_statistics.png)

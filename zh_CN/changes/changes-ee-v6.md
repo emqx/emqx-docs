@@ -1572,7 +1572,7 @@ MQTT 消息流提供了一种基于主题过滤器的持久化消息集合，并
 
 - [#17474](https://github.com/emqx/emqx/pull/17474) IoTDB REST API 连接器健康检查现在使用有界版本查询，而不是每次检查都列出所有数据库，从而降低健康检查开销。
 
-- [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实转发上游保留消息。默认值为 `false`，以保持现有行为。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
+- [#17481](https://github.com/emqx/emqx/pull/17481) 为 MQTT Bridge 入口（Source）订阅新增 `retain_as_published` 选项。当 Bridge 使用 MQTT 5.0 连接到远端 Broker 且 `retain_as_published = true` 时，转发消息会保留原始 `retain` 标志，而不是清除该标志，从而可以如实转发上游保留消息。该选项默认启用。当 `proto_ver` 为 `v3` 或 `v4` 时，该选项不生效。
 
   此外，当同时配置 `bridge_mode = true` 和 `proto_ver = v5` 时，连接器现在会输出警告日志，因为旧的 Bridge Mode 标志在 MQTT 5.0 下不起作用；应改为在各个订阅上设置 `retain_as_published`。
 

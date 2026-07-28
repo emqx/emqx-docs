@@ -44,7 +44,7 @@ emqx   Ready    10m
 
 ## API シークレットの作成
 
-Prometheus は EMQX ダッシュボード API からメトリクスを取得するため、ダッシュボードにサインインして [API シークレットを作成](../../../../dashboard/system.md#api-keys) する必要があります。
+Prometheus は EMQX ダッシュボード API からメトリクスを取得するため、ダッシュボードにサインインして [API シークレットを作成](../../../../dashboard/system.md#api-keys) してください。
 
 ## [EMQX Exporter](https://github.com/emqx/emqx-exporter) のデプロイ
 
@@ -88,7 +88,7 @@ spec:
           image: emqx-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            # "emqx-dashboard-service-name" はオペレーターが 18083 ポート公開用に作成したサービス名です
+            # "emqx-dashboard-service-name" はオペレーターが 18083 ポートを公開するために作成したサービス名です
             - --emqx.nodes=${emqx-dashboard-service-name}:18083
             - --emqx.auth-username=${paste_your_new_api_key_here}
             - --emqx.auth-password=${paste_your_new_secret_here}
@@ -108,15 +108,15 @@ spec:
               memory: 20Mi
 ```
 
-> 引数の `--emqx.nodes` はオペレーターが 18083 ポート公開用に作成したサービス名に設定してください。サービス名は `kubectl get svc` コマンドで確認できます。
+> 引数 "--emqx.nodes" には、オペレーターが 18083 ポートを公開するために作成したサービス名を設定してください。サービス名は `kubectl get svc` コマンドで確認できます。
 
-上記の内容を `emqx-exporter.yaml` として保存し、`--emqx.auth-username` と `--emqx.auth-password` を新しく作成した API シークレットに置き換えてください。以下のコマンドで `emqx-exporter` をデプロイします。
+上記の内容を `emqx-exporter.yaml` として保存し、`--emqx.auth-username` と `--emqx.auth-password` を新しい API シークレットに置き換えてください。以下のコマンドで `emqx-exporter` をデプロイします。
 
 ```bash
 kubectl apply -f emqx-exporter.yaml
 ```
 
-`emqx-exporter` の Pod のステータスを確認します。
+`emqx-exporter` Pod のステータスを確認します。
 
 ```bash
 $ kubectl get po -l="app=emqx-exporter"
@@ -126,7 +126,7 @@ emqx-exporter-856564c95-j4q5v   Running  8m33s
 
 ## Prometheus 監視の設定
 
-Prometheus Operator は [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) と [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD を使って、Pod やサービスの監視方法を動的に定義します。
+Prometheus Operator は [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) と [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD を使い、Pod やサービスの監視方法を動的に定義します。
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -143,7 +143,7 @@ spec:
       port: dashboard
       relabelings:
         - action: replace
-          # ユーザー定義のクラスター名、一意である必要があります
+          # ユーザー定義のクラスター名、ユニークである必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
@@ -156,12 +156,12 @@ spec:
           targetLabel: "instance"
   selector:
     matchLabels:
-      # emqx Pod のラベルと同じにしてください
+      # emqx Pod のラベルと同じ値
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
     matchNames:
-      # EMQX クラスターを他のネームスペースにデプロイしている場合は修正してください
+      # EMQX クラスターが他のネームスペースにデプロイされている場合は修正してください
       #- default
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -173,7 +173,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      # emqx-exporter サービスのラベルと同じにしてください
+      # emqx-exporter サービスのラベルと同じ値
       app: emqx-exporter
   endpoints:
     - port: metrics
@@ -181,7 +181,7 @@ spec:
       path: /metrics
       relabelings:
         - action: replace
-          # ユーザー定義のクラスター名、一意である必要があります
+          # ユーザー定義のクラスター名、ユニークである必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
@@ -199,13 +199,13 @@ spec:
           regex: 'pod'
   namespaceSelector:
     matchNames:
-      # exporter を他のネームスペースにデプロイしている場合は修正してください
+      # exporter が他のネームスペースにデプロイされている場合は修正してください
       #- default
 ```
 
-`path` は指標収集インターフェースのパスを示します。EMQX 5 では `/api/v5/prometheus/stats` です。`selector.matchLabels` はマッチする Pod のラベルを示し、`apps.emqx.io/instance: emqx` となっています。
+`path` はメトリクス収集インターフェースのパスを示します。EMQX 5 では `/api/v5/prometheus/stats` です。`selector.matchLabels` は対象の Pod のラベルを示し、`apps.emqx.io/instance: emqx` となっています。
 
-`targetLabel` の `cluster` は現在のクラスター名を表し、一意である必要があります。
+`targetLabel` の `cluster` は現在のクラスター名を表し、ユニークである必要があります。
 
 上記の内容を `monitor.yaml` として保存し、以下のコマンドを実行してください。
 
@@ -215,16 +215,16 @@ $ kubectl apply -f monitor.yaml
 
 ## Prometheus での EMQX 指標の確認
 
-Prometheus インターフェースを開き、Graph ページに切り替えて `emqx` と入力すると、以下のように表示されます。
+Prometheus のインターフェースを開き、Graph ページに切り替えて `emqx` と入力すると、以下のように表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-**Status** -> **Targets** ページに切り替えると、以下の画面が表示され、クラスター内の監視対象の EMQX Pod 情報を確認できます。
+**Status** -> **Targets** ページに切り替えると、以下の画面が表示され、クラスター内のすべての監視対象 EMQX Pod 情報を確認できます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
 ## Grafana テンプレートのインポート
 
-すべてのダッシュボード [テンプレート](https://github.com/emqx/emqx-exporter/tree/main/grafana-dashboard/template) をインポートしてください。メインダッシュボードの **EMQX** を開いてお楽しみください。
+すべてのダッシュボード [テンプレート](https://github.com/emqx/emqx-exporter/tree/main/grafana-dashboard/template) をインポートしてください。メインダッシュボード **EMQX** を開いてお楽しみください！
 
 ![](./assets/configure-emqx-prometheus/emqx-grafana-dashboard.png)

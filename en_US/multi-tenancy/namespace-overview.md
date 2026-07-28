@@ -81,7 +81,7 @@ EMQX is highly flexible and supports multiple isolation mechanisms even before n
 
 Namespaces provide a unified tenant identifier (`client_attrs.tns`) that allows Client IDs, topic mountpoints, and related configurations to be organized around a consistent tenant context.
 
-However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled.
+However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled. Starting from EMQX 6.0.3, rule trigger isolation is enabled by default, but it only limits which messages and events can trigger namespaced rules; it does not replace Client ID or topic isolation.
 
 ### Client ID Override
 
@@ -124,6 +124,12 @@ authorization.include_mountpoint = true
 ```
 
 This allows authorization backends to receive topics with the mountpoint prefix.
+
+### Rule Trigger Isolation
+
+With `rule_engine.limit_selects_in_namespace` enabled, a rule that belongs to a namespace is triggered only by messages and client-related events from clients in that same namespace. EMQX identifies the client namespace by the `client_attrs.tns` client attribute.
+
+This setting only prevents rules from being triggered by messages or events from another namespace. It does not restrict clients from publishing or subscribing across namespaces. To isolate client topic access, configure topic isolation using mount points and authorization rules.
 
 ## Multi-Tenancy Capability Support
 
