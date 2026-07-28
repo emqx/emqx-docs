@@ -275,7 +275,7 @@ This section demonstrates how to add a Republish action to the rule for forwardi
 
 Now that you have successfully created a rule, you can see the newly created rule on the **Rules** page. On the **Sources** tab, you can see the newly created GCP Pub/Sub Consumer Source.
 
-You can also click **Integrate** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages from the GCP Pub/Sub Consumer Source will be published to `t/1` through message republishing.
+You can also click **Integration** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages from the GCP Pub/Sub Consumer Source will be published to `t/1` through message republishing.
 
 ## Test the GCP Pub/Sub Consumer Rule
 
