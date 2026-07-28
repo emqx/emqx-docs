@@ -11,7 +11,7 @@ EMQX provides CLI commands for data import and export to implement backup and re
 - In EMQX 4.x, a single JSON file was used to save all necessary data of EMQX configuration and the built-in database.
 - In EMQX 5.x, the exported data is compressed into a tar file format, allowing for more efficient and structured handling of potentially large amounts of user data.
 
-In addition to CLI commands, the EMQX Enterprise also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
+In addition to CLI commands, EMQX Enterprise provides a data backup and recovery page in the EMQX Dashboard, where you can import and export data.
 
 The data that EMQX supports for import and export includes:
 
@@ -61,9 +61,9 @@ Therefore, importing data into an EMQX cluster without clearing data may require
 
 :::
 
-## Dashboard Example
+## Manage Backup Files in Dashboard
 
-This section explains how to perform data import and export operations on the Dashboard.
+Global administrators can manage backup files in **Global** or a specific [Namespace](../multi-tenancy/namespace-overview.md). Namespaced administrators can manage backup files only in their assigned Namespace.
 
 :::tip
 
@@ -72,20 +72,42 @@ This section explains how to perform data import and export operations on the Da
 
 :::
 
-1. Log in to the Dashboard and go to **System** -> **Backup & Restore** page.
+1. Log in to the Dashboard and go to **System** -> **Backup & Restore**.
 
-2. To export data, click the **Create** button in the top right corner to create a backup file based on the current data of the EMQX cluster. You can view the file information on the backup file list page:
+2. If you are a global administrator, select **Global** or a specific Namespace from the Namespace selector. The page loads the backup file list for the selected scope. When you select a Namespace, verify that the notice above the list identifies the target Namespace.
+
+   Namespaced administrators do not see the selector. EMQX restricts their backup operations to their assigned Namespace.
+
+3. To export data, click **Create**. Global administrators can create a backup only in the **Global** view. When a global administrator selects a specific Namespace, **Create** is disabled. Namespaced administrators can create a backup for their assigned Namespace.
+
+   The backup file list displays the following information:
 
    - **File Name**: The name of the backup file.
    - **Node Name**: This name refers to the node where the backup file is stored, and it does not mean that the backup only contains data from that node.
    - **Created At**: The creation time of the backup file.
    - **File Size**: The size of the backup file.
 
-   You can click **Download** in the **Actions** column to download the file and back it up locally.
+4. To add a backup file to the selected scope, click **Upload**. Uploading a file does not restore its data. For a specific Namespace, the success message identifies the target Namespace. After the upload succeeds, verify that the file appears in the backup file list.
 
-3. To import data, click the **Upload** button in the top right corner to upload a backup file to the current EMQX cluster. The file will not be restored immediately upon upload. You can go to the **Actions** column in the backup file list and click **Restore** to import the backup file into the current EMQX cluster.
+5. Manage a backup file by clicking one of the following buttons in the **Actions** column:
 
-![EMQX backup & restore](./assets/backup-restore.png)
+   - **Download**: Download the backup file to your local device.
+   - **Delete**: Delete the backup file from the selected scope.
+   - **Restore**: Import the backup file into the selected scope. If you selected a specific Namespace, verify the target Namespace in the confirmation dialog before you confirm the restore. After the restore succeeds, verify that the success message identifies the target Namespace.
+
+In a specific Namespace view, upload, download, delete, and restore operations apply to that Namespace. A global administrator can manage and restore backup files in this view but cannot create a backup.
+
+### Manage Backup Files Through REST API
+
+A global administrator can pass the optional `namespace` query parameter to the following endpoints:
+
+- `GET /api/v5/data/files`: List backup files.
+- `POST /api/v5/data/files`: Upload a backup file.
+- `GET /api/v5/data/files/{filename}`: Download a backup file.
+- `DELETE /api/v5/data/files/{filename}`: Delete a backup file.
+- `POST /api/v5/data/import`: Import a backup file.
+
+If the global administrator omits `namespace`, the operation applies to backup files in **Global**. For a namespaced caller, EMQX ignores the parameter and applies the operation to the caller's assigned Namespace.
 
 ## CLI Example
 
