@@ -186,7 +186,7 @@ Note: The "body" will be converted to a query string.
 
 ### OAuth2 Client Credentials Configuration
 
-Starting from EMQX 6.0.4, add an `oauth2` block to the HTTP authenticator to enable OAuth2 Client Credentials:
+Starting from EMQX 6.0.4, you can enable OAuth2 Client Credentials by adding an `oauth2` block to the HTTP authenticator configuration. Place the block at the same level as `method`, `url`, `body`, and `headers`:
 
 ```hocon
 oauth2 {

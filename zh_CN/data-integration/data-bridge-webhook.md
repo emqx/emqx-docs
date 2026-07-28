@@ -116,7 +116,7 @@ python3 http_server.py
 | **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
 | **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于目标 HTTP 服务的**启用 TLS**开关。 |
 
-通过 API 或 HOCON 配置时，使用以下 `oauth2` 配置块：
+使用 HOCON 配置时，将 `oauth2` 配置块添加到 HTTP 服务连接器配置中，与 `url`、`headers` 和 `ssl` 同级：
 
 ```hocon
 oauth2 {

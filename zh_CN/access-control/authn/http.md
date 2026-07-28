@@ -186,7 +186,7 @@ EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlen
 
 ### OAuth2 客户端凭证配置
 
-从 EMQX 6.0.4 开始，可以在 HTTP 认证器中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证：
+从 EMQX 6.0.4 开始，可以在 HTTP 认证器配置对象中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证。该配置块与 `method`、`url`、`body` 和 `headers` 同级：
 
 ```hocon
 oauth2 {

@@ -115,7 +115,7 @@ When you create or edit the Connector, turn on **OAuth2 Client Credentials**, an
 | **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
 | **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. This setting is independent of the **Enable TLS** setting for the target HTTP server. |
 
-The API or HOCON configuration uses the following `oauth2` block:
+In HOCON, add the `oauth2` block inside the HTTP Server Connector configuration, at the same level as `url`, `headers`, and `ssl`:
 
 ```hocon
 oauth2 {

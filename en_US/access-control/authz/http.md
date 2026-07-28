@@ -167,7 +167,7 @@ Example of an HTTP authorizer configured with `GET` request:
 
 ### OAuth2 Client Credentials Configuration
 
-Starting from EMQX 6.0.4, add an `oauth2` block to the HTTP authorizer to enable OAuth2 Client Credentials:
+Starting from EMQX 6.0.4, you can enable OAuth2 Client Credentials by adding an `oauth2` block to the HTTP authorizer configuration. Place the block at the same level as `method`, `url`, `body`, and `headers`:
 
 ```hocon
 oauth2 {
