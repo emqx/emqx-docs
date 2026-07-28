@@ -66,7 +66,7 @@ EMQX 支持导入和导出的数据包括：
 
 ## 通过 Dashboard 管理备份文件
 
-全局管理员可以管理 **Global** 或具体 [Namespace](../multi-tenancy/namespace-overview.md) 下的备份文件。命名空间管理员只能管理所属 Namespace 下的备份文件。
+全局管理员可以管理 **Global** 或具体 [Namespace](../multi-tenancy/namespace-overview.md) 下的备份文件。命名空间管理员可以管理和下载所属 Namespace 下的备份文件，但不能访问全局范围或其他 Namespace 下的备份文件。
 
 :::tip
 

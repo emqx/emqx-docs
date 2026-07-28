@@ -63,7 +63,7 @@ Therefore, importing data into an EMQX cluster without clearing data may require
 
 ## Manage Backup Files in Dashboard
 
-Global administrators can manage backup files in **Global** or a specific [Namespace](../multi-tenancy/namespace-overview.md). Namespaced administrators can manage backup files only in their assigned Namespace.
+Global administrators can manage backup files in **Global** or a specific [Namespace](../multi-tenancy/namespace-overview.md). Namespaced administrators can manage and download backup files from their assigned Namespace, but cannot access backup files in **Global** or another Namespace.
 
 :::tip
 
