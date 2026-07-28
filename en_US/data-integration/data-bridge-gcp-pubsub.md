@@ -96,8 +96,9 @@ Before adding a GCP Pub/Sub Producer Sink action, you need to create a GCP Pub/S
 2. Click **Create** in the top right corner of the page, select **Google PubSub Producer** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my-pubsubproducer`. The name is used to associate the GCP Pub/Sub Producer Sink with the connector and must be unique within the cluster.
 4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to GCP Pub/Sub. For detailed steps, see [Create a Rule with GCP Pub/Sub Producer Sink](#create-a-rule-with-gcp-pub-sub-producer-sink).
+5. Expand **Advanced Settings** to configure optional settings as needed. For details, see [Connector Advanced Settings](#connector-advanced-settings).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to GCP Pub/Sub. For detailed steps, see [Create a Rule with GCP Pub/Sub Producer Sink](#create-a-rule-with-gcp-pubsub-producer-sink).
 
 ## Create a Rule with GCP Pub/Sub Producer Sink
 
@@ -144,7 +145,7 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-13. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+13. Expand **Advanced Settings** to configure optional settings as needed. For details, see [Advanced Settings](#advanced-settings).
 
 14. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP Pub/Sub server.
 
@@ -170,14 +171,15 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Create a GCP Pub/Sub Consumer Connector
 
-Before adding a GCP Pub/Sub Consumer Sink, you need to create a GCP Pub/Sub Consumer connector to establish a connection between EMQX and GCP Pub/Sub.
+Before adding a GCP Pub/Sub Consumer Source, you need to create a GCP Pub/Sub Consumer connector to establish a connection between EMQX and GCP Pub/Sub.
 
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **Google PubSub Consumer** on the connector selection page, and click **Next**.
-3. Enter a name and description, such as `my-pubsubconsumer`. The name is used to associate the GCP Pub/Sub Consumer Sink with the connector and must be unique within the cluster.
+3. Enter a name and description, such as `my-pubsubconsumer`. The name is used to associate the GCP Pub/Sub Consumer Source with the connector and must be unique within the cluster.
 4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GCP Pub/Sub Consumer Source to consume the data from GCP Pub/Sub and forward the data to EMQX. For detailed steps, see [Create a Rule with GCP Pub/Sub Consumer Source](#create-a-rule-with-gcp-pub-sub-cconsumer-source).
+5. Expand **Advanced Settings** to configure optional settings as needed. For details, see [Connector Advanced Settings](#connector-advanced-settings).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GCP Pub/Sub Consumer Source to consume the data from GCP Pub/Sub and forward the data to EMQX. For detailed steps, see [Create a Rule with GCP Pub/Sub Consumer Source](#create-a-rule-with-gcp-pubsub-consumer-source).
 
 ## Create a Rule with GCP Pub/Sub Consumer Source
 
@@ -204,7 +206,7 @@ This section demonstrates how to create a rule in EMQX for consuming the message
    - **GCP PubSub Topic**: Enter the topic name of the GCP Pub/Sub topic to be consumed from, for example, `my-iot-core`.
    - **Maximum Messages to Pull**: Specify the maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
 
-10. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. Expand **Advanced Settings** to configure optional settings as needed. For details, see [Advanced Settings](#advanced-settings).
 
 11. Before clicking **Create**, you can click **Test Connectivity** to test if the connection to the GCP Pub/Sub server is successful.
 
@@ -248,7 +250,7 @@ This section demonstrates how to add a Republish action to the rule for forwardi
 
    - **Retain**: Select `true` or `false`. Determine whether to publish the message as a retained message, placeholders can also be entered to set the retain message flag from other fields. In this example, select `false`.
 
-   - **Payload**: Set a template for generating the forwarded message payload. Leaving it blank by default means forwarding the rule output result. Here you can enter `${payload}` to indicate forwarding Payload only.
+   - **Payload**: Set a template for generating the forwarded message payload. Leaving it blank means forwarding the rule output result. Enter `${.value}` to forward only the payload of the GCP Pub/Sub message.
 
      The default value for MQTT payload template is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a GCP Pub/Sub message containing all optional fields:
 
@@ -275,4 +277,76 @@ Now that you have successfully created a rule, you can see the newly created rul
 
 You can also click **Integrate** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages from the GCP Pub/Sub Consumer Source will be published to `t/1` through message republishing.
 
-## <!--Test the Consumer Rule-->
+## Test the GCP Pub/Sub Consumer Rule
+
+Follow these steps to verify that the GCP Pub/Sub Consumer Source consumes messages from GCP Pub/Sub and republishes them to the MQTT topic `t/1` in EMQX.
+
+1. Use MQTTX CLI to subscribe to the MQTT topic `t/1` in EMQX:
+
+   ```bash
+   mqttx sub -t t/1 -v
+   ```
+
+2. In the Google Cloud console, go to **Pub/Sub** -> **Topics**, click the `my-iot-core` topic, and publish the following message:
+
+   ```json
+   {"msg":"hello GCP PubSub"}
+   ```
+
+3. Verify that MQTTX receives the following message on topic `t/1`:
+
+   ```text
+   topic: t/1
+   payload: {"msg":"hello GCP PubSub"}
+   ```
+
+## Advanced Settings
+
+This section describes the advanced settings for GCP Pub/Sub connectors, the Producer Sink, and the Consumer Source.
+
+### Connector Advanced Settings
+
+GCP Pub/Sub Producer and Consumer connectors use the same advanced settings.
+
+| Field Name | Description | Default Value |
+| --- | --- | --- |
+| **HTTP Pipelining** | Maximum number of HTTP requests that can be sent without waiting for each response. Set to `1` to wait for a response before sending the next request. | `100` |
+| **Connection Pool Size** | Number of connections maintained in the connection pool. | `8` |
+| **Connect Timeout** | Maximum time to wait for an HTTP connection to be established. | `15` seconds |
+| **Max Inactive** | Maximum time without activity before the HTTP client attempts to reconnect. | `10` seconds |
+| **Max Retries** | Maximum number of retries after an error occurs while sending a request. | `2` |
+| **Start Timeout** | Maximum time to wait for the connector to become healthy after it is created. | `5` seconds |
+| **Health Check Interval** | Interval between connector health checks. | `15` seconds |
+| **Health Check Timeout** | Maximum time for a health check to return a result. If the timeout expires, the connector is considered disconnected. | `60` seconds |
+
+### Advanced Settings Shared by the Producer Sink and Consumer Source
+
+The Producer Sink and Consumer Source share the following advanced settings. Their default **Health Check Interval** values differ.
+
+| Field Name | Description | Producer Sink Default | Consumer Source Default |
+| --- | --- | --- | --- |
+| **Request TTL** | Maximum time from when a request enters the buffer until it receives a response or acknowledgment. The request expires if it remains buffered or receives no response or acknowledgment within this interval. | `45` seconds | `45` seconds |
+| **Health Check Interval** | Interval between Sink or Source health checks. | `15` seconds | `30` seconds |
+| **Health Check Interval Jitter** | Uniform random delay added to the health check interval so that Actions and Sources sharing a connector do not start health checks simultaneously. | `0` milliseconds | `0` milliseconds |
+| **Health Check Timeout** | Maximum time for a health check to return a result. If the timeout expires, the Sink or Source is considered disconnected. | `60` seconds | `60` seconds |
+
+### Advanced Settings Specific to the Producer Sink
+
+The GCP Pub/Sub Producer Sink provides the following additional advanced settings.
+
+| Field Name | Description | Default Value |
+| --- | --- | --- |
+| **Buffer Pool Size** | Number of buffer worker processes used to store and process data before sending it to GCP Pub/Sub. | `16` |
+| **Dispatch Strategy** | Strategy for assigning requests without an explicit pick key to buffer workers. `Per Client ID` keeps requests from the same client on the same worker; `Random` distributes them across workers. | `Per Client ID` |
+| **Max Buffer Queue Size** | Maximum amount of data that each buffer worker can hold. | `256` MB |
+| **Batch Size** | Maximum number of requests in one batch. Set to `1` to disable batching. | `1` |
+| **Query Mode** | Controls whether requests are sent synchronously or asynchronously. In `Async` mode, EMQX continues processing messages without waiting for a response from GCP Pub/Sub. | `Async` |
+| **Inflight Window** | When **Query Mode** is `Async`, specifies the maximum number of requests that can be sent without receiving a response. Set to `1` when messages from the same MQTT client must be processed in strict order. | `100` |
+
+### Advanced Settings Specific to the Consumer Source
+
+The GCP Pub/Sub Consumer Source provides the following additional advanced setting.
+
+| Field Name | Description | Default Value |
+| --- | --- | --- |
+| **Ack Deadline** | Approximate time GCP Pub/Sub waits for the Source to acknowledge a delivered message. After the deadline, GCP Pub/Sub may redeliver the message. The supported range is `10` to `600` seconds. | `60` seconds |
