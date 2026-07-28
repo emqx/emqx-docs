@@ -58,13 +58,14 @@ Body:
 ## 通过 Dashboard 配置
 
 1. 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **认证**。
+
 2. 在**认证**页面，点击**创建**。
-3. 依次选择**认证方式**为 `Password-Based`，**数据源**为 `HTTP Server`，进入**配置参数**页签：
 
-<!-- TODO: Dashboard OAuth2 客户端凭证认证表单定稿后，替换或删除此截图。 -->
-![authn-http](./assets/authn-http.png)
+3. 依次选择**认证方式**为 `Password-Based`，**数据源**为 `HTTP Server`，进入**配置参数**步骤：
 
-4. 您可根据如下说明完成相关配置：
+   ![authn-http](./assets/authn-http.png)
+
+4. 根据如下说明完成相关配置：
 
    - **请求方式**：选择 HTTP 请求方式，可选值： `get`、`post`。
 
@@ -78,7 +79,9 @@ Body:
 
    - **请求头**（可选）：HTTP 请求头配置。可以添加多个请求头。键和值可以使用[占位符](./authn.md#认证占位符)。
 
-   - **启用 TLS**：配置是否启用 TLS。
+   - **OAuth2 客户端凭证**：开启后，EMQX 将获取 Access Token，并将其以 Bearer Token 的形式添加到发往外部 HTTP 认证服务的请求中。有关配置详情，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
+
+   - **启用 TLS**：开启后，对外部 HTTP 认证服务的连接启用 TLS。此开关独立于 OAuth2 客户端凭证配置中的**启用 TLS**开关。
 
    - **请求体**：请求模板，对于 `POST` 请求，它以 JSON 形式在请求体中发送。对于 `GET` 请求，它被编码为 URL 中的查询参数（Query String）。映射键和值可以使用[占位符](./authn.md#认证占位符)。
 
@@ -94,20 +97,18 @@ Body:
 
 ### 配置 OAuth2 客户端凭证认证
 
-从 EMQX 6.0.4 开始，HTTP 认证器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token Endpoint 获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 认证服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
+从 EMQX 6.0.4 开始，HTTP 认证器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 认证服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
 
-在 Dashboard 中配置以下 OAuth2 设置：
+开启 **OAuth2 客户端凭证**，然后配置以下设置：
 
-| 配置项 | 说明 |
+| Dashboard 配置项 | 说明 |
 | --- | --- |
-| `enable` | 是否启用 OAuth2 客户端凭证认证。默认值为 `false`。 |
-| `grant_type` | OAuth2 授权类型。仅支持 `client_credentials`，默认值为 `client_credentials`。 |
-| `token_endpoint` | OAuth2 Token Endpoint 的 URL。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
-| `client_id` | 请求 Access Token 时使用的 Client ID。 |
-| `client_secret` | 请求 Access Token 时使用的 Client Secret。 |
-| `scope` | 请求 Access Token 时使用的可选 scope。 |
-| `timeout` | 连接 Token Endpoint 并请求 Token 的超时时间。默认值为 `5s`。 |
-| `ssl` | HTTPS Token Endpoint 的 TLS 配置，默认启用 TLS。此配置独立于认证服务 URL 的 TLS 配置。 |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于外部 HTTP 认证服务的**启用 TLS**开关。 |
 
 EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。例如：
 

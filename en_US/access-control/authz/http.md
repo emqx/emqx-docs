@@ -8,7 +8,7 @@ EMQX supports the authorization based on the HTTP service. The user needs to bui
 
 ::: tip Tip
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
@@ -76,28 +76,23 @@ For untrusted environments, HTTPS should be used.
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
 
-2. Click **Create** at the top right corner, select **HTTP Server** as **Backend**, and click **Next**. The **Configuration** tab is shown as below.
+2. Click **Create** at the top right corner, select **HTTP Server** as **Backend**, and click **Next** to proceed to the **Configuration** step.
 
-   <!-- TODO: Replace or remove this screenshot after the Dashboard OAuth2 Client Credentials form is finalized. -->
    <img src="./assets/authz-http_ee.png" alt="authz-http_ee" style="zoom:67%;" />
 
 3. Follow the instructions below to do the configuration.
 
-   **HTTP**: Configure the HTTP request method, the IP address and request headers here.
-
-   - **Request Method**: Select the HTTP request method, optional values: `GET`, `POST`.
+   - **Method**: Select the HTTP request method, optional values: `GET`, `POST`.
    - **URL**: Enter the IP address of the HTTP application.
    - **Headers** (optional): Configure the HTTP request headers. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
-
-   **Connection Configuration**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
-
-   - **Pool size** (optional): This is an integer that specifies the number of concurrent connections from EMQX nodes to external HTTP servers. The default value is `8`. 
-   - **Connection Timeout** (optional): Enter the duration to wait for a connection timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
-   - **HTTP Pipelining** (optional): Positive integer, specifies the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
-   - **Request Timeout** (optional): Enter the duration to wait for a request timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
-   - **TLS Configuration**: Configure whether to enable TLS.
-
-   **Authorization Configuration**: Complete the configuration of the HTTP request body here. <!--Related information needs to be added.-->
+   - **OAuth2 Client Credentials**: Turn on the toggle switch to let EMQX obtain an access token and add it to requests sent to the external HTTP authorization service. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
+   - **Enable TLS**: Turn on the toggle switch to enable TLS for connections to the external HTTP authorization service. This setting is independent of the TLS setting for the OAuth2 token endpoint.
+   - **Body**: Configure the HTTP request body. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
+   - **Advanced Settings**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
+     - **Pool size** (optional): This is an integer that specifies the number of concurrent connections from EMQX nodes to external HTTP servers. The default value is `8`.
+     - **Connection Timeout** (optional): Enter the duration to wait for a connection timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
+     - **HTTP Pipelining** (optional): Positive integer, specifies the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
+     - **Request Timeout** (optional): Enter the duration to wait for a request timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
 
 4. Click **Create** to finish the setting.
 
@@ -105,18 +100,16 @@ For untrusted environments, HTTPS should be used.
 
 Starting from EMQX 6.0.4, an HTTP authorizer supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the external HTTP authorization service, it sends the token in the `Authorization: Bearer <access_token>` request header so that the external service can authenticate EMQX.
 
-Configure the following OAuth2 settings in Dashboard:
+Turn on **OAuth2 Client Credentials**, and then configure the following settings:
 
-| Setting | Description |
+| Dashboard Setting | Description |
 | --- | --- |
-| `enable` | Enables OAuth2 Client Credentials authentication. The default is `false`. |
-| `grant_type` | OAuth2 grant type. Only `client_credentials` is supported. The default is `client_credentials`. |
-| `token_endpoint` | URL of the OAuth2 token endpoint. The URL must use HTTP or HTTPS and must not contain user information. |
-| `client_id` | Client ID used to request an access token. |
-| `client_secret` | Client secret used to request an access token. |
-| `scope` | Optional scope requested for the access token. |
-| `timeout` | Timeout for connecting to and requesting the token endpoint. The default is `5s`. |
-| `ssl` | TLS options for an HTTPS token endpoint. TLS is enabled by default. These options are independent of the TLS settings for the authorization service URL. |
+| **Token Endpoint** | Required. OAuth2 authorization server endpoint used to request an access token. The URL must use HTTP or HTTPS and must not contain user information. |
+| **Client ID** | Required. OAuth2 client ID used to request an access token. |
+| **Client Secret** | Required. OAuth2 client secret used to request an access token. |
+| **Scope** | Optional OAuth2 scope requested for the access token. |
+| **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
+| **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. This setting is independent of the **Enable TLS** setting for the external HTTP authorization service. |
 
 EMQX sends a `POST` request with the `application/x-www-form-urlencoded` content type to the token endpoint. The request body contains `grant_type`, `client_id`, `client_secret`, and the optional `scope`. The token endpoint must return a `200` response with a JSON body containing an `access_token`. It can also return `token_type` and `expires_in`. If present, `token_type` must be `Bearer`, and `expires_in` must be a positive integer.
 

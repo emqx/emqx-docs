@@ -64,11 +64,12 @@ Due to the lack of expressiveness, it has been redesigned to make use of HTTP bo
 You can use EMQX Dashboard to finish the relevant configuration.
 
 1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner.
-3. Click to select **Password-Based** as **Mechanism**, and **HTTP Server** as **Backend** to go to the **Configuration** tab, as shown below. 
 
-<!-- TODO: Replace or remove this screenshot after the Dashboard OAuth2 Client Credentials form is finalized. -->
-<img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
+2. On the **Authentication** page, click **Create** in the top right corner.
+
+3. Select **Password-Based** as the **Mechanism** and **HTTP Server** as the **Backend** to proceed to the **Configuration** step.
+
+   <img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
 4. Follow the instructions below to configure the authentication backend:
 
@@ -82,7 +83,8 @@ You can use EMQX Dashboard to finish the relevant configuration.
    - **URL**: Enter the URL address of the HTTP service.
    - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this HTTP Server authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
    - **Headers** (optional): HTTP request header. You can add several headers. Keys and values support using [placeholders](./authn.md#authentication-placeholders).
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+   - **OAuth2 Client Credentials**: Turn on the toggle switch to let EMQX obtain an access token and add it to requests sent to the external HTTP authentication service. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
+   - **Enable TLS**: Turn on the toggle switch to enable TLS for connections to the external HTTP authentication service. This setting is independent of the TLS setting for the OAuth2 token endpoint. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
    - **Body**: Request template; for `POST` requests, it is sent as a JSON in the request body; for `GET` requests, it is encoded as a Query String in the URL. Mapping keys and values support using [placeholders](./authn.md#authentication-placeholders).
    - **Advanced Settings**:
      - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to an HTTP server. Default: `8`. 
@@ -99,18 +101,16 @@ You can use EMQX Dashboard to finish the relevant configuration.
 
 Starting from EMQX 6.0.4, an HTTP authenticator supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the external HTTP authentication service, it sends the token in the `Authorization: Bearer <access_token>` request header so that the external service can authenticate EMQX.
 
-Configure the following OAuth2 settings in Dashboard:
+Turn on **OAuth2 Client Credentials**, and then configure the following settings:
 
-| Setting | Description |
+| Dashboard Setting | Description |
 | --- | --- |
-| `enable` | Enables OAuth2 Client Credentials authentication. The default is `false`. |
-| `grant_type` | OAuth2 grant type. Only `client_credentials` is supported. The default is `client_credentials`. |
-| `token_endpoint` | URL of the OAuth2 token endpoint. The URL must use HTTP or HTTPS and must not contain user information. |
-| `client_id` | Client ID used to request an access token. |
-| `client_secret` | Client secret used to request an access token. |
-| `scope` | Optional scope requested for the access token. |
-| `timeout` | Timeout for connecting to and requesting the token endpoint. The default is `5s`. |
-| `ssl` | TLS options for an HTTPS token endpoint. TLS is enabled by default. These options are independent of the TLS settings for the authentication service URL. |
+| **Token Endpoint** | Required. OAuth2 authorization server endpoint used to request an access token. The URL must use HTTP or HTTPS and must not contain user information. |
+| **Client ID** | Required. OAuth2 client ID used to request an access token. |
+| **Client Secret** | Required. OAuth2 client secret used to request an access token. |
+| **Scope** | Optional OAuth2 scope requested for the access token. |
+| **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
+| **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. This setting is independent of the **Enable TLS** setting for the external HTTP authentication service. |
 
 EMQX sends a `POST` request with the `application/x-www-form-urlencoded` content type to the token endpoint. The request body contains `grant_type`, `client_id`, `client_secret`, and the optional `scope`. The token endpoint must return a `200` response with a JSON body containing an `access_token`. It can also return `token_type` and `expires_in`. If present, `token_type` must be `Bearer`, and `expires_in` must be a positive integer. For example:
 
