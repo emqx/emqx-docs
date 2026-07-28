@@ -82,36 +82,38 @@ python3 http_server.py
 
 This section demonstrates how to configure an HTTP server Connector that is used to connect the Sink to the HTTP server.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+1. Go to EMQX Dashboard, and click **Integration** -> **Connectors**.
 
-2. Click **Create** on the top right corner of the page. Click to select the **HTTP Server** and click **Next**:
+2. Click **Create** in the top-right corner, select **HTTP Server** as the connector type, and click **Next** to proceed to the **Configuration** step.
 
-3. Enter a name for the Connector. The name should be a combination of upper/lower case letters or numbers, for example, `my_httpserver`. 
+3. Configure the Connector:
 
-4. Set **URL** to `http://localhost:5000`. For the rest, you can keep the default value.
+   - **Connector Name**: Enter a name for the Connector, for example, `my_httpserver`.
+   - **Description** (optional): Enter a description of the Connector.
+   - **URL**: Enter the URL of the target HTTP server. In this example, enter `http://localhost:5000`.
+   - **Headers** (optional): Add HTTP request headers to requests sent through this Connector.
+   - **OAuth2 Client Credentials**: Turn on the toggle switch to let EMQX obtain an access token and add it to requests sent to the target HTTP server. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
+   - **Enable TLS**: Turn on the toggle switch to enable TLS for connections to the target HTTP server. This setting is independent of the TLS setting for the OAuth2 token endpoint.
+   - **Advanced Settings** (optional): Configure connection-related options. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+4. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the HTTP server.
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the HTTP server.
-
-7. Click **Create** to complete the creation of the Connector.
+5. Click **Create** to complete the creation of the Connector.
 
 ### Configure OAuth2 Client Credentials
 
 Starting from EMQX 6.0.4, an HTTP Server Connector supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the target HTTP server, it sends the token in the `Authorization: Bearer <access_token>` request header so that the target server can authenticate EMQX.
 
-Configure the following OAuth2 settings when you create or edit the Connector:
+When you create or edit the Connector, turn on **OAuth2 Client Credentials**, and then configure the following settings:
 
-| Setting | Description |
+| Dashboard Setting | Description |
 | --- | --- |
-| `enable` | Enables OAuth2 Client Credentials authentication. The default is `false`. |
-| `grant_type` | OAuth2 grant type. Only `client_credentials` is supported. The default is `client_credentials`. |
-| `token_endpoint` | URL of the OAuth2 token endpoint. The URL must use HTTP or HTTPS and must not contain user information. |
-| `client_id` | Client ID used to request an access token. |
-| `client_secret` | Client secret used to request an access token. |
-| `scope` | Optional scope requested for the access token. |
-| `timeout` | Timeout for connecting to and requesting the token endpoint. The default is `5s`. |
-| `ssl` | TLS options for an HTTPS token endpoint. TLS is enabled by default. These options are independent of the Connector TLS settings for the target HTTP server. |
+| **Token Endpoint** | Required. OAuth2 authorization server endpoint used to request an access token. The URL must use HTTP or HTTPS and must not contain user information. |
+| **Client ID** | Required. OAuth2 client ID used to request an access token. |
+| **Client Secret** | Required. OAuth2 client secret used to request an access token. |
+| **Scope** | Optional OAuth2 scope requested for the access token. |
+| **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
+| **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. This setting is independent of the **Enable TLS** setting for the target HTTP server. |
 
 The API or HOCON configuration uses the following `oauth2` block:
 

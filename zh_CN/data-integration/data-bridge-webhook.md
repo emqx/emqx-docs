@@ -84,30 +84,37 @@ python3 http_server.py
 在创建 Sink 之前，我们需要先创建一个 HTTP 服务连接器，用来指定 HTTP 服务的地址、请求方法和请求头等信息。
 
 1. 转到 Dashboard **集成** -> **连接器**页面。
-2. 点击页面右上角的**创建**。
-3. 在连接器类型中选择 **HTTP 服务**，点击**下一步**。
-4. 输入连接器名称，要求是大小写英文字母和数字的组合，这里我们输入 `my_httpserver`。
-5. URL 为 `http://localhost:5000`，其他使用默认值即可。
-6. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
-7. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 HTTP 服务。
-8. 点击最下方**创建**按钮完成规则创建。
+
+2. 点击页面右上角的**创建**，选择连接器类型为 **HTTP 服务**，点击**下一步**，进入**配置信息**步骤。
+
+3. 根据如下说明完成连接器配置：
+
+   - **连接器名称**：输入连接器名称，例如 `my_httpserver`。
+   - **描述**（可选）：输入连接器的描述。
+   - **URL**：输入目标 HTTP 服务的 URL。本示例输入 `http://localhost:5000`。
+   - **请求头**（可选）：添加通过此连接器发送请求时使用的 HTTP 请求头。
+   - **OAuth2 客户端凭证**：开启后，EMQX 将获取 Access Token，并将其以 Bearer Token 的形式添加到发往目标 HTTP 服务的请求中。有关配置详情，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
+   - **启用 TLS**：开启后，对目标 HTTP 服务的连接启用 TLS。此开关独立于 OAuth2 客户端凭证配置中的**启用 TLS**开关。
+   - **高级设置**（可选）：配置连接相关选项。详细信息参见 [Sink 的特性](./data-bridges.md#sink-的特性)。
+
+4. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 HTTP 服务。
+
+5. 点击最下方的**创建**按钮完成连接器创建。
 
 ### 配置 OAuth2 客户端凭证认证
 
-从 EMQX 6.0.4 开始，HTTP 服务连接器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token Endpoint 获取、缓存并自动刷新 Access Token。EMQX 调用目标 HTTP 服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由目标服务验证 EMQX 的身份。
+从 EMQX 6.0.4 开始，HTTP 服务连接器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用目标 HTTP 服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由目标服务验证 EMQX 的身份。
 
-创建或编辑连接器时，配置以下 OAuth2 设置：
+创建或编辑连接器时，开启 **OAuth2 客户端凭证**，然后配置以下设置：
 
-| 配置项 | 说明 |
+| Dashboard 配置项 | 说明 |
 | --- | --- |
-| `enable` | 是否启用 OAuth2 客户端凭证认证。默认值为 `false`。 |
-| `grant_type` | OAuth2 授权类型。仅支持 `client_credentials`，默认值为 `client_credentials`。 |
-| `token_endpoint` | OAuth2 Token Endpoint 的 URL。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
-| `client_id` | 请求 Access Token 时使用的 Client ID。 |
-| `client_secret` | 请求 Access Token 时使用的 Client Secret。 |
-| `scope` | 请求 Access Token 时使用的可选 scope。 |
-| `timeout` | 连接 Token Endpoint 并请求 Token 的超时时间。默认值为 `5s`。 |
-| `ssl` | HTTPS Token Endpoint 的 TLS 配置，默认启用 TLS。此配置独立于目标 HTTP 服务的连接器 TLS 配置。 |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于目标 HTTP 服务的**启用 TLS**开关。 |
 
 通过 API 或 HOCON 配置时，使用以下 `oauth2` 配置块：
 
