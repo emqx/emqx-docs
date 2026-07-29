@@ -70,7 +70,7 @@ EMQX 支持导入和导出的数据包括：
 
 ## 通过 Dashboard 管理备份文件
 
-全局管理员可以管理 **Global** 或具体 [Namespace](../multi-tenancy/namespace-overview.md) 下的备份文件。命名空间管理员可以管理和下载所属 Namespace 下的备份文件，但不能访问全局范围或其他 Namespace 下的备份文件。
+全局管理员可以管理全局范围或具体 [Namespace](../multi-tenancy/namespace-overview.md) 下的备份文件。命名空间管理员可以管理和下载所属 Namespace 下的备份文件，但不能访问全局范围或其他 Namespace 下的备份文件。
 
 :::tip
 
@@ -81,11 +81,11 @@ EMQX 支持导入和导出的数据包括：
 
 1. 登录 Dashboard，进入**系统设置** -> **备份与恢复**。
 
-2. 如果您是全局管理员，在 Namespace 选择器中选择 **Global** 或具体 Namespace。页面会加载选定范围内的备份文件。选择具体 Namespace 后，确认列表上方的提示中显示了目标 Namespace。
+2. 如果您是全局管理员，在 Namespace 选择器中选择**全局**或具体 Namespace。页面会加载选定范围内的备份文件。选择具体 Namespace 后，确认列表上方的提示中显示了目标 Namespace。
 
    命名空间管理员不会看到此选择器。EMQX 会将其备份操作限制在所属 Namespace 内。
 
-3. 如需导出数据，点击**创建**。全局管理员只能在 **Global** 视图中创建备份。全局管理员选择具体 Namespace 后，**创建**按钮不可用。命名空间管理员可以为所属 Namespace 创建备份。
+3. 如需导出数据，点击**创建**。全局管理员只能在**全局**视图中创建备份。全局管理员选择具体 Namespace 后，**创建**按钮不可用。命名空间管理员可以为所属 Namespace 创建备份。
 
    备份文件列表中包含以下信息：
    - **文件名称**：备份文件的名称。
@@ -113,7 +113,7 @@ EMQX 支持导入和导出的数据包括：
 - `DELETE /api/v5/data/files/{filename}`：删除备份文件。
 - `POST /api/v5/data/import`：导入备份文件。
 
-全局管理员未传入 `namespace` 时，操作作用于 **Global** 下的备份文件。对于命名空间调用方，EMQX 会忽略该参数，并将操作限制在调用方所属的 Namespace 内。
+全局管理员未传入 `namespace` 时，操作作用于全局范围内的备份文件。对于命名空间调用方，EMQX 会忽略该参数，并将操作限制在调用方所属的 Namespace 内。
 
 ## 通过 CLI 操作
 
