@@ -305,14 +305,13 @@ From this page, you can:
 
 #### Delete a Certificate Bundle
 
-When you click **Delete** for a certificate bundle, EMQX checks whether any listeners or connectors are currently referencing it.
+Starting from EMQX 6.1.4, a certificate bundle cannot be deleted while it is referenced by any configuration.
 
-- If no dependencies are found, the bundle is deleted immediately.
-- If one or more configurations depend on the bundle, EMQX displays a warning and asks whether you want to force delete. Proceeding with force delete removes the certificate bundle even though it is still referenced.
-
-::: caution
-Force deleting a certificate bundle that is in use will cause the dependent listeners or connectors to lose their certificate configuration. Affected connectors may report errors and fail to establish new TLS connections. Update or reconfigure the dependent resources after a force delete.
-:::
+1. Click **Delete**. The **Confirm Delete?** dialog opens.
+2. Click **Cancel** to close the dialog without deleting the certificate bundle, or click **Confirm** to proceed.
+3. After you click **Confirm**, one of the following occurs:
+   - If no dependencies are found, the certificate bundle is deleted.
+   - If one or more configurations depend on the bundle, the deletion is refused. The **Bundle In Use** dialog lists the configurations that reference the bundle. Click **Go to Page** to update or delete these configurations before trying again, or click **Cancel** to close the dialog without deleting the certificate bundle.
 
 Managed certificate bundles are stored on disk and automatically reloaded by EMQX. Updating a managed certificate does not require restarting EMQX.
 
@@ -361,27 +360,23 @@ GET /certs/global/list
 
 #### Delete Certificate Bundles
 
-Before deleting a managed certificate bundle or an individual certificate file within a bundle, EMQX checks whether any configurations across all namespaces are referencing it. If dependencies exist, the request fails with a `400 BAD_REQUEST` error unless `force_delete=true` is specified.
+Starting from EMQX 6.1.4, EMQX refuses to delete a managed certificate bundle or an individual file in the bundle while any configuration across all namespaces references the bundle. The request returns a `400 BAD_REQUEST` error.
 
 Delete an entire managed certificate bundle from a namespace:
 
-```
+```text
 DELETE /certs/ns/:namespace/name/:name
 ```
 
 Delete an entire managed certificate bundle from the global namespace:
 
-```
+```text
 DELETE /certs/global/name/:name
 ```
 
-The same `force_delete` query parameter also applies when deleting an individual file within a bundle (when the `kind` query parameter is specified).
+To delete an individual file within a bundle, use the same endpoint and specify the file with the `kind` query parameter. The dependency check applies to both the entire bundle and individual files.
 
-**Query Parameters**
-
-| Parameter      | Type    | Default | Description                                                                                     |
-| -------------- | ------- | ------- | ----------------------------------------------------------------------------------------------- |
-| `force_delete` | Boolean | `false` | When `true`, deletes the bundle or file even if it is referenced by other configurations. When `false` (default), the request fails with `400` if any dependent configurations are found. |
+The `force_delete` query parameter is no longer part of the API schema and cannot bypass the dependency check. If an existing client sends `force_delete=true`, EMQX ignores the parameter and processes the request as a regular deletion request.
 
 When the deletion is blocked, the `400` response body includes a `referencing_configs` field that identifies which configurations are referencing the bundle, grouped by namespace. For example:
 
@@ -397,9 +392,7 @@ When the deletion is blocked, the `400` response body includes a `referencing_co
 }
 ```
 
-::: caution
-Setting `force_delete=true` removes the certificate bundle regardless of active dependencies. Listeners or connectors that reference the deleted bundle will lose their TLS certificate configuration and may fail to establish new secure connections. Reconfigure the affected resources after a force delete.
-:::
+Before retrying the deletion, update or delete every configuration listed in `referencing_configs` so that it no longer references the bundle.
 
 <!--## Automatic Certificate Issuance with ACME (Managed Certificates)
 
