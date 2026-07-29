@@ -144,6 +144,12 @@ Timeout for FIN-WAIT-2 Sockets:
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
 
+Reduce TCP packet retransmission count:
+
+```bash
+sysctl -w net.ipv4.tcp_retries2=5
+```
+
 ## Erlang VM Tuning
 
 Tune and optimize the Erlang VM in `etc/emqx.conf` file:
