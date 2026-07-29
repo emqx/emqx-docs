@@ -108,6 +108,10 @@ FIN-WAIT-2 Socket 超时设置:
 ```bash
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
+减少 TCP 报文重传次数:
+```bash
+sysctl -w net.ipv4.tcp_retries2=5
+```
 
 ## Erlang 虚拟机参数
 
@@ -166,6 +170,7 @@ docker run -d --name emqx -p 18083:18083 -p 1883:1883 -p 4369:4369 \
     --sysctl net.ipv4.tcp_wmem=1024 4096 16777216 \
     --sysctl net.ipv4.tcp_max_tw_buckets=1048576 \
     --sysctl net.ipv4.tcp_fin_timeout=15 \
+    --sysctl net.ipv4.tcp_retries2=5 \
     emqx/emqx:latest
 ```
 

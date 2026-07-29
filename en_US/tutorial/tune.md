@@ -136,6 +136,12 @@ Timeout for FIN-WAIT-2 Sockets:
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
 
+Reduce TCP packet retransmission count:
+
+```
+sysctl -w net.ipv4.tcp_retries2=5
+```
+
 ## Erlang VM Tuning
 
 
@@ -199,6 +205,7 @@ docker run -d --name emqx -p 18083:18083 -p 1883:1883 \
     --sysctl net.ipv4.tcp_wmem='1024 4096 16777216\ \
     --sysctl net.ipv4.tcp_max_tw_buckets=1048576 \
     --sysctl net.ipv4.tcp_fin_timeout=15 \
+    --sysctl net.ipv4.tcp_retries2=5 \
     emqx/emqx:latest
 ```
 
