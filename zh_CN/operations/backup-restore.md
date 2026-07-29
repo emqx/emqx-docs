@@ -32,17 +32,15 @@ EMQX 支持导入和导出的数据包括：
 
 ::: warning 重要提示
 
-与 Namespace 关联的内置数据库认证凭证和授权规则不能按单个 Namespace 导出或导入。如需备份或恢复这些记录，请使用全局备份。全局备份会统一处理所有 Namespace 的相关记录。
+- 与 Namespace 关联的内置数据库认证凭证和授权规则不能按单个 Namespace 导出或导入。如需备份或恢复这些记录，请使用全局备份。全局备份会统一处理所有 Namespace 的相关记录。
+- 备份仅包含存储在 EMQX 数据目录中的 SSL/TLS 证书和 `acl.conf` 文件。导入备份前，请将存储在数据目录之外的证书或 `acl.conf` 文件单独复制到相应位置。
 
 :::
 
-::: tip 特别提示
+::: tip 备份文件说明
 
-1. 请注意，导出的文件仅包含存储在 EMQX 数据目录中的 SSL/TLS 证书和 acl.conf 文件。如果存在任何位于数据目录之外的证书或 acl.conf 文件，请在导入数据之前手动将其复制到相应的位置，以确保完整性和正确性。
-
-2. 导出的文件名格式为 `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`，导出目录为 `<EMQX data directory>/backup`。
-
-3. 从  EMQX v5.7.1 开始，即使保留消息的存储方式配置为 ram（内存），也会进行备份。
+- 导出的文件名格式为 `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`，导出目录为 `<EMQX data directory>/backup`。
+- 从 EMQX v5.7.1 开始，即使保留消息的存储方式配置为 `ram`（内存），也会进行备份。
 
 :::
 

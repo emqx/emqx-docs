@@ -32,15 +32,15 @@ The data that EMQX supports for import and export includes:
 
 ::: warning Important Notice
 
-Built-in database authentication credentials and authorization rules associated with Namespaces cannot be exported or imported for an individual Namespace. To back up or restore these records, use a global backup. A global backup processes the records for all Namespaces together.
+- Built-in database authentication credentials and authorization rules associated with Namespaces cannot be exported or imported for an individual Namespace. To back up or restore these records, use a global backup. A global backup processes the records for all Namespaces together.
+- A backup includes only the SSL/TLS certificates and `acl.conf` file stored in the EMQX data directory. Before you import the backup, separately copy any certificates or `acl.conf` files stored outside the data directory to the appropriate locations.
 
 :::
 
-::: tip Special Note
+::: tip Backup File Details
 
-1. The exported file only includes SSL/TLS certificates and the `acl.conf` file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
-2. The exported file name format is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`.
-3. Starting from EMQX v5.7.1, even if the storage method of retained messages is configured as ram (memory), it will also be backed up.
+- The exported file name format is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`.
+- Starting from EMQX v5.7.1, retained messages are backed up even when their storage method is configured as `ram` (memory).
 
 :::
 
