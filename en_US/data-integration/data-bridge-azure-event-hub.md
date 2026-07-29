@@ -64,6 +64,7 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
    - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Set other fields as per your actual setup.
    - **Connection String**: Enter the connection string for your namespace, which can be found in the "Connection string - primary key" of the namespace's Shared access policies. For more details, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
    - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
+   - **Request Timeout**: Specify how long EMQX waits for a reply from Azure Event Hubs for a pending request. The default is `30` seconds. When the timeout is exceeded, EMQX considers the connection stale and re-establishes it. If this value is too small, Azure Event Hubs may accept a produce request but delay its acknowledgment. EMQX may then resend the accepted batch after reconnecting, resulting in duplicate messages and excessive downstream data volume.
 6. Click the **Create** button at the bottom to complete the Connector creation. 
 
 Now, Azure Event Hubs should be listed in the connector list (**Integration** -> **Connector**) with a **Connection Status** of **Connected**. Next, you need to create a rule and a Sink to specify the data to be streamed into the Azure Event Hubs.
@@ -95,7 +96,7 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
 
 6. Enter the name and description for the Sink in the **Name** and **Description** text boxes.
 
-7. Select the `my-azure-event-hubs` you just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
+7. Select the `my-azure-event-hubs` you just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Configure the Sink information.
    - **Event Hub Name**: Enter the name of the Event Hub to be used. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Configure Kafka Dynamic Topics](./data-bridge-kafka.md#configure-kafka-dynamic-topics) for details. 
@@ -136,7 +137,9 @@ To test if the Azure Event Hubs data integration works as you expected, you can 
 
 ## Advanced Configuration
 
-This section describes some advanced configuration options that can optimize the performance of your connectors and customize operations according to your specific scenario. When creating the corresponding object, you can expand **Advanced Settings** and configure the following settings according to your business needs.
+This section describes advanced options for optimizing Connector and Sink performance. Expand **Advanced Settings** when creating the corresponding object to configure these options.
+
+### Connector Configuration
 
 | Fields                            | Descriptions                                                 | Recommended Values |
 | --------------------------------- | ------------------------------------------------------------ | ------------------ |
@@ -150,3 +153,15 @@ This section describes some advanced configuration options that can optimize the
 | Socket Send / Receive Buffer Size | Manages the size of socket buffers to optimize network transmission performance. | `1 ` MB            |
 | No Delay                          | Choose whether to have the system kernel send the TCP socket immediately or with a delay. Turning on the toggle switch enables "No Delay", allowing the system kernel to send immediately. Otherwise, there might be some delay when the content to be sent is minimal (default 40 milliseconds). | `Enabled`          |
 | TCP Keepalive                     | This configuration enables TCP keepalive mechanism for Kafka bridge connections to maintain ongoing connection validity, preventing connection disruptions caused by extended periods of inactivity. The value should be provided as a comma-separated list of three numbers in the format `Idle, Interval, Probes`:<br />Idle: This represents the number of seconds a connection must remain idle before the server initiates keep-alive probes. The default value on Linux is 7200 seconds.<br />Interval: The interval specifies the number of seconds between each TCP keep-alive probe. On Linux, the default is 75 seconds.<br />Probes: This parameter defines the maximum number of TCP keep-alive probes to send before considering the connection as closed if there's no response from the other end. The default on Linux is 9 probes.<br />For example, if you set the value to '240,30,5,' it means that TCP keepalive probes will be sent after 240 seconds of idle time, with subsequent probes sent every 30 seconds. If there are no responses for 5 consecutive probe attempts, the connection will be marked as closed. | `none`             |
+
+### Azure Event Hubs Producer Sink Configuration
+
+<!-- TODO: Replace max_batch_age, max_retries, and reconnect_delay in the Fields column with the finalized Dashboard field labels. -->
+
+| Fields              | Descriptions                                                 | Recommended Values |
+| ------------------- | ------------------------------------------------------------ | ------------------ |
+| `max_batch_age`     | Maximum duration a message can remain in the producer buffer before it is dropped instead of sent to Azure Event Hubs. A batch is dropped only when all its messages have exceeded this duration. This applies to queued messages, including messages buffered while disconnected, and messages awaiting acknowledgment when the connection is lost. Each dropped message is counted in the `dropped.expired` metric. The default `infinity` prevents messages from expiring. Messages can still be dropped if the buffer overflows. | `infinity`         |
+| `max_retries`       | Maximum number of retries after Azure Event Hubs responds with a retryable error, such as a partition leader change. If the initial attempt and all retries fail, the batch is dropped and each message is counted in the `failed` metric. Only explicit Azure Event Hubs error responses increment the retry count. Resends caused by connection loss do not increment it and are bounded by `max_batch_age`. The default `infinity` permits unlimited retries. | `infinity`         |
+| `reconnect_delay`   | Delay before the producer attempts to reconnect to Azure Event Hubs after a connection loss. While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and `max_batch_age`. The default is `2` seconds. | `2` seconds        |
+| Max Linger Time     | Maximum duration a per-partition producer waits to accumulate more messages into a larger batch. This option applies to all buffer modes. The default `0` means no wait and optimizes messaging latency. If a small delay is acceptable, configuring one can reduce the number of requests sent to Azure Event Hubs. The wait ends early when a full batch accumulates. When messages are buffered on disk, the wait occurs before the batch is written to the buffer; configure at least `5ms` to reduce disk IOPS. | `0` milliseconds   |
+| Max Linger Bytes    | Maximum number of bytes a per-partition producer accumulates before it stops waiting and sends the batch. | `10` MB            |
