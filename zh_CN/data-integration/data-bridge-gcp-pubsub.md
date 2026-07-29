@@ -118,7 +118,10 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 8. 从**连接器**下拉框中选择刚刚创建的 `my_pubsubprodcer`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。关于配置参数，请参见[创建连接器](#创建连接器)。
 
-9. 在 **GCP PubSub 主题**中，输入您在[创建和管理 GCP 中的主题](#在-gcp-pub-sub-中创建主题)中创建的主题 ID `my-iot-core`。
+9. 在 **GCP PubSub 主题**中，输入以下任一值：
+
+   - 主题名称，例如按照[在 GCP Pub/Sub 中创建主题](#在-gcp-pub-sub-中创建主题)中的步骤创建的 `my-iot-core`。EMQX 在已配置服务账户所属的项目中解析该主题。
+   - 完整主题路径，格式为 `projects/<project-id>/topics/<topic-name>`。使用此格式可将消息发布到其他 GCP 项目中的主题。请为已配置的服务账户授予访问该项目中目标主题所需的 Pub/Sub 权限。
 
 10. 在 **HTTP 请求消息体模版**中定义模板，或留空。
 
@@ -188,7 +191,7 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 
 9. 想要从 GCP Pub/Sub 消费消息到 EMQX，可以为 Source 配置以下信息：
 
-   - **GCP PubSub 主题**：输入要被消费的 GCP Pub/Sub 消息主题的名称，例如 `my-iot-core`。
+   - **GCP PubSub 主题**：输入主题名称（例如 `my-iot-core`）或完整主题路径（格式为 `projects/<project-id>/topics/<topic-name>`）。主题名称在已配置服务账户所属的项目中解析。要消费其他 GCP 项目中的主题，请输入完整路径，并为服务账户授予访问该主题所需的 Pub/Sub 权限。消费者订阅仍创建在服务账户所属的项目中，只有主题引用指向其他项目。
    - **拉取的最大消息数**：指定在单次拉取请求中从 GCP PubSub 检索的最大消息数量。实际数量可能小于指定的值。
 
 10. 展开**高级设置**，根据需要配置可选设置。详细信息请参见[高级设置](#高级设置)。

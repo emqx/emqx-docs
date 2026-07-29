@@ -131,7 +131,10 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 8. Select the `my_pubsubprodcer` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-9. In **GCP PubSub Topic**, enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
+9. In **GCP PubSub Topic**, enter one of the following values:
+
+   - A topic name, for example, `my-iot-core`, that you created in [Create and Manage Topics in GCP](#create-and-manage-topics-in-gcp). EMQX resolves the topic in the project associated with the configured service account.
+   - A fully-qualified topic path in the format `projects/<project-id>/topics/<topic-name>`. Use this format to publish messages to a topic in a different GCP project. Grant the configured service account the required Pub/Sub permissions on the topic in that project.
 
 10. Define a template in **Payload Template**, or leave it blank.
 
@@ -203,7 +206,7 @@ This section demonstrates how to create a rule in EMQX for consuming the message
 
 9. Configure the following information for the source for consuming the message from GCP Pub/Sub to EMQX:
 
-   - **GCP PubSub Topic**: Enter the topic name of the GCP Pub/Sub topic to be consumed from, for example, `my-iot-core`.
+   - **GCP PubSub Topic**: Enter a topic name, for example, `my-iot-core`, or a fully-qualified topic path in the format `projects/<project-id>/topics/<topic-name>`. A topic name is resolved in the project associated with the configured service account. To consume from a topic in a different GCP project, enter its fully-qualified path and grant the service account the required Pub/Sub permissions on that topic. The consumer subscription is still created in the service account's project; only the topic reference points to the other project.
    - **Maximum Messages to Pull**: Specify the maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
 
 10. Expand **Advanced Settings** to configure optional settings as needed. For details, see [Advanced Settings](#advanced-settings).
