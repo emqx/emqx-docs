@@ -262,7 +262,7 @@ This section covers the creation and management of managed certificate bundles u
 
 You can create managed certificate bundles directly from the Dashboard.
 
-1. Go to **Management** -> **Certificate**.
+1. Go to **Management** -> **Certificates**.
 
 2. Click **+ Create**.
 
