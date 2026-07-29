@@ -30,6 +30,12 @@ The data that EMQX supports for import and export includes:
 - SSL/TLS certificates stored in the EMQX data directory (`node.data_dir`)
 - Authorization `acl.conf` file stored in the EMQX data directory
 
+::: warning Important Notice
+
+Built-in database authentication credentials and authorization rules associated with Namespaces cannot be exported or imported for an individual Namespace. To back up or restore these records, use a global backup. A global backup processes the records for all Namespaces together.
+
+:::
+
 ::: tip Special Note
 
 1. The exported file only includes SSL/TLS certificates and the `acl.conf` file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
