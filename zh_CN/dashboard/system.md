@@ -39,22 +39,43 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此 Scope 非常有用。
 
-在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
+创建用户时，**Scopes** 字段是可选的。省略该字段时，用户会得到一个由其角色推导出的默认 Scope 集：
 
 - **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
 - **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
 
+更新用户时，省略 `scopes` 将保留用户已存储的 Scope 设置。
+
 ![user_scopes](./assets/user_scopes.png)
 
-::: warning 将宽泛 Scope 视为等同管理员权限
+#### `scopes` 写入行为
 
-以下 Scope 天然覆盖范围较广，即使未分配其他 Scope，也实际上授予管理员能力：
+从 EMQX 6.0.4 开始，`POST /api/v5/users` 和 `PUT /api/v5/users/:username` 支持以下 `scopes` 请求值：
+
+| 请求值 | 创建用户 | 更新用户 |
+| --- | --- | --- |
+| 省略字段 | 应用角色的默认 Scope。 | 保留用户已存储的 Scope 设置。如果请求同时更改角色，已存储的 Scope 必须适用于新角色。 |
+| `"unset"` | 使用角色的隐式默认 Scope，不存储显式列表。 | 清除显式列表，恢复角色的隐式默认 Scope。 |
+| 与角色默认值相同的列表 | 按 `"unset"` 处理，列表顺序不影响比较结果。 | 按 `"unset"` 处理，列表顺序不影响比较结果。 |
+| 空列表 `[]` | 拒绝访问所有受 Scope 控制的 API 区域。 | 将已存储的设置替换为拒绝访问所有受 Scope 控制的 API 区域。 |
+| 其他显式列表 | 校验并存储该列表。 | 校验并存储该列表。 |
+
+使用 `"unset"` 可以使用户 Scope 在升级到增加了新 Scope 的 EMQX 版本后继续与角色默认值保持一致。对于没有显式 Scope 列表的用户，API 可以返回 `"unset"`。API 客户端执行读取、修改、写回操作时，可以原样回传该值，例如只修改用户备注时。
+
+::: warning 特权 Scope 必须单独使用
+
+以下 Scope 等同管理员权限：
 
 - `system` 覆盖配置管理（`/configs*`、`/data/*` 等）。持有 `system` 的用户可以更新任意配置子树，或恢复包含已存储用户和 API 密钥记录的备份文件。
 - `user_management` 允许持有者创建或修改其他 Dashboard 用户，包括具有任意 Scope 集的用户。
 - `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
+- `sso_management` 允许持有者轮换或重新配置 SSO 后端，从而改变管理员的身份认证方式。
 
-将其中任一 Scope 与受限 Scope 列表组合到同一个用户上，并不能可靠地强制执行该限制。该用户可通过配置变更、备份恢复，或为自己创建新的账号或密钥来访问受限区域。仅将这三个 Scope 授予您完全信任的用户，并遵循最小权限原则，只授予用户实际需要的具体 Scope。
+从 EMQX 6.0.4 开始，全局 Dashboard 用户的显式 Scope 列表不能将以上任一特权 Scope 与非特权 Scope 组合。创建或更新请求将返回 HTTP 400。需要等同管理员权限时，仅使用特权 Scope；需要受限访问时，仅使用非特权 Scope。`mfa_management` 属于非特权 Scope。
+
+在 EMQX 6.0.4 之前创建且使用混合 Scope 列表的用户可以继续工作。后续请求显式提交 Scope 列表时，必须拆分特权 Scope 和非特权 Scope。省略 `scopes` 字段、使用 `"unset"`、使用与角色默认值相同的列表或使用空列表 `[]` 时，不会按显式混合列表处理。
+
+此互斥规则不适用于命名空间 Dashboard 管理员。命名空间管理员的 Scope 组合仍受命名空间角色兼容性和端点级授权控制。
 
 :::
 
@@ -70,7 +91,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 - **不能被删除**：无论是从 Dashboard 还是 REST API，**删除**按钮始终不可用。
 - 角色**不能被更改**，始终保持 `administrator`。
-- Scope 集**不能被自定义**，始终拥有完整的管理员 Scope。
+- Scope 集**不能被自定义**，始终使用隐式的完整管理员 Scope。通过用户 API 更新其他字段时，可以省略 `scopes` 字段、使用 `"unset"`，或使用与管理员角色默认值相同的列表。
 - 描述和密码**可以**正常修改。
 
 其他管理员不受此限制，只要系统中至少还存在一个管理员，就可以被删除。
@@ -145,6 +166,7 @@ ns:<NAMESPACE>::<ROLE>
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
   - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
 - **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+- **API 密钥管理**：命名空间管理员可以创建、查询、查看、更新和删除自己命名空间中的 API 密钥。命名空间管理员不能创建全局 API 密钥或其他命名空间中的密钥，所属命名空间之外的密钥不会显示。REST API 的详细行为参见[命名空间管理员管理 API 密钥](../admin/api.md#命名空间管理员管理-api-密钥)。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
 

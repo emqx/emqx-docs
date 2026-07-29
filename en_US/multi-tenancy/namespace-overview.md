@@ -54,6 +54,7 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
+  - Starting from EMQX 6.0.4, namespaced administrators can [manage API keys within their own namespace](../admin/api.md#manage-api-keys-as-a-namespaced-administrator). Global keys and keys in other namespaces remain inaccessible.
   - This ensures secure, tenant-specific administrative access alongside data isolation.
   
 - **Multi-Tenant Management**

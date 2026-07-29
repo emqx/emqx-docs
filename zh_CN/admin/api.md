@@ -255,6 +255,40 @@ POST http://your-emqx-address:8483/api/v5/login
 
 已创建的密钥可在列表页查看详情，通过**编辑**按钮修改到期时间、状态和备注，或通过**删除**按钮移除。
 
+#### REST API
+
+通过 REST API 创建或更新 API 密钥时，使用 Dashboard 用户的 Bearer Token 进行身份认证。API 密钥管理端点不接受 API 密钥认证。
+
+从 EMQX 6.0.4 开始，`POST /api/v5/api_key` 和 `PUT /api/v5/api_key/:name` 的请求体支持顶层 `namespace` 字段。例如，以下请求在 `team-a` 命名空间中创建管理员 API 密钥：
+
+```json
+{
+  "name": "team-a-key",
+  "role": "administrator",
+  "namespace": "team-a"
+}
+```
+
+可以通过以下任一方式指定命名空间：
+
+- 使用 `administrator` 等不含命名空间的角色，并同时提供 `namespace` 字段。
+- 将命名空间编码到角色中，格式为 `ns:<namespace>::<role>`，例如 `ns:team-a::administrator`。
+
+以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后不能更改所属命名空间。
+
+#### 命名空间管理员管理 API 密钥
+
+从 EMQX 6.0.4 开始，命名空间 Dashboard 管理员可以管理自己命名空间中的 API 密钥。管理员必须使用 Bearer Token 进行身份认证。
+
+| 操作 | 命名空间管理员行为 |
+| --- | --- |
+| 创建 API 密钥 | 只能在管理员所属的命名空间中创建密钥。创建全局密钥或其他命名空间的密钥时返回 HTTP 403。 |
+| 查询 API 密钥列表 | 只能看到管理员所属命名空间中的密钥。响应会过滤全局密钥和其他命名空间中的密钥。 |
+| 查看、更新或删除 API 密钥 | 只能操作管理员所属命名空间中的密钥。操作其他命名空间中的密钥时返回 HTTP 404，避免泄露密钥是否存在。 |
+| 更改 API 密钥的命名空间 | 不能将密钥移动到其他命名空间，更新请求返回 HTTP 400。 |
+
+全局 Dashboard 管理员仍可跨命名空间管理 API 密钥。
+
 #### Bootstrap 文件
 
 您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
@@ -313,7 +347,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 #### 内置范围
 
-EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
+EMQX 5.10 提供 10 个 API 密钥 Scope。从 EMQX 6.0.4 开始，显式 Scope 列表不能将 `system` 与其他 API 密钥 Scope 组合：
 
 | Scope | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -341,11 +375,13 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
 :::
 
-::: warning 将 `system` 视为等同管理员权限
+::: warning `system` 必须单独使用
 
 `system` 覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度 Scope（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
 
-将 `system` 与受限 Scope 列表组合到同一个密钥上，并不能可靠地强制执行该限制。仅将 `system` 授予已具备管理员信任级别的密钥，并遵循最小权限原则，只授予该密钥实际需要的 Scope。
+从 EMQX 6.0.4 开始，如果创建或更新 API 密钥时，显式 Scope 列表将 `system` 与其他 Scope 组合，请求返回 HTTP 400。需要等同管理员权限时，只分配 `system`；需要最小权限访问时，只分配非特权 Scope。
+
+在 EMQX 6.0.4 之前创建且使用混合 Scope 列表的 API 密钥可以继续工作。后续请求显式提交 Scope 列表时，必须改为仅使用 `system`，或仅使用非特权 Scope。省略 `scopes` 字段时，保留已有设置或继续使用向后兼容的无限制行为；空列表 `[]` 仍表示拒绝所有业务端点。
 
 :::
 
@@ -379,7 +415,7 @@ Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（�
 
 Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
 
-同样的三态模型也适用于 Dashboard 登录用户。当登录用户的 `scopes` 字段未设置时，用户将获得由角色推导出的默认 Scope 集：管理员获得全部 Scope（包括 4 个登录专属 Scope）；查看者获得全部 10 个 API 密钥 Scope，但不包括 4 个登录专属 Scope（含 `mfa_management`），除非显式分配。
+Dashboard 登录用户同样支持角色默认值、空列表和显式 Scope 列表，但创建和更新用户的 API 还具有额外的写入语义。用户 API 接受 `"unset"`，用于恢复角色的隐式默认 Scope；与角色默认值相同的列表也按 `"unset"` 处理。详情参见 [`scopes` 写入行为](../dashboard/system.md#scopes-写入行为)。
 
 #### 查询可用范围
 

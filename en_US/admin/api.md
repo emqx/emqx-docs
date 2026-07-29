@@ -259,6 +259,40 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 
 You can view key details by clicking its name, edit its expiration, status, or note via the **Edit** button, or remove it with the **Delete** button.
 
+#### REST API
+
+Use a Dashboard user's bearer token to create or update an API key through the REST API. The API key management endpoints do not accept API key authentication.
+
+Starting from EMQX 6.0.4, the request body for `POST /api/v5/api_key` and `PUT /api/v5/api_key/:name` accepts a top-level `namespace` field. For example, the following request creates an administrator API key in the `team-a` namespace:
+
+```json
+{
+  "name": "team-a-key",
+  "role": "administrator",
+  "namespace": "team-a"
+}
+```
+
+You can specify the namespace in either of these ways:
+
+- Provide a bare role, such as `administrator`, together with the `namespace` field.
+- Encode the namespace in the role as `ns:<namespace>::<role>`, such as `ns:team-a::administrator`.
+
+Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. An API key's namespace cannot be changed after the key is created.
+
+#### Manage API Keys as a Namespaced Administrator
+
+Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API keys within their own namespace. The administrator must authenticate with a bearer token.
+
+| Operation | Namespaced Administrator Behavior |
+| --- | --- |
+| Create an API key | Can create a key only in the administrator's namespace. Creating a global key or a key in another namespace returns HTTP 403. |
+| List API keys | Sees only keys in the administrator's namespace. Global keys and keys in other namespaces are filtered from the response. |
+| Read, update, or delete an API key | Can operate only on keys in the administrator's namespace. A key in another namespace returns HTTP 404 so that its existence is not disclosed. |
+| Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
+
+A global Dashboard administrator can continue to manage API keys across all namespaces.
+
 #### Bootstrap File
 
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
@@ -317,7 +351,7 @@ In microservice and integration scenarios, external systems typically need acces
 
 #### Built-in Scopes
 
-EMQX 5.10 ships with 10 scopes that you can combine freely when creating an API key:
+EMQX 5.10 ships with 10 scopes for API keys. Starting from EMQX 6.0.4, an explicit scope list cannot combine `system` with any other API-key scope:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -345,11 +379,13 @@ In addition to these API-key scopes, Dashboard login users have four login-only 
 Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
 :::
 
-::: warning Treat `system` as administrator-equivalent
+::: warning `system` Must Stand Alone
 
 `system` covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
 
-Combining `system` with a restricted scope list on the same key does not reliably enforce the restriction. Reserve `system` for keys that already have administrative trust, and apply the principle of least privilege by granting only the scopes the key actually needs.
+Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or assign only non-privilege scopes for least-privilege access.
+
+API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must use either `system` alone or a list containing only non-privilege scopes. When `scopes` is omitted, an update keeps the stored setting and a create request applies the backward-compatible unrestricted behavior. An empty list `[]` remains the deny-all setting.
 
 :::
 
@@ -383,7 +419,7 @@ The `scopes` field on an API key follows these rules:
 
 When a bootstrap file entry omits the scopes segment, the key is explicitly written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
 
-The same three-state model applies to Dashboard login users. When a login user's `scopes` field is absent, the user receives a role-derived default set: administrators get all scopes, including the four login-only ones; viewers get all 10 API-key scopes, but none of the four login-only scopes (including `mfa_management`) unless explicitly assigned.
+Dashboard login users also support role-default, empty, and explicit scope settings, but their create and update APIs have additional write semantics. The user API accepts `"unset"` to restore the implicit role default and treats a list equal to the role default the same way. For details, see [Write Behavior of `scopes`](../dashboard/system.md#write-behavior-of-scopes).
 
 #### List Available Scopes
 

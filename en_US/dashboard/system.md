@@ -40,22 +40,43 @@ Starting from EMQX 5.10, you can assign scopes to Dashboard login users to furth
 
 Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) require the Administrator role and cannot be assigned to Viewers. The exception is `mfa_management`: Viewers can hold it, but it only allows them to manage MFA on their own account. It does not grant access to other users’ MFA settings. This is useful when you want Viewer accounts to be able to re-enroll or recover their own authenticator without gaining any additional privileges.
 
-When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
+When you create a user, the **Scopes** field is optional. If you omit it, the user receives a default scope set derived from their role:
 
 - **Administrator**: All scopes, including the four login-only ones above.
 - **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
 
+When you update a user, omitting `scopes` keeps the user's stored scope setting.
+
 ![user_scopes](./assets/user_scopes.png)
 
-::: warning Treat broad scopes as administrator-equivalent
+#### Write Behavior of `scopes`
 
-The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+Starting from EMQX 6.0.4, `POST /api/v5/users` and `PUT /api/v5/users/:username` support the following `scopes` request values:
+
+| Request Value | Create User | Update User |
+| --- | --- | --- |
+| Field omitted | Applies the role's default scopes. | Keeps the user's stored scope setting. If the request also changes the role, the stored scopes must be valid for the new role. |
+| `"unset"` | Uses the role's implicit default scopes without storing an explicit list. | Clears an explicit list and restores the role's implicit default scopes. |
+| List equal to the role default | Treated as `"unset"`. List order does not affect the comparison. | Treated as `"unset"`. List order does not affect the comparison. |
+| Empty list `[]` | Denies access to all scope-gated API areas. | Replaces the stored setting with deny-all for scope-gated API areas. |
+| Any other explicit list | Validates and stores the list. | Validates and stores the list. |
+
+Using `"unset"` keeps the user's scopes aligned with the role default after an EMQX upgrade adds scopes. The API can return `"unset"` for a user without an explicit scope list. API clients can send this value back unchanged during a read-modify-write operation, such as when editing only the user's description.
+
+::: warning Privilege Scopes Must Stand Alone
+
+The following scopes are administrator-equivalent:
 
 - `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
+- `sso_management` lets the holder rotate or reconfigure an SSO backend, which can change how administrators authenticate.
 
-Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
+Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of these privilege scopes with a non-privilege scope. The create or update request returns HTTP 400. Assign either a privilege-only list for administrator-equivalent access or a non-privilege-only list for restricted access. `mfa_management` is a non-privilege scope.
+
+Users with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must split the privilege and non-privilege scopes. An omitted `scopes` field, `"unset"`, a list equal to the role default, and an empty list `[]` are not treated as an explicit mixed list.
+
+This mutual-exclusion rule does not apply to namespaced Dashboard administrators. Their allowed scope combinations remain subject to namespaced role compatibility and endpoint-level authorization.
 
 :::
 
@@ -71,7 +92,7 @@ The `dashboard.default_username` account (created with the password configured i
 
 - It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
 - Its role **cannot be changed** away from `administrator`.
-- Its scope set **cannot be customized**; it always retains the full administrator scope.
+- Its scope set **cannot be customized**; it always uses the implicit full administrator scope. The user API accepts an omitted `scopes` field, `"unset"`, or a list equal to the administrator role default when another field is updated.
 - Its description and password **can** be edited normally.
 
 Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
@@ -144,6 +165,7 @@ For example:
   - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
   - Delayed messages: `GET /mqtt/delayed/messages`, `GET /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:topic`
 - **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
+- **API key management**: Namespaced administrators can create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. Keys outside their namespace are hidden. For detailed REST API behavior, see [Manage API Keys as a Namespaced Administrator](../admin/api.md#manage-api-keys-as-a-namespaced-administrator).
 - **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
 - **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
 
