@@ -6,7 +6,7 @@
 
 1. アップグレードを開始する前に、すべての EMQX カスタムリソースが `v2beta1` API バージョンを使用していることを確認してください。EMQX Operator 2.3.0 は `v2beta1` より前の API バージョンをサポートしていません。
 
-   リソースがまだ `v2alpha1` または `v1beta4` API バージョンを使用している場合は、`v2beta1` に更新してください。ほとんどの場合、`apiVersion` フィールドをパッチすることで対応可能です。
+   リソースがまだ `v2alpha1` または `v1beta4` API バージョンを使用している場合は、`v2beta1` に更新してください。ほとんどの場合、`apiVersion` フィールドをパッチ適用することで対応可能です。
 
    ```sh
    kubectl patch emqx emqx --type=merge -p '{"apiVersion":"apps.emqx.io/v2beta1"}'
