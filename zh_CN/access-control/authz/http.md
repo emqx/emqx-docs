@@ -16,37 +16,62 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 ## 通过 Dashboard 配置
 
-在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**页签：
+1. 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，进入**授权**页面。
 
-<img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
+2. 在**授权**页面，点击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**步骤：
 
-**HTTP**：<!--插入简要说明，这快要配置什么-->
+   <img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
 
-- **请求方式**：选择 HTTP 请求方式，可选值： `get` 、 `post`
+3. 根据如下说明完成相关配置：
 
-  ::: tip
-  推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可能通过 HTTP 服务器日志记录暴露。此外，对于不受信任的环境，请使用 HTTPS。
-  :::
+   - **请求方式**：选择 HTTP 请求方式，可选值：`get`、`post`。
 
-- **URL**：输入 HTTP 应用的 IP 地址。
+     ::: tip
+     推荐使用 `POST` 方法。使用 `GET` 方法时，一些敏感信息（如纯文本密码）可能通过 HTTP 服务器日志记录暴露。此外，对于不受信任的环境，请使用 HTTPS。
+     :::
 
-- **请求头**（可选）：完成 HTTP 请求头的配置。键和值支持使用[占位符](./authz.md#占位符)。
+   - **URL**：输入 HTTP 应用的 IP 地址。
 
-**连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
+   - **请求头**（可选）：完成 HTTP 请求头的配置。键和值支持使用[占位符](./authz.md#占位符)。
 
-- **连接池大小**（可选）：整数，指定从 EMQX 节点到外部 HTTP Server 的并发连接数；默认值：**8**。<!--有范围吗？-->
-- **连接超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
-- **HTTP 管道**（可选）：正整数，指定无需等待响应可发出的最大 HTTP 请求数；默认值：**100**。
-- **请求超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**
+   - **OAuth2 客户端凭证**：开启后，EMQX 将获取 Access Token，并将其以 Bearer Token 的形式添加到发往外部 HTTP 授权服务的请求中。有关配置详情，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
 
-**TLS 配置**：配置是否启用 TLS。
+   - **启用 TLS**：开启后，对外部 HTTP 授权服务的连接启用 TLS。此开关独立于 OAuth2 客户端凭证配置中的**启用 TLS**开关。
 
-**请求体**：在此处完成 HTTP 请求体的配置。
+   - **请求体**：配置 HTTP 请求体。键和值支持使用[占位符](./authz.md#占位符)。
 
-<!--需要补上相关信息-->
+   - **高级设置**：在此部分配置并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
 
-最后点击**创建**完成相关配置。
+     - **连接池大小**（可选）：整数，指定从 EMQX 节点到外部 HTTP Server 的并发连接数；默认值：**8**。<!--有范围吗？-->
+     - **连接超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
+     - **HTTP 管道**（可选）：正整数，指定无需等待响应可发出的最大 HTTP 请求数；默认值：**100**。
+     - **请求超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
 
+4. 最后点击**创建**完成相关配置。
+
+### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，HTTP 授权器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 授权服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
+
+开启 **OAuth2 客户端凭证**，然后配置以下设置：
+
+| Dashboard 配置项 | 说明 |
+| --- | --- |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于外部 HTTP 授权服务的**启用 TLS**开关。 |
+
+EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要为 HTTP 授权器配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token Endpoint 必须从请求体的表单字段中接收 Client ID 和 Client Secret。不支持通过 HTTP Basic `Authorization` 请求头向 Token Endpoint 发送客户端凭证。
+
+:::
 
 ## 请求格式与返回结果
 
@@ -149,6 +174,27 @@ HTTP 授权必需使用 `type=http`的配置。
     }
 }
 ```
+
+### OAuth2 客户端凭证配置
+
+从 EMQX 6.0.4 开始，可以在 HTTP 授权器配置对象中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证。该配置块与 `method`、`url`、`body` 和 `headers` 同级：
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "authorization.check"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+如果授权服务器不要求 `scope`，可以省略该配置项。有关请求格式和限制，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
 
 ### method
 
