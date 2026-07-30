@@ -106,12 +106,18 @@ The following steps assume that you run both EMQX and RabbitMQ on the local mach
 3. On the **Create Connector** page, select **RabbitMQ** and then click **Next**.
 4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_rabbitmq`.
 5. Enter the connection information.
-   - **Server**: Enter `localhost` or the actual hostname/IP if the RabbitMQ server is running remotely.
-   - **Port**: Enter `5672` or the actual port if different.
+   - **Servers**: Enter a comma-separated list of RabbitMQ nodes in the `host[:port]` format, for example, `rmq1:5672,rmq2:5672`. If a connection attempt to one node fails, EMQX tries the next node in the list. Different connection pool workers start from different positions in the list, which helps distribute connections across the configured nodes.
+
+     ::: tip
+     Starting from EMQX 6.0.4, you can configure multiple RabbitMQ nodes. Failover occurs during connection establishment and does not migrate an established AMQP connection between nodes. Existing configurations that specify a single node with `server` and `port` remain compatible.
+     :::
+
+   - **Port**: Enter the default port for nodes that do not specify a port in **Servers**. The default value is `5672`.
    - **Username**: Enter `guest`.
    - **Password**: Enter `guest`.
    - **Virtual Host**: Enter RabbitMQ virtual host;  `/` by default.
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the RabbitMQ server.
 7. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or **Create Rule**. By clicking **Create Rule**, you have the following options:
    - **Action Outputs**: creating a rule with RabbitMQ Sink to specify the data to be forwarded to RabbitMQ. You can also follow the steps in [Create a Rule with RabbitMQ Sink](#create-a-rule-with-rabbitmq-sink).
