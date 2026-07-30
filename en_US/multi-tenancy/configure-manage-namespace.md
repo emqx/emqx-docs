@@ -53,7 +53,7 @@ For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-
 
 ## Configure and Manage Namespaces via Dashboard
 
-In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can view, edit, or delete namespaces and manage clients connected to each namespace.
+In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can view or edit namespaces and manage clients connected to each namespace.
 
 By default, the namespace list only shows explicitly created namespaces. You can toggle the switch at the top left of the page to show both explicitly created namespaces and those automatically created by EMQX from the `client_attrs.tns` attribute.
 
@@ -99,15 +99,7 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
 
 2. After completing the configuration, click **Create**. The new namespace will appear in the list.
 
-### Delete a Namespace via Dashboard
-
-To delete a namespace, click **Delete** in the **Actions** column. After confirming, the namespace will be permanently deleted.
-
-::: tip Note
-
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected.
-
-:::
+### Manage Namespace Clients
 
 To view clients connected to a specific namespace, click **Clients** in the **Actions** column. You can also choose to bulk disconnect clients.
 
@@ -277,12 +269,32 @@ PUT /mt/ns/ns1/config
 }
 ```
 
-### Delete a Namespace via REST API
+## Delete and Clean Up a Namespace
 
-To remove a namespace and its associated configuration, you can use the `DELETE /mt/ns/<namespace>` API.
+Deleting a managed namespace permanently removes the namespace and its associated configuration. Starting from EMQX 6.1.4, EMQX also asynchronously removes namespace-scoped data from the built-in database. This data includes password-based authentication users, SCRAM users, and authorization rules. EMQX removes authentication users from every user group in the deleted namespace without affecting the global namespace or other namespaces. After the cleanup completes, recreating a namespace with the same name does not restore the deleted users or authorization rules.
 
 ::: tip Note
 
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected. EMQX provides an API to bulk kick all sessions under a namespace, and this process should be triggered automatically when deleting a managed namespace.
+Deleting a managed namespace automatically starts disconnecting all clients currently connected through it. To avoid unexpected client interruption, disconnect active clients before deleting the namespace.
 
 :::
+
+### Delete via Dashboard
+
+To delete a namespace, click **Delete** in the **Actions** column. After confirming, the namespace will be permanently deleted.
+
+### Delete via REST API
+
+To remove a namespace and its associated configuration, use the `DELETE /mt/ns/<namespace>` API.
+
+### Recover from an Interrupted Deletion
+
+Starting from EMQX 6.1.4, use `emqx ctl mt purge_ns <namespace>` as a last resort when a previous namespace deletion was interrupted and left data behind. The command attempts to clean up the namespace data even if the namespace no longer exists. If the namespace still exists, the command also deletes it.
+
+::: warning Important Notice
+
+Running this command for an existing namespace permanently deletes the namespace and its data. Use the Dashboard or REST API for routine namespace deletion. Use `purge_ns` only to recover from an incomplete deletion, and do not rerun it after a namespace with the same name has been recreated.
+
+:::
+
+For command syntax, output, and error handling, see [`mt purge_ns`](../admin/cli.md#mt).
