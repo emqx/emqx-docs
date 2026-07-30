@@ -241,7 +241,7 @@ POST http://your-emqx-address:8483/api/v5/login
    - **到期时间**：留空表示永不过期。
    - **是否启用**：默认为启用。
    - **角色**：选择角色（可选），参见[角色与权限](#角色与权限)。
-   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 范围（Scope）](#api-范围scope)。
+   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 权限范围](#api-权限范围)。
    - **备注**：可选，填写密钥的描述信息。
 3. 单击**确认**，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
 
@@ -304,9 +304,9 @@ api_key = {
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
 - **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
+- **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属权限范围（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些权限范围，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些权限范围。
 
-从 EMQX 6.0.4 开始，bootstrap 加载器会以宽松方式处理混合 Scope 列表。如果条目将 `system` 与其他 Scope 组合，EMQX 会移除 `system`、保留其他 Scope、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合 Scope 列表并返回 HTTP 400。
+从 EMQX 6.0.4 开始，bootstrap 加载器会以宽松方式处理混合权限范围列表。如果条目将 `system` 与其他权限范围组合，EMQX 会移除 `system`、保留其他权限范围、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合权限范围列表并返回 HTTP 400。
 
 例如：
 
@@ -320,7 +320,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 通过此方式创建的 API 密钥有效期为永久有效。
 
-每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key、Role 与 Scopes。
+每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key、Role 与权限范围。
 
 ### 角色与权限
 
@@ -331,27 +331,27 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 - **发布者**：专门为 MQTT 消息发布定制，此角色仅限于访问与消息发布相关的 API。对应的角色标识为 `publisher`。
 
 ::: tip 注意
-`publisher` 密钥只接受 `publish` 范围。分配 Scope 时，除 `publish` 以外的任何 Scope 都会返回 HTTP 400。如果您将某个密钥的角色更改为 `publisher`，请在同一请求中包含 `"scopes": ["publish"]` 或空列表；否则，若该密钥已有的 Scope 中包含 `publish` 以外的项，请求将被拒绝。
+`publisher` 密钥只接受 `publish` 权限范围。分配权限范围时，除 `publish` 以外的任何权限范围都会返回 HTTP 400。如果您将某个密钥的角色更改为 `publisher`，请在同一请求中包含 `"scopes": ["publish"]` 或空列表；否则，若该密钥已有的权限范围中包含 `publish` 以外的项，请求将被拒绝。
 :::
 
-### API 范围（Scope）
+### API 权限范围
 
-**Scope（范围）** 是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些业务领域的 API。它与[角色与权限](#角色与权限)相互独立、共同生效，形成两层权限控制：
+**权限范围**是 EMQX 5.10 引入的 API 密钥权限控制维度，用来声明一个密钥可以访问哪些业务领域的 API。它与[角色与权限](#角色与权限)相互独立、共同生效，形成两层权限控制：
 
 | 维度 | 作用 | 粒度 |
 | ---- | ---- | ---- |
 | **Role（角色）** | 限制 HTTP 方法（只读 vs 可写、只能发布等） | 请求动作 |
-| **Scope（范围）** | 限制可访问的 API 领域（客户端、规则、监控等） | 资源领域 |
+| **权限范围** | 限制可访问的 API 领域（客户端、规则、监控等） | 资源领域 |
 
-一次请求会先后通过两个检查：Role 校验 + Scope 校验。只有两个检查都通过，请求才会被接受。
+一次请求会先后通过两个检查：Role 校验和权限范围校验。只有两个检查都通过，请求才会被接受。
 
-在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：监控平台只需要 `monitoring` 范围的接口，规则发布服务只需要 `data_integration` 范围的接口，集群运维工具只需要 `cluster_operations` 范围的接口。通过 Scope，您可以按最小权限原则分配密钥，降低单个密钥被泄露带来的影响面。
+在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：监控平台只需要 `monitoring` 权限范围的接口，规则发布服务只需要 `data_integration` 权限范围的接口，集群运维工具只需要 `cluster_operations` 权限范围的接口。通过权限范围，您可以按最小权限原则分配密钥，降低单个密钥被泄露带来的影响面。
 
 #### 内置范围
 
-EMQX 5.10 提供 10 个 API 密钥 Scope。从 EMQX 6.0.4 开始，显式 Scope 列表不能将 `system` 与其他 API 密钥 Scope 组合：
+EMQX 5.10 提供 10 个 API 密钥权限范围。从 EMQX 6.0.4 开始，显式权限范围列表不能将 `system` 与其他 API 密钥权限范围组合：
 
-| Scope | 涵盖的典型 API 领域 |
+| 权限范围 | 涵盖的典型 API 领域 |
 | --- | --- |
 | `connections`（连接管理） | `/clients`、`/subscriptions`、`/topics`、`/banned`、`/retainer`、`/file_transfer`、`/mqtt/delayed`、`/mqtt/topic_rewrite` 等 |
 | `publish`（消息发布） | `/publish`、`/publish/bulk` |
@@ -364,9 +364,9 @@ EMQX 5.10 提供 10 个 API 密钥 Scope。从 EMQX 6.0.4 开始，显式 Scope 
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
 
-除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围scopes)。
+除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围)。
 
-| Scope | 所需角色 | 用途 |
+| 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
 | `user_management` | 管理员 | 管理 Dashboard 用户。 |
 | `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
@@ -374,20 +374,20 @@ EMQX 5.10 提供 10 个 API 密钥 Scope。从 EMQX 6.0.4 开始，显式 Scope 
 | `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
 ::: tip 提示
-Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
+权限范围名称是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个权限范围，密钥行为保持不变。
 :::
 
 ::: warning `system` 必须单独使用
 
-`system` 覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度 Scope（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
+`system` 权限范围（EMQX 校验错误消息中称为 `privilege scope`）覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度权限范围（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
 
-从 EMQX 6.0.4 开始，如果创建或更新 API 密钥时，显式 Scope 列表将 `system` 与其他 Scope 组合，请求返回 HTTP 400。需要等同管理员权限时，只分配 `system`；需要最小权限访问时，不分配 `system`，仅分配实际需要的 Scope。
+从 EMQX 6.0.4 开始，如果创建或更新 API 密钥时，显式权限范围列表将 `system` 与其他权限范围组合，请求返回 HTTP 400。需要等同管理员权限时，只分配 `system`；需要最小权限访问时，不分配 `system`，仅分配实际需要的权限范围。
 
-在 EMQX 6.0.4 之前创建且使用混合 Scope 列表的 API 密钥可以继续工作。后续请求显式提交 Scope 列表时，必须改为仅使用 `system`，或使用不包含 `system` 的列表。省略 `scopes` 字段时，保留已有设置或继续使用向后兼容的无限制行为；空列表 `[]` 仍表示拒绝所有业务端点。
+在 EMQX 6.0.4 之前创建且使用混合权限范围列表的 API 密钥可以继续工作。后续请求显式提交权限范围列表时，必须改为仅使用 `system`，或使用不包含 `system` 的列表。省略 `scopes` 字段时，保留已有设置或继续使用向后兼容的无限制行为；空列表 `[]` 仍表示拒绝所有业务端点。
 
 :::
 
-**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在 Scope 检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` Scope，命名空间调用方也无法访问以下可读取或操作集群范围内原始 MQTT 消息内容（含保留/延迟消息存储）的端点，调用时将返回 `403 Forbidden`：
+**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` 权限范围，命名空间调用方也无法访问以下可读取或操作集群范围内原始 MQTT 消息内容（含保留/延迟消息存储）的端点，调用时将返回 `403 Forbidden`：
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
@@ -403,9 +403,9 @@ Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 A
 
 对于追踪列表端点（`GET /trace`），命名空间调用方仅能看到其命名空间内的追踪记录。单条追踪操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）在追踪记录属于其他命名空间时返回 `404 Not Found`，不会泄露跨命名空间追踪是否存在。
 
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
-#### Scope 的默认行为
+#### 权限范围的默认行为
 
 `scopes` 字段在 API 密钥中的行为遵循以下规则：
 
@@ -415,30 +415,30 @@ Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（�
 | **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
 | 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
 
-Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
+Bootstrap 文件中不指定权限范围时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新增权限范围机制而突然失去权限。
 
-Dashboard 登录用户同样支持角色默认值、空列表和显式 Scope 列表，但创建和更新用户的 API 还具有额外的写入语义。用户 API 接受 `"unset"`，用于恢复角色的隐式默认 Scope；与角色默认值相同的列表也按 `"unset"` 处理。详情参见 [`scopes` 写入行为](../dashboard/system.md#scopes-写入行为)。
+Dashboard 登录用户同样支持角色默认值、空列表和显式权限范围列表，但创建和更新用户的 API 还具有额外的写入语义。用户 API 接受 `"unset"`，用于恢复角色的隐式默认权限范围；与角色默认值相同的列表也按 `"unset"` 处理。详情参见 [`scopes` 写入行为](../dashboard/system.md#scopes-写入行为)。
 
 #### 查询可用范围
 
-EMQX 提供两个端点用于查询可用的 Scope 列表：
+EMQX 提供两个端点用于查询可用的权限范围列表：
 
-- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的 Scope（即上述 10 个业务领域 Scope）。使用 API 密钥认证。
-- `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部 Scope，包含 4 个登录专属 Scope。使用 Bearer Token 认证。
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 10 个业务领域权限范围）。使用 API 密钥认证。
+- `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部权限范围，包含 4 个登录专属权限范围。使用 Bearer Token 认证。
 
-可用于前端渲染 Scope 选择 UI 或运维脚本校验配置：
+可用于前端渲染权限范围选择 UI 或运维脚本校验配置：
 
 ```bash
-# API 密钥 Scope
+# API 密钥权限范围
 curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
 
-# 登录用户 Scope（需要 Bearer Token）
+# 登录用户权限范围（需要 Bearer Token）
 curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 ```
 
-#### 如何分配 Scope
+#### 如何分配权限范围
 
-Scope 可以在以下任一入口指定：
+权限范围可以在以下任一入口指定：
 
 - **Dashboard**：在**系统设置** -> **API 密钥**创建或编辑密钥时，勾选需要授予的范围。
 - **REST API**：在创建 / 更新 API 密钥时，请求体加入 `"scopes": ["monitoring", "cluster_operations"]`。

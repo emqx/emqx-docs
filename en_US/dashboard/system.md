@@ -65,7 +65,7 @@ Using `"unset"` keeps the user's scopes aligned with the role default after an E
 
 ::: warning Administrator-Equivalent Scopes Must Stand Alone
 
-The following scopes are administrator-equivalent:
+The following scopes are administrator-equivalent (referred to as `privilege scopes` in EMQX validation messages):
 
 - `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.

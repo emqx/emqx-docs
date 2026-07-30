@@ -383,7 +383,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 ::: warning `system` Must Stand Alone
 
-`system` covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
+The `system` scope (referred to as a `privilege scope` in EMQX validation messages) covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
 
 Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or omit `system` and assign only the scopes required for least-privilege access.
 
