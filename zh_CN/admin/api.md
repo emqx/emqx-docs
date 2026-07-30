@@ -262,12 +262,15 @@ POST http://your-emqx-address:8483/api/v5/login
 
 从 EMQX 6.0.4 开始，`POST /api/v5/api_key` 和 `PUT /api/v5/api_key/:name` 的请求体支持顶层 `namespace` 字段。例如，以下请求在 `team-a` 命名空间中创建管理员 API 密钥：
 
-```json
-{
-  "name": "team-a-key",
-  "role": "administrator",
-  "namespace": "team-a"
-}
+```bash
+curl -X POST "http://localhost:18083/api/v5/api_key" \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "team-a-key",
+    "role": "administrator",
+    "namespace": "team-a"
+  }'
 ```
 
 可以通过以下任一方式指定命名空间：
@@ -294,8 +297,6 @@ api_key = {
 - **Role（可选）**：指定密钥的[角色](#角色与权限)。
 - **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属权限范围（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些权限范围，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些权限范围。
 
-从 EMQX 6.0.4 开始，bootstrap 加载器会以宽松方式处理混合权限范围列表。如果条目将 `system` 与其他权限范围组合，EMQX 会移除 `system`、保留其他权限范围、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合权限范围列表并返回 HTTP 400。
-
 例如：
 
 ```bash
@@ -305,6 +306,8 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 ```
+
+从 EMQX 6.0.4 开始，bootstrap 加载器会以宽松方式处理混合权限范围列表。如果条目将 `system` 与其他权限范围组合，EMQX 会移除 `system`、保留其他权限范围、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合权限范围列表并返回 HTTP 400。
 
 通过此方式创建的 API 密钥有效期为永久有效。
 

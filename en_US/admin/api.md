@@ -266,12 +266,15 @@ Use a Dashboard user's bearer token to create or update an API key through the R
 
 Starting from EMQX 6.0.4, the request body for `POST /api/v5/api_key` and `PUT /api/v5/api_key/:name` accepts a top-level `namespace` field. For example, the following request creates an administrator API key in the `team-a` namespace:
 
-```json
-{
-  "name": "team-a-key",
-  "role": "administrator",
-  "namespace": "team-a"
-}
+```bash
+curl -X POST "http://localhost:18083/api/v5/api_key" \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "team-a-key",
+    "role": "administrator",
+    "namespace": "team-a"
+  }'
 ```
 
 You can specify the namespace in either of these ways:
@@ -298,8 +301,6 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 - **Role (optional)**: Specify the key's [role](#roles-and-permissions).
 - **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases). Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
 
-Starting from EMQX 6.0.4, the bootstrap loader handles mixed scope lists leniently. If an entry combines `system` with other scopes, EMQX removes `system`, keeps the other scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400.
-
 For example:
 
 ```bash
@@ -309,6 +310,8 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 ```
+
+Starting from EMQX 6.0.4, the bootstrap loader handles mixed scope lists leniently. If an entry combines `system` with other scopes, EMQX removes `system`, keeps the other scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400.
 
 API keys created this way are valid indefinitely.
 
