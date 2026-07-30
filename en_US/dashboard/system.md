@@ -40,28 +40,20 @@ Starting from EMQX 5.10, you can assign scopes to Dashboard login users to furth
 
 Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) require the Administrator role and cannot be assigned to Viewers. The exception is `mfa_management`: Viewers can hold it, but it only allows them to manage MFA on their own account. It does not grant access to other users’ MFA settings. This is useful when you want Viewer accounts to be able to re-enroll or recover their own authenticator without gaining any additional privileges.
 
-When you create a user, the **Scopes** field is optional. If you omit it, the user receives a default scope set derived from their role:
+When you create a user in the Dashboard, **Use Role Default Scopes** is enabled by default. When enabled, the user automatically receives the default permissions for their role and scope (Global or Namespace). If the role defaults change later, the updated permissions take effect automatically without editing the user again.
 
-- **Administrator**: All scopes, including the 4 login-only ones above.
-- **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
+Turn off **Use Role Default Scopes** to assign an explicit scope list. The **Scopes** field then appears. If you leave **Scopes** empty, the user receives no scopes.
 
-When you update a user, omitting `scopes` keeps the user's stored scope setting.
+The **Namespace** option is off by default. For a global administrator, leaving it off creates a global user. Turn it on and select a namespace to create a namespaced user. The user's scope (Global or Namespace) determines which role defaults apply.
+
+| User Type | Default Permissions |
+| --- | --- |
+| Global Administrator | All 14 scopes: the 10 API-key scopes and the 4 login-only scopes. |
+| Global Viewer | The 10 API-key scopes. `mfa_management` is granted only when explicitly assigned. |
+| Namespace Administrator | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, User Management, and API Key Management. |
+| Namespace Viewer | The same 10 API-key scopes as a Global Viewer. `mfa_management` is granted only when explicitly assigned. |
 
 ![user_scopes](./assets/user_scopes.png)
-
-#### Write Behavior of `scopes`
-
-Starting from EMQX 6.0.4, `POST /api/v5/users` and `PUT /api/v5/users/:username` support the following `scopes` request values:
-
-| Request Value | Create User | Update User |
-| --- | --- | --- |
-| Field omitted | Applies the role's default scopes. | Keeps the user's stored scope setting. If the request also changes the role, the stored scopes must be valid for the new role. |
-| `"unset"` | Uses the role's implicit default scopes without storing an explicit list. | Clears an explicit list and restores the role's implicit default scopes. |
-| List equal to the role default | Treated as `"unset"`. List order does not affect the comparison. | Treated as `"unset"`. List order does not affect the comparison. |
-| Empty list `[]` | Denies access to all scope-gated API areas. | Replaces the stored setting with deny-all for scope-gated API areas. |
-| Any other explicit list | Validates and stores the list. | Validates and stores the list. |
-
-Using `"unset"` keeps the user's scopes aligned with the role default after an EMQX upgrade adds scopes. The API can return `"unset"` for a user without an explicit scope list. API clients can send this value back unchanged during a read-modify-write operation, such as when editing only the user's description.
 
 ::: warning Administrator-Equivalent Scopes Must Stand Alone
 
@@ -74,9 +66,9 @@ The following scopes are administrator-equivalent (referred to as `privilege sco
 
 Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of the administrator-equivalent scopes above with other scopes. The create or update request returns HTTP 400. Assign either only administrator-equivalent scopes or only other scopes, depending on the required permissions. `mfa_management` is not administrator-equivalent.
 
-Users with a mixed scope list created before EMQX 6.0.4 continue to work. On a subsequent request that explicitly submits a scope list, the list must contain either only administrator-equivalent scopes or only other scopes. An omitted `scopes` field, `"unset"`, a list equal to the role default, and an empty list `[]` are not treated as an explicit mixed list.
+Users with a mixed scope list created before EMQX 6.0.4 continue to work. When the scope list is next customized, it must contain either only administrator-equivalent scopes or only other scopes. Using the role defaults or granting no scopes does not trigger this restriction.
 
-This mutual-exclusion rule does not apply to namespaced Dashboard administrators. Their allowed scope combinations remain subject to namespaced role compatibility and endpoint-level authorization.
+This mutual-exclusion rule does not apply to namespaced Dashboard administrators. These administrators can use the allowed scope combinations but can still access only operations and resources within their namespace.
 
 :::
 
@@ -92,7 +84,7 @@ The `dashboard.default_username` account (created with the password configured i
 
 - It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
 - Its role **cannot be changed** away from `administrator`.
-- Its scope set **cannot be customized**; it always uses the implicit full administrator scope. The user API accepts an omitted `scopes` field, `"unset"`, or a list equal to the administrator role default when another field is updated.
+- Its scope set **cannot be customized**; it always uses the full administrator permissions.
 - Its description and password **can** be edited normally.
 
 Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
@@ -126,7 +118,7 @@ To learn more about the namespaces, see [Namespace](../multi-tenancy/namespace-o
 
 #### Create a User with a Namespaced Role
 
-When creating a new user in the Dashboard, you will now see a **Namespace** option.
+When creating a new user in the Dashboard, the **Namespace** option is off by default. Enable it and select a namespace to create a user with a namespaced role.
 
 ::: tip Prerequisite
 
@@ -136,13 +128,15 @@ When creating a new user in the Dashboard, you will now see a **Namespace** opti
 :::
 
 1. Navigate to **System** -> **Users** and click **+ Create**.
-2. Fill in the required fields:
+2. Configure the user:
    - **Username**: Unique identifier for the user.
    - **Note**: Optional description.
    - **Password**: User’s login password.
    - **Role**: Select either **Administrator** or **Viewer**.
-3. Toggle the **Namespace** option and select an existing namespace (for example, `namespace_01`).
-4. Click **Create** to finish.
+   - **Use Role Default Scopes**: Enabled by default. Keep it enabled to use the defaults for the selected role and scope (Global or Namespace), or turn it off to assign explicit scopes.
+   - **Scopes**: Appears when **Use Role Default Scopes** is off. Select the scopes to grant; leaving it empty grants no scopes.
+   - **Namespace**: Off by default. Turn it on and select an existing namespace (for example, `namespace_01`).
+3. Click **Create** to finish.
 
 When creating users via the CLI or API, the role must be explicitly specified in the following format:
 

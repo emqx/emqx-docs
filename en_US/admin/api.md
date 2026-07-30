@@ -436,7 +436,7 @@ The `scopes` field on an API key follows these rules:
 
 When a bootstrap file entry omits the scopes segment, the key is explicitly written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
 
-Dashboard login users also support role-default, empty, and explicit scope settings, but their create and update APIs have additional write semantics. The user API accepts `"unset"` to restore the implicit role default and treats a list equal to the role default the same way. For details, see [Write Behavior of `scopes`](../dashboard/system.md#write-behavior-of-scopes).
+API keys and Dashboard login users use different `scopes` defaults. For Dashboard login users, omitting `scopes` when creating a user applies the role defaults, while omitting it when updating a user preserves the current setting. Set `scopes` to `"unset"` to restore the role defaults.
 
 #### List Available Scopes
 
