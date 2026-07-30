@@ -245,6 +245,7 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
    - **Expire At**: Leave empty for the key to never expire.
    - **Is Enable**: Defaults to enabled.
    - **Role**: Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
+   - **Namespace**: The switch is off by default. For a global administrator, leaving it off creates a global API key. Turn it on and select a namespace to create the key in that namespace. A namespaced administrator can create keys only in their own namespace.
    - **Scopes**: Select the scopes to grant (optional). Defaults to all scope permissions. See [API Scopes](#api-scopes).
    - **Note**: Optionally enter a description for the key.
 3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
