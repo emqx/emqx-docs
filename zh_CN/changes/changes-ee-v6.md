@@ -1,5 +1,217 @@
 # EMQX 企业版 v6 版本
 
+## 6.1.4
+
+*发布日期: 2026-07-31*
+
+在升级到 EMQX 6.1.4 之前，请务必查阅不兼容变更和已知问题。
+
+### 增强
+
+#### 多租户
+
+- [#17732](https://github.com/emqx/emqx/pull/17732) 为 API 密钥创建和更新端点新增 `namespace` 字段。运维人员不再需要在 `role` 字符串中编码命名空间。仍支持 `ns:<namespace>::<role>` 格式；同时提供两种形式时，其中的命名空间值必须一致。
+- [#17855](https://github.com/emqx/emqx/pull/17855) 支持命名空间范围的 EMQX Dashboard 管理员创建、列出、查看、更新和删除其所属命名空间中的 API 密钥。这些管理员不能创建全局 API 密钥或其他命名空间中的密钥，也无法查看其命名空间之外的 API 密钥。
+
+#### 访问控制
+
+- [#17813](https://github.com/emqx/emqx/pull/17813) 为 Dashboard 用户和 API 密钥端点新增校验，拒绝同时包含特权 scope（`system`、`user_management`、`api_key_management` 和 `sso_management`）与非特权 scope 的 scope 列表。每个特权 scope 都会授予与管理员等效的权限，因此添加受限 scope 并不会限制账户权限。请根据所需权限仅使用特权 scope 或仅使用非特权 scope。
+
+  受此校验约束的现有记录即使混合使用 scope 也可继续工作。更新此类记录时，其 scope 列表必须仅包含特权 scope 或仅包含非特权 scope。命名空间范围的 Dashboard 管理员不受此互斥规则限制，其权限仍由命名空间 RBAC 管理。
+
+#### 数据集成
+
+- [#17933](https://github.com/emqx/emqx/pull/17933) RabbitMQ 连接器新增对多节点 `servers` 列表的支持，例如 `rmq1:5672,rmq2:5672`。连接器支持连接时故障转移，并为连接池轮换起始偏移量。未设置 `servers` 时，仍支持 `server` 和 `port` 设置。
+
+- [#17944](https://github.com/emqx/emqx/pull/17944) 为 HTTP 连接器以及基于 HTTP 的认证和授权新增 OAuth2 客户端凭证认证。启用后，EMQX 会从配置的令牌端点获取并刷新访问令牌，并将其作为 Bearer Authorization 标头添加到出站请求中。
+
+  无法获取令牌时，连接器健康检查会报告 `disconnected`。同时启用 OAuth2 并提供 `Authorization` 标头的配置将被拒绝。
+
+  EMQX 在令牌请求正文中以表单字段形式发送客户端 ID 和客户端密钥。不支持在 HTTP Basic `Authorization` 标头中发送这些凭证。
+
+- [#18014](https://github.com/emqx/emqx/pull/18014) 为 Datalayers Arrow Flight 连接器新增预处理语句自动重建功能。如果服务器丢失预处理语句，例如服务器重启后，客户端会自动重新创建该语句并重试写入操作，避免因语句缺失导致写入失败。
+
+- [#18042](https://github.com/emqx/emqx/pull/18042) DynamoDB 连接器新增 AWS IAM 角色凭证支持。
+
+  同时省略访问密钥 ID 和秘密访问密钥时，EMQX 会从 ECS 任务角色或 EC2 实例元数据获取临时凭证，并在凭证过期前进行刷新。
+
+- [#18081](https://github.com/emqx/emqx/pull/18081) 提升了 Snowflake Streaming 动作的韧性。在追加行的过程中，如果通道内部状态不同步，动作会将该错误视为可恢复错误，重试失败的行，并尝试重新打开通道，无需人工干预。
+
+- [#18085](https://github.com/emqx/emqx/pull/18085) 为 Kafka、Confluent 和 Azure Event Hubs 生产者新增以下配置项：
+
+  - `max_batch_age`（动作）：消息可在生产者缓冲区中保留的最长时间。EMQX 会丢弃超过该时长的消息，并同时递增 `dropped` 和 `dropped.expired` 指标。过期消息不计入 `failed` 或 `success`。默认值：`infinity`，表示消息在缓冲期间不会过期。
+  - `max_retries`（动作）：消息批次允许的 Kafka 失败重试次数。达到配置的重试次数后，EMQX 会丢弃该批次。受影响的消息计入 `failed`，而不是 `dropped`。仅当 Kafka 返回错误码时才会增加重试计数；连接中断后的重新发送不会增加该计数。默认值：`infinity`，表示无限重试。
+  - `reconnect_delay`（动作）：连接中断后，生产者重新连接前的等待时间。默认值：`2s`，此前为硬编码值。
+  - `request_timeout`（连接器）：等待 Kafka 响应的最长时间，超过该时间后连接将被视为失效并重新建立。默认值：`30s`。
+
+  Kafka 客户端库已升级至 `wolff` 4.2.1，恢复了内存模式缓冲区对 `max_linger_time` 的支持。未达到大小上限的批次最多等待 `max_linger_time` 以接收更多消息，从而降低生产请求频率。已满的批次会立即发送。
+
+- [#18110](https://github.com/emqx/emqx/pull/18110) Schema Registry 新增对 JSON Schema 2019-09 和 2020-12 草案的支持。
+
+- [#18137](https://github.com/emqx/emqx/pull/18137) GCP Pub/Sub 生产者和消费者的主题配置现在接受完全限定的主题路径（`projects/<project-id>/topics/<topic-name>`），从而可以向服务账户所属 GCP 项目以外的主题发布消息，或从该主题消费消息。与此前一样，仅提供主题名称时，仍会基于服务账户所属项目进行解析。对于消费者，订阅仍创建在服务账户所属项目中，只有主题引用可以指向其他项目。
+
+#### 插件
+
+- [#18012](https://github.com/emqx/emqx/pull/18012) 新增 `emqx_sync_request` 插件，用于通过 EMQX REST API 实现同步 MQTT 请求/响应流程。该插件还提供节点本地 CLI 诊断，可查看请求计数器和当前待处理状态。
+
+#### 安装包
+
+- [#18037](https://github.com/emqx/emqx/pull/18037) 新增适用于 Red Hat Enterprise Linux 10、Rocky Linux 10 及兼容发行版的 Enterprise Linux 10（EL10）安装包。
+- [#18127](https://github.com/emqx/emqx/pull/18127) 开始发布适用于 macOS 26（Tahoe）的安装包。
+
+### BUG 修复
+
+#### 核心 MQTT 功能
+
+- [#17895](https://github.com/emqx/emqx/pull/17895) 修复了将 TLS 监听器从托管证书包切换回基于文件的证书时，如果引用的证书包已被删除会导致切换失败的问题。
+
+- [#17911](https://github.com/emqx/emqx/pull/17911) 当 Erlang/OTP `ssl` 应用支持 `ECDHE-PSK-CHACHA20-POLY1305` 密码套件时，DTLS 监听器现在可以校验该密码套件。
+
+- [#18062](https://github.com/emqx/emqx/pull/18062) 修复了将 TLS/WSS 监听器从托管证书包切换回基于文件的证书时，如果请求通过发送 `null` 清除 `managed_certs`（与 Dashboard 的行为一致）且证书包已被删除，会导致切换失败的问题。
+
+- [#18102](https://github.com/emqx/emqx/pull/18102) 修复了启用投递速率限制时，MQTT 客户端可能乱序接收 QoS 1 和 QoS 2 消息的问题。EMQX 现在会将后续消息保留在队列中，直到受阻消息可以发送。
+
+- [#18108](https://github.com/emqx/emqx/pull/18108) 删除仍被某项配置引用的托管证书包或其中的单个文件时，现在始终会失败，并返回列出引用配置的明确错误。`force_delete` 查询参数不再绕过此检查，且已从 API schema 中移除。
+
+  此外，当监听器引用磁盘上缺失的证书包时，Prometheus 统计端点不再整体失败。证书过期指标会跳过受影响的监听器，并记录警告。
+
+- [#18111](https://github.com/emqx/emqx/pull/18111) 将 `mqtt.strict_mode` 校验扩展到 MQTT v3.1 CONNECT 报文。EMQX 现在会拒绝设置密码标志但未设置用户名标志的报文，与 MQTT v3.1.1 的行为保持一致。MQTT v3.1 规范不允许在没有用户名的情况下提供密码。
+
+  改进了连接日志的可读性。CONNECT 报文跟踪使用 `Password=undefined` 区分未提供密码与提供空密码。日志还会将 `peername` 字段呈现为普通字符串，例如 `10.0.0.1:54123`。
+
+#### 规则引擎
+
+- [#17957](https://github.com/emqx/emqx/pull/17957) 修复了当 `rule_engine.limit_selects_in_namespace = true` 时，多个规则事件（例如 `$events/client/connack`）无法在全局命名空间中触发规则的问题。
+- [#18049](https://github.com/emqx/emqx/pull/18049) 修复了设置 `rule_engine.limit_selects_in_namespace = true` 后，由告警激活或停用事件触发的全局规则无法触发的问题。
+
+#### 数据集成
+
+- [#17859](https://github.com/emqx/emqx/pull/17859) 修复了 MQTT 连接器无法连接 IPv6 Broker 的问题。
+
+  此前，将 MQTT 连接器配置为连接 IPv6 Broker 时会以两种方式失败：保存时会以 `bad_host_port` 校验错误拒绝 `[::1]:1883` 等 IPv6 字面量；仅解析为 IPv6（`AAAA`）地址的主机名会因连接默认使用 IPv4 而以“Could not resolve host”错误连接失败。
+
+  服务器地址解析器现在接受带方括号的 IPv6 字面量，例如 `[::1]`、`[::1]:1883` 和 `mqtt://[::1]:1883`。MQTT 连接器现在还会在连接时启用 IPv6 探测，因此可以连接仅支持 IPv6 的 Broker。
+
+  MQTT 连接器和集群连接的 `server` 地址现在接受正式的 MQTT URI scheme：`mqtt`（普通 TCP）和 `mqtts`（TLS），例如 `mqtt://broker:1883` 和 `mqtts://broker:8883`。仍支持不含 scheme 的 `host:port`。其他 scheme 现在会被拒绝，并返回 `unsupported_scheme` 校验错误。
+
+- [#17947](https://github.com/emqx/emqx/pull/17947) 修复了更新 HTTP 连接器时，连接器重建后其动作缓冲区 worker 可能保持阻塞，导致消息持续排队直至下一重试间隔的问题。
+
+- [#17955](https://github.com/emqx/emqx/pull/17955) 修复了低写入速率下执行健康检查后，GreptimeDB 异步批次可能未刷新的问题。
+
+- [#17961](https://github.com/emqx/emqx/pull/17961) 修复了 Kafka 或 Pulsar 连接器在健康检查超时后可能转换为 `disconnected` 状态，并可能导致其内部队列被重新创建的问题。发生此类超时后，Kafka 和 Pulsar 连接器现在会转换为 `connecting` 状态。
+
+- [#17970](https://github.com/emqx/emqx/pull/17970) 启用 SSRF 防护后，管理连接器的操作不再受地址现已被策略阻止的现有连接器影响。
+
+  此前，在创建连接器后启用 SSRF 防护或扩展其拒绝列表，可能导致不相关的连接器操作出现内部错误；删除受影响的连接器时，也可能在其动作和规则已被删除后仍残留该连接器。
+
+  SSRF 防护现在适用于 HTTP 和 MQTT 连接器，并在创建或更新连接器时执行：使用被阻止地址创建或更新此类连接器会被拒绝。启用、禁用和删除连接器的操作不会被阻止，其他类型的连接器不受此策略约束。
+
+- [#17973](https://github.com/emqx/emqx/pull/17973) 修复了 Kafka 生产者动作的重试指标。动作指标中的 `retried`、`retried.success` 和 `retried.failed` 计数器现在会反映 Broker 重新连接后内部缓冲区重新发送的消息，使运维人员可以判断重试消息最终成功还是失败。此前，无论发生多少次内部重试，这些计数器都保持为 `0`。`success` 和 `failed` 计数器不受影响，也不会重复计数。
+
+- [#17982](https://github.com/emqx/emqx/pull/17982) 更新了 GCP Pub/Sub 消费者，使其使用 HTTP/2，并在活跃的拉取请求超时时取消该请求。取消 HTTP/2 流可以更明确地通知 GCP 服务器该请求已结束，并可能使消息可被后续拉取请求租用，从而降低尾延迟。
+
+- [#18055](https://github.com/emqx/emqx/pull/18055) 修复了不同集群节点上的 Snowflake Streaming 动作因以下错误而失败的问题：
+
+  ```text
+  {unrecoverable_error,#{body => <<"{\"code\":\"STALE_CONTINUATION_TOKEN_SEQUENCER\",\"message\":\"Channel sequencer in the continuation token is stale. Please reopen the channel\"}">>,...
+  ```
+
+- [#18110](https://github.com/emqx/emqx/pull/18110) 修复了在 Schema Registry 的 JSON Schema draft-06 中使用 `examples` 注解会导致有效数据被判定为无效的问题。
+
+#### 集群
+
+- [#17995](https://github.com/emqx/emqx/pull/17995) 修复了节点加入持久化 `mqtt.max_packet_size` 与其本地配置不同的集群时，节点可能终止的问题。EMQX 现在会在监听器启动前跳过监听器刷新产生的副作用，并在 EMQX 应用启动时根据已同步的配置创建监听器。
+
+- [#17999](https://github.com/emqx/emqx/pull/17999) 修复了使用社区版（单节点）License 的节点加入其他节点持有集群 License 的集群时，可能出现启动崩溃循环的问题。
+
+  此前，如果集群成员关系在对端 License 复制到加入节点之前建立，该节点会以 `SINGLE_NODE_LICENSE` 错误拒绝启动，并在自动重启管理程序下持续崩溃循环。节点现在会在启动前等待有限的宽限期，以同步集群 License。如果宽限期结束后集群中仍无任何节点获得集群 License，该集群仍会被拒绝。
+
+- [#18077](https://github.com/emqx/emqx/pull/18077) 修复了节点在完全启动前收到 `cluster join` 请求（CLI 或 API）时发生崩溃的问题：加入操作会在应用仍在启动时重启内部数据库，可能导致整个节点停止。此类请求现在会被拒绝并返回明确的错误消息；请在节点完全启动后重试。
+
+#### 访问控制
+
+- [#17806](https://github.com/emqx/emqx/pull/17806) 按最小权限原则调整了数据备份导入和导出端点：scope 集合未同时包含 `user_management` 和 `api_key_management` 的 Dashboard 用户不能再导入或导出包含 `dashboard_users` 或 `api_keys` 表集的归档文件。全局管理员和具有所需 scope 的 API 密钥调用方不受影响。
+
+- [#17853](https://github.com/emqx/emqx/pull/17853) 改进了连接器调试日志中敏感 HTTP 请求标头的脱敏处理。与 `Authorization` 和 `Proxy-Authorization` 相同，EMQX 会将连接器状态中的 `x-api-key`、`x-auth-token`、`api-key` 和 `cookie` 标头存储为 Secret。在 trace 或 debug 级别记录连接器状态时，会省略这些标头的值。
+
+  共享标头脱敏辅助函数现在还可以识别以 iolist 存储的标头名称，包括连接器模板解析器生成的名称。
+
+- [#17871](https://github.com/emqx/emqx/pull/17871) 通过内置数据库批量导入或 bootstrap 文件在非全局命名空间中创建超级用户时，现在会拒绝该操作，使其行为与单用户管理 API 保持一致。此类记录会被报告为失败，且不会存储。
+
+- [#17974](https://github.com/emqx/emqx/pull/17974) 连接日志现在默认对原始 MQTT 报文数据进行脱敏；可按监听器将可信客户端 IP 地址加入允许列表，以用于诊断。
+
+- [#18005](https://github.com/emqx/emqx/pull/18005) 修复了 CLI 审计日志可能存储敏感命令参数的问题。
+
+- [#18009](https://github.com/emqx/emqx/pull/18009) 修复了通过 Dashboard 用户 API 仅编辑默认管理员备注（描述）时发生错误的问题。
+
+  用户 API 现在会将与角色隐含完整集合匹配的 scope 列表以及 `unset` 值视为等同于“未显式设置 scope”，因此对管理员执行读取、修改和写回操作时不再失败。此类用户还会保留可向前兼容的隐含 scope，而不是固定的 scope 列表。
+
+#### 多租户
+
+- [#17807](https://github.com/emqx/emqx/pull/17807) 为命名空间管理员新增隔离的备份空间。通过数据备份端点（`/data/export`、`/data/import`、`/data/files` 和 `/data/files/:filename`）执行导出、上传、列出、下载、导入和删除操作时，仅会作用于其所属命名空间中的备份。命名空间管理员无法查看、下载或删除全局备份或其他命名空间中的备份。
+
+  全局管理员默认继续管理全局备份，包括此变更前创建的备份。他们可以向 `GET /data/files`、`DELETE /data/files` 或 `GET /data/files/:filename` 传递 `namespace` 查询参数，以检查或删除特定命名空间中的备份。
+
+- [#17975](https://github.com/emqx/emqx/pull/17975) 禁止命名空间范围的调用方通过 `PUT /api/v5/tracing` 更新全局追踪配置。命名空间范围的 Dashboard 用户和 API 密钥会收到 HTTP 状态码 `403`。全局 Dashboard 管理员仍可访问该端点。
+
+- [#18008](https://github.com/emqx/emqx/pull/18008) 支持全局管理员在通过 `POST /api/v5/data/import` 和 `POST /api/v5/data/files` 为特定命名空间导入或上传备份时，传递可选的 `namespace` 查询参数。如果省略该参数，操作将使用全局备份范围。
+
+  对于命名空间管理员，EMQX 会忽略 `namespace` 查询参数，并将操作限制在调用方所属命名空间中。此行为与备份列出和下载操作保持一致。
+
+- [#18117](https://github.com/emqx/emqx/pull/18117) 删除命名空间时，现在还会删除该命名空间的内置数据库认证用户（包括基于密码和 SCRAM 的用户）及授权规则。此前，这些记录会在命名空间删除后保留，并在之后创建同名命名空间时重新出现。
+
+  此外，新增 `emqx ctl mt purge_ns <namespace>` CLI 命令，用于删除命名空间并清除其所有数据。该命令具有幂等性，且不要求命名空间存在，因此可在之前的命名空间删除操作中断后，作为最后手段清理残留数据。
+
+#### 网关
+
+- [#17796](https://github.com/emqx/emqx/pull/17796) 修复了新设备通过最近由已断开设备使用的 UDP 源端口连接时，MQTT-SN 网关崩溃的问题。这种情况常见于环回网络和 NAT 后方，因为操作系统或 NAT 设备会重新分配相同端口。现在会正确清理旧通道，并将新连接作为全新会话处理。
+
+- [#17805](https://github.com/emqx/emqx/pull/17805) 修复了此前的网关加载尝试中途终止后，例如因配置无效或监听端口被占用，再次加载网关可能以 `already_started` 错误失败的问题。现在会自动回收失败尝试遗留的 locker 进程，使下次 `load` 或运维人员重试可以从干净状态开始。
+
+- [#17815](https://github.com/emqx/emqx/pull/17815) 修复了 UDP 源元组发生变化或被复用时的 MQTT-SN UDP 会话路由。
+
+  MQTT-SN UDP 监听器现在通过 `esockd_udp_proxy`，根据从报文中解析出的 ClientId 路由报文，使休眠会话可以从不同的 UDP 源元组恢复，同时防止复用的 UDP 源元组将另一个 ClientId 的报文传递到旧会话。
+
+- [#17888](https://github.com/emqx/emqx/pull/17888) 修复了 LwM2M 网关可能在注册和更新 MQTT 报告中包含敏感 REGISTER 查询字段的问题，例如 `password`、`secret`、`private_key` 和 `access_token`。
+
+- [#18051](https://github.com/emqx/emqx/pull/18051) 修复了 CoAP 调试日志可能泄露敏感 URI 查询值的问题。
+
+#### 插件
+
+- [#17861](https://github.com/emqx/emqx/pull/17861) 恢复了此前的插件启动行为：节点启动或重新加入集群时，不再删除集群插件配置中缺失的本地插件包。
+
+- [#17884](https://github.com/emqx/emqx/pull/17884) 修复了插件管理 HTTP API，使其忽略集群插件配置中不存在且未在本地运行的过期已解压插件目录。
+
+  此类过期插件包不会出现在插件列表、详情、配置或 schema 响应中。插件操作 API 无法操作这些插件包，且这些插件包不会阻止通过 HTTP 安装 API 重新安装。已配置的预安装插件仍然可见，并继续遵循文档所述的预安装工作流。
+
+  如果插件包已解压，但在 `plugins.states` 中既未启用也未禁用，EMQX 会在启动或访问 HTTP API 时记录错误。
+
+- [#17932](https://github.com/emqx/emqx/pull/17932) 修复了通过 CLI 安装插件时产生多余 `failed_to_get_plugin_config_from_cluster` 警告的问题。
+
+  `emqx ctl plugins install` 命令现在使用 `fresh_install` 模式，与 HTTP API 的行为保持一致。此模式会跳过新安装插件的集群配置查找，避免在每个集群节点上重复产生 `config_not_found_on_node` 警告。
+
+  为 `emqx ctl plugins install` 新增 `--cluster` 标志，用于在整个集群中安装插件。指定该标志时，此命令会将插件包分发并安装到所有正在运行的节点上。
+
+- [#18018](https://github.com/emqx/emqx/pull/18018) 修复了插件安装在校验插件包的应用声明、配置 schema 和默认配置之前加载代码的问题。
+
+#### 可观测性
+
+- [#17886](https://github.com/emqx/emqx/pull/17886) 在 Prometheus 中将发布配额超限报文指标公开为 `emqx_packets_publish_quota_exceeded`。
+
+- [#18114](https://github.com/emqx/emqx/pull/18114) 修复了节点正在加入集群时，Dashboard 指标 API（`GET /api/v5/monitor_current` 和 `GET /api/v5/monitor`）返回 `500 INTERNAL_ERROR` 的问题。
+
+  当加入节点重启其应用而无法采样指标时，API 会返回其余可达节点的聚合指标并记录警告，而不是使整个请求失败。
+
+  此外，修复了每次成功执行 `DELETE /api/v5/monitor` 请求后错误记录 `clear_monitor_metrics_rpc_errors` 警告的问题。
+
+#### 文件传输
+
+- [#18069](https://github.com/emqx/emqx/pull/18069) 修复了文件传输文件 API（`GET /api/v5/file_transfer/files`）列出名称包含非 ASCII 字符（例如中文）的文件时返回 500 错误的问题。
+
+#### 部署
+
+- [#17877](https://github.com/emqx/emqx/pull/17877) 修复了 `emqx-enterprise` Helm Chart 在节点主机名中硬编码 `svc.cluster.local` 的问题。在 DNS 域不是 `cluster.local` 的 Kubernetes 集群中，节点会使用无法解析的 FQDN 作为自身名称，导致 Erlang 分布式通信无法启动，节点也无法组成集群。主机名现在遵循 Chart 的 `clusterDomain` 值，该值此前已用于控制 DNS 和 Kubernetes 服务发现设置。
+
 ## 6.1.3
 
 *发布日期: 2026-07-01*
