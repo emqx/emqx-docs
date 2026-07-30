@@ -15,9 +15,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Access Control
 
-- [#17813](https://github.com/emqx/emqx/pull/17813) Added validation to the Dashboard user and API key endpoints to reject scope lists that combine privilege scopes (`system`, `user_management`, `api_key_management`, and `sso_management`) with non-privilege scopes. Each privilege scope grants administrator-equivalent permissions, so adding restricted scopes does not limit the account. Use either privilege scopes or non-privilege scopes, depending on the required permissions.
+- [#17813](https://github.com/emqx/emqx/pull/17813) Added validation to the Dashboard user and API key endpoints to reject scope lists that combine administrator-equivalent scopes (referred to as `privilege scopes` in EMQX validation messages), including `system`, `user_management`, `api_key_management`, and `sso_management`, with other scopes. Each of the listed scopes grants administrator-equivalent permissions, so adding other scopes does not restrict the account. Use either only administrator-equivalent scopes or only other scopes, depending on the required permissions.
 
-  Pre-existing records subject to this validation continue to work with mixed scopes. When such a record is updated, its scope list must contain only privilege scopes or only non-privilege scopes. Namespace-scoped Dashboard administrators are exempt from this mutual-exclusion rule and remain governed by namespace RBAC.
+  Pre-existing records subject to this validation continue to work with mixed scopes. When an explicit scope list is submitted during an update, it must contain either only administrator-equivalent scopes or only other scopes. Namespace-scoped Dashboard administrators are exempt from this mutual-exclusion rule and remain governed by namespace RBAC.
 
 #### Data Integration
 

@@ -15,9 +15,9 @@
 
 #### 访问控制
 
-- [#17813](https://github.com/emqx/emqx/pull/17813) 为 Dashboard 用户和 API 密钥端点新增校验，拒绝同时包含特权 scope（`system`、`user_management`、`api_key_management` 和 `sso_management`）与非特权 scope 的 scope 列表。每个特权 scope 都会授予与管理员等效的权限，因此添加受限 scope 并不会限制账户权限。请根据所需权限仅使用特权 scope 或仅使用非特权 scope。
+- [#17813](https://github.com/emqx/emqx/pull/17813) 为 Dashboard 用户和 API 密钥端点新增校验，拒绝将等同管理员权限的 scope（EMQX 校验错误消息中称为 `privilege scopes`），包括 `system`、`user_management`、`api_key_management` 和 `sso_management`，与其他 scope 组合。上述每个 scope 都会授予与管理员等效的权限，因此添加其他 scope 并不会限制账户权限。请根据所需权限仅使用等同管理员权限的 scope，或仅使用其他 scope。
 
-  受此校验约束的现有记录即使混合使用 scope 也可继续工作。更新此类记录时，其 scope 列表必须仅包含特权 scope 或仅包含非特权 scope。命名空间范围的 Dashboard 管理员不受此互斥规则限制，其权限仍由命名空间 RBAC 管理。
+  受此校验约束的现有记录即使混合使用 scope 也可继续工作。更新时如果显式提交 scope 列表，该列表必须仅包含等同管理员权限的 scope，或仅包含其他 scope。命名空间范围的 Dashboard 管理员不受此互斥规则限制，其权限仍由命名空间 RBAC 管理。
 
 #### 数据集成
 
