@@ -281,19 +281,6 @@ You can specify the namespace in either of these ways:
 
 Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. An API key's namespace cannot be changed after the key is created.
 
-#### Manage API Keys as a Namespaced Administrator
-
-Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API keys within their own namespace. The administrator must authenticate with a bearer token.
-
-| Operation | Namespaced Administrator Behavior |
-| --- | --- |
-| Create an API key | Can create a key only in the administrator's namespace. Omitting the namespace, specifying the global namespace, or specifying another namespace returns HTTP 403. |
-| List API keys | Sees only keys in the administrator's namespace. Global keys and keys in other namespaces are filtered from the response. |
-| Read, update, or delete an API key | Can operate only on keys in the administrator's namespace. A key in another namespace returns HTTP 404 so that its existence is not disclosed. |
-| Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
-
-A global Dashboard administrator can continue to manage API keys across all namespaces.
-
 #### Bootstrap File
 
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
@@ -326,6 +313,19 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 API keys created this way are valid indefinitely.
 
 Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key, Role, and Scopes will be updated.
+
+### Manage API Keys as a Namespaced Administrator
+
+Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API keys within their own namespace. The administrator must authenticate with a bearer token.
+
+| Operation | Namespaced Administrator Behavior |
+| --- | --- |
+| Create an API key | Can create a key only in the administrator's namespace. Omitting the namespace, specifying the global namespace, or specifying another namespace returns HTTP 403. |
+| List API keys | Sees only keys in the administrator's namespace. Global keys and keys in other namespaces are filtered from the response. |
+| Read, update, or delete an API key | Can operate only on keys in the administrator's namespace. A key in another namespace returns HTTP 404 so that its existence is not disclosed. |
+| Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
+
+A global Dashboard administrator can continue to manage API keys across all namespaces.
 
 ### Roles and Permissions
 
