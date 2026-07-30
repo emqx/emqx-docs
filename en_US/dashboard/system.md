@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-scopes), Dashboard users have four additional scopes that apply only to browser sessions:
+Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-api-key-scopes), Dashboard users have 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ Three of these scopes (`user_management`, `sso_management`, and `api_key_managem
 
 When you create a user, the **Scopes** field is optional. If you omit it, the user receives a default scope set derived from their role:
 
-- **Administrator**: All scopes, including the four login-only ones above.
+- **Administrator**: All scopes, including the 4 login-only ones above.
 - **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
 
 When you update a user, omitting `scopes` keeps the user's stored scope setting.

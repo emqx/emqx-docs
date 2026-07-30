@@ -355,7 +355,11 @@ Every request is checked against both dimensions: the role check and the scope c
 
 In microservice and integration scenarios, external systems typically need access to only a subset of EMQX's management surface: a monitoring platform only needs the `monitoring` scope, a rules-publishing service only needs `data_integration`, and a cluster operator tool only needs `cluster_operations`. Scopes let you assign keys using the principle of least privilege, minimizing the blast radius if a key is ever leaked.
 
-#### Built-in Scopes
+::: tip
+Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
+:::
+
+#### Built-in API Key Scopes
 
 EMQX 5.10 ships with 10 scopes for API keys. Starting from EMQX 6.0.4, an explicit scope list cannot combine `system` with any other API-key scope:
 
@@ -372,19 +376,6 @@ EMQX 5.10 ships with 10 scopes for API keys. Starting from EMQX 6.0.4, an explic
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
 
-In addition to these API-key scopes, Dashboard login users have four login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](../dashboard/system.md#login-user-scopes).
-
-| Scope | Required role | Purpose |
-| --- | --- | --- |
-| `user_management` | Administrator | Manage Dashboard users. |
-| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
-| `api_key_management` | Administrator | Manage API keys. |
-| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
-
-::: tip
-Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
-:::
-
 ::: warning `system` Must Stand Alone
 
 The `system` scope (referred to as a `privilege scope` in EMQX validation messages) covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
@@ -395,7 +386,20 @@ API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A s
 
 :::
 
-**Namespaced callers** (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Even with the `connections` or `monitoring` scope granted, namespaced callers cannot access endpoints that read or manipulate raw MQTT message content (including retained/delayed message stores) across the entire cluster. The following endpoints return `403 Forbidden` for namespaced callers regardless of their assigned scopes:
+#### Login-Only Scopes
+
+In addition to these API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](../dashboard/system.md#login-user-scopes).
+
+| Scope | Required role | Purpose |
+| --- | --- | --- |
+| `user_management` | Administrator | Manage Dashboard users. |
+| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
+| `api_key_management` | Administrator | Manage API keys. |
+| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
+
+#### Restrictions for Namespaced Callers
+
+Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions. For example, even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
@@ -407,9 +411,16 @@ API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A s
 - `GET /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
-- `DELETE /trace` (bulk-delete all traces)
 
-For trace listing (`GET /trace`), namespaced callers see only traces within their own namespace. Per-trace operations (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found` when the trace belongs to a different namespace, so the existence of cross-namespace traces is not leaked.
+For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
 
 Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
@@ -432,7 +443,7 @@ Dashboard login users also support role-default, empty, and explicit scope setti
 EMQX exposes two endpoints to query the available scope catalogues:
 
 - `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
-- `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the four login-only scopes. Authenticate with a bearer token.
+- `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the 4 login-only scopes. Authenticate with a bearer token.
 
 Use these endpoints to populate a scope-picker UI or validate automation scripts:
 

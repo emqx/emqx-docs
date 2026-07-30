@@ -351,7 +351,11 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：监控平台只需要 `monitoring` 权限范围的接口，规则发布服务只需要 `data_integration` 权限范围的接口，集群运维工具只需要 `cluster_operations` 权限范围的接口。通过权限范围，您可以按最小权限原则分配密钥，降低单个密钥被泄露带来的影响面。
 
-#### 内置范围
+::: tip 提示
+权限范围名称是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个权限范围，密钥行为保持不变。
+:::
+
+#### 内置 API 密钥权限范围
 
 EMQX 5.10 提供 10 个 API 密钥权限范围。从 EMQX 6.0.4 开始，显式权限范围列表不能将 `system` 与其他 API 密钥权限范围组合：
 
@@ -368,19 +372,6 @@ EMQX 5.10 提供 10 个 API 密钥权限范围。从 EMQX 6.0.4 开始，显式�
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
 
-除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围)。
-
-| 权限范围 | 所需角色 | 用途 |
-| --- | --- | --- |
-| `user_management` | 管理员 | 管理 Dashboard 用户。 |
-| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
-| `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
-
-::: tip 提示
-权限范围名称是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个权限范围，密钥行为保持不变。
-:::
-
 ::: warning `system` 必须单独使用
 
 `system` 权限范围（EMQX 校验错误消息中称为 `privilege scope`）覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度权限范围（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
@@ -391,7 +382,20 @@ EMQX 5.10 提供 10 个 API 密钥权限范围。从 EMQX 6.0.4 开始，显式�
 
 :::
 
-**命名空间调用方**（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。即使已授予 `connections` 或 `monitoring` 权限范围，命名空间调用方也无法访问以下可读取或操作集群范围内原始 MQTT 消息内容（含保留/延迟消息存储）的端点，调用时将返回 `403 Forbidden`：
+#### 登录专属权限范围
+
+除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](../dashboard/system.md#登录用户权限范围)。
+
+| 权限范围 | 所需角色 | 用途 |
+| --- | --- | --- |
+| `user_management` | 管理员 | 管理 Dashboard 用户。 |
+| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 管理员 | 管理 API 密钥。 |
+| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
+
+#### 命名空间调用方限制
+
+命名空间调用方（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。授予权限范围不能绕过这些限制。例如，即使命名空间调用方已获得 `connections` 或 `monitoring` 权限范围，仍无法访问读取或操作集群级原始 MQTT 消息内容的端点，包括保留消息和延迟消息存储。以下消息相关端点返回 `403 Forbidden`：
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
@@ -403,9 +407,16 @@ EMQX 5.10 提供 10 个 API 密钥权限范围。从 EMQX 6.0.4 开始，显式�
 - `GET /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
-- `DELETE /trace`（批量删除所有追踪记录）
 
-对于追踪列表端点（`GET /trace`），命名空间调用方仅能看到其命名空间内的追踪记录。单条追踪操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）在追踪记录属于其他命名空间时返回 `404 Not Found`，不会泄露跨命名空间追踪是否存在。
+对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
 
 Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
