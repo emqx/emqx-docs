@@ -62,7 +62,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 使用 `"unset"` 可以使用户 Scope 在升级到增加了新 Scope 的 EMQX 版本后继续与角色默认值保持一致。对于没有显式 Scope 列表的用户，API 可以返回 `"unset"`。API 客户端执行读取、修改、写回操作时，可以原样回传该值，例如只修改用户备注时。
 
-::: warning 特权 Scope 必须单独使用
+::: warning 等同管理员权限的 Scope 必须单独使用
 
 以下 Scope 等同管理员权限：
 
@@ -71,9 +71,9 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 - `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
 - `sso_management` 允许持有者轮换或重新配置 SSO 后端，从而改变管理员的身份认证方式。
 
-从 EMQX 6.0.4 开始，全局 Dashboard 用户的显式 Scope 列表不能将以上任一特权 Scope 与非特权 Scope 组合。创建或更新请求将返回 HTTP 400。需要等同管理员权限时，仅使用特权 Scope；需要受限访问时，仅使用非特权 Scope。`mfa_management` 属于非特权 Scope。
+从 EMQX 6.0.4 开始，全局 Dashboard 用户的显式 Scope 列表不能将上述任何等同管理员权限的 Scope 与其他 Scope 组合。创建或更新请求将返回 HTTP 400。需要等同管理员权限时，仅使用上述 Scope；需要受限访问时，仅使用其他 Scope。`mfa_management` 不会授予等同管理员的权限。
 
-在 EMQX 6.0.4 之前创建且使用混合 Scope 列表的用户可以继续工作。后续请求显式提交 Scope 列表时，必须拆分特权 Scope 和非特权 Scope。省略 `scopes` 字段、使用 `"unset"`、使用与角色默认值相同的列表或使用空列表 `[]` 时，不会按显式混合列表处理。
+在 EMQX 6.0.4 之前创建且使用混合 Scope 列表的用户可以继续工作。后续请求显式提交 Scope 列表时，该列表必须仅包含等同管理员权限的 Scope，或仅包含其他 Scope。省略 `scopes` 字段、使用 `"unset"`、使用与角色默认值相同的列表或使用空列表 `[]` 时，不会按显式混合列表处理。
 
 此互斥规则不适用于命名空间 Dashboard 管理员。命名空间管理员的 Scope 组合仍受命名空间角色兼容性和端点级授权控制。
 

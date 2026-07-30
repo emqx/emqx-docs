@@ -286,7 +286,7 @@ Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API ke
 
 | Operation | Namespaced Administrator Behavior |
 | --- | --- |
-| Create an API key | Can create a key only in the administrator's namespace. Creating a global key or a key in another namespace returns HTTP 403. |
+| Create an API key | Can create a key only in the administrator's namespace. Omitting the namespace, specifying the global namespace, or specifying another namespace returns HTTP 403. |
 | List API keys | Sees only keys in the administrator's namespace. Global keys and keys in other namespaces are filtered from the response. |
 | Read, update, or delete an API key | Can operate only on keys in the administrator's namespace. A key in another namespace returns HTTP 404 so that its existence is not disclosed. |
 | Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
@@ -309,6 +309,8 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 - **Secret Key**: Use a random string as the secret key.
 - **Role (optional)**: Specify the key's [role](#roles-and-permissions).
 - **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases). Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
+
+Starting from EMQX 6.0.4, the bootstrap loader handles mixed scope lists leniently. If an entry combines `system` with other scopes, EMQX removes `system`, keeps the other scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400.
 
 For example:
 
@@ -383,9 +385,9 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 `system` covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
 
-Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or assign only non-privilege scopes for least-privilege access.
+Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or omit `system` and assign only the scopes required for least-privilege access.
 
-API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must use either `system` alone or a list containing only non-privilege scopes. When `scopes` is omitted, an update keeps the stored setting and a create request applies the backward-compatible unrestricted behavior. An empty list `[]` remains the deny-all setting.
+API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must use either `system` alone or a list that does not include `system`. When `scopes` is omitted, an update keeps the stored setting and a create request applies the backward-compatible unrestricted behavior. An empty list `[]` remains the deny-all setting.
 
 :::
 

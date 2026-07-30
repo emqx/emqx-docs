@@ -63,7 +63,7 @@ Starting from EMQX 6.0.4, `POST /api/v5/users` and `PUT /api/v5/users/:username`
 
 Using `"unset"` keeps the user's scopes aligned with the role default after an EMQX upgrade adds scopes. The API can return `"unset"` for a user without an explicit scope list. API clients can send this value back unchanged during a read-modify-write operation, such as when editing only the user's description.
 
-::: warning Privilege Scopes Must Stand Alone
+::: warning Administrator-Equivalent Scopes Must Stand Alone
 
 The following scopes are administrator-equivalent:
 
@@ -72,9 +72,9 @@ The following scopes are administrator-equivalent:
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
 - `sso_management` lets the holder rotate or reconfigure an SSO backend, which can change how administrators authenticate.
 
-Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of these privilege scopes with a non-privilege scope. The create or update request returns HTTP 400. Assign either a privilege-only list for administrator-equivalent access or a non-privilege-only list for restricted access. `mfa_management` is a non-privilege scope.
+Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of the administrator-equivalent scopes above with other scopes. The create or update request returns HTTP 400. Assign either only administrator-equivalent scopes or only other scopes, depending on the required permissions. `mfa_management` is not administrator-equivalent.
 
-Users with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must split the privilege and non-privilege scopes. An omitted `scopes` field, `"unset"`, a list equal to the role default, and an empty list `[]` are not treated as an explicit mixed list.
+Users with a mixed scope list created before EMQX 6.0.4 continue to work. On a subsequent request that explicitly submits a scope list, the list must contain either only administrator-equivalent scopes or only other scopes. An omitted `scopes` field, `"unset"`, a list equal to the role default, and an empty list `[]` are not treated as an explicit mixed list.
 
 This mutual-exclusion rule does not apply to namespaced Dashboard administrators. Their allowed scope combinations remain subject to namespaced role compatibility and endpoint-level authorization.
 
