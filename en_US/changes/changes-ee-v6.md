@@ -69,7 +69,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18062](https://github.com/emqx/emqx/pull/18062) Switching a TLS/WSS listener from a managed certificate bundle back to file-based certificates now succeeds when the request clears `managed_certs` by sending it as `null` (as the Dashboard does), even if the bundle has already been deleted.
 
-- [#18102](https://github.com/emqx/emqx/pull/18102) Fixed an issue where MQTT clients could receive QoS 1 and QoS 2 messages out of order when a delivery rate limit was active. EMQX now keeps later messages queued until the blocked message can be sent.
+- [#18102](https://github.com/emqx/emqx/pull/18102) Fixed an issue introduced in EMQX 6.1.2 and 6.2.0 where MQTT clients could receive QoS 1 and QoS 2 messages out of order. This issue affected only deployments with a delivery rate limit configured. EMQX now keeps later messages queued until the rate-limited message can be sent.
 
 - [#18108](https://github.com/emqx/emqx/pull/18108) Deleting a managed certificate bundle (or a single file in it) that is still referenced by some configuration now always fails with a clear error listing the referencing configurations; the `force_delete` query parameter no longer bypasses this check and has been removed from the API schema.
 

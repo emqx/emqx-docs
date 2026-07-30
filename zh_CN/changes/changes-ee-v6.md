@@ -69,7 +69,7 @@
 
 - [#18062](https://github.com/emqx/emqx/pull/18062) 修复了将 TLS/WSS 监听器从托管证书包切换回基于文件的证书时，如果请求通过发送 `null` 清除 `managed_certs`（与 Dashboard 的行为一致）且证书包已被删除，会导致切换失败的问题。
 
-- [#18102](https://github.com/emqx/emqx/pull/18102) 修复了启用投递速率限制时，MQTT 客户端可能乱序接收 QoS 1 和 QoS 2 消息的问题。EMQX 现在会将后续消息保留在队列中，直到受阻消息可以发送。
+- [#18102](https://github.com/emqx/emqx/pull/18102) 修复了 EMQX 6.1.2 和 6.2.0 中引入的一个问题，该问题可能导致 MQTT 客户端乱序接收 QoS 1 和 QoS 2 消息。此问题仅影响配置了投递速率限制的部署。EMQX 现在会将后续消息保留在队列中，直到受速率限制的消息可以发送。
 
 - [#18108](https://github.com/emqx/emqx/pull/18108) 删除仍被某项配置引用的托管证书包或其中的单个文件时，现在始终会失败，并返回列出引用配置的明确错误。`force_delete` 查询参数不再绕过此检查，且已从 API schema 中移除。
 
