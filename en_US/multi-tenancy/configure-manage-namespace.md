@@ -53,7 +53,7 @@ For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-
 
 ## Configure and Manage Namespaces via Dashboard
 
-In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can view or edit namespaces and manage clients connected to each namespace.
+In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can manage namespaces and clients connected to each namespace.
 
 By default, the namespace list only shows explicitly created namespaces. You can toggle the switch at the top left of the page to show both explicitly created namespaces and those automatically created by EMQX from the `client_attrs.tns` attribute.
 
