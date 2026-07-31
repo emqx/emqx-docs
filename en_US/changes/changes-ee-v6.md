@@ -142,9 +142,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18005](https://github.com/emqx/emqx/pull/18005) Fixed an issue where CLI audit logs could store sensitive command arguments.
 
-- [#18009](https://github.com/emqx/emqx/pull/18009) Fixed an error when editing only the note (description) of the default administrator via the Dashboard user API.
+- [#18009](https://github.com/emqx/emqx/pull/18009) Made scope handling consistent for administrator and API key records that use their role's implicit default scopes (shown as `unset`). Updated read and write operations to accept unset-equivalent scope lists. These records retain their forward-compatible implicit scopes instead of a frozen list, so scopes added in later releases take effect automatically.
 
-  The user API now accepts a scope list that matches the role's implicit full set (and the `unset` value) as equivalent to "no explicit scopes", so a read-modify-write of an administrator no longer fails. Such users also keep their forward-compatible implicit scopes instead of a frozen list.
+  - Fixed an issue where `PUT /api/v5/users/{username}` rejected a request that updated only the default administrator's note (description). EMQX no longer treats the default scope list included in such a request as an explicit assignment. If the submitted value is `unset` or a list that matches the administrator role's full default scope set, EMQX treats it as "no explicit scopes" and allows the note update.
+  - [#18196](https://github.com/emqx/emqx/pull/18196) When creating or updating an API key, EMQX treats `unset` or a list that matches the role's default scopes as "no explicit scopes." As a result, the `scopes` value returned when retrieving the API key can be submitted unchanged without causing the request to fail.
+  - [#18221](https://github.com/emqx/emqx/pull/18221) EMQX no longer creates the default administrator with an explicit scope list at startup. At boot, EMQX updates default administrator records that carry an explicit list to the implicit form.
 
 #### Multi-tenancy
 
