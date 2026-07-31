@@ -1,26 +1,31 @@
 # Schema Registry
 
-Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
+EMQX Schema Registry lets you define and manage schemas for encoding, decoding, and validating MQTT message payloads. Rules can call Schema Registry functions to decode binary payloads such as Avro or Protobuf into data that the rule engine can process, encode processed data for downstream systems, or validate JSON data against a JSON Schema.
 
-The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in
-various scenarios.
-
-EMQX Schema Registry currently supports codecs in the below formats:
-
-- [Avro](https://avro.apache.org)
-- [Protobuf](https://developers.google.com/protocol-buffers/)
-- [JSON Schema](https://json-schema.org/)
-- External HTTP server
-
-Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
-
-JSON schema can be used to validate if the input JSON object is following the schema definitions or if the JSON object output from the rule engine is valid before producing the data to downstream.
-
-External HTTP Server makes all decoding and encoding of payloads go through a configured black-box server that handles the logic.  It's useful for cases where one wishes to have custom encoding/decoding logic.
+Use Schema Registry when devices and downstream applications exchange data in different formats. It centralizes schema definitions and custom codec configurations so that rules can process messages in a consistent format without implementing conversion logic separately in each rule or application.
 
 The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
 <img src="./assets/schema-registry.png" alt="schema-registry" style="zoom:67%;" />
+
+## Supported Schema Types
+
+EMQX Schema Registry supports the following internal schema types:
+
+| Schema Type | Description | Example |
+| --- | --- | --- |
+| [Avro](https://avro.apache.org) | Encodes data from [Map format](#rule-engine-internal-data-format-map) into Avro binary data and decodes Avro binary data into Map format. | [Schema Registry Example - Avro](./schema-registry-example-avro.md) |
+| [Protobuf](https://developers.google.com/protocol-buffers/) | Encodes data from Map format into Protobuf binary data and decodes Protobuf binary data into Map format. | [Schema Registry Example - Protobuf](./schema-registry-example-protobuf.md) |
+| [JSON Schema](https://json-schema.org/) | Validates whether input JSON data or JSON data produced by the rule engine conforms to a JSON Schema. | [Schema Registry Example - JSON Schema](./schema-registry-example-json.md) |
+| External HTTP Server | Delegates payload encoding and decoding to a configured HTTP service that implements custom codec logic. | [Schema Registry Example - External HTTP Server](./schema-registry-example-external-http.md) |
+
+External HTTP Server and an external Schema Registry are different integrations. External HTTP Server is an internal schema type that delegates encoding and decoding to a custom HTTP service. An external Schema Registry is configured separately and retrieves Avro schemas from a configured Confluent Schema Registry during rule processing. For details, see [External Schema Registry](#external-schema-registry).
+
+### JSON Schema Support
+
+Starting from EMQX 6.0.4, Schema Registry supports JSON Schema draft-03, draft-04, draft-06, draft 2019-09, and draft 2020-12. EMQX selects the JSON Schema version based on the value of the `$schema` field. If `$schema` is omitted, EMQX uses draft-06.
+
+For a complete example and the limitations of each draft, see [Schema Registry Example - JSON Schema](./schema-registry-example-json.md).
 
 ## Architecture Design
 
