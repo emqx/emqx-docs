@@ -46,7 +46,9 @@ When you create a global user in the Dashboard, the **Namespace** option is off 
 - **Privilege Scopes**: Select from `system`, `user_management`, `api_key_management`, and `sso_management`. These scopes provide administrator-equivalent capabilities.
 - **Custom Restricted Permissions**: Select from the non-privilege scopes available to the role, such as `connections`, `publish`, `data_integration`, `monitoring`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
 
-To create a namespaced user, turn on **Namespace** and select a namespace. Namespaced users do not use the three-option **Permission Mode** field. Instead, **Use Role Default Scopes** is enabled by default. Turn it off to select any scopes that the role can hold in a namespace. If you leave **Scopes** empty, the user cannot access scope-protected APIs.
+<img src="./assets/user_scopes.png" alt="Create a global Dashboard user and select a permission mode" style="zoom:67%;" />
+
+Namespaced users use a separate scope-assignment flow, and the available scopes remain limited by their role and namespace. For configuration steps, see [Create a User with a Namespaced Role](#create-a-user-with-a-namespaced-role).
 
 | User Type | Default Permissions |
 | --- | --- |
@@ -55,11 +57,9 @@ To create a namespaced user, turn on **Namespace** and select a namespace. Names
 | Namespace Administrator | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, User Management, and API Key Management. |
 | Namespace Viewer | The same 10 API-key scopes as a Global Viewer. `mfa_management` is granted only when explicitly assigned. |
 
-<!-- TODO: Replace ./assets/user_scopes.png with an updated, cropped screenshot that shows Permission Mode for a global user. -->
-
 ::: warning Administrator-Equivalent Scopes Must Stand Alone
 
-The following scopes are administrator-equivalent (referred to as `privilege scopes` in EMQX validation messages):
+The following administrator-equivalent scopes are grouped under **Privilege Scopes** in the Dashboard and referred to as `privilege scopes` in validation messages:
 
 - `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
@@ -108,7 +108,7 @@ Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature ex
 
 Namespaced admin access is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidental cross-team configuration changes. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** > **Cluster Settings** > **[Rule Engine Security](./cluster_settings.md#rule-engine-security)** to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** -> **Cluster Settings** -> **[Rule Engine Security](./cluster_settings.md#rule-engine-security)** to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 :::
 
@@ -136,8 +136,11 @@ When creating a new user in the Dashboard, the **Namespace** option is off by de
    - **Password**: User’s login password.
    - **Role**: Select either **Administrator** or **Viewer**.
    - **Namespace**: Off by default. Turn it on and select an existing namespace (for example, `namespace_01`).
-   - **Use Role Default Scopes**: Appears after you turn on **Namespace** and is enabled by default. Keep it enabled to use the defaults for the selected namespaced role, or turn it off to assign explicit scopes.
-   - **Scopes**: Appears when **Use Role Default Scopes** is off. Select the scopes to grant; leaving it empty grants no scopes.
+   - **Use Role Default Scopes**: After you turn on **Namespace**, this field replaces the three-option **Permission Mode** field and is enabled by default. Keep it enabled to use the defaults for the selected namespaced role, or turn it off to assign explicit scopes.
+   - **Scopes**: Appears when **Use Role Default Scopes** is off. Select from the scopes that the selected role can hold in the namespace; leaving it empty grants no scopes.
+
+   <img src="./assets/create-namespaced-user.png" alt="Create a namespaced user and assign explicit scopes" style="zoom:67%;" />
+
 3. Click **Create** to finish.
 
 When creating users via the CLI or API, the role must be explicitly specified in the following format:
