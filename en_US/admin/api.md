@@ -237,7 +237,7 @@ Once you have the bearer token, include it in the `Authorization` header of your
 
 #### Dashboard
 
-You can manually create API keys on the Dashboard by navigating to **System** -> **API Key**:
+You can manually create API keys on the Dashboard by navigating to **System** -> **API Keys**:
 
 1. Click the **+ Create** button in the top right corner to open the Create dialog.
 2. Configure the API key details:
@@ -246,7 +246,11 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
    - **Is Enable**: Defaults to enabled.
    - **Role**: Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
    - **Namespace**: The switch is off by default. For a global administrator, leaving it off creates a global API key. Turn it on and select a namespace to create the key in that namespace. A namespaced administrator can create keys only in their own namespace.
-   - **Scopes**: Select the scopes to grant (optional). Defaults to all scope permissions. See [API Scopes](#api-scopes).
+   - **Permission Mode**: For an Administrator or Viewer key, select how to assign scopes:
+     - **Role Default Scopes**: Use the defaults for the selected role. Changes to the role defaults take effect automatically.
+     - **System-level Permissions**: Grant only the `system` scope.
+     - **Custom Restricted Permissions**: Select one or more non-system scopes. If you leave **Scopes** empty, the key cannot access scope-protected APIs.
+   - **Scopes**: Appears when you select **Custom Restricted Permissions**. Select the scopes to grant. See [API Scopes](#api-scopes).
    - **Note**: Optionally enter a description for the key.
 3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
 
@@ -258,7 +262,11 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 
 4. Click **Close** to dismiss the dialog.
 
-You can view key details by clicking its name, edit its expiration, status, or note via the **Edit** button, or remove it with the **Delete** button.
+**Permission Mode** is available only in the Dashboard. When using the REST API, configure the `scopes` field directly. For details, see [Default Behavior of `scopes`](#default-behavior-of-scopes).
+
+The **Permission Mode** field is not displayed for Publisher keys. A Publisher key uses the role-default `publish` scope.
+
+You can view key details by clicking its name. Use the **Edit** button to change its expiration, status, role, permission mode, scopes, or note. Use the **Delete** button to remove the key.
 
 #### REST API
 
@@ -273,9 +281,12 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
   -d '{
     "name": "team-a-key",
     "role": "administrator",
-    "namespace": "team-a"
+    "namespace": "team-a",
+    "scopes": "unset"
   }'
 ```
+
+Setting `scopes` to `"unset"` explicitly applies the role-default scopes. Omitting `scopes` from a create request has the same effect.
 
 You can specify the namespace in either of these ways:
 
@@ -299,7 +310,7 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
 - **Role (optional)**: Specify the key's [role](#roles-and-permissions).
-- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives all user-visible scopes by default (administrative all-allow, for backward compatibility with earlier releases). Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
+- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives the defaults for its role. Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
 
 For example:
 
@@ -382,7 +393,7 @@ The `system` scope (referred to as a `privilege scope` in EMQX validation messag
 
 Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or omit `system` and assign only the scopes required for least-privilege access.
 
-API keys with a mixed scope list created before EMQX 6.0.4 continue to work. A subsequent request that explicitly submits a scope list must use either `system` alone or a list that does not include `system`. When `scopes` is omitted, an update keeps the stored setting and a create request applies the backward-compatible unrestricted behavior. An empty list `[]` remains the deny-all setting.
+API keys with a mixed scope list created before EMQX 6.0.4 continue to work. When you edit such a key in the Dashboard, the form displays a compatibility warning and requires you to select **System-level Permissions**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. A subsequent request that explicitly submits a scope list must use either `system` alone or a list that does not include `system`. When `scopes` is omitted, an update keeps the stored setting and a create request uses the selected role's defaults. An empty list `[]` remains the deny-all setting.
 
 :::
 
@@ -399,7 +410,11 @@ In addition to these API-key scopes, Dashboard login users have 4 login-only sco
 
 #### Restrictions for Namespaced Callers
 
-Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions. For example, even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
+Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions.
+
+Namespaced API keys cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if the key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
+
+Even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
 
 - `GET /clients/:clientid/mqueue_messages`
 - `GET /clients/:clientid/inflight_messages`
@@ -426,17 +441,21 @@ Dashboard login, SSO callbacks, and API key self-management endpoints (for examp
 
 #### Default Behavior of `scopes`
 
-The `scopes` field on an API key follows these rules:
+Starting from EMQX 6.0.4, the `scopes` field on an API key follows these rules:
 
 | Value of `scopes` | Meaning |
 | --- | --- |
-| **Absent** (field missing) | All business endpoints are allowed. This is the backward-compatible default for keys created before the scopes feature existed. |
+| **Absent in a create request** | Use the defaults for the selected role. |
+| **Absent in an update request** | Preserve the key's current scope setting. |
+| **Role-default sentinel** `"unset"` | Remove the explicit scope setting and use the defaults for the selected role. Changes to the role defaults take effect automatically. |
 | **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
 | **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
 
-When a bootstrap file entry omits the scopes segment, the key is explicitly written with all user-visible scopes (administrative all-allow), so upgrades don't silently strip privileges from existing bootstrap-provisioned keys.
+An explicit list that contains the same set of scopes as the role defaults has the same effect as `"unset"`. The key continues to follow changes to the role defaults. The comparison is order-independent.
 
-API keys and Dashboard login users use different `scopes` defaults. For Dashboard login users, omitting `scopes` when creating a user applies the role defaults, while omitting it when updating a user preserves the current setting. Set `scopes` to `"unset"` to restore the role defaults.
+When a bootstrap file entry omits the scopes segment, EMQX applies the defaults for the specified role when processing the file.
+
+Scopes determine which API areas a key can access. They do not override the key's role or namespace restrictions. A request is allowed only when its role, scope, and namespace checks all pass.
 
 #### List Available Scopes
 
@@ -459,7 +478,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 Scopes can be set from any of the following entry points:
 
-- **Dashboard**: When creating or editing a key under **System** -> **API Key**, tick the scopes to grant.
+- **Dashboard**: When creating or editing a key under **System** -> **API Keys**, select a **Permission Mode**. Select individual scopes only for **Custom Restricted Permissions**.
 - **REST API**: Include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
 - **Bootstrap file**: Provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
 
