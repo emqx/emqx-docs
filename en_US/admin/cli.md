@@ -1593,12 +1593,6 @@ List all metrics for a gateway.
 
 ## license
 
-::: tip
-
-This section applies to the EMQX Enterprise edition only.
-
-:::
-
 ### license info
 
 Display License information.
@@ -1628,10 +1622,53 @@ You need to replace `YOUR_LICENSE_STRING` with the actual License string.
 
 ### license update default
 
-Revert to default Community License.
+Revert to the default Community License.
 
 ```bash
 emqx ctl license update default
+```
+
+### license history
+
+Display the session high-watermark history. EMQX Enterprise records the daily peak session count and retains at least 24 months of history for billing audit purposes.
+
+```bash
+emqx ctl license history [N] [--period daily|monthly] [--json]
+```
+
+- `N`: Optional positive integer; caps the number of rows returned (default: 24 for monthly period)
+- `--period daily|monthly`: Aggregation granularity; `daily` returns one row per calendar day, `monthly` folds daily peaks into per-month maximums (default: `monthly`)
+- `--json`: Output in JSON format instead of plain text
+
+**Example: plain-text output**
+
+```bash
+$ emqx ctl license history
+period=2026-04 high_watermark=25000 observed_at=2026-04-18T13:53:05.000Z
+period=2026-03 high_watermark=23500 observed_at=2026-03-31T22:10:42.000Z
+```
+
+**Example: JSON output**
+
+```bash
+$ emqx ctl license history --json
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+When no data has been recorded yet, the plain-text output displays:
+
+```
+No session high-watermark history recorded.
 ```
 
 ## admins
@@ -1663,6 +1700,93 @@ Delete a specific Dashboard user.
 ```bash
 $ emqx ctl admins del emqx_u
 ok
+```
+
+## api_keys
+
+The `api_keys` command can be used to manage REST API keys from the command line. This is useful for bootstrapping API access without needing to log in to the Dashboard first.
+
+### api_keys list
+
+List all API keys.
+
+```bash
+$ emqx ctl api_keys list
+[
+  {
+    "role" : "administrator",
+    "name" : "my-key",
+    "expired_at" : "infinity",
+    "expired" : false,
+    "enable" : true,
+    "desc" : "",
+    "api_key" : "admin"
+  }
+]
+```
+
+### api_keys show --name \<Name\>
+
+Show details of a specific API key.
+
+```bash
+$ emqx ctl api_keys show --name my-key
+```
+
+### api_keys add
+
+Create a new API key. The generated `api_key` and `api_secret` are returned in the output. The `api_secret` is only shown once at creation time.
+
+```bash
+$ emqx ctl api_keys add --name my-key --role viewer --valid-days 30 --desc "My API key"
+{
+  "role" : "viewer",
+  "name" : "my-key",
+  "expired_at" : 1777201070,
+  "expired" : false,
+  "enable" : true,
+  "desc" : "My API key",
+  "api_secret" : "tEWX9APine9B9Bkk...",
+  "api_key" : "CPKcoFpIkIlbaqhL"
+}
+```
+
+Options:
+
+| Option | Description |
+| --- | --- |
+| `--name <Name>` | Required. A name to identify the API key. |
+| `--api-secret <Secret>` | Optional. Specify a secret key. If omitted, one is generated automatically. |
+| `--valid-days <infinity\|days>` | Optional. Validity period. Use `infinity` for no expiration (default), or a number of days. |
+| `--role <Role>` | Optional. One of `administrator` (default), `viewer`, or `publisher`. See [Roles and Permissions](./api.md#roles-and-permissions). |
+| `--desc <Desc>` | Optional. A description for the API key. |
+
+### api_keys enable --name \<Name\>
+
+Enable a previously disabled API key.
+
+```bash
+$ emqx ctl api_keys enable --name my-key
+```
+
+### api_keys disable --name \<Name\>
+
+Disable an API key without deleting it.
+
+```bash
+$ emqx ctl api_keys disable --name my-key
+```
+
+### api_keys del --name \<Name\>
+
+Delete an API key.
+
+```bash
+$ emqx ctl api_keys del --name my-key
+{
+  "result" : "ok",
+  "name" : "my-key"
+}
 ```
 
 ## rules

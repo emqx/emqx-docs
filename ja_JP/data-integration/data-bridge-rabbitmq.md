@@ -12,7 +12,7 @@ RabbitMQ Sinkを例にとると、以下の図はEMQXとRabbitMQ間の典型的�
 
 ![EMQX Integration RabbitMQ](./assets/emqx-integration-rabbitmq.png)
 
-MQTTデータをRabbitMQに取り込む流れは以下の通りです：
+MQTTデータをRabbitMQに取り込む流れは以下の通りです。
 
 1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを通じてEMQXに正常に接続し、リアルタイムのMQTTデータをEMQXにパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
 2. **メッセージデータの処理**：メッセージが到着すると、ルールエンジンを通過し、EMQXで定義されたルールによって処理されます。ルールは事前定義された条件に基づき、RabbitMQにルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、ペイロードの付加的なコンテキストによる強化などの変換が適用されます。
@@ -41,7 +41,7 @@ RabbitMQとのデータ統合は、以下の特徴とメリットをビジネス
 
 ### RabbitMQサーバーの起動
 
-ここでは[Docker](https://www.docker.com/)を使ったRabbitMQサーバーの起動方法を紹介します。
+ここでは[Docker](https://www.docker.com/)を使用してRabbitMQサーバーを起動する方法を紹介します。
 
 管理プラグインを有効にしたRabbitMQサーバーを起動するには、以下のコマンドを実行してください。管理プラグインによりWebインターフェースでRabbitMQを確認できます。
 
@@ -83,7 +83,7 @@ RabbitMQサーバー起動後、RabbitMQ管理Webインターフェースを使�
 RabbitMQ管理Webインターフェースを使って、RabbitMQメッセージ送信用のキューを作成できます。
 
 1. RabbitMQ管理Webインターフェースにログインします。
-2. 上部メニューの**Queues**タブをクリックし、**Add a new queue**を展開して以下を入力します：
+2. 上部メニューの**Queues**タブをクリックし、**Add a new queue**を展開して以下を入力します。
    * **Type**: `Default for virtual host`
    * **Name**: `message-send` と入力
    * **Durability**: `Durable` を選択し、キューを永続化
@@ -373,7 +373,7 @@ EMQXダッシュボード内蔵のWebSocketクライアントを使ってルー�
 
 ![rabbitmq_source](./assets/rabbitmq/rabbitmq_source.png)
 
-### ルールにリパブリッシュアクションを追加
+### ルールに再パブリッシュアクションを追加
 
 このセクションでは、RabbitMQ Sourceから消費したメッセージを転送し、EMQXトピック`t/1`にパブリッシュするためのリパブリッシュアクションの追加方法を説明します。
 
@@ -394,7 +394,9 @@ EMQXダッシュボード内蔵のWebSocketクライアントを使ってルー�
 
 ## RabbitMQ Sourceを使ったルールのテスト
 
-1. [MQTTX CLI](https://mqttx.app/cli)を使い、トピック`t/1`をサブスクライブします：
+## RabbitMQ Source付きルールのテスト
+
+1. [MQTTX CLI](https://mqttx.app/cli)を使い、トピック`t/1`をサブスクライブします。
 
    ```bash
    mqttx sub -t t/1
@@ -418,7 +420,7 @@ EMQXダッシュボード内蔵のWebSocketクライアントを使ってルー�
    2. **Name**列の**message-send**をクリックし詳細ページを開く。
    3. **Publish message**を展開し、**Payload**欄に`"Hello EMQX"`と入力し、**Publish message**ボタンをクリック。
 
-3. MQTTXで以下のような出力が表示されます：
+3. MQTTXに以下のような出力が表示されます。
 
    ```bash
    [2024-2-23] [16:59:28] › payload: {"payload":{"msg":"Hello EMQX"},"event":"$bridges/rabbitmq:my-rabbitmq-source","metadata":{"rule_id":"rule_0ly1"},"timestamp":1708678768449,"node":"emqx@127.0.0.1"}

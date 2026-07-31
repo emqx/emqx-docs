@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
 }'
 ```
 
-詳細な REST API の説明は [REST API - Gateway](../admin/api.md) を参照してください。
+REST API の詳細は [REST API - Gateway](../admin/api.md) を参照してください。
 
 カスタマイズが必要な場合やリスナーの追加、認証ルールの追加を行いたい場合は、[CoAP ゲートウェイのカスタマイズ](#customize-your-coap-gateway) セクションを参照してください。
 
@@ -114,7 +114,6 @@ CoAP ゲートウェイは [Publish-Subscribe Broker for the CoAP](https://datat
     - アック不要の場合は QoS 0
     - アック必要の場合は QoS 1
   - **qos0**, **qos1**, **qos2**
-
 - **Publish QoS**: パブリッシュ要求のデフォルト QoS レベルを設定します。デフォルトは `coap`。選択肢は `coap`、`qos0`、`qos1`、`qos2`。
 
 - **MountPoint**: パブリッシュやサブスクライブ時にすべてのトピックに接頭辞として付与される文字列を設定します。これにより異なるプロトコル間でのメッセージルーティングの分離が可能です。例: *CoAP*
@@ -229,7 +228,7 @@ MQTT プロトコルとは異なり、**ゲートウェイは認証方式の作�
 `libcoap` を例に示します。
 
 ```bash
-# clientid 123、username と password に admin/public を指定して接続リクエストを送信。
+# clientid 123、username admin、password public で接続リクエストを送信。
 # 返却されたトークンは 3404490787
 coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&username=admin&password=public"
 

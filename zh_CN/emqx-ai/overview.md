@@ -113,6 +113,16 @@ MCP（Model Context Protocol）让 AI 能够自然、规范、动态地调用设
 
 - [MCP over MQTT 协议概述](./mcp-over-mqtt/overview.md)
 
+### 协同：A2A over MQTT — Agent 间任务协作
+
+随着智能硬件与 AI Agent 的不断普及，单个 Agent 越来越需要将任务委派给其他 Agent，并与之协同完成复杂的工作流。Agent-to-Agent（A2A）协议定义了 Agent 之间如何相互发现、交换任务请求并流式传输执行结果，从而构建出能够应对复杂场景的多智能体系统。
+
+EMQX 通过内置的 A2A Registry 实现 A2A over MQTT。该功能负责收录 Agent 发布的 Agent Card，追踪其连接状态，并通过标准 MQTT 主题在 Agent 之间路由任务请求。
+
+#### 扩展阅读：
+
+- [A2A over MQTT 概述](./a2a-over-mqtt/overview.md)
+
 #### 智能体交互典型场景
 
 - 纯语音对话：以语音为唯一输入，基于 WebRTC 即可实现实时、高品质互动。

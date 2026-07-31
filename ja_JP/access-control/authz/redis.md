@@ -10,12 +10,12 @@
 
 ## データスキーマとクエリ文
 
-ユーザーは以下のデータを返すクエリテンプレートを提供する必要があります。
+ユーザーは以下のデータを返すクエリテンプレートを用意する必要があります。
 
 - `topic`：ルールが適用されるトピックを指定します。トピックフィルターや[トピックプレースホルダー](./authz.md#topic-placeholders)を使用可能です。
 - `action`：ルールが適用されるアクションを指定します。利用可能な値は `publish`、`subscribe`、`all` です。
 - `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
-- `retain`（オプション）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトは保持メッセージを許可します。
+- `retain`（オプション）：ルールがリテインドメッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトはリテインドメッセージを許可します。
 
 例えば、ルールは[Redisハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存できます。
 
@@ -99,7 +99,7 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
 
 ::: tab Single
 
-```bash
+```hocon
 {
     type = redis
 
@@ -109,7 +109,8 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -117,7 +118,7 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
 
 ::: tab Sentinel
 
-```bash
+```hocon
 {
     type = redis
 
@@ -128,7 +129,8 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -136,7 +138,7 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
 
 ::: tab Cluster
 
-```bash
+```hocon
 {
     type = redis
 
@@ -145,9 +147,13 @@ Redisオーソライザーはタイプ `redis` で識別されます。オーソ
 
     cmd = "HGETALL mqtt_user:${username}"
     password = public
+    
+    compatibility_mode = disabled
 }
 ```
 
 :::
 
 ::::
+
+> `compatibility_mode` はEMQX 4.xからのアップグレード時に既存のRedis ACLデータを再利用する場合に `v4` に設定できます。

@@ -1,6 +1,6 @@
 # ルールエンジン
 
-EMQXは、データ処理のためのルールエンジン機能を提供しており、[データ統合](./data-bridges.md)と連携してIoTデータの抽出、フィルタリング、強化、変換、保存を行います。これにより、アプリケーション統合が加速し、ビジネスのイノベーションを促進します。
+EMQXは、データ処理のためのルールエンジン機能を提供しており、[データ統合](./data-bridges.md)と連携してIoTデータの抽出、フィルタリング、強化、変換、保存を行います。これにより、アプリケーション統合を加速し、ビジネスのイノベーションを促進します。
 
 ![data-integration-arch](./assets/rules/data-integration-arch.png)
 
@@ -28,7 +28,7 @@ EMQXのルールエンジンは、特に受信したメッセージの変換や�
   - [コンソール出力](./rule-get-started.md#add-console-output-action)：処理結果をコンソールやログに出力する。
   - [シンクへの転送](./data-bridges.md#add-forwarding-with-sinks-action)：処理結果をMQTTサービス、Kafka、PostgreSQLなどの外部データシステムに送信する。
 
-EMQXダッシュボードでルールを作成する手順については、[ルールの作成](./rule-get-started.md)をご参照ください。
+EMQXダッシュボードでのルール作成手順については、[ルールの作成](./rule-get-started.md)をご覧ください。
 
 ## ルールSQLの例
 
@@ -54,7 +54,7 @@ WHERE
 
 :::
 
-ルールSQL文の形式や使い方の詳細は、[SQLマニュアル](./rule-sql-syntax.md)をご参照ください。
+ルールSQL文の形式や使用方法の詳細については、[SQLマニュアル](./rule-sql-syntax.md)を参照してください。
 
 ## ルールの典型的な適用シナリオ
 

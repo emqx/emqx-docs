@@ -213,16 +213,16 @@
 
 | 云平台                | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注和链接                                                   |
 | --------------------- | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
-| **AWS Marketplace**   | ✅               | ✅                   | ✅               | [AWS Marketplace: EMQX Platform (Pay as you go)](https://aws.amazon.com/marketplace/pp/prodview-g6zejrbcad6mu) |
-| **Azure Marketplace** | ✅               | ✅                   | ✅               | [Azure Marketplace: EMQX Platform](https://marketplace.microsoft.com/en-us/product/saas/emqtechnologiesincorporated1678779968155.emqx_cloud?tab=Overview) |
-| **GCP Marketplace**   | ✅               | ✅                   | ✅               | [GCP Marketplace](https://console.cloud.google.com/marketplace/product/emq-public-380104/emqx-cloudpay-as-you-go) |
+| **AWS Marketplace**   | ✅               | ✅                   | ✅               | [AWS Marketplace: EMQX Platform (Pay as you go)](https://docs.emqx.com/en/cloud/latest/billing/aws_marketplace.html) |
+| **Azure Marketplace** | ✅               | ✅                   | ✅               | [Azure Marketplace: EMQX Platform](https://docs.emqx.com/en/cloud/latest/billing/azure_marketplace.html) |
+| **GCP Marketplace**   | ✅               | ✅                   | ✅               | [GCP Marketplace](https://docs.emqx.com/en/cloud/latest/billing/gcp_marketplace.html) |
 | **阿里云**            | ✅               | ✅                   | ✅               |                                                              |
 | **华为云**            | ✅               | ✅ 规划中            | ✅               |                                                              |
 | **腾讯云**            | ✅               | ✅ 规划中            | ✅               |                                                              |
 
 ## MQTT 开发工具与 SDKs
 
-2| MQTT 开发工具 & SDKs  | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注和链接                                                   |
+| MQTT 开发工具 & SDKs  | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注和链接                                                   |
 | --------------------- | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
 | **MQTTX 桌面版**      | ✅               | ✅                   | ✅               | MQTTX - 学习 MQTT 最好的工具。<br>[MQTTX: 你的全功能 MQTT 客户端工具](https://mqttx.app/zh) |
 | **MQTTX 命令行版**    | ✅               | ✅                   | ✅               | [MQTTX CLI: 强大易用的 MQTT 5.0 命令行工具](https://mqttx.app/zh/cli) |

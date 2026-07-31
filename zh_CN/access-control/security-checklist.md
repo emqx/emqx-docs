@@ -33,20 +33,24 @@
 
 - 在将公共监听器暴露到生产环境之前，至少配置一种认证方式。默认情况下，如果未启用认证，EMQX 将允许所有客户端连接。详见[认证](./authn/authn.md)。
 - 优先使用每设备或每应用独立凭据，避免多个客户端共享用户名、密码或证书。
+- 在认证机制支持时，将 MQTT 客户端 ID 与认证身份绑定。例如，校验 JWT 的 `clientid` 声明、使用 [`peer_cert_as_clientid`](./authn/x509.md#证书信息映射) 映射证书字段、让 HTTP 认证器拒绝不匹配的请求，或将认证器与 [Client-Info](./authn/cinfo.md) 规则配合使用。缺少此类绑定时，泄露的凭据可能使攻击者使用随机客户端 ID 和较长的[会话过期间隔](../messaging/mqtt-concepts.md)不受限制地创建会话，导致空闲持久会话持续累积，直至耗尽 Broker 内存。
 - 根据实际信任模型选择认证机制，例如 X.509、JWT、SCRAM，或基于安全后端数据库的密码认证。
 - 使用密码认证时，应存储加盐哈希后的密码，而不是明文密码，并优先采用 `bcrypt`、`pbkdf2` 等强哈希算法。
 - 尽可能最小化主题权限范围，并谨慎审查通配符规则。详见[授权](./authz/authz.md)。
+- 当 ACL 主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时（参见[授权占位符](./authz/authz.md#authorization-placeholders)），必须对这些身份字段进行校验，禁止其包含 MQTT 主题通配符（`+`、`#`）或主题分隔符（`/`）。例如模板 `clients/${clientid}/data` 在未做校验的情况下，若客户端 ID 为 `+`，整段模板会退化为通配模式，可访问其他客户端的所有子主题；若取值为 `tenantA/+` 或含有 `/`，则会突破原本分配的主题子树范围。应在认证侧强制约束身份格式，例如通过 [Client-Info](./authn/cinfo.md) 规则、JWT 声明的正则校验或 HTTP 认证拒绝不合规的请求。应在握手阶段直接拒绝连接，而不是寄希望于 ACL 兜底处理非法替换值。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
 - 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
 - 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。
 - 在需要时，使用[黑名单](./blacklist.md)和[连接抖动检测](./flapping-detect.md)抑制异常或不稳定客户端。
+- 如果启用了集群连接（Cluster Linking），请在接收对端连入的监听器上强制认证，将 `$LINK/` 控制命名空间限定给专用的集群连接 ClientID，并拒绝其它任何客户端访问。详见[集群连接安全加固](../cluster-linking/security.md)。
 
 ## 阶段 5：管理面与运维维护
 
 - 在生产环境使用前修改 Dashboard 默认密码，并定期审查谁拥有管理权限。详见[系统](../dashboard/system.md)。
 - 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../configuration/dashboard.md)。
+- 在**管理** -> **集群配置** -> **规则引擎安全**中启用 SSRF 防护，以在配置更新时校验连接器、数据桥接和动作的出站目标。在允许委派管理员创建或修改规则引擎资源的部署中尤为重要。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 - 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../admin/api.md)和[系统](../dashboard/system.md#api-key)。
 - 如果您使用的是 EMQX 企业版，可为管理用户配置[单点登录（SSO）](../dashboard/sso.md)，并在身份提供方侧启用 MFA（如果可用）。
 - 定期执行备份并演练恢复流程。请注意，若证书或 ACL 文件存放在 EMQX 数据目录之外，则需要单独备份。详见[备份与恢复](../operations/backup-restore.md)。

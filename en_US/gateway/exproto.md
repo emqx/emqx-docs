@@ -4,6 +4,10 @@ The Extension Protocol (ExProto) is a custom protocol parsing gateway implemente
 
 This page introduces the working principle of the ExProto gateway and how to configure and use the ExProto Gateway in EMQX.
 
+::: warning Important Notice
+ExProto Gateway is deprecated as of EMQX 6.2.0 and is planned for removal in EMQX 7.
+:::
+
 <!--a brief introduction of the architecture-->
 
 ## How ExProto Gateway and gRPC Service Work
@@ -141,7 +145,7 @@ On the Gateways page, locate **ExProto**. Click **Settings** in the **Actions** 
 - **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`. This topic prefix is managed by the gateway. Clients do not need to add this prefix explicitly when publishing and subscribing.
 - **gRPC ConnectionAdapter**: Set the configurations for starting the `ConnectionAdapter` service.
   - **Bind**: Listening address and port for the gRPC server; default: **0.0.0.0:9100**.
-    - **TLS Verify Client**: Enable or disable peer verification; disabled by default. When enabled, you can configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading it with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+    - **TLS Verify Client**: Enable or disable peer verification; disabled by default. When enabled, you can configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading it with the **Select File** button. For details, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
 - **gRPC ConnectionHandler**: Set the callback server configurations that implemented ConnectionUnaryHandler.
   - **Server**: The callback gRPC server address.
     - **Enable TLS**: Enable the TLS connection for gRPC server; disabled by default. When enabled, you can further set the configurations below:

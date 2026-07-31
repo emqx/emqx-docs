@@ -22,22 +22,39 @@ You can configure the following options for Audit Log:
 - **Audit Log File Name**: Specify the path and name of the audit log file. The default value is `${EMQX_LOG_DIR}/audit.log`, where `${EMQX_LOG_DIR}` is a variable and defaults to `./log`, meaning it is ultimately be saved in `./log/audit.log.1`.
 - **Maximum Log Files Number**: The maximum number of rotated log files. The default value is `10`.
 - **Rotation Size**: Set the size of log files, and when the specified size is reached, log files will be rotated. If disabled, log files will grow indefinitely. You can enter the desired value in the text box and select the unit from the drop-down list, with options such as `MB`, `GB`, and `KB`. The default value is `50MB`.
-- **Max Dashboard Record Size**: This setting determines the maximum number of records stored in the database, which can be accessed and retrieved through the Dashboard and the `/audit` API. The default value is `5000`.
+- **Cache Size**: This setting determines the maximum number of records stored in the database, which can be accessed and retrieved through the Dashboard and the `/audit` API. The default value is `5000`.
+
+  ::: tip Note
+  `log.audit.max_filter_size` is retained as an alias for backward compatibility.
+  :::
+
 - **Ignore High Frequency Request**: This option controls whether to ignore high-frequency requests to prevent flooding the audit log with entries, such as requests related to publish/subscribe and kicking out clients. It is enabled by default.
-- **Time Offset**: Define the format of timestamps in the log. such as "-02:00" or "+00:00". By default, it is set to `system`.
+- **Timestamp Format**: The format used for timestamps in log entries. Options are:
+  - `auto`: Automatically selects the best format based on the log formatter: `epoch` for JSON and `rfc3339` for text.
+  - `epoch`: Unix epoch time in microseconds.
+  - `rfc3339`: RFC3339 format.
+- **Time Offset**: The time offset used when formatting timestamps in log entries. Options are:
+  - `system`: The time offset used by the local system.
+  - `utc`: The UTC time offset.
+  - `+-[hh]:[mm]`: A user-specified time offset, such as `"-02:00"` or `"+00:00"`.
+
+  The default is `system`.
+- **Payload Encode**: The encoding method for payload data in log entries. Options are `text`, `hex`, and `hidden`. The default is `text`.
 
 ### Enable Audit Log via Configuration File
 
 You can also enable the audit log and modify the configuration options under `log.audit` in the `base.hocon` file, as shown in the example below.
 
-```bash
+```hocon
 log.audit {
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB
-  time_offset = system
+  cache_size = 5000
   ignore_high_frequency_request = true
-  max_filter_size = 5000
+  timestamp_format = auto
+  time_offset = system
+  payload_encode = text
 }
 ```
 
@@ -45,7 +62,7 @@ log.audit {
 
 Once the Audit Log is enabled, you can view the content of the audit logs on the Dashboard under **System** -> **Audit Log**.
 
-![image-20231214143911786](./assets/image-20231214143911786.png)
+![image-20231214143911786](./assets/audit_log_list.png)
 
 ### Search Filter
 

@@ -112,14 +112,14 @@ EMQX ダッシュボードで以下の手順で設定できます：
 
    **New Subscription** ウィンドウで：
 
-   - `Subscriber1` と `Subscriber2` の **Topic** を `$share/a/t/1` に設定します。
-   - `Subscriber3` と `Subscriber4` の **Topic** を `$share/b/t/1` に設定します。
+   - `Subscriber1` と `Subscriber2` は **Topic** に `$share/a/t/1` を設定します。
+   - `Subscriber3` と `Subscriber4` は **Topic** に `$share/b/t/1` を設定します。
 
    これらの例のトピックにおいて：
 
    - プレフィックス `$share` は共有サブスクライブであることを示します。
    - `{group}` は `a` と `b` で、任意の名前に変更可能です。
-   - `t/1` は元のトピック名を示します。
+   - `t/1` は元のトピック名です。
 
    他の設定はデフォルトのままにして **Confirm** ボタンをクリックします。
 

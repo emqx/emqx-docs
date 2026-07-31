@@ -525,7 +525,40 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 | ロービーム信号   | low_beam  | 1ビット | integer    |
 | ハイビーム信号   | high_beam | 1ビット | integer    |
 
-例:
+- アナログは `analog` マップに含まれます。
+
+|   フィールド   | JSONキー | 値の型  | JSONでの値の型 |
+| :------------: | :------: | :-----: | :------------: |
+| アナログ0       |   ad0    | 16 bits |    integer     |
+| アナログ1       |   ad1    | 16 bits |    integer     |
+
+- 拡張車両信号状態ビットは `extra` マップに含まれます。
+
+|         フィールド         |    JSONキー     | 値の型  |               JSONでの値の型                |
+| :-----------------------: | :-------------: | :-----: | :----------------------------------------: |
+| 信号                      |     signal      | - 2 bits| map, `{"low_beam": VAL, "high_beam": VAL}` |
+| 右折信号                  |   right_turn    | 1 bit   |                  integer                   |
+| 左折信号                  |    left_turn    | 1 bit   |                  integer                   |
+| ブレーキ信号              |      brake      | 1 bit   |                  integer                   |
+| リバース信号              |     reverse     | 1 bit   |                  integer                   |
+| フォグライト信号          |       fog       | 1 bit   |                  integer                   |
+| サイドマーカー           |   side_marker   | 1 bit   |                  integer                   |
+| ホーン状態                |      horn       | 1 bit   |                  integer                   |
+| エアコン状態              | air_conditioner | 1 bit   |                  integer                   |
+| ニュートラル信号          |     neutral     | 1 bit   |                  integer                   |
+| リターダ作動             |    retarder     | 1 bit   |                  integer                   |
+| ABS作動                   |       abs       | 1 bit   |                  integer                   |
+| ヒーター作動             |     heater      | 1 bit   |                  integer                   |
+| クラッチ状態             |      cluth      | 1 bit   |                  integer                   |
+
+- 信号状態は `signal` マップに含まれます。
+
+|       フィールド       | JSONキー  | 値の型 | JSONでの値の型 |
+| :--------------------: | :-------: | :----: | :------------: |
+| ロービーム信号         | low_beam  | 1 bit  |    integer     |
+| ハイビーム信号         | high_beam | 1 bit  |    integer     |
+
+例：
 
 ```json
 {
@@ -727,7 +760,7 @@ JSONベースのデータ交換では、2019年版のメッセージは `header`
 連絡先項目例:
 
 ```json
-[{"type": TYPE, "phone_len": PH_LEN, "phone": PHONE, "name_len": NAME_LEN, "name": NAME}, ...]
+[{"type": TYPE, "phone_len", PH_LEN, "phone": PHONE, "name_len": NAME_LEN, "name": NAME}, ...]
 ```
 
 #### 車両制御 `"msg_id": 34048` (0x8500)

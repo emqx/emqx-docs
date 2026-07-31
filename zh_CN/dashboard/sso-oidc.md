@@ -65,30 +65,53 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
 本节将指导您使用 Okta 作为身份提供商 (IdP) 并配置单点登录。您需要分别完成 Okta (IdP) 侧和 EMQX Dashboard 侧的配置。
 
-### 第 1 步：将 OIDC 应用程序添加到 Okta 的应用程序目录
+### 步骤 1：在 EMQX Dashboard 中启用 OIDC
+
+1. 在 EMQX Dashboard 中，导航到**系统设置** -> **单点登录**。
+2. 点击 **OIDC** 卡片上的**启用**按钮。
+
+### 步骤 2：将 OIDC 应用程序添加到 Okta 的应用程序目录
 
 1. 以管理员身份登录 Okta，并进入 **Okta 管理控制台**。
 2. 转到 **Applications -> Applications** 页面，点击 **Create App integration** 按钮，并在弹出对话框中选择 `OIDC - OpenID Connect` 作为登录方式。
 3. 选择 `Web Application` 作为**Application type**，然后点击 **Next**。
 4. 在 **General Settings** 选项卡中，输入您的应用程序名称，例如 `EMQX Dashboard`。然后点击 **Next**。
-5. 在 **LOGIN** 选项卡中，使用 EMQX Dashboard 提供的信息配置设置（见**第 2 步**）：
-   - **Sign-in redirect URIs**：输入 Dashboard 提供的 **Sign-in Redirect URI**，例如 `http://localhost:18083/api/v5/sso/oidc/callback`。如果需要，您可以在完成**第 2 步**后更新此 URI。
+5. 在 **LOGIN** 选项卡中，使用 EMQX Dashboard 提供的信息配置：
+   - **Sign-in redirect URIs**：输入 Dashboard **OIDC 设置**页面中提供的 **Sign-in Redirect URI**，例如 `http://localhost:18083/api/v5/sso/oidc/callback`。
    - 其他设置是可选的，可以根据您的具体需求进行配置。
 6. 检查设置，然后点击 **Save**。
 
 有关更详细的说明，请参阅 [Okta 文档](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)。
 
-### 第 2 步：在 EMQX Dashboard 中启用 OIDC
+### 步骤 3：在 EMQX Dashboard 中完成 OIDC 配置
 
-1. 在 EMQX Dashboard 中，导航到 **System** -> **SSO**。
-2. 在 **OIDC** 选项卡中点击**启用**按钮。
-3. 在配置页面中，输入以下信息：
+1. 在 **OIDC 设置**页面中，输入以下信息：
+   - **强制启用 MFA**：可选。开启后，该后端的所有用户在登录时须完成 TOTP 验证。默认关闭。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
    - **提供商**：选择 `Okta` 或为其他提供商选择 `通用`。
    - **签发者 URL**：这是您的 Okta 授权服务器的 URL，例如 `https://example-org.okta.com`。
-   - **Client ID**：从**第一步**创建的应用程序中复制。
-   - **Client Secret**：从**第一步**创建的应用程序中复制。
+   - **Client ID**：从**步骤 2** 创建的应用程序中复制。
+   - **Client Secret**：从**步骤 2** 创建的应用程序中复制。
    - **Dashboard 地址**：输入用户可以访问 Dashboard 的基本 URL，例如 `http://localhost:18083`。该地址将自动组合生成 **SSO Address** 和 **Metadata Address**，用于 IdP 端的配置。
-4. 点击**更新**完成配置。
+2. 点击**更新**完成配置。
+
+## 高级设置
+
+**高级设置**用于配置 OIDC 的一些高级参数，以控制 EMQX 如何从 OIDC 提供方获取用户信息以及认证相关行为。
+
+| 字段名称                | 描述                                                         | 默认值                                                      |
+| ----------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- |
+| **Scopes**              | 在认证过程中请求的 OIDC Scope，用于指定从身份提供方（IdP）获取哪些用户信息。至少需要包含 `openid` 作用域才能进行 OIDC 认证。 | `openid`                                                    |
+| **名称变量**            | 用于将 OIDC 用户属性映射为 EMQX Dashboard 用户名的模板。该模板可以引用 IdP 返回的声明（claims）。 | `${sub}`                                                    |
+| **名称变量来源**        | 指定从哪个来源提取用户信息以构建 Dashboard 用户名。可选值包括：<br/>**用户信息端点**：使用 `/userinfo` 端点返回的用户信息。<br/>**ID Token**：使用认证过程中返回的 ID Token 中包含的声明。 | `用户信息端点`                                              |
+| **角色来源**            | 指定从哪个来源提取用户信息以构建 Dashboard 用户角色。可选值包括：<br/>**用户信息端点**：使用 `/userinfo` 端点返回的用户信息。<br/>**ID Token**：使用认证过程中返回的 ID Token 中包含的声明。 | `用户信息端点`                                              |
+| **角色表达式**          | 用于将 OIDC 用户属性映射为 EMQX Dashboard 用户角色的 [`jq`](https://jqlang.org/manual/) 程序。该程序可以引用 IdP 返回的声明（claims）。表达式必须返回一个字符串，且必须是有效的角色值。当前有效角色为：<br/>`"viewer"`<br/>`"administrator"`<br/>若返回结果不是上述值之一，用户将无法被创建。未设置时，将创建 viewer 角色的用户；若用户已存在，则保留其现有角色。 | 未设置                                                      |
+| **命名空间来源**        | 指定从哪个来源提取用户信息以构建 Dashboard 用户的多租户命名空间。可选值包括：<br/>**用户信息端点**：使用 `/userinfo` 端点返回的用户信息。<br/>**ID Token**：使用认证过程中返回的 ID Token 中包含的声明。 | `用户信息端点`                                              |
+| **命名空间表达式**      | 用于将 OIDC 用户属性映射为 EMQX Dashboard 用户命名空间的 [`jq`](https://jqlang.org/manual/) 程序。该程序可以引用 IdP 返回的声明（claims）。表达式必须返回一个值：命名空间名称字符串（须为已存在的命名空间），或 `null`（表示全局命名空间）。若返回结果不符合上述要求，用户将无法被创建。未设置时，将在全局命名空间中创建用户；若用户已存在，则保留其现有命名空间。 | 未设置                                                      |
+| **会话过期**            | 用户通过 OIDC 登录后，Dashboard 会话保持有效的时间（单位：秒）。 | `30` 秒                                                     |
+| **开启 PKCE**           | 启用 Proof Key for Code Exchange（PKCE），以增强授权码流程的安全性。 | 关闭                                                        |
+| **首选认证方法**        | 定义与 Token Endpoint 通信时使用的客户端认证方法。可以配置多个方法，系统会按顺序尝试。 | `client_secret_post`<br />`client_secret_basic`<br />`none` |
+| **备用方法**            | 当身份提供方的元数据未明确指定签名算法时，用于验证 ID Token 的备用签名算法。 | `RS256`                                                     |
+| **JSON Web 密钥 (JWK)** | 可选的静态 JSON Web Key 配置。当 IdP 未提供 JWKS Endpoint 时，可用于验证 Token 签名。 | `无`                                                        |
 
 ## 登录和用户管理
 
@@ -98,7 +121,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
  <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中管理该用户，例如分配角色和权限。
+认证成功后，EMQX 将自动添加一个 Dashboard 用户，您可以在[用户](./system.md#用户)中管理该用户，例如分配角色和权限。如需要求 OIDC 用户在登录时完成 TOTP 二次验证，请参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
 
 ## 退出登录
 

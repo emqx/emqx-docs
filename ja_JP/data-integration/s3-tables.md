@@ -6,7 +6,7 @@ EMQXはAmazon S3 Tablesとのシームレスな連携をサポートし、MQTT�
 
 本ページでは、EMQXとAmazon S3 Tables間のデータ統合について詳しく解説し、ルールおよびSinkの作成方法について実践的なガイダンスを提供します。
 
-## 動作概要
+## 動作の仕組み
 
 EMQXのAmazon S3 Tables連携は標準搭載機能です。この連携はEMQXのルールエンジンとS3 Tables Sinkを活用し、MQTTメッセージを変換してApache Iceberg形式のテーブルに直接ストリーミングし、S3テーブルバケットに保存して長期保管および下流分析を実現します。
 

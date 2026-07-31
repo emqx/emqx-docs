@@ -14,7 +14,7 @@
 EMQX は [Prometheus 互換の HTTP API](../../../../observability/prometheus.md) を通じて様々なメトリクスを公開します。
 
 ```yaml
-apiVersion: apps.emqx.io/v2beta1
+apiVersion: apps.emqx.io/v2
 kind: EMQX
 metadata:
   name: emqx

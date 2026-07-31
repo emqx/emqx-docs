@@ -13,7 +13,7 @@ EMQXは設定ファイル形式として[HOCON](../../../../configuration/config
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
       name: emqx

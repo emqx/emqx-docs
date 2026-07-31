@@ -26,7 +26,7 @@ node {
 
 EMQX は、ノード間の通信チャネルをTLSで保護し、交換されるデータの機密性、完全性、および真正性を守ることもサポートしています。TLSはCPU負荷やメモリ使用量の増加を伴うため、ビジネスニーズに応じて設定してください。
 
-本節では、EMQXクラスターでのTLS設定方法を紹介します。SSL/TLS証明書の取得方法については、[SSL/TLS接続の有効化](../../network/emqx-mqtt-tls.md)を参照してください。
+本節では、EMQXクラスターでTLSを設定する方法を紹介します。SSL/TLS証明書の取得方法については、[SSL/TLS証明書](../../network/tls-certificate.md)をご参照ください。
 
 ## クラスターRPC接続にTLS/SSLを使用する
 
@@ -66,7 +66,7 @@ EMQXは、クラスター通信の信頼性と効率性を確保するために�
 | **Erlang Distribution ポート** | ノード間通信に使用                                           | `4370`                                             |
 | **クラスターRPCポート**         | ノードの管理タスク（ノードの参加や離脱など）に使用          | `5370` または<br />Docker展開時は `5369`          |
 
-EMQXはErlang DistributionポートとクラスターRPCポートに同じポートマッピングルールを適用しており、以下の式で計算されます。
+EMQXはErlang DistributionポートとクラスターRPCポートに同じポートマッピングルールを適用します。
 
 ```
 ListeningPort = BasePort + Offset

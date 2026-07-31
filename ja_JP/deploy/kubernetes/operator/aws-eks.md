@@ -34,7 +34,7 @@ EKS 上に EMQX をデプロイする前に、以下の前提条件を完了し�
    provisioner: ebs.csi.aws.com
    volumeBindingMode: WaitForFirstConsumer
    ---
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

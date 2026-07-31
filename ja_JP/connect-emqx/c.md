@@ -66,6 +66,6 @@ int main(int argc, char* argv[])
 }
 ```
 
-## Paho C MQTT 5.0対応状況
+## Paho C MQTT 5.0対応
 
 Paho Cは現在、MQTT 5.0を完全にサポートしています。

@@ -22,22 +22,39 @@ EMQX 提供了 Dashboard 查看以及日志系统集成的方式帮助企业管�
 - **审计日志文件**：填写审计日志文件路径和名称。默认值为 `${EMQX_LOG_DIR}/audit.log`，其中 `${EMQX_LOG_DIR}` 是一个变量，默认为`./log`，意味着最终默认保存在 `./log/audit.log.1`  文件中。
 - **最大日志文件数**：轮换的最大日志文件数。默认值为`10`。
 - **日志文件轮换大小**：设置日志文件大小，达到设定的值时日志文件将进行轮换。如果禁用，则日志文件将无限增长。可在文本框输入设定的值，在下拉列表中选择单位，可选值为：`MB`, `GB`, `KB`。默认值为 `50MB`。
-- **最大 Dashboard 记录数**：在数据库中存储的最大的记录数，该记录通过 Dashboard 和 /audit API 获取。
+- **缓存大小**：在数据库中存储的最大记录数，这些记录可通过 Dashboard 和 `/audit` API 获取。默认值为 `5000`。
+
+  ::: tip 注意
+  `log.audit.max_filter_size` 作为向后兼容的别名保留。
+  :::
+
 - **忽略高频请求**：忽略高频请求以避免淹没审计日志，例如发布/订阅、踢出客户端等请求。
-- **时间偏移量**：定义日志中时间戳的格式。比如："-02:00" 或者 "+00:00"，默认为 `system`。
+- **时间戳格式**：日志条目中时间戳的格式。可选值：
+  - `auto`：根据日志的格式自动选择最合适的时间戳格式。对于 JSON 使用 `epoch`，对于文本则使用 `rfc3339`。
+  - `epoch`：表示自 Unix 纪元起的微秒数。
+  - `rfc3339`：遵循 RFC3339 标准的时间格式。
+- **时间偏移量**：日志中时间戳使用的时间偏移量。可选值为：
+  - `system`：本地系统使用的时区偏移量。
+  - `utc`：0 时区的偏移量。
+  - `+-[hh]:[mm]`：自定义偏移量，比如 `"-02:00"` 或者 `"+00:00"`。
+
+  默认值为本地系统的时区偏移量：`system`。
+- **Payload 编码**：日志条目中 Payload 数据的编码方式，可选值为 `text`、`hex` 和 `hidden`，默认为 `text`。
 
 ### 通过配置文件启用
 
 您可以在 `emqx.conf` 文件中通过修改 `log.audit` 下的配置项启用审计日志并设置审计日志的配置参数，参见下面示例。
 
-```bash
+```hocon
 log.audit {
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB
-  time_offset = system
+  cache_size = 5000
   ignore_high_frequency_request = true
-  max_filter_size = 5000
+  timestamp_format = auto
+  time_offset = system
+  payload_encode = text
 }
 ```
 
@@ -45,7 +62,7 @@ log.audit {
 
 审计日志启用后，您可以在 Dashboard **系统设置** -> **审计日志** 页面中查看审计日志的内容。
 
-![EMQX 审计日志列表](./assets/audit-log-list.png)
+![EMQX 审计日志列表](./assets/audit_log_list.png)
 
 ### 搜索过滤
 

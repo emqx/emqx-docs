@@ -1,29 +1,53 @@
 # Configure and Manage Namespaces
 
-You can configure and manage namespaces using either the Dashboard or the REST API.
+You can configure and manage namespaces using the Dashboard and REST API, including setting session limits, rate limits, and managing connected clients.
 
-## Rate Limiters for a Namespace
+## Namespace Rate Limits
 
-Namespace configuration mainly includes setting a maximum session count and rate limiters. Before configuring rate limiters, it's important to understand the types and purposes of rate limiters in a namespace. For specific configuration options, refer to [Configure and Manage Namespaces via Dashboard](#configure-and-manage-namespaces-via-dashboard).
+Namespace configuration mainly includes maximum session limits and rate limiters. Before configuring rate limiters, it is recommended to understand the different types of rate limiters available for namespaces and their scope of effect.
 
-You can configure rate limiters for each namespace to control traffic and message flow for specific client groups. These namespace-level limiters work alongside EMQX’s existing rate limiters (for zones and listeners), depending on the type used.
+For details on how to configure specific options, see [Configure and Manage Namespaces via Dashboard](#configure-and-manage-namespaces-via-dashboard).
 
-### Types of Rate Limiters
+Namespace rate limiters can be used to control message traffic and bandwidth usage for clients within a specific namespace. They can work together with existing EMQX rate-limiting mechanisms (such as zone-level or listener-level rate limiters), depending on the type of rate limiter configured.
 
-In a managed namespace, there are two types of rate limiters:
+### Rate Limiter Types
 
-**Tenant rate limiters**: Assign tokens that are **shared** across all clients within a namespace (NS). When this type of limiter is configured, it composes with any existing zone-level rate limiters, meaning both the zone and the namespace tenant rate limiters apply to clients simultaneously.
+There are two types of rate limiters available for managed namespaces:
 
-**Client rate limiters**: Assign tokens that are **dedicated** to each client within the NS. When this type of limiter is configured, it replaces any existing listener-level rate limiters, meaning the listener rate limiters are ignored while the namespace client limiter takes effect.
+#### Tenant Rate Limiter
 
-Both limiter types can define limits for:
+The tenant rate limiter allocates shared tokens across all clients within the same namespace.
 
-- **Message rate limits**: The maximum number of messages a client or tenant can publish over a given time period.
-- **Byte throughput limits**: The maximum allowed size for message payloads over time.
+When this limiter is enabled:
 
-::: tip
+- The limit applies to the entire namespace
+- It works together with existing zone-level rate limiters
+- Clients must satisfy both the zone-level and namespace-level limits
 
-For more details, refer to the [Rate Limit](../rate-limit/rate-limit.md) documentation.
+This type is suitable for scenarios where the overall traffic of a tenant needs to be controlled.
+
+#### Client Rate Limiter
+
+The client rate limiter allocates dedicated tokens to each client within a namespace.
+
+When this limiter is enabled:
+
+- The limit applies to individual clients
+- It overrides listener-level rate limiters
+- Listener-level rate limits are ignored, and only the namespace client rate limiter is applied
+
+This type is suitable for scenarios that require fine-grained control over individual client behavior.
+
+### Supported Limiting Dimensions
+
+Both tenant and client rate limiters support the following dimensions:
+
+- **Message rate limit**: The maximum number of messages that a client or tenant can publish within a specified period
+- **Byte throughput limit**: The maximum effective payload size that can be transmitted within a specified period
+
+:::
+
+For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-limit/rate-limit.md).
 
 :::
 
@@ -91,20 +115,91 @@ To view clients connected to a specific namespace, click **Clients** in the **Ac
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+Always check the corresponding [Swagger API documentation](../admin/api.md) for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
 
 :::
+
+### List Namespaces via REST API
+
+EMQX provides two endpoints for listing namespaces with details, depending on which namespaces you need:
+
+| Endpoint | Scope | Config included |
+| -------- | ----- | --------------- |
+| `GET /mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
+| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | Yes |
+
+Both endpoints support the same query parameters:
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| `last_ns` | String | `""` | Pagination cursor. Pass the `name` of the last item from the previous page to retrieve the next page. |
+| `limit` | Integer | `100` | Maximum number of namespaces to return per page. |
+
+#### List All Namespaces
+
+`GET /mt/ns_list_details` returns all namespaces, including those auto-created from client connection metadata. Each item contains `name` and `created_at` only, with no configuration fields.
+
+**Response Example**
+
+```json
+[
+  { "name": "ns1", "created_at": 1747917753 },
+  { "name": "ns2", "created_at": 1747917754 }
+]
+```
+
+#### List Managed Namespaces with Configuration
+
+`GET /mt/managed_ns_list_details` returns only explicitly created namespaces and includes each namespace's current configuration inline. A management UI can use this endpoint to render a full list with configuration data in a single request.
+
+**Response Example**
+
+```json
+[
+  {
+    "name": "ns1",
+    "created_at": 1747917753,
+    "config": {
+      "session": {
+        "max_sessions": 100
+      },
+      "limiter": {
+        "tenant": {
+          "bytes": { "rate": "20MB/10s", "burst": "300MB/1m" },
+          "messages": { "rate": "5000/1s", "burst": "60/1m" }
+        },
+        "client": {
+          "bytes": { "rate": "10MB/10s", "burst": "200MB/1m" },
+          "messages": { "rate": "3000/1s", "burst": "40/1m" }
+        }
+      }
+    }
+  },
+  {
+    "name": "ns2",
+    "created_at": 1747917754,
+    "config": {}
+  }
+]
+```
+
+Each item contains:
+- `name`: The namespace identifier.
+- `created_at`: Unix timestamp (seconds) of when the namespace was created.
+- `config`: The namespace configuration. An empty object (`{}`) indicates no configuration has been applied. For a full description of config fields, see [Configure a Namespace via REST API](#configure-a-namespace-via-rest-api).
+
+To retrieve the full configuration of a specific namespace, use `GET /mt/ns/<namespace>/config`.
 
 ### Configure a Namespace via REST API
 
 After the namespace is created, it can be configured using the `PUT /mt/ns/<namespace>/config` API.
 
-Use this endpoint to set rate limits, session limits, and other namespace-specific settings. For example configurations, see the [Configuration Example](#configuration-example).
+Use this endpoint to set rate limits, session limits, and other namespace-specific settings.
 
 #### Configuration Example
 
 
-This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+This example configures a namespace using the REST API. Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
 ##### Create the Namespace
 

@@ -51,6 +51,43 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
 
    <img src="./assets/gcp_pubsub/service-account-key.png" alt="service-account-key" style="zoom:50%;" />
 
+### 配置工作负载身份联合
+
+工作负载身份联合（WIF）允许 EMQX 无需持有服务账号密钥文件即可访问 GCP 资源。EMQX 将从外部身份提供商（如 Microsoft Azure）获取的 token 通过 GCP Security Token Service 换取临时 GCP token，再凭此模拟指定的 GCP 服务账号。Token 续期由 EMQX 自动处理。
+
+要使用 WIF，请在创建连接器之前在 GCP 项目中完成以下配置。
+
+1. 在 Google Cloud 控制台中，进入 **IAM 和管理** -> **工作负载身份联合**，创建一个工作负载身份池，并记录**池 ID** 和**项目编号**。
+
+2. 向该池添加提供商并记录**提供商 ID**。如使用基于 OIDC 的认证，请从外部身份提供商处获取 OAuth 2.0 客户端凭证（客户端 ID、客户端密钥和令牌端点 URI）。
+
+3. 授予工作负载身份池权限，使其能够模拟具有 BigQuery 数据集和数据表访问权限的 GCP 服务账号。配置连接器时需要填写服务账号的电子邮件地址。
+
+   ::: tip
+
+   详细配置步骤请参阅 [配置工作负载身份联合](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers)。
+
+   :::
+
+**示例：Microsoft Azure（Entra ID）**
+
+在 [Microsoft Entra ID](https://portal.azure.com/) 中注册一个公开 API 的应用程序，并为其创建客户端密钥。配置连接器时使用以下值：
+
+| 连接器字段 | 值 |
+|---|---|
+| **OAuth Token 端点 URI** | `https://login.microsoftonline.com/<租户 ID>/oauth2/v2.0/token` |
+| **OAuth 客户端 ID** | 应用程序（客户端）ID，格式为 `api://<应用程序 ID>` |
+| **OAuth 客户端密钥** | 为该应用程序生成的客户端密钥 |
+| **OAuth 请求范围** | `api://<应用程序 ID>/.default` |
+
+::: tip 注意
+
+**OAuth 请求范围**必须与应用程序的受众（`aud`）完全匹配，否则与 GCP STS 的令牌交换将会失败。详情请参阅 Microsoft 文档中的 [OAuth 2.0 客户端凭证流](https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-client-creds-grant-flow)。
+
+向 WIF 池授予服务账号访问权限时，请使用**对象 ID**（而非应用程序 ID）作为主体标识符（Subject）。对象 ID 显示在 Azure 门户**企业应用程序**下对应应用的概述页面中。
+
+:::
+
 ### 在 GCP 中创建和管理数据集与数据表
 
 在配置 EMQX 的 BigQuery 数据集成之前，您需要在 GCP 中创建所需的数据集和数据表，并了解其基本管理操作。
@@ -101,7 +138,19 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
 1. 进入 EMQX Dashboard，点击**集成** -> **连接器**。
 2. 点击页面右上角的**创建**按钮，在连接器选择页面中选择 **BigQuery**，然后点击**下一步**。
 3. 输入连接器名称和描述，例如 `my_bigquery`。此名称用于将 BigQuery Sink 与该连接器关联，且在集群内必须唯一。
-4. 在 **GCP 服务账户凭证** 一栏中，上传您在[创建服务账户凭证](#创建服务账户凭证)步骤中导出的 JSON 格式的密钥文件。
+4. 在**认证**下拉菜单中选择以下认证方式之一并填写相应字段：
+   - **服务账号 JSON**：上传您在[创建服务账户凭证](#创建服务账户凭证)步骤中导出的 JSON 格式服务账户凭证。
+   - **工作负载身份联合 (WIF)**：填写以下字段。此方式无需服务账号 JSON 文件。前置条件请参见[配置工作负载身份联合](#配置工作负载身份联合)。
+     - **GCP 项目 ID**：连接器所访问资源的 GCP 项目 ID。
+     - **GCP 项目编号**：连接器所访问资源的 GCP 项目编号。
+     - **服务账号邮箱**：需要模拟的服务账号电子邮件地址。
+     - **工作负载身份池 ID**：WIF 令牌交换中使用的工作负载身份池 ID。
+     - **工作负载身份提供商 ID**：WIF 令牌交换中使用的工作负载身份提供商 ID。
+     - **凭证类型**：外部身份提供商使用的凭证类型，目前支持 **OIDC 客户端凭证**，选择后填写以下字段：
+       - **OAuth 客户端 ID**：用于向 OAuth 服务器请求令牌的客户端 ID。
+       - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
+       - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
+       - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
 5. 在点击**创建**之前，您可以点击**测试连接**按钮，测试连接器是否能够成功连接到 BigQuery 服务。
 6. 点击页面底部的**创建**按钮完成连接器的创建。
     在弹出的对话框中，您可以选择点击**返回连接器列表**，或点击**创建规则**，继续创建包含 Sink 的规则，以指定要转发到 BigQuery 的数据。

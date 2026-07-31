@@ -24,7 +24,7 @@ AKS上でEMQXをデプロイする前に、以下の前提条件を満たして�
 1. YAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

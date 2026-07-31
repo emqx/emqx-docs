@@ -26,7 +26,7 @@ EMQXはルールエンジンとSinkを介してデバイスデータをTimescale
 - ERPなどのアプリケーションシステムに接続し、生産分析や生産計画の調整に活用。
 - 業務システムに接続し、リアルタイムのエネルギー使用状況分析を行い、データ駆動型のエネルギー管理を実現。
 
-## 特長とメリット
+## 特長と利点
 
 EMQXのTimescaleDBデータ統合は、以下の特長と利点をもたらします：
 
@@ -55,7 +55,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
 
 2. Tiger Dataポータルにログインし、[Tiger Cloudサービスの作成](https://www.tigerdata.com/docs/getting-started/latest/services#create-your-first-service)を行います。サービスのパスワードを保存してください。
 
-3. サービス概要ページから接続情報を取得します。EMQXで必要な項目は、**Database name**、**Host**、**Port**、**Username**です。
+3. サービス概要ページから接続情報を取得します。EMQXで必要な項目は**データベース名**、**ホスト**、**ポート**、**ユーザー名**です。
 
 4. `psql client`を使って[サービスに接続](https://www.tigerdata.com/docs/getting-started/latest/services#connect-to-your-service)します。
 
@@ -98,7 +98,7 @@ EMQXはセルフホストのTimescaleDBまたはクラウド上のTimescaleサ�
        timescale/timescaledb:latest-pg13
    ```
 
-3. クライアントデータを保存するデータベースを作成します。
+3. クライアントデータ保存用のデータベースを作成します。
 
    ```bash
    docker exec -it timescaledb psql -U postgres
@@ -152,7 +152,7 @@ TimescaleDB Sinkを作成する前に、TimescaleDBサービスへの接続用�
 
 3. ルール作成画面で、ルールIDに`my_rule`を入力します。
 
-4. **SQL Editor**に以下のSQLルールを入力し、トピック`t/#`のMQTTメッセージをTimescaleDBに保存します：
+4. **SQL Editor** に以下のSQLルールを入力し、トピック `t/#` のMQTTメッセージをTimescaleDBに保存します：
 
    ```sql
    SELECT
@@ -206,7 +206,7 @@ mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30,"location":"hangzhou"}'
 
 Sinkの稼働状況を確認すると、新たに1件のMatchedおよび1件のSent Successfullyメッセージがあるはずです。
 
-TimescaleDBの`sensor_data`テーブルを確認すると、新しいレコードが挿入されています：
+TimescaleDBの`sensor_data`テーブルを確認し、新しいレコードが挿入されていることを確認します：
 
 ```bash
 tsdb=# select * from sensor_data;
@@ -234,9 +234,9 @@ tsdb=# select * from sensor_data;
 | **Query Mode**            | メッセージ送信要件に応じて`asynchronous`または`synchronous`のクエリモードを選択できます。非同期モードではTimescaleDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージをTimescaleDB到着前に受信する可能性があります。 | `Async`               |
 | **Inflight Window**       | 「インフライトクエリ」とは、開始されて応答やアックをまだ受け取っていないクエリを指します。SinkがTimescaleDBと通信する際の最大同時インフライトクエリ数を制御します。<br/>**Query Mode**が`async`の場合、このパラメータは特に重要です。同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は、この値を1に設定してください。 | `100`                 |
 
-## さらに詳しく
+## 参考情報
 
-以下のリンクから詳細情報をご覧いただけます：
+以下のリンクもご参照ください：
 
 **ブログ**：
 

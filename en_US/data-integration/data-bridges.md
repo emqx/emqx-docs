@@ -85,6 +85,7 @@ EMQX supports data integrations with the following types of data systems:
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [Azure Event Grid](./azure-event-grid.md)
 - [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 **TSDB**
@@ -94,6 +95,7 @@ EMQX supports data integrations with the following types of data systems:
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
 - [Datalayers](./data-bridge-datalayers.md)
+- [Timestream for InfluxDB](./timestream-for-influxdb.md)
 
 **SQL**
 
@@ -107,6 +109,7 @@ EMQX supports data integrations with the following types of data systems:
 - [AlloyDB](./alloydb.md)
 - [CockroachDB](./cockroachdb.md)
 - [Redshift](./redshift.md)
+- [QuasarDB](./quasardb.md)
 
 **NoSQL**
 
@@ -118,6 +121,7 @@ EMQX supports data integrations with the following types of data systems:
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 - [Elasticsearch](./elasticsearch.md)
+- [EMQX Tables](./emqx-tables.md)
 
 **Message Queue**
 
@@ -209,7 +213,7 @@ Fallback actions can be used to:
 - All defined fallback actions will be triggered concurrently. EMQX does not attempt them one-by-one or stop at the first success.
 - Fallback actions share the same buffering mechanism as regular actions, meaning messages are retried up to their request TTL or if there is buffer overflow.
 - Fallback actions do **not** trigger further fallback actions. If a fallback action itself fails, its own configured fallback actions (if any) will **not** be triggered.
-- Processing of messages by fallback actions do not affect metrics of their primary actions or of the original rule that triggered the primary action.
+- Processing of messages by fallback actions does not affect metrics of their primary actions or of the original rule that triggered the primary action.
 
 #### Define a Fallback Action
 

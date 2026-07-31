@@ -63,7 +63,7 @@ MQTTX を使って **サブスクライバー** としてクライアントを�
 3. キュートピックにサブスクライブします。
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
@@ -87,7 +87,7 @@ MQTTX を使って **サブスクライバー** としてクライアントを�
 3. EMQX に接続し、同じキュートピックにサブスクライブします。
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 

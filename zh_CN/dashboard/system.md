@@ -1,6 +1,6 @@
 # 系统设置
 
-EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，包括用户与角色管理、审计日志、API 密钥、许可证、单点登录（SSO）、数据备份与恢复、热升级以及通用设置。
+EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，包括用户与角色管理、审计日志、API 密钥、许可证、单点登录（SSO）、数据备份与恢复以及通用设置。
 
 ## 用户
 
@@ -18,13 +18,71 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 从 EMQX 5.3 开始，Dashboard 用户引入了 基于角色的访问控制 （RBAC）功能。RBAC 允许根据用户在组织中的角色为其分配权限。此功能简化了授权管理，通过限制访问权限提高安全性，并改善组织合规性，因此是 Dashboard 必不可少的访问控制机制。
 
 目前，可以为用户设置以下两种预定义角色之一。您可以在创建用户时从**角色**下拉菜单中选择角色。
-+ 管理员 
++ **管理员**
 
     管理员拥有对 EMQX 所有功能和资源的完全管理访问权限，包括客户端管理、系统配置、API 密钥以及用户管理。
 
-+ 查看者
++ **查看者**
 
     查看者可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
+
+### 登录用户权限范围（Scopes）
+
+从 EMQX 5.10 开始，您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。除 [10 个 API 密钥 Scope](../admin/api.md#内置范围) 外，Dashboard 用户还拥有 4 个仅适用于浏览器会话的专属 Scope：
+
+| Scope | 所需角色 | 用途 |
+| --- | --- | --- |
+| `user_management` | 管理员 | 管理 Dashboard 用户（创建 / 修改 / 删除）。 |
+| `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
+| `api_key_management` | 管理员 | 管理 API 密钥。 |
+| `mfa_management` | 任意 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
+
+其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此 Scope 非常有用。
+
+在创建或编辑用户时，**Scopes** 字段是可选的。留空时，用户会得到一个由其角色推导出的默认 Scope 集：
+
+- **管理员**：拥有全部 Scope，包括上述 4 个登录专属 Scope。
+- **查看者**：拥有全部通用 API 密钥 Scope；`mfa_management` 仅在显式分配时才会被授予。
+
+![user_scopes](./assets/user_scopes.png)
+
+::: warning 将宽泛 Scope 视为等同管理员权限
+
+以下 Scope 天然覆盖范围较广，即使未分配其他 Scope，也实际上授予管理员能力：
+
+- `system` 覆盖配置管理（`/configs*`、`/data/*` 等）。持有 `system` 的用户可以更新任意配置子树，或恢复包含已存储用户和 API 密钥记录的备份文件。
+- `user_management` 允许持有者创建或修改其他 Dashboard 用户，包括具有任意 Scope 集的用户。
+- `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
+
+将其中任一 Scope 与受限 Scope 列表组合到同一个用户上，并不能可靠地强制执行该限制。该用户可通过配置变更、备份恢复，或为自己创建新的账号或密钥来访问受限区域。仅将这三个 Scope 授予您完全信任的用户，并遵循最小权限原则，只授予用户实际需要的具体 Scope。
+
+:::
+
+#### 角色变更与 Scope 兼容性
+
+变更用户角色时，EMQX 会检查该用户当前的 Scope 是否与新角色兼容。如果不兼容，请求将返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
+
+例如，如果您将一个管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个 Scope 需要管理员角色。请在同一请求中提供一个仅包含查看者兼容 Scope 的列表以完成变更。（`mfa_management` 不是仅限管理员的 Scope，不会导致此拒绝。）
+
+### 默认管理员保护
+
+`dashboard.default_username` 账号（其密码由 `dashboard.default_password` 配置）是一个应急（break-glass）账号。为了保证在其他管理员配置错误或失联时系统仍可恢复，默认用户受到下列保护，以防止误操作导致整个系统失去管理入口：
+
+- **不能被删除**：无论是从 Dashboard 还是 REST API，**删除**按钮始终不可用。
+- 角色**不能被更改**，始终保持 `administrator`。
+- Scope 集**不能被自定义**，始终拥有完整的管理员 Scope。
+- 描述和密码**可以**正常修改。
+
+其他管理员不受此限制，只要系统中至少还存在一个管理员，就可以被删除。
+
+### 自助操作边界
+
+每个 Dashboard 用户无论持有哪些 Scope，都被允许执行以下两类自助操作：
+
+- 修改自己的密码。
+- 绑定或重新绑定自己的 TOTP / MFA。禁用 MFA 同样允许，但若管理员已为该用户账号显式要求启用 MFA，则需持有 `mfa_management` Scope 方可禁用。
+
+其他个人信息变更（描述、角色、由管理员授予的 Scope）都需要操作者持有对应 Scope，即使目标用户就是操作者自己也不能绕过此检查。
 
 ### 命名空间角色
 
@@ -34,7 +92,7 @@ EMQX Dashboard 中的**系统设置** 菜单提供一系列管理功能入口，
 
 命名空间管理员访问仅适用于受信任的内部部署场景，例如在同一组织内隔离不同团队或业务单元，以降低误修改其他配置的风险。命名空间功能不提供强隔离保障，不适合作为面向公共环境或非受信任用户的多租户安全边界。
 
-如果您允许委派管理员管理命名空间范围内的资源，建议在可用版本中优先启用 `rule_engine.ssrf` 来校验规则引擎管理的出站目标。如果还需要运行时网络边界，再增加主机级出站访问控制，例如 `iptables` 或 `nftables`。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md)。
+如果您允许委派管理员管理命名空间范围内的资源，建议在**管理** > **集群配置** > **[规则引擎安全](./cluster_settings.md#规则引擎安全)**中启用 SSRF 防护，以校验规则引擎管理的出站目标。如果还需要运行时网络边界，再增加主机级出站访问控制，例如 `iptables` 或 `nftables`。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 
 :::
 
@@ -81,6 +139,12 @@ ns:<NAMESPACE>::<ROLE>
 
 - **资源作用域限制**：命名空间用户只能查看和管理其所属命名空间下的资源，包括连接器、动作、数据源、规则等支持命名空间的模块。
 - **集群级设置访问限制**：尚未支持命名空间隔离的全局配置项对命名空间用户为只读，只有系统管理员可进行修改。
+- **消息内容端点限制**：部分访问或操作原始 MQTT 消息内容的 REST API 端点对命名空间用户不可用，调用时将返回 `403 Forbidden`。这些端点仅供全局管理员使用：
+  - 消息队列消息：`GET /clients/:clientid/mqueue_messages`
+  - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
+  - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
+  - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
+- **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
 
@@ -97,32 +161,7 @@ ns:<NAMESPACE>::<ROLE>
 
 ## API 密钥
 
-点击左侧**系统设置**菜单下的 **API 密钥**，可以来到 API 密钥页面。如果需要 API 密钥来创建一些脚本调用 [HTTP API](../admin/api.md)，可以在此页面进行创建获取操作。点击页面右上角**创建**按钮打开创建 API 密钥弹框，填写 API 密钥相关数据，如果**到期时间**未填写 API 密钥将永不过期，点击**确定**提交数据，提交成功后页面上将提供此次创建的 API 密钥的 API Key 和 Secret Key，**其中 Secret Key 后续将不再显示**，用户需立即将 API Key 和 Secret Key 保存至安全的地方；保存数据完毕可点击**关闭**按钮关闭弹框。
-
-在 API 密钥页面上，您可以按照以下步骤生成用于访问 [HTTP API](../admin/api.md) 的 API 密钥和 Secret key。
-
-1. 单击页面右上角的**创建**按钮，弹出创建 API 密钥的对话框。
-
-2. 在创建 API 密钥对话框上，配置 API 密钥的详细信息。
-
-   - 如果**到期时间**文本框留空，API 密钥将永不过期。
-   - 您可以指定密钥的[角色](../admin/api.md#角色与权限)（可选）。
-
-3. 单击**确认**按钮，API 密钥和密钥将被创建并显示在**创建成功**对话框中。
-
-   ::: tip
-
-   您需要将 API Key 和 Secret Key 保存在安全的地方，因为 Secret Key 将不再显示。
-
-   :::
-
-   单击**关闭**按钮以关闭对话框。
-
-<img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
-
-已创建的 API 密钥可在页面上进行查看和切换启用状态，点击 API 密钥名称可查看密钥详情。点击**编辑**按钮可重新设置 API 密钥的到期时间、启用状态和备注，如某 API 密钥已过期，可在此延长 API 密钥的可使用时间。如果某个 API 密钥已不再需要，可点击 API 密钥右侧**删除**按钮删除 API 密钥。
-
-<img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+**API 密钥**页面用于创建和管理访问 [HTTP API](../admin/api.md) 所需的 API 密钥。有关创建和管理 API 密钥（包括角色与范围分配）的操作说明，请参见[创建 API 密钥](../admin/api.md#创建-api-密钥)。
 
 ## License
 
@@ -139,10 +178,6 @@ ns:<NAMESPACE>::<ROLE>
 **备份与恢复**页面提供用于备份运行数据和配置文件的相关设置。您可以在此页面执行数据导入和导出操作。
 
 有关备份与恢复功能的详细信息，请参见[备份与恢复](../operations/backup-restore.md)。
-
-## 热升级
-
-**热升级**页面允许您通过上传热升级包，在不中断服务的情况下升级 EMQX。如需获取升级包，请联系 [EMQX 团队](https://www.emqx.com/en/contact)。
 
 ## 设置
 

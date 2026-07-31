@@ -105,7 +105,7 @@ EMQXダッシュボードを使用して、Redisをパスワード認証に利�
 
 EMQXの設定項目を使用してRedis認証機能を設定することも可能です。 <!--詳細な操作手順は [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone)、[authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel)、および [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster)を参照してください。-->
 
-Redis認証は `mechanism = password_based` と `backend = redis` で識別されます。
+  ::: tip
 
 EMQXは3種類のRedisインストール形態に対応しています。
 

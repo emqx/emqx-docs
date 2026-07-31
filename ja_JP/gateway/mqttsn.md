@@ -32,9 +32,9 @@ EMQX をクラスターで運用している場合、ダッシュボードや RE
 
 ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、MQTT-SN ゲートウェイの状態が **Enabled** と表示されていることを確認できます。
 
-<img src="./assets/mqttsn-enabled.png" alt="有効化された MQTT-SN ゲートウェイ" style="zoom:50%;" />
+<img src="./assets/mqttsn-enabled.png" alt="有効化されたMQTT-SNゲートウェイ" style="zoom:50%;" />
 
-上記の設定は REST API でも行えます。
+上記の設定はREST APIでも行えます。
 
 **例:**
 
@@ -63,7 +63,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 
 カスタマイズが必要な場合やリスナーの追加、認証ルールの追加を行いたい場合は、[MQTT-SN ゲートウェイのカスタマイズ](#customize-your-mqtt-sn-gateway) セクションをご覧ください。
 
-## MQTT-SN クライアントとの連携
+## MQTT-SNクライアントとの連携
 
 ### クライアントライブラリ
 
@@ -80,7 +80,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 - `SUBSCRIBE` メッセージはサブスクライブ操作に使用され、トピックと QoS の両方が指定されます。
 - `UNSUBSCRIBE` メッセージはサブスクライブ解除操作に使用され、トピックが指定されます。
 
-## MQTT-SN ゲートウェイのカスタマイズ
+## MQTT-SNゲートウェイのカスタマイズ
 
 デフォルト設定に加え、EMQX はさまざまな設定オプションを提供しており、特定のビジネス要件により適合させることが可能です。本節では、**Gateways** ページで利用可能な各種フィールドについて詳しく解説します。
 
@@ -113,7 +113,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 
 デフォルトでは、名前が **default** の UDP リスナーがポート `1884` に設定されており、1秒あたり最大1,000接続、最大1,024,000の同時接続をサポートします。**Settings** をクリックすると詳細設定が可能で、**Delete** でリスナーを削除、**+ Add Listener** で新規リスナーを追加できます。
 
-<img src="./assets/mqttsn-listener.png" alt="MQTT-SN リスナー" style="zoom:50%;" />
+<img src="./assets/mqttsn-listener.png" alt="MQTT-SNリスナー" style="zoom:50%;" />
 
 **Add Listener** をクリックすると **Add Listener** ページが開き、以下の設定が行えます。
 
@@ -130,7 +130,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 - **Max Connections**：リスナーが処理可能な最大同時接続数を設定します。デフォルトは **1024000**。
 - **Max Connection Rate**：リスナーが1秒あたり受け入れ可能な新規接続の最大レートを設定します。デフォルトは **1000**。
 
-**UDP 設定**
+**UDP設定**
 
 - **ActiveN**：ソケットの `{active, N}` オプションを設定します。これはソケットが積極的に処理できる受信パケット数です。詳細は [Erlang Documentation - setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2) をご参照ください。
 - **Buffer**：受信および送信パケットを格納するバッファサイズを KB 単位で設定します。
@@ -138,7 +138,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 - **Send Buffer**：送信バッファのサイズを KB 単位で設定します。
 - **SO_REUSEADDR**：ローカルでのポート番号の再利用を許可するかどうかを設定します。
 
-**DTLS 設定**（DTLS リスナーのみ）
+**DTLS設定**（DTLSリスナーのみ）
 
 TLS Verify の有効化はトグルスイッチで設定できますが、その前に関連する **TLS Cert**、**TLS Key**、および **CA Cert** の情報を設定する必要があります。ファイルの内容を直接入力するか、**Select File** ボタンでアップロードしてください。詳細は [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md) をご参照ください。
 
@@ -151,9 +151,9 @@ TLS Verify の有効化はトグルスイッチで設定できますが、その
 
 ### 認証の設定
 
-MQTT-SN プロトコルの接続メッセージはクライアントの Client ID のみを提供するため、MQTT-SN ゲートウェイは [HTTP サーバー認証](../access-control/authn/http.md) のみをサポートしています。
+MQTT-SNプロトコルの接続メッセージはクライアントのClient IDのみを提供するため、MQTT-SNゲートウェイは[HTTPサーバー認証](../access-control/authn/http.md)のみをサポートしています。
 
-クライアント情報の生成ルールは以下の通りです。
+クライアント情報の生成ルールは以下の通りです：
 
 - Client ID：`CONNECT` メッセージの Client ID フィールドを使用。
 - Username：未定義。
@@ -161,7 +161,7 @@ MQTT-SN プロトコルの接続メッセージはクライアントの Client I
 
 以下はダッシュボードを例にした認証設定の手順です。
 
-**Gateways** ページで **MQTT-SN** を見つけ、**Actions** 列の **Setup** をクリックし、**Authentication** タブに入ります。
+**Gateways**ページで**MQTT-SN**を見つけ、**Actions**列の**Setup**をクリックし、**Authentication**タブに入ります。
 
 **Create Authentication** をクリックし、**Mechanism** に **Password-Based**、**Backend** に **HTTP Server** を選択します。続いて **Configuration** タブで認証ルールを設定します。
 

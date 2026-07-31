@@ -49,8 +49,8 @@ EMQXでOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
        volumes:
          - ./otel-logs-collector-config.yaml:/etc/otel-collector-config.yaml
        ports:
-         - "13133:13133" # ヘルスチェック拡張
-         - "4317:4317"   # OTLP gRPCレシーバー
+         - "13133:13133" # Health check extension
+         - "4317:4317"   # OTLP gRPC receiver
    ```
 
 3. Docker Composeを使ってCollectorを起動します。

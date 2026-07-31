@@ -86,7 +86,7 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
    ![openai_node_flow](./assets/openai_node_flow.png)
 
-   Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
+   Flowとフォームルールは相互運用可能です。ルールページでSQLや関連ルール設定も確認できます。
 
    ![openai_node_rule_page](./assets/openai_node_rule_page.png)
 

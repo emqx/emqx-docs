@@ -44,7 +44,7 @@ EMQXダッシュボードにアクセスし、左メニューの **Management** 
 
 <img src="./assets/config-console-log-1-ee.png" alt="コンソールログ設定画面" style="zoom:67%;" />
 
-コンソールログハンドラーの設定項目は以下の通りです。
+コンソールログハンドラーの以下の設定を行います。
 
 - **Enable Log Handler**：トグルスイッチをクリックしてコンソールログハンドラーを有効化します。
 
@@ -67,7 +67,7 @@ EMQXダッシュボードにアクセスし、左メニューの **Management** 
 
 <img src="./assets/config-file-log-1-ee.png" alt="ファイルログ設定画面" style="zoom:67%;" />
 
-ファイルログハンドラーの設定項目は以下の通りです。
+ファイルログハンドラーの以下の設定を行います。
 
 - **Enable Log Handler**：トグルスイッチをクリックしてファイルログハンドラーを有効化します。
 

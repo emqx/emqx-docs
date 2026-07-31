@@ -65,7 +65,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ## eMQTT-Benchの使い方
 
-`emqtt_bench`には以下の3つのサブコマンドがあります。
+`emqtt_bench`には3つのサブコマンドがあります。
 
 1. `pub`：多数のクライアントを作成し、メッセージをパブリッシュする操作を行います。
 2. `sub`：多数のクライアントを作成し、トピックをサブスクライブしてメッセージを受信します。
@@ -114,7 +114,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 ./emqtt_bench sub -t t -h emqx-server -c 500
 ```
 
-### コネクト
+### 接続
 
 `./emqtt_bench conn --help`を実行すると、このサブコマンドで利用可能なパラメータが表示されます。パラメータの説明は上記の表と同様のため省略します。
 

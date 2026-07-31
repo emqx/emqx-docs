@@ -30,9 +30,9 @@ Events act as anchors for contextual understanding and are the key triggers that
 
 The ability to capture events at millisecond-level latency directly determines how fast and how accurately the system can respond intelligently.
 
-### Multimodal Interaction: Enabling Natural Human–Machine Communication
+### Multimedia Interaction: Enabling Natural Human–Machine Communication
 
-Multimodal interaction represents a fundamental leap from traditional “voice assistants” to truly immersive intelligent experiences:
+Multimedia interaction represents a fundamental leap from traditional “voice assistants” to truly immersive intelligent experiences:
 
 - **Voice**: Emotional expression, natural prosody, and multilingual support.
 - **Video**: Facial expression recognition, scene understanding, and real-time visual feedback.
@@ -76,7 +76,7 @@ EMQX provides a comprehensive *real-time context infrastructure* for devices:
 
 ### Hearing, Seeing, and Speaking: Audio and Video Stream Access and Processing
 
-WebRTC is the core technology for real-time audio and video interaction. Its low latency and high compatibility make it the preferred solution for multimodal interaction in intelligent hardware.
+WebRTC is the core technology for real-time audio and video interaction. Its low latency and high compatibility make it the preferred solution for multimedia interaction in intelligent hardware.
 
 - **Voice input**: Enables devices to truly “understand” users. High-quality microphones combined with noise reduction and echo cancellation maintain speech clarity in complex environments. Real-time ASR converts speech to text with multilingual support, forming the basis for semantic understanding.
 - **Visual input**: Provides devices with “eyes.” High-definition cameras combined with object recognition, face recognition, and action understanding allow devices to perceive user states and actions. Gesture interaction enables touch-free, more natural operation.
@@ -111,8 +111,18 @@ Through MCP, AI gains the ability to act, while devices gain a unified control i
 
 - [MCP over MQTT Protocol Overview](./mcp-over-mqtt/overview.md)
 
+### Coordination: A2A over MQTT — Agent-to-Agent Collaboration
+
+As intelligent hardware and AI agents proliferate, individual agents increasingly need to delegate tasks to, and collaborate with, other agents. The Agent-to-Agent (A2A) protocol defines how agents discover each other, exchange task requests, and stream results, forming a multi-agent system that can tackle complex workflows no single agent can handle alone.
+
+EMQX implements A2A over MQTT through its built-in A2A Registry, which records Agent Cards published by agents, tracks their connection state, and routes task requests between them using standard MQTT topics.
+
+#### Further Reading
+
+- [A2A over MQTT Overview](./a2a-over-mqtt/overview.md)
+
 ### Typical Intelligent Agent Interaction Scenarios
 
 - **Pure voice interaction**: Voice as the sole input; real-time, high-quality interaction can be achieved using WebRTC alone.
 - **Voice/video-based device control**: Devices are operated via microphones or cameras, requiring both WebRTC and MQTT to ensure a stable control pipeline.
-- **Perception-driven control with multimodal interaction**: Devices detect events through sensors, AI makes decisions, and responses are delivered via voice and video, creating immersive intelligent experiences. Like the previous scenario, this requires integration of both WebRTC and MQTT.
+- **Perception-driven control with multimedia interaction**: Devices detect events through sensors, AI makes decisions, and responses are delivered via voice and video, creating immersive intelligent experiences. Like the previous scenario, this requires integration of both WebRTC and MQTT.

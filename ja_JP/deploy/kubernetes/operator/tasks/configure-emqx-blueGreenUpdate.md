@@ -92,10 +92,10 @@ timeline
 1. `apps.emqx.io/v2beta1`のEMQX CRを作成し、アップデート戦略を設定します。
 
   ```yaml
-  apiVersion: apps.emqx.io/v2beta1
+  apiVersion: apps.emqx.io/v2
   kind: EMQX
   metadata:
-    name: emqx-ee
+    name: emqx
   spec:
     image: emqx/emqx:@EE_VERSION@
     config:
@@ -120,7 +120,7 @@ timeline
 
   ```bash
   $ kubectl apply -f emqx-update.yaml
-  emqx.apps.emqx.io/emqx-ee created
+  emqx.apps.emqx.io/emqx created
   ```
 
 3. EMQXクラスターの状態を確認します。
@@ -130,7 +130,7 @@ timeline
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
 ### EMQXクラスターへの接続
@@ -153,33 +153,27 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   本例では、Podの`ImagePullPolicy`を変更してアップグレードをトリガーします。
 
   ```bash
-  $ kubectl patch emqx emqx-ee --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
-  emqx.apps.emqx.io/emqx-ee patched
+  $ kubectl patch emqx emqx --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
+  emqx.apps.emqx.io/emqx patched
   ```
 
 2. アップグレードの進行状況を確認します。
 
   ```bash
-  $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
+  $ kubectl get emqx emqx -o json | jq ".status.nodeEvacuationsStatus"
   [
     {
-      "connection_eviction_rate": 200,
-      "node": "emqx-ee@emqx-ee-54fc496fb4-2.emqx-ee-headless.default.svc.cluster.local",
-      "session_eviction_rate": 200,
-      "session_goal": 0,
-      "connection_goal": 22,
-      "session_recipients": [
-        "emqx-ee@emqx-ee-5d87d4c6bd-2.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-1.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-0.emqx-ee-headless.default.svc.cluster.local"
-      ],
+      "nodeName": "emqx@emqx-54fc496fb4-2.emqx-headless.default.svc.cluster.local",
+      "initialConnections": 33,
+      "initialSessions": 0,
+      "connectionEvictionRate": 200,
+      "sessionEvictionRate": 200,
       "state": "waiting_takeover",
-      "stats": {
-        "current_connected": 0,
-        "current_sessions": 0,
-        "initial_connected": 33,
-        "initial_sessions": 0
-      }
+      "sessionRecipients": [
+        "emqx@emqx-5d87d4c6bd-2.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-1.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-0.emqx-headless.default.svc.cluster.local"
+      ]
     }
   ]
   ```
@@ -201,7 +195,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
   `STATUS`が`Ready`であることを確認してください。MQTTクライアント数やセッション数によってはアップグレードに時間がかかる場合があります。

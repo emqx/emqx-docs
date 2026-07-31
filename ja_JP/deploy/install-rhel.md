@@ -18,7 +18,7 @@
 
 ### EMQXの起動
 
-systemdサービスとしてEMQXを起動します。
+EMQXをsystemdサービスとして起動します。
 
 ```bash
 sudo systemctl start emqx

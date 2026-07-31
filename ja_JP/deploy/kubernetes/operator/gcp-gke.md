@@ -36,7 +36,7 @@ GKE 上に EMQX をデプロイする前に、以下の前提条件を満たし�
     :::
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

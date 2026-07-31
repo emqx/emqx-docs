@@ -4,13 +4,22 @@ Webhook provides a way to integrate EMQX client messages and events with externa
 
 This page comprehensively introduces information related to Webhook, along with practical usage instructions.
 
+
+<video
+  src="https://assets.emqx.com/data/video/emqx-docs/data-integration/webhook_integration.mp4"
+  preload="metadata"
+  controls
+  muted
+  playsinline
+  style="width: 100%; border-radius: 8px;"></video>
+
 ## How It Works
 
 When a client publishes a message to a specific topic or performs certain actions, it triggers the Webhook. Webhook is compatible with all messages and events supported by the rule engine.
 
 You can configure Webhook to be triggered in the following scenarios. For the request content of each event, refer to [SQL Data Source and Fields](./rule-sql-events-and-fields.md).
 
-![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
+![EMQX Webhook 集成](./assets/emqx-integration-http.png)
 
 ### Messages
 
@@ -84,15 +93,29 @@ python3 http_server.py
 ### Create Webhook
 
 1. Click **Integration** -> **Webhooks** from the Dashboard left menu.
-2. Click the **Create** button on the page.
-3. Enter Webhook name and notes, which should be a combination of uppercase and lowercase English letters and numbers. Here you can enter `my_webhook`.
-4. Select the trigger according to your needs, in this case, select **All messages and events**. For other options, refer to [How it Works](#how-it-works).
-5. Select the request method as POST, URL as `http://localhost:5000`. You can test if the connection is configured correctly by clicking the **Test** button next to the URL input box, and use the default values for the rest.
-6. Click the **Save** button at the bottom to complete the rule creation.
 
-![EMQX Webhook](./assets/webhook.png)
+2. Click the **Create Webhook** button on the page.
 
-You have now completed the Webhook creation.
+3. Enter a **Name** and optional **Note** for the webhook.
+
+   The name should contain only uppercase or lowercase English letters and numbers. For example: `my_webhook`.
+
+4. Select a **Trigger** based on your requirements.
+
+   In this example, select **All Messages and Events**. For details about other options, see [How it Works](#how-it-works).
+
+5. Configure the request settings:
+
+   - **Method**: `POST`
+   - **URL**: `http://localhost:5000`
+
+   You can verify the connection by clicking **Test** next to the URL field. Leave the other settings with their default values.
+
+6. Click **Save** at the bottom of the page to create the webhook.
+
+   ![EMQX Webhook](./assets/webhook.png)
+
+The webhook is now successfully created.
 
 ### Test Webhook
 

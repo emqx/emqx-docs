@@ -42,7 +42,7 @@ EMQX における Azure Blob Storage データ統合を利用することで、�
 - [ルール](./rules.md) の理解
 - [データ統合](./data-bridges.md) の理解
 
-### Azure Storage にコンテナを作成する
+### Azure Storage でコンテナを作成する
 
 1. Azure Storage にアクセスするには Azure サブスクリプションが必要です。まだお持ちでない場合は、[無料アカウント](https://azure.microsoft.com/free/)を作成してください。
 

@@ -49,7 +49,7 @@ Microsoft SQL ServerデータベースにアクセスするためにODBCドラ�
 
 EMQXは`odbcinst.ini`設定に指定されたDSN名を使ってドライバーの動的ライブラリのパスを判別します。以下の例ではDSN名を`ms-sql`としています。詳細は[接続プロパティ](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties)を参照してください。
 
-::: tip 注意
+::: tip 補足
 
 DSN 名は任意に設定可能ですが、英字のみの使用を推奨します。また、DSN 名は大文字・小文字を区別します。
 
@@ -94,7 +94,7 @@ USER emqx
 
 3. ビルド後、`docker image ls`でローカルイメージ一覧を確認できます。必要に応じてイメージをアップロードまたは保存してください。
 
-::: tip 注意
+::: tip 補足
 
 この例でmsodbcsql18ドライバーをインストールした場合、`odbcinst.ini`のDSN名は`ms-sql`になっていることを確認してください。必要に応じてDSN名を変更可能です。
 

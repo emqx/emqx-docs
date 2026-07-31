@@ -119,7 +119,7 @@ Key: <API_KEY>
 Secret: <API_SECRET>
 ```
 
-APIキーとシークレットを持っていない場合は、以下のコマンドで作成できます。
+APIキーとシークレットがない場合は以下で作成可能です。
 
 ```bash
 $ confluent api-key create --resource <kafka_cluster_id>
@@ -132,7 +132,7 @@ APIキーとシークレットは保存してください。シークレット�
 +------------+------------------------------------------------------------------+
 ```
 
-CLIに追加後、以下のコマンドでAPIキーとシークレットを使用できます。
+CLIに追加後、以下でAPIキーとシークレットを使用します。
 
 ```bash
 confluent api-key use <API_Key> --resource <kafka_cluster_id>
@@ -146,7 +146,7 @@ confluent api-key use <API_Key> --resource <kafka_cluster_id>
 confluent kafka topic create testtopic-in
 ```
 
-トピック一覧は以下のコマンドで確認できます。
+トピック一覧は以下で確認できます。
 
 ```bash
 confluent kafka topic list
@@ -170,7 +170,7 @@ confluent kafka topic consume -b testtopic-in
 
 ## コネクターの作成
 
-Confluent Sinkアクションを追加する前に、EMQXとConfluent Cloud間の接続を確立するためにConfluentプロデューサーコネクターを作成する必要があります。
+Confluent Sinkアクションを追加する前に、EMQXとConfluent Cloud間の接続を確立するためにConfluent Producerコネクターを作成する必要があります。
 
 1. EMQXダッシュボードにアクセスし、**Integration** -> **Connectors**をクリックします。
 2. ページ右上の**Create**をクリックし、コネクター選択画面で**Confluent Producer**を選択して**Next**をクリックします。

@@ -23,12 +23,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
    Helmを使って`cert-manager`をインストールできます。
 
    ```bash
-   $ helm repo add jetstack https://charts.jetstack.io
-   $ helm repo update
-   $ helm upgrade --install cert-manager jetstack/cert-manager \
-     --namespace cert-manager \
-     --create-namespace \
-     --set crds.enabled=true
+   $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
    または、公式の[cert-managerインストールガイド](https://cert-manager.io/docs/installation/)に従ってください。
@@ -61,10 +56,10 @@ Operatorが起動したら、EMQXのデプロイに進めます。
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
-      name: emqx-ee
+      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
@@ -113,9 +108,9 @@ Operatorが起動したら、EMQXのデプロイに進めます。
 
    `STATUS`が`Ready`になっていることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。内部で多くの処理が行われています。
 
-:::
+## トラブルシューティング
 
-::::
+EMQX OperatorはKubernetes APIに対して限定的なイベントのみを公開しています。
 
 ## パブリッククラウドへのデプロイ
 

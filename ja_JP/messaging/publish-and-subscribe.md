@@ -145,7 +145,7 @@ EMQXをローカルにデプロイする前でも、[EMQ](https://www.emqx.com)�
 
 1. EMQXダッシュボードの左ナビゲーションメニューで**Diagnose** -> **WebSocket Client**をクリックします。
 
-2. **Connection**セクションに接続情報を入力します。
+2. **Connection**セクションで接続情報を入力します。
 
    - **Host**: 対応するIPアドレスを入力します（デフォルト: `localhost`）。
    - **Port**: デフォルトのポート`8083`を使用します。

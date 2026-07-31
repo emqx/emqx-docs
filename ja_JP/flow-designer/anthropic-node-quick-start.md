@@ -59,7 +59,7 @@
      - **System Message**：以下のような動的プロンプトを入力できます。  
        
        ```
-       You are a power consumption calculator. Given an input JSON object with various keys, sum all numeric values (e.g., circuit readings) and return only the total.
+       あなたは電力消費計算機です。様々なキーを持つJSONオブジェクトが入力された場合、すべての数値（例：回路の読み取り値）を合計し、合計値のみを返してください。
        ```
      - **Model**：`claude-3-sonnet-20240620`を選択します。
      - **Max Tokens**：`50`を入力します。
@@ -80,7 +80,7 @@
 
    ![anthropic_node_flow](./assets/anthropic_node_flow.png)
 
-6. Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
+6. Flowとフォームルールは相互運用可能です。SQLや関連するルール設定は**Rule**ページでも確認できます。
 
    ![anthropic_node_rule_page](./assets/anthropic_node_rule_page.png)
 
@@ -112,7 +112,7 @@
 
 3. 結果とノードの処理メトリクスを確認します。
 
-   - Flowの正常な実行結果が表示されます。
+   - Flowの正常な実行結果を確認できます。
 
      ![anthropic_node_test_result](./assets/anthropic_node_test_result.png)
 

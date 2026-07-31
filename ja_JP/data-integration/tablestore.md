@@ -132,9 +132,9 @@ Tablestoreデータ統合は以下の特長と利点を提供します：
 
 8. **Connector**ドロップダウンから先ほど作成した`my_tablestore`を選択します。新規コネクターを作成するにはドロップダウン横のボタンをクリックします。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-9. 以下のフィールドを設定します：
+9. 以下のフィールドを設定します。
 
-   - **Data Source**：EMQXがメッセージを取得するデータソース。処理対象のデータの起点を示します。特定のトピックやデータストリームを指定可能です。
+   - **Data Source**：EMQXがメッセージを取得するデータソース。処理対象のデータの起点を示します。特定のトピックやデータストリームを指定します。
 
    - **Table Name**：データを保存するTablestoreのテーブル名。先ほど作成したテーブル名を入力します。`${table}`のような変数を使って動的にテーブル名を割り当てることも可能です。
 
@@ -165,11 +165,11 @@ Tablestoreデータ統合は以下の特長と利点を提供します：
 
 11. **詳細設定（オプション）**：詳細は[高度な設定](#advanced-configurations)を参照してください。
 
-12. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがTablestoreサーバーに接続できるかテスト可能です。
+12. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがTablestoreサーバーに接続可能かテストできます。
 
 13. **Create**をクリックしてSink作成を完了します。ルール作成ページの**Action Outputs**タブに新しいSinkが表示されます。
 
-14. ルール作成ページで設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。
+14. **Create Rule**ページで設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。
 
 これでルールが正常に作成され、**Rule**ページに新しいルールが表示されます。**Actions(Sink)**タブをクリックすると、新しいTablestore Sinkが確認できます。
 
@@ -177,7 +177,7 @@ Tablestoreデータ統合は以下の特長と利点を提供します：
 
 ## ルールのテスト
 
-1. MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
+1. MQTTXを使用してトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "table": "timeseries_demo_with_data", "measurement": "foo", "microsecond_timestamp": 1734924039271024, "column_name": "cc", "value": 1}'
@@ -187,8 +187,8 @@ Tablestoreデータ統合は以下の特長と利点を提供します：
 
 3. [Tablestoreコンソール](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6)にアクセスし、データがTablestoreに書き込まれているか確認します。
 
-   - **Metric Name**にメジャメント名（このデモでは`foo`）を入力します。
-   - **Tag**に`location=office1`および`device=sensor1`をクエリ条件として入力し、**Search**をクリックします。
+   - **Metric Name**にメジャメント名（本デモでは`foo`）を入力します。
+   - **Tag**に`location=office1`、`device=sensor1`をクエリ条件として入力し、**Search**をクリックします。
 
    ![tablestore_query_data](./assets/tablestore_query_data.png)
 

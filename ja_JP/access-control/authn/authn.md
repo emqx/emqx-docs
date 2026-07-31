@@ -299,7 +299,7 @@ authentication = [
 
 listeners.tcp.default {
   ...
-  # 指定したMQTTリスナーに対する認証チェーン
+  # 指定されたMQTTリスナーに対する認証チェーン
   authentication = [
     ...
   ]

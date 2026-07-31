@@ -218,7 +218,6 @@ emqx_data=# select * from t_mqtt_msg;
 ----+----------------------------------+--------+-------+-----+--------+-------------------------------+---------------------
   1 | 0005F298A0F0AEE2F443000012DC0002 | emqx_c | t/1   |   0 |        | { "msg": "hello CockroachDB" } | 2023-01-19 07:10:32
 (1 row)
-
 ```
 
 `emqx_client_events`テーブルにデータが書き込まれているか確認します。
@@ -230,5 +229,4 @@ emqx_data=# select * from emqx_client_events;
   3 | emqx_c   | client.connected    | 2023-01-19 07:10:32
   4 | emqx_c   | client.disconnected | 2023-01-19 07:10:32
 (2 rows)
-
 ```

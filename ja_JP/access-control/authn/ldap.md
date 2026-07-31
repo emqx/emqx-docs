@@ -40,7 +40,7 @@ EMQXのLDAP統合には、以下の2つの異なる認証方式があります�
 
 ::: tip
 
-このセクションは「ローカルパスワード比較」認証方式に適用されます。「LDAPバインド認証」方式を使用している場合は、このセクションはスキップできます。
+このセクションは「ローカルパスワード比較」認証方式に適用されます。「LDAPバインド認証」方式を使用する場合はこのセクションをスキップできます。
 
 :::
 
@@ -69,7 +69,7 @@ LDAP資格情報を作成するには、必要な属性名、ベースオブジ�
 以下は、OpenLDAP用のスキーマに基づいた[LDAPデータ交換形式（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/)で指定されたLDAP資格情報のサンプルです。
 
 ```sql
-## create organization: emqx.io
+## 組織作成: emqx.io
 dn:dc=emqx,dc=io
 objectclass: top
 objectclass: dcobject
@@ -77,15 +77,15 @@ objectclass: organization
 dc:emqx
 o:emqx,Inc.
 
-## create organization unit: testdevice.emqx.io
+## 組織単位作成: testdevice.emqx.io
 dn:ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectclass:organizationalUnit
 ou:testdevice
 
-## create user=mqttuser0001,
-#         password=mqttuser0001,
-#         passhash={SHA}mlb3fat40MKBTXUVZwCKmL73R/0=
+## ユーザー作成: mqttuser0001,
+#         パスワード=mqttuser0001,
+#         パスワードハッシュ={SHA}mlb3fat40MKBTXUVZwCKmL73R/0=
 #         base64passhash=e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
 dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -93,9 +93,9 @@ objectClass: mqttUser
 uid: mqttuser0001
 userPassword:: e1NIQX1tbGIzZmF0NDBNS0JUWFVWWndDS21MNzNSLzA9
 
-## create user=mqttuser0002
-#         password=mqttuser0002,
-#         passhash={SSHA}n9XdtoG4Q/TQ3TQF4Y+khJbMBH4qXj4M
+## ユーザー作成: mqttuser0002
+#         パスワード=mqttuser0002,
+#         パスワードハッシュ={SSHA}n9XdtoG4Q/TQ3TQF4Y+khJbMBH4qXj4M
 #         base64passhash=e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -103,9 +103,9 @@ objectClass: mqttUser
 uid: mqttuser0002
 userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 
-## create a superuser mqttuser0003
-#         password=mqttuser0003,
-#         passhash={MD5}ybsPGoaK3nDyiQvveiCOIw==
+## スーパーユーザー作成: mqttuser0003
+#         パスワード=mqttuser0003,
+#         パスワードハッシュ={MD5}ybsPGoaK3nDyiQvveiCOIw==
 #         base64passhash=e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
 dn:uid=mqttuser0003,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -141,7 +141,7 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
-## ダッシュボードでLDAP認証を設定する
+## ダッシュボードからLDAP認証を設定する
 
 EMQXダッシュボードでLDAPをパスワード認証に使用する方法を設定できます。
 
@@ -165,7 +165,7 @@ EMQXダッシュボードでLDAPをパスワード認証に使用する方法を
 
      - **パスワード**：上記ユーザー名に対応する平文パスワードで、バインド操作を完了するために使用します。この値はLDAP設定で定義された`rootpw`の実際のパスワードと一致する必要があります。
 
-   - **認証設定**：認証に関する設定を入力します。
+     - **ユーザー名**: EMQXがLDAPサーバーにバインドするために使用するアカウント名（バインドDN）を指定します。例：`cn=root,dc=emqx,dc=io`。このアカウントはユーザーエントリの読み取り権限を持ち、通常はLDAP設定ファイル（例：`slapd.conf`）で定義された`rootdn`と同じです。
 
      - **パスワード認証方式**：認証方式を選択します。`LDAPバインド認証`（デフォルト）または`ローカルパスワード比較`から選択可能です。
 
@@ -353,7 +353,7 @@ mqttAclTtl: 1s
 userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 ```
 
-### LDAP認証機能の設定例
+### LDAP認証機能設定例
 
 ACLルールの取得とキャッシュを有効にするには、LDAP認証機能の設定で属性名を**明示的に**指定する必要があります。
 

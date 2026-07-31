@@ -1,6 +1,6 @@
 # Message Queue Quick Start
 
-This page walks you through how to use the Message Queue feature in EMQX 6.0. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
+This page walks you through how to quickly use the Message Queue feature. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
 
 ## Objectives
 
@@ -22,15 +22,16 @@ Before starting, ensure you have:
 
 This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline.
 
-### Step 1: Create a Message Queue
+### Step 1: Create a Queue
 
-1. Navigate to **Message Queue** in the left menu.
+1. Navigate to **Queues** in the left menu.
 2. Click the **Create** button in the upper-right corner of the page.
 
-3. In the **Create Message Queue** dialog, configure the following settings:
+3. In the **Create Queue** dialog, configure the following settings:
+   - **Name**: `my_queue`
    - **Topic Filter**: `demo/topic`
    - **Dispatch Strategy**: `Random`
-   - **Data Retention Period**: `1` day
+   - **Data Retention Period**: `7` day
    - **Last Value Semantics**: `Disabled`
 4. Click **Create**.
 
@@ -65,7 +66,7 @@ Use MQTTX to simulate a client as a **subscriber**:
 3. Subscribe to the queue topic:
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
@@ -77,7 +78,7 @@ You should now receive all previously published messages in the queue.
 
 In this section, you will simulate multiple subscribers connected to the same Message Queue and explore how different dispatch strategies influence message distribution behavior.
 
-1. In your `publisher` client, publish a series of messages to the original topic (not prefixed with `$q/`), e.g.:
+1. In your `publisher` client, publish a series of messages to the original topic (not prefixed with `$queue/`), e.g.:
 
    ```bash
    for i in {1..10}; do
@@ -90,7 +91,7 @@ In this section, you will simulate multiple subscribers connected to the same Me
 3. Connect to EMQX and subscribe to the same queue topic:
 
    ```json
-   Topic: $q/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
@@ -115,7 +116,7 @@ You can verify these behaviors by watching how messages are delivered to `worker
 
 You can change the strategy on the fly:
 
-1. Go to **Message Queue** in Dashboard.
+1. Go to **Queues** in Dashboard.
 2. Click **Edit** next to your queue.
 3. Select a new **Dispatch Strategy** and save.
 
@@ -129,7 +130,7 @@ This section demonstrates how to enable **Last-Value Semantics**, which ensures 
 
 ### Step 1: Delete the Existing Queue
 
-1. Navigate to **Message Queue** in the EMQX Dashboard.
+1. Navigate to **Queues** in the EMQX Dashboard.
 2. Locate the queue with the topic filter `demo/topic`.
 3. Click **Delete** in the **Actions** column.
 4. Confirm deletion in the prompt.
@@ -138,11 +139,12 @@ This removes the previous queue and its stored messages.
 
 ### Step 2: Create a Queue with Last-Value Semantics
 
-1. On the **Message Queue** page, click **Create**.
-2. In the **Create Message Queue** dialog, configure the settings:
+1. On the **Queues** page, click **Create**.
+2. In the **Create Queue** dialog, configure the settings:
+   - **Name**: `my_queue`
    - **Topic Filter**: `device/config`
    - **Dispatch Strategy**: `Random` (or your choice)
-   - **Data Retention Period**: `1` day
+   - **Data Retention Period**: `7` day
    - **Last Value Semantics**: Toggle on
    - **Queue Key Expression**: `message.from` (or any field name you will use as key)
 3. Click **Create**.
@@ -184,7 +186,7 @@ Since the **Queue Key Expression** is set to `message.from`, EMQX will automatic
 3. Subscribe to the queue topic:
 
    ```json
-   Topic: $q/device/config
+   Topic: $queue/my_queue/device/config
    QoS: 1
    ```
 

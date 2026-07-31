@@ -4,9 +4,9 @@
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
-本ページでは、EMQXとKafka間のデータ統合について包括的に紹介し、データ統合の作成および検証方法を実践的に解説します。
+<img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
-## 動作概要
+本ページでは、EMQXとKafkaのデータ統合について紹介し、統合の作成および検証手順を段階的に解説します。
 
 Apache Kafkaとのデータ統合は、MQTTベースのIoTデータとKafkaの強力なデータ処理機能のギャップを埋めるためにEMQXに標準搭載された機能です。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、両プラットフォーム間のデータストリーミングと処理が簡素化され、複雑なコーディングを不要にします。
 
@@ -29,7 +29,7 @@ Apache Kafkaへのデータの流入および流出には、それぞれKafka Si
 
 ## 特長とメリット
 
-Apache Kafkaとのデータ統合は、以下の特長とメリットをビジネスにもたらします。
+Apache Kafkaとのデータ統合は以下の特長とメリットを提供します。
 
 - **信頼性の高い双方向IoTデータメッセージング**：Kafkaと不安定なモバイルネットワーク上で動作するリソース制約のあるIoTデバイス間のデータ通信は、不確実なネットワークでのメッセージングに優れたMQTTプロトコルで処理されます。EMQXはMQTTメッセージをバッチでKafkaに転送するだけでなく、バックエンドシステムからのKafkaメッセージをサブスクライブし、接続されたIoTクライアントに配信します。
 - **ペイロード変換**：メッセージペイロードは送信中に定義されたSQLルールで処理可能です。例えば、総メッセージ数、成功／失敗配信数、メッセージレートなどのリアルタイム指標を含むペイロードは、Kafkaに取り込まれる前にデータ抽出、フィルタリング、拡充、変換を経ることができます。
@@ -111,7 +111,7 @@ Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確�
 
 5. **Create**をクリックする前に、**Test Connection**をクリックしてKafkaサーバーへの接続が成功するかテストできます。
 
-6. **Create**をクリックしてコネクターの作成を完了します。
+5. **Create**をクリックする前に、**Test Connection**をクリックしてKafkaサーバーへの接続が成功するかテストできます。
 
 作成後、コネクターは自動的にKafkaに接続します。次に、このコネクターを使ってKafkaクラスターにデータを転送するルールを作成します。
 
@@ -119,7 +119,7 @@ Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確�
 
 EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュリティ設定に応じて以下の認証方式から選択可能です。
 
-- **None**：認証不要。
+- **None**：認証なし。
 
 - **MSK IAM**：EMQXがAmazon EC2インスタンス上にデプロイされている場合のAmazon MSKクラスター接続用。
 
@@ -133,7 +133,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
   :::
 
-- **Basic Auth**：ユーザー名とパスワードによる認証。
+- **OAuth**：OAuth 2.0ベースの認証で、OAuthまたはOIDC対応のKafkaクラスター（例：Confluent CloudやOAuth有効化済みのセルフマネージドKafka）に接続します。
 
   選択時は以下を指定する必要があります：
   - **Mechanism**：`plain`、`scram_sha_256`、`scram_sha_512`から選択
@@ -159,7 +159,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 2. ページ右上の **Create** をクリックします。
 
-3. ルールIDを入力します。例：`my_rule`。
+3. ルールIDを入力します。例：`my_rule`
 
 4. **SQL Editor**に以下の文を入力します。これはMQTTトピック`t/#`のメッセージをKafkaに転送する例です。
 
@@ -180,7 +180,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
    ::: tip
 
-   EMQX v5.7.2からルールSQLで環境変数を読み取る機能が追加されました。詳細は[ルールSQLで環境変数を使う](#use-environment-variables)を参照してください。
+   EMQX v5.7.2からはルールSQL内で環境変数を読み取る機能が追加されました。詳細は[ルールSQLで環境変数を使う](#use-environment-variables)を参照してください。
 
    :::
 
@@ -200,7 +200,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
    - **Message Value**：Kafkaメッセージの値。プレーン文字列または`${var}`形式のプレースホルダーが使用可能です。
 
-   - **Partition Strategy**：プロデューサーがKafkaパーティションにメッセージを分配する方法を選択します。
+10. **フォールバックアクション**（任意）：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
    - **Compression**：Kafkaメッセージのレコード圧縮／解凍に使用する圧縮アルゴリズムを指定します。
 
@@ -216,7 +216,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 また、**Integration** -> **Flow Designer**でトポロジーを表示可能です。トポロジーでは、トピック`t/#`のメッセージがルール`my_rule`で解析されKafkaに送信・保存される様子を直感的に把握できます。
 
-![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+![Kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 ### Kafka動的トピックの設定
 
@@ -370,7 +370,7 @@ Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を�
 
 2. ページ右上の **Create** をクリックします。
 
-3. ルールIDを入力します。例：`my_rule`。
+3. ルールIDを入力します。例：`my_rule`
 
 4. Kafkaソース`$bridges/kafka_consumer:<sourceName>`から変換されたメッセージをEMQXに転送する場合、**SQL Editor**に以下の文を入力します。
 
@@ -437,7 +437,7 @@ Kafka Sourceとルールが期待通り動作するかテストするため、[M
    bin/kafka-console-producer --bootstrap-server 127.0.0.1:9092 --topic testtopic-out
    ```
 
-   メッセージ入力待ちになります。
+   メッセージ入力待ち状態になります。
 
 3. `{"msg": "Hello EMQX"}`を入力し、`testtopic-out`トピックにメッセージを生成してEnterを押します。
 

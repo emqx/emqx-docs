@@ -91,21 +91,21 @@ EMQX 5.10.0以降、イベントトピックにネームスペースが導入さ
 
 後方互換性のため、旧イベントトピックも引き続きサポートされていますが、新規設定ではネームスペース付きの新しいトピックの使用を推奨します。以下の表は旧トピックと新トピックの対応表です。
 
-| 旧イベントトピック                    | 新イベントトピック                         |
-|:----------------------------------------|:----------------------------------------|
-| `$events/client_connected`              | `$events/client/connected`              |
-| `$events/client_disconnected`           | `$events/client/disconnected`           |
-| `$events/client_connack`                | `$events/client/connack`                |
-| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
-| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
-| `$events/session_subscribed`            | `$events/session/subscribed`            |
-| `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
-| `$events/message_delivered`             | `$events/message/delivered`             |
-| `$events/message_acked`                 | `$events/message/acked`                 |
-| `$events/message_dropped`               | `$events/message/dropped`               |
-| `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
-| `$events/message_transformation_failed` | `$events/message_transformation/failed` |
-| `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+| 旧イベントトピック                      | 新イベントトピック                         |
+|:----------------------------------------|:------------------------------------------|
+| `$events/client_connected`              | `$events/client/connected`                 |
+| `$events/client_disconnected`           | `$events/client/disconnected`              |
+| `$events/client_connack`                | `$events/client/connack`                   |
+| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`       |
+| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`       |
+| `$events/session_subscribed`            | `$events/session/subscribed`               |
+| `$events/session_unsubscribed`          | `$events/session/unsubscribed`             |
+| `$events/message_delivered`             | `$events/message/delivered`                |
+| `$events/message_acked`                 | `$events/message/acked`                    |
+| `$events/message_dropped`               | `$events/message/dropped`                  |
+| `$events/delivery_dropped`              | `$events/message/delivery_dropped`        |
+| `$events/message_transformation_failed` | `$events/message_transformation/failed`   |
+| `$events/schema_validation_failed`      | `$events/schema_validation/failed`        |
 
 :::
 
@@ -752,7 +752,7 @@ FROM
 
 ルールは、データブリッジによってトリガーされたメッセージやイベントを、`$bridges/`で始まるトピックで扱います。フォーマットは以下の通りです。
 
-`$bridges/<type>:<name>`
+ `$bridges/<type>:<name>`
 
 ここで、
 
@@ -762,7 +762,7 @@ FROM
 
 例えば、MQTTブリッジのイベントは`"$bridges/mqtt:*"`の形式で参照できます。MQTTデータブリッジ`my_mqtt_bridge`が送信するすべてのメッセージに対してルールを設定するには、以下のステートメントを使用します。
 
-**例：**
+例：
 
 ```sql
 SELECT
@@ -771,7 +771,7 @@ FROM
   "$bridges/mqtt:my_mqtt_bridge"
 ```
 
-**出力例：**
+出力例：
 
 ```json
 {

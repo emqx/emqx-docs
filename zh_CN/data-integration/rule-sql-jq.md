@@ -1,6 +1,6 @@
 # jq 函数
 
-[jq](https://stedolan.github.io/jq/) 是一款功能强大的命令行工具和编程语言，主要用于转换和查询 [JSON](https://www.json.org/json-en.html) 编码的消息。
+[jq](https://jqlang.org) 是一款功能强大的命令行工具和编程语言，主要用于转换和查询 [JSON](https://www.json.org/json-en.html) 编码的消息。
 
 对于规则 SQL 及其内置函数很难或无法实现的 JSON 消息处理，使用 jq 函数可以很方便地实现。
 
@@ -14,7 +14,7 @@ EMQX 规则 SQL 通过以下函数集成了 jq：
 
 > 默认执行超时可通过 `rule_engine.jq_function_default_timeout` 配置。
 
-jq 同时也是一个图灵完备的编程语言，[jq 官方文档](https://stedolan.github.io/jq/manual/) 是学习如何编写 jq 的最佳指南，您也可以[在 jq Playground](https://jqplay.org/) 或本地安装后进行学习与测试。
+jq 同时也是一个图灵完备的编程语言，[jq 官方文档](https://jqlang.org/manual/v1.8/) 是学习如何编写 jq 的最佳指南，您也可以[在 jq Playground](https://jqplay.org/) 或本地安装后进行学习与测试。
 
 以下是一些简单的 `jq` 函数调用及其结果的示例。
 

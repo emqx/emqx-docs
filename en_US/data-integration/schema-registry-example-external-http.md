@@ -6,9 +6,11 @@ In some scenarios, you might need to apply custom encoding or decoding logic tha
 
 ## External HTTP API Specification
 
-To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single `POST` endpoint that handles the encoding or decoding requests from EMQX.  
+Your external HTTP server must expose a single endpoint that receives encoding and decoding requests from EMQX's `schema_encode` and `schema_decode` functions. EMQX can call this endpoint using either the `POST` (default) or the `GET` method.
 
 ### Request Format
+
+#### POST request
 
 The request body is a JSON object with the following fields:
 
@@ -17,10 +19,35 @@ The request body is a JSON object with the following fields:
 - `schema_name`: A string identifying the name of this External HTTP schema configured in EMQX.
 - `opts`: An arbitrary string that can be configured in EMQX to provide further options, which is passed unaltered to the HTTP server.
 
+#### GET request
+
+When the schema method is set to `GET`, EMQX sends the same fields as URL query parameters:
+
+- `payload`: URL-safe Base64 encoded without padding.
+- `type`: Either the `encode` or `decode` string.
+- `schema_name`: A string identifying the name of this External HTTP schema configured in EMQX.
+- `opts`: An arbitrary string passed through unchanged.
+
+If the schema URL already contains query parameters, EMQX appends these four parameters to the existing query string.
+
 ### Response Format
 
 - The server must respond with HTTP status code `200`.
 - The response body must contain a base64-encoded string representing the result. Note that this base64 value must not be further JSON-encoded when replying to EMQX.
+
+## Schema Configuration Reference
+
+When creating an External HTTP schema in the Dashboard, the following fields are available:
+
+| Field        | Required | Description                                                                                                                                                      |
+| ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**     | Yes      | A unique identifier for the schema within EMQX.                                                                                                                  |
+| **Type**     | Yes      | Set to `External HTTP`.                                                                                                                                          |
+| **URL**      | Yes      | The full URL of the endpoint on your external HTTP server, for example, `http://server:9500/serde`.                                                              |
+| **Method**   | Yes      | HTTP method used to call the endpoint. Defaults to `POST`. Use `GET` only if your external service expects the request fields in the query string.               |
+| **Params**   | No       | An optional string passed as the `opts` field in every request. Use this to send extra options or configuration values to your service.                          |
+| **Headers**  | No       | HTTP headers included in every request. The `content-type: application/json` header is added by default. Click **Add** to include additional headers, for example authentication tokens. |
+| **Enable TLS** | No     | Toggle on if your external HTTP server requires a TLS connection. For details, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access). |
 
 ## Example Use Case
 
@@ -28,7 +55,7 @@ Suppose a device publishes a binary message, and you want to encode or decode th
 
 ### Build an External HTTP Service
 
-The following example demonstrates how to create and run a simple HTTP server using Python and Flask. The server receives Base64-encoded data and applies an XOR operation to the decoded payload.
+The following example demonstrates how to create and run a simple HTTP server using Python and Flask. The server accepts either `POST` or `GET` requests, decodes the incoming payload, and applies an XOR operation to it.
 
 <details>
 <summary><strong>Code for sample External HTTP Server</strong></summary>
@@ -47,13 +74,22 @@ import base64
 
 app = Flask(__name__)
 
-@app.route("/serde", methods=['POST'])
+
+def decode_payload(payload64):
+    if request.method == "GET":
+        # EMQX sends GET payload as URL-safe Base64 without padding.
+        payload64 += "=" * (-len(payload64) % 4)
+        return base64.urlsafe_b64decode(payload64)
+    return base64.b64decode(payload64)
+
+
+@app.route("/serde", methods=["POST", "GET"])
 def serde():
-    # The input payload is base64 encoded
-    body = request.get_json(force=True)
+    # POST uses a JSON body; GET uses query parameters.
+    body = request.args if request.method == "GET" else request.get_json(force=True)
     print("incoming request:", body)
     payload64 = body.get("payload")
-    payload = base64.b64decode(payload64)
+    payload = decode_payload(payload64)
     secret = 122
     response = bytes(b ^ secret for b in payload)
     # The response must also be base64 encoded
@@ -82,6 +118,8 @@ flask --app myapp --debug run -h 0.0.0.0 -p 9500
    - **Type**: `External HTTP`
 
    - **URL**: The full URI where your server is running.  For example: `http://server:9500/serde`.
+
+   - **Method**: Select `POST` or `GET`. `POST` is the default. Use `GET` only if your external service expects the request fields in the query string.
 
 4. Click **Create**.
 

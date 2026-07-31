@@ -201,7 +201,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `TurnDetectionMode` | number   | 任意   | ターン検出モード                             |
 | `InterruptConfig`   | object   | 任意   | 割り込み設定                                 |
 
-**ProviderParams**:
+**ProviderParams**：
 
 | パラメータ           | 型       | 説明                                         |
 | ------------------- | -------- | -------------------------------------------- |
@@ -223,7 +223,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `Sensitivity` | number   | 感度                                         |
 | `AIVAD`       | boolean  | AI VADを有効化                               |
 
-**InterruptConfig**:
+**InterruptConfig**：
 
 | パラメータ                 | 型         | 説明                                         |
 | ------------------------- | ---------- | -------------------------------------------- |
@@ -262,7 +262,7 @@ AI音声セッションを開始し、指定したルームにAIエージェン�
 | `ProviderParams`    | object     | 必須   | プロバイダー固有のパラメータ                 |
 | `IgnoreBracketText` | number[]   | 任意   | 無視する括弧タイプ                           |
 
-**ProviderParams**:
+**ProviderParams**：
 
 | パラメータ    | 型       | 説明                       |
 | ------------ | -------- | -------------------------- |

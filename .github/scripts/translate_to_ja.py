@@ -19,6 +19,10 @@ CONCURRENCY = int(os.getenv('TRANSLATION_CONCURRENCY', '10'))
 MAX_RETRIES = 3
 REQUEST_TIMEOUT = 600
 
+SKIP_TRANSLATION_PATHS = {
+    'en_US/connect-emqx/introduction.md',
+}
+
 SYSTEM_PROMPT = '''
 # 1. Role & Objective
 You are a **technical translator** specializing in IoT infrastructure (MQTT, message brokers, etc.).
@@ -81,6 +85,9 @@ Translate EMQX documentation from **English → Japanese** for an audience of Ja
 | Flow Designer            | Flowデザイナー                |
 | Data Integration         | データ統合                     |
 | Reference                | リファレンス                   |
+| Serverless               | サーバレス                     |
+| Dedicated                | 専用                          |
+| BYOC                     | BYOC                         |
 
 ---
 
@@ -175,7 +182,7 @@ def translate_one(input_file_path, copy_set):
     with open(input_file_path, 'r', encoding='utf-8') as f:
         markdown_text = f.read().strip()
 
-    if 'en_US/changes/' in input_file_path or input_file_path in copy_set:
+    if 'en_US/changes/' in input_file_path or input_file_path in copy_set or input_file_path in SKIP_TRANSLATION_PATHS:
         with open(output_file_path, 'w', encoding='utf-8') as f:
             f.write(markdown_text + '\n')
         return {'path': input_file_path, 'status': 'copied'}

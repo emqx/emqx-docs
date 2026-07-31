@@ -45,7 +45,7 @@ SQL実行時に`412`エラーコードが表示される場合、テストデー
 - メッセージパブリッシュ（mqttトピック）
 - メッセージ配信済み（$events/message/delivered）
 - メッセージアック済み（$events/message/acked）
-- メッセージドロップ（$events/message/dropped）
+- メッセージ破棄（$events/message/dropped）
 
 その他のイベントでは、以下のクライアントおよびセッションイベントを選択してデータをシミュレートできます。
 

@@ -14,6 +14,7 @@ NATS 协议网关当前支持以下主要功能：
   - 消息传递与响应：`MSG`、`HMSG`
   - 心跳与状态响应：`PING`、`PONG`、`+OK`、`-ERR`
 - **Verbose 模式支持**：支持客户端通过 `CONNECT verbose=true` 开启消息确认响应。
+- **丰富的认证支持**：支持 `Token`、`NKey`、`JWT` 以及用户名密码认证。
 
 ### 协议互通能力（与 MQTT）
 
@@ -190,7 +191,23 @@ NATS 网关支持 TCP/SSL/WS/WSS 类型的监听器，其完整可配置的参�
 
 ### 配置接入认证
 
-NATS 协议支持多种认证方式，包括用户名/密码、Token 认证等。NATS 网关支持以下多种认证器类型，例如：
+NATS 网关通过以下两种方式支持认证：
+
+- **网关认证（`authentication`）**：EMQX 网关集成的通用认证器体系，常用于用户名/密码类认证后端。
+- **网关内部认证（`internal_authn`）**：NATS 原生的、非用户名/密码的认证。
+
+当两者同时启用时，EMQX 按以下顺序认证：
+
+1. 按 `internal_authn` 数组顺序依次执行内部认证。
+2. 当前方式缺少必需凭证时，继续尝试下一种方式。
+3. 当前方式提供了凭证但校验失败时，立即拒绝连接，不再回退。
+4. 若所有内部认证方式都被跳过，且配置了 `authentication`，则回退到网关认证。
+5. 若内部认证和网关认证都未配置，则允许所有 NATS 客户端接入。
+
+#### 配置网关认证器
+
+和其他网关一样，NATS 网关也支持与 EMQX 标准认证器进行集成，它支持以下认证器类型：
+
 - [内置数据库认证](../access-control/authn/mnesia.md)
 - [MySQL 认证](../access-control/authn/mysql.md)
 - [MongoDB 认证](../access-control/authn/mongodb.md)
@@ -200,15 +217,14 @@ NATS 协议支持多种认证方式，包括用户名/密码、Token 认证等�
 - [JWT 认证](../access-control/authn/jwt.md)
 - [LDAP 认证](../access-control/authn/ldap.md)
 
-与 MQTT 协议不同，网关仅支持创建一个认证器，而不是认证器列表（或认证链）。当不启用任何认证器时，表示允许所有的 NATS 客户端都具有接入的权限。
+NATS 网关从 `CONNECT` 报文提取以下认证字段，用于以上认证器的校验：
+- **Client ID**：默认自动生成随机字符串。
+- **Username**：`user` 字段。
+- **Password**：`pass` 字段。
 
-NATS 网关使用 NATS 协议的 CONNECT 报文中的信息来生成客户端的认证信息。默认情况下：
+与 MQTT 协议不同，网关认证器仅支持创建一个认证器，而不是认证器列表（或认证链）。
 
-- Client ID：为随机生成的字符串。
-- Username：为 CONNECT 报文中的 `user` 字段的值。
-- Password：为 CONNECT 报文中的 `pass` 字段的值。
-
-#### 通过 Dashboard 配置
+##### 通过 Dashboard 配置
 
 本节以使用 HTTP 服务进行密码认证为例，说明如何对 NATS 网关进行接入认证的配置。
 
@@ -217,7 +233,7 @@ NATS 网关使用 NATS 协议的 CONNECT 报文中的信息来生成客户端的
 3. 完成配置后，点击**创建**。在**接入认证**中将出现**HTTP 服务**设置页面。
 4. 确认您的设置，点击**更新**。
 
-#### 通过 REST API 配置
+##### 通过 REST API 配置
 
 以下为通过 REST API 或 `base.hocon` 为 NATS 网关创建一个内置数据库认证的示例：
 
@@ -237,7 +253,7 @@ curl -X 'POST' \
   "user_id_type": "username"
 }'
 ```
-#### 通过配置文件配置
+##### 通过配置文件配置
 
 以下为通过 `base.hocon` 为 NATS 网关创建一个内置数据库认证的示例：
 
@@ -256,6 +272,114 @@ gateway.nats {
 }
 ```
 其他类型的认证器的配置格式参考每种 [EMQX 认证器](../access-control/authn/authn.md#emqx-认证器)的使用文档。
+
+#### 配置网关内部认证（`internal_authn`）
+
+NATS 网关独有的认证方式，用于支持 NATS Server 中标准的三种认证方式。
+
+##### Token 认证
+
+- 使用 NATS `CONNECT` 报文中的 `auth_token` 字段。
+- 支持明文 Token 以及 bcrypt 哈希（`$2a$`、`$2b$`、`$2y$`）。
+- NATS Server 参考：[Token Authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens)
+
+Dashboard 配置示例如下：
+
+![nats-auth-token](assets/nats-auth-token.png)
+
+配置文件示例如下：
+
+```properties
+gateway.nats {
+  internal_authn = [
+    {
+      type = token
+      token = "nats_token"
+    }
+  ]
+}
+```
+
+##### NKey 认证
+
+- 使用 NATS `CONNECT` 报文中的 `nkey` + `sig` 的 challenge/response 认证流程。
+- `nkeys` 必须是合法的用户公钥（`U...`）。
+- NATS Server 参考：[NKey Authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth)
+
+Dashboard 配置示例如下：
+
+![nats-auth-nkey](assets/nats-auth-nkey.png)
+
+配置文件示例如下：
+
+```properties
+gateway.nats {
+  internal_authn = [
+    {
+      type = nkey
+      nkeys = [
+        "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
+    }
+  ]
+}
+```
+
+##### JWT 认证（支持 ACL）
+
+- 使用 NATS `CONNECT` 报文中的 `jwt` + `sig`（可选 `nkey`）进行认证。
+- `受信操作者` 的公钥列表 与 `JWT 预加载` 的 JWT 列表均为必填。
+- `解析器类型` 当前仅支持 `memory`，即使用配置的方式预设合法的 Account JWT。
+- NATS Server 参考：[JWT Authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/jwt)
+
+Dashboard 配置示例如下：
+
+![nats-auth-jwt](assets/nats-auth-jwt.png)
+
+配置文件示例如下：
+
+```properties
+gateway.nats {
+  internal_authn = [
+    {
+      type = jwt
+      trusted_operators = [
+        "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
+      resolver {
+        type = memory
+        resolver_preload = [
+          {
+            pubkey = "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            jwt = "<your-account-jwt>"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+JWT 用户声明中可附带 ACL 规则。EMQX 支持 `permissions` 以及 `nats.pub` / `nats.sub` 声明。最终授权结果是 JWT ACL 与 EMQX 授权规则的交集。
+
+JWT ACL 声明示例：
+
+```json
+{
+  "sub": "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "iss": "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "nats": {
+    "pub": {
+      "allow": ["sensors.>"],
+      "deny": ["sensors.secret.>"]
+    },
+    "sub": {
+      "allow": ["alerts.>"],
+      "deny": ["alerts.internal.>"]
+    }
+  }
+}
+```
 
 ### 配置用户层接口
 

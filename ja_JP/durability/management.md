@@ -284,7 +284,7 @@ Durable Sessionsに関連するPrometheusメトリクスは以下の通りです
 
 これらのカウンターは「wildcard optimized」ストレージレイアウト固有のもので、ローカルストレージからのデータ消費効率を測定します。`seek` 操作は一般的に遅いため、`emqx_ds_storage_bitfield_lts_counter_next` の増加率が `seek` より速いことが望ましいです。
 
-`durable_storage.messages.layout.epoch_bits` パラメータを増やすことで、この比率を改善できます。
+`durable_storage.messages.layout.epoch_bits` パラメータを増やすことでこの比率の改善が期待できます。
 
 ### `emqx_ds_raft_db_shards_num`
 
@@ -342,7 +342,7 @@ DB シャードのレプリカセット遷移オーケストレーション中�
 
 ### `emqx_ds_raft_snapshot_read_chunk_bytes`
 
-ソース DS DB シャードでチャンクとして読み取られたバイト数をカウントします。
+ソース DS DB シャードでチャンクとして読み込まれたバイト数をカウントします。
 
 ### `emqx_ds_raft_snapshot_writes`
 

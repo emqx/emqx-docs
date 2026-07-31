@@ -79,6 +79,7 @@ D1 -->|发布消息| E[客户端]
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
 - [Azure Event Hubs](./data-bridge-azure-event-hub.md)
+- [Azure Event Grid](./azure-event-grid.md)
 - [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 **时序数据库**
@@ -88,6 +89,7 @@ D1 -->|发布消息| E[客户端]
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
 - [Datalayers](./data-bridge-datalayers.md)
+- [Timestream for InfluxDB](./timestream-for-influxdb.md)
 
 **SQL**
 
@@ -101,6 +103,7 @@ D1 -->|发布消息| E[客户端]
 - [AlloyDB](./alloydb.md)
 - [CockroachDB](./cockroachdb.md)
 - [Redshift](./redshift.md)
+- [QuasarDB](./quasardb.md)
 
 **NoSQL**
 
