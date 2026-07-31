@@ -1,5 +1,13 @@
 # Releases
 
+## e4.4.37
+
+*Release Date: 2026-07-31*
+
+### Bug Fixes
+
+- Fixed an issue where data backup exports did not include Dashboard MFA configuration, API Key permissions, and SCRAM credentials.
+
 ## e4.4.36
 
 *Release Date: 2026-05-22*
