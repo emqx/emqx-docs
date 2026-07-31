@@ -4647,13 +4647,19 @@
             "oneOf": [
               {
                 "enum": [
-                  "opents"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -4665,13 +4671,7 @@
               },
               {
                 "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "redshift"
                 ],
                 "type": "string"
               },
@@ -4683,7 +4683,31 @@
               },
               {
                 "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -4695,13 +4719,13 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "mqtt"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mqtt"
+                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -4713,25 +4737,37 @@
               },
               {
                 "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "timescale"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -4749,25 +4785,7 @@
               },
               {
                 "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -4779,13 +4797,19 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "aws_timestream"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "emqx_tables"
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
                 ],
                 "type": "string"
               },
@@ -4803,49 +4827,7 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -4857,25 +4839,13 @@
               },
               {
                 "enum": [
-                  "cockroachdb"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -4887,13 +4857,37 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
                 ],
                 "type": "string"
               },
@@ -4905,7 +4899,13 @@
               },
               {
                 "enum": [
-                  "s3tables"
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
                 ],
                 "type": "string"
               }
@@ -5945,7 +5945,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
             "example": [
               "connections",
               "monitoring"
@@ -39742,7 +39742,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "D9C47CE9E73D9F97",
+            "example": "589FF7C7F9AAC7D4",
             "type": "string"
           },
           "status": {
@@ -58699,7 +58699,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.4-rc.1"
+    "version": "6.1.4-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58715,100 +58715,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "s3tables",
+                      "s3",
+                      "confluent_producer",
                       "snowflake_streaming",
-                      "dynamo",
-                      "kinesis",
-                      "azure_event_hub_producer",
-                      "datalayers",
                       "snowflake",
-                      "mongodb",
-                      "cockroachdb",
-                      "redis",
-                      "rabbitmq",
-                      "tdengine",
-                      "doris",
-                      "sqlserver",
-                      "redshift",
-                      "couchbase",
-                      "pgsql",
+                      "matrix",
+                      "cassandra",
                       "azure_blob_storage",
+                      "datalayers",
+                      "mongodb",
+                      "azure_event_hub_producer",
+                      "tdengine",
+                      "elasticsearch",
+                      "redis",
+                      "couchbase",
                       "iotdb",
                       "syskeeper_forwarder",
-                      "emqx_tables",
                       "rocketmq",
-                      "disk_log",
-                      "cassandra",
-                      "confluent_producer",
-                      "oracle",
+                      "gcp_pubsub_producer",
                       "aws_timestream",
+                      "disk_log",
+                      "oracle",
                       "influxdb",
                       "http",
-                      "elasticsearch",
-                      "s3",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "alloydb",
-                      "mqtt",
                       "bigquery",
+                      "opents",
+                      "timescale",
+                      "pgsql",
+                      "emqx_tables",
+                      "kinesis",
+                      "alloydb",
+                      "s3tables",
+                      "mqtt",
                       "clickhouse",
-                      "mysql",
-                      "greptimedb",
-                      "matrix",
+                      "doris",
                       "tablestore",
+                      "mysql",
+                      "sqlserver",
+                      "dynamo",
+                      "greptimedb",
+                      "redshift",
                       "pulsar",
-                      "kafka_producer",
-                      "opents"
+                      "cockroachdb",
+                      "rabbitmq",
+                      "kafka_producer"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "s3tables",
+                      "s3",
+                      "confluent_producer",
                       "snowflake_streaming",
-                      "dynamo",
-                      "kinesis",
-                      "azure_event_hub_producer",
-                      "datalayers",
                       "snowflake",
-                      "mongodb",
-                      "cockroachdb",
-                      "redis",
-                      "rabbitmq",
-                      "tdengine",
-                      "doris",
-                      "sqlserver",
-                      "redshift",
-                      "couchbase",
-                      "pgsql",
+                      "matrix",
+                      "cassandra",
                       "azure_blob_storage",
+                      "datalayers",
+                      "mongodb",
+                      "azure_event_hub_producer",
+                      "tdengine",
+                      "elasticsearch",
+                      "redis",
+                      "couchbase",
                       "iotdb",
                       "syskeeper_forwarder",
-                      "emqx_tables",
                       "rocketmq",
-                      "disk_log",
-                      "cassandra",
-                      "confluent_producer",
-                      "oracle",
+                      "gcp_pubsub_producer",
                       "aws_timestream",
+                      "disk_log",
+                      "oracle",
                       "influxdb",
                       "http",
-                      "elasticsearch",
-                      "s3",
-                      "gcp_pubsub_producer",
-                      "timescale",
-                      "alloydb",
-                      "mqtt",
                       "bigquery",
+                      "opents",
+                      "timescale",
+                      "pgsql",
+                      "emqx_tables",
+                      "kinesis",
+                      "alloydb",
+                      "s3tables",
+                      "mqtt",
                       "clickhouse",
-                      "mysql",
-                      "greptimedb",
-                      "matrix",
+                      "doris",
                       "tablestore",
+                      "mysql",
+                      "sqlserver",
+                      "dynamo",
+                      "greptimedb",
+                      "redshift",
                       "pulsar",
-                      "kafka_producer",
-                      "opents"
+                      "cockroachdb",
+                      "rabbitmq",
+                      "kafka_producer"
                     ],
                     "type": "string"
                   },
@@ -70545,7 +70545,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -70647,15 +70647,25 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. The literal string `unset`, or a list equal to the role default, means \"no explicit scope policy\": the key is stored without a scope list and follows the role default (this lets a client re-submit the value a read returned without modification). Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -70868,7 +70878,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -70994,15 +71004,25 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. The literal string `unset`, or a list equal to the role default, means \"no explicit scope policy\": the key is stored without a scope list and follows the role default (this lets a client re-submit the value a read returned without modification). Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -71093,7 +71113,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -92769,7 +92789,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "D9C47CE9E73D9F97",
+            "example": "589FF7C7F9AAC7D4",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92832,7 +92852,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "D9C47CE9E73D9F97",
+            "example": "589FF7C7F9AAC7D4",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93246,7 +93266,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "D9C47CE9E73D9F97",
+            "example": "589FF7C7F9AAC7D4",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93332,7 +93352,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "D9C47CE9E73D9F97",
+            "example": "589FF7C7F9AAC7D4",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98854,73 +98874,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -99021,6 +98974,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
