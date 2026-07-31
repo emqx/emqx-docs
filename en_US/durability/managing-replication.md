@@ -6,6 +6,8 @@ For an EMQX cluster, durable storage achieves high availability through multiple
 
 During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed at runtime, and modifying them will not take any effect once the durable storage is initialized.
 
+Before initializing Durable Storage, ensure that the EMQX data directory on every node uses a local filesystem. [Embedded Durable Storage backends](../design/durable-storage.md#embedded-backends) do not support network filesystems such as NFS and SMB/CIFS.
+
 ### Replication Factor
 
 The replication factor, controlled with `durable_storage.<DB>.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.

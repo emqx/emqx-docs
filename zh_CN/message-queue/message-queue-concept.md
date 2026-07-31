@@ -10,6 +10,8 @@ EMQX 6.0 引入的消息队列功能扩展了 MQTT 的发布/订阅模式，加�
 
 与传统 MQTT 不同，消息队列即使在无客户端在线的情况下也会保留消息。客户端可通过订阅特殊格式 `$q/{topic}` 来消费这些消息。
 
+消息队列使用 EMQX 内嵌持久存储。启用消息队列前，请确保 EMQX 数据目录使用本地文件系统。[内嵌持久存储后端](../design/durable-storage.md#内嵌后端)不支持 NFS、SMB/CIFS 等网络文件系统。
+
 <img src="./assets/message_queque_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## 为什么需要消息队列？
