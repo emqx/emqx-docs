@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-scopes), Dashboard users have four additional scopes that apply only to browser sessions:
+You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-api-key-scopes), Dashboard users have 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -40,28 +40,45 @@ Starting from EMQX 5.10, you can assign scopes to Dashboard login users to furth
 
 Three of these scopes (`user_management`, `sso_management`, and `api_key_management`) require the Administrator role and cannot be assigned to Viewers. The exception is `mfa_management`: Viewers can hold it, but it only allows them to manage MFA on their own account. It does not grant access to other users’ MFA settings. This is useful when you want Viewer accounts to be able to re-enroll or recover their own authenticator without gaining any additional privileges.
 
-When you create or edit a user, the **Scopes** field is optional. If you leave it empty, the user receives a default scope set derived from their role:
+When you create a global user in the Dashboard, the **Namespace** option is off and **Permission Mode** is set to **Role Default Scopes** by default. Select one of the following modes:
 
-- **Administrator**: All scopes, including the four login-only ones above.
-- **Viewer**: All generic API-key scopes; `mfa_management` is only granted if you explicitly assign it.
+- **Role Default Scopes**: Use the defaults for the selected role. Changes to the role defaults take effect automatically.
+- **Privilege Scopes**: Select from `system`, `user_management`, `api_key_management`, and `sso_management`. These scopes provide administrator-equivalent capabilities.
+- **Custom Restricted Permissions**: Select from the scopes available to the role that are outside the administrator-equivalent group, such as `connections`, `publish`, `data_integration`, `monitoring`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
 
-![user_scopes](./assets/user_scopes.png)
+<img src="./assets/user_scopes.png" alt="Create a global Dashboard user and select a permission mode" style="zoom:67%;" />
 
-::: warning Treat broad scopes as administrator-equivalent
+Namespaced users use a separate scope-assignment flow, and the available scopes remain limited by their role and namespace. For configuration steps, see [Create a User with a Namespaced Role](#create-a-user-with-a-namespaced-role).
 
-The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+| User Type | Default Permissions |
+| --- | --- |
+| Global Administrator | All 14 scopes: the 10 API-key scopes and the 4 login-only scopes. |
+| Global Viewer | The 10 API-key scopes. `mfa_management` is granted only when explicitly assigned. |
+| Namespace Administrator | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, User Management, and API Key Management. |
+| Namespace Viewer | The same 10 API-key scopes as a Global Viewer. `mfa_management` is granted only when explicitly assigned. |
+
+::: warning Administrator-Equivalent Scopes Must Stand Alone
+
+The following administrator-equivalent scopes are grouped under **Privilege Scopes** in the Dashboard and referred to as `privilege scopes` in validation messages:
 
 - `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
+- `sso_management` lets the holder rotate or reconfigure an SSO backend, which can change how administrators authenticate.
 
-Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
+Each listed scope grants administrator-equivalent permissions. Combining one of these scopes with a scope outside this group would not reduce the user's effective permissions.
+
+Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of the administrator-equivalent scopes above with a scope outside this group. The create or update request returns HTTP 400, and no scope changes are applied. Assign either only administrator-equivalent scopes or only scopes outside this group, depending on the required permissions. `mfa_management` is outside the administrator-equivalent group.
+
+Users with a mixed scope list created before EMQX 6.0.4 continue to work, and their administrator-equivalent scopes remain effective. When you edit such a global user in the Dashboard, the form displays a compatibility warning and requires you to select **Privilege Scopes**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. An explicit scope list must contain either only administrator-equivalent scopes or only scopes outside this group. Using the role defaults or granting no scopes does not trigger this restriction.
+
+This mutual-exclusion rule does not apply to namespaced Dashboard administrators. These administrators can use the allowed scope combinations but can still access only operations and resources within their namespace.
 
 :::
 
 #### Role Changes and Scope Compatibility
 
-When you change a user’s role, EMQX checks whether the user’s current scopes are compatible with the new role. If they are not, the request is rejected with HTTP 400. To resolve this, include a `scopes` list in the same request that is valid for the new role.
+When you change the selected role or namespace while configuring a user in the Dashboard, the form removes scopes that are not supported by that role or namespace and displays a warning. When you use the REST API, EMQX checks whether the user's scopes are compatible with the new role. An incompatible request is rejected with HTTP 400. To resolve the error, include a `scopes` list in the same request that is valid for the new role.
 
 For example, if you demote an Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. (`mfa_management` is not admin-only and does not cause this rejection.)
 
@@ -71,7 +88,7 @@ The `dashboard.default_username` account (created with the password configured i
 
 - It **cannot be deleted** from the Dashboard or REST API. The Delete button is disabled.
 - Its role **cannot be changed** away from `administrator`.
-- Its scope set **cannot be customized**; it always retains the full administrator scope.
+- Its scope set **cannot be customized**; it always uses the full administrator permissions.
 - Its description and password **can** be edited normally.
 
 Other administrators are unaffected and can be deleted as long as at least one administrator remains in the system.
@@ -93,7 +110,7 @@ Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature ex
 
 Namespaced admin access is intended for trusted internal deployments, such as separating teams or business units within one organization, to reduce the risk of accidental cross-team configuration changes. This feature does not provide strong isolation guarantees and is not suitable as a security boundary for public or untrusted multi-tenant deployments.
 
-If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** > **Cluster Settings** > **[Rule Engine Security](./cluster_settings.md#rule-engine-security)** to validate rule-engine-managed outbound targets. For runtime network enforcement, add host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
+If you allow delegated administrators to manage namespace-scoped resources, enable SSRF protection under **Management** -> **Cluster Settings** -> **[Rule Engine Security](./cluster_settings.md#rule-engine-security)**. Starting from EMQX 6.0.4, this policy validates HTTP and MQTT connector targets only when a connector configuration is tested, created, or updated. It does not cover other connector types or runtime connections. Add host-level egress controls such as `iptables` or `nftables` to enforce a complete outbound network boundary. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules).
 
 :::
 
@@ -105,7 +122,7 @@ To learn more about the namespaces, see [Namespace](../multi-tenancy/namespace-o
 
 #### Create a User with a Namespaced Role
 
-When creating a new user in the Dashboard, you will now see a **Namespace** option.
+When creating a new user in the Dashboard, the **Namespace** option is off by default. Enable it and select a namespace to create a user with a namespaced role.
 
 ::: tip Prerequisite
 
@@ -115,13 +132,18 @@ When creating a new user in the Dashboard, you will now see a **Namespace** opti
 :::
 
 1. Navigate to **System** -> **Users** and click **+ Create**.
-2. Fill in the required fields:
+2. Configure the user:
    - **Username**: Unique identifier for the user.
    - **Note**: Optional description.
    - **Password**: User’s login password.
    - **Role**: Select either **Administrator** or **Viewer**.
-3. Toggle the **Namespace** option and select an existing namespace (for example, `namespace_01`).
-4. Click **Create** to finish.
+   - **Namespace**: Off by default. Turn it on and select an existing namespace (for example, `namespace_01`).
+   - **Use Role Default Scopes**: After you turn on **Namespace**, this field replaces the three-option **Permission Mode** field and is enabled by default. Keep it enabled to use the defaults for the selected namespaced role, or turn it off to assign explicit scopes.
+   - **Scopes**: Appears when **Use Role Default Scopes** is off. Select from the scopes that the selected role can hold in the namespace; leaving it empty grants no scopes.
+
+   <img src="./assets/create-namespaced-user.png" alt="Create a namespaced user and assign explicit scopes" style="zoom:67%;" />
+
+3. Click **Create** to finish.
 
 When creating users via the CLI or API, the role must be explicitly specified in the following format:
 
@@ -144,6 +166,7 @@ For example:
   - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
   - Delayed messages: `GET /mqtt/delayed/messages`, `GET /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:topic`
 - **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
+- **API key management**: Namespaced administrators can create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. Keys outside their namespace are hidden. For detailed REST API behavior, see [Manage API Keys as a Namespaced Administrator](../admin/api.md#manage-api-keys-as-a-namespaced-administrator).
 - **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
 - **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
 
@@ -174,7 +197,7 @@ The **SSO** page provides settings for the administrators to configure the SSO f
 
 ## Backup & Restore
 
-The **Backup & Restore** page provides settings for backing up your operating data and configuration files. You can perform data import and export operations on this page. For details of the Backup and Restore function, see [Backup and Restore](../operations/backup-restore.md).
+The **Backup & Restore** page provides settings for backing up your operating data and configuration files. Global administrators can switch between **Global** and a specific Namespace to manage backup files in that scope. When a Namespace is selected, they can upload, download, delete, and restore backup files but cannot create a backup. For details, see [Backup and Restore](../operations/backup-restore.md).
 
 ## Settings
 

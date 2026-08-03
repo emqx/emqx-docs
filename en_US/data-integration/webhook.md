@@ -61,7 +61,7 @@ This section takes macOS as an example to introduce how to configure and use Web
 
 ### Create HTTP Service
 
-Here we quickly create an HTTP server using Python, listening on the local port 8082, and print the URL when receiving a Webhook request. In actual applications, please replace it with your business server:
+Here we quickly create an HTTP server using Python, listening on the local port 5000, and print the URL when receiving a Webhook request. In actual applications, please replace it with your business server:
 
 First, we use Python to build a simple HTTP service to receive `POST /` requests. The service prints the request content and returns 200 OK:
 
@@ -116,6 +116,30 @@ python3 http_server.py
    ![EMQX Webhook](./assets/webhook.png)
 
 The webhook is now successfully created.
+
+#### Configure OAuth2 Client Credentials
+
+Starting from EMQX 6.0.4, Webhook supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX sends a Webhook request to the target HTTP server, it includes the token in the `Authorization: Bearer <access_token>` request header so that the target server can authenticate EMQX.
+
+Obtain the token endpoint, client credentials, and allowed scopes from your OAuth2 authorization server, identity provider (IdP), or target API administrator. Turn on **OAuth2 Client Credentials**, and then configure the following settings:
+
+| Dashboard Setting | Description |
+| --- | --- |
+| **Token Endpoint** | Required. OAuth2 authorization server endpoint used to request an access token. The URL must use HTTP or HTTPS and must not contain user information. |
+| **Client ID** | Required. OAuth2 client ID used to request an access token. |
+| **Client Secret** | Required. OAuth2 client secret used to request an access token. |
+| **Scope** | Optional OAuth2 scope requested for the access token. Separate multiple scopes with spaces. Leave this field empty if the authorization server does not require a scope. |
+| **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
+| **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. |
+
+EMQX sends a `POST` request with the `application/x-www-form-urlencoded` content type to the token endpoint. The request body contains `grant_type`, `client_id`, `client_secret`, and the optional `scope`. The token endpoint must return a `200` response with a JSON body containing an `access_token`. It can also return `token_type` and `expires_in`. If present, `token_type` must be `Bearer`, and `expires_in` must be a positive integer.
+
+::: warning Important Notice
+
+- Do not configure an `Authorization` header for the Webhook when OAuth2 is enabled. EMQX rejects the configuration because it conflicts with the automatically generated Bearer authorization header.
+- The token endpoint must accept the client ID and client secret as form fields in the request body. Authenticating to the token endpoint with an HTTP Basic `Authorization` header is not supported.
+
+:::
 
 ### Test Webhook
 

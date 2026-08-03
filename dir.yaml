@@ -471,6 +471,7 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
+        - data-integration/schema-registry-example-json
         - data-integration/schema-registry-example-external-http
         - data-integration/sparkplug
     - data-integration/schema-validation

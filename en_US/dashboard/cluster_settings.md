@@ -81,31 +81,31 @@ The Namespace feature in EMQX provides logical isolation for different client gr
 
 EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF).
 
-Starting from EMQX 6.0.3, the **Rule Engine Security** page lets you configure the built-in SSRF protection policy from the Dashboard. When enabled, EMQX validates outbound targets at configuration create or update time. Targets that resolve to a blocked address are rejected at that point. This check does not run at connection time, so DNS rebinding or other post-validation address changes are not covered.
+Starting from EMQX 6.0.3, the **Rule Engine Security** page lets you configure the built-in SSRF protection policy from the Dashboard. Starting from EMQX 6.0.4, the policy validates only the `url` field of HTTP connectors and the `server` field of MQTT connectors when their configurations are tested, created, or updated. A blocked target is rejected at that point.
 
-::: tip
-For runtime network enforcement and deployments with delegated administrators, the Dashboard-level SSRF policy should be supplemented with host-level egress controls such as `iptables` or `nftables`. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules) for the full guidance.
+::: warning Important Notice
+The SSRF policy does not validate other connector types, connector enable or disable operations, connector deletion, or outbound connections at runtime. A stored HTTP or MQTT connector can be enabled even if its target becomes blocked after the connector was created. Use host-level egress controls such as `iptables` or `nftables` when you need protection for other connector types, policy changes that must apply to stored connector configurations, DNS rebinding, or other runtime address changes. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules) for the full guidance.
 :::
 
 ### Enable SSRF Protection
 
-Toggle **Enable SSRF Protection** to turn the policy on or off. When enabled, EMQX validates outbound targets each time a connector, bridge, or action is created or updated. The evaluation order is:
+Toggle **Enable SSRF Protection** to turn the policy on or off. When enabled, EMQX evaluates the `url` of each HTTP connector and the `server` of each MQTT connector when the connector configuration is tested, created, or updated. The evaluation order is:
 
 1. Exact hostname match against **Denied Hostnames**: rejected immediately if matched.
 2. Resolved IPs checked against **Allowed CIDR Ranges**: allowed if matched.
 3. Resolved IPs checked against **Denied CIDR Ranges**: rejected if matched.
 
-This policy is disabled by default for compatibility with existing deployments. Enable it for all deployments unless your connectors or actions must reach internal services. In that case, review and adjust the allowed and denied CIDR ranges before enabling.
+This policy is disabled by default for compatibility with deployed configurations. Enable it when you want to prevent HTTP and MQTT connector configurations with blocked targets from passing connectivity tests or being created or updated. If these connectors must reach internal services, review and adjust the allowed and denied CIDR ranges before enabling the policy.
 
 ### Allowed CIDR Ranges
 
-A list of CIDR ranges whose resolved IP addresses are always permitted, regardless of the denied CIDR ranges. Use this field to explicitly allow specific internal subnets that your connectors must reach.
+A list of CIDR ranges whose resolved IP addresses are always permitted, regardless of the denied CIDR ranges. Use this field to explicitly allow specific internal subnets that your HTTP or MQTT connectors must reach.
 
 If a resolved IP matches an entry in this list, it bypasses the denied CIDR check.
 
 ### Denied CIDR Ranges
 
-A list of CIDR ranges that EMQX will refuse to connect to. The default set covers addresses that are commonly abused in SSRF attacks:
+A list of CIDR ranges that EMQX rejects when an HTTP or MQTT connector configuration is tested, created, or updated. The default set covers addresses that are commonly abused in SSRF attacks:
 
 | CIDR | Description |
 |---|---|
@@ -126,11 +126,11 @@ A list of CIDR ranges that EMQX will refuse to connect to. The default set cover
 Removing entries from the default rejected CIDR list may expose EMQX to SSRF attacks. Only remove an entry if you have a specific operational requirement and understand the security implications.
 :::
 
-If your connectors must reach an address in the default denied list (for example, AWS connectors that retrieve credentials from the instance metadata service at `169.254.169.254`), add that address to **Allowed CIDR Ranges** rather than removing it from the denied list. The allowed list takes precedence.
+If an HTTP or MQTT connector must reach an address in the default denied list, add that address to **Allowed CIDR Ranges** rather than removing it from the denied list. The allowed list takes precedence.
 
 ### Denied Hostnames
 
-A list of hostnames that EMQX will refuse to connect to regardless of their resolved IP address. Hostname matching is exact and case-insensitive. This field is useful for blocking known cloud metadata endpoints by name.
+A list of hostnames that EMQX rejects when an HTTP or MQTT connector configuration is tested, created, or updated, regardless of the resolved IP address. Hostname matching is exact and case-insensitive. This field is useful for blocking known cloud metadata endpoints by name.
 
 Click **Save Changes** to apply the changes.
 
