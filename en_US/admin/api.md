@@ -233,6 +233,8 @@ Once you have the bearer token, include it in the `Authorization` header of your
 
 ## API Key Management
 
+This section describes how to create and manage API keys and configure their roles, namespaces, and scopes.
+
 ### Create API Keys
 
 #### Dashboard
@@ -246,11 +248,11 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
    - **Is Enable**: Defaults to enabled.
    - **Role**: Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
    - **Namespace**: The switch is off by default. For a global administrator, leaving it off creates a global API key. Turn it on and select a namespace to create the key in that namespace. A namespaced administrator can create keys only in their own namespace.
-   - **Permission Mode**: For an Administrator or Viewer key, select how to assign scopes:
+   - **Permission Mode**: For an Administrator or Viewer key, select how to assign scopes. This field is not displayed for Publisher keys, which use the role-default `publish` scope. For scope behavior and restrictions, see [API Scopes](#api-scopes).
      - **Role Default Scopes**: Use the defaults for the selected role. Changes to the role defaults take effect automatically.
      - **System-level Permissions**: Grant only the `system` scope.
-     - **Custom Restricted Permissions**: Select one or more non-system scopes. If you leave **Scopes** empty, the key cannot access scope-protected APIs.
-   - **Scopes**: Appears when you select **Custom Restricted Permissions**. Select the scopes to grant. See [API Scopes](#api-scopes).
+     - **Custom Restricted Permissions**: Select one or more scopes to limit which API areas the key can access. If you leave **Scopes** empty, the key cannot access scope-protected APIs.
+   - **Scopes**: Appears when you select **Custom Restricted Permissions**. Select the scopes to grant.
    - **Note**: Optionally enter a description for the key.
 3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
 
@@ -263,8 +265,6 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 4. Click **Close** to dismiss the dialog.
 
 **Permission Mode** is available only in the Dashboard. When using the REST API, configure the `scopes` field directly. For details, see [Default Behavior of `scopes`](#default-behavior-of-scopes).
-
-The **Permission Mode** field is not displayed for Publisher keys. A Publisher key uses the role-default `publish` scope.
 
 You can view key details by clicking its name. Use the **Edit** button to change its expiration, status, role, permission mode, scopes, or note. Use the **Delete** button to remove the key.
 
@@ -322,7 +322,7 @@ integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 ```
 
-Starting from EMQX 6.0.4, the bootstrap loader handles mixed scope lists leniently. If an entry combines `system` with other scopes, EMQX removes `system`, keeps the other scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400.
+Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if a bootstrap entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes, keeps the remaining scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400 and does not apply any scope changes.
 
 API keys created this way are valid indefinitely.
 
@@ -355,7 +355,7 @@ The REST API implements role-based access control. When creating an API key, you
 
 ### API Scopes
 
-Scopes are a per-key permission dimension introduced in EMQX 5.10 that declare which business areas of the REST API a key is allowed to reach. Scopes and [Roles and Permissions](#roles-and-permissions) are independent of each other and enforced together, forming two separate layers of access control:
+Scopes are a per-key permission dimension that declares which business areas of the REST API a key is allowed to reach. Scopes and [Roles and Permissions](#roles-and-permissions) are independent of each other and enforced together, forming two separate layers of access control:
 
 | Dimension | Purpose | Granularity |
 | --------- | ------- | ----------- |
@@ -372,7 +372,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-EMQX 5.10 ships with 10 scopes for API keys. Starting from EMQX 6.0.4, an explicit scope list cannot combine `system` with any other API-key scope:
+EMQX provides 10 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -387,13 +387,13 @@ EMQX 5.10 ships with 10 scopes for API keys. Starting from EMQX 6.0.4, an explic
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
 
-::: warning `system` Must Stand Alone
+::: warning Do Not Mix Administrator-Equivalent and Restricted Scopes
 
-The `system` scope (referred to as a `privilege scope` in EMQX validation messages) covers configuration-management endpoints (`/configs*`, `/data/*`, `/listeners*`, ...). A key holding `system` can update any configuration subtree or restore EMQX data from backup archives. Either action can change settings that finer-grained scopes, such as `audit`, `access_control`, or `monitoring`, would normally protect.
+EMQX classifies `system`, `user_management`, `api_key_management`, and `sso_management` as administrator-equivalent scopes, referred to as `privilege scopes` in validation messages. Combining these scopes with restricted scopes would not reduce the account's effective permissions. Of the four scopes, only `system` can be assigned to API keys; the other three are described under [Login-Only Scopes](#login-only-scopes).
 
-Starting from EMQX 6.0.4, creating or updating an API key with an explicit scope list that combines `system` with another scope returns HTTP 400. Assign `system` alone to a key that requires administrator-equivalent access, or omit `system` and assign only the scopes required for least-privilege access.
+Therefore, starting from EMQX 6.0.4, an explicit scope list used to create or update an API key must contain either `system` alone or scopes that do not include `system`. A mixed list returns HTTP 400, and no changes are applied.
 
-API keys with a mixed scope list created before EMQX 6.0.4 continue to work. When you edit such a key in the Dashboard, the form displays a compatibility warning and requires you to select **System-level Permissions**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. A subsequent request that explicitly submits a scope list must use either `system` alone or a list that does not include `system`. When `scopes` is omitted, an update keeps the stored setting and a create request uses the selected role's defaults. An empty list `[]` remains the deny-all setting.
+Existing mixed scope lists continue to work, with `system` remaining effective. The next explicit scope update must use either `system` alone or a list that does not include `system`. When such a key is edited in the Dashboard, the user is prompted to select a permission mode before saving.
 
 :::
 

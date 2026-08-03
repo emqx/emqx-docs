@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-Starting from EMQX 5.10, you can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-api-key-scopes), Dashboard users have 4 additional scopes that apply only to browser sessions:
+You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../admin/api.md#built-in-api-key-scopes), Dashboard users have 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -44,7 +44,7 @@ When you create a global user in the Dashboard, the **Namespace** option is off 
 
 - **Role Default Scopes**: Use the defaults for the selected role. Changes to the role defaults take effect automatically.
 - **Privilege Scopes**: Select from `system`, `user_management`, `api_key_management`, and `sso_management`. These scopes provide administrator-equivalent capabilities.
-- **Custom Restricted Permissions**: Select from the non-privilege scopes available to the role, such as `connections`, `publish`, `data_integration`, `monitoring`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
+- **Custom Restricted Permissions**: Select from the scopes available to the role that are outside the administrator-equivalent group, such as `connections`, `publish`, `data_integration`, `monitoring`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
 
 <img src="./assets/user_scopes.png" alt="Create a global Dashboard user and select a permission mode" style="zoom:67%;" />
 
@@ -66,9 +66,11 @@ The following administrator-equivalent scopes are grouped under **Privilege Scop
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
 - `sso_management` lets the holder rotate or reconfigure an SSO backend, which can change how administrators authenticate.
 
-Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of the administrator-equivalent scopes above with other scopes. The create or update request returns HTTP 400. Assign either only administrator-equivalent scopes or only other scopes, depending on the required permissions. `mfa_management` is not administrator-equivalent.
+Each listed scope grants administrator-equivalent permissions. Combining one of these scopes with a scope outside this group would not reduce the user's effective permissions.
 
-Users with a mixed scope list created before EMQX 6.0.4 continue to work. When you edit such a global user in the Dashboard, the form displays a compatibility warning and requires you to select **Privilege Scopes**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. An explicit scope list must contain either only administrator-equivalent scopes or only other scopes. Using the role defaults or granting no scopes does not trigger this restriction.
+Starting from EMQX 6.0.4, an explicit scope list for a global Dashboard user cannot combine any of the administrator-equivalent scopes above with a scope outside this group. The create or update request returns HTTP 400, and no scope changes are applied. Assign either only administrator-equivalent scopes or only scopes outside this group, depending on the required permissions. `mfa_management` is outside the administrator-equivalent group.
+
+Users with a mixed scope list created before EMQX 6.0.4 continue to work, and their administrator-equivalent scopes remain effective. When you edit such a global user in the Dashboard, the form displays a compatibility warning and requires you to select **Privilege Scopes**, **Custom Restricted Permissions**, or **Role Default Scopes** before saving. An explicit scope list must contain either only administrator-equivalent scopes or only scopes outside this group. Using the role defaults or granting no scopes does not trigger this restriction.
 
 This mutual-exclusion rule does not apply to namespaced Dashboard administrators. These administrators can use the allowed scope combinations but can still access only operations and resources within their namespace.
 
