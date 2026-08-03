@@ -1,10 +1,10 @@
-# Schema Registry Example - JSON Schema
+# スキーマレジストリの例 - JSON Schema
 
-This page demonstrates how to register a draft 2020-12 JSON Schema in Schema Registry and use the `schema_check` function in a rule to validate MQTT message payloads. The example republishes only payloads that conform to the schema.
+このページでは、スキーマレジストリに draft 2020-12 JSON Schema を登録し、ルール内で `schema_check` 関数を使用して MQTT メッセージのペイロードを検証する方法を示します。この例では、スキーマに準拠したペイロードのみを再パブリッシュします。
 
-## Supported JSON Schema Drafts
+## 対応している JSON Schema ドラフト
 
-Starting from EMQX 6.0.4, Schema Registry supports the following JSON Schema drafts:
+EMQX 6.0.4 以降、スキーマレジストリは以下の JSON Schema ドラフトをサポートしています。
 
 - draft-03
 - draft-04
@@ -12,27 +12,27 @@ Starting from EMQX 6.0.4, Schema Registry supports the following JSON Schema dra
 - draft 2019-09
 - draft 2020-12
 
-EMQX selects the JSON Schema version based on the value of the `$schema` field. If `$schema` is omitted, EMQX uses draft-06.
+EMQX は `$schema` フィールドの値に基づいて JSON Schema のバージョンを選択します。`$schema` が省略された場合は draft-06 を使用します。
 
-Support for draft 2019-09 and draft 2020-12 has the following limitations:
+draft 2019-09 および draft 2020-12 のサポートには以下の制限があります。
 
-- Draft 2019-09 does not support `$recursiveRef`.
-- Draft 2020-12 does not support `$dynamicRef`.
-- References to remote schemas are not supported for these two drafts.
+- draft 2019-09 は `$recursiveRef` をサポートしていません。
+- draft 2020-12 は `$dynamicRef` をサポートしていません。
+- これら2つのドラフトではリモートスキーマへの参照はサポートされていません。
 
-If a schema uses an unsupported keyword, validation returns an error instead of silently ignoring the keyword.
+サポートされていないキーワードがスキーマに含まれている場合、検証はエラーを返し、キーワードを無視することはありません。
 
-## Create a JSON Schema
+## JSON Schema の作成
 
-Create a schema that accepts an array containing exactly two integers:
+正確に2つの整数を含む配列を受け入れるスキーマを作成します。
 
-1. In the EMQX Dashboard, click **Smart Data Hub** -> **Schema Registry** in the left navigation menu.
-2. On the **Internal** tab, click **Create**.
-3. Configure the following fields:
+1. EMQX ダッシュボードの左側ナビゲーションメニューで **Smart Data Hub** -> **Schema Registry** をクリックします。
+2. **Internal** タブで **Create** をクリックします。
+3. 以下の項目を設定します。
 
-   - **Name**: Enter `json_array`.
-   - **Type**: Select **JSON Schema**.
-   - **Schema**: Enter the following draft 2020-12 schema:
+   - **Name**: `json_array` と入力します。
+   - **Type**: **JSON Schema** を選択します。
+   - **Schema**: 以下の draft 2020-12 スキーマを入力します。
 
      ```json
      {
@@ -47,18 +47,18 @@ Create a schema that accepts an array containing exactly two integers:
      }
      ```
 
-4. Click **Create**.
+4. **Create** をクリックします。
 
-The `prefixItems` array defines the schema for each position. The local `$ref` makes the second item use the same integer schema as the first item. `minItems` and `maxItems` require the payload to contain exactly two items.
+`prefixItems` 配列は各位置のスキーマを定義します。ローカル `$ref` により、2番目の要素も1番目の要素と同じ整数スキーマを使用します。`minItems` と `maxItems` はペイロードが正確に2つの要素を含むことを要求します。
 
-## Create a Rule
+## ルールの作成
 
-Create a rule that republishes messages only when the payload conforms to `json_array`:
+ペイロードが `json_array` に準拠する場合にのみメッセージを再パブリッシュするルールを作成します。
 
-1. In the Dashboard, click **Integration** -> **Rules** in the left navigation menu.
-2. On the **Rules** page, click **Create**.
-3. Enter `validate_json_array` in the **Name** field.
-4. Enter the following statement in the **SQL Editor**:
+1. ダッシュボードの左側ナビゲーションメニューで **Integration** -> **Rules** をクリックします。
+2. **Rules** ページで **Create** をクリックします。
+3. **Name** フィールドに `validate_json_array` と入力します。
+4. **SQL Editor** に以下のステートメントを入力します。
 
    ```sql
    SELECT *
@@ -66,36 +66,36 @@ Create a rule that republishes messages only when the payload conforms to `json_
    WHERE schema_check('json_array', payload)
    ```
 
-   The `schema_check` function returns `true` when the payload conforms to `json_array`. Otherwise, it returns `false`, and the rule does not execute its action.
+   `schema_check` 関数はペイロードが `json_array` に準拠する場合に `true` を返します。そうでない場合は `false` を返し、ルールはアクションを実行しません。
 
-5. Click **Add Action**, and select **Republish**.
-6. Enter `validated/json` in the **Topic** field and `${payload}` in the **Payload** field.
-7. Click **Create**.
+5. **Add Action** をクリックし、**Republish** を選択します。
+6. **Topic** フィールドに `validated/json`、**Payload** フィールドに `${payload}` と入力します。
+7. **Create** をクリックします。
 
-## Test the Rule
+## ルールのテスト
 
-Use MQTTX CLI to verify the rule:
+MQTTX CLI を使用してルールを検証します。
 
-1. Subscribe to the republish topic:
+1. 再パブリッシュ先のトピックをサブスクライブします。
 
    ```bash
    mqttx sub -t validated/json
    ```
 
-2. In another terminal, publish a payload that conforms to the schema:
+2. 別のターミナルでスキーマに準拠したペイロードをパブリッシュします。
 
    ```bash
    mqttx pub -t t/json -m '[1, 2]'
    ```
 
-   The subscriber receives `[1, 2]` from the `validated/json` topic.
+   サブスクライバーは `validated/json` トピックから `[1, 2]` を受信します。
 
-3. Publish a payload whose second item is not an integer:
+3. 2番目の要素が整数でないペイロードをパブリッシュします。
 
    ```bash
    mqttx pub -t t/json -m '[1, "two"]'
    ```
 
-   The rule does not execute the republish action, and the subscriber receives no message.
+   ルールは再パブリッシュアクションを実行せず、サブスクライバーはメッセージを受信しません。
 
-Using `schema_check` in a rule filters rule execution but does not reject the original MQTT message. To reject or discard nonconforming messages, use [Schema Validation](./schema-validation.md).
+ルール内での `schema_check` の使用はルールの実行をフィルタリングしますが、元の MQTT メッセージを拒否するわけではありません。非準拠メッセージを拒否または破棄するには、[スキーマ検証](./schema-validation.md) を使用してください。
