@@ -79,11 +79,11 @@ The offset is calculated based on the numeric suffix of the node's name. If the 
 
 ## Mitigate SSRF with Rule Engine Policy and Firewall Rules
 
-EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF). EMQX provides two complementary defenses: a built-in rule engine SSRF policy that validates targets at configuration time, and host-level egress filtering that enforces network boundaries at runtime.
+EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF). EMQX provides two complementary defenses: a built-in rule engine SSRF policy with limited connector coverage, and host-level egress filtering that enforces network boundaries across connector types at runtime.
 
-### Use `rule_engine.ssrf` as the First Line of Defense
+### Use `rule_engine.ssrf` for HTTP and MQTT Connectors
 
-Starting from EMQX `6.0.3`, `6.1.2`, and `6.2.1`, EMQX provides a cluster-level SSRF policy for outbound rule engine targets such as connectors, bridges, and actions:
+Starting from EMQX `6.0.3`, EMQX provides a cluster-level SSRF policy for outbound rule engine targets. Starting from EMQX `6.0.4`, the policy applies only to the `url` field of HTTP connectors and the `server` field of MQTT connectors:
 
 ```hocon
 rule_engine {
@@ -114,23 +114,30 @@ rule_engine {
 }
 ```
 
-When enabled, EMQX validates outbound targets at configuration update time. Exact matches in `deny_hosts` are rejected immediately. Resolved IPs are checked against `allow_cidrs` first, and then against `deny_cidrs` if no allowlist match is found.
+To configure the policy in the Dashboard, see [Rule Engine Security](../../dashboard/cluster_settings.md#rule-engine-security).
 
-This policy is disabled by default for compatibility. Enable it for all deployments unless your connectors or actions must reach internal services — in that case, review and adjust `allow_cidrs` and `deny_cidrs` before enabling.
+When enabled, EMQX validates these HTTP and MQTT connector targets when a connector configuration is tested, created, or updated. Exact matches in `deny_hosts` are rejected immediately. Resolved IPs are checked against `allow_cidrs` first, and then against `deny_cidrs` if no allowlist match is found.
+
+The policy does not validate other connector types, connector enable or disable operations, connector deletion, or outbound connections at runtime. If a stored HTTP or MQTT connector target becomes blocked after the connector was created, the connector can still be enabled. Deleting a connector is also not blocked by the policy.
+
+This policy is disabled by default for compatibility. Enable it when you want to prevent HTTP and MQTT connector configurations with blocked targets from passing connectivity tests or being created or updated. If these connectors must reach internal services, review and adjust `allow_cidrs` and `deny_cidrs` before enabling the policy.
 
 ### When `rule_engine.ssrf` Alone Is Usually Enough
 
 Using `rule_engine.ssrf` alone is usually sufficient when all of the following are true:
 
-- Only trusted administrators can create or update connectors, bridges, or actions.
+- All rule engine targets that require SSRF protection use HTTP or MQTT connectors.
+- The policy is enabled before the connectors are created, and only trusted administrators can update their configurations.
 - Outbound targets are stable and expected, such as fixed SaaS endpoints or explicitly approved public services.
-- You mainly want to prevent accidental misconfiguration or obvious SSRF targets during config updates.
+- You mainly want to prevent accidental misconfiguration or obvious SSRF targets when HTTP or MQTT connector configurations are tested, created, or updated.
 - You do not rely on DNS names that could later be rebound to different addresses.
 
 ### When You Should Also Add Firewall Rules
 
 Add host-level egress filtering with `iptables`, `nftables`, cloud security groups, or Kubernetes network policies when any of the following apply:
 
+- You use connector types other than HTTP or MQTT.
+- Policy changes must apply to stored connector configurations, connector enable operations, or runtime connections.
 - Delegated administrators can configure namespace-scoped resources.
 - EMQX must not be able to reach internal services, metadata endpoints, or management networks, even if a target passes config-time validation.
 - DNS rebinding or post-validation address changes are part of your threat model.
@@ -148,7 +155,7 @@ When planning egress restrictions:
 - Validate the rules carefully in staging before applying them to production systems.
 - If EMQX runs in containers or Kubernetes, apply equivalent egress controls with the container host firewall, cloud security groups, or Kubernetes network policies.
 
-`rule_engine.ssrf` does not replace these network-layer controls. The SSRF policy validates targets only when the configuration is created or updated. Runtime network controls are still required if you need protection against DNS rebinding or any other case where the resolved address may change after validation.
+`rule_engine.ssrf` does not replace these network-layer controls. The SSRF policy validates only HTTP and MQTT connector targets when a connector configuration is tested, created, or updated. Runtime network controls are required for other connector types, stored configurations that are enabled after a policy change, DNS rebinding, and any other case where the resolved address may change after validation.
 
 The following `iptables` example shows the general approach. Adapt the interface names, ports, and destination addresses to match your environment. If `iptables` is not available on your host, apply equivalent rules with `nftables`:
 
