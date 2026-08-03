@@ -133,6 +133,12 @@ FIN-WAIT-2 Socket 超时设置:
 sysctl -w net.ipv4.tcp_fin_timeout=15
 ```
 
+减少 TCP 报文重传次数:
+
+```bash
+sysctl -w net.ipv4.tcp_retries2=5
+```
+
 ## Erlang 虚拟机参数
 
 优化设置 Erlang 虚拟机启动参数，配置文件 /etc/emqx/emqx.conf:

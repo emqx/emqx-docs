@@ -1,22 +1,31 @@
 # Schema Registry
 
-物联网设备终端种类繁杂，各厂商使用的编码格式各异，所以在接入物联网平台的时候就产生了统一数据格式的需求，以便平台之上的应用进行设备管理。
+EMQX Schema Registry 用于定义和管理 MQTT 消息 Payload 编解码及数据校验所需的 Schema。规则可以调用 Schema Registry 函数，将 Avro 或 Protobuf 等二进制 Payload 解码为规则引擎可处理的数据，将处理后的数据重新编码后发送至下游系统，或使用 JSON Schema 校验 JSON 数据。
 
-Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
-
-EMQX Schema Registry 目前可支持以下格式的 Schema：
-
-- [Avro](https://avro.apache.org)
-- [Protobuf](https://developers.google.com/protocol-buffers/)
-- [JSON Schema](https://json-schema.org/)
-
-Avro 和 Protobuf 是依赖 Schema 的数据格式，编码后的数据为二进制，解码后为 [Map 格式](#规则引擎内部数据格式-map)。解码后的数据可直接被规则引擎和其他插件使用。Schema Registry 为 Avro 和 Protobuf 等内置编码格式维护 Schema 文本。
-
-JSON Schema 可以用来验证输入的 JSON 对象是否遵循了 schema 定义，或者在将数据输出到下游之前，规则引擎输出的 JSON 对象是否有效。
+当设备与下游应用使用不同的数据格式时，可以使用 Schema Registry 集中管理 Schema 定义和自定义编解码配置，使规则以一致的数据格式处理消息，而无需在每条规则或应用中分别实现格式转换逻辑。
 
 下图展示了 Schema Registry 的一个应用案例。多个设备上报不同格式的数据，经过 Schema Registry 解码之后，变为统一的内部格式，然后转发给后台应用。
 
 <img src="./assets/schema-registry.png" alt="schema-registry" style="zoom:67%;" />
+
+## 支持的 Schema 类型
+
+EMQX Schema Registry 支持以下内部 Schema 类型：
+
+| Schema 类型 | 说明 | 示例 |
+| --- | --- | --- |
+| [Avro](https://avro.apache.org) | 将 [Map 格式](#规则引擎内部数据格式-map)的数据编码为 Avro 二进制数据，或将 Avro 二进制数据解码为 Map 格式。 | [Schema Registry Avro 示例](./schema-registry-example-avro.md) |
+| [Protobuf](https://developers.google.com/protocol-buffers/) | 将 Map 格式的数据编码为 Protobuf 二进制数据，或将 Protobuf 二进制数据解码为 Map 格式。 | [Schema Registry Protobuf 示例](./schema-registry-example-protobuf.md) |
+| [JSON Schema](https://json-schema.org/) | 验证输入的 JSON 数据或规则引擎生成的 JSON 数据是否符合 JSON Schema。 | [Schema Registry JSON Schema 示例](./schema-registry-example-json.md) |
+| External HTTP Server | 将 Payload 的编解码委托给已配置的 HTTP 服务，由该服务实现自定义编解码逻辑。 | [Schema Registry 外部 HTTP 示例](./schema-registry-example-external-http.md) |
+
+External HTTP Server 与外部 Schema Registry 是两种不同的集成。External HTTP Server 是一种内部 Schema 类型，用于将编解码操作委托给自定义 HTTP 服务。外部 Schema Registry 需要单独配置，用于在规则处理过程中从已配置的 Confluent Schema Registry 中获取 Avro Schema。详情参见[外部 Schema Registry](#外部-schema-registry)。
+
+### JSON Schema 版本支持
+
+从 EMQX 6.0.4 开始，Schema Registry 支持 JSON Schema draft-03、draft-04、draft-06、draft 2019-09 和 draft 2020-12。EMQX 根据 `$schema` 字段的值选择对应的 JSON Schema 版本。如果未指定 `$schema`，EMQX 使用 draft-06。
+
+有关完整示例和各版本的限制，参见[Schema Registry JSON Schema 示例](./schema-registry-example-json.md)。
 
 ## 架构设计
 
@@ -41,7 +50,7 @@ schema_decode(SchemaName, Bytes) -> Map
 当对 JSON 格式的 MQTT 消息进行编码时，在用 schema 编码之前，您也需要用 `json_decode` 先对其进行解码，使它变为规则引擎内部数据格式 (Map)，示例如下：
 
 ```erlang
-schema_encode(SchemaName, json_decode(Map)) -> Bytes
+schema_encode(SchemaName, json_decode(JSONData)) -> Bytes
 ```
 
 在编码前或解码后检查 JSON 数据是否可以根据 JSON schema 进行验证时，使用以下编解码验证示例：
@@ -80,7 +89,7 @@ SQL 语句的筛选结果为 `#{my_id => 1}`。
 SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
-上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x" = 1, "y" = 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
+上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x": 1, "y": 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
 
 `json_decode(payload) as p` 将 JSON 字符串解码为下面的 Map 数据结构，从而可以在 `WHERE` 子句中使用 p.x 和 p.y 使用 Map 中的字段：
 

@@ -58,6 +58,7 @@ A namespace becomes effective once it is created, regardless of whether it is cr
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
+  - Starting from EMQX 6.0.4, namespaced administrators can [manage API keys within their own namespace](../admin/api.md#manage-api-keys-as-a-namespaced-administrator). Global keys and keys in other namespaces remain inaccessible.
   - This ensures secure, tenant-specific administrative access alongside data isolation.
 - **Multi-Tenant Management**
 
@@ -67,7 +68,7 @@ A namespace becomes effective once it is created, regardless of whether it is cr
 
 Delegated namespace administrators can configure outbound targets such as connectors, bridges, and actions. Without additional controls, this could allow unintended access to internal or sensitive network destinations.
 
-Enable `rule_engine.ssrf` where available to validate rule-engine-managed outbound targets. When your deployment also requires runtime network enforcement, add egress controls on the EMQX hosts:
+Enable `rule_engine.ssrf` where available to validate HTTP and MQTT connector targets when a connector configuration is tested, created, or updated. Starting from EMQX 6.0.4, the policy does not cover other connector types or runtime connections. Add egress controls on the EMQX hosts to enforce an outbound network boundary across connector types:
 
 - Allow outbound access only to approved destinations, such as identity providers (IdPs), webhooks, or connector backends.
 - Deny access to instance metadata services, loopback addresses, link-local addresses, and internal management networks unless explicitly required. Typical metadata endpoints to block include `100.100.100.200`, `169.254.169.253`, `169.254.169.254`, and `fd00:ec2::254`.

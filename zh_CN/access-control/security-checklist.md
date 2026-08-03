@@ -33,11 +33,17 @@
 
 - 在将公共监听器暴露到生产环境之前，至少配置一种认证方式。默认情况下，如果未启用认证，EMQX 将允许所有客户端连接。详见[认证](./authn/authn.md)。
 - 优先使用每设备或每应用独立凭据，避免多个客户端共享用户名、密码或证书。
-- 在认证机制支持时，将 MQTT 客户端 ID 与认证身份绑定。例如，校验 JWT 的 `clientid` 声明、使用 [`peer_cert_as_clientid`](./authn/x509.md#证书信息映射) 映射证书字段、让 HTTP 认证器拒绝不匹配的请求，或将认证器与 [Client-Info](./authn/cinfo.md) 规则配合使用。缺少此类绑定时，泄露的凭据可能使攻击者使用随机客户端 ID 和较长的[会话过期间隔](../messaging/mqtt-concepts.md)不受限制地创建会话，导致空闲持久会话持续累积，直至耗尽 Broker 内存。
+- 在认证机制支持时，将 MQTT 客户端 ID 与认证身份绑定。例如，校验 JWT 的 `clientid` 声明、使用 [`peer_cert_as_clientid`](./authn/x509.md#证书信息映射) 映射证书字段、让 HTTP 认证器拒绝不匹配的请求，或将认证器与 [Client-Info](./authn/cinfo.md) 规则配合使用。缺少此类绑定时：
+  - 泄露的凭据可能使攻击者使用随机客户端 ID 和较长的[会话过期间隔](../messaging/mqtt-concepts.md)不受限制地创建会话，导致空闲持久会话持续累积，直至耗尽 Broker 内存。
+  - 持有任意有效凭据的攻击者如果知道受害者的客户端 ID，就可以接管受害者的会话。MQTT 仅使用客户端 ID 标识和恢复会话。当攻击者使用相同的客户端 ID 连接时，EMQX 会断开受害者客户端的连接。对于 MQTT 5.0 客户端，EMQX 会发送原因码为 `0x8E`（`Session taken over`）的 `DISCONNECT` 报文。
+  - 当 `Clean Start = 0` 时，攻击者会恢复受害者的会话并继承其已有订阅。EMQX 在创建订阅时执行授权检查，不会根据恢复会话的新身份重新检查继承的订阅。因此，攻击者可能收到其自身授权规则本应拒绝的消息。
+
+  将客户端 ID 与认证身份绑定后，认证机制会在连接阶段拒绝身份不匹配的连接，从而阻止此类会话接管。该订阅继承风险不影响发布操作，因为 EMQX 会根据当前身份对每次发布执行授权检查。
 - 根据实际信任模型选择认证机制，例如 X.509、JWT、SCRAM，或基于安全后端数据库的密码认证。
 - 使用密码认证时，应存储加盐哈希后的密码，而不是明文密码，并优先采用 `bcrypt`、`pbkdf2` 等强哈希算法。
 - 尽可能最小化主题权限范围，并谨慎审查通配符规则。详见[授权](./authz/authz.md)。
 - 当 ACL 主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时（参见[授权占位符](./authz/authz.md#authorization-placeholders)），必须对这些身份字段进行校验，禁止其包含 MQTT 主题通配符（`+`、`#`）或主题分隔符（`/`）。例如模板 `clients/${clientid}/data` 在未做校验的情况下，若客户端 ID 为 `+`，整段模板会退化为通配模式，可访问其他客户端的所有子主题；若取值为 `tenantA/+` 或含有 `/`，则会突破原本分配的主题子树范围。应在认证侧强制约束身份格式，例如通过 [Client-Info](./authn/cinfo.md) 规则、JWT 声明的正则校验或 HTTP 认证拒绝不合规的请求。应在握手阶段直接拒绝连接，而不是寄希望于 ACL 兜底处理非法替换值。
+- 在设计发往外部服务的请求时，包括 HTTP [认证](./authn/http.md)、HTTP [授权](./authz/http.md)，以及数据集成的连接器、桥接与动作，应通过 EMQX 能识别的敏感字段或请求头传递密码、令牌、密钥等敏感信息。这样，当这些数据经过 EMQX 的脱敏处理时，其中的敏感值会在相关日志、追踪和配置 API 响应中显示为 `******`，而不是明文。脱敏是依据字段名或请求头名进行的：对于放在 HTTP 请求头中的凭据，应使用标准的 `Authorization`（或 `Proxy-Authorization`）请求头，EMQX 会始终对其脱敏；对于放在其他配置字段中的密钥，应将字段命名为已识别的敏感键名，例如 `password`、`token`、`secret`、`secret_key` 或 `jwt`。非标准的自定义请求头（例如 `x-custom-secret`）或不符合约定的字段名不会被识别，其值可能在 `debug` 级别日志和错误信息中以明文出现。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
@@ -50,7 +56,7 @@
 
 - 在生产环境使用前修改 Dashboard 默认密码，并定期审查谁拥有管理权限。详见[系统](../dashboard/system.md)。
 - 仅在受信任网络上暴露 Dashboard。管理员访问应优先使用 HTTPS，并尽可能将 Dashboard 监听器绑定到 localhost、私网地址或受保护的管理网络。详见[Dashboard 配置](../configuration/dashboard.md)。
-- 在**管理** -> **集群配置** -> **规则引擎安全**中启用 SSRF 防护，以在配置更新时校验连接器、数据桥接和动作的出站目标。在允许委派管理员创建或修改规则引擎资源的部署中尤为重要。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
+- 在**管理** -> **集群配置** -> **规则引擎安全**中启用 SSRF 防护，以在测试、创建或更新 HTTP、MQTT 连接器配置时校验目标地址。从 EMQX 6.0.4 开始，该策略不覆盖其他连接器类型或运行时连接。如果允许委派管理员创建或修改规则引擎资源，或需要完整的出站网络边界，请增加主机级出站访问控制。详见[规则引擎安全](../dashboard/cluster_settings.md#规则引擎安全)和[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
 - 如果开放管理 API，应使用 API Key 而不是 Dashboard 用户凭据进行调用，只授予所需的最小权限，并尽可能设置过期时间。详见[REST API](../admin/api.md)和[系统](../dashboard/system.md#api-key)。
 - 如果您使用的是 EMQX 企业版，可为管理用户配置[单点登录（SSO）](../dashboard/sso.md)，并在身份提供方侧启用 MFA（如果可用）。
 - 定期执行备份并演练恢复流程。请注意，若证书或 ACL 文件存放在 EMQX 数据目录之外，则需要单独备份。详见[备份与恢复](../operations/backup-restore.md)。
