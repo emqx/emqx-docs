@@ -197,7 +197,7 @@ The **SSO** page provides settings for the administrators to configure the SSO f
 
 ## Backup & Restore
 
-The **Backup & Restore** page provides settings for backing up your operating data and configuration files. You can perform data import and export operations on this page. For details of the Backup and Restore function, see [Backup and Restore](../operations/backup-restore.md).
+The **Backup & Restore** page provides settings for backing up your operating data and configuration files. Global administrators can switch between **Global** and a specific Namespace to manage backup files in that scope. When a Namespace is selected, they can upload, download, delete, and restore backup files but cannot create a backup. For details, see [Backup and Restore](../operations/backup-restore.md).
 
 ## Settings
 
