@@ -22,8 +22,6 @@ Support for draft 2019-09 and draft 2020-12 has the following limitations:
 
 If a schema uses an unsupported keyword, validation returns an error instead of silently ignoring the keyword.
 
-Starting from EMQX 6.0.4, Schema Registry also treats `examples` in draft-06 as an annotation. The `examples` keyword does not affect whether an instance is valid.
-
 ## Create a JSON Schema
 
 Create a schema that accepts an array containing exactly two integers:

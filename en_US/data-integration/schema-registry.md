@@ -52,7 +52,7 @@ schema_decode(SchemaName, Bytes) -> Map
 When encoding data from MQTT messages which are JSON-encoded, you also need to decode it to the Map internal format using the `json_decode` function before encoding with the schema function.  For example:
 
 ```erlang
-schema_encode(SchemaName, json_decode(Map)) -> Bytes
+schema_encode(SchemaName, json_decode(JSONData)) -> Bytes
 ```
 
 When checking if JSON data can be validated against the JSON schema before encoding or after decoding, use the following schema validation example:
@@ -92,7 +92,7 @@ The SQL statements of the rule engine provide support for encoding and decoding 
 SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
-The SQL statement above will match an MQTT message with the content of the payload as a JSON string: `{"x" = 1, "y" = 1}`, and the topic as `t/a`.
+The SQL statement above will match an MQTT message with the content of the payload as a JSON string: `{"x": 1, "y": 1}`, and the topic as `t/a`.
 
 `json_decode(payload) as p` decodes the JSON string into the following Map data structure so that the fields in the Map can be used in the `WHERE` clause using p.x and p.y.
 

@@ -22,8 +22,6 @@ draft 2019-09 和 draft 2020-12 存在以下限制：
 
 如果 Schema 使用了不支持的关键字，验证会返回错误，不会静默忽略该关键字。
 
-从 EMQX 6.0.4 开始，Schema Registry 还会将 draft-06 中的 `examples` 作为注解处理。`examples` 关键字不影响实例是否有效。
-
 ## 创建 JSON Schema
 
 创建一个仅接受两个整数所组成数组的 Schema：

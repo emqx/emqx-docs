@@ -50,7 +50,7 @@ schema_decode(SchemaName, Bytes) -> Map
 当对 JSON 格式的 MQTT 消息进行编码时，在用 schema 编码之前，您也需要用 `json_decode` 先对其进行解码，使它变为规则引擎内部数据格式 (Map)，示例如下：
 
 ```erlang
-schema_encode(SchemaName, json_decode(Map)) -> Bytes
+schema_encode(SchemaName, json_decode(JSONData)) -> Bytes
 ```
 
 在编码前或解码后检查 JSON 数据是否可以根据 JSON schema 进行验证时，使用以下编解码验证示例：
@@ -89,7 +89,7 @@ SQL 语句的筛选结果为 `#{my_id => 1}`。
 SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
-上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x" = 1, "y" = 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
+上面这个 SQL 语句将会匹配到 payload 内容为 JSON 字符串： `{"x": 1, "y": 1}` , 并且 topic 为 `t/a` 的 MQTT 消息。
 
 `json_decode(payload) as p` 将 JSON 字符串解码为下面的 Map 数据结构，从而可以在 `WHERE` 子句中使用 p.x 和 p.y 使用 Map 中的字段：
 
