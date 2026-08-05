@@ -137,6 +137,29 @@ where:
   - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
   - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
+## Forwarded Client Address (WebSocket Listeners)
+
+WebSocket and secure WebSocket listeners have options that control how EMQX determines a client's source address when the listener sits behind a proxy or load balancer:
+
+- `websocket.proxy_address_header` (default: `x-forwarded-for`)
+- `websocket.proxy_port_header` (default: `x-forwarded-port`)
+- `websocket.proxy_address_allow` (default: `["0.0.0.0/0"]`, since 6.3.0)
+
+When the header configured by `proxy_address_header` is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port, for `proxy_port_header`) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP.
+
+`proxy_address_allow` restricts which TCP peers (proxies) are trusted to set these headers: the headers are honored only when the real TCP peer address falls within one of the listed CIDR ranges. The default `["0.0.0.0/0"]` trusts every IPv4 peer, matching the behavior of releases before 6.3.0; IPv6 peers are not trusted by default. Set it to the addresses of your proxies to trust only them, or to `[]` to never honor the headers.
+
+::: warning Trust the forwarded address header only behind a trusted proxy
+
+The header value determines the client's apparent source IP, so it must be honored only when a trusted proxy sets it:
+
+- If the listener is directly reachable by clients (no proxy in front), any client can send the header and choose its own apparent source IP. Set `proxy_address_allow = []` to never honor the headers. On releases before 6.3.0, set `proxy_address_header = ""` and `proxy_port_header = ""` instead.
+- If there is a proxy but it **appends** its observation to an inbound `X-Forwarded-For` header instead of overwriting or stripping it (appending is the default behavior of most proxies, for example NGINX's `$proxy_add_x_forwarded_for`), the leftmost entry that EMQX reads is still the one supplied by the client, so the source IP can still be spoofed — even when the proxy is in `proxy_address_allow`. Configure the proxy to overwrite the header with the address it observed, or use the [PROXY protocol](../deploy/cluster/lb.md) instead.
+- Do not try to disable the mechanism by pointing `proxy_address_header` at an unused header name: a client can send a header by any name. Use `proxy_address_allow = []` (or the empty string for the header options) instead.
+
+When `proxy_protocol = true` is set on the listener, the client address comes from the PROXY protocol handshake, and these headers are not consulted.
+:::
+
 <!--To add QUIC-->
 
 <!--To add code sample for adding multiple listeners.-->
