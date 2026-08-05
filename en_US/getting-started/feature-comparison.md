@@ -75,7 +75,6 @@ This page lists features supported across different deployment types in detail.
 | **STOMP**                  | ✅                        | ❌                              | ❌                                  |                                                              |
 | **CoAP**                   | ✅                        | ❌                              | ✅                                  |                                                              |
 | **LwM2M**                  | ✅                        | ❌                              | ❌                                  |                                                              |
-| **ExProto**                | ✅                        | ❌                              | ❌                                  |                                                              |
 | **OCPP**                   | ✅                        | ❌                              | ❌                                  |                                                              |
 | **JT/808**                 | ✅                        | ❌                              | ✅                                  |                                                              |
 | **GB/T 32960**             | ✅                        | ❌                              | ❌                                  |                                                              |

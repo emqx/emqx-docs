@@ -1005,7 +1005,6 @@
         - gateway/mqttsn
         - gateway/coap
         - gateway/lwm2m
-        - gateway/exproto
         - title_en: OCPP Gateway
           title_cn: OCPP 网关
           title_ja: OCPP ゲートウェイ

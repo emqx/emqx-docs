@@ -1485,7 +1485,6 @@ rebalance start \
 ```bash
 $ emqx ctl gateway list
 Gateway(name=coap, status=running, clients=0, started_at=2023-05-22T14:23:50.353+08:00)
-Gateway(name=exproto, status=unloaded)
 Gateway(name=lwm2m, status=unloaded)
 Gateway(name=mqttsn, status=unloaded)
 Gateway(name=stomp, status=unloaded)
@@ -1559,7 +1558,6 @@ ok
 当前默认支持的网关有如下 5 种：
 
 - coap
-- exproto
 - lwm2m
 - mqttsn
 - stomp
