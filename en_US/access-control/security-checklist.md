@@ -11,6 +11,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 - If nodes have multiple interfaces, bind Erlang distribution traffic to the private network interface only.
 - If you deploy EMQX behind a load balancer or TCP proxy, enable [Proxy Protocol](../deploy/cluster/lb.md) only on the listeners that need the real client IP address or client certificate details.
 - If Proxy Protocol is enabled for a listener, expose that address and port only to the designated proxy or load balancer. Enforce this in EMQX with `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]`, combined with network-level controls (firewall, private network, or Unix socket). Otherwise, a client that reaches the port directly can craft a PROXY v2 frame with arbitrary peer-cert fields and impersonate any identity.
+- If a WebSocket listener (`ws` or `wss`) is not behind a trusted proxy that overwrites the `x-forwarded-for` header, set `listeners.{type}.{name}.websocket.proxy_address_header = ""` (and `websocket.proxy_port_header = ""`) so that IP-based authorization rules, banned clients, flapping detection, and audit logs use the real TCP peer address. When the header is honored, the derived source IP is client-supplied unless a trusted proxy overwrites the header — a proxy that only appends to the inbound header does not protect it. See [Forwarded Client Address](../configuration/listener.md#forwarded-client-address-websocket-listeners).
 
 ## Phase 2: Erlang and Cluster
 
