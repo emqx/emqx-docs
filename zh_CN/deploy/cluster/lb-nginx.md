@@ -311,6 +311,10 @@ http {
 }
 ```
 
+::: tip
+`$proxy_add_x_forwarded_for` 会将 `$remote_addr` 追加到入站请求中已有的 `X-Forwarded-For` 请求头之后，而 EMQX 读取的是该请求头中第一个（最左侧的）条目——在追加模式下，该条目由客户端提供，可以被伪造。如果 EMQX 使用该请求头作为客户端源地址（参见 [WebSocket 监听器的转发客户端地址](../../configuration/listener.md#websocket-监听器的转发客户端地址)），请改为使用 NGINX 观察到的地址覆盖该请求头：`proxy_set_header X-Forwarded-For $remote_addr;`。
+:::
+
 ### 配置反向代理 MQTT WebSocket SSL
 
 您可以使用以下配置使 NGINX 反向代理 MQTT WebSocket 并解密 TLS 连接，将客户端加密的 MQTT 请求解密后转发至后端 MQTT 服务器，以确保通信安全性。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
