@@ -876,7 +876,6 @@ OLPはオーバーロードプロテクション（過負荷保護）を意味�
 デフォルトで以下の5つのゲートウェイが登録されています：
 
 * coap
-* exproto
 * lwm2m
 * mqttsn
 * stomp
@@ -902,7 +901,6 @@ EMQXはプラグイン可能な設計であり、より多くのゲートウェ�
 ```bash
 $ emqx ctl gateway list
 Gateway(name=coap, status=running, clients=0, started_at=2023-05-22T14:23:50.353+08:00)
-Gateway(name=exproto, status=unloaded)
 Gateway(name=lwm2m, status=unloaded)
 Gateway(name=mqttsn, status=unloaded)
 Gateway(name=stomp, status=unloaded)
