@@ -4,10 +4,10 @@ This page walks you through the process of developing custom EMQX plugins using 
 
 EMQX supports two project styles for plugin development:
 
-- **Standalone project** — developed and packaged outside the EMQX monorepo using `rebar3` only. Recommended for independent plugin development.
 - **Monorepo plugin** — developed inside the EMQX monorepo under the `plugins/` directory, using Mix (Elixir build tooling) for compile, test, and packaging workflows. Recommended when the plugin is tightly coupled with a specific EMQX version.
+- **Standalone project** — developed and packaged outside the EMQX monorepo using `rebar3` only. Recommended for independent plugin development.
 
-The following sections cover both styles. The [Standalone Plugin Development](#standalone-plugin-development) section is a complete walkthrough. The [Plugin Development Inside the EMQX Monorepo](#plugin-development-inside-the-emqx-monorepo) section describes the differences and additional requirements for the monorepo style.
+The following sections cover both styles. The [Plugin Development Inside the EMQX Monorepo](#plugin-development-inside-the-emqx-monorepo) section describes the monorepo workflow and requirements. The [Standalone Plugin Development](#standalone-plugin-development) section provides a complete walkthrough for standalone projects.
 
 ## Prerequisites
 
@@ -17,6 +17,100 @@ Before you begin, make sure you have the following:
 - A working build environment (e.g., `build_essential`), including `make`.
 - [rebar3](https://www.rebar3.org/).
 - Erlang/OTP of the same major version as the EMQX release you wish to target. For more information, see the `org.opencontainers.image.otp.version` attribute in the Docker or refer to the `.tool-versions` file for the used version (e.g., https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions). It's recommended to use [ASDF](https://asdf-vm.com/) to manage Erlang/OTP versions. Alternatively, you can pull the emqx-builder images by running [this command](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh).
+
+## Plugin Development Inside the EMQX Monorepo
+
+This style is intended for plugins tightly coupled with a specific EMQX version. Plugins live under `plugins/` in the EMQX monorepo and participate in its Mix-based build and test workflows.
+
+### Prerequisites
+
+In addition to the [general prerequisites](#prerequisites), monorepo plugins require Mix (Elixir build tooling), which is included in the monorepo. Ensure `rebar3` is available by running:
+
+```bash
+make ensure-rebar3
+```
+
+### Bootstrap
+
+1. Choose a plugin name. It must be globally unique and match the Erlang application name.
+
+2. Check out the appropriate release branch matching the target EMQX version, for example, `release-60` for EMQX 6.0.
+
+3. Generate the plugin application:
+
+   ```bash
+   cd plugins/
+   rebar3 new emqx-plugin {plugin_name}
+   ```
+
+   Alternatively, keep the plugin in a separate repository and symlink it:
+
+   ```bash
+   ln -s /path/to/{plugin_name} plugins/{plugin_name}
+   ```
+
+4. Add `mix.exs` and `VERSION`:
+
+   - Create `plugins/{plugin_name}/VERSION`, a single-line file containing the plugin version. This is the single source of truth.
+   - Create `plugins/{plugin_name}/mix.exs`. Use `plugins/emqx_username_quota/mix.exs` as a reference.
+
+   The `mix.exs` file must define:
+
+   - `project/0`: OTP app name, version (read from `VERSION`), monorepo build paths, and `emqx_plugin` metadata. The required monorepo paths are:
+     - `build_path: "../../_build"`
+     - `deps_path: "../../deps"`
+     - `lockfile: "../../mix.lock"`
+   - `application/0`: OTP metadata (for example `mod`, `extra_applications`).
+   - `deps/0`: include `{:emqx_mix, path: "../..", runtime: false}` for plugin build tooling. Set the `:emqx_mix` env to `:"emqx-enterprise-test"` in test profile and `:"emqx-enterprise"` otherwise.
+
+   For Common Test support, also define:
+
+   - `erlc_paths/0`: include `test` only in `*-test` Mix env.
+   - `erlc_options/0`: enable `{:d, :TEST}` and `{:parse_transform, :cth_readable_transform}` in `*-test` Mix env.
+   - A test-only dependency: `{:cth_readable, "1.5.1"}`.
+
+   The `emqx_plugin/0` function must return a keyword list including:
+
+   - `rel_vsn` (required, typically `version()`).
+   - `name` (optional, defaults to `app`).
+   - `rel_apps` (optional, defaults to `[app]`).
+   - `metadata` keyword list (for example, `description`, `authors`, `builder`, `repo`, `functionality`, `compatibility`). Note that the package task flattens `metadata` into top-level fields in `release.json` — it is not emitted as a nested object.
+
+### Development and Testing
+
+- Implement plugin code under `plugins/{plugin_name}/src`.
+- Add Common Test suites under `plugins/{plugin_name}/test`.
+- Run Common Tests for the plugin:
+
+  ```bash
+  make plugins/{plugin_name}-ct
+  ```
+
+For quick local integration testing without adding the plugin to EMQX boot applications:
+
+```bash
+scripts/run-plugin-dev.sh {plugin_name} [--attach]
+```
+
+### Build the Plugin Package
+
+Build the plugin package from the repository root using Mix-driven packaging:
+
+```bash
+make plugin-{plugin_name}
+```
+
+This produces a `.tar.gz` artifact under `_build/plugins/`, suitable for installation via `emqx ctl plugins`.
+
+::: tip
+
+Building a plugin package does not automatically load or start the plugin in EMQX. Manage the plugin lifecycle explicitly:
+
+```bash
+emqx ctl plugins install|enable|start
+```
+
+:::
 
 ## Standalone Plugin Development
 
@@ -403,100 +497,6 @@ The tarball includes the compiled applications (as specified in the `relx` secti
     "with_config_schema": true
 }
 ```
-
-## Plugin Development Inside the EMQX Monorepo
-
-This style is intended for plugins tightly coupled with a specific EMQX version. Plugins live under `plugins/` in the EMQX monorepo and participate in its Mix-based build and test workflows.
-
-### Prerequisites
-
-In addition to the [general prerequisites](#prerequisites), monorepo plugins require Mix (Elixir build tooling), which is included in the monorepo. Ensure `rebar3` is available by running:
-
-```bash
-make ensure-rebar3
-```
-
-### Bootstrap
-
-1. Choose a plugin name. It must be globally unique and match the Erlang application name.
-
-2. Check out the appropriate release branch matching the target EMQX version, for example, `release-60` for EMQX 6.0.
-
-3. Generate the plugin application:
-
-   ```bash
-   cd plugins/
-   rebar3 new emqx-plugin {plugin_name}
-   ```
-
-   Alternatively, keep the plugin in a separate repository and symlink it:
-
-   ```bash
-   ln -s /path/to/{plugin_name} plugins/{plugin_name}
-   ```
-
-4. Add `mix.exs` and `VERSION`:
-
-   - Create `plugins/{plugin_name}/VERSION`, a single-line file containing the plugin version. This is the single source of truth.
-   - Create `plugins/{plugin_name}/mix.exs`. Use `plugins/emqx_username_quota/mix.exs` as a reference.
-
-   The `mix.exs` file must define:
-
-   - `project/0`: OTP app name, version (read from `VERSION`), monorepo build paths, and `emqx_plugin` metadata. The required monorepo paths are:
-     - `build_path: "../../_build"`
-     - `deps_path: "../../deps"`
-     - `lockfile: "../../mix.lock"`
-   - `application/0`: OTP metadata (for example `mod`, `extra_applications`).
-   - `deps/0`: include `{:emqx_mix, path: "../..", runtime: false}` for plugin build tooling. Set the `:emqx_mix` env to `:"emqx-enterprise-test"` in test profile and `:"emqx-enterprise"` otherwise.
-
-   For Common Test support, also define:
-
-   - `erlc_paths/0`: include `test` only in `*-test` Mix env.
-   - `erlc_options/0`: enable `{:d, :TEST}` and `{:parse_transform, :cth_readable_transform}` in `*-test` Mix env.
-   - A test-only dependency: `{:cth_readable, "1.5.1"}`.
-
-   The `emqx_plugin/0` function must return a keyword list including:
-
-   - `rel_vsn` (required, typically `version()`).
-   - `name` (optional, defaults to `app`).
-   - `rel_apps` (optional, defaults to `[app]`).
-   - `metadata` keyword list (for example, `description`, `authors`, `builder`, `repo`, `functionality`, `compatibility`). Note that the package task flattens `metadata` into top-level fields in `release.json` — it is not emitted as a nested object.
-
-### Development and Testing
-
-- Implement plugin code under `plugins/{plugin_name}/src`.
-- Add Common Test suites under `plugins/{plugin_name}/test`.
-- Run Common Tests for the plugin:
-
-  ```bash
-  make plugins/{plugin_name}-ct
-  ```
-
-For quick local integration testing without adding the plugin to EMQX boot applications:
-
-```bash
-scripts/run-plugin-dev.sh {plugin_name} [--attach]
-```
-
-### Build the Plugin Package
-
-Build the plugin package from the repository root using Mix-driven packaging:
-
-```bash
-make plugin-{plugin_name}
-```
-
-This produces a `.tar.gz` artifact under `_build/plugins/`, suitable for installation via `emqx ctl plugins`.
-
-::: tip
-
-Building a plugin package does not automatically load or start the plugin in EMQX. Manage the plugin lifecycle explicitly:
-
-```bash
-emqx ctl plugins install|enable|start
-```
-
-:::
 
 ## Plugin Extended API and UI
 

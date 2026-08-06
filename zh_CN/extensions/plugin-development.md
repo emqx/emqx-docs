@@ -4,10 +4,10 @@
 
 EMQX 支持两种插件开发方式：
 
-- **独立项目**：在 EMQX monorepo 之外独立开发和打包，仅使用 `rebar3`。适合独立开发插件的场景。
 - **Monorepo 插件**：在 EMQX monorepo 的 `plugins/` 目录下开发，使用 Mix（Elixir 构建工具）完成编译、测试和打包流程。适合插件与特定 EMQX 版本紧密耦合的场景。
+- **独立项目**：在 EMQX monorepo 之外独立开发和打包，仅使用 `rebar3`。适合独立开发插件的场景。
 
-以下章节涵盖两种方式。[独立插件开发](#独立插件开发)是完整的操作指南；[在 EMQX Monorepo 中开发插件](#在-emqx-monorepo-中开发插件)介绍 Monorepo 方式的差异与额外要求。
+以下章节涵盖两种方式。[在 EMQX Monorepo 中开发插件](#在-emqx-monorepo-中开发插件)介绍 Monorepo 方式的工作流与要求；[独立插件开发](#独立插件开发)提供独立项目的完整操作指南。
 
 ## 前提条件
 
@@ -17,6 +17,100 @@ EMQX 支持两种插件开发方式：
 - 已配置构建环境（例如已安装 `build-essential` 和 `make`）。
 - 安装了 [rebar3](https://www.rebar3.org/)。
 - 安装了与目标 EMQX 版本相同主版本号的 Erlang/OTP。你可以查看 Docker 镜像中的 `org.opencontainers.image.otp.version` 标签，或参考 [.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions) 文件以获取使用的版本号。建议使用 [ASDF](https://asdf-vm.com/) 管理 Erlang 版本，或运行[这个脚本](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)拉取 emqx-builder 镜像。
+
+## 在 EMQX Monorepo 中开发插件
+
+本方式适合与特定 EMQX 版本紧密耦合的插件。插件存放在 EMQX monorepo 的 `plugins/` 目录下，参与基于 Mix 的构建和测试工作流。
+
+### 前提条件
+
+除[通用前提条件](#前提条件)外，Monorepo 插件还需要 Mix（Elixir 构建工具），已内置于 monorepo 中。运行以下命令确保 `rebar3` 可用：
+
+```bash
+make ensure-rebar3
+```
+
+### 初始化步骤
+
+1. **选择插件名称**：必须全局唯一，且须与 Erlang 应用名称一致。
+
+2. **切换到对应的发布分支**，与目标 EMQX 版本匹配。例如，针对 EMQX 6.0 的开发请切换到 `release-60` 分支。
+
+3. **生成插件应用骨架**：
+
+   ```bash
+   cd plugins/
+   rebar3 new emqx-plugin {plugin_name}
+   ```
+
+   也可以将插件保存在独立仓库中，通过软链接引入：
+
+   ```bash
+   ln -s /path/to/{plugin_name} plugins/{plugin_name}
+   ```
+
+4. **添加 `mix.exs` 和 `VERSION` 文件**：
+
+   - 创建 `plugins/{plugin_name}/VERSION`，单行文件，内容为插件版本号，是版本的唯一来源。
+   - 创建 `plugins/{plugin_name}/mix.exs`，可参考 `plugins/emqx_username_quota/mix.exs`。
+
+   `mix.exs` 文件必须定义：
+
+   - `project/0`：OTP 应用名称、版本（从 `VERSION` 读取）、monorepo 构建路径及 `emqx_plugin` 元数据。必填的 monorepo 路径为：
+     - `build_path: "../../_build"`
+     - `deps_path: "../../deps"`
+     - `lockfile: "../../mix.lock"`
+   - `application/0`：OTP 元数据（例如 `mod`、`extra_applications`）。
+   - `deps/0`：包含 `{:emqx_mix, path: "../..", runtime: false}` 以启用插件构建工具。`:emqx_mix` 的 env 在测试 profile 中设置为 `:"emqx-enterprise-test"`，其他情况设置为 `:"emqx-enterprise"`。
+
+   如需支持 Common Test，还需定义：
+
+   - `erlc_paths/0`：仅在 `*-test` Mix env 中包含 `test` 目录。
+   - `erlc_options/0`：在 `*-test` Mix env 中启用 `{:d, :TEST}` 和 `{:parse_transform, :cth_readable_transform}`。
+   - 仅测试环境的依赖：`{:cth_readable, "1.5.1"}`。
+
+   `emqx_plugin/0` 函数需返回一个关键字列表，包含：
+
+   - `rel_vsn`（必填，通常为 `version()`）。
+   - `name`（可选，默认值为 `app`）。
+   - `rel_apps`（可选，默认值为 `[app]`）。
+   - `metadata` 关键字列表（例如 `description`、`authors`、`builder`、`repo`、`functionality`、`compatibility`）。注意：打包任务会将 `metadata` 中的字段展开为 `release.json` 的顶层字段，而非嵌套对象。
+
+### 开发与测试
+
+- 在 `plugins/{plugin_name}/src` 下实现插件代码。
+- 在 `plugins/{plugin_name}/test` 下添加 Common Test 测试套件。
+- 运行插件的 Common Test 测试：
+
+  ```bash
+  make plugins/{plugin_name}-ct
+  ```
+
+如需快速本地集成测试（无需将插件添加到 EMQX 启动应用列表中）：
+
+```bash
+scripts/run-plugin-dev.sh {plugin_name} [--attach]
+```
+
+### 构建插件发布包
+
+从 monorepo 根目录运行以下命令，使用 Mix 打包插件：
+
+```bash
+make plugin-{plugin_name}
+```
+
+该命令会在 `_build/plugins/` 下生成 `.tar.gz` 文件，可通过 `emqx ctl plugins` 命令安装。
+
+::: tip
+
+构建插件发布包不会自动加载或启动插件。需手动管理插件生命周期：
+
+```bash
+emqx ctl plugins install|enable|start
+```
+
+:::
 
 ## 独立插件开发
 
@@ -397,100 +491,6 @@ tar 包中包含：
   "with_config_schema": true
 }
 ```
-
-## 在 EMQX Monorepo 中开发插件
-
-本方式适合与特定 EMQX 版本紧密耦合的插件。插件存放在 EMQX monorepo 的 `plugins/` 目录下，参与基于 Mix 的构建和测试工作流。
-
-### 前提条件
-
-除[通用前提条件](#前提条件)外，Monorepo 插件还需要 Mix（Elixir 构建工具），已内置于 monorepo 中。运行以下命令确保 `rebar3` 可用：
-
-```bash
-make ensure-rebar3
-```
-
-### 初始化步骤
-
-1. **选择插件名称**：必须全局唯一，且须与 Erlang 应用名称一致。
-
-2. **切换到对应的发布分支**，与目标 EMQX 版本匹配。例如，针对 EMQX 6.0 的开发请切换到 `release-60` 分支。
-
-3. **生成插件应用骨架**：
-
-   ```bash
-   cd plugins/
-   rebar3 new emqx-plugin {plugin_name}
-   ```
-
-   也可以将插件保存在独立仓库中，通过软链接引入：
-
-   ```bash
-   ln -s /path/to/{plugin_name} plugins/{plugin_name}
-   ```
-
-4. **添加 `mix.exs` 和 `VERSION` 文件**：
-
-   - 创建 `plugins/{plugin_name}/VERSION`，单行文件，内容为插件版本号，是版本的唯一来源。
-   - 创建 `plugins/{plugin_name}/mix.exs`，可参考 `plugins/emqx_username_quota/mix.exs`。
-
-   `mix.exs` 文件必须定义：
-
-   - `project/0`：OTP 应用名称、版本（从 `VERSION` 读取）、monorepo 构建路径及 `emqx_plugin` 元数据。必填的 monorepo 路径为：
-     - `build_path: "../../_build"`
-     - `deps_path: "../../deps"`
-     - `lockfile: "../../mix.lock"`
-   - `application/0`：OTP 元数据（例如 `mod`、`extra_applications`）。
-   - `deps/0`：包含 `{:emqx_mix, path: "../..", runtime: false}` 以启用插件构建工具。`:emqx_mix` 的 env 在测试 profile 中设置为 `:"emqx-enterprise-test"`，其他情况设置为 `:"emqx-enterprise"`。
-
-   如需支持 Common Test，还需定义：
-
-   - `erlc_paths/0`：仅在 `*-test` Mix env 中包含 `test` 目录。
-   - `erlc_options/0`：在 `*-test` Mix env 中启用 `{:d, :TEST}` 和 `{:parse_transform, :cth_readable_transform}`。
-   - 仅测试环境的依赖：`{:cth_readable, "1.5.1"}`。
-
-   `emqx_plugin/0` 函数需返回一个关键字列表，包含：
-
-   - `rel_vsn`（必填，通常为 `version()`）。
-   - `name`（可选，默认值为 `app`）。
-   - `rel_apps`（可选，默认值为 `[app]`）。
-   - `metadata` 关键字列表（例如 `description`、`authors`、`builder`、`repo`、`functionality`、`compatibility`）。注意：打包任务会将 `metadata` 中的字段展开为 `release.json` 的顶层字段，而非嵌套对象。
-
-### 开发与测试
-
-- 在 `plugins/{plugin_name}/src` 下实现插件代码。
-- 在 `plugins/{plugin_name}/test` 下添加 Common Test 测试套件。
-- 运行插件的 Common Test 测试：
-
-  ```bash
-  make plugins/{plugin_name}-ct
-  ```
-
-如需快速本地集成测试（无需将插件添加到 EMQX 启动应用列表中）：
-
-```bash
-scripts/run-plugin-dev.sh {plugin_name} [--attach]
-```
-
-### 构建插件发布包
-
-从 monorepo 根目录运行以下命令，使用 Mix 打包插件：
-
-```bash
-make plugin-{plugin_name}
-```
-
-该命令会在 `_build/plugins/` 下生成 `.tar.gz` 文件，可通过 `emqx ctl plugins` 命令安装。
-
-::: tip
-
-构建插件发布包不会自动加载或启动插件。需手动管理插件生命周期：
-
-```bash
-emqx ctl plugins install|enable|start
-```
-
-:::
 
 ## 插件扩展 API 与 UI
 
