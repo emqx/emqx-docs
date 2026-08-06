@@ -4,6 +4,12 @@ EMQX provides a series of observability-related features to help with system mon
 
 **Monitoring**:
 
+- [Production Monitoring Best Practices](./monitoring-best-practices.md)
+
+  Set up external monitoring and early-warning alerts so operators can respond
+  to availability, capacity, resource, and message-delivery risks before they
+  cause an outage.
+
 - [Metrics](./metrics-and-stats.md)
 
   EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. Users can use the EMQX Dashboard, HTTP API, and system topics to trace the metrics data. 
@@ -39,6 +45,5 @@ EMQX provides a series of observability-related features to help with system mon
 - [Log Trace](./tracer.md)
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
-
 
 

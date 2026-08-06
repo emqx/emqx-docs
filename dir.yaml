@@ -845,6 +845,11 @@
       path: observability/overview
       collapsed: true
       children:
+        - title_en: Production Monitoring Best Practices
+          title_cn: Production Monitoring Best Practices
+          title_ja: Production Monitoring Best Practices
+          path: observability/monitoring-best-practices
+          lang: en
         - observability/metrics-and-stats
         - observability/alarms
         - observability/log

@@ -1,0 +1,286 @@
+# Production Monitoring Best Practices
+
+Monitoring EMQX only from the Dashboard is not sufficient for a production
+deployment. The Dashboard shows the current state, but it cannot notify you if
+the broker or the host running it becomes unavailable. A production monitoring
+system should detect loss of service, loss of redundancy, and resource
+exhaustion early enough for operators to act.
+
+This page provides a starting point for monitoring and alerting. The example
+thresholds are not universal limits. Adjust them to your service-level
+objectives (SLOs), tested capacity, traffic patterns, and recovery time.
+
+## Recommended Monitoring Design
+
+Use several independent sources of health information:
+
+1. **Export EMQX metrics to an external monitoring system.**
+   [Prometheus Pull mode](./prometheus.md#configure-pull-mode-integration) is
+   recommended for comprehensive monitoring. Scrape every EMQX node directly,
+   rather than scraping through a load balancer, so that a failed or isolated
+   node cannot be hidden by a healthy node. Monitor the Prometheus `up` metric
+   for every target.
+2. **Forward EMQX built-in alarms.** Configure the alarm thresholds for your
+   environment and send alarm events to an external notification system by
+   using a [Webhook or system topic](./alarms.md#get-alarms). Do not rely on an
+   operator noticing an alarm in the Dashboard.
+3. **Run an end-to-end MQTT check from outside the cluster.** A synthetic client
+   should connect through the same load balancer, TLS listener, and
+   authentication path as production clients, publish a uniquely identified
+   message, receive it on a subscription, and measure the total latency. This
+   detects failures that broker metrics alone cannot detect.
+4. **Monitor the host or container platform.** EMQX does not replace operating
+   system, Kubernetes, or cloud-provider monitoring. Collect CPU throttling,
+   memory pressure, disk capacity and latency, file descriptor use, network
+   errors, container restarts, and time synchronization status.
+5. **Collect logs centrally.** Send warning, error, and critical logs from every
+   node to storage outside the EMQX cluster. Prefer JSON-formatted logs so that
+   alert rules can match the structured `msg`, `node`, and other context fields.
+   Logs reveal some conditions that are not represented by a metric or built-in
+   alarm.
+6. **Keep monitoring independent of EMQX.** The monitoring and notification
+   path must remain available when an EMQX node, availability zone, or the
+   entire cluster is unavailable.
+
+::: tip
+
+Collect metrics at a shorter interval than the required detection time. For
+example, a 15-second scrape interval and an alert after two consecutive failures
+normally detects an unreachable target in less than one minute without paging
+on a single missed scrape.
+
+:::
+
+## Leading Indicators to Monitor
+
+Preventive alerts should detect a deteriorating condition while the cluster is
+still serving traffic. Use a warning threshold that leaves time for
+investigation and maintenance, and a critical threshold for conditions that
+require immediate action.
+
+| Concern | Suggested early-warning condition | Relevant signals | Typical response |
+| --- | --- | --- | --- |
+| MRIA replication pressure | Replication lag or queues stay above their normal peak, or continue growing instead of draining | On Replicant nodes: `emqx_mria_lag`, `emqx_mria_message_queue_len`, and `emqx_mria_replayq_len`. On Core nodes: `emqx_mria_server_mql` and `emqx_mria_weight` | Correlate the metric change with logs from both the Replicant and its upstream Core node. Look for lag-collection failures, busy distribution ports, long scheduler pauses, Mnesia overload, and MRIA replication errors. Then check network latency and loss, CPU, and disk I/O; reduce write pressure or add Core capacity before Replicants fall further behind. |
+| CPU pressure | CPU remains above the normal peak for 10 to 15 minutes | `emqx_vm_cpu_use`, host CPU, load, and container throttling | Find the workload or integration causing the increase. Rebalance traffic or add capacity before saturation. EMQX's built-in CPU alarm defaults to 80%. |
+| Memory pressure | Memory remains above the warning threshold or is growing toward the host or container limit | `emqx_vm_used_memory`, `emqx_vm_total_memory`, host or container memory, and EMQX memory alarms | Inspect connection, session, queue, and integration growth. Add capacity or reduce the source of growth before the operating system terminates the process. EMQX's built-in system-memory alarm defaults to 70%. |
+| Runtime backlog | Run queue or mailbox sizes stay above their established baseline | `emqx_vm_run_queue`, `emqx_vm_mnesia_tm_mailbox_size`, `emqx_vm_broker_pool_max_mailbox_size`, built-in overload alarms, and `busy_dist_port` events | Investigate sustained overload, slow storage, or cluster communication before request latency and queues grow further. |
+| Disk pressure | Free space falls below the operational reserve or is predicted to run out before the next maintenance window | Host or volume free bytes, free inodes, I/O latency, and disk growth rate | Remove data according to the retention policy or expand the volume. A common starting point is a warning at 20% free and a critical alert at 10% free. |
+| Broker capacity | Connections, sessions, subscriptions, or topics approach the tested or licensed operating limit | `emqx_connections_count`, `emqx_sessions_count`, `emqx_subscriptions_count`, `emqx_topics_count`, and, in Enterprise, `emqx_license_max_sessions` | Compare growth with capacity-test results. Add nodes or move traffic before reaching the limit. Do not treat the historical `*_max` gauges as configured capacity limits. |
+| Message loss | Unexpected drop counters increase | `emqx_messages_dropped_*` and `emqx_delivery_dropped_*` | Investigate the specific reason. In particular, queue-full, quota-exceeded, receive-maximum, and expired-message drops can indicate overload or incorrect limits. `no_subscribers` and `no_local` drops can be expected in some applications. |
+| Data integration health | An enabled connector or action is disconnected, or failures, retries, drops, or queue depth increase | Metrics from `/api/v5/prometheus/data_integration` and EMQX `resource` alarms | Check the external service and network, then verify buffer capacity and retry behavior. |
+| Certificate and license expiry | Expiry is within the organization's renewal lead time | `emqx_cert_expiry_at` and, in Enterprise, `emqx_license_expiry_at` | Renew and deploy the certificate or license. A common starting point is a warning 30 days before expiry and a critical alert 7 days before expiry. |
+
+`emqx_mria_lag` is the number of transactions by which a Replicant shard is
+behind its upstream Core shard; it is not a duration in seconds. Short spikes
+can be normal during bursts of writes. Alert when the value remains above the
+maximum observed during representative peak traffic, or when it and the MRIA
+queue metrics show a sustained positive trend. Group alerts by both node and
+`shard`, because one shard can be unhealthy while others continue to replicate
+normally. For details about each MRIA metric, see
+[Monitor and Debug](../deploy/cluster/mria-introduction.md#monitor-and-debug).
+
+For the descriptions of broker counters displayed in the Dashboard, see
+[Statistics and Metrics](./metrics-and-stats.md). Metric availability can vary
+by edition and enabled features. Inspect the relevant Prometheus endpoint in
+your deployment before creating rules.
+
+## Centralize Logs and Alert Selectively
+
+Do not keep the only copy of a node's logs on that node. A node failure can make
+the evidence needed to diagnose it unavailable. Send logs from every node to a
+central system outside the EMQX cluster and include labels for the cluster,
+node, node role, EMQX version, and availability zone. Monitor the log collector
+and transport as well; an absence of logs is meaningful only if the pipeline is
+known to be healthy.
+
+Use [JSON log format](./log.md#log-format) and retain at least warning, error,
+and critical events. Logs can be collected from console or file output, or
+exported through [OpenTelemetry](./opentelemetry/logs.md). For configuration and
+production collection guidance, see [Logs](./log.md).
+
+Create targeted alerts for events that add information unavailable in metrics:
+
+| Condition | Log signal | Alerting guidance |
+| --- | --- | --- |
+| MRIA lag observation failed | `prometheus_mria_shard_lag_refresh_exception` | Alert if it occurs repeatedly. The exporter caches MRIA lag; if a refresh times out, the previous value can continue to be exported and appear stable. |
+| Erlang VM or inter-node communication pressure | `busy_dist_port`, `long_schedule`, `long_gc`, and Mnesia overload messages | Alert on a sustained rate or repeated events and correlate them with MRIA queues, CPU, and latency. These events can precede client-visible degradation. |
+| MRIA replication or topology failure | `gap_in_the_tlog` and `mria_lb_split_brain` | Page immediately. Capture the node, shard, agent, expected sequence number, and actual sequence number from the structured fields. |
+| Buffering or message-queue pressure | `data_bridge_buffer_overflow`, `unrecoverable_resource_error`, and `dropped_msg_due_to_mqueue_is_full` | Alert when these events are unexpected or exceed the application's accepted loss rate. Correlate them with action and message-drop counters. |
+| Configuration synchronization failure | `sync_data_from_node_failed` and `cluster_rpc_apply_failed` | Alert immediately when a configuration change or node startup is in progress; verify that all nodes have converged on the intended configuration. |
+
+Do not page on every warning-level log. Authentication failures and malformed
+client traffic, for example, may be expected at low rates. Alert on selected
+`msg` values, severity, sustained rates, or deviations from the normal
+baseline. Treat unexpected critical events as immediately actionable.
+
+EMQX throttles selected repetitive log events. A log query can therefore
+undercount the original events. Include
+`log_events_throttled_during_last_period` in dashboards and alerts, and use its
+`dropped` field to determine which messages were suppressed. For details, see
+[Log Throttling](./log.md#log-throttling).
+
+## Detect Failures Separately
+
+Failure-detection alerts remain necessary, but they do not provide advance
+warning. Prometheus `up == 0`, a failed synthetic MQTT check,
+`emqx_cluster_nodes_running` falling below the planned size,
+`emqx_cluster_nodes_stopped` increasing, and an EMQX `partition` alarm mean
+that service or redundancy has already been lost.
+
+Page immediately on these conditions. Use the leading indicators above to
+create the maintenance window that prevents them.
+
+## Example Prometheus Alert Rules
+
+The following rules are starting points. They assume the job names from the
+[Prometheus server configuration example](./prometheus.md#prometheus-server-configuration-example)
+and a planned cluster size of three nodes.
+
+```yaml
+groups:
+  - name: emqx-early-warning
+    rules:
+      - alert: EMQXMRIAReplicationLagGrowing
+        expr: deriv(emqx_mria_lag{job="emqx_stats"}[10m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "MRIA replication lag is growing on {{ $labels.instance }} shard {{ $labels.shard }}"
+
+      - alert: EMQXMRIAReplicationQueueGrowing
+        expr: deriv(emqx_mria_server_mql{job="emqx_stats"}[10m]) > 0 or deriv(emqx_mria_message_queue_len{job="emqx_stats"}[10m]) > 0 or deriv(emqx_mria_replayq_len{job="emqx_stats"}[10m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "An MRIA replication queue is growing on {{ $labels.instance }} shard {{ $labels.shard }}"
+
+      - alert: EMQXSustainedHighCPU
+        expr: emqx_vm_cpu_use{job="emqx_stats"} > 80
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "EMQX CPU usage is high on {{ $labels.instance }}"
+
+      - alert: EMQXSustainedHighMemory
+        expr: 100 * emqx_vm_used_memory{job="emqx_stats"} / emqx_vm_total_memory{job="emqx_stats"} > 70
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "EMQX host memory usage is high on {{ $labels.instance }}"
+
+      - alert: EMQXDeliveryQueueFullDrops
+        expr: sum by (instance) (increase(emqx_delivery_dropped_queue_full{job="emqx_stats"}[5m])) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "EMQX dropped messages because a delivery queue was full"
+
+      - alert: EMQXActionFailures
+        expr: sum by (instance, id) (increase(emqx_action_failed{job="emqx_data_integration"}[5m])) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "EMQX data integration action {{ $labels.id }} is failing"
+
+      - alert: EMQXCertificateExpiresSoon
+        expr: emqx_cert_expiry_at{job="emqx_stats"} > 0 and (emqx_cert_expiry_at{job="emqx_stats"} - time()) < 30 * 24 * 60 * 60
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "EMQX listener certificate expires within 30 days"
+
+  - name: emqx-failure-detection
+    rules:
+      - alert: EMQXMetricsTargetDown
+        expr: up{job="emqx_stats"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "EMQX metrics target {{ $labels.instance }} is unreachable"
+
+      - alert: EMQXClusterLostNode
+        expr: min by (job) (emqx_cluster_nodes_running{job="emqx_stats"}) < 3
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "EMQX cluster has fewer than three running nodes"
+```
+
+The MRIA examples detect a queue or lag that has a positive slope for a
+sustained period. Add an absolute threshold based on your peak-traffic baseline
+so that a large but stable backlog also alerts. Replace the cluster size and
+other thresholds with values appropriate for your deployment. If you rename
+the Prometheus scrape jobs, update the `job` matchers. Add host- or
+platform-specific rules for disk exhaustion, memory limits, container
+restarts, and network health.
+
+Counter metrics normally only increase. Alert on their rate or increase over a
+time window, not on their absolute value. Use a `for` duration with resource
+gauges so that a short traffic spike does not cause an unnecessary alert.
+
+## Set Thresholds from Capacity and SLOs
+
+Use the following process instead of copying fixed thresholds into production:
+
+1. Define the user-visible SLOs for connection success, publish-to-delivery
+   success, and latency.
+2. Run a representative [performance test](../performance/overview.md) and
+   record resource use, message rates, and latency before saturation.
+3. Observe at least one normal business cycle and identify daily or weekly
+   peaks.
+4. Set warning thresholds below the tested safe capacity, leaving enough time
+   to add capacity or schedule maintenance. Set critical thresholds at the
+   point where immediate action is required.
+5. Revisit thresholds after traffic growth, topology changes, upgrades, or
+   changes to persistent sessions and data integrations.
+
+Avoid alerting only on a fixed percentage. Trend and forecast alerts, such as
+disk exhaustion predicted within 24 hours or connections reaching tested
+capacity within a week, often provide more useful maintenance lead time.
+
+## Turn Alerts into Maintenance Actions
+
+Every actionable alert should include the affected cluster and node, the
+current value and threshold, a dashboard link, an owner, and a runbook. The
+runbook should state how to confirm the condition, protect service, restore
+redundancy, and decide whether to scale, rebalance, restart, or repair.
+
+Test the full alert path before relying on it. Deliberately stop a scrape target,
+lower a non-production threshold, and disconnect a test integration. Confirm
+that the alert reaches the correct operator, contains enough context, and
+clears after recovery.
+
+Use warning alerts to schedule maintenance while redundancy remains available.
+Before changing the cluster, verify that backups are usable, the remaining
+nodes can carry the load, and the alerting system is healthy. Relevant
+procedures include [Backup and Restore](../operations/backup-restore.md),
+[Node Evacuation and Cluster Load Rebalancing](../deploy/cluster/rebalancing.md),
+and [EMQX Enterprise Rolling Upgrade](../deploy/rolling-upgrades.md).
+
+## Production Readiness Checklist
+
+- Every EMQX node and its host or container is visible in the external
+  monitoring system.
+- Built-in alarms are forwarded outside EMQX and tested.
+- Warning, error, and critical logs from every node are stored centrally, and
+  the collection pipeline is monitored.
+- An external synthetic MQTT check covers the production client path.
+- MRIA replication, runtime backlog, CPU, memory, disk, capacity, message-drop,
+  integration, and expiry warnings have owners and runbooks.
+- Selected MRIA, VM-pressure, buffer-overflow, and configuration-sync log events
+  have rate-based or immediate alerts appropriate to their severity.
+- Separate target-down, synthetic MQTT, cluster-size, and partition alerts
+  detect failures and page the appropriate operator immediately.
+- Warning thresholds leave enough time for the team's normal maintenance and
+  capacity-provisioning process.
+- Dashboards show both the current value and the trend over a relevant business
+  cycle.
+- Alert notifications, backup restoration, and rolling-maintenance procedures
+  are tested regularly.
