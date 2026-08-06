@@ -6,9 +6,7 @@ EMQX provides a series of observability-related features to help with system mon
 
 - [Production Monitoring Best Practices](./monitoring-best-practices.md)
 
-  Set up external monitoring and early-warning alerts so operators can respond
-  to availability, capacity, resource, and message-delivery risks before they
-  cause an outage.
+  Set up external monitoring and early-warning alerts so operators can respond to availability, capacity, resource, and message-delivery risks before they cause an outage.
 
 - [Metrics](./metrics-and-stats.md)
 
@@ -45,5 +43,4 @@ EMQX provides a series of observability-related features to help with system mon
 - [Log Trace](./tracer.md)
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
-
 

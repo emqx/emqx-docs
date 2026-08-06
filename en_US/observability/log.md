@@ -100,41 +100,21 @@ When file logging is enabled (log.to = file or both), the following files will a
 
 ## Centralize Production Logs
 
-In production, send logs from every EMQX node to a central system outside the
-EMQX cluster. Logs kept only on the broker host may become unavailable when the
-node or its storage fails. Central collection also makes it possible to
-correlate events across Core and Replicant nodes and to alert on conditions that
-are not exposed as metrics or built-in alarms.
+In production, send logs from every EMQX node to a central system outside the EMQX cluster. Logs kept only on the broker host may become unavailable when the node or its storage fails. Central collection also makes it possible to correlate events across Core and Replicant nodes and to alert on conditions that are not exposed as metrics or built-in alarms.
 
 Use one of the following collection patterns:
 
-- In a container platform, write JSON logs to the console and use the
-  platform's log agent to collect container output.
-- For file logging, use a log agent that collects `emqx.log.N` files, handles
-  rotation without duplicating records, and preserves the structured fields.
-- Use the [OpenTelemetry log handler](./opentelemetry/logs.md) to export logs to
-  an OpenTelemetry Collector and compatible backend.
+- In a container platform, write JSON logs to the console and use the platform's log agent to collect container output.
+- For file logging, use a log agent that collects `emqx.log.N` files, handles rotation without duplicating records, and preserves the structured fields.
+- Use the [OpenTelemetry log handler](./opentelemetry/logs.md) to export logs to an OpenTelemetry Collector and compatible backend.
 
-Add deployment metadata such as cluster, node, node role, EMQX version, and
-availability zone in the collection pipeline. Protect logs as operational data,
-because fields can contain client IDs, usernames, topics, peer addresses, and
-error details.
+Add deployment metadata such as cluster, node, node role, EMQX version, and availability zone in the collection pipeline. Protect logs as operational data, because fields can contain client IDs, usernames, topics, peer addresses, and error details.
 
-Monitor the collection path itself. Alert if a node stops sending logs while it
-is otherwise reachable, if the collector rejects or drops records, or if the
-central backend approaches its retention or storage limit.
+Monitor the collection path itself. Alert if a node stops sending logs while it is otherwise reachable, if the collector rejects or drops records, or if the central backend approaches its retention or storage limit.
 
-Create log-based alerts selectively. Warning events are often useful as
-early-warning signals, but some can be caused by expected client behavior. Match
-stable structured fields such as `level` and `msg`, and use a rate or deviation
-from the normal baseline where individual events do not require action. Error
-or critical events that indicate loss of replication, configuration
-synchronization, listener startup, or durable storage should normally alert
-immediately.
+Create log-based alerts selectively. Warning events are often useful as early-warning signals, but some can be caused by expected client behavior. Match stable structured fields such as `level` and `msg`, and use a rate or deviation from the normal baseline where individual events do not require action. Error or critical events that indicate loss of replication, configuration synchronization, listener startup, or durable storage should normally alert immediately.
 
-For a recommended set of metric- and log-based alerts, including MRIA
-replication signals, see
-[Production Monitoring Best Practices](./monitoring-best-practices.md#centralize-logs-and-alert-selectively).
+For a recommended set of metric- and log-based alerts, including MRIA replication signals, see [Production Monitoring Best Practices](./monitoring-best-practices.md#centralize-logs-and-alert-selectively).
 
 ## Configure Logging via Configuration File
 
