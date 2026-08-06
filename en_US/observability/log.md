@@ -110,7 +110,7 @@ Use one of the following collection patterns:
 
 Add deployment metadata such as cluster, node, node role, EMQX version, and availability zone in the collection pipeline. Protect logs as operational data, because fields can contain client IDs, usernames, topics, peer addresses, and error details.
 
-Monitor the collection path itself. Alert if a node stops sending logs while it is otherwise reachable, if the collector rejects or drops records, or if the central backend approaches its retention or storage limit.
+Monitor the collection path itself by using collector and transport health metrics or an explicit heartbeat that does not depend on application log volume. Alert if a collector or transport is unhealthy, rejects or drops records, or if the central backend approaches its retention or storage limit. Do not alert merely because a reachable EMQX node produces no logs; an idle or healthy node may have nothing to report at the configured severity.
 
 Create log-based alerts selectively. Warning events are often useful as early-warning signals, but some can be caused by expected client behavior. Match stable structured fields such as `level` and `msg`, and use a rate or deviation from the normal baseline where individual events do not require action. Error or critical events that indicate loss of replication, configuration synchronization, listener startup, or durable storage should normally alert immediately.
 
