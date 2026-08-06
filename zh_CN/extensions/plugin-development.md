@@ -1,11 +1,11 @@
 # 开发 EMQX 插件
 
-本页将指导你使用 EMQX 插件模板开发自定义插件的全过程。
+本页将指导你通过独立项目或 monorepo 工作流开发自定义 EMQX 插件。
 
 EMQX 支持两种插件开发方式：
 
 - **Monorepo 插件**：在 EMQX monorepo 的 `plugins/` 目录下开发，使用 Mix（Elixir 构建工具）完成编译、测试和打包流程。适合插件与特定 EMQX 版本紧密耦合的场景。
-- **独立项目**：在 EMQX monorepo 之外独立开发和打包，仅使用 `rebar3`。适合独立开发插件的场景。
+- **独立项目**：在 EMQX monorepo 之外开发。你可以使用 `rebar3` 插件模板；对于 EMQX 6.0 及后续版本，也可以将 EMQX 作为 Git submodule 引入，并复用 monorepo 构建工具。
 
 以下章节涵盖两种方式。[在 EMQX Monorepo 中开发插件](#在-emqx-monorepo-中开发插件)介绍 Monorepo 方式的工作流与要求；[独立插件开发](#独立插件开发)提供独立项目的完整操作指南。
 
@@ -113,6 +113,40 @@ emqx ctl plugins install|enable|start
 :::
 
 ## 独立插件开发
+
+独立插件开发支持两种方式：
+
+- **rebar3 模板方式**：使用 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) 生成插件项目。该方式仅使用 `rebar3`。
+- **Git submodule 方式**：适用于 EMQX 6.0 及后续版本。插件保存在独立仓库中，将 EMQX 作为 Git submodule 引入，并使用 monorepo 构建工具打包插件。
+
+### Git Submodule 方式
+
+如果插件必须保存在独立仓库中，例如源代码需要保持私有，但仍希望使用 EMQX monorepo 构建工具打包插件，可以使用该方式。
+
+1. 将 EMQX 添加为 submodule：
+
+   ```bash
+   git submodule add --depth 1 git@github.com:emqx/emqx.git emqx
+   ```
+
+2. 切换到与目标 EMQX 版本匹配的分支，例如 EMQX 6.0 对应 `release-60`。
+
+3. 将插件仓库软链接到 submodule 的 `plugins/` 目录：
+
+   ```bash
+   ln -s ../.. emqx/plugins/{plugin_name}
+   ```
+
+4. 从 EMQX submodule 中构建插件包：
+
+   ```bash
+   cd emqx
+   make plugin-{plugin_name}
+   ```
+
+生成的 `.tar.gz` 文件位于 `emqx/_build/plugins/` 目录下。
+
+如使用 `rebar3` 模板方式，请继续执行以下步骤。
 
 ### 安装插件模板
 

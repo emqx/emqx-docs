@@ -1,11 +1,11 @@
 # Develop EMQX Plugins
 
-This page walks you through the process of developing custom EMQX plugins using the EMQX plugin template.
+This page walks you through the process of developing custom EMQX plugins using standalone or monorepo workflows.
 
 EMQX supports two project styles for plugin development:
 
 - **Monorepo plugin** — developed inside the EMQX monorepo under the `plugins/` directory, using Mix (Elixir build tooling) for compile, test, and packaging workflows. Recommended when the plugin is tightly coupled with a specific EMQX version.
-- **Standalone project** — developed and packaged outside the EMQX monorepo using `rebar3` only. Recommended for independent plugin development.
+- **Standalone project** — developed outside the EMQX monorepo. You can use the `rebar3` plugin template, or, for EMQX 6.0 and later, keep EMQX as a Git submodule and reuse the monorepo build tooling.
 
 The following sections cover both styles. The [Plugin Development Inside the EMQX Monorepo](#plugin-development-inside-the-emqx-monorepo) section describes the monorepo workflow and requirements. The [Standalone Plugin Development](#standalone-plugin-development) section provides a complete walkthrough for standalone projects.
 
@@ -113,6 +113,40 @@ emqx ctl plugins install|enable|start
 :::
 
 ## Standalone Plugin Development
+
+Standalone plugin development supports two styles:
+
+- **rebar3 template**: Generate a plugin project with the [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template). This style uses `rebar3` only.
+- **Git submodule style**: For EMQX 6.0 and later, keep the plugin in its own repository, add EMQX as a Git submodule, and build the plugin with the monorepo tooling.
+
+### Git Submodule Style
+
+Use this style when the plugin must stay in a separate repository, for example, when the source code is private, but you still want to build it with the EMQX monorepo tooling.
+
+1. Add EMQX as a submodule:
+
+   ```bash
+   git submodule add --depth 1 git@github.com:emqx/emqx.git emqx
+   ```
+
+2. Check out the EMQX branch that matches your target version, for example, `release-60` for EMQX 6.0.
+
+3. Symlink the plugin repository into the submodule's `plugins/` directory:
+
+   ```bash
+   ln -s ../.. emqx/plugins/{plugin_name}
+   ```
+
+4. Build the plugin package from the EMQX submodule:
+
+   ```bash
+   cd emqx
+   make plugin-{plugin_name}
+   ```
+
+The `.tar.gz` artifact is generated under `emqx/_build/plugins/`.
+
+For the `rebar3` template style, continue with the following steps.
 
 ### Install the Plugin Template
 
