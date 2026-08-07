@@ -21,6 +21,18 @@ Collect metrics at a shorter interval than the required detection time. For exam
 
 :::
 
+## Set Thresholds from Capacity and SLOs
+
+Use the following process instead of copying fixed thresholds into production:
+
+1. Define the user-visible SLOs for connection success, publish-to-delivery success, and latency.
+2. Run a representative [performance test](../performance/overview.md) and record resource use, message rates, and latency before saturation.
+3. Observe at least one normal business cycle and identify daily or weekly peaks.
+4. Set warning thresholds below the tested safe capacity, leaving enough time to add capacity or schedule maintenance. Set critical thresholds at the point where immediate action is required.
+5. Revisit thresholds after traffic growth, topology changes, upgrades, or changes to persistent sessions and data integrations.
+
+Avoid alerting only on a fixed percentage. Trend and forecast alerts, such as disk exhaustion predicted within 24 hours or connections reaching tested capacity within a week, often provide more useful maintenance lead time.
+
 ## Leading Indicators to Monitor
 
 Preventive alerts should detect a deteriorating condition while the cluster is still serving traffic. Use a warning threshold that leaves time for investigation and maintenance, and a critical threshold for conditions that require immediate action.
@@ -36,8 +48,8 @@ Preventive alerts should detect a deteriorating condition while the cluster is s
 | Disk pressure | Free space falls below the operational reserve or is predicted to run out before the next maintenance window | Host or volume free bytes, free inodes, I/O latency, and disk growth rate | Remove data according to the retention policy or expand the volume. A common starting point is a warning at 20% free and a critical alert at 10% free. |
 | Broker capacity | Connections, sessions, subscriptions, or topics approach the tested or licensed operating limit | `emqx_connections_count`, `emqx_sessions_count`, `emqx_subscriptions_count`, `emqx_topics_count`, and, in Enterprise, `emqx_license_max_sessions` | Compare growth with capacity-test results. Add nodes or move traffic before reaching the limit. Do not treat the historical `*_max` gauges as configured capacity limits. |
 | Message loss | Unexpected drop counters increase | `emqx_messages_dropped_*` and `emqx_delivery_dropped_*` | Investigate the specific reason. In particular, queue-full, quota-exceeded, receive-maximum, and expired-message drops can indicate overload or incorrect limits. `no_subscribers` and `no_local` drops can be expected in some applications. |
-| Authentication and authorization dependency health | An enabled provider or source has a status of `0`, authentication or authorization latency rises above the normal peak, or failures and denies increase unexpectedly | `emqx_authn_enable`, `emqx_authn_status`, `emqx_authn_latency`, `emqx_authn_failed`, `emqx_authz_enable`, `emqx_authz_status`, `emqx_authz_latency`, and `emqx_authz_deny` from `/api/v5/prometheus/auth` | Check the external database, HTTP service, LDAP server, network, and connection pool. Correlate a failure spike with client traffic to distinguish a backend problem from invalid credentials, an application change, or an attack. |
-| Data integration health | An enabled connector or action is disconnected; `emqx_action_queuing` or `emqx_action_inflight` grows instead of draining; or late replies, retries, failures, or drops increase | Action and connector metrics from `/api/v5/prometheus/data_integration` and EMQX `resource` alarms | Check the external service and network, then verify buffer capacity and retry behavior. Growing queues and in-flight requests can provide warning before failures and drops begin. |
+| Authentication and authorization dependency health | An enabled provider or source is not connected (its status is `0`), authentication or authorization latency rises above the normal peak, or failures and denies increase unexpectedly | `emqx_authn_enable`, `emqx_authn_status`, `emqx_authn_latency`, `emqx_authn_failed`, `emqx_authz_enable`, `emqx_authz_status`, `emqx_authz_latency`, and `emqx_authz_deny` from `/api/v5/prometheus/auth` | Check the external database, HTTP service, LDAP server, network, and connection pool. Correlate a failure spike with client traffic to distinguish a backend problem from invalid credentials, an application change, or an attack. |
+| Data integration health | An enabled connector or action is disconnected; `emqx_action_queuing` or `emqx_action_inflight` grows instead of draining; or late replies, retries, failures, or drops increase | `emqx_connector_enable`, `emqx_connector_status`, `emqx_action_enable`, `emqx_action_status`, `emqx_action_queuing`, `emqx_action_inflight`, and related action metrics from `/api/v5/prometheus/data_integration`, plus EMQX `resource` alarms | Check the external service and network, then verify buffer capacity and retry behavior. Growing queues and in-flight requests can provide warning before failures and drops begin. |
 | Certificate and license expiry | Expiry is within the organization's renewal lead time | `emqx_cert_expiry_at` and, in Enterprise, `emqx_license_expiry_at` | Renew and deploy the certificate or license. A common starting point is a warning 30 days before expiry and a critical alert 7 days before expiry. |
 
 `emqx_mria_lag` is the number of transactions by which a Replicant shard is behind its upstream Core shard; it is not a duration in seconds. Short spikes can be normal during bursts of writes. Alert when the value remains above the maximum observed during representative peak traffic, or when it and the MRIA queue metrics show a sustained positive trend. Group alerts by both node and `shard`, because one shard can be unhealthy while others continue to replicate normally. For details about each MRIA metric, see [Monitor and Debug](../deploy/cluster/mria-introduction.md#monitor-and-debug).
@@ -185,18 +197,6 @@ groups:
 The MRIA examples detect a queue or lag that has a positive slope for a sustained period. Add an absolute threshold based on your peak-traffic baseline so that a large but stable backlog also alerts. The configuration-convergence example assumes one cluster per Prometheus job; if a job contains multiple clusters, aggregate by a cluster label. Replace the cluster size and other thresholds with values appropriate for your deployment. If you rename the Prometheus scrape jobs, update the `job` matchers. Add host- or platform-specific rules for disk exhaustion, memory limits, container restarts, and network health.
 
 Counter metrics normally only increase. Alert on their rate or increase over a time window, not on their absolute value. Use a `for` duration with resource gauges so that a short traffic spike does not cause an unnecessary alert.
-
-## Set Thresholds from Capacity and SLOs
-
-Use the following process instead of copying fixed thresholds into production:
-
-1. Define the user-visible SLOs for connection success, publish-to-delivery success, and latency.
-2. Run a representative [performance test](../performance/overview.md) and record resource use, message rates, and latency before saturation.
-3. Observe at least one normal business cycle and identify daily or weekly peaks.
-4. Set warning thresholds below the tested safe capacity, leaving enough time to add capacity or schedule maintenance. Set critical thresholds at the point where immediate action is required.
-5. Revisit thresholds after traffic growth, topology changes, upgrades, or changes to persistent sessions and data integrations.
-
-Avoid alerting only on a fixed percentage. Trend and forecast alerts, such as disk exhaustion predicted within 24 hours or connections reaching tested capacity within a week, often provide more useful maintenance lead time.
 
 ## Turn Alerts into Maintenance Actions
 

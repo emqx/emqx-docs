@@ -1,12 +1,14 @@
 # Logs and Observability
 
-EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on the Dashboard under the following menu items:
+EMQX provides built-in observability features, external integrations, and production monitoring guidance to help you monitor, manage, and diagnose a deployment. The following pages cover production monitoring, observability data and integrations, and diagnostic tools.
 
-**Monitoring**:
+**Production Monitoring**:
 
 - [Production Monitoring Best Practices](./monitoring-best-practices.md)
 
-  Set up external monitoring and early-warning alerts so operators can respond to availability, capacity, resource, and message-delivery risks before they cause an outage.
+  Design production monitoring and alerts that detect availability, capacity, dependency, and message-delivery risks and turn them into actionable maintenance procedures.
+
+**Observability and Integrations**:
 
 - [Metrics](./metrics-and-stats.md)
 
@@ -15,8 +17,6 @@ EMQX provides a series of observability-related features to help with system mon
 - [Alarm](./alarms.md)
 
   EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions.
-
-**Management**:
 
 - [Logs](./log.md)
 
@@ -30,7 +30,7 @@ EMQX provides a series of observability-related features to help with system mon
 
   [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
 
-**Diagnose**:
+**Diagnostics**:
 
 - [Topic Metrics](./topic-metrics.md)
 
@@ -43,4 +43,3 @@ EMQX provides a series of observability-related features to help with system mon
 - [Log Trace](./tracer.md)
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
-
