@@ -6,7 +6,7 @@ EMQX provides built-in observability features, external integrations, and produc
 
 - [Production Monitoring Best Practices](./monitoring-best-practices.md)
 
-  Design production monitoring and alerts that detect availability, capacity, dependency, and message-delivery risks and turn them into actionable maintenance procedures.
+  Design production monitoring and alerts to identify availability, capacity, dependency, and message-delivery risks and support timely maintenance.
 
 **Observability and Integrations**:
 
