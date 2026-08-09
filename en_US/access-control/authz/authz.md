@@ -281,6 +281,14 @@ Where,
     
   * `cache.ttl`: Specifies the effective time of cached values, default: `1m` (one minute). 
 
+::: tip
+
+For brokers exposed to untrusted or public networks, consider changing `deny_action` from the default `ignore` to `disconnect`. A client whose publish or subscribe operation is denied is then disconnected instead of being allowed to keep probing topics on the same connection. Combined with [flapping detection](../flapping-detect.md), a client that repeatedly reconnects and triggers denials is banned automatically for a period.
+
+Note that `deny_action` is a global authorization setting; it cannot be configured per listener. Because `disconnect` also drops legitimate clients that attempt any denied operation, use it in deployments where clients only access their authorized topics, and tune the flapping detection thresholds so that normal reconnection storms do not cause clients to be banned.
+
+:::
+
 ### Configure Authorization via HTTP API
 
 There are several API endpoints for managing authorization:
