@@ -191,4 +191,4 @@ EMQX 的一些功能通过发布或订阅带有特殊 `$` 前缀的主题来触�
 对于集群连接，接受对端集群连接的监听器不能配置挂载点。
 :::
 
-[共享订阅](../messaging/mqtt-shared-subscription.md)（`$share/{group}/` 和 `$queue/`）以及[排他订阅](../messaging/mqtt-exclusive-subscription.md)（`$exclusive/`）是例外：它们可以与挂载点配合使用。EMQX 会先解析这些订阅前缀，然后再应用挂载点，因此前缀会被添加到内部的实际主题过滤器上。例如，通过配置了挂载点 `mp/` 的监听器订阅 `$share/g/t`，会以主题 `mp/t` 加入共享订阅组 `g`。
+[共享订阅](../messaging/mqtt-shared-subscription.md)（`$share/{group}/`）以及[排他订阅](../messaging/mqtt-exclusive-subscription.md)（`$exclusive/`）是例外：它们可以与挂载点配合使用。EMQX 会先解析这些订阅前缀，然后再应用挂载点，因此前缀会被添加到内部的实际主题过滤器上。例如，通过配置了挂载点 `mp/` 的监听器订阅 `$share/g/t`，会以主题 `mp/t` 加入共享订阅组 `g`。
