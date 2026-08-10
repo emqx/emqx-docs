@@ -643,8 +643,8 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
-  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
+  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min <= X <= Max）。
+  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min <= X <= Max）。
 - **比较函数**：
   - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
   - `num_neq(A, B)`：如果两个数字不相同，则返回 'true'，否则返回 'false'。

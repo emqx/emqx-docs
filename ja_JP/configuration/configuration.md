@@ -622,7 +622,7 @@ EMQXはルールエンジンの文字列関数に似た豊富な文字列、配�
 - **ハッシュ関数**：
   - `hash(Algorithm, Data)`：`Algorithm`は`md4`、`md5`、`sha`（`sha1`）、`sha224`、`sha256`、`sha384`、`sha512`、`sha3_224`、`sha3_256`、`sha3_384`、`sha3_512`、`shake128`、`shake256`、`blake2b`、`blake2s`から選択可能。
   - `hash_to_range(Input, Min, Max)`：`sha256`でハッシュ化し、`Min`から`Max`までの整数にマッピング（`Min <= X <= Max`）。
-  - `map_to_rage(Input, Min, Max)`：入力を`Min`から`Max`までの整数にマッピング（`Min <= X <= Max`）。
+  - `map_to_range(Input, Min, Max)`：入力を`Min`から`Max`までの整数にマッピング（`Min <= X <= Max`）。
 - **比較関数**：
   - `num_eq(A, B)`：数値が同じなら`true`、そうでなければ`false`
   - `num_neq(A, B)`：数値が異なれば`true`、そうでなければ`false`
