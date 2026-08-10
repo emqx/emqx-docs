@@ -12,6 +12,10 @@ Unlike traditional MQTT behavior, Message Queues persist messages even when no c
 
 Message Queue uses embedded Durable Storage. Before enabling Message Queue, ensure that the EMQX data directory uses a local filesystem. [Embedded Durable Storage backends](../design/durable-storage.md#embedded-backends) do not support network filesystems such as NFS and SMB/CIFS.
 
+::: warning Incompatible with listener mountpoint
+Message Queue does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. The mountpoint is prepended before EMQX matches the `$q/` prefix, so the subscription is treated as an ordinary subscription to the mounted literal topic, and no error is reported to the client.
+:::
+
 <img src="./assets/message_queque_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## Why Use Message Queue?
