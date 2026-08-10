@@ -243,9 +243,9 @@ Where,
 
 ::: tip Recommendation for brokers exposed to untrusted networks
 
-For brokers exposed to untrusted or public networks, consider changing `deny_action` from the default `ignore` to `disconnect`. A client whose publish or subscribe is denied is then disconnected instead of being allowed to keep probing topics on the same connection. Combined with [flapping detection](../flapping-detect.md), a client that repeatedly reconnects and triggers denials is banned automatically for a period.
+For brokers exposed to untrusted or public networks, setting `deny_action` to `disconnect` can help stop clients from continuing unauthorized publish or subscribe attempts on the same connection. When used with [flapping detection](../flapping-detect.md), clients that repeatedly reconnect and trigger authorization denials are banned automatically for a period.
 
-Note that `deny_action` is a global authorization setting; it cannot be configured per listener. Because `disconnect` also drops legitimate clients that attempt any denied operation, use it in deployments where clients only ever access their authorized topics, and tune the flapping-detection thresholds so that normal reconnection storms do not get clients banned.
+The `deny_action` setting is global and cannot be configured per listener. It also disconnects legitimate clients that attempt a denied operation. Use `disconnect` when clients normally publish and subscribe only to authorized topics. Tune the flapping detection thresholds to avoid banning clients during normal reconnection storms.
 
 :::
 
