@@ -140,3 +140,36 @@ EMQX 中的每个监听器都与一个区域相关联，默认设置为名为 `d
 当监听器关联到特定区域时，连接到该监听器的 MQTT 客户端将继承该区域的设置。
 
 更多信息，请查看配置文件简介中的[区域覆盖](./configuration.md#区域覆盖)部分。
+
+## 挂载点（Mountpoint）
+
+每个监听器都可以配置 `mountpoint`（挂载点）：EMQX 会为通过该监听器连接的所有客户端的主题添加该主题前缀。该前缀会被添加到 `PUBLISH` 报文、`SUBSCRIBE` 和 `UNSUBSCRIBE` 请求以及遗嘱消息中的主题上，并在消息投递给客户端时从主题中移除。挂载点对客户端透明，常用于在客户端分组之间隔离主题空间，例如多租户部署场景。
+
+```bash
+listeners.tcp.demo {
+    bind = "0.0.0.0:1883"
+    mountpoint = "department-a/"
+}
+```
+
+挂载点支持占位符 `${clientid}`、`${username}`、`${zone}` 和 `${client_attrs.NAME}`。例如，配置 `mountpoint = "${username}/"` 后，用户名为 `u1` 的客户端订阅 `sensors/#` 时，实际在 Broker 内部创建的订阅为 `u1/sensors/#`。
+
+### 与基于主题前缀的扩展功能不兼容
+
+EMQX 的一些功能通过发布或订阅带有特殊 `$` 前缀的主题来触发。挂载点前缀是在 EMQX 匹配这些特殊前缀*之前*添加的。对于通过配置了挂载点 `mp/` 的监听器连接的客户端，发布到 `$delayed/10/t` 的消息到达 Broker 时主题已变为 `mp/$delayed/10/t`，不再以 `$delayed/` 开头。相应功能会被静默绕过：EMQX 将该消息作为普通消息路由到挂载后的字面主题，且不会向客户端报告任何错误。
+
+::: warning
+如果客户端需要使用以下任一功能，请勿在其连接的监听器上配置挂载点：
+
+| 功能 | 主题前缀 |
+| --- | --- |
+| [延迟发布](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
+| [文件传输](../file-transfer/introduction.md) | `$file/`、`$file-async/`、`$file-response/` |
+| [消息队列](../message-queue/message-queue-concept.md) | `$q/` |
+| [MQTT 消息流](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
+| [集群连接](../cluster-linking/introduction.md) | `$LINK/` |
+
+对于集群连接，接受对端集群连接的监听器不能配置挂载点。
+:::
+
+[共享订阅](../messaging/mqtt-shared-subscription.md)（`$share/{group}/` 和 `$queue/`）以及[排他订阅](../messaging/mqtt-exclusive-subscription.md)（`$exclusive/`）是例外：它们可以与挂载点配合使用。EMQX 会先解析这些订阅前缀，然后再应用挂载点，因此前缀会被添加到内部的实际主题过滤器上。例如，通过配置了挂载点 `mp/` 的监听器订阅 `$share/g/t`，会以主题 `mp/t` 加入共享订阅组 `g`。
