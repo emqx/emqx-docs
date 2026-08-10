@@ -174,11 +174,11 @@ Do not configure a mountpoint on listeners whose clients use any of the followin
 | --- | --- |
 | [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
 | [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
-| [Message Queue](../message-queue/message-queue-concept.md) | `$q/` |
+| [Message Queue](../message-queue/message-queue-concept.md) | `$queue/` |
 | [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
 | [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
 
 For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster.
 :::
 
-[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/` and `$queue/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are the exception: they work together with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the prefix is added to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
+[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are the exception: they work together with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the prefix is added to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
