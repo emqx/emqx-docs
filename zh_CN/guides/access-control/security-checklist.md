@@ -41,6 +41,7 @@
 - 当 ACL 主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时（参见[授权占位符](./authz/authz.md#authorization-placeholders)），必须对这些身份字段进行校验，禁止其包含 MQTT 主题通配符（`+`、`#`）或主题分隔符（`/`）。例如模板 `clients/${clientid}/data` 在未做校验的情况下，若客户端 ID 为 `+`，整段模板会退化为通配模式，可访问其他客户端的所有子主题；若取值为 `tenantA/+` 或含有 `/`，则会突破原本分配的主题子树范围。应在认证侧强制约束身份格式，例如通过 [Client-Info](./authn/cinfo.md) 规则、JWT 声明的正则校验或 HTTP 认证拒绝不合规的请求。应在握手阶段直接拒绝连接，而不是寄希望于 ACL 兜底处理非法替换值。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
+- 对于暴露在不受信任网络或公共网络中的 Broker，可考虑设置 `authorization.deny_action = disconnect`（默认值为 `ignore`）。如果客户端尝试发布或订阅未授权主题，EMQX 会断开该客户端连接，而不是保持连接打开。配合[连接抖动检测](./flapping-detect.md)使用时，反复重连并触发授权拒绝的客户端会被自动封禁。`deny_action` 是全局配置，因此同样会断开尝试了被拒绝操作的合法客户端。建议在客户端正常只发布和订阅已授权主题的场景下使用。应调整连接抖动检测阈值，避免正常重连风暴导致客户端被封禁。详见[授权](./authz/authz.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
 - 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
 - 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。
