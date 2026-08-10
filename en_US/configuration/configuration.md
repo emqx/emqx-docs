@@ -637,7 +637,7 @@ Below are the functions that can be used in the expressions:
 - **Hash functions**:
   - `hash(Algorithm, Data)`: Algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
   - `hash_to_range(Input, Min, Max)`: Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - `map_to_rage(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
+  - `map_to_range(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
 - **Compare functions**:
   - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
   - `num_neq(A, B)`: Return 'true' if two numbers are NOT the same, otherwise 'false'.

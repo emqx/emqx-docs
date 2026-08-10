@@ -1123,6 +1123,36 @@ sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
+### hash_to_range(Value: string, Min: integer, Max: integer) -> integer
+
+此函数自 EMQX 6.2.3 起引入。
+
+使用 SHA-256 对 `Value` 进行散列计算，然后将散列值映射为闭区间 `[Min, Max]` 内的整数。`Min` 必须小于或等于 `Max`。
+
+当需要根据消息字段生成稳定的桶编号或分片编号时，可以使用此函数。例如，可以根据主题片段将设备分配到多个规则或动作。
+
+示例：
+
+```bash
+hash_to_range('A_C001', 0, 3) = 0
+hash_to_range(nth(2, tokens(topic, '/')), 0, 3)
+```
+
+### map_to_range(Value: integer | string, Min: integer, Max: integer) -> integer
+
+此函数自 EMQX 6.2.3 起引入。
+
+将 `Value` 映射为闭区间 `[Min, Max]` 内的整数。`Min` 必须小于或等于 `Max`。
+
+如果 `Value` 为整数，函数会直接将其映射到指定范围内。如果 `Value` 为非空字符串，函数会先将其二进制表示转换为无符号整数，然后再进行映射。
+
+示例：
+
+```bash
+map_to_range(7, 0, 3) = 3
+map_to_range('a', 0, 3) = 1
+```
+
 ## 压缩与解压缩函数
 
 注意：二进制数据无法直接进行 JSON 编码，必须调用 bin2hexstr 函数将其转换成对应的由十六进制数字组成的字符串。

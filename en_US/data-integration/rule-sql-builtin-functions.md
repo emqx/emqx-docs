@@ -1123,6 +1123,36 @@ Example:
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
+### hash_to_range(Value: string, Min: integer, Max: integer) -> integer
+
+This function has been introduced since EMQX 6.2.3.
+
+Uses SHA-256 to hash `Value`, and then maps the hash to an integer in the inclusive range `[Min, Max]`. `Min` must be less than or equal to `Max`.
+
+This function is useful when you need a stable bucket or shard number from a message field, such as distributing devices across multiple rules or actions by a topic segment.
+
+Example:
+
+```bash
+hash_to_range('A_C001', 0, 3) = 0
+hash_to_range(nth(2, tokens(topic, '/')), 0, 3)
+```
+
+### map_to_range(Value: integer | string, Min: integer, Max: integer) -> integer
+
+This function has been introduced since EMQX 6.2.3.
+
+Maps `Value` to an integer in the inclusive range `[Min, Max]`. `Min` must be less than or equal to `Max`.
+
+If `Value` is an integer, the function maps it directly to the range. If `Value` is a non-empty string, the function converts its binary representation to an unsigned integer before mapping it.
+
+Example:
+
+```bash
+map_to_range(7, 0, 3) = 3
+map_to_range('a', 0, 3) = 1
+```
+
 ## Compression and Decompression Functions
 
 Note: Binary data cannot be JSON encoded directly, you must call the `bin2hexstr` function to convert it into the corresponding string composed of hexadecimal digits.
