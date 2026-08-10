@@ -51,6 +51,7 @@ EMQX 将指标分为了 Metrics 与 Statistics 两种。
 | packets.publish.auth_error   | 接收的未通过 ACL 检查的 PUBLISH 报文数量                     |
 | packets.publish.error        | 接收的无法被发布的 PUBLISH 报文数量                          |
 | packets.publish.dropped      | 超出接收限制而被丢弃的 PUBLISH 报文数量                      |
+| packets.publish.quota_exceeded | 因超出配额而被拒绝的 PUBLISH 报文数量                        |
 | packets.puback.received      | 接收的 PUBACK 报文数量                                       |
 | packets.puback.sent          | 发送的 PUBACK 报文数量                                       |
 | packets.puback.inuse         | 接收的报文标识符已被占用的 PUBACK 报文数量                   |

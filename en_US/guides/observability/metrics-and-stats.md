@@ -118,6 +118,7 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | packets.publish.auth_error   | The number of received PUBLISH packets that failed the ACL check |
 | packets.publish.error        | The number of received PUBLISH packets that cannot be published |
 | packets.publish.dropped      | The number of PUBLISH packets that are discarded due to the receiving limit |
+| packets.publish.quota_exceeded | The number of PUBLISH packets rejected due to quota exceeded |
 | packets.puback.received      | The number of received PUBACK packets                        |
 | packets.puback.sent          | The number of sent PUBACK packets                            |
 | packets.puback.inuse         | The number of received PUBACK messages with occupied identifiers |
