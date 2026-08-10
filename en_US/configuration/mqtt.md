@@ -118,6 +118,10 @@ In scenarios such as vehicle networking (T-Box) and mobile IoT, MQTT clients nee
 
 EMQX supports dynamic, per-client keepalive adjustment through a set of `$SETOPTS/` system topics. A client can publish to these topics to update its own broker-side keepalive tolerance, or a privileged backend service can update multiple clients at once, all without disconnecting or renegotiating the MQTT connection. The adjustment is applied in-memory to the active session only and is not persisted.
 
+::: warning Incompatible with listener mountpoint
+Dynamic keepalive adjustment does not work for clients connected through a listener with a [mountpoint](./listener.md#mountpoint) configured. The mountpoint is prepended before EMQX matches the `$SETOPTS/` prefix, so the update is routed as an ordinary message to the mounted literal topic, and no error is reported to the client.
+:::
+
 #### Single-Client Update: `$SETOPTS/mqtt/keepalive`
 
 A client publishes to this topic to update its own broker-side keepalive timeout. EMQX derives the client ID from the publishing session automatically.

@@ -149,3 +149,38 @@ When a listener is linked to a specific zone, MQTT clients connected to that lis
 
 For more information, see the [Zone Override](./configuration.md#zone-override) section in the configuration documentation.
 
+
+## Mountpoint
+
+Each listener can be configured with a `mountpoint`: a topic prefix that EMQX prepends to the topics of all clients connected through the listener. The prefix is added to topics in `PUBLISH` packets, `SUBSCRIBE` and `UNSUBSCRIBE` requests, and Will Messages, and is removed again from the topics of messages delivered to the client. The mountpoint is transparent to the client and is commonly used to isolate topic spaces between groups of clients, for example in multi-tenant deployments.
+
+```bash
+listeners.tcp.demo {
+    bind = "0.0.0.0:1883"
+    mountpoint = "department-a/"
+}
+```
+
+The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
+
+### Incompatibility with Topic-Prefix Extension Features
+
+Several EMQX features are triggered by publishing or subscribing to topics that start with a special `$` prefix. The mountpoint is prepended *before* EMQX matches these prefixes. For a client connected through a listener with mountpoint `mp/`, a message published to `$delayed/10/t` reaches the broker with the topic `mp/$delayed/10/t`, which no longer starts with `$delayed/`. The feature is silently bypassed: EMQX routes the message as an ordinary message under the mounted literal topic, and no error is reported to the client.
+
+::: warning
+Do not configure a mountpoint on listeners whose clients use any of the following features:
+
+| Feature | Topic Prefix |
+| --- | --- |
+| [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
+| [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
+| [Message Queue](../message-queue/message-queue-concept.md) | `$q/` |
+| [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
+| [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
+| [Dynamic Keep Alive Adjustment](./mqtt.md#dynamic-keep-alive-adjustment) | `$SETOPTS/` |
+| [A2A over MQTT](../emqx-ai/a2a-over-mqtt/overview.md) | `$a2a/` |
+
+For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster. For A2A over MQTT, a mountpoint of exactly one topic level (for example `acme/`) still works: EMQX parses it as a namespace prefix on `$a2a` topics.
+:::
+
+[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/` and `$queue/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are the exception: they work together with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the prefix is added to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
