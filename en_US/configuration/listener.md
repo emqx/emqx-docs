@@ -199,5 +199,5 @@ Do not configure a mountpoint on listeners whose clients use any of the followin
 For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster.
 :::
 
-[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/` and `$queue/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are the exception: they work together with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the prefix is added to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
+[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are the exception: they work together with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the prefix is added to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
 
