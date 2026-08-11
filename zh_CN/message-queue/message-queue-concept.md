@@ -10,6 +10,10 @@ EMQX 中的消息队列是一个命名的、持久化的服务器端缓冲区，
 
 与传统 MQTT 行为不同，消息队列即使在没有任何客户端在线时也会持久化存储消息。客户端可以通过订阅特殊格式的 `$queue/<name>` 或 `$queue/<name>/<topic_filter>` 来消费这些消息。
 
+::: warning 与监听器挂载点不兼容
+对于通过带有[挂载点](../configuration/listener.md#挂载点mountpoint)的监听器连接的客户端，消息队列不生效。EMQX 会先应用挂载点，再匹配 `$queue/` 前缀，因此该订阅会被当作对挂载后字面主题的普通订阅处理。此过程不会向客户端报告任何错误。
+:::
+
 <img src="./assets/message_queue_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## 为什么需要消息队列？
