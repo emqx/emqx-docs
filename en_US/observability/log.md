@@ -31,6 +31,12 @@ The table below describes the meaning and output contents for each log level.
 | error     | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
 | critical  | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | A component is unable to start or function normally due to incorrect configuration. |
 
+::: warning Important Notice
+
+Raw MQTT packet data in connection and parser-error logs is redacted by default. To temporarily log raw packet data for troubleshooting, add trusted client IP addresses or CIDR ranges to the listener's `allow_log_packet_data_from` option. Enable this option only for trusted clients and only during diagnostics, because raw packet data can contain credentials and other sensitive information.
+
+:::
+
 ## Configure Logging via Dashboard
 
 This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
