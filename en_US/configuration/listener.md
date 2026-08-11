@@ -149,3 +149,36 @@ When a listener is linked to a specific zone, MQTT clients connected to that lis
 
 For more information, see the [Zone Override](./configuration.md#zone-override) section in the configuration documentation.
 
+
+## Mountpoint
+
+Each listener can be configured with a `mountpoint`: a topic prefix that EMQX adds to topics used by clients connected through the listener. The prefix is added to topics in `PUBLISH` packets, `SUBSCRIBE` and `UNSUBSCRIBE` requests, and Will messages, and removed from the topics of messages delivered to the client. The mountpoint is transparent to the client and is commonly used to isolate topic spaces between groups of clients, for example in multi-tenant deployments.
+
+```bash
+listeners.tcp.demo {
+    bind = "0.0.0.0:1883"
+    mountpoint = "department-a/"
+}
+```
+
+The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
+
+### Incompatibility with Topic-Prefix Extension Features
+
+Several EMQX features are triggered by publishing or subscribing to topics that start with a special `$` prefix. EMQX adds the mountpoint prefix before it matches these prefixes. For example, if a client connects through a listener with mountpoint `mp/` and publishes to `$delayed/10/t`, the broker receives the topic as `mp/$delayed/10/t`, which no longer starts with `$delayed/`. The feature is silently bypassed: EMQX routes the message as an ordinary message to the mounted literal topic, and no error is reported to the client.
+
+::: warning Compatibility Limitation
+Do not configure a mountpoint on listeners whose clients use any of the following features:
+
+| Feature | Topic Prefix |
+| --- | --- |
+| [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
+| [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
+| [Message Queue](../message-queue/message-queue-concept.md) | `$queue/` |
+| [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
+| [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
+
+For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster.
+:::
+
+[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are exceptions: they work with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the mountpoint is added only to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.
