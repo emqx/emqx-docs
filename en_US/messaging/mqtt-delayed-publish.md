@@ -20,7 +20,7 @@ Example:
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
 ::: warning Incompatible with listener mountpoint
-Delayed publish does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. The mountpoint is prepended before EMQX matches the `$delayed/` prefix, so the message is routed immediately, as an ordinary message, to the mounted literal topic (for example, `mp/$delayed/10/t`). No error is reported to the client.
+Delayed publish does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$delayed/` prefix, so the message is routed immediately as an ordinary message to the mounted literal topic, such as `mp/$delayed/10/t`. No error is reported to the client.
 :::
 
 ## Configure Delayed Publish via Dashboard
@@ -94,6 +94,4 @@ Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subs
    ```bash
    mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"
    ```
-
-
 

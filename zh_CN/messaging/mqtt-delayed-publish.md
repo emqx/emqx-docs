@@ -20,7 +20,7 @@ $delayed/{DelayInterval}/{TopicName}
 - `$delayed/3600/$SYS/topic`：1 小时后将 MQTT 消息发布到 `$SYS/topic`。
 
 ::: warning 与监听器挂载点不兼容
-对于通过配置了[挂载点](../configuration/listener.md#挂载点mountpoint)的监听器连接的客户端，延迟发布不生效。挂载点前缀会在 EMQX 匹配 `$delayed/` 前缀之前被添加，因此消息会作为普通消息立即路由到挂载后的字面主题（例如 `mp/$delayed/10/t`），且不会向客户端报告任何错误。
+对于通过带有[挂载点](../configuration/listener.md#挂载点mountpoint)的监听器连接的客户端，延迟发布不生效。EMQX 会先应用挂载点，再匹配 `$delayed/` 前缀，因此消息会作为普通消息立即路由到挂载后的字面主题，例如 `mp/$delayed/10/t`。此过程不会向客户端报告任何错误。
 :::
 
 ## 通过 Dashboard 配置延迟发布
@@ -94,4 +94,3 @@ $delayed/{DelayInterval}/{TopicName}
    ```bash
    mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"
    ```
-
