@@ -1,13 +1,12 @@
 # MQTT Shared Subscription
 
-EMQX implements the shared subscription feature of MQTT. A shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. You can add a prefix to the original topic to enable a shared subscription for multiple subscribers. EMQX supports shared subscription prefixes in two formats: shared subscription for groups (prefixed with `$share/<group-name>/`) and shared subscription not for groups (prefixed with `$queue/`).
+EMQX implements the shared subscription feature of MQTT. A shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. To enable a shared subscription for multiple subscribers, add the prefix `$share/<group-name>/` to the original topic.
 
-Examples of two shared subscription prefixes formats are as follows.
+An example of the shared subscription prefix format is as follows.
 
 | Prefixes format                  | Example        | Prefix      | Real topic name |
 | --------------------------------- | -------------- | ----------- | --------------- |
 | Shared subscription for groups    | $share/abc/t/1 | $share/abc/ |t/1|
-| Shared subscription not for group | $queue/t/1     | $queue/     |t/1|
 
 You can use client tools to connect to EMQX and try this messaging service. This section introduces how shared subscription works and provides a demonstration of how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try the shared subscription feature.
 
@@ -23,11 +22,9 @@ For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`, subs
 
 <img src="./assets/shared_subscription_group.png" alt="shared_subscription_group" style="zoom:50%;" />
 
-## Shared Subscription Not for Groups
+## Deprecated `$queue/` Prefix
 
-Shared subscription topics prefixed with `$queue/` are for subscribers not in groups. It is a special case of a shared subscription topic with a `$share` prefix. You can understand it as all subscribers in a subscription group such as `$share/$queue`.
-
-<img src="./assets/shared_subscription_queue.jpg" alt="shared_subscription_queue" style="zoom:50%;" />
+EMQX also accepts the `$queue/` prefix as a shared subscription without a group name. This prefix is deprecated. Use `$share/<group-name>/` instead: a subscription to `$queue/t/1` is equivalent to `$share/$queue/t/1`.
 
 ## Shared Subscription and Session
 

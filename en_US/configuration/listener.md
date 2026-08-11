@@ -193,7 +193,6 @@ Do not configure a mountpoint for listeners whose clients use any of the followi
 | --- | --- |
 | [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
 | [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
-| [Message Queue](../message-queue/message-queue-concept.md) | `$q/` |
 | [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
 
 For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster.

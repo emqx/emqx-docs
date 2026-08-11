@@ -185,7 +185,6 @@ EMQX 的一些功能通过发布或订阅带有特殊 `$` 前缀的主题来触�
 | --- | --- |
 | [延迟发布](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
 | [文件传输](../file-transfer/introduction.md) | `$file/`、`$file-async/`、`$file-response/` |
-| [消息队列](../message-queue/message-queue-concept.md) | `$q/` |
 | [集群连接](../cluster-linking/introduction.md) | `$LINK/` |
 
 对于集群连接，接受对端集群连接的监听器不能配置挂载点。
