@@ -376,6 +376,10 @@
   path: access-control/security-guide
   collapsed: true
   children:
+    - title_en: Security Profiles
+      title_cn: 安全配置方案
+      title_ja: セキュリティプロファイル
+      path: access-control/security-profile
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       title_ja: ネットワークと TLS
