@@ -180,6 +180,12 @@ Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.g
    $ emqx ctl plugins install my_emqx_plugin-1.0.0
    ```
 
+   To install the plugin on all running nodes in a cluster, add the `--cluster` flag:
+
+   ```
+   $ emqx ctl plugins install my_emqx_plugin-1.0.0 --cluster
+   ```
+
 3. Check plugin list:
 
    ```
