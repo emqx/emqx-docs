@@ -6,6 +6,10 @@ This page provides an overview of the file transfer process from a client's pers
 
 While reusing existing MQTT connections, clients can control file transfer sessions by publishing predetermined messages to topics with specific prefixes.
 
+::: warning Incompatible with Listener Mountpoint
+File transfer does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$file/` and `$file-async/` command prefixes, so file transfer commands are routed as ordinary messages to the mounted literal topics. Subscriptions to the `$file-response/` response topic are also mounted, so clients do not receive command result messages from EMQX. No error is reported to the client.
+:::
+
 The client-side file transfer process is as follows:
 
 1. **Preparation for Transfer**: The client device selects the file to be uploaded and generates a unique `file_id` to identify the transfer session.
