@@ -165,7 +165,7 @@ EMQX 的一些功能通过发布或订阅带有特殊 `$` 前缀的主题来触�
 | --- | --- |
 | [延迟发布](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
 | [文件传输](../file-transfer/introduction.md) | `$file/`、`$file-async/`、`$file-response/` |
-| [消息队列](../message-queue/message-queue-concept.md) | `$q/` |
+| [消息队列](../message-queue/message-queue-concept.md) | `$queue/` |
 | [MQTT 消息流](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
 | [集群连接](../cluster-linking/introduction.md) | `$LINK/` |
 | [动态 Keep Alive 调整](./mqtt.md#动态-keep-alive-调整) | `$SETOPTS/` |

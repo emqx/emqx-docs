@@ -10,11 +10,11 @@ Authorization checks are performed before the topic is rewritten.
 
 :::tip
 
-Topic rewriting only applies to the actual topics when it comes to client subscriptions/unsubscriptions for shared subscription topics. In other words, it only affects the portion of shared subscription topics after removing the prefix `$share/<group-name>/` or `$queue`.
+Topic rewriting only applies to the actual topics when it comes to client subscriptions/unsubscriptions for shared subscription topics. In other words, it only affects the portion of shared subscription topics after removing the prefix `$share/<group-name>/`.
 
-For example, when a client subscribes/unsubscribes to a shared subscription topic filter like `$share/group/t/1` or `$queue/t/2`, it will only attempt to match and rewrite `t/1` or `t/2`, ignoring `$share/group/` and `$queue/`.
+For example, when a client subscribes/unsubscribes to a shared subscription topic filter like `$share/group/t/1`, it will only attempt to match and rewrite `t/1`, ignoring `$share/group/`.
 
-For more information about shared subscriptions and `$queue`, please refer to [Shared Subscriptions](./mqtt-shared-subscription.md).
+For more information about shared subscriptions, please refer to [Shared Subscriptions](./mqtt-shared-subscription.md).
 
 :::
 
