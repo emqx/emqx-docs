@@ -174,7 +174,7 @@ Do not configure a mountpoint on listeners whose clients use any of the followin
 | --- | --- |
 | [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
 | [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
-| [Message Queue](../message-queue/message-queue-concept.md) | `$q/` |
+| [Message Queue](../message-queue/message-queue-concept.md) | `$queue/` |
 | [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
 | [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
 

@@ -10,6 +10,10 @@ A Message Queue in EMQX is a named, durable server-side buffer that stores MQTT 
 
 Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$queue/<name>` or `$queue/<name>/topic_filter>` format.
 
+::: warning Incompatible with Listener Mountpoint
+Message Queue does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$queue/` prefix, so the subscription is treated as an ordinary subscription to the mounted literal topic. No error is reported to the client.
+:::
+
 Message Queue uses embedded Durable Storage. Before enabling Message Queue, ensure that the EMQX data directory uses a local filesystem. [Embedded Durable Storage backends](../design/durable-storage.md#embedded-backends) do not support network filesystems such as NFS and SMB/CIFS.
 
 <img src="./assets/message_queue_routing_overview.png" alt="message_queue_routing_overview" style="zoom:50%;" />
