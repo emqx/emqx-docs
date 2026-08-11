@@ -171,7 +171,7 @@ For more information, see the [Zone Override](./configuration.md#zone-override) 
 
 ## Mountpoint
 
-Each listener can be configured with a `mountpoint`: a topic prefix that EMQX adds to topics used by clients connected through the listener. The prefix is added to topics in `PUBLISH` packets, `SUBSCRIBE` and `UNSUBSCRIBE` requests, and Will messages. It is removed from message topics before the messages are delivered to the client. The mountpoint is transparent to the client and is commonly used to isolate topic spaces between groups of clients, for example in multi-tenant deployments.
+Each listener can be configured with a `mountpoint`: a topic prefix that EMQX adds to topics used by clients connected through the listener. The prefix is added to topics in `PUBLISH` packets, `SUBSCRIBE` and `UNSUBSCRIBE` requests, and Will messages, and removed from the topics of messages delivered to the client. The mountpoint is transparent to the client and is commonly used to isolate topic spaces between groups of clients, for example in multi-tenant deployments.
 
 ```bash
 listeners.tcp.demo {
