@@ -19,7 +19,7 @@ Example:
 - `$delayed/1743490800/chat/id`: Publish message to the topic `chat/id` on April 1st, 2025 at 9:00 (Stockholm timezone).
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
-::: warning Incompatible with listener mountpoint
+::: warning Incompatible with Listener Mountpoint
 Delayed publish does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$delayed/` prefix, so the message is routed immediately as an ordinary message to the mounted literal topic, such as `mp/$delayed/10/t`. No error is reported to the client.
 :::
 
@@ -94,4 +94,3 @@ Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subs
    ```bash
    mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"
    ```
-
