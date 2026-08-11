@@ -4,8 +4,8 @@ A2A over MQTT is a broker-neutral transport profile that brings the [Agent-to-Ag
 
 EMQX implements A2A over MQTT through the **A2A Registry**, a built-in feature that indexes Agent Cards published to discovery topics, tracks agent liveness, and provides management interfaces for operators.
 
-::: warning Incompatible with most listener mountpoints
-The A2A Registry does not work for agents connected through a listener with a [mountpoint](../../configuration/listener.md#mountpoint) configured, unless the mountpoint is exactly one topic level (for example `acme/`), which EMQX parses as a namespace prefix on `$a2a` topics. With any other mountpoint, the mounted topics no longer match the `$a2a/v1/` conventions: Agent Cards are stored as ordinary retained messages without being indexed, validated, or annotated with liveness status, and no error is reported to the client.
+::: warning Incompatible with Most Listener Mountpoints
+The A2A Registry does not work for agents connected through a listener with a [mountpoint](../../configuration/listener.md#mountpoint) configured. The only exception is a mountpoint with exactly one topic level, such as `acme/`, which EMQX parses as a namespace prefix on `$a2a` topics. With any other mountpoint, the mounted topics no longer match the `$a2a/v1/` conventions: Agent Cards are stored as ordinary retained messages without being indexed, validated, or annotated with liveness status. No error is reported to the client.
 :::
 
 ## Why MQTT for A2A
