@@ -297,6 +297,7 @@
     - durability/durability_introduction
     - connect-emqx/curl
     - connect-emqx/node-red
+    - connect-emqx/apache-nifi
     - title_en: Client SDK
       title_cn: 客户端 SDK
       title_ja: クライアント SDK
