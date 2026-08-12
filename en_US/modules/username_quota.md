@@ -5,7 +5,7 @@ Starting from version 4.4.25, a new username quota module has been added to limi
 When a username exceeds its quota, new session connections will be rejected, and the corresponding CONNACK return code will be sent: "0x97 Quota Exceeded" (MQTT 5.0) or "0x03 Service Unavailable" (MQTT 3.1.1).
 
 ::: tip Note
-Starting from Enterprise 4.4.38, the cross-node data synchronization of the username quota module has been refactored from Mnesia replication to streaming synchronization based on a per-node ETS table and a dedicated RPC channel, which reduces memory usage and the resource consumption during cluster node changes, and adds overload protection for the data synchronization and processing paths. Accordingly, the previously deprecated `refresh_username_tab_interval` configuration item (the **Refresh Username Interval** option in the Dashboard) has been removed.
+Starting from Enterprise 4.4.38, the username quota module uses a new cross-node synchronization mechanism to improve performance and stability in clusters. The `refresh_username_tab_interval` configuration item, shown as **Refresh Username Interval** in the Dashboard, has been removed.
 :::
 
 ## Add Username Quota Module
