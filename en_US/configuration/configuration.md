@@ -570,7 +570,7 @@ System tuning parameters. This configuration will override the `-kernel net_tick
 Specifying how long time when a node has been unresponsive, it is considered to be down and disconnected. For details, see [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime).
 
 ::: tip Tip
-Starting from Enterprise 4.4.38, the default `net_ticktime` is adjusted from `120` seconds to `60` seconds (configured via `-kernel net_ticktime` in the `vm.args` file), which allows the cluster to detect and remove unresponsive nodes faster, reducing the time window during which RPC requests are blocked on failed nodes.
+Starting from Enterprise 4.4.38, the default `net_ticktime` is adjusted from `120` seconds to `60` seconds. This value is configured by `-kernel net_ticktime` in the `vm.args` file. The shorter interval allows the cluster to detect and remove unresponsive nodes faster, reducing the time window during which RPC requests are blocked on failed nodes.
 :::
 
 
