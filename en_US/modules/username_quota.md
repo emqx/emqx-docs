@@ -55,6 +55,13 @@ In addition to viewing the username quota module on the Dashboard, you can also 
 ### GET /api/v4/quota/usernames
 
 Get the list of usernames in the cluster, sorted in descending order by the number of sessions for each username.
+To get the client IDs for a username, use `GET /api/v4/quota/usernames/:username`.
+
+This API supports the following query parameters:
+
+- `sort`: Sorts usernames by the number of sessions. The default value is `true`, which sorts usernames in descending order. Set it to `false` to sort usernames in ascending order.
+- `_page`: Specifies the page number. The value must be a positive integer.
+- `_limit`: Specifies the number of items per page. The value must be a positive integer and cannot exceed the maximum row limit.
 
 **Success Response Body (JSON):**
 
@@ -64,7 +71,6 @@ Get the list of usernames in the cluster, sorted in descending order by the numb
 | data | Array   | List of username details   |
 | data[0].username | String   | Username |
 | data[0].used | Integer   | Number of sessions for the username |
-| data[0].clientids | Array | List of client IDs |
 
 **Examples**
 
@@ -80,10 +86,7 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
   "data": [
     {
       "username": "a",
-      "used": 1,
-      "clientids": [
-        "mqttjs_6916e2ae"
-      ]
+      "used": 1
     }
   ],
   "code": 0

@@ -50,6 +50,13 @@
 ### GET /api/v4/quota/usernames
 
 获取集群中的用户名列表，按照用户名的会话数降序排列。
+如需获取某个用户名下的客户端 ID，请使用 `GET /api/v4/quota/usernames/:username`。
+
+该接口支持以下查询参数：
+
+- `sort`：按会话数对用户名排序。默认值为 `true`，表示按会话数降序排列；设置为 `false` 时按会话数升序排列。
+- `_page`：指定页码。取值必须为正整数。
+- `_limit`：指定每页返回的条目数。取值必须为正整数，且不能超过最大行数限制。
 
 **成功响应体 (JSON):**
 
@@ -59,7 +66,6 @@
 | data | Array   | 用户名详情列表   |
 | data[0].username | String   | 用户名 |
 | data[0].used | Integer   | 该用户名的会话数 |
-| data[0].clientids | Array | 包含客户端 ID 的列表 |
 
 **示例**
 
@@ -75,10 +81,7 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
   "data": [
     {
       "username": "a",
-      "used": 1,
-      "clientids": [
-        "mqttjs_6916e2ae"
-      ]
+      "used": 1
     }
   ],
   "code": 0
