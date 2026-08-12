@@ -17,6 +17,7 @@ This checklist helps you review an EMQX deployment before exposing it to product
 
 - Replace the default node cookie on every node in the cluster, and use the same high-entropy secret on all members. See [Set Node Cookie](../deploy/cluster/security.md#set-node-cookie).
 - Protect `emqx.conf`, ACL files, certificates, private keys, and other secret material with strict file permissions and secure secret-management processes.
+- Store secret-typed fields as `file://` references instead of inline values whenever possible. For any field documented as a secret, such as SSL key passphrases, bridge and connector passwords, and API keys, set the value to `file:///path/to/secret` so EMQX reads the secret from a file at startup and at every reload. This keeps plaintext secrets out of config files, API request bodies, configuration backups, and version control, which lowers the risk of leaking them when you share or export configurations. See [Load Secrets from a File](../configuration/secret-from-file.md).
 - Keep clustering ports internal, and enable TLS for inter-node communication when traffic crosses less-trusted networks or public cloud boundaries. See [Cluster Security](../deploy/cluster/security.md).
 - Re-check firewall rules, certificates, and cluster membership controls after adding nodes, moving networks, or changing deployment topology.
 
