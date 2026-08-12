@@ -757,31 +757,32 @@ error
 
 ## log-throttling 命令
 
-从企业版 4.4.38 版本开始，支持使用 `log-throttling` 命令在运行时查看和调整日志节流配置，并可按照日志行号覆盖节流上限。
+从企业版 4.4.38 版本开始，支持使用 `log-throttling` 命令在运行时查看和调整日志限流配置，并可为指定日志行号设置独立限流阈值。
 
-此前日志节流的全局上限（limit）、时间窗口（window）与级别（level）只能通过配置文件设定。本版本新增 `log-throttling` 命令组：
+此前日志限流的全局阈值（limit）、时间窗口（window）与级别（level）只能通过配置文件设定。本版本新增 `log-throttling` 命令组：
 
 | 命令                                                             | 描述                                                   |
 | ---------------------------------------------------------------- | ------------------------------------------------------ |
-| `log-throttling print`                                           | 打印本节点的全部日志节流配置                           |
-| `log-throttling print-cluster`                                   | 打印集群所有节点的日志节流配置                         |
-| `log-throttling limit set <Limit>`                               | 设置全局节流上限                                       |
-| `log-throttling limit set-cluster <Limit>`                       | 在集群所有节点上设置全局节流上限                       |
+| `log-throttling print`                                           | 打印本节点的全部日志限流配置                           |
+| `log-throttling print-cluster`                                   | 打印集群所有节点的日志限流配置                         |
+| `log-throttling limit set <Limit>`                               | 设置全局限流阈值                                       |
+| `log-throttling limit set-cluster <Limit>`                       | 在集群所有节点上设置全局限流阈值                       |
 | `log-throttling window set <Duration>`                           | 设置节流时间窗口                                       |
 | `log-throttling window set-cluster <Duration>`                   | 在集群所有节点上设置节流时间窗口                       |
 | `log-throttling level set <Level>`                               | 设置节流级别                                           |
 | `log-throttling level set-cluster <Level>`                       | 在集群所有节点上设置节流级别                           |
-| `log-throttling line-limit set '<Mod:Ln,...>' <Limit>`           | 为指定日志行号设置独立的节流上限                       |
-| `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>`   | 在集群所有节点上为指定日志行号设置独立的节流上限       |
-| `log-throttling line-limit del '<Mod:Ln,...>'`                   | 删除指定日志行号的节流上限覆盖                         |
-| `log-throttling line-limit del-cluster '<Mod:Ln,...>'`           | 在集群所有节点上删除指定日志行号的节流上限覆盖         |
-| `log-throttling line-limit del`                                  | 删除所有日志行号的节流上限覆盖                         |
+| `log-throttling line-limit set '<Mod:Ln,...>' <Limit>`           | 为指定日志行号设置独立限流阈值                         |
+| `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>`   | 在集群所有节点上为指定日志行号设置独立限流阈值         |
+| `log-throttling line-limit del '<Mod:Ln,...>'`                   | 删除指定日志行号的限流阈值覆盖配置                     |
+| `log-throttling line-limit del-cluster '<Mod:Ln,...>'`           | 在集群所有节点上删除指定日志行号的限流阈值覆盖配置     |
+| `log-throttling line-limit del`                                  | 删除所有日志行号的限流阈值覆盖配置                     |
+| `log-throttling line-limit del-cluster`                          | 在集群所有节点上删除所有日志行号的限流阈值覆盖配置     |
 
 由于行号会随版本演进而变化，该功能刻意不写入配置文件，适合在发现某条日志打印过频或过少时临时调整。
 
 ### log-throttling print
 
-打印本节点的全部日志节流配置：
+打印本节点的全部日志限流配置：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling print
@@ -794,7 +795,7 @@ line_limits: none
 
 ### log-throttling print-cluster
 
-打印集群所有节点的日志节流配置：
+打印集群所有节点的日志限流配置：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling print-cluster
@@ -808,7 +809,7 @@ line_limits: none
 
 ### log-throttling limit set \<Limit>
 
-设置全局节流上限。例如，将全局上限设置为 5：
+设置全局限流阈值。例如，将全局阈值设置为 5：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling limit set 5
@@ -832,7 +833,7 @@ $ ./bin/emqx_ctl log-throttling level set warning
 
 ### log-throttling line-limit set '\<Mod:Ln,...>' \<Limit>
 
-为指定日志行号设置独立的节流上限。例如，将 `emqx_channel` 模块第 `1551` 行和 `emqx_username_quota` 模块第 `245` 行的限制改为 `0`（完全静默），其他行号仍沿用全局上限：
+为指定日志行号设置独立限流阈值。例如，将 `emqx_channel` 模块第 `1551` 行和 `emqx_username_quota` 模块第 `245` 行的限制改为 `0`（完全静默），其他行号仍沿用全局阈值：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling line-limit set 'emqx_channel:1551,emqx_username_quota:245' 0
@@ -853,7 +854,7 @@ line_limits:
 
 ### log-throttling line-limit del '\<Mod:Ln,...>'
 
-删除指定日志行号的节流上限覆盖：
+删除指定日志行号的限流阈值覆盖配置：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling line-limit del 'emqx_channel:1551,emqx_username_quota:245'
@@ -861,10 +862,18 @@ $ ./bin/emqx_ctl log-throttling line-limit del 'emqx_channel:1551,emqx_username_
 
 ### log-throttling line-limit del
 
-删除所有日志行号的节流上限覆盖：
+删除所有日志行号的限流阈值覆盖配置：
 
 ```bash
 $ ./bin/emqx_ctl log-throttling line-limit del
+```
+
+### log-throttling line-limit del-cluster
+
+在集群所有节点上删除所有日志行号的限流阈值覆盖配置：
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit del-cluster
 ```
 
 ## trace 命令

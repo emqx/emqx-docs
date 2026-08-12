@@ -756,7 +756,8 @@ Previously, the global throttling upper limit, time window, and level of log thr
 | `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>`    | Set dedicated throttling limits on all nodes in the cluster         |
 | `log-throttling line-limit del '<Mod:Ln,...>'`                    | Delete the throttling limit override for the specified log lines    |
 | `log-throttling line-limit del-cluster '<Mod:Ln,...>'`            | Delete the throttling limit overrides on all nodes in the cluster   |
-| `log-throttling line-limit del`                                  | Delete all per-line throttling limits                                |
+| `log-throttling line-limit del`                                   | Delete all per-line throttling limits                               |
+| `log-throttling line-limit del-cluster`                           | Delete all per-line throttling limits on all nodes in the cluster   |
 
 Since log line numbers change as the version evolves, this feature is intentionally not written to the configuration file, and is suitable for temporary adjustments when a log line is found to be printed too frequently or too rarely.
 
@@ -846,6 +847,14 @@ Delete all per-line throttling limits:
 
 ```bash
 $ ./bin/emqx_ctl log-throttling line-limit del
+```
+
+### log-throttling line-limit del-cluster
+
+Delete all per-line throttling limits on all nodes in the cluster:
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit del-cluster
 ```
 
 ## trace command

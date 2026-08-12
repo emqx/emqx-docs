@@ -323,4 +323,4 @@ log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "C
 
 ### 运行时调整日志限流
 
-从企业版 4.4.38 版本开始，您还可以使用 `emqx ctl log-throttling` 命令在运行时查看和调整日志节流配置，并为指定日志行号设置独立的节流上限。详情请参见 [CLI log-throttling 命令](../advanced/cli.md#log-throttling-命令)。
+从企业版 4.4.38 版本开始，您还可以使用 `emqx_ctl log-throttling` 命令在运行时查看和调整日志限流配置，并为指定日志行号设置独立限流阈值。详情请参见 [CLI log-throttling 命令](../advanced/cli.md#log-throttling-命令)。

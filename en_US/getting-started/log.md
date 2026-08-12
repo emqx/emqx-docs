@@ -292,4 +292,4 @@ This log indicates that over the last 60 seconds, the `emqx_channel` module at l
 
 ### Adjust Log Throttling at Runtime
 
-Starting from Enterprise 4.4.38, you can also view and adjust the log throttling configuration at runtime with the `emqx ctl log-throttling` command, and set a dedicated throttling limit for specific log lines. For details, see [CLI log-throttling Command](../advanced/cli.md#log-throttling-command).
+Starting from Enterprise 4.4.38, you can also view and adjust the log throttling configuration at runtime with the `emqx_ctl log-throttling` command, and set a dedicated throttling limit for specific log lines. For details, see [CLI log-throttling Command](../advanced/cli.md#log-throttling-command).
