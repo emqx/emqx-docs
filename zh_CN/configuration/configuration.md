@@ -565,13 +565,17 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `120`   |
+| integer | `60`    |
 
 #### 说明
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `-kernel net_ticktime` 参数。
 
 当一个节点持续无响应多久之后，认为其已经宕机并断开连接。详情请参见 [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime)。
+
+::: tip 提示
+从企业版 4.4.38 版本开始，`net_ticktime` 的默认值由 `120` 秒调整为 `60` 秒（通过 `vm.args` 中的 `-kernel net_ticktime` 配置），集群能够更快地发现并移除无响应的节点，缩短 RPC 请求阻塞在故障节点上的时间窗口。
+:::
 
 <br />
 ### node.dist_use_interface
@@ -1535,11 +1539,15 @@ Topic层级过多可能导致订阅时的性能问题。
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
+| enum | `true`, `false` | `true`  |
 
 #### 说明
 
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
+
+::: tip 提示
+从企业版 4.4.38 版本开始，`mqtt.strict_mode` 的默认值由 `false` 调整为 `true`，即默认启用严格解析模式。严格模式下，EMQX 会拒绝包含不合法 UTF-8 字符、控制字符、以及其他不符合 [MQTT UTF-8 Encoded String 规范](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010) 的报文结构。
+:::
 
 ### mqtt.response_information
 

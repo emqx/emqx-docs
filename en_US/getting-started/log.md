@@ -272,16 +272,24 @@ Starting from Enterprise 4.4.25, EMQX supports a log throttling feature, which l
 Logs with the same `module name` and `line number` are considered duplicate logs. For these duplicate logs, EMQX will only print the first N entries within the specified time window, and any additional duplicate logs are discarded. Throttling-related parameters can be configured in the `etc/logger.conf` file:
 
 ```
-log.throttling = 50,60s
+log.throttling = 5,60s
 log.throttling_level = warning
 ```
 
-Log throttling is enabled by default, with a default time window of 60 seconds, and a throttling threshold of 50 entries. Only logs at the `warning` level and above are throttled by default. You can disable log throttling by setting `log.throttling` to `disabled`.
+Log throttling is enabled by default, with a default time window of 60 seconds, and a throttling threshold of 5 entries. Only logs at the `warning` level and above are throttled by default. You can disable log throttling by setting `log.throttling` to `disabled`.
 
-To improve the efficiency of the throttling feature, EMQX starts N throttlers, where N is the number of CPU cores. This means that when `log.throttling = 50,60s` is set, each throttler will limit the number of duplicate logs to a maximum of 50 per minute. Assuming an 8-core CPU, depending on the Erlang virtual machine’s process scheduling, the total number of logs printed per minute can range from 50 to 400. If any logs are discarded by the throttler, EMQX will print a log message at the end of the time window, indicating the number of discarded logs:
+::: tip Note
+Starting from Enterprise 4.4.38, the default log throttling threshold is adjusted from `50,60s` to `5,60s`, which means each log line is printed at most 5 times within a 60-second window by default. Logs exceeding this limit are discarded and summarized. This reduces screen flooding caused by high-frequency logs.
+:::
+
+To improve the efficiency of the throttling feature, EMQX starts N throttlers, where N is the number of CPU cores. This means that when `log.throttling = 5,60s` is set, each throttler will limit the number of duplicate logs to a maximum of 5 per minute. Assuming an 8-core CPU, depending on the Erlang virtual machine’s process scheduling, the total number of logs printed per minute can range from 5 to 40. If any logs are discarded by the throttler, EMQX will print a log message at the end of the time window, indicating the number of discarded logs:
 
 ```erlang
 log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
 ```
 
 This log indicates that over the last 60 seconds, the `emqx_channel` module at line 1400 printed many logs, and a total of 33 logs were discarded. Be aware that some important information may be lost in discarded logs, such as the client ID, username, and the reason for the login failure in the example above. This information can only be inferred from the duplicate logs printed before throttling occurred.
+
+### Adjust Log Throttling at Runtime
+
+Starting from Enterprise 4.4.38, you can also view and adjust the log throttling configuration at runtime with the `emqx ctl log-throttling` command, and set a dedicated throttling limit for specific log lines. For details, see [CLI log-throttling Command](../advanced/cli.md#log-throttling-command).

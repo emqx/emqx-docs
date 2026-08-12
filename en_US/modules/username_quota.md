@@ -4,6 +4,10 @@ Starting from version 4.4.25, a new username quota module has been added to limi
 
 When a username exceeds its quota, new session connections will be rejected, and the corresponding CONNACK return code will be sent: "0x97 Quota Exceeded" (MQTT 5.0) or "0x03 Service Unavailable" (MQTT 3.1.1).
 
+::: tip Note
+Starting from Enterprise 4.4.38, the cross-node data synchronization of the username quota module has been refactored from Mnesia replication to streaming synchronization based on a per-node ETS table and a dedicated RPC channel, which reduces memory usage and the resource consumption during cluster node changes, and adds overload protection for the data synchronization and processing paths. Accordingly, the previously deprecated `refresh_username_tab_interval` configuration item (the **Refresh Username Interval** option in the Dashboard) has been removed.
+:::
+
 ## Add Username Quota Module
 
 1. Click **Modules** from the left navigation menu on the Dashboard.
@@ -16,7 +20,6 @@ When a username exceeds its quota, new session connections will be rejected, and
 
    - **Max Sessions Per Username**: Defines the maximum number of MQTT sessions allowed for each username. Note that if the MQTT client logs in using a persistent session, the session will remain on the server even after the client disconnects, until the session expires and is cleared.
    - **Username White List**: You can add username entries by clicking the **Add** button on the right. Usernames in the whitelist are not subject to session limits. For example, clients connecting to a cluster using the MQTT bridge should bypass the quota limitation, you can add the usernames used by the MQTT bridge to the whitelist.
-   - **Refresh Username Interval**: Specifies how frequently the local username quota table is refreshed by synchronizing with other nodes in the cluster, in seconds. This helps prevent inconsistencies in username session states across nodes in certain exceptional cases. The default interval is `900` seconds (15 minutes), and the minimum allowed value is `30` seconds.
 
 5. Click **Add** to complete the settings.
 
