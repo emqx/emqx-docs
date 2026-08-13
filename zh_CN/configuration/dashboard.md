@@ -2,7 +2,7 @@
 
 在 EMQX 中， Dashboard 是一个基于 Web 的图形界面，用于实时管理和监控 EMQX 及连接的设备。
 
-EMQX Dashboard 配置包括很多配置项，例如，为 Dashboard 配置 `swagger_support` 和一个监听器以接受所有传入连接。除此以外，还有以下常用的配置项：
+EMQX Dashboard 配置包括很多配置项，例如，通过 `swagger_support` 启用 API 规范端点，以及为 Dashboard 配置监听器以接收所有传入连接。除此以外，还有以下常用配置项：
 
 - `listeners`
 - `token_expired_time`
@@ -127,7 +127,7 @@ dashboard {
 
 - `swagger_support = true`
 
-  用于启用 API 文档端点，包括 Swagger UI（`/api-docs`）和 API 规范页面（`/api-spec.html`、`/api-spec.md`、`/api-spec.json`）。将其设置为 `false` 可禁用所有 API 文档端点。
+  用于启用 API 文档端点，包括 `/api-spec.html`、`/api-spec.md`、`/api-spec.json`，以及提供完整 OpenAPI 规范的 `/api-docs/swagger.json`。为保持向后兼容，`/api-docs` 和 `/api-docs/index.html` 会重定向到 `/api-spec.html`。将此配置项设置为 `false` 可禁用所有 API 文档端点。
 
 - `default_password`
 

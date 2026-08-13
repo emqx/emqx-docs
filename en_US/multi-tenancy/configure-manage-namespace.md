@@ -115,7 +115,7 @@ To view clients connected to a specific namespace, click **Clients** in the **Ac
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+To view request and response schemas that match the current EMQX instance version, open `/api-spec.html` on the Dashboard listener, for example, `http://localhost:18083/api-spec.html`.
 
 :::
 
