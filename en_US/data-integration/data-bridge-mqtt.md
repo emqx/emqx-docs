@@ -39,7 +39,7 @@ Make sure you know the following:
 
 Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example:
 
-- **MQTT Service Address**: The address and port of the target MQTT service; in this example, it is `broker.emqx.io:1883`.
+- **MQTT Service Address**: The address and port of the target MQTT service; in this example, it is `broker.emqx.io:1883`. Supported formats are `host:port`, `[IPv6]:port`, `mqtt://host:port`, `mqtt://[IPv6]:port`, `mqtts://host:port`, and `mqtts://[IPv6]:port`. If the port is omitted, EMQX uses the default MQTT port `1883`. Other URI schemes are not supported. The `mqtt` and `mqtts` schemes are used only for address parsing. Configure TLS separately in the connector settings when connecting to a TLS-enabled MQTT listener.
 - **Username**: The username required for the connection. If the target service does not require authentication, this can be left blank.
 - **Password**: The password required for the connection. If the target service does not require authentication, this can also be left blank.
 - **Protocol Type**: It is important to determine whether the target service has enabled TLS and whether it is using MQTT over TCP/TLS protocol. Note that the EMQX MQTT bridge currently does not support protocols like MQTT over WebSocket and MQTT over QUIC.
@@ -66,7 +66,7 @@ This section guides you on how to configure a connection with a remote MQTT serv
 4. Enter a **name** for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_mqtt_bridge`.
 
 5. Configure the connection information:
-   - **MQTT Broker**: Only supports MQTT over TCP/TLS. For example, `broker.emqx.io:1883`.
+   - **MQTT Broker**: Only supports MQTT over TCP/TLS. Enter the MQTT service address, for example, `broker.emqx.io:1883`, `[::1]:1883`, or `mqtt://broker.emqx.io:1883`. For TLS-enabled MQTT listeners, configure TLS separately in the connector settings.
    
    - **ClientID Prefix**: This can be left blank. In actual use, specifying a client ID prefix can facilitate client management. EMQX will automatically generate client IDs based on the client ID prefix and the size of the connection pool. For more information, see [Connection Pool and Client ID Generation Rules](#connection-pool-and-client-id-generation-rules).
    
@@ -259,6 +259,10 @@ This section demonstrates how to create a rule for forwarding data from a remote
 
    - **QoS**: The subscription QoS, select `0` or `1` from the dropdown.
 
+   - **No Local**: Enable this option if you use the same connector to publish messages to a topic that this Source also subscribes to and want to prevent the remote MQTT broker from forwarding those messages back to the Source. This option is disabled by default and takes effect only when the connector uses MQTT 5.0.
+
+   - **Retain As Published**: Enable this option to preserve the original `retain` flag on messages forwarded by the upstream MQTT broker. When disabled, the upstream MQTT broker clears the `retain` flag. This option is enabled by default and takes effect only when the connector uses MQTT 5.0.
+
 9. Use the default settings for other configurations and click the **Create** button to complete the Source creation, adding the Source to the rule data input. You will also notice that the rule SQL has changed to:
 
    ```sql
@@ -274,7 +278,7 @@ This section demonstrates how to create a rule for forwarding data from a remote
    | ----------------------------- | ------------------------------------------------------------ |
    | topic                         | Originating message topic                                    |
    | server                        | Server address of the connected Source                       |
-   | retain                        | Whether the message is a retained message, value is false    |
+   | retain                        | Whether the message carries the `retain` flag received from the upstream MQTT broker. When **Retain As Published** is disabled, this value is `false` |
    | qos                           | Message Quality of Service                                   |
    | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other attributes |
    | pub_props.User-Property-Pairs | Array of user property pairs, each containing a key-value pair, e.g., `{"key":"foo", "value":"bar"}` |
@@ -295,7 +299,7 @@ Now you have completed the creation of the MQTT Source, but the subscribed data 
    - **QoS**: Select from `0`, `1`, `2`, or `${qos}`. You can also use placeholders to set QoS from other fields. Here, select `${qos}` to follow the QoS of the original message.
    - **Retain**: Select `true` or `false` to confirm whether to publish the message as a retained message. You can also use placeholders to set the retain flag from other fields. In this case, you can select `false`.
      - Since the data source is MQTT Source, the `${flags.retain}` option is not applicable here.
-     - You can also enter `${retain}` to follow the retain flag of the original message, but it only works when the message is retained through the external MQTT service's retention mechanism, not when the original message is published to EMQX locally.
+     - You can also enter `${retain}` to follow the retain flag received by the MQTT Source. For an MQTT 5.0 connection, enable **Retain As Published** in the Source to preserve the upstream retain flag.
    - **Payload**: Used to generate the payload of the forwarded message. Leave it blank by default to forward the rule output result. Here, you can enter `${payload}` to only forward the Payload.
 
 3. Click the **Add** button to complete the action creation. You will be directed back to the Create Rule page and the new action will be added under the **Action Outputs** tab.

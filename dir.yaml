@@ -471,6 +471,7 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
+        - data-integration/schema-registry-example-json
         - data-integration/schema-registry-example-external-http
         - data-integration/sparkplug
     - data-integration/schema-validation
@@ -920,11 +921,13 @@
           path: extensions/plugin-catalog
           collapsed: true
           children:
-            - extensions/plugin-catalog/emqx-bridge-mqtt-dq
-            - extensions/plugin-catalog/emqx-unsgov
-            - extensions/plugin-catalog/emqx-username-quota
-            - extensions/plugin-catalog/emqx-offline-messages
-            - extensions/plugin-catalog/emqx-relup
+            - extensions/plugin-catalog/6.1/emqx-acme
+            - extensions/plugin-catalog/6.1/emqx-relup
+            - extensions/plugin-catalog/6.1/emqx-backup-sync
+            - extensions/plugin-catalog/6.1/emqx-bridge-mqtt-dq
+            - extensions/plugin-catalog/6.1/emqx-offline-messages
+            - extensions/plugin-catalog/6.1/emqx-username-quota
+            - extensions/plugin-catalog/6.1/emqx-unsgov
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ
