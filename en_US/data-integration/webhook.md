@@ -91,7 +91,11 @@ python3 http_server.py
 
 4. Select the trigger according to your needs, in this case, select **All messages and events**. For other options, refer to [How it Works](#how-it-works).
 
-5. Select `POST` as the request method and set **URL** to `http://localhost:5000`. To use OAuth2 to protect the Webhook request, turn on **OAuth2 Client Credentials** and configure the required settings. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials). You can click **Test** next to the URL input box to test the connection.
+5. Configure the Webhook request settings:
+
+   - Select `POST` as the request method and set **URL** to `http://localhost:5000`.
+   - Optionally, configure **Query String** to add query parameters to the Webhook request URL, and configure **Headers** to add custom HTTP request headers.
+   - To use OAuth2 to protect the Webhook request, turn on **OAuth2 Client Credentials** and configure the required settings. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials). You can click **Test** next to the URL input box to test the connection.
 
 6. Click **Save** to complete the Webhook creation.
 
