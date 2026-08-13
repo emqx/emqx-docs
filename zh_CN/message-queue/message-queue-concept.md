@@ -12,7 +12,11 @@ EMQX 中的消息队列是一个命名的、持久化的服务器端缓冲区，
 
 消息队列使用 EMQX 内嵌持久存储。启用消息队列前，请确保 EMQX 数据目录使用本地文件系统。[内嵌持久存储后端](../design/durable-storage.md#内嵌后端)不支持 NFS、SMB/CIFS 等网络文件系统。
 
-<img src="./assets/message_queue_routing_overview.png" alt="message_queue_routing_overview" style="zoom:50%;" />
+::: warning 与监听器挂载点不兼容
+对于通过带有[挂载点](../configuration/listener.md#挂载点mountpoint)的监听器连接的客户端，消息队列不生效。EMQX 会先应用挂载点，再匹配 `$queue/` 前缀，因此该订阅会被当作对挂载后字面主题的普通订阅处理。此过程不会向客户端报告任何错误。
+:::
+
+<img src="./assets/message_queue_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## 为什么需要消息队列？
 

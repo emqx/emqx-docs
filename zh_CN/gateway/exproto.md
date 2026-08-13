@@ -5,7 +5,7 @@ Extension Protocol (ExProto) 协议是一个基于 gRPC 通信实现的自定义
 本页介绍了如何在 EMQX 中配置和使用 ExProto 网关。
 
 ::: warning 重要提示
-ExProto Gateway 自 EMQX 6.2.0 起已弃用，并计划在 EMQX 7 中移除。
+ExProto Gateway 自 EMQX 6.2.0 起已弃用，并已在 EMQX 6.3.0 中移除。
 :::
 
 <!--a brief introduction of the architecture-->

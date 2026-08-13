@@ -5,7 +5,7 @@ The Extension Protocol (ExProto) is a custom protocol parsing gateway implemente
 This page introduces the working principle of the ExProto gateway and how to configure and use the ExProto Gateway in EMQX.
 
 ::: warning Important Notice
-ExProto Gateway is deprecated as of EMQX 6.2.0 and is planned for removal in EMQX 7.
+ExProto Gateway is deprecated as of EMQX 6.2.0 and has been removed in EMQX 6.3.0.
 :::
 
 <!--a brief introduction of the architecture-->

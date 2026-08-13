@@ -4,6 +4,10 @@ EMQX 6.1 introduces the MQTT Streams, a streaming and replay feature that extend
 
 This page provides a complete overview of the MQTT Streams feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
 
+::: warning Incompatible with Listener Mountpoint
+Stream replay does not work for clients connected through a listener with a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$stream/` prefix, so a subscription to `$stream/<name>` is treated as an ordinary subscription to the mounted literal topic. No error is reported to the client. Message ingestion is also affected: published topics carry the mountpoint prefix, so they only match streams whose topic filter includes that prefix.
+:::
+
 ## What Is an MQTT Stream?
 
 An MQTT Stream is a named logical resource that continuously collects MQTT messages matching its configured topic filter. Messages are stored durably according to the stream’s retention policy and can later be replayed by subscribing clients.
