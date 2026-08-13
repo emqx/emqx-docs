@@ -300,14 +300,14 @@ http {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header REMOTE-HOST $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-For $remote_addr;
     }
   }
 }
 ```
 
 ::: tip
-`$proxy_add_x_forwarded_for` appends `$remote_addr` to any `X-Forwarded-For` header already present in the inbound request, while EMQX reads the first (leftmost) entry of the header — which in the appended form is supplied by the client and can be spoofed. If EMQX uses this header as the client's source address (see [Forwarded Client Address](../../configuration/listener.md#forwarded-client-address-websocket-listeners)), overwrite the header with the address NGINX observed instead: `proxy_set_header X-Forwarded-For $remote_addr;`.
+The WebSocket examples overwrite `X-Forwarded-For` with `$remote_addr` because EMQX reads the first (leftmost) entry of this header when it uses the header as the client's source address. Do not use `$proxy_add_x_forwarded_for` in this case: it appends `$remote_addr` to any inbound `X-Forwarded-For` header, leaving a client-supplied spoofable value as the leftmost entry. For details, see [Forwarded Client Address](../../configuration/listener.md#forwarded-client-address-websocket-listeners).
 :::
 
 ### Configure Reverse Proxy for MQTT WebSocket SSL
@@ -346,7 +346,7 @@ http {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
 
         # Disable caching
         proxy_buffering off;

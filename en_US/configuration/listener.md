@@ -146,7 +146,7 @@ WebSocket and secure WebSocket listeners have two options that control how EMQX 
 
 When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP.
 
-::: warning Trust the forwarded address header only behind a trusted proxy
+::: warning Trust Forwarded Address Headers Only Behind a Trusted Proxy
 
 The header value determines the client's apparent source IP, so it must be honored only when a trusted proxy sets it:
 
