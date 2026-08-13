@@ -1,6 +1,8 @@
 # 开发 EMQX 插件
 
-本页将指导你使用 EMQX 插件模板开发自定义插件的全过程。
+本页介绍如何在 EMQX monorepo 之外开发自定义 EMQX 插件。
+
+EMQX 官方插件通常在 EMQX monorepo 中开发。更多信息请参考 GitHub 上的 [EMQX 插件开发指南](https://github.com/emqx/emqx/blob/release-60/PLUGIN.md)。
 
 ## 前提条件
 
@@ -9,9 +11,45 @@
 - 了解 EMQX 的[钩子机制](./hooks.md)。
 - 已配置构建环境（例如已安装 `build-essential` 和 `make`）。
 - 安装了 [rebar3](https://www.rebar3.org/)。
-- 安装了与目标 EMQX 版本相同主版本号的 Erlang/OTP。你可以查看 Docker 镜像中的 `org.opencontainers.image.otp.version` 标签，或参考 [.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions) 文件以获取使用的版本号。建议使用 [ASDF](https://asdf-vm.com/) 管理 Erlang 版本，或运行[这个脚本](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh) 拉取 emqx-builder 镜像。
+- 安装了与目标 EMQX 版本相同主版本号的 Erlang/OTP。你可以查看 Docker 镜像中的 `org.opencontainers.image.otp.version` 标签，或参考 [.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions) 文件以获取使用的版本号。建议使用 [ASDF](https://asdf-vm.com/) 管理 Erlang 版本，或运行[这个脚本](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)拉取 emqx-builder 镜像。
 
-## 安装插件模板
+## 独立插件开发
+
+独立插件开发支持两种方式：
+
+- **rebar3 模板方式**：使用 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) 生成插件项目。该方式仅使用 `rebar3`。
+- **Git submodule 方式**：适用于 EMQX 6.0 及后续版本。插件保存在独立仓库中，将 EMQX 作为 Git submodule 引入，并使用 monorepo 构建工具打包插件。
+
+### Git Submodule 方式
+
+如果插件必须保存在独立仓库中，例如源代码需要保持私有，但仍希望使用 EMQX monorepo 构建工具打包插件，可以使用该方式。
+
+1. 将 EMQX 添加为 submodule：
+
+   ```bash
+   git submodule add --depth 1 git@github.com:emqx/emqx.git emqx
+   ```
+
+2. 切换到与目标 EMQX 版本匹配的分支，例如 EMQX 6.0 对应 `release-60`。
+
+3. 将插件仓库软链接到 submodule 的 `plugins/` 目录：
+
+   ```bash
+   ln -s ../.. emqx/plugins/{plugin_name}
+   ```
+
+4. 从 EMQX submodule 中构建插件包：
+
+   ```bash
+   cd emqx
+   make plugin-{plugin_name}
+   ```
+
+生成的 `.tar.gz` 文件位于 `emqx/_build/plugins/` 目录下。
+
+如使用 `rebar3` 模板方式，请继续执行以下步骤。
+
+### 安装插件模板
 
 EMQX 提供了一个官方插件模板 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)，可以帮助你快速构建插件项目。
 
@@ -30,7 +68,15 @@ $ popd
 
 :::
 
-## 生成插件项目结构
+运行以下命令验证安装是否成功：
+
+```shell
+$ rebar3 new help
+```
+
+输出中应列出 `emqx-plugin (custom)` 作为可用模板。
+
+### 生成插件项目结构
 
 通过如下命令使用模板创建插件项目：
 
@@ -199,7 +245,7 @@ my_emqx_plugin
 
 这些翻译信息会被引用到 `config_schema.avsc` 的 UI 提示中。更多内容请参考 `config_i18n.json.example` 和 `config_schema.avsc.enterprise.example`。
 
-## 实现插件功能
+### 实现插件功能
 
 在插件框架搭建完成后，接下来就可以开始实现插件的业务逻辑。通常需要实现以下功能：
 
@@ -326,7 +372,7 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result) -> {ok, Result}.
 
 更多实现示例请参考[实现自定义插件逻辑](./plugin-example.md)。
 
-## 构建插件发布包
+### 构建插件发布包
 
 执行以下命令以构建插件发布版本：
 
@@ -380,3 +426,48 @@ tar 包中包含：
   "with_config_schema": true
 }
 ```
+
+## 插件扩展 API 与 UI
+
+插件可通过 EMQX 插件 API 网关暴露自定义 HTTP 接口，并可选择在 Dashboard 中嵌入原生 UI。
+
+### 插件 HTTP API
+
+插件 API 网关将请求路由到以下路径：
+
+```
+/api/v5/plugin_api/{plugin_name}/...
+```
+
+要处理这些请求，需在插件应用模块中实现 `on_handle_api_call/4`，并按方法和路径进行分发。参考实现请见 `plugins/emqx_username_quota/src/emqx_username_quota_app.erl` 和 `emqx_username_quota_api.erl`。
+
+#### 回调函数签名
+
+```erlang
+on_handle_api_call(Method, PathRemainder, Request, Context) -> Result
+```
+
+| 参数            | 说明                                                                         |
+| --------------- | ---------------------------------------------------------------------------- |
+| `Method`        | `get \| post \| put \| patch \| delete`                                      |
+| `PathRemainder` | `{plugin_name}` 之后的路径段列表（已进行百分比解码），类型为二进制字符串     |
+| `Request`       | 包含 `query_string`、`headers` 和 `body`（非 GET/DELETE 请求的 JSON 体）的 Map |
+| `Context`       | 包含认证元数据和命名空间信息的 Map                                            |
+
+支持的返回值：
+
+- `{ok, StatusCode, Headers, Body}`
+- `{error, StatusCode, Headers, Body}`
+- `{error, not_found}`
+
+### 在 Dashboard 中嵌入原生 UI
+
+如果 `emqx_plugin` 元数据中包含 `index` 字段，EMQX Dashboard 会在 iframe 中展示插件的原生 UI。Dashboard 会在插件 API 基础路径前缀上拼接 `index`：
+
+```
+/api/v5/plugin_api/{plugin_name}{index}
+```
+
+例如，`index: "/ui"` 对应的完整路径为 `/api/v5/plugin_api/{plugin_name}/ui`。
+
+如不需要原生 UI，可省略 `index` 字段或将其设为空字符串。
