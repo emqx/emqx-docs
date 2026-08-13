@@ -11,11 +11,13 @@
 - 如果节点存在多个网卡接口，应将 Erlang 分布式通信仅绑定到私网接口。
 - 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../deploy/cluster/lb.md)。
 - 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。可在 EMQX 中通过 `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]` 进行限制，并结合网络层控制（防火墙、私有网络或 Unix socket）。否则，能直接访问该端口的客户端可以伪造任意对端证书字段的 PROXY v2 帧，从而冒充任意身份。
+- 如果 WebSocket 监听器（`ws` 或 `wss`）前面没有会覆盖 `x-forwarded-for` 请求头的受信任代理，应设置 `listeners.{type}.{name}.websocket.proxy_address_header = ""`（以及 `websocket.proxy_port_header = ""`），使基于 IP 的授权规则、客户端封禁、连接抖动检测和审计日志使用真实的 TCP 对端地址。一旦启用该请求头，除非受信任代理覆盖它，派生出的源 IP 就是由客户端提供的；仅向入站请求头追加内容的代理并不能提供保护。详见 [WebSocket 监听器的转发客户端地址](../configuration/listener.md#websocket-监听器的转发客户端地址)。
 
 ## 阶段 2：Erlang 与集群
 
 - 在所有集群节点上替换默认 Erlang Cookie，并确保所有节点使用相同的高熵机密值。详见[集群安全](../deploy/cluster/security.md)。
 - 对 `emqx.conf`、ACL 文件、证书、私钥以及其他敏感配置文件设置严格的文件权限，并使用安全的密钥管理流程进行分发和轮换。
+- 尽可能将 secret 类型字段存储为 `file://` 引用，而不是直接写入明文值。对于所有标记为 secret 的字段（例如 SSL 密钥口令、桥接和连接器的密码、API Key），将其值设置为 `file:///path/to/secret`，EMQX 会在启动以及每次配置重载时从该文件读取实际值。这样可以避免明文机密出现在配置文件、API 请求体、配置备份和版本控制中，降低共享或导出配置时泄露机密的风险。详见[从文件加载 Secret](../configuration/secret-from-file.md)。
 - 保持集群端口仅在内网开放；当节点间流量经过低信任网络或公有云边界时，应为节点间通信启用 TLS。详见[集群安全](../deploy/cluster/security.md)。
 - 在新增节点、迁移网络或调整部署拓扑后，应重新检查防火墙规则、证书配置以及集群成员控制策略。
 
@@ -46,6 +48,7 @@
 - 在设计发往外部服务的请求时，包括 HTTP [认证](./authn/http.md)、HTTP [授权](./authz/http.md)，以及数据集成的连接器、桥接与动作，应通过 EMQX 能识别的敏感字段或请求头传递密码、令牌、密钥等敏感信息。这样，当这些数据经过 EMQX 的脱敏处理时，其中的敏感值会在相关日志、追踪和配置 API 响应中显示为 `******`，而不是明文。脱敏是依据字段名或请求头名进行的：对于放在 HTTP 请求头中的凭据，应使用标准的 `Authorization`（或 `Proxy-Authorization`）请求头，EMQX 会始终对其脱敏；对于放在其他配置字段中的密钥，应将字段命名为已识别的敏感键名，例如 `password`、`token`、`secret`、`secret_key` 或 `jwt`。非标准的自定义请求头（例如 `x-custom-secret`）或不符合约定的字段名不会被识别，其值可能在 `debug` 级别日志和错误信息中以明文出现。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
 - 对于基于文件的 ACL，可在适用场景下采用默认拒绝策略，例如以 `{deny, all}` 作为结尾规则，并设置 `authorization.no_match = deny`。详见[使用 ACL 文件](./authz/file.md)。
+- 对于暴露在不受信任网络或公共网络中的 Broker，可考虑设置 `authorization.deny_action = disconnect`（默认值为 `ignore`）。如果客户端尝试发布或订阅未授权主题，EMQX 会断开该客户端连接，而不是保持连接打开。配合[连接抖动检测](./flapping-detect.md)使用时，反复重连并触发授权拒绝的客户端会被自动封禁。`deny_action` 是全局配置，因此同样会断开尝试了被拒绝操作的合法客户端。建议在客户端正常只发布和订阅已授权主题的场景下使用。应调整连接抖动检测阈值，避免正常重连风暴导致客户端被封禁。详见[授权](./authz/authz.md)。
 - 检查授权缓存配置以及 Authorizer 的执行顺序，确保策略变更能够按预期生效。
 - 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
 - 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。
