@@ -171,6 +171,10 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 
 :::
 
+::: tip
+Starting from EMQX 6.3.0, `EMQX_FEATURES` is a special startup environment variable for [feature gates](../deploy/feature-gates.md). It does not map to a HOCON configuration path, is not stored in `cluster.hocon`, and is resolved only when EMQX starts.
+:::
+
 ## Config Override Rules
 
 In EMQX, configuration values are applied hierarchically, with the following override rules:

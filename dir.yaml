@@ -206,6 +206,10 @@
           title_cn: 配置 License
           title_ja: ライセンスの設定
           path: deploy/license
+        - title_en: Feature Gates
+          title_cn: 功能门控
+          title_ja: Feature Gates
+          path: deploy/feature-gates
     # - title_en: Install EMQX Open Source
     #  title_cn: 安装 EMQX 开源版
     #  path: deploy/install-open-source

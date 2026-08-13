@@ -18,6 +18,29 @@
    docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:@EE_VERSION@
    ```
 
+### 使用功能门控启动 EMQX
+
+从 EMQX 6.3.0 开始，可以使用 `EMQX_FEATURES` 环境变量控制启动时可用的可选功能。例如，如需仅启动核心应用，运行：
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=ESSENTIAL" \
+  -p 1883:1883 -p 8083:8083 \
+  -p 8084:8084 -p 8883:8883 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+如需使用自定义功能集启动 EMQX，运行：
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -p 1883:1883 -p 18083:18083 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+完整功能列表和依赖行为请参见[功能门控](./feature-gates.md)。
+
 ### Docker 部署注意事项
 
 1. 如果需要持久化 Docker 容器中生成的数据 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
@@ -74,6 +97,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -99,6 +123,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -117,6 +142,8 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
      emqx-bridge:
        driver: bridge
    ```
+
+   如果在 Docker Compose 集群中设置 `EMQX_FEATURES`，请为所有 EMQX 服务使用相同的值。
 
 2. 通过命令行切换 `docker-compose.yml` 文件所在目录，然后输入以下命令启动 EMQX 集群：
 

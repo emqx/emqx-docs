@@ -13,6 +13,10 @@ EMQX supports two methods for integrating Prometheus metrics monitoring:
 - **Pull Mode**: Prometheus directly collects metrics through EMQX's REST API.
 - **Push Mode**: EMQX pushes metrics to the Pushgateway service, from which Prometheus collects the metrics.
 
+::: tip
+Starting from EMQX 6.3.0, Prometheus metrics are controlled by the `metrics` feature gate. If you set `EMQX_FEATURES` manually, enabling `metrics` also enables its required `dashboard` and `auth` dependencies. For more information, see [Feature Gates](../deploy/feature-gates.md).
+:::
+
 To configure Prometheus integration:
 
 1. Go to **Management** -> **Monitoring** in the EMQX Dashboard.
