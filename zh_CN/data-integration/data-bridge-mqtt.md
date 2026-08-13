@@ -39,7 +39,7 @@ EMQX 的 MQTT 消息桥接具有以下特性和优势：
 
 在创建 MQTT 消息桥接之前，您需要获取远程 MQTT 服务（例如 EMQX 的[在线 MQTT 服务器](https://www.emqx.com/zh/mqtt/public-mqtt5-broker)）的连接信息，包括：
 
-- **MQTT 服务地址**：目标 MQTT 服务的地址和端口，例如：`broker.emqx.io:1883`。
+- **MQTT 服务地址**：目标 MQTT 服务的地址和端口，例如：`broker.emqx.io:1883`。支持 `host:port`、`[IPv6]:port`、`mqtt://host:port`、`mqtt://[IPv6]:port`、`mqtts://host:port` 和 `mqtts://[IPv6]:port` 格式。如果省略端口，EMQX 使用默认 MQTT 端口 `1883`。不支持其他 URI scheme。`mqtt` 和 `mqtts` scheme 仅用于地址解析。连接启用 TLS 的 MQTT 监听器时，请在连接器设置中单独配置 TLS。
 - **用户名**：进行连接所需的用户名，如果目标服务不需要认证，此项可留空。
 - **密码**：进行连接所需的密码，如果目标服务不需要认证，此项也可留空。
 - **协议类型**：需要明确目标服务是否启用了 TLS，以及是否使用的是 MQTT over TCP/TLS 协议。值得注意的是，EMQX MQTT 桥接暂时不支持 MQTT over WebSocket 和 MQTT over QUIC 类型的协议。
@@ -65,7 +65,7 @@ EMQX 运行在集群模式下或启用连接池时，多个节点使用相同的
 
 5. 填写连接相关配置：
 
-   - **MQTT 服务地址**：仅支持 MQTT over TCP/TLS，例如：`broker.emqx.io:1883`。
+   - **MQTT 服务地址**：仅支持 MQTT over TCP/TLS。输入 MQTT 服务地址，例如 `broker.emqx.io:1883`、`[::1]:1883` 或 `mqtt://broker.emqx.io:1883`。连接启用 TLS 的 MQTT 监听器时，请在连接器设置中单独配置 TLS。
    
    - **客户端 ID 前缀**：此处可以留空，实际使用中，指定客户端 ID 前缀可以便于客户端管理，EMQX 会根据客户端 ID 前缀和连接池大小自动生成客户端 ID，具体规则，参考[连接池与客户端 ID 生成规则](#连接池与客户端-id-生成规则)。
    

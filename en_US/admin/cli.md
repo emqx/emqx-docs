@@ -472,12 +472,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-Install a plugin package that is located in the plugin installation directory.
+Install a plugin package that is located in the plugin installation directory. Use `--cluster` to distribute and install the package on all running nodes.
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>

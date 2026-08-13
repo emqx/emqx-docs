@@ -108,8 +108,8 @@ python3 http_server.py
 
    - **Method**：`POST`
    - **URL**：`http://localhost:5000`
-
-   URL欄の横にある **Test** ボタンで接続確認が可能です。他の設定はデフォルトのままで構いません。
+   - 必要に応じて **Query String** にクエリパラメータを追加したり、**Headers** にカスタムHTTPリクエストヘッダーを設定できます。
+   - OAuth2でWebhookリクエストを保護する場合は、**OAuth2 Client Credentials** をオンにして必要な設定を行います。詳細は[OAuth2クライアントクレデンシャルの設定](#oauth2クライアントクレデンシャルの設定)を参照してください。URL欄の横にある **Test** ボタンで接続確認も可能です。
 
 6. ページ下部の **Save** をクリックし、Webhookを作成します。
 

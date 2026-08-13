@@ -100,7 +100,11 @@ python3 http_server.py
 
    The name should contain only uppercase or lowercase English letters and numbers. For example: `my_webhook`.
 
-4. Select a **Trigger** based on your requirements.
+5. Configure the Webhook request settings:
+
+   - Select `POST` as the request method and set **URL** to `http://localhost:5000`.
+   - Optionally, configure **Query String** to add query parameters to the Webhook request URL, and configure **Headers** to add custom HTTP request headers.
+   - To use OAuth2 to protect the Webhook request, turn on **OAuth2 Client Credentials** and configure the required settings. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials). You can click **Test** next to the URL input box to test the connection.
 
    In this example, select **All Messages and Events**. For details about other options, see [How it Works](#how-it-works).
 

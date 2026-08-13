@@ -11,7 +11,7 @@ Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from th
 On the configuration page, configure the settings of the following fields:
 
 - **Cluster Name**: Enter the name of the remote cluster.
-- **Server**: Provide the MQTT host and port of the remote cluster.
+- **Server**: Provide the MQTT listener endpoint of the remote cluster. Supported address formats are described in [Configure MQTT Connections](#configure-mqtt-connections).
 - **Client ID Prefix**: Define a prefix for ClientIDs used by MQTT connections to the remote cluster. For more information, see [Configure MQTT Connections](#configure-mqtt-connections).
 - **Username**: Username for authentication to the remote cluster, if required.
 - **Password**: Password for authentication to the remote cluster, if required.
@@ -68,7 +68,7 @@ The `topics` parameter is a list of MQTT topic filters that specify which topics
 
 ### Configure MQTT Connections
 
-Cluster Linking uses standard MQTT as the underlying protocol, requiring you to specify the remote cluster's MQTT listener endpoint as `server`. 
+Cluster Linking uses standard MQTT as the underlying protocol, requiring you to specify the remote cluster's MQTT listener endpoint as `server`. Supported formats are `host:port`, `[IPv6]:port`, `mqtt://host:port`, `mqtt://[IPv6]:port`, `mqtts://host:port`, and `mqtts://[IPv6]:port`. If the port is omitted, EMQX uses the default MQTT port `1883`. Other URI schemes are not supported. The `mqtt` and `mqtts` schemes are used only for address parsing. Configure TLS separately for the link when connecting to a TLS-enabled MQTT listener.
 
 Depending on the cluster size and configuration, multiple MQTT client connections may be established to the remote cluster, and each client must have a unique ClientID. You can control how these ClientIDs are allocated by setting the `clientid` parameter, which serves as a *ClientID prefix* for these connections. 
 
@@ -83,6 +83,10 @@ Other MQTT protocol aspects, such as authentication and authorization parameters
 This rule allows MQTT clients with ClientIDs that match the regex pattern `^clink-us-east` to publish and subscribe to any topic that starts with `$LINK/`. The `$LINK/` is the control topic prefix used for Cluster Linking-related messages. This ensures that the subscribing entity receives all relevant messages under the `$LINK/` namespace, which are necessary for maintaining and managing the cluster link.
 
 The single rule above is the minimum that lets a link function. For production, a complete authorization configuration also needs to forbid non-cluster-link clients from touching `$LINK/`, and finish with a default-deny rule. See [Secure Cluster Linking](./security.md) for a full example and the matching `authorization.no_match = deny` setting.
+
+::: warning Incompatible with Listener Mountpoint
+The listener that accepts Cluster Linking connections must not have a [mountpoint](../configuration/listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$LINK/` control topics, so link traffic is routed as ordinary messages and the link silently fails to function.
+:::
 
 Cluster Linking supports [TLS connections](../network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
 

@@ -470,12 +470,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-プラグインインストールディレクトリにあるプラグインパッケージをインストールします。
+プラグインインストールディレクトリにあるプラグインパッケージをインストールします。`--cluster`を指定すると、すべての稼働中ノードに配布・インストールします。
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
