@@ -115,12 +115,34 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang 虚拟机参数
 
-优化设置 Erlang 虚拟机启动参数，配置文件 /etc/emqx/emqx.conf:
+从 EMQX 6.3.0 开始，EMQX 根据节点可用的 CPU 资源自动设置 Erlang VM 资源限制。在 `etc/emqx.conf` 中配置以下参数。配置在节点重启后生效。
 
-```bash
-## 设置 Erlang 系统同时存在的最大端口数
+### 端口数和进程数限制
+
+`node.max_ports` 控制 Erlang VM 可以同时打开的最大文件和 Socket 数量。默认值为 `auto`，EMQX 按照以下规则设置 Erlang VM 端口数限制（`+Q`）：
+
+- 当节点有 1 至 8 个可用逻辑 CPU 时，每个 CPU 对应 `65536` 个端口。
+- 当节点有超过 8 个可用逻辑 CPU 时，端口数限制为 `1048576`。
+
+::: warning 重要提示
+从早期 EMQX 版本升级时，可用逻辑 CPU 不超过 8 个的节点将以较低的端口数限制启动。如果自动计算值无法满足部署的连接数需求，请显式设置 `node.max_ports`，重启节点后再执行升级。
+:::
+
+EMQX 将 Erlang 进程数限制（`+P`）设置为解析后的 `node.max_ports` 值的 2 倍。如果显式配置 `node.process_limit`，只有大于计算结果的配置值才会生效。
+
+如果自动计算的端口数限制无法满足高并发工作负载的连接需求，请显式设置 `node.max_ports`。例如：
+
+```hocon
 node.max_ports = 2097152
 ```
+
+增大 `node.max_ports` 前，请确保操作系统的文件描述符限制和可用内存能够支持配置值。您可以在 EMQX Dashboard 的节点监控页面查看实际生效的端口数和进程数限制。
+
+### Erlang 调度器
+
+`node.schedulers` 通过 Erlang VM 的 `+S` 参数控制 Erlang 调度器数量。默认值为 `auto`，即使用 Erlang VM 实际可用的逻辑处理器数量，包括容器可用的 CPU 资源。
+
+仅当需要覆盖检测值时，才将 `node.schedulers` 设置为正整数，例如，为同一主机上的其他工作负载预留 CPU 容量。
 
 ## EMQX 消息服务器参数
 
