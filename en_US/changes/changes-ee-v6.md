@@ -830,6 +830,220 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16764](https://github.com/emqx/emqx/pull/16764) Refined license customer tier handling by introducing `STANDARD` and `VIP` tiers in enforcement logic and reducing the official-license `STANDARD` expiry grace period from 90 days to 15 days before new sessions are restricted.
 
+## 6.1.4
+
+*Release Date: 2026-08-03*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 6.1.4.
+
+### Enhancements
+
+#### Multi-tenancy
+
+- [#17732](https://github.com/emqx/emqx/pull/17732) Added a `namespace` field to the API key creation and update endpoints. Operators no longer need to encode the namespace in the `role` string. The `ns:<namespace>::<role>` format remains supported. When both forms are provided, their namespace values must match.
+- [#17855](https://github.com/emqx/emqx/pull/17855) Enabled namespace-scoped EMQX Dashboard administrators to create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. API keys outside their namespace are not visible to them.
+
+#### Access Control
+
+- [#17813](https://github.com/emqx/emqx/pull/17813) Added validation to the Dashboard user and API key endpoints to reject scope lists that combine administrator-equivalent scopes (referred to as `privilege scopes` in EMQX validation messages), including `system`, `user_management`, `api_key_management`, and `sso_management`, with other scopes. Each of the listed scopes grants administrator-equivalent permissions, so adding other scopes does not restrict the account. Use either only administrator-equivalent scopes or only other scopes, depending on the required permissions.
+
+  Pre-existing records subject to this validation continue to work with mixed scopes. When an explicit scope list is submitted during an update, it must contain either only administrator-equivalent scopes or only other scopes. Namespace-scoped Dashboard administrators are exempt from this mutual-exclusion rule and remain governed by namespace RBAC.
+
+#### Data Integration
+
+- [#17933](https://github.com/emqx/emqx/pull/17933) Added support for a multi-node `servers` list in the RabbitMQ connector, such as `rmq1:5672,rmq2:5672`. The connector provides connection-time failover and rotated starting offsets for connection pools. The `server` and `port` settings remain supported when `servers` is not set.
+
+- [#17944](https://github.com/emqx/emqx/pull/17944) Added OAuth2 Client Credentials authentication to the HTTP connector and to HTTP-based authentication and authorization. When enabled, EMQX obtains and refreshes an access token from the configured token endpoint and adds it to outbound requests as a Bearer authorization header.
+
+  The connector health check reports `disconnected` when a token cannot be obtained. Configurations that enable OAuth2 and also provide an `Authorization` header are rejected.
+
+  EMQX sends the client ID and client secret as form fields in the token request body. Sending the credentials in the HTTP Basic `Authorization` header is not supported.
+
+- [#18014](https://github.com/emqx/emqx/pull/18014) Added automatic prepared statement rebuilding to the Datalayers Arrow Flight connector. If the server loses a prepared statement, such as after a restart, the client automatically recreates the statement and retries the write operation, avoiding write failures caused by the missing statement.
+
+- [#18042](https://github.com/emqx/emqx/pull/18042) Added AWS IAM role credential support to DynamoDB connectors.
+
+  When both the access key ID and secret access key are omitted, EMQX obtains temporary credentials from an ECS task role or EC2 instance metadata and refreshes them before they expire.
+
+- [#18081](https://github.com/emqx/emqx/pull/18081) Improved the resilience of the Snowflake Streaming Action. When a channel's internal state becomes out of sync while rows are being appended, the action treats the error as recoverable, retries the failed rows, and attempts to reopen the channel without manual intervention.
+
+- [#18085](https://github.com/emqx/emqx/pull/18085) Added the following configuration options for Kafka, Confluent, and Azure Event Hubs producers:
+
+  - `max_batch_age` (action): Maximum time that a message can remain in the producer buffer. EMQX drops messages that exceed this duration and increments both the `dropped` and `dropped.expired` metrics. Expired messages are not counted as `failed` or `success`. Default: `infinity` (messages do not expire while buffered).
+  - `max_retries` (action): Number of failed Kafka retries allowed for a message batch. EMQX drops the batch after the configured number of retries. The affected messages are counted as `failed`, not `dropped`. The retry counter increases only when Kafka returns an error code; resends after a connection loss do not increase the counter. Default: `infinity` (retry indefinitely).
+  - `reconnect_delay` (action): Delay before the producer reconnects after a connection loss. Default: `2s`, which was previously hard-coded.
+  - `request_timeout` (connector): Time to wait for a Kafka response before considering the connection stale and reestablishing it. Default: `30s`.
+
+  The Kafka client library was upgraded to `wolff` 4.2.1, restoring `max_linger_time` support for memory-mode buffers. An undersized batch waits up to `max_linger_time` for additional messages, reducing the produce request rate. Full batches are sent without delay.
+
+- [#18110](https://github.com/emqx/emqx/pull/18110) Added support for JSON Schema drafts 2019-09 and 2020-12 in Schema Registry.
+
+- [#18137](https://github.com/emqx/emqx/pull/18137) The GCP Pub/Sub producer and consumer now accept a fully-qualified topic path (`projects/<project-id>/topics/<topic-name>`) in the topic configuration, making it possible to publish to or consume from a topic that lives in a different GCP project than the service account's own. A bare topic name keeps resolving against the service account's project as before. For consumers, the subscription is still created in the service account's project; only the topic reference may point to another project.
+
+#### Plugins
+
+- [#18012](https://github.com/emqx/emqx/pull/18012) Added the `emqx_sync_request` plugin for synchronous MQTT request/response flows through the EMQX REST API. It also provides node-local CLI diagnostics for request counters and current pending state.
+
+#### Packaging
+
+- [#18037](https://github.com/emqx/emqx/pull/18037) Added Enterprise Linux 10 (EL10) packages for Red Hat Enterprise Linux 10, Rocky Linux 10, and compatible distributions.
+- [#18127](https://github.com/emqx/emqx/pull/18127) Started releasing packages for macOS 26 (Tahoe).
+
+### Bug Fixes
+
+#### Core MQTT Functionalities
+
+- [#17895](https://github.com/emqx/emqx/pull/17895) Switching a TLS listener from a managed certificate bundle back to file-based certificates now succeeds even if the referenced bundle has already been removed.
+
+- [#17911](https://github.com/emqx/emqx/pull/17911) Added support for validating the `ECDHE-PSK-CHACHA20-POLY1305` cipher suite in DTLS listeners when the Erlang/OTP `ssl` application supports it.
+
+- [#18062](https://github.com/emqx/emqx/pull/18062) Switching a TLS/WSS listener from a managed certificate bundle back to file-based certificates now succeeds when the request clears `managed_certs` by sending it as `null` (as the Dashboard does), even if the bundle has already been deleted.
+
+- [#18102](https://github.com/emqx/emqx/pull/18102) Fixed an issue introduced in EMQX 6.1.2 and 6.2.0 where MQTT clients could receive QoS 1 and QoS 2 messages out of order. This issue affected only deployments with a delivery rate limit configured. EMQX now keeps later messages queued until the rate-limited message can be sent.
+
+- [#18108](https://github.com/emqx/emqx/pull/18108) Deleting a managed certificate bundle (or a single file in it) that is still referenced by some configuration now always fails with a clear error listing the referencing configurations; the `force_delete` query parameter no longer bypasses this check and has been removed from the API schema.
+
+  Additionally, the Prometheus stats endpoint no longer fails entirely when a listener references a certificate bundle that is missing from disk; the affected listener is skipped in the certificate expiry metric and a warning is logged.
+
+- [#18111](https://github.com/emqx/emqx/pull/18111) Extended `mqtt.strict_mode` validation to MQTT v3.1 CONNECT packets. EMQX rejects packets that set the password flag without the username flag, matching its behavior for MQTT v3.1.1. The MQTT v3.1 specification does not allow a password without a user name.
+
+  Improved connection log readability. The CONNECT packet trace uses `Password=undefined` to distinguish a missing password from an empty password. Logs also render the `peername` field as a plain string, such as `10.0.0.1:54123`.
+
+#### Rule Engine
+
+- [#17957](https://github.com/emqx/emqx/pull/17957) Fixed an issue where multiple rule events (for example, `$events/client/connack`) would not trigger rules in the global namespace when `rule_engine.limit_selects_in_namespace = true`.
+- [#18049](https://github.com/emqx/emqx/pull/18049) Fixed an issue where setting `rule_engine.limit_selects_in_namespace = true` prevented global rules triggered by alarm activation or deactivation events from firing.
+
+#### Data Integration
+
+- [#17859](https://github.com/emqx/emqx/pull/17859) Fixed the MQTT connector so it can connect to IPv6 brokers.
+
+  Previously, configuring an MQTT connector to an IPv6 broker failed in two ways: an IPv6 literal such as `[::1]:1883` was rejected at save time with a `bad_host_port` validation error, and a hostname that only resolves to an IPv6 (`AAAA`) address failed to connect with a "Could not resolve host" error because the connection defaulted to IPv4.
+
+  The server address parser now accepts bracketed IPv6 literals (for example `[::1]`, `[::1]:1883`, and `mqtt://[::1]:1883`), and the MQTT connector now enables IPv6 probing when connecting, so IPv6-only brokers can be reached.
+
+  The MQTT connector and cluster link `server` address now accept the official MQTT URI schemes `mqtt` (plain TCP) and `mqtts` (TLS), for example `mqtt://broker:1883` and `mqtts://broker:8883`. A scheme-less `host:port` is still accepted. Any other scheme is now rejected with an `unsupported_scheme` validation error.
+
+- [#17947](https://github.com/emqx/emqx/pull/17947) Fixed an issue where updating an HTTP connector could leave its action buffer workers blocked after the connector was recreated, causing messages to remain queued until the next retry interval.
+
+- [#17955](https://github.com/emqx/emqx/pull/17955) Fixed an issue that could leave GreptimeDB asynchronous batches unflushed after health checks at low write rates.
+
+- [#17961](https://github.com/emqx/emqx/pull/17961) Fixed an issue where a Kafka or Pulsar connector could transition to `disconnected` after a health check timeout, which could cause its internal queue to be recreated. Kafka and Pulsar connectors transition to `connecting` after such timeouts.
+
+- [#17970](https://github.com/emqx/emqx/pull/17970) When SSRF protection is enabled, managing connectors is no longer disrupted by an existing connector whose address is now blocked by the policy.
+
+  Previously, enabling SSRF protection (or extending its deny list) after connectors were created could make unrelated connector operations fail with an internal error, and deleting an affected connector could leave it behind after its actions and rules were already removed.
+
+  SSRF protection now applies to HTTP and MQTT connectors and is enforced when a connector is created or updated: creating or updating such a connector with a blocked address is rejected. Enabling, disabling and deleting connectors are never blocked, and other connector types are not subject to the policy.
+
+- [#17973](https://github.com/emqx/emqx/pull/17973) Fixed Kafka producer action retry metrics. The `retried`, `retried.success`, and `retried.failed` counters on an action's metrics now reflect messages that the internal buffer re-sends after a broker reconnect, so an operator can tell whether retried messages ultimately succeeded or failed. Previously these counters stayed at `0` regardless of how many internal retries occurred. The `success` and `failed` counters are unaffected and are not double-counted.
+
+- [#17982](https://github.com/emqx/emqx/pull/17982) Updated the GCP Pub/Sub consumer to use HTTP/2 and cancel an active pull request when it times out. Canceling the HTTP/2 stream gives the GCP server a clearer signal that the request has ended and may allow the messages to be leased to a subsequent pull request, reducing tail latency.
+
+- [#18055](https://github.com/emqx/emqx/pull/18055) Fixed an issue that caused Snowflake Streaming Actions on different cluster nodes to fail with the following error:
+
+  ```text
+  {unrecoverable_error,#{body => <<"{\"code\":\"STALE_CONTINUATION_TOKEN_SEQUENCER\",\"message\":\"Channel sequencer in the continuation token is stale. Please reopen the channel\"}">>,...
+  ```
+
+- [#18110](https://github.com/emqx/emqx/pull/18110) Fixed an issue where using the `examples` annotation in a draft-06 JSON Schema in Schema Registry would result in valid data being rejected as invalid.
+
+#### Clustering
+
+- [#17995](https://github.com/emqx/emqx/pull/17995) Fixed an issue that could terminate a node while it joined a cluster whose persisted `mqtt.max_packet_size` differed from its local configuration. EMQX now skips listener refresh side effects before listener startup and creates the listeners from the synchronized configuration when the EMQX application starts.
+
+- [#17999](https://github.com/emqx/emqx/pull/17999) Fixed a startup crash-loop that could occur when a node using the community (single-node) license joins a cluster whose peers hold a clustering-capable license.
+
+  Previously, if cluster membership was established before the peer's license was replicated to the joining node, the node would refuse to start with a `SINGLE_NODE_LICENSE` error and, under an automatic-restart supervisor, keep crash-looping. The node now waits a bounded grace period for the clustering license to sync before it starts. A cluster in which no node ever obtains a clustering license is still rejected after the grace period elapses.
+
+- [#18077](https://github.com/emqx/emqx/pull/18077) Fixed a crash when a node received a `cluster join` request (CLI or API) before it had fully booted: joining restarts the internal database while applications are still starting, which could bring the whole node down. Such requests are now rejected with a clear error message; retry after the node is fully started.
+
+#### Access Control
+
+- [#17806](https://github.com/emqx/emqx/pull/17806) Aligned the data backup import and export endpoints with the principle of least privilege: Dashboard users whose scope set does not include both `user_management` and `api_key_management` can no longer import or export archives containing the `dashboard_users` or `api_keys` table sets. Global administrators and API-key callers with the necessary scopes are unaffected.
+
+- [#17853](https://github.com/emqx/emqx/pull/17853) Improved the redaction of sensitive HTTP request headers in connector debug logs. EMQX stores the `x-api-key`, `x-auth-token`, `api-key`, and `cookie` headers as secrets in connector state, as it does for `Authorization` and `Proxy-Authorization`. Their values are omitted when connector state is logged at trace or debug level.
+
+  The shared header-redaction helper also recognizes header names stored as iolists, including names produced by the connector's template parser.
+
+- [#17871](https://github.com/emqx/emqx/pull/17871) Creating a super-user in a non-global namespace is now rejected when importing built-in-database users in bulk or via a bootstrap file, matching the per-user management API. Such rows are reported as failed and are not stored.
+
+- [#17974](https://github.com/emqx/emqx/pull/17974) Raw MQTT packet data is now redacted by default in connection logs; trusted client IP addresses can be allowlisted per listener for diagnostics.
+
+- [#18005](https://github.com/emqx/emqx/pull/18005) Fixed an issue where CLI audit logs could store sensitive command arguments.
+
+- [#18009](https://github.com/emqx/emqx/pull/18009) Made scope handling consistent for administrator and API key records that use their role's implicit default scopes (shown as `unset`). Updated read and write operations to accept unset-equivalent scope lists. These records retain their forward-compatible implicit scopes instead of a frozen list, so scopes added in later releases take effect automatically.
+
+  - Fixed an issue where `PUT /api/v5/users/{username}` rejected a request that updated only the default administrator's note (description). EMQX no longer treats the default scope list included in such a request as an explicit assignment. If the submitted value is `unset` or a list that matches the administrator role's full default scope set, EMQX treats it as "no explicit scopes" and allows the note update.
+  - [#18196](https://github.com/emqx/emqx/pull/18196) When creating or updating an API key, EMQX treats `unset` or a list that matches the role's default scopes as "no explicit scopes." As a result, the `scopes` value returned when retrieving the API key can be submitted unchanged without causing the request to fail.
+  - [#18221](https://github.com/emqx/emqx/pull/18221) EMQX no longer creates the default administrator with an explicit scope list at startup. At boot, EMQX updates default administrator records that carry an explicit list to the implicit form.
+
+#### Multi-tenancy
+
+- [#17807](https://github.com/emqx/emqx/pull/17807) Added an isolated backup space for namespace-scoped administrators. Their export, upload, list, download, import, and delete operations through the data backup endpoints (`/data/export`, `/data/import`, `/data/files`, and `/data/files/:filename`) act only on backups in their own namespace. Namespace-scoped administrators cannot view, download, or delete global backups or backups from another namespace.
+
+  Global administrators continue to manage global backups by default, including backups created before this change. They can pass a `namespace` query parameter to `GET /data/files`, `DELETE /data/files`, or `GET /data/files/:filename` to inspect or remove backups from a specific namespace.
+
+- [#17975](https://github.com/emqx/emqx/pull/17975) Prevented namespace-scoped callers from updating the global tracing configuration through `PUT /api/v5/tracing`. Namespace-scoped Dashboard users and namespace-scoped API keys receive HTTP status code `403`. Global Dashboard administrators retain access to the endpoint.
+
+- [#18008](https://github.com/emqx/emqx/pull/18008) Added support for global administrators to pass the optional `namespace` query parameter to `POST /api/v5/data/import` and `POST /api/v5/data/files` when importing or uploading a backup for a specific namespace. If the parameter is omitted, the operation uses the global backup scope.
+
+  For namespace-scoped administrators, EMQX ignores the `namespace` query parameter and confines the operation to the caller's own namespace. This behavior is consistent with backup listing and download operations.
+
+- [#18117](https://github.com/emqx/emqx/pull/18117) Deleting a namespace now also removes the namespace's built-in database authentication users (both password-based and SCRAM) and authorization rules. Previously, these records persisted after namespace deletion and reappeared if a namespace with the same name was created later.
+
+  Additionally, a new `emqx ctl mt purge_ns <namespace>` CLI command deletes a namespace and purges all data belonging to it. The command is idempotent and does not require the namespace to exist, so it can be used as a last resort to clean up leftover data if a previous namespace deletion was interrupted.
+
+#### Gateway
+
+- [#17796](https://github.com/emqx/emqx/pull/17796) Fixed a crash in the MQTT-SN gateway when a new device connects from a UDP source port that was recently used by a disconnected device (common on loopback and behind NAT, where the OS or NAT box re-assigns the same port). The stale channel is now retired cleanly and the new connection is processed as a fresh session.
+
+- [#17805](https://github.com/emqx/emqx/pull/17805) Fixed an issue where re-loading a gateway could fail with an `already_started` error after a previous load attempt aborted partway through (for example due to an invalid configuration or a busy listener port). The leftover locker process from the failed attempt is now reclaimed automatically, so the next `load` (or operator retry) starts from a clean state.
+
+- [#17815](https://github.com/emqx/emqx/pull/17815) Fixed MQTT-SN UDP session routing when UDP source tuples change or are reused.
+
+  MQTT-SN UDP listeners now route packets by the ClientId parsed from the packet through `esockd_udp_proxy`, allowing asleep sessions to resume from a different UDP source tuple while preventing a reused UDP source tuple from delivering another ClientId's packets to the old session.
+
+- [#17888](https://github.com/emqx/emqx/pull/17888) Fixed an issue where the LwM2M gateway could include sensitive REGISTER query fields, such as `password`, `secret`, `private_key`, and `access_token`, in registration and update MQTT reports.
+
+- [#18051](https://github.com/emqx/emqx/pull/18051) Fixed an issue where CoAP debug logs could expose sensitive URI query values.
+
+#### Plugins
+
+- [#17861](https://github.com/emqx/emqx/pull/17861) Restored the previous plugin startup behavior by no longer deleting local plugin packages that are missing from the cluster plugin configuration when a node starts or rejoins the cluster.
+
+- [#17884](https://github.com/emqx/emqx/pull/17884) Fixed the plugin management HTTP APIs to ignore stale unpacked plugin directories that are absent from the cluster plugin configuration and are not running locally.
+
+  Such stale packages do not appear in plugin list, detail, configuration, or schema responses. Plugin operation APIs cannot act on these packages, and the packages do not block reinstallation through the HTTP install API. Configured preinstalled plugins remain visible and continue to follow the documented preinstallation workflow.
+
+  EMQX logs an error during startup or HTTP API access when a plugin package is unpacked but is neither enabled nor disabled in `plugins.states`.
+
+- [#17932](https://github.com/emqx/emqx/pull/17932) Fixed a noisy `failed_to_get_plugin_config_from_cluster` warning when installing plugins through the CLI.
+
+  The `emqx ctl plugins install` command uses `fresh_install` mode, consistent with the HTTP API behavior. This mode skips the cluster configuration lookup for newly installed plugins and prevents repeated `config_not_found_on_node` warnings on every cluster node.
+
+  Added a `--cluster` flag to `emqx ctl plugins install` for cluster-wide installation. When the flag is specified, the command distributes and installs the plugin package on all running nodes.
+
+- [#18018](https://github.com/emqx/emqx/pull/18018) Fixed an issue where plugin installation loaded code before validating the package's application declarations, configuration schema, and default configuration.
+
+#### Observability
+
+- [#17886](https://github.com/emqx/emqx/pull/17886) Exposed the publish quota-exceeded packet metric in Prometheus as `emqx_packets_publish_quota_exceeded`.
+
+- [#18114](https://github.com/emqx/emqx/pull/18114) Fixed an issue where the Dashboard metrics APIs (`GET /api/v5/monitor_current` and `GET /api/v5/monitor`) returned `500 INTERNAL_ERROR` while a node was joining the cluster.
+
+  If metrics cannot be sampled while a joining node restarts its applications, the APIs return aggregated metrics from the remaining reachable nodes and log a warning instead of failing the entire request.
+
+  Also fixed a spurious `clear_monitor_metrics_rpc_errors` warning that was logged after every successful `DELETE /api/v5/monitor` request.
+
+#### File Transfer
+
+- [#18069](https://github.com/emqx/emqx/pull/18069) Fixed the file transfer files API (`GET /api/v5/file_transfer/files`) failing with a 500 error when listing files whose names contain non-ASCII characters (e.g. Chinese).
+
+#### Deployment
+
+- [#17877](https://github.com/emqx/emqx/pull/17877) Fixed the `emqx-enterprise` Helm chart hardcoding `svc.cluster.local` in the node's host name. On a Kubernetes cluster whose DNS domain is not `cluster.local`, a node named itself with an unresolvable FQDN, so Erlang distribution could not start and the nodes failed to form a cluster. The host name now follows the chart's `clusterDomain` value, which already governed the DNS and Kubernetes discovery settings.
+
 ## 6.1.3
 
 *Release Date: 2026-07-01*

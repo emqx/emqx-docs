@@ -471,12 +471,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-安装一个已放置在插件安装目录下的插件包。
+安装已放置在插件安装目录下的插件包。添加 `--cluster` 可将插件包分发并安装到所有运行中的节点。
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
@@ -1662,6 +1663,44 @@ $ emqx ctl license history --json
 ```
 No session high-watermark history recorded.
 ```
+
+## mt
+
+`mt` 命令用于维护 EMQX Enterprise 的多租户数据。
+
+### mt purge_ns \<Namespace\>
+
+从 EMQX Enterprise 6.1.4 开始，该命令会删除指定命名空间，并同步执行清理流程。清理范围包括命名空间配置，以及内置数据库中属于该命名空间的数据，例如密码认证用户、SCRAM 用户和授权规则。即使命名空间已不存在，该命令仍会执行。
+
+如果命名空间状态未发生变化，该操作具有幂等性。如果清理未完成，仅当同名命名空间尚未重新创建时，才可再次运行该命令。
+
+该命令仅用于清理由删除操作中断而遗留的数据。常规命名空间删除应使用 Dashboard 或 `DELETE /mt/ns/<namespace>` REST API。
+
+::: warning 重要提示
+
+对现有命名空间运行此命令会永久删除该命名空间及其数据。重新创建同名命名空间后，不要再次运行该命令。
+
+:::
+
+例如，清理 `tenant-a` 命名空间：
+
+```bash
+emqx ctl mt purge_ns tenant-a
+```
+
+如果所有清理步骤均成功，输出的 JSON 中包含 `"result": "ok"`：
+
+```json
+{"namespace":"tenant-a","result":"ok"}
+```
+
+如果任一清理步骤失败，输出的 JSON 中包含 `"error": "cleanup_incomplete"`：
+
+```json
+{"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
+```
+
+检查 EMQX 日志以确定失败的清理步骤。解决问题后，再次运行该命令。
 
 ## admins
 

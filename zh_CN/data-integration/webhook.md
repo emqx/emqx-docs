@@ -55,7 +55,7 @@ Webhook 支持规则引擎所有的消息与事件，各事件的数据请参考
 
 ### 创建 HTTP 服务
 
-此处使用 Python 来快速创建一个 HTTP 服务器，监听本地 8082 端口，并在收到 Webhook 请求时打印出 URL。实际应用中请将其更换为你的业务服务器：
+此处使用 Python 来快速创建一个 HTTP 服务器，监听本地 5000 端口，并在收到 Webhook 请求时打印出 URL。实际应用中请将其更换为你的业务服务器：
 
 首先我们使用 Python 搭建一个简单的 HTTP 服务，用来接收 `POST /` 请求，该服务打印请求内容后返回 200 OK：
 
@@ -87,15 +87,48 @@ python3 http_server.py
 ### 创建 Webhook
 
 1. 点击 Dashboard 左侧菜单中的**集成** -> **Webhook**。
-2. 点击页面上的**创建**按钮。
-4. 输入 Webhook 名称与备注，要求是大小写英文字母和数字的组合，这里我们输入 `my_webhook`。
-5. 触发器根据需要选择，此处选择**所有消息和事件**。其他选项说明请参考[工作原理](#工作原理)。
-6. 请求方法选择 POST，URL 为 `http://localhost:5000`，点击 URL 输入框旁的 **测试** 按钮可以测试连接是否配置正确，其他使用默认值即可。
-7. 点击最下方**保存**按钮完成规则创建。
 
-![EMQX Webhook](./assets/webhook.png)
+2. 点击页面上的**创建**按钮。
+
+3. 输入 Webhook 名称与备注，要求是大小写英文字母和数字的组合，这里我们输入 `my_webhook`。
+
+4. 触发器根据需要选择，此处选择**所有消息和事件**。其他选项说明请参考[工作原理](#工作原理)。
+
+5. 配置 Webhook 请求设置：
+
+   - 请求方法选择 `POST`，URL 设置为 `http://localhost:5000`。
+   - 可选：配置**查询字符串**，为 Webhook 请求 URL 添加查询参数；配置**请求头**，为 Webhook 请求添加自定义 HTTP 请求头。
+   - 如需使用 OAuth2 保护 Webhook 请求，开启 **OAuth2 客户端凭证**并完成相关配置。详细信息参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。点击 URL 输入框旁的**测试**按钮可以测试连接是否配置正确。
+
+6. 点击最下方的**保存**按钮完成 Webhook 创建。
+
+   ![EMQX Webhook](./assets/webhook.png)
 
 至此您已经完成 Webhook 创建。
+
+#### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，Webhook 支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 向目标 HTTP 服务发送 Webhook 请求时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由目标服务验证 EMQX 的身份。
+
+Token 端点、客户端凭证和允许使用的授权范围应从 OAuth2 授权服务器、身份提供商（IdP）或目标 API 管理员处获取。开启 **OAuth2 客户端凭证**，然后配置以下设置：
+
+| Dashboard 配置项 | 说明 |
+| --- | --- |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。多个授权范围使用空格分隔；如果授权服务器不要求授权范围，请将此项留空。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。 |
+
+EMQX 使用 `POST` 方法向 Token 端点发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token 端点必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要为 Webhook 配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token 端点必须从请求体的表单字段中接收客户端 ID 和客户端密钥。不支持通过 HTTP Basic `Authorization` 请求头向 Token 端点发送客户端凭证。
+
+:::
 
 ### 测试 Webhook
 

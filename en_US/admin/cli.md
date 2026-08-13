@@ -472,12 +472,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-Install a plugin package that is located in the plugin installation directory.
+Install a plugin package that is located in the plugin installation directory. Use `--cluster` to distribute and install the package on all running nodes.
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
@@ -1670,6 +1671,44 @@ When no data has been recorded yet, the plain-text output displays:
 ```
 No session high-watermark history recorded.
 ```
+
+## mt
+
+The `mt` command provides maintenance operations for multi-tenancy in EMQX Enterprise.
+
+### mt purge_ns \<Namespace\>
+
+Starting from EMQX Enterprise 6.1.4, this command deletes the specified namespace and synchronously runs its cleanup process. The cleanup removes the namespace configuration and namespace-scoped data from the built-in database. This data includes password-based authentication users, SCRAM users, and authorization rules. The command runs even if the namespace no longer exists.
+
+The operation is idempotent if the namespace state has not changed. If a cleanup attempt does not finish, you can rerun the command only if a namespace with the same name has not been recreated.
+
+Use this command as a last resort to remove data left behind by an interrupted namespace deletion. For routine namespace deletion, use the Dashboard or `DELETE /mt/ns/<namespace>` REST API.
+
+::: warning Important Notice
+
+Running this command for an existing namespace permanently deletes the namespace and its data. Do not rerun the command after a namespace with the same name has been recreated.
+
+:::
+
+For example, purge the `tenant-a` namespace:
+
+```bash
+emqx ctl mt purge_ns tenant-a
+```
+
+If every cleanup step succeeds, the output JSON contains `"result": "ok"`:
+
+```json
+{"namespace":"tenant-a","result":"ok"}
+```
+
+If any cleanup step fails, the output JSON contains `"error": "cleanup_incomplete"`:
+
+```json
+{"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
+```
+
+Check the EMQX logs for the failed cleanup step, resolve the cause, and run the command again.
 
 ## admins
 

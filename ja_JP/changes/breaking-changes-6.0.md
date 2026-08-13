@@ -2,7 +2,7 @@
 
 ## 6.0.3
 
-- [#17157](https://github.com/emqx/emqx/pull/17157) Introduced a new Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, which defaults to `true`. When enabled, rules are triggered only by messages published by clients in the same namespace as the rule.
+- [#17157](https://github.com/emqx/emqx/pull/17157) Added a Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, which defaults to `true`. When enabled, rules that belong to a namespace are triggered only by messages and client-related events from clients in that same namespace.
 
 ## 6.0.1
 

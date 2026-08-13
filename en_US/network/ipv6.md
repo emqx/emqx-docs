@@ -143,7 +143,10 @@ EMQX makes outbound connections to external services for features such as HTTP a
 
 ### Automatic IPv6 Detection
 
-For HTTP-based connectors (authentication backends, webhook actions, etc.), EMQX automatically probes whether the target host supports IPv6 and selects the appropriate address family. No manual configuration is required in most cases.
+EMQX provides IPv6 support for different outbound connection types:
+
+- For HTTP-based connectors (authentication backends, webhook actions, etc.), EMQX automatically probes whether the target host supports IPv6 and selects the appropriate address family. No manual configuration is required in most cases.
+- For MQTT connectors, EMQX can connect to IPv6-only brokers, including brokers whose hostnames resolve only to IPv6 `AAAA` records. The MQTT broker address can also use a bracketed IPv6 literal, such as `[::1]:1883` or `mqtt://[::1]:1883`.
 
 ### Manual Override
 

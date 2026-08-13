@@ -1,4 +1,4 @@
-# ライセンスの設定
+# ライセンス設定
 
 `emqx ctl license update` コマンドを使用してライセンスを更新できます。このコマンドはライセンスファイルを更新し、ライセンスをリロードします。
 
@@ -18,9 +18,9 @@ emqx ctl license update 'file://<license_file_path>'
 - `<license_key>` は改行なしのライセンスキー文字列です。
 - `<license_file_path>` はライセンスキーが保存されているファイルのパスです。
 
-`'file://<license_file_path>'` 表記でライセンスを設定した場合、EMQX は2分ごとに自動的にライセンスをリロードします。
+`'file://<license_file_path>'` 表記でライセンスを設定した場合、EMQXは2分ごとに自動的にライセンスをリロードします。
 
-さらに、設定ファイルでライセンスの接続クォータ使用状況に関する設定を以下のように行うことができます。
+さらに、設定ファイルでライセンス接続クォータ使用状況の設定を以下のように行うことができます。
 
 ```bash
 license {
@@ -33,21 +33,21 @@ license {
 
 ここで、
 
-- `key` は base64 形式でエンコードされたライセンスキーを含むフィールドです。
-- `connection_low_watermark` はライセンス接続クォータ使用率のアラームを解除する閾値を設定します。デフォルトは `"75%"` です。
-- `connection_high_watermark` はライセンス接続クォータ使用率のアラームを発動する閾値を設定します。デフォルトは `"80%"` です。
-- `high_watermark_timezone` は日次のセッション高水準履歴を記録する際のローカル日の境界を決定するためのタイムゾーンです。`"system"` を指定するとノードホストのローカルタイムゾーンに従い、`"+08:00"` のような明示的なUTCオフセットを指定することも可能です。デフォルトは `"system"` です。
+- `key` はbase64形式でエンコードされたライセンスキーを含むフィールドです。
+- `connection_low_watermark` はライセンス接続クォータ使用率のアラームが解除される閾値を設定します。デフォルトは `"75%"` です。
+- `connection_high_watermark` はライセンス接続クォータ使用率のアラームが発動する閾値を設定します。デフォルトは `"80%"` です。
+- `high_watermark_timezone` は日次セッションのハイウォーターマーク履歴を記録する際のローカル日の境界を決定するためのタイムゾーンです。 `"system"` を指定するとノードホストのローカルタイムゾーンに従い、明示的なUTCオフセット（例：`"+08:00"`）を指定することも可能です。デフォルトは `"system"` です。
 
-実行後、`emqx ctl license info` コマンドを実行して新しいライセンスファイルが反映されていることを確認できます。
+実行後、`emqx ctl license info` を実行して新しいライセンスファイルが反映されていることを確認できます。
 
 ::: tip
 
-ライセンスファイルは EMQX ダッシュボードからも設定可能です。ダッシュボードでのライセンス設定方法については、[Work with License](../deploy/license.md) を参照してください。ダッシュボードで設定した内容は、設定ファイル内の同じ設定項目より優先されます。
+EMQXダッシュボードからもライセンスファイルを設定できます。ダッシュボードでのライセンス設定方法については、[Work with License](../deploy/license.md) をご参照ください。ダッシュボードで設定した内容は、設定ファイル内の同じ設定項目を上書きします。
 
 :::
 
 ::: tip
 
-EMQX はカスタマイズニーズに応じたより詳細な設定項目も提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
+EMQXはカスタマイズニーズに対応するため、さらに多くの設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
 
 :::
