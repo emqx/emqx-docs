@@ -99,7 +99,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
+    <td> <a href="https://docs.emqx.com/en/emqx/latest/guides/durability/durability_introduction.html">Improved stability and reliability</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -689,7 +689,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.html">JWT Authentication</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Enhanced Authentication</b></td>

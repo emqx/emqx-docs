@@ -99,7 +99,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内置的 RocksDB 数据库或外部数据库</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/zh/emqx/latest/durability/durability_introduction.html">提高了稳定性和可靠性</a></td>
+    <td> <a href="https://docs.emqx.com/zh/emqx/latest/guides/durability/durability_introduction.html">提高了稳定性和可靠性</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -693,7 +693,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/emqx/latest/access-control/authn/jwt.html">JWT 认证</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/guides/access-control/authn/jwt.html">JWT 认证</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 增强认证</b></td>
