@@ -24,7 +24,7 @@ The Developer Guides help developers connect clients to EMQX, process MQTT data,
 
 - [Flow Designer](./flow-designer/introduction.md) (EMQX Enterprise feature) is a visual, no-code tool for building data processing pipelines by connecting rules, actions, and integrations in a graphical interface.
 
-- [Advanced Features](./mqtt-over-quic/advanced-feature.md) introduces advanced capabilities such as Message Queue, MQTT over WebSocket, MQTT over QUIC, Cluster Linking, File Transfer over MQTT, Multi-Protocol Gateway, and client attributes.
+- [Advanced Features](./advanced-features.md) introduces advanced capabilities such as Message Queue, MQTT over WebSocket, MQTT over QUIC, Cluster Linking, File Transfer over MQTT, Multi-Protocol Gateway, and client attributes.
 
 - [EMQX AI](./emqx-ai/overview.md) introduces AI-related capabilities, including MCP over MQTT, MCP Bridge, SDKs, and real-time audio and video AI services.
 

@@ -24,7 +24,7 @@ prev:
 
 - [Flow 设计器](./flow-designer/introduction.md)（企业版功能）是一款可视化无代码工具，通过图形化界面将规则、动作和集成连接起来，快速构建数据处理流水线。
 
-- [高级功能](./mqtt-over-quic/advanced-feature.md) 介绍消息队列、MQTT over WebSocket、MQTT over QUIC、集群连接、基于 MQTT 的文件传输、多协议网关和客户端属性等高级能力。
+- [高级功能](./advanced-features.md) 介绍消息队列、MQTT over WebSocket、MQTT over QUIC、集群连接、基于 MQTT 的文件传输、多协议网关和客户端属性等高级能力。
 
 - [EMQX AI](./emqx-ai/overview.md) 介绍 EMQX 的 AI 能力，包括 MCP over MQTT、MCP Bridge、SDK，以及实时音视频 AI 服务。
 

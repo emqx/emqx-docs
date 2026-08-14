@@ -59,8 +59,8 @@ AI 会告诉你当前版本的具体操作步骤。
 
 ```
 # HTML 页面
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.html
 
 # 同一页面的 Markdown 格式
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.md
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.md
 ```

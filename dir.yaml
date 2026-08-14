@@ -606,7 +606,7 @@
   title_cn: 高级功能
   title_ja: 高度な機能
   collapsed: true
-  path: develop/mqtt-over-quic/advanced-feature
+  path: develop/advanced-features
   children:
   - title_en: Message Queue
     title_cn: 消息队列
