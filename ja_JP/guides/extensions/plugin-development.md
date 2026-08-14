@@ -11,7 +11,7 @@ EMQX公式プラグインは通常EMQXモノリポジトリ内で開発されま
 - EMQXの[フック](./hooks.md)の知識
 - `make`を含む動作するビルド環境（例：`build_essential`）
 - [rebar3](https://www.rebar3.org/)
-- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを示す`.tool-versions`ファイル（例：https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得可能です。
+- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを示す`.tool-versions`ファイル（例：[`e5.9.0-beta.4/.tool-versions`](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions)）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得可能です。
 
 ## スタンドアロンプラグイン開発
 

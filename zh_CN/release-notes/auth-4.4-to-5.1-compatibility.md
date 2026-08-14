@@ -18,7 +18,7 @@ EMQX 5.1 提供了当需要访问外部资源时可以启用 TLS 的选项，例
 
 #### 密码散列
 
-所有使用密码认证的数据源（内置数据库、MySQL、PostgreSQL、MongoDB、Redis）现在都具有相同的 `password_hash` 选项，并以相同的方式配置。详情请参阅[密码散列](../access-control/authn/authn.html#密码散列)。
+所有使用密码认证的数据源（内置数据库、MySQL、PostgreSQL、MongoDB、Redis）现在都具有相同的 `password_hash` 选项，并以相同的方式配置。详情请参阅[密码散列](../guides/access-control/authn/authn.md#密码散列)。
 
 #### 监听器认证
 
@@ -39,7 +39,7 @@ EMQX 5.1 不再有显式的 `allow_anonymous` 设置。所有客户端默认允�
 ### 内置数据库（Mnesia）
 
 - Mnesia 现在称为"内置"数据库；不在配置中保留用户记录。
-- 将 `password_hash` 更改为 `password_hash_algorithm`：{name = Algo, salt_position = prefix}。有关详情，请参阅[密码散列](../access-control/authn/authn.html#密码散列)。
+- 将 `password_hash` 更改为 `password_hash_algorithm`：{name = Algo, salt_position = prefix}。有关详情，请参阅[密码散列](../guides/access-control/authn/authn.md#密码散列)。
 - `user_id_type` 用于标识是使用 `clientid` 还是 `username` 作为 MQTT 用户标识符。不允许混合类型的记录。
 - 用于管理身份认证数据记录的 REST API 已更改。有关更多信息，请参阅 `POST /authentication/{id}/users` 的API文档。
 - 用户可以使用数据导入 API 将数据从旧版本导入到 EMQX 5.x，请参阅 `POST /authentication/{id}/import_users` 了解详情。
@@ -1255,4 +1255,3 @@ EMQX 5.1
   }
 }
 ```
-

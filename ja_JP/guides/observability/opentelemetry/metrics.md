@@ -67,5 +67,5 @@ opentelemetry {
 
 ## PrometheusでEMQXメトリクスを可視化する
 
-EMQXのメトリクスは、PrometheusのWebコンソール（http://otel-collector:9090）で確認できます：
+EMQXのメトリクスは、PrometheusのWebコンソール（`http://otel-collector:9090`）で確認できます：
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)

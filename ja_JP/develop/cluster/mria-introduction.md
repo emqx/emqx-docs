@@ -16,7 +16,7 @@ EMQX 5.0 から、新しい [Mria](https://github.com/emqx/mria) クラスター
 
 Mria は Erlang のネイティブデータベースである Mnesia のオープンソース拡張であり、最終的整合性を実現するデータレプリケーションを可能にします。非同期トランザクションログレプリケーションを有効にすると、ノード接続トポロジーは Mnesia の **フルメッシュ** モデルから Mria の **メッシュ＋スター** ハイブリッドトポロジーに変わります。
 
-<img src="../../../develop/cluster/assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
 
 ### ノードの役割説明
 

@@ -141,7 +141,7 @@ _出现于:_
 | --- | --- | --- | --- |
 | `controllerUID` _[UID](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#uid-types-pkg)_ |  |  |  |
 | `podUID` _[UID](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#uid-types-pkg)_ |  |  |  |
-| `node` _string_ | EMQX 节点名称，例如：emqx@127.0.0.1 |  |  |
+| `node` _string_ | EMQX 节点名称，例如：`emqx@127.0.0.1` |  |  |
 | `node_status` _string_ | EMQX 节点状态，例如：Running |  |  |
 | `otp_release` _string_ | EMQX 使用的 Erlang/OTP 版本，例如：24.2/12.2 |  |  |
 | `version` _string_ | EMQX 版本 |  |  |

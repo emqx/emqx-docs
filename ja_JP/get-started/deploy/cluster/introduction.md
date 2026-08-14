@@ -49,7 +49,7 @@ EMQX クラスターは複数のノードで構成され、それぞれが EMQX 
 
 初期の EMQX は Erlang/OTP に組み込まれた Mnesia データベースとフルメッシュトポロジーを利用していました。各ノードは Erlang 分散プロトコル（デフォルトポート：4370）を使い、すべての他ノードと直接 TCP 接続を維持し、密結合のシステムを形成していました。
 
-<img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 40%;" />
+<img src="../../../develop/cluster/assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 40%;" />
 
 しかし、このモデルには以下の制約がありました：
 
@@ -69,7 +69,7 @@ EMQX クラスターは複数のノードで構成され、それぞれが EMQX 
 - **レプリケーションログ（RLOG）**：Core から Replicant への非同期かつ高スループットなデータ複製を可能にします。
 - **スケーラビリティ**：クラスタあたり最大 1億 MQTT 接続をサポートします。
 
-<img src="./assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:40%;" />
+<img src="../../../develop/cluster/assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:40%;" />
 
 ::: tip 注意
 
@@ -138,7 +138,7 @@ topic3 -> node2, node4
 
 これらのサブスクリプションが設定された後、EMQX は以下のトピックツリーとルーティングテーブルを構築します。
 
-<img src="./assets/cluster_2.png" alt="image" style="zoom:67%;" />
+<img src="../../../develop/cluster/assets/cluster_2.png" alt="image" style="zoom:67%;" />
 
 #### メッセージ配信フロー
 

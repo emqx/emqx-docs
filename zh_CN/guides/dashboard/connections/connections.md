@@ -19,7 +19,7 @@
 
 在列表上方的**选择列**可以选择需要显示的列，点击**刷新**按钮可重置所有过滤条件并重新加载连接列表。您还可以选中某个客户端，然后点击**踢除**来手动踢除该客户端。
 
-<img src="./assets/connections.png" alt="连接管理列表" style="zoom:50%;" />
+<img src="../assets/connections.png" alt="连接管理列表" style="zoom:50%;" />
 
 ## 客户端详情
 
@@ -31,4 +31,4 @@
 
 页面底部显示了当前连接已订阅的主题，用户可点击添加订阅按钮，进行较为简单的订阅操作，或在订阅列表中点击取消订阅按钮，取消当前订阅的某个主题。
 
-<img src="./assets/connection-details.png" alt="连接详情" style="zoom:50%;" />
+<img src="../assets/connection-details.png" alt="连接详情" style="zoom:50%;" />

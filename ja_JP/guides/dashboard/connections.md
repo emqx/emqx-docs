@@ -19,7 +19,7 @@ EMQXに接続してパブリッシュやサブスクライブを行うクライ�
 
 一覧の上部にある **Select Column** ボタンで表示するカラムを選択できます。**Refresh** ボタンをクリックすると、すべてのフィルター条件がリセットされ、接続リストが再読み込みされます。クライアントを選択して **Kick Out** をクリックすると、そのクライアントを手動で切断できます。
 
-<img src="../assets/connections.png" alt="接続管理リスト" style="zoom:50%;" />
+<img src="./assets/connections.png" alt="接続管理リスト" style="zoom:50%;" />
 
 ## クライアント詳細
 
@@ -31,4 +31,4 @@ EMQXに接続してパブリッシュやサブスクライブを行うクライ�
 
 ページの最下部には、その接続が現在サブスクライブしているトピックが表示されます。**Add Subscription** ボタンをクリックすると簡単にサブスクライブ操作ができ、サブスクリプション一覧の **Unsubscribe** をクリックすると特定のトピックのサブスクライブを解除できます。
 
-<img src="../assets/connection-details.png" alt="接続詳細" style="zoom:50%;" />
+<img src="./assets/connection-details.png" alt="接続詳細" style="zoom:50%;" />
