@@ -74,6 +74,39 @@
 
   将 `net_ticktime` 缩短为 60 秒（通过 `vm.args` 中的 `-kernel net_ticktime` 配置）后，集群能够更快发现并移除故障节点。这会缩短 RPC 请求可能阻塞在该节点上的时间窗口。
 
+- 增强全局垃圾回收（Global GC）机制：支持内存压力触发的全局 GC。
+
+  当系统内存使用率超过高水位（`os_mon.sysmem_high_watermark`）且周期性 GC 已禁用时，触发一次平滑的全局 GC 以降低内存占用。触发信号由 `emqx_os_mon` 在内存告警时发出。该行为由两个配置项控制：
+
+  - `node.global_gc_mem_pressure`（默认 `on`）：是否启用内存压力触发的全局 GC；
+  - `node.global_gc_mem_pressure_min_interval`（默认 `15m`）：两次内存压力触发的全局 GC 之间的最小间隔，用于节流。
+
+- 新增集群节点间网络健康探测插件 `emqx_erpc_probe`，通过 Prometheus 指标暴露节点间链路的健康状况。
+
+  每个节点对集群中的其余节点各维持一个独立的探测进程，按 `erpc_probe.probe_interval`（默认 `1s`）周期性发起 `erpc:call(Peer, erlang, node, [], Timeout)` 探测（超时 `erpc_probe.probe_timeout`，默认 `5s`）。
+
+  插件暴露以下 Prometheus 指标：
+
+  - `emqx_erpc_probe_result_total`（计数器）：按 `result` 标签区分 `ok`、`timeout`（已连接但对端无响应：链路劣化或对端过载）、`noconnection`（无分布连接：对端 VM 宕机或完全隔离）、`system_limit`（对端进程耗尽）四种结果，分别对应三种不同的诊断；
+  - `emqx_erpc_probe_duration_seconds`（直方图）：成功探测的往返时间，用于发现「变慢但尚未超时」的链路（p99）。
+
+  该插件对新安装的集群默认启用（见 `data/loaded_plugins`），配置文件位于 `etc/plugins/emqx_erpc_probe.conf`，修改后需重启插件。
+
+  注意：从旧版本升级的集群会保留原有的 `data/loaded_plugins`，插件不会自动启用；可执行 `./bin/emqx ctl plugins load emqx_erpc_probe` 启用，或在 `data/loaded_plugins` 中加入 `{emqx_erpc_probe, true}.` 后重启节点。
+
+- 新增集群节点间网络健康探测插件 `emqx_erpc_probe`，用于通过 Prometheus 指标上报集群节点间链路的健康状态。
+
+  每个节点都会为集群中的其他每个节点运行一个独立的探测进程。探测进程会按照 `erpc_probe.probe_interval` 配置的间隔（默认：`1s`），定期发送 `erpc:call(Peer, erlang, node, [], Timeout)` 作为探测请求，超时时间由 `erpc_probe.probe_timeout` 配置（默认：`5s`）。
+
+  该插件暴露以下 Prometheus 指标：
+
+  - `emqx_erpc_probe_result_total`（计数器）：按 `result` 标签统计探测结果。可取值包括 `ok`、`timeout`、`noconnection` 和 `system_limit`。
+  - `emqx_erpc_probe_duration_seconds`（直方图）：统计成功探测的往返时间，可用于通过 p99 延迟发现已经变慢但尚未超时的节点间链路。
+
+  新安装的集群默认会通过 `data/loaded_plugins` 启用该插件。插件配置文件位于 `etc/plugins/emqx_erpc_probe.conf`；修改配置后需要重启插件。
+
+  从旧版本升级的集群会保留原有的 `data/loaded_plugins` 文件，因此升级后不会自动启用该插件。要启用该插件，可执行 `./bin/emqx ctl plugins load emqx_erpc_probe`，或在 `data/loaded_plugins` 中添加 `{emqx_erpc_probe, true}.` 后重启节点。
+
 ### 修复
 
 - 修复导入备份时 Dashboard 用户的显式 `scopes` 与 `admin_override` 丢失的问题。

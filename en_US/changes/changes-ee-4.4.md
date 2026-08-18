@@ -74,6 +74,26 @@
 
   With `net_ticktime` shortened to 60 seconds (configured via `-kernel net_ticktime` in `vm.args`), the cluster can detect and remove the failed node faster. This shortens the time window during which RPC requests may remain blocked on that node.
 
+- Enhanced the global GC mechanism with memory-pressure-triggered global GC.
+
+  When system memory usage exceeds the high watermark (`os_mon.sysmem_high_watermark`) and periodic GC is disabled, a smooth global GC is triggered to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires. This behaviour is controlled by two configuration options:
+
+  - `node.global_gc_mem_pressure` (default `on`): whether the memory-pressure-triggered global GC is enabled.
+  - `node.global_gc_mem_pressure_min_interval` (default `15m`): the minimum interval between two memory-pressure-triggered global GCs, used for throttling.
+
+- Added the inter-node network health probe plugin, `emqx_erpc_probe`, which reports the health of links between cluster nodes through Prometheus metrics.
+
+  Each node runs an independent probe process for every other node in the cluster. The probe periodically sends `erpc:call(Peer, erlang, node, [], Timeout)` at the interval configured by `erpc_probe.probe_interval` (default: `1s`), with the timeout configured by `erpc_probe.probe_timeout` (default: `5s`).
+
+  The plugin exposes the following Prometheus metrics:
+
+  - `emqx_erpc_probe_result_total` (counter): Counts probe results by the `result` label. Possible values are `ok`, `timeout`, `noconnection`, and `system_limit`.
+  - `emqx_erpc_probe_duration_seconds` (histogram): Measures the round-trip time of successful probes and helps detect slow inter-node links before they time out, for example by using p99 latency.
+
+  The plugin is enabled by default for new installations through `data/loaded_plugins`. Its configuration file is located at `etc/plugins/emqx_erpc_probe.conf`; restart the plugin after updating the configuration.
+
+  Clusters upgraded from an earlier version keep their existing `data/loaded_plugins` file, so the plugin is not enabled automatically after upgrade. To enable it, run `./bin/emqx ctl plugins load emqx_erpc_probe`, or add `{emqx_erpc_probe, true}.` to `data/loaded_plugins` and restart the node.
+
 ### Bug Fixes
 
 - Fixed backup restore dropping explicit Dashboard user scopes and `admin_override`.
