@@ -1,6 +1,6 @@
 # Durable Sessions の設定と管理
 
-本ドキュメントでは、EMQX における [MQTT Durable Sessions](../../develop/durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
+本ドキュメントでは、EMQX における [MQTT Durable Sessions](./durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
 
 ## 設定パラメータ
 

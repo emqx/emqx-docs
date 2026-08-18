@@ -14,7 +14,7 @@
 | **集群连接**           | ✅                                 | ❌                   | ✅               | 设备和应用数据的无缝连接                                     |
 | **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构（即将发布）                         |
 | **流处理**             | ✅                                 | ❌                   | ✅               | 更高的可靠性和灾难恢复能力<br>（即将发布）                   |
-| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../guides/durability/management.md) |
+| **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../guides/durability/durability_introduction.md) |
 | **Schema Registry**    | ✅                                 | ❌                   | ✅               | [编解码](../develop/data-integration/schema-registry.md)保证数据一致性和可兼容性 |
 | **消息编解码**         | ✅                                 | ❌                   | ✅               | 灵活的消息格式转换：JSON / Avro / Protobuf / HTTP / gRPC     |
 | **消息验证**           | ✅                                 | ❌                   | ✅               | 确保消息的完整性和合法性                                     |
