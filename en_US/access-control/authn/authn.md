@@ -140,6 +140,14 @@ To authenticate clients connected via different listeners using different authen
   str_eq(listener, 'ssl:default')
   ```
 
+To combine a JWT authenticator with a password-based authenticator in one authentication chain, you can configure the JWT authenticator with the following precondition:
+
+```
+is_jwt(password)
+```
+
+Starting from EMQX 6.2.3, `is_jwt(password)` returns `true` only when the password is structurally a JWT in JWS compact form. Non-JWT passwords and absent passwords return `false`, so EMQX skips the JWT authenticator and continues to the next authenticator in the chain. This is useful when the chain must serve both JWT clients and clients that use legacy passwords or TLS certificate authentication. If a structurally valid JWT fails signature or claim verification, the JWT authenticator still denies the client.
+
 ## External Resource Cache
 
 EMQX provides a node-level caching mechanism for authentication results retrieved from external backends, such as MySQL, MongoDB, or Redis. This cache is designed to improve the performance of authentication result lookups and reduce repeated access to external resources, especially in high-throughput environments.
