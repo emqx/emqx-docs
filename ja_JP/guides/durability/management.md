@@ -1,6 +1,6 @@
 # Durable Sessions の設定と管理
 
-本ドキュメントでは、EMQX における [MQTT Durable Sessions](../../develop/durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
+本ドキュメントでは、EMQX における [MQTT Durable Sessions](./durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
 
 ## 設定パラメータ
 
@@ -56,7 +56,7 @@ EMQX はクライアントからの MQTT メッセージをバッチ単位で耐
 
 #### ストレージレイアウトの設定
 
-ストレージレイアウトは EMQX がディスク上のデータをどのように整理するかを決定します。`durable_storage.<DS>.layout.type` パラメータを設定すると、新しい [世代](../../develop/durability_introduction.html#generation)で使用されるレイアウトを変更できます。この変更は既存の世代には影響しません。各レイアウトタイプの設定は `durable_storage.<DS>.layout` サブツリーに含まれます。現在は `wildcard_optimized` レイアウトタイプが利用可能です。
+ストレージレイアウトは EMQX がディスク上のデータをどのように整理するかを決定します。`durable_storage.<DS>.layout.type` パラメータを設定すると、新しい [世代](./durability_introduction.html#generation)で使用されるレイアウトを変更できます。この変更は既存の世代には影響しません。各レイアウトタイプの設定は `durable_storage.<DS>.layout` サブツリーに含まれます。現在は `wildcard_optimized` レイアウトタイプが利用可能です。
 
 ##### `wildcard_optimized` レイアウトタイプの設定
 
