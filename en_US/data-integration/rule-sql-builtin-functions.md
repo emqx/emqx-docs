@@ -1205,6 +1205,26 @@ To decompress `Data`, `Data` must contain a zlib header and a checksum at the en
 zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 ```
 
+### lz4_compress(Data: binary | string) -> binary
+
+This function has been introduced since EMQX 6.2.3.
+
+Compresses `Data` using the LZ4 Frame format. Raw LZ4 blocks are not supported. Example:
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
+### lz4_uncompress(Data: binary) -> binary | string
+
+This function has been introduced since EMQX 6.2.3.
+
+Decompresses `Data` in the LZ4 Frame format. `Data` must be a valid LZ4 Frame. Raw LZ4 blocks are not supported. Example:
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
 ## Bit Operation Functions
 
 ### bitand(Num1: integer, Num2: integer) -> integer

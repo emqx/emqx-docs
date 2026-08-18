@@ -1205,6 +1205,26 @@ bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
 zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 ```
 
+### lz4_compress(Data: binary | string) -> binary
+
+此函数自 EMQX 6.2.3 起引入。
+
+使用 LZ4 Frame 格式压缩 Data。不支持原始 LZ4 块。示例：
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
+### lz4_uncompress(Data: binary) -> binary | string
+
+此函数自 EMQX 6.2.3 起引入。
+
+解压 LZ4 Frame 格式的 Data。Data 必须是有效的 LZ4 Frame。不支持原始 LZ4 块。示例：
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
 ## 比特位操作函数
 
 ### bitand(Num1: integer, Num2: integer) -> integer
