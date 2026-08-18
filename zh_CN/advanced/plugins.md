@@ -52,6 +52,7 @@ EMQX Enteprise 商业销售时不提供源代码，不支持客户自行开发�
 | [emqx_sn](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_sn)                   | etc/plugins/emqx_sn.conf              | MQTT-SN 协议支持          |
 | [emqx_stomp](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_stomp)             | etc/plugins/emqx_stomp.conf           | Stomp 协议支持            |
 | [emqx_recon](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_recon)             | etc/plugins/emqx_recon.conf           | Recon 性能调试            |
+| emqx_erpc_probe                                                                    | etc/plugins/emqx_erpc_probe.conf      | 集群节点间网络健康探测（默认加载），详见 [Prometheus 监控告警](../tutorial/prometheus.md#集群节点间网络健康探测) |
 | [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)               | etc/plugins/emqx_plugin_template.conf | 代码热加载插件            |
 
 ## 启停插件
@@ -76,6 +77,7 @@ EMQX Enteprise 商业销售时不提供源代码，不支持客户自行开发�
 {emqx_retainer, true}.
 {emqx_dashboard, true}.
 {emqx_rule_engine, true}.
+{emqx_erpc_probe, true}.
 {emqx_bridge_mqtt, false}.
 ```
 

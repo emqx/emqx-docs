@@ -37,6 +37,7 @@ EMQX Enteprise does not provide source code for commercial sales, and does not s
 | [emqx_sn](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_sn)                   | etc/plugins/emqx_sn.conf              | MQTT-SN protocol support           |
 | [emqx_stomp](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_stomp)             | etc/plugins/emqx_stomp.conf           | Stomp protocol support             |
 | [emqx_recon](https://github.com/emqx/emqx/tree/main-v4.3/apps/emqx_recon)             | etc/plugins/emqx_recon.conf           | Recon performance debugging        |
+| emqx_erpc_probe                                                                    | etc/plugins/emqx_erpc_probe.conf      | Inter-node network health probe (enabled by default), see [Prometheus Monitoring](../tutorial/prometheus.md#inter-node-network-health-probe) |
 | [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)               | etc/plugins/emqx_plugin_template.conf | plugin develop template            |
 
 ## Start and stop plugin
@@ -61,6 +62,7 @@ EMQX Enteprise does not provide source code for commercial sales, and does not s
 {emqx_retainer, true}.
 {emqx_dashboard, true}.
 {emqx_rule_engine, true}.
+{emqx_erpc_probe, true}.
 {emqx_bridge_mqtt, false}.
 ```
 

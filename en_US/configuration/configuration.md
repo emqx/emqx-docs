@@ -509,11 +509,35 @@ Set the maximum number of ETS tables allowed in Erlang runtime. See [http://erla
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `15m`   |
+| duration | Not set (disabled by default) |
 
 #### Description
 
-System tuning parameters, which set how often Erlang runs to force a global garbage collection.
+System tuning parameters, which set how often Erlang runs to force a global garbage collection. Periodic global GC is disabled by default; only enable it temporarily if EMQX memory usage keeps growing and manual garbage collection can indeed release a large amount of memory.
+
+
+
+### node.global_gc_mem_pressure
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Whether to enable memory-pressure-triggered global GC. When system memory usage exceeds `os_mon.sysmem_high_watermark` and periodic GC is disabled (`node.global_gc_interval` is not set), EMQX triggers a smooth global GC to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires.
+
+
+
+### node.global_gc_mem_pressure_min_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5m`    |
+
+#### Description
+
+The minimum interval between two memory-pressure-triggered global GCs. This throttles the feature so that memory alarms do not repeatedly trigger global GC.
 
 
 
@@ -7923,6 +7947,56 @@ Specify the collection interval of Statsd data in milliseconds.
 #### Description
 
 Specify Prometheus Collector.
+
+
+
+## Plugin `emqx_erpc_probe`
+
+### erpc_probe.probe_enable
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Whether to enable the inter-node erpc network health probe workers. When off, the metric series remain present but stay at zero.
+
+
+
+### erpc_probe.probe_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `1s`    |
+
+#### Description
+
+Minimum interval between two consecutive probes of one peer. If a peer keeps timing out, the effective cadence degrades to approximately `1 / (probe_timeout + probe_interval)`.
+
+
+
+### erpc_probe.probe_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+Timeout of each `erpc:call` probe.
+
+
+
+### erpc_probe.probe_buckets
+
+| Type   | Default                                                                           |
+| ------ | --------------------------------------------------------------------------------- |
+| string | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` |
+
+#### Description
+
+Histogram bucket upper bounds (seconds), comma-separated and strictly increasing. Invalid non-empty values fall back to the default list with a warning.
 
 
 

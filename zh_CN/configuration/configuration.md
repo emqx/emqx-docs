@@ -513,11 +513,35 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `15m`   |
+| duration | 未设置（默认关闭） |
 
 #### 说明
 
-系统调优参数，设置 Erlang 运行多久强制进行一次全局垃圾回收。
+系统调优参数，设置 Erlang 运行多久强制进行一次全局垃圾回收。默认不启用周期性全局 GC；仅建议在内存使用持续增长且手动 GC 确实能释放大量内存时临时开启。
+
+<br />
+
+### node.global_gc_mem_pressure
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### 说明
+
+是否启用内存压力触发的全局 GC。当系统内存使用率超过 `os_mon.sysmem_high_watermark` 且周期性 GC 已禁用（`node.global_gc_interval` 未设置）时，EMQX 会触发一次平滑的全局 GC 以降低内存占用。触发信号由 `emqx_os_mon` 在内存告警时发出。
+
+<br />
+
+### node.global_gc_mem_pressure_min_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5m`    |
+
+#### 说明
+
+两次内存压力触发的全局 GC 之间的最小间隔，用于节流，避免内存告警频繁触发全局 GC。
 
 <br />
 
@@ -7854,6 +7878,56 @@ mqtt.sn.predefined.topic.1 = foo/bar
 #### 说明
 
 指定 Prometheus 的 Collector。
+
+<br />
+
+## 插件 `emqx_erpc_probe`
+
+### erpc_probe.probe_enable
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### 说明
+
+是否启用集群节点间 erpc 网络健康探测 worker。关闭后指标序列仍存在但保持为 0。
+
+<br />
+
+### erpc_probe.probe_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `1s`    |
+
+#### 说明
+
+对同一对端两次探测之间的最小间隔。若对端持续超时，实际探测频率会退化为约 `1 / (probe_timeout + probe_interval)`。
+
+<br />
+
+### erpc_probe.probe_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### 说明
+
+每次 `erpc:call` 探测的超时时间。
+
+<br />
+
+### erpc_probe.probe_buckets
+
+| Type   | Default                                                                           |
+| ------ | --------------------------------------------------------------------------------- |
+| string | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` |
+
+#### 说明
+
+耗时直方图的 bucket 上界（秒），逗号分隔，需严格递增。非法的非空取值会回退到默认值并输出告警。
 
 <br />
 

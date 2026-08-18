@@ -167,4 +167,34 @@ rate(emqx_http_api_request_duration_milliseconds_sum[5m])
 rate(emqx_http_api_request_duration_milliseconds_count[5m])
 ```
 
+## 集群节点间网络健康探测
+
+> 从 EMQX Enterprise e4.4.38 开始支持。
+
+`emqx_erpc_probe` 插件用于监控集群节点间链路的健康状况。每个节点对集群中的其余节点各维持一个独立的探测进程，按 `erpc_probe.probe_interval`（默认 `1s`）周期性发起 `erpc:call(Peer, erlang, node, [], Timeout)` 探测，超时时间为 `erpc_probe.probe_timeout`（默认 `5s`）。
+
+插件通过标准 Prometheus 指标暴露探测结果，这些指标会随 EMQX 的 Prometheus 采集一起暴露（可通过拉取模式或 `emqx_prometheus` 插件获取）：
+
+| 指标名 | 类型 | 标签 | 说明 |
+| ------ | ---- | ---- | ---- |
+| `emqx_erpc_probe_result_total` | Counter | `peer`、`result`=`ok` \| `timeout` \| `noconnection` \| `system_limit` | 按结果统计探测次数。`timeout` 表示已连接但对端无响应（链路劣化或对端过载）；`noconnection` 表示无分布连接（对端 VM 宕机或完全隔离）；`system_limit` 表示对端进程耗尽 |
+| `emqx_erpc_probe_duration_seconds` | Histogram | `peer` | 成功探测的往返时间，用于发现“变慢但尚未超时”的链路（p99） |
+
+配置文件位于 `etc/plugins/emqx_erpc_probe.conf`：
+
+| 配置项 | 默认值 | 说明 |
+| ------ | ------ | ---- |
+| `erpc_probe.probe_enable` | `on` | 是否启用探测 worker。关闭后指标序列仍存在但保持为 0 |
+| `erpc_probe.probe_interval` | `1s` | 对同一对端两次探测之间的最小间隔 |
+| `erpc_probe.probe_timeout` | `5s` | 每次 `erpc:call` 探测的超时时间 |
+| `erpc_probe.probe_buckets` | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` | 耗时直方图的 bucket 上界（秒），需严格递增 |
+
+::: tip 注意
+
+- 该插件对新安装的集群默认启用（见 `data/loaded_plugins`）。
+- 从旧版本升级的集群会保留原有的 `data/loaded_plugins`，插件不会自动启用。可执行 `./bin/emqx ctl plugins load emqx_erpc_probe` 启用，或在 `data/loaded_plugins` 中加入 `{emqx_erpc_probe, true}.` 后重启节点。
+- 配置项在插件启动时读取，修改配置后需要重启插件或节点才能生效。
+
+:::
+
 {% endemqxee %}
