@@ -1,6 +1,6 @@
 # Configure and Manage Durable Sessions
 
-This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Sessions](./management.md) feature within EMQX, including sessions and storage configuration.
+This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Sessions](./durability_introduction.md) feature within EMQX, including sessions and storage configuration.
 
 ## Configuration Parameters
 
@@ -256,4 +256,3 @@ A rolling average of time (in μs) spent consuming a batch of messages from dura
 These counters are specific to the "wildcard optimized" storage layout. They measure the efficiency of consuming data from local storage. The `seek` primitive is generally slower, so the rate of `emqx_ds_storage_bitfield_lts_counter_next` should ideally grow faster than `seek`.
 
 Increasing the `durable_storage.messages.layout.epoch_bits` parameter can help improve this ratio.
-
