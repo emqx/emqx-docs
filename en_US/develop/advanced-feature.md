@@ -3,7 +3,7 @@
 As MQTT brokers evolve, EMQX stays ahead of the curve, introducing new features and capabilities to meet the complex demands of IoT applications. This chapter delves into the following powerful features:
 
 - [MQTT over WebSocket](./connect-emqx/mqtt-over-websocket.md) explains how to connect to EMQX using the MQTT protocol over WebSocket.
-- [MQTT over QUIC](./cluster/introduction.md) introduces this groundbreaking feature in EMQX and explains how to enable it in EMQX.
+- [MQTT over QUIC](./mqtt-over-quic/introduction.md) introduces this groundbreaking feature in EMQX and explains how to enable it in EMQX.
 - [Cluster Linking](./cluster-linking/introduction.md) (EMQX Enterprise feature) introduces the feature that connects multiple, separate clusters and facilitates client communication on geographically dispersed clusters.
 - [MQTT-based File Transfer](./file-transfer/introduction.md) (EMQX Enterprise feature) provides insights into transferring large files to EMQX using the MQTT protocol.
 - [Multi-Protocol Gateway](./gateway/gateway.md) covers the design and usage of several commonly used gateways, including Stomp, MQTT-SN, CoAP, LwM2M, and ExProto.

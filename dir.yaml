@@ -190,6 +190,7 @@
     - guides/backup-restore
 - title_en: MQTT Durable Sessions
   title_cn: MQTT 会话持久化
+  path: guides/durability/durability_introduction
   collapsed: true
   children:
     - guides/durability/management
@@ -638,7 +639,6 @@
         - title_en: Design Principle
           title_cn: 设计原理
           path: develop/design/clustering
-    - develop/durability_introduction
     - develop/design/inflight-window-and-message-queue
     - develop/design/retransmission
 - title_en: MQTT Reference
