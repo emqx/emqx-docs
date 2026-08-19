@@ -662,6 +662,7 @@ Below are the functions that can be used in the expressions:
 - **Data extraction functions**:
   - `json_value(Data, Path)`: Extract values from JSON strings using a dot-separated path to navigate nested structures. For example, if `username` is a JSON object, you can access a field with `json_value(username, 'shop.floor')`.
   - `jwt_value(Data, Path)`: Decode JWT token payloads and extract claim values using a dot-separated path. For example, if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`.
+  - `is_jwt(Data)` (since 6.2.3): Check whether `Data` has the structure of a JWT in JWS compact form. The function returns `true` only for values with 3 dot-separated Base64URL-decodable segments and a decoded header JSON object that contains an `alg` field. It does not verify the signature or inspect the payload, and returns `false` for `undefined`, `null`, empty strings, JWE tokens with 5 segments, and malformed values.
 
 #### Conditions
 

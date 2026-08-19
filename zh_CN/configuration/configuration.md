@@ -669,6 +669,7 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 - **数据提取函数**：
   - `json_value(Data, Path)`: 使用点分隔路径从 JSON 字符串中提取值，以导航嵌套结构。例如，如果 `username` 是一个 JSON 对象，可以使用 `json_value(username, 'shop.floor')` 访问字段。
   - `jwt_value(Data, Path)`: 解码 JWT 令牌负载并使用点分隔路径提取声明值。例如，如果 `password` 是一个带有自定义声明的 JWT，可以使用 `jwt_value(password, 'client_attrs.unitid')` 访问嵌套值。
+  - `is_jwt(Data)`（从 6.2.3 起）：检查 `Data` 是否具有 JWS Compact 格式的 JWT 结构。仅当该值包含 3 个以点号分隔且可进行 Base64URL 解码的片段，并且解码后的 header 是包含 `alg` 字段的 JSON 对象时，该函数才返回 `true`。该函数不会校验签名，也不会检查 payload。对于 `undefined`、`null`、空字符串、包含 5 个片段的 JWE Token 和格式错误的值，该函数返回 `false`。
 
 #### 条件
 
