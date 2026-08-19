@@ -30,6 +30,10 @@ This plugin periodically synchronizes selected backup data from a primary EMQX c
 
 This plugin forwards local MQTT messages to another MQTT broker, buffering them on disk for better resilience across network interruptions.
 
+[Mapping Tables](./plugin-catalog/6.1/emqx-maptabs.md)
+
+This plugin provides named mapping tables for Rule SQL, allowing rules to replace long `CASE WHEN` expressions with table lookups.
+
 ## Message Persistence
 
 [Offline Messages](./plugin-catalog/6.1/emqx-offline-messages.md)
