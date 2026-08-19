@@ -134,7 +134,7 @@ EMQX 允许创建多个认证器构成一条认证链，认证器将按照在链
 is_jwt(password)
 ```
 
-从 EMQX 6.2.3 开始，仅当密码在结构上是 JWS Compact Serialization 形式的 JWT 时，`is_jwt(password)` 才返回 `true`。非 JWT 密码或未提供密码时返回 `false`，因此 EMQX 会跳过 JWT 认证器，并继续执行认证链中的下一个认证器。该配置适用于同一认证链需要同时服务 JWT 客户端、传统密码客户端或 TLS 证书认证客户端的场景。如果结构有效的 JWT 未通过签名或声明校验，JWT 认证器仍会拒绝该客户端。
+从 EMQX 6.2.3 开始，仅当密码在结构上是 JWT 时，该调用条件才返回 `true`。对于 JWT 密码，EMQX 会执行 JWT 认证器。如果密码不是 JWT 或未提供密码，EMQX 会跳过 JWT 认证器，并继续执行认证链中的下一个认证器。
 
 ## 外部资源缓存
 
