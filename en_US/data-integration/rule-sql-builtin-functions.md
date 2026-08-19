@@ -951,7 +951,7 @@ map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 
 ::: tip
 
-This function is available starting from EMQX v6.1.5. It is available only after the EMQX Mapping Tables plugin is installed and started.
+This function is available starting from EMQX 6.1.5. It is available only after the EMQX Mapping Tables plugin is installed and started.
 
 :::
 
