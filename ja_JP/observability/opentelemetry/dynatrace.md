@@ -31,7 +31,38 @@ Before configuring EMQX, prepare the following information in Dynatrace. For end
 - The OAuth2 resource value, for example `urn:dtaccount:{your-account-uuid}`.
 - The scopes required by Dynatrace for the signals you want to export, such as `openTelemetryTrace.ingest` for traces and `logs.ingest` for logs.
 
-## Configure EMQX
+## Configure Dynatrace in Dashboard
+
+You can configure the Dynatrace integration from the EMQX Dashboard:
+
+1. In the left navigation menu, click **Management** -> **Monitoring**.
+2. On the **Monitoring** page, click the **Integration** tab.
+3. Under **Monitoring Platform**, select **OpenTelemetry**.
+4. Under **OpenTelemetry Type**, select **Dynatrace**.
+5. Under **Feature Selection**, select **Traces**, **Logs**, or both. Dynatrace integration does not support metrics.
+6. In **Endpoint**, enter the Dynatrace OTLP base URL. Do not append `/v1/logs` or `/v1/traces`.
+7. Optional: In **Headers**, click **Add** to add extra HTTP headers that EMQX should send to the Dynatrace OTLP endpoint. You do not need to add an OAuth2 `Authorization` header; EMQX obtains the access token and adds this header automatically.
+8. If the Dynatrace OTLP endpoint uses HTTPS, turn on **Enable TLS** for the exporter.
+
+In the **OAuth2 Authentication** section, configure the following fields:
+
+| Field | Description |
+| --- | --- |
+| **Token Endpoint** | Dynatrace OAuth2 token endpoint. |
+| **Client ID** | OAuth2 client ID. |
+| **Client Secret** | OAuth2 client secret. |
+| **Resource** | OAuth2 resource value required by Dynatrace. |
+| **Scope** | Optional OAuth2 scopes. Configure scopes that match the enabled signals when Dynatrace requires them. |
+| **Timeout** | Timeout for token requests. |
+| **Enable TLS** | Enable TLS for token requests when the token endpoint uses HTTPS. |
+
+If **Traces** is selected, configure **Trace Mode**, **Traces All Messages**, **Traces Export Interval**, and **Max Queue Size** as needed.
+
+If **Logs** is selected, configure **Logs Level** and **Logs Export Interval** as needed.
+
+Click **Save Changes** to apply the configuration.
+
+## Configure Dynatrace with HOCON
 
 Add the following configuration to `etc/base.hocon`, or apply the equivalent configuration through the REST API:
 

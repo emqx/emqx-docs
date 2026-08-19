@@ -31,7 +31,38 @@
 - OAuth2 resource，例如 `urn:dtaccount:{your-account-uuid}`。
 - 与要导出的信号匹配的 Dynatrace scope，例如用于追踪的 `openTelemetryTrace.ingest` 和用于日志的 `logs.ingest`。
 
-## 配置 EMQX
+## 通过 Dashboard 配置 Dynatrace
+
+您可以在 EMQX Dashboard 中配置 Dynatrace 集成：
+
+1. 在左侧导航栏中，点击**管理** -> **监控**。
+2. 在**监控**页面，点击**监控集成**标签页。
+3. 在**监控平台**中选择 **OpenTelemetry**。
+4. 在 **OpenTelemetry 类型**中选择 **Dynatrace**。
+5. 在**功能选择**中选择**追踪**、**日志**，或同时选择两者。Dynatrace 集成不支持指标。
+6. 在**服务地址**中输入 Dynatrace OTLP 基础 URL。不要追加 `/v1/logs` 或 `/v1/traces`。
+7. 可选：在**请求头**中点击**添加**，添加 EMQX 发送到 Dynatrace OTLP endpoint 的额外 HTTP 请求头。无需添加 OAuth2 `Authorization` 请求头；EMQX 会自动获取 access token 并添加该请求头。
+8. 如果 Dynatrace OTLP endpoint 使用 HTTPS，打开导出器的**启用 TLS**开关。
+
+在 **OAuth2 认证**区域中，配置以下字段：
+
+| 字段 | 说明 |
+| --- | --- |
+| **令牌端点** | Dynatrace OAuth2 token endpoint。 |
+| **客户端 ID** | OAuth2 client ID。 |
+| **客户端密钥** | OAuth2 client secret。 |
+| **资源** | Dynatrace 所需的 OAuth2 resource。 |
+| **作用域** | 可选的 OAuth2 scope。当 Dynatrace 要求 scope 时，请根据已启用的信号进行配置。 |
+| **超时时间** | token 请求的超时时间。 |
+| **启用 TLS** | token endpoint 使用 HTTPS 时，启用 token 请求的 TLS。 |
+
+如果选择了**追踪**，可根据需要配置**追踪模式**、**追踪全部消息**、**追踪导出间隔**和**最大队列大小**。
+
+如果选择了**日志**，可根据需要配置**日志级别**和**日志导出间隔**。
+
+点击**保存修改**应用配置。
+
+## 通过 HOCON 配置 Dynatrace
 
 将以下配置添加到 `etc/base.hocon`，或通过 REST API 应用等效配置：
 
