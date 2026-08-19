@@ -30,7 +30,7 @@
 
 该插件将本地 MQTT 消息转发到另一个 MQTT Broker，并在磁盘上缓冲消息，以在网络中断时提供更好的可靠性。
 
-[Mapping Tables](./plugin-catalog/6.1/emqx-maptabs.md)
+[映射表（Mapping Tables）](./plugin-catalog/6.1/emqx-maptabs.md)
 
 该插件为 Rule SQL 提供命名 mapping table，使规则可以用表查找替代较长的 `CASE WHEN` 表达式。
 

@@ -2,7 +2,7 @@
 
 The EMQX Mapping Tables plugin provides named mapping tables for Rule SQL. Use this plugin when a rule needs to map stable identifiers, codes, or binary field IDs to structured values without maintaining long `CASE WHEN` expressions in the SQL statement.
 
-This plugin is available starting from EMQX 6.1.5. Install and start the plugin before using `maptab_lookup` in Rule SQL.
+This plugin is available starting from EMQX v6.1.5. Install and start the plugin before using `maptab_lookup` in Rule SQL.
 
 Mapping tables are loaded from JSON files through the `emqx ctl maptabs` CLI and stored in EMQX's replicated database. Rules query the tables with the `maptab_lookup` SQL function.
 

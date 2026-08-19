@@ -1,8 +1,8 @@
-# Mapping Tables
+# 映射表（Mapping Tables）
 
 EMQX Mapping Tables 插件为 Rule SQL 提供命名 mapping table。当规则需要将稳定的标识符、编码或二进制字段 ID 映射为结构化值时，可以使用该插件，避免在 SQL 语句中维护较长的 `CASE WHEN` 表达式。
 
-该插件从 EMQX 6.1.5 开始可用。请先安装并启动该插件，再在 Rule SQL 中使用 `maptab_lookup`。
+该插件从 EMQX v6.1.5 开始可用。请先安装并启动该插件，再在 Rule SQL 中使用 `maptab_lookup`。
 
 Mapping table 通过 `emqx ctl maptabs` CLI 从 JSON 文件加载，并存储在 EMQX 的复制数据库中。规则可使用 `maptab_lookup` SQL 函数查询这些表。函数签名和 SQL 示例参见[内置 SQL 函数](../../../data-integration/rule-sql-builtin-functions.md)。
 
