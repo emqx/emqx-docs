@@ -1,5 +1,183 @@
 # EMQX 企业版 v4 版本
 
+## e4.4.38
+
+*发布日期: 2026-08-19*
+
+### 增强
+
+- Dashboard 用户支持基于 Category 的精细权限控制。
+
+  此前 Dashboard 用户仅有 `administrator` 与 `viewer` 两种角色：管理员可访问所有接口，Viewer 可访问所有只读接口。
+
+  本版本引入基于 Category 的权限模型，共包含 9 个 Category：
+
+  - 6 个已有业务 Category：`banned`、`rule_engine`、`resources`、`plugins`、`modules`、`others`。这些 Category 同时适用于 API Key 与 Dashboard 用户。
+  - 3 个仅适用于 Dashboard 用户的新增 Category：`user_management`（管理其他 Dashboard 账号）、`mfa_management`（管理其他用户的 MFA）、`app_management`（管理 API Key）。
+
+  如需收窄 Dashboard 用户的权限，可在该用户的 `tags` 字段中设置 `scopes` 数组。未显式设置 `scopes` 字段的用户保持升级前的行为：
+
+  - 管理员可访问所有接口。
+  - Viewer 可访问除备份归档下载外的所有只读接口。
+
+  设置 `scopes` 后，将适用以下规则：
+
+  - 显式设置了 `scopes` 的管理员用户，其读写操作均被限制在所列范围内：管理员的显式 scope 列表会生效。
+  - Viewer 用户保持只读。对其他用户资源的非 GET 请求一律拒绝，与 `scopes` 无关。
+  - Viewer 用户不能持有 `user_management` 或 `app_management`，默认 Viewer scope 集合也不包含这些 Category 和 `mfa_management`。对于 Viewer，`mfa_management` 仅允许在强制 MFA 锁定时豁免自己的账号，不能管理其他用户的 MFA。
+  - GET 请求同样受 scope 约束，未映射到任何 Category 的 API 路径对设置了 `scopes` 的用户拒绝访问（fail-closed）。显式设置为空列表时，除自助操作外全部拒绝：修改自己的密码、管理自己的 MFA、登出。
+  - 自助操作不受 `scopes` 影响：Viewer 始终可以修改自己的密码、管理自己的 MFA、以及登出。
+  - Viewer 用户不再允许下载备份归档（`/api/v4/data/file/*`），因为备份中包含 Dashboard 用户密码哈希、TOTP 密钥与 API Key 凭据。查看导出列表（`/data/export`）仍对 Viewer 开放。
+
+  此外，由 `dashboard.default_user.login` 配置的默认管理员账号受到额外保护：不允许被降级、不允许被显式设置 `scopes`、不允许被删除。
+
+- SAML SSO 后端支持对 `force_mfa` 进行逐用户覆盖。
+
+  此前，每个 SAML 后端的 `force_mfa` 标志统一作用于所有用户，无法针对单个账号调整 MFA 要求。
+
+  本版本在每个 Dashboard 用户的 `tags` 字段中新增 `admin_override` 内部状态。当管理员使用现有接口为其他用户启用或关闭 MFA 时，该状态会被隐式维护。
+
+  `admin_override` 状态语义如下：
+
+  - `admin_override = mfa_required`：无论后端 `force_mfa` 如何，该用户 SSO 登录时都必须完成 MFA。
+  - `admin_override = mfa_exempted`：无论后端 `force_mfa` 如何，该用户 SSO 登录时都可以跳过 MFA。
+  - 未设置（默认）：跟随后端 `force_mfa` 配置。
+
+  用户自助修改 MFA 不会修改 `admin_override`，因此会保留原有语义。
+
+  **滚动升级注意事项**：升级期间若集群中仍存在未升级到本版本的旧节点，`admin_override = mfa_required` 在旧节点上不会生效。旧节点会继续只按后端 `force_mfa` 判定。`admin_override = mfa_exempted` 通过现有的 `disable_mfa` 占位记录路径在旧节点上仍然生效。
+
+- MQTT 默认解析模式现已改为严格模式，以降低包含特殊字符的 MQTT 消息带来的注入风险。
+
+  在默认设置 `mqtt.strict_mode = true` 下，EMQX 会拒绝包含非法 UTF-8 字符、控制字符或其他不符合 [MQTT UTF-8 Encoded String 规范](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010) 的报文结构。
+
+- 通过 `emqx_ctl log-throttling` 新增日志限流运行时控制能力。
+
+  此前，日志限流的全局限流阈值、时间窗口和级别只能在配置文件中设置。新增的 `log-throttling` 命令组支持以下操作：
+
+  - 使用 `log-throttling print` 查看本节点当前配置，或使用 `log-throttling print-cluster` 查看所有节点的当前配置。
+  - 使用 `log-throttling limit set <Limit>`、`log-throttling window set <Duration>` 或 `log-throttling level set <Level>` 修改全局限流阈值、时间窗口或级别。使用对应的 `set-cluster` 变体可将变更应用到所有节点。
+  - 使用 `log-throttling line-limit set '<Mod:Ln,...>' <Limit>` 为指定日志行设置独立限流阈值。例如，`'emqx_channel:1551,emqx_username_quota:245' 0` 将这两行的限制设置为 `0`（完全静默），其他行仍沿用全局阈值。使用 `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>` 可将变更应用到所有节点。
+  - 使用 `log-throttling line-limit del '<Mod:Ln,...>'` 删除每行限流阈值覆盖配置。使用 `log-throttling line-limit del-cluster '<Mod:Ln,...>'` 可在集群范围内删除。
+
+  由于行号会随版本演进而变化，每行限流阈值仅在运行时生效，不会持久化到配置文件中。可在发现某条日志打印过频或过少时，使用该功能进行临时调整。
+
+- 将日志限流的默认值由 `50,60s` 调整为 `5,60s`。每个限流器在默认情况下每 60 秒最多允许 5 条重复日志，超出部分将被丢弃并汇总记录，以减少高频日志的刷屏。
+
+- 用户名配额限制模块现在使用新的跨节点同步机制，以提升集群性能和稳定性。
+
+  本版本使用基于每节点 ETS 表和专用 RPC 通道的流式设计替代 Mnesia 复制。新机制可降低内存占用以及集群节点变动时的资源消耗，并为数据同步与处理路径增加过载保护。已废弃的 `refresh_username_tab_interval` 配置项已被移除。
+
+- 将节点的默认 `net_ticktime` 由 120 秒调整为 60 秒。
+
+  在高负载下，指向缓慢或停滞节点的 RPC 通道可能发生拥塞和阻塞。积压在通道上的消息可能持续增加内存占用，直至节点内存耗尽（OOM）。
+
+  将 `net_ticktime` 缩短为 60 秒（通过 `vm.args` 中的 `-kernel net_ticktime` 配置）后，集群能够更快发现并移除故障节点。这会缩短 RPC 请求可能阻塞在该节点上的时间窗口。
+
+- 增强全局垃圾回收（Global GC）机制：支持内存压力触发的全局 GC。
+
+  当系统内存使用率超过高水位（`os_mon.sysmem_high_watermark`）且周期性 GC 已禁用时，触发一次平滑的全局 GC 以降低内存占用。触发信号由 `emqx_os_mon` 在内存告警时发出。该行为由两个配置项控制：
+
+  - `node.global_gc_mem_pressure`（默认 `on`）：是否启用内存压力触发的全局 GC；
+  - `node.global_gc_mem_pressure_min_interval`（默认 `15m`）：两次内存压力触发的全局 GC 之间的最小间隔，用于节流。
+
+- 新增集群节点间网络健康探测插件 `emqx_erpc_probe`，用于通过 Prometheus 指标上报集群节点间链路的健康状态。
+
+  每个节点都会为集群中的其他每个节点运行一个独立的探测进程。探测进程会按照 `erpc_probe.probe_interval` 配置的间隔（默认：`1s`），定期发送 `erpc:call(Peer, erlang, node, [], Timeout)` 作为探测请求，超时时间由 `erpc_probe.probe_timeout` 配置（默认：`5s`）。
+
+  该插件暴露以下 Prometheus 指标：
+
+  - `emqx_erpc_probe_result_total`（计数器）：按 `result` 标签统计探测结果。可取值包括 `ok`、`timeout`、`noconnection` 和 `system_limit`。
+  - `emqx_erpc_probe_duration_seconds`（直方图）：统计成功探测的往返时间，可用于通过 p99 延迟发现已经变慢但尚未超时的节点间链路。
+
+  新安装的集群默认会通过 `data/loaded_plugins` 启用该插件。插件配置文件位于 `etc/plugins/emqx_erpc_probe.conf`；修改配置后需要重启插件。
+
+  从旧版本升级的集群会保留原有的 `data/loaded_plugins` 文件，因此升级后不会自动启用该插件。要启用该插件，可执行 `./bin/emqx ctl plugins load emqx_erpc_probe`，或在 `data/loaded_plugins` 中添加 `{emqx_erpc_probe, true}.` 后重启节点。
+
+### 修复
+
+- 修复导入备份时 Dashboard 用户的显式 `scopes` 与 `admin_override` 丢失的问题。
+
+  导入备份时会原样保留 Dashboard 用户 `tags` 中的扩展字段。设置了显式 `scopes`（或逐用户 `admin_override`）的用户在恢复后不再回退到角色默认值。
+
+- 修复备份接口（`/api/v4/data*`）允许 API Key 凭据访问的问题。
+
+  备份导出/导入现在会拒绝 API Key 凭据访问；Dashboard 登录会话不受影响。
+
+- API Key 更新接口现在严格校验输入并拒绝非法值。
+
+  当请求包含未知的权限字段、非布尔的权限值、`permissions` 字段传入 JSON 数组（应为对象）或非布尔的 `fallback` 时，接口会返回 HTTP 400。部分更新时省略的字段会保持原值，不再被写成字符串 `undefined`。
+
+- 将 SAML SSO 使用的 `esaml` 依赖升级到 v1.1.5，在解析 SAML 响应和元数据时禁用 XML 实体展开，避免特制 SAML XML 展开外部或自定义实体。
+
+- 修复 SAML SSO 回调收到格式错误的 DEFLATE 编码响应时返回 HTTP 500 的问题。此类请求现在会返回 HTTP 400，且不会终止 Cowboy 请求进程。
+
+- 修复 RabbitMQ exchange 重新创建时破坏所有队列绑定关系的问题。
+
+  修复前，如果 `exchange.declare` 请求中的 `durable` 设置与已有 exchange 不匹配，桥接会删除并重新声明该 exchange，同时也会删除所有已有队列绑定关系。修复后，durable 或类型不匹配会产生明确的错误提示（`PRECONDITION_FAILED`），已有 exchange 及其所有绑定关系都会保留。
+
+- 新增对网关连接中对端证书 CN/DN 字段的校验。
+
+  修复前，网关协议连接通过 TLS 证书或 PROXY 协议 v2 获取到的 CN/DN 字段未经过校验。这些字段中的控制字符可能带来日志注入风险。修复后，包含非法控制字符的字段会被拒绝，并断开连接。
+
+- 加强备份文件名校验，确保备份保留在备份目录内。
+
+  修复前，备份文件名仅校验扩展名，因此构造包含路径分隔符或非法字符的文件名可能使备份逃逸出备份目录（路径穿越）。修复后，备份文件名必须为合法基础文件名，且解析后的路径必须保留在备份目录内。
+
+- 修复节点加入集群时可能将评估 License 选为集群 License 的问题。
+
+  修复前，当评估 License 与正式 License 并存时，集群加入时的 License 协商可能选择评估 License。修复后，License 协商会始终优先选择非评估 License。
+
+- 修复节点加入集群后已停用模块的钩子未清除，导致模块可能在新节点上保持激活的问题。
+
+  修复前，集群中已停用的模块（如 Retainer）在新加入节点上仍可能保持激活状态。当该节点处理订阅请求时，可能报告如下错误：
+
+  ```
+  2026-08-04T03:49:03.217491+00:00 [error] c1@10.12.1.10:52079 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[{gproc,get_value,[...,{emqx_hooks,safe_execute,2,[{file,"emqx_hooks.erl"},{line,235}]},...,{emqx_session,subscribe,4,[{file,"emqx_session.erl"},{line,281}]},...]}]}
+  ```
+
+  修复后，节点加入集群时会正确停止已停用的模块并清除其钩子。
+
+- 修复通配符订阅意外收到 `$SYS` 主题保留消息的问题。
+
+  修复前，客户端使用通配符过滤器（如 `#`）订阅时，会收到 `$SYS` 主题下的保留消息，不符合 MQTT 规范（以 `#` 或 `+` 开头的过滤器不得匹配以 `$` 开头的主题）。修复后，`$SYS` 主题的保留消息只投递给订阅其具体主题（如 `$SYS/#`）的客户端。
+
+- 修复消息重发布（republish）动作丢失原始 MQTT 属性的问题。
+
+  修复前，通过 republish 动作转发消息时，原始消息中的用户属性等 MQTT 属性会丢失。修复后，重发布消息会保留这些属性。
+
+- 修复 MQTT 桥接连接相关配置缺少校验的问题。
+
+  修复前，创建 MQTT 桥接时，非法值（如非正数的连接池大小或格式错误的重连间隔）可能静默生效或产生不明确的错误。修复后，这些连接参数会进行校验，非法配置会给出明确的错误提示。
+
+- 修复通过 REST API 创建带有非法配置的资源时，`emqx_rule_engine_api` 崩溃并导致规则引擎应用退出的问题。
+
+  修复前，创建 `bridge_mqtt` 等资源时，如果缺少必填字段（例如 `clientid`），配置校验过程中可能抛出异常。该异常会传播到 `emqx_rule_engine_api` 进程并导致其崩溃。在并发请求下，规则引擎应用可能因达到重启强度上限而退出，后续请求会返回 HTTP 500。修复后，非法配置会返回明确的 HTTP 400 客户端错误，不再影响 `emqx_rule_engine_api`。
+
+- 修复审计日志中 HTTP API 路径参数未解码的问题。
+
+  修复前，审计日志中记录的 HTTP API 调用路径参数（bindings）保留 URL 编码形式，且列表形式的值可能无法被正确记录。修复后，审计日志会记录解码并规范化后的路径参数。
+
+- 修复热配置导入接受非法配置的问题。
+
+  修复前，通过 API 导入不合法的热配置时，配置可能直接生效。修复后，导入前会先对配置进行校验，不合法的配置会返回错误而不生效。
+
+- 修复导入备份后已加载模块记录未同步更新的问题。
+
+  修复前，导入包含模块配置的备份后，`data/loaded_modules` 文件不会随之更新，重启后模块加载状态可能与导入内容不一致。修复后，导入备份会刷新已加载模块的记录。
+
+- 修复 Prometheus 上报的 CPU 使用率指标不准确的问题。
+
+  修复前，由于 `cpu_sup:util` 在进程首次调用时返回的利用率数据不可靠，Prometheus 抓取的 `cpu_use`、`cpu_idle` 指标可能不准确。修复后，CPU 指标统一经由长驻的 `emqx_os_mon` 进程采集，以保证上报值准确。
+
+- 修复集群节点之间转发 MQTT 消息时可能乱序送达的问题。
+
+  修复前，当发布者与订阅者分别连接到集群中的不同节点时，同一客户端按序发布到同一主题的连续消息，到达订阅者时可能发生乱序（违反 MQTT-4.6.0-5/6）。原因是跨节点转发使用 `gen_rpc:cast`，其接收端会把每条 cast 随机交给并发工作池中的某个 worker 执行，因此即便 cast 在同一连接上按序到达，执行时也可能乱序。修复后，跨节点转发改用 `gen_rpc:ordered_cast`（见 `emqx_rpc:cast/4,5`），同一连接上的 cast 会按到达顺序执行，从而恢复按客户端维度的消息顺序。
+
+- 修复 `emqx_ctl listeners restart http:dashboard`（以及 `https:dashboard`）因 Dashboard 监听器的 `start_listener/1` 与 `stop_listener/1` 函数未导出而报 `undef` 错误的问题。
+
+  修复前，重启命令会通过 `emqx_mgmt_cli:restart_http_listener/2` 调用 `emqx_dashboard:stop_listener/1`，但该函数未导出，因此命令报 `undef` 错误，Dashboard 监听器也不会被重启。停止监听器后，Dashboard 端口（如 `18083`）会一直不可用。现已导出这两个函数，因此 `listeners restart http:dashboard` 可以按预期停止并启动 Dashboard 监听器。
+
 ## e4.4.37
 
 *发布日期: 2026-07-31*
