@@ -15,7 +15,7 @@ prev:
 - [REST API](./api.md) 指导您快速上手 EMQX 提供的 HTTP 管理 API，用于管理客户端、主题、订阅等资源。
 - [命令行接口](./cli.md)介绍了 EMQX 支持的各类启动与管理命令。
 - [安全指南](./security-guide.md)涵盖了网络与 TLS 配置、认证、授权、禁用客户端、连接抖动检测、身份管理、API 密钥以及审计日志等内容。
-- [MQTT 会话持久化](./durability/management.md)指导您如何配置和管理会话持久化功能以及如何为高可用性数据副本设置参数。
+- [MQTT 会话持久化](./durability/durability_introduction.md)指导您如何配置和管理会话持久化功能以及如何为高可用性数据副本设置参数。
 - [EMQX Dashboard](./dashboard/introduction.md) 为您全面介绍 EMQX 内置的管理控制台，您将了解如何管理和监控 EMQX 集群并配置和使用所需的各项功能。
 - [日志及可观测性](./observability/overview.md)介绍了 EMQX 中的指标观测和监控功能，便于您进行系统监控和调试。
 - [插件与扩展](./extensions/introduction.md)帮助您通过开发插件来扩展 EMQX 的功能。

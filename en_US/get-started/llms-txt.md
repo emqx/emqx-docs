@@ -59,8 +59,8 @@ Any EMQX documentation page can be retrieved as raw Markdown by replacing `.html
 
 ```
 # HTML page
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.html
 
 # Same page as Markdown
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.md
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.md
 ```
