@@ -41,11 +41,11 @@ This section covers creating, viewing, updating, and deleting Dashboard users, a
 
 ### List Users
 
-Click **Users** from the left navigation menu to view all Dashboard users and their roles.
+Click **General** -> **Users** from the left navigation menu to view all Dashboard users and their roles.
 
 ### Update User
 
-1. Click **Users** from the left navigation menu.
+1. Click **General** -> **Users** from the left navigation menu.
 2. Click the **Edit** button for the target user.
 3. Update the role, remark, or scopes, and click **Confirm**.
 
@@ -53,7 +53,7 @@ You cannot update the username or password through this operation. To change a p
 
 ### Delete User
 
-1. Click **Users** from the left navigation menu.
+1. Click **General** -> **Users** from the left navigation menu.
 2. Click the **Delete** button for the target user.
 3. Click **Confirm** in the confirmation dialog.
 
@@ -61,7 +61,7 @@ You cannot update the username or password through this operation. To change a p
 The built-in `admin` user cannot be deleted. Attempting to delete it will return an error.
 :::
 
-:::warning Important Notice
+::: warning Important Notice
 Deleting a user immediately removes their MFA configuration and invalidates all their active tokens. Any active sessions for that user will be terminated.
 :::
 
@@ -69,7 +69,7 @@ Deleting a user immediately removes their MFA configuration and invalidates all 
 
 Users can change their own passwords. Administrators can change the password for any user.
 
-1. Click **Users** from the left navigation menu.
+1. Click **General** -> **Users** from the left navigation menu.
 2. Click the **Edit** button for the target user.
 3. Enter the new password and click **Confirm**.
 
@@ -123,7 +123,7 @@ For example, select **Modules** to allow the user to access only module-related 
 
 ### Default Administrator Protection
 
-The default administrator account configured by `dashboard.default_user.login` has additional safeguard:
+The default administrator account configured by `dashboard.default_user.login` has additional safeguards:
 
 - It cannot be demoted to the `viewer` role.
 - It cannot have an explicit `scopes` field (it always holds the full category set).
