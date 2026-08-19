@@ -4,6 +4,10 @@ Starting from version 4.4.25, a new username quota module has been added to limi
 
 When a username exceeds its quota, new session connections will be rejected, and the corresponding CONNACK return code will be sent: "0x97 Quota Exceeded" (MQTT 5.0) or "0x03 Service Unavailable" (MQTT 3.1.1).
 
+::: tip Note
+Starting from Enterprise 4.4.38, the username quota module uses a new cross-node synchronization mechanism to improve performance and stability in clusters. The `refresh_username_tab_interval` configuration item, shown as **Refresh Username Interval** in the Dashboard, has been removed.
+:::
+
 ## Add Username Quota Module
 
 1. Click **Modules** from the left navigation menu on the Dashboard.
@@ -16,7 +20,6 @@ When a username exceeds its quota, new session connections will be rejected, and
 
    - **Max Sessions Per Username**: Defines the maximum number of MQTT sessions allowed for each username. Note that if the MQTT client logs in using a persistent session, the session will remain on the server even after the client disconnects, until the session expires and is cleared.
    - **Username White List**: You can add username entries by clicking the **Add** button on the right. Usernames in the whitelist are not subject to session limits. For example, clients connecting to a cluster using the MQTT bridge should bypass the quota limitation, you can add the usernames used by the MQTT bridge to the whitelist.
-   - **Refresh Username Interval**: Specifies how frequently the local username quota table is refreshed by synchronizing with other nodes in the cluster, in seconds. This helps prevent inconsistencies in username session states across nodes in certain exceptional cases. The default interval is `900` seconds (15 minutes), and the minimum allowed value is `30` seconds.
 
 5. Click **Add** to complete the settings.
 
@@ -52,6 +55,13 @@ In addition to viewing the username quota module on the Dashboard, you can also 
 ### GET /api/v4/quota/usernames
 
 Get the list of usernames in the cluster, sorted in descending order by the number of sessions for each username.
+To get the client IDs for a username, use `GET /api/v4/quota/usernames/:username`.
+
+This API supports the following query parameters:
+
+- `sort`: Sorts usernames by the number of sessions. The default value is `true`, which sorts usernames in descending order. Set it to `false` to sort usernames in ascending order.
+- `_page`: Specifies the page number. The value must be a positive integer.
+- `_limit`: Specifies the number of items per page. The value must be a positive integer and cannot exceed the maximum row limit.
 
 **Success Response Body (JSON):**
 
@@ -61,7 +71,6 @@ Get the list of usernames in the cluster, sorted in descending order by the numb
 | data | Array   | List of username details   |
 | data[0].username | String   | Username |
 | data[0].used | Integer   | Number of sessions for the username |
-| data[0].clientids | Array | List of client IDs |
 
 **Examples**
 
@@ -77,10 +86,7 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
   "data": [
     {
       "username": "a",
-      "used": 1,
-      "clientids": [
-        "mqttjs_6916e2ae"
-      ]
+      "used": 1
     }
   ],
   "code": 0

@@ -736,6 +736,127 @@ $ ./bin/emqx_ctl log handlers set-level emqx_logger_handler error
 error
 ```
 
+## log-throttling command
+
+Starting from Enterprise 4.4.38, the log-throttling command is used to view and adjust the log throttling configuration at runtime, and to override the throttling limit for specific log lines.
+
+Previously, the global throttling upper limit, time window, and level of log throttling could only be set in the configuration file. This version adds the `log-throttling` command group:
+
+| Command                                                          | Description                                                         |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `log-throttling print`                                            | Print all log throttling configuration of this node                 |
+| `log-throttling print-cluster`                                    | Print the log throttling configuration of all nodes in the cluster  |
+| `log-throttling limit set <Limit>`                                | Set the global throttling limit                                     |
+| `log-throttling limit set-cluster <Limit>`                        | Set the global throttling limit on all nodes in the cluster         |
+| `log-throttling window set <Duration>`                            | Set the throttling time window                                      |
+| `log-throttling window set-cluster <Duration>`                    | Set the throttling time window on all nodes in the cluster          |
+| `log-throttling level set <Level>`                                | Set the throttling level                                            |
+| `log-throttling level set-cluster <Level>`                        | Set the throttling level on all nodes in the cluster                |
+| `log-throttling line-limit set '<Mod:Ln,...>' <Limit>`            | Set a dedicated throttling limit for the specified log lines        |
+| `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>`    | Set dedicated throttling limits on all nodes in the cluster         |
+| `log-throttling line-limit del '<Mod:Ln,...>'`                    | Delete the throttling limit override for the specified log lines    |
+| `log-throttling line-limit del-cluster '<Mod:Ln,...>'`            | Delete the throttling limit overrides on all nodes in the cluster   |
+| `log-throttling line-limit del`                                   | Delete all per-line throttling limits                               |
+| `log-throttling line-limit del-cluster`                           | Delete all per-line throttling limits on all nodes in the cluster   |
+
+Since log line numbers change as the version evolves, this feature is intentionally not written to the configuration file, and is suitable for temporary adjustments when a log line is found to be printed too frequently or too rarely.
+
+### log-throttling print
+
+Print all log throttling configuration of this node:
+
+```bash
+$ ./bin/emqx_ctl log-throttling print
+enable: true
+limit: 5
+time_window: 60000 ms
+level: warning
+line_limits: none
+```
+
+### log-throttling print-cluster
+
+Print the log throttling configuration of all nodes in the cluster:
+
+```bash
+$ ./bin/emqx_ctl log-throttling print-cluster
+=== emqx@127.0.0.1 ===
+enable: true
+limit: 5
+time_window: 60000 ms
+level: warning
+line_limits: none
+```
+
+### log-throttling limit set \<Limit>
+
+Set the global throttling limit. For example, set the global limit to 5:
+
+```bash
+$ ./bin/emqx_ctl log-throttling limit set 5
+```
+
+### log-throttling window set \<Duration>
+
+Set the throttling time window. For example, set the time window to 60 seconds:
+
+```bash
+$ ./bin/emqx_ctl log-throttling window set 60s
+```
+
+### log-throttling level set \<Level>
+
+Set the throttling level. For example, set the level to `warning`:
+
+```bash
+$ ./bin/emqx_ctl log-throttling level set warning
+```
+
+### log-throttling line-limit set '\<Mod:Ln,...>' \<Limit>
+
+Set a dedicated throttling limit for the specified log lines. For example, set the limits of line `1551` of `emqx_channel` and line `245` of `emqx_username_quota` to `0` (completely silent), while other lines still use the global limit:
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit set 'emqx_channel:1551,emqx_username_quota:245' 0
+```
+
+After the command is executed, the set per-line limits can be verified with the `print` command:
+
+```bash
+$ ./bin/emqx_ctl log-throttling print
+enable: true
+limit: 5
+time_window: 60000 ms
+level: warning
+line_limits:
+  emqx_channel:1551 => 0
+  emqx_username_quota:245 => 0
+```
+
+### log-throttling line-limit del '\<Mod:Ln,...>'
+
+Delete the throttling limit override for the specified log lines:
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit del 'emqx_channel:1551,emqx_username_quota:245'
+```
+
+### log-throttling line-limit del
+
+Delete all per-line throttling limits:
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit del
+```
+
+### log-throttling line-limit del-cluster
+
+Delete all per-line throttling limits on all nodes in the cluster:
+
+```bash
+$ ./bin/emqx_ctl log-throttling line-limit del-cluster
+```
+
 ## trace command
 
 The trace command is used to trace a client or topic, and print log information to a file. For details, see [Log and Trace](../getting-started/log.md).

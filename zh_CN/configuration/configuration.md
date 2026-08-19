@@ -513,11 +513,35 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `15m`   |
+| duration | 未设置（默认关闭） |
 
 #### 说明
 
-系统调优参数，设置 Erlang 运行多久强制进行一次全局垃圾回收。
+系统调优参数，设置 Erlang 运行多久强制进行一次全局垃圾回收。默认不启用周期性全局 GC；仅建议在内存使用持续增长且手动 GC 确实能释放大量内存时临时开启。
+
+<br />
+
+### node.global_gc_mem_pressure
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### 说明
+
+是否启用内存压力触发的全局 GC。当系统内存使用率超过 `os_mon.sysmem_high_watermark` 且周期性 GC 已禁用（`node.global_gc_interval` 未设置）时，EMQX 会触发一次平滑的全局 GC 以降低内存占用。触发信号由 `emqx_os_mon` 在内存告警时发出。
+
+<br />
+
+### node.global_gc_mem_pressure_min_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5m`    |
+
+#### 说明
+
+两次内存压力触发的全局 GC 之间的最小间隔，用于节流，避免内存告警频繁触发全局 GC。
 
 <br />
 
@@ -565,13 +589,17 @@ emqx@172-16-122-33.default.pod.cluster.local
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `120`   |
+| integer | `60`    |
 
 #### 说明
 
 系统调优参数，此配置将覆盖 `vm.args` 文件里的 `-kernel net_ticktime` 参数。
 
 当一个节点持续无响应多久之后，认为其已经宕机并断开连接。详情请参见 [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime)。
+
+::: tip 提示
+从企业版 4.4.38 版本开始，`net_ticktime` 的默认值由 `120` 秒调整为 `60` 秒（通过 `vm.args` 中的 `-kernel net_ticktime` 配置），集群能够更快地发现并移除无响应的节点，缩短 RPC 请求阻塞在故障节点上的时间窗口。
+:::
 
 <br />
 ### node.dist_use_interface
@@ -1535,11 +1563,15 @@ Topic层级过多可能导致订阅时的性能问题。
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
+| enum | `true`, `false` | `true`  |
 
 #### 说明
 
 是否开启严格检查模式。严格检查模式会更细致的检查 MQTT 报文的正确性。
+
+::: tip 提示
+从企业版 4.4.38 版本开始，`mqtt.strict_mode` 的默认值由 `false` 调整为 `true`，即默认启用严格解析模式。严格模式下，EMQX 会拒绝包含不合法 UTF-8 字符、控制字符、以及其他不符合 [MQTT UTF-8 Encoded String 规范](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010) 的报文结构。
+:::
 
 ### mqtt.response_information
 
@@ -7846,6 +7878,56 @@ mqtt.sn.predefined.topic.1 = foo/bar
 #### 说明
 
 指定 Prometheus 的 Collector。
+
+<br />
+
+## 插件 `emqx_erpc_probe`
+
+### erpc_probe.probe_enable
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### 说明
+
+是否启用集群节点间 erpc 网络健康探测 worker。关闭后指标序列仍存在但保持为 0。
+
+<br />
+
+### erpc_probe.probe_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `1s`    |
+
+#### 说明
+
+对同一对端两次探测之间的最小间隔。若对端持续超时，实际探测频率会退化为约 `1 / (probe_timeout + probe_interval)`。
+
+<br />
+
+### erpc_probe.probe_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### 说明
+
+每次 `erpc:call` 探测的超时时间。
+
+<br />
+
+### erpc_probe.probe_buckets
+
+| Type   | Default                                                                           |
+| ------ | --------------------------------------------------------------------------------- |
+| string | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` |
+
+#### 说明
+
+耗时直方图的 bucket 上界（秒），逗号分隔，需严格递增。非法的非空取值会回退到默认值并输出告警。
 
 <br />
 

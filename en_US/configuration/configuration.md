@@ -509,11 +509,35 @@ Set the maximum number of ETS tables allowed in Erlang runtime. See [http://erla
 
 | Type     | Default |
 | -------- | ------- |
-| duration | `15m`   |
+| duration | Not set (disabled by default) |
 
 #### Description
 
-System tuning parameters, which set how often Erlang runs to force a global garbage collection.
+System tuning parameters, which set how often Erlang runs to force a global garbage collection. Periodic global GC is disabled by default; only enable it temporarily if EMQX memory usage keeps growing and manual garbage collection can indeed release a large amount of memory.
+
+
+
+### node.global_gc_mem_pressure
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Whether to enable memory-pressure-triggered global GC. When system memory usage exceeds `os_mon.sysmem_high_watermark` and periodic GC is disabled (`node.global_gc_interval` is not set), EMQX triggers a smooth global GC to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires.
+
+
+
+### node.global_gc_mem_pressure_min_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5m`    |
+
+#### Description
+
+The minimum interval between two memory-pressure-triggered global GCs. This throttles the feature so that memory alarms do not repeatedly trigger global GC.
 
 
 
@@ -561,13 +585,17 @@ If you use SSL to establish an emqx cluster, you need to specify the SSL distrib
 
 | Type    | Default |
 | ------- | ------- |
-| integer | `120`   |
+| integer | `60`    |
 
 #### Description
 
 System tuning parameters. This configuration will override the `-kernel net_ticktime` parameter in the `vm.args` file.
 
 Specifying how long time when a node has been unresponsive, it is considered to be down and disconnected. For details, see [http://www.erlang.org/doc/man/kernel_app.html#net_ticktime](http://www.erlang.org/doc/man/kernel_app.html#net_ticktime).
+
+::: tip Tip
+Starting from Enterprise 4.4.38, the default `net_ticktime` is adjusted from `120` seconds to `60` seconds. This value is configured by `-kernel net_ticktime` in the `vm.args` file. The shorter interval allows the cluster to detect and remove unresponsive nodes faster, reducing the time window during which RPC requests are blocked on failed nodes.
+:::
 
 
 ### node.dist_use_interface
@@ -1570,11 +1598,15 @@ Whether to ignore the message sent by itself. If it is ignored, it means that EM
 
 | Type | Optional Value  | Default |
 | ---- | --------------- | ------- |
-| enum | `true`, `false` | `false` |
+| enum | `true`, `false` | `true`  |
 
 #### Description
 
 Whether to enable the strict check mode. The strict check mode will check the correctness of the MQTT message in more detail.
+
+::: tip Tip
+Starting from Enterprise 4.4.38, the default value of `mqtt.strict_mode` is changed from `false` to `true`, which means the strict parsing mode is enabled by default. In strict mode, EMQX rejects MQTT packets that contain invalid UTF-8 characters, control characters, or other packet structures that do not conform to the [MQTT UTF-8 Encoded String specification](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010).
+:::
 
 ### mqtt.response_information
 
@@ -7915,6 +7947,56 @@ Specify the collection interval of Statsd data in milliseconds.
 #### Description
 
 Specify Prometheus Collector.
+
+
+
+## Plugin `emqx_erpc_probe`
+
+### erpc_probe.probe_enable
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Whether to enable the inter-node erpc network health probe workers. When off, the metric series remain present but stay at zero.
+
+
+
+### erpc_probe.probe_interval
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `1s`    |
+
+#### Description
+
+Minimum interval between two consecutive probes of one peer. If a peer keeps timing out, the effective cadence degrades to approximately `1 / (probe_timeout + probe_interval)`.
+
+
+
+### erpc_probe.probe_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+Timeout of each `erpc:call` probe.
+
+
+
+### erpc_probe.probe_buckets
+
+| Type   | Default                                                                           |
+| ------ | --------------------------------------------------------------------------------- |
+| string | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` |
+
+#### Description
+
+Histogram bucket upper bounds (seconds), comma-separated and strictly increasing. Invalid non-empty values fall back to the default list with a warning.
 
 
 

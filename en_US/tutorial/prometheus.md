@@ -116,4 +116,40 @@ rate(emqx_http_api_request_duration_milliseconds_sum[5m])
 rate(emqx_http_api_request_duration_milliseconds_count[5m])
 ```
 
+## Inter-Node Network Health Probe
+
+> Available since EMQX Enterprise e4.4.38.
+
+The `emqx_erpc_probe` plugin monitors the health of links between cluster nodes. Each node maintains an independent probe process for every other node in the cluster and periodically issues `erpc:call(Peer, erlang, node, [], Timeout)` probes at `erpc_probe.probe_interval` (default `1s`), with a timeout of `erpc_probe.probe_timeout` (default `5s`).
+
+The plugin exposes probe results as standard Prometheus metrics. These metrics are available with EMQX Prometheus metrics in pull mode or through the `emqx_prometheus` plugin:
+
+| Name | Type | Labels | Description |
+| ---- | ---- | ------ | ----------- |
+| `emqx_erpc_probe_result_total` | Counter | `peer`, `result` | Counts probe results by peer and result. |
+| `emqx_erpc_probe_duration_seconds` | Histogram | `peer` | Measures the round-trip time of successful probes. The p99 latency can be used to detect inter-node links that have become slow but have not yet timed out. |
+
+The `result` label can be `ok`, `timeout`, `noconnection`, or `system_limit`. The non-success values have the following meanings:
+
+- `timeout`: The nodes are connected, but the peer does not respond, indicating a degraded link or an overloaded peer.
+- `noconnection`: No distributed connection exists, indicating that the peer VM is down or fully isolated.
+- `system_limit`: The peer has exhausted its processes.
+
+The configuration file is located at `etc/plugins/emqx_erpc_probe.conf`:
+
+| Configuration | Default | Description |
+| ------------- | ------- | ----------- |
+| `erpc_probe.probe_enable` | `on` | Whether to enable probe workers. When disabled, the metric series are still exposed but remain at zero. |
+| `erpc_probe.probe_interval` | `1s` | Minimum interval between two consecutive probes of one peer |
+| `erpc_probe.probe_timeout` | `5s` | Timeout of each `erpc:call` probe |
+| `erpc_probe.probe_buckets` | `0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5` | Histogram bucket upper bounds (seconds), strictly increasing |
+
+::: tip Note
+
+- The plugin is enabled by default for new installations (see `data/loaded_plugins`).
+- Clusters upgraded from an earlier version keep their existing `data/loaded_plugins`, so the plugin is not started automatically. To enable it, run `./bin/emqx ctl plugins load emqx_erpc_probe`, or add `{emqx_erpc_probe, true}.` to `data/loaded_plugins` and restart the node.
+- Configuration is read at plugin startup; restart the plugin or node after making changes.
+
+:::
+
 {% endemqxee %}
