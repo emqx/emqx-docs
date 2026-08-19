@@ -74,7 +74,7 @@ Example:
      - `public-key`: Uses a private key to generate the JWT's signature and a public key for verification. Supported algorithms are RS256, RS384, RS512, ES256, ES384, and ES512. Configuration must include:
         - `Public Key`: Specify the public key in PEM format used to verify the signature.
 
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this JWT authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `password`, `clientid`, and `listener`). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authenticator-preconditions).
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this JWT authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `password`, `clientid`, and `listener`). The authenticator will only be invoked if the expression evaluates to the string "true". Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
 
      Example: use `is_jwt(password)` when the same authentication chain serves both JWT clients and password-based clients.
 
