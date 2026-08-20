@@ -244,5 +244,6 @@ UNS 治理会同时校验主题结构以及（可选的）载荷 schema。
 |---|---|---|
 | 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) |
 | 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) |
+| 6.1.4 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

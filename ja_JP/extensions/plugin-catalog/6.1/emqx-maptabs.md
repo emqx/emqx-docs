@@ -94,3 +94,15 @@ maptab_lookup('signals', concat(client_attrs.tns, ':', item_id))
 ```
 
 You can also use one table per tenant and compose the table name in the rule. Apply the same convention to every key in the table and every lookup site.
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## ダウンロード
+
+各 EMQX リリースに対応するプラグインパッケージ:
+
+| EMQX バージョン | プラグインバージョン | パッケージ |
+|---|---|---|
+| 6.1.5 | 0.1.1 | [emqx_maptabs-0.1.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.5/emqx_maptabs-0.1.1.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

@@ -66,10 +66,11 @@ emqx ctl backup_sync status
 
 ## ダウンロード
 
-各EMQXリリースのtarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
-| EMQXバージョン | プラグインバージョン | パッケージ |
+| EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.3 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_backup_sync-0.1.0.tar.gz) |
+| 6.1.4 | 0.1.1 | [emqx_backup_sync-0.1.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_backup_sync-0.1.1.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

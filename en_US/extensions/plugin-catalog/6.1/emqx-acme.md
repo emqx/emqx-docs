@@ -154,5 +154,6 @@ Tarballs for each EMQX release:
 |---|---|---|
 | 6.1.2 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_acme-0.2.0.tar.gz) |
 | 6.1.3 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_acme-0.2.0.tar.gz) |
+| 6.1.4 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_acme-0.2.0.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

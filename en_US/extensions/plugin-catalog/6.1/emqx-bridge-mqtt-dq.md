@@ -599,5 +599,6 @@ Tarballs for each EMQX release:
 |---|---|---|
 | 6.1.2 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
 | 6.1.3 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
+| 6.1.4 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

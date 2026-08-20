@@ -148,11 +148,12 @@ ACME CA は常に検証対象ドメインのポート 80 に対して HTTP-01 �
 
 ## ダウンロード
 
-各 EMQX リリース向けの tarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
 | EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.2 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_acme-0.2.0.tar.gz) |
 | 6.1.3 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_acme-0.2.0.tar.gz) |
+| 6.1.4 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_acme-0.2.0.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

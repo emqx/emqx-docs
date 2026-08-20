@@ -94,3 +94,15 @@ maptab_lookup('signals', concat(client_attrs.tns, ':', item_id))
 ```
 
 也可以为每个租户使用一张表，并在规则中组合表名。请对表中的每个 Key 和每个查询位置使用一致的约定。
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 6.1.5 | 0.1.1 | [emqx_maptabs-0.1.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.5/emqx_maptabs-0.1.1.tar.gz) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

@@ -219,5 +219,6 @@ API 客户端指南：
 | 6.1.1 | 1.0.0 | [emqx_username_quota-1.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.1/emqx_username_quota-1.0.0.tar.gz) |
 | 6.1.2 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_username_quota-1.2.1.tar.gz) |
 | 6.1.3 | 1.2.2 | [emqx_username_quota-1.2.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_username_quota-1.2.2.tar.gz) |
+| 6.1.4 | 1.2.2 | [emqx_username_quota-1.2.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_username_quota-1.2.2.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
