@@ -50,12 +50,26 @@ def check_md_content(md_file):
             success = False
 
 
+def flatten_config(dir_config):
+    """Accept either a list or a dict-of-lists and return a flat list."""
+    if isinstance(dir_config, dict):
+        flat = []
+        for items in dir_config.values():
+            flat += items
+        return flat
+    return dir_config
+
+
 def get_md_files(dir_config, path):
     global success
     md_list = []
-    for i in dir_config:
-        md_name = i.get('path')
-        md_children = i.get('children')
+    for i in flatten_config(dir_config):
+        if isinstance(i, str):
+            md_name = i
+            md_children = None
+        else:
+            md_name = i.get('path')
+            md_children = i.get('children')
 
         if md_name:
             if md_name.startswith(('http://', 'https://')):
