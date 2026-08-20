@@ -64,7 +64,7 @@ Considering all the runtime dependencies, it is recommended to use installation 
 
 3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
-5. To run EMQX, enter:
+4. To run EMQX, enter:
 
    ```bash
    ./emqx/bin/emqx foreground
@@ -76,11 +76,11 @@ Considering all the runtime dependencies, it is recommended to use installation 
    ./emqx/bin/emqx start
    ```
 
-6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
+5. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
-7. To stop EMQX, enter:
+6. To stop EMQX, enter:
 
    ```bash
    ./emqx/bin/emqx stop
