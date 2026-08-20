@@ -38,7 +38,11 @@ To enable MFA for all Dashboard users by default, the administrator needs to con
 Example configuration:
 
 ```bash
-dashboard.default_mfa = {mechanism: totp}
+dashboard {
+  default_mfa {
+    mechanism = totp
+  }
+}
 ```
 
 ### Enable MFA for Users via EMQX Dashboard

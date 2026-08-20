@@ -296,7 +296,7 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
 您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
 
 ```bash
-api_key = {
+api_key {
   bootstrap_file = "etc/default_api_key.conf"
 }
 ```

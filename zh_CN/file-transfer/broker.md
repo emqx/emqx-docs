@@ -41,18 +41,22 @@ file_transfer {
   enable = true
 
   # 分片存储配置
-  storage.local.segments = {
-    # 分片存储目录，建议优先设置到高 I/O 性能的磁盘上。
-    root = "./data/file_transfer/segments"
+  storage {
+    local {
+      segments {
+        # 分片存储目录，建议优先设置到高 I/O 性能的磁盘上。
+        root = "./data/file_transfer/segments"
     
-    # 定时清理已过期的分片文件
-    gc {
-      # 清理间隔
-      interval = "1h"
+        # 定时清理已过期的分片文件
+        gc {
+          # 清理间隔
+          interval = "1h"
 
-      # 分片存储最大有效期，达到有效期之后，即使分片未被合并也将被清除。
-      # 客户端指定的有效期不得超过此值。
-      maximum_segments_ttl = "24h"
+          # 分片存储最大有效期，达到有效期之后，即使分片未被合并也将被清除。
+          # 客户端指定的有效期不得超过此值。
+          maximum_segments_ttl = "24h"
+        }
+      }
     }
   }
 }

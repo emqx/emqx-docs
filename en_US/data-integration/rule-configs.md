@@ -33,7 +33,7 @@ rule_engine {
             },
             {
                 function = republish
-                args = {
+                args {
                     topic = "a/1"
                     payload = "${payload}"
                 }
@@ -72,7 +72,7 @@ Before using data bridge, you need to create it in advance:
 
 ```js
 bridges.mqtt.my_egress_mqtt_bridge {
-    connector = {
+    connector {
         server = "broker.EMQX.io:1883"
         username = "username1"
         password = ""
@@ -112,7 +112,7 @@ rule_engine {
         actions = [
             {
                 function = republish
-                args = {
+                args {
                     topic = "t/b"
                     qos = "${qos}"
                     payload = "y: ${y}"
@@ -176,7 +176,7 @@ This MQTT bridge needs to be created in advance:
 
 ```js
 bridges.mqtt.my_mqtt_source {
-    connector = {
+    connector {
         server = "192.168.2.100:1883"
         username = "username1"
         password = ""
