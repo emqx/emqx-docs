@@ -1209,7 +1209,7 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 
 This function has been introduced since EMQX 6.2.3.
 
-Compresses `Data` using the LZ4 Frame format. Raw LZ4 blocks are not supported. Example:
+Compresses `Data` using the LZ4 Frame format. Example:
 
 ```bash
 lz4_uncompress(lz4_compress('hello')) = 'hello'
@@ -1219,7 +1219,7 @@ lz4_uncompress(lz4_compress('hello')) = 'hello'
 
 This function has been introduced since EMQX 6.2.3.
 
-Decompresses `Data` in the LZ4 Frame format. `Data` must be a valid LZ4 Frame. Raw LZ4 blocks are not supported. Example:
+Decompresses `Data` in the LZ4 Frame format. Example:
 
 ```bash
 lz4_uncompress(lz4_compress('hello')) = 'hello'
