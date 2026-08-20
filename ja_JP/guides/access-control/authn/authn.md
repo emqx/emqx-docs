@@ -315,7 +315,7 @@ listeners.tcp.default {
 gateway.stomp {
   ...
   # すべてのSTOMPリスナーに対するグローバル認証機
-  authentication = {
+  authentication {
     ...
   }
 

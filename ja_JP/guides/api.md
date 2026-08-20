@@ -264,7 +264,7 @@ POST http://your-emqx-address:8483/api/v5/login
 ブートストラップファイル方式でもAPIキーを作成可能です。以下の設定ファイルでファイルの場所を指定します。
 
 ```bash
-api_key = {
+api_key {
   bootstrap_file = "etc/default_api_key.conf"
 }
 ```
