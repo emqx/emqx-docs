@@ -300,7 +300,7 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
 ブートストラップファイルを使って API キーを作成することも可能です。以下の設定でファイルの場所を指定します。
 
 ```bash
-api_key = {
+api_key {
   bootstrap_file = "etc/default_api_key.conf"
 }
 ```

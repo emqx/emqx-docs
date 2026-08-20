@@ -300,7 +300,7 @@ Both forms remain supported. If a request contains both forms, the namespaces mu
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
 
 ```bash
-api_key = {
+api_key {
   bootstrap_file = "etc/default_api_key.conf"
 }
 ```

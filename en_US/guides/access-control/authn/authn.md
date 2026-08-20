@@ -319,7 +319,7 @@ listeners.tcp.default {
 gateway.stomp {
   ...
   # Specific global authenticator for all STOMP listeners
-  authentication = {
+  authentication {
     ...
   }
 

@@ -41,18 +41,22 @@ file_transfer {
   enable = true
 
   # Segment storage configuration
-  storage.local.segments = {
-    # Segment storage directory, preferably set on high I/O performance disks.
-    root = "./data/file_transfer/segments"
+  storage {
+    local {
+      segments {
+        # Segment storage directory, preferably set on high I/O performance disks.
+        root = "./data/file_transfer/segments"
 
-    # Scheduled cleaning of expired segment files
-    gc {
-      # Cleaning interval
-      interval = "1h"
+        # Scheduled cleaning of expired segment files
+        gc {
+          # Cleaning interval
+          interval = "1h"
 
-      # Maximum valid period for segment storage, segments will be cleared after this period, even if they have not been merged.
-      # The validity period specified by the client must not exceed this value.
-      maximum_segments_ttl = "24h"
+          # Maximum valid period for segment storage, segments will be cleared after this period, even if they have not been merged.
+          # The validity period specified by the client must not exceed this value.
+          maximum_segments_ttl = "24h"
+        }
+      }
     }
   }
 }

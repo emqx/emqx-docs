@@ -32,7 +32,7 @@ rule_engine {
             },
             {
                 function = republish
-                args = {
+                args {
                     topic = "a/1"
                     payload = "${payload}"
                 }
@@ -71,7 +71,7 @@ rule_engine {
 
 ```js
 bridges.mqtt.my_egress_mqtt_bridge {
-    connector = {
+    connector {
         server = "broker.emqx.io:1883"
         username = "username1"
         password = ""
@@ -110,7 +110,7 @@ rule_engine {
         actions = [
             {
                 function = republish
-                args = {
+                args {
                     topic = "t/b"
                     qos = "${qos}"
                     payload = "y: ${y}"
@@ -172,7 +172,7 @@ SQL 语句里指定了一个 Sink 主题：`$bridges/mqtt:my_mqtt_source`，
 
 ```js
 bridges.mqtt.my_mqtt_source {
-    connector = {
+    connector {
         server = "192.168.2.100:1883"
         username = "username1"
         password = ""

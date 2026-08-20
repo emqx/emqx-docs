@@ -36,7 +36,11 @@ MFA 默认为禁用状态。要为用户启用 MFA，管理员必须配置系统
 示例配置：
 
 ```bash
-dashboard.default_mfa = {mechanism: totp}
+dashboard {
+  default_mfa {
+    mechanism = totp
+  }
+}
 ```
 
 ### 通过 EMQX Dashboard 启用 MFA

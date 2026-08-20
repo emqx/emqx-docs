@@ -305,7 +305,7 @@ gateway.stomp {
   ...
   enable_authn = true
   # Specific global authenticator for all STOMP listeners
-  authentication = {
+  authentication {
     ...
   }
 

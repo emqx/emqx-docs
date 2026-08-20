@@ -42,9 +42,9 @@ dashboard {
   unsuccessful_login_max_attempts = 5
   unsuccessful_login_lock_duration = 10m
   unsuccessful_login_interval = 5m
-  sso = {
+  sso {
     # 通常、`ldap`、`oidc`、`saml`のうち一つだけが有効になります。以下はデモ用の設定です。
-    ldap = {
+    ldap {
       enable = true
       backend = "ldap"
       query_timeout = "5s"
@@ -56,7 +56,7 @@ dashboard {
       filter = "(& (objectClass=person) (uid=${username}))"
       request_timeout = "10s"
     }
-    oidc = {
+    oidc {
       enable = true
       backend = oidc
       issuer = "https://issuer.example.com"
@@ -79,7 +79,7 @@ dashboard {
         "RS256"
       ]
     }
-    saml = {
+    saml {
       enable = true
       backend = "saml"
       dashboard_addr = "https://127.0.0.1:18083"
