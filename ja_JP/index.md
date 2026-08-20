@@ -8,14 +8,14 @@ EMQXは「無制限の接続、シームレスな統合、どこでもデプロ�
 ## 主なメリット
 
 - [**大規模スケール**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)：単一ノードで150万MQTTデバイス接続を安定サポートし、クラスターは水平スケールで最大1億の同時MQTT接続を処理可能。
-- [**業務重要性の高い信頼性**](./deploy/cluster/mria-introduction.md)：組み込みのRocksDBによるデータパーシステンスでデータ損失を防止。
-- [**データセキュリティ**](./access-control/security-guide.md)：エンドツーエンドの暗号化と細粒度のアクセス制御でデータを保護。
+- [**業務重要性の高い信頼性**](./develop/cluster/mria-introduction.md)：組み込みのRocksDBによるデータパーシステンスでデータ損失を防止。
+- [**データセキュリティ**](./guides/security-guide.md)：エンドツーエンドの暗号化と細粒度のアクセス制御でデータを保護。
 - [**複数プロトコル対応**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m)：MQTT、QUIC、CoAP、Stomp、LwM2Mなどに対応。
 - [**完全なMQTT 5.0対応**](https://www.emqx.com/en/blog/introduction-to-mqtt-5)：EMQXはMQTT 5.0および3.x規格に完全準拠し、優れたスケーラビリティ、セキュリティ、信頼性を提供。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：ノードごとに毎秒数百万のMQTTメッセージを効率的に処理。
 - [**低レイテンシ**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)：ソフトリアルタイムランタイムによりミリ秒以下のメッセージ伝送を保証。
-- [**完全な可観測性**](./dashboard/introduction.md)：リアルタイムMQTTトレーシングによる監視、アラート、高度なエンドツーエンド分析。
-- [**クラウドネイティブ＆K8s対応**](./deploy/kubernetes/kubernetes.md)：**Kubernetes Operator**を利用しオンプレミスやパブリッククラウドに容易にデプロイ可能。
+- [**完全な可観測性**](./guides/dashboard/introduction.md)：リアルタイムMQTTトレーシングによる監視、アラート、高度なエンドツーエンド分析。
+- [**クラウドネイティブ＆K8s対応**](./get-started/deploy/kubernetes/kubernetes.md)：**Kubernetes Operator**を利用しオンプレミスやパブリッククラウドに容易にデプロイ可能。
 
 ## 主なコンポーネント
 
@@ -27,47 +27,47 @@ EMQX EnterpriseはMQTT 5.0および3.x仕様に100％準拠し、卓越したス
 
 #### MQTT over QUIC
 
-EMQX Enterpriseは先駆的に[MQTT over QUIC](./mqtt-over-quic/introduction.md)プロトコルを導入し、IoTクライアントがQUIC経由でEMQXに接続して通信可能にします。QUICを利用するデバイスは接続性能とメッセージスループットを向上させ、メッセージレイテンシを低減します。これは特にネットワーク環境が不安定でリンクの変動が多いIoV（Internet of Vehicles）などのシナリオに適しています。MQTT over QUICはリアルタイムかつ効率的なメッセージ伝送の要件を満たします。
+EMQX Enterpriseは先駆的に[MQTT over QUIC](./develop/mqtt-over-quic/introduction.md)プロトコルを導入し、IoTクライアントがQUIC経由でEMQXに接続して通信可能にします。QUICを利用するデバイスは接続性能とメッセージスループットを向上させ、メッセージレイテンシを低減します。これは特にネットワーク環境が不安定でリンクの変動が多いIoV（Internet of Vehicles）などのシナリオに適しています。MQTT over QUICはリアルタイムかつ効率的なメッセージ伝送の要件を満たします。
 
 #### マルチプロトコルゲートウェイ
 
-[マルチプロトコルゲートウェイ](./gateway/gateway.md)は、MQTT以外の異なる通信プロトコルを用いたデバイス接続をEMQX Enterpriseに可能にします。これらのゲートウェイはデバイスの接続要求を受け付け、使用されている通信プロトコルを識別し、各プロトコル仕様に基づいてデバイスから送信されたメッセージ、コマンド、データを解析します。解析したデータはMQTTメッセージ形式に変換され、以降のメッセージ処理に渡されます。
+[マルチプロトコルゲートウェイ](./develop/gateway/gateway.md)は、MQTT以外の異なる通信プロトコルを用いたデバイス接続をEMQX Enterpriseに可能にします。これらのゲートウェイはデバイスの接続要求を受け付け、使用されている通信プロトコルを識別し、各プロトコル仕様に基づいてデバイスから送信されたメッセージ、コマンド、データを解析します。解析したデータはMQTTメッセージ形式に変換され、以降のメッセージ処理に渡されます。
 
 ### メッセージルーティング
 
-EMQX Enterpriseは[パブリッシュ／サブスクライブ](./messaging/introduction.md)パターンをサポートし、高信頼性のメッセージ伝送機構を提供します。これによりメッセージは対象デバイスやアプリケーションに確実に届きます。QoS機構とセッション保持機能により、不安定なネットワーク環境下でも迅速かつ確実にデータを届け、業務の継続性と安定性を確保します。
+EMQX Enterpriseは[パブリッシュ／サブスクライブ](./get-started/messaging/introduction.md)パターンをサポートし、高信頼性のメッセージ伝送機構を提供します。これによりメッセージは対象デバイスやアプリケーションに確実に届きます。QoS機構とセッション保持機能により、不安定なネットワーク環境下でも迅速かつ確実にデータを届け、業務の継続性と安定性を確保します。
 
 ### 分散クラスター
 
-EMQX Enterpriseはネイティブな[クラスタリング](./deploy/cluster/introduction.md)機能を備え、シームレスかつ弾力的なスケールアウトを可能にし、単一障害点を排除します。徹底的な最適化により単一ノードで毎秒数百万のMQTTメッセージを[低レイテンシ](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)で処理・配信可能です。クラスターの水平スケールにより最大1億の同時MQTT接続をサポートし、IoV、産業オートメーション、スマートホームなど大規模IoT展開に不可欠です。
+EMQX Enterpriseはネイティブな[クラスタリング](./develop/cluster/introduction.md)機能を備え、シームレスかつ弾力的なスケールアウトを可能にし、単一障害点を排除します。徹底的な最適化により単一ノードで毎秒数百万のMQTTメッセージを[低レイテンシ](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)で処理・配信可能です。クラスターの水平スケールにより最大1億の同時MQTT接続をサポートし、IoV、産業オートメーション、スマートホームなど大規模IoT展開に不可欠です。
 
 ### アクセス制御とデータセキュリティ
 
-[TLS/SSL暗号化](./network/overview.md)および[認証](./access-control/authn/authn.md)/[認可](./access-control/authz/authz.md)機構により、EMQX Enterpriseはデバイスデータ伝送の機密性と完全性を保証します。
+[TLS/SSL暗号化](./guides/network/overview.md)および[認証](./guides/access-control/authn/authn.md)/[認可](./guides/access-control/authz/authz.md)機構により、EMQX Enterpriseはデバイスデータ伝送の機密性と完全性を保証します。
 
 EMQX Enterpriseはユーザー名／パスワード、JWT、拡張認証、PSK、X.509証明書など複数のクライアント認証方式を備えています。ACLに基づくパブリッシュ／サブスクライブの認可機構も提供します。認証・認可データはLDAP、HTTPサービス、SQL／NoSQLデータベースなど外部企業セキュリティシステムと統合・管理可能で、多様かつ柔軟なクライアントセキュリティ保護を実現します。
 
-さらにEMQX Enterpriseは[監査ログ](./dashboard/audit-log.md)、ロール・権限管理、[シングルサインオン](./dashboard/sso.md)を備え、SOC 2準拠やGDPRデータプライバシー保護に対応。包括的なセキュリティ機能により、企業が業界セキュリティ基準に準拠した信頼性の高いIoTアプリケーションを構築できます。
+さらにEMQX Enterpriseは[監査ログ](./guides/dashboard/audit-log.md)、ロール・権限管理、[シングルサインオン](./guides/dashboard/sso.md)を備え、SOC 2準拠やGDPRデータプライバシー保護に対応。包括的なセキュリティ機能により、企業が業界セキュリティ基準に準拠した信頼性の高いIoTアプリケーションを構築できます。
 
 ### ルールエンジンとデータ統合
 
-EMQX Enterpriseは強力な[ルールエンジン](./data-integration/rules.md)を内蔵し、EMQX内でルールを設定して受信データを要件に応じて処理・ルーティング可能です。Sink機能を使い、クラウドサービスやデータベースと連携してIoTデータをクラウドに転送し、保存・分析を行うこともできます。
+EMQX Enterpriseは強力な[ルールエンジン](./develop/data-integration/rules.md)を内蔵し、EMQX内でルールを設定して受信データを要件に応じて処理・ルーティング可能です。Sink機能を使い、クラウドサービスやデータベースと連携してIoTデータをクラウドに転送し、保存・分析を行うこともできます。
 
 #### リアルタイムデータ処理
 
-SQLベースのルールエンジン、スキーマレジストリ、メッセージコーデック、[Flowデザイナー](./flow-designer/introduction.md)を活用し、デバイスイベントやメッセージ処理フローを簡単に作成・編集可能。IoTデータのリアルタイム抽出、検証、フィルタリング、変換を実現します。
+SQLベースのルールエンジン、スキーマレジストリ、メッセージコーデック、[Flowデザイナー](./develop/flow-designer/introduction.md)を活用し、デバイスイベントやメッセージ処理フローを簡単に作成・編集可能。IoTデータのリアルタイム抽出、検証、フィルタリング、変換を実現します。
 
 #### 企業向けデータ統合
 
-標準搭載のWebhookやSink/Sourceを通じて、Kafka、AWS RDS、MongoDB、Oracle、SAP、時系列データベースなど40以上のクラウドサービスや企業システムとシームレスに[統合](./data-integration/data-bridges.md)可能。企業はIoTデバイスからのデータを効果的に管理・分析・活用し、多様なアプリケーションや業務ニーズを支援します。
+標準搭載のWebhookやSink/Sourceを通じて、Kafka、AWS RDS、MongoDB、Oracle、SAP、時系列データベースなど40以上のクラウドサービスや企業システムとシームレスに[統合](./develop/data-integration/data-bridges.md)可能。企業はIoTデバイスからのデータを効果的に管理・分析・活用し、多様なアプリケーションや業務ニーズを支援します。
 
 ### 管理・監視ダッシュボード
 
-EMQX Enterpriseは[ダッシュボード](./dashboard/introduction.md)というグラフィカル管理システムを提供し、主要指標や運用状況をリアルタイムに監視可能です。クライアント接続や機能設定の管理を簡素化し、クライアントやクラスターの異常診断・デバッグを支援。MQTTデバイスのオンライン状態をエンドツーエンドでトラブルシューティングでき、問題解決時間を大幅に短縮します。また、Prometheus、Datadog、OpenTelemetry対応サービスなど外部サービスへの可観測性指標の統合もサポートし、運用監視機能を強化します。
+EMQX Enterpriseは[ダッシュボード](./guides/dashboard/introduction.md)というグラフィカル管理システムを提供し、主要指標や運用状況をリアルタイムに監視可能です。クライアント接続や機能設定の管理を簡素化し、クライアントやクラスターの異常診断・デバッグを支援。MQTTデバイスのオンライン状態をエンドツーエンドでトラブルシューティングでき、問題解決時間を大幅に短縮します。また、Prometheus、Datadog、OpenTelemetry対応サービスなど外部サービスへの可観測性指標の統合もサポートし、運用監視機能を強化します。
 
 ## デプロイモードとエディション比較
 
-EMQはEMQXのデプロイに3つの選択肢を提供しています。2つのマネージドサービス（EMQX Serverless、EMQX Dedicated）と1つのセルフホスト型（EMQX Enterprise）です。要件に最適なデプロイを選ぶため、以下の表に各デプロイタイプの機能サポート比較を示します。詳細な機能比較は[機能比較](./getting-started/feature-comparison.md)を参照してください。
+EMQはEMQXのデプロイに3つの選択肢を提供しています。2つのマネージドサービス（EMQX Serverless、EMQX Dedicated）と1つのセルフホスト型（EMQX Enterprise）です。要件に最適なデプロイを選ぶため、以下の表に各デプロイタイプの機能サポート比較を示します。詳細な機能比較は[機能比較](./get-started/feature-comparison.md)を参照してください。
 
 <table>
 <thead>
@@ -141,7 +141,7 @@ EMQXはMQTT 5.0のRequest-Response機能をサポートしています。この�
 
 ### 流れるデータの変換
 
-強力なSQLベースの[ルールエンジン](./data-integration/rules.md)を内蔵し、EMQXは流れるデータをリアルタイムに抽出、フィルタリング、強化、変換できます。処理済みデータは外部HTTPサーバーやMQTTサービスに容易に取り込めます。EMQX Enterpriseでは主流のデータベース、データストレージ、メッセージキューへの取り込みも可能です。
+強力なSQLベースの[ルールエンジン](./develop/data-integration/rules.md)を内蔵し、EMQXは流れるデータをリアルタイムに抽出、フィルタリング、強化、変換できます。処理済みデータは外部HTTPサーバーやMQTTサービスに容易に取り込めます。EMQX Enterpriseでは主流のデータベース、データストレージ、メッセージキューへの取り込みも可能です。
 
 ![use_case_6_ce](./assets/use_case_6_ce.png)
 
@@ -159,7 +159,7 @@ EMQX Enterpriseはデバイスデータのクラウドへのアップロード�
 
 ### 大容量ファイルアップロード
 
-EMQX EnterpriseはMQTTプロトコルの[ファイル転送](./file-transfer/introduction.md)機能を提供し、デバイスが大容量ファイルデータをアップロードし、ローカルまたはS3ストレージに保存可能です。例えばIoVシナリオでは、機械学習ログファイルやパッケージ化されたCANバスデータをクラウドストレージに送信し、インテリジェント運転アルゴリズムモデルの更新に活用します。このモードは構造化データとファイル型データを統一チャネルで扱い、アプリケーションの複雑性と保守コストを削減します。
+EMQX EnterpriseはMQTTプロトコルの[ファイル転送](./develop/file-transfer/introduction.md)機能を提供し、デバイスが大容量ファイルデータをアップロードし、ローカルまたはS3ストレージに保存可能です。例えばIoVシナリオでは、機械学習ログファイルやパッケージ化されたCANバスデータをクラウドストレージに送信し、インテリジェント運転アルゴリズムモデルの更新に活用します。このモードは構造化データとファイル型データを統一チャネルで扱い、アプリケーションの複雑性と保守コストを削減します。
 
 <img src="./assets/use_case_3.png" alt="use_case_3" style="zoom:50%;" />
 
@@ -175,7 +175,7 @@ EMQX Enterpriseは多様な業界向けに汎用的なIoTソリューション�
 
 ### 自動車・コネクテッドビークル
 
-EMQXはソフトウェア定義車両（SDV）の未来を支え、世界の主要自動車メーカー上位10社のうち5社の100以上の車種、3000万台以上の車両を接続しています。プラットフォームはミッションクリティカルなV2Xやテレマティクスアプリケーションのリアルタイムデータ基盤を提供し、不安定なネットワーク環境に最適化された[MQTT over QUIC](./mqtt-over-quic/introduction.md)を採用しています。
+EMQXはソフトウェア定義車両（SDV）の未来を支え、世界の主要自動車メーカー上位10社のうち5社の100以上の車種、3000万台以上の車両を接続しています。プラットフォームはミッションクリティカルなV2Xやテレマティクスアプリケーションのリアルタイムデータ基盤を提供し、不安定なネットワーク環境に最適化された[MQTT over QUIC](./develop/mqtt-over-quic/introduction.md)を採用しています。
 
 ![architecture_vehicle_to_cloud](./assets/architecture-v2c.svg)
 
@@ -208,13 +208,13 @@ EMQXは工場フロアからクラウドまで全ての機械、システム、�
 - **予知保全**：リアルタイムセンサーデータとAIで機械故障を予測し、計画外ダウンタイムを防止、設備寿命を延長。
 - **OEE最適化**：リアルタイムで総合設備効率を追跡し、最大25％のOEE向上と40％のダウンタイム削減を実現。
 - **品質・トレーサビリティ**：品質異常を即検知、生産パラメータをリアルタイム監視し、製品の完全なトレーサビリティを提供。
-- **ライブパフォーマンス監視**：EMQXの[メトリクスと可観測性](./observability/overview.md)機能を活用し、PrometheusやDatadogと連携した生産ライン全体のライブダッシュボードを実現。
+- **ライブパフォーマンス監視**：EMQXの[メトリクスと可観測性](./guides/observability/overview.md)機能を活用し、PrometheusやDatadogと連携した生産ライン全体のライブダッシュボードを実現。
 
 主要半導体ファブはEMQXを活用し、1プラントあたり350万以上のデータタグを100ms収集率で処理、100％のデータ完全性を維持し精密製造を支えています。[**詳細はこちら →**](https://www.emqx.com/en/solutions/industrial-iot)
 
 ### エネルギー・公益事業
 
-EMQXは現代のエネルギーグリッドを支え、1,000万以上のエンドポイントを100ms以下のレイテンシで接続し、重要なグリッド制御と保護アプリケーションを実現。レガシーOTプロトコルと最新ITシステムを[マルチプロトコルゲートウェイ](./gateway/gateway.md)で橋渡しします。
+EMQXは現代のエネルギーグリッドを支え、1,000万以上のエンドポイントを100ms以下のレイテンシで接続し、重要なグリッド制御と保護アプリケーションを実現。レガシーOTプロトコルと最新ITシステムを[マルチプロトコルゲートウェイ](./develop/gateway/gateway.md)で橋渡しします。
 
 ![architecture-energy-utilities](./assets/architecture-energy-utilities.svg)
 
@@ -231,7 +231,7 @@ EMQXは現代のエネルギーグリッドを支え、1,000万以上のエン�
 
 ### ヘルスケア
 
-EMQXはリアルタイム患者モニタリング、医療機器統合、次世代テレヘルスソリューションをスケーラブルかつ[セキュアなデータ基盤](./access-control/security-guide.md)で実現します。HIPAA準拠のセキュリティ機能として、[TLS/SSL暗号化](./network/overview.md)、堅牢な認証、細粒度アクセス制御を提供し、機微な患者データを保護します。
+EMQXはリアルタイム患者モニタリング、医療機器統合、次世代テレヘルスソリューションをスケーラブルかつ[セキュアなデータ基盤](./guides/security-guide.md)で実現します。HIPAA準拠のセキュリティ機能として、[TLS/SSL暗号化](./guides/network/overview.md)、堅牢な認証、細粒度アクセス制御を提供し、機微な患者データを保護します。
 
 ![architecture-healthcare](./assets/architecture-healthcare.svg)
 
@@ -272,7 +272,7 @@ EMQXは数百万の小売デバイスとコンシューマIoTエンドポイン�
 ![architecture-retail](./assets/architecture-retail.svg)
 
 - **スマートリテール**：リアルタイム在庫管理、POS監視、パーソナライズ顧客エンゲージメント、動的価格設定を全店舗で実現。数千のセルフサービスキオスクを接続し、ピーク時もシームレスな顧客体験を提供。
-- **スマートホーム**：数百万のスマートホームデバイスをスケーラブルな[パブリッシュ／サブスクライブメッセージング](./messaging/introduction.md)基盤で接続し、ホームオートメーション、エネルギー監視、AlexaやGoogle Assistantとの統合を実現。
+- **スマートホーム**：数百万のスマートホームデバイスをスケーラブルな[パブリッシュ／サブスクライブメッセージング](./get-started/messaging/introduction.md)基盤で接続し、ホームオートメーション、エネルギー監視、AlexaやGoogle Assistantとの統合を実現。
 - **ゲーム＆ソーシャル**：数百万の同時ユーザー向けに超低レイテンシ通信で応答性の高いオンラインゲームやソーシャルアプリを構築。ゲーム内チャット、リアルタイム通知、ライブイベントをサポート。
 
 Signify（旧Philips Lighting）はEMQXを活用し、数百万の接続照明の信頼性高いリアルタイム制御を実現。位置情報ベースのソーシャルアプリJAGATはEMQXで数百万ユーザーのリアルタイムメッセージングを支えています。[**事例紹介 →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)

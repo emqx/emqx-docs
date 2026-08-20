@@ -8,14 +8,14 @@ As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://w
 ## Key Benefits
 
 - [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): A single node stably supports 1.5M MQTT device connections, and the cluster can scale horizontally to handle up to 100M concurrent MQTT connections.
-- [**Business-Critical Reliability**](./deploy/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
-- [**Data Security**](./access-control/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
+- [**Business-Critical Reliability**](./develop/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
+- [**Data Security**](./guides/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
 - [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
 - [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 - [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
-- [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
-- [**Cloud-Native & K8s**](./deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
+- [**Complete Observability**](./guides/dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
+- [**Cloud-Native & K8s**](./get-started/deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
 
 ## Main Components
 
@@ -27,47 +27,47 @@ EMQX Enterprise is 100% compatible with MQTT 5.0 and 3.x specifications, and its
 
 #### MQTT over QUIC
 
-EMQX Enterprise pioneeringly introduces the [MQTT over QUIC](./mqtt-over-quic/introduction.md) protocol, allowing IoT clients to establish connections with EMQX via QUIC for communication. Devices using QUIC can improve connection and message throughput performance while reducing message latency. This is particularly beneficial in scenarios such as the Internet of Vehicles (IoV), which commonly face weak network conditions, frequent link changes, and unstable network environments. MQTT over QUIC meets the requirements for real-time and efficient message transmission in such scenarios.
+EMQX Enterprise pioneeringly introduces the [MQTT over QUIC](./develop/mqtt-over-quic/introduction.md) protocol, allowing IoT clients to establish connections with EMQX via QUIC for communication. Devices using QUIC can improve connection and message throughput performance while reducing message latency. This is particularly beneficial in scenarios such as the Internet of Vehicles (IoV), which commonly face weak network conditions, frequent link changes, and unstable network environments. MQTT over QUIC meets the requirements for real-time and efficient message transmission in such scenarios.
 
 #### Multi-Protocol Gateways
 
-[Multi-protocol gateways](./gateway/gateway.md) enable EMQX Enterprise to support device connections using different communication protocols other than MQTT. These gateways listen to device connection requests, identify the communication protocols used by devices, and then parse the messages, commands, and data sent by devices according to the respective protocol specifications. The gateways convert this data into MQTT message formats for further message processing.
+[Multi-protocol gateways](./develop/gateway/gateway.md) enable EMQX Enterprise to support device connections using different communication protocols other than MQTT. These gateways listen to device connection requests, identify the communication protocols used by devices, and then parse the messages, commands, and data sent by devices according to the respective protocol specifications. The gateways convert this data into MQTT message formats for further message processing.
 
 ### Message Routing
 
-EMQX Enterprise provides a highly reliable message transmission mechanism through its support for the [publish/subscribe](./messaging/introduction.md) pattern. This ensures that messages are reliably delivered to the intended devices or applications. With QoS mechanisms and session retention capability, data can be quickly and reliably delivered even in unstable network environments, ensuring business continuity and stability.
+EMQX Enterprise provides a highly reliable message transmission mechanism through its support for the [publish/subscribe](./get-started/messaging/introduction.md) pattern. This ensures that messages are reliably delivered to the intended devices or applications. With QoS mechanisms and session retention capability, data can be quickly and reliably delivered even in unstable network environments, ensuring business continuity and stability.
 
 ### Distributed Clustering
 
-EMQX Enterprise offers native [clustering](./deploy/cluster/introduction.md) capabilities, enabling seamless and elastic scaling, while avoiding single points of failure. With extreme optimization, a single node can process and distribute millions of MQTT messages per second with [low latency](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time). Through cluster horizontal scaling, it supports up to 100 million concurrent MQTT connections, making it crucial for large-scale IoT deployments in areas such as the IoV, industrial automation, and smart homes.
+EMQX Enterprise offers native [clustering](./develop/cluster/introduction.md) capabilities, enabling seamless and elastic scaling, while avoiding single points of failure. With extreme optimization, a single node can process and distribute millions of MQTT messages per second with [low latency](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time). Through cluster horizontal scaling, it supports up to 100 million concurrent MQTT connections, making it crucial for large-scale IoT deployments in areas such as the IoV, industrial automation, and smart homes.
 
 ### Access Control and Data Security
 
-Through [TLS/SSL encryption](./network/overview.md) and [authentication](./access-control/authn/authn.md)/[authorization](./access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
+Through [TLS/SSL encryption](./guides/network/overview.md) and [authentication](./guides/access-control/authn/authn.md)/[authorization](./guides/access-control/authz/authz.md) mechanism EMQX Enterprise ensures the confidentiality and integrity of device data transmission.
 
 EMQX Enterprise includes multiple client authentication mechanisms, including username/password, JWT, enhanced authentication, PSK, and X.509 certificates. It provides publish/subscribe authorization mechanisms based on ACLs. Authentication and authorization data can be integrated and managed through external enterprise security systems, such as LDAP, HTTP services, SQL, and NoSQL databases, allowing for flexible and diverse client security protection solutions.
 
-Additionally, the EMQX Enterprise offers [audit logs](./dashboard/audit-log.md), role and permission management, and [single sign-on](./dashboard/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
+Additionally, the EMQX Enterprise offers [audit logs](./guides/dashboard/audit-log.md), role and permission management, and [single sign-on](./guides/dashboard/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
 
 ### Rule Engine and Data Integration
 
-EMQX Enterprise includes a powerful [rule engine](./data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's Sink feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
+EMQX Enterprise includes a powerful [rule engine](./develop/data-integration/rules.md) that allows you to configure rules within EMQX to process and route incoming data based on your requirements. You can also use EMQX's Sink feature to integrate EMQX Enterprise with cloud services or databases for transferring IoT data to the cloud for storage and analysis.
 
 #### Real-Time Data Processing
 
-With a built-in SQL-based rule engine, Schema Registry, message codecs, and [Flow Designer](./flow-designer/introduction.md), you can easily create and edit device events and message processing flows. This enables real-time extraction, validation, filtering, and transformation of IoT data.
+With a built-in SQL-based rule engine, Schema Registry, message codecs, and [Flow Designer](./develop/flow-designer/introduction.md), you can easily create and edit device events and message processing flows. This enables real-time extraction, validation, filtering, and transformation of IoT data.
 
 #### Enterprise Data Integration
 
-Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](./data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
+Through out-of-the-box Webhooks and Sink/Source, you can seamlessly [integrate](./develop/data-integration/data-bridges.md) IoT data with over 40 cloud services and enterprise systems, including Kafka, AWS RDS, MongoDB, Oracle, SAP, and time-series databases. This empowers enterprises to effectively manage, analyze, and utilize data from IoT devices, supporting various applications and business needs.
 
 ### Management and Monitoring Dashboard
 
-EMQX Enterprise provides a graphical management system called the [Dashboard](./dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
+EMQX Enterprise provides a graphical management system called the [Dashboard](./guides/dashboard/introduction.md), allowing you to monitor key metrics and operational statuses in real time. It simplifies the management of client connections and feature configurations. The Dashboard also enables diagnostics and debugging of client and cluster anomalies, facilitating end-to-end troubleshooting of MQTT devices online, significantly reducing troubleshooting time. In addition, it supports the integration of observability metrics into external services such as Prometheus, Datadog, and services supporting OpenTelemetry, enhancing operational monitoring capabilities.
 
 ## Deployment Modes and Edition Comparison
 
-EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
+EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./get-started/feature-comparison.md).
 
 <table>
 <thead>
@@ -143,7 +143,7 @@ EMQX supports the MQTT 5.0 feature Request-Response. With this feature, you can 
 
 ### Flowing Data Transformation
 
-With a built-in powerful SQL-based [rules engine](./data-integration/rules.md), EMQX can extract, filter, enrich, and transform the flowing data in real-time. Processed data can be easily ingested into external HTTP servers and MQTT services. If you are using EMQX Enterprise, you can also ingest data into mainstream databases, data storage, and message queues.
+With a built-in powerful SQL-based [rules engine](./develop/data-integration/rules.md), EMQX can extract, filter, enrich, and transform the flowing data in real-time. Processed data can be easily ingested into external HTTP servers and MQTT services. If you are using EMQX Enterprise, you can also ingest data into mainstream databases, data storage, and message queues.
 
 ![use_case_6_ce](./assets/use_case_6_ce.png)
 
@@ -161,7 +161,7 @@ EMQX Enterprise supports uploading device data to the cloud and processing and s
 
 ### Large File Upload
 
-EMQX Enterprise provides MQTT protocol [file transfer](./file-transfer/introduction.md) capability, allowing devices to upload large file data and store it locally or in S3 storage. For example, in an IoV scenario, machine learning log files and packaged CAN Bus data can be transmitted to cloud storage to drive updates to intelligent driving algorithm models. This mode combines structured data and file-type data through a unified data channel, reducing application complexity and maintenance costs.
+EMQX Enterprise provides MQTT protocol [file transfer](./develop/file-transfer/introduction.md) capability, allowing devices to upload large file data and store it locally or in S3 storage. For example, in an IoV scenario, machine learning log files and packaged CAN Bus data can be transmitted to cloud storage to drive updates to intelligent driving algorithm models. This mode combines structured data and file-type data through a unified data channel, reducing application complexity and maintenance costs.
 
 <img src="./assets/use_case_3.png" alt="use_case_3" style="zoom:50%;" />
 
@@ -177,7 +177,7 @@ EMQX Enterprise provides versatile IoT solutions across industries, delivering r
 
 ### Automotive & Connected Vehicles
 
-EMQX powers the future of software-defined vehicles (SDVs), connecting 30+ million vehicles across 100+ car models for 5 of the 10 largest automobile companies worldwide. The platform provides the real-time data backbone for mission-critical V2X and telematics applications, with [MQTT over QUIC](./mqtt-over-quic/introduction.md) optimized for unstable network conditions.
+EMQX powers the future of software-defined vehicles (SDVs), connecting 30+ million vehicles across 100+ car models for 5 of the 10 largest automobile companies worldwide. The platform provides the real-time data backbone for mission-critical V2X and telematics applications, with [MQTT over QUIC](./develop/mqtt-over-quic/introduction.md) optimized for unstable network conditions.
 
 ![architecture_vehicle_to_cloud](./assets/architecture-v2c.svg)
 
@@ -210,13 +210,13 @@ EMQX connects all machines, systems, and applications from the factory floor to 
 - **Predictive Maintenance**: Use real-time sensor data and AI to predict machine failures, prevent unplanned downtime, and extend equipment life.
 - **OEE Optimization**: Boost factory output by tracking Overall Equipment Effectiveness in real time. Manufacturers report up to 25% increase in OEE and 40% reduction in downtime.
 - **Quality & Traceability**: Detect quality deviations the moment they occur, monitor production parameters in real-time, and enable full product traceability.
-- **Live Performance Monitoring**: Visualize your entire production line with live dashboards using EMQX [metrics and observability](./observability/overview.md) features, with integration to Prometheus and Datadog.
+- **Live Performance Monitoring**: Visualize your entire production line with live dashboards using EMQX [metrics and observability](./guides/observability/overview.md) features, with integration to Prometheus and Datadog.
 
 Leading semiconductor fabs use EMQX to unify equipment data, handling 3.5M+ data tags per plant with 100ms collection rates and 100% data integrity for precision manufacturing. [**Learn More →**](https://www.emqx.com/en/solutions/industrial-iot)
 
 ### Energy & Utilities
 
-EMQX powers the modern energy grid, connecting 10M+ endpoints with sub-100ms latency for critical grid control and protection applications. The platform bridges legacy OT protocols with modern IT systems using [multi-protocol gateways](./gateway/gateway.md).
+EMQX powers the modern energy grid, connecting 10M+ endpoints with sub-100ms latency for critical grid control and protection applications. The platform bridges legacy OT protocols with modern IT systems using [multi-protocol gateways](./develop/gateway/gateway.md).
 
 ![architecture-energy-utilities](./assets/architecture-energy-utilities.svg)
 
@@ -233,7 +233,7 @@ Huabei Oilfield Company uses EMQX to connect over 40,000 data collection points,
 
 ### Healthcare
 
-EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./access-control/security-guide.md). The platform provides HIPAA-ready security features, including [TLS/SSL encryption](./network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
+EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./guides/security-guide.md). The platform provides HIPAA-ready security features, including [TLS/SSL encryption](./guides/network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
 
 ![architecture-healthcare](./assets/architecture-healthcare.svg)
 
@@ -274,7 +274,7 @@ EMQX connects millions of retail devices and consumer IoT endpoints, enabling re
 ![architecture-retail](./assets/architecture-retail.svg)
 
 - **Smart Retail**: Power real-time inventory management, POS monitoring, personalized customer engagement, and dynamic pricing across all store locations. Connect thousands of self-service kiosks, ensuring seamless customer experiences even during peak hours.
-- **Smart Home**: Connect millions of smart home devices with a scalable [pub/sub messaging](./messaging/introduction.md) backbone, enabling home automation, energy monitoring, and integration with platforms like Alexa and Google Assistant.
+- **Smart Home**: Connect millions of smart home devices with a scalable [pub/sub messaging](./get-started/messaging/introduction.md) backbone, enabling home automation, energy monitoring, and integration with platforms like Alexa and Google Assistant.
 - **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
 
 Signify (formerly Philips Lighting) uses EMQX to power global smart lighting solutions, ensuring reliable real-time control for millions of connected lights. JAGAT, a location-based social app, handles millions of users with EMQX for reliable real-time messaging. [**Read Case Study →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
