@@ -10,10 +10,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Access Control
 
-- [#17813](https://github.com/emqx/emqx/pull/17813) The Dashboard user and API-key endpoints now reject scope lists that mix privilege scopes (`system`, `user_management`, `api_key_management`, `sso_management`) with other scopes. Each of the four privilege scopes is administrator-equivalent in effect, so combining them with a restricted scope list cannot meaningfully restrict the account. Use either a privilege-only scope list or a non-privilege-only scope list, depending on whether the account should have administrator-equivalent capability. Pre-existing records with a mixed scope set continue to function until the next update; the next update must split the list to succeed.
-- [#17980](https://github.com/emqx/emqx/pull/17980) In the hardened security profile, respect topic validation, authorization, MQTT capability checks, and client subscribe hooks for internal subscriptions.
+- [#17813](https://github.com/emqx/emqx/pull/17813) The Dashboard user and API key endpoints now reject scope lists that mix privilege scopes (`system`, `user_management`, `api_key_management`, `sso_management`) with other scopes. Each of the four privilege scopes is administrator-equivalent in effect, so combining them with a restricted scope list cannot meaningfully restrict the account. Use either a privilege-only scope list or a scope list that contains only non-privilege scopes, depending on whether the account should have administrator-equivalent capability. Pre-existing records with a mixed scope set continue to function until the next update; the next update must split the list to succeed.
+- [#17980](https://github.com/emqx/emqx/pull/17980) In the hardened security profile, EMQX now applies topic validation, authorization, MQTT capability checks, and client subscribe hooks to server-initiated subscriptions.
 - [#18002](https://github.com/emqx/emqx/pull/18002) Enabled SAML response and assertion signature verification by default in the hardened security profile.
-- [#18296](https://github.com/emqx/emqx/pull/18296) Added a new `is_jwt(value)` function usable in authenticator `precondition` expressions (and anywhere variform expressions are accepted). It returns true only when the value is structurally a JWT (JWS compact form), without verifying the signature. This lets a JWT authenticator be skipped cleanly for clients that present a non-JWT password — useful for chains serving both JWT and legacy credential clients, especially under the hardened security profile where a non-JWT credential would otherwise be rejected by the JWT authenticator.
+- [#18296](https://github.com/emqx/emqx/pull/18296) Added a new `is_jwt(value)` function usable in authenticator `precondition` expressions (and anywhere variform expressions are accepted). It returns true only when the value is structurally a JWT (JWS compact form), without verifying the signature. This lets a JWT authenticator be skipped cleanly for clients that present a non-JWT password. This is useful for chains serving both JWT and legacy credential clients, especially under the hardened security profile where a non-JWT credential would otherwise be rejected by the JWT authenticator.
 
 #### Multi-Tenancy
 
@@ -36,7 +36,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   When both the access key ID and secret access key are omitted, EMQX obtains temporary credentials from an ECS task role or EC2 instance metadata and refreshes them before they expire.
 
-- [#18081](https://github.com/emqx/emqx/pull/18081) Improved resiliency of Snowflake Streaming Action. Under certain error types when appending rows (specifically, when the channel internal states becomes out of sync), the Action will retry the rows that failed and attempt to re-open the channel without manual intervention.
+- [#18081](https://github.com/emqx/emqx/pull/18081) Improved resilience of Snowflake Streaming actions. Under certain error types when appending rows, specifically when the channel's internal state becomes out of sync, the action retries the failed rows and attempts to re-open the channel without manual intervention.
 
 - [#18085](https://github.com/emqx/emqx/pull/18085) Added new configuration options for the Kafka, Confluent, and Azure Event Hubs producers:
 
@@ -53,7 +53,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Rule Engine
 
-- [#18253](https://github.com/emqx/emqx/pull/18253) Added two Rule-Engine SQL functions: `map_to_range(value, min, max)` and `hash_to_range(value, min, max)`. They map a value (or its hash) into an inclusive integer range, which is useful for sharding or bucketing — for example, distributing a large device fleet across several rules by deriving a shard index from a topic segment: `hash_to_range(nth(2, tokens(topic, '/')), 0, 3)`.
+- [#18253](https://github.com/emqx/emqx/pull/18253) Added two Rule-Engine SQL functions: `map_to_range(value, min, max)` and `hash_to_range(value, min, max)`. They map a value (or its hash) into an inclusive integer range, which is useful for sharding or bucketing. For example, you can distribute a large device fleet across several rules by deriving a shard index from a topic segment: `hash_to_range(nth(2, tokens(topic, '/')), 0, 3)`.
 - [#18306](https://github.com/emqx/emqx/pull/18306) Added the `lz4_compress` and `lz4_uncompress` rule functions for LZ4 Frame compression and decompression.
 
 #### Plugins
@@ -71,7 +71,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Packaging
 
 - [#18037](https://github.com/emqx/emqx/pull/18037) Added Enterprise Linux 10 (EL10) packages, for Red Hat Enterprise Linux 10, Rocky Linux 10, and compatible distributions.
-- [#18127](https://github.com/emqx/emqx/pull/18127) Start releasing macOS 26 (Tahoe) packages.
+- [#18127](https://github.com/emqx/emqx/pull/18127) Started releasing macOS 26 (Tahoe) packages.
 
 #### Performance
 
@@ -84,7 +84,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17895](https://github.com/emqx/emqx/pull/17895) [#18062](https://github.com/emqx/emqx/pull/18062) Switching a TLS/WSS listener from a managed certificate bundle back to file-based certificates now succeeds even if the referenced bundle has already been removed, including when the request clears `managed_certs` by sending it as `null` (as the Dashboard does).
 
-- [#17911](https://github.com/emqx/emqx/pull/17911) Allow DTLS listeners to validate the `ECDHE-PSK-CHACHA20-POLY1305` cipher suite when the runtime OTP ssl application supports it.
+- [#17911](https://github.com/emqx/emqx/pull/17911) Allowed DTLS listeners to validate the `ECDHE-PSK-CHACHA20-POLY1305` cipher suite when the runtime OTP ssl application supports it.
 
 - [#18102](https://github.com/emqx/emqx/pull/18102) Fixed an issue where MQTT clients could receive QoS 1 and QoS 2 messages out of order when a delivery rate limit was active. EMQX now keeps later messages queued until the blocked message can be sent.
 
@@ -106,7 +106,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   [error] crasher: initial call: emqx_socket_connection:init/4, ..., error: {{case_clause,{select,{select_info,recv,#Ref<...>}}},[{emqx_socket_connection,handle_msg,2,[{file,"emqx_socket_connection.erl"},{line,827}]}, ...
   ```
 
-- [#18293](https://github.com/emqx/emqx/pull/18293) Upgrade QUIC stack to quicer-0.4.8 (msquic 2.5.7).
+- [#18293](https://github.com/emqx/emqx/pull/18293) Upgraded the QUIC stack to quicer-0.4.8 (msquic 2.5.7).
 
 - [#18357](https://github.com/emqx/emqx/pull/18357) [#18375](https://github.com/emqx/emqx/pull/18375) MQTT connections are now refused until node startup completes, so listeners no longer serve traffic before authentication, authorization, and plugin hooks are active.
 
@@ -135,7 +135,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17947](https://github.com/emqx/emqx/pull/17947) Fixed an issue where updating an HTTP connector could leave its action buffer workers blocked after the connector was recreated, causing messages to remain queued until the next retry interval.
 
-- [#17955](https://github.com/emqx/emqx/pull/17955) Fix GreptimeDB async batches that could remain unflushed after health checks at low write rates.
+- [#17955](https://github.com/emqx/emqx/pull/17955) Fixed GreptimeDB async batches that could remain unflushed after health checks at low write rates.
 
 - [#17961](https://github.com/emqx/emqx/pull/17961) Fixed an issue where a Kafka or Pulsar Connector would transition to a `disconnected` state on health check timeouts, potentially recreating its internal queue. Now, they transition to `connecting`.
 
@@ -174,13 +174,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   In addition, a payload that does not conform to its JSON schema now produces a clear schema validation error during Rule Engine decoding instead of an internal error.
 
-- [#18242](https://github.com/emqx/emqx/pull/18242) Fix Datalayers connectors failing with `function_clause` when database or credentials are left blank. A clear configuration error is reported instead.
+- [#18242](https://github.com/emqx/emqx/pull/18242) Fixed Datalayers connectors failing with `function_clause` when database or credentials are left blank. A clear configuration error is reported instead.
 
-- [#18270](https://github.com/emqx/emqx/pull/18270) Fix GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
+- [#18270](https://github.com/emqx/emqx/pull/18270) Fixed GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
 
 - [#18274](https://github.com/emqx/emqx/pull/18274) Fixed the Tablestore connector health check listing all timeseries tables on every check. Health checks now use a `DescribeTimeseriesTable` probe against the configured `probe_table_name`, falling back to listing all timeseries tables when it is unset.
 
-- [#18299](https://github.com/emqx/emqx/pull/18299) Fixed an issue where the Snowflake connector's configured TLS (`ssl`) settings were not applied to its outbound HTTPS connections (both Streaming and Aggregated modes). Settings such as `verify`, `cacertfile`, client certificates, and `server_name_indication` were accepted and displayed but had no effect on the actual connections. The configured values are now honoured. Connectors that never customized the `ssl` settings keep the previous connection behavior.
+- [#18299](https://github.com/emqx/emqx/pull/18299) Fixed an issue where the Snowflake connector's configured TLS (`ssl`) settings were not applied to its outbound HTTPS connections (both Streaming and Aggregated modes). Settings such as `verify`, `cacertfile`, client certificates, and `server_name_indication` were accepted and displayed but had no effect on the actual connections. The configured values are now honored. Connectors that never customized the `ssl` settings keep the previous connection behavior.
 
 - [#18302](https://github.com/emqx/emqx/pull/18302) Elasticsearch action `index` and `id` values are now URL-encoded when composing the request path, so characters such as `#` or `/` in a templated value are treated as literal text within a single path segment instead of altering the request target. The JSON request body is not affected.
 
@@ -198,18 +198,18 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18277](https://github.com/emqx/emqx/pull/18277) Improved reliability of persisting configuration changes to `cluster.hocon`: the update is now written and synced to disk before atomically replacing the file, and a failure to read the previous file for backup no longer prevents the new configuration from being saved.
 
-- [#18287](https://github.com/emqx/emqx/pull/18287) Improved REST API resilience when a cluster node becomes unreachable or fails while serving a request. A number of endpoints previously returned an opaque 500 error (or, in a few cases, reported success while part of the work had failed) when an RPC to a peer node did not complete; they now return a descriptive error response, and cluster-wide reads degrade gracefully to the results from the reachable nodes.
+- [#18287](https://github.com/emqx/emqx/pull/18287) Improved REST API resilience when a cluster node becomes unreachable or fails while serving a request. When an RPC to a peer node did not complete, a number of endpoints previously returned an opaque 500 error or, in a few cases, reported success while part of the work had failed. These endpoints now return a descriptive error response, and cluster-wide reads degrade gracefully to the results from the reachable nodes.
 
   Affected areas include: listing and describing plugins, listing clients (v2), streaming and downloading trace logs, reading configuration in HOCON format from a specific node, deleting a delayed message on a specific node, resetting topic metrics, importing a data backup, per-node action/source operations, rule listing, file-transfer downloads, and deleting message queues. Retained-message reindexing and session takeover also now tolerate an unreachable peer node instead of aborting.
 
-- [#18347](https://github.com/emqx/emqx/pull/18347) Fix a problem with Mnesia RocksDB backend that caused table inconsistency on core nodes when keys were deleted while core node is down.
+- [#18347](https://github.com/emqx/emqx/pull/18347) Fixed a problem with the Mnesia RocksDB backend that caused table inconsistency on core nodes when keys were deleted while a core node was down.
 
   From the EMQX point of view, this problem could lead to delayed release of dashboard login locks, as well as wasted disk space by the EMQX schema registry, since deletion of old schemas could be missed.
 
 #### Access Control
 
-- [#17806](https://github.com/emqx/emqx/pull/17806) Aligned the data backup import and export endpoints with the principle of least privilege: Dashboard users whose scope set does not include both `user_management` and `api_key_management` can no longer import or export archives containing the `dashboard_users` or `api_keys` table sets. Global administrators and API-key callers with the necessary scopes are unaffected.
-- [#17853](https://github.com/emqx/emqx/pull/17853) Improved redaction of sensitive HTTP request headers in connector debug logs. `x-api-key`, `x-auth-token`, `api-key`, and `cookie` headers are now stored as secrets in connector state (matching the existing behaviour for `Authorization` / `Proxy-Authorization`), so their values are not printed when connector state is emitted at trace / debug level. In addition, the shared header-redaction helper now recognises header names that are stored as iolists (a shape produced by the connector's template parser), which previously slipped through the sensitivity check.
+- [#17806](https://github.com/emqx/emqx/pull/17806) Aligned the data backup import and export endpoints with the principle of least privilege: Dashboard users whose scope set does not include both `user_management` and `api_key_management` can no longer import or export archives containing the `dashboard_users` or `api_keys` table sets. Global administrators and API key callers with the necessary scopes are unaffected.
+- [#17853](https://github.com/emqx/emqx/pull/17853) Improved redaction of sensitive HTTP request headers in connector debug logs. `x-api-key`, `x-auth-token`, `api-key`, and `cookie` headers are now stored as secrets in connector state (matching the existing behavior for `Authorization` / `Proxy-Authorization`), so their values are not printed when connector state is emitted at trace / debug level. In addition, the shared header-redaction helper now recognizes header names that are stored as iolists (a shape produced by the connector's template parser), which previously slipped through the sensitivity check.
 - [#17871](https://github.com/emqx/emqx/pull/17871) Creating a super-user in a non-global namespace is now rejected when importing built-in-database users in bulk or via a bootstrap file, matching the per-user management API. Such rows are reported as failed and are not stored.
 - [#17974](https://github.com/emqx/emqx/pull/17974) Raw MQTT packet data is now redacted by default in connection logs; trusted client IP addresses can be allowlisted per listener for diagnostics.
 - [#18005](https://github.com/emqx/emqx/pull/18005) Fixed an issue where CLI audit logs could store sensitive command arguments.
@@ -220,11 +220,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18146](https://github.com/emqx/emqx/pull/18146) Hardened scope-based authorization for the dashboard and management API so that access-control checks are applied consistently across equivalent request paths.
 - [#18177](https://github.com/emqx/emqx/pull/18177) Fixed an issue where `frame_parse_error` logs could expose packet data in `received_prefix` when the client was not allowed by `allow_log_packet_data_from`.
 - [#18204](https://github.com/emqx/emqx/pull/18204) Strengthened validation of data backup archives during import so a backup file's contents are restored only into the table it is meant for.
-- [#18225](https://github.com/emqx/emqx/pull/18225) Improved the warning logged when an API key bootstrap file entry contains scopes that are dropped during loading. The warning now groups the dropped scope names by the reason they were dropped -- an unknown scope name, a scope not allowed for the publisher role, or a privilege scope that cannot be combined with other scopes -- instead of reporting every dropped scope as an unknown scope name.
-- [#18314](https://github.com/emqx/emqx/pull/18314) When reading GCP Connectors (GCP PubSub Producer/Consumer, Bigquery) that use JSON Service Account authentication via the HTTP API, now the values are redacted.
-- [#18330](https://github.com/emqx/emqx/pull/18330) Add more secrets redaction to Read-only REST endpoints.
+- [#18225](https://github.com/emqx/emqx/pull/18225) Improved the warning logged when an API key bootstrap file entry contains scopes that are dropped during loading. The warning now groups the dropped scope names by the reason they were dropped: an unknown scope name, a scope not allowed for the publisher role, or a privilege scope that cannot be combined with other scopes. Previously, every dropped scope was reported as an unknown scope name.
+- [#18314](https://github.com/emqx/emqx/pull/18314) When reading GCP connectors (GCP PubSub Producer/Consumer, BigQuery) that use JSON Service Account authentication through the HTTP API, service account JSON values are now redacted.
+- [#18330](https://github.com/emqx/emqx/pull/18330) Added more secret redaction to read-only REST endpoints, including listener, ExHook, and audit log endpoints.
 - [#18344](https://github.com/emqx/emqx/pull/18344) Upgraded HOCON to 0.46.3. This release renders sensitive values inside array-typed config fields as `******` and no longer prints sensitive field values in config validation error logs.
-- [#18386](https://github.com/emqx/emqx/pull/18386) Fix password leak in logs for InfluxDB v1 connectors using query-string authentication (including the Datalayers connector). The password was logged in clear text as part of the client's `path` and `auth_path` fields.
+- [#18386](https://github.com/emqx/emqx/pull/18386) Fixed password leak in logs for InfluxDB v1 connectors using query-string authentication (including the Datalayers connector). The password was logged in clear text as part of the client's `path` and `auth_path` fields.
 
 #### Multi-tenancy
 
@@ -234,13 +234,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17975](https://github.com/emqx/emqx/pull/17975) The `/tracing` configuration endpoint (`PUT /api/v5/tracing`) is now restricted to the global administrator. Namespaced dashboard administrators and API keys can no longer mutate the global `[trace]` configuration; such requests are rejected with HTTP 403.
 
-- [#18008](https://github.com/emqx/emqx/pull/18008) Data backup: a global administrator can now import or upload a namespaced backup by passing the `namespace` query parameter, consistent with listing and downloading. Previously, importing a namespaced backup directly failed while uploading it first (which silently moved it to the global scope) succeeded — the two now behave the same. Namespaced administrators remain confined to their own namespace on every operation.
+- [#18008](https://github.com/emqx/emqx/pull/18008) Data backup: a global administrator can now import or upload a namespaced backup by passing the `namespace` query parameter, consistent with listing and downloading. Previously, importing a namespaced backup directly failed, while uploading it first silently moved it to the global scope and succeeded. The two operations now behave the same. Namespaced administrators remain confined to their own namespace on every operation.
 
 - [#18117](https://github.com/emqx/emqx/pull/18117) Deleting a namespace now also removes the namespace's built-in database authentication users (both password-based and SCRAM) and authorization rules. Previously, these records persisted after namespace deletion and reappeared if a namespace with the same name was created later.
 
   Additionally, a new `emqx ctl mt purge_ns <namespace>` CLI command deletes a namespace and purges all data belonging to it. The command is idempotent and does not require the namespace to exist, so it can be used as a last resort to clean up leftover data if a previous namespace deletion was interrupted.
 
-- [#18164](https://github.com/emqx/emqx/pull/18164) Improved backup import feedback when working within a namespace. Importing an archive that does not belong to the target namespace -- for example one exported from a different namespace, or a global backup -- now returns a clear error instead of appearing to succeed while importing nothing. A global administrator can still restore a specific namespace's backup using the `namespace` query parameter.
+- [#18164](https://github.com/emqx/emqx/pull/18164) Improved backup import feedback when working within a namespace. Importing an archive that does not belong to the target namespace, for example one exported from a different namespace or a global backup, now returns a clear error instead of appearing to succeed while importing nothing. A global administrator can still restore a specific namespace's backup using the `namespace` query parameter.
 
   Global backups are now complete cluster snapshots: a global export also includes every namespace's configuration, and a global import restores each namespace's configuration back into its own namespace. A cluster without namespaces produces and reads exactly the same archives as before.
 
@@ -250,7 +250,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18339](https://github.com/emqx/emqx/pull/18339) Fixed a data backup import isolation issue where an uploaded archive could delete or write backup files that belong to other namespaces. Import now extracts and cleans up within the caller's own namespace directory. Backup archives that contain symlink or hardlink members are now rejected.
 
-- [#18372](https://github.com/emqx/emqx/pull/18372) [#18378](https://github.com/emqx/emqx/pull/18378) Make sure that backup file and managed certificate bundle operations for a namespace always stay within that namespace's own directory. These operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, an empty name, or a name containing a path separator.
+- [#18372](https://github.com/emqx/emqx/pull/18372) [#18378](https://github.com/emqx/emqx/pull/18378) Ensured that backup file and managed certificate bundle operations for a namespace always stay within that namespace's own directory. These operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, an empty name, or a name containing a path separator.
 
 #### Gateway
 
@@ -264,7 +264,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17888](https://github.com/emqx/emqx/pull/17888) Fixed an issue where the LwM2M gateway could include sensitive REGISTER query fields such as `password`, `secret`, `private_key`, and `access_token` in registration/update MQTT reports.
 
-- [#18051](https://github.com/emqx/emqx/pull/18051) Fix CoAP debug logs leaking sensitive URI-query values.
+- [#18051](https://github.com/emqx/emqx/pull/18051) Fixed CoAP debug logs leaking sensitive URI-query values.
 
 #### Plugins
 
@@ -294,7 +294,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   When a plugin fails to start with a timeout, the error log now lists the declared dependency applications that were not running at that moment.
 
-- [#18337](https://github.com/emqx/emqx/pull/18337) Start plugins after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
+- [#18337](https://github.com/emqx/emqx/pull/18337) Started plugins after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
 
 #### Observability
 
