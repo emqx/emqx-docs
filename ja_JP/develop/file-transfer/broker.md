@@ -41,18 +41,22 @@ file_transfer {
   enable = true
 
   # セグメント保存の設定
-  storage.local.segments = {
-    # セグメント保存ディレクトリ。I/O性能の高いディスクに設定することが望ましい。
-    root = "./data/file_transfer/segments"
+  storage {
+    local {
+      segments {
+        # セグメント保存ディレクトリ。I/O性能の高いディスクに設定することが望ましい。
+        root = "./data/file_transfer/segments"
 
-    # 有効期限切れセグメントの定期クリーンアップ設定
-    gc {
-      # クリーンアップ間隔
-      interval = "1h"
+        # 有効期限切れセグメントの定期クリーンアップ設定
+        gc {
+          # クリーンアップ間隔
+          interval = "1h"
 
-      # セグメント保存の最大有効期間。この期間を過ぎるとマージされていなくてもセグメントは削除される。
-      # クライアントが指定する有効期間はこの値を超えてはならない。
-      maximum_segments_ttl = "24h"
+          # セグメント保存の最大有効期間。この期間を過ぎるとマージされていなくてもセグメントは削除される。
+          # クライアントが指定する有効期間はこの値を超えてはならない。
+          maximum_segments_ttl = "24h"
+        }
+      }
     }
   }
 }

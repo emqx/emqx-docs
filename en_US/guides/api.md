@@ -51,7 +51,7 @@ You can manually create API keys for authentication on the Dashboard by navigati
 You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
 
 ```bash
-api_key = {
+api_key {
   bootstrap_file = "etc/default_api_key.conf"
 }
 ```

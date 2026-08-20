@@ -38,7 +38,11 @@ MFAはデフォルトで無効になっています。ユーザーにMFAを有�
 設定例：
 
 ```bash
-dashboard.default_mfa = {mechanism: totp}
+dashboard {
+  default_mfa {
+    mechanism = totp
+  }
+}
 ```
 
 ### EMQXダッシュボードからユーザーごとにMFAを有効化する

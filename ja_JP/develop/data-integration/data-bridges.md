@@ -218,7 +218,7 @@ actions {
         {kind = reference, type = mqtt, name = fallback},
         {
           kind = republish,
-          args = {
+          args {
             topic = "fallback/republish/topic"
             qos = 1
             payload = "${payload}"
