@@ -158,7 +158,7 @@ On the **Add Action** page, select **Republish** from the **Type of Action** dro
 
 ::: tip Note
 
-Starting from EMQX 6.1.5, when a rule belongs to a namespace and `rule_engine.limit_selects_in_namespace` is enabled (the default), EMQX confines the Republish action's output topic to the rule's namespace. After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with the rule's namespace. A topic that already starts with `<namespace>/` remains unchanged. This behavior does not depend on `mqtt.namespace_as_mountpoint`. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
+Starting from EMQX 6.1.5, when a rule belongs to a namespace and `rule_engine.limit_selects_in_namespace` is enabled (the default), EMQX confines the Republish action's output topic to the rule's namespace. After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with `<namespace>/`. A topic that already starts with `<namespace>/` remains unchanged. This behavior does not depend on `mqtt.namespace_as_mountpoint`. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
 
 For more information, see [Rule Namespace Isolation](../multi-tenancy/namespace-overview.md#rule-namespace-isolation).
 
