@@ -223,14 +223,9 @@ Where,
 
 ::: warning Memory cost of disconnected sessions
 
-With the default in-memory session store, a session whose expiry interval is greater than zero is not removed when the client disconnects. EMQX keeps the session process, its subscriptions, and its message queue in memory until the client reconnects or the interval elapses. The number of such sessions on a node is roughly the client disconnect rate multiplied by the expiry interval. A large fleet of clients on unstable links, combined with a long expiry interval, can leave a node holding many disconnected sessions. Each of them uses memory and is listed as a disconnected client.
+With the default in-memory session store, a session whose expiry interval is greater than zero is not removed when the client disconnects. EMQX keeps the session, its subscriptions, and its message queue in memory until the client reconnects or the interval elapses. The number of such sessions on a node is roughly the client disconnect rate multiplied by the expiry interval.
 
-This is the intended behavior of persistent sessions. Size the deployment for it, or limit it:
-
-- Set `session_expiry_interval` to the shortest value that covers the reconnect window of your MQTT 3.1.1 clients.
-- Set `max_session_expiry_interval` to cap the interval that MQTT 5.0 clients can request.
-- Set `max_mqueue_len` to bound the number of messages queued for each disconnected session.
-- For workloads that need long session lifetimes for many clients, consider [durable sessions](../durability/durability_introduction.md). Durable sessions store the session state on disk and release the session process when the client disconnects.
+This is the intended behavior of persistent sessions. Allocate enough memory for your workload, or use [durable sessions](../durability/durability_introduction.md), which store session state on disk.
 
 :::
 
