@@ -1,42 +1,56 @@
 # Flapping Detect
 
-Based on the Banned Clients function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
+Flapping detection identifies repeated `CONNECT` packets within a configured time window. To protect EMQX from excessive connection attempts, EMQX temporarily bans a client ID, username, or source IP address when it reaches the configured threshold.
 
-It should be noted that the automatic ban only bans the client by the client ID, not by the user name and IP address. A malicious client may still be able to attack if they change the client ID for each attempt.
+Starting from EMQX 6.3.0, flapping detection can independently evaluate any combination of the following dimensions:
 
-This feature is disabled by default, and you can enable it via EMQX Dashboard or configuration file.
+- Client ID: Counts connection attempts from the same client ID.
+- Username: Counts connection attempts from clients that share the same username. Connections without a username are not counted for this dimension.
+- Source IP address: Counts connection attempts from the same source IP address.
 
-## Enable Flapping Detect on Dashboard
+Each enabled dimension has its own detection time window, connection count threshold, and ban duration. When a client ID, username, or source IP address reaches its threshold, EMQX rejects new connection attempts that match that identifier or address before authentication. Existing connections are not disconnected.
 
-1. Go to Dashboard, and click **Access Control** -> **Flapping Detect** from the left navigation menu to enter the **Flapping Detect** page. 
-2. Enable the flapping detection feature by clicking the toggle switch.
-   - **Detection Time Window**: You can specify the duration for which the system monitors the client's flapping behavior. The default value is `1` minute.
-   - **Max Disconnection Count**: You can specify the maximum number of disconnections allowed for an MQTT client during the detection window time. It allows you to set precise criteria for identifying and responding to clients exhibiting flapping behavior. The default number is `15`.
-   - **Ban Duration**: You can specify for how long the client should be banned. The default value is `5` minutes.
-3. Click **Save Changes** to finish the setting.
+Flapping detection is disabled by default. You can configure it on the EMQX Dashboard or in the configuration file.
 
-<img src="./assets/flapping-detect.png" alt="flapping-detect" style="zoom:67%;" />
+## Configure Flapping Detect on Dashboard
 
-## Enable Flapping Detect in Configuration File
+1. In the Dashboard, click **Access Control** -> **Flapping Detect**.
+2. Enable one or more detection dimensions:
+   - **Detect by Client ID**
+   - **Detect by Username**
+   - **Detect by Source IP Address**
+3. Configure the following settings for each enabled dimension:
+   - **Detection Time Window**: The time window in which EMQX counts connection attempts. The default is `1` minute.
+   - **Max Connection Count**: The number of connection attempts that triggers a ban within the detection time window. The default is `15`.
+   - **Ban Duration**: How long EMQX bans the client ID, username, or source IP address. The default is `5` minutes.
+4. Click **Save Changes**.
 
-You can also enable the flapping detect feature by adding the following configuration:
+<img src="./assets/flapping-detect.png" alt="Flapping detection dimensions" style="zoom:67%;" />
 
-```bash
+Ban entries created by flapping detection expire automatically. You can inspect or remove them on the [Banned Clients](./blacklist.md) page or through the `/banned` REST API.
+
+## Configure Flapping Detect in the Configuration File
+
+The following HOCON example enables detection by client ID and username and disables detection by source IP address:
+
+```hocon
 flapping_detect {
+  by_clientid {
+    window_time = 1m
+    max_count = 15
+    ban_time = 5m
+  }
 
-  enable = true
+  by_username {
+    window_time = 1m
+    max_count = 15
+    ban_time = 5m
+  }
 
-  ## The maximum number of disconnections allowed for an MQTT client during the detection window time
-  max_count = 15
-
-  ## The duration for which the system monitors the client's flapping behavior
-  window_time = 1m
-
-  ## How long the clientid will be banned
-  ban_time = 5m
-
+  by_peerhost = none
 }
 ```
 
-These settings may be specified individually for each zone.
+A dimension is enabled when detection settings are configured for it. Set the dimension to `none` to disable it. These settings can also be configured for individual zones.
 
+Starting from EMQX 6.3.0, the flat `flapping_detect.enable`, `flapping_detect.window_time`, `flapping_detect.max_count`, and `flapping_detect.ban_time` fields are deprecated. EMQX continues to accept the flat fields and maps them to `flapping_detect.by_clientid`, so configurations created before EMQX 6.3.0 remain compatible. The deprecated fields affect only client ID detection. `by_username` and `by_peerhost` remain `none` unless you explicitly configure them. For the full configuration structure and precedence rules, see [Flapping Detect Configuration](../configuration/flapping.md).

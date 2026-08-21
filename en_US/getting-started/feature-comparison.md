@@ -86,7 +86,7 @@ This page lists features supported across different deployment types in detail.
 | **TLS/SSL**                   | ✅                        | ✅                              | ✅                                  | Protect data transmission security: TLS 1.1, 1.2, 1.3        |
 | **QUIC**                      | ✅                        | ❌                              | ✅                                  | Enhance efficiency of weak network and mobile network data transmission |
 | **OCSP Stapling**             | ✅                        | ❌                              | ✅                                  | Provide more flexible security practices                     |
-| **Flapping Detect**           | ✅                        | ✅                              | ✅ In product roadmap               | Detect and intercept frequent online and offline connections |
+| **Flapping Detect**           | ✅                        | ✅                              | ✅ In product roadmap               | Detect and block excessive connection attempts               |
 | **Audit Logs**                | ✅                        | ✅                              | ✅                                  | Support audit tracing for important operations               |
 | **Dashboard SSO**             | ✅                        | ✅                              | ✅                                  | Secure and simplified authentication processes               |
 | **Dashboard / REST API RBAC** | ✅                        | ✅                              | ✅                                  | Minimize permissions to ensure system security               |
