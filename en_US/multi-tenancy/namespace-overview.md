@@ -130,7 +130,7 @@ This allows authorization backends to receive topics with the mountpoint prefix.
 
 When `rule_engine.limit_selects_in_namespace` is enabled (the default), this setting prevents messages and client-related events from another namespace from triggering a namespaced rule. EMQX identifies the client namespace by the `client_attrs.tns` client attribute. Starting from EMQX 6.1.5, the setting also confines the output topic of the rule's Republish action to the rule's namespace.
 
-After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with the rule's namespace. A topic that already starts with `<namespace>/` remains unchanged. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
+After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with `<namespace>/`. A topic that already starts with `<namespace>/` remains unchanged. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
 
 This Republish behavior does not depend on `mqtt.namespace_as_mountpoint`. The setting does not restrict clients from publishing or subscribing across namespaces. To isolate client topic access, configure topic isolation using mount points and authorization rules.
 
