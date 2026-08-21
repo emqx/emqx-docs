@@ -121,7 +121,7 @@ When configuring dynamic hostname resolution, note the following:
 
 3. Follow the instructions below to do the configuration.
 
-   **HTTP**: Configure the HTTP request method, the IP address and request headers here.
+   **HTTP**: Configure the HTTP request method, URL, and request headers here.
 
    - **Request Method**: Select the HTTP request method, optional values: `GET`, `POST`.
    - **URL**: Enter the URL of the HTTP application. The host part can include [authorization placeholders](./authz.md#authorization-placeholders) when **Hostname Resolution** is set to `Dynamic`.
