@@ -221,11 +221,12 @@ UNS Governanceはトピック構造と（オプションで）ペイロードス
 
 ## ダウンロード
 
-各EMQXリリース用のtarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
-| EMQXバージョン | プラグインバージョン | パッケージ |
+| EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) |
 | 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) |
+| 6.1.4 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

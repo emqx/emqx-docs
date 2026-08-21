@@ -947,6 +947,60 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 ```
 
+### maptab_lookup(Table: string, Key: string | integer) -> map | undefined
+
+::: tip
+
+此函数在 EMQX 6.1.5 中引入。仅当 EMQX Mapping Tables 插件已安装并启动后，该函数才可用。
+
+:::
+
+在 [EMQX Mapping Tables 插件](../extensions/plugin-catalog/6.1/emqx-maptabs.md)管理的 mapping table 中查找一行数据。查找成功时返回该行的值映射；如果表不存在、Key 不存在或 Key 类型不匹配，则返回 `undefined`。
+
+Key 使用精确值匹配，不进行类型转换。例如，整数 Key `50` 和字符串 Key `'50'` 是不同的 Key。
+
+示例：
+
+```bash
+maptab_lookup('signals', 1) = json_decode('{"signal_name":"temperature_c","start_bit":17,"length":8,"type":"integer","signedness":"signed","endian":"big"}')
+maptab_lookup('signals', 3) = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, DefaultRow: map) -> map
+
+同 `maptab_lookup/2`，但查找未命中时返回指定的 `DefaultRow`。可以使用 `map_new()`、`map_put(...)` 或 `json_decode('{...}')` 构造默认行。
+
+如果将返回的行继续作为其他函数的输入，需要提供该函数所需的所有字段。使用 `map_new()` 这样的空默认行时，行内字段仍为 `undefined`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 3, json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')) = json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string) -> any | undefined
+
+查找匹配行中的指定字段。字段存在时返回字段值；如果表、Key 或字段不存在，或 Key 类型不匹配，则返回 `undefined`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 1, 'signal_name') = 'temperature_c'
+maptab_lookup('signals', 3, 'signal_name') = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string, Default: any) -> any
+
+与 `maptab_lookup(Table, Key, Field)` 相同，但查找未命中时返回指定的 `Default`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 3, 'signal_name', 'Unknown') = 'Unknown'
+```
+
+在 `FOREACH` 中使用 `maptab_lookup` 时，如果查询结果可能未命中，需要先保护字段访问。例如，`maptab_lookup('signals', item_id)` 返回 `undefined` 时，如果继续将 `sig.start_bit` 等字段传入 `subbits`，该消息对应的整条 SQL 执行会失败。可以使用 `CASE WHEN is_map(sig)` 判断，或提供完整的默认行。
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 将 Key 与关联的 Value 插入到 Map 中，返回更新后的 Map。如果原始 Map 中该 Key 已经存在，那么旧的关联值将被替换为新的 Value。示例：

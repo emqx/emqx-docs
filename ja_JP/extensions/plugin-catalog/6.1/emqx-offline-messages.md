@@ -76,11 +76,12 @@ Redis は `mqtt:sub:*` および `mqtt:msg:*` キースペースの下でハッ�
 
 ## ダウンロード
 
-各 EMQX リリース向けの tarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
 | EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) |
 | 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) |
+| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
