@@ -122,6 +122,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17957](https://github.com/emqx/emqx/pull/17957) Fixed an issue where multiple rule events (for example, `$events/client/connack`) would not trigger rules in the global namespace when `rule_engine.limit_selects_in_namespace = true`.
 - [#18049](https://github.com/emqx/emqx/pull/18049) Fixed an issue where setting `rule_engine.limit_selects_in_namespace = true` would prevent alarm activated/deactivated-triggered global rules from firing.
+- [#18388](https://github.com/emqx/emqx/pull/18388) Fixed the Rule Engine `republish` action for rules that belong to a namespace. When `rule_engine.limit_selects_in_namespace` is enabled (the default), the republished message is now published under the rule's namespace (`<namespace>/<topic>`). This makes the `republish` action follow the same namespace boundary as the rule itself. A rendered topic that already starts with `<namespace>/` is published unchanged, so republish templates that add the prefix themselves keep working. Previously, the message was published to the rendered topic without the namespace prefix. Setting `rule_engine.limit_selects_in_namespace = false` keeps the previous behavior.
 
 #### Data Integration
 
@@ -206,6 +207,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   From the EMQX point of view, this problem could lead to delayed release of dashboard login locks, as well as wasted disk space by the EMQX schema registry, since deletion of old schemas could be missed.
 
+- [#18383](https://github.com/emqx/emqx/pull/18383) Fixed an issue where submitting a configuration containing an invalid Unicode escape sequence through `PUT /configs` returned an internal error. Such requests now return a validation error that identifies the invalid escape sequence.
+
 #### Access Control
 
 - [#17806](https://github.com/emqx/emqx/pull/17806) Aligned the data backup import and export endpoints with the principle of least privilege: Dashboard users whose scope set does not include both `user_management` and `api_key_management` can no longer import or export archives containing the `dashboard_users` or `api_keys` table sets. Global administrators and API key callers with the necessary scopes are unaffected.
@@ -225,6 +228,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18330](https://github.com/emqx/emqx/pull/18330) Added more secret redaction to read-only REST endpoints, including listener, ExHook, and audit log endpoints.
 - [#18344](https://github.com/emqx/emqx/pull/18344) Upgraded HOCON to 0.46.3. This release renders sensitive values inside array-typed config fields as `******` and no longer prints sensitive field values in config validation error logs.
 - [#18386](https://github.com/emqx/emqx/pull/18386) Fixed password leak in logs for InfluxDB v1 connectors using query-string authentication (including the Datalayers connector). The password was logged in clear text as part of the client's `path` and `auth_path` fields.
+- [#18391](https://github.com/emqx/emqx/pull/18391) Fixed an authentication cache key collision. Two different credentials whose field values produce the same byte sequence when concatenated could share a cache entry, letting one client receive another client's cached authentication result within the cache TTL.
 
 #### Multi-tenancy
 

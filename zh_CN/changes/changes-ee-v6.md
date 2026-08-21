@@ -122,6 +122,7 @@
 
 - [#17957](https://github.com/emqx/emqx/pull/17957) 修复当 `rule_engine.limit_selects_in_namespace = true` 时，多个规则事件（例如 `$events/client/connack`）无法触发全局命名空间中规则的问题。
 - [#18049](https://github.com/emqx/emqx/pull/18049) 修复设置 `rule_engine.limit_selects_in_namespace = true` 后，告警激活/解除触发的全局规则无法触发的问题。
+- [#18388](https://github.com/emqx/emqx/pull/18388) 修复规则引擎 `republish` 动作处理命名空间规则时的问题。当启用 `rule_engine.limit_selects_in_namespace`（默认启用）时，重新发布的消息现在会发布到该规则的命名空间下（`<namespace>/<topic>`）。这使 `republish` 动作遵循与规则本身相同的命名空间边界。渲染后的主题如果已经以 `<namespace>/` 开头，则会原样发布，因此自行添加该前缀的 republish 模板仍可继续工作。此前，该消息会发布到渲染后的主题，且不会添加命名空间前缀。设置 `rule_engine.limit_selects_in_namespace = false` 会保留此前行为。
 
 #### 数据集成
 
@@ -206,6 +207,8 @@
 
   从 EMQX 角度看，该问题可能导致 Dashboard 登录锁延迟释放，也可能因为旧 schema 的删除被遗漏而造成 EMQX Schema Registry 浪费磁盘空间。
 
+- [#18383](https://github.com/emqx/emqx/pull/18383) 修复通过 `PUT /configs` 提交包含非法 Unicode 转义序列的配置时返回内部错误的问题。此类请求现在会返回校验错误，并指出非法的转义序列。
+
 #### 访问控制
 
 - [#17806](https://github.com/emqx/emqx/pull/17806) 使数据备份导入和导出端点符合最小权限原则：Dashboard 用户的 scope 集合如果不同时包含 `user_management` 和 `api_key_management`，则不能导入或导出包含 `dashboard_users` 或 `api_keys` 表集的归档。全局管理员和具有必要 scope 的 API 密钥调用方不受影响。
@@ -225,6 +228,7 @@
 - [#18330](https://github.com/emqx/emqx/pull/18330) 为只读 REST 端点增加更多 secret 脱敏处理，包括监听器、ExHook 和审计日志端点。
 - [#18344](https://github.com/emqx/emqx/pull/18344) 将 HOCON 升级到 0.46.3。该版本会将数组类型配置字段中的敏感值渲染为 `******`，并且不再在配置校验错误日志中打印敏感字段值。
 - [#18386](https://github.com/emqx/emqx/pull/18386) 修复使用 query-string 认证的 InfluxDB v1 连接器（包括 Datalayers 连接器）在日志中泄露密码的问题。该密码此前会作为客户端 `path` 和 `auth_path` 字段的一部分以明文记录。
+- [#18391](https://github.com/emqx/emqx/pull/18391) 修复认证缓存 key 碰撞问题。两个不同凭据的字段值在拼接后生成相同字节序列时，可能共享同一个缓存条目，导致一个客户端在缓存 TTL 内复用另一个客户端的缓存认证结果。
 
 #### 多租户
 
