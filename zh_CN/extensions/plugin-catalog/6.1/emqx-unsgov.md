@@ -1,6 +1,6 @@
 # UNS 治理
 
-该插件在 ACL 检查阶段强制执行统一命名空间（Unified Namespace）的主题结构。
+该插件在 ACL 检查阶段强制执行统一命名空间（Unified Namespace）的主题结构，并可对发布到受 UNS 治理的主题的消息载荷进行校验。
 
 ## 插件 API
 
@@ -175,6 +175,7 @@ UNS 治理会同时校验主题结构以及（可选的）载荷 schema。
     `topic_invalid`、`not_endpoint`，以及 `per_model` 中的按模型计数器。
 
 - 载荷违规（`payload_invalid`）：
+  - 当消息发布到受 UNS 治理且配置了载荷 schema 的主题时，UNS 治理会在发布处理阶段对每条匹配消息执行载荷校验，包括命中授权缓存的发布，以及规则引擎重发布或桥接入口等非客户端发布。
   - 消息由 UNS 治理在发布处理阶段丢弃。
   - 此路径不需要执行授权拒绝/断开连接。
   - 可观测计数器：`messages_dropped`、`payload_invalid`，

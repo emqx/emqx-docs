@@ -50,4 +50,4 @@ This plugin enforces a per-username session quota across the cluster, rejecting 
 
 [UNS Governance](./plugin-catalog/6.1/emqx-unsgov.md)
 
-This plugin enforces a Unified Namespace (UNS) topic structure at ACL check time, so publishing and subscribing must conform to the governed namespace hierarchy.
+This plugin enforces a Unified Namespace (UNS) topic structure and can validate the payloads of messages published to topics governed by UNS Governance.
