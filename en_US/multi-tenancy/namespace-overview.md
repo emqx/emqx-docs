@@ -82,7 +82,7 @@ EMQX is highly flexible and supports multiple isolation mechanisms even before n
 
 Namespaces provide a unified tenant identifier (`client_attrs.tns`) that allows Client IDs, topic mountpoints, and related configurations to be organized around a consistent tenant context.
 
-However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled. Starting from EMQX 6.0.3, rule trigger isolation is enabled by default, but it only limits which messages and events can trigger namespaced rules; it does not replace Client ID or topic isolation.
+However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled.
 
 ### Client ID Override
 
@@ -126,11 +126,13 @@ authorization.include_mountpoint = true
 
 This allows authorization backends to receive topics with the mountpoint prefix.
 
-### Rule Trigger Isolation
+### Rule Namespace Isolation
 
-With `rule_engine.limit_selects_in_namespace` enabled, a rule that belongs to a namespace is triggered only by messages and client-related events from clients in that same namespace. EMQX identifies the client namespace by the `client_attrs.tns` client attribute.
+When `rule_engine.limit_selects_in_namespace` is enabled (the default), this setting prevents messages and client-related events from another namespace from triggering a namespaced rule. EMQX identifies the client namespace by the `client_attrs.tns` client attribute. Starting from EMQX 6.1.5, the setting also confines the output topic of the rule's Republish action to the rule's namespace.
 
-This setting only prevents rules from being triggered by messages or events from another namespace. It does not restrict clients from publishing or subscribing across namespaces. To isolate client topic access, configure topic isolation using mount points and authorization rules.
+After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with the rule's namespace. A topic that already starts with `<namespace>/` remains unchanged. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
+
+This Republish behavior does not depend on `mqtt.namespace_as_mountpoint`. The setting does not restrict clients from publishing or subscribing across namespaces. To isolate client topic access, configure topic isolation using mount points and authorization rules.
 
 ## Multi-Tenancy Capability Support
 

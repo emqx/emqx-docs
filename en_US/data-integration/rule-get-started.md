@@ -156,6 +156,14 @@ On the **Add Action** page, select **Republish** from the **Type of Action** dro
 
 - **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule. 
 
+::: tip Note
+
+Starting from EMQX 6.1.5, when a rule belongs to a namespace and `rule_engine.limit_selects_in_namespace` is enabled (the default), EMQX confines the Republish action's output topic to the rule's namespace. After rendering the topic template, EMQX prepends `<namespace>/` if the rendered topic does not already start with the rule's namespace. A topic that already starts with `<namespace>/` remains unchanged. This behavior does not depend on `mqtt.namespace_as_mountpoint`. Global rules and deployments with `rule_engine.limit_selects_in_namespace = false` continue to publish to the rendered topic without adding the rule namespace.
+
+For more information, see [Rule Namespace Isolation](../multi-tenancy/namespace-overview.md#rule-namespace-isolation).
+
+:::
+
 On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page. 
 
 ::: tip
@@ -270,4 +278,3 @@ When there are many sink or source entries in the list, you can use the filter t
 To view the statistics and rate indicators for a sink or source, click the name of the sink or source.
 
 ![action_statistics](./assets/action_statistics.png)
-
