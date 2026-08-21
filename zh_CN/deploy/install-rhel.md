@@ -5,15 +5,16 @@
 支持的 CentOS/RHEL 版本：
 
 - Amazon Linux 2023
+- Rocky Linux 10 (RHEL 10)
 - Rocky Linux 9 (RHEL 9)
 - Rocky Linux 8 (RHEL 8)
 
-下文将以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装或希望安装其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取详细安装信息。
+下文将介绍如何从官方下载页面下载最新版 EMQX。如希望在其他系统中进行安装或希望安装其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取详细安装信息。
 
 ## 通过 rpm 安装
 
 1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=RHEL)。
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据所需的 CPU 架构选择 `RHEL 8 (CentOS 8) amd64` 或 `RHEL 8 (CentOS 8) arm64` -> `rpm` 安装包。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据目标 RHEL 兼容发行版版本和 CPU 架构选择对应的 `rpm` 安装包。
 3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
@@ -36,7 +37,7 @@ sudo yum remove emqx
 
 
 1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=RHEL)。
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据所需的 CPU 架构选择 `RHEL 8 (CentOS 8) amd64` 或 `RHEL 8 (CentOS 8) arm64` -> `tar.gz` 安装包。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据目标 RHEL 兼容发行版版本和 CPU 架构选择对应的 `tar.gz` 安装包。
 3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
 
 ### 启动 EMQX
