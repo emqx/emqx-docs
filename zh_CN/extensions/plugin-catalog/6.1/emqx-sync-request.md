@@ -12,7 +12,7 @@
 POST /api/v5/plugin_api/emqx_sync_request/request
 ```
 
-EMQX 收到 HTTP 请求后，插件会查找请求主题对应的在线 MQTT 订阅者，将 MQTT 请求直接投递给该订阅者，并等待匹配的响应消息。对于 MQTT 5 响应方，响应必须同时匹配响应主题和由 `request_id` 生成的 Correlation Data。对于不支持 Correlation Data 的 MQTT 3 响应方，响应会按响应主题的请求顺序进行匹配。
+EMQX 收到 HTTP 请求后，插件会查找请求主题对应的在线 MQTT 订阅者，将 MQTT 请求直接投递给该订阅者，并等待匹配的响应消息。对于 MQTT 5 响应方，响应必须同时匹配响应主题和使用 `request_id` 作为值的 Correlation Data。对于不支持 Correlation Data 的 MQTT 3 响应方，响应会按响应主题的请求顺序进行匹配。
 
 请求主题必须精确匹配一个在线的非共享订阅者：
 

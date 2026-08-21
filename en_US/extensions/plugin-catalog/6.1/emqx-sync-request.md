@@ -12,7 +12,7 @@ The plugin exposes a runtime API through the plugin API gateway:
 POST /api/v5/plugin_api/emqx_sync_request/request
 ```
 
-When EMQX receives the HTTP request, the plugin finds the online MQTT subscriber for the request topic, delivers the MQTT request directly to that subscriber, and waits for a matching response message. For MQTT 5 responders, the response must match both the response topic and the Correlation Data generated from `request_id`. For MQTT 3 responders, which do not support Correlation Data, responses are matched by response topic in request sequence.
+When EMQX receives the HTTP request, the plugin finds the online MQTT subscriber for the request topic, delivers the MQTT request directly to that subscriber, and waits for a matching response message. For MQTT 5 responders, the response must match both the response topic and the Correlation Data that uses `request_id` as its value. For MQTT 3 responders, which do not support Correlation Data, responses are matched by response topic in request sequence.
 
 Request topics must match one online, non-shared subscriber exactly:
 
