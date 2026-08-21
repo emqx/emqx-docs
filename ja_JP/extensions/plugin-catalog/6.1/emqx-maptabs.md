@@ -1,18 +1,18 @@
 # Mapping Tables
 
-The EMQX Mapping Tables plugin provides named mapping tables for Rule SQL. Use this plugin when a rule needs to map stable identifiers, codes, or binary field IDs to structured values without maintaining long `CASE WHEN` expressions in the SQL statement.
+EMQX Mapping Tablesプラグインは、Rule SQL向けの名前付きマッピングテーブルを提供します。Ruleで安定した識別子、コード、またはバイナリフィールドIDを長い`CASE WHEN`式をSQL文に維持せずに構造化された値にマッピングする必要がある場合に、このプラグインを使用してください。
 
-This plugin is available starting from EMQX 6.1.5. Install and start the plugin before using `maptab_lookup` in Rule SQL.
+このプラグインはEMQX 6.1.5以降で利用可能です。Rule SQLで`maptab_lookup`を使用する前に、プラグインをインストールして起動してください。
 
-Mapping tables are loaded from JSON files through the `emqx ctl maptabs` CLI and stored in EMQX's replicated database. Rules query the tables with the `maptab_lookup` SQL function.
+マッピングテーブルは`emqx ctl maptabs` CLIを通じてJSONファイルからロードされ、EMQXのレプリケートされたデータベースに保存されます。ルールは`maptab_lookup` SQL関数でテーブルを照会します。関数のシグネチャやSQL例については、[組み込みSQL関数](../../../data-integration/rule-sql-builtin-functions.md)を参照してください。
 
-## Table Files
+## テーブルファイル
 
-A mapping table is a JSON file. The file name without the `.json` extension is used as the table name. Table names can contain only letters, digits, underscores, and hyphens.
+マッピングテーブルはJSONファイルです。ファイル名の`.json`拡張子を除いた部分がテーブル名として使用されます。テーブル名には英数字、アンダースコア、ハイフンのみ使用できます。
 
-The JSON file must contain an array of row objects. Each row must include a `key` field. All other fields in the row form the row's value map.
+JSONファイルは行オブジェクトの配列を含む必要があります。各行は`key`フィールドを必ず含みます。行内のその他すべてのフィールドが行の値マップを構成します。
 
-Example:
+例：
 
 ```json
 [
@@ -37,71 +37,71 @@ Example:
 ]
 ```
 
-A `key` must be a JSON integer or string. Native JSON types are preserved, so the integer `50` and the string `"50"` are different keys.
+`key`はJSONの整数または文字列でなければなりません。JSONのネイティブ型は保持されるため、整数の`50`と文字列の`"50"`は異なるキーとして扱われます。
 
-Loading is fail-closed. EMQX rejects the whole file and keeps the previous table version when the file contains any of the following issues:
+ロードはフェイルクローズ方式です。以下の問題がある場合、EMQXはファイル全体を拒否し、以前のテーブルバージョンを保持します。
 
-- invalid JSON
-- a top-level value that is not an array
-- a row that is not an object
-- a row without `key`
-- duplicate keys
-- a key whose type is float, boolean, null, array, or object
+- 無効なJSON
+- 配列でないトップレベルの値
+- オブジェクトでない行
+- `key`がない行
+- 重複したキー
+- キーの型が浮動小数点数、真偽値、null、配列、オブジェクト
 
-## CLI Commands
+## CLIコマンド
 
-Use the `emqx ctl maptabs` CLI to manage mapping tables.
+`emqx ctl maptabs` CLIを使ってマッピングテーブルを管理します。
 
-| Command | Description |
+| コマンド | 説明 |
 | --- | --- |
-| `emqx ctl maptabs list` | List tables cached on the local node, including row count and version. |
-| `emqx ctl maptabs status` | List tables on every running node. Use this command to detect cache drift. |
-| `emqx ctl maptabs load <file>` | Validate a table JSON file and replicate it to all nodes. |
-| `emqx ctl maptabs reload` | Rebuild caches from storage on all running nodes. Use this command as a reconciliation fallback. |
-| `emqx ctl maptabs get <name>` | Print the stored JSON content of a table. |
-| `emqx ctl maptabs delete <name>` | Delete a table from all nodes. |
+| `emqx ctl maptabs list` | ローカルノードにキャッシュされているテーブルの一覧を行数とバージョン付きで表示します。 |
+| `emqx ctl maptabs status` | 全稼働ノードのテーブル一覧を表示します。キャッシュのずれを検出するのに使用します。 |
+| `emqx ctl maptabs load <file>` | テーブルJSONファイルを検証し、全ノードにレプリケートします。 |
+| `emqx ctl maptabs reload` | 全稼働ノードでストレージからキャッシュを再構築します。キャッシュの同期が必要な場合に使用します。 |
+| `emqx ctl maptabs get <name>` | テーブルの保存されているJSONコンテンツを表示します。 |
+| `emqx ctl maptabs delete <name>` | 全ノードからテーブルを削除します。 |
 
-All command output is JSON, except that `emqx ctl maptabs get <name>` prints the stored table JSON content directly when the table exists.
+すべてのコマンド出力はJSON形式ですが、`emqx ctl maptabs get <name>`はテーブルが存在する場合、保存されているテーブルのJSONコンテンツを直接出力します。
 
-## Configuration
+## 設定
 
-Configure the plugin through the standard plugin configuration API `PUT /api/v5/plugins/<name-vsn>/config` or the plugin configuration file.
+プラグインは標準のプラグイン設定API `PUT /api/v5/plugins/<name-vsn>/config` またはプラグイン設定ファイルを通じて設定します。
 
-| Configuration | Default | Description |
+| 設定項目 | デフォルト | 説明 |
 | --- | --- | --- |
-| `max_tables` | `100` | Maximum number of mapping tables. Loading a new table beyond this limit is rejected. Replacing an existing table is allowed. |
-| `max_rows_per_table` | `10000` | Maximum number of rows in one table. A file with more rows is rejected. |
-| `max_table_file_bytes` | `10000000` | Maximum size, in bytes, of a table JSON file. Larger files are rejected before being read into memory and replicated. |
+| `max_tables` | `100` | マッピングテーブルの最大数。この制限を超える新規テーブルのロードは拒否されます。既存テーブルの置換は可能です。 |
+| `max_rows_per_table` | `10000` | 1テーブルあたりの最大行数。これを超えるファイルは拒否されます。 |
+| `max_table_file_bytes` | `10000000` | テーブルJSONファイルの最大サイズ（バイト）。これを超えるファイルは読み込み前に拒否され、レプリケートされません。 |
 
-Limits are checked when a table is loaded. Changing a limit does not delete or truncate already loaded tables.
+制限はテーブルロード時にチェックされます。制限を変更しても既にロード済みのテーブルは削除や切り詰めされません。
 
-## Cluster Behavior
+## クラスター動作
 
-The plugin stores table content in EMQX's built-in replicated database. Loading or deleting a table is replicated to every node in the cluster, and each node rebuilds its in-memory cache from the stored table content.
+プラグインはEMQXの組み込みレプリケートデータベースにテーブル内容を保存します。テーブルのロードや削除はクラスター内のすべてのノードにレプリケートされ、各ノードは保存されたテーブル内容からメモリ内キャッシュを再構築します。
 
-Install and start the plugin on all nodes in the cluster. A node that was down during a table load or delete catches up when it restarts and rebuilds its cache from storage.
+クラスター内のすべてのノードにプラグインをインストールして起動してください。テーブルロードや削除時にダウンしていたノードは、再起動時にストレージからキャッシュを再構築して追いつきます。
 
-Cache updates are atomic for readers. A rule lookup sees either the old table version or the new table version, not a partial update.
+キャッシュの更新はリーダーに対して原子操作です。ルールの照会は古いテーブルバージョンか新しいテーブルバージョンのいずれかを完全に参照し、中途半端な更新は見ません。
 
-## Access and Sharing
+## アクセスと共有
 
-Mapping tables are managed only by administrators through the CLI. The tables are shared across tenant namespaces. A lookup returns the same rows for every client, whether or not the client belongs to a multi-tenancy namespace.
+マッピングテーブルはCLIを通じて管理者のみが管理できます。テーブルはテナントのネームスペースを超えて共有されます。照会はクライアントがマルチテナンシーのネームスペースに属しているかどうかに関わらず、すべてのクライアントに同じ行を返します。
 
-If rows must differ by tenant, encode the tenant in the table data. For example, include the tenant in the lookup key:
+テナントごとに行を分ける必要がある場合は、テーブルデータにテナントをエンコードしてください。例えば、照会キーにテナントを含めます。
 
 ```sql
 maptab_lookup('signals', concat(client_attrs.tns, ':', item_id))
 ```
 
-You can also use one table per tenant and compose the table name in the rule. Apply the same convention to every key in the table and every lookup site.
+またはテナントごとにテーブルを分け、ルール内でテーブル名を動的に構成することも可能です。テーブル内のすべてのキーと照会箇所に同じ規約を適用してください。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
 ## ダウンロード
 
-各 EMQX リリースに対応するプラグインパッケージ:
+各EMQXリリース向けのtarball：
 
-| EMQX バージョン | プラグインバージョン | パッケージ |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.5 | 0.1.1 | [emqx_maptabs-0.1.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.5/emqx_maptabs-0.1.1.tar.gz) |
 
