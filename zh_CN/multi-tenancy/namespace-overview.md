@@ -119,7 +119,7 @@ authorization.include_mountpoint = true
 
 启用 `rule_engine.limit_selects_in_namespace`（默认启用）后，该配置可防止其他命名空间中的消息和客户端相关事件触发命名空间规则。EMQX 通过客户端属性 `client_attrs.tns` 判断客户端所属的命名空间。从 EMQX 6.1.5 开始，该配置还会将规则的消息重新发布动作输出主题限制在规则所属的命名空间内。
 
-渲染主题模板后，如果生成的主题尚未以规则所属的命名空间开头，EMQX 会添加 `<namespace>/` 前缀。已包含 `<namespace>/` 前缀的主题保持不变。全局规则以及设置了 `rule_engine.limit_selects_in_namespace = false` 的部署仍会直接发布到渲染后的主题，不添加规则所属的命名空间。
+渲染主题模板后，如果生成的主题尚未以 `<namespace>/` 开头，EMQX 会添加 `<namespace>/` 前缀。已包含 `<namespace>/` 前缀的主题保持不变。全局规则以及设置了 `rule_engine.limit_selects_in_namespace = false` 的部署仍会直接发布到渲染后的主题，不添加规则所属的命名空间。
 
 消息重新发布动作的这一行为不依赖 `mqtt.namespace_as_mountpoint`。该配置不会限制客户端跨命名空间发布或订阅主题。如需隔离客户端的主题访问，还需要配置挂载点进行主题隔离和授权规则。
 
