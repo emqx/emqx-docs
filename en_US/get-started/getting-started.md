@@ -50,7 +50,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
 
 ### Install EMQX Using Installation Package
 
-You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
+You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 26 (Tahoe) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
 
 ::: tip
 
@@ -60,11 +60,11 @@ Considering all the runtime dependencies, it is recommended to use installation 
 
 1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
 
-2. Select the latest version `@EE_VERSION@` and select `macOS 15 arm64 / zip` from **Package Type**.
+2. Select the latest version `@EE_VERSION@` and select `macOS 26 arm64 / zip` from **Package Type**.
 
 3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
-5. To run EMQX, enter:
+4. To run EMQX, enter:
 
    ```bash
    ./emqx/bin/emqx foreground
@@ -76,11 +76,11 @@ Considering all the runtime dependencies, it is recommended to use installation 
    ./emqx/bin/emqx start
    ```
 
-6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
+5. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../guides/dashboard/introduction.md), from where you can connect to your clients or check the running status.
 
    The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
 
-7. To stop EMQX, enter:
+6. To stop EMQX, enter:
 
    ```bash
    ./emqx/bin/emqx stop
@@ -151,4 +151,3 @@ So far, you have completed the installation, startup, and access test of EMQX, y
 ## Frequently Asked Questions
 
 You can visit the [EMQ Q&A Community](https://askemq.com/) to participate in discussions, ask and answer questions about the usage of EMQX and other EMQ-related products, and exchange experiences with other EMQX users in IoT-related technologies. Additionally, feel free to [contact us](https://www.emqx.com/en/contact) at any time for professional technical support.
-
