@@ -915,6 +915,7 @@
                 - extensions/plugin-catalog/6.1/emqx-backup-sync
                 - extensions/plugin-catalog/6.1/emqx-bridge-mqtt-dq
                 - extensions/plugin-catalog/6.1/emqx-offline-messages
+                - extensions/plugin-catalog/6.1/emqx-sync-request
                 - extensions/plugin-catalog/6.1/emqx-username-quota
                 - extensions/plugin-catalog/6.1/emqx-unsgov
         # - extensions/lang-lua

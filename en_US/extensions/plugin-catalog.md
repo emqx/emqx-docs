@@ -36,6 +36,12 @@ This plugin forwards local MQTT messages to another MQTT broker, buffering them 
 
 This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
 
+## Messaging
+
+[Sync Request](./plugin-catalog/6.1/emqx-sync-request.md)
+
+This plugin lets an HTTP caller publish one MQTT request through the EMQX REST API and wait synchronously for the first matching MQTT response.
+
 ## Connection Management
 
 [Per-username Session Quota](./plugin-catalog/6.1/emqx-username-quota.md)
