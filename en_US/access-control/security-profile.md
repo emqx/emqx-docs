@@ -15,6 +15,15 @@ Set the `EMQX_SECURITY_PROFILE` environment variable before starting the node:
 export EMQX_SECURITY_PROFILE=hardened
 ```
 
+For nodes installed from rpm or deb packages and managed by systemd, set the variable in the `emqx` service. Run `systemctl edit emqx` and add the following lines to the override file:
+
+```ini
+[Service]
+Environment=EMQX_SECURITY_PROFILE=hardened
+```
+
+Then restart the node with `systemctl restart emqx`.
+
 EMQX reads the variable once at boot. Valid values are `legacy`, `hardened`, or empty (which selects the default). Any other value stops the node from starting. Set the same value on every node in a cluster.
 
 ::: tip
@@ -31,7 +40,7 @@ The `hardened` profile changes the following behaviors compared to `legacy`.
 
 ### Listener Exposure
 
-- **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, and secure WebSocket listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
+- **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, secure WebSocket and QUIC listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
 - **The Dashboard HTTP listener binds to loopback by default.** The Dashboard HTTP listener with an omitted or port-only `bind` listens on the loopback interface only. Configure an explicit bind address to accept external connections.
 
 ### Authentication
@@ -39,13 +48,16 @@ The `hardened` profile changes the following behaviors compared to `legacy`.
 - **Explicit authentication is required.** Clients are denied when no authenticators are configured, or when all authenticators are disabled. To explicitly allow anonymous access on a listener, set the listener's `enable_authn = false`.
 - **Authentication backend failures deny access.** Authenticator backend errors, malformed backend responses, errors evaluating authenticator preconditions, and unavailable JWT verification keys deny the client instead of continuing to the next authenticator. Set `authentication_settings.ignore_backend_failures = true` to allow fallback to later authenticators.
 - **Missing JWTs are not ignored by the JWT authenticator.** The JWT authenticator denies clients that omit the configured JWT field. Set the authenticator's `on_missing_jwt = ignore` to allow those clients to continue to the next authenticator.
+- **Non-JWT credentials must skip JWT authenticators in mixed authentication chains.** A JWT authenticator fails authentication when it receives a malformed JWT. When a JWT authenticator and a later password-based authenticator read a JWT or a password from the same field, for example `password`, set the JWT authenticator's `precondition = "is_jwt(password)"` so that plain passwords continue to the next authenticator.
 - **Outbound JWKS TLS is verified.** The JWT authenticator verifies peer certificates and hostnames when it fetches keys from a JWKS HTTPS endpoint. Endpoints with untrusted certificates become unavailable. Set `ssl.verify = verify_none` on a specific JWKS endpoint to disable verification.
 
 ### Authorization
 
 - **Authorization backend failures deny the operation.** Authorization backend errors, malformed rules, and template evaluation errors deny the publish or subscribe operation instead of continuing to later sources or falling back to the no-match behavior. Set `authorization.ignore_backend_failures = true` to ignore backend failures and proceed to the next authorization source.
+- **Forbidden characters in authorization topic-template substitutions deny the operation.** By default, a substituted value that contains `/`, `+`, or `#` causes the rule to return no match under `legacy` and to deny the operation under `hardened`. For example, a client with client ID `i/am/+/good/#` matched against the rule `{allow, all, all, ["t/${clientid}/#"]}.`. Allow individual characters with `authorization.topic_template_allow.slash`, `authorization.topic_template_allow.plus`, or `authorization.topic_template_allow.hash`.
 - **The default file authorization source is deny-by-default.** The final allow rule in the built-in file source applies only under the `legacy` profile. Under `hardened`, operations that match no rule fall through to `authorization.no_match`, which defaults to `deny`. Add a final `{allow, all}.` rule to the ACL file for permissive behavior.
 - **Internal subscriptions are authorized.** Subscriptions made by features such as Auto Subscribe undergo topic validation, authorization, capability checks, and subscribe hooks. Privileged management force-subscribe operations continue to bypass MQTT authorization.
+- **A security profile matcher for authorization rules is available.** Use `{security_profile, legacy}` or `{security_profile, hardened}` as a rule condition, including within `and` and `or` expressions, to apply custom rules only under the selected profile.
 
 ### Delayed Publishing
 
