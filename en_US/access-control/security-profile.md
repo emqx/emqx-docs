@@ -9,22 +9,23 @@ EMQX 7.0 is planned to use `hardened` by default. Use `hardened` for initial dep
 
 ## Select a Profile
 
-Set the `EMQX_SECURITY_PROFILE` environment variable before starting the node:
+The profile is selected by the `EMQX_SECURITY_PROFILE` environment variable. Set it in the `emqx.env` file, which the `emqx` command sources on every invocation:
+
+- rpm and deb installs: `/etc/emqx/emqx.env`
+- Docker image: `/opt/emqx/etc/emqx.env`
+- tar.gz installs: `etc/emqx.env`
+
+Uncomment the `EMQX_SECURITY_PROFILE` line in the file and set the value:
 
 ```bash
-export EMQX_SECURITY_PROFILE=hardened
+EMQX_SECURITY_PROFILE=hardened
 ```
 
-For nodes installed from rpm or deb packages and managed by systemd, set the variable in the `emqx` service. Run `systemctl edit emqx` and add the following lines to the override file:
+Then restart the node.
 
-```ini
-[Service]
-Environment=EMQX_SECURITY_PROFILE=hardened
-```
+Values in `emqx.env` override variables inherited from the environment, and package upgrades keep edits to the file. The variable can also be set in the environment directly, for example with `docker run -e EMQX_SECURITY_PROFILE=hardened`, or with `export EMQX_SECURITY_PROFILE=hardened` before a foreground start.
 
-Then restart the node with `systemctl restart emqx`.
-
-EMQX reads the variable once at boot. Valid values are `legacy`, `hardened`, or empty (which selects the default). Any other value stops the node from starting. Set the same value on every node in a cluster.
+EMQX reads the variable once at boot, before it parses the configuration files, so the profile cannot be set in a configuration file. Valid values are `legacy`, `hardened`, or empty (which selects the default). Any other value stops the node from starting. Set the same value on every node in a cluster.
 
 ::: tip
 The security profile only changes default behaviors. Most of the behaviors listed below can also be configured individually, regardless of the selected profile.

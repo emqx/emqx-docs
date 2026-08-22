@@ -9,22 +9,23 @@ EMQX 计划从 7.0 版本开始默认使用 `hardened`。首次部署时，建�
 
 ## 选择方案
 
-在启动节点前设置环境变量 `EMQX_SECURITY_PROFILE`：
+安全配置方案由环境变量 `EMQX_SECURITY_PROFILE` 选择。请在 `emqx.env` 文件中设置该变量，`emqx` 命令的每次调用都会加载此文件：
+
+- rpm 和 deb 安装：`/etc/emqx/emqx.env`
+- Docker 镜像：`/opt/emqx/etc/emqx.env`
+- tar.gz 安装：`etc/emqx.env`
+
+取消文件中 `EMQX_SECURITY_PROFILE` 行的注释并设置值：
 
 ```bash
-export EMQX_SECURITY_PROFILE=hardened
+EMQX_SECURITY_PROFILE=hardened
 ```
 
-对于通过 rpm 或 deb 包安装并由 systemd 管理的节点，请在 `emqx` 服务中设置该变量。运行 `systemctl edit emqx`，在覆盖文件中添加以下内容：
+然后重启节点。
 
-```ini
-[Service]
-Environment=EMQX_SECURITY_PROFILE=hardened
-```
+`emqx.env` 中的值会覆盖从环境继承的变量，包升级会保留对该文件的修改。也可以直接在环境中设置该变量，例如使用 `docker run -e EMQX_SECURITY_PROFILE=hardened`，或在前台启动前执行 `export EMQX_SECURITY_PROFILE=hardened`。
 
-然后运行 `systemctl restart emqx` 重启节点。
-
-EMQX 在启动时读取该变量一次。有效值为 `legacy`、`hardened` 或空（使用默认值）。其他值会导致节点启动失败。集群中的每个节点应设置相同的值。
+EMQX 在启动时读取该变量一次，读取发生在解析配置文件之前，因此无法在配置文件中设置安全配置方案。有效值为 `legacy`、`hardened` 或空（使用默认值）。其他值会导致节点启动失败。集群中的每个节点应设置相同的值。
 
 ::: tip
 安全配置方案只改变默认行为。下文列出的大多数行为也可以单独配置，与所选方案无关。
