@@ -76,6 +76,16 @@ Under the `hardened` profile, EMQX drops pending delayed messages created before
 - **Default Dashboard credentials are not accepted.** Local Dashboard accounts with the default password `public` cannot log in. This includes administrator accounts created before an upgrade. Change the password before switching to the `hardened` profile.
 - **SAML signatures are verified.** SAML single sign-on requires signatures on both the response envelope and the assertion. Configure `idp_signs_envelopes` and `idp_signs_assertions` to match the identity provider.
 
+## Rolling Upgrade
+
+All nodes in a cluster must use the same security profile. When profiles differ between nodes, access-control decisions depend on which node a client connects to. Nodes running versions before 6.3 always behave as `legacy`.
+
+When performing a rolling upgrade from a version before 6.3:
+
+1. Do not set `EMQX_SECURITY_PROFILE=hardened` on the upgraded nodes. Leave the variable unset, or set it to `legacy`, so that upgraded nodes behave the same as the nodes that still run the old version.
+2. Complete the rolling upgrade on every node.
+3. Switch the cluster to `hardened` afterwards by following the migration steps below.
+
 ## Migration
 
 To move an existing deployment from `legacy` to `hardened`:
