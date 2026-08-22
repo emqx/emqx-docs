@@ -54,9 +54,9 @@ EMQX 在启动时读取该变量一次。有效值为 `legacy`、`hardened` 或�
 ### 授权
 
 - **授权后端故障将拒绝操作。** 授权后端错误、规则格式错误和模板求值错误会直接拒绝发布或订阅操作，而不是继续尝试后续数据源或回退到未匹配规则时的处理逻辑。设置 `authorization.ignore_backend_failures = true` 可忽略后端故障并继续下一个授权数据源。
-- **授权主题模板替换值中的禁用字符将拒绝操作。** 默认情况下，替换值包含 `/`、`+` 或 `#` 时，该规则在 `legacy` 方案下视为未匹配，在 `hardened` 方案下直接拒绝操作。例如，客户端 ID 为 `i/am/+/good/#` 的客户端匹配规则 `{allow, all, all, ["t/${clientid}/#"]}.` 时即属于这种情况。可通过 `authorization.topic_template_allow.slash`、`authorization.topic_template_allow.plus` 或 `authorization.topic_template_allow.hash` 单独放行对应字符。 内置文件数据源中最后一条 `allow` 规则仅在 `legacy` 方案下生效。在 `hardened` 方案下，未匹配任何规则的操作将落入 `authorization.no_match`，其默认值为 `deny`。在 ACL 文件末尾添加 `{allow, all}.` 规则可恢复宽松行为。
+- **授权主题模板替换值中的禁用字符将拒绝操作。** 默认情况下，替换值包含 `/`、`+` 或 `#` 时，该规则在 `legacy` 方案下视为未匹配，在 `hardened` 方案下直接拒绝操作。例如，客户端 ID 为 `i/am/+/good/#` 的客户端匹配规则 `{allow, all, all, ["t/${clientid}/#"]}.` 时即属于这种情况。可通过 `authorization.topic_template_allow.slash`、`authorization.topic_template_allow.plus` 或 `authorization.topic_template_allow.hash` 单独放行对应字符。
+- **默认文件授权数据源变为默认拒绝。** 默认 `acl.conf` 的最后一条规则是 `{allow, {security_profile, legacy}}.`，该规则在 `legacy` 方案下允许操作，在 `hardened` 方案下不生效。在 `hardened` 方案下，未匹配任何规则的操作将落入 `authorization.no_match`，其默认值为 `deny`。将最后一条规则改为 `{allow, all}.` 可恢复宽松行为。`{security_profile, legacy}` 和 `{security_profile, hardened}` 条件可用于 `acl.conf` 中的任意规则（包括在 `and` 和 `or` 表达式中），使自定义规则仅在所选方案下生效。
 - **内部订阅需要授权。** 自动订阅（Auto Subscribe）等功能发起的订阅会经过主题验证、授权检查、MQTT 能力检查和订阅钩子。特权管理类的强制订阅操作仍然绕过 MQTT 授权。
-- **授权规则支持安全配置方案匹配条件。** 可在规则条件中使用 `{security_profile, legacy}` 或 `{security_profile, hardened}`（包括在 `and` 和 `or` 表达式中），使自定义规则仅在所选方案下生效。
 
 ### 延迟发布
 
