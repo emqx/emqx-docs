@@ -1,46 +1,46 @@
 # Sync Request
 
-The `emqx_sync_request` plugin lets an HTTP caller publish one MQTT request through the EMQX REST API and wait synchronously for the first matching MQTT response.
+`emqx_sync_request`プラグインは、HTTP呼び出し元がEMQX REST APIを介して1つのMQTTリクエストをパブリッシュし、最初に一致するMQTTレスポンスを同期的に待機できる機能を提供します。
 
-Use this plugin when an HTTP-based backend service needs to send a command or query to a connected MQTT client and receive the result in the same HTTP request. The plugin handles request delivery, response correlation, timeout handling, and concurrent inflight requests, so the HTTP caller does not need to run its own MQTT client or implement MQTT request/response tracking.
+HTTPベースのバックエンドサービスが接続されたMQTTクライアントにコマンドやクエリを送信し、同じHTTPリクエスト内で結果を受け取りたい場合にこのプラグインを使用します。プラグインはリクエストの配信、レスポンスの相関、タイムアウト処理、および同時進行中のリクエスト管理を行うため、HTTP呼び出し元は独自にMQTTクライアントを実行したり、MQTTリクエスト/レスポンスの追跡を実装する必要がありません。
 
-## How It Works
+## 動作概要
 
-The plugin exposes a runtime API through the plugin API gateway:
+プラグインはプラグインAPIゲートウェイを通じてランタイムAPIを公開します：
 
 ```http
 POST /api/v5/plugin_api/emqx_sync_request/request
 ```
 
-When EMQX receives the HTTP request, the plugin finds the online MQTT subscriber for the request topic, delivers the MQTT request directly to that subscriber, and waits for a matching response message. For MQTT 5 responders, the response must match both the response topic and the Correlation Data that uses `request_id` as its value. For MQTT 3 responders, which do not support Correlation Data, responses are matched by response topic in request sequence.
+EMQXがHTTPリクエストを受信すると、プラグインはリクエストトピックに対するオンラインのMQTTサブスクライバーを特定し、そのサブスクライバーに直接MQTTリクエストを配信し、一致するレスポンスメッセージを待機します。MQTT 5のレスポンダーの場合、レスポンスはレスポンストピックと`request_id`を値とするCorrelation Dataの両方に一致する必要があります。Correlation DataをサポートしないMQTT 3のレスポンダーでは、レスポンスはリクエストの順序に従いレスポンストピックでマッチングされます。
 
-Request topics must match one online, non-shared subscriber exactly:
+リクエストトピックは、オンラインでかつ非共有のサブスクライバーに正確に一致する必要があります：
 
-- Wildcard topic filters are not matched as request receivers.
-- Shared subscriptions are not accepted as request receivers.
-- If no exact subscriber is online, the API returns `404 NO_SUBSCRIBERS`.
-- If the request topic has a shared subscription or more than one exact subscriber, the API returns `409 CONFLICT`.
+- ワイルドカードトピックフィルターはリクエスト受信者としてマッチしません。
+- 共有サブスクリプションはリクエスト受信者として受け付けません。
+- 正確なサブスクライバーがオンラインに存在しない場合、APIは`404 NO_SUBSCRIBERS`を返します。
+- リクエストトピックに共有サブスクリプションがあるか、正確なサブスクライバーが複数いる場合、APIは`409 CONFLICT`を返します。
 
-## Delivery Semantics
+## 配信セマンティクス
 
-The plugin stores inflight requests in local node memory only. It does not persist requests, subscribe to response topics, or modify MQTT payloads.
+プラグインはインフライトリクエストをローカルノードのメモリにのみ保存します。リクエストを永続化せず、レスポンストピックへのサブスクライブも行わず、MQTTペイロードの変更も行いません。
 
-Request messages are injected by direct session delivery to the single exact subscriber. They do not pass through the normal MQTT publish pipeline. As a result, request messages are not processed by the rule engine, schema validation, message transformation, retained message handling, or delayed publish, and they do not use the generic `/publish` path.
+リクエストメッセージは単一の正確なサブスクライバーに対して直接セッション配信されます。通常のMQTTパブリッシュパイプラインは通過しません。そのため、リクエストメッセージはルールエンジン、スキーマ検証、メッセージ変換、保持メッセージ処理、遅延パブリッシュの対象外であり、一般的な`/publish`パスも使用しません。
 
-The HTTP wait timeout is a single deadline shared by remote dispatch and the local wait for the MQTT response. Remote dispatch time counts against the same timeout instead of adding a separate full wait.
+HTTPの待機タイムアウトは、リモートディスパッチとMQTTレスポンスのローカル待機の両方に共有される単一の期限です。リモートディスパッチ時間も同じタイムアウトにカウントされ、別途待機時間が加算されることはありません。
 
-Matching responses are observed through the broker `message.publish` hook on the node that delivered the request. The responder should publish the response from a client connected to that same node, typically the same connection that received the request. A response published from another node is not matched.
+一致するレスポンスは、リクエストを配信したノードのブローカー`message.publish`フックを通じて監視されます。レスポンダーは通常、リクエストを受信したのと同じ接続のクライアントからレスポンスをパブリッシュすべきです。別のノードからパブリッシュされたレスポンスはマッチしません。
 
-## Configuration
+## 設定
 
-| Field | Default | Description |
+| フィールド | デフォルト | 説明 |
 | --- | --- | --- |
-| `default_timeout` | `10s` | Default HTTP wait timeout when the request body omits `timeout`. |
-| `max_timeout` | `60s` | Maximum allowed per-request `timeout`. |
-| `max_inflight_requests` | `10000` | Maximum number of local HTTP requests waiting for responses on one node. |
-| `max_payload_size` | `64KB` | Maximum MQTT request payload size and maximum MQTT response payload size. |
+| `default_timeout` | `10s` | リクエストボディに`timeout`がない場合のデフォルトHTTP待機タイムアウト。 |
+| `max_timeout` | `60s` | リクエストごとに許容される最大`timeout`。 |
+| `max_inflight_requests` | `10000` | 1ノードあたりレスポンス待機中のローカルHTTPリクエストの最大数。 |
+| `max_payload_size` | `64KB` | MQTTリクエストおよびレスポンスの最大ペイロードサイズ。 |
 
-Example configuration:
+設定例：
 
 ```hocon
 default_timeout = "10s"
@@ -49,7 +49,7 @@ max_inflight_requests = 10000
 max_payload_size = "64KB"
 ```
 
-Update plugin configuration through the standard plugin configuration API:
+標準のプラグイン設定APIを通じてプラグイン設定を更新します：
 
 ```http
 PUT /api/v5/plugins/<name-vsn>/config
@@ -57,9 +57,9 @@ PUT /api/v5/plugins/<name-vsn>/config
 
 ## HTTP API
 
-Use the same authentication methods as other EMQX management APIs. Bearer tokens obtained from Dashboard login are accepted. API keys must be sent with HTTP Basic authentication and require the `publish` scope.
+他のEMQX管理APIと同じ認証方法を使用します。ダッシュボードログインで取得したBearerトークンが利用可能です。APIキーはHTTP Basic認証で送信し、`publish`スコープが必要です。
 
-### Request Body
+### リクエストボディ
 
 ```json
 {
@@ -76,26 +76,26 @@ Use the same authentication methods as other EMQX management APIs. Bearer tokens
 }
 ```
 
-| Field | Type | Required | Default | Description |
+| フィールド | 型 | 必須 | デフォルト | 説明 |
 | --- | --- | --- | --- | --- |
-| `timeout` | duration string | No | `default_timeout` | Maximum time to wait for a matching MQTT response. It must be greater than `0` and no greater than `max_timeout`. Examples: `100ms`, `5s`, `1m`. |
-| `request` | object | Yes | - | MQTT request parameters. |
+| `timeout` | duration文字列 | いいえ | `default_timeout` | 一致するMQTTレスポンスを待つ最大時間。`0`より大きく、`max_timeout`以下でなければなりません。例：`100ms`、`5s`、`1m`。 |
+| `request` | オブジェクト | はい | - | MQTTリクエストパラメータ。 |
 
-The `request` object contains the following fields:
+`request`オブジェクトのフィールド：
 
-| Field | Type | Required | Default | Description |
+| フィールド | 型 | 必須 | デフォルト | 説明 |
 | --- | --- | --- | --- | --- |
-| `topic` | string | Yes | - | MQTT request topic. It must be a topic name, not a topic filter, so `+` and `#` are not allowed. Exactly one non-shared subscriber must be online for this topic. |
-| `response_topic` | string | Yes | - | MQTT response topic. It must also be a topic name without `+` or `#`. |
-| `request_id` | string | Yes | - | Plain string used as MQTT 5 Correlation Data and echoed in the HTTP response. The maximum length is 128 bytes. |
-| `qos` | integer | No | `0` | MQTT QoS for the request. Allowed values are `0`, `1`, and `2`. |
-| `payload_encoding` | string | No | `plain` | Request payload encoding. Allowed values are `plain` and `base64`. |
-| `payload` | string | Yes | - | Request payload. With `plain`, the string bytes are used as the MQTT payload. With `base64`, the value must be valid base64 and the decoded bytes are used as the MQTT payload. The MQTT payload must not exceed `max_payload_size`. |
-| `content_type` | string | No | - | MQTT 5 Content Type for the request. MQTT 3 clients do not receive this property. |
+| `topic` | 文字列 | はい | - | MQTTリクエストトピック。トピックフィルターではなくトピック名である必要があり、`+`や`#`は使用できません。このトピックに対して正確に1つの非共有サブスクライバーがオンラインでなければなりません。 |
+| `response_topic` | 文字列 | はい | - | MQTTレスポンストピック。こちらも`+`や`#`を含まないトピック名である必要があります。 |
+| `request_id` | 文字列 | はい | - | MQTT 5のCorrelation Dataとして使用され、HTTPレスポンスにも反映されるプレーン文字列。最大長は128バイトです。 |
+| `qos` | 整数 | いいえ | `0` | リクエストのMQTT QoS。許容値は`0`、`1`、`2`です。 |
+| `payload_encoding` | 文字列 | いいえ | `plain` | リクエストペイロードのエンコーディング。許容値は`plain`と`base64`です。 |
+| `payload` | 文字列 | はい | - | リクエストペイロード。`plain`の場合は文字列のバイト列がMQTTペイロードとして使用されます。`base64`の場合は有効なbase64文字列でなければならず、デコード後のバイト列がMQTTペイロードとして使用されます。MQTTペイロードは`max_payload_size`を超えてはいけません。 |
+| `content_type` | 文字列 | いいえ | - | MQTT 5のリクエスト用Content Type。MQTT 3クライアントはこのプロパティを受け取りません。 |
 
-### Success Response
+### 成功レスポンス
 
-A successful request returns HTTP `200`. The MQTT response payload is always returned as base64.
+成功したリクエストはHTTP `200`を返します。MQTTレスポンスペイロードは常にbase64で返されます。
 
 ```json
 {
@@ -111,41 +111,41 @@ A successful request returns HTTP `200`. The MQTT response payload is always ret
 }
 ```
 
-| Field | Description |
+| フィールド | 説明 |
 | --- | --- |
-| `code` | Always `OK`. |
-| `message` | Always `OK`. |
-| `response.topic` | MQTT response topic. |
-| `response.request_id` | The `request_id` from the HTTP request. |
-| `response.payload_encoding` | Always `base64`. |
-| `response.payload` | Base64-encoded MQTT response payload. |
-| `response.content_type` | Optional. MQTT 5 Content Type from the response PUBLISH. This field is omitted when the responder does not send it, including MQTT 3 responders. |
+| `code` | 常に`OK`。 |
+| `message` | 常に`OK`。 |
+| `response.topic` | MQTTレスポンストピック。 |
+| `response.request_id` | HTTPリクエストの`request_id`。 |
+| `response.payload_encoding` | 常に`base64`。 |
+| `response.payload` | base64エンコードされたMQTTレスポンスペイロード。 |
+| `response.content_type` | 任意。レスポンスPUBLISHのMQTT 5 Content Type。レスポンダーが送信しない場合（MQTT 3レスポンダーを含む）は省略されます。 |
 
-### Error Responses
+### エラーレスポンス
 
-Errors use the same `code` and `message` response shape as other EMQX management APIs.
+エラーは他のEMQX管理APIと同様の`code`と`message`のレスポンス形式を使用します。
 
-| HTTP Status | Code | Meaning |
+| HTTPステータス | コード | 意味 |
 | --- | --- | --- |
-| `400` | `BAD_REQUEST` | Invalid JSON body, invalid field value, request payload too large, or MQTT response payload too large. |
-| `401` | `BAD_API_KEY_OR_SECRET` | API key authentication failed. Returned by EMQX management API authentication. |
-| `403` | `UNAUTHORIZED_ROLE` | The API key does not have permission to call this API. Returned by EMQX management API authorization. |
-| `404` | `NO_SUBSCRIBERS` | No exact, non-shared subscriber is online for the request topic. Wildcard subscribers are ignored. |
-| `409` | `CONFLICT` | The request topic has a shared subscription or more than one exact subscriber. |
-| `429` | `TOO_MANY_REQUESTS` | The local node already has `max_inflight_requests` HTTP requests waiting for responses. |
-| `503` | `SERVICE_UNAVAILABLE` | Failed to dispatch the request to the subscriber node. |
-| `504` | `TIMEOUT` | Timed out waiting for a matching MQTT response. |
-| `500` | `INTERNAL_ERROR` | Unexpected server-side error. |
+| `400` | `BAD_REQUEST` | 無効なJSONボディ、無効なフィールド値、リクエストペイロードが大きすぎる、またはMQTTレスポンスペイロードが大きすぎる。 |
+| `401` | `BAD_API_KEY_OR_SECRET` | APIキー認証失敗。EMQX管理API認証による返却。 |
+| `403` | `UNAUTHORIZED_ROLE` | APIキーにこのAPIを呼び出す権限がない。EMQX管理API認可による返却。 |
+| `404` | `NO_SUBSCRIBERS` | リクエストトピックに対して正確な非共有サブスクライバーがオンラインにいない。ワイルドカードサブスクライバーは無視されます。 |
+| `409` | `CONFLICT` | リクエストトピックに共有サブスクリプションがあるか、正確なサブスクライバーが複数いる。 |
+| `429` | `TOO_MANY_REQUESTS` | このノードで既に`max_inflight_requests`のHTTPリクエストがレスポンス待機中。 |
+| `503` | `SERVICE_UNAVAILABLE` | リクエストをサブスクライバーノードにディスパッチできなかった。 |
+| `504` | `TIMEOUT` | 一致するMQTTレスポンスの待機がタイムアウトした。 |
+| `500` | `INTERNAL_ERROR` | 予期しないサーバー側エラー。 |
 
-## Operational Diagnostics
+## 運用診断
 
-The plugin provides a node-local diagnostic CLI command:
+プラグインはノードローカルの診断CLIコマンドを提供します：
 
 ```bash
 emqx ctl sync_request status
 ```
 
-Example output:
+出力例：
 
 ```text
 Counters since plugin start:
@@ -165,32 +165,32 @@ sync_request.inflight_requests: 0
 sync_request.pending_responses: 0
 ```
 
-These values are not cluster-wide aggregates. The command reads only the node where it runs. In a cluster, run it on each node that may receive the HTTP request or deliver the MQTT response.
+これらの値はクラスター全体の集計ではありません。コマンドは実行したノードの情報のみを読み取ります。クラスター環境では、HTTPリクエストを受信またはMQTTレスポンスを配信する可能性のある各ノードで実行してください。
 
-Only requests that reach the plugin handler are counted. Management API authentication and authorization failures are handled by EMQX before the plugin runs.
+プラグインハンドラーに到達したリクエストのみがカウントされます。管理APIの認証・認可失敗はプラグイン実行前にEMQXが処理します。
 
-| Metric | Type | Scope | Description |
+| メトリクス | 種類 | スコープ | 説明 |
 | --- | --- | --- | --- |
-| `sync_request.requests.total` | counter | node-local | HTTP sync request attempts handled by this node. |
-| `sync_request.requests.succeeded` | counter | node-local | Requests that returned HTTP `200`. |
-| `sync_request.requests.failed` | counter | node-local | Requests that returned a non-`200` HTTP status. |
-| `sync_request.requests.bad_request` | counter | node-local | Requests rejected with `400 BAD_REQUEST`. |
-| `sync_request.requests.no_subscribers` | counter | node-local | Requests rejected because no exact, non-shared subscriber was online. |
-| `sync_request.requests.conflict` | counter | node-local | Requests rejected because the request topic matched multiple or shared subscribers. |
-| `sync_request.requests.too_many_requests` | counter | node-local | Requests rejected because this node reached `max_inflight_requests`. |
-| `sync_request.requests.dispatch_failed` | counter | node-local | Requests that could not be dispatched to the subscriber node. |
-| `sync_request.requests.timeout` | counter | node-local | Requests that timed out waiting for a matching MQTT response. |
-| `sync_request.requests.internal_error` | counter | node-local | Requests that failed with an unexpected internal error. |
-| `sync_request.inflight_requests` | gauge | node-local | Current number of HTTP requests waiting for MQTT responses on this node. |
-| `sync_request.pending_responses` | gauge | node-local | Current number of local pending response registrations created after request delivery. |
+| `sync_request.requests.total` | カウンター | ノードローカル | このノードで処理されたHTTP同期リクエストの試行回数。 |
+| `sync_request.requests.succeeded` | カウンター | ノードローカル | HTTP `200`を返したリクエスト数。 |
+| `sync_request.requests.failed` | カウンター | ノードローカル | HTTP `200`以外のステータスを返したリクエスト数。 |
+| `sync_request.requests.bad_request` | カウンター | ノードローカル | `400 BAD_REQUEST`で拒否されたリクエスト数。 |
+| `sync_request.requests.no_subscribers` | カウンター | ノードローカル | 正確な非共有サブスクライバーがオンラインにいないため拒否されたリクエスト数。 |
+| `sync_request.requests.conflict` | カウンター | ノードローカル | リクエストトピックが複数または共有サブスクライバーにマッチしたため拒否されたリクエスト数。 |
+| `sync_request.requests.too_many_requests` | カウンター | ノードローカル | このノードで`max_inflight_requests`に達したため拒否されたリクエスト数。 |
+| `sync_request.requests.dispatch_failed` | カウンター | ノードローカル | サブスクライバーノードへのディスパッチに失敗したリクエスト数。 |
+| `sync_request.requests.timeout` | カウンター | ノードローカル | 一致するMQTTレスポンスの待機がタイムアウトしたリクエスト数。 |
+| `sync_request.requests.internal_error` | カウンター | ノードローカル | 予期しない内部エラーで失敗したリクエスト数。 |
+| `sync_request.inflight_requests` | ゲージ | ノードローカル | このノードでMQTTレスポンス待機中のHTTPリクエスト数。 |
+| `sync_request.pending_responses` | ゲージ | ノードローカル | リクエスト配信後に作成されたローカルの保留中レスポンス登録数。 |
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
-## Download
+## ダウンロード
 
-Tarballs for each EMQX release:
+各EMQXリリース用のtarball：
 
-| EMQX Version | Plugin Version | Package |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.4 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.tar.gz) |
 
