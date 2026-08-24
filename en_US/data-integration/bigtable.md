@@ -2,9 +2,9 @@
 
 [Cloud Bigtable](https://cloud.google.com/bigtable) is a fully managed, wide-column NoSQL database service on Google Cloud. It is designed for large-scale, low-latency workloads, such as time series data, telemetry storage, event records, and high-throughput IoT data ingestion.
 
-EMQX supports integration with Bigtable through the rule engine and a Bigtable Sink. You can process MQTT messages with rule SQL, map the selected fields to Bigtable row keys and cell mutations, and append the processed data to a Bigtable table in real time.
+EMQX supports integration with Bigtable through the rule engine and a Bigtable Sink. You can process MQTT messages with rule SQL, map the selected fields to Bigtable row keys and cell mutations, and write the processed data to a Bigtable table in real time.
 
-This page introduces how the Bigtable data integration works and provides a draft workflow for creating and testing the integration in the EMQX Dashboard.
+This page introduces how the Bigtable data integration works and provides a workflow for creating and testing the integration in the EMQX Dashboard.
 
 ## How It Works
 
@@ -38,7 +38,7 @@ This section describes the preparations you need to complete before creating the
 - Authentication information required by the authentication method you plan to use:
   - **Service Account JSON**: A service account key JSON file.
   - **Workload Identity Federation (WIF)**: A workload identity pool, provider, project ID, project number, service account email, and OAuth 2.0 client credentials from the external identity provider.
-  - **Attached Service Account**: An EMQX deployment running in a Google Cloud environment, such as Google Compute Engine or GKE, with an attached service account that has access to the target Bigtable resources.
+  - **Attached Service Account**: An EMQX deployment running on GCP Compute Engine that meets the [Attached Service Account prerequisites](#attached-service-account-prerequisites).
 
 ### Create Service Account Key in GCP
 
@@ -89,9 +89,13 @@ The **OAuth Request Scope** must match the application's audience (`aud`) exactl
 
 :::
 
-### Prepare an Attached Service Account
+### Attached Service Account Prerequisites
 
-To use **Attached Service Account** authentication, deploy EMQX in a Google Cloud runtime environment that supports attached service accounts, such as Google Compute Engine or GKE. Attach a service account that has permissions to access the target Bigtable instance and table.
+To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. Make sure the instance's OAuth access scopes allow access to Bigtable. Google recommends using the `cloud-platform` scope (`https://www.googleapis.com/auth/cloud-platform`) and restricting the service account's permissions through IAM roles. The service account must have permission to access the target Bigtable instance and table. For more information, see [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts) in the Google Cloud documentation.
+
+The target Bigtable instance and table must be in the GCP project associated with the Compute Engine instance. In an EMQX cluster, every node must meet these requirements and run on a Compute Engine instance in that project.
+
+When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
 
 ### Create and Manage Bigtable Resources in GCP
 
@@ -130,7 +134,7 @@ Before adding a Bigtable Sink action, create a Bigtable connector to establish t
          - **OAuth Token Endpoint URI**: OAuth token endpoint URI of the OIDC provider.
          - **OAuth Request Scope**: `scope` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
          - **OAuth Request Audience**: `audience` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
-     - **Attached Service Account**: Use the service account attached to the runtime environment. For prerequisites, see [Prepare an Attached Service Account](#prepare-an-attached-service-account).
+     - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. For prerequisites, see [Attached Service Account Prerequisites](#attached-service-account-prerequisites).
    - **Enable TLS**: Enable TLS if it is required by your deployment.
    - **Advanced Settings**: Expand this section to configure advanced connection options.
 5. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to Bigtable.
@@ -234,8 +238,9 @@ This section demonstrates how to create a rule that writes MQTT messages to Bigt
 
 9. Configure **Fallback Actions** if you want to improve reliability when message delivery fails. See [Fallback Actions](./data-bridges.md#fallback-actions).
 10. Configure **Advanced Settings** as needed. See [Advanced Settings](#advanced-settings).
-11. Click **Create** to complete the Sink configuration.
-12. Back on the **Create Rule** page, click **Create** to create the rule.
+11. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to Bigtable.
+12. Click **Create** to complete the Sink configuration.
+13. Back on the **Create Rule** page, click **Create** to create the rule.
 
 ## Test the Rule
 

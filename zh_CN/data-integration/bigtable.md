@@ -4,7 +4,7 @@
 
 EMQX 支持通过规则引擎和 Bigtable Sink 与 Bigtable 集成。您可以使用规则 SQL 处理 MQTT 消息，将规则输出字段映射为 Bigtable 的行键和单元格变更，并将处理后的数据实时写入 Bigtable 表。
 
-本页面介绍 Bigtable 数据集成的工作原理，并提供在 EMQX Dashboard 中创建和验证该集成的草稿操作流程。
+本页面介绍 Bigtable 数据集成的工作原理，并提供在 EMQX Dashboard 中创建和验证该集成的操作流程。
 
 ## 工作原理
 
@@ -38,7 +38,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程
 - 已准备您计划使用的认证方式所需的信息：
   - **服务账号 JSON**：服务账号密钥 JSON 文件。
   - **工作负载身份联合 (WIF)**：工作负载身份池、提供商、GCP 项目 ID、项目编号、服务账号邮箱，以及外部身份提供商的 OAuth 2.0 客户端凭证。
-  - **附加服务账号**：EMQX 运行在 Google Cloud 环境中，例如 Google Compute Engine 或 GKE，并已绑定具有目标 Bigtable 资源访问权限的服务账号。
+  - **附加服务账号**：EMQX 运行在满足[附加服务账号前提条件](#附加服务账号前提条件)的 GCP Compute Engine 实例上。
 
 ### 创建服务账号凭证
 
@@ -89,9 +89,13 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程
 
 :::
 
-### 准备附加服务账号
+### 附加服务账号前提条件
 
-如需使用**附加服务账号**认证方式，请将 EMQX 部署在支持附加服务账号的 Google Cloud 运行环境中，例如 Google Compute Engine 或 GKE，并绑定具有目标 Bigtable 实例和表访问权限的服务账号。
+要使用**附加服务账号**认证，EMQX 必须运行在已附加服务账号的 GCP Compute Engine 实例上。确保该实例的 OAuth 访问范围允许访问 Bigtable。Google 建议使用 `cloud-platform` 访问范围（`https://www.googleapis.com/auth/cloud-platform`），并通过 IAM 角色限制服务账号的权限。该服务账号必须具有访问目标 Bigtable 实例和表的权限。详情参见 Google Cloud 文档中的[服务账号](https://cloud.google.com/compute/docs/access/service-accounts?hl=zh-cn)。
+
+目标 Bigtable 实例和表必须位于该 Compute Engine 实例所属的 GCP 项目中。在 EMQX 集群中，每个节点都必须满足上述要求，并运行在该项目的 Compute Engine 实例上。
+
+连接器启动时，EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌，无需上传服务账号密钥文件。
 
 ### 在 GCP 中创建和管理 Bigtable 资源
 
@@ -130,7 +134,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程
          - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
          - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
          - **OAuth 请求受众 (Audience)**：向 OAuth 服务器请求访问令牌时指定的 `audience`（如提供商要求则需填写）。
-     - **附加服务账号**：使用运行环境绑定的服务账号。前置条件请参见[准备附加服务账号](#准备附加服务账号)。
+     - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[附加服务账号前提条件](#附加服务账号前提条件)。
    - **启用 TLS**：如果您的部署需要 TLS，可启用该选项。
    - **高级设置**：展开该区域可配置高级连接选项。
 5. 在点击**创建**之前，您可以点击**测试连接**，验证 EMQX 是否能够连接到 Bigtable。
@@ -234,8 +238,9 @@ actions.bigtable.my_bigtable_sink {
 
 9. 如需提升消息投递失败时的可靠性，可配置**备选动作**。参见[备选动作](./data-bridges.md#备选动作)。
 10. 根据需要配置**高级设置**。参见[高级设置](#高级设置)。
-11. 点击**创建**完成 Sink 配置。
-12. 返回**创建规则**页面，点击**创建**创建规则。
+11. 在点击**创建**之前，您可以点击**测试连接**，验证 Sink 是否能够连接到 Bigtable。
+12. 点击**创建**完成 Sink 配置。
+13. 返回**创建规则**页面，点击**创建**创建规则。
 
 ## 测试规则
 

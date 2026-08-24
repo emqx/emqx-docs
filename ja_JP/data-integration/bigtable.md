@@ -2,9 +2,9 @@
 
 [Cloud Bigtable](https://cloud.google.com/bigtable) is a fully managed, wide-column NoSQL database service on Google Cloud. It is designed for large-scale, low-latency workloads, such as time series data, telemetry storage, event records, and high-throughput IoT data ingestion.
 
-EMQX supports integration with Bigtable through the rule engine and a Bigtable Sink. You can process MQTT messages with rule SQL, map the selected fields to Bigtable row keys and cell mutations, and append the processed data to a Bigtable table in real time.
+EMQX supports integration with Bigtable through the rule engine and a Bigtable Sink. You can process MQTT messages with rule SQL, map the selected fields to Bigtable row keys and cell mutations, and write the processed data to a Bigtable table in real time.
 
-This page introduces how the Bigtable data integration works and provides a draft workflow for creating and testing the integration in the EMQX Dashboard.
+This page introduces how the Bigtable data integration works and provides a workflow for creating and testing the integration in the EMQX Dashboard.
 
 ## How It Works
 
@@ -35,10 +35,14 @@ This section describes the preparations you need to complete before creating the
 - Knowledge about [Data Integration](./data-bridges.md)
 - A Google Cloud project with Bigtable enabled
 - A Bigtable instance, table, and at least one column family
+- Authentication information required by the authentication method you plan to use:
+  - **Service Account JSON**: A service account key JSON file.
+  - **Workload Identity Federation (WIF)**: A workload identity pool, provider, project ID, project number, service account email, and OAuth 2.0 client credentials from the external identity provider.
+  - **Attached Service Account**: An EMQX deployment running on GCP Compute Engine that meets the [Attached Service Account prerequisites](#attached-service-account-prerequisites).
 
 ### Create Service Account Key in GCP
 
-To allow EMQX to connect to Bigtable, create a Google Cloud service account and generate a key in JSON format.
+To use **Service Account JSON** authentication, create a Google Cloud service account and generate a key in JSON format.
 
 1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.
 2. Grant the service account permissions to write to the Bigtable instance and table. For example, assign a Bigtable role that allows data read/write operations on the target table.
@@ -58,8 +62,9 @@ Workload Identity Federation (WIF) allows EMQX to access GCP resources without a
 To use WIF, complete the following in your GCP project before creating the connector:
 
 1. In the Google Cloud console, go to **IAM & Admin** -> **Workload Identity Federation**, create a workload identity pool, and note the **Pool ID** and **Project Number**.
-2. Add a provider to the pool and note the **Provider ID**. For OIDC-based authentication, obtain the OAuth 2.0 client credentials from your external identity provider.
-3. Grant the workload identity pool permission to impersonate the GCP service account with access to the Bigtable instance and table.
+2. Add a provider to the pool and note the **Provider ID**. For OIDC-based authentication, obtain the OAuth 2.0 client credentials from your external identity provider, including the client ID, client secret, token endpoint URI, and request scope.
+3. Grant the workload identity pool permission to impersonate the GCP service account with access to the Bigtable instance and table. Note the service account email.
+4. Note the **GCP Project ID** of the project that contains the Bigtable resources.
 
 ::: tip
 
@@ -67,18 +72,43 @@ See [Configure Workload Identity Federation](https://cloud.google.com/iam/docs/w
 
 :::
 
+Example: Microsoft Azure (Entra ID)
+
+Register an application that exposes an API in [Microsoft Entra ID](https://portal.azure.com/) and create a client secret for it. Use the following values when configuring the connector:
+
+| Connector Field | Value |
+| --- | --- |
+| **OAuth Token Endpoint URI** | `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token` |
+| **OAuth Client ID** | Application (client) ID, in the format `api://<application-id>` |
+| **OAuth Client Secret** | Client secret generated for the application |
+| **OAuth Request Scope** | `api://<application-id>/.default` |
+
+::: note
+
+The **OAuth Request Scope** must match the application's audience (`aud`) exactly, otherwise the token exchange with GCP STS fails. When granting service account access to the WIF pool, use the **Object ID**, not the application ID, as the subject identifier. The Object ID is available on the application's overview page under **Enterprise applications** in the Azure portal.
+
+:::
+
+### Attached Service Account Prerequisites
+
+To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. Make sure the instance's OAuth access scopes allow access to Bigtable. Google recommends using the `cloud-platform` scope (`https://www.googleapis.com/auth/cloud-platform`) and restricting the service account's permissions through IAM roles. The service account must have permission to access the target Bigtable instance and table. For more information, see [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts) in the Google Cloud documentation.
+
+The target Bigtable instance and table must be in the GCP project associated with the Compute Engine instance. In an EMQX cluster, every node must meet these requirements and run on a Compute Engine instance in that project.
+
+When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
+
 ### Create and Manage Bigtable Resources in GCP
 
 Before configuring the Bigtable data integration in EMQX, create the target Bigtable resources in Google Cloud.
 
 1. In the Google Cloud console, go to the **Bigtable** page.
-2. Create or select a Bigtable instance. Note the instance ID, for example, `emqxinst`.
+2. Create or select a Bigtable instance. When creating an instance, **Instance name** is only used as the display name in the Google Cloud console. You can enter a readable name, such as `EMQX MQTT Messages`. **Instance ID** is the value you will use later in EMQX, and should be a simple unique identifier, such as `emqxinst`.
 3. Create a table. Note the table ID, for example, `mqtt_messages`.
 4. Create at least one column family in the table, for example, `cf`.
 
    ::: tip
 
-   The **Instance ID** and **Table ID** used in EMQX are simple identifiers, such as `emqxinst` and `mqtt_messages`. They are not fully qualified resource names such as `projects/<project-id>/instances/<instance-id>`.
+   EMQX uses the **Instance ID** and **Table ID**, not the instance display name in the Google Cloud console or fully qualified resource names such as `projects/<project-id>/instances/<instance-id>`.
 
    :::
 
@@ -86,17 +116,27 @@ Before configuring the Bigtable data integration in EMQX, create the target Bigt
 
 Before adding a Bigtable Sink action, create a Bigtable connector to establish the connection between EMQX and Bigtable.
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
+1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
 2. Click **Create** in the top right corner of the page, select **Bigtable**, and click **Next**.
 3. Enter a connector name and description, such as `my_bigtable`. The name is used to associate the Bigtable Sink with the connector and must be unique within the cluster.
-4. Configure the connection and authentication options:
-   - **Endpoint**: The Bigtable endpoint. The default endpoint is `https://bigtable.googleapis.com:443`.
-   - **Connect Timeout**: Timeout for establishing the connection.
-   - **Pool Size**: Size of the connection pool to Bigtable.
-   - **Authentication**: Select one of the supported authentication methods:
-     - **Service Account JSON**: Upload the service account key JSON file.
-     - **Workload Identity Federation (WIF)**: Configure the GCP project, workload identity pool, provider, service account email, and initial OIDC client credentials.
-     - **Attached Service Account**: Use the service account attached to the runtime environment, such as a Google Compute Engine or GKE environment where the metadata service is available.
+4. Configure the authentication options:
+   - **Authentication**: Select how EMQX authenticates with GCP.
+     - **Service Account JSON**: Upload the JSON service account key exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp) to **GCP Service Account Credentials**. You can click **Select file** to upload the JSON file.
+     - **Workload Identity Federation (WIF)**: Fill in the following fields. This method does not require a service account JSON file. For prerequisites, see [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp).
+       - **GCP Project ID**: GCP project ID of the resources accessed by the connector.
+       - **GCP Project Number**: GCP project number of the resources accessed by the connector.
+       - **Service Account Email**: Email address of the service account to impersonate.
+       - **Workload Identity Pool ID**: Workload identity pool ID used for WIF token exchange.
+       - **Workload Identity Provider ID**: Workload identity provider ID used for WIF token exchange.
+       - **Credential Type**: Credential type used by the external identity provider. Currently, OIDC client credentials are supported. After selecting this type, fill in the following fields:
+         - **OAuth Client ID**: Client ID used to request tokens from the OAuth server.
+         - **OAuth Client Secret**: Client secret used to request tokens from the OAuth server.
+         - **OAuth Token Endpoint URI**: OAuth token endpoint URI of the OIDC provider.
+         - **OAuth Request Scope**: `scope` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
+         - **OAuth Request Audience**: `audience` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
+     - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. For prerequisites, see [Attached Service Account Prerequisites](#attached-service-account-prerequisites).
+   - **Enable TLS**: Enable TLS if it is required by your deployment.
+   - **Advanced Settings**: Expand this section to configure advanced connection options.
 5. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to Bigtable.
 6. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
 
@@ -178,27 +218,29 @@ This section demonstrates how to create a rule that writes MQTT messages to Bigt
 
    :::
 
-4. Click **Add Action**. Select `Bigtable` from the **Type of Action** dropdown list.
-5. Keep **Action** as `Create Action`, or select an existing Bigtable Sink. If you entered rule creation from the connector success dialog, confirm that the connector is already pre-selected.
-6. Enter a Sink name.
-7. Select the Bigtable connector created in [Create a Bigtable Connector](#create-a-bigtable-connector) if it is not already selected.
+4. Click **Add Action**. In the **Add Action** panel, select `Bigtable` from the **Type of Action** dropdown list.
+5. Keep **Action** as `Create Action`, or select an existing Bigtable Sink. If you entered rule creation from the connector success dialog, confirm that **Type of Action** is already set to `Bigtable` and the connector is already pre-selected.
+6. In **Name**, enter a Sink name. You can also enter a description in **Description**.
+7. In **Connectors**, select the Bigtable connector created in [Create a Bigtable Connector](#create-a-bigtable-connector) if it is not already selected. You can click the plus icon to create a new connector from this panel.
 8. Configure the Bigtable action parameters:
 
    | Field | Description | Example |
    | --- | --- | --- |
-   | **Instance ID** | Bigtable instance ID. Use the simple instance ID, not the fully qualified resource name. | `emqxinst` |
-   | **Table ID** | Bigtable table ID. Use the simple table ID. | `mqtt_messages` |
-   | **Row Key** | Rule output field name that contains the row key. | `rk` |
-   | **Mutations** | List of cell mutations to apply for each message. The current integration supports `set_cell` mutations. | - |
-   | **Family Name** | Rule output field name that contains the column family name. | `fn` |
-   | **Column Qualifier** | Rule output field name that contains the column qualifier. | `cq` |
-   | **Timestamp in Microseconds** | Rule output field name that contains the cell timestamp in microseconds. | `tm` |
-   | **Value** | Rule output field name that contains the cell value. | `v` |
+   | **Instance ID** | Bigtable instance identifier. Use the simple ID, not the fully qualified `projects/.../instances/...` value. | `emqxinst` |
+   | **Table ID** | Bigtable table identifier. Use the simple ID, not the fully qualified `projects/.../instances/.../tables/...` value. | `mqtt_messages` |
+   | **Row Key** | Key name that contains the message's row key. | `rk` |
+   | **Mutations** | List of cell mutations to apply for a single received message. Click **Add** to add a mutation. | - |
+   | **Mutation Type** | Mutation operation type. The current integration supports Set Cell mutations. | `Set Cell` |
+   | **Column Family** | Key name that contains the mutation's column family. | `fn` |
+   | **Column Qualifier** | Key name that contains the mutation's column qualifier. | `cq` |
+   | **Timestamp (microseconds)** | Key name that contains the mutation's timestamp in microseconds. | `tm` |
+   | **Value** | Key name that contains the mutation's value. | `v` |
 
 9. Configure **Fallback Actions** if you want to improve reliability when message delivery fails. See [Fallback Actions](./data-bridges.md#fallback-actions).
 10. Configure **Advanced Settings** as needed. See [Advanced Settings](#advanced-settings).
-11. Click **Create** to complete the Sink configuration.
-12. Back on the **Create Rule** page, click **Create** to create the rule.
+11. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to Bigtable.
+12. Click **Create** to complete the Sink configuration.
+13. Back on the **Create Rule** page, click **Create** to create the rule.
 
 ## Test the Rule
 
@@ -217,18 +259,31 @@ This section demonstrates how to create a rule that writes MQTT messages to Bigt
 
 ## Advanced Settings
 
-This section describes common advanced settings for the Bigtable Sink.
+This section describes common advanced settings for the Bigtable connector and Sink.
+
+### Connector Advanced Settings
+
+| Field | Description | Default Value |
+| --- | --- | --- |
+| **Connection Pool Size** | Number of connections in the connection pool for Bigtable. | `8` |
+| **Connect Timeout** | Timeout for establishing a connection to Bigtable. | `5s` |
+| **Start Timeout** | Timeout for starting the connector. | `5s` |
+| **Health Check Interval** | Interval for checking the health of the Bigtable connection. | `15s` |
+| **Health Check Timeout** | Timeout for connector health checks. | `60s` |
+
+### Sink Advanced Settings
 
 | Field | Description | Default Value |
 | --- | --- | --- |
 | **Buffer Pool Size** | Number of buffer worker processes used to process and send data to Bigtable. | `16` |
+| **Dispatch Strategy** | Strategy for dispatching requests to buffer workers. The default strategy dispatches requests by MQTT client ID. | `Per Client ID` |
 | **Request TTL** | Maximum time a request can stay valid after entering the buffer. If the request expires before it is sent or acknowledged, it is considered expired. | `45s` |
 | **Health Check Interval** | Interval for checking the health of the Bigtable connection. | `15s` |
+| **Health Check Interval Jitter** | Random jitter added to the health check interval. | `0ms` |
 | **Health Check Timeout** | Timeout for connector health checks. | `60s` |
 | **Max Buffer Queue Size** | Maximum buffer queue size for each buffer worker. | `256MB` |
-| **Query Mode** | Request mode. In asynchronous mode, writing to Bigtable does not block MQTT message publishing. | `Async` |
 | **Batch Size** | Maximum number of records to write in one batch. Set it to `1` to disable batching. | `1000` |
-| **Batch Time** | Maximum waiting time before a non-empty batch is sent. | `500ms` |
+| **Query Mode** | Request mode. In asynchronous mode, writing to Bigtable does not block MQTT message publishing. | `Async` |
 | **Inflight Window** | Maximum number of in-flight requests in asynchronous mode. Set it to `1` if strict ordering is required for messages from the same MQTT client. | `100` |
 
-For high-throughput deployments, tune **Pool Size**, **Buffer Pool Size**, **Batch Size**, **Batch Time**, and **Inflight Window** together based on your expected cluster workload. For example, if the target workload is around 11,000,000 messages per 2 minutes across the cluster with 5,000 to 10,000 MQTT connections, validate the configuration with a representative benchmark before production use.
+For high-throughput deployments, tune **Connection Pool Size**, **Buffer Pool Size**, **Dispatch Strategy**, **Batch Size**, and **Inflight Window** together based on your expected cluster workload. For example, if the target workload is around 11,000,000 messages per 2 minutes across the cluster with 5,000 to 10,000 MQTT connections, validate the configuration with a representative benchmark before production use.
