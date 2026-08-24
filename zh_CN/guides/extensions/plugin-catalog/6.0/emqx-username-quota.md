@@ -216,6 +216,6 @@ API 客户端指南：
 
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
-| 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) |
+| 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
