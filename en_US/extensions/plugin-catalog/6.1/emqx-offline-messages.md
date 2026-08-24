@@ -80,8 +80,8 @@ Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
-| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) |
-| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) |
-| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) |
+| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

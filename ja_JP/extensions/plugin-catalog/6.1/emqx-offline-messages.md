@@ -76,12 +76,12 @@ Redisは `mqtt:sub:*` および `mqtt:msg:*` キースペースの下でハッ�
 
 ## ダウンロード
 
-各EMQXリリース用のtarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
-| EMQXバージョン | プラグインバージョン | パッケージ |
+| EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
-| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) |
-| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) |
-| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) |
+| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
