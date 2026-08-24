@@ -95,13 +95,14 @@ In the **Add Listener** pop-up panel, you will see a form for adding a listener,
 
 #### Rate Limiting
 
-In the **Limiter** section of the **Add Listener** form, you can configure limits on connection, message publishing, and subscribe packet rates, including:
+In the **Limiter** section of the **Add Listener** form, you can configure the following rate and burst limits:
 
-- Maximum Connection Rate (Listener)
-- Maximum Message Publishing Rate (Per Client)
-- Maximum Message Publishing Rraffic (Per Client)
-- Subscribe Rate
-- Subscribe Burst
+- **Max Connection Rate (Listener)** and **Max Connection Burst (Listener)**
+- **Max Message Publishing Rate (Per Client)** and **Max Message Publishing Burst (Per Client)**
+- **Subscribes Rate** and **Subscribes Burst**
+- **Max Message Publishing Traffic (Per Client)** and **Max Message Publishing Traffic Burst (Per Client)**
+- **Max Message Delivery Rate (Per Client)** and **Max Message Delivery Burst (Per Client)**
+- **Max Message Delivery Traffic (Per Client)** and **Max Message Delivery Traffic Burst (Per Client)**
 
 Configuring rate limiting ensures the stability of the system and network when message data overload or excessive client requests occur.
 

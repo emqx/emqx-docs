@@ -47,7 +47,7 @@ Both tenant and client rate limiters support the following dimensions:
 
 The client rate limiter also supports a **subscribe packet rate limit**, which controls how many `SUBSCRIBE` packets an individual client can send within a specified period. This dimension is not available for the shared tenant rate limiter.
 
-:::
+::: tip
 
 For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-limit/rate-limit.md).
 
@@ -98,8 +98,8 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
      - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
      - **Messages Publish Rate**: Limits the maximum number of messages a client can send per second.
      - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
-     - **Subscribe Rate**: Limits the maximum number of `SUBSCRIBE` packets a client can send within the configured period.
-     - **Subscribe Burst**: Allows additional `SUBSCRIBE` packets during bursts.
+     - **Subscribes Rate**: Limits the maximum number of `SUBSCRIBE` packets a client can send within the configured period.
+     - **Subscribes Burst**: Allows additional `SUBSCRIBE` packets during bursts.
 
 2. After completing the configuration, click **Create**. The new namespace will appear in the list.
 
@@ -119,7 +119,7 @@ To view clients connected to a specific namespace, click **Clients** in the **Ac
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+To view request and response schemas that match the current EMQX instance version, open `/api-spec.html` on the Dashboard listener, for example, `http://localhost:18083/api-spec.html`.
 
 :::
 

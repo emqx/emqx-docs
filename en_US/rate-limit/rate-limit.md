@@ -12,8 +12,8 @@ Limiters can operate at the listener level. EMQX uses the following types of lim
 | bytes_burst                  | Max Message Publishing Traffic Burst (Per Client)      | Number of bytes that can be sent in a burst by a single client, based on the regular `Data Publishing Rate`. | Pause receiving client messages |
 | messages_rate                | Max Message Publishing Rate (Per Client)               | The number of messages published per second by a single client. | Pause receiving client messages |
 | messages_burst               | Max Message Publishing Burst (Per Client)              | Number of messages that can be sent in a burst by a single client, on top of regular `Messages Publish Rate`. | Pause receiving client messages |
-| subscribes_rate              | Subscribe Rate                                         | The number of `SUBSCRIBE` packets sent by a single client. | Reject the packet with a `SUBACK` containing the `Quota Exceeded` reason code (0x97) |
-| subscribes_burst             | Subscribe Burst                                        | The number of additional `SUBSCRIBE` packets that a single client can send in a burst. | Same as above |
+| subscribes_rate              | Subscribes Rate                                        | The maximum number of `SUBSCRIBE` packets a client connection can send within the configured interval. | Do not process the packet or create its subscriptions. Return a failure code in the `SUBACK` for each topic filter. |
+| subscribes_burst             | Subscribes Burst                                       | The number of additional `SUBSCRIBE` packets that a client connection can send in a burst. | Same as above |
 | max_conn_rate                | Max Connection Rate (Listener)                         | The number of connections per second for the current listener. | Pause receiving new connections |
 | max_conn_burst               | Max Connection Burst (Listener)                        | The maximum number of connections that the listener can accept in bursts. | Pause receiving new connections |
 
@@ -53,7 +53,7 @@ This configuration implies:
 
 The subscribe packet rate limit applies independently to each client connection.
 
-The limiter counts `SUBSCRIBE` packets, not the number of topic filters in a packet. A `SUBSCRIBE` packet containing multiple topic filters consumes one quota unit. When the limit is reached, EMQX does not process the packet or create its subscriptions. It keeps the client connected and returns a `SUBACK` in which every topic filter has the `Quota Exceeded` reason code (0x97).
+The limiter counts `SUBSCRIBE` packets, not the number of topic filters in a packet. A `SUBSCRIBE` packet containing multiple topic filters consumes one quota unit. When the limit is reached, EMQX does not process the packet or create its subscriptions, but keeps the client connected. For MQTT 5.0, EMQX returns a `SUBACK` in which every topic filter has the `Quota Exceeded` reason code (0x97). For MQTT 3.x, EMQX returns the `SUBACK` failure return code (0x80) for every topic filter.
 
 The default value of `subscribes_rate` is `infinity`, which disables the limit. When configured for a managed namespace, the namespace-level subscribe packet rate limit overrides the listener-level subscribe packet rate limit for clients in that namespace. For details, see [Configure and Manage Namespaces](../multi-tenancy/configure-manage-namespace.md#namespace-rate-limits).
 
