@@ -37,7 +37,7 @@ This section describes the preparations you need to complete before you start to
 
 ### Create Service Account Key in GCP
 
-To allow EMQX to connect with BigQuery, you need to create a Service Account in Google Cloud and generate a key in JSON format.
+If you use **Service Account JSON** authentication, create a service account in Google Cloud and generate a key in JSON format.
 
 1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has the necessary permissions to access the datasets and tables you will use. For example, by granting the "BigQuery Data Editor" role to read and write the required datasets or tables, or at least ensuring it has read/write access to their data.
 
@@ -89,6 +89,12 @@ The `scope` must exactly match the application's audience (aud). Otherwise, the 
 When granting the Service Account access to the WIF pool, use the **Object ID** (not the Application ID) as the Subject value. The Object ID is visible on the application's Overview page in the Azure portal under **Enterprise applications**.
 
 :::
+
+### Set Up an Attached Service Account in GCP
+
+To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. The service account must have permission to access the target BigQuery datasets and tables.
+
+When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
 
 ### Create and Manage Datasets and Tables in GCP
 
@@ -143,7 +149,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **BigQuery** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my_bigquery`. The name is used to associate the BigQuery Sink with the connector and must be unique within the cluster.
-4. In the **Authentication** dropdown, select one of the following authentication methods and fill in the corresponding fields:
+4. Select one of the following authentication methods from the **Authentication** list and configure the corresponding fields:
    - **Service Account JSON**: Upload the Service Account credentials in JSON format that you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
    - **Workload Identity Federation (WIF)**: Fill in the following fields. This method does not use a service account JSON file. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
      - **GCP Project ID**: The Project ID for the resource being accessed by the connector.
@@ -156,7 +162,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
        - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
        - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
        - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
-   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves a token from the GCP instance metadata endpoint. Use this option when EMQX is deployed on a GCP Compute Engine instance with a service account attached to the VM.
+   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. See [Set Up an Attached Service Account in GCP](#set-up-an-attached-service-account-in-gcp) for prerequisites.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Sink](#create-a-rule-with-bigquery-sink).
 
