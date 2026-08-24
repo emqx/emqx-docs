@@ -78,9 +78,9 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 
 ### 授权检查器调用条件
 
-从 EMQX 6.3 开始，您可以为每个授权检查器配置一个调用条件，用于判断是否应触发该授权检查器来检查当前客户端权限。
+从 EMQX 6.3 开始，您可以为每个授权检查器配置一个调用条件，用于判断是否应针对当前授权请求调用该授权检查器。
 
-调用条件是一个 [Variform 表达式](../../configuration/configuration.md#variform-表达式)，可基于客户端属性信息（例如 `listener`、`username`、`clientid` 等）进行逻辑判断。如果表达式的计算结果不是 `true`，该授权检查器将被跳过。
+调用条件是一个 [Variform 表达式](../../configuration/configuration.md#variform-表达式)，可基于客户端信息和当前授权请求信息（例如 `listener`、`username`、`clientid`、`action` 和 `topic`）进行逻辑判断。如果表达式的计算结果不是 `true`，该授权检查器将被跳过。
 
 例如，您可以将不同业务线、客户端属性、发布/订阅动作或主题范围路由到不同的授权后端。`precondition` 为空时不设置调用条件，授权检查器会按照授权链顺序正常执行。
 

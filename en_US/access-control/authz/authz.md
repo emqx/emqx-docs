@@ -79,9 +79,9 @@ For information on how to adjust the sequence of the authorizer in an authorizat
 
 ### Authorizer Preconditions
 
-Starting from EMQX 6.3, you can assign a precondition to each authorizer to control whether it should be invoked for a given client. 
+Starting from EMQX 6.3, you can assign a precondition to each authorizer to control whether it should be invoked for a given authorization request.
 
-A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client attributes (such as `listener`, `username`, `clientid`, etc.). If the expression does not evaluate to `true`, the authorizer is skipped.
+A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client and authorization request information, such as `listener`, `username`, `clientid`, `action`, and `topic`. If the expression does not evaluate to `true`, the authorizer is skipped.
 
 For example, you can route different business lines, client attributes, publish/subscribe actions, or topic ranges to different authorization backends. An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain.
 
