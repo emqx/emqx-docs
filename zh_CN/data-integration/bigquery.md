@@ -88,9 +88,11 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
 
 :::
 
-### 配置附加服务账号
+### 附加服务账号前提条件
 
-要使用**附加服务账号**认证，EMQX 必须运行在已附加服务账号的 GCP Compute Engine 实例上。该服务账号必须具有访问目标 BigQuery 数据集和数据表的权限。
+要使用**附加服务账号**认证，EMQX 必须运行在已附加服务账号的 GCP Compute Engine 实例上。确保该实例的 OAuth 访问范围允许访问 BigQuery。Google 建议使用 `cloud-platform` 访问范围（`https://www.googleapis.com/auth/cloud-platform`），并通过 IAM 角色限制服务账号的权限。该服务账号必须具有访问目标 BigQuery 数据集和数据表的权限。详情参见 Google Cloud 文档中的[服务账号](https://cloud.google.com/compute/docs/access/service-accounts?hl=zh-cn)。
+
+目标 BigQuery 数据集和数据表必须位于该 Compute Engine 实例所属的 GCP 项目中。在 EMQX 集群中，每个节点都必须满足上述要求，并运行在该项目的 Compute Engine 实例上。
 
 连接器启动时，EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌，无需上传服务账号密钥文件。
 
@@ -157,7 +159,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
        - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
        - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
        - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
-   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[配置附加服务账号](#配置附加服务账号)。
+   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[附加服务账号前提条件](#附加服务账号前提条件)。
 5. 在点击**创建**之前，您可以点击**测试连接**按钮，测试连接器是否能够成功连接到 BigQuery 服务。
 6. 点击页面底部的**创建**按钮完成连接器的创建。
     在弹出的对话框中，您可以选择点击**返回连接器列表**，或点击**创建规则**，继续创建包含 Sink 的规则，以指定要转发到 BigQuery 的数据。

@@ -90,9 +90,11 @@ When granting the Service Account access to the WIF pool, use the **Object ID** 
 
 :::
 
-### Set Up an Attached Service Account in GCP
+### Attached Service Account Prerequisites
 
-To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. The service account must have permission to access the target BigQuery datasets and tables.
+To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. Make sure the instance's OAuth access scopes allow access to BigQuery. Google recommends using the `cloud-platform` scope (`https://www.googleapis.com/auth/cloud-platform`) and restricting the service account's permissions through IAM roles. The service account must have permission to access the target BigQuery datasets and tables. For more information, see [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts) in the Google Cloud documentation.
+
+The target BigQuery datasets and tables must be in the GCP project associated with the Compute Engine instance. In an EMQX cluster, every node must meet these requirements and run on a Compute Engine instance in that project.
 
 When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
 
@@ -162,7 +164,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
        - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
        - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
        - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
-   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. See [Set Up an Attached Service Account in GCP](#set-up-an-attached-service-account-in-gcp) for prerequisites.
+   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. See [Attached Service Account Prerequisites](#attached-service-account-prerequisites) for prerequisites.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Sink](#create-a-rule-with-bigquery-sink).
 

@@ -98,9 +98,11 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 
 :::
 
-### 配置附加服务账号
+### 附加服务账号前提条件
 
-要使用**附加服务账号**认证，EMQX 必须运行在已附加服务账号的 GCP Compute Engine 实例上。该服务账号必须具有访问所需 Pub/Sub 主题和订阅的权限。
+要使用**附加服务账号**认证，EMQX 必须运行在已附加服务账号的 GCP Compute Engine 实例上。确保该实例的 OAuth 访问范围允许访问 Pub/Sub。Google 建议使用 `cloud-platform` 访问范围（`https://www.googleapis.com/auth/cloud-platform`），并通过 IAM 角色限制服务账号的权限。该服务账号必须具有访问所需 Pub/Sub 主题和订阅的权限。详情参见 Google Cloud 文档中的[服务账号](https://cloud.google.com/compute/docs/access/service-accounts?hl=zh-cn)。
+
+目标 Pub/Sub 主题和订阅必须位于该 Compute Engine 实例所属的 GCP 项目中。在 EMQX 集群中，每个节点都必须满足上述要求，并运行在该项目的 Compute Engine 实例上。
 
 连接器启动时，EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌，无需上传服务账号密钥文件。
 
@@ -136,7 +138,7 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
        - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
        - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
        - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
-   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[配置附加服务账号](#配置附加服务账号)。
+   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[附加服务账号前提条件](#附加服务账号前提条件)。
 5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
 6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 生产者 Sink 的规则，以指定要转发到 GCP Pub/Sub 的数据。详细步骤请参见 [创建 GCP Pub/Sub 生产者 Sink 规则](#创建-gcp-pub-sub-生产者-sink-规则)。
 
@@ -229,7 +231,7 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
        - **OAuth 客户端密钥**：用于向 OAuth 服务器请求令牌的客户端密钥。
        - **OAuth Token 端点 URI**：OIDC 提供商的 OAuth Token 端点 URI。
        - **OAuth 请求范围**：向 OAuth 服务器请求访问令牌时指定的 `scope`（如提供商要求则需填写）。
-   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[配置附加服务账号](#配置附加服务账号)。
+   - **附加服务账号**：无需填写额外字段。EMQX 会自动从实例元数据端点获取 GCP 项目 ID 和访问令牌。前提条件请参见[附加服务账号前提条件](#附加服务账号前提条件)。
 5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
 6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 消费者 Source 的规则，以消费来自 GCP Pub/Sub 的数据并转发到 EMQX 本地。详细步骤请参见 [创建 GCP Pub/Sub 消费者 Source 规则](#创建-gcp-pub-sub-消费者-source-规则)。
 
