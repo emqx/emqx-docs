@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refresh plugin download-link tables in plugin-catalog docs.
 
-Starting with EMQX 5.10 (enterprise) and 6.2 (unified), plugins live in
+Starting with EMQX 5.10 (enterprise) and 6.0.3 (unified), plugins live in
 the emqx.git monorepo under `plugins/<name>/` and each has a `VERSION`
 file. For every stable release tag in the chosen series, the CI
 publishes a tarball and its sha256 digest, served from the emqx.com
