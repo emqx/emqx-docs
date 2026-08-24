@@ -55,6 +55,10 @@ EMQX 同时支持通过下载 rpm 安装包进行安装。本节以 CentOS 8 系
 sudo systemctl start emqx
 ```
 
+::: tip
+从 EMQX 6.3.0 开始，可以在 `/etc/emqx/emqx.env` 中设置启动期环境变量（例如 `EMQX_SECURITY_PROFILE`）。`emqx` 命令每次执行时都会加载该文件，软件包升级会保留您的修改。参见[环境变量](../configuration/configuration.md#环境变量)。
+:::
+
 ### 卸载 EMQX
 
 服务完成后，可通过如下命令卸载 EMQX：

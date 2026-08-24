@@ -47,6 +47,10 @@ Start EMQX as a systemd service.
 sudo systemctl start emqx
 ```
 
+::: tip
+Starting from EMQX 6.3.0, boot-time environment variables such as `EMQX_SECURITY_PROFILE` can be set in `/etc/emqx/emqx.env`. The `emqx` command sources this file on every invocation, and package upgrades keep your edits. See [Environment Variables](../configuration/configuration.md#environment-variables).
+:::
+
 #### Uninstall EMQX
 
 To uninstall EMQX, run:
