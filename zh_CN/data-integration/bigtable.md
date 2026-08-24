@@ -8,7 +8,7 @@ EMQX 支持通过规则引擎和 Bigtable Sink 与 Bigtable 集成。您可以�
 
 ## 工作原理
 
-Bigtable 数据集成是 EMQX 6.3 提供的开箱即用功能，可帮助用户将 MQTT 数据流写入 Google Cloud，并将设备遥测数据或事件数据存储到 Bigtable 中，用于后续查询、分析或下游处理。
+Bigtable 数据集成是 EMQX 的开箱即用功能，可帮助用户将 MQTT 数据流写入 Google Cloud，并将设备遥测数据或事件数据存储到 Bigtable 中，用于后续查询、分析或下游处理。
 
 ![bigtable_architecture](./assets/bigtable_architecture.png)
 

@@ -8,7 +8,7 @@ This page introduces how the Bigtable data integration works and provides a work
 
 ## How It Works
 
-Bigtable data integration is an out-of-the-box feature in EMQX 6.3. It helps users stream MQTT data into Google Cloud and store device telemetry or event data in Bigtable for later query, analysis, or downstream processing.
+Bigtable data integration is an out-of-the-box feature of EMQX. It helps users stream MQTT data into Google Cloud and store device telemetry or event data in Bigtable for later query, analysis, or downstream processing.
 
 ![bigtable_architecture](./assets/bigtable_architecture.png)
 
