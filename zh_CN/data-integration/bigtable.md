@@ -10,11 +10,13 @@ EMQX 支持通过规则引擎和 Bigtable Sink 与 Bigtable 集成。您可以�
 
 Bigtable 数据集成是 EMQX 6.3 提供的开箱即用功能，可帮助用户将 MQTT 数据流写入 Google Cloud，并将设备遥测数据或事件数据存储到 Bigtable 中，用于后续查询、分析或下游处理。
 
+![bigtable_architecture](./assets/bigtable_architecture.png)
+
 EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程如下：
 
 1. **物联网设备发布消息**：设备向 MQTT 主题发布遥测、状态或事件数据。
 2. **规则引擎处理消息**：规则引擎按主题匹配 MQTT 消息，并通过 SQL 提取或转换 Bigtable 写入所需的字段。
-3. **写入 Bigtable**：Bigtable Sink 根据配置的行键和 `set_cell` 变更字段，将规则输出的每条记录转换为 Bigtable 行变更并写入目标表。
+3. **写入 Bigtable**：Bigtable Sink 根据配置的行键和 `set_cell` 变更字段，将规则输出的每条记录作为行变更写入 Bigtable 表。下游应用和服务随后可以查询或处理这些数据，用于低延迟应用、时序查询、分析处理或 AI/ML 流程。
 
 ## 特性与优势
 
@@ -139,49 +141,6 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 Bigtable，完整流程
    - **高级设置**：展开该区域可配置高级连接选项。
 5. 在点击**创建**之前，您可以点击**测试连接**，验证 EMQX 是否能够连接到 Bigtable。
 6. 点击**创建**按钮完成连接器设置。此时会出现**创建成功**对话框，询问是否立即创建规则。点击**创建规则**可直接进入规则创建流程，并自动预选该连接器；点击**返回连接器列表**可返回列表，稍后再创建规则。
-
-## 配置项示例
-
-以下示例展示了 Bigtable 连接器和动作的主要配置项。您可以在核对 Dashboard 字段或通过 API/配置文件准备配置时参考该示例。
-
-```hocon
-connectors.bigtable.my_bigtable {
-  enable = true
-  connect_timeout = "5s"
-  pool_size = 8
-  authentication {
-    type = service_account_json
-    service_account_json = "{...}"
-  }
-}
-
-actions.bigtable.my_bigtable_sink {
-  enable = true
-  connector = my_bigtable
-  parameters {
-    instance_id = "emqxinst"
-    table_id = "mqtt_messages"
-    row_key = "rk"
-    mutations = [
-      {
-        type = set_cell
-        family_name = "fn"
-        column_qualifier = "cq"
-        timestamp_micros = "tm"
-        value = "v"
-      }
-    ]
-  }
-  resource_opts {
-    batch_size = 1000
-    batch_time = "500ms"
-    query_mode = async
-    request_ttl = "45s"
-    worker_pool_size = 16
-    inflight_window = 100
-  }
-}
-```
 
 ## 创建 Bigtable Sink 规则
 

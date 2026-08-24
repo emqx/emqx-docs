@@ -10,6 +10,8 @@ This page introduces how the Bigtable data integration works and provides a work
 
 Bigtable data integration is an out-of-the-box feature in EMQX 6.3. It helps users stream MQTT data into Google Cloud and store device telemetry or event data in Bigtable for later query, analysis, or downstream processing.
 
+![bigtable_architecture](./assets/bigtable_architecture.png)
+
 EMQX forwards MQTT data to Bigtable through the rule engine and Sink. The complete process is as follows:
 
 1. **IoT Devices Publish Messages**: Devices publish telemetry, status, or event data to MQTT topics.
@@ -139,49 +141,6 @@ Before adding a Bigtable Sink action, create a Bigtable connector to establish t
    - **Advanced Settings**: Expand this section to configure advanced connection options.
 5. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to Bigtable.
 6. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
-
-## Configuration Example
-
-The following example shows the main Bigtable connector and action configuration items. You can use it as a reference when checking the Dashboard fields or preparing configuration through API/config files.
-
-```hocon
-connectors.bigtable.my_bigtable {
-  enable = true
-  connect_timeout = "5s"
-  pool_size = 8
-  authentication {
-    type = service_account_json
-    service_account_json = "{...}"
-  }
-}
-
-actions.bigtable.my_bigtable_sink {
-  enable = true
-  connector = my_bigtable
-  parameters {
-    instance_id = "emqxinst"
-    table_id = "mqtt_messages"
-    row_key = "rk"
-    mutations = [
-      {
-        type = set_cell
-        family_name = "fn"
-        column_qualifier = "cq"
-        timestamp_micros = "tm"
-        value = "v"
-      }
-    ]
-  }
-  resource_opts {
-    batch_size = 1000
-    batch_time = "500ms"
-    query_mode = async
-    request_ttl = "45s"
-    worker_pool_size = 16
-    inflight_window = 100
-  }
-}
-```
 
 ## Create a Rule with Bigtable Sink
 
