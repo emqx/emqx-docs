@@ -82,7 +82,7 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 
 调用条件是一个 [Variform 表达式](../../configuration/configuration.md#variform-表达式)，可基于客户端信息和当前授权请求信息（例如 `listener`、`username`、`clientid`、`action` 和 `topic`）进行逻辑判断。如果表达式的计算结果不是 `true`，该授权检查器将被跳过。
 
-例如，您可以将不同业务线、客户端属性、发布/订阅动作或主题范围路由到不同的授权后端。`precondition` 为空时不设置调用条件，授权检查器会按照授权链顺序正常执行。
+例如，您可以根据业务线、客户端属性、发布/订阅动作或主题范围，将授权请求路由到不同的授权后端。`precondition` 为空时不设置调用条件，授权检查器会按照授权链顺序正常执行。
 
 可在 `precondition` 中使用的客户端变量包括：
 
@@ -91,7 +91,7 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 - `client_attrs.*`：客户端属性，例如 `client_attrs.tenant`。有关客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
 - `cert_common_name`：客户端 TLS 证书中的通用名称（Common Name）。
 - `cert_subject`：客户端 TLS 证书中的主题（Subject）。
-- `peersni`： TLS 客户端发送的 SNI（Server Name Indication）。
+- `peersni`：TLS 客户端发送的 SNI（Server Name Indication）。
 - `listener`：客户端接入的监听器 ID，例如 `tcp:default`。
 - `zone`：客户端所属的配置 Zone。
 
@@ -100,7 +100,7 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 - `action`：当前授权动作，取值为 `publish` 或 `subscribe`。
 - `topic`：当前正在检查的发布主题或订阅主题过滤器。
 
-下面的示例仅展示与 `precondition` 相关的字段。HTTP 授权检查器只处理 `orders` 业务客户端的发布请求，Redis 授权检查器只处理 `devices/${clientid}/#` 范围内的请求：
+下面的示例仅展示与 `precondition` 相关的字段。HTTP 授权检查器只处理 `orders` 业务客户端的发布请求，Redis 授权检查器只处理主题与 `devices/${clientid}/#` 主题过滤器匹配的请求：
 
 ```hcl
 authorization {

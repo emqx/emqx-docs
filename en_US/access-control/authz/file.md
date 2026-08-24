@@ -75,7 +75,7 @@ Additionally, there are two special rules. These rules are usually used as defau
 
 ## Configure with Dashboard
 
-EMQX configures a file-based authorizer by default. You can click **Settings** in the **Actions** column to view or edit it. To create another file-based authorizer, click **Create**, select **File** as the **Backend**, and click **Next**. The **Configuration** step is shown below.
+EMQX configures a file-based authorizer by default. You can click **Settings** in the **Actions** column to view or edit its configuration. To create another file-based authorizer, click **Create**, select **File** as the **Backend**, and click **Next**. The **Configuration** step is shown below.
 
 <img src="./assets/dashboard-edit-ACL-file_ee.png" alt="dashboard-edit-ACL-file_ee" style="zoom:67%;" />
 

@@ -45,7 +45,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 - `type`：授权检查器的数据源类型，此处填入 `built_in_database`
 - `enable`：是否激活该检查器，可选值：`true`、`false`
-- `precondition`：可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或将其留空时，不应用调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+- `precondition`：可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 <!--详细参数列表，请参考 [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia)。-->
 

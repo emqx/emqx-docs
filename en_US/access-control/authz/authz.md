@@ -83,7 +83,7 @@ Starting from EMQX 6.3, you can assign a precondition to each authorizer to cont
 
 A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client and authorization request information, such as `listener`, `username`, `clientid`, `action`, and `topic`. If the expression does not evaluate to `true`, the authorizer is skipped.
 
-For example, you can route different business lines, client attributes, publish/subscribe actions, or topic ranges to different authorization backends. An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain.
+For example, you can route authorization requests to different backends based on business line, client attributes, publish/subscribe action, or topic range. An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain.
 
 Client variables available in `precondition` include:
 
@@ -101,7 +101,7 @@ Authorization request variables available in `precondition` include:
 - `action`: Current authorization action. The value is `publish` or `subscribe`.
 - `topic`: Publish topic or subscription topic filter currently being checked.
 
-The following example only shows fields related to `precondition`. The HTTP authorizer handles only publish requests from `orders` business clients, and the Redis authorizer handles only requests under the `devices/${clientid}/#` topic range:
+The following example only shows fields related to `precondition`. The HTTP authorizer handles only publish requests from `orders` business clients, and the Redis authorizer handles only requests whose topics match the `devices/${clientid}/#` topic filter:
 
 ```hcl
 authorization {

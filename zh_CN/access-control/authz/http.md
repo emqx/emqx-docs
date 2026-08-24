@@ -112,7 +112,7 @@ Body:
 
 HTTP 授权必需使用 `type=http`的配置。
 
-可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或将其留空时，不应用调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 使用 POST 请求配置的示例：
 

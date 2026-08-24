@@ -556,7 +556,7 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 - **主题函数**：
   - `topic_join(Words)`：将数组中的主题层级用 `/` 拼接为 MQTT 主题或主题过滤器。例如，`topic_join(['devices', clientid, '#'])` 会生成 `devices/<clientid>/#`。
   - `topic_join(Parent, Word)`：将 `Word` 追加到 `Parent` 主题之后。如果 `Parent` 已经以 `/` 结尾，则不会重复添加分隔符。
-  - `topic_match(Topic, Filter)`：判断 MQTT 主题是否匹配主题过滤器，返回 `true` 或 `false`。例如，`topic_match(topic, topic_join(['devices', clientid, '#']))` 可用于判断当前主题是否位于某个客户端专属主题范围内。
+  - `topic_match(Topic, Filter)`：判断 MQTT 主题是否匹配主题过滤器，返回 `true` 或 `false`。例如，`topic_match(topic, topic_join(['devices', clientid, '#']))` 可用于判断当前主题是否匹配客户端专属的主题过滤器。
   - `topic_split(Topic)`：按 `/` 将 MQTT 主题拆分为主题层级数组。
 - **随机函数**：rand_str, rand_int
 - **无模式编码/解码函数**：
