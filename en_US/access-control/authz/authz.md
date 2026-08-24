@@ -54,7 +54,7 @@ Example:
 
 ## Authorization Chain
 
-EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authentication information from the first authorizer, it switches to the next authenticator to continue the process.
+EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authorization information from the first authorizer, it switches to the next authorizer to continue the process.
 
 Authorizers also support preconditions. When an authorizer has `precondition` configured, EMQX evaluates the precondition expression before calling the authorizer's data source. EMQX calls the authorizer only when the expression evaluates to `true`. If the result is not `true`, or if the expression fails during runtime evaluation, EMQX skips the authorizer and continues with the next enabled authorizer in the authorization chain.
 
