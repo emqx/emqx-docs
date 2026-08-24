@@ -8012,7 +8012,7 @@
               "type": "String(\"kerberos\")"
             },
             {
-              "doc": "Server Kerberos principal.\nFor example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.\nNOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+              "doc": "Server Kerberos principal.\nFor example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.\nNOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
               "hash": "V-authentication-S-kerberos-principal",
               "text": "principal",
               "type": "String"
@@ -17681,7 +17681,7 @@
                           "doc": "Use GSSAPI/Kerberos authentication.",
                           "fields": [
                             {
-                              "doc": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+                              "doc": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
                               "hash": "V-connectors-S-connectors-kafka_producer-S-config_connector-authentication-S-auth_gssapi_kerberos-kerberos_principal",
                               "text": "kerberos_principal",
                               "type": "String"
@@ -18229,7 +18229,7 @@
                           "doc": "Use GSSAPI/Kerberos authentication.",
                           "fields": [
                             {
-                              "doc": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+                              "doc": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
                               "hash": "V-connectors-S-connectors-kafka_consumer-S-config_connector-authentication-S-auth_gssapi_kerberos-kerberos_principal",
                               "text": "kerberos_principal",
                               "type": "String"
