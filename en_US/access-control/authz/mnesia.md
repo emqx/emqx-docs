@@ -16,7 +16,10 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 
    ![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
 
-3. In the **Configuration** step, set the value for **Max Rules** (default: `100`), which defines the maximum number of authorization rules allowed per client or user.
+3. In the **Configuration** step, configure the following options:
+
+   - **Max Rules**: Set the maximum number of authorization rules allowed per client or user. Default: `100`.
+   - **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
    ::: tip Note
 
@@ -42,6 +45,8 @@ Sample configuration:
 -  `type`: The data source type of the authorization checker; fill in `built_in_database` here.
 
 - `enable`: Whether to activate this checker; optional values: `true`, `false`.
+
+- `precondition`: Optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
 <!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia).-->
 
@@ -277,4 +282,3 @@ Each rule can include the following fields:
 | **action**                  | Operation type. Options: `publish`, `subscribe`, `all`.      |
 | **qos**                     | (Optional) Allowed QoS levels. Example: `[0,1]`. Default: all levels. |
 | **retain**                  | (Optional) Whether the rule applies to retained messages. Options: `true`, `false`, `all`. |
-

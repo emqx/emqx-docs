@@ -133,6 +133,7 @@ $ mqttx sub -u emqx_u -t t/3 -q 1
      - **数据库**：填入 MySQL 的数据库名称。
      - **用户名**：填入用户名称。
      - **密码**：填入用户密码。
+   - **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
    - **启用 TLS**：如果要启用 TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和 TLS](../../network/overview.md#启用-tls-加密访问外部资源)。
    - **SQL**：根据表结构填入查询 SQL，具体要求见[表结构与查询语句](#表结构与查询语句)。
    - **高级设置**：配置连接池、超时及预处理语句相关选项。
@@ -147,6 +148,8 @@ $ mqttx sub -u emqx_u -t t/3 -q 1
 您也可以通过配置文件完成以上配置。详细参数说明请参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 MySQL 授权器由 `type = mysql` 标识，配置示例：
+
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 ```bash
 {

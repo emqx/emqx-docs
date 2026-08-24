@@ -54,12 +54,15 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 
 除配置单个授权检查器外，EMQX 支持用户通过配置多个授权检查器构成授权链，以实现更灵活的授权检查。EMQX 将按照授权链中配置的检查器顺序依次执行授权检查。如果在当前授权检查器中未检索到权限数据，将会切换至链上的下一个启用的授权检查器继续权限检查。
 
+授权检查器还支持配置调用条件。当某个授权检查器配置了 `precondition` 时，EMQX 会在调用该检查器的数据源前先计算该调用条件表达式。只有表达式计算结果为 `true` 时，才会调用该授权检查器；如果结果不是 `true`，或表达式在运行时计算失败，EMQX 将跳过该授权检查器，并继续检查授权链中的下一个启用的授权检查器。
+
 授权检查流程如下：
 
-1. 当前授权检查器执行时检索到了客户端的权限信息，匹配当前执行的操作与客户端的权限信息：
+1. 如果当前授权检查器配置了 `precondition`，EMQX 会先计算该调用条件表达式；当结果不是 `true` 时，跳过当前授权检查器。
+2. 当前授权检查器执行时检索到了客户端的权限信息，匹配当前执行的操作与客户端的权限信息：
    - 操作与权限匹配，根据权限允许或拒绝客户端的操作；
    - 操作与权限不匹配，交由下一授权检查器继续检查。
-2. 当前授权检查器执行时没有检索到了客户端的权限信息，EMQX 将继续检查授权链中是否还有其他授权检查器：
+3. 当前授权检查器执行时没有检索到客户端的权限信息，EMQX 将继续检查授权链中是否还有其他授权检查器：
    - 如有，EMQX 将跳过当前授权检查器，并将请求交由下一授权检查器继续检查；
    - 如当前授权检查器是链中最后一个授权检查器：根据**未匹配时执行**（ `no_match` ）配置决定检查结果（允许或拒绝）。
 
@@ -72,6 +75,54 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 :::
 
 <!-- TODO 补充流程图 -->
+
+### 授权检查器调用条件
+
+从 EMQX 6.3 开始，您可以为每个授权检查器配置一个调用条件，用于判断是否应针对当前授权请求调用该授权检查器。
+
+调用条件是一个 [Variform 表达式](../../configuration/configuration.md#variform-表达式)，可基于客户端信息和当前授权请求信息（例如 `listener`、`username`、`clientid`、`action` 和 `topic`）进行逻辑判断。如果表达式的计算结果不是 `true`，该授权检查器将被跳过。
+
+例如，您可以根据业务线、客户端属性、发布/订阅动作或主题范围，将授权请求路由到不同的授权后端。`precondition` 为空时不设置调用条件，授权检查器会按照授权链顺序正常执行。
+
+可在 `precondition` 中使用的客户端变量包括：
+
+- `username`：客户端用户名。
+- `clientid`：客户端 ID。
+- `client_attrs.*`：客户端属性，例如 `client_attrs.tenant`。有关客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
+- `cert_common_name`：客户端 TLS 证书中的通用名称（Common Name）。
+- `cert_subject`：客户端 TLS 证书中的主题（Subject）。
+- `peersni`：TLS 客户端发送的 SNI（Server Name Indication）。
+- `listener`：客户端接入的监听器 ID，例如 `tcp:default`。
+- `zone`：客户端所属的配置 Zone。
+
+可在 `precondition` 中使用的授权请求变量包括：
+
+- `action`：当前授权动作，取值为 `publish` 或 `subscribe`。
+- `topic`：当前正在检查的发布主题或订阅主题过滤器。
+
+下面的示例仅展示与 `precondition` 相关的字段。HTTP 授权检查器只处理 `orders` 业务客户端的发布请求，Redis 授权检查器只处理主题与 `devices/${clientid}/#` 主题过滤器匹配的请求：
+
+```hcl
+authorization {
+  sources = [
+    {
+      type = http
+      precondition = "iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)"
+      ...
+    },
+    {
+      type = redis
+      precondition = "topic_match(topic, topic_join(['devices', clientid, '#']))"
+      ...
+    }
+  ]
+}
+```
+
+其中：
+
+- `iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)`：当客户端属性 `client_attrs.biz` 等于 `orders`，且当前授权动作为 `publish` 时，表达式结果为 `true`。
+- `topic_match(topic, topic_join(['devices', clientid, '#']))`：当当前授权请求的主题匹配 `devices/${clientid}/#` 主题过滤器时，表达式结果为 `true`。
 
 ## 客户端授权缓存
 
@@ -261,8 +312,8 @@ EMQX 提供了三种授权检查器的配置方式，分别为：Dashboard、配
 ```hcl
 authorization {
   sources = [
-    { ...   },
-    { ...   }
+    { ... },
+    { ... }
   ]
   no_match = deny
   deny_action = ignore
@@ -277,6 +328,7 @@ authorization {
 其中：
 
 - `sources`(可选)：带顺序的数组，用于配置授权检查器的数据源。有关各授权检查器的具体配置信息，请参考相应的配置文件文档。<!--TODO 这里需要加上对应的超链接-->
+  - `sources[].precondition`：可选的 Variform 表达式，用于在调用该授权检查器前判断是否应跳过它。为空时不设置调用条件。
 - `no_match`：如当前客户端操作无法匹配到任何规则，将基于此规则决定允许或拒绝操作；可选值： `allow` 、 `deny`；自 EMQX 6.0 起，默认值为 `deny`。
 - `deny_action`：如当前客户端的操作被拒绝，后续应执行的操作；可选值： `ignore` 、 `disconnect`；默认值： `ignore`。
   - `ignore`: 丢弃当前操作，例如，如针对发布动作，该消息会被丢弃；如针对订阅操作，该请求将被拒绝。
@@ -327,7 +379,7 @@ EMQX 为授权参数暴露如下 REST API 来支持进行运行时动态修改�
 - **允许**：鉴权检查通过次数。
 - **拒绝**：鉴权检查拒绝次数。<!-- TODO Dashboard 的描述是 失败次数，有歧义 -->
 - **不匹配**：未查找到客户端权限数据次数。
-- **忽略**：鉴权查询被忽略的次数，原因是当授权源尝试对请求进行授权但遇到不适用或出现错误导致无法决定结果的情况。
+- **忽略**：鉴权查询被忽略的次数，例如授权检查器的 `precondition` 结果不是 `true`，或授权源遇到不适用、错误等无法决定结果的情况。
 - **当前速率(tps)**：当前触发检查执行速率。
 
 您也可以通过 **节点状态** 查看每个节点上授权状态和执行情况。
