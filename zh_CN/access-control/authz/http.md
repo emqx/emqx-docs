@@ -30,6 +30,8 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 - **URL**：输入 HTTP 应用的 IP 地址。
 
+- **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+
 - **请求头**（可选）：完成 HTTP 请求头的配置。键和值支持使用[占位符](./authz.md#占位符)。
 
 **连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
@@ -109,6 +111,8 @@ Body:
 支持 HTTP `POST` 和 `GET` 请求，它们各自都有一些特定的选项。<!--详细配置请参考  [authz:http_post](../../configuration/configuration-manual.html#authz:http_post)与 [authz:http_get](../../configuration/configuration-manual.html#authz:http_get)。-->
 
 HTTP 授权必需使用 `type=http`的配置。
+
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或将其留空时，不应用调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 使用 POST 请求配置的示例：
 

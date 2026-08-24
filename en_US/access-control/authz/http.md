@@ -86,6 +86,7 @@ For untrusted environments, HTTPS should be used.
 
    - **Request Method**: Select the HTTP request method, optional values: `GET`, `POST`.
    - **URL**: Enter the IP address of the HTTP application.
+   - **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
    - **Headers** (optional): Configure the HTTP request headers. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
 
    **Connection Configuration**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
@@ -103,6 +104,8 @@ For untrusted environments, HTTPS should be used.
 ## Configure with Configuration Items
 
 The HTTP authorization requires configuration with `type=http`.
+
+The optional `precondition` configuration item accepts a Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
 HTTP `POST` and `GET` requests are supported. Each of them has some specific options. <!--For detailed information, see [authz:http_post](../../configuration/configuration-manual.html#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.html#authz:http_get).-->
 
@@ -144,4 +147,3 @@ Example of an HTTP authorizer configured with `GET` request:
     }
 }
 ```
-
