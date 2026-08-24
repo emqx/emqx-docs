@@ -94,7 +94,10 @@ EMQX 已默认配置了基于文件的授权检查器。您可点击 **File** �
 
 <img src="./assets/authz-file.png" alt="file authentication" style="zoom:67%;" />
 
-您可在 **ACL File** 区域编辑客户端访问规则，有关文件格式和对应字段的说明，可参考 [文件格式](#文件格式) 部分。
+在**配置参数**页签中：
+
+- **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+- **ACL File**：编辑客户端访问规则。有关文件格式和对应字段的说明，请参见[文件格式](#文件格式)。
 
 ## 通过配置文件配置
 
@@ -121,7 +124,7 @@ authorization {
 
 - `type`：授权检查器的数据源类型，此处填入 `file`
 - `enable`：是否激活该检查器，可选值：`true`、`false`
+- `precondition`：可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或将其留空时，不应用调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 - `path`：配置文件路径，默认为：`etc/acl.conf`。 如果通过 Dashboard 或 REST API 对 File 授权检查器进行过修改，EMQX 会把新的文件保存到 `data/authz/acl.conf`，并且不再读取原文件中的配置。
 
 <!-- 详细参数列表，可参考 [authz-file](../../configuration/configuration-manual.html#authz-file)。-->
-
