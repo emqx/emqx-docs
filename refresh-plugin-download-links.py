@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Refresh plugin download-link tables in plugin-catalog docs.
 
-Starting with EMQX 5.10 (enterprise) and 6.2 (unified), plugins live in
+Starting with EMQX 5.10 (enterprise) and 6.0.3 (unified), plugins live in
 the emqx.git monorepo under `plugins/<name>/` and each has a `VERSION`
 file. For every stable release tag in the chosen series, the CI
-publishes a tarball at:
+publishes a tarball and its sha256 digest, served from the emqx.com
+download CDN:
 
-    https://packages.emqx.io/emqx-plugins/<tag>/<plugin>-<plugin-ver>.tar.gz
+    https://www.emqx.com/downloads/emqx-plugins/<tag>/<plugin>-<plugin-ver>.tar.gz
+    https://www.emqx.com/downloads/emqx-plugins/<tag>/<plugin>-<plugin-ver>.sha256
 
 where `<tag>` is the literal git tag — bare semver for 6.x (e.g. `6.2.0`)
-and `e`-prefixed for 5.x enterprise (e.g. `e5.10.4`).
+and `e`-prefixed for 5.x enterprise (e.g. `e5.10.4`). Note the digest
+file replaces the `.tar.gz` extension rather than appending to it.
 
 This script walks the stable tags of one series (e.g. 5.10 or 6.2),
 reads each plugin's VERSION file, and regenerates a "Download" table
@@ -55,8 +58,14 @@ from pathlib import Path
 from typing import Iterable
 
 DEFAULT_EMQX_REMOTE = "https://github.com/emqx/emqx.git"
+# The emqx.com download CDN (matches scripts/rel/print-download-links.py in
+# emqx.git). Steering users to www.emqx.com/downloads rather than the S3
+# bucket keeps download statistics visible.
 PACKAGE_URL_TEMPLATE = (
-    "https://packages.emqx.io/emqx-plugins/{tag}/{plugin}-{plugin_ver}.tar.gz"
+    "https://www.emqx.com/downloads/emqx-plugins/{tag}/{plugin}-{plugin_ver}.tar.gz"
+)
+SHA256_URL_TEMPLATE = (
+    "https://www.emqx.com/downloads/emqx-plugins/{tag}/{plugin}-{plugin_ver}.sha256"
 )
 
 # Stable release tags. Two conventions are in use:
@@ -262,23 +271,18 @@ def render_section(
     )
     lines.append("|---|---|---|")
     for tag, plugin_ver in entries:
-        url = PACKAGE_URL_TEMPLATE.format(
-            tag=tag.raw, plugin=plugin, plugin_ver=plugin_ver
-        )
-        filename = f"{plugin}-{plugin_ver}.tar.gz"
-        lines.append(
-            f"| {tag.display_version} | {plugin_ver} | [{filename}]({url}) |"
-        )
+        lines.append(render_data_row(plugin, tag, plugin_ver))
     lines.append("")
     lines.append(END_MARKER)
     return "\n".join(lines)
 
 
 # A markdown table row whose first column is an EMQX version like "5.10.4"
-# or "6.2.0" and third column is the package link `[name](url)`. The middle
+# or "6.2.0" and third column starts with the package link `[name](url)`,
+# optionally followed by more links (e.g. the sha256 digest). The middle
 # column (plugin version) is matched loosely.
 DATA_ROW_RE = re.compile(
-    r"^\|\s*(?P<display_version>\d+\.\d+\.\d+)\s*\|\s*[^|]+\|\s*\[[^\]]+\]\([^)]+\)\s*\|\s*$"
+    r"^\|\s*(?P<display_version>\d+\.\d+\.\d+)\s*\|\s*[^|]+\|\s*\[[^\]]+\]\([^)]+\)[^|]*\|\s*$"
 )
 SEPARATOR_ROW_RE = re.compile(r"^\|\s*-+\s*(?:\|\s*-+\s*)+\|\s*$")
 
@@ -296,8 +300,14 @@ def render_data_row(plugin: str, tag: ReleaseTag, plugin_ver: str) -> str:
     url = PACKAGE_URL_TEMPLATE.format(
         tag=tag.raw, plugin=plugin, plugin_ver=plugin_ver
     )
+    sha256_url = SHA256_URL_TEMPLATE.format(
+        tag=tag.raw, plugin=plugin, plugin_ver=plugin_ver
+    )
     filename = f"{plugin}-{plugin_ver}.tar.gz"
-    return f"| {tag.display_version} | {plugin_ver} | [{filename}]({url}) |"
+    return (
+        f"| {tag.display_version} | {plugin_ver} | "
+        f"[{filename}]({url}) ([sha256]({sha256_url})) |"
+    )
 
 
 def append_new_rows(
@@ -366,14 +376,13 @@ def update_catalog_files(
         for locale in locales:
             path = docs_root / locale / subpath / fname
             existed = path.exists()
-            new_section = render_section(locale, plugin, entries)
             if existed:
                 original = path.read_text(encoding="utf-8")
             elif locale in bootstrap_locales and plugin in readmes:
                 original = readmes[plugin].rstrip() + "\n"
             else:
                 continue
-            updated = splice_section(original, new_section)
+            updated = splice_section(original, locale, plugin, entries)
             if existed and updated == original:
                 print(f"unchanged: {path.relative_to(docs_root)}", file=sys.stderr)
                 continue
@@ -467,6 +476,14 @@ def main() -> int:
 
     series = resolve_series(args.series, docs_root)
     subpath = catalog_subpath(series)
+    if not any((docs_root / loc / subpath).is_dir() for loc in present_locales):
+        # This branch still publishes the flat (unversioned) catalog pages;
+        # the version-scoped subdir arrives with its own restructuring.
+        print(
+            f"note: {subpath} not found; using flat catalog dir {CATALOG_BASE}",
+            file=sys.stderr,
+        )
+        subpath = CATALOG_BASE
     print(
         f"Targeting release series {series[0]}.{series[1]} "
         f"(catalog dir: {subpath})",
