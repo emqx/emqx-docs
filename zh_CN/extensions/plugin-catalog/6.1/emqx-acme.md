@@ -152,8 +152,8 @@ ACME CA 始终通过被验证域名的 80 端口执行 HTTP-01 挑战。此行�
 
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
-| 6.1.2 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_acme-0.2.0.tar.gz) |
-| 6.1.3 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_acme-0.2.0.tar.gz) |
-| 6.1.4 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_acme-0.2.0.tar.gz) |
+| 6.1.2 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_acme-0.2.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_acme-0.2.0.sha256)) |
+| 6.1.3 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_acme-0.2.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_acme-0.2.0.sha256)) |
+| 6.1.4 | 0.2.0 | [emqx_acme-0.2.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_acme-0.2.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_acme-0.2.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

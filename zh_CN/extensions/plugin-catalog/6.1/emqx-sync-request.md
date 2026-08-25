@@ -192,6 +192,6 @@ sync_request.pending_responses: 0
 
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
-| 6.1.4 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.tar.gz) |
+| 6.1.4 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

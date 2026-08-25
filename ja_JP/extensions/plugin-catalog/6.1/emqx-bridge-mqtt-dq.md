@@ -509,12 +509,12 @@ QoS 0 のリモートブローカーへのパブリッシュは、メッセー�
 
 ## ダウンロード
 
-各 EMQX リリース向けの tarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
 | EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
-| 6.1.2 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
-| 6.1.3 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
-| 6.1.4 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_bridge_mqtt_dq-0.5.2.tar.gz) |
+| 6.1.2 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_bridge_mqtt_dq-0.5.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_bridge_mqtt_dq-0.5.2.sha256)) |
+| 6.1.3 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_bridge_mqtt_dq-0.5.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_bridge_mqtt_dq-0.5.2.sha256)) |
+| 6.1.4 | 0.5.2 | [emqx_bridge_mqtt_dq-0.5.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_bridge_mqtt_dq-0.5.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_bridge_mqtt_dq-0.5.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

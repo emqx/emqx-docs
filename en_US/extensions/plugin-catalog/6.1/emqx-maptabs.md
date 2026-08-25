@@ -103,6 +103,6 @@ Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
-| 6.1.5 | 0.1.1 | [emqx_maptabs-0.1.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.5/emqx_maptabs-0.1.1.tar.gz) |
+| 6.1.5 | 0.1.2 | [emqx_maptabs-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.5/emqx_maptabs-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.5/emqx_maptabs-0.1.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

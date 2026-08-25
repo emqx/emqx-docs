@@ -245,8 +245,8 @@ Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
-| 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) |
-| 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) |
-| 6.1.4 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.tar.gz) |
+| 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.sha256)) |
+| 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.sha256)) |
+| 6.1.4 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
