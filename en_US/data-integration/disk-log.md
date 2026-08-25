@@ -12,15 +12,52 @@ Implemented using EMQX’s rule engine and Sink mechanism, the Disk Log integrat
 1. Rules are used to filter, transform, and extract the data of interest from MQTT messages or client events.
 2. A Disk Log Sink is attached to the rule to define how and where to store the data. The Sink forwards the formatted data (as JSON) to the corresponding Connector.
 3. The Disk Log Connector manages the physical writing of data to the file system. It handles the log file path configuration, log file rotation policy, etc.
-4. Once the rule is triggered and the data is passed to the Sink, the Sink invokes the configured Connector to write the data in JSON Lines format to a specified local directory, making it easy to consume using standard tools and downstream data systems.
+4. Once the rule is triggered and the data is passed to the Sink, the Sink invokes the configured Connector to write the data in JSON Lines format to rotating files under the configured base path, making it easy to consume using standard tools and downstream data systems.
 
 ### Log Rotation
 
-Disk Log integration writes messages to a specified local directory on the local file system. To manage storage usage, each log file is rotated based on file size and file count thresholds:
+The Disk Log integration writes messages to a set of rotating files on the local file system. The configured **Log Filepath** is the base file path, not a directory. For example, if the base path is `/var/log/emqx/mqtt-trace.log`, the actual log files use a numeric suffix such as `mqtt-trace.log.1`.
+
+Disk Log supports size-based and time-based rotation. Size-based rotation is always active:
 
 - EMQX opens a new file and continues writing when the configured maximum file size is reached.
-- When the configured maximum number of files is reached, the oldest file is truncated and opened for writing new entries.
+- When the configured maximum number of files is reached, EMQX discards the contents of the oldest file and reuses the file for new entries.
 - Each log file is guaranteed to contain at least one complete entry, even if that entry exceeds the specified file size limit.
+
+Time-based rotation starts a separate file set at each hour or day boundary. Configure the following connector fields:
+
+| Field | Configuration Key | Description | Default |
+| --- | --- | --- | --- |
+| **Rotation Period** | `rotation.period` | Select `hour` or `day` to start a file set at each period boundary. Select `None` (`none`) to use only size-based rotation. | `None` (`none`) |
+| **Retention Period** | `rotation.retention_period` | Specify how long EMQX keeps file sets from previous periods. EMQX removes expired file sets when the connector starts and after each period rotation. This option has no effect when `rotation.period` is `none`. | `infinity` |
+| **Rotation Timezone** | `rotation.timezone` | Specify the timezone used to determine period boundaries and filename timestamps. Supported values are `UTC`, `local`, or a fixed UTC offset such as `+02:00`. | `UTC` |
+
+When time-based rotation is enabled, EMQX inserts a `YYYYMMDDHH` timestamp before the file extension. Hourly files use the hour of the period, for example, `mqtt-trace-2026062413.log.1`. Daily files use `00` as the hour, for example, `mqtt-trace-2026062400.log.1`. The `.N` suffix is always present. Each period's file set also includes `.idx` and `.siz` bookkeeping files.
+
+The **Maximum File Size** and **Maximum Number of Files** settings apply separately to each period. To prevent files from being overwritten within a period, configure enough capacity for the maximum expected data volume during one hour or day. The approximate capacity of each period is **Maximum File Size** multiplied by **Maximum Number of Files**.
+
+EMQX detects period boundaries during connector health checks. Therefore, the new period's file appears within the configured `resource_opts.health_check_interval` after the boundary.
+
+The following example defines daily rotation with a 30-day retention period in `base.hocon`:
+
+```hocon
+connectors.disk_log.my_disk_log {
+  filepath = "/var/log/emqx/mqtt-trace.log"
+  max_file_size = "1GB"
+  max_file_number = 24
+  rotation {
+    period = day
+    retention_period = "30d"
+    timezone = "UTC"
+  }
+}
+```
+
+::: warning Important Notice
+
+Do not use an external `logrotate` rule with `copytruncate` on active Disk Log files. External truncation does not reset the size tracked in the `.siz` file and can cause unexpected rotations. Use the built-in time-based rotation for hourly or daily files.
+
+:::
 
 ## Features and Benefits
 
@@ -48,14 +85,17 @@ Create a writable directory on the EMQX host for storing log files. The EMQX sys
 
 Before adding the Disk Log Sink, you need to create the corresponding connector.
 
-1. Go to the Dashboard **Integration** -> **Connector** page.
+1. In the EMQX Dashboard, click **Integration** -> **Connectors** in the left navigation menu.
 2. Click the **Create** button in the top right corner.
 3. Select **Disk Log** as the connector type and click **Next**.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-disk-log`.
 5. Enter the connector parameters.
-   - **Log Filepath**: Path to the directory where logs will be stored.
+   - **Log Filepath**: Base path of the log files, for example, `/var/log/emqx/mqtt-trace.log`. The directory that contains the file must be writable by the EMQX system user.
    - **Maximum File Size**: Maximum file size for each file before rotation. Note: At least one entry is written to each log, so the final file size may exceed this maximum if a single log entry exceeds this value.
-   - **Maximum Number of Files**: Maximum number of files to retain before rotating over older logs.
+   - **Maximum Number of Files**: Maximum number of files in each file set. When time-based rotation is enabled, the limit applies separately to each hour or day.
+   - **Rotation Period**: Select `hour` or `day` to start a file set at each period boundary. Select `None` to use only size-based rotation.
+   - **Retention Period**: Specify how long to keep file sets from previous periods. The default value is `infinity`.
+   - **Rotation Timezone**: Specify `UTC`, `local`, or a fixed UTC offset such as `+02:00` for determining period boundaries and filename timestamps. For details about these rotation settings, see [Log Rotation](#log-rotation).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can write logs to the configured path.
 7. Click the **Create** button at the bottom to complete the connector creation.
 
