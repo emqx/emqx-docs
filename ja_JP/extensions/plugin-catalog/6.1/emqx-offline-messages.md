@@ -1,6 +1,6 @@
 # オフラインメッセージ
 
-このプラグインは、サブスクライバーがオンラインでない場合に選択されたQoS 1/2のメッセージを永続化し、後で該当するサブスクライバーがオンラインになった際にそれらを再生します。
+このプラグインは、サブスクライバーがオンラインでない場合に選択されたQoS 1/2のメッセージをパーシステンスし、後で該当するサブスクライバーがオンラインになった際にそれらを再生します。
 
 対応バックエンド：
 
@@ -13,9 +13,9 @@
 
 `PUT /api/v5/plugins/<name-vsn>/config`
 
-スキーマは `priv/config.hocon` に定義されており、RedisおよびMySQL用のバックエンド固有の設定が含まれています。
+スキーマは `priv/config.hocon` に定義されており、RedisおよびMySQL用のバックエンド固有の設定を含みます。
 
-プラグインがメッセージを永続化する条件は以下の通りです：
+プラグインがメッセージをパーシステンスする条件は以下の通りです：
 
 - パブリッシュのQoSが `0` より大きい
 - トピックが設定された `message.topic_filter` のいずれかにマッチする
@@ -76,9 +76,9 @@ Redisは `mqtt:sub:*` および `mqtt:msg:*` キースペースの下でハッ�
 
 ## ダウンロード
 
-各 EMQX リリースに対応するプラグインパッケージ:
+各EMQXリリース用のtarball：
 
-| EMQX バージョン | プラグインバージョン | パッケージ |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.sha256)) |
 | 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.sha256)) |
