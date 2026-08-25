@@ -186,7 +186,7 @@ listeners.ssl.default {
 - `EMQX_FEATURES`：选择节点启动的应用集合，例如 `FULL` 或 `ESSENTIAL`。
 - `EMQX_SECURITY_PROFILE`：选择节点级安全配置方案（Security Profile），可选值为 `legacy` 或 `hardened`。
 
-从 EMQX 6.3.0 开始，`emqx` 命令在每次执行时（启动服务、前台启动、`emqx ctl` 等）都会加载环境文件 `etc/emqx.env`（rpm 和 deb 安装为 `/etc/emqx/emqx.env`）。在软件包安装环境中，请使用该文件设置启动期环境变量，而不要修改 systemd 单元文件。
+从 EMQX 6.3.0 开始，`emqx` 命令每次执行时都会从 `etc/emqx.env` 加载环境变量，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。对于 RPM 和 DEB 安装，该文件位于 `/etc/emqx/emqx.env`。请使用该文件设置启动期环境变量，而不要修改 systemd 单元文件。
 
 - 文件中设置的值会覆盖从环境中继承的变量。
 - 软件包升级会保留您对该文件的修改。

@@ -183,7 +183,7 @@ Most `EMQX_`-prefixed environment variables override `emqx.conf` settings, follo
 - `EMQX_FEATURES`: Selects the set of applications the node boots, for example `FULL` or `ESSENTIAL`.
 - `EMQX_SECURITY_PROFILE`: Selects the node-wide security profile, `legacy` or `hardened`.
 
-Starting from EMQX 6.3.0, the `emqx` command sources the environment file `etc/emqx.env` (`/etc/emqx/emqx.env` on rpm and deb installs) on every invocation: service start, foreground start, `emqx ctl`, and so on. Use this file to set boot-time environment variables on package installs, instead of editing the systemd unit.
+Starting from EMQX 6.3.0, the `emqx` command loads environment variables from `etc/emqx.env` whenever it runs, including during a service start, a foreground start, and `emqx ctl`. On RPM and DEB installations, the file is located at `/etc/emqx/emqx.env`. Use this file to set boot-time environment variables instead of editing the systemd unit.
 
 - Values set in the file override variables inherited from the environment.
 - Package upgrades keep your edits to the file.
