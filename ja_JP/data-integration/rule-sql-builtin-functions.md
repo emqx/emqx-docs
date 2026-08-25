@@ -934,6 +934,60 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 ```
 
+### maptab_lookup(Table: string, Key: string | integer) -> map | undefined
+
+::: tip
+
+この関数はEMQX 6.1.5以降で利用可能で、EMQX Mapping Tablesプラグインのインストール・起動後に使用できます。
+
+:::
+
+[EMQX Mapping Tablesプラグイン](../extensions/plugin-catalog/6.1/emqx-maptabs.md)で管理されるマッピングテーブルから行を検索します。テーブルやキーが存在しない、またはキーの型が一致しない場合は `undefined` を返します。
+
+キーの一致は型変換なしの厳密な等価比較です。例えば整数キー `50` と文字列キー `'50'` は異なるキーです。
+
+例：
+
+```bash
+maptab_lookup('signals', 1) = json_decode('{"signal_name":"temperature_c","start_bit":17,"length":8,"type":"integer","signedness":"signed","endian":"big"}')
+maptab_lookup('signals', 3) = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, DefaultRow: map) -> map
+
+`maptab_lookup/2` と同様ですが、検索失敗時に指定した `DefaultRow` を返します。`DefaultRow` は `map_new()`, `map_put(...)`, `json_decode('{...}')` で作成します。
+
+返された行を別の関数に渡す場合は、その関数が必要とするすべてのフィールドを含めてください。空のデフォルト行（例：`map_new()`）はフィールドが `undefined` のままです。
+
+例：
+
+```bash
+maptab_lookup('signals', 3, json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')) = json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string) -> any | undefined
+
+一致した行の指定したフィールドを検索します。テーブル、キー、フィールドが存在しないかキーの型が一致しない場合は `undefined` を返します。
+
+例：
+
+```bash
+maptab_lookup('signals', 1, 'signal_name') = 'temperature_c'
+maptab_lookup('signals', 3, 'signal_name') = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string, Default: any) -> any
+
+`maptab_lookup(Table, Key, Field)` と同様ですが、検索失敗時に指定した `Default` を返します。
+
+例：
+
+```bash
+maptab_lookup('signals', 3, 'signal_name', 'Unknown') = 'Unknown'
+```
+
+`FOREACH` 内で `maptab_lookup` を使う場合、欠損する行のフィールドアクセスはガードしてください。例えば、`maptab_lookup('signals', item_id)` が `undefined` を返した場合、`sig.start_bit` を `subbits` に渡すとメッセージのSQL実行全体が失敗します。`CASE WHEN is_map(sig)` を使うか完全なデフォルト行を用意してください。
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 `Map` に `Key` と対応する `Value` を挿入し、更新されたマップを返します。既存の `Key` がある場合は値を上書きします。例：

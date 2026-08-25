@@ -1,6 +1,6 @@
 # UNS Governance
 
-This plugin enforces Unified Namespace topic structure at ACL check time.
+This plugin enforces Unified Namespace topic structure at ACL check time and can validate the payloads of messages published to topics governed by UNS Governance.
 
 ## Plugin API
 
@@ -175,6 +175,7 @@ UNS Governance validates both topic structure and (optionally) payload schema.
     `topic_invalid`, `not_endpoint`, and per-model counters in `per_model`.
 
 - Payload violations (`payload_invalid`):
+  - When a message is published to a topic governed by UNS Governance and that topic has a payload schema, payload validation runs during publish processing for every matching message, including publishes that hit the authorization cache and non-client publishes such as rule-engine republish or bridge ingress.
   - Message is dropped by UNS Governance in publish processing.
   - No auth reject/disconnect is required for this path.
   - Observable counters: `messages_dropped`, `payload_invalid`,
@@ -244,7 +245,8 @@ Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
-| 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) |
-| 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) |
+| 6.1.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_unsgov-0.1.3.sha256)) |
+| 6.1.3 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_unsgov-0.1.3.sha256)) |
+| 6.1.4 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_unsgov-0.1.3.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

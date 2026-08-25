@@ -8,7 +8,7 @@ Some plugins remain specialized, while others may later be promoted into standar
 
 The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
 
-## Message Persistence
+## Security
 
 [EMQX ACME Plugin](./plugin-catalog/6.1/emqx-acme.md)
 
@@ -30,11 +30,21 @@ This plugin periodically synchronizes selected backup data from a primary EMQX c
 
 This plugin forwards local MQTT messages to another MQTT broker, buffering them on disk for better resilience across network interruptions.
 
+[Mapping Tables](./plugin-catalog/6.1/emqx-maptabs.md)
+
+This plugin provides named mapping tables for Rule SQL, allowing rules to replace long `CASE WHEN` expressions with table lookups.
+
 ## Message Persistence
 
 [Offline Messages](./plugin-catalog/6.1/emqx-offline-messages.md)
 
 This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
+
+## Messaging
+
+[Sync Request](./plugin-catalog/6.1/emqx-sync-request.md)
+
+This plugin lets an HTTP caller publish one MQTT request through the EMQX REST API and wait synchronously for the first matching MQTT response.
 
 ## Connection Management
 
@@ -46,4 +56,4 @@ This plugin enforces a per-username session quota across the cluster, rejecting 
 
 [UNS Governance](./plugin-catalog/6.1/emqx-unsgov.md)
 
-This plugin enforces a Unified Namespace (UNS) topic structure at ACL check time, so publishing and subscribing must conform to the governed namespace hierarchy.
+This plugin enforces a Unified Namespace (UNS) topic structure and can validate the payloads of messages published to topics governed by UNS Governance.
