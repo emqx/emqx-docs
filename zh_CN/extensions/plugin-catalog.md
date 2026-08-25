@@ -8,7 +8,7 @@
 
 本页面列出的插件均维护在 [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins) 中。
 
-## 消息持久化
+## 安全
 
 [EMQX ACME 插件](./plugin-catalog/6.1/emqx-acme.md)
 
@@ -30,11 +30,21 @@
 
 该插件将本地 MQTT 消息转发到另一个 MQTT Broker，并在磁盘上缓冲消息，以在网络中断时提供更好的可靠性。
 
+[映射表（Mapping Tables）](./plugin-catalog/6.1/emqx-maptabs.md)
+
+该插件为 Rule SQL 提供命名 mapping table，使规则可以用表查找替代较长的 `CASE WHEN` 表达式。
+
 ## 消息持久化
 
 [离线消息](./plugin-catalog/6.1/emqx-offline-messages.md)
 
 该插件将 MQTT 消息持久化到 MySQL 或 Redis，使订阅者重新上线后可以获取在离线期间到达的消息，覆盖标准 MQTT 会话持久化能力之外的场景。
+
+## 消息传输
+
+[同步请求](./plugin-catalog/6.1/emqx-sync-request.md)
+
+该插件允许 HTTP 调用方通过 EMQX REST API 发布一条 MQTT 请求，并同步等待第一条匹配的 MQTT 响应。
 
 ## 连接管理
 
@@ -46,4 +56,4 @@
 
 [UNS 治理](./plugin-catalog/6.1/emqx-unsgov.md)
 
-该插件在 ACL 检查阶段强制执行统一命名空间（UNS）的主题结构，使发布和订阅必须符合受治理的命名空间层级。
+该插件强制执行统一命名空间（UNS）的主题结构，并可对发布到受 UNS 治理的主题的消息载荷进行校验。

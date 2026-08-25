@@ -1,6 +1,6 @@
 # オフラインメッセージ
 
-このプラグインは、サブスクライバーがオンラインでない場合に選択された QoS 1/2 のメッセージを永続化し、後で一致するサブスクライバーがオンラインになった際にそれらを再生します。
+このプラグインは、サブスクライバーがオンラインでない場合に選択されたQoS 1/2のメッセージをパーシステンスし、後で該当するサブスクライバーがオンラインになった際にそれらを再生します。
 
 対応バックエンド：
 
@@ -9,15 +9,15 @@
 
 ## 設定
 
-プラグインは標準の EMQX プラグイン設定 API を通じて設定します：
+プラグインは標準のEMQXプラグイン設定APIを通じて設定します：
 
 `PUT /api/v5/plugins/<name-vsn>/config`
 
-スキーマは `priv/config.hocon` に定義されており、Redis と MySQL 向けのバックエンド固有の設定を含みます。
+スキーマは `priv/config.hocon` に定義されており、RedisおよびMySQL用のバックエンド固有の設定を含みます。
 
-プラグインがメッセージを永続化する条件は以下の通りです：
+プラグインがメッセージをパーシステンスする条件は以下の通りです：
 
-- パブリッシュの QoS が `0` より大きい
+- パブリッシュのQoSが `0` より大きい
 - トピックが設定された `message.topic_filter` のいずれかにマッチする
 
 ## ビルドとテスト
@@ -28,7 +28,7 @@
 make
 ```
 
-このプラグインの Common Test スイートを実行します：
+このプラグインのCommon Testスイートを実行します：
 
 ```bash
 make plugins/emqx_offline_messages-ct
@@ -66,21 +66,22 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8MB4;
 
 ### Redis
 
-Redis は `mqtt:sub:*` および `mqtt:msg:*` キースペースの下でハッシュとソート済みセットを使用します。
+Redisは `mqtt:sub:*` および `mqtt:msg:*` キースペースの下でハッシュとソート済みセットを使用します。
 
-- サブスクリプション状態はクライアント ID をキーとするハッシュに保存されます。
-- メッセージペイロードはメッセージ ID をキーとするハッシュに保存されます。
-- トピックインデックスはトピックをキーとするソート済みセットに保存されます。
+- サブスクリプション状態はクライアントIDをキーとしたハッシュに保存されます。
+- メッセージペイロードはメッセージIDをキーとしたハッシュに保存されます。
+- トピックインデックスはトピックをキーとしたソート済みセットに保存されます。
 
 <!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
 
 ## ダウンロード
 
-各 EMQX リリース向けの tarball：
+各EMQXリリース用のtarball：
 
-| EMQX バージョン | プラグインバージョン | パッケージ |
+| EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
-| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) |
-| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) |
+| 6.1.2 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.2/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.3 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_offline_messages-2.0.0.sha256)) |
+| 6.1.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_offline_messages-2.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

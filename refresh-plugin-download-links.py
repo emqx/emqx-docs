@@ -24,6 +24,16 @@ release-6.N -> release-6.(N+1) sync merges free of content conflicts on
 the plugin pages. The series defaults to the current docs-root branch
 (`release-N.M`); override with `--series N.M`.
 
+Docs for a brand-new plugin are sometimes published ahead of the first
+release that ships it. Pass `--upcoming TAG[:REF]` (e.g.
+`--upcoming 6.1.5:release-61`) to add a download row for that not-yet-tagged
+release, reading plugin VERSION files from REF (default: HEAD of the emqx
+repo). The upcoming row is added only for plugins that appear in no stable
+tag of the series; pages of already-released plugins are not given links to
+packages that do not exist yet. The generated URL goes live when the tag is
+published. Re-run the script without `--upcoming` after the release to
+regenerate the tables from real tags.
+
 If an `en_US` catalog page does not yet exist for a discovered plugin,
 the script bootstraps it by copying the plugin's `README.md` from the
 latest stable tag of the series, then splices the Download table onto
@@ -123,6 +133,14 @@ class ReleaseTag:
     major: int
     minor: int
     patch: int
+    # Git ref to read tree contents from. Defaults to `raw` (the tag
+    # itself); an upcoming release reads from a branch/commit instead
+    # because its tag does not exist yet.
+    git_ref: str | None = None
+
+    @property
+    def ref(self) -> str:
+        return self.git_ref or self.raw
 
     @property
     def display_version(self) -> str:
@@ -233,13 +251,37 @@ def build_rows(
     """Return plugin -> [(tag, plugin_ver), ...] sorted by tag asc."""
     rows: dict[str, list[tuple[ReleaseTag, str]]] = {}
     for tag in tags:
-        plugins = list_plugins_at(repo, tag.raw)
+        plugins = list_plugins_at(repo, tag.ref)
         for plugin in plugins:
-            pver = read_plugin_version(repo, tag.raw, plugin)
+            pver = read_plugin_version(repo, tag.ref, plugin)
             if not pver:
                 continue
             rows.setdefault(plugin, []).append((tag, pver))
     return rows
+
+
+def add_upcoming_rows(
+    repo: Path,
+    rows: dict[str, list[tuple[ReleaseTag, str]]],
+    upcoming: ReleaseTag,
+) -> list[str]:
+    """Add rows for an upcoming (not yet tagged) release.
+
+    Only plugins absent from every stable tag get a row: their docs are
+    published ahead of the first release that ships them. Plugins that
+    already have stable-tag rows are left alone so their pages do not
+    link to packages that do not exist yet.
+    """
+    added: list[str] = []
+    for plugin in list_plugins_at(repo, upcoming.ref):
+        if plugin in rows:
+            continue
+        pver = read_plugin_version(repo, upcoming.ref, plugin)
+        if not pver:
+            continue
+        rows[plugin] = [(upcoming, pver)]
+        added.append(plugin)
+    return added
 
 
 def collect_readmes(
@@ -248,7 +290,7 @@ def collect_readmes(
     """Return plugin -> README.md content from the latest tag where it appears."""
     readmes: dict[str, str] = {}
     for plugin, entries in rows.items():
-        latest_tag = entries[-1][0].raw
+        latest_tag = entries[-1][0].ref
         readme = read_plugin_readme(repo, latest_tag, plugin)
         if readme:
             readmes[plugin] = readme
@@ -424,6 +466,49 @@ def resolve_series(flag: str | None, docs_root: Path) -> tuple[int, int]:
     return detected
 
 
+def parse_upcoming_flag(
+    flag: str, series: tuple[int, int]
+) -> ReleaseTag:
+    """Parse 'TAG[:REF]' into a ReleaseTag; validate against the series."""
+    tag_part, sep, ref_part = flag.partition(":")
+    git_ref = ref_part if sep else "HEAD"
+    m = STABLE_TAG_RE.match(tag_part)
+    if not m:
+        sys.exit(
+            f"error: --upcoming tag {tag_part!r} does not look like a "
+            f"stable release tag (e.g. '6.1.5' or 'e5.10.5')"
+        )
+    major = int(m.group("major"))
+    minor = int(m.group("minor"))
+    has_prefix = bool(m.group("prefix"))
+    if (major, minor) != series:
+        sys.exit(
+            f"error: --upcoming tag {tag_part!r} is not in the targeted "
+            f"series {series[0]}.{series[1]}"
+        )
+    if major == 5 and not has_prefix:
+        sys.exit(f"error: 5.x tags use the 'e' prefix (got {tag_part!r})")
+    if major >= 6 and has_prefix:
+        sys.exit(f"error: 6.x tags use no 'e' prefix (got {tag_part!r})")
+    return ReleaseTag(
+        raw=tag_part,
+        major=major,
+        minor=minor,
+        patch=int(m.group("patch")),
+        git_ref=git_ref,
+    )
+
+
+def validate_upcoming(repo: Path, upcoming: ReleaseTag) -> None:
+    if try_git(repo, "rev-parse", "--verify", f"refs/tags/{upcoming.raw}") is not None:
+        sys.exit(
+            f"error: tag {upcoming.raw} already exists; drop --upcoming and "
+            f"regenerate from the real tag"
+        )
+    if try_git(repo, "rev-parse", "--verify", f"{upcoming.ref}^{{commit}}") is None:
+        sys.exit(f"error: --upcoming ref {upcoming.ref!r} does not resolve in {repo}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Refresh plugin download-link tables in plugin-catalog docs.",
@@ -454,6 +539,16 @@ def main() -> int:
              "Default: auto-detect from the docs-root branch name (release-N.M).",
     )
     parser.add_argument(
+        "--upcoming",
+        default=None,
+        metavar="TAG[:REF]",
+        help="Add a download row for a not-yet-tagged release, reading "
+             "plugin VERSION files from git REF (default: HEAD). Applied "
+             "only to plugins that appear in no stable tag of the series "
+             "(docs published ahead of the plugin's first release). "
+             "Example: --upcoming 6.1.5:release-61",
+    )
+    parser.add_argument(
         "--bootstrap-locales",
         default="en_US",
         help="Comma-separated list of locales whose missing catalog pages "
@@ -475,6 +570,9 @@ def main() -> int:
         )
 
     series = resolve_series(args.series, docs_root)
+    upcoming = (
+        parse_upcoming_flag(args.upcoming, series) if args.upcoming else None
+    )
     subpath = catalog_subpath(series)
     if not any((docs_root / loc / subpath).is_dir() for loc in present_locales):
         # This branch still publishes the flat (unversioned) catalog pages;
@@ -499,20 +597,37 @@ def main() -> int:
             workdir = Path(".")
         repo = ensure_repo(args.emqx_repo.resolve() if args.emqx_repo else None, workdir)
 
+        if upcoming is not None:
+            validate_upcoming(repo, upcoming)
+
         tags = list_release_tags(repo, series)
-        if not tags:
+        if not tags and upcoming is None:
             print(
                 f"warning: no stable tags found for series {series[0]}.{series[1]}",
                 file=sys.stderr,
             )
             return 0
-        print(
-            f"Found {len(tags)} stable tag(s): "
-            f"{tags[0].raw} ... {tags[-1].raw}",
-            file=sys.stderr,
-        )
+        if tags:
+            print(
+                f"Found {len(tags)} stable tag(s): "
+                f"{tags[0].raw} ... {tags[-1].raw}",
+                file=sys.stderr,
+            )
 
         rows = build_rows(repo, tags)
+        if upcoming is not None:
+            added = add_upcoming_rows(repo, rows, upcoming)
+            if added:
+                print(
+                    f"Upcoming {upcoming.raw} (from {upcoming.ref}) adds: "
+                    f"{', '.join(added)}",
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    f"Upcoming {upcoming.raw}: no new plugins beyond stable tags",
+                    file=sys.stderr,
+                )
         if not rows:
             print("warning: no plugins discovered in any tag", file=sys.stderr)
             return 0

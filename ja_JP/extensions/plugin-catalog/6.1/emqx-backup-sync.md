@@ -1,12 +1,12 @@
 # EMQX Backup Sync
 
-このプラグインは、既存のデータバックアップAPIを使用して、プライマリEMQXクラスターからセカンダリEMQXクラスターへ選択されたバックアップデータを定期的に同期します。
+このプラグインは、既存のデータバックアップAPIを使用して、プライマリEMQXクラスターからセカンダリEMQXクラスターへ選択したバックアップデータを定期的に同期します。
 
-セカンダリクラスターはプライマリクラスターに対してバックアップファイルのエクスポートを要求し、そのファイルをダウンロードしてローカルにアップロードし、インポートします。選択された設定ルートはEMQXの既存の設定インポートのセマンティクスに従ってインポートされます。選択されたMnesiaテーブルセットはスナップショットとしてインポートされるため、セカンダリクラスターにのみ存在するそれらのテーブルセット内のレコードは削除されます。選択されていないルートおよびテーブルセットは変更されません。
+セカンダリクラスターはプライマリクラスターに対してバックアップファイルのエクスポートを呼び出し、そのファイルをダウンロードしてローカルにアップロードし、インポートします。選択された設定ルートはEMQXの既存の設定インポートのセマンティクスに従ってインポートされます。選択されたMnesiaテーブルセットはスナップショットとしてインポートされるため、セカンダリクラスターにのみ存在するレコードは削除されます。選択されていないルートおよびテーブルセットは変更されません。
 
 ## 設定
 
-各セカンダリクラスターにプラグインをインストールして起動してください。プライマリクラスターにはこのプラグインをインストールする必要はなく、セカンダリクラスターからアクセス可能なDashboardのデータバックアップAPIが必要です。
+各セカンダリクラスターにプラグインをインストールして起動してください。プライマリクラスターにはこのプラグインをインストールする必要はなく、セカンダリクラスターからアクセス可能なDashboardのデータバックアップAPIがあれば十分です。
 
 ```hocon
 primary {
@@ -44,17 +44,17 @@ sync {
 }
 ```
 
-設定されたAPIキーはプライマリクラスターのデータバックアップエンドポイントへのアクセスが許可されている必要があります。`primary.api_key`および`primary.api_secret`は直接設定するか、`file://`パス（例：`file:///etc/emqx/backup-sync-api-key`）として指定できます。
+設定されたAPIキーはプライマリクラスターのデータバックアップエンドポイントへのアクセスが許可されている必要があります。`primary.api_key`および`primary.api_secret`は直接設定するか、`file://`パス（例：`file:///etc/emqx/backup-sync-api-key`）として設定可能です。
 
 サポートされている`sync.root_keys`の値は`connectors`、`actions`、`sources`、`rule_engine`、`listeners`、`schema_registry`、`authentication`、および`authorization`です。
 
-ルールは一般的にコネクター、アクション、ソース、およびスキーマレジストリのオブジェクトに依存します。`rule_engine`を依存関係なしで同期すると、インポートに失敗したり、実行時動作が不完全になる可能性があります。セカンダリクラスターに存在しない限り、それらの依存ルートを`sync.root_keys`に含めてください。
+ルールは一般的にコネクター、アクション、ソース、およびスキーマレジストリのオブジェクトに依存します。`rule_engine`を依存関係なしに同期すると、インポートに失敗したり不完全なランタイム動作を引き起こす可能性があります。セカンダリクラスターに存在しない限り、依存するルートを`sync.root_keys`に含めてください。
 
-デフォルトでは、同期には`banned`、`builtin_authn`、`builtin_authz`のテーブルセットも含まれます。これらの選択されたテーブルセットはセカンダリクラスター上で置き換えられます。設定のみの同期が必要な場合は`sync.table_sets = []`に設定してください。サポートされている`sync.table_sets`の値は`banned`、`builtin_authn`、`builtin_authz`、`builtin_retainer`、`psk`、および`mt`です。プライマリのデータバックアップAPIはAPIキーで呼び出された場合、`dashboard_users`や`api_keys`は含まれません。
+デフォルトでは、同期には`banned`、`builtin_authn`、および`builtin_authz`のテーブルセットも含まれます。これらの選択されたテーブルセットはセカンダリクラスター上で置き換えられます。設定のみの同期が必要な場合は`sync.table_sets = []`に設定してください。サポートされている`sync.table_sets`の値は`banned`、`builtin_authn`、`builtin_authz`、`builtin_retainer`、`psk`、および`mt`です。プライマリのデータバックアップAPIはAPIキーで呼び出された場合、`dashboard_users`や`api_keys`は含みません。
 
 ## CLI
 
-セカンダリノード上で以下のコマンドを使用して、ローカルの同期ワーカーを確認できます。
+セカンダリノードで以下のコマンドを使用してローカルの同期ワーカーを確認できます。
 
 ```bash
 emqx ctl backup_sync status
@@ -70,6 +70,7 @@ emqx ctl backup_sync status
 
 | EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
-| 6.1.3 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.1.3/emqx_backup_sync-0.1.0.tar.gz) |
+| 6.1.3 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_backup_sync-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.3/emqx_backup_sync-0.1.0.sha256)) |
+| 6.1.4 | 0.1.1 | [emqx_backup_sync-0.1.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_backup_sync-0.1.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_backup_sync-0.1.1.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
