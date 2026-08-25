@@ -41,7 +41,7 @@ You can configure the Dynatrace integration from the EMQX Dashboard:
 4. Under **OpenTelemetry Type**, select **Dynatrace**.
 5. Under **Feature Selection**, select **Traces**, **Logs**, or both. Dynatrace integration does not support metrics.
 6. In **Endpoint**, enter the Dynatrace OTLP base URL. Do not append `/v1/logs` or `/v1/traces`.
-7. Optional: In **Headers**, click **Add** to add extra HTTP headers that EMQX should send to the Dynatrace OTLP endpoint. You do not need to add an OAuth2 `Authorization` header; EMQX obtains the access token and adds this header automatically.
+7. Optional: In **Headers**, click **Add** to add extra HTTP headers that EMQX should send to the Dynatrace OTLP endpoint. You do not need to add an `Authorization` header; EMQX obtains the access token and adds this header automatically.
 8. If the Dynatrace OTLP endpoint uses HTTPS, turn on **Enable TLS** for the exporter.
 
 In the **OAuth2 Authentication** section, configure the following fields:
@@ -51,7 +51,7 @@ In the **OAuth2 Authentication** section, configure the following fields:
 | **Token Endpoint** | Dynatrace OAuth2 token endpoint. |
 | **Client ID** | OAuth2 client ID. |
 | **Client Secret** | OAuth2 client secret. |
-| **Resource** | OAuth2 resource value required by Dynatrace. |
+| **Resource** | OAuth2 resource value required by Dynatrace. Use the format `urn:dtaccount:{your-account-uuid}`. |
 | **Scope** | Optional OAuth2 scopes. Configure scopes that match the enabled signals when Dynatrace requires them. |
 | **Timeout** | Timeout for token requests. |
 | **Enable TLS** | Enable TLS for token requests when the token endpoint uses HTTPS. |

@@ -1,6 +1,6 @@
 # 将 OpenTelemetry 与 Dynatrace 集成
 
-从 EMQX 6.3.0 开始，EMQX 支持将 OpenTelemetry 日志和追踪数据直接导出到 Dynatrace。该集成使用 OTLP HTTP/protobuf 协议，并通过 OAuth2 client credentials 进行认证。
+从 EMQX 6.3.0 开始，EMQX 支持将 OpenTelemetry 日志和追踪数据直接导出到 Dynatrace。该集成使用 OTLP HTTP/protobuf 协议，并通过 OAuth2 客户端凭据（client credentials）进行认证。
 
 ::: tip 提示
 
@@ -41,7 +41,7 @@
 4. 在 **OpenTelemetry 类型**中选择 **Dynatrace**。
 5. 在**功能选择**中选择**追踪**、**日志**，或同时选择两者。Dynatrace 集成不支持指标。
 6. 在**服务地址**中输入 Dynatrace OTLP 基础 URL。不要追加 `/v1/logs` 或 `/v1/traces`。
-7. 可选：在**请求头**中点击**添加**，添加 EMQX 发送到 Dynatrace OTLP endpoint 的额外 HTTP 请求头。无需添加 OAuth2 `Authorization` 请求头；EMQX 会自动获取 access token 并添加该请求头。
+7. 可选：在**请求头**中点击**添加**，添加 EMQX 发送到 Dynatrace OTLP endpoint 的额外 HTTP 请求头。无需添加 `Authorization` 请求头；EMQX 会自动获取 access token 并添加该请求头。
 8. 如果 Dynatrace OTLP endpoint 使用 HTTPS，打开导出器的**启用 TLS**开关。
 
 在 **OAuth2 认证**区域中，配置以下字段：
@@ -51,7 +51,7 @@
 | **令牌端点** | Dynatrace OAuth2 token endpoint。 |
 | **客户端 ID** | OAuth2 client ID。 |
 | **客户端密钥** | OAuth2 client secret。 |
-| **资源** | Dynatrace 所需的 OAuth2 resource。 |
+| **资源** | Dynatrace 所需的 OAuth2 resource，格式为 `urn:dtaccount:{your-account-uuid}`。 |
 | **作用域** | 可选的 OAuth2 scope。当 Dynatrace 要求 scope 时，请根据已启用的信号进行配置。 |
 | **超时时间** | token 请求的超时时间。 |
 | **启用 TLS** | token endpoint 使用 HTTPS 时，启用 token 请求的 TLS。 |
