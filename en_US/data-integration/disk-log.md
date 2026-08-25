@@ -12,7 +12,7 @@ Implemented using EMQX’s rule engine and Sink mechanism, the Disk Log integrat
 1. Rules are used to filter, transform, and extract the data of interest from MQTT messages or client events.
 2. A Disk Log Sink is attached to the rule to define how and where to store the data. The Sink forwards the formatted data (as JSON) to the corresponding Connector.
 3. The Disk Log Connector manages the physical writing of data to the file system. It handles the log file path configuration, log file rotation policy, etc.
-4. Once the rule is triggered and the data is passed to the Sink, the Sink invokes the configured Connector to write the data in JSON Lines format to rotating files under the configured base path, making it easy to consume using standard tools and downstream data systems.
+4. Once the rule is triggered and the data is passed to the Sink, the Sink invokes the configured Connector to write the data in JSON Lines format to rotating files derived from the configured base file path, making it easy to consume using standard tools and downstream data systems.
 
 ### Log Rotation
 
@@ -32,7 +32,7 @@ Time-based rotation starts a separate file set at each hour or day boundary. Con
 | **Retention Period** | `rotation.retention_period` | Specify how long EMQX keeps file sets from previous periods. EMQX removes expired file sets when the connector starts and after each period rotation. This option has no effect when `rotation.period` is `none`. | `infinity` |
 | **Rotation Timezone** | `rotation.timezone` | Specify the timezone used to determine period boundaries and filename timestamps. Supported values are `UTC`, `local`, or a fixed UTC offset such as `+02:00`. | `UTC` |
 
-When time-based rotation is enabled, EMQX inserts a `YYYYMMDDHH` timestamp before the file extension. Hourly files use the hour of the period, for example, `mqtt-trace-2026062413.log.1`. Daily files use `00` as the hour, for example, `mqtt-trace-2026062400.log.1`. The `.N` suffix is always present. Each period's file set also includes `.idx` and `.siz` bookkeeping files.
+When time-based rotation is enabled, EMQX inserts a hyphen (`-`) followed by a `YYYYMMDDHH` timestamp before the file extension. Hourly files use the hour of the period, for example, `mqtt-trace-2026062413.log.1`. Daily files use `00` as the hour, for example, `mqtt-trace-2026062400.log.1`. The `.N` suffix is always present. Each period's file set also includes `.idx` and `.siz` bookkeeping files.
 
 The **Maximum File Size** and **Maximum Number of Files** settings apply separately to each period. To prevent files from being overwritten within a period, configure enough capacity for the maximum expected data volume during one hour or day. The approximate capacity of each period is **Maximum File Size** multiplied by **Maximum Number of Files**.
 
