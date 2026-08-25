@@ -109,6 +109,6 @@ mqttx pub -q 1 -t 't/2' -m 'hello-from-offline3'
 
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
-| 5.10.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.tar.gz) |
+| 5.10.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

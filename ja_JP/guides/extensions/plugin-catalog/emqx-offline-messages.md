@@ -105,10 +105,10 @@ mqttx pub -q 1 -t 't/2' -m 'hello-from-offline3'
 
 ## ダウンロード
 
-各EMQXリリース向けのtarball：
+各 EMQX リリースに対応するプラグインパッケージ:
 
-| EMQXバージョン | プラグインバージョン | パッケージ |
+| EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
-| 5.10.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.tar.gz) |
+| 5.10.4 | 2.0.0 | [emqx_offline_messages-2.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.4/emqx_offline_messages-2.0.0.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
