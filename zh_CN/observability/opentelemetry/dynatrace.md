@@ -52,7 +52,7 @@
 | **客户端 ID** | OAuth2 client ID。 |
 | **客户端密钥** | OAuth2 client secret。 |
 | **资源** | Dynatrace 所需的 OAuth2 resource，格式为 `urn:dtaccount:{your-account-uuid}`。 |
-| **作用域** | 可选的 OAuth2 scope。当 Dynatrace 要求 scope 时，请根据已启用的信号进行配置。 |
+| **作用域** | 可选的 OAuth2 scope。如果在创建 OAuth2 客户端时已固定 scope，请省略此字段；否则，请配置已启用信号所需的 scope。 |
 | **超时时间** | token 请求的超时时间。 |
 | **启用 TLS** | token endpoint 使用 HTTPS 时，启用 token 请求的 TLS。 |
 
@@ -109,7 +109,7 @@ opentelemetry {
 - `opentelemetry.exporter.auth.kind`：设置为 `dynatrace_oauth2`。
 - `opentelemetry.exporter.auth.enable`：设置为 `true`，启用 OAuth2 token 获取。
 - `opentelemetry.exporter.auth.resource`：Dynatrace OAuth2 client credentials flow 所需字段。EMQX 在请求 access token 时会将其作为 `resource` 参数发送。
-- `opentelemetry.exporter.auth.scope`：在 EMQX 中为可选字段，但 Dynatrace 可能要求 scope 与已启用的信号匹配。
+- `opentelemetry.exporter.auth.scope`：可选。如果在创建 OAuth2 客户端时已固定 scope，请省略此字段；否则，请配置已启用信号所需的 scope。
 - `opentelemetry.exporter.ssl_options.enable`：导出到 Dynatrace SaaS 或 HTTPS ActiveGate endpoint 时，应启用 TLS。
 
 您可以启用 `logs`、`traces`，或同时启用两者。当 `opentelemetry.type = dynatrace` 时，不要配置 `metrics`。

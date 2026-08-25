@@ -41,7 +41,7 @@ You can configure the Dynatrace integration from the EMQX Dashboard:
 4. Under **OpenTelemetry Type**, select **Dynatrace**.
 5. Under **Feature Selection**, select **Traces**, **Logs**, or both. Dynatrace integration does not support metrics.
 6. In **Endpoint**, enter the Dynatrace OTLP base URL. Do not append `/v1/logs` or `/v1/traces`.
-7. Optional: In **Headers**, click **Add** to add extra HTTP headers that EMQX should send to the Dynatrace OTLP endpoint. You do not need to add an OAuth2 `Authorization` header; EMQX obtains the access token and adds this header automatically.
+7. Optional: In **Headers**, click **Add** to add extra HTTP headers that EMQX should send to the Dynatrace OTLP endpoint. You do not need to add an `Authorization` header; EMQX obtains the access token and adds this header automatically.
 8. If the Dynatrace OTLP endpoint uses HTTPS, turn on **Enable TLS** for the exporter.
 
 In the **OAuth2 Authentication** section, configure the following fields:
@@ -51,8 +51,8 @@ In the **OAuth2 Authentication** section, configure the following fields:
 | **Token Endpoint** | Dynatrace OAuth2 token endpoint. |
 | **Client ID** | OAuth2 client ID. |
 | **Client Secret** | OAuth2 client secret. |
-| **Resource** | OAuth2 resource value required by Dynatrace. |
-| **Scope** | Optional OAuth2 scopes. Configure scopes that match the enabled signals when Dynatrace requires them. |
+| **Resource** | OAuth2 resource value required by Dynatrace. Use the format `urn:dtaccount:{your-account-uuid}`. |
+| **Scope** | Optional OAuth2 scopes. Omit this field if the scopes were fixed during OAuth2 client creation; otherwise, configure the scopes required for the enabled signals. |
 | **Timeout** | Timeout for token requests. |
 | **Enable TLS** | Enable TLS for token requests when the token endpoint uses HTTPS. |
 
@@ -109,7 +109,7 @@ Replace the placeholders with your Dynatrace environment, account, and OAuth2 cl
 - `opentelemetry.exporter.auth.kind`: Set to `dynatrace_oauth2`.
 - `opentelemetry.exporter.auth.enable`: Set to `true` to enable OAuth2 token retrieval.
 - `opentelemetry.exporter.auth.resource`: Required by Dynatrace OAuth2 client credentials flow. EMQX sends it as the `resource` parameter when requesting an access token.
-- `opentelemetry.exporter.auth.scope`: Optional in EMQX, but Dynatrace may require scopes that match the enabled signals.
+- `opentelemetry.exporter.auth.scope`: Optional. Omit this field if the scopes were fixed during OAuth2 client creation; otherwise, configure the scopes required for the enabled signals.
 - `opentelemetry.exporter.ssl_options.enable`: Enable TLS when exporting to Dynatrace SaaS or an HTTPS ActiveGate endpoint.
 
 You can enable either `logs`, `traces`, or both. Do not configure `metrics` when `opentelemetry.type = dynatrace`.
