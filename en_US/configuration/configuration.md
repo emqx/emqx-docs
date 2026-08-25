@@ -187,7 +187,8 @@ Starting from EMQX 6.3.0, the `emqx` command sources the environment file `etc/e
 
 - Values set in the file override variables inherited from the environment.
 - Package upgrades keep your edits to the file.
-- The shipped file lists the boot-time variables commented out at their defaults, in the `KEY="${KEY:-default}"` form: uncommented as shipped, a line keeps a value already set in the environment and falls back to the default otherwise. Write `KEY=value` to force a value.
+- The shipped file lists boot-time variables as commented lines, for example, `#KEY="${KEY:-default}"`. If you uncomment a line without changing the expression, it keeps a nonempty environment value or uses the default when the variable is unset or empty. To override an existing value, replace the expression with `KEY=value`.
+- Restart the EMQX node after changing a boot-time environment variable.
 - Regular `EMQX_`-prefixed overrides, for example `EMQX_NODE__COOKIE`, can also be set in the file.
 
 ## Config Override Rules

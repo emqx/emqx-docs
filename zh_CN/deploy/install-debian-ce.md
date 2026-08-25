@@ -50,7 +50,7 @@ sudo systemctl start emqx
 ```
 
 ::: tip
-从 EMQX 6.3.0 开始，可以在 `/etc/emqx/emqx.env` 中设置启动期环境变量（例如 `EMQX_SECURITY_PROFILE`）。`emqx` 命令每次执行时都会加载该文件，软件包升级会保留您的修改。参见[环境变量](../configuration/configuration.md#环境变量)。
+从 EMQX 6.3.0 开始，可在 `/etc/emqx/emqx.env` 中设置启动期环境变量，例如 `EMQX_SECURITY_PROFILE`。`emqx` 命令每次执行时都会加载该文件，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。软件包升级会保留对该文件的修改。修改启动期环境变量后，重启 EMQX 节点以使更改生效。参见[启动期环境变量](../configuration/configuration.md#启动期环境变量)。
 :::
 
 #### 卸载 EMQX
