@@ -178,6 +178,22 @@ listeners.ssl.default {
 从 EMQX 6.3.0 开始，`EMQX_FEATURES` 是用于[功能门控](../deploy/feature-gates.md)的特殊启动环境变量。它不会映射到 HOCON 配置路径，不会写入 `cluster.hocon`，并且只在 EMQX 启动时解析。
 :::
 
+
+### 启动期环境变量
+
+大多数 `EMQX_` 前缀的环境变量按上述转换规则覆盖 `emqx.conf` 中的配置项。少数变量在配置文件解析之前就被读取，用于配置 EMQX 自身，因此没有对应的 `emqx.conf` 配置项：
+
+- `EMQX_FEATURES`：选择节点启动的应用集合，例如 `FULL` 或 `ESSENTIAL`。
+- `EMQX_SECURITY_PROFILE`：选择节点级安全配置方案（Security Profile），可选值为 `legacy` 或 `hardened`。
+
+从 EMQX 6.3.0 开始，`emqx` 命令每次执行时都会从 `etc/emqx.env` 加载环境变量，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。对于 RPM 和 DEB 安装，该文件位于 `/etc/emqx/emqx.env`。请使用该文件设置启动期环境变量，而不要修改 systemd 单元文件。
+
+- 文件中设置的值会覆盖从环境中继承的变量。
+- 软件包升级会保留您对该文件的修改。
+- EMQX 随附的文件以注释行列出启动期环境变量，例如 `#KEY="${KEY:-default}"`。如果直接取消注释而不修改表达式，文件会保留环境中已有的非空值；如果变量未设置或值为空，则使用默认值。如需覆盖已有值，请将表达式改为 `KEY=value`。
+- 修改启动期环境变量后，需要重启 EMQX 节点。
+- 普通的 `EMQX_` 前缀覆盖变量（例如 `EMQX_NODE__COOKIE`）也可以设置在该文件中。
+
 ## 配置覆盖规则
 
 HOCON 的值是分层覆盖的，最简单的规则如下：

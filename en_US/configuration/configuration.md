@@ -175,6 +175,22 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 Starting from EMQX 6.3.0, `EMQX_FEATURES` is a special startup environment variable for [feature gates](../deploy/feature-gates.md). It does not map to a HOCON configuration path, is not stored in `cluster.hocon`, and is resolved only when EMQX starts.
 :::
 
+
+### Boot-Time Environment Variables
+
+Most `EMQX_`-prefixed environment variables override `emqx.conf` settings, following the conversion rules above. A few variables configure EMQX itself before the configuration files are parsed, so they have no `emqx.conf` equivalent:
+
+- `EMQX_FEATURES`: Selects the set of applications the node boots, for example `FULL` or `ESSENTIAL`.
+- `EMQX_SECURITY_PROFILE`: Selects the node-wide security profile, `legacy` or `hardened`.
+
+Starting from EMQX 6.3.0, the `emqx` command loads environment variables from `etc/emqx.env` whenever it runs, including during a service start, a foreground start, and `emqx ctl`. On RPM and DEB installations, the file is located at `/etc/emqx/emqx.env`. Use this file to set boot-time environment variables instead of editing the systemd unit.
+
+- Values set in the file override variables inherited from the environment.
+- Package upgrades keep your edits to the file.
+- The shipped file lists boot-time variables as commented lines, for example, `#KEY="${KEY:-default}"`. If you uncomment a line without changing the expression, it keeps a nonempty environment value or uses the default when the variable is unset or empty. To override an existing value, replace the expression with `KEY=value`.
+- Restart the EMQX node after changing a boot-time environment variable.
+- Regular `EMQX_`-prefixed overrides, for example `EMQX_NODE__COOKIE`, can also be set in the file.
+
 ## Config Override Rules
 
 In EMQX, configuration values are applied hierarchically, with the following override rules:
