@@ -25,7 +25,7 @@ To configure Prometheus integration:
 
 Depending on the selected mode, some configuration options apply only to Pull mode, while others affect both modes. You can click the **Help** button on the Dashboard page to view detailed configuration steps for each mode.
 
-<img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
+<img src="./assets/enable-push-gateway.png" alt="Prometheus integration settings" style="zoom: 67%;" />
 
 ## Prometheus Configuration Options
 
@@ -60,18 +60,19 @@ The following options apply only when Prometheus scrapes EMQX metrics via REST A
 
 #### Enable Basic Auth
 
-Enable or disable HTTP Basic Authentication for Prometheus scrape APIs.
+Enable or disable authentication for Prometheus scrape APIs. The Dashboard uses the **Enable Basic Auth** label, but the setting controls both Basic and Bearer authentication for these APIs.
 
-By default, Prometheus Pull mode APIs do not require authentication. When this option is enabled:
+Starting from EMQX 6.3.0, this option is enabled by default. When this option is enabled:
 
-- Prometheus must use HTTP Basic Authentication to access:
-  - `/api/v5/prometheus/stats`
-  - `/api/v5/prometheus/auth`
-  - `/api/v5/prometheus/data_integration`
-- You must create an [API Key](../admin/api.md#authentication) in EMQX.
-- Configure the `basic_auth` section in your `prometheus.yaml`.
+- All Prometheus scrape APIs under `/api/v5/prometheus/*` require authentication. Requests without credentials return `401`.
+- Scrapers can use HTTP Basic authentication with an API key and secret key, or bearer token authentication with a Dashboard login token.
+- For persistent scraping, create a dedicated [API key](../admin/api.md#authentication) with the `monitoring` scope and configure the `basic_auth` section in `prometheus.yaml`.
 
-This option applies only to Pull mode and does not affect Pushgateway integration. For details, see [Configure Pull Mode Integration](#configure-pull-mode-integration).
+To allow unauthenticated scraping, turn off **Enable Basic Auth** or set `prometheus.enable_basic_auth = false`. This option applies only to Pull mode and does not affect Pushgateway integration. For details, see [Configure Pull Mode Integration](#configure-pull-mode-integration).
+
+::: warning Important Notice
+Disabling authentication allows any client that can reach the Dashboard listener to scrape EMQX metrics. After an upgrade, configurations that explicitly set `prometheus.enable_basic_auth = false` and legacy-format Prometheus configurations continue to allow unauthenticated scraping. Check **Enable Basic Auth** in the Dashboard after upgrading.
+:::
 
 #### Namespace Data Scraping Rate Limit
 
@@ -219,16 +220,14 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
-### Authentication (Optional)
+### Authentication
 
-By default, Prometheus Pull mode APIs do not require authentication.
+Starting from EMQX 6.3.0, Prometheus Pull mode APIs require authentication by default. Requests without credentials return `401`.
 
-If **Enable Basic Auth** is enabled in the EMQX Dashboard, Prometheus must authenticate using HTTP Basic Authentication.
+For persistent scraping, use HTTP Basic authentication with a dedicated API key:
 
-In this case:
-
-1. Create an [API key](../admin/api.md#authentication) in EMQX.
-2. Use the generated API Key and Secret Key in the Prometheus configuration.
+1. Create an [API key](../admin/api.md#authentication) with the `monitoring` scope in EMQX.
+2. Use the generated API key and secret key in the Prometheus configuration.
 
 In the Prometheus configuration:
 
@@ -240,10 +239,12 @@ basic_auth:
 
 Where:
 
-- `username` is the API Key.
-- `password` is the corresponding Secret Key.
+- `username` is the API key.
+- `password` is the corresponding secret key.
 
 Prometheus will use these credentials when scraping EMQX metrics.
+
+EMQX also accepts a bearer token obtained from `POST /api/v5/login`. Dashboard login tokens expire, so use an API key for long-running Prometheus scrapers.
 
 ### Prometheus Server Configuration Example
 
@@ -266,8 +267,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/stats'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_auth'
     static_configs:
@@ -275,8 +276,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/auth'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_data_integration'
     static_configs:
@@ -284,8 +285,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/data_integration'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 ```
 
 ## Configure Push Mode Integration

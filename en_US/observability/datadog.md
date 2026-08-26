@@ -54,18 +54,20 @@ Following the configuration guidelines, add the EMQX integration to the Datadog 
     datadog-agent integration install -t datadog-emqx==1.1.0
     ```
 
-2. Once the installation is complete, modify the Agent configuration file to enable EMQX integration.
+2. Once the installation is complete, create a dedicated [EMQX API key](../admin/api.md#authentication) with the `monitoring` scope. Then modify the Agent configuration file to enable EMQX integration.
 
     Navigate to the Agent configuration directory (usually located at `/opt/datadog-agent/etc/conf.d/`). Locate the `emqx.d` directory within this directory. You'll find a sample configuration file named `conf.yaml.example` in the `emqx.d` directory.
 
     Create a copy of this file in the same directory and rename it to `conf.yaml`. Edit the `conf.yaml` file, adjusting the following configuration item:
 
-    ```bash
+    ```yaml
     instances:
       - openmetrics_endpoint: http://localhost:18083/api/v5/prometheus/stats?mode=all_nodes_aggregated
+        username: '<API_KEY>'
+        password: '<SECRET_KEY>'
     ```
 
-    The `openmetrics_endpoint` specifies the address from which the Datadog Agent extracts metrics data in OpenMetrics format. In this case, it's set to the HTTP API address of EMQX. Make sure to replace this with an address accessible by the Datadog Agent.
+    The `openmetrics_endpoint` specifies the address from which the Datadog Agent extracts metrics data in OpenMetrics format. In this case, it is set to the HTTP API address of EMQX. Replace it with an address accessible by the Datadog Agent. Set `username` to the API key and `password` to the corresponding secret key. Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by default.
 
     The API also allows specifying the range of metrics to pull via the `mode` query parameter. The meaning of each parameter is as follows:
     

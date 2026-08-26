@@ -533,6 +533,8 @@ HiveMQ 通过 “Prometheus Monitoring HiveMQ Extension” 提供监控功能，
 
 Prometheus 用于采集指标（即 *scrape*）的端点默认启用：`http://emqx-node:18083/api/v5/prometheus/stats`。
 
+从 EMQX 6.3.0 开始，Prometheus 抓取端点默认要求身份认证。请为抓取程序配置 API Key 和 Secret Key，或显式关闭身份认证。详情请参见[集成 Prometheus](../observability/prometheus.md#身份认证)。
+
 如果您希望使用 **Pushgateway** 模式，可以按如下方式配置：
 
 ```hocon
@@ -544,7 +546,7 @@ prometheus {
 }
 ```
 
-更多配置细节请参考[集成 Prometheus](../observability/prometheus.md)。
+有关 Pushgateway 的配置详情，请参见[集成 Prometheus](../observability/prometheus.md#配置-push-模式集成)。
 
 #### 日志
 

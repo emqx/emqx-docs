@@ -25,7 +25,7 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
 
 根据所选择的模式，部分配置项仅适用于 Pull 模式，而部分配置项同时适用于两种模式。您可以点击 Dashboard 页面上的**帮助**按钮查看每种模式的详细配置步骤。
 
-<img src="./assets/config_pushgateway.png" alt="config_pushgateway" style="zoom:67%;" />
+<img src="./assets/config_pushgateway.png" alt="Prometheus 集成设置" style="zoom: 67%;" />
 
 ## Prometheus 配置选项
 
@@ -60,18 +60,19 @@ EMQX 支持两种方式实现 Prometheus 指标监控集成：
 
 #### 启用基本认证
 
-启用或禁用 Prometheus 抓取 API 的 HTTP Basic 认证。
+启用或禁用 Prometheus 抓取 API 的身份认证。Dashboard 中的选项名称为**启用基本认证**，但该设置同时控制这些 API 的 Basic 认证和 Bearer 认证。
 
-默认情况下，Prometheus Pull 模式接口不需要身份认证。当启用该选项后：
+从 EMQX 6.3.0 开始，该选项默认启用。启用后：
 
-- Prometheus 必须使用 HTTP Basic 认证访问以下接口：
-  - `/api/v5/prometheus/stats`
-  - `/api/v5/prometheus/auth`
-  - `/api/v5/prometheus/data_integration`
-- 您需要在 EMQX 中创建一个 [API 密钥](../admin/api.md#创建-api-密钥)。
-- 在 `prometheus.yaml` 的 `basic_auth` 部分进行配置。
+- `/api/v5/prometheus/*` 下的所有 Prometheus 抓取 API 都需要身份认证。未携带凭据的请求将返回 `401`。
+- 抓取程序可以使用 API Key 和 Secret Key 进行 HTTP Basic 认证，也可以使用 Dashboard 登录 Token 进行 Bearer 认证。
+- 对于持续运行的抓取程序，建议创建具有 `monitoring` scope 的专用 [API 密钥](../admin/api.md#创建-api-密钥)，并在 `prometheus.yaml` 的 `basic_auth` 部分配置凭据。
 
-该选项仅适用于 Pull 模式，不影响 Pushgateway 集成。详情请参阅 [配置 Pull 模式集成](#配置-pull-模式集成)。
+如需允许未认证的抓取请求，可关闭**启用基本认证**，或设置 `prometheus.enable_basic_auth = false`。该选项仅适用于 Pull 模式，不影响 Pushgateway 集成。详情请参阅[配置 Pull 模式集成](#配置-pull-模式集成)。
+
+::: warning 重要提示
+关闭身份认证后，任何能够访问 Dashboard 监听器的客户端都可以抓取 EMQX 指标。升级后，显式设置 `prometheus.enable_basic_auth = false` 的配置和旧格式的 Prometheus 配置仍允许未认证抓取。升级后请在 Dashboard 中检查**启用基本认证**的状态。
+:::
 
 #### 命名空间数据抓取速率限制
 
@@ -204,15 +205,13 @@ EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 
 更多 Prometheus pull 端点相关信息，请参考 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
-### 认证（可选）
+### 身份认证
 
-默认情况下，Prometheus Pull 模式接口不需要身份认证。
+从 EMQX 6.3.0 开始，Prometheus Pull 模式 API 默认要求身份认证。未携带凭据的请求将返回 `401`。
 
-如果在 EMQX Dashboard 中开启了**启用基本认证**，则 Prometheus 必须使用 HTTP Basic 认证进行访问。
+对于持续运行的抓取程序，建议使用专用 API 密钥进行 HTTP Basic 认证：
 
-在这种情况下：
-
-1. 在 EMQX 中创建一个 [API 密钥](../admin/api.md#创建-api-密钥)。
+1. 在 EMQX 中创建具有 `monitoring` scope 的 [API 密钥](../admin/api.md#创建-api-密钥)。
 2. 在 Prometheus 配置中使用生成的 API Key 和 Secret Key。
 
 在 Prometheus 配置文件中：
@@ -229,6 +228,8 @@ basic_auth:
 - `password` 为对应的 Secret Key。
 
 Prometheus 将使用这些凭据抓取 EMQX 指标。
+
+EMQX 也接受通过 `POST /api/v5/login` 获取的 Bearer Token。Dashboard 登录 Token 会过期，因此持续运行的 Prometheus 抓取程序应使用 API 密钥。
 
 ### Prometheus 服务器配置示例
 
@@ -251,8 +252,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/stats'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_auth'
     static_configs:
@@ -260,8 +261,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/auth'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_data_integration'
     static_configs:
@@ -269,8 +270,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/data_integration'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
 ```
 
