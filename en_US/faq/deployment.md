@@ -303,7 +303,7 @@ hostname: docker.emqx.com
       - EMQX_HOST=docker.emqx.com
 ```
 
-Since EMQX stores data in the directory `data/mnesia/<node name>`, it's important to use a fixed identifier like the hostname or FQDN (instead of an IP address) as the node name to avoid potential data loss if the node name changes.
+Since EMQX stores data in the directory `data/mnesia/<node name>`, it's important to use a stable identifier as the node name to avoid potential data loss if the node name changes: use a fully qualified domain name (FQDN, a name with dots) rather than a container IP address that may change. A short (undotted) hostname does not work, because EMQX runs the Erlang node with long names.
 
 To make this easier, consider using the [EMQX Docker Compose Generator](https://docker.emqx.dev/) to create a production-ready `docker-compose.yml` file.
 
