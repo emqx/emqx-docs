@@ -9,6 +9,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 | `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
 | `/api-spec.md` | Markdown | API reference in Markdown format, suited for AI agents and automation tools. |
 | `/api-spec.json` | JSON | OpenAPI 3.0 specification in JSON format, suited for scripts and programmatic tooling. |
+| `/api-spec/:tag[/:name]` | JSON | Focused OpenAPI 3.0 specification for an API tag or endpoint. |
 | `/api-docs/swagger.json` | JSON | Full OpenAPI 3.0 specification for external Swagger UI deployments and other compatible tools. |
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
@@ -20,6 +21,20 @@ This section introduces how to work with the EMQX REST API.
 ::: tip
 Starting from EMQX 6.3.0, [feature gates](../deploy/feature-gates.md) can disable optional features at startup. REST API paths provided by disabled features are not loaded as accessible API endpoints. When the `dashboard` feature is enabled, you can call `GET /api/v5/features` to view the resolved feature set.
 :::
+
+## API Specification Endpoint Authentication
+
+Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above. EMQX accepts the following credentials:
+
+- Basic authentication with an API key and secret key. Access to the API specification is read-only and does not depend on the API key's role or scopes.
+- A bearer token obtained from `POST /api/v5/login`.
+- The `emqx_auth` session cookie created when you sign in to the Dashboard.
+
+For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body uses the requested format and contains a minimal API specification that describes the supported authentication schemes and the public bootstrap endpoints, `POST /api/v5/login` and `GET /api/v5/status`. It does not expose the full API specification.
+
+An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
+
+Requests to `/api-docs` and `/api-docs/index.html` do not require authentication because these endpoints only redirect to `/api-spec.html`. Authentication is required after the redirect to access the full explorer.
 
 ## Basic Path
 
@@ -39,7 +54,7 @@ EMQX follows the [HTTP Response Status Code](https://developer.mozilla.org/en-US
 | 201   | Created successfully, and the new object will be returned in the Body |
 | 204   | Request successfully. Usually used for delete and update operations, and the returned Body will be empty |
 | 400   | Bad Request. Usually request body or parameter error         |
-| 401   | Unauthorized. API key expires or does not exist.             |
+| 401   | Unauthorized. Authentication credentials are missing, invalid, or expired. |
 | 403   | Forbidden. Check if the object is in use or has dependency constraints. |
 | 404   | Not Found. You can refer to the `message` field in the Body to check the reason |
 | 409   | Conflict. The object already exists or the number limit is exceeded |

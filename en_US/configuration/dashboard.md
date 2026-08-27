@@ -130,6 +130,8 @@ Where,
 
   Enable API documentation endpoints, including `/api-spec.html`, `/api-spec.md`, `/api-spec.json`, and the full OpenAPI specification at `/api-docs/swagger.json`. For backward compatibility, `/api-docs` and `/api-docs/index.html` redirect to `/api-spec.html`. Set this option to `false` to disable all API documentation endpoints.
 
+  Starting from EMQX 6.3.0, access to API specification content through these endpoints requires authentication. For supported authentication methods and unauthenticated response behavior, see [API Specification Endpoint Authentication](../admin/api.md#api-specification-endpoint-authentication).
+
 - `default_password`
 
   The password used to initialize the database record for `admin` user. NOTE: Changing this config after EMQX has booted for the first time has no effect. Once initialized, the default password `public` (which comes with the installation) must be changed from the Dashboard or CLI.
