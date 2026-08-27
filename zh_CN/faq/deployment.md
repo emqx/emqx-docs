@@ -271,6 +271,6 @@ hostname: docker.emqx.com
       - EMQX_HOST=docker.emqx.com
 ```
 
-由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，应使用稳定的标识作为节点名，避免因节点名变动导致数据丢失：推荐使用完全限定域名（FQDN，即带点的域名），不推荐使用可能变化的容器 IP。EMQX 的 Erlang 节点以长名称（long name）模式运行，因此不支持不带点的短主机名。 
+由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，应使用稳定的节点名，避免节点名变动造成数据丢失。推荐使用完全限定域名（FQDN），不要使用可能变化的容器 IP。EMQX 的 Erlang 节点以长节点名模式运行，因此不能使用不含点号的短主机名。
 
 推荐使用 [EMQX Docker Compose 一键生成器](https://docker.emqx.dev/) 一键生成生产就绪的 `docker-compose.yml` 文件。

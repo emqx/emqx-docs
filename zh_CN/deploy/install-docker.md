@@ -49,7 +49,7 @@
 
    对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@<host>`。您还应该设置容器主机名以保持一致，如上面示例所示。
 
-   **注意：** `<host>` 部分必须是完全限定域名（FQDN，即带点的域名，例如 `node1.emqx.com`）或 IP 地址。EMQX 的 Erlang 节点以长名称（long name）模式运行，因此不支持不带点的短主机名（例如 `node1`）。
+   **注意：** `<host>` 部分必须是 IP 地址或完全限定域名（FQDN），例如 `node1.emqx.com`。EMQX 的 Erlang 节点以长节点名模式运行，因此不能使用不含点号的短主机名，例如 `node1`。
 
 ## 通过 Docker Compose 构建 EMQX 集群
 
