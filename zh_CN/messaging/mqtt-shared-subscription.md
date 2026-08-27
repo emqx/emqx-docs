@@ -1,11 +1,10 @@
 # 共享订阅
 
-EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，用于在多个订阅者之间实现负载均衡。客户端可以分为多个订阅组，消息仍然会被转发到所有订阅组，但每个订阅组内只有一个客户端接收消息。您可以为一组订阅者的原始主题添加前缀以启用共享订阅。EMQX 支持两种格式的共享订阅前缀，分别为带群组的共享订阅（前缀为 `$share/<group-name>/`）和不带群组的共享订阅（前缀为 `$queue/`）。两种共享订阅格式示例如下：
+EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，用于在多个订阅者之间实现负载均衡。客户端可以分为多个订阅组，消息仍然会被转发到所有订阅组，但每个订阅组内只有一个客户端接收消息。您可以为原始主题添加 `$share/<group-name>/` 前缀以启用共享订阅。共享订阅前缀格式示例如下：
 
 | 前缀格式     | 示例           | 前缀        | 真实主题名 |
 | ------------ | -------------- | ----------- | ---------- |
 | 带群组格式   | $share/abc/t/1 | $share/abc/ |t/1|
-| 不带群组格式 | $queue/t/1     | $queue/ |t/1|
 
 您可以使用客户端工具连接 EMQX 并尝试这个消息服务。 本节介绍了共享订阅的机制并演示了如何使用 [MQTTX Desktop](https://mqttx.app/zh) 和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试通过共享订阅来接收消息。
 
@@ -21,11 +20,9 @@ EMQX 实现了 MQTT 的共享订阅功能。共享订阅是一种订阅模式，
 
 <img src="./assets/shared_subscription_group.png" alt="shared_subscription_group" style="zoom:50%;" />
 
-## 不带群组的共享订阅
+## 已废弃的 `$queue/` 前缀
 
-以 `$queue/` 为前缀的共享订阅是不带群组的共享订阅。它是 `$share` 订阅的一种特例。您可以将其理解为所有订阅者都在一个订阅组中，如 `$share/$queue`。
-
-<img src="./assets/shared_subscription_queue.jpg" alt="shared_subscription_queue" style="zoom:50%;" />
+EMQX 也支持使用 `$queue/` 前缀声明不带群组的共享订阅。该用法已废弃：当[消息队列](../message-queue/message-queue-concept.md)启用时，EMQX 会将 `$queue/` 前缀保留给队列订阅使用，相同的主题过滤器不再创建共享订阅。请改用 `$share/<group-name>/`：订阅 `$queue/t/1` 等价于订阅 `$share/$queue/t/1`。
 
 ## 共享订阅与会话
 

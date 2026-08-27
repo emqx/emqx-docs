@@ -131,3 +131,5 @@ EMQX 提供完善的监控能力，您可以通过 Prometheus 指标 或 Erlang 
 执行 `emqx ctl eval 'mria_rlog:status().'` 命令，获得更多关于嵌入式数据库状态的信息。
 
 如需进一步了解 Mria 架构的实现细节或调优建议，请参阅：[集群设计原理](../../design/clustering.md)。
+
+另请参阅：[Mria 日志与告警](../../observability/mria-alarms.md)

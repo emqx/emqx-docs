@@ -1,32 +1,32 @@
-# テレメトリ
+# Telemetry
 
-EMQXはテレメトリ機能を通じて利用状況データを収集しています。この機能により、ユーザーコミュニティがEMQXをどのように利用しているかを把握し、使用パターンを理解することで製品の継続的な改善に役立てています。これらのメトリクスを共有することで、EMQXのパフォーマンスや機能向上に貢献いただけます。
+EMQXはTelemetry機能を通じてEMQXの使用状況データを収集します。この機能により、ユーザーコミュニティがEMQXをどのように利用しているかを把握し、使用パターンを理解することで製品の継続的な改善に役立てています。これらのメトリクスを共有することで、EMQXのパフォーマンスや機能向上に貢献していただけます。
 
-プライバシーを最優先に考えており、テレメトリデータは匿名化されており、サーバーモデル、ハードウェアID、IPアドレスなどの個人や識別可能な情報は含まれていません。このデータが第三者に共有されることはありません。
+プライバシーを最優先に考えており、Telemetryデータは匿名化されており、サーバーモデル、ハードウェアID、IPアドレスなどの個人や識別可能な情報は含まれていません。このデータが第三者に共有されることはありません。
 
-テレメトリは商用ライセンスのユーザーではデフォルトで無効化されており、以下のライセンスタイプではデフォルトで有効になっています。
+Telemetryは商用ライセンスのユーザーではデフォルトで無効化されており、以下のライセンスタイプではデフォルトで有効化されています。
 
 - EMQX Community
 - 教育機関または非営利団体
 - トライアル
 
-これらのデフォルト設定はEMQXの設定ファイル内の `telemetry.enable` フラグを変更することで上書き可能です。例えば、設定ファイルでテレメトリを恒久的に無効化するには以下のように設定します。
+これらのデフォルト設定は、EMQXの設定ファイル内の`telemetry.enable`フラグを設定することで上書き可能です。例えば、設定ファイルを通じてTelemetryを恒久的に無効化するには以下のように設定します。
 
 ```bash
 telemetry.enable = false
 ```
 
-また、起動時に環境変数でテレメトリの動作を制御することも可能です。
+また、起動時に環境変数を使ってTelemetryの動作を制御することも可能です。
 
 ```bash
 export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 ```
 
-これらの設定をカスタマイズすることで、テレメトリデータの収集を完全に制御できます。
+これらの設定をカスタマイズすることで、Telemetryデータの収集を完全に制御できます。
 
-## テレメトリメトリクス
+## Telemetry Metrics
 
-収集されるテレメトリデータには以下が含まれます。
+収集するTelemetryデータには以下が含まれます。
 
 - クラスターのハードウェア仕様（ハードウェアUUIDは除く）
 - クラスターのトポロジー
@@ -36,9 +36,9 @@ export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 - プラグインの使用状況
 - メトリクス情報
 
-テレメトリデータは暗号化されたHTTPリクエストを通じて `https://telemetry.emqx.io/api/telemetry` に送信されます。データは安全なプライベート環境に保存され、公開ネットワークには一切公開されません。
+Telemetryデータは暗号化されたHTTPリクエストを通じて`https://telemetry.emqx.io/api/telemetry`に送信されます。データは当社のプライベート環境に安全に保存され、公開ネットワークには一切公開されません。
 
-テレメトリデータ収集のコードは [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl) をご参照ください。ご質問がある場合は [Issues](http://github.com/emqx/emqx/issues) からお問い合わせください。
+Telemetryデータ収集のコードについては、[apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl)をご参照ください。ご質問がある場合は、[Issues](http://github.com/emqx/emqx/issues)からお問い合わせください。
 
 送信されるデータの例は以下の通りです：
 

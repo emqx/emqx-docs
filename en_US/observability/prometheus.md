@@ -25,6 +25,8 @@ To configure Prometheus integration:
 
 Depending on the selected mode, some configuration options apply only to Pull mode, while others affect both modes. You can click the **Help** button on the Dashboard page to view detailed configuration steps for each mode.
 
+For a curated reference of the metric series exposed on the endpoints below (including the ones worth alerting on), see [Broker Health Indicators](./broker-health-indicators.md).
+
 <img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
 
 ## Prometheus Configuration Options

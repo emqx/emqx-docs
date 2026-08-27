@@ -1,114 +1,117 @@
 # Subscription Filters
 
-The Subscription Filter feature introduced in EMQX 6.2 extends the MQTT 5.0 publish/subscribe model with content-based filtering at the subscription level. It allows clients to receive only the subset of messages that match both a topic filter and an additional filter expression, reducing unnecessary message delivery and network overhead.
+EMQX 6.2で導入されたSubscription Filter機能は、MQTT 5.0のパブリッシュ／サブスクライブモデルを拡張し、サブスクリプションレベルでのコンテンツベースのフィルタリングを可能にします。これにより、クライアントはトピックフィルターに加えて追加のフィルター式にマッチするメッセージのサブセットのみを受信でき、不必要なメッセージ配信やネットワークのオーバーヘッドを削減できます。
 
-This page provides a complete overview of Subscription Filters in EMQX, covering design motivation, key concepts, filter expression syntax, behavioral semantics, and real-world use cases.
+本ページでは、EMQXにおけるSubscription Filtersの設計動機、主要概念、フィルター式の構文、動作セマンティクス、実際のユースケースを包括的に解説します。
 
-## What Is a Subscription Filter?
+## Subscription Filterとは何か？
 
-A Subscription Filter is an optional filter condition attached to an MQTT subscription. When a published message matches the subscription's topic filter, EMQX evaluates the filter expression against the message's MQTT 5.0 User Properties before forwarding. Only messages that satisfy both the topic filter and the filter expression are delivered to the subscriber.
+Subscription Filterは、MQTTサブスクリプションに付加できる任意のフィルター条件です。パブリッシュされたメッセージがサブスクリプションのトピックフィルターにマッチした場合、EMQXはメッセージのMQTT 5.0 User Propertiesに対してフィルター式を評価します。トピックフィルターとフィルター式の両方を満たすメッセージのみがサブスクライバーに配信されます。
 
-Standard MQTT routing forwards every topic-matched message to the subscriber:
+標準のMQTTルーティングでは、トピックにマッチしたすべてのメッセージがサブスクライバーに転送されます：
 
 ```
 Publisher --> Topic -- (Filter) --> Subscription --> Subscriber
 ```
 
-Subscription Filters introduce a second level of filtering in the message routing path:
+Subscription Filtersはメッセージルーティング経路に第2のフィルター層を導入します：
 
 ```
 Publisher --> Topic -- (Filter) --> Subscription -- (Filter) --> Subscriber
 ```
 
-This two-level filtering mechanism allows for both topic-based and content-based filtering, enabling clients to precisely specify the messages they wish to receive.
+この2段階のフィルタリング機構により、トピックベースとコンテンツベースの両方のフィルタリングが可能となり、クライアントは受信したいメッセージを正確に指定できます。
 
-## Why Use Subscription Filters?
+## なぜSubscription Filtersを使うのか？
 
-Standard MQTT 5.0 subscriptions route messages based solely on topic matching. All messages published to a matching topic are delivered to every subscriber, regardless of message content. This can be limiting in scenarios where:
+標準のMQTT 5.0サブスクリプションはトピックマッチングのみに基づいてメッセージをルーティングします。マッチするトピックにパブリッシュされたすべてのメッセージは、メッセージ内容に関係なくすべてのサブスクライバーに配信されます。これは以下のようなシナリオで制約となることがあります：
 
-- Subscribers are only interested in messages from a specific region, device group, or category.
-- High-frequency topics carry mixed data that different consumers need to partition independently.
-- Delivering all messages to clients increases network usage and processing load unnecessarily.
+- サブスクライバーが特定の地域、デバイスグループ、カテゴリのメッセージのみを受信したい場合
+- 高頻度のトピックが複数の異なるデータを含み、それらを独立して分割して処理したい場合
+- すべてのメッセージをクライアントに配信するとネットワーク負荷や処理負荷が不必要に増加する場合
 
-Subscription Filters address these limitations by allowing precise, content-aware delivery rules to be declared at subscription time. No changes to publishers, topic structures, or separate topics per data dimension are required.
+Subscription Filtersは、サブスクリプション時に正確かつコンテンツ認識型の配信ルールを宣言できるようにし、パブリッシャーやトピック構造、データ次元ごとの別トピックの変更を必要としません。
 
-## Key Concepts
+## 主要概念
 
-- **Topic Filter**: The standard MQTT topic filter portion of the subscription (the part before `?`). Determines which messages enter the routing stage.
+- **トピックフィルター**：サブスクリプションの標準MQTTトピックフィルター部分（`?`の前の部分）。メッセージがルーティング段階に入るかを決定します。
 
-- **Filter Expression**: The content-based filter condition (the part after `?`). Evaluated against the MQTT 5.0 User Properties of each message that passes the topic filter.
+- **フィルター式**：コンテンツベースのフィルター条件（`?`の後の部分）。トピックフィルターを通過したメッセージのMQTT 5.0 User Propertiesに対して評価されます。
 
-- **User Properties**: Key-value metadata attached to an MQTT 5.0 message. Publishers include these to provide additional context that subscribers can filter on, such as `location`, `device_type`, or `region`.
+- **User Properties**：MQTT 5.0メッセージに付加されるキー・バリュー形式のメタデータ。パブリッシャーは`location`や`device_type`、`region`などの追加情報を含め、サブスクライバーはこれを基にフィルタリング可能です。
 
-- **Two-Stage Delivery**: The combined evaluation of the topic filter followed by the filter expression before a message is delivered to the subscriber.
+- **2段階配信**：トピックフィルターの評価に続き、フィルター式の評価を行い、両方を満たした場合にメッセージをサブスクライバーに配信する仕組み。
 
-- **Unfiltered Subscription**: A subscription without a `?` delimiter. Treated as a standard MQTT subscription, with all topic-matched messages delivered regardless of content.
+- **フィルターなしサブスクリプション**：`?`区切りがないサブスクリプション。標準のMQTTサブスクリプションとして扱われ、トピックにマッチしたすべてのメッセージが配信されます。
 
-## How Subscription Filters Work
+## Subscription Filtersの動作原理
 
-Subscription Filters use MQTT 5.0 **User Properties** as the filtering surface. When a client publishes a message, it may include key-value pairs in the message's User Properties header. EMQX evaluates each filter expression against these key-value pairs and delivers the message only if the expression matches.
+Subscription FiltersはMQTT 5.0の**User Properties**をフィルタリング対象とします。クライアントがメッセージをパブリッシュする際にUser Propertiesヘッダーにキー・バリューのペアを含めることができます。EMQXは各フィルター式をこれらのキー・バリューに対して評価し、式がマッチした場合のみメッセージを配信します。
 
-Subscription Filters are disabled by default. For instructions on enabling the feature, see [Get Started with Subscription Filters](./subscription-filter-get-started.md).
+Subscription Filtersはデフォルトで無効化されています。機能の有効化方法については[Subscription Filtersの使い始め](./subscription-filter-get-started.md)をご覧ください。
 
-### Filter Syntax
+### フィルター構文
 
-A Subscription Filter is appended to the topic filter using `?` as a delimiter:
+Subscription Filterはトピックフィルターの後に`?`を区切り文字として付加します：
 
 ```
 <topic-filter>?<filter-expression>
 ```
 
-| Component | Description |
+| コンポーネント | 説明 |
 |---|---|
-| `<topic-filter>` | A standard MQTT topic filter, e.g., `sensor/+/temperature` or `home/#` |
-| `?` | Delimiter separating the topic filter from the filter expression |
-| `<filter-expression>` | A key-value filter condition evaluated against the message's User Properties |
+| `<topic-filter>` | 標準のMQTTトピックフィルター（例：`sensor/+/temperature`や`home/#`） |
+| `?` | トピックフィルターとフィルター式を区切るデリミタ |
+| `<filter-expression>` | メッセージのUser Propertiesに対して評価されるキー・バリュー形式のフィルター条件 |
 
-### Filter Expression Format
+### フィルター式の形式
 
-Filter expressions support equality and comparison operators. Multiple conditions are combined with `&` (logical AND):
+フィルター式は等価比較や大小比較演算子をサポートし、複数条件は`&`（論理AND）で結合します：
 
 ```
 key1=value1&key2>value2
 ```
 
-| Element | Description |
+| 要素 | 説明 |
 |---|---|
-| `key` | The name of a User Property key in the published message |
-| `=` | Equality match (the key's value must equal the specified string) |
-| `>` | Numeric comparison (the key's value must be numerically greater than the specified number) |
-| `&` | Combines multiple conditions; all must be true for the message to be delivered |
+| `key` | パブリッシュされたメッセージのUser Propertyキー名 |
+| `=` | 等価比較（キーの値が指定文字列と一致する必要がある） |
+| `>` | 数値比較（キーの値が指定数値より大きい必要がある） |
+| `>=` | 数値比較（キーの値が指定数値以上である必要がある） |
+| `<` | 数値比較（キーの値が指定数値より小さい必要がある） |
+| `<=` | 数値比較（キーの値が指定数値以下である必要がある） |
+| `&` | 複数条件の結合。すべての条件が真である必要がある |
 
-Filter expressions are **case-sensitive**. If a specified key is absent from the message's User Properties, the message is filtered out.
+フィルター式は**大文字・小文字を区別**します。指定されたキーがメッセージのUser Propertiesに存在しない場合、そのメッセージはフィルタリングされ配信されません。
 
 ::: tip
 
-Subscription Filters apply to MQTT 5.0 clients only. MQTT 3.1.1 clients that subscribe with a `?`-containing topic string will have the full string treated as a literal topic filter.
+Subscription FiltersはMQTT 5.0クライアントのみ適用されます。MQTT 3.1.1クライアントが`?`を含むトピック文字列でサブスクライブした場合、その文字列全体がリテラルトピックフィルターとして扱われます。
 
 :::
 
-## Behavioral Semantics
+## 動作セマンティクス
 
-- EMQX delivers a message to a subscriber only when **both** the topic filter matches **and** the filter expression evaluates to true.
-- If the filter expression references a key not present in the message's User Properties, the message is **not delivered** to that subscriber.
-- Each subscription's filter expression is evaluated independently. Whether a message is delivered to one subscriber has no effect on whether it is delivered to other subscribers on the same topic.
-- Subscriptions without a `?` delimiter behave identically to standard MQTT subscriptions.
-- Filter expressions are evaluated server-side. Clients are not responsible for any filtering logic.
+- EMQXはトピックフィルターがマッチし、かつフィルター式がtrueと評価された場合にのみメッセージをサブスクライバーに配信します。
+- フィルター式が参照するキーがメッセージのUser Propertiesに存在しない場合、そのメッセージは当該サブスクライバーに配信されません。
+- 各サブスクリプションのフィルター式は独立して評価されます。あるサブスクライバーにメッセージが配信されるかどうかは、同じトピックの他のサブスクライバーへの配信に影響しません。
+- `?`区切りのないサブスクリプションは標準のMQTTサブスクリプションと同様に動作します。
+- フィルター式の評価はサーバー側で行われ、クライアント側でのフィルタリングロジックは不要です。
 
-## Filter Expression Examples
+## フィルター式の例
 
-The following examples illustrate common subscription patterns:
+以下は一般的なサブスクリプションパターンの例です：
 
-| Subscription String | Meaning |
+| サブスクリプション文字列 | 意味 |
 |---|---|
-| `sensor/+/temperature?location=roomA` | Receive temperature messages where User Properties include `location=roomA`. |
-| `sensor/+/temperature?value>25` | Receive temperature messages where the `value` User Property is numerically greater than 25. |
-| `sensor/+/temperature?location=roomA&unit=celsius` | Receive temperature messages where both `location=roomA` and `unit=celsius`. |
-| `home/lights/#` | Standard subscription. All messages on matching topics are delivered). |
+| `sensor/+/temperature?location=roomA` | User Propertiesに`location=roomA`を含む温度メッセージを受信 |
+| `sensor/+/temperature?value>25` | `value` User Propertyが25より大きい温度メッセージを受信 |
+| `sensor/+/temperature?location=roomA&unit=celsius` | `location=roomA`かつ`unit=celsius`の両方を満たす温度メッセージを受信 |
+| `home/lights/#` | 標準サブスクリプション。マッチするトピックのすべてのメッセージを受信 |
 
-### Publisher Side
+### パブリッシャー側
 
-A publisher sends a message to `sensor/1/temperature` with User Properties:
+パブリッシャーはUser Propertiesとして以下を含むメッセージを`sensor/1/temperature`に送信します：
 
 ```json
 {
@@ -117,34 +120,34 @@ A publisher sends a message to `sensor/1/temperature` with User Properties:
 }
 ```
 
-### Subscriber Side
+### サブスクライバー側
 
-| Subscription | Delivered? | Reason |
+| サブスクリプション | 配信されるか？ | 理由 |
 |---|---|---|
-| `sensor/+/temperature?location=roomA` | Yes | `location=roomA` matches |
-| `sensor/+/temperature?location=roomB` | No | `location` value does not match |
-| `sensor/+/temperature?location=roomA&unit=celsius` | Yes | Both conditions match |
-| `sensor/+/temperature?location=roomA&unit=fahrenheit` | No | `unit` value does not match |
-| `sensor/+/temperature` | Yes | No filter expression — standard subscription |
+| `sensor/+/temperature?location=roomA` | はい | `location=roomA`が一致 |
+| `sensor/+/temperature?location=roomB` | いいえ | `location`の値が一致しない |
+| `sensor/+/temperature?location=roomA&unit=celsius` | はい | 両方の条件が一致 |
+| `sensor/+/temperature?location=roomA&unit=fahrenheit` | いいえ | `unit`の値が一致しない |
+| `sensor/+/temperature` | はい | フィルター式なしの標準サブスクリプション |
 
-## Authorization Considerations
+## 認可に関する考慮事項
 
-When [Authorization](../access-control/authz/authz.md) is enabled, EMQX validates the subscription topic against configured rules. The topic used for authorization is the **base topic filter** (the portion before the `?` delimiter). The filter expression is stripped before authorization is evaluated.
+[認可](../access-control/authz/authz.md)が有効な場合、EMQXは設定されたルールに基づきサブスクリプションのトピックを検証します。認可に使用されるトピックは**ベーストピックフィルター**（`?`区切りの前の部分）です。フィルター式は認可評価の前に除去されます。
 
-For example, a client subscribing to `sensor/+/temperature?location=roomA` is authorized against `sensor/+/temperature`. Ensure your authorization rules account for the base topic patterns used with Subscription Filters.
+例えば、`sensor/+/temperature?location=roomA`にサブスクライブするクライアントは、`sensor/+/temperature`に対して認可が行われます。Subscription Filtersで使用するベーストピックパターンに応じて認可ルールを設定してください。
 
-## Related Features Reference
+## 関連機能のリファレンス
 
-Subscription Filters complement other messaging features in EMQX:
+Subscription FiltersはEMQXの他のメッセージング機能と補完的に利用できます：
 
-- [Shared Subscriptions](../messaging/mqtt-shared-subscription.md): Distributes messages among a subscriber group for load balancing. Does not support content-based filtering.
-- [Retained Messages](../messaging/mqtt-retained-message.md): Stores the last message per topic for delivery to new subscribers. Retained message delivery is not affected by Subscription Filter expressions.
-- [Topic Rewrite](../messaging/mqtt-topic-rewrite.md): Rewrites topic strings before routing. Topic rewrite rules are applied before Subscription Filter evaluation.
-- [Wildcard Subscription](../messaging/mqtt-wildcard-subscription.md): Matches multiple topics using `+` and `#` wildcards. Wildcard topic filters can be combined with Subscription Filters.
-- [Message Queue](../message-queue/message-queue-concept.md): Provides durable, asynchronous message queuing with persistent storage and configurable dispatch strategies. <!-- Needs to be verified-->
+- [共有サブスクリプション](../messaging/mqtt-shared-subscription.md)：サブスクライバーグループ間でメッセージを分散しロードバランシングを実現。コンテンツベースのフィルタリングはサポートしません。
+- [保持メッセージ](../messaging/mqtt-retained-message.md)：トピックごとに最後のメッセージを保存し、新規サブスクライバーに配信。保持メッセージの配信はSubscription Filterの式に影響されません。
+- [トピック書き換え](../messaging/mqtt-topic-rewrite.md)：ルーティング前にトピック文字列を書き換え。トピック書き換えルールはSubscription Filterの評価前に適用されます。
+- [ワイルドカードサブスクリプション](../messaging/mqtt-wildcard-subscription.md)：`+`や`#`のワイルドカードを使い複数トピックにマッチ。ワイルドカードトピックフィルターはSubscription Filtersと組み合わせ可能です。
+- [メッセージキュー](../message-queue/message-queue-concept.md)：永続化ストレージと設定可能なディスパッチ戦略を備えた耐久性のある非同期メッセージキューを提供します。<!-- 要確認 -->
 
-## Next Steps
+## 次のステップ
 
-Now that you understand Subscription Filter concepts, explore how to use them in practice:
+Subscription Filterの概念を理解したら、実際の利用方法を確認しましょう：
 
-- [Get Started with Subscription Filters](./subscription-filter-get-started.md): Enable the feature and follow a step-by-step walkthrough using MQTTX CLI to verify filter behavior end-to-end.
+- [Subscription Filtersの使い始め](./subscription-filter-get-started.md)：機能を有効化し、MQTTX CLIを使ったフィルター動作のエンドツーエンド検証をステップバイステップで解説します。
