@@ -238,7 +238,7 @@ Prometheus must also be configured to scrape the Pushgateway instance.
 
 ### Enable Pushgateway Delivery in the Configuration File
 
-Alternatively, add the following configuration to `etc/emqx.conf`. For all available settings, see [Configuration - Prometheus](../configuration/prometheus.md).
+Alternatively, add the following recommended nested configuration to `etc/base.hocon`:
 
 ```hocon
 prometheus {

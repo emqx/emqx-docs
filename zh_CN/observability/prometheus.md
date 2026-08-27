@@ -238,7 +238,7 @@ Push 模式仅发送 `/api/v5/prometheus/stats` 提供的基础指标和计数�
 
 ### 在配置文件中启用 Pushgateway 推送
 
-也可以在 `etc/emqx.conf` 中添加以下配置。有关全部配置项，请参见[配置文件 - Prometheus](../configuration/prometheus.md)。
+也可以在 `etc/base.hocon` 中添加以下推荐的嵌套配置：
 
 ```hocon
 prometheus {
