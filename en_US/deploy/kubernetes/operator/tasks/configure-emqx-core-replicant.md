@@ -8,6 +8,7 @@
 ## Core and Replicant Nodes
 
 Nodes in the EMQX cluster can have one of two roles: Core node and Replicant node.
+
 * Core nodes are responsible for data persistence in the cluster.
   
     They serve as the authoritative source for shared cluster state such as routing tables, MQTT client channels, retained messages, cluster configuration, alarms, Dashboard user credentials, etc.
@@ -44,10 +45,9 @@ EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX clus
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          replicas: 2

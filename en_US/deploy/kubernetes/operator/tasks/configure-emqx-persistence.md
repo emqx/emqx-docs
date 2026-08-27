@@ -40,10 +40,9 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          persistentVolumeClaimSpec:
@@ -80,46 +79,28 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 
 ## Verify Persistence
 
-1. Create a test rule in the EMQX Dashboard.
+Verify that Kubernetes reattaches the same PVC when a Core Pod is replaced. Do not delete the EMQX resource for this test: EMQX Operator configures its StatefulSet to delete associated PVCs when the StatefulSet is deleted.
+
+1. Record the UID of the PVC attached to the first Core Pod:
 
    ```bash
-   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   pvc_name=emqx-core-data-emqx-core-0
+   pvc_uid_before=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   kubectl get pvc "${pvc_name}"
    ```
 
-     - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
-
-     - Navigate to **Integration** -> **Rules** to create a new rule.
-
-     - Attach a simple action to this rule.
-
-     - Click **Save** to generate a rule, as shown in the following figure:
-
-       ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
-    
-       Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
-    
-       ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
-
-2. Delete the old EMQX cluster.
-
-   Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
+2. Delete the Pod and wait for the StatefulSet to recreate it:
 
    ```bash
-   $ kubectl delete -f emqx.yaml
-   emqx.apps.emqx.io "emqx" deleted
+   kubectl delete pod emqx-core-0
+   kubectl wait --for=condition=Ready pod/emqx-core-0 --timeout=10m
    ```
 
-3. Re-deploy the EMQX cluster.
-
-   Run the following command to re-deploy the EMQX cluster:
+3. Compare the PVC UID after the Pod is ready:
 
    ```bash
-   $ kubectl apply -f emqx.yaml
-   emqx.apps.emqx.io/emqx created
+   pvc_uid_after=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
    ```
 
-4. Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
-
-   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
-
-   The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.
+   Matching UIDs confirm that the replacement Pod reused the existing persistent volume instead of creating a new one.

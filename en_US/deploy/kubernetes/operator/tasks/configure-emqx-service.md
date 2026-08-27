@@ -22,10 +22,9 @@ Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) 
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      listenersServiceTemplate:
        spec:
          type: LoadBalancer
@@ -38,7 +37,7 @@ Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) 
 
    By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
 
-   Users can configure new or existing listeners through `.spec.config.data`, or manage them through the EMQX Dashboard.
+   You can configure new or existing listeners through `.spec.config.roots.listeners`, or manage them through the EMQX Dashboard.
 
    EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
 

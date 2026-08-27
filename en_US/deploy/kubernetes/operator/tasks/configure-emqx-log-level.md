@@ -6,7 +6,7 @@ Modify the log level in the EMQX cluster.
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v3beta1` supports configuring the log level of the EMQX cluster through `.spec.config.data`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
+The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `.spec.config.roots.log`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`:
 
@@ -19,11 +19,12 @@ EMQX CRD `apps.emqx.io/v3beta1` supports configuring the log level of the EMQX c
      image: emqx/emqx:@EE_VERSION@
      config:
        # Enable debug logging:
-       data: |
-         log.console.level = debug
-         license {
-           key = "..."
-         }
+       roots:
+         log:
+           console:
+             level: debug
+         license:
+           key: "..."
      dashboardServiceTemplate:
        spec:
          type: LoadBalancer

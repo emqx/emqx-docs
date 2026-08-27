@@ -41,10 +41,9 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          ## EMQX custom resources do not support updating this field at runtime

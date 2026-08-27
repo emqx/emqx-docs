@@ -37,10 +37,9 @@ The following example shows the basic EMQX Custom Resource (CR) configuration.
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          persistentVolumeClaimSpec:

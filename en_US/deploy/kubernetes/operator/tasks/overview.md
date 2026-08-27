@@ -11,6 +11,7 @@ This chapter provides step-by-step instructions for performing common tasks and 
   - [Change EMQX Configuration](./configure-emqx-config.md)
   - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
   - [Enable Persistence](./configure-emqx-persistence.md)
+  - [Configure Pod Disruption Budgets](./configure-disruption-budgets.md)
   - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
   - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
   - [Rebalance Cluster Load](./configure-emqx-rebalance.md)

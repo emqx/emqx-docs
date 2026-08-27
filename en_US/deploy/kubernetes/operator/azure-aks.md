@@ -31,10 +31,9 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          persistentVolumeClaimSpec:

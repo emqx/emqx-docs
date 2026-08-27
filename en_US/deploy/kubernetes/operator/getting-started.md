@@ -18,7 +18,7 @@ Before deploying EMQX Operator, ensure that the following components are ready:
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   This command downloads EMQX Operator 3.0.0, installs cluster-wide EMQX CRDs, and deploys controller services into a separate `emqx-operator-system` namespace.
+   This command downloads the latest EMQX Operator release, installs cluster-wide EMQX CRDs, and deploys the controller in the `emqx-operator-system` namespace.
 
 2. Wait till EMQX Operator is ready:
 
@@ -31,21 +31,22 @@ Once the Operator is running, you can proceed to deploy EMQX.
 
 ## Deploy EMQX
 
-1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
+1. Save the following content as a YAML file and deploy it with `kubectl apply`.
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
-      name: emqx
+     name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "evaluation"
    ```
+
+   EMQX Operator deploys a single-node EMQX cluster from this manifest. A single-node cluster can run without a license, but a valid license is required before you configure multiple nodes or scale an existing cluster beyond one node. During an evaluation, set `license.key` to `"evaluation"`, as shown in this example.
 
    For more details about the EMQX CRD, check out the [reference documentation](./reference/v3beta1-reference.md).
 

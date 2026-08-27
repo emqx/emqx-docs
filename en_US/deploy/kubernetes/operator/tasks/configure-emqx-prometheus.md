@@ -1,4 +1,4 @@
-# Monitor EMQX Cluster by Prometheus and Grafana
+# Monitor EMQX with Prometheus and Grafana
 
 ## Objective
 
@@ -21,10 +21,9 @@ metadata:
 spec:
   image: emqx/emqx:@EE_VERSION@
   config:
-    data: |
-      license {
-        key = "..."
-      }
+    roots:
+      license:
+        key: "..."
 ```
 
 Save the above content as `emqx.yaml` and execute the following command to deploy the EMQX cluster:
@@ -52,6 +51,8 @@ Sign in to the Dashboard and [create two dedicated API keys](../../../../dashboa
 Save the API key and secret key for each integration. EMQX displays each secret key only once.
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
+
+<!-- Consider removing this section -->
 
 The `emqx-exporter` is designed to expose partial metrics that are not exposed in the EMQX Prometheus API.
 
@@ -158,24 +159,24 @@ spec:
         password:
           name: emqx-prometheus-basic-auth
           key: password
-      # the name of emqx dashboard containerPort
+      # Name of the EMQX Dashboard container port.
       port: dashboard
       relabelings:
         - action: replace
-          # user-defined cluster name, requires unique
+          # Use a unique value for each EMQX cluster.
           replacement: emqx5
           targetLabel: cluster
         - action: replace
-          # fix value, don't modify
+          # Keep this value unchanged.
           replacement: emqx
           targetLabel: from
         - action: replace
-          # fix value, don't modify
-          sourceLabels: ['pod']
-          targetLabel: "instance"
+          # Use the Pod name as the Prometheus instance label.
+          sourceLabels: [pod]
+          targetLabel: instance
   selector:
     matchLabels:
-      # the label is the same as the label of emqx pod
+      # Match Pods managed for the EMQX resource named `emqx`.
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
@@ -232,17 +233,18 @@ Save the above content as `monitor.yaml` and execute the following command:
 $ kubectl apply -f monitor.yaml
 ```
 
-## View EMQX Indicators on Prometheus
+## View EMQX Metrics in Prometheus
 
-Open the Prometheus interface, switch to the Graph page, and enter `emqx` to display as shown in the following figure:
+Open the Prometheus expression browser and enter `emqx` to view EMQX metrics, as shown in the following figure:
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-Switch to the **Status** -> **Targets** page, the following figure is displayed, and you can see all monitored EMQX Pod information in the cluster:
+Open **Status** -> **Targets** to view all monitored EMQX Pods in the cluster:
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
-## Import Grafana Templates
-Import all dashboard [templates](https://github.com/emqx/emqx-exporter/tree/main/grafana-dashboard/template). Open the main dashboard **EMQX** and enjoy yourself!
+## Import a Grafana Dashboard
+
+Import the [EMQX Grafana dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) and select the Prometheus data source that scrapes the EMQX Pods.
 
 ![](./assets/configure-emqx-prometheus/emqx-grafana-dashboard.png)

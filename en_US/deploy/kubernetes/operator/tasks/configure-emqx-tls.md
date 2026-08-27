@@ -63,20 +63,19 @@ There are many types of Volumes. For information about Volumes, please refer to 
      image: emqx/emqx:@EE_VERSION@
      config:
        # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
-       data: |
-         listeners.ssl.default {
-           bind = "0.0.0.0:8883"
-           ssl_options {
-             cacertfile = "/mounted/cert/ca.crt"
-             certfile = "/mounted/cert/tls.crt"
-             keyfile = "/mounted/cert/tls.key"
-             gc_after_handshake = true
-             handshake_timeout = 5s
-           }
-         }
-         license {
-           key = "..."
-         }
+       roots:
+         listeners:
+           ssl:
+             default:
+               bind: "0.0.0.0:8883"
+               ssl_options:
+                 cacertfile: "/mounted/cert/ca.crt"
+                 certfile: "/mounted/cert/tls.crt"
+                 keyfile: "/mounted/cert/tls.key"
+                 gc_after_handshake: true
+                 handshake_timeout: "5s"
+         license:
+           key: "..."
      coreTemplate:
        spec:
          extraVolumes:
