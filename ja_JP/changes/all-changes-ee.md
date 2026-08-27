@@ -100,6 +100,7 @@ The release notes page for EMQX Enterprise provides a comprehensive, detailed re
 
 ## v4.4
 
+- [4.4.37](./changes-ee-v4.md#_4-4-37): 2026-07-31
 - [4.4.36](./changes-ee-v4.md#_4-4-36): 2026-05-22
 - [4.4.35](./changes-ee-v4.md#_4-4-35): 2026-04-03
 - [4.4.34](./changes-ee-v4.md#_4-4-34): 2026-03-25
