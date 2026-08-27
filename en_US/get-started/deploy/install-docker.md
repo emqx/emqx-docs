@@ -52,7 +52,7 @@ This section will introduce how to use the Docker image to install the latest ve
 
    To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@<host>`. You should also set the container hostname to match, as shown in the example above.
 
-   **Note:** The `<host>` part must be a fully qualified domain name (FQDN, a name with dots, such as `node1.emqx.com`) or an IP address. EMQX runs the Erlang node with long names, so a short (undotted) hostname such as `node1` does not work.
+   **Note:** The `<host>` part must be an IP address or a fully qualified domain name (FQDN), such as `node1.emqx.com`. EMQX runs its Erlang node in long-name mode, so you cannot use a short hostname without dots, such as `node1`.
 
 ## Use Docker Compose to Build an EMQX Cluster
 
