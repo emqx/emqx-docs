@@ -12,7 +12,6 @@
   - [启用 Core-Replicant 部署](./configure-emqx-core-replicant.md)
   - [启用持久化](./configure-emqx-persistence.md)
   - [通过 LoadBalancer 访问 EMQX 集群](./configure-emqx-service.md)
-  - [重新平衡集群负载](./configure-emqx-rebalance.md)
 
 ## 升级和维护
 

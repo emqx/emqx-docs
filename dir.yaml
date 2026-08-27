@@ -186,10 +186,6 @@
                       title_cn: 使用 HPA 自动扩缩 Replicant 节点
                       title_ja: Autoscale Replicant Nodes with HPA
                       path: deploy/kubernetes/operator/tasks/configure-emqx-hpa
-                    - title_en: Rebalance Cluster Load
-                      title_cn: 重新平衡集群负载
-                      title_ja: クラスター負荷の再バランス
-                      path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
                       title_ja: 制限付き k8s 環境での EMQX クラスター展開
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群

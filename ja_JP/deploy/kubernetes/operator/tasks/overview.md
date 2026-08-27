@@ -12,7 +12,6 @@
   - [コア・レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
   - [パーシステンスの有効化](./configure-emqx-persistence.md)
   - [ロードバランサー経由でのEMQXクラスターアクセス](./configure-emqx-service.md)
-  - [クラスター負荷のリバランス](./configure-emqx-rebalance.md)
 
 ## アップグレードとメンテナンス
 

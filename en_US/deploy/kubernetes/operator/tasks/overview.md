@@ -14,7 +14,6 @@ This chapter provides step-by-step instructions for performing common tasks and 
   - [Configure Pod Disruption Budgets](./configure-disruption-budgets.md)
   - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
   - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
-  - [Rebalance Cluster Load](./configure-emqx-rebalance.md)
 
 ## Upgrades and Maintenance
 
