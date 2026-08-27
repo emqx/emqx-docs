@@ -10,50 +10,50 @@ EMQXプラグインは、標準の製品機能が要件を完全に満たさな�
 
 ## セキュリティ
 
-[EMQX ACMEプラグイン](./plugin-catalog/6.1/emqx-acme.md)
+[EMQX ACMEプラグイン](./plugin-catalog/6.2/emqx-acme.md)
 
 このプラグインは、Let's EncryptなどのACME対応証明書機関を通じて、EMQXのSSLリスナー向けにTLS証明書を自動発行および更新します。
 
 ## 運用
 
-[ホットアップグレード（Relup）](./plugin-catalog/6.1/emqx-relup.md)
+[ホットアップグレード（Relup）](./plugin-catalog/6.2/emqx-relup.md)
 
 このプラグインは、実行中のEMQXノードに対して`.relup`コード変更指示を適用し、VMを再起動せずにパッチリリースを展開できるようにします。
 
-[バックアップ同期](./plugin-catalog/6.1/emqx-backup-sync.md)
+[バックアップ同期](./plugin-catalog/6.2/emqx-backup-sync.md)
 
 このプラグインは、Data Backup APIを使用してプライマリEMQXクラスターからセカンダリクラスターへ選択されたバックアップデータを定期的に同期し、災害復旧のためにセカンダリを最新状態に保ちます。
 
 ## データ統合
 
-[ディスクキュー付きMQTTブリッジ](./plugin-catalog/6.1/emqx-bridge-mqtt-dq.md)
+[ディスクキュー付きMQTTブリッジ](./plugin-catalog/6.2/emqx-bridge-mqtt-dq.md)
 
 このプラグインは、ローカルのMQTTメッセージを別のMQTTブローカーに転送し、ネットワークの中断に対するレジリエンスを高めるためにディスク上でバッファリングします。
 
-[マッピングテーブル](./plugin-catalog/6.1/emqx-maptabs.md)
+[マッピングテーブル](./plugin-catalog/6.2/emqx-maptabs.md)
 
 このプラグインは、ルールSQL向けに名前付きマッピングテーブルを提供し、ルールが長い`CASE WHEN`式をテーブルルックアップに置き換えられるようにします。
 
 ## メッセージ永続化
 
-[オフラインメッセージ](./plugin-catalog/6.1/emqx-offline-messages.md)
+[オフラインメッセージ](./plugin-catalog/6.2/emqx-offline-messages.md)
 
 このプラグインは、MQTTメッセージをMySQLまたはRedisに永続化し、標準のMQTTセッション永続化を超えて、再接続後にサブスクライバーがメッセージを取得できるようにします。
 
 ## メッセージング
 
-[同期リクエスト](./plugin-catalog/6.1/emqx-sync-request.md)
+[同期リクエスト](./plugin-catalog/6.2/emqx-sync-request.md)
 
 このプラグインは、HTTP呼び出し元がEMQX REST APIを通じて1つのMQTTリクエストをパブリッシュし、最初に一致するMQTTレスポンスを同期的に待機できるようにします。
 
 ## 接続管理
 
-[ユーザー名ごとのセッションクォータ](./plugin-catalog/6.1/emqx-username-quota.md)
+[ユーザー名ごとのセッションクォータ](./plugin-catalog/6.2/emqx-username-quota.md)
 
 このプラグインはクラスター全体でユーザー名ごとのセッションクォータを強制し、設定された制限に達したユーザー名に対しては`quota_exceeded`で認証を拒否します。
 
 ## ネームスペースガバナンス
 
-[UNSガバナンス](./plugin-catalog/6.1/emqx-unsgov.md)
+[UNSガバナンス](./plugin-catalog/6.2/emqx-unsgov.md)
 
 このプラグインはUnified Namespace（UNS）トピック構造を強制し、UNSガバナンスで管理されるトピックにパブリッシュされたメッセージのペイロードを検証できます。
