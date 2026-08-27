@@ -1,29 +1,30 @@
-# EMQXのログレベル変更
+# Change EMQX Log Level
 
-## 目的
+## Objective
 
-EMQXクラスターのログレベルを変更します。
+Modify the log level in the EMQX cluster.
 
-## EMQXクラスターの設定
+## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラスターのログレベルを設定することをサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
+The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `.spec.config.roots.log`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
 
-1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
+1. Save the following content as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       # デバッグログを有効化：
-       data: |
-         log.console.level = debug
-         license {
-           key = "..."
-         }
+       # Enable debug logging:
+       roots:
+         log:
+           console:
+             level: debug
+         license:
+           key: "..."
      dashboardServiceTemplate:
        spec:
          type: LoadBalancer
@@ -32,9 +33,9 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラス�
          type: LoadBalancer
    ```
 
-2. EMQXクラスターが準備完了になるまで待ちます。
+2. Wait for the EMQX cluster to become ready.
 
-   `kubectl get`コマンドでEMQXクラスターのステータスを確認し、`STATUS`が`Ready`になっていることを確認してください。完了までに時間がかかる場合があります。
+   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx
@@ -42,17 +43,17 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラス�
    emqx   Ready    10m
    ```
 
-## ログレベルの確認
+## Verify Log Level
 
-1. EMQXクラスターのExternal IPを取得します。
+1. Obtain the External IP of the EMQX cluster.
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. MQTTX CLIを使ってEMQXクラスターに接続します。
+2. Use MQTTX CLI to connect to the EMQX cluster.
 
-   [MQTTX CLI](https://mqttx.app/cli)は、開発者がMQTTサービスやアプリケーションをより迅速に利用開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
+   [MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers start using MQTT services and applications more quickly.
 
    ```
    $ mqttx conn -h ${external_ip} -p 1883
@@ -60,7 +61,7 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` を通じてEMQXクラス�
    [4/17/2023] [5:17:31 PM] › ✔ Connected
    ```
 
-3. EMQXコンテナのログを確認します。
+3. View EMQX container logs.
 
    ```bash
    $ kubectl logs emqx-core-0 -c emqx

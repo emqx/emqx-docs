@@ -41,10 +41,9 @@ The update process is roughly divided into the following steps:
   spec:
     image: emqx/emqx:@EE_VERSION@
     config:
-      data: |
-        license {
-          key = "..."
-        }
+      roots:
+        license:
+          key: "..."
     updateStrategy:
       type: RollingUpdate
       evacuationStrategy:
