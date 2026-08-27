@@ -1,22 +1,22 @@
-# 在 Kubernetes 中采集 EMQX 日志
+# Collect EMQX Logs in Kubernetes
 
-## 目标
+## Objective
 
-使用 ELK 收集 EMQX 集群日志。
+Use ELK to collect EMQX cluster logs.
 
-## 部署 ELK
+## Deploy ELK
 
-**ELK** 代表 Elasticsearch、Logstash 和 Kibana（也称为 Elastic Stack）：
+**ELK** stands for Elasticsearch, Logstash, and Kibana (also known as the Elastic Stack):
 
-- [**Elasticsearch**](https://www.elastic.co/cn/elasticsearch/)：基于 Lucene 的分布式、近实时搜索和分析引擎，提供 REST API 与数据交互。
-- [**Logstash**](https://www.elastic.co/cn/logstash/)：用于从各种来源收集、转换和转发日志到不同目的地的主要数据流引擎。
-- [**Kibana**](https://www.elastic.co/cn/kibana/)：用于实时可视化和分析 Elasticsearch 数据的 Web 界面。
+- [**Elasticsearch**](https://www.elastic.co/elasticsearch/): Distributed, near-real-time search and analytics engine based on Lucene providing REST APIs to interact with data.
+- [**Logstash**](https://www.elastic.co/logstash/): Primary data flow engine for collecting, transforming, and forwarding logs from various sources to different destinations.
+- [**Kibana**](https://www.elastic.co/kibana/): Web interface for visualizing and analyzing Elasticsearch data in real time.
 
-### 部署单节点 Elasticsearch
+### Deploy Single Node Elasticsearch
 
-部署单节点 Elasticsearch 集群相对简单。您可以使用以下 YAML 配置文件快速部署 Elasticsearch 集群。
+Deploying a single-node Elasticsearch cluster is relatively simple. You can use the following YAML configuration file to quickly deploy an Elasticsearch cluster.
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
    ---
@@ -94,7 +94,7 @@
        kubernetes.io/cluster-service: "true"
        addonmanager.kubernetes.io/mode: Reconcile
    spec:
-     serviceName: elasticsearch-svc
+     serviceName: elasticsearch-logging
      replicas: 1
      selector:
        matchLabels:
@@ -108,6 +108,7 @@
          containers:
          - image: docker.io/library/elasticsearch:7.9.3
            name: elasticsearch-logging
+           resources:
              limits:
                cpu: 1000m
                memory: 1Gi
@@ -151,7 +152,7 @@
          - name: elasticsearch-volume-init
            image: alpine:3.6
            command:
-             - chmod
+             -chmod
              - -R
              - "777"
              - /usr/share/elasticsearch/data/
@@ -171,11 +172,13 @@
 
    :::tip
 
-   使用 `storageClassName` 字段选择合适的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 列出 Kubernetes 集群中已存在的 StorageClass，或根据您的需求创建 StorageClass。
+   Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
 
    :::
 
-2. 等待 Elasticsearch 就绪。使用 `kubectl get` 命令检查 Elasticsearch Pod 的状态，并确保 `STATUS` 为 `Running`。
+2. Wait for Elasticsearch to be ready.
+
+   Check the status of the Elasticsearch pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
    ```bash
    $ kubectl get pod -n kube-logging -l "k8s-app=elasticsearch"
@@ -183,13 +186,13 @@
    elasticsearch-0             1/1     Running            0          16m
    ```
 
-### 部署 Kibana
+### Deploy Kibana
 
-本文使用 `Deployment` 的方式部署 Kibana，对搜集到的日志进行可视化展示，`Service` 中使用的是 `NodePort`。
+This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collected logs, and a `Service` of type `NodePort` to expose Kibana externally.
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
-   ```bash
+   ```yaml
    ---
    apiVersion: v1
    kind: Service
@@ -247,7 +250,9 @@
              protocol: TCP
    ```
 
-2. 等待 Kibana 就绪，可以通过 `kubectl get` 命令查看 Kibana pod 的状态，请确保 `STATUS` 为 `Running`。
+2. Wait for Kibana to be ready.
+
+   Check the status of the Kibana pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
    ```bash
    $ kubectl get pod -n kube-logging -l "k8s-app=kibana"
@@ -255,175 +260,177 @@
    kibana-b7d98644-48gtm       1/1     Running            0          17m
    ```
 
-1. 在浏览器中输入 `http://{node_ip}:35601`，进入 kibana 的 web 界面。
+3. In your browser, navigate to `http://{node_ip}:35601` to access the Kibana web interface.
 
-### 部署日志采集组件 Filebeat
+### Deploy Filebeat
 
-[Filebeat](https://www.elastic.co/cn/beats/filebeat) 是一个轻量级的吃日志采集组件，是 Elastic Stack 的一部分，能够与 Logstash、Elasticsearch 和 Kibana 无缝协作。无论您要使用 Logstash 转换或充实日志和文件，还是在 Elasticsearch 中随意处理一些数据分析，亦或在 Kibana 中构建和分享仪表板，Filebeat 都能轻松地将您的数据发送至最关键的地方。
+[Filebeat](https://www.elastic.co/beats/filebeat) is a lightweight log collection component that is part of the Elastic Stack and works seamlessly with Logstash, Elasticsearch, and Kibana.
 
-1. 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署。
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
-  ```yaml
-  ---
-  apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    name: filebeat-config
-    namespace: kube-system
-    labels:
-      k8s-app: filebeat
-  data:
-    filebeat.yml: |-
-      filebeat.inputs:
-      - type: container
-        paths:
-          # The log path of the EMQX container on the host
-          - /var/log/containers/^emqx.*.log
-        processors:
-          - add_kubernetes_metadata:
-              host: ${NODE_NAME}
-              matchers:
-              - logs_path:
-                  logs_path: "/var/log/containers/"
-      output.logstash:
-        hosts: ["logstash:5044"]
-        enabled: true
-  ---
-  apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: filebeat
-    namespace: kube-logging
-    labels:
-      k8s-app: filebeat
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  kind: ClusterRole
-  metadata:
-    name: filebeat
-    labels:
-      k8s-app: filebeat
-  rules:
-  - apiGroups: [""]
-    resources:
-    - namespaces
-    - pods
-    verbs:
-    - get
-    - watch
-    - list
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  kind: ClusterRoleBinding
-  metadata:
-    name: filebeat
-  subjects:
-  - kind: ServiceAccount
-    name: filebeat
-    namespace: kube-logging
-  roleRef:
-    kind: ClusterRole
-    name: filebeat
-    apiGroup: rbac.authorization.k8s.io
-  ---
-  apiVersion: apps/v1
-  kind: DaemonSet
-  metadata:
-    name: filebeat
-    namespace: kube-logging
-    labels:
-      k8s-app: filebeat
-  spec:
-    selector:
-      matchLabels:
-        k8s-app: filebeat
-    template:
-      metadata:
-        labels:
-          k8s-app: filebeat
-      spec:
-        serviceAccountName: filebeat
-        terminationGracePeriodSeconds: 30
-        containers:
-        - name: filebeat
-          image: docker.io/kubeimages/filebeat:7.9.3
-          args: [
-            "-c", "/etc/filebeat.yml",
-            "-e","-httpprof","0.0.0.0:6060"
-          ]
-          env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: ELASTICSEARCH_HOST
-            value: elasticsearch
-          - name: ELASTICSEARCH_PORT
-            value: "9200"
-          securityContext:
-            runAsUser: 0
-          resources:
-            limits:
-              memory: 1000Mi
-              cpu: 1000m
-            requests:
-              memory: 100Mi
-              cpu: 100m
-          volumeMounts:
-          - name: config
-            mountPath: /etc/filebeat.yml
-            readOnly: true
-            subPath: filebeat.yml
-          - name: data
-            mountPath: /usr/share/filebeat/data
-          - name: varlibdockercontainers
-            mountPath: /data/var/
-            readOnly: true
-          - name: varlog
-            mountPath: /var/log/
-            readOnly: true
-          - name: timezone
-            mountPath: /etc/localtime
-        volumes:
-        - name: config
-          configMap:
-            defaultMode: 0600
-            name: filebeat-config
-        - name: varlibdockercontainers
-          hostPath:
-            path: /data/var/
-        - name: varlog
-          hostPath:
-            path: /var/log/
-        - name: inputs
-          configMap:
-            defaultMode: 0600
-            name: filebeat-inputs
-        - name: data
-          hostPath:
-            path: /data/filebeat-data
-            type: DirectoryOrCreate
-        - name: timezone
-          hostPath:
-            path: /etc/localtime
-  ```
+   ```yaml
+   ---
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: filebeat-config
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   data:
+     filebeat.yml: |-
+       filebeat.inputs:
+       - type: container
+         paths:
+           # The log path of the EMQX container on the host
+           - /var/log/containers/^emqx.*.log
+         processors:
+           - add_kubernetes_metadata:
+               host: ${NODE_NAME}
+               matchers:
+               - logs_path:
+                   logs_path: "/var/log/containers/"
+       output.logstash:
+         hosts: ["logstash:5044"]
+         enabled: true
+   ---
+   apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+     name: filebeat
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   ---
+   apiVersion: rbac.authorization.k8s.io/v1beta1
+   kind: ClusterRole
+   metadata:
+     name: filebeat
+     labels:
+       k8s-app: filebeat
+   rules:
+   - apiGroups: [""]
+     resources:
+     - namespaces
+     - pods
+     verbs:
+     - get
+     - watch
+     - list
+   ---
+   apiVersion: rbac.authorization.k8s.io/v1beta1
+   kind: ClusterRoleBinding
+   metadata:
+     name: filebeat
+   subjects:
+   - kind: ServiceAccount
+     name: filebeat
+     namespace: kube-logging
+   roleRef:
+     kind: ClusterRole
+     name: filebeat
+     apiGroup: rbac.authorization.k8s.io
+   ---
+   apiVersion: apps/v1
+   kind: DaemonSet
+   metadata:
+     name: filebeat
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   spec:
+     selector:
+       matchLabels:
+         k8s-app: filebeat
+     template:
+       metadata:
+         labels:
+           k8s-app: filebeat
+       spec:
+         serviceAccountName: filebeat
+         terminationGracePeriodSeconds: 30
+         containers:
+         - name: filebeat
+           image: docker.io/kubeimages/filebeat:7.9.3
+           args: [
+             "-c", "/etc/filebeat.yml",
+             "-e","-httpprof","0.0.0.0:6060"
+           ]
+           env:
+           - name: NODE_NAME
+             valueFrom:
+               fieldRef:
+                 fieldPath: spec.nodeName
+           - name: ELASTICSEARCH_HOST
+             value: elasticsearch
+           - name: ELASTICSEARCH_PORT
+             value: "9200"
+           securityContext:
+             runAsUser: 0
+           resources:
+             limits:
+               memory: 1000Mi
+               cpu: 1000m
+             requests:
+               memory: 100Mi
+               cpu: 100m
+           volumeMounts:
+           - name: config
+             mountPath: /etc/filebeat.yml
+             readOnly: true
+             subPath: filebeat.yml
+           - name: data
+             mountPath: /usr/share/filebeat/data
+           - name: varlibdockercontainers
+             mountPath: /data/var/
+             readOnly: true
+           - name: varlog
+             mountPath: /var/log/
+             readOnly: true
+           - name: timezone
+             mountPath: /etc/localtime
+         volumes:
+         - name: config
+           configMap:
+             defaultMode: 0600
+             name: filebeat-config
+         - name: varlibdockercontainers
+           hostPath:
+             path: /data/var/
+         - name: varlog
+           hostPath:
+             path: /var/log/
+         - name: inputs
+           configMap:
+             defaultMode: 0600
+             name: filebeat-inputs
+         - name: data
+           hostPath:
+             path: /data/filebeat-data
+             type: DirectoryOrCreate
+         - name: timezone
+           hostPath:
+             path: /etc/localtime
+   ```
 
-2. 等待 Filebeat 就绪，可以通过 `kubectl get` 命令查看 Filebeat pod 的状态，请确保 `STATUS` 为 `Running`。
+2. Wait for Filebeat to become ready.
 
-  ```bash
-  $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
-  NAME             READY   STATUS    RESTARTS   AGE
-  filebeat-82d2b   1/1     Running   0          45m
-  filebeat-vwrjn   1/1     Running   0          45m
-  ```
+   Check the status of Filebeat pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
-### 部署 Logstash
+   ```bash
+   $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
+   NAME             READY   STATUS    RESTARTS   AGE
+   filebeat-82d2b   1/1     Running   0          45m
+   filebeat-vwrjn   1/1     Running   0          45m
+   ```
 
-Logstash 用于日志处理和清洗。
+### Deploy Logstash
 
-在本演练中，我们使用 Logstash 的 [Beats Input 插件](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats) 收集日志，使用 [Ruby filter 插件](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby) 过滤日志。Logstash 还提供了许多其他输入和过滤插件，您可以根据业务需求进行配置。
+Logstash is used for log processing and cleaning.
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
+In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats) of Logstash to collect logs and the [Ruby filter plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby) to filter logs. Logstash also provides many other input and filtering plugins that you can configure according to your business needs.
+
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
    ---
@@ -431,7 +438,7 @@ Logstash 用于日志处理和清洗。
    kind: Service
    metadata:
      name: logstash
-     namespace: kube-system
+     namespace: kube-logging
    spec:
      ports:
      - port: 5044
@@ -444,7 +451,7 @@ Logstash 用于日志处理和清洗。
    kind: Deployment
    metadata:
      name: logstash
-     namespace: kube-system
+     namespace: kube-logging
    spec:
      selector:
        matchLabels:
@@ -544,7 +551,7 @@ Logstash 用于日志处理和清洗。
            drop {}
          }
        }
-       output{
+       output {
          elasticsearch {
            hosts => ["http://elasticsearch-logging:9200"]
            codec => json
@@ -555,7 +562,7 @@ Logstash 用于日志处理和清洗。
    apiVersion: v1
    kind: ConfigMap
    metadata:
-     name: logstash
+     name: logstash-yml
      namespace: kube-logging
      labels:
        k8s-app: logstash
@@ -565,7 +572,9 @@ Logstash 用于日志处理和清洗。
        xpack.monitoring.elasticsearch.hosts: http://elasticsearch-logging:9200
    ```
 
-2. 等待 Logstash 就绪，可以通过 `kubectl get` 命令查看 Filogstash pod 的状态，请确保 `STATUS` 为 `Running`。
+2. Wait for Logstash to be ready.
+
+   Check the status of Logstash pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
    ```bash
    $ kubectl get pod -n kube-logging -l "k8s-app=logstash"
@@ -574,22 +583,22 @@ Logstash 用于日志处理和清洗。
    filebeat-vwrjn   1/1     Running   0          45m
    ```
 
-## 部署 EMQX 集群
+## Deploy EMQX Cluster
 
-要部署 EMQX 集群，请参阅文档[部署 EMQX](../getting-started.md)。
+To deploy an EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md).
 
-## 验证日志采集
+## Verify Log Collection
 
-1. 登录 Kibana 界面，打开菜单中的堆栈管理模块，点击 _Index Management_。您可以看到日志索引已经被采集。
+1. Log in to the Kibana interface, open the stack management module in the menu, and click on _Index Management_. You can see that log indices have already been collected.
 
-     ![](./assets/configure-log-collection/index-manage.png)
+   ![](./assets/configure-log-collection/index-manage.png)
 
-2. 要在 Kibana 中发现和查看日志，您需要创建索引模式。选择索引模式并点击 _Create_。
+2. To discover and view logs in Kibana, you need to create an index pattern. Select index patterns and click _Create_.
 
    ![](./assets/configure-log-collection/create-index-0.png)
 
    ![](./assets/configure-log-collection/create-index-1.png)
 
-3. 最后，验证 EMQX 集群日志已被采集。
+3. Verify that the EMQX cluster logs are collected.
 
    ![](./assets/configure-log-collection/log-collection.png)

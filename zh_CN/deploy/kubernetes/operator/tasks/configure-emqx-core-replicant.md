@@ -1,47 +1,53 @@
-# 启用 Core-Replicant 部署
+# Enable Core + Replicant Cluster
 
-## 目标
+## Objective
 
-- 通过 `coreTemplate` 字段配置 EMQX 集群 Core 节点。
-- 通过 `replicantTemplate` 字段配置 EMQX 集群 Replicant 节点。
+- Configure EMQX cluster Core nodes through the `coreTemplate` field.
+- Configure EMQX cluster Replicant nodes through the `replicantTemplate` field.
 
-## Core 和 Replicant 节点
+## Core and Replicant Nodes
 
-EMQX 集群中的节点可以具有两种角色之一：Core 节点和 Replicant 节点。
+Nodes in the EMQX cluster can have one of two roles: Core node and Replicant node.
 
-- Core 节点负责集群中的数据持久化，并作为共享集群状态的权威来源，例如路由表、MQTT 客户端通道、保留消息、集群配置、告警、Dashboard 用户凭据等。
-- Replicant 节点被设计为无状态的，不参与数据库操作。添加或删除 Replicant 节点不会影响集群数据的冗余。
+* Core nodes are responsible for data persistence in the cluster.
+  
+    They serve as the authoritative source for shared cluster state such as routing tables, MQTT client channels, retained messages, cluster configuration, alarms, Dashboard user credentials, etc.
 
-典型 EMQX 集群中 Core 和 Replicant 节点之间的通信如下图所示：
+* Replicant nodes are designed to be stateless and do not participate in database operations.
+
+    Adding or deleting Replicant nodes will not affect the redundancy of the cluster data.
+
+Communication between Core and Replicant nodes in a typical EMQX cluster is illustrated in the following diagram:
 
   <div style="text-align:center">
   <img src="./assets/configure-core-replicant/mria-core-replicant.png" style="zoom:30%;" />
   </div>
 
-有关 EMQX Core-Replicant 架构的更多信息，请参阅[集群架构](../../../cluster/mria-introduction.md)文档。
+For more information about the EMQX Core-Replicant architecture, refer to the [Cluster Architecture](../../../cluster/mria-introduction.md) documentation.
 
 :::tip
-EMQX 集群中必须至少有一个 Core 节点。为了高可用性，EMQX Operator 建议 EMQX 集群至少有三个 Core 节点。
+* There must be at least one Core node in the EMQX cluster.
+* When Replicant nodes are enabled, EMQX Operator 3.0 requires at least two Core nodes for rolling updates.
+* For high availability, running at least three Core nodes is recommended.
 :::
 
-## 配置 EMQX 集群
+## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate` 字段配置 EMQX 集群的 Core 节点，并通过 `.spec.replicantTemplate` 字段配置 EMQX 集群的 Replicant 节点。
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX cluster through the `.spec.coreTemplate` field, and configuring Replicant nodes of the EMQX cluster through the `.spec.replicantTemplate` field.
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
+1. Save the following content as a YAML file and deploy using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          replicas: 2
@@ -61,11 +67,13 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate` 字段配置 EMQX �
          type: LoadBalancer
    ```
 
-   在上面的示例中，EMQX CR 定义了一个由两个 Core 节点和三个 Replicant 节点组成的 EMQX 集群。
+   In the example above, the EMQX CR defines an EMQX cluster consisting of two Core nodes and three Replicant nodes.
 
-   Core 节点至少需要 512Mi 内存，Replicant 节点至少需要 1Gi 内存。您可以根据实际业务负载调整这些约束。通常，Replicant 节点接受所有客户端请求，因此 Replicant 节点所需的资源可能更高，以适应许多并发连接。
+   Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
 
-2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+   EMQX Operator exposes the Replicant replica count through the Kubernetes `scale` subresource, which allows HorizontalPodAutoscaler to manage scaling of Replicant set in Core-Replicant mode.
+
+2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx
@@ -73,16 +81,16 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate` 字段配置 EMQX �
    emqx   Ready    10m
    ```
 
-## 验证 EMQX 集群
+## Verify EMQX Cluster
 
-您可以通过检查 EMQX CR 的 `.status` 字段查看集群中所有节点的信息。
+You can view information about all nodes in the cluster by checking the `.status` field of the EMQX CR.
 
 ```bash
 $ kubectl get emqx emqx -o json | jq .status.coreNodes
 [
   {
-    "name": "emqx@emqx-core-adcdef012-0.emqx-headless.default.svc.cluster.local",
-    "podName": "emqx-core-adcdef012-0",
+    "name": "emqx@emqx-core-0.emqx-headless.default.svc.cluster.local",
+    "podName": "emqx-core-0",
     "status": "running",
     "otpRelease": "27.3.4.2-6/15.2.7.1",
     "role": "core",
@@ -91,8 +99,8 @@ $ kubectl get emqx emqx -o json | jq .status.coreNodes
     "connections": 0
   },
   {
-    "name": "emqx@emqx-core-adcdef012-1.emqx-headless.default.svc.cluster.local",
-    "podName": "emqx-core-adcdef012-1",
+    "name": "emqx@emqx-core-1.emqx-headless.default.svc.cluster.local",
+    "podName": "emqx-core-1",
     "status": "running",
     "otpRelease": "27.3.4.2-6/15.2.7.1",
     "role": "core",

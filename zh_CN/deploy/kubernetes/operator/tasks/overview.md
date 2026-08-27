@@ -1,27 +1,28 @@
-# 管理 EMQX 集群
+# Manage EMQX Clusters
 
-本章提供了在 Kubernetes 集群中使用 EMQX 执行常见任务和操作的分步说明。
+This chapter provides step-by-step instructions for performing common tasks and operations with EMQX in a Kubernetes cluster.
 
-## 配置和设置
+## Configuration and Setup
 
-- License 和安全性
-  - [管理 License](./configure-emqx-license.md)
-  - [为 EMQX 监听器启用 TLS](./configure-emqx-tls.md)
-- 集群配置
-  - [修改 EMQX 配置](./configure-emqx-config.md)
-  - [启用 Core-Replicant 部署](./configure-emqx-core-replicant.md)
-  - [启用持久化](./configure-emqx-persistence.md)
-  - [通过 LoadBalancer 访问 EMQX 集群](./configure-emqx-service.md)
+- License and Security
+  - [Manage License](./configure-emqx-license.md)
+  - [Enable TLS for EMQX listeners](./configure-emqx-tls.md)
+- Cluster Configuration
+  - [Change EMQX Configuration](./configure-emqx-config.md)
+  - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
+  - [Enable Persistence](./configure-emqx-persistence.md)
+  - [Configure Pod Disruption Budgets](./configure-disruption-budgets.md)
+  - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
+  - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
 
-## 升级和维护
+## Upgrades and Maintenance
 
-- 升级
-  - [执行蓝绿升级](./configure-emqx-blueGreenUpdate.md)
-- 日志管理
-  - [采集 EMQX 日志](./configure-emqx-log-collection.md)
-  - [修改 EMQX 日志等级](./configure-emqx-log-level.md)
+- Upgrade
+  - [Configure Rolling Update](./configure-emqx-rolling-update.md)
+- Log Management
+  - [Collect EMQX Logs](./configure-emqx-log-collection.md)
+  - [Change EMQX Log Level](./configure-emqx-log-level.md)
 
-## 监控和性能
+## Monitoring and Performance
 
-- [使用 Prometheus 监控 EMQX 集群](./configure-emqx-prometheus.md)
-
+- [Monitor EMQX Cluster using Prometheus](./configure-emqx-prometheus.md)

@@ -1,23 +1,33 @@
-# 重新平衡集群负载
+# Rebalance Cluster Load
 
-## 目标
+::: warning
+EMQX Operator 3.0.0 does not support the `Rebalance` CRD. The examples on this page apply only to earlier EMQX Operator releases that installed `Rebalance`.
+:::
 
-如何重新平衡 MQTT 连接。
+## Task Target
 
-## 为什么需要负载重平衡
+How to rebalance MQTT connections.
 
-集群负载重平衡是将客户端连接和会话从一组节点强制迁移到另一组节点的操作。它将自动计算需要迁移的连接数量以实现节点平衡，然后将相应数量的连接和会话从高负载节点迁移到低负载节点，从而在节点之间实现负载均衡。通常在新节点加入或节点重启后需要此操作来实现平衡。
+## Why Need Load Rebalancing
 
-重平衡的价值主要有以下两点：
+Cluster load rebalancing is the act of forcibly migrating client connections and sessions from one set of nodes to another. It will automatically calculate the number of connections that need to be migrated to achieve node balance, and then migrate the corresponding number of connections and sessions from high-load nodes to low-load nodes, thereby achieving load balancing between nodes. This operation is usually required to achieve balance after a new join or a restart of a node.
 
-- **提高系统可扩展性**：由于 MQTT 连接的持久性，当集群扩展时，对原始节点的连接不会自动迁移到新节点。为了解决这个问题，您可以使用负载重平衡功能将连接从过载节点平滑转移到新添加的节点。此过程确保整个集群的负载分布更加均衡，并提高吞吐量、响应速度和资源利用率。
-- **降低运维成本**：对于负载分布不均的集群，某些节点过载而其他节点保持空闲，您可以使用负载重平衡功能自动调整集群内的负载。这有助于实现更均衡的工作分布并降低运维成本。
+The value of rebalancing mainly has the following two points:
 
-有关 EMQX 集群负载重平衡，请参阅文档：[重平衡](../../../cluster/rebalancing.md)
+- **Improve system scalability**: Due to the persistent nature of MQTT connections, connections to the original nodes will not automatically migrate to the new nodes when the cluster scales. To address this, you can use the load rebalancing feature to smoothly transfer connections from overloaded nodes to newly-added ones. This process ensures a more balanced distribution of load across the entire cluster and enhances throughput, response speed, and resource utilization rate.
+- **Reduce O&M costs**: For clusters with unevenly distributed loads, where some nodes are overloaded while others remain idle, you can use the load rebalancing feature to automatically adjust the load within the cluster. This helps achieve a more balanced distribution of work and reduces operational and maintenance costs.
 
-## 如何使用负载重平衡
+For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../cluster/rebalancing.md)
 
-EMQX Operator 中集群重平衡对应的 CRD 是 `Rebalance`，示例如下：
+## EMQX Operator 3.0
+
+EMQX Operator 3.0 still uses EMQX node evacuation internally during rolling updates and scale-down operations, but it no longer exposes a standalone `Rebalance` Kubernetes resource for user-triggered cluster rebalancing.
+
+For user-triggered load rebalancing, use the EMQX rebalancing tools directly. For details, refer to [Rebalancing](../../../cluster/rebalancing.md).
+
+## Earlier EMQX Operator Releases
+
+The corresponding CRD of cluster rebalancing in earlier EMQX Operator releases is `Rebalance`, and its example is as follows:
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -37,23 +47,23 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-> 有关 Rebalance 配置，请参阅文档：[Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy)。
+> For Rebalance configuration in earlier releases, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
 
-## 测试负载重平衡
+## Test Load Rebalancing
 
-### 重平衡前的集群负载分布
+### Cluster Load Distribution Before Rebalancing
 
-在重平衡之前，我们有意创建了一个连接分布不均的 EMQX 集群。然后使用 Grafana 和 Prometheus 监控集群负载：
+Before rebalancing, we intentionally created an EMQX cluster with an uneven distribution of connections. We then used Grafana and Prometheus to monitor the cluster load:
 
 ![](./assets/configure-emqx-rebalance/before-rebalance.png)
 
-如图所示，集群由四个 EMQX 节点组成。三个节点各自处理 10,000 个连接，而一个节点的连接数为 **零**。
+As shown in the graph, the cluster consists of four EMQX nodes. Three nodes each handle 10,000 connections, while one node has **zero** connections.
 
-在以下示例中，我们演示如何执行重平衡操作，以在所有四个节点之间均匀分配负载。
+In the following example, we demonstrate how to perform a rebalancing operation to evenly distribute the load across all four nodes.
 
-#### 提交 Rebalance 任务
+#### Submit a Rebalance Task
 
-创建 `Rebalance` 资源以启动重平衡过程：
+Create a `Rebalance` resource to initiate the rebalancing process:
 
 ```yaml
 apiVersion: apps.emqx.io/v1beta4
@@ -74,16 +84,16 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-将文件保存为 `rebalance.yaml`，并执行以下命令提交 Rebalance 任务：
+Save the file as `rebalance.yaml`, and execute the following command to submit the Rebalance task:
 
 ```bash
 $ kubectl apply -f rebalance.yaml
 rebalance.apps.emqx.io/rebalance-sample created
 ```
 
-#### 检查重平衡进度
+#### Check the Rebalance Progress
 
-执行以下命令检查 EMQX 集群的重平衡状态：
+Execute the following command to inspect the rebalancing status of the EMQX cluster:
 
 ```bash
 $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
@@ -103,12 +113,11 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
      "connection_eviction_rate": 10
 }
 ```
+> For a detailed description of the `rebalanceStates` field, refer to the documentation: [rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate).
 
-> 有关 `rebalanceStates` 字段的详细描述，请参阅文档：[rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate)。
+#### Wait for Completion
 
-#### 等待完成
-
-监控任务直到其状态变为 `Completed`：
+Monitor the task until its status becomes `Completed`:
 
 ```bash
 $ kubectl get rebalances rebalance-sample
@@ -116,34 +125,34 @@ NAME               STATUS      AGE
 rebalance-sample   Completed   62s
 ```
 
-> `STATUS` 字段表示 Rebalance 任务的生命周期状态：
+> The `STATUS` field indicates the lifecycle state of the Rebalance task:
 >
-> | 状态         | 含义                                       |
+> | Status         | Meaning                                       |
 > | -------------- | --------------------------------------------- |
-> | **Processing** | 重平衡正在进行中。                   |
-> | **Completed**  | 重平衡已成功完成。        |
-> | **Failed**     | 重平衡遇到错误并停止。 |
+> | **Processing** | Rebalancing is in progress.                   |
+> | **Completed**  | Rebalancing has successfully finished.        |
+> | **Failed**     | Rebalancing encountered an error and stopped. |
 
-### 重平衡后的集群负载分布
+### Cluster Load Distribution After Rebalancing
 
 ![](./assets/configure-emqx-rebalance/after-rebalance.png)
 
-上图显示了 Rebalance 完成后的集群负载。如图所示，在整个操作过程中，客户端连接的迁移是平滑且稳定的。集群中的连接总数仍为 **10,000**，与重平衡前相同。
+The figure above shows the cluster load after Rebalance has completed. As illustrated, the migration of client connections is smooth and stable throughout the entire operation. The total number of connections in the cluster remains **10,000**, the same as before rebalancing.
 
-在重平衡之前，一个节点承载 **0** 个连接，而三个节点各自承载 **10,000** 个连接。重平衡后，连接已重新分配到所有四个节点。每个节点上的负载稳定在 **2,500** 个连接左右并保持一致。
+Before rebalancing, one node carried **0** connections while three nodes carried **10,000** connections each. After rebalancing, the connections have been redistributed evenly across all four nodes. The load on each node stabilizes around **2,500** connections and remains consistent.
 
-要确定集群是否已达到平衡状态，EMQX Operator 评估以下条件：
+To determine whether the cluster has reached a balanced state, the EMQX Operator evaluates the following conditions:
 
 ```
-avg(源节点连接数) < avg(目标节点连接数) + abs_conn_threshold
-或
-avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
+avg(source node connection number) < avg(target node connection number) + abs_conn_threshold
+or
+avg(source node connection number) < avg(target node connection number) * rel_conn_threshold
 ```
 
-使用配置的 Rebalance 阈值和实际连接数：
+Using the configured Rebalance thresholds and real connection counts:
 
-- 源节点平均值：`avg(2553 + 2553 + 2554) ≈ 2553`
-- 目标节点平均值：`2340`
-- 检查的条件：`2553 < 2340 * 1.1`
+- Source node average: `avg(2553 + 2553 + 2554) ≈ 2553`
+- Target node average: `2340`
+- Condition checked: `2553 < 2340 * 1.1`
 
-由于条件成立，Operator 得出结论：集群已达到平衡状态，重平衡任务已成功完成。
+Since the condition holds true, the Operator concludes that the cluster has reached a balanced state and the rebalancing task has successfully completed.

@@ -1,16 +1,16 @@
-# 在 EMQX 中开启 TLS
+# Enable TLS In EMQX
 
-## 目标
+## Objective
 
-使用 `extraVolumes` 和 `extraVolumeMounts` 字段自定义 TLS 证书。
+Customize TLS certificates using the `extraVolumes` and `extraVolumeMounts` fields.
 
-## 基于 TLS 证书创建 Secret
+## Create a Secret Based On TLS Certificate
 
-Secret 是一种包含少量敏感信息的对象，例如密码、令牌或密钥。在本演示中，我们使用 Secret 存储 TLS 证书信息，因此在创建 EMQX 集群之前需要创建一个 Secret。
+A secret is an object that contains a small amount of sensitive information, such as passwords, tokens, or keys. In this demonstration, we use secrets to store TLS certificate information, so we need to create one before creating the EMQX cluster.
 
-有关更多信息，请参阅 [Secret](https://kubernetes.io/zh-cn/docs/concepts/configuration/secret/#working-with-secrets) 文档。
+For more information, please refer to the [Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets) documentation.
 
-将以下内容保存为 YAML 文件，并使用 `kubectl apply` 命令部署：
+Save the following as a YAML file and deploy it using the `kubectl apply` command:
 
 ```yaml
 apiVersion: v1
@@ -34,98 +34,99 @@ stringData:
 ```
 
 :::tip
-在此示例中，上述三个字段的内容被省略。请用您自己的证书内容填充。
-* `ca.crt` 应包含 CA 证书。
-* `tls.crt` 应包含服务器证书。
-* `tls.key` 应包含服务器的私钥。
+In this example, the contents of the above three fields are omitted. Please fill them with your own certificate contents.
+* `ca.crt` should contain the CA certificate.
+* `tls.crt` should contain the server certificate.
+* `tls.key` should contain the server's private key.
 :::
 
-## 配置 EMQX 集群
+## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` 提供以下字段来为 EMQX 集群配置额外的卷和挂载点：
-* `.spec.coreTemplate.extraVolumes`
-* `.spec.coreTemplate.extraVolumeMounts`
-* `.spec.replicantTemplate.extraVolumes`
-* `.spec.replicantTemplate.extraVolumeMounts`
+EMQX CRD `apps.emqx.io/v3beta1` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
+* `.spec.coreTemplate.spec.extraVolumes`
+* `.spec.coreTemplate.spec.extraVolumeMounts`
+* `.spec.replicantTemplate.spec.extraVolumes`
+* `.spec.replicantTemplate.spec.extraVolumeMounts`
 
-在本演示中，我们将使用这些字段为 EMQX 集群提供 TLS 证书。
+In this demonstration, we will use these fields to provide TLS certificates to the EMQX cluster.
 
-Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/#secret) 文档。这里我们使用的是 `secret` 卷类型。
+There are many types of Volumes. For information about Volumes, please refer to the [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret) documentation. Here we are using the `secret` volume type.
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
+1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      # 配置从 `emqx-tls` 卷挂载的 TLS 监听器证书：
-      data: |
-        listeners.ssl.default {
-          bind = "0.0.0.0:8883"
-          ssl_options {
-            cacertfile = "/mounted/cert/ca.crt"
-            certfile = "/mounted/cert/tls.crt"
-            keyfile = "/mounted/cert/tls.key"
-            gc_after_handshake = true
-            handshake_timeout = 5s
-          }
-        }
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        extraVolumes:
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            mountPath: /mounted/cert
-    replicantTemplate:
-      spec:
-        extraVolumes:
-          # 创建一个名为 `emqx-tls` 的 `secret` 卷类型：
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            # TLS 证书挂载到 EMQX 节点的目录：
-            mountPath: /mounted/cert
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v3beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
+       roots:
+         listeners:
+           ssl:
+             default:
+               bind: "0.0.0.0:8883"
+               ssl_options:
+                 cacertfile: "/mounted/cert/ca.crt"
+                 certfile: "/mounted/cert/tls.crt"
+                 keyfile: "/mounted/cert/tls.key"
+                 gc_after_handshake: true
+                 handshake_timeout: "5s"
+         license:
+           key: "..."
+     coreTemplate:
+       spec:
+         extraVolumes:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             mountPath: /mounted/cert
+     replicantTemplate:
+       spec:
+         extraVolumes:
+           # Create a `secret` volume type named `emqx-tls`:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             # Directory where the TLS certificate is mounted to EMQX nodes:
+             mountPath: /mounted/cert
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-2. 等待 EMQX 集群就绪。
+2. Wait for the EMQX cluster to become ready.
 
-  使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
 
-  ```bash
-  $ kubectl get emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+   ```bash
+   $ kubectl get emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
-## 使用 MQTTX 验证 TLS 连接
+## Verify TLS Connection using MQTTX
 
-[MQTTX CLI](https://mqttx.app/zh/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发者快速开始使用 MQTT 服务和应用。
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool, designed to help developers quickly get started with MQTT services and applications.
 
-1. 获取 EMQX 监听器服务的外部 IP。
+1. Obtain the external IP of the EMQX listeners service.
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. 使用 MQTTX CLI 订阅消息。连接到 TLS 监听器端口 8883，使用 `--insecure` 标志跳过证书验证。
+2. Subscribe to messages using MQTTX CLI.
+
+   Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
 
    ```bash
    mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
@@ -135,7 +136,7 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
    [10:00:25] › ✔ Subscribed to hello
    ```
 
-3. 在单独的终端窗口中发布消息。
+3. In a separate terminal window, publish a message.
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -145,10 +146,14 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
    [10:00:58] › ✔ Message published
    ```
 
-4. 观察订阅客户端接收消息。
+4. Observe the subscriber client receiving the message.
 
    ```bash
-   [10:00:58] › payload: hello world
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
    ```
 
-   这表明发布者和订阅者客户端都通过 TLS 连接成功与代理通信。
+   This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.
