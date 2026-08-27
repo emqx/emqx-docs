@@ -146,6 +146,18 @@ EMQX provides the following endpoints for metric collection:
 - `/api/v5/prometheus/auth`: Key metrics and counters in access control, including authentication and authorization.
 - `/api/v5/prometheus/data_integration`: Metrics and counters related to the rule engine, connectors, actions, Sink/Source, and encoding/decoding.
 
+### Scrape Data Integration Metrics by Namespace
+
+Starting from EMQX 6.3.0, `GET /api/v5/prometheus/data_integration` limits rule, action, and connector metrics according to the namespace of the authenticated user:
+
+- A namespaced user receives metrics only from their assigned namespace. If the user specifies another namespace with `ns=<namespace>`, EMQX returns `403`.
+- A global administrator receives metrics from all namespaces by default. Specify `ns=<namespace>` to scrape one namespace, or specify `only_global=true` without `ns` to scrape only the global namespace.
+- If authentication is disabled, EMQX applies the same visibility as for a global administrator. Requests return metrics from all namespaces by default.
+
+Per-resource metrics for rules, actions, and connectors in a non-global namespace include a `namespace` label. Per-resource metrics in the global namespace do not include this label. The `emqx_schema_registrys_count` metric remains cluster-wide because Schema Registry resources are not scoped by namespace.
+
+Requests that scrape all namespaces are subject to the [Namespace Data Scraping Rate Limit](#namespace-data-scraping-rate-limit).
+
 ### Metric Collection Modes
 
 When calling the above APIs to obtain metrics, you can use the URL query parameter `mode` to get different types of metric data. The meanings of different parameters are as follows:
