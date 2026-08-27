@@ -1,14 +1,14 @@
 # IPv6
 
-EMQX fully supports IPv6 for client connections, the Dashboard, inter-node clustering, and outbound connections to external services. This page explains how to configure EMQX for IPv6 environments, from single-stack (IPv6-only) to dual-stack deployments.
+EMQXは、クライアント接続、ダッシュボード、ノード間クラスタリング、および外部サービスへのアウトバウンド接続においてIPv6を完全にサポートしています。このページでは、シングルスタック（IPv6のみ）からデュアルスタック展開まで、IPv6環境でのEMQXの設定方法を説明します。
 
-## MQTT Listeners
+## MQTTリスナー
 
-To accept MQTT client connections over IPv6, bind the listener to an IPv6 address. EMQX automatically enables the `inet6` socket option when it detects an IPv6 bind address.
+IPv6経由でMQTTクライアント接続を受け入れるには、リスナーをIPv6アドレスにバインドします。EMQXはIPv6のバインドアドレスを検出すると、自動的に`inet6`ソケットオプションを有効にします。
 
-### Dual-Stack (IPv4 and IPv6)
+### デュアルスタック（IPv4およびIPv6）
 
-Bind to `[::]` to accept both IPv4 and IPv6 connections on the same port:
+同じポートでIPv4とIPv6の両方の接続を受け入れるには、`[::]`にバインドします。
 
 ```bash
 listeners.tcp.default {
@@ -18,13 +18,13 @@ listeners.tcp.default {
 
 ::: tip
 
-On most operating systems, binding to `[::]` accepts both IPv4 and IPv6 connections by default (dual-stack). This is the simplest configuration for environments that need to support both protocols.
+ほとんどのオペレーティングシステムでは、`[::]`にバインドするとデフォルトでIPv4とIPv6の両方の接続を受け入れます（デュアルスタック）。両方のプロトコルをサポートする環境において最も簡単な設定です。
 
 :::
 
-### IPv6-Only
+### IPv6のみ
 
-To restrict the listener to IPv6 connections only, set `ipv6_v6only = true`:
+リスナーをIPv6接続のみに制限するには、`ipv6_v6only = true`を設定します。
 
 ```bash
 listeners.tcp.default {
@@ -33,11 +33,11 @@ listeners.tcp.default {
 }
 ```
 
-This sets the `IPV6_V6ONLY` socket option, which prevents IPv4-mapped IPv6 addresses from being accepted.
+これは`IPV6_V6ONLY`ソケットオプションを設定し、IPv4マッピングされたIPv6アドレスの受け入れを防ぎます。
 
-### Bind to a Specific IPv6 Address
+### 特定のIPv6アドレスにバインド
 
-You can bind to a specific IPv6 address:
+特定のIPv6アドレスにバインドすることも可能です。
 
 ```bash
 listeners.tcp.default {
@@ -45,7 +45,7 @@ listeners.tcp.default {
 }
 ```
 
-The same configuration applies to SSL, WebSocket, and Secure WebSocket listeners:
+同じ設定はSSL、WebSocket、Secure WebSocketリスナーにも適用されます。
 
 ```bash
 listeners.ssl.default {
@@ -66,13 +66,13 @@ listeners.wss.default {
 }
 ```
 
-## Dashboard HTTP/HTTPS Listeners
+## ダッシュボードのHTTP/HTTPSリスナー
 
-The EMQX Dashboard HTTP/HTTPS listener also supports IPv6.
+EMQXダッシュボードのHTTP/HTTPSリスナーもIPv6をサポートしています。
 
-### Use an IPv6 Bind Address
+### IPv6バインドアドレスの使用
 
-When the `bind` address is an IPv6 address, EMQX automatically enables IPv6 for the Dashboard listener:
+`bind`アドレスがIPv6の場合、EMQXはダッシュボードリスナーで自動的にIPv6を有効にします。
 
 ```bash
 dashboard.listeners.http {
@@ -80,9 +80,9 @@ dashboard.listeners.http {
 }
 ```
 
-### Use the `inet6` Flag
+### `inet6`フラグの使用
 
-Alternatively, if using a port-only bind (without an explicit IP address), you can enable IPv6 explicitly:
+IPアドレスを明示せずポート番号のみでバインドする場合は、`inet6`を明示的に有効にできます。
 
 ```bash
 dashboard.listeners.http {
@@ -91,125 +91,128 @@ dashboard.listeners.http {
 }
 ```
 
-| Parameter    | Type    | Default | Description                                                                 |
-| ------------ | ------- | ------- | --------------------------------------------------------------------------- |
-| `inet6`      | boolean | `false` | Enable IPv6 support. When `false`, the listener accepts only IPv4 traffic.  |
-| `ipv6_v6only`| boolean | `false` | Disable IPv4-to-IPv6 mapping. Only effective when `inet6` is `true`.        |
+| パラメータ          | 型       | デフォルト | 説明                                                                                   |
+| ------------------- | -------- | ---------- | -------------------------------------------------------------------------------------- |
+| `inet6`             | boolean  | `false`    | IPv6サポートを有効にします。`false`の場合、リスナーはIPv4トラフィックのみを受け入れます。 |
+| `ipv6_v6only`       | boolean  | `false`    | IPv4からIPv6へのマッピングを無効にします。`inet6`が`true`の場合のみ有効です。          |
 
-## Cluster Communication
+## クラスター通信
 
-When nodes in an EMQX cluster communicate over an IPv6 network, two components need configuration: the Erlang distribution protocol (used for cluster coordination) and the Gen RPC channel (used for data forwarding between nodes).
+EMQXクラスターのノード間通信がIPv6ネットワーク上で行われる場合、2つのコンポーネントの設定が必要です。1つはクラスタ調整に使用されるErlang分散プロトコル、もう1つはノード間のデータ転送に使用されるGen RPCチャネルです。
 
-### Erlang Distribution Protocol
+### Erlang分散プロトコル
 
-Set `cluster.proto_dist` to use IPv6 for inter-node communication:
+ノード間通信でIPv6を使用するには、`cluster.proto_dist`を設定します。
 
 ```bash
 cluster.proto_dist = inet6_tcp
 ```
 
-Available options:
+利用可能なオプション：
 
-| Value        | Description                                              |
-| ------------ | -------------------------------------------------------- |
-| `inet_tcp`   | TCP over IPv4 (default)                                  |
-| `inet6_tcp`  | TCP over IPv6                                            |
-| `inet_tls`   | TLS over IPv4, configured via `etc/ssl_dist.conf`        |
-| `inet6_tls`  | TLS over IPv6, configured via `etc/ssl_dist.conf`        |
+| 値             | 説明                                         |
+| -------------- | -------------------------------------------- |
+| `inet_tcp`     | IPv4上のTCP（デフォルト）                     |
+| `inet6_tcp`    | IPv6上のTCP                                  |
+| `inet_tls`     | IPv4上のTLS、`etc/ssl_dist.conf`で設定       |
+| `inet6_tls`    | IPv6上のTLS、`etc/ssl_dist.conf`で設定       |
 
-::: warning Important Notice
+::: warning 重要なお知らせ
 
-When using IPv6 node names (for example, `emqx@::1`), you **must** set `cluster.proto_dist` to `inet6_tcp` or `inet6_tls`. Otherwise, the node will fail to start with errors such as "not responding to pings".
+IPv6ノード名（例：`emqx@::1`）を使用する場合、`cluster.proto_dist`を必ず`inet6_tcp`または`inet6_tls`に設定してください。そうしないと、「not responding to pings」などのエラーでノードが起動に失敗します。
 
 :::
 
 ### Gen RPC
 
-Configure the Gen RPC channel for IPv6:
+Gen RPCチャネルをIPv6用に設定します。
 
 ```bash
 rpc.listen_address = "::"
 rpc.ipv6_only = true
 ```
 
-| Parameter           | Type    | Default     | Description                                                                                  |
-| ------------------- | ------- | ----------- | -------------------------------------------------------------------------------------------- |
-| `rpc.listen_address`| string  | `0.0.0.0`   | IP address for the RPC server. Use `0.0.0.0` for IPv4 or `::` for IPv6.                     |
-| `rpc.ipv6_only`     | boolean | `false`     | When `listen_address` is IPv6, setting this to `true` forces the RPC client to use IPv6 only. |
+| パラメータ           | 型       | デフォルト   | 説明                                                                                   |
+| -------------------- | -------- | ------------ | -------------------------------------------------------------------------------------- |
+| `rpc.listen_address`  | string   | `0.0.0.0`    | RPCサーバーのIPアドレス。IPv4の場合は`0.0.0.0`、IPv6の場合は`::`を使用します。       |
+| `rpc.ipv6_only`       | boolean  | `false`      | `listen_address`がIPv6の場合、これを`true`にするとRPCクライアントはIPv6のみを使用します。 |
 
-## Outbound Connections
+## アウトバウンド接続
 
-EMQX makes outbound connections to external services for features such as HTTP authentication, webhook actions, and database integrations.
+EMQXはHTTP認証、Webhookアクション、データベース統合などの機能のために外部サービスへのアウトバウンド接続を行います。
 
-### Automatic IPv6 Detection
+### 自動IPv6検出
 
-For HTTP-based connectors (authentication backends, webhook actions, etc.), EMQX automatically probes whether the target host supports IPv6 and selects the appropriate address family. No manual configuration is required in most cases.
+EMQXはさまざまなアウトバウンド接続タイプでIPv6をサポートしています。
 
-### Manual Override
+- HTTPベースのコネクター（認証バックエンド、Webhookアクションなど）では、EMQXがターゲットホストのIPv6対応を自動的に検出し、適切なアドレスファミリーを選択します。ほとんどの場合、手動設定は不要です。
+- MQTTコネクターでは、IPv6のみのブローカーやホスト名がIPv6の`AAAA`レコードのみを返すブローカーにも接続可能です。MQTTブローカーのアドレスは、`[::1]:1883`や`mqtt://[::1]:1883`のような角括弧付きIPv6リテラルも使用できます。
 
-Some connector types expose an `ipv6_probe` toggle in their configuration. When enabled (the default for HTTP connectors), EMQX attempts an IPv6 connection first. If your network is IPv4-only and DNS returns both A and AAAA records, you can disable the probe to avoid connection delays:
+### 手動オーバーライド
+
+一部のコネクタータイプでは設定に`ipv6_probe`トグルがあり、有効（HTTPコネクターのデフォルト）にするとEMQXはまずIPv6接続を試みます。ネットワークがIPv4のみでDNSがAレコードとAAAAレコードの両方を返す場合、接続遅延を避けるためにこのプローブを無効にできます。
 
 ```bash
-# Example: HTTP authentication backend
+# 例：HTTP認証バックエンド
 authentication {
   backend = "http"
   method = "post"
   url = "http://auth-server.example.com:8080/auth"
 
-  # Disable IPv6 auto-detection if not needed
+  # 不要な場合はIPv6自動検出を無効化
   pool_size = 8
 }
 ```
 
-## Complete IPv6-Only Example
+## IPv6のみの完全な例
 
-Below is a minimal `emqx.conf` for an IPv6-only deployment:
+以下はIPv6のみの展開向けの最小限の`emqx.conf`例です。
 
 ```bash
-# Node name using IPv6 address
+# IPv6アドレスを使用したノード名
 node.name = "emqx@::1"
 
-# Cluster distribution over IPv6
+# IPv6によるクラスター分散
 cluster.proto_dist = inet6_tcp
 
-# Gen RPC over IPv6
+# IPv6によるGen RPC
 rpc.listen_address = "::"
 rpc.ipv6_only = true
 
-# MQTT listener on IPv6
+# IPv6でのMQTTリスナー
 listeners.tcp.default {
   bind = "[::]:1883"
   ipv6_v6only = true
 }
 
-# Dashboard on IPv6
+# IPv6でのダッシュボード
 dashboard.listeners.http {
   bind = "[::]:18083"
 }
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### Node Not Responding to Pings
+### ノードがpingに応答しない
 
-**Symptom**: When starting a cluster node with an IPv6 node name, the node reports "not responding to pings" and fails to start.
+**症状**：IPv6ノード名でクラスターを起動すると、「not responding to pings」と表示され起動に失敗する。
 
-**Cause**: The Erlang distribution protocol defaults to `inet_tcp` (IPv4). An IPv6 node name requires `inet6_tcp`.
+**原因**：Erlang分散プロトコルのデフォルトが`inet_tcp`（IPv4）であり、IPv6ノード名には`inet6_tcp`が必要。
 
-**Solution**: Set `cluster.proto_dist = inet6_tcp` in `emqx.conf`.
+**対処法**：`emqx.conf`で`cluster.proto_dist = inet6_tcp`を設定してください。
 
-### `enetunreach` Errors in Outbound Connections
+### アウトバウンド接続での`enetunreach`エラー
 
-**Symptom**: Outbound HTTP requests (e.g., to authentication backends) fail with `enetunreach` (network unreachable).
+**症状**：HTTPリクエスト（認証バックエンドなど）が`enetunreach`（ネットワーク到達不能）で失敗する。
 
-**Cause**: The connection is attempting to use IPv4 to reach an IPv6-only service, or vice versa.
+**原因**：IPv6のみのサービスにIPv4で接続しようとしている、またはその逆。
 
-**Solution**: Verify that the target service is reachable from the EMQX host using the correct address family. For HTTP connectors, the automatic IPv6 probe should handle this. If the service is behind a DNS name, ensure the DNS returns the correct record type (A for IPv4, AAAA for IPv6).
+**対処法**：EMQXホストからターゲットサービスへの正しいアドレスファミリーでの到達性を確認してください。HTTPコネクターは自動IPv6プローブで対応します。DNS名の場合は、DNSが正しいレコードタイプ（IPv4はA、IPv6はAAAA）を返しているか確認してください。
 
-### Dashboard Unreachable on IPv6
+### IPv6環境でダッシュボードにアクセスできない
 
-**Symptom**: The Dashboard is not accessible when EMQX is running in an IPv6-only environment.
+**症状**：IPv6のみ環境でEMQXを実行しているときにダッシュボードにアクセスできない。
 
-**Cause**: The Dashboard listener defaults to IPv4 (`0.0.0.0:18083`).
+**原因**：ダッシュボードリスナーがデフォルトでIPv4（`0.0.0.0:18083`）にバインドされている。
 
-**Solution**: Either bind the Dashboard to an IPv6 address (`bind = "[::]:18083"`), or explicitly enable IPv6 with `inet6 = true`.
+**対処法**：ダッシュボードをIPv6アドレスにバインドする（`bind = "[::]:18083"`）か、`inet6 = true`でIPv6を明示的に有効にしてください。

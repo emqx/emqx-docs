@@ -4,6 +4,7 @@
 
 支持的操作系统：
 
+- macOS 26
 - macOS 15
 - macOS 14
 

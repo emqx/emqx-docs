@@ -116,6 +116,7 @@ These metrics are useful for assessing rule effectiveness, monitoring downstream
 | Metrics          | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | actions.executed | The number of actions (sinks) that have been executed as a result of rule matching. |
+| actions.messages | The number of messages handled by action executions. Because a single action execution may process a batch of messages, this value is greater than or equal to `actions.executed`. |
 
 ### Messaging
 

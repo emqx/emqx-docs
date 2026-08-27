@@ -87,3 +87,4 @@ Next, you can learn how to use the Cluster Linking feature and configure its fun
 
 - [Quick Start with Cluster Linking](./quick-start.md)
 - [Configure Cluster Linking](./configuration.md)
+- [Secure Cluster Linking](./security.md)

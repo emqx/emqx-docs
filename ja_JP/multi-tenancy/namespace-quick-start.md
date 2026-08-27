@@ -1,14 +1,14 @@
-# Quick Start: Experience Namespaces
+# クイックスタート: ネームスペースの体験
 
-This section guides you through using the [MQTTX client](https://mqttx.app) to connect to EMQX and quickly experience the core capabilities of the namespace feature: tenant identification, client and topic isolation, and ACL isolation.
+このセクションでは、[MQTTXクライアント](https://mqttx.app) を使用してEMQXに接続し、ネームスペース機能のコア機能であるテナント識別、クライアントおよびトピックの分離、ACL分離を素早く体験する方法を案内します。
 
-## Enable a Namespace Source (Generate the `tns` Attribute)
+## ネームスペースソースの有効化（`tns`属性の生成）
 
-By configuring a namespace source, EMQX can identify the namespace from client connection information and automatically create the corresponding namespace when the client connects.
+ネームスペースソースを設定することで、EMQXはクライアント接続情報からネームスペースを識別し、クライアントが接続した際に対応するネームスペースを自動的に作成できます。
 
-### Enable via Configuration File
+### 設定ファイルによる有効化
 
-Add the following configuration to `base.hocon` to extract the namespace identifier from the username:
+`base.hocon` に以下の設定を追加し、ユーザー名からネームスペース識別子を抽出します。
 
 ```
 mqtt.client_attrs_init = [
@@ -16,126 +16,134 @@ mqtt.client_attrs_init = [
 ]
 ```
 
-**Example**
+**例**
 
-If a client connects with the username `tenantA-user1`, EMQX extracts `tenantA` as the namespace identifier.
+クライアントがユーザー名 `tenantA-user1` で接続すると、EMQXは `tenantA` をネームスペース識別子として抽出します。
 
-### Enable via Dashboard
+### ダッシュボードによる有効化
 
-You can also configure the namespace source in the Dashboard:
+ダッシュボードでもネームスペースソースを設定できます。
 
-1. Navigate to **Management** -> **Namespace** -> **Settings**.
+1. **管理** -> **ネームスペース** -> **設定** に移動します。
 
-2. In **Take Namespace From**, enter the expression:
+2. **ネームスペースを解決するタイミング** はデフォルトの **認証前** のままにします。
+
+3. **ネームスペースを取得する場所** に以下の式を入力します。
 
    ```
    nth(1, tokens(username, '-'))
    ```
 
-3. Click **Confirm** to save the configuration.
+4. **確認** をクリックして設定を保存します。
 
 ![namespace_source](./assets/namespace_source.png)
 
-### Verify Automatic Namespace Creation
+### ネームスペースの自動作成を確認する
 
-1. Use MQTTX to create an MQTT client connection simulating tenant `tenantA`:
+1. MQTTXを使い、テナント `tenantA` を模擬したMQTTクライアント接続を作成します。
 
-   - **Username**: `tenantA-user1`
-   - Connect to EMQX.
+   - ユーザー名：`tenantA-user1`
+   - EMQXに接続します。
 
-2. On the **Namespace** page, disable **View Explicitly Created Namespaces Only**.
+2. **ネームスペース** ページで **明示的に作成されたネームスペースのみ表示** を無効にします。
 
-3. Verify that the namespace `tenantA` is automatically created.
+3. ネームスペース `tenantA` が自動的に作成されていることを確認します。
 
-4. In the **Actions** column, click **Clients** to view clients connected to this namespace.
+4. **操作** 列の **クライアント** をクリックし、このネームスペースに接続しているクライアントを表示します。
 
    ![namespace_client](./assets/namespace_client.png)
 
-## Configure and Verify Namespace Isolation
+## ネームスペース分離の設定と確認
 
-### Enable Client ID and Topic Isolation
+### クライアントIDおよびトピックの分離を有効化
 
-To isolate client IDs and topics across different namespaces, you need to enable the relevant options in the global namespace settings.
+異なるネームスペース間でクライアントIDとトピックを分離するには、グローバルネームスペース設定で該当オプションを有効にする必要があります。
 
-#### Enable via Configuration File
+#### 設定ファイルによる有効化
 
-Add the following configuration to `base.hocon`:
+`base.hocon` に以下の設定を追加します。
 
 ```hocon
 mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
 mqtt.namespace_as_mountpoint = true
 ```
 
-These settings will:
+これらの設定により：
 
-- Automatically add a namespace prefix to client IDs, preventing client ID conflicts across namespaces.
-- Automatically add a `{namespace}/` prefix to topics internally in the broker, enabling namespace-level topic isolation.
+- クライアントIDにネームスペースのプレフィックスが自動付与され、ネームスペース間のクライアントID競合を防止します。
+- ブローカー内部でトピックに `{namespace}/` プレフィックスが自動付与され、ネームスペース単位でのトピック分離を実現します。
 
-#### Enable via Dashboard
+#### ダッシュボードによる有効化
 
-1. In the Dashboard, navigate to **Management** -> **Namespace** -> **Settings**.
-2. Enable the following options:
-   - **Client ID Isolation**, with default value as `concat([client_attrs.tns, '-', clientid])`.
-   - **Namespace as Mountpoint**
-3. Click **Confirm** to save the settings.
+1. ダッシュボードで **管理** -> **ネームスペース** -> **設定** に移動します。
 
-### Verify Client and Topic Isolation
+2. 以下のオプションを有効にします。
 
-1. Use MQTTX to create two MQTT client connections to simulate two tenants: `tenantA` and `tenantB`.
+   - **クライアントID分離**（デフォルト値は `concat([client_attrs.tns, '-', clientid])`）
+   - **ネームスペースをマウントポイントとして使用**
 
-   **Client A (Tenant: tenantA)**:
+3. **確認** をクリックして設定を保存します。
 
-   | Parameter | Value           |
-   | --------- | --------------- |
-   | Client ID | `client1`       |
-   | Username  | `tenantA-user1` |
-   | Subscribe | `test/topic`    |
+### クライアントおよびトピック分離の確認
 
-   **Client B (Tenant: tenantB)**:
+1. MQTTXを使い、2つのテナント `tenantA` と `tenantB` を模擬したMQTTクライアント接続を作成します。
 
-   | Parameter | Value           |
-   | --------- | --------------- |
-   | Client ID | `client1`       |
-   | Username  | `tenantB-user2` |
-   | Publish   | `test/topic`    |
+   **クライアントA（テナント：tenantA）**：
 
-2. Use Client B to publish a message. Verify the result in MQTTX and the EMQX Dashboard:
+   | パラメータ | 値               |
+   | ---------- | ---------------- |
+   | クライアントID | `client1`       |
+   | ユーザー名   | `tenantA-user1`  |
+   | サブスクライブ | `test/topic`    |
 
-   - Although both clients use the same client ID (`client1`), due to the prefix rule, they connect as `tenantA-client1` and `tenantB-client1`, avoiding conflicts.
-   - Even though both clients use the same topic (`test/topic`), Client A will **not receive** messages published by Client B because they are isolated by namespace.
+   **クライアントB（テナント：tenantB）**：
 
-3. Go to the **Monitoring** -> **Clients** page to view:
-   - Client A's subscribed topic appears as `tenantA/test/topic`.
-   - Client B's published topic appears as `tenantB/test/topic`.
+   | パラメータ | 値               |
+   | ---------- | ---------------- |
+   | クライアントID | `client1`       |
+   | ユーザー名   | `tenantB-user2`  |
+   | パブリッシュ | `test/topic`    |
+
+2. クライアントBでメッセージをパブリッシュします。MQTTXおよびEMQXダッシュボードで結果を確認します。
+
+   - 両クライアントは同じクライアントID（`client1`）を使用していますが、プレフィックスルールにより `tenantA-client1` と `tenantB-client1` として接続され、競合を回避しています。
+   - 両クライアントは同じトピック（`test/topic`）を使用していますが、ネームスペースで分離されているため、クライアントAはクライアントBがパブリッシュしたメッセージを**受信しません**。
+
+3. **モニタリング** -> **クライアント** ページで以下を確認します。
+
+   - クライアントAのサブスクライブトピックは `tenantA/test/topic` として表示されます。
+   - クライアントBのパブリッシュトピックは `tenantB/test/topic` として表示されます。
 
 ![namespace_client_list](./assets/namespace_client_list.png)
 
 ![namespace_client_sub](./assets/namespace_client_sub.png)
 
-## Enable Mountpoint-Based ACL Checks
+## マウントポイントベースのACLチェックを有効化
 
-By default, to maintain backward compatibility, authorization (ACL) checks do not include the topic prefix (mountpoint). This means that authorization rules are matched against the original topic name (for example, `test/topic`) rather than the namespaced topic (for example, `tenantA/test/topic`).
+デフォルトでは後方互換性を維持するため、認可（ACL）チェックはトピックプレフィックス（マウントポイント）を含みません。つまり、認可ルールは名前空間付きトピック（例：`tenantA/test/topic`）ではなく、元のトピック名（例：`test/topic`）に対してマッチングされます。
 
-Starting from EMQX 6.1, you can enable authorization checks that include the topic prefix to enforce namespace-level ACL isolation.
+EMQX 6.1以降では、トピックプレフィックスを含む認可チェックを有効にし、ネームスペース単位のACL分離を強制できます。
 
-### Enable via Configuration File
+### 設定ファイルによる有効化
 
-Add the following configuration to `base.hocon`:
+`base.hocon` に以下の設定を追加します。
 
 ```hocon
 authorization.include_mountpoint = true
 ```
 
-### Enable via Dashboard
+### ダッシュボードによる有効化
 
-1. In the Dashboard, navigate to **Management** -> **Namespace** -> **Settings**, or **Access Control** -> **Client Authorization** -> **Settings**.
-2. Enable **Mount Prefix for Authorization**.
-3. Save the settings.
+1. ダッシュボードで **管理** -> **ネームスペース** -> **設定** または **アクセス制御** -> **クライアント認可** -> **設定** に移動します。
 
-::: tip Note
+2. **認可にマウントプレフィックスを含める** を有効にします。
 
-When `authorization.include_mountpoint = true` is enabled, all authorization rules must include the topic prefix in their topic matching patterns.
+3. 設定を保存します。
 
-For example, if a client connects through a listener with the topic prefix `tenantA/` and wants to subscribe to `test/topic`, the corresponding authorization rule must be configured as `tenantA/test/topic`.
+::: tip 補足
+
+`authorization.include_mountpoint = true` を有効にすると、すべての認可ルールはトピックマッチングパターンにトピックプレフィックスを含める必要があります。
+
+例えば、クライアントがトピックプレフィックス `tenantA/` を持つリスナー経由で接続し、`test/topic` をサブスクライブする場合、対応する認可ルールは `tenantA/test/topic` として設定する必要があります。
 
 :::

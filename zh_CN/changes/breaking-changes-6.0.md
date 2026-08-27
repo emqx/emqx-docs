@@ -1,5 +1,9 @@
 # EMQX 6.0 中的不兼容变更
 
+## 6.0.3
+
+- [#17157](https://github.com/emqx/emqx/pull/17157) 新增规则引擎配置项 `rule_engine.limit_selects_in_namespace`，默认值为 `true`。启用后，属于某个命名空间的规则只会被同一命名空间内客户端产生的消息和客户端相关事件触发。
+
 ## 6.0.1
 
 - [#16061](https://github.com/emqx/emqx/pull/16061) 修复了一个问题：RocketMQ 动作忽略了配置的 payload 模板，错误地发送了整个规则的输出结果。

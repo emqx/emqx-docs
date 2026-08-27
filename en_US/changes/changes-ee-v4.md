@@ -1,5 +1,345 @@
 # EMQX Enterprise Version 4
 
+## e4.4.38
+
+*Release Date: 2026-08-19*
+
+### Enhancements
+
+- Dashboard users now support fine-grained permission control through categories.
+
+  Previously, Dashboard users had only two roles: `administrator` (full access) and `viewer` (full read-only access).
+
+  This release introduces a category-based permission model with 9 categories:
+
+  - 6 pre-existing business categories: `banned`, `rule_engine`, `resources`, `plugins`, `modules`, `others`. These categories apply to both API keys and Dashboard users.
+  - 3 new categories that apply only to Dashboard users: `user_management` (manage other Dashboard accounts), `mfa_management` (manage other users' MFA), and `app_management` (manage API keys).
+
+  To narrow a Dashboard user's permissions, set a `scopes` array in the user's `tags` field. Users without an explicit `scopes` field keep the pre-upgrade behaviour:
+
+  - Administrators may access all endpoints.
+  - Viewers may access all read-only endpoints except backup-archive downloads.
+
+  When `scopes` is set, the following rules apply:
+
+  - Administrator users with explicit `scopes` are restricted to those scopes for both read and write operations: an explicit scope list on an administrator is enforced.
+  - Viewer users remain read-only. Non-GET requests on other users' resources are denied regardless of scopes.
+  - Viewer users cannot hold `user_management` or `app_management`, and the default viewer scope set omits these categories and `mfa_management`. For viewers, `mfa_management` only enables self-exemption from a forced MFA lock, never management of other users' MFA.
+  - GET requests are scope-checked, and unmapped API paths are denied for scope-restricted users (fail-closed). An explicit empty scope list denies all access except self-service: own password, own MFA, and logout.
+  - Self-service paths are unaffected by `scopes`: viewers may always change their own password, manage their own MFA, and log out.
+  - Viewer users can no longer download backup archives (`/api/v4/data/file/*`) because backups contain Dashboard user password hashes, TOTP secrets and API-key credentials. Listing exports (`/data/export`) remains available to viewers.
+
+  The default administrator account configured by `dashboard.default_user.login` is additionally protected: it cannot be demoted, cannot have explicit `scopes`, and cannot be deleted.
+
+- SAML SSO backends now support per-user overrides for `force_mfa`.
+
+  Previously, each SAML backend's `force_mfa` flag applied uniformly to every user, with no way to adjust the MFA requirement for individual accounts.
+
+  This release adds an internal `admin_override` state to each Dashboard user's `tags` field. The state is maintained implicitly when administrators use the existing endpoints to enable or disable MFA for another user.
+
+  The `admin_override` state has the following semantics:
+
+  - `admin_override = mfa_required`: The user must complete MFA on SSO login, regardless of the backend's `force_mfa` setting.
+  - `admin_override = mfa_exempted`: The user may skip MFA on SSO login, regardless of the backend's `force_mfa` setting.
+  - Absent (default): The backend's `force_mfa` setting applies.
+
+  Self-service MFA changes do not modify `admin_override`, preserving the original semantics.
+
+  **Rolling upgrade note**: While older nodes that have not yet been upgraded to this release remain in the cluster, `admin_override = mfa_required` does not take effect on those nodes. They continue to honour only the backend `force_mfa` setting. `admin_override = mfa_exempted` continues to take effect on older nodes via the existing `disable_mfa` placeholder record path.
+
+- The default MQTT parsing mode is now strict mode to reduce injection risks from MQTT messages that contain special characters.
+
+  With the default setting `mqtt.strict_mode = true`, EMQX rejects message structures that contain invalid UTF-8 characters, control characters, or other content that does not conform to the [MQTT UTF-8 Encoded String specification](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010).
+
+- Added runtime controls for log throttling through `emqx_ctl log-throttling`.
+
+  Previously, the global throttle limit, time window, and level could only be configured in the configuration file. The new `log-throttling` command group supports the following operations:
+
+  - Inspect the current configuration on the local node with `log-throttling print`, or on every node with `log-throttling print-cluster`.
+  - Update the global throttle limit, time window, or level with `log-throttling limit set <Limit>`, `log-throttling window set <Duration>`, or `log-throttling level set <Level>`. Use the corresponding `set-cluster` variants to apply the change on every node.
+  - Set an independent throttle limit for specific log lines with `log-throttling line-limit set '<Mod:Ln,...>' <Limit>`. For example, `'emqx_channel:1551,emqx_username_quota:245' 0` sets the limit of those two lines to `0` (fully silenced), while other lines keep the global limit. Use `log-throttling line-limit set-cluster '<Mod:Ln,...>' <Limit>` to apply the change on every node.
+  - Remove per-line overrides with `log-throttling line-limit del '<Mod:Ln,...>'`. Use `log-throttling line-limit del-cluster '<Mod:Ln,...>'` for cluster-wide removal.
+
+  Since line numbers drift across releases, per-line limits are runtime-only and are not persisted to the configuration file. Use them for temporary tuning when a log line prints too often or too rarely.
+
+- Changed the default log throttling setting from `50,60s` to `5,60s`. Each throttler now allows up to 5 duplicate log entries per 60-second window by default, with further occurrences dropped and summarized. This reduces log flooding from high-frequency log sites.
+
+- The username quota module now uses a new cross-node synchronization mechanism to improve cluster performance and stability.
+
+  This release replaces Mnesia replication with a streaming design based on per-node ETS tables and a dedicated RPC channel. The new mechanism reduces memory usage and resource consumption when cluster membership changes, and adds overload protection for the synchronization and processing paths. The deprecated `refresh_username_tab_interval` config option has been removed.
+
+- Reduced the default node `net_ticktime` from 120 seconds to 60 seconds.
+
+  Under heavy load, the RPC channel to a slow or stalled node can become congested and blocked. Messages queued against it can keep increasing memory usage until the node runs out of memory (OOM).
+
+  With `net_ticktime` shortened to 60 seconds (configured via `-kernel net_ticktime` in `vm.args`), the cluster can detect and remove the failed node faster. This shortens the time window during which RPC requests may remain blocked on that node.
+
+- Enhanced the global GC mechanism with memory-pressure-triggered global GC.
+
+  When system memory usage exceeds the high watermark (`os_mon.sysmem_high_watermark`) and periodic GC is disabled, a smooth global GC is triggered to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires. This behaviour is controlled by two configuration options:
+
+  - `node.global_gc_mem_pressure` (default `on`): whether the memory-pressure-triggered global GC is enabled.
+  - `node.global_gc_mem_pressure_min_interval` (default `15m`): the minimum interval between two memory-pressure-triggered global GCs, used for throttling.
+
+- Added the inter-node network health probe plugin, `emqx_erpc_probe`, which reports the health of links between cluster nodes through Prometheus metrics.
+
+  Each node runs an independent probe process for every other node in the cluster. The probe periodically sends `erpc:call(Peer, erlang, node, [], Timeout)` at the interval configured by `erpc_probe.probe_interval` (default: `1s`), with the timeout configured by `erpc_probe.probe_timeout` (default: `5s`).
+
+  The plugin exposes the following Prometheus metrics:
+
+  - `emqx_erpc_probe_result_total` (counter): Counts probe results by the `result` label. Possible values are `ok`, `timeout`, `noconnection`, and `system_limit`.
+  - `emqx_erpc_probe_duration_seconds` (histogram): Measures the round-trip time of successful probes and helps detect slow inter-node links before they time out, for example by using p99 latency.
+
+  The plugin is enabled by default for new installations through `data/loaded_plugins`. Its configuration file is located at `etc/plugins/emqx_erpc_probe.conf`; restart the plugin after updating the configuration.
+
+  Clusters upgraded from an earlier version keep their existing `data/loaded_plugins` file, so the plugin is not enabled automatically after upgrade. To enable it, run `./bin/emqx ctl plugins load emqx_erpc_probe`, or add `{emqx_erpc_probe, true}.` to `data/loaded_plugins` and restart the node.
+
+### Bug Fixes
+
+- Fixed backup restore dropping explicit Dashboard user scopes and `admin_override`.
+
+  Importing a backup now preserves the extension fields in a Dashboard user's `tags` verbatim. Users with explicit `scopes` (or a per-user `admin_override`) keep them after restore instead of falling back to role defaults.
+
+- Fixed backup endpoints (`/api/v4/data*`) allowing access from API-key credentials.
+
+  Backup export/import is now denied for API-key credentials; Dashboard login sessions are unaffected.
+
+- The API Key update endpoint now validates input strictly and rejects malformed values.
+
+  The endpoint now returns HTTP 400 for unknown permission keys, non-boolean permission values, a JSON array where an object is expected for `permissions`, or a non-boolean `fallback`. A partial update keeps the existing value for omitted fields instead of overwriting them with the literal string `undefined`.
+
+- Upgraded the `esaml` dependency to v1.1.5 for SAML SSO to disable XML entity expansion while parsing SAML responses and metadata, preventing crafted SAML XML from expanding external or custom entities.
+
+- Fixed the SAML SSO callback returning HTTP 500 for malformed DEFLATE-encoded responses. Such requests now return HTTP 400 without terminating the Cowboy request process.
+
+- Fixed a RabbitMQ exchange recreate bug that destroyed all queue bindings when two rule actions declared the same exchange with different `durable` settings.
+
+  Before this fix, if the `durable` setting of the `exchange.declare` request did not match the existing exchange, the bridge would delete the exchange and re-declare it, which also removed all existing queue bindings. After this fix, a durable or type mismatch now results in a clear error message (`PRECONDITION_FAILED`), and the existing exchange and all its bindings are preserved.
+
+- Added validation for peer certificate CN/DN fields in gateway connections.
+
+  Previously, CN/DN fields obtained from a TLS certificate or PROXY protocol v2 in gateway protocol connections were not validated. Control characters in these fields could pose a log-injection risk. Fields containing illegal control characters are now rejected and the connection is closed.
+
+- Hardened backup filename validation to keep backups inside the backup directory.
+
+  Previously, backup filenames were only checked for the file extension, so crafted names containing path separators or illegal characters could escape the backup directory (path traversal). Filenames are now required to be legal basenames whose resolved path stays within the backup directory.
+
+- Fixed an evaluation license possibly being selected as the cluster license when a node joins.
+
+  Previously, when an evaluation license and an official license coexisted, license negotiation on cluster join could pick the evaluation one. Negotiation now always prefers a non-evaluation license.
+
+- Fixed disabled modules' hooks not being cleared after a node joins a cluster, which could leave the modules active on the new node.
+
+  Previously, a module disabled on the cluster, such as Retainer, could remain active on a newly joined node. When the node processed subscription requests, it could report errors like the following:
+
+  ```
+  2026-08-04T03:49:03.217491+00:00 [error] c1@10.12.1.10:52079 [Hooks] Failed to execute {fun emqx_retainer:on_session_subscribed/3,[]}: {error,badarg,[{gproc,get_value,[...,{emqx_hooks,safe_execute,2,[{file,"emqx_hooks.erl"},{line,235}]},...,{emqx_session,subscribe,4,[{file,"emqx_session.erl"},{line,281}]},...]}]}
+  ```
+
+  Disabled modules are now stopped correctly, and their hooks are cleared when a node joins the cluster.
+
+- Fixed retained messages on `$SYS` topics being delivered to wildcard subscriptions.
+
+  Previously, a client subscribing with a wildcard filter (e.g. `#`) could receive retained messages under `$SYS` topics, violating the MQTT spec (filters starting with `#` or `+` must not match topics beginning with `$`). Retained messages on `$SYS` topics are now delivered only to clients subscribed to their concrete topics (e.g. `$SYS/#`).
+
+- Fixed the republish rule action dropping the original message's MQTT properties.
+
+  Previously, forwarding a message through the republish action lost the original message's MQTT properties such as user properties. Republished messages now preserve them.
+
+- Fixed missing validation of connection-related config options for MQTT bridges.
+
+  Previously, invalid values (such as a non-positive pool size or a malformed reconnect interval) could take effect silently or produce unclear errors when creating an MQTT bridge. Such connection parameters are now validated and invalid configurations produce a clear error.
+
+- Fixed the REST API crashing `emqx_rule_engine_api` and shutting down the rule engine application when creating a resource with an invalid configuration.
+
+  Previously, creating a resource such as `bridge_mqtt` with a missing required field, for example `clientid`, could throw during config validation. The exception propagated to the `emqx_rule_engine_api` process and crashed it. Under concurrent requests, the rule engine application could then shut down after reaching its restart-intensity limit, and subsequent requests returned HTTP 500. Invalid configurations now return a clear HTTP 400 client error without affecting `emqx_rule_engine_api`.
+
+- Fixed HTTP API path bindings not being URL-decoded in audit logs.
+
+  Previously, the bindings of an HTTP API call recorded in audit logs remained URL-encoded, and list-form values might not be persisted correctly. Audit logs now record the decoded and normalized path bindings.
+
+- Fixed hot configuration import accepting invalid configuration.
+
+  Previously, invalid hot configuration imported through the API could be applied directly. Configuration is now validated before import, and invalid values return an error instead of taking effect.
+
+- Fixed the loaded-modules record not being updated after importing a backup.
+
+  Previously, importing a backup that contains module configuration did not update the `data/loaded_modules` file, so the modules loaded after a restart could diverge from the imported state. The loaded-modules record is now refreshed after backup import.
+
+- Fixed inaccurate CPU utilization metrics reported to Prometheus.
+
+  Previously, because `cpu_sup:util` returns unreliable utilization on a process's first call, the `cpu_use` and `cpu_idle` metrics scraped by Prometheus could be inaccurate. CPU metrics are now collected through the long-lived `emqx_os_mon` process, so the reported values are correct.
+
+- Fixed MQTT messages forwarded between cluster nodes being delivered out of order.
+
+  Previously, when a publisher and a subscriber were connected to different nodes in a cluster, messages published sequentially by the same client to the same topic could reach the subscriber out of order (violating MQTT-4.6.0-5/6). Cross-node forwarding used `gen_rpc:cast`, whose receiving side executes each cast on a random worker of a concurrent pool, so per-client order was lost even when the casts arrived on a single connection. Cross-node dispatch now uses `gen_rpc:ordered_cast` (see `emqx_rpc:cast/4,5`), which executes casts on the same connection in arrival order and restores per-client message ordering.
+
+- Fixed `emqx_ctl listeners restart http:dashboard` (and `https:dashboard`) failing with `undef` because the Dashboard listener's `start_listener/1` and `stop_listener/1` functions were not exported.
+
+  Previously, the restart command dispatched to `emqx_dashboard:stop_listener/1` through `emqx_mgmt_cli:restart_http_listener/2`, but the function was not exported, so the command failed with `undef` and the Dashboard listener was never restarted. After stopping the listener, the Dashboard port (e.g. `18083`) remained unavailable. Both functions are now exported, so `listeners restart http:dashboard` stops and starts the Dashboard listener as expected.
+
+## e4.4.37
+
+*Release Date: 2026-07-31*
+
+### Bug Fixes
+
+- Fixed an issue where data backup exports did not include Dashboard MFA configuration, API Key permissions, and SCRAM credentials.
+
+## e4.4.36
+
+*Release Date: 2026-05-22*
+
+### Enhancements
+
+- Exposed per-node license information through Prometheus metrics.
+
+  Added three Prometheus metrics: `emqx_license_max_sessions`, `emqx_license_expiry_at`, and `emqx_license_issued_at`. Timestamps are Unix epoch seconds (UTC). When the license is unavailable, all three metrics return `0`.
+
+- RabbitMQ rule actions now support RabbitMQ's default (unnamed) exchange.
+
+  The `exchange` parameter is no longer required and now defaults to an empty string `""`. When left empty, the rule action publishes messages through the default direct exchange, and messages are routed to the queue whose name matches `routing_key`. In this mode, the bridge does not run `exchange.declare`/`exchange.delete` because the default exchange is reserved and managed by the broker. See [RabbitMQ: Default Exchange](https://www.rabbitmq.com/docs/exchanges#default-exchange).
+
+- Disabled Erlang VM scheduler load compaction by default.
+
+  Scheduler load compaction is now disabled with `+scl false` in `vm.args` to improve scheduling stability and reduce message latency during load transitions.
+
+  Note that on some CPU topologies, disabling load compaction may lead to higher EMQX CPU usage under lower load, especially on systems with multiple NUMA nodes or a large number of logical CPU cores. In such cases, you can consider re-enabling load compaction (`+scl true`) to improve low-load behavior, with a potential trade-off of more noticeable performance fluctuation as load increases. Reducing the number of schedulers with `+S Schedulers:SchedulerOnline`, disabling CPU hyper-threading (thus starting fewer scheduler threads), or binding only CPU cores from a single NUMA node can help mitigate this issue.
+
+- Optimized performance when updating MQTT connection heap memory limits.
+
+  After enabling log trace for a ClientID, EMQX adjusts the corresponding MQTT connection process heap memory limit to avoid process termination caused by excessive logging. In this optimization, ETS is used instead of `persistent_term` to store heap-limit configuration, avoiding performance loss caused by triggering GC across a large number of MQTT connection processes during configuration updates.
+
+- Added configuration options related to Erlang distributed communication port buffers, and increased their default values to improve cluster stability.
+
+  The previous default buffer size was `1460B`. In this release it is increased to `1MB` to better handle higher network latency and larger message volumes, significantly reducing RPC latency and improving cluster stability. The new options are:
+
+  ```hocon
+  node.dist_connect_options.nodelay = false
+  node.dist_connect_options.sndbuf = 1MB
+  node.dist_connect_options.recbuf = 1MB
+  node.dist_connect_options.buffer = 1MB
+  node.dist_listen_options.nodelay = false
+  node.dist_listen_options.sndbuf = 1MB
+  node.dist_listen_options.recbuf = 1MB
+  node.dist_listen_options.buffer = 1MB
+  ```
+
+- Increased the default timeout of the hot-upgrade script.
+
+  The default timeout of the hot-upgrade script is increased from 5 minutes to 25 minutes to avoid upgrade timeouts. Note that because hot upgrades use the script from the old version, the new default timeout takes effect only when upgrading from this version to a newer EMQX version.
+
+- Replaced `rpc` with `erpc` for multi-node calls in node evacuation/rebalance features and cluster distributed locks (`ekka_locker`) to improve performance and stability under high concurrency.
+
+- Upgraded Erlang/OTP to 24.3.4.17-2.
+
+  Note that fixes in Erlang/OTP cannot be applied at runtime through hot upgrade and only take effect after restarting EMQX.
+
+### Bug Fixes
+
+- Fixed a self-healing failure in EMQX clusters under unstable network conditions.
+
+- Fixed Redis Sentinel connections so that separate authentication settings can be configured for Redis data nodes and Sentinel nodes.
+
+- Fixed RPC self-invocation issues in some HTTP APIs.
+
+  Before this fix, the Dashboard API `nodes/:node/monitor/metrics` for retrieving message-rate statistics could enter an RPC recursive loop and leak a large number of `gen_rpc` processes. This issue only occurred in cluster mode when the IP part of one node name was incorrectly configured as the loopback address, for example `emqx@127.0.0.1` (the default single-node configuration).
+
+  This change affects most HTTP APIs that perform cross-node RPC under the `emqx_management`, Dashboard, hot-configuration, topic-metrics, and client-tag modules, including:
+
+  - Cluster node information
+  - Client/subscription queries
+  - Listener and alarm listing
+  - ACL cache cleanup
+  - Data backup download
+  - Dashboard rate statistics
+  - Hot-configuration application
+  - Topic-metrics management
+
+  During rolling upgrades, because old-version nodes still exist in the cluster, these APIs may return inaccurate results or fail.
+
+- Fixed inaccurate mailbox length logging in long-process mailbox alerts.
+
+- Fixed a risk where `emqx_broker_helper` and `username_quota` processes could not recover from excessively long process mailboxes.
+
+- Fixed an issue where RocketMQ resources could not release old-version code modules.
+
+  Before this fix, even long after hot upgrade completion, RocketMQ resource processes could still block old-version code unloading, causing repeated scans for processes still using old code modules and introducing unnecessary performance overhead.
+
+  Note that RocketMQ resources are restarted during hot upgrade, which may lead to a small number of RocketMQ messages being lost.
+
+- Fixed a memory leak issue in the RocketMQ Producer.
+
+- Fixed AppIDs from `management.default_application` and `management.bootstrap_apps_file` being treated as compatibility-mode (no permission record) AppIDs after the API key permission control was introduced in e4.4.34.
+
+  Before this fix, AppIDs configured via `management.default_application` or loaded from `management.bootstrap_apps_file` had no permission record and were treated as compatibility-mode AppIDs, which caused repeated warning logs such as `AppId 'xxx' accessing '/api/v4/resources' in compatibility mode (no permission record)` on every API request. After this fix, these AppIDs are now treated as full-permission AppIDs. The log level for compatibility-mode AppIDs without a permission record has also been reduced from `warning` to `info`.
+
+- Fixed an issue where SAML SSO login failures could leak EMQX internal error details in the response body.
+
+  Before this fix, when a user successfully authenticated through SAML but the subsequent account provisioning or session setup on the EMQX side failed, internal error details were written directly into the response body returned to the browser. After this fix, the response body now returns a generic error message, and detailed information is written only to the server log for operators to investigate.
+
+- Fixed an issue where a large number of worker processes could be spawned by `gen_rpc` when the MQTT message forwarding rate between nodes is extremely high, leading to the total number of processes exceeding system limits.
+
+## e4.4.35
+
+*Release Date: 2026-04-03*
+
+### Bug Fixes
+
+- Fixed routing table inconsistencies caused by EMQX restarts after network partitions.This issue is resolved by upgrading to `ekka-0.8.1.17`.
+
+## e4.4.34
+
+*Release Date: 2026-03-25*
+
+### Enhancements
+
+- Added API key permission control for management HTTP APIs.
+
+  API keys can now be configured with category-based write permissions (`banned`, `rule_engine`, `resources`, `plugins`, `modules`), while `GET` requests remain readable for compatibility.
+
+- Added Dashboard MFA authentication and session management.
+
+  Dashboard now supports MFA setup/challenge flows, MFA status management APIs, JWT bearer sessions, and user logout.
+
+- Added Dashboard SAML 2.0 SSO module.
+
+  It supports IDP metadata integration, ACS callback handling, SP metadata export, optional SP-signed AuthnRequest, and configurable `force_mfa` for SSO users.
+
+- Added HTTP API observability metrics.
+
+  EMQX now records HTTP API success/failure counters and request duration histogram, exports them to Prometheus, and provides `/api/v4/http_api_metrics` for direct counter lookup.
+
+- Improved Helm Chart startup behavior.
+
+  The default `podManagementPolicy` is changed to `OrderedReady`, and a DNS-wait init container is added for `k8s`/`dns` discovery modes to improve cluster bootstrap stability.
+
+- Improved `ehttpc` handling of head-of-line blocking: when blocking is detected, it now automatically disconnects and reconnects, preventing a small number of long-running requests from blocking the entire connection.
+
+  This improvement affects all components that rely on ehttpc, including HTTP ACL and authentication, WebHook resources, IoTDB resources, SAP Event Mesh resources, and GCP PubSub resources.
+
+### Bug Fixes
+
+- Fixed trace module table handling during hot upgrade and rolling upgrade to avoid trace table copy inconsistencies and startup issues.
+
+- Fixed Pulsar bridge single-message parsing by upgrading `pulsar-client-erl` to `0.7.3`.
+
+- Fixed an issue where the HTTP API could not update the ACL file to an empty value.
+
+- Optimized `emqx_vm_mon` resource usage to reduce memory overhead in high-connection scenarios.
+
+- Fixed slow HTTP API response caused by system memory usage retrieval.
+
+  Previously, with a large number of connections, retrieving memory usage via `memsup` was slow because `memsup` would traverse all Erlang processes to find the one with the highest memory usage, in addition to getting system memory utilization. The current version disables this behavior by setting `os_mon.memsup_system_only = true`, retrieving only system memory usage.
+
+  Both `/nodes` and `/emqx_prometheus` endpoints were affected by this issue.
+
+- Upgraded `eredis_cluster` to `0.7.8` to improve Redis Cluster reconnect backoff behavior.
+
+- Upgraded `wolff` to `1.5.20` to include Kafka client stability fixes.
+
+- Fixed license loading behavior when a node joins a cluster by prioritizing the cluster license and preventing the use of invalid or expired licenses.
+
 ## e4.4.33
 
 *Release Date: 2025-11-26*

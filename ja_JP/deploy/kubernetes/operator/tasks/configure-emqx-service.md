@@ -1,100 +1,98 @@
-# Access EMQX Cluster through LoadBalancer
+# LoadBalancerを介したEMQXクラスターへのアクセス
 
-## Objective
+## 目的
 
-Access the EMQX cluster through a Service of type LoadBalancer.
+LoadBalancerタイプのServiceを介してEMQXクラスターにアクセスします。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-EMQX CRD `apps.emqx.io/v2beta1` supports:
-* Configuring the EMQX Dashboard Service through `.spec.dashboardServiceTemplate`.
-* Configuring the EMQX cluster listener Service through `.spec.listenersServiceTemplate`.
+EMQX CRD `apps.emqx.io/v2` は以下をサポートしています：
+* `.spec.dashboardServiceTemplate` を通じたEMQXダッシュボードServiceの設定
+* `.spec.listenersServiceTemplate` を通じたEMQXクラスターリスナーServiceの設定
 
-Refer to the [respective documentation](../reference/v2beta1-reference.md#emqxspec) for more details.
+詳細は[該当ドキュメント](../reference/v2-reference.md#emqxspec)を参照してください。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`.
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  ::: tip
-  By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
+   ::: tip
 
-  Users can configure new or existing listeners through `.spec.config.data`, or manage them through the EMQX Dashboard.
+   デフォルトでEMQXはポート1883でMQTT TCPリスナー `tcp-default` と、ポート18083でダッシュボードHTTPリスナーを起動します。
 
-  EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
-  :::
+   ユーザーは `.spec.config.data` を通じて新規または既存のリスナーを設定するか、EMQXダッシュボードから管理できます。
 
-2. Wait for the EMQX cluster to become ready.
+   EMQXオペレーターはデフォルトのリスナー情報をServiceリソースに自動反映します。ユーザーが設定したServiceとEMQXが設定したリスナーで名前やポートが重複する場合、EMQXオペレーターはユーザー設定を優先します。
 
-  Check the status of the EMQX cluster with `kubectl get` and make sure that `STATUS` is `Ready`. This may take some time.
+   :::
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+2. EMQXクラスターが準備完了になるまで待ちます。
 
-## Add New Listener through EMQX Dashboard
+   `kubectl get` でEMQXクラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。完了までに時間がかかる場合があります。
 
-1. Add a new listener.
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
-  Open the EMQX Dashboard and navigate to _Configuration_ → _Listeners_.
+## EMQXダッシュボードから新規リスナーを追加する
 
-  Click the _Add Listener_ button to add a listener with the name `test` and port `1884`, as shown in the following figure:
+1. 新しいリスナーを追加します。
 
-  <div style="text-align:center">
-  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" />
-  </div>
+   - EMQXダッシュボードを開き、**Management** -> **Listeners** に移動します。
 
-  Then click the _Add_ button to create the listener, as shown in the following figure:
+   - **Add Listener** をクリックし、名前を `test`、ポートを `1884` に設定して新しいリスナーを追加します。以下の図を参照してください：
 
-  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" />
+     ![emqx-add-listener](./assets/configure-service/emqx-add-listener.png)
 
-  As seen in the figure, the new listener has been created.
+   - **Add** をクリックしてリスナーを作成します。以下の図のように新しいリスナーが作成されます。
 
-2. Check if the new listener is reflected in the Service.
+     ![emqx-listeners](./assets/configure-service/emqx-listeners.png)
 
-  ```bash
-  kubectl get svc
-  
-  NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                                         AGE
-  emqx-dashboard   NodePort   10.105.110.235   <none>        18083:32012/TCP                                 13m
-  emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
-  ```
+2. 新しいリスナーがServiceに反映されているか確認します。
 
-  From this output, we can see that the newly added listener on port 1884 has been reflected in the `emqx-listeners` Service resource.
+   ```bash
+   kubectl get svc
+   
+   NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                                         AGE
+   emqx-dashboard   NodePort   10.105.110.235   <none>        18083:32012/TCP                                 13m
+   emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
+   ```
 
-## Connect to the New Listener Using MQTTX
+   この出力は、ポート1884の新しいリスナーが `emqx-listeners` Serviceリソースに反映されていることを示しています。
 
-1. Obtain the external IP of the EMQX listeners service.
+## MQTTXを使って新しいリスナーに接続する
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-  ```
+1. EMQXリスナーServiceの外部IPを取得します。
 
-2. Connect to the new listener using MQTTX CLI.
+   ```bash
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-  ```bash
-  $ mqttx conn -h ${external_ip} -p 1884
-  
-  [4/17/2023] [5:17:31 PM] › … Connecting...
-  [4/17/2023] [5:17:31 PM] › ✔ Connected
-  ```
+2. MQTTX CLIを使って新しいリスナーに接続します。
+
+   ```bash
+   $ mqttx conn -h ${external_ip} -p 1884
+   
+   [4/17/2023] [5:17:31 PM] › … Connecting...
+   [4/17/2023] [5:17:31 PM] › ✔ Connected
+   ```

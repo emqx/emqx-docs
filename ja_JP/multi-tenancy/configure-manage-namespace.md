@@ -1,159 +1,222 @@
-# Configure and Manage Namespaces
+# ネームスペースの設定と管理
 
-You can configure and manage namespaces using the Dashboard and REST API, including setting session limits, rate limits, and managing connected clients.
+ネームスペースは、ダッシュボードやREST APIを使用して設定および管理できます。セッション制限、レート制限、接続中のクライアント管理などが可能です。
 
-## Namespace Rate Limits
+## ネームスペースのレート制限
 
-Namespace configuration mainly includes maximum session limits and rate limiters. Before configuring rate limiters, it is recommended to understand the different types of rate limiters available for namespaces and their scope of effect.
+ネームスペースの設定は主に最大セッション数とレートリミッターの設定を含みます。レートリミッターを設定する前に、ネームスペースで利用可能なレートリミッターの種類とその適用範囲を理解することを推奨します。
 
-For details on how to configure specific options, see [Configure and Manage Namespaces via Dashboard](#configure-and-manage-namespaces-via-dashboard).
+具体的な設定方法については、[ダッシュボードによるネームスペースの設定と管理](#configure-and-manage-namespaces-via-dashboard)を参照してください。
 
-Namespace rate limiters can be used to control message traffic and bandwidth usage for clients within a specific namespace. They can work together with existing EMQX rate-limiting mechanisms (such as zone-level or listener-level rate limiters), depending on the type of rate limiter configured.
+ネームスペースのレートリミッターは、特定のネームスペース内のクライアントのメッセージトラフィックや帯域使用量を制御するために使用できます。設定されたレートリミッターの種類に応じて、既存のEMQXのレート制御機構（ゾーンレベルやリスナーレベルのレートリミッターなど）と連携して動作します。
 
-### Rate Limiter Types
+### レートリミッターの種類
 
-There are two types of rate limiters available for managed namespaces:
+管理対象のネームスペースには、以下の2種類のレートリミッターがあります。
 
-#### Tenant Rate Limiter
+#### テナントレートリミッター
 
-The tenant rate limiter allocates shared tokens across all clients within the same namespace.
+テナントレートリミッターは、同じネームスペース内のすべてのクライアントで共有されるトークンを割り当てます。
 
-When this limiter is enabled:
+このリミッターが有効な場合：
 
-- The limit applies to the entire namespace
-- It works together with existing zone-level rate limiters
-- Clients must satisfy both the zone-level and namespace-level limits
+- 制限はネームスペース全体に適用されます
+- 既存のゾーンレベルのレートリミッターと連携します
+- クライアントはゾーンレベルとネームスペースレベルの両方の制限を満たす必要があります
 
-This type is suitable for scenarios where the overall traffic of a tenant needs to be controlled.
+このタイプは、テナント全体のトラフィックを制御したいシナリオに適しています。
 
-#### Client Rate Limiter
+#### クライアントレートリミッター
 
-The client rate limiter allocates dedicated tokens to each client within a namespace.
+クライアントレートリミッターは、ネームスペース内の各クライアントに専用のトークンを割り当てます。
 
-When this limiter is enabled:
+このリミッターが有効な場合：
 
-- The limit applies to individual clients
-- It overrides listener-level rate limiters
-- Listener-level rate limits are ignored, and only the namespace client rate limiter is applied
+- 制限は個々のクライアントに適用されます
+- リスナーレベルのレートリミッターを上書きします
+- リスナーレベルの制限は無視され、ネームスペースのクライアントレートリミッターのみが適用されます
 
-This type is suitable for scenarios that require fine-grained control over individual client behavior.
+このタイプは、個々のクライアントの動作を細かく制御したいシナリオに適しています。
 
-### Supported Limiting Dimensions
+### サポートされる制限の次元
 
-Both tenant and client rate limiters support the following dimensions:
+テナントおよびクライアントの両方のレートリミッターは、以下の次元をサポートしています。
 
-- **Message rate limit**: The maximum number of messages that a client or tenant can publish within a specified period
-- **Byte throughput limit**: The maximum effective payload size that can be transmitted within a specified period
-
-:::
-
-For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-limit/rate-limit.md).
+- **メッセージレート制限**：クライアントまたはテナントが指定期間内にパブリッシュできる最大メッセージ数
+- **バイトスループット制限**：指定期間内に送信可能な有効ペイロードの最大サイズ
 
 :::
 
-## Configure and Manage Namespaces via Dashboard
-
-In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can view, edit, or delete namespaces and manage clients connected to each namespace.
-
-By default, the namespace list only shows explicitly created namespaces. You can toggle the switch at the top left of the page to show both explicitly created namespaces and those automatically created by EMQX from the `client_attrs.tns` attribute.
-
-::: tip Note
-
-Automatically created namespaces cannot be edited in the Dashboard.
+レート制御の詳細については、[レート制限](../rate-limit/rate-limit.md)を参照してください。
 
 :::
 
-### Configure a Namespace via Dashboard
+## ダッシュボードによるネームスペースの設定と管理
 
-You can configure a namespace when creating it, or edit it later. To edit an existing namespace, click **Edit** in the **Actions** column for that namespace.
+ダッシュボードの左側メニューから **Management** -> **Namespace** に移動します。**Namespace** ページでは、ネームスペースの管理および各ネームスペースに接続されているクライアントの管理が可能です。
 
-1. In the **Create Namespace** dialog, complete the following configuration:
+デフォルトでは、ネームスペース一覧には明示的に作成されたネームスペースのみが表示されます。ページ左上のスイッチを切り替えると、明示的に作成されたネームスペースとEMQXが `client_attrs.tns` 属性から自動作成したネームスペースの両方を表示できます。
 
-   - **Max Sessions**: By default, this is set to `infinity` (unlimited). If enabled, you can set a specific number to limit the maximum number of sessions, preventing too many clients from occupying resources in a single namespace. When setting the max sessions, ensure it aligns with your cluster capacity to avoid rejected connections due to a low limit.
+::: tip 注意
 
-   - **Tenant Limiter**: This configuration controls the traffic for all clients within the namespace. For instance, when multiple clients share the same infrastructure, tenant rate limits ensure fair bandwidth distribution. By default, this is disabled. If enabled, you can configure the following rate limits:
+自動作成されたネームスペースはダッシュボード上で編集できません。
+
+:::
+
+### ダッシュボードでのネームスペース設定
+
+ネームスペースは作成時に設定するか、後から編集できます。既存のネームスペースを編集するには、そのネームスペースの **Actions** 列にある **Edit** をクリックします。
+
+1. **Create Namespace** ダイアログで以下の設定を行います。
+
+   - **Max Sessions**：デフォルトは `infinity`（無制限）です。有効にすると、最大セッション数を指定して、1つのネームスペース内でリソースを占有するクライアント数を制限できます。最大セッション数はクラスターの容量に合わせて設定し、低すぎると接続拒否が発生する可能性があるため注意してください。
+
+   - **Tenant Limiter**：ネームスペース内のすべてのクライアントのトラフィックを制御します。複数のクライアントが同じインフラを共有する場合、テナントレートリミッターにより帯域の公平な分配が可能です。デフォルトでは無効です。有効にした場合、以下のレート制限を設定できます。
 
      ::: tip
 
-     For more details on this configuration, refer to the tooltips in the Dashboard.
+     この設定の詳細はダッシュボードのツールチップを参照してください。
 
      :::
 
-     - **Packet Publish Rate**: Limits the bytes the current tenant can send to EMQX per second.
-     - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
-     - **Messages Publish Rate**: Limits the maximum number of messages a tenant can send per second.
-     - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
+     - **Packet Publish Rate**：現在のテナントがEMQXに送信できるバイト数の秒間制限
+     - **Packet Publish Burst**：バースト時に追加で送信可能なバイト数
+     - **Messages Publish Rate**：テナントが秒間に送信できる最大メッセージ数
+     - **Messages Publish Burst**：バースト時に追加で送信可能なメッセージ数
 
-   - **Client Limiter**: This configuration controls traffic for individual clients. Client rate limiters are exclusive to each client, meaning the rate limit for one client won’t affect others. By default, this is disabled. If enabled, you can configure the following rate limits:
+   - **Client Limiter**：個々のクライアントのトラフィックを制御します。クライアントレートリミッターはクライアントごとに独立しており、あるクライアントの制限は他のクライアントに影響しません。デフォルトでは無効です。有効にした場合、以下のレート制限を設定できます。
 
      ::: tip
 
-     For more details on this configuration, refer to the tooltips in the Dashboard.
+     この設定の詳細はダッシュボードのツールチップを参照してください。
 
      :::
 
-     - **Packet Publish Rate**: Limits the bytes a client can send to EMQX per second.
-     - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
-     - **Messages Publish Rate**: Limits the maximum number of messages a client can send per second.
-     - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
+     - **Packet Publish Rate**：クライアントがEMQXに送信できるバイト数の秒間制限
+     - **Packet Publish Burst**：バースト時に追加で送信可能なバイト数
+     - **Messages Publish Rate**：クライアントが秒間に送信できる最大メッセージ数
+     - **Messages Publish Burst**：バースト時に追加で送信可能なメッセージ数
 
-2. After completing the configuration, click **Create**. The new namespace will appear in the list.
+2. 設定が完了したら **Create** をクリックします。新しいネームスペースがリストに表示されます。
 
-### Delete a Namespace via Dashboard
+### ネームスペースのクライアント管理
 
-To delete a namespace, click **Delete** in the **Actions** column. After confirming, the namespace will be permanently deleted.
+特定のネームスペースに接続されているクライアントを表示するには、**Actions** 列の **Clients** をクリックします。複数のクライアントを一括切断することも可能です。
 
-::: tip Note
-
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected.
-
-:::
-
-To view clients connected to a specific namespace, click **Clients** in the **Actions** column. You can also choose to bulk disconnect clients.
-
-## Configure and Manage Namespaces via REST API
+## REST APIによるネームスペースの設定と管理
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+最新かつ詳細なリクエストおよびレスポンスのエンドポイントスキーマについては、対応する[Swagger APIドキュメント](../admin/api.md)を必ず確認してください。これらはダッシュボードのリスナーで `/api-docs` にて提供されています。
 
 :::
 
-### Configure a Namespace via REST API
+### REST APIでネームスペース一覧を取得
 
-After the namespace is created, it can be configured using the `PUT /mt/ns/<namespace>/config` API.
+EMQXは、必要に応じてネームスペースの詳細一覧を取得できる2つのエンドポイントを提供しています。
 
-Use this endpoint to set rate limits, session limits, and other namespace-specific settings. For example configurations, see the [Configuration Example](#configuration-example).
+| エンドポイント | 対象範囲 | 設定情報含むか |
+| -------------- | -------- | -------------- |
+| `GET /mt/ns_list_details` | すべてのネームスペース（自動作成および明示的作成） | 含まない |
+| `GET /mt/managed_ns_list_details` | 明示的に作成された（管理対象の）ネームスペースのみ | 含む |
 
-#### Configuration Example
+両エンドポイントは同じクエリパラメータをサポートしています。
 
+| パラメータ | 型 | デフォルト | 説明 |
+| ---------- | -- | ---------- | ---- |
+| `last_ns` | String | `""` | ページネーション用カーソル。前ページの最後のアイテムの `name` を渡して次ページを取得します。 |
+| `limit` | Integer | `100` | 1ページあたりの最大ネームスペース数 |
 
-This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+#### すべてのネームスペースを一覧表示
 
-##### Create the Namespace
+`GET /mt/ns_list_details` は、クライアント接続メタデータから自動作成されたものも含め、すべてのネームスペースを返します。各アイテムには `name` と `created_at` のみが含まれ、設定情報は含まれません。
 
-Before applying any configuration, ensure the namespace is explicitly created:
+**レスポンス例**
+
+```json
+[
+  { "name": "ns1", "created_at": 1747917753 },
+  { "name": "ns2", "created_at": 1747917754 }
+]
+```
+
+#### 管理対象ネームスペースの設定付き一覧表示
+
+`GET /mt/managed_ns_list_details` は、明示的に作成されたネームスペースのみを返し、各ネームスペースの現在の設定をインラインで含みます。管理UIはこのエンドポイントを使って、単一リクエストで設定情報付きの一覧を描画できます。
+
+**レスポンス例**
+
+```json
+[
+  {
+    "name": "ns1",
+    "created_at": 1747917753,
+    "config": {
+      "session": {
+        "max_sessions": 100
+      },
+      "limiter": {
+        "tenant": {
+          "bytes": { "rate": "20MB/10s", "burst": "300MB/1m" },
+          "messages": { "rate": "5000/1s", "burst": "60/1m" }
+        },
+        "client": {
+          "bytes": { "rate": "10MB/10s", "burst": "200MB/1m" },
+          "messages": { "rate": "3000/1s", "burst": "40/1m" }
+        }
+      }
+    }
+  },
+  {
+    "name": "ns2",
+    "created_at": 1747917754,
+    "config": {}
+  }
+]
+```
+
+各アイテムには以下が含まれます。
+
+- `name`：ネームスペース識別子
+- `created_at`：ネームスペース作成時のUnixタイムスタンプ（秒）
+- `config`：ネームスペースの設定。空オブジェクト (`{}`) は設定が適用されていないことを示します。設定フィールドの詳細は[REST APIによるネームスペース設定](#configure-a-namespace-via-rest-api)を参照してください。
+
+特定のネームスペースの完全な設定を取得するには、`GET /mt/ns/<namespace>/config` を使用します。
+
+### REST APIによるネームスペースの設定
+
+ネームスペース作成後、`PUT /mt/ns/<namespace>/config` APIを使って設定できます。
+
+このエンドポイントでレート制限、セッション制限、その他ネームスペース固有の設定を行います。
+
+#### 設定例
+
+以下はREST APIでネームスペースを設定する例です。`ns1` ネームスペース内のクライアントに対して特定のレート制限を設定し、同時接続セッション数の最大値も制限します。
+
+##### ネームスペースの作成
+
+設定を適用する前に、ネームスペースが明示的に作成されていることを確認してください。
 
 ```bash
-# No request body is needed
+# リクエストボディは不要です
 POST /mt/ns/ns1
 ```
 
-::: tip Important Notice
+::: tip 重要
 
-If clients connect to a namespace before it is explicitly created, they will not inherit configurations such as rate limiters applied later. To enforce new settings, those clients must be manually disconnected and reconnected.
+クライアントがネームスペースを明示的に作成する前に接続した場合、その後に適用されたレートリミッターなどの設定は継承されません。新しい設定を強制するには、該当クライアントを手動で切断し再接続させる必要があります。
 
 :::
 
-##### Configure Rate Limits and Session Limits
+##### レート制限とセッション制限の設定
 
-Once the namespace is created, apply the configuration using:
+ネームスペース作成後、以下のように設定を適用します。
 
 ```
 PUT /mt/ns/ns1/config
 ```
 
-**Request body:**
+**リクエストボディ例**
 
 ```json
 {
@@ -185,17 +248,17 @@ PUT /mt/ns/ns1/config
 }
 ```
 
-This configuration applies both client-specific and shared tenant-wide rate limits and sets a maximum of 100 sessions for the namespace.
+この設定では、クライアント固有およびテナント全体のレート制限を適用し、ネームスペースの最大セッション数を100に制限しています。
 
-##### Disable Namespace Rate Limiters
+##### ネームスペースのレートリミッターを無効化
 
-If you want to remove rate limiting entirely, you can update the configuration again and set the limiter types to `"disabled"`:
+レート制限を完全に解除したい場合は、再度設定を更新してリミッターを `"disabled"` に設定します。
 
 ```
 PUT /mt/ns/ns1/config
 ```
 
-**Request body:**
+**リクエストボディ例**
 
 ```json
 {
@@ -206,12 +269,32 @@ PUT /mt/ns/ns1/config
 }
 ```
 
-### Delete a Namespace via REST API
+## ネームスペースの削除とクリーンアップ
 
-To remove a namespace and its associated configuration, you can use the `DELETE /mt/ns/<namespace>` API.
+管理対象ネームスペースを削除すると、そのネームスペースと関連設定が完全に削除されます。EMQX 6.1.4以降では、組み込みデータベースからネームスペーススコープのデータ（パスワード認証ユーザー、SCRAMユーザー、認可ルールなど）も非同期に削除されます。削除されたネームスペース内のすべてのユーザーグループから認証ユーザーが削除されますが、グローバルネームスペースや他のネームスペースには影響しません。クリーンアップ完了後に同じ名前でネームスペースを再作成しても、削除されたユーザーや認可ルールは復元されません。
 
-::: tip Note
+::: tip 注意
 
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected. EMQX provides an API to bulk kick all sessions under a namespace, and this process should be triggered automatically when deleting a managed namespace.
+管理対象ネームスペースを削除すると、そのネームスペースに現在接続中のすべてのクライアントの切断が自動的に開始されます。予期しないクライアントの切断を避けるため、削除前にアクティブなクライアントを切断してください。
 
 :::
+
+### ダッシュボードからの削除
+
+ネームスペースを削除するには、**Actions** 列の **Delete** をクリックします。確認後、ネームスペースは完全に削除されます。
+
+### REST APIからの削除
+
+ネームスペースと関連設定を削除するには、`DELETE /mt/ns/<namespace>` APIを使用します。
+
+### 削除が中断された場合の復旧
+
+EMQX 6.1.4以降では、以前のネームスペース削除が中断されデータが残った場合の最終手段として、`emqx ctl mt purge_ns <namespace>` コマンドを使用できます。このコマンドは、ネームスペースが存在しなくてもデータのクリーンアップを試みます。ネームスペースが存在する場合は、それも削除します。
+
+::: warning 重要
+
+このコマンドは既存のネームスペースとそのデータを完全に削除します。通常のネームスペース削除はダッシュボードまたはREST APIを使用してください。`purge_ns` は不完全な削除からの復旧用であり、同じ名前のネームスペースを再作成した後に再実行しないでください。
+
+:::
+
+コマンドの構文、出力、エラー処理については、[`mt purge_ns`](../admin/cli.md#mt) を参照してください。

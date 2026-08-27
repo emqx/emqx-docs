@@ -1,143 +1,136 @@
 # Hot Upgrade
 
-## Release Upgrade
+Hot upgrade lets you apply a patch-version update to a running EMQX Enterprise node without stopping it. Connections stay alive throughout the upgrade; the node switches to the new release tree on its next restart.
 
-Since version 4.2.0, EMQX enterprise supports hot upgrades.
+Hot upgrade is supported for patch-version hops only (the third digit of the version number). For example, upgrading from 5.10.4 to 5.10.5 is supported, but upgrading from 5.10.x to 5.11.0 is not.
 
-By using the hot upgrade feature, users can quickly and safely upgrade EMQX in the production environment and avoid the decrease in system availability caused by restarting the service.
+Hot upgrade is driven by the `emqx_relup` plugin. The plugin is installed from the Dashboard. All upgrade operations are performed through the `emqx ctl relup` CLI.
 
-Currently, EMQX only supports hot upgrades of Patch version (Patch version is the third digit of the version number).
-That is, it currently supports hot upgrades from 4.2.0 -> 4.2.1, 4.2.0 -> 4.2.2, ..., etc., but 4.2.x cannot be hot upgraded to 4.3.0 or 5.0.
+::: warning Important Notice
+Back up `data/`, `etc/`, and `log/` before running a hot upgrade. There is no in-place rollback once a hop is applied.
+:::
 
-## Hot Upgrade Steps
+## Prerequisites
 
-1. View the currently installed version list of EMQX.
+- EMQX Enterprise is running on each node.
+- You have shell access and can run `emqx ctl` commands on each node.
+- The `emqx_relup` plugin version matches your current EMQX Enterprise version.
+- The target version is listed as a supported hop by the plugin (verify in step 2).
 
-```bash
+## Step 1: Install the emqx_relup Plugin
 
-$ emqx versions
+Install the plugin from the Dashboard following the [Install Packages via Dashboard](../extensions/plugin-management.md#install-packages-via-dashboard) instructions. Plugin packages are published at `https://packages.emqx.io/emqx-plugins/e<EMQX-VSN>/`.
 
-Installed versions:
-* 5.0.0 permanent
-```
+The plugin should appear with status `running` after installation.
 
-2. Download the software package to be upgraded from the EMQX website.
+## Step 2: Confirm the Upgrade Path Is Supported
 
-Visit https://www.emqx.com/en/downloads?product=broker, select the corresponding version and operating system type, and then select the **"zip"** package type.
-
-3. Find the installation directory of EMQX:
-
-```bash
-
-$ EMQX_ROOT_DIR=$(emqx root_dir)
-
-$ echo ${EMQX_ROOT_DIR}
-"/usr/lib/emqx"
-
-```
-
-4. Put the downloaded zip package in the `releases` directory under the EMQX installation directory:
+List the version hops the installed plugin knows about:
 
 ```bash
-
-$ cp emqx-5.0.1.zip ${EMQX_ROOT_DIR}/releases/
-
+emqx ctl relup list-supported-paths
 ```
 
-5. Upgrade to the specified version:
+Confirm that your `{from, target}` version pair appears in the output before continuing.
+
+## Step 3: Prepare the Tarball and SHA256 Sidecar
+
+Copy two files to each node. They can be placed anywhere readable by the EMQX process:
+
+- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz`: The EMQX Enterprise target release tarball.
+- `emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256`: The SHA256 digest of the tarball. Both the bare digest format and the `sha256sum` output format (`<digest>  <filename>`) are accepted.
 
 ```bash
-
-$ emqx upgrade 5.0.1
-
-Release 5.0.1 not found, attempting to unpack releases/emqx-5.0.1.tar.gz
-Unpacked successfully: "5.0.1"
-Installed Release: 5.0.1
-Made release permanent: "5.0.1"
+scp emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz      node1:/opt/upgrade/
+scp emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256 node1:/opt/upgrade/
 ```
 
-6. Check the version list again, and the status of the previous version will become `old`:
+The `.sha256` sidecar must sit next to the tarball and share the same base name with a `.sha256` extension.
+
+## Step 4: Run the Upgrade
+
+On each node, trigger the upgrade by pointing `relup upgrade` at the tarball:
 
 ```bash
-
-$ emqx versions
-
-Installed versions:
-* 5.0.1 permanent
-* 5.0.0 old
+emqx ctl relup upgrade /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz
 ```
 
-## Manually Permanent After Upgrade
+The upgrade handler performs the following steps:
 
-The above `emqx upgrade 5.0.1` command actually performs three actions:
+1. Verifies the SHA256 digest and refuses to proceed if there is a mismatch.
+2. Extracts the tarball and reads the target version from `releases/emqx_vars`.
+3. Deploys only the runtime subdirectories (`bin/`, `erts-*/`, `lib/`, `releases/`) to `<RootDir>/relup/<TargetVsn>/`. Config, data, logs, and plugins remain at the original install root.
+4. Applies the matching code-change instructions from the plugin's `.relup` catalog.
+5. Runs post-upgrade callbacks.
+6. Writes `<RootDir>/relup/current` with the target version string.
 
-- `unpack`
-- `install`
-- `permanent`
+Rolling out across a cluster is the operator's responsibility. Upgrade nodes one at a time and verify each before proceeding.
 
-After permanent, this version upgrade will be fixed, which means that after the hot upgrade, if emqx restarts, the new version after the upgrade will be used.
+## Step 5: Verify the Node
 
-If you don't want to persist while upgrading, you can use the `--no-permanent` parameter:
+After the upgrade command returns, confirm the node is healthy:
 
 ```bash
+# Check the node is running
+emqx ctl status
 
-$ emqx upgrade --no-permanent 5.0.1
+# Confirm the version marker was written
+cat <RootDir>/relup/current
 
-Release 5.0.1 not found, attempting to unpack releases/emqx-5.0.1.tar.gz
-Unpacked successfully: "5.0.1"
-Installed Release: 5.0.1
-
+# Check upgrade status and history
+emqx ctl relup status
+emqx ctl relup logs
 ```
 
-At this time, the version has been successfully upgraded to 5.0.1. However, if you restart emqx, it will revert to the old version 5.0.0.
-Now, if you check the version list, you will find that the state of 5.0.1 is `current`, not the permanent version:
+`relup/current` should contain the target version string, and `emqx ctl status` should report the node running.
+
+## Step 6: Restart Into the New Release
+
+The code-change upgrade takes effect in the running VM immediately. To fully switch to the new ERTS runtime and binaries, restart the node:
 
 ```bash
-
-$ emqx versions
-
-Installed versions:
-* 5.0.1 current
-* 5.0.0 permanent
-
+emqx restart
 ```
 
-After the system has been running stably for a while, if you decide to make the new version permanent, you can execute the `install` command again:
+On restart, the `bin/emqx` wrapper detects `<RootDir>/relup/current` and starts from `<RootDir>/relup/<TargetVsn>/` instead. The original `<RootDir>` remains the authority for `data/`, `etc/`, `log/`, and `plugins/`.
+
+## Step 7: Clean Up
+
+Once the entire cluster is running the target version, remove the staging files:
 
 ```bash
-
-$ emqx install 5.0.1
-
-Release 5.0.1 is already installed and current, making permanent.
-Made release permanent: "5.0.1"
-
+rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz
+rm /opt/upgrade/emqx-enterprise-<TargetVsn>-<os>-<arch>.tar.gz.sha256
 ```
 
-## Downgrade to previous versions
+The plugin does not track the source path, so no cleanup is needed inside the plugin itself.
 
-You can execute the version downgrade command if you find a problem and want to roll back after the upgrade. 
-For example, the following example will roll back emqx to version 5.0.0:
+## Rollback
 
-```bash
+There is no in-place rollback for an applied hop. Code changes run against the live VM, and post-upgrade callbacks may have mutated data on disk; reversing those is not supported.
 
-$ emqx downgrade 5.0.0
+Two limited recovery options are available:
 
-Release 5.0.1 is marked old, switching to it.
-Installed Release: 5.0.0
-Made release permanent: "5.0.0"
+- **Before the next restart:** If the upgraded code is misbehaving but disk state is still compatible with the old release, delete the version marker and restart into the old tree:
 
-```
+  ```bash
+  rm <RootDir>/relup/current
+  # optionally: rm -rf <RootDir>/relup/<TargetVsn>/
+  emqx restart
+  ```
 
-## Delete versions
+  This recovers only the boot path. Live state changes made by the upgrade are already in effect.
 
-After the system has been running stably for a while, if you decide to delete an old version, you can execute the version uninstall command.
-For example, the following example will uninstall the old version 5.0.0:
+- **Full restore:** Restore `data/` from the pre-upgrade backup and reinstall the old EMQX release.
 
-```bash
+Plan your upgrade window with these limitations in mind.
 
-$ emqx uninstall 5.0.0
+## CLI Reference
 
-Release 5.0.0 is marked old, uninstalling it.
-Uninstalled Release: 5.0.0
-
-```
+| Command | Description |
+|---|---|
+| `emqx ctl relup upgrade <TarballPath>` | Apply the upgrade hop from the given tarball. |
+| `emqx ctl relup list-supported-paths` | List supported `{from, target}` version hops in the plugin catalog. |
+| `emqx ctl relup status` | Show the current upgrade state: `idle`, `in-progress`, or `hot-upgraded to <vsn>; pending on restart to boot from the new version`. |
+| `emqx ctl relup logs` | Print this node's upgrade history from the persistent log table. |
+| `emqx ctl relup logs-clear` | Wipe this node's upgrade log table. |

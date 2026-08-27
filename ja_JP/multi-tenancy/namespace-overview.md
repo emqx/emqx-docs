@@ -1,159 +1,171 @@
-# Namespace
+# ネームスペース
 
-Starting from EMQX 5.9.0, the Namespace feature allows users to logically group MQTT clients and apply traffic limits within a single EMQX cluster. This feature enables scalable deployments where multiple client groups (such as business units, applications, or customers) share the same infrastructure while remaining logically separated.
+EMQX 5.9.0以降、ネームスペース機能により、ユーザーはMQTTクライアントを論理的にグループ化し、単一のEMQXクラスター内でトラフィック制限を適用できます。この機能は、複数のクライアントグループ（事業部門、アプリケーション、顧客など）が同じインフラを共有しつつ、論理的に分離されたスケーラブルなデプロイメントを可能にします。
 
-::: tip Note
+EMQXのネームスペース機能は以下の2つの部分で構成されています。
 
-This feature is referred to as Namespace in EMQX 5.9, even though it follows multi-tenancy design principles.
+- **MQTTクライアントネームスペース** — MQTTクライアントを（ユーザー名、SNI、その他の接続メタデータで）論理的にグループ化し、ネームスペースごとのクォータ、レート制限、クライアントIDやトピックの分離設定を適用します。
+- **管理ユーザーネームスペース** — ダッシュボード、CLI、APIユーザーを[namespaced roles](../dashboard/system.md/#namespaced-roles)を通じて特定のネームスペースにスコープし、委任された管理者が割り当てられたネームスペース内のリソースのみを閲覧・操作できるようにします。EMQX 6.0以降で利用可能です。
+
+::: warning 信頼されたデプロイメントのみ
+
+**管理ユーザーネームスペース**は、同一組織内のチームや事業部門を分離するなど、信頼された内部デプロイメントを想定しています。誤って互いの設定を変更するリスクを減らすためのものであり、強固な分離保証を提供せず、パブリックまたは信頼できないマルチテナント環境のセキュリティ境界ではありません。パブリックなマルチテナント環境で管理ユーザーネームスペースを検討している場合は、EMQの営業にお問い合わせください。このユースケースは現時点で標準機能としてサポートされていません。
+
+**MQTTクライアントネームスペース**では、ネームスペース間のクライアント分離はオプトインであり、明示的な設定が必要です。ネームスペース間のクライアントが相互に信頼されていない場合は、[分離メカニズム](#isolation-mechanisms)を参照し、必要なクライアントIDのオーバーライドやトピックマウントポイントを設定してください。
 
 :::
 
-Beginning with EMQX 6.1, namespace-related capabilities have been enhanced without changing their original semantics. These enhancements simplify multi-tenant isolation configuration and unify the behavior of topic isolation.
+EMQX 6.1以降、ネームスペース関連機能は元の意味を変えずに強化されました。これにより、マルチテナントの分離設定が簡素化され、トピック分離の挙動が統一されました。
 
-## What Is a Namespace
+## ネームスペースとは
 
-A Namespace in EMQX Enterprise is a mechanism used for logical isolation and resource management of MQTT clients. It allows users to divide clients from different businesses or tenants into separate namespaces within a shared EMQX cluster, achieving isolation in connections, messages, quotas, and more.
+EMQX Enterpriseのネームスペースは、MQTTクライアントの論理的分離およびリソース管理のための仕組みです。異なる事業やテナントのクライアントを共有クラスター内で別々のネームスペースに分割し、接続、メッセージ、クォータなどの分離を実現します。
 
-A namespace is identified by a special client attribute named `tns` (tenant namespace). This attribute is not created automatically; instead, it must be derived from client connection metadata, such as the username or Server Name Indication (SNI), through configuration.
+ネームスペースは、`tns`（テナントネームスペース）という特別なクライアント属性で識別されます。この属性は自動的には作成されず、ユーザー名やServer Name Indication（SNI）などのクライアント接続メタデータから設定によって導出されます。
 
-> **Typical use cases include**: multiple business units sharing a cluster within an enterprise, tenant-level resource isolation management, centralized access control, etc.
+ネームスペースは、ダッシュボードやREST APIで明示的に作成されるか、定義されたルールに基づいてクライアント接続時に自動的に作成されると、有効になります。
 
-### What Namespaces Can Achieve
+> **典型的なユースケース**：企業内の複数事業部門によるクラスター共有、テナントレベルのリソース分離管理、集中アクセス制御など。
 
-- **Logical Isolation of Clients and Messages**
+### ネームスペースで実現できること
 
-  Namespaces enable you to logically separate clients across different tenants by isolating client IDs and topic spaces.
+- **クライアントとメッセージの論理的分離**
 
-  ::: tip Note
+  ネームスペースにより、異なるテナント間でクライアントIDやトピックスペースを分離し、論理的にクライアントを区別できます。
 
-  Enabling namespaces does not automatically apply client ID overrides or topic prefixes. These features must be manually configured. See [Isolation Mechanisms](#isolation-mechanisms) for details.
+  ::: tip 注意
+
+  ネームスペースを有効にしても、クライアントIDのオーバーライドやトピックのプレフィックスは自動的には適用されません。これらは手動で設定する必要があります。詳細は[分離メカニズム](#isolation-mechanisms)を参照してください。
 
   :::
 
-- **Tenant-Level Quotas and Connection Control**
+- **テナントレベルのクォータと接続制御**
 
-  You can define limits on the number of concurrent connections and message publish rates for each namespace, helping to ensure fair usage and system stability.
+  ネームスペースごとに同時接続数やメッセージパブリッシュレートの制限を設定でき、公平な利用とシステムの安定性を確保します。
 
-- **Enhanced Logging and Operational Visibility**
+- **強化されたログと運用可視性**
 
-  Logs automatically include the namespace identifier (`tns`), making it easier to trace client activity, detect issues, and perform tenant-level diagnostics.
+  ログにネームスペース識別子（`tns`）が自動的に含まれ、クライアントの活動追跡や問題検出、テナント単位の診断が容易になります。
 
-- **Namespace-Based Resource Monitoring**
+- **ネームスペースベースのリソース監視**
 
-  Namespaces provide a clean boundary for collecting metrics such as connection count and message throughput per tenant, essential for capacity planning and operational insight.
+  ネームスペースは、テナントごとの接続数やメッセージスループットなどのメトリクス収集の境界を提供し、キャパシティプランニングや運用の洞察に役立ちます。
 
-- **Admin User Isolation**
-  
-  Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
-  
-  - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
-  - Namespaced users only see and operate on resources within their assigned namespace.
-   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
-   - This ensures secure, tenant-specific administrative access alongside data isolation.
-  
-- **Multi-Tenant Management**
+- **管理ユーザーの分離**
 
-  System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
+  EMQX 6.0以降、ネームスペースはダッシュボード、CLI、APIユーザーにも[namespaced roles](../dashboard/system.md/#namespaced-roles)を通じて拡張されています。このページ上部の[信頼されたデプロイメントのみ](#namespace)の注意事項にある信頼モデルと必要な対策をご確認ください。
 
-### Isolation Mechanisms
+  - 管理ユーザーは特定のネームスペースに制限されたロール（例：`ns:team_a::administrator`）で作成可能です。
+  - ネームスペースユーザーは割り当てられたネームスペース内のリソースのみを閲覧・操作できます。
+  - ネームスペース非対応のクラスター全体設定は閲覧のみ可能で、変更はグローバル管理者のみが行えます。
+  - EMQX 6.0.4以降、ネームスペース管理者は[自身のネームスペース内でAPIキーを管理可能](../admin/api.md#manage-api-keys-as-a-namespaced-administrator)です。グローバルキーや他ネームスペースのキーにはアクセスできません。
+  - これにより、データ分離とともにテナント固有の安全な管理アクセスが実現します。
 
-EMQX is highly flexible and supports multiple isolation mechanisms even before namespaces were introduced.
+- **マルチテナント管理**
 
-Namespaces provide a unified tenant identifier (`client_attrs.tns`) that allows Client IDs, topic mountpoints, and related configurations to be organized around a consistent tenant context.
+  システム管理者は同一クラスター内で複数のネームスペースを管理でき、各テナントは分離されたリソースとユーザー権限の自己完結型環境で運用できます。
 
-However, isolation policies still need to be explicitly configured based on business requirements. EMQX does not automatically enable Client ID or topic isolation when namespaces are enabled.
+## 管理ネームスペースの運用セキュリティ
 
-- **Client ID override**
+委任されたネームスペース管理者は、コネクター、ブリッジ、アクションなどのアウトバウンドターゲットを設定できます。追加の制御がなければ、内部や機密ネットワークへの意図しないアクセスを許してしまう可能性があります。
 
-  To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
+利用可能な場合は`rule_engine.ssrf`を有効にし、コネクター設定のテスト、作成、更新時にHTTPおよびMQTTコネクターのターゲットを検証してください。EMQX 6.0.4以降、このポリシーは他のコネクタータイプやランタイム接続には適用されません。EMQXホスト側でアウトバウンドネットワーク境界を強制するために以下のようなイグレス制御を追加してください。
 
-  ```hocon
-  mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
-  ```
+- IdP、Webhook、コネクターバックエンドなど承認済みの宛先へのアウトバウンドアクセスのみ許可。
+- インスタンスメタデータサービス、ループバックアドレス、リンクローカルアドレス、内部管理ネットワークへのアクセスは明示的に必要な場合を除き拒否。典型的なブロック対象は`100.100.100.200`、`169.254.169.253`、`169.254.169.254`、`fd00:ec2::254`など。
+- 新しい統合や管理機能でアウトバウンドHTTP/TCP接続を開始する場合は、ファイアウォールルールを必ず見直してください。
 
-  This rule prefixes the Client ID with the namespace to avoid conflicts.
+詳細は[ルールエンジンポリシーとファイアウォールルールによるSSRF緩和](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules)を参照してください。
 
-- **Topic isolation using mountpoints**
+## 分離メカニズム
 
-  If clients in different namespaces need to publish or subscribe to the same topic names without interfering with each other, a mountpoint can be used to automatically prefix topics with the namespace.
+EMQXは非常に柔軟で、ネームスペース導入前から複数の分離メカニズムをサポートしています。
 
-  In EMQX 6.0 and earlier, mountpoints were typically configured at the listener level, for example:
+ネームスペースは統一されたテナント識別子（`client_attrs.tns`）を提供し、クライアントID、トピックマウントポイント、関連設定を一貫したテナントコンテキストで整理できます。
 
-  ```hocon
-  listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
-  ```
+しかし、分離ポリシーはビジネス要件に応じて明示的に設定する必要があります。ネームスペースを有効にしただけでは、クライアントIDやトピックの分離は自動的には有効になりません。
 
-  In environments with multiple listeners, this required repetitive configuration.
+### クライアントIDオーバーライド
 
-  Starting from EMQX 6.1, namespaces can be used as a unified topic mountpoint. Once a namespace is successfully identified, EMQX internally applies `{namespace}/` as the topic prefix, achieving the same isolation effect as listener mountpoints without requiring per-listener configuration.
+::: warning 信頼できないマルチテナント環境では必須
 
-  To maintain backward compatibility, authorization (ACL) checks do not include the mountpoint prefix by default.
+異なるネームスペースのクライアントが相互に信頼されていない場合（例：各ネームスペースが外部顧客や別組織を表す場合）、`mqtt.clientid_override`の設定が**必須**です。これがないと、あるネームスペースのクライアントが別テナントのクライアントIDを使い回し、そのクライアントをオフラインにしたり、永続セッションを乗っ取ったり、サービス拒否を引き起こしたりします。認証はこれを防げません。セッションの乗っ取りはACL適用前の接続レイヤーで発生します。
 
-  From EMQX 6.1 onward, you can enable this behavior by setting:
+この設定は[マウントポイントを使ったトピック分離](#topic-isolation-using-mountpoints)と組み合わせて、トピックレベルのアクセスがネームスペースを越えないようにしてください。
 
-  ```hocon
-  authorization.include_mountpoint = true
-  ```
+:::
 
-  This allows authorization backends to receive topics with the mountpoint prefix.
+異なるネームスペースのクライアントが同じクライアントIDを使えるように、クライアントIDオーバーライドルールを設定できます。例：
 
-## Enable Namespaces
-
-To enable the namespace feature, you must first tell EMQX how to determine which namespace a client belongs to. This is done by configuring a namespace source rule that derives and sets the special client attribute `tns` (tenant namespace) from client connection information.
-
-### Enable Namespaces via Configuration File
-
-You can extract the `tns` attribute from the connection metadata, such as the client's username, SNI, or other fields.
-
-For example, to use the client's username as the namespace identifier, you can apply the following configuration:
-
-```
-mqtt.client_attrs_init = [{expression = username, set_as_attr = tns}]
+```hocon
+mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
 ```
 
-### Enable Namespaces via Dashboard
+このルールはクライアントIDの先頭にネームスペースを付加し、競合を防ぎます。
 
-You can also enable namespaces using the EMQX Dashboard:
+### マウントポイントを使ったトピック分離
 
-1. Navigate to **Management** -> **MQTT Settings** -> **General** tab, and locate the **Client Attributes** section.
-2. Click **Add**, and fill in the following information:
-   - **Attribute**: `tns`
-   - **Attribute Expression**: For example, if you want to use the client's username as the namespace identifier, enter `username`. You may also use other variables. For more information on attribute expressions, refer to [Set Client Attributes](../client-attributes/client-attributes.md#set-client-attributes).
-3. Click **Save Changes**.
+異なるネームスペースのクライアントが同じトピック名でパブリッシュやサブスクライブを行う場合、マウントポイントを使ってトピックにネームスペースを自動的にプレフィックスできます。
 
-## Multi-Tenancy Capability Support
+EMQX 6.0以前では、マウントポイントは通常リスナー単位で設定されていました。例：
 
-Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9 and enhanced in 6.1, namespaces now support tenant isolation across multiple subsystems. The current support status is as follows:
+```hocon
+listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
+```
 
-- **Unified management and MQTT namespaces** (6.0)
+複数リスナー環境では設定の重複が必要でした。
 
-  The management plane (Dashboard, CLI, APIs) and the MQTT data plane share the same namespace model.
+EMQX 6.1以降は、ネームスペースを統一されたトピックマウントポイントとして利用可能です。ネームスペースが特定されると、EMQXは内部的に`{namespace}/`をトピックのプレフィックスとして適用し、リスナーごとの設定なしに同等の分離効果を実現します。
 
-- **Isolation for built-in database authentication** (6.1)
+後方互換性のため、デフォルトでは認可（ACL）チェックにマウントポイントのプレフィックスは含まれません。
 
-  Authentication data stored in the built-in database can be isolated by namespace.
+EMQX 6.1以降、以下の設定でこの挙動を有効化できます。
 
-- **Isolation for built-in database authorization** (6.1)
+```hocon
+authorization.include_mountpoint = true
+```
 
-  Authorization rules can be scoped to specific namespaces.
+これにより認可バックエンドはマウントポイント付きのトピックを受け取れます。
 
-- **Prometheus metrics isolation** (6.1)
+### ルールのネームスペース分離
 
-  Metrics can be exposed and aggregated by namespace, enabling better observability in multi-tenant environments.
+`rule_engine.limit_selects_in_namespace`が有効（デフォルト）な場合、他ネームスペースのメッセージやクライアント関連イベントがネームスペース限定ルールをトリガーするのを防ぎます。EMQXはクライアント属性`client_attrs.tns`でクライアントのネームスペースを判別します。EMQX 6.1.5以降、この設定はルールのRepublishアクションの出力トピックもルールのネームスペースに制限します。
 
-- **Retained message quota isolation**
+トピックテンプレートのレンダリング後、EMQXはレンダリング結果が`<namespace>/`で始まらない場合に`<namespace>/`を先頭に付加します。すでに`<namespace>/`で始まるトピックは変更されません。グローバルルールや`rule_engine.limit_selects_in_namespace = false`のデプロイメントは、レンダリング済みトピックにネームスペースを付加せずにパブリッシュします。
 
-  Resource usage related to retained messages can be limited per namespace.
+このRepublishの挙動は`mqtt.namespace_as_mountpoint`に依存しません。この設定はクライアントのトピックパブリッシュやサブスクライブをネームスペース間で制限しません。クライアントのトピックアクセスを分離するには、マウントポイントと認可ルールによるトピック分離を設定してください。
 
-In addition, starting from EMQX 6.0, namespace isolation has been fully implemented for rules, actions, sources, and connectors, and is no longer part of the future roadmap.
+## マルチテナンシー対応状況
 
-## What's Next
+ネームスペースはEMQXマルチテナンシーの中核要素です。EMQX 5.9で導入され、6.1で強化されたネームスペースは複数サブシステムにわたるテナント分離をサポートしています。現在の対応状況は以下の通りです。
 
-Now that you understand what namespaces are and what they can achieve, here are the next steps to start using them in EMQX:
+- **管理プレーンとMQTTネームスペースの統一**（6.0）
 
-- **[Create Namespaces](./create-namespace.md)**
-  Learn how to create namespaces explicitly via the Dashboard or REST API, or automatically based on client metadata.
-- **[Configure and Manage Namespaces](./configure-manage-namespace.md)**
-  Set rate limits and session quotas using either the Dashboard or REST API.
-- **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**
-  Follow a hands-on guide using MQTTX to quickly try out namespace-based client and topic isolation.
+  ダッシュボード、CLI、APIの管理プレーンとMQTTデータプレーンが同じネームスペースモデルを共有。
+
+- **組み込みデータベース認証の分離**（6.1）
+
+  組み込みデータベースに保存された認証情報をネームスペースごとに分離可能。
+
+- **組み込みデータベース認可の分離**（6.1）
+
+  認可ルールを特定ネームスペースにスコープ可能。
+
+- **Prometheusメトリクスの分離**（6.1）
+
+  ネームスペースごとにメトリクスを公開・集約し、マルチテナント環境での可観測性を向上。
+
+- **保持メッセージクォータの分離**
+
+  ネームスペースごとに保持メッセージ関連のリソース使用量を制限可能。
+
+加えて、EMQX 6.0以降、ルール、アクション、ソース、コネクターに対するネームスペース分離が完全に実装されており、今後のロードマップには含まれていません。
+
+## 次のステップ
+
+ネームスペースの概要と実現可能なことを理解したら、EMQXでの利用を開始するために以下を参照してください。
+
+- **[ネームスペースの作成](./create-namespace.md)**：ダッシュボードやREST APIで明示的にネームスペースを作成する方法や、クライアントメタデータに基づく自動作成方法を学びます。
+- **[ネームスペースの設定と管理](./configure-manage-namespace.md)**：ダッシュボードやREST APIでレート制限やセッションクォータを設定します。
+- **[ネームスペースのグローバル設定](./namespace-global-settings.md)**：ネームスペース解決、分離メカニズム、トピックマウントポイント、認可処理などクラスター全体のネームスペース挙動を設定します。
+- **[クイックスタート：ネームスペースを体験する](./namespace-quick-start.md)**：MQTTXを使ったハンズオンガイドで、ネームスペースベースのクライアント・トピック分離を素早く試せます。
