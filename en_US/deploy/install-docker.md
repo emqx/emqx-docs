@@ -50,9 +50,9 @@ This section will introduce how to use the Docker image to install the latest ve
 
 3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
 
-   To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@hostname`. You should also set the container hostname to match, as shown in the example above.
+   To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@<host>`. You should also set the container hostname to match, as shown in the example above.
 
-   **Note:** The node name must follow the format `emqx@<hostname>` where `<hostname>` should match the container's hostname or a stable FQDN.
+   **Note:** The `<host>` part must be an IP address or a fully qualified domain name (FQDN), such as `node1.emqx.com`. EMQX runs its Erlang node in long-name mode, so you cannot use a short hostname without dots, such as `node1`.
 
 ## Use Docker Compose to Build an EMQX Cluster
 

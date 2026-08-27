@@ -47,9 +47,9 @@
 
 3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
 
-   对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@hostname`。您还应该设置容器主机名以保持一致，如上面示例所示。
+   对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@<host>`。您还应该设置容器主机名以保持一致，如上面示例所示。
 
-   **注意：** 节点名必须遵循 `emqx@<hostname>` 格式，其中 `<hostname>` 应该与容器的主机名或稳定的 FQDN 匹配。
+   **注意：** `<host>` 部分必须是 IP 地址或完全限定域名（FQDN），例如 `node1.emqx.com`。EMQX 的 Erlang 节点以长节点名模式运行，因此不能使用不含点号的短主机名，例如 `node1`。
 
 ## 通过 Docker Compose 构建 EMQX 集群
 
