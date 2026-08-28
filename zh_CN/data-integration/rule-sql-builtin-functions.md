@@ -947,6 +947,60 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 ```
 
+### maptab_lookup(Table: string, Key: string | integer) -> map | undefined
+
+::: tip
+
+此函数在 EMQX 6.1.5 中引入。仅当 EMQX Mapping Tables 插件已安装并启动后，该函数才可用。
+
+:::
+
+在 [EMQX Mapping Tables 插件](../extensions/plugin-catalog/6.1/emqx-maptabs.md)管理的 mapping table 中查找一行数据。查找成功时返回该行的值映射；如果表不存在、Key 不存在或 Key 类型不匹配，则返回 `undefined`。
+
+Key 使用精确值匹配，不进行类型转换。例如，整数 Key `50` 和字符串 Key `'50'` 是不同的 Key。
+
+示例：
+
+```bash
+maptab_lookup('signals', 1) = json_decode('{"signal_name":"temperature_c","start_bit":17,"length":8,"type":"integer","signedness":"signed","endian":"big"}')
+maptab_lookup('signals', 3) = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, DefaultRow: map) -> map
+
+同 `maptab_lookup/2`，但查找未命中时返回指定的 `DefaultRow`。可以使用 `map_new()`、`map_put(...)` 或 `json_decode('{...}')` 构造默认行。
+
+如果将返回的行继续作为其他函数的输入，需要提供该函数所需的所有字段。使用 `map_new()` 这样的空默认行时，行内字段仍为 `undefined`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 3, json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')) = json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string) -> any | undefined
+
+查找匹配行中的指定字段。字段存在时返回字段值；如果表、Key 或字段不存在，或 Key 类型不匹配，则返回 `undefined`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 1, 'signal_name') = 'temperature_c'
+maptab_lookup('signals', 3, 'signal_name') = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string, Default: any) -> any
+
+与 `maptab_lookup(Table, Key, Field)` 相同，但查找未命中时返回指定的 `Default`。
+
+示例：
+
+```bash
+maptab_lookup('signals', 3, 'signal_name', 'Unknown') = 'Unknown'
+```
+
+在 `FOREACH` 中使用 `maptab_lookup` 时，如果查询结果可能未命中，需要先保护字段访问。例如，`maptab_lookup('signals', item_id)` 返回 `undefined` 时，如果继续将 `sig.start_bit` 等字段传入 `subbits`，该消息对应的整条 SQL 执行会失败。可以使用 `CASE WHEN is_map(sig)` 判断，或提供完整的默认行。
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 将 Key 与关联的 Value 插入到 Map 中，返回更新后的 Map。如果原始 Map 中该 Key 已经存在，那么旧的关联值将被替换为新的 Value。示例：
@@ -1123,6 +1177,36 @@ sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
+### hash_to_range(Value: string, Min: integer, Max: integer) -> integer
+
+此函数自 EMQX 6.2.3 起引入。
+
+使用 SHA-256 对 `Value` 进行散列计算，然后将散列值映射为闭区间 `[Min, Max]` 内的整数。`Min` 必须小于或等于 `Max`。
+
+当需要根据消息字段生成稳定的桶编号或分片编号时，可以使用此函数。例如，可以根据主题片段将设备分配到多个规则或动作。
+
+示例：
+
+```bash
+hash_to_range('A_C001', 0, 3) = 0
+hash_to_range(nth(2, tokens(topic, '/')), 0, 3)
+```
+
+### map_to_range(Value: integer | string, Min: integer, Max: integer) -> integer
+
+此函数自 EMQX 6.2.3 起引入。
+
+将 `Value` 映射为闭区间 `[Min, Max]` 内的整数。`Min` 必须小于或等于 `Max`。
+
+如果 `Value` 为整数，函数会直接将其映射到指定范围内。如果 `Value` 为非空字符串，函数会先将其二进制表示转换为无符号整数，然后再进行映射。
+
+示例：
+
+```bash
+map_to_range(7, 0, 3) = 3
+map_to_range('a', 0, 3) = 1
+```
+
 ## 压缩与解压缩函数
 
 注意：二进制数据无法直接进行 JSON 编码，必须调用 bin2hexstr 函数将其转换成对应的由十六进制数字组成的字符串。
@@ -1173,6 +1257,26 @@ bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
 
 ```bash
 zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
+```
+
+### lz4_compress(Data: binary | string) -> binary
+
+此函数自 EMQX 6.2.3 起引入。
+
+使用 LZ4 Frame 格式压缩 Data。示例：
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
+### lz4_uncompress(Data: binary) -> binary | string
+
+此函数自 EMQX 6.2.3 起引入。
+
+解压 LZ4 Frame 格式的 Data。示例：
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
 ```
 
 ## 比特位操作函数

@@ -18,6 +18,8 @@ Rules specify how to retrieve data from a **data source**, perform **data transf
 
   For more information on the various types of supported data sources and fields that can be referenced in the `WHERE` clause, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
 
+  Starting from EMQX 6.0.3, when namespaces are enabled, the Rule Engine limits rule triggering by namespace by default. A rule that belongs to a namespace is triggered only by messages and client-related events from clients in that same namespace. For more information, see [Namespace](../multi-tenancy/namespace-overview.md#isolation-mechanisms).
+
 - **Data Transformation**: Data transformations describe the process of transforming an input message. The `SELECT` part of the SQL extracts and transforms data from the input message. Embedded SQL sample statements can be used to implement advanced transformations, such as adding a timestamp to the output message.
 
   For a detailed explanation of the syntax and built-in SQL functions, see [Rule SQL Reference](./rule-sql-syntax.md) and [Built-in SQL Functions](./rule-sql-builtin-functions.md).

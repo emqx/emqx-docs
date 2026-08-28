@@ -3,6 +3,7 @@ This page guides you on installing and starting EMQX on macOS with a zip file.
 
 Supported versions:
 
+- macOS 26
 - macOS 15
 - macOS 14
 

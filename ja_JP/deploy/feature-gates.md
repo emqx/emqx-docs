@@ -1,21 +1,21 @@
 # Feature Gates
 
-Starting in EMQX 6.3.0, feature gates are deployment-time controls that enable or disable optional EMQX features. They are resolved only when EMQX starts and cannot be changed at runtime.
+EMQX 6.3.0以降、Feature GatesはオプションのEMQX機能を有効化または無効化するデプロイ時の制御機構です。これらはEMQX起動時にのみ解決され、ランタイム中に変更することはできません。
 
-Feature gates are configured by the `EMQX_FEATURES` environment variable and are designed for deployment policy. They are not stored in HOCON configuration files, are not persisted to `cluster.hocon`, and cannot be changed from the Dashboard, REST API, or CLI. To change the enabled feature set, update `EMQX_FEATURES` in the deployment environment and restart EMQX.
+Feature Gatesは`EMQX_FEATURES`環境変数で設定し、デプロイポリシー用に設計されています。HOCON設定ファイルには保存されず、`cluster.hocon`にも永続化されません。また、ダッシュボード、REST API、CLIから変更することもできません。機能セットを変更するには、デプロイ環境の`EMQX_FEATURES`を更新し、EMQXを再起動してください。
 
-## Configure Feature Gates
+## Feature Gatesの設定
 
-Set `EMQX_FEATURES` to one of the following values:
+`EMQX_FEATURES`に以下のいずれかの値を設定します：
 
-| Value | Description |
+| 値 | 説明 |
 | --- | --- |
-| Unset or empty | Uses the `FULL` preset. This preserves the default EMQX behavior. |
-| `FULL` | Enables all optional features. |
-| `ESSENTIAL` | Starts EMQX with only the core applications. All optional features are disabled. |
-| Custom feature list | Enables the listed features and their dependencies. Use lowercase feature names separated by commas, spaces, or both. |
+| 未設定または空 | `FULL`プリセットが使用されます。これはデフォルトのEMQX動作を維持します。 |
+| `FULL` | すべてのオプション機能を有効化します。 |
+| `ESSENTIAL` | コアアプリケーションのみでEMQXを起動します。すべてのオプション機能は無効化されます。 |
+| カスタム機能リスト | 指定した機能とその依存関係を有効化します。小文字の機能名をカンマ、スペース、またはその両方で区切って指定してください。 |
 
-Examples:
+例：
 
 ```bash
 export EMQX_FEATURES=FULL
@@ -25,42 +25,42 @@ export EMQX_FEATURES="dashboard auth"
 export EMQX_FEATURES=dashboard,auth,data_integration,metrics
 ```
 
-`dashboard,auth` and `"dashboard auth"` have the same effect. If you use spaces to separate feature names, wrap the whole value in quotes to prevent the shell from splitting it.
+`dashboard,auth`と`"dashboard auth"`は同じ効果です。スペースで区切る場合は、シェルによる分割を防ぐために値全体を引用符で囲んでください。
 
-Do not mix a preset with feature names. For example, `EMQX_FEATURES=ESSENTIAL,metrics` is invalid.
+プリセットと機能名を混在させないでください。例えば、`EMQX_FEATURES=ESSENTIAL,metrics`は無効です。
 
 ::: warning
-Invalid values prevent EMQX from starting. If a feature name is unknown, EMQX logs `invalid_feature_specification` with `reason` set to `unknown_feature` and exits with a non-zero status.
+無効な値を設定するとEMQXは起動しません。未知の機能名がある場合、EMQXは`invalid_feature_specification`をログに記録し、`reason`は`unknown_feature`となり、非ゼロステータスで終了します。
 :::
 
-## Available Features
+## 利用可能な機能
 
-The following optional features can be used in a custom `EMQX_FEATURES` list:
+カスタム`EMQX_FEATURES`リストで使用できるオプション機能は以下の通りです：
 
-| Feature | Description |
+| 機能 | 説明 |
 | --- | --- |
-| `dashboard` | Dashboard UI, REST API, Dashboard role-based access control, and Dashboard single sign-on. |
-| `auth` | Authentication and authorization chains and backends. |
-| `data_integration` | Rule engine, connectors, actions, sources, and data bridges. |
-| `message_transformation` | Message transformation. |
-| `schema_validation` | Schema validation. |
-| `schema_registry` | Schema registry and schema definitions used by related features. |
-| `gateways` | Non-MQTT protocol gateways. |
-| `cluster_link` | Cluster linking. |
-| `multi_tenancy` | Multi-tenancy and namespace management. |
-| `ai` | AI features, including AI completion and Agent-to-Agent registry. |
-| `metrics` | Prometheus metrics export. |
-| `mqtt_extensions` | MQTT extensions such as delayed publish, topic rewrite, topic metrics, auto subscription, slow subscribers, MQTT Streams, and Message Queue. |
-| `file_transfer` | File Transfer over MQTT. |
-| `gcp_device` | Migration compatibility shim for Google IoT Core. |
-| `exhook` | External gRPC hooks. |
-| `opentelemetry` | OpenTelemetry exporter. |
+| `dashboard` | ダッシュボードUI、REST API、ダッシュボードのロールベースアクセス制御、およびダッシュボードのシングルサインオン。 |
+| `auth` | 認証および認可のチェーンとバックエンド。 |
+| `data_integration` | ルールエンジン、コネクター、アクション、ソース、およびデータブリッジ。 |
+| `message_transformation` | メッセージ変換。 |
+| `schema_validation` | スキーマ検証。 |
+| `schema_registry` | スキーマレジストリおよび関連機能で使用されるスキーマ定義。 |
+| `gateways` | MQTT以外のプロトコルゲートウェイ。 |
+| `cluster_link` | クラスターリンク。 |
+| `multi_tenancy` | マルチテナンシーおよびネームスペース管理。 |
+| `ai` | AI機能（AI補完やAgent-to-Agentレジストリを含む）。 |
+| `metrics` | Prometheusメトリクスのエクスポート。 |
+| `mqtt_extensions` | 遅延パブリッシュ、トピック書き換え、トピックメトリクス、自動サブスクリプション、スロースブスクライバー、MQTTストリーム、メッセージキューなどのMQTT拡張機能。 |
+| `file_transfer` | MQTT経由のファイル転送。 |
+| `gcp_device` | Google IoT Coreの移行互換シム。 |
+| `exhook` | 外部gRPCフック。 |
+| `opentelemetry` | OpenTelemetryエクスポーター。 |
 
-## Feature Dependencies
+## 機能の依存関係
 
-Some features require other features to work. When you enable a feature, EMQX automatically enables its dependencies.
+一部の機能は他の機能を必要とします。機能を有効化すると、EMQXは依存関係も自動的に有効化します。
 
-| Feature | Automatically Enabled Dependencies |
+| 機能 | 自動的に有効化される依存機能 |
 | --- | --- |
 | `data_integration` | `schema_registry` |
 | `message_transformation` | `schema_registry` |
@@ -71,31 +71,31 @@ Some features require other features to work. When you enable a feature, EMQX au
 | `metrics` | `dashboard`, `auth` |
 | `opentelemetry` | `dashboard` |
 
-For example, setting `EMQX_FEATURES=metrics` enables `metrics`, `dashboard`, and `auth`.
+例として、`EMQX_FEATURES=metrics`を設定すると、`metrics`、`dashboard`、`auth`が有効化されます。
 
-## Core Applications
+## コアアプリケーション
 
-The `ESSENTIAL` preset disables optional features, but EMQX still starts the core applications required for broker operation and management. Core applications include the MQTT broker, configuration system, CLI, license validation, plugin framework, durable storage, audit log, node rebalance, retainer, TLS PSK, outbound telemetry, and shared resource or bridge framework applications.
+`ESSENTIAL`プリセットはオプション機能を無効化しますが、EMQXはブローカーの動作と管理に必要なコアアプリケーションは起動します。コアアプリケーションにはMQTTブローカー、設定システム、CLI、ライセンス検証、プラグインフレームワーク、耐久ストレージ、監査ログ、ノードリバランス、リテイナー、TLS PSK、アウトバウンドテレメトリー、共有リソースおよびブリッジフレームワークアプリケーションが含まれます。
 
-Existing feature-specific configuration sections can remain in configuration files when the corresponding feature gate is disabled. EMQX does not start the applications behind disabled features, so those configuration sections are not used until the feature is enabled again.
+既存の機能固有の設定セクションは、対応するFeature Gateが無効化されていても設定ファイルに残して問題ありません。EMQXは無効化された機能のアプリケーションを起動しないため、これらの設定は機能が再度有効化されるまで使用されません。
 
-## Inspect Enabled Features
+## 有効化された機能の確認
 
-EMQX logs the resolved feature state during startup:
+EMQXは起動時に解決された機能状態をログに出力します：
 
 ```text
 feature_gates_resolved
 ```
 
-The log entry includes the resolved `preset`, `enabled` feature list, and `disabled` feature list.
+ログには解決された`preset`、`enabled`機能リスト、および`disabled`機能リストが含まれます。
 
-When the `dashboard` feature is enabled, you can also query the resolved state through the REST API:
+`dashboard`機能が有効な場合は、REST APIからも解決済みの状態を問い合わせ可能です：
 
 ```bash
 curl -u <API_KEY>:<SECRET_KEY> http://localhost:18083/api/v5/features
 ```
 
-Example response:
+レスポンス例：
 
 ```json
 {
@@ -105,21 +105,21 @@ Example response:
 }
 ```
 
-The exact lists depend on the EMQX edition, version, and configured feature set.
+リストの内容はEMQXのエディション、バージョン、設定された機能セットによって異なります。
 
 ::: tip
-`GET /api/v5/features` is served by the Dashboard and management API applications. If the `dashboard` feature is disabled, inspect the resolved feature set from the startup log instead.
+`GET /api/v5/features`はダッシュボードおよび管理APIアプリケーションによって提供されます。`dashboard`機能が無効な場合は、起動ログから解決済みの機能セットを確認してください。
 :::
 
-## Cluster Deployment Considerations
+## クラスター展開時の注意点
 
-For operational consistency, configure the same `EMQX_FEATURES` value on all nodes in a cluster. A mixed-feature cluster can expose different REST APIs, background applications, and cross-node behavior on different nodes.
+運用の一貫性を保つため、クラスター内のすべてのノードで同じ`EMQX_FEATURES`値を設定してください。機能セットが混在したクラスターでは、ノードごとに異なるREST APIやバックグラウンドアプリケーション、ノード間の挙動が現れる可能性があります。
 
-When you use Docker Compose, Kubernetes, or another orchestration system, set `EMQX_FEATURES` in the shared deployment manifest so added and restarted nodes receive the same value.
+Docker Compose、Kubernetes、その他のオーケストレーションシステムを使用する場合は、共有のデプロイマニフェストに`EMQX_FEATURES`を設定し、追加や再起動されたノードが同じ値を受け取るようにしてください。
 
-## Related Links
+## 関連リンク
 
-- [Install EMQX Using Docker](./install-docker.md)
-- [Deploy EMQX on Kubernetes Using Helm Chart](./kubernetes/chart.md)
-- [Configuration Files](../configuration/configuration.md)
+- [Dockerを使ったEMQXのインストール](./install-docker.md)
+- [Helmチャートを使ったKubernetes上のEMQXデプロイ](./kubernetes/chart.md)
+- [設定ファイル](../configuration/configuration.md)
 - [REST API](../admin/api.md)

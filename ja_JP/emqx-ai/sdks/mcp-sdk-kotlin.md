@@ -1,19 +1,19 @@
 # Kotlin SDK
 
-This guide demonstrates how to create a simple MCP server using the Kotlin SDK with MCP over MQTT support:
- https://github.com/terry-xiaoyu/kotlin-sdk
+このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。  
+リポジトリ：https://github.com/terry-xiaoyu/kotlin-sdk
 
-## Environment Setup
+## 環境構築
 
-### Install the Kotlin Toolchain
+### Kotlin ツールチェーンのインストール
 
-Make sure the following tools are installed:
+以下のツールがインストールされていることを確認してください。
 
-- JDK 21+
-- Kotlin 2.2+
-- Gradle 9.2+
+- JDK 21以上
+- Kotlin 2.2以上
+- Gradle 9.2以上
 
-Using [SDKMAN](https://sdkman.io/) is the recommended way to install and manage these tools:
+[SDKMAN](https://sdkman.io/) を使用すると、これらのツールを簡単にインストールおよび管理できます。
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -24,107 +24,108 @@ sdk install kotlin 2.2.21
 sdk install gradle 9.2.1
 ```
 
-### Install and Run EMQX
+### EMQX のインストールと起動
 
-Follow the [Getting Started](../../getting-started/getting-started.md) guide to install and start the EMQX broker.
+EMQX ブローカーのインストールおよび起動については、[Getting Started](../../getting-started/getting-started.md) ガイドに従ってください。
 
-## Download and Run the MCP Server Example
+## MCP サーバーのサンプルをダウンロードして実行する
 
-Clone the example project:
+サンプルプロジェクトをクローンします。
 
 ```bash
 git clone https://github.com/terry-xiaoyu/kotlin-mcp-server-demo.git
 cd kotlin-mcp-server-demo
 ```
 
-The example registers two MCP tools:
+このサンプルでは、以下の2つの MCP ツールを登録しています。
 
-- **Calculator tool**: provides basic arithmetic operations (addition, subtraction, multiplication, division).
-- **Light control tool**: controls the light’s on/off state and brightness.
+- **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
+- **Light control tool**：ライトのオン/オフ状態と明るさを制御します。
 
-You can find the tool registration code here: https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
+ツール登録のコードはこちらで確認できます。  
+https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
 
 ```bash
-// Add a calculator tool
+// Calculator tool を追加
 server.addTool(
     name = "calculator",
-    description = "This tool can perform basic math operations: addition, subtraction, multiplication, and division.",
+    description = "このツールは基本的な数学演算（加算、減算、乗算、除算）を実行できます。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("num1") {
                 put("type", JsonPrimitive("number"))
-                put("description", JsonPrimitive("The first number"))
+                put("description", JsonPrimitive("最初の数値"))
             }
             putJsonObject("num2") {
                 put("type", JsonPrimitive("number"))
-                put("description", JsonPrimitive("The second number"))
+                put("description", JsonPrimitive("2番目の数値"))
             }
             putJsonObject("op") {
                 put("type", JsonPrimitive("string"))
-                put("description", JsonPrimitive("The operation to perform: +, -, *, /"))
+                put("description", JsonPrimitive("実行する演算子：+, -, *, /"))
             }
         },
         required = listOf("num1", "num2", "op"),
     ),
 ) { request : CallToolRequest ->
     val num1 = request.params.arguments?.get("num1")?.jsonPrimitive?.content?.toDoubleOrNull()
-        ?: throw IllegalArgumentException("Invalid or missing argument: num1")
+        ?: throw IllegalArgumentException("無効または欠落している引数: num1")
     val num2 = request.params.arguments?.get("num2")?.jsonPrimitive?.content?.toDoubleOrNull()
-        ?: throw IllegalArgumentException("Invalid or missing argument: num2")
+        ?: throw IllegalArgumentException("無効または欠落している引数: num2")
     val op = request.params.arguments?.get("op")?.jsonPrimitive?.content?.firstOrNull()
-        ?: throw IllegalArgumentException("Invalid or missing argument: op")
+        ?: throw IllegalArgumentException("無効または欠落している引数: op")
     val x = num1.toDouble()
     val y = num2.toDouble()
     val result = when(op) {
         '+' -> x + y
         '-' -> x - y
         '*' -> x * y
-        '/' -> if (y == 0.0) throw ArithmeticException("Division by zero") else x / y
-        else -> throw IllegalArgumentException("Unsupported operator: $op")
+        '/' -> if (y == 0.0) throw ArithmeticException("ゼロによる除算") else x / y
+        else -> throw IllegalArgumentException("サポートされていない演算子: $op")
     }
     CallToolResult(
-        content = listOf(TextContent("The result is: $result")),
+        content = listOf(TextContent("結果は: $result")),
     )
 }
 
-// Add a light control tool
+// Light control tool を追加
 server.addTool(
     name = "set_light_brightness",
-    description = "Control the light on the panel. You can change the brightness. To turn off the light, set brightness to 0. Set brightness to 'last_value' to restore the previous brightness, which is useful when the light is off and you want to turn it back on.",
+    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。明るさを 'last_value' に設定すると、前回の明るさに戻せます。これはライトがオフのときに再度オンにする場合に便利です。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
                 put("type", JsonArray(listOf(JsonPrimitive("number"), JsonPrimitive("string"))))
-                put("description", JsonPrimitive("Brightness value between 0 and 100, or 'last_value' to restore previous brightness"))
+                put("description", JsonPrimitive("0から100の明るさの値、または前回の明るさに戻すための 'last_value'"))
             }
         },
         required = listOf("value")
     ),
 ) { request ->
     val value = request.params.arguments?.get("value")?.jsonPrimitive?.content
-    // Handle the request and control the light brightness
+    // リクエストを処理し、ライトの明るさを制御
     CallToolResult(
-        content = listOf(TextContent("Light brightness set to: ${value}%")),
+        content = listOf(TextContent("ライトの明るさを ${value}% に設定しました")),
     )
 }
 ```
 
-Start the MCP server example with the following command:
+以下のコマンドで MCP サーバーのサンプルを起動します。
 
 ```bash
 ./gradlew run --args="--mqtt kt001 demo/kotlin-mcp-server"
 ```
 
-Parameter explanation:
+パラメーターの説明：
 
-- **MQTT Client ID**: `kt001`
-- **MCP Server Name**: `demo/kotlin-mcp-server`
+- **MQTT クライアント ID**：`kt001`
+- **MCP サーバー名**：`demo/kotlin-mcp-server`
 
-## Test with an MCP Client
+## MCP クライアントでテストする
 
-The Kotlin SDK currently does not provide an MCP client implementation. For testing, you can create a simple MCP client using the Python SDK.
+現在、Kotlin SDK には MCP クライアントの実装がありません。テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
 
-Set up the Python environment:
+Python 環境のセットアップ：
 
 ```bash
 uv init light_controller
@@ -134,7 +135,7 @@ uv add "mcp[cli]"
 source .venv/bin/activate
 ```
 
-Create a file named `light_controller.py` with the following content:
+`light_controller.py` というファイルを作成し、以下の内容を記述します。
 
 ```bash
 # light_controller.py
@@ -147,20 +148,20 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-    logger.info(f"Discovered {server_name}, connecting ...")
+    logger.info(f"{server_name} を検出しました。接続しています...")
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
     success, init_result = connect_result
     if success == 'error':
-        logger.error(f"Failed to connect to {server_name}: {init_result}")
+        logger.error(f"{server_name} への接続に失敗しました: {init_result}")
         return
-    logger.info(f"Connected to {server_name}, success={success}, init_result={init_result}")
+    logger.info(f"{server_name} に接続しました。success={success}, init_result={init_result}")
     capabilities = init_result.capabilities
     if capabilities.tools:
         toolsResult = await client.list_tools(server_name)
         tools = toolsResult.tools
-        logger.info(f"Tools of {server_name}: {tools}")
+        logger.info(f"{server_name} のツール一覧: {tools}")
         for tool in tools:
             logger.info(f" - {tool.name}: {tool.description}")
             if tool.name == "set_light_brightness":
@@ -170,7 +171,7 @@ async def on_mcp_connect(client, server_name, connect_result):
                     arguments={"value": 50}
                 )
                 logger.info(
-                    f"Calling the tool as set_light_brightness(value=50), result: {result}"
+                    f"set_light_brightness(value=50) ツールを呼び出しました。結果: {result}"
                 )
 
 async def main():
@@ -186,17 +187,17 @@ async def main():
     ) as client:
         await client.start()
         while True:
-            # Simulate other work while the MQTT client runs in the background
+            # MQTT クライアントがバックグラウンドで動作している間、他の処理をシミュレート
             await anyio.sleep(20)
 
 if __name__ == "__main__":
     anyio.run(main)
 ```
 
-This Python client automatically discovers the MCP server named `demo/kotlin-mcp-server` and calls the `set_light_brightness` tool to set the light brightness to 50:
+この Python クライアントは、`demo/kotlin-mcp-server` という MCP サーバーを自動検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します。
 
 ```bash
-INFO 2025-12-19 13:07:44,445 - Calling the tool as set_light_brightness(value=50), result: meta=None
-                             content=[TextContent(type='text', text='Light brightness set to: 50%',
+INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) ツールを呼び出しました。結果: meta=None
+                             content=[TextContent(type='text', text='ライトの明るさを 50% に設定しました',
                              annotations=None)] isError=False
 ```

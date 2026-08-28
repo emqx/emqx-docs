@@ -472,12 +472,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-Install a plugin package that is located in the plugin installation directory.
+Install a plugin package that is located in the plugin installation directory. Use `--cluster` to distribute and install the package on all running nodes.
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
@@ -1591,12 +1592,6 @@ List all metrics for a gateway.
 
 ## license
 
-::: tip
-
-This section applies to the EMQX Enterprise edition only.
-
-:::
-
 ### license info
 
 Display License information.
@@ -1626,11 +1621,92 @@ You need to replace `YOUR_LICENSE_STRING` with the actual License string.
 
 ### license update default
 
-Revert to default Community License.
+Revert to the default Community License.
 
 ```bash
 emqx ctl license update default
 ```
+
+### license history
+
+Display the session high-watermark history. EMQX Enterprise records the daily peak session count and retains at least 24 months of history for billing audit purposes.
+
+```bash
+emqx ctl license history [N] [--period daily|monthly] [--json]
+```
+
+- `N`: Optional positive integer; caps the number of rows returned (default: 24 for monthly period)
+- `--period daily|monthly`: Aggregation granularity; `daily` returns one row per calendar day, `monthly` folds daily peaks into per-month maximums (default: `monthly`)
+- `--json`: Output in JSON format instead of plain text
+
+**Example: plain-text output**
+
+```bash
+$ emqx ctl license history
+period=2026-04 high_watermark=25000 observed_at=2026-04-18T13:53:05.000Z
+period=2026-03 high_watermark=23500 observed_at=2026-03-31T22:10:42.000Z
+```
+
+**Example: JSON output**
+
+```bash
+$ emqx ctl license history --json
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+When no data has been recorded yet, the plain-text output displays:
+
+```
+No session high-watermark history recorded.
+```
+
+## mt
+
+The `mt` command provides maintenance operations for multi-tenancy in EMQX Enterprise.
+
+### mt purge_ns \<Namespace\>
+
+Starting from EMQX Enterprise 6.1.4, this command deletes the specified namespace and synchronously runs its cleanup process. The cleanup removes the namespace configuration and namespace-scoped data from the built-in database. This data includes password-based authentication users, SCRAM users, and authorization rules. The command runs even if the namespace no longer exists.
+
+The operation is idempotent if the namespace state has not changed. If a cleanup attempt does not finish, you can rerun the command only if a namespace with the same name has not been recreated.
+
+Use this command as a last resort to remove data left behind by an interrupted namespace deletion. For routine namespace deletion, use the Dashboard or `DELETE /mt/ns/<namespace>` REST API.
+
+::: warning Important Notice
+
+Running this command for an existing namespace permanently deletes the namespace and its data. Do not rerun the command after a namespace with the same name has been recreated.
+
+:::
+
+For example, purge the `tenant-a` namespace:
+
+```bash
+emqx ctl mt purge_ns tenant-a
+```
+
+If every cleanup step succeeds, the output JSON contains `"result": "ok"`:
+
+```json
+{"namespace":"tenant-a","result":"ok"}
+```
+
+If any cleanup step fails, the output JSON contains `"error": "cleanup_incomplete"`:
+
+```json
+{"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
+```
+
+Check the EMQX logs for the failed cleanup step, resolve the cause, and run the command again.
 
 ## admins
 

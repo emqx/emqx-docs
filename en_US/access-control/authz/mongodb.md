@@ -71,6 +71,8 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
    - **Username**: Specify MongoDB user name. 
    - **Password**: Specify MongDB user password. 
 
+   **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 
    **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authz.md#authorization-placeholders) are supported. 
@@ -92,6 +94,8 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
 You can configure the EMQX MongoDB authorizer with EMQX configuration items.
 
 The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
+
+The optional `precondition` configuration item accepts a Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
 Sample configuration:
 

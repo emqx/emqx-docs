@@ -1,73 +1,75 @@
-# Ingest MQTT Data into AlloyDB
+# AlloyDB に MQTT データを取り込む
 
-[AlloyDB for PostgreSQL](https://cloud.google.com/products/alloydb?hl=en) is Google Cloud’s fully managed, PostgreSQL‑compatible database service engineered for demanding enterprise workloads. EMQX supports seamless integration with AlloyDB, enabling real-time ingestion and storage of MQTT data from IoT devices. Leveraging EMQX’s efficient message routing alongside AlloyDB’s high-throughput transactional capabilities and real-time analytics via its Hybrid Transactional/Analytical Processing (HTAP) engine, you get a powerful pipeline for capturing device status, logging events, and performing insightful analytics.
+[AlloyDB for PostgreSQL](https://cloud.google.com/products/alloydb?hl=en) は、Google Cloud が提供するフルマネージドの PostgreSQL 互換データベースサービスであり、厳しいエンタープライズワークロードに対応するよう設計されています。EMQX は AlloyDB とのシームレスな統合をサポートしており、IoT デバイスからの MQTT データをリアルタイムで取り込み、保存することが可能です。EMQX の効率的なメッセージルーティングと AlloyDB の高スループットなトランザクション処理能力および Hybrid Transactional/Analytical Processing（HTAP）エンジンによるリアルタイム分析を活用することで、デバイスの状態取得、イベントログ記録、洞察に富んだ分析を行う強力なパイプラインを構築できます。
 
-This page provides a comprehensive introduction to the data integration between EMQX and AlloyDB, with practical instructions on creating and validating the data integration.
+本ページでは、EMQX と AlloyDB 間のデータ統合について包括的に紹介し、実際の作成および検証手順を解説します。
 
-## How It Works
+## 動作概要
 
-AlloyDB data integration in EMQX is a built-in feature that ingests MQTT-based IoT data streams directly into AlloyDB's high-performance, PostgreSQL-compatible database. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to AlloyDB for storage and analysis, eliminating the need for complex coding. Through the AlloyDB Sink, MQTT messages and client events can be stored in AlloyDB. Events can also trigger update or delete operations on data in AlloyDB, enabling the recording of information such as device online status and connection history.
+EMQX における AlloyDB データ統合は組み込み機能であり、MQTT ベースの IoT データストリームを AlloyDB の高性能な PostgreSQL 互換データベースに直接取り込みます。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQX から AlloyDB へのデータ取り込みと分析のプロセスを簡素化し、複雑なコーディングを不要にします。AlloyDB シンクを通じて、MQTT メッセージやクライアントイベントを AlloyDB に保存できます。また、イベントに応じて AlloyDB 内のデータの更新や削除操作をトリガーでき、デバイスのオンライン状態や接続履歴などの情報を記録可能です。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and AlloyDB:
+以下の図は、EMQX と AlloyDB 間のデータ統合の典型的なアーキテクチャを示しています。
+
+
 
 ![EMQX Integration AlloyDB](./assets/alloydb_architecture.png)
 
-Ingesting MQTT data into AlloyDB works as follows:
+AlloyDB への MQTT データ取り込みは以下のように動作します：
 
-1. **IoT devices connect to EMQX**: After IoT devices are successfully connected through the MQTT protocol, online events will be triggered. The events include information such as device ID, source IP address, and other attributes.
-2. **Message publication and reception**: The devices publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
-3. **Rule Engine Processing Messages**: EMQX’s rules engine processes events and messages by matching them to defined rules based on topics or message content. Processing can include data transformation (e.g., JSON to SQL-ready format), filtering, and data enrichment with contextual information before database insertion.
-4. **Write to AlloyDB**: The matched rule triggers SQL execution against AlloyDB. Using SQL templates, users can map processed data fields to AlloyDB tables and columns. Because AlloyDB supports parallel query execution and optimized storage with a built-in columnar engine, data can be inserted quickly while remaining instantly queryable for analytics.
+1. **IoT デバイスが EMQX に接続**：IoT デバイスが MQTT プロトコルを通じて正常に接続されると、オンラインイベントがトリガーされます。イベントにはデバイスID、送信元IPアドレス、その他属性情報が含まれます。
+2. **メッセージのパブリッシュと受信**：デバイスは特定のトピックにテレメトリや状態データをパブリッシュします。EMQX はこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+3. **ルールエンジンによるメッセージ処理**：EMQX のルールエンジンは、トピックやメッセージ内容に基づいて定義されたルールとイベント・メッセージをマッチングします。処理にはデータ変換（例：JSON から SQL 用フォーマットへの変換）、フィルタリング、コンテキスト情報によるデータ強化などが含まれ、データベース挿入前に行われます。
+4. **AlloyDB への書き込み**：マッチしたルールは AlloyDB に対する SQL 実行をトリガーします。SQL テンプレートを用いて、処理済みデータのフィールドを AlloyDB のテーブルやカラムにマッピング可能です。AlloyDB は並列クエリ実行と組み込みのカラムナエンジンによる最適化ストレージをサポートしているため、高速にデータを挿入しつつ即座に分析可能な状態を維持します。
 
-After the event and message data are written to AlloyDB, you can connect to AlloyDB to read the data for flexible application development, such as:
+イベントおよびメッセージデータが AlloyDB に書き込まれた後は、以下のような柔軟なアプリケーション開発に AlloyDB へ接続してデータを読み取れます：
 
-- Connect to visualization tools, such as Grafana, to generate charts based on data and show data changes.
-- Integrate AlloyDB with device management systems or analytical models to track device health, detect anomalies, and trigger alerts.
-- Use AlloyDB’s HTAP capabilities to run complex analytics (aggregation, joins, time-series queries) on live IoT data while continuing to process new device telemetry in real time.
+- Grafana などの可視化ツールに接続し、データに基づくチャート作成やデータ変化の表示。
+- AlloyDB をデバイス管理システムや分析モデルと統合し、デバイスの健全性監視、異常検知、アラート発動。
+- AlloyDB の HTAP 機能を活用し、ライブの IoT データに対して複雑な分析（集計、結合、時系列クエリ）を実行しつつ、新規デバイステレメトリのリアルタイム処理を継続。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with AlloyDB can bring the following features and advantages to your business:
+AlloyDB とのデータ統合は、以下の特長と利点をビジネスにもたらします：
 
-- **Flexible Event Handling**: Using the EMQX rules engine, AlloyDB can store and process device lifecycle events (connect, disconnect, status changes) with low latency. When paired with AlloyDB’s parallel query execution and independent scaling, you can analyze event data in real time to detect device failures, anomalies, or usage trends.
-- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to AlloyDB, making storage and usage more convenient.
-- **Flexible Data Operations with SQL Templates**: Through EMQX’s SQL template mapping, structured IoT data can be inserted or updated in AlloyDB tables and columns. AlloyDB’s PostgreSQL compatibility supports standard SQL, JSONB storage, and indexing, while AI-powered indexing automatically optimizes query performance as workloads evolve.
-- **Integration of Business Processes**: AlloyDB’s PostgreSQL ecosystem compatibility allows direct integration with ERP, CRM, GIS, and custom business systems, whether hosted in Google Cloud or on-premises. Paired with EMQX, you can implement event-driven automation and business process orchestration without complex data pipelines.
-- **Advanced Geospatial Capabilities**: Via PostgreSQL extensions like PostGIS, AlloyDB supports geospatial data storage, indexing, and querying, enabling geofencing, route tracking, and location analytics. Combined with EMQX’s reliable MQTT ingestion, it’s possible to build fleet tracking, asset monitoring, and other real-time IoT-GIS solutions.
-- **Built-in Metrics and Monitoring**: EMQX provides runtime metrics for each AlloyDB sink, while AlloyDB integrates with Cloud Monitoring for query performance, storage utilization, and replica health, ensuring end-to-end observability.
+- **柔軟なイベント処理**：EMQX のルールエンジンを活用し、AlloyDB はデバイスのライフサイクルイベント（接続、切断、状態変化）を低レイテンシで保存・処理可能です。AlloyDB の並列クエリ実行や独立スケーリングと組み合わせることで、リアルタイムにイベントデータを分析し、デバイス障害や異常、利用傾向を検出できます。
+- **メッセージ変換**：EMQX ルールを通じてメッセージは高度に処理・変換されてから AlloyDB に書き込まれるため、保存や活用がより便利になります。
+- **SQL テンプレートによる柔軟なデータ操作**：EMQX の SQL テンプレートマッピングを使い、構造化された IoT データを AlloyDB のテーブルやカラムに挿入・更新できます。AlloyDB の PostgreSQL 互換性により標準 SQL、JSONB ストレージ、インデックス作成が可能で、AI によるインデックス最適化がワークロードの変化に応じて自動で行われます。
+- **業務プロセスの統合**：AlloyDB の PostgreSQL エコシステム互換性により、Google Cloud 上またはオンプレミスの ERP、CRM、GIS、カスタム業務システムと直接統合可能です。EMQX と組み合わせることで、複雑なデータパイプラインなしにイベント駆動の自動化や業務プロセスオーケストレーションを実現できます。
+- **高度な地理空間機能**：PostgreSQL 拡張機能の PostGIS などを通じて、AlloyDB は地理空間データの保存、インデックス作成、クエリをサポートし、ジオフェンス、ルート追跡、位置情報分析を可能にします。EMQX の信頼性の高い MQTT 取り込みと組み合わせることで、車両追跡、資産監視などリアルタイム IoT-GIS ソリューションの構築が可能です。
+- **組み込みのメトリクスと監視**：EMQX は各 AlloyDB シンクのランタイムメトリクスを提供し、AlloyDB は Cloud Monitoring と統合してクエリ性能、ストレージ利用率、レプリカの健全性を監視し、エンドツーエンドの可観測性を確保します。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the AlloyDB integration, including how to create an AlloyDB instance and create a database and data tables.
+本節では AlloyDB 統合を作成する前に必要な準備について説明します。AlloyDB インスタンスの作成やデータベース・テーブルの作成方法を含みます。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- EMQX データ統合の[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-### Create Database and Tables in AlloyDB
+### AlloyDB でのデータベースとテーブル作成
 
-Before creating an AlloyDB connector in EMQX, ensure that an AlloyDB instance is available and that the required database and tables are created to store your IoT data.
+EMQX に AlloyDB コネクターを作成する前に、AlloyDB インスタンスが利用可能であること、および IoT データを保存するためのデータベースとテーブルが作成されていることを確認してください。
 
-Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/docs/quickstart/create-and-connect) to:
+[公式 AlloyDB クイックスタートガイド](https://cloud.google.com/alloydb/docs/quickstart/create-and-connect) に従って以下を行います：
 
-1. Create an AlloyDB instance. 
+1. AlloyDB インスタンスを作成します。
 
-   - During this setup, define the database user credentials for this example as follows:
+   - このセットアップ中に、以下のユーザー認証情報を定義してください：
 
-     - **Username**: `emqx_user` (must have privileges to connect, insert, update, and select data)
+     - **ユーザー名**：`emqx_user`（接続、挿入、更新、選択の権限を持つ必要があります）
 
-     - **Password**: `your_password_here`
+     - **パスワード**：`your_password_here`
 
-   - You can create this user during instance provisioning or later via SQL, Google Cloud Console, or the `gcloud` CLI.
+   - このユーザーはインスタンスプロビジョニング時、または後から SQL、Google Cloud コンソール、`gcloud` CLI を使って作成可能です。
 
-2. Create a database inside the instance. For this example, the database name is `emqx_data`.
+2. インスタンス内にデータベースを作成します。例としてデータベース名は `emqx_data` とします。
 
-3. Connect to the database using a PostgreSQL-compatible client such as `psql` to connect with the credentials above.
+3. `psql` などの PostgreSQL 互換クライアントを使い、上記の認証情報でデータベースに接続します。
 
-4. Create two tables for storing MQTT messages and client event data in the database `emqx_data`.
+4. MQTT メッセージとクライアントイベントデータを保存するために、`emqx_data` データベース内に2つのテーブルを作成します。
 
-   - Use the following SQL statements to create the `t_mqtt_msg` table for storing MQTT messages with metadata such as client ID, topic, QoS, payload, and arrival time:
+   - 以下の SQL 文で、クライアントID、トピック、QoS、ペイロード、到着時間などのメタデータを含む MQTT メッセージ保存用テーブル `t_mqtt_msg` を作成します：
 
      ```sql
      CREATE TABLE t_mqtt_msg (
@@ -82,7 +84,7 @@ Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/
      );
      ```
 
-   - Use the following SQL statements to create the data table `emqx_client_events` for storing client lifecycle events, such as connect and disconnect, with timestamps:
+   - 以下の SQL 文で、クライアントのオンライン／オフラインイベントとタイムスタンプを保存するデータテーブル `emqx_client_events` を作成します：
 
      ```sql
      CREATE TABLE emqx_client_events (
@@ -93,52 +95,51 @@ Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/
      );
      ```
 
+## AlloyDB コネクターの作成
 
-## Create an AlloyDB Connector
+AlloyDB シンクを追加する前に、EMQX で AlloyDB コネクターを作成します。コネクターは EMQX が Google Cloud 上の AlloyDB インスタンスに接続する方法を定義します。
 
-Before adding an AlloyDB Sink, create an AlloyDB Connector in EMQX. The connector defines how EMQX connects to the AlloyDB instance in Google Cloud.
+1. EMQX ダッシュボードで、**Integration** -> **Connector** に移動します。
 
-1. In the EMQX Dashboard, go to **Integration** -> **Connector**.
+2. ページ右上の **Create** をクリックします。
 
-2. Click **Create** in the upper right corner of the page.
+3. **Create Connector** ページで **AlloyDB** を選択し、**Next** をクリックします。
 
-3. On the **Create Connector** page, select **AlloyDB**, and then click **Next**.
+4. コネクター名を入力します。名前は英数字で始まり、英数字、ハイフン、アンダースコアを含めることができます。例：`my_alloydb`
 
-4. Enter a name for the connector. Names must start with a letter or number and may contain letters, numbers, hyphens, or underscores, for example, `my_alloydb`.
+5. 接続情報を入力します：
 
-5. Enter the connection information:
+   - **Server Host**：Google Cloud 上の AlloyDB インスタンスのホスト名または IP アドレス
+   - **Database Name**：EMQX がデータを書き込む AlloyDB 内の対象データベース名（例：`emqx_data`）
+   - **Username**：認証および識別に使用する AlloyDB のデータベースユーザー名（例：`emqx_user`）
+   - **Password**：`emqx_user` のパスワード
+   - **Enable TLS**：暗号化接続を確立する場合はトグルをオンにします。TLS 接続の詳細は[外部リソースアクセスの TLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 
-   - **Server Host**: The hostname or IP address of your AlloyDB instance in Google Cloud.
-   - **Database Name**: The name of the target database in AlloyDB where EMQX will write data. In this example, it is `emqx_data`.
-   - **Username**: The database username in AlloyDB used for authentication and identification. In this example, it is `emqx_user`.
-   - **Password**: The password for `emqx_user`.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+6. 高度な設定（任意）：接続プールサイズ、アイドルタイムアウト、リクエストタイムアウトなどの追加接続プロパティを設定可能です。
 
-6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout.
+7. **Test Connectivity** をクリックして、EMQX が指定された設定で AlloyDB インスタンスに正常に接続できるか確認します。
 
-7. Click **Test Connectivity** to verify that EMQX can successfully connect to the AlloyDB instance using the provided settings.
+8. **Create** をクリックしてコネクターを保存します。
 
-8. Click **Create** to save the connector.
+9. 作成後、以下のいずれかを選択できます：
 
-9. After creation, you can either:
+   - **Back to Connector List** をクリックしてすべてのコネクターを表示
+   - **Create Rule** をクリックして、このコネクターを使った AlloyDB へのデータ転送ルールを即座に作成
 
-   - Click **Back to Connector List** to view all connectors, or
-   - Click **Create Rule** to immediately create a rule that uses this connector to forward data to AlloyDB.
+   詳細な例は以下を参照してください：
 
-   For detailed examples, see:
+   - [メッセージ保存用 AlloyDB シンクを使ったルール作成](#create-a-rule-with-alloydb-sink-for-message-storage)
+   - [イベント記録用 AlloyDB シンクを使ったルール作成](#create-a-rule-with-alloydb-sink-for-events-recording)
 
-   - [Create a Rule with AlloyDB Sink for Message Storage](#create-a-rule-with-alloydb-sink-for-message-storage)
-   - [Create a Rule with AlloyDB Sink for Events Recording](#create-a-rule-with-alloydb-for-events-recording).
+## メッセージ保存用 AlloyDB シンクを使ったルール作成
 
-## Create a Rule with AlloyDB Sink for Message Storage
+この節では、ソース MQTT トピック `t/#` からのメッセージを処理し、処理済みデータを AlloyDB のテーブル `t_mqtt_msg` に保存するルールをダッシュボードで作成する方法を示します。
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the AlloyDB table `t_mqtt_msg` via the configured Sink.
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+2. ページ右上の **Create** をクリックします。
 
-2. Click **Create** in the upper right corner of the page.
-
-3. Enter the rule ID `my_rule` and enter the rule in the SQL editor. Here we choose to store MQTT messages with `t/#` topic to AlloyDB, make sure that the fields selected by the rule (in the SELECT section) contain all the variables used in the SQL template, here the rule SQL is as follows:
+3. ルールID に `my_rule` を入力し、SQL エディターにルールを入力します。ここではトピック `t/#` の MQTT メッセージを AlloyDB に保存するため、ルールの SELECT 部分で SQL テンプレートで使用するすべての変数を含むフィールドを選択してください。ルール SQL は以下の通りです：
 
    ```sql
    SELECT
@@ -149,21 +150,21 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は **SQL Examples** と **Enable Test** をクリックして SQL ルールを学習・テストできます。
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to AlloyDB.
+4. + **Add Action** ボタンをクリックして、ルールによってトリガーされるアクションを定義します。このアクションで EMQX はルールで処理したデータを AlloyDB に送信します。
 
-5. Select AlloyDB from the **Type of Action** drop-down, leave the **Action** drop-down at the default `Create Action` option, or you can select a previously created AlloyDB action from the Action drop-down box. This example will create a brand new Sink and add it to the rule.
+5. **Type of Action** ドロップダウンから AlloyDB を選択し、**Action** ドロップダウンはデフォルトの `Create Action` のままにするか、既存の AlloyDB アクションを選択します。この例では新規シンクを作成し、ルールに追加します。
 
-6. Enter the name and description of the Sink in the form below.
+6. シンクの名前と説明をフォームに入力します。
 
-7. From the **Connector** dropdown box, select the `my_alloydb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create an AlloyDB Connector](#create-an-alloydb-connector).
+7. **Connector** ドロップダウンから先に作成した `my_alloydb` を選択します。新規コネクターはドロップダウン横のボタンから作成可能です。設定パラメーターは[AlloyDB コネクター作成](#create-an-alloydb-connector)を参照してください。
 
-8. Configure the **SQL Template**. Use the SQL statements below to insert data.
+8. **SQL Template** を設定します。以下の SQL 文を使ってデータを挿入します。
 
-   Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   注意：これは[プリプロセス済み SQL](./data-bridges.md#prepared-statement)なので、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
    ```sql
    INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
@@ -176,27 +177,27 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    )
    ```
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**: For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. **高度な設定（任意）**：詳細は[シンクの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the AlloyDB instance.
+11. **Create** をクリックする前に、**Test Connectivity** をクリックしてシンクが AlloyDB インスタンスに接続できるかテストできます。
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. **Create** ボタンをクリックしてシンクの設定を完了します。新しいシンクが **Action Outputs** に追加されます。
 
-13. On the **Create Rule** page, verify the configured information and click the **Save** button to generate the rule.
+13. **Create Rule** ページで設定内容を確認し、**Save** ボタンをクリックしてルールを生成します。
 
-Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created AlloyDB Sink in the **Action (Sink)** tab.
+ルールが正常に作成されたら、**Integration** -> **Rules** ページで新規ルールを確認でき、**Action (Sink)** タブで新規 AlloyDB シンクも表示されます。
 
-You can also click **Integration** -> **Flow Designer** to see the topology, through which you can visualize that the messages under topic `t/#` are being written to AlloyDB after being parsed by the rule `my_rule`.
+また、**Integration** -> **Flow Designer** を開くとトポロジーが可視化され、トピック `t/#` のメッセージがルール `my_rule` によって解析され、AlloyDB に書き込まれている様子を確認できます。
 
-## Create a Rule with AlloyDB for Events Recording
+## イベント記録用 AlloyDB シンクを使ったルール作成
 
-This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the AlloyDB table `emqx_client_events` via a configured Sink.
+この節では、クライアントのオンライン／オフライン状態を記録し、イベントデータを AlloyDB のテーブル `emqx_client_events` に保存するルールの作成方法を示します。
 
-The steps are similar to those in [Create a Rule with AlloyDB Sink for Message Storage](#create-a-rule-with-alloydb-sink-for-message-storage) except for the SQL template and SQL rules.
+手順は[メッセージ保存用 AlloyDB シンクを使ったルール作成](#create-a-rule-with-alloydb-sink-for-message-storage)とほぼ同様で、SQL テンプレートと SQL ルールのみ異なります。
 
-The SQL rule statement for online/offline status recording is as follows.
+オンライン／オフライン状態記録用の SQL ルール文は以下の通りです。
 
 ```sql
 SELECT
@@ -205,9 +206,9 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-The SQL template for events recording is as follows.
+イベント記録用の SQL テンプレートは以下の通りです。
 
-Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+注意：これは[プリプロセス済み SQL](./data-bridges.md#prepared-statement)なので、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -217,17 +218,17 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-## Test the Rules
+## ルールのテスト
 
-Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
+MQTTX を使ってトピック `t/1` にメッセージを送信し、オンライン／オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello AlloyDB" }'
 ```
 
-Check the running status of the two sinks. For the message storage Sink, there should be one new incoming and one new outgoing message. For the events recording Sink, there are two event records.
+2つのシンクの稼働状況を確認します。メッセージ保存用シンクでは新規の受信メッセージ1件と送信メッセージ1件があるはずです。イベント記録用シンクでは2件のイベントレコードがあります。
 
-Check whether the data is written into the `t_mqtt_msg` data table.
+`t_mqtt_msg` データテーブルにデータが書き込まれているか確認します。
 
 ```bash
 emqx_data=# select * from t_mqtt_msg;
@@ -239,7 +240,7 @@ emqx_data=# select * from t_mqtt_msg;
 
 ```
 
-Check whether the data is written into the `emqx_client_events` table.
+`emqx_client_events` テーブルにデータが書き込まれているか確認します。
 
 ```bash
 emqx_data=# select * from emqx_client_events;

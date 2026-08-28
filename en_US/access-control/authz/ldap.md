@@ -149,6 +149,8 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
    - **Username** Specify the LDAP root user name.
    - **Password** Specify the LDAP root user password.
 
+   **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS.
 
    **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
@@ -176,6 +178,8 @@ You can use EMQX Dashboard to configure how to use LDAP for user authorization.
 You can configure the EMQX LDAP authorizer with EMQX configuration items.
 
 The LDAP authorizer is identified by type `ldap`.
+
+The optional `precondition` configuration item accepts a Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
 Sample configuration:
 
