@@ -113,7 +113,7 @@ AlloyDB シンクを追加する前に、EMQX で AlloyDB コネクターを作�
    - **Database Name**：EMQX がデータを書き込む AlloyDB 内の対象データベース名（例：`emqx_data`）
    - **Username**：認証および識別に使用する AlloyDB のデータベースユーザー名（例：`emqx_user`）
    - **Password**：`emqx_user` のパスワード
-   - **Enable TLS**：暗号化接続を確立する場合はトグルをオンにします。TLS 接続の詳細は[外部リソースアクセスの TLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - **Enable TLS**：暗号化接続を確立する場合はトグルをオンにします。TLS 接続の詳細は[外部リソースアクセスの TLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 
 6. 高度な設定（任意）：接続プールサイズ、アイドルタイムアウト、リクエストタイムアウトなどの追加接続プロパティを設定可能です。
 

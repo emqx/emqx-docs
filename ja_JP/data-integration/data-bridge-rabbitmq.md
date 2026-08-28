@@ -111,7 +111,7 @@ RabbitMQ管理Webインターフェースを使って、RabbitMQメッセージ�
    - **Username**：`guest`
    - **Password**：`guest`
    - **Virtual Host**：RabbitMQの仮想ホスト。デフォルトは`/`。
-   - 暗号化接続を行う場合は**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - 暗号化接続を行う場合は**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 
 6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがRabbitMQサーバーに接続できるかテストできます。
 7. 画面下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択可能です。**Create Rule**をクリックすると以下の選択肢があります：

@@ -120,7 +120,7 @@ Amazon Redshift Serverless を使用している場合、コネクターが作�
    - **Database Name**：EMQX データを格納するターゲットデータベース。例：`emqx_data`
    - **Username**：データ挿入権限を持つデータベースユーザー名。例：`emqx_user`
    - **Password**：`emqx_user` のパスワード
-   - **Enable TLS**：Redshift 接続に SSL/TLS 暗号化が必要な場合はオンにします（クラウドサービス接続では推奨）。詳細は[外部リソースアクセスの TLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - **Enable TLS**：Redshift 接続に SSL/TLS 暗号化が必要な場合はオンにします（クラウドサービス接続では推奨）。詳細は[外部リソースアクセスの TLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 6. 詳細設定（任意）：接続プールサイズ、アイドルタイムアウト、リクエストタイムアウトなどの追加接続プロパティを設定可能です。詳細は[シンクの機能](./data-bridges.md#features-of-sink)を参照してください。
 7. **Test Connectivity** をクリックし、EMQX が指定設定で Redshift クラスターに正常に接続できるか確認します。
 8. **Create** をクリックしてコネクターを保存します。

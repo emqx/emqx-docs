@@ -75,7 +75,7 @@ docker exec -it pulsar bin/pulsar-admin topics create-partitioned-topic persiste
    - Pulsarサーバーへの接続およびメッセージ書き込みに関する情報を設定します：
      - **Servers**：`pulsar://localhost:6650`を入力します。リモート環境の場合は適宜変更してください。
      - **Authentication**：認証方式を選択します。`none`、`Basic auth`、`token`があります。`Basic auth`の場合、EMQXは`Username`と`Password`を`:`で結合して認証文字列を作成します。
-     - **Enable TLS**：暗号化接続を確立したい場合はトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+     - **Enable TLS**：暗号化接続を確立したい場合はトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 5. 高度な設定（任意）：[高度な設定](#advanced-configurations)を参照してください。
 6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがPulsarサーバーに接続できるかテストできます。
 7. ページ下部の**Create**ボタンをクリックしてコネクターを作成します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成を続行できます。詳細は[Create a Rule with Pulsar Sink](#create-a-rule-with-pulsar-sink)を参照してください。

@@ -108,7 +108,7 @@ CockroachDBシンクを追加する前に、EMQXでCockroachDBコネクターを
    - **Database Name**：EMQXがデータを保存する対象データベース名。本例では`emqx_data`。
    - **Username**：CockroachDBの認証および識別に使用するSQLユーザー名。本例では`emqx_user`。
    - **Password**：`emqx_user`のパスワード。
-   - **Enable TLS**：暗号化接続を確立する場合はトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - **Enable TLS**：暗号化接続を確立する場合はトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 6. 高度な設定（任意）：接続プールサイズ、アイドルタイムアウト、リクエストタイムアウトなどの追加接続プロパティを設定できます。詳細は[シンクの機能](./data-bridges.md#features-of-sink)を参照してください。
 7. **Test Connectivity**をクリックし、EMQXが指定した設定でCockroachDBクラスターに正常に接続できるか確認します。
 8. **Create**をクリックしてコネクターを保存します。

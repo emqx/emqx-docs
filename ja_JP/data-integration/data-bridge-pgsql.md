@@ -113,7 +113,7 @@ PostgreSQLシンクを追加する前に、PostgreSQLコネクターを作成す
    - **Database Name**：`emqx_data` を入力します。
    - **Username**：`postgres` を入力します。
    - **Password**：`public` を入力します。
-   - **Enable TLS**：暗号化接続を確立したい場合はトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - **Enable TLS**：暗号化接続を確立したい場合はトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 6. 詳細設定（任意）：詳細は[シンクの特長](./data-bridges.md#features-of-sink)を参照してください。
 7. **Create**をクリックする前に、**Test Connectivity** をクリックしてコネクターがPostgreSQLサーバーに接続できるかテストできます。
 8. ページ下部の **Create** ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックしてシンク付きのルール作成を続行できます。ルール作成の詳細は[メッセージ保存用PostgreSQLシンク付きルールの作成](#create-a-rule-with-postgresql-sink-for-message-storage)および[イベント記録用PostgreSQLシンク付きルールの作成](#create-a-rule-with-postgresql-for-events-recording)を参照してください。
