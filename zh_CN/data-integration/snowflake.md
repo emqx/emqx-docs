@@ -350,7 +350,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
 
-6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
+6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
 
@@ -383,7 +383,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
 
-6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
+6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
 
