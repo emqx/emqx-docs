@@ -23,6 +23,8 @@ EMQX 支持向 Prometheus 暴露运行指标，用于查询、告警和可视化
 
 <img src="./assets/config_pushgateway.png" alt="Prometheus 集成设置" style="zoom: 67%;" />
 
+如需查看下方端点所暴露的指标精选参考（包括建议告警的指标），请参见 [Broker 健康指标](./broker-health-indicators.md)。
+
 ### 要求抓取请求进行身份认证
 
 **启用基本认证**控制 `/api/v5/prometheus/*` 下所有 Prometheus 抓取 API 的身份认证。虽然 Dashboard 中的名称是“启用基本认证”，但该选项同时控制 HTTP Basic 认证和 Bearer 认证。

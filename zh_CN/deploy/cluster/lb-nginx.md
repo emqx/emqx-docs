@@ -305,11 +305,15 @@ http {
       proxy_set_header Host $host;            
       proxy_set_header X-Real-IP $remote_addr;            
       proxy_set_header REMOTE-HOST $remote_addr;            
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-For $remote_addr;
     }
   }
 }
 ```
+
+::: tip
+WebSocket 示例使用 `$remote_addr` 覆盖 `X-Forwarded-For`，因为 EMQX 使用该请求头作为客户端源地址时，会读取该请求头中第一个（最左侧的）条目。此时不要使用 `$proxy_add_x_forwarded_for`：它会将 `$remote_addr` 追加到入站请求中已有的 `X-Forwarded-For` 请求头之后，使客户端提供的、可伪造的值仍位于最左侧。更多信息，参见 [WebSocket 监听器的转发客户端地址](../../configuration/listener.md#websocket-监听器的转发客户端地址)。
+:::
 
 ### 配置反向代理 MQTT WebSocket SSL
 
@@ -349,7 +353,7 @@ http {
         proxy_set_header Host $host;            
         proxy_set_header X-Real-IP $remote_addr;            
         proxy_set_header REMOTE-HOST $remote_addr;            
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;      
+        proxy_set_header X-Forwarded-For $remote_addr;
         
         # 禁用缓存             
         proxy_buffering off;

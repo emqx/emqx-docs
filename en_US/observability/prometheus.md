@@ -23,6 +23,8 @@ To open the Prometheus integration settings:
 
 <img src="./assets/enable-push-gateway.png" alt="Prometheus integration settings" style="zoom: 67%;" />
 
+For a curated reference of the metric series exposed on the endpoints below (including the ones worth alerting on), see [Broker Health Indicators](./broker-health-indicators.md).
+
 ### Require Authentication for Scrape Requests
 
 **Enable Basic Auth** controls authentication for all Prometheus scrape APIs under `/api/v5/prometheus/*`. Despite the Dashboard label, this setting controls both HTTP Basic and Bearer authentication.

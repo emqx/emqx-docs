@@ -203,7 +203,7 @@ Administrators can manage and monitor durable storage status across the cluster 
 
 ## Hardware Requirements for Durable Sessions
 
-When session durability is enabled, EMQX saves the metadata of durable sessions and MQTT messages sent to the durable sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. To achieve the best throughput, it is recommended to use Solid State Drive (SSD) storage.
+When session durability is enabled, EMQX saves the metadata of durable sessions and MQTT messages sent to the durable sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. The EMQX data directory must use a local filesystem because [embedded Durable Storage backends](../design/durable-storage.md#embedded-backends) do not support network filesystems such as NFS and SMB/CIFS. For best throughput, use solid-state drive (SSD) storage.
 
 The disk space requirements can be estimated according to the following guidelines:
 

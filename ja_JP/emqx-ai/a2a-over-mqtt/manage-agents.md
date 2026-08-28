@@ -1,27 +1,27 @@
-# Manage Agents
+# エージェントの管理
 
-This page describes how to enable the A2A Registry and how to register, view, and remove agents using the Dashboard UI, the CLI, or MQTT.
+このページでは、A2Aレジストリの有効化方法と、ダッシュボードUI、CLI、またはMQTTを使用してエージェントを登録、表示、削除する方法について説明します。
 
-## Prerequisites
+## 前提条件
 
-- EMQX 6.2.0 or later.
-- Administrator access to the Dashboard or the EMQX node.
+- EMQX 6.2.0以降。
+- ダッシュボードまたはEMQXノードへの管理者アクセス権。
 
-## Enable the A2A Registry
+## A2Aレジストリの有効化
 
-The A2A Registry is disabled by default. Enable it before registering any agents.
+A2Aレジストリはデフォルトで無効になっています。エージェントを登録する前に有効化してください。
 
-### Via the Dashboard
+### ダッシュボード経由
 
-1. In the left navigation panel, click **A2A Registry**.
-2. Click **Settings**.
-3. Toggle **Enable A2A Registry** to on.
-4. **Validate Schema** is enabled by default. When enabled, EMQX validates Agent Card payloads against the A2A schema on registration and rejects non-conforming cards. Disable it only if you need to accept cards that deviate from the schema.
-5. Click **Save Changes**.
+1. 左のナビゲーションパネルで **A2A Registry** をクリックします。
+2. **Settings** をクリックします。
+3. **Enable A2A Registry** をオンに切り替えます。
+4. **Validate Schema** はデフォルトで有効です。有効の場合、EMQXは登録時にAgent CardのペイロードをA2Aスキーマに対して検証し、スキーマに準拠しないカードは拒否します。スキーマから逸脱したカードを受け入れる必要がある場合のみ無効にしてください。
+5. **Save Changes** をクリックします。
 
-### Via Configuration File
+### 設定ファイル経由
 
-Add the following to your `emqx.conf`:
+`emqx.conf` に以下を追加します。
 
 ```hocon
 a2a_registry {
@@ -30,67 +30,67 @@ a2a_registry {
 }
 ```
 
-Full configuration options:
+設定項目の詳細：
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |---|---|---|---|
-| `enable` | Boolean | `false` | Enables the A2A Registry. |
-| `validate_schema` | Boolean | `true` | Validates Agent Card payloads against the A2A schema on registration. Invalid cards are rejected. |
-| `max_card_size` | Integer | `65536` | Maximum Agent Card payload size in bytes. |
-| `registration_rate_limit` | Integer | `10` | Maximum registration updates per minute per agent. |
-| `require_security_metadata` | Boolean | `false` | When enabled, requires Agent Cards to include a `jwksUri` in their security metadata extension. |
-| `trusted_jkus` | Array | `[]` | If non-empty, the `jwksUri` in any Agent Card must match one of the listed prefixes. An empty list disables JKU enforcement (permissive mode). |
-| `verify_jku_tls` | Boolean | `true` | Validates TLS certificates when fetching JWKS endpoints. |
+| `enable` | Boolean | `false` | A2Aレジストリを有効にします。 |
+| `validate_schema` | Boolean | `true` | 登録時にAgent CardのペイロードをA2Aスキーマに対して検証します。無効なカードは拒否されます。 |
+| `max_card_size` | Integer | `65536` | Agent Cardペイロードの最大サイズ（バイト単位）。 |
+| `registration_rate_limit` | Integer | `10` | 1分あたりのエージェントごとの登録更新の最大数。 |
+| `require_security_metadata` | Boolean | `false` | 有効にすると、Agent Cardのセキュリティメタデータ拡張に `jwksUri` を含める必要があります。 |
+| `trusted_jkus` | 配列 | `[]` | 空でない場合、Agent Card内の `jwksUri` はリスト内のいずれかのプレフィックスと一致する必要があります。空リストはJKU検証を無効化（寛容モード）します。 |
+| `verify_jku_tls` | Boolean | `true` | JWKSエンドポイント取得時にTLS証明書を検証します。 |
 
-## Register an Agent
+## エージェントの登録
 
-An agent registers itself by publishing its Agent Card to the A2A Registry, making it discoverable by other agents. You can register an agent through the Dashboard, via MQTT, or using the CLI.
+エージェントは自身のAgent CardをA2Aレジストリにパブリッシュして登録し、他のエージェントから検出可能にします。登録はダッシュボード、MQTT、またはCLIで行えます。
 
-### Via the Dashboard
+### ダッシュボード経由
 
-1. Click **A2A Registry** -> **+ Register Agent**.
-2. Fill in the identity fields:
+1. **A2A Registry** → **+ Register Agent** をクリックします。
+2. 識別情報を入力します：
 
-   - **Organization ID**: The organization or trust domain the agent belongs to, for example, `com.example`. Use reverse-DNS notation for uniqueness across deployments.
-   - **Unit ID**: A subdivision within the organization, such as a business unit or deployment environment, for example, `factory-a`.
-   - **Agent ID**: A unique identifier for this agent within the organization and unit, for example, `iot-ops-agent-001`.
+   - **Organization ID**：エージェントが所属する組織またはトラストドメイン。例：`com.example`。展開間での一意性を保つためにリバースDNS表記を使用します。
+   - **Unit ID**：組織内の区分（事業部門や展開環境など）。例：`factory-a`。
+   - **Agent ID**：組織およびユニット内で一意のエージェント識別子。例：`iot-ops-agent-001`。
 
-   All three values must contain only alphanumeric characters, hyphens, underscores, or periods (`^[A-Za-z0-9._-]+$`), and must not contain `/`, `+`, `#`, or whitespace. Together they form the agent's full address: `{org_id}/{unit_id}/{agent_id}`.
+   これら3つの値は英数字、ハイフン、アンダースコア、ピリオド（`^[A-Za-z0-9._-]+$`）のみを含み、`/`、`+`、`#`、空白は含められません。これらはエージェントの完全なアドレス `{org_id}/{unit_id}/{agent_id}` を構成します。
 
-3. Paste the Agent Card JSON into the editor. Click the **Help** button to see the required fields and a template.
-4. Click **Register Agent**.
+3. Agent CardのJSONをエディターに貼り付けます。必要なフィールドやテンプレートは **Help** ボタンで確認できます。
+4. **Register Agent** をクリックします。
 
-### Via MQTTX
+### MQTTX経由
 
-Agents register by publishing their Agent Card as a retained message to their discovery topic. The requirements are:
+エージェントは自身のAgent Cardを保持メッセージとしてディスカバリートピックにパブリッシュして登録します。要件は以下の通りです：
 
-- MQTT protocol version 5.
-- Client ID set to `{org_id}/{unit_id}/{agent_id}`.
-- Retain flag enabled, QoS 1.
-- Payload: Agent Card JSON with at least `name`, `description`, `version`, `url`, and `skills`.
+- MQTTプロトコルバージョン5。
+- クライアントIDは `{org_id}/{unit_id}/{agent_id}` に設定。
+- Retainフラグ有効、QoS 1。
+- ペイロードは `name`、`description`、`version`、`url`、`skills` を含むAgent CardのJSON。
 
-**Use MQTTX Desktop:**
+**[MQTTX Desktop](https://mqttx.app/downloads) を使用する場合：**
 
-1. Open MQTTX and click **New Connection**.
+1. MQTTXを開き、**New Connection** をクリックします。
 
-2. Fill in the connection details:
-   - **Name**: Name of the connection, for example, `IoT Operations Agent`
-   - **Host**: Your EMQX broker address.
-   - **Port**: `1883` (or the appropriate port).
-   - **Client ID**: Set to `com.example/factory-a/iot-ops-agent-001`.
-   - **MQTT Version**: `5.0`.
+2. 接続情報を入力します：
+   - **Name**：接続名（例：`IoT Operations Agent`）
+   - **Host**：EMQXブローカーのアドレス
+   - **Port**：`1883`（または適切なポート）
+   - **Client ID**：`com.example/factory-a/iot-ops-agent-001`
+   - **MQTT Version**：`5.0`
    
    <img src="./assets/register_agent_mqttx_connection.png" alt="register_agent_mqttx_connection" style="zoom:67%;" />
    
-3. Click **Connect**.
+3. **Connect** をクリックします。
 
-4. In the message compose area at the bottom, fill in:
-   - **Topic**: `$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`
-   - **QoS**: `1`
-   - **Retain**: Enabled
-   - **Payload**: The Agent Card JSON (see example below).
+4. 下部のメッセージ作成エリアに以下を入力します：
+   - **Topic**：`$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`
+   - **QoS**：`1`
+   - **Retain**：有効
+   - **Payload**：Agent CardのJSON（以下の例を参照）
    
-5. Click the send button.
+5. 送信ボタンをクリックします。
 
 ```json
 {
@@ -110,7 +110,7 @@ Agents register by publishing their Agent Card as a retained message to their di
 
 <img src="./assets/register_agent_mqttx_send.png" alt="register_agent_mqttx_send" style="zoom:67%;" />
 
-**Use MQTTX CLI:**
+**[MQTTX CLI](https://mqttx.app/cli) を使用する場合：**
 
 ```bash
 mqttx pub \
@@ -122,15 +122,15 @@ mqttx pub \
   -q 1 -r
 ```
 
-If **Validate Schema** is enabled, EMQX validates the payload before recording it. An invalid card is rejected with a PUBACK reason code.
+**Validate Schema** が有効な場合、EMQXは登録前にペイロードを検証します。無効なカードはPUBACKの理由コードで拒否されます。
 
-### Via the CLI
+### CLI経由
 
 ```bash
 emqx ctl a2a-registry register <path-to-agent-card.json>
 ```
 
-The JSON file must contain the Agent Card fields as well as the identity fields used for routing:
+JSONファイルにはAgent Cardのフィールドとルーティングに使う識別情報を含める必要があります：
 
 ```json
 {
@@ -151,55 +151,55 @@ The JSON file must contain the Agent Card fields as well as the identity fields 
 }
 ```
 
-## View Registered Agents
+## 登録済みエージェントの表示
 
-You can browse and inspect registered agents through the Dashboard or query them using the CLI.
+登録済みエージェントはダッシュボードで閲覧・確認でき、CLIでクエリを実行することも可能です。
 
-### Via the Dashboard
+### ダッシュボード経由
 
-The **A2A Registry** page lists all registered agents. Each row has two action buttons: **Agent Card JSON** and **Delete**.
+**A2A Registry** ページに登録されたすべてのエージェントが一覧表示されます。各行には **Agent Card JSON** と **Delete** の2つの操作ボタンがあります。
 
-Use the **Organization ID**, **Unit ID**, and **Agent ID** filter fields at the top to narrow the list.
+上部の **Organization ID**、**Unit ID**、**Agent ID** のフィルターでリストを絞り込めます。
 
-Click **Agent Card JSON** on any row to view the full Agent Card as raw JSON with a copy button.
+任意の行の **Agent Card JSON** をクリックすると、Agent Cardの生JSONがコピー可能な状態で表示されます。
 
 ![view_agent_via_dashboard](./assets/view_agent_via_dashboard.png)
 
-### Via the CLI
+### CLI経由
 
 ```bash
-# List all agents
+# すべてのエージェントを一覧表示
 emqx ctl a2a-registry list
 
-# Filter by org and status
+# 組織とステータスでフィルター
 emqx ctl a2a-registry list --org com.example --status online
 
-# Get the full Agent Card for a specific agent
+# 特定エージェントのAgent Cardを取得
 emqx ctl a2a-registry get com.example factory-a iot-ops-agent-001
 
-# Show registry statistics
+# レジストリ統計を表示
 emqx ctl a2a-registry stats
 ```
 
-## Remove an Agent
+## エージェントの削除
 
-Removing an agent deregisters it from the A2A Registry and clears its retained Agent Card, making it no longer discoverable.
+エージェントを削除するとA2Aレジストリから登録が解除され、保持されたAgent Cardがクリアされるため、検出できなくなります。
 
-### Via the Dashboard
+### ダッシュボード経由
 
-In the agent list, click the delete action for the agent you want to remove. Confirm by typing the full `{org_id}/{unit_id}/{agent_id}` when prompted.
+エージェント一覧で削除したいエージェントの削除操作をクリックし、プロンプトで完全な `{org_id}/{unit_id}/{agent_id}` を入力して確認します。
 
-### Via MQTT
+### MQTT経由
 
-Publish an empty retained message to the agent's discovery topic. This clears the retained card and removes the agent from the registry.
+エージェントのディスカバリートピックに空の保持メッセージをパブリッシュします。これにより保持カードがクリアされ、レジストリからエージェントが削除されます。
 
-**Use MQTTX Desktop:**
+**MQTTX Desktopを使用する場合：**
 
-1. Connect using the agent's Client ID (`com.example/factory-a/iot-ops-agent-001`).
-2. Set the topic to `$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`, QoS `1`, **Retain** enabled, and leave the payload empty.
-3. Click the send button.
+1. エージェントのクライアントID（例：`com.example/factory-a/iot-ops-agent-001`）で接続します。
+2. トピックを `$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001`、QoS `1`、**Retain** 有効に設定し、ペイロードは空のままにします。
+3. 送信ボタンをクリックします。
 
-**Using MQTTX CLI:**
+**MQTTX CLIを使用する場合：**
 
 ```bash
 mqttx pub \
@@ -211,43 +211,43 @@ mqttx pub \
   -q 1 -r
 ```
 
-### Via the CLI
+### CLI経由
 
 ```bash
 emqx ctl a2a-registry delete com.example factory-a iot-ops-agent-001
 ```
 
-## Discover Agents via MQTT
+## MQTT経由でのエージェント検出
 
-Client agents subscribe to discovery topics using wildcards to find available agents. Because the cards are retained, they are delivered immediately on subscribe.
+クライアントエージェントはワイルドカードを使ったディスカバリートピックをサブスクライブして利用可能なエージェントを検出します。カードは保持メッセージなので、サブスクライブ直後に即座に配信されます。
 
-**Use MQTTX Desktop:**
+**MQTTX Desktopを使用する場合：**
 
-1. Connect to your EMQX broker.
-2. Click **+ New Subscription** and enter a wildcard topic, for example, `$a2a/v1/discovery/com.example/+/+` to discover all agents in an organization.
-3. Click **Confirm**. Retained Agent Cards appear in the message pane immediately.
+1. EMQXブローカーに接続します。
+2. **+ New Subscription** をクリックし、ワイルドカードトピックを入力します。例：`$a2a/v1/discovery/com.example/+/+`（組織内のすべてのエージェントを検出）。
+3. **Confirm** をクリックします。保持されたAgent Cardがメッセージペインに即座に表示されます。
 
-**Use MQTTX CLI:**
+**MQTTX CLIを使用する場合：**
 
 ```bash
-# All agents in an organization
+# 組織内のすべてのエージェント
 mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/+/+' -v
 
-# All agents in a specific unit
+# 特定ユニット内のすべてのエージェント
 mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/factory-a/+' -v
 
-# A specific agent
+# 特定エージェント
 mqttx sub -h localhost -p 1883 -V 5 -t '$a2a/v1/discovery/com.example/factory-a/iot-ops-agent-001' -v
 ```
 
-The `-v` flag prints the topic name before each received payload.
+`-v` フラグは受信したペイロードの前にトピック名を表示します。
 
-Each received message contains the Agent Card JSON as the payload. EMQX attaches the following MQTT v5 User Properties to indicate liveness:
+受信した各メッセージのペイロードにはAgent CardのJSONが含まれています。EMQXはMQTT v5のユーザープロパティとして以下を付与し、エージェントの生存状態を示します：
 
-| User Property | Value | Meaning |
+| ユーザープロパティ | 値 | 意味 |
 |---|---|---|
-| `a2a-status` | `online` | Agent is currently connected. |
-| `a2a-status` | `offline` | Agent has disconnected. |
-| `a2a-status-source` | `broker` | Status set by EMQX based on connection state. |
-| `a2a-status-source` | `agent` | Status published proactively by the agent itself (for example, graceful offline). |
-| `a2a-status-source` | `lwt` | Status reflects an ungraceful disconnect detected via Last Will and Testament. |
+| `a2a-status` | `online` | エージェントが現在接続中。 |
+| `a2a-status` | `offline` | エージェントが切断済み。 |
+| `a2a-status-source` | `broker` | EMQXが接続状態に基づいて設定したステータス。 |
+| `a2a-status-source` | `agent` | エージェント自身が積極的にパブリッシュしたステータス（例：正常なオフライン）。 |
+| `a2a-status-source` | `lwt` | Last Will and Testamentにより検出された異常切断を反映するステータス。 |

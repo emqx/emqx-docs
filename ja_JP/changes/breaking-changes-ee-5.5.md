@@ -1,10 +1,10 @@
-# EMQX 5.5 の非互換変更点
+# Incompatible Changes in EMQX 5.5
 
 ## e5.5.0
 
-- EMQX における MQTT データブリッジ管理をリファクタリングし、より柔軟かつ効率的な管理手法を提供するために分割しました。これまで `/bridges` API で管理されていた操作は、`/connectors`、`/actions`、および `/sources` の3つの別々の API に分割されました。この分割により、MQTT データブリッジの各コンポーネントをより細かく制御・管理できるようになり、システムの柔軟性と使いやすさが向上しています。
+- Refactored and divided the MQTT data bridge management in EMQX to offer a more flexible and efficient management approach. Operations previously managed through the `/bridges` API have now been split across three separate APIs: `/connectors`, `/actions`, and `/sources`. This division allows for more granular control and management of each component of the MQTT data bridge, enhancing system flexibility and usability.
 
-  旧バージョンからの設定については、[Bridge with Other MQTT Services](../data-integration/data-bridge-mqtt.md) の設定手順に従って手動で移行する必要があります。この移行作業には時間と労力がかかる場合がありますが、完了すれば新バージョンの改善点を活用できます。
+  For configurations from older versions, users must manually migrate by following the configuration instructions in [Bridge with Other MQTT Services](../data-integration/data-bridge-mqtt.md). This migration process may require some time and effort, but users can benefit from the enhancements brought by the new version once completed.
 
-- [#12283](https://github.com/emqx/emqx/pull/12283) GCP PubSub Producer コネクターの `resource_opts` 設定スキーマを修正し、関連するフィールドのみを含むようにしました。  
-  これにより、HOCON 設定（`connectors.gcp_pubsub_producer.*.resource_opts`）およびこのコネクタータイプに対する HTTP API の `POST /connectors` / `PUT /connectors/:id` による作成に影響があります。
+- [#12283](https://github.com/emqx/emqx/pull/12283) Fixed the `resource_opts` configuration schema for the GCP PubSub Producer connector so that it contains only relevant fields.
+  This affects the creation of GCP PubSub Producer connectors via HOCON configuration (`connectors.gcp_pubsub_producer.*.resource_opts`) and the HTTP APIs `POST /connectors` / `PUT /connectors/:id` for this particular connector type.

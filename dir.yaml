@@ -64,7 +64,7 @@
 
 - title_en: Installation and Deployment
   title_cn: 安装部署
-  title_ja: インストールとデプロイ
+  title_ja: インストールとデプロイメント
   path: deploy/install
   collapsed: true
   children:
@@ -111,88 +111,88 @@
                 - deploy/kubernetes/operator/upgrade-operator
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
-                  title_ja: 在阿里云中部署 EMQX
+                  title_ja: Alibaba Cloud 上での EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/alibaba-cloud
                 - title_en: 在华为云中部署 EMQX
                   title_cn: 在华为云中部署 EMQX
-                  title_ja: 在华为云中部署 EMQX
+                  title_ja: Huawei Cloud 上での EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/huawei-cloud
                 - title_en: 在腾讯云中部署 EMQX
                   title_cn: 在腾讯云中部署 EMQX
-                  title_ja: 在腾讯云中部署 EMQX
+                  title_ja: Tencent Cloud 上での EMQX デプロイ
                   lang: cn
                   path: deploy/kubernetes/operator/tencent-cloud
                 - title_en: Deploy EMQX on AWS
                   title_cn: 在 AWS 中部署 EMQX
-                  title_ja: Deploy EMQX on AWS
+                  title_ja: AWS 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/aws-eks
                 - title_en: Deploy EMQX on Google cloud
                   title_cn: 在 GCP 中部署 EMQX
-                  title_ja: Deploy EMQX on Google cloud
+                  title_ja: Google Cloud 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/gcp-gke
                 - title_en: Deploy EMQX on Azure
                   title_cn: 在 Azure 中部署 EMQX
-                  title_ja: Deploy EMQX on Azure
+                  title_ja: Azure 上での EMQX デプロイ
                   path: deploy/kubernetes/operator/azure-aks
                 - title_en: Manage EMQX Cluster
                   title_cn: 管理 EMQX 集群
-                  title_ja: Manage EMQX Cluster
+                  title_ja: EMQX クラスター管理
                   path: deploy/kubernetes/operator/tasks/overview
                   collapsed: true
                   children:
                     - title_en: Manage License
                       title_cn: 管理 License
-                      title_ja: Manage License
+                      title_ja: ライセンス管理
                       path: deploy/kubernetes/operator/tasks/configure-emqx-license
                     - title_en: Enable TLS for Listeners
                       title_cn: 为监听器启用 TLS
-                      title_ja: Enable TLS for Listeners
+                      title_ja: リスナーの TLS 有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
                     - title_en: Change EMQX Configuration
                       title_cn: 修改 EMQX 配置
-                      title_ja: Change EMQX Configuration
+                      title_ja: EMQX 設定変更
                       path: deploy/kubernetes/operator/tasks/configure-emqx-config
                     - title_en: Enable Core-Replicant Deployment
                       title_cn: 配置 Core-Replicant 集群
-                      title_ja: Enable Core-Replicant Deployment
+                      title_ja: Core-Replicant デプロイ有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
                     - title_en: Enable Persistence
                       title_cn: 开启持久化
-                      title_ja: Enable Persistence
+                      title_ja: 永続化有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
                     - title_en: Access EMQX Cluster through LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX 集群
-                      title_ja: Access EMQX Cluster through LoadBalancer
+                      title_ja: ロードバランサー経由で EMQX クラスターにアクセス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
                     - title_en: Perform Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
-                      title_ja: Perform Blue-Green Upgrade
+                      title_ja: ブルーグリーンアップグレード実施
                       path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
-                      title_ja: Collect EMQX Logs
+                      title_ja: EMQX ログ収集
                       path: deploy/kubernetes/operator/tasks/configure-emqx-log-collection
                     - title_en: Change EMQX Log Level
                       title_cn: 修改 EMQX 日志等级
-                      title_ja: Change EMQX Log Level
+                      title_ja: EMQX ログレベル変更
                       path: deploy/kubernetes/operator/tasks/configure-emqx-log-level
                     - title_en: Monitor EMQX Cluster
                       title_cn: 监控 EMQX 集群
-                      title_ja: Monitor EMQX Cluster
+                      title_ja: EMQX クラスター監視
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
                     - title_en: Rebalance Cluster Load
                       title_cn: 重新平衡集群负载
-                      title_ja: Rebalance Cluster Load
+                      title_ja: クラスター負荷の再バランス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
-                      title_ja: Deploy EMQX Cluster in k8s with Restricted Access
+                      title_ja: 制限付き k8s 環境での EMQX クラスター展開
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
                 - title_en: API Reference
                   title_cn: API Reference
-                  title_ja: API Reference
+                  title_ja: API リファレンス
                   path: deploy/kubernetes/operator/reference/overview
                   collapsed: true
                   children:
@@ -200,11 +200,11 @@
                     - deploy/kubernetes/operator/reference/v2beta1-reference
             - title_en: EMQX Helm Chart
               title_cn: EMQX Helm Chart
-              title_ja: EMQX Helm Chart
+              title_ja: EMQX Helm チャート
               path: deploy/kubernetes/chart
         - title_en: Work with License
           title_cn: 配置 License
-          title_ja: ライセンスの設定
+          title_ja: ライセンス設定
           path: deploy/license
         - title_en: Feature Gates
           title_cn: 功能门控
@@ -266,7 +266,10 @@
           title_ja: Kubernetes での EMQX アップグレード
           lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
-      # - deploy/hot-upgrades
+        - title_en: Hot Upgrade
+          title_cn: 版本热升级
+          title_ja: ホットアップグレード
+          path: deploy/hot-upgrades
   # - title_en: Migrate to Enterprise
   #   title_cn: 迁移到企业版
   #   path: deploy/migrate-to-enterprise
@@ -380,6 +383,9 @@
   path: access-control/security-guide
   collapsed: true
   children:
+    - title_en: Security Checklist
+      title_cn: 安全检查清单
+      path: access-control/security-checklist
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       title_ja: ネットワークと TLS
@@ -469,13 +475,14 @@
       children:
         - data-integration/schema-registry-example-avro
         - data-integration/schema-registry-example-protobuf
+        - data-integration/schema-registry-example-json
         - data-integration/schema-registry-example-external-http
         - data-integration/sparkplug
     - data-integration/schema-validation
     - data-integration/message-transformation
 - title_en: Flow Designer
   title_cn: Flow 设计器
-  title_ja: Flow デザイナー
+  title_ja: Flowデザイナー
   path: flow-designer/introduction
   collapsed: true
   children:
@@ -600,6 +607,11 @@
       title_ja: EMQX Tables
       path: data-integration/emqx-tables
       lang: en
+    - title_en: EMQX Tables
+      title_cn: EMQX Tables
+      title_ja: EMQX Tables
+      path: data-integration/emqx-tables
+      lang: ja
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       title_ja: GCP PubSub
@@ -739,6 +751,10 @@
           title_cn: License
           title_ja: ライセンス
           path: configuration/license
+        - title_en: Load Secrets from a File
+          title_cn: 从文件加载 Secret
+          title_ja: ファイルからシークレットを読み込む
+          path: configuration/secret-from-file
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
       title_ja: EMQX エンタープライズ設定マニュアル
@@ -856,8 +872,15 @@
         - observability/slow-subscribers-statistics
         - observability/tracer
         - observability/mqtt-system-topics
-        - observability/prometheus
+        - title_en: Integrate with Prometheus
+          title_cn: 集成 Prometheus
+          title_ja: Prometheus との統合
+          path: observability/prometheus
+          collapsed: true
+          children:
+            - observability/broker-health-indicators
         - observability/datadog
+        - observability/mria-alarms
         - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
           title_ja: OpenTelemetry との統合
@@ -902,9 +925,15 @@
           path: extensions/plugin-catalog
           collapsed: true
           children:
-            - extensions/plugin-catalog/emqx-bridge-mqtt-dq
-            - extensions/plugin-catalog/emqx-unsgov
-            - extensions/plugin-catalog/emqx-username-quota
+            - extensions/plugin-catalog/6.1/emqx-acme
+            - extensions/plugin-catalog/6.1/emqx-relup
+            - extensions/plugin-catalog/6.1/emqx-backup-sync
+            - extensions/plugin-catalog/6.1/emqx-bridge-mqtt-dq
+            - extensions/plugin-catalog/6.1/emqx-maptabs
+            - extensions/plugin-catalog/6.1/emqx-offline-messages
+            - extensions/plugin-catalog/6.1/emqx-sync-request
+            - extensions/plugin-catalog/6.1/emqx-username-quota
+            - extensions/plugin-catalog/6.1/emqx-unsgov
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ
@@ -928,7 +957,7 @@
           path: subscription-filter/subscription-filter-get-started
     - title_en: Message Queue
       title_cn: 消息队列
-      title_ja: Message Queue
+      title_ja: メッセージキュー
       path: message-queue/message-queue-concept
       collapsed: true
       children:
@@ -942,7 +971,7 @@
           path: message-queue/message-queue-quick-start
     - title_en: MQTT Streams
       title_cn: MQTT 消息流
-      title_ja: MQTT Streams
+      title_ja: MQTT ストリーム
       path: mqtt-stream/mqtt-stream-concept
       collapsed: true
       children:
@@ -981,6 +1010,10 @@
           title_cn: 快速开始
           title_ja: クイックスタート
           path: cluster-linking/quick-start
+        - title_en: Security
+          title_cn: 安全设置
+          title_ja: セキュリティ
+          path: cluster-linking/security
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       title_ja: MQTT ベースのファイル転送
@@ -1055,12 +1088,12 @@
       children:
         - title_en: Architecture
           title_cn: 架构
-          title_ja: Architecture
+          title_ja: アーキテクチャ
           path: emqx-ai/mcp-over-mqtt/architecture
         - emqx-ai/mcp-over-mqtt/specification
         - title_en: SDKs
           title_cn: SDKs
-          title_ja: SDKs
+          title_ja: SDK
           collapsed: true
           children:
             - emqx-ai/sdks/mcp-sdk-erlang
@@ -1077,7 +1110,7 @@
       children:
         - title_en: Quick Start
           title_cn: 快速开始
-          title_ja: Quick Start
+          title_ja: クイックスタート
           path: emqx-ai/mcp-bridge/quick-start
     - title_en: Realtime Audio & Video AI
       title_cn: 实时音视频 AI
@@ -1105,15 +1138,15 @@
                   children:
                     - title_en: Pure Voice Conversation
                       title_cn: 纯语音对话
-                      title_ja: Pure Voice Conversation
+                      title_ja: ピュアボイス会話
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-chat
                     - title_en: Voice-Controlled Hardware
                       title_cn: 语音控制硬件
-                      title_ja: Voice-Controlled Hardware
+                      title_ja: 音声制御ハードウェア
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-control-hardware
                     - title_en: Device-Initiated Voice Feedback
                       title_cn: 设备感知语音反馈
-                      title_ja: Device_Initiated Voice Feedback
+                      title_ja: デバイス起動音声フィードバック
                       path: emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
             - title_en: GPT-Realtime
               title_cn: GPT-Realtime
@@ -1123,7 +1156,7 @@
               children:
                 - title_en: Build Real-Time Voice Agent
                   title_cn: 构建实时语音智能体
-                  title_ja: Build Real-Time Voice Agent
+                  title_ja: リアルタイム音声エージェント構築
                   path: emqx-ai/rtc-services/gpt-realtime/quick-start
             # - title_en: EMQX Multimedia Server
             #   title_cn: EMQX 多媒体服务器
@@ -1225,11 +1258,26 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
-          title_ja: MQTT Basics
+          title_ja: MQTT 基礎
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
-          title_ja: MQTT Advanced
+          title_ja: MQTT 応用
+          path: design/mqtt-advanced
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: design/mqtt-guide
+      collapsed: true
+      children:
+        - title_en: MQTT Basics
+          title_cn: MQTT Basics
+          title_ja: MQTT 基礎
+          path: design/mqtt-basics
+        - title_en: MQTT Advanced
+          title_cn: MQTT Advanced
+          title_ja: MQTT 応用
           path: design/mqtt-advanced
     - title_en: MQTT 教程
       title_cn: MQTT 教程
@@ -1244,13 +1292,13 @@
       children:
         - title_en: EMQX Clustering
           title_cn: EMQX 集群
-          title_ja: EMQX Clustering
+          title_ja: EMQX クラスター
           path: design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
         - title_en: Durable Storage
           title_cn: 持久存储
-          title_ja: Durable Storage
+          title_ja: 永続ストレージ
           path: design/durable-storage
       # - design/design
       # - title_en: SDK & Tools
@@ -1310,16 +1358,16 @@
   path: changes/all-changes-ee
   children:
     - title_en: Version 6
-      title_cn: v6 版本
-      title_ja: Version 6
+      title_cn: V6 版本
+      title_ja: バージョン 6
       path: changes/changes-ee-v6
     - title_en: Version 5
-      title_cn: v5 版本
-      title_ja: Version 5
+      title_cn: V5 版本
+      title_ja: バージョン 5
       path: changes/changes-ee-v5
     - title_en: Version 4
-      title_cn: v4 版本
-      title_ja: Version 4
+      title_cn: V4 版本
+      title_ja: バージョン 4
       path: changes/changes-ee-v4
     - title_en: Known Issues
       title_cn: 已知问题
@@ -1334,6 +1382,10 @@
           title_cn: EMQX 6.0
           title_ja: EMQX 6.0
           path: changes/known-issues-6.0
+        - title_en: EMQX 5.10
+          title_cn: EMQX 5.10
+          title_ja: EMQX 5.10
+          path: changes/known-issues-5.10
         - title_en: EMQX 5.9
           title_cn: EMQX 5.9
           title_ja: EMQX 5.9
@@ -1395,7 +1447,10 @@
           title_cn: EMQX 5.4
           title_ja: EMQX 5.4
           path: changes/breaking-changes-ee-5.4
-    - changes/breaking-changes-6.0.0
+    - title_en: Incompatible Changes from EMQX 5.x to EMQX 6.0
+      title_cn: 从 EMQX 5.x 到 EMQX 6.0 的不兼容变更
+      title_ja: EMQX 5.x から EMQX 6.0 への非互換変更
+      path: changes/breaking-changes-6.0.0
     - title_en: Incompatible Changes from EMQX 4.4 to EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
