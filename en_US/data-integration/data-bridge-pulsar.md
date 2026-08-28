@@ -75,7 +75,7 @@ The following steps assume that you run both EMQX and Pulsar on the local machin
    - Configure the information for connecting to the Pulsar server and message writing:
      - **Servers**: Enter `pulsar://localhost:6650` for the **Servers**. If you have Pulsar and EMQX running remotely, adjust the settings accordingly.
      - **Authentication**: Select the authentication method: `none`, `Basic auth`, or `token`. For `Basic auth`, EMQX joins `Username` and `Password` with `:` to make the authentication string.
-     - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+     - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 5. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Pulsar server.
 7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Pulsar. For detailed steps, see [Create a Rule with Pulsar Sink](#create-a-rule-with-pulsar-sink).

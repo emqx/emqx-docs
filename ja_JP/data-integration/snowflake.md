@@ -406,7 +406,7 @@ Snowflake Sinkで集約アップロードモードを使う場合、Snowflake環
 
      - **Proxy Port**：プロキシサーバーのポート番号
 
-6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
+6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
 
 7. 詳細設定（任意）：[詳細設定](#advanced-settings)を参照。
 
@@ -446,7 +446,7 @@ Snowflake Sinkでストリーミングアップロードモードを使う場合
 
      - **Proxy Port**：プロキシサーバーのポート番号
 
-6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
+6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
 
 7. 詳細設定（任意）：[詳細設定](#advanced-settings)を参照。
 

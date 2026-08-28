@@ -114,7 +114,7 @@ Before adding an AlloyDB Sink, create an AlloyDB Connector in EMQX. The connecto
    - **Database Name**: The name of the target database in AlloyDB where EMQX will write data. In this example, it is `emqx_data`.
    - **Username**: The database username in AlloyDB used for authentication and identification. In this example, it is `emqx_user`.
    - **Password**: The password for `emqx_user`.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 
 6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout.
 

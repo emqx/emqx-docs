@@ -79,7 +79,7 @@ OK
    - **Password**：`public`を入力します。  
    - **Database ID**：`0`を入力します。  
    - その他のオプションはビジネスニーズに応じて設定してください。  
-   - 暗号化接続を確立したい場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+   - 暗号化接続を確立したい場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 8. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがRedisサーバーに接続できるかテストできます。
 9. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成に進めます。詳細は[ルールとRedis Sinkの作成](#create-a-rule-and-redis-sink)を参照してください。
 
