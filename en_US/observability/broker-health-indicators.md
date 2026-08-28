@@ -13,7 +13,9 @@ All metrics are exposed on the EMQX Prometheus endpoints (`/api/v5/prometheus/st
 
 ::: tip Note on collector defaults
 
-The metrics prefixed `emqx_` are always on. The richer Erlang VM metrics prefixed `erlang_vm_` come from the upstream Prometheus Erlang exporter and are **disabled by default** in EMQX 6.0 and newer. To enable process counts, per-allocator memory, or GC and scheduler breakdowns, set `prometheus.collectors.vm_system_info`, `vm_memory`, and `vm_statistics` to `enabled`.
+EMQX-native metrics do not depend on the upstream Erlang VM collectors. In EMQX 6.3, the `vm_dist`, `vm_statistics`, `vm_system_info`, and `vm_memory` fields under `prometheus.collectors` default to `enabled`. The `mnesia` and `vm_msacc` fields default to `disabled`.
+
+Legacy flat collector fields, such as `prometheus.vm_statistics_collector`, retain their legacy default of `disabled`. Explicit collector settings take precedence over these defaults.
 
 :::
 
@@ -30,16 +32,16 @@ The signals closest to the hardware layer. When the broker is unhealthy, one of 
 
 ### Memory
 
+Metrics with the `erlang_vm_memory_` prefix require `prometheus.collectors.vm_memory` to be `enabled`.
+
 | Metric | Description |
 |--------|-------------|
 | `emqx_vm_total_memory` | Total system memory (bytes). |
 | `emqx_vm_used_memory` | Used system memory (bytes). |
-| `erlang_vm_memory_processes` | Per-allocator memory: processes (requires the `vm_memory` collector enabled). |
-| `erlang_vm_memory_atom` | Per-allocator memory: atoms. |
-| `erlang_vm_memory_binary` | Per-allocator memory: binaries. |
-| `erlang_vm_memory_ets` | Per-allocator memory: ETS tables. |
-| `erlang_vm_memory_code` | Per-allocator memory: loaded code. |
-| `erlang_vm_memory_system` | Per-allocator memory: system overhead. |
+| `erlang_vm_memory_bytes` | Total memory allocated by the Erlang VM, with `kind="system"` or `kind="processes"`. |
+| `erlang_vm_memory_processes_bytes` | Memory allocated for Erlang processes, with `usage="used"` or `usage="free"`. |
+| `erlang_vm_memory_system_bytes` | System memory by usage, including atoms, binaries, loaded code, ETS tables, and other overhead. |
+| `erlang_vm_memory_atom_bytes` | Memory allocated for atoms, with `usage="used"` or `usage="free"`. |
 
 ### File Descriptors
 
@@ -52,8 +54,7 @@ The signals closest to the hardware layer. When the broker is unhealthy, one of 
 | Metric | Description |
 |--------|-------------|
 | `emqx_vm_run_queue` | Current scheduler run queue length. A sustained non-zero value indicates CPU saturation. |
-| `emqx_vm_process_messages_in_queues` | Sum of all Erlang process mailbox lengths. Large or growing values mean a process is unable to keep up with incoming work. |
-| `erlang_vm_process_count` | Current Erlang process count (requires the `vm_system_info` collector enabled). |
+| `erlang_vm_processes` | Current Erlang process count (requires the `vm_system_info` collector enabled). |
 | `erlang_vm_process_limit` | Configured maximum Erlang processes. |
 
 ### Internal Mailbox Watchdogs
@@ -401,6 +402,31 @@ If only a handful of series can fit on a Grafana dashboard, these are the ones t
 - `rate(emqx_overload_protection_new_conn[1m])`: the broker is actively rejecting new connections.
 - `rate(emqx_authentication_failure[1m])`: a spike usually indicates a backend issue or an attack.
 - `emqx_vm_run_queue`: sustained above zero means CPU saturation.
-- `emqx_vm_process_messages_in_queues`: large values indicate process-mailbox backlog.
 - `emqx_mria_lag`: values above a few seconds mean replication is falling behind.
 - `emqx_license_expiry_at - time()` (Enterprise): countdown to license expiration.
+
+## Prometheus Metric Compatibility in EMQX 6.3
+
+EMQX 6.3 uses promtool-compliant names for Prometheus VM and Mnesia collector metrics. Update PromQL expressions, recording and alerting rules, and custom Grafana dashboards that use the previous names.
+
+| Before EMQX 6.3 | EMQX 6.3 |
+| --- | --- |
+| `erlang_mnesia_failed_transactions` | `erlang_mnesia_failed_transactions_total` |
+| `erlang_mnesia_committed_transactions` | `erlang_mnesia_committed_transactions_total` |
+| `erlang_mnesia_logged_transactions` | `erlang_mnesia_logged_transactions_total` |
+| `erlang_mnesia_restarted_transactions` | `erlang_mnesia_restarted_transactions_total` |
+| `erlang_vm_memory_atom_bytes_total` | `erlang_vm_memory_atom_bytes` |
+| `erlang_vm_memory_bytes_total` | `erlang_vm_memory_bytes` |
+| `erlang_vm_memory_processes_bytes_total` | `erlang_vm_memory_processes_bytes` |
+| `erlang_vm_memory_system_bytes_total` | `erlang_vm_memory_system_bytes` |
+| `erlang_vm_statistics_context_switches` | `erlang_vm_statistics_context_switches_total` |
+| `erlang_vm_statistics_garbage_collection_number_of_gcs` | `erlang_vm_statistics_garbage_collection_number_of_gcs_total` |
+| `erlang_vm_statistics_garbage_collection_words_reclaimed` | `erlang_vm_statistics_garbage_collection_words_reclaimed_total` |
+| `erlang_vm_statistics_garbage_collection_bytes_reclaimed` | `erlang_vm_statistics_garbage_collection_bytes_reclaimed_total` |
+| `erlang_vm_statistics_runtime_milliseconds` | `erlang_vm_statistics_runtime_seconds_total` |
+| `erlang_vm_statistics_wallclock_time_milliseconds` | `erlang_vm_statistics_wallclock_time_seconds_total` |
+| `erlang_vm_port_count` | `erlang_vm_ports` |
+| `erlang_vm_process_count` | `erlang_vm_processes` |
+| `erlang_vm_atom_count` | `erlang_vm_atoms` |
+
+The `emqx_vm_process_messages_in_queues` metric is no longer exported in EMQX 6.3. Remove queries that use this metric. EMQX 6.3 does not provide a direct replacement.
