@@ -185,6 +185,7 @@ mqtt {
     max_awaiting_rel = 100
     await_rel_timeout = 300s
     session_expiry_interval = 2h
+    max_session_expiry_interval = infinity
     max_mqueue_len = 1000
     mqueue_priorities = disabled
     mqueue_default_priority = lowest
@@ -210,7 +211,8 @@ mqtt {
 | `retry_interval`                  | 消息重试间隔         | 此设置客户端应该以多久的间隔重试发送 QoS 1 或 QoS 2 消息。   | `30s`<br />单位: 秒                                          | --                                  |
 | `max_awaiting_rel`                | 最大待发 PUBREL 数量 | 此设置每个会话中挂起的 QoS 2 消息数量，直到收到 `PUBREL` 或超时。达到此限制后，新的 QoS 2 `PUBLISH` 请求将被拒绝，并返回错误码 `147(0x93)`。<br />在 MQTT 中，`PUBREL` 是 QoS 2 消息流中用于确保消息交付的控制包。 | `100`                                                        | `1` - `infinity`                    |
 | `await_rel_timeout`               | 最大 PUBREL 等待时长 | 此设置等待接收到 QoS 2 消息的 `PUBREL` 的时间。达到此限制后，EMQX 将释放包 ID 并生成警告级别日志。<br />注意：无论是否收到 `PUBREL`，EMQX 都会转发收到的 QoS 2 消息。 | `300s`<br />单位: 秒                                         | --                                  |
-| `session_expiry_interval`         | 会话过期间隔         | 此设置会话可以空闲多久之后自动关闭。注意：仅对非 MQTT 5.0 客户端有效。 | `2`<br />单位：小时                                          |                                     |
+| `session_expiry_interval`         | 会话过期间隔         | 此设置客户端断开连接后 EMQX 保留会话的时长。适用于以 `Clean Session = false` 连接的 MQTT 3.1 和 3.1.1 客户端。MQTT 5.0 客户端通过 CONNECT 报文的 `Session-Expiry-Interval` 属性自行指定该值，参见 `max_session_expiry_interval`。<br />使用默认的内存会话存储时，已断开连接的会话会在整个过期间隔内驻留在内存中。参见表格后的警告。 | `2h`                                                         | --                                  |
+| `max_session_expiry_interval`     | 最大会话过期间隔     | 此设置限制 MQTT 5.0 客户端通过 CONNECT 和 DISCONNECT 报文的 `Session-Expiry-Interval` 属性所能请求的最大会话过期间隔。当客户端在连接时请求的值超过此限制时，EMQX 会将其截断为该限制值，并在 CONNACK 的 `Session-Expiry-Interval` 属性中返回截断后的值（MQTT 5.0 规范 3.2.2.3.2 节）。DISCONNECT 报文中超过此限制的值同样会被截断为该限制值。对 MQTT 3.1 和 3.1.1 客户端无效，其会话过期间隔由 `session_expiry_interval` 决定。<br />自 EMQX 6.3.0 起提供。 | `infinity`（不限制）                                         | 时长<br />或<br />`infinity`        |
 | `max_mqueue_len`                  | 最大消息队列长度     | 此设置当持久客户端断开连接或在途窗口已满时允许的最大队列长度。 | `1000`                                                       | `0` - `infinity`                    |
 | `mqueue_priorities`               | 主题优先级           | 此设置主题优先级，此处的配置将覆盖 `mqueue_default_priority` 定义的优先级。 | `disabled` <br />会话使用 `mqueue_default_priority` 设置的优先级。 | `disabled`<br />或<br />`1` - `255` |
 | `mqueue_default_priority`         | 默认主题优先级       | 此设置默认主题优先级。                                       | `lowest`                                                     | `highest`， `lowest`                |
@@ -221,6 +223,14 @@ mqtt {
 | `force_gc`                        | --                   | 此设置是否启用强制垃圾回收，如果达到指定的消息数量（`count`）或接收字节（`bytes`）： | `true`                                                       | `true`, `false`                     |
 | `force_gc.count`                  | --                   | 此设置将触发强制垃圾回收的接收消息数量。                     | `16000`                                                      | `0` - `infinity`                    |
 | `force_gc.bytes`                  | --                   | 此设置将触发强制垃圾回收的接收字节数量。                     | `16 MB`<br />单位: `MB`                                      | --                                  |
+
+::: warning 已断开连接会话的内存开销
+
+使用默认的内存会话存储时，过期间隔大于零的会话不会在客户端断开连接时被移除。EMQX 会将会话、订阅和消息队列保留在内存中，直到客户端重新连接或过期间隔结束。如果客户端未在会话过期前重新连接，节点上已断开连接的会话数量大约等于客户端断开连接的速率与过期间隔的乘积。
+
+客户端断开连接后仍保留会话是 MQTT 持久会话的预期行为。请为您的工作负载分配足够的内存，或使用[会话持久化](../durability/durability_introduction.md)，它将会话状态保存在磁盘上。
+
+:::
 
 ::: tip
 
