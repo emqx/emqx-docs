@@ -44,7 +44,7 @@
 - 根据实际信任模型选择认证机制，例如 X.509、JWT、SCRAM，或基于安全后端数据库的密码认证。
 - 使用密码认证时，应存储加盐哈希后的密码，而不是明文密码，并优先采用 `bcrypt`、`pbkdf2` 等强哈希算法。
 - 尽可能最小化主题权限范围，并谨慎审查通配符规则。详见[授权](./authz/authz.md)。
-- 当授权主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时，除非占位符替换值必须包含相应字符，否则应将 `authorization.topic_template_allow.plus`、`hash` 和 `slash` 保持为 `false`。从 EMQX 6.3.0 开始，这些默认值可防止包含 MQTT 主题通配符（`+`、`#`）或主题层级分隔符（`/`）的客户端相关值扩大规则匹配的主题过滤器范围。例如，将客户端 ID `+` 或 `tenantA/+` 替换到 `clients/${clientid}/data` 中，可能使客户端访问其分配主题子树之外的主题。
+- 当授权主题模板中包含 `${clientid}`、`${username}` 或 `${client_attrs.X}` 占位符时，除非占位符替换值必须包含相应字符，否则应将 `authorization.topic_template_allow.plus`、`authorization.topic_template_allow.hash` 和 `authorization.topic_template_allow.slash` 保持为 `false`。从 EMQX 6.3.0 开始，这些默认值可防止包含 MQTT 主题通配符（`+`、`#`）或主题层级分隔符（`/`）的客户端相关值扩大规则匹配的主题过滤器范围。例如，将客户端 ID `+` 或 `tenantA/+` 替换到 `clients/${clientid}/data` 中，可能使客户端访问其分配主题子树之外的主题。
 - 作为补充防护，在授权主题模板中使用客户端身份值之前，还应校验这些值的格式。可以使用 [Client-Info](./authn/cinfo.md) 规则或 JWT 声明的正则校验来限制格式，也可以配置 HTTP 认证器拒绝不合规的值。有关内置校验和安全配置方案行为，参见[主题占位符](./authz/authz.md#主题占位符)。
 - 在设计发往外部服务的请求时，包括 HTTP [认证](./authn/http.md)、HTTP [授权](./authz/http.md)，以及数据集成的连接器、桥接与动作，应通过 EMQX 能识别的敏感字段或请求头传递密码、令牌、密钥等敏感信息。这样，当这些数据经过 EMQX 的脱敏处理时，其中的敏感值会在相关日志、追踪和配置 API 响应中显示为 `******`，而不是明文。脱敏是依据字段名或请求头名进行的：对于放在 HTTP 请求头中的凭据，应使用标准的 `Authorization`（或 `Proxy-Authorization`）请求头，EMQX 会始终对其脱敏；对于放在其他配置字段中的密钥，应将字段命名为已识别的敏感键名，例如 `password`、`token`、`secret`、`secret_key` 或 `jwt`。非标准的自定义请求头（例如 `x-custom-secret`）或不符合约定的字段名不会被识别，其值可能在 `debug` 级别日志和错误信息中以明文出现。
 - 在生产环境依赖授权能力之前，应移除或调整过于宽松的默认规则。
