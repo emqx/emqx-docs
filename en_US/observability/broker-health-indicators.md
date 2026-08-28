@@ -15,7 +15,7 @@ All metrics are exposed on the EMQX Prometheus endpoints (`/api/v5/prometheus/st
 
 EMQX-native metrics do not depend on the upstream Erlang VM collectors. In EMQX 6.3, the `vm_dist`, `vm_statistics`, `vm_system_info`, and `vm_memory` fields under `prometheus.collectors` default to `enabled`. The `mnesia` and `vm_msacc` fields default to `disabled`.
 
-Legacy flat collector fields, such as `prometheus.vm_statistics_collector`, retain their legacy default of `disabled`. Explicit collector settings take precedence over these defaults.
+Existing legacy-format configurations retain their previous behavior: All six flat `prometheus.*_collector` fields default to `disabled`, and explicitly configured values remain unchanged.
 
 :::
 

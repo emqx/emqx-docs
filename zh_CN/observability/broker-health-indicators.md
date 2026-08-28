@@ -15,7 +15,7 @@
 
 EMQX 原生指标不依赖上游 Erlang VM 采集器。在 EMQX 6.3 中，`prometheus.collectors` 下的 `vm_dist`、`vm_statistics`、`vm_system_info` 和 `vm_memory` 字段默认值为 `enabled`。`mnesia` 和 `vm_msacc` 字段的默认值为 `disabled`。
 
-旧版扁平采集器字段（例如 `prometheus.vm_statistics_collector`）仍使用旧版默认值 `disabled`。显式设置的采集器配置优先于默认值。
+现有旧格式配置保持原有行为：六个扁平 `prometheus.*_collector` 字段的默认值均为 `disabled`，已显式配置的值保持不变。
 
 :::
 
