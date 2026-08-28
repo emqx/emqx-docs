@@ -122,7 +122,7 @@ EMQXはREST APIまたはThriftプロトコルを通じてIoTDBと通信をサポ
    - **Database Name**：**SQL Dialect**が`Table Model`の場合、接続するデータベース名を指定する必要があります。
    - **Username**および**Password**：EMQXがApache IoTDBサーバーに認証するための資格情報を入力します。
    - **IoTDB Version**：Apache IoTDBのバージョンを選択します。
-   - **Enable TLS**：有効にするとApache IoTDBサーバーへの暗号化接続を確立します。詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)をご参照ください。
+   - **Enable TLS**：有効にするとApache IoTDBサーバーへの暗号化接続を確立します。詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)をご参照ください。
    - 任意のチューニングは[高度な設定](#advanced-configurations)の**Advanced Settings**を参照してください。
 
 5. （任意）**Test Connectivity**をクリックして、コネクターがApache IoTDBサーバーに正常に接続できるか検証します。
