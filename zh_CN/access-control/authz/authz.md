@@ -271,6 +271,29 @@ EMQX 还允许在主题中使用占位符，在匹配规则时将当前客户端
 
 占位符只能用于替换主题的整个字段，例如 `a/b/${username}/c/d`，但是不能用于替换字段的一部分，例如 `a/b${username}c/d`。
 
+从 EMQX 6.3.0 开始，EMQX 会校验授权主题模板中的占位符替换值。默认情况下，这些值不能包含主题层级分隔符（`/`）或 MQTT 主题过滤器通配符（`+`、`#`）。该限制不适用于直接写在模板中的分隔符和通配符。
+
+例如，当用户名为 `alice` 时，EMQX 会将 `tenant/${username}/#` 替换为 `tenant/alice/#`。如果用户名为 `tenant/alice` 或 `+`，由于占位符替换值包含不允许的字符，EMQX 无法完成模板替换。
+
+如果占位符替换值包含不允许的字符，EMQX 会根据当前安全配置方案处理该授权规则：
+
+- 使用 `legacy` 配置方案时，该规则不匹配，EMQX 继续检查其余授权规则和授权数据源。
+- 使用 `hardened` 配置方案时，EMQX 拒绝此次发布或订阅操作。如果将 `authorization.ignore_backend_failures` 设为 `true`，EMQX 会改为将该规则视为不匹配。
+
+EMQX 6.3.0 默认使用 `legacy` 安全配置方案，`authorization.ignore_backend_failures` 的默认值为 `false`。升级到 EMQX 6.3.0 后，如果升级前配置的规则使用了包含不允许字符的占位符替换值，该规则在默认 `legacy` 配置方案下不再匹配。最终结果取决于其余授权规则、授权数据源和 `authorization.no_match`。升级前应检查这些设置，确认回退行为符合预期。
+
+`authorization.topic_template_allow` 配置控制占位符替换值中允许使用的字符。所有配置项的默认值均为 `false`：
+
+```hocon
+authorization.topic_template_allow {
+  plus = false
+  hash = false
+  slash = false
+}
+```
+
+仅当占位符替换值必须包含某个字符时，才将对应配置项设为 `true`。启用这些配置项后，客户端相关值可能扩大授权规则的主题过滤器匹配范围。在主题模板中使用用户名、客户端 ID 或客户端属性值之前，应先校验这些值。
+
 <!-- TODO 调查与 4.x 版本是否存在差异-->
 
 为了避免占位符跟想要的主题冲突的问题，从 EMQX 5.4 开始，可以使用 `${$}` 来对 `$` 进行转义。例如 `t/${$}{username}` 表示 `t/${username}` 本身，而不是将 username 替换进去之后的主题名称。
