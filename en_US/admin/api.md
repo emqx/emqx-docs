@@ -9,7 +9,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 | `/api-spec.html` | HTML | Drill-down style API reference page for human reading. |
 | `/api-spec.md` | Markdown | API reference in Markdown format, suited for AI agents and automation tools. |
 | `/api-spec.json` | JSON | OpenAPI 3.0 specification in JSON format, suited for scripts and programmatic tooling. |
-| `/api-spec/:tag[/:name]` | JSON | Focused OpenAPI 3.0 specification for an API tag or endpoint. |
+| `/api-spec/:tag[/:name]` | JSON | Focused OpenAPI 3.0 specification for an API tag, optionally narrowed by a matching request or response schema name. |
 | `/api-docs/swagger.json` | JSON | Full OpenAPI 3.0 specification for external Swagger UI deployments and other compatible tools. |
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](../configuration/dashboard.md).
@@ -28,11 +28,11 @@ Starting from EMQX 6.3.0, you must authenticate to retrieve API specification co
 
 Authenticate programmatic requests with either Basic authentication using an API key and secret key or a bearer token. For instructions, see [Authentication](#authentication).
 
-Access to the API specification is read-only and does not depend on the API key's role or scopes. When you access `/api-spec.html` in a browser, EMQX can also authenticate the request with the `emqx_auth` session cookie created when you sign in to the Dashboard.
+Access to the API specification is read-only and does not depend on the API key's role or scopes.
 
-For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body uses the requested format and contains a minimal API specification that describes the supported authentication schemes and the public bootstrap endpoints, `POST /api/v5/login` and `GET /api/v5/status`. It does not expose the full API specification.
+For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body matches the requested format and contains a minimal API specification. It describes the supported authentication schemes and lists two public endpoints: `POST /api/v5/login` for obtaining a bearer token and `GET /api/v5/status` for checking broker status. The minimal response does not include the requested API specification content.
 
-An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
+For browser access, EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
 
 Requests to `/api-docs` and `/api-docs/index.html` do not require authentication because these endpoints only redirect to `/api-spec.html`. Authentication is required after the redirect to access the full explorer.
 
