@@ -130,7 +130,7 @@ Where,
 
   Enable API documentation endpoints, including `/api-spec.html`, `/api-spec.md`, `/api-spec.json`, and the full OpenAPI specification at `/api-docs/swagger.json`. For backward compatibility, `/api-docs` and `/api-docs/index.html` redirect to `/api-spec.html`. Set this option to `false` to disable all API documentation endpoints.
 
-  Starting from EMQX 6.3.0, access to API specification content through these endpoints requires authentication. For supported authentication methods and unauthenticated response behavior, see [API Specification Endpoint Authentication](../admin/api.md#api-specification-endpoint-authentication).
+  Starting from EMQX 6.3.0, access to API specification content through these endpoints requires authentication. For supported authentication methods and unauthenticated response behavior, see [Access API Specification Endpoints](../admin/api.md#access-api-specification-endpoints).
 
 - `default_password`
 

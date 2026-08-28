@@ -22,13 +22,13 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 从 EMQX 6.3.0 开始，[功能门控](../deploy/feature-gates.md)可以在启动阶段禁用可选功能。已禁用功能提供的 REST API 路径不会加载为可访问的 API 端点。启用 `dashboard` 功能后，可以调用 `GET /api/v5/features` 查看解析后的功能集。
 :::
 
-## API 规范端点认证
+## 访问 API 规范端点
 
-从 EMQX 6.3.0 开始，必须通过认证才能从上述端点获取 API 规范内容。EMQX 支持以下凭据：
+从 EMQX 6.3.0 开始，必须通过认证才能从上述端点获取 API 规范内容。
 
-- 使用 API Key 和 Secret Key 进行基本认证。访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。
-- 通过 `POST /api/v5/login` 获取的 Bearer Token。
-- 登录 Dashboard 时创建的 `emqx_auth` 会话 Cookie。
+程序化请求可以使用 API Key 和 Secret Key 进行基本认证，也可以使用 Bearer Token 认证。操作说明参见[认证](#认证)。
+
+访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。在浏览器中访问 `/api-spec.html` 时，EMQX 还可以使用登录 Dashboard 时创建的 `emqx_auth` 会话 Cookie 对请求进行认证。
 
 如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，包含一个最小化的 API 规范，用于说明支持的认证方式以及公开的引导端点 `POST /api/v5/login` 和 `GET /api/v5/status`，但不会公开完整的 API 规范。
 

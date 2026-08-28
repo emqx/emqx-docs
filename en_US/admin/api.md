@@ -22,13 +22,13 @@ This section introduces how to work with the EMQX REST API.
 Starting from EMQX 6.3.0, [feature gates](../deploy/feature-gates.md) can disable optional features at startup. REST API paths provided by disabled features are not loaded as accessible API endpoints. When the `dashboard` feature is enabled, you can call `GET /api/v5/features` to view the resolved feature set.
 :::
 
-## API Specification Endpoint Authentication
+## Access API Specification Endpoints
 
-Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above. EMQX accepts the following credentials:
+Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above.
 
-- Basic authentication with an API key and secret key. Access to the API specification is read-only and does not depend on the API key's role or scopes.
-- A bearer token obtained from `POST /api/v5/login`.
-- The `emqx_auth` session cookie created when you sign in to the Dashboard.
+Authenticate programmatic requests with either Basic authentication using an API key and secret key or a bearer token. For instructions, see [Authentication](#authentication).
+
+Access to the API specification is read-only and does not depend on the API key's role or scopes. When you access `/api-spec.html` in a browser, EMQX can also authenticate the request with the `emqx_auth` session cookie created when you sign in to the Dashboard.
 
 For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body uses the requested format and contains a minimal API specification that describes the supported authentication schemes and the public bootstrap endpoints, `POST /api/v5/login` and `GET /api/v5/status`. It does not expose the full API specification.
 
