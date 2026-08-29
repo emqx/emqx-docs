@@ -42,7 +42,10 @@ The `hardened` profile changes the following behaviors compared to `legacy`.
 ### Listener Exposure
 
 - **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, secure WebSocket and QUIC listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
+- **Gateway listeners bind to loopback by default.** Gateway listeners with an omitted or port-only `bind` listen on the loopback interface only.
 - **The Dashboard HTTP listener binds to loopback by default.** The Dashboard HTTP listener with an omitted or port-only `bind` listens on the loopback interface only. Configure an explicit bind address to accept external connections.
+
+To set the address for all defaulted listeners at once, without switching the profile, use `node.default_listener_address`. See [Default Listener Address](#default-listener-address).
 
 ### Authentication
 
@@ -77,6 +80,34 @@ Under the `hardened` profile, EMQX drops pending delayed messages created before
 - **Default Dashboard credentials are not accepted.** Local Dashboard accounts with the default password `public` cannot log in. This includes administrator accounts created before an upgrade. Change the password before switching to the `hardened` profile.
 - **SAML signatures are verified.** SAML single sign-on requires signatures on both the response envelope and the assertion. Configure `idp_signs_envelopes` and `idp_signs_assertions` to match the identity provider.
 
+## Default Listener Address
+
+The `node.default_listener_address` configuration option sets the address for listener binds that have no explicit address, that is bare-port binds such as `bind = 1883`. It applies to MQTT listeners, gateway listeners, and the Dashboard HTTP listener. An explicit `IP:port` bind always wins.
+
+Use this option to control listener exposure independently of the security profile. For example, keep the `hardened` profile and still accept external MQTT connections:
+
+```bash
+node.default_listener_address = "all"
+```
+
+Valid values:
+
+| Value | Bind address |
+|---|---|
+| `loopback` | `127.0.0.1`. The Dashboard binds `::1` instead when its `inet6` option is set. |
+| `nodename` | The host part of the Erlang node name, after the `@`. When it is an IP address, EMQX binds it. Otherwise EMQX resolves it at boot and binds the first IPv4 address, or the first IPv6 address when no IPv4 address resolves. |
+| `all` | `0.0.0.0`, that is all IPv4 interfaces. |
+| An IP address | The literal address, for example `192.168.1.10` or `::1`. On most systems `::` accepts both IPv4 and IPv6 connections; the operating system's `bindv6only` setting decides. |
+| A hostname | Resolved at boot, for example `broker1.example.com`. |
+
+When the option is not set, the security profile decides the default address: `legacy` binds all interfaces, `hardened` binds loopback.
+
+The option is node-local. EMQX reads it once at boot, so changing it requires a node restart. It can also be set with the `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` environment variable.
+
+::: tip
+The official Docker image sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all`, because a container's loopback interface is not reachable through published ports. Defaulted listeners therefore stay reachable under both profiles, and `docker run -p` remains the exposure decision.
+:::
+
 ## Rolling Upgrade
 
 All nodes in a cluster must use the same security profile. When profiles differ between nodes, access-control decisions depend on which node a client connects to. Nodes running versions before 6.3 always behave as `legacy`.
@@ -93,7 +124,7 @@ To move an existing deployment from `legacy` to `hardened`:
 
 1. Review each behavior change above and apply the explicit configuration where the strict default does not fit the deployment.
 2. Configure a non-default Erlang cookie and verify that every node in the cluster uses the same value.
-3. Verify that listeners and the Dashboard have explicit bind addresses when they must accept external connections.
+3. Verify that listeners and the Dashboard have explicit bind addresses when they must accept external connections, or set `node.default_listener_address` for all defaulted listeners at once.
 4. Verify that every node has authentication configured, or that anonymous access is explicitly enabled where intended.
 5. Change any Dashboard account that still uses the default password.
 6. Before enabling `hardened` after an upgrade, wait for pending delayed messages created before the upgrade to be replayed, or accept that EMQX will drop them.
