@@ -1,19 +1,18 @@
-# API Reference (v2beta1)
+# APIリファレンス (v2beta1)
 
-## Packages
+## パッケージ
 - [apps.emqx.io/v2beta1](#appsemqxiov2beta1)
 
 
 ## apps.emqx.io/v2beta1
 
-Package v2beta1 contains API Schema definitions for the apps v2beta1 API group
+パッケージv2beta1はapps v2beta1 APIグループのAPIスキーマ定義を含みます
 
-### Resource Types
+### リソースタイプ
 - [EMQX](#emqx)
 - [EMQXList](#emqxlist)
 - [Rebalance](#rebalance)
 - [RebalanceList](#rebalancelist)
-
 
 
 #### BootstrapAPIKey
@@ -24,13 +23,13 @@ Package v2beta1 contains API Schema definitions for the apps v2beta1 API group
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `key` _string_ |  |  | Pattern: `^[a-zA-Z\d-_]+$` <br /> |
-| `secret` _string_ |  |  | MaxLength: 128 <br />MinLength: 3 <br /> |
+| `key` _string_ |  |  | パターン: `^[a-zA-Z\d-_]+$` <br /> |
+| `secret` _string_ |  |  | 最大長: 128 <br />最小長: 3 <br /> |
 | `secretRef` _[SecretRef](#secretref)_ |  |  |  |
 
 
@@ -42,33 +41,33 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `mode` _string_ |  | Merge | Enum: [Merge Replace] <br /> |
-| `data` _string_ | EMQX config, HOCON format, like etc/emqx.conf file |  |  |
+| `mode` _string_ |  | Merge | 列挙: [Merge Replace] <br /> |
+| `data` _string_ | EMQX設定。HOCON形式で、etc/emqx.confファイルのような形式です。 |  |  |
 
 
 #### EMQX
 
 
 
-EMQX is the Schema for the emqxes API
+EMQXはemqxes APIのスキーマです
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXList](#emqxlist)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `apps.emqx.io/v2beta1` | | |
 | `kind` _string_ | `EMQX` | | |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[EMQXSpec](#emqxspec)_ | Spec defines the desired identities of EMQX nodes in this set. |  |  |
-| `status` _[EMQXStatus](#emqxstatus)_ | Status is the current status of EMQX nodes. This data<br />may be out of date by some window of time. |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
+| `spec` _[EMQXSpec](#emqxspec)_ | Specはこのセット内のEMQXノードの望ましい状態を定義します。 |  |  |
+| `status` _[EMQXStatus](#emqxstatus)_ | StatusはEMQXノードの現在の状態です。このデータはある程度の遅延がある場合があります。 |  |  |
 
 
 #### EMQXCoreTemplate
@@ -79,13 +78,13 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[EMQXCoreTemplateSpec](#emqxcoretemplatespec)_ | Specification of the desired behavior of the EMQX core node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
+| `spec` _[EMQXCoreTemplateSpec](#emqxcoretemplatespec)_ | EMQXコアノードの望ましい動作の仕様。<br />詳細: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
 
 
 #### EMQXCoreTemplateSpec
@@ -96,54 +95,54 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXCoreTemplate](#emqxcoretemplate)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `nodeSelector` _object (keys:string, values:string)_ | NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node.<br />More info: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ |  |  |
-| `nodeName` _string_ | NodeName is a request to schedule this pod onto a specific node. If it is non-empty, the scheduler simply schedules this pod onto that node, assuming that it fits resource requirements. |  |  |
-| `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#affinity-v1-core)_ | Affinity for pod assignment<br />ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity |  |  |
-| `toleRations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | If specified, the pod's tolerations.<br />The pod this Toleration is attached to tolerates any taint that matches the triple <key,value,effect> using the matching operator .<br />TODO: should use `tolerations` instead, this field just for compatible with old version, will delete in future. |  |  |
-| `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | If specified, the pod's tolerations.<br />The pod this Toleration is attached to tolerates any taint that matches the triple <key,value,effect> using the matching operator . |  |  |
-| `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#topologyspreadconstraint-v1-core) array_ | // TopologySpreadConstraint specifies how to spread matching pods among the given topology. |  |  |
-| `replicas` _integer_ | Replicas is the desired number of replicas of the given Template.<br />These are replicas in the sense that they are instantiations of the<br />same Template, but individual replicas also have a consistent identity.<br />Defaults to 2. | 2 |  |
-| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | An eviction is allowed if at least "minAvailable" pods selected by<br />"selector" will still be available after the eviction, i.e. even in the<br />absence of the evicted pod.  So for example you can prevent all voluntary<br />evictions by specifying "100%". |  | XIntOrString: \{\} <br /> |
-| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | An eviction is allowed if at most "maxUnavailable" pods selected by<br />"selector" are unavailable after the eviction, i.e. even in absence of<br />the evicted pod. For example, one can prevent all voluntary evictions<br />by specifying 0. This is a mutually exclusive setting with "minAvailable". |  | XIntOrString: \{\} <br /> |
-| `command` _string array_ | Entrypoint array. Not executed within a shell.<br />The container image's ENTRYPOINT is used if this is not provided.<br />Variable references $(VAR_NAME) are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced<br />to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will<br />produce the string literal "$(VAR_NAME)". Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `args` _string array_ | Arguments to the entrypoint.<br />The container image's CMD is used if this is not provided.<br />Variable references $(VAR_NAME) are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced<br />to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will<br />produce the string literal "$(VAR_NAME)". Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#containerport-v1-core) array_ | List of ports to expose from the container. Exposing a port here gives<br />the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here<br />DOES NOT prevent that port from being exposed. Any port which is<br />listening on the default "0.0.0.0" address inside a container will be<br />accessible from the network.<br />Cannot be updated. |  |  |
-| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core) array_ | List of environment variables to set in the container.<br />Cannot be updated. |  |  |
-| `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envfromsource-v1-core) array_ | List of sources to populate environment variables in the container.<br />The keys defined within a source must be a C_IDENTIFIER. All invalid keys<br />will be reported as an event when the container is starting. When a key exists in multiple<br />sources, the value associated with the last source will take precedence.<br />Values defined by an Env with a duplicate key will take precedence.<br />Cannot be updated. |  |  |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcerequirements-v1-core)_ | Compute Resources required by this container.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |  |  |
-| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podsecuritycontext-v1-core)_ | SecurityContext holds pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
-| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#securitycontext-v1-core)_ | SecurityContext defines the security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
-| `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | List of initialization containers belonging to the pod.<br />Init containers are executed in order prior to containers being started. If any<br />init container fails, the pod is considered to have failed and is handled according<br />to its restartPolicy. The name for an init container or normal container must be<br />unique among all containers.<br />Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.<br />The resourceRequirements of an init container are taken into account during scheduling<br />by finding the highest request/limit for each resource type, and then using the max of<br />of that value or the sum of the normal containers. Limits are applied to init containers<br />in a similar fashion.<br />Init containers cannot currently be added or removed.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
-| `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ExtraContainers represents extra containers to be added to the pod.<br />See https://github.com/emqx/emqx-operator/issues/252 |  |  |
-| `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volume-v1-core) array_ | See https://github.com/emqx/emqx-operator/pull/72 |  |  |
-| `extraVolumeMounts` _[VolumeMount](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volumemount-v1-core) array_ | See https://github.com/emqx/emqx-operator/pull/72 |  |  |
-| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | Periodic probe of container liveness.<br />Container will be restarted if the probe fails.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:3 httpGet:map[path:/status port:dashboard] initialDelaySeconds:60 periodSeconds:30 \} |  |
-| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | Periodic probe of container service readiness.<br />Container will be removed from service endpoints if the probe fails.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:12 httpGet:map[path:/status port:dashboard] initialDelaySeconds:10 periodSeconds:5 \} |  |
-| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | StartupProbe indicates that the Pod has successfully initialized.<br />If specified, no other probes are executed until this completes successfully.<br />If this probe fails, the Pod will be restarted, just as if the livenessProbe failed.<br />This can be used to provide different probe parameters at the beginning of a Pod's lifecycle,<br />when it might take a long time to load data or warm a cache, than during steady-state operation.<br />This cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes |  |  |
-| `lifecycle` _[Lifecycle](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#lifecycle-v1-core)_ | Actions that the management system should take in response to container lifecycle events.<br />Cannot be updated. |  |  |
-| `volumeClaimTemplates` _[PersistentVolumeClaimSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#persistentvolumeclaimspec-v1-core)_ | This field is named VolumeClaimTemplates but actually it is PersistentVolumeClaimSpec. I'm sorry for the bad naming.<br />PersistentVolumeClaimSpec describes the common attributes of storage devices<br />and allows a Source for provider-specific attributes<br />More than EMQXReplicantTemplateSpec |  |  |
+| `nodeSelector` _object (keys:string, values:string)_ | NodeSelectorはポッドがノードに適合するために真でなければならないセレクターです。ポッドがノードにスケジュールされるためにノードのラベルと一致する必要があります。<br />詳細: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/ |  |  |
+| `nodeName` _string_ | NodeNameはこのポッドを特定のノードにスケジュールするリクエストです。空でなければ、スケジューラーはリソース要件に合うと仮定して単純にこのポッドをそのノードにスケジュールします。 |  |  |
+| `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#affinity-v1-core)_ | ポッド割り当てのためのアフィニティ<br />参照: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ |  |  |
+| `toleRations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | 指定されている場合、ポッドのトレランスです。<br />このTolerationが付与されたポッドは、<key,value,effect>の組にマッチする任意のテイントをマッチングオペレーターを使って許容します。<br />TODO: 将来的には`tolerations`を使うべきで、このフィールドは旧バージョンとの互換性のためだけに存在し、将来削除されます。 |  |  |
+| `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | 指定されている場合、ポッドのトレランスです。<br />このTolerationが付与されたポッドは、<key,value,effect>の組にマッチする任意のテイントをマッチングオペレーターを使って許容します。 |  |  |
+| `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#topologyspreadconstraint-v1-core) array_ | // TopologySpreadConstraintは指定されたトポロジー間でマッチするポッドをどのように分散させるかを指定します。 |  |  |
+| `replicas` _integer_ | Replicasは指定されたテンプレートの望ましいレプリカ数です。<br />これらは同じテンプレートのインスタンスですが、個々のレプリカは一貫した識別子を持ちます。<br />デフォルトは2です。 | 2 |  |
+| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | "selector"で選択されたポッドのうち、少なくとも"minAvailable"が退避後も利用可能である場合に退避が許可されます。<br />つまり、退避されたポッドがなくてもこの数だけは利用可能です。例えば、"100%"を指定するとすべての任意退避を防止できます。 |  | XIntOrString: \{\} <br /> |
+| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | "selector"で選択されたポッドのうち、退避後に利用不可となるポッドが最大で"maxUnavailable"以下であれば退避が許可されます。<br />例えば、0を指定するとすべての任意退避を防止できます。これは"minAvailable"と相互排他的な設定です。 |  | XIntOrString: \{\} <br /> |
+| `command` _string array_ | エントリポイントの配列。シェル内で実行されません。<br />指定しない場合はコンテナイメージのENTRYPOINTが使われます。<br />変数参照$(VAR_NAME)はコンテナの環境変数で展開されます。解決できない場合は参照文字列は変更されません。ダブル$$は単一の$に縮小され、$(VAR_NAME)構文のエスケープに使えます。例: "$$(VAR_NAME)"は文字列リテラル"$(VAR_NAME)"になります。エスケープされた参照は変数の有無に関わらず展開されません。更新不可。<br />詳細: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
+| `args` _string array_ | エントリポイントへの引数。<br />指定しない場合はコンテナイメージのCMDが使われます。<br />変数参照$(VAR_NAME)はコンテナの環境変数で展開されます。解決できない場合は参照文字列は変更されません。ダブル$$は単一の$に縮小され、$(VAR_NAME)構文のエスケープに使えます。例: "$$(VAR_NAME)"は文字列リテラル"$(VAR_NAME)"になります。エスケープされた参照は変数の有無に関わらず展開されません。更新不可。<br />詳細: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
+| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#containerport-v1-core) array_ | コンテナから公開するポートのリスト。ここでポートを公開することは、システムにコンテナのネットワーク接続情報を追加で提供しますが、主に情報提供目的です。ここでポートを指定しなくても、そのポートの公開は妨げられません。コンテナ内のデフォルトの"0.0.0.0"アドレスでリッスンしている任意のポートはネットワークからアクセス可能です。<br />更新不可。 |  |  |
+| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core) array_ | コンテナ内で設定する環境変数のリスト。<br />更新不可。 |  |  |
+| `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envfromsource-v1-core) array_ | コンテナ内の環境変数を設定するためのソースのリスト。<br />ソース内で定義されるキーはC_IDENTIFIERでなければなりません。無効なキーはコンテナ起動時にイベントとして報告されます。複数のソースに同じキーが存在する場合、最後のソースの値が優先されます。<br />重複キーのEnvで定義された値が優先されます。<br />更新不可。 |  |  |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcerequirements-v1-core)_ | このコンテナが必要とする計算リソース。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |  |  |
+| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podsecuritycontext-v1-core)_ | SecurityContextはポッドレベルのセキュリティ属性および共通のコンテナ設定を保持します。 | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
+| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#securitycontext-v1-core)_ | SecurityContextはコンテナの実行に使用されるセキュリティオプションを定義します。<br />設定されている場合、SecurityContextのフィールドはPodSecurityContextの同等のフィールドを上書きします。<br />詳細: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ポッドに属する初期化コンテナのリスト。<br />初期化コンテナは、コンテナが開始される前に順番に実行されます。いずれかの初期化コンテナが失敗すると、ポッドは失敗とみなされrestartPolicyに従って処理されます。初期化コンテナまたは通常のコンテナの名前はすべてのコンテナ間で一意でなければなりません。<br />初期化コンテナはLifecycleアクション、Readinessプローブ、Livenessプローブ、Startupプローブを持つことはできません。<br />初期化コンテナのresourceRequirementsはスケジューリング時に考慮され、各リソースタイプの最高要求/制限を見つけ、その値と通常コンテナの合計の最大値を使用します。制限も同様に適用されます。<br />初期化コンテナは現在追加または削除できません。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
+| `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ExtraContainersはポッドに追加される追加コンテナを表します。<br />詳細: https://github.com/emqx/emqx-operator/issues/252 |  |  |
+| `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volume-v1-core) array_ | 詳細: https://github.com/emqx/emqx-operator/pull/72 |  |  |
+| `extraVolumeMounts` _[VolumeMount](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volumemount-v1-core) array_ | 詳細: https://github.com/emqx/emqx-operator/pull/72 |  |  |
+| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | コンテナの生存確認のための定期的なプローブ。<br />プローブが失敗するとコンテナは再起動されます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:3 httpGet:map[path:/status port:dashboard] initialDelaySeconds:60 periodSeconds:30 \} |  |
+| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | コンテナのサービス準備完了確認のための定期的なプローブ。<br />プローブが失敗するとコンテナはサービスエンドポイントから除外されます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:12 httpGet:map[path:/status port:dashboard] initialDelaySeconds:10 periodSeconds:5 \} |  |
+| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | StartupProbeはポッドが正常に初期化されたことを示します。<br />指定されている場合、これが成功するまで他のプローブは実行されません。<br />このプローブが失敗すると、livenessProbeが失敗した場合と同様にポッドは再起動されます。<br />これはポッドのライフサイクル開始時にデータのロードやキャッシュのウォームアップに時間がかかる場合に、通常の状態とは異なるプローブパラメータを提供するために使えます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes |  |  |
+| `lifecycle` _[Lifecycle](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#lifecycle-v1-core)_ | コンテナのライフサイクルイベントに対して管理システムが取るべきアクション。<br />更新不可。 |  |  |
+| `volumeClaimTemplates` _[PersistentVolumeClaimSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#persistentvolumeclaimspec-v1-core)_ | このフィールド名はVolumeClaimTemplatesですが、実際にはPersistentVolumeClaimSpecです。名前が悪くて申し訳ありません。<br />PersistentVolumeClaimSpecはストレージデバイスの共通属性を記述し、プロバイダー固有の属性のためのソースを許可します。<br />EMQXReplicantTemplateSpecより多いです。 |  |  |
 
 
 #### EMQXList
 
 
 
-EMQXList contains a list of EMQX
+EMQXListはEMQXのリストを含みます
 
 
 
 
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `apps.emqx.io/v2beta1` | | |
 | `kind` _string_ | `EMQXList` | | |
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
 | `items` _[EMQX](#emqx) array_ |  |  |  |
 
 
@@ -155,21 +154,21 @@ EMQXList contains a list of EMQX
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXStatus](#emqxstatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `controllerUID` _[UID](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#uid-types-pkg)_ |  |  |  |
 | `podUID` _[UID](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#uid-types-pkg)_ |  |  |  |
-| `node` _string_ | EMQX node name, example: emqx@127.0.0.1 |  |  |
-| `node_status` _string_ | EMQX node status, example: Running |  |  |
-| `otp_release` _string_ | Erlang/OTP version used by EMQX, example: 24.2/12.2 |  |  |
-| `version` _string_ | EMQX version |  |  |
-| `role` _string_ | EMQX cluster node role, enum: "core" "replicant" |  |  |
-| `edition` _string_ | EMQX cluster node edition, enum: "Opensource" "Enterprise" |  |  |
-| `connections` _integer_ | In EMQX's API of `/api/v5/nodes`, the `connections` field means the number of MQTT session count, |  |  |
-| `live_connections` _integer_ | In EMQX's API of `/api/v5/nodes`, the `live_connections` field means the number of connected MQTT clients.<br />THe `live_connections` just work in EMQX 5.1 or later. |  |  |
+| `node` _string_ | EMQXノード名。例: emqx@127.0.0.1 |  |  |
+| `node_status` _string_ | EMQXノードの状態。例: Running |  |  |
+| `otp_release` _string_ | EMQXで使用されているErlang/OTPのバージョン。例: 24.2/12.2 |  |  |
+| `version` _string_ | EMQXのバージョン |  |  |
+| `role` _string_ | EMQXクラスターのノードの役割。列挙: "core" "replicant" |  |  |
+| `edition` _string_ | EMQXクラスターのノードのエディション。列挙: "Opensource" "Enterprise" |  |  |
+| `connections` _integer_ | EMQXのAPI `/api/v5/nodes` の `connections` フィールドはMQTTセッション数を意味します。 |  |  |
+| `live_connections` _integer_ | EMQXのAPI `/api/v5/nodes` の `live_connections` フィールドは接続中のMQTTクライアント数を意味します。<br />`live_connections` はEMQX 5.1以降でのみ有効です。 |  |  |
 
 
 #### EMQXNodesStatus
@@ -180,10 +179,10 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXStatus](#emqxstatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `replicas` _integer_ |  |  |  |
 | `readyReplicas` _integer_ |  |  |  |
@@ -202,13 +201,13 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[EMQXReplicantTemplateSpec](#emqxreplicanttemplatespec)_ | Specification of the desired behavior of the EMQX replicant node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status<br />Controller tools does not support more complex validations (oneOf/anyOf/allOf/etc), so use validation rule instead. https://github.com/kubernetes-sigs/controller-tools/issues/461#issuecomment-1982741599 |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
+| `spec` _[EMQXReplicantTemplateSpec](#emqxreplicanttemplatespec)_ | EMQXレプリカントノードの望ましい動作の仕様。<br />詳細: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status<br />Controller toolsは複雑なバリデーション(oneOf/anyOf/allOfなど)をサポートしていないため、代わりにバリデーションルールを使用してください。https://github.com/kubernetes-sigs/controller-tools/issues/461#issuecomment-1982741599 |  |  |
 
 
 #### EMQXReplicantTemplateSpec
@@ -219,81 +218,81 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXCoreTemplateSpec](#emqxcoretemplatespec)
 - [EMQXReplicantTemplate](#emqxreplicanttemplate)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `nodeSelector` _object (keys:string, values:string)_ | NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node.<br />More info: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/ |  |  |
-| `nodeName` _string_ | NodeName is a request to schedule this pod onto a specific node. If it is non-empty, the scheduler simply schedules this pod onto that node, assuming that it fits resource requirements. |  |  |
-| `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#affinity-v1-core)_ | Affinity for pod assignment<br />ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity |  |  |
-| `toleRations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | If specified, the pod's tolerations.<br />The pod this Toleration is attached to tolerates any taint that matches the triple <key,value,effect> using the matching operator .<br />TODO: should use `tolerations` instead, this field just for compatible with old version, will delete in future. |  |  |
-| `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | If specified, the pod's tolerations.<br />The pod this Toleration is attached to tolerates any taint that matches the triple <key,value,effect> using the matching operator . |  |  |
-| `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#topologyspreadconstraint-v1-core) array_ | // TopologySpreadConstraint specifies how to spread matching pods among the given topology. |  |  |
-| `replicas` _integer_ | Replicas is the desired number of replicas of the given Template.<br />These are replicas in the sense that they are instantiations of the<br />same Template, but individual replicas also have a consistent identity.<br />Defaults to 2. | 2 |  |
-| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | An eviction is allowed if at least "minAvailable" pods selected by<br />"selector" will still be available after the eviction, i.e. even in the<br />absence of the evicted pod.  So for example you can prevent all voluntary<br />evictions by specifying "100%". |  | XIntOrString: \{\} <br /> |
-| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | An eviction is allowed if at most "maxUnavailable" pods selected by<br />"selector" are unavailable after the eviction, i.e. even in absence of<br />the evicted pod. For example, one can prevent all voluntary evictions<br />by specifying 0. This is a mutually exclusive setting with "minAvailable". |  | XIntOrString: \{\} <br /> |
-| `command` _string array_ | Entrypoint array. Not executed within a shell.<br />The container image's ENTRYPOINT is used if this is not provided.<br />Variable references $(VAR_NAME) are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced<br />to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will<br />produce the string literal "$(VAR_NAME)". Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `args` _string array_ | Arguments to the entrypoint.<br />The container image's CMD is used if this is not provided.<br />Variable references $(VAR_NAME) are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced<br />to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will<br />produce the string literal "$(VAR_NAME)". Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#containerport-v1-core) array_ | List of ports to expose from the container. Exposing a port here gives<br />the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here<br />DOES NOT prevent that port from being exposed. Any port which is<br />listening on the default "0.0.0.0" address inside a container will be<br />accessible from the network.<br />Cannot be updated. |  |  |
-| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core) array_ | List of environment variables to set in the container.<br />Cannot be updated. |  |  |
-| `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envfromsource-v1-core) array_ | List of sources to populate environment variables in the container.<br />The keys defined within a source must be a C_IDENTIFIER. All invalid keys<br />will be reported as an event when the container is starting. When a key exists in multiple<br />sources, the value associated with the last source will take precedence.<br />Values defined by an Env with a duplicate key will take precedence.<br />Cannot be updated. |  |  |
-| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcerequirements-v1-core)_ | Compute Resources required by this container.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |  |  |
-| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podsecuritycontext-v1-core)_ | SecurityContext holds pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
-| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#securitycontext-v1-core)_ | SecurityContext defines the security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
-| `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | List of initialization containers belonging to the pod.<br />Init containers are executed in order prior to containers being started. If any<br />init container fails, the pod is considered to have failed and is handled according<br />to its restartPolicy. The name for an init container or normal container must be<br />unique among all containers.<br />Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.<br />The resourceRequirements of an init container are taken into account during scheduling<br />by finding the highest request/limit for each resource type, and then using the max of<br />of that value or the sum of the normal containers. Limits are applied to init containers<br />in a similar fashion.<br />Init containers cannot currently be added or removed.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
-| `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ExtraContainers represents extra containers to be added to the pod.<br />See https://github.com/emqx/emqx-operator/issues/252 |  |  |
-| `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volume-v1-core) array_ | See https://github.com/emqx/emqx-operator/pull/72 |  |  |
-| `extraVolumeMounts` _[VolumeMount](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volumemount-v1-core) array_ | See https://github.com/emqx/emqx-operator/pull/72 |  |  |
-| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | Periodic probe of container liveness.<br />Container will be restarted if the probe fails.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:3 httpGet:map[path:/status port:dashboard] initialDelaySeconds:60 periodSeconds:30 \} |  |
-| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | Periodic probe of container service readiness.<br />Container will be removed from service endpoints if the probe fails.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:12 httpGet:map[path:/status port:dashboard] initialDelaySeconds:10 periodSeconds:5 \} |  |
-| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | StartupProbe indicates that the Pod has successfully initialized.<br />If specified, no other probes are executed until this completes successfully.<br />If this probe fails, the Pod will be restarted, just as if the livenessProbe failed.<br />This can be used to provide different probe parameters at the beginning of a Pod's lifecycle,<br />when it might take a long time to load data or warm a cache, than during steady-state operation.<br />This cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes |  |  |
-| `lifecycle` _[Lifecycle](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#lifecycle-v1-core)_ | Actions that the management system should take in response to container lifecycle events.<br />Cannot be updated. |  |  |
+| `nodeSelector` _object (keys:string, values:string)_ | NodeSelectorはポッドがノードに適合するために真でなければならないセレクターです。ポッドがノードにスケジュールされるためにノードのラベルと一致する必要があります。<br />詳細: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/ |  |  |
+| `nodeName` _string_ | NodeNameはこのポッドを特定のノードにスケジュールするリクエストです。空でなければ、スケジューラーはリソース要件に合うと仮定して単純にこのポッドをそのノードにスケジュールします。 |  |  |
+| `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#affinity-v1-core)_ | ポッド割り当てのためのアフィニティ<br />参照: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/ |  |  |
+| `toleRations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | 指定されている場合、ポッドのトレランスです。<br />このTolerationが付与されたポッドは、<key,value,effect>の組にマッチする任意のテイントをマッチングオペレーターを使って許容します。<br />TODO: 将来的には`tolerations`を使うべきで、このフィールドは旧バージョンとの互換性のためだけに存在し、将来削除されます。 |  |  |
+| `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core) array_ | 指定されている場合、ポッドのトレランスです。<br />このTolerationが付与されたポッドは、<key,value,effect>の組にマッチする任意のテイントをマッチングオペレーターを使って許容します。 |  |  |
+| `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#topologyspreadconstraint-v1-core) array_ | // TopologySpreadConstraintは指定されたトポロジー間でマッチするポッドをどのように分散させるかを指定します。 |  |  |
+| `replicas` _integer_ | Replicasは指定されたテンプレートの望ましいレプリカ数です。<br />これらは同じテンプレートのインスタンスですが、個々のレプリカは一貫した識別子を持ちます。<br />デフォルトは2です。 | 2 |  |
+| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | "selector"で選択されたポッドのうち、少なくとも"minAvailable"が退避後も利用可能である場合に退避が許可されます。<br />つまり、退避されたポッドがなくてもこの数だけは利用可能です。例えば、"100%"を指定するとすべての任意退避を防止できます。 |  | XIntOrString: \{\} <br /> |
+| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#intorstring-intstr-util)_ | "selector"で選択されたポッドのうち、退避後に利用不可となるポッドが最大で"maxUnavailable"以下であれば退避が許可されます。<br />例えば、0を指定するとすべての任意退避を防止できます。これは"minAvailable"と相互排他的な設定です。 |  | XIntOrString: \{\} <br /> |
+| `command` _string array_ | エントリポイントの配列。シェル内で実行されません。<br />指定しない場合はコンテナイメージのENTRYPOINTが使われます。<br />変数参照$(VAR_NAME)はコンテナの環境変数で展開されます。解決できない場合は参照文字列は変更されません。ダブル$$は単一の$に縮小され、$(VAR_NAME)構文のエスケープに使えます。例: "$$(VAR_NAME)"は文字列リテラル"$(VAR_NAME)"になります。エスケープされた参照は変数の有無に関わらず展開されません。更新不可。<br />詳細: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
+| `args` _string array_ | エントリポイントへの引数。<br />指定しない場合はコンテナイメージのCMDが使われます。<br />変数参照$(VAR_NAME)はコンテナの環境変数で展開されます。解決できない場合は参照文字列は変更されません。ダブル$$は単一の$に縮小され、$(VAR_NAME)構文のエスケープに使えます。例: "$$(VAR_NAME)"は文字列リテラル"$(VAR_NAME)"になります。エスケープされた参照は変数の有無に関わらず展開されません。更新不可。<br />詳細: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
+| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#containerport-v1-core) array_ | コンテナから公開するポートのリスト。ここでポートを公開することは、システムにコンテナのネットワーク接続情報を追加で提供しますが、主に情報提供目的です。ここでポートを指定しなくても、そのポートの公開は妨げられません。コンテナ内のデフォルトの"0.0.0.0"アドレスでリッスンしている任意のポートはネットワークからアクセス可能です。<br />更新不可。 |  |  |
+| `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core) array_ | コンテナ内で設定する環境変数のリスト。<br />更新不可。 |  |  |
+| `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envfromsource-v1-core) array_ | コンテナ内の環境変数を設定するためのソースのリスト。<br />ソース内で定義されるキーはC_IDENTIFIERでなければなりません。無効なキーはコンテナ起動時にイベントとして報告されます。複数のソースに同じキーが存在する場合、最後のソースの値が優先されます。<br />重複キーのEnvで定義された値が優先されます。<br />更新不可。 |  |  |
+| `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcerequirements-v1-core)_ | このコンテナが必要とする計算リソース。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ |  |  |
+| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podsecuritycontext-v1-core)_ | SecurityContextはポッドレベルのセキュリティ属性および共通のコンテナ設定を保持します。 | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
+| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#securitycontext-v1-core)_ | SecurityContextはコンテナの実行に使用されるセキュリティオプションを定義します。<br />設定されている場合、SecurityContextのフィールドはPodSecurityContextの同等のフィールドを上書きします。<br />詳細: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ポッドに属する初期化コンテナのリスト。<br />初期化コンテナは、コンテナが開始される前に順番に実行されます。いずれかの初期化コンテナが失敗すると、ポッドは失敗とみなされrestartPolicyに従って処理されます。初期化コンテナまたは通常のコンテナの名前はすべてのコンテナ間で一意でなければなりません。<br />初期化コンテナはLifecycleアクション、Readinessプローブ、Livenessプローブ、Startupプローブを持つことはできません。<br />初期化コンテナのresourceRequirementsはスケジューリング時に考慮され、各リソースタイプの最高要求/制限を見つけ、その値と通常コンテナの合計の最大値を使用します。制限も同様に適用されます。<br />初期化コンテナは現在追加または削除できません。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
+| `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core) array_ | ExtraContainersはポッドに追加される追加コンテナを表します。<br />詳細: https://github.com/emqx/emqx-operator/issues/252 |  |  |
+| `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volume-v1-core) array_ | 詳細: https://github.com/emqx/emqx-operator/pull/72 |  |  |
+| `extraVolumeMounts` _[VolumeMount](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#volumemount-v1-core) array_ | 詳細: https://github.com/emqx/emqx-operator/pull/72 |  |  |
+| `livenessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | コンテナの生存確認のための定期的なプローブ。<br />プローブが失敗するとコンテナは再起動されます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:3 httpGet:map[path:/status port:dashboard] initialDelaySeconds:60 periodSeconds:30 \} |  |
+| `readinessProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | コンテナのサービス準備完了確認のための定期的なプローブ。<br />プローブが失敗するとコンテナはサービスエンドポイントから除外されます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes | \{ failureThreshold:12 httpGet:map[path:/status port:dashboard] initialDelaySeconds:10 periodSeconds:5 \} |  |
+| `startupProbe` _[Probe](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)_ | StartupProbeはポッドが正常に初期化されたことを示します。<br />指定されている場合、これが成功するまで他のプローブは実行されません。<br />このプローブが失敗すると、livenessProbeが失敗した場合と同様にポッドは再起動されます。<br />これはポッドのライフサイクル開始時にデータのロードやキャッシュのウォームアップに時間がかかる場合に、通常の状態とは異なるプローブパラメータを提供するために使えます。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes |  |  |
+| `lifecycle` _[Lifecycle](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#lifecycle-v1-core)_ | コンテナのライフサイクルイベントに対して管理システムが取るべきアクション。<br />更新不可。 |  |  |
 
 
 #### EMQXSpec
 
 
 
-EMQXSpec defines the desired state of EMQX
+EMQXSpecはEMQXの望ましい状態を定義します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQX](#emqx)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `image` _string_ | EMQX image name.<br />More info: https://kubernetes.io/docs/concepts/containers/images |  |  |
-| `imagePullPolicy` _[PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#pullpolicy-v1-core)_ | Image pull policy.<br />One of Always, Never, IfNotPresent.<br />Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.<br />Cannot be updated.<br />More info: https://kubernetes.io/docs/concepts/containers/images#updating-images |  |  |
-| `imagePullSecrets` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#localobjectreference-v1-core) array_ | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for pulling any of the images used by this PodSpec.<br />If specified, these secrets will be passed to individual puller implementations for them to use.<br />More info: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod |  |  |
-| `serviceAccountName` _string_ | Service Account Name<br />This associates the ReplicaSet or StatefulSet with the specified Service Account for authentication purposes.<br />More info: https://kubernetes.io/docs/concepts/security/service-accounts |  |  |
-| `bootstrapAPIKeys` _[BootstrapAPIKey](#bootstrapapikey) array_ | EMQX bootstrap user<br />Cannot be updated. |  |  |
-| `config` _[Config](#config)_ | EMQX config |  |  |
+| `image` _string_ | EMQXのイメージ名。<br />詳細: https://kubernetes.io/docs/concepts/containers/images |  |  |
+| `imagePullPolicy` _[PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#pullpolicy-v1-core)_ | イメージプルポリシー。<br />Always、Never、IfNotPresentのいずれか。<br />:latestタグ指定時はデフォルトでAlways、それ以外はIfNotPresent。<br />更新不可。<br />詳細: https://kubernetes.io/docs/concepts/containers/images#updating-images |  |  |
+| `imagePullSecrets` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#localobjectreference-v1-core) array_ | ImagePullSecretsはこのPodSpecで使用されるイメージをプルするために同じネームスペース内のシークレットへの参照のオプションリストです。<br />指定された場合、これらのシークレットは個々のプラー実装に渡されます。<br />詳細: https://kubernetes.io/docs/concepts/containers/images#specifying-imagepullsecrets-on-a-pod |  |  |
+| `serviceAccountName` _string_ | サービスアカウント名<br />ReplicaSetまたはStatefulSetを指定されたサービスアカウントに関連付けて認証に使用します。<br />詳細: https://kubernetes.io/docs/concepts/security/service-accounts |  |  |
+| `bootstrapAPIKeys` _[BootstrapAPIKey](#bootstrapapikey) array_ | EMQXのブートストラップユーザー<br />更新不可。 |  |  |
+| `config` _[Config](#config)_ | EMQX設定 |  |  |
 | `clusterDomain` _string_ |  | cluster.local |  |
-| `revisionHistoryLimit` _integer_ | The number of old ReplicaSets, old StatefulSet and old PersistentVolumeClaim to retain to allow rollback.<br />This is a pointer to distinguish between explicit zero and not specified.<br />Defaults to 3. | 3 |  |
-| `updateStrategy` _[UpdateStrategy](#updatestrategy)_ | UpdateStrategy is the object that describes the EMQX blue-green update strategy | \{ evacuationStrategy:map[connEvictRate:1000 sessEvictRate:1000 waitTakeover:10] initialDelaySeconds:10 type:Recreate \} |  |
-| `coreTemplate` _[EMQXCoreTemplate](#emqxcoretemplate)_ | CoreTemplate is the object that describes the EMQX core node that will be created | \{ spec:map[replicas:1] \} |  |
-| `replicantTemplate` _[EMQXReplicantTemplate](#emqxreplicanttemplate)_ | ReplicantTemplate is the object that describes the EMQX replicant node that will be created |  |  |
-| `dashboardServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | DashboardServiceTemplate is the object that describes the EMQX dashboard service that will be created<br />This service always selector the EMQX core node |  |  |
-| `listenersServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | ListenersServiceTemplate is the object that describes the EMQX listener service that will be created<br />If the EMQX replicant node exist, this service will selector the EMQX replicant node<br />Else this service will selector EMQX core node |  |  |
+| `revisionHistoryLimit` _integer_ | ロールバックを可能にするために保持する古いReplicaSet、古いStatefulSet、および古いPersistentVolumeClaimの数。<br />明示的なゼロと未指定を区別するためのポインター。<br />デフォルトは3。 | 3 |  |
+| `updateStrategy` _[UpdateStrategy](#updatestrategy)_ | UpdateStrategyはEMQXのブルーグリーンアップデート戦略を記述するオブジェクトです | \{ evacuationStrategy:map[connEvictRate:1000 sessEvictRate:1000 waitTakeover:10] initialDelaySeconds:10 type:Recreate \} |  |
+| `coreTemplate` _[EMQXCoreTemplate](#emqxcoretemplate)_ | CoreTemplateは作成されるEMQXコアノードを記述するオブジェクトです | \{ spec:map[replicas:1] \} |  |
+| `replicantTemplate` _[EMQXReplicantTemplate](#emqxreplicanttemplate)_ | ReplicantTemplateは作成されるEMQXレプリカントノードを記述するオブジェクトです |  |  |
+| `dashboardServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | DashboardServiceTemplateは作成されるEMQXダッシュボードサービスを記述するオブジェクトです<br />このサービスは常にEMQXコアノードをセレクトします |  |  |
+| `listenersServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | ListenersServiceTemplateは作成されるEMQXリスナーサービスを記述するオブジェクトです<br />EMQXレプリカントノードが存在する場合、このサービスはEMQXレプリカントノードをセレクトします<br />存在しない場合はEMQXコアノードをセレクトします |  |  |
 
 
 #### EMQXStatus
 
 
 
-EMQXStatus defines the observed state of EMQX
+EMQXStatusはEMQXの観測された状態を定義します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQX](#emqx)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#condition-v1-meta) array_ | Represents the latest available observations of a EMQX Custom Resource current state. |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#condition-v1-meta) array_ | EMQXカスタムリソースの現在の状態に関する最新の観測結果を表します。 |  |  |
 | `coreNodes` _[EMQXNode](#emqxnode) array_ |  |  |  |
 | `coreNodesStatus` _[EMQXNodesStatus](#emqxnodesstatus)_ |  |  |  |
 | `replicantNodes` _[EMQXNode](#emqxnode) array_ |  |  |  |
@@ -309,14 +308,14 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [UpdateStrategy](#updatestrategy)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `waitTakeover` _integer_ |  |  | Minimum: 0 <br /> |
-| `connEvictRate` _integer_ | Just work in EMQX Enterprise. | 1000 | Minimum: 1 <br /> |
-| `sessEvictRate` _integer_ | Just work in EMQX Enterprise. | 1000 | Minimum: 1 <br /> |
+| `waitTakeover` _integer_ |  |  | 最小値: 0 <br /> |
+| `connEvictRate` _integer_ | EMQX Enterpriseでのみ動作します。 | 1000 | 最小値: 1 <br /> |
+| `sessEvictRate` _integer_ | EMQX Enterpriseでのみ動作します。 | 1000 | 最小値: 1 <br /> |
 
 
 #### KeyRef
@@ -327,13 +326,13 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [SecretRef](#secretref)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `secretName` _string_ |  |  |  |
-| `secretKey` _string_ |  |  | Pattern: `^[a-zA-Z\d-_]+$` <br /> |
+| `secretKey` _string_ |  |  | パターン: `^[a-zA-Z\d-_]+$` <br /> |
 
 
 #### NodeEvacuationStats
@@ -344,10 +343,10 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [NodeEvacuationStatus](#nodeevacuationstatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `initial_sessions` _integer_ |  |  |  |
 | `initial_connected` _integer_ |  |  |  |
@@ -363,10 +362,10 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXStatus](#emqxstatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `node` _string_ |  |  |  |
 | `stats` _[NodeEvacuationStats](#nodeevacuationstats)_ |  |  |  |
@@ -382,18 +381,18 @@ _Appears in:_
 
 
 
-Rebalance is the Schema for the rebalances API
+Rebalanceはrebalances APIのスキーマです
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceList](#rebalancelist)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `apps.emqx.io/v2beta1` | | |
 | `kind` _string_ | `Rebalance` | | |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
 | `spec` _[RebalanceSpec](#rebalancespec)_ |  |  |  |
 | `status` _[RebalanceStatus](#rebalancestatus)_ |  |  |  |
 
@@ -402,35 +401,35 @@ _Appears in:_
 
 
 
-RebalanceCondition describes current state of a EMQX rebalancing job.
+RebalanceConditionはEMQXのリバランシングジョブの現在の状態を表します。
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceStatus](#rebalancestatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `type` _[RebalanceConditionType](#rebalanceconditiontype)_ | Status of rebalance condition type. one of Processing, Complete, Failed. |  |  |
-| `status` _[ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#conditionstatus-v1-core)_ | Status of the condition, one of True, False, Unknown. |  |  |
-| `lastUpdateTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | The last time this condition was updated. |  |  |
-| `lastTransitionTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | Last time the condition transitioned from one status to another. |  |  |
-| `reason` _string_ | The reason for the condition's last transition. |  |  |
-| `message` _string_ | A human readable message indicating details about the transition. |  |  |
+| `type` _[RebalanceConditionType](#rebalanceconditiontype)_ | リバランス条件タイプの状態。Processing、Complete、Failedのいずれか。 |  |  |
+| `status` _[ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#conditionstatus-v1-core)_ | 条件の状態。True、False、Unknownのいずれか。 |  |  |
+| `lastUpdateTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | この条件が最後に更新された時間。 |  |  |
+| `lastTransitionTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | 条件がある状態から別の状態に最後に遷移した時間。 |  |  |
+| `reason` _string_ | 条件の最後の遷移理由。 |  |  |
+| `message` _string_ | 遷移の詳細を示す人間が読めるメッセージ。 |  |  |
 
 
 #### RebalanceConditionType
 
-_Underlying type:_ _string_
+_基礎型:_ _string_
 
 
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceCondition](#rebalancecondition)
 
-| Field | Description |
+| フィールド | 説明 |
 | --- | --- |
 | `Processing` |  |
 | `Completed` |  |
@@ -441,32 +440,32 @@ _Appears in:_
 
 
 
-RebalanceList contains a list of Rebalance
+RebalanceListはRebalanceのリストを含みます
 
 
 
 
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `apiVersion` _string_ | `apps.emqx.io/v2beta1` | | |
 | `kind` _string_ | `RebalanceList` | | |
-| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#listmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
 | `items` _[Rebalance](#rebalance) array_ |  |  |  |
 
 
 #### RebalancePhase
 
-_Underlying type:_ _string_
+_基礎型:_ _string_
 
 
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceStatus](#rebalancestatus)
 
-| Field | Description |
+| フィールド | 説明 |
 | --- | --- |
 | `Processing` |  |
 | `Completed` |  |
@@ -477,83 +476,83 @@ _Appears in:_
 
 
 
-RebalanceSpec defines the desired state of Rebalance
+RebalanceSpecはRebalanceの望ましい状態を定義します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [Rebalance](#rebalance)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `instanceKind` _string_ | InstanceKind is used to distinguish between EMQX and EMQXEnterprise.<br />When it is set to "EMQX", it means that the EMQX CR is v2beta1,<br />and when it is set to "EmqxEnterprise", it means that the EmqxEnterprise CR is v1beta4. | EMQX |  |
-| `instanceName` _string_ | InstanceName represents the name of EMQX CR, just work for EMQX Enterprise |  | Required: \{\} <br /> |
-| `rebalanceStrategy` _[RebalanceStrategy](#rebalancestrategy)_ | RebalanceStrategy represents the strategy of EMQX rebalancing<br />More info: https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing |  | Required: \{\} <br /> |
+| `instanceKind` _string_ | InstanceKindはEMQXとEMQXEnterpriseを区別するために使われます。<br />"EMQX"に設定されている場合、EMQX CRはv2beta1を意味し、<br />"EmqxEnterprise"に設定されている場合、EmqxEnterprise CRはv1beta4を意味します。 | EMQX |  |
+| `instanceName` _string_ | InstanceNameはEMQX CRの名前を表し、EMQX Enterpriseでのみ動作します。 |  | 必須: \{\} <br /> |
+| `rebalanceStrategy` _[RebalanceStrategy](#rebalancestrategy)_ | RebalanceStrategyはEMQXのリバランス戦略を表します。<br />詳細: https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing |  | 必須: \{\} <br /> |
 
 
 #### RebalanceState
 
 
 
-Rebalance defines the observed Rebalancing state of EMQX
+RebalanceStateはEMQXの観測されたリバランス状態を定義します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceStatus](#rebalancestatus)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `state` _string_ | State represents the state of emqx cluster rebalancing. |  |  |
-| `session_eviction_rate` _integer_ | SessionEvictionRate represents the node session evacuation rate per second. |  |  |
-| `recipients` _string array_ | Recipients represent the target node for rebalancing. |  |  |
-| `node` _string_ | Node represents the rebalancing scheduling node. |  |  |
-| `donors` _string array_ | Donors represent the source nodes for rebalancing. |  |  |
-| `coordinator_node` _string_ | CoordinatorNode represents the node currently undergoing rebalancing. |  |  |
-| `connection_eviction_rate` _integer_ | ConnectionEvictionRate represents the node session evacuation rate per second. |  |  |
+| `state` _string_ | Stateはemqxクラスターのリバランス状態を表します。 |  |  |
+| `session_eviction_rate` _integer_ | SessionEvictionRateはノードのセッション退避率（秒あたり）を表します。 |  |  |
+| `recipients` _string array_ | Recipientsはリバランスのターゲットノードを表します。 |  |  |
+| `node` _string_ | Nodeはリバランスをスケジューリングしているノードを表します。 |  |  |
+| `donors` _string array_ | Donorsはリバランスのソースノードを表します。 |  |  |
+| `coordinator_node` _string_ | CoordinatorNodeは現在リバランス中のノードを表します。 |  |  |
+| `connection_eviction_rate` _integer_ | ConnectionEvictionRateはノードの接続退避率（秒あたり）を表します。 |  |  |
 
 
 #### RebalanceStatus
 
 
 
-RebalanceStatus represents the current state of Rebalance
+RebalanceStatusはRebalanceの現在の状態を表します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [Rebalance](#rebalance)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `conditions` _[RebalanceCondition](#rebalancecondition) array_ | The latest available observations of an object's current state.<br />When Rebalance fails, the condition will have type "Failed" and status false.<br />When Rebalance is in processing, the condition will have a type "Processing" and status true.<br />When Rebalance is completed, the condition will have a type "Complete" and status true. |  |  |
-| `phase` _[RebalancePhase](#rebalancephase)_ | Phase represents the phase of Rebalance. |  |  |
+| `conditions` _[RebalanceCondition](#rebalancecondition) array_ | オブジェクトの現在の状態に関する最新の観測結果。<br />Rebalanceが失敗した場合、conditionは"type"が"Failed"、statusがfalseになります。<br />Rebalanceが処理中の場合、conditionは"type"が"Processing"、statusがtrueになります。<br />Rebalanceが完了した場合、conditionは"type"が"Complete"、statusがtrueになります。 |  |  |
+| `phase` _[RebalancePhase](#rebalancephase)_ | PhaseはRebalanceのフェーズを表します。 |  |  |
 | `rebalanceStates` _[RebalanceState](#rebalancestate) array_ |  |  |  |
-| `startedTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | StartedTime Represents the time when rebalance job start. |  |  |
-| `completedTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | CompletedTime Represents the time when the rebalance job was completed. |  |  |
+| `startedTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | StartedTimeはリバランスジョブの開始時間を表します。 |  |  |
+| `completedTime` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#time-v1-meta)_ | CompletedTimeはリバランスジョブの完了時間を表します。 |  |  |
 
 
 #### RebalanceStrategy
 
 
 
-RebalanceStrategy represents the strategy of EMQX rebalancing
+RebalanceStrategyはEMQXのリバランス戦略を表します
 
 
 
-_Appears in:_
+_登場箇所:_
 - [RebalanceSpec](#rebalancespec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `connEvictRate` _integer_ | ConnEvictRate represents the source node client disconnect rate per second.<br />same to conn-evict-rate in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0 |  | Minimum: 1 <br />Required: \{\} <br /> |
-| `sessEvictRate` _integer_ | SessEvictRate represents the source node session evacuation rate per second.<br />same to sess-evict-rate in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0<br />Defaults to 500. | 500 |  |
-| `waitTakeover` _integer_ | WaitTakeover represents the time in seconds to wait for a client to<br />reconnect to take over the session after all connections are disconnected.<br />same to wait-takeover in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0<br />Defaults to 60 seconds. | 60 |  |
-| `waitHealthCheck` _integer_ | WaitHealthCheck represents the time (in seconds) to wait for the LB to<br />remove the source node from the list of active backend nodes. After the<br />specified waiting time is exceeded,the rebalancing task will start.<br />same to wait-health-check in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0<br />Defaults to 60 seconds. | 60 |  |
-| `absConnThreshold` _integer_ | AbsConnThreshold represents the absolute threshold for checking connection balance.<br />same to abs-conn-threshold in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0<br />Defaults to 1000. | 1000 |  |
-| `relConnThreshold` _string_ | RelConnThreshold represents the relative threshold for checkin connection balance.<br />same to rel-conn-threshold in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />the usage of float highly discouraged, as support for them varies across languages.<br />So we define the RelConnThreshold field as string type and you not float type<br />The value must be greater than "1.0"<br />Defaults to "1.1". | 1.1 |  |
-| `absSessThreshold` _integer_ | AbsSessThreshold represents the absolute threshold for checking session connection balance.<br />same to abs-sess-threshold in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />The value must be greater than 0<br />Default to 1000. | 1000 |  |
-| `relSessThreshold` _string_ | RelSessThreshold represents the relative threshold for checking session connection balance.<br />same to rel-sess-threshold in [EMQX Rebalancing](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)<br />the usage of float highly discouraged, as support for them varies across languages.<br />So we define the RelSessThreshold field as string type and you not float type<br />The value must be greater than "1.0"<br />Defaults to "1.1". | 1.1 |  |
+| `connEvictRate` _integer_ | ConnEvictRateはソースノードのクライアント切断率（秒あたり）を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のconn-evict-rateと同じです。<br />値は0より大きくなければなりません。 |  | 最小値: 1 <br />必須: \{\} <br /> |
+| `sessEvictRate` _integer_ | SessEvictRateはソースノードのセッション退避率（秒あたり）を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のsess-evict-rateと同じです。<br />値は0より大きくなければなりません。<br />デフォルトは500です。 | 500 |  |
+| `waitTakeover` _integer_ | WaitTakeoverはすべての接続が切断された後にクライアントが再接続してセッションを引き継ぐまでの待機時間（秒）を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のwait-takeoverと同じです。<br />値は0より大きくなければなりません。<br />デフォルトは60秒です。 | 60 |  |
+| `waitHealthCheck` _integer_ | WaitHealthCheckはロードバランサーがソースノードをアクティブなバックエンドノードのリストから削除するまでの待機時間（秒）を表します。<br />指定された待機時間を超えるとリバランスタスクが開始されます。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のwait-health-checkと同じです。<br />値は0より大きくなければなりません。<br />デフォルトは60秒です。 | 60 |  |
+| `absConnThreshold` _integer_ | AbsConnThresholdは接続バランスチェックの絶対閾値を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のabs-conn-thresholdと同じです。<br />値は0より大きくなければなりません。<br />デフォルトは1000です。 | 1000 |  |
+| `relConnThreshold` _string_ | RelConnThresholdは接続バランスチェックの相対閾値を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のrel-conn-thresholdと同じです。<br />浮動小数点の使用は言語間でのサポート差異が大きいため強く推奨されません。<br />そのためRelConnThresholdは文字列型で定義されており、浮動小数点型ではありません。<br />値は"1.0"より大きくなければなりません。<br />デフォルトは"1.1"です。 | 1.1 |  |
+| `absSessThreshold` _integer_ | AbsSessThresholdはセッション接続バランスチェックの絶対閾値を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のabs-sess-thresholdと同じです。<br />値は0より大きくなければなりません。<br />デフォルトは1000です。 | 1000 |  |
+| `relSessThreshold` _string_ | RelSessThresholdはセッション接続バランスチェックの相対閾値を表します。<br />[EMQXリバランシング](https://docs.emqx.com/en/enterprise/v4.4/advanced/rebalancing.html#rebalancing)のrel-sess-thresholdと同じです。<br />浮動小数点の使用は言語間でのサポート差異が大きいため強く推奨されません。<br />そのためRelSessThresholdは文字列型で定義されており、浮動小数点型ではありません。<br />値は"1.0"より大きくなければなりません。<br />デフォルトは"1.1"です。 | 1.1 |  |
 
 
 #### SecretRef
@@ -564,10 +563,10 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [BootstrapAPIKey](#bootstrapapikey)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
 | `key` _[KeyRef](#keyref)_ |  |  |  |
 | `secret` _[KeyRef](#keyref)_ |  |  |  |
@@ -581,14 +580,14 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `enabled` _boolean_ | EMQX Operator will create a service for EMQX nodes.<br />This is a pointer to distinguish between `false` and not specified. | true |  |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[ServiceSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#servicespec-v1-core)_ | Spec defines the behavior of a service.<br />https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
+| `enabled` _boolean_ | EMQX OperatorはEMQXノード用のサービスを作成します。<br />これは`false`と未指定を区別するためのポインターです。 | true |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#objectmeta-v1-meta)_ | `metadata`のフィールドについてはKubernetes APIドキュメントを参照してください。 |  |  |
+| `spec` _[ServiceSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#servicespec-v1-core)_ | Specはサービスの動作を定義します。<br />https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
 
 
 #### UpdateStrategy
@@ -599,12 +598,11 @@ _Appears in:_
 
 
 
-_Appears in:_
+_登場箇所:_
 - [EMQXSpec](#emqxspec)
 
-| Field | Description | Default | Validation |
+| フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `type` _string_ |  | Recreate | Enum: [Recreate] <br /> |
-| `initialDelaySeconds` _integer_ | Number of seconds before evacuation connection start. |  |  |
-| `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Number of seconds before evacuation connection timeout. |  |  |
-
+| `type` _string_ |  | Recreate | 列挙: [Recreate] <br /> |
+| `initialDelaySeconds` _integer_ | 退避接続開始までの秒数。 |  |  |
+| `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | 退避接続タイムアウトまでの秒数。 |  |  |

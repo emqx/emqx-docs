@@ -36,6 +36,8 @@ Output:
 }
 ```
 
+Starting from EMQX 6.0.3, when namespaces are enabled and `rule_engine.limit_selects_in_namespace` is set to `true`, a rule that belongs to a namespace is triggered only by messages published by clients in that same namespace. This setting is enabled by default.
+
 Refer to the table below for fields that can be selected from the received MQTT messages: <!--need tech review @WIVWIV-->
 
 
@@ -59,6 +61,8 @@ Refer to the table below for fields that can be selected from the received MQTT 
 ## MQTT Events
 
 You can use EMQX rules to extract data from event topics to get event notifications, for example, client online and offline, client subscriptions, etc. The event topic starts with `"$events/"`, such as `"$events/client/connected"`, which can be specified in the `FROM` clause of the rule.
+
+Starting from EMQX 6.0.3, when namespaces are enabled and `rule_engine.limit_selects_in_namespace` is set to `true`, a rule that belongs to a namespace is triggered only by client-related events from clients in that same namespace. System alarm events are not associated with any client namespace. When this setting is enabled, `"$events/sys/alarm_activated"` and `"$events/sys/alarm_deactivated"` do not trigger rules.
 
 ::: tip
 

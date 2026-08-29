@@ -120,6 +120,68 @@ EMQX Enterprise 的 License 可能包含使用限制，用于在生产环境中�
 
 你可以通过 EMQX Dashboard 或配置文件配置会话数使用的告警水位阈值。
 
+### 会话峰值水位线历史
+
+EMQX Enterprise 会自动记录集群每日的会话数峰值，并保留最长 24 个月的历史数据。该数据存储在一个经过复制并具备完整性保护的内部表中，可在节点重启或集群拓扑变更后持久保留，为计费结算提供可审计的数据依据。
+
+#### 命令行
+
+使用 `emqx ctl license history` 命令查询历史记录：
+
+```bash
+# 按月查询（默认）
+emqx ctl license history
+
+# 按日查询，最近 7 天
+emqx ctl license history 7 --period daily
+
+# JSON 格式输出
+emqx ctl license history --json
+```
+
+完整命令参考请参见 [license history](../admin/cli.md#license-history)。
+
+#### REST API
+
+```bash
+GET /api/v5/license/session_hwm_history
+```
+
+**查询参数**
+
+| 参数 | 类型 | 默认值 | 说明 |
+| ---- | ---- | ------ | ---- |
+| `period` | `daily` \| `monthly` | `daily` | 聚合粒度。`daily` 按自然日返回记录；`monthly` 将每日峰值聚合为月度最大值。 |
+| `limit` | 整数 | `30` | 最大返回条数，仅对 `daily` 有效；`monthly` 模式下忽略此参数，返回 24 个月保留窗口内的所有可用月份数据。 |
+
+**响应示例**
+
+以下示例显式指定按月聚合的请求：
+
+```bash
+GET /api/v5/license/session_hwm_history?period=monthly
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+每条记录包含以下字段：
+- `period`：自然日（`YYYY-MM-DD`）或月份（`YYYY-MM`），取决于请求的聚合粒度
+- `high_watermark`：该时间段内观测到的会话数峰值
+- `observed_at`：峰值发生时的 RFC 3339 格式时间戳
+
+#### 时区配置
+
+自然日的划分边界由配置项 `license.high_watermark_timezone` 决定。默认值为 `"system"`，即跟随节点所在主机的本地时区。您可以设置显式的 UTC 偏移量（如 `"+08:00"`），以确保跨地域节点的日期边界保持一致。详情请参见 [License 配置](../configuration/license.md)。
+
 ### TPS 限制
 
 从 EMQX 6.0 起，License 中还可以包含每秒消息处理数（TPS）限制。该限制适用于整个集群中处理的 MQTT 消息总量，包括入站和出站消息。

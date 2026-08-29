@@ -88,10 +88,55 @@ python3 http_server.py
 3. 在连接器类型中选择 **HTTP 服务**，点击**下一步**。
 4. 为连接器输入名称，名称应由大小写字母或数字组成，例如：`httpserver`。
 5. 将 **URL** 设置为 HTTP 服务器的地址。例如：`http://localhost:5000`。
-6. 保持其他设置为默认值。
-7. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
-8. 在点击**创建**之前，可以点击**测试连接性**，验证连接器是否能成功连接到 HTTP 服务器。
-9. 点击**创建**完成连接器配置。
+6. [可选] 在**请求头**中添加 HTTP 请求头。
+7. [可选] 开启 **OAuth2 客户端凭证**。EMQX 将获取 Access Token，并将其以 Bearer Token 的形式添加到发往目标 HTTP 服务的请求中。有关配置详情，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
+8. [可选] 开启**启用 TLS**，对目标 HTTP 服务的连接启用 TLS。此开关独立于 OAuth2 Token 端点的**启用 TLS**开关。
+9. [可选] 在**高级设置**中配置连接相关选项。详细信息参见 [Sink 的特性](./data-bridges.md#sink-的特性)。
+10. 在点击**创建**之前，可以点击**测试连接性**，验证连接器是否能成功连接到 HTTP 服务器。
+11. 点击**创建**完成连接器配置。
+
+### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，HTTP 服务连接器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用目标 HTTP 服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由目标服务验证 EMQX 的身份。
+
+创建或编辑连接器时，开启 **OAuth2 客户端凭证**，然后配置以下设置：
+
+| Dashboard 配置项 | 说明 |
+| --- | --- |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于目标 HTTP 服务的**启用 TLS**开关。 |
+
+使用 HOCON 配置时，将 `oauth2` 配置块添加到 HTTP 服务连接器配置中，与 `url`、`headers` 和 `ssl` 同级：
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "messages.write"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要在 HTTP 服务连接器或其 Sink 中配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token Endpoint 必须从请求体的表单字段中接收 Client ID 和 Client Secret。不支持通过 HTTP Basic `Authorization` 请求头向 Token Endpoint 发送客户端凭证。
+
+:::
+
+如果 EMQX 无法获取 Access Token，连接器健康检查会将连接器状态报告为 `disconnected`。
 
 连接器创建成功后，弹出一个对话框，询问是否使用此连接器创建规则。
 

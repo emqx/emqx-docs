@@ -1,58 +1,58 @@
-# EMQX 5.x と EMQX 6.0 の非互換な変更点
+# Incompatible Changes from EMQX 5.x to EMQX 6.0
 
-## 廃止されたパッケージ
+## Deprecated Packages
 
-- [#15939](https://github.com/emqx/emqx/pull/15939) サポート終了となったシステム向けのパッケージ提供を停止しました:
+- [#15939](https://github.com/emqx/emqx/pull/15939) Stopped releasing packages for systems that have already reached end-of-life:
   - Debian 10 (Buster)
   - Enterprise Linux (CentOS) 7
   - Ubuntu 18.04
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
-- [#16050](https://github.com/emqx/emqx/pull/16050) Amazon Linux 2 向けのパッケージ提供を停止しました。Amazon Linux 2 は 2026年6月30日にサポート終了となります。
+- [#16050](https://github.com/emqx/emqx/pull/16050) Stopped releasing packages for Amazon Linux 2. It will reach end-of-life on June 30, 2026.
 
-## 永続セッション
+## Durable Sessions
 
-永続セッション機能を有効にしていない場合、このセクションは無視できます。
+If the durable sessions feature was not enabled before, you can ignore this section.
 
-EMQX 6.0 では、永続セッションおよびそのメッセージの内部表現が変更されました。
-5.x で永続セッションを有効にして運用していたクラスタは、6.0 へアップグレードする際にクリーンな状態から再構築する必要があります。
+In EMQX 6.0, the internal representation of durable sessions and their messages has changed. 
+Clusters previously running on version 5.x with durable sessions enabled must be recreated from a clean state when upgrading to 6.0.
 
-詳細なアップグレード手順は [ローリングアップグレードのドキュメント](../deploy/rolling-upgrades.md#emqx-enterprise-rolling-upgrade) を参照してください。
+For detailed upgrade instructions, see the [rolling upgrade documentation](../deploy/rolling-upgrades.md#emqx-enterprise-rolling-upgrade).
 
-- [#15496](https://github.com/emqx/emqx/pull/15496) 永続セッションの状態は Mnesia から EMQX 永続ストレージ上の新しいデータベースへ移行されました。
-  - そのため、6.0.0 より前に作成された永続セッションの状態は移行時に失われます。
-  - この変更により、Mnesia のトランザクション分離制限によるセッション状態の破損（[#14039](https://github.com/emqx/emqx/issues/14039) 参照）が解消されます。
-  - また、シャーディングと効率的なデータ表現により、永続セッションのパフォーマンスとスケーラビリティが向上します。
+- [#15496](https://github.com/emqx/emqx/pull/15496) The state of durable sessions has been migrated from Mnesia to a new database built on EMQX durable storage.
+  - As a result, all durable session states created before 6.0.0 will be lost during the migration.
+  - This change resolves potential session state corruption caused by Mnesia’s limited transaction isolation (see [#14039](https://github.com/emqx/emqx/issues/14039)).
+  - It also improves the performance and scalability of durable sessions through sharding and a more efficient data representation.
 
-## Will メッセージの挙動
+## Will Message Behavior
 
-永続セッションの認可チェックは、クライアント切断時に行われ、Will メッセージの公開可否が判断されるようになりました。
+Authorization checks for durable sessions are now performed at the moment of client disconnection to determine whether the will message may be published.
 
-以前は、設定された `Will-Delay-Interval` の経過後に認可チェックが行われていました。
+Previously, these checks were deferred until after the configured `Will-Delay-Interval` had expired.
 
-## 設定変更
+## Configuration Changes
 
-**永続セッション**
+**Durable Sessions**
 
-- `durable_storage.messages.n_sites` パラメータは `durable_storage.n_sites` に名称変更され、すべての永続ストレージで共通となりました。
-- `durable_storage.sessions` および `durable_storage.timers` が追加されました。
-- [#15734](https://github.com/emqx/emqx/pull/15734) 永続セッションの信頼性とスループットが向上しました。
+- `durable_storage.messages.n_sites` parameter has been renamed to `durable_storage.n_sites`. This parameter has become common for all durable storage.
+- `durable_storage.sessions` and `durable_storage.timers` have been added.
+- [#15734](https://github.com/emqx/emqx/pull/15734) Improved the reliability and throughput of durable sessions.
 
-**永続ストレージ**
+**Durable Storage**
 
-- `durable_storage.messages.n_sites` は `durable_storage.n_sites` に名称変更され、すべての永続ストレージタイプに適用されます。
-- `durable_storage.sessions` および `durable_storage.timers` の新しい設定項目が追加されました。
+- `durable_storage.messages.n_sites` has been renamed to `durable_storage.n_sites`, which now applies to all durable storage types.
+- Added new configuration entries for `durable_storage.sessions` and `durable_storage.timers`.
 
 **RocketMQ**
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) `parameters.strategy` フィールドはキー・テンプレート（以前は `key_dispatch` 戦略を暗示）を受け付けなくなりました。
-  代わりに、`parameters.strategy = key_dispatch` を明示的に設定し、キー・テンプレートは `parameters.key` で指定してください。
+- [#15635](https://github.com/emqx/emqx/pull/15635) The `parameters.strategy` field no longer accepts key templates (which previously implied the `key_dispatch` strategy).
+  Instead, set `parameters.strategy = key_dispatch` explicitly and specify the key template in `parameters.key`.
 
-**プラットフォームサポート**
+**Platform Support**
 
-- [#15613](https://github.com/emqx/emqx/pull/15613) Debian 10 向けのパッケージビルドを終了しました。
+- [#15613](https://github.com/emqx/emqx/pull/15613) Discontinued package builds for Debian 10.
 
-## レート制限
+## Rate Limit
 
-- [#15743](https://github.com/emqx/emqx/pull/15743) リスナーの接続レート制限（`max_conn_rate` および `max_conn_burst`）は、アクセプタ単位ではなくリスナー単位で適用されるようになり、5.9.0 以前の挙動に戻りました。そのため、5.9.0、5.9.1、5.10.0 の設定は非互換となります：同じ制限値を維持するには、各リスナーで設定したアクセプタ数分だけレート値を増やす必要があります。
+- [#15743](https://github.com/emqx/emqx/pull/15743) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the behavior before 5.9.0. As a result, configurations from versions 5.9.0, 5.9.1, and 5.10.0 are incompatible: the specified rate values must be scaled up by the number of acceptors configured for each listener to preserve the same effective limits.

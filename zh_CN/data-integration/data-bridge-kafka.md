@@ -98,14 +98,17 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    - **认证**：选择 Kafka 集群所需的认证机制。EMQX 支持以下几种方式：
    
      - `无`：无需认证。
-     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
+     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 Amazon MSK 集群的场景。
+     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
      - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式，连接支持 OAuth 或 OIDC 的 Kafka 集群。
      - `基础认证`：使用用户名和密码进行身份认证。需要选择 SASL 机制（`plain`、`scram_sha_256` 或 `scram_sha_512`）。
      - `Kerberos`：使用 Kerberos（GSSAPI）进行身份认证。需要指定 Kerberos Principal 和 Kerberos keytab 文件。
 
      有关每种认证方式的详细说明，请参见[认证方式](#认证方式)。
      
-   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
+   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
+
+   - **请求超时**：指定 EMQX 等待 Kafka 返回待处理请求响应的最长时间。默认值为 `30` 秒。超过此时间后，EMQX 会将连接视为失效并重新建立连接。如果该值设置得过小，Kafka 可能已接收生产请求但延迟返回确认。EMQX 重新连接后可能会重发已被接收的批次，从而产生重复消息，并导致下游数据量过大。
    
    - **高级设置（可选）**：请参阅 [高级配置](#高级配置)。
    
@@ -130,6 +133,15 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
   如果您使用 `iptables` 或 `nftables` 配置宿主机出站访问控制，请不要阻止 `169.254.169.254`。EMQX 需要访问实例元数据服务，以获取用于 MSK IAM 认证的凭据。同样的例外也适用于其他通过 EC2 实例元数据获取 AWS 凭据的连接器，例如 S3、S3 Tables、DynamoDB 和 Kinesis。参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md)。
 
   :::
+
+- **MSK IAM Roles Anywhere**：适用于 EMQX 部署在 EC2 以外的环境（例如本地数据中心），并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
+
+  在该模式下，AWS IAM Roles Anywhere 凭证助手必须以 `serve` 模式运行，并将其 HTTP API 暴露给 EMQX。EMQX 通过该 API 获取临时 AWS 凭据，并使用这些凭据生成用于 MSK IAM 认证的 SASL/OAUTHBEARER 令牌。
+
+  该认证方式需要配置以下参数：
+
+  - **Roles Anywhere 端点**：AWS IAM Roles Anywhere 凭证助手提供 API 的端点。请输入包含协议和端口的完整 HTTP 端点，例如 `http://127.0.0.1:9911`。
+  - **AWS 区域**：MSK 集群运行所在的 AWS 区域。
 
 - **OAuth**：使用基于 OAuth 2.0 的身份认证方式，将 EMQX 连接到支持 OAuth 或 OIDC 的 Kafka 集群（例如 Confluent Cloud，或启用了 OAuth 的自建 Kafka 集群）。
 
@@ -355,7 +367,17 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
 5. 输入连接信息。
 
    - 对于 **主机列表**，输入 `127.0.0.1:9092`。注意：此演示假设您在本地机器上运行 EMQX 和 Kafka。如果您在远程运行 Kafka 和 EMQX，请相应调整设置。
-   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
+   - **认证**：选择 Kafka 集群所需的认证机制。EMQX 支持以下几种方式：
+
+     - `无`：无需认证。
+     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 Amazon MSK 集群的场景。
+     - `MSK IAM Roles Anywhere`：适用于 EMQX 部署在 EC2 以外的环境，并通过 AWS IAM Roles Anywhere 凭证助手连接到 Amazon MSK 集群的场景。
+     - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式。
+     - `基础认证`：需要选择认证方法（`plain`、`scram_sha_256` 或 `scram_sha_512`），并提供用户名和密码。
+     - `Kerberos`：需要指定 Kerberos Principal 和 Kerberos Keytab 文件。
+
+     有关每种认证方式的详细说明，请参见[认证方式](#认证方式)。
+   - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 6. **高级设置**（可选）：参见 **[高级配置](#高级配置)**。
 7. 在点击 **创建** 之前，您可以点击 **测试连接** 来测试连接器是否能连接到 Kafka 服务器。
 11. 点击 **创建**。您将被提供创建关联规则的选项。请参见 [创建 Kafka Source 规则](#创建-kafka-source-规则)。
@@ -476,8 +498,11 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
 | 内存过载保护（生产者）       | 当缓存模式配置为 `memory` 时适用。当 EMQX 遇到高内存压力时，将自动丢弃较旧的缓存消息。它有助于防止因过度内存使用而导致的系统不稳定，确保系统可靠性。<br />此配置仅在 Linux 系统上有效。 | `启用`    |
 | Socket 发送/收包缓存大小     | 管理 TCP socket 发送/收包缓存大小以优化网络传输性能。        | `1024`KB  |
 | TCP Keepalive                | 此配置为 Kafka 连接器启用 TCP 保活机制，以维护持续连接的有效性，防止由长时间不活动导致的连接中断。该值应以逗号分隔的三个数字格式提供，格式为 `Idle, Interval, Probes`：<br />Idle：服务器发起保活探测前连接必须保持空闲的秒数。Linux 上的默认值是 7200 秒。<br />Interval：每个 TCP 保活探测之间的秒数。Linux 上的默认值是 75 秒。<br />Probes：在将连接视为关闭之前，发送的最大 TCP 保活探测次数（如果对端没有响应）。Linux 上的默认值是 9 次探测。<br />例如，如果您将值设置为 `240,30,5`，则意味着在 240 秒的空闲时间后将发送 TCP 保活探测，随后每 30 秒发送一次探测。如果连续 5 次探测尝试没有响应，连接将被标记为关闭。 | `none`    |
-| 最大延迟时间                 | 每个分区生产者为了收集批量消息进行缓冲的最长等待时间。默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。 | `0` 毫秒  |
-| 最大延迟字节数               | 每个分区生产者在发送数据前，为了收集批量消息进行缓冲，最多可以等待的消息字节数。 | `10`MB    |
+| 最大批次存留时间（生产者）   | 消息在生产者缓存中停留的最长时间。超过此时间后，EMQX 将丢弃消息，而不是将其发送到 Kafka。仅当一个批次中的所有消息都超过此时间时，EMQX 才会丢弃该批次。此限制适用于仍在队列中的消息，包括断连期间缓存的消息，以及连接断开时正在等待确认的消息。每条被丢弃的消息都会计入 `dropped.expired` 指标。默认值 `infinity` 表示消息不会过期，但缓存溢出时仍可能被丢弃。 | `infinity` |
+| 最大重试次数（生产者）       | Kafka 返回可重试错误（例如分区 leader 发生变化）后，EMQX 重试发送消息批次的最大次数。如果首次发送和所有重试均失败，EMQX 将丢弃该批次，并将每条消息计入 `failed` 指标。只有 Kafka 明确返回错误码时才会增加重试计数；断连导致的重发不计入重试次数，而是受 `max_batch_age` 限制。默认值 `infinity` 表示不限制重试次数。 | `infinity` |
+| 重连等待时间（生产者）       | 连接断开后，生产者再次尝试连接 Kafka 前的等待时间。断连期间，消息会继续进入缓存，并受缓存容量和 `max_batch_age` 限制。默认值为 `2` 秒。 | `2` 秒    |
+| 最大延迟时间                 | 每个分区生产者为积累更多消息并组成更大批次而等待的最长时间。此参数适用于所有缓存模式。默认值 `0` 表示不等待，可优化消息时延。如果业务允许较短的等待时间，可以配置此参数以减少发往 Kafka 的请求数。积累的数据达到完整批次大小时，等待会提前结束。使用磁盘缓存时，等待发生在批次写入缓存之前；建议配置至少 `5ms` 以减少磁盘 IOPS。 | `0` 毫秒  |
+| 最大延迟字节数               | 每个分区生产者在等待期间积累的最大字节数。达到此值后，生产者停止等待并发送批次。 | `10` MB   |
 | 健康检查间隔                 | 检查连接器运行状态的时间间隔。                               | `15`秒    |
 
 ## 更多信息

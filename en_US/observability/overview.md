@@ -22,6 +22,10 @@ EMQX provides a series of observability-related features to help with system mon
 
   [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for multidimensional data models, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and pushing metrics to `pushgateway`.
 
+- [Broker Health Indicators](./broker-health-indicators.md)
+
+  A curated reference of the most useful Prometheus metrics for monitoring an EMQX broker, organized by system, broker, authentication / authorization, and data integration. Use it together with the Prometheus integration guide to decide what to scrape, alert on, and chart.
+
 - [Integrate with Datadog](./datadog.md)
 
   [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
@@ -40,5 +44,6 @@ EMQX provides a series of observability-related features to help with system mon
 
   EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
 
+- [Mria Logs and Alarms](./mria-alarms.md)
 
-
+  Describes the log messages and alarms reported by the Mria database management system, including how to identify and interpret network partition events and cluster recovery progress.

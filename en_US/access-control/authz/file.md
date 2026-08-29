@@ -75,9 +75,14 @@ Additionally, there are two special rules. These rules are usually used as defau
 
 ## Configure with Dashboard
 
-EMQX configures file-based authorizer by default. You can click **Settings** button in **Actions** column to view or edit the authorization rules configured in the **ACL File** area. For more information on file format and fields descriptions, see [ACL file format](#acl-file-format).
+EMQX configures a file-based authorizer by default. You can click **Settings** in the **Actions** column to view or edit its configuration. To create another file-based authorizer, click **Create**, select **File** as the **Backend**, and click **Next**. The **Configuration** step is shown below.
 
 <img src="./assets/dashboard-edit-ACL-file_ee.png" alt="dashboard-edit-ACL-file_ee" style="zoom:67%;" />
+
+In the **Configuration** step:
+
+- **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+- **ACL File**: Enter the authorization rules. For more information about the file format and fields, see [ACL File Format](#acl-file-format).
 
 ## Configure with Configuration File
 
@@ -103,6 +108,7 @@ Where,
 
 - `type`: Data source types of authorizer; here is `file`.
 - `enable`: Whether to activate the authorizer; optional value: `true`, `false`.
+- `precondition`: Optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 - `path`: Configuration file path; default value: `etc/acl.conf`. If file-based authorizer is edited through Dashboard or REST API, EMQX stores the new file to `data/authz/acl.conf` and stops reading the configuration in the original file.
 
 <!--For detailed parameter list, see [authz-file](../../configuration/configuration-manual.html#authz-file). Need to update the link later-->
@@ -114,4 +120,3 @@ If rules are updated from the dashboard UI or management API, the new rules
 will be stored in `data/authz/acl.conf`, and this original config will no longer be loaded.
 
 ::: <!--This note is not in the Chinese file anymore, remove?-->
-

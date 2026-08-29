@@ -122,7 +122,7 @@ EMQX supports communication with IoTDB through the REST API or Thrift protocol.
    - **Database Name**: When the **SQL Dialect** is set to `Table Model`, you must specify the name of the database to connect to.
    - **Username** and **Password**: Enter credentials used by EMQX to authenticate with the Apache IoTDB server.
    - **IoTDB Version**: Select the version of your Apache IoTDB deployment.
-   - **Enable TLS**: Enable this option to establish an encrypted connection to the Apache IoTDB server. For more information, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   - **Enable TLS**: Enable this option to establish an encrypted connection to the Apache IoTDB server. For more information, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
    - For optional tuning, see **Advanced Settings** in [Advanced Configurations](#advanced-configurations).
 
 5. (Optional) Click **Test Connectivity** to verify that the connector can successfully connect to the Apache IoTDB server.

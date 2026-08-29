@@ -2,7 +2,15 @@
 
 Security is a critical aspect of any MQTT-based application, and this guide is designed to help you understand and implement robust security measures in your EMQX deployments. This chapter explores various security-related topics, focusing on access control, authorization and network security using Transport Layer Security (TLS).
 
+- [Security Checklist](./security-checklist.md)
+
+  Use this production-oriented checklist to review listener exposure, TLS, authentication, authorization, secret handling, and monitoring before a rollout.
+
 - [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
+
+- [Load Secrets from a File](../configuration/secret-from-file.md)
+
+  Use the `file://` prefix on any secret-typed configuration field to have EMQX read the value from a file at startup and on every reload, rather than embedding it directly in `emqx.conf` or an API request.
 
 - [Authentication](./authn/authn.md)
 

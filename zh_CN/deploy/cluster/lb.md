@@ -54,7 +54,9 @@ listeners.tcp.default {
 
 ### 客户端 TLS 证书信息
 
-仅 Proxy Protocol v2 支持发送客户端 TLS 证书信息，例如通用名称 (Common Name, CN) 和主题 (Subject)。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+Proxy Protocol v2 可以将客户端 TLS 证书的部分信息（例如通用名称（Common Name，CN）和主题（Subject））从负载均衡器传递到 EMQX TCP 监听器，但不传递证书的主题备用名称（Subject Alternative Name，SAN）。
+
+要使用 `cert_san.*` 值初始化客户端属性，TLS 连接必须在 EMQX 终结，并且客户端必须向 EMQX TLS 监听器提供证书。如果负载均衡器终结 TLS，EMQX 无法获取 SAN 值。如果负载均衡器不终结 TLS，而是将 TLS 连接转发给 EMQX，则客户端证书仍会提交给 EMQX，因此 EMQX 可以提取其中的 SAN。配置方法参见[使用证书主题备用名称初始化客户端属性](../../client-attributes/client-attributes.md#使用证书主题备用名称初始化客户端属性)。
 
 ## 选择负载均衡产品
 

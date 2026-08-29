@@ -71,6 +71,7 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 1. Go to **System** -> **SSO** in the Dashboard.
 2. Click the **Enable** button on the **SAML 2.0** card.
 3. On the configuration page, enter the following information:
+   - **Force MFA**: Optionally enable this to require all users from this backend to complete TOTP verification at login. Disabled by default. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
 4. Click **Update** to finish the configuration.
@@ -110,7 +111,7 @@ After enabling SAML Single Sign-On, the EMQX Dashboard will display the SSO opti
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions. To require SAML users to complete a TOTP second factor at login, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Logout
 

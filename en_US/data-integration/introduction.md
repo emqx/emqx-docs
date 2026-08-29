@@ -6,6 +6,10 @@ Through simple and visual configuration, message flow and device events can be i
 EMQX provides a real-time, concise and efficient data integration scheme by combining **Rules** and **Data Bridges**.
 The rules are used to process messages or events, and the data bridge is used to connect the data system.
 
+::: tip
+Starting from EMQX 6.3.0, rules, connectors, actions, sources, and data bridges are controlled by the `data_integration` feature gate. If you set `EMQX_FEATURES` manually, enabling `data_integration` also enables its required `schema_registry` dependency. For more information, see [Feature Gates](../deploy/feature-gates.md).
+:::
+
 <img src="./assets/rules/data-integration-arch.png" alt="Data integration architecture" style="zoom:50%;" />
 ## Rules
 

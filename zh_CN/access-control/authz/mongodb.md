@@ -49,11 +49,34 @@ filter { username = "${username}" }
 当系统中有大量用户时，请确保查询使用的集合已优化并使用有效的索引，以提升大量发布订阅时的数据查找速度并降低 EMQX 负载。
 :::
 
+## 通过 Dashboard 配置
+
+1. 在 EMQX Dashboard 中，点击左侧导航栏的**访问控制** > **授权**，进入**授权**页面。
+2. 点击**创建**，选择 **MongoDB** 作为**数据源**，然后点击**下一步**进入**配置参数**页签。
+
+   <img src="./assets/authz-mongodb.png" alt="MongoDB 授权配置" style="zoom:67%;" />
+
+3. 按照以下说明配置 MongoDB 授权检查器：
+   - **部署模式**：选择 MongoDB 的部署模式，包括**单节点**、**副本集**和**分片集群**。
+   - **SRV 记录**：设置是否使用 DNS SRV 记录查找 MongoDB 服务器地址。
+   - **服务器地址**：输入 MongoDB 服务器地址（`host:port`）。
+   - **数据库**：输入用于存储授权数据的数据库名称。
+   - **集合**：输入用于存储授权数据的集合名称。
+   - **用户名**：输入连接 MongoDB 时使用的用户名。
+   - **密码**：输入连接 MongoDB 时使用的密码。
+   - **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+   - **启用 TLS**：设置是否启用 TLS。
+   - **查询 Filter**：输入用于查询授权数据的 MongoDB 选择器，支持使用[数据查询占位符](./authz.md#数据查询占位符)。
+   - **高级设置**：配置身份验证源、兼容模式、记录数量限制、跳过记录数、连接池和连接超时等选项。
+4. 点击**创建**完成配置。
+
 ## 配置项
 
 此认证器支持 3 种部署模式的 MongoDB。<!--详细配置请参考 [authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) 与 [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)。-->
 
 MongoDB Authorizer 必需有 `type = mongodb`。
+
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 有三种不同的连接模式：
 
