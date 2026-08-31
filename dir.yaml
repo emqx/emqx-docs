@@ -170,6 +170,8 @@
                       title_cn: 开启持久化
                       title_ja: 永続化有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Configure Pod Disruption Budgets
+                      path: deploy/kubernetes/operator/tasks/configure-disruption-budgets
                     - title_en: Access EMQX Cluster through LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX 集群
                       title_ja: ロードバランサー経由で EMQX クラスターにアクセス
