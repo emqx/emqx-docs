@@ -9,6 +9,7 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 | `/api-spec.html` | HTML | 逐层展开式 API 参考页面，适合人工阅读。 |
 | `/api-spec.md` | Markdown | Markdown 格式的 API 参考，适合 AI 代理和自动化工具使用。 |
 | `/api-spec.json` | JSON | OpenAPI 3.0 规范的 JSON 格式，适合脚本和程序化工具使用。 |
+| `/api-spec/:tag[/:name]` | JSON | 针对特定 API 标签的 OpenAPI 3.0 规范，可选择通过匹配请求或响应 Schema 名称进一步筛选。 |
 | `/api-docs/swagger.json` | JSON | 完整的 OpenAPI 3.0 规范，适用于外部 Swagger UI 部署及其他兼容工具。 |
 
 以上所有端点均需要 Dashboard 配置中的 `swagger_support` 设置为 `true`（默认值）。将其设置为 `false` 可禁用所有 API 文档端点。更多信息请参阅 [Dashboard 配置](../configuration/dashboard.md)。
@@ -20,6 +21,20 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 ::: tip
 从 EMQX 6.3.0 开始，[功能门控](../deploy/feature-gates.md)可以在启动阶段禁用可选功能。已禁用功能提供的 REST API 路径不会加载为可访问的 API 端点。启用 `dashboard` 功能后，可以调用 `GET /api/v5/features` 查看解析后的功能集。
 :::
+
+## 访问 API 规范端点
+
+从 EMQX 6.3.0 开始，必须通过认证才能从上述端点获取 API 规范内容。
+
+程序化请求可以使用 API Key 和 Secret Key 进行基本认证，也可以使用 Bearer Token 认证。操作说明参见[认证](#认证)。
+
+访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。
+
+如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，并包含一个最小化的 API 规范。该规范说明支持的认证方式，并列出两个公开端点：用于获取 Bearer Token 的 `POST /api/v5/login`，以及用于检查 Broker 状态的 `GET /api/v5/status`。该最小化响应不包含所请求的 API 规范内容。
+
+在浏览器中访问时，EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证访问 `/api-spec.html` 时，EMQX 返回 HTTP `401`，并显示登录页面，而不是完整的 API Spec Explorer。该响应仅声明支持 Bearer Token 认证，以避免浏览器打开原生的基本认证对话框。使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
+
+访问 `/api-docs` 和 `/api-docs/index.html` 无需认证，因为这两个端点只会重定向到 `/api-spec.html`。重定向后，必须通过认证才能访问完整的 API Spec Explorer。
 
 ## 基本路径
 
@@ -39,7 +54,7 @@ EMQX 遵循 [HTTP 响应状态码](https://developer.mozilla.org/en-US/docs/Web/
 | 201    | 创建成功，新建的对象将在 Body 中返回                         |
 | 204    | 请求成功，常用于删除与更新操作，Body 不会返回内容            |
 | 400    | 请求无效，例如请求体或参数错误                               |
-| 401    | 未通过服务端认证，API 密钥过期或不存在时可能会发生           |
+| 401    | 未通过服务端认证。认证凭据缺失、无效或已过期。               |
 | 403    | 无权操作，检查操作对象是否正在使用或有依赖约束               |
 | 404    | 找不到请求路径或请求的对象不存在，可参照 Body 中的 `message` 字段判断具体原因 |
 | 409    | 请求的资源已存在或数量超过限制                               |

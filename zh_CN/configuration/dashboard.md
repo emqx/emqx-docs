@@ -129,6 +129,8 @@ dashboard {
 
   用于启用 API 文档端点，包括 `/api-spec.html`、`/api-spec.md`、`/api-spec.json`，以及提供完整 OpenAPI 规范的 `/api-docs/swagger.json`。为保持向后兼容，`/api-docs` 和 `/api-docs/index.html` 会重定向到 `/api-spec.html`。将此配置项设置为 `false` 可禁用所有 API 文档端点。
 
+  从 EMQX 6.3.0 开始，必须通过认证才能从这些端点访问 API 规范内容。有关支持的认证方式和未认证响应行为，参见[访问 API 规范端点](../admin/api.md#访问-api-规范端点)。
+
 - `default_password`
 
   用于为 `admin` 用户初始化数据库条目的默认密码。注意：一旦 EMQX 初次启动成功，修改这个密码将不再不起作用。初始化后，密码必须在控制台或者命令行进行修改。
