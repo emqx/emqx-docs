@@ -13,7 +13,9 @@
 
 ::: tip 关于采集器默认值
 
-带 `emqx_` 前缀的指标始终启用。带 `erlang_vm_` 前缀的、更丰富的 Erlang VM 指标来自上游 Prometheus Erlang exporter，在 EMQX 6.0 及更新版本中**默认关闭**。如需进程数、按分配器拆分的内存或 GC 和调度器统计等指标，可将 `prometheus.collectors.vm_system_info`、`vm_memory`、`vm_statistics` 设置为 `enabled`。
+EMQX 原生指标不依赖上游 Erlang VM 采集器。在 EMQX 6.3 中，`prometheus.collectors` 下的 `vm_dist`、`vm_statistics`、`vm_system_info` 和 `vm_memory` 字段默认值为 `enabled`。`mnesia` 和 `vm_msacc` 字段的默认值为 `disabled`。
+
+现有旧格式配置保持原有行为：六个扁平 `prometheus.*_collector` 字段的默认值均为 `disabled`，已显式配置的值保持不变。
 
 :::
 
@@ -30,16 +32,16 @@
 
 ### 内存
 
+以 `erlang_vm_memory_` 为前缀的指标要求将 `prometheus.collectors.vm_memory` 设置为 `enabled`。
+
 | 指标 | 说明 |
 |------|------|
 | `emqx_vm_total_memory` | 系统总内存（字节）。 |
 | `emqx_vm_used_memory` | 系统已用内存（字节）。 |
-| `erlang_vm_memory_processes` | 按分配器拆分的内存：进程（需启用 `vm_memory` 采集器）。 |
-| `erlang_vm_memory_atom` | 按分配器拆分的内存：原子。 |
-| `erlang_vm_memory_binary` | 按分配器拆分的内存：二进制数据。 |
-| `erlang_vm_memory_ets` | 按分配器拆分的内存：ETS 表。 |
-| `erlang_vm_memory_code` | 按分配器拆分的内存：已加载代码。 |
-| `erlang_vm_memory_system` | 按分配器拆分的内存：系统开销。 |
+| `erlang_vm_memory_bytes` | Erlang VM 分配的总内存，使用 `kind="system"` 或 `kind="processes"` 标签区分内存类型。 |
+| `erlang_vm_memory_processes_bytes` | Erlang 进程内存，使用 `usage="used"` 或 `usage="free"` 标签区分已用和空闲内存。 |
+| `erlang_vm_memory_system_bytes` | 按用途区分的系统内存，包括原子、二进制数据、已加载代码、ETS 表和其他开销。 |
+| `erlang_vm_memory_atom_bytes` | 原子内存，使用 `usage="used"` 或 `usage="free"` 标签区分已用和空闲内存。 |
 
 ### 文件描述符
 
@@ -52,8 +54,7 @@
 | 指标 | 说明 |
 |------|------|
 | `emqx_vm_run_queue` | 当前调度器运行队列长度。长期不为零表示 CPU 饱和。 |
-| `emqx_vm_process_messages_in_queues` | 所有 Erlang 进程邮箱长度之和。数值持续偏大或增长，表明某个进程处理不过来。 |
-| `erlang_vm_process_count` | 当前 Erlang 进程数（需启用 `vm_system_info` 采集器）。 |
+| `erlang_vm_processes` | 当前 Erlang 进程数（需启用 `vm_system_info` 采集器）。 |
 | `erlang_vm_process_limit` | 配置的 Erlang 进程数上限。 |
 
 ### 内部邮箱看门狗
@@ -401,6 +402,31 @@
 - `rate(emqx_overload_protection_new_conn[1m])`：broker 正在主动拒绝新连接。
 - `rate(emqx_authentication_failure[1m])`：速率突增通常意味着后端异常或受到攻击。
 - `emqx_vm_run_queue`：持续大于零说明 CPU 饱和。
-- `emqx_vm_process_messages_in_queues`：数值偏大说明进程邮箱出现积压。
 - `emqx_mria_lag`：持续超过几秒说明复制开始落后。
 - `emqx_license_expiry_at - time()`（企业版）：License 到期倒计时。
+
+## EMQX 6.3 Prometheus 指标兼容性
+
+EMQX 6.3 对 Prometheus VM 和 Mnesia 采集器指标使用符合 promtool 规范的名称。如果 PromQL 表达式、记录规则、告警规则或自定义 Grafana Dashboard 使用了原指标名称，请按下表更新。
+
+| EMQX 6.3 之前 | EMQX 6.3 |
+| --- | --- |
+| `erlang_mnesia_failed_transactions` | `erlang_mnesia_failed_transactions_total` |
+| `erlang_mnesia_committed_transactions` | `erlang_mnesia_committed_transactions_total` |
+| `erlang_mnesia_logged_transactions` | `erlang_mnesia_logged_transactions_total` |
+| `erlang_mnesia_restarted_transactions` | `erlang_mnesia_restarted_transactions_total` |
+| `erlang_vm_memory_atom_bytes_total` | `erlang_vm_memory_atom_bytes` |
+| `erlang_vm_memory_bytes_total` | `erlang_vm_memory_bytes` |
+| `erlang_vm_memory_processes_bytes_total` | `erlang_vm_memory_processes_bytes` |
+| `erlang_vm_memory_system_bytes_total` | `erlang_vm_memory_system_bytes` |
+| `erlang_vm_statistics_context_switches` | `erlang_vm_statistics_context_switches_total` |
+| `erlang_vm_statistics_garbage_collection_number_of_gcs` | `erlang_vm_statistics_garbage_collection_number_of_gcs_total` |
+| `erlang_vm_statistics_garbage_collection_words_reclaimed` | `erlang_vm_statistics_garbage_collection_words_reclaimed_total` |
+| `erlang_vm_statistics_garbage_collection_bytes_reclaimed` | `erlang_vm_statistics_garbage_collection_bytes_reclaimed_total` |
+| `erlang_vm_statistics_runtime_milliseconds` | `erlang_vm_statistics_runtime_seconds_total` |
+| `erlang_vm_statistics_wallclock_time_milliseconds` | `erlang_vm_statistics_wallclock_time_seconds_total` |
+| `erlang_vm_port_count` | `erlang_vm_ports` |
+| `erlang_vm_process_count` | `erlang_vm_processes` |
+| `erlang_vm_atom_count` | `erlang_vm_atoms` |
+
+EMQX 6.3 不再导出 `emqx_vm_process_messages_in_queues` 指标。请删除使用该指标的查询。EMQX 6.3 没有提供直接替代指标。
