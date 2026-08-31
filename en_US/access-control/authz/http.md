@@ -72,6 +72,45 @@ For untrusted environments, HTTPS should be used.
 
 :::
 
+## Configure Dynamic Hostname Resolution
+
+By default, the HTTP authorizer resolves the hostname in `url` when the authorizer is created and uses a persistent connection pool. To resolve the hostname for every authorization request, set `hostname_resolution` to `dynamic`.
+
+Dynamic hostname resolution also allows placeholders in the host part of `url`. For example, the following configuration routes authorization requests to different endpoints according to the client's `tenant` attribute:
+
+```hocon
+{
+    type = http
+    method = post
+    url = "https://${client_attrs.tenant}.auth.example.com/authz"
+    hostname_resolution = dynamic
+    allowed_hosts = ["*.auth.example.com"]
+    pool_size = 8
+    headers {
+        "Content-Type" = "application/json"
+    }
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    ssl {
+        enable = true
+    }
+}
+```
+
+When configuring dynamic hostname resolution, note the following:
+
+- `hostname_resolution` accepts `static` or `dynamic`. The default value is `static`. You can also use `dynamic` with a literal hostname to resolve that hostname for every request.
+- If the URL host contains placeholders, `hostname_resolution` must be `dynamic` and `allowed_hosts` must contain at least one entry.
+- Each `allowed_hosts` entry must be an exact hostname, such as `auth.example.com`, or a wildcard pattern, such as `*.auth.example.com`. The wildcard matches hostnames under the specified suffix, but not the suffix itself. `allowed_hosts` has no effect when the URL uses a literal hostname.
+- Within the URL authority, only the host can contain placeholders. The scheme must be `http` or `https`, and the port, if specified, must be a literal integer. URL userinfo and fragments are not supported. Placeholders in the URL path and query remain supported.
+- If EMQX cannot render a valid hostname or the rendered hostname does not match `allowed_hosts`, EMQX does not send the HTTP request and the authorization check fails.
+- In `dynamic` mode, requests to all rendered hosts share a connection pool. `pool_size` limits how many idle connections the pool can keep for reuse. Set it to `0` to disable connection reuse. `enable_pipelining` and `max_inactive` do not apply in this mode.
+- For HTTPS requests in `dynamic` mode, EMQX applies the configured TLS options to the rendered host. Unless Server Name Indication (SNI) is explicitly configured, EMQX derives it from the rendered hostname.
+- OAuth2 is not supported when `hostname_resolution` is `dynamic`.
+
 ## Configure with Dashboard
 
 1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
@@ -83,16 +122,18 @@ For untrusted environments, HTTPS should be used.
 3. Follow the instructions below to do the configuration.
 
    - **Method**: Select the HTTP request method, optional values: `GET`, `POST`.
-   - **URL**: Enter the IP address of the HTTP application.
+   - **URL**: Enter the URL of the HTTP application. The host part can include [authorization placeholders](./authz.md#authorization-placeholders) when **Hostname Resolution** is set to `Dynamic`.
+   - **Hostname Resolution**: Select `Static` to resolve a fixed hostname when creating the authorizer, or `Dynamic` to resolve the hostname for every request. The default option is `Static`. For more information, see [Configure Dynamic Hostname Resolution](#configure-dynamic-hostname-resolution).
+   - **Allowed Hosts**: When the URL host contains placeholders, enter the exact hostnames or wildcard patterns that the rendered hostname is allowed to match.
    - **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
    - **Headers** (optional): Configure the HTTP request headers. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
    - **OAuth2 Client Credentials**: Turn on the toggle switch to let EMQX obtain an access token and add it to requests sent to the external HTTP authorization service. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
    - **Enable TLS**: Turn on the toggle switch to enable TLS for connections to the external HTTP authorization service. This setting is independent of the TLS setting for the OAuth2 token endpoint.
    - **Body**: Configure the HTTP request body. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
    - **Advanced Settings**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
-     - **Pool size** (optional): This is an integer that specifies the number of concurrent connections from EMQX nodes to external HTTP servers. The default value is `8`.
+     - **Pool size** (optional): In `Static` mode, specify the persistent connection pool size. The value must be at least `1`. In `Dynamic` mode, specify the number of connections that can be reused across requests, or set it to `0` to disable connection reuse. The default value is `8`.
      - **Connection Timeout** (optional): Enter the duration to wait for a connection timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
-     - **HTTP Pipelining** (optional): Positive integer, specifies the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
+     - **HTTP Pipelining** (optional): Positive integer, specifies the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`. This setting does not apply when **Hostname Resolution** is set to `Dynamic`.
      - **Request Timeout** (optional): Enter the duration to wait for a request timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
 
 4. Click **Create** to finish the setting.
