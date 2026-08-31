@@ -264,6 +264,29 @@ EMQX also allows placeholders to be used in topics to support dynamic themes. Th
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
+Starting from EMQX 6.3.0, EMQX validates values interpolated into authorization topic templates. By default, these values cannot contain the topic level separator (`/`) or MQTT topic filter wildcards (`+` and `#`). This restriction does not apply to separators or wildcards written directly in the template.
+
+For example, when the username is `alice`, EMQX renders `tenant/${username}/#` as `tenant/alice/#`. If the username is `tenant/alice` or `+`, EMQX cannot render the template because the interpolated value contains a disallowed character.
+
+If an interpolated value contains a disallowed character, EMQX handles the authorization rule according to the active security profile:
+
+- With the `legacy` profile, the rule does not match, and EMQX continues with the remaining authorization rules and sources.
+- With the `hardened` profile, EMQX denies the publish or subscribe operation. If `authorization.ignore_backend_failures` is set to `true`, EMQX instead treats the rule as not matching.
+
+In EMQX 6.3.0, the default security profile is `legacy`, and `authorization.ignore_backend_failures` defaults to `false`. After upgrading to EMQX 6.3.0, a rule configured before the upgrade no longer matches under the default `legacy` profile if an interpolated value contains a disallowed character. The final result depends on the remaining authorization rules, authorization sources, and `authorization.no_match`. Before upgrading, review these settings to confirm the expected fallback behavior.
+
+The `authorization.topic_template_allow` settings control which characters are allowed in interpolated values. All settings default to `false`:
+
+```hocon
+authorization.topic_template_allow {
+  plus = false
+  hash = false
+  slash = false
+}
+```
+
+Set an option to `true` only if interpolated values must contain the corresponding character. Enabling these options can allow a client-derived value to broaden the topic filter matched by an authorization rule. Validate usernames, client IDs, and client attributes before using their values in topic templates.
+
 To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` as `${$}`. For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
 
 ::: tip
