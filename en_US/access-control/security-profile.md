@@ -74,11 +74,11 @@ Under the `hardened` profile, EMQX drops pending delayed messages created before
 
 - **Access-control hook failures deny the request.** Exceptions raised from authentication or authorization hooks interrupt processing and deny the request. This is particularly important for custom authentication and authorization provided by plugins or the ExHook extension.
 - **ExHook `message.publish` failures deny publishing.** If no ExHook server is available, or an ExHook server whose `failed_action` is `deny` fails while processing `message.publish`, EMQX prevents the message from being published. Under `legacy`, the same failure does not block publishing.
+- **Plugin installation requires a package digest.** `emqx ctl plugins allow <Name-Vsn>` requires the `sha256:<hex>` argument. The grant binds the plugin package to that digest, and EMQX installs an upload only when its bytes match. A grant without a digest is refused, including one that a cluster peer sends. Under `legacy`, the argument stays optional.
 
 ### Dashboard
 
 - **Default Dashboard credentials are not accepted.** Local Dashboard accounts with the default password `public` cannot log in. This includes administrator accounts created before an upgrade. Change the password before switching to the `hardened` profile.
-- **SAML signatures are verified.** SAML single sign-on requires signatures on both the response envelope and the assertion. Configure `idp_signs_envelopes` and `idp_signs_assertions` to match the identity provider.
 
 ## Default Listener Address
 

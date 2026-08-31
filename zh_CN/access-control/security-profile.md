@@ -74,11 +74,11 @@ EMQX 在启动时读取该变量一次，读取发生在解析配置文件之前
 
 - **访问控制钩子故障将拒绝请求。** 认证或授权钩子抛出的异常会中断处理并拒绝请求。这对插件或 ExHook 扩展提供的自定义认证和授权尤其重要。
 - **ExHook `message.publish` 失败将拒绝发布。** 如果没有可用的 ExHook 服务端，或者 `failed_action` 为 `deny` 的 ExHook 服务端在处理 `message.publish` 时失败，EMQX 将阻止消息发布。在 `legacy` 方案下，相同的失败不会阻止消息发布。
+- **安装插件必须提供安装包摘要。** `emqx ctl plugins allow <Name-Vsn>` 必须带上 `sha256:<hex>` 参数。该授权将插件安装包绑定到指定摘要，只有字节内容与摘要一致的上传才会被安装。未携带摘要的授权将被拒绝，包括集群中其他节点发来的授权。在 `legacy` 方案下，该参数仍为可选。
 
 ### Dashboard
 
 - **不接受 Dashboard 默认凭据。** 使用默认密码 `public` 的本地 Dashboard 账户无法登录，包括升级前创建的管理员账户。切换到 `hardened` 方案前请先修改密码。
-- **验证 SAML 签名。** SAML 单点登录要求响应信封和断言都带有签名。根据身份提供商的实际行为配置 `idp_signs_envelopes` 和 `idp_signs_assertions`。
 
 ## 默认监听地址
 
