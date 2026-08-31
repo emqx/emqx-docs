@@ -10,6 +10,7 @@
 ::: tip
 
 您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。
+如需通过配置文件配置监听器，建议使用 `base.hocon`，而不是 `emqx.conf`。
 注意，如果监听器在  `emqx.conf` 中显式配置，那么在 Dashboard 中进行的修改只能临时生效直到下次 EMQX 重启。
 
 :::
@@ -20,11 +21,57 @@ EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见
 
 :::
 
+## 如何确定监听地址
+
+监听地址决定 EMQX 在哪些本地网络接口和端口上接收客户端连接。
+
+监听器的 `bind` 配置支持显式指定 IP 地址和端口（例如 `"0.0.0.0:1883"`），也支持仅指定端口（例如 `1883`）。从 EMQX 6.3.0 开始，节点级配置项 `node.default_listener_address` 用于控制仅指定端口的监听器所使用的地址。
+
+EMQX 按以下顺序确定地址：
+
+1. 如果 `bind` 包含 IP 地址，EMQX 使用该地址。`node.default_listener_address` 和安全配置方案均不会覆盖此地址。
+2. 如果 `bind` 仅指定端口，且已设置 `node.default_listener_address`，EMQX 使用该配置项在本节点上确定的地址。
+3. 否则，MQTT 监听器使用安全配置方案的默认地址：`legacy` 方案下监听所有网络接口，`hardened` 方案下绑定仅供本机访问的回环地址。
+
+配置中的 `bind` 值保持不变。例如，即使监听器在运行时使用特定 IP 地址，`bind = 1883` 仍保持为仅指定端口的值。
+
+下文的 TCP、SSL 和 WebSocket 配置示例均显式指定 IP 地址，因此不受默认监听地址设置影响。
+
+支持的取值及启动行为参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。官方 Docker 镜像会设置自己的默认值，参见 [Docker 中的监听地址](../deploy/install-docker.md#docker-中的监听地址)。
+
+### 为各节点使用不同地址
+
+通过 Dashboard、REST API 或 CLI 修改的监听器配置会同步到整个集群。如果在 `bind` 中填写某个节点的 IP 地址，其他不具备该地址的节点将无法绑定该监听器。如需在各节点上使用不同地址，请将监听器的绑定保持为仅指定端口，并分别配置各节点的默认地址。
+
+监听器配置使用 `base.hocon`，节点级的默认监听地址使用 `emqx.conf` 或环境变量。例如，若要使用各节点 Erlang 节点名中的主机部分：
+
+1. 通过 Dashboard 将 TCP 监听器的绑定设置为 `1883`，或在每个节点的 `etc/base.hocon` 中配置：
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   如果优先级更高的配置源已设置显式绑定地址，请改为更新该配置源。参见[配置覆盖规则](./configuration.md#配置覆盖规则)。
+
+2. 在每个节点的 `emqx.conf` 中添加：
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   对于 Docker 部署，请向 `docker run` 传入 `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename`，或在 Docker Compose 服务的 `environment` 部分设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename`。这会覆盖官方镜像设置的默认值 `all`，该默认值的优先级高于 `emqx.conf` 中的配置。
+
+   EMQX 使用节点名中 `@` 之后的主机部分；如果它是主机名，则在节点启动时解析。请确保该名称解析到本节点可用的地址。如果主机名无法解析，节点将无法启动。
+
+3. 重启各节点，使 `node.default_listener_address` 生效。该配置项会影响本节点上所有仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器。监听器绑定中显式指定的 IP 地址保持不变。
+
+也可以在节点环境中设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`。环境变量的优先级高于 `emqx.conf`。
+
 ## 配置 TCP 监听器
 
 TCP 监听器是一种网络服务，它在特定的网络端口上监听传入的 TCP 连接。它在客户端与 EMQX 之间通过 TCP/IP 网络建立和维护连接中发挥重要作用。
 
-在 EMQX 中配置 TCP 监听器，需在 EMQX 安装目录下的 `etc` 文件夹中的 `emqx.conf` 文件添加 `listeners.tcp` 配置项。
+在 EMQX 中配置 TCP 监听器，可在 EMQX 安装目录下的 `etc/base.hocon` 文件中添加 `listeners.tcp` 配置项。
 
 例如，若要启用端口 `1883` 上的 TCP 监听器，并设置监听器最多允许 1,024,000 个并发连接，可使用以下配置：
 
@@ -46,7 +93,7 @@ listeners.tcp.default {
 
 SSL 监听器监听传入的 Secure Sockets Layer (SSL）连接，用于加密客户端与 EMQX 间传输的数据，保护网络通信安全。
 
-在 EMQX 中配置 SSL 监听器，需在 `emqx.conf` 文件中添加 `listeners.ssl` 配置项。
+在 EMQX 中配置 SSL 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.ssl` 配置项。
 
 例如，若要在端口 `8883` 上启用 SSL 监听器，同时允许最多 1,024,000 个并发连接，可使用以下配置：
 
@@ -83,7 +130,7 @@ WebSocket 监听器接收并处理通过 WebSocket 协议传入的消息。EMQX 
 
 有关 MQTT over WebSocket 的工作原理及其典型使用场景的概述，请参阅 [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md)。
 
-在 EMQX 中配置 WebSocket 监听器，需在 `emqx.conf` 文件中添加 `listeners.ws` 配置项。
+在 EMQX 中配置 WebSocket 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.ws` 配置项。
 
 例如，若要在端口 `8083` 上启用 WebSocket 监听器，并允许最多 1,024,000 个并发连接，可使用以下配置：
 
@@ -107,7 +154,7 @@ listeners.ws.default {
 
 安全 WebSocket 监听器通过 SSL 或 TLS 协议加密 WebSocket 客户端与代理之间交换的数据，是保护数据安全的重要措施。
 
-在 EMQX 中配置安全 WebSocket 监听器，需在 `emqx.conf` 文件中添加 `listeners.wss` 配置项。
+在 EMQX 中配置安全 WebSocket 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.wss` 配置项。
 
 例如，若要在端口 `8084` 上启用安全 WebSocket 监听器，并允许最多 1,024,000 个并发连接，可使用以下配置：
 

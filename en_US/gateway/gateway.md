@@ -52,6 +52,13 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
+
+A gateway listener's `bind` setting specifies the local address and port used to receive client traffic. It accepts an explicit IP address and port, or a port alone.
+
+Starting from EMQX 6.3.0, gateway listeners whose `bind` specifies only a port use `node.default_listener_address`, a node-level setting that selects the default bind address. An explicit IP address and port in `bind` takes precedence. If this setting is not configured, gateway listeners with port-only binds listen on all network interfaces under both the `legacy` and `hardened` security profiles.
+
+To change the address used by gateway listeners with port-only binds, configure this setting in each node's `emqx.conf` or through `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`, and restart the node after changing it. It also affects port-only binds for MQTT listeners and the Dashboard HTTP listener. See [Default Listener Address](../access-control/security-profile.md#default-listener-address) for supported values and the official Docker image's default.
+
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.

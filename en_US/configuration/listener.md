@@ -21,6 +21,52 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+## How EMQX Determines the Listener Address
+
+A listener address determines the local network interfaces and port on which EMQX receives client connections.
+
+A listener's `bind` setting accepts an explicit IP address and port, such as `"0.0.0.0:1883"`, or a port alone, such as `1883`. Starting from EMQX 6.3.0, the node-level `node.default_listener_address` setting controls the address used by listeners whose binds specify only a port.
+
+EMQX selects the address in the following order:
+
+1. If `bind` includes an IP address, EMQX uses that address. Neither `node.default_listener_address` nor the security profile overrides it.
+2. If `bind` specifies only a port and `node.default_listener_address` is set, EMQX uses the address selected by that setting on the local node.
+3. Otherwise, MQTT listeners use the security profile's default: all network interfaces under `legacy`, or the loopback address under `hardened`. The loopback address is accessible only from the local host.
+
+The configured `bind` value stays unchanged. For example, `bind = 1883` remains a port-only value even when the listener uses a specific IP address at runtime.
+
+The TCP, SSL, and WebSocket configuration examples below use explicit IP addresses, so they are not affected by the default listener address setting.
+
+For supported values and startup behavior, see [Default Listener Address](../access-control/security-profile.md#default-listener-address). The official Docker image sets its own default; see [Listener Addresses in Docker](../deploy/install-docker.md#listener-addresses-in-docker).
+
+### Use a Different Address on Each Node
+
+Listener configuration changes made through the Dashboard, REST API, or CLI are replicated across the cluster. If you put one node's IP address in `bind`, the listener cannot bind to that address on nodes where it is not available. To use a different address on each node, keep the listener's bind as a port and configure the default address separately on each node.
+
+Use `base.hocon` for listener settings, and `emqx.conf` or environment variables for the node-level default listener address. For example, to use the host part of each node's Erlang node name:
+
+1. Set the TCP listener's bind to `1883` through the Dashboard, or configure the following in each node's `etc/base.hocon`:
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   If a higher-priority configuration source already sets an explicit bind address, update that source instead. See [Config Override Rules](./configuration.md#config-override-rules).
+
+2. Add the following to each node's `emqx.conf`:
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   For Docker deployments, pass `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename` to `docker run`, or set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename` in the Docker Compose service's `environment` section. This overrides the official image's `all` default, which takes precedence over the value in `emqx.conf`.
+
+   EMQX uses the host part after `@` in the node name, resolving it at node startup if it is a hostname. Ensure that it resolves to an address available on that node. A hostname that cannot be resolved prevents the node from starting.
+
+3. Restart each node to apply `node.default_listener_address`. This setting affects all port-only binds for MQTT listeners, gateway listeners, and the Dashboard HTTP listener on that node. Explicit IP addresses in listener binds remain unchanged.
+
+You can also set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` in the node's environment. Environment variables take precedence over `emqx.conf`.
+
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
