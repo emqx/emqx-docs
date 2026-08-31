@@ -141,6 +141,17 @@ EMQX Helm Chart 通过 `values.yaml` 文件提供丰富的可配置参数。下�
 | `emqxLicenseSecretRef.name`                                                                                                                                         | 包含许可证信息的 Secret 名称                       | `""`         |
 | `emqxLicenseSecretRef.key`                                                                                                                                          | 包含许可证信息的 Secret 中的键                        | `""`         |
 
+### 配置功能门控
+
+从 EMQX 6.3.0 开始，可以设置 `EMQX_FEATURES` 控制启动时可用的可选功能。例如：
+
+```yaml
+emqxConfig:
+  EMQX_FEATURES: "dashboard,auth,metrics"
+```
+
+功能门控只在 EMQX 启动时解析。如果修改该值，需要重新创建或重启 EMQX Pod。完整功能列表和依赖行为请参见[功能门控](../feature-gates.md)。
+
 ## SSL 设置
 使用 `cert-manager` 时，TLS 证书会以 Kubernetes Secret 的形式保存，使用标准的键名：`tls.crt` 和 `tls.key`。EMQX Helm Chart 会将这些文件自动挂载至容器内的以下路径：
 

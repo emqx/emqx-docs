@@ -56,14 +56,13 @@
 详细的介绍可参考各个协议的文档。本节包含了以下这些常用网关的快速开始文档：
 
 ::: warning 重要提示
-ExProto Gateway 自 EMQX 6.2.0 起已弃用，并计划在 EMQX 7 中移除。
+ExProto 网关自 EMQX 6.2.0 起已弃用，并已在 EMQX 6.3.0 中移除。
 :::
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
 - [CoAP](./coap.md)
 - [LwM2M](./lwm2m.md)
-- [ExProto](./exproto.md)
 
 - [OCPP](./ocpp.md) 
 - [GB/T 32960](./gbt32960.md)

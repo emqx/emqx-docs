@@ -405,7 +405,7 @@ If you plan to use the aggregated upload mode in your Snowflake Sink, you need t
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
 
-6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
 
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 
@@ -433,7 +433,7 @@ If you plan to use the streaming upload mode in your Snowflake Sink, you need to
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
 9. Click the **Create** button at the bottom to complete the connector creation.

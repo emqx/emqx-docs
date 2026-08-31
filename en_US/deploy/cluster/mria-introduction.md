@@ -139,3 +139,5 @@ You can also monitor the operating status of the cluster with the command `emqx 
 If the EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
+
+See also: [Mria Logs and Alarms](../../observability/mria-alarms.md)

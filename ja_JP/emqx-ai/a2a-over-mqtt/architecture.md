@@ -1,169 +1,169 @@
-# How A2A over MQTT Works
+# A2A over MQTT の仕組み
 
-This page explains the core concepts behind A2A over MQTT: how agents, clients, and the broker are organized, how agents identify and discover each other, what an Agent Card contains, and the interaction patterns agents use to communicate. Understanding these concepts is the foundation for working with the A2A Registry in EMQX.
+このページでは、A2A over MQTT の基本概念について説明します。エージェント、クライアント、ブローカーの構成、エージェント同士の識別と検出方法、Agent Card の内容、エージェント間の通信に使われるインタラクションパターンについて解説します。これらの概念を理解することは、EMQX の A2A レジストリを活用するための基礎となります。
 
-## Architecture
+## アーキテクチャ
 
-A2A over MQTT uses a broker-centric model with three participants:
+A2A over MQTT はブローカー中心のモデルで、3つの参加者が存在します。
 
-- **Agent (responder)**: Publishes its Agent Card as a retained message on its discovery topic, subscribes to its request topic, and replies to incoming task requests.
-- **Client agent (requester)**: Subscribes to discovery topics to find available agents, then sends task requests and receives replies.
-- **MQTT Broker (EMQX)**: Routes all messages, records Agent Cards in the A2A Registry, enforces authentication and authorization, and attaches liveness metadata to discovery messages.
+- **エージェント（レスポンダー）**：自身の Agent Card を検出トピックにリテインドメッセージとしてパブリッシュし、自身のリクエストトピックをサブスクライブし、受信したタスクリクエストに応答します。
+- **クライアントエージェント（リクエスター）**：検出トピックをサブスクライブして利用可能なエージェントを見つけ、タスクリクエストを送信し、返信を受信します。
+- **MQTT ブローカー（EMQX）**：すべてのメッセージをルーティングし、Agent Card を A2A レジストリに記録し、認証と認可を実施し、検出メッセージにライブネスメタデータを付加します。
 
 ```mermaid
 graph LR
-    subgraph "Client Agents (Requesters)"
-        CA1[Agent A]
-        CA2[Agent B]
+    subgraph "クライアントエージェント（リクエスター）"
+        CA1[エージェント A]
+        CA2[エージェント B]
     end
 
-    subgraph "EMQX Broker"
-        B[A2A Registry\n+ Message Router]
+    subgraph "EMQX ブローカー"
+        B[A2A レジストリ\n+ メッセージルーター]
     end
 
-    subgraph "Service Agents (Responders)"
-        SA1[Agent X]
-        SA2[Agent Y]
-        SA3[Agent Z]
+    subgraph "サービスエージェント（レスポンダー）"
+        SA1[エージェント X]
+        SA2[エージェント Y]
+        SA3[エージェント Z]
     end
 
-    CA1 -- "discover / request" --> B
-    CA2 -- "discover / request" --> B
-    B -- "reply / event" --> CA1
-    B -- "reply / event" --> CA2
-    B -- "request" --> SA1
-    B -- "request" --> SA2
-    B -- "request" --> SA3
-    SA1 -- "register / reply" --> B
-    SA2 -- "register / reply" --> B
-    SA3 -- "register / reply" --> B
+    CA1 -- "検出 / リクエスト" --> B
+    CA2 -- "検出 / リクエスト" --> B
+    B -- "返信 / イベント" --> CA1
+    B -- "返信 / イベント" --> CA2
+    B -- "リクエスト" --> SA1
+    B -- "リクエスト" --> SA2
+    B -- "リクエスト" --> SA3
+    SA1 -- "登録 / 返信" --> B
+    SA2 -- "登録 / 返信" --> B
+    SA3 -- "登録 / 返信" --> B
 ```
 
-## Agent Identity
+## エージェントの識別
 
-Each agent is identified by a three-level hierarchy:
+各エージェントは3階層の階層構造で識別されます。
 
 ```
 {org_id} / {unit_id} / {agent_id}
 ```
 
-- **org_id**: the organization the agent belongs to (for example, `com.example`).
-- **unit_id**: a subdivision within the organization, such as a team or deployment environment (for example, `factory-a`).
-- **agent_id**: a unique identifier for the agent within its org and unit (for example, `iot-ops-agent-001`).
+- **org_id**：エージェントが所属する組織（例：`com.example`）。
+- **unit_id**：組織内の区分、チームやデプロイ環境など（例：`factory-a`）。
+- **agent_id**：組織とユニット内で一意のエージェント識別子（例：`iot-ops-agent-001`）。
 
-All three segments must match `^[A-Za-z0-9_.-]+$` and must not contain `/`, `+`, `#`, or whitespace. The agent's MQTT Client ID must use the combined format: `{org_id}/{unit_id}/{agent_id}`.
+3つのセグメントすべてが `^[A-Za-z0-9_.-]+$` にマッチし、`/`、`+`、`#`、空白文字を含んではいけません。エージェントの MQTT クライアントID は `{org_id}/{unit_id}/{agent_id}` の形式で指定する必要があります。
 
-## Topic Model
+## トピックモデル
 
-| Topic | Purpose |
+| トピック | 用途 |
 |---|---|
-| `$a2a/v1/discovery/{org_id}/{unit_id}/{agent_id}` | Agent registration and discovery (retained) |
-| `$a2a/v1/request/{org_id}/{unit_id}/{agent_id}` | Incoming task requests to a specific agent |
-| `$a2a/v1/reply/{org_id}/{unit_id}/{agent_id}/{suffix}` | Recommended reply topic pattern (see note below) |
-| `$a2a/v1/event/{org_id}/{unit_id}/{agent_id}` | Unsolicited event publications |
-| `$a2a/v1/request/{org_id}/{unit_id}/pool/{pool_id}` | Shared pool topic for load-balanced dispatch |
+| `$a2a/v1/discovery/{org_id}/{unit_id}/{agent_id}` | エージェント登録および検出（リテインド） |
+| `$a2a/v1/request/{org_id}/{unit_id}/{agent_id}` | 特定エージェントへのタスクリクエスト受信 |
+| `$a2a/v1/reply/{org_id}/{unit_id}/{agent_id}/{suffix}` | 推奨される返信トピックパターン（下記注記参照） |
+| `$a2a/v1/event/{org_id}/{unit_id}/{agent_id}` | 要求なしのイベントパブリッシュ |
+| `$a2a/v1/request/{org_id}/{unit_id}/pool/{pool_id}` | ロードバランスされたディスパッチ用共有プールトピック |
 
-::: tip Note
-The reply topic is not a fixed protocol topic. The requester can use any topic as its reply topic. The responder learns where to reply from the MQTT v5 `Response Topic` property on each incoming request. The pattern above is a recommendation for consistency and to simplify ACL configuration.
+::: tip 注記
+返信トピックは固定のプロトコルトピックではありません。リクエスターは任意のトピックを返信トピックとして使用可能です。レスポンダーは MQTT v5 の `Response Topic` プロパティから返信先を取得します。上記パターンは一貫性を保ち、ACL設定を簡素化するための推奨です。
 :::
 
-Discovery subscriptions use wildcards to scope the view:
+検出サブスクリプションはワイルドカードを使って範囲を指定します。
 
 ```
-$a2a/v1/discovery/com.example/+/+     # all agents in an org
-$a2a/v1/discovery/com.example/factory-a/+  # all agents in a unit
+$a2a/v1/discovery/com.example/+/+     # 組織内のすべてのエージェント
+$a2a/v1/discovery/com.example/factory-a/+  # ユニット内のすべてのエージェント
 ```
 
 ## Agent Card
 
-The Agent Card is a JSON document that an agent publishes to its discovery topic. It describes the agent's identity, capabilities, HTTP endpoint, and optional security metadata. EMQX records the card in the A2A Registry when it is received.
+Agent Card はエージェントが自身の検出トピックにパブリッシュする JSON ドキュメントです。エージェントの識別情報、機能、HTTP エンドポイント、任意のセキュリティメタデータを記述します。EMQX は受信時にカードを A2A レジストリに記録します。
 
-Minimum required fields:
+最低限必要なフィールド：
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |---|---|---|
-| `name` | String | Human-readable agent name. |
-| `description` | String | Brief description of what the agent does. |
-| `version` | String | Version string, for example `"1.0.0"`. |
-| `url` | String (URI) | The agent's endpoint URI. For HTTP-based A2A interactions, this is the HTTP endpoint; for MQTT-registered agents, it identifies the broker endpoint (for example, `mqtts://broker.example.com:8883`). |
-| `skills` | Array | At least one skill object, each with `id`, `name`, and `description`. |
+| `name` | 文字列 | 人間が読めるエージェント名。 |
+| `description` | 文字列 | エージェントの概要説明。 |
+| `version` | 文字列 | バージョン文字列（例：`"1.0.0"`）。 |
+| `url` | 文字列（URI） | エージェントのエンドポイントURI。任意。 |
+| `skills` | 配列 | 少なくとも1つのスキルオブジェクト（`id`、`name`、`description` を含む）。 |
 
-Example minimal Agent Card:
+最小限の Agent Card の例：
 
 ```json
 {
   "name": "IoT Operations Agent",
-  "description": "Monitors factory telemetry and coordinates remediation actions.",
+  "description": "工場のテレメトリを監視し、修復アクションを調整します。",
   "version": "1.2.3",
   "url": "mqtts://broker.example.com:8883",
   "skills": [
     {
       "id": "device-diagnostics",
-      "name": "Device Diagnostics",
-      "description": "Analyzes telemetry and detects device anomalies."
+      "name": "デバイス診断",
+      "description": "テレメトリを解析し、デバイスの異常を検出します。"
     }
   ]
 }
 ```
 
-For the full Agent Card schema, including `capabilities`, `securitySchemes`, `supportedInterfaces`, and extension parameters, see the [A2A specification](https://a2a-protocol.org/latest/specification/).
+`capabilities`、`securitySchemes`、`supportedInterfaces`、拡張パラメータを含む完全な Agent Card スキーマについては、[A2A仕様](https://a2a-protocol.org/latest/specification/)をご参照ください。
 
-## Agent Liveness
+## エージェントのライブネス
 
-Agent Cards persist as retained messages after the agent disconnects. EMQX tracks connection state and attaches MQTT v5 User Properties to discovery messages when forwarding them to subscribers:
+Agent Card はエージェントが切断された後もリテインドメッセージとして保持されます。EMQX は接続状態を追跡し、検出メッセージをサブスクライバーに転送する際に MQTT v5 のユーザープロパティを付加します。
 
-| User Property | Value | Meaning |
+| ユーザープロパティ | 値 | 意味 |
 |---|---|---|
-| `a2a-status` | `online` | Agent's MQTT connection is active. |
-| `a2a-status` | `offline` | Agent has disconnected (gracefully or via LWT). |
-| `a2a-status-source` | `broker` | Status was set by EMQX. |
-| `a2a-status-source` | `agent` | Status was set by the agent itself. |
-| `a2a-status-source` | `lwt` | Status reflects an unexpected disconnect (Last Will). |
+| `a2a-status` | `online` | エージェントの MQTT 接続がアクティブ。 |
+| `a2a-status` | `offline` | エージェントが切断済み（正常切断または LWT による）。 |
+| `a2a-status-source` | `broker` | ステータスが EMQX によって設定された。 |
+| `a2a-status-source` | `agent` | ステータスがエージェント自身によって設定された。 |
+| `a2a-status-source` | `lwt` | 予期しない切断（Last Will）を反映したステータス。 |
 
-Agents should configure a Last Will message on their discovery topic with `a2a-status=offline` and `a2a-status-source=lwt` so subscribers are notified automatically on ungraceful disconnect.
+エージェントは検出トピックに対して Last Will メッセージを設定し、`a2a-status=offline` と `a2a-status-source=lwt` を指定することで、異常切断時にサブスクライバーに自動通知されるようにしてください。
 
-## Interaction Patterns
+## インタラクションパターン
 
-A2A over MQTT supports the following interaction patterns between agents. Each uses the MQTT v5 `Response Topic` and `Correlation Data` properties for request/reply routing, with a requester-generated `Task.id` to track task state across the full lifecycle.
+A2A over MQTT はエージェント間で以下のインタラクションパターンをサポートします。すべて MQTT v5 の `Response Topic` と `Correlation Data` プロパティを使い、リクエスターが生成する `Task.id` でタスクの状態をライフサイクル全体で追跡します。
 
-| Pattern | Description |
+| パターン | 説明 |
 |---|---|
-| One request, one response | Requester publishes a task request; responder publishes a single reply to the provided `Response Topic`. |
-| Streaming responses | Responder publishes multiple status and artifact update messages until a terminal task state is reached. |
-| Multi-turn conversation | Related tasks are grouped using `Task.context_id`, allowing interrupted tasks to be resumed. |
-| Shared pool dispatch | Multiple agent instances share a pool topic for load-balanced request handling via MQTT shared subscriptions. |
-| Task handover | A responding agent delegates an in-progress task to another instance using the `a2a-responder-agent-id` User Property. |
-| OAuth 2.0 authorization | Per-request bearer tokens are passed as the `a2a-authorization` MQTT User Property. |
-| End-to-end security | The optional `ubsp-v1` security profile provides end-to-end encrypted payloads for untrusted broker environments. |
+| 1リクエスト・1レスポンス | リクエスターがタスクリクエストをパブリッシュし、レスポンダーが指定された `Response Topic` に単一の返信をパブリッシュ。 |
+| ストリーミングレスポンス | レスポンダーが複数の状態更新や成果物メッセージをパブリッシュし、最終的なタスク状態に達するまで続ける。 |
+| マルチターン会話 | 関連タスクを `Task.context_id` でグループ化し、中断したタスクを再開可能にする。 |
+| 共有プールディスパッチ | 複数のエージェントインスタンスがプールトピックを共有し、MQTT 共有サブスクリプションを使ってロードバランスされたリクエスト処理を実現。 |
+| タスク引き継ぎ | レスポンダーが進行中のタスクを別のインスタンスに `a2a-responder-agent-id` ユーザープロパティを使って委譲。 |
+| OAuth 2.0 認可 | リクエストごとにベアラートークンを `a2a-authorization` MQTT ユーザープロパティとして渡す。 |
+| エンドツーエンドセキュリティ | オプションの `ubsp-v1` セキュリティプロファイルにより、信頼できないブローカー環境でもペイロードのエンドツーエンド暗号化を提供。 |
 
-For the full specification of each pattern, see the [A2A over MQTT Transport Specification](https://www.emqx.com/mqtt-for-ai/a2a-over-mqtt/specification/0.1/basic/mqtt_transport.html).
+各パターンの詳細仕様は、[A2A over MQTT トランスポート仕様](https://www.emqx.com/mqtt-for-ai/a2a-over-mqtt/specification/0.1/basic/mqtt_transport.html)をご参照ください。
 
-## Example Workflow: Factory Alert Response
+## 例：工場アラート対応ワークフロー
 
-Two agents collaborate to handle a factory floor alert: a **Monitor Agent** that detects anomalies and delegates diagnostic tasks, and a **Repair Agent** that processes them and streams results back.
+2つのエージェントが協力して工場のアラートに対応します。異常を検知し診断タスクを委譲する **モニターエージェント** と、タスクを処理して結果をストリーム配信する **修理エージェント** です。
 
-**Step 1: Both agents register.** Each agent publishes its Agent Card as a retained message to its discovery topic. EMQX records the cards and marks both agents as online.
+**ステップ1：両エージェントが登録。** 各エージェントは自身の Agent Card を検出トピックにリテインドメッセージとしてパブリッシュします。EMQX はカードを記録し、両エージェントをオンライン状態としてマークします。
 
-**Step 2: Monitor Agent discovers the Repair Agent.** The Monitor Agent subscribes to `$a2a/v1/discovery/com.example/factory-a/+` and immediately receives the Repair Agent's retained card, confirming it can diagnose equipment faults.
+**ステップ2：モニターエージェントが修理エージェントを検出。** モニターエージェントは `$a2a/v1/discovery/com.example/factory-a/+` をサブスクライブし、修理エージェントのリテインドカードを即座に受信、機器故障を診断可能であることを確認します。
 
-**Step 3: Monitor Agent sends a task request.** An abnormal vibration reading arrives from motor `line-7`. The Monitor Agent publishes a request to the Repair Agent's request topic with a unique `Task.id` and a reply topic set in the MQTT `Response Topic` property.
+**ステップ3：モニターエージェントがタスクリクエストを送信。** モーター `line-7` から異常振動の読み取りが届きます。モニターエージェントは修理エージェントのリクエストトピックにユニークな `Task.id` と MQTT `Response Topic` プロパティを設定してリクエストをパブリッシュします。
 
-**Step 4: Repair Agent streams status updates.** The Repair Agent publishes progress updates to the reply topic, followed by a final `completed` status: bearing wear detected, inspection scheduled. Each update echoes the original `Correlation Data` so the Monitor Agent can match it to the request.
+**ステップ4：修理エージェントが状態更新をストリーム配信。** 修理エージェントは返信トピックに進捗更新をパブリッシュし、最終的に `completed` 状態（ベアリング摩耗検出、検査予定）を送信します。各更新は元の `Correlation Data` をエコーし、モニターエージェントがリクエストと対応付けられるようにします。
 
 ```mermaid
 sequenceDiagram
-    participant M as Monitor Agent
-    participant E as EMQX Broker
-    participant R as Repair Agent
+    participant M as モニターエージェント
+    participant E as EMQX ブローカー
+    participant R as 修理エージェント
 
-    M->>E: Publish Agent Card (retained)
-    R->>E: Publish Agent Card (retained)
-    M->>E: Subscribe to discovery/com.example/factory-a/+
-    E-->>M: Deliver Repair Agent's card (a2a-status=online)
-    M->>E: Publish task request (Response Topic + Task.id)
-    E->>R: Forward request
-    R-->>E: Stream: "Analyzing vibration signature..."
-    E-->>M: Forward update
-    R-->>E: Stream: "completed — Bearing wear detected"
-    E-->>M: Forward final update
+    M->>E: Agent Card をパブリッシュ（リテインド）
+    R->>E: Agent Card をパブリッシュ（リテインド）
+    M->>E: discovery/com.example/factory-a/+ をサブスクライブ
+    E-->>M: 修理エージェントのカードを配信（a2a-status=online）
+    M->>E: タスクリクエストをパブリッシュ（Response Topic + Task.id）
+    E->>R: リクエストを転送
+    R-->>E: ストリーム：「振動シグネチャを解析中…」
+    E-->>M: 更新を転送
+    R-->>E: ストリーム：「完了 — ベアリング摩耗検出」
+    E-->>M: 最終更新を転送
 ```

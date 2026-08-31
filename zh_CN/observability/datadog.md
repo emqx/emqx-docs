@@ -54,19 +54,20 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     datadog-agent integration install -t datadog-emqx==1.1.0
     ```
 
-2. 安装完成后，修改 Agent 配置文件以启用 EMQX 集成。
+2. 安装完成后，创建具有 `monitoring` scope 的专用 [EMQX API 密钥](../admin/api.md#认证)，然后修改 Agent 配置文件以启用 EMQX 集成。
 
     打开 Agent 配置目录（默认是 `/opt/datadog-agent/etc/conf.d/`），找到目录下的 `emqx.d` 目录，可以看到 `emqx.d` 目录下有一个示例配置文件 `conf.yaml.example`。
 
     在相同目录下复制一份该文件并重命名为 `conf.yaml`，修改文件中的以下配置项：
 
-    ```bash
+    ```yaml
     instances:
       - openmetrics_endpoint: http://localhost:18083/api/v5/prometheus/stats?mode=all_nodes_aggregated
-    
+        username: '<API_KEY>'
+        password: '<SECRET_KEY>'
     ```
 
-    `openmetrics_endpoint` 选项是 Datadog Agent 提取 OpenMetrics 格式的指标数据的地址，这里设置的是 EMQX 的 HTTP API 地址。实际使用中，请修改为 Datadog Agent 能够访问到的地址。
+    `openmetrics_endpoint` 是 Datadog Agent 提取 OpenMetrics 格式指标数据的地址。示例使用 EMQX 的 HTTP API 地址，实际使用时请替换为 Datadog Agent 可访问的地址。将 `username` 设置为 API Key，将 `password` 设置为对应的 Secret Key。从 EMQX 6.3.0 开始，Prometheus 抓取 API 默认要求身份认证。
 
     该 API 还支持通过 `mode` 查询参数指定拉取的指标范围，每个参数的含义如下：
     

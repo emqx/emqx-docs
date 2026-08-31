@@ -82,6 +82,8 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
      - If you have entered a username, this password must match the credentials configured in your Redis ACL settings.
      - If no username is provided, this password will be used to authenticate as the `default` user (if enabled).
 
+   - **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+
    - **Compatibility Mode**: Controls whether to enable compatibility with the EMQX 4.x Redis ACL data format.
 
      - `Disabled (Default)`: Use the current rule format.
@@ -107,6 +109,8 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 You can configure the EMQX Redis authorizer with EMQX configuration items.
 
 The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. 
+
+The optional `precondition` configuration item accepts a Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
 
 Sample configuration:
 
