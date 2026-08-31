@@ -108,7 +108,15 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
-                - deploy/kubernetes/operator/upgrade-operator
+                - title_en: Upgrade EMQX Operator
+                  title_cn: 升级 EMQX Operator
+                  title_ja: EMQX Operator のアップグレード
+                  path: deploy/kubernetes/operator/upgrade-operator
+                  collapsed: true
+                  children:
+                    - title_en: Migrate from EMQX Operator 2.3 to 3.0
+                      lang: en
+                      path: deploy/kubernetes/operator/migration/migrate-from-2.3-to-3.0
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
                   title_ja: Alibaba Cloud 上での EMQX デプロイ
