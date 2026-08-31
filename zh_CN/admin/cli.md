@@ -893,7 +893,7 @@ ssl:default
   listen_on             : 0.0.0.0:8883
   acceptors             : 16
   proxy_protocol        : false
-  enbale                : true
+  enable                : true
   running               : true
   resolved_address      : 0.0.0.0
   resolved_address_from : bind
@@ -903,7 +903,7 @@ tcp:default
   listen_on             : 0.0.0.0:1883
   acceptors             : 16
   proxy_protocol        : false
-  enbale                : true
+  enable                : true
   running               : true
   resolved_address      : 0.0.0.0
   resolved_address_from : bind
@@ -914,7 +914,7 @@ ws:default
   listen_on             : 0.0.0.0:8083
   acceptors             : 16
   proxy_protocol        : false
-  enbale                : true
+  enable                : true
   running               : true
   resolved_address      : 0.0.0.0
   resolved_address_from : bind
@@ -924,7 +924,7 @@ wss:default
   listen_on             : 0.0.0.0:8084
   acceptors             : 16
   proxy_protocol        : false
-  enbale                : true
+  enable                : true
   running               : true
   resolved_address      : 0.0.0.0
   resolved_address_from : bind
