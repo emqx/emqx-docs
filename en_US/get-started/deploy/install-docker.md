@@ -32,6 +32,8 @@ This section will introduce how to use the Docker image to install the latest ve
 
    For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
 
+   Mount `/opt/emqx/log` even though a container logs to the console by default. The directory stays empty during normal operation, but the Erlang VM writes a crash dump there when the node terminates abnormally. Without the mount, that file is lost with the container. The directory must be writable by the `emqx` user in the container (UID 1000). For details, see [Crash Dumps in Docker](../../guides/configuration/logs.md#crash-dumps-in-docker).
+
     Start container and mount directories:
 
    ```bash
