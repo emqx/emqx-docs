@@ -11,7 +11,7 @@
 
 ## EMQX クラスターのデプロイ
 
-EMQX は [Prometheus 互換の HTTP API](../../../../observability/prometheus.md) を通じて様々なメトリクスを公開しています。
+EMQX は [Prometheus 互換の HTTP API](../../../../observability/prometheus.md) を通じて様々なメトリクスを公開します。
 
 ```yaml
 apiVersion: apps.emqx.io/v2
@@ -27,7 +27,7 @@ spec:
       }
 ```
 
-上記内容を `emqx.yaml` として保存し、以下のコマンドを実行して EMQX クラスターをデプロイします。
+上記の内容を `emqx.yaml` として保存し、以下のコマンドを実行して EMQX クラスターをデプロイします。
 
 ```bash
 $ kubectl apply -f emqx.yaml
@@ -42,9 +42,14 @@ NAME   STATUS   AGE
 emqx   Ready    10m
 ```
 
-## API シークレットの作成
+## API キーの作成
 
-Prometheus は EMQX ダッシュボード API からメトリクスを取得するため、ダッシュボードにサインインして [API シークレットを作成](../../../../dashboard/system.md#api-keys) してください。
+ダッシュボードにサインインし、[専用の API キーを2つ作成](../../../../dashboard/system.md#api-keys)します。
+
+- EMQX Exporter 用には Viewer ロールでデフォルトのスコープのまま API キーを作成します。EMQX Exporter は Prometheus のスクレイプ API に加え、いくつかの管理 API を読み取ります。
+- Prometheus 用には Viewer ロールで `monitoring` スコープのみの API キーを作成します。`PodMonitor` はこのキーを使って `/api/v5/prometheus/stats` をスクレイプします。
+
+それぞれの統合用に API キーとシークレットキーを保存してください。EMQX はシークレットキーを一度しか表示しません。
 
 ## [EMQX Exporter](https://github.com/emqx/emqx-exporter) のデプロイ
 
@@ -88,7 +93,7 @@ spec:
           image: emqx-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            # "emqx-dashboard-service-name" はオペレーターが 18083 ポートを公開するために作成したサービス名です
+            # "emqx-dashboard-service-name" は operator により 18083 ポートを公開するために作成されたサービス名です
             - --emqx.nodes=${emqx-dashboard-service-name}:18083
             - --emqx.auth-username=${paste_your_new_api_key_here}
             - --emqx.auth-password=${paste_your_new_secret_here}
@@ -108,15 +113,15 @@ spec:
               memory: 20Mi
 ```
 
-> 引数 "--emqx.nodes" には、オペレーターが 18083 ポートを公開するために作成したサービス名を設定してください。サービス名は `kubectl get svc` コマンドで確認できます。
+> 引数の `--emqx.nodes` には operator により 18083 ポートを公開するために作成されたサービス名を設定してください。`kubectl get svc` コマンドでサービス名を確認できます。
 
-上記内容を `emqx-exporter.yaml` として保存し、`--emqx.auth-username` と `--emqx.auth-password` を作成した API シークレットに置き換えてください。以下のコマンドで `emqx-exporter` をデプロイします。
+上記の内容を `emqx-exporter.yaml` として保存し、`--emqx.auth-username` に EMQX Exporter 用に作成した API キーを、`--emqx.auth-password` にそのシークレットキーを設定してください。以下のコマンドで `emqx-exporter` をデプロイします。
 
 ```bash
 kubectl apply -f emqx-exporter.yaml
 ```
 
-`emqx-exporter` Pod のステータスを確認します。
+`emqx-exporter` ポッドのステータスを確認します。
 
 ```bash
 $ kubectl get po -l="app=emqx-exporter"
@@ -124,9 +129,17 @@ NAME                            STATUS   AGE
 emqx-exporter-856564c95-j4q5v   Running  8m33s
 ```
 
-## Prometheus 監視の設定
+## Prometheus モニターの設定
 
-Prometheus Operator は [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) と [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD を使い、Pod やサービスの監視方法を動的に定義します。
+Prometheus Operator は [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) と [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD を使って、ポッドやサービスの監視方法を動的に定義します。
+
+EMQX 6.3.0 以降、Prometheus のスクレイプ API はデフォルトで認証が必要です。`PodMonitor` と同じネームスペースに、Prometheus 用に作成した API キーとシークレットキーを格納する Kubernetes Secret を作成します。
+
+```bash
+kubectl create secret generic emqx-prometheus-basic-auth \
+  --from-literal=username='<API_KEY>' \
+  --from-literal=password='<SECRET_KEY>'
+```
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -139,11 +152,18 @@ spec:
   podMetricsEndpoints:
     - interval: 5s
       path: /api/v5/prometheus/stats
+      basicAuth:
+        username:
+          name: emqx-prometheus-basic-auth
+          key: username
+        password:
+          name: emqx-prometheus-basic-auth
+          key: password
       # emqx ダッシュボードの containerPort 名
       port: dashboard
       relabelings:
         - action: replace
-          # ユーザー定義のクラスター名、ユニークである必要があります
+          # ユーザー定義のクラスター名、一意である必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
@@ -156,7 +176,7 @@ spec:
           targetLabel: "instance"
   selector:
     matchLabels:
-      # emqx Pod のラベルと同じです
+      # EMQX ポッドのラベルと同じもの
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
@@ -173,7 +193,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      # emqx-exporter サービスのラベルと同じです
+      # emqx-exporter サービスのラベルと同じもの
       app: emqx-exporter
   endpoints:
     - port: metrics
@@ -181,7 +201,7 @@ spec:
       path: /metrics
       relabelings:
         - action: replace
-          # ユーザー定義のクラスター名、ユニークである必要があります
+          # ユーザー定義のクラスター名、一意である必要があります
           replacement: emqx5
           targetLabel: cluster
         - action: replace
@@ -203,23 +223,23 @@ spec:
       #- default
 ```
 
-`path` は指標収集インターフェースのパスを示します。EMQX 5 では `/api/v5/prometheus/stats` です。`selector.matchLabels` はマッチする Pod のラベルを示し、`apps.emqx.io/instance: emqx` となっています。
+`path` はメトリクス収集用の API パスを指定します。EMQX 5.0 以降は `/api/v5/prometheus/stats` を使用します。`basicAuth` セクションは Kubernetes Secret から API キーとシークレットキーを読み取ります。`selector.matchLabels` は `apps.emqx.io/instance: emqx` ラベルで EMQX ポッドを識別します。
 
-`targetLabel` の `cluster` の値は現在のクラスター名を表し、ユニークである必要があります。
+`targetLabel` の `cluster` は現在のクラスター名を表し、一意であることを確認してください。
 
-上記内容を `monitor.yaml` として保存し、以下のコマンドを実行してください。
+上記の内容を `monitor.yaml` として保存し、以下のコマンドを実行します。
 
 ```bash
 $ kubectl apply -f monitor.yaml
 ```
 
-## Prometheus での EMQX 指標の確認
+## Prometheus で EMQX 指標を確認
 
-Prometheus インターフェースを開き、Graph ページに切り替えて `emqx` を入力すると、以下のように表示されます。
+Prometheus インターフェースを開き、Graph ページに切り替えて `emqx` と入力すると、以下のように表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-**Status** -> **Targets** ページに切り替えると、以下のようにクラスター内の監視対象 EMQX Pod 情報が表示されます。
+**Status** -> **Targets** ページに切り替えると、以下の画面が表示され、クラスター内の監視対象 EMQX ポッド情報を確認できます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
