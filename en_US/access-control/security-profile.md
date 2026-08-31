@@ -41,11 +41,12 @@ The `hardened` profile changes the following behaviors compared to `legacy`.
 
 ### Listener Exposure
 
+The `hardened` profile uses the following default bind addresses unless you override them with `node.default_listener_address`, a node-level setting for listeners without an explicit bind address:
+
 - **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, secure WebSocket and QUIC listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
-- **Gateway listeners bind to loopback by default.** Gateway listeners with an omitted or port-only `bind` listen on the loopback interface only.
 - **The Dashboard HTTP listener binds to loopback by default.** The Dashboard HTTP listener with an omitted or port-only `bind` listens on the loopback interface only. Configure an explicit bind address to accept external connections.
 
-To set the address for all defaulted listeners at once, without switching the profile, use `node.default_listener_address`. See [Default Listener Address](#default-listener-address).
+This setting also applies to gateway listeners, whose default bind address is not changed by the security profile. See [Default Listener Address](#default-listener-address) for supported values and configuration details.
 
 ### Authentication
 
@@ -84,9 +85,11 @@ Under the `hardened` profile, EMQX drops pending delayed messages created before
 
 The `node.default_listener_address` configuration option sets the address for listener binds that have no explicit address, that is bare-port binds such as `bind = 1883`. It applies to MQTT listeners, gateway listeners, and the Dashboard HTTP listener. An explicit `IP:port` bind always wins.
 
-Use this option to control listener exposure independently of the security profile. For example, keep the `hardened` profile and still accept external MQTT connections:
+EMQX determines the default address locally on each node and applies it when the listener starts. The configured `bind` value remains unchanged: a port-only bind does not become a persisted `IP:port` value. Nodes with the same listener configuration can therefore listen on different addresses.
 
-```bash
+Use this option to control listener exposure independently of the security profile. For example, to keep the `hardened` profile and bind defaulted listeners to all network interfaces, add the following to the node's `emqx.conf`:
+
+```hocon
 node.default_listener_address = "all"
 ```
 
@@ -96,16 +99,16 @@ Valid values:
 |---|---|
 | `loopback` | `127.0.0.1`. The Dashboard binds `::1` instead when its `inet6` option is set. |
 | `nodename` | The host part of the Erlang node name, after the `@`. When it is an IP address, EMQX binds it. Otherwise EMQX resolves it at boot and binds the first IPv4 address, or the first IPv6 address when no IPv4 address resolves. |
-| `all` | `0.0.0.0`, that is all IPv4 interfaces. |
+| `all` | All network interfaces. With the default IPv4 configuration, the address is `0.0.0.0`. The address family depends on the listener configuration. |
 | An IP address | The literal address, for example `192.168.1.10` or `::1`. On most systems `::` accepts both IPv4 and IPv6 connections; the operating system's `bindv6only` setting decides. |
 | A hostname | Resolved at boot, for example `broker1.example.com`. |
 
-When the option is not set, the security profile decides the default address: `legacy` binds all interfaces, `hardened` binds loopback.
+When the option is not set, the security profile decides the default address for MQTT listeners and the Dashboard HTTP listener: `legacy` binds all interfaces, and `hardened` binds loopback. Gateway listeners bind all interfaces under either profile.
 
 The option is node-local. EMQX reads it once at boot, so changing it requires a node restart. It can also be set with the `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` environment variable.
 
 ::: tip
-The official Docker image sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all`, because a container's loopback interface is not reachable through published ports. Defaulted listeners therefore stay reachable under both profiles, and `docker run -p` remains the exposure decision.
+The official Docker image's entrypoint sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all` when the variable is unset or empty, because a container's loopback interface is not reachable through published ports. With this default, listeners whose binds specify only a port listen on all network interfaces under either profile, allowing access through published container ports. To override it, explicitly set the environment variable to another supported value. Listener binds with an explicit IP address remain unchanged.
 :::
 
 ## Rolling Upgrade
