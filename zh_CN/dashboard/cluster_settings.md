@@ -204,7 +204,7 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 该页面主要提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus、OpenTelemetry，和 Datadog 的集成方式。
 
-当使用 `Prometheus` 第三方监控服务时，您可以在该页面快速开启该配置，并配置推送数据地址与数据上报时间间隔等。我们可以直接使用 EMQX 提供的 API `/prometheus/stats` 来获取监控数据，使用该 API 时不需要认证信息，具体的 API 请参考 [Prometheus](../observability/prometheus.md)。
+使用 Prometheus 时，可以在该页面配置 Pull 或 Push 模式。在 Pull 模式下，Prometheus 从 `/api/v5/prometheus/*` 下的 API 抓取指标。从 EMQX 6.3.0 开始，这些 API 默认要求身份认证。请为抓取程序配置具有 `monitoring` scope 的专用 API 密钥。配置详情请参见[集成 Prometheus](../observability/prometheus.md)。
 
 或者可以选择配置一个 `Pushgateway` 的服务地址，来将监控数据推送到 `Pushgateway`，然后再由 `Pushgateway` 推送到 `Prometheus` 服务。通常情况下我们不需要使用 `Pushgateway` 就能监控到 EMQX 的指标数据，点击查看[何时使用 Pushgateway](https://prometheus.io/docs/practices/pushing/)。
 

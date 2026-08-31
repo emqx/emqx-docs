@@ -42,9 +42,14 @@ NAME   STATUS   AGE
 emqx   Ready    10m
 ```
 
-## Create API secret
+## Create API Keys
 
-Prometheus is going to pull metrics from the EMQX Dashboard API, so you need to sign in to the Dashboard to [create an API secret](../../../../dashboard/system.md#api-keys).
+Sign in to the Dashboard and [create two dedicated API keys](../../../../dashboard/system.md#api-keys):
+
+- For EMQX Exporter, create an API key with the Viewer role and keep its default scopes. EMQX Exporter reads several management APIs in addition to the Prometheus scrape APIs.
+- For Prometheus, create an API key with the Viewer role and only the `monitoring` scope. The `PodMonitor` uses this key to scrape `/api/v5/prometheus/stats`.
+
+Save the API key and secret key for each integration. EMQX displays each secret key only once.
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 
@@ -110,7 +115,7 @@ spec:
 
 > Set the arg "--emqx.nodes" to the service name that creating by operator for exposing 18083 port. Look up the service name by calling `kubectl get svc`.
 
-Save the above content as `emqx-exporter.yaml`, replacing `--emqx.auth-username` and `--emqx.auth-password` with your new API secret. Run the following command to deploy the `emqx-exporter`:
+Save the above content as `emqx-exporter.yaml`. Set `--emqx.auth-username` to the API key created for EMQX Exporter and `--emqx.auth-password` to its secret key. Run the following command to deploy `emqx-exporter`:
 
 ```bash
 kubectl apply -f emqx-exporter.yaml
@@ -127,6 +132,14 @@ emqx-exporter-856564c95-j4q5v   Running  8m33s
 
 Prometheus Operator uses [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) and [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRDs to define how to monitor a set of pods or services dynamically.
 
+Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by default. Create a Kubernetes Secret in the same namespace as the `PodMonitor` to store the API key and secret key created for Prometheus:
+
+```bash
+kubectl create secret generic emqx-prometheus-basic-auth \
+  --from-literal=username='<API_KEY>' \
+  --from-literal=password='<SECRET_KEY>'
+```
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -138,6 +151,13 @@ spec:
   podMetricsEndpoints:
     - interval: 5s
       path: /api/v5/prometheus/stats
+      basicAuth:
+        username:
+          name: emqx-prometheus-basic-auth
+          key: username
+        password:
+          name: emqx-prometheus-basic-auth
+          key: password
       # the name of emqx dashboard containerPort
       port: dashboard
       relabelings:
@@ -202,7 +222,7 @@ spec:
       #- default
 ```
 
-`path` indicates the path of the indicator collection interface. In EMQX 5, the path is: `/api/v5/prometheus/stats`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx`.
+`path` specifies the metrics collection API path. For EMQX 5.0 and later, use `/api/v5/prometheus/stats`. The `basicAuth` section reads the API key and secret key from the Kubernetes Secret. `selector.matchLabels` identifies EMQX Pods by the `apps.emqx.io/instance: emqx` label.
 
 The value of the targetLabel `cluster` represents the name of the current cluster. Make sure it is unique.
 

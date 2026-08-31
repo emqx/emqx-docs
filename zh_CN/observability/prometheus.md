@@ -1,251 +1,199 @@
-# 集成 Prometheus
+# 使用 Prometheus 监控 EMQX
 
-EMQX 支持将指标数据集成到第三方服务中来监控指标，例如 Prometheus。[Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。还可以结合 Prometheus 和 Grafana 实现 EMQX 统计指标可视化。
+EMQX 支持向 Prometheus 暴露运行指标，用于查询、告警和可视化。您可以通过以下任一方式采集指标：
 
-使用第三方监控系统可以带来以下优势：
+- **Pull 模式（推荐）**：Prometheus 直接从 EMQX REST API 端点抓取指标。需要采集完整指标时，请使用此模式。
+- **Push 模式**：EMQX 将基础指标发送到 Pushgateway，再由 Prometheus 从 Pushgateway 抓取。Prometheus 无法直接连接 EMQX 时，可使用此模式。
 
-- 提供全面的监控：第三方监控系统可以提供全面的视角。例如，您可以同时获取服务器主机和 MQTT 服务的监控信息。
-- 提供直观的监控报告：第三方监控系统通常提供图形和图表等可视化工具，使得监控报告更加直观易懂。例如，您可以使用 Grafana 来可视化 EMQX 的指标。
-- 多样的报警通知选项：第三方监控系统通常支持多种报警通知方式，使得在出现问题时，可以及时通知到相关人员。例如，您可以使用 Prometheus Alertmanager 来设置报警规则和通知方式。
-
-EMQX 支持两种方式实现 Prometheus 指标监控集成：
-
-- **Pull 模式**：Prometheus 直接通过 EMQX 的 REST API 采集指标。
-- **Push 模式**：EMQX 推送指标到 Pushgateway 服务，再由 Prometheus 从 Pushgateway 服务中采集指标。
+完成采集后，可以使用 Grafana [可视化 EMQX 指标](#在-grafana-中可视化-emqx-指标)。
 
 ::: tip
 从 EMQX 6.3.0 开始，Prometheus 指标由 `metrics` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `metrics` 时也会自动启用其依赖的 `dashboard` 和 `auth`。更多信息请参见[功能门控](../deploy/feature-gates.md)。
 :::
 
-配置 Prometheus 集成步骤如下：
+## 在 EMQX 中配置指标采集行为
+
+通过 Dashboard 中的 Prometheus 集成页面，可以控制身份认证、Pushgateway 推送、延迟区间和命名空间请求速率。本节说明各选项控制的行为；后续章节分别提供 Pull 和 Push 模式的完整配置步骤。
+
+进入 Prometheus 集成设置：
 
 1. 在 EMQX Dashboard 中进入**管理** -> **监控**。
-2. 切换到**监控集成**标签页。
-3. 选择 **Prometheus** 作为监控平台。
+2. 选择**监控集成**标签页。
+3. 选择 **Prometheus**。
 
-根据所选择的模式，部分配置项仅适用于 Pull 模式，而部分配置项同时适用于两种模式。您可以点击 Dashboard 页面上的**帮助**按钮查看每种模式的详细配置步骤。
+<img src="./assets/config_pushgateway.png" alt="Prometheus 集成设置" style="zoom: 67%;" />
 
 如需查看下方端点所暴露的指标精选参考（包括建议告警的指标），请参见 [Broker 健康指标](./broker-health-indicators.md)。
 
-<img src="./assets/config_pushgateway.png" alt="config_pushgateway" style="zoom:67%;" />
+### 要求抓取请求进行身份认证
 
-## Prometheus 配置选项
+**启用基本认证**控制 `/api/v5/prometheus/*` 下所有 Prometheus 抓取 API 的身份认证。虽然 Dashboard 中的名称是“启用基本认证”，但该选项同时控制 HTTP Basic 认证和 Bearer 认证。
 
-本节介绍在 Dashboard 中选择 **Prometheus** 时可用的所有配置项。
+从 EMQX 6.3.0 开始，身份认证默认启用。未携带凭据的请求返回 `401`。Prometheus 可以使用 API Key 和 Secret Key 进行 HTTP Basic 认证。EMQX 也接受 Dashboard 登录 Token 作为 Bearer Token，但该 Token 会过期，不适合持续抓取。
 
-### 通用选项（同时影响 Pull 和 Push 模式）
+对于持续运行的 Prometheus 服务，请创建具有 `monitoring` scope 的专用 API 密钥，并[配置 Prometheus 对抓取请求进行身份认证](#配置-prometheus-对抓取请求进行身份认证)。
 
-#### 延迟区间
+如需允许未认证的抓取请求，可关闭**启用基本认证**，或设置 `prometheus.enable_basic_auth = false`。该选项仅影响 Pull 模式，不影响向 Pushgateway 推送指标。
 
-用于设置延迟指标的直方图区间边界，多个时间值使用英文逗号分隔。
+::: warning 重要提示
+关闭身份认证后，任何能够访问 Dashboard 监听器的客户端都可以抓取 EMQX 指标。升级后，显式设置 `prometheus.enable_basic_auth = false` 的配置和旧格式的 Prometheus 配置仍允许未认证抓取。升级后请在 Dashboard 中检查**启用基本认证**的状态。
+:::
 
-**格式**
+### 配置向 Pushgateway 推送指标
 
-以逗号分隔的时间长度列表，例如：
+打开**启用 Pushgateway**，使 EMQX 向 Pushgateway 实例发送指标。指标推送默认关闭。请配置以下字段：
 
-```
+| 字段 | 说明 |
+| --- | --- |
+| **采集间隔** | EMQX 推送指标的时间间隔，默认值为 `15` 秒。 |
+| **Pushgateway 服务** | Pushgateway URL，默认值为 `http://127.0.0.1:9091`。 |
+| **Job 名称** | 推送指标的 Job 标签。默认值为 `${name}/instance/${name}~${host}`，其中 `${name}` 是节点名称中 `@` 之前的部分，`${host}` 是 `@` 之后的主机部分。例如，`emqx@127.0.0.1` 对应的值分别为 `emqx` 和 `127.0.0.1`。 |
+| **请求头** | 发送到 Pushgateway 的可选 HTTP 请求头。请以键值对形式添加，例如 `Authorization = "some-auth-token"`。 |
+
+有关完整操作步骤，请参见[配置 EMQX 向 Pushgateway 推送指标](#配置-push-模式集成)。
+
+### 定义延迟直方图的区间
+
+在**延迟区间**中输入以英文逗号分隔的时间长度，例如：
+
+```text
 10ms, 100ms, 1s, 5s, 30s
 ```
 
-**说明**
+这些值用于定义 Pull 和 Push 模式下延迟直方图的区间边界。增加区间可以提高统计粒度，但可能增加指标基数和存储开销。
 
-这些值用于定义 Prometheus 中延迟指标如何划分到不同的直方图区间中。较小的区间间隔可以提供更精细的统计粒度，但可能会增加指标的基数（cardinality）以及存储开销。
+### 限制抓取所有命名空间的请求速率
 
-该设置会影响延迟直方图指标在内部的生成方式，并适用于：
+**命名空间数据抓取速率限制**用于设置抓取所有命名空间指标时的最大请求速率。针对特定命名空间的请求不受限制。请按 `<requests>/<duration>` 格式输入。默认值 `1/5s` 表示每 5 秒允许 1 次请求；该时间段内的额外请求将被拒绝。
 
-- Pull 模式指标
-- Push 模式指标（通过 Pushgateway）
+## 配置 Prometheus 抓取 EMQX 指标
 
-### Pull 模式选项设置
+在 Pull 模式下，Prometheus 连接 EMQX Dashboard 监听器，并抓取一个或多个 REST API 端点。
 
-以下选项仅在 Prometheus 通过 REST API 拉取 EMQX 指标时适用。
+### 选择要抓取的指标端点
 
-#### 启用基本认证
+为需要采集的每类指标添加一个 Prometheus 抓取任务：
 
-启用或禁用 Prometheus 抓取 API 的 HTTP Basic 认证。
+| 端点 | 指标 |
+| --- | --- |
+| `/api/v5/prometheus/stats` | EMQX 基础指标和计数器 |
+| `/api/v5/prometheus/namespaced_stats` | 按命名空间聚合的指标 |
+| `/api/v5/prometheus/auth` | 认证、授权和禁用客户端指标 |
+| `/api/v5/prometheus/data_integration` | 规则、连接器、动作、Sink/Source 和编解码指标 |
+| `/api/v5/prometheus/schema_validation` | Schema 验证指标 |
+| `/api/v5/prometheus/message_transformation` | 消息转换指标 |
+| `/api/v5/prometheus/topic_metrics` | 主题指标采集器的计数器 |
 
-默认情况下，Prometheus Pull 模式接口不需要身份认证。当启用该选项后：
+完整的 API 参考请参见 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
-- Prometheus 必须使用 HTTP Basic 认证访问以下接口：
-  - `/api/v5/prometheus/stats`
-  - `/api/v5/prometheus/auth`
-  - `/api/v5/prometheus/data_integration`
-- 您需要在 EMQX 中创建一个 [API 密钥](../admin/api.md#创建-api-密钥)。
-- 在 `prometheus.yaml` 的 `basic_auth` 部分进行配置。
+### 按命名空间抓取数据集成指标
 
-该选项仅适用于 Pull 模式，不影响 Pushgateway 集成。详情请参阅 [配置 Pull 模式集成](#配置-pull-模式集成)。
+从 EMQX 6.3.0 开始，`GET /api/v5/prometheus/data_integration` 根据认证用户所属的命名空间限制规则、动作和连接器指标的可见范围：
 
-#### 命名空间数据抓取速率限制
+- 命名空间用户只能获取所属命名空间的指标。用户通过 `ns=<namespace>` 指定其他命名空间时，EMQX 返回 `403`。
+- 全局管理员默认获取所有命名空间的指标。设置 `ns=<namespace>` 可抓取指定命名空间的指标；不设置 `ns` 并设置 `only_global=true`，可仅抓取全局命名空间的指标。
+- 关闭身份认证后，EMQX 按照全局管理员的可见范围处理请求。默认返回所有命名空间的指标。
 
-限制抓取命名空间级指标时的最大请求速率。
+非全局命名空间中的规则、动作和连接器逐资源指标包含 `namespace` 标签。全局命名空间中的逐资源指标不包含该标签。由于 Schema Registry 资源不按命名空间隔离，`emqx_schema_registrys_count` 仍是集群级指标。
 
-在多租户部署场景中，支持按命名空间暴露和聚合指标。详情请参阅 [Prometheus 指标隔离](../multi-tenancy/namespace-overview.md#多租户能力支持情况)。
+抓取所有命名空间指标的请求受[命名空间数据抓取速率限制](#限制抓取所有命名空间的请求速率)约束。
 
-**格式**：`<requests>/<duration>`
+### 选择指标采集模式
 
-**示例**：`1/5s`，表示每 5 秒最多允许 1 次请求。在时间窗口内的额外请求将被拒绝。
+对于支持该参数的端点，使用 `mode` 查询参数控制端点返回当前节点还是整个集群的指标。
 
-**行为说明**：
+:::: tabs type: card
 
-- 仅适用于命名空间级指标抓取请求。
-- 针对特定命名空间的请求不受限制。
-- 仅适用于 Pull 模式。
+::: tab 当前节点
 
-该选项有助于在大规模或多命名空间部署环境中防止过度负载。
+```text
+mode=node
+```
 
-### Push 模式选项设置
-
-Push 模式允许 EMQX 将指标推送到 Pushgateway 实例。默认情况下，Push 模式处于禁用状态。
-
-#### 启用 Pushgateway
-
-启用或禁用向 Pushgateway 推送指标。启用后需配置以下字段：
-
-#### 采集间隔
-
-指定 EMQX 向 Pushgateway 推送指标的时间间隔。默认值为 `15` 秒。
-
-#### Pushgateway 服务
-
-指定 Pushgateway 服务器的 URL。默认值为：`http://127.0.0.1:9091`。
-
-#### Job 名称
-
-指定向 Pushgateway 推送指标时使用的 Job 标签。
-
-您可以使用从 EMQX 节点名称和主机名派生的变量来构造 Job 标签。默认值为：`${name}/instance/${name}~${host}`。
-
-**变量说明：**
-
-- `${name}`：EMQX 节点名称（例如 `emqx`）
-- `${host}`：主机 IP 地址（例如 `127.0.0.1`）
-
-例如，当节点名称为：`emqx@127.0.0.1`，则：
-
-- `${name}` = `emqx`
-- `${host}` = `127.0.0.1`
-
-#### 请求头
-
-向 Pushgateway 推送指标时可选的 HTTP 请求头。
-
-其值类型为字符串。您可以以键值对形式进行配置，例如：`Authorization = "some-auth-token"`。
-
-点击**添加**可添加更多请求头。
-
-## 配置 Pull 模式集成
-
-EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
-
-- `/api/v5/prometheus/stats`：EMQX 的基础指标及计数器。
-
-- `/api/v5/prometheus/auth`：包含访问控制中认证和鉴权的关键指标及计数器。
-
-- `/api/v5/prometheus/data_integration`：包含规则引擎，连接器，动作，Sink/Source，编解码相关指标及计数器。
-
-在调用以上的 API 来获取指标时，我们可以使用 URL 查询参数 `mode` 来获取不同模式的指标数据。不同参数的含义如下：
-
-
-:::: tabs type:card
-
-::: tab 单节点模式
-
-`mode=node`
-
-默认模式，会返回当前请求节点的指标。如果没有指定具体的模式，系统会默认返回这种模式的指标。
+返回接收请求的节点的指标。此模式为默认模式。
 
 :::
 
-::: tab 集群聚合模式
+::: tab 集群聚合
 
-`mode=all_nodes_aggregated`
+```text
+mode=all_nodes_aggregated
+```
 
-聚合集群指标，返回的是集群中所有运行节点指标的*算术和*或者*逻辑和*。
+返回所有运行节点的指标，并按以下规则聚合：
 
-- 对于像“开启状态”，“运行状态”这类指标系统会返回它们的逻辑和，即所有节点都开启或运行则返回 1，否则返回 0。
-- 部分指标在不同节点具有独立性，将不会返回聚合值。例如 CPU 内存的使用量等。系统会将节点名加入标签，以便区分不同节点的指标。例如：
+- 状态类指标采用逻辑聚合。例如，仅当所有节点均处于开启或运行状态时返回 `1`，否则返回 `0`。
+- CPU 和内存使用量等节点独立指标不进行聚合，并保留 `node` 标签：
 
-  ```bash
+  ```text
   emqx_vm_cpu_use{node="emqx@172.17.0.2"} 7.6669163995887715
   emqx_vm_cpu_idle{node="emqx@172.17.0.2"} 92.33308360041123
-
   emqx_vm_cpu_use{node="emqx@172.17.0.3"} 7.676007766679973
   emqx_vm_cpu_idle{node="emqx@172.17.0.3"} 92.32399223332003
   ```
 
-- 部分指标在集群中任意节点的取值应一致。对于集群一致的指标，将直接返回接受 API 请求的节点上的取值。并且不会求和，也不会将节点名加入标签。例如：
-  ```bash
+- 集群内取值一致的指标直接返回接收请求节点上的值，不求和，也不包含 `node` 标签：
+
+  ```text
   emqx_topics_count 3
   emqx_cert_expiry_at{listener_type="ssl",listener_name="default"} 1904285225
   emqx_cert_expiry_at{listener_type="wss",listener_name="default"} 1904285225
   ```
-- 其他指标返回算数和，即返回的指标为所有节点指标的和。
+
+- 其他指标返回所有运行节点指标的算术和。
 
 :::
 
-::: tab 集群非聚合模式
+::: tab 集群非聚合
 
-`mode=all_nodes_unaggregated`
+```text
+mode=all_nodes_unaggregated
+```
 
-这是集群指标非聚合模式，返回的是集群中所有运行节点的各自指标。
+分别返回所有运行节点的指标。节点独立的值包含 `node` 标签：
 
-- 系统会将节点名加入标签，以便区分不同节点的指标。例如：
+```text
+emqx_connections_count{node="emqx@127.0.0.1"} 0
+```
 
-  ```bash
-  emqx_connections_count{node="emqx@127.0.0.1"} 0
-  ```
+集群内取值一致的指标仅返回接收请求节点上的一个值，不包含 `node` 标签：
 
-- 部分指标在集群中任意节点的取值应一致。例如“黑名单条数”，“保留消息数”等。对于集群一致的指标，将直接返回接受 API 请求的节点上的取值。并且不会将节点名加入标签。例如：
-  ```bash
-  emqx_retained_count 3
-  ```
+```text
+emqx_retained_count 3
+```
 
 :::
 
 ::::
 
-更多 Prometheus pull 端点相关信息，请参考 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
+<a id="身份认证"></a>
 
-### 认证（可选）
+### 配置 Prometheus 对抓取请求进行身份认证
 
-默认情况下，Prometheus Pull 模式接口不需要身份认证。
+从 EMQX 6.3.0 开始，Prometheus 抓取 API 默认要求身份认证。对于持续抓取，请使用专用 API 密钥进行 HTTP Basic 认证：
 
-如果在 EMQX Dashboard 中开启了**启用基本认证**，则 Prometheus 必须使用 HTTP Basic 认证进行访问。
+1. 在 EMQX 中创建具有 `monitoring` scope 的 [API 密钥](../admin/api.md#创建-api-密钥)。
+2. 将 API Key 和 Secret Key 添加到 `prometheus.yaml` 中的每个 EMQX 抓取任务：
 
-在这种情况下：
+   ```yaml
+   basic_auth:
+     username: '<API_KEY>'
+     password: '<SECRET_KEY>'
+   ```
 
-1. 在 EMQX 中创建一个 [API 密钥](../admin/api.md#创建-api-密钥)。
-2. 在 Prometheus 配置中使用生成的 API Key 和 Secret Key。
+EMQX 也接受通过 `POST /api/v5/login` 获取的 Bearer Token。Dashboard 登录 Token 会过期，因此持续运行的 Prometheus 抓取程序应使用 API 密钥。
 
-在 Prometheus 配置文件中：
+### 在 Prometheus 中添加 EMQX 抓取任务
 
-```yaml
-basic_auth:
-  username: '<API_KEY>'
-  password: '<SECRET_KEY>'
-```
-
-其中：
-
-- `username` 为 API Key。
-- `password` 为对应的 Secret Key。
-
-Prometheus 将使用这些凭据抓取 EMQX 指标。
-
-### Prometheus 服务器配置示例
-
-要使 Prometheus 抓取 EMQX 指标，需要配置 Prometheus 服务器。
-
-将以下配置添加到 Prometheus 的配置文件，然后重启 Prometheus 服务。
+以下 `prometheus.yaml` 示例采集三个常用指标类别。请替换目标地址和凭据，并根据需要为其他[指标端点](#选择要抓取的指标端点)添加任务。修改后重启 Prometheus。
 
 ```yaml
-# prometheus.yaml
 global:
-  scrape_interval:     10s # 默认抓取间隔为 10 秒
-  evaluation_interval: 10s # 默认评估间隔为 10 秒
-  # 在此机器上，每个时间序列默认都会被导出
+  scrape_interval: 10s
+  evaluation_interval: 10s
   external_labels:
     monitor: 'emqx-monitor'
+
 scrape_configs:
   - job_name: 'emqx_stats'
     static_configs:
@@ -253,8 +201,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/stats'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_auth'
     static_configs:
@@ -262,8 +210,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/auth'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_data_integration'
     static_configs:
@@ -271,50 +219,43 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/data_integration'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
-
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 ```
 
-## 配置 Push 模式集成
+<a id="配置-push-模式集成"></a>
 
-EMQX 支持向 Pushgateway 推送指标，再由 Prometheus 从 Pushgateway 采集指标。此功能默认为关闭状态。如需启用 Pushgateway 服务，您可以在 Dashboard 中的 Prometheus 配置页面上打开**启用 Pushgateway** 按钮并完成相关选项设置后，点击**保存修改**。
+## 配置 EMQX 向 Pushgateway 推送指标
 
-当前 Push 模式仅包含来自 `/api/v5/prometheus/stats` 接口的基础指标和计数器。若需更全面的监控，通常建议使用 Pull 模式。
+Push 模式仅发送 `/api/v5/prometheus/stats` 提供的基础指标和计数器。如需采集其他端点的指标，请使用 Pull 模式。
 
-### 配置文件示例
+### 在 Dashboard 中启用 Pushgateway 推送
 
-您还可以通过在 `etc/emqx.conf` 中添加以下配置来启用和配置 Pushgateway。有关更多配置项，请参阅 [配置文件 - Prometheus](../configuration/prometheus.md)。
+1. 在 Dashboard 中进入 Prometheus 集成设置。
+2. 打开**启用 Pushgateway**。
+3. 配置 Pushgateway 服务、采集间隔、Job 名称和所需的 HTTP 请求头。
+4. 点击**保存修改**。
 
-```bash
+同时还需要配置 Prometheus 抓取 Pushgateway 实例。
+
+### 在配置文件中启用 Pushgateway 推送
+
+也可以在 `etc/base.hocon` 中添加以下推荐的嵌套配置：
+
+```hocon
 prometheus {
-
-  ## Prometheus的URL
-  ## @path prometheus.push_gateway_server
-  ## @type string()
-  ## @default "http://127.0.0.1:9091"
-  push_gateway_server: "http://127.0.0.1:9091"
-
-
-  ## 数据报告间隔。
-  ## @path prometheus.interval
-  ## @type emqx_schema:duration_ms()
-  ## @default 15s
-  interval: 15s
-
-
-  ## 打开 Prometheus 的数据推送，或者关闭
-  ## @path prometheus.enable
-  ## @type boolean()
-  ## @default false
-  enable: true
+  push_gateway {
+    enable = true
+    url = "http://127.0.0.1:9091"
+    interval = 15s
+    headers {}
+    job_name = "${name}/instance/${name}~${host}"
+  }
 }
 ```
 
-## 通过 Grafana 可视化 EMQX 指标
+## 在 Grafana 中可视化 EMQX 指标
 
-EMQX 提供了 Grafana 的 Dashboard 模板，可以直接导入到 Grafana 中查看 EMQX 的指标数据图表。默认的 Dashboard 模板可以在 [EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) 中下载，也可以在帮助页面里下载。
+Prometheus 开始采集 EMQX 指标后，可以导入 [EMQX Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) 进行可视化。也可以从 Dashboard 的 Prometheus 集成**帮助**页面下载该模板。
 
-:::tip 提示
-完整的 Prometheus Grafana 可视化展示操作步骤可以参考 [EMQX+Prometheus+Grafana：MQTT 数据可视化监控实践](https://www.emqx.com/zh/blog/emqx-prometheus-grafana)。
-:::
+完整示例请参见 [EMQX+Prometheus+Grafana：MQTT 数据可视化监控实践](https://www.emqx.com/zh/blog/emqx-prometheus-grafana)。

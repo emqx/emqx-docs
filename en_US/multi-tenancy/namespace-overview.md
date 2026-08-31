@@ -150,9 +150,9 @@ Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX
 
   Authorization rules can be scoped to specific namespaces.
 
-- **Prometheus metrics isolation** (6.1)
+- **Prometheus metrics isolation** (6.1; extended in 6.3)
 
-  Metrics can be exposed and aggregated by namespace, enabling better observability in multi-tenant environments.
+  Starting from EMQX 6.1, metrics can be exposed and aggregated by namespace. Starting from EMQX 6.3, namespace isolation also applies to data integration metrics for rules, actions, and connectors. For scraping and filtering behavior, see [Scrape Data Integration Metrics by Namespace](../observability/prometheus.md#scrape-data-integration-metrics-by-namespace).
 
 - **Retained message quota isolation**
 

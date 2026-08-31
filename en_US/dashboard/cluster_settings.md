@@ -212,7 +212,7 @@ If the default value of the current alarm trigger threshold or alarm monitoring 
 
 This page mainly provides integration configurations with third-party monitoring platforms. Currently, EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
 
-When using the `Prometheus` third-party monitoring service, you can quickly enable the configuration on this page and set parameters such as the push data address and data reporting interval. You can directly use the API `/prometheus/stats` provided by EMQX to get monitoring data. When using this API, no authentication information is required. Please refer to [Prometheus](../observability/prometheus.md) for specific API.
+When using Prometheus, you can configure Pull or Push mode on this page. In Pull mode, Prometheus scrapes metrics from APIs under `/api/v5/prometheus/*`. Starting from EMQX 6.3.0, these APIs require authentication by default. Configure the scraper with a dedicated API key that has the `monitoring` scope. For configuration details, see [Integrate with Prometheus](../observability/prometheus.md).
 
 In most cases, you do not need to use `Pushgateway` to monitor the metrics data of EMQX. And you can choose to configure a `Pushgateway` service address to push the monitoring data to `Pushgateway`, and then `Pushgateway` pushes the data to the `Prometheus` service. Click to view [When to use Pushgateway](https://prometheus.io/docs/practices/pushing/).
 
