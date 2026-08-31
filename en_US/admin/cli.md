@@ -878,40 +878,82 @@ This command is used to manage listeners.
 
 ### listeners
 
-List information of all listeners.
+List MQTT listener information on the local node. Starting from EMQX 6.3.0, the output includes the resolved address and its source.
 
 ```bash
-$ emqx ctl listeners
-ssl:default
-  listen_on       : 0.0.0.0:8883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-tcp:default
-  listen_on       : 0.0.0.0:1883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 12
-  max_conns       : 5000000
-  shutdown_count  : [{takenover,2},{discarded,1}]
-ws:default
-  listen_on       : 0.0.0.0:8083
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-wss:default
-  listen_on       : 0.0.0.0:8084
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
+emqx ctl listeners
 ```
+
+Example output for listeners configured with explicit IP addresses:
+
+```text
+ssl:default
+  listen_on             : 0.0.0.0:8883
+  acceptors             : 16
+  proxy_protocol        : false
+  enbale                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+tcp:default
+  listen_on             : 0.0.0.0:1883
+  acceptors             : 16
+  proxy_protocol        : false
+  enbale                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 12
+  max_conns             : 5000000
+  shutdown_count        : [{takenover,2},{discarded,1}]
+ws:default
+  listen_on             : 0.0.0.0:8083
+  acceptors             : 16
+  proxy_protocol        : false
+  enbale                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+wss:default
+  listen_on             : 0.0.0.0:8084
+  acceptors             : 16
+  proxy_protocol        : false
+  enbale                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+```
+
+#### Listener Address Information
+
+The following fields distinguish the configured bind from the address selected on the local node:
+
+| Field | Description |
+| --- | --- |
+| `listen_on` | The configured bind, including the port. A port-only bind is displayed as `:1883`, for example. |
+| `resolved_address` | The resolved IP address, without the port. An empty value means the port-only bind resolves to all network interfaces. |
+| `resolved_address_from` | The source of the address, as described below. |
+| `running` | Whether the listener is running. A stopped listener can still report a resolved address; the address alone does not indicate that it is accepting connections. |
+
+The `resolved_address_from` field can contain:
+
+| Value | Meaning |
+| --- | --- |
+| `bind` | The listener's `bind` explicitly specifies an IP address. |
+| `0.0.0.0` | `node.default_listener_address` or the security profile selects all network interfaces. |
+| `127.0.0.1` | `node.default_listener_address` or the security profile selects loopback. |
+| `nodename` | The address comes from the host part of the local Erlang node name. |
+| An IP address or hostname | The address comes from that value of `node.default_listener_address`. |
+
+For example, with `bind = 1883` and `node.default_listener_address = "all"`, `listen_on` is `:1883`, `resolved_address` is empty, and `resolved_address_from` is `0.0.0.0`. With an explicit `bind = "0.0.0.0:1883"`, the resolved address is `0.0.0.0` and its source is `bind`.
+
+This command does not aggregate addresses across the cluster. To compare nodes and interpret `inconsistent` in the cluster API response, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information).
 
 #### Common Shutdown Reasons
 

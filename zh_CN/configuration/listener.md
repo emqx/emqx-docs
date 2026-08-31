@@ -9,8 +9,7 @@
 
 ::: tip
 
-您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。
-如需通过配置文件配置监听器，建议使用 `base.hocon`，而不是 `emqx.conf`。
+您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。如需通过配置文件配置监听器，建议使用 `base.hocon`，而不是 `emqx.conf`。
 注意，如果监听器在  `emqx.conf` 中显式配置，那么在 Dashboard 中进行的修改只能临时生效直到下次 EMQX 重启。
 
 :::
@@ -38,34 +37,6 @@ EMQX 按以下顺序确定地址：
 下文的 TCP、SSL 和 WebSocket 配置示例均显式指定 IP 地址，因此不受默认监听地址设置影响。
 
 支持的取值及启动行为参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。官方 Docker 镜像会设置自己的默认值，参见 [Docker 中的监听地址](../deploy/install-docker.md#docker-中的监听地址)。
-
-### 为各节点使用不同地址
-
-通过 Dashboard、REST API 或 CLI 修改的监听器配置会同步到整个集群。如果在 `bind` 中填写某个节点的 IP 地址，其他不具备该地址的节点将无法绑定该监听器。如需在各节点上使用不同地址，请将监听器的绑定保持为仅指定端口，并分别配置各节点的默认地址。
-
-监听器配置使用 `base.hocon`，节点级的默认监听地址使用 `emqx.conf` 或环境变量。例如，若要使用各节点 Erlang 节点名中的主机部分：
-
-1. 通过 Dashboard 将 TCP 监听器的绑定设置为 `1883`，或在每个节点的 `etc/base.hocon` 中配置：
-
-   ```hocon
-   listeners.tcp.default.bind = 1883
-   ```
-
-   如果优先级更高的配置源已设置显式绑定地址，请改为更新该配置源。参见[配置覆盖规则](./configuration.md#配置覆盖规则)。
-
-2. 在每个节点的 `emqx.conf` 中添加：
-
-   ```hocon
-   node.default_listener_address = "nodename"
-   ```
-
-   对于 Docker 部署，请向 `docker run` 传入 `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename`，或在 Docker Compose 服务的 `environment` 部分设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename`。这会覆盖官方镜像设置的默认值 `all`，该默认值的优先级高于 `emqx.conf` 中的配置。
-
-   EMQX 使用节点名中 `@` 之后的主机部分；如果它是主机名，则在节点启动时解析。请确保该名称解析到本节点可用的地址。如果主机名无法解析，节点将无法启动。
-
-3. 重启各节点，使 `node.default_listener_address` 生效。该配置项会影响本节点上所有仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器。监听器绑定中显式指定的 IP 地址保持不变。
-
-也可以在节点环境中设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`。环境变量的优先级高于 `emqx.conf`。
 
 ## 配置 TCP 监听器
 
@@ -179,6 +150,64 @@ listeners.wss.default {
 - `max_connections` 设置允许的最大并发连接数，默认为 `infinity`。
 - `websocket.mqtt_path` 设置 WebSocket 的 MQTT 协议路径，默认为 `/mqtt`。
 - `ssl_options` 包括 SSL/TLS 配置选项，详细说明参见 [配置 SSL 监听器](#配置-ssl-监听器)。
+
+## 为各节点使用不同地址
+
+通过 Dashboard、REST API 或 CLI 修改的监听器配置会同步到整个集群。如果在 `bind` 中填写某个节点的 IP 地址，其他节点的本地网络接口上没有配置该 IP 地址时，将无法绑定该监听器。如需在各节点上使用不同地址，请将监听器的绑定保持为仅指定端口，并分别配置各节点的默认地址。
+
+监听器配置使用 `base.hocon`，节点级的默认监听地址使用 `emqx.conf` 或环境变量。例如，若要使用各节点 Erlang 节点名中的主机部分：
+
+1. 通过 Dashboard 将 TCP 监听器的绑定设置为 `1883`，或在每个节点的 `etc/base.hocon` 中配置：
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   如果优先级更高的配置源已设置显式绑定地址，请改为更新该配置源。参见[配置覆盖规则](./configuration.md#配置覆盖规则)。
+
+2. 在每个节点的 `emqx.conf` 中添加：
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   对于 Docker 部署，请向 `docker run` 传入 `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename`，或在 Docker Compose 服务的 `environment` 部分设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename`。这会覆盖官方镜像设置的默认值 `all`，该默认值的优先级高于 `emqx.conf` 中的配置。
+
+   EMQX 使用节点名中 `@` 之后的主机部分；如果它是主机名，则在节点启动时解析。请确保该名称解析到本节点可用的地址。如果主机名无法解析，节点将无法启动。
+
+3. 重启各节点，使 `node.default_listener_address` 生效。该配置项会影响本节点上所有仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器。监听器绑定中显式指定的 IP 地址保持不变。
+
+也可以在节点环境中设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`。环境变量的优先级高于 `emqx.conf`。
+
+## 查看监听地址信息
+
+从 EMQX 6.3.0 开始，可以在不修改监听器 `bind` 配置的情况下，查看解析后的地址及其来源。查看单个节点时，可选择 CLI 或 REST API；比较集群中的节点时，使用监听器列表 API。
+
+### 通过 CLI 查询节点
+
+在需要检查的节点上运行：
+
+```bash
+emqx ctl listeners
+```
+
+查看 `listen_on` 确认配置的绑定值，查看 `resolved_address` 确认解析后的 IP，并通过 `resolved_address_from` 了解地址来源。同时检查 `running`，确认监听器是否正在运行：已停止的监听器仍可返回解析地址。各字段的含义（包括 `resolved_address` 为空时的含义）参见[监听地址信息](../admin/cli.md#监听地址信息)。
+
+### 通过 REST API 查询监听器
+
+如需通过 REST API 检查单个监听器，使用 `GET /api/v5/listeners/:id`，例如 `GET /api/v5/listeners/tcp:default`。响应返回处理该请求的节点上的地址信息。请求需按要求进行 [API 认证](../admin/api.md#认证)。
+
+`bind` 保留配置中的值，包含端口。`resolved_address` 和 `resolved_address_from` 为只读信息；如需更改地址，应修改 `bind` 或 `node.default_listener_address`，而不是编辑这两个响应字段。
+
+### 比较各节点
+
+如需比较各节点，使用 `GET /api/v5/listeners`。每个监听器的 `status` 包含集群汇总结果，`node_status[].status` 包含各节点的值。请同时检查 `resolved_address` 和 `resolved_address_from`：
+
+- 如果各节点返回的地址不同，`status.resolved_address` 为 `inconsistent`。这本身不代表故障。例如，使用 `node.default_listener_address = "nodename"` 时，各节点可以解析到不同 IP，但 `resolved_address_from` 均为 `nodename`。
+- 如果 `status.resolved_address_from` 为 `inconsistent`，请比较 `node_status` 中的地址来源。即使各节点返回相同的监听地址，地址来源也可能不同。请检查各节点的默认监听地址和安全配置方案，确认这些差异是否符合部署预期。
+- 单独检查各节点的 `running` 状态。如果正在运行的监听器使用回环地址，其他主机上的客户端将无法访问。在 Docker 中，回环地址通常指容器自身，参见 [Docker 中的监听地址](../deploy/install-docker.md#docker-中的监听地址)。
+
+以上查询适用于 MQTT 监听器。对于网关监听器，请使用[网关监听器查询接口](../gateway/gateway.md#监听器)。
 
 ## WebSocket 监听器的转发客户端地址
 

@@ -39,34 +39,6 @@ The TCP, SSL, and WebSocket configuration examples below use explicit IP address
 
 For supported values and startup behavior, see [Default Listener Address](../access-control/security-profile.md#default-listener-address). The official Docker image sets its own default; see [Listener Addresses in Docker](../deploy/install-docker.md#listener-addresses-in-docker).
 
-### Use a Different Address on Each Node
-
-Listener configuration changes made through the Dashboard, REST API, or CLI are replicated across the cluster. If you put one node's IP address in `bind`, the listener cannot bind to that address on nodes where it is not available. To use a different address on each node, keep the listener's bind as a port and configure the default address separately on each node.
-
-Use `base.hocon` for listener settings, and `emqx.conf` or environment variables for the node-level default listener address. For example, to use the host part of each node's Erlang node name:
-
-1. Set the TCP listener's bind to `1883` through the Dashboard, or configure the following in each node's `etc/base.hocon`:
-
-   ```hocon
-   listeners.tcp.default.bind = 1883
-   ```
-
-   If a higher-priority configuration source already sets an explicit bind address, update that source instead. See [Config Override Rules](./configuration.md#config-override-rules).
-
-2. Add the following to each node's `emqx.conf`:
-
-   ```hocon
-   node.default_listener_address = "nodename"
-   ```
-
-   For Docker deployments, pass `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename` to `docker run`, or set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename` in the Docker Compose service's `environment` section. This overrides the official image's `all` default, which takes precedence over the value in `emqx.conf`.
-
-   EMQX uses the host part after `@` in the node name, resolving it at node startup if it is a hostname. Ensure that it resolves to an address available on that node. A hostname that cannot be resolved prevents the node from starting.
-
-3. Restart each node to apply `node.default_listener_address`. This setting affects all port-only binds for MQTT listeners, gateway listeners, and the Dashboard HTTP listener on that node. Explicit IP addresses in listener binds remain unchanged.
-
-You can also set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` in the node's environment. Environment variables take precedence over `emqx.conf`.
-
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
@@ -182,6 +154,64 @@ where:
   - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
   - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
   - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+
+## Use a Different Address on Each Node
+
+Listener configuration changes made through the Dashboard, REST API, or CLI are replicated across the cluster. If you put one node's IP address in `bind`, the listener cannot bind to that address on other nodes unless the IP address is configured on a local network interface of those nodes. To use a different address on each node, keep the listener's bind as a port and configure the default address separately on each node.
+
+Use `base.hocon` for listener settings, and `emqx.conf` or environment variables for the node-level default listener address. For example, to use the host part of each node's Erlang node name:
+
+1. Set the TCP listener's bind to `1883` through the Dashboard, or configure the following in each node's `etc/base.hocon`:
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   If a higher-priority configuration source already sets an explicit bind address, update that source instead. See [Config Override Rules](./configuration.md#config-override-rules).
+
+2. Add the following to each node's `emqx.conf`:
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   For Docker deployments, pass `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename` to `docker run`, or set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename` in the Docker Compose service's `environment` section. This overrides the official image's `all` default, which takes precedence over the value in `emqx.conf`.
+
+   EMQX uses the host part after `@` in the node name, resolving it at node startup if it is a hostname. Ensure that it resolves to an address available on that node. A hostname that cannot be resolved prevents the node from starting.
+
+3. Restart each node to apply `node.default_listener_address`. This setting affects all port-only binds for MQTT listeners, gateway listeners, and the Dashboard HTTP listener on that node. Explicit IP addresses in listener binds remain unchanged.
+
+You can also set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` in the node's environment. Environment variables take precedence over `emqx.conf`.
+
+## View Listener Address Information
+
+Starting from EMQX 6.3.0, you can view the resolved address and its source without changing the listener's configured `bind`. Use either the CLI or the REST API to query a node. To compare nodes in a cluster, use the listener list API.
+
+### Query a Node with the CLI
+
+Run the following command on the node you want to check:
+
+```bash
+emqx ctl listeners
+```
+
+Check `listen_on` for the configured bind, `resolved_address` for the resolved IP, and `resolved_address_from` for the address source. Also check `running` to confirm whether the listener is running: a stopped listener can still report a resolved address. See [Listener Address Information](../admin/cli.md#listener-address-information) for field meanings, including what an empty `resolved_address` value means.
+
+### Query a Listener with the REST API
+
+To check a listener through the REST API, use `GET /api/v5/listeners/:id`, for example `GET /api/v5/listeners/tcp:default`. The response reports the address on the node handling the request. Use [API authentication](../admin/api.md#authentication) as required.
+
+The `bind` field keeps the configured value, including the port. `resolved_address` and `resolved_address_from` are read-only information; change `bind` or `node.default_listener_address` to change the address, rather than editing these response fields.
+
+### Compare Nodes
+
+To compare nodes, use `GET /api/v5/listeners`. For each listener, `status` contains the cluster aggregate and `node_status[].status` contains each node's values. Check both `resolved_address` and `resolved_address_from`:
+
+- If the nodes report different addresses, `status.resolved_address` is `inconsistent`. This does not by itself indicate a failure. For example, with `node.default_listener_address = "nodename"`, nodes can resolve to different IP addresses while all report `resolved_address_from = "nodename"`.
+- If `status.resolved_address_from` is `inconsistent`, compare the sources in `node_status`. Nodes can report the same listener address but different sources. Check each node's default listener address and security profile to confirm that these differences match your deployment.
+- Check each node's `running` status separately. If a running listener uses loopback, clients on other hosts cannot reach it. In Docker, loopback normally refers to the container itself; see [Listener Addresses in Docker](../deploy/install-docker.md#listener-addresses-in-docker).
+
+These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../gateway/gateway.md#listener).
 
 ## Forwarded Client Address (WebSocket Listeners)
 
