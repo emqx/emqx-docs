@@ -386,6 +386,10 @@
     - title_en: Security Checklist
       title_cn: 安全检查清单
       path: access-control/security-checklist
+    - title_en: Security Profiles
+      title_cn: 安全配置方案
+      title_ja: セキュリティプロファイル
+      path: access-control/security-profile
     - title_en: Network and TLS
       title_cn: 网络与 TLS
       title_ja: ネットワークと TLS
