@@ -156,6 +156,8 @@ For example:
 - `ns:namespace_01::administrator`
 - `ns:namespace_01::viewer`
 
+Starting from EMQX 6.3.0, the namespace in a namespaced role must not be listed in `multi_tenancy.deny_namespaces`. EMQX rejects roles that use a denied name. For configuration details, see [Denied Namespace Names](../multi-tenancy/namespace-global-settings.md#denied-namespace-names).
+
 #### Behavior of Namespaced Users
 
 - **Scoped resources**: Namespaced users can view and manage only the resources within their assigned namespace, such as Connectors, Actions, Sources, Rules, and other namespace-aware modules.
