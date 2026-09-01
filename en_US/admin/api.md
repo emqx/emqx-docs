@@ -325,6 +325,10 @@ You can specify the namespace in either of these ways:
 
 Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. An API key's namespace cannot be changed after the key is created.
 
+Starting from EMQX 6.3.0, neither form can use a namespace listed in `multi_tenancy.deny_namespaces`. For configuration details, see [Denied Namespace Names](../multi-tenancy/namespace-global-settings.md#denied-namespace-names).
+
+To create a global API key, omit `namespace` and use a role without a namespace prefix. Setting `namespace` to the string `"global"` does not select the global scope.
+
 #### Bootstrap File
 
 You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
