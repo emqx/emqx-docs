@@ -88,9 +88,15 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 When the Erlang VM terminates abnormally, it writes a crash dump to `erl_crash.<timestamp>.dump` in the log directory, which is `/opt/emqx/log` in the container. The file records the state of the node at the moment it went down, and it is the primary evidence for troubleshooting a crash.
 
-Console logging does not cover this. The console handler streams runtime logs to `docker logs`, but the crash dump is written as a file. If the log directory is not mounted, the dump disappears with the container, which is exactly when it is needed.
+Console logging does not preserve the crash dump file. The console log handler writes runtime logs to the container's standard output, which you can view with `docker logs`. Crash dumps are written to files separately. If the log directory is not mounted, the dump is lost when the container is removed.
 
-Mount a host directory at `/opt/emqx/log` even when EMQX logs to the console:
+Before you start EMQX, create a host directory and make it writable by the `emqx` user in the container (UID 1000):
+
+```bash
+mkdir -p $PWD/log && sudo chown 1000:1000 $PWD/log
+```
+
+Then mount the directory at `/opt/emqx/log` when you start EMQX:
 
 ```bash
 docker run -d --name emqx \
@@ -98,15 +104,15 @@ docker run -d --name emqx \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
 
-The directory must be writable by the `emqx` user in the container (UID 1000), otherwise the VM cannot write the dump and it is lost:
+After a crash, run the following command to check the container output:
 
 ```bash
-mkdir -p $PWD/log && sudo chown 1000:1000 $PWD/log
+docker logs emqx
 ```
 
-To confirm that a dump was written, check the container output for the following line. The `done` suffix means the file is complete:
+If the following line ends with `done`, the dump file is complete:
 
-```bash
+```text
 Crash dump is being written to: /opt/emqx/log/erl_crash.2026.08.31.06.56.22.dump...done
 ```
 
