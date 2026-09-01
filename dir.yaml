@@ -115,7 +115,6 @@
                   collapsed: true
                   children:
                     - title_en: Migrate from EMQX Operator 2.3 to 3.0
-                      lang: en
                       path: deploy/kubernetes/operator/migration/migrate-from-2.3-to-3.0
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX

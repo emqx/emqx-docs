@@ -234,6 +234,36 @@ Do not delete the old PVCs or node-cookie Secret until you have verified the new
 
 ## Roll back
 
-Before scaling down the old workloads, you can direct client traffic back to the old listener Service. Any data created in the new cluster after the cutover is not copied back automatically.
+Confirm that the old StatefulSets, ReplicaSets, PVCs, configuration resources, Services, and Secrets are still present.
 
-To return the old workloads to Operator management, remove Operator 3.0 and its CRD, reinstall Operator 2.3, and reapply `emqx-v2.yaml`. Verify that Operator 2.3 recognizes the existing workloads before resuming normal operation.
+If the old workloads are still running, test the old listener Service and direct client traffic back to it.
+
+If you already scaled the old workloads to zero, use the following procedure to return to Operator 2.3 through a blue-green update:
+
+1. Scale the same StatefulSets and ReplicaSets that were running before the migration back to their previous replica counts. Use `emqx-v2-workloads.yaml` to identify them and their counts.
+
+2. Wait for EMQX to start in an old Core Pod:
+
+   ```bash
+   kubectl exec -n "$EMQX_NAMESPACE" <old-core-pod> -c emqx -- \
+     emqx ctl status
+   ```
+
+   The recreated Pod can remain not ready because its readiness gate is managed by Operator 2.3. Do not switch client traffic yet.
+
+3. Uninstall Operator 3.0 by using the same method that you used to install it. This also removes the new EMQX resource, its managed workloads, and the EMQX CRD. If you installed the CRD separately, remove it before continuing.
+
+4. Reinstall the same Operator 2.3 version that managed the old cluster, then reapply the saved resource:
+
+   ```bash
+   kubectl apply -f emqx-v2.yaml
+   ```
+
+5. Wait for the restored resource to become ready, then test the old listener Service before switching traffic:
+
+   ```bash
+   kubectl wait emqx.apps.emqx.io/"$OLD_EMQX" \
+     -n "$EMQX_NAMESPACE" --for=condition=Ready --timeout=15m
+   ```
+
+   Operator 2.3 does not strictly adopt the old workloads. It uses the running workloads as the starting revision for a blue-green update, performing a complete data migration.
