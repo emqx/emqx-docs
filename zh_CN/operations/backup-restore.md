@@ -48,6 +48,8 @@ EMQX 支持导入和导出的数据包括：
 
 数据可以从任何运行的集群节点导出。
 
+从 EMQX 6.3.0 开始，导出的备份会在 `META.hocon` 中记录节点的安全配置方案。导入备份时，EMQX 使用该元数据检查安全配置方案是否兼容。
+
 ### 导入
 
 要导入数据，EMQX 节点必须处于运行状态，并且需要满足一些条件才能成功进行导入操作：
@@ -66,6 +68,30 @@ EMQX 支持导入和导出的数据包括：
 
 因此，将数据导入到未清除数据的 EMQX 集群可能需要额外的注意。
 
+:::
+
+#### 安全配置方案兼容性
+
+[安全配置方案](../access-control/security-profile.md)用于为节点选择一组与安全相关的默认行为，包括 `legacy` 和 `hardened` 两种方案。从 EMQX 6.3.0 开始，EMQX 会在导入时检查备份中记录的安全配置方案。上传备份文件不会触发该检查，也不会恢复任何数据。
+
+| 备份的安全配置方案 | 目标节点的安全配置方案 | 默认导入结果 |
+| --- | --- | --- |
+| `hardened` | `hardened` | 允许 |
+| `legacy` | `hardened` | 拒绝，除非显式允许方案不匹配 |
+| 不包含安全配置方案元数据，例如 EMQX 6.3.0 之前创建的备份 | `hardened` | 按 `legacy` 处理并拒绝，除非显式允许方案不匹配 |
+| 任意方案 | `legacy` | 允许 |
+
+此表仅说明安全配置方案检查。允许安全配置方案不匹配只会跳过此项检查，其他备份兼容性检查仍然适用。
+
+::: warning 重要提示
+将 `legacy` 方案下生成的数据恢复到 `hardened` 节点，可能改变恢复后部署的行为：
+
+- 如果目标节点未设置 `node.default_listener_address`，仅配置端口而未配置地址的 MQTT 监听器和 Dashboard HTTP 监听器将绑定回环地址，而不是所有网络接口。
+- 空认证器链或所有认证器均已禁用时，EMQX 将拒绝所有客户端，而不是允许其连接。
+- 仍使用默认密码的 Dashboard 账户将无法登录。
+- `legacy` 方案忽略的认证和授权后端故障将导致操作被拒绝。
+
+允许安全配置方案不匹配前，请评估这些差异。
 :::
 
 ## 通过 Dashboard 管理备份文件
@@ -99,7 +125,7 @@ EMQX 支持导入和导出的数据包括：
 
    - **下载**：将备份文件下载到本地。
    - **删除**：从选定范围中删除备份文件。
-   - **恢复**：将备份文件导入选定范围。如果选择了具体 Namespace，请在确认恢复前核对确认对话框中的目标 Namespace。恢复成功后，确认成功消息中显示了目标 Namespace。
+   - **恢复**：将备份文件导入选定范围。如果选择了具体 Namespace，请在确认恢复前核对确认对话框中的目标 Namespace。**允许安全配置文件不匹配**复选框默认未选中。仅在评估并接受[安全配置方案兼容性](#安全配置方案兼容性)中说明的风险后，才选中该复选框。恢复成功后，确认成功消息中显示了目标 Namespace。
 
 在具体 Namespace 视图中，上传、下载、删除和恢复操作均作用于该 Namespace。全局管理员可以在此视图中管理和恢复备份文件，但不能创建备份。
 
@@ -114,6 +140,15 @@ EMQX 支持导入和导出的数据包括：
 - `POST /api/v5/data/import`：导入备份文件。
 
 全局管理员未传入 `namespace` 时，操作作用于全局范围内的备份文件。对于命名空间调用方，EMQX 会忽略该参数，并将操作限制在调用方所属的 Namespace 内。
+
+对于 `POST /api/v5/data/import`，可选请求体字段 `allow_security_profile_mismatch` 默认为 `false`。仅当需要将 `legacy` 方案下导出的备份或不包含安全配置方案元数据的备份导入 `hardened` 节点，并且已接受兼容性风险时，才将该字段设置为 `true`。例如：
+
+```json
+{
+  "filename": "emqx-export-2026-09-01-08-30-00.000.tar.gz",
+  "allow_security_profile_mismatch": true
+}
+```
 
 ## 通过 CLI 操作
 
@@ -182,4 +217,10 @@ EMQX 支持导入和导出的数据包括：
     Importing emqx_psk database table...
     Importing emqx_app database table...
     Data has been imported successfully.
+   ```
+
+   评估并接受兼容性风险后，如需将 `legacy` 方案下导出的备份或不包含安全配置方案元数据的备份导入 `hardened` 节点，添加 `--allow-security-profile-mismatch`：
+
+   ```bash
+   ./emqx ctl data import emqx-export-2026-09-01-08-30-00.000.tar.gz --allow-security-profile-mismatch
    ```

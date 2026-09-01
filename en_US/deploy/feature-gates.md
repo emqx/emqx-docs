@@ -81,6 +81,10 @@ Existing feature-specific configuration sections can remain in configuration fil
 
 ## Inspect Enabled Features
 
+In the Dashboard, click **Monitoring** -> **Cluster Overview** -> **Nodes** and check the **Feature Preset** column. The column shows whether each node started with the `full`, `essential`, or `custom` preset. `custom` means that `EMQX_FEATURES` contains an explicit feature list. Stopped nodes and nodes running versions earlier than 6.3 do not report a preset.
+
+The Dashboard shows only the preset. To inspect the exact enabled and disabled feature lists, use the startup log or REST API.
+
 EMQX logs the resolved feature state during startup:
 
 ```text

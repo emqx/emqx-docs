@@ -81,6 +81,10 @@ export EMQX_FEATURES=dashboard,auth,data_integration,metrics
 
 ## 查看已启用功能
 
+在 Dashboard 中，点击**监控** -> **集群概览** -> **节点**，查看**功能预设**列。该列显示各节点启动时使用的 `full`、`essential` 或 `custom` 预设。`custom` 表示 `EMQX_FEATURES` 包含显式指定的功能列表。停止的节点和运行 6.3 之前版本的节点不会报告功能预设。
+
+Dashboard 仅显示预设。如需查看实际启用和禁用的功能列表，请使用启动日志或 REST API。
+
 EMQX 会在启动时记录解析后的功能状态：
 
 ```text
