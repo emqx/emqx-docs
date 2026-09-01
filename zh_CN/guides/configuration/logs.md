@@ -86,9 +86,15 @@ EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见
 
 Erlang 虚拟机异常终止时，会在日志目录下写入崩溃转储文件 `erl_crash.<timestamp>.dump`，在容器中该目录为 `/opt/emqx/log`。该文件记录了节点宕机瞬间的状态，是排查崩溃问题的主要依据。
 
-控制台日志无法替代该文件。控制台处理器将运行时日志输出到 `docker logs`，而崩溃转储以文件形式写入。如果未挂载日志目录，转储文件会随容器一起消失，而这恰恰是最需要它的时候。
+控制台日志无法保留崩溃转储文件。控制台日志处理器将运行日志写入容器的标准输出，您可以通过 `docker logs` 查看这些日志。崩溃转储则单独写入文件。如果未挂载日志目录，删除容器后将无法保留转储文件。
 
-即使 EMQX 将日志输出到控制台，也应将宿主机目录挂载到 `/opt/emqx/log`：
+启动 EMQX 前，创建宿主机目录，并确保容器内的 `emqx` 用户（UID 1000）对该目录具有写权限：
+
+```bash
+mkdir -p $PWD/log && sudo chown 1000:1000 $PWD/log
+```
+
+启动 EMQX 时，将该目录挂载到 `/opt/emqx/log`：
 
 ```bash
 docker run -d --name emqx \
@@ -96,15 +102,15 @@ docker run -d --name emqx \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
 
-该目录必须对容器内的 `emqx` 用户（UID 1000）可写，否则虚拟机无法写入转储文件，该文件将会丢失：
+崩溃后，运行以下命令查看容器输出：
 
 ```bash
-mkdir -p $PWD/log && sudo chown 1000:1000 $PWD/log
+docker logs emqx
 ```
 
-要确认转储文件已写入，请在容器输出中查看以下日志。结尾的 `done` 表示文件已完整写入：
+如果以下日志以 `done` 结尾，则表示转储文件已完整写入：
 
-```bash
+```text
 Crash dump is being written to: /opt/emqx/log/erl_crash.2026.08.31.06.56.22.dump...done
 ```
 
