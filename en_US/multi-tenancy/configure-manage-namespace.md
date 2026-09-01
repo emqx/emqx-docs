@@ -53,7 +53,7 @@ For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-
 
 ## Configure and Manage Namespaces via Dashboard
 
-In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can view, edit, or delete namespaces and manage clients connected to each namespace.
+In the Dashboard’s left-side menu, go to **Management** -> **Namespace**. On the **Namespace** page, you can manage namespaces and clients connected to each namespace.
 
 By default, the namespace list only shows explicitly created namespaces. You can toggle the switch at the top left of the page to show both explicitly created namespaces and those automatically created by EMQX from the `client_attrs.tns` attribute.
 
@@ -99,15 +99,7 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
 
 2. After completing the configuration, click **Create**. The new namespace will appear in the list.
 
-### Delete a Namespace via Dashboard
-
-To delete a namespace, click **Delete** in the **Actions** column. After confirming, the namespace will be permanently deleted.
-
-::: tip Note
-
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected.
-
-:::
+### Manage Namespace Clients
 
 To view clients connected to a specific namespace, click **Clients** in the **Actions** column. You can also choose to bulk disconnect clients.
 
@@ -115,20 +107,91 @@ To view clients connected to a specific namespace, click **Clients** in the **Ac
 
 ::: tip
 
-Always check the corresponding Swagger API documentation for detailed and up-to-date request and response endpoint schemas. These are served by the Dashboard listeners at `/api-docs`.
+To view request and response schemas that match the current EMQX instance version, open `/api-spec.html` on the Dashboard listener, for example, `http://localhost:18083/api-spec.html`.
 
 :::
+
+### List Namespaces via REST API
+
+EMQX provides two endpoints for listing namespaces with details, depending on which namespaces you need:
+
+| Endpoint | Scope | Config included |
+| -------- | ----- | --------------- |
+| `GET /mt/ns_list_details` | All namespaces (auto-created and explicitly created) | No |
+| `GET /mt/managed_ns_list_details` | Explicitly created (managed) namespaces only | Yes |
+
+Both endpoints support the same query parameters:
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+| `last_ns` | String | `""` | Pagination cursor. Pass the `name` of the last item from the previous page to retrieve the next page. |
+| `limit` | Integer | `100` | Maximum number of namespaces to return per page. |
+
+#### List All Namespaces
+
+`GET /mt/ns_list_details` returns all namespaces, including those auto-created from client connection metadata. Each item contains `name` and `created_at` only, with no configuration fields.
+
+**Response Example**
+
+```json
+[
+  { "name": "ns1", "created_at": 1747917753 },
+  { "name": "ns2", "created_at": 1747917754 }
+]
+```
+
+#### List Managed Namespaces with Configuration
+
+`GET /mt/managed_ns_list_details` returns only explicitly created namespaces and includes each namespace's current configuration inline. A management UI can use this endpoint to render a full list with configuration data in a single request.
+
+**Response Example**
+
+```json
+[
+  {
+    "name": "ns1",
+    "created_at": 1747917753,
+    "config": {
+      "session": {
+        "max_sessions": 100
+      },
+      "limiter": {
+        "tenant": {
+          "bytes": { "rate": "20MB/10s", "burst": "300MB/1m" },
+          "messages": { "rate": "5000/1s", "burst": "60/1m" }
+        },
+        "client": {
+          "bytes": { "rate": "10MB/10s", "burst": "200MB/1m" },
+          "messages": { "rate": "3000/1s", "burst": "40/1m" }
+        }
+      }
+    }
+  },
+  {
+    "name": "ns2",
+    "created_at": 1747917754,
+    "config": {}
+  }
+]
+```
+
+Each item contains:
+- `name`: The namespace identifier.
+- `created_at`: Unix timestamp (seconds) of when the namespace was created.
+- `config`: The namespace configuration. An empty object (`{}`) indicates no configuration has been applied. For a full description of config fields, see [Configure a Namespace via REST API](#configure-a-namespace-via-rest-api).
+
+To retrieve the full configuration of a specific namespace, use `GET /mt/ns/<namespace>/config`.
 
 ### Configure a Namespace via REST API
 
 After the namespace is created, it can be configured using the `PUT /mt/ns/<namespace>/config` API.
 
-Use this endpoint to set rate limits, session limits, and other namespace-specific settings. For example configurations, see the [Configuration Example](#configuration-example).
+Use this endpoint to set rate limits, session limits, and other namespace-specific settings.
 
 #### Configuration Example
 
 
-This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
+This example configures a namespace using the REST API. Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
 ##### Create the Namespace
 
@@ -206,12 +269,31 @@ PUT /mt/ns/ns1/config
 }
 ```
 
-### Delete a Namespace via REST API
+## Delete and Clean Up a Namespace
 
-To remove a namespace and its associated configuration, you can use the `DELETE /mt/ns/<namespace>` API.
+Deleting a managed namespace permanently removes the namespace and its associated configuration. Starting from EMQX 6.1.4, EMQX also asynchronously removes namespace-scoped data from the built-in database. This data includes password-based authentication users, SCRAM users, and authorization rules. EMQX removes authentication users from every user group in the deleted namespace without affecting the global namespace or other namespaces. After the cleanup completes, recreating a namespace with the same name does not restore the deleted users or authorization rules.
 
 ::: tip Note
 
-Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected. EMQX provides an API to bulk kick all sessions under a namespace, and this process should be triggered automatically when deleting a managed namespace.
+Deleting a managed namespace automatically starts disconnecting all clients currently connected through it. To avoid unexpected client interruption, disconnect active clients before deleting the namespace.
 
 :::
+### Delete via Dashboard
+
+To delete a namespace, click **Delete** in the **Actions** column. After confirming, the namespace will be permanently deleted.
+
+### Delete via REST API
+
+To remove a namespace and its associated configuration, use the `DELETE /mt/ns/<namespace>` API.
+
+### Recover from an Interrupted Deletion
+
+Starting from EMQX 6.1.4, use `emqx ctl mt purge_ns <namespace>` as a last resort when a previous namespace deletion was interrupted and left data behind. The command attempts to clean up the namespace data even if the namespace no longer exists. If the namespace still exists, the command also deletes it.
+
+::: warning Important Notice
+
+Running this command for an existing namespace permanently deletes the namespace and its data. Use the Dashboard or REST API for routine namespace deletion. Use `purge_ns` only to recover from an incomplete deletion, and do not rerun it after a namespace with the same name has been recreated.
+
+:::
+
+For command syntax, output, and error handling, see [`mt purge_ns`](../admin/cli.md#mt).

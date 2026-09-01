@@ -120,7 +120,7 @@ If you are using Amazon Redshift Serverless, be aware that you may incur charges
    - **Database Name**: The target database to store EMQX data. For this example: `emqx_data`.
    - **Username**: The database username with sufficient privileges to insert data. For this example: `emqx_user`.
    - **Password**: The password for `emqx_user`.
-   - **Enable TLS**: Toggle on if your Redshift connection requires SSL/TLS encryption (recommended for all cloud service connections). See [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   - **Enable TLS**: Toggle on if your Redshift connection requires SSL/TLS encryption (recommended for all cloud service connections). See [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Click **Test Connectivity** to verify that EMQX can successfully connect to the Redshift cluster using the provided settings.
 

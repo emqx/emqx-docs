@@ -526,6 +526,8 @@ HiveMQ uses the "Prometheus Monitoring HiveMQ Extension". EMQX comes with native
 
 Endpoint for Prometheus to scrape metrics is enabled by default: `http://emqx-node:18083/api/v5/prometheus/stats`.
 
+Starting from EMQX 6.3.0, Prometheus scrape endpoints require authentication by default. Configure the scraper with an API key and secret key, or explicitly disable authentication. For details, see [Integrate with Prometheus](../observability/prometheus.md#authentication).
+
 If you want to use Pushgateway, it can be configured as follows:
 
 ```hocon
@@ -537,7 +539,7 @@ prometheus {
 }
 ```
 
-Check out [Integrate with Prometheus](../observability/prometheus.md#integrate-with-prometheus) guide for more details.
+For Pushgateway configuration details, see [Integrate with Prometheus](../observability/prometheus.md#configure-push-mode-integration).
 
 #### Logging
 

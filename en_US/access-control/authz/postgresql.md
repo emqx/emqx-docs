@@ -67,6 +67,8 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
      - **Username**: Specify user name.
      - **Password**: Specify user password.
 
+   - **Precondition**: Enter an optional Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+
    - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md#tls-for-external-resource-access).
 
    - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement).
@@ -84,6 +86,8 @@ You can configure the EMQX PostgreSQL authorizer with EMQX configuration items.
 
 The PostgreSQL authorizer is identified by type `postgresql`. For a full list of configuration parameters, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
+The optional `precondition` configuration item accepts a Variform expression. EMQX invokes this authorizer only when the expression evaluates to `true`. If `precondition` is omitted or empty, no precondition is applied. For details, see [Authorizer Preconditions](./authz.md#authorizer-preconditions).
+
 Sample configuration:
 
 ```bash
@@ -99,4 +103,3 @@ Sample configuration:
   disable_prepared_statements = false
 }
 ```
-

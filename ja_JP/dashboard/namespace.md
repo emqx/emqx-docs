@@ -1,31 +1,31 @@
-# Namespace
+# ネームスペース
 
-The Namespace monitoring page provides visibility into namespace-related metrics in EMQX, including message traffic and rule action execution. It helps users understand overall system load as well as workload distribution at the namespace level.
+ネームスペース監視ページは、EMQXにおけるネームスペース関連のメトリクス（メッセージトラフィックやルールアクションの実行状況など）を可視化します。これにより、システム全体の負荷状況やネームスペース単位でのワークロード分布を把握できます。
 
-This page is primarily intended for runtime monitoring and usage analysis in multi-tenant environments.
+このページは主にマルチテナント環境でのランタイム監視および利用状況分析を目的としています。
 
-## Namespace Selection
+## ネームスペース選択
 
-A namespace selection dropdown is available at the top of the page to define the scope of the displayed metrics.
+ページ上部にはネームスペース選択用のドロップダウンがあり、表示するメトリクスの対象範囲を定義できます。
 
-- In the current version, only the **Global** view is available, which shows aggregated metrics across all namespaces.
-- When distinguishable namespaces are available in the system, this dropdown will allow you to select a specific namespace and view its corresponding metrics.
+- 現バージョンでは、すべてのネームスペースを集約したメトリクスを表示する**Global**ビューのみが利用可能です。
+- システム内に区別可能なネームスペースが存在する場合、このドロップダウンから特定のネームスペースを選択し、そのメトリクスを表示できます。
 
 ![namespace_metrics](./assets/namespace_metrics.png)
 
-## Metrics
+## メトリクス
 
-The table below describes the metrics displayed on the Namespace monitoring page.
+以下の表は、ネームスペース監視ページに表示されるメトリクスの説明です。
 
-| Metric Name                | Description                                                  |
-| -------------------------- | ------------------------------------------------------------ |
-| Messages Received          | The total number of messages received by EMQX and currently aggregated across all namespaces. |
-| Messages Sent              | The total number of messages successfully delivered by EMQX to clients and currently aggregated across all namespaces. |
-| All Sessions               | The total number of MQTT sessions currently active in the system. |
-| Number of Actions Executed | The total number of actions successfully executed by rules or Flows. |
+| メトリクス名                 | 説明                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| Messages Received            | EMQXが受信したメッセージの総数で、現在はすべてのネームスペースを集約した値です。 |
+| Messages Sent                | EMQXがクライアントに正常に配信したメッセージの総数で、現在はすべてのネームスペースを集約した値です。 |
+| All Sessions                 | システム内で現在アクティブなMQTTセッションの総数です。       |
+| Number of Actions Executed   | ルールまたはFlowによって正常に実行されたアクションの総数です。 |
 
-## Usage Notes
+## 利用上の注意
 
-- The Namespace monitoring page is read-only and does not provide configuration or management capabilities.
-- All metrics are cumulative values and continue to increase from the time the node or cluster is started.
-- This page is intended for observing runtime status and analyzing usage patterns in multi-tenant scenarios.
+- ネームスペース監視ページは閲覧専用であり、設定や管理機能は提供していません。
+- すべてのメトリクスは累積値であり、ノードまたはクラスターの起動時から増加し続けます。
+- このページはマルチテナント環境におけるランタイム状態の観察および利用パターンの分析を目的としています。

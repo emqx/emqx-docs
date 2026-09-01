@@ -4,6 +4,10 @@ A2A over MQTT 是一种与 Broker 无关的传输规范，将 [Agent-to-Agent（
 
 EMQX 通过内置的 **A2A Registry** 功能实现 A2A over MQTT。该功能负责收录发布到发现主题的 Agent Card，跟踪 Agent 的在线状态，并为运维人员提供管理界面。
 
+::: warning 与大多数监听器挂载点不兼容
+对于通过配置了[挂载点](../../configuration/listener.md#挂载点mountpoint)的监听器连接的 Agent，A2A Registry 不生效。唯一的例外是挂载点恰好为一个主题层级，例如 `acme/`，EMQX 会将其解析为 `$a2a` 主题的命名空间前缀。使用其他形式的挂载点时，挂载后的主题不再符合 `$a2a/v1/` 主题规范：Agent Card 会作为普通保留消息存储，不会被收录、校验或附加在线状态标注。此过程不会向客户端报告任何错误。
+:::
+
 ## 为什么选择 MQTT 传输 A2A
 
 标准 A2A 协议以 HTTP 作为传输层。这在云端环境中运行良好，但在分布式、IoT 或边缘部署场景下存在局限：Agent 可能运行在资源受限的设备上、处于 NAT 之后，或所处环境不适合维持持久 HTTP 连接。

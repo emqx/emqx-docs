@@ -10,6 +10,10 @@ The new UI / UX design of EMQX Dashboard optimizes the display and content of ke
 
 This section introduces various features of EMQX that you can configure and manage through the Dashboard.
 
+::: tip
+Starting from EMQX 6.3.0, deployments can use [feature gates](../deploy/feature-gates.md) to disable optional features at startup. When a feature is disabled, the Dashboard hides the corresponding menus and pages.
+:::
+
 ### [Monitoring](./monitoring.md)
 
 View overall information of the running EMQX cluster, including connection count, subscribed topics, message delivery counts, inbound rates, and outbound rates. It also includes node lists, node information, and various system metric information. Additionally, you can view and manage client connections and subscription data.
@@ -134,4 +138,3 @@ Administrators can also configure the lockout duration and the number of failed 
 ## Configure Dashboard
 
 Dashboard listens to the HTTP by default, and the default port number is 18083. Users can enable HTTPS or change the listener port. For more information on how to configure and modify the Dashboard settings,  refer to the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-

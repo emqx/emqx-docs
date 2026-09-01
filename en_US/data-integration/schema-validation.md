@@ -77,6 +77,8 @@ For configuration details, see [Configuration Manual](https://docs.emqx.com/en/e
 
 This section demonstrates how to create a validation schema, using JSON Schema as an example. The JSON Schema must meet the following requirements:
 
+Starting from EMQX 6.0.4, Schema Registry supports JSON Schema draft 2019-09 and draft 2020-12 in addition to draft-03, draft-04, and draft-06. If `$schema` is omitted, EMQX uses draft-06. For the support scope, limitations, and a complete example, see [Schema Registry Example - JSON Schema](./schema-registry-example-json.md).
+
 - The JSON object must include a property named `temp`.
 - The `temp` property must be an integer.
 - The `temp` property must be at least 101.

@@ -4,12 +4,12 @@ EMQX 5.0 では、MQTT over QUIC リスナーを導入し、IoT ユーザーが 
 
 ::: tip 前提条件
 
-[MQTT over QUIC](./introduction.md) の知識が必要です。  
+[MQTT over QUIC](./introduction.md) の知識が必要です。
 :::
 
 ## 環境
 
-MQTT over QUIC リスナーをテストするには、Docker イメージの利用を推奨します。以下のコマンドでポート 14567 でリスナーを有効化できます。
+MQTT over QUIC リスナーをテストするには、Docker イメージの使用を推奨します。以下のコマンドでポート 14567 でリスナーを有効化できます。
 
 ```bash
 docker run -d --name emqx \
@@ -23,11 +23,11 @@ docker run -d --name emqx \
 emqx/emqx:@CE_VERSION@
 ```
 
-EMQX を Docker コンテナで実行する詳細は、[Deploy with Docker](../deploy/install-docker.md) をご参照ください。
+Docker コンテナでの EMQX の起動方法については、[Deploy with Docker](../deploy/install-docker.md) をご参照ください。
 
 ## MQTT over QUIC の有効化
 
-MQTT over QUIC はデフォルトで無効になっているため、以下の手順で手動で有効化してください。
+MQTT over QUIC はデフォルトで無効になっているため、以下の手順で手動でリスナーを有効化する必要があります。
 
 1. 設定ファイル `etc/base.hocon` を開き、以下の設定を追加します。
 
@@ -40,7 +40,7 @@ listeners.quic.default {
 }
 ```
 
-この設定により、ポート `14567` で QUIC リスナーが有効化されます。変更を保存し、EMQX を再起動して設定を反映させてください。
+この設定は、ポート `14567` で QUIC リスナーを有効化することを示しています。変更を保存し、EMQX を再起動して設定を反映させてください。
 
 2. CLI で `emqx ctl listeners` を実行すると、MQTT over QUIC リスナーが有効になっていることが確認できます。
 
@@ -64,33 +64,33 @@ listeners.quic.default {
 
 ## クライアント SDK とツール
 
-- [NanoSDK](https://github.com/nanomq/NanoSDK/)：EMQ NanoMQ チームが提供する C 言語の MQTT SDK。WebSocket や nanomsg/SP などのプロトコルもサポート。
+- [NanoSDK](https://github.com/nanomq/NanoSDK/)：EMQ NanoMQ チームが提供する C 言語の MQTT SDK。WebSocket や nanomsg/SP などのプロトコルもサポートしています。
 - [NanoSDK-Python](https://github.com/wanghaEMQ/pynng-mqtt)：NanoSDK の Python バインディング。
 - [NanoSDK-Java](https://github.com/nanomq/nanosdk-java)：NanoSDK の Java JNA バインディング。
-- [emqtt](https://github.com/emqx/emqtt)：Erlang 製の MQTT クライアントライブラリで、QUIC をサポート。
+- [emqtt](https://github.com/emqx/emqtt)：Erlang 製の MQTT クライアントライブラリで、QUIC をサポートしています。
 
-クライアントライブラリに加え、EMQ はエッジコンピューティング製品 NanoMQ を使った MQTT over QUIC ブリッジングも提供しています。NanoMQ を使うことで、エッジのデータを QUIC 経由でクラウドにブリッジでき、MQTT over QUIC リスナーを利用する際の開発や統合作業を大幅に軽減できます。
+クライアントライブラリに加え、EMQ はエッジコンピューティング製品 NanoMQ と連携した MQTT over QUIC ブリッジングも提供しています。NanoMQ を使うことで、QUIC を介してエッジデータをクラウドにブリッジでき、MQTT over QUIC リスナーを利用しつつ大きな開発や統合の手間をかけずに済みます。
 
 ## ネットワークフェイルオーバー
 
-QUIC は UDP プロトコルをベースにしているため、多くの通信事業者は UDP パケットに対して特別なルーティング戦略を持っており、QUIC 接続の失敗やパケットロスが発生しやすい状況があります。
+QUIC は UDP プロトコルをベースとしているため、多くの通信事業者は UDP パケットに対して特別なルーティング戦略を持っており、QUIC 接続の失敗やパケットロスが発生しやすい状況があります。
 
-そのため、MQTT over QUIC クライアントはフォールバック機能を備えています。API 層は統一的な操作でサービスを記述でき、トランスポート層はネットワーク状況に応じてリアルタイムに切り替わります。QUIC が利用できない場合は自動的に TCP/TLS 1.2 に切り替わり、多様なネットワーク環境下でもサービスを維持します。
+そのため、MQTT over QUIC クライアントはフォールバック機能を備えています。API 層は統一された操作でサービスを記述でき、トランスポート層はネットワーク状況に応じてリアルタイムに切り替わります。QUIC が利用できない場合は自動的に TCP/TLS 1.2 に切り替わり、様々なネットワーク環境下でのサービスを保証します。
 
 ## 例 1: NanoSDK を使った MQTT over QUIC
 
-[NanoSDK](https://github.com/nanomq/NanoSDK/) は MsQuic ベースで、C 言語で MQTT over QUIC を実装した初の SDK です。EMQX 5.0 とシームレスに互換し、完全非同期 IO 設計を採用。QUIC ストリームと MQTT 接続のマッピングを行い、0 RTT の高速ハンドシェイク再接続機能を内蔵し、マルチコア並列処理をサポートしています。
+[NanoSDK](https://github.com/nanomq/NanoSDK/) は MsQuic をベースにした、C 言語で MQTT over QUIC を実装した最初の SDK であり、EMQX 5.0 とシームレスに互換性があります。完全非同期 IO 設計を採用し、QUIC ストリームと MQTT 接続のマッピングをバインド、0 RTT の高速ハンドシェイク再接続機能を内蔵し、マルチコアのタスク並列処理をサポートしています。
 
-NanoSDK API は MQTT over TCP とほぼ同様に動作します。以下のコマンド一つで QUIC ベースの MQTT クライアントを作成できます。
+NanoSDK の API は MQTT over TCP とほぼ同様に動作します。以下のコマンドで QUIC ベースの MQTT クライアントを作成できます。
 
 ```bash
 ## NanoSDK で MQTT over Quic クライアントを作成
 nng_mqtt_quic_client_open(&socket, url);
 ```
 
-メッセージのサンプルコードは https://github.com/nanomq/NanoSDK/tree/main/demo をご覧ください。
+メッセージのサンプルコードは https://github.com/nanomq/NanoSDK/tree/main/demo をご参照ください。
 
-ビルド後、以下のコマンドでポート 14567 の EMQX 5.0 に接続してテストできます。
+コンパイル後、以下のコマンドでポート 14567 の EMQX 5.0 に接続してテストできます。
 
 ```bash
 quic_client sub/pub mqtt-quic://127.0.0.1:14567 topic msg
@@ -103,9 +103,9 @@ NanoSDK は Java と Python のバインディングも提供しています。
 
 ## 例 2: NanoMQ を使った MQTT over QUIC ブリッジング
 
-[NanoMQ](https://nanomq.io/) は IoT エッジ向けの超軽量かつ高速なサービスで、クロスプラットフォーム対応、マルチスレッド対応、MQTT over QUIC ブリッジングをサポートしています。
+[NanoMQ](https://nanomq.io/) は超軽量かつ高速な IoT エッジ向けサービスで、クロスプラットフォーム対応、多スレッド処理、MQTT over QUIC ブリッジングをサポートしています。
 
-従来の MQTT クライアントからのデータを QUIC パケットに変換してクラウドの EMQX に送信できるため、統合が難しいエンドデバイスや適切な MQTT over QUIC SDK がない IoT デバイスに対して QUIC プロトコルを利用する選択肢を提供します。
+従来の MQTT クライアントからのデータを QUIC パケットに変換し、クラウドの EMQX に送信できます。これにより、統合が難しい、または適切な MQTT over QUIC SDK がないエンド側 IoT デバイスでも QUIC プロトコルを利用可能にします。
 
 ![NanoMQ MQTT over QUIC ブリッジ](./assets/nanomq-mqtt-bridge.png)
 
@@ -120,12 +120,12 @@ cmake -G Ninja -DNNG_ENABLE_QUIC=ON ..
 sudo ninja install
 ```
 
-2. インストール後、設定ファイル `/etc/nanomq.conf` で MQTT over QUIC ブリッジ機能と関連トピックを設定します。URL プレフィックス `mqtt-quic` は QUIC を MQTT の伝送層に使うことを示します。
+2. インストール後、設定ファイル `/etc/nanomq.conf` で MQTT over QUIC ブリッジ機能と関連トピックを設定します。URL プレフィックス `mqtt-quic` は QUIC を MQTT 伝送層として使用していることを示します。
 
 ```bash
-## ブリッジ先アドレス: host:port .
+## ブリッジ先アドレス: host:port
 ##
-## 値: 文字列
+## 値の型: 文字列
 bridge.mqtt.emqx.address=mqtt-quic://127.0.0.1:14567
 ```
 
@@ -133,7 +133,7 @@ bridge.mqtt.emqx.address=mqtt-quic://127.0.0.1:14567
 
 ## MQTT over QUIC CLI ツール
 
-NanoMQ はテストツール `nanomq_cli` も提供しており、MQTT over QUIC クライアントツールを含むため、EMQX 5.0 の MQTT over QUIC 機能を手軽にテストできます。
+NanoMQ はテストツール `nanomq_cli` も提供しており、MQTT over QUIC クライアントツールを含むため、EMQX 5.0 の MQTT over QUIC 機能を簡単にテストできます。
 
 ```bash
 nanomq_cli quic --help
@@ -145,4 +145,4 @@ Usage: quic conn <url>
 nanomq_cli quic sub mqtt-quic://54.75.171.11:14567 2 msg
 ```
 
-まとめると、NanoSDK を直接プロジェクトに組み込むか、NanoMQ と組み合わせて利用することで、デバイス側からクラウドまでの QUIC アクセスを実現できます。
+まとめると、NanoSDK を直接プロジェクトに組み込むか、NanoMQ と組み合わせて利用することで、デバイス側からクラウドへの QUIC アクセスを実現できます。

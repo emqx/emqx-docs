@@ -54,15 +54,18 @@ Example:
 
 ## Authorization Chain
 
-EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authentication information from the first authorizer, it switches to the next authenticator to continue the process.
+EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authorization information from the first authorizer, it switches to the next authorizer to continue the process.
+
+Authorizers also support preconditions. When an authorizer has `precondition` configured, EMQX evaluates the precondition expression before calling the authorizer's data source. EMQX calls the authorizer only when the expression evaluates to `true`. If the result is not `true`, or if the expression fails during runtime evaluation, EMQX skips the authorizer and continues with the next enabled authorizer in the authorization chain.
 
 The process of the authorization check is as follows:
 
-1. If EMQX successfully retrieves the client's permission information, it matches the client's operation to the retrieved permission list.
+1. If the current authorizer has `precondition` configured, EMQX evaluates the precondition expression first. If the result is not `true`, EMQX skips the current authorizer.
+2. If EMQX successfully retrieves the client's permission information, it matches the client's operation to the retrieved permission list.
    - If they match, EMQX allows or denies the operation based on permission setting.
    - If they do not match, EMQX switches to the next authorizer to continue the process.
 
-2. If EMQX fails to retrieve the client's permission information, it checks if there are any other authorizers configured.
+3. If EMQX fails to retrieve the client's permission information, it checks if there are any other authorizers configured.
    - If yes, EMQX switches to the next authorizer to continue the process.
    - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
 
@@ -73,6 +76,54 @@ To avoid problems with the authorization, you need to remember to disable or rem
 :::
 
 For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage Authorizers](#manage-authorizers).
+
+### Authorizer Preconditions
+
+Starting from EMQX 6.3, you can assign a precondition to each authorizer to control whether it should be invoked for a given authorization request.
+
+A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client and authorization request information, such as `listener`, `username`, `clientid`, `action`, and `topic`. If the expression does not evaluate to `true`, the authorizer is skipped.
+
+For example, you can route authorization requests to different backends based on business line, client attributes, publish/subscribe action, or topic range. An empty `precondition` means no precondition is set, and the authorizer runs normally according to its position in the authorization chain.
+
+Client variables available in `precondition` include:
+
+- `username`: Client username.
+- `clientid`: Client ID.
+- `client_attrs.*`: Client attributes, for example, `client_attrs.tenant`. For more information about client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
+- `cert_common_name`: Common Name (CN) from the client TLS certificate.
+- `cert_subject`: Subject from the client TLS certificate.
+- `peersni`: SNI (Server Name Indication) sent by the TLS client.
+- `listener`: Listener ID used by the client, for example, `tcp:default`.
+- `zone`: Configuration zone associated with the client.
+
+Authorization request variables available in `precondition` include:
+
+- `action`: Current authorization action. The value is `publish` or `subscribe`.
+- `topic`: Publish topic or subscription topic filter currently being checked.
+
+The following example only shows fields related to `precondition`. The HTTP authorizer handles only publish requests from `orders` business clients, and the Redis authorizer handles only requests whose topics match the `devices/${clientid}/#` topic filter:
+
+```hcl
+authorization {
+  sources = [
+    {
+      type = http
+      precondition = "iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)"
+      ...
+    },
+    {
+      type = redis
+      precondition = "topic_match(topic, topic_join(['devices', clientid, '#']))"
+      ...
+    }
+  ]
+}
+```
+
+In this example:
+
+- `iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)`: The expression evaluates to `true` when the client attribute `client_attrs.biz` is `orders` and the current authorization action is `publish`.
+- `topic_match(topic, topic_join(['devices', clientid, '#']))`: The expression evaluates to `true` when the topic in the current authorization request matches the `devices/${clientid}/#` topic filter.
 
 ## Client Authorization Cache
 
@@ -213,6 +264,29 @@ EMQX also allows placeholders to be used in topics to support dynamic themes. Th
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
+Starting from EMQX 6.3.0, EMQX validates values interpolated into authorization topic templates. By default, these values cannot contain the topic level separator (`/`) or MQTT topic filter wildcards (`+` and `#`). This restriction does not apply to separators or wildcards written directly in the template.
+
+For example, when the username is `alice`, EMQX renders `tenant/${username}/#` as `tenant/alice/#`. If the username is `tenant/alice` or `+`, EMQX cannot render the template because the interpolated value contains a disallowed character.
+
+If an interpolated value contains a disallowed character, EMQX handles the authorization rule according to the active security profile:
+
+- With the `legacy` profile, the rule does not match, and EMQX continues with the remaining authorization rules and sources.
+- With the `hardened` profile, EMQX denies the publish or subscribe operation. If `authorization.ignore_backend_failures` is set to `true`, EMQX instead treats the rule as not matching.
+
+In EMQX 6.3.0, the default security profile is `legacy`, and `authorization.ignore_backend_failures` defaults to `false`. After upgrading to EMQX 6.3.0, a rule configured before the upgrade no longer matches under the default `legacy` profile if an interpolated value contains a disallowed character. The final result depends on the remaining authorization rules, authorization sources, and `authorization.no_match`. Before upgrading, review these settings to confirm the expected fallback behavior.
+
+The `authorization.topic_template_allow` settings control which characters are allowed in interpolated values. All settings default to `false`:
+
+```hocon
+authorization.topic_template_allow {
+  plus = false
+  hash = false
+  slash = false
+}
+```
+
+Set an option to `true` only if interpolated values must contain the corresponding character. Enabling these options can allow a client-derived value to broaden the topic filter matched by an authorization rule. Validate usernames, client IDs, and client attributes before using their values in topic templates.
+
 To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` as `${$}`. For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
 
 ::: tip
@@ -266,6 +340,7 @@ authorization {
 Where, 
 
 - `sources` (optional): An ordered array; each array element defines the data source of the corresponding authorizer. For detailed configurations, see the corresponding configuration file.
+  - `sources[].precondition`: Optional Variform expression used to decide whether to skip the authorizer before calling it. If it is empty, no precondition is set.
 
 - `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; starting from EMQX 6.0, the default value has been changed to `deny`.
 
@@ -280,6 +355,14 @@ Where,
   * `cache.excludes`: A list of excluded topics, for which authorization cache will not be generated; default value: `[]`.
     
   * `cache.ttl`: Specifies the effective time of cached values, default: `1m` (one minute). 
+
+::: tip
+
+For brokers exposed to untrusted or public networks, setting `deny_action` to `disconnect` can help stop clients from continuing unauthorized publish or subscribe attempts on the same connection. When used with [flapping detection](../flapping-detect.md), clients that repeatedly reconnect and trigger authorization denials are banned automatically for a period.
+
+The `deny_action` setting is global and cannot be configured per listener. It also disconnects legitimate clients that attempt a denied operation. Use `disconnect` when clients normally publish and subscribe only to authorized topics. Tune the flapping detection thresholds to avoid banning clients during normal reconnection storms.
+
+:::
 
 ### Configure Authorization via HTTP API
 
@@ -317,7 +400,7 @@ You can view the statistic metrics of each authorizer on the Overview page of th
 - **Allow**: Number of authorizations passed.
 - **Deny**: Number of authorizations failed.
 - **No match**: Number of times client authorization data is not found.
-- **Ignored**: Number of ignored authorization queries because the authorization is not applicable or encounters an error, resulting in an undecidable outcome.
+- **Ignored**: Number of ignored authorization queries, for example, when an authorizer's `precondition` result is not `true`, or when an authorization source is not applicable or encounters an error, resulting in an undecidable outcome.
 - **Rate(tps)**: Execution rates of authorizations.
 
 You can also check the authorization status and execution status on each node through **Node Status**.

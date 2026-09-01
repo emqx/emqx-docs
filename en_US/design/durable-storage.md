@@ -13,6 +13,10 @@ EMQX provides two embedded backends that do not rely on third-party services:
 - The `builtin_local` backend uses RocksDB as the storage engine and is intended for single-node deployments. 
 - The `builtin_raft` backend extends `builtin_local` with support for clustering and data replication across different sites.
 
+::: warning Important Notice
+Embedded Durable Storage backends require the EMQX data directory to use a local filesystem. Network filesystems such as NFS and SMB/CIFS are not supported. For best performance, use solid-state drive (SSD) storage.
+:::
+
 ### Data Storage Hierarchy
 
 The database storage engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:

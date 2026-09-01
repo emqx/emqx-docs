@@ -187,7 +187,8 @@ Before adding a Confluent Sink action, you need to create a Confluent producer c
      - **OAuth**: Configure the OAuth parameters according to your Confluent Cloud OAuth/OIDC settings, including the token endpoint, client ID, and client secret. 
      
        The OAuth configuration is the same as for Kafka connectors; see [Authentication Method](./data-bridge-kafka.md#authentication-method) for details on each parameter.
-     
+
+   - **Request Timeout**: Specify how long EMQX waits for a reply from Confluent for a pending request. The default is `30` seconds. When the timeout is exceeded, EMQX considers the connection stale and re-establishes it. If this value is too small, Confluent may accept a produce request but delay its acknowledgment. EMQX may then resend the accepted batch after reconnecting, resulting in duplicate messages and excessive downstream data volume.
    - Leave other options as default or configure them according to your business needs.
    
 5. Click the **Create** button to complete the creation of the connector.
@@ -295,6 +296,11 @@ This section describes some advanced configuration options that can optimize the
 | Per-partition Buffer Limit       | Maximum allowed buffer size, in bytes, for each Kafka partition. When this limit is reached, older messages will be discarded to make room for new ones by reclaiming buffer space. <br />This option helps to balance memory usage and performance. | `2` GB             |
 | Segment File Bytes               | This setting is applicable when the buffer mode is configured as `disk` or `hybrid`. It controls the size of segmented files used to store messages, influencing the optimization level of disk storage. | `100` MB           |
 | Memory Overload Protection       | This setting applies when the buffer mode is configured as `memory`. EMQX will automatically discard older buffered messages when it encounters high memory pressure. It helps prevent system instability due to excessive memory usage, ensuring system reliability. <br />**Note**: This configuration is effective only on Linux systems. | Disabled           |
+| Max Batch Age                    | Maximum duration a message can remain in the producer buffer before it is dropped instead of sent to Confluent. A batch is dropped only when all its messages have exceeded this duration. This applies to queued messages, including messages buffered while disconnected, and messages awaiting acknowledgment when the connection is lost. Each dropped message is counted in the `dropped.expired` metric. The default `infinity` prevents messages from expiring. Messages can still be dropped if the buffer overflows. | `infinity`         |
+| Max Retries                      | Maximum number of retries after Confluent responds with a retryable error, such as a partition leader change. If the initial attempt and all retries fail, the batch is dropped and each message is counted in the `failed` metric. Only explicit Confluent error responses increment the retry count. Resends caused by connection loss do not increment it and are bounded by `max_batch_age`. The default `infinity` permits unlimited retries. | `infinity`         |
+| Reconnect Delay                  | Delay before the producer attempts to reconnect to Confluent after a connection loss. While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and `max_batch_age`. The default is `2` seconds. | `2` seconds        |
+| Max Linger Time                  | Maximum duration a per-partition producer waits to accumulate more messages into a larger batch. This option applies to all buffer modes. The default `0` means no wait and optimizes messaging latency. If a small delay is acceptable, configuring one can reduce the number of requests sent to Confluent. The wait ends early when a full batch accumulates. When messages are buffered on disk, the wait occurs before the batch is written to the buffer; configure at least `5ms` to reduce disk IOPS. | `0` milliseconds   |
+| Max Linger Bytes                 | Maximum number of bytes a per-partition producer accumulates before it stops waiting and sends the batch. | `10` MB            |
 
 ### <!-- Confluent Consumer Source Configuration -->
 

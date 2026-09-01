@@ -18,8 +18,31 @@ This section will introduce how to use the Docker image to install the latest ve
 2. To start the Docker container, run:
 
    ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
+   docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
    ```
+
+### Start EMQX with Feature Gates
+
+Starting from EMQX 6.3.0, you can use the `EMQX_FEATURES` environment variable to control which optional features are available at startup. For example, to start EMQX with only core applications, run:
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=ESSENTIAL" \
+  -p 1883:1883 -p 8083:8083 \
+  -p 8084:8084 -p 8883:8883 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+To start EMQX with a custom feature set, run:
+
+```bash
+docker run -d --name emqx-enterprise \
+  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -p 1883:1883 -p 18083:18083 \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+For the full feature list and dependency behavior, see [Feature Gates](./feature-gates.md).
 
 ### Docker Deployment Precautions
 
@@ -50,9 +73,9 @@ This section will introduce how to use the Docker image to install the latest ve
 
 3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
 
-   To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@hostname`. You should also set the container hostname to match, as shown in the example above.
+   To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@<host>`. You should also set the container hostname to match, as shown in the example above.
 
-   **Note:** The node name must follow the format `emqx@<hostname>` where `<hostname>` should match the container's hostname or a stable FQDN.
+   **Note:** The `<host>` part must be an IP address or a fully qualified domain name (FQDN), such as `node1.emqx.com`. EMQX runs its Erlang node in long-name mode, so you cannot use a short hostname without dots, such as `node1`.
 
 ## Use Docker Compose to Build an EMQX Cluster
 
@@ -77,6 +100,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -102,6 +126,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
+       # - "EMQX_FEATURES=dashboard,auth,metrics"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -120,6 +145,8 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
      emqx-bridge:
        driver: bridge
    ```
+
+   If you set `EMQX_FEATURES` in a Docker Compose cluster, use the same value for all EMQX services.
 
 2. In the command line tool, switch to the directory where  `docker-compose.yml` is stored, and run the following command to start the EMQX cluster:
 

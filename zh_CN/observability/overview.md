@@ -12,9 +12,7 @@ EMQX 提供内置可观测性功能、外部集成和生产监控指南，帮助
 
 - [指标](./metrics-and-stats.md)
 
-  EMQX 为用户提供了丰富的指标来帮助用户与运维人员了解当前服务状态，监测和排除系统的性能问题。
-
-  您可通过 EMQX Dashboard、HTTP API 或系统主题获取 EMQX 指标信息。
+  EMQX 为用户提供了丰富的指标来帮助用户与运维人员了解当前服务状态，监测和排除系统的性能问题。您可通过 EMQX Dashboard、HTTP API 和系统主题来获取 EMQX 指标信息。
 
 - [告警](./alarms.md)
 
@@ -28,15 +26,19 @@ EMQX 提供内置可观测性功能、外部集成和生产监控指南，帮助
 
   [Prometheus](https://prometheus.io/) 是由 SoundCloud 开源的监控告警解决方案，支持多维数据模型、灵活的查询语言、强大的告警管理等特性。EMQX 支持集成 Prometheus 用于监测系统指标，同时还支持向 `pushgateway` 推送指标。
 
+- [Broker 健康指标](./broker-health-indicators.md)
+
+  用于监控 EMQX broker 的常用 Prometheus 指标精选参考，按系统、broker、认证与授权、数据集成四个领域组织。请配合 Prometheus 集成文档一起使用，用于决定抓取哪些指标、对哪些指标设置告警以及在仪表盘上展示哪些曲线。
+
 - [集成 Datadog](./datadog.md)
 
-  [Datadog](https://www.datadoghq.com/) 是一款可观测性平台，它为应用程序提供统一、实时的可观测性和安全性解决方案。EMQX 支持集成 Datadog 用于了解 EMQX 运行状态、监测和排查系统性能问题，还可以在 Datadog 控制台上查看 EMQX 指标。
+  [Datadog](https://www.datadoghq.com/) 是一款可观测性平台，为应用程序提供统一、实时的可观测性和安全性解决方案。EMQX 支持集成 Datadog 用于了解 EMQX 运行状态、监测和排查系统性能问题，还可以在 Datadog 控制台上查看 EMQX 指标。
 
 **诊断工具：**
 
 - [主题监控](./topic-metrics.md)
 
-  EMQX 提供了主题监控功能，可以统计指定主题下的消息收发数量、速率等指标。您可以通过 Dashboard 的 **问题分析** -> **主题监控** 页面查看和使用这一功能，也可以通过 HTTP API 完成相应操作。
+  EMQX 提供了主题监控功能，可以统计指定主题下的消息收发数量、速率等指标。您可以通过 Dashboard 的**问题分析** -> **主题监控**页面查看和使用这一功能，也可以通过 HTTP API 完成相应操作。
 
 - [慢订阅统计](./slow-subscribers-statistics.md)
 
@@ -44,4 +46,8 @@ EMQX 提供内置可观测性功能、外部集成和生产监控指南，帮助
 
 - [日志追踪](./tracer.md)
 
-  EMQX 5.x 新增了在线日志追踪(Trace)功能，支持用户指定客户端 ID、主题或 IP 实时过滤输出 **DEBUG** 级别日志，提升问题排查效率。
+  EMQX 5.x 新增了在线日志追踪（Trace）功能，支持用户指定客户端 ID、主题或 IP 实时过滤输出 DEBUG 级别日志，提升问题排查效率。
+
+- [Mria 日志与告警](./mria-alarms.md)
+
+  介绍 Mria 数据库管理系统上报的日志消息与告警，包括如何识别和解读网络分区事件及集群恢复进度。
