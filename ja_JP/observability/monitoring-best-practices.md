@@ -1,196 +1,196 @@
-# Production Monitoring Best Practices
+# 本番環境モニタリングのベストプラクティス
 
-Production deployments require monitoring beyond EMQX Dashboard. Dashboard shows the current broker state but cannot notify operators if the broker or host becomes unavailable. The monitoring guidance on this page helps you detect loss of service, loss of redundancy, and resource exhaustion early enough to act.
+本番環境でのデプロイメントでは、EMQXダッシュボード以上のモニタリングが必要です。ダッシュボードは現在のブローカー状態を表示しますが、ブローカーやホストが利用不可になった場合にオペレーターへ通知することはできません。本ページのモニタリングガイダンスは、サービス停止、冗長性喪失、リソース枯渇を早期に検知し、対応可能なタイミングを提供します。
 
-This guidance applies to production deployments of EMQX Enterprise. Treat the example thresholds as starting points and adjust them to your service-level objectives (SLOs), tested capacity, traffic patterns, and recovery time.
+このガイダンスはEMQX Enterpriseの本番環境デプロイメントに適用されます。例示した閾値は出発点として扱い、サービスレベル目標（SLO）、テスト済みの容量、トラフィックパターン、復旧時間に応じて調整してください。
 
-## Design a Production Monitoring System
+## 本番環境モニタリングシステムの設計
 
-Follow these principles when designing your monitoring system:
+モニタリングシステムを設計する際は、以下の原則に従ってください。
 
-1. **Export EMQX metrics to an external monitoring system.**
+1. **EMQXのメトリクスを外部モニタリングシステムにエクスポートする。**
 
-   [Prometheus Pull mode](./prometheus.md#configure-pull-mode-integration) is recommended for comprehensive monitoring. Scrape every EMQX node directly, rather than through a load balancer, so that a failed or isolated node cannot be hidden by a healthy node. Monitor the Prometheus `up` metric for every target.
+   包括的なモニタリングには、[PrometheusのPullモード](./prometheus.md#configure-pull-mode-integration)が推奨されます。ロードバランサー経由ではなく、各EMQXノードを直接スクレイプしてください。これにより、障害や孤立したノードが正常なノードに隠されることを防げます。すべてのターゲットに対してPrometheusの`up`メトリクスを監視してください。
 
-2. **Forward EMQX built-in alarms.**
+2. **EMQX組み込みアラームを転送する。**
 
-   Configure EMQX built-in alarm thresholds for your environment and send alarm events to an external notification system by using a [Webhook or system topic](./alarms.md#get-alarms). Do not rely on an operator noticing an alarm in the Dashboard.
+   環境に合わせてEMQX組み込みアラームの閾値を設定し、[Webhookまたはシステムトピック](./alarms.md#get-alarms)を使ってアラームイベントを外部通知システムに送信してください。オペレーターがダッシュボードのアラームに気づくことに依存しないでください。
 
-3. **Run an end-to-end MQTT check from outside the cluster.**
+3. **クラスター外部からエンドツーエンドのMQTTチェックを実行する。**
 
-   A synthetic client should connect through the same load balancer, TLS listener, and authentication path as production clients. The client should publish a uniquely identified message, receive it on a subscription, and measure the total latency. This check detects failures that broker metrics alone cannot detect.
+   合成クライアントは、本番クライアントと同じロードバランサー、TLSリスナー、認証経路を通じて接続する必要があります。クライアントは一意に識別可能なメッセージをパブリッシュし、サブスクリプションで受信し、合計レイテンシを測定します。このチェックは、ブローカーのメトリクスだけでは検知できない障害を検出します。
 
-4. **Monitor the host or container platform.**
+4. **ホストまたはコンテナプラットフォームを監視する。**
 
-   EMQX does not replace operating system, Kubernetes, or cloud-provider monitoring. Collect CPU throttling, memory pressure, disk capacity and latency, file descriptor use, network errors, container restarts, and time synchronization status.
+   EMQXはOS、Kubernetes、クラウドプロバイダーの監視に代わるものではありません。CPUスロットリング、メモリプレッシャー、ディスク容量とレイテンシ、ファイルディスクリプタ使用率、ネットワークエラー、コンテナ再起動、時刻同期状態を収集してください。
 
-5. **Collect logs centrally.**
+5. **ログを中央集約する。**
 
-   Send warning, error, and critical logs from every node to storage outside the EMQX cluster. Prefer JSON-formatted logs so that alert rules can match the structured `msg`, `node`, and other context fields. Logs reveal some conditions that are not represented by a metric or built-in alarm.
+   すべてのノードから警告、エラー、クリティカルログをEMQXクラスター外のストレージに送信してください。構造化された`msg`、`node`などのコンテキストフィールドにマッチするアラートルールを作成しやすいため、JSON形式のログを推奨します。ログはメトリクスや組み込みアラームで表現されない状態を明らかにします。
 
-6. **Keep monitoring independent of EMQX.**
+6. **モニタリングをEMQXから独立させる。**
 
-   The monitoring and notification path must remain available when an EMQX node, availability zone, or the entire cluster is unavailable.
+   EMQXノード、アベイラビリティゾーン、またはクラスター全体が利用不可になった場合でも、モニタリングおよび通知経路は利用可能でなければなりません。
 
 ::: tip
 
-Collect metrics at a shorter interval than the required detection time. For example, with a 15-second scrape interval and an alert after 2 consecutive failures, you can normally detect an unreachable target in less than 1 minute without paging on a single missed scrape.
+検知に必要な時間より短い間隔でメトリクスを収集してください。例えば、15秒間隔のスクレイプと2回連続失敗でアラートを出す設定なら、単一のスクレイプ失敗だけで1分以内に到達不能なターゲットを検知可能です。
 
 :::
 
-## Establish SLOs, Capacity Baselines, and Alert Thresholds
+## SLO、容量ベースライン、アラート閾値の設定
 
-Use the following process instead of copying fixed thresholds into production:
+固定の閾値を本番にコピーする代わりに、以下のプロセスを用いてください。
 
-1. Define the user-visible SLOs for connection success, publish-to-delivery success, and latency.
-2. Run a representative [performance test](../performance/overview.md) and record resource use, message rates, and latency before saturation.
-3. Observe at least 1 normal business cycle and identify daily or weekly peaks.
-4. Set warning thresholds below the tested safe capacity, leaving enough time to add capacity or schedule maintenance. Set critical thresholds at the point where immediate action is required.
-5. Revisit thresholds after traffic growth, topology changes, upgrades, or changes to persistent sessions and data integrations.
+1. 接続成功率、パブリッシュから配信成功率、レイテンシなど、ユーザーに見えるSLOを定義する。
+2. 代表的な[パフォーマンステスト](../performance/overview.md)を実施し、飽和前のリソース使用率、メッセージレート、レイテンシを記録する。
+3. 少なくとも1つの通常の業務サイクルを観察し、日次または週次のピークを特定する。
+4. 警告閾値はテスト済みの安全容量より低く設定し、容量追加やメンテナンスの余裕時間を確保する。クリティカル閾値は即時対応が必要なポイントに設定する。
+5. トラフィック増加、トポロジ変更、アップグレード、永続セッションやデータ統合の変更後に閾値を見直す。
 
-Avoid alerting only on a fixed percentage. Trend and forecast alerts, such as disk exhaustion predicted within 24 hours or connections reaching tested capacity within a week, often provide more useful maintenance lead time.
+固定パーセンテージのみでアラートを出すのは避けてください。ディスク枯渇が24時間以内に予測される、接続数が1週間以内にテスト済み容量に達するなどのトレンドや予測アラートは、より有用な保守リードタイムを提供します。
 
-## Leading Indicators to Monitor
+## 監視すべき先行指標
 
-Preventive alerts should detect a deteriorating condition while the cluster is still serving traffic. Use a warning threshold that leaves time for investigation and maintenance, and a critical threshold for conditions that require immediate action. For each condition, the following guidance lists relevant signals and suggested actions for operators.
+予防的なアラートは、クラスターがまだトラフィックを処理している間に状態悪化を検知すべきです。調査や保守のための時間を残す警告閾値と、即時対応が必要なクリティカル閾値を設定してください。以下の各条件について、関連するシグナルとオペレーターへの推奨対応を示します。
 
-### Cluster and Runtime Health
+### クラスターおよびランタイムの健全性
 
-**Mria replication pressure**
+**Mriaレプリケーション圧力**
 
-- **Early-warning condition:** Replication lag or queues stay above their normal peak, or continue growing instead of draining.
-- **Relevant signals:** On Replicant nodes, monitor `emqx_mria_lag`, `emqx_mria_message_queue_len`, and `emqx_mria_replayq_len`. On Core nodes, monitor `emqx_mria_server_mql` and `emqx_mria_weight`.
-- **Suggested actions:** Correlate the metric change with logs from both the Replicant and its upstream Core node. Look for lag-collection failures, busy distribution ports, long scheduler pauses, Mnesia overload, and Mria replication errors. Then check network latency and loss, CPU, and disk I/O. Reduce write pressure or add Core capacity before Replicants fall further behind.
+- **早期警告条件:** レプリケーション遅延やキューが通常のピークを超えて持続、または減少せず増加し続ける。
+- **関連シグナル:** レプリカントノードでは`emqx_mria_lag`、`emqx_mria_message_queue_len`、`emqx_mria_replayq_len`を監視。コアノードでは`emqx_mria_server_mql`、`emqx_mria_weight`を監視。
+- **推奨対応:** レプリカントとその上流コアノードのログとメトリクスを相関分析。遅延収集失敗、分配ポートの過負荷、長時間のスケジューラ停止、Mnesia過負荷、Mriaレプリケーションエラーを確認。ネットワークレイテンシ・ロス、CPU、ディスクI/Oもチェック。書き込み圧力を軽減するか、コア容量を増強し、レプリカントの遅れ拡大を防ぐ。
 
-`emqx_mria_lag` is the number of transactions by which a Replicant shard is behind its upstream Core shard; it is not a duration in seconds. Short spikes can be normal during bursts of writes. Alert when the value remains above the maximum observed during representative peak traffic, or when it and the Mria queue metrics show a sustained positive trend. Group alerts by both node and `shard`, because one shard can be unhealthy while others continue to replicate normally. For details about each Mria metric, see [Monitor and Debug](../deploy/cluster/mria-introduction.md#monitor-and-debug).
+`emqx_mria_lag`はレプリカントシャードが上流コアシャードに対して遅れているトランザクション数であり、秒数ではありません。書き込みバースト時の短時間のスパイクは正常です。代表的なピークトラフィックで観測された最大値を超えて持続する場合、またはMriaキューメトリクスとともに持続的な増加傾向を示す場合にアラートを出してください。ノードと`shard`の両方でアラートをグルーピングしてください。シャードごとに状態が異なることがあるためです。各Mriaメトリクスの詳細は[監視とデバッグ](../deploy/cluster/mria-introduction.md#monitor-and-debug)を参照してください。
 
-**Configuration convergence**
+**設定収束**
 
-- **Early-warning condition:** `emqx_conf_sync_txid` differs between nodes for longer than a normal configuration rollout.
-- **Relevant signals:** `emqx_conf_sync_txid` from every node and configuration synchronization logs.
-- **Suggested actions:** Stop further configuration changes, identify the node that is behind, and inspect cluster connectivity and configuration synchronization errors. Restore convergence before maintenance or another configuration change.
+- **早期警告条件:** ノード間で`emqx_conf_sync_txid`が通常の設定展開時間を超えて異なる。
+- **関連シグナル:** すべてのノードの`emqx_conf_sync_txid`と設定同期ログ。
+- **推奨対応:** 追加の設定変更を停止し、遅れているノードを特定。クラスター接続性と設定同期エラーを調査。保守や次の設定変更前に収束を回復する。
 
-**Runtime backlog**
+**ランタイムバックログ**
 
-- **Early-warning condition:** Run queue or mailbox sizes stay above their established baseline.
-- **Relevant signals:** `emqx_vm_run_queue`, `emqx_vm_mnesia_tm_mailbox_size`, `emqx_vm_broker_pool_max_mailbox_size`, built-in overload alarms, and `busy_dist_port` events.
-- **Suggested actions:** Investigate sustained overload, slow storage, or cluster communication before request latency and queues grow further.
+- **早期警告条件:** ランキューやメールボックスサイズが基準値を超えて持続。
+- **関連シグナル:** `emqx_vm_run_queue`、`emqx_vm_mnesia_tm_mailbox_size`、`emqx_vm_broker_pool_max_mailbox_size`、組み込みの過負荷アラーム、`busy_dist_port`イベント。
+- **推奨対応:** 過負荷の持続、ストレージの遅延、クラスター通信の問題を調査し、リクエストレイテンシやキューのさらなる増加を防ぐ。
 
-### Resource and Capacity
+### リソースと容量
 
-**CPU pressure**
+**CPUプレッシャー**
 
-- **Early-warning condition:** CPU remains above the normal peak for 10 to 15 minutes.
-- **Relevant signals:** `emqx_vm_cpu_use`, host CPU, load, and container throttling.
-- **Suggested actions:** Find the workload or integration causing the increase. Rebalance traffic or add capacity before saturation. EMQX's built-in CPU alarm defaults to 80%.
+- **早期警告条件:** CPU使用率が通常ピークを10〜15分間超過。
+- **関連シグナル:** `emqx_vm_cpu_use`、ホストCPU、ロード、コンテナスロットリング。
+- **推奨対応:** 増加の原因となるワークロードや統合を特定。トラフィックの再分散や容量追加を行い飽和を防ぐ。EMQXの組み込みCPUアラームはデフォルトで80%に設定。
 
-**Memory pressure**
+**メモリプレッシャー**
 
-- **Early-warning condition:** Memory remains above the warning threshold or is growing toward the host or container limit.
-- **Relevant signals:** `emqx_vm_used_memory`, `emqx_vm_total_memory`, host or container memory, and EMQX memory alarms.
-- **Suggested actions:** Inspect connection, session, queue, and integration growth. Add capacity or reduce the source of growth before the operating system terminates the process. EMQX's built-in system-memory alarm defaults to 70%.
+- **早期警告条件:** メモリ使用率が警告閾値を超えるか、ホストまたはコンテナの制限に近づく。
+- **関連シグナル:** `emqx_vm_used_memory`、`emqx_vm_total_memory`、ホストまたはコンテナのメモリ、EMQXメモリアラーム。
+- **推奨対応:** 接続数、セッション、キュー、統合の増加を調査。OSによるプロセス終了を防ぐため、容量追加または増加源の削減を行う。EMQXの組み込みシステムメモリアラームはデフォルトで70%。
 
-**Overload-protection activity**
+**過負荷保護の活動**
 
-- **Early-warning condition:** Overload-protection counters increase, especially connection closures or delay timeouts.
-- **Relevant signals:** `emqx_overload_protection_new_conn`, `emqx_overload_protection_delay_timeout`, `emqx_overload_protection_delay_ok`, `emqx_overload_protection_gc`, and `emqx_overload_protection_hibernation`. These metrics are exported only when overload protection is enabled.
-- **Suggested actions:** The broker is already mitigating resource pressure. Correlate the events with CPU, memory, run queue, mailboxes, and connection churn. Reduce load or add capacity before more client traffic is affected.
+- **早期警告条件:** 過負荷保護のカウンターが増加、特に接続切断や遅延タイムアウト。
+- **関連シグナル:** `emqx_overload_protection_new_conn`、`emqx_overload_protection_delay_timeout`、`emqx_overload_protection_delay_ok`、`emqx_overload_protection_gc`、`emqx_overload_protection_hibernation`。過負荷保護が有効な場合のみエクスポートされる。
+- **推奨対応:** ブローカーは既にリソース圧力を緩和中。CPU、メモリ、ランキュー、メールボックス、接続の変動と相関させて分析。さらなるクライアント影響を防ぐため負荷軽減または容量追加を検討。
 
-**Disk pressure**
+**ディスクプレッシャー**
 
-- **Early-warning condition:** Free space falls below the operational reserve or is predicted to run out before the next maintenance window.
-- **Relevant signals:** Host or volume free bytes, free inodes, I/O latency, and disk growth rate.
-- **Suggested actions:** Remove data according to the retention policy or expand the volume. A common starting point is a warning at 20% free and a critical alert at 10% free.
+- **早期警告条件:** 空き容量が運用予備を下回るか、次回メンテナンスまでに枯渇すると予測される。
+- **関連シグナル:** ホストまたはボリュームの空きバイト数、空きinode数、I/Oレイテンシ、ディスク増加率。
+- **推奨対応:** 保持ポリシーに従いデータ削除またはボリューム拡張を実施。一般的な目安は警告が空き容量20%、クリティカルが10%。
 
-**Broker capacity**
+**ブローカー容量**
 
-- **Early-warning condition:** Connections, sessions, subscriptions, or topics approach the tested or licensed operating limit.
-- **Relevant signals:** `emqx_connections_count`, `emqx_sessions_count`, `emqx_subscriptions_count`, `emqx_topics_count`, and, in EMQX Enterprise, `emqx_license_max_sessions`.
-- **Suggested actions:** Compare growth with capacity-test results. Add nodes or move traffic before reaching the limit. Do not treat the historical `*_max` gauges as configured capacity limits.
+- **早期警告条件:** 接続数、セッション数、サブスクリプション数、トピック数がテスト済みまたはライセンス上限に近づく。
+- **関連シグナル:** `emqx_connections_count`、`emqx_sessions_count`、`emqx_subscriptions_count`、`emqx_topics_count`、EMQX Enterpriseでは`emqx_license_max_sessions`。
+- **推奨対応:** 容量テスト結果と比較し、上限到達前にノード追加やトラフィック移動を行う。過去の`*_max`ゲージ値を設定容量の上限とみなさないこと。
 
-### Message Delivery and Dependencies
+### メッセージ配信と依存関係
 
-**Message loss**
+**メッセージロス**
 
-- **Early-warning condition:** Unexpected drop counters increase.
-- **Relevant signals:** `emqx_messages_dropped_*` and `emqx_delivery_dropped_*`.
-- **Suggested actions:** Investigate the specific reason. Queue-full, quota-exceeded, receive-maximum, and expired-message drops can indicate overload or incorrect limits. `no_subscribers` and `no_local` drops can be expected in some applications.
+- **早期警告条件:** 予期しないドロップカウンターの増加。
+- **関連シグナル:** `emqx_messages_dropped_*`、`emqx_delivery_dropped_*`。
+- **推奨対応:** 原因を調査。キュー満杯、クォータ超過、受信最大数超過、期限切れメッセージのドロップは過負荷や誤設定を示す場合がある。`no_subscribers`や`no_local`のドロップは一部アプリケーションで予期される。
 
-**Authentication and authorization dependency health**
+**認証・認可依存性の健全性**
 
-- **Early-warning condition:** An enabled provider or source is not connected (its status is `0`), authentication or authorization latency rises above the normal peak, or authentication failures or authorization denials increase unexpectedly.
-- **Relevant signals:** `emqx_authn_enable`, `emqx_authn_status`, `emqx_authn_latency`, `emqx_authn_failed`, `emqx_authz_enable`, `emqx_authz_status`, `emqx_authz_latency`, and `emqx_authz_deny` from `/api/v5/prometheus/auth`.
-- **Suggested actions:** Check the external database, HTTP service, LDAP server, network, and connection pool. Correlate a failure spike with client traffic to distinguish a backend problem from invalid credentials, an application change, or an attack.
+- **早期警告条件:** 有効なプロバイダーやソースが未接続（ステータス`0`）、認証・認可レイテンシが通常ピークを超過、認証失敗や認可拒否が予期せず増加。
+- **関連シグナル:** `/api/v5/prometheus/auth`の`emqx_authn_enable`、`emqx_authn_status`、`emqx_authn_latency`、`emqx_authn_failed`、`emqx_authz_enable`、`emqx_authz_status`、`emqx_authz_latency`、`emqx_authz_deny`。
+- **推奨対応:** 外部DB、HTTPサービス、LDAPサーバー、ネットワーク、接続プールを確認。障害の急増をクライアントトラフィックと相関させ、バックエンド問題か無効な資格情報、アプリ変更、攻撃かを判別。
 
-**Data integration health**
+**データ統合の健全性**
 
-- **Early-warning condition:** An enabled connector or action is disconnected; `emqx_action_queuing` or `emqx_action_inflight` grows instead of draining; or late replies, retries, failures, or drops increase.
-- **Relevant signals:** `emqx_connector_enable`, `emqx_connector_status`, `emqx_action_enable`, `emqx_action_status`, `emqx_action_queuing`, `emqx_action_inflight`, and related action metrics from `/api/v5/prometheus/data_integration`, plus EMQX `resource` alarms.
-- **Suggested actions:** Check the external service and network, then verify buffer capacity and retry behavior. Growing queues and in-flight requests can provide warning before failures and drops begin.
+- **早期警告条件:** 有効なコネクターやアクションが切断、`emqx_action_queuing`や`emqx_action_inflight`が減少せず増加、遅延応答、リトライ、失敗、ドロップが増加。
+- **関連シグナル:** `/api/v5/prometheus/data_integration`の`emqx_connector_enable`、`emqx_connector_status`、`emqx_action_enable`、`emqx_action_status`、`emqx_action_queuing`、`emqx_action_inflight`、およびEMQXの`resource`アラーム。
+- **推奨対応:** 外部サービスとネットワークを確認し、バッファ容量とリトライ動作を検証。キューやインフライトリクエストの増加は失敗やドロップの前兆となる。
 
-### Expiry Risks
+### 有効期限リスク
 
-**Certificate and license expiry**
+**証明書およびライセンスの有効期限**
 
-- **Early-warning condition:** Expiry is within the organization's renewal lead time.
-- **Relevant signals:** `emqx_cert_expiry_at` and, in EMQX Enterprise, `emqx_license_expiry_at`.
-- **Suggested actions:** Renew and deploy the certificate or license. A common starting point is a warning 30 days before expiry and a critical alert 7 days before expiry.
+- **早期警告条件:** 組織の更新リードタイム内に有効期限が迫る。
+- **関連シグナル:** `emqx_cert_expiry_at`、EMQX Enterpriseでは`emqx_license_expiry_at`。
+- **推奨対応:** 証明書またはライセンスを更新しデプロイ。一般的な目安は有効期限30日前に警告、7日前にクリティカルアラート。
 
-### Verify Metric Availability
+### メトリクスの利用可能性を確認
 
-For the descriptions of broker counters displayed in the Dashboard, see [Statistics and Metrics](./metrics-and-stats.md). Basic broker, authentication and authorization, and data integration metrics are exposed through separate Prometheus endpoints. Metric availability can vary by edition and enabled features. Inspect the relevant endpoint in your deployment before creating rules.
+ダッシュボードに表示されるブローカーカウンターの説明は[統計とメトリクス](./metrics-and-stats.md)を参照してください。基本的なブローカー、認証・認可、データ統合のメトリクスは別々のPrometheusエンドポイントで公開されます。メトリクスの利用可能性はエディションや有効化された機能によって異なります。ルール作成前にデプロイメントの該当エンドポイントを確認してください。
 
-## Centralize Logs and Alert Selectively
+## ログを中央集約し選択的にアラート設定
 
-### Collect Logs Outside the Cluster
+### クラスター外部でログを収集
 
-Do not keep the only copy of a node's logs on that node. A node failure can make the evidence needed to diagnose it unavailable. Send logs from every node to a central system outside the EMQX cluster and include labels for the cluster, node, node role, EMQX version, and availability zone.
+ノードのログをそのノードにのみ保持しないでください。ノード障害時に診断に必要な証拠が失われる可能性があります。すべてのノードからログをEMQXクラスター外の中央システムに送信し、クラスター、ノード、ノード役割、EMQXバージョン、アベイラビリティゾーンのラベルを付与してください。
 
-Use [JSON log format](./log.md#log-format) and retain at least warning, error, and critical events. Logs can be collected from console or file output, or exported through [OpenTelemetry](./opentelemetry/logs.md). For configuration and production collection guidance, see [Logs](./log.md).
+[JSONログ形式](./log.md#log-format)を使用し、警告、エラー、クリティカルイベントを最低限保持してください。ログはコンソールやファイル出力から収集可能で、[OpenTelemetry](./opentelemetry/logs.md)経由でエクスポートも可能です。設定と本番収集のガイダンスは[ログ](./log.md)を参照してください。
 
-Monitor the log collector and transport by using their health metrics or an explicit heartbeat that does not depend on application log volume. Do not alert merely because a node produces no logs; an idle or healthy node may have nothing to report at the configured severity.
+ログ収集システムと転送経路は、ヘルスメトリクスやアプリケーションログ量に依存しない明示的なハートビートで監視してください。ノードがログを生成しないだけでアラートを出さないでください。アイドル状態や正常なノードは設定された重大度で報告すべきログがない場合があります。
 
-### Define Targeted Log Alerts
+### 目的に応じたログアラートを定義
 
-Use the following events and guidance to define log-based alert rules:
+以下のイベントとガイダンスを参考に、ログベースのアラートルールを定義してください。
 
-| Condition | Log Signal | Alerting Guidance |
+| 条件 | ログシグナル | アラートガイダンス |
 | --- | --- | --- |
-| Mria lag observation failed | `prometheus_mria_shard_lag_refresh_exception` | Alert if it occurs repeatedly. The exporter caches Mria lag; if a refresh times out, the previous value can continue to be exported and appear stable. |
-| Erlang VM or inter-node communication pressure | `busy_dist_port`, `long_schedule`, `long_gc`, and Mnesia overload messages | Alert on a sustained rate or repeated events and correlate them with Mria queues, CPU, and latency. These events can precede client-visible degradation. |
-| Mria replication or topology failure | `gap_in_the_tlog` and `mria_lb_split_brain` | Notify the responsible operator immediately. Capture the node, shard, agent, expected sequence number, and actual sequence number from the structured fields. |
-| Buffering or message-queue pressure | `data_bridge_buffer_overflow`, `unrecoverable_resource_error`, and `dropped_msg_due_to_mqueue_is_full` | Alert when these events are unexpected or exceed the application's accepted loss rate. Correlate them with action and message-drop counters. |
-| Configuration synchronization failure | `sync_data_from_node_failed` and `cluster_rpc_apply_failed` | Alert immediately when a configuration change or node startup is in progress; verify that all nodes have converged on the intended configuration. |
+| Mria遅延観測失敗 | `prometheus_mria_shard_lag_refresh_exception` | 繰り返し発生した場合にアラート。エクスポーターはMria遅延をキャッシュしており、リフレッシュタイムアウト時は前回値を安定してエクスポートし続ける可能性あり。 |
+| Erlang VMまたはノード間通信圧力 | `busy_dist_port`、`long_schedule`、`long_gc`、Mnesia過負荷メッセージ | 持続的な発生率や繰り返しイベントでアラート。Mriaキュー、CPU、レイテンシと相関させる。これらはクライアントに見える劣化の前兆となる。 |
+| Mriaレプリケーションまたはトポロジ障害 | `gap_in_the_tlog`、`mria_lb_split_brain` | 直ちに担当オペレーターに通知。構造化フィールドからノード、シャード、エージェント、期待シーケンス番号、実際のシーケンス番号を取得。 |
+| バッファリングまたはメッセージキュー圧力 | `data_bridge_buffer_overflow`、`unrecoverable_resource_error`、`dropped_msg_due_to_mqueue_is_full` | 予期せぬ発生や許容損失率を超えた場合にアラート。アクションおよびメッセージドロップカウンターと相関させる。 |
+| 設定同期失敗 | `sync_data_from_node_failed`、`cluster_rpc_apply_failed` | 設定変更やノード起動中に直ちにアラート。すべてのノードが意図した設定に収束しているか確認。 |
 
-Not every warning-level log requires immediate operator notification. Authentication failures and malformed client traffic, for example, may be expected at low rates. Base alerts on selected `msg` values, severity levels, sustained event rates, or deviations from the normal baseline. Treat unexpected critical events as immediately actionable.
+すべての警告レベルログが即時通知を要するわけではありません。例えば認証失敗や不正なクライアントトラフィックは低頻度であれば想定内です。選択した`msg`値、重大度レベル、持続的なイベント発生率、通常基準からの逸脱に基づいてアラートを設定してください。予期せぬクリティカルイベントは即時対応が必要とみなします。
 
-### Account for Log Throttling
+### ログスロットリングを考慮
 
-EMQX throttles selected repetitive log events. A log query can therefore undercount the original events. Include `log_events_throttled_during_last_period` in dashboards and alerts, and use its `dropped` field to determine which messages were suppressed. For details, see [Log Throttling](./log.md#log-throttling).
+EMQXは選択された繰り返しログイベントをスロットリングします。ログクエリは元のイベント数を過小評価する可能性があります。ダッシュボードやアラートに`log_events_throttled_during_last_period`を含め、その`dropped`フィールドで抑制されたメッセージを把握してください。詳細は[ログスロットリング](./log.md#log-throttling)を参照。
 
-## Detect Failures Separately
+## 障害検知は別途行う
 
-The indicators in [Leading Indicators to Monitor](#leading-indicators-to-monitor) provide advance warning, but they do not replace failure-detection alerts. The following conditions indicate that service or redundancy has already been lost. Configure alerts to notify the responsible operator immediately when any of these conditions occurs:
+[監視すべき先行指標](#leading-indicators-to-monitor)は早期警告を提供しますが、障害検知アラートに代わるものではありません。以下の条件はサービスまたは冗長性が既に失われていることを示します。これらの条件が発生した場合は、直ちに担当オペレーターに通知するアラートを設定してください。
 
-- Prometheus `up == 0`
-- A failed synthetic MQTT check
-- `emqx_cluster_nodes_running` falling below the planned cluster size
-- `emqx_cluster_nodes_stopped` increasing
-- An unexpected reset of `emqx_vm_uptime_ms`
-- An EMQX `partition` alarm
+- Prometheusの`up == 0`
+- 合成MQTTチェックの失敗
+- `emqx_cluster_nodes_running`が計画クラスターサイズを下回る
+- `emqx_cluster_nodes_stopped`が増加
+- `emqx_vm_uptime_ms`の予期しないリセット
+- EMQXの`partition`アラーム
 
-Use the early-warning indicators described in [Leading Indicators to Monitor](#leading-indicators-to-monitor) to detect deterioration early and provide enough time to schedule maintenance before these failures occur.
+これらの障害発生前に[監視すべき先行指標](#leading-indicators-to-monitor)で劣化を検知し、保守スケジュールの余裕を確保してください。
 
-## Example Prometheus Alert Rules
+## Prometheusアラートルールの例
 
-You can copy the following configuration as a starting point for Prometheus alert rules. Before using it in production:
+以下の設定はPrometheusアラートルールの出発点としてコピー可能です。本番環境で使用する前に以下を確認してください。
 
-- The example uses the job names from the [Prometheus server configuration example](./prometheus.md#prometheus-server-configuration-example). Update the `job` matchers if your scrape jobs use different names.
-- The cluster-loss rule assumes a planned cluster size of 3 nodes. Replace `3` with the planned size of your cluster.
-- Replace the other example thresholds with values appropriate for your deployment.
-- If a Prometheus job contains multiple clusters, aggregate the configuration-convergence rule by a cluster label.
-- Add an absolute threshold based on your peak-traffic baseline to the Mria trend rules. The example rules detect a queue or lag with a sustained positive slope, but a large, stable backlog should also trigger an alert.
-- Add host- or platform-specific rules for disk exhaustion, memory limits, container restarts, and network health.
+- 例は[Prometheusサーバー設定例](./prometheus.md#prometheus-server-configuration-example)のジョブ名を使用しています。スクレイプジョブの名前が異なる場合は`job`マッチャーを更新してください。
+- クラスター喪失ルールは計画クラスターサイズ3ノードを想定しています。`3`を実際のクラスターサイズに置き換えてください。
+- 他の例示閾値もデプロイメントに適した値に置き換えてください。
+- Prometheusジョブに複数クラスターが含まれる場合、設定収束ルールはクラスターラベルで集約してください。
+- Mriaトレンドルールにはピークトラフィック基準の絶対閾値も追加してください。例は持続的な増加傾向を検知しますが、大きく安定したバックログもアラート対象とすべきです。
+- ディスク枯渇、メモリ制限、コンテナ再起動、ネットワーク健全性についてはホストやプラットフォーム固有のルールを追加してください。
 
 ```yaml
 groups:
@@ -202,7 +202,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Mria replication lag is growing on {{ $labels.instance }} shard {{ $labels.shard }}"
+          summary: "Mriaレプリケーション遅延が{{ $labels.instance }}のシャード{{ $labels.shard }}で増加中"
 
       - alert: EMQXMRIAReplicationQueueGrowing
         expr: deriv(emqx_mria_server_mql{job="emqx_stats"}[10m]) > 0 or deriv(emqx_mria_message_queue_len{job="emqx_stats"}[10m]) > 0 or deriv(emqx_mria_replayq_len{job="emqx_stats"}[10m]) > 0
@@ -210,7 +210,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "A Mria replication queue is growing on {{ $labels.instance }} shard {{ $labels.shard }}"
+          summary: "Mriaレプリケーションキューが{{ $labels.instance }}のシャード{{ $labels.shard }}で増加中"
 
       - alert: EMQXSustainedHighCPU
         expr: emqx_vm_cpu_use{job="emqx_stats"} > 80
@@ -218,7 +218,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "EMQX CPU usage is high on {{ $labels.instance }}"
+          summary: "{{ $labels.instance }}でEMQXのCPU使用率が高い"
 
       - alert: EMQXSustainedHighMemory
         expr: 100 * emqx_vm_used_memory{job="emqx_stats"} / emqx_vm_total_memory{job="emqx_stats"} > 70
@@ -226,14 +226,14 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "EMQX host memory usage is high on {{ $labels.instance }}"
+          summary: "{{ $labels.instance }}でEMQXホストのメモリ使用率が高い"
 
       - alert: EMQXOverloadProtectionActive
         expr: sum by (instance) (increase(emqx_overload_protection_new_conn{job="emqx_stats"}[5m])) > 0 or sum by (instance) (increase(emqx_overload_protection_delay_timeout{job="emqx_stats"}[5m])) > 0
         labels:
           severity: warning
         annotations:
-          summary: "EMQX overload protection is closing or timing out client work on {{ $labels.instance }}"
+          summary: "{{ $labels.instance }}でEMQX過負荷保護がクライアント処理を切断またはタイムアウト"
 
       - alert: EMQXConfigurationNotConverged
         expr: max(emqx_conf_sync_txid{job="emqx_stats"}) != min(emqx_conf_sync_txid{job="emqx_stats"})
@@ -241,14 +241,14 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "EMQX nodes report different configuration transaction IDs"
+          summary: "EMQXノード間で設定トランザクションIDが異なる"
 
       - alert: EMQXDeliveryQueueFullDrops
         expr: sum by (instance) (increase(emqx_delivery_dropped_queue_full{job="emqx_stats"}[5m])) > 0
         labels:
           severity: warning
         annotations:
-          summary: "EMQX dropped messages because a delivery queue was full"
+          summary: "EMQXで配信キュー満杯によりメッセージがドロップされた"
 
       - alert: EMQXActionQueueGrowing
         expr: deriv(emqx_action_queuing{job="emqx_data_integration"}[10m]) > 0
@@ -256,14 +256,14 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "EMQX data integration action {{ $labels.id }} has a growing queue on {{ $labels.instance }}"
+          summary: "{{ $labels.instance }}でEMQXデータ統合アクション{{ $labels.id }}のキューが増加中"
 
       - alert: EMQXActionFailures
         expr: sum by (instance, id) (increase(emqx_action_failed{job="emqx_data_integration"}[5m])) > 0
         labels:
           severity: warning
         annotations:
-          summary: "EMQX data integration action {{ $labels.id }} is failing"
+          summary: "{{ $labels.instance }}でEMQXデータ統合アクション{{ $labels.id }}が失敗中"
 
       - alert: EMQXAuthenticationBackendUnavailable
         expr: (emqx_authn_enable{job="emqx_auth"} == 1 and on (instance, id) emqx_authn_status{job="emqx_auth"} == 0) or (emqx_authz_enable{job="emqx_auth"} == 1 and on (instance, type) emqx_authz_status{job="emqx_auth"} == 0)
@@ -271,7 +271,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "An enabled EMQX authentication or authorization backend is unavailable on {{ $labels.instance }}"
+          summary: "{{ $labels.instance }}で有効なEMQX認証または認可バックエンドが利用不可"
 
       - alert: EMQXCertificateExpiresSoon
         expr: emqx_cert_expiry_at{job="emqx_stats"} > 0 and (emqx_cert_expiry_at{job="emqx_stats"} - time()) < 30 * 24 * 60 * 60
@@ -279,7 +279,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "EMQX listener certificate expires within 30 days"
+          summary: "EMQXリスナー証明書が30日以内に有効期限切れ"
 
   - name: emqx-failure-detection
     rules:
@@ -289,7 +289,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "EMQX metrics target {{ $labels.instance }} is unreachable"
+          summary: "EMQXメトリクスターゲット{{ $labels.instance }}が到達不能"
 
       - alert: EMQXClusterLostNode
         expr: min by (job) (emqx_cluster_nodes_running{job="emqx_stats"}) < 3
@@ -297,37 +297,37 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "EMQX cluster has fewer than 3 running nodes"
+          summary: "EMQXクラスターの稼働ノード数が3未満"
 ```
 
-Counter metrics normally only increase. Alert on their rate or increase over a time window, not on their absolute value. Use a `for` duration with resource gauges so that a short traffic spike does not cause an unnecessary alert.
+カウンタメトリクスは通常増加のみです。絶対値ではなく、一定期間の増加率や増加量でアラートを設定してください。リソースゲージには`for`期間を設定し、短時間のトラフィックスパイクで不要なアラートが発生しないようにします。
 
-## Make Alerts Actionable
+## アラートを実効的にする
 
-1. **Define alert context and ownership.**
+1. **アラートのコンテキストと担当者を定義する。**
 
-   Each actionable alert should identify the affected cluster and, when applicable, the affected node, current value, and threshold. It should also include a dashboard link, an owner, and a runbook that documents how to investigate, mitigate, and resolve the alert. The runbook should state how to confirm the condition, protect service, restore redundancy, and decide whether to scale, rebalance, restart, or repair.
+   実効的なアラートは、影響を受けるクラスター、該当する場合はノード、現在値、閾値を特定できる必要があります。ダッシュボードリンク、担当者、調査・緩和・解決手順を記載したランブックも含めてください。ランブックには、状態の確認方法、サービス保護、冗長性回復、スケール、リバランス、再起動、修復の判断基準を記述します。
 
-2. **Test alert delivery and recovery.**
+2. **アラート通知と復旧をテストする。**
 
-   Test the full alert path before relying on it. In a non-production environment or during an approved test window, deliberately stop a scrape target, lower a test threshold, and disconnect a test integration. Confirm that the alert reaches the correct operator, contains enough context, and clears after recovery.
+   依存前にアラート経路全体をテストしてください。非本番環境や承認済みテスト期間中に、スクレイプターゲット停止、テスト閾値の引き下げ、テスト統合の切断を意図的に行い、アラートが正しい担当者に届き、十分なコンテキストを含み、復旧後にクリアされることを確認してください。
 
-3. **Prepare maintenance procedures.**
+3. **保守手順を準備する。**
 
-   Use warning alerts to schedule maintenance while redundancy remains available. Before changing the cluster, verify that backups are usable, the remaining nodes can carry the load, and the alerting system is healthy. Relevant procedures include [Backup and Restore](../operations/backup-restore.md), [Node Evacuation and Cluster Load Rebalancing](../deploy/cluster/rebalancing.md), and [EMQX Enterprise Rolling Upgrade](../deploy/rolling-upgrades.md).
+   警告アラートを使って冗長性が残るうちに保守を計画してください。クラスター変更前にバックアップの利用可能性、残存ノードの負荷耐性、アラートシステムの健全性を確認します。関連手順は[バックアップとリストア](../operations/backup-restore.md)、[ノード退避とクラスター負荷リバランス](../deploy/cluster/rebalancing.md)、[EMQX Enterpriseローリングアップグレード](../deploy/rolling-upgrades.md)を参照してください。
 
-## Production Readiness Checklist
+## 本番環境準備チェックリスト
 
-- Every EMQX node and its host or container is visible in the external monitoring system.
-- Built-in alarms are forwarded outside EMQX and tested.
-- Warning, error, and critical logs from every node are stored centrally, and the collection pipeline is monitored.
-- An external synthetic MQTT check covers the production client path.
-- Alerts for Mria replication, configuration convergence, and runtime backlog have defined owners and runbooks.
-- Alerts for overload protection, CPU, memory, disk, and broker capacity have defined owners and runbooks.
-- Alerts for authentication and authorization, message drops, and data integrations have defined owners and runbooks.
-- Certificate and license expiry alerts have defined owners and runbooks.
-- Selected Mria, VM-pressure, buffer-overflow, and configuration-sync log events have rate-based or immediate alerts appropriate to their severity.
-- Separate target-down, synthetic MQTT, cluster-size, and partition alerts detect failures and notify the responsible operator immediately.
-- Warning thresholds leave enough time for the team's normal maintenance and capacity-provisioning process.
-- Dashboards show both the current value and the trend over a relevant business cycle.
-- Alert notifications, backup restoration, and rolling-maintenance procedures are tested regularly.
+- すべてのEMQXノードおよびそのホスト・コンテナが外部モニタリングシステムに可視化されている。
+- 組み込みアラームがEMQX外部に転送され、テスト済みである。
+- すべてのノードから警告、エラー、クリティカルログが中央に保存され、収集パイプラインが監視されている。
+- 外部の合成MQTTチェックが本番クライアント経路をカバーしている。
+- Mriaレプリケーション、設定収束、ランタイムバックログのアラートに担当者とランブックが定義されている。
+- 過負荷保護、CPU、メモリ、ディスク、ブローカー容量のアラートに担当者とランブックが定義されている。
+- 認証・認可、メッセージドロップ、データ統合のアラートに担当者とランブックが定義されている。
+- 証明書およびライセンス有効期限アラートに担当者とランブックが定義されている。
+- 選択したMria、VMプレッシャー、バッファオーバーフロー、設定同期のログイベントに対して、レートベースまたは即時アラートが設定されている。
+- ターゲットダウン、合成MQTT、クラスターサイズ、パーティションのアラートが障害を検知し、担当オペレーターに即時通知する。
+- 警告閾値はチームの通常保守および容量プロビジョニングプロセスに十分な余裕を残している。
+- ダッシュボードは現在値と関連する業務サイクルのトレンドを表示している。
+- アラート通知、バックアップ復元、ローリング保守手順が定期的にテストされている。
