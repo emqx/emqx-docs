@@ -209,6 +209,7 @@ Starting from EMQX 6.3.0, `EMQX_FEATURES` is a special startup environment varia
 Most `EMQX_`-prefixed environment variables override `emqx.conf` settings, following the conversion rules above. A few variables configure EMQX itself before the configuration files are parsed, so they have no `emqx.conf` equivalent:
 
 - `EMQX_FEATURES`: Selects the set of applications the node boots, for example `FULL` or `ESSENTIAL`.
+- `CODE_LOADING_MODE`: Controls Erlang code loading. When `EMQX_FEATURES=ESSENTIAL` and this variable is unset or empty, EMQX defaults it to `interactive`. Set it to `embedded` to preload Erlang modules at startup.
 - `EMQX_SECURITY_PROFILE`: Selects the node-wide security profile, `legacy` or `hardened`.
 
 Starting from EMQX 6.3.0, the `emqx` command loads environment variables from `etc/emqx.env` whenever it runs, including during a service start, a foreground start, and `emqx ctl`. On RPM and DEB installations, the file is located at `/etc/emqx/emqx.env`. Use this file to set boot-time environment variables instead of editing the systemd unit.

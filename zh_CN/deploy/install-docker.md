@@ -34,7 +34,7 @@ docker run -d --name emqx-enterprise \
 
 ```bash
 docker run -d --name emqx-enterprise \
-  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -e "EMQX_FEATURES=dashboard,metrics,plugins" \
   -p 1883:1883 -p 18083:18083 \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
@@ -97,7 +97,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -123,7 +123,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:

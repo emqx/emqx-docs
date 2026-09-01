@@ -146,7 +146,7 @@ Starting from EMQX 6.3.0, you can set `EMQX_FEATURES` to control which optional 
 
 ```yaml
 emqxConfig:
-  EMQX_FEATURES: "dashboard,auth,metrics"
+  EMQX_FEATURES: "dashboard,metrics,plugins"
 ```
 
 Feature gates are resolved only when EMQX starts. If you change this value, recreate or restart the EMQX pods. For the full feature list and dependency behavior, see [Feature Gates](../feature-gates.md).

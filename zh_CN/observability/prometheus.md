@@ -8,7 +8,7 @@ EMQX 支持向 Prometheus 暴露运行指标，用于查询、告警和可视化
 完成采集后，可以使用 Grafana [可视化 EMQX 指标](#在-grafana-中可视化-emqx-指标)。
 
 ::: tip
-从 EMQX 6.3.0 开始，Prometheus 指标由 `metrics` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `metrics` 时也会自动启用其依赖的 `dashboard` 和 `auth`。更多信息请参见[功能门控](../deploy/feature-gates.md)。
+从 EMQX 6.3.0 开始，Prometheus 指标由 `metrics` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `metrics` 时也会自动启用其依赖的 `dashboard`。认证和授权属于核心能力，不受功能门控控制。更多信息请参见[功能门控](../deploy/feature-gates.md)。
 :::
 
 ## 在 EMQX 中配置指标采集行为

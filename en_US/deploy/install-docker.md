@@ -37,7 +37,7 @@ To start EMQX with a custom feature set, run:
 
 ```bash
 docker run -d --name emqx-enterprise \
-  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -e "EMQX_FEATURES=dashboard,metrics,plugins" \
   -p 1883:1883 -p 18083:18083 \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
@@ -100,7 +100,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -126,7 +126,7 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
