@@ -869,6 +869,7 @@
       path: observability/overview
       collapsed: true
       children:
+        - observability/monitoring-best-practices
         - observability/metrics-and-stats
         - observability/alarms
         - observability/log
