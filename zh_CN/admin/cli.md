@@ -471,12 +471,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-安装一个已放置在插件安装目录下的插件包。
+安装已放置在插件安装目录下的插件包。添加 `--cluster` 可将插件包分发并安装到所有运行中的节点。
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
@@ -953,8 +954,6 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | `protocol_error`              | 出现通用的 MQTT 协议错误。                                   |
 | `tcp_closed`                  | TCP 连接被客户端或网络层关闭。                               |
 | `timeout`                     | 发生通用超时错误（如在认证或握手过程中）。                   |
-
->>>>>>> origin/release-5.10
 ### listeners stop \<Identifier\>
 
 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。（临时生效，当 EMQX 重启后将恢复原先状态。）
@@ -1485,7 +1484,6 @@ rebalance start \
 ```bash
 $ emqx ctl gateway list
 Gateway(name=coap, status=running, clients=0, started_at=2023-05-22T14:23:50.353+08:00)
-Gateway(name=exproto, status=unloaded)
 Gateway(name=lwm2m, status=unloaded)
 Gateway(name=mqttsn, status=unloaded)
 Gateway(name=stomp, status=unloaded)
@@ -1559,7 +1557,6 @@ ok
 当前默认支持的网关有如下 5 种：
 
 - coap
-- exproto
 - lwm2m
 - mqttsn
 - stomp
@@ -1591,12 +1588,6 @@ EMQX 的网关设计成可插拔。所以网关应用可以在启动/运行时�
 
 ## license
 
-::: tip
-
-本节内容仅适用于 EMQX 企业版。
-
-:::
-
 ### license info
 
 ```bash
@@ -1627,6 +1618,87 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 ```bash
 emqx ctl license update default
 ```
+
+### license history
+
+查看会话峰值水位线历史记录。EMQX Enterprise 会记录每日的会话数峰值，并保留至少 24 个月的历史数据，以供计费审计使用。
+
+```bash
+emqx ctl license history [N] [--period daily|monthly] [--json]
+```
+
+- `N`：可选正整数，限制返回的记录条数（按月统计时默认为 24）
+- `--period daily|monthly`：聚合粒度；`daily` 按自然日返回记录，`monthly` 将每日峰值聚合为月度最大值（默认：`monthly`）
+- `--json`：以 JSON 格式输出，而非纯文本
+
+**示例：纯文本输出**
+
+```bash
+$ emqx ctl license history
+period=2026-04 high_watermark=25000 observed_at=2026-04-18T13:53:05.000Z
+period=2026-03 high_watermark=23500 observed_at=2026-03-31T22:10:42.000Z
+```
+
+**示例：JSON 输出**
+
+```bash
+$ emqx ctl license history --json
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+当尚未记录任何数据时，纯文本输出显示：
+
+```
+No session high-watermark history recorded.
+```
+
+## mt
+
+`mt` 命令用于维护 EMQX Enterprise 的多租户数据。
+
+### mt purge_ns \<Namespace\>
+
+从 EMQX Enterprise 6.1.4 开始，该命令会删除指定命名空间，并同步执行清理流程。清理范围包括命名空间配置，以及内置数据库中属于该命名空间的数据，例如密码认证用户、SCRAM 用户和授权规则。即使命名空间已不存在，该命令仍会执行。
+
+如果命名空间状态未发生变化，该操作具有幂等性。如果清理未完成，仅当同名命名空间尚未重新创建时，才可再次运行该命令。
+
+该命令仅用于清理由删除操作中断而遗留的数据。常规命名空间删除应使用 Dashboard 或 `DELETE /mt/ns/<namespace>` REST API。
+
+::: warning 重要提示
+
+对现有命名空间运行此命令会永久删除该命名空间及其数据。重新创建同名命名空间后，不要再次运行该命令。
+
+:::
+
+例如，清理 `tenant-a` 命名空间：
+
+```bash
+emqx ctl mt purge_ns tenant-a
+```
+
+如果所有清理步骤均成功，输出的 JSON 中包含 `"result": "ok"`：
+
+```json
+{"namespace":"tenant-a","result":"ok"}
+```
+
+如果任一清理步骤失败，输出的 JSON 中包含 `"error": "cleanup_incomplete"`：
+
+```json
+{"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
+```
+
+检查 EMQX 日志以确定失败的清理步骤。解决问题后，再次运行该命令。
 
 ## admins
 

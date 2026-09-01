@@ -147,6 +147,8 @@ directory       /usr/local/etc/openldap/data
      - **用户名**：指定 LDAP 根用户名称。
      - **密码**：指定 LDAP 根用户密码。
 
+   **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+
    **TLS 配置**：如果要启用 TLS，请打开切换按钮。有关启用 TLS 的更多信息，请参见[网络和TLS](../../network/overview.md)。
 
    - **连接配置**：设置并发连接数和连接超时前的等待时间。
@@ -172,6 +174,8 @@ directory       /usr/local/etc/openldap/data
 您也可通过配置文件配置 LDAP 授权器。
 
 LDAP 授权通过 `type = ldap` 进行标识。
+
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
 配置示例：
 

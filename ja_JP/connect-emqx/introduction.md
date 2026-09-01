@@ -1,48 +1,48 @@
 ---
 {
-  'title': 'MQTT クライアント SDK',
+  'title': 'MQTT Client SDKs',
   'categoryList':
     [
       {
-        'title': 'SDK サンプル',
-        'moreText': 'さらに多くのサンプル',
+        'title': 'SDK Example',
+        'moreText': 'More Examples',
         'linkForMoreDemos': 'https://github.com/emqx/MQTT-Client-Examples',
         'menus':
           [
             {
               'imgName': 'c',
               'name': 'C',
-              'description': 'MQTT C SDK サンプル',
+              'description': 'MQTT C SDK Example',
               'link': './c.html',
             },
             {
               'imgName': 'java',
               'name': 'Java',
-              'description': 'MQTT Java SDK サンプル',
+              'description': 'MQTT Java SDK Example',
               'link': './java.html',
             },
             {
               'imgName': 'go',
               'name': 'Golang',
-              'description': 'MQTT Go SDK サンプル',
+              'description': 'MQTT Go SDK Example',
               'link': './go.html',
             },
             {
               'imgName': 'python',
               'name': 'Python',
-              'description': 'MQTT Python SDK サンプル',
+              'description': 'MQTT Python SDK Example',
               'link': './python.html',
             },
             {
               'imgName': 'js',
               'name': 'JavaScript',
-              'description': 'MQTT JavaScript SDK サンプル',
+              'description': 'MQTT JavaScript SDK Example',
               'link': './javascript.html',
             }
           ],
       },
       {
-        'title': 'サードパーティ SDK 推奨',
+        'title': 'Third-party SDK Recommendation',
         'menus':
           [
             {

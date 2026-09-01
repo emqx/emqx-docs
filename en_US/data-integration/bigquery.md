@@ -186,8 +186,8 @@ This section demonstrates how to create a rule to specify the data to be saved i
    SELECT
      clientid,
      topic,
-     payload,
-     publish_received_at
+     base64_encode(payload) AS payload,
+     timestamp/1000 AS publish_received_at
    FROM
      "t/bq"
    ```

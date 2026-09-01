@@ -92,6 +92,7 @@ For more detailed instructions, refer to the [Okta documentation](https://help.o
 ### Step 3: Complete the EMQX Dashboard Configuration
 
 1. On the **OIDC Settings** page, enter the following information:
+   - **Force MFA**: Optionally enable this to require all users from this backend to complete TOTP verification at login. Disabled by default. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
    - **Provider**: Choose `Okta` or select `Generic` for other providers.
    - **Issuer URL**: This is the URL of your Okta authorization server, e.g., `https://example-org.okta.com`.
    - **Client ID**: Copy it from the application created in **Step 2**.
@@ -126,7 +127,7 @@ After enabling OIDC SSO, the EMQX Dashboard will display the SSO option on the l
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-After successful authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successful authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions. To require OIDC users to complete a TOTP second factor at login, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
 
 ## Logout
 
