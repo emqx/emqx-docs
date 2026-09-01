@@ -2,7 +2,7 @@
 
 ## e4.4.38
 
-*Release Date: 2026-08-19*
+*Release Date: 2026-09-01*
 
 ### Enhancements
 
