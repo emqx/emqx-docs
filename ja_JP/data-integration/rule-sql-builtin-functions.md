@@ -949,7 +949,7 @@ EMQX 6.1.5以降で利用可能です。EMQX Mapping Tablesプラグインがイ
 
 :::
 
-[EMQX Mapping Tablesプラグイン](../extensions/plugin-catalog/6.1/emqx-maptabs.md)で管理されるマッピングテーブルの行を検索します。テーブルやキーが存在しない、またはキーの型が一致しない場合は `undefined` を返します。
+[EMQX Mapping Tablesプラグイン](../extensions/plugin-catalog/6.3/emqx-maptabs.md)で管理されるマッピングテーブルの行を検索します。テーブルやキーが存在しない、またはキーの型が一致しない場合は `undefined` を返します。
 
 キーの比較は型変換なしの厳密な等価比較です。例えば整数キー `50` と文字列キー `'50'` は異なるキーです。
 
