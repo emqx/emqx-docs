@@ -15,7 +15,7 @@
   - 6 pre-existing business categories: `banned`, `rule_engine`, `resources`, `plugins`, `modules`, `others`. These categories apply to both API keys and Dashboard users.
   - 3 new categories that apply only to Dashboard users: `user_management` (manage other Dashboard accounts), `mfa_management` (manage other users' MFA), and `app_management` (manage API keys).
 
-  To narrow a Dashboard user's permissions, set a `scopes` array in the user's `tags` field. Users without an explicit `scopes` field keep the pre-upgrade behaviour:
+  To narrow a Dashboard user's permissions, set a `scopes` array in the user's `tags` field. Users without an explicit `scopes` field keep the pre-upgrade behavior:
 
   - Administrators may access all endpoints.
   - Viewers may access all read-only endpoints except backup-archive downloads.
@@ -76,7 +76,7 @@
 
 - Enhanced the global GC mechanism with memory-pressure-triggered global GC.
 
-  When system memory usage exceeds the high watermark (`os_mon.sysmem_high_watermark`) and periodic GC is disabled, a smooth global GC is triggered to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires. This behaviour is controlled by two configuration options:
+  When system memory usage exceeds the high watermark (`os_mon.sysmem_high_watermark`) and periodic GC is disabled, a smooth global GC is triggered to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires. This behavior is controlled by two configuration options:
 
   - `node.global_gc_mem_pressure` (default `on`): whether the memory-pressure-triggered global GC is enabled.
   - `node.global_gc_mem_pressure_min_interval` (default `15m`): the minimum interval between two memory-pressure-triggered global GCs, used for throttling.
