@@ -45,12 +45,36 @@ The `file://` convention works wherever the configuration schema uses the secret
 - **License**: `license.key` (the license string itself). See [License Configuration](../configuration/license.md).
 - **AI completion**: `ai.completion_profile.api_key`.
 
-If a particular field accepts `file://`, the field's Dashboard tooltip will say so explicitly.
+The Dashboard tooltips for these fields indicate that they support the `file://` format.
+
+## Load the Node Cookie from a File
+
+Starting from EMQX 6.3.0, `node.cookie` and its environment-variable override, `EMQX_NODE__COOKIE`, accept `file://`. This is an explicit exception to the default behavior of `string` fields.
+
+To avoid storing the node cookie in plain text in `emqx.conf`, set `node.cookie` to a file URL:
+
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
+```
+
+Alternatively, set `EMQX_NODE__COOKIE`:
+
+```bash
+export EMQX_NODE__COOKIE='file:///run/secrets/emqx-cookie'
+```
+
+The path can reference a regular file or a FIFO (named pipe). EMQX resolves the node cookie once during boot. Configuration reloads do not read the file or FIFO again.
+
+When you use a FIFO, the orchestrator must write the cookie to the FIFO on every boot before invoking any other `emqx` command, such as `emqx ctl`. Commands invoked after the node starts obtain the cookie from the running node instead of reading the FIFO again.
+
+The startup script removes trailing newline characters from the file content. The node fails to start if the referenced path does not exist, the file is empty, or the resolved cookie contains a backslash, single quote, double quote, or space.
+
+EMQX passes the resolved cookie directly to the Erlang VM without writing it to the generated `data/configs/vm.*.args` file. In clustered deployments, provision the file or FIFO on every node and ensure that each node reads the same cookie. For more information, see [Set Node Cookie](../deploy/cluster/security.md#set-node-cookie).
 
 ## Logging and Redaction
 
-EMQX redacts secret values from logs and HTTP API responses. When a secret is configured as a `file://...` URL, EMQX logs the path itself (not the file's content), so operators can still verify which file the node is reading. The secret value extracted from the file is never logged.
+EMQX redacts the values of secret-typed fields in logs and HTTP API responses. For a `file://` value, EMQX logs the file path but not its contents. The resolved secret value is never logged.
 
 ## When Not to Use `file://`
 
-If a configuration field is plain `string` (not a secret-typed field), prefixing the value with `file://` will be treated as a literal string, not as a file reference. Check the schema type for each field before assuming `file://` is supported.
+Except for explicitly documented fields such as `node.cookie`, a plain `string` field treats a `file://` value as a literal string, not as a file reference. Check the schema type and field documentation before assuming that `file://` is supported.

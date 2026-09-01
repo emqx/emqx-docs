@@ -223,7 +223,7 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 
 只有使用相同 Cookie 的 EMQX 节点才能组成一个集群。虽然 Cookie 并不能保证集群的通信安全，但它可以避免节点连接到它不打算与之通信的集群。EMQX 节点默认统一将 `emqxsecretcookie` 作为 Cookie，所以我们会推荐用户在搭建集群时更改 Cookie 的值。
 
-第二条 WARNING 日志则提示了修改 Cookie 的两种方式，分别为 `emqx.conf` 配置文件中的 `node.cookie`，和环境变量 `EMQX_NODE__COOKIE`。
+第二条警告列出了两种 Cookie 配置方式：在 `emqx.conf` 中设置 `node.cookie`，或设置 `EMQX_NODE__COOKIE`。从 EMQX 6.3.0 开始，两种配置都支持 `file://`，无需在配置文件或环境变量中直接写入 Cookie 值。更多信息，参见[从文件加载节点 Cookie](../configuration/secret-from-file.md#从文件加载节点-cookie)。
 
 ## 使用 Docker 部署 EMQX 时，为什么容器重启会丢失已经配置的规则、资源等数据？
 
