@@ -53,9 +53,9 @@ Configure the following settings for the console log output:
 
 - **Enable Log Output**: Click the toggle switch to enable the console log output.
 
-- **Log Level**: Select the log level to use from the drop-down list. The default value is `warning`.
+- **Log Level**: Select the minimum log level to record. Available values are `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, and `emergency`. The default value is `warning`.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `JSON`. The default value is `text`.
+- **Log Formatter**: Select the log format. Available values are `text` for free-form text and `json` for structured logs. The default value is `text`.
 
 - **Timestamp Format**: Select the format of the timestamp in the log. Optional values are:
   - `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.
@@ -63,7 +63,15 @@ Configure the following settings for the console log output:
   - `epoch`: Represents timestamps in microseconds precision Unix epoch format.
   - `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example, `2024-03-26T11:52:19.777087+00:00`.
 
-- **Time Offset**: Define the time offset relative to UTC in the log. By default, it follows the system, with a default value of `system`.
+- **Time Offset**: Set the time offset used to format log timestamps. Enter `system` to use the local system offset, `utc` to use UTC, or a fixed offset in the `+-[hh]:[mm]` format, such as `-02:00` or `+00:00`. The default value is `system`. This setting does not affect JSON logs because their timestamps use the Unix epoch format.
+
+- **Payload Encode**: Select how payload data is encoded in log entries. Available values are:
+
+  - `text`: Uses text encoding. This value is recommended for text-based protocols and JSON-encoded payloads.
+  - `hex`: Uses hexadecimal encoding. This value is recommended for custom binary protocols.
+  - `hidden`: Replaces the payload with `******`.
+
+  The default value is `text`.
 
 After you finish the configurations, click **Save Changes**.
 
@@ -77,15 +85,15 @@ Configure the following settings for the file log output:
 
 - **Enable Log Output**: Click the toggle switch to enable the file log output.
 
-- **Log File Name**: Type the name of the log file. The default name is `log/emqx.log`.
+- **Log File Name**: Enter the path and name of the log file. The default value is `${EMQX_LOG_DIR}/emqx.log`, where `${EMQX_LOG_DIR}` is the EMQX log directory.
 
 - **Max Log Files Number**: Specify the maximum number of rotated log files. The default value is `10`.
 
-- **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
+- **Rotation Size**: Set the maximum size of a log file before rotation. Enter a value and select `KB`, `MB`, or `GB`. The default value is `50 MB`. If you turn off the toggle, the value becomes `infinity`, and the log file grows without size-based rotation.
 
-- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`. Default value is: `warning`.
+- **Log Level**: Select the minimum log level to record. Available values are `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, and `emergency`. The default value is `warning`.
 
-- **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `JSON`. The default value is `text`.
+- **Log Formatter**: Select the log format. Available values are `text` for free-form text and `json` for structured logs. The default value is `text`.
 
 - **Timestamp Format**: Select the format of the timestamp in the log. Optional values are:
 
@@ -95,7 +103,15 @@ Configure the following settings for the file log output:
 
   - `rfc3339`: Uses RFC3339 compliant format for date-time strings. For example, `2024-03-26T11:52:19.777087+00:00`.
 
-- **Time Offset**: Define the time offset relative to UTC in the log. By default, it follows the system, with a default value of `system`.
+- **Time Offset**: Set the time offset used to format log timestamps. Enter `system` to use the local system offset, `utc` to use UTC, or a fixed offset in the `+-[hh]:[mm]` format, such as `-02:00` or `+00:00`. The default value is `system`. This setting does not affect JSON logs because their timestamps use the Unix epoch format.
+
+- **Payload Encode**: Select how payload data is encoded in log entries. Available values are:
+
+  - `text`: Uses text encoding. This value is recommended for text-based protocols and JSON-encoded payloads.
+  - `hex`: Uses hexadecimal encoding. This value is recommended for custom binary protocols.
+  - `hidden`: Replaces the payload with `******`.
+
+  The default value is `text`.
 
 After you finish the configurations, click **Save Changes**.
 
