@@ -349,6 +349,82 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 - 为避免性能下降，命令在扫描 ETS（Erlang Term Storage，Erlang 数据存储）表时会定期休眠（例如每处理 1000 条记录休眠 10 毫秒）。
 - 生成的 CSV 文件可用于离线分析、可视化展示或进一步的自动化处理。
 
+## session-top
+
+从 EMQX 6.3.0 开始，可以使用 `session-top` 命令识别保留 MQTT 消息载荷字节数最多或消息队列最长的会话。该命令读取集群中支持 `session-top` 的运行节点所缓存的会话统计数据，并将排名靠前的会话写入命令执行节点上的 CSV 文件。
+
+### 启动会话扫描
+
+运行以下命令启动扫描：
+
+```bash
+emqx ctl session-top --out <File> [--count <K>] [--sort <SortBy>] [--batch <Size>] [--sleep <Ms>]
+```
+
+以下示例导出保留 MQTT 消息载荷字节数最多的 20 个会话：
+
+```bash
+emqx ctl session-top --out /tmp/session-top.csv --count 20 --sort total_payload_bytes
+```
+
+| 选项 | 描述 | 默认值 |
+| --- | --- | --- |
+| `--out <File>` | CSV 输出文件路径。该选项为必填项，且指定文件不能已存在。 | 无 |
+| `--count <K>` | 最多导出的会话数。取值范围为 `1` 到 `1000`。 | `10` |
+| `--sort <SortBy>` | 会话排序字段。支持 `total_payload_bytes` 和 `mqueue_length`。 | `total_payload_bytes` |
+| `--batch <Size>` | 每个本地扫描批次处理的缓存会话记录数。取值必须为正整数。 | `1000` |
+| `--sleep <Ms>` | 本地扫描批次之间的延迟，单位为毫秒。取值必须为非负整数。 | `1` |
+
+扫描以异步方式运行。可以使用 `emqx ctl session-top status` 查看扫描进度和完成状态。
+
+滚动升级期间，不支持 `session-top` 的 EMQX 节点不会参与扫描。
+
+每个节点同一时间只能发起一个扫描任务。每个参与节点同一时间也只接受一个本地扫描任务。EMQX 在各参与节点上分批扫描，以降低扫描对运行中集群的影响。
+
+CSV 文件包含以下列：
+
+```text
+clientid,node,mqueue_length,total_payload_bytes,inflight_count
+```
+
+- `clientid`：MQTT 客户端 ID。
+- `node`：会话所在的 EMQX 节点。
+- `mqueue_length`：会话消息队列中的消息数。
+- `total_payload_bytes`：内存会话的消息队列和飞行窗口中保留的 MQTT 消息载荷总字节数。该值不包括主题、消息头、MQTT 属性和 Erlang 内部记录开销。持久会话的缓冲状态不保存在这些内存结构中，因此该字段返回 `0`。
+- `inflight_count`：会话飞行窗口中的消息数。
+
+命令从缓存的会话统计数据中读取这些值。扫描期间，这些值可能发生变化。
+
+如果远程节点正在执行其他扫描任务、启动扫描失败或返回扫描错误，状态输出会在 `Bad replies` 中列出该节点。CSV 文件仅包含完成扫描的节点所返回的结果。
+
+如果远程节点接受扫描后未返回结果，任务会一直处于 `running` 状态，且 EMQX 不会写入 CSV 文件。请检查任务状态，并根据需要取消扫描。
+
+如需在内存会话保留的消息载荷字节数超过阈值时记录经过限流的 warning 级别日志，请将 `sysmon.session.total_payload_bytes_high_watermark` 设置为大于 `0` 的值。默认值 `0` 表示禁用该日志。该日志仅用于诊断，不会限制缓冲的消息载荷字节数，也不会改变消息投递、消息队列淘汰、飞行窗口处理逻辑或会话接管行为。配置详情参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+
+### 查看扫描状态
+
+在发起扫描的节点上，运行以下命令查看正在运行的扫描或最近一次已结束的扫描：
+
+```bash
+emqx ctl session-top status
+```
+
+最近一次已结束扫描的状态会一直保留到下一次扫描开始。
+
+扫描状态仅保存在发起节点上。即使其他节点发起的扫描仍在运行，在当前节点执行该命令也可能返回 `idle`。
+
+### 取消会话扫描
+
+在发起扫描的节点上，运行以下命令取消正在运行的扫描：
+
+```bash
+emqx ctl session-top cancel
+```
+
+集群中的扫描取消操作采用尽力而为机制。节点可能在收到取消请求前已经完成本地扫描。
+
+在其他节点上运行 `cancel` 不会取消该扫描，并会报告没有正在运行的 `session-top` 扫描。
+
 ## topics
 
 该命令用于查看当前系统中所有订阅的主题。

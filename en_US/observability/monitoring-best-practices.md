@@ -88,7 +88,7 @@ Preventive alerts should detect a deteriorating condition while the cluster is s
 
 - **Early-warning condition:** Memory remains above the warning threshold or is growing toward the host or container limit.
 - **Relevant signals:** `emqx_vm_used_memory`, `emqx_vm_total_memory`, host or container memory, and EMQX memory alarms.
-- **Suggested actions:** Inspect connection, session, queue, and integration growth. Add capacity or reduce the source of growth before the operating system terminates the process. EMQX's built-in system-memory alarm defaults to 70%.
+- **Suggested actions:** Inspect connection, session, queue, and integration growth. Starting from EMQX 6.3.0, use [`emqx ctl session-top`](../admin/cli.md#session-top) to identify sessions that retain the most MQTT payload bytes or have the longest message queues. Add capacity or reduce the source of growth before the operating system terminates the process. EMQX's built-in system-memory alarm defaults to 70%.
 
 **Overload-protection activity**
 
@@ -159,6 +159,7 @@ Use the following events and guidance to define log-based alert rules:
 | Mria lag observation failed | `prometheus_mria_shard_lag_refresh_exception` | Alert if it occurs repeatedly. The exporter caches Mria lag; if a refresh times out, the previous value can continue to be exported and appear stable. |
 | Erlang VM or inter-node communication pressure | `busy_dist_port`, `long_schedule`, `long_gc`, and Mnesia overload messages | Alert on a sustained rate or repeated events and correlate them with Mria queues, CPU, and latency. These events can precede client-visible degradation. |
 | Mria replication or topology failure | `gap_in_the_tlog` and `mria_lb_split_brain` | Notify the responsible operator immediately. Capture the node, shard, agent, expected sequence number, and actual sequence number from the structured fields. |
+| Session buffer payload pressure | `session_buffer_high_watermark` | Investigate every warning. If the threshold represents an actionable per-session risk, configure an alert. Raise the alert priority when warnings occur for multiple clients or correlate with increased memory use or `busy_dist_port`. Capture `clientid`, `mqueue_length`, `inflight_count`, `total_payload_bytes`, and `total_payload_bytes_high_watermark`, and use [`emqx ctl session-top`](../admin/cli.md#session-top) to identify the sessions retaining the most payload bytes. |
 | Buffering or message-queue pressure | `data_bridge_buffer_overflow`, `unrecoverable_resource_error`, and `dropped_msg_due_to_mqueue_is_full` | Alert when these events are unexpected or exceed the application's accepted loss rate. Correlate them with action and message-drop counters. |
 | Configuration synchronization failure | `sync_data_from_node_failed` and `cluster_rpc_apply_failed` | Alert immediately when a configuration change or node startup is in progress; verify that all nodes have converged on the intended configuration. |
 

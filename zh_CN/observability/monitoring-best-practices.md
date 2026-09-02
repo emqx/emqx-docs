@@ -88,7 +88,7 @@
 
 - **预警条件：**内存持续高于 warning 阈值，或者持续增长并接近主机或容器限制。
 - **相关信号：**`emqx_vm_used_memory`、`emqx_vm_total_memory`、主机或容器内存和 EMQX 内存告警。
-- **建议措施：**检查连接、会话、队列和集成的增长情况。在操作系统终止进程之前，增加容量或消除增长来源。EMQX 内置系统内存告警的默认阈值为 70%。
+- **建议措施：**检查连接、会话、队列和集成的增长情况。从 EMQX 6.3.0 开始，可以使用 [`emqx ctl session-top`](../admin/cli.md#session-top) 识别保留 MQTT 消息载荷字节数最多或消息队列最长的会话。在操作系统终止进程之前，增加容量或消除增长来源。EMQX 内置系统内存告警的默认阈值为 70%。
 
 **过载保护活动**
 
@@ -159,6 +159,7 @@
 | Mria 复制延迟指标采集失败 | `prometheus_mria_shard_lag_refresh_exception` | 重复发生时触发告警。导出器会缓存 Mria 延迟；刷新超时后，导出器可能继续导出之前的值，使其看起来保持稳定。 |
 | Erlang VM 或节点间通信压力 | `busy_dist_port`、`long_schedule`、`long_gc` 和 Mnesia 过载消息 | 根据持续发生率或重复事件触发告警，并结合 Mria 队列、CPU 和时延进行分析。这些事件可能先于客户端可感知的性能下降出现。 |
 | Mria 复制或拓扑故障 | `gap_in_the_tlog` 和 `mria_lb_split_brain` | 立即通知负责的运维人员。从结构化字段中获取节点、分片、agent、预期序列号和实际序列号。 |
+| 会话缓冲区 Payload 压力 | `session_buffer_high_watermark` | 调查每条 warning。如果该阈值表示需要采取措施的单会话风险，请配置告警。当多个客户端出现该 warning，或该 warning 与内存用量增长、`busy_dist_port` 同时出现时，提高告警优先级。记录 `clientid`、`mqueue_length`、`inflight_count`、`total_payload_bytes` 和 `total_payload_bytes_high_watermark`，并使用 [`emqx ctl session-top`](../admin/cli.md#session-top) 识别保留消息载荷字节数最多的会话。 |
 | 缓冲或消息队列压力 | `data_bridge_buffer_overflow`、`unrecoverable_resource_error` 和 `dropped_msg_due_to_mqueue_is_full` | 当这些事件并非预期行为或超过应用可接受的消息丢失率时触发告警，并结合动作和消息丢弃计数器进行分析。 |
 | 配置同步失败 | `sync_data_from_node_failed` 和 `cluster_rpc_apply_failed` | 在更改配置或启动节点期间发生时立即触发告警，并验证所有节点是否已收敛到预期配置。 |
 

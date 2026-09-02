@@ -353,6 +353,82 @@ Descriptions of each field:
 - To avoid performance degradation, it throttles Erlang Term Storage (ETS) scans by sleeping periodically (e.g., 10ms every 1000 records).
 - The resulting CSV can be used for offline analysis, visualizations, or further automated processing.
 
+## session-top
+
+Starting from EMQX 6.3.0, use the `session-top` command to identify sessions that retain the most MQTT payload bytes or have the longest message queues. The command reads cached session statistics from running cluster nodes that support `session-top` and writes the top sessions to a CSV file on the node where you run the command.
+
+### Start a Session Scan
+
+Run the following command to start a scan:
+
+```bash
+emqx ctl session-top --out <File> [--count <K>] [--sort <SortBy>] [--batch <Size>] [--sleep <Ms>]
+```
+
+The following example exports the 20 sessions with the most retained MQTT payload bytes:
+
+```bash
+emqx ctl session-top --out /tmp/session-top.csv --count 20 --sort total_payload_bytes
+```
+
+| Option | Description | Default |
+| --- | --- | --- |
+| `--out <File>` | Path of the CSV output file. This option is required, and the file must not already exist. | No default |
+| `--count <K>` | Maximum number of sessions to export. The value must be from `1` to `1000`. | `10` |
+| `--sort <SortBy>` | Field used to rank sessions. Supported values are `total_payload_bytes` and `mqueue_length`. | `total_payload_bytes` |
+| `--batch <Size>` | Number of cached session records processed in each local scan batch. The value must be a positive integer. | `1000` |
+| `--sleep <Ms>` | Delay in milliseconds between local scan batches. The value must be a non-negative integer. | `1` |
+
+The scan runs asynchronously. Use `emqx ctl session-top status` to check its progress and completion status.
+
+During a rolling upgrade, nodes running EMQX versions that do not support `session-top` are excluded from the scan.
+
+Only one scan can be initiated from a node at a time. Each participating node also accepts only one local scan at a time. EMQX scans each participating node in batches to reduce the effect on the running cluster.
+
+The CSV file contains the following columns:
+
+```text
+clientid,node,mqueue_length,total_payload_bytes,inflight_count
+```
+
+- `clientid`: MQTT client ID.
+- `node`: EMQX node that owns the session.
+- `mqueue_length`: Number of messages in the session message queue.
+- `total_payload_bytes`: Total MQTT payload bytes retained by the in-memory session message queue and inflight window. This value excludes topics, headers, MQTT properties, and internal Erlang record overhead. Durable sessions report `0` because their buffered state is not held in these in-memory structures.
+- `inflight_count`: Number of messages in the session inflight window.
+
+The command reads these values from cached session statistics. The values can change during the scan.
+
+If a remote node is already scanning, fails to start, or reports a scan error, the status output lists the node under `Bad replies`. The CSV contains results only from nodes that completed the scan.
+
+If a remote node accepts the scan but does not return a result, the task remains in the `running` state, and EMQX does not write the CSV file. Check the task status and cancel the scan if necessary.
+
+To log a throttled warning when an in-memory session's retained payload bytes exceed a threshold, set `sysmon.session.total_payload_bytes_high_watermark` to a value greater than `0`. The default value `0` disables the warning. The warning is for diagnosis only and does not limit buffered payload bytes or change message delivery, message queue eviction, inflight handling, or session takeover behavior. For configuration details, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+### Check the Scan Status
+
+On the node that initiated the scan, run the following command to show the running scan or the latest finished scan:
+
+```bash
+emqx ctl session-top status
+```
+
+The latest finished status is retained until the next scan starts.
+
+The status is local to the initiating node. Running the command on another node can return `idle` even when a scan initiated elsewhere is running.
+
+### Cancel a Session Scan
+
+On the node that initiated the scan, run the following command to cancel the running scan:
+
+```bash
+emqx ctl session-top cancel
+```
+
+Cancellation is best-effort across the cluster. A node might finish its local scan before it receives the cancellation request.
+
+Running `cancel` on another node does not cancel a scan initiated elsewhere and reports that no `session-top` scan is running.
+
 ## topics
 
 This command is to view all subscribed topics in current system.
