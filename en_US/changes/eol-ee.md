@@ -149,7 +149,8 @@ The following table outlines release dates, support types, lifecycles, and estim
 | **5.10** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 |  |
 | **6.0** | 2025-09-30 | Major Release | 18 months | 2027-03-30 |  |
 | **6.1** | 2025-12-30 | Feature Release | 18 months | 2027-06-30 |  |
-| **6.2** | 2026-03-31 | Feature Release | 18 months | 2027-09-30 | Latest Feature Release |
+| **6.2** | 2026-03-31 | Feature Release | 18 months | 2027-09-30 |  |
+| **6.3** | 2026-09-03 | Feature Release | 18 months | 2028-03-02 | Latest Feature Release |
 
 ## Upgrade Path Recommendations
 
