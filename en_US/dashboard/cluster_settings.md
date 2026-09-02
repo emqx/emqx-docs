@@ -183,7 +183,7 @@ Modifying and deleting listeners is a risky operation and should be done careful
 
 The **Logging** page includes tabs for **Console Log**, **File Log**, **Log Throttling**, and **Audit Log**.
 
-EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log handler, set the log level, log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
+EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log output, set the log level and log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
 
 In the **Log Throttling** tab page, you can configure the time window for log throttling. For more information on log throttling, refer to [Log Rate Limiting](../observability/log.md#log-throttling).
 

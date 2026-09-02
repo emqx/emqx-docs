@@ -670,7 +670,7 @@ disc_only_copies   = []
 
 ## log
 
-ログハンドラの状態管理（ログレベル設定など）に使用します。
+ログレベルおよび設定済みのログ出力を管理するためのコマンドです。
 
 ### log set-level \<Level\>
 
@@ -683,7 +683,7 @@ debug
 
 ### log primary-level
 
-現在のプライマリログレベルを表示します。`primary-level`はEMQXのデフォルトログレベルを示し、特定のログハンドラが独自のレベルを持たない限り全体に影響します。
+現在のプライマリログレベルを表示します。`primary-level` は EMQX のプライマリログレベルを表し、システム全体のデフォルトログレベルを指定します。`primary-level` の設定は、独自のログレベルが設定されたログ出力を除く、すべてのログ出力に影響します。
 
 ```bash
 $ emqx ctl log primary-level
@@ -699,41 +699,41 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
-ログハンドラの一覧を表示します。ログハンドラは独自のログレベルを持ち、ログの処理・保存方法を定義します。
+設定済みのログ出力を表示します。`outputs` には、コンソール出力 `console`、デフォルトのファイル出力 `file`、および設定済みの名前付きファイル出力が含まれます。各ログ出力には、独自のログレベル、出力先、およびステータスを設定できます。
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
-特定のハンドラを起動します。
+指定したログ出力を有効にします。`<name>` には、`console`、`file`、または設定済みの名前付きファイル出力を指定できます。
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
-特定のハンドラを停止します。
+指定したログ出力を無効にします。`<name>` には、`console`、`file`、または設定済みの名前付きファイル出力を指定できます。
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log outputs set-level \<name\> \<Level\>
 
-特定のハンドラのログレベルを設定します。
+指定したログ出力のログレベルを設定します。`<name>` には、`console`、`file`、または設定済みの名前付きファイル出力を指定できます。
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace
