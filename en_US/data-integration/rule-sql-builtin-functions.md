@@ -955,7 +955,7 @@ This function is available starting from EMQX 6.1.5. It is available only after 
 
 :::
 
-Looks up a row in a mapping table managed by the [EMQX Mapping Tables Plugin](../extensions/plugin-catalog/6.1/emqx-maptabs.md). It returns the row's value map, or `undefined` when the table does not exist, the key does not exist, or the key type does not match.
+Looks up a row in a mapping table managed by the [EMQX Mapping Tables Plugin](../extensions/plugin-catalog/6.3/emqx-maptabs.md). It returns the row's value map, or `undefined` when the table does not exist, the key does not exist, or the key type does not match.
 
 Key matching uses exact term equality without type conversion. For example, the integer key `50` and the string key `'50'` are different keys.
 

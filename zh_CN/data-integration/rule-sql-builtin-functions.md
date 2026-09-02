@@ -955,7 +955,7 @@ map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 
 :::
 
-在 [EMQX Mapping Tables 插件](../extensions/plugin-catalog/6.1/emqx-maptabs.md)管理的 mapping table 中查找一行数据。查找成功时返回该行的值映射；如果表不存在、Key 不存在或 Key 类型不匹配，则返回 `undefined`。
+在 [EMQX Mapping Tables 插件](../extensions/plugin-catalog/6.3/emqx-maptabs.md)管理的 mapping table 中查找一行数据。查找成功时返回该行的值映射；如果表不存在、Key 不存在或 Key 类型不匹配，则返回 `undefined`。
 
 Key 使用精确值匹配，不进行类型转换。例如，整数 Key `50` 和字符串 Key `'50'` 是不同的 Key。
 
