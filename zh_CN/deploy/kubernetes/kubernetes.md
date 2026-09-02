@@ -31,7 +31,7 @@ Operator 由 EMQX 官方团队开发和维护，专为在 Kubernetes 中原生�
 
 EMQX Helm chart 提供了一种灵活且简洁的方式，通过 Kubernetes 生态中最流行的包管理工具 Helm 来部署 EMQX。此方式非常适合快速评估、开发/测试环境，或偏好直接管理 Kubernetes 资源的用户和团队。
 
-该 Helm chart 由 EMQX 官方团队维护，封装了部署所需的全部 Kubernetes 对象，用户可通过配置 `values.yaml` 文件定义部署参数，实现可重复和可定制的部署，而无需手动编写 YAML 文件。
+该 Helm chart 由 EMQX 官方团队维护，封装了部署所需的全部 Kubernetes 对象，用户可通过配置 `values.yaml` 文件定义部署参数，实现可重复和可定制的部署，而无需手动编写 YAML 文件。如果使用兼容的 Gateway API 控制器，Helm Chart 还可以通过 `HTTPRoute` 和 `TLSRoute` 资源暴露 EMQX Dashboard、MQTT over WebSocket、MQTTS 和 WSS 服务。
 
 [查看 Helm Chart 部署指南](./chart.md)
 

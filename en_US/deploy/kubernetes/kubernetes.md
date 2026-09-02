@@ -31,7 +31,7 @@ Developed and maintained by the EMQX team, the Operator is purpose-built to help
 
 The EMQX Helm chart offers a flexible and streamlined approach to deploying EMQX on Kubernetes using Helm, the most widely used package manager in the Kubernetes ecosystem. This method is ideal for quick evaluations, development or testing environments, and for teams that prefer direct control over Kubernetes resources.
 
-Maintained by the EMQX team, the Helm chart packages all necessary Kubernetes objects into a reusable and configurable chart. Users can define deployment parameters in a `values.yaml` file, enabling repeatable and customizable EMQX installations without writing raw YAML manifests.
+Maintained by the EMQX team, the Helm chart packages all necessary Kubernetes objects into a reusable and configurable chart. Users can define deployment parameters in a `values.yaml` file, enabling repeatable and customizable EMQX installations without writing raw YAML manifests. With a compatible Gateway API controller, the chart can also expose the EMQX Dashboard, MQTT over WebSocket, MQTTS, and WSS through `HTTPRoute` and `TLSRoute` resources.
 
 [View the Deployment Guide for Helm Chart](./chart.md)
 
