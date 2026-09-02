@@ -26,14 +26,6 @@ The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows use
 
 See: [Extension Hook](./exhook.md).
 
-<!-- ### Extension Protocol -->
-
-<!-- The **Extension Protocol** is supported by the **emqx-exproto** plugin. It allows users to implement their private access protocol using other programming languages. In the `emqx-exproto`, you can: -->
-
-<!-- - Establish a connection based on TCP/SSL/UDP/DTLS -->
-<!-- - Subscribe a topic to receive messages and deliver it to your client -->
-<!-- - Parse bytes and publish it to EMQX -->
-
 
 <!-- ### Legacy solutions -->
 

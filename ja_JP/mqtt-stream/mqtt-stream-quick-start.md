@@ -1,232 +1,309 @@
-# MQTT Streams Quick Start
+# MQTT Streams クイックスタート
 
-This page walks you through how to use the MQTT Streams feature in EMQX 6.1. You’ll use MQTTX to simulate clients, create and manage streams from the EMQX Dashboard, and experience how messages can be stored, replayed, and compacted.
+このページでは、EMQX 6.1 の MQTT Streams 機能の使い方を説明します。MQTTX を使ってクライアントをシミュレートし、EMQX ダッシュボードからストリームを作成・管理し、メッセージの保存、再生、圧縮の動作を体験します。
 
-## Objectives
+## 目的
 
-This quick start demonstrates how EMQX MQTT Streams can:
+このクイックスタートでは、EMQX MQTT Streams が以下を実現できることを示します。
 
-- Persist messages independently of subscriber availability
-- Support timestamp-based replay
-- Enable Last-Value semantics for state-oriented messaging
+- サブスクライバーの有無に関わらずメッセージを永続化する
+- タイムスタンプに基づく再生をサポートする
+- 状態指向のメッセージングに適した Last-Value セマンティクスを有効にする
+- `$stream/` プレフィックスのサブスクライブによりストリームを自動作成する
 
-## Prerequisites
+## 前提条件
 
-Before starting, ensure you have:
+開始前に以下を準備してください。
 
-- EMQX 6.1+ running
-- [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
-- Access to the EMQX Dashboard (default: `http://localhost:18083`)
+- EMQX 6.1 以上が稼働していること
+- [MQTTX](https://mqttx.app/)（または MQTT 5.0 対応のクライアント）
+- EMQX ダッシュボードへのアクセス（デフォルト：`http://localhost:18083`）
 
-## Test MQTT Streams Basic Features (Regular Stream)
+## MQTT Streams の基本機能を試す（レギュラーストリーム）
 
-This section demonstrates how MQTT Streams stores messages and allows consumers to replay historical data.
+このセクションでは、MQTT Streams がメッセージを保存し、コンシューマーが過去のデータを再生できることを示します。
 
-### Prerequisite
+### 前提条件
 
-Before starting, ensure that the MQTT Streams feature is enabled and that the auto-creation behavior will not interfere with this example.
+開始前に、MQTT Streams 機能が有効であり、自動作成の設定が本例に影響しないことを確認してください。
 
-1. Go to **Message Stream** in the left menu.
+1. 左メニューの **Streams** に移動します。
 
-2. If Message Stream is disabled, click **Settings**. You will be redirected to the **Management** -> **MQTT Settings** -> **Message Stream** page.
+2. Message Stream が無効の場合は、**Settings** をクリックします。**Management** -> **MQTT Settings** -> **Streams** ページにリダイレクトされます。
 
-3. Toggle the **Enable Message Stream** switch on.
+3. **Enable Streams** スイッチをオンにします。
 
-4. Verify the auto-create settings to ensure a **regular Message Stream** is used:
+4. 自動作成設定を確認し、**Regular Stream** が使用されるようにします。
 
-   - **Enable Auto Create Message Stream** is disabled, or
+   - **Enable Auto Create Streams** が無効、または
 
-   - **Auto Create Message Stream Type** is set to **Regular Message Stream**
+   - **Auto Create Stream Type** が **Regular Stream** に設定されていること。
 
-   > This prevents the stream from being auto-created as a Last-Value Message Stream, which would retain only the most recent message per key.
+   > これにより、ストリームが Last-Value Stream として自動作成されず、キーごとに最新のメッセージのみを保持する動作を防ぎます。
 
-4. If you make any changes, click **Save Changes** to apply them.
+4. 変更した場合は、**Save Changes** をクリックして適用します。
 
-   <img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
+   <img src="./assets/message_stream_settings.png" alt="メッセージストリーム設定" style="zoom:67%;" />
 
-### Step 1: Create an MQTT Stream
+### ステップ 1: 名前付きストリームを作成する
 
-1. Navigate to **Message Stream** in the left menu.
+1. 左メニューの **Streams** に移動します。
 
-2. Click **Create Stream** on the page, or click **Create** in the upper-right corner.
+2. ページ内の **Create Stream** をクリックするか、右上の **Create** をクリックします。
 
-3. In the **Create Message Stream** dialog, configure the following settings:
+3. **Create Stream** ダイアログで以下を設定します。
+
+   - **Name**: `my_stream`
    - **Topic Filter**: `demo/stream`
-   - **Data Retention Period**: `1` day
-   - **Last-Value Semantics**: Disabled
+   - **Last-Value Semantics**: 無効
    - **Stream Key Expression**: `message.from`
 
-4. Click **Create**.
+   その他のオプションはデフォルトのままにします。
+
+4. **Create** をクリックします。
 
    ![create_message_stream](./assets/create_message_stream.png)
 
-### Step 2: Publish Messages
+### ステップ 2: メッセージをパブリッシュする
 
-Use MQTTX to simulate a client acting as a **publisher**:
+MQTTX CLI を使ってパブリッシャークライアントをシミュレートします。
 
-1. Open MQTTX and create a client (for example, `publisher`).
+1. MQTTX CLI がインストールされていることを確認します。詳細は [インストール](https://mqttx.app/docs/cli/downloading-and-installation) を参照してください。
 
-2. Connect to EMQX (`mqtt://localhost:1883`).
+2. EMQX に接続します。
 
-3. Publish several messages to the topic `demo/stream` with QoS 1.
-
-   Examples:
-
-   ```
-   Topic: demo/stream
-   QoS: 1
-   Payload: {"value": 1}
-   Payload: {"value": 2}
-   Payload: {"value": 3}
+   ```bash
+   mqttx conn -h 'localhost' -p 1883
    ```
 
-Since this is a regular stream, **all messages are stored** in the stream.
+3. QoS 1 でトピック `demo/stream` に複数のメッセージをパブリッシュします。
 
-### Step 3: Replay All Messages from the Stream
+   例:
 
-Now simulate a **consumer** that replays stored messages.
-
-1. Open a second MQTTX client (for example, `consumer`).
-
-2. Connect to EMQX.
-
-3. Subscribe to the stream topic using the earliest timestamp:
-
-   ```
-   Topic: $s/0/demo/stream
-   QoS: 1
+   ```bash
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 1}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 2}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 3}'
    ```
 
-   ![subscribe_to_stream_topic](./assets/subscribe_to_stream_topic.png)
+   期待される出力:
 
-**Expected Behavior**:
- You should receive all previously published messages, in publish order:
+   ```bash
+   ✔ Connected
+   ✔ Message published
+   ```
 
+このストリームはレギュラーストリームなので、すべてのパブリッシュされたメッセージは保持ポリシーに従ってストリームに保存されます。
+
+### ステップ 3: ストリームからすべてのメッセージを再生する
+
+MQTTX CLI を使い、MQTT 5 のサブスクリプションユーザープロパティ `stream-offset` を設定してストリームの先頭からメッセージを再生します。
+
+```bash
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 0"
 ```
+
+**期待される動作**:
+
+これまでにパブリッシュされたすべてのメッセージがパブリッシュ順に受信されます。
+
+```bash
+topic: demo/stream, qos: 0, size: 10B, userProperties: [
+  { key: 'key', value: 'mqttx_28c50267' },
+  { key: 'ts', value: '1772161077594532' }
+]
 {"value": 1}
+
+topic: demo/stream, qos: 0, size: 10B, userProperties: [
+  { key: 'key', value: 'mqttx_1989d120' },
+  { key: 'ts', value: '1772161084921509' }
+]
 {"value": 2}
+
+topic: demo/stream, qos: 0, size: 10B, userProperties: [
+  { key: 'key', value: 'mqttx_085ea00d' },
+  { key: 'ts', value: '1772161094020511' }
+]
 {"value": 3}
 ```
 
-This confirms that:
+これにより以下が確認できます。
 
-- The stream is a regular stream.
-- Timestamp-based replay is working correctly.
-- No messages were compacted or overwritten.
+- ストリームはレギュラーストリームである
+- `stream-offset` サブスクリプションプロパティが正しく機能している
+- メッセージは圧縮や上書きされていない
 
-![replay_messages](./assets/replay_messages.png)
+## 異なる位置からメッセージを再生する
 
-## Replay Messages from Different Positions
+MQTT Streams では、サブスクライバーが `stream-offset` の値を指定して再生開始位置を制御できます。
 
-MQTT Streams allow consumers to control where message replay starts by specifying a timestamp when subscribing.
+ここでは、特定の時点以降にパブリッシュされたメッセージのみを再生する例を示します。
 
-1. Publish additional messages from the `publisher` client:
+### ステップ 1: 現在のタイムスタンプを取得する
 
-   ```
-   {"value": 4}
-   {"value": 5}
-   ```
+新しいメッセージをパブリッシュする前に、現在の Unix タイムスタンプ（マイクロ秒単位）を記録します。
 
-2. In a new MQTTX client, subscribe to the stream using a later timestamp:
+ミリ秒単位の現在時刻は以下で取得可能です。
 
-   ```
-   Topic: $s/1766477011000/demo/stream
-   QoS: 1
-   ```
+- **Linux / macOS**:
 
-   In this example, `1766477011000` is a Unix timestamp in milliseconds. Only messages published **at or after** this time are delivered to the subscriber.
+  ```bash
+  date +%s000
+  ```
 
-   ::: tip
+- **JavaScript**:
 
-   - The timestamp must be a Unix timestamp in milliseconds.
-   - Use `0` to replay from the earliest available message.
-   - Use a later timestamp to replay only newer messages.
+  ```javascript
+  Date.now()
+  ```
 
-   You can obtain the current timestamp in milliseconds using:
+例:
 
-   - **Linux / macOS**:
+```
+1772162409000
+```
 
-     ```
-     date +%s000
-     ```
+この値に 1000 を掛けてマイクロ秒単位に変換し、保存します。これが再生開始位置になります。
 
-   - **JavaScript**:
+### ステップ 2: 新しいメッセージをパブリッシュする
 
-     ```
-     Date.now()
-     ```
+ストリームにさらにメッセージをパブリッシュします。
 
-   :::
+```bash
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 4}'
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 5}'
+```
 
-3. Click **Confirm**. Only messages published at or after the specified timestamp are delivered.
+### ステップ 3: 記録したタイムスタンプから再生する
 
-   ![replay_message_from_different_positions](./assets/replay_message_from_different_positions.png)
+保存したタイムスタンプを `stream-offset` として指定してストリームにサブスクライブします。
 
-This demonstrates consumer-controlled replay, where different consumers can independently read the same stream from different points in time without affecting each other.
+```bash
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 1772162409000000"
+```
 
-## Test Last-Value Semantics
+**期待される動作**:
 
-This section demonstrates how Last-Value MQTT streams keep only the latest message per key, which is useful for representing state.
+この時刻以降にパブリッシュされたメッセージのみが配信されます。
 
-### Step 1: Delete the Existing Stream
+```bash
+topic: demo/stream, qos: 1, size: 12B, userProperties: [
+  { key: 'key', value: 'mqttx_a5508c54' },
+  { key: 'ts', value: '1772163340159513' }
+]
+{"value": 4}
 
-1. Navigate to **Message Stream** in the Dashboard.
-2. Locate the stream with the topic filter `demo/stream`.
-3. Click **Delete** and confirm.
+topic: demo/stream, qos: 1, size: 12B, userProperties: [
+  { key: 'key', value: 'mqttx_e0848366' },
+  { key: 'ts', value: '1772163350666523' }
+]
+{"value": 5}
+```
 
-### Step 2: Create a Last-Value Message Stream
+異なるコンシューマーは同じストリームを別々の位置から再生できます。
 
-1. Click **Create** on the **Message Stream** page.
-2. Configure the following settings:
+- あるコンシューマーは先頭（`earliest`）から再生
+- 別のコンシューマーは特定のタイムスタンプから再生
+- さらに別のコンシューマーは新しいメッセージのみ（`latest`）を受信
+
+各コンシューマーの再生位置は独立しており、他のサブスクライバーに影響を与えません。
+
+これにより、MQTT Streams のコンシューマー制御型再生が実証されます。
+
+## Last-Value セマンティクスを試す
+
+このセクションでは、Last-Value MQTT Streams がキーごとに最新のメッセージのみを保持し、状態を表現するのに適していることを示します。
+
+### ステップ 1: 既存のストリームを削除する
+
+1. ダッシュボードの **Streams** に移動します。
+2. `my_stream` を探します。
+3. **Delete** をクリックし、確認します。
+
+### ステップ 2: Last-Value メッセージストリームを作成する
+
+1. **Streams** ページで **Create** をクリックします。
+2. 以下を設定します。
+
+   - **Name**: `device_stream`
    - **Topic Filter**: `device/state`
-   - **Data Retention Period**: `1` day
-   - **Last-Value Semantics**: Enabled
+   - **Data Retention Period**: `7` 日
+   - **Last-Value Semantics**: 有効
    - **Stream Key Expression**: `message.from`
-3. Click **Create**.
 
-The stream is now configured to retain only the latest message in streams with the same key.
+3. **Create** をクリックします。
 
-### Step 3: Publish State Updates
+キー式が `message.from` のため、同じキーのストリームでは最新のメッセージのみが保持されます。
 
-1. In MQTTX, use a client with ID `device-1`.
+### ステップ 3: 状態更新をパブリッシュする
 
-2. Publish messages to `device/state`:
+同じクライアント ID `-i device-1` からメッセージをパブリッシュします。
 
-   ```
-   Topic: device/state
-   QoS: 1
-   Payload: {"status": online}
-   ```
+```bash
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "online"}'
 
-3. Publish another message from the same client:
-
-   ```json
-   {"status": offline}
-   ```
-
-Because the **Stream Key Expression** is `message.from`, both messages share the same key. The second message overwrites the first.
-
-### Step 4: Subscribe to the Stream
-
-1. Open a new MQTTX client (for example, `monitor`).
-
-2. Subscribe to the stream topic:
-
-   ```
-   Topic: $s/0/device/state
-   QoS: 1
-   ```
-
-   ![stream_topic_last_value](./assets/stream_topic_last_value.png)
-
-**Expected Behavior**:
-
-Only the most recent message is delivered:
-
-```
-{"status": offline}
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
 ```
 
-This demonstrates how MQTT Streams support state-oriented messaging patterns using Last-Value semantics.
+ストリームキー式がメッセージメタデータのクライアント ID を抽出してキーとしているため、両メッセージは同じキーを持ち、2つ目のメッセージが1つ目を上書きします。
 
-![replay_message_last_value](./assets/replay_message_last_value.png)
+### ステップ 4: ストリームにサブスクライブする
+
+ストリームにサブスクライブし、先頭から再生します。
+
+```bash
+mqttx sub -t '$stream/device_stream' -h 'localhost' -p 1883 -q 1 -up "stream-offset: 0"
+```
+
+**期待される動作**:
+
+最新のメッセージのみが配信されます。
+
+```bash
+topic: device/state, qos: 1, size: 21B, userProperties: [
+  { key: 'key', value: 'device-1' },
+  { key: 'ts', value: '1772173666097076' }
+]
+{"status": "offline"}
+```
+
+これにより、MQTT Streams が Last-Value セマンティクスを用いた状態指向メッセージングをサポートしていることが示されます。
+
+## ストリームの自動作成
+
+EMQX の MQTT Streams は、クライアントが `$stream/` プレフィックス付きトピックにサブスクライブするとストリームを自動作成できます。これにより、ダッシュボードで手動作成せずに動的にストリームをプロビジョニング可能です。
+
+このセクションでは、自動作成を有効にして動作を確認します。
+
+1. ダッシュボードの **Management** -> **MQTT Settings** -> **Streams** に移動します。
+
+2. **Enable Auto Create Streams** がオンになっていることを確認します。
+
+3. ストリームタイプを選択します。
+
+   - **Regular Stream**
+   - **Last-Value Stream**
+
+   > 自動作成で有効にできるのは一度に1種類のみです。
+
+4. その他のオプションはデフォルトのままにします。
+
+5. **Save Changes** をクリックします。
+
+6. 以下のコマンドでサブスクライブし、自動作成をトリガーします。
+
+   ```bash
+   mqttx sub -h localhost -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
+   ```
+
+   手動作成ストリームと異なり、自動作成ストリームはサブスクライブ時にトピックフィルター（この例では `demo/auto`）が必要です。
+
+   ストリームが存在しない場合、EMQX は以下を実行します。
+
+   - `auto_stream` という名前の新しいストリームを作成
+   - トピックフィルターを `demo/auto` に設定
+   - 設定された自動作成タイプ（レギュラーまたは Last-Value）を適用
+
+7. ダッシュボードの **Streams** ページで自動作成が確認できます。ストリーム一覧に `auto_stream` が表示されます。
+
+   ![auto_stream](./assets/auto_stream.png)

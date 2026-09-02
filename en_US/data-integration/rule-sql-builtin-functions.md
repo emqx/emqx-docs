@@ -947,6 +947,60 @@ Returns an array of all keys in the `Map`. Example:
 map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
 ```
 
+### maptab_lookup(Table: string, Key: string | integer) -> map | undefined
+
+::: tip
+
+This function is available starting from EMQX 6.1.5. It is available only after the EMQX Mapping Tables plugin is installed and started.
+
+:::
+
+Looks up a row in a mapping table managed by the [EMQX Mapping Tables Plugin](../extensions/plugin-catalog/6.3/emqx-maptabs.md). It returns the row's value map, or `undefined` when the table does not exist, the key does not exist, or the key type does not match.
+
+Key matching uses exact term equality without type conversion. For example, the integer key `50` and the string key `'50'` are different keys.
+
+Example:
+
+```bash
+maptab_lookup('signals', 1) = json_decode('{"signal_name":"temperature_c","start_bit":17,"length":8,"type":"integer","signedness":"signed","endian":"big"}')
+maptab_lookup('signals', 3) = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, DefaultRow: map) -> map
+
+Same as `maptab_lookup/2`, but returns the specified `DefaultRow` when the lookup misses. Build the default row with `map_new()`, `map_put(...)`, or `json_decode('{...}')`.
+
+When you use the returned row as input to another function, provide all fields required by that function. An empty default row such as `map_new()` still leaves its fields as `undefined`.
+
+Example:
+
+```bash
+maptab_lookup('signals', 3, json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')) = json_decode('{"signal_name":"Unknown","start_bit":17,"length":48,"type":"bits","signedness":"unsigned","endian":"big"}')
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string) -> any | undefined
+
+Looks up one field in the matched row. It returns the field value, or `undefined` when the table, key, or field does not exist, or when the key type does not match.
+
+Example:
+
+```bash
+maptab_lookup('signals', 1, 'signal_name') = 'temperature_c'
+maptab_lookup('signals', 3, 'signal_name') = undefined
+```
+
+### maptab_lookup(Table: string, Key: string | integer, Field: string, Default: any) -> any
+
+Same as `maptab_lookup(Table, Key, Field)`, but returns the specified `Default` when the lookup misses.
+
+Example:
+
+```bash
+maptab_lookup('signals', 3, 'signal_name', 'Unknown') = 'Unknown'
+```
+
+When you use `maptab_lookup` inside `FOREACH`, guard field access for rows that can miss. For example, if `maptab_lookup('signals', item_id)` returns `undefined`, passing fields such as `sig.start_bit` to `subbits` causes the whole SQL execution for that message to fail. Use `CASE WHEN is_map(sig)` or provide a complete default row.
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new Value. Example:
@@ -1123,6 +1177,36 @@ Example:
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
+### hash_to_range(Value: string, Min: integer, Max: integer) -> integer
+
+This function has been introduced since EMQX 6.2.3.
+
+Uses SHA-256 to hash `Value`, and then maps the hash to an integer in the inclusive range `[Min, Max]`. `Min` must be less than or equal to `Max`.
+
+This function is useful when you need a stable bucket or shard number from a message field, such as distributing devices across multiple rules or actions by a topic segment.
+
+Example:
+
+```bash
+hash_to_range('A_C001', 0, 3) = 0
+hash_to_range(nth(2, tokens(topic, '/')), 0, 3)
+```
+
+### map_to_range(Value: integer | string, Min: integer, Max: integer) -> integer
+
+This function has been introduced since EMQX 6.2.3.
+
+Maps `Value` to an integer in the inclusive range `[Min, Max]`. `Min` must be less than or equal to `Max`.
+
+If `Value` is an integer, the function maps it directly to the range. If `Value` is a non-empty string, the function converts its binary representation to an unsigned integer before mapping it.
+
+Example:
+
+```bash
+map_to_range(7, 0, 3) = 3
+map_to_range('a', 0, 3) = 1
+```
+
 ## Compression and Decompression Functions
 
 Note: Binary data cannot be JSON encoded directly, you must call the `bin2hexstr` function to convert it into the corresponding string composed of hexadecimal digits.
@@ -1173,6 +1257,26 @@ To decompress `Data`, `Data` must contain a zlib header and a checksum at the en
 
 ```bash
 zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
+```
+
+### lz4_compress(Data: binary | string) -> binary
+
+This function has been introduced since EMQX 6.2.3.
+
+Compresses `Data` using the LZ4 Frame format. Example:
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
+```
+
+### lz4_uncompress(Data: binary) -> binary | string
+
+This function has been introduced since EMQX 6.2.3.
+
+Decompresses `Data` in the LZ4 Frame format. Example:
+
+```bash
+lz4_uncompress(lz4_compress('hello')) = 'hello'
 ```
 
 ## Bit Operation Functions

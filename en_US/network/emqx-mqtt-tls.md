@@ -78,7 +78,6 @@ Choose the method that best fits your deployment and operational model.
      EMQX also does not support client early data (0-RTT). Clients must wait until the TLS handshake is complete before sending MQTT data.
    
      :::
-   
    - **Certificate Source**: Choose how server certificates are provided:
    
      - **Enter Manually**: Use traditional path-based certificates. Configure the following fields:
@@ -102,7 +101,7 @@ Choose the method that best fits your deployment and operational model.
    
    - **CACert Depth**: The maximum allowed depth of the certificate chain. Default value: `10`.
    
-   - **Key File Passphrase**: Password for the private key file, if encrypted.
+   - **Key File Passphrase**: Password for the private key file, if encrypted. To load the password from a file rather than embedding it inline, use the form `file://<path-to-file>`; the file's content (with any trailing whitespace stripped) is then used as the password. When clustered, the file must exist on all EMQX nodes. See [Load Secrets from a File](../configuration/secret-from-file.md) for details.
    
    - **Enable OCSP Stapling**: Disabled by default. Enable this option if you need to check certificate revocation status via OCSP. See [OCSP Stapling](./ocsp.md).
    

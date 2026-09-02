@@ -81,6 +81,8 @@ EMQX 内置了 Schema 验证功能，以确保只有符合预定数据格式的�
 
 本节以 JSON Schema 为例创建一个示例验证 schema，要求：
 
+从 EMQX 6.0.4 开始，Schema Registry 在 draft-03、draft-04 和 draft-06 的基础上，新增对 JSON Schema draft 2019-09 和 draft 2020-12 的支持。如果未指定 `$schema`，EMQX 使用 draft-06。有关支持范围、限制和完整示例，参见[Schema Registry JSON Schema 示例](./schema-registry-example-json.md)。
+
 - 该 JSON 对象必须包含一个名为 `temp` 的属性。
 - `temp` 属性的值必须是一个整数（integer）。
 - `temp` 属性的值必须大于或等于 101。

@@ -1,177 +1,282 @@
-# MQTT Streams User Guide
+# MQTT Streams ユーザーガイド
 
-This page walks you through the practical usage of the MQTT Streams feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
+このページでは、EMQXのMQTT Streams機能の実用的な使い方について、ストリームの作成から動作設定、ダッシュボード、REST API、設定ファイルを使った管理方法までを解説します。
 
-## Enable MQTT Streams Feature
+## MQTT Streams機能の有効化
 
-The MQTT Streams feature is disabled by default. Before creating or using any streams, you must enable the feature in the Dashboard.
+MQTT Streams機能はデフォルトで無効になっています。ストリームを作成または使用する前に、ダッシュボードで機能を有効化する必要があります。
 
-1. Navigate to **Message Stream** in the left menu.
-2. If the feature is not enabled, you will see a prompt indicating that the feature is disabled.
-3. Click **Settings** to open the **Message Stream** settings page.
-4. Toggle **Enable Message Stream** to **On**.
-5. Click **Save Changes**.
+1. 左メニューの **Streams** に移動します。
+2. 機能が無効の場合、無効である旨のメッセージが表示されます。
+3. **Settings** をクリックして **Streams** 設定ページを開きます。
+4. **Enable Streams** を **On** に切り替えます。
+5. **Save Changes** をクリックします。
 
-Once enabled, the MQTT Stream feature becomes available immediately, and you can start creating and managing streams.
+有効化すると、MQTT Streams機能が即座に利用可能となり、ストリームの作成と管理を開始できます。
 
-## Manually Create MQTT Streams via Dashboard
+## ダッシュボードからのストリーム手動作成
 
-MQTT streams must be explicitly created before they can store or replay messages. You can create and manage streams either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
+MQTT Streamsは、メッセージの保存や再生を行うために明示的に作成する必要があります。ストリームは手動または自動で作成・管理できます。自動作成の詳細は[ダッシュボードからの自動作成](#automatically-create-mqtt-streams-via-dashboard)を参照してください。
 
-1. Navigate to **Message Stream** in the left menu.
+1. 左メニューの **Streams** に移動します。
 
-2. Click **Create Stream** to open the **Create Message Stream** dialog.
+2. **Create Stream** をクリックして **Create Stream** ダイアログを開きます。
 
-3. Configure the following options:
+3. 以下のオプションを設定します：
 
-   - **Topic Filter**: Enter the topic or topic filter (for example, `t/1` or `sensors/+/data`) that defines which published messages are captured into the stream. All messages published to topics matching this filter will be stored in the stream.
+   - **Name**：必須。ストリームの一意な名前を指定します。名前には以下の文字のみ使用可能です：
 
-     > Clients consume messages from the stream by subscribing to a stream topic in the `$s/<timestamp>/<topic_filter>` format.
+     - 英数字（`A–Z`、`a–z`、`0–9`）
+     - アンダースコア（`_`）
+     - ハイフン（`-`）
+     - ドット（`.`）
 
-   - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
-     
-   - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
-     
-   - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
-     
-      The extracted key serves different purposes depending on the stream type:
-        - For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
-      
-        - For **regular** streams, the key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, preserving per-key ordering while enabling parallel storage across shards.
-      
-          ::: tip
-      
-          For regular streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
-      
-          :::
-      
+     この名前でストリームが識別・管理されます。
+
+   - **Topic Filter**：パブリッシュされたメッセージをストリームに取り込む対象のトピックまたはトピックフィルターを入力します（例：`t/1`、`sensors/+/data`）。このフィルターにマッチするトピックにパブリッシュされたすべてのメッセージがストリームに保存されます。
+
+     > クライアントは以下のサブスクリプション形式でメッセージを消費できます：
+     >
+     > - `$stream/<name>` はストリームが既に存在する場合に使用します。
+     > - `$stream/<name>/<topic_filter>` は既存ストリームへのサブスクライブ時に任意で使用可能です。自動作成が有効な場合に使用でき、ストリームが存在しない場合は指定した `<topic_filter>` を使って自動的にストリームを作成します。
+     >
+     > `<topic_filter>` セグメントはストリームの設定済みトピックフィルターと一致している必要があります。
+     >
+     > 過去メッセージを再生するには、MQTT 5のサブスクリプションプロパティ `stream-offset` を指定します。値は以下のいずれかです：
+     >
+     > - マイクロ秒単位のUnixタイムスタンプ
+     > - `earliest`
+     > - `latest`
+
+   - **Data Retention Period**：メッセージの保持期間を指定します。設定期間を超えた古いメッセージは自動的に削除され、再生可能な期間が制限されます。
+
+   - **Last-Value Semantics**：このオプションを有効にすると、各キーごとに最新のメッセージのみを保持します。同じキーの新しいメッセージが古いメッセージを上書きします。デバイス状態や設定などの状態指向データに適しています。
+
+   - **Stream Key Expression**：必須。各メッセージからキーを抽出するための式を定義します。デフォルトは `message.from` で、メッセージパブリッシャーのクライアントIDを意味します。このフィールドは[Variform式](../configuration/configuration.md#variform-expressions)で設定可能です。
+
       ::: tip
-      
-      The Stream Key Expression is similar to the Queue Key Expression in Message Queue. See [Queue Key Expression](../message-queue/message-queue-task.md/#queue-key-expression) for examples of key extraction.
-      
+
+      Stream Key ExpressionはMessage QueueのQueue Key Expressionに似ています。キー抽出の例は[Queue Key Expression](../message-queue/message-queue-task.md#queue-key-expression)を参照してください。
+
       :::
-      
-   - **Limiter**: Configure limits for each shard of the stream to control storage usage:
-     
-      - **Max Shard Message Count**: Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
-     - **Max Shard Message Bytes**: Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
-     
-      These limits are persisted to durable storage and work together with the retention period.
 
-4. Click **Create** to save the stream.
+      抽出されたキーはストリームタイプによって異なる役割を持ちます：
+        - **Last-Value**ストリームでは、キーが主キーとして機能します。同じキーのメッセージは上書きされ、キーごとに最新のメッセージのみが保持されます。詳細と例は[Stream Key Expression](#stream-key-expression)を参照してください。
 
-Once created, the MQTT stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
+        - **通常**ストリームでは、キーはシャーディングキーとして使われ、どのストレージシャードにメッセージを書き込むかを決定します。
 
-## Automatically Create MQTT Streams via Dashboard
+          ::: tip
 
-MQTT streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+          通常ストリームでは、定数や低カーディナリティの式は避けてください。メッセージが単一シャードに集中し、書き込み性能に影響を与える可能性があります。
 
-::: tip Note
+          :::
 
-Automatic stream creation is available only when the Message Stream feature is enabled globally.
+   - **Limiter**：ストリームの各シャードごとのストレージ使用制限を設定します：
+
+      - **Max Shard Message Count**：各シャードに保持する最大メッセージ数を設定します。有効化して値を指定するか、無効化して無制限（`infinity`）にできます。
+     - **Max Shard Message Bytes**：各シャードに保持するメッセージの合計最大サイズを設定します（例：`200MB`）。有効化してサイズを指定するか、無効化して無制限（`infinity`）にできます。
+
+      これらの制限は永続ストレージに保存され、保持期間設定と連動して動作します。
+
+4. **Create** をクリックしてストリームを保存します。
+
+作成後、MQTTストリームは即座に有効になります。設定したトピックフィルターにマッチするメッセージは保持期間と制限に従って保存され、ストリームにサブスクライブしたクライアントから再生可能です。
+
+## Stream Key Expression
+
+Stream Key Expressionは、Last-Value Semanticsモードでメッセージの重複排除に使うキーの抽出方法を指定します。この式はメッセージのデータに対して評価され、[Variform式](../configuration/configuration.md#variform-expressions)の構文に従います。
+
+式は、`from`、`topic`、`payload`、`headers.properties`などのフィールドを含むメッセージコンテキストに対して評価されます。例えば、ユーザープロパティをキーに使う場合は以下のように設定します：
+
+```
+message.headers.properties.User-Property.user-prop
+```
+
+式に基づいてキーが抽出できない場合（例：フィールドが存在しない）、メッセージは破棄されストリームに保存されません。
+
+### メッセージコンテキスト例
+
+<!--@include: ../shared/key-expression-message-context.md-->
+
+### Stream Key Expressionの例
+
+#### 例1
+
+以下の条件でストリームを設定したとします：
+- Last-Value Semantics 有効
+- Topic Filter：`t/#`
+- Stream Key Expression：`message.headers.properties.User-Property.stream-key`
+
+以下のメッセージがEMQXにパブリッシュされ、クライアントは存在しないものとします：
+
+| N | 送信元 | トピック | ユーザープロパティ `stream-key` |
+|---|--------|----------|------------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+クライアントが接続してストリームにサブスクライブすると、以下のメッセージが配信されます：
+
+| N | 送信元 | トピック | ユーザープロパティ `stream-key` |
+|---|--------|----------|------------------------------|
+| 3 | `client2` | `t/3` | `keyA` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+各ユニークな `message.headers.properties.User-Property.stream-key` の最新メッセージのみがストリームに保持されます。キー式はトピックをまたいでストリーム全体に適用されるため、`t/1` にパブリッシュされた `keyA` のメッセージは後に `t/3` にパブリッシュされた同じキーのメッセージで上書きされます。
+
+#### 例2
+
+以下の条件でストリームを設定したとします：
+- Last-Value Semantics 有効
+- Topic Filter：`t/#`
+- Stream Key Expression：`message.from`
+
+例1と同じメッセージがEMQXにパブリッシュされた場合、クライアントが接続してストリームにサブスクライブすると、以下のメッセージが配信されます：
+
+| N | 送信元 | トピック | ユーザープロパティ `stream-key` |
+|---|--------|----------|------------------------------|
+| 2 | `client1` | `t/2` | `keyB` |
+| 4 | `client2` | `t/4` | `keyB` |
+
+同じ `message.from` の値を持つメッセージは上書きされるため、送信元ごとに最新のメッセージのみが保持されます。
+
+#### 例3
+
+以下の条件でストリームを設定したとします：
+- Last-Value Semantics 有効
+- Topic Filter：`t/#`
+- Stream Key Expression：`concat(message.headers.properties.User-Property.stream-key, '-', message.topic)`
+
+以下のメッセージがEMQXにパブリッシュされました：
+
+| N | 送信元 | トピック | ユーザープロパティ `stream-key` |
+|---|--------|----------|------------------------------|
+| 1 | `client1` | `t/1` | `keyA` |
+| 2 | `client1` | `t/2` | `keyB` |
+| 3 | `client1` | `t/1` | `keyB` |
+| 4 | `client1` | `t/2` | `keyA` |
+
+クライアントが接続してストリームにサブスクライブすると、すべてのメッセージが配信されます。なぜなら `message.headers.properties.User-Property.stream-key` と `message.topic` の組み合わせがメッセージごとにユニークだからです：
+
+| N | 送信元 | トピック | ユーザープロパティ `stream-key` | 計算されたキー |
+|---|--------|----------|------------------------------|----------------|
+| 1 | `client1` | `t/1` | `keyA` | `keyA-t/1` |
+| 2 | `client1` | `t/2` | `keyB` | `keyB-t/2` |
+| 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
+| 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
+
+## ダッシュボードからのストリーム自動作成
+
+クライアントが `$stream/<name>` プレフィックス付きトピックにサブスクライブすると、MQTT Streamsは自動的にストリームを作成できます。サブスクリプションの `<name>` がストリーム名になります。
+
+::: tip 注意
+
+自動ストリーム作成はMQTT Streams機能がグローバルに有効な場合のみ利用可能です。
 
 :::
 
-The streams may be auto-created either as regular streams or last-value semantics streams. 
+ストリームは通常ストリームまたはLast-Value Semanticsストリームとして自動作成されます。
 
-::: tip Note
+::: tip 注意
 
-To ensure proper stream behavior, you can enable auto create either **Regular Message Stream** or **Last Value Message Stream**, but not both at the same time.
+適切なストリーム動作を確保するため、自動作成は通常ストリームかLast-Value Semanticsストリームのいずれか一方のみ有効にしてください。同時に両方を有効にすることはできません。
 
 :::
 
-### Auto Create Last Value MQTT Streams
+### Last-Valueストリームの自動作成
 
-This option is turned on by default in the **Message Stream** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
+このオプションはデフォルトで **Streams** タブの **MQTT Settings** 内で有効になっています。これにより、EMQXはLast-Value Semanticsをサポートするストリームを自動作成し、キーごとに最新のメッセージのみを保持します。
 
-1. Navigate to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+1. **Management** -> **MQTT Settings** -> **Messages** タブに移動します。
 
-2. By default, **Enable Auto Create Message Stream** is enabled and **Last Value Message Stream** type is selected.
+2. デフォルトで **Enable Auto Create Stream** が有効で、**Last Value Stream** タイプが選択されています。
 
-   Configure the following:
+   以下を設定します：
 
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
-   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
+   - **Stream Key Expression**：必須。各メッセージから一意のキーを抽出する方法を定義します（デフォルト：`message.from`）。Last-Valueストリームではこのキーが主キーとして機能し、同じキーのメッセージは上書きされ、最新の値のみが保持されます。
+   - **Data Retention Period**：メッセージの保持期間を指定します。
 
-3. Click **Save Changes**.
+3. **Save Changes** をクリックします。
 
-When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
-### Auto Create Regular MQTT Streams
+クライアントが `$stream/my_stream/test` のようなトピックにサブスクライブすると、EMQXは `my_stream` という名前のLast-Valueストリームを自動作成し、**Streams** リストに表示されます。
 
-This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
+### 通常ストリームの自動作成
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+このオプションは手動で有効にできます。通常ストリームはメッセージを独立して保存し、上書きしません。
 
-2. By default, **Enable Auto Create Message Stream** is enabled. Select **Regular Message Stream** type.
+1. **Management** -> **MQTT Settings** -> **Streams** タブに移動します。
 
-3. Configure the following:
+2. デフォルトで **Enable Auto Create Message Stream** が有効です。**Regular Message Stream** タイプを選択します。
 
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). 
+3. 以下を設定します：
 
-     In Regular streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
+   - **Stream Key Expression**：必須。各メッセージから一意のキーを抽出する方法を定義します（デフォルト：`message.from`）。
 
-   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
+     通常ストリームでは、このキーはシャーディングキーとして使われ、同じキーのメッセージは同じシャードにルーティングされます。これによりキーごとの順序が保たれ、負荷分散が可能になります。
 
-4. Click **Save Changes**.
+   - **Data Retention Period**：メッセージの保持期間を指定します。
 
-## Configure MQTT Streams Settings
+4. **Save Changes** をクリックします。
 
-This section explains how to configure global settings that apply to all MQTT streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
+## ストリーム設定の構成
 
-### Dashboard
+このセクションでは、EMQXのすべてのMQTT Streamsに適用されるグローバル設定の構成方法を説明します。これらの設定はメッセージの保持、クリーンアップ間隔、内部ストリーム動作、自動作成の挙動を制御します。ダッシュボード、REST API、設定ファイルで設定可能です。
 
-You can update MQTT Streams settings directly from the EMQX Dashboard without restarting the broker. This is useful for adjusting system-wide Message Stream behavior at runtime.
+### ダッシュボード
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+EMQXダッシュボードからMQTT Streams設定を直接更新できます。ブローカーの再起動は不要で、システム全体のストリーム動作をランタイムに調整可能です。
 
-2. Configure the following options:
+1. **Management** -> **MQTT Settings** -> **Streams** タブに移動します。
 
-   - **Enable Message Stream**: Enables or disables the Message Stream feature globally. When disabled, no streams can be created or used.
+2. 以下のオプションを設定します：
 
-   - **Max Stream Count**: Sets the maximum number of streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
+   - **Enable Streams**：MQTT Streams機能のグローバル有効/無効を切り替えます。無効時はストリームの作成・使用ができません。
 
-   - **GC Interval**: Specifies how often expired stream messages are cleaned up. The default value is `1` hour.
+   - **Max Stream Count**：クラスター内で存在可能なストリームの最大数を設定します。無制御なストリーム作成によるリソース過剰使用を防止します。
 
-   - **Regular Stream Retention Period**: Defines the default retention period for regular (non–Last-Value) streams. Messages older than this duration are automatically removed. The default is `7` days.
+   - **GC Interval**：期限切れストリームメッセージのクリーンアップ間隔を指定します。デフォルトは `1` 時間です。
 
-   - **Enable Auto Create Message Stream**: Enables automatic creation of streams when clients subscribe to stream topics and no matching stream exists.
+   - **Regular Stream Retention Period**：通常（Last-Valueでない）ストリームのデフォルト保持期間を定義します。期間を超えたメッセージは自動削除されます。デフォルトは `7` 日です。
 
-   - **Auto Create Message Stream Type**: Specifies the type of streams to create automatically:
+   - **Enable Auto Create Message Stream**：クライアントがストリームトピックにサブスクライブし、該当ストリームが存在しない場合に自動作成を有効にします。
 
-     - **Last Value Message Stream** (default): Automatically creates streams with Last-Value semantics enabled.
-     - **Regular Message Stream**: Automatically creates streams that retain all messages without overwriting.
+   - **Auto Create Stream Type**：自動作成するストリームのタイプを指定します：
 
-   - **Stream Key Expression**: Defines the key expression used for automatically created streams when Last-Value semantics are enabled. The default value is `message.from`. This expression determines how keys are extracted for per-key ordering and overwriting behavior.
+     - **Last Value Stream**（デフォルト）：Last-Valueセマンティクスを有効にしたストリームを自動作成します。
+     - **Regular Stream**：すべてのメッセージを保持し上書きしないストリームを自動作成します。
 
-   - **Data Retention Period**: Specifies the retention period for automatically created streams. Messages older than this period are removed automatically.
+   - **Stream Key Expression**：Last-Valueセマンティクスが有効な自動作成ストリームで使うキー式を定義します。デフォルトは `message.from` です。キーの抽出方法を決定し、キーごとの順序や上書き動作に影響します。
 
-   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`). 
+   - **Data Retention Period**：自動作成ストリームの保持期間を指定します。期間を超えたメッセージは自動削除されます。
 
-   - **Max Shard Message Count**: Limits the maximum number of messages in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited messages (`infinity`).
+   - **Max Shard Message Bytes**：ストリームの各シャードに保存可能なデータ量の上限を設定します。有効化して制限を設定するか、無効化して無制限（`infinity`）にできます。
+
+   - **Max Shard Message Count**：ストリームの各シャードに保持可能な最大メッセージ数を設定します。有効化して制限を設定するか、無効化して無制限（`infinity`）にできます。
 
      ::: tip
 
-     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a stream scales with the number of shards and the replication factor. 
+     [シャード](../design/durable-storage.md#shard)の数はDurable Storage設定でグローバルに定義され、すべてのストリームに適用されます。この制限はシャード単位で適用され、データのレプリケーションは考慮されません。ストレージ容量計画時は、シャード数とレプリケーション係数に応じて総ディスク使用量が増加することに注意してください。
 
      :::
 
-3. After making changes, click **Save Changes** to apply the new settings.
+3. 設定変更後、**Save Changes** をクリックして反映します。
 
-The updated configuration takes effect immediately and applies to all existing and newly created streams where applicable.
+更新された設定は即時に適用され、既存および新規作成ストリームに影響します。
 
 ### REST API
 
-You can configure global MQTT Streams settings programmatically using the EMQX REST API.
+EMQXのREST APIを使ってグローバルMQTT Streams設定をプログラムから構成できます。
 
-To update MQTT Streams global settings, send a `PUT` request to the following endpoint:
+MQTT Streamsのグローバル設定を更新するには、以下のエンドポイントに `PUT` リクエストを送信します：
 
 ```
 PUT /api/v5/message_streams/config
 ```
 
-**Request example**:
+**リクエスト例**：
 
-```
+```bash
 curl -s -u key:secret \
   -X PUT \
   -H "Content-Type: application/json" \
@@ -183,13 +288,13 @@ curl -s -u key:secret \
   }'
 ```
 
-### Configuration File
+### 設定ファイル
 
-You can configure global MQTT Streams settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
+EMQXの設定ファイルを編集してグローバルMQTT Streams設定を構成できます。この方法は起動時のデフォルト動作を定義したり、設定ファイル管理が主な環境での設定に適しています。
 
-**Configuration example**:
+**設定例**：
 
-MQTT Streams settings are defined under the `streams` section of the EMQX configuration file (`emqx.conf`).
+MQTT Streams設定はEMQX設定ファイル（`emqx.conf`）の `streams` セクションで定義します。
 
 ```hocon
 streams {
@@ -199,22 +304,22 @@ streams {
 }
 ```
 
-#### Configuration Options
+#### 設定オプション
 
-- **gc_interval**: Controls how often expired messages are removed from Message Streams. This setting affects the garbage collection cycle for stream storage.
-- **regular_stream_retention_period**: Specifies the default maximum retention period for regular streams. Messages older than this duration are automatically deleted.
-- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$s/` topic and the corresponding stream does not yet exist.
+- **gc_interval**：MQTT Streamsから期限切れメッセージを削除する頻度を制御します。ストリームストレージのガベージコレクションサイクルに影響します。
+- **regular_stream_retention_period**：通常ストリームの最大保持期間を指定します。期間を超えたメッセージは自動削除されます。
+- **check_stream_status_interval**：`$stream/<name>` トピックにサブスクライブした際、対応するストリームが存在しない場合にサブスクライバーがストリームを再試行する頻度を指定します。
 
-All duration values use standard time units, such as `s` (seconds), `m` (minutes), `h` (hours), and `d` (days).
+すべての期間値は `s`（秒）、`m`（分）、`h`（時間）、`d`（日）などの標準時間単位を使用します。
 
-#### Durable Storage Configuration
+#### Durable Storage設定
 
-Stream messages are stored using EMQX Durable Storage. Storage-related settings for MQTT streams are configured under the `durable_storage.streams_messages` section.
+ストリームメッセージはEMQX Durable Storageに保存されます。MQTT Streamsのストレージ関連設定は `durable_storage.streams_messages` セクションで構成します。
 
 ```hocon
 durable_storage {
-    ## Settings for the database storing Message Stream messages.
-    ## See Durable Storage configuration for more details.
+    ## ストリームメッセージを保存するデータベースの設定。
+    ## 詳細はDurable Storage設定を参照してください。
     streams_messages {
         transaction {
             flush_interval = 100
@@ -225,23 +330,23 @@ durable_storage {
 }
 ```
 
-These settings control how MQTT stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
+これらの設定はMQTT Streamsデータの永続化に関するトランザクションバッチ処理やフラッシュ動作を制御します。通常はデフォルト値で十分であり、ストレージ性能調整時以外は変更不要です。
 
-## Manage MQTT Streams via REST API
+## REST APIによるストリーム管理
 
-EMQX provides REST APIs for managing streams. You can use these APIs to create, update, list, query, and delete streams, as well as configure global MQTT Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
+EMQXはストリーム管理のためのREST APIを提供しています。これらのAPIを使ってストリームの作成、更新、一覧取得、照会、削除やグローバルMQTT Streams設定の構成が可能です。自動化や外部システム連携、大規模管理に便利です。
 
-::: tip Note
+::: tip 注意
 
-All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "MQTT Stream" section in [REST API](../admin/api.md).
+すべてのREST API操作には適切な認証と権限が必要です。リクエスト・レスポンスの詳細スキーマは[REST API](../admin/api.md)の「MQTT Stream」セクションを参照してください。
 
 :::
 
-All examples below assume basic authentication using an API key and secret.
+以下の例はすべてAPIキーとシークレットによるベーシック認証を想定しています。
 
-### Create a Stream
+### ストリームの作成
 
-To create a new stream, send a `POST` request to the streams endpoint and specify the stream configuration in the request body.
+新しいストリームを作成するには、ストリームエンドポイントに `POST` リクエストを送り、リクエストボディにストリーム設定を指定します。
 
 ```bash
 curl -s -u key:secret \
@@ -249,16 +354,17 @@ curl -s -u key:secret \
   -H "Content-Type: application/json" \
   http://localhost:18083/api/v5/message_streams/streams \
   -d '{
+    "name": "my_stream",
     "topic_filter": "t1/#",
     "is_lastvalue": false
   }' | jq
 ```
 
-The response includes the details of the newly created stream, including its `topic_filter`.
+レスポンスには作成されたストリームの詳細（`topic_filter`など）が含まれます。
 
-### List Streams
+### ストリーム一覧の取得
 
-To retrieve a list of existing streams, send a `GET` request to the streams endpoint.
+既存ストリームの一覧を取得するには、ストリームエンドポイントに `GET` リクエストを送信します。
 
 ```bash
 curl -s -u key:secret \
@@ -267,12 +373,13 @@ curl -s -u key:secret \
   http://localhost:18083/api/v5/message_streams/streams | jq
 ```
 
-The response contains a list of streams and pagination metadata.
+レスポンスにはストリームのリストとページネーション情報が含まれます。
 
 ```bash
 {
   "data": [
     {
+      "name": "my_stream",
       "topic_filter": "t1/#"
     }
   ],
@@ -282,35 +389,35 @@ The response contains a list of streams and pagination metadata.
 }
 ```
 
-### Update a Stream
+### ストリームの更新
 
-To update an existing stream, send a `PUT` request to the stream resource identified by its topic filter. The topic filter must be URL-encoded.
+既存ストリームを更新するには、ストリーム名で識別されるリソースに対して `PUT` リクエストを送信します。トピックフィルターはURLエンコードしてください。
 
 ```bash
 curl -s -u key:secret \
   -X PUT \
   -H "Content-Type: application/json" \
-  http://localhost:18083/api/v5/message_streams/streams/t1%2F%23 \
+  http://localhost:18083/api/v5/message_streams/streams/my_stream \
   -d '{
     "key_expression": "message.from",
     "is_lastvalue": false
   }' | jq
 ```
 
-The response returns the updated stream configuration.
+レスポンスには更新後のストリーム設定が返されます。
 
-### Delete a Stream
+### ストリームの削除
 
-To delete a Message Stream, send a `DELETE` request to the stream resource identified by its URL-encoded topic filter.
+ストリームを削除するには、ストリーム名で識別されるリソースに対して `DELETE` リクエストを送信します。
 
-```
+```bash
 curl -s -u key:secret \
   -X DELETE \
-  http://localhost:18083/api/v5/message_streams/streams/t1%2F%23
+  http://localhost:18083/api/v5/message_streams/streams/my_stream
 ```
 
-Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
+削除後、ストリームはメッセージの収集を停止し、保存されていたデータは内部クリーンアップルールに従って削除されます。
 
-### Configure MQTT Streams Global Settings
+### ストリームのグローバル設定構成
 
-See [Configure MQTT Streams Settings -RESP API](#rest-api).
+[Configure Streams Settings -RESP API](#rest-api) を参照してください。

@@ -1,4 +1,4 @@
-# UNS Governance
+# UNS 治理
 
 该插件在 ACL 检查阶段强制执行 Unified Namespace 主题结构。
 
@@ -224,6 +224,9 @@ UNS Governance 会同时校验主题结构以及（可选的）负载模式。
 
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
-| 6.2.0 | 0.1.2 | [emqx_unsgov-0.1.2.tar.gz](https://packages.emqx.io/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.tar.gz) |
+| 6.2.0 | 0.1.2 | [emqx_unsgov-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.2.0/emqx_unsgov-0.1.2.sha256)) |
+| 6.2.1 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.2.1/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.2.1/emqx_unsgov-0.1.3.sha256)) |
+| 6.2.2 | 0.1.3 | [emqx_unsgov-0.1.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.2.2/emqx_unsgov-0.1.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.2.2/emqx_unsgov-0.1.3.sha256)) |
+| 6.2.3 | 0.1.4 | [emqx_unsgov-0.1.4.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.2.3/emqx_unsgov-0.1.4.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.2.3/emqx_unsgov-0.1.4.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

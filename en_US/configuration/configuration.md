@@ -48,7 +48,7 @@ Starting from EMQX 5.8.4, there is a base configuration file named `base.hocon` 
 
 For example, you may want to start the deployment with a basic authentication configuration, and then override it with a more complex configuration at runtime from the Dashboard UI.
 
-For immutable configurations such as `node` and `cluster` configs, it is **NOT** recommended to set them in the `base.hocon` file. See the [Immutable Configurations File](#immutable-configuration-file) for more details.
+For immutable configurations such as `node` and `cluster` configs, you can also use environment variables when the values are deployment-specific and should not be changed at runtime. See [Environment Variables](#environment-variables) and [Config Override Rules](#config-override-rules) for more details.
 
 ::: tip
 The `base.hocon` file is not synchronized across the cluster and only applies to the node where it is located.
@@ -67,7 +67,7 @@ Since EMQX version 5.1, any changes to the cluster configuration will trigger a 
 
 ## Immutable Configuration File
 
-For backward compatibility, the `emqx.conf` file remains the primary configuration file for critical system settings, including `node` and `cluster` configurations. This file has a higher priority than both `base.hocon` and `cluster.hocon`, but with a lower priority than environment variables.
+For backward compatibility, the `emqx.conf` file remains available for critical system settings, including `node` and `cluster` configurations. This file has a higher priority than both `base.hocon` and `cluster.hocon`, but with a lower priority than environment variables. Avoid changing it unless you intentionally want this priority and understand that package upgrades may update the shipped defaults in this file.
 
 For more details on configuration overrides, refer to the [Config Override Rules](#config-override-rules) section.
 
@@ -132,9 +132,9 @@ node {
 
 Configuration items and environment variables can be converted by the following rules:
 
-1. Since the `.` separator in the configuration file cannot be used in environment variables. EMQX uses double underscores `__` as the configuration separator.
-2. To distinguish the converted configuration items from other environment variables, EMQX also adds a prefix `EMQX_` to the environment variable.
-3. The value of the environment variable is parsed according to the HOCON value, making it possible to use the environment variable to pass the value of complex data types, but please note that special characters such as `:` and `=` need to be wrapped in double quotes `"`.
+1. Since the `.` separator in the configuration file cannot be used in environment variables, EMQX uses double underscores `__` as the configuration separator;
+2. To distinguish the converted configuration items from other environment variables, EMQX also adds a prefix `EMQX_` to the environment variable;
+3. The value of the environment variable is parsed as a HOCON value, making it possible to pass complex data types through environment variables. Values that contain HOCON special characters such as `:`, `=`, or `#` must be wrapped in double quotes `"` so the parser treats them as a literal string. In particular, `#` starts a HOCON line comment — without quoting, the parser silently drops everything from `#` to the end of the line.
 
 Conversion example:
 
@@ -159,6 +159,34 @@ listeners.ssl.default {
 }
 ```
 
+::: warning Values that contain `#`, `:`, or `=`
+
+A common gotcha is passing a password (or any string) that contains a `#`. Because `#` starts a HOCON line comment, this:
+
+```bash
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="MQtt#123"
+```
+
+results in the password being parsed as `MQtt` — the `#123` is dropped as a comment. To pass the literal value through, wrap it in **HOCON-level** double quotes (not just shell quotes), so the parser sees `"MQtt#123"` including the quotes:
+
+```bash
+# Correct — value seen by the HOCON parser is: "MQtt#123"
+export EMQX_DASHBOARD__DEFAULT_PASSWORD='"MQtt#123"'
+
+# Same effect, with the inner quotes escaped for the shell
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="\"MQtt#123\""
+```
+
+The same applies to values containing `:` or `=`. URL-encoding (e.g. `%23` for `#`) does not work — EMQX does not URL-decode environment variable values.
+
+:::
+
+::: tip Why some unquoted values pass through and others don't
+
+Internally, EMQX wraps each environment variable value as `fake_key=<value>` and tries to parse it as HOCON. If that succeeds, the parsed value is used; if it fails because the value is not valid HOCON syntax, EMQX falls back to the raw string. That is why `EMQX_..._PASSWORD="abc#def"` becomes `abc` (valid HOCON, `#def` is a comment) while `EMQX_..._PASSWORD=".abc#def"` is kept as the literal `.abc#def` (invalid HOCON syntax, fallback to raw). Wrapping the value in HOCON quotes makes the behavior deterministic.
+
+:::
+
 ::: tip
 
 EMQX will ignore undefined root paths, for example, `EMQX_UNKNOWN_ROOT__FOOBAR` , because `UNKNOWN_ROOT` is not a pre-defined root path.
@@ -170,6 +198,26 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 ```
 
 :::
+
+::: tip
+Starting from EMQX 6.3.0, `EMQX_FEATURES` is a special startup environment variable for [feature gates](../deploy/feature-gates.md). It does not map to a HOCON configuration path, is not stored in `cluster.hocon`, and is resolved only when EMQX starts.
+:::
+
+
+### Boot-Time Environment Variables
+
+Most `EMQX_`-prefixed environment variables override `emqx.conf` settings, following the conversion rules above. A few variables configure EMQX itself before the configuration files are parsed, so they have no `emqx.conf` equivalent:
+
+- `EMQX_FEATURES`: Selects the set of applications the node boots, for example `FULL` or `ESSENTIAL`.
+- `EMQX_SECURITY_PROFILE`: Selects the node-wide security profile, `legacy` or `hardened`.
+
+Starting from EMQX 6.3.0, the `emqx` command loads environment variables from `etc/emqx.env` whenever it runs, including during a service start, a foreground start, and `emqx ctl`. On RPM and DEB installations, the file is located at `/etc/emqx/emqx.env`. Use this file to set boot-time environment variables instead of editing the systemd unit.
+
+- Values set in the file override variables inherited from the environment.
+- Package upgrades keep your edits to the file.
+- The shipped file lists boot-time variables as commented lines, for example, `#KEY="${KEY:-default}"`. If you uncomment a line without changing the expression, it keeps a nonempty environment value or uses the default when the variable is unset or empty. To override an existing value, replace the expression with `KEY=value`.
+- Restart the EMQX node after changing a boot-time environment variable.
+- Regular `EMQX_`-prefixed overrides, for example `EMQX_NODE__COOKIE`, can also be set in the file.
 
 ## Config Override Rules
 
@@ -328,6 +376,55 @@ listeners.tcp.default {
     ...
 }
 ```
+
+## Configuration-as-Code Best Practices
+
+When you manage EMQX configuration from source control or an automation system, use the following rule of thumb:
+
+- Put configuration-as-code settings in `base.hocon`.
+- Do not edit `cluster.hocon` manually or mount your own `cluster.hocon` file.
+- Avoid changing `emqx.conf` unless you understand its higher priority in the configuration layers and the upgrade consequences.
+- Use environment variables for simple overrides that you do not expect to change from the Dashboard, API, or CLI at runtime.
+
+The recommended source of truth for configuration-as-code is `base.hocon`. It is read from the static configuration directory during node startup and can be managed by your packaging, image build, configuration management, or GitOps workflow. Runtime changes made from the Dashboard, REST API, or CLI are persisted to `cluster.hocon` and layered on top of `base.hocon`.
+
+For example, a deployment can keep its listener, log, authentication, authorization, and data integration baseline in `base.hocon`:
+
+```bash
+# base.hocon
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+}
+
+log.console {
+  enable = true
+  level = warning
+}
+
+authentication = [
+  {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+  }
+]
+```
+
+Do not use `cluster.hocon` as the source of truth for configuration-as-code. EMQX owns this file at runtime: the Dashboard, REST API, and CLI rewrite it, EMQX creates backups before overwriting it, and cluster nodes can copy it from each other. Manually editing or mounting this file can cause your changes to conflict with runtime updates or be overwritten.
+
+`emqx.conf` is shipped with distribution packages as a baseline configuration file. Keeping it unchanged makes upgrades easier because your installation can pick up conservative default changes delivered by new EMQX versions. If you set a configurable item in `emqx.conf`, it has higher priority than both `base.hocon` and `cluster.hocon`, so runtime changes to the same item may appear to work but be reverted after a node restart. Use `emqx.conf` only when you intentionally need that behavior.
+
+Environment variables have the highest priority. They are useful for simple deployment-specific values, especially values already provided by the runtime environment and values that should not be mutated at runtime:
+
+```bash
+export EMQX_NODE__NAME='emqx@node1.example.net'
+export EMQX_NODE__COOKIE='mysecret'
+export EMQX_CLUSTER__DISCOVERY_STRATEGY='static'
+export EMQX_CLUSTER__STATIC__SEEDS='["emqx@node1.example.net", "emqx@node2.example.net"]'
+```
+
+Because environment variables override all configuration files, avoid using them for settings that operators are expected to tune later from the Dashboard, API, or CLI.
 
 ## Schema
 
@@ -546,6 +643,11 @@ Below are the functions that can be used in the expressions:
   - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - A new function `any_to_string/1` is also added to convert any intermediate non-string value to a string.
 - **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **Topic functions**:
+  - `topic_join(Words)`: Join topic levels in an array with `/` into an MQTT topic or topic filter. For example, `topic_join(['devices', clientid, '#'])` generates `devices/<clientid>/#`.
+  - `topic_join(Parent, Word)`: Append `Word` to the `Parent` topic. If `Parent` already ends with `/`, no extra separator is added.
+  - `topic_match(Topic, Filter)`: Check whether an MQTT topic matches a topic filter. It returns `true` or `false`. For example, `topic_match(topic, topic_join(['devices', clientid, '#']))` can check whether the current topic matches a client-specific topic filter.
+  - `topic_split(Topic)`: Split an MQTT topic into an array of topic levels by `/`.
 - **Random functions**: rand_str, rand_int
 - **Schema-less encode/decode functions**:
   - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
@@ -556,13 +658,11 @@ Below are the functions that can be used in the expressions:
   - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - [base64_encode(Data, 'no_padding')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (since 6.0.2)
   - [base64_encode(Data, 'no_padding', 'urlsafe')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (since 6.0.2)
-  - `json_value(Data, Path)`: Extract values from JSON strings using a dot-separated path to navigate nested structures. For example, if `username` is a JSON object, you can access a field with `json_value(username, 'shop.floor')`. (since 6.0.2)
-  - `jwt_value(Data, Path)`: Decode JWT token payloads and extract claim values using a dot-separated path. For example, if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`. (since 6.0.2)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **Hash functions**:
   - `hash(Algorithm, Data)`: Algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - `hash_to_range(Input, Min, Max)`: Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - `map_to_rage(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
+  - `hash_to_range(Input, Min, Max)`: Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive (Min <= X <= Max)
+  - `map_to_range(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min <= X <= Max)
 - **Compare functions**:
   - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
   - `num_neq(A, B)`: Return 'true' if two numbers are NOT the same, otherwise 'false'.
@@ -583,6 +683,11 @@ Below are the functions that can be used in the expressions:
   - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
     - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
     - Values are immutable once loaded from the OS environment.
+
+- **Data extraction functions**:
+  - `json_value(Data, Path)`: Extract values from JSON strings using a dot-separated path to navigate nested structures. For example, if `username` is a JSON object, you can access a field with `json_value(username, 'shop.floor')`.
+  - `jwt_value(Data, Path)`: Decode JWT token payloads and extract claim values using a dot-separated path. For example, if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`.
+  - `is_jwt(Data)` (since 6.2.3): Check whether `Data` has the structure of a JWT in JWS compact form. The function returns `true` only for values with 3 dot-separated Base64URL-decodable segments and a decoded header JSON object that contains an `alg` field. It does not verify the signature or inspect the payload, and returns `false` for `undefined`, `null`, empty strings, JWE tokens with 5 segments, and malformed values.
 
 #### Conditions
 

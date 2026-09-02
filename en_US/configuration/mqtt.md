@@ -118,6 +118,10 @@ In scenarios such as vehicle networking (T-Box) and mobile IoT, MQTT clients nee
 
 EMQX supports dynamic, per-client keepalive adjustment through a set of `$SETOPTS/` system topics. A client can publish to these topics to update its own broker-side keepalive tolerance, or a privileged backend service can update multiple clients at once, all without disconnecting or renegotiating the MQTT connection. The adjustment is applied in-memory to the active session only and is not persisted.
 
+::: warning Incompatible with Listener Mountpoint
+Dynamic keepalive adjustment does not work for clients connected through a listener with a [mountpoint](./listener.md#mountpoint) configured. EMQX applies the mountpoint before it matches the `$SETOPTS/` prefix, so the update is routed as an ordinary message to the mounted literal topic. No error is reported to the client.
+:::
+
 #### Single-Client Update: `$SETOPTS/mqtt/keepalive`
 
 A client publishes to this topic to update its own broker-side keepalive timeout. EMQX derives the client ID from the publishing session automatically.
@@ -182,6 +186,7 @@ mqtt {
     max_awaiting_rel = 100
     await_rel_timeout = 300s
     session_expiry_interval = 2h
+    max_session_expiry_interval = infinity
     max_mqueue_len = 1000
     mqueue_priorities = disabled
     mqueue_default_priority = lowest
@@ -207,7 +212,8 @@ Where,
 | `retry_interval`                  | Retry Interval              | This sets the interval at which the client should retry sending a QoS 1 or QoS 2 message. | `30s`<br />unit: s                                           | --                                  |
 | `max_awaiting_rel`                | Max Awaiting PUBREL         | This sets the pending QoS 2 messages in each session until either `PUBREL` is received or timed out. After reaching this limit, new QoS 2 `PUBLISH` requests will be rejected with error code `147(0x93)`.<br />In MQTT, `PUBREL` is a control packet used in the message flow for QoS  2, which provides guaranteed message delivery. | `100`                                                        | `1` - `infinity`                    |
 | `await_rel_timeout`               | Max Awaiting PUBREL TIMEOUT | This sets the amount of time to wait for a release of a QoS 2 message before receiving `PUBREL`.  After reaching this limit, EMQX will release the packet ID and also generate a warning level log. <br />Note:  ﻿EMQX will forwarding of the received QoS 2 message whether it has received the `PUBREL`﻿ or not. | `300s`<br />unit: s                                          | --                                  |
-| `session_expiry_interval`         | Session Expiry Interval     | This sets the amount of time that a session can be idle before it is automatically closed. Note: For non-MQTT 5.0 clients only. | `2h`                                                         |                                     |
+| `session_expiry_interval`         | Session Expiry Interval     | This sets how long EMQX keeps a session after the client disconnects. It applies to MQTT 3.1 and 3.1.1 clients that connect with `Clean Session = false`. MQTT 5.0 clients set their own value with the `Session-Expiry-Interval` CONNECT property; see `max_session_expiry_interval`.<br />With the default in-memory session store, a disconnected session stays in memory for the whole interval. See the warning after this table. | `2h`                                                         | --                                  |
+| `max_session_expiry_interval`     | Max Session Expiry Interval | This caps the session expiry interval that an MQTT 5.0 client can request with the `Session-Expiry-Interval` property of the CONNECT and DISCONNECT packets. When a client requests a longer value at connect, EMQX clamps it to this limit and returns the clamped value in the `Session-Expiry-Interval` property of CONNACK (MQTT 5.0 section 3.2.2.3.2). A longer value in a DISCONNECT packet is clamped to the same limit. It has no effect on MQTT 3.1 and 3.1.1 clients, whose session expiry is set by `session_expiry_interval`.<br />Available since EMQX 6.3.0. | `infinity` (no limit)                                        | duration<br />or<br />`infinity`    |
 | `max_mqueue_len`                  | Max Message Queue Length    | This sets the maximum allowed queue length when persistent clients are disconnected or inflight window is full. | `1000`                                                       | `0` - `infinity`                    |
 | `mqueue_priorities`               | Topic Priorities            | This sets the topic priorities, the configuration here will override that defined in `mqueue_default_priority`. | `disabled` <br />The session uses the priority set by `mqueue_default_priority`. | `disabled`<br />or<br />`1` - `255` |
 | `mqueue_default_priority`         | Default Topic Priorities    | This sets the default topic priority.                        | `lowest`                                                     | `highest`， `lowest`                |
@@ -218,6 +224,14 @@ Where,
 | `force_gc`                        | --                          | This sets whether to enable forced garbage collection if the specified message number (`count`) or byte received (`bytes`)  is reached: | `true`                                                       | `true`, `false`                     |
 | `force_gc.count`                  | --                          | This sets the received message number that will trigger the forced garbage collection. | `16000`                                                      | `0` - `infinity`                    |
 | `force_gc.bytes`                  | --                          | This sets the received byte number that will trigger the forced garbage collection. | `16MB`<br />Unit: `MB`                                       | --                                  |
+
+::: warning Memory Cost of Disconnected Sessions
+
+With the default in-memory session store, a session whose expiry interval is greater than zero is not removed when the client disconnects. EMQX keeps the session, its subscriptions, and its message queue in memory until the client reconnects or the interval elapses. If clients do not reconnect before their sessions expire, the number of disconnected sessions on a node is roughly the client disconnect rate multiplied by the expiry interval.
+
+Session retention after a client disconnects is the intended behavior of persistent sessions. Allocate enough memory for your workload, or use [durable sessions](../durability/durability_introduction.md), which store session state on disk.
+
+:::
 
 :::tip
 

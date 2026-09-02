@@ -1,6 +1,8 @@
 # Develop EMQX Plugins
 
-This page walks you through the process of developing custom EMQX plugins using the EMQX plugin template.
+This page walks you through the process of developing custom EMQX plugins outside the EMQX monorepo.
+
+EMQX official plugins are usually developed inside the EMQX monorepo. For details, see the [EMQX Plugin Development Guide](https://github.com/emqx/emqx/blob/release-60/PLUGIN.md).
 
 ## Prerequisites
 
@@ -11,7 +13,43 @@ Before you begin, make sure you have the following:
 - [rebar3](https://www.rebar3.org/).
 - Erlang/OTP of the same major version as the EMQX release you wish to target. For more information, see the `org.opencontainers.image.otp.version` attribute in the Docker or refer to the `.tool-versions` file for the used version (e.g., https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions). It's recommended to use [ASDF](https://asdf-vm.com/) to manage Erlang/OTP versions. Alternatively, you can pull the emqx-builder images by running [this command](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh).
 
-## Install the Plugin Template
+## Standalone Plugin Development
+
+Standalone plugin development supports two styles:
+
+- **rebar3 template**: Generate a plugin project with the [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template). This style uses `rebar3` only.
+- **Git submodule style**: For EMQX 6.0 and later, keep the plugin in its own repository, add EMQX as a Git submodule, and build the plugin with the monorepo tooling.
+
+### Git Submodule Style
+
+Use this style when the plugin must stay in a separate repository, for example, when the source code is private, but you still want to build it with the EMQX monorepo tooling.
+
+1. Add EMQX as a submodule:
+
+   ```bash
+   git submodule add --depth 1 git@github.com:emqx/emqx.git emqx
+   ```
+
+2. Check out the EMQX branch that matches your target version, for example, `release-60` for EMQX 6.0.
+
+3. Symlink the plugin repository into the submodule's `plugins/` directory:
+
+   ```bash
+   ln -s ../.. emqx/plugins/{plugin_name}
+   ```
+
+4. Build the plugin package from the EMQX submodule:
+
+   ```bash
+   cd emqx
+   make plugin-{plugin_name}
+   ```
+
+The `.tar.gz` artifact is generated under `emqx/_build/plugins/`.
+
+For the `rebar3` template style, continue with the following steps.
+
+### Install the Plugin Template
 
 EMQX provides an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) to simplify the creation of custom EMQX plugins. To create a new plugin, you should install `emqx-plugin-template` as a `rebar3` template.
 
@@ -30,7 +68,15 @@ If the `REBAR_CACHE_DIR` environment variable is set, the directory for template
 
 :::
 
-## Generate the Plugin Skeleton
+Verify the installation by running:
+
+```shell
+$ rebar3 new help
+```
+
+The output should list `emqx-plugin (custom)` as an available template.
+
+### Generate the Plugin Skeleton
 
 Generate a new plugin project using the installed template:
 
@@ -206,7 +252,7 @@ This file contains translations for the plugin's configuration UI in JSON format
 
 The translations are referenced in the `config_schema.avsc` in UI hints. See `config_i18n.json.example` and `config_schema.avsc.enterprise.example` for more information.
 
-## Implement the Plugin
+### Implement the Plugin
 
 Once the skeleton is ready, begin implementing your plugin's logic. To implement a plugin, the following logic is typically required:
 
@@ -332,7 +378,7 @@ Although this function is invoked for running plugins, it may also be called dur
 
 You can find more implementation examples in [Implement Customized Plugin Logic](./plugin-example.md).
 
-## Build the Plugin Package
+### Build the Plugin Package
 
 Execute the following command to make a release of the plugin:
 
@@ -386,3 +432,48 @@ The tarball includes the compiled applications (as specified in the `relx` secti
     "with_config_schema": true
 }
 ```
+
+## Plugin Extended API and UI
+
+Plugins can expose custom HTTP endpoints through the EMQX plugin API gateway and optionally embed a native UI in the Dashboard.
+
+### Plugin HTTP API
+
+The plugin API gateway routes requests to your plugin under the path:
+
+```
+/api/v5/plugin_api/{plugin_name}/...
+```
+
+To handle these requests, implement `on_handle_api_call/4` in the plugin app module and dispatch by method and path. See `plugins/emqx_username_quota/src/emqx_username_quota_app.erl` and `emqx_username_quota_api.erl` for reference implementations.
+
+#### Callback Contract
+
+```erlang
+on_handle_api_call(Method, PathRemainder, Request, Context) -> Result
+```
+
+| Parameter       | Description                                                                 |
+| --------------- | --------------------------------------------------------------------------- |
+| `Method`        | `get \| post \| put \| patch \| delete`                                     |
+| `PathRemainder` | List of binary path segments after `{plugin_name}` (percent-decoded)        |
+| `Request`       | Map with `query_string`, `headers`, and `body` (JSON, for non-GET/DELETE)   |
+| `Context`       | Map with auth metadata and namespace info                                   |
+
+Accepted return values:
+
+- `{ok, StatusCode, Headers, Body}`
+- `{error, StatusCode, Headers, Body}`
+- `{error, not_found}`
+
+### Plugin Native UI in Dashboard
+
+If the `emqx_plugin` metadata contains an `index` field, the EMQX Dashboard presents the plugin's native UI in an iframe. The Dashboard prepends the plugin API base path:
+
+```
+/api/v5/plugin_api/{plugin_name}{index}
+```
+
+For example, `index: "/ui"` resolves to `/api/v5/plugin_api/{plugin_name}/ui`.
+
+To disable the native UI, omit the `index` field or set it to an empty string.

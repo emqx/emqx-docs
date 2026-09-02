@@ -199,6 +199,8 @@ cluster.autoheal = true
 
 With this feature enabled, EMQX continuously monitors the connectivity between nodes in the cluster. If a network partition is detected, EMQX isolates the affected nodes and continues to operate with the remaining nodes. Once the network partition is resolved, the broker automatically re-integrates the isolated nodes into the cluster.
 
+For information on the log messages and alarms generated during partition detection and recovery, see [Mria Logs and Alarms](../../observability/mria-alarms.md).
+
 ### Cluster Node Autoclean
 
 The cluster node autoclean feature automatically removes the disconnected nodes from the cluster after the configured time interval. This feature ensures that the cluster is running efficiently and prevents performance degradation over time.

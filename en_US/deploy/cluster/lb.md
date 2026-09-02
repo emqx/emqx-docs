@@ -57,7 +57,9 @@ For information on enabling Proxy Protocol on your LB, refer to the respective d
 
 ### Client TLS Certificate Information
 
-Only Proxy Protocol v2 supports forwarding client certificate information, such as Common Name (CN) and Subject. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+Proxy Protocol v2 can forward selected client TLS certificate information, such as the Common Name (CN) and Subject, from a load balancer to an EMQX TCP listener. However, Proxy Protocol v2 does not forward certificate subject alternative names (SANs).
+
+To initialize client attributes from `cert_san.*` values, the TLS connection must terminate at EMQX and the client must present its certificate to an EMQX TLS listener. If the load balancer terminates TLS, SAN values are unavailable to EMQX. If the load balancer forwards the TLS connection to EMQX without terminating it, the client certificate is still presented to EMQX, allowing EMQX to extract its SANs. For configuration details, see [Initialize Client Attributes from Certificate Subject Alternative Names](../../client-attributes/client-attributes.md#initialize-client-attributes-from-certificate-subject-alternative-names).
 
 ## Select an LB Product
 
@@ -82,4 +84,3 @@ The following two pages will use a privately deployed LB server as an example to
 
 - [Load Balance EMQX Cluster with NGINX](./lb-nginx.md)
 - [Load Balance EMQX Cluster with HAProxy](./lb-haproxy.md)
-

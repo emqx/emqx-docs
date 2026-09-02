@@ -95,10 +95,12 @@ This section demonstrates how to configure an HTTP server Connector that is used
 3. Select **HTTP Server** as the connector type and click **Next**.
 4. Enter a name for the Connector. The name should be a combination of upper/lowercase letters or numbers, for example: `httpserver`. 
 5. Set **URL** to the address of your HTTP server. For example: `http://localhost:5000`.
-6. For the remaining settings, keep the default values.
-7. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
-8. Before clicking **Create**, you can click **Test Connectivity** to verify that the Connector can connect to the HTTP server.
-9. Click **Create** to complete the Connector configuration.
+6. [Optional] Add HTTP request headers in **Headers**.
+7. [Optional] Turn on **OAuth2 Client Credentials** to let EMQX obtain an access token and add it to requests sent to the target HTTP server. For details, see [Configure OAuth2 Client Credentials](#configure-oauth2-client-credentials).
+8. [Optional] Turn on **Enable TLS** to enable TLS for connections to the target HTTP server. This setting is independent of the TLS setting for the OAuth2 token endpoint.
+9. [Optional] Configure connection-related options in **Advanced Settings**. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. Before clicking **Create**, you can click **Test Connectivity** to verify that the Connector can connect to the HTTP server.
+11. Click **Create** to complete the Connector configuration.
 
 After the Connector is created successfully, a dialog appears asking whether you want to create a rule using this connector.
 
@@ -106,6 +108,49 @@ After the Connector is created successfully, a dialog appears asking whether you
 - Alternatively, click **Back To Connector List** to return to the Connector list and create a rule later from **Integration** -> **Rules**.
 
 In this example, click **Create Rule** to continue.
+
+### Configure OAuth2 Client Credentials
+
+Starting from EMQX 6.0.4, an HTTP Server Connector supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the target HTTP server, it sends the token in the `Authorization: Bearer <access_token>` request header so that the target server can authenticate EMQX.
+
+When you create or edit the Connector, turn on **OAuth2 Client Credentials**, and then configure the following settings:
+
+| Dashboard Setting | Description |
+| --- | --- |
+| **Token Endpoint** | Required. OAuth2 authorization server endpoint used to request an access token. The URL must use HTTP or HTTPS and must not contain user information. |
+| **Client ID** | Required. OAuth2 client ID used to request an access token. |
+| **Client Secret** | Required. OAuth2 client secret used to request an access token. |
+| **Scope** | Optional OAuth2 scope requested for the access token. |
+| **Token Request Timeout** | Timeout for the HTTP request to the token endpoint. The default is `5` seconds. |
+| **Enable TLS** | Turn on the toggle switch to enable TLS for the token endpoint. This setting is independent of the **Enable TLS** setting for the target HTTP server. |
+
+In HOCON, add the `oauth2` block inside the HTTP Server Connector configuration, at the same level as `url`, `headers`, and `ssl`:
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "messages.write"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+EMQX sends a `POST` request with the `application/x-www-form-urlencoded` content type to the token endpoint. The request body contains `grant_type`, `client_id`, `client_secret`, and the optional `scope`. The token endpoint must return a `200` response with a JSON body containing an `access_token`. It can also return `token_type` and `expires_in`. If present, `token_type` must be `Bearer`, and `expires_in` must be a positive integer.
+
+::: warning Important Notice
+
+- Do not configure an `Authorization` header in either the HTTP Server Connector or its Sink when OAuth2 is enabled. EMQX rejects the configuration because it conflicts with the automatically generated Bearer authorization header.
+- The token endpoint must accept the client ID and client secret as form fields in the request body. Authenticating to the token endpoint with an HTTP Basic `Authorization` header is not supported.
+
+:::
+
+If EMQX cannot obtain an access token, the Connector health check reports the Connector as `disconnected`.
 
 ## Create a Rule with HTTP Server Sink
 
