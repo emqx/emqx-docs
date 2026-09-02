@@ -369,7 +369,7 @@ emqx ctl session-top --out /tmp/session-top.csv --count 20 --sort total_payload_
 
 | 选项 | 描述 | 默认值 |
 | --- | --- | --- |
-| `--out <File>` | CSV 输出文件路径。该选项为必填项，且指定文件不能已存在。 | 无 |
+| `--out <File>` | CSV 输出文件路径。该选项为必填项，且指定的输出文件必须尚不存在。 | 无 |
 | `--count <K>` | 最多导出的会话数。取值范围为 `1` 到 `1000`。 | `10` |
 | `--sort <SortBy>` | 会话排序字段。支持 `total_payload_bytes` 和 `mqueue_length`。 | `total_payload_bytes` |
 | `--batch <Size>` | 每个本地扫描批次处理的缓存会话记录数。取值必须为正整数。 | `1000` |
