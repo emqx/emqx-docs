@@ -1,58 +1,62 @@
-# Create Namespaces
+# ネームスペースの作成
 
-There are two ways to create a namespace in EMQX: explicit creation and automatic creation. With these two approaches, you can flexibly choose how to create namespaces based on your needs.
+EMQXでは、ネームスペースを作成する方法として明示的作成と自動作成の2種類があります。これらの方法を使い分けることで、ニーズに応じて柔軟にネームスペースを作成できます。
 
-- **Explicit creation** is suitable for tightly controlled environments.
-- **Automatic creation** is better for dynamic, large-scale deployments that benefit from reduced manual intervention.
+- **明示的作成**は、厳密に管理された環境に適しています。
+- **自動作成**は、手動操作を減らして動的かつ大規模なデプロイメントに適しています。
 
-## Explicitly Create a Namespace
+EMQX 6.3.0以降、`multi_tenancy.deny_namespaces`にリストされている名前は、いずれの作成方法でも使用できません。デフォルトリストおよび設定方法については、[Denied Namespace Names](./namespace-global-settings.md#denied-namespace-names)を参照してください。
 
-You can manually create namespaces through the Dashboard or the REST API. Explicitly created namespaces can be directly managed, edited, and deleted.
+## ネームスペースを明示的に作成する
 
-**Use case**: Recommended when you need explicit control over which namespaces exist and require fine-grained management.
+ネームスペースは、ダッシュボードまたはREST APIを通じて手動で作成できます。明示的に作成されたネームスペースは、直接管理・編集・削除が可能です。
 
-### Create a Namespace via Dashboard
+**ユースケース**：どのネームスペースが存在するかを明確に管理し、細かく制御したい場合に推奨されます。
 
-To quickly create a namespace in the Dashboard:
+### ダッシュボードでネームスペースを作成する
 
-1. In the Dashboard's left menu, go to **Management** -> **Namespace**.
-2. Click **Create**. In the **Create Namespace** dialog that appears, enter the name of the namespace. Leave other options at their default values. For details on configuring maximum session count and rate limits, see [Configure and Manage Namespaces via Dashboard](./configure-manage-namespace).
-3. Click **Create**. The newly created namespace will appear in the list.
+ダッシュボードでネームスペースを素早く作成する手順は以下の通りです。
 
-### Create a Namespace via REST API
+1. ダッシュボード左メニューの **Management** -> **Namespace** に移動します。
+2. **Create** をクリックし、表示される **Create Namespace** ダイアログでネームスペース名を入力します。他のオプションはデフォルトのままで構いません。最大セッション数やレート制限の設定詳細は、[Configure and Manage Namespaces via Dashboard](./configure-manage-namespace.md)を参照してください。
+3. **Create** をクリックすると、新しく作成されたネームスペースがリストに表示されます。
 
-Before applying any namespace-specific configurations, you must explicitly create the namespace using the following API:
+### REST APIでネームスペースを作成する
+
+ネームスペース固有の設定を適用する前に、以下のAPIを使って明示的にネームスペースを作成する必要があります。
 
 ```
 POST /mt/ns/<namespace>
 ```
 
-Replace `<namespace>` with the desired namespace ID. No request body is required.
+`<namespace>`は作成したいネームスペースIDに置き換えてください。リクエストボディは不要です。
 
-## Automatically Create a Namespace
+名前が`multi_tenancy.deny_namespaces`に含まれている場合、EMQXはHTTP 400でリクエストを拒否します。
 
-In EMQX, namespaces can also be created automatically when clients connect.
+## ネームスペースを自動で作成する
 
-Automatic namespace creation is not based directly on the `client_attrs.tns` field itself, but instead depends on the **Namespace Source** configuration.
+EMQXでは、クライアントが接続した際にネームスペースを自動的に作成することも可能です。
 
-When a client connects, EMQX evaluates the configured namespace source rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the corresponding namespace does not already exist, EMQX automatically creates it.
+自動作成は直接`client_attrs.tns`フィールドに基づくものではなく、**[Take Namespace From](./namespace-global-settings)** 設定に依存します。
 
-**Typical use cases**: This approach is suitable when client connections originate from trusted sources, the namespace identifier can be reliably derived from connection metadata, and namespaces need to be created dynamically for a large number of tenants or business units.
+クライアントが接続すると、EMQXは設定された **Take Namespace From** ルールに従ってクライアント接続メタデータから`tns`（テナントネームスペース）属性を導出します。導出された名前が`multi_tenancy.deny_namespaces`に含まれている場合、EMQXは`not_authorized`で接続を拒否します。そうでなければ、自動作成が許可されており該当ネームスペースが存在しない場合に限り、EMQXが自動的にネームスペースを作成します。
 
-::: tip Note
+**典型的なユースケース**：クライアント接続が信頼できるソースから発生し、ネームスペース識別子を接続メタデータから確実に導出できる場合や、多数のテナントや事業単位のために動的にネームスペースを作成する必要がある場合に適しています。
 
-Automatically created namespaces are read-only and cannot be edited in the Dashboard.
+::: tip 注意
 
-Their configuration (such as session limits or rate limits) cannot be modified, as these namespaces are generated automatically based on the namespace source rules.
+自動作成されたネームスペースは読み取り専用であり、ダッシュボード上で編集できません。
+
+これらのネームスペースの設定（セッション制限やレート制限など）も変更できません。自動作成はネームスペースソースルールに基づいて生成されるためです。
 
 :::
 
-::: tip Note
+::: tip 注意
 
-Automatic namespace creation is only allowed when `multi_tenancy.allow_only_managed_namespaces = false`.
+自動ネームスペース作成は、`multi_tenancy.allow_only_managed_namespaces = false` の場合にのみ許可されます。
 
-When this configuration is set to `true`, only explicitly created namespaces are allowed, and automatic namespace creation is disabled.
+この設定が`true`の場合、明示的に作成されたネームスペースのみが許可され、自動作成は無効になります。
 
-You can also control this behavior from the Dashboard using the **[Allow Only Explicitly Created Namespaces](./namespace-global-settings.md#allow-only-explicitly-created-namespaces)** setting.
+この動作はダッシュボードの **[Allow Only Explicitly Created Namespaces](./namespace-global-settings.md#allow-only-explicitly-created-namespaces)** 設定からも制御可能です。
 
 :::

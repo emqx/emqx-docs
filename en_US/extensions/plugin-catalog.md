@@ -8,20 +8,52 @@ Some plugins remain specialized, while others may later be promoted into standar
 
 The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
 
+## Security
+
+[EMQX ACME Plugin](./plugin-catalog/6.3/emqx-acme.md)
+
+This plugin automatically issues and renews TLS certificates for EMQX SSL listeners through ACME-compatible certificate authorities such as Let's Encrypt.
+
+## Operations
+
+[Hot Upgrade (Relup)](./plugin-catalog/6.3/emqx-relup.md)
+
+This plugin applies `.relup` code-change instructions to a running EMQX node, allowing operators to roll out patched releases without restarting the VM.
+
+[Backup Sync](./plugin-catalog/6.3/emqx-backup-sync.md)
+
+This plugin periodically synchronizes selected backup data from a primary EMQX cluster to a secondary cluster using the Data Backup APIs, keeping the secondary in step for disaster recovery.
+
 ## Data Integration
 
-[MQTT Bridge with Disk Queue](./plugin-catalog/emqx-bridge-mqtt-dq.md)
+[MQTT Bridge with Disk Queue](./plugin-catalog/6.3/emqx-bridge-mqtt-dq.md)
 
-This plugin forwards MQTT messages from EMQX to a remote MQTT broker and uses a disk-backed queue to improve resilience during downstream outages or intermittent connectivity failures.
+This plugin forwards local MQTT messages to another MQTT broker, buffering them on disk for better resilience across network interruptions.
 
-## Data Governance
+[Mapping Tables](./plugin-catalog/6.3/emqx-maptabs.md)
 
-[UNS Governance](./plugin-catalog/emqx-unsgov.md)
+This plugin provides named mapping tables for Rule SQL, allowing rules to replace long `CASE WHEN` expressions with table lookups.
 
-This plugin enforces Unified Namespace topic structure and optional payload validation rules, helping you standardize topic hierarchies and data contracts at publish time.
+## Message Persistence
 
-## Access Control
+[Offline Messages](./plugin-catalog/6.3/emqx-offline-messages.md)
 
-[Per-username Session Quota](./plugin-catalog/emqx-username-quota.md)
+This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
 
-This plugin enforces cluster-wide concurrent session limits per username, with support for quota overrides, snapshot-based inspection APIs, and administrative session control.
+## Messaging
+
+[Sync Request](./plugin-catalog/6.3/emqx-sync-request.md)
+
+This plugin lets an HTTP caller publish one MQTT request through the EMQX REST API and wait synchronously for the first matching MQTT response.
+
+## Connection Management
+
+[Per-username Session Quota](./plugin-catalog/6.3/emqx-username-quota.md)
+
+This plugin enforces a per-username session quota across the cluster, rejecting authentication with `quota_exceeded` once a username reaches its configured limit.
+
+## Namespace Governance
+
+[UNS Governance](./plugin-catalog/6.3/emqx-unsgov.md)
+
+This plugin enforces a Unified Namespace (UNS) topic structure and can validate the payloads of messages published to topics governed by UNS Governance.

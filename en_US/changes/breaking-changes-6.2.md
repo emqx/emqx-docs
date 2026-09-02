@@ -1,5 +1,9 @@
 # Incompatible Changes in EMQX 6.2
 
+## 6.2.1
+
+- [#17157](https://github.com/emqx/emqx/pull/17157) Introduced a new Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, whose default value is `true`. When enabled, rules will only trigger on messages published by clients on the same namespace as the rule itself.
+
 ## 6.2.0
 
 - [#16589](https://github.com/emqx/emqx/pull/16589) The jq language in the Rule Engine runtime has been upgraded from version 1.6.1 to 1.8.1, introducing several subtle incompatibilities. These are unlikely to affect your deployment but are documented here for completeness.

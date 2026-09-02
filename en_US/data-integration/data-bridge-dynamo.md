@@ -30,12 +30,25 @@ The data integration with DynamoDB offers a range of features and benefits tailo
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create a DynamoDB data integration, including how to install a DynamoDB server and create a data table.
+This section describes the preparations you need to complete before you create a DynamoDB data integration, including choosing a credential method, installing a DynamoDB server, and creating a data table.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data integration](./data-bridges.md)
+
+### Choose a Credential Method
+
+Starting from EMQX 6.0.4, the DynamoDB connector supports the following credential methods. Choose a method based on the EMQX deployment environment:
+
+- **Manually configure access keys**: Provide an AWS Access Key ID and AWS Secret Access Key that have permission to access the target DynamoDB resources. This method is suitable for local deployments, non-AWS environments, and deployments that do not use an ECS task role or EC2 instance role.
+- **Automatically obtain temporary credentials**: If EMQX runs as an Amazon ECS task or on an Amazon EC2 instance, configure an ECS task role or EC2 instance role with permission to access the target DynamoDB resources. Leave **AWS Access Key ID** and **AWS Secret Access Key** blank in the connector. EMQX obtains temporary credentials from the ECS task role or EC2 instance metadata and refreshes them before they expire.
+
+::: warning Important Notice
+
+**AWS Access Key ID** and **AWS Secret Access Key** must be provided together or both left blank. Providing only one of these fields results in an invalid connector configuration.
+
+:::
 
 ### Install DynamoDB Local Server and Create Table
 
@@ -136,8 +149,7 @@ The following steps assume that you run both EMQX and DynamoDB on the local mach
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_dynamodb`.
    - **DynamoDB Region**: Enter `us-west-2`.
    - **DynamoDB Endpoint**: Enter `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **AWS Access Key ID**: Enter `root`.
-   - **AWS Secret Access Key**: Enter `public`.
+   - **AWS Access Key ID** and **AWS Secret Access Key**: For the local DynamoDB example, enter `root` and `public`, respectively. To use an ECS task role or EC2 instance role, leave both fields blank. For details, see [Choose a Credential Method](#choose-a-credential-method).
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the DynamoDB server.
 7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the DynamoDB and to record client events. For detailed steps, see [Create a Rule with DynamoDB Sink for Message Storage](#create-a-rule-with-dynamodb-sink-for-message-storage) and [Create a Rule with DynamoDB Sink for Events Recording](#create-a-rule-with-dynamodb-sink-for-events-recording).
@@ -411,6 +423,5 @@ The output will be:
     "ConsumedCapacity": null
 }
 ```
-
 
 

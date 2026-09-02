@@ -38,12 +38,6 @@ For a complete introduction to the system topic, please refer to [here](../obser
 
 Yes. Some system messages may be published frequently, such as client online and offline events, so it is very useful for clients to use shared subscriptions. Subscription example: `$share/group1/$SYS/brokers/+/clients/+/connected`.
 
-## Does EMQX support access to customized protocols?
-
-EMQX provides an ExProto gateway that supports users to develop gRPC services using their familiar programming languages ​​(such as Java, Python, Go, etc.) to parse customized protocols used by devices and facilitate functions such as device connection, authentication, and message transmission.
-
-For details, please refer to [ExProto Protocol Gateway](../gateway/exproto.md).
-
 ## Does EMQX support limiting the topics that clients can publish or subscribe to?
 
 Yes. The authorization management mechanism in EMQX can achieve fine-grained management of client permissions. 

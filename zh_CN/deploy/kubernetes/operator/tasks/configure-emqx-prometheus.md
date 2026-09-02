@@ -42,9 +42,14 @@
    emqx   Ready    10m
    ```
 
-## 创建 API Secret
+## 创建 API 密钥
 
-Prometheus 将从 EMQX Dashboard API 拉取指标，因此您需要登录 Dashboard [创建 API Secret](../../../../dashboard/system.md#api-密钥)。
+登录 Dashboard 并[创建两个专用 API 密钥](../../../../dashboard/system.md#api-密钥)：
+
+- 为 EMQX Exporter 创建具有查看者角色的 API 密钥，并保留默认 scope 配置。除 Prometheus 抓取 API 外，EMQX Exporter 还会读取多个管理 API。
+- 为 Prometheus 创建具有查看者角色且仅包含 `monitoring` scope 的 API 密钥。`PodMonitor` 使用该密钥抓取 `/api/v5/prometheus/stats`。
+
+分别保存用于这两个集成的 API Key 和 Secret Key。每个 Secret Key 仅显示一次。
 
 ## 部署 [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 
@@ -110,7 +115,7 @@ spec:
 
 > 将参数 "--emqx.nodes" 设置为 Operator 创建的用于暴露 18083 端口的服务名称。通过调用 `kubectl get svc` 查找服务名称。
 
-将上述内容保存为 `emqx-exporter.yaml`，替换 `--emqx.auth-username` 和 `--emqx.auth-password` 为您的新 API Secret。运行以下命令部署 `emqx-exporter`：
+将上述内容保存为 `emqx-exporter.yaml`。将 `--emqx.auth-username` 设置为 EMQX Exporter 的 API Key，将 `--emqx.auth-password` 设置为对应的 Secret Key。运行以下命令部署 `emqx-exporter`：
 
 ```bash
 kubectl apply -f emqx-exporter.yaml
@@ -128,6 +133,14 @@ emqx-exporter-856564c95-j4q5v   Running  8m33s
 
 Prometheus Operator 使用 [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) 和 [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD 来定义如何动态监控一组 Pod 或服务。
 
+从 EMQX 6.3.0 开始，Prometheus 抓取 API 默认要求身份认证。在 `PodMonitor` 所在的命名空间中创建 Kubernetes Secret，用于保存为 Prometheus 创建的 API Key 和 Secret Key：
+
+```bash
+kubectl create secret generic emqx-prometheus-basic-auth \
+  --from-literal=username='<API_KEY>' \
+  --from-literal=password='<SECRET_KEY>'
+```
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -139,6 +152,13 @@ spec:
   podMetricsEndpoints:
     - interval: 5s
       path: /api/v5/prometheus/stats
+      basicAuth:
+        username:
+          name: emqx-prometheus-basic-auth
+          key: username
+        password:
+          name: emqx-prometheus-basic-auth
+          key: password
       # emqx dashboard containerPort 的名称
       port: dashboard
       relabelings:
@@ -203,7 +223,7 @@ spec:
       #- default
 ```
 
-`path` 表示指标采集接口的路径。在 EMQX 5 中，路径为：`/api/v5/prometheus/stats`。`selector.matchLabels` 表示匹配 Pod 的标签：`apps.emqx.io/instance: emqx`。
+`path` 指定指标采集 API 的路径。EMQX 5.0 及后续版本使用 `/api/v5/prometheus/stats`。`basicAuth` 从 Kubernetes Secret 中读取 API Key 和 Secret Key。`selector.matchLabels` 通过 `apps.emqx.io/instance: emqx` 标签匹配 EMQX Pod。
 
 targetLabel `cluster` 的值表示当前集群的名称。请确保它是唯一的。
 

@@ -1,27 +1,59 @@
-# Plugin Catalog
+# プラグインカタログ
 
-This catalog collects plugin-specific documentation for custom EMQX plugins maintained outside the built-in product documentation.
+このカタログは、組み込みの製品ドキュメント外で管理されているカスタムEMQXプラグインに関するプラグイン固有のドキュメントを集約しています。
 
-EMQX plugins are typically built when standard product features do not fully meet a requirement, or when a domain-specific problem is better solved as an extension rather than as a built-in capability.
+EMQXプラグインは、標準の製品機能が要件を完全に満たさない場合や、ドメイン固有の問題が組み込み機能ではなく拡張機能として解決される方が適切な場合に構築されることが一般的です。
 
-Some plugins remain specialized, while others may later be promoted into standard EMQX features if they prove useful across a broader range of real-world use cases.
+一部のプラグインは専門的なままですが、他のプラグインは実際の幅広いユースケースで有用であることが証明されれば、後に標準EMQX機能として昇格することもあります。
 
-The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
+このページに掲載されているプラグインは、[`emqx.git`モノリポジトリ](https://github.com/emqx/emqx/tree/master/plugins)の一部として管理されています。
 
-## Data Integration
+## セキュリティ
 
-[MQTT Bridge with Disk Queue](./plugin-catalog/emqx-bridge-mqtt-dq.md)
+[EMQX ACMEプラグイン](./plugin-catalog/6.3/emqx-acme.md)
 
-This plugin forwards MQTT messages from EMQX to a remote MQTT broker and uses a disk-backed queue to improve resilience during downstream outages or intermittent connectivity failures.
+このプラグインは、Let's EncryptなどのACME互換証明書機関を通じて、EMQXのSSLリスナー向けにTLS証明書を自動発行および更新します。
 
-## Data Governance
+## 運用
 
-[UNS Governance](./plugin-catalog/emqx-unsgov.md)
+[ホットアップグレード（Relup）](./plugin-catalog/6.3/emqx-relup.md)
 
-This plugin enforces Unified Namespace topic structure and optional payload validation rules, helping you standardize topic hierarchies and data contracts at publish time.
+このプラグインは、実行中のEMQXノードに対して`.relup`コード変更指示を適用し、VMを再起動せずにパッチリリースを展開できるようにします。
 
-## Access Control
+[バックアップ同期](./plugin-catalog/6.3/emqx-backup-sync.md)
 
-[Per-username Session Quota](./plugin-catalog/emqx-username-quota.md)
+このプラグインは、Data Backup APIを使用してプライマリEMQXクラスターからセカンダリクラスターへ選択したバックアップデータを定期的に同期し、災害復旧のためにセカンダリを最新状態に保ちます。
 
-This plugin enforces cluster-wide concurrent session limits per username, with support for quota overrides, snapshot-based inspection APIs, and administrative session control.
+## データ統合
+
+[ディスクキュー付きMQTTブリッジ](./plugin-catalog/6.3/emqx-bridge-mqtt-dq.md)
+
+このプラグインは、ローカルのMQTTメッセージを別のMQTTブローカーに転送し、ネットワークの中断に対するレジリエンスを高めるためにディスク上にバッファリングします。
+
+[マッピングテーブル](./plugin-catalog/6.3/emqx-maptabs.md)
+
+このプラグインは、Rule SQL向けに名前付きマッピングテーブルを提供し、ルールで長い`CASE WHEN`式をテーブルルックアップに置き換えられるようにします。
+
+## メッセージ永続化
+
+[オフラインメッセージ](./plugin-catalog/6.3/emqx-offline-messages.md)
+
+このプラグインは、MQTTメッセージをMySQLまたはRedisに永続化し、標準のMQTTセッション永続化を超えて、サブスクライバーが再接続後にメッセージを取得できるようにします。
+
+## メッセージング
+
+[同期リクエスト](./plugin-catalog/6.3/emqx-sync-request.md)
+
+このプラグインは、HTTP呼び出し元がEMQX REST APIを介して1つのMQTTリクエストをパブリッシュし、最初に一致するMQTTレスポンスを同期的に待機できるようにします。
+
+## 接続管理
+
+[ユーザー名ごとのセッションクォータ](./plugin-catalog/6.3/emqx-username-quota.md)
+
+このプラグインはクラスター全体でユーザー名ごとのセッションクォータを強制し、設定された制限に達したユーザー名に対しては`quota_exceeded`で認証を拒否します。
+
+## ネームスペースガバナンス
+
+[UNSガバナンス](./plugin-catalog/6.3/emqx-unsgov.md)
+
+このプラグインは統一ネームスペース（UNS）トピック構造を強制し、UNSガバナンスで管理されるトピックにパブリッシュされたメッセージのペイロードを検証できます。

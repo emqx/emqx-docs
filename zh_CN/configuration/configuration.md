@@ -50,7 +50,7 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 
 例如，您可能希望在部署时使用一个基本的身份认证配置，然后在运行时通过 Dashboard UI 覆盖它为更复杂的配置。
 
-对于 `node` 和 `cluster` 等不可变配置，**不推荐**将它们设置在 `base.hocon` 文件中。有关更多信息，请参阅[不可变配置文件](#不可变配置文件) 部分。
+对于 `node` 和 `cluster` 等不可变配置，如果这些值是部署特定的，并且不应在运行时修改，也可以使用环境变量。有关更多信息，请参阅[环境变量](#环境变量)和[配置覆盖规则](#配置覆盖规则)。
 
 ::: tip
 
@@ -64,13 +64,13 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 
 如果集群中的某个节点被重启或添加了新节点，该节点将自动从集群中的其他节点复制并应用 `cluster.hocon` 文件。因此，不建议手动修改此文件。
 
-此文件中的配置会覆盖 `base.hocon` 文件中的配置。有关配置覆盖优先级的详细信息，请参阅[配置覆盖规则](#配覆盖规则)。
+此文件中的配置会覆盖 `base.hocon` 文件中的配置。有关配置覆盖优先级的详细信息，请参阅[配置覆盖规则](#配置覆盖规则)。
 
 自 EMQX 5.1 版本起，对集群配置的任何更改都会在覆盖 `cluster.hocon` 文件之前备份该文件。备份文件会带有节点本地时间的时间戳，最多可以保留 10 个备份文件。
 
 ## 不可变配置文件
 
-出于向后兼容的考虑，`emqx.conf` 文件仍然是用于配置关键系统设置的主要配置文件，包括 `node` 和 `cluster` 配置。该文件的优先级高于 `base.hocon` 和 `cluster.hocon`，但低于环境变量。
+出于向后兼容的考虑，`emqx.conf` 文件仍可用于配置关键系统设置，包括 `node` 和 `cluster` 配置。该文件的优先级高于 `base.hocon` 和 `cluster.hocon`，但低于环境变量。除非您明确需要这种优先级，并且了解发行包升级可能更新此文件中的默认配置，否则应避免修改它。
 
 有关配置覆盖的更多细节，请参阅[配置覆盖规则](#配置覆盖规则)部分。
 
@@ -138,7 +138,7 @@ node {
 
 1. 由于配置文件中的 `.` 分隔符不能使用于环境变量，因此 EMQX 选用双下划线 `__` 作为配置分割；
 2. 为了与其他的环境变量有所区分，EMQX 还增加了一个前缀 `EMQX_` 来用作环境变量命名空间;
-3. 环境变量的值是按 HOCON 值解析的，这也使得环境变量可以用来传递复杂数据类型的值，但要注意特殊字符如 `:` 和 `=` 需要用双引号 `"` 包裹。
+3. 环境变量的值是按 HOCON 值解析的，这也使得环境变量可以用来传递复杂数据类型的值。如果值中包含 HOCON 特殊字符（例如 `:`、`=` 或 `#`），需要用双引号 `"` 包裹，让解析器将其视为字符串字面量。特别地，`#` 在 HOCON 中表示行注释 —— 未加引号时，解析器会静默丢弃 `#` 到行尾的所有内容。
 
 转换示例：
 
@@ -163,6 +163,34 @@ listeners.ssl.default {
 }
 ```
 
+::: warning 包含 `#`、`:`、`=` 的值
+
+一个常见的坑是传递包含 `#` 字符的密码（或任意字符串）。由于 `#` 在 HOCON 中表示行注释，下面这样写：
+
+```bash
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="MQtt#123"
+```
+
+实际解析出的密码是 `MQtt` —— `#123` 被当作注释丢弃了。要让字面值原样传入，需要用 **HOCON 层面的**双引号包裹（不仅仅是 shell 引号），让解析器看到包含引号在内的 `"MQtt#123"`：
+
+```bash
+# 正确写法 —— HOCON 解析器看到的值是 "MQtt#123"
+export EMQX_DASHBOARD__DEFAULT_PASSWORD='"MQtt#123"'
+
+# 等价写法，将内部的双引号在 shell 中转义
+export EMQX_DASHBOARD__DEFAULT_PASSWORD="\"MQtt#123\""
+```
+
+同样的规则适用于包含 `:` 或 `=` 的值。URL 编码（例如用 `%23` 代替 `#`）不起作用 —— EMQX 不会对环境变量值做 URL 解码。
+
+:::
+
+::: tip 为什么有些未加引号的值能传过去，有些不能
+
+EMQX 内部会将每个环境变量值包装为 `fake_key=<value>` 并尝试按 HOCON 解析。解析成功则使用解析出的值；如果因为不是合法 HOCON 语法而失败，则回退为原始字符串。因此 `EMQX_..._PASSWORD="abc#def"` 会变成 `abc`（HOCON 合法，`#def` 是注释），而 `EMQX_..._PASSWORD=".abc#def"` 会保留为 `.abc#def`（HOCON 语法非法，回退为原始字符串）。用 HOCON 引号包裹值后，行为是确定的。
+
+:::
+
 ::: tip
 未定义的根路径会被 EMQX 忽略，例如 `EMQX_UNKNOWN_ROOT__FOOBAR` 这个环境变量会被 EMQX 忽略，因为 `UNKNOWN_ROOT` 不是预先定义好的根路径。
 
@@ -173,6 +201,26 @@ listeners.ssl.default {
 ```
 
 :::
+
+::: tip
+从 EMQX 6.3.0 开始，`EMQX_FEATURES` 是用于[功能门控](../deploy/feature-gates.md)的特殊启动环境变量。它不会映射到 HOCON 配置路径，不会写入 `cluster.hocon`，并且只在 EMQX 启动时解析。
+:::
+
+
+### 启动期环境变量
+
+大多数 `EMQX_` 前缀的环境变量按上述转换规则覆盖 `emqx.conf` 中的配置项。少数变量在配置文件解析之前就被读取，用于配置 EMQX 自身，因此没有对应的 `emqx.conf` 配置项：
+
+- `EMQX_FEATURES`：选择节点启动的应用集合，例如 `FULL` 或 `ESSENTIAL`。
+- `EMQX_SECURITY_PROFILE`：选择节点级安全配置方案（Security Profile），可选值为 `legacy` 或 `hardened`。
+
+从 EMQX 6.3.0 开始，`emqx` 命令每次执行时都会从 `etc/emqx.env` 加载环境变量，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。对于 RPM 和 DEB 安装，该文件位于 `/etc/emqx/emqx.env`。请使用该文件设置启动期环境变量，而不要修改 systemd 单元文件。
+
+- 文件中设置的值会覆盖从环境中继承的变量。
+- 软件包升级会保留您对该文件的修改。
+- EMQX 随附的文件以注释行列出启动期环境变量，例如 `#KEY="${KEY:-default}"`。如果直接取消注释而不修改表达式，文件会保留环境中已有的非空值；如果变量未设置或值为空，则使用默认值。如需覆盖已有值，请将表达式改为 `KEY=value`。
+- 修改启动期环境变量后，需要重启 EMQX 节点。
+- 普通的 `EMQX_` 前缀覆盖变量（例如 `EMQX_NODE__COOKIE`）也可以设置在该文件中。
 
 ## 配置覆盖规则
 
@@ -335,6 +383,55 @@ listeners.tcp.default {
     ...
 }
 ```
+
+## 配置即代码最佳实践
+
+当您通过源码仓库或自动化系统管理 EMQX 配置时，可以遵循以下经验规则：
+
+- 将配置即代码管理的配置项放在 `base.hocon` 中。
+- 不要手动编辑 `cluster.hocon`，也不要挂载您自己的 `cluster.hocon` 文件。
+- 除非您了解 `emqx.conf` 在配置层级中具有更高优先级及其升级影响，否则应避免修改 `emqx.conf`。
+- 对于不希望通过 Dashboard、API 或 CLI 在运行时修改的简单覆盖项，可以使用环境变量。
+
+配置即代码推荐以 `base.hocon` 作为配置事实来源。它位于静态配置目录中，并在节点启动时读取，可以由打包、镜像构建、配置管理或 GitOps 流程管理。通过 Dashboard、REST API 或 CLI 做出的运行时变更会持久化到 `cluster.hocon`，并覆盖在 `base.hocon` 之上。
+
+例如，部署可以在 `base.hocon` 中维护监听器、日志、认证、授权和数据集成等基线配置：
+
+```bash
+# base.hocon
+listeners.tcp.default {
+  bind = "0.0.0.0:1883"
+  max_connections = 1024000
+}
+
+log.console {
+  enable = true
+  level = warning
+}
+
+authentication = [
+  {
+    mechanism = password_based
+    backend = built_in_database
+    user_id_type = username
+  }
+]
+```
+
+不要将 `cluster.hocon` 作为配置即代码的事实来源。该文件由 EMQX 在运行时管理：Dashboard、REST API 和 CLI 会重写它；EMQX 在覆盖前会创建备份；集群节点之间也可能相互复制该文件。手动编辑或挂载该文件可能导致您的变更与运行时更新冲突，或被覆盖。
+
+`emqx.conf` 是随发行包提供的基线配置文件。保持该文件不变，可以让安装实例在升级时更容易获取新版本提供的保守默认配置变更。如果在 `emqx.conf` 中设置了某个配置项，它的优先级高于 `base.hocon` 和 `cluster.hocon`，因此针对同一配置项的运行时变更可能看起来已经生效，但在节点重启后被恢复。只有在明确需要这种行为时，才使用 `emqx.conf`。
+
+环境变量具有最高优先级。它们适用于简单的部署特定值，尤其是由运行环境提供的值，以及不应在运行时修改的值：
+
+```bash
+export EMQX_NODE__NAME='emqx@node1.example.net'
+export EMQX_NODE__COOKIE='mysecret'
+export EMQX_CLUSTER__DISCOVERY_STRATEGY='static'
+export EMQX_CLUSTER__STATIC__SEEDS='["emqx@node1.example.net", "emqx@node2.example.net"]'
+```
+
+由于环境变量会覆盖所有配置文件，因此如果某些配置需要后续由运维人员通过 Dashboard、API 或 CLI 调整，应避免使用环境变量设置这些配置。
 
 ## Schema 手册
 
@@ -553,6 +650,11 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - [字符串操作函数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
   - 还添加了一个新函数 `any_to_string/1`，用于将任何中间非字符串值转换为字符串。
 - **数组函数**：[nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
+- **主题函数**：
+  - `topic_join(Words)`：将数组中的主题层级用 `/` 拼接为 MQTT 主题或主题过滤器。例如，`topic_join(['devices', clientid, '#'])` 会生成 `devices/<clientid>/#`。
+  - `topic_join(Parent, Word)`：将 `Word` 追加到 `Parent` 主题之后。如果 `Parent` 已经以 `/` 结尾，则不会重复添加分隔符。
+  - `topic_match(Topic, Filter)`：判断 MQTT 主题是否匹配主题过滤器，返回 `true` 或 `false`。例如，`topic_match(topic, topic_join(['devices', clientid, '#']))` 可用于判断当前主题是否匹配客户端专属的主题过滤器。
+  - `topic_split(Topic)`：按 `/` 将 MQTT 主题拆分为主题层级数组。
 - **随机函数**：rand_str, rand_int
 - **无模式编码/解码函数**：
   - [bin2hexstr/1](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
@@ -563,13 +665,11 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - [base64_encode/1](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - [base64_encode(Data, 'no_padding')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (自 6.0.2 起)
   - [base64_encode(Data, 'no_padding', 'urlsafe')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (自 6.0.2 起)
-  - `json_value(Data, Path)`: 使用点分隔路径从 JSON 字符串中提取值，以导航嵌套结构。例如，如果 `username` 是一个 JSON 对象，可以使用 `json_value(username, 'shop.floor')` 访问字段。 (自 6.0.2 起)
-  - `jwt_value(Data, Path)`: 解码 JWT 令牌负载并使用点分隔路径提取声明值。例如，如果 `password` 是一个带有自定义声明的 JWT，可以使用 `jwt_value(password, 'client_attrs.unitid')` 访问嵌套值。 (自 6.0.2 起)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **散列函数**：
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
-  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
+  - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min <= X <= Max）。
+  - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min <= X <= Max）。
 - **比较函数**：
   - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
   - `num_neq(A, B)`：如果两个数字不相同，则返回 'true'，否则返回 'false'。
@@ -590,6 +690,11 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `getenv(Name)`：返回环境变量 `Name` 的值，并遵循以下限制：
     - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
     - 这些值一旦从操作系统环境加载便不会再改变。
+
+- **数据提取函数**：
+  - `json_value(Data, Path)`: 使用点分隔路径从 JSON 字符串中提取值，以导航嵌套结构。例如，如果 `username` 是一个 JSON 对象，可以使用 `json_value(username, 'shop.floor')` 访问字段。
+  - `jwt_value(Data, Path)`: 解码 JWT 令牌负载并使用点分隔路径提取声明值。例如，如果 `password` 是一个带有自定义声明的 JWT，可以使用 `jwt_value(password, 'client_attrs.unitid')` 访问嵌套值。
+  - `is_jwt(Data)`（从 6.2.3 起）：检查 `Data` 是否具有 JWS Compact 格式的 JWT 结构。仅当该值包含 3 个以点号分隔且可进行 Base64URL 解码的片段，并且解码后的 header 是包含 `alg` 字段的 JSON 对象时，该函数才返回 `true`。该函数不会校验签名，也不会检查 payload。对于 `undefined`、`null`、空字符串、包含 5 个片段的 JWE Token 和格式错误的值，该函数返回 `false`。
 
 #### 条件
 

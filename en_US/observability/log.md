@@ -31,6 +31,12 @@ The table below describes the meaning and output contents for each log level.
 | error     | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
 | critical  | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | A component is unable to start or function normally due to incorrect configuration. |
 
+::: warning Important Notice
+
+Raw MQTT packet data in connection and parser-error logs is redacted by default. To temporarily log raw packet data for troubleshooting, add trusted client IP addresses or CIDR ranges to the listener's `allow_log_packet_data_from` option. Enable this option only for trusted clients and only during diagnostics, because raw packet data can contain credentials and other sensitive information.
+
+:::
+
 ## Configure Logging via Dashboard
 
 This section mainly describes how to configure logging with EMQX Dashboard. Changes take effect immediately without restarting the node.
@@ -204,3 +210,40 @@ If any events are throttled within a time window, a summary warning message will
 ```
 
 As you can see, the first "authorization_permission_denied" event is fully logged. The next 4 similar events are dropped but their number is recorded in "log_events_throttled_during_last_period" statistics.
+
+## Centralize Logs in Production
+
+In production, send logs from every EMQX node to a central system outside the EMQX cluster. Logs kept only on the broker host may become unavailable when the node or its storage fails. Central collection also makes it possible to correlate events across Core and Replicant nodes and to alert on conditions that are not exposed as metrics or built-in alarms.
+
+### Choose a Collection Method
+
+Use one of the following collection patterns:
+
+- In a containerized deployment, such as Kubernetes, write JSON logs to the console and use the platform's logging agent to collect the container output.
+- For file logging, use a log agent that collects `emqx.log.N` files, handles rotation without duplicating records, and preserves the structured fields.
+- Use the [OpenTelemetry log handler](./opentelemetry/logs.md) to export logs to an OpenTelemetry Collector and a compatible backend.
+
+### Add Context and Protect Logs
+
+Add deployment metadata such as cluster, node, node role, EMQX version, and availability zone in the collection pipeline.
+
+Protect centralized logs as operational data. Log fields can contain client IDs, usernames, topics, peer addresses, and error details.
+
+### Monitor the Collection Pipeline
+
+Monitor the collection path by using collector and transport health metrics or an explicit heartbeat that does not depend on application log volume. Configure alerts for the following conditions:
+
+- The collector or transport is unhealthy.
+- The collector or transport rejects or drops records.
+- The central backend approaches its storage limits.
+
+Do not alert merely because a reachable EMQX node produces no logs. An idle or healthy node may have nothing to report at the configured severity.
+
+### Define a Log Alerting Policy
+
+Create log-based alerts selectively and match stable structured fields such as `level` and `msg`.
+
+- **Warning events:** These events are often useful as early-warning signals, but some can be caused by expected client behavior. Use a rate or deviation from the normal baseline where individual events do not require action.
+- **Error or critical events:** Events that indicate loss of replication, configuration synchronization, listener startup, or durable storage should normally alert immediately.
+
+For a recommended set of metric- and log-based alerts, including Mria replication signals, see [Production Monitoring Best Practices](./monitoring-best-practices.md#centralize-logs-and-alert-selectively).
