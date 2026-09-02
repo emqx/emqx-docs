@@ -98,6 +98,8 @@ In addition to the publish-side limiters above, EMQX supports subscriber-side de
 | delivery_bytes_rate     | Max Message Delivery Traffic (Per Client)       | The maximum rate (in bytes) at which data is delivered to a single subscriber per node. | QoS 0 messages are dropped. QoS 1 and QoS 2 messages are queued internally and retried after a delay derived from the limiter configuration. |
 | delivery_bytes_burst    | Max Message Delivery Traffic Burst (Per Client) | Burst allowance on top of `delivery_bytes_rate`.             | Same as above.                                               |
 
+When a delivery rate limit blocks a QoS 1 or QoS 2 message, EMQX queues that message and subsequent QoS 1 and QoS 2 messages together. This prevents the delivery rate limiter itself from causing later messages to overtake earlier messages.
+
 Unlike publish-side limiters, delivery limiters are channel-only. They apply per client connection and are not shared across zones or listener groups.
 
 ::: tip
