@@ -141,16 +141,18 @@ where:
 
 WebSocket and secure WebSocket listeners have two options that control how EMQX determines a client's source address when the listener sits behind a proxy or load balancer:
 
-- `websocket.proxy_address_header` (default: `x-forwarded-for`)
-- `websocket.proxy_port_header` (default: `x-forwarded-port`)
+- `websocket.proxy_address_header`: Specifies the HTTP header that carries the client IP address.
+- `websocket.proxy_port_header`: Specifies the HTTP header that carries the client port.
 
-When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP.
+Starting from EMQX 6.3.0, both options default to `""`. EMQX uses the corresponding TCP peer address or port for any option left empty. To obtain either value from a trusted proxy, explicitly configure the corresponding header name, such as `x-forwarded-for` or `x-forwarded-port`.
+
+When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP. Configured header names are matched case-insensitively.
 
 ::: warning Trust Forwarded Address Headers Only Behind a Trusted Proxy
 
-The header value determines the client's apparent source IP, so it must be honored only when a trusted proxy sets it:
+The header value determines the client source IP that EMQX uses, so it must be honored only when a trusted proxy sets it:
 
-- If the listener is directly reachable by clients (no proxy in front), any client can send the header and choose its own apparent source IP. Set `proxy_address_header = ""` and `proxy_port_header = ""` to always use the real TCP peer address.
+- If the listener is directly reachable by clients (no proxy in front), keep `proxy_address_header` and `proxy_port_header` empty so that EMQX always uses the real TCP peer address.
 - If there is a proxy but it **appends** its observation to an inbound `X-Forwarded-For` header instead of overwriting or stripping it (appending is the default behavior of most proxies, for example NGINX's `$proxy_add_x_forwarded_for`), the leftmost entry that EMQX reads is still the one supplied by the client, so the source IP can still be spoofed. Configure the proxy to overwrite the header with the address it observed, use the [PROXY protocol](../deploy/cluster/lb.md) instead, or set the options to `""`.
 - Do not try to disable the mechanism by pointing the option at an unused header name: a client can send a header by any name. The empty string is the only value a client can never supply.
 
