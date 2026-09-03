@@ -1,8 +1,8 @@
 # MQTT Configuration
 
-[MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
+[MQTT](https://mqtt.org/) is a lightweight publish/subscribe messaging protocol for connecting Internet of Things (IoT) devices. EMQX supports MQTT 3.1, 3.1.1, and 5.0.
 
-EMQX is 100% MQTT 5.0 and 3.x compliant. This section introduces the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+This page describes how to configure MQTT protocol behavior in EMQX, including packet validation and limits, subscriptions, delayed publishing, Keep Alive handling, and sessions.
 
 ## Basic MQTT Configurations
 
@@ -26,6 +26,7 @@ mqtt {
   max_qos_allowed = 2
   max_topic_alias = 65535
   retain_available = true
+  strict_mode = true
 }  
 ```
 
@@ -39,6 +40,39 @@ Where,
 | `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |
 | `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` - `65535`       |
 | `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`     |
+| `strict_mode`           | Strict Mode          | This sets whether to apply additional protocol compliance checks to incoming MQTT packets. Packets that fail these checks cause the client connection to be closed. | `true` | `true`, `false` |
+
+### Strict MQTT Packet Validation
+
+Starting from EMQX 6.3.0, strict MQTT packet validation is enabled by default. With `strict_mode = true`, EMQX rejects malformed MQTT packets, including packets with:
+
+- Invalid MQTT fixed-header flag combinations.
+- In an MQTT 3.1.1 CONNECT packet, a Password Flag without a Username Flag.
+- Invalid UTF-8 strings in fields such as the client ID, topic name, username, password, Will Topic, or MQTT 5.0 string properties. This includes null characters and other prohibited control characters.
+- A zero Packet Identifier where the MQTT protocol requires a non-zero value.
+
+When a malformed packet is detected, EMQX closes the client connection and records a `frame_parse_error` log at the `info` level with the specific reason. For MQTT 5.0 clients, EMQX also sends a CONNACK or DISCONNECT packet with reason code `0x81` (Malformed Packet) when possible. MQTT 3.1 and MQTT 3.1.1 clients are disconnected without a reason code for malformed packets.
+
+If an existing client does not conform to these MQTT protocol requirements, you can temporarily disable the protocol compliance checks that are enforced only in strict mode:
+
+```bash
+mqtt.strict_mode = false
+```
+
+To disable strict-mode checks only for specific legacy clients, configure a zone and associate it with a dedicated listener:
+
+```bash
+zones.legacy_clients {
+  mqtt.strict_mode = false
+}
+
+listeners.tcp.legacy {
+  bind = "0.0.0.0:1884"
+  zone = legacy_clients
+}
+```
+
+Clients connected through other listeners continue to use strict validation. For more information about zones, see [Zone Override](./configuration.md#zone-override).
 
 ## Subscription Settings
 

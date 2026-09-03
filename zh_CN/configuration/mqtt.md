@@ -1,8 +1,8 @@
-# MQTT
+# MQTT 配置
 
-[MQTT](https://mqtt.org/) 是物联网 (IoT) 的标准消息传输协议。它被设计为一个极轻量级的发布/订阅消息传输机制，非常适合于需要小代码占用和最小网络带宽的远程设备连接。
+[MQTT](https://mqtt.org/) 是一种用于连接物联网（IoT）设备的轻量级发布/订阅消息传输协议。EMQX 支持 MQTT 3.1、3.1.1 和 5.0。
 
-EMQX 完全兼容 MQTT 5.0 和 3.x，本节将介绍 MQTT 相关功能的基本配置项，包括基本 MQTT 设置、订阅设置、会话设置、强制关闭设置和强制垃圾回收设置等。
+本页介绍如何配置 EMQX 的 MQTT 协议行为，包括报文校验和限制、订阅、延迟发布、Keep Alive 处理以及会话。
 
 ## 基本 MQTT 配置
 
@@ -24,6 +24,7 @@ mqtt {
   max_qos_allowed = 2
   max_topic_alias = 65535
   retain_available = true
+  strict_mode = true
 }  
 ```
 
@@ -37,6 +38,39 @@ mqtt {
 | `max_qos_allowed`  | 最大 QoS           | QoS 等级决定了消息的可靠性和传递保证等级。<br /><br />此设置允许 MQTT 消息的最大服务质量（QoS）等级。 |            |                 |
 | `max_topic_alias`  | 最大主题别名数     | 主题别名是通过使用较短的别名代替完整主题名称来减少 MQTT 数据包大小的一种方式。<br /><br />此设置允许在 MQTT 会话中使用的最大主题别名数量。 | `65535`    | `1` - `65535`   |
 | `retain_available` | 启用保留消息       | 保留消息用于存储发布到主题的最后一条消息，以便新订阅该主题的客户端可以接收到最新的消息。<br /><br />此设置是否启用 MQTT 中的保留消息功能。 | `true`     | `true`, `false` |
+| `strict_mode`      | 严格模式           | 设置是否对传入的 MQTT 报文执行额外的协议合规性校验。未通过这些校验的报文会导致客户端连接关闭。 | `true` | `true`, `false` |
+
+### MQTT 报文严格校验
+
+从 EMQX 6.3.0 开始，默认启用 MQTT 报文严格校验。设置 `strict_mode = true` 后，EMQX 会拒绝格式错误的 MQTT 报文，包括存在以下问题的报文：
+
+- MQTT 固定报文头中的标志位组合无效。
+- MQTT 3.1.1 CONNECT 报文设置了 Password Flag，但未设置 Username Flag。
+- 客户端 ID、主题名称、用户名、密码、Will Topic 或 MQTT 5.0 字符串属性等字段包含无效的 UTF-8 字符串，包括空字符和其他协议禁止的控制字符。
+- MQTT 协议要求 Packet Identifier 非零，但报文中的值为零。
+
+检测到格式错误的报文后，EMQX 会关闭客户端连接，并记录一条 `info` 级别的 `frame_parse_error` 日志，其中包含具体原因。对于 MQTT 5.0 客户端，EMQX 还会在可能的情况下发送原因码为 `0x81`（Malformed Packet）的 CONNACK 或 DISCONNECT 报文。对于 MQTT 3.1 和 MQTT 3.1.1 客户端，EMQX 会直接断开连接，不返回格式错误原因码。
+
+如果现有客户端不符合这些 MQTT 协议要求，可以通过以下配置暂时关闭仅在严格模式下执行的协议合规性校验：
+
+```bash
+mqtt.strict_mode = false
+```
+
+如需仅对特定旧客户端关闭严格模式校验，可以配置一个 Zone，并将其关联到专用监听器：
+
+```bash
+zones.legacy_clients {
+  mqtt.strict_mode = false
+}
+
+listeners.tcp.legacy {
+  bind = "0.0.0.0:1884"
+  zone = legacy_clients
+}
+```
+
+通过其他监听器连接的客户端仍使用严格校验。有关 Zone 的更多信息，请参见 [Zone 覆盖](./configuration.md#zone-覆盖)。
 
 ## 订阅设置
 
