@@ -48,6 +48,8 @@ The data that EMQX supports for import and export includes:
 
 Data can be exported from any running cluster node.
 
+Starting from EMQX 6.3.0, the exported backup records the node's security profile in `META.hocon`. EMQX uses this metadata to check profile compatibility when the backup is imported.
+
 ### Import
 
 To import data, the EMQX node must be running, and some conditions need to be met for the import operation to be successful:
@@ -65,6 +67,30 @@ In rare cases, existing data may be incompatible with the imported data. For exa
 
 Therefore, importing data into an EMQX cluster without clearing data may require extra caution.
 
+:::
+
+#### Security Profile Compatibility
+
+A [security profile](../access-control/security-profile.md) selects a set of security-related default behaviors for a node. EMQX provides the `legacy` and `hardened` profiles. Starting from EMQX 6.3.0, EMQX checks the backup's recorded security profile during import. Uploading a backup file does not run this check or restore any data.
+
+| Backup Security Profile | Target Node Security Profile | Default Import Result |
+| --- | --- | --- |
+| `hardened` | `hardened` | Allowed |
+| `legacy` | `hardened` | Rejected unless you explicitly allow the mismatch |
+| No security profile metadata, such as a backup created before EMQX 6.3.0 | `hardened` | Treated as `legacy` and rejected unless you explicitly allow the mismatch |
+| Any profile | `legacy` | Allowed |
+
+This table describes only the security profile check. Allowing a mismatch bypasses only this check. All other backup compatibility checks still apply.
+
+::: warning Important Notice
+Restoring data captured under `legacy` to a `hardened` node can change how the restored deployment behaves:
+
+- On a target node where `node.default_listener_address` is not set, MQTT and Dashboard HTTP listeners configured with a port but no address resolve to loopback instead of all network interfaces.
+- An empty or fully disabled authenticator chain denies all clients instead of allowing them.
+- A restored Dashboard account that still uses the default password cannot log in.
+- Authentication and authorization backend failures that `legacy` ignores cause the operation to be denied.
+
+Review the [differences between security profiles](../access-control/security-profile.md) before allowing a security profile mismatch.
 :::
 
 ## Manage Backup Files in Dashboard
@@ -99,7 +125,7 @@ Global administrators can manage backup files in **Global** or a specific [Names
 
    - **Download**: Download the backup file to your local device.
    - **Delete**: Delete the backup file from the selected scope.
-   - **Restore**: Import the backup file into the selected scope. If you selected a specific Namespace, verify the target Namespace in the confirmation dialog before you confirm the restore. After the restore succeeds, verify that the success message identifies the target Namespace.
+   - **Restore**: Import the backup file into the selected scope. If you selected a specific Namespace, verify the target Namespace in the confirmation dialog before you confirm the restore. The **Allow Security Profile Mismatch** checkbox is cleared by default. Select it only after reviewing and accepting the risks described in [Security Profile Compatibility](#security-profile-compatibility). After the restore succeeds, verify that the success message identifies the target Namespace.
 
 In a specific Namespace view, upload, download, delete, and restore operations apply to that Namespace. A global administrator can manage and restore backup files in this view but cannot create a backup.
 
@@ -114,6 +140,15 @@ A global administrator can pass the optional `namespace` query parameter to the 
 - `POST /api/v5/data/import`: Import a backup file.
 
 If the global administrator omits `namespace`, the operation applies to backup files in **Global**. For a namespaced caller, EMQX ignores the parameter and applies the operation to the caller's assigned Namespace.
+
+For `POST /api/v5/data/import`, the optional `allow_security_profile_mismatch` request-body field defaults to `false`. Set it to `true` only to import a backup exported under the `legacy` profile or a backup without security profile metadata into a `hardened` node after accepting the compatibility risks. For example:
+
+```json
+{
+  "filename": "emqx-export-2026-09-01-08-30-00.000.tar.gz",
+  "allow_security_profile_mismatch": true
+}
+```
 
 ## CLI Example
 
@@ -183,3 +218,9 @@ This section shows how to import and export data using the command-line interfac
     Importing emqx_app database table...
     Data has been imported successfully.
     ```
+
+   To import a backup exported under the `legacy` profile or a backup without security profile metadata into a `hardened` node after reviewing the compatibility risks, append `--allow-security-profile-mismatch`:
+
+   ```bash
+   ./emqx ctl data import emqx-export-2026-09-01-08-30-00.000.tar.gz --allow-security-profile-mismatch
+   ```
