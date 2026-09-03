@@ -202,6 +202,37 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 - [MQTT Durable Sessions](../durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
 - [Rule Engine](../data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
 
+## Security Considerations
+
+EMQX authorizes a queue subscription against the full topic, including the `$queue/` prefix and the queue name. Write authorization rules for that full topic. A queue subscription also delivers messages that the queue stored before the subscription was created.
+
+### Queue Subscriptions Need Their Own Rules
+
+Rules written for a plain topic space do not cover the corresponding queue subscriptions:
+
+- A rule for `t/#` does not apply to `$queue/orders/t/#`. EMQX treats the two as different topics.
+- A wildcard rule never matches a topic that starts with `$`. A rule that denies `#`, including the `{eq, "#"}` rule in the default `acl.conf`, does not deny `$queue/orders/#`.
+
+A client that is denied `#` can therefore still subscribe to `$queue/orders/#` and receive every message the queue holds. Add explicit rules for the `$queue/` namespace, and keep them at least as strict as the rules for the topics the queue ingests:
+
+```erlang
+%% Allow one consumer to read one queue.
+{allow, {username, "order_worker"}, subscribe, ["$queue/orders", "$queue/orders/#"]}.
+
+%% Deny all other queue subscriptions, including the deprecated prefix.
+{deny, all, subscribe, ["$queue/#", "$q/#"]}.
+```
+
+Keep the deprecated `$q/` prefix in the rules while any client still uses it. See [Deprecated Prefix](#deprecated-prefix).
+
+This behavior differs from [shared subscriptions](../messaging/mqtt-shared-subscription.md). For `$share/<group>/t/#`, EMQX removes the prefix and authorizes `t/#`. For `$queue/<name>/t/#`, EMQX authorizes the full topic.
+
+### Auto-Creation Grants Control over the Ingested Topics
+
+When queue auto-creation is enabled, the subscribing client chooses the topic filter of the new queue. EMQX takes the filter from `$queue/<name>/<topic_filter>` and does not check whether the client may subscribe to that filter directly. A client that is allowed to subscribe to `$queue/+/#` can create a queue over `#` and read the whole topic space through it.
+
+Auto-creation of last-value queues is enabled by default. On deployments that accept untrusted clients, restrict the `$queue/` namespace as shown above, or disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
+
 ## Compatibility Notes
 
 This section summarizes compatibility considerations introduced in EMQX 6.1.1.
