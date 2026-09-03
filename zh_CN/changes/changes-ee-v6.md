@@ -217,7 +217,7 @@
 
   如果已安装插件的 Schema 文件缺失或不可读，插件配置验证现在会报告文件错误。
 
-- [#18688](https://github.com/emqx/emqx/pull/18688) 现在可通过 `node.dirty_io_schedulers` 配置 Dirty I/O 调度器线程数（`+SDio`），其默认值也从固定的 8 改为跟随 `node.schedulers`。在小型节点上（例如 2 vCPU 的容器或 cgroup，其中 `node.schedulers` 已自动解析为 2），这可避免创建节点没有足够 CPU 容量并行运行的 Dirty I/O 调度器线程，从而降低启动时的内存占用。
+- [#18688](https://github.com/emqx/emqx/pull/18688) 现在可通过 `node.dirty_io_schedulers` 配置 Dirty I/O 调度器线程数（`+SDio`）。当 `node.schedulers` 的解析结果大于 2 时，默认值 `auto` 保持原有固定值 8；在较小的节点上（例如 2 vCPU 的容器或 cgroup），该值为 4。这样既可降低小型节点启动时的内存占用，又能保留足够的线程来并发执行阻塞 I/O 操作。
 
 ### 缺陷修复
 
@@ -337,6 +337,10 @@
 #### 部署与安全
 
 - [#17921](https://github.com/emqx/emqx/pull/17921) 将 `protobuf` 依赖升级到 v0.17.0。该依赖仅用于生成 SBOM，不属于 EMQX 运行时。升级包含深度嵌套消息解码时无限递归拒绝服务问题的修复（GHSA-rv48-qqj5-crxg）、Elixir 1.19/1.20 编译器警告修复，并将此前固定的开发版本引用替换为正式 Release。
+
+- [#18706](https://github.com/emqx/emqx/pull/18706) 调试模式下不再输出敏感信息。
+
+  使用 `DEBUG=1` 或 `DEBUG=2` 运行 `bin/emqx` 命令时，Shell 跟踪输出不再打印 Erlang Cookie 或 License Key。
 
 ## 6.2.3
 

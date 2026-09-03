@@ -217,7 +217,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   When the schema file of an installed plugin is missing or unreadable, plugin configuration validation now reports the file error.
 
-- [#18688](https://github.com/emqx/emqx/pull/18688) The number of dirty I/O scheduler threads (`+SDio`) can now be configured via `node.dirty_io_schedulers`, and defaults to tracking `node.schedulers` instead of a fixed 8. On small nodes (for example, a 2 vCPU container or cgroup, where `node.schedulers` already auto-resolves to 2), this avoids spawning dirty I/O scheduler threads the node has no CPU capacity to run in parallel, reducing boot-time memory footprint.
+- [#18688](https://github.com/emqx/emqx/pull/18688) The number of dirty I/O scheduler threads (`+SDio`) can now be configured via `node.dirty_io_schedulers`. The default `auto` keeps the previous fixed value of 8 on nodes where `node.schedulers` resolves to more than 2, and uses 4 on smaller nodes (for example, a 2 vCPU container or cgroup). This reduces boot-time memory footprint on small nodes while keeping enough threads to overlap blocking I/O operations.
 
 ### Bug Fixes
 
@@ -394,6 +394,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Deployment and Security
 
 - [#17921](https://github.com/emqx/emqx/pull/17921) Upgraded the `protobuf` dependency to v0.17.0. This dependency is used only for SBOM generation and is not part of the EMQX runtime. The upgrade picks up a fix for an unbounded-recursion denial of service when decoding deeply-nested messages (GHSA-rv48-qqj5-crxg) and Elixir 1.19/1.20 compiler warning fixes, and replaces the previously pinned development ref with the official release.
+
+- [#18706](https://github.com/emqx/emqx/pull/18706) Avoid logging sensitive information in debug mode.
+
+  Running `bin/emqx` commands with `DEBUG=1` or `DEBUG=2` no longer prints the Erlang cookie or the license key in the shell trace output.
 
 ## 6.2.3
 
