@@ -43,6 +43,7 @@ This tiered release model allows features to mature through internal validation 
 
 *   **4.4.x** (Initial release date: Dec 21, 2021, EOL date: Dec 20, 2026)
 *   **5.8.x** (Initial release date: Aug 28, 2024, EOL Date: Aug 27, 2027)
+*   **6.3.x** (Initial release date: Sep 3, 2026, EOL Date: Sep 2, 2029)
 
 ## Version Numbering and Naming Conventions
 
@@ -144,13 +145,13 @@ The following table outlines release dates, support types, lifecycles, and estim
 | **5.5** | 2024-02-01 | Feature Release | 18 months | 2025-07-31 | |
 | **5.6** | 2024-03-28 | Feature Release | 18 months | 2025-09-27 | |
 | **5.7** | 2024-05-27 | Feature Release | 18 months | 2025-11-26 | |
-| **5.8 LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Latest Active LTS Version** |
+| **5.8 LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Current Active LTS Version** |
 | **5.9** | 2025-05-02 | Feature Release | 18 months | 2026-11-01 |  |
 | **5.10** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 |  |
 | **6.0** | 2025-09-30 | Major Release | 18 months | 2027-03-30 |  |
 | **6.1** | 2025-12-30 | Feature Release | 18 months | 2027-06-30 |  |
 | **6.2** | 2026-03-31 | Feature Release | 18 months | 2027-09-30 |  |
-| **6.3** | 2026-09-03 | Feature Release | 18 months | 2028-03-02 | Latest Feature Release |
+| **6.3 LTS** | **2026-09-03** | **LTS** | **3 years** | **2029-09-02** | **Latest Active LTS Version** |
 
 ## Upgrade Path Recommendations
 
