@@ -29,6 +29,10 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 3. On the configuration page, enter the following information:
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
+   - **Signed Assertions from IdP**: Require the IdP to sign SAML assertions.
+   - **Signed Response Envelopes from IdP**: Require the IdP to sign SAML response envelopes.
+
+   Starting from EMQX 6.3.0, both options are enabled by default. The options can be configured independently. Enable the options that match the IdP signing behavior. Disabling both options turns off all SAML signature verification. This is insecure and should only be used for testing.
 
 ### Step 2: Register an Application to Integrate with Microsoft Entra ID
 
@@ -60,7 +64,9 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 
 2. In the Dashboard, paste the copied URL into the **SAML Metadata URL** in Step 1.
 
-3. Click **Update** to finish the configuration.
+3. If either signature verification option is enabled, open the metadata URL in a browser. In the returned XML, verify that `IDPSSODescriptor` contains a `KeyDescriptor` with `use="signing"` and a non-empty `X509Certificate`. If it does not, configure a signing certificate in the IdP before proceeding. Otherwise, the SAML backend cannot start.
+
+4. Click **Update** to finish the configuration.
 
 ## Configure SSO by Integrating with Okta 
 
@@ -74,7 +80,10 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
    - **Force MFA**: Optionally enable this to require all users from this backend to complete TOTP verification at login. Disabled by default. For details, see [Forced MFA for SSO Users](../multi-factor-authn/multi-factor-authentication.md#forced-mfa-for-sso-users).
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
-4. Click **Update** to finish the configuration.
+   - **Signed Assertions from IDP**: Require the IdP to sign SAML assertions.
+   - **Signed Response Envelopes from IdP**: Require the IdP to sign SAML response envelopes.
+
+   Starting from EMQX 6.3.0, both options are enabled by default. The options can be configured independently. Enable the options that match the IdP signing behavior. Disabling both options turns off all SAML signature verification. This is insecure and should only be used for testing.
 
 ### Step 2: Add a SAML 2.0 Application in Okta's Application Catalog
 
@@ -100,8 +109,10 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 ### Step 3: Complete Configuration and Assign Users and Groups in Okta
 
 1. In Okta, go to the **Sign On** tab and copy the **Metadata URL**.
-2. In the Dashboard, paste the copied **Metadata URL** into the **SAML Metadata URL** in Step 1 and click **Update**.
-3. In the **Okta > Assignments** tab, you can now assign users and groups to the EMQX Dashboard application. Only users assigned here can log in to this application.
+2. In the Dashboard, paste the copied **Metadata URL** into the **SAML Metadata URL** in Step 1.
+3. If either signature verification option is enabled, open the metadata URL in a browser. In the returned XML, verify that `IDPSSODescriptor` contains a `KeyDescriptor` with `use="signing"` and a non-empty `X509Certificate`. If it does not, configure a signing certificate in the IdP before proceeding. Otherwise, the SAML backend cannot start.
+4. Click **Update** to finish the configuration.
+5. In the **Okta > Assignments** tab, you can now assign users and groups to the EMQX Dashboard application. Only users assigned here can log in to this application.
 
 ## Login and User Management
 
