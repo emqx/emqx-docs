@@ -7,6 +7,10 @@ Supported versions:
 - Ubuntu 24.04
 - Ubuntu 22.04
 
+::: tip
+Starting from EMQX 6.3.0, installing EMQX through Apt or from a DEB package provides the same `/opt/emqx/...` paths as the Docker image. For the path mappings, see [Files and Directories](./install.md#files-and-directories).
+:::
+
 ## Install with Apt Package Manager
 
 EMQX supports installing with Apt Package Manager to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with apt:

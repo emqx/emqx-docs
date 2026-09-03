@@ -7,6 +7,10 @@
 - Ubuntu 24.04
 - Ubuntu 22.04
 
+::: tip
+从 EMQX 6.3.0 开始，通过 Apt 或 DEB 包安装的 EMQX 可使用与 Docker 镜像相同的 `/opt/emqx/...` 路径。路径映射参见[文件和目录](./install.md#文件和目录)。
+:::
+
 ## 使用 Apt 包管理器安装
 
 EMQX 支持使用 Apt 包管理器进行安装，为用户提供了一种便捷且可靠的方式来管理 EMQX 的安装和更新。以下是使用 apt 安装 EMQX 的步骤：
