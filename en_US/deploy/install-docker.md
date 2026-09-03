@@ -46,7 +46,7 @@ Follow these steps to run a single EMQX node. For more information about the off
 
    ```bash
    mkdir -p $PWD/data $PWD/log
-   sudo chown 1000:1000 $PWD/log
+   sudo chown $UID:$GID $PWD/log
    ```
 
 3. Start the container with the stable node name and mounted directories:
