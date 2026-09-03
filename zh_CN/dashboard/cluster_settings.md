@@ -5,6 +5,7 @@ EMQX 提供了热配置能力，可以在运行时动态修改配置，无需重
 - MQTT 配置
 - 集群
 - 命名空间
+- 规则引擎安全
 - 监听器
 - 日志
 - 监控
@@ -73,6 +74,64 @@ EMQX 还提供了通过使用命令的方式来创建和管理集群，详细信
 
 EMQX 中的命名空间功能为单个集群内的不同客户端组提供逻辑隔离。您可以在**命名空间**页面管理命名空间。有关如何管理和配置命名空间的详细指导，参阅[命名空间](../multi-tenancy/namespace-overview.md)。
 
+## 规则引擎安全
+
+EMQX 连接器、数据桥接和动作会向外部服务建立出站网络连接。如果缺乏访问控制，错误配置或恶意的目标地址可能导致 EMQX 向内部或敏感网络发起非预期请求，即服务端请求伪造（SSRF）漏洞。
+
+从 EMQX 6.0.3 开始，**规则引擎安全**页面支持直接在 Dashboard 中配置内置的 SSRF 防护策略。从 EMQX 6.0.4 开始，该策略仅在测试、创建或更新 HTTP、MQTT 连接器配置时，分别校验 HTTP 连接器的 `url` 字段和 MQTT 连接器的 `server` 字段。解析到被禁止地址的目标会在此时被拒绝。
+
+::: warning 重要提示
+SSRF 策略不校验其他连接器类型、连接器启停操作、连接器删除操作或运行时出站连接。如果 HTTP 或 MQTT 连接器的目标地址在连接器创建后被策略禁止，仍可重新启用该连接器。如果需要保护其他连接器类型、使策略变更应用于已保存的连接器配置、防御 DNS rebinding 或其他运行时地址变化，请使用 `iptables`、`nftables` 等主机级出站访问控制。完整指导请参见[结合规则引擎策略与防火墙规则防御 SSRF](../deploy/cluster/security.md#结合规则引擎策略与防火墙规则防御-ssrf)。
+:::
+
+### 启用 SSRF 保护
+
+通过**启用 SSRF 保护**开关开启或关闭该策略。启用后，EMQX 会在测试、创建或更新 HTTP、MQTT 连接器配置时，分别评估 HTTP 连接器的 `url` 和 MQTT 连接器的 `server`。评估顺序如下：
+
+1. 与**拒绝的主机名**进行精确匹配，匹配则立即拒绝。
+2. 将解析得到的 IP 与**允许的 CIDR 范围**匹配，命中则放行。
+3. 将解析得到的 IP 与**拒绝的 CIDR 范围**匹配，命中则拒绝。
+
+为保持兼容性，该策略默认关闭。如果需要防止使用被禁止的目标地址测试、创建或更新 HTTP、MQTT 连接器配置，请启用该策略。如果这些连接器必须访问内部服务，请先审查并调整允许和拒绝的 CIDR 范围，再启用该策略。
+
+### 允许的 CIDR 范围
+
+解析 IP 命中该列表中的 CIDR 范围时，无论其是否在拒绝列表中，均会被放行。可用此字段显式放行 HTTP 或 MQTT 连接器需要访问的特定内部子网。
+
+允许列表的优先级高于拒绝 CIDR 列表。
+
+### 拒绝的 CIDR 范围
+
+测试、创建或更新 HTTP、MQTT 连接器配置时，EMQX 拒绝使用的 CIDR 范围列表。默认集合涵盖 SSRF 攻击中常见的敏感地址：
+
+| CIDR | 说明 |
+|---|---|
+| `127.0.0.0/8` | IPv4 回环地址 |
+| `::1/128` | IPv6 回环地址 |
+| `169.254.0.0/16` | IPv4 链路本地地址（含 AWS/Azure 元数据） |
+| `fe80::/10` | IPv6 链路本地地址 |
+| `10.0.0.0/8` | 私有网络（RFC 1918） |
+| `172.16.0.0/12` | 私有网络（RFC 1918） |
+| `192.168.0.0/16` | 私有网络（RFC 1918） |
+| `fc00::/7` | IPv6 唯一本地地址 |
+| `0.0.0.0/32` | 未指定地址 |
+| `224.0.0.0/4` | IPv4 多播 |
+| `ff00::/8` | IPv6 多播 |
+| `100.100.100.200/32` | 阿里云元数据服务 |
+| `169.254.169.253/32` | AWS 外部元数据服务 |
+
+::: warning 重要提示
+从默认拒绝 CIDR 列表中移除条目可能使 EMQX 暴露于 SSRF 攻击风险。仅在有明确业务需求且充分了解安全影响的情况下才可移除。
+:::
+
+如果 HTTP 或 MQTT 连接器必须访问默认拒绝列表中的地址，建议将该地址添加到**允许的 CIDR 范围**，而非从拒绝列表中移除。允许列表优先级更高。
+
+### 拒绝的主机名
+
+测试、创建或更新 HTTP、MQTT 连接器配置时，EMQX 拒绝使用的主机名列表，无论其解析到哪个 IP 地址。主机名匹配为精确匹配，且不区分大小写。该字段适合用于按名称屏蔽已知的云元数据端点。
+
+配置完成后，点击**保存修改**使更改生效。
+
 ## 监听器
 
 **管理** -> **监听器**页面默认是一个监听器的列表页。EMQX 默认提供了四个常用的监听器：
@@ -122,7 +181,7 @@ EMQX 中的命名空间功能为单个集群内的不同客户端组提供逻辑
 
 **管理**->**日志**为日志相关的配置页面。该页面包含**控制台日志**、**文件日志**、**日志限流**，和**审计日志**标签页。
 
-EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。在相应的配置页面中，可以设置是否启用日志处理进程，设置日志级别，日志格式类型，文件日志还可以设置日志文件的路径和日志名称。更多关于日志的详细配置说明，请参考[通过 Dashboard 修改日志配置](../observability/log.md#通过-dashboard-修改日志配置)。
+EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。在相应的配置页面中，可以设置是否启用日志输出、设置日志级别和日志格式类型；对于文件日志，还可以设置日志文件的路径和日志名称。更多关于日志的详细配置说明，请参考[通过 Dashboard 修改日志配置](../observability/log.md#通过-dashboard-修改日志配置)。
 
 在**日志限流**配置页面，您可以设置日志限流的时间窗口。关于日志限流功能的介绍，参考[日志限流](../observability/log.md#日志限流)。
 
@@ -143,9 +202,9 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ### 监控集成
 
-该页面主要提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus、OpenTelemetry，和 Datadog 的集成方式。
+该页面主要提供了与第三方监控平台的集成配置，EMQX 支持与 Prometheus、OpenTelemetry 和 Datadog 集成。
 
-当使用 `Prometheus` 第三方监控服务时，您可以在该页面快速开启该配置，并配置推送数据地址与数据上报时间间隔等。我们可以直接使用 EMQX 提供的 API `/prometheus/stats` 来获取监控数据，使用该 API 时不需要认证信息，具体的 API 请参考 [Prometheus](../observability/prometheus.md)。
+使用 Prometheus 时，可以在该页面配置 Pull 或 Push 模式。在 Pull 模式下，Prometheus 从 `/api/v5/prometheus/*` 下的 API 抓取指标。从 EMQX 6.3.0 开始，这些 API 默认要求身份认证。请为抓取程序配置具有 `monitoring` scope 的专用 API 密钥。配置详情请参见[集成 Prometheus](../observability/prometheus.md)。
 
 或者可以选择配置一个 `Pushgateway` 的服务地址，来将监控数据推送到 `Pushgateway`，然后再由 `Pushgateway` 推送到 `Prometheus` 服务。通常情况下我们不需要使用 `Pushgateway` 就能监控到 EMQX 的指标数据，点击查看[何时使用 Pushgateway](https://prometheus.io/docs/practices/pushing/)。
 
@@ -155,7 +214,9 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ![emqx-grafana](./assets/emqx-grafana.jpg)
 
-关于 OpenTelemetry 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md) 和 [集成 Datadog](../observability/datadog.md)。
+配置 OpenTelemetry 时，可以在 **OpenTelemetry 类型**中选择**通用**或 **Dynatrace**。**通用**支持通过标准 OpenTelemetry 配置导出指标、追踪和日志。**Dynatrace**支持追踪和日志，并使用 OAuth2 认证。
+
+关于 OpenTelemetry、Dynatrace 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md)、[将 OpenTelemetry 与 Dynatrace 集成](../observability/opentelemetry/dynatrace.md)和[集成 Datadog](../observability/datadog.md)。
 
 ## 集群连接
 

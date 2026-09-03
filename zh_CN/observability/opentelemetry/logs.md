@@ -3,6 +3,8 @@
 
 本页面提供了一个全面的指南，介绍了如何将 OpenTelemetry 与 EMQX 集成，以实现高级日志管理。内容涵盖了设置 OpenTelemetry Collector、在 EMQX 中启用 OpenTelemetry 日志处理进程导出日志，以及管理潜在的日志过载。与 OpenTelemetry 的集成允许您根据 [OpenTelemetry 日志数据模型](https://opentelemetry.io/docs/specs/otel/logs/data-model/) 格式化 EMQX 日志事件，并将它们导出到配置的 OpenTelemetry Collector 或后端系统，提高了对 EMQX 的监控和调试能力。
 
+如需将 OpenTelemetry 日志直接导出到 Dynatrace，参见[将 OpenTelemetry 与 Dynatrace 集成](./dynatrace.md)。
+
 ## 配置 OpenTelemetry Collector
 
 在启用 EMQX OpenTelemetry 日志处理进程之前，你需要部署和配置 OpenTelemetry Collector 以及一些兼容的日志收集系统。以下步骤将引导您部署 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) 并将其设置使用调试导出器将日志重定向到 `stdout`。

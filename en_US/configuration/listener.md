@@ -137,6 +137,28 @@ where:
   - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
   - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
+## Forwarded Client Address (WebSocket Listeners)
+
+WebSocket and secure WebSocket listeners have two options that control how EMQX determines a client's source address when the listener sits behind a proxy or load balancer:
+
+- `websocket.proxy_address_header`: Specifies the HTTP header that carries the client IP address.
+- `websocket.proxy_port_header`: Specifies the HTTP header that carries the client port.
+
+Starting from EMQX 6.3.0, both options default to `""`. EMQX uses the corresponding TCP peer address or port for any option left empty. To obtain either value from a trusted proxy, explicitly configure the corresponding header name, such as `x-forwarded-for` or `x-forwarded-port`.
+
+When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP. Configured header names are matched case-insensitively.
+
+::: warning Trust Forwarded Address Headers Only Behind a Trusted Proxy
+
+The header value determines the client source IP that EMQX uses, so it must be honored only when a trusted proxy sets it:
+
+- If the listener is directly reachable by clients (no proxy in front), keep `proxy_address_header` and `proxy_port_header` empty so that EMQX always uses the real TCP peer address.
+- If there is a proxy but it **appends** its observation to an inbound `X-Forwarded-For` header instead of overwriting or stripping it (appending is the default behavior of most proxies, for example NGINX's `$proxy_add_x_forwarded_for`), the leftmost entry that EMQX reads is still the one supplied by the client, so the source IP can still be spoofed. Configure the proxy to overwrite the header with the address it observed, use the [PROXY protocol](../deploy/cluster/lb.md) instead, or set the options to `""`.
+- Do not try to disable the mechanism by pointing the option at an unused header name: a client can send a header by any name. The empty string is the only value a client can never supply.
+
+When `proxy_protocol = true` is set on the listener, the client address comes from the PROXY protocol handshake, and these headers are not consulted.
+:::
+
 <!--To add QUIC-->
 
 <!--To add code sample for adding multiple listeners.-->
@@ -149,3 +171,37 @@ When a listener is linked to a specific zone, MQTT clients connected to that lis
 
 For more information, see the [Zone Override](./configuration.md#zone-override) section in the configuration documentation.
 
+## Mountpoint
+
+Each listener can be configured with a `mountpoint`: a topic prefix that EMQX adds to topics used by clients connected through the listener. The prefix is added to topics in `PUBLISH` packets, `SUBSCRIBE` and `UNSUBSCRIBE` requests, and Will messages, and removed from the topics of messages delivered to the client. The mountpoint is transparent to the client and is commonly used to isolate topic spaces between groups of clients, for example in multi-tenant deployments.
+
+```bash
+listeners.tcp.demo {
+    bind = "0.0.0.0:1883"
+    mountpoint = "department-a/"
+}
+```
+
+The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
+
+### Incompatibility with Topic-Prefix Extension Features
+
+Several EMQX features are triggered by publishing or subscribing to topics that start with a special `$` prefix. EMQX adds the mountpoint prefix before it matches these prefixes. For example, if a client connects through a listener with mountpoint `mp/` and publishes to `$delayed/10/t`, the broker receives the topic as `mp/$delayed/10/t`, which no longer starts with `$delayed/`. The feature is silently bypassed: EMQX routes the message as an ordinary message to the mounted literal topic, and no error is reported to the client.
+
+::: warning Compatibility Limitation
+Do not configure a mountpoint on listeners whose clients use any of the following features:
+
+| Feature | Topic Prefix |
+| --- | --- |
+| [Delayed Publish](../messaging/mqtt-delayed-publish.md) | `$delayed/` |
+| [File Transfer](../file-transfer/introduction.md) | `$file/`, `$file-async/`, `$file-response/` |
+| [Message Queue](../message-queue/message-queue-concept.md) | `$queue/` |
+| [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) | `$stream/` |
+| [Cluster Linking](../cluster-linking/introduction.md) | `$LINK/` |
+| [Dynamic Keep Alive Adjustment](./mqtt.md#dynamic-keep-alive-adjustment) | `$SETOPTS/` |
+| [A2A over MQTT](../emqx-ai/a2a-over-mqtt/overview.md) | `$a2a/` |
+
+For Cluster Linking, the mountpoint must not be set on the listener that accepts connections from the linked cluster. For A2A over MQTT, a mountpoint of exactly one topic level (for example `acme/`) still works: EMQX parses it as a namespace prefix on `$a2a` topics.
+:::
+
+[Shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/`) and [exclusive subscriptions](../messaging/mqtt-exclusive-subscription.md) (`$exclusive/`) are exceptions: they work with a mountpoint. EMQX parses these subscription prefixes before applying the mountpoint, so the mountpoint is added only to the inner topic filter. For example, subscribing to `$share/g/t` through a listener with mountpoint `mp/` joins the shared subscription group `g` on the topic `mp/t`.

@@ -177,8 +177,8 @@ This section demonstrates how to create a rule to specify the data to be saved i
    SELECT
      clientid,
      topic,
-     payload,
-     publish_received_at
+     base64_encode(payload) AS payload,
+     timestamp/1000 AS publish_received_at
    FROM
      "t/bq"
    ```
@@ -203,7 +203,9 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 8. Select the `my_bigquery` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-9. In **Dataset** and **Table**, enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
+9. Configure the following BigQuery resource parameters:
+   - **Project ID** (optional): Enter the ID of the GCP project that contains the target dataset and table. If specified, this value overrides the project ID extracted from the selected connector's authentication configuration and applies only to this Sink. If left empty, EMQX uses the project ID obtained from the authentication configuration.
+   - **Dataset** and **Table**: Enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
 
 12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 

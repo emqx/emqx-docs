@@ -1,260 +1,199 @@
-# Integrate with Prometheus
+# Monitor EMQX with Prometheus
 
-EMQX supports integration with third-party monitoring systems such as [Prometheus](https://prometheus.io/), an open-source monitoring solution originally developed by SoundCloud. Prometheus provides a multidimensional data model, flexible query language (PromQL), and powerful alerting capabilities.
+EMQX exposes runtime metrics that Prometheus can collect for querying, alerting, and visualization. You can collect these metrics in either of the following ways:
 
-Using a third-party monitoring system can bring the following advantages:
+- **Pull mode (recommended)**: Prometheus scrapes EMQX metrics directly from REST API endpoints. Use this mode to collect the complete set of available metrics.
+- **Push mode**: EMQX sends basic metrics to Pushgateway, and Prometheus scrapes them from Pushgateway. Use this mode when Prometheus cannot connect directly to EMQX.
 
-- A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, you can get the monitoring information of the server host.
-- More intuitive monitoring report with figures and charts, such as using [Grafana dashboard](#use-grafana-to-visualize-EMQX-metrics) to visualize the EMQX metrics.
-- Various alarm notification options, such as using Prometheus Alertmanager to set up alarm rules and notification methods.
+You can then use Grafana to [visualize the collected EMQX metrics](#visualize-emqx-metrics-in-grafana).
 
-EMQX supports two methods for integrating Prometheus metrics monitoring:
+::: tip
+Starting from EMQX 6.3.0, Prometheus metrics are controlled by the `metrics` feature gate. If you set `EMQX_FEATURES` manually, enabling `metrics` also enables its required `dashboard` and `auth` dependencies. For more information, see [Feature Gates](../deploy/feature-gates.md).
+:::
 
-- **Pull Mode**: Prometheus directly collects metrics through EMQX's REST API.
-- **Push Mode**: EMQX pushes metrics to the Pushgateway service, from which Prometheus collects the metrics.
+## Configure Metric Collection in EMQX
 
-To configure Prometheus integration:
+Use the Prometheus integration page in Dashboard to control authentication, Pushgateway delivery, latency buckets, and namespace request limits. This section explains what each setting controls. The later sections provide the complete procedures for configuring Pull and Push modes.
+
+To open the Prometheus integration settings:
 
 1. Go to **Management** -> **Monitoring** in the EMQX Dashboard.
-2. Switch to the **Integration** tab.
-3. Select **Prometheus** as the monitoring platform.
+2. Select the **Integration** tab.
+3. Select **Prometheus**.
 
-Depending on the selected mode, some configuration options apply only to Pull mode, while others affect both modes. You can click the **Help** button on the Dashboard page to view detailed configuration steps for each mode.
+<img src="./assets/enable-push-gateway.png" alt="Prometheus integration settings" style="zoom: 67%;" />
 
-<img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
+For a curated reference of the metric series exposed on the endpoints below (including the ones worth alerting on), see [Broker Health Indicators](./broker-health-indicators.md).
 
-## Prometheus Configuration Options
+### Require Authentication for Scrape Requests
 
-This section describes all configuration options available when selecting **Prometheus** in the Dashboard.
+**Enable Basic Auth** controls authentication for all Prometheus scrape APIs under `/api/v5/prometheus/*`. Despite the Dashboard label, this setting controls both HTTP Basic and Bearer authentication.
 
-### General Options (Affect Both Pull and Push Modes)
+Starting from EMQX 6.3.0, authentication is enabled by default. Requests without credentials return `401`. Prometheus can use HTTP Basic authentication with an API key and secret key. EMQX also accepts a Dashboard login token as a Bearer token, but the token expires and is not suitable for persistent scraping.
 
-#### Latency Buckets
+For a long-running Prometheus server, create a dedicated API key with the `monitoring` scope and [configure Prometheus to authenticate its scrape requests](#authenticate-prometheus-scrape-requests).
 
-Specify histogram bucket boundaries for latency-related metrics.
+To allow unauthenticated scraping, turn off **Enable Basic Auth** or set `prometheus.enable_basic_auth = false`. This setting affects only Pull mode and does not affect Pushgateway delivery.
 
-**Format**
+::: warning Important Notice
+Disabling authentication allows any client that can reach the Dashboard listener to scrape EMQX metrics. After an upgrade, configurations that explicitly set `prometheus.enable_basic_auth = false` and legacy-format Prometheus configurations continue to allow unauthenticated scraping. Check **Enable Basic Auth** in the Dashboard after upgrading.
+:::
 
-A comma-separated list of duration values:
+### Configure Metric Delivery to Pushgateway
 
-```
+Turn on **Enable Pushgateway** to make EMQX send metrics to a Pushgateway instance. Push delivery is disabled by default. Configure the following fields:
+
+| Field | Description |
+| --- | --- |
+| **Interval** | How often EMQX pushes metrics. The default is `15` seconds. |
+| **Pushgateway Server** | Pushgateway URL. The default is `http://127.0.0.1:9091`. |
+| **Job Name** | Job label for the pushed metrics. The default is `${name}/instance/${name}~${host}`, where `${name}` is the node name before `@` and `${host}` is the host after `@`. For `emqx@127.0.0.1`, the values are `emqx` and `127.0.0.1`. |
+| **Headers** | Optional HTTP headers sent to Pushgateway. Add each header as a key-value pair, for example, `Authorization = "some-auth-token"`. |
+
+For the complete procedure, see [Configure EMQX to Push Metrics to Pushgateway](#configure-push-mode-integration).
+
+### Define Latency Histogram Buckets
+
+In **Latency Buckets**, enter a comma-separated list of duration values, for example:
+
+```text
 10ms, 100ms, 1s, 5s, 30s
 ```
 
-**Description**
+These values define the bucket boundaries for latency histograms in both Pull and Push modes. More buckets provide finer granularity but may increase metric cardinality and storage usage.
 
-These values define how latency metrics are grouped into histogram buckets in Prometheus. Smaller bucket intervals provide finer granularity but may increase metric cardinality and storage usage.
+### Limit Requests That Scrape All Namespaces
 
-This setting affects how latency histogram metrics are generated internally and applies to:
+**Namespace Data Scraping Rate Limit** sets the maximum request rate for scraping metrics across all namespaces. Requests for a specific namespace are not limited. Enter a value in the format `<requests>/<duration>`. The default value `1/5s` allows one request every 5 seconds; additional requests within that interval are rejected.
 
-- Pull mode metrics
-- Push mode metrics (via Pushgateway)
+## Configure Prometheus to Scrape EMQX Metrics
 
-### Pull Mode Settings
+In Pull mode, Prometheus connects to the EMQX Dashboard listener and scrapes one or more REST API endpoints.
 
-The following options apply only when Prometheus scrapes EMQX metrics via REST APIs.
+### Select Metrics Endpoints to Scrape
 
-#### Enable Basic Auth
+Add a Prometheus scrape job for each metric category that you want to collect:
 
-Enable or disable HTTP Basic Authentication for Prometheus scrape APIs.
+| Endpoint | Metrics |
+| --- | --- |
+| `/api/v5/prometheus/stats` | Basic EMQX metrics and counters |
+| `/api/v5/prometheus/namespaced_stats` | Metrics aggregated by namespace |
+| `/api/v5/prometheus/auth` | Authentication, authorization, and banned-client metrics |
+| `/api/v5/prometheus/data_integration` | Rule, connector, action, Sink/Source, and encoding/decoding metrics |
+| `/api/v5/prometheus/schema_validation` | Schema validation metrics |
+| `/api/v5/prometheus/message_transformation` | Message transformation metrics |
+| `/api/v5/prometheus/topic_metrics` | Topic metric collection counters |
 
-By default, Prometheus Pull mode APIs do not require authentication. When this option is enabled:
+For the complete API reference, see the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
-- Prometheus must use HTTP Basic Authentication to access:
-  - `/api/v5/prometheus/stats`
-  - `/api/v5/prometheus/auth`
-  - `/api/v5/prometheus/data_integration`
-- You must create an [API Key](../admin/api.md#authentication) in EMQX.
-- Configure the `basic_auth` section in your `prometheus.yaml`.
+### Scrape Data Integration Metrics by Namespace
 
-This option applies only to Pull mode and does not affect Pushgateway integration. For details, see [Configure Pull Mode Integration](#configure-pull-mode-integration).
+Starting from EMQX 6.3.0, `GET /api/v5/prometheus/data_integration` limits rule, action, and connector metrics according to the namespace of the authenticated user:
 
-#### Namespace Data Scraping Rate Limit
+- A namespaced user receives metrics only from their assigned namespace. If the user specifies another namespace with `ns=<namespace>`, EMQX returns `403`.
+- A global administrator receives metrics from all namespaces by default. Specify `ns=<namespace>` to scrape one namespace, or specify `only_global=true` without `ns` to scrape only the global namespace.
+- If authentication is disabled, EMQX applies the same visibility as for a global administrator. Requests return metrics from all namespaces by default.
 
-Limit the maximum request rate when scraping namespace-related metrics.
+Per-resource metrics for rules, actions, and connectors in a non-global namespace include a `namespace` label. Per-resource metrics in the global namespace do not include this label. The `emqx_schema_registrys_count` metric remains cluster-wide because Schema Registry resources are not scoped by namespace.
 
-Namespace-level metrics are supported in multi-tenant deployments and can be exposed or aggregated by namespace. For details, see [Prometheus Metrics Isolation](../multi-tenancy/namespace-overview.md#multi-tenancy-capability-support).
+Requests that scrape all namespaces are subject to the [Namespace Data Scraping Rate Limit](#limit-requests-that-scrape-all-namespaces).
 
-**Format**: `<requests>/<duration>`
+### Choose a Metric Collection Mode
 
-**Example**: `1/5s`, which means at most 1 request is allowed every 5 seconds. Additional requests within the time window will be rejected.
-
-**Behavior**:
-
-- Applies only to namespace-level metric scraping requests.
-- Requests targeting specific namespaces are not limited.
-- Applies only to Pull mode.
-
-This option helps prevent excessive load in large-scale or multi-namespace deployments.
-
-### Push Mode Settings
-
-Push mode allows EMQX to send metrics to a Pushgateway instance. By default, Push mode is disabled.
-
-#### Enable Pushgateway
-
-Enable or disable metric pushing to Pushgateway. When enabled, configure the following fields:
-
-#### Interval
-
-Specify how often EMQX pushes metrics to Pushgateway. The default value is `15` seconds.
-
-#### Pushgateway Server
-
-Specify the Pushgateway server URL. It is `http://127.0.0.1:9091` by default.
-
-#### Job Name
-
-Specify the job label used when pushing metrics to Pushgateway.
-
-You can construct the job label using variables derived from the EMQX node name and hostname. The default value is: `${name}/instance/${name}~${host}`.
-
-**Variables**:
-
-- `${name}`: EMQX node name (e.g., `emqx`)
-- `${host}`: Host IP address (e.g., `127.0.0.1`)
-
-For example, if the node name is `emqx@127.0.0.1`, then:
-
-- `${name}` = `emqx`
-- `${host}` = `127.0.0.1`
-
-#### Headers
-
-Optional HTTP headers sent when pushing metrics to Pushgateway.
-
-The value type is string. You can configure headers as key-value pairs, for example:
-
-```
-Authorization = "some-auth-token"
-```
-
-Click **Add** to insert additional headers.
-
-## Configure Pull Mode Integration
-
-In Pull mode, Prometheus scrapes metrics from EMQX through REST APIs.
-
-EMQX provides the following endpoints for metric collection:
-
-- `/api/v5/prometheus/stats`: Basic metrics and counters of EMQX.
-- `/api/v5/prometheus/auth`: Key metrics and counters in access control, including authentication and authorization.
-- `/api/v5/prometheus/data_integration`: Metrics and counters related to the rule engine, connectors, actions, Sink/Source, and encoding/decoding.
-
-### Metric Collection Modes
-
-When calling the above APIs to obtain metrics, you can use the URL query parameter `mode` to get different types of metric data. The meanings of different parameters are as follows:
+For endpoints that support it, use the `mode` query parameter to control whether the endpoint returns metrics for the current node or the cluster.
 
 :::: tabs type: card
 
-::: tab Single Node Mode
+::: tab Current Node
 
-```
+```text
 mode=node
 ```
 
-The default mode returns the metrics of the current request node. If no specific mode is specified, the system defaults to returning metrics in this mode.
+Returns metrics from the node that receives the request. This is the default mode.
 
 :::
 
-::: tab Cluster Aggregated Mode
+::: tab Aggregated Cluster
 
-```
+```text
 mode=all_nodes_aggregated
 ```
 
-Aggregate cluster metrics, returning the *arithmetic sum* or *logical sum* of all running node metrics in the cluster.
+Returns metrics for all running nodes with the following aggregation behavior:
 
-- For metrics like "on status" and "running status", the system will return their logical sum, i.e., returns 1 if all nodes are on or running, otherwise returns 0.
+- State metrics use logical aggregation. For example, a metric is `1` only when the state is enabled or running on every node; otherwise, it is `0`.
+- Node-specific metrics, such as CPU and memory usage, are not aggregated. They retain a `node` label:
 
-- Some metrics are independent on different nodes and will not return aggregated values. For example, CPU and memory usage. The system will add node names as labels to distinguish the metrics of different nodes. For example:
-
-  ```bash
+  ```text
   emqx_vm_cpu_use{node="emqx@172.17.0.2"} 7.6669163995887715
   emqx_vm_cpu_idle{node="emqx@172.17.0.2"} 92.33308360041123
-  
   emqx_vm_cpu_use{node="emqx@172.17.0.3"} 7.676007766679973
   emqx_vm_cpu_idle{node="emqx@172.17.0.3"} 92.32399223332003
   ```
 
-- Some metrics should have consistent values on any node in the cluster. For cluster-consistent metrics, the value on the node that accepts the API request will be returned directly. They are not summed and do not include node names as labels. For example:
+- Metrics that are consistent across the cluster return the value from the node that receives the request. They are not summed and do not include a `node` label:
 
-  ```bash
+  ```text
   emqx_topics_count 3
   emqx_cert_expiry_at{listener_type="ssl",listener_name="default"} 1904285225
   emqx_cert_expiry_at{listener_type="wss",listener_name="default"} 1904285225
   ```
 
-- Other metrics return arithmetic sums, i.e., the returned metrics are the sum of all node metrics.
+- Other metrics return the arithmetic sum across all running nodes.
 
 :::
 
-::: tab Cluster Unaggregated Mode
+::: tab Unaggregated Cluster
 
-```
+```text
 mode=all_nodes_unaggregated
 ```
 
-This is the cluster unaggregated metric mode, returning the individual metrics of all running nodes in the cluster.
+Returns individual metrics for all running nodes. Node-specific values include a `node` label:
 
-- The system will add node names as labels to distinguish the metrics of different nodes. For example:
+```text
+emqx_connections_count{node="emqx@127.0.0.1"} 0
+```
 
-  ```bash
-  emqx_connections_count{node="emqx@127.0.0.1"} 0
-  ```
+Metrics that are consistent across the cluster return one value from the node that receives the request and do not include a `node` label:
 
-- Some metrics should have consistent values on any node in the cluster. For example, "blacklist count", "retained message count", etc. For cluster-consistent metrics, the value on the node that accepts the API request will be returned directly. Node names are not included as labels. For example:
-
-  ```bash
-  emqx_retained_count 3
-  ```
+```text
+emqx_retained_count 3
+```
 
 :::
 
 ::::
 
-For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+<a id="authentication"></a>
 
-### Authentication (Optional)
+### Authenticate Prometheus Scrape Requests
 
-By default, Prometheus Pull mode APIs do not require authentication.
+Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by default. For persistent scraping, use HTTP Basic authentication with a dedicated API key:
 
-If **Enable Basic Auth** is enabled in the EMQX Dashboard, Prometheus must authenticate using HTTP Basic Authentication.
+1. Create an [API key](../admin/api.md#authentication) with the `monitoring` scope in EMQX.
+2. Add the API key and secret key to each EMQX scrape job in `prometheus.yaml`:
 
-In this case:
+   ```yaml
+   basic_auth:
+     username: '<API_KEY>'
+     password: '<SECRET_KEY>'
+   ```
 
-1. Create an [API key](../admin/api.md#authentication) in EMQX.
-2. Use the generated API Key and Secret Key in the Prometheus configuration.
+EMQX also accepts a Bearer token obtained from `POST /api/v5/login`. Dashboard login tokens expire, so use an API key for long-running Prometheus scrapers.
 
-In the Prometheus configuration:
+### Add EMQX Scrape Jobs to Prometheus
 
-```yaml
-basic_auth:
-  username: '<API_KEY>'
-  password: '<SECRET_KEY>'
-```
-
-Where:
-
-- `username` is the API Key.
-- `password` is the corresponding Secret Key.
-
-Prometheus will use these credentials when scraping EMQX metrics.
-
-### Prometheus Server Configuration Example
-
-To enable Prometheus to scrape EMQX metrics, configure the Prometheus server.
-
-Add the following configuration to your Prometheus configuration file, then restart the Prometheus service.
+The following `prometheus.yaml` example collects three common metric categories. Replace the target address and credentials, and add jobs for any other [metrics endpoints](#select-metrics-endpoints-to-scrape) that you need. Restart Prometheus after changing the file.
 
 ```yaml
-# prometheus.yaml
 global:
-  scrape_interval:     10s # The default scrape interval is every 10 seconds.
-  evaluation_interval: 10s # The default evaluation interval is every 10 seconds.
-  # On this machine, every time series will be exported by default.
+  scrape_interval: 10s
+  evaluation_interval: 10s
   external_labels:
     monitor: 'emqx-monitor'
+
 scrape_configs:
   - job_name: 'emqx_stats'
     static_configs:
@@ -262,8 +201,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/stats'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_auth'
     static_configs:
@@ -271,8 +210,8 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/auth'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 
   - job_name: 'emqx_data_integration'
     static_configs:
@@ -280,37 +219,43 @@ scrape_configs:
     metrics_path: '/api/v5/prometheus/data_integration'
     scheme: 'http'
     basic_auth:
-      username: ''
-      password: ''
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
 ```
 
-## Configure Push Mode Integration
+<a id="configure-push-mode-integration"></a>
 
-Push mode sends metrics from EMQX to Pushgateway.
+## Configure EMQX to Push Metrics to Pushgateway
 
-After enabling **Enable Pushgateway** in the Dashboard and configuring the required fields, click **Save Changes**.
+Push mode sends only the basic metrics and counters available from `/api/v5/prometheus/stats`. Use Pull mode if you need metrics from the other endpoints.
 
-The Push mode currently only includes EMQX's basic metrics and counters from the `/api/v5/prometheus/stats` endpoint. For comprehensive monitoring, Pull mode is generally recommended.
+### Enable Pushgateway Delivery in Dashboard
 
-### Configuration File Example
+1. Open the Prometheus integration settings in Dashboard.
+2. Turn on **Enable Pushgateway**.
+3. Enter the Pushgateway server, push interval, job name, and any required HTTP headers.
+4. Click **Save Changes**.
 
-You can also enable and configure the Pushgateway by adding the following configuration to the configuration file. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
+Prometheus must also be configured to scrape the Pushgateway instance.
 
-```bash
+### Enable Pushgateway Delivery in the Configuration File
+
+Alternatively, add the following recommended nested configuration to `etc/base.hocon`:
+
+```hocon
 prometheus {
-  push_gateway_server = "http://127.0.0.1:9091"
-  interval = 15s
-  headers {}
-  job_name = "${name}/instance/${name}~${host}"
+  push_gateway {
+    enable = true
+    url = "http://127.0.0.1:9091"
+    interval = 15s
+    headers {}
+    job_name = "${name}/instance/${name}~${host}"
+  }
 }
 ```
 
-## Use Grafana to Visualize EMQX Metrics
+## Visualize EMQX Metrics in Grafana
 
-You can also use Grafana with Prometheus to visualize EMQX metrics, which can be achieved by importing the EMQX template files into Grafana. To download the template, click [EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) or click the **Help** button at the bottom of the **Integration** tab of the **Monitoring** page.
+After Prometheus starts collecting EMQX metrics, import the [EMQX Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) to visualize them. The template is also available from the **Help** page of the Prometheus integration in Dashboard.
 
-::: tip
-
-For detailed operating steps, see [Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana)
-
-:::
+For a complete example, see [Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana).

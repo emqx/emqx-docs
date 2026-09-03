@@ -160,6 +160,14 @@ SQL 处理结果将以 JSON 形式呈现在**输出结果**部分。SQL 处理�
 
 - **直接派发**：切换此开关以启用或禁用直接派发。启用后，消息将直接发送给订阅者，避免触发额外的规则或导致同一规则的递归激活等意外行为。
 
+::: tip 提示
+
+从 EMQX 6.1.5 开始，当规则属于某个命名空间且 `rule_engine.limit_selects_in_namespace` 已启用（默认）时，EMQX 会将消息重新发布动作的输出主题限制在规则所属的命名空间内。渲染主题模板后，如果生成的主题尚未以 `<namespace>/` 开头，EMQX 会添加 `<namespace>/` 前缀。已包含 `<namespace>/` 前缀的主题保持不变。该行为不依赖 `mqtt.namespace_as_mountpoint`。全局规则以及设置了 `rule_engine.limit_selects_in_namespace = false` 的部署仍会直接发布到渲染后的主题，不添加规则所属的命名空间。
+
+更多信息，参见[规则命名空间隔离](../multi-tenancy/namespace-overview.md#规则命名空间隔离)。
+
+:::
+
 在**创建规则**页面，点击底部的**创建**按钮以完成规则创建。此规则将作为新条目添加到**规则**页面。
 
 ::: tip 

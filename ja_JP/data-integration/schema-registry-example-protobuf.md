@@ -4,9 +4,9 @@
 
 ## デコードシナリオ
 
-デバイスがProtobufでエンコードされたバイナリメッセージをパブリッシュし、そのメッセージをルールエンジンでマッチさせて、`name`フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は `person/${name}` です。
+デバイスがProtobufでエンコードされたバイナリメッセージをパブリッシュし、ルールエンジンがそれをマッチングして、`name`フィールドに関連付けられたトピックに再パブリッシュする必要があります。トピックの形式は `person/${name}` です。
 
-例えば、`name`フィールドが "Shawn" のメッセージをトピック `person/Shawn` に再パブリッシュします。
+例えば、`name`フィールドが「Shawn」のメッセージをトピック `person/Shawn` に再パブリッシュします。
 
 ### スキーマの作成
 
@@ -16,7 +16,7 @@
 
 2. **Internal Schema** タブの下で、**Create** をクリックします。
 
-3. スキーマの **Name** を入力します。例：`protobuf_person`。この名前はエンコード・デコード関数で使用されます。
+3. スキーマの **Name** を入力します。例：`protobuf_person`。この名前はエンコードおよびデコード関数で使用されます。
 
 4. スキーマの **Type** を選択します。`Protobuf` を選択してください。
 
@@ -28,9 +28,9 @@
 
    :::
 
-   - **Input**（シンプルなスキーマ向け）:
+   - **Input**（単純なスキーマの場合）:
 
-     - 作成方法に **Input** を選択します。
+     - 作成方法として **Input** を選択します。
 
      - Protobuf定義を直接 **Schema** フィールドに貼り付けます。例：
 
@@ -42,13 +42,13 @@
        }
        ```
 
-   - **Upload Protobuf Bundle**（複雑または複数ファイルのスキーマ向け）:
+   - **Upload Protobuf Bundle**（複雑または複数ファイルのスキーマの場合）:
 
-     - 作成方法に **Upload Protobuf Bundle** を選択します。
+     - 作成方法として **Upload Protobuf Bundle** を選択します。
 
      - `.proto` ファイルを含む `.tar.gz` バンドルをアップロードするために **Select file** をクリックします。
 
-     - **Root Proto File** にエントリポイントファイル名（例：`person.proto`）を指定します。このファイルはバンドルのルートに存在する必要があります。
+     - **Root Proto File** にエントリポイントとなるファイル名（例：`person.proto`）を指定します。このファイルはバンドルのルートに存在する必要があります。
 
 6. **Create** をクリックしてスキーマを登録します。
 
@@ -56,9 +56,9 @@
 
 1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. **Rules** ページの右上の **Create** をクリックします。
+2. **Rules** ページの右上にある **Create** をクリックします。
 
-3. 先ほど作成したスキーマを使って、以下のようなルールSQL文を記述します：
+3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を記述します：
 
    ```sql
    SELECT
@@ -69,27 +69,25 @@
      person.name = 'Shawn'
    ```
 
-   ポイントは `schema_decode('protobuf_person', payload, 'Person')` の部分です：
+   ここでのポイントは `schema_decode('protobuf_person', payload, 'Person')` です：
 
-   - `schema_decode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をデコードします。
-
+   - `schema_decode` 関数は、`protobuf_person` スキーマに基づいてペイロードの内容をデコードします。
    - `as person` はデコードした値を変数 `person` に格納します。
-
-   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを示します。
 
 4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. **Topic** フィールドに、送信先トピックとして `person/${person.name}` と入力します。
+5. **Topic** フィールドに、宛先トピックとして `person/${person.name}` を入力します。
 
-6. **Payload** フィールドに、メッセージ内容のテンプレートとして `${person}` と入力します。
+6. **Payload** フィールドに、メッセージコンテンツのテンプレートとして `${person}` を入力します。
 
 このアクションにより、デコードされた "person" メッセージがJSON形式でトピック `person/${person.name}` に送信されます。`${person.name}` は変数プレースホルダーで、実行時にデコードされたメッセージの `name` フィールドの値に置き換えられます。
 
 ### デバイス側コードの準備
 
-ルールが作成されたら、テスト用にデータをシミュレートできます。
+ルールが作成されたら、テスト用のデータをシミュレートできます。
 
-以下のコードはPython言語を使い、ユーザーメッセージを作成してバイナリデータとしてエンコードし、`t/1` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c)を参照してください。
+以下のコードはPython言語を使用し、ユーザーメッセージを作成してバイナリデータにエンコードし、`t/1` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c)を参照してください。
 
 ```python
 def publish_msg(client):
@@ -105,13 +103,13 @@ def publish_msg(client):
 
 ### ルール実行結果の確認
 
-1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
 
-   - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
+   - EMQXをローカルで実行している場合はデフォルト値を使用できます。
 
-   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
+   - 認証設定などEMQXのデフォルト構成を変更している場合は、ユーザー名やパスワードの入力が必要になることがあります。
 
 3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
 
@@ -128,7 +126,7 @@ def publish_msg(client):
    publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
    ```
 
-6. WebSocket側でトピック `person/Shawn` のメッセージを受信していることを確認します：
+6. WebSocket側でトピック `person/Shawn` のメッセージが受信されていることを確認します：
 
    ```json
    {"name":"Shawn","id":1,"email":"shawn@example.com"}
@@ -136,7 +134,7 @@ def publish_msg(client):
 
 ## エンコードシナリオ
 
-デバイスがトピック `protobuf_out` をサブスクライブし、Protobufでエンコードされたバイナリメッセージを受信することを期待しています。ルールエンジンを使ってそのようなメッセージをエンコードし、関連トピックにパブリッシュします。
+デバイスが `protobuf_out` トピックをサブスクライブし、Protobufでエンコードされたバイナリメッセージを受信することを期待しています。ルールエンジンを使ってそのようなメッセージをエンコードし、関連するトピックにパブリッシュします。
 
 ### スキーマの作成
 
@@ -146,9 +144,9 @@ def publish_msg(client):
 
 1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. **Rules** ページの右上の **Create** をクリックします。
+2. **Rules** ページの右上にある **Create** をクリックします。
 
-3. 先ほど作成したスキーマを使って、以下のルールSQL文を記述します：
+3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を記述します：
 
    ```sql
    SELECT
@@ -157,29 +155,26 @@ def publish_msg(client):
      "protobuf_in"
    ```
 
-   ポイントは `schema_encode('protobuf_person', json_decode(payload), 'Person')` の部分です：
+   ここでのポイントは `schema_encode('protobuf_person', json_decode(payload), 'Person')` です：
 
-   - `schema_encode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をエンコードします。
-
+   - `schema_encode` 関数は、`protobuf_person` スキーマに基づいてペイロードの内容をエンコードします。
    - `as protobuf_person` はエンコードした値を変数 `protobuf_person` に格納します。
-
-   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
-
-   - `json_decode(payload)` は、`payload` が一般的にJSONエンコードされたバイナリであるため、`schema_encode` の入力としてMap型が必要なため使用します。
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを示します。
+   - `json_decode(payload)` は、ペイロードが一般的にJSONエンコードされたバイナリであるため、`schema_encode` の入力としてMap型が必要なために使用します。
 
 4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. **Topic** フィールドに送信先トピックとして `protobuf_out` と入力します。
+5. **Topic** フィールドに、宛先トピックとして `protobuf_out` を入力します。
 
-6. **Payload** フィールドにメッセージ内容のテンプレートとして `${protobuf_person}` と入力します。
+6. **Payload** フィールドに、メッセージコンテンツのテンプレートとして `${protobuf_person}` を入力します。
 
 このアクションにより、Protobufでエンコードされたユーザーメッセージがトピック `protobuf_out` に送信されます。`${protobuf_person}` は変数プレースホルダーで、実行時に `schema_encode` の結果（バイナリ値）に置き換えられます。
 
 ### デバイス側コードの準備
 
-ルールが作成されたら、テスト用にデータをシミュレートできます。
+ルールが作成されたら、テスト用のデータをシミュレートできます。
 
-以下のコードはPython言語を使い、ユーザーメッセージを作成してバイナリデータとしてエンコードし、`protobuf_in` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa)を参照してください。
+以下のコードはPython言語を使用し、ユーザーメッセージを作成してバイナリデータをデコードし、受信したメッセージを表示します。詳細は[フルコード](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa)を参照してください。
 
 ```python
 def on_message(client, userdata, msg):
@@ -191,13 +186,13 @@ def on_message(client, userdata, msg):
 
 ### ルール実行結果の確認
 
-1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
 
-   - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
+   - EMQXをローカルで実行している場合はデフォルト値を使用できます。
 
-   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
+   - 認証設定などEMQXのデフォルト構成を変更している場合は、ユーザー名やパスワードの入力が必要になることがあります。
 
 3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
 

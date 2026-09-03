@@ -269,6 +269,12 @@ stream {
 
 You can use the following configuration to reverse proxy MQTT WebSocket connections in NGINX, forwarding client requests to the backend MQTT servers. You need to specify an HTTP domain name or IP address using `server_name`:
 
+Starting from EMQX 6.3.0, WebSocket listeners do not read forwarded client address headers by default. To use the `X-Forwarded-For` header set by NGINX, add the following configuration to `base.hocon` on every backend EMQX node:
+
+```hocon
+listeners.ws.default.websocket.proxy_address_header = "x-forwarded-for"
+```
+
 ```bash
 http {
   upstream mqtt_websocket_servers {
@@ -300,11 +306,15 @@ http {
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header REMOTE-HOST $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-For $remote_addr;
     }
   }
 }
 ```
+
+::: tip
+The WebSocket examples overwrite `X-Forwarded-For` with `$remote_addr` because EMQX reads the first (leftmost) entry of this header when `proxy_address_header` is configured. Do not use `$proxy_add_x_forwarded_for` in this case: it appends `$remote_addr` to any inbound `X-Forwarded-For` header, leaving a client-supplied spoofable value as the leftmost entry. For details, see [Forwarded Client Address](../../configuration/listener.md#forwarded-client-address-websocket-listeners).
+:::
 
 ### Configure Reverse Proxy for MQTT WebSocket SSL
 
@@ -342,7 +352,7 @@ http {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
 
         # Disable caching
         proxy_buffering off;

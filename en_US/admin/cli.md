@@ -353,6 +353,82 @@ Descriptions of each field:
 - To avoid performance degradation, it throttles Erlang Term Storage (ETS) scans by sleeping periodically (e.g., 10ms every 1000 records).
 - The resulting CSV can be used for offline analysis, visualizations, or further automated processing.
 
+## session-top
+
+Starting from EMQX 6.3.0, use the `session-top` command to identify sessions that retain the most MQTT payload bytes or have the longest message queues. The command reads cached session statistics from running cluster nodes that support `session-top` and writes the top sessions to a CSV file on the node where you run the command.
+
+### Start a Session Scan
+
+Run the following command to start a scan:
+
+```bash
+emqx ctl session-top --out <File> [--count <K>] [--sort <SortBy>] [--batch <Size>] [--sleep <Ms>]
+```
+
+The following example exports the 20 sessions with the most retained MQTT payload bytes:
+
+```bash
+emqx ctl session-top --out /tmp/session-top.csv --count 20 --sort total_payload_bytes
+```
+
+| Option | Description | Default |
+| --- | --- | --- |
+| `--out <File>` | Path of the CSV output file. This option is required, and the file must not already exist. | No default |
+| `--count <K>` | Maximum number of sessions to export. The value must be from `1` to `1000`. | `10` |
+| `--sort <SortBy>` | Field used to rank sessions. Supported values are `total_payload_bytes` and `mqueue_length`. | `total_payload_bytes` |
+| `--batch <Size>` | Number of cached session records processed in each local scan batch. The value must be a positive integer. | `1000` |
+| `--sleep <Ms>` | Delay in milliseconds between local scan batches. The value must be a non-negative integer. | `1` |
+
+The scan runs asynchronously. Use `emqx ctl session-top status` to check its progress and completion status.
+
+During a rolling upgrade, nodes running EMQX versions that do not support `session-top` are excluded from the scan.
+
+Only one scan can be initiated from a node at a time. Each participating node also accepts only one local scan at a time. EMQX scans each participating node in batches to reduce the effect on the running cluster.
+
+The CSV file contains the following columns:
+
+```text
+clientid,node,mqueue_length,total_payload_bytes,inflight_count
+```
+
+- `clientid`: MQTT client ID.
+- `node`: EMQX node that owns the session.
+- `mqueue_length`: Number of messages in the session message queue.
+- `total_payload_bytes`: Total MQTT payload bytes retained by the in-memory session message queue and inflight window. This value excludes topics, headers, MQTT properties, and internal Erlang record overhead. Durable sessions report `0` because their buffered state is not held in these in-memory structures.
+- `inflight_count`: Number of messages in the session inflight window.
+
+The command reads these values from cached session statistics. The values can change during the scan.
+
+If a remote node is already scanning, fails to start, or reports a scan error, the status output lists the node under `Bad replies`. The CSV contains results only from nodes that completed the scan.
+
+If a remote node accepts the scan but does not return a result, the task remains in the `running` state, and EMQX does not write the CSV file. Check the task status and cancel the scan if necessary.
+
+To log a throttled warning when an in-memory session's retained payload bytes exceed a threshold, set `sysmon.session.total_payload_bytes_high_watermark` to a value greater than `0`. The default value `0` disables the warning. The warning is for diagnosis only and does not limit buffered payload bytes or change message delivery, message queue eviction, inflight handling, or session takeover behavior. For configuration details, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+
+### Check the Scan Status
+
+On the node that initiated the scan, run the following command to show the running scan or the latest finished scan:
+
+```bash
+emqx ctl session-top status
+```
+
+The latest finished status is retained until the next scan starts.
+
+The status is local to the initiating node. Running the command on another node can return `idle` even when a scan initiated elsewhere is running.
+
+### Cancel a Session Scan
+
+On the node that initiated the scan, run the following command to cancel the running scan:
+
+```bash
+emqx ctl session-top cancel
+```
+
+Cancellation is best-effort across the cluster. A node might finish its local scan before it receives the cancellation request.
+
+Running `cancel` on another node does not cancel a scan initiated elsewhere and reports that no `session-top` scan is running.
+
 ## topics
 
 This command is to view all subscribed topics in current system.
@@ -472,12 +548,13 @@ emqx ctl plugins disallow emqx_auth_mnesia-3.0.1
 }
 ```
 
-### plugins install \<Name-Vsn\>
+### plugins install \<Name-Vsn\> \[--cluster\]
 
-Install a plugin package that is located in the plugin installation directory.
+Install a plugin package that is located in the plugin installation directory. Use `--cluster` to distribute and install the package on all running nodes.
 
 ```bash
 emqx ctl plugins install emqx_auth_mnesia-3.0.1
+emqx ctl plugins install emqx_auth_mnesia-3.0.1 --cluster
 ```
 
 ### plugins uninstall \<Name-Vsn\>
@@ -671,7 +748,7 @@ disc_only_copies   = []
 
 ## log
 
-This command can be used to manage log handlers states, such as setting logging level etc.
+This command can be used to manage log levels and configured log outputs.
 
 ### log set-level \<Level\>
 
@@ -684,7 +761,7 @@ debug
 
 ### log primary-level
 
-Show the current primary log level. `primary-level` represents the primary log level of EMQX, which is used to specify the default log level for the entire system. Setting `primary-level` will affect all log outputs unless specific log handlers have their own independent log levels.
+Show the current primary log level. `primary-level` represents the primary log level of EMQX, which is used to specify the default log level for the entire system. Setting `primary-level` will affect all log outputs unless specific log outputs have their own independent log levels.
 
 ```bash
 $ emqx ctl log primary-level
@@ -700,41 +777,41 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
-Show the log handlers. `handlers` refer to the collection of log handlers used for handling logs. Each log handler can set its own log level independently and define how to handle and store log messages.
+Show the configured log outputs. `outputs` include the console output `console`, the default file output `file`, and configured named file outputs. Each log output can have its own log level, destination, and status.
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
-Start a specific handler.
+Enable a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
-Stop a specific handler。
+Disable a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log outputs set-level \<name\> \<Level\>
 
-Set the log level for a specific handler.
+Set the log level for a specific log output. The `<name>` can be `console`, `file`, or a configured named file output.
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace
@@ -1489,7 +1566,6 @@ List information of all gateways.
 ```bash
 $ emqx ctl gateway list
 Gateway(name=coap, status=running, clients=0, started_at=2023-05-22T14:23:50.353+08:00)
-Gateway(name=exproto, status=unloaded)
 Gateway(name=lwm2m, status=unloaded)
 Gateway(name=mqttsn, status=unloaded)
 Gateway(name=stomp, status=unloaded)
@@ -1563,7 +1639,6 @@ List the registered gateways in the system.
 Currently there are by default 5 registered gateways:
 
 * coap
-* exproto
 * lwm2m
 * mqttsn
 * stomp
@@ -1592,12 +1667,6 @@ Kick out a specific client from the gateway.
 List all metrics for a gateway.
 
 ## license
-
-::: tip
-
-This section applies to the EMQX Enterprise edition only.
-
-:::
 
 ### license info
 
@@ -1628,11 +1697,92 @@ You need to replace `YOUR_LICENSE_STRING` with the actual License string.
 
 ### license update default
 
-Revert to default Community License.
+Revert to the default Community License.
 
 ```bash
 emqx ctl license update default
 ```
+
+### license history
+
+Display the session high-watermark history. EMQX Enterprise records the daily peak session count and retains at least 24 months of history for billing audit purposes.
+
+```bash
+emqx ctl license history [N] [--period daily|monthly] [--json]
+```
+
+- `N`: Optional positive integer; caps the number of rows returned (default: 24 for monthly period)
+- `--period daily|monthly`: Aggregation granularity; `daily` returns one row per calendar day, `monthly` folds daily peaks into per-month maximums (default: `monthly`)
+- `--json`: Output in JSON format instead of plain text
+
+**Example: plain-text output**
+
+```bash
+$ emqx ctl license history
+period=2026-04 high_watermark=25000 observed_at=2026-04-18T13:53:05.000Z
+period=2026-03 high_watermark=23500 observed_at=2026-03-31T22:10:42.000Z
+```
+
+**Example: JSON output**
+
+```bash
+$ emqx ctl license history --json
+```
+
+```json
+{
+  "period": "monthly",
+  "count": 2,
+  "data": [
+    { "period": "2026-04", "high_watermark": 25000, "observed_at": "2026-04-18T13:53:05.000Z" },
+    { "period": "2026-03", "high_watermark": 23500, "observed_at": "2026-03-31T22:10:42.000Z" }
+  ]
+}
+```
+
+When no data has been recorded yet, the plain-text output displays:
+
+```
+No session high-watermark history recorded.
+```
+
+## mt
+
+The `mt` command provides maintenance operations for multi-tenancy in EMQX Enterprise.
+
+### mt purge_ns \<Namespace\>
+
+Starting from EMQX Enterprise 6.1.4, this command deletes the specified namespace and synchronously runs its cleanup process. The cleanup removes the namespace configuration and namespace-scoped data from the built-in database. This data includes password-based authentication users, SCRAM users, and authorization rules. The command runs even if the namespace no longer exists.
+
+The operation is idempotent if the namespace state has not changed. If a cleanup attempt does not finish, you can rerun the command only if a namespace with the same name has not been recreated.
+
+Use this command as a last resort to remove data left behind by an interrupted namespace deletion. For routine namespace deletion, use the Dashboard or `DELETE /mt/ns/<namespace>` REST API.
+
+::: warning Important Notice
+
+Running this command for an existing namespace permanently deletes the namespace and its data. Do not rerun the command after a namespace with the same name has been recreated.
+
+:::
+
+For example, purge the `tenant-a` namespace:
+
+```bash
+emqx ctl mt purge_ns tenant-a
+```
+
+If every cleanup step succeeds, the output JSON contains `"result": "ok"`:
+
+```json
+{"namespace":"tenant-a","result":"ok"}
+```
+
+If any cleanup step fails, the output JSON contains `"error": "cleanup_incomplete"`:
+
+```json
+{"error":"cleanup_incomplete","hint":"some cleanup steps failed; check logs and re-run the command to retry","namespace":"tenant-a"}
+```
+
+Check the EMQX logs for the failed cleanup step, resolve the cause, and run the command again.
 
 ## admins
 

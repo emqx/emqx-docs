@@ -7,6 +7,7 @@ The Cluster Settings module provides the following submodules:
 - MQTT Settings
 - Cluster
 - Namespace
+- Rule Engine Security
 - Listeners
 - Logging
 - Monitoring
@@ -76,6 +77,63 @@ EMQX also supports creating and managing clusters using the Command Line Interfa
 
 The Namespace feature in EMQX provides logical isolation for different client groups within a single cluster. You can manage namespaces on the **Namespace** page. For more detailed guidance on how to manage and configure namespaces, refer to the [Namespace](../multi-tenancy/namespace-overview.md).
 
+## Rule Engine Security
+
+EMQX connectors, bridges, and actions open outbound network connections to external services. Without controls, a misconfigured or malicious target could cause EMQX to make unintended requests to internal or sensitive destinations, a class of vulnerability known as Server-Side Request Forgery (SSRF).
+
+Starting from EMQX 6.0.3, the **Rule Engine Security** page lets you configure the built-in SSRF protection policy from the Dashboard. Starting from EMQX 6.0.4, the policy validates only the `url` field of HTTP connectors and the `server` field of MQTT connectors when their configurations are tested, created, or updated. A blocked target is rejected at that point.
+
+::: warning Important Notice
+The SSRF policy does not validate other connector types, connector enable or disable operations, connector deletion, or outbound connections at runtime. A stored HTTP or MQTT connector can be enabled even if its target becomes blocked after the connector was created. Use host-level egress controls such as `iptables` or `nftables` when you need protection for other connector types, policy changes that must apply to stored connector configurations, DNS rebinding, or other runtime address changes. See [Mitigate SSRF with Rule Engine Policy and Firewall Rules](../deploy/cluster/security.md#mitigate-ssrf-with-rule-engine-policy-and-firewall-rules) for the full guidance.
+:::
+
+### Enable SSRF Protection
+
+Toggle **Enable SSRF Protection** to turn the policy on or off. When enabled, EMQX evaluates the `url` of each HTTP connector and the `server` of each MQTT connector when the connector configuration is tested, created, or updated. The evaluation order is:
+
+1. Exact hostname match against **Denied Hostnames**: rejected immediately if matched.
+2. Resolved IPs checked against **Allowed CIDR Ranges**: allowed if matched.
+3. Resolved IPs checked against **Denied CIDR Ranges**: rejected if matched.
+
+This policy is disabled by default for compatibility with deployed configurations. Enable it when you want to prevent HTTP and MQTT connector configurations with blocked targets from passing connectivity tests or being created or updated. If these connectors must reach internal services, review and adjust the allowed and denied CIDR ranges before enabling the policy.
+
+### Allowed CIDR Ranges
+
+A list of CIDR ranges whose resolved IP addresses are always permitted, regardless of the denied CIDR ranges. Use this field to explicitly allow specific internal subnets that your HTTP or MQTT connectors must reach.
+
+If a resolved IP matches an entry in this list, it bypasses the denied CIDR check.
+
+### Denied CIDR Ranges
+
+A list of CIDR ranges that EMQX rejects when an HTTP or MQTT connector configuration is tested, created, or updated. The default set covers addresses that are commonly abused in SSRF attacks:
+
+| CIDR | Description |
+|---|---|
+| `127.0.0.0/8` | IPv4 loopback |
+| `::1/128` | IPv6 loopback |
+| `169.254.0.0/16` | IPv4 link-local (includes AWS/Azure metadata) |
+| `fe80::/10` | IPv6 link-local |
+| `10.0.0.0/8` | Private network (RFC 1918) |
+| `172.16.0.0/12` | Private network (RFC 1918) |
+| `192.168.0.0/16` | Private network (RFC 1918) |
+| `fc00::/7` | IPv6 unique local |
+| `0.0.0.0/32` | Unspecified address |
+| `224.0.0.0/4` | IPv4 multicast |
+| `ff00::/8` | IPv6 multicast |
+| `100.100.100.200/32` | Alibaba Cloud metadata service |
+
+::: warning Important Notice
+Removing entries from the default rejected CIDR list may expose EMQX to SSRF attacks. Only remove an entry if you have a specific operational requirement and understand the security implications.
+:::
+
+If an HTTP or MQTT connector must reach an address in the default denied list, add that address to **Allowed CIDR Ranges** rather than removing it from the denied list. The allowed list takes precedence.
+
+### Denied Hostnames
+
+A list of hostnames that EMQX rejects when an HTTP or MQTT connector configuration is tested, created, or updated, regardless of the resolved IP address. Hostname matching is exact and case-insensitive. This field is useful for blocking known cloud metadata endpoints by name.
+
+Click **Save Changes** to apply the changes.
+
 ## Listeners
 
 The **Listeners** displays a list of listeners by default. EMQX provides four common listeners:
@@ -125,7 +183,7 @@ Modifying and deleting listeners is a risky operation and should be done careful
 
 The **Logging** page includes tabs for **Console Log**, **File Log**, **Log Throttling**, and **Audit Log**.
 
-EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log handler, set the log level, log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
+EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log output, set the log level and log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
 
 In the **Log Throttling** tab page, you can configure the time window for log throttling. For more information on log throttling, refer to [Log Rate Limiting](../observability/log.md#log-throttling).
 
@@ -152,9 +210,9 @@ If the default value of the current alarm trigger threshold or alarm monitoring 
 
 ### Integration
 
-This page mainly provides integration configurations with third-party monitoring platforms. Currently, EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
+This page mainly provides integration configurations with third-party monitoring platforms. EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
 
-When using the `Prometheus` third-party monitoring service, you can quickly enable the configuration on this page and set parameters such as the push data address and data reporting interval. You can directly use the API `/prometheus/stats` provided by EMQX to get monitoring data. When using this API, no authentication information is required. Please refer to [Prometheus](../observability/prometheus.md) for specific API.
+When using Prometheus, you can configure Pull or Push mode on this page. In Pull mode, Prometheus scrapes metrics from APIs under `/api/v5/prometheus/*`. Starting from EMQX 6.3.0, these APIs require authentication by default. Configure the scraper with a dedicated API key that has the `monitoring` scope. For configuration details, see [Integrate with Prometheus](../observability/prometheus.md).
 
 In most cases, you do not need to use `Pushgateway` to monitor the metrics data of EMQX. And you can choose to configure a `Pushgateway` service address to push the monitoring data to `Pushgateway`, and then `Pushgateway` pushes the data to the `Prometheus` service. Click to view [When to use Pushgateway](https://prometheus.io/docs/practices/pushing/).
 
@@ -164,7 +222,9 @@ Users can customize and modify the monitoring data in `Grafana` according to the
 
 ![image](./assets/emqx-grafana.jpg)
 
-For detailed configuration of OpenTelemetry and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md) and [Integrate with Datadog](../observability/datadog.md).
+When configuring OpenTelemetry, you can select **Generic** or **Dynatrace** under **OpenTelemetry Type**. **Generic** supports metrics, traces, and logs through standard OpenTelemetry configuration. **Dynatrace** supports traces and logs and uses OAuth2 authentication.
+
+For detailed configuration of OpenTelemetry, Dynatrace, and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md), [Integrate OpenTelemetry with Dynatrace](../observability/opentelemetry/dynatrace.md), and [Integrate with Datadog](../observability/datadog.md).
 
 ## Cluster Linking
 

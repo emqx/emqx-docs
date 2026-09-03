@@ -1,104 +1,104 @@
-# Bridge with Azure Event Grid MQTT
+# Azure Event Grid MQTTとのブリッジ
 
-[Azure Event Grid](https://azure.microsoft.com/en-us/products/event-grid) is a fully managed event-routing service on Azure. Its MQTT broker capability enables bidirectional, standards-based MQTT communication between IoT devices and cloud applications at scale. EMQX provides a built-in connector for Azure Event Grid, enabling you to bridge MQTT data between EMQX and Azure Event Grid for seamless integration with Azure's cloud services ecosystem.
+[Azure Event Grid](https://azure.microsoft.com/en-us/products/event-grid) は、Azure上のフルマネージドなイベントルーティングサービスです。そのMQTTブローカー機能により、IoTデバイスとクラウドアプリケーション間でスケール可能な双方向の標準ベースのMQTT通信が可能になります。EMQXはAzure Event Grid用の組み込みコネクターを提供しており、EMQXとAzure Event Grid間でMQTTデータをブリッジし、Azureのクラウドサービスエコシステムとシームレスに統合できます。
 
-This page provides a detailed overview of the integration between EMQX and Azure Event Grid MQTT with practical instructions on creating and validating the Sink and Source.
+本ページでは、EMQXとAzure Event Grid MQTTの統合について詳細に解説し、SinkおよびSourceの作成と検証方法を実践的に説明します。
 
-## How It Works
+## 動作原理
 
-Azure Event Grid data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with Azure Event Grid's cloud-native MQTT broker. EMQX connects to the Azure Event Grid MQTT broker as an MQTT client, enabling bidirectional message transmission:
+Azure Event Gridのデータ統合は、EMQXのデバイス接続性とメッセージ送信機能をAzure Event GridのクラウドネイティブMQTTブローカーと組み合わせた、EMQXの標準機能です。EMQXはMQTTクライアントとしてAzure Event Grid MQTTブローカーに接続し、双方向のメッセージ送受信を実現します。
 
-- **Outgoing Messages (Sink)**: EMQX publishes messages from local MQTT topics to specified topics on Azure Event Grid.
-- **Incoming Messages (Source)**: EMQX subscribes to topics on Azure Event Grid and forwards the received messages to local EMQX topics.
+- **送信メッセージ（Sink）**：EMQXはローカルのMQTTトピックからメッセージをAzure Event Gridの指定トピックにパブリッシュします。
+- **受信メッセージ（Source）**：EMQXはAzure Event Gridのトピックをサブスクライブし、受信したメッセージをローカルのEMQXトピックに転送します。
 
-The diagram below illustrates a typical architecture of the integration:
+以下の図は統合の典型的なアーキテクチャを示しています：
 
 ![EMQX Integration Azure Event Grid](./assets/emqx-integration-azure-event-grid.png)
 
-## Features and Benefits
+## 特長と利点
 
-The data integration with Azure Event Grid offers the following features and benefits:
+Azure Event Gridとのデータ統合は以下の特長と利点を提供します：
 
-- **Standards-based MQTT bridging**: Azure Event Grid supports MQTT 3.1.1 and MQTT 5.0, allowing EMQX to bridge with it using the standard MQTT protocol and interoperate with any MQTT-compatible client or service.
-- **Bidirectional data flow**: Supports both publishing messages from EMQX to Azure Event Grid (Sink) and subscribing to Azure Event Grid topics and forwarding messages to EMQX (Source), enabling flexible IoT data routing.
-- **Secure connectivity**: TLS is required by Azure Event Grid. The connector enables TLS by default and supports client certificate authentication, which is the recommended authentication method for production deployments.
-- **Flexible topic mapping**: Through EMQX's rule engine, you can filter, transform, and route messages to specific Azure Event Grid topic spaces with dynamic topic mapping.
-- **Rich Azure ecosystem integration**: Once data reaches Azure Event Grid, it can be routed to other Azure services such as Azure Functions, Azure Event Hubs, Azure Storage, and more for further processing and analysis.
+- **標準ベースのMQTTブリッジ**：Azure Event GridはMQTT 3.1.1およびMQTT 5.0をサポートしており、EMQXは標準MQTTプロトコルでブリッジでき、任意のMQTT互換クライアントやサービスと相互運用可能です。
+- **双方向データフロー**：EMQXからAzure Event Gridへのメッセージパブリッシュ（Sink）と、Azure Event GridのトピックサブスクライブおよびEMQXへのメッセージ転送（Source）の両方をサポートし、柔軟なIoTデータルーティングを実現します。
+- **安全な接続**：Azure Event GridはTLSを必須としています。コネクターはデフォルトでTLSを有効にし、クライアント証明書認証もサポートしており、本番環境で推奨される認証方式です。
+- **柔軟なトピックマッピング**：EMQXのルールエンジンを通じて、メッセージのフィルタリング、変換、動的トピックマッピングによるAzure Event Gridの特定トピックスペースへのルーティングが可能です。
+- **豊富なAzureエコシステムとの統合**：データがAzure Event Gridに到達すると、Azure Functions、Azure Event Hubs、Azure Storageなど他のAzureサービスへルーティングされ、さらなる処理や分析が可能です。
 
-## Before You Start
+## はじめる前に
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQXのデータ統合[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-### Set Up Azure Event Grid
+### Azure Event Gridのセットアップ
 
-Before creating the data integration in EMQX, you need to set up an Azure Event Grid namespace with MQTT broker support enabled. The following Microsoft documentation links provide step-by-step guidance:
+EMQXでデータ統合を作成する前に、MQTTブローカーサポートが有効なAzure Event Gridネームスペースをセットアップする必要があります。以下のMicrosoftドキュメントで手順を確認できます：
 
-- [Quickstart: Publish and subscribe to MQTT messages using Azure Event Grid namespace](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-publish-and-subscribe-portal)
-- [Azure Event Grid MQTT broker overview](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-overview)
-- [How to authenticate MQTT clients using a certificate chain](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-certificate-chain-client-authentication)
+- [クイックスタート：Azure Event Gridネームスペースを使ったMQTTメッセージのパブリッシュとサブスクライブ](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-publish-and-subscribe-portal)
+- [Azure Event Grid MQTTブローカー概要](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-overview)
+- [証明書チェーンを使ったMQTTクライアント認証方法](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-certificate-chain-client-authentication)
 
-After completing the setup, note the following connection details, which you will need when creating the connector in EMQX:
+セットアップ完了後、EMQXでコネクター作成時に必要となる以下の接続情報を控えてください：
 
-- **Hostname**: The MQTT broker hostname for your Event Grid namespace, in the format `<namespace>.ts.<region>.eventgrid.azure.net`. The port is `8883`.
-- **Client certificate and private key**: Azure Event Grid requires client certificate authentication. Export the certificate and private key from your Azure Event Grid namespace, as you may need them when configuring TLS in the connector.
-- **Topic spaces**: The topic spaces and permission bindings you configured in Azure Event Grid.
+- **ホスト名**：Event GridネームスペースのMQTTブローカーホスト名。形式は `<namespace>.ts.<region>.eventgrid.azure.net`。ポートは`8883`です。
+- **クライアント証明書と秘密鍵**：Azure Event Gridはクライアント証明書認証を要求します。ネームスペースから証明書と秘密鍵をエクスポートし、コネクターのTLS設定時に使用します。
+- **トピックスペース**：Azure Event Gridで設定したトピックスペースと権限バインディング。
 
 ::: tip
 
-Consult the [Azure Event Grid documentation](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-client-authentication) for supported authentication methods and TLS requirements.
+サポートされている認証方式やTLS要件については、[Azure Event Gridドキュメント](https://learn.microsoft.com/en-us/azure/event-grid/mqtt-client-authentication)を参照してください。
 
 :::
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect EMQX to Azure Event Grid.
+EMQXとAzure Event Gridを接続するコネクターの作成手順を示します。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
+1. EMQXダッシュボードで **Integration** -> **Connectors** をクリックします。
 
-2. Click **Create** in the top right corner of the page.
+2. ページ右上の **Create** をクリックします。
 
-3. On the **Create Connector** page, select **Azure Event Grid** and then click **Next**.
+3. **Create Connector** ページで **Azure Event Grid** を選択し、**Next** をクリックします。
 
-4. Enter a name for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_azure_event_grid`.
+4. コネクター名を入力します。英数字の組み合わせで、例：`my_azure_event_grid`。
 
-5. Configure the connection information:
+5. 接続情報を設定します：
 
-   - **Server Host**: Enter the MQTT broker endpoint of your Event Grid namespace, for example, `myns.northeurope-1.ts.eventgrid.azure.net:8883`. The default port is `8883`.
-   - **ClientID Prefix**: (Optional) Specify a prefix for the client IDs generated by EMQX. EMQX automatically generates unique client IDs using the format `[prefix]:{connector name}{random string}:{pool index}`. For more details, see [Connection Pool and Client ID Generation Rules](./data-bridge-mqtt.md#connection-pool-and-client-id-generation-rules).
-   - **Username** and **Password**: Leave blank. Azure Event Grid MQTT does not use username/password authentication.
-   - **Keepalive**: Specify the keepalive interval in seconds. The default is `160` seconds.
-   - **MQTT Version**: Select the MQTT protocol version. Azure Event Grid supports both MQTT 3.1.1 (`v4`) and MQTT 5.0 (`v5`).
-   - **Static ClientId Entries**: (Optional) Configure static client IDs for specific EMQX nodes. This is useful when Azure Event Grid requires pre-registered client IDs. See [Configure Static Client IDs](./data-bridge-mqtt.md#configure-static-client-ids) for details.
+   - **Server Host**：Event GridネームスペースのMQTTブローカーエンドポイントを入力します。例：`myns.northeurope-1.ts.eventgrid.azure.net:8883`。デフォルトポートは`8883`です。
+   - **ClientID Prefix**：（任意）EMQXが生成するクライアントIDのプレフィックスを指定します。EMQXは`[prefix]:{connector name}{random string}:{pool index}`形式で一意のクライアントIDを生成します。詳細は[接続プールとクライアントID生成ルール](./data-bridge-mqtt.md#connection-pool-and-client-id-generation-rules)を参照してください。
+   - **Username** と **Password**：空欄のままにします。Azure Event Grid MQTTはユーザー名/パスワード認証を使用しません。
+   - **Keepalive**：キープアライブ間隔（秒）を指定します。デフォルトは`160`秒です。
+   - **MQTT Version**：MQTTプロトコルバージョンを選択します。Azure Event GridはMQTT 3.1.1（`v4`）とMQTT 5.0（`v5`）の両方をサポートしています。
+   - **Static ClientId Entries**：（任意）特定のEMQXノードに静的クライアントIDを割り当てる設定です。Azure Event Gridで事前登録されたクライアントIDが必要な場合に有効です。詳細は[静的クライアントIDの設定](./data-bridge-mqtt.md#configure-static-client-ids)を参照してください。
 
      ::: tip
 
-     If static client ID entries are defined, only the EMQX nodes that have been explicitly assigned static client IDs will start MQTT connections.
+     静的クライアントIDが定義されている場合、明示的に割り当てられたEMQXノードのみがMQTT接続を開始します。
 
      :::
 
-   - **Clean Start**: Enabled by default. When enabled, EMQX starts a new session each time it connects to Azure Event Grid.
-   - **Enable TLS**: Enable this option. Azure Event Grid requires TLS. If you are using client certificate authentication, configure the client certificate and private key here. For detailed TLS configuration options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
+   - **Clean Start**：デフォルトで有効。接続ごとに新しいセッションを開始します。
+   - **Enable TLS**：必ず有効にしてください。Azure Event GridはTLSを要求します。クライアント証明書認証を使用する場合は、ここで証明書と秘密鍵を設定します。TLS設定の詳細は[外部リソースアクセスのTLS設定](../network/overview.md#enable-tls-encryption-for-accessing-external-resources)を参照してください。
 
-6. **Advanced settings (optional)**: For details, see [Connector Advanced Settings](#connector-advanced-settings).
+6. **詳細設定（任意）**：詳細は[コネクター詳細設定](#connector-advanced-settings)を参照してください。
 
-7. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to Azure Event Grid.
+7. **Create**をクリックする前に、**Test Connectivity** でEMQXがAzure Event Gridに接続できるか確認できます。
 
-8. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
+8. **Create** をクリックしてコネクター作成を完了します。作成成功ダイアログが表示され、ルール作成の案内があります。**Create Rule** をクリックするとコネクターが選択された状態でルール作成画面に進みます。**Back To Connector List** をクリックすると後でルールを作成できます。
 
-## Create a Rule with Azure Event Grid Sink
+## Azure Event Grid Sinkを使ったルール作成
 
-This section demonstrates how to create a rule to forward MQTT messages from the local EMQX topic `t/#` to Azure Event Grid.
+ローカルのEMQXトピック `t/#` からAzure Event GridへMQTTメッセージを転送するルール作成手順です。
 
-1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `Azure Event Grid` and the connector pre-selected. Skip to step 5.
+1. 前節で**Create Rule**をクリックした場合、**Add Action**パネルが自動で開き、**Type of Action**が`Azure Event Grid`、コネクターが選択済みです。ステップ5へ進んでください。
 
-   Otherwise, go to the EMQX Dashboard, click **Integration** -> **Rules**, click **Create** in the top right corner, then click **+ Add Action**.
+   そうでない場合は、EMQXダッシュボードの **Integration** -> **Rules** を開き、右上の **Create** をクリックし、**+ Add Action** をクリックします。
 
-2. In the **SQL Editor** on the left, enter a rule ID and the following SQL to match messages from topic `t/#`:
+2. 左側の**SQL Editor**にルールIDと以下のSQLを入力し、トピック `t/#` のメッセージをマッチさせます。
 
-   Note: If you want to specify your own SQL syntax, make sure all fields required by the Sink are included in the `SELECT` part.
+   ※独自のSQLを指定する場合は、Sinkで必要なフィールドがすべて`SELECT`に含まれていることを確認してください。
 
    ```sql
    SELECT
@@ -109,68 +109,68 @@ This section demonstrates how to create a rule to forward MQTT messages from the
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は**SQL Examples**をクリックし、**Enable Test**でSQLルールの学習とテストが可能です。
 
    :::
 
-3. In the **Add Action** panel on the right, select `Azure Event Grid` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value.
+3. 右側の**Add Action**パネルで、**Type of Action**ドロップダウンから`Azure Event Grid`を選択します。**Action**はデフォルトの`Create Action`のままにします。
 
-4. From the **Connectors** dropdown, select the `my_azure_event_grid` connector you just created. You can also create a new Connector by clicking the button next to the dropdown. For configuration parameters, see [Create a Connector](#create-a-connector).
+4. **Connectors**ドロップダウンから先ほど作成した`my_azure_event_grid`コネクターを選択します。新規コネクター作成は隣のボタンから可能です。設定パラメータは[コネクターの作成](#コネクターの作成)を参照してください。
 
-5. Enter a name and optional description for the Sink.
+5. Sinkの名前と任意の説明を入力します。
 
-6. Configure the Sink parameters for publishing messages to Azure Event Grid:
+6. Azure Event GridへメッセージをパブリッシュするSinkパラメータを設定します：
 
-   - **Topic**: The topic to publish to on Azure Event Grid. Supports `${var}` placeholders. For example, enter `devices/${clientid}/messages` to dynamically set the topic based on the client ID.
-   - **QoS**: The QoS level for the published message. Select `0`, `1`, or `2`, or use a placeholder like `${qos}` to follow the QoS of the original message.
-   - **Retain**: Select `true`, `false`, or a placeholder like `${flags.retain}` to set the retain flag.
-   - **Payload**: The message payload template. Leave blank to forward the full rule output, or enter a template such as `${payload}` to forward only the payload.
+   - **Topic**：Azure Event Gridでパブリッシュするトピック。`${var}`プレースホルダーをサポートします。例：`devices/${clientid}/messages`でクライアントIDに基づく動的トピック設定が可能です。
+   - **QoS**：パブリッシュメッセージのQoSレベル。`0`、`1`、`2`のいずれか、または`${qos}`のように元メッセージのQoSを引き継ぐプレースホルダーを指定できます。
+   - **Retain**：`true`、`false`、または`${flags.retain}`のようなプレースホルダーを選択し、リテインフラグを設定します。
+   - **Payload**：メッセージペイロードのテンプレート。空欄の場合はルール出力全体を転送し、`${payload}`などを指定するとペイロードのみを転送します。
 
-7. **Fallback Actions (Optional)**: Define one or more fallback actions to improve reliability in case of message delivery failure. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+7. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-8. **Advanced settings (optional)**: For details, see [Sink Advanced Settings](#sink-advanced-settings).
+8. **詳細設定（任意）**：詳細は[Sink詳細設定](#sink-advanced-settings)を参照してください。
 
-9. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can connect to Azure Event Grid.
+9. **Create**をクリックする前に、**Test Connectivity**でSinkがAzure Event Gridに接続できるかテスト可能です。
 
-10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs**.
+10. **Create**をクリックしてSink設定を完了すると、**Action Outputs**に新しいSinkが追加されます。
 
-11. Back on the **Create Rule** page, verify the configured information and click the **Save** button to generate the rule.
+11. **Create Rule**ページに戻り、設定内容を確認して**Save**をクリックしルールを生成します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab to see the new Azure Event Grid Sink.
+これでルールの作成が完了しました。**Integration** -> **Rules**ページで新規ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいAzure Event Grid Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and verify that messages under topic `t/#` are forwarded to Azure Event Grid after processing by rule `my_rule`.
+また、**Integration** -> **Flow Designer**でトポロジーを確認し、`t/#`トピックのメッセージがルール`my_rule`で処理された後にAzure Event Gridへ転送されていることを検証できます。
 
-## Create a Rule with Azure Event Grid Source
+## Azure Event Grid Sourceを使ったルール作成
 
-This section demonstrates how to create a rule to subscribe to messages from Azure Event Grid and forward them to local EMQX topics.
+Azure Event Gridからのメッセージをサブスクライブし、ローカルのEMQXトピックに転送するルール作成手順です。
 
-### Create an Azure Event Grid Source and Add It to the Rule
+### Azure Event Grid Sourceの作成とルールへの追加
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Rules**, then click **Create** in the top right corner.
+1. EMQXダッシュボードで **Integration** -> **Rules** を開き、右上の **Create** をクリックします。
 
-2. Enter `my_rule_source` as the rule ID.
+2. ルールIDに `my_rule_source` を入力します。
 
-3. Configure the trigger source for the rule. On the right side of the page, under the **Data Inputs** tab, delete the default **Message** input and click **Add Input** to create an Azure Event Grid Source.
+3. ルールのトリガーソースを設定します。ページ右側の**Data Inputs**タブでデフォルトの**Message**入力を削除し、**Add Input**をクリックしてAzure Event Grid Sourceを作成します。
 
-4. In the **Add Input** dialog, select `Azure Event Grid` from the **Input Type** dropdown. Keep the **Source** dropdown at the default `Create Source` value.
+4. **Add Input**ダイアログで、**Input Type**ドロップダウンから`Azure Event Grid`を選択し、**Source**はデフォルトの`Create Source`のままにします。
 
-5. Enter a name and description for the Source.
+5. Sourceの名前と説明を入力します。
 
-6. Select the `my_azure_event_grid` connector from the dropdown.
+6. ドロップダウンから`my_azure_event_grid`コネクターを選択します。
 
-7. Configure the Source parameters for subscribing to Azure Event Grid:
+7. Azure Event Gridのサブスクライブ設定を行います：
 
-   - **Topic**: The topic to subscribe to on Azure Event Grid. Supports `+` and `#` wildcards.
+   - **Topic**：Azure Event Gridでサブスクライブするトピック。`+`および`#`ワイルドカードをサポートします。
 
      ::: tip
 
-     When EMQX is running in cluster mode, or the Connector is configured with a connection pool, use shared subscriptions to avoid duplicate messages. For example, `$share/group/devices/#`.
+     EMQXがクラスター構成で稼働している場合や、コネクターが接続プールを使用している場合は、重複メッセージを避けるため共有サブスクリプションを使用してください。例：`$share/group/devices/#`。
 
      :::
 
-   - **QoS**: The subscription QoS. Select `0` or `1` from the dropdown.
+   - **QoS**：サブスクライブのQoS。`0`または`1`を選択します。
 
-8. Click the **Create** button to complete the Source creation. The rule SQL will automatically update to:
+8. **Create**をクリックしてSource作成を完了すると、ルールSQLは自動的に以下のように更新されます：
 
    ```sql
    SELECT
@@ -179,43 +179,44 @@ This section demonstrates how to create a rule to subscribe to messages from Azu
      "$bridges/azure_event_grid:<source_name>"
    ```
 
-### Create a Republish Action
+### Republishアクションの作成
 
-The subscribed messages from Azure Event Grid are not automatically forwarded to local EMQX topics. Create a Republish action to route the messages.
+Azure Event Gridからサブスクライブしたメッセージは自動的にローカルEMQXトピックに転送されないため、Republishアクションを作成してルーティングします。
 
-1. Switch to the **Action Outputs** tab on the right side of the Create Rule page and click **Add Action**.
+1. ルール作成ページ右側の**Action Outputs**タブに切り替え、**Add Action**をクリックします。
 
-2. Select `Republish` from the **Type of Action** dropdown.
+2. **Type of Action**ドロップダウンから`Republish`を選択します。
 
-3. Configure the republish parameters:
-   - **Topic**: Enter the target local topic, for example, `azure/${topic}`, to add an `azure/` prefix to the original topic.
-   - **QoS**: Select `${qos}` to follow the original message QoS, or set a fixed value.
-   - **Retain**: Select `false` or use a placeholder.
-   - **Payload**: Enter `${payload}` to forward only the payload, or leave blank to forward the full rule output.
+3. Republishパラメータを設定します：
 
-4. Click **Add** to complete the action, then click **Save** to generate the rule.
+   - **Topic**：転送先のローカルトピックを入力します。例：`azure/${topic}`で元トピックに`azure/`プレフィックスを付加します。
+   - **QoS**：`${qos}`を選択し元メッセージのQoSを引き継ぐか、固定値を設定します。
+   - **Retain**：`false`を選択するかプレースホルダーを使用します。
+   - **Payload**：`${payload}`を入力してペイロードのみ転送、または空欄でルール出力全体を転送します。
 
-## Test the Rule
+4. **Add**をクリックしてアクションを追加し、**Save**をクリックしてルールを生成します。
 
-### Test the Sink
+## ルールのテスト
 
-Use [MQTTX](https://mqttx.app/) to publish a message to `t/1` in EMQX:
+### Sinkのテスト
+
+[MQTTX](https://mqttx.app/)を使ってEMQXのトピック `t/1` にメッセージをパブリッシュします：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure Event Grid" }'
 ```
 
-Check the running statistics of the Azure Event Grid Sink. There should be 1 new matching and 1 new outgoing message. Verify in the Azure portal or using an Azure Event Grid MQTT client that the message has been received.
+Azure Event Grid Sinkの稼働統計を確認し、新しいマッチ数1件と送信数1件があることを確認してください。AzureポータルやAzure Event Grid MQTTクライアントでメッセージ受信を検証します。
 
-### Test the Source
+### Sourceのテスト
 
-1. Subscribe to the local EMQX topic `azure/#`:
+1. ローカルのEMQXトピック `azure/#` をサブスクライブします：
 
    ```bash
    mqttx sub -t azure/# -q 1 -v
    ```
 
-2. Publish a message to Azure Event Grid using an MQTT client configured with Azure Event Grid credentials:
+2. Azure Event Gridの認証情報で設定したMQTTクライアントを使い、Azure Event Gridにメッセージをパブリッシュします：
 
    ```bash
    mqttx pub -t devices/device1/messages -m "hello from azure" \
@@ -223,47 +224,47 @@ Check the running statistics of the Azure Event Grid Sink. There should be 1 new
      --tls --cert /path/to/client.crt --key /path/to/client.key
    ```
 
-3. You should see the message forwarded to the `azure/devices/device1/messages` topic in EMQX:
+3. EMQXの`azure/devices/device1/messages`トピックにメッセージが転送されていることを確認します：
 
    ```bash
    topic: azure/devices/device1/messages
    payload: hello from azure
    ```
 
-## Advanced Settings
+## 詳細設定
 
-This section describes the advanced configuration options available for the Azure Event Grid connector and Sink. When configuring them in the Dashboard, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+本節ではAzure Event GridコネクターおよびSinkの詳細設定オプションを説明します。ダッシュボードで設定する際は、**詳細設定**を展開し、必要に応じて以下のパラメータを調整してください。
 
-### Connector Advanced Settings
+### コネクター詳細設定
 
-| Field Name | Description | Default Value |
-| --- | --- | --- |
-| Message Retry Interval | Time between retry attempts when a message delivery fails. | `15` seconds |
-| Bridge Mode | When enabled, the connector uses MQTT bridge mode, which notifies the remote broker that the connection is a bridge. | Disabled |
-| Max Inflight | Maximum number of unacknowledged messages in flight at any given time per connection. | `32` |
-| Connection Pool Size | Number of concurrent MQTT connections to maintain to Azure Event Grid. Increase this value to improve throughput. | `8` |
-| Connect Timeout | Maximum time to wait when establishing a TCP connection to Azure Event Grid. | `10` seconds |
-| Start Timeout | Maximum time the connector waits for an auto-started resource to become healthy before accepting requests. | `5` seconds |
-| Health Check Interval | How often the connector runs an automated health check on the connection. | `15` seconds |
-| Health Check Timeout | Maximum time allowed for each health check to complete. | `60` seconds |
+| フィールド名               | 説明                                                                                       | デフォルト値      |
+|----------------------------|--------------------------------------------------------------------------------------------|-------------------|
+| Message Retry Interval      | メッセージ配信失敗時の再試行間隔時間                                                     | `15`秒            |
+| Bridge Mode                | 有効にすると、リモートブローカーに接続がブリッジであることを通知するMQTTブリッジモードを使用 | 無効              |
+| Max Inflight              | 1接続あたり同時に未アックのメッセージ最大数                                               | `32`              |
+| Connection Pool Size       | Azure Event Gridへの同時MQTT接続数。増やすとスループットが向上します                       | `8`               |
+| Connect Timeout            | Azure Event GridへのTCP接続確立の最大待機時間                                             | `10`秒            |
+| Start Timeout              | 自動起動リソースが正常になるまでの最大待機時間                                           | `5`秒             |
+| Health Check Interval      | 接続の自動ヘルスチェック実行間隔                                                         | `15`秒            |
+| Health Check Timeout       | 各ヘルスチェック完了までの最大許容時間                                                   | `60`秒            |
 
-### Sink Advanced Settings
+### Sink詳細設定
 
-| Field Name | Description | Default Value |
-| --- | --- | --- |
-| Buffer Pool Size | Number of buffer worker processes that handle data flow between EMQX and Azure Event Grid. Increase this value to improve throughput under high load. | `16` |
-| Request TTL | Maximum time a request remains valid in the buffer. Requests that exceed this duration, whether still queued or sent without acknowledgment, are discarded. | `45` seconds |
-| Health Check Interval | How often the Sink runs an automated health check on the connection. | `15` seconds |
-| Health Check Interval Jitter | Random delay added to the health check interval to prevent multiple nodes from checking simultaneously. Useful when multiple Actions or Sources share the same Connector. | `0` milliseconds |
-| Health Check Timeout | Maximum time allowed for each Sink health check to complete. | `60` seconds |
-| Max Buffer Queue Size | Maximum bytes each buffer worker can hold. Increase this value if your workload produces bursts that exceed default capacity. | `256` MB |
-| Query Mode | `async` lets EMQX continue publishing without waiting for Azure Event Grid to confirm each write; `sync` waits for confirmation before proceeding. Async mode offers higher throughput but may result in out-of-order delivery. | `Async` |
-| Inflight Window | Maximum number of unacknowledged requests allowed in flight at once. When **Query Mode** is `async`, set this to `1` to guarantee per-client message ordering. | `100` |
+| フィールド名               | 説明                                                                                       | デフォルト値      |
+|----------------------------|--------------------------------------------------------------------------------------------|-------------------|
+| Buffer Pool Size           | EMQXとAzure Event Grid間のデータフローを処理するバッファワーカープロセス数。増やすと高負荷時のスループット向上 | `16`              |
+| Request TTL                | バッファ内でリクエストが有効な最大時間。キュー内または未アックのままTTL超過したリクエストは破棄されます | `45`秒            |
+| Health Check Interval      | Sinkの自動ヘルスチェック実行間隔                                                         | `15`秒            |
+| Health Check Interval Jitter | 複数ノードが同時にチェックしないようにヘルスチェック間隔に加えるランダム遅延。複数アクションやソースが同一コネクターを共有する場合に有効 | `0`ミリ秒         |
+| Health Check Timeout       | 各Sinkヘルスチェック完了までの最大許容時間                                               | `60`秒            |
+| Max Buffer Queue Size      | 各バッファワーカーが保持できる最大バイト数。バーストが多い場合は増やしてください          | `256`MB           |
+| Query Mode                 | `async`はAzure Event Gridの書き込み確認を待たずにパブリッシュを継続。`sync`は確認後に進行。Asyncはスループットが高いが順序が乱れる可能性あり | `Async`           |
+| Inflight Window            | 同時に未アックのリクエスト最大数。**Query Mode**が`async`の場合はクライアント単位のメッセージ順序保証のため`1`に設定推奨 | `100`             |
 
-### Source Advanced Settings
+### Source詳細設定
 
-| Field Name | Description | Default Value |
-| --- | --- | --- |
-| Health Check Interval | How often the Source runs an automated health check on the connection. | `15` seconds |
-| Health Check Interval Jitter | Random delay added to the health check interval to prevent multiple nodes from checking simultaneously. Useful when multiple Actions or Sources share the same Connector. | `0` milliseconds |
-| Health Check Timeout | Maximum time allowed for each Source health check to complete. | `60` seconds |
+| フィールド名               | 説明                                                                                       | デフォルト値      |
+|----------------------------|--------------------------------------------------------------------------------------------|-------------------|
+| Health Check Interval      | Sourceの自動ヘルスチェック実行間隔                                                       | `15`秒            |
+| Health Check Interval Jitter | 複数ノードが同時にチェックしないようにヘルスチェック間隔に加えるランダム遅延。複数アクションやソースが同一コネクターを共有する場合に有効 | `0`ミリ秒         |
+| Health Check Timeout       | 各Sourceヘルスチェック完了までの最大許容時間                                             | `60`秒            |

@@ -274,6 +274,12 @@ stream {
 
 您可以使用以下配置使 NGINX 反向代理 MQTT WebSocket 连接，将客户端请求转发至后端 MQTT 服务器。需要使用  `server_name` 指定 HTTP 域名或 IP 地址。
 
+从 EMQX 6.3.0 开始，WebSocket 监听器默认不读取转发的客户端地址请求头。若要使用 NGINX 设置的 `X-Forwarded-For` 请求头，请在每个后端 EMQX 节点的 `base.hocon` 中添加以下配置：
+
+```hocon
+listeners.ws.default.websocket.proxy_address_header = "x-forwarded-for"
+```
+
 ```bash
 http {
   upstream mqtt_websocket_servers {
@@ -305,11 +311,15 @@ http {
       proxy_set_header Host $host;            
       proxy_set_header X-Real-IP $remote_addr;            
       proxy_set_header REMOTE-HOST $remote_addr;            
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-For $remote_addr;
     }
   }
 }
 ```
+
+::: tip
+WebSocket 示例使用 `$remote_addr` 覆盖 `X-Forwarded-For`，因为配置 `proxy_address_header` 后，EMQX 会读取该请求头中第一个（最左侧的）条目。此时不要使用 `$proxy_add_x_forwarded_for`：它会将 `$remote_addr` 追加到入站请求中已有的 `X-Forwarded-For` 请求头之后，使客户端提供的、可伪造的值仍位于最左侧。更多信息，参见 [WebSocket 监听器的转发客户端地址](../../configuration/listener.md#websocket-监听器的转发客户端地址)。
+:::
 
 ### 配置反向代理 MQTT WebSocket SSL
 
@@ -349,7 +359,7 @@ http {
         proxy_set_header Host $host;            
         proxy_set_header X-Real-IP $remote_addr;            
         proxy_set_header REMOTE-HOST $remote_addr;            
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;      
+        proxy_set_header X-Forwarded-For $remote_addr;
         
         # 禁用缓存             
         proxy_buffering off;

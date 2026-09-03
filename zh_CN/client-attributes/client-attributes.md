@@ -65,10 +65,43 @@ mqtt {
 - `username`：用户名
 - `cn`：TLS 证书的 CN 字段
 - `dn`：TLS 证书的 DN 字段
+- `cert_san.dns`：TLS 客户端证书中的 DNS 名称
+- `cert_san.ip`：TLS 客户端证书中的 IPv4 和 IPv6 地址
+- `cert_san.email`：TLS 客户端证书中的电子邮件地址
+- `cert_san.uri`：TLS 客户端证书中的 URI
 - `user_property.*`：从 MQTT CONNECT 数据包的 User-Property 中提取属性值，例如 `user_property.foo`
 - `zone`：继承自 MQTT 监听器的 zone 名称
 
 更多客户端属性配置的详细信息，请参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+
+#### 使用证书主题备用名称初始化客户端属性
+
+从 EMQX Enterprise 6.3.0 开始，当 TLS 连接在 EMQX 终结时，`mqtt.client_attrs_init` 表达式可以从客户端证书中提取主题备用名称（Subject Alternative Name，SAN）。每个 `cert_san.*` 变量都是数组。可以使用 Variform 数组函数选择某个值，也可以将多个值合并为一个客户端属性。
+
+例如，以下配置将第一个 DNS 名称设置为 `client_attrs.san_dns`，并将所有 DNS 名称以逗号分隔后设置为 `client_attrs.san_dns_all`：
+
+```hocon
+mqtt {
+    client_attrs_init = [
+        {
+            expression = "nth(1, cert_san.dns)"
+            set_as_attr = san_dns
+        },
+        {
+            expression = "join_to_string(',', cert_san.dns)"
+            set_as_attr = san_dns_all
+        }
+    ]
+}
+```
+
+`cert_san.*` 变量只能用于初始化客户端属性。要在认证、授权或其他支持客户端属性的功能中使用 SAN 值，需要先将其保存为客户端属性，再通过 `${client_attrs.NAME}` 引用。
+
+如果证书不包含指定类型的 SAN，对应变量为空数组。当 `nth()` 选择的条目不存在时，EMQX 不会设置目标客户端属性。如果提取的 SAN 值包含回车符（`\r`）、换行符（`\n`）等不可打印控制字符，EMQX 将拒绝客户端连接。
+
+::: warning 重要提示
+只有 TLS 连接在 EMQX 终结且客户端向 EMQX TLS 监听器提供证书时，EMQX 才能提取 SAN。Proxy Protocol v2 不携带 SAN 信息。如果负载均衡器终结 TLS，EMQX 无法获取 `cert_san.*` 值。如果负载均衡器不终结 TLS，而是将 TLS 连接转发给 EMQX，则 EMQX 仍可从客户端证书中提取 SAN。
+:::
 
 ### 在客户端认证过程中设置
 

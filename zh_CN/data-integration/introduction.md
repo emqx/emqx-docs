@@ -5,6 +5,10 @@
 EMQX 通过结合**规则**与 **Sink** 两个功能，提供了实时、简洁、高效的数据集成方案。
 其中规则用于处理消息或事件，而 Sink 用于对接数据系统。
 
+::: tip
+从 EMQX 6.3.0 开始，规则、连接器、动作、Source 和数据桥接由 `data_integration` 功能门控控制。如果手动设置 `EMQX_FEATURES`，启用 `data_integration` 时也会自动启用其依赖的 `schema_registry`。更多信息请参见[功能门控](../deploy/feature-gates.md)。
+:::
+
 ![image](./assets/rules/data-integration-arch.jpg)
 
 ## 规则

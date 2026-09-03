@@ -3,6 +3,12 @@ EMQX has built-in support for pushing metrics directly to the OpenTelemetry Coll
 
 This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md).
 
+::: tip Note
+
+In EMQX 6.3.0, Dynatrace integration does not support OpenTelemetry metrics.
+
+:::
+
 ## Prerequisites
 
 Before integrating with OpenTelemetry, you need to deploy and configure OpenTelemetry and Prometheus.

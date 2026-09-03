@@ -175,6 +175,12 @@ EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
    emqx ctl plugins install my_emqx_plugin-1.0.0
    ```
 
+   如需将插件安装到集群中所有运行中的节点，可添加 `--cluster` 参数：
+
+   ```bash
+   emqx ctl plugins install my_emqx_plugin-1.0.0 --cluster
+   ```
+
 3. 查看插件列表：
 
    ```bash

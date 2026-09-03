@@ -14,11 +14,11 @@
 
 :::
 
-![namespace_global_settings](./assets/namespace_global_settings.png)
+![全局命名空间设置，包括禁止使用的命名空间名称](./assets/namespace_global_settings.png)
 
 ## 仅允许显示创建的命名空间
 
-该配置用于控制客户端是否只能连接到已显式创建的命名空间。
+该配置用于控制客户端是否只能连接到已显式创建的命名空间，在配置文件中对应 `multi_tenancy.allow_only_managed_namespaces`。
 
 当启用该配置时，EMQX 会在客户端连接阶段对命名空间进行校验，并据此决定是否允许连接。
 
@@ -31,7 +31,9 @@
 
 ::: tip 提示
 
-关闭该配置前，请确保已正确配置**命名空间来源**，并且所有合法客户端都能够解析出有效的命名空间标识。否则，客户端可能因无法解析命名空间而被拒绝连接。
+启用该配置前，请确保已正确配置**命名空间来源**，并且所有合法客户端都能够解析出已显式创建的命名空间。否则，客户端可能因无法解析命名空间或命名空间尚未显式创建而被拒绝连接。
+
+当**命名空间解析时机**设置为**认证后**时，认证前的命名空间校验将被跳过，对显式创建命名空间的检查将在认证完成后执行。
 
 :::
 
@@ -44,16 +46,65 @@
 
 该配置仅对新创建的命名空间生效，不会影响已经存在的命名空间。已存在命名空间的最大会话数需在对应命名空间的配置中单独修改。
 
-## 命名空间来源
+## 禁止使用的命名空间名称
 
-命名空间来源用于定义 EMQX 如何从客户端连接信息中识别命名空间。
+从 EMQX 6.3.0 开始，`multi_tenancy.deny_namespaces` 用于指定不能用作命名空间标识的名称。该限制适用于 Dashboard 用户角色、API 密钥、通过管理 API 创建和批量导入命名空间，以及通过 `client_attrs.tns` 为客户端分配命名空间。
 
-当客户端连接到 EMQX 时，系统会根据命名空间来源规则，从客户端连接的元数据中提取命名空间标识，并将其写入客户端属性 `client_attrs.tns`。
+默认列表为 `["global", "undefined", "null", "none"]`。这些名称在日志和 Dashboard 输出中容易与内部标识混淆。
+
+在 Dashboard 中编辑该列表：
+
+1. 进入**管理** -> **命名空间** -> **设置**。
+2. 在**禁止使用的命名空间名称**中，按需添加或移除名称。清空所有条目可关闭名称限制。
+3. 点击**确定**应用更改。
+
+您也可以在 `etc/base.hocon` 中配置该列表。以下示例使用默认值：
+
+```hocon
+multi_tenancy.deny_namespaces = ["global", "undefined", "null", "none"]
+```
+
+自定义列表会替换默认列表。如果仍需禁止某些默认名称，请将其保留在列表中。设置 `multi_tenancy.deny_namespaces = []` 可关闭名称限制。配置文件的优先级请参见[配置覆盖规则](../configuration/configuration.md#配置覆盖规则)。
+
+如果客户端解析出的命名空间在该列表中，EMQX 将拒绝连接并返回 `not_authorized`，即使已关闭**仅允许显式创建的命名空间**也是如此。当 `multi_tenancy.allow_only_managed_namespaces = false` 时，该名称限制不会阻止未分配命名空间的客户端连接。
+
+::: warning 重要提示
+
+默认列表会禁止使用 EMQX 6.3.0 之前允许的名称。EMQX 不会自动迁移使用这些名称的命名空间。升级前，请更换受影响的命名空间名称，或调整 `multi_tenancy.deny_namespaces` 以允许使用这些名称。
+
+:::
+
+## 命名空间解析时机
+
+该设置控制 EMQX 在连接生命周期的哪个阶段解析客户端的命名空间标识。
+
+EMQX 支持两种模式，可在 Dashboard 中通过**命名空间解析时机**单选按钮进行选择：
+
+- **认证前**（默认）：在认证链执行前，使用当时可用的连接元数据（如 `username`、`clientid`、`cert_common_name` 等）对命名空间表达式进行求值。在配置文件中，对应通过 `mqtt.client_attrs_init` 配置 `tns` 属性。
+- **认证后**：在完整的认证链执行完成后，对命名空间表达式进行求值。除标准连接元数据外，还可访问 `client_attrs.*` 值，包括认证后端返回的属性（例如，HTTP 认证后端返回的 `tag` 字段）。在配置文件中，对应配置 `multi_tenancy.post_auth_tns_expression`。
 
 ::: tip
 
-命名空间来源规则使用 Variform 表达式进行定义，有关 Variform 表达式的语法和可用函数，请参考
-[Variform 表达式](../configuration/configuration.md#variform-表达式)。
+若配置了**认证后**模式，EMQX 将使用认证后表达式分配命名空间。当该表达式求值为空或出错时，不会回退到认证前的 `tns` 值。详情请参见[认证后表达式为空或求值出错](#认证后表达式为空或求值出错)。
+
+:::
+
+### 与"仅允许显式创建的命名空间"的交互
+
+选择**认证后**模式时，认证前的命名空间检查会被完全跳过，即使已启用**仅允许显式创建的命名空间**也是如此。所有校验（命名空间是否已存在、配额检查）均推迟到认证完成、最终命名空间值确定后再执行。
+
+## 命名空间来源
+
+该设置定义 EMQX 用于派生客户端命名空间标识（`client_attrs.tns`）的 Variform 表达式。
+
+表达式的求值时机由**命名空间解析时机**设置决定：
+
+- **认证前**模式下，仅可使用标准连接元数据：`username`、`clientid`、`cert_common_name` 及其他预认证属性。
+- **认证后**模式下，还可使用 `client_attrs.*`，包括认证结果中合并进来的属性。
+
+::: tip
+
+命名空间来源规则使用 Variform 表达式进行定义，有关 Variform 表达式的语法和可用函数，请参考 [Variform 表达式](../configuration/configuration.md#variform-表达式)。
 
 :::
 
@@ -68,18 +119,40 @@
 
 ### 示例
 
-以下示例从客户端用户名中提取命名空间：
+#### 认证前
 
-```
+从用户名中提取命名空间：
+
+```text
 nth(1, tokens(username, '-'))
 ```
 
-在该配置下：
+在该配置下，使用用户名 `tenantA-user1` 连接的客户端，会在认证执行前将 `tenantA` 赋值为其命名空间标识。
 
-- 客户端使用用户名 `tenantA-user1` 连接。
-- 命名空间来源规则会从用户名中提取 `tenantA`。
-- 提取到的值会被赋值给客户端属性 `client_attrs.tns`。
-- `tenantA` 即为该客户端所属的命名空间标识。
+#### 认证后
+
+使用 HTTP 认证后端返回的 `tag` 属性：
+
+```text
+client_attrs.tag
+```
+
+带回退（当认证后端未返回 `tag` 时，回退到 `username`）：
+
+```text
+coalesce(client_attrs.tag, username)
+```
+
+在该配置下，EMQX 等待认证链执行完毕后，从合并后的 `client_attrs` 中读取 `tag` 值，并将其赋值为命名空间标识。
+
+### 认证后表达式为空或求值出错
+
+配置 `multi_tenancy.post_auth_tns_expression` 后，如果表达式求值为空字符串或出错，EMQX 将按以下规则处理连接。求值出错时还会记录一条警告日志。
+
+1. 如果认证前的 `client_attrs.tns` 值在 `multi_tenancy.deny_namespaces` 列表中，EMQX 将拒绝连接并返回 `not_authorized`。
+2. 否则，EMQX 将客户端视为未分配命名空间：
+   - 当 `multi_tenancy.allow_only_managed_namespaces = true` 时，EMQX 拒绝连接并返回 `not_authorized`。
+   - 当 `multi_tenancy.allow_only_managed_namespaces = false` 时，EMQX 清除认证前的 `tns` 值（如有），允许客户端以无命名空间状态连接。
 
 ## 客户端 ID 隔离
 

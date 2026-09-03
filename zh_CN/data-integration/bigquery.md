@@ -174,8 +174,8 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
    SELECT
      clientid,
      topic,
-     payload,
-     publish_received_at
+     base64_encode(payload) AS payload,
+     timestamp/1000 AS publish_received_at
    FROM
      "t/bq"
    ```
@@ -200,7 +200,9 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
 
 8. 在**连接器**下拉框中选择之前创建的 `my_bigquery`。您也可以点击下拉框旁的按钮新建一个连接器。关于配置参数的说明，请参阅[创建连接器](#创建连接器)。
 
-9. 在**数据集**和**表**字段中，填写您在[在 GCP 中创建和管理数据集与数据表](#在-GCP-中创建和管理数据集与数据表)中创建的名称。
+9. 配置以下 BigQuery 资源参数：
+   - **项目 ID**（可选）：输入目标数据集和表所在的 GCP 项目 ID。设置后，该值将覆盖从所选连接器的认证配置中提取的项目 ID，且仅对当前 Sink 生效。如果留空，EMQX 将使用从认证配置中获取的项目 ID。
+   - **数据集**和**表**：填写您在[在 GCP 中创建和管理数据集与数据表](#在-GCP-中创建和管理数据集与数据表)中创建的名称。
 
 10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 

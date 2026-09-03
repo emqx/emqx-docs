@@ -1,20 +1,25 @@
-# Migration Guides
+# マイグレーションガイド
 
-This section provides comprehensive guides for migrating your IoT devices and solutions from other platforms to EMQX. Whether you are moving from a public cloud IoT service or another broker, these guides offer a clear and reliable path to ensure a smooth migration experience.
+このセクションでは、他のプラットフォームからEMQXへIoTデバイスやソリューションを移行するための包括的なガイドを提供します。パブリッククラウドのIoTサービスや他のブローカーからの移行であっても、これらのガイドはスムーズなマイグレーションを実現するための明確で信頼できる手順を示します。
 
-## Available Guides
+## 利用可能なガイド
 
-Below are the step-by-step guides for migrating from specific platforms.
+以下は、特定のプラットフォームからのマイグレーション手順を段階的に解説したガイドです。
 
 * [AWS IoT Core](./migrate-from-aws-iot-core.md)
 * [Azure IoT Hub](./migrate-from-azure-iot-hub.md)
 * [HiveMQ](./migrate-from-hivemq.md)
 * [Mosquitto](./migrate-from-mosquitto.md)
 
-## General Migration Principles
+## 一般的なマイグレーションの原則
 
-While each platform has unique specifics, most migrations to EMQX follow a similar three-phase process, especially when devices use X.509 client certificates for mutual TLS (mTLS) authentication:
+各プラットフォームには固有の特徴がありますが、特にX.509クライアント証明書を用いた相互TLS（mTLS）認証を使用するデバイスの場合、EMQXへのマイグレーションは概ね以下の3段階のプロセスに従います。
 
-1. **Collect Existing Credentials**: Before starting, ensure you have access to your devices' existing cryptographic assets. This typically includes each device's private key and the public CA (Certificate Authority) certificate that was used to issue your device certificates.
-2. **Configure EMQX Server Settings**: Configure appropriate listeners on your EMQX cluster to support the authentication mechanism used by your devices. For mTLS-based migrations, this generally involves setting up an SSL/TLS listener and configuring it to trust the CA that issued your device certificates.
-3. **Update Device Configuration**: Modify your device settings to connect to the EMQX broker. In most cases, this involves updating the endpoint address, port, and (if necessary) the server's root CA certificate that the client uses to verify the EMQX server.
+1. **既存の認証情報の収集**  
+   マイグレーションを開始する前に、デバイスの既存の暗号資産にアクセスできることを確認してください。通常、これは各デバイスの秘密鍵と、デバイス証明書を発行した公開CA（認証局）証明書を含みます。
+
+2. **EMQXサーバー設定の構成**  
+   デバイスが使用する認証方式をサポートするために、EMQXクラスター上で適切なリスナーを設定します。mTLSベースのマイグレーションでは、一般的にSSL/TLSリスナーを設定し、デバイス証明書を発行したCAを信頼するように構成します。
+
+3. **デバイス設定の更新**  
+   デバイスの設定を変更し、EMQXブローカーへ接続できるようにします。多くの場合、エンドポイントアドレス、ポート、および（必要に応じて）クライアントがEMQXサーバーを検証するために使用するサーバーのルートCA証明書を更新します。

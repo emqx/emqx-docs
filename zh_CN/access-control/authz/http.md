@@ -14,39 +14,109 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 :::
 
+## 配置动态主机名解析
+
+默认情况下，HTTP 授权器在创建时解析 `url` 中的主机名，并使用持久连接池。如果需要为每次授权请求解析主机名，请将 `hostname_resolution` 设置为 `dynamic`。
+
+动态主机名解析还允许在 `url` 的主机部分使用占位符。例如，以下配置根据客户端的 `tenant` 属性，将授权请求发送到不同的端点：
+
+```hocon
+{
+    type = http
+    method = post
+    url = "https://${client_attrs.tenant}.auth.example.com/authz"
+    hostname_resolution = dynamic
+    allowed_hosts = ["*.auth.example.com"]
+    pool_size = 8
+    headers {
+        "Content-Type" = "application/json"
+    }
+    body {
+        username = "${username}"
+        topic = "${topic}"
+        action = "${action}"
+    }
+    ssl {
+        enable = true
+    }
+}
+```
+
+配置动态主机名解析时，请注意：
+
+- `hostname_resolution` 的可选值为 `static` 和 `dynamic`，默认值为 `static`。也可以为字面量主机名使用 `dynamic`，使 EMQX 为每次请求重新解析该主机名。
+- 如果 URL 主机包含占位符，必须将 `hostname_resolution` 设置为 `dynamic`，并在 `allowed_hosts` 中至少配置一个条目。
+- `allowed_hosts` 中的每个条目必须是精确主机名（例如 `auth.example.com`）或通配模式（例如 `*.auth.example.com`）。通配模式匹配指定后缀下的主机名，但不匹配该后缀本身。URL 使用字面量主机名时，`allowed_hosts` 不生效。
+- 在 URL 的网络位置（authority）部分，只有主机可以包含占位符。协议（scheme）必须是 `http` 或 `https`，端口必须是字面量整数。不支持用户信息（userinfo）和片段（fragment）。URL 路径和查询参数仍然支持占位符。
+- 如果 EMQX 无法渲染出有效主机名，或者渲染后的主机名与 `allowed_hosts` 不匹配，EMQX 不会发送 HTTP 请求，授权检查将失败。
+- 在 `dynamic` 模式下，发往所有渲染后主机的请求共享一个连接池。`pool_size` 限制连接池可保留以供复用的空闲连接数。将其设置为 `0` 可禁用连接复用。`enable_pipelining` 和 `max_inactive` 在该模式下不生效。
+- 在 `dynamic` 模式下发送 HTTPS 请求时，EMQX 会将配置的 TLS 选项应用于渲染后的主机。如果没有显式配置服务器名称指示（SNI），EMQX 将根据渲染后的主机名生成 SNI。
+- `hostname_resolution` 为 `dynamic` 时不支持 OAuth2。
+
 ## 通过 Dashboard 配置
 
-在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，在随即打开的**授权**页面，单击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**页签：
+1. 在 [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) 页面，点击左侧导航栏的**访问控制** -> **授权**，进入**授权**页面。
 
-<img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
+2. 在**授权**页面，点击**创建**，选择**数据源**为 `HTTP Server`，点击**下一步**，进入**配置参数**步骤：
 
-**HTTP**：<!--插入简要说明，这快要配置什么-->
+   <img src="./assets/authz-http.png" alt="HTTP authorization" style="zoom:67%;" />
 
-- **请求方式**：选择 HTTP 请求方式，可选值： `get` 、 `post`
+3. 根据如下说明完成相关配置：
 
-  ::: tip
-  推荐使用 `POST` 方法。 使用 `GET` 方法时，一些敏感信息（如纯文本密码）可能通过 HTTP 服务器日志记录暴露。此外，对于不受信任的环境，请使用 HTTPS。
-  :::
+   - **请求方式**：选择 HTTP 请求方式，可选值：`get`、`post`。
 
-- **URL**：输入 HTTP 应用的 IP 地址。
+     ::: tip
+     推荐使用 `POST` 方法。使用 `GET` 方法时，一些敏感信息（如纯文本密码）可能通过 HTTP 服务器日志记录暴露。此外，对于不受信任的环境，请使用 HTTPS。
+     :::
 
-- **请求头**（可选）：完成 HTTP 请求头的配置。键和值支持使用[占位符](./authz.md#占位符)。
+   - **URL**：输入 HTTP 应用的 URL。当**主机名解析方式**设置为 `动态` 时，主机部分可以使用[授权占位符](./authz.md#占位符)。
 
-**连接配置**：在此部分进行并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
+   - **主机名解析方式**：设置为 `静态` 时，在创建授权器时解析固定主机名；设置为 `动态` 时，为每次请求解析主机名。默认选项为 `静态`。更多信息，参见[配置动态主机名解析](#配置动态主机名解析)。
 
-- **连接池大小**（可选）：整数，指定从 EMQX 节点到外部 HTTP Server 的并发连接数；默认值：**8**。<!--有范围吗？-->
-- **连接超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
-- **HTTP 管道**（可选）：正整数，指定无需等待响应可发出的最大 HTTP 请求数；默认值：**100**。
-- **请求超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**
+   - **允许的主机**：对应配置项 `allowed_hosts`。URL 主机包含占位符时，配置渲染后的主机名可以匹配的精确主机名或通配模式。
 
-**TLS 配置**：配置是否启用 TLS。
+   - **调用条件**：输入可选的 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。有关表达式语法和可用变量，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
 
-**请求体**：在此处完成 HTTP 请求体的配置。
+   - **请求头**（可选）：完成 HTTP 请求头的配置。键和值支持使用[占位符](./authz.md#占位符)。
 
-<!--需要补上相关信息-->
+   - **OAuth2 客户端凭证**：开启后，EMQX 将获取 Access Token，并将其以 Bearer Token 的形式添加到发往外部 HTTP 授权服务的请求中。有关配置详情，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
 
-最后点击**创建**完成相关配置。
+   - **启用 TLS**：开启后，对外部 HTTP 授权服务的连接启用 TLS。此开关独立于 OAuth2 客户端凭证配置中的**启用 TLS**开关。
 
+   - **请求体**：配置 HTTP 请求体。键和值支持使用[占位符](./authz.md#占位符)。
+
+   - **高级设置**：在此部分配置并发连接、连接超时等待时间、最大 HTTP 请求数以及请求超时时间。
+
+     - **连接池大小**（可选）：在 `静态` 模式下，指定持久连接池大小，取值不能小于 `1`；在 `动态` 模式下，指定可在请求间复用的连接数，设置为 `0` 可禁用连接复用。默认值：`8`。
+     - **连接超时**（可选）：填入连接超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
+     - **HTTP 管道**（可选）：正整数，指定无需等待响应可发出的最大 HTTP 请求数。默认值：`100`。在 `动态` 模式下，该设置不生效。
+     - **请求超时**（可选）：填入请求超时等待时长，可选单位：**小时**、**分钟**、**秒**、**毫秒**。
+
+4. 最后点击**创建**完成相关配置。
+
+### 配置 OAuth2 客户端凭证认证
+
+从 EMQX 6.0.4 开始，HTTP 授权器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 授权服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
+
+开启 **OAuth2 客户端凭证**，然后配置以下设置：
+
+| Dashboard 配置项 | 说明 |
+| --- | --- |
+| **Token 端点** | 必填。用于请求 Access Token 的 OAuth2 授权服务器端点。URL 必须使用 HTTP 或 HTTPS，且不能包含用户信息。 |
+| **客户端 ID** | 必填。请求 Access Token 时使用的 OAuth2 客户端 ID。 |
+| **客户端密钥** | 必填。请求 Access Token 时使用的 OAuth2 客户端密钥。 |
+| **授权范围** | 可选。请求 Access Token 时使用的 OAuth2 授权范围。 |
+| **Token 请求超时** | 向 Token 端点发送 HTTP 请求的超时时间。默认值为 `5` 秒。 |
+| **启用 TLS** | 开启后，对 Token 端点启用 TLS。此开关独立于 OAuth2 配置面板外用于外部 HTTP 授权服务的**启用 TLS**开关。 |
+
+EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlencoded` 请求。请求体包含 `grant_type`、`client_id`、`client_secret` 和可选的 `scope`。Token Endpoint 必须返回状态码 `200`，JSON 响应体中必须包含 `access_token`，还可以包含 `token_type` 和 `expires_in`。如果返回 `token_type`，其值必须为 `Bearer`；如果返回 `expires_in`，其值必须为正整数。
+
+::: warning 重要提示
+
+- 启用 OAuth2 后，不要为 HTTP 授权器配置 `Authorization` 请求头。此请求头与 EMQX 自动生成的 Bearer 认证请求头冲突，EMQX 会拒绝该配置。
+- Token Endpoint 必须从请求体的表单字段中接收 Client ID 和 Client Secret。不支持通过 HTTP Basic `Authorization` 请求头向 Token Endpoint 发送客户端凭证。
+
+:::
 
 ## 请求格式与返回结果
 
@@ -110,6 +180,8 @@ Body:
 
 HTTP 授权必需使用 `type=http`的配置。
 
+可选配置项 `precondition` 接受 Variform 表达式。仅当表达式计算结果为 `true` 时，EMQX 才调用此授权检查器。未配置 `precondition` 或该配置项为空时，不设置调用条件。有关详细信息，请参见[授权检查器调用条件](./authz.md#授权检查器调用条件)。
+
 使用 POST 请求配置的示例：
 
 ```hcl
@@ -150,6 +222,27 @@ HTTP 授权必需使用 `type=http`的配置。
 }
 ```
 
+### OAuth2 客户端凭证配置
+
+从 EMQX 6.0.4 开始，可以在 HTTP 授权器配置对象中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证。该配置块与 `method`、`url`、`body` 和 `headers` 同级：
+
+```hocon
+oauth2 {
+    enable = true
+    grant_type = client_credentials
+    token_endpoint = "https://auth.example.com/oauth/token"
+    client_id = "emqx-client"
+    client_secret = "emqx-client-secret"
+    scope = "authorization.check"
+    timeout = 5s
+    ssl {
+        enable = true
+    }
+}
+```
+
+如果授权服务器不要求 `scope`，可以省略该配置项。有关请求格式和限制，参见[配置 OAuth2 客户端凭证认证](#配置-oauth2-客户端凭证认证)。
+
 ### method
 
 该配置为必填字段，用于指定 http 方法，可以是 `get` 或者 `post`。
@@ -157,6 +250,8 @@ HTTP 授权必需使用 `type=http`的配置。
 ### url
 
 发送 HTTP 请求的 URL，可以使用如下[占位符](./authz.md#数据查询占位符):
+
+URL 主机包含占位符时，必须将 `hostname_resolution` 设置为 `dynamic`，并配置 `allowed_hosts`。在 URL 的网络位置（authority）部分，只有主机可以包含占位符；协议（scheme）和端口必须使用字面量。
 
 如果 URL 为 `https`，必须同时启用 `ssl`：
 
@@ -263,6 +358,8 @@ Content-Type: application/json
 
 正整数，用于指定可以无需等待响应发出的 HTTP 请求的最大数量 [HTTP pipelining](https://wikipedia.org/wiki/HTTP_pipelining)。可选，默认值为 `100`，设置为 `1` 表示关闭 HTTP pipelining 功能，即恢复成常规的同步请求响应模式。
 
+当 `hostname_resolution` 设置为 `dynamic` 时，该配置不生效。
+
 ### 请求配置
 
 以下都是可选字段，
@@ -276,7 +373,7 @@ Content-Type: application/json
 
 ### pool_size
 
-可选的整型配置，用于指定 EMQX 节点到 HTTP 服务器的并发连接数，默认值为 8。
+可选的非负整数配置，默认值为 `8`。当 `hostname_resolution` 设置为 `static` 时，该配置指定持久连接池大小，取值不能小于 `1`。当 `hostname_resolution` 设置为 `dynamic` 时，该配置限制可在请求间复用的连接数，设置为 `0` 可禁用连接复用。
 
 ### ssl
 

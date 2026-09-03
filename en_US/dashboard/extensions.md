@@ -16,7 +16,6 @@ In the gateways page, you can enable a gateway and configure its basic settings,
 - [STOMP](../gateway/stomp.md)
 - [CoAP](../gateway/coap.md)
 - [LwM2M](../gateway/lwm2m.md)
-- [ExProto](../gateway/exproto.md)
 
 - [OCPP](../gateway/ocpp.md)
 - [GB/T 32960](../gateway/gbt32960.md)
@@ -56,7 +55,6 @@ After completing the basic configuration, you can proceed to set up the gateway'
 | ---------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
 | STOMP      | ✔︎    |      | ✔︎    |      |           |                    |
 | CoAP       |      | ✔︎    |      | ✔︎    |           |                    |
-| ExProto    | ✔︎    | ✔︎    | ✔︎    | ✔︎    |           |                    |
 | MQTT-SN    |      | ✔︎    |      | ✔︎    |           |                    |
 | LwM2M      |      | ✔︎    |      | ✔︎    |           |                    |
 | OCPP       |      |      |      |      | ✔︎         | ✔︎                  |
@@ -73,7 +71,6 @@ After configuring the listener, you can optionally configure the protocol gatewa
 | CoAP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |       |      |
 | MQTT-SN    | ✔︎           |                   |       |         |            |       |      |      |       |      |
 | LwM2M      | ✔︎           |                   |       |         |            |       |      |      |       |      |
-| ExProto    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     |      | ✔︎    |       | ✔︎    |
 | OCPP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     |      | ✔︎    |       | ✔︎    |
 | GB/T 32960 | ✔︎           |                   |       |         |            |       |      |      |       |      |
 

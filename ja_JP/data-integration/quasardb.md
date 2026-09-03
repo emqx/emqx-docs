@@ -1,50 +1,49 @@
-# Ingest MQTT Data into QuasarDB
+# QuasarDBへのMQTTデータ取り込み
 
-[QuasarDB](https://www.quasardb.net/) is a high-performance, column-oriented time-series database designed for storing and querying large volumes of time-stamped data. EMQX supports integration with QuasarDB, enabling you to save MQTT messages and client events to QuasarDB. This facilitates the construction of data pipelines and analytical processes for IoT telemetry management and analysis.
+[QuasarDB](https://www.quasardb.net/)は、高性能なカラム指向の時系列データベースであり、大量のタイムスタンプ付きデータの保存とクエリに最適化されています。EMQXはQuasarDBとの統合をサポートしており、MQTTメッセージやクライアントイベントをQuasarDBに保存できます。これにより、IoTテレメトリの管理や分析のためのデータパイプラインや分析プロセスの構築が容易になります。
 
-This page provides a detailed overview of the data integration between EMQX and QuasarDB with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとQuasarDB間のデータ統合の詳細な概要と、データ統合の作成および検証手順を説明します。
 
+## 動作概要
 
-## How It Works
+QuasarDBデータ統合はEMQXに標準搭載された機能であり、EMQXのデバイス接続およびメッセージ送信機能とQuasarDBの高性能時系列ストレージを組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントとSinkを利用して、MQTTメッセージやクライアントイベントをQuasarDBに保存できます。この統合により、EMQXからQuasarDBへのデータ取り込みが簡素化され、複雑なコーディングなしでデータの保存と管理が可能です。
 
-QuasarDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with the high-performance time-series storage of QuasarDB. Through the built-in [rule engine](./rules.md) component and Sink, you can store MQTT messages and client events in QuasarDB. This integration simplifies the process of ingesting data from EMQX to QuasarDB for storage and management, eliminating the need for complex coding.
+以下の図は、EMQXとQuasarDB間の典型的なデータ統合アーキテクチャを示しています：
 
-The diagram below illustrates a typical architecture of data integration between EMQX and QuasarDB:
+![quasardb_integration](./assets/quasardb_integration.png)
 
-<!-- TODO: add architecture diagram -->
+QuasarDBへのMQTTデータ取り込みの流れは以下の通りです：
 
-Ingesting MQTT data into QuasarDB works as follows:
+1. **メッセージのパブリッシュと受信**：IoTデバイスはMQTTプロトコルを介してEMQXに正常に接続し、リアルタイムのMQTTデータをEMQXにパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **メッセージデータの処理**：メッセージが到着すると、ルールエンジンを通過し、EMQXで定義されたルールによって処理されます。ルールは事前定義された条件に基づき、QuasarDBにルーティングすべきメッセージを判定します。ペイロード変換を指定している場合は、データ形式の変換や特定情報のフィルタリング、ペイロードへの追加コンテキスト付加などの変換が適用されます。
+3. **QuasarDBへのデータ取り込み**：ルールがトリガーされると、メッセージのQuasarDBへの書き込みが行われます。SQLテンプレートを活用して、ルール処理結果からデータを抽出しSQLを構築、QuasarDBに送信して実行することで、メッセージの特定フィールドを対応するテーブルに書き込みます。
+4. **データの保存と活用**：データがQuasarDBに保存されることで、企業は時系列クエリ機能を活用して分析、監視、運用ユースケースに利用できます。
 
-1. **Message publication and reception**: IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing**: When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to QuasarDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into QuasarDB**: The rule triggers the writing of messages to QuasarDB. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to QuasarDB for execution, so that specific fields of the message can be written into the corresponding tables.
-4. **Data storage and utilization**: With data now stored in QuasarDB, businesses can harness its time-series querying capabilities for analytics, monitoring, and operational use cases.
+## 特長とメリット
 
-## Features and Benefits
+QuasarDBとのデータ統合は以下の特長とメリットを提供します：
 
-The data integration with QuasarDB offers a range of features and benefits:
+- **リアルタイムデータストリーミング**：EMQXはリアルタイムデータストリームの処理に最適化されており、ソースシステムからQuasarDBへの効率的かつ信頼性の高いデータ伝送を実現します。即時の洞察やアクションが必要なユースケースに適しています。
+- **高性能な時系列ストレージ**：QuasarDBのカラム型エンジンは時系列ワークロードに最適化されており、大量のタイムスタンプ付きデータに対して高速な取り込みスループットと効率的な範囲クエリを提供します。
+- **柔軟なデータ変換**：EMQXは強力なSQLベースのルールエンジンを備えており、QuasarDBに保存する前にデータの前処理が可能です。フィルタリング、ルーティング、集約、エンリッチメントなど多様なデータ変換機能をサポートします。
+- **バッチ処理対応**：QuasarDB Sinkはバッチ書き込みに対応しており、往復回数を削減し全体の取り込みスループットを向上させます。
 
-- **Real-time data streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to QuasarDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **High-performance time-series storage**: QuasarDB's columnar engine is optimized for time-series workloads, providing fast ingestion throughput and efficient range queries over large volumes of timestamped data.
-- **Flexibility in data transformation**: EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in QuasarDB. It supports various data transformation mechanisms such as filtering, routing, aggregation, and enrichment.
-- **Batching support**: The QuasarDB Sink supports batch writes, reducing the number of round trips and improving overall ingestion throughput.
+## はじめる前に
 
-## Before You Start
+このセクションでは、QuasarDBデータ統合を作成する前に必要な準備、ODBCドライバーの設定やQuasarDBのインストール方法について説明します。
 
-This section describes the preparations you need to complete before creating the QuasarDB data integration, including how to configure the ODBC driver and install QuasarDB.
+### 前提条件
 
-### Prerequisites
+- EMQXデータ統合の[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+### ODBCドライバーのインストールと設定
 
-### Install and Configure the ODBC Driver
+QuasarDBコネクターはODBCを使用してデータベースに接続します。EMQXが稼働するホストにQuasarDB ODBCドライバーをインストールおよび設定する必要があります。
 
-The QuasarDB connector uses ODBC to connect to the database. You need to install and configure the QuasarDB ODBC driver on the host where EMQX is running before creating a connector.
+詳細なインストール手順は[QuasarDB ODBCドキュメント](https://doc.quasar.ai/master/user-guide/integration/odbc.html)を参照してください。以下はDebian系システムでドライバー3.14.1を使用した典型的なセットアップ例です。
 
-Refer to the [QuasarDB ODBC documentation](https://doc.quasar.ai/master/user-guide/integration/odbc.html) for full installation instructions. The steps below show a typical setup on Debian-based systems using driver version 3.14.1.
-
-1. Download and install the QuasarDB C API package and ODBC driver:
+1. QuasarDB C APIパッケージとODBCドライバーをダウンロードしてインストール：
 
    ```bash
    curl -fsSL -O https://download.quasar.ai/quasardb/3.14/3.14.1/api/c/qdb-api_3.14.1.deb
@@ -53,7 +52,7 @@ Refer to the [QuasarDB ODBC documentation](https://doc.quasar.ai/master/user-gui
    tar -C /tmp/qdb_odbc_driver -xf qdb-3.14.1-linux-64bit-odbc-driver.tar.gz
    ```
 
-2. Register the driver in `/etc/odbcinst.ini`:
+2. `/etc/odbcinst.ini`にドライバーを登録：
 
    ```ini
    [qdb_odbc_driver]
@@ -62,7 +61,7 @@ Refer to the [QuasarDB ODBC documentation](https://doc.quasar.ai/master/user-gui
    Setup=/tmp/qdb_odbc_driver/lib/libqdb_odbc_driver.so
    ```
 
-3. Create a Data Source Name (DSN) entry in `/etc/odbc.ini`:
+3. `/etc/odbc.ini`にデータソース名（DSN）を作成：
 
    ```ini
    [qdb]
@@ -74,13 +73,13 @@ Refer to the [QuasarDB ODBC documentation](https://doc.quasar.ai/master/user-gui
    #KEY = cluster_public_key
    ```
 
-The DSN name you set here (e.g., `qdb`) is what you enter in the **ODBC Data Source Name** field when creating the connector.
+ここで設定したDSN名（例：`qdb`）は、コネクター作成時の**ODBC Data Source Name**フィールドに入力します。
 
-### Install and Connect to QuasarDB
+### QuasarDBのインストールと接続
 
-This section describes how to start a QuasarDB instance using Docker.
+このセクションでは、Dockerを使ってQuasarDBインスタンスを起動する方法を説明します。
 
-1. Pull and start the QuasarDB Docker image:
+1. QuasarDBのDockerイメージをプルして起動：
 
    ```bash
    docker run -d --name qdb \
@@ -90,21 +89,21 @@ This section describes how to start a QuasarDB instance using Docker.
 
    ::: tip
 
-   QuasarDB requires connecting via an **IP address**, not a hostname. Use `127.0.0.1` (or the actual host IP) in the URI. Hostname-based connections are not supported.
+   QuasarDBはホスト名ではなく**IPアドレス**での接続を要求します。URIには`127.0.0.1`（または実際のホストIP）を使用してください。ホスト名ベースの接続はサポートされていません。
 
    :::
 
-2. Verify the instance is running by connecting with the QuasarDB shell:
+2. QuasarDBシェルで接続を確認：
 
    ```bash
    docker run -it --rm bureau14/qdbsh --cluster qdb://127.0.0.1:2836
    ```
 
-To enable user authentication or cluster key authentication, refer to the [QuasarDB security documentation](https://doc.quasar.ai/).
+ユーザー認証やクラスターキー認証を有効にする場合は、[QuasarDBセキュリティドキュメント](https://doc.quasar.ai/)を参照してください。
 
-### Create a Table
+### テーブルの作成
 
-Create a table in QuasarDB to receive ingested data. The example below creates a table for storing temperature and humidity readings:
+取り込んだデータを受け取るためのQuasarDBテーブルを作成します。以下は温度と湿度の読み取り値を保存するテーブルの例です：
 
 ```sql
 CREATE TABLE temp_hum (temp DOUBLE, hum DOUBLE);
@@ -112,47 +111,47 @@ CREATE TABLE temp_hum (temp DOUBLE, hum DOUBLE);
 
 ::: tip
 
-QuasarDB tables always include an implicit `$timestamp` index column. You do not need to declare it when creating a table, but you can reference it in INSERT statements.
+QuasarDBのテーブルには常に暗黙の`$timestamp`インデックス列が含まれます。テーブル作成時に宣言する必要はありませんが、INSERT文で参照可能です。
 
 :::
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect EMQX to QuasarDB.
+EMQXとQuasarDBを接続するコネクターの作成手順を示します。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
+1. EMQXダッシュボードで **Integration** -> **Connectors** をクリックします。
 
-2. Click **Create** in the top right corner of the page.
+2. 画面右上の **Create** をクリックします。
 
-3. On the **Create Connector** page, select **QuasarDB** and then click **Next**.
+3. **Create Connector** ページで **QuasarDB** を選択し、**Next** をクリックします。
 
-4. Enter a name for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_quasardb`.
+4. コネクター名を入力します。英数字の組み合わせで、例として `my_quasardb` などを指定します。
 
-5. Configure the connection information:
+5. 接続情報を設定します：
 
-   - **Server URI**: Enter the URI of your QuasarDB cluster using an IP address, for example `qdb://127.0.0.1:2836`.
-   - **ODBC Data Source Name**: Enter the DSN name defined in `/etc/odbc.ini`, for example `qdb`.
-   - **Username**: Enter the username, if any.
-   - **Password**: Enter the user secret key, if any.
-   - **Cluster Public Key**: Enter the cluster public key, if any.
+   - **Server URI**：QuasarDBクラスターのURIをIPアドレス形式で入力します。例：`qdb://127.0.0.1:2836`
+   - **ODBC Data Source Name**：`/etc/odbc.ini`で定義したDSN名を入力します。例：`qdb`
+   - **Username**：ユーザー名（あれば）
+   - **Password**：ユーザーのシークレットキー（あれば）
+   - **Cluster Public Key**：クラスター公開鍵（あれば）
 
-6. Advanced settings (optional): For details, see [Advanced Configuration](#advanced-configuration).
+6. 詳細設定（任意）：[高度な設定](#advanced-configuration)を参照してください。
 
-7. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to QuasarDB.
+7. **Create**をクリックする前に、**Test Connectivity**をクリックしてEMQXがQuasarDBに接続できるか確認できます。
 
-8. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
+8. **Create**ボタンをクリックしてコネクターの作成を完了します。作成成功のダイアログが表示され、ルールを今すぐ作成するか尋ねられます。**Create Rule**をクリックすると、コネクターが事前選択された状態でルール作成画面に進みます。**Back To Connector List**をクリックすると戻って後からルールを作成できます。
 
-## Create a Rule with QuasarDB Sink
+## QuasarDB Sinkを使ったルールの作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#` and saving the processed data to the QuasarDB table `temp_hum` via the configured Sink.
+このセクションでは、ソースMQTTトピック`t/#`のメッセージを処理し、QuasarDBの`temp_hum`テーブルに保存するルールをダッシュボードで作成する方法を示します。
 
-1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `QuasarDB` and the connector pre-selected. Skip to step 5.
+1. 前ステップで**Create Rule**をクリックした場合、**Add Action**パネルが自動的に開き、**Type of Action**が`QuasarDB`、コネクターが事前選択されています。ステップ5へ進んでください。
 
-   Otherwise, go to the EMQX Dashboard, click **Integration** -> **Rules**, click **Create** in the top right corner, then click **+ Add Action**.
+   そうでない場合は、EMQXダッシュボードで **Integration** -> **Rules** をクリックし、右上の **Create** をクリック、次に **+ Add Action** をクリックします。
 
-2. In the **SQL Editor** on the left, enter a rule ID and the following SQL to match messages from topic `t/#`:
+2. 左側の**SQL Editor**にルールIDと以下のSQLを入力して、トピック`t/#`のメッセージにマッチさせます：
 
-   Note: If you want to specify your own SQL syntax, make sure all fields required by the Sink are included in the `SELECT` part.
+   注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドが`SELECT`部分に含まれていることを確認してください。
 
    ```sql
    SELECT
@@ -163,29 +162,29 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は、**SQL Examples**をクリックし、**Enable Test**を有効にしてSQLルールの学習とテストを行うことを推奨します。
 
    :::
 
-3. In the **Add Action** panel on the right, select `QuasarDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value.
+3. 右側の**Add Action**パネルで、**Type of Action**ドロップダウンから`QuasarDB`を選択します。**Action**はデフォルトの`Create Action`のままにします。
 
-4. From the **Connectors** dropdown, select the `my_quasardb` connector you just created. You can also create a new Connector by clicking the button next to the dropdown. For configuration parameters, see [Create a Connector](#create-a-connector).
+4. **Connectors**ドロップダウンから、先ほど作成した`my_quasardb`コネクターを選択します。新しいコネクターを作成する場合は、ドロップダウン横のボタンをクリックしてください。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-5. Enter a name and optional description for the Sink.
+5. Sinkの名前と任意の説明を入力します。
 
-6. Configure the **SQL Template** to define how data is written to QuasarDB.
+6. QuasarDBへの書き込み方法を定義する**SQL Template**を設定します。
 
-   ::: tip Note
+   ::: tip 注意
 
-   The SQL Template only accepts **INSERT** statements. Other statement types such as UPDATE and DELETE are not supported.
+   SQLテンプレートは**INSERT**文のみ受け付けます。UPDATEやDELETEなどの文はサポートされていません。
 
    :::
 
-   The SQL template supports placeholder variables such as `${clientid}`. QuasarDB uses `$timestamp` as the implicit timestamp index column; you can use `now()` to insert the current server time.
+   SQLテンプレートは`${clientid}`などのプレースホルダー変数をサポートします。QuasarDBでは暗黙のタイムスタンプインデックス列として`$timestamp`を使用し、`now()`で現在のサーバー時刻を挿入できます。
 
-   ::: tip Note
+   ::: tip 注意
 
-   The QuasarDB ODBC driver does not support prepared statements. Any value that resolves to a `STRING` or `BLOB` type must be manually quoted with single quotes (`'`) in your SQL template.
+   QuasarDB ODBCドライバーはプリペアドステートメントをサポートしていません。`STRING`または`BLOB`型に解決される値は、SQLテンプレート内で手動でシングルクォート（`'`）で囲む必要があります。
 
    :::
 
@@ -194,54 +193,54 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    values (now(), ${.temp}, ${.hum})
    ```
 
-7. **Fallback Actions (Optional)**: Define one or more fallback actions to improve reliability in case of message delivery failure. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+7. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-8. **Advanced settings (optional)**: For details, see [Sink Advanced Settings](#sink-advanced-settings).
+8. 詳細設定（任意）：[Sink高度な設定](#sink-advanced-settings)を参照してください。
 
-9. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can connect to QuasarDB.
+9. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがQuasarDBに接続できるかテストできます。
 
-10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs**.
+10. **Create**ボタンをクリックしてSinkの設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-11. Back on the **Create Rule** page, verify the configured information and click the **Save** button to generate the rule.
+11. **Create Rule**ページに戻り、設定内容を確認して**Save**ボタンをクリックし、ルールを生成します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab to see the new QuasarDB Sink.
+これでルールが正常に作成されました。**Integration** -> **Rules**ページで新規作成したルールを確認できます。**Actions(Sink)**タブをクリックすると、新しいQuasarDB Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and verify that messages under topic `t/#` are forwarded to QuasarDB after processing by rule `my_rule`.
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認でき、トピック`t/#`のメッセージがルール`my_rule`で処理された後にQuasarDBに転送されていることを検証できます。
 
-## Test the Rule
+## ルールのテスト
 
-Use MQTTX to send a message to topic `t/1` to trigger the rule.
+MQTTXを使ってトピック`t/1`にメッセージを送信し、ルールをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "temp": "27.5", "hum": "41.8" }'
 ```
 
-Check the running statistics of the QuasarDB Sink. There should be 1 new matching and 1 new outgoing message. Verify that the data is written into the `temp_hum` table in QuasarDB.
+QuasarDB Sinkの実行統計を確認してください。新しいマッチ数が1、新しい送信数が1であるはずです。QuasarDBの`temp_hum`テーブルにデータが書き込まれていることを検証してください。
 
-## Advanced Configuration
+## 高度な設定
 
-This section describes the advanced configuration options available for the QuasarDB Connector and Sink. When configuring them in the Dashboard, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+このセクションでは、QuasarDBコネクターおよびSinkの高度な設定オプションについて説明します。ダッシュボードで設定する際は、**Advanced Settings**を展開して、用途に応じて以下のパラメータを調整できます。
 
-### Connector Advanced Settings
+### コネクター高度な設定
 
-| Field Name | Description | Default Value |
+| フィールド名 | 説明 | デフォルト値 |
 | --- | --- | --- |
-| Connection Pool Size | Number of concurrent connections maintained in the pool. Too large a value may exhaust system resources; too small a value may limit throughput. | `8` |
-| Connect Timeout | Maximum time to wait when establishing a connection to QuasarDB. | `5` seconds |
-| Start Timeout | Maximum time the connector waits for an auto-started resource to become healthy before accepting requests. | `5` seconds |
-| Health Check Interval | How often the connector runs an automated health check on the QuasarDB connection. | `15` seconds |
-| Health Check Timeout | Maximum time allowed for each health check to complete. | `60` seconds |
+| Connection Pool Size | プール内で維持する同時接続数。大きすぎるとシステムリソースを枯渇させ、小さすぎるとスループットが制限されます。 | `8` |
+| Connect Timeout | QuasarDBへの接続確立時に待機する最大時間 | `5`秒 |
+| Start Timeout | 自動起動リソースが正常になるまでコネクターが待機する最大時間 | `5`秒 |
+| Health Check Interval | QuasarDB接続に対して自動ヘルスチェックを実行する間隔 | `15`秒 |
+| Health Check Timeout | 各ヘルスチェックが完了するまでの最大許容時間 | `60`秒 |
 
-### Sink Advanced Settings
+### Sink高度な設定
 
-| Field Name | Description | Default Value |
+| フィールド名 | 説明 | デフォルト値 |
 | --- | --- | --- |
-| Buffer Pool Size | Number of buffer worker processes that handle data flow between EMQX and QuasarDB. Increase this value to improve throughput under high load. | `16` |
-| Request TTL | Maximum time a request remains valid in the buffer. Requests that exceed this duration — whether still queued or sent without acknowledgment — are discarded. | `45` seconds |
-| Health Check Interval | How often the Sink runs an automated health check on the QuasarDB connection. | `15` seconds |
-| Health Check Interval Jitter | Random delay added to the health check interval to prevent multiple nodes from checking simultaneously. Useful when multiple Actions or Sources share the same Connector. | `0` milliseconds |
-| Health Check Timeout | Maximum time allowed for each Sink health check to complete. | `60` seconds |
-| Max Buffer Queue Size | Maximum bytes each buffer worker can hold. Increase this value if your workload produces bursts that exceed default capacity. | `256` MB |
-| Batch Size | Maximum number of records sent to QuasarDB in a single operation. Set to `1` to disable batching and send records individually. | `100` |
-| Query Mode | `async` lets EMQX continue publishing without waiting for QuasarDB to confirm each write; `sync` waits for confirmation before proceeding. Async mode offers higher throughput but may result in out-of-order delivery. | `Async` |
-| Inflight Window | Maximum number of unacknowledged requests allowed in flight at once. When **Query Mode** is `async`, set this to `1` to guarantee per-client message ordering. | `100` |
+| Buffer Pool Size | EMQXとQuasarDB間のデータフローを処理するバッファワーカープロセス数。負荷が高い場合は増やしてスループットを向上可能。 | `16` |
+| Request TTL | バッファ内でリクエストが有効な最大時間。これを超えたリクエストは、キュー内であってもアックなしで送信済みでも破棄される。 | `45`秒 |
+| Health Check Interval | QuasarDB接続に対してSinkが自動ヘルスチェックを実行する間隔 | `15`秒 |
+| Health Check Interval Jitter | 複数ノードが同時にヘルスチェックを行わないように、チェック間隔にランダム遅延を加える。複数のActionやSourceが同一コネクターを共有する場合に有効。 | `0`ミリ秒 |
+| Health Check Timeout | Sinkの各ヘルスチェックが完了するまでの最大許容時間 | `60`秒 |
+| Max Buffer Queue Size | 各バッファワーカーが保持可能な最大バイト数。ワークロードがバーストを発生させる場合は増やすとよい。 | `256`MB |
+| Batch Size | 1回の操作でQuasarDBに送信する最大レコード数。`1`に設定するとバッチ処理を無効化し、レコードを個別送信する。 | `100` |
+| Query Mode | `async`はQuasarDBの書き込み完了を待たずにEMQXがパブリッシュを継続。`sync`は書き込み完了を待つ。非同期はスループットが高いが順序が乱れる可能性がある。 | `Async` |
+| Inflight Window | 同時に未アックのリクエストを許容する最大数。**Query Mode**が`async`の場合、クライアントごとのメッセージ順序保証のために`1`に設定推奨。 | `100` |

@@ -4,11 +4,11 @@
 
 - [パフォーマンスチューニング](./tune.md)
 
-  本セクションでは、Linux環境でのパフォーマンスチューニング方法を解説します。Linuxカーネルのチューニング、TCPネットワークのチューニング、Erlang VMのチューニング、そしてEMQXのチューニングに関する内容を含みます。
+  本セクションでは、Linux環境でのパフォーマンスチューニングの方法を紹介します。Linuxカーネルのチューニング、TCPネットワークのチューニング、Erlang VMのチューニング、そしてEMQXのチューニングに関する内容を含みます。
 
 - [eMQTT-Benchによるパフォーマンステスト](./benchmark-emqtt-bench.md)
 
-  本セクションでは、シンプルかつ強力なMQTTプロトコルのパフォーマンステストツールである[emqtt_bench](https://github.com/emqx/emqtt_bench)のインストールおよび使用方法を紹介します。
+  本セクションでは、シンプルかつ強力なMQTTプロトコルのパフォーマンステストツールである[emqtt_bench](https://github.com/emqx/emqtt_bench)のインストール方法および使用方法を紹介します。
 
 - [EMQXパフォーマンスリファレンス](./performance-reference.md)
 
