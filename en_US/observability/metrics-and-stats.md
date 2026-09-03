@@ -205,8 +205,8 @@ Scroll down the **Metrics** page to view message-related metrics, including [byt
 | delivery.dropped            | The total number of dropped messages during transmission     |
 | delivery.dropped.expired    | The number of dropped messages during transmission because the message is expired |
 | delivery.dropped.no_local   | The number of dropped messages during transmission due to the `No Local` subscription option |
-| delivery.dropped.qos0_msg   | The number of dropped QoS 0 messages during transmission due to a full message queue |
-| delivery.dropped.queue_full | The number of dropped non-zero QoS level messages during transmission due to a full message queue |
+| delivery.dropped.qos0_msg   | The number of QoS 0 messages dropped during transmission because `mqueue_store_qos0` is set to `false` |
+| delivery.dropped.queue_full | The number of messages dropped during transmission because a delivery queue is full |
 | delivery.dropped.too_large  | The number of dropped messages during transmission due to exceeding length limits |
 
 ## Request Monitoring Status via REST API

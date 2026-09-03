@@ -208,8 +208,8 @@ Dashboard 中的指标按以下类别进行分组：
 | delivery.dropped            | 投递过程中被丢弃的消息总数                |
 | delivery.dropped.expired    | 因消息过期而在投递过程中被丢弃的消息数量  |
 | delivery.dropped.no_local   | 因 `No Local` 订阅选项而被丢弃的消息数量  |
-| delivery.dropped.qos0_msg   | 因消息队列已满而被丢弃的 QoS 0 消息数量   |
-| delivery.dropped.queue_full | 因消息队列已满而被丢弃的非 QoS 0 消息数量 |
+| delivery.dropped.qos0_msg   | 因 `mqueue_store_qos0` 设置为 `false`，而在投递过程中被丢弃的 QoS 0 消息数量 |
+| delivery.dropped.queue_full | 因投递队列已满而在投递过程中被丢弃的消息数量 |
 | delivery.dropped.too_large  | 因消息长度超出限制而被丢弃的消息数量      |
 
 ## 通过 REST API 获取监控状态
