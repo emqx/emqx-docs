@@ -90,7 +90,7 @@ Restoring data captured under `legacy` to a `hardened` node can change how the r
 - A restored Dashboard account that still uses the default password cannot log in.
 - Authentication and authorization backend failures that `legacy` ignores cause the operation to be denied.
 
-Review these differences before allowing a security profile mismatch.
+Review the [differences between security profiles](../access-control/security-profile.md) before allowing a security profile mismatch.
 :::
 
 ## Manage Backup Files in Dashboard
