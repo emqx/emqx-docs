@@ -1,16 +1,16 @@
 # Flapping Detect
 
-Flapping検出は、設定された時間ウィンドウ内で繰り返される`CONNECT`パケットを識別します。EMQXを過剰な接続試行から保護するために、設定された閾値に達した場合、EMQXはクライアントID、ユーザー名、または送信元IPアドレスを一時的に禁止します。
+Flapping検出は、設定された時間ウィンドウ内で繰り返される`CONNECT`パケットを識別します。EMQXを過剰な接続試行から保護するために、設定された閾値に達したクライアントID、ユーザー名、または送信元IPアドレスを一時的に禁止します。
 
 EMQX 6.3.0以降では、Flapping検出は以下の任意の組み合わせの次元を独立して評価できます。
 
-- クライアントID：同じクライアントIDからの接続試行をカウントします。
-- ユーザー名：同じユーザー名を共有するクライアントからの接続試行をカウントします。ユーザー名がない接続はこの次元ではカウントされません。
-- 送信元IPアドレス：同じ送信元IPアドレスからの接続試行をカウントします。
+- クライアントID：同一クライアントIDからの接続試行をカウントします。
+- ユーザー名：同一ユーザー名を共有するクライアントからの接続試行をカウントします。ユーザー名がない接続はこの次元ではカウントされません。
+- 送信元IPアドレス：同一送信元IPアドレスからの接続試行をカウントします。
 
-有効化された各次元は、それぞれ独自の検出時間ウィンドウ、接続試行数の閾値、および禁止期間を持ちます。クライアントID、ユーザー名、または送信元IPアドレスが閾値に達した場合、EMQXは認証前に該当する識別子またはアドレスに一致する新しい接続試行を拒否します。既存の接続は切断されません。
+有効にした各次元は、それぞれ独自の検出時間ウィンドウ、接続試行数の閾値、および禁止期間を持ちます。クライアントID、ユーザー名、または送信元IPアドレスが閾値に達すると、EMQXは認証前に該当する識別子またはアドレスに一致する新しい接続試行を拒否します。既存の接続は切断されません。
 
-Flapping検出はデフォルトで無効になっています。EMQXダッシュボードまたは設定ファイルで設定可能です。
+Flapping検出はデフォルトで無効です。EMQXダッシュボードまたは設定ファイルで設定できます。
 
 ## ダッシュボードでのFlapping Detect設定
 
@@ -27,11 +27,11 @@ Flapping検出はデフォルトで無効になっています。EMQXダッシ�
 
 <img src="./assets/flapping-detect.png" alt="Flapping検出の次元" style="zoom:67%;" />
 
-Flapping検出によって作成された禁止エントリは自動的に期限切れになります。[禁止クライアント](./blacklist.md)ページまたは`/banned` REST APIで確認・削除が可能です。
+Flapping検出によって作成された禁止エントリは自動的に期限切れになります。これらは[Banned Clients](./blacklist.md)ページや`/banned` REST APIで確認または削除できます。
 
 ## 設定ファイルでのFlapping Detect設定
 
-以下のHOCON例は、クライアントIDおよびユーザー名による検出を有効にし、送信元IPアドレスによる検出を無効にしています。
+以下のHOCON例は、クライアントIDとユーザー名による検出を有効にし、送信元IPアドレスによる検出を無効にしています。
 
 ```hocon
 flapping_detect {
@@ -53,4 +53,4 @@ flapping_detect {
 
 検出設定が構成されている次元は有効になります。無効にする場合は、その次元を`none`に設定してください。これらの設定は個別のゾーンにも適用可能です。
 
-EMQX 6.3.0以降、フラットな`flapping_detect.enable`、`flapping_detect.window_time`、`flapping_detect.max_count`、および`flapping_detect.ban_time`フィールドは非推奨となりました。EMQXは引き続きこれらのフラットフィールドを受け入れ、`flapping_detect.by_clientid`にマッピングするため、EMQX 6.3.0以前に作成された設定との互換性は維持されます。非推奨フィールドはクライアントID検出のみに影響し、`by_username`および`by_peerhost`は明示的に設定しない限り`none`のままです。完全な設定構造および優先順位ルールについては、[Flapping Detect Configuration](../configuration/flapping.md)を参照してください。
+EMQX 6.3.0以降、フラットな`flapping_detect.enable`、`flapping_detect.window_time`、`flapping_detect.max_count`、`flapping_detect.ban_time`フィールドは非推奨となりました。EMQXは引き続きこれらのフラットフィールドを受け入れ、`flapping_detect.by_clientid`にマッピングするため、6.3.0以前に作成された設定との互換性は維持されます。非推奨フィールドはクライアントID検出にのみ影響し、`by_username`および`by_peerhost`は明示的に設定しない限り`none`のままです。完全な設定構造と優先順位のルールについては、[Flapping Detect Configuration](../configuration/flapping.md)を参照してください。
