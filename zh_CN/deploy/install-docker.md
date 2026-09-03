@@ -43,7 +43,7 @@ EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚�
 
    ```bash
    mkdir -p $PWD/data $PWD/log
-   sudo chown 1000:1000 $PWD/log
+   sudo chown $UID:$GID $PWD/log
    ```
 
 3. 使用稳定的节点名和已挂载的目录启动容器：
