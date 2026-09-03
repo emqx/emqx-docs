@@ -196,6 +196,30 @@ EMQX 允许在认证阶段为客户端设置**超级用户**角色以及预设**
 
 超级用户的判定发生在认证阶段，由数据库查询结果、HTTP 响应或者 JWT 声明中的 `is_superuser` 字段来指示。
 
+## 通过认证结果覆盖客户端 ID
+
+认证后端可以在认证成功结果中返回 `clientid_override`。该字段必须是包含完整替代客户端 ID 的非空字符串。EMQX 在认证后、打开客户端会话前应用该值。如果该字段不存在或值为空，EMQX 将继续使用此前确定的客户端 ID。
+
+当认证后端负责确定替代客户端 ID 时，请使用此机制。如果 EMQX 可以在认证前根据连接信息生成替代客户端 ID，请改用 `mqtt.clientid_override`。有关多租户部署中如何选择机制、具体执行顺序和失败处理行为，参见[客户端 ID 隔离](../../multi-tenancy/namespace-global-settings.md#客户端-id-隔离)。
+
+一个连接只应使用一种客户端 ID 覆盖机制。如果同时配置两种机制，认证结果覆盖会在稍后执行，并替换 `mqtt.clientid_override` 生成的客户端 ID。
+
+### 配置认证后端
+
+`clientid_override` 是认证结果字段，不是所有认证器共用的 Dashboard 配置项。请根据使用的认证后端进行配置：
+
+| 认证后端 | 提供 `clientid_override` 的方式 |
+| --- | --- |
+| [HTTP](./http.md) | 在认证成功的 JSON 响应中，将 `clientid_override` 作为顶层字符串字段返回。 |
+| [JWT](./jwt.md) | 在 JWT Payload 中，将 `clientid_override` 添加为顶层字符串声明。 |
+| [LDAP](./ldap.md) | 将该值保存在 LDAP 属性中，并将 **Client ID 覆盖属性**设置为该属性的名称。默认属性名为 `clientIdOverride`。 |
+| [MongoDB](./mongodb.md) | 将该值保存在文档字段中，并将 **Client ID 覆盖字段名**设置为该字段的名称。默认字段名为 `clientid_override`。 |
+| [MySQL](./mysql.md) | 在查询结果中通过名为 `clientid_override` 的列返回该值。 |
+| [PostgreSQL](./postgresql.md) | 在查询结果中通过名为 `clientid_override` 的列返回该值。 |
+| [Redis](./redis.md) | 将该值保存在 `clientid_override` 字段中，并在查询命令中包含该字段。 |
+
+如果将替代客户端 ID 用于客户端 ID 隔离，请确保该值全局唯一。
+
 ## 密码散列
 
 通过明文存储密码会有非常高的密码泄漏风险。因此 EMQX 支持多种密码散列算法以满足不同用户的安全性要求，同时我们建议生成一个随机的盐，数据库中存储盐与对密码加盐后散列得到的值（password_hash）。

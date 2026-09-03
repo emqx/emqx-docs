@@ -207,6 +207,30 @@ Permission preset is supported in JWT and HTTP authentication. An [Access Contro
 
 You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
 
+## Override Client IDs from Authentication Results
+
+An authentication backend can return `clientid_override` in a successful authentication result. The value must be a non-empty string containing the complete replacement Client ID. EMQX applies it after authentication and before opening the client session. If the field is absent or empty, EMQX keeps the previously determined Client ID.
+
+Use this mechanism when the authentication backend determines the replacement Client ID. If EMQX can construct the replacement Client ID from connection information before authentication, use `mqtt.clientid_override` instead. For details about choosing a mechanism, execution order, and failure behavior in multi-tenant deployments, see [Client ID Isolation](../../multi-tenancy/namespace-global-settings.md#client-id-isolation).
+
+Use only one Client ID override mechanism for a connection. If both mechanisms are configured, the authentication-result override runs later and replaces the Client ID produced by `mqtt.clientid_override`.
+
+### Configure an Authentication Backend
+
+`clientid_override` is an authentication-result field, not a common Dashboard setting shared by all authenticators. Configure each supported authentication backend as follows:
+
+| Authentication Backend | How to Provide `clientid_override` |
+| --- | --- |
+| [HTTP](./http.md) | Return `clientid_override` as a top-level string field in the successful JSON response. |
+| [JWT](./jwt.md) | Add `clientid_override` as a top-level string claim in the JWT payload. |
+| [LDAP](./ldap.md) | Store the value in an LDAP attribute. Set **Client ID Override Attribute** to the name of that attribute. The default attribute name is `clientIdOverride`. |
+| [MongoDB](./mongodb.md) | Store the value in a document field. Set **Client ID Override Field** to the name of that field. The default field name is `clientid_override`. |
+| [MySQL](./mysql.md) | Return the value in a query result column named `clientid_override`. |
+| [PostgreSQL](./postgresql.md) | Return the value in a query result column named `clientid_override`. |
+| [Redis](./redis.md) | Store the value in a `clientid_override` field and include that field in the query command. |
+
+If you use the replacement Client ID for Client ID isolation, ensure that it is globally unique.
+
 ## Password Hashing
 
 Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
