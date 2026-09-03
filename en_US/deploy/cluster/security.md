@@ -16,6 +16,14 @@ node {
 }
 ```
 
+Starting from EMQX 6.3.0, you can avoid storing the cookie in plain text in `emqx.conf` by setting `node.cookie` to a file URL that references a regular file or FIFO (named pipe):
+
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
+```
+
+The `EMQX_NODE__COOKIE` environment variable also accepts a `file://` URL. Provision the file or FIFO on every node and make sure every node reads the same cookie. For details about boot-time reads and FIFO requirements, see [Load the Node Cookie from a File](../../configuration/secret-from-file.md#load-the-node-cookie-from-a-file).
+
 :::tip Tip 
 
 All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 

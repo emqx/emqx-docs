@@ -82,13 +82,13 @@ Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.e
 
 ### Set Node Cookies
 
-For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security).
+For security, replace the default cookie on every node that will join the cluster, and use the same secret cookie on all nodes. Set `node.cookie` in `emqx.conf`. To keep the cookie value out of the configuration, use a `file://` URL:
 
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
 ```
-node {
-  cookie = "<a Secret cookie>"
-}
-```
+
+The `EMQX_NODE__COOKIE` environment variable also accepts a `file://` URL. For details about regular files, FIFOs, and boot-time reads, see [Load the Node Cookie from a File](../../configuration/secret-from-file.md#load-the-node-cookie-from-a-file). For details about the magic cookie, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security).
 
 ### Configure Network Environment
 
