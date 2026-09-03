@@ -97,6 +97,19 @@ This section displays event-related metrics for the cluster or a node, including
 | client.authenticate         | The number of triggered authentication                       |
 | client.authorize            | The number of triggered authorization                        |
 
+#### Bans and Flapping Detection
+
+These metrics track connection attempts rejected by active ban entries and temporary bans created by flapping detection.
+
+| Metrics                      | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| client.banned               | The number of connection attempts rejected because the client matched an active ban entry |
+| flapping.detected.clientid  | The number of times flapping was detected for a client ID, resulting in a temporary ban |
+| flapping.detected.username  | The number of times flapping was detected for a username, resulting in a temporary ban |
+| flapping.detected.peerhost  | The number of times flapping was detected for a source IP address, resulting in a temporary ban |
+
+A connection attempt counted by `client.banned` also increments `packets.connack.error` because EMQX rejects the connection with a non-successful `CONNACK` reason code.
+
 ### Rules and Actions (Sink)
 
 This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and actions (sinks) are executed.
