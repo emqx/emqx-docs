@@ -185,7 +185,7 @@ You can also set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` in the node's environment
 
 ## View Listener Address Information
 
-Starting from EMQX 6.3.0, you can view the resolved address and its source without changing the listener's configured `bind`. Use either the CLI or the REST API to query a node. To compare nodes in a cluster, use the listener list API.
+Starting from EMQX 6.3.0, you can view the resolved address and its source without changing the listener's configured `bind`. Use either the CLI or the REST API to query a node.
 
 ### Query a Node with the CLI
 
@@ -203,30 +203,24 @@ To check a listener through the REST API, use `GET /api/v5/listeners/:id`, for e
 
 The `bind` field keeps the configured value, including the port. `resolved_address` and `resolved_address_from` are read-only information; change `bind` or `node.default_listener_address` to change the address, rather than editing these response fields.
 
-### Compare Nodes
-
-To compare nodes, use `GET /api/v5/listeners`. For each listener, `status` contains the cluster aggregate and `node_status[].status` contains each node's values. Check both `resolved_address` and `resolved_address_from`:
-
-- If the nodes report different addresses, `status.resolved_address` is `inconsistent`. This does not by itself indicate a failure. For example, with `node.default_listener_address = "nodename"`, nodes can resolve to different IP addresses while all report `resolved_address_from = "nodename"`.
-- If `status.resolved_address_from` is `inconsistent`, compare the sources in `node_status`. Nodes can report the same listener address but different sources. Check each node's default listener address and security profile to confirm that these differences match your deployment.
-- Check each node's `running` status separately. If a running listener uses loopback, clients on other hosts cannot reach it. In Docker, loopback normally refers to the container itself; see [Listener Addresses in Docker](../deploy/install-docker.md#listener-addresses-in-docker).
-
 These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../gateway/gateway.md#listener).
 
 ## Forwarded Client Address (WebSocket Listeners)
 
 WebSocket and secure WebSocket listeners have two options that control how EMQX determines a client's source address when the listener sits behind a proxy or load balancer:
 
-- `websocket.proxy_address_header` (default: `x-forwarded-for`)
-- `websocket.proxy_port_header` (default: `x-forwarded-port`)
+- `websocket.proxy_address_header`: Specifies the HTTP header that carries the client IP address.
+- `websocket.proxy_port_header`: Specifies the HTTP header that carries the client port.
 
-When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP.
+Starting from EMQX 6.3.0, both options default to `""`. EMQX uses the corresponding TCP peer address or port for any option left empty. To obtain either value from a trusted proxy, explicitly configure the corresponding header name, such as `x-forwarded-for` or `x-forwarded-port`.
+
+When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP. Configured header names are matched case-insensitively.
 
 ::: warning Trust Forwarded Address Headers Only Behind a Trusted Proxy
 
-The header value determines the client's apparent source IP, so it must be honored only when a trusted proxy sets it:
+The header value determines the client source IP that EMQX uses, so it must be honored only when a trusted proxy sets it:
 
-- If the listener is directly reachable by clients (no proxy in front), any client can send the header and choose its own apparent source IP. Set `proxy_address_header = ""` and `proxy_port_header = ""` to always use the real TCP peer address.
+- If the listener is directly reachable by clients (no proxy in front), keep `proxy_address_header` and `proxy_port_header` empty so that EMQX always uses the real TCP peer address.
 - If there is a proxy but it **appends** its observation to an inbound `X-Forwarded-For` header instead of overwriting or stripping it (appending is the default behavior of most proxies, for example NGINX's `$proxy_add_x_forwarded_for`), the leftmost entry that EMQX reads is still the one supplied by the client, so the source IP can still be spoofed. Configure the proxy to overwrite the header with the address it observed, use the [PROXY protocol](../deploy/cluster/lb.md) instead, or set the options to `""`.
 - Do not try to disable the mechanism by pointing the option at an unused header name: a client can send a header by any name. The empty string is the only value a client can never supply.
 

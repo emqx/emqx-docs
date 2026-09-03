@@ -157,6 +157,8 @@ ns:<NAMESPACE>::<ROLE>
 - `ns:namespace_01::administrator`
 - `ns:namespace_01::viewer`
 
+从 EMQX 6.3.0 开始，命名空间角色中的命名空间名称不能在 `multi_tenancy.deny_namespaces` 列表中。EMQX 会拒绝使用禁止名称的角色。配置方法请参见[禁止使用的命名空间名称](../multi-tenancy/namespace-global-settings.md#禁止使用的命名空间名称)。
+
 #### 命名空间用户的行为说明
 
 - **资源作用域限制**：命名空间用户只能查看和管理其所属命名空间下的资源，包括连接器、动作、数据源、规则等支持命名空间的模块。

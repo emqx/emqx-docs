@@ -214,6 +214,25 @@ OCPP 网关仅支持 Websocket 和 Websocket over TLS 类型的监听器。
 - **CA 证书深度**：设置在对等证书之后的有效认证路径中可以包括的非自我签发中间证书的最大数量，默认为**10**。
 - **密钥密码**：设置用户密码，仅在私钥受密码保护时使用。
 
+#### 配置转发的客户端地址
+
+从 EMQX 6.3.0 开始，`proxy_address_header` 和 `proxy_port_header` 均默认为 `""`。只有显式配置转发请求头名称后，OCPP WebSocket 监听器才会使用请求头值，否则使用 TCP 对端地址和端口。
+
+如果 OCPP 监听器位于受信任代理之后，并且该代理会覆盖转发请求头，可在 `base.hocon` 中配置请求头名称。例如：
+
+```hocon
+gateway.ocpp.listeners.ws.default.websocket {
+  proxy_address_header = "x-forwarded-for"
+  proxy_port_header = "x-forwarded-port"
+}
+```
+
+对于 WSS 监听器，请改用 `gateway.ocpp.listeners.wss.<listener-name>.websocket`。EMQX 使用每个已配置请求头中第一个（最左侧的）条目。如果请求头不存在或值无效，EMQX 使用对应的 TCP 对端地址或端口。
+
+仅当受信任代理会覆盖客户端提供的值时，才应配置这些选项。否则，客户端可以使 EMQX 使用伪造的源地址。
+
+EMQX 6.3.0 还修复了网关 WebSocket 监听器的请求头名称匹配问题。EMQX 6.3.0 之前，已配置的名称无法匹配请求头，因此 EMQX 使用 TCP 对端地址和端口。
+
 ## 配置认证
 
 鉴于 OCPP 协议的连接消息中已经定义了用户名和密码的概念，OCPP 可支持多种身份验证器类型，例如：

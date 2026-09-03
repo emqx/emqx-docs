@@ -3,6 +3,8 @@ Like file logs, OpenTelemetry logs are used to record critical events, status in
 
 This page provides a comprehensive guide on integrating the OpenTelemetry log handler with EMQX for advanced log management. It covers setting up the OpenTelemetry Collector, configuring the OpenTelemetry log handler in EMQX to export logs, and managing potential log overloads. This integration allows you to format EMQX log events according to the [OpenTelemetry log data model](https://opentelemetry.io/docs/specs/otel/logs/data-model/) and export them to the configured OpenTelemetry Collector or backend system, offering improved monitoring and debugging capabilities.
 
+To export OpenTelemetry logs directly to Dynatrace, see [Integrate OpenTelemetry with Dynatrace](./dynatrace.md).
+
 ## Set Up OpenTelemetry Collector
 
 Before enabling EMQX OpenTelemetry logging, you need to deploy and configure OpenTelemetry Collector and an OpenTelemetry-compatible logging collection system. This guide walks you through deploying the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) and setting it up to redirect logs to `stdout` using the debug exporter.

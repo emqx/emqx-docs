@@ -321,6 +321,10 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
 
 以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后不能更改所属命名空间。
 
+从 EMQX 6.3.0 开始，以上两种方式均不能使用 `multi_tenancy.deny_namespaces` 列表中的命名空间名称。配置方法请参见[禁止使用的命名空间名称](../multi-tenancy/namespace-global-settings.md#禁止使用的命名空间名称)。
+
+创建全局 API 密钥时，应省略 `namespace` 并使用不含命名空间前缀的角色。将 `namespace` 设置为字符串 `"global"` 并不表示选择全局范围。
+
 #### Bootstrap 文件
 
 您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：

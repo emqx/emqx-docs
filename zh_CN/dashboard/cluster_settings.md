@@ -151,7 +151,7 @@ SSRF 策略不校验其他连接器类型、连接器启停操作、连接器删
 - 解析后的地址。
 - 地址来源，例如监听器绑定中显式指定的 IP 或节点的默认监听地址设置。
 
-地址来源为 `nodename` 时，各节点使用自身节点名中的主机部分，因此可能得到不同地址。地址显示为 `inconsistent` 表示各节点返回的监听地址不同，不一定是监听器故障。如何理解这些差异、`resolved_address` 为空时的含义以及运行状态，参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
+地址来源为 `nodename` 时，各节点使用自身节点名中的主机部分，因此可能得到不同地址。地址显示为 `inconsistent` 表示各节点返回的监听地址不同，不一定是监听器故障。各字段的含义，包括 `resolved_address` 为空时的含义和运行状态，参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
 
 ![config-listener-list](./assets/config-listener-list.png)
 
@@ -163,19 +163,16 @@ SSRF 策略不校验其他连接器类型、连接器启停操作、连接器删
 
 从 EMQX 6.3.0 开始，仅指定端口时使用的地址取决于节点配置和安全配置方案，因此监听器可能无法接受其他主机的连接。Dashboard 显示的是配置中的绑定值，而不是各节点解析后的地址。地址选择规则参见[如何确定监听地址](../configuration/listener.md#如何确定监听地址)。
 
-<!-- XXX: 截图待核对
-请确认实际的**添加监听器**表单是否也包含地址信息图标，仅在该表单发生变化时替换 `./assets/config-listener-add.png`。已认可的截图展示的是编辑表单，尚不能确认添加表单的行为。核实前保留现有图片，核实后删除此说明。
--->
-
-![image](./assets/config-listener-add.png)
-
 #### 速率限制
 
-在**添加监听器**表单中的**速率限制**区域，您可以对 EMQX 的使用时，接入消息，分发消息的速率进行限制，包括：
+在**添加监听器**表单的**速率限制**区域，可以配置以下速率和突发限制：
 
-- 最大连接速率（监听器）
-- 最大消息发布速率（单客户端）
-- 最大消息发布流量（单客户端）
+- **最大连接速率（监听器）**和**最大连接突发速率（监听器）**
+- **最大消息发布速率（单客户端）**和**最大消息发布突发速率（单客户端）**
+- **订阅速率**和**订阅突发速率**
+- **最大消息发布流量（单客户端）**和**最大消息发布流量突发速率（单客户端）**
+- **最大消息投递速率（单客户端）**和**最大消息投递突发速率（单客户端）**
+- **最大消息投递流量（单客户端）**和**最大消息投递流量突发速率（单客户端）**
 
 配置速率限制可以在当消息数据过载或客户端过度请求时确保系统和网络的稳定性。
 
@@ -205,7 +202,7 @@ SSRF 策略不校验其他连接器类型、连接器启停操作、连接器删
 
 **管理**->**日志**为日志相关的配置页面。该页面包含**控制台日志**、**文件日志**、**日志限流**，和**审计日志**标签页。
 
-EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。在相应的配置页面中，可以设置是否启用日志处理进程，设置日志级别，日志格式类型，文件日志还可以设置日志文件的路径和日志名称。更多关于日志的详细配置说明，请参考[通过 Dashboard 修改日志配置](../observability/log.md#通过-dashboard-修改日志配置)。
+EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输出日志。您可以根据需要选择输出方式或同时启用这两种方式。在相应的配置页面中，可以设置是否启用日志输出、设置日志级别和日志格式类型；对于文件日志，还可以设置日志文件的路径和日志名称。更多关于日志的详细配置说明，请参考[通过 Dashboard 修改日志配置](../observability/log.md#通过-dashboard-修改日志配置)。
 
 在**日志限流**配置页面，您可以设置日志限流的时间窗口。关于日志限流功能的介绍，参考[日志限流](../observability/log.md#日志限流)。
 
@@ -226,7 +223,7 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ### 监控集成
 
-该页面主要提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus、OpenTelemetry，和 Datadog 的集成方式。
+该页面主要提供了与第三方监控平台的集成配置，EMQX 支持与 Prometheus、OpenTelemetry 和 Datadog 集成。
 
 使用 Prometheus 时，可以在该页面配置 Pull 或 Push 模式。在 Pull 模式下，Prometheus 从 `/api/v5/prometheus/*` 下的 API 抓取指标。从 EMQX 6.3.0 开始，这些 API 默认要求身份认证。请为抓取程序配置具有 `monitoring` scope 的专用 API 密钥。配置详情请参见[集成 Prometheus](../observability/prometheus.md)。
 
@@ -238,7 +235,9 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ![emqx-grafana](./assets/emqx-grafana.jpg)
 
-关于 OpenTelemetry 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md) 和 [集成 Datadog](../observability/datadog.md)。
+配置 OpenTelemetry 时，可以在 **OpenTelemetry 类型**中选择**通用**或 **Dynatrace**。**通用**支持通过标准 OpenTelemetry 配置导出指标、追踪和日志。**Dynatrace**支持追踪和日志，并使用 OAuth2 认证。
+
+关于 OpenTelemetry、Dynatrace 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md)、[将 OpenTelemetry 与 Dynatrace 集成](../observability/opentelemetry/dynatrace.md)和[集成 Datadog](../observability/datadog.md)。
 
 ## 集群连接
 

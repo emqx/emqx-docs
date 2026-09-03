@@ -14,11 +14,11 @@
 
 :::
 
-![namespace_global_settings](./assets/namespace_global_settings.png)
+![全局命名空间设置，包括禁止使用的命名空间名称](./assets/namespace_global_settings.png)
 
 ## 仅允许显示创建的命名空间
 
-该配置用于控制客户端是否只能连接到已显式创建的命名空间。
+该配置用于控制客户端是否只能连接到已显式创建的命名空间，在配置文件中对应 `multi_tenancy.allow_only_managed_namespaces`。
 
 当启用该配置时，EMQX 会在客户端连接阶段对命名空间进行校验，并据此决定是否允许连接。
 
@@ -31,7 +31,7 @@
 
 ::: tip 提示
 
-关闭该配置前，请确保已正确配置**命名空间来源**，并且所有合法客户端都能够解析出有效的命名空间标识。否则，客户端可能因无法解析命名空间而被拒绝连接。
+启用该配置前，请确保已正确配置**命名空间来源**，并且所有合法客户端都能够解析出已显式创建的命名空间。否则，客户端可能因无法解析命名空间或命名空间尚未显式创建而被拒绝连接。
 
 当**命名空间解析时机**设置为**认证后**时，认证前的命名空间校验将被跳过，对显式创建命名空间的检查将在认证完成后执行。
 
@@ -46,6 +46,34 @@
 
 该配置仅对新创建的命名空间生效，不会影响已经存在的命名空间。已存在命名空间的最大会话数需在对应命名空间的配置中单独修改。
 
+## 禁止使用的命名空间名称
+
+从 EMQX 6.3.0 开始，`multi_tenancy.deny_namespaces` 用于指定不能用作命名空间标识的名称。该限制适用于 Dashboard 用户角色、API 密钥、通过管理 API 创建和批量导入命名空间，以及通过 `client_attrs.tns` 为客户端分配命名空间。
+
+默认列表为 `["global", "undefined", "null", "none"]`。这些名称在日志和 Dashboard 输出中容易与内部标识混淆。
+
+在 Dashboard 中编辑该列表：
+
+1. 进入**管理** -> **命名空间** -> **设置**。
+2. 在**禁止使用的命名空间名称**中，按需添加或移除名称。清空所有条目可关闭名称限制。
+3. 点击**确定**应用更改。
+
+您也可以在 `etc/base.hocon` 中配置该列表。以下示例使用默认值：
+
+```hocon
+multi_tenancy.deny_namespaces = ["global", "undefined", "null", "none"]
+```
+
+自定义列表会替换默认列表。如果仍需禁止某些默认名称，请将其保留在列表中。设置 `multi_tenancy.deny_namespaces = []` 可关闭名称限制。配置文件的优先级请参见[配置覆盖规则](../configuration/configuration.md#配置覆盖规则)。
+
+如果客户端解析出的命名空间在该列表中，EMQX 将拒绝连接并返回 `not_authorized`，即使已关闭**仅允许显式创建的命名空间**也是如此。当 `multi_tenancy.allow_only_managed_namespaces = false` 时，该名称限制不会阻止未分配命名空间的客户端连接。
+
+::: warning 重要提示
+
+默认列表会禁止使用 EMQX 6.3.0 之前允许的名称。EMQX 不会自动迁移使用这些名称的命名空间。升级前，请更换受影响的命名空间名称，或调整 `multi_tenancy.deny_namespaces` 以允许使用这些名称。
+
+:::
+
 ## 命名空间解析时机
 
 该设置控制 EMQX 在连接生命周期的哪个阶段解析客户端的命名空间标识。
@@ -57,7 +85,7 @@ EMQX 支持两种模式，可在 Dashboard 中通过**命名空间解析时机**
 
 ::: tip
 
-两种模式互斥。若配置了**认证后**模式，则以该模式的求值结果为准，`mqtt.client_attrs_init` 所设置的预认证 `tns` 值将被覆盖。
+若配置了**认证后**模式，EMQX 将使用认证后表达式分配命名空间。当该表达式求值为空或出错时，不会回退到认证前的 `tns` 值。详情请参见[认证后表达式为空或求值出错](#认证后表达式为空或求值出错)。
 
 :::
 
@@ -117,30 +145,65 @@ coalesce(client_attrs.tag, username)
 
 在该配置下，EMQX 等待认证链执行完毕后，从合并后的 `client_attrs` 中读取 `tag` 值，并将其赋值为命名空间标识。
 
-::: tip
+### 认证后表达式为空或求值出错
 
-若表达式的求值结果为空字符串，则保留已有的 `tns` 值（如有）。若表达式求值出错，则记录一条警告日志，并将该客户端视为无命名空间处理。
+配置 `multi_tenancy.post_auth_tns_expression` 后，如果表达式求值为空字符串或出错，EMQX 将按以下规则处理连接。求值出错时还会记录一条警告日志。
 
-:::
+1. 如果认证前的 `client_attrs.tns` 值在 `multi_tenancy.deny_namespaces` 列表中，EMQX 将拒绝连接并返回 `not_authorized`。
+2. 否则，EMQX 将客户端视为未分配命名空间：
+   - 当 `multi_tenancy.allow_only_managed_namespaces = true` 时，EMQX 拒绝连接并返回 `not_authorized`。
+   - 当 `multi_tenancy.allow_only_managed_namespaces = false` 时，EMQX 清除认证前的 `tns` 值（如有），允许客户端以无命名空间状态连接。
 
 ## 客户端 ID 隔离
 
 客户端 ID 隔离用于解决多租户场景下不同命名空间使用相同客户端 ID 导致冲突的问题。
 
-启用该配置后，EMQX 会在内部为客户端 ID 自动添加命名空间前缀，而客户端在连接时使用的原始 Client ID 保持不变。
+EMQX 在全局范围内使用有效客户端 ID 标识会话，而不是使用命名空间和客户端 ID 的组合。因此，客户端 ID 隔离通过生成全局唯一的有效客户端 ID 来避免冲突，通常会在原始客户端 ID 前添加命名空间前缀。客户端仍发送原始客户端 ID，EMQX 在内部将覆盖后的 ID 用作有效客户端 ID。
 
-当启用客户端 ID 隔离时，Dashboard 会自动填入一个推荐的默认表达式：
+### 选择客户端 ID 覆盖机制
+
+请根据命名空间信息的来源以及有效客户端 ID 是否必须包含命名空间，选择覆盖机制：
+
+- 如果命名空间在认证前生成，请配置 `mqtt.clientid_override`。EMQX 在 `mqtt.client_attrs_init` 执行完成后、认证开始前对该表达式求值，因此表达式可以使用由 `mqtt.client_attrs_init` 初始化的属性，包括 `client_attrs.tns`。
+- 如果命名空间来自认证结果，并且有效客户端 ID 必须包含该命名空间，请配置[认证后端返回 `clientid_override`](../access-control/authn/authn.md#通过认证结果覆盖客户端-id)。返回值必须包含完整的新客户端 ID。`mqtt.clientid_override` 表达式无法使用认证后端返回的属性，也无法使用 `multi_tenancy.post_auth_tns_expression` 生成的命名空间。
+- 如果 `multi_tenancy.post_auth_tns_expression` 设置命名空间，但有效客户端 ID 不需要包含该命名空间，则只有在客户端已使用全局唯一客户端 ID 时，才无需配置客户端 ID 覆盖。
+
+一个连接只应使用一种客户端 ID 覆盖机制。如果同时配置两种机制，认证结果覆盖会在稍后执行，并替换 `mqtt.clientid_override` 生成的客户端 ID。无论使用哪种机制，都必须确保最终生成的客户端 ID 全局唯一。
+
+### EMQX 应用客户端 ID 覆盖的顺序
+
+EMQX 按以下顺序确定有效客户端 ID：
+
+1. 通过 `mqtt.client_attrs_init` 初始化客户端属性。
+2. 在认证前对 `mqtt.clientid_override` 求值。
+3. 认证客户端，并应用认证成功结果中返回的非空 `clientid_override`。
+4. 对 `multi_tenancy.post_auth_tns_expression` 求值。
+5. 使用有效客户端 ID 打开客户端会话。
+
+EMQX 不会在认证后再次对 `mqtt.clientid_override` 求值，也不会自动将认证后获取的命名空间添加到客户端 ID。如果认证成功结果中未包含 `clientid_override` 或其值为空，EMQX 将继续使用此前确定的客户端 ID。
+
+### 配置认证前客户端 ID 隔离
+
+在 Dashboard 中启用客户端 ID 隔离时，EMQX 会配置 `mqtt.clientid_override` 并自动填入一个推荐表达式：
 
 ```
 concat([client_attrs.tns, '-', clientid])
 ```
+
+::: warning 重要提示
+
+从 EMQX 6.3.0 开始，如果 `mqtt.clientid_override` 表达式求值出错或生成空字符串，EMQX 会记录错误日志并拒绝连接。MQTT 5.0 客户端会收到 CONNACK 原因码 `0x85`（`Client Identifier not valid`），MQTT 3.1 和 3.1.1 客户端会收到返回码 `2`。EMQX 不会回退到客户端提供的 Client ID。
+
+升级前，请确认每个连接的客户端都能将已配置的表达式求值为非空字符串。如果某个客户端无法生成有效结果，请修正表达式或该客户端必需的数据。
+
+:::
 
 在上述配置下：
 
 - 不同命名空间中的客户端即使使用相同的 Client ID，也不会发生冲突。
 - 内部实际使用的客户端 ID 将包含命名空间前缀。
 
-该表达式仅作为示例，用户可以根据自身业务需要调整，只要最终生成的客户端 ID 在全局范围内保持唯一即可。
+该表达式仅作为认证前生成命名空间时的示例。可以根据业务需要调整表达式，但必须确保最终生成的客户端 ID 在全局范围内保持唯一。
 
 ### 实际效果示例
 

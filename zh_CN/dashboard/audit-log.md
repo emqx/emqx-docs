@@ -2,7 +2,7 @@
 
 审计日志（Audit Log）功能让您实时跟踪 EMQX 集群的重要操作变更，是企业用户遵守合规要求、确保数据安全的关键工具。
 
-EMQX 审计日志支持记录来自 [Dashboard](../dashboard/introduction.md) 、[REST API](../admin/api.md) 以及 [CLI](../admin/cli.md) 和控制台的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。而指标获取、客户端列表查询等只读操作则不会被记录。
+EMQX 审计日志支持记录来自 [Dashboard](../dashboard/introduction.md) 、[REST API](../admin/api.md) 以及 [CLI](../admin/cli.md) 和控制台的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。对于 Dashboard 和 REST API，指标获取、客户端列表查询等只读操作不会被记录。CLI 命令无论是否修改数据都会被记录，唯一的例外请参见下文的[命令行或 Erlang Console 操作记录](#命令行或-erlang-console-操作记录)。
 
 EMQX 提供了 Dashboard 查看以及日志系统集成的方式帮助企业管理审计日志。通过审计日志，企业用户可以方便地查看谁通过何种方式，在何时执行了哪些关键操作，以实现运营过程中的合规性和安全性审计。
 
@@ -132,6 +132,8 @@ log.audit {
 | body             | 对象 | HTTP 请求体，包含操作的详细信息。                            |
 
 ### 命令行或 Erlang Console 操作记录
+
+每一条 CLI 命令都会被记录到审计日志中，包括只读命令，例如 `emqx ctl status`。唯一的例外是顶层的用法（usage）列表：不带任何命令直接运行 `emqx ctl`，或使用未知命令时，会打印可用命令列表，且不会被记录。如果某条命令因参数无效而打印自身的用法说明，例如 `emqx ctl status bad-arg`，仍会作为该命令的一次调用被记录。
 
 记录命令行或 Erlang Console 操作的审计日志包含执行的命令、调用参数等信息。日志消息格式示例如下：
 

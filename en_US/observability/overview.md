@@ -1,8 +1,14 @@
 # Logs and Observability
 
-EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on the Dashboard under the following menu items:
+EMQX provides built-in observability features, external integrations, and production monitoring guidance to help you monitor, manage, and diagnose a deployment. The following pages cover production monitoring, observability data and integrations, and diagnostic tools.
 
-**Monitoring**:
+**Production Monitoring**:
+
+- [Production Monitoring Best Practices](./monitoring-best-practices.md)
+
+  Design production monitoring and alerts to identify availability, capacity, dependency, and message-delivery risks and support timely maintenance.
+
+**Observability and Integrations**:
 
 - [Metrics](./metrics-and-stats.md)
 
@@ -11,8 +17,6 @@ EMQX provides a series of observability-related features to help with system mon
 - [Alarm](./alarms.md)
 
   EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions.
-
-**Management**:
 
 - [Logs](./log.md)
 
@@ -30,7 +34,7 @@ EMQX provides a series of observability-related features to help with system mon
 
   [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
 
-**Diagnose**:
+**Diagnostics**:
 
 - [Topic Metrics](./topic-metrics.md)
 

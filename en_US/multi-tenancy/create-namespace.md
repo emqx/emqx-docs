@@ -5,6 +5,8 @@ There are two ways to create a namespace in EMQX: explicit creation and automati
 - **Explicit creation** is suitable for tightly controlled environments.
 - **Automatic creation** is better for dynamic, large-scale deployments that benefit from reduced manual intervention.
 
+Starting from EMQX 6.3.0, names listed in `multi_tenancy.deny_namespaces` cannot be used for either creation method. For the default list and how to configure it, see [Denied Namespace Names](./namespace-global-settings.md#denied-namespace-names).
+
 ## Explicitly Create a Namespace
 
 You can manually create namespaces through the Dashboard or the REST API. Explicitly created namespaces can be directly managed, edited, and deleted.
@@ -29,13 +31,15 @@ POST /mt/ns/<namespace>
 
 Replace `<namespace>` with the desired namespace ID. No request body is required.
 
+If the name is in `multi_tenancy.deny_namespaces`, EMQX rejects the request with HTTP 400.
+
 ## Automatically Create a Namespace
 
 In EMQX, namespaces can also be created automatically when clients connect.
 
 Automatic namespace creation is not based directly on the `client_attrs.tns` field itself, but instead depends on the **[Take Namespace From](./namespace-global-settings)** configuration.
 
-When a client connects, EMQX evaluates the configured **Take Namespace From** rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the corresponding namespace does not already exist, EMQX automatically creates it.
+When a client connects, EMQX evaluates the configured **Take Namespace From** rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the resolved name is in `multi_tenancy.deny_namespaces`, EMQX rejects the connection with `not_authorized`. Otherwise, if automatic creation is allowed and the corresponding namespace does not exist, EMQX automatically creates it.
 
 **Typical use cases**: This approach is suitable when client connections originate from trusted sources, the namespace identifier can be reliably derived from connection metadata, and namespaces need to be created dynamically for a large number of tenants or business units.
 

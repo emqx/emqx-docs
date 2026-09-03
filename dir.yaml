@@ -869,6 +869,7 @@
       path: observability/overview
       collapsed: true
       children:
+        - observability/monitoring-best-practices
         - observability/metrics-and-stats
         - observability/alarms
         - observability/log
@@ -894,6 +895,7 @@
             - observability/opentelemetry/metrics
             - observability/opentelemetry/logs
             - observability/opentelemetry/traces
+            - observability/opentelemetry/dynatrace
             - title_en: End-to-end Traces
               title_cn: 端到端追踪
               title_ja: エンドツーエンドトレース
@@ -929,15 +931,16 @@
           path: extensions/plugin-catalog
           collapsed: true
           children:
-            - extensions/plugin-catalog/6.1/emqx-acme
-            - extensions/plugin-catalog/6.1/emqx-relup
-            - extensions/plugin-catalog/6.1/emqx-backup-sync
-            - extensions/plugin-catalog/6.1/emqx-bridge-mqtt-dq
-            - extensions/plugin-catalog/6.1/emqx-maptabs
-            - extensions/plugin-catalog/6.1/emqx-offline-messages
-            - extensions/plugin-catalog/6.1/emqx-sync-request
-            - extensions/plugin-catalog/6.1/emqx-username-quota
-            - extensions/plugin-catalog/6.1/emqx-unsgov
+            - extensions/plugin-catalog/6.3/emqx-acme
+            - extensions/plugin-catalog/6.3/emqx-agent
+            - extensions/plugin-catalog/6.3/emqx-relup
+            - extensions/plugin-catalog/6.3/emqx-backup-sync
+            - extensions/plugin-catalog/6.3/emqx-bridge-mqtt-dq
+            - extensions/plugin-catalog/6.3/emqx-maptabs
+            - extensions/plugin-catalog/6.3/emqx-offline-messages
+            - extensions/plugin-catalog/6.3/emqx-sync-request
+            - extensions/plugin-catalog/6.3/emqx-username-quota
+            - extensions/plugin-catalog/6.3/emqx-unsgov
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ

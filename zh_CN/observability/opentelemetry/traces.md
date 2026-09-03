@@ -18,6 +18,8 @@ EMQX 传播追踪上下文的固有能力使其能够无缝地参与分布式追
 
 本页介绍了如何将 OpenTelemetry 追踪与 EMQX 集成，详细描述了设置 OpenTelemetry Collector 并在 EMQX 中启用和配置 OpenTelemetry 追踪集成，以及管理追踪跨度过载。
 
+如需将 OpenTelemetry 追踪数据直接导出到 Dynatrace，参见[将 OpenTelemetry 与 Dynatrace 集成](./dynatrace.md)。
+
 ## 设置 OpenTelemetry Collector
 
 在将 EMQX 与 OpenTelemetry 追踪集成之前，您需要部署并配置 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) 以及一个兼容 OpenTelemetry 的可观测性平台，例如 [Jaeger](https://www.jaegertracing.io/docs/latest/deployment/)。以下步骤概述了部署和配置过程：

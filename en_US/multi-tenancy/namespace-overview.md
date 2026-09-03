@@ -88,19 +88,21 @@ However, isolation policies still need to be explicitly configured based on busi
 
 ::: warning Required for Untrusted Multi-Tenant Deployments
 
-If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure `mqtt.clientid_override`. Without it, a client in one namespace can reuse another tenant's client ID, kicking it offline, hijacking its persistent session, or causing a denial-of-service for that tenant. Authentication does not prevent this: session takeover happens at the connection layer before ACLs apply.
+If clients from different namespaces are not mutually trusted (for example, when each namespace represents an external customer or a separate organization), you **must** configure a Client ID override mechanism appropriate for when EMQX determines the namespace.
+
+Without an override, a client in one namespace can reuse another tenant's Client ID. This can disconnect that tenant's client, hijack its persistent session, or cause a denial-of-service for that tenant. Authentication alone does not prevent these attacks because EMQX identifies sessions globally by the effective Client ID.
 
 Pair this with [topic isolation using mountpoints](#topic-isolation-using-mountpoints) so that topic-level access cannot cross namespace boundaries either.
 
 :::
 
-To allow clients in different namespaces to use the same Client ID, you can configure a Client ID override rule. For example:
+If EMQX can determine the namespace before authentication from connection information such as the username, Client ID, or client certificate, configure `mqtt.clientid_override`. For example:
 
 ```hocon
 mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
 ```
 
-This rule prefixes the Client ID with the namespace to avoid conflicts.
+This rule prefixes the Client ID with the namespace to avoid conflicts. If the authentication backend determines the namespace or another value required for the replacement Client ID, configure the backend to return `clientid_override` instead. Do not configure both mechanisms. For details, see [Client ID Isolation](./namespace-global-settings.md#client-id-isolation).
 
 ### Topic Isolation Using Mountpoints
 

@@ -11,7 +11,11 @@
 - 如果节点存在多个网卡接口，应将 Erlang 分布式通信仅绑定到私网接口。
 - 如果 EMQX 部署在负载均衡器或 TCP 代理之后，仅应在确实需要获取真实客户端 IP 或客户端证书信息的监听器上启用 [Proxy Protocol](../deploy/cluster/lb.md)。
 - 如果某个监听器启用了 Proxy Protocol，则该监听地址和端口只应暴露给指定的代理或负载均衡器，不能再直接对公网客户端开放。可在 EMQX 中通过 `listeners.{type}.{name}.access_rules = ["allow <trusted-LB-CIDR>", "deny all"]` 进行限制，并结合网络层控制（防火墙、私有网络或 Unix socket）。否则，能直接访问该端口的客户端可以伪造任意对端证书字段的 PROXY v2 帧，从而冒充任意身份。
-- 如果 WebSocket 监听器（`ws` 或 `wss`）前面没有会覆盖 `x-forwarded-for` 请求头的受信任代理，应设置 `listeners.{type}.{name}.websocket.proxy_address_header = ""`（以及 `websocket.proxy_port_header = ""`），使基于 IP 的授权规则、客户端封禁、连接抖动检测和审计日志使用真实的 TCP 对端地址。一旦启用该请求头，除非受信任代理覆盖它，派生出的源 IP 就是由客户端提供的；仅向入站请求头追加内容的代理并不能提供保护。详见 [WebSocket 监听器的转发客户端地址](../configuration/listener.md#websocket-监听器的转发客户端地址)。
+- 从 EMQX 6.3.0 开始，应将 `proxy_address_header` 和 `proxy_port_header` 保持为默认的空值。仅当 WebSocket 监听器（`ws` 或 `wss`）需要从会覆盖转发请求头的受信任代理获取客户端地址或端口时，才配置这些选项。
+- 请在对应路径下配置这些选项：
+  - MQTT 监听器：`listeners.{type}.{name}.websocket`。
+  - OCPP 和 NATS 网关监听器：`gateway.<gateway-name>.listeners.{type}.{name}.websocket`。
+- 如果客户端可以直接访问监听器，就能提供任意已配置的请求头。仅当代理会覆盖客户端提供的值时，才能信任这些请求头；仅追加内容无法防止伪造。如果请求头不存在或值无效，EMQX 使用对应的 TCP 对端地址或端口。详见[WebSocket 监听器的转发客户端地址](../configuration/listener.md#websocket-监听器的转发客户端地址)。
 
 ## 阶段 2：Erlang 与集群
 

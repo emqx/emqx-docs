@@ -181,7 +181,7 @@ listeners.wss.default {
 
 ## 查看监听地址信息
 
-从 EMQX 6.3.0 开始，可以在不修改监听器 `bind` 配置的情况下，查看解析后的地址及其来源。查看单个节点时，可选择 CLI 或 REST API；比较集群中的节点时，使用监听器列表 API。
+从 EMQX 6.3.0 开始，可以在不修改监听器 `bind` 配置的情况下，查看解析后的地址及其来源。可选择 CLI 或 REST API 查询节点。
 
 ### 通过 CLI 查询节点
 
@@ -199,30 +199,24 @@ emqx ctl listeners
 
 `bind` 保留配置中的值，包含端口。`resolved_address` 和 `resolved_address_from` 为只读信息；如需更改地址，应修改 `bind` 或 `node.default_listener_address`，而不是编辑这两个响应字段。
 
-### 比较各节点
-
-如需比较各节点，使用 `GET /api/v5/listeners`。每个监听器的 `status` 包含集群汇总结果，`node_status[].status` 包含各节点的值。请同时检查 `resolved_address` 和 `resolved_address_from`：
-
-- 如果各节点返回的地址不同，`status.resolved_address` 为 `inconsistent`。这本身不代表故障。例如，使用 `node.default_listener_address = "nodename"` 时，各节点可以解析到不同 IP，但 `resolved_address_from` 均为 `nodename`。
-- 如果 `status.resolved_address_from` 为 `inconsistent`，请比较 `node_status` 中的地址来源。即使各节点返回相同的监听地址，地址来源也可能不同。请检查各节点的默认监听地址和安全配置方案，确认这些差异是否符合部署预期。
-- 单独检查各节点的 `running` 状态。如果正在运行的监听器使用回环地址，其他主机上的客户端将无法访问。在 Docker 中，回环地址通常指容器自身，参见 [Docker 中的监听地址](../deploy/install-docker.md#docker-中的监听地址)。
-
 以上查询适用于 MQTT 监听器。对于网关监听器，请使用[网关监听器查询接口](../gateway/gateway.md#监听器)。
 
 ## WebSocket 监听器的转发客户端地址
 
 WebSocket 与安全 WebSocket 监听器提供两个配置项，用于在监听器位于代理或负载均衡器之后时决定 EMQX 如何获取客户端的源地址：
 
-- `websocket.proxy_address_header`（默认值：`x-forwarded-for`）
-- `websocket.proxy_port_header`（默认值：`x-forwarded-port`）
+- `websocket.proxy_address_header`：指定携带客户端 IP 地址的 HTTP 请求头。
+- `websocket.proxy_port_header`：指定携带客户端端口的 HTTP 请求头。
 
-当 WebSocket 升级请求中携带所配置的请求头时，EMQX 会使用该请求头值中第一个（最左侧的）条目作为客户端的源 IP 地址（或端口），而不再使用真实 TCP 对端的地址。基于 IP 的授权规则、客户端封禁、连接抖动检测以及审计与追踪日志所看到的客户端源 IP 都来自这个派生地址。
+从 EMQX 6.3.0 开始，这两个配置项均默认为 `""`。配置项为空时，EMQX 使用对应的 TCP 对端地址或端口。若需要从受信任代理获取客户端 IP 地址或端口，请显式配置对应的请求头名称，例如 `x-forwarded-for` 或 `x-forwarded-port`。
+
+当 WebSocket 升级请求中携带所配置的请求头时，EMQX 会使用该请求头值中第一个（最左侧的）条目作为客户端的源 IP 地址（或端口），而不再使用真实 TCP 对端的地址。基于 IP 的授权规则、客户端封禁、连接抖动检测以及审计与追踪日志所看到的客户端源 IP 都来自这个派生地址。请求头名称匹配不区分大小写。
 
 ::: warning 仅在受信任代理之后才可信任转发地址请求头
 
-该请求头的值决定了客户端的表观源 IP，因此只有在由受信任的代理设置该请求头时才可信任它：
+该请求头的值决定 EMQX 使用的客户端源 IP，因此只有在由受信任的代理设置该请求头时才可信任它：
 
-- 如果监听器可被客户端直接访问（前面没有代理），任何客户端都可以自行发送该请求头，从而任意选择自己的表观源 IP。此时应设置 `proxy_address_header = ""` 和 `proxy_port_header = ""`，使 EMQX 始终使用真实的 TCP 对端地址。
+- 如果监听器可被客户端直接访问（前面没有代理），应将 `proxy_address_header` 和 `proxy_port_header` 保持为空，使 EMQX 始终使用真实的 TCP 对端地址。
 - 如果前面有代理，但代理是将自身观察到的地址**追加**到入站 `X-Forwarded-For` 请求头之后，而不是覆盖或去除它（大多数代理默认为追加行为，例如 NGINX 的 `$proxy_add_x_forwarded_for`），那么 EMQX 读取的最左侧条目仍然是客户端提供的值，源 IP 依然可以被伪造。应将代理配置为使用其观察到的地址覆盖该请求头，或改用 [Proxy Protocol](../deploy/cluster/lb.md)，或将上述配置项设置为 `""`。
 - 不要试图通过将配置项指向一个未使用的请求头名称来“禁用”该机制：客户端可以发送任意名称的请求头。空字符串是客户端唯一无法提供的值。
 
