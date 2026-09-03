@@ -140,6 +140,23 @@ EMQX 安装完成后会创建一些目录用来存放运行文件和配置文件
 | `erts-*`   | Erlang 虚拟机文件 | `./erts-*`     | `/usr/lib/emqx/erts-*`   |
 | `plugins`  | 插件              | `./plugins`    | `/usr/lib/emqx/plugins`  |
 
+从 EMQX 6.3.0 开始，RPM 和 DEB 包会创建 `/opt/emqx` 目录及符号链接（symlink），指向上表列出的文件系统层次结构标准路径。运维人员和脚本因此可以使用与 Docker 镜像相同的 `/opt/emqx/...` 路径：
+
+| 符号链接             | 目标路径                 |
+| -------------------- | ------------------------ |
+| `/opt/emqx/bin`      | `/usr/lib/emqx/bin`      |
+| `/opt/emqx/data`     | `/var/lib/emqx`          |
+| `/opt/emqx/etc`      | `/etc/emqx`              |
+| `/opt/emqx/lib`      | `/usr/lib/emqx/lib`      |
+| `/opt/emqx/log`      | `/var/log/emqx`          |
+| `/opt/emqx/plugins`  | `/usr/lib/emqx/plugins`  |
+| `/opt/emqx/releases` | `/usr/lib/emqx/releases` |
+| `/opt/emqx/erts-*`   | `/usr/lib/emqx/erts-*`   |
+
+安装或升级软件包时会创建或刷新这些符号链接。卸载 EMQX 时会删除符号链接，并仅在 `/opt/emqx` 为空时删除该目录。直接添加到 `/opt/emqx` 的其他内容会被保留。
+
+符号链接始终指向表中列出的目标。配置自定义数据、日志或插件目录不会更新相应符号链接。
+
 ::: tip
 
 1. 压缩包解压安装时，目录相对于软件所在目录；

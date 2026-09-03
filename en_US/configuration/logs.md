@@ -21,9 +21,9 @@ Environment variable `EMQX_DEFAULT_LOG_HANDLER` defaults `console`, but explicit
 
 ## Output Logs as a File
 
-EMQX's log output directory is determined by the environment variable `EMQX_LOG_DIR` which is set to `/var/log/emqx` if installed via RPM or DEB packages. Otherwise, the log directory is `log` in the EMQX installation directory.
+For RPM and DEB installations, `EMQX_LOG_DIR` defaults to `/var/log/emqx`. Starting from EMQX 6.3.0, `/opt/emqx/log` is a symlink to this directory. The symlink always points to `/var/log/emqx`. Changing `EMQX_LOG_DIR` does not update it.
 
-For EMQX Docker container, the installation directory is `/opt/emqx`, hence the log directory is `/opt/emqx/log`.
+For other installation methods, the default log directory is `log` under the EMQX installation directory. In a Docker container, this path is `/opt/emqx/log`.
 
 To output logs as a file, you may either configure the file log output in the Dashboard or modify the `base.hocon` file directly as below:
 

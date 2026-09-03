@@ -129,6 +129,23 @@ After installation, EMQX creates some directories to store running and configura
 | `erts-*`   | Erlang runtime     | `./erts-*`            | `/usr/lib/emqx/erts-*`   |
 | `plugins`  | Plugins            | `./plugins`           | `/usr/lib/emqx/plugins`  |
 
+Starting from EMQX 6.3.0, RPM and DEB packages create `/opt/emqx` with symlinks to the Filesystem Hierarchy Standard paths listed above. Operators and scripts can therefore use the same `/opt/emqx/...` paths as the Docker image:
+
+| Symlink              | Target                   |
+| -------------------- | ------------------------ |
+| `/opt/emqx/bin`      | `/usr/lib/emqx/bin`      |
+| `/opt/emqx/data`     | `/var/lib/emqx`          |
+| `/opt/emqx/etc`      | `/etc/emqx`              |
+| `/opt/emqx/lib`      | `/usr/lib/emqx/lib`      |
+| `/opt/emqx/log`      | `/var/log/emqx`          |
+| `/opt/emqx/plugins`  | `/usr/lib/emqx/plugins`  |
+| `/opt/emqx/releases` | `/usr/lib/emqx/releases` |
+| `/opt/emqx/erts-*`   | `/usr/lib/emqx/erts-*`   |
+
+Installing or upgrading the package creates or refreshes these symlinks. Uninstalling EMQX removes them and deletes `/opt/emqx` only if it is empty. Other content added directly under `/opt/emqx` is preserved.
+
+The symlinks always point to the listed targets. Configuring a custom data, log, or plugin directory does not update the corresponding symlink.
+
 ::: tip
 
 1. When installed with the compressed package, the directory is relative to the directory where the software is installed.

@@ -11,6 +11,10 @@ Supported versions:
 
 The following sections demonstrate how to download the latest version of EMQX from the official download site. For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise) for detailed information.
 
+::: tip
+Starting from EMQX 6.3.0, RPM installations support the same `/opt/emqx/...` paths as the Docker image. For the path mappings, see [Files and Directories](./install.md#files-and-directories).
+:::
+
 ## Install with rpm
 
 1. Go to the official download page and select the [**CentOS/RHEL** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=RHEL).
