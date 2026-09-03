@@ -85,8 +85,6 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
    Starting from EMQX 6.3.0, both options are enabled by default. The options can be configured independently. Enable the options that match the IdP signing behavior. Disabling both options turns off all SAML signature verification. This is insecure and should only be used for testing.
 
-4. Click **Update** to finish the configuration.
-
 ### Step 2: Add a SAML 2.0 Application in Okta's Application Catalog
 
 1. Log in to Okta as an administrator and go to the **Okta Admin Console**.
