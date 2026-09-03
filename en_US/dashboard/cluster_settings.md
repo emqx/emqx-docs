@@ -210,7 +210,7 @@ If the default value of the current alarm trigger threshold or alarm monitoring 
 
 ### Integration
 
-This page mainly provides integration configurations with third-party monitoring platforms. Currently, EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
+This page mainly provides integration configurations with third-party monitoring platforms. EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
 
 When using Prometheus, you can configure Pull or Push mode on this page. In Pull mode, Prometheus scrapes metrics from APIs under `/api/v5/prometheus/*`. Starting from EMQX 6.3.0, these APIs require authentication by default. Configure the scraper with a dedicated API key that has the `monitoring` scope. For configuration details, see [Integrate with Prometheus](../observability/prometheus.md).
 
@@ -222,7 +222,9 @@ Users can customize and modify the monitoring data in `Grafana` according to the
 
 ![image](./assets/emqx-grafana.jpg)
 
-For detailed configuration of OpenTelemetry and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md) and [Integrate with Datadog](../observability/datadog.md).
+When configuring OpenTelemetry, you can select **Generic** or **Dynatrace** under **OpenTelemetry Type**. **Generic** supports metrics, traces, and logs through standard OpenTelemetry configuration. **Dynatrace** supports traces and logs and uses OAuth2 authentication.
+
+For detailed configuration of OpenTelemetry, Dynatrace, and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md), [Integrate OpenTelemetry with Dynatrace](../observability/opentelemetry/dynatrace.md), and [Integrate with Datadog](../observability/datadog.md).
 
 ## Cluster Linking
 

@@ -202,7 +202,7 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ### 监控集成
 
-该页面主要提供了与第三方监控平台的集成配置，目前 EMQX 提供了与 Prometheus、OpenTelemetry，和 Datadog 的集成方式。
+该页面主要提供了与第三方监控平台的集成配置，EMQX 支持与 Prometheus、OpenTelemetry 和 Datadog 集成。
 
 使用 Prometheus 时，可以在该页面配置 Pull 或 Push 模式。在 Pull 模式下，Prometheus 从 `/api/v5/prometheus/*` 下的 API 抓取指标。从 EMQX 6.3.0 开始，这些 API 默认要求身份认证。请为抓取程序配置具有 `monitoring` scope 的专用 API 密钥。配置详情请参见[集成 Prometheus](../observability/prometheus.md)。
 
@@ -214,7 +214,9 @@ EMQX 支持两种不同的日志输出方式：控制台输出日志和文件输
 
 ![emqx-grafana](./assets/emqx-grafana.jpg)
 
-关于 OpenTelemetry 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md) 和 [集成 Datadog](../observability/datadog.md)。
+配置 OpenTelemetry 时，可以在 **OpenTelemetry 类型**中选择**通用**或 **Dynatrace**。**通用**支持通过标准 OpenTelemetry 配置导出指标、追踪和日志。**Dynatrace**支持追踪和日志，并使用 OAuth2 认证。
+
+关于 OpenTelemetry、Dynatrace 和 Datadog 集成的配置详情，参考[集成 OpenTelemetry](../observability/opentelemetry/opentelemetry.md)、[将 OpenTelemetry 与 Dynatrace 集成](../observability/opentelemetry/dynatrace.md)和[集成 Datadog](../observability/datadog.md)。
 
 ## 集群连接
 

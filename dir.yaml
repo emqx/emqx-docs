@@ -895,6 +895,7 @@
             - observability/opentelemetry/metrics
             - observability/opentelemetry/logs
             - observability/opentelemetry/traces
+            - observability/opentelemetry/dynatrace
             - title_en: End-to-end Traces
               title_cn: 端到端追踪
               title_ja: エンドツーエンドトレース
