@@ -306,6 +306,11 @@
 - [#18436](https://github.com/emqx/emqx/pull/18436) 修复 NATS 网关内部 JWT 认证未强制检查账户 JWT `exp`/`nbf` 声明和账户级用户撤销的问题。认证期间会拒绝已过期或尚未生效的账户 JWT，以及被账户撤销的用户 JWT；现有连接会在用户 JWT 或账户 JWT 中较早的过期时间到达时断开。格式错误且由 Resolver 预加载的账户 JWT 会在网关配置验证期间被拒绝。
 - [#18494](https://github.com/emqx/emqx/pull/18494) 修复 CoAP 网关客户端报告内部 Keepalive 检查间隔而不是已配置心跳间隔的问题。网关 API 和 `emqx ctl gateway-clients list coap` 现在会以秒为单位报告配置的心跳值。
 - [#18504](https://github.com/emqx/emqx/pull/18504) 修复 STOMP 帧对转义请求头字符和 CRLF 行尾的解析。网关现在会按照 STOMP 1.2 的要求，在请求头名称和值中解码 `\c`、`\r`、`\n` 和 `\\`。CONNECT 和 CONNECTED 帧除外：为兼容 STOMP 1.0，这两种帧的请求头（包括含冒号或反斜杠的密码）会原样传递。其他帧中未定义的转义序列会作为帧错误被拒绝。网关现在也支持 CRLF（`\r\n`）行尾和 CRLF 心跳；此前使用 CRLF 行尾的客户端无法连接。
+- [#18700](https://github.com/emqx/emqx/pull/18700) 修复从 Dashboard 保存已有 NATS 网关配置时，认证凭据可能被表单中显示的掩码值替换，导致 NATS 客户端认证失败的问题。
+
+  当用户更新其他网关设置而不更改认证配置时，现在会保留认证凭据。
+
+  NATS 网关认证配置现在会拒绝重复的认证方式和凭据条目，包括重复的 NKey 和 JWT 账户条目，以避免认证行为不明确。
 
 #### 插件
 

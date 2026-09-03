@@ -341,6 +341,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The gateway now also accepts CRLF (`\r\n`) line endings in frames and CRLF heartbeats. Before this fix, clients using CRLF line endings could not connect.
 
+- [#18700](https://github.com/emqx/emqx/pull/18700) Fixed an issue where saving an existing NATS Gateway configuration from the Dashboard could replace its authentication credentials with the masked value displayed in the form, causing NATS clients to fail authentication.
+
+  Authentication credentials are now preserved when users update other Gateway settings without changing the authentication configuration.
+
+  NATS Gateway authentication settings now reject duplicate authentication methods and credential entries, including duplicate NKeys and JWT account entries, to prevent ambiguous authentication behavior.
+
 #### Plugins
 
 - [#18188](https://github.com/emqx/emqx/pull/18188) Hardened the plugin framework package and runtime integrity checks.
