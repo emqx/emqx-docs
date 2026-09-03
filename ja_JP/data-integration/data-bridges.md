@@ -120,6 +120,7 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 - [Elasticsearch](./elasticsearch.md)
+- [Bigtable](./bigtable.md)
 - [EMQX Tables](./emqx-tables.md)
 
 **メッセージキュー**
