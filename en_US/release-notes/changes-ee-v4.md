@@ -47,10 +47,6 @@
 
   **Rolling upgrade note**: While older nodes that have not yet been upgraded to this release remain in the cluster, `admin_override = mfa_required` does not take effect on those nodes. They continue to honour only the backend `force_mfa` setting. `admin_override = mfa_exempted` continues to take effect on older nodes via the existing `disable_mfa` placeholder record path.
 
-- The default MQTT parsing mode is now strict mode to reduce injection risks from MQTT messages that contain special characters.
-
-  With the default setting `mqtt.strict_mode = true`, EMQX rejects message structures that contain invalid UTF-8 characters, control characters, or other content that does not conform to the [MQTT UTF-8 Encoded String specification](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010).
-
 - Added runtime controls for log throttling through `emqx_ctl log-throttling`.
 
   Previously, the global throttle limit, time window, and level could only be configured in the configuration file. The new `log-throttling` command group supports the following operations:
@@ -79,7 +75,7 @@
   When system memory usage exceeds the high watermark (`os_mon.sysmem_high_watermark`) and periodic GC is disabled, a smooth global GC is triggered to reduce memory usage. The trigger signal is emitted by `emqx_os_mon` when the memory alarm fires. This behaviour is controlled by two configuration options:
 
   - `node.global_gc_mem_pressure` (default `on`): whether the memory-pressure-triggered global GC is enabled.
-  - `node.global_gc_mem_pressure_min_interval` (default `15m`): the minimum interval between two memory-pressure-triggered global GCs, used for throttling.
+  - `node.global_gc_mem_pressure_min_interval` (default `5m`): the minimum interval between two memory-pressure-triggered global GCs, used for throttling.
 
 - Added the inter-node network health probe plugin, `emqx_erpc_probe`, which reports the health of links between cluster nodes through Prometheus metrics.
 
@@ -177,6 +173,12 @@
 - Fixed `emqx_ctl listeners restart http:dashboard` (and `https:dashboard`) failing with `undef` because the Dashboard listener's `start_listener/1` and `stop_listener/1` functions were not exported.
 
   Previously, the restart command dispatched to `emqx_dashboard:stop_listener/1` through `emqx_mgmt_cli:restart_http_listener/2`, but the function was not exported, so the command failed with `undef` and the Dashboard listener was never restarted. After stopping the listener, the Dashboard port (e.g. `18083`) remained unavailable. Both functions are now exported, so `listeners restart http:dashboard` stops and starts the Dashboard listener as expected.
+
+- Fixed a regression where `os_mon.memsup_system_only` was not actually enabled, so retrieving system memory usage remained slow under a large number of connections.
+
+  A previous fix (e4.4.34) intended to avoid `memsup` scanning every Erlang process for the highest-memory process by setting `os_mon.memsup_system_only = true`. However, the value was written into the `emqx.os_mon` configuration (populating the `emqx` application environment) instead of the `os_mon` application environment that `memsup` reads at startup. As a result, `memsup` still traversed all processes, and the slow `/nodes` and `/emqx_prometheus` responses persisted.
+
+  This release maps `os_mon.memsup_system_only` directly into the `os_mon` application environment (defaulting to `true`), so `memsup` starts in system-only mode and retrieves only system memory usage.
 
 ## e4.4.37
 
