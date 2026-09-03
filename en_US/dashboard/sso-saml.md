@@ -29,7 +29,7 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 3. On the configuration page, enter the following information:
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
-   - **Signed Assertions from IDP**: Require the IdP to sign SAML assertions.
+   - **Signed Assertions from IdP**: Require the IdP to sign SAML assertions.
    - **Signed Response Envelopes from IdP**: Require the IdP to sign SAML response envelopes.
 
    Starting from EMQX 6.3.0, both options are enabled by default. The options can be configured independently. Enable the options that match the IdP signing behavior. Disabling both options turns off all SAML signature verification. This is insecure and should only be used for testing.
