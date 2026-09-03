@@ -95,9 +95,11 @@ You can use EMQX Dashboard to configure how to use MongoDB for password authenti
    - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MongoDB authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
    - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
    - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported.
-   - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-     - **Connection Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a MongoDB server. Default: `8`. 
-     - **Connect Timeout** (optional): Define the duration to wait before considering a connection as timed out. Supported units: milliseconds, seconds, minutes, hours. Default: `20` second.
+   - **Advanced Settings**: Configure the following optional connection settings:
+     - **Auth Source**: Specify the MongoDB database that stores the user's authentication credentials. For example, enter `admin` if the user was created in the `admin` database.
+     - **Use Legacy Protocol**: Select how EMQX uses MongoDB's legacy protocol. `auto` lets EMQX detect which protocol the server supports, `true` uses the legacy protocol, and `false` does not use it. Default: `auto`.
+     - **Connection Pool Size**: Specify the number of concurrent connections from an EMQX node to a MongoDB server. Default: `8`.
+     - **Connect Timeout**: Specify how long EMQX waits to establish a connection. Supported units: milliseconds, seconds, minutes, and hours. Default: `20` seconds.
 
 5. After you finish the settings, click **Create**.
 

@@ -68,6 +68,10 @@ mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
 mqtt.namespace_as_mountpoint = true
 ```
 
+In this example, EMQX derives the namespace from the username before authentication and stores it in `client_attrs.tns`.
+
+Starting from EMQX 6.3.0, EMQX rejects a connection if the `mqtt.clientid_override` expression raises an error or renders an empty string. Ensure that every client provides a username in the format expected by the namespace expression. For other namespace resolution modes, see [Client ID Isolation](./namespace-global-settings.md#client-id-isolation).
+
 These settings will:
 
 - Automatically add a namespace prefix to client IDs, preventing client ID conflicts across namespaces.

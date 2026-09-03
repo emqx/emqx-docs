@@ -66,6 +66,10 @@ mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
 mqtt.namespace_as_mountpoint = true
 ```
 
+在本示例中，EMQX 会在认证前从用户名中提取命名空间，并将结果保存到 `client_attrs.tns`。
+
+从 EMQX 6.3.0 开始，如果 `mqtt.clientid_override` 表达式求值出错或生成空字符串，EMQX 会拒绝连接。请确保每个客户端提供的用户名符合命名空间表达式要求的格式。其他命名空间解析模式请参见[客户端 ID 隔离](./namespace-global-settings.md#客户端-id-隔离)。
+
 上述配置将：
 
 - 自动为客户端 ID 添加命名空间前缀，避免不同命名空间之间的客户端 ID 冲突；
