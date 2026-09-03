@@ -72,18 +72,20 @@ If a node in the topology diagram turns gray, it indicates that the node is curr
 
 ### Node List
 
-Clicking **View Nodes** at the upper right corner of the node card or selecting the **Nodes** tab at the top navigates to the Nodes page. This page lists all nodes currently in the EMQX cluster, offering a quick view of each node's name, status, uptime, version, connections, Erlang process count, memory usage, CPU load, and other key metrics. Clicking the **Refresh** button in the top right corner updates the list with the latest node information in real time.
+Click **View Nodes** in the upper-right corner of the node card, or select the **Nodes** tab, to open the Nodes page. This page lists all nodes in the EMQX cluster. It shows each node's name, status, uptime, version, connections, role, security profile, feature preset, Erlang process count, memory usage, and CPU load. The security profile and feature preset are fixed when the node starts. Compare the **Security Profile** and **Feature Preset** columns across nodes to identify inconsistent startup settings in the cluster.
 
-![image](./assets/node_list.png)
+Stopped nodes and nodes running versions earlier than 6.3 do not report the security profile or feature preset. Clicking the **Refresh** button in the upper-right corner updates the list with the latest node information.
+
+![Node list](./assets/node_list.png)
 
 ### Node Details
 
 The node list can only show partial basic information about nodes. To view the comprehensive information about a node, click the node name in the **Name** column to access the node's details page. On the details page, you will find the following cards:
 
-- In the **Node Info** card, in addition to basic node information, you can also view details such as the maximum file handle count for the current node, system paths, and log paths (displaying log paths requires enabling file log processing in the configuration).
+- In the **Node Info** card, you can view the node role, security profile, feature preset, maximum file descriptor limit, system path, and log path. The log path is available only when file logging is enabled.
 - In the **Node Statistics** card, you can see various statistics about the current node, including the number of connections, subscriptions, topics, retained messages, sessions, and shared subscriptions. The statistics values are divided into two parts separated by a slash ("/"): the left side shows real-time data and the right side shows the high watermark data, which represents the peak values reached by the current data.
 
-![image](./assets/node-detail.png)
+![Node details](./assets/node-detail.png)
 
 ## Metrics
 

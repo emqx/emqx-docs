@@ -31,6 +31,12 @@ EMQX reads the variable once at boot, before it parses the configuration files, 
 The security profile only changes default behaviors. Most of the behaviors listed below can also be configured individually, regardless of the selected profile.
 :::
 
+## Verify the Active Profile
+
+In the Dashboard, click **Monitoring** -> **Cluster Overview** -> **Nodes** and check the **Security Profile** column. The column shows whether each node started with the `legacy` or `hardened` profile. The value is fixed at startup and can change only after the node restarts.
+
+Compare the values across all running nodes to verify that the cluster uses a consistent profile. Stopped nodes and nodes running versions earlier than 6.3 do not report a security profile.
+
 ## Behavior Changes in the Hardened Profile
 
 The `hardened` profile changes the following behaviors compared to `legacy`.
@@ -110,6 +116,12 @@ The option is node-local. EMQX reads it once at boot, so changing it requires a 
 ::: tip
 The official Docker image's entrypoint sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all` when the variable is unset or empty, because a container's loopback interface is not reachable through published ports. With this default, listeners whose binds specify only a port listen on all network interfaces under either profile, allowing access through published container ports. To override it, explicitly set the environment variable to another supported value. Listener binds with an explicit IP address remain unchanged.
 :::
+
+## Restore Backups Across Security Profiles
+
+A data backup records the security profile of the node from which it was exported. By default, EMQX rejects a backup whose recorded security profile is `legacy`, as well as a backup without this metadata, when it is imported into a `hardened` node. Importing into a `legacy` node is not affected.
+
+Review the differences between the profiles before overriding this protection. For the compatibility rules and override methods, see [Backup and Restore](../operations/backup-restore.md#security-profile-compatibility).
 
 ## Rolling Upgrade
 
