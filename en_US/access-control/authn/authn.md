@@ -225,8 +225,8 @@ Use only one Client ID override mechanism for a connection. If both mechanisms a
 | [JWT](./jwt.md) | Add `clientid_override` as a top-level string claim in the JWT payload. |
 | [LDAP](./ldap.md) | Store the value in an LDAP attribute. Set **Client ID Override Attribute** to the name of that attribute. The default attribute name is `clientIdOverride`. |
 | [MongoDB](./mongodb.md) | Store the value in a document field. Set **Client ID Override Field** to the name of that field. The default field name is `clientid_override`. |
-| [MySQL](./mysql.md) | Return the value in a query-result column named `clientid_override`. |
-| [PostgreSQL](./postgresql.md) | Return the value in a query-result column named `clientid_override`. |
+| [MySQL](./mysql.md) | Return the value in a query result column named `clientid_override`. |
+| [PostgreSQL](./postgresql.md) | Return the value in a query result column named `clientid_override`. |
 | [Redis](./redis.md) | Store the value in a `clientid_override` field and include that field in the query command. |
 
 If you use the replacement Client ID for Client ID isolation, ensure that it is globally unique.
