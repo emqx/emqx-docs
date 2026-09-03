@@ -284,6 +284,11 @@
 - [#18300](https://github.com/emqx/emqx/pull/18300) 无论 `verify` 模式为何，连接器 TLS 设置中的空证书文件字段现在都视为未配置。此前，`verify_peer` 模式会拒绝空的客户端证书字段，尽管对端验证并不要求客户端证书。
 - [#18392](https://github.com/emqx/emqx/pull/18392) 修复不同命名空间中同名的聚合动作（S3、S3Tables、Azure Blob Storage、Snowflake Aggregated）共用临时文件工作目录的问题。
 - [#18449](https://github.com/emqx/emqx/pull/18449) 修复 PostgreSQL 动作写入数据时将罕见的 `sock_closed` 竞态错误错误地视为不可恢复的问题。EMQX 现在将其视为可恢复。
+- [#18767](https://github.com/emqx/emqx/pull/18767) 修复 RocketMQ 连接器被报告为属于其实际并不归属的命名空间的问题。
+
+  RocketMQ 连接器自身带有一个 `namespace` 配置字段，用于保存 RocketMQ 实例命名空间。连接器 API 响应此前会将该值放在与 EMQX 命名空间相同的 JSON 字段中，导致 Dashboard 将该连接器视为属于这个名称的命名空间，并显示“Only the administrator of namespace <name> can perform operations on the connector”；打开连接器时还会失败并提示“Managed namespace not found”。
+
+  现在，连接器 API 响应中的 `namespace` 字段始终表示 EMQX 命名空间。RocketMQ 实例命名空间不再返回，并且在更新连接器时如果未提供该字段，其值会保持不变。
 
 #### 规则引擎
 
