@@ -1,156 +1,156 @@
-# Ingest MQTT Data into Bigtable
+# Bigtable に MQTT データを取り込む
 
-[Cloud Bigtable](https://cloud.google.com/bigtable) is a fully managed, wide-column NoSQL database service on Google Cloud. It is designed for large-scale, low-latency workloads, such as time series data, telemetry storage, event records, and high-throughput IoT data ingestion.
+[Cloud Bigtable](https://cloud.google.com/bigtable) は、Google Cloud 上のフルマネージドのワイドカラム型 NoSQL データベースサービスです。時系列データ、テレメトリストレージ、イベント記録、高スループットの IoT データ取り込みなど、大規模かつ低レイテンシのワークロード向けに設計されています。
 
-EMQX supports integration with Bigtable through the rule engine and a Bigtable Sink. You can process MQTT messages with rule SQL, map the selected fields to Bigtable row keys and cell mutations, and write the processed data to a Bigtable table in real time.
+EMQX はルールエンジンと Bigtable Sink を通じて Bigtable との連携をサポートしています。MQTT メッセージをルール SQL で処理し、選択したフィールドを Bigtable の行キーやセルのミューテーションにマッピングし、処理済みデータをリアルタイムで Bigtable テーブルに書き込みます。
 
-This page introduces how the Bigtable data integration works and provides a workflow for creating and testing the integration in the EMQX Dashboard.
+本ページでは、Bigtable データ統合の仕組みを紹介し、EMQX ダッシュボードでの統合作成およびテストのワークフローを説明します。
 
-## How It Works
+## 仕組み
 
-Bigtable data integration is an out-of-the-box feature of EMQX. It helps users stream MQTT data into Google Cloud and store device telemetry or event data in Bigtable for later query, analysis, or downstream processing.
+Bigtable データ統合は EMQX の標準機能です。MQTT データを Google Cloud にストリーミングし、デバイスのテレメトリやイベントデータを Bigtable に保存して、後のクエリ、分析、下流処理に活用できます。
 
 ![bigtable_architecture](./assets/bigtable_architecture.png)
 
-EMQX forwards MQTT data to Bigtable through the rule engine and Sink. The complete process is as follows:
+EMQX はルールエンジンと Sink を介して MQTT データを Bigtable に転送します。処理の流れは以下の通りです。
 
-1. **IoT Devices Publish Messages**: Devices publish telemetry, status, or event data to MQTT topics.
-2. **Rule Engine Processes Messages**: The rule engine matches MQTT messages by topic and uses SQL to extract or transform the fields that Bigtable requires.
-3. **Writing to Bigtable**: The Bigtable Sink writes the rule output to a Bigtable table. Each rule output record is converted into a Bigtable row mutation by using the configured row key and `set_cell` mutation fields.
+1. **IoT デバイスがメッセージをパブリッシュ**：デバイスがテレメトリ、ステータス、イベントデータを MQTT トピックにパブリッシュします。
+2. **ルールエンジンがメッセージを処理**：ルールエンジンはトピックで MQTT メッセージをマッチングし、SQL で Bigtable に必要なフィールドを抽出または変換します。
+3. **Bigtable への書き込み**：Bigtable Sink は各ルール出力レコードを行ミューテーションとして Bigtable テーブルに書き込みます。設定した行キーや `set_cell` ミューテーションフィールドを使用します。下流アプリケーションやサービスは保存されたデータを低レイテンシのアプリケーション、時系列クエリ、分析処理、AI/ML パイプラインに利用できます。
 
-## Features and Benefits
+## 特長と利点
 
-Integrating EMQX with Bigtable provides the following benefits:
+EMQX と Bigtable の統合により、以下の利点があります。
 
-- **High-Throughput IoT Data Ingestion**: Write MQTT messages to Bigtable for large-scale telemetry and event workloads.
-- **Flexible Field Mapping**: Use rule SQL to explicitly select and alias the fields used as the Bigtable row key, column family, column qualifier, timestamp, and cell value.
-- **Batch and Asynchronous Writes**: Use batch mode and asynchronous request mode to improve write throughput and reduce the impact on MQTT message publishing.
-- **Google Cloud Integration**: Store MQTT data in Bigtable and use it with other Google Cloud services for analytics, processing, or application development.
+- **高スループットの IoT データ取り込み**：大規模なテレメトリやイベントワークロードに対し、MQTT メッセージを Bigtable に書き込みます。
+- **柔軟なフィールドマッピング**：ルール SQL で Bigtable の行キー、カラムファミリー、カラム修飾子、タイムスタンプ、セル値として使用するフィールドを明示的に選択・エイリアス設定できます。
+- **バッチおよび非同期書き込み**：バッチモードや非同期リクエストモードを利用して書き込みスループットを向上させ、MQTT メッセージのパブリッシュへの影響を軽減します。
+- **Google Cloud との統合**：MQTT データを Bigtable に保存し、他の Google Cloud サービスと連携して分析、処理、アプリケーション開発に活用できます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before creating the Bigtable data integration.
+Bigtable データ統合を作成する前に必要な準備を説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
-- A Google Cloud project with Bigtable enabled
-- A Bigtable instance, table, and at least one column family
-- Authentication information required by the authentication method you plan to use:
-  - **Service Account JSON**: A service account key JSON file.
-  - **Workload Identity Federation (WIF)**: A workload identity pool, provider, project ID, project number, service account email, and OAuth 2.0 client credentials from the external identity provider.
-  - **Attached Service Account**: An EMQX deployment running on GCP Compute Engine that meets the [Attached Service Account prerequisites](#attached-service-account-prerequisites).
+- EMQX データ統合の[ルール](./rules.md)の知識
+- [データ統合](./data-bridges.md)の知識
+- Bigtable が有効な Google Cloud プロジェクト
+- Bigtable インスタンス、テーブル、および少なくとも1つのカラムファミリー
+- 利用予定の認証方式に必要な認証情報：
+  - **サービスアカウント JSON**：サービスアカウントキーの JSON ファイル
+  - **Workload Identity Federation (WIF)**：ワークロードアイデンティティプール、プロバイダー、プロジェクト ID、プロジェクト番号、サービスアカウントメール、外部 ID プロバイダーからの OAuth 2.0 クライアント認証情報
+  - **Attached Service Account**：GCP Compute Engine 上で動作する EMQX デプロイメントで、[Attached Service Account の前提条件](#attached-service-account-prerequisites)を満たすもの
 
-### Create Service Account Key in GCP
+### GCP でサービスアカウントキーを作成する
 
-To use **Service Account JSON** authentication, create a Google Cloud service account and generate a key in JSON format.
+**サービスアカウント JSON** 認証を利用する場合は、Google Cloud でサービスアカウントを作成し、JSON 形式のキーを生成します。
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.
-2. Grant the service account permissions to write to the Bigtable instance and table. For example, assign a Bigtable role that allows data read/write operations on the target table.
-3. Click the email address of the service account you created.
-4. Click the **Keys** tab. In the **Add key** dropdown list, select **Create new key** and download the key in JSON format.
+1. GCP アカウントで[サービスアカウント](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)を作成します。
+2. サービスアカウントに Bigtable インスタンスとテーブルへの書き込み権限を付与します。例として、対象テーブルのデータ読み書きが可能な Bigtable ロールを割り当てます。
+3. 作成したサービスアカウントのメールアドレスをクリックします。
+4. **Keys** タブをクリックし、**Add key** のドロップダウンから **Create new key** を選択し、JSON 形式でキーをダウンロードします。
 
    ::: tip
 
-   Store the service account key securely. You will use it later when creating the Bigtable connector.
+   サービスアカウントキーは安全に保管してください。後で Bigtable コネクター作成時に使用します。
 
    :::
 
-### Set Up Workload Identity Federation in GCP
+### GCP で Workload Identity Federation を設定する
 
-Workload Identity Federation (WIF) allows EMQX to access GCP resources without a long-lived service account key file. EMQX exchanges a token from an external identity provider, such as Microsoft Azure, for a temporary GCP token through GCP Security Token Service, then uses it to impersonate a GCP service account. Token renewal is handled automatically.
+Workload Identity Federation (WIF) により、EMQX は長期間有効なサービスアカウントキーを使わずに GCP リソースにアクセスできます。EMQX は Microsoft Azure などの外部 ID プロバイダーからトークンを受け取り、GCP Security Token Service を介して一時的な GCP トークンに交換し、GCP サービスアカウントを代行します。トークンの更新は自動処理されます。
 
-To use WIF, complete the following in your GCP project before creating the connector:
+WIF を利用するには、コネクター作成前に GCP プロジェクトで以下を完了してください。
 
-1. In the Google Cloud console, go to **IAM & Admin** -> **Workload Identity Federation**, create a workload identity pool, and note the **Pool ID** and **Project Number**.
-2. Add a provider to the pool and note the **Provider ID**. For OIDC-based authentication, obtain the OAuth 2.0 client credentials from your external identity provider, including the client ID, client secret, token endpoint URI, and request scope.
-3. Grant the workload identity pool permission to impersonate the GCP service account with access to the Bigtable instance and table. Note the service account email.
-4. Note the **GCP Project ID** of the project that contains the Bigtable resources.
+1. Google Cloud コンソールの **IAM & Admin** -> **Workload Identity Federation** でワークロードアイデンティティプールを作成し、**Pool ID** と **Project Number** を控えます。
+2. プールにプロバイダーを追加し、**Provider ID** を控えます。OIDC ベース認証の場合、外部 ID プロバイダーから OAuth 2.0 クライアント認証情報（クライアント ID、クライアントシークレット、トークンエンドポイント URI、リクエストスコープ）を取得します。
+3. ワークロードアイデンティティプールに Bigtable インスタンスとテーブルにアクセス可能な GCP サービスアカウントの代行権限を付与し、サービスアカウントメールを控えます。
+4. Bigtable リソースを含むプロジェクトの **GCP プロジェクト ID** を控えます。
 
 ::: tip
 
-See [Configure Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers) for detailed instructions.
+詳細は[Workload Identity Federation の設定](https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers)を参照してください。
 
 :::
 
-Example: Microsoft Azure (Entra ID)
+例：Microsoft Azure (Entra ID)
 
-Register an application that exposes an API in [Microsoft Entra ID](https://portal.azure.com/) and create a client secret for it. Use the following values when configuring the connector:
+[Microsoft Entra ID](https://portal.azure.com/) で API を公開するアプリケーションを登録し、クライアントシークレットを作成します。コネクター設定時に以下の値を使用します。
 
-| Connector Field | Value |
+| コネクター項目 | 値 |
 | --- | --- |
-| **OAuth Token Endpoint URI** | `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token` |
-| **OAuth Client ID** | Application (client) ID, in the format `api://<application-id>` |
-| **OAuth Client Secret** | Client secret generated for the application |
-| **OAuth Request Scope** | `api://<application-id>/.default` |
+| **OAuth トークンエンドポイント URI** | `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token` |
+| **OAuth クライアント ID** | `api://<application-id>` 形式のアプリケーション（クライアント）ID |
+| **OAuth クライアントシークレット** | アプリケーション用に生成したクライアントシークレット |
+| **OAuth リクエストスコープ** | `api://<application-id>/.default` |
 
 ::: note
 
-The **OAuth Request Scope** must match the application's audience (`aud`) exactly, otherwise the token exchange with GCP STS fails. When granting service account access to the WIF pool, use the **Object ID**, not the application ID, as the subject identifier. The Object ID is available on the application's overview page under **Enterprise applications** in the Azure portal.
+**OAuth リクエストスコープ** はアプリケーションのオーディエンス (`aud`) と完全に一致する必要があります。そうでないと GCP STS とのトークン交換に失敗します。WIF プールにサービスアカウントアクセスを付与する際は、アプリケーション ID ではなく **Object ID** をサブジェクト識別子として使用してください。Object ID は Azure ポータルのアプリケーション概要ページの **Enterprise applications** にて確認できます。
 
 :::
 
-### Attached Service Account Prerequisites
+### Attached Service Account の前提条件
 
-To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. Make sure the instance's OAuth access scopes allow access to Bigtable. Google recommends using the `cloud-platform` scope (`https://www.googleapis.com/auth/cloud-platform`) and restricting the service account's permissions through IAM roles. The service account must have permission to access the target Bigtable instance and table. For more information, see [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts) in the Google Cloud documentation.
+**Attached Service Account** 認証を利用するには、EMQX が GCP Compute Engine インスタンス上で動作し、そのインスタンスにサービスアカウントがアタッチされている必要があります。インスタンスの OAuth アクセススコープは Bigtable へのアクセスを許可している必要があります。Google は `cloud-platform` スコープ（`https://www.googleapis.com/auth/cloud-platform`）の使用を推奨し、サービスアカウントの権限は IAM ロールで制限してください。サービスアカウントは対象 Bigtable インスタンスとテーブルへのアクセス権を持つ必要があります。詳細は Google Cloud ドキュメントの[サービスアカウント](https://cloud.google.com/compute/docs/access/service-accounts)を参照してください。
 
-The target Bigtable instance and table must be in the GCP project associated with the Compute Engine instance. In an EMQX cluster, every node must meet these requirements and run on a Compute Engine instance in that project.
+対象の Bigtable インスタンスとテーブルは、Compute Engine インスタンスに関連付けられた GCP プロジェクト内に存在する必要があります。EMQX クラスターの場合、すべてのノードがこれらの要件を満たし、そのプロジェクトの Compute Engine インスタンス上で動作している必要があります。
 
-When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
+コネクター起動時、EMQX はインスタンスメタデータエンドポイントから自動的に GCP プロジェクト ID とアクセストークンを取得します。サービスアカウントキーのアップロードは不要です。
 
-### Create and Manage Bigtable Resources in GCP
+### GCP で Bigtable リソースを作成・管理する
 
-Before configuring the Bigtable data integration in EMQX, create the target Bigtable resources in Google Cloud.
+EMQX で Bigtable データ統合を設定する前に、Google Cloud で対象の Bigtable リソースを作成してください。
 
-1. In the Google Cloud console, go to the **Bigtable** page.
-2. Create or select a Bigtable instance. When creating an instance, **Instance name** is only used as the display name in the Google Cloud console. You can enter a readable name, such as `EMQX MQTT Messages`. **Instance ID** is the value you will use later in EMQX, and should be a simple unique identifier, such as `emqxinst`.
-3. Create a table. Note the table ID, for example, `mqtt_messages`.
-4. Create at least one column family in the table, for example, `cf`.
+1. Google Cloud コンソールの **Bigtable** ページにアクセスします。
+2. Bigtable インスタンスを作成または選択します。インスタンス作成時、**インスタンス名** は Google Cloud コンソールの表示名にのみ使用されます。`EMQX MQTT Messages` のようなわかりやすい名前を入力できます。**インスタンス ID** は後で EMQX で使用する値で、`emqxinst` のようなシンプルで一意な識別子にしてください。
+3. テーブルを作成します。テーブル ID（例：`mqtt_messages`）を控えます。
+4. テーブルに少なくとも1つのカラムファミリーを作成します（例：`cf`）。
 
    ::: tip
 
-   EMQX uses the **Instance ID** and **Table ID**, not the instance display name in the Google Cloud console or fully qualified resource names such as `projects/<project-id>/instances/<instance-id>`.
+   EMQX では Google Cloud コンソールの表示名や完全修飾リソース名（`projects/<project-id>/instances/<instance-id>`）ではなく、**インスタンス ID** と **テーブル ID** を使用します。
 
    :::
 
-## Create a Bigtable Connector
+## Bigtable コネクターを作成する
 
-Before adding a Bigtable Sink action, create a Bigtable connector to establish the connection between EMQX and Bigtable.
+Bigtable Sink アクションを追加する前に、EMQX と Bigtable の接続を確立するための Bigtable コネクターを作成します。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page, select **Bigtable**, and click **Next**.
-3. Enter a connector name and description, such as `my_bigtable`. The name is used to associate the Bigtable Sink with the connector and must be unique within the cluster.
-4. Configure the authentication options:
-   - **Authentication**: Select how EMQX authenticates with GCP.
-     - **Service Account JSON**: Upload the JSON service account key exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp) to **GCP Service Account Credentials**. You can click **Select file** to upload the JSON file.
-     - **Workload Identity Federation (WIF)**: Fill in the following fields. This method does not require a service account JSON file. For prerequisites, see [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp).
-       - **GCP Project ID**: GCP project ID of the resources accessed by the connector.
-       - **GCP Project Number**: GCP project number of the resources accessed by the connector.
-       - **Service Account Email**: Email address of the service account to impersonate.
-       - **Workload Identity Pool ID**: Workload identity pool ID used for WIF token exchange.
-       - **Workload Identity Provider ID**: Workload identity provider ID used for WIF token exchange.
-       - **Credential Type**: Credential type used by the external identity provider. Currently, OIDC client credentials are supported. After selecting this type, fill in the following fields:
-         - **OAuth Client ID**: Client ID used to request tokens from the OAuth server.
-         - **OAuth Client Secret**: Client secret used to request tokens from the OAuth server.
-         - **OAuth Token Endpoint URI**: OAuth token endpoint URI of the OIDC provider.
-         - **OAuth Request Scope**: `scope` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
-         - **OAuth Request Audience**: `audience` used when requesting an access token from the OAuth server. Fill it in if required by the provider.
-     - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. For prerequisites, see [Attached Service Account Prerequisites](#attached-service-account-prerequisites).
-   - **Enable TLS**: Enable TLS if it is required by your deployment.
-   - **Advanced Settings**: Expand this section to configure advanced connection options.
-5. Before clicking **Create**, you can click **Test Connectivity** to verify that EMQX can connect to Bigtable.
-6. Click the **Create** button to complete the connector setup. A **Created Successfully** dialog appears asking whether to create a rule now. Click **Create Rule** to proceed directly to rule creation with the connector pre-selected, or click **Back To Connector List** to return and create a rule later.
+1. EMQX ダッシュボードで **Integration** -> **Connectors** に移動します。
+2. 画面右上の **Create** をクリックし、**Bigtable** を選択して **Next** をクリックします。
+3. コネクター名と説明を入力します（例：`my_bigtable`）。この名前は Bigtable Sink とコネクターを紐付けるために使用され、クラスター内で一意である必要があります。
+4. 認証オプションを設定します：
+   - **Authentication**：EMQX が GCP に認証する方法を選択します。
+     - **Service Account JSON**：[GCP でサービスアカウントキーを作成する](#gcp-でサービスアカウントキーを作成する)でエクスポートした JSON ファイルを **GCP Service Account Credentials** にアップロードします。**Select file** をクリックして JSON ファイルをアップロードできます。
+     - **Workload Identity Federation (WIF)**：以下の項目を入力します。この方法はサービスアカウント JSON ファイルを必要としません。前提条件は[WIF の設定](#gcp-で-workload-identity-federation-を設定する)を参照してください。
+       - **GCP Project ID**：コネクターがアクセスするリソースの GCP プロジェクト ID
+       - **GCP Project Number**：コネクターがアクセスするリソースの GCP プロジェクト番号
+       - **Service Account Email**：代行するサービスアカウントのメールアドレス
+       - **Workload Identity Pool ID**：WIF トークン交換に使用するワークロードアイデンティティプール ID
+       - **Workload Identity Provider ID**：WIF トークン交換に使用するワークロードアイデンティティプロバイダー ID
+       - **Credential Type**：外部 ID プロバイダーが使用する認証情報タイプ。現在は OIDC クライアント認証情報をサポート。選択後、以下を入力：
+         - **OAuth Client ID**：OAuth サーバーからトークンを要求するためのクライアント ID
+         - **OAuth Client Secret**：OAuth サーバーからトークンを要求するためのクライアントシークレット
+         - **OAuth Token Endpoint URI**：OIDC プロバイダーの OAuth トークンエンドポイント URI
+         - **OAuth Request Scope**：OAuth サーバーからアクセストークンを要求する際のスコープ。プロバイダーが必要な場合に入力。
+         - **OAuth Request Audience**：OAuth サーバーからアクセストークンを要求する際のオーディエンス。プロバイダーが必要な場合に入力。
+     - **Attached Service Account**：追加項目は不要です。EMQX はインスタンスメタデータエンドポイントから GCP プロジェクト ID とアクセストークンを自動取得します。前提条件は[Attached Service Account の前提条件](#attached-service-account-prerequisites)を参照してください。
+   - **Enable TLS**：デプロイメントで TLS が必要な場合は有効にします。
+   - **Advanced Settings**：詳細な接続オプションを設定する場合はこのセクションを展開します。
+5. **Create** をクリックする前に、**Test Connectivity** をクリックして EMQX が Bigtable に接続できるか確認できます。
+6. **Create** をクリックしてコネクター設定を完了します。成功ダイアログが表示され、ルールを今すぐ作成するか尋ねられます。**Create Rule** をクリックするとコネクターが事前選択された状態でルール作成画面に進みます。**Back To Connector List** をクリックするとリストに戻り、後でルールを作成できます。
 
-## Create a Rule with Bigtable Sink
+## Bigtable Sink を使ったルールの作成
 
-This section demonstrates how to create a rule that writes MQTT messages to Bigtable.
+MQTT メッセージを Bigtable に書き込むルールの作成方法を説明します。
 
-1. If you clicked **Create Rule** in the previous step, the **Add Action** panel opens automatically with **Type of Action** set to `Bigtable` and the connector pre-selected. Skip to step 5 to configure the action first; after the action is created, return to the rule page and complete the rule ID and SQL settings. Otherwise, go to the Dashboard **Integration** -> **Rules** page and click **Create** in the top right corner.
-2. Enter `my_rule` as the rule ID.
-3. In the **SQL Editor**, enter the rule SQL. The Bigtable Sink uses field names configured in the Sink to look up values from the rule output. Therefore, the SQL must explicitly select and alias all fields required by the Bigtable mutation.
+1. 前のステップで **Create Rule** をクリックした場合、**Add Action** パネルが自動で開き、**Type of Action** が `Bigtable`、コネクターが事前選択されています。まずアクションを設定するため、ステップ5に進んでください。アクション作成後にルールページに戻り、ルール ID と SQL 設定を完了します。そうでない場合はダッシュボードの **Integration** -> **Rules** ページに移動し、右上の **Create** をクリックします。
+2. ルール ID に `my_rule` と入力します。
+3. **SQL Editor** にルール SQL を入力します。Bigtable Sink は Sink で設定したフィールド名を使ってルール出力から値を参照するため、SQL では Bigtable ミューテーションに必要なすべてのフィールドを明示的に選択し、エイリアスを付ける必要があります。
 
-   Example:
+   例：
 
    ```sql
    SELECT
@@ -163,86 +163,86 @@ This section demonstrates how to create a rule that writes MQTT messages to Bigt
      "t/bigtable"
    ```
 
-   In this example:
+   この例では：
 
-   - `rk` is used as the Bigtable row key.
-   - `fn` is used as the column family name.
-   - `cq` is used as the column qualifier.
-   - `tm` is used as the timestamp in microseconds.
-   - `v` is used as the cell value.
+   - `rk` が Bigtable の行キーとして使われます。
+   - `fn` がカラムファミリー名として使われます。
+   - `cq` がカラム修飾子として使われます。
+   - `tm` がマイクロ秒単位のタイムスタンプとして使われます。
+   - `v` がセルの値として使われます。
 
    ::: tip
 
-   The Bigtable Sink fields are key names that refer to rule output fields. They are not template expressions. If a required key is not selected by the rule SQL, the Sink cannot build the Bigtable mutation for that message.
+   Bigtable Sink のフィールドはルール出力のフィールド名を指すキー名であり、テンプレート式ではありません。SQL で必要なキーが選択されていない場合、そのメッセージの Bigtable ミューテーションを構築できません。
 
    :::
 
-4. Click **Add Action**. In the **Add Action** panel, select `Bigtable` from the **Type of Action** dropdown list.
-5. Keep **Action** as `Create Action`, or select an existing Bigtable Sink. If you entered rule creation from the connector success dialog, confirm that **Type of Action** is already set to `Bigtable` and the connector is already pre-selected.
-6. In **Name**, enter a Sink name. You can also enter a description in **Description**.
-7. In **Connectors**, select the Bigtable connector created in [Create a Bigtable Connector](#create-a-bigtable-connector) if it is not already selected. You can click the plus icon to create a new connector from this panel.
-8. Configure the Bigtable action parameters:
+4. **Add Action** をクリックし、**Add Action** パネルで **Type of Action** ドロップダウンから `Bigtable` を選択します。
+5. **Action** は `Create Action` のままにするか、既存の Bigtable Sink を選択します。コネクター成功ダイアログからルール作成した場合は、**Type of Action** がすでに `Bigtable` に設定され、コネクターも事前選択されています。
+6. **Name** に Sink 名を入力します。**Description** に説明を入力することも可能です。
+7. **Connectors** で、[Bigtable コネクターを作成する](#bigtable-コネクターを作成する)で作成した Bigtable コネクターを選択します。未選択の場合はこのパネルからプラスアイコンで新規作成も可能です。
+8. Bigtable アクションパラメーターを設定します：
 
-   | Field | Description | Example |
+   | フィールド | 説明 | 例 |
    | --- | --- | --- |
-   | **Instance ID** | Bigtable instance identifier. Use the simple ID, not the fully qualified `projects/.../instances/...` value. | `emqxinst` |
-   | **Table ID** | Bigtable table identifier. Use the simple ID, not the fully qualified `projects/.../instances/.../tables/...` value. | `mqtt_messages` |
-   | **Row Key** | Key name that contains the message's row key. | `rk` |
-   | **Mutations** | List of cell mutations to apply for a single received message. Click **Add** to add a mutation. | - |
-   | **Mutation Type** | Mutation operation type. The current integration supports Set Cell mutations. | `Set Cell` |
-   | **Column Family** | Key name that contains the mutation's column family. | `fn` |
-   | **Column Qualifier** | Key name that contains the mutation's column qualifier. | `cq` |
-   | **Timestamp (microseconds)** | Key name that contains the mutation's timestamp in microseconds. | `tm` |
-   | **Value** | Key name that contains the mutation's value. | `v` |
+   | **Instance ID** | Bigtable インスタンス識別子。完全修飾の `projects/.../instances/...` ではなくシンプルな ID を使用。 | `emqxinst` |
+   | **Table ID** | Bigtable テーブル識別子。完全修飾の `projects/.../instances/.../tables/...` ではなくシンプルな ID を使用。 | `mqtt_messages` |
+   | **Row Key** | メッセージの行キーを含むキー名。 | `rk` |
+   | **Mutations** | 受信メッセージに適用するセルミューテーションのリスト。**Add** をクリックしてミューテーションを追加。 | - |
+   | **Mutation Type** | ミューテーション操作タイプ。現在は Set Cell ミューテーションをサポート。 | `Set Cell` |
+   | **Column Family** | ミューテーションのカラムファミリーを含むキー名。 | `fn` |
+   | **Column Qualifier** | ミューテーションのカラム修飾子を含むキー名。 | `cq` |
+   | **Timestamp (microseconds)** | ミューテーションのタイムスタンプ（マイクロ秒単位）を含むキー名。 | `tm` |
+   | **Value** | ミューテーションの値を含むキー名。 | `v` |
 
-9. Configure **Fallback Actions** if you want to improve reliability when message delivery fails. See [Fallback Actions](./data-bridges.md#fallback-actions).
-10. Configure **Advanced Settings** as needed. See [Advanced Settings](#advanced-settings).
-11. Before clicking **Create**, you can click **Test Connectivity** to verify that the Sink can connect to Bigtable.
-12. Click **Create** to complete the Sink configuration.
-13. Back on the **Create Rule** page, click **Create** to create the rule.
+9. メッセージ配信失敗時の信頼性向上のために **Fallback Actions** を設定することも可能です。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
+10. 必要に応じて **Advanced Settings** を設定します。詳細は[Advanced Settings](#advanced-settings)を参照してください。
+11. **Create** をクリックする前に、**Test Connectivity** をクリックして Sink が Bigtable に接続できるか確認できます。
+12. **Create** をクリックして Sink 設定を完了します。
+13. **Create Rule** ページに戻り、**Create** をクリックしてルールを作成します。
 
-## Test the Rule
+## ルールのテスト
 
-1. Use MQTTX to publish a message to the topic `t/bigtable`:
+1. MQTTX を使ってトピック `t/bigtable` にメッセージをパブリッシュします：
 
    ```bash
    mqttx pub -i emqx_c -t t/bigtable -m '{ "msg": "hello Bigtable" }'
    ```
 
-2. Check the rule and Sink metrics. The matched and successful counts should increase.
-3. In Google Cloud, query the target Bigtable table and verify that a row was written with:
-   - Row key: the MQTT client ID, for example, `emqx_c`
-   - Column family: `cf`
-   - Column qualifier: empty string
-   - Cell value: the MQTT payload
+2. ルールと Sink のメトリクスを確認します。マッチ数と成功数が増加しているはずです。
+3. Google Cloud で対象の Bigtable テーブルをクエリし、以下の内容で行が書き込まれていることを確認します：
+   - 行キー：MQTT クライアント ID（例：`emqx_c`）
+   - カラムファミリー：`cf`
+   - カラム修飾子：空文字列
+   - セル値：MQTT ペイロード
 
 ## Advanced Settings
 
-This section describes common advanced settings for the Bigtable connector and Sink.
+Bigtable コネクターと Sink の一般的な詳細設定を説明します。
 
-### Connector Advanced Settings
+### コネクターの詳細設定
 
-| Field | Description | Default Value |
+| フィールド | 説明 | デフォルト値 |
 | --- | --- | --- |
-| **Connection Pool Size** | Number of connections in the connection pool for Bigtable. | `8` |
-| **Connect Timeout** | Timeout for establishing a connection to Bigtable. | `5s` |
-| **Start Timeout** | Timeout for starting the connector. | `5s` |
-| **Health Check Interval** | Interval for checking the health of the Bigtable connection. | `15s` |
-| **Health Check Timeout** | Timeout for connector health checks. | `60s` |
+| **Connection Pool Size** | Bigtable 用のコネクションプール内の接続数。 | `8` |
+| **Connect Timeout** | Bigtable への接続確立タイムアウト。 | `5s` |
+| **Start Timeout** | コネクター起動タイムアウト。 | `5s` |
+| **Health Check Interval** | Bigtable 接続のヘルスチェック間隔。 | `15s` |
+| **Health Check Timeout** | コネクターのヘルスチェックタイムアウト。 | `60s` |
 
-### Sink Advanced Settings
+### Sink の詳細設定
 
-| Field | Description | Default Value |
+| フィールド | 説明 | デフォルト値 |
 | --- | --- | --- |
-| **Buffer Pool Size** | Number of buffer worker processes used to process and send data to Bigtable. | `16` |
-| **Dispatch Strategy** | Strategy for dispatching requests to buffer workers. The default strategy dispatches requests by MQTT client ID. | `Per Client ID` |
-| **Request TTL** | Maximum time a request can stay valid after entering the buffer. If the request expires before it is sent or acknowledged, it is considered expired. | `45s` |
-| **Health Check Interval** | Interval for checking the health of the Bigtable connection. | `15s` |
-| **Health Check Interval Jitter** | Random jitter added to the health check interval. | `0ms` |
-| **Health Check Timeout** | Timeout for connector health checks. | `60s` |
-| **Max Buffer Queue Size** | Maximum buffer queue size for each buffer worker. | `256MB` |
-| **Batch Size** | Maximum number of records to write in one batch. Set it to `1` to disable batching. | `1000` |
-| **Query Mode** | Request mode. In asynchronous mode, writing to Bigtable does not block MQTT message publishing. | `Async` |
-| **Inflight Window** | Maximum number of in-flight requests in asynchronous mode. Set it to `1` if strict ordering is required for messages from the same MQTT client. | `100` |
+| **Buffer Pool Size** | Bigtable へのデータ処理・送信に使用するバッファワーカープロセス数。 | `16` |
+| **Dispatch Strategy** | バッファワーカーへのリクエスト振り分け戦略。デフォルトは MQTT クライアント ID ごとに振り分け。 | `Per Client ID` |
+| **Request TTL** | バッファに入ってからリクエストが有効な最大時間。期限切れの場合は失効とみなす。 | `45s` |
+| **Health Check Interval** | Bigtable 接続のヘルスチェック間隔。 | `15s` |
+| **Health Check Interval Jitter** | ヘルスチェック間隔に加えるランダムジッター。 | `0ms` |
+| **Health Check Timeout** | コネクターのヘルスチェックタイムアウト。 | `60s` |
+| **Max Buffer Queue Size** | 各バッファワーカーの最大バッファキューサイズ。 | `256MB` |
+| **Batch Size** | 1バッチあたりの最大書き込みレコード数。`1` に設定するとバッチ処理を無効化。 | `1000` |
+| **Query Mode** | リクエストモード。非同期モードでは Bigtable への書き込みが MQTT メッセージパブリッシュをブロックしない。 | `Async` |
+| **Inflight Window** | 非同期モードでの最大インフライトリクエスト数。同一 MQTT クライアントからのメッセージで厳密な順序が必要な場合は `1` に設定。 | `100` |
 
-For high-throughput deployments, tune **Connection Pool Size**, **Buffer Pool Size**, **Dispatch Strategy**, **Batch Size**, and **Inflight Window** together based on your expected cluster workload. For example, if the target workload is around 11,000,000 messages per 2 minutes across the cluster with 5,000 to 10,000 MQTT connections, validate the configuration with a representative benchmark before production use.
+高スループットのデプロイメントでは、**Connection Pool Size**、**Buffer Pool Size**、**Dispatch Strategy**、**Batch Size**、**Inflight Window** を想定されるクラスターのワークロードに応じて調整してください。例えば、クラスター全体で 2 分間に約 11,000,000 メッセージ、5,000～10,000 MQTT 接続のワークロードを想定する場合は、本番利用前に代表的なベンチマークで設定を検証してください。
