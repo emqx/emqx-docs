@@ -138,11 +138,15 @@ This Republish behavior does not depend on `mqtt.namespace_as_mountpoint`. The s
 
 ## Multi-Tenancy Capability Support
 
-Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9 and enhanced in 6.1, namespaces now support tenant isolation across multiple subsystems. The current support status is as follows:
+Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX 5.9, namespace support has gradually expanded across multiple subsystems. EMQX supports the following multi-tenancy capabilities:
 
 - **Unified management and MQTT namespaces** (6.0)
 
   The management plane (Dashboard, CLI, APIs) and the MQTT data plane share the same namespace model.
+
+- **Rule and data integration isolation** (6.0)
+
+  Namespace isolation is available for rules, actions, sources, and connectors.
 
 - **Isolation for built-in database authentication** (6.1)
 
@@ -156,11 +160,13 @@ Namespaces are the core building block of EMQX multi-tenancy. Introduced in EMQX
 
   Starting from EMQX 6.1, metrics can be exposed and aggregated by namespace. Starting from EMQX 6.3, namespace isolation also applies to data integration metrics for rules, actions, and connectors. For scraping and filtering behavior, see [Scrape Data Integration Metrics by Namespace](../observability/prometheus.md#scrape-data-integration-metrics-by-namespace).
 
+- **Topic Metrics collection isolation** (6.3)
+
+  A Topic Metrics collection created by a namespaced administrator counts only messages published by clients in the same namespace. Namespaced administrators can manage only collections owned by their namespace, while global administrators can list collections across all namespaces. For more information, see [Topic Metrics](../observability/topic-metrics.md#namespace-isolation).
+
 - **Retained message quota isolation**
 
   Resource usage related to retained messages can be limited per namespace.
-
-In addition, starting from EMQX 6.0, namespace isolation has been fully implemented for rules, actions, sources, and connectors, and is no longer part of the future roadmap.
 
 ## What's Next
 
