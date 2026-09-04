@@ -98,6 +98,10 @@ Where,
 
   The IP address and port number that the listener binds to. In this example, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`. set to port number `0` will disable this listener.
 
+  Starting from EMQX 6.3.0, when `dashboard.listeners.http.bind` specifies only a port, such as `18083`, EMQX uses `node.default_listener_address` to select the address on each node. If that setting is not configured, the HTTP listener binds all network interfaces under the `legacy` security profile, or loopback under `hardened`. An explicit IP address in `bind`, as in the example above, takes precedence.
+
+  This default-address setting does not apply to the Dashboard HTTPS listener. For supported values, restart requirements, and Docker defaults, see [Default Listener Address](../access-control/security-profile.md#default-listener-address).
+
 - `max_connections = 512`
 
   The maximum number of concurrent connections that the listener will accept. In this example, the maximum number of connections is set to `512`.

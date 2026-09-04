@@ -956,40 +956,82 @@ Del cluster_trace mytraces_ip successfully
 
 ### listeners
 
-列出所有监听器的信息。
+列出本节点的 MQTT 监听器信息。从 EMQX 6.3.0 开始，输出包含解析后的地址及其来源。
 
 ```bash
-$ emqx ctl listeners
-ssl:default
-  listen_on       : 0.0.0.0:8883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-tcp:default
-  listen_on       : 0.0.0.0:1883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 12
-  max_conns       : 5000000
-  shutdown_count  : [{takenover,2},{discarded,1}]
-ws:default
-  listen_on       : 0.0.0.0:8083
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-wss:default
-  listen_on       : 0.0.0.0:8084
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
+emqx ctl listeners
 ```
+
+以下示例展示了显式配置 IP 地址时的输出：
+
+```text
+ssl:default
+  listen_on             : 0.0.0.0:8883
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+tcp:default
+  listen_on             : 0.0.0.0:1883
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 12
+  max_conns             : 5000000
+  shutdown_count        : [{takenover,2},{discarded,1}]
+ws:default
+  listen_on             : 0.0.0.0:8083
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+wss:default
+  listen_on             : 0.0.0.0:8084
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+```
+
+#### 监听地址信息
+
+以下字段用于区分配置中的绑定值和本节点确定的地址：
+
+| 字段 | 说明 |
+| --- | --- |
+| `listen_on` | 配置中的绑定值，包含端口。例如，仅指定端口的绑定显示为 `:1883`。 |
+| `resolved_address` | 解析后的 IP 地址，不包含端口。值为空表示仅指定端口的绑定解析为监听所有网络接口。 |
+| `resolved_address_from` | 地址的来源，具体含义见下表。 |
+| `running` | 监听器是否正在运行。已停止的监听器仍可返回解析地址，因此不能仅凭地址判断它是否正在接受连接。 |
+
+`resolved_address_from` 的取值包括：
+
+| 取值 | 含义 |
+| --- | --- |
+| `bind` | 监听器的 `bind` 显式指定了 IP 地址。 |
+| `0.0.0.0` | `node.default_listener_address` 或安全配置方案指定监听所有网络接口。 |
+| `127.0.0.1` | `node.default_listener_address` 或安全配置方案指定使用回环地址。 |
+| `nodename` | 地址来自本节点 Erlang 节点名中的主机部分。 |
+| IP 地址或主机名 | 地址来自 `node.default_listener_address` 中配置的该值。 |
+
+例如，配置 `bind = 1883` 和 `node.default_listener_address = "all"` 时，`listen_on` 为 `:1883`，`resolved_address` 为空，`resolved_address_from` 为 `0.0.0.0`。如果显式配置 `bind = "0.0.0.0:1883"`，解析地址则为 `0.0.0.0`，来源为 `bind`。
+
+该命令不会汇总整个集群的地址。其他查看方式参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
 
 #### 常见连接关闭原因
 

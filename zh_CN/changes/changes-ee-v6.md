@@ -286,7 +286,7 @@
 - [#18449](https://github.com/emqx/emqx/pull/18449) 修复 PostgreSQL 动作写入数据时将罕见的 `sock_closed` 竞态错误错误地视为不可恢复的问题。EMQX 现在将其视为可恢复。
 - [#18767](https://github.com/emqx/emqx/pull/18767) 修复 EMQX 将 RocketMQ 实例命名空间误识别为连接器所属 EMQX 命名空间的问题。
 
-  RocketMQ 连接器的 `namespace` 配置字段用于保存 RocketMQ 实例命名空间。此前，连接器 API 响应会将该值放在与 EMQX 命名空间相同的 JSON 字段中。因此，Dashboard 将连接器视为属于同名的 EMQX 命名空间，并显示“Only the administrator of namespace <name> can perform operations on the connector”；打开连接器也会失败并提示“Managed namespace not found”。
+  RocketMQ 连接器的 `namespace` 配置字段用于保存 RocketMQ 实例命名空间。此前，连接器 API 响应会将该值放在与 EMQX 命名空间相同的 JSON 字段中。因此，Dashboard 将连接器视为属于同名的 EMQX 命名空间，并显示“Only the administrator of namespace `<name>` can perform operations on the connector”；打开连接器也会失败并提示“Managed namespace not found”。
 
   连接器 API 响应中的 `namespace` 字段始终表示 EMQX 命名空间，不再包含 RocketMQ 实例命名空间。更新连接器时，如果请求未提供 RocketMQ 的 `namespace` 配置字段，EMQX 会保留该字段的现有值。
 

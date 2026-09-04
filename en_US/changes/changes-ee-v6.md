@@ -305,7 +305,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18767](https://github.com/emqx/emqx/pull/18767) Fixed an issue where EMQX incorrectly treated the RocketMQ instance namespace as the connector's EMQX namespace.
 
-  A RocketMQ connector has a `namespace` configuration field that stores the RocketMQ instance namespace. Connector API responses previously returned this value under the same JSON key as the EMQX namespace. As a result, the Dashboard treated the connector as belonging to an EMQX namespace with the same name. The Dashboard displayed "Only the administrator of namespace <name> can perform operations on the connector", and opening the connector failed with "Managed namespace not found".
+  A RocketMQ connector has a `namespace` configuration field that stores the RocketMQ instance namespace. Connector API responses previously returned this value under the same JSON key as the EMQX namespace. As a result, the Dashboard treated the connector as belonging to an EMQX namespace with the same name. The Dashboard displayed "Only the administrator of namespace `<name>` can perform operations on the connector", and opening the connector failed with "Managed namespace not found".
 
   The `namespace` field in connector API responses always represents the EMQX namespace. Connector API responses no longer include the RocketMQ instance namespace. If an update request omits the RocketMQ `namespace` configuration field, EMQX preserves its existing value.
 

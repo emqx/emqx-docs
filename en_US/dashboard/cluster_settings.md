@@ -143,6 +143,10 @@ The **Listeners** displays a list of listeners by default. EMQX provides four co
 - WebSocket listener using port 8083
 - WebSocket secure listener using port 8084
 
+<!-- XXX: Listener Address Information and Screenshot Replacement
+The Dashboard does not yet display `resolved_address` or `resolved_address_from`. After the UI is implemented, document how the listener list presents the configured bind and each node's address information. Replace `./assets/config-listener-list.png` with a screenshot showing a port-only bind and the implemented address-information view. Keep the existing screenshot until its replacement is available, then remove this note.
+-->
+
 ![image](./assets/config-listener-list.png)
 
 Typically, you can use these default listeners by specifying the corresponding port and protocol type. To add another type of listener, click the **+Add Listener** button in the top-right corner to create a new listener.
@@ -150,6 +154,8 @@ Typically, you can use these default listeners by specifying the corresponding p
 ### Add Listener
 
 In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
+
+Starting from EMQX 6.3.0, the address used by a port-only bind depends on node configuration and the security profile, so the listener may not accept connections from other hosts. The Dashboard displays the configured bind value, not the address resolved on each node. For the address selection rules, see [How EMQX Determines the Listener Address](../configuration/listener.md#how-emqx-determines-the-listener-address).
 
 #### Rate Limiting
 
@@ -170,7 +176,11 @@ For more details on listener configuration, refer to [EMQX Enterprise Configurat
 
 ### Manage Listeners
 
-After adding a listener, you can see it in the list. Click on the listener's name to enter the editing page, where you can modify or delete the listener configuration. Note that the listener name, type, and listener address cannot be modified in the settings.
+After adding a listener, you can see it in the list. Click on the listener's name to enter the editing page, where you can modify or delete the listener configuration. You can change the listener address, but the listener name and type cannot be modified.
+
+<!-- XXX: Edit Form Address Information and Screenshot Pending
+After the address-information UI is implemented, document its behavior in the edit form and add `./assets/config-listener-edit-bind-info.png`. Show a port-only bind together with the implemented address-information view. Use the actual UI, without the red annotation boxes from the design discussion. Replace this note with the instructions and screenshot before publication.
+-->
 
 Click the **Delete** button on the editing page to remove the listener. When deleting a listener, you will need to enter the listener's name to confirm the deletion. You can also toggle the enable switch to enable or disable the listener. The list also shows the number of connections for each listener.
 
