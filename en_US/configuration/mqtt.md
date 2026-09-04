@@ -1,8 +1,8 @@
 # MQTT Configuration
 
-[MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
+[MQTT](https://mqtt.org/) is a lightweight publish/subscribe messaging protocol for connecting Internet of Things (IoT) devices. EMQX supports MQTT 3.1, 3.1.1, and 5.0.
 
-EMQX is 100% MQTT 5.0 and 3.x compliant. This section introduces the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+This page describes how to configure MQTT protocol behavior in EMQX, including packet validation and limits, subscriptions, delayed publishing, Keep Alive handling, and sessions.
 
 ## Basic MQTT Configurations
 
@@ -26,6 +26,7 @@ mqtt {
   max_qos_allowed = 2
   max_topic_alias = 65535
   retain_available = true
+  strict_mode = true
 }  
 ```
 
@@ -39,6 +40,39 @@ Where,
 | `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |
 | `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` - `65535`       |
 | `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`     |
+| `strict_mode`           | Strict Mode          | This sets whether to apply additional protocol compliance checks to incoming MQTT packets. Packets that fail these checks cause the client connection to be closed. | `true` | `true`, `false` |
+
+### Strict MQTT Packet Validation
+
+Starting from EMQX 6.3.0, strict MQTT packet validation is enabled by default. With `strict_mode = true`, EMQX rejects malformed MQTT packets, including packets with:
+
+- Invalid MQTT fixed-header flag combinations.
+- In an MQTT 3.1.1 CONNECT packet, a Password Flag without a Username Flag.
+- Invalid UTF-8 strings in fields such as the client ID, topic name, username, password, Will Topic, or MQTT 5.0 string properties. This includes null characters and other prohibited control characters.
+- A zero Packet Identifier where the MQTT protocol requires a non-zero value.
+
+When a malformed packet is detected, EMQX closes the client connection and records a `frame_parse_error` log at the `info` level with the specific reason. For MQTT 5.0 clients, EMQX also sends a CONNACK or DISCONNECT packet with reason code `0x81` (Malformed Packet) when possible. MQTT 3.1 and MQTT 3.1.1 clients are disconnected without a reason code for malformed packets.
+
+If an existing client does not conform to these MQTT protocol requirements, you can temporarily disable the protocol compliance checks that are enforced only in strict mode:
+
+```bash
+mqtt.strict_mode = false
+```
+
+To disable strict-mode checks only for specific legacy clients, configure a zone and associate it with a dedicated listener:
+
+```bash
+zones.legacy_clients {
+  mqtt.strict_mode = false
+}
+
+listeners.tcp.legacy {
+  bind = "0.0.0.0:1884"
+  zone = legacy_clients
+}
+```
+
+Clients connected through other listeners continue to use strict validation. For more information about zones, see [Zone Override](./configuration.md#zone-override).
 
 ## Subscription Settings
 
@@ -214,10 +248,10 @@ Where,
 | `await_rel_timeout`               | Max Awaiting PUBREL TIMEOUT | This sets the amount of time to wait for a release of a QoS 2 message before receiving `PUBREL`.  After reaching this limit, EMQX will release the packet ID and also generate a warning level log. <br />Note:  ﻿EMQX will forwarding of the received QoS 2 message whether it has received the `PUBREL`﻿ or not. | `300s`<br />unit: s                                          | --                                  |
 | `session_expiry_interval`         | Session Expiry Interval     | This sets how long EMQX keeps a session after the client disconnects. It applies to MQTT 3.1 and 3.1.1 clients that connect with `Clean Session = false`. MQTT 5.0 clients set their own value with the `Session-Expiry-Interval` CONNECT property; see `max_session_expiry_interval`.<br />With the default in-memory session store, a disconnected session stays in memory for the whole interval. See the warning after this table. | `2h`                                                         | --                                  |
 | `max_session_expiry_interval`     | Max Session Expiry Interval | This caps the session expiry interval that an MQTT 5.0 client can request with the `Session-Expiry-Interval` property of the CONNECT and DISCONNECT packets. When a client requests a longer value at connect, EMQX clamps it to this limit and returns the clamped value in the `Session-Expiry-Interval` property of CONNACK (MQTT 5.0 section 3.2.2.3.2). A longer value in a DISCONNECT packet is clamped to the same limit. It has no effect on MQTT 3.1 and 3.1.1 clients, whose session expiry is set by `session_expiry_interval`.<br />Available since EMQX 6.3.0. | `infinity` (no limit)                                        | duration<br />or<br />`infinity`    |
-| `max_mqueue_len`                  | Max Message Queue Length    | This sets the maximum allowed queue length when persistent clients are disconnected or inflight window is full. | `1000`                                                       | `0` - `infinity`                    |
+| `max_mqueue_len`                  | Max Message Queue Length    | This sets the message queue length limit used by in-memory sessions. Messages enter the queue when the client is offline and the session remains, the Inflight Window is full, or the connection's send queue is congested. When the message queue for a topic priority reaches this limit, EMQX prefers to evict the oldest QoS 0 message at that priority. | `1000`                                                       | `0` - `infinity`                    |
 | `mqueue_priorities`               | Topic Priorities            | This sets the topic priorities, the configuration here will override that defined in `mqueue_default_priority`. | `disabled` <br />The session uses the priority set by `mqueue_default_priority`. | `disabled`<br />or<br />`1` - `255` |
 | `mqueue_default_priority`         | Default Topic Priorities    | This sets the default topic priority.                        | `lowest`                                                     | `highest`， `lowest`                |
-| `mqueue_store_qos0`               | Store QoS 0 Message         | This sets whether to store QoS 0 message in the message queue when the connection is down but the session remains. | `true`                                                       | `true`, `false`                     |
+| `mqueue_store_qos0`               | Store QoS 0 Message         | This sets whether EMQX stores QoS 0 messages in an in-memory session's message queue while the client is offline and the session remains, the connection's send queue is congested, or the Inflight Window is full. If disabled, EMQX drops QoS 0 messages that arrive while the client is offline or the send queue is congested. If only the Inflight Window is full, EMQX continues to deliver QoS 0 messages immediately. | `true`                                                       | `true`, `false`                     |
 | `force_shutdown`                  | Enable Force Shutdown       | This sets whether to enable the force shutdown feature. The client connection process will be forcibly shut down if the mailbox queue length (`max_mailbox_size`) or heap size (`max_heap_size`) reaches the specified value. | `true`                                                       | `true`, `false`                     |
 | `force_shutdown.max_mailbox_size` | Max Mailbox Size            | This sets the maximum mailbox queue length to trigger a forced shutdown. | `1000`                                                       | `1` - `infinity`                    |
 | `force_shutdown.max_heap_size`    | Max Heap Size               | This sets the maximum heap size to trigger a forced shutdown. | `32MB`                                                       | --                                  |

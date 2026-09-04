@@ -10,6 +10,10 @@
 
 如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取安装信息。
 
+::: tip
+从 EMQX 6.3.0 开始，通过 DEB 包安装的 EMQX 可使用与 Docker 镜像相同的 `/opt/emqx/...` 路径。路径映射参见[文件和目录](./install.md#文件和目录)。
+:::
+
 ## 通过 deb 安装
 
 1. 前往官方下载页面，选择 [Debian 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=Debian)。

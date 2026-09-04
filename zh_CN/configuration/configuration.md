@@ -19,6 +19,8 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 | 在 Docker 容器中运行   | `/opt/emqx/etc` |
 | 从便携式压缩包中提取   | `./etc`         |
 
+从 EMQX 6.3.0 开始，使用 RPM 或 DEB 包安装时，`/opt/emqx/etc` 是指向 `/etc/emqx` 的符号链接（symlink）。
+
 ### 动态配置目录（`data/configs`）
 
 在运行时，EMQX 允许通过 Dashboard、REST API 或 CLI 进行动态重新配置。通过这些工具进行的更改将存储在 `data/configs` 目录中，以确保跨会话的数据持久性。该目录的位置同样取决于安装方式：
@@ -28,6 +30,8 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 | 使用 RPM 或 DEB 包安装 | `/var/lib/emqx/configs`  |
 | 在 Docker 容器中运行   | `/opt/emqx/data/configs` |
 | 从便携式压缩包中提取   | `./data/configs`         |
+
+从 EMQX 6.3.0 开始，使用 RPM 或 DEB 包安装时，`/opt/emqx/data` 是指向 `/var/lib/emqx` 的符号链接。因此，`/opt/emqx/data/configs` 实际指向 `/var/lib/emqx/configs`。配置自定义数据目录不会更新该符号链接。
 
 ::: tip
 

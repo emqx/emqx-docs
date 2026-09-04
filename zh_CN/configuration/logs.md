@@ -19,9 +19,9 @@ EMQX 支持两种主要的日志输出方式：控制台输出日志和文件输
 
 ## 文件输出日志
 
-EMQX 的日志输出目录由环境变量 `EMQX_LOG_DIR` 确定，如果通过 RPM 或 DEB 包安装，则设置为 `/var/log/emqx`。否则，日志目录为 EMQX 安装目录下的 `log`。
+使用 RPM 或 DEB 包安装时，`EMQX_LOG_DIR` 默认为 `/var/log/emqx`。从 EMQX 6.3.0 开始，`/opt/emqx/log` 是指向该目录的符号链接（symlink）。该符号链接始终指向 `/var/log/emqx`。修改 `EMQX_LOG_DIR` 不会更新该符号链接。
 
-对于 EMQX Docker 容器，安装目录为 `/opt/emqx`，因此日志目录为 `/opt/emqx/log`。
+对于其他安装方式，默认日志目录为 EMQX 安装目录下的 `log`。在 Docker 容器中，该路径为 `/opt/emqx/log`。
 
 要将日志输出到文件，您可以在 Dashboard 上配置文件日志输出，或直接修改 `emqx.conf` 文件，如下所示：
 

@@ -10,6 +10,10 @@ Supported versions:
 
 For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise). 
 
+::: tip
+Starting from EMQX 6.3.0, DEB installations support the same `/opt/emqx/...` paths as the Docker image. For the path mappings, see [Files and Directories](./install.md#files-and-directories).
+:::
+
 ## Install with deb
 
 1. Go to the download site and select the [**Debian** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Debian).

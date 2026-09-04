@@ -250,7 +250,7 @@ WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 
 Only EMQX nodes using the same cookie can form a cluster. While a cookie does not secure cluster communication, it prevents a node from connecting to a cluster it did not intend to communicate with. By default, EMQX nodes uniformly use the cookie value `emqxsecretcookie`. However, we recommend that users change the cookie value when building a cluster to enhance security.
 
-The second warning log indicates two ways to modify the cookie: by editing `node.cookie` in the `emqx.conf` configuration file or by setting the environment variable `EMQX_NODE__COOKIE`.
+The second warning lists two ways to configure the cookie: set `node.cookie` in `emqx.conf`, or set `EMQX_NODE__COOKIE`. Starting from EMQX 6.3.0, both settings accept `file://`, so the cookie value does not need to appear directly in the configuration file or environment variable. For details, see [Load the Node Cookie from a File](../configuration/secret-from-file.md#load-the-node-cookie-from-a-file).
 
 ## Why does restarting the EMQX Docker container cause data loss, such as configured rules and resources?
 

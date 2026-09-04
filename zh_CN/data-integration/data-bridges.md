@@ -115,6 +115,7 @@ D1 -->|发布消息| E[客户端]
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 - [Elasticsearch](./elasticsearch.md)
+- [Bigtable](./bigtable.md)
 
 **消息队列**
 

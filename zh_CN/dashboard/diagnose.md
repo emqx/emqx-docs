@@ -20,7 +20,7 @@
 
 <img src="./assets/topic-metrics.png" alt="image" style="zoom:67%;" />
 
-> 出于整体性能考虑，目前主题指标统计功能仅支持主题名，即不支持带有 + 或 # 通配符的主题过滤器，例如 a/+ 等。
+> Dashboard 仅支持具体主题名。从 EMQX 6.3 开始，只能通过[主题监控 REST API](../observability/topic-metrics.md#通过-rest-api-管理主题指标集合)创建和管理包含通配符的主题指标集合；这些集合不会显示在 Dashboard 中。
 
 ## 慢订阅
 

@@ -30,6 +30,10 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 3. 在配置页面输入以下信息：
    - **Dashboard 地址**：确保用户可以访问 Dashboard 的实际访问地址，不需要指定具体路径。例如 `http://localhost:18083`。此地址将被自动拼接以生成用于 IdP 侧配置的 **SSO Address** 和 **Metadata Address**。
    - **SAML 元数据 URL**：暂时留空，等待步骤 2 的配置。
+   - **IdP 签名断言（Assertion）**：要求 IdP 对 SAML 断言进行签名。
+   - **IdP 签名响应（Envelope）**：要求 IdP 对 SAML 响应进行签名。
+
+   从 EMQX 6.3.0 开始，这两个选项均默认开启。两个选项可以独立配置，请根据 IdP 的签名方式启用相应选项。将两个选项同时关闭会完全禁用 SAML 签名验证，这种配置不安全，仅应在测试环境中使用。
 
 ### 步骤 2：注册一个应用以集成 Microsoft Entra ID
 
@@ -64,7 +68,9 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 2. 在 Dashboard 中，将复制的 URL 粘贴到步骤 1 的 **SAML 元数据 URL** 中。
 
-3. 点击**更新**以完成配置。
+3. 如果开启了任一签名验证选项，请在浏览器中打开元数据 URL。在返回的 XML 中，确认 `IDPSSODescriptor` 包含 `use="signing"` 的 `KeyDescriptor`，并且其中的 `X509Certificate` 非空。如果不满足这些条件，请先在 IdP 中配置签名证书，否则 SAML 后端无法启动。
+
+4. 点击**更新**以完成配置。
 
 ## 集成 Okta 身份服务配置 SSO
 
@@ -77,6 +83,10 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
    - **强制启用 MFA**：可选。开启后，该后端的所有用户在登录时须完成 TOTP 验证。默认关闭。详情参见[为 SSO 用户强制启用 MFA](../multi-factor-authn/multi-factor-authentication.md#为-sso-用户强制启用-mfa)。
    - **Dashboard 地址**：确保用户能够访问 Dashboard 的实际访问地址，不需要带具体路径。例如 `http://localhost:18083`。该地址将自动拼接生成**单点登录地址**与**元数据地址**供 IdP 侧配置使用。
    - **SAML 元数据 URL**：暂时留空，等待步骤 2 配置生成。
+   - **IdP 签名断言（Assertion）**：要求 IdP 对 SAML 断言进行签名。
+   - **IdP 签名响应（Envelope）**：要求 IdP 对 SAML 响应进行签名。
+
+   从 EMQX 6.3.0 开始，这两个选项均默认开启。两个选项可以独立配置，请根据 IdP 的签名方式启用相应选项。将两个选项同时关闭会完全禁用 SAML 签名验证，这种配置不安全，仅应在测试环境中使用。
 
 ### 步骤 2：在 Okta 的应用程序目录添加 SAML 2.0 应用程序
 
@@ -102,8 +112,10 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 ### 步骤 3：完成 Dashboard 配置，在 Okta 中为应用分配用户与组
 
 1. 在 Okta 中，转到 **Sign On** 选项卡，复制 **Metadata URL**。
-2. 在 Dashboard 中，粘贴复制来的  **Metadata URL** 到第 1 步中的 **SAML 元数据 URL** 中，点击**更新**按钮。
-3. 在 **Okta > Assignments** 选项卡中，您现在可以将用户和组分配给 EMQX Dashboard 应用，只有分配进来的用户才能登录此应用。
+2. 在 Dashboard 中，将复制的 **Metadata URL** 粘贴到步骤 1 的 **SAML 元数据 URL** 中。
+3. 如果开启了任一签名验证选项，请在浏览器中打开元数据 URL。在返回的 XML 中，确认 `IDPSSODescriptor` 包含 `use="signing"` 的 `KeyDescriptor`，并且其中的 `X509Certificate` 非空。如果不满足这些条件，请先在 IdP 中配置签名证书，否则 SAML 后端无法启动。
+4. 点击**更新**以完成配置。
+5. 在 **Okta > Assignments** 选项卡中，您现在可以将用户和组分配给 EMQX Dashboard 应用，只有分配进来的用户才能登录此应用。
 ## 登录与用户管理
 
 启用 SAML 单点登录后，EMQX Dashboard 会在登录页面展示单点登录选项。点击 **SAML** 按钮，会进入到 IdP 预设值的登录页面，在新页面中输入为用户分配的凭证进行登录。

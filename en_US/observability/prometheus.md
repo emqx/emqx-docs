@@ -166,6 +166,34 @@ emqx_retained_count 3
 
 ::::
 
+### Topic Metrics
+
+Starting from EMQX 6.3, `GET /api/v5/prometheus/topic_metrics` exposes counters for the named collections created through the Topic Metrics REST API. Create at least one collection before scraping this endpoint. For instructions, see [Manage Topic Metric Collections with the REST API](./topic-metrics.md#manage-topic-metric-collections-with-the-rest-api).
+
+The endpoint exposes the following counters:
+
+| Metric | Description |
+| --- | --- |
+| `emqx_topic_metric_messages_in_count` | Number of messages published to topics that match the collection filter. |
+| `emqx_topic_metric_messages_out_count` | Number of matching messages delivered to subscribers. |
+| `emqx_topic_metric_messages_dropped_count` | Number of matching messages dropped by EMQX. |
+| `emqx_topic_metric_bytes_in` | Combined size of the topic and payload for matching published messages. |
+| `emqx_topic_metric_bytes_out` | Combined size of the topic and payload for matching delivered messages. |
+
+Each time series includes the `name` and `topic_filter` labels. Collections owned by a namespace also include the `namespace` label. When `mode=all_nodes_unaggregated`, each series includes the `node` label.
+
+All Topic Metrics values are monotonic counters. Use a PromQL function such as `rate()` to calculate a per-second rate. For example:
+
+```text
+rate(emqx_topic_metric_messages_in_count[5m])
+```
+
+::: warning Important Notice
+
+Each collection exposes five counters. In unaggregated mode, EMQX creates a separate time series for each node. Limit the number of collections to avoid creating excessive Prometheus time series.
+
+:::
+
 <a id="authentication"></a>
 
 ### Authenticate Prometheus Scrape Requests
@@ -217,6 +245,15 @@ scrape_configs:
     static_configs:
       - targets: ['127.0.0.1:18083']
     metrics_path: '/api/v5/prometheus/data_integration'
+    scheme: 'http'
+    basic_auth:
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
+
+  - job_name: 'emqx_topic_metrics'
+    static_configs:
+      - targets: ['127.0.0.1:18083']
+    metrics_path: '/api/v5/prometheus/topic_metrics'
     scheme: 'http'
     basic_auth:
       username: '<API_KEY>'

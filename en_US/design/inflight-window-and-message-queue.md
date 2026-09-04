@@ -4,15 +4,15 @@
 
 To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 messages in-flight at the same time. These sent but unconfirmed messages will be stored in the Inflight Window until acknowledgment is complete.
 
-When the number of in-flight messages exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX will no longer send subsequent messages, but will store these messages in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
+If the number of in-flight QoS 1 and QoS 2 messages reaches the maximum limit of the Inflight Window (see `max_inflight`), newly arrived messages are not forwarded immediately but are temporarily stored in the Message Queue.
 
-If the number of in-flight QoS 1, 2 messages reaches the maximum limit of the Inflight Window (see `max_inflight`), the newly arrived messages will not be forwarded immediately, but will be temporarily stored in the Message Queue. 
+When delivery resumes, EMQX dequeues messages in FIFO order if topic priorities are disabled. If topic priorities are enabled, EMQX schedules messages according to their topic priority and preserves FIFO order within each priority. Delivered QoS 1 and QoS 2 messages are added to the Inflight Window, while delivered QoS 0 messages do not enter the Inflight Window.
 
-Messages in the Message Queue are sent in FIFO order and added to the Inflight Window only after previous messages have been confirmed and removed. QoS 0 messages, however, are not affected by this process and are always forwarded immediately.
+QoS 0 messages normally bypass the Inflight Window and are forwarded immediately. For in-memory sessions, EMQX puts subsequent QoS 0 messages in the Message Queue if the connection's send queue becomes congested. If the Inflight Window is full and `mqueue_store_qos0` is enabled, EMQX also queues QoS 0 messages so that they follow normal queue scheduling instead of bypassing the queue. EMQX resumes queued delivery after the connection recovers or space becomes available in the Inflight Window.
 
-If the Message Queue also reaches the length limit, subsequent messages will still be cached to the Message Queue, but the oldest message in the Message Queue will be discarded. Therefore, it is very important to set a suitable Message Queue length limit (see `max_mqueue_len`) 
+When the Message Queue for a topic priority reaches the length limit, EMQX first evicts the oldest QoS 0 message at that priority. If no QoS 0 message exists at that priority, EMQX evicts the oldest remaining message at that priority. When topic priorities are disabled, all messages share the same priority. This policy helps QoS 1 and QoS 2 messages make progress during QoS 0 bursts. Therefore, it is important to set a suitable Message Queue length limit. See `max_mqueue_len`.
 
-The Message Queue is also used to store messages (including QoS 0 messages) that arrive while the subscriber is offline and that will be sent the next time the subscriber comes online. Considering that QoS 0 messages may have a lower importance, you can choose to disable EMQX from storing QoS 0 messages to the queue, see `mqueue_store_qos0`.
+The Message Queue also stores messages that arrive while the subscriber is offline but the session remains. EMQX sends these messages the next time the subscriber comes online. The `mqueue_store_qos0` option controls whether EMQX stores QoS 0 messages while the subscriber is offline, while an in-memory connection's send queue is congested, or while the Inflight Window is full. If this option is disabled, EMQX drops QoS 0 messages that arrive while the subscriber is offline or the send queue is congested. If only the Inflight Window is full, EMQX continues to deliver QoS 0 messages immediately.
 
 Note that the Inflight Window and Message Queue are not global. EMQX will allocate a separate Inflight Window and Message Queue for each client connection.
 
@@ -33,5 +33,5 @@ However, EMQX does not necessarily grant the `Receive Maximum` value requested i
 | Configuration Items    | Type    | Optional Value  | Default Value | Description                                                  |
 | ---------------------- | ------- | --------------- | ------------- | ------------------------------------------------------------ |
 | mqtt.max_inflight      | integer | (0, 65536)      | 32            | Inflight Window length limit, 0 means no limit               |
-| mqtt.max_mqueue_len    | integer | [0, ∞)          | 1000          | Message Queue length limit, 0 means no limit                 |
-| mqtt.mqueue_store_qos0 | enum    | `true`, `false` | true          | Whether EMQX stores QoS 0 messages to the Message Queue when the client is offline |
+| mqtt.max_mqueue_len    | integer | [0, ∞)          | 1000          | Message Queue length limit. `0` means no limit.              |
+| mqtt.mqueue_store_qos0 | enum    | `true`, `false` | true          | Whether EMQX stores QoS 0 messages in the Message Queue when the client is offline, an in-memory connection's send queue is congested, or the Inflight Window is full. |

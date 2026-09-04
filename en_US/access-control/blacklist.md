@@ -27,6 +27,8 @@ This page focuses on managing banned clients via the EMQX Dashboard. The banning
 | POST /banned             | Add a client ID, username or IP address to the blacklist.    |
 | DEL /banned/ {as} /{who} | Remove a client ID, username or IP address from the blacklist. |
 
+Flapping detection automatically creates direct ban entries when a client ID, username, or source IP address reaches its configured connection threshold. These entries appear on the **Banned Clients** page and in the `GET /banned` response. In the REST API response, `as` identifies the ban type as `clientid`, `username`, or `peerhost`, and `by` is `flapping detector`. You can remove an entry before it expires. For more information, see [Flapping Detect](./flapping-detect.md).
+
 ::: tip
 The banned list is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, use the [authentication](./authn/authn.md) function.
 :::
@@ -45,4 +47,3 @@ The banned list is only applicable to a small number of client bans. If there ar
 ## Clear Banned Clients
 
 You can remove a single banned client record by clicking the **Delete** button in the **Actions** column. If you want to clear the records on the page all at once, click the **Clear All** button.
-

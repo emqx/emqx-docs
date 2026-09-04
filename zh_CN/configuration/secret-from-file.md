@@ -45,12 +45,36 @@ bridges.mqtt.upstream.password = "file:///run/secrets/upstream-mqtt-password"
 - **许可证**：`license.key`（许可证字符串本身）。详见 [License 配置](../configuration/license.md)。
 - **AI 补全**：`ai.completion_profile.api_key`。
 
-某个字段是否支持 `file://`，请参考字段的 Dashboard 提示。
+这些字段的 Dashboard 提示会注明支持 `file://` 格式。
+
+## 从文件加载节点 Cookie
+
+从 EMQX 6.3.0 开始，`node.cookie` 及其环境变量覆盖项 `EMQX_NODE__COOKIE` 支持 `file://`。这是对普通 `string` 字段默认行为的明确例外。
+
+为避免在 `emqx.conf` 中以明文保存节点 Cookie，可将 `node.cookie` 设置为文件 URL：
+
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
+```
+
+也可以设置 `EMQX_NODE__COOKIE`：
+
+```bash
+export EMQX_NODE__COOKIE='file:///run/secrets/emqx-cookie'
+```
+
+该路径可以指向普通文件或 FIFO（命名管道）。EMQX 仅在节点启动时解析一次 Cookie。配置重载不会再次读取文件或 FIFO。
+
+使用 FIFO 时，编排系统必须在每次启动时将 Cookie 写入 FIFO，并且写入操作应先于 `emqx ctl` 等其他 `emqx` 命令。节点启动后的命令会从运行中的节点获取 Cookie，而不会再次读取 FIFO。
+
+启动脚本会删除文件内容末尾的换行符。如果路径不存在、文件为空，或者解析出的 Cookie 包含反斜杠、单引号、双引号或空格，节点将无法启动。
+
+EMQX 将解析出的 Cookie 直接传递给 Erlang VM，不会写入生成的 `data/configs/vm.*.args` 文件。在集群部署中，需要在每个节点上分发该文件或 FIFO，并确保所有节点读取到相同的 Cookie。更多信息，参见[设置节点 Cookie](../deploy/cluster/security.md#设置节点-cookie)。
 
 ## 日志与脱敏
 
-EMQX 会在日志和 HTTP API 响应中对 secret 值进行脱敏。若 secret 通过 `file://...` URL 配置，EMQX 在日志中记录的是路径本身（不会记录文件内容），便于运维人员排查节点实际读取的是哪个文件。从文件中提取出的真正 secret 值不会出现在任何日志中。
+EMQX 会对日志和 HTTP API 响应中的 secret 类型字段值进行脱敏。对于 `file://` 值，EMQX 仅记录文件路径，不记录文件内容。解析出的 secret 值不会写入日志。
 
 ## 不适用情况
 
-如果配置字段类型是普通 `string`（而非 secret 类型），即便加上 `file://` 前缀，也会被作为字面字符串处理，而非文件引用。使用前请确认字段的 schema 类型是否支持 `file://`。
+除 `node.cookie` 等文档明确说明支持的字段外，普通 `string` 字段会将 `file://` 值作为字面字符串处理，而不是文件引用。使用前请根据字段的 schema 类型和文档确认是否支持 `file://`。

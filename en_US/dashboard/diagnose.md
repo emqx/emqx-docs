@@ -19,7 +19,7 @@ Click on **Topic Monitoring** under the **Diagnose** menu on the left to go to t
 
 <img src="./assets/topic-metrics.png" alt="image" style="zoom:67%;" />
 
-> For overall performance reasons, only topic names are currently supported for topic statistics, i.e. topic filters with + or # wildcards, e.g. a/+ etc. are not supported.
+> The Dashboard supports only specific topic names. Starting from EMQX 6.3, wildcard topic metric collections can be created and managed only through the [Topic Metrics REST API](../observability/topic-metrics.md#manage-topic-metric-collections-with-the-rest-api); they are not displayed on the Dashboard.
 
 ## Slow Subscriptions
 
