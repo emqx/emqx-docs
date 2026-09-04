@@ -233,7 +233,7 @@ When queue auto-creation is enabled, the subscribing client determines the new q
 
 For example, a client allowed to subscribe to `$queue/+/#` can subscribe to `$queue/orders/#`. If the `orders` queue does not exist, EMQX creates it with `#` as its topic filter. The queue then stores messages published to all non-`$` topics. The client might therefore receive messages from topics that it is not authorized to subscribe to directly.
 
-Auto-creation of last-value queues is enabled by default. On deployments that accept untrusted clients, allow access only to specific pre-created queues, such as `$queue/orders`, and deny all other subscriptions that match `$queue/#` or `$q/#`. Alternatively, disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
+Auto-creation is enabled by default for last-value queues and disabled for regular queues, but it only takes effect while the Message Queue feature is active. With the default `mq.enable = auto`, EMQX activates the feature only once at least one queue exists, so a subscription cannot create the very first queue. Once the feature is active, or when `mq.enable = true`, a subscription to an unused queue name creates the queue. On deployments that accept untrusted clients, allow access only to specific pre-created queues, such as `$queue/orders`, and deny all other subscriptions that match `$queue/#` or `$q/#`. Alternatively, disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
 
 ## Compatibility Notes
 
