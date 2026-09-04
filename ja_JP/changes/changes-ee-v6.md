@@ -303,6 +303,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18449](https://github.com/emqx/emqx/pull/18449) Fixed a rare race condition in which the PostgreSQL Action encountered a `sock_closed` error while writing data and incorrectly treated it as unrecoverable. EMQX treats the error as recoverable.
 
+- [#18767](https://github.com/emqx/emqx/pull/18767) Fixed an issue where EMQX incorrectly treated the RocketMQ instance namespace as the connector's EMQX namespace.
+
+  A RocketMQ connector has a `namespace` configuration field that stores the RocketMQ instance namespace. Connector API responses previously returned this value under the same JSON key as the EMQX namespace. As a result, the Dashboard treated the connector as belonging to an EMQX namespace with the same name. The Dashboard displayed "Only the administrator of namespace <name> can perform operations on the connector", and opening the connector failed with "Managed namespace not found".
+
+  The `namespace` field in connector API responses always represents the EMQX namespace. Connector API responses no longer include the RocketMQ instance namespace. If an update request omits the RocketMQ `namespace` configuration field, EMQX preserves its existing value.
+
 #### Rule Engine
 
 - [#18527](https://github.com/emqx/emqx/pull/18527) Fixed repeated `badarg` errors in the log when a message was published while the schema validation, message transformation, or rule engine topic index table was unavailable. Such a publish now proceeds as if no validation, transformation, or rule matched the topic, and the broker logs a throttled `topic_index_table_missing` message instead of one error per publish. The index tables now also survive a restart of their owner process, and the hooks are removed before the tables during application shutdown, which removes the known windows where a publish could find a table missing.
@@ -334,6 +340,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   The STOMP gateway now decodes the escape sequences `\c`, `\r`, `\n`, and `\\` in header names and values, as required by STOMP 1.2. CONNECT and CONNECTED frames are exempt: STOMP 1.2 excludes them from header escaping for backward compatibility with STOMP 1.0, so their headers, including a password containing a colon or a backslash, pass through unchanged. In other frames, an undefined escape sequence is now rejected as a frame error.
 
   The gateway now also accepts CRLF (`\r\n`) line endings in frames and CRLF heartbeats. Before this fix, clients using CRLF line endings could not connect.
+
+- [#18700](https://github.com/emqx/emqx/pull/18700) Fixed an issue where saving an existing NATS Gateway configuration from the Dashboard could replace its authentication credentials with the masked value displayed in the form, causing NATS clients to fail authentication.
+
+  Authentication credentials are now preserved when users update other Gateway settings without changing the authentication configuration.
+
+  NATS Gateway authentication settings now reject duplicate authentication methods and credential entries, including duplicate NKeys and JWT account entries, to prevent ambiguous authentication behavior.
 
 #### Plugins
 
