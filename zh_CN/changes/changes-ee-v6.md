@@ -284,6 +284,11 @@
 - [#18300](https://github.com/emqx/emqx/pull/18300) 无论 `verify` 模式为何，连接器 TLS 设置中的空证书文件字段现在都视为未配置。此前，`verify_peer` 模式会拒绝空的客户端证书字段，尽管对端验证并不要求客户端证书。
 - [#18392](https://github.com/emqx/emqx/pull/18392) 修复不同命名空间中同名的聚合动作（S3、S3Tables、Azure Blob Storage、Snowflake Aggregated）共用临时文件工作目录的问题。
 - [#18449](https://github.com/emqx/emqx/pull/18449) 修复 PostgreSQL 动作写入数据时将罕见的 `sock_closed` 竞态错误错误地视为不可恢复的问题。EMQX 现在将其视为可恢复。
+- [#18767](https://github.com/emqx/emqx/pull/18767) 修复 EMQX 将 RocketMQ 实例命名空间误识别为连接器所属 EMQX 命名空间的问题。
+
+  RocketMQ 连接器的 `namespace` 配置字段用于保存 RocketMQ 实例命名空间。此前，连接器 API 响应会将该值放在与 EMQX 命名空间相同的 JSON 字段中。因此，Dashboard 将连接器视为属于同名的 EMQX 命名空间，并显示“Only the administrator of namespace <name> can perform operations on the connector”；打开连接器也会失败并提示“Managed namespace not found”。
+
+  连接器 API 响应中的 `namespace` 字段始终表示 EMQX 命名空间，不再包含 RocketMQ 实例命名空间。更新连接器时，如果请求未提供 RocketMQ 的 `namespace` 配置字段，EMQX 会保留该字段的现有值。
 
 #### 规则引擎
 
@@ -301,6 +306,11 @@
 - [#18436](https://github.com/emqx/emqx/pull/18436) 修复 NATS 网关内部 JWT 认证未强制检查账户 JWT `exp`/`nbf` 声明和账户级用户撤销的问题。认证期间会拒绝已过期或尚未生效的账户 JWT，以及被账户撤销的用户 JWT；现有连接会在用户 JWT 或账户 JWT 中较早的过期时间到达时断开。格式错误且由 Resolver 预加载的账户 JWT 会在网关配置验证期间被拒绝。
 - [#18494](https://github.com/emqx/emqx/pull/18494) 修复 CoAP 网关客户端报告内部 Keepalive 检查间隔而不是已配置心跳间隔的问题。网关 API 和 `emqx ctl gateway-clients list coap` 现在会以秒为单位报告配置的心跳值。
 - [#18504](https://github.com/emqx/emqx/pull/18504) 修复 STOMP 帧对转义请求头字符和 CRLF 行尾的解析。网关现在会按照 STOMP 1.2 的要求，在请求头名称和值中解码 `\c`、`\r`、`\n` 和 `\\`。CONNECT 和 CONNECTED 帧除外：为兼容 STOMP 1.0，这两种帧的请求头（包括含冒号或反斜杠的密码）会原样传递。其他帧中未定义的转义序列会作为帧错误被拒绝。网关现在也支持 CRLF（`\r\n`）行尾和 CRLF 心跳；此前使用 CRLF 行尾的客户端无法连接。
+- [#18700](https://github.com/emqx/emqx/pull/18700) 修复从 Dashboard 保存已有 NATS 网关配置时，认证凭据可能被表单中显示的掩码值替换，导致 NATS 客户端认证失败的问题。
+
+  当用户更新其他网关设置而不更改认证配置时，现在会保留认证凭据。
+
+  NATS 网关认证配置现在会拒绝重复的认证方式和凭据条目，包括重复的 NKey 和 JWT 账户条目，以避免认证行为不明确。
 
 #### 插件
 
