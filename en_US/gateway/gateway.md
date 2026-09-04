@@ -63,7 +63,7 @@ To change the address used by gateway listeners with port-only binds, configure 
 
 #### View Listener Address Information
 
-To check gateway listener addresses, use `GET /api/v5/gateways/:name/listeners`, replacing `:name` with the gateway name, such as `stomp`. Starting from EMQX 6.3.0, each listener's `status` and `node_status[].status` include `resolved_address` and `resolved_address_from`. The former contains the cluster aggregate; the latter contains each node's values.
+To check gateway listener addresses, use `GET /api/v5/gateways/:name/listeners`, replacing `:name` with the gateway name, such as `stomp`. Starting from EMQX 6.3.0, each listener's `node_status[].status` includes `resolved_address` and `resolved_address_from`. Each `node_status` entry reports the values for its corresponding node; the cluster-wide `status` does not include these node-local fields.
 
 Check `running` alongside the address. For help interpreting an empty `resolved_address` value, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information). Use this gateway list endpoint rather than the MQTT `emqx ctl listeners` command or the gateway's single-listener configuration endpoint.
 

@@ -153,7 +153,7 @@ The listener list shows the configured bind. Use the information icon beside the
 - The resolved address.
 - The address source, such as an IP explicitly specified in the listener's bind or the node's default listener address setting.
 
-An address derived from `nodename` can differ between nodes because each node uses the host part of its own name. An `inconsistent` address indicates that nodes report different listener addresses. This does not necessarily indicate a listener failure. For field meanings, including empty `resolved_address` values and running status, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information).
+The resolved address and its source are node-local. The Dashboard displays the values reported by the node that handles the request. In a cluster, other nodes can resolve the same configured bind to different addresses. For field meanings, including empty `resolved_address` values and running status, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information).
 
 ![image](./assets/config-listener-list.png)
 

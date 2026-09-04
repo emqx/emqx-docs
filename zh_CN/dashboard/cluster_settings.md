@@ -151,7 +151,7 @@ SSRF 策略不校验其他连接器类型、连接器启停操作、连接器删
 - 解析后的地址。
 - 地址来源，例如监听器绑定中显式指定的 IP 或节点的默认监听地址设置。
 
-地址来源为 `nodename` 时，各节点使用自身节点名中的主机部分，因此可能得到不同地址。地址显示为 `inconsistent` 表示各节点返回的监听地址不同，不一定是监听器故障。各字段的含义，包括 `resolved_address` 为空时的含义和运行状态，参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
+解析地址及其来源属于节点本地信息。Dashboard 显示处理该请求的节点所返回的值。在集群中，其他节点可能将同一配置中的绑定值解析为不同的地址。各字段的含义，包括 `resolved_address` 为空时的含义和运行状态，参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
 
 ![config-listener-list](./assets/config-listener-list.png)
 
