@@ -167,20 +167,20 @@ MQTT Streams provide a set of core capabilities that define how messages are sto
 
 ## Security Considerations
 
-EMQX authorizes a stream subscription against the full topic, including the `$stream/` prefix and the stream name. Write authorization rules for that full topic. A stream subscription can also replay messages that the stream stored before the subscription was created.
+EMQX authorizes a stream subscription against the complete subscription topic filter, including the `$stream/` prefix and the stream name. Authorizing a stream subscription can also allow the client to replay messages that the stream stored before the subscription was created.
 
 ### Stream Subscriptions Need Their Own Rules
 
 Rules written for a plain topic space do not cover the corresponding stream subscriptions:
 
 - A rule for `t/#` does not apply to `$stream/events/t/#`. EMQX treats the two as different topics.
-- A wildcard rule never matches a topic that starts with `$`. A rule that denies `#`, including the `{eq, "#"}` rule in the default `acl.conf`, does not deny `$stream/events/#`.
+- An authorization topic filter that starts with `#` or `+` does not match a subscription topic filter that starts with `$`. A rule that denies `#`, including the `{eq, "#"}` rule in the default `acl.conf`, does not deny `$stream/events/#`.
 
-A client that is denied `#` can therefore still subscribe to `$stream/events/#` and replay every message the stream holds. Add explicit rules for the `$stream/` namespace, and keep them at least as strict as the rules for the topics the stream ingests:
+A client that is denied `#` can therefore still subscribe to `$stream/events/#` and set `stream-offset` to `earliest` to replay all messages still stored in the stream. Add explicit rules for `$stream/`, and make them at least as strict as the rules for the topics matched by the stream's topic filter:
 
 ```erlang
-%% Allow one consumer to replay one stream.
-{allow, {username, "event_reader"}, subscribe, ["$stream/events", "$stream/events/#"]}.
+%% Allow one consumer to replay the pre-created "events" stream without granting auto-creation.
+{allow, {username, "event_reader"}, subscribe, ["$stream/events"]}.
 
 %% Deny all other stream subscriptions, including the deprecated prefix.
 {deny, all, subscribe, ["$stream/#", "$s/#"]}.
@@ -188,13 +188,15 @@ A client that is denied `#` can therefore still subscribe to `$stream/events/#` 
 
 Keep the deprecated `$s/` prefix in the rules while any client still uses it. See [Deprecated Prefix](#deprecated-prefix).
 
-This behavior differs from [shared subscriptions](../messaging/mqtt-shared-subscription.md). For `$share/<group>/t/#`, EMQX removes the prefix and authorizes `t/#`. For `$stream/<name>/t/#`, EMQX authorizes the full topic.
+This behavior differs from [shared subscriptions](../messaging/mqtt-shared-subscription.md). For `$share/<group>/t/#`, EMQX removes the prefix and authorizes `t/#`. For `$stream/<name>/t/#`, EMQX authorizes the complete subscription topic filter.
 
-### Auto-Creation Grants Control over the Ingested Topics
+### Auto-Creation Allows Client-Specified Topic Filters
 
-When stream auto-creation is enabled, the subscribing client chooses the topic filter of the new stream. EMQX takes the filter from `$stream/<name>/<topic_filter>` and does not check whether the client may subscribe to that filter directly. A client that is allowed to subscribe to `$stream/+/#` can create a stream over `#` and read the whole topic space through it.
+When stream auto-creation is enabled, the subscribing client determines the new stream's topic filter. EMQX uses `<topic_filter>` from `$stream/<name>/<topic_filter>` to create the stream. It does not separately check whether the client is authorized to subscribe to `<topic_filter>` directly.
 
-Auto-creation of last-value streams is enabled by default. On deployments that accept untrusted clients, restrict the `$stream/` namespace as shown above, or disable auto-creation and create streams from the Dashboard or the REST API. See [Automatically Create Streams via Dashboard](./mqtt-stream-task.md#automatically-create-streams-via-dashboard).
+For example, a client allowed to subscribe to `$stream/+/#` can subscribe to `$stream/events/#`. If the `events` stream does not exist, EMQX creates it with `#` as its topic filter. The stream then stores messages published to all non-`$` topics. The client might therefore replay messages from topics that it is not authorized to subscribe to directly.
+
+Auto-creation of last-value streams is enabled by default. On deployments that accept untrusted clients, allow access only to specific pre-created streams, such as `$stream/events`, and deny all other subscriptions that match `$stream/#` or `$s/#`. Alternatively, disable auto-creation and create streams from the Dashboard or the REST API. See [Automatically Create Streams via Dashboard](./mqtt-stream-task.md#automatically-create-streams-via-dashboard).
 
 ## Compatibility Notes
 

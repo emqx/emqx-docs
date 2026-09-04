@@ -53,7 +53,7 @@
 - 限制 MQTT 资源使用范围，降低异常客户端或恶意客户端的影响面，例如检查报文大小、主题层级、订阅数量、Inflight 窗口和排队消息等限制。详见[MQTT 配置](../configuration/mqtt.md)。
 - 在需要时，对监听器启用速率限制，控制连接突发和消息突发。详见[速率限制器配置](../configuration/limiter.md)。
 - 在需要时，使用[黑名单](./blacklist.md)和[连接抖动检测](./flapping-detect.md)抑制异常或不稳定客户端。
-- 如果启用了[消息队列](../message-queue/message-queue-concept.md)或[MQTT 消息流](../mqtt-stream/mqtt-stream-concept.md)，请为 `$queue/` 和 `$stream/` 命名空间单独编写授权规则。EMQX 对这些订阅的授权基于完整主题（包括前缀以及队列或消息流名称），并不会对末尾的主题过滤器单独授权。通配符规则永远不会匹配以 `$` 开头的主题，因此一个被拒绝订阅 `#` 的客户端仍然可以订阅 `$queue/<name>/#` 或 `$stream/<name>/#`，并通过该队列或消息流接收同样的消息。在启用自动创建的情况下，发起订阅的客户端还可以决定新建的队列或消息流摄取哪些主题。规则中还应覆盖已弃用的 `$q/` 和 `$s/` 前缀。详见[消息队列安全注意事项](../message-queue/message-queue-concept.md#安全注意事项)与[MQTT 消息流安全注意事项](../mqtt-stream/mqtt-stream-concept.md#安全注意事项)。
+- 如果启用了[消息队列](../message-queue/message-queue-concept.md)或[MQTT 消息流](../mqtt-stream/mqtt-stream-concept.md)，请分别为 `$queue/` 和 `$stream/` 命名空间配置授权规则，并覆盖已弃用的 `$q/` 和 `$s/` 前缀。EMQX 针对包含前缀的完整订阅主题过滤器执行授权，不会单独检查 `$queue/<name>/` 或 `$stream/<name>/` 后面的 `<topic_filter>` 部分。针对 `#` 或 `+/#` 的规则不会匹配以 `$` 开头的过滤器。启用自动创建时，还需限制这部分 `<topic_filter>`，因为它决定新队列或消息流接收并存储哪些主题的消息。详见[消息队列安全注意事项](../message-queue/message-queue-concept.md#安全注意事项)与[MQTT 消息流安全注意事项](../mqtt-stream/mqtt-stream-concept.md#安全注意事项)。
 - 如果启用了集群连接（Cluster Linking），请在接收对端连入的监听器上强制认证，将 `$LINK/` 控制命名空间限定给专用的集群连接 ClientID，并拒绝其它任何客户端访问。详见[集群连接安全加固](../cluster-linking/security.md)。
 
 ## 阶段 5：管理面与运维维护
