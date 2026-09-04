@@ -9,6 +9,22 @@
 建议通过配置防火墙规则来保持集群端口的内部防火墙规则，如 AWS 安全组，或 iptables。
 :::
 
+## 设置节点 Cookie
+
+出于安全考虑，请在所有要加入集群的节点上更改默认 Cookie，并确保所有节点使用相同的高熵 Cookie。可以在 `emqx.conf` 中直接设置：
+
+```hocon
+node.cookie = "a7G9k2P4m8Q6x3R5"
+```
+
+从 EMQX 6.3.0 开始，为避免在 `emqx.conf` 中以明文保存 Cookie，可以将 `node.cookie` 设置为引用普通文件或 FIFO（命名管道）的文件 URL：
+
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
+```
+
+`EMQX_NODE__COOKIE` 环境变量也支持 `file://` URL。需要在每个节点上分发该文件或 FIFO，并确保所有节点读取到相同的 Cookie。关于启动时读取行为和 FIFO 要求，参见[从文件加载节点 Cookie](../../configuration/secret-from-file.md#从文件加载节点-cookie)。
+
 ## 集群内通信端口
 
 为了形成一个集群，EMQX 节点需要通过一些常规端口进行互联

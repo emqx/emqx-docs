@@ -63,6 +63,14 @@ Follow these steps to run a single EMQX node. For more information about the off
      emqx/emqx-enterprise:@EE_VERSION@
    ```
 
+### Listener Addresses in Docker
+
+Starting from EMQX 6.3.0, the official image's entrypoint sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all` when the variable is unset or empty. This selects all network interfaces for MQTT listeners, gateway listeners, and the Dashboard HTTP listener whose binds specify only a port, so they can be reached through published container ports under either security profile. Explicit IP addresses in listener binds remain unchanged. This setting only controls the bind address; it does not relax authentication or authorization requirements.
+
+To override this default, pass another supported value with `docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>`, or set the variable in the service's `environment` section in Docker Compose. Environment variables take precedence over configuration files, so setting `node.default_listener_address` only in a mounted `emqx.conf` does not override the entrypoint's default. See [Default Listener Address](../access-control/security-profile.md#default-listener-address) for supported values.
+
+With Docker bridge networking, setting this variable to `loopback` binds the affected listeners to loopback inside the container's network namespace. They cannot then be reached through published ports, even if you use `-p`. To control which host addresses are used for published ports, see [Docker port publishing and mapping](https://docs.docker.com/engine/network/port-publishing/).
+
 ### Start EMQX with Feature Gates
 
 Starting from EMQX 6.3.0, you can use the `EMQX_FEATURES` environment variable to control which optional features are available at startup. For example, to start EMQX with only core applications, run:

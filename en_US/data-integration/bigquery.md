@@ -37,7 +37,7 @@ This section describes the preparations you need to complete before you start to
 
 ### Create Service Account Key in GCP
 
-To allow EMQX to connect with BigQuery, you need to create a Service Account in Google Cloud and generate a key in JSON format.
+If you use **Service Account JSON** authentication, create a service account in Google Cloud and generate a key in JSON format.
 
 1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has the necessary permissions to access the datasets and tables you will use. For example, by granting the "BigQuery Data Editor" role to read and write the required datasets or tables, or at least ensuring it has read/write access to their data.
 
@@ -89,6 +89,14 @@ The `scope` must exactly match the application's audience (aud). Otherwise, the 
 When granting the Service Account access to the WIF pool, use the **Object ID** (not the Application ID) as the Subject value. The Object ID is visible on the application's Overview page in the Azure portal under **Enterprise applications**.
 
 :::
+
+### Attached Service Account Prerequisites
+
+To use **Attached Service Account** authentication, EMQX must run on a GCP Compute Engine instance with an attached service account. Make sure the instance's OAuth access scopes allow access to BigQuery. Google recommends using the `cloud-platform` scope (`https://www.googleapis.com/auth/cloud-platform`) and restricting the service account's permissions through IAM roles. The service account must have permission to access the target BigQuery datasets and tables. For more information, see [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts) in the Google Cloud documentation.
+
+The target BigQuery datasets and tables must be in the GCP project associated with the Compute Engine instance. In an EMQX cluster, every node must meet these requirements and run on a Compute Engine instance in that project.
+
+When the connector starts, EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. You do not need to upload a service account key file.
 
 ### Create and Manage Datasets and Tables in GCP
 
@@ -143,7 +151,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **BigQuery** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my_bigquery`. The name is used to associate the BigQuery Sink with the connector and must be unique within the cluster.
-4. In the **Authentication** dropdown, select one of the following authentication methods and fill in the corresponding fields:
+4. Select one of the following authentication methods from the **Authentication** list and configure the corresponding fields:
    - **Service Account JSON**: Upload the Service Account credentials in JSON format that you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
    - **Workload Identity Federation (WIF)**: Fill in the following fields. This method does not use a service account JSON file. See [Set Up Workload Identity Federation in GCP](#set-up-workload-identity-federation-in-gcp) for prerequisites.
      - **GCP Project ID**: The Project ID for the resource being accessed by the connector.
@@ -156,6 +164,7 @@ Before adding a BigQuery Producer Sink action, you need to create a BigQuery con
        - **OAuth Client ID**: The client ID used to request a token from the OAuth server.
        - **OAuth Client Secret**: The client secret used to request a token from the OAuth server.
        - **OAuth Request Scope**: The `scope` to provide when requesting the OAuth access token, if required by your provider.
+   - **Attached Service Account**: No additional fields are required. EMQX automatically retrieves the GCP project ID and an access token from the instance metadata endpoint. See [Attached Service Account Prerequisites](#attached-service-account-prerequisites) for prerequisites.
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Sink](#create-a-rule-with-bigquery-sink).
 
@@ -203,7 +212,9 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 8. Select the `my_bigquery` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-9. In **Dataset** and **Table**, enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
+9. Configure the following BigQuery resource parameters:
+   - **Project ID** (optional): Enter the ID of the GCP project that contains the target dataset and table. If specified, this value overrides the project ID extracted from the selected connector's authentication configuration and applies only to this Sink. If left empty, EMQX uses the project ID obtained from the authentication configuration.
+   - **Dataset** and **Table**: Enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
 
 12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 

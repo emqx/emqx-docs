@@ -60,6 +60,14 @@ EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚�
      emqx/emqx-enterprise:@EE_VERSION@
    ```
 
+### Docker 中的监听地址
+
+从 EMQX 6.3.0 开始，当环境变量 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 未设置或为空时，官方镜像的入口脚本将其设置为 `all`。该默认值使仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器监听所有网络接口，从而在两种安全配置方案下均可通过发布的容器端口访问。监听器绑定中显式指定的 IP 地址保持不变。该配置仅控制绑定地址，不会放宽认证或授权要求。
+
+如需覆盖此默认值，可通过 `docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>` 传入其他支持的值，或在 Docker Compose 服务的 `environment` 部分设置该变量。环境变量的优先级高于配置文件，因此，仅在挂载的 `emqx.conf` 中设置 `node.default_listener_address` 不会覆盖入口脚本的默认值。支持的取值参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。
+
+使用 Docker 桥接网络时，将该变量设置为 `loopback` 会使受影响的监听器绑定到容器网络命名空间内的回环地址。此时，即使使用 `-p`，也无法通过发布的端口访问这些监听器。如需控制发布端口所使用的宿主机地址，请参见 [Docker 端口发布和映射](https://docs.docker.com/engine/network/port-publishing/)。
+
 ### 使用功能门控启动 EMQX
 
 从 EMQX 6.3.0 开始，可以使用 `EMQX_FEATURES` 环境变量控制启动时可用的可选功能。例如，如需仅启动核心应用，运行：

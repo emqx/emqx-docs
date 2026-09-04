@@ -38,7 +38,7 @@ EMQX 提供内置可观测性功能、外部集成和生产监控指南，帮助
 
 - [主题监控](./topic-metrics.md)
 
-  EMQX 提供了主题监控功能，可以统计指定主题下的消息收发数量、速率等指标。您可以通过 Dashboard 的**问题分析** -> **主题监控**页面查看和使用这一功能，也可以通过 HTTP API 完成相应操作。
+  主题监控用于统计指定 MQTT 主题的消息流入、流出和丢弃情况。您可以在 Dashboard 中监控具体主题。从 EMQX 6.3 开始，还可以通过 REST API 创建支持通配符主题过滤器的命名指标集合，并将计数器导出到 Prometheus。
 
 - [慢订阅统计](./slow-subscribers-statistics.md)
 

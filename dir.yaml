@@ -566,6 +566,10 @@
       title_cn: BigQuery
       title_ja: BigQuery
       path: data-integration/bigquery
+    - title_en: Bigtable
+      title_cn: Bigtable
+      title_ja: Bigtable
+      path: data-integration/bigtable
     - title_en: Cassandra
       title_cn: Cassandra
       title_ja: Cassandra
@@ -895,6 +899,7 @@
             - observability/opentelemetry/metrics
             - observability/opentelemetry/logs
             - observability/opentelemetry/traces
+            - observability/opentelemetry/dynatrace
             - title_en: End-to-end Traces
               title_cn: 端到端追踪
               title_ja: エンドツーエンドトレース
@@ -930,15 +935,16 @@
           path: extensions/plugin-catalog
           collapsed: true
           children:
-            - extensions/plugin-catalog/6.1/emqx-acme
-            - extensions/plugin-catalog/6.1/emqx-relup
-            - extensions/plugin-catalog/6.1/emqx-backup-sync
-            - extensions/plugin-catalog/6.1/emqx-bridge-mqtt-dq
-            - extensions/plugin-catalog/6.1/emqx-maptabs
-            - extensions/plugin-catalog/6.1/emqx-offline-messages
-            - extensions/plugin-catalog/6.1/emqx-sync-request
-            - extensions/plugin-catalog/6.1/emqx-username-quota
-            - extensions/plugin-catalog/6.1/emqx-unsgov
+            - extensions/plugin-catalog/6.3/emqx-acme
+            - extensions/plugin-catalog/6.3/emqx-agent
+            - extensions/plugin-catalog/6.3/emqx-relup
+            - extensions/plugin-catalog/6.3/emqx-backup-sync
+            - extensions/plugin-catalog/6.3/emqx-bridge-mqtt-dq
+            - extensions/plugin-catalog/6.3/emqx-maptabs
+            - extensions/plugin-catalog/6.3/emqx-offline-messages
+            - extensions/plugin-catalog/6.3/emqx-sync-request
+            - extensions/plugin-catalog/6.3/emqx-username-quota
+            - extensions/plugin-catalog/6.3/emqx-unsgov
     - title_en: Telemetry
       title_cn: 遥测
       title_ja: テレメトリ
@@ -1412,6 +1418,10 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+        - title_en: EMQX 6.3
+          title_cn: EMQX 6.3
+          title_ja: EMQX 6.3
+          path: changes/breaking-changes-6.3
         - title_en: EMQX 6.2
           title_cn: EMQX 6.2
           title_ja: EMQX 6.2

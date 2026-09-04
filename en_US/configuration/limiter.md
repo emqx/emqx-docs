@@ -1,6 +1,6 @@
 # Rate Limiter Configuration
 
-Limiter is a new feature introduced in EMQX 5.0. It is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time. For more information on the Limiter and how it works, see [Rate Limit](../rate-limit/rate-limit.md).
+The rate limiter, introduced in EMQX 5.0, controls connection rates and the rates at which clients publish and receive messages, transfer data, and send `SUBSCRIBE` packets. For more information about rate limiters and how they work, see [Rate Limit](../rate-limit/rate-limit.md).
 
 ## Listener-Level Limiters
 
@@ -12,6 +12,8 @@ Limiters can operate at the listener level. EMQX uses the following types of lim
 | bytes_burst    | Max Message Publishing Traffic Burst (Per Client) | Number of bytes that can be sent in a burst by a single client, based on the regular `Data Publishing Rate`. | Pause receiving client messages |
 | messages_rate  | Max Message Publishing Rate (Per Client)          | The number of messages published per second by a single client. | Pause receiving client messages |
 | messages_burst | Max Message Publishing Burst (Per Client)         | Number of messages that can be sent in a burst by a single client, on top of regular `Messages Publish Rate`. | Pause receiving client messages |
+| subscribes_rate | Subscribes Rate                                  | The maximum number of `SUBSCRIBE` packets a client connection can send within the configured interval. | Do not process the packet or create its subscriptions. Return a failure code in the `SUBACK` for each topic filter. |
+| subscribes_burst | Subscribes Burst                                | The number of additional `SUBSCRIBE` packets that a client connection can send in a burst. | Same as above |
 | max_conn_rate  | Max Connection Rate (Listener)                    | The number of connections per second for the current listener. | Pause receiving new connections |
 | max_conn_burst | Max Connection Burst (Listener)                   | The maximum number of connections that the listener can accept in bursts. | Pause receiving new connections |
 
@@ -26,6 +28,8 @@ listeners.tcp.default {
   max_conn_burst = "10000/60m"
   messages_rate = "1000/s"
   messages_burst = "10000/60m"
+  subscribes_rate = "120/1m"
+  subscribes_burst = "10/10s"
   bytes_rate = "1MB/s"
   bytes_burst = "100MB/60m"
 }
@@ -37,8 +41,13 @@ This configuration implies:
 - The listener can accept a maximum of 10,000 connections within 60 minutes.
 - The maximum publishing rate for messages is 1000 per second per client.
 - The listener allows a burst of up to 10,000 messages within a short period every 60 minutes.
+- Each client can send up to 120 `SUBSCRIBE` packets per minute, with up to 10 additional packets allowed in a burst every 10 seconds.
 - The maximum publishing rate for data is 1MB per second per client.
 - The listener allows a burst of up to 100MB within a short period every 60 minutes.
+
+The subscribe packet rate limit applies independently to each client connection. The limiter counts packets rather than topic filters. When the limit is reached, EMQX does not process the packet or create its subscriptions, but keeps the client connected. For MQTT 5.0, EMQX returns a `SUBACK` with the `Quota Exceeded` reason code (0x97) for every topic filter in the packet. For MQTT 3.x, EMQX returns the `SUBACK` failure return code (0x80) for every topic filter.
+
+The default value of `subscribes_rate` is `infinity`, which disables the limit. When configured for a managed namespace, the namespace-level subscribe packet rate limit overrides the listener-level subscribe packet rate limit for clients in that namespace.
 
 ## Node-Level Limiters
 
@@ -89,6 +98,8 @@ In addition to the publish-side limiters above, EMQX supports subscriber-side de
 | delivery_messages_burst | Max Message Delivery Burst (Per Client)         | Burst allowance on top of `delivery_messages_rate`.          | Same as above.                                               |
 | delivery_bytes_rate     | Max Message Delivery Traffic (Per Client)       | The maximum rate (in bytes) at which data is delivered to a single subscriber per node. | QoS 0 messages are dropped. QoS 1 and QoS 2 messages are queued internally and retried after a delay derived from the limiter configuration. |
 | delivery_bytes_burst    | Max Message Delivery Traffic Burst (Per Client) | Burst allowance on top of `delivery_bytes_rate`.             | Same as above.                                               |
+
+When a delivery rate limit blocks a QoS 1 or QoS 2 message, EMQX queues that message and subsequent QoS 1 and QoS 2 messages together. This prevents the delivery rate limiter itself from causing later messages to overtake earlier messages.
 
 Unlike publish-side limiters, delivery limiters are channel-only: they apply per client connection and are not shared across zone or listener groups.
 

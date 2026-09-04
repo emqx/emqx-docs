@@ -3,6 +3,12 @@ EMQX 内置支持通过 gRPC OTEL 协议将指标直接推送到 OpenTelemetry C
 
 本页面介绍了如何通过 EMQX Dashboard 将 OpenTelemetry 与 EMQX 集成，并通过 [Prometheus](../../observability/prometheus.md) 查看 EMQX 指标。
 
+::: tip 提示
+
+在 EMQX 6.3.0 中，Dynatrace 集成不支持 OpenTelemetry 指标。
+
+:::
+
 ## 前置准备
 
 在集成 Opentelemetry 之前，您需要先部署和配置 OpenTelemetry 以及 Prometheus。

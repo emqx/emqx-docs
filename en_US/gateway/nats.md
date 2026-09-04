@@ -193,6 +193,25 @@ You can further customize your gateway by editing, deleting, or adding new liste
 
 3. Click **Add** to complete listener creation.
 
+#### Configure the Forwarded Client Address
+
+Starting from EMQX 6.3.0, `proxy_address_header` and `proxy_port_header` default to `""`, so NATS WebSocket listeners use the TCP peer address and port unless you explicitly configure forwarded header names.
+
+If the NATS listener is behind a trusted proxy that overwrites the forwarded headers, configure the header names in `base.hocon`. For example:
+
+```hocon
+gateway.nats.listeners.ws.default.websocket {
+  proxy_address_header = "x-forwarded-for"
+  proxy_port_header = "x-forwarded-port"
+}
+```
+
+For a WSS listener, use `gateway.nats.listeners.wss.<listener-name>.websocket` instead. EMQX uses the first (leftmost) entry in each configured header. If a header is absent or invalid, EMQX uses the corresponding TCP peer address or port.
+
+Configure these options only when a trusted proxy overwrites client-supplied values. Otherwise, a client can make EMQX use a forged source address.
+
+EMQX 6.3.0 also fixes header-name matching for gateway WebSocket listeners. Before EMQX 6.3.0, configured names did not match request headers, so EMQX used the TCP peer address and port.
+
 ### Configure Authentication
 
 The NATS gateway supports authentication in two ways:

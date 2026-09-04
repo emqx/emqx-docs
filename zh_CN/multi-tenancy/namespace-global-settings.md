@@ -158,20 +158,52 @@ coalesce(client_attrs.tag, username)
 
 客户端 ID 隔离用于解决多租户场景下不同命名空间使用相同客户端 ID 导致冲突的问题。
 
-启用该配置后，EMQX 会在内部为客户端 ID 自动添加命名空间前缀，而客户端在连接时使用的原始 Client ID 保持不变。
+EMQX 在全局范围内使用有效客户端 ID 标识会话，而不是使用命名空间和客户端 ID 的组合。因此，客户端 ID 隔离通过生成全局唯一的有效客户端 ID 来避免冲突，通常会在原始客户端 ID 前添加命名空间前缀。客户端仍发送原始客户端 ID，EMQX 在内部将覆盖后的 ID 用作有效客户端 ID。
 
-当启用客户端 ID 隔离时，Dashboard 会自动填入一个推荐的默认表达式：
+### 选择客户端 ID 覆盖机制
+
+请根据命名空间信息的来源以及有效客户端 ID 是否必须包含命名空间，选择覆盖机制：
+
+- 如果命名空间在认证前生成，请配置 `mqtt.clientid_override`。EMQX 在 `mqtt.client_attrs_init` 执行完成后、认证开始前对该表达式求值，因此表达式可以使用由 `mqtt.client_attrs_init` 初始化的属性，包括 `client_attrs.tns`。
+- 如果命名空间来自认证结果，并且有效客户端 ID 必须包含该命名空间，请配置[认证后端返回 `clientid_override`](../access-control/authn/authn.md#通过认证结果覆盖客户端-id)。返回值必须包含完整的新客户端 ID。`mqtt.clientid_override` 表达式无法使用认证后端返回的属性，也无法使用 `multi_tenancy.post_auth_tns_expression` 生成的命名空间。
+- 如果 `multi_tenancy.post_auth_tns_expression` 设置命名空间，但有效客户端 ID 不需要包含该命名空间，则只有在客户端已使用全局唯一客户端 ID 时，才无需配置客户端 ID 覆盖。
+
+一个连接只应使用一种客户端 ID 覆盖机制。如果同时配置两种机制，认证结果覆盖会在稍后执行，并替换 `mqtt.clientid_override` 生成的客户端 ID。无论使用哪种机制，都必须确保最终生成的客户端 ID 全局唯一。
+
+### EMQX 应用客户端 ID 覆盖的顺序
+
+EMQX 按以下顺序确定有效客户端 ID：
+
+1. 通过 `mqtt.client_attrs_init` 初始化客户端属性。
+2. 在认证前对 `mqtt.clientid_override` 求值。
+3. 认证客户端，并应用认证成功结果中返回的非空 `clientid_override`。
+4. 对 `multi_tenancy.post_auth_tns_expression` 求值。
+5. 使用有效客户端 ID 打开客户端会话。
+
+EMQX 不会在认证后再次对 `mqtt.clientid_override` 求值，也不会自动将认证后获取的命名空间添加到客户端 ID。如果认证成功结果中未包含 `clientid_override` 或其值为空，EMQX 将继续使用此前确定的客户端 ID。
+
+### 配置认证前客户端 ID 隔离
+
+在 Dashboard 中启用客户端 ID 隔离时，EMQX 会配置 `mqtt.clientid_override` 并自动填入一个推荐表达式：
 
 ```
 concat([client_attrs.tns, '-', clientid])
 ```
+
+::: warning 重要提示
+
+从 EMQX 6.3.0 开始，如果 `mqtt.clientid_override` 表达式求值出错或生成空字符串，EMQX 会记录错误日志并拒绝连接。MQTT 5.0 客户端会收到 CONNACK 原因码 `0x85`（`Client Identifier not valid`），MQTT 3.1 和 3.1.1 客户端会收到返回码 `2`。EMQX 不会回退到客户端提供的 Client ID。
+
+升级前，请确认每个连接的客户端都能将已配置的表达式求值为非空字符串。如果某个客户端无法生成有效结果，请修正表达式或该客户端必需的数据。
+
+:::
 
 在上述配置下：
 
 - 不同命名空间中的客户端即使使用相同的 Client ID，也不会发生冲突。
 - 内部实际使用的客户端 ID 将包含命名空间前缀。
 
-该表达式仅作为示例，用户可以根据自身业务需要调整，只要最终生成的客户端 ID 在全局范围内保持唯一即可。
+该表达式仅作为认证前生成命名空间时的示例。可以根据业务需要调整表达式，但必须确保最终生成的客户端 ID 在全局范围内保持唯一。
 
 ### 实际效果示例
 

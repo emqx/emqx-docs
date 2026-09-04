@@ -17,6 +17,22 @@
 
 ![gateway_struct](./assets/gateway_struct.png)
 
+### 监听器
+
+#### 绑定地址
+
+网关监听器的 `bind` 配置用于指定接收客户端流量的本地地址和端口，可以显式指定 IP 地址和端口，也可以仅指定端口。
+
+从 EMQX 6.3.0 开始，`bind` 仅指定端口的网关监听器使用节点级配置项 `node.default_listener_address` 确定默认绑定地址。`bind` 中显式指定的 IP 地址和端口优先。未设置该配置项时，仅指定端口的网关监听器在 `legacy` 和 `hardened` 两种安全配置方案下均监听所有网络接口。
+
+如需更改仅指定端口的网关监听器所使用的地址，可在各节点的 `emqx.conf` 中或通过环境变量 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 设置该配置项，并在修改后重启节点。该配置也影响仅指定端口的 MQTT 监听器和 Dashboard HTTP 监听器。支持的取值及官方 Docker 镜像的默认值参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。
+
+#### 查看监听地址信息
+
+如需检查网关监听地址，使用 `GET /api/v5/gateways/:name/listeners`，将 `:name` 替换为网关名称，例如 `stomp`。从 EMQX 6.3.0 开始，每个监听器的 `node_status[].status` 包含 `resolved_address` 和 `resolved_address_from`。每个 `node_status` 条目返回对应节点的值；集群级 `status` 不包含这些节点本地字段。
+
+在每个 `node_status` 条目中，应结合 `status.running` 和 `status.resolved_address`，判断监听器是否正在对应节点上运行。`resolved_address` 为空时的含义参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。请使用此网关列表接口，而不是 MQTT 的 `emqx ctl listeners` 命令或网关的单个监听器配置接口。
+
 ### 接入认证
 
 网关会给每个连接构建客户端信息，它要求：

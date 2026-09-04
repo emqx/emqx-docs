@@ -97,6 +97,10 @@ dashboard {
 
   用于设置监听器绑定的网络地址和端口号。在以上示例中，监听器将绑定到所有可用的网络接口（`0.0.0.0`）上的端口 `18083`。
 
+  从 EMQX 6.3.0 开始，当 `dashboard.listeners.http.bind` 仅指定端口（例如 `18083`）时，EMQX 使用 `node.default_listener_address` 确定各节点的绑定地址。未设置该配置项时，HTTP 监听器在 `legacy` 安全配置方案下监听所有网络接口，在 `hardened` 方案下绑定回环地址。`bind` 中显式指定的 IP 地址（如上例所示）优先于默认地址。
+
+  该默认地址配置不适用于 Dashboard HTTPS 监听器。支持的取值、重启要求及 Docker 默认值参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。
+
 - `max_connections = 512` 
 
   用于设置监听器将接受的最大并发连接数。在以上示例中，最大连接数设置为 `512`。

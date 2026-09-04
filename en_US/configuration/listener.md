@@ -21,6 +21,24 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+## How EMQX Determines the Listener Address
+
+A listener address determines the local network interfaces and port on which EMQX receives client connections.
+
+A listener's `bind` setting accepts an explicit IP address and port, such as `"0.0.0.0:1883"`, or a port alone, such as `1883`. Starting from EMQX 6.3.0, the node-level `node.default_listener_address` setting controls the address used by listeners whose binds specify only a port.
+
+EMQX selects the address in the following order:
+
+1. If `bind` includes an IP address, EMQX uses that address. Neither `node.default_listener_address` nor the security profile overrides it.
+2. If `bind` specifies only a port and `node.default_listener_address` is set, EMQX uses the address selected by that setting on the local node.
+3. Otherwise, MQTT listeners use the security profile's default: all network interfaces under `legacy`, or the loopback address under `hardened`. The loopback address is accessible only from the local host.
+
+The configured `bind` value stays unchanged. For example, `bind = 1883` remains a port-only value even when the listener uses a specific IP address at runtime.
+
+The TCP, SSL, and WebSocket configuration examples below use explicit IP addresses, so they are not affected by the default listener address setting.
+
+For supported values and startup behavior, see [Default Listener Address](../access-control/security-profile.md#default-listener-address). The official Docker image sets its own default; see [Listener Addresses in Docker](../deploy/install-docker.md#listener-addresses-in-docker).
+
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
@@ -137,20 +155,72 @@ where:
   - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
   - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
 
+## Use a Different Address on Each Node
+
+Listener configuration changes made through the Dashboard, REST API, or CLI are replicated across the cluster. If you put one node's IP address in `bind`, the listener cannot bind to that address on other nodes unless the IP address is configured on a local network interface of those nodes. To use a different address on each node, keep the listener's bind as a port and configure the default address separately on each node.
+
+Use `base.hocon` for listener settings, and `emqx.conf` or environment variables for the node-level default listener address. For example, to use the host part of each node's Erlang node name:
+
+1. Set the TCP listener's bind to `1883` through the Dashboard, or configure the following in each node's `etc/base.hocon`:
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   If a higher-priority configuration source already sets an explicit bind address, update that source instead. See [Config Override Rules](./configuration.md#config-override-rules).
+
+2. Add the following to each node's `emqx.conf`:
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   For Docker deployments, pass `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename` to `docker run`, or set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename` in the Docker Compose service's `environment` section. This overrides the official image's `all` default, which takes precedence over the value in `emqx.conf`.
+
+   EMQX uses the host part after `@` in the node name, resolving it at node startup if it is a hostname. Ensure that it resolves to an address available on that node. A hostname that cannot be resolved prevents the node from starting.
+
+3. Restart each node to apply `node.default_listener_address`. This setting affects all port-only binds for MQTT listeners, gateway listeners, and the Dashboard HTTP listener on that node. Explicit IP addresses in listener binds remain unchanged.
+
+You can also set `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` in the node's environment. Environment variables take precedence over `emqx.conf`.
+
+## View Listener Address Information
+
+Starting from EMQX 6.3.0, you can view the resolved address and its source without changing the listener's configured `bind`. Use either the CLI or the REST API to query a node.
+
+### Query a Node with the CLI
+
+Run the following command on the node you want to check:
+
+```bash
+emqx ctl listeners
+```
+
+Check `listen_on` for the configured bind, `resolved_address` for the resolved IP, and `resolved_address_from` for the address source. Also check `running` to confirm whether the listener is running: a stopped listener can still report a resolved address. See [Listener Address Information](../admin/cli.md#listener-address-information) for field meanings, including what an empty `resolved_address` value means.
+
+### Query a Listener with the REST API
+
+To check a listener through the REST API, use `GET /api/v5/listeners/:id`, for example `GET /api/v5/listeners/tcp:default`. The response reports the address on the node handling the request. Use [API authentication](../admin/api.md#authentication) as required.
+
+The `bind` field keeps the configured value, including the port. `resolved_address` and `resolved_address_from` are read-only information; change `bind` or `node.default_listener_address` to change the address, rather than editing these response fields.
+
+These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../gateway/gateway.md#listener).
+
 ## Forwarded Client Address (WebSocket Listeners)
 
 WebSocket and secure WebSocket listeners have two options that control how EMQX determines a client's source address when the listener sits behind a proxy or load balancer:
 
-- `websocket.proxy_address_header` (default: `x-forwarded-for`)
-- `websocket.proxy_port_header` (default: `x-forwarded-port`)
+- `websocket.proxy_address_header`: Specifies the HTTP header that carries the client IP address.
+- `websocket.proxy_port_header`: Specifies the HTTP header that carries the client port.
 
-When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP.
+Starting from EMQX 6.3.0, both options default to `""`. EMQX uses the corresponding TCP peer address or port for any option left empty. To obtain either value from a trusted proxy, explicitly configure the corresponding header name, such as `x-forwarded-for` or `x-forwarded-port`.
+
+When the configured header is present on the WebSocket upgrade request, EMQX uses the first (leftmost) entry of the header value as the client's source IP address (or port) instead of the address of the real TCP peer. The derived address is what IP-based authorization rules, banned clients, flapping detection, and audit and trace logs see as the client's source IP. Configured header names are matched case-insensitively.
 
 ::: warning Trust Forwarded Address Headers Only Behind a Trusted Proxy
 
-The header value determines the client's apparent source IP, so it must be honored only when a trusted proxy sets it:
+The header value determines the client source IP that EMQX uses, so it must be honored only when a trusted proxy sets it:
 
-- If the listener is directly reachable by clients (no proxy in front), any client can send the header and choose its own apparent source IP. Set `proxy_address_header = ""` and `proxy_port_header = ""` to always use the real TCP peer address.
+- If the listener is directly reachable by clients (no proxy in front), keep `proxy_address_header` and `proxy_port_header` empty so that EMQX always uses the real TCP peer address.
 - If there is a proxy but it **appends** its observation to an inbound `X-Forwarded-For` header instead of overwriting or stripping it (appending is the default behavior of most proxies, for example NGINX's `$proxy_add_x_forwarded_for`), the leftmost entry that EMQX reads is still the one supplied by the client, so the source IP can still be spoofed. Configure the proxy to overwrite the header with the address it observed, use the [PROXY protocol](../deploy/cluster/lb.md) instead, or set the options to `""`.
 - Do not try to disable the mechanism by pointing the option at an unused header name: a client can send a header by any name. The empty string is the only value a client can never supply.
 

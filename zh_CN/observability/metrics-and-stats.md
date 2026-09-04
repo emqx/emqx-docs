@@ -100,6 +100,19 @@ Dashboard 中的指标按以下类别进行分组：
 | client.authenticate         | 触发认证操作的次数                                           |
 | client.authorize            | 触发授权操作的次数                                           |
 
+#### 封禁与连接抖动检测
+
+以下指标用于统计因匹配有效封禁记录而被拒绝的连接尝试，以及连接抖动检测创建的临时封禁。
+
+| 指标                         | 说明                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| client.banned               | 客户端匹配有效封禁记录而被拒绝的连接尝试次数                 |
+| flapping.detected.clientid  | 按客户端 ID 检测到连接抖动并创建临时封禁的次数               |
+| flapping.detected.username  | 按用户名检测到连接抖动并创建临时封禁的次数                   |
+| flapping.detected.peerhost  | 按源 IP 地址检测到连接抖动并创建临时封禁的次数               |
+
+计入 `client.banned` 的连接尝试也会增加 `packets.connack.error`，因为 EMQX 会使用非成功原因码的 `CONNACK` 报文拒绝连接。
+
 ### 规则与动作（Sink）
 
 该部分提供与数据集成相关的指标，用于帮助了解规则被匹配的次数以及动作（Sink）被执行的情况。
@@ -208,8 +221,8 @@ Dashboard 中的指标按以下类别进行分组：
 | delivery.dropped            | 投递过程中被丢弃的消息总数                |
 | delivery.dropped.expired    | 因消息过期而在投递过程中被丢弃的消息数量  |
 | delivery.dropped.no_local   | 因 `No Local` 订阅选项而被丢弃的消息数量  |
-| delivery.dropped.qos0_msg   | 因消息队列已满而被丢弃的 QoS 0 消息数量   |
-| delivery.dropped.queue_full | 因消息队列已满而被丢弃的非 QoS 0 消息数量 |
+| delivery.dropped.qos0_msg   | 因 `mqueue_store_qos0` 设置为 `false`，而在投递过程中被丢弃的 QoS 0 消息数量 |
+| delivery.dropped.queue_full | 因投递队列已满而在投递过程中被丢弃的消息数量 |
 | delivery.dropped.too_large  | 因消息长度超出限制而被丢弃的消息数量      |
 
 ## 通过 REST API 获取监控状态

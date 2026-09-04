@@ -166,6 +166,34 @@ emqx_retained_count 3
 
 ::::
 
+### 主题指标
+
+从 EMQX 6.3 开始，`GET /api/v5/prometheus/topic_metrics` 可以暴露通过主题监控 REST API 创建的命名指标集合计数器。抓取此端点前，请至少创建一个指标集合。操作步骤参见[通过 REST API 管理主题指标集合](./topic-metrics.md#通过-rest-api-管理主题指标集合)。
+
+此端点提供以下计数器：
+
+| 指标 | 说明 |
+| --- | --- |
+| `emqx_topic_metric_messages_in_count` | 发布到匹配集合过滤器主题的消息数量。 |
+| `emqx_topic_metric_messages_out_count` | 投递给订阅者的匹配消息数量。 |
+| `emqx_topic_metric_messages_dropped_count` | EMQX 丢弃的匹配消息数量。 |
+| `emqx_topic_metric_bytes_in` | 匹配发布消息的主题和 Payload 总大小。 |
+| `emqx_topic_metric_bytes_out` | 匹配投递消息的主题和 Payload 总大小。 |
+
+每个时间序列都包含 `name` 和 `topic_filter` 标签。归属于命名空间的集合还包含 `namespace` 标签。使用 `mode=all_nodes_unaggregated` 时，每个时间序列还包含 `node` 标签。
+
+所有主题指标值均为单调递增计数器。请使用 PromQL `rate()` 等函数计算每秒速率。例如：
+
+```text
+rate(emqx_topic_metric_messages_in_count[5m])
+```
+
+::: warning 重要提示
+
+每个指标集合会暴露 5 个计数器。在非聚合模式下，EMQX 会为每个节点生成独立的时间序列。请限制指标集合数量，避免产生过多 Prometheus 时间序列。
+
+:::
+
 <a id="身份认证"></a>
 
 ### 配置 Prometheus 对抓取请求进行身份认证
@@ -217,6 +245,15 @@ scrape_configs:
     static_configs:
       - targets: ['127.0.0.1:18083']
     metrics_path: '/api/v5/prometheus/data_integration'
+    scheme: 'http'
+    basic_auth:
+      username: '<API_KEY>'
+      password: '<SECRET_KEY>'
+
+  - job_name: 'emqx_topic_metrics'
+    static_configs:
+      - targets: ['127.0.0.1:18083']
+    metrics_path: '/api/v5/prometheus/topic_metrics'
     scheme: 'http'
     basic_auth:
       username: '<API_KEY>'

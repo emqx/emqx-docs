@@ -9,7 +9,7 @@
 
 ::: tip
 
-您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。
+您也可以通过在 Dashboard 点击左侧导航菜单中的**管理** -> **监听器**来配置监听器。如需通过配置文件配置监听器，建议使用 `base.hocon`，而不是 `emqx.conf`。
 注意，如果监听器在  `emqx.conf` 中显式配置，那么在 Dashboard 中进行的修改只能临时生效直到下次 EMQX 重启。
 
 :::
@@ -20,11 +20,29 @@ EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见
 
 :::
 
+## 如何确定监听地址
+
+监听地址决定 EMQX 在哪些本地网络接口和端口上接收客户端连接。
+
+监听器的 `bind` 配置支持显式指定 IP 地址和端口（例如 `"0.0.0.0:1883"`），也支持仅指定端口（例如 `1883`）。从 EMQX 6.3.0 开始，节点级配置项 `node.default_listener_address` 用于控制仅指定端口的监听器所使用的地址。
+
+EMQX 按以下顺序确定地址：
+
+1. 如果 `bind` 包含 IP 地址，EMQX 使用该地址。`node.default_listener_address` 和安全配置方案均不会覆盖此地址。
+2. 如果 `bind` 仅指定端口，且已设置 `node.default_listener_address`，EMQX 使用该配置项在本节点上确定的地址。
+3. 否则，MQTT 监听器使用安全配置方案的默认地址：`legacy` 方案下监听所有网络接口，`hardened` 方案下绑定仅供本机访问的回环地址。
+
+配置中的 `bind` 值保持不变。例如，即使监听器在运行时使用特定 IP 地址，`bind = 1883` 仍保持为仅指定端口的值。
+
+下文的 TCP、SSL 和 WebSocket 配置示例均显式指定 IP 地址，因此不受默认监听地址设置影响。
+
+支持的取值及启动行为参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。官方 Docker 镜像会设置自己的默认值，参见 [Docker 中的监听地址](../deploy/install-docker.md#docker-中的监听地址)。
+
 ## 配置 TCP 监听器
 
 TCP 监听器是一种网络服务，它在特定的网络端口上监听传入的 TCP 连接。它在客户端与 EMQX 之间通过 TCP/IP 网络建立和维护连接中发挥重要作用。
 
-在 EMQX 中配置 TCP 监听器，需在 EMQX 安装目录下的 `etc` 文件夹中的 `emqx.conf` 文件添加 `listeners.tcp` 配置项。
+在 EMQX 中配置 TCP 监听器，可在 EMQX 安装目录下的 `etc/base.hocon` 文件中添加 `listeners.tcp` 配置项。
 
 例如，若要启用端口 `1883` 上的 TCP 监听器，并设置监听器最多允许 1,024,000 个并发连接，可使用以下配置：
 
@@ -46,7 +64,7 @@ listeners.tcp.default {
 
 SSL 监听器监听传入的 Secure Sockets Layer (SSL）连接，用于加密客户端与 EMQX 间传输的数据，保护网络通信安全。
 
-在 EMQX 中配置 SSL 监听器，需在 `emqx.conf` 文件中添加 `listeners.ssl` 配置项。
+在 EMQX 中配置 SSL 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.ssl` 配置项。
 
 例如，若要在端口 `8883` 上启用 SSL 监听器，同时允许最多 1,024,000 个并发连接，可使用以下配置：
 
@@ -83,7 +101,7 @@ WebSocket 监听器接收并处理通过 WebSocket 协议传入的消息。EMQX 
 
 有关 MQTT over WebSocket 的工作原理及其典型使用场景的概述，请参阅 [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md)。
 
-在 EMQX 中配置 WebSocket 监听器，需在 `emqx.conf` 文件中添加 `listeners.ws` 配置项。
+在 EMQX 中配置 WebSocket 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.ws` 配置项。
 
 例如，若要在端口 `8083` 上启用 WebSocket 监听器，并允许最多 1,024,000 个并发连接，可使用以下配置：
 
@@ -107,7 +125,7 @@ listeners.ws.default {
 
 安全 WebSocket 监听器通过 SSL 或 TLS 协议加密 WebSocket 客户端与代理之间交换的数据，是保护数据安全的重要措施。
 
-在 EMQX 中配置安全 WebSocket 监听器，需在 `emqx.conf` 文件中添加 `listeners.wss` 配置项。
+在 EMQX 中配置安全 WebSocket 监听器，可在 `etc/base.hocon` 文件中添加 `listeners.wss` 配置项。
 
 例如，若要在端口 `8084` 上启用安全 WebSocket 监听器，并允许最多 1,024,000 个并发连接，可使用以下配置：
 
@@ -133,20 +151,72 @@ listeners.wss.default {
 - `websocket.mqtt_path` 设置 WebSocket 的 MQTT 协议路径，默认为 `/mqtt`。
 - `ssl_options` 包括 SSL/TLS 配置选项，详细说明参见 [配置 SSL 监听器](#配置-ssl-监听器)。
 
+## 为各节点使用不同地址
+
+通过 Dashboard、REST API 或 CLI 修改的监听器配置会同步到整个集群。如果在 `bind` 中填写某个节点的 IP 地址，其他节点的本地网络接口上没有配置该 IP 地址时，将无法绑定该监听器。如需在各节点上使用不同地址，请将监听器的绑定保持为仅指定端口，并分别配置各节点的默认地址。
+
+监听器配置使用 `base.hocon`，节点级的默认监听地址使用 `emqx.conf` 或环境变量。例如，若要使用各节点 Erlang 节点名中的主机部分：
+
+1. 通过 Dashboard 将 TCP 监听器的绑定设置为 `1883`，或在每个节点的 `etc/base.hocon` 中配置：
+
+   ```hocon
+   listeners.tcp.default.bind = 1883
+   ```
+
+   如果优先级更高的配置源已设置显式绑定地址，请改为更新该配置源。参见[配置覆盖规则](./configuration.md#配置覆盖规则)。
+
+2. 在每个节点的 `emqx.conf` 中添加：
+
+   ```hocon
+   node.default_listener_address = "nodename"
+   ```
+
+   对于 Docker 部署，请向 `docker run` 传入 `-e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=nodename`，或在 Docker Compose 服务的 `environment` 部分设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS: nodename`。这会覆盖官方镜像设置的默认值 `all`，该默认值的优先级高于 `emqx.conf` 中的配置。
+
+   EMQX 使用节点名中 `@` 之后的主机部分；如果它是主机名，则在节点启动时解析。请确保该名称解析到本节点可用的地址。如果主机名无法解析，节点将无法启动。
+
+3. 重启各节点，使 `node.default_listener_address` 生效。该配置项会影响本节点上所有仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器。监听器绑定中显式指定的 IP 地址保持不变。
+
+也可以在节点环境中设置 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`。环境变量的优先级高于 `emqx.conf`。
+
+## 查看监听地址信息
+
+从 EMQX 6.3.0 开始，可以在不修改监听器 `bind` 配置的情况下，查看解析后的地址及其来源。可选择 CLI 或 REST API 查询节点。
+
+### 通过 CLI 查询节点
+
+在需要检查的节点上运行：
+
+```bash
+emqx ctl listeners
+```
+
+查看 `listen_on` 确认配置的绑定值，查看 `resolved_address` 确认解析后的 IP，并通过 `resolved_address_from` 了解地址来源。同时检查 `running`，确认监听器是否正在运行：已停止的监听器仍可返回解析地址。各字段的含义（包括 `resolved_address` 为空时的含义）参见[监听地址信息](../admin/cli.md#监听地址信息)。
+
+### 通过 REST API 查询监听器
+
+如需通过 REST API 检查单个监听器，使用 `GET /api/v5/listeners/:id`，例如 `GET /api/v5/listeners/tcp:default`。响应返回处理该请求的节点上的地址信息。请求需按要求进行 [API 认证](../admin/api.md#认证)。
+
+`bind` 保留配置中的值，包含端口。`resolved_address` 和 `resolved_address_from` 为只读信息；如需更改地址，应修改 `bind` 或 `node.default_listener_address`，而不是编辑这两个响应字段。
+
+以上查询适用于 MQTT 监听器。对于网关监听器，请使用[网关监听器查询接口](../gateway/gateway.md#监听器)。
+
 ## WebSocket 监听器的转发客户端地址
 
 WebSocket 与安全 WebSocket 监听器提供两个配置项，用于在监听器位于代理或负载均衡器之后时决定 EMQX 如何获取客户端的源地址：
 
-- `websocket.proxy_address_header`（默认值：`x-forwarded-for`）
-- `websocket.proxy_port_header`（默认值：`x-forwarded-port`）
+- `websocket.proxy_address_header`：指定携带客户端 IP 地址的 HTTP 请求头。
+- `websocket.proxy_port_header`：指定携带客户端端口的 HTTP 请求头。
 
-当 WebSocket 升级请求中携带所配置的请求头时，EMQX 会使用该请求头值中第一个（最左侧的）条目作为客户端的源 IP 地址（或端口），而不再使用真实 TCP 对端的地址。基于 IP 的授权规则、客户端封禁、连接抖动检测以及审计与追踪日志所看到的客户端源 IP 都来自这个派生地址。
+从 EMQX 6.3.0 开始，这两个配置项均默认为 `""`。配置项为空时，EMQX 使用对应的 TCP 对端地址或端口。若需要从受信任代理获取客户端 IP 地址或端口，请显式配置对应的请求头名称，例如 `x-forwarded-for` 或 `x-forwarded-port`。
+
+当 WebSocket 升级请求中携带所配置的请求头时，EMQX 会使用该请求头值中第一个（最左侧的）条目作为客户端的源 IP 地址（或端口），而不再使用真实 TCP 对端的地址。基于 IP 的授权规则、客户端封禁、连接抖动检测以及审计与追踪日志所看到的客户端源 IP 都来自这个派生地址。请求头名称匹配不区分大小写。
 
 ::: warning 仅在受信任代理之后才可信任转发地址请求头
 
-该请求头的值决定了客户端的表观源 IP，因此只有在由受信任的代理设置该请求头时才可信任它：
+该请求头的值决定 EMQX 使用的客户端源 IP，因此只有在由受信任的代理设置该请求头时才可信任它：
 
-- 如果监听器可被客户端直接访问（前面没有代理），任何客户端都可以自行发送该请求头，从而任意选择自己的表观源 IP。此时应设置 `proxy_address_header = ""` 和 `proxy_port_header = ""`，使 EMQX 始终使用真实的 TCP 对端地址。
+- 如果监听器可被客户端直接访问（前面没有代理），应将 `proxy_address_header` 和 `proxy_port_header` 保持为空，使 EMQX 始终使用真实的 TCP 对端地址。
 - 如果前面有代理，但代理是将自身观察到的地址**追加**到入站 `X-Forwarded-For` 请求头之后，而不是覆盖或去除它（大多数代理默认为追加行为，例如 NGINX 的 `$proxy_add_x_forwarded_for`），那么 EMQX 读取的最左侧条目仍然是客户端提供的值，源 IP 依然可以被伪造。应将代理配置为使用其观察到的地址覆盖该请求头，或改用 [Proxy Protocol](../deploy/cluster/lb.md)，或将上述配置项设置为 `""`。
 - 不要试图通过将配置项指向一个未使用的请求头名称来“禁用”该机制：客户端可以发送任意名称的请求头。空字符串是客户端唯一无法提供的值。
 

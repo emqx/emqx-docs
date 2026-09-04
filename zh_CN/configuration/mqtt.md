@@ -1,8 +1,8 @@
-# MQTT
+# MQTT 配置
 
-[MQTT](https://mqtt.org/) 是物联网 (IoT) 的标准消息传输协议。它被设计为一个极轻量级的发布/订阅消息传输机制，非常适合于需要小代码占用和最小网络带宽的远程设备连接。
+[MQTT](https://mqtt.org/) 是一种用于连接物联网（IoT）设备的轻量级发布/订阅消息传输协议。EMQX 支持 MQTT 3.1、3.1.1 和 5.0。
 
-EMQX 完全兼容 MQTT 5.0 和 3.x，本节将介绍 MQTT 相关功能的基本配置项，包括基本 MQTT 设置、订阅设置、会话设置、强制关闭设置和强制垃圾回收设置等。
+本页介绍如何配置 EMQX 的 MQTT 协议行为，包括报文校验和限制、订阅、延迟发布、Keep Alive 处理以及会话。
 
 ## 基本 MQTT 配置
 
@@ -24,6 +24,7 @@ mqtt {
   max_qos_allowed = 2
   max_topic_alias = 65535
   retain_available = true
+  strict_mode = true
 }  
 ```
 
@@ -37,6 +38,39 @@ mqtt {
 | `max_qos_allowed`  | 最大 QoS           | QoS 等级决定了消息的可靠性和传递保证等级。<br /><br />此设置允许 MQTT 消息的最大服务质量（QoS）等级。 |            |                 |
 | `max_topic_alias`  | 最大主题别名数     | 主题别名是通过使用较短的别名代替完整主题名称来减少 MQTT 数据包大小的一种方式。<br /><br />此设置允许在 MQTT 会话中使用的最大主题别名数量。 | `65535`    | `1` - `65535`   |
 | `retain_available` | 启用保留消息       | 保留消息用于存储发布到主题的最后一条消息，以便新订阅该主题的客户端可以接收到最新的消息。<br /><br />此设置是否启用 MQTT 中的保留消息功能。 | `true`     | `true`, `false` |
+| `strict_mode`      | 严格模式           | 设置是否对传入的 MQTT 报文执行额外的协议合规性校验。未通过这些校验的报文会导致客户端连接关闭。 | `true` | `true`, `false` |
+
+### MQTT 报文严格校验
+
+从 EMQX 6.3.0 开始，默认启用 MQTT 报文严格校验。设置 `strict_mode = true` 后，EMQX 会拒绝格式错误的 MQTT 报文，包括存在以下问题的报文：
+
+- MQTT 固定报文头中的标志位组合无效。
+- MQTT 3.1.1 CONNECT 报文设置了 Password Flag，但未设置 Username Flag。
+- 客户端 ID、主题名称、用户名、密码、Will Topic 或 MQTT 5.0 字符串属性等字段包含无效的 UTF-8 字符串，包括空字符和其他协议禁止的控制字符。
+- MQTT 协议要求 Packet Identifier 非零，但报文中的值为零。
+
+检测到格式错误的报文后，EMQX 会关闭客户端连接，并记录一条 `info` 级别的 `frame_parse_error` 日志，其中包含具体原因。对于 MQTT 5.0 客户端，EMQX 还会在可能的情况下发送原因码为 `0x81`（Malformed Packet）的 CONNACK 或 DISCONNECT 报文。对于 MQTT 3.1 和 MQTT 3.1.1 客户端，EMQX 会直接断开连接，不返回格式错误原因码。
+
+如果现有客户端不符合这些 MQTT 协议要求，可以通过以下配置暂时关闭仅在严格模式下执行的协议合规性校验：
+
+```bash
+mqtt.strict_mode = false
+```
+
+如需仅对特定旧客户端关闭严格模式校验，可以配置一个 Zone，并将其关联到专用监听器：
+
+```bash
+zones.legacy_clients {
+  mqtt.strict_mode = false
+}
+
+listeners.tcp.legacy {
+  bind = "0.0.0.0:1884"
+  zone = legacy_clients
+}
+```
+
+通过其他监听器连接的客户端仍使用严格校验。有关 Zone 的更多信息，请参见 [Zone 覆盖](./configuration.md#zone-覆盖)。
 
 ## 订阅设置
 
@@ -213,10 +247,10 @@ mqtt {
 | `await_rel_timeout`               | 最大 PUBREL 等待时长 | 此设置等待接收到 QoS 2 消息的 `PUBREL` 的时间。达到此限制后，EMQX 将释放包 ID 并生成警告级别日志。<br />注意：无论是否收到 `PUBREL`，EMQX 都会转发收到的 QoS 2 消息。 | `300s`<br />单位: 秒                                         | --                                  |
 | `session_expiry_interval`         | 会话过期间隔         | 此设置客户端断开连接后 EMQX 保留会话的时长。适用于以 `Clean Session = false` 连接的 MQTT 3.1 和 3.1.1 客户端。MQTT 5.0 客户端通过 CONNECT 报文的 `Session-Expiry-Interval` 属性自行指定该值，参见 `max_session_expiry_interval`。<br />使用默认的内存会话存储时，已断开连接的会话会在整个过期间隔内驻留在内存中。参见表格后的警告。 | `2h`                                                         | --                                  |
 | `max_session_expiry_interval`     | 最大会话过期间隔     | 此设置限制 MQTT 5.0 客户端通过 CONNECT 和 DISCONNECT 报文的 `Session-Expiry-Interval` 属性所能请求的最大会话过期间隔。当客户端在连接时请求的值超过此限制时，EMQX 会将其截断为该限制值，并在 CONNACK 的 `Session-Expiry-Interval` 属性中返回截断后的值（MQTT 5.0 规范 3.2.2.3.2 节）。DISCONNECT 报文中超过此限制的值同样会被截断为该限制值。对 MQTT 3.1 和 3.1.1 客户端无效，其会话过期间隔由 `session_expiry_interval` 决定。<br />自 EMQX 6.3.0 起提供。 | `infinity`（不限制）                                         | 时长<br />或<br />`infinity`        |
-| `max_mqueue_len`                  | 最大消息队列长度     | 此设置当持久客户端断开连接或在途窗口已满时允许的最大队列长度。 | `1000`                                                       | `0` - `infinity`                    |
+| `max_mqueue_len`                  | 最大消息队列长度     | 设置内存会话使用的消息队列长度限制。当客户端离线但会话仍保留、飞行窗口已满或连接的发送队列拥塞时，消息会进入该队列。当某个主题优先级的消息队列达到此限制时，EMQX 会优先淘汰该优先级中最早入队的 QoS 0 消息。 | `1000`                                                       | `0` - `infinity`                    |
 | `mqueue_priorities`               | 主题优先级           | 此设置主题优先级，此处的配置将覆盖 `mqueue_default_priority` 定义的优先级。 | `disabled` <br />会话使用 `mqueue_default_priority` 设置的优先级。 | `disabled`<br />或<br />`1` - `255` |
 | `mqueue_default_priority`         | 默认主题优先级       | 此设置默认主题优先级。                                       | `lowest`                                                     | `highest`， `lowest`                |
-| `mqueue_store_qos0`               | 存储 QoS 0 消息      | 此设置在连接断开但会话保持时是否存储 QoS 0 消息在消息队列中。 | `true`                                                       | `true`, `false`                     |
+| `mqueue_store_qos0`               | 存储 QoS 0 消息      | 设置客户端离线但会话仍保留、内存会话连接的发送队列拥塞或飞行窗口已满时，EMQX 是否将 QoS 0 消息存入会话消息队列。如果禁用该配置项，EMQX 会丢弃客户端离线或发送队列拥塞时到达的 QoS 0 消息。如果仅飞行窗口已满，EMQX 仍会立即投递 QoS 0 消息。 | `true`                                                       | `true`, `false`                     |
 | `force_shutdown`                  | 强制关闭             | 此设置是否启用强制关闭功能，当邮箱队列长度（`max_mailbox_size`）或堆内存（`max_heap_size`）超过设定值时强制关闭客户端进程。 | `true`                                                       | `true`, `false`                     |
 | `force_shutdown.max_mailbox_size` | 最大邮箱大小         | 此设置触发强制关闭的最大邮箱队列长度。                       | `1000`                                                       | `1` - `infinity`                    |
 | `force_shutdown.max_heap_size`    | 最大堆内存           | 此设置触发强制关闭的最大堆大小。                             | `32 MB`                                                      | --                                  |

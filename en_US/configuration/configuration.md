@@ -19,6 +19,8 @@ The `etc` directory holds the configuration files that define EMQX's initial set
 | Running in docker container                | `/opt/emqx/etc` |
 | Extracted from portable compressed package | `./etc`         |
 
+Starting from EMQX 6.3.0, RPM and DEB installations include an `/opt/emqx/etc` symlink to `/etc/emqx`.
+
 ### Dynamic Configuration Directory (`data/configs`)
 
 At runtime, EMQX allows dynamic reconfiguration through the Dashboard, REST API, or CLI. Changes made using these tools are stored in the `data/configs` directory to ensure persistence across sessions. The location of this directory also depends on the installation method:
@@ -28,6 +30,8 @@ At runtime, EMQX allows dynamic reconfiguration through the Dashboard, REST API,
 | Installed with RPM or DEB package          | `/var/lib/emqx/configs`  |
 | Running in docker container                | `/opt/emqx/data/configs` |
 | Extracted from portable compressed package | `./data/configs`         |
+
+Starting from EMQX 6.3.0, RPM and DEB installations include an `/opt/emqx/data` symlink to `/var/lib/emqx`. Therefore, `/opt/emqx/data/configs` resolves to `/var/lib/emqx/configs`. Configuring a custom data directory does not update the symlink.
 
 ::: tip
 It is possible to change the data directory by modifying the `node.data_dir` setting in the configuration or the `EMQX_NODE__DATA_DIR` environment variable. However, when running a cluster, all nodes must use the same directory path.

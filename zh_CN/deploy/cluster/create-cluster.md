@@ -81,7 +81,13 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
 ### 设置节点 Cookie
 
-出于安全考虑，您应该在所有要加入集群的节点上的 `emqx.conf` 中将默认 cookie 设置更改为秘密 cookie。所有要加入集群的节点都应使用相同的秘密 cookie。有关使用的秘密 cookie 的详细信息，请参见 [分布式 Erlang - 安全性](https://www.erlang.org/doc/reference_manual/distributed.html#security)。
+出于安全考虑，请更改所有待加入集群节点的默认 Cookie，并确保所有节点使用相同的高熵 Cookie。在 `emqx.conf` 中设置 `node.cookie`。如需避免将 Cookie 值写入配置，请使用 `file://` URL：
+
+```hocon
+node.cookie = "file:///run/secrets/emqx-cookie"
+```
+
+`EMQX_NODE__COOKIE` 环境变量也支持 `file://` URL。关于普通文件、FIFO 和启动时读取行为，参见[从文件加载节点 Cookie](../../configuration/secret-from-file.md#从文件加载节点-cookie)。有关 Erlang Cookie 的详细信息，参见[分布式 Erlang - 安全性](https://www.erlang.org/doc/reference_manual/distributed.html#security)。
 
 ### 配置网络环境
 

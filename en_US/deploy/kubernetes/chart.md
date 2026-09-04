@@ -2,7 +2,7 @@
 
 This page provides step-by-step instructions for deploying EMQX on a Kubernetes cluster using the official Helm chart.
 
-The official EMQX Helm chart simplifies Kubernetes-based deployments by packaging all required EMQX components, such as StatefulSets, Services, ConfigMaps, and Ingress rules, into a single, configurable Helm chart.
+The official EMQX Helm chart simplifies Kubernetes-based deployments by packaging all required EMQX components, such as StatefulSets, Services, ConfigMaps, Ingress rules, and Gateway API routes, into a single, configurable Helm chart.
 
 ## Prerequisites
 
@@ -89,6 +89,7 @@ The EMQX Helm chart offers a wide range of configurable parameters through the `
 | `service.mqttssl`                    | Port for MQTT(SSL)                                           | 8883                                                    |
 | `service.ws`                         | Port for WebSocket/HTTP                                      | 8083                                                    |
 | `service.wss`                        | Port for WSS/HTTPS                                           | 8084                                                    |
+| `service.wsEnabled`                  | Publish the WebSocket and WSS ports in the Service. This must be `true` when `httpRoute.ws.enabled` or `tlsRoute.wss.enabled` is enabled. | true |
 | `service.dashboard`                  | Port for dashboard and API                                   | 18083                                                   |
 | `service.customPorts`                | Custom Ports to be exposed in the Service                    | {}                                                      |
 | `service.nodePorts.mqtt`             | Kubernetes node port for MQTT                                | nil                                                     |
@@ -140,7 +141,7 @@ The following table lists the configurable EMQX-specific parameters of the chart
 | `emqxLicenseSecretRef.name`                                                                                                                                         | Name of the secret that holds the license information                         | `""`         |
 | `emqxLicenseSecretRef.key`                                                                                                                                          | Key of the secret that holds the license information                          | `""`         |
 
-### Configure Feature Gates
+## Configure Feature Gates
 
 Starting from EMQX 6.3.0, you can set `EMQX_FEATURES` to control which optional features are available at startup. For example:
 
@@ -150,6 +151,107 @@ emqxConfig:
 ```
 
 Feature gates are resolved only when EMQX starts. If you change this value, recreate or restart the EMQX pods. For the full feature list and dependency behavior, see [Feature Gates](../feature-gates.md).
+
+## Configure Gateway API Routes
+
+Starting from EMQX 6.3, the EMQX Enterprise Helm chart can create Kubernetes Gateway API routes as an alternative to Ingress resources. `HTTPRoute` exposes the EMQX Dashboard and MQTT over WebSocket, while `TLSRoute` exposes MQTTS and WSS with TLS passthrough.
+
+Before enabling the routes, complete the following prerequisites:
+
+- Install a [Gateway API controller and its Custom Resource Definitions (CRDs)](https://gateway-api.sigs.k8s.io/guides/getting-started/introduction/).
+- To enable `tlsRoute.mqtts` or `tlsRoute.wss`, use Kubernetes 1.31 or later and Gateway API standard-channel CRDs version 1.5.0 or later. The Gateway API controller must support `TLSRoute` with Passthrough mode.
+- To enable `httpRoute.ws`, use a Gateway API controller that supports HTTPRoute WebSocket traffic without requiring `ServicePort.appProtocol`. The EMQX Helm chart does not set `appProtocol` on the WebSocket Service port.
+- Create a Gateway with listeners that match the routes.
+- Configure the Gateway TLS listeners used by `tlsRoute.mqtts` and `tlsRoute.wss` with `tls.mode: Passthrough`. EMQX terminates the TLS connections.
+
+All routes are disabled by default. Set `parentRefs` for every enabled route to attach the route to a Gateway. The following `values.yaml` example enables all supported routes:
+
+```yaml
+service:
+  wsEnabled: true
+
+httpRoute:
+  dashboard:
+    enabled: true
+    parentRefs:
+      - name: emqx-gateway
+        namespace: default
+        sectionName: https
+    hostnames:
+      - dashboard.emqx.local
+    path: /
+    pathType: PathPrefix
+  ws:
+    enabled: true
+    parentRefs:
+      - name: emqx-gateway
+        namespace: default
+        sectionName: https
+    hostnames:
+      - ws.emqx.local
+    path: /mqtt
+    pathType: PathPrefix
+
+tlsRoute:
+  mqtts:
+    enabled: true
+    parentRefs:
+      - name: emqx-gateway
+        namespace: default
+        sectionName: mqtts
+    hostnames:
+      - mqtt.emqx.local
+  wss:
+    enabled: true
+    parentRefs:
+      - name: emqx-gateway
+        namespace: default
+        sectionName: wss
+    hostnames:
+      - wss.emqx.local
+```
+
+Replace the Gateway name, namespace, listener section names, and hostnames with values for your environment. If the Gateway and the Helm release are in different namespaces, configure `allowedRoutes` on each referenced Gateway listener to accept Routes from the Helm release namespace. The chart creates the following routes:
+
+| Route | Backend Service Port | Default Path |
+| --- | --- | --- |
+| `httpRoute.dashboard` | Dashboard and API on `18083` | `/` |
+| `httpRoute.ws` | MQTT over WebSocket on `8083` | `/mqtt` |
+| `tlsRoute.mqtts` | MQTTS on `8883` | Not applicable |
+| `tlsRoute.wss` | WSS on `8084` | Not applicable |
+
+::: warning Important Notice
+
+Keep `service.wsEnabled` set to `true` when enabling `httpRoute.ws` or `tlsRoute.wss`. Otherwise, Helm stops rendering the chart with `httpRoute.ws.enabled requires service.wsEnabled=true` or `tlsRoute.wss.enabled requires service.wsEnabled=true`.
+
+:::
+
+After installing or upgrading the release, inspect the route status:
+
+```bash
+kubectl get httproute,tlsroute -o yaml
+```
+
+For every attached route, confirm that the `Accepted` and `ResolvedRefs` conditions in `status.parents` are `True`. If the controller reports the `Programmed` condition, confirm that it is also `True`.
+
+Route conditions do not verify end-to-end traffic. Send a request to the configured Dashboard or WebSocket hostname, or establish an MQTTS or WSS connection through the Gateway, to confirm that the route can forward traffic to EMQX.
+
+The Gateway API route parameters are:
+
+| Parameter | Description | Default Value |
+| --- | --- | --- |
+| `httpRoute.<route>.enabled` | Create the `dashboard` or `ws` HTTPRoute. | `false` |
+| `httpRoute.<route>.annotations` | Annotations added to the HTTPRoute. | `{}` |
+| `httpRoute.<route>.labels` | Labels added to the HTTPRoute. | `{}` |
+| `httpRoute.<route>.parentRefs` | References to the parent Gateway and listener. | `[]` |
+| `httpRoute.<route>.hostnames` | Hostnames matched by the route. | `dashboard.emqx.local` for `dashboard`; `ws.emqx.local` for `ws` |
+| `httpRoute.<route>.path` | Path matched by the route. | `/` for `dashboard`; `/mqtt` for `ws` |
+| `httpRoute.<route>.pathType` | Type of path match. | `PathPrefix` |
+| `tlsRoute.<route>.enabled` | Create the `mqtts` or `wss` TLSRoute. | `false` |
+| `tlsRoute.<route>.annotations` | Annotations added to the TLSRoute. | `{}` |
+| `tlsRoute.<route>.labels` | Labels added to the TLSRoute. | `{}` |
+| `tlsRoute.<route>.parentRefs` | References to the parent Gateway and TLS listener. | `[]` |
+| `tlsRoute.<route>.hostnames` | Required SNI hostnames matched by the route. The list must contain at least one valid fully qualified domain name. | `mqtt.emqx.local` for `mqtts`; `wss.emqx.local` for `wss` |
 
 ## SSL Settings
 When using `cert-manager`, TLS certificates are stored in Kubernetes secrets using the standard keys: `tls.crt` and `tls.key`. The EMQX Helm chart automatically mounts these certificate files to the following directory within the container:

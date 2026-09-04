@@ -2,7 +2,7 @@
 
 The Audit Log feature allows you to track important operational changes in your EMQX cluster in real-time. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security auditing during their operations.
 
-EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API,](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. 
+EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API,](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. For the Dashboard and REST API, read-only operations such as metrics retrieval and client list queries are not recorded. CLI commands are recorded regardless of whether they change data, with one exception described in [Operation Records from CLI or Erlang Console](#operation-records-from-cli-or-erlang-console) below.
 
 EMQX offers a Dashboard view and integration with log systems to help enterprises manage audit logs. Through these methods, EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
 
@@ -128,6 +128,8 @@ The following table shows the fields contained in the above log message samples.
 | operate_id       | String  | The REST API path of the request, please refer to [REST API](../admin/api.md). |
 
 ### Operation Records from CLI or Erlang Console
+
+Every CLI command is recorded in the audit log, including read-only commands such as `emqx ctl status`. The only exception is the top-level usage listing: running `emqx ctl` with no command, or with an unrecognized command, prints the list of available commands and is not recorded. A command that receives invalid arguments and prints its own usage message, for example `emqx ctl status bad-arg`, is still recorded as an invocation of that command.
 
 Audit logs that record operations from CLI or Erlang Console operations include the executed command, called parameters, and other information. The log message format examples are as follows:
 

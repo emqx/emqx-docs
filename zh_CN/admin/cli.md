@@ -349,6 +349,82 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 - 为避免性能下降，命令在扫描 ETS（Erlang Term Storage，Erlang 数据存储）表时会定期休眠（例如每处理 1000 条记录休眠 10 毫秒）。
 - 生成的 CSV 文件可用于离线分析、可视化展示或进一步的自动化处理。
 
+## session-top
+
+从 EMQX 6.3.0 开始，可以使用 `session-top` 命令识别保留 MQTT 消息载荷字节数最多或消息队列最长的会话。该命令读取集群中支持 `session-top` 的运行节点所缓存的会话统计数据，并将排名靠前的会话写入命令执行节点上的 CSV 文件。
+
+### 启动会话扫描
+
+运行以下命令启动扫描：
+
+```bash
+emqx ctl session-top --out <File> [--count <K>] [--sort <SortBy>] [--batch <Size>] [--sleep <Ms>]
+```
+
+以下示例导出保留 MQTT 消息载荷字节数最多的 20 个会话：
+
+```bash
+emqx ctl session-top --out /tmp/session-top.csv --count 20 --sort total_payload_bytes
+```
+
+| 选项 | 描述 | 默认值 |
+| --- | --- | --- |
+| `--out <File>` | CSV 输出文件路径。该选项为必填项，且指定的输出文件必须尚不存在。 | 无 |
+| `--count <K>` | 最多导出的会话数。取值范围为 `1` 到 `1000`。 | `10` |
+| `--sort <SortBy>` | 会话排序字段。支持 `total_payload_bytes` 和 `mqueue_length`。 | `total_payload_bytes` |
+| `--batch <Size>` | 每个扫描批次处理的缓存会话记录数。取值必须为正整数。 | `1000` |
+| `--sleep <Ms>` | 扫描批次之间的延迟，单位为毫秒。取值必须为非负整数。 | `1` |
+
+扫描以异步方式运行。可以使用 `emqx ctl session-top status` 查看扫描进度和完成状态。
+
+滚动升级期间，不支持 `session-top` 的 EMQX 节点不会参与扫描。
+
+每个节点同一时间只能发起一个扫描任务。每个参与节点同一时间也只接受一个本地扫描任务。EMQX 在各参与节点上分批扫描，以降低扫描对运行中集群的影响。
+
+CSV 文件包含以下列：
+
+```text
+clientid,node,mqueue_length,total_payload_bytes,inflight_count
+```
+
+- `clientid`：MQTT 客户端 ID。
+- `node`：会话所在的 EMQX 节点。
+- `mqueue_length`：会话消息队列中的消息数。
+- `total_payload_bytes`：内存会话的消息队列和飞行窗口中保留的 MQTT 消息载荷总字节数。该值不包括主题、消息头、MQTT 属性和 Erlang 内部记录开销。持久会话的缓冲状态不保存在这些内存结构中，因此该字段返回 `0`。
+- `inflight_count`：会话飞行窗口中的消息数。
+
+命令从缓存的会话统计数据中读取这些值。扫描期间，这些值可能发生变化。
+
+如果远程节点正在执行其他扫描任务、启动扫描失败或返回扫描错误，状态输出会在 `Bad replies` 中列出该节点。CSV 文件仅包含完成扫描的节点所返回的结果。
+
+如果远程节点接受扫描后未返回结果，任务会一直处于 `running` 状态，且 EMQX 不会写入 CSV 文件。请检查任务状态，并根据需要取消扫描。
+
+如需在内存会话保留的消息载荷字节数超过阈值时记录经过限流的 warning 级别日志，请将 `sysmon.session.total_payload_bytes_high_watermark` 设置为大于 `0` 的值。默认值 `0` 表示禁用该日志。该日志仅用于诊断，不会限制缓冲的消息载荷字节数，也不会改变消息投递、消息队列淘汰、飞行窗口处理逻辑或会话接管行为。配置详情参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+
+### 查看扫描状态
+
+在发起扫描的节点上，运行以下命令查看正在运行的扫描或最近一次已结束的扫描：
+
+```bash
+emqx ctl session-top status
+```
+
+最近一次已结束扫描的状态会一直保留到下一次扫描开始。
+
+扫描状态仅保存在发起节点上。即使其他节点发起的扫描仍在运行，在当前节点执行该命令也可能返回 `idle`。
+
+### 取消会话扫描
+
+在发起扫描的节点上，运行以下命令取消正在运行的扫描：
+
+```bash
+emqx ctl session-top cancel
+```
+
+集群中的扫描取消操作采用尽力而为机制。节点可能在收到取消请求前已经完成本地扫描。
+
+在其他节点上运行 `cancel` 不会取消该扫描，并会报告没有正在运行的 `session-top` 扫描。
+
 ## topics
 
 该命令用于查看当前系统中所有订阅的主题。
@@ -674,7 +750,7 @@ disc_only_copies   = []
 
 ## log
 
-用于管理日志参数，例如日志级别等。
+用于管理日志级别和已配置的日志输出。
 
 ### log set-level \<Level\>
 
@@ -687,7 +763,7 @@ debug
 
 ### log primary-level
 
-显示当前主要日志级别。`primary-level`代表 EMQX 的主要日志级别，用于指定整个系统的默认日志级别。设置`primary-level`会影响所有的日志输出，除非特定的日志处理程序有自己独立的日志级别。
+显示当前主要日志级别。`primary-level`代表 EMQX 的主要日志级别，用于指定整个系统的默认日志级别。设置`primary-level`会影响所有的日志输出，除非特定的日志输出设置了独立的日志级别。
 
 ```bash
 $ emqx ctl log primary-level
@@ -703,41 +779,41 @@ $ emqx ctl log primary-level info
 info
 ```
 
-### log handlers list
+### log outputs list
 
-显示日志处理 handlers。`handlers`是指定用于处理日志的日志处理程序的集合。每个日志处理程序可以独立设置自己的日志级别，并定义如何处理和存储日志消息。
+显示已配置的日志输出。`outputs` 包括控制台输出 `console`、默认文件输出 `file`，以及已配置的命名文件输出。每个日志输出可以有独立的日志级别、输出目标和启用状态。
 
 ```bash
-$ emqx ctl log handlers list
-LogHandler(id=ssl_handler, level=debug, destination=console, status=started)
-LogHandler(id=console, level=debug, destination=console, status=started)
+$ emqx ctl log outputs list
+LogOutput(name=console, level=debug, destination=console, status=enabled)
+LogOutput(name=file, level=debug, destination=/var/log/emqx/emqx.log, status=enabled)
 ```
 
-### log handlers start \<HandlerId\>
+### log outputs enable \<name\>
 
-启动某个 handler。
+启用指定日志输出。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers start console
-log handler console started
+$ emqx ctl log outputs enable console
+log output console enabled
 ```
 
-### log handlers stop \<HandlerId\>
+### log outputs disable \<name\>
 
-停止某个 handler。
+禁用指定日志输出。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers stop console
-log handler console stopped
+$ emqx ctl log outputs disable console
+log output console disabled
 ```
 
-### log handlers set-level \<HandlerId\> \<Level\>
+### log outputs set-level \<name\> \<Level\>
 
-设置某个 handler 的日志级别。
+设置指定日志输出的日志级别。`<name>` 可以是 `console`、`file`，或已配置的命名文件输出名称。
 
 ```bash
-$ emqx ctl log handlers set-level console debug
-debug
+$ emqx ctl log outputs set-level console debug
+log output console level set to debug
 ```
 
 ## trace
@@ -880,40 +956,82 @@ Del cluster_trace mytraces_ip successfully
 
 ### listeners
 
-列出所有监听器的信息。
+列出本节点的 MQTT 监听器信息。从 EMQX 6.3.0 开始，输出包含解析后的地址及其来源。
 
 ```bash
-$ emqx ctl listeners
-ssl:default
-  listen_on       : 0.0.0.0:8883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-tcp:default
-  listen_on       : 0.0.0.0:1883
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 12
-  max_conns       : 5000000
-  shutdown_count  : [{takenover,2},{discarded,1}]
-ws:default
-  listen_on       : 0.0.0.0:8083
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
-wss:default
-  listen_on       : 0.0.0.0:8084
-  acceptors       : 16
-  proxy_protocol  : false
-  running         : true
-  current_conn    : 0
-  max_conns       : 5000000
+emqx ctl listeners
 ```
+
+以下示例展示了显式配置 IP 地址时的输出：
+
+```text
+ssl:default
+  listen_on             : 0.0.0.0:8883
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+tcp:default
+  listen_on             : 0.0.0.0:1883
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 12
+  max_conns             : 5000000
+  shutdown_count        : [{takenover,2},{discarded,1}]
+ws:default
+  listen_on             : 0.0.0.0:8083
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+wss:default
+  listen_on             : 0.0.0.0:8084
+  acceptors             : 16
+  proxy_protocol        : false
+  enable                : true
+  running               : true
+  resolved_address      : 0.0.0.0
+  resolved_address_from : bind
+  current_conn          : 0
+  max_conns             : 5000000
+```
+
+#### 监听地址信息
+
+以下字段用于区分配置中的绑定值和本节点确定的地址：
+
+| 字段 | 说明 |
+| --- | --- |
+| `listen_on` | 配置中的绑定值，包含端口。例如，仅指定端口的绑定显示为 `:1883`。 |
+| `resolved_address` | 解析后的 IP 地址，不包含端口。值为空表示仅指定端口的绑定解析为监听所有网络接口。 |
+| `resolved_address_from` | 地址的来源，具体含义见下表。 |
+| `running` | 监听器是否正在运行。已停止的监听器仍可返回解析地址，因此不能仅凭地址判断它是否正在接受连接。 |
+
+`resolved_address_from` 的取值包括：
+
+| 取值 | 含义 |
+| --- | --- |
+| `bind` | 监听器的 `bind` 显式指定了 IP 地址。 |
+| `0.0.0.0` | `node.default_listener_address` 或安全配置方案指定监听所有网络接口。 |
+| `127.0.0.1` | `node.default_listener_address` 或安全配置方案指定使用回环地址。 |
+| `nodename` | 地址来自本节点 Erlang 节点名中的主机部分。 |
+| IP 地址或主机名 | 地址来自 `node.default_listener_address` 中配置的该值。 |
+
+例如，配置 `bind = 1883` 和 `node.default_listener_address = "all"` 时，`listen_on` 为 `:1883`，`resolved_address` 为空，`resolved_address_from` 为 `0.0.0.0`。如果显式配置 `bind = "0.0.0.0:1883"`，解析地址则为 `0.0.0.0`，来源为 `bind`。
+
+该命令不会汇总整个集群的地址。其他查看方式参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。
 
 #### 常见连接关闭原因
 

@@ -29,6 +29,8 @@ EMQX 为用户提供了黑名单功能来禁止某些客户端的访问，除了
 | POST /banned             | 将客户端添加到封禁黑名单，可以使用客户端 ID、用户名或 IP 地址。 |
 | DEL /banned/ {as} /{who} | 将客户端从黑名单中移除。                                     |
 
+当客户端 ID、用户名或源 IP 地址达到配置的连接次数阈值时，连接抖动检测会自动创建直接封禁记录。这些记录会显示在**黑名单**页面和 `GET /banned` 响应中。在 REST API 响应中，`as` 表示封禁类型，其值为 `clientid`、`username` 或 `peerhost`；`by` 的值为 `flapping detector`。您可以在记录到期前将其删除。有关详细信息，参见[连接抖动检测](./flapping-detect.md)。
+
 ::: tip
 黑名单只适用于少量客户端封禁需求，如果有大量客户端需要认证管理，请使用[认证](./authn/authn.md)功能。
 :::

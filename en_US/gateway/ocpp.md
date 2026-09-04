@@ -210,6 +210,25 @@ Then you can continue to set:
 - **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, `10`.
 - **Key Password**: Set the user's password, used only when the private key is password-protected.
 
+#### Configure the Forwarded Client Address
+
+Starting from EMQX 6.3.0, `proxy_address_header` and `proxy_port_header` default to `""`, so OCPP WebSocket listeners use the TCP peer address and port unless you explicitly configure forwarded header names.
+
+If the OCPP listener is behind a trusted proxy that overwrites the forwarded headers, configure the header names in `base.hocon`. For example:
+
+```hocon
+gateway.ocpp.listeners.ws.default.websocket {
+  proxy_address_header = "x-forwarded-for"
+  proxy_port_header = "x-forwarded-port"
+}
+```
+
+For a WSS listener, use `gateway.ocpp.listeners.wss.<listener-name>.websocket` instead. EMQX uses the first (leftmost) entry in each configured header. If a header is absent or invalid, EMQX uses the corresponding TCP peer address or port.
+
+Configure these options only when a trusted proxy overwrites client-supplied values. Otherwise, a client can make EMQX use a forged source address.
+
+EMQX 6.3.0 also fixes header-name matching for gateway WebSocket listeners. Before EMQX 6.3.0, configured names did not match request headers, so EMQX used the TCP peer address and port.
+
 ## Configure Authentication
 
 As the concept of username and password is already defined in the connection message of the OCPP protocol, the OCPP supports a variety of authenticator types, such as:

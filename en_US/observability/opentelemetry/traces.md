@@ -17,6 +17,8 @@ With OpenTelemetry distributed tracing, EMQX system administrators or developers
 
 This page introduces how to integrate OpenTelemetry tracing with EMQX, detailing the setup of the OpenTelemetry Collector and the enabling and configuring of OpenTelemetry trace integration in EMQX, as well as managing tracing span overload.
 
+To export OpenTelemetry traces directly to Dynatrace, see [Integrate OpenTelemetry with Dynatrace](./dynatrace.md).
+
 ## Set Up OpenTelemetry Collector
 
 Before integrating EMQX with OpenTelemetry traces, you need to deploy and configure [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) and preferably an OpenTelemetry-compatible observability platform, for example, [Jaeger](https://www.jaegertracing.io/docs/latest/deployment/). The following steps outline the deployment and configuration process:

@@ -52,6 +52,21 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
+
+#### Bind Address
+
+A gateway listener's `bind` setting specifies the local address and port used to receive client traffic. It accepts an explicit IP address and port, or a port alone.
+
+Starting from EMQX 6.3.0, gateway listeners whose `bind` specifies only a port use `node.default_listener_address`, a node-level setting that selects the default bind address. An explicit IP address and port in `bind` takes precedence. If this setting is not configured, gateway listeners with port-only binds listen on all network interfaces under both the `legacy` and `hardened` security profiles.
+
+To change the address used by gateway listeners with port-only binds, configure this setting in each node's `emqx.conf` or through `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`, and restart the node after changing it. It also affects port-only binds for MQTT listeners and the Dashboard HTTP listener. See [Default Listener Address](../access-control/security-profile.md#default-listener-address) for supported values and the official Docker image's default.
+
+#### View Listener Address Information
+
+To check gateway listener addresses, use `GET /api/v5/gateways/:name/listeners`, replacing `:name` with the gateway name, such as `stomp`. Starting from EMQX 6.3.0, each listener's `node_status[].status` includes `resolved_address` and `resolved_address_from`. Each `node_status` entry reports the values for its corresponding node; the cluster-wide `status` does not include these node-local fields.
+
+In each `node_status` entry, check `status.running` together with `status.resolved_address` to determine whether the listener is running on that node. For help interpreting an empty `resolved_address` value, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information). Use this gateway list endpoint rather than the MQTT `emqx ctl listeners` command or the gateway's single-listener configuration endpoint.
+
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
