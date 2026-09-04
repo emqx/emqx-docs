@@ -2,7 +2,7 @@
 
 ## e4.4.38
 
-*发布日期: 2026-08-19*
+*发布日期: 2026-09-01*
 
 ### 增强
 
@@ -47,10 +47,6 @@
 
   **滚动升级注意事项**：升级期间若集群中仍存在未升级到本版本的旧节点，`admin_override = mfa_required` 在旧节点上不会生效。旧节点会继续只按后端 `force_mfa` 判定。`admin_override = mfa_exempted` 通过现有的 `disable_mfa` 占位记录路径在旧节点上仍然生效。
 
-- MQTT 默认解析模式现已改为严格模式，以降低包含特殊字符的 MQTT 消息带来的注入风险。
-
-  在默认设置 `mqtt.strict_mode = true` 下，EMQX 会拒绝包含非法 UTF-8 字符、控制字符或其他不符合 [MQTT UTF-8 Encoded String 规范](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901010) 的报文结构。
-
 - 通过 `emqx_ctl log-throttling` 新增日志限流运行时控制能力。
 
   此前，日志限流的全局限流阈值、时间窗口和级别只能在配置文件中设置。新增的 `log-throttling` 命令组支持以下操作：
@@ -79,7 +75,7 @@
   当系统内存使用率超过高水位（`os_mon.sysmem_high_watermark`）且周期性 GC 已禁用时，触发一次平滑的全局 GC 以降低内存占用。触发信号由 `emqx_os_mon` 在内存告警时发出。该行为由两个配置项控制：
 
   - `node.global_gc_mem_pressure`（默认 `on`）：是否启用内存压力触发的全局 GC；
-  - `node.global_gc_mem_pressure_min_interval`（默认 `15m`）：两次内存压力触发的全局 GC 之间的最小间隔，用于节流。
+  - `node.global_gc_mem_pressure_min_interval`（默认 `5m`）：两次内存压力触发的全局 GC 之间的最小间隔，用于节流。
 
 - 新增集群节点间网络健康探测插件 `emqx_erpc_probe`，用于通过 Prometheus 指标上报集群节点间链路的健康状态。
 
@@ -177,6 +173,12 @@
 - 修复 `emqx_ctl listeners restart http:dashboard`（以及 `https:dashboard`）因 Dashboard 监听器的 `start_listener/1` 与 `stop_listener/1` 函数未导出而报 `undef` 错误的问题。
 
   修复前，重启命令会通过 `emqx_mgmt_cli:restart_http_listener/2` 调用 `emqx_dashboard:stop_listener/1`，但该函数未导出，因此命令报 `undef` 错误，Dashboard 监听器也不会被重启。停止监听器后，Dashboard 端口（如 `18083`）会一直不可用。现已导出这两个函数，因此 `listeners restart http:dashboard` 可以按预期停止并启动 Dashboard 监听器。
+
+- 修复 `os_mon.memsup_system_only` 配置未真正生效、导致系统内存使用率获取在大量连接下仍然缓慢的问题。
+
+  此前（e4.4.34）尝试通过开启 `os_mon.memsup_system_only = true` 来避免 `memsup` 遍历所有 Erlang 进程查找内存占用最高的进程，从而加快内存使用率获取。但该值被写入了 `emqx.os_mon` 配置（即 `emqx` 应用环境），而不是 `memsup` 启动时实际读取的 `os_mon` 应用环境，因此 `memsup` 仍会遍历所有进程，`/nodes` 与 `/emqx_prometheus` 接口响应缓慢的问题依旧存在。
+
+  本版本将 `os_mon.memsup_system_only` 直接映射到 `os_mon` 应用环境（默认 `true`），使 `memsup` 以 system-only 模式启动，仅获取系统内存使用率。
 
 ## e4.4.37
 
