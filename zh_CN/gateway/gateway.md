@@ -31,7 +31,7 @@
 
 如需检查网关监听地址，使用 `GET /api/v5/gateways/:name/listeners`，将 `:name` 替换为网关名称，例如 `stomp`。从 EMQX 6.3.0 开始，每个监听器的 `node_status[].status` 包含 `resolved_address` 和 `resolved_address_from`。每个 `node_status` 条目返回对应节点的值；集群级 `status` 不包含这些节点本地字段。
 
-请结合 `running` 判断运行状态。`resolved_address` 为空时的含义参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。请使用此网关列表接口，而不是 MQTT 的 `emqx ctl listeners` 命令或网关的单个监听器配置接口。
+在每个 `node_status` 条目中，应结合 `status.running` 和 `status.resolved_address`，判断监听器是否正在对应节点上运行。`resolved_address` 为空时的含义参见[查看监听地址信息](../configuration/listener.md#查看监听地址信息)。请使用此网关列表接口，而不是 MQTT 的 `emqx ctl listeners` 命令或网关的单个监听器配置接口。
 
 ### 接入认证
 

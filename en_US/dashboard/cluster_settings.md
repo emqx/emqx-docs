@@ -143,17 +143,9 @@ The **Listeners** displays a list of listeners by default. EMQX provides four co
 - WebSocket listener using port 8083
 - WebSocket secure listener using port 8084
 
-<!-- XXX: Draft UI Content and Screenshot Replacement
-The address-information descriptions below are a draft based on the agreed Dashboard design for emqx/emqx#18609. Verify the list and edit form against the implemented UI before publication. Replace `./assets/config-listener-list.png` with a screenshot showing a port-only bind and the address-information tooltip open. Capture the configured bind, resolved address, and address source. Keep the existing screenshot until its replacement is available, then remove this note.
+<!-- XXX: Listener Address Information and Screenshot Replacement
+The Dashboard does not yet display `resolved_address` or `resolved_address_from`. After the UI is implemented, document how the listener list presents the configured bind and each node's address information. Replace `./assets/config-listener-list.png` with a screenshot showing a port-only bind and the implemented address-information view. Keep the existing screenshot until its replacement is available, then remove this note.
 -->
-
-The listener list shows the configured bind. Use the information icon beside the bind address to view:
-
-- The configured value, including the port.
-- The resolved address.
-- The address source, such as an IP explicitly specified in the listener's bind or the node's default listener address setting.
-
-The resolved address and its source are node-local. The Dashboard displays the values reported by the node that handles the request. In a cluster, other nodes can resolve the same configured bind to different addresses. For field meanings, including empty `resolved_address` values and running status, see [View Listener Address Information](../configuration/listener.md#view-listener-address-information).
 
 ![image](./assets/config-listener-list.png)
 
@@ -186,10 +178,8 @@ For more details on listener configuration, refer to [EMQX Enterprise Configurat
 
 After adding a listener, you can see it in the list. Click on the listener's name to enter the editing page, where you can modify or delete the listener configuration. You can change the listener address, but the listener name and type cannot be modified.
 
-Use the information icon beside the bind address in the edit form to inspect the address information. The input keeps the configured value. For example, a port-only bind remains `1883`; the resolved IP is not automatically inserted into it. Viewing the information does not change the configuration.
-
-<!-- XXX: Screenshot Pending
-Add `./assets/config-listener-edit-bind-info.png` after verifying the implemented edit form. Show a port-only bind with its address-information tooltip open, making the configured value and resolved address visible together. Use the actual UI, without the red annotation boxes from the design discussion. Replace this note with the screenshot before publication.
+<!-- XXX: Edit Form Address Information and Screenshot Pending
+After the address-information UI is implemented, document its behavior in the edit form and add `./assets/config-listener-edit-bind-info.png`. Show a port-only bind together with the implemented address-information view. Use the actual UI, without the red annotation boxes from the design discussion. Replace this note with the instructions and screenshot before publication.
 -->
 
 Click the **Delete** button on the editing page to remove the listener. When deleting a listener, you will need to enter the listener's name to confirm the deletion. You can also toggle the enable switch to enable or disable the listener. The list also shows the number of connections for each listener.
