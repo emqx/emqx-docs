@@ -20,12 +20,12 @@ Examples:
 ```bash
 export EMQX_FEATURES=FULL
 export EMQX_FEATURES=ESSENTIAL
-export EMQX_FEATURES=dashboard,auth
-export EMQX_FEATURES="dashboard auth"
-export EMQX_FEATURES=dashboard,auth,data_integration,metrics
+export EMQX_FEATURES=dashboard,plugins
+export EMQX_FEATURES="dashboard plugins"
+export EMQX_FEATURES=dashboard,data_integration,metrics,plugins
 ```
 
-`dashboard,auth` and `"dashboard auth"` have the same effect. If you use spaces to separate feature names, wrap the whole value in quotes to prevent the shell from splitting it.
+`dashboard,plugins` and `"dashboard plugins"` have the same effect. If you use spaces to separate feature names, wrap the whole value in quotes to prevent the shell from splitting it.
 
 Do not mix a preset with feature names. For example, `EMQX_FEATURES=ESSENTIAL,metrics` is invalid.
 
@@ -40,7 +40,6 @@ The following optional features can be used in a custom `EMQX_FEATURES` list:
 | Feature | Description |
 | --- | --- |
 | `dashboard` | Dashboard UI, REST API, Dashboard role-based access control, and Dashboard single sign-on. |
-| `auth` | Authentication and authorization chains and backends. |
 | `data_integration` | Rule engine, connectors, actions, sources, and data bridges. |
 | `message_transformation` | Message transformation. |
 | `schema_validation` | Schema validation. |
@@ -55,6 +54,7 @@ The following optional features can be used in a custom `EMQX_FEATURES` list:
 | `gcp_device` | Migration compatibility shim for Google IoT Core. |
 | `exhook` | External gRPC hooks. |
 | `opentelemetry` | OpenTelemetry exporter. |
+| `plugins` | Plugin framework for installing and managing third-party plugins. |
 
 ## Feature Dependencies
 
@@ -66,16 +66,14 @@ Some features require other features to work. When you enable a feature, EMQX au
 | `message_transformation` | `schema_registry` |
 | `schema_validation` | `schema_registry` |
 | `ai` | `schema_registry` |
-| `gateways` | `auth` |
-| `gcp_device` | `auth` |
-| `metrics` | `dashboard`, `auth` |
+| `metrics` | `dashboard` |
 | `opentelemetry` | `dashboard` |
 
-For example, setting `EMQX_FEATURES=metrics` enables `metrics`, `dashboard`, and `auth`.
+For example, setting `EMQX_FEATURES=metrics` enables `metrics` and `dashboard`.
 
 ## Core Applications
 
-The `ESSENTIAL` preset disables optional features, but EMQX still starts the core applications required for broker operation and management. Core applications include the MQTT broker, configuration system, CLI, license validation, plugin framework, durable storage, audit log, node rebalance, retainer, TLS PSK, outbound telemetry, and shared resource or bridge framework applications.
+The `ESSENTIAL` preset disables optional features, but EMQX still starts the core applications required for broker operation and management. Authentication and authorization are core capabilities and remain available with every `EMQX_FEATURES` setting. Other core applications include the MQTT broker, configuration system, CLI, license validation, durable storage, audit log, node rebalance, retainer, TLS PSK, outbound telemetry, and shared resource or bridge framework applications.
 
 Existing feature-specific configuration sections can remain in configuration files when the corresponding feature gate is disabled. EMQX does not start the applications behind disabled features, so those configuration sections are not used until the feature is enabled again.
 
@@ -104,8 +102,8 @@ Example response:
 ```json
 {
   "preset": "custom",
-  "enabled": ["auth", "dashboard", "metrics"],
-  "disabled": ["ai", "cluster_link", "data_integration"]
+  "enabled": ["dashboard", "metrics"],
+  "disabled": ["ai", "cluster_link", "data_integration", "plugins"]
 }
 ```
 

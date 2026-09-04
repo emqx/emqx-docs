@@ -83,3 +83,37 @@ Where,
 EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
+
+## Crash Dumps in Docker
+
+When the Erlang VM terminates abnormally, it writes a crash dump to `erl_crash.<timestamp>.dump` in the log directory, which is `/opt/emqx/log` in the container. The file records the state of the node at the moment it went down, and it is the primary evidence for troubleshooting a crash.
+
+Console logging does not preserve the crash dump file. The console log handler writes runtime logs to the container's standard output, which you can view with `docker logs`. Crash dumps are written to files separately. If the log directory is not mounted, the dump is lost when the container is removed.
+
+Before you start EMQX, create a host directory and make it writable by the `emqx` user in the container (UID 1000):
+
+```bash
+mkdir -p $PWD/log && sudo chown 1000:1000 $PWD/log
+```
+
+Then mount the directory at `/opt/emqx/log` when you start EMQX:
+
+```bash
+docker run -d --name emqx \
+  -v $PWD/log:/opt/emqx/log \
+  emqx/emqx-enterprise:@EE_VERSION@
+```
+
+After a crash, run the following command to check the container output:
+
+```bash
+docker logs emqx
+```
+
+If the following line ends with `done`, the dump file is complete:
+
+```text
+Crash dump is being written to: /opt/emqx/log/erl_crash.2026.08.31.06.56.22.dump...done
+```
+
+A crash dump can be tens of megabytes. Consider the disk space of the mounted directory, and set `node.crash_dump_bytes` to limit the file size.

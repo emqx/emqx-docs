@@ -2,29 +2,87 @@
 
 本页将指导您使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
 
+## 部署前准备
+
+在 Docker 中启动 EMQX 前，请了解以下部署注意事项。
+
+### 配置稳定的节点名
+
+EMQX 将节点数据存储在 `data/mnesia/<节点名>` 目录中。首次启动容器前，请配置稳定的节点名，避免后续节点名发生变化导致数据丢失。
+
+对于单节点部署，使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@<host>`。容器主机名应与 `<host>` 的值保持一致。
+
+**注意：** `<host>` 部分必须是 IP 地址或完全限定域名（FQDN），例如 `node1.emqx.com`。EMQX 的 Erlang 节点以长节点名模式运行，因此不能使用不含点号的短主机名，例如 `node1`。
+
+### 准备持久化存储
+
+要在容器被删除后保留 EMQX 数据，请将以下容器目录挂载到宿主机：
+
+- `/opt/emqx/data`：存储 EMQX 数据。
+- `/opt/emqx/log`：存储文件日志和崩溃转储文件。
+
+EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚拟机会将崩溃转储文件写入 `/opt/emqx/log`。如果未挂载该目录，删除容器后将无法保留转储文件。宿主机上的日志目录必须对容器内的 `emqx` 用户（UID 1000）可写。详情参见 [Docker 中的崩溃转储文件](../configuration/logs.md#docker-中的崩溃转储文件)。
+
+有关 EMQX 目录结构的更多信息，参见 [EMQX 文件和目录](./install.md#文件和目录)。
+
+### 访问宿主机服务
+
+如果 EMQX 需要访问宿主机上运行的服务，请勿使用 `localhost` 或 `127.0.0.1` 作为服务地址。这些地址指向容器自身的网络接口。请使用宿主机 IP 地址或 [host 网络模式](https://docs.docker.com/network/host/)。在 Docker Desktop for Mac 或 Windows 中，也可以使用 `host.docker.internal`。
+
 ## 通过 Docker 运行单个 EMQX 节点
 
-本节主要介绍如何通过 Docker 镜像安装最新版本的 EMQX。有关 EMQX 官方镜像的更多信息，请查看 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
+按照以下步骤运行单个 EMQX 节点。有关 EMQX 官方 Docker 镜像的更多信息，参见 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
 
-1. 运行以下命令获取 Docker 镜像：
+1. 拉取 Docker 镜像：
 
    ```bash
    docker pull emqx/emqx-enterprise:@EE_VERSION@
    ```
 
-2. 运行以下命令启动 Docker 容器。
+2. 创建宿主机目录，并确保容器内的 `emqx` 用户对日志目录具有写权限：
 
    ```bash
-   docker run -d --name emqx-enterprise -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:@EE_VERSION@
+   mkdir -p $PWD/data $PWD/log
+   sudo chown $UID:$GID $PWD/log
    ```
 
-### Docker 中的监听地址
+3. 使用稳定的节点名和已挂载的目录启动容器：
 
-从 EMQX 6.3.0 开始，当环境变量 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 未设置或为空时，官方镜像的入口脚本将其设置为 `all`。该默认值使仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器监听所有网络接口，从而在两种安全配置方案下均可通过发布的容器端口访问。监听器绑定中显式指定的 IP 地址保持不变。该配置仅控制绑定地址，不会放宽认证或授权要求。
+   ```bash
+   docker run -d --name emqx-enterprise \
+     --hostname node1.emqx.com \
+     -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
+     -p 1883:1883 -p 8083:8083 \
+     -p 8084:8084 -p 8883:8883 \
+     -p 18083:18083 \
+     -v $PWD/data:/opt/emqx/data \
+     -v $PWD/log:/opt/emqx/log \
+     emqx/emqx-enterprise:@EE_VERSION@
+   ```
 
-如需覆盖此默认值，可通过 `docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>` 传入其他支持的值，或在 Docker Compose 服务的 `environment` 部分设置该变量。环境变量的优先级高于配置文件，因此，仅在挂载的 `emqx.conf` 中设置 `node.default_listener_address` 不会覆盖入口脚本的默认值。支持的取值参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。
+### 配置 Docker 中的默认监听地址
 
-使用 Docker 桥接网络时，将该变量设置为 `loopback` 会使受影响的监听器绑定到容器网络命名空间内的回环地址。此时，即使使用 `-p`，也无法通过发布的端口访问这些监听器。如需控制发布端口所使用的宿主机地址，请参见 [Docker 端口发布和映射](https://docs.docker.com/engine/network/port-publishing/)。
+**Docker 镜像默认设置**
+
+从 EMQX 6.3.0 开始，当环境变量 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 未设置或为空时，官方镜像的入口脚本将其设置为 `all`。
+
+该默认值使仅指定端口的 MQTT 监听器、网关监听器和 Dashboard HTTP 监听器监听所有网络接口，从而在两种[安全配置方案](../access-control/security-profile.md)下均可通过发布的容器端口访问。
+
+监听器绑定中显式指定的 IP 地址保持不变。该配置仅控制绑定地址，不会放宽认证或授权要求。
+
+**覆盖默认设置**
+
+如需覆盖此默认值，可通过 `docker run -e EMQX_NODE__DEFAULT_LISTENER_ADDRESS=<value>` 传入其他支持的值，或在 Docker Compose 服务的 `environment` 部分设置该变量。
+
+环境变量的优先级高于配置文件，因此，仅在挂载的 `emqx.conf` 中设置 `node.default_listener_address` 不会覆盖入口脚本的默认值。
+
+支持的取值参见[默认监听地址](../access-control/security-profile.md#默认监听地址)。
+
+::: warning 重要提示
+使用 Docker 桥接网络时，将该变量设置为 `loopback` 会使受影响的监听器绑定到容器网络命名空间内的回环地址。此时，即使使用 `-p`，也无法通过发布的端口访问这些监听器。
+
+如需控制发布端口所使用的宿主机地址，请参见 [Docker 端口发布和映射](https://docs.docker.com/engine/network/port-publishing/)。
+:::
 
 ### 使用功能门控启动 EMQX
 
@@ -42,51 +100,18 @@ docker run -d --name emqx-enterprise \
 
 ```bash
 docker run -d --name emqx-enterprise \
-  -e "EMQX_FEATURES=dashboard,auth,metrics" \
+  -e "EMQX_FEATURES=dashboard,metrics,plugins" \
   -p 1883:1883 -p 18083:18083 \
   emqx/emqx-enterprise:@EE_VERSION@
 ```
 
 完整功能列表和依赖行为请参见[功能门控](./feature-gates.md)。
 
-### Docker 部署注意事项
-
-1. 如果需要持久化 Docker 容器中生成的数据 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
-
-   ```bash
-   /opt/emqx/data
-   /opt/emqx/log
-   ```
-
-   关于 EMQX 目录结构的详细信息请参考 [EMQX 文件和目录](./install.md#文件和目录)。
-
-   启动容器并挂载目录：
-
-   ```bash
-   docker run -d --name emqx-enterprise \
-     --hostname node1.emqx.com \
-     -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
-     -p 1883:1883 -p 8083:8083 \
-     -p 8084:8084 -p 8883:8883 \
-     -p 18083:18083 \
-     -v $PWD/data:/opt/emqx/data \
-     -v $PWD/log:/opt/emqx/log \
-     emqx/emqx-enterprise:@EE_VERSION@
-   ```
-   
-2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
-
-3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
-
-   对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@<host>`。您还应该设置容器主机名以保持一致，如上面示例所示。
-
-   **注意：** `<host>` 部分必须是 IP 地址或完全限定域名（FQDN），例如 `node1.emqx.com`。EMQX 的 Erlang 节点以长节点名模式运行，因此不能使用不含点号的短主机名，例如 `node1`。
-
 ## 通过 Docker Compose 构建 EMQX 集群
 
 Docker Compose 是一个用于编排和运行多容器的工具，下面将指导您通过 Docker Compose 创建简单的 EMQX 静态集群用于测试。
 
-请注意，本章节中的 Docker Compose 示例文件仅适用于本地测试，如果您需要在生产环境中部署集群请参考 [构建集群](./cluster/introduction.md)。
+本节中的 Docker Compose 示例仅适用于本地测试，其中的卷挂载配置默认被注释。要保留数据和崩溃转储文件，请按照[部署前准备](#部署前准备)中的说明准备宿主机目录，并取消 `volumes` 配置的注释。有关生产环境中的集群部署，参见[构建集群](./cluster/introduction.md)。
 
 :::tip
 
@@ -105,7 +130,7 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
        container_name: emqx1
        environment:
        - "EMQX_NODE_NAME=emqx@node1.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -125,13 +150,14 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
          - 18083:18083
        # volumes:
        #   - $PWD/emqx1_data:/opt/emqx/data
-   
+       #   - $PWD/emqx1_log:/opt/emqx/log
+
      emqx2:
        image: emqx/emqx-enterprise:@EE_VERSION@
        container_name: emqx2
        environment:
        - "EMQX_NODE_NAME=emqx@node2.emqx.com"
-       # - "EMQX_FEATURES=dashboard,auth,metrics"
+       # - "EMQX_FEATURES=dashboard,metrics,plugins"
        - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
        - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]"
        healthcheck:
@@ -145,7 +171,8 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
            - node2.emqx.com
        # volumes:
        #   - $PWD/emqx2_data:/opt/emqx/data
-   
+       #   - $PWD/emqx2_log:/opt/emqx/log
+
    networks:
      emqx-bridge:
        driver: bridge

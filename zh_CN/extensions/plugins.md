@@ -4,6 +4,8 @@ EMQX 插件允许用户使用 Erlang 扩展核心功能，或将自定义逻辑�
 
 本章节介绍插件的基本概念，以及如何开发、定制和管理插件。
 
+从 EMQX 6.3.0 开始，插件框架由 `plugins` 功能门控控制。`FULL` 预设默认启用该功能。如果使用自定义 `EMQX_FEATURES` 列表，需要添加 `plugins` 才能使用插件功能。禁用 `plugins` 后，EMQX 不会启动插件框架，EMQX Dashboard 会隐藏插件管理界面，且不会注册 `/api/v5/plugins/*` 和 `/api/v5/plugin_api/*` 路由。更多信息请参见[功能门控](../deploy/feature-gates.md)。
+
 ## 什么是插件？
 
 在 EMQX 中，插件是运行于 EMQX 节点中的 Erlang/OTP 应用。插件通过钩子与 EMQX 核心系统交互，钩子是一些预定义的事件，例如客户端连接、消息发布、认证等。

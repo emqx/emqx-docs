@@ -20,12 +20,12 @@
 ```bash
 export EMQX_FEATURES=FULL
 export EMQX_FEATURES=ESSENTIAL
-export EMQX_FEATURES=dashboard,auth
-export EMQX_FEATURES="dashboard auth"
-export EMQX_FEATURES=dashboard,auth,data_integration,metrics
+export EMQX_FEATURES=dashboard,plugins
+export EMQX_FEATURES="dashboard plugins"
+export EMQX_FEATURES=dashboard,data_integration,metrics,plugins
 ```
 
-`dashboard,auth` 和 `"dashboard auth"` 的效果相同。如果使用空格分隔功能名称，需要用引号包裹整个值，避免 shell 将其拆分。
+`dashboard,plugins` 和 `"dashboard plugins"` 的效果相同。如果使用空格分隔功能名称，需要用引号包裹整个值，避免 shell 将其拆分。
 
 不要混用预设名称和功能名称。例如，`EMQX_FEATURES=ESSENTIAL,metrics` 是无效值。
 
@@ -40,7 +40,6 @@ export EMQX_FEATURES=dashboard,auth,data_integration,metrics
 | 功能 | 说明 |
 | --- | --- |
 | `dashboard` | Dashboard UI、REST API、Dashboard 基于角色的访问控制和 Dashboard 单点登录。 |
-| `auth` | 认证和授权链及其后端。 |
 | `data_integration` | 规则引擎、连接器、动作、Source 和数据桥接。 |
 | `message_transformation` | 消息转换。 |
 | `schema_validation` | Schema 验证。 |
@@ -55,6 +54,7 @@ export EMQX_FEATURES=dashboard,auth,data_integration,metrics
 | `gcp_device` | Google IoT Core 迁移兼容功能。 |
 | `exhook` | 外部 gRPC Hook。 |
 | `opentelemetry` | OpenTelemetry 导出器。 |
+| `plugins` | 用于安装和管理第三方插件的插件框架。 |
 
 ## 功能依赖
 
@@ -66,16 +66,14 @@ export EMQX_FEATURES=dashboard,auth,data_integration,metrics
 | `message_transformation` | `schema_registry` |
 | `schema_validation` | `schema_registry` |
 | `ai` | `schema_registry` |
-| `gateways` | `auth` |
-| `gcp_device` | `auth` |
-| `metrics` | `dashboard`、`auth` |
+| `metrics` | `dashboard` |
 | `opentelemetry` | `dashboard` |
 
-例如，设置 `EMQX_FEATURES=metrics` 会启用 `metrics`、`dashboard` 和 `auth`。
+例如，设置 `EMQX_FEATURES=metrics` 会启用 `metrics` 和 `dashboard`。
 
 ## 核心应用
 
-`ESSENTIAL` 预设会禁用所有可选功能，仅保留 EMQX 作为 MQTT Broker 运行和基础管理所需的核心能力。核心能力包括 MQTT Broker、配置系统、CLI、License 校验、插件框架、持久存储、审计日志、节点重平衡、保留消息、TLS PSK、遥测上报，以及共享的资源和桥接框架应用。
+`ESSENTIAL` 预设会禁用所有可选功能，但 EMQX 仍会启动 Broker 运行和基础管理所需的核心应用。认证和授权属于核心能力，在所有 `EMQX_FEATURES` 设置下均保持可用。其他核心应用包括 MQTT Broker、配置系统、CLI、License 校验、持久存储、审计日志、节点重平衡、保留消息、TLS PSK、遥测上报，以及共享的资源和桥接框架应用。
 
 当某个功能门控被禁用时，对应功能的配置项可以继续保留在配置文件中。EMQX 不会启动已禁用功能背后的应用，因此这些配置项不会被使用，直到再次启用对应功能。
 
@@ -104,8 +102,8 @@ curl -u <API_KEY>:<SECRET_KEY> http://localhost:18083/api/v5/features
 ```json
 {
   "preset": "custom",
-  "enabled": ["auth", "dashboard", "metrics"],
-  "disabled": ["ai", "cluster_link", "data_integration"]
+  "enabled": ["dashboard", "metrics"],
+  "disabled": ["ai", "cluster_link", "data_integration", "plugins"]
 }
 ```
 

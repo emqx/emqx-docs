@@ -4,6 +4,8 @@ EMQX plugins allow users to extend core functionality or integrate custom logic 
 
 This section introduces what plugins are and how they are developed, customized, and managed.
 
+Starting from EMQX 6.3.0, the plugin framework is controlled by the `plugins` feature gate. The `FULL` preset enables it by default. If you use a custom `EMQX_FEATURES` list, include `plugins` to use plugin functionality. When `plugins` is disabled, EMQX does not start the plugin framework, EMQX Dashboard hides the plugin management UI, and the `/api/v5/plugins/*` and `/api/v5/plugin_api/*` routes are not registered. For more information, see [Feature Gates](../deploy/feature-gates.md).
+
 ## What is a Plugin?
 
 A plugin in EMQX is an Erlang/OTP application that runs inside EMQX nodes. Plugins interact with the EMQX core through hookpoints, which are predefined events such as client connection, message publish, authentication, and more.

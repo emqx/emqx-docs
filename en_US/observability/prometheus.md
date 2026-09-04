@@ -8,7 +8,7 @@ EMQX exposes runtime metrics that Prometheus can collect for querying, alerting,
 You can then use Grafana to [visualize the collected EMQX metrics](#visualize-emqx-metrics-in-grafana).
 
 ::: tip
-Starting from EMQX 6.3.0, Prometheus metrics are controlled by the `metrics` feature gate. If you set `EMQX_FEATURES` manually, enabling `metrics` also enables its required `dashboard` and `auth` dependencies. For more information, see [Feature Gates](../deploy/feature-gates.md).
+Starting from EMQX 6.3.0, Prometheus metrics are controlled by the `metrics` feature gate. If you set `EMQX_FEATURES` manually, enabling `metrics` also enables its required `dashboard` dependency. Authentication and authorization are core capabilities and are not controlled by a feature gate. For more information, see [Feature Gates](../deploy/feature-gates.md).
 :::
 
 ## Configure Metric Collection in EMQX

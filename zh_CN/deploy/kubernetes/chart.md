@@ -148,7 +148,7 @@ EMQX Helm Chart 通过 `values.yaml` 文件提供丰富的可配置参数。下�
 
 ```yaml
 emqxConfig:
-  EMQX_FEATURES: "dashboard,auth,metrics"
+  EMQX_FEATURES: "dashboard,metrics,plugins"
 ```
 
 功能门控只在 EMQX 启动时解析。如果修改该值，需要重新创建或重启 EMQX Pod。完整功能列表和依赖行为请参见[功能门控](../feature-gates.md)。
