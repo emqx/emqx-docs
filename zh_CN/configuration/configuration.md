@@ -212,7 +212,6 @@ EMQX 内部会将每个环境变量值包装为 `fake_key=<value>` 并尝试按 
 大多数 `EMQX_` 前缀的环境变量按上述转换规则覆盖 `emqx.conf` 中的配置项。少数变量在配置文件解析之前就被读取，用于配置 EMQX 自身，因此没有对应的 `emqx.conf` 配置项：
 
 - `EMQX_FEATURES`：选择节点启动的应用集合，例如 `FULL` 或 `ESSENTIAL`。
-- `CODE_LOADING_MODE`：控制 Erlang 代码加载模式。当 `EMQX_FEATURES=ESSENTIAL` 且 `CODE_LOADING_MODE` 未设置或为空时，EMQX 默认使用 `interactive`；其他情况下默认使用 `embedded`。使用 `ESSENTIAL` 预设时，可将其显式设置为 `embedded`，以便在启动时预加载 Erlang 模块。
 - `EMQX_SECURITY_PROFILE`：选择节点级安全配置方案（Security Profile），可选值为 `legacy` 或 `hardened`。
 
 从 EMQX 6.3.0 开始，`emqx` 命令每次执行时都会从 `etc/emqx.env` 加载环境变量，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。对于 RPM 和 DEB 安装，该文件位于 `/etc/emqx/emqx.env`。请使用该文件设置启动期环境变量，而不要修改 systemd 单元文件。

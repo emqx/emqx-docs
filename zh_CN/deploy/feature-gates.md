@@ -77,17 +77,6 @@ export EMQX_FEATURES=dashboard,data_integration,metrics,plugins
 
 当某个功能门控被禁用时，对应功能的配置项可以继续保留在配置文件中。EMQX 不会启动已禁用功能背后的应用，因此这些配置项不会被使用，直到再次启用对应功能。
 
-## 代码加载和内存占用
-
-设置 `EMQX_FEATURES=ESSENTIAL` 时，EMQX 默认将 `CODE_LOADING_MODE` 设置为 `interactive`。在交互式加载模式下，Erlang 模块按需加载，而不是在启动时全部加载。因此，已禁用功能对应的模块可以保持未加载状态，从而降低 `ESSENTIAL` 节点的常驻内存占用。
-
-如需在 `ESSENTIAL` 预设下使用预加载模式，请在启动 EMQX 前显式设置 `CODE_LOADING_MODE=embedded`：
-
-```bash
-export EMQX_FEATURES=ESSENTIAL
-export CODE_LOADING_MODE=embedded
-```
-
 ## 查看已启用功能
 
 EMQX 会在启动时记录解析后的功能状态：

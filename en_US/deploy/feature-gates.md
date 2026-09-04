@@ -77,17 +77,6 @@ The `ESSENTIAL` preset disables optional features, but EMQX still starts the cor
 
 Existing feature-specific configuration sections can remain in configuration files when the corresponding feature gate is disabled. EMQX does not start the applications behind disabled features, so those configuration sections are not used until the feature is enabled again.
 
-## Code Loading and Memory Use
-
-When `EMQX_FEATURES=ESSENTIAL`, EMQX defaults `CODE_LOADING_MODE` to `interactive`. In interactive mode, Erlang modules are loaded on demand instead of all at startup. As a result, modules that belong to disabled features can remain unloaded, which reduces the resident memory footprint of an `ESSENTIAL` node.
-
-To use eager code loading with the `ESSENTIAL` preset, set `CODE_LOADING_MODE=embedded` explicitly before starting EMQX:
-
-```bash
-export EMQX_FEATURES=ESSENTIAL
-export CODE_LOADING_MODE=embedded
-```
-
 ## Inspect Enabled Features
 
 EMQX logs the resolved feature state during startup:
