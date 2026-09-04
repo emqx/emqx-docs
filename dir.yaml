@@ -108,7 +108,14 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
-                - deploy/kubernetes/operator/upgrade-operator
+                - title_en: Upgrade EMQX Operator
+                  title_cn: 升级 EMQX Operator
+                  title_ja: EMQX Operator のアップグレード
+                  path: deploy/kubernetes/operator/upgrade-operator
+                  collapsed: true
+                  children:
+                    - title_en: Migrate from EMQX Operator 2.3 to 3.0
+                      path: deploy/kubernetes/operator/migration/migrate-from-2.3-to-3.0
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
                   title_ja: Alibaba Cloud 上での EMQX デプロイ
@@ -162,14 +169,16 @@
                       title_cn: 开启持久化
                       title_ja: 永続化有効化
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Configure Pod Disruption Budgets
+                      path: deploy/kubernetes/operator/tasks/configure-disruption-budgets
                     - title_en: Access EMQX Cluster through LoadBalancer
                       title_cn: 通过 LoadBalancer 访问 EMQX 集群
                       title_ja: ロードバランサー経由で EMQX クラスターにアクセス
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
-                    - title_en: Perform Blue-Green Upgrade
-                      title_cn: 配置蓝绿发布
-                      title_ja: ブルーグリーンアップグレード実施
-                      path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
+                    - title_en: Perform Rolling Update
+                      title_cn: 配置滚动更新
+                      title_ja: Perform Rolling Update
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-rolling-update
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
                       title_ja: EMQX ログ収集
@@ -182,10 +191,10 @@
                       title_cn: 监控 EMQX 集群
                       title_ja: EMQX クラスター監視
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
-                    - title_en: Rebalance Cluster Load
-                      title_cn: 重新平衡集群负载
-                      title_ja: クラスター負荷の再バランス
-                      path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+                    - title_en: Autoscale Replicant Nodes with HPA
+                      title_cn: 使用 HPA 自动扩缩 Replicant 节点
+                      title_ja: Autoscale Replicant Nodes with HPA
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-hpa
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
                       title_ja: 制限付き k8s 環境での EMQX クラスター展開
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
@@ -196,6 +205,7 @@
                   path: deploy/kubernetes/operator/reference/overview
                   collapsed: true
                   children:
+                    - deploy/kubernetes/operator/reference/v3beta1-reference
                     - deploy/kubernetes/operator/reference/v2-reference
                     - deploy/kubernetes/operator/reference/v2beta1-reference
             - title_en: EMQX Helm Chart

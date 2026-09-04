@@ -30,21 +30,20 @@ The following example shows the basic EMQX Custom Resource (CR) configuration.
     :::
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
-         ## more information about storage classes: https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
+         persistentVolumeClaimSpec:
+          ## more information about storage classes: https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
            storageClassName: standard
            resources:
              requests:

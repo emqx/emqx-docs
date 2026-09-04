@@ -2,35 +2,50 @@
 
 ## Objective
 
-Configure persistence for the set of Core nodes of an EMQX cluster through the `volumeClaimTemplates` field.
+Configure persistence for the set of Core nodes of an EMQX cluster through the `persistentVolumeClaimSpec` field.
 
 ## Configure EMQX Cluster Persistence
 
-EMQX CRD `apps.emqx.io/v2` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring persistence of each Core node data through `.spec.coreTemplate.spec.persistentVolumeClaimSpec`.
 
-The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
+The definition and semantics of the `.spec.coreTemplate.spec.persistentVolumeClaimSpec` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
 
-When you specify the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). As a result, when an EMQX Pod is deleted, the associated PV and PVC are retained, preserving EMQX runtime data.
+EMQX Operator 3.0 manages Core nodes with a single StatefulSet. Each Core Pod has a stable identity and a stable PVC across image updates and rolling upgrades. When you specify `.spec.coreTemplate.spec.persistentVolumeClaimSpec`, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/).
+
+## PVC Lifecycle
+
+Core node PVCs are tied to StatefulSet Pod ordinals. For example, the PVC for `emqx-core-0` stays attached to `emqx-core-0` during image updates and rolling updates, so the node keeps using the same data volume.
+
+EMQX Operator configures Kubernetes to delete Core node PVCs when they are no longer needed:
+
+- When you scale down Core nodes, PVCs for the removed Pod ordinals are deleted.
+    
+    For example, scaling from 5 Core replicas to 3 deletes the PVCs for ordinals 3 and 4. EMQX Operator ensures that this incurs no data or durability loss: any Durable Storage data is "rebalanced away" from those Core replicas before scaling the StatefulSet down.
+
+- When you delete the EMQX custom resource, Kubernetes deletes the Core StatefulSet and its associated PVCs.
+
+- During rolling updates, PVCs are preserved because the StatefulSet name and Pod ordinals do not change.
+
+This automatic cleanup depends on the Kubernetes `StatefulSetAutoDeletePVC` feature gate. It is enabled by default in Kubernetes 1.32 and later. On Kubernetes 1.27 through 1.31, make sure the feature gate is enabled; otherwise Kubernetes ignores the deletion policy and you must clean up unused PVCs manually.
 
 For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            storageClassName: standard
            resources:
              requests:
@@ -64,46 +79,28 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 
 ## Verify Persistence
 
-1. Create a test rule in the EMQX Dashboard.
+Verify that Kubernetes reattaches the same PVC when a Core Pod is replaced. Do not delete the EMQX resource for this test: EMQX Operator configures its StatefulSet to delete associated PVCs when the StatefulSet is deleted.
+
+1. Record the UID of the PVC attached to the first Core Pod:
 
    ```bash
-   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   pvc_name=emqx-core-data-emqx-core-0
+   pvc_uid_before=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   kubectl get pvc "${pvc_name}"
    ```
 
-     - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
-
-     - Navigate to **Integration** -> **Rules** to create a new rule.
-
-     - Attach a simple action to this rule.
-
-     - Click **Save** to generate a rule, as shown in the following figure:
-
-       ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
-    
-       Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
-    
-       ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
-
-2. Delete the old EMQX cluster.
-
-   Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
+2. Delete the Pod and wait for the StatefulSet to recreate it:
 
    ```bash
-   $ kubectl delete -f emqx.yaml
-   emqx.apps.emqx.io "emqx" deleted
+   kubectl delete pod emqx-core-0
+   kubectl wait --for=condition=Ready pod/emqx-core-0 --timeout=10m
    ```
 
-3. Re-deploy the EMQX cluster.
-
-   Run the following command to re-deploy the EMQX cluster:
+3. Compare the PVC UID after the Pod is ready:
 
    ```bash
-   $ kubectl apply -f emqx.yaml
-   emqx.apps.emqx.io/emqx created
+   pvc_uid_after=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
    ```
 
-4. Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
-
-   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
-
-   The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.
+   Matching UIDs confirm that the replacement Pod reused the existing persistent volume instead of creating a new one.

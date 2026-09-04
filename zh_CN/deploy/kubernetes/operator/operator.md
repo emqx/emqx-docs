@@ -1,54 +1,59 @@
-# EMQX Operator 概述
+# EMQX Operator Overview
 
-EMQX Operator 为部署和管理 [EMQX](https://www.emqx.io/) 集群提供原生 [Kubernetes](https://kubernetes.io/) 支持。其主要目标是简化和自动化 Kubernetes 环境中 EMQX 的生命周期管理。
+The EMQX Operator provides native [Kubernetes](https://kubernetes.io/) support for deploying and managing [EMQX](https://www.emqx.io/) clusters. Its primary goal is to simplify and automate the lifecycle management of EMQX in Kubernetes environments.
 
-EMQX Operator 要求 Kubernetes 1.24 或更高版本。
+EMQX Operator 3.0 requires Kubernetes 1.27 or later. On Kubernetes 1.27 through 1.31, enable the `StatefulSetAutoDeletePVC` feature gate. This feature is enabled by default in Kubernetes 1.32 and later.
 
-EMQX Operator 包括但不限于以下功能：
+EMQX Operator includes, but is not limited to, the following features:
 
-* **简化部署**：通过 EMQX 自定义资源声明 EMQX 集群并快速部署。
+* **Simplified Deployment**: Declare EMQX clusters with EMQX custom resources and deploy them quickly.
 
-    更多详细信息，请参阅[快速开始](./getting-started.md)指南。
+    For more details, see the [Getting Started](./getting-started.md) guide.
 
-* **集群管理**：自动化 EMQX 集群的运维操作，包括带工作负载迁移的集群升级、运行时数据持久化、保持 Kubernetes 管理的资源处于最新状态等。
+* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including rolling updates, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
 
-    更多详细信息，请参阅[管理 EMQX](./tasks/overview.md)部分。
+    For more details, see the [Manage EMQX](./tasks/overview.md) section.
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## EMQX 与 EMQX Operator 兼容性
+## EMQX and EMQX Operator Compatibility
 
-### EMQX Operator 2.3.x
+### EMQX Operator 3.0.x
 
-EMQX Operator 2.3.x 版本系列与以下 EMQX 版本完全兼容：
+The EMQX Operator 3.0.x release series is compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
 
-- EMQX 5.9 和 5.10
-- EMQX 6.0 及以上版本
+The following API versions are supported:
+- [apps.emqx.io/v3beta1](./reference/v3beta1-reference.md)
 
-支持的 API 版本如下：
+EMQX Operator 3.0 introduces in-place rolling updates for Core nodes, Deployment-style rollouts for Replicant nodes, and HPA-compatible scaling of Core-Replicant clusters. It does not provide backward compatibility with earlier EMQX CR API versions.
 
+### Past Releases
+
+#### EMQX Operator 2.3.x
+
+The EMQX Operator 2.3.x release series is fully compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
+
+The following API versions are supported:
 - [apps.emqx.io/v2](./reference/v2-reference.md)
-- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)（已弃用）
-
-### 历史版本
+- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md) (deprecated)
 
 #### EMQX Operator 2.2.x
 
-EMQX Operator 2.2.x 版本系列与以下 EMQX 版本兼容：
+EMQX Operator 2.2.x release series is compatible with the following EMQX versions:
+- EMQX Open Source & Enterprise 5.1.1 – 5.8.x
+- EMQX 5.9 & 5.10 (limited support<sup>*</sup>)
+- EMQX 6.0 and higher (limited support<sup>*</sup>)
 
-- EMQX Open Source 与 Enterprise 5.1.1 – 5.8.x
-- EMQX 5.9 和 5.10（有限支持<sup>*</sup>）
-- EMQX 6.0 及以上版本（有限支持<sup>*</sup>）
-
-支持的 API 版本如下：
-
+The following API versions are supported:
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
-- apps.emqx.io/v2alpha1（已弃用）
+- apps.emqx.io/v2alpha1 (deprecated)
 - apps.emqx.io/v1beta4
-- apps.emqx.io/v1beta3（已弃用）
+- apps.emqx.io/v1beta3 (deprecated)
 
 ::: tip
-
-<sup>*</sup> 对于上述版本，不支持对持久化存储（Durable Storage）副本的自动化管理。
-
+<sup>*</sup> Automatic management of Durable Storage replication is not supported for these versions.
 :::

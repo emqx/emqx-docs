@@ -1,36 +1,51 @@
-# EMQXクラスターでのパーシステンス有効化
+# Enable Persistence in EMQX Cluster
 
-## 目的
+## Objective
 
-`volumeClaimTemplates` フィールドを使用して、EMQXクラスターのコアノード群のパーシステンスを設定します。
+Configure persistence for the set of Core nodes of an EMQX cluster through the `persistentVolumeClaimSpec` field.
 
-## EMQXクラスターのパーシステンス設定
+## Configure EMQX Cluster Persistence
 
-EMQX CRD `apps.emqx.io/v2` は、`.spec.coreTemplate.spec.volumeClaimTemplates` を通じて各コアノードのデータのパーシステンス設定をサポートしています。
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring persistence of each Core node data through `.spec.coreTemplate.spec.persistentVolumeClaimSpec`.
 
-`.spec.coreTemplate.spec.volumeClaimTemplates` フィールドの定義と意味は、Kubernetes APIで定義されている `PersistentVolumeClaimSpec` と一致しています。
+The definition and semantics of the `.spec.coreTemplate.spec.persistentVolumeClaimSpec` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
 
-`.spec.coreTemplate.spec.volumeClaimTemplates` フィールドを指定すると、EMQXオペレーターはEMQXコンテナの `/opt/emqx/data` ボリュームをPersistent Volume Claim（PVC）に紐付けて設定します。PVCは指定された[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を使用してPersistent Volume（PV）をプロビジョニングします。その結果、EMQX Podが削除されても、関連するPVおよびPVCは保持され、EMQXのランタイムデータが保存されます。
+EMQX Operator 3.0 manages Core nodes with a single StatefulSet. Each Core Pod has a stable identity and a stable PVC across image updates and rolling upgrades. When you specify `.spec.coreTemplate.spec.persistentVolumeClaimSpec`, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/).
 
-PVおよびPVCの詳細については、[Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)のドキュメントを参照してください。
+## PVC Lifecycle
 
-1. 以下の内容をYAMLファイルとして保存し、`kubectl apply` でデプロイします。
+Core node PVCs are tied to StatefulSet Pod ordinals. For example, the PVC for `emqx-core-0` stays attached to `emqx-core-0` during image updates and rolling updates, so the node keeps using the same data volume.
+
+EMQX Operator configures Kubernetes to delete Core node PVCs when they are no longer needed:
+
+- When you scale down Core nodes, PVCs for the removed Pod ordinals are deleted.
+    
+    For example, scaling from 5 Core replicas to 3 deletes the PVCs for ordinals 3 and 4. EMQX Operator ensures that this incurs no data or durability loss: any Durable Storage data is "rebalanced away" from those Core replicas before scaling the StatefulSet down.
+
+- When you delete the EMQX custom resource, Kubernetes deletes the Core StatefulSet and its associated PVCs.
+
+- During rolling updates, PVCs are preserved because the StatefulSet name and Pod ordinals do not change.
+
+This automatic cleanup depends on the Kubernetes `StatefulSetAutoDeletePVC` feature gate. It is enabled by default in Kubernetes 1.32 and later. On Kubernetes 1.27 through 1.31, make sure the feature gate is enabled; otherwise Kubernetes ignores the deletion policy and you must clean up unused PVCs manually.
+
+For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
+
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            storageClassName: standard
            resources:
              requests:
@@ -48,13 +63,13 @@ PVおよびPVCの詳細については、[Persistent Volumes](https://kubernetes
 
    ::: tip
 
-   `storageClassName` フィールドを使用して、EMQXデータに適切な[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を選択してください。`kubectl get storageclass` コマンドでKubernetesクラスター内に存在するStorageClassを一覧表示できます。または、必要に応じてStorageClassを作成してください。
+   Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
 
    :::
 
-2. EMQXクラスターが準備完了になるまで待ちます。
+2. Wait for the EMQX cluster to become ready.
 
-   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
+   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx
@@ -62,48 +77,30 @@ PVおよびPVCの詳細については、[Persistent Volumes](https://kubernetes
    emqx   Ready    10m
    ```
 
-## パーシステンスの検証
+## Verify Persistence
 
-1. EMQXダッシュボードでテスト用のルールを作成します。
+Verify that Kubernetes reattaches the same PVC when a Core Pod is replaced. Do not delete the EMQX resource for this test: EMQX Operator configures its StatefulSet to delete associated PVCs when the StatefulSet is deleted.
 
-   ```bash
-   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-   ```
-
-   - `http://${external_ip}:18083` にアクセスしてEMQXダッシュボードにログインします。
-
-   - **Integration** -> **Rules** に移動し、新しいルールを作成します。
-
-   - このルールにシンプルなアクションを追加します。
-
-   - **Save** をクリックしてルールを生成します。以下の図のように表示されます：
-
-     ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
-
-     ルールが正常に作成されると、ページに `emqx-persistent-test` ID の対応するレコードが表示されます。以下の図を参照してください：
-
-     ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
-
-2. 既存のEMQXクラスターを削除します。
-
-   以前にクラスターをデプロイした際に使用したファイル（例：`emqx.yaml`）を指定して、以下のコマンドでEMQXクラスターを削除します。
+1. Record the UID of the PVC attached to the first Core Pod:
 
    ```bash
-   $ kubectl delete -f emqx.yaml
-   emqx.apps.emqx.io "emqx" deleted
+   pvc_name=emqx-core-data-emqx-core-0
+   pvc_uid_before=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   kubectl get pvc "${pvc_name}"
    ```
 
-3. EMQXクラスターを再デプロイします。
-
-   以下のコマンドでEMQXクラスターを再度デプロイします。
+2. Delete the Pod and wait for the StatefulSet to recreate it:
 
    ```bash
-   $ kubectl apply -f emqx.yaml
-   emqx.apps.emqx.io/emqx created
+   kubectl delete pod emqx-core-0
+   kubectl wait --for=condition=Ready pod/emqx-core-0 --timeout=10m
    ```
 
-4. EMQXクラスターが準備完了になるまで待ちます。ブラウザでEMQXダッシュボードにアクセスし、以前作成したルールが残っていることを確認します。以下の図のように表示されます：
+3. Compare the PVC UID after the Pod is ready:
 
-   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+   ```bash
+   pvc_uid_after=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
+   ```
 
-   旧クラスターで作成した `emqx-persistent-test` ルールが新クラスターでも存在しているため、パーシステンス設定が正しく機能していることが確認できます。
+   Matching UIDs confirm that the replacement Pod reused the existing persistent volume instead of creating a new one.

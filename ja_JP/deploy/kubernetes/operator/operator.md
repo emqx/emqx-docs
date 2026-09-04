@@ -1,48 +1,59 @@
-# EMQX Operator 概要
+# EMQX Operator Overview
 
-EMQX Operator は、[Kubernetes](https://kubernetes.io/) ネイティブのサポートを提供し、[EMQX](https://www.emqx.io/) クラスターのデプロイおよび管理を行います。主な目的は、Kubernetes 環境における EMQX のライフサイクル管理を簡素化し、自動化することです。
+The EMQX Operator provides native [Kubernetes](https://kubernetes.io/) support for deploying and managing [EMQX](https://www.emqx.io/) clusters. Its primary goal is to simplify and automate the lifecycle management of EMQX in Kubernetes environments.
 
-EMQX Operator は Kubernetes 1.24 以降が必要です。
+EMQX Operator 3.0 requires Kubernetes 1.27 or later. On Kubernetes 1.27 through 1.31, enable the `StatefulSetAutoDeletePVC` feature gate. This feature is enabled by default in Kubernetes 1.32 and later.
 
-EMQX Operator は以下の機能を含みますが、これらに限定されません：
+EMQX Operator includes, but is not limited to, the following features:
 
-* **簡素化されたデプロイ**：EMQX カスタムリソースを宣言して EMQX クラスターを迅速にデプロイできます。
+* **Simplified Deployment**: Declare EMQX clusters with EMQX custom resources and deploy them quickly.
 
-    詳細は、[はじめに](./getting-started.md) ガイドをご参照ください。
+    For more details, see the [Getting Started](./getting-started.md) guide.
 
-* **クラスター管理**：ワークロードの移行を伴うクラスターのアップグレード、ランタイムデータのパーシステンス、Kubernetes 管理リソースの最新状態維持など、EMQX クラスターの運用・保守を自動化します。
+* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including rolling updates, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
 
-    詳細は、[EMQX 管理](./tasks/overview.md) セクションをご参照ください。
+    For more details, see the [Manage EMQX](./tasks/overview.md) section.
 
-<img src="./assets/architecture.png" style="zoom:20%;" alt="EMQX Operator アーキテクチャ" />
+<img src="./assets/architecture.png" style="zoom:20%;" />
 
-## EMQX と EMQX Operator の互換性
+## EMQX and EMQX Operator Compatibility
 
-### EMQX Operator 2.3.x
+### EMQX Operator 3.0.x
 
-EMQX Operator 2.3.x リリースシリーズは、以下の EMQX バージョンと完全に互換性があります：
-- EMQX 5.9 および 5.10
-- EMQX 6.0 以降
+The EMQX Operator 3.0.x release series is compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
 
-サポートされる API バージョンは以下の通りです：
+The following API versions are supported:
+- [apps.emqx.io/v3beta1](./reference/v3beta1-reference.md)
+
+EMQX Operator 3.0 introduces in-place rolling updates for Core nodes, Deployment-style rollouts for Replicant nodes, and HPA-compatible scaling of Core-Replicant clusters. It does not provide backward compatibility with earlier EMQX CR API versions.
+
+### Past Releases
+
+#### EMQX Operator 2.3.x
+
+The EMQX Operator 2.3.x release series is fully compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
+
+The following API versions are supported:
 - [apps.emqx.io/v2](./reference/v2-reference.md)
-- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)（非推奨）
-
-### 過去のリリース
+- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md) (deprecated)
 
 #### EMQX Operator 2.2.x
 
-EMQX Operator 2.2.x リリースシリーズは、以下の EMQX バージョンと互換性があります：
-- EMQX オープンソース＆エンタープライズ 5.1.1 – 5.8.x
-- EMQX 5.9 & 5.10（限定サポート<sup>*</sup>）
-- EMQX 6.0 以降（限定サポート<sup>*</sup>）
+EMQX Operator 2.2.x release series is compatible with the following EMQX versions:
+- EMQX Open Source & Enterprise 5.1.1 – 5.8.x
+- EMQX 5.9 & 5.10 (limited support<sup>*</sup>)
+- EMQX 6.0 and higher (limited support<sup>*</sup>)
 
-サポートされる API バージョンは以下の通りです：
+The following API versions are supported:
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
-- apps.emqx.io/v2alpha1（非推奨）
+- apps.emqx.io/v2alpha1 (deprecated)
 - apps.emqx.io/v1beta4
-- apps.emqx.io/v1beta3（非推奨）
+- apps.emqx.io/v1beta3 (deprecated)
 
 ::: tip
-<sup>*</sup> これらのバージョンでは、Durable Storage レプリケーションの自動管理はサポートされていません。
+<sup>*</sup> Automatic management of Durable Storage replication is not supported for these versions.
 :::
