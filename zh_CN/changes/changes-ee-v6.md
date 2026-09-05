@@ -20,7 +20,7 @@
 
 - [#17603](https://github.com/emqx/emqx/pull/17603) 支持通过 `mqtt.client_attrs_init` 中的 `cert_san.dns`、`cert_san.ip`、`cert_san.email` 和 `cert_san.uri`，从直接连接的 TLS 客户端证书中提取主题备用名称并写入 MQTT 客户端属性。
 
-- [#17854](https://github.com/emqx/emqx/pull/17854) 为改善消息延迟和资源使用，Unix 系统上的 MQTT TCP 监听器现在默认使用 `socket` 作为 `tcp_backend`。仍可通过设置 `tcp_backend = gen_tcp` 使用 `gen_tcp` 后端；Windows 上仍默认使用 `gen_tcp`。
+- [#17854](https://github.com/emqx/emqx/pull/17854) 为改善消息延迟和资源使用，MQTT TCP 监听器现在默认使用 `socket` 作为 `tcp_backend`。仍可通过设置 `tcp_backend = gen_tcp` 使用 `gen_tcp` 后端。
 
 - [#17870](https://github.com/emqx/emqx/pull/17870) 改进内存会话向处理缓慢或发生拥塞的订阅者投递消息的行为。
 
