@@ -58,6 +58,7 @@
 - 不正または悪意あるクライアントの影響を軽減するため、MQTTリソース使用を制限してください。パケットサイズ、トピックレベル、サブスクリプション数、インフライトウィンドウ、キューイングメッセージ数などの制限を確認してください。[MQTT Configuration](../configuration/mqtt.md)を参照してください。
 - 必要に応じてリスナーレベルでレート制御を適用し、接続やパブリッシュのバーストを制限してください。[Rate Limiter Configuration](../configuration/limiter.md)を参照してください。
 - 悪質または不安定なクライアントを抑制するために、[Banned Clients](./blacklist.md)および[Flapping Detect](./flapping-detect.md)を活用してください。
+- [Message Queue](../message-queue/message-queue-concept.md)または[MQTT Streams](../mqtt-stream/mqtt-stream-concept.md)を有効にしている場合は、`$queue/`および`$stream/`ネームスペース（非推奨の`$q/`および`$s/`プレフィックスを含む）に対して別個の認可ルールを定義してください。EMQXは完全なプレフィックス付きサブスクリプショントピックフィルターを認可し、`$queue/<name>/`や`$stream/<name>/`の後の`<topic_filter>`部分を個別に認可しません。`#`や`+/#`のルールは`$`で始まるフィルターにはマッチしません。自動作成が有効な場合、この`<topic_filter>`部分を制限してください。これは新しいキューやストリームが受信・保存するパブリッシュメッセージを決定します。詳細は[Message Queue Security Considerations](../message-queue/message-queue-concept.md#security-considerations)および[MQTT Streams Security Considerations](../mqtt-stream/mqtt-stream-concept.md#security-considerations)を参照してください。
 - クラスターリンクが有効な場合、ピア接続を受け入れるリスナーで認証を強制し、`$LINK/`コントロールネームスペースを専用のクラスターリンククライアントIDに制限し、それ以外は拒否してください。[Secure Cluster Linking](../cluster-linking/security.md)を参照してください。
 
 ## フェーズ5：管理とメンテナンス
