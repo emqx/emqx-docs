@@ -6,8 +6,7 @@ This section guides you through preparing the environment for EMQX Operator, ins
 
 Before deploying EMQX Operator, ensure that the following components are ready:
 
-- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.27 or later.
-  - The `StatefulSetAutoDeletePVC` feature gate must be enabled. It is enabled by default in Kubernetes 1.27 and later; verify that your cluster administrator has not disabled it.
+- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) cluster running version 1.27 or later, with the `StatefulSetAutoDeletePVC` feature gate enabled. This feature gate is enabled by default in supported Kubernetes versions.
 - A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
 
 ## Install EMQX Operator
@@ -46,7 +45,7 @@ Once the Operator is running, you can proceed to deploy EMQX.
            key: "evaluation"
    ```
 
-   EMQX Operator deploys a single-node EMQX cluster from this manifest. A single-node cluster can run without a license, but a valid license is required before you configure multiple nodes or scale an existing cluster beyond one node. During an evaluation, set `license.key` to `"evaluation"`, as shown in this example.
+   This manifest deploys a single-node EMQX cluster, which is supported by the default Community License. Before configuring multiple nodes or scaling an existing cluster beyond one node, configure a license that supports clustering. This example sets `license.key` to `"evaluation"` for evaluation.
 
    For more details about the EMQX CRD, check out the [reference documentation](./reference/v3beta1-reference.md).
 

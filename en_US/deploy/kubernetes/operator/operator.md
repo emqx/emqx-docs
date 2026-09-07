@@ -10,7 +10,7 @@ EMQX Operator includes, but is not limited to, the following features:
 
     For more details, see the [Getting Started](./getting-started.md) guide.
 
-* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including rolling updates, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
+* **Cluster Management**: Automate EMQX cluster operations and maintenance, including rolling updates, persistent storage, and synchronization of Kubernetes-managed resources.
 
     For more details, see the [Manage EMQX](./tasks/overview.md) section.
 

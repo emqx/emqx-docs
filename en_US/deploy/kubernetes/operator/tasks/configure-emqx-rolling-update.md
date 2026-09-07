@@ -1,4 +1,4 @@
-# Perform Rolling Update of EMQX Cluster
+# Perform a Rolling Update of an EMQX Cluster
 
 ## Objective
 
@@ -12,20 +12,11 @@ During a rolling update, Core nodes are updated in place through a single Statef
 
 ## Solution
 
-When an EMQX CR is updated, EMQX Operator compares the desired Pod template with the running workloads and rolls the cluster forward until every managed Pod matches the new template.
+When a change to an EMQX CR modifies a Pod template, EMQX Operator compares the desired template with the running workloads and rolls the cluster forward until every managed Pod matches the new template.
 
-For Core nodes, the Operator updates the StatefulSet template, drains the selected Core Pod if evacuation is enabled, recreates that Pod with the new template, and waits until it is ready before moving to the next Core Pod. For Replicant nodes, the Operator creates updated Replicant Pods up to the `maxSurge` limit and drains old Replicant Pods up to the `maxUnavailable` limit. This controls how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
+For Core nodes, the Operator updates the StatefulSet template, drains the selected Core Pod if evacuation is enabled, recreates that Pod with the new template, and waits until it is ready before moving to the next Core Pod. For Replicant nodes, the Operator creates updated Replicant Pods up to the `maxSurge` limit and drains old Replicant Pods up to the `maxUnavailable` limit. These settings control how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
 
 In Core-Replicant clusters, at least one updated Core node must be ready before the Replicant rollout starts, and at least one old Core node is kept until Replicant Pods have migrated away from the old revision.
-
-The update process is roughly divided into the following steps:
-
-1. Detect a change in the EMQX Pod template.
-2. Update Core nodes one StatefulSet Pod at a time until at least one updated Core node is ready.
-3. Roll out Replicant nodes by creating updated Replicant Pods according to `maxSurge` and draining old Replicant Pods according to `maxUnavailable`.
-4. Keep at least one old Core node while old Replicant Pods are still migrating.
-5. Use node evacuation, unless disabled, to migrate MQTT connections and sessions at a controlled rate.
-6. Complete the update when all desired Pods are ready and old Replicant Pods have been removed.
 
 ## Procedure
 
@@ -86,7 +77,7 @@ The update process is roughly divided into the following steps:
 
 ### Connect to EMQX Cluster
 
-[MQTTX](https://mqttx.app/cli) is an open-source MQTT 5.0 compatible command line client tool that supports automatic reconnection, designed to help in development and debugging of MQTT services and applications.
+[MQTTX CLI](https://mqttx.app/cli) is an open-source, MQTT 5.0-compatible command-line client for developing and debugging MQTT services and applications. It supports automatic reconnection.
 
 Get the external address of the `emqx-listeners` Service. The command supports load balancers that publish either an IP address or a hostname.
 
@@ -105,9 +96,7 @@ mqttx bench conn -h "${EMQX_HOST}" -p 1883 -c 3000
 
 ### Trigger the Update
 
-1. Any modifications made to the Pod template will trigger the upgrade strategy of EMQX Operator.
-
-  In this example, update an annotation in the Core and Replicant Pod templates. The timestamp ensures that each command produces a new Pod template and triggers a rolling update.
+1. Update an annotation in the Core and Replicant Pod templates to trigger a rolling update. The timestamp gives the annotation a new value each time you run the command.
 
   ```bash
   ROLLOUT_ID="$(date +%s)"
@@ -152,7 +141,7 @@ mqttx bench conn -h "${EMQX_HOST}" -p 1883 -c 3000
   | `initialSessions`       | Initial number of sessions on this node.                             |
   | `initialConnections`    | Initial number of connections on this node.                          |
 
-  Progress of a node evacuation can be estimated by looking at the `connections` and `sessions` counters in the respective [EMQX node status](../reference/v3beta1-reference.md#emqxnode).
+  Estimate node evacuation progress by checking the `connections` and `sessions` counters in the corresponding [EMQX node status](../reference/v3beta1-reference.md#emqxnode).
 
 3. Wait for the update to complete.
 

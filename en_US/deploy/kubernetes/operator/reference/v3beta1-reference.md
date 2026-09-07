@@ -150,7 +150,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Metadata applied to objects generated from this template. |  |  |
 | `spec` _[EMQXCoreTemplateSpec](#emqxcoretemplatespec)_ | Specification of the desired state of a core node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status | \{  \} |  |
 
 
@@ -230,7 +230,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Metadata applied to objects generated from this template. |  |  |
 | `spec` _[EMQXReplicantTemplateSpec](#emqxreplicanttemplatespec)_ | Specification of the desired state of a replicant node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
 
 
@@ -325,7 +325,7 @@ _Appears in:_
 | `replicantNodesStatus` _[ReplicantNodesStatus](#replicantnodesstatus)_ | Summary status of the set of replicant nodes. |  |  |
 | `nodeEvacuations` _[NodeEvacuationStatus](#nodeevacuationstatus) array_ | Status of active node evacuations in the cluster. |  |  |
 | `dsReplication` _[DSReplicationStatus](#dsreplicationstatus)_ | Status of EMQX Durable Storage replication. |  |  |
-| `config` _[ConfigStatus](#configstatus)_ | Declarative EMQX configuration reconciliation status.<br />Fields are informational implementation details. Prefer the ConfigApplied<br />condition to determine configuration lifecycle state. |  |  |
+| `config` _[ConfigStatus](#configstatus)_ | Declarative EMQX configuration reconciliation status.<br />Fields are informational implementation details. Prefer the `ConfigApplied`<br />condition to determine configuration lifecycle state. |  |  |
 
 
 #### EvacuationStrategy
@@ -441,7 +441,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `enabled` _boolean_ | Specifies whether the Service should be created. | true |  |
-| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Metadata applied to objects generated from this template. |  |  |
 | `spec` _[ServiceSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#servicespec-v1-core)_ | Specification of the desired state of a Service.<br />https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
 
 
@@ -460,8 +460,8 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `labels` _object (keys:string, values:string)_ |  |  |  |
-| `annotations` _object (keys:string, values:string)_ |  |  |  |
+| `labels` _object (keys:string, values:string)_ | Labels applied to generated objects. |  |  |
+| `annotations` _object (keys:string, values:string)_ | Annotations applied to generated objects. |  |  |
 
 
 #### UpdateStrategy
