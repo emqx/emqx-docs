@@ -1,26 +1,31 @@
 # Perform a Rolling Update of an EMQX Cluster
 
-## Objective
+Use EMQX Operator 3.0 to perform a graceful rolling update of an EMQX cluster.
 
-Perform a graceful rolling update of the EMQX cluster.
+## Before You Begin
 
-## Background
+- [Install EMQX Operator 3.0](../getting-started.md) and configure `kubectl` to access the Kubernetes cluster.
+- Make sure that the Kubernetes environment can provision an external address for a `LoadBalancer` Service.
+- Prepare a valid EMQX Enterprise license that supports at least 3,000 concurrent connections. Replace the license placeholder in this example with your license key. For more information, see [Manage License](./configure-emqx-license.md).
+- Install `jq` to inspect the node evacuation status.
+- Install [MQTTX CLI](https://mqttx.app/cli) to generate test connections.
+- For a Core-Replicant cluster, configure at least two Core replicas. EMQX Operator rejects a Core-Replicant configuration with fewer than two Core replicas.
 
-EMQX Operator performs rolling updates when fields in the EMQX Pod template change, such as the image, image pull policy, resource requests, or node templates.
+## How Rolling Updates Work
 
-During a rolling update, Core nodes are updated in place through a single StatefulSet, one Pod at a time. Replicant nodes use a Deployment-style rollout controlled by `maxUnavailable` and `maxSurge`. Node evacuation is used by default to drain MQTT connections and sessions before Pods are removed. It can be disabled with `.spec.updateStrategy.evacuationStrategy.type: Disabled`.
+EMQX Operator performs a rolling update when a change to an EMQX custom resource modifies a Pod template, such as the image, image pull policy, resource requests, or Core and Replicant templates.
 
-## Solution
+Node evacuation is enabled by default to drain MQTT connections and sessions before Pods are removed. To disable node evacuation, set `.spec.updateStrategy.evacuationStrategy.type` to `Disabled`.
 
-When a change to an EMQX CR modifies a Pod template, EMQX Operator compares the desired template with the running workloads and rolls the cluster forward until every managed Pod matches the new template.
+For Core nodes, the Operator updates Pods one at a time within the same StatefulSet. The Operator drains the selected Core Pod if node evacuation is enabled, recreates the Pod with the desired template, and waits until it is ready before updating the next Core Pod.
 
-For Core nodes, the Operator updates the StatefulSet template, drains the selected Core Pod if evacuation is enabled, recreates that Pod with the new template, and waits until it is ready before moving to the next Core Pod. For Replicant nodes, the Operator creates updated Replicant Pods up to the `maxSurge` limit and drains old Replicant Pods up to the `maxUnavailable` limit. These settings control how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
+For Replicant nodes, the Operator uses a Deployment-style rollout. It creates updated Replicant Pods up to the `maxSurge` limit and drains outdated Replicant Pods up to the `maxUnavailable` limit. These settings control how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
 
 In Core-Replicant clusters, at least one updated Core node must be ready before the Replicant rollout starts, and at least one old Core node is kept until Replicant Pods have migrated away from the old revision.
 
-## Procedure
+The following procedure changes annotations in the Core and Replicant Pod templates to demonstrate the rolling update mechanism without changing the EMQX version. To upgrade EMQX, update `.spec.image` to a supported target version. The Operator uses the same rolling update mechanism for the image change.
 
-### Configure the Update Strategy
+## Configure the Update Strategy
 
 1. Create an `apps.emqx.io/v3beta1` EMQX CR and configure the update strategy.
 
@@ -58,6 +63,8 @@ In Core-Replicant clusters, at least one updated Core node must be ready before 
         type: LoadBalancer
   ```
 
+  `maxUnavailable` and `maxSurge` cannot both be `0`. If `maxUnavailable` is `100%`, `maxSurge` must be greater than `0`. For field definitions, defaults, and validation rules, see [ReplicantsUpdateStrategy](../reference/v3beta1-reference.md#replicantsupdatestrategy).
+
 2. Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
 
   ```bash
@@ -75,9 +82,9 @@ In Core-Replicant clusters, at least one updated Core node must be ready before 
   emqx      Ready    8m33s
   ```
 
-### Connect to EMQX Cluster
+## Generate Test Connections
 
-[MQTTX CLI](https://mqttx.app/cli) is an open-source, MQTT 5.0-compatible command-line client for developing and debugging MQTT services and applications. It supports automatic reconnection.
+Use MQTTX CLI to generate MQTT connections for observing connection evacuation during the rolling update. MQTTX CLI supports automatic reconnection.
 
 Get the external address of the `emqx-listeners` Service. The command supports load balancers that publish either an IP address or a hostname.
 
@@ -94,12 +101,12 @@ mqttx bench conn -h "${EMQX_HOST}" -p 1883 -c 3000
 [10:06:13 AM] › ℹ  Done, total time: 31.113s
 ```
 
-### Trigger the Update
+## Trigger the Update
 
-1. Update an annotation in the Core and Replicant Pod templates to trigger a rolling update. The timestamp gives the annotation a new value each time you run the command.
+1. Update an annotation in the Core and Replicant Pod templates to trigger a rolling update. The command combines a timestamp with a random suffix to reduce the chance of reusing the same annotation value.
 
   ```bash
-  ROLLOUT_ID="$(date +%s)"
+  ROLLOUT_ID="$(date +%s)-${RANDOM}"
 
   kubectl patch emqx emqx --type=merge -p \
     "{\"spec\":{\"coreTemplate\":{\"metadata\":{\"annotations\":{\"docs.emqx.com/rollout-id\":\"${ROLLOUT_ID}\"}}},\"replicantTemplate\":{\"metadata\":{\"annotations\":{\"docs.emqx.com/rollout-id\":\"${ROLLOUT_ID}\"}}}}}"
@@ -155,28 +162,25 @@ mqttx bench conn -h "${EMQX_HOST}" -p 1883 -c 3000
 
   After the update is completed, you can verify that all Pods are running the desired template using `kubectl get pods`.
 
-## Grafana Monitoring
+## Rolling Update Illustration
 
-The following monitoring graph shows the number of connections during the update process, using 10,000 connections as an example.
+The following diagram illustrates a possible connection distribution during a Replicant rolling update with 3,000 connections. It is not based on measured Grafana data.
 
-<svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Connection counts during a Replicant rolling update">
+<svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrative connection distribution during a Replicant rolling update">
   <rect width="920" height="360" fill="#111827"/>
   <rect x="58" y="34" width="680" height="266" fill="#121a24" stroke="#263241"/>
   <g stroke="#263241" stroke-width="1">
     <path d="M58 60H738M58 108H738M58 156H738M58 204H738M58 252H738M58 300H738"/>
-    <path d="M80 34V300M160 34V300M260 34V300M360 34V300M460 34V300M560 34V300M660 34V300M738"/>
+    <path d="M80 34V300M160 34V300M260 34V300M360 34V300M460 34V300M560 34V300M660 34V300M738 34V300"/>
   </g>
   <g fill="#9ca3af" font-family="sans-serif" font-size="12">
     <text x="25" y="304">0</text>
-    <text x="20" y="256">2K</text>
-    <text x="20" y="208">4K</text>
-    <text x="20" y="160">6K</text>
-    <text x="20" y="112">8K</text>
-    <text x="14" y="64">10K</text>
-    <text x="62" y="322">14:08</text>
-    <text x="242" y="322">14:11</text>
-    <text x="442" y="322">14:14</text>
-    <text x="642" y="322">14:17</text>
+    <text x="16" y="256">600</text>
+    <text x="10" y="208">1,200</text>
+    <text x="10" y="160">1,800</text>
+    <text x="10" y="112">2,400</text>
+    <text x="10" y="64">3,000</text>
+    <text x="350" y="322">Update progress</text>
   </g>
   <g fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path d="M80 300 C105 300 135 180 160 62 C210 58 270 61 330 60 C390 61 445 59 505 60 C565 62 630 59 700 60" stroke="#73bf69" stroke-width="2"/>
@@ -189,7 +193,7 @@ The following monitoring graph shows the number of connections during the update
   </g>
   <g font-family="sans-serif" font-size="9">
     <rect x="758" y="46" width="144" height="166" rx="4" fill="#101923" stroke="#263241"/>
-    <circle cx="768" cy="66" r="3" fill="#73bf69"/><text x="776" y="69" fill="#d1d5db">Total 10K</text>
+    <circle cx="768" cy="66" r="3" fill="#73bf69"/><text x="776" y="69" fill="#d1d5db">Total 3,000</text>
     <circle cx="768" cy="88" r="3" fill="#e24d42"/><text x="776" y="91" fill="#d1d5db">emqx-replicant-86f864f9-0</text>
     <circle cx="768" cy="110" r="3" fill="#8f7ee7"/><text x="776" y="113" fill="#d1d5db">emqx-replicant-86f864f9-1</text>
     <circle cx="768" cy="132" r="3" fill="#5794f2"/><text x="776" y="135" fill="#d1d5db">emqx-replicant-86f864f9-2</text>
@@ -198,14 +202,14 @@ The following monitoring graph shows the number of connections during the update
     <circle cx="768" cy="198" r="3" fill="#56a64b"/><text x="776" y="201" fill="#d1d5db">emqx-replicant-648c45c7-2</text>
   </g>
   <g fill="#d1d5db" font-family="sans-serif">
-    <text x="58" y="24" font-size="14">Replicant rolling update, maxSurge = 1, maxUnavailable = 1</text>
+    <text x="58" y="24" font-size="14">Illustrative Replicant rolling update, maxSurge = 1, maxUnavailable = 1</text>
   </g>
 </svg>
 
 | Label/Prefix         | Description                                         |
 |----------------------|-----------------------------------------------------|
-| Total                | Total number of connections; shown as the top line in the graph. |
-| `emqx-replicant-86f864f9`    | Name prefix for the set of old Replicant Pods. |
-| `emqx-replicant-648c45c7`    | Name prefix for the set of updated Replicant Pods. |
+| Total                | Example total connection count, shown as the top line in the diagram. |
+| `emqx-replicant-86f864f9`    | Example name prefix for the set of outdated Replicant Pods. |
+| `emqx-replicant-648c45c7`    | Example name prefix for the set of updated Replicant Pods. |
 
-This timeline illustrates how EMQX Operator performs a smooth rolling update. Throughout the process, the total number of connections remained stable (subject to factors such as migration rate, server capacity, and client reconnection strategy). This approach reduces disruption, prevents server overload, and improves overall service stability.
+During a Replicant rollout, clients disconnected from an evacuated Pod may reconnect to other serving Pods, including updated Pods. The lines illustrate this redistribution only; they are not measured values. Actual connection counts can fluctuate based on the node evacuation rate, available cluster capacity, and client reconnection behavior.
