@@ -26,7 +26,7 @@ EMQX Operator configures Kubernetes to delete Core node PVCs when they are no lo
 
 - During rolling updates, PVCs are preserved because the StatefulSet name and Pod ordinals do not change.
 
-This automatic cleanup depends on the Kubernetes `StatefulSetAutoDeletePVC` feature gate. It is enabled by default in Kubernetes 1.32 and later. On Kubernetes 1.27 through 1.31, make sure the feature gate is enabled; otherwise Kubernetes ignores the deletion policy and you must clean up unused PVCs manually.
+This automatic cleanup depends on the Kubernetes `StatefulSetAutoDeletePVC` feature gate, which is enabled by default in Kubernetes 1.27 and later. If your cluster administrator has disabled the feature gate, Kubernetes ignores the deletion policy, and you must clean up unused PVCs manually.
 
 For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
 

@@ -62,6 +62,9 @@ The update process is roughly divided into the following steps:
     replicantTemplate:
       spec:
         replicas: 3
+    listenersServiceTemplate:
+      spec:
+        type: LoadBalancer
   ```
 
 2. Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
@@ -85,10 +88,16 @@ The update process is roughly divided into the following steps:
 
 [MQTTX](https://mqttx.app/cli) is an open-source MQTT 5.0 compatible command line client tool that supports automatic reconnection, designed to help in development and debugging of MQTT services and applications.
 
-Use MQTTX to connect to the EMQX cluster:
+Get the external address of the `emqx-listeners` Service. The command supports load balancers that publish either an IP address or a hostname.
 
 ```bash
-mqttx bench conn -h ${IP} -p ${PORT} -c 3000
+export EMQX_HOST="$(kubectl get service emqx-listeners -o jsonpath='{.status.loadBalancer.ingress[0].ip}{.status.loadBalancer.ingress[0].hostname}')"
+```
+
+After `EMQX_HOST` contains an address, use MQTTX to open 3,000 connections to the default TCP listener on port `1883`:
+
+```bash
+mqttx bench conn -h "${EMQX_HOST}" -p 1883 -c 3000
 [10:05:21 AM] › ℹ  Start the connect benchmarking, connections: 3000, req interval: 10ms
 ✔  success   [3000/3000] - Connected
 [10:06:13 AM] › ℹ  Done, total time: 31.113s
@@ -98,10 +107,18 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
 
 1. Any modifications made to the Pod template will trigger the upgrade strategy of EMQX Operator.
 
-  In this example, we trigger the upgrade by modifying the Pod's `ImagePullPolicy`.
+  In this example, update an annotation in the Core and Replicant Pod templates. The timestamp ensures that each command produces a new Pod template and triggers a rolling update.
 
   ```bash
-  $ kubectl patch emqx emqx --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
+  ROLLOUT_ID="$(date +%s)"
+
+  kubectl patch emqx emqx --type=merge -p \
+    "{\"spec\":{\"coreTemplate\":{\"metadata\":{\"annotations\":{\"docs.emqx.com/rollout-id\":\"${ROLLOUT_ID}\"}}},\"replicantTemplate\":{\"metadata\":{\"annotations\":{\"docs.emqx.com/rollout-id\":\"${ROLLOUT_ID}\"}}}}}"
+  ```
+
+  Expected output:
+
+  ```text
   emqx.apps.emqx.io/emqx patched
   ```
 
@@ -135,7 +152,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   | `initialSessions`       | Initial number of sessions on this node.                             |
   | `initialConnections`    | Initial number of connections on this node.                          |
 
-  Progress of a node evacuation can be estimated by looking at `connections` and `sessions` counters in the respective [EMQX node status](../reference/v3beta1-reference.md#status).
+  Progress of a node evacuation can be estimated by looking at the `connections` and `sessions` counters in the respective [EMQX node status](../reference/v3beta1-reference.md#emqxnode).
 
 3. Wait for the update to complete.
 

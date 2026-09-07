@@ -49,8 +49,8 @@ helm repo update
 helm upgrade --install emqx-operator emqx/emqx-operator \
   --namespace emqx \
   --create-namespace \
-  --set singleNamespace=true \
-  --set crds.enabled=false \
+  --set-json='watchNamespaces=["emqx"]' \
+  --set skipCRDs=true \
   --set-json='podSecurityContext={"runAsNonRoot":true}' \
   --set-json='containerSecurityContext={"allowPrivilegeEscalation":false}' \
   --set image.repository=$REGISTRY/emqx/emqx-operator \
@@ -65,9 +65,9 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
 
 ## Configure EMQX Cluster
 
-1. Save the following content as a YAML file and deploy it with the `kubectl apply` command:
+1. Save the following content as `emqx.yaml`:
 
-   ```bash
+   ```yaml
    apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
@@ -76,13 +76,18 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
    spec:
      image: ${REGISTRY}/emqx/emqx-enterprise:${EMQX_VERSION}
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
    ```
 
-2. Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster through `kubectl get` command. Make sure `STATUS` is `Ready`. This may take some time.
+2. Use `envsubst` to substitute the environment variables exported earlier, and deploy the rendered manifest:
+
+   ```bash
+   envsubst < emqx.yaml | kubectl apply -f -
+   ```
+
+3. Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster through `kubectl get` command. Make sure `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx

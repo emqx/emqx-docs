@@ -1,4 +1,4 @@
-# API Reference
+# API Reference (v3beta1)
 
 ## Packages
 - [apps.emqx.io/v3beta1](#appsemqxiov3beta1)
@@ -26,8 +26,40 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `mode` _string_ | Determines how configuration updates are applied.<br />* `Merge`: Merge the new configuration into the existing configuration.<br />* `Replace`: Replace the whole configuration. | Merge | Enum: [Merge Replace] <br /> |
-| `data` _string_ | EMQX configuration, in HOCON format.<br />This configuration will be supplied as `base.hocon` to the container. See respective<br />[documentation](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html#base-configuration-file). |  |  |
+| `roots` _[ConfigRoots](#configroots)_ | Top-level EMQX configuration roots. Values must be JSON-compatible. The Operator<br />serializes runtime-applicable roots into `base.hocon` and settings that take effect<br />when EMQX starts into `emqx.conf`.<br />HOCON-only syntax such as includes, substitutions, and duplicate declarations is not supported.<br />Removing a root relinquishes Operator ownership; it does not delete values persisted by EMQX.<br />The `node.cookie` path is reserved for the Operator and must not be specified here. |  |  |
+
+
+#### ConfigRoots
+
+_Underlying type:_ _[JSON](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#json-v1-apiextensions-k8s-io)_
+
+
+
+
+
+_Appears in:_
+- [Config](#config)
+
+
+
+#### ConfigStatus
+
+
+
+ConfigStatus contains controller-owned reconciliation checkpoints.
+These fields are informational implementation details and may change.
+
+
+
+_Appears in:_
+- [EMQXStatus](#emqxstatus)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `desiredRevision` _string_ | Revision of the complete desired configuration in spec.config.roots. |  |  |
+| `runtimeRevision` _string_ | Revision of runtime configuration most recently accepted by the EMQX API.<br />Before initial startup, it is the revision staged for cluster bootstrap. |  |  |
+| `desiredStartupRevision` _string_ | Revision of the desired settings that take effect when EMQX starts. |  |  |
+| `activeStartupRevisions` _string array_ | Revisions of startup configuration used by ready Pods.<br />Multiple revisions indicate that ready Pods started with different versions of those settings. |  |  |
 
 
 #### CoreNodesStatus
@@ -118,8 +150,8 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
-| `spec` _[EMQXCoreTemplateSpec](#emqxcoretemplatespec)_ | Specification of the desired state of a core node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `spec` _[EMQXCoreTemplateSpec](#emqxcoretemplatespec)_ | Specification of the desired state of a core node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status | \{  \} |  |
 
 
 #### EMQXCoreTemplateSpec
@@ -140,18 +172,17 @@ _Appears in:_
 | `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#affinity-v1-core)_ | Affinity for pod assignment<br />ref: https://kubernetes.io/docs/concepts/config/assign-pod-node/#affinity-and-anti-affinity |  |  |
 | `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#toleration-v1-core) array_ | Pod tolerations.<br />If specified, Pod tolerates any taint that matches the triple <key,value,effect> using the matching operator. |  |  |
 | `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#topologyspreadconstraint-v1-core) array_ | Specifies how to spread matching pods among the given topology. |  |  |
-| `replicas` _integer_ | Desired number of instances.<br />In case of core nodes, each instance has a consistent identity. | 2 | Minimum: 0 <br /> |
-| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#intorstring-intstr-util)_ | An eviction is allowed if at least "minAvailable" pods selected by<br />"selector" will still be available after the eviction, i.e. even in the<br />absence of the evicted pod.  So for example you can prevent all voluntary<br />evictions by specifying "100%". |  | XIntOrString: \{\} <br /> |
-| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#intorstring-intstr-util)_ | An eviction is allowed if at most "maxUnavailable" pods selected by<br />"selector" are unavailable after the eviction, i.e. even in absence of<br />the evicted pod. For example, one can prevent all voluntary evictions<br />by specifying 0. This is a mutually exclusive setting with "minAvailable". |  | XIntOrString: \{\} <br /> |
+| `dnsConfig` _[PodDNSConfig](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#poddnsconfig-v1-core)_ | Specifies the DNS parameters of a pod.<br />Parameters specified here will be merged to the generated DNS<br />configuration based on DNSPolicy (always ClusterFirst).<br />More info: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config |  |  |
+| `replicas` _integer_ | Desired number of instances.<br />In case of core nodes, each instance has a consistent identity. | 1 | Minimum: 0 <br /> |
 | `minReadySeconds` _integer_ | MinReadySeconds is the minimum time (seconds) a pod must be Ready before it counts as available.<br />For core nodes this is applied to the StatefulSet (mirrors apps/v1 StatefulSetSpec.minReadySeconds);<br />for replicants, to the ReplicaSet (mirrors apps/v1 ReplicaSetSpec.minReadySeconds).<br />Omitted or zero matches the apps/v1 default (0). |  | Minimum: 0 <br /> |
 | `command` _string array_ | Entrypoint array. Not executed within a shell.<br />The container image's ENTRYPOINT is used if this is not provided.<br />Variable references `$(VAR_NAME)` are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double `$$` are reduced<br />to a single `$`, which allows for escaping the `$(VAR_NAME)` syntax: i.e. `$$(VAR_NAME)` will<br />produce the string literal `$(VAR_NAME)`. Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  | Optional: \{\} <br /> |
 | `args` _string array_ | Arguments to the entrypoint.<br />The container image's CMD is used if this is not provided.<br />Variable references `$(VAR_NAME)` are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double `$$` are reduced<br />to a single `$`, which allows for escaping the `$(VAR_NAME)` syntax: i.e. `$$(VAR_NAME)` will<br />produce the string literal `$(VAR_NAME)`. Escaped references will never be expanded, regardless<br />of whether the variable exists or not.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | List of ports to expose from the container.<br />Exposing a port here gives the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here DOES NOT prevent that<br />port from being exposed. Any port which is listening on the default `0.0.0.0` address inside a<br />container will be accessible from the network. |  |  |
+| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | List of ports to expose from the container.<br />Exposing a port here gives the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here DOES NOT prevent that<br />port from being exposed. Any port which is listening on the default `0.0.0.0` address inside a<br />container will be accessible from the network.<br />Port names `dashboard` and `dashboard-https` are reserved by the Operator and cannot be supplied<br />in the template. The Operator derives these named ports from<br />`spec.config.roots.dashboard.listeners` for probes, Services, and per-Pod API requests.<br />Change their container port by changing the corresponding listener bind instead. |  |  |
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envvar-v1-core) array_ | List of environment variables to set in the container. |  |  |
 | `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envfromsource-v1-core) array_ | List of sources to populate environment variables from in the container.<br />The keys defined within a source must be a C_IDENTIFIER. All invalid keys<br />will be reported as an event when the container is starting. When a key exists in multiple<br />sources, the value associated with the last source will take precedence.<br />Values defined by an Env with a duplicate key will take precedence. |  |  |
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | Compute Resources required by this container.<br />More info: https://kubernetes.io/docs/concepts/config/manage-resources-containers/ |  |  |
-| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#podsecuritycontext-v1-core)_ | Pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
-| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | Security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#podsecuritycontext-v1-core)_ | Pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | Security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |  |  |
 | `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | List of initialization containers belonging to the pod.<br />Init containers are executed in order prior to containers being started. If any<br />init container fails, the pod is considered to have failed and is handled according<br />to its restartPolicy. The name for an init container or normal container must be<br />unique among all containers.<br />Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.<br />The resourceRequirements of an init container are taken into account during scheduling<br />by finding the highest request/limit for each resource type, and then using the max of<br />of that value or the sum of the normal containers. Limits are applied to init containers<br />in a similar fashion.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
 | `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | Additional containers to run alongside the main container. |  |  |
 | `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#volume-v1-core) array_ | Additional volumes to provide to a Pod. |  |  |
@@ -199,7 +230,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[EMQXReplicantTemplateSpec](#emqxreplicanttemplatespec)_ | Specification of the desired state of a replicant node.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
 
 
@@ -222,18 +253,17 @@ _Appears in:_
 | `affinity` _[Affinity](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#affinity-v1-core)_ | Affinity for pod assignment<br />ref: https://kubernetes.io/docs/concepts/config/assign-pod-node/#affinity-and-anti-affinity |  |  |
 | `tolerations` _[Toleration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#toleration-v1-core) array_ | Pod tolerations.<br />If specified, Pod tolerates any taint that matches the triple <key,value,effect> using the matching operator. |  |  |
 | `topologySpreadConstraints` _[TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#topologyspreadconstraint-v1-core) array_ | Specifies how to spread matching pods among the given topology. |  |  |
-| `replicas` _integer_ | Desired number of instances.<br />In case of core nodes, each instance has a consistent identity. | 2 | Minimum: 0 <br /> |
-| `minAvailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#intorstring-intstr-util)_ | An eviction is allowed if at least "minAvailable" pods selected by<br />"selector" will still be available after the eviction, i.e. even in the<br />absence of the evicted pod.  So for example you can prevent all voluntary<br />evictions by specifying "100%". |  | XIntOrString: \{\} <br /> |
-| `maxUnavailable` _[IntOrString](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#intorstring-intstr-util)_ | An eviction is allowed if at most "maxUnavailable" pods selected by<br />"selector" are unavailable after the eviction, i.e. even in absence of<br />the evicted pod. For example, one can prevent all voluntary evictions<br />by specifying 0. This is a mutually exclusive setting with "minAvailable". |  | XIntOrString: \{\} <br /> |
+| `dnsConfig` _[PodDNSConfig](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#poddnsconfig-v1-core)_ | Specifies the DNS parameters of a pod.<br />Parameters specified here will be merged to the generated DNS<br />configuration based on DNSPolicy (always ClusterFirst).<br />More info: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config |  |  |
+| `replicas` _integer_ | Desired number of instances.<br />In case of core nodes, each instance has a consistent identity. | 1 | Minimum: 0 <br /> |
 | `minReadySeconds` _integer_ | MinReadySeconds is the minimum time (seconds) a pod must be Ready before it counts as available.<br />For core nodes this is applied to the StatefulSet (mirrors apps/v1 StatefulSetSpec.minReadySeconds);<br />for replicants, to the ReplicaSet (mirrors apps/v1 ReplicaSetSpec.minReadySeconds).<br />Omitted or zero matches the apps/v1 default (0). |  | Minimum: 0 <br /> |
 | `command` _string array_ | Entrypoint array. Not executed within a shell.<br />The container image's ENTRYPOINT is used if this is not provided.<br />Variable references `$(VAR_NAME)` are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double `$$` are reduced<br />to a single `$`, which allows for escaping the `$(VAR_NAME)` syntax: i.e. `$$(VAR_NAME)` will<br />produce the string literal `$(VAR_NAME)`. Escaped references will never be expanded, regardless<br />of whether the variable exists or not. Cannot be updated.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  | Optional: \{\} <br /> |
 | `args` _string array_ | Arguments to the entrypoint.<br />The container image's CMD is used if this is not provided.<br />Variable references `$(VAR_NAME)` are expanded using the container's environment. If a variable<br />cannot be resolved, the reference in the input string will be unchanged. Double `$$` are reduced<br />to a single `$`, which allows for escaping the `$(VAR_NAME)` syntax: i.e. `$$(VAR_NAME)` will<br />produce the string literal `$(VAR_NAME)`. Escaped references will never be expanded, regardless<br />of whether the variable exists or not.<br />More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell |  |  |
-| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | List of ports to expose from the container.<br />Exposing a port here gives the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here DOES NOT prevent that<br />port from being exposed. Any port which is listening on the default `0.0.0.0` address inside a<br />container will be accessible from the network. |  |  |
+| `ports` _[ContainerPort](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#containerport-v1-core) array_ | List of ports to expose from the container.<br />Exposing a port here gives the system additional information about the network connections a<br />container uses, but is primarily informational. Not specifying a port here DOES NOT prevent that<br />port from being exposed. Any port which is listening on the default `0.0.0.0` address inside a<br />container will be accessible from the network.<br />Port names `dashboard` and `dashboard-https` are reserved by the Operator and cannot be supplied<br />in the template. The Operator derives these named ports from<br />`spec.config.roots.dashboard.listeners` for probes, Services, and per-Pod API requests.<br />Change their container port by changing the corresponding listener bind instead. |  |  |
 | `env` _[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envvar-v1-core) array_ | List of environment variables to set in the container. |  |  |
 | `envFrom` _[EnvFromSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#envfromsource-v1-core) array_ | List of sources to populate environment variables from in the container.<br />The keys defined within a source must be a C_IDENTIFIER. All invalid keys<br />will be reported as an event when the container is starting. When a key exists in multiple<br />sources, the value associated with the last source will take precedence.<br />Values defined by an Env with a duplicate key will take precedence. |  |  |
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#resourcerequirements-v1-core)_ | Compute Resources required by this container.<br />More info: https://kubernetes.io/docs/concepts/config/manage-resources-containers/ |  |  |
-| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#podsecuritycontext-v1-core)_ | Pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsUser:1000 supplementalGroups:[1000] \} |  |
-| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | Security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ | \{ runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `podSecurityContext` _[PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#podsecuritycontext-v1-core)_ | Pod-level security attributes and common container settings. | \{ fsGroup:1000 fsGroupChangePolicy:Always runAsGroup:1000 runAsNonRoot:true runAsUser:1000 \} |  |
+| `containerSecurityContext` _[SecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#securitycontext-v1-core)_ | Security options the container should be run with.<br />If set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.<br />More info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |  |  |
 | `initContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | List of initialization containers belonging to the pod.<br />Init containers are executed in order prior to containers being started. If any<br />init container fails, the pod is considered to have failed and is handled according<br />to its restartPolicy. The name for an init container or normal container must be<br />unique among all containers.<br />Init containers may not have Lifecycle actions, Readiness probes, Liveness probes, or Startup probes.<br />The resourceRequirements of an init container are taken into account during scheduling<br />by finding the highest request/limit for each resource type, and then using the max of<br />of that value or the sum of the normal containers. Limits are applied to init containers<br />in a similar fashion.<br />More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ |  |  |
 | `extraContainers` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#container-v1-core) array_ | Additional containers to run alongside the main container. |  |  |
 | `extraVolumes` _[Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#volume-v1-core) array_ | Additional volumes to provide to a Pod. |  |  |
@@ -265,9 +295,9 @@ _Appears in:_
 | `clusterDomain` _string_ | Kubernetes cluster domain. | cluster.local |  |
 | `revisionHistoryLimit` _integer_ | Number of old ReplicaSets to retain to allow rollback. | 3 |  |
 | `updateStrategy` _[UpdateStrategy](#updatestrategy)_ | Cluster upgrade strategy settings. | \{ type:RollingUpdate \} |  |
-| `coreTemplate` _[EMQXCoreTemplate](#emqxcoretemplate)_ | Template for Pods running EMQX core nodes. | \{ spec:map[persistentVolumeClaimSpec:map[accessModes:[ReadWriteOnce] resources:map[requests:map[storage:500Mi]]] replicas:2] \} |  |
+| `coreTemplate` _[EMQXCoreTemplate](#emqxcoretemplate)_ | Template for Pods running EMQX core nodes. | \{ spec:map[persistentVolumeClaimSpec:map[accessModes:[ReadWriteOnce] resources:map[requests:map[storage:500Mi]]] replicas:1] \} |  |
 | `replicantTemplate` _[EMQXReplicantTemplate](#emqxreplicanttemplate)_ | Template for Pods running EMQX replicant nodes. |  |  |
-| `dashboardServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | Template for Service exposing the EMQX Dashboard.<br />Dashboard Service always points to the set of EMQX core nodes. |  |  |
+| `dashboardServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | Template for Service exposing the EMQX Dashboard.<br />Dashboard Service always points to the set of EMQX core nodes.<br />A port named `dashboard` or `dashboard-https` in the template overrides the corresponding<br />generated Service port. Its `port` may expose the listener on a different Service port, but<br />its `targetPort` must resolve to the corresponding Dashboard listener. Prefer the reserved<br />named target port so it follows changes to the listener bind. |  |  |
 | `listenersServiceTemplate` _[ServiceTemplate](#servicetemplate)_ | Template for Service exposing enabled EMQX listeners.<br />Listeners Service points to the set of EMQX replicant nodes if they are enabled and exist.<br />Otherwise, it points to the set of EMQX core nodes. |  |  |
 
 
@@ -295,6 +325,7 @@ _Appears in:_
 | `replicantNodesStatus` _[ReplicantNodesStatus](#replicantnodesstatus)_ | Summary status of the set of replicant nodes. |  |  |
 | `nodeEvacuations` _[NodeEvacuationStatus](#nodeevacuationstatus) array_ | Status of active node evacuations in the cluster. |  |  |
 | `dsReplication` _[DSReplicationStatus](#dsreplicationstatus)_ | Status of EMQX Durable Storage replication. |  |  |
+| `config` _[ConfigStatus](#configstatus)_ | Declarative EMQX configuration reconciliation status.<br />Fields are informational implementation details. Prefer the ConfigApplied<br />condition to determine configuration lifecycle state. |  |  |
 
 
 #### EvacuationStrategy
@@ -410,8 +441,27 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `enabled` _boolean_ | Specifies whether the Service should be created. | true |  |
-| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `metadata` _[TemplateObjectMeta](#templateobjectmeta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[ServiceSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#servicespec-v1-core)_ | Specification of the desired state of a Service.<br />https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status |  |  |
+
+
+#### TemplateObjectMeta
+
+
+
+TemplateObjectMeta contains metadata propagated to objects created from a template.
+
+
+
+_Appears in:_
+- [EMQXCoreTemplate](#emqxcoretemplate)
+- [EMQXReplicantTemplate](#emqxreplicanttemplate)
+- [ServiceTemplate](#servicetemplate)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `labels` _object (keys:string, values:string)_ |  |  |  |
+| `annotations` _object (keys:string, values:string)_ |  |  |  |
 
 
 #### UpdateStrategy
@@ -428,7 +478,5 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `type` _string_ | Determines how cluster upgrade is performed.<br />* `RollingUpdate`: Perform a rolling upgrade, updating pods gradually; core pods are<br />   always updated one at a time, updating of replicants is controlled by `replicants`<br />   strategy. | RollingUpdate | Enum: [RollingUpdate] <br /> |
-| `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Evacuation strategy settings. |  |  |
+| `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Evacuation strategy settings. | \{ type:NodeEvacuation \} |  |
 | `replicants` _[ReplicantsUpdateStrategy](#replicantsupdatestrategy)_ | Parameters of the rolling update for replicant ReplicaSet rollouts. |  |  |
-
-

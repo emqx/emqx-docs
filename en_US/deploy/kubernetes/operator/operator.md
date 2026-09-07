@@ -2,7 +2,7 @@
 
 The EMQX Operator provides native [Kubernetes](https://kubernetes.io/) support for deploying and managing [EMQX](https://www.emqx.io/) clusters. Its primary goal is to simplify and automate the lifecycle management of EMQX in Kubernetes environments.
 
-EMQX Operator 3.0 requires Kubernetes 1.27 or later. On Kubernetes 1.27 through 1.31, enable the `StatefulSetAutoDeletePVC` feature gate. This feature is enabled by default in Kubernetes 1.32 and later.
+EMQX Operator 3.0 requires Kubernetes 1.27 or later. The `StatefulSetAutoDeletePVC` feature gate is enabled by default in Kubernetes 1.27 and later. If your cluster administrator has disabled it, enable it on the Kubernetes API server and controller manager before using EMQX Operator.
 
 EMQX Operator includes, but is not limited to, the following features:
 

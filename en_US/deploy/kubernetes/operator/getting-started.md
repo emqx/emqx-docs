@@ -6,8 +6,8 @@ This section guides you through preparing the environment for EMQX Operator, ins
 
 Before deploying EMQX Operator, ensure that the following components are ready:
 
-- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.27 or higher.
-   * The `StatefulSetAutoDeletePVC` feature gate enabled when using Kubernetes 1.27 through 1.31. This feature is enabled by default in Kubernetes 1.32 and later.
+- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.27 or later.
+  - The `StatefulSetAutoDeletePVC` feature gate must be enabled. It is enabled by default in Kubernetes 1.27 and later; verify that your cluster administrator has not disabled it.
 - A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
 
 ## Install EMQX Operator
