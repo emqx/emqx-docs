@@ -107,7 +107,7 @@ spec:
 
 `path` specifies the metrics collection API path. For EMQX 5.0 and later, use `/api/v5/prometheus/stats`. The `basicAuth` section reads the API key and secret key from the Kubernetes Secret. The selector matches Pods managed for the `emqx` resource. The `cluster` target label must be unique for each EMQX cluster monitored by the same Prometheus server.
 
-By default, EMQX Prometheus pull endpoints do not require authentication. If you enable basic authentication for these endpoints, configure the corresponding authentication secret in `podMetricsEndpoints`. For all available endpoints and authentication options, see [Integrate with Prometheus](../../../../observability/prometheus.md#configure-pull-mode-integration).
+If you explicitly disable authentication by setting `prometheus.enable_basic_auth = false`, you can omit `basicAuth` from `podMetricsEndpoints`. For all available endpoints and authentication options, see [Integrate with Prometheus](../../../../observability/prometheus.md#configure-pull-mode-integration).
 
 Save the above content as `monitor.yaml` and execute the following command:
 

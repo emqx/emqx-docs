@@ -1,37 +1,36 @@
-# Install Operator and Deploy EMQX
+# 安装 EMQX Operator 并部署 EMQX
 
-This section guides you through preparing the environment for EMQX Operator, installing the Operator itself, and using it to deploy EMQX. By following the steps provided, you can install and manage EMQX efficiently and reliably with the Operator.
+本节介绍如何准备 EMQX Operator 的运行环境、安装 Operator，以及使用 Operator 部署 EMQX。
 
-## Prepare the Environment
+## 准备环境
 
-Before deploying EMQX Operator, ensure that the following components are ready:
+部署 EMQX Operator 前，请准备以下组件：
 
-- A [Kubernetes](https://kubernetes.io/docs/concepts/overview/) environment running Kubernetes version 1.27 or higher.
-   * The `StatefulSetAutoDeletePVC` feature gate enabled when using Kubernetes 1.27 through 1.31. This feature is enabled by default in Kubernetes 1.32 and later.
-- A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
+- 运行 Kubernetes 1.27 或更高版本的 [Kubernetes](https://kubernetes.io/docs/concepts/overview/) 集群，并确保已启用 `StatefulSetAutoDeletePVC` 特性门控。该特性门控在 EMQX Operator 支持的 Kubernetes 版本中默认启用。
+- 可访问 Kubernetes 集群的 [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) 工具。可运行 `kubectl cluster-info` 检查 Kubernetes 集群状态。
 
-## Install EMQX Operator
+## 安装 EMQX Operator
 
-1. Install the EMQX Operator with the command below:
+1. 运行以下命令安装 EMQX Operator：
 
    ```bash
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   This command downloads the latest EMQX Operator release, installs cluster-wide EMQX CRDs, and deploys the controller in the `emqx-operator-system` namespace.
+   此命令将下载最新的 EMQX Operator 版本、安装集群级 EMQX CRD，并在 `emqx-operator-system` 命名空间中部署控制器。
 
-2. Wait till EMQX Operator is ready:
+2. 等待 EMQX Operator 就绪：
 
    ```bash
    $ kubectl wait --for=condition=Ready pods --namespace emqx-operator-system -l "control-plane=controller-manager"
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
-Once the Operator is running, you can proceed to deploy EMQX.
+Operator 开始运行后，即可部署 EMQX。
 
-## Deploy EMQX
+## 部署 EMQX
 
-1. Save the following content as a YAML file and deploy it with `kubectl apply`.
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 进行部署。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -46,11 +45,11 @@ Once the Operator is running, you can proceed to deploy EMQX.
            key: "evaluation"
    ```
 
-   EMQX Operator deploys a single-node EMQX cluster from this manifest. A single-node cluster can run without a license, but a valid license is required before you configure multiple nodes or scale an existing cluster beyond one node. During an evaluation, set `license.key` to `"evaluation"`, as shown in this example.
+   此清单将部署一个单节点 EMQX 集群，默认的社区版 License 可支持该部署。配置多节点集群或将现有集群扩容到多个节点前，请配置支持集群功能的 License。本示例将 `license.key` 设置为 `"evaluation"`，用于评估环境。
 
-   For more details about the EMQX CRD, check out the [reference documentation](./reference/v3beta1-reference.md).
+   有关 EMQX CRD 的详情，请参见 [API 参考](./reference/v3beta1-reference.md)。
 
-2. Wait until the EMQX cluster is ready.
+2. 等待 EMQX 集群就绪。
 
    ```bash
    $ kubectl get emqx
@@ -58,24 +57,26 @@ Once the Operator is running, you can proceed to deploy EMQX.
    emqx      Ready     2m55s
    ```
 
-   Make sure the `STATUS` is `Ready`. It may take some time for the EMQX cluster to become ready.
+   确保 `STATUS` 为 `Ready`。EMQX 集群可能需要一段时间才能就绪。
 
-## Troubleshooting
+## 故障排查
 
-EMQX Operator exposes a limited number of events to the Kubernetes API.
+EMQX Operator 仅向 Kubernetes API 提供有限数量的事件。可运行以下命令查看事件：
+
 ```sh
 kubectl get events --sort-by=.lastTimestamp
 ```
 
-Alternatively, if EMQX resources fail to reach `Ready` status condition, consult the controller manager logs for more details:
+如果 EMQX 资源无法进入 `Ready` 状态，请运行以下命令查看 Controller Manager 日志：
+
 ```sh
 kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-operator-system
 ```
 
-## Deploy on Public Cloud
+## 在公有云上部署
 
-Use the following guides to deploy EMQX on managed Kubernetes services using the EMQX Operator:
+请参照以下指南，使用 EMQX Operator 在托管 Kubernetes 服务上部署 EMQX：
 
-- [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
+- [Amazon Elastic Kubernetes Service（EKS）](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)
-- [Azure Kubernetes Service (AKS)](./azure-aks.md)
+- [Azure Kubernetes Service（AKS）](./azure-aks.md)

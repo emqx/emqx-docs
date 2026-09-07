@@ -1,17 +1,17 @@
-# Monitor EMQX with Prometheus and Grafana
+# 使用 Prometheus 和 Grafana 监控 EMQX
 
-## Objective
+## 目标
 
-Configure Prometheus to scrape an EMQX cluster and visualize its metrics in Grafana.
+配置 Prometheus 抓取 EMQX 集群指标，并在 Grafana 中将指标可视化。
 
-## Deploy Prometheus and Grafana
+## 部署 Prometheus 和 Grafana
 
-* To learn more about Prometheus deployment, refer to the [Prometheus](https://github.com/prometheus-operator/prometheus-operator) documentation.
-* To learn more about Grafana deployment, refer to [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) documentation.
+* 有关 Prometheus 部署的详情，请参见 [Prometheus](https://github.com/prometheus-operator/prometheus-operator) 文档。
+* 有关 Grafana 部署的详情，请参见 [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) 文档。
 
-## Deploy EMQX Cluster
+## 部署 EMQX 集群
 
-EMQX exposes various metrics through the [Prometheus-compatible HTTP API](../../../../observability/prometheus.md).
+EMQX 通过[兼容 Prometheus 的 HTTP API](../../../../observability/prometheus.md) 公开多种指标。
 
 ```yaml
 apiVersion: apps.emqx.io/v3beta1
@@ -26,14 +26,14 @@ spec:
         key: "..."
 ```
 
-Save the above content as `emqx.yaml` and execute the following command to deploy the EMQX cluster:
+将以上内容保存为 `emqx.yaml`，然后运行以下命令部署 EMQX 集群：
 
 ```bash
 $ kubectl apply -f emqx.yaml
 emqx.apps.emqx.io/emqx created
 ```
 
-Check the status of the EMQX cluster and make sure that `STATUS` is `Ready`. This may take some time.
+检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
 ```bash
 $ kubectl get emqx emqx
@@ -41,19 +41,19 @@ NAME   STATUS   AGE
 emqx   Ready    10m
 ```
 
-## Create API Keys
+## 创建 API 密钥
 
-Sign in to the Dashboard and [create dedicated API key](../../../../dashboard/system.md#api-keys). For Prometheus, create an API key with the Viewer role and only the `monitoring` scope. The `PodMonitor` uses this key to scrape `/api/v5/prometheus/stats`.
+登录 Dashboard，并[创建专用 API 密钥](../../../../dashboard/system.md#api-keys)。为 Prometheus 创建 API 密钥时，请选择查看者角色，并仅授予 `monitoring` 权限范围。`PodMonitor` 将使用该密钥抓取 `/api/v5/prometheus/stats`。
 
-Save the API key and secret key. EMQX displays each secret key only once.
+请妥善保存 API Key 和 Secret Key。EMQX 仅显示 Secret Key 一次。
 
-## Configure Prometheus Monitor
+## 配置 Prometheus 监控
 
-Prometheus Operator uses the [PodMonitor](https://prometheus-operator.dev/docs/developer/getting-started/#using-podmonitors) CRD to select Pods and define scrape endpoints. EMQX exposes Prometheus metrics through its Dashboard listener, whose container port is named `dashboard` by default.
+Prometheus Operator 使用 [PodMonitor](https://prometheus-operator.dev/docs/developer/getting-started/#using-podmonitors) CRD 选择 Pod 并定义抓取端点。EMQX 通过 Dashboard 监听器公开 Prometheus 指标，该监听器的容器端口默认名为 `dashboard`。
 
-The following PodMonitor scrapes the basic EMQX metrics endpoint from every Pod in the `emqx` cluster:
+以下 PodMonitor 从 `emqx` 集群的每个 Pod 抓取 EMQX 基础指标端点：
 
-Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by default. Create a Kubernetes Secret in the same namespace as the `PodMonitor` to store the API key and secret key created for Prometheus:
+从 EMQX 6.3.0 开始，Prometheus 抓取 API 默认要求身份验证。请在 `PodMonitor` 所在的命名空间中创建 Kubernetes Secret，用于存储为 Prometheus 创建的 API Key 和 Secret Key：
 
 ```bash
 kubectl create secret generic emqx-prometheus-basic-auth \
@@ -79,54 +79,54 @@ spec:
         password:
           name: emqx-prometheus-basic-auth
           key: password
-      # Name of the EMQX Dashboard container port.
+      # EMQX Dashboard 容器端口的名称。
       port: dashboard
       relabelings:
         - action: replace
-          # Use a unique value for each EMQX cluster.
+          # 每个 EMQX 集群应使用不同的值。
           replacement: emqx5
           targetLabel: cluster
         - action: replace
-          # Keep this value unchanged.
+          # 请勿修改此值。
           replacement: emqx
           targetLabel: from
         - action: replace
-          # Use the Pod name as the Prometheus instance label.
+          # 使用 Pod 名称作为 Prometheus instance 标签。
           sourceLabels: [pod]
           targetLabel: instance
   selector:
     matchLabels:
-      # Match Pods managed for the EMQX resource named `emqx`.
+      # 匹配由 EMQX Operator 为名为 `emqx` 的 EMQX 资源管理的 Pod。
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
     matchNames:
-      # Change this value if the EMQX cluster is in another namespace.
+      # 如果 EMQX 集群位于其他命名空间，请修改此值。
       - default
 ```
 
-`path` specifies the metrics collection API path. For EMQX 5.0 and later, use `/api/v5/prometheus/stats`. The `basicAuth` section reads the API key and secret key from the Kubernetes Secret. The selector matches Pods managed for the `emqx` resource. The `cluster` target label must be unique for each EMQX cluster monitored by the same Prometheus server.
+`path` 指定指标采集 API 路径。对于 EMQX 5.0 及更高版本，请使用 `/api/v5/prometheus/stats`。`basicAuth` 部分从 Kubernetes Secret 中读取 API Key 和 Secret Key。selector 用于匹配由 Operator 为 `emqx` 资源管理的 Pod。同一个 Prometheus 服务器所监控的每个 EMQX 集群必须使用唯一的 `cluster` 目标标签。
 
-By default, EMQX Prometheus pull endpoints do not require authentication. If you enable basic authentication for these endpoints, configure the corresponding authentication secret in `podMetricsEndpoints`. For all available endpoints and authentication options, see [Integrate with Prometheus](../../../../observability/prometheus.md#configure-pull-mode-integration).
+如果明确设置 `prometheus.enable_basic_auth = false` 以禁用身份验证，可以从 `podMetricsEndpoints` 中省略 `basicAuth`。有关所有可用端点和身份验证选项，请参见[集成 Prometheus](../../../../observability/prometheus.md#configure-pull-mode-integration)。
 
-Save the above content as `monitor.yaml` and execute the following command:
+将以上内容保存为 `monitor.yaml`，然后运行以下命令：
 
 ```bash
 $ kubectl apply -f monitor.yaml
 ```
 
-## View EMQX Metrics in Prometheus
+## 在 Prometheus 中查看 EMQX 指标
 
-Open the Prometheus expression browser and enter `emqx` to view EMQX metrics, as shown in the following figure:
+打开 Prometheus 表达式浏览器并输入 `emqx`，即可查看 EMQX 指标，如下图所示：
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-Open **Status** -> **Targets** to view all monitored EMQX Pods in the cluster:
+打开 **Status** -> **Targets**，查看集群中所有受监控的 EMQX Pod：
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
-## Import a Grafana Dashboard
+## 导入 Grafana Dashboard
 
-Import the [EMQX Grafana dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) and select the Prometheus data source that scrapes the EMQX Pods.
+导入 [EMQX Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/)，并选择用于抓取 EMQX Pod 指标的 Prometheus 数据源。
 
 ![](./assets/configure-emqx-prometheus/emqx-grafana-dashboard.png)
