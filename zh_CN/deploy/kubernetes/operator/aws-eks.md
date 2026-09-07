@@ -1,32 +1,32 @@
-# Deploy EMQX on Amazon Elastic Kubernetes Service
+# 在 Amazon Elastic Kubernetes Service 上部署 EMQX
 
-EMQX Operator supports running on Amazon Container Service EKS (Elastic Kubernetes Service). Amazon EKS is a managed Kubernetes service that simplifies the deployment, management, and scaling of containerized applications. EKS provides the Kubernetes control plane and node groups, automatically handling node replacements, upgrades, and patching. It supports AWS services such as Load Balancers, RDS, and IAM, and integrates seamlessly with other Kubernetes ecosystem tools.
+EMQX Operator 支持在 Amazon EKS（Elastic Kubernetes Service）上运行。Amazon EKS 是一项托管 Kubernetes 服务，可简化容器化应用的部署、管理和伸缩。EKS 提供 Kubernetes 控制平面和节点组，并自动处理节点替换、升级和补丁。它支持负载均衡器、RDS 和 IAM 等 AWS 服务，并可与 Kubernetes 生态系统中的其他工具集成。
 
-For an in-depth introduction, refer to [What is Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html).
+有关详细介绍，请参阅[什么是 Amazon EKS](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/what-is-eks.html)。
 
-## Before You Begin
+## 准备工作
 
-Before deploying EMQX on EKS, ensure you have completed the following prerequisites:
+在 EKS 上部署 EMQX 前，请完成以下准备工作：
 
-- Create an EKS cluster.<br/>See [Create an Amazon EKS cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for more details.
+- 创建 EKS 集群。<br/>详情请参阅[创建 Amazon EKS 集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started.html)。
 
-- Configure kubectl to connect to your EKS cluster.<br/>See [Using kubectl to connect to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl) for more details.
+- 配置 kubectl 以连接 EKS 集群。<br/>详情请参阅[使用 kubectl 连接到集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)。
 
-- Deploy an AWS Load Balancer Controller on a cluster.<br/>See [Create a Network Load Balancer](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html) for more details.
+- 在集群中部署 AWS Load Balancer Controller。<br/>详情请参阅[创建网络负载均衡器](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/network-load-balancing.html)。
 
-- Install the Amazon EBS CSI driver on the cluster.<br/>See [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) for further details.
+- 在集群中安装 Amazon EBS CSI 驱动程序。<br/>详情请参阅 [Amazon EBS CSI 驱动程序](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/ebs-csi.html)。
 
-- Install EMQX Operator.<br/>Please refer to [Install EMQX Operator](./getting-started.md) for further details.
+- 安装 EMQX Operator。<br/>详情请参阅[安装 EMQX Operator](./getting-started.md)。
 
-## Deploy EMQX Cluster Quickly
+## 快速部署 EMQX 集群
 
-The following example demonstrates the relevant EMQX Custom Resource (CR) configuration for deployment on EKS.
+以下示例演示在 EKS 上部署 EMQX 所需的自定义资源（CR）配置。
 
-1. Save the following content as a YAML file and deploy it with `kubectl apply`.
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   # Configure EBS StorageClass with WaitForFirstConsumer binding mode
-   # This ensures volumes are created in the same AZ as the pods that will use them
+   # 使用 WaitForFirstConsumer 绑定模式配置 EBS StorageClass
+   # 确保卷与使用它们的 Pod 创建在同一可用区
    apiVersion: storage.k8s.io/v1
    kind: StorageClass
    metadata:
@@ -46,7 +46,7 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
            key: "..."
      coreTemplate:
        spec:
-         ## EMQX custom resources do not support updating this field at runtime
+         ## EMQX 自定义资源不支持在运行时更新此字段
          persistentVolumeClaimSpec:
            storageClassName: ebs-sc
            resources:
@@ -56,31 +56,31 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
              - ReadWriteOnce
      dashboardServiceTemplate:
        metadata:
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
+         ## 更多信息：https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## Specifies whether the NLB is Internet-facing or internal. If not specified, defaults to internal.
+           ## 指定 NLB 面向互联网还是内部网络。未指定时默认为内部网络。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
          type: LoadBalancer
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
+         ## 更多信息：https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
          loadBalancerClass: service.k8s.aws/nlb
      listenersServiceTemplate:
        metadata:
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
+         ## 更多信息：https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
          annotations:
-           ## Specifies whether the NLB is Internet-facing or internal. If not specified, defaults to internal.
+           ## 指定 NLB 面向互联网还是内部网络。未指定时默认为内部网络。
            service.beta.kubernetes.io/aws-load-balancer-type: external
            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
        spec:
          type: LoadBalancer
-         ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
+         ## 更多信息：https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
          loadBalancerClass: service.k8s.aws/nlb
    ```
 
-2. Wait for the EMQX cluster to become ready.
+2. 等待 EMQX 集群就绪。
 
-   Use the following command to check the status. The `STATUS` field must show `Ready`, which may take several minutes:
+   使用以下命令检查状态。`STATUS` 字段必须显示为 `Ready`，此过程可能需要几分钟：
 
    ```shell
    $ kubectl get emqx
@@ -88,35 +88,35 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    emqx   Ready     55s
    ```
 
-3. Obtain the external IP of the EMQX Dashboard and access it.
+3. 获取 EMQX Dashboard 的外部 IP 地址并进行访问。
 
-   The EMQX Operator creates a Service for the EMQX Dashboard based on your `dashboardServiceTemplate` configuration.
+   EMQX Operator 根据 `dashboardServiceTemplate` 配置为 EMQX Dashboard 创建 Service。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    192.168.1.200
    ```
 
-4. Open the Dashboard at: `http://192.168.1.200:18083`.
+4. 通过 `http://192.168.1.200:18083` 打开 Dashboard。
 
-   Log in with the default credentials:
+   使用默认凭据登录：
 
-     - **Username:** `admin`
-     - **Password:** `public`
+     - **用户名：** `admin`
+     - **密码：** `public`
 
-## Subscribe and Publish
+## 订阅和发布消息
 
-This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.0 command-line client tool that helps developers quickly test the MQTT services and applications.
+本示例使用 [MQTTX CLI](https://mqttx.app/cli)。这是一款开源 MQTT 5.0 命令行客户端工具，可帮助开发者快速测试 MQTT 服务和应用。
 
-1. Retrieve the external IP of the EMQX TCP listener.
+1. 获取 EMQX TCP 监听器的外部 IP 地址。
 
-   The EMQX Operator automatically creates a Service resource for each configured listener.
+   EMQX Operator 会为每个已配置的监听器自动创建 Service 资源。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Subscribe to a topic.
+2. 订阅主题。
 
    ```shell
    $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
@@ -127,7 +127,7 @@ This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.
    [10:00:25] › ✔ Subscribed to hello
    ```
 
-3. In another terminal, connect to the EMQX cluster and publish a message.
+3. 在另一个终端中连接 EMQX 集群并发布消息。
 
    ```shell
    $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
@@ -138,34 +138,34 @@ This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.
    [10:00:58] › ✔ Message published
    ```
 
-4. Observe the subscriber receiving the message.
+4. 确认订阅端收到消息。
 
    ```shell
    [10:00:58] › payload: hello world
    ```
 
-## Terminate TLS Encryption with LoadBalancer
+## 使用 LoadBalancer 终止 TLS 加密
 
-You can use an AWS Network Load Balancer (NLB) to terminate TLS traffic for EMQX. Follow the steps below:
+可以使用 AWS Network Load Balancer（NLB）终止发往 EMQX 的 TLS 流量。操作步骤如下：
 
-1. Import relevant certificates in [AWS Console](https://us-east-2.console.aws.amazon.com/acm/home). Open the certificate details page by clicking the certificate ID. Record the certificate ARN.
+1. 在 [AWS 控制台](https://us-east-2.console.aws.amazon.com/acm/home)中导入相关证书。点击证书 ID 打开证书详情页面，并记录证书 ARN。
 
     ::: tip
-For certificate/key import formats, see [Importing certificates](https://docs.aws.amazon.com/acm/latest/userguide/import-certificate-format.html).
+有关证书和密钥的导入格式，请参阅[导入证书](https://docs.aws.amazon.com/zh_cn/acm/latest/userguide/import-certificate-format.html)。
     :::
 
-2. Add annotations to the EMQX Service metadata, for example:
+2. 在 EMQX Service 元数据中添加注解，例如：
 
     ```yaml
-    ## Specifies the ARN of one or more certificates managed by the AWS Certificate Manager.
+    ## 指定 AWS Certificate Manager 管理的一个或多个证书的 ARN。
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:xxxxx:certificate/xxxxxxx
-    ## Specifies whether to use TLS for the backend traffic between the load balancer and the kubernetes pods.
+    ## 指定负载均衡器与 Kubernetes Pod 之间的后端流量是否使用 TLS。
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
-    ## Specifies a frontend port with a TLS listener. This means that accessing port 1883 through AWS NLB service requires TLS authentication,
-    ## but direct access to K8S service port does not require TLS authentication
+    ## 指定使用 TLS 监听器的前端端口。通过 AWS NLB Service 访问端口 1883 时需要 TLS 认证，
+    ## 但直接访问 Kubernetes Service 端口时不需要 TLS 认证。
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "1883"
     ```
 
     ::: tip
-    The value of `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` should match the ARN recorded in step 1.
+    `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` 的值应与步骤 1 中记录的 ARN 一致。
     :::

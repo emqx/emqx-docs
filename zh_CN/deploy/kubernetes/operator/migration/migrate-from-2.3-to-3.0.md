@@ -1,16 +1,16 @@
-# Migrate from EMQX Operator 2.3 to 3.0
+# 从 EMQX Operator 2.3 迁移到 3.0
 
-Operator 3.0 uses the `apps.emqx.io/v3beta1` API. It cannot convert an earlier EMQX custom resource or adopt the workloads created by Operator 2.3. This migration therefore deploys a new EMQX cluster instead of updating the existing cluster in place. It does not join the old and new clusters.
+Operator 3.0 使用 `apps.emqx.io/v3beta1` API。它无法转换早期版本的 EMQX 自定义资源，也无法接管由 Operator 2.3 创建的工作负载。因此，此迁移过程会部署一个新的 EMQX 集群，而不是原地更新现有集群，并且不会将新旧集群合并为同一个集群。
 
 ::: warning
 
-This walkthrough does not migrate MQTT sessions. Plan a maintenance window and make sure clients can reconnect to the new cluster. Live connections, session state, offline queues, in-flight messages, and Durable Storage data are not included in an EMQX data backup.
+本操作指南不会迁移 MQTT 会话。请规划维护窗口，并确保客户端能够重新连接到新集群。EMQX 数据备份不包含活动连接、会话状态、离线队列、未确认消息以及持久存储数据。
 
 :::
 
-The walkthrough keeps the old workloads available for rollback while you install Operator 3.0 and verify a separately named EMQX cluster. After verification, switch client traffic to the new cluster and retire the old workloads.
+本操作指南会保留旧工作负载，以便在安装 Operator 3.0 和验证名称不同的新 EMQX 集群期间进行回滚。验证完成后，将客户端流量切换到新集群，再停用旧工作负载。
 
-The examples use the following names. Replace them with the names and namespace of your deployment:
+以下示例使用这些名称。请将其替换为实际部署使用的名称和命名空间：
 
 ```bash
 export EMQX_NAMESPACE=default
@@ -18,28 +18,28 @@ export OLD_EMQX=my-emqx
 export NEW_EMQX=my-emqx-v3
 ```
 
-## 1. Prepare for the migration
+## 1. 准备迁移
 
-Before starting:
+开始前，请完成以下准备工作：
 
-- Rehearse the complete procedure in an environment that matches production.
-- Keep the EMQX image and version unchanged. Upgrade EMQX only after the new cluster is running under Operator 3.0.
-- Make sure the Kubernetes cluster has enough capacity to run the old and new EMQX workloads at the same time.
-- Plan how to direct clients from the old listener Service to the new one, for example through a load balancer, ingress, or DNS change.
-- Stop configuration and application data changes before taking the final backup. Changes made afterward are not copied to the new cluster.
-- Confirm that Durable Storage is not in use. If it is, proceed only if losing its data is acceptable because this walkthrough does not migrate it.
+- 在与生产环境相同的环境中演练完整流程。
+- 保持 EMQX 镜像和版本不变。仅在新集群由 Operator 3.0 管理并正常运行后再升级 EMQX。
+- 确保 Kubernetes 集群有足够的容量同时运行新旧 EMQX 工作负载。
+- 规划如何将客户端从旧的监听器 Service 切换到新的 Service，例如更改负载均衡器、Ingress 或 DNS 配置。
+- 在执行最终备份前停止更改配置和应用数据。此后产生的更改不会复制到新集群。
+- 确认未使用持久存储。如果正在使用，请仅在能够接受其数据丢失的情况下继续，因为本操作指南不会迁移持久存储数据。
 
-The EMQX CRD is cluster-scoped. List every EMQX resource before removing the Operator 2.3 CRD:
+EMQX CRD 的作用域为集群级。在删除 Operator 2.3 CRD 前，请列出所有 EMQX 资源：
 
 ```bash
 kubectl get emqx.apps.emqx.io --all-namespaces
 ```
 
-All listed resources must be included in the same maintenance event. Do not remove the CRD while another Operator 2.3 cluster still depends on it.
+列出的所有资源都必须纳入同一次维护操作。如果还有其他 Operator 2.3 集群依赖此 CRD，请勿删除该 CRD。
 
-## 2. Back up the existing cluster
+## 2. 备份现有集群
 
-Save the existing custom resource and a list of its workloads. Keep these files outside the Kubernetes cluster so that you can use them for rollback:
+保存现有自定义资源及其工作负载列表。请将这些文件存放在 Kubernetes 集群外，以便用于回滚：
 
 ```bash
 kubectl get emqx.apps.emqx.io "$OLD_EMQX" \
@@ -51,7 +51,7 @@ kubectl get statefulset,replicaset,pod,service,pvc \
   > emqx-v2-workloads.yaml
 ```
 
-Select a running Core Pod and create a global EMQX data backup in its `/tmp` directory:
+选择一个正在运行的 Core Pod，并在其 `/tmp` 目录中创建 EMQX 全局数据备份：
 
 ```bash
 OLD_EMQX_CORE_POD="$(kubectl get pod \
@@ -64,7 +64,7 @@ kubectl exec -n "$EMQX_NAMESPACE" "$OLD_EMQX_CORE_POD" -c emqx -- \
   emqx ctl data export --dir /tmp
 ```
 
-The export command prints the generated archive path. Set `EMQX_BACKUP_FILE` to the file name from that path, then copy the archive out of the Pod and verify it:
+导出命令会输出生成的归档文件路径。将 `EMQX_BACKUP_FILE` 设置为该路径中的文件名，然后将归档文件从 Pod 复制到本地并验证：
 
 ```bash
 export EMQX_BACKUP_FILE='<exported-file-name>.tar.gz'
@@ -78,30 +78,30 @@ test -s "./$EMQX_BACKUP_FILE"
 tar -tzf "./$EMQX_BACKUP_FILE" >/dev/null
 ```
 
-Alternatively, create and download a global backup from **System** -> **Backup & Restore** in Dashboard. For details, see [Backup and Restore](../../../../operations/backup-restore.md). Do not use the Operator-generated API key for this backup: API-key-authenticated exports omit Dashboard users and API keys.
+也可以在 Dashboard 的 **系统** -> **备份与恢复**页面创建并下载全局备份。有关详情，请参见[备份与恢复](../../../../operations/backup-restore.md)。请勿使用 Operator 生成的 API 密钥执行此备份：通过 API 密钥认证执行的导出不会包含 Dashboard 用户和 API 密钥。
 
-The backup contains supported configuration, files from the EMQX data directory, and built-in database data such as authentication records, API keys, and retained messages. It does not contain the live MQTT state listed in the warning above. A good idea is to verify the archive by restoring it in a test environment before continuing.
+备份包含受支持的配置、EMQX 数据目录中的文件，以及认证记录、API 密钥和保留消息等内置数据库数据，但不包含上述警告中列出的实时 MQTT 状态。建议先在测试环境中恢复归档文件以验证备份，再继续迁移。
 
-## 3. Convert the EMQX manifest
+## 3. 转换 EMQX 清单
 
-Create a new manifest named `emqx-v3.yaml`. Use a different `metadata.name`, such as the value of `$NEW_EMQX`, so that Operator 3.0 does not mistake the orphaned Operator 2.3 workloads for its own resources.
+创建名为 `emqx-v3.yaml` 的新清单。为其设置不同的 `metadata.name`，例如 `$NEW_EMQX` 的值，以免 Operator 3.0 将已成为孤立资源的 Operator 2.3 工作负载误认为由自己管理的资源。
 
-Apply these changes to the manifest:
+对清单进行以下更改：
 
-| Operator 2.3 setting | Change in Operator 3.0 | Action Needed |
+| Operator 2.3 设置 | Operator 3.0 中的变化 | 所需操作 |
 | --- | --- | --- |
-| `apiVersion: apps.emqx.io/v2` | Replaced by `apps.emqx.io/v3beta1` | Change `apiVersion` in the manifest. |
-| `.spec.config.data` | Replaced by `.spec.config.roots` | Convert literal HOCON to structured YAML. |
-| `.spec.coreTemplate.spec.volumeClaimTemplates` | Renamed to `.spec.coreTemplate.spec.persistentVolumeClaimSpec` | Rename the field and preserve its storage settings. |
-| `.spec.coreTemplate.spec.replicas`<br/>`.spec.replicantTemplate.spec.replicas` | Default changed from `2` to `1` | Set the intended counts explicitly. When Replicants are enabled, configure at least two Core replicas. |
-| `.spec.bootstrapAPIKeys` | Removed | Restore existing API keys from the global backup, then manage them through EMQX. |
-| `.spec.updateStrategy.initialDelaySeconds` | Removed; no direct replacement | Remove the field and review rollout timing. Do not map it to `minReadySeconds`, which has different semantics. |
-| `.spec.updateStrategy.evacuationStrategy.connEvictRate` | Renamed to `.spec.updateStrategy.evacuationStrategy.connectionEvictionRate` | Rename the field and preserve the value. |
-| `.spec.updateStrategy.evacuationStrategy.sessEvictRate` | Renamed to `.spec.updateStrategy.evacuationStrategy.sessionEvictionRate` | Rename the field and preserve the value. |
-| `.spec.coreTemplate.spec.minAvailable`<br/>`.spec.coreTemplate.spec.maxUnavailable`<br/>`.spec.replicantTemplate.spec.minAvailable`<br/>`.spec.replicantTemplate.spec.maxUnavailable` | Removed | Create separate PDBs after the migration; see [Configure Pod Disruption Budgets](../tasks/configure-disruption-budgets.md). |
-| `Rebalance` resources | Removed | Delete existing `Rebalance` resources before removing the Operator 2.3 CRD. |
+| `apiVersion: apps.emqx.io/v2` | 已由 `apps.emqx.io/v3beta1` 取代 | 更改清单中的 `apiVersion`。 |
+| `.spec.config.data` | 已由 `.spec.config.roots` 取代 | 将 HOCON 文本转换为结构化 YAML。 |
+| `.spec.coreTemplate.spec.volumeClaimTemplates` | 已重命名为 `.spec.coreTemplate.spec.persistentVolumeClaimSpec` | 重命名该字段，并保留其存储设置。 |
+| `.spec.coreTemplate.spec.replicas`<br/>`.spec.replicantTemplate.spec.replicas` | 默认值从 `2` 更改为 `1` | 明确设置所需的副本数。启用 Replicant 时，至少配置两个 Core 副本。 |
+| `.spec.bootstrapAPIKeys` | 已删除 | 从全局备份恢复现有 API 密钥，之后通过 EMQX 管理这些密钥。 |
+| `.spec.updateStrategy.initialDelaySeconds` | 已删除，且没有直接替代字段 | 删除该字段，并重新评估滚动更新的时间安排。请勿将其映射到语义不同的 `minReadySeconds`。 |
+| `.spec.updateStrategy.evacuationStrategy.connEvictRate` | 已重命名为 `.spec.updateStrategy.evacuationStrategy.connectionEvictionRate` | 重命名该字段并保留原值。 |
+| `.spec.updateStrategy.evacuationStrategy.sessEvictRate` | 已重命名为 `.spec.updateStrategy.evacuationStrategy.sessionEvictionRate` | 重命名该字段并保留原值。 |
+| `.spec.coreTemplate.spec.minAvailable`<br/>`.spec.coreTemplate.spec.maxUnavailable`<br/>`.spec.replicantTemplate.spec.minAvailable`<br/>`.spec.replicantTemplate.spec.maxUnavailable` | 已删除 | 迁移后单独创建 PDB；请参见[配置 Pod 干扰预算](../tasks/configure-disruption-budgets.md)。 |
+| `Rebalance` 资源 | 已删除 | 删除 Operator 2.3 CRD 前，删除现有的 `Rebalance` 资源。 |
 
-For example, convert this Operator 2.3 configuration:
+例如，将以下 Operator 2.3 配置：
 
 ```yaml
 spec:
@@ -112,7 +112,7 @@ spec:
       dashboard.listeners.http.bind = 18083
 ```
 
-To this Operator 3.0 structure:
+转换为以下 Operator 3.0 结构：
 
 ```yaml
 spec:
@@ -127,9 +127,9 @@ spec:
             bind: 18083
 ```
 
-For configuration details, see [Configure EMQX](../tasks/configure-emqx-config.md).
+有关配置详情，请参见[配置 EMQX](../tasks/configure-emqx-config.md)。
 
-Before deploying the new cluster, copy the old Operator bootstrap API-key Secret to the name expected by the new EMQX resource:
+部署新集群前，复制旧 Operator 的引导 API 密钥 Secret，并将其命名为新 EMQX 资源所需的名称：
 
 ```bash
 kubectl get secret "$OLD_EMQX-bootstrap-api-key" \
@@ -140,25 +140,25 @@ kubectl get secret "$OLD_EMQX-bootstrap-api-key" \
       --from-file=bootstrap_api_key=/dev/stdin
 ```
 
-The global backup contains the Operator controller API-key record. Reusing the bootstrap Secret keeps that credential consistent when the record is restored. Do not copy the old node-cookie Secret or configure `node.cookie`. Operator 3.0 creates a new cookie for the independent cluster used by this walkthrough.
+全局备份包含 Operator 控制器的 API 密钥记录。复用引导 Secret 可以确保恢复该记录时凭据保持一致。请勿复制旧的 node-cookie Secret，也不要配置 `node.cookie`。Operator 3.0 会为本操作指南使用的独立集群创建新的 cookie。
 
-## 4. Stop Operator 2.3 and preserve its workloads
+## 4. 停止 Operator 2.3 并保留其工作负载
 
-Scale the Operator 2.3 controller to zero. Adjust the namespace and Deployment name if you used a custom installation:
+将 Operator 2.3 控制器的副本数缩减为零。如果使用了自定义安装，请相应调整命名空间和 Deployment 名称：
 
 ```bash
 kubectl scale deployment emqx-operator-controller-manager \
   -n emqx-operator-system --replicas=0
 ```
 
-Delete each Operator 2.3 EMQX resource with orphan propagation. This removes the custom resource but leaves its StatefulSets, ReplicaSets, Pods, Services, and PVCs running:
+使用孤立级联删除策略删除每个 Operator 2.3 EMQX 资源。此操作会删除自定义资源，但会保留其 StatefulSet、ReplicaSet、Pod、Service 和 PVC 并使其继续运行：
 
 ```bash
 kubectl delete emqx.apps.emqx.io "$OLD_EMQX" \
   -n "$EMQX_NAMESPACE" --cascade=orphan --wait=true
 ```
 
-Verify that the old resources and client endpoint remain available:
+确认旧资源和客户端端点仍然可用：
 
 ```bash
 kubectl get statefulset,replicaset,pod,service,pvc \
@@ -166,25 +166,25 @@ kubectl get statefulset,replicaset,pod,service,pvc \
   -l "apps.emqx.io/instance=$OLD_EMQX"
 ```
 
-Uninstall Operator 2.3 by using the same method that you used to install it, then remove its CRDs:
+使用与安装时相同的方式卸载 Operator 2.3，然后删除其 CRD：
 
 ```bash
 kubectl delete --ignore-not-found crd \
   emqxes.apps.emqx.io rebalances.apps.emqx.io
 ```
 
-Install Operator 3.0 by following [Install Operator and Deploy EMQX](../getting-started.md), but do not deploy the example EMQX resource from that page.
+按照[安装 Operator 并部署 EMQX](../getting-started.md)中的步骤安装 Operator 3.0，但不要部署该页面中的 EMQX 示例资源。
 
-## 5. Deploy and restore the new cluster
+## 5. 部署并恢复新集群
 
-Validate and apply the converted manifest:
+验证并应用转换后的清单：
 
 ```bash
 kubectl apply --dry-run=server -f emqx-v3.yaml
 kubectl apply -f emqx-v3.yaml
 ```
 
-Wait for both the workload and configuration to become ready:
+等待工作负载和配置均就绪：
 
 ```bash
 kubectl wait emqx.apps.emqx.io/"$NEW_EMQX" \
@@ -194,7 +194,7 @@ kubectl wait emqx.apps.emqx.io/"$NEW_EMQX" \
   -n "$EMQX_NAMESPACE" --for=condition=ConfigApplied --timeout=15m
 ```
 
-Select a running Core Pod, copy the backup into it, and restore the data:
+选择一个正在运行的 Core Pod，将备份复制到该 Pod，并恢复数据：
 
 ```bash
 NEW_EMQX_CORE_POD="$(kubectl get pod \
@@ -214,56 +214,56 @@ kubectl exec -n "$EMQX_NAMESPACE" "$NEW_EMQX_CORE_POD" -c emqx -- \
   rm -f "/tmp/$EMQX_BACKUP_FILE"
 ```
 
-Keep the converted `.spec.config.roots` as the source of truth for configuration. Run the readiness checks above again and verify that the import completed successfully before switching client traffic.
+继续将转换后的 `.spec.config.roots` 作为配置的权威来源。切换客户端流量前，请再次执行上述就绪检查，并确认导入已成功完成。
 
-## 6. Switch client traffic
+## 6. 切换客户端流量
 
-Run representative connection, authentication, publish, subscribe, retained message, rule, and integration tests against the new listener Service. Then update your load balancer, ingress, or DNS record to send new client connections to `<new-emqx-name>-listeners`.
+针对新的监听器 Service 执行具有代表性的连接、认证、发布、订阅、保留消息、规则和集成测试。然后更新负载均衡器、Ingress 或 DNS 记录，将新的客户端连接发送到 `<new-emqx-name>-listeners`。
 
-Treat this cutover as the session boundary. Clients might disconnect and must reconnect to the new cluster. Verify client reconnect behavior and monitor authentication failures, reconnect loops, and message flow before continuing.
+将此次流量切换视为新旧会话的分界点。客户端可能会断开连接，并且必须重新连接到新集群。继续操作前，请验证客户端重连行为，并监控认证失败、重复重连和消息流。
 
-## 7. Complete the migration
+## 7. 完成迁移
 
-After the acceptance period:
+验收期结束后：
 
-1. List the orphaned Operator 2.3 StatefulSets and ReplicaSets, then scale each one to zero.
-2. Take a new EMQX data backup from the Operator 3.0 cluster.
-3. Remove the orphaned Operator 2.3 workloads only after the rollback window has closed.
+1. 列出已成为孤立资源的 Operator 2.3 StatefulSet 和 ReplicaSet，然后将每个工作负载的副本数缩减为零。
+2. 从 Operator 3.0 集群创建新的 EMQX 数据备份。
+3. 仅在回滚窗口结束后，删除已成为孤立资源的 Operator 2.3 工作负载。
 
-Do not delete the old PVCs or node-cookie Secret until you have verified the new cluster and stored both backups outside Kubernetes. Deleting these resources is irreversible.
+在验证新集群并将两个备份都存放到 Kubernetes 外部之前，请勿删除旧 PVC 或 node-cookie Secret。删除这些资源后无法恢复。
 
-## Roll back
+## 回滚
 
-Confirm that the old StatefulSets, ReplicaSets, PVCs, configuration resources, Services, and Secrets are still present.
+确认旧的 StatefulSet、ReplicaSet、PVC、配置资源、Service 和 Secret 仍然存在。
 
-If the old workloads are still running, test the old listener Service and direct client traffic back to it.
+如果旧工作负载仍在运行，请测试旧的监听器 Service，并将客户端流量切回该 Service。
 
-If you already scaled the old workloads to zero, use the following procedure to return to Operator 2.3 through a blue-green update:
+如果已将旧工作负载的副本数缩减为零，请按照以下步骤通过蓝绿更新回滚到 Operator 2.3：
 
-1. Scale the same StatefulSets and ReplicaSets that were running before the migration back to their previous replica counts. Use `emqx-v2-workloads.yaml` to identify them and their counts.
+1. 将迁移前运行的相同 StatefulSet 和 ReplicaSet 恢复到之前的副本数。使用 `emqx-v2-workloads.yaml` 确定这些工作负载及其副本数。
 
-2. Wait for EMQX to start in an old Core Pod:
+2. 等待 EMQX 在旧 Core Pod 中启动：
 
    ```bash
    kubectl exec -n "$EMQX_NAMESPACE" <old-core-pod> -c emqx -- \
      emqx ctl status
    ```
 
-   The recreated Pod can remain not ready because its readiness gate is managed by Operator 2.3. Do not switch client traffic yet.
+   由于其就绪门控由 Operator 2.3 管理，重新创建的 Pod 可能仍处于未就绪状态。此时请勿切换客户端流量。
 
-3. Uninstall Operator 3.0 by using the same method that you used to install it. This also removes the new EMQX resource, its managed workloads, and the EMQX CRD. If you installed the CRD separately, remove it before continuing.
+3. 使用与安装时相同的方式卸载 Operator 3.0。此操作还会删除新的 EMQX 资源、由其管理的工作负载以及 EMQX CRD。如果单独安装了 CRD，请先将其删除再继续。
 
-4. Reinstall the same Operator 2.3 version that managed the old cluster, then reapply the saved resource:
+4. 重新安装之前管理旧集群的同一 Operator 2.3 版本，然后重新应用已保存的资源：
 
    ```bash
    kubectl apply -f emqx-v2.yaml
    ```
 
-5. Wait for the restored resource to become ready, then test the old listener Service before switching traffic:
+5. 等待恢复的资源就绪，然后先测试旧的监听器 Service，再切换流量：
 
    ```bash
    kubectl wait emqx.apps.emqx.io/"$OLD_EMQX" \
      -n "$EMQX_NAMESPACE" --for=condition=Ready --timeout=15m
    ```
 
-   Operator 2.3 does not strictly adopt the old workloads. It uses the running workloads as the starting revision for a blue-green update, performing a complete data migration.
+   严格来说，Operator 2.3 并不会接管旧工作负载。它会将正在运行的工作负载用作蓝绿更新的起始版本，并执行完整的数据迁移。

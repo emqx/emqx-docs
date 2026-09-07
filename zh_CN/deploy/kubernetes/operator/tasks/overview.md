@@ -1,28 +1,28 @@
-# Manage EMQX Clusters
+# 管理 EMQX 集群
 
-This chapter provides step-by-step instructions for performing common tasks and operations with EMQX in a Kubernetes cluster.
+本章介绍如何在 Kubernetes 集群中完成常见的 EMQX 配置和运维任务。
 
-## Configuration and Setup
+## 配置和设置
 
-- License and Security
-  - [Manage License](./configure-emqx-license.md)
-  - [Enable TLS for EMQX listeners](./configure-emqx-tls.md)
-- Cluster Configuration
-  - [Change EMQX Configuration](./configure-emqx-config.md)
-  - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
-  - [Enable Persistence](./configure-emqx-persistence.md)
-  - [Configure Pod Disruption Budgets](./configure-disruption-budgets.md)
-  - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
-  - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
+- License 和安全
+  - [管理 License](./configure-emqx-license.md)
+  - [为 EMQX 监听器启用 TLS](./configure-emqx-tls.md)
+- 集群配置
+  - [修改 EMQX 配置](./configure-emqx-config.md)
+  - [启用 Core-Replicant 部署](./configure-emqx-core-replicant.md)
+  - [启用持久化存储](./configure-emqx-persistence.md)
+  - [配置 Pod 干扰预算](./configure-disruption-budgets.md)
+  - [通过 LoadBalancer 访问 EMQX 集群](./configure-emqx-service.md)
+  - [使用 HPA 自动伸缩 Replicant 节点](./configure-emqx-hpa.md)
 
-## Upgrades and Maintenance
+## 升级和维护
 
-- Upgrade
-  - [Configure Rolling Update](./configure-emqx-rolling-update.md)
-- Log Management
-  - [Collect EMQX Logs](./configure-emqx-log-collection.md)
-  - [Change EMQX Log Level](./configure-emqx-log-level.md)
+- 升级
+  - [配置滚动更新](./configure-emqx-rolling-update.md)
+- 日志管理
+  - [采集 EMQX 日志](./configure-emqx-log-collection.md)
+  - [修改 EMQX 日志等级](./configure-emqx-log-level.md)
 
-## Monitoring and Performance
+## 监控和性能
 
-- [Monitor EMQX Cluster using Prometheus](./configure-emqx-prometheus.md)
+- [使用 Prometheus 监控 EMQX 集群](./configure-emqx-prometheus.md)

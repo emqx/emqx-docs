@@ -1,27 +1,27 @@
-# Deploy EMQX on Azure Kubernetes Service
+# 在 Azure Kubernetes Service 中部署 EMQX
 
-EMQX Operator supports deploying EMQX on Azure Kubernetes Service (AKS). AKS simplifies deploying a managed Kubernetes cluster in Azure by offloading the operational overhead to Azure. As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. When an AKS cluster is created, Azure automatically provisions and manages the Kubernetes control plane at no additional cost.
+EMQX Operator 支持在 Azure Kubernetes Service（AKS）上部署 EMQX。使用 AKS，可以将 Kubernetes 集群的运维工作交由 Azure 管理，从而简化托管集群的部署。作为托管的 Kubernetes 服务，Azure 负责运行状况监控和维护等关键任务。创建 AKS 集群时，Azure 会自动配置和管理 Kubernetes 控制平面，无需额外费用。
 
-## Before You Begin
+## 前提条件
 
-Before deploying EMQX on AKS, ensure the following prerequisites are met:
+在 AKS 上部署 EMQX 之前，请确保满足以下先决条件：
 
-- An AKS cluster in your Azure subscription
-  * Refer to the [Azure Kubernetes Service documentation](https://learn.microsoft.com/en-us/azure/aks/) for guidance on creating and configuring an AKS cluster.
+- Azure 订阅中的 AKS 集群
+  - 有关创建和配置 AKS 集群的指导，请参阅 [Azure Kubernetes Service 文档](https://learn.microsoft.com/zh-cn/azure/aks/)。
 
-- A working `kubectl` configuration for connecting to the AKS cluster
-  - To connect using the locally installed `kubectl`, follow the instructions in [Connect to an AKS cluster](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli).
-  - To connect using Azure Cloud Shell, see [Manage an AKS cluster in Azure CloudShell](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
+- 用于连接到 AKS 集群的有效 `kubectl` 配置
+  - 要使用本地安装的 `kubectl` 连接，请按照 [连接到 AKS 集群](https://learn.microsoft.com/zh-cn/azure/aks/learn/quick-kubernetes-deploy-cli) 中的说明操作。
+  - 要使用 Azure Cloud Shell 连接，请参阅 [在 Azure CloudShell 中管理 AKS 集群](https://learn.microsoft.com/zh-cn/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli)。
 
-- EMQX Operator installed on the cluster
-  - Refer to [Install EMQX Operator](./getting-started.md) for installation details.
-  
+- 在集群上安装 EMQX Operator
+  - 有关安装详细信息，请参阅 [安装 EMQX Operator](./getting-started.md)。
 
-## Deploy EMQX Cluster Quickly
 
-The following example shows a basic configuration for an EMQX Custom Resource (CR).
+## 快速部署 EMQX 集群
 
-1. Save it as a YAML file and deploy with `kubectl apply`.
+以下示例显示了 EMQX 自定义资源（CR）的基本配置。
+
+1. 将其保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -37,7 +37,7 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
      coreTemplate:
        spec:
          persistentVolumeClaimSpec:
-           ## more information about storage classes: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
+           ## 有关存储类的更多信息：https://learn.microsoft.com/zh-cn/azure/aks/concepts-storage#storage-classes
            storageClassName: default
            resources:
              requests:
@@ -46,17 +46,17 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
            - ReadWriteOnce
      dashboardServiceTemplate:
        spec:
-         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## 有关负载均衡器的更多信息：https://learn.microsoft.com/zh-cn/azure/aks/load-balancer-standard
          type: LoadBalancer
      listenersServiceTemplate:
        spec:
-         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## 有关负载均衡器的更多信息：https://learn.microsoft.com/zh-cn/azure/aks/load-balancer-standard
          type: LoadBalancer
    ```
 
-2. Wait for the EMQX cluster to become ready.
+2. 等待 EMQX 集群就绪。
 
-   Check the cluster status using `kubectl get` and verify that the `STATUS` is `Ready`. A startup may take some time.
+   使用 `kubectl get` 检查集群状态，并验证 `STATUS` 为 `Ready`。启动可能需要一些时间。
 
    ```shell
    $ kubectl get emqx
@@ -64,35 +64,35 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
    emqx   Ready     1m5s
    ```
 
-3. Retrieve the external IP of the EMQX Dashboard and access it.
+3. 获取 EMQX Dashboard 的外部 IP 并访问它。
 
-   The EMQX Operator automatically creates a Service based on the `dashboardServiceTemplate` configuration.
+   EMQX Operator 会根据 `dashboardServiceTemplate` 配置自动创建 Service。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    20.245.230.91
    ```
 
-4. Open the Dashboard at `http://20.245.230.91:18083`.
+4. 在 `http://20.245.230.91:18083` 打开 Dashboard。
 
-    Log in with the default credentials:
+    使用默认凭据登录：
 
-     - **Username:** `admin`
-     - **Password:** `public`
+     - **用户名：** `admin`
+     - **密码：** `public`
 
-## Use MQTTX to Subscribe and Publish
+## 使用 MQTTX 订阅和发布
 
-This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.0 command-line client tool that helps developers quickly test the MQTT services and applications.
+本演练使用 [MQTTX CLI](https://mqttx.app/zh/cli)，这是一款开源的 MQTT 5.0 命令行客户端工具，可帮助开发者快速测试 MQTT 服务和应用。
 
-1. Obtain the external IP of the EMQX TCP listener.
+1. 获取 EMQX TCP 监听器的外部 IP。
 
-   The EMQX Operator automatically creates a Service resource for each configured listener.
+   EMQX Operator 会为每个配置的监听器自动创建 Service 资源。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Subscribe to a topic.
+2. 订阅主题。
 
    ```shell
    $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
@@ -102,7 +102,7 @@ This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.
    [10:00:25] › ✔  Subscribed to hello
    ```
 
-3. In another terminal, connect to the EMQX cluster and publish a message.
+3. 在另一个终端中，连接到 EMQX 集群并发布消息。
 
    ```shell
    $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
@@ -112,12 +112,12 @@ This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.
    [10:00:58] › ✔  Message published
    ```
 
-4. Observe the subscriber receiving the message.
+4. 观察订阅者接收消息。
 
    ```shell
    [10:00:58] › payload: hello world
    ```
 
-## Notes on TLS Offloading with LoadBalancer
+## 关于使用 LoadBalancer 进行 TLS 卸载的说明
 
-As an L3/L4 load balancer, Azure LoadBalancer does not support TLS termination. Please refer to this [discussion](https://github.com/emqx/emqx-operator/discussions/312) to understand possible workarounds.
+Azure LoadBalancer 是 L3/L4 负载均衡器，不支持 TLS 终止。有关可能的解决方法，请参阅[相关讨论](https://github.com/emqx/emqx-operator/discussions/312)。

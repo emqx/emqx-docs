@@ -1,18 +1,18 @@
-# Change EMQX Configuration
+# 修改 EMQX 配置
 
-## Objective
+## 目标
 
-Change EMQX configuration through `.spec.config.roots` in the EMQX Custom Resource.
+通过 EMQX 自定义资源中的 `.spec.config.roots` 修改 EMQX 配置。
 
-## Configure EMQX Cluster
+## 配置 EMQX 集群
 
-The `apps.emqx.io/v3beta1` EMQX CRD accepts top-level EMQX configuration roots as JSON-compatible values in `.spec.config.roots`. In a YAML manifest, express each root as a structured YAML object, array, or scalar that corresponds to the [EMQX configuration schema](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/).
+`apps.emqx.io/v3beta1` EMQX CRD 的 `.spec.config.roots` 接受与 JSON 兼容的 EMQX 顶层配置根项。在 YAML 清单中，每个根项应表示为与 [EMQX 配置 Schema](https://docs.emqx.com/zh/enterprise/v6.2.0/hocon/)对应的结构化 YAML 对象、数组或标量。
 
-The field does not accept HOCON-only constructs such as includes or substitutions.
+该字段不接受 include 或替换等仅适用于 HOCON 的结构。
 
-Removing a root from `.spec.config.roots` means that EMQX Operator stops managing that root. It does not remove values that EMQX has persisted or restore the root to its schema defaults. To reset a root to known values, declare those values explicitly.
+从 `.spec.config.roots` 中删除根项表示 EMQX Operator 不再管理该根项。这一操作不会删除 EMQX 已持久化的值，也不会将该根项恢复为 Schema 默认值。如需将根项重置为已知值，请显式声明这些值。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`:
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -24,7 +24,7 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
      imagePullPolicy: IfNotPresent
      config:
        roots:
-         # Configure a TCP listener named `test` on port 1884:
+         # 配置名为 `test`、端口为 1884 的 TCP 监听器：
          listeners:
            tcp:
              test:
@@ -41,14 +41,14 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
    ```
 
    ::: tip
-   Do not configure `node.cookie`, because EMQX Operator manages this setting.
+   不要配置 `node.cookie`，该设置由 EMQX Operator 管理。
    :::
 
    ::: tip
-   EMQX Operator writes most settings, such as listener settings, to [`base.hocon`](../../../../configuration/configuration.md#base-configuration-file) and applies changes at runtime through the EMQX Configs API without restarting Pods. It writes settings that take effect only when EMQX starts, such as Dashboard listeners and node settings, to [`emqx.conf`](../../../../configuration/configuration.md#immutable-configuration-file). Changing such settings triggers a controlled rolling update.
+   EMQX Operator 将监听器设置等大多数配置写入 [`base.hocon`](../../../../configuration/configuration.md#基础配置文件)，并通过 EMQX Configs API 在运行时应用变更，无需重启 Pod。Operator 将 Dashboard 监听器和节点设置等仅在 EMQX 启动时生效的配置写入 [`emqx.conf`](../../../../configuration/configuration.md#不可变配置文件)。修改此类设置会触发受控滚动更新。
    :::
 
-2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
+2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx emqx
@@ -56,16 +56,16 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
    emqx   Ready    10m
    ```
 
-3. Check the `ConfigApplied` condition to confirm that the desired configuration is active:
+3. 检查 `ConfigApplied` 条件，确认目标配置已生效：
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
    True    Applied    Desired configuration is active
    ```
 
-## Verify Configuration
+## 验证配置
 
-View the EMQX listeners' status.
+查看 EMQX 监听器状态。
 
 ```bash
 $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
@@ -85,34 +85,34 @@ tcp:test
    max_conns : 1024000
 ```
 
-Here we can see that the new listener on port 1884 is running.
+输出表明，端口 1884 上的新监听器正在运行。
 
-## Change Configuration That Requires a Restart
+## 修改需要重启的配置
 
-Some configuration changes update the Pod template and trigger a rolling update. The following example changes the Dashboard HTTP listener, which takes effect when EMQX starts.
+部分配置变更会更新 Pod 模板并触发滚动更新。以下示例修改仅在 EMQX 启动时生效的 Dashboard HTTP 监听器。
 
-1. Patch the EMQX resource:
+1. 修补 EMQX 资源：
 
    ```bash
    kubectl patch emqx emqx --type=merge -p '{"spec":{"config":{"roots":{"dashboard":{"listeners":{"http":{"bind":"0.0.0.0:18084"}}}}}}}'
    ```
 
-2. Check the `ConfigApplied` condition after EMQX Operator detects the change:
+2. EMQX Operator 检测到变更后，检查 `ConfigApplied` 条件：
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
    False    StartupConfigPending    Configuration roots require rolling restart: [dashboard]
    ```
 
-   `False` with reason `StartupConfigPending` means that at least one ready Pod still uses the previous configuration and the rolling update is in progress.
+   状态为 `False` 且原因为 `StartupConfigPending`，表示至少有一个就绪 Pod 仍在使用原配置，滚动更新正在进行。
 
-3. Wait until the rolling update completes:
+3. 等待滚动更新完成：
 
    ```bash
    kubectl wait --for=condition=ConfigApplied emqx/emqx --timeout=10m
    ```
 
-4. Check the `ConfigApplied` condition to confirm that the new configuration is active:
+4. 检查 `ConfigApplied` 条件，确认新配置已生效：
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'

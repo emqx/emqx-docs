@@ -1,18 +1,18 @@
-# Access EMQX Cluster through LoadBalancer
+# 通过 LoadBalancer 访问 EMQX 集群
 
-## Objective
+## 目标
 
-Access the EMQX cluster through a Service of type LoadBalancer.
+通过 LoadBalancer 类型的 Service 访问 EMQX 集群。
 
-## Configure EMQX Cluster
+## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v3beta1` supports:
-* Configuring the EMQX Dashboard Service through `.spec.dashboardServiceTemplate`.
-* Configuring the EMQX cluster listener Service through `.spec.listenersServiceTemplate`.
+EMQX CRD `apps.emqx.io/v3beta1` 支持：
+* 通过 `.spec.dashboardServiceTemplate` 配置 EMQX Dashboard Service。
+* 通过 `.spec.listenersServiceTemplate` 配置 EMQX 集群监听器 Service。
 
-Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) for more details.
+有关字段说明，请参阅 `v3beta1` API 参考中的 [EMQX](../reference/v3beta1-reference.md#emqx)。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`.
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -35,17 +35,17 @@ Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) 
 
    ::: tip
 
-   By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
+   默认情况下，EMQX 在端口 1883 上启动 MQTT TCP 监听器 `tcp-default`，并在端口 18083 上启动 Dashboard HTTP 监听器。
 
-   You can configure new or existing listeners through `.spec.config.roots.listeners`, or manage them through the EMQX Dashboard.
+   可以通过 `.spec.config.roots.listeners` 配置新监听器或现有监听器，也可以通过 EMQX Dashboard 管理监听器。
 
-   EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
+   EMQX Operator 会自动在 Service 资源中反映默认监听器信息。当用户配置的 Service 与 EMQX 配置的监听器发生冲突时（名称或端口字段重复），EMQX Operator 会优先使用用户配置。
 
    :::
 
-2. Wait for the EMQX cluster to become ready.
+2. 等待 EMQX 集群就绪。
 
-   Check the status of the EMQX cluster with `kubectl get` and make sure that `STATUS` is `Ready`. This may take some time.
+   使用 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx emqx
@@ -53,21 +53,21 @@ Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) 
    emqx   Ready    10m
    ```
 
-## Add New Listener through EMQX Dashboard
+## 通过 EMQX Dashboard 添加新监听器
 
-1. Add a new listener.
+1. 添加新监听器。
 
-   - Open the EMQX Dashboard and navigate to **Management** -> **Listeners**.
+   - 打开 EMQX Dashboard，进入**管理** -> **监听器**。
 
-   - Click the **Add Listener** to add a new listener with the name `test` and port `1884`, as shown in the following figure:
+   - 点击**添加监听器**，添加一个名为 `test`、端口为 `1884` 的监听器，如下图所示：
 
      ![emqx-add-listener](./assets/configure-service/emqx-add-listener.png)
 
-   - Click **Add** to create the listener. As shown in the following figure, the new listener has been created.
+   - 点击**添加**创建监听器。如下图所示，新监听器已创建。
 
      ![emqx-listeners](./assets/configure-service/emqx-listeners.png)
 
-2. Check if the new listener is reflected in the Service.
+2. 检查新监听器是否已反映在 Service 中。
 
    ```bash
    kubectl get svc
@@ -77,17 +77,17 @@ Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) 
    emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
    ```
 
-   This output shows that the newly added listener on port 1884 has been reflected in the `emqx-listeners` Service resource.
+   输出表明，新添加的端口 1884 监听器已反映在 `emqx-listeners` Service 资源中。
 
-## Connect to the New Listener Using MQTTX
+## 使用 MQTTX 连接到新监听器
 
-1. Obtain the external IP of the EMQX listeners service.
+1. 获取 EMQX 监听器 Service 的外部 IP 地址。
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Connect to the new listener using MQTTX CLI.
+2. 使用 MQTTX CLI 连接到新监听器。
 
    ```bash
    $ mqttx conn -h ${external_ip} -p 1884

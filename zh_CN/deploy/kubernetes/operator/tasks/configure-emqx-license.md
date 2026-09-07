@@ -1,19 +1,19 @@
-# Manage License
+# 管理 License
 
-## Objective
+## 目标
 
-- Configure the EMQX Enterprise license.
-- Update EMQX Enterprise license.
+- 配置 EMQX Enterprise License。
+- 更新 EMQX Enterprise License。
 
-## Configure License
+## 配置 License
 
-You can apply for an EMQX Enterprise license for free on the EMQX official website: [Apply for EMQX Enterprise License](https://www.emqx.com/en/apply-licenses/emqx).
+可以在 EMQX 官网免费申请 EMQX Enterprise License：[申请 EMQX Enterprise License](https://www.emqx.com/zh/apply-licenses/emqx)。
 
-## Configure EMQX Cluster
+## 配置 EMQX 集群
 
-The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster license through `.spec.config.roots.license`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
+`apps.emqx.io/v3beta1` EMQX CRD 支持通过 `.spec.config.roots.license` 配置 EMQX 集群的 License。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.2.0/hocon/)。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`.
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -33,13 +33,13 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster licens
 
    ::: tip
 
-   The `.spec.config.roots.license.key` field contains the license key. Replace the placeholder in this example with your license key.
+   `.spec.config.roots.license.key` 字段用于设置 License 密钥。请将本示例中的占位符替换为实际的 License 密钥。
 
    :::
 
-2. Wait for the EMQX cluster to become ready. 
+2. 等待 EMQX 集群就绪。
 
-   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
+   使用 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx emqx
@@ -47,9 +47,9 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster licens
    emqx   Ready    10m
    ```
 
-## Update License
+## 更新 License
 
-1. View the license information.
+1. 查看 License 信息。
 
    ```bash
    $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
@@ -64,9 +64,9 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster licens
    expiry          : false
    ```
 
-   The output shows basic license information, including the applicant's information, the maximum number of connections supported by the license, and the expiration time.
+   输出显示 License 的基本信息，包括申请人信息、License 支持的最大连接数和到期时间。
 
-2. Modify the EMQX CR to update the license.
+2. 修改 EMQX CR 以更新 License。
 
    ```bash
    $ kubectl edit emqx emqx
@@ -80,7 +80,7 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster licens
    ...
    ```
 
-3. Verify that the license has been updated.
+3. 验证 License 是否已更新。
 
    ```bash
    $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
@@ -95,4 +95,4 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster licens
    expiry          : false
    ```
 
-   The updated `max_connections` field clearly indicates that the EMQX Enterprise license has been updated successfully. Keep in mind that the license update may take time, so you may need to retry the command.
+   更新后的 `max_connections` 字段表明 EMQX Enterprise License 已成功更新。License 更新可能需要一些时间，因此可能需要重试该命令。
