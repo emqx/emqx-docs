@@ -1,65 +1,65 @@
-# Apache IoTDBへのMQTTデータ取り込み
+# Apache IoTDB に MQTT データを取り込む
 
-[Apache IoTDB](https://iotdb.apache.org/) は、多種多様なIoTデバイスやシステムから生成される膨大な時系列データを効率的に処理するために設計された、高性能かつスケーラブルな時系列データベースです。
+[Apache IoTDB](https://iotdb.apache.org/) は、多種多様な IoT デバイスやシステムから生成される膨大な時系列データを効率的に処理するために設計された、高性能かつスケーラブルな時系列データベースです。
 
-EMQXはApache IoTDBとのシームレスなデータ統合を提供しており、EMQXで受信したリアルタイムのMQTTメッセージを[REST API V2](https://iotdb.apache.org/UserGuide/latest/API/RestServiceV2.html)を通じてIoTDBに転送できます。この統合は一方向のデータフローをサポートし、MQTTデータをIoTDBに書き込み、効率的な時系列ストレージおよび分析を実現します。
+EMQX は Apache IoTDB とのシームレスなデータ統合を提供し、EMQX がリアルタイムで受信した MQTT メッセージを [REST API V2](https://iotdb.apache.org/UserGuide/latest/API/RestServiceV2.html) を通じて IoTDB に転送します。この統合は一方向のデータフローをサポートし、MQTT データを効率的な時系列ストレージおよび分析のために IoTDB に書き込みます。
 
-本ページでは、EMQXとApache IoTDBの統合方法を紹介し、統合の作成および検証手順を段階的に説明します。
+本ページでは、EMQX と Apache IoTDB の統合方法を紹介し、統合の作成および検証の手順をステップバイステップで説明します。
 
 ## 動作概要
 
-Apache IoTDBデータ統合はEMQXの組み込み機能であり、追加のコーディングなしにMQTTベースの時系列データをApache IoTDBに取り込むことを可能にします。EMQXの組み込み[ルールエンジン](./rules.md)を活用することで、データのフィルタリング、変換、転送を簡素化し、IoTDBでの効率的な保存とクエリを実現します。
+Apache IoTDB データ統合は、EMQX に組み込まれた機能であり、追加のコーディングなしに MQTT ベースの時系列データを Apache IoTDB に取り込むことを可能にします。EMQX の組み込み [ルールエンジン](./rules.md) を活用することで、データのフィルタリング、変換、転送を簡素化し、IoTDB での効率的な保存とクエリを実現します。
 
-以下の図は、EMQXとIoTDB間の典型的なデータ統合アーキテクチャを示しています。<!-- この画像はIoTDB専用に修正が必要です -->
+以下の図は、EMQX と IoTDB 間の典型的なデータ統合アーキテクチャを示しています。<!-- この画像は IoTDB 専用に修正が必要です -->
 
 <img src="./assets/IoTDB_bridge_architecture.png" alt="IoTDB_bridge_architecture" style="zoom:67%;" />
 
 データ統合のワークフローは以下の通りです：
 
-1. **メッセージのパブリッシュと受信**：デバイスはMQTTを介してEMQXに接続し、テレメトリデータ、ステータス更新、イベント情報を含むメッセージをパブリッシュします。ルールエンジンが受信メッセージを評価します。
-2. **ルールベースの処理**：定義されたルールにマッチしたメッセージが選択され、必要に応じてフィールドのフィルタリング、データ形式の変換、ペイロードの拡充などの変換が適用されます。
-3. **データのバッファリング**：IoTDBが一時的に利用できない場合に備え、EMQXはメッセージをメモリ内でバッファリングします。必要に応じてメモリ圧迫を避けるためにディスクにオフロードすることも可能です。統合またはEMQXノードが再起動するとバッファデータは保持されません。
-4. **IoTDBへのデータ取り込み**：マッチしたルールに対して、EMQXはIoTDB Sinkをトリガーし、処理済みデータをIoTDBに時系列データとして書き込みます。
-5. **データの保存と活用**：IoTDBに保存されたデータは、デバイス監視、資産追跡、予知保全、運用最適化などの下流アプリケーションでクエリや分析に利用できます。
+1. **メッセージのパブリッシュと受信**：デバイスは MQTT を介して EMQX に接続し、テレメトリデータ、ステータス更新、イベント情報を含むメッセージをパブリッシュします。ルールエンジンが受信メッセージを評価します。
+2. **ルールベースの処理**：定義されたルールにマッチしたメッセージが選択され、必要に応じてフィールドのフィルタリング、データ形式の変換、ペイロードの付加などの変換が適用されます。
+3. **データのバッファリング**：信頼性向上のため、IoTDB が一時的に利用不可の場合は EMQX がメッセージをメモリにバッファリングします。必要に応じて、メモリ圧迫を避けるためにバッファデータをディスクにオフロード可能です。統合または EMQX ノードの再起動時にはバッファデータは保持されません。
+4. **IoTDB へのデータ取り込み**：マッチしたルールに対して、EMQX は IoTDB Sink をトリガーし、処理済みデータを IoTDB に時系列データとして書き込みます。
+5. **データの保存と活用**：IoTDB に保存されたデータは、デバイス監視、資産追跡、予知保全、運用最適化などの下流アプリケーションでクエリや分析に利用できます。
 
-## 特長と利点
+## 特長とメリット
 
-IoTDBとのデータ統合は、効果的なデータ処理と保存を実現するために以下の特長と利点を提供します：
+IoTDB とのデータ統合は、効果的なデータ処理と保存を実現するための多彩な機能と利点を提供します：
 
-- **ノーコードのIoTデータパイプライン**
+- **ノーコード IoT データパイプライン**
 
-  組み込みのルールとSinkを用いて、カスタムコードや外部サービスなしでEMQXとApache IoTDB間のMQTTから時系列データへの完全なパイプラインを構築可能です。
+  組み込みのルールとシンクを使い、カスタムコードや外部サービスなしで EMQX と Apache IoTDB 間の完全な MQTT から時系列データへのパイプラインを構築できます。
 
-- **MQTTからIoTDBモデルへの柔軟なマッピング**
+- **MQTT から IoTDB モデルへの柔軟なマッピング**
 
-  TreeモデルとTableモデルの両方をサポートし、デバイスのモデリングやクエリ要件に合わせた構造でMQTTデータをIoTDBに書き込めます。
+  ツリーモデルとテーブルモデルの両方をサポートし、デバイスモデリングやクエリ要件に合った構造で MQTT データを IoTDB に書き込めます。
 
 - **取り込みと保存の分離**
 
-  EMQXはバースト的かつ高頻度のMQTTトラフィックを吸収し、IoTDBは耐久性のある時系列ストレージに専念することで、システムの安定性とレジリエンスを向上させます。
+  EMQX はバースト的で高頻度な MQTT トラフィックを吸収し、IoTDB は耐久性のある時系列ストレージに専念することで、システムの安定性とレジリエンスを向上させます。
 
 - **本番対応のスケーラビリティ**
 
-  デバイス数やデータ量に応じて水平スケールが可能で、大規模なIoT、IIoT、エネルギー分野に適しています。
+  統合はデバイス数とデータ量に応じて水平スケール可能で、大規模な IoT、IIoT、エネルギーシナリオに適しています。
 
 - **分析対応の時系列データ**
 
-  IoTDBに書き込まれたデータは直接クエリ、集計、分析が可能であり、ビッグデータエンジンと連携して高度な分析や長期的なインサイト取得も可能です。
+  IoTDB に書き込まれたデータは直接クエリ、集計、分析できるほか、ビッグデータエンジンと連携して高度な分析や長期的な洞察を得られます。
 
 ## はじめる前に
 
-このセクションでは、EMQXダッシュボードでApache IoTDBデータ統合を作成する前に必要な準備について説明します。
+このセクションでは、EMQX ダッシュボードで Apache IoTDB データ統合を作成する前に必要な準備を説明します。
 
 ### 前提条件
 
-- EMQXデータ統合の[ルール](./rules.md)に関する知識
-- [データ統合](./data-bridges.md)に関する知識
+- EMQX データ統合の [ルール](./rules.md) に関する知識
+- [データ統合](./data-bridges.md) に関する知識
 
-### Apache IoTDBサーバーの起動
+### Apache IoTDB サーバーの起動
 
-ここでは[Docker](https://www.docker.com/)を使ったApache IoTDBサーバーの起動方法を紹介します。IoTDBの設定で`enable_rest_service=true`が有効になっていることを確認してください。
+ここでは [Docker](https://www.docker.com/) を使って Apache IoTDB サーバーを起動する方法を紹介します。IoTDB の設定で `enable_rest_service=true` が有効になっていることを確認してください。
 
-以下のコマンドを実行すると、RESTインターフェースが有効なApache IoTDBサーバーが起動します：
+以下のコマンドを実行すると、REST インターフェースが有効な Apache IoTDB サーバーが起動します：
 
 ```bash
 docker run -d --name iotdb-service \
@@ -81,69 +81,69 @@ docker run -d --name iotdb-service \
               apache/iotdb:2.0.5-standalone
 ```
 
-詳細は[Docker HubのIoTDB実行情報](https://hub.docker.com/r/apache/iotdb)をご参照ください。
+詳細は [Docker Hub の IoTDB 実行方法](https://hub.docker.com/r/apache/iotdb) をご参照ください。
 
 ### データベースの作成
 
-IoTDBはTreeモデルとTableモデルの2つのデータモデルをサポートしています。データベース作成前に、ConnectorおよびSinkで使用する**SQL Dialect**（TreeまたはTable）を確認し、それに応じてデータベースを作成してください。
+IoTDB はツリーモデルとテーブルモデルの2つのデータモデルをサポートしています。データベース作成前に、コネクターおよびシンクで使用する **SQL Dialect**（Tree または Table）を確認し、それに応じてデータベースを作成してください。
 
-- **Treeモデル**の場合はデータベースのみ作成すればよいです。
-- **Tableモデル**の場合は、まずデータベースを作成し、その後データ取り込み用のテーブルを作成する必要があります。
+- **ツリーモデル**の場合はデータベースのみ作成すればよいです。
+- **テーブルモデル**の場合は、まずデータベースを作成し、その後データ取り込み用のテーブルを作成する必要があります。
 
-詳細な手順はIoTDBユーザーガイドをご参照ください：
+詳細な手順は IoTDB ユーザーガイドをご参照ください：
 
-- [Treeモデル用データベースの作成](https://iotdb.apache.org/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-create-database)
-- [Tableモデル用データベースの作成](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-create-a-database)
-- [Tableモデル用テーブルの作成](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Table-Management_apache.html#_1-1-create-a-table)
+- [ツリーモデル用データベース作成](https://iotdb.apache.org/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-create-database)
+- [テーブルモデル用データベース作成](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-create-a-database)
+- [テーブルモデル用テーブル作成](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Table-Management_apache.html#_1-1-create-a-table)
 
-## IoTDBコネクターの作成
+## IoTDB コネクターの作成
 
-Apache IoTDBデータ統合を作成するには、Apache IoTDB SinkとApache IoTDBサーバーを接続するためのコネクターを作成する必要があります。
+Apache IoTDB データ統合を作成するには、Apache IoTDB Sink を Apache IoTDB サーバーに接続するためのコネクターを作成する必要があります。
 
-EMQXはREST APIまたはThriftプロトコルを通じてIoTDBと通信をサポートしています。
+EMQX は REST API または Thrift プロトコルを介した IoTDB との通信をサポートしています。
 
-1. EMQXダッシュボードで **Integrations** -> **Connectors** に移動します。
+1. EMQX ダッシュボードで **Integrations** -> **Connectors** に移動します。
 
 2. 右上の **Create** をクリックします。
 
 3. **Create Connector** ページで **Apache IoTDB** を選択します。
 
-4. コネクターを設定します：
+4. コネクターの設定を行います：
 
-   - **Connector Name**：コネクターの一意な名前を入力します。大文字・小文字の英数字の組み合わせを使用してください。例：`my_iotdb`
-   - **Description**：（任意）コネクターの簡単な説明
-   - **Driver**：IoTDB接続に使用するプロトコルを選択します。
-     - `REST API`：IoTDB RESTサービスのエンドポイント（例：`http://localhost:18080`）を**IoTDB REST Service Base URL**に入力します。
-     - `Thrift Protocol`：IoTDB Thriftサーバーのアドレスを**Server Host**に入力します。
+   - **Connector Name**：コネクターの一意の名前を入力します。大文字・小文字の英数字の組み合わせを使用してください（例：`my_iotdb`）。
+   - **Description**：（任意）コネクターの簡単な説明を入力します。
+   - **Driver**：IoTDB への接続に使用するプロトコルを選択します。
+     - `REST API`：IoTDB REST サービスのエンドポイント（例：`http://localhost:18080`）を **IoTDB REST Service Base URL** に入力します。
+     - `Thrift Protocol`：IoTDB Thrift サーバーのアドレスを **Server Host** に入力します。
 
-   - **SQL Dialect**：EMQXがデバイスデータをIoTDBに書き込む際のデータモデルを選択します。
-     - `Tree Model`：階層的な時系列パスとしてデータを書き込み、パスベースのデバイス・測定管理に適しています。
+   - **SQL Dialect**：EMQX が IoTDB にデバイスデータを書き込む際のデータモデルを選択します。
+     - `Tree Model`：階層的な時系列パスとしてデータを書き込み、パスベースのデバイス・計測管理に適しています。
      - `Table Model`：リレーショナルテーブルにデータを書き込み、デバイスタイプやカテゴリ別の管理に適しています。
-   - **Database Name**：**SQL Dialect**が`Table Model`の場合、接続するデータベース名を指定します。
-   - **Username** と **Password**：EMQXがApache IoTDBサーバーに認証するための資格情報を入力します。
-   - **IoTDB Version**：Apache IoTDBのバージョンを選択します。
-   - **Enable TLS**：Apache IoTDBサーバーへの暗号化接続を有効にします。詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)をご参照ください。
-   - オプションの調整は[高度な設定](#advanced-configurations)の**Advanced Settings**をご覧ください。
+   - **Database Name**：**SQL Dialect** が `Table Model` の場合、接続先のデータベース名を指定する必要があります。
+   - **Username** と **Password**：EMQX が Apache IoTDB サーバーに認証するための資格情報を入力します。
+   - **IoTDB Version**：使用している Apache IoTDB のバージョンを選択します。
+   - **Enable TLS**：Apache IoTDB サーバーへの暗号化接続を有効にする場合はチェックします。詳細は [外部リソースアクセスの TLS](../network/overview.md#tls-for-external-resource-access) を参照してください。
+   - 任意の調整は [高度な設定](#advanced-configurations) の **Advanced Settings** を参照してください。
 
-5. （任意）**Test Connectivity**をクリックして、コネクターがApache IoTDBサーバーに正常に接続できるか確認します。
+5. （任意）**Test Connectivity** をクリックして、コネクターが Apache IoTDB サーバーに正常に接続できるかを確認します。
 
-6. **Create**をクリックしてコネクターの作成を完了します。
+6. **Create** をクリックしてコネクターの作成を完了します。
 
-   表示されるダイアログで、**Back to Connector List** または **Create Rule** を選択し、ルールとApache IoTDB Sinkの設定を続けることができます。詳細は[ルールとApache IoTDB Sinkの作成](#create-a-rule-and-apache-iotdb-sink)をご覧ください。
+   表示されるダイアログで、**Back to Connector List** または **Create Rule** を選択して、ルールおよび Apache IoTDB Sink の設定を続行できます。詳細は [ルールと Apache IoTDB Sink の作成](#create-a-rule-and-apache-iotdb-sink) を参照してください。
 
-## Apache IoTDB Sink付きのルール作成
+## Apache IoTDB Sink を使ったルールの作成
 
-このセクションでは、EMQXでMQTTのソーストピック `root/#` からのメッセージを処理し、処理結果を設定済みのApache IoTDB Sinkを通じてApache IoTDBに時系列データとして保存するルールの作成方法を示します。
+このセクションでは、EMQX でソース MQTT トピック `root/#` からのメッセージを処理し、処理結果を設定済みの Apache IoTDB Sink を通じて Apache IoTDB に時系列データとして保存するルールの作成方法を示します。
 
-### SQLを定義したルールの作成
+### SQL 定義付きルールの作成
 
-1. EMQXダッシュボードで **Integration** -> **Rules** に移動します。
+1. EMQX ダッシュボードで **Integration** -> **Rules** に移動します。
 
-2. 右上の **Create** をクリックします。
+2. ページ右上の **Create** をクリックします。
 
-3. ルールIDを入力します。例：`my_rule`
+3. ルール ID を入力します（例：`my_rule`）。
 
-4. **SQLエディター**に以下の文を入力し、トピックパターン `root/#` にマッチするMQTTメッセージを転送します：
+4. **SQL editor** に以下のステートメントを入力します。これはトピックパターン `root/#` にマッチする MQTT メッセージを転送します：
 
    ```sql
    SELECT
@@ -154,181 +154,181 @@ EMQXはREST APIまたはThriftプロトコルを通じてIoTDBと通信をサポ
 
    ::: tip
 
-   初心者の方は **SQL Examples** と **Enable Test** をクリックして、SQLルールの学習とテストが可能です。
+   初心者の方は、**SQL Examples** と **Enable Test** をクリックして SQL ルールの学習とテストができます。
 
    :::
 
-5. 処理結果をIoTDBに書き込むため、ルールにApache IoTDB Sinkを追加します。詳細は[Apache IoTDB Sinkの追加](#add-an-apache-iotdb-sink)をご覧ください。
+5. 処理結果を IoTDB に書き込むために、ルールに Apache IoTDB Sink を追加します。詳細は [Apache IoTDB Sink の追加](#add-an-apache-iotdb-sink) を参照してください。
 
-6. **Create Rule** ページで設定内容を確認し、**Save** をクリックしてルールを作成します。
+6. **Create Rule** ページで設定を確認し、**Save** をクリックしてルールを作成します。
 
-作成したルールは **Rules** 一覧に表示されます。**Actions (Sink)** タブをクリックすると、このルールに関連付けられたIoTDB Sinkを確認できます。
+ルールが作成されると、**Rules** リストに表示されます。**Actions (Sink)** タブをクリックすると、このルールに関連付けられた IoTDB Sink を確認できます。
 
-また、**Integrations** -> **Flow Designer** に移動するとトポロジーグラフが表示され、トピック `root/#` からのメッセージが `my_rule` ルールで処理されIoTDBに書き込まれている様子を確認できます。
+また、**Integrations** -> **Flow Designer** に移動すると、トポロジーグラフが表示され、トピック `root/#` からのメッセージが `my_rule` ルールで処理され IoTDB に書き込まれている様子が確認できます。
 
-### Apache IoTDB Sinkの追加
+### Apache IoTDB Sink の追加
 
-1. ルールの右側にある **Add Action** ボタンをクリックし、ルールにマッチした際にトリガーされるアクションを定義します。このアクションは処理済みデータをIoTDBに転送します。
+1. 右側の **Add Action** ボタンをクリックし、ルールにマッチした際にトリガーされるアクションを定義します。このアクションは処理済みデータを IoTDB に転送します。
 
-2. **Type of Action** ドロップダウンで `Apache IoTDB` を選択します。**Action** はデフォルトの `Create Action` のままにします。既存のIoTDB Sinkを選択することも可能ですが、ここでは新規作成を想定しています。
+2. **Type of Action** ドロップダウンで `Apache IoTDB` を選択します。**Action** はデフォルトの `Create Action` のままにします。既存の IoTDB Sink を選択することも可能ですが、ここでは新規作成を想定しています。
 
-3. Sinkの名前と説明を入力します。
+3. Sink の名前と説明を入力します。
 
-4. **Connector** ドロップダウンで先ほど作成したコネクター `my_iotdb` を選択します。利用可能なコネクターがない場合は隣のボタンから作成できます。詳細は[IoTDBコネクターの作成](#create-an-iotdb-connector)をご覧ください。
+4. **Connector** ドロップダウンで、先ほど作成したコネクター `my_iotdb` を選択します。利用可能なコネクターがない場合は、隣のボタンから新規作成できます。詳細は [IoTDB コネクターの作成](#create-an-iotdb-connector) を参照してください。
 
-5. Sinkの設定を行います：
+5. Sink の設定を行います：
 
-   * **SQL Dialect**：Apache IoTDB SinkがIoTDBにデータを書き込む方法を選択します。この設定はコネクターのSQL Dialectと一致させる必要があります。
+      * **SQL Dialect**：Apache IoTDB Sink が IoTDB にデータを書き込む方法を選択します。コネクターで選択した SQL Dialect と一致させる必要があります。
 
-     * `Tree Model`：IoTDBの時系列パスとしてデータを書き込みます。各Sinkレコードはデバイスパスに挿入され、測定値はそのデバイス下の個別時系列として書き込まれます。このモデル選択時は**Device ID**フィールドを指定可能です。
-     * `Table Model`：IoTDBのリレーショナルテーブルにデータを書き込みます。各Sinkレコードは指定テーブルの行として挿入され、フィールドはテーブル列にマッピングされます。このモデル選択時は**Table**フィールドの指定が必須です。
+        * `Tree Model`：IoTDB の時系列パスとしてデータを書き込みます。各 Sink レコードはデバイスパスに挿入され、そのデバイスの下に個別の時系列として計測値が書き込まれます。このモデルを選択した場合、**Device ID** フィールドを指定できます。
+        * `Table Model`：IoTDB のリレーショナルテーブルにデータを書き込みます。各 Sink レコードは指定テーブルの行として挿入され、フィールドはテーブルのカラムにマッピングされます。このモデルを選択した場合、**Table** フィールドの指定が必須です。
+        
+      * **Device ID**（任意）：IoTDB インスタンスに時系列データを転送・挿入する際のデバイス名として使用する特定のデバイス ID を入力します。
 
-   * **Device ID**（任意）：IoTDBインスタンスに時系列データを転送・挿入する際のデバイス名として使用する特定のデバイスIDを入力します。
+        :::tip
 
-     :::tip
+        空欄の場合でも、パブリッシュされたメッセージ内やルール内でデバイス ID を指定可能です。例えば、JSON エンコードされたメッセージに `device_id` フィールドがあれば、その値が出力デバイス ID になります。ルールエンジンでこの情報を抽出するには、以下のような SQL を使用できます：
 
-     空欄の場合でも、パブリッシュされたメッセージ内やルール内でデバイスIDを指定可能です。例えば、JSON形式のメッセージに`device_id`フィールドが含まれていれば、その値が出力デバイスIDとなります。ルールエンジンでこれを抽出するには、以下のようなSQLを使用できます：
+        ```sql
+        SELECT
+         payload,
+         `my_device` as payload.device_id
+        ```
 
-     ```sql
-     SELECT
-      payload,
-      `my_device` as payload.device_id
-     ```
+        ただし、このフィールドで固定指定したデバイス ID が優先されます。
 
-     ただし、このフィールドに固定で設定したデバイスIDが優先されます。
+        :::
 
-     :::
+      - **Table**：データを書き込む IoTDB のテーブル名を指定します。
 
-   - **Table**：データを書き込むIoTDBのテーブル名を指定します。
+      - **Align Timeseries**：デフォルトは無効です。有効にすると、グループ化されたアラインド時系列のタイムスタンプ列が IoTDB に一度だけ保存され、グループ内の各時系列で重複保存されなくなります。詳細は [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries) を参照してください。
 
-   - **Align Timeseries**：デフォルトで無効です。有効にすると、グループ化されたアラインド時系列のタイムスタンプ列がIoTDB内で一度だけ保存され、各時系列での重複がなくなります。詳細は[Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries)をご覧ください。
+      - **Write Data** の設定で、MQTT メッセージから IoTDB データを生成する方法を指定します。
 
-   - **Write Data** の設定で、MQTTメッセージからIoTDBデータを生成する方法を指定します。
+        **Write Data** セクションでは、必要な数だけ項目を含むテンプレートを定義でき、各行に必要なコンテキスト情報を記述します。このテンプレートを基に MQTT メッセージから IoTDB データが生成されます。データ書き込みテンプレートは CSV ファイルによる一括設定もサポートしています。詳細は [バッチ設定](#batch-setting) を参照してください。
 
-     **Write Data** セクションでは、必要な数だけアイテムを含むテンプレートを定義でき、各行に必要なコンテキスト情報を含めます。このテンプレートを用いてMQTTメッセージに適用し、IoTDBデータを生成します。書き込みテンプレートはCSVファイルによる一括設定もサポートしています。詳細は[バッチ設定](#batch-setting)をご覧ください。
+        例として以下のテンプレートを考えます：
 
-     例として以下のテンプレートを考えます：
+        ::: tip 補足
+        
+        **Column Category** は SQL Dialect で `Table Model` を選択した場合のみ表示されます。
+        
+        :::
 
-     ::: tip 注意
+        | Column Category | Timestamp | Measurement | Data Type | Value    |
+        | --------------- | --------- | ----------- | --------- | -------- |
+        | field           |           | index       | INT32     | ${index} |
+        |                 |           | temperature | FLOAT     | ${temp}  |
 
-     **Column Category** はSQL Dialectで`Table Model`を選択した場合のみ表示されます。
+        `Timestamp` と `Value` はプレースホルダー構文をサポートし、変数で埋められます。`Timestamp` を省略すると、システムの現在時刻（ミリ秒単位）が自動的に設定されます。
 
-     :::
+        例えば、MQTT メッセージは以下のように構成できます：
 
-     | Column Category | Timestamp | Measurement | Data Type | Value    |
-     | --------------- | --------- | ----------- | --------- | -------- |
-     | field           |           | index       | INT32     | ${index} |
-     |                 |           | temperature | FLOAT     | ${temp}  |
+          ```json
+        {
+          "index": "42",
+          "temp": "32.67"
+          }
+          ```
 
-     `Timestamp` と `Value` はプレースホルダー構文をサポートし、変数で埋められます。`Timestamp`を省略すると、現在のシステム時刻（ミリ秒単位）が自動で設定されます。
+6. **Fallback Actions**：（任意）メッセージ配信失敗時の信頼性向上のため、プライマリ Sink が処理に失敗した場合にトリガーされるフォールバックアクションを1つ以上定義できます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-     これに対応するMQTTメッセージ例：
+7. **Advanced settings**：（任意）[高度な設定](#advanced-configurations) を参照してください。
 
-     ```json
-     {
-       "index": "42",
-       "temp": "32.67"
-     }
-     ```
-
-6. **フォールバックアクション**：（任意）メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)をご覧ください。
-
-7. **高度な設定**：（任意）[高度な設定](#advanced-configurations)をご参照ください。
-
-8. （任意）**Test Connectivity**をクリックして、SinkがApache IoTDBサーバーに接続できるかテストします。
+8. （任意）**Test Connectivity** をクリックして、Sink が Apache IoTDB サーバーに接続できるかをテストします。
 
 ### バッチ設定
 
-Apache IoTDBでは、数百件のデータを同時に書き込む場合、ダッシュボードでの設定が煩雑になることがあります。これを解決するため、EMQXはデータ書き込みのバッチ設定機能を提供しています。
+Apache IoTDB では、ダッシュボード上で数百件のデータを同時に書き込む設定は困難な場合があります。これを解決するため、EMQX はデータ書き込みのバッチ設定機能を提供しています。
 
-**Write Data** 設定時に、CSVファイルから挿入操作用のフィールドを一括インポートできます。
+**Write Data** の設定時に、CSV ファイルから挿入操作用のフィールドを一括インポートできます。
 
 1. **Write Data** テーブルの **Batch Setting** ボタンをクリックし、**Import Batch Setting** ポップアップを開きます。
 
-2. 指示に従いバッチ設定テンプレートファイルをダウンロードし、テンプレートにデータ書き込み設定を記入します。デフォルトのテンプレート内容は以下の通りです：
+2. 指示に従ってバッチ設定テンプレートファイルをダウンロードし、テンプレートにデータ書き込み設定を記入します。デフォルトのテンプレート内容は以下の通りです：
 
-   ::: tip 注意
+   ::: tip 補足
 
-   以下は`Table Model`用のデフォルトテンプレートです。`Tree Model`では**Column Category**列はありません。
+   以下は `Table Model` 用のデフォルトテンプレートです。`Tree Model` では **Column Category** 列はありません。
 
    :::
 
    | Column Category | Timestamp | Measurement | Data Type | Value             | 備考（任意）                                               |
    | --------------- | --------- | ----------- | --------- | ----------------- | ---------------------------------------------------------- |
    | tag             | now       | clientid    | text      | ${clientid}       |                                                            |
-   | field           | now       | temp        | float     | ${payload.temp}   | フィールド、値、データ型は必須。利用可能なデータ型はboolean, int32, int64, float, double, text |
+   | field           | now       | temp        | float     | ${payload.temp}   | フィールド、値、データ型は必須。データ型は boolean, int32, int64, float, double, text が利用可能 |
    | attribute       | now       | hum         | text      | ${payload.hum}    |                                                            |
    | attribute       | now       | status      | text      | ${payload.status} |                                                            |
 
-   - **Column Category**：列のデータモデル。`tag`、`field`、`attribute`をサポート。`tag`は文字列である必要があり、`field`または`attribute`が推奨されます。
-   - **Timestamp**：`${var}`形式のプレースホルダーをサポートし、タイムスタンプ形式が必要です。以下の特殊文字も使用可能：
+   - **Column Category**：カラムのデータモデル。`tag`、`field`、`attribute` のいずれか。`tag` は文字列である必要があり、`field` または `attribute` の使用が推奨されます。
+   - **Timestamp**：`${var}` 形式のプレースホルダーをサポートし、タイムスタンプ形式で指定します。以下の特殊文字も使用可能：
      - now：現在のミリ秒タイムスタンプ
      - now_ms：現在のミリ秒タイムスタンプ
      - now_us：現在のマイクロ秒タイムスタンプ
      - now_ns：現在のナノ秒タイムスタンプ
    - **Measurement**：フィールド名
    - **Data Type**：データ型（boolean, int32, int64, float, double, text）
-   - **Value**：書き込むデータ値。定数または`${var}`形式のプレースホルダーをサポートし、データ型と一致する必要があります。
-   - **備考**：CSVファイル内のメモ用で、EMQXへのインポート対象外です。
+   - **Value**：書き込むデータ値。定数または `${var}` 形式のプレースホルダーをサポートし、データ型と一致する必要があります。
+   - **備考**：CSV ファイル内のメモ用で、EMQX にはインポートされません。
 
-   1MB以下かつ2000行以内のCSVファイルのみサポートされています。
+   ファイルサイズは 1MB 以下、行数は 2000 行以下の CSV のみサポートされます。
 
-3. 記入済みテンプレートファイルを保存し、**Import Batch Setting** ポップアップにアップロードして **Import** をクリックし、バッチ設定を完了します。
+3. 記入済みテンプレートファイルを保存し、**Import Batch Setting** ポップアップにアップロード後、**Import** をクリックしてバッチ設定を完了します。
 
-4. インポート後、**Write Data** テーブルでさらに設定を調整可能です。
+4. インポート後、**Write Data** テーブルでさらにデータを調整できます。
 
 ## ルールのテスト
 
-EMQXダッシュボード内蔵のWebSocketクライアントを使って、Apache IoTDB Sinkとルールの動作をテストできます。
+EMQX ダッシュボード内蔵の WebSocket クライアントを使って、Apache IoTDB Sink とルールの動作をテストできます。
 
 1. ダッシュボード左メニューの **Diagnose** -> **WebSocket Client** をクリックします。
 
-2. 現在のEMQXインスタンスの接続情報を入力します。
+2. 現在の EMQX インスタンスの接続情報を入力します。
 
-   - ローカルでEMQXを実行している場合はデフォルト値を使用可能です。
-   - 認証設定を変更している場合は、ユーザー名とパスワードを入力してください。
+   - ローカルで EMQX を実行している場合はデフォルト値を使用できます。
+   - 認証設定などでデフォルト設定を変更している場合は、ユーザー名やパスワードを入力してください。
 
-3. **Connect** をクリックしてクライアントをEMQXに接続します。
+3. **Connect** をクリックしてクライアントを EMQX インスタンスに接続します。
 
-4. ページ下部のパブリッシュエリアに移動し、メッセージ内にデバイスIDを指定して以下を入力します：
+4. 下にスクロールしてパブリッシュエリアに移動し、メッセージ内にデバイス ID を指定して以下を入力します：
 
    - **Topic**：`root/sg27`
 
      :::tip
 
-     トピックが`root`で始まらない場合、自動的に`root.`がプレフィックスされます。例えば`test/sg27`にメッセージをパブリッシュすると、デバイス名は`root.test.sg27`になります。ルールとトピックの設定が正しく、該当トピックのメッセージがSinkに転送されるようにしてください。
+     トピックが `root` で始まらない場合、自動的に `root` がプレフィックスされます。例えば `test/sg27` にメッセージをパブリッシュすると、デバイス名は `root.test.sg27` になります。ルールとトピックの設定が正しく、該当トピックのメッセージが Sink に転送されるようにしてください。
 
      :::
 
    - **Payload**：
 
      ```json
-     {
+      {
        "value": "37.6",
        "device_id": "root.sg27"
-     }
+      }
      ```
-
-     ::: tip
-
-     `Write Data` テンプレートは以下の通りです：
-
+     
+      ::: tip
+     
+      `Write Data` テンプレートは以下の通りです：
+     
      ```
-     now, "temp", float, "${payload.value}"
+      now, "temp", float, "${payload.value}"
      ```
-
-     :::
+     
+      :::
 
    - **QoS**：`2`
 
 7. **Publish** をクリックしてメッセージを送信します。
 
-   Sinkとルールが正常に作成されていれば、メッセージは指定したApache IoTDBの時系列テーブルにパブリッシュされているはずです。
+   Sink とルールが正常に作成されていれば、メッセージは指定された時系列テーブルにパブリッシュされているはずです。
 
-8. IoTDBのコマンドラインインターフェースでメッセージを確認します。上記のDocker環境の場合、以下のコマンドでサーバーに接続できます：
+8. IoTDB のコマンドラインインターフェースでメッセージを確認します。上記の Docker 環境を使用している場合は、以下のコマンドでサーバーに接続できます：
 
    ```shell
-   $ docker exec -ti iotdb-service /iotdb/sbin/start-cli.sh -h iotdb-service
+       $ docker exec -ti iotdb-service /iotdb/sbin/start-cli.sh -h iotdb-service
    ```
 
 9. コンソールで以下を入力します：
@@ -349,27 +349,27 @@ EMQXダッシュボード内蔵のWebSocketクライアントを使って、Apac
 
 ## 高度な設定
 
-このセクションでは、コネクターのパフォーマンスを最適化し、特定のシナリオに応じた動作をカスタマイズするための高度な設定オプションを説明します。コネクター作成時に**Advanced Settings**を展開し、ビジネスニーズに応じて以下の設定を行えます。
+このセクションでは、コネクターのパフォーマンス最適化や特定シナリオに応じたカスタマイズが可能な高度な設定オプションを説明します。コネクター作成時に **Advanced Settings** を展開し、ビジネスニーズに応じて以下の設定を行えます。
 
 | 項目                     | 説明                                                         | 推奨値             |
 | ------------------------ | ------------------------------------------------------------ | ------------------ |
-| HTTP Pipelining          | サーバーに対して連続して応答を待たずに送信可能なHTTPリクエスト数を指定します。正の整数値で最大パイプライン数を表します。<br />`1`の場合は従来のリクエスト-レスポンスモデルで、各リクエスト送信後に応答待ちを行います。値を大きくすると複数リクエストをバッチ送信でき、ラウンドトリップ時間を削減しネットワークリソースを効率的に利用可能です。 | `100`              |
-| Pool Type                | EMQXとApache IoTDB間のコネクション管理・分配のアルゴリズム戦略を定義します。<br />`random`は利用可能なコネクションプールからランダムに選択し、シンプルで均等な分配を提供します。<br />`hash`はハッシュアルゴリズムによりリクエストを一貫して特定のコネクションにマッピングし、クライアントIDやトピック名に基づくロードバランシングなど決定論的分配に適します。<br />**注意**：適切なプールタイプはユースケースや分配特性に依存します。 | `random`           |
-| Connection Pool Size     | Apache IoTDBサービスとの接続プールで維持可能な同時接続数を指定します。システムのスケーラビリティとパフォーマンス管理に役立ちます。<br />**注意**：適切なサイズはシステムリソース、ネットワークレイテンシ、ワークロードに依存します。大きすぎるとリソース枯渇、小さすぎるとスループット制限の可能性があります。 | `8`                |
-| Connect Timeout          | EMQXがApache IoTDB HTTPサーバーへの接続確立を試みる最大待機時間（秒）を指定します。<br />**注意**：適切なタイムアウト設定はシステム性能とリソース利用のバランスに重要です。様々なネットワーク条件でテストし最適値を見つけてください。 | `15`               |
-| HTTP Request Max Retries | EMQXとApache IoTDB間の通信でHTTPリクエストが失敗した場合に再試行する最大回数を指定します。 | `2`                |
-| Start Timeout            | コネクターが自動起動したリソースの正常状態到達を待つ最大時間（秒）を指定します。リソース作成リクエストに応答する前に、接続先リソース（例：Apache IoTDBのデータベースインスタンス）が完全に稼働し準備できていることを確認するための設定です。 | `5`                |
-| Buffer Pool Size         | EMQXとApache IoTDB間のイグレス型ブリッジでデータフロー管理に割り当てるバッファワーカープロセス数を指定します。これらのワーカーはデータ送信前に一時的にデータを保持・処理します。イングレス（インバウンド）専用のブリッジでは不要なため`0`に設定可能です。 | `18`               |
-| Request TTL              | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。バッファリング開始からこのTTLを超えた場合、または送信後にApache IoTDBからタイムリーな応答やアックを受け取れなかった場合、リクエストは期限切れと見なされます。 | `45`               |
-| Health Check Interval    | コネクターがApache IoTDB接続の自動ヘルスチェックを行う間隔（秒）を指定します。 | `15`               |
-| Max Buffer Queue Size    | Apache IoTDBデータ統合における各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーはIoTDBへのデータ送信前にデータを一時保持し、データフローを効率化します。システム性能やデータ転送要件に応じて調整してください。 | `265`              |
-| Query Mode               | メッセージ送信要件に応じて`asynchronous`または`synchronous`のクエリモードを選択します。非同期モードではIoTDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがIoTDB到達前にメッセージを受信する可能性があります。 | `Async`            |
-| Inflight Window          | 「インフライトクエリ」とは開始済みで応答やアックをまだ受け取っていないクエリを指します。コネクターがApache IoTDBと通信する際に同時に存在可能なインフライトクエリの最大数を制御します。<br />`query_mode`が`async`の場合、このパラメータは特に重要です。同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は`1`に設定してください。 | `100`              |
+| HTTP Pipelining          | サーバーに対して連続して応答を待たずに送信可能な HTTP リクエスト数を指定します。<br />正の整数値で最大パイプライン数を表します。<br />`1` は従来のリクエスト-レスポンスモデルで、1リクエスト送信後に応答を待ってから次を送信します。<br />値を大きくすると複数リクエストをバッチ送信でき、ネットワークリソースの効率的利用と往復時間の短縮が可能です。 | `100`              |
+| Pool Type                | EMQX と Apache IoTDB 間のコネクション管理・分配のアルゴリズム戦略を定義します。<br />`random` は利用可能なコネクションプールからランダムに選択し、シンプルかつ均等な分配を実現します。<br />`hash` はハッシュアルゴリズムでリクエストを一貫して特定コネクションにマッピングし、クライアント ID やトピック名に基づく負荷分散など決定的な分配が必要な場合に適します。<br />**注意**：適切なプールタイプはユースケースや分配特性によります。 | `random`           |
+| Connection Pool Size     | Apache IoTDB サービスとのコネクションプール内で維持可能な同時接続数を指定します。<br />システムのスケーラビリティとパフォーマンス管理に寄与します。<br />**注意**：適切なサイズはシステムリソース、ネットワークレイテンシ、ワークロードに依存します。大きすぎるとリソース枯渇、小さすぎるとスループット制限の恐れがあります。 | `8`                |
+| Connect Timeout          | EMQX が Apache IoTDB HTTP サーバーへの接続確立を試みる最大待機時間（秒）を指定します。<br />**注意**：適切なタイムアウト設定はシステム性能とリソース利用のバランスに重要です。様々なネットワーク条件下でテストし最適値を決定してください。 | `15`               |
+| HTTP Request Max Retries | EMQX と Apache IoTDB 間の通信で HTTP リクエストが失敗した場合の最大再試行回数を指定します。 | `2`                |
+| Start Timeout            | 自動起動されたリソースが正常状態になるまで待機する最大時間（秒）を指定します。<br />この設定により、Apache IoTDB のデータベースインスタンスなど接続先リソースが完全に稼働しデータ処理準備が整うまで操作を進めないようにします。 | `5`                |
+| Buffer Pool Size         | EMQX と Apache IoTDB 間のイーグレス型ブリッジでデータフロー管理に割り当てるバッファワーカープロセス数を指定します。<br />これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへの送信を円滑にします。イングレスのみのブリッジでは「0」に設定可能です。 | `18`               |
+| Request TTL              | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。<br />リクエストがこの TTL を超えてバッファに滞留するか、送信後に Apache IoTDB からの応答やアックがタイムリーに得られない場合、リクエストは期限切れとみなされます。 | `45`               |
+| Health Check Interval    | Apache IoTDB への接続の自動ヘルスチェックを行う間隔（秒）を指定します。 | `15`               |
+| Max Buffer Queue Size    | Apache IoTDB データ統合における各バッファワーカーがバッファリング可能な最大バイト数を指定します。<br />バッファワーカーはデータを一時保存し、効率的なデータフローを実現します。システム性能やデータ転送要件に応じて調整してください。 | `265`              |
+| Query Mode               | メッセージ送信の最適化のため、`asynchronous`（非同期）または `synchronous`（同期）クエリモードを選択できます。<br />非同期モードでは IoTDB への書き込みが MQTT メッセージのパブリッシュ処理をブロックしませんが、クライアントが IoTDB 到着前にメッセージを受信する可能性があります。 | `Async`            |
+| Inflight Window          | 「インフライトクエリ」とは、開始されたがまだ応答やアックを受け取っていないクエリを指します。<br />この設定は、Connector が Apache IoTDB と通信する際に同時に存在可能なインフライトクエリの最大数を制御します。<br />`query_mode` が `async` の場合、このパラメータは特に重要です。同一 MQTT クライアントからのメッセージを厳密な順序で処理したい場合は、この値を 1 に設定してください。 | `100`              |
 
 ## さらに詳しく
 
-EMQXはApache IoTDBとのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクから詳細をご覧ください：
+EMQX は Apache IoTDB とのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクから詳細を学べます：
 
 **ブログ：**
 
-[IoT向け時系列データベース（TSDB）：欠けていたピース](https://www.emqx.com/en/blog/time-series-database-for-iot-the-missing-piece)
+[Time-Series Database (TSDB) for IoT: The Missing Piece](https://www.emqx.com/en/blog/time-series-database-for-iot-the-missing-piece)
