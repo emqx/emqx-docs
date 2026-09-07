@@ -265,157 +265,157 @@
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-  ---
-  apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    name: filebeat-config
-    namespace: kube-logging
-    labels:
-      k8s-app: filebeat
-  data:
-    filebeat.yml: |-
-      filebeat.inputs:
-      - type: container
-        paths:
-          # The log path of the EMQX container on the host
-          - /var/log/containers/^emqx.*.log
-        processors:
-          - add_kubernetes_metadata:
-              host: ${NODE_NAME}
-              matchers:
-              - logs_path:
-                  logs_path: "/var/log/containers/"
-      output.logstash:
-        hosts: ["logstash:5044"]
-        enabled: true
-  ---
-  apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: filebeat
-    namespace: kube-logging
-    labels:
-      k8s-app: filebeat
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  kind: ClusterRole
-  metadata:
-    name: filebeat
-    labels:
-      k8s-app: filebeat
-  rules:
-  - apiGroups: [""]
-    resources:
-    - namespaces
-    - pods
-    verbs:
-    - get
-    - watch
-    - list
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  kind: ClusterRoleBinding
-  metadata:
-    name: filebeat
-  subjects:
-  - kind: ServiceAccount
-    name: filebeat
-    namespace: kube-logging
-  roleRef:
-    kind: ClusterRole
-    name: filebeat
-    apiGroup: rbac.authorization.k8s.io
-  ---
-  apiVersion: apps/v1
-  kind: DaemonSet
-  metadata:
-    name: filebeat
-    namespace: kube-logging
-    labels:
-      k8s-app: filebeat
-  spec:
-    selector:
-      matchLabels:
-        k8s-app: filebeat
-    template:
-      metadata:
-        labels:
-          k8s-app: filebeat
-      spec:
-        serviceAccountName: filebeat
-        terminationGracePeriodSeconds: 30
-        containers:
-        - name: filebeat
-          image: docker.io/kubeimages/filebeat:7.9.3
-          args: [
-            "-c", "/etc/filebeat.yml",
-            "-e","-httpprof","0.0.0.0:6060"
-          ]
-          env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: ELASTICSEARCH_HOST
-            value: elasticsearch
-          - name: ELASTICSEARCH_PORT
-            value: "9200"
-          securityContext:
-            runAsUser: 0
-          resources:
-            limits:
-              memory: 1000Mi
-              cpu: 1000m
-            requests:
-              memory: 100Mi
-              cpu: 100m
-          volumeMounts:
-          - name: config
-            mountPath: /etc/filebeat.yml
-            readOnly: true
-            subPath: filebeat.yml
-          - name: data
-            mountPath: /usr/share/filebeat/data
-          - name: varlibdockercontainers
-            mountPath: /data/var/
-            readOnly: true
-          - name: varlog
-            mountPath: /var/log/
-            readOnly: true
-          - name: timezone
-            mountPath: /etc/localtime
-        volumes:
-        - name: config
-          configMap:
-            defaultMode: 0600
-            name: filebeat-config
-        - name: varlibdockercontainers
-          hostPath:
-            path: /data/var/
-        - name: varlog
-          hostPath:
-            path: /var/log/
-        - name: inputs
-          configMap:
-            defaultMode: 0600
-            name: filebeat-inputs
-        - name: data
-          hostPath:
-            path: /data/filebeat-data
-            type: DirectoryOrCreate
-        - name: timezone
-          hostPath:
-            path: /etc/localtime
+   ---
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: filebeat-config
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   data:
+     filebeat.yml: |-
+       filebeat.inputs:
+       - type: container
+         paths:
+           # The log path of the EMQX container on the host
+           - /var/log/containers/^emqx.*.log
+         processors:
+           - add_kubernetes_metadata:
+               host: ${NODE_NAME}
+               matchers:
+               - logs_path:
+                   logs_path: "/var/log/containers/"
+       output.logstash:
+         hosts: ["logstash:5044"]
+         enabled: true
+   ---
+   apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+     name: filebeat
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   ---
+   apiVersion: rbac.authorization.k8s.io/v1beta1
+   kind: ClusterRole
+   metadata:
+     name: filebeat
+     labels:
+       k8s-app: filebeat
+   rules:
+   - apiGroups: [""]
+     resources:
+     - namespaces
+     - pods
+     verbs:
+     - get
+     - watch
+     - list
+   ---
+   apiVersion: rbac.authorization.k8s.io/v1beta1
+   kind: ClusterRoleBinding
+   metadata:
+     name: filebeat
+   subjects:
+   - kind: ServiceAccount
+     name: filebeat
+     namespace: kube-logging
+   roleRef:
+     kind: ClusterRole
+     name: filebeat
+     apiGroup: rbac.authorization.k8s.io
+   ---
+   apiVersion: apps/v1
+   kind: DaemonSet
+   metadata:
+     name: filebeat
+     namespace: kube-logging
+     labels:
+       k8s-app: filebeat
+   spec:
+     selector:
+       matchLabels:
+         k8s-app: filebeat
+     template:
+       metadata:
+         labels:
+           k8s-app: filebeat
+       spec:
+         serviceAccountName: filebeat
+         terminationGracePeriodSeconds: 30
+         containers:
+         - name: filebeat
+           image: docker.io/kubeimages/filebeat:7.9.3
+           args: [
+             "-c", "/etc/filebeat.yml",
+             "-e","-httpprof","0.0.0.0:6060"
+           ]
+           env:
+           - name: NODE_NAME
+             valueFrom:
+               fieldRef:
+                 fieldPath: spec.nodeName
+           - name: ELASTICSEARCH_HOST
+             value: elasticsearch
+           - name: ELASTICSEARCH_PORT
+             value: "9200"
+           securityContext:
+             runAsUser: 0
+           resources:
+             limits:
+               memory: 1000Mi
+               cpu: 1000m
+             requests:
+               memory: 100Mi
+               cpu: 100m
+           volumeMounts:
+           - name: config
+             mountPath: /etc/filebeat.yml
+             readOnly: true
+             subPath: filebeat.yml
+           - name: data
+             mountPath: /usr/share/filebeat/data
+           - name: varlibdockercontainers
+             mountPath: /data/var/
+             readOnly: true
+           - name: varlog
+             mountPath: /var/log/
+             readOnly: true
+           - name: timezone
+             mountPath: /etc/localtime
+         volumes:
+         - name: config
+           configMap:
+             defaultMode: 0600
+             name: filebeat-config
+         - name: varlibdockercontainers
+           hostPath:
+             path: /data/var/
+         - name: varlog
+           hostPath:
+             path: /var/log/
+         - name: inputs
+           configMap:
+             defaultMode: 0600
+             name: filebeat-inputs
+         - name: data
+           hostPath:
+             path: /data/filebeat-data
+             type: DirectoryOrCreate
+         - name: timezone
+           hostPath:
+             path: /etc/localtime
    ```
 
 2. 等待 Filebeat 就绪。运行以下 `kubectl get` 命令查看 Filebeat Pod 的状态，确保 `STATUS` 为 `Running`。
 
    ```bash
-  $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
-  NAME             READY   STATUS    RESTARTS   AGE
-  filebeat-82d2b   1/1     Running   0          45m
-  filebeat-vwrjn   1/1     Running   0          45m
+   $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
+   NAME             READY   STATUS    RESTARTS   AGE
+   filebeat-82d2b   1/1     Running   0          45m
+   filebeat-vwrjn   1/1     Running   0          45m
    ```
 
 ### 部署 Logstash
