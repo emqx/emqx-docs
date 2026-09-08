@@ -146,7 +146,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_rocketmq`。
    - **服务器列表**：输入 `127.0.0.1:9876`。
-   - **命名空间**：此处留空。如果您的 RocketMQ 服务配置了命名空间，则必须填写此项。
+   - **RocketMQ 命名空间**：填写 RocketMQ 服务中配置的命名空间。如果使用阿里云 RocketMQ，请填写实例 ID。如果 RocketMQ 服务未配置命名空间，请将此项留空。
    - **Accesskey**、**Secretkey** 与**安全令牌**：此处留空，或根据您的 RocketMQ 实际配置填写。
 4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 RocketMQ 服务器。
