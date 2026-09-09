@@ -69,6 +69,8 @@
 
 - [#17222](https://github.com/emqx/emqx/pull/17222) EMQX 新增与 Bigtable 的数据集成，支持向 Bigtable 追加数据。
 
+- EMQX 新增与达梦数据库（DM8）的数据集成，通过 ODBC 驱动将 MQTT 消息写入达梦，支持批量参数化写入（`odbc:param_query`）与连接池/健康检查。
+
 - [#17547](https://github.com/emqx/emqx/pull/17547) Kafka Producer 和 Consumer 连接器新增 AWS IAM Roles Anywhere 支持。可将连接器配置为使用凭据辅助进程公开的 HTTP 端点。
 
   凭据辅助进程必须处于运行状态，并且 EMQX 能够访问该进程。详情请参阅 [AWS IAM Roles Anywhere 凭据辅助工具文档](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html#credential-helper-serve)。

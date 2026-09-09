@@ -69,6 +69,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17222](https://github.com/emqx/emqx/pull/17222) Added a Bigtable data integration that supports appending data to Bigtable.
 
+- Added a Dameng (DM8) data integration: write MQTT messages into a Dameng database via the ODBC driver, with batched parameterized writes (`odbc:param_query`) and a connection pool with health checks.
+
 - [#17547](https://github.com/emqx/emqx/pull/17547) Added support for AWS IAM Roles Anywhere in Kafka Producer and Consumer Connectors. The Connectors can be configured with the HTTP endpoint exposed by the credential helper process.
 
   The credential helper process must be running and accessible to EMQX. See the [AWS IAM Roles Anywhere credential helper documentation](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html#credential-helper-serve) for more information.
