@@ -115,7 +115,9 @@ The default `sync.root_keys` values are:
 - `listeners`
 - `schema_registry`
 
-The other supported values are `authentication` and `authorization`.
+You can also add `authentication` and `authorization`. These eight roots are recommended for backup synchronization.
+
+`sync.root_keys` also accepts other roots supported by the primary cluster's `/data/export` API. Unknown roots return `400 Invalid root keys`. API acceptance does not guarantee synchronization: some roots, including `node` and `rpc`, are skipped during import. Before adding another root, confirm that it can be imported and is appropriate for the secondary cluster.
 
 Rules commonly depend on connectors, actions, sources, and Schema Registry objects. If you synchronize `rule_engine`, include its dependent roots unless equivalent objects already exist on the secondary cluster. Otherwise, imports can fail or the imported rules might not work as expected.
 

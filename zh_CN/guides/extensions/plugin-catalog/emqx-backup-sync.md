@@ -115,7 +115,9 @@ HTTP 客户端不会自动跟随重定向。请将 `primary.base_url` 配置为�
 - `listeners`
 - `schema_registry`
 
-其他支持的值为 `authentication` 和 `authorization`。
+还可以添加 `authentication` 和 `authorization`。建议将这 8 个配置根用于备份同步。
+
+`sync.root_keys` 也接受主集群 `/data/export` API 支持的其他配置根。未知配置根会返回 `400 Invalid root keys`。但是，API 接受并不代表一定会同步：部分配置根（如 `node` 和 `rpc`）会在导入时被跳过。添加其他配置根前，请确认其可以导入且适用于备用集群。
 
 规则通常依赖连接器、动作、数据源和 Schema Registry 对象。如果同步 `rule_engine`，请同时包含其依赖的配置根，除非备用集群中已存在等效对象。否则，导入可能失败，或导入的规则可能无法按预期运行。
 
