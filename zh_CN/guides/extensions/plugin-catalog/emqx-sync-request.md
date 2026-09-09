@@ -10,7 +10,7 @@
 
 请求和响应流程如下：
 
-1. HTTP 调用方向 API 发送 MQTT 请求主题、响应主题、`request_id` 和 Payload。
+1. HTTP 调用方调用该 API，并在请求中提供 MQTT 请求主题、响应主题、`request_id` 和 Payload。
 2. 插件找到订阅请求主题的 MQTT 客户端，并将请求直接投递给该客户端。
 3. MQTT 客户端处理请求，并向响应主题发布响应。对于 MQTT 5，插件会将 `request_id` 作为请求消息的 Correlation Data。
 4. 如果 MQTT 5 客户端返回该 Correlation Data，插件会根据响应主题和 Correlation Data 精确匹配响应。如果响应未包含 Correlation Data，插件会将其匹配到该响应主题最早进入等待状态的请求。此回退方式适用于 MQTT 3，以及未返回 Correlation Data 的 MQTT 5 客户端。当并发请求使用同一个响应主题时，MQTT 5 客户端应返回 Correlation Data，以确保每条响应与预期请求匹配。
