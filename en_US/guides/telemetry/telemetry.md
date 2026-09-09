@@ -1,3 +1,9 @@
+---
+next:
+  text: 'Developer Guides'
+  link: '../../develop/developer-guide'
+---
+
 # Telemetry
 
 EMQ collects usage data for EMQX through its telemetry feature. This functionality helps us gain insights into how our user community interacts with EMQX, enabling us to understand usage patterns and continuously enhance our products. By sharing these metrics, you contribute to improving EMQX's performance and features.
