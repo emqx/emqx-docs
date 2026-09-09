@@ -20,12 +20,18 @@ def get_markdown_file(dir_config, base_path):
     return current_files
 
 
+def flatten_config(config):
+    if isinstance(config, dict):
+        return [item for sublist in config.values() for item in sublist]
+    return config
+
+
 if __name__ == '__main__':
     r = open(f'{docs_path}/{directory_file}', 'r')
     directory_config = json.load(r)
-    markdown_files = get_markdown_file(directory_config['cn'], f'{docs_path}/zh_CN')
-    markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
-    markdown_files += get_markdown_file(directory_config['ja'], f'{docs_path}/ja_JP')
+    markdown_files = get_markdown_file(flatten_config(directory_config['cn']), f'{docs_path}/zh_CN')
+    markdown_files += get_markdown_file(flatten_config(directory_config['en']), f'{docs_path}/en_US')
+    markdown_files += get_markdown_file(flatten_config(directory_config['ja']), f'{docs_path}/ja_JP')
 
     walk_root = f'{docs_path}/{scan_subdir}' if scan_subdir else docs_path
 
