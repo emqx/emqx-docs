@@ -16,6 +16,10 @@ This plugin persists MQTT messages to MySQL or Redis so that subscribers can ret
 
 ## Operations
 
+[Backup Sync](./plugin-catalog/emqx-backup-sync.md)
+
+This plugin periodically synchronizes selected configuration and built-in database data from a primary EMQX cluster to a secondary cluster for disaster recovery.
+
 [Hot Upgrade (Relup)](./plugin-catalog/emqx-relup.md)
 
 This plugin applies `.relup` code-change instructions to a running EMQX node, allowing operators to roll out patched releases without restarting the VM.
