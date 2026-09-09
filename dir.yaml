@@ -284,6 +284,7 @@
           path: guides/extensions/plugin-catalog
           collapsed: true
           children:
+            - guides/extensions/plugin-catalog/emqx-sync-request
             - guides/extensions/plugin-catalog/emqx-offline-messages
             - guides/extensions/plugin-catalog/emqx-relup
     - guides/extensions/exhook
