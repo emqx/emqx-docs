@@ -10,7 +10,7 @@ Before using the API, install and start `emqx_sync_request` as described in [Man
 
 The request and response flow works as follows:
 
-1. The HTTP caller sends the MQTT request topic, response topic, `request_id`, and payload to the API.
+1. The HTTP caller sends an HTTP request to the API that includes the MQTT request topic, response topic, `request_id`, and payload.
 2. The plugin finds the MQTT client subscribed to the request topic and delivers the request directly to that client.
 3. The MQTT client processes the request and publishes a response to the response topic. For MQTT 5, the plugin includes `request_id` as Correlation Data in the request message.
 4. If the MQTT 5 client returns this Correlation Data, the plugin matches the response by response topic and Correlation Data. If the response does not include Correlation Data, the plugin matches it to the oldest pending request for the response topic. This fallback applies to MQTT 3 responses and MQTT 5 responses that omit Correlation Data. When concurrent requests use the same response topic, MQTT 5 clients should return the Correlation Data to ensure that each response is matched to the intended request.
