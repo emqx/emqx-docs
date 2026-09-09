@@ -16,6 +16,10 @@
 
 ## 运维
 
+[备份同步（Backup Sync）](./plugin-catalog/emqx-backup-sync.md)
+
+该插件定期将选定的配置和内置数据库数据从主 EMQX 集群同步到备用集群，用于灾备场景。
+
 [热升级（Relup）](./plugin-catalog/emqx-relup.md)
 
 该插件在运行中的 EMQX 节点上应用 `.relup` 代码变更指令，使运维人员可以在不重启 VM 的情况下发布补丁版本。

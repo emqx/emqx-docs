@@ -285,6 +285,7 @@
           collapsed: true
           children:
             - guides/extensions/plugin-catalog/emqx-offline-messages
+            - guides/extensions/plugin-catalog/emqx-backup-sync
             - guides/extensions/plugin-catalog/emqx-relup
     - guides/extensions/exhook
 - title_en: Telemetry
