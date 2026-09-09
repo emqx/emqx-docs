@@ -345,6 +345,7 @@
     path: guides/extensions/plugin-catalog
     collapsed: true
     children:
+    - guides/extensions/plugin-catalog/6.0/emqx-sync-request
     - guides/extensions/plugin-catalog/6.0/emqx-backup-sync
     - guides/extensions/plugin-catalog/6.0/emqx-relup
     - guides/extensions/plugin-catalog/6.0/emqx-username-quota

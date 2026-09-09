@@ -8,6 +8,12 @@
 
 本页面列出的插件均维护在 [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins) 中。
 
+## 消息传输
+
+[同步请求](./plugin-catalog/6.0/emqx-sync-request.md)
+
+该插件允许 HTTP 调用方通过 EMQX REST API 发布一条 MQTT 请求，并同步等待第一条匹配的 MQTT 响应。
+
 ## 运维
 
 [热升级（Relup）](./plugin-catalog/6.0/emqx-relup.md)
