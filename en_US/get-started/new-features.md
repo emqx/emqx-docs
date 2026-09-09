@@ -6,7 +6,7 @@ description: This section lists the new features introduced in EMQX 5.2 and late
 
 This page highlights major new features supported in the current release. Note that it does not list every feature provided by EMQX.
 
-## EMQX 6.1.1 (Latest)
+## EMQX 6.x Series
 
 ### MQTT Streams
 
