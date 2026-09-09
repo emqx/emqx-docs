@@ -8,6 +8,12 @@ Some plugins remain specialized, while others may later be promoted into standar
 
 The plugins listed on this page are maintained as part of the [`emqx.git` monorepo](https://github.com/emqx/emqx/tree/master/plugins).
 
+## Message Delivery
+
+[Sync Request](./plugin-catalog/6.0/emqx-sync-request.md)
+
+This plugin lets an HTTP caller publish an MQTT request through the EMQX REST API and synchronously wait for the first matching MQTT response.
+
 ## Operations
 
 [Hot Upgrade (Relup)](./plugin-catalog/6.0/emqx-relup.md)
