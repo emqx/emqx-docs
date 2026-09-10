@@ -338,7 +338,7 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时根据下文规则组�
 
 EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management` 归为等同管理员权限的 Scope，校验错误消息中称为 `privilege scopes`。此类 Scope 会授予等同管理员的权限，与受限 Scope 组合并不能缩小账号的实际权限。在这 4 个 Scope 中，只有 `system` 可以分配给 API 密钥；其余 3 个在下文的[登录专属 Scope](#登录专属-scope) 中介绍。`mfa_management` 不是等同管理员权限的 Scope。
 
-从 EMQX 5.10.5 开始，创建或更新 API 密钥时，显式 Scope 列表必须仅包含 `system`，或仅包含不含 `system` 的 Scope。如果创建或更新请求显式提供混合列表，EMQX 将拒绝该请求并返回 HTTP 400。错误消息以 `Privilege scopes cannot be combined with other scopes` 开头。创建请求被拒绝时不会创建密钥，更新请求被拒绝时则保留密钥的原有设置。省略 `scopes` 或提供空列表 `[]` 时，不触发此限制。
+从 EMQX 5.10.5 开始，通过 REST API 或 Dashboard 创建或更新 API 密钥时，显式提供的 Scope 列表必须仅包含 `system`，或仅包含不含 `system` 的 Scope。如果创建或更新请求显式提供混合列表，EMQX 将拒绝该请求并返回 HTTP 400。错误消息以 `Privilege scopes cannot be combined with other scopes` 开头。创建请求被拒绝时不会创建密钥，更新请求被拒绝时则保留密钥的原有设置。省略 `scopes` 或提供空列表 `[]` 时，不触发此限制。
 
 在 EMQX 5.10.5 之前创建且使用混合 Scope 列表的 API 密钥可以继续工作，其中 `system` 仍然有效。下次更新时，如果显式提供 `scopes`，必须拆分该列表，仅使用 `system`，或仅使用不含 `system` 的 Scope。
 
