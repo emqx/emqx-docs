@@ -245,7 +245,7 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 2. Configure the API key details:
    - **Name** (required): Enter a name for the API key.
    - **Expire At**: Leave empty for the key to never expire.
-   - **Is Enable**: Defaults to enabled.
+   - **Enabled**: Defaults to enabled.
    - **Role**: Select a role (optional, EMQX Enterprise only). See [Roles and Permissions](#roles-and-permissions).
    - **Scopes**: Select the scopes to grant (optional). If omitted, the key uses the default scopes for the selected role. See [API Scopes](#api-scopes).
    - **Note**: Optionally enter a description for the key.
