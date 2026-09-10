@@ -56,7 +56,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
 
 ### Install EMQX Using Installation Package
 
-You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
+You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 26 (Tahoe) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
 
 ::: tip
 
@@ -66,7 +66,7 @@ Considering all the runtime dependencies, it is recommended to use installation 
 
 1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
 
-2. Select the latest version `@EE_VERSION@` and select `macOS 15 arm64 / zip` from **Package Type**.
+2. Select the latest version `@EE_VERSION@` and select `macOS 26 arm64 / zip` from **Package Type**.
 
 3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
