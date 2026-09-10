@@ -42,7 +42,7 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。
 :::
 
-#### 使用 API 密钥认证
+#### API 密钥认证请求示例
 
 使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
 

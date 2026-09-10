@@ -44,7 +44,7 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 :::
 
-#### Authenticate with API Keys
+#### API Key Authentication Examples
 
 Once you have your API key and secret key, use the API key as the username and the secret key as the password for Basic Authentication.
 
@@ -245,7 +245,7 @@ You can manually create API keys on the Dashboard by navigating to **System** ->
 2. Configure the API key details:
    - **Name** (required): Enter a name for the API key.
    - **Expire At**: Leave empty for the key to never expire.
-   - **Is Enable**: Defaults to enabled.
+   - **Enabled**: Defaults to enabled.
    - **Role**: Select a role (optional). See [Roles and Permissions](#roles-and-permissions).
    - **Namespace**: The switch is off by default. For a global administrator, leaving it off creates a global API key. Turn it on and select a namespace to create the key in that namespace. A namespaced administrator can create keys only in their own namespace.
    - **Permission Mode**: For an Administrator or Viewer key, select how to assign scopes. This field is not displayed for Publisher keys, which use the role-default `publish` scope. For scope behavior and restrictions, see [API Scopes](#api-scopes).
