@@ -45,15 +45,20 @@ When you create or edit a user, the **Scopes** field is optional. If you leave i
 
 ![user_scopes](./assets/user_scopes.png)
 
-::: warning Treat broad scopes as administrator-equivalent
+::: warning Important Notice
 
-The following scopes are inherently broad and effectively grant administrator capabilities even when other scopes are not assigned:
+EMQX classifies the following scopes as administrator-equivalent scopes, referred to as `privilege scopes` in validation messages:
 
 - `system` covers configuration management (`/configs*`, `/data/*`, ...). A user holding `system` can update any configuration subtree or restore backup archives that contain stored user and API key records.
 - `user_management` lets the holder create or modify other Dashboard users, including ones with any scope set.
 - `api_key_management` lets the holder create or modify API keys, including ones with any scope set.
+- `sso_management` lets the holder rotate or reconfigure an SSO backend, which can change how administrators authenticate.
 
-Granting any of these scopes together with a restricted scope list on the same user does not reliably enforce the restriction. The user can reach restricted areas through configuration changes, backup import, or by provisioning a new account or key. Reserve these three scopes for fully trusted users, and grant only the scopes a user actually needs.
+Each listed scope grants administrator-equivalent permissions. Combining one of these scopes with a scope outside this group would not reduce the user's effective permissions.
+
+Starting from EMQX 5.10.5, an explicit scope list for a Dashboard user must contain either only administrator-equivalent scopes or only scopes outside this group. If a create or update request explicitly mixes the two groups, EMQX rejects the request with HTTP 400. The error message begins with `Privilege scopes cannot be combined with other scopes`. A rejected create request does not create the user, and a rejected update request leaves the user unchanged. `mfa_management` is outside the administrator-equivalent group. Omitting `scopes` when creating a user applies the role-derived defaults; omitting it when updating a user preserves the current scopes. Neither omission nor providing an empty list triggers this restriction.
+
+Users with mixed scope lists created before EMQX 5.10.5 continue to work, and their administrator-equivalent scopes remain effective. The next update that explicitly provides `scopes` must split the list by choosing either only administrator-equivalent scopes or only scopes outside this group.
 
 :::
 

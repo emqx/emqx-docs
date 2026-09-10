@@ -2,7 +2,7 @@
 
 EMQX 提供了管理监控 REST API，这些 API 遵循 OpenAPI (Swagger) 3.0 规范。
 
-EMQX 服务启动后，您可以访问 [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) 来查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。默认情况下，Dashboard 配置下的 `swagger_support` 设置为 `true`，表示启用 Swagger UI 支持，即开启所有 swagger 相关的功能，例如生成交互式 API 文档。您也可以将它设置为 `false` 以禁用此功能。
+EMQX 服务启动后，您可以访问 [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) 来查看 API 的文档。还可以直接在 Swagger UI 上尝试执行一些 API。默认情况下，Dashboard 配置下的 `swagger_support` 设置为 `true`，表示启用 Swagger UI 支持，即开启所有 Swagger 相关功能，例如生成交互式 API 文档。您也可以将它设置为 `false` 以禁用此功能。更多信息参见 [Dashboard 配置](./configuration/dashboard.md)。
 
 本节将指导您快速开始使用 EMQX REST API。
 
@@ -42,7 +42,7 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。请注意，基于角色的 API 凭据仅适用于 EMQX 企业版。
 :::
 
-#### 使用 API 密钥认证
+#### API 密钥认证请求示例
 
 使用生成的 API Key 以及 Secret Key 分别作为 Basic 认证的用户名与密码，请求示例如下：
 
@@ -229,6 +229,8 @@ POST http://your-emqx-address:8483/api/v5/login
 
 ## API 密钥管理
 
+本节介绍如何创建和管理 API 密钥，以及如何配置角色和 Scope。
+
 ### 创建 API 密钥
 
 #### Dashboard
@@ -241,7 +243,7 @@ POST http://your-emqx-address:8483/api/v5/login
    - **到期时间**：留空表示永不过期。
    - **是否启用**：默认为启用。
    - **角色**：选择角色（可选），参见[角色与权限](#角色与权限)。
-   - **权限范围**：选择授予的范围（可选），默认拥有全部范围权限，参见 [API 范围（Scope）](#api-范围scope)。
+   - **Scopes**：选择要授予的 Scope（可选）。省略时，密钥使用所选角色的默认 Scope。参见 [API 范围（Scope）](#api-范围scope)。
    - **备注**：可选，填写密钥的描述信息。
 3. 单击**确认**，API 密钥和 Secret Key 将显示在**创建成功**对话框中。
 
@@ -270,7 +272,7 @@ api_key {
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
 - **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围scope)，多个范围用英文逗号分隔。省略时密钥默认拥有全部用户可见范围（管理员场景下的向后兼容行为）。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。
+- **Scopes（可选）**：指定密钥可访问的 [API 范围](#api-范围scope)，多个范围用英文逗号分隔。省略时，密钥使用其角色的默认 Scope：管理员和查看者使用 10 个 API 密钥 Scope，发布者仅使用 `publish`。登录专属 Scope（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些 Scope，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些 Scope。从 EMQX 5.10.5 开始，如果条目同时包含 `system` 和其他可用于 API 密钥的 Scope，EMQX 会删除 `system`、保留其他 Scope、记录警告，并继续创建或更新密钥。
 
 例如：
 
@@ -288,7 +290,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 ### 角色与权限
 
-在 EMQX 企业版中，REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下 3 个预定义的角色：
+REST API 实现了基于角色的访问控制，API 密钥创建时，可以分配以下 3 个预定义的角色：
 
 - **管理员**：此角色可以访问所有资源，未指定角色时默认使用此值。对应的角色标识为 `administrator`。
 - **查看者**：此角色只能查看资源和数据，对应于 REST API 中的所有 GET 请求。对应的角色标识为 `viewer`。
@@ -311,9 +313,13 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 在微服务与集成场景中，不同的外部系统通常只需要访问 EMQX 的一部分管理接口：监控平台只需要 `monitoring` 范围的接口，规则发布服务只需要 `data_integration` 范围的接口，集群运维工具只需要 `cluster_operations` 范围的接口。通过 Scope，您可以按最小权限原则分配密钥，降低单个密钥被泄露带来的影响面。
 
-#### 内置范围
+::: tip 提示
+Scope 名称是稳定标识符，不会随 EMQX 版本升级而改变。即使某个 API 的 OpenAPI tag 发生变化，只要使用相同的 Scope，密钥仍可正常工作。
+:::
 
-EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
+#### 内置 API 密钥 Scope
+
+EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时根据下文规则组合：
 
 | Scope | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -328,6 +334,18 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
 
+::: warning 重要提示
+
+EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management` 归为等同管理员权限的 Scope，校验错误消息中称为 `privilege scopes`。此类 Scope 会授予等同管理员的权限，与受限 Scope 组合并不能缩小账号的实际权限。在这 4 个 Scope 中，只有 `system` 可以分配给 API 密钥；其余 3 个在下文的[登录专属 Scope](#登录专属-scope) 中介绍。`mfa_management` 不是等同管理员权限的 Scope。
+
+从 EMQX 5.10.5 开始，创建或更新 API 密钥时，显式 Scope 列表必须仅包含 `system`，或仅包含不含 `system` 的 Scope。如果创建或更新请求显式提供混合列表，EMQX 将拒绝该请求并返回 HTTP 400。错误消息以 `Privilege scopes cannot be combined with other scopes` 开头。创建请求被拒绝时不会创建密钥，更新请求被拒绝时则保留密钥的原有设置。省略 `scopes` 或提供空列表 `[]` 时，不触发此限制。
+
+在 EMQX 5.10.5 之前创建且使用混合 Scope 列表的 API 密钥可以继续工作，其中 `system` 仍然有效。下次更新时，如果显式提供 `scopes`，必须拆分该列表，仅使用 `system`，或仅使用不含 `system` 的 Scope。
+
+:::
+
+#### 登录专属 Scope
+
 除上述 10 个 API 密钥 Scope 外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属 Scope，这些 Scope 不能分配给 API 密钥。有关这些 Scope 在登录用户中的分配和生效方式，请参见[登录用户权限范围](dashboard/system.md#登录用户权限范围scopes)。
 
 | Scope | 所需角色 | 用途 |
@@ -337,31 +355,22 @@ EMQX 5.10 提供 10 个 Scope，可在创建 API 密钥时自由组合：
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
 | `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
-::: tip 提示
-Scope 是稳定标识符，不会随 EMQX 版本升级而改名；即便某个 API 的 OpenAPI tag 发生变化，只要您使用的是同一个 Scope，密钥行为保持不变。
-:::
-
-::: warning 将 `system` 视为等同管理员权限
-
-`system` 覆盖配置管理端点（`/configs*`、`/data/*`、`/listeners*` 等）。持有 `system` 的密钥可以更新任意配置子树，或从备份文件中恢复 EMQX 数据。任一操作都可能更改通常由更细粒度 Scope（如 `audit`、`access_control` 或 `monitoring`）保护的设置。
-
-将 `system` 与受限 Scope 列表组合到同一个密钥上，并不能可靠地强制执行该限制。仅将 `system` 授予已具备管理员信任级别的密钥，并遵循最小权限原则，只授予该密钥实际需要的 Scope。
-
-:::
-
 Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与 Scope 模型无关。
 
 #### Scope 的默认行为
 
 `scopes` 字段在 API 密钥中的行为遵循以下规则：
 
-| `scopes` 字段的值 | 语义 |
+| 场景或值 | 语义 |
 | --- | --- |
-| **未设置**（字段不存在） | 放行所有业务端点。主要用于历史升级场景，保持与旧版本兼容。 |
-| **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
-| 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
+| 创建密钥时省略 `scopes` | 使用所选角色的默认 Scope：管理员和查看者使用 10 个 API 密钥 Scope，发布者仅使用 `publish`。 |
+| 更新密钥时省略 `scopes` | 保留密钥当前的 Scope 设置。 |
+| **空列表** `[]` | 拒绝访问所有受 Scope 保护的端点；未映射或公共端点仍可访问。 |
+| 显式列表（如 `["monitoring", "cluster_operations"]`） | 只允许访问所列 Scope 下受保护的端点。 |
 
-Bootstrap 文件中不指定 Scopes 时，密钥将显式写入所有用户可见范围（等同于管理员全权限），确保升级路径下已有的 bootstrap 文件不会因为新加了 Scope 机制而突然失去权限。
+从不支持 Scope 的版本升级后，API 密钥可能保留未设置 Scope 的兼容状态。该状态允许访问 API 密钥原本可访问的所有端点。
+
+Bootstrap 文件中省略 Scopes 时，EMQX 会写入该角色的默认 Scope。
 
 同样的三态模型也适用于 Dashboard 登录用户。当登录用户的 `scopes` 字段未设置时，用户将获得由角色推导出的默认 Scope 集：管理员获得全部 Scope（包括 4 个登录专属 Scope）；查看者获得全部 10 个 API 密钥 Scope，但不包括 4 个登录专属 Scope（含 `mfa_management`），除非显式分配。
 

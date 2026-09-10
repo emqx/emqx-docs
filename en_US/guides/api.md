@@ -1,14 +1,14 @@
 # REST API
 
-EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
+EMQX exposes an HTTP management API designed following the OpenAPI (Swagger) 3.0 specification.
 
-After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../guides/configuration/dashboard.md).
+After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](./configuration/dashboard.md).
 
-The section introduces how to work with EMQX REST API.
+This section introduces how to work with the EMQX REST API.
 
 ## Basic Path
 
-EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
+EMQX has version control on the REST API; all API paths from EMQX 5.0.0 start with `/api/v5`.
 
 ## HTTP Headers
 
@@ -32,11 +32,11 @@ EMQX follows the [HTTP Response Status Code](https://developer.mozilla.org/en-US
 
 ## Authentication
 
-EMQX's REST API supports two main methods for authentication: basic Authentication using API keys and bearer token authentication.
+EMQX's REST API supports two main methods for authentication: basic authentication using API keys and bearer token authentication.
 
 ### Basic Authentication Using API Keys
 
-In this method, you use API keys and secret keys as the username and password to authenticate your API requests. EMQX's REST API follows [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework), where these credentials are required. Before using the EMQX REST API, you must create an API key.
+In this method, you use API keys and secret keys as the username and password to authenticate your API requests. EMQX's REST API follows [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework), where these credentials are required. Before using the EMQX REST API, you must create an API key. See [API Key Management](#api-key-management) for details.
 
 ::: tip Note
 
@@ -44,47 +44,9 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 :::
 
-#### Create API Keys
+#### API Key Authentication Examples
 
-You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [API Keys](../guides/api-keys.md).
-
-You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
-
-```bash
-api_key {
-  bootstrap_file = "etc/default_api_key.conf"
-}
-```
-
-In the specified file, add multiple API keys in the format `{API Key}:{Secret Key}:{?Role}`, separated by new lines:
-
-- **API Key**: Any string as the key identifier.
-- **Secret Key**: Use a random string as the secret key.
-- **Role (optional)**: Specify the key's [role](#roles-and-permissions), applicable only in the Enterprise edition.
-
-For example:
-
-```bash
-my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
-ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
-foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
-```
-
-API keys created this way are valid indefinitely.
-
-Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key and Role will be updated.
-
-#### Roles and Permissions (Enterprise Edition)
-
-In the EMQX Enterprise edition, the REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
-
-- **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
-- **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
-- **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
-
-#### Authentication Method Using API Keys
-
-Once you have your API key and secret key, you can use them to authenticate your requests. The API key is used as the username and the secret key as the password for Basic Authentication.
+Once you have your API key and secret key, use the API key as the username and the secret key as the password for Basic Authentication.
 
 Examples in different languages:
 
@@ -231,7 +193,7 @@ axios
 :::
 ::::
 
-### Authentication Using Bearer Token
+### Bearer Token Authentication
 
 As an alternative to API key-based authentication, you can use bearer tokens for secure and programmatic access to the EMQX REST API. To obtain a bearer token, send a request to the login API endpoint as described below.
 
@@ -268,6 +230,172 @@ Once you have the bearer token, include it in the `Authorization` header of your
 ```bash
 --header "Authorization: Bearer <your-token>"
 ```
+
+## API Key Management
+
+This section describes how to create and manage API keys and configure their roles and scopes.
+
+### Create API Keys
+
+#### Dashboard
+
+You can manually create API keys on the Dashboard by navigating to **System** -> **API Key**:
+
+1. Click the **+ Create** button in the top-right corner to open the Create API Key dialog.
+2. Configure the API key details:
+   - **Name** (required): Enter a name for the API key.
+   - **Expire At**: Leave empty for the key to never expire.
+   - **Is Enable**: Defaults to enabled.
+   - **Role**: Select a role (optional, EMQX Enterprise only). See [Roles and Permissions](#roles-and-permissions).
+   - **Scopes**: Select the scopes to grant (optional). If omitted, the key uses the default scopes for the selected role. See [API Scopes](#api-scopes).
+   - **Note**: Optionally enter a description for the key.
+3. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
+
+   ::: warning Important Notice
+
+   Save the API key and secret key immediately. The secret key will not be shown again.
+
+   :::
+
+4. Click **Close** to dismiss the dialog.
+
+You can view key details by clicking its name. Use the **Edit** button to change its expiration, status, role, scopes, or note. Use the **Delete** button to remove the key.
+
+#### Bootstrap File
+
+You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
+
+```bash
+api_key {
+  bootstrap_file = "etc/default_api_key.conf"
+}
+```
+
+In the specified file, add multiple API keys in the format `{API Key}:{Secret Key}:{?Role}:{?Scopes}`, separated by new lines:
+
+- **API Key**: Any string as the key identifier.
+- **Secret Key**: Use a random string as the secret key.
+- **Role (optional)**: Specify the key's [role](#roles-and-permissions), applicable only in the Enterprise edition.
+- **Scopes (optional)**: Specify the [API scopes](#api-scopes) the key can access as a comma-separated list. When omitted, the key uses the default scopes for its role: the 10 API-key scopes for an Administrator or Viewer, or `publish` for a Publisher. Login-only scopes (`user_management`, `mfa_management`, `sso_management`, and `api_key_management`) are not valid for API keys. If a bootstrap entry contains these scopes, EMQX removes them, logs a warning, and continues to create or update the key. Starting from EMQX 5.10.5, if an entry contains both `system` and another valid API-key scope, EMQX removes `system`, keeps the other scopes, logs a warning, and continues to create or update the key.
+
+For example:
+
+```bash
+my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
+ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
+foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
+integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
+rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+```
+
+API keys created this way are valid indefinitely.
+
+Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key, Role, and Scopes will be updated.
+
+### Roles and Permissions
+
+The REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
+
+- **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
+- **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
+- **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
+
+::: tip Note
+`publisher` keys only accept the `publish` scope. When assigning scopes, any scope other than `publish` returns HTTP 400. If you change a key's role to `publisher`, include `"scopes": ["publish"]` or an empty list in the same request. Otherwise, the request is rejected if the key's existing scopes contain anything other than `publish`.
+:::
+
+### API Scopes
+
+Scopes are a per-key permission dimension that declares which business areas of the REST API a key can access. Scopes and [Roles and Permissions](#roles-and-permissions) are independent and enforced together, forming two layers of access control:
+
+| Dimension | Purpose | Granularity |
+| --- | --- | --- |
+| **Role** | Limits HTTP methods, such as read-only, write, or publish-only operations. | Request action |
+| **Scope** | Limits the API domain, such as clients, rules, or monitoring. | Resource area |
+
+Every request must pass both the role check and the scope check. Scopes let you apply the principle of least privilege by granting an integration access only to the API areas it needs.
+
+::: tip
+Scope names are stable identifiers that do not change across EMQX upgrades. Even if a route's OpenAPI tag is renamed, a key configured with the same scope keeps working.
+:::
+
+#### Built-in API Key Scopes
+
+EMQX 5.10 provides 10 scopes for API keys:
+
+| Scope | Name | Typical API areas |
+| --- | --- | --- |
+| `connections` | Connection management | `/clients`, `/subscriptions`, `/topics`, `/banned`, `/retainer`, `/file_transfer`, `/mqtt/delayed`, `/mqtt/topic_rewrite`, ... |
+| `publish` | Message publishing | `/publish`, `/publish/bulk` |
+| `data_integration` | Data integration | `/rules`, `/connectors`, `/actions`, `/schema_registry`, `/schema_validations`, `/message_transformations`, `/exhooks`, `/ai/*` |
+| `access_control` | Access control | `/authentication`, `/authorization/*` |
+| `gateways` | Protocol gateways | `/gateways`, `/coap/*`, `/lwm2m/*`, `/gcp_devices`, ... |
+| `monitoring` | Monitoring data | `/metrics`, `/stats`, `/monitor*`, `/alarms`, `/trace`, `/slow_subscriptions`, `/telemetry`, `/prometheus/{auth,stats,data_integration,...}`, ... |
+| `cluster_operations` | Cluster operations | `/cluster*`, `/nodes`, `/load_rebalance`, `/node_eviction`, `/mt/*`, ... |
+| `system` | System configuration | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
+| `audit` | Audit log | `/audit` |
+| `license` | License | `/license*` |
+
+::: warning Important Notice
+
+EMQX classifies `system`, `user_management`, `api_key_management`, and `sso_management` as administrator-equivalent scopes, referred to as `privilege scopes` in validation messages. Combining these scopes with restricted scopes would not reduce the account's effective permissions. Of the four scopes, only `system` can be assigned to API keys; the other three are described under [Login-Only Scopes](#login-only-scopes). `mfa_management` is not an administrator-equivalent scope.
+
+Starting from EMQX 5.10.5, an explicit scope list used to create or update an API key must contain either `system` alone or scopes that do not include `system`. If a create or update request explicitly provides a mixed list, EMQX rejects the request with HTTP 400. The error message begins with `Privilege scopes cannot be combined with other scopes`. A rejected create request does not create the key, and a rejected update request leaves the key unchanged. Omitting `scopes` or providing an empty list `[]` does not trigger this restriction.
+
+API keys with mixed scope lists created before EMQX 5.10.5 continue to work, with `system` remaining effective. The next update that explicitly provides `scopes` must split the list by using either `system` alone or scopes that do not include `system`.
+
+:::
+
+#### Login-Only Scopes
+
+In addition to the 10 API-key scopes, Dashboard login users have four login-only scopes that apply only to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](./dashboard/system.md#login-user-scopes).
+
+| Scope | Required role | Purpose |
+| --- | --- | --- |
+| `user_management` | Administrator | Manage Dashboard users. |
+| `sso_management` | Administrator | Manage SSO backends and SSO user records. |
+| `api_key_management` | Administrator | Manage API keys. |
+| `mfa_management` | Any | Manage MFA for the user's own account; administrators can manage other users' MFA. |
+
+Dashboard login, SSO callbacks, and API key management endpoints (for example, `/api_key`) do not accept API key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary and is unrelated to the scope model.
+
+#### Default Behavior of `scopes`
+
+The `scopes` field on an API key has the following behavior:
+
+| Context or value | Meaning |
+| --- | --- |
+| Omitted when creating a key | Uses the default scopes for the selected role: the 10 API-key scopes for an Administrator or Viewer, or `publish` for a Publisher. |
+| Omitted when updating a key | Preserves the key's current scope setting. |
+| **Empty list** `[]` | Denies access to all scope-protected endpoints. Unmapped or public endpoints remain accessible. |
+| **Explicit list**, such as `["monitoring", "cluster_operations"]` | Allows access only to scope-protected endpoints in the listed scopes. |
+
+API keys upgraded from a version without scope support can retain a legacy unset scope value. For backward compatibility, this value allows access to all endpoints that API keys are otherwise allowed to access.
+
+When a bootstrap entry omits Scopes, EMQX stores the default scopes for its role.
+
+#### List Available Scopes
+
+EMQX provides two endpoints for querying available scopes:
+
+- `GET /api/v5/api_key_scopes`: Returns the 10 scopes that can be assigned to API keys. Authenticate with an API key.
+- `GET /api/v5/user_scopes`: Returns all scopes available to Dashboard login users, including the four login-only scopes. Authenticate with a bearer token.
+
+```bash
+# API key scopes
+curl -u "$API_KEY:$API_SECRET" http://localhost:18083/api/v5/api_key_scopes
+
+# Login user scopes (requires a bearer token)
+curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
+```
+
+#### Assign Scopes
+
+You can assign scopes through any of the following methods:
+
+- **Dashboard**: When creating or editing a key under **System** -> **API Key**, select the scopes to grant.
+- **REST API**: Include `"scopes": ["monitoring", "cluster_operations"]` in the request body when creating or updating a key.
+- **Bootstrap file**: Provide a comma-separated scope list as the fourth segment of each line, for example, `my-app:my-secret:administrator:monitoring,cluster_operations`.
 
 ## Pagination
 

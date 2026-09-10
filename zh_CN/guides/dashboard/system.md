@@ -44,15 +44,20 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 ![user_scopes](./assets/user_scopes.png)
 
-::: warning 将宽泛 Scope 视为等同管理员权限
+::: warning 重要提示
 
-以下 Scope 天然覆盖范围较广，即使未分配其他 Scope，也实际上授予管理员能力：
+EMQX 将以下 Scope 归为等同管理员权限的 Scope，校验错误消息中称为 `privilege scopes`：
 
 - `system` 覆盖配置管理（`/configs*`、`/data/*` 等）。持有 `system` 的用户可以更新任意配置子树，或恢复包含已存储用户和 API 密钥记录的备份文件。
 - `user_management` 允许持有者创建或修改其他 Dashboard 用户，包括具有任意 Scope 集的用户。
 - `api_key_management` 允许持有者创建或修改 API 密钥，包括具有任意 Scope 集的密钥。
+- `sso_management` 允许持有者轮换或重新配置 SSO 后端，从而改变管理员的身份认证方式。
 
-将其中任一 Scope 与受限 Scope 列表组合到同一个用户上，并不能可靠地强制执行该限制。该用户可通过配置变更、备份恢复，或为自己创建新的账号或密钥来访问受限区域。仅将这三个 Scope 授予您完全信任的用户，并遵循最小权限原则，只授予用户实际需要的具体 Scope。
+上述每个 Scope 都会授予等同管理员的权限。将其中任一 Scope 与该组之外的 Scope 组合，并不能缩小用户的实际权限。
+
+从 EMQX 5.10.5 开始，Dashboard 用户的显式 Scope 列表必须仅包含等同管理员权限的 Scope，或仅包含该组之外的 Scope。如果创建或更新请求显式混用两组 Scope，EMQX 将拒绝该请求并返回 HTTP 400。错误消息以 `Privilege scopes cannot be combined with other scopes` 开头。创建请求被拒绝时不会创建用户，更新请求被拒绝时则保留用户的原有设置。`mfa_management` 不属于等同管理员权限的 Scope。创建用户时省略 `scopes` 会使用角色推导出的默认 Scope，更新用户时省略 `scopes` 会保留当前 Scope。省略该字段或提供空列表均不会触发此限制。
+
+在 EMQX 5.10.5 之前创建且使用混合 Scope 列表的用户可以继续工作，其中等同管理员权限的 Scope 仍然有效。下次更新时，如果显式提供 `scopes`，必须拆分该列表，仅使用等同管理员权限的 Scope，或仅使用该组之外的 Scope。
 
 :::
 
