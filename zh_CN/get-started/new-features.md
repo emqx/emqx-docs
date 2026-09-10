@@ -4,6 +4,22 @@
 
 ## EMQX 6.x 系列
 
+### 订阅过滤器
+
+EMQX 6.2 为 MQTT 5.0 客户端引入了订阅过滤器。订阅者在主题过滤器的 `?` 后添加过滤条件。发布者无需在主题中包含该条件，只需使用普通主题名称，并通过 MQTT 5.0 User Properties 携带待判断的值。只有消息主题和过滤条件均匹配时，EMQX 才会投递消息。
+
+例如，订阅 `sensor/+/temperature?location=roomA&value>25` 可匹配发布到 `sensor/1/temperature`，且 User Properties 为 `location=roomA` 和 `value=26` 的消息。
+
+#### 功能亮点
+
+- **仅投递符合条件的消息**：先匹配消息主题，再根据 User Properties 判断过滤条件。
+- **灵活的过滤表达式**：支持等值和数值比较运算符，并可使用 `&` 组合多个条件。
+- **降低网络与客户端负载**：避免向客户端投递不符合订阅者过滤条件的消息。
+- **可选启用并保持向后兼容**：通过 `mqtt.subscription_message_filter` 控制该功能。该功能默认关闭；关闭时，EMQX 将 `?` 作为主题过滤器的一部分处理。
+- **内置可观测性**：过滤条件不匹配时，EMQX 会触发原因为 `subscription_filter` 的 `delivery.dropped` 事件，并通过 `delivery.dropped.filter` 指标进行统计。
+
+详细信息请参阅[订阅过滤器文档](../develop/subscription-filter/subscription-filter-concept.md)。
+
 ### MQTT 消息流
 
 MQTT 消息流为 EMQX 引入了一种可持久化、可回放的消息流模型，在保持 MQTT 发布/订阅语义不变的前提下，扩展了对历史消息存储与回放的能力。

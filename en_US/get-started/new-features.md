@@ -8,6 +8,22 @@ This page highlights major new features supported in the current release. Note t
 
 ## EMQX 6.x Series
 
+### Subscription Filters
+
+EMQX 6.2 introduces Subscription Filters for MQTT 5.0 clients. Subscribers append a filter condition to the topic filter after `?`. Publishers do not include the condition in the topic; they use regular topic names and provide the values to evaluate through MQTT 5.0 User Properties. EMQX delivers a message only when both the topic and condition match.
+
+For example, the subscription `sensor/+/temperature?location=roomA&value>25` matches a message published to `sensor/1/temperature` with the User Properties `location=roomA` and `value=26`.
+
+#### Feature Highlights
+
+- **Deliver Only Matching Messages**: Match the message topic first, then evaluate the condition against its User Properties.
+- **Flexible Expressions**: Use equality and numeric comparison operators, and combine multiple conditions with `&`.
+- **Reduced Network and Client Load**: Prevent messages that do not match the subscriber's criteria from being delivered to the client.
+- **Backward-Compatible Opt-In**: Control the feature with `mqtt.subscription_message_filter`. The feature is disabled by default, and when disabled, EMQX treats `?` as part of the topic filter.
+- **Built-In Observability**: Filter mismatches are reported through the `delivery.dropped` event with reason `subscription_filter` and counted by the `delivery.dropped.filter` metric.
+
+Learn more in the [Subscription Filters documentation](../develop/subscription-filter/subscription-filter-concept.md).
+
 ### MQTT Streams
 
 MQTT Streams introduce a persistent, replayable streaming model to EMQX, extending MQTT’s real-time publish/subscribe paradigm with durable message storage and consumer-controlled replay.
