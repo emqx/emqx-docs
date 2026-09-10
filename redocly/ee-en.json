@@ -4647,6 +4647,216 @@
             "oneOf": [
               {
                 "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "emqx_tables"
                 ],
                 "type": "string"
@@ -4659,91 +4869,7 @@
               },
               {
                 "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
+                  "couchbase"
                 ],
                 "type": "string"
               },
@@ -4755,103 +4881,13 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "pgsql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -4863,43 +4899,7 @@
               },
               {
                 "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -6124,6 +6124,13 @@
               "delete"
             ],
             "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "query_string": {
+            "example": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -7050,7 +7057,7 @@
             "type": "string"
           },
           "principal": {
-            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -16361,7 +16368,7 @@
             "type": "string"
           },
           "kerberos_principal": {
-            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -24131,6 +24138,10 @@
             "description": "The pool size.",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -24299,6 +24310,10 @@
             "description": "The pool size.",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -24434,6 +24449,10 @@
             "default": 8,
             "description": "The pool size.",
             "type": "integer"
+          },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
@@ -34366,7 +34385,7 @@
           },
           "session_expiry_interval": {
             "default": "2h",
-            "description": "Specifies how long the session will expire after the connection is disconnected, only for non-MQTT 5.0 connections.",
+            "description": "Specifies how long EMQX keeps a session after the client disconnects.<br/>It applies to MQTT 3.1 and 3.1.1 clients connecting with `Clean Session = false`.<br/>MQTT 5.0 clients set their own value with the `Session-Expiry-Interval` CONNECT property.<br/><br/>With the default in-memory session store, a disconnected session stays in memory for the whole<br/>interval. Allocate memory for this, or use durable sessions, which store session state on disk.",
             "example": "12m",
             "type": "string"
           },
@@ -34388,7 +34407,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.<br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
+            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.<br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized.<br/><br/>- `random`: Randomly select a subscriber for dispatch.<br/>- `round_robin`: Deliver messages to subscribers in turn within each shared subscription group. The round-robin progress is maintained per publishing client, so messages from different publishers may be delivered to the same subscriber consecutively.<br/>- `round_robin_per_group`: Similar to `round_robin`, but the round-robin progress is tracked independently on each node. This means messages published from different nodes in a cluster may be delivered to the same subscriber.<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster.<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial subscriber is chosen based on `mqtt_shared_subscription_initial_sticky_pick`.<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber.<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
             "enum": [
               "random",
               "round_robin",
@@ -34946,12 +34965,12 @@
           },
           "proxy_address_header": {
             "default": "x-forwarded-for",
-            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source IP address of the WebSocket connection is always used.",
             "type": "string"
           },
           "proxy_port_header": {
             "default": "x-forwarded-port",
-            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source port of the WebSocket connection is always used.",
             "type": "string"
           },
           "supported_subprotocols": {
@@ -39742,7 +39761,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "027C8DC12700B711",
+            "example": "E7C5A1755C22DFF5",
             "type": "string"
           },
           "status": {
@@ -41479,12 +41498,14 @@
       "emqx_telemetry_api.status": {
         "properties": {
           "enable": {
-            "default": true,
             "description": "Enable telemetry",
             "example": false,
             "type": "boolean"
           }
         },
+        "required": [
+          "enable"
+        ],
         "type": "object"
       },
       "emqx_telemetry_api.telemetry": {
@@ -43194,12 +43215,12 @@
           },
           "proxy_address_header": {
             "default": "x-forwarded-for",
-            "description": "HTTP header used to pass information about the client IP address.<br/>Relevant when the EMQX cluster is deployed behind a load-balancer.",
+            "description": "HTTP header used to pass information about the client IP address.<br/>Relevant when the EMQX cluster is deployed behind a load-balancer.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source IP address of the WebSocket connection is always used.",
             "type": "string"
           },
           "proxy_port_header": {
             "default": "x-forwarded-port",
-            "description": "HTTP header used to pass information about the client port. Relevant when the EMQX cluster is deployed behind a load-balancer.",
+            "description": "HTTP header used to pass information about the client port. Relevant when the EMQX cluster is deployed behind a load-balancer.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source port of the WebSocket connection is always used.",
             "type": "string"
           },
           "supported_subprotocols": {
@@ -50682,8 +50703,7 @@
         "properties": {
           "endpoint": {
             "default": "http://localhost:4317",
-            "description": "The target URL to which the exporter is going to send Open Telemetry signal data.",
-            "example": "http://127.0.0.1",
+            "description": "The target URL to which the exporter is going to send Open Telemetry signal data.  Must explicitly define the port.",
             "type": "string"
           },
           "headers": {
@@ -50691,6 +50711,14 @@
             "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
             "example": {},
             "type": "object"
+          },
+          "protocol": {
+            "default": "grpc",
+            "description": "The transport protocol of the OpenTelemetry exporter.<br/>Only `grpc` is supported. The exporter cannot send to an OTLP/HTTP endpoint.",
+            "enum": [
+              "grpc"
+            ],
+            "type": "string"
           },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -53762,10 +53790,6 @@
             "description": "The name of the connector.",
             "type": "string"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "node_status": {
             "description": "Node status.",
             "items": {
@@ -53783,6 +53807,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -53934,10 +53962,6 @@
             "description": "The name of the connector.",
             "type": "string"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -53948,6 +53972,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -54067,10 +54095,6 @@
             "description": "Enable (true) or disable (false) this connector.",
             "type": "boolean"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -54081,6 +54105,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -58699,7 +58727,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.4"
+    "version": "6.1.5-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58716,49 +58744,49 @@
                     "summary": "Action Types",
                     "value": [
                       "cassandra",
-                      "s3",
-                      "doris",
-                      "syskeeper_forwarder",
-                      "dynamo",
-                      "snowflake",
-                      "bigquery",
-                      "datalayers",
-                      "mongodb",
-                      "tablestore",
-                      "matrix",
-                      "tdengine",
-                      "azure_event_hub_producer",
-                      "sqlserver",
-                      "rabbitmq",
-                      "redis",
-                      "confluent_producer",
-                      "azure_blob_storage",
-                      "iotdb",
-                      "couchbase",
-                      "rocketmq",
-                      "cockroachdb",
-                      "disk_log",
-                      "opents",
-                      "gcp_pubsub_producer",
-                      "kinesis",
-                      "influxdb",
-                      "http",
-                      "oracle",
-                      "elasticsearch",
-                      "pgsql",
-                      "s3tables",
-                      "timescale",
-                      "redshift",
-                      "kafka_producer",
-                      "mqtt",
-                      "aws_timestream",
-                      "clickhouse",
                       "snowflake_streaming",
-                      "mysql",
-                      "greptimedb",
-                      "pulsar",
+                      "mongodb",
+                      "oracle",
+                      "pgsql",
+                      "influxdb",
+                      "couchbase",
                       "alloydb",
-                      "emqx_tables"
+                      "emqx_tables",
+                      "cockroachdb",
+                      "timescale",
+                      "pulsar",
+                      "datalayers",
+                      "redshift",
+                      "gcp_pubsub_producer",
+                      "dynamo",
+                      "tdengine",
+                      "redis",
+                      "kafka_producer",
+                      "clickhouse",
+                      "rabbitmq",
+                      "s3tables",
+                      "matrix",
+                      "tablestore",
+                      "kinesis",
+                      "disk_log",
+                      "azure_event_hub_producer",
+                      "syskeeper_forwarder",
+                      "rocketmq",
+                      "opents",
+                      "snowflake",
+                      "http",
+                      "s3",
+                      "mqtt",
+                      "iotdb",
+                      "elasticsearch",
+                      "azure_blob_storage",
+                      "doris",
+                      "sqlserver",
+                      "confluent_producer",
+                      "greptimedb",
+                      "mysql",
+                      "aws_timestream",
+                      "bigquery"
                     ]
                   }
                 },
@@ -58766,49 +58794,49 @@
                   "items": {
                     "enum": [
                       "cassandra",
-                      "s3",
-                      "doris",
-                      "syskeeper_forwarder",
-                      "dynamo",
-                      "snowflake",
-                      "bigquery",
-                      "datalayers",
-                      "mongodb",
-                      "tablestore",
-                      "matrix",
-                      "tdengine",
-                      "azure_event_hub_producer",
-                      "sqlserver",
-                      "rabbitmq",
-                      "redis",
-                      "confluent_producer",
-                      "azure_blob_storage",
-                      "iotdb",
-                      "couchbase",
-                      "rocketmq",
-                      "cockroachdb",
-                      "disk_log",
-                      "opents",
-                      "gcp_pubsub_producer",
-                      "kinesis",
-                      "influxdb",
-                      "http",
-                      "oracle",
-                      "elasticsearch",
-                      "pgsql",
-                      "s3tables",
-                      "timescale",
-                      "redshift",
-                      "kafka_producer",
-                      "mqtt",
-                      "aws_timestream",
-                      "clickhouse",
                       "snowflake_streaming",
-                      "mysql",
-                      "greptimedb",
-                      "pulsar",
+                      "mongodb",
+                      "oracle",
+                      "pgsql",
+                      "influxdb",
+                      "couchbase",
                       "alloydb",
-                      "emqx_tables"
+                      "emqx_tables",
+                      "cockroachdb",
+                      "timescale",
+                      "pulsar",
+                      "datalayers",
+                      "redshift",
+                      "gcp_pubsub_producer",
+                      "dynamo",
+                      "tdengine",
+                      "redis",
+                      "kafka_producer",
+                      "clickhouse",
+                      "rabbitmq",
+                      "s3tables",
+                      "matrix",
+                      "tablestore",
+                      "kinesis",
+                      "disk_log",
+                      "azure_event_hub_producer",
+                      "syskeeper_forwarder",
+                      "rocketmq",
+                      "opents",
+                      "snowflake",
+                      "http",
+                      "s3",
+                      "mqtt",
+                      "iotdb",
+                      "elasticsearch",
+                      "azure_blob_storage",
+                      "doris",
+                      "sqlserver",
+                      "confluent_producer",
+                      "greptimedb",
+                      "mysql",
+                      "aws_timestream",
+                      "bigquery"
                     ],
                     "type": "string"
                   },
@@ -78574,7 +78602,7 @@
             }
           },
           {
-            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. Messages beyond the limit will be silently omitted in the response. The only exception to this rule is when the first message payload is already larger than the limit, in this case, the first message will be returned in the response.",
+            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. When the limit is reached, the response may contain fewer messages than `limit`; `meta.position` points to the last returned message, so the omitted messages can be fetched by requesting the next page from that position. The only exception to this rule is when the first message payload is already larger than the limit, in this case, only the first message will be returned in the response.",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -78727,7 +78755,7 @@
             }
           },
           {
-            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. Messages beyond the limit will be silently omitted in the response. The only exception to this rule is when the first message payload is already larger than the limit, in this case, the first message will be returned in the response.",
+            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. When the limit is reached, the response may contain fewer messages than `limit`; `meta.position` points to the last returned message, so the omitted messages can be fetched by requesting the next page from that position. The only exception to this rule is when the first message payload is already larger than the limit, in this case, only the first message will be returned in the response.",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -84128,7 +84156,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -85713,7 +85741,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -87530,7 +87558,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -88760,7 +88788,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90334,7 +90362,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91911,7 +91939,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -92541,6 +92569,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -92644,6 +92694,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -92704,6 +92776,28 @@
                     },
                     "message": {
                       "description": "Backup file import failed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
                       "type": "string"
                     }
                   },
@@ -92789,7 +92883,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "027C8DC12700B711",
+            "example": "E7C5A1755C22DFF5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92852,7 +92946,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "027C8DC12700B711",
+            "example": "E7C5A1755C22DFF5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93266,7 +93360,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "027C8DC12700B711",
+            "example": "E7C5A1755C22DFF5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93352,7 +93446,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "027C8DC12700B711",
+            "example": "E7C5A1755C22DFF5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -105806,11 +105900,12 @@
         "description": "EMQX metrics",
         "parameters": [
           {
-            "description": "Whether to aggregate all nodes Metrics. Default value is 'true'.",
+            "description": "Whether to aggregate all nodes Metrics. Default value is 'false'.",
             "in": "query",
             "name": "aggregate",
             "required": false,
             "schema": {
+              "default": false,
               "type": "boolean"
             }
           },
