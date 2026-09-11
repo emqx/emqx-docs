@@ -10,7 +10,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Plugins
 
-- [#17449](https://github.com/emqx/emqx/pull/17449) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster by using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
+- [#17449](https://github.com/emqx/emqx/pull/17449) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration and supported table data from a primary cluster to a secondary cluster through the Data Backup APIs. The plugin is installed and run only on secondary clusters and supports configurable TLS options for HTTPS connections to the primary cluster. It does not synchronize Dashboard users or API keys.
 
 - [#17887](https://github.com/emqx/emqx/pull/17887) Added the `emqx_sync_request` plugin for synchronous MQTT request/response flows through the EMQX REST API. It also provides node-local CLI diagnostics for request counters and current pending state.
 
@@ -46,7 +46,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17729](https://github.com/emqx/emqx/pull/17729) Fixed a transient "address already in use" error that could occur when updating the options of a WS or WSS listener (for example when rotating TLS certificates). Updating such a listener rebinds its port, and the operating system may not have released the old socket yet; EMQX now retries the rebind briefly instead of failing the update.
 
-- [#17522](https://github.com/emqx/emqx/pull/17522) Periodically purge stale entries from the global session registry. Previously, when a session's owner process died without a clean unregister (for example, after a brief network split that prevented the unregister from replicating, or when one core's consensus check timed out during the down-event cleanup), the registry row could remain forever if the same clientid never reconnected. A new throttled background sweep on each core node now removes such rows. The sweep is bounded to at most 500 registry rows per second per node and runs no more often than once every 10 minutes, so it does not measurably affect broker throughput even on registries holding millions of sessions.
+- [#17522](https://github.com/emqx/emqx/pull/17522) Added a throttled background sweep to remove stale entries from the global session registry. Such entries could persist when a session owner terminated without cleanly unregistering. The sweep scans at most 500 registry rows per second per node and runs no more than once every 10 minutes to limit cleanup overhead.
 
 - [#17573](https://github.com/emqx/emqx/pull/17573) Reduced MQTT v5 user-property parsing cost from quadratic to linear.
 
@@ -92,9 +92,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Upgraded HOCON to 0.46.3. This release renders sensitive values inside array-typed config fields as `******` and no longer prints sensitive field values in config validation error logs.
 
-- [#18626](https://github.com/emqx/emqx/pull/18626) Upgrade QUIC stack to quicer-0.4.8 (msquic 2.5.7).
-
-  Contains a security update for CVE-2026-32179
+- [#18262](https://github.com/emqx/emqx/pull/18262) [#18867](https://github.com/emqx/emqx/pull/18867) Upgraded the QUIC stack to quicer 0.4.9 (msquic 2.5.7), which includes the security fix for CVE-2026-32179.
 
 #### Access Control
 
@@ -144,7 +142,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17947](https://github.com/emqx/emqx/pull/17947) Fixed an issue where updating an HTTP connector could leave its action buffer workers blocked after the connector was recreated, causing messages to remain queued until the next retry interval.
 
-- [#17961](https://github.com/emqx/emqx/pull/17961) Fixed an issue where a Kafka or Pulsar Connector would transition to a `disconnected` state on health check timeouts, potentially recreating its internal queue.  Now, they transition to `connecting`.
+- [#17961](https://github.com/emqx/emqx/pull/17961) Fixed Kafka and Pulsar Connectors entering the `disconnected` state when a health check timed out. They now enter `connecting`, preventing resource restarts that could discard internally buffered messages.
 
 - [#17994](https://github.com/emqx/emqx/pull/17994) Fixed Kafka producer action retry metrics. The `retried`, `retried.success`, and `retried.failed` counters on an action's metrics now reflect messages that the internal buffer re-sends after a broker reconnect, so an operator can tell whether retried messages ultimately succeeded or failed. Previously these counters stayed at `0` regardless of how many internal retries occurred. The `success` and `failed` counters are unaffected and are not double-counted.
 
@@ -160,17 +158,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18328](https://github.com/emqx/emqx/pull/18328) The Snowflake connector now applies its configured `ssl` options when connecting to Snowflake endpoints. Previously the connector ignored the `ssl` settings and never verified the server certificate.
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) Fixed handling of templated INSERT SQL statements in the ClickHouse, TDengine, SQL Server, and MySQL bridges (when batch insert is enabled).
+- [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, SQL Server, and MySQL actions when batch insert is enabled. EMQX now parses and validates SQL templates when an action is created and escapes interpolated values according to their SQL context.
 
-  Previously, rendering SQL templates could often produce malformed SQL due to syntax errors in the manually entered template itself and due to interpolation issues.
+  This is a compatibility-breaking change. Existing templates that contain comments or use unsupported SQL syntax are rejected and must be updated. Supported syntax includes constants, strings and string interpolation, arithmetic, functions, conditions, and conditional operators. MySQL also supports `ON DUPLICATE KEY UPDATE`; ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`; and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
 
-  Now, SQL statements are fully parsed when an action is created, and invalid SQL is rejected. During rendering, correct escaping is enforced. To provide consistent and predictable behavior, we limit the SQL features that can be used. Most notably, we reject comments in SQL statements. However, we support a large subset of syntax features: constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
-
-  MySQL also supports `ON DUPLICATE KEY UPDATE`, ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`, and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
-
-  To provide consistent rendering for MySQL templates, the MySQL bridge unconditionally disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` modes for all connections, and treats the statements accordingly.
-
-  The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator` value.
+  The MySQL bridge now disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` for all connections. The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator`.
 
 - [#18762](https://github.com/emqx/emqx/pull/18762) Fixed an error reported by the TDengine action. When the action could not be found, the error named the connector's ID instead of the action's ID, which made the error read as if a valid connector ID was invalid.
 
