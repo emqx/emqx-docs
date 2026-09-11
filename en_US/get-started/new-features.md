@@ -8,6 +8,43 @@ This page highlights major new features supported in the current release. Note t
 
 ## EMQX 6.x Series
 
+### Security Profiles
+
+EMQX 6.3 introduces node-wide security profiles for choosing between backward-compatible defaults and stricter, secure-by-default behavior.
+
+#### Feature Highlights
+
+- **Legacy Compatibility**: The default `legacy` profile preserves the default behavior of earlier EMQX versions.
+- **Hardened Defaults**: The `hardened` profile strengthens listener exposure, authentication, authorization, delayed publishing, extensions, and Dashboard access.
+- **Cluster Consistency**: View each node's active profile and detect profile differences across the cluster.
+
+Select the profile at startup with `EMQX_SECURITY_PROFILE`. Use the same profile on every node and restart nodes to apply a change. Learn more in [Security Profiles](../guides/access-control/security-profile.md).
+
+### Feature Gates
+
+EMQX 6.3 introduces deployment-time feature gates for starting only the optional capabilities a deployment needs.
+
+#### Feature Highlights
+
+- **Preset or Custom Selection**: Use `FULL`, `ESSENTIAL`, or an explicit feature list through `EMQX_FEATURES`.
+- **Automatic Dependencies**: EMQX enables the required dependencies for selected features.
+- **Reduced Footprint**: `ESSENTIAL` starts the core MQTT broker and access-control capabilities without optional feature applications.
+- **Consistent Deployment**: Feature selection is resolved at startup and should be the same on every cluster node.
+
+Learn more in [Feature Gates](./deploy/feature-gates.md).
+
+### Enhanced Observability
+
+EMQX 6.3 expands operational visibility for MQTT traffic, client sessions, and external observability platforms.
+
+#### Feature Highlights
+
+- **Topic Metrics v2**: Create named metric collections with wildcard topic filters, namespace isolation, REST API management, and Prometheus export.
+- **Session Buffer Insights**: Track buffered payload bytes, warn when a session crosses a configured threshold, and identify the largest sessions with `emqx ctl session-top`.
+- **Dynatrace Integration**: Export OpenTelemetry traces and logs to Dynatrace using OAuth2 token authentication.
+
+Learn more in [Topic Metrics](../guides/observability/topic-metrics.md), [Production Monitoring Best Practices](../guides/observability/monitoring-best-practices.md), and [Dynatrace Integration](../guides/observability/opentelemetry/dynatrace.md).
+
 ### Subscription Filters
 
 EMQX 6.2 introduces Subscription Filters for MQTT 5.0 clients. Subscribers append a filter condition to the topic filter after `?`. Publishers do not include the condition in the topic; they use regular topic names and provide the values to evaluate through MQTT 5.0 User Properties. EMQX delivers a message only when both the topic and condition match.
@@ -110,14 +147,15 @@ These enhancements make EMQX more capable of handling large-scale, persistent MQ
 
 ### Expanded Support in Data Integration
 
-EMQX 6.0.0 continues to strengthen its data integration capabilities, empowering users to seamlessly connect MQTT data with modern cloud and database ecosystems for real-time analytics, processing, and storage.
+EMQX 6.x continues to strengthen its data integration capabilities, connecting MQTT data with cloud and database ecosystems for real-time analytics, processing, and storage.
 
 #### New Integrations
 
-The following integrations have been newly added in EMQX 6.0.0:
+The following integrations have been added in the EMQX 6.x series:
 
-- **[Google BigQuery](../develop/data-integration/bigquery.md)**: Integrate MQTT data with BigQuery for large-scale data warehousing and advanced querying, enabling insights from massive IoT datasets.
-- **[AWS AlloyDB](../develop/data-integration/alloydb.md)**, **[CockroachDB](../develop/data-integration/cockroachdb.md)**, and **[AWS Redshift](../develop/data-integration/redshift.md)**: Stream MQTT data to these high-performance databases for real-time analytics and scalable storage. Perfect for enterprise-grade IoT analytics.
+- **[Google Bigtable](../develop/data-integration/bigtable.md) (6.3.0)**: Append MQTT data to Bigtable for scalable, low-latency storage and retrieval of operational IoT data.
+- **[Google BigQuery](../develop/data-integration/bigquery.md) (6.0.0)**: Integrate MQTT data with BigQuery for large-scale data warehousing and advanced querying, enabling insights from massive IoT datasets.
+- **[AWS AlloyDB](../develop/data-integration/alloydb.md) (6.0.0)**, **[CockroachDB](../develop/data-integration/cockroachdb.md) (6.0.0)**, and **[AWS Redshift](../develop/data-integration/redshift.md) (6.0.0)**: Stream MQTT data to these high-performance databases for real-time analytics and scalable storage. Perfect for enterprise-grade IoT analytics.
 
 #### Enhanced Integrations
 
@@ -152,7 +190,7 @@ In addition to the highlights covered above, recent EMQX updates include many ot
 
 ### Breaking Changes
 
-For complete information about what's deprecated and breaking changes, see [Incompatible Changes between EMQX 5.x and EMQX 6.0](../release-notes/breaking-changes-6.0.0.md).
+For breaking changes introduced in EMQX 6.3, see [Incompatible Changes in EMQX 6.3](../release-notes/breaking-changes-6.3.md). For migration from EMQX 5.x to 6.0, see [Incompatible Changes between EMQX 5.x and EMQX 6.0](../release-notes/breaking-changes-6.0.0.md).
 
 ## EMQX 5.x Series
 

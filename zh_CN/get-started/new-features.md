@@ -4,6 +4,43 @@
 
 ## EMQX 6.x 系列
 
+### 安全配置方案
+
+EMQX 6.3 引入了节点级安全配置方案，可在兼容早期版本默认行为与采用更严格的安全默认行为之间进行选择。
+
+#### 功能亮点
+
+- **兼容原有行为**：默认的 `legacy` 方案保留早期 EMQX 版本的默认行为。
+- **强化安全默认值**：`hardened` 方案针对监听器暴露范围、认证、授权、延迟发布、扩展功能和 Dashboard 访问采用更严格的默认行为。
+- **检查集群一致性**：查看每个节点启用的方案，并检测集群内的方案差异。
+
+通过 `EMQX_SECURITY_PROFILE` 在启动时选择方案。集群内所有节点应使用相同方案；更改后需重启节点才能生效。详细信息请参阅[安全配置方案](../guides/access-control/security-profile.md)。
+
+### 功能门控
+
+EMQX 6.3 引入了部署阶段的功能门控，可仅启动部署所需的可选功能。
+
+#### 功能亮点
+
+- **预设或自定义选择**：通过 `EMQX_FEATURES` 使用 `FULL`、`ESSENTIAL` 或明确指定功能列表。
+- **自动启用依赖**：EMQX 会自动启用所选功能依赖的其他功能。
+- **降低资源占用**：`ESSENTIAL` 仅启动 MQTT Broker 和访问控制等核心能力，不加载可选功能应用。
+- **保持部署一致**：功能集在启动时确定，集群内所有节点应使用相同设置。
+
+详细信息请参阅[功能门控](./deploy/feature-gates.md)。
+
+### 可观测性增强
+
+EMQX 6.3 增强了对 MQTT 流量、客户端会话和外部可观测性平台的运行状态监测。
+
+#### 功能亮点
+
+- **主题指标 v2**：支持创建带名称的指标集合，并使用通配符主题过滤器、命名空间隔离、REST API 管理和 Prometheus 导出。
+- **会话缓冲区监测**：统计缓冲消息的载荷字节数，在会话超过配置阈值时发出警告，并通过 `emqx ctl session-top` 识别占用最大的会话。
+- **Dynatrace 集成**：通过 OAuth2 令牌认证，将 OpenTelemetry 追踪和日志导出到 Dynatrace。
+
+详细信息请参阅[主题指标](../guides/observability/topic-metrics.md)、[生产环境监控最佳实践](../guides/observability/monitoring-best-practices.md)和 [Dynatrace 集成](../guides/observability/opentelemetry/dynatrace.md)。
+
 ### 订阅过滤器
 
 EMQX 6.2 为 MQTT 5.0 客户端引入了订阅过滤器。订阅者在主题过滤器的 `?` 后添加过滤条件。发布者无需在主题中包含该条件，只需使用普通主题名称，并通过 MQTT 5.0 User Properties 携带待判断的值。只有消息主题和过滤条件均匹配时，EMQX 才会投递消息。
@@ -118,14 +155,15 @@ EMQX 6.0.0 在持久化存储方面进行了显著优化，提升了性能与可
 
 ### 扩展的数据集成支持
 
-EMQX 6.0.0 进一步增强了数据集成功能，支持与各类主流云服务和高性能数据库生态系统无缝集成，实现实时分析、处理与存储。
+EMQX 6.x 持续增强数据集成功能，支持将 MQTT 数据接入云服务和数据库生态系统，用于实时分析、处理与存储。
 
 #### 新增集成
 
-以下数据集成在 EMQX 6.0.0 中全新支持：
+EMQX 6.x 系列新增了以下数据集成：
 
-- **[Google BigQuery](../develop/data-integration/bigquery.md)**：将 MQTT 数据流式传输至 BigQuery，实现大规模数据仓储与高级查询，从海量物联网数据中获取洞察。
-- **[AWS AlloyDB](../develop/data-integration/alloydb.md)**、**[CockroachDB](../develop/data-integration/cockroachdb.md)** 和 **[AWS Redshift](../develop/data-integration/redshift.md)**：将 MQTT 数据流式发送至这些高性能分布式数据库，用于实时分析与可扩展存储，非常适合企业级物联网分析场景。
+- **[Google Bigtable](../develop/data-integration/bigtable.md)（6.3.0）**：将 MQTT 数据追加写入 Bigtable，用于可扩展、低延迟的物联网运行数据存储与检索。
+- **[Google BigQuery](../develop/data-integration/bigquery.md)（6.0.0）**：将 MQTT 数据流式传输至 BigQuery，实现大规模数据仓储与高级查询，从海量物联网数据中获取洞察。
+- **[AWS AlloyDB](../develop/data-integration/alloydb.md)（6.0.0）**、**[CockroachDB](../develop/data-integration/cockroachdb.md)（6.0.0）** 和 **[AWS Redshift](../develop/data-integration/redshift.md)（6.0.0）**：将 MQTT 数据流式发送至这些高性能分布式数据库，用于实时分析与可扩展存储，非常适合企业级物联网分析场景。
 
 #### 增强的集成能力
 
@@ -162,9 +200,8 @@ LDAP 授权现支持 JSON 格式的扩展 ACL 规则，LDAP 认证还可直接�
 
 ### 不兼容变更
 
-有关弃用项与不兼容变更的完整信息，请参阅 [EMQX 5.x 与 6.0 不兼容变更](../release-notes/breaking-changes-6.0.md)。
+有关 EMQX 6.3 引入的不兼容变更，请参阅 [EMQX 6.3 中的不兼容变更](../release-notes/breaking-changes-6.3.md)。有关从 EMQX 5.x 迁移到 6.0 的不兼容变更，请参阅 [从 EMQX 5.x 到 EMQX 6.0 的不兼容变更](../release-notes/breaking-changes-6.0.0.md)。
 
 ## EMQX 5.x 系列
 
 有关 EMQX 5.x 的全新功能，请参阅 EMQX 企业版 v5 版本的[全新功能](https://docs.emqx.com/zh/emqx/v5.10/getting-started/new-features.html)。
-
