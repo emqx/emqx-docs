@@ -1,5 +1,22 @@
 # EMQX 5.10 中的不兼容变更
 
+## 5.10.5
+
+- [#18465](https://github.com/emqx/emqx/pull/18465) EMQX 现在使用受限的 SQL 解析器验证并安全渲染 ClickHouse、TDengine 和 SQL Server 动作中的模板化 `INSERT` 语句，以及启用批量插入时 MySQL 动作中的模板化 `INSERT` 语句。包含注释或使用不受支持 SQL 语法的现有模板必须更新后才能用于新的解析器。
+
+  ClickHouse、TDengine 和 SQL Server 会在创建动作时拒绝无效模板。MySQL 会记录解析错误，但仍可能创建动作；使用不受支持模板的批量请求会在运行时失败。
+
+  各数据库支持的特定语法：
+
+  - **MySQL**：`ON DUPLICATE KEY UPDATE`
+  - **ClickHouse**：`FORMAT Values` 和 `FORMAT JSONCompactEachRow`
+  - **TDengine**：`INSERT ... USING ... TAGS` 和表标识符插值
+
+  其他行为变更：
+
+  - MySQL Bridge 现在会对所有连接禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES`。
+  - ClickHouse Bridge 现在会根据 SQL 模板推断批量值分隔符，并忽略配置的 `batch_value_separator`。
+
 ## 5.10.4
 
 - [#17244](https://github.com/emqx/emqx/pull/17244) 移除了热升级 REST API 端点（`/api/v5/relup/*`）。热升级现在完全通过各节点上的 `emqx ctl relup` CLI 操作，Dashboard 中不再提供对应入口。

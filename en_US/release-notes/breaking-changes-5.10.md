@@ -1,5 +1,22 @@
 # Incompatible Changes in EMQX 5.10
 
+## 5.10.5
+
+- [#18465](https://github.com/emqx/emqx/pull/18465) EMQX now uses restricted SQL parsers to validate and safely render templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled. Existing templates that contain comments or use unsupported SQL syntax must be updated before they can be used with the new parsers.
+
+  ClickHouse, TDengine, and SQL Server reject invalid templates when the action is created. MySQL logs a parsing error but may still create the action; batch requests using an unsupported template fail at runtime.
+
+  Supported backend-specific syntax:
+
+  - **MySQL**: `ON DUPLICATE KEY UPDATE`
+  - **ClickHouse**: `FORMAT Values` and `FORMAT JSONCompactEachRow`
+  - **TDengine**: `INSERT ... USING ... TAGS` and table identifier interpolation
+
+  Other behavior changes:
+
+  - The MySQL bridge now disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` for all connections.
+  - The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator`.
+
 ## 5.10.4
 
 - [#17244](https://github.com/emqx/emqx/pull/17244) Removed the hot-upgrade REST API endpoints (`/api/v5/relup/*`). Hot-upgrade is now operated exclusively through the `emqx ctl relup` CLI on each node, with no Dashboard surface.
@@ -31,4 +48,3 @@
 - [#15239](https://github.com/emqx/emqx/pull/15239) The type for the `multi_tenancy.default_max_sessions` is now either `infinity` or a positive integer.  Previously, `0` would be accepted.
 
 - [#15156](https://github.com/emqx/emqx/pull/15156) Schema validation was added to `dashboard.sso.oidc.issuer` field.  Now, this value is checked to be a valid URL.
-
