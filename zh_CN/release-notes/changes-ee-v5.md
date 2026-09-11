@@ -152,9 +152,11 @@
 
 - [#18328](https://github.com/emqx/emqx/pull/18328) Snowflake 连接器现在会在连接 Snowflake 端点时应用配置的 `ssl` 选项。此前，连接器会忽略 `ssl` 设置，并且不验证服务器证书。
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) 改进了以下模板化 `INSERT` 语句的验证和安全渲染：ClickHouse、TDengine 和 SQL Server 动作中的语句，以及启用批量插入时 MySQL 动作中的语句。EMQX 现在会在创建动作时解析并验证 SQL 模板，并根据插值所在的 SQL 上下文对值进行转义。
+- [#18465](https://github.com/emqx/emqx/pull/18465) 改进了以下模板化 `INSERT` 语句的验证和安全渲染：ClickHouse、TDengine 和 SQL Server 动作中的语句，以及启用批量插入时 MySQL 动作中的语句。EMQX 现在会根据插值所在的 SQL 上下文对值进行转义。
 
-  这是一项破坏兼容性的变更。包含注释或使用不受支持 SQL 语法的现有模板将被拒绝，必须进行更新。支持的语法包括常量、字符串和字符串插值、算术运算、函数、条件和条件运算符。MySQL 还支持 `ON DUPLICATE KEY UPDATE`；ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`；TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
+  ClickHouse、TDengine 和 SQL Server 会在创建动作时拒绝无效模板。MySQL 会记录解析错误，但仍可能创建动作；使用不受支持模板的批量请求会在运行时失败。
+
+  这是一项破坏兼容性的变更。包含注释或使用不受支持 SQL 语法的现有模板必须更新后才能用于新的解析器。支持的语法包括常量、字符串和字符串插值、算术运算、函数、条件和条件运算符。MySQL 还支持 `ON DUPLICATE KEY UPDATE`；ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`；TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
 
   MySQL Bridge 现在会对所有连接禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES`。ClickHouse Bridge 现在会根据 SQL 模板推断批量值分隔符，并忽略配置的 `batch_value_separator`。
 
