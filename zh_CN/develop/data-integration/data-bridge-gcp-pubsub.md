@@ -81,8 +81,9 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
 2. 在页面的右上角点击 **创建**，在连接器选择页面选择 **Google PubSub 生产者**，然后点击 **下一步**。
 3. 输入连接器名称和描述，例如 `my-pubsubproducer`。名称用于将 GCP Pub/Sub 生产者 Sink 与连接器关联，并且必须在集群内唯一。
 4. 在 **GCP 服务账户凭证** 中，上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式的服务账户凭证。
-5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
-6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 生产者 Sink 的规则，以指定要转发到 GCP Pub/Sub 的数据。详细步骤请参见 [创建 GCP Pub/Sub 生产者 Sink 规则](#创建-gcp-pub-sub-生产者-sink-规则)。
+5. 从 EMQX 5.10.5 开始，您可以启用**验证服务器证书**来验证 GCP Pub/Sub 服务器证书，并在 **CA 证书**中配置可信 CA 证书。更多信息请参见[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
+6. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
+7. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 生产者 Sink 的规则，以指定要转发到 GCP Pub/Sub 的数据。详细步骤请参见 [创建 GCP Pub/Sub 生产者 Sink 规则](#创建-gcp-pub-sub-生产者-sink-规则)。
 
 ## 创建 GCP Pub/Sub 生产者 Sink 规则
 
@@ -161,8 +162,9 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 2. 在页面的右上角点击 **创建**，在连接器选择页面选择 **Google PubSub 消费者**，然后点击 **下一步**。
 3. 输入连接器名称和描述，例如 `my-pubsubconsumer`。名称用于将 GCP Pub/Sub 生产者 Sink 与连接器关联，并且必须在集群内唯一。
 4. 在 **GCP 服务账户凭证** 中，上传您在 [创建服务账户凭证](#创建服务账户凭证) 中导出的 JSON 格式的服务账户凭证。
-5. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
-6. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 消费者 Source 的规则，以消费来自 GCP Pub/Sub 的数据并转发到 EMQX 本地。详细步骤请参见 [创建 GCP Pub/Sub 消费者 Source 规则](#创建-gcp-pub-sub-消费者-source-规则)。
+5. 从 EMQX 5.10.5 开始，您可以启用**验证服务器证书**来验证 GCP Pub/Sub 服务器证书，并在 **CA 证书**中配置可信 CA 证书。更多信息请参见[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
+6. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能连接到 GCP Pub/Sub 服务器。
+7. 点击底部的 **创建** 按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建带有 GCP Pub/Sub 消费者 Source 的规则，以消费来自 GCP Pub/Sub 的数据并转发到 EMQX 本地。详细步骤请参见 [创建 GCP Pub/Sub 消费者 Source 规则](#创建-gcp-pub-sub-消费者-source-规则)。
 
 ## 创建 GCP Pub/Sub 消费者 Source 规则
 
@@ -261,4 +263,3 @@ mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
 您也可以点击 **集成** -> **Flow 设计器** 查看拓扑图。通过拓扑图，您可以直观地看到来自 GCP Pub/Sub 消费者 Source 的消息将通过消息重发布发布到 `t/1`。
 
 ## <!--测试 GCP Pub/Sub 消费者 Source 规则-->
-
