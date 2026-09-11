@@ -16,7 +16,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Performance
 
-- [#17964](https://github.com/emqx/emqx/pull/17964) No longer spawn buffer worker pools for authenticator and authorizer resources.  These resources always query through `simple_sync_query`, which bypasses the buffer workers, so the previously spawned workers were idle and never used.
+- [#17964](https://github.com/emqx/emqx/pull/17964) Stopped spawning buffer worker pools for authenticator and authorizer resources. These resources always query through `simple_sync_query`, which bypasses the buffer workers, so the previously spawned workers were idle and never used.
 
 - [#18138](https://github.com/emqx/emqx/pull/18138) [#18186](https://github.com/emqx/emqx/pull/18186) Improved deep-page queries in the subscriptions HTTP API by accumulating in-memory subscription rows on each target node, avoiding one RPC per pagination batch.
 
@@ -36,9 +36,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17593](https://github.com/emqx/emqx/pull/17593) Added `--force` flag to `emqx ctl relup upgrade`. By default, the upgrade now refuses to proceed if `data/patches/` contains any `*.beam` hot-patch files (which would shadow modules from the upgrade target). Pass `--force` to keep the patches and proceed anyway.
 
-- [#18031](https://github.com/emqx/emqx/pull/18031) Added Enterprise Linux 10 (EL10) packages, for Red Hat Enterprise Linux 10, Rocky Linux 10, and compatible distributions.
+- [#18031](https://github.com/emqx/emqx/pull/18031) Added Enterprise Linux 10 (EL10) packages for Red Hat Enterprise Linux 10, Rocky Linux 10, and compatible distributions.
 
-- [#18118](https://github.com/emqx/emqx/pull/18118) Start releasing macOS 26 (Tahoe) packages.
+- [#18118](https://github.com/emqx/emqx/pull/18118) Started releasing macOS 26 (Tahoe) packages.
 
 ### Bug Fixes
 
@@ -50,7 +50,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17573](https://github.com/emqx/emqx/pull/17573) Reduced MQTT v5 user-property parsing cost from quadratic to linear.
 
-  Previously a CONNECT, PUBLISH or SUBSCRIBE packet carrying many user-properties caused super-linear scheduler time on the owning connection process, because each parsed property was appended to the end of the accumulated list. Parsing now scales linearly with the number of entries while preserving their wire order.
+  Previously, a CONNECT, PUBLISH or SUBSCRIBE packet carrying many user-properties caused super-linear scheduler time on the owning connection process, because each parsed property was appended to the end of the accumulated list. Parsing now scales linearly with the number of entries while preserving their wire order.
 
 - [#18356](https://github.com/emqx/emqx/pull/18356) MQTT connections are now refused until node startup completes, so listeners no longer serve traffic before authentication, authorization, and plugin security hooks are active. The `GET /status` endpoint reports HTTP 503 during this startup window, so load balancers can route around the node until it is ready.
 
@@ -58,7 +58,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, when a client resumed an existing session (`clean_start=false`) after its namespace changed, `GET /api/v5/mt/ns/{ns}/client_list` kept listing the client under the old namespace, and the new namespace's list did not include it. The client list and the per-namespace client count now always reflect the namespace the client connected with.
 
-- [#18623](https://github.com/emqx/emqx/pull/18623) Stop MQTT listeners before stopping applications during node shutdown.
+- [#18623](https://github.com/emqx/emqx/pull/18623) Stopped MQTT listeners before stopping applications during node shutdown.
 
   Previously, listeners kept accepting and processing client traffic while the applications behind the publish path were already stopped. Publishing clients could then trigger a burst of `hook_callback_exception` errors in the log, for example from the rule engine, until the listeners stopped a few seconds later. Listeners now stop first, so no client traffic is processed during application shutdown.
 
@@ -72,15 +72,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17451](https://github.com/emqx/emqx/pull/17451) [#17553](https://github.com/emqx/emqx/pull/17553) Restricted backup file downloads so only dashboard administrators can download archives containing dashboard accounts or API key records, while API key callers can still download archives without those sensitive records.
 
-- [#17531](https://github.com/emqx/emqx/pull/17531) Bumped jiffy app version to 1.1.4 to address a memory safety bug in JSON handling.
-
-  Without this fix, EMQX may occasionally (very rare) segfault when processing JSON data.
+- [#17531](https://github.com/emqx/emqx/pull/17531) Upgraded `jiffy` to 1.1.4 to fix a rare memory-safety issue that could cause EMQX to terminate with a segmentation fault while processing JSON.
 
 - [#17652](https://github.com/emqx/emqx/pull/17652) Fixed a security issue where the Prometheus configuration API returned stored `Authorization` header values in push gateway headers. The API now redacts these values in responses.
 
-- [#17857](https://github.com/emqx/emqx/pull/17857) Improved redaction of sensitive data in logs, traces, and API responses.
-
-  Secrets are now consistently hidden in the affected places, including authentication and authorization backend query traces, JWT signing key material (carried inside `jose_jwk` records), HTTP connector request headers, Prometheus configuration API responses, and authenticator creation responses.
+- [#17857](https://github.com/emqx/emqx/pull/17857) Improved redaction of sensitive data in logs and traces, including authentication and authorization backend query traces, JWT signing key material, sensitive HTTP connector request headers, and Redis Sentinel passwords.
 
 - [#18336](https://github.com/emqx/emqx/pull/18336) Read-only REST endpoints no longer return secrets in cleartext:
 
@@ -96,23 +92,21 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Access Control
 
-- [#17645](https://github.com/emqx/emqx/pull/17645) Fixed an HTTP/1.1 protocol-conformance issue in the JWKS retrieval client used by JWT authentication. Earlier versions sent an empty `TE:` header value due to a long-standing default in Erlang/OTP's `inets` HTTP client (fixed upstream in inets 9.4.2 / OTP 28.1). Some identity providers (notably PingFederate) reject such requests with `503` or a TCP reset. EMQX now sends an explicit valid `TE: trailers` header on JWKS fetches.
+- [#17645](https://github.com/emqx/emqx/pull/17645) Fixed JWKS retrieval failures with strict identity providers such as PingFederate, which could reject the empty `TE` header sent by Erlang/OTP's HTTP client with a `503` response or TCP reset. EMQX now sends `TE: trailers` on JWKS requests unless a user-supplied `TE` header is already configured.
 
 - [#17643](https://github.com/emqx/emqx/pull/17643) Fixed an issue where the `plain` password hash algorithm accepted passwords that differed only by letter case during authentication.
 
 - [#17651](https://github.com/emqx/emqx/pull/17651) Fixed an issue where creating an authenticator via `POST /authentication` returned the new authenticator config without redacting provider secrets (such as JWT HMAC secrets, HTTP `Authorization` headers, and request body passwords). The creation response now applies the same redaction as the list and get endpoints.
 
-- [#18147](https://github.com/emqx/emqx/pull/18147) Hardened scope-based authorization for the dashboard and management API so that access-control checks are applied consistently across equivalent request paths.
+- [#18147](https://github.com/emqx/emqx/pull/18147) Hardened scope-based authorization for the Dashboard and management API by canonicalizing request paths in the same way as the HTTP router: percent-decoding each path segment and resolving `.` and `..` segments. Requests that do not map to a known API route are now denied for Dashboard users with explicit scope restrictions.
 
-- [#18200](https://github.com/emqx/emqx/pull/18200) Fixed an error when updating an API key that was created with the scope left blank.
+- [#18200](https://github.com/emqx/emqx/pull/18200) Fixed API key updates failing when the key was created without explicit scopes. API key create and update requests now treat `unset` or a scope list matching the role default as no explicit scopes, allowing read results to be resubmitted and preserving forward-compatible implicit scopes.
 
-  The API key create and update requests now accept a scope list that matches the role's implicit default (and the `unset` value) as equivalent to "no explicit scopes", so re-submitting the value returned by a read no longer fails. Such keys also keep their forward-compatible implicit scopes instead of a frozen list.
-
-  Also fixed the default administrator user being created with an explicit scope list at startup. The default administrator now follows its role's implicit default scopes (shown as `unset`), so it automatically gains scopes introduced in future releases instead of being pinned to a frozen list. Existing default administrator records that carry an explicit list are updated to the implicit form at boot.
+  The default administrator now also uses implicit role-default scopes (`unset`) instead of a frozen explicit list. Existing default administrator records with an explicit role-default scope list are converted to `unset` at startup.
 
 #### Data Integration
 
-- [#17538](https://github.com/emqx/emqx/pull/17538) Fixed Redis Sentinel resources sharing one global Sentinel manager.  Multiple Redis Sentinel resources on the same node now keep independent Sentinel server lists and credentials, preventing one resource from connecting through another resource's Sentinel configuration.
+- [#17538](https://github.com/emqx/emqx/pull/17538) Fixed an issue where Redis Sentinel resources shared a single global Sentinel manager. Multiple Redis Sentinel resources on the same node now keep independent Sentinel server lists and credentials, preventing one resource from connecting through another resource's Sentinel configuration.
 
 - [#17627](https://github.com/emqx/emqx/pull/17627) Fixed PostgreSQL connector batch execution when prepared statements are disabled.
 
@@ -122,9 +116,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   PostgreSQL action batching does not support row-returning SQL.  EMQX now returns a clear unsupported SQL error instead of crashing the batch result handler.
 
-- [#17954](https://github.com/emqx/emqx/pull/17954) Fix GreptimeDB async batches that could remain unflushed after health checks at low write rates.
+- [#17954](https://github.com/emqx/emqx/pull/17954) Fixed GreptimeDB async batches that could remain unflushed after health checks at low write rates.
 
-- [#17414](https://github.com/emqx/emqx/pull/17414) Fixed an issue where the health check of an Azure Blob Storage Connector could timeout, or generate large bandwidth costs, if the storage account contained too many containers.  Companion fix to #16935.
+- [#17414](https://github.com/emqx/emqx/pull/17414) Fixed an issue where the health check of an Azure Blob Storage Connector could time out or generate large bandwidth costs if the storage account contained too many containers. This is a companion fix to #16935.
 
 - [#17567](https://github.com/emqx/emqx/pull/17567) Upgraded Kafka client library `brod` from 4.5.4 to 4.5.5.
 
@@ -134,11 +128,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17605](https://github.com/emqx/emqx/pull/17605) Fixed Oracle action prepare/status checks to parse action SQL without executing it, and reject unsupported top-level DDL/DCL/TCL statements. Also improved support for text payloads over 4000 bytes when the payload placeholder is the last bind parameter.
 
-- [#17624](https://github.com/emqx/emqx/pull/17624) Fixed an issue with GCP PubSub Consumer Source where, if a source was initially created with a service account lacking necessary permissions to create subscriptions for the configured topic, the Source would fail to become `connected` even after granting the permissions to the service account.
+- [#17624](https://github.com/emqx/emqx/pull/17624) Fixed an issue where a GCP PubSub Consumer Source created with a service account that lacked the necessary permissions to create subscriptions for the configured topic could not become `connected` even after the permissions were later granted.
 
-- [#17716](https://github.com/emqx/emqx/pull/17716) Added the option of allowing TLS Peer Verification for Confluent Producer Connectors.
+- [#17716](https://github.com/emqx/emqx/pull/17716) Added an option to enable TLS peer verification for Confluent Producer Connectors.
 
-- [#17720](https://github.com/emqx/emqx/pull/17720) Added the option of allowing TLS Peer Verification for GCP PubSub Producer/Consumer Connectors.
+- [#17720](https://github.com/emqx/emqx/pull/17720) Added an option to enable TLS peer verification for GCP PubSub Producer and Consumer Connectors.
 
 - [#17947](https://github.com/emqx/emqx/pull/17947) Fixed an issue where updating an HTTP connector could leave its action buffer workers blocked after the connector was recreated, causing messages to remain queued until the next retry interval.
 
@@ -150,11 +144,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   This also applies to Azure Event Hubs and Confluent producer connectors, which use the same client library.
 
-- [#18251](https://github.com/emqx/emqx/pull/18251) Fix GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
+- [#18251](https://github.com/emqx/emqx/pull/18251) Fixed GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
 
 - [#18301](https://github.com/emqx/emqx/pull/18301) Elasticsearch action `index` and `id` values are now URL-encoded when composing the request path, so characters such as `#` or `/` in a templated value are treated as literal text within a single path segment instead of altering the request target. The JSON request body is not affected.
 
-- [#18317](https://github.com/emqx/emqx/pull/18317) When reading GCP Connectors (GCP PubSub Producer/Consumer) that use JSON Service Account authentication via the HTTP API, now the values are redacted.
+- [#18317](https://github.com/emqx/emqx/pull/18317) Fixed GCP PubSub Producer and Consumer Connector API responses returning the `service_account_json` value without redaction. The value is now returned as `******` when a Connector is created or retrieved.
 
 - [#18328](https://github.com/emqx/emqx/pull/18328) The Snowflake connector now applies its configured `ssl` options when connecting to Snowflake endpoints. Previously the connector ignored the `ssl` settings and never verified the server certificate.
 
@@ -180,13 +174,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Added `--cluster` flag to `emqx ctl plugins install` for cluster-wide installation. When specified, the plugin package is distributed to and installed on all running nodes in a single command.
 
-- [#17934](https://github.com/emqx/emqx/pull/17934) Fixed plugin package installation loading code before validating the package's application declarations, configuration schema, and default configuration.
+- [#17934](https://github.com/emqx/emqx/pull/17934) Fixed plugin package installation so it validates the package's application declarations, configuration schema, and default configuration before loading any code.
 
 - [#18334](https://github.com/emqx/emqx/pull/18334) Fixed an issue where a plugin could fail to start after a node restart.
 
   A plugin that declares the `emqx_plugins` application as a dependency made node boot 10 seconds slower and was left enabled but not running after every restart. EMQX now ignores this dependency declaration and logs a warning. Bundled plugins no longer declare it. When a plugin fails to start within the start timeout, the error log now lists the declared applications that were not running.
 
-- [#18338](https://github.com/emqx/emqx/pull/18338) Start plugins after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
+- [#18338](https://github.com/emqx/emqx/pull/18338) Changed the startup order so plugins start after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
 
 - [#18469](https://github.com/emqx/emqx/pull/18469) The hot-upgrade (relup) plugin now validates the target version string and checks upgrade-path compatibility before it modifies any files. An incompatible or malformed upgrade package is rejected without deleting or overwriting the installed release.
 
@@ -194,7 +188,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17885](https://github.com/emqx/emqx/pull/17885) Fixed an issue where the LwM2M gateway could include sensitive REGISTER query fields such as `password`, `secret`, `private_key`, and `access_token` in registration/update MQTT reports.
 
-- [#18044](https://github.com/emqx/emqx/pull/18044) Redact sensitive fields from structured CoAP packet debug logs, including LwM2M registration query parameters.
+- [#18044](https://github.com/emqx/emqx/pull/18044) Redacted sensitive fields from structured CoAP packet debug logs, including LwM2M registration query parameters.
 
 - [#17395](https://github.com/emqx/emqx/pull/17395) Fixed CoAP gateway observe notifications to honor the `gateway.coap.notify_type` setting and queue pending confirmable Observe notifications instead of silently dropping them while another notification is waiting for ACK.
 
@@ -228,7 +222,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Also fixed a spurious `clear_monitor_metrics_rpc_errors` warning that was logged on every successful `DELETE /api/v5/monitor` request.
 
-- [#18694](https://github.com/emqx/emqx/pull/18694) Fixed an issue where querying the audit log could return an error for records created by SSO-authenticated users.
+- [#18694](https://github.com/emqx/emqx/pull/18694) Fixed `GET /api/v5/audit` returning HTTP 500 when a result page contained an audit record created by an SSO-authenticated user.
 
 #### API
 
