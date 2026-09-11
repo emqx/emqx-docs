@@ -1,5 +1,9 @@
 # Rebalance Cluster Load
 
+::: warning
+EMQX Operator 3.0.0 does not support the `Rebalance` CRD. The examples on this page apply only to earlier EMQX Operator releases that installed `Rebalance`.
+:::
+
 ## Task Target
 
 How to rebalance MQTT connections.
@@ -15,9 +19,15 @@ The value of rebalancing mainly has the following two points:
 
 For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../cluster/rebalancing.md)
 
-## How to Use Load Rebalancing
+## EMQX Operator 3.0
 
-The corresponding CRD of the cluster rebalancing in EMQX Operator is `Rebalance`, and its example is as follows:
+EMQX Operator 3.0 still uses EMQX node evacuation internally during rolling updates and scale-down operations, but it no longer exposes a standalone `Rebalance` Kubernetes resource for user-triggered cluster rebalancing.
+
+For user-triggered load rebalancing, use the EMQX rebalancing tools directly. For details, refer to [Rebalancing](../../../cluster/rebalancing.md).
+
+## Earlier EMQX Operator Releases
+
+The corresponding CRD of cluster rebalancing in earlier EMQX Operator releases is `Rebalance`, and its example is as follows:
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -37,7 +47,7 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-> For Rebalance configuration, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
+> For Rebalance configuration in earlier releases, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
 
 ## Test Load Rebalancing
 

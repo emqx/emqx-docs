@@ -1,23 +1,33 @@
-# クラスター負荷のリバランス
+# Rebalance Cluster Load
 
-## タスク対象
+::: warning
+EMQX Operator 3.0.0 does not support the `Rebalance` CRD. The examples on this page apply only to earlier EMQX Operator releases that installed `Rebalance`.
+:::
 
-MQTT接続のリバランス方法。
+## Task Target
 
-## なぜ負荷リバランスが必要か
+How to rebalance MQTT connections.
 
-クラスター負荷のリバランスとは、クライアント接続およびセッションをあるノード群から別のノード群へ強制的に移行する操作のことです。ノード間のバランスを取るために移行すべき接続数を自動的に計算し、高負荷ノードから低負荷ノードへ対応する数の接続とセッションを移行します。通常、新規参加やノードの再起動後にバランスを取るためにこの操作が必要となります。
+## Why Need Load Rebalancing
 
-リバランスの価値は主に以下の2点です：
+Cluster load rebalancing is the act of forcibly migrating client connections and sessions from one set of nodes to another. It will automatically calculate the number of connections that need to be migrated to achieve node balance, and then migrate the corresponding number of connections and sessions from high-load nodes to low-load nodes, thereby achieving load balancing between nodes. This operation is usually required to achieve balance after a new join or a restart of a node.
 
-- **システムのスケーラビリティ向上**：MQTT接続は永続的であるため、クラスターがスケールアウトしても既存の接続は自動的に新規ノードへ移行しません。これを解決するために、負荷リバランス機能を使って過負荷のノードから新規追加ノードへ接続をスムーズに移行できます。これによりクラスター全体の負荷分散が改善され、スループット、応答速度、リソース利用率が向上します。
-- **運用コストの削減**：負荷の偏りがあるクラスターでは、一部のノードが過負荷で他がアイドル状態になることがあります。負荷リバランス機能を使うことでクラスター内の負荷を自動調整し、作業の均等化を実現し、運用・保守コストを削減できます。
+The value of rebalancing mainly has the following two points:
 
-EMQXクラスターの負荷リバランスについては、ドキュメント：[Rebalancing](../../../cluster/rebalancing.md) をご参照ください。
+- **Improve system scalability**: Due to the persistent nature of MQTT connections, connections to the original nodes will not automatically migrate to the new nodes when the cluster scales. To address this, you can use the load rebalancing feature to smoothly transfer connections from overloaded nodes to newly-added ones. This process ensures a more balanced distribution of load across the entire cluster and enhances throughput, response speed, and resource utilization rate.
+- **Reduce O&M costs**: For clusters with unevenly distributed loads, where some nodes are overloaded while others remain idle, you can use the load rebalancing feature to automatically adjust the load within the cluster. This helps achieve a more balanced distribution of work and reduces operational and maintenance costs.
 
-## 負荷リバランスの使い方
+For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../cluster/rebalancing.md)
 
-EMQX Operatorにおけるクラスターリバランスの対応CRDは `Rebalance` であり、例は以下の通りです：
+## EMQX Operator 3.0
+
+EMQX Operator 3.0 still uses EMQX node evacuation internally during rolling updates and scale-down operations, but it no longer exposes a standalone `Rebalance` Kubernetes resource for user-triggered cluster rebalancing.
+
+For user-triggered load rebalancing, use the EMQX rebalancing tools directly. For details, refer to [Rebalancing](../../../cluster/rebalancing.md).
+
+## Earlier EMQX Operator Releases
+
+The corresponding CRD of cluster rebalancing in earlier EMQX Operator releases is `Rebalance`, and its example is as follows:
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -37,23 +47,23 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-> Rebalanceの設定については、ドキュメント：[Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy) をご参照ください。
+> For Rebalance configuration in earlier releases, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
 
-## 負荷リバランスのテスト
+## Test Load Rebalancing
 
-### リバランス前のクラスター負荷分布
+### Cluster Load Distribution Before Rebalancing
 
-リバランス前に、意図的に接続数が偏ったEMQXクラスターを作成し、GrafanaとPrometheusでクラスター負荷を監視しました：
+Before rebalancing, we intentionally created an EMQX cluster with an uneven distribution of connections. We then used Grafana and Prometheus to monitor the cluster load:
 
 ![](./assets/configure-emqx-rebalance/before-rebalance.png)
 
-グラフの通り、クラスターは4つのEMQXノードで構成されています。3つのノードはそれぞれ10,000接続を処理し、1つのノードは**ゼロ**接続です。
+As shown in the graph, the cluster consists of four EMQX nodes. Three nodes each handle 10,000 connections, while one node has **zero** connections.
 
-以下の例では、4つのノードすべてに負荷を均等に分散させるリバランス操作の方法を示します。
+In the following example, we demonstrate how to perform a rebalancing operation to evenly distribute the load across all four nodes.
 
-#### リバランスタスクの提出
+#### Submit a Rebalance Task
 
-`Rebalance` リソースを作成してリバランスを開始します：
+Create a `Rebalance` resource to initiate the rebalancing process:
 
 ```yaml
 apiVersion: apps.emqx.io/v1beta4
@@ -74,16 +84,16 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-ファイル名を `rebalance.yaml` として保存し、以下のコマンドでRebalanceタスクを提出します：
+Save the file as `rebalance.yaml`, and execute the following command to submit the Rebalance task:
 
 ```bash
 $ kubectl apply -f rebalance.yaml
 rebalance.apps.emqx.io/rebalance-sample created
 ```
 
-#### リバランス進捗の確認
+#### Check the Rebalance Progress
 
-以下のコマンドを実行してEMQXクラスターのリバランス状況を確認します：
+Execute the following command to inspect the rebalancing status of the EMQX cluster:
 
 ```bash
 $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
@@ -103,11 +113,11 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
      "connection_eviction_rate": 10
 }
 ```
-> `rebalanceStates` フィールドの詳細な説明は、ドキュメント：[rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate) をご参照ください。
+> For a detailed description of the `rebalanceStates` field, refer to the documentation: [rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate).
 
-#### 完了まで待機
+#### Wait for Completion
 
-タスクのステータスが `Completed` になるまで監視します：
+Monitor the task until its status becomes `Completed`:
 
 ```bash
 $ kubectl get rebalances rebalance-sample
@@ -115,23 +125,23 @@ NAME               STATUS      AGE
 rebalance-sample   Completed   62s
 ```
 
-> `STATUS` フィールドはRebalanceタスクのライフサイクル状態を示します：
+> The `STATUS` field indicates the lifecycle state of the Rebalance task:
 >
-> | ステータス       | 意味                                         |
-> | ---------------- | -------------------------------------------- |
-> | **Processing**   | リバランス処理中。                           |
-> | **Completed**    | リバランスが正常に完了。                     |
-> | **Failed**       | リバランスでエラーが発生し停止。             |
+> | Status         | Meaning                                       |
+> | -------------- | --------------------------------------------- |
+> | **Processing** | Rebalancing is in progress.                   |
+> | **Completed**  | Rebalancing has successfully finished.        |
+> | **Failed**     | Rebalancing encountered an error and stopped. |
 
-### リバランス後のクラスター負荷分布
+### Cluster Load Distribution After Rebalancing
 
 ![](./assets/configure-emqx-rebalance/after-rebalance.png)
 
-上図はリバランス完了後のクラスター負荷を示しています。クライアント接続の移行は全体を通じてスムーズかつ安定しています。クラスター内の接続総数はリバランス前と同じく**10,000**のままです。
+The figure above shows the cluster load after Rebalance has completed. As illustrated, the migration of client connections is smooth and stable throughout the entire operation. The total number of connections in the cluster remains **10,000**, the same as before rebalancing.
 
-リバランス前は1ノードが**0**接続、3ノードがそれぞれ**10,000**接続でしたが、リバランス後は4ノードすべてに均等に接続が再分配されています。各ノードの負荷は約**2,500**接続で安定し、一貫しています。
+Before rebalancing, one node carried **0** connections while three nodes carried **10,000** connections each. After rebalancing, the connections have been redistributed evenly across all four nodes. The load on each node stabilizes around **2,500** connections and remains consistent.
 
-クラスターがバランス状態に達したかどうかは、EMQX Operatorが以下の条件で評価します：
+To determine whether the cluster has reached a balanced state, the EMQX Operator evaluates the following conditions:
 
 ```
 avg(source node connection number) < avg(target node connection number) + abs_conn_threshold
@@ -139,10 +149,10 @@ or
 avg(source node connection number) < avg(target node connection number) * rel_conn_threshold
 ```
 
-設定されたRebalanceの閾値と実際の接続数を用いると：
+Using the configured Rebalance thresholds and real connection counts:
 
-- ソースノード平均：`avg(2553 + 2553 + 2554) ≈ 2553`
-- ターゲットノード平均：`2340`
-- 条件判定：`2553 < 2340 * 1.1`
+- Source node average: `avg(2553 + 2553 + 2554) ≈ 2553`
+- Target node average: `2340`
+- Condition checked: `2553 < 2340 * 1.1`
 
-条件を満たすため、Operatorはクラスターがバランス状態に達したと判断し、リバランスタスクは正常に完了したと結論づけます。
+Since the condition holds true, the Operator concludes that the cluster has reached a balanced state and the rebalancing task has successfully completed.

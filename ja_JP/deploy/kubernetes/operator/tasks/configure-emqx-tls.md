@@ -1,16 +1,16 @@
-# EMQXでTLSを有効化する
+# Enable TLS In EMQX
 
-## 目的
+## Objective
 
-`extraVolumes` および `extraVolumeMounts` フィールドを使用してTLS証明書をカスタマイズします。
+Customize TLS certificates using the `extraVolumes` and `extraVolumeMounts` fields.
 
-## TLS証明書に基づくSecretの作成
+## Create a Secret Based On TLS Certificate
 
-Secretは、パスワード、トークン、キーなどの少量の機密情報を格納するオブジェクトです。このデモではTLS証明書情報を保存するためにSecretを使用するため、EMQXクラスターを作成する前にSecretを作成する必要があります。
+A secret is an object that contains a small amount of sensitive information, such as passwords, tokens, or keys. In this demonstration, we use secrets to store TLS certificate information, so we need to create one before creating the EMQX cluster.
 
-詳細は[Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets)のドキュメントをご参照ください。
+For more information, please refer to the [Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets) documentation.
 
-以下をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
+Save the following as a YAML file and deploy it using the `kubectl apply` command:
 
 ```yaml
 apiVersion: v1
@@ -34,49 +34,48 @@ stringData:
 ```
 
 :::tip
-上記3つのフィールドの内容は省略しています。ご自身の証明書内容で埋めてください。
-* `ca.crt` はCA証明書を含めてください。
-* `tls.crt` はサーバー証明書を含めてください。
-* `tls.key` はサーバーの秘密鍵を含めてください。
+In this example, the contents of the above three fields are omitted. Please fill them with your own certificate contents.
+* `ca.crt` should contain the CA certificate.
+* `tls.crt` should contain the server certificate.
+* `tls.key` should contain the server's private key.
 :::
 
-## EMQXクラスターの設定
+## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリュームおよびマウントポイントを設定するために以下のフィールドを提供しています：
-* `.spec.coreTemplate.extraVolumes`
-* `.spec.coreTemplate.extraVolumeMounts`
-* `.spec.replicantTemplate.extraVolumes`
-* `.spec.replicantTemplate.extraVolumeMounts`
+EMQX CRD `apps.emqx.io/v3beta1` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
+* `.spec.coreTemplate.spec.extraVolumes`
+* `.spec.coreTemplate.spec.extraVolumeMounts`
+* `.spec.replicantTemplate.spec.extraVolumes`
+* `.spec.replicantTemplate.spec.extraVolumeMounts`
 
-このデモでは、これらのフィールドを使ってTLS証明書をEMQXクラスターに提供します。
+In this demonstration, we will use these fields to provide TLS certificates to the EMQX cluster.
 
-ボリュームには多くの種類があります。ボリュームの詳細は[Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret)のドキュメントをご参照ください。ここでは `secret` ボリュームタイプを使用しています。
+There are many types of Volumes. For information about Volumes, please refer to the [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret) documentation. Here we are using the `secret` volume type.
 
-1. 以下をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
+1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       # `emqx-tls` ボリュームからマウントされたTLSリスナー証明書を設定：
-       data: |
-         listeners.ssl.default {
-           bind = "0.0.0.0:8883"
-           ssl_options {
-             cacertfile = "/mounted/cert/ca.crt"
-             certfile = "/mounted/cert/tls.crt"
-             keyfile = "/mounted/cert/tls.key"
-             gc_after_handshake = true
-             handshake_timeout = 5s
-           }
-         }
-         license {
-           key = "..."
-         }
+       # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
+       roots:
+         listeners:
+           ssl:
+             default:
+               bind: "0.0.0.0:8883"
+               ssl_options:
+                 cacertfile: "/mounted/cert/ca.crt"
+                 certfile: "/mounted/cert/tls.crt"
+                 keyfile: "/mounted/cert/tls.key"
+                 gc_after_handshake: true
+                 handshake_timeout: "5s"
+         license:
+           key: "..."
      coreTemplate:
        spec:
          extraVolumes:
@@ -89,13 +88,13 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
      replicantTemplate:
        spec:
          extraVolumes:
-           # `secret` ボリュームタイプの `emqx-tls` を作成：
+           # Create a `secret` volume type named `emqx-tls`:
            - name: emqx-tls
              secret:
                secretName: emqx-tls
          extraVolumeMounts:
            - name: emqx-tls
-             # TLS証明書がEMQXノードにマウントされるディレクトリ：
+             # Directory where the TLS certificate is mounted to EMQX nodes:
              mountPath: /mounted/cert
      dashboardServiceTemplate:
        spec:
@@ -105,9 +104,9 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
          type: LoadBalancer
    ```
 
-2. EMQXクラスターが準備完了になるまで待ちます。
+2. Wait for the EMQX cluster to become ready.
 
-   `kubectl get` コマンドでEMQXクラスターのステータスを確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
+   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
 
    ```bash
    $ kubectl get emqx
@@ -115,19 +114,19 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    emqx   Ready    10m
    ```
 
-## MQTTXを使ったTLS接続の検証
+## Verify TLS Connection using MQTTX
 
-[MQTTX CLI](https://mqttx.app/cli) は、開発者がMQTTサービスやアプリケーションを素早く始められるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool, designed to help developers quickly get started with MQTT services and applications.
 
-1. EMQXリスナーサービスの外部IPを取得します。
+1. Obtain the external IP of the EMQX listeners service.
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. MQTTX CLIでメッセージをサブスクライブします。
+2. Subscribe to messages using MQTTX CLI.
 
-   TLSリスナーポート8883に接続し、証明書検証をスキップするために `--insecure` フラグを使用します。
+   Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
 
    ```bash
    mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
@@ -137,7 +136,7 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    [10:00:25] › ✔ Subscribed to hello
    ```
 
-3. 別のターミナルでメッセージをパブリッシュします。
+3. In a separate terminal window, publish a message.
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -147,7 +146,7 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    [10:00:58] › ✔ Message published
    ```
 
-4. サブスクライバー側でメッセージ受信を確認します。
+4. Observe the subscriber client receiving the message.
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -157,4 +156,4 @@ EMQX CRD `apps.emqx.io/v2` は、EMQXクラスターに追加のボリューム�
    [10:00:58] › ✔ Message published
    ```
 
-   これにより、パブリッシャーおよびサブスクライバーの両クライアントがTLS接続を介してブローカーと正常に通信できていることが確認できます。
+   This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.

@@ -8,8 +8,14 @@
 ## Core and Replicant Nodes
 
 Nodes in the EMQX cluster can have one of two roles: Core node and Replicant node.
-* Core nodes are responsible for data persistence in the cluster and serve as the authoritative source for shared cluster state such as routing tables, MQTT client channels, retained messages, cluster configuration, alarms, Dashboard user credentials, etc.
-* Replicant nodes are designed to be stateless and do not participate in database operations. Adding or deleting Replicant nodes will not affect the redundancy of the cluster data.
+
+* Core nodes are responsible for data persistence in the cluster.
+  
+    They serve as the authoritative source for shared cluster state such as routing tables, MQTT client channels, retained messages, cluster configuration, alarms, Dashboard user credentials, etc.
+
+* Replicant nodes are designed to be stateless and do not participate in database operations.
+
+    Adding or deleting Replicant nodes will not affect the redundancy of the cluster data.
 
 Communication between Core and Replicant nodes in a typical EMQX cluster is illustrated in the following diagram:
 
@@ -20,27 +26,28 @@ Communication between Core and Replicant nodes in a typical EMQX cluster is illu
 For more information about the EMQX Core-Replicant architecture, refer to the [Cluster Architecture](../../../cluster/mria-introduction.md) documentation.
 
 :::tip
-There must be at least one Core node in the EMQX cluster. For the purpose of high availability, EMQX Operator recommends that the EMQX cluster have at least three Core nodes.
+* There must be at least one Core node in the EMQX cluster.
+* When Replicant nodes are enabled, EMQX Operator 3.0 requires at least two Core nodes for rolling updates.
+* For high availability, running at least three Core nodes is recommended.
 :::
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` supports configuring Core nodes of the EMQX cluster through the `.spec.coreTemplate` field, and configuring Replicant nodes of the EMQX cluster through the `.spec.replicantTemplate` field.
+EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX cluster through the `.spec.coreTemplate` field, and configuring Replicant nodes of the EMQX cluster through the `.spec.replicantTemplate` field.
 
 1. Save the following content as a YAML file and deploy using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          replicas: 2
@@ -64,6 +71,8 @@ EMQX CRD `apps.emqx.io/v2` supports configuring Core nodes of the EMQX cluster t
 
    Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
 
+   EMQX Operator exposes the Replicant replica count through the Kubernetes `scale` subresource, which allows HorizontalPodAutoscaler to manage scaling of Replicant set in Core-Replicant mode.
+
 2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
 
    ```bash
@@ -80,8 +89,8 @@ You can view information about all nodes in the cluster by checking the `.status
 $ kubectl get emqx emqx -o json | jq .status.coreNodes
 [
   {
-    "name": "emqx@emqx-core-adcdef012-0.emqx-headless.default.svc.cluster.local",
-    "podName": "emqx-core-adcdef012-0",
+    "name": "emqx@emqx-core-0.emqx-headless.default.svc.cluster.local",
+    "podName": "emqx-core-0",
     "status": "running",
     "otpRelease": "27.3.4.2-6/15.2.7.1",
     "role": "core",
@@ -90,8 +99,8 @@ $ kubectl get emqx emqx -o json | jq .status.coreNodes
     "connections": 0
   },
   {
-    "name": "emqx@emqx-core-adcdef012-1.emqx-headless.default.svc.cluster.local",
-    "podName": "emqx-core-adcdef012-1",
+    "name": "emqx@emqx-core-1.emqx-headless.default.svc.cluster.local",
+    "podName": "emqx-core-1",
     "status": "running",
     "otpRelease": "27.3.4.2-6/15.2.7.1",
     "role": "core",

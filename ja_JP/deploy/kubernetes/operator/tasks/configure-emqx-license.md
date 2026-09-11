@@ -1,31 +1,30 @@
-# ライセンス管理
+# Manage License
 
-## 目的
+## Objective
 
-- EMQX Enterpriseライセンスの設定
-- EMQX Enterpriseライセンスの更新
+- Configure the EMQX Enterprise license.
+- Update EMQX Enterprise license.
 
-## ライセンスの設定
+## Configure License
 
-EMQX Enterpriseライセンスは、EMQX公式サイトから無料で申請できます：[EMQX Enterpriseライセンスの申請](https://www.emqx.com/en/apply-licenses/emqx)。
+You can apply for an EMQX Enterprise license for free on the EMQX official website: [Apply for EMQX Enterprise License](https://www.emqx.com/en/apply-licenses/emqx).
 
-## EMQXクラスターの設定
+## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じてEMQXクラスターのライセンス設定をサポートしています。完全な設定リファレンスについては、[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/)を参照してください。
+The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster license through `.spec.config.roots.license`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
 
-1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
+1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      image: emqx/emqx:@EE_VERSION@
      dashboardServiceTemplate:
        spec:
@@ -34,13 +33,13 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じて
 
    ::: tip
 
-   `.spec.config.data` フィールド内の `license.key` はライセンスの内容を表します。この例ではライセンス内容は省略しています。ご自身のライセンスキーを入力してください。
+   The `.spec.config.roots.license.key` field contains the license key. Replace the placeholder in this example with your license key.
 
    :::
 
-2. EMQXクラスターが準備完了になるまで待ちます。
+2. Wait for the EMQX cluster to become ready. 
 
-   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。完了までに時間がかかる場合があります。
+   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx
@@ -48,9 +47,9 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じて
    emqx   Ready    10m
    ```
 
-## ライセンスの更新
+## Update License
 
-1. ライセンス情報を確認します。
+1. View the license information.
 
    ```bash
    $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
@@ -65,9 +64,9 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じて
    expiry          : false
    ```
 
-   出力には、申請者情報、ライセンスでサポートされる最大接続数、有効期限などの基本的なライセンス情報が表示されます。
+   The output shows basic license information, including the applicant's information, the maximum number of connections supported by the license, and the expiration time.
 
-2. EMQX CRを編集してライセンスを更新します。
+2. Modify the EMQX CR to update the license.
 
    ```bash
    $ kubectl edit emqx emqx
@@ -75,14 +74,13 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じて
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "${new_license_key}"
-         }
+       roots:
+         license:
+           key: "${new_license_key}"
    ...
    ```
 
-3. ライセンスが更新されたことを確認します。
+3. Verify that the license has been updated.
 
    ```bash
    $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
@@ -97,4 +95,4 @@ EMQX CRD `apps.emqx.io/v2` は、`.spec.config.data` フィールドを通じて
    expiry          : false
    ```
 
-   更新された `max_connections` の値から、EMQX Enterpriseライセンスが正常に更新されたことが確認できます。ライセンスの更新には時間がかかる場合があるため、コマンドの再実行が必要な場合があります。
+   The updated `max_connections` field clearly indicates that the EMQX Enterprise license has been updated successfully. Keep in mind that the license update may take time, so you may need to retry the command.

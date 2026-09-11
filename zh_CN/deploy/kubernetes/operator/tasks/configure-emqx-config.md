@@ -2,49 +2,53 @@
 
 ## 目标
 
-使用 EMQX 自定义资源中的 `.spec.config.data` 字段修改 EMQX 配置。
+通过 EMQX 自定义资源中的 `.spec.config.roots` 修改 EMQX 配置。
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 字段配置 EMQX 集群。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
+`apps.emqx.io/v3beta1` EMQX CRD 的 `.spec.config.roots` 接受与 JSON 兼容的 EMQX 顶层配置根项。在 YAML 清单中，每个根项应表示为与 [EMQX 配置 Schema](https://docs.emqx.com/zh/enterprise/v6.2.0/hocon/)对应的结构化 YAML 对象、数组或标量。
 
-EMQX 使用 [HOCON](../../../../configuration/configuration.md#hocon-配置格式) 作为配置文件格式。
+该字段不接受 include 或替换等仅适用于 HOCON 的结构。
+
+从 `.spec.config.roots` 中删除根项表示 EMQX Operator 不再管理该根项。这一操作不会删除 EMQX 已持久化的值，也不会将该根项恢复为 Schema 默认值。如需将根项重置为已知值，请显式声明这些值。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
-      name: emqx
+     name: emqx
    spec:
-      image: emqx/emqx:@EE_VERSION@
-      imagePullPolicy: IfNotPresent
-      config:
-         # 配置一个名为 `test` 的 TCP 监听器，监听端口 1884：
-         data: |
-            listeners.tcp.test {
-               bind = "0.0.0.0:1884"
-               max_connections = 1024000
-            }
-            license {
-              key = "..."
-            }
-      listenersServiceTemplate:
-         spec:
-            type: LoadBalancer
-      dashboardServiceTemplate:
-         spec:
-            type: LoadBalancer
+     image: emqx/emqx:@EE_VERSION@
+     imagePullPolicy: IfNotPresent
+     config:
+       roots:
+         # 配置名为 `test`、端口为 1884 的 TCP 监听器：
+         listeners:
+           tcp:
+             test:
+               bind: "0.0.0.0:1884"
+               max_connections: 1024000
+         license:
+           key: "..."
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
    ```
 
    ::: tip
-   `.spec.config.data` 字段的内容作为 [`emqx.conf` 配置文件](../../../../configuration/configuration.md#不可变配置文件)提供给 EMQX 容器。
+   不要配置 `node.cookie`，该设置由 EMQX Operator 管理。
    :::
 
-2. 等待 EMQX 集群就绪。
+   ::: tip
+   EMQX Operator 将监听器设置等大多数配置写入 [`base.hocon`](../../../../configuration/configuration.md#基础配置文件)，并通过 EMQX Configs API 在运行时应用变更，无需重启 Pod。Operator 将 Dashboard 监听器和节点设置等仅在 EMQX 启动时生效的配置写入 [`emqx.conf`](../../../../configuration/configuration.md#不可变配置文件)。修改此类设置会触发受控滚动更新。
+   :::
 
-   使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx emqx
@@ -52,9 +56,16 @@ EMQX 使用 [HOCON](../../../../configuration/configuration.md#hocon-配置格�
    emqx   Ready    10m
    ```
 
+3. 检查 `ConfigApplied` 条件，确认目标配置已生效：
+
+   ```bash
+   $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
+   True    Applied    Desired configuration is active
+   ```
+
 ## 验证配置
 
-查看 EMQX 监听器的状态。
+查看 EMQX 监听器状态。
 
 ```bash
 $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
@@ -74,4 +85,36 @@ tcp:test
    max_conns : 1024000
 ```
 
-这里我们可以看到端口 1884 上的新监听器正在运行。
+输出表明，端口 1884 上的新监听器正在运行。
+
+## 修改需要重启的配置
+
+部分配置变更会更新 Pod 模板并触发滚动更新。以下示例修改仅在 EMQX 启动时生效的 Dashboard HTTP 监听器。
+
+1. 修补 EMQX 资源：
+
+   ```bash
+   kubectl patch emqx emqx --type=merge -p '{"spec":{"config":{"roots":{"dashboard":{"listeners":{"http":{"bind":"0.0.0.0:18084"}}}}}}}'
+   ```
+
+2. EMQX Operator 检测到变更后，检查 `ConfigApplied` 条件：
+
+   ```bash
+   $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
+   False    StartupConfigPending    Configuration roots require rolling restart: [dashboard]
+   ```
+
+   状态为 `False` 且原因为 `StartupConfigPending`，表示至少有一个就绪 Pod 仍在使用原配置，滚动更新正在进行。
+
+3. 等待滚动更新完成：
+
+   ```bash
+   kubectl wait --for=condition=ConfigApplied emqx/emqx --timeout=10m
+   ```
+
+4. 检查 `ConfigApplied` 条件，确认新配置已生效：
+
+   ```bash
+   $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
+   True    Applied    Desired configuration is active
+   ```

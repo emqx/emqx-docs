@@ -1,36 +1,49 @@
-# 启用持久化
+# 为 EMQX 集群启用持久化存储
 
 ## 目标
 
-通过 `volumeClaimTemplates` 字段为 EMQX 集群的 Core 节点集配置持久化。
+使用 `persistentVolumeClaimSpec` 字段为 EMQX 集群中的 Core 节点配置持久化存储。
 
-## 配置 EMQX 集群持久化
+## 配置 EMQX 集群持久化存储
 
-EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate.spec.volumeClaimTemplates` 配置每个 Core 节点数据的持久化。
+`apps.emqx.io/v3beta1` EMQX CRD 中的 `.spec.coreTemplate.spec.persistentVolumeClaimSpec` 字段用于为每个 Core 节点配置持久化存储。该字段采用 Kubernetes `PersistentVolumeClaimSpec` 的模式和语义。
 
-`.spec.coreTemplate.spec.volumeClaimTemplates` 字段的定义和语义与 Kubernetes API 中定义的 `PersistentVolumeClaimSpec` 一致。
+EMQX Operator 3.0 使用单个 StatefulSet 管理 Core 节点。每个 Core Pod 都具有稳定的标识，并在镜像更新和滚动更新期间始终使用同一个 PVC。配置此字段后，EMQX Operator 会使用持久卷声明（Persistent Volume Claim，PVC）作为 EMQX 容器的 `/opt/emqx/data` 卷，并通过指定的 [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) 制备持久卷（Persistent Volume，PV）。
 
-当您指定 `.spec.coreTemplate.spec.volumeClaimTemplates` 字段时，EMQX Operator 会将 EMQX 容器的 `/opt/emqx/data` 卷配置为由 Persistent Volume Claim (PVC) 支持，该 PVC 使用指定的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/) 提供 Persistent Volume (PV)。因此，当删除 EMQX Pod 时，关联的 PV 和 PVC 会被保留，从而保留 EMQX 运行时数据。
+## PVC 生命周期
 
-有关 PV 和 PVC 的更多详细信息，请参阅 [Persistent Volumes](https://kubernetes.io/zh-cn/docs/concepts/storage/persistent-volumes/) 文档。
+Core 节点的 PVC 与 StatefulSet Pod 序号绑定。例如，在镜像更新和滚动更新期间，`emqx-core-0` 的 PVC 始终挂载到 `emqx-core-0`，因此该节点会继续使用同一个数据卷。
 
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
+EMQX Operator 会配置 Kubernetes，使其在不再需要 Core 节点 PVC 时将其删除：
+
+- 缩容 Core 节点时，会删除已移除 Pod 序号所对应的 PVC。
+
+    例如，将 Core 节点副本数从 5 缩减到 3 时，会删除序号 3 和 4 对应的 PVC。在缩容 StatefulSet 前，EMQX Operator 会将持久存储（Durable Storage）数据从这些 Core 节点重新均衡到其他节点，以免数据丢失或持久性降低。
+
+- 删除 EMQX 自定义资源时，Kubernetes 会删除 Core StatefulSet 及其关联的 PVC。
+
+- 滚动更新期间，StatefulSet 名称和 Pod 序号不会改变，因此 PVC 会被保留。
+
+自动清理功能依赖 Kubernetes `StatefulSetAutoDeletePVC` 特性门控。从 Kubernetes 1.27 开始，该特性门控默认启用。如果集群管理员将其禁用，Kubernetes 会忽略 PVC 删除策略，此时必须手动清理不再使用的 PVC。
+
+有关 PV 和 PVC 的详情，请参见 Kubernetes [持久卷](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)文档。
+
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 进行部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            storageClassName: standard
            resources:
              requests:
@@ -48,11 +61,13 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate.spec.volumeClaimTemp
 
    ::: tip
 
-   使用 `storageClassName` 字段为 EMQX 数据选择合适的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 列出 Kubernetes 集群中已存在的 StorageClass，或根据您的需求创建 StorageClass。
+   使用 `storageClassName` 字段为 EMQX 数据选择合适的 [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 可列出 Kubernetes 集群中已有的 StorageClass；也可以根据需要创建 StorageClass。
 
    :::
 
-2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+2. 等待 EMQX 集群就绪。
+
+   运行 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx emqx
@@ -60,46 +75,30 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate.spec.volumeClaimTemp
    emqx   Ready    10m
    ```
 
-## 验证持久化
+## 验证持久化存储
 
-1. 在 EMQX Dashboard 中创建测试规则。
+验证 Kubernetes 是否会在 Core Pod 被替换后重新挂载同一个 PVC。请勿在此测试中删除 EMQX 资源，因为 EMQX Operator 会将 StatefulSet 配置为：删除 StatefulSet 时一并删除关联的 PVC。
 
-   ```bash
-   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-   ```
-
-   - 在 `http://${external_ip}:18083` 登录 EMQX Dashboard。
-
-   - 导航到**集成** -> **规则**创建新规则。
-
-   - 为此规则附加简单动作。
-
-     ![](./assets/configure-emqx-persistent/emqx-core-action.png)
-
-   - 点击**保存**生成规则。规则创建成功后，页面上会出现一条 ID 为 `emqx-persistent-test` 的相应记录，如下图所示：
-
-     ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
-
-2. 删除旧 EMQX 集群。
-
-   运行以下命令删除 EMQX 集群，其中 `emqx.yaml` 是您之前用于部署集群的文件：
+1. 记录第一个 Core Pod 所挂载 PVC 的 UID：
 
    ```bash
-   $ kubectl delete -f emqx.yaml
-   emqx.apps.emqx.io "emqx" deleted
+   pvc_name=emqx-core-data-emqx-core-0
+   pvc_uid_before=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   kubectl get pvc "${pvc_name}"
    ```
 
-3. 重新部署 EMQX 集群。
-
-   运行以下命令重新部署 EMQX 集群：
+2. 删除 Pod，并等待 StatefulSet 重新创建该 Pod：
 
    ```bash
-   $ kubectl apply -f emqx.yaml
-   emqx.apps.emqx.io/emqx created
+   kubectl delete pod emqx-core-0
+   kubectl wait --for=condition=Ready pod/emqx-core-0 --timeout=10m
    ```
 
-4. 等待 EMQX 集群就绪。通过浏览器访问 EMQX Dashboard 验证之前创建的规则是否仍然存在，如下图所示：
+3. Pod 就绪后，再次获取并比较 PVC UID：
 
-   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+   ```bash
+   pvc_uid_after=$(kubectl get pvc "${pvc_name}" -o jsonpath='{.metadata.uid}')
+   test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
+   ```
 
-   在旧集群中创建的 `emqx-persistent-test` 规则在新集群中仍然存在，这确认了持久化配置工作正常。
+   UID 相同即表示替换后的 Pod 复用了同一个 PVC。
