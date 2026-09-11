@@ -159,12 +159,14 @@ The following integrations have been added in the EMQX 6.x series:
 
 #### Enhanced Integrations
 
-In addition to new integrations, EMQX 6.0.0 brings powerful enhancements to existing integrations, improving performance, usability, and cloud-native compatibility:
+In addition to new integrations, EMQX 6.x enhances existing integrations with improved authentication, data management, performance, and usability:
 
-- **Snowflake Snowpipe Streaming**: Now supports low-latency data ingestion into Snowflake tables via Snowpipe Streaming (preview feature of Snowflake), available for AWS-hosted accounts.
-- **RocketMQ Action**: Adds support for `key` and `tag` templates, plus a `key_dispatch` strategy for flexible message routing and metadata enrichment.
-- **AWS S3 and AWS S3 Tables Connector**: `access_key_id` and `secret_access_key` are now optional, with automatic retrieval from EC2 Instance Metadata Service v2 APIs in AWS-hosted environments.
-- **RabbitMQ Sink**: Allows customization of Headers and Properties Templates to enhance message routing and compatibility within RabbitMQ.
+- **Cloud-Native Authentication (6.3.0)**: [GCP Pub/Sub](../develop/data-integration/data-bridge-gcp-pubsub.md#attached-service-account-prerequisites) Producer and Consumer connectors and the [BigQuery](../develop/data-integration/bigquery.md#attached-service-account-prerequisites) connector can obtain access tokens through an attached service account. When connecting to Amazon MSK, [Kafka](../develop/data-integration/data-bridge-kafka.md#authentication-method) Producer and Consumer connectors support AWS IAM Roles Anywhere for obtaining temporary AWS credentials through a credential helper.
+- **[Disk Log Connector](../develop/data-integration/disk-log.md#log-rotation) (6.3.0)**: Supports hourly or daily file rotation, with configurable retention periods and rotation time zones.
+- **[Snowflake Snowpipe Streaming](../develop/data-integration/snowflake.md#create-a-snowflake-streaming-connector) (6.0.0)**: Supports low-latency data ingestion into Snowflake tables via Snowpipe Streaming (preview feature of Snowflake), available for AWS-hosted accounts.
+- **RocketMQ Action (6.0.0)**: Adds support for `key` and `tag` templates, plus a `key_dispatch` strategy for flexible message routing and metadata enrichment.
+- **[AWS S3](../develop/data-integration/s3.md#prepare-an-s3-bucket) and [AWS S3 Tables](../develop/data-integration/s3-tables.md#deployment-prerequisites-and-credential-sources) Connectors (6.0.0)**: `access_key_id` and `secret_access_key` are optional, with automatic retrieval from EC2 Instance Metadata Service v2 APIs in AWS-hosted environments.
+- **[RabbitMQ Sink](../develop/data-integration/data-bridge-rabbitmq.md#set-headers-and-properties-templates) (6.0.0)**: Allows customization of Headers and Properties Templates to enhance message routing and compatibility within RabbitMQ.
 
 ### Other Enhancements
 

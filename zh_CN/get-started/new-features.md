@@ -167,12 +167,14 @@ EMQX 6.x 系列新增了以下数据集成：
 
 #### 增强的集成能力
 
-除了新增集成外，EMQX 6.0.0 还对现有集成进行了性能、可用性与云原生兼容性优化：
+除了新增集成外，EMQX 6.x 还增强了现有集成的身份认证、数据管理、性能和可用性：
 
-- **Snowflake Snowpipe Streaming**：现支持通过 Snowpipe Streaming（Snowflake 的预览版功能）将数据低延迟写入 Snowflake 表，适用于 AWS 托管账户。
-- **RocketMQ 动作**：新增 `key` 与 `tag` 模板字段，并提供 `key_dispatch` 消息分发策略，实现更灵活的消息路由与元数据管理。
-- **AWS S3 和 AWS S3 Tables 连接器**：`access_key_id` 与 `secret_access_key` 参数现为可选项，EMQX 可自动通过 AWS EC2 Instance Metadata Service v2 获取凭证，实现无缝集成。
-- **RabbitMQ Sink**：支持自定义消息 Headers 与 Properties 模板，提升消息在 RabbitMQ 中的消息路由能力和兼容性。
+- **云原生身份认证（6.3.0）**：[GCP Pub/Sub](../develop/data-integration/data-bridge-gcp-pubsub.md#附加服务账号前提条件) Producer 和 Consumer 连接器以及 [BigQuery](../develop/data-integration/bigquery.md#附加服务账号前提条件) 连接器可通过附加服务账号获取访问令牌。连接 Amazon MSK 时，[Kafka](../develop/data-integration/data-bridge-kafka.md#认证方式) Producer 和 Consumer 连接器支持 AWS IAM Roles Anywhere，可通过凭据助手获取临时 AWS 凭据。
+- **[Disk Log 连接器](../develop/data-integration/disk-log.md#日志轮转机制)（6.3.0）**：支持按小时或按天轮换文件，并可配置文件保留时间和轮换时区。
+- **[Snowflake Snowpipe Streaming](../develop/data-integration/snowflake.md#创建-snowflake-streaming-连接器)（6.0.0）**：支持通过 Snowpipe Streaming（Snowflake 的预览版功能）将数据低延迟写入 Snowflake 表，适用于 AWS 托管账户。
+- **RocketMQ 动作（6.0.0）**：新增 `key` 与 `tag` 模板字段，并提供 `key_dispatch` 消息分发策略，实现更灵活的消息路由与元数据管理。
+- **[AWS S3](../develop/data-integration/s3.md#准备-s3-存储桶) 和 [AWS S3 Tables](../develop/data-integration/s3-tables.md#部署前提与凭证获取方式) 连接器（6.0.0）**：`access_key_id` 与 `secret_access_key` 参数为可选项，EMQX 可自动通过 AWS EC2 Instance Metadata Service v2 获取凭证。
+- **[RabbitMQ Sink](../develop/data-integration/data-bridge-rabbitmq.md#设置-headers-和属性模板)（6.0.0）**：支持自定义消息 Headers 与 Properties 模板，提升消息在 RabbitMQ 中的消息路由能力和兼容性。
 
 ### 其他增强功能
 
