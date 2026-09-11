@@ -355,6 +355,8 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
 
 注意：除规则 SQL 和 Sink 的 SQL 模板设置不同外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
 
+该章节中说明的 SQL 模板限制同样适用于此模板。
+
 规则 SQL 如下：
 
 ```sql

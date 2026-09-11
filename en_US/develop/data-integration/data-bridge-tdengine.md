@@ -213,7 +213,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   There is a breaking change in EMQX 5.1.1. Earlier than this version, string-type values were automatically quoted. However, starting from EMQX 5.1.1, users are required to manually quote these values.
+   Before EMQX 5.1.1, EMQX automatically added quotes around string placeholder values. From EMQX 5.1.1 through 5.10.4, you must add the quotes manually. Starting from EMQX 5.10.5, placeholders can be used as complete values or inside string literals, and EMQX escapes the rendered values according to their SQL context.
 
    :::
 
@@ -297,7 +297,7 @@ SELECT
 
 The SQL template for the Sink is as follows:
 
-Note: The fields should not include quotation marks, and do not end SQL statements with a semicolon (`;`).
+The following template uses string placeholders inside single-quoted literals. Do not end the SQL statement with a semicolon (`;`).
 
 ```sql
 INSERT INTO emqx_client_events(ts, clientid, event) VALUES (

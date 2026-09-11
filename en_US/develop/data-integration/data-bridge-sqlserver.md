@@ -359,6 +359,8 @@ This section demonstrates how to create a rule for recording the clients' online
 
 The steps are similar to those in [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) expect for the SQL template and SQL rules.
 
+The SQL template restrictions described in that section also apply to this template.
+
 The rule SQL statement for online/offline status recording is as follows.
 
 ```sql
