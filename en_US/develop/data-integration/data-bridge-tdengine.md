@@ -203,9 +203,17 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 8. Configure the **SQL Template** for the Sink. You can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
 
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, EMQX parses the SQL template when creating the Sink, escapes placeholder values based on their SQL context, and rejects unsupported syntax. The template must be a single TDengine `INSERT` statement. It supports multi-table `VALUES` inserts and `USING ... TAGS` clauses. A bare or backtick-quoted target table name can contain placeholders, for example, `test_${clientid}`; EMQX renders the complete target as one quoted identifier. SQL comments, `FILE` input, and additional statements are not supported.
+
+   This validation can reject templates that earlier versions accepted. Revise any incompatible templates before upgrading.
+
+   :::
+
    ::: tip
 
-   There is a breaking change in EMQX 5.1.1. Earlier than this version, string-type values were automatically quoted. However, starting from EMQX 5.1.1, users are required to manually quote these values.
+   Before EMQX 5.1.1, EMQX automatically added quotes around string placeholder values. From EMQX 5.1.1 through 5.10.4, you must add the quotes manually. Starting from EMQX 5.10.5, placeholders can be used as complete values or inside string literals, and EMQX escapes the rendered values according to their SQL context.
 
    :::
 
@@ -289,7 +297,7 @@ SELECT
 
 The SQL template for the Sink is as follows:
 
-Note: The fields should not include quotation marks, and do not end SQL statements with a semicolon (`;`).
+The following template uses string placeholders inside single-quoted literals. Do not end the SQL statement with a semicolon (`;`).
 
 ```sql
 INSERT INTO emqx_client_events(ts, clientid, event) VALUES (

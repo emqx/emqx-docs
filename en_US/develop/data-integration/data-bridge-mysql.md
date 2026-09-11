@@ -147,7 +147,17 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 8. Configure the **SQL Template** based on the feature to use:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   When batch mode is disabled, MySQL uses a prepared statement. Do not enclose placeholders in quotation marks or end the statement with a semicolon.
+
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, when batch mode is enabled, EMQX uses a restricted SQL parser to render the template safely. If the template contains unsupported syntax, EMQX logs a parsing error, and batch requests using the template fail at runtime.
+
+   The template must be a single MySQL `INSERT INTO ... VALUES` statement with one configured row. It supports constants, placeholders inside string literals, arithmetic expressions, functions, conditional expressions, and `ON DUPLICATE KEY UPDATE`. Assignment expressions in the `ON DUPLICATE KEY UPDATE` clause cannot contain placeholders. SQL comments, additional statements, and placeholders in identifiers are not supported.
+
+   EMQX also disables the MySQL `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` SQL modes on every connection it creates. Before upgrading, revise templates that use unsupported syntax or depend on either SQL mode.
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -187,6 +197,8 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the MySQL table `emqx_client_events` via a configured Sink.
 
 The rule creation steps are similar to those in [Creating a rule with MySQL Sink for Message Storage](#create-a-rules-with-mysql-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+
+The SQL template restrictions described in that section also apply to this template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 

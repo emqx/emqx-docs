@@ -126,9 +126,17 @@ ClickHouse 数据集成是 EMQX 中的开箱即用功能，旨在结合 MQTT 的
 
 8. 从**连接器**下拉框中选择刚刚创建的 `my_clickhouse`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-9. **批量值分隔符**（可选）：用于区分多个输入项，本示例中可保留默认的 `,` 。注意：您只需在启用[批量模式](./data-bridges.md)、且使用其他 [ClickHouse 数据格式](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)时才需更改设置。
+9. 从 EMQX 5.10.5 开始，**批量值分隔符**配置仅为兼容性保留，不再生效。启用[批量模式](./data-bridges.md)时，EMQX 会根据 SQL 格式自动推导分隔符。
 
-10. 在 **SQL 模版**中输入以下命令（您可通过[规则引擎](./rules.md)确保输入 SQL 语句中的字符串能被正确转义，以防 SQL 注入攻击）：
+10. 在 **SQL 模板**中输入以下命令：
+
+    ::: warning 重要提示
+
+    从 EMQX 5.10.5 开始，EMQX 会在创建 Sink 时解析 SQL 模板，根据 SQL 上下文转义占位符值，并拒绝不支持的语法。模板必须是单条 ClickHouse `INSERT` 语句，并使用 `VALUES`、`FORMAT Values` 或 `FORMAT JSONCompactEachRow`。占位符可用于值位置和字符串字面量中。不支持 SQL 注释、附加语句或在标识符中使用占位符。
+
+    此验证可能会拒绝早期版本接受的模板。升级前请修改不兼容的模板。
+
+    :::
 
     ```sql
     INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})

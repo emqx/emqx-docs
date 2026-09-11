@@ -138,7 +138,17 @@ CREATE TABLE emqx_client_events (
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_mysql`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
+8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入。未启用批量模式时，MySQL 使用[预处理 SQL](./data-bridges.md#sql-预处理)，占位符不应包含在引号内，SQL 末尾不要带分号 `;`：
+
+   ::: warning 重要提示
+
+   从 EMQX 5.10.5 开始，启用批量模式时，EMQX 使用受限的 SQL 解析器安全渲染模板。如果模板包含不支持的语法，EMQX 会记录解析错误，使用该模板的批量请求将在运行时失败。
+
+   模板必须是单条 MySQL `INSERT INTO ... VALUES` 语句，且只能配置一行值。模板支持常量、字符串字面量中的占位符、算术表达式、函数、条件表达式以及 `ON DUPLICATE KEY UPDATE`。`ON DUPLICATE KEY UPDATE` 子句的赋值表达式中不能包含占位符。不支持 SQL 注释、附加语句或在标识符中使用占位符。
+
+   EMQX 还会在其创建的每个 MySQL 连接中禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES` SQL 模式。升级前，请修改使用不支持语法或依赖这两种 SQL 模式的模板。
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -174,6 +184,8 @@ CREATE TABLE emqx_client_events (
 ## 创建事件记录 Sink 规则
 
 本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 MySQL 的数据表 `emqx_client_events` 中。除 SQL 模板与规则外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
+
+该章节中说明的 SQL 模板限制同样适用于此模板。
 
 您可以使用以下规则 SQL 创建规则：
 
