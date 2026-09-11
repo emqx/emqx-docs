@@ -12,7 +12,7 @@ QoS 0 messages normally bypass the Inflight Window and are forwarded immediately
 
 When the Message Queue for a topic priority reaches the length limit, EMQX first evicts the oldest QoS 0 message at that priority. If no QoS 0 message exists at that priority, EMQX evicts the oldest remaining message at that priority. When topic priorities are disabled, all messages share the same priority. This policy helps QoS 1 and QoS 2 messages make progress during QoS 0 bursts. Therefore, it is important to set a suitable Message Queue length limit. See `max_mqueue_len`.
 
-The Message Queue also stores messages that arrive while the subscriber is offline but the session remains. EMQX sends these messages the next time the subscriber comes online. The `mqueue_store_qos0` option controls whether EMQX stores QoS 0 messages while the subscriber is offline, while an in-memory connection's send queue is congested, or while the Inflight Window is full. If this option is disabled, EMQX drops QoS 0 messages that arrive while the subscriber is offline or the send queue is congested. If only the Inflight Window is full, EMQX continues to deliver QoS 0 messages immediately.
+The Message Queue also stores messages that arrive while the subscriber is offline but the session remains. EMQX delivers these messages when the subscriber reconnects. Set `mqueue_store_qos0` to `false` to exclude QoS 0 messages from offline storage.
 
 Note that the Inflight Window and Message Queue are not global. EMQX will allocate a separate Inflight Window and Message Queue for each client connection.
 
