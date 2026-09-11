@@ -2,7 +2,7 @@
 
 ## 5.10.5
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) 启用批量插入时，EMQX 现在会解析并验证 ClickHouse、TDengine、SQL Server 和 MySQL 动作中的模板化 `INSERT` 语句。新的解析器仅支持各 SQL 方言的有限语法子集。升级后，包含注释或使用不受支持 SQL 语法的现有模板将被拒绝，必须进行更新。
+- [#18465](https://github.com/emqx/emqx/pull/18465) EMQX 现在会解析并验证 ClickHouse、TDengine 和 SQL Server 动作中的模板化 `INSERT` 语句，以及启用批量插入时 MySQL 动作中的模板化 `INSERT` 语句。新的解析器仅支持各 SQL 方言的有限语法子集。升级后，包含注释或使用不受支持 SQL 语法的现有模板将被拒绝，必须进行更新。
 
   各数据库支持的特定语法：
 

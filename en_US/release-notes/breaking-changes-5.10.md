@@ -2,7 +2,7 @@
 
 ## 5.10.5
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) EMQX now parses and validates templated `INSERT` statements in ClickHouse, TDengine, SQL Server, and MySQL actions when batch insert is enabled. The new parsers support a limited subset of each SQL dialect. Existing templates that contain comments or use unsupported SQL syntax are rejected after the upgrade and must be updated.
+- [#18465](https://github.com/emqx/emqx/pull/18465) EMQX now parses and validates templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled. The new parsers support a limited subset of each SQL dialect. Existing templates that contain comments or use unsupported SQL syntax are rejected after the upgrade and must be updated.
 
   Supported backend-specific syntax:
 

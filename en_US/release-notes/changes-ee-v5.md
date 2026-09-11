@@ -152,7 +152,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18328](https://github.com/emqx/emqx/pull/18328) The Snowflake connector now applies its configured `ssl` options when connecting to Snowflake endpoints. Previously the connector ignored the `ssl` settings and never verified the server certificate.
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, SQL Server, and MySQL actions when batch insert is enabled. EMQX now parses and validates SQL templates when an action is created and escapes interpolated values according to their SQL context.
+- [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled. EMQX now parses and validates SQL templates when an action is created and escapes interpolated values according to their SQL context.
 
   This is a compatibility-breaking change. Existing templates that contain comments or use unsupported SQL syntax are rejected and must be updated. Supported syntax includes constants, strings and string interpolation, arithmetic, functions, conditions, and conditional operators. MySQL also supports `ON DUPLICATE KEY UPDATE`; ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`; and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
 
