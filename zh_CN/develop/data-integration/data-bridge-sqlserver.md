@@ -299,7 +299,15 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_sqlserver`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **SQL 模板**。如需实现对指定主题消息的转发，使用如下 SQL 语句完成数据插入。此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
+8. 配置 **SQL 模板**。如需转发指定主题的消息，可使用以下 SQL 语句插入数据。
+
+   ::: warning 重要提示
+
+   从 EMQX 5.10.5 开始，EMQX 会在创建 Sink 时解析 SQL 模板，根据 SQL 上下文转义占位符值，并拒绝不支持的语法。模板必须是单条 Microsoft SQL Server `INSERT INTO ... VALUES` 语句，且只能配置一行值。占位符可用于值位置和字符串字面量中。不支持 SQL 注释、附加语句、配置多行值或在标识符中使用占位符。
+
+   此验证可能会拒绝早期版本接受的模板。升级前请修改不兼容的模板。
+
+   :::
 
    ```sql
    insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )

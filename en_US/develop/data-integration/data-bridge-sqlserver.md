@@ -303,7 +303,13 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 8. Configure the **SQL Template** for message storage, using the following SQL statement:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, EMQX parses the SQL template when creating the Sink, escapes placeholder values based on their SQL context, and rejects unsupported syntax. The template must be a single Microsoft SQL Server `INSERT INTO ... VALUES` statement with one configured row. Placeholders are supported in value positions and inside string literals. SQL comments, additional statements, multiple configured rows, and placeholders in identifiers are not supported.
+
+   This validation can reject templates that earlier versions accepted. Revise any incompatible templates before upgrading.
+
+   :::
 
    ```sql
    insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )

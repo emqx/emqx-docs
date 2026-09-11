@@ -147,7 +147,15 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
 8. Configure the **SQL Template** based on the feature to use:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   When batch mode is disabled, MySQL uses a prepared statement. Do not enclose placeholders in quotation marks or end the statement with a semicolon.
+
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, when batch mode is enabled, EMQX parses the SQL template when creating the Sink, escapes placeholder values based on their SQL context, and rejects unsupported syntax. The template must be a single MySQL `INSERT INTO ... VALUES` statement with one configured row. It supports constants, placeholders inside string literals, arithmetic expressions, functions, conditional expressions, and `ON DUPLICATE KEY UPDATE`. SQL comments, additional statements, and placeholders in identifiers are not supported.
+
+   EMQX also disables the MySQL `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` SQL modes on every connection it creates. Before upgrading, revise templates that use unsupported syntax or depend on either SQL mode.
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(

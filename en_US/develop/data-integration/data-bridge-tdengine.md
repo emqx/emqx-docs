@@ -203,6 +203,14 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 8. Configure the **SQL Template** for the Sink. You can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
 
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, EMQX parses the SQL template when creating the Sink, escapes placeholder values based on their SQL context, and rejects unsupported syntax. The template must be a single TDengine `INSERT` statement. It supports multi-table `VALUES` inserts and `USING ... TAGS` clauses. A bare or backtick-quoted target table name can contain placeholders, for example, `test_${clientid}`; EMQX renders the complete target as one quoted identifier. SQL comments, `FILE` input, and additional statements are not supported.
+
+   This validation can reject templates that earlier versions accepted. Revise any incompatible templates before upgrading.
+
+   :::
+
    ::: tip
 
    There is a breaking change in EMQX 5.1.1. Earlier than this version, string-type values were automatically quoted. However, starting from EMQX 5.1.1, users are required to manually quote these values.
