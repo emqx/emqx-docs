@@ -149,7 +149,7 @@ This command output includes:
 
 ### `emqx ctl ds set-replicas all <site1> <site2> ...`
 
-This command allows to set the list of sites containing replicas of the durable storage in the cluster.
+This command allows setting the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
 
 ::: warning Important Notice
