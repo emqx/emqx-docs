@@ -127,7 +127,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `FULL`: the default. Starts EMQX with all available features.
   - `ESSENTIAL`: starts EMQX with the minimum feature set: the core MQTT broker with authentication and authorization.
 
-  The available features are:
+  The following features can be selected in a custom `EMQX_FEATURES` list:
 
   - `dashboard`: Dashboard UI (including SSO and RBAC), REST API.
   - `data_integration`: Connectors, Actions, Sources, and Rule Engine.
@@ -141,12 +141,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `metrics`: Prometheus metrics exporting.
   - `mqtt_extensions`: MQTT extensions: delayed publish, topic rewrite, Auto Subscribe, Slow Subscriptions, message queue, and streams.
   - `plugins`: Plugin framework for installing and managing third-party plugins.
-
-  The following features cannot be enabled by themselves and are only enabled when using the full preset:
-
   - `file_transfer`: File transfer extension to MQTT.
   - `exhook`: External gRPC hooks.
   - `opentelemetry`: OpenTelemetry exporter.
+
+  Enabling `opentelemetry` automatically enables `dashboard`.
 
 - [#17768](https://github.com/emqx/emqx/pull/17768) Added support for sourcing `node.cookie` from a file using the `file://` URL form.
 
