@@ -145,7 +145,18 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `exhook`: External gRPC hooks.
   - `opentelemetry`: OpenTelemetry exporter.
 
-  Enabling `opentelemetry` automatically enables `dashboard`.
+  The following feature dependencies are enabled automatically:
+
+  | Feature | Automatically Enabled Dependencies |
+  | --- | --- |
+  | `data_integration` | `schema_registry` |
+  | `message_transformation` | `schema_registry` |
+  | `schema_validation` | `schema_registry` |
+  | `ai` | `schema_registry` |
+  | `metrics` | `dashboard` |
+  | `opentelemetry` | `dashboard` |
+
+  The other listed features have no feature dependencies.
 
 - [#17768](https://github.com/emqx/emqx/pull/17768) Added support for sourcing `node.cookie` from a file using the `file://` URL form.
 

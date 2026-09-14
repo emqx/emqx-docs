@@ -145,7 +145,18 @@
   - `exhook`：外部 gRPC Hook。
   - `opentelemetry`：OpenTelemetry Exporter。
 
-  启用 `opentelemetry` 时，会自动启用其依赖功能 `dashboard`。
+  以下依赖功能会自动启用：
+
+  | 功能 | 自动启用的依赖功能 |
+  | --- | --- |
+  | `data_integration` | `schema_registry` |
+  | `message_transformation` | `schema_registry` |
+  | `schema_validation` | `schema_registry` |
+  | `ai` | `schema_registry` |
+  | `metrics` | `dashboard` |
+  | `opentelemetry` | `dashboard` |
+
+  其余列出的功能不依赖其他功能。
 
 - [#17768](https://github.com/emqx/emqx/pull/17768) 支持通过 `file://` URL 从文件读取 `node.cookie`。
 
