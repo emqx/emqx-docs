@@ -123,9 +123,17 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
 8. Select the `my_clickhouse` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-9. Keep the default value `,` in the **Batch Value Separator** to distinguish multiple input items. This setting only needs to be changed if you enable [batch mode](./data-bridges.md) for the data integration and if you specify an alternative format with [ClickHouse's FORMAT syntax](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).
+9. The **Batch Value Separator** setting is retained for compatibility but is ignored starting from EMQX 5.10.5. EMQX derives the separator from the SQL format when [batch mode](./data-bridges.md) is enabled.
 
-10. Enter the following command in the SQL template (You can use the [Rule Engine](./rules.md) to ensure that strings in the input SQL statement are properly escaped to prevent SQL injection attacks):
+10. Enter the following command in the **SQL Template**:
+
+    ::: warning Important Notice
+
+    Starting from EMQX 5.10.5, EMQX parses the SQL template when creating the Sink, escapes placeholder values based on their SQL context, and rejects unsupported syntax. The template must be a single ClickHouse `INSERT` statement using `VALUES`, `FORMAT Values`, or `FORMAT JSONCompactEachRow`. Placeholders are supported in value positions and inside string literals. SQL comments, additional statements, and placeholders in identifiers are not supported.
+
+    This validation can reject templates that earlier versions accepted. Revise any incompatible templates before upgrading.
+
+    :::
 
     ```sql
     INSERT INTO messages(data, arrived) VALUES ('${data}', ${timestamp})
