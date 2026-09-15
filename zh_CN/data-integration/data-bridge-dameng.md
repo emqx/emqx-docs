@@ -6,19 +6,19 @@
 
 ::: tip
 
-仅 EMQX 6.x 版本支持达梦数据库 Sink 功能。达梦集成通过 ODBC 驱动完成，需要先在运行 EMQX 的机器上配置 unixODBC 与达梦 ODBC 驱动（见下文）。
+达梦数据库 Sink 功能需要 EMQX Enterprise 7.0 或更高版本。达梦集成通过 ODBC 驱动完成，需要先在运行 EMQX 的机器上配置 unixODBC 与达梦 ODBC 驱动（见下文）。
 
 :::
 
 ## 工作原理
 
-达梦数据库数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与达梦数据库强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件和动作（Sink），您可以将 MQTT 消息和客户端事件存储到达梦数据库中，也可以通过事件触发对达梦数据库中数据的更新或删除操作。
+达梦数据库数据集成是 EMQX 的开箱即用功能，结合了 EMQX 的设备接入、消息传输能力与达梦数据库强大的数据存储能力。通过内置的[规则引擎](./rules.md)组件和动作（Sink），您可以将 MQTT 消息和客户端事件存储到达梦数据库中。
 
 将 MQTT 数据摄取到达梦数据库的工作流程如下：
 
 1. **消息发布和接收**：工业物联网设备通过 MQTT 协议成功连接到 EMQX，并根据其运行状态、读数或触发的事件，发布实时 MQTT 数据到 EMQX。当 EMQX 接收到这些消息时，它将在其规则引擎中启动匹配过程。
 2. **消息数据处理**：当消息到达时，通过规则引擎处理。规则根据预定义的标准确定哪些消息需要路由到达梦数据库。如果任何规则指定了载荷转换，那么这些转换将被应用。
-3. **数据写入到达梦数据库**：规则触发将消息写入达梦数据库的动作。借助 SQL 模板，用户可以从规则处理结果中提取数据来构造 SQL，并通过 ODBC 发送到达梦数据库执行，从而将消息的特定字段写入或更新到数据库的相应表和列中。
+3. **数据写入到达梦数据库**：规则触发将消息写入达梦数据库的动作。借助 SQL 模板，用户可以从规则处理结果中提取数据来构造 SQL，并通过 ODBC 发送到达梦数据库执行，从而将消息的特定字段写入到数据库的相应表和列中。
 4. **数据存储和利用**：数据现存储在达梦数据库中，企业可以利用其查询能力应用于各种用例。
 
 ## 特性与优势
@@ -71,12 +71,29 @@ EMQX 使用 Erlang/OTP 的 `odbc` 应用与达梦建立连接。`odbc` 的 `odbc
    :::
 4. 验证连接：`odbcinst -j` 确认 unixODBC 与驱动；用 `isql dm8 SYSDBA 你的密码` 执行 `select 1` 确认可达。
 
+### 创建目标表
+
+创建动作之前，先在 DM8 数据库客户端执行以下 SQL。请使用具有目标表插入权限的数据库用户和 schema。
+
+```sql
+CREATE TABLE SYSDBA.t_mqtt_msg (
+    msgid VARCHAR(64),
+    topic VARCHAR(255),
+    qos INTEGER,
+    payload VARCHAR(1024)
+);
+```
+
 ## 创建连接器
+
+执行下文的 REST API 示例前，请将 `EMQX_API_KEY` 和 `EMQX_API_SECRET` 设置为 EMQX API 凭据。
 
 在 EMQX 中执行以下命令创建达梦连接器：
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/connectors \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "type": "dameng",
     "name": "dameng",
@@ -86,7 +103,6 @@ curl -XPOST http://localhost:18083/api/v5/connectors \
     "username": "SYSDBA",
     "password": "你的密码",
     "driver": "DM8 ODBC DRIVER",
-    "database": "DM8",
     "charset": "utf8",
     "pool_size": 8,
     "resource_opts": {"health_check_interval": "20s"}
@@ -97,14 +113,15 @@ curl -XPOST http://localhost:18083/api/v5/connectors \
 
 | 参数 | 说明 |
 | --- | --- |
-| `server` | 达梦主机（`host` 或 `host:port`）。 |
-| `port` | 达梦端口，默认 `5236`。 |
-| `username` / `password` | 登录用户（默认 `SYSDBA`）与密码。 |
+| `server` | DM8 主机（`host` 或 `host:port`）。未设置 `dsn` 时必填。 |
+| `port` | DM8 端口，默认 `5236`；仅在 `server` 未携带端口时使用。设置 `dsn` 后忽略。 |
+| `username` / `password` | 登录凭据。未设置 `dsn` 时用户名默认为 `SYSDBA`；使用 `dsn` 时可省略，以使用 DSN 中的凭据。 |
 | `driver` | ODBC 驱动名（如 `DM8 ODBC DRIVER`，需 `/etc/odbcinst.ini` 已配置）或驱动 `.so` 绝对路径（如 `/opt/dmdbms/bin/libdodbc.so`）。 |
-| `dsn` | 可选；配置了 `/etc/odbc.ini` 的 DSN 时可使用 `DSN=<名称>` 直连。 |
-| `database` | 数据库名（透传给 ODBC 连接串 `Database=`，如 `DM8`）。 |
+| `dsn` | 可选，使用 `odbc.ini` 中的 DSN。优先于 `server`、`port`、`driver` 和 `charset`。 |
 | `charset` | 字符集（透传给 `Charset=`，如 `utf8`）。 |
 | `pool_size` | 连接池大小，默认 `8`。 |
+
+连接器没有 `database` 参数。使用 `server`/`port` 或 `dsn` 选择 DM8 实例，并在 INSERT 模板中使用带 schema 的表名。
 
 ## 创建动作（规则 Sink）
 
@@ -112,11 +129,13 @@ curl -XPOST http://localhost:18083/api/v5/connectors \
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/actions \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "type": "dameng",
     "name": "dameng",
+    "connector": "dameng",
     "parameters": {
-      "connector": "dameng",
       "sql": "insert into SYSDBA.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
       "undefined_vars_as_null": false
     },
@@ -128,10 +147,20 @@ curl -XPOST http://localhost:18083/api/v5/actions \
 
 | 参数 | 说明 |
 | --- | --- |
-| `sql` | 插入 SQL 模板（占位符 `${...}` 取自规则处理结果）。**INSERT 必须显式列出字段**，连接器会在动作创建时用 `describe_table` 探测表的列类型。 |
+| `sql` | 仅接受 `INSERT` SQL 模板。必须显式列出目标列，并在 `VALUES` 中使用 `${...}` 占位符。创建动作时检查目标列类型。 |
 | `undefined_vars_as_null` | 为 `true` 时，未匹配到的变量按 `null` 写入；为 `false`（默认）时，未匹配变量按错误处理。 |
 | `resource_opts.batch_size` | 批量行数，默认 `100`。 |
 | `resource_opts.batch_time` | 批量聚合时间，默认 `100ms`。 |
+
+### 支持的 SQL 语句
+
+本版本的动作模板仅支持 `INSERT INTO ... (columns) VALUES (...)`。模板必须显式列出目标列，并在 `VALUES` 中为每列提供一个 `${...}` 占位符。表名和列名必须为静态名称，SQL 关键字不区分大小写。
+
+创建或更新动作时，`SELECT`、`UPDATE`、`DELETE`、`MERGE` 及其他语句类型会被拒绝，错误信息为 `Only INSERT statements are supported`。同样不支持 `INSERT ... SELECT`、多条语句和 `ON` 子句。
+
+单条和批量写入均将消息值作为独立参数绑定到 SQL。引号、反斜杠以及类似 SQL 的载荷内容都会作为数据处理，从而防止通过消息值进行 SQL 注入。
+
+此限制仅针对达梦动作的 SQL 模板。规则引擎仍然使用 `SELECT` 筛选 MQTT 消息，连接器也会使用固定的 `SELECT 1` 检查连接状态。数据库管理和数据查询可以直接在数据库客户端执行。
 
 ### SQL 模板示例
 
@@ -141,7 +170,7 @@ values ( ${id}, ${topic}, ${qos}, ${payload} )
 ```
 
 - `${id}`、`${topic}`、`${qos}`、`${payload}` 等占位符取自规则的输出字段。
-- 批量写入使用参数化查询（`odbc:param_query`），无需手动转义字符串。
+- 单条和批量写入均使用参数化查询（`odbc:param_query`）。不要手动转义消息值，也不要在占位符外添加引号。
 
 ## 创建规则
 
@@ -149,10 +178,12 @@ values ( ${id}, ${topic}, ${qos}, ${payload} )
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/rules \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "name": "写入达梦",
     "sql": "SELECT * FROM \"t/#\"",
-    "actions": [{"function": "dameng:dameng"}]
+    "actions": ["dameng:dameng"]
   }'
 ```
 
@@ -172,6 +203,7 @@ SELECT * FROM SYSDBA.t_mqtt_msg;
 
 ## 注意事项
 
+- 支持字符、数值、布尔和时间戳列。创建动作时会拒绝二进制、CLOB/NCLOB 和 interval 列；写入时会拒绝超出列大小的值，以及包含 NUL 字节的字符值。二进制数据可先编码为 Base64 等文本，再写入支持的字符列。
 - 达梦连接串支持 `DSN=` 与字段模式两种写法。字段模式下 `Driver` 可填驱动名或 `.so` 绝对路径。
 - 若使用 DSN/驱动名，务必保证 `/etc/odbcinst.ini` 与 `/etc/odbc.ini` 配置正确（Erlang `odbcserver` 读 `/etc/`）。
 - 批量写入依赖 `odbc:param_query`，所有行的列数必须一致。

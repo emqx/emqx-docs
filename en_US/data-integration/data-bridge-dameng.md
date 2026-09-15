@@ -6,13 +6,13 @@ This page describes how to integrate EMQX with the Dameng database and provides 
 
 ::: tip
 
-The Dameng Sink is supported starting from EMQX 6.x. The integration uses an ODBC driver, so unixODBC and the Dameng ODBC driver must be configured on the machine running EMQX (see below).
+The Dameng Sink requires EMQX Enterprise 7.0 or later. The integration uses an ODBC driver, so unixODBC and the Dameng ODBC driver must be configured on the machine running EMQX (see below).
 
 :::
 
 ## How it works
 
-The Dameng data integration is an out-of-the-box EMQX feature that combines EMQX's device access and message transport capabilities with Dameng's data storage. Through the built-in [rule engine](./rules.md) and Sink, you can store MQTT messages and client events into Dameng, or update/delete data on events.
+The Dameng data integration is an out-of-the-box EMQX feature that combines EMQX's device access and message transport capabilities with Dameng's data storage. Through the built-in [rule engine](./rules.md) and Sink, you can store MQTT messages and client events into Dameng.
 
 The workflow for ingesting MQTT data into Dameng:
 
@@ -69,12 +69,29 @@ EMQX uses the Erlang/OTP `odbc` application to connect to Dameng. The `odbcserve
    :::
 4. Verify connectivity: `odbcinst -j` to confirm unixODBC and the driver; run `isql dm8 SYSDBA your-password` and execute `select 1`.
 
+### Create the target table
+
+Run the following SQL in a DM8 database client before creating the action. Use a schema and user with permission to insert into the table.
+
+```sql
+CREATE TABLE SYSDBA.t_mqtt_msg (
+    msgid VARCHAR(64),
+    topic VARCHAR(255),
+    qos INTEGER,
+    payload VARCHAR(1024)
+);
+```
+
 ## Create the connector
+
+For the REST API examples below, set `EMQX_API_KEY` and `EMQX_API_SECRET` to your EMQX API credentials.
 
 Create a Dameng connector in EMQX:
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/connectors \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "type": "dameng",
     "name": "dameng",
@@ -84,7 +101,6 @@ curl -XPOST http://localhost:18083/api/v5/connectors \
     "username": "SYSDBA",
     "password": "your-password",
     "driver": "DM8 ODBC DRIVER",
-    "database": "DM8",
     "charset": "utf8",
     "pool_size": 8,
     "resource_opts": {"health_check_interval": "20s"}
@@ -95,14 +111,15 @@ Main connection parameters:
 
 | Parameter | Description |
 | --- | --- |
-| `server` | Dameng host (`host` or `host:port`). |
-| `port` | Dameng port, default `5236`. |
-| `username` / `password` | Login user (default `SYSDBA`) and password. |
+| `server` | DM8 host (`host` or `host:port`). Required unless `dsn` is set. |
+| `port` | DM8 port, default `5236`; used if `server` has no port. Ignored when `dsn` is set. |
+| `username` / `password` | Login credentials. Without `dsn`, the username defaults to `SYSDBA`. With `dsn`, omit these fields to use the DSN credentials. |
 | `driver` | ODBC driver name (e.g. `DM8 ODBC DRIVER`, requiring `/etc/odbcinst.ini`) or absolute driver `.so` path (e.g. `/opt/dmdbms/bin/libdodbc.so`). |
-| `dsn` | Optional; use `DSN=<name>` direct connection when `/etc/odbc.ini` defines a DSN. |
-| `database` | Database name (passed to the ODBC `Database=` attribute, e.g. `DM8`). |
+| `dsn` | Optional DSN in `odbc.ini`. Takes precedence over `server`, `port`, `driver`, and `charset`. |
 | `charset` | Character set (passed to `Charset=`, e.g. `utf8`). |
 | `pool_size` | Connection pool size, default `8`. |
+
+There is no `database` connector parameter. Select the DM8 instance with `server`/`port` or `dsn`, and use a schema-qualified table name in the INSERT template.
 
 ## Create the action (rule Sink)
 
@@ -110,11 +127,13 @@ Create a Dameng action in EMQX:
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/actions \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "type": "dameng",
     "name": "dameng",
+    "connector": "dameng",
     "parameters": {
-      "connector": "dameng",
       "sql": "insert into SYSDBA.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
       "undefined_vars_as_null": false
     },
@@ -126,10 +145,20 @@ Action parameters:
 
 | Parameter | Description |
 | --- | --- |
-| `sql` | Insert SQL template (placeholder `${...}` from the rule result). **The INSERT must explicitly list the columns**; the connector probes the table with `describe_table` at action-creation time. |
+| `sql` | Only an `INSERT` SQL template is accepted. Explicitly list the target columns and use `${...}` placeholders in `VALUES`. Column types are checked when the action is created. |
 | `undefined_vars_as_null` | When `true`, unmatched variables are written as `null`; when `false` (default), they are treated as an error. |
 | `resource_opts.batch_size` | Batch size, default `100`. |
 | `resource_opts.batch_time` | Batch aggregation time, default `100ms`. |
+
+### Supported SQL statements
+
+Only `INSERT INTO ... (columns) VALUES (...)` action templates are supported in this release. The template must explicitly list the target columns, with one `${...}` placeholder per column in `VALUES`. Table and column names must be static. SQL keywords are case-insensitive.
+
+`SELECT`, `UPDATE`, `DELETE`, `MERGE`, and other statement types are rejected when creating or updating an action, with the error `Only INSERT statements are supported`. `INSERT ... SELECT`, multiple statements, and `ON` clauses are also unsupported.
+
+For both single-message and batched writes, EMQX binds message values separately from SQL. Quotes, backslashes, and SQL-looking payload text remain data, preventing SQL injection through message values.
+
+The restriction applies to the Dameng action template. The rule engine still uses `SELECT` to select MQTT messages; the connector uses a fixed `SELECT 1` for health checks. You can run SQL directly in a database client to administer or inspect the database.
 
 ### SQL template example
 
@@ -139,7 +168,7 @@ values ( ${id}, ${topic}, ${qos}, ${payload} )
 ```
 
 - `${id}`, `${topic}`, `${qos}`, `${payload}` are placeholders taken from the rule output fields.
-- Batch writes use parameterized queries (`odbc:param_query`); no manual string escaping required.
+- Both single-message and batched writes use parameterized queries (`odbc:param_query`). Do not manually escape message values or add quotes around placeholders.
 
 ## Create a rule
 
@@ -147,10 +176,12 @@ Create a rule in EMQX and select the `dameng` action to write matched messages i
 
 ```bash
 curl -XPOST http://localhost:18083/api/v5/rules \
+  -u "$EMQX_API_KEY:$EMQX_API_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{
     "name": "write to dameng",
     "sql": "SELECT * FROM \"t/#\"",
-    "actions": [{"function": "dameng:dameng"}]
+    "actions": ["dameng:dameng"]
   }'
 ```
 
@@ -170,6 +201,7 @@ SELECT * FROM SYSDBA.t_mqtt_msg;
 
 ## Notes
 
+- Character, numeric, boolean, and timestamp columns are supported. Binary, CLOB/NCLOB, and interval columns are rejected when creating the action. Values that exceed the declared column size or contain a NUL byte in character data are rejected. Encode binary data as text, such as Base64, and use a supported character column.
 - The Dameng connection string supports both `DSN=` and field (connection-string) forms. In the field form, `Driver` can be a driver name or an absolute `.so` path.
 - When using DSN/driver name, make sure `/etc/odbcinst.ini` and `/etc/odbc.ini` are correctly configured (the Erlang `odbcserver` reads `/etc/`).
 - Batch writes rely on `odbc:param_query`; all rows must have the same number of columns.
