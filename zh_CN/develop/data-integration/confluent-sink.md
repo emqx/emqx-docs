@@ -178,6 +178,7 @@ confluent kafka topic consume -b testtopic-in
 4. 配置连接到 Confluent Cloud 所需的参数：
    - 主机列表：对应 Confluent 集群设置页面中的 Endpoints 信息。
    - 用户名与密码：填入您之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret。
+   - 从 EMQX 5.10.5 开始，您可以启用**验证服务器证书**来验证 Confluent 服务器证书，并在 **CA 证书**中配置可信 CA 证书。更多信息请参见[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
 5. 点击**创建**按钮完成连接器的创建。
 

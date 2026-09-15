@@ -178,6 +178,7 @@ Before adding a Confluent Sink action, you need to create a Confluent producer c
 4. Configure the parameters required to connect to Confluent Cloud:
    - **Bootstrap Hosts**: Corresponds to the Endpoints information on the Confluent cluster settings page.
    - **Username** and **Password**: Enter the API key and Secret you created earlier with the Confluent Cloud CLI.
+   - Starting from EMQX 5.10.5, you can enable **TLS Verify** to verify the Confluent server certificate. Configure **CA Cert** with a trusted CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
    - Leave other options as default or configure them according to your business needs.
 5. Click the **Create** button to complete the creation of the connector.
 
