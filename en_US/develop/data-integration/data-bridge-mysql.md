@@ -198,7 +198,7 @@ This section demonstrates how to create a rule for recording the clients' online
 
 The rule creation steps are similar to those in [Creating a rule with MySQL Sink for Message Storage](#create-a-rules-with-mysql-sink-for-message-storage) except for the SQL rule syntax and SQL template.
 
-The SQL template restrictions described in that section also apply to this template.
+When batch mode is enabled, the SQL template restrictions described in that section also apply to this template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 

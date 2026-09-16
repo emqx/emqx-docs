@@ -207,7 +207,7 @@ CREATE TABLE emqx_client_events (
 
    ::: tip
 
-   在 EMQX 5.1.1 之前，EMQX 会自动为字符串类型的占位符值添加引号。从 EMQX 5.1.1 到 6.3.0，您必须手动添加引号。从 EMQX 6.3.1 开始，占位符既可作为完整值，也可用于字符串字面量中；EMQX 会根据 SQL 上下文转义渲染后的值。
+   在 EMQX 6.3.0 中，您必须手动为字符串类型的占位符值添加引号。从 EMQX 6.3.1 开始，占位符既可作为完整值，也可用于字符串字面量中；EMQX 会根据 SQL 上下文转义渲染后的值。
 
    :::
 
@@ -287,6 +287,8 @@ CREATE TABLE emqx_client_events (
     FROM
       "$events/client_connected", "$events/client_disconnected"
 ```
+
+上述 SQL 模板限制同样适用于此模板。
 
 以下 Sink SQL 模板在单引号字符串字面量中使用字符串占位符。SQL 语句末尾不要带分号（`;`）：
 

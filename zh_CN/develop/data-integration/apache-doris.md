@@ -182,7 +182,7 @@ mysql -uroot -P9030 -h127.0.0.1
 
 本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入 Apache Doris 的数据表 `emqx_client_events` 中。除 SQL 模板与规则外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
 
-该章节中说明的 SQL 模板限制同样适用于此模板。
+启用批量模式时，该章节中说明的 SQL 模板限制同样适用于此模板。
 
 您可以使用以下规则 SQL 创建规则：
 
@@ -193,7 +193,7 @@ FROM
   "$events/client/connected", "$events/client/disconnected"
 ```
 
-您可以使用以下 SQL 模板创建实现设备上下线记录的 Sink，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
+您可以使用以下 SQL 模板创建实现设备上下线记录的 Sink。未启用批量模式时，占位符不应包含在引号内，SQL 末尾不要带分号（`;`）：
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (

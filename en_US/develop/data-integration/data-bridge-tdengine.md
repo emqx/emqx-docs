@@ -213,7 +213,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   Before EMQX 5.1.1, EMQX automatically added quotes around string placeholder values. From EMQX 5.1.1 through 6.3.0, you must add the quotes manually. Starting from EMQX 6.3.1, placeholders can be used as complete values or inside string literals, and EMQX escapes the rendered values according to their SQL context.
+   In EMQX 6.3.0, you must add quotes around string placeholder values manually. Starting from EMQX 6.3.1, placeholders can be used as complete values or inside string literals, and EMQX escapes the rendered values according to their SQL context.
 
    :::
 
@@ -296,6 +296,8 @@ SELECT
 ```
 
 The SQL template for the Sink is as follows:
+
+The SQL template restrictions described above also apply to this template.
 
 The following template uses string placeholders inside single-quoted literals. Do not end the SQL statement with a semicolon (`;`).
 
