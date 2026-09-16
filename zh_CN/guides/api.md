@@ -30,9 +30,9 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。
 
-如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，并包含一个最小化的 API 规范。该规范说明支持的认证方式，并列出两个公开端点：用于获取 Bearer Token 的 `POST /api/v5/login`，以及用于检查 Broker 状态的 `GET /api/v5/status`。该最小化响应不包含所请求的 API 规范内容。
+如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，并包含一个最小化的 API 规范。该规范说明支持的认证方式，并列出公开的引导端点：用于 SCRAM 登录的 `POST /api/v5/login/challenge` 和 `POST /api/v5/login/verify`、兼容端点 `POST /api/v5/login`，以及用于检查 Broker 状态的 `GET /api/v5/status`。仅当 `dashboard.password_login` 设置为 `both` 时，兼容端点才接受密码登录。该最小化响应不包含所请求的 API 规范内容。
 
-在浏览器中访问时，EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证访问 `/api-spec.html` 时，EMQX 返回 HTTP `401`，并显示登录页面，而不是完整的 API Spec Explorer。该响应仅声明支持 Bearer Token 认证，以避免浏览器打开原生的基本认证对话框。使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
+在浏览器中访问时，EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证访问 `/api-spec.html` 时，EMQX 返回 HTTP `401`，并显示登录页面，而不是完整的 API Spec Explorer。该响应仅声明支持 Bearer Token 认证，以避免浏览器打开原生的基本认证对话框。从 EMQX 6.3.1 开始，此页面默认使用 SCRAM-SHA-256。请通过 HTTPS 或其他安全浏览器上下文打开该页面。TLS 可以在反向代理或负载均衡器终止，EMQX Dashboard 监听器本身无需启用 HTTPS。使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
 
 访问 `/api-docs` 和 `/api-docs/index.html` 无需认证，因为这两个端点只会重定向到 `/api-spec.html`。重定向后，必须通过认证才能访问完整的 API Spec Explorer。
 
@@ -221,14 +221,55 @@ axios
 
 ### 使用 Bearer Token 认证
 
-除了基于 API 密钥的身份验证外，您还可以使用 Bearer Token 来实现对 EMQX REST API 的安全和程序化访问。要获取 Bearer Token，请按照以下说明向登录 API 端点发送请求。
+请根据客户端访问 EMQX 的方式选择认证方法：
 
-#### 获取 Bearer Token
+- 长期运行的服务和无人值守的自动化任务应使用 API 密钥，因为 Dashboard 登录 Token 会过期。
+- 从 EMQX 6.3.1 开始，如需使用本地 Dashboard 用户凭据获取短期 Bearer Token，请使用 SCRAM-SHA-256 挑战-响应认证。
 
-要请求 Bearer Token，请向以下登录 API 端点发送 HTTP `POST ` 请求：
+通过 SCRAM 获取 Bearer Token 时，无需在 HTTP 请求体中发送密码。操作步骤如下：
+
+1. 生成由 20 到 128 个无填充 Base64URL 字符组成的随机客户端 Nonce。
+2. 将用户名和客户端 Nonce 发送到 `POST /api/v5/login/challenge`。
+3. 将服务端返回的 Nonce 拼接到客户端 Nonce 之后，生成组合 Nonce。
+4. 使用挑战响应中的字段构造 RFC 7677 SCRAM-SHA-256 消息：
+
+   ```text
+   client-first-message-bare = n=<escaped_username>,r=<client_nonce>
+   server-first-message = r=<combined_nonce>,s=<salt>,i=<iterations>
+   client-final-message-without-proof = c=biws,r=<combined_nonce>
+   auth-message = <client-first-message-bare>,<server-first-message>,<client-final-message-without-proof>
+   ```
+
+   按照 RFC 5802 转义用户名：先将 `=` 替换为 `=3D`，再将 `,` 替换为 `=2C`。在 `server-first-message` 中直接使用挑战端点返回的 Base64 编码 `salt` 值。
+5. 按照以下方式计算客户端证明和预期的服务端签名。`HMAC-SHA-256(key, message)` 中的参数依次为密钥和消息。`UTF8(value)` 将字符串编码为 UTF-8 字节，`Base64Decode(value)` 对 Base64 字符串进行解码，`XOR` 表示逐字节异或运算。
+
+   ```text
+   salted-password = PBKDF2-HMAC-SHA-256(UTF8(password), Base64Decode(salt), iterations, 32 bytes)
+   client-key = HMAC-SHA-256(salted-password, "Client Key")
+   stored-key = SHA-256(client-key)
+   client-signature = HMAC-SHA-256(stored-key, UTF8(auth-message))
+   client-proof = client-key XOR client-signature
+   server-key = HMAC-SHA-256(salted-password, "Server Key")
+   expected-server-signature = HMAC-SHA-256(server-key, UTF8(auth-message))
+   ```
+
+   对 `client-proof` 进行 Base64 编码，并将结果写入 `POST /api/v5/login/verify` 请求的 `client_proof` 字段，同时提供挑战 ID 和组合 Nonce。如果用户启用了多因素认证，还需提供 `mfa_token`。
+6. 对响应中的 `server_signature` 进行 Base64 解码，并与 `expected-server-signature` 比对。确认一致后，再使用 `token` 字段中的 Bearer Token。
+
+每个挑战都有有效期，且只能用于一次验证。即使认证失败，`POST /api/v5/login/verify` 也会消耗该挑战。如果验证失败，包括返回 `BAD_MFA_TOKEN`，请重新请求挑战并计算客户端证明。
+
+请求和响应 Schema 参见 [API 规范](#访问-api-规范端点)中的 `dashboard` 部分。
+
+浏览器中的 SCRAM 登录需要 HTTPS 或其他安全浏览器上下文。
+
+#### 通过密码登录获取 Bearer Token
+
+兼容端点 `POST /api/v5/login` 仅在 `dashboard.password_login` 设置为 `both` 时接受用户名和密码。`both` 为默认值。如果将 `dashboard.password_login` 设置为 `scram_only`，该端点将返回 HTTP `403` 和错误码 `PASSWORD_LOGIN_DISABLED`。此时请改用上述 SCRAM 流程或 API 密钥。
+
+启用密码登录后，向以下端点发送 HTTP `POST` 请求：
 
 ```bash
-POST http://your-emqx-address:8483/api/v5/login
+POST http://your-emqx-address:18083/api/v5/login
 ```
 
 **请求头:**

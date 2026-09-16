@@ -7,6 +7,7 @@ EMQX Dashboard 配置包括很多配置项，例如，通过 `swagger_support` �
 - `listeners`
 - `token_expired_time`
 - `password_expired_time`
+- `password_login`
 - `hwmark_expire_time`
 - `cors`
 - `default_password`
@@ -35,6 +36,7 @@ dashboard {
   }
   token_expired_time = 60m
   password_expired_time = 0
+  password_login = both
   cors = false
   swagger_support = true
   default_password = jEdOgGS6vzQ
@@ -124,6 +126,15 @@ dashboard {
 - `password_expired_time`
 
   设置用户用于登录 Dashboard 的密码的过期时间，比如 `1h`。超过此时间，用户在登录 Dashboard 时必须修改密码。默认值 `0` 表示密码永不过期。
+
+- `password_login`
+
+  从 EMQX 6.3.1 开始，控制本地 Dashboard 用户可使用的登录协议。支持以下取值：
+
+  - `both`：同时接受 SCRAM-SHA-256 挑战-响应登录和基于密码的 `POST /api/v5/login` 请求。此项为默认值，可兼容在请求体中发送密码的脚本和客户端。
+  - `scram_only`：仅接受 SCRAM-SHA-256 挑战-响应登录。在此模式下，`POST /api/v5/login` 返回 HTTP `403` 和错误码 `PASSWORD_LOGIN_DISABLED`。脚本和第三方客户端必须改用 SCRAM 端点或 API 密钥。
+
+  设置为 `scram_only` 前，请将所有 EMQX 节点以及使用本地 Dashboard 用户凭据登录的客户端升级到支持 SCRAM 的版本。密码迁移、浏览器访问和登录操作参见[配置 Dashboard 登录认证](../dashboard-security.md#配置-dashboard-登录认证)。
 
 - `cors`
 

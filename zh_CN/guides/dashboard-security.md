@@ -8,9 +8,32 @@
 
 首次登录后，系统会检测到您正在使用默认凭据，并强制要求在继续之前修改密码。新密码不能与原密码相同，且不建议再次使用 `public` 作为登录密码。
 
+## 配置 Dashboard 登录认证
+
+从 EMQX 6.3.1 开始，EMQX 为本地 Dashboard 用户提供 SCRAM-SHA-256 挑战-响应端点。客户端可以通过 SCRAM 证明其持有密码，而无需在 HTTP 请求体中发送密码。
+
+通过 `dashboard.password_login` 选择允许使用的登录协议：
+
+- `both`：同时接受 SCRAM-SHA-256 和基于密码的 `POST /api/v5/login` 请求。此项为默认值。
+- `scram_only`：仅接受 SCRAM-SHA-256。基于密码的端点将返回 HTTP `403` 和错误码 `PASSWORD_LOGIN_DISABLED`。
+
+滚动升级期间请保留 `both`。只有在所有 EMQX 节点以及使用本地 Dashboard 用户凭据登录的客户端均支持 SCRAM 后，才能设置为 `scram_only`。脚本和第三方客户端必须迁移到 `POST /api/v5/login/challenge` 和 `POST /api/v5/login/verify`，或改用 API 密钥。
+
+如果 EMQX 在服务端日志中提示某个本地用户需要迁移密码，请在启用 `scram_only` 前重置该用户的密码：
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
+
+内置 API Spec Explorer 登录页面默认使用 SCRAM。浏览器中的 SCRAM 登录需要 HTTPS 或其他安全浏览器上下文。TLS 可以在反向代理或负载均衡器终止，EMQX Dashboard 监听器本身无需启用 HTTPS。
+
+配置详情参见 [Dashboard 配置](./configuration/dashboard.md)。SCRAM 登录流程参见 [Bearer Token 认证](./api.md#使用-bearer-token-认证)。
+
 ## 通过 URL Token 登录
 
 从 EMQX 5.6.0 开始，Dashboard 支持通过在 URL 中携带登录信息的方式进行免密登录。此功能适用于需要无缝跳转或集成的场景，可在无需用户手动输入凭据的情况下自动登录 Dashboard。
+
+以下流程中的密码 Token 请求需要设置 `dashboard.password_login = both`。如果将 `dashboard.password_login` 设置为 `scram_only`，请改用 SCRAM 挑战-响应认证获取 Token。
 
 ### 使用方法
 

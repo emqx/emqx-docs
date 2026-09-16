@@ -68,6 +68,10 @@ Starting from EMQX 5.6.0, the Dashboard supports a token-based login method that
 
 This feature is particularly useful for seamless redirection and integration scenarios where a user should be logged in automatically without entering credentials manually.
 
+::: tip
+Starting from EMQX 6.3.1, the password-based token request in the following procedure works only when `dashboard.password_login` is set to `both`, which is the default. In `scram_only` mode, obtain the token through SCRAM challenge-response authentication. For details, see [Dashboard Security](../dashboard-security.md#configure-dashboard-login-authentication).
+:::
+
 #### How To Use This Login Method
 
 1. Use the `/login` endpoint to obtain an authentication token. Since the response does not include the username, you will need to manually add it before encoding the full JSON payload.

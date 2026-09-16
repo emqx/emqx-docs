@@ -8,9 +8,32 @@ For a fresh EMQX installation, open the Dashboard at <http://localhost:18083/> a
 
 After the first login, the system detects that you are using the default credentials and forces a password change before you can proceed. The new password must differ from the original, and using `public` again is not recommended.
 
+## Configure Dashboard Login Authentication
+
+Starting from EMQX 6.3.1, EMQX provides SCRAM-SHA-256 challenge-response endpoints for local Dashboard users. SCRAM allows a client to prove that it knows the password without sending the password in an HTTP request body.
+
+Set `dashboard.password_login` to select the accepted login protocols:
+
+- `both`: Accept SCRAM-SHA-256 and the password-based `POST /api/v5/login` request. This is the default value.
+- `scram_only`: Accept only SCRAM-SHA-256. The password-based endpoint returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`.
+
+Keep `both` during a rolling upgrade. Set `scram_only` only after all EMQX nodes and clients that sign in with local Dashboard user credentials support SCRAM. Scripts and third-party clients must migrate to `POST /api/v5/login/challenge` and `POST /api/v5/login/verify`, or use API keys.
+
+If EMQX reports in the server logs that a local user's password must be migrated, reset that user's password before enabling `scram_only`:
+
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
+```
+
+The embedded API Spec Explorer login page uses SCRAM by default. Browser-based SCRAM login requires HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS.
+
+For configuration details, see [Dashboard Configuration](./configuration/dashboard.md). For the SCRAM login flow, see [Bearer Token Authentication](./api.md#bearer-token-authentication).
+
 ## Token-Based Login via URL
 
 Starting from EMQX 5.6.0, the Dashboard supports token-based login by embedding authentication information in the URL. This is useful for seamless redirection and integration scenarios where a user should be logged in automatically without manually entering credentials.
+
+The password-based token request in the following procedure requires `dashboard.password_login = both`. If `dashboard.password_login` is set to `scram_only`, obtain the token through SCRAM challenge-response authentication instead.
 
 ### How to Use
 

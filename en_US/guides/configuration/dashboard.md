@@ -7,6 +7,7 @@ EMQX Dashboard configuration includes many configuration items. For example, you
 - `listeners`
 - `token_expired_time`
 - `password_expired_time`
+- `password_login`
 - `hwmark_expire_time`
 - `cors`
 - `default_password`
@@ -36,6 +37,7 @@ dashboard {
   }
   token_expired_time = 60m
   password_expired_time = 0
+  password_login = both
   cors = false
   swagger_support = true
   default_password = jEdOgGS6vzQ
@@ -125,6 +127,15 @@ Where,
 - `password_expired_time`
 
   Set the expiration time for the user's password used to log in to the Dashboard, such as `1h`. After this time, the user must change their password when logging into the Dashboard. The default value `0` means the password never expires.
+
+- `password_login`
+
+  Starting in EMQX 6.3.1, this option controls the login protocols accepted for local Dashboard users. Supported values are:
+
+  - `both`: Accept SCRAM-SHA-256 challenge-response login and the password-based `POST /api/v5/login` request. This is the default value and preserves compatibility with scripts and clients that send the password in the request body.
+  - `scram_only`: Accept only SCRAM-SHA-256 challenge-response login. In this mode, `POST /api/v5/login` returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`. Scripts and third-party clients must use the SCRAM endpoints or API keys.
+
+  Before setting this option to `scram_only`, upgrade all EMQX nodes and clients that sign in with local Dashboard user credentials to versions that support SCRAM. For password migration, browser access, and login instructions, see [Configure Dashboard Login Authentication](../dashboard-security.md#configure-dashboard-login-authentication).
 
 - `cors`
 

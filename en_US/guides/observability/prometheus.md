@@ -209,7 +209,7 @@ Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by defau
      password: '<SECRET_KEY>'
    ```
 
-EMQX also accepts a Bearer token obtained from `POST /api/v5/login`. Dashboard login tokens expire, so use an API key for long-running Prometheus scrapers.
+Prometheus can also authenticate scrape requests with a Dashboard bearer token. When `dashboard.password_login` is set to `both`, obtain the token from `POST /api/v5/login`. In `scram_only` mode, obtain the token through [SCRAM challenge-response authentication](../api.md#bearer-token-authentication). Dashboard login tokens expire, so use an API key for long-running Prometheus scrapers.
 
 ### Add EMQX Scrape Jobs to Prometheus
 

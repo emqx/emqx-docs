@@ -68,6 +68,10 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 此功能适用于需要无缝跳转或集成场景，可在无需用户手动输入凭据的情况下，自动登录 Dashboard。
 
+::: tip
+从 EMQX 6.3.1 开始，以下流程中的密码 Token 请求仅在 `dashboard.password_login` 设置为默认值 `both` 时可用。在 `scram_only` 模式下，请通过 SCRAM 挑战-响应认证获取 Token。详情参见 [Dashboard 安全](../dashboard-security.md#配置-dashboard-登录认证)。
+:::
+
 #### 使用方法
 
 使用此登录方式的步骤如下：
