@@ -92,7 +92,13 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 3. Enter a name and description, such as `my-kafka`. The name is used to associate the Kafka Sink with the connector and must be unique within the cluster.
 
 4. Configure the parameters required to connect to Kafka:
-   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. This demonstration assumes that EMQX and Kafka run on the same machine. If they run on different machines, enter the actual Kafka broker addresses. Starting from EMQX 5.10.5, you can specify an IPv6 address in brackets, for example, `[::1]:9092`.
+
+   - **IP Family**: Starting from EMQX 5.10.5, select the IP address family that EMQX uses to connect to Kafka brokers:
+
+     - **Auto** (`auto`): Default. For an IP address, EMQX uses its address family. For a hostname, EMQX tries IPv4 first, then IPv6 if the IPv4 connection fails.
+     - **IPv4** (`ipv4`): Connect over IPv4 only.
+     - **IPv6** (`ipv6`): Connect over IPv6 only.
 
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
 
@@ -332,7 +338,13 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
 4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers, for example, `my-kafka-source`.
 
 5. Enter the connection information for the source.
-   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. This demonstration assumes that EMQX and Kafka run on the same machine. If they run on different machines, enter the actual Kafka broker addresses. Starting from EMQX 5.10.5, you can specify an IPv6 address in brackets, for example, `[::1]:9092`.
+
+   - **IP Family**: Starting from EMQX 5.10.5, select the IP address family that EMQX uses to connect to Kafka brokers:
+
+     - **Auto** (`auto`): Default. For an IP address, EMQX uses its address family. For a hostname, EMQX tries IPv4 first, then IPv6 if the IPv4 connection fails.
+     - **IPv4** (`ipv4`): Connect over IPv4 only.
+     - **IPv6** (`ipv6`): Connect over IPv6 only.
    
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
    

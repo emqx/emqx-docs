@@ -61,7 +61,11 @@ To create the Azure Event Hubs data integration, you need to create a Connector 
 3. On the **Create Connector** page, select **Azure Event Hubs** as the Connector type then click **Next**.
 4. Enter the name and description of the Connector. The name should be a combination of uppercase and lowercase letters and numbers, for example, `my-azure-event-hubs`.
 5. Configure the connection details.
-   - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Set other fields as per your actual setup.
+   - **Bootstrap Host**: Enter the hostname of your namespace. The default port is `9093`. Starting from EMQX 5.10.5, you can specify an IPv6 address in brackets, for example, `[::1]:9093`.
+   - **IP Family**: Starting from EMQX 5.10.5, select the IP address family that EMQX uses to connect to Azure Event Hubs:
+     - **Auto** (`auto`): Default. For an IP address, EMQX uses its address family. For a hostname, EMQX tries IPv4 first, then IPv6 if the IPv4 connection fails.
+     - **IPv4** (`ipv4`): Connect over IPv4 only.
+     - **IPv6** (`ipv6`): Connect over IPv6 only.
    - **Connection String**: Enter the connection string for your namespace, which can be found in the "Connection string - primary key" of the namespace's Shared access policies. For more details, see [Get an Event Hubs connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string).
    - **Enable TLS**: TLS is enabled by default when connecting to Azure Event Hub. For detailed TLS connection options, see [TLS for External Resource Access](../../guides/network/overview.md#enable-tls-encryption-for-accessing-external-resources).
 6. Click the **Create** button at the bottom to complete the Connector creation.
