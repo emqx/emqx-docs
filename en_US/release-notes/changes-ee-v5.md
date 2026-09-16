@@ -32,6 +32,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17472](https://github.com/emqx/emqx/pull/17472) Reduced the overhead of IoTDB REST API connector health checks by using a bounded version query instead of listing all databases on each check.
 
+- [#18917](https://github.com/emqx/emqx/pull/18917) Added IPv6 support to the Kafka, Confluent and Azure Event Hubs connectors.
+
+  - `bootstrap_hosts` accepts bracketed IPv6 addresses, for example `[::1]:9092` or `[fd00::5]:9092,host2:9093`.
+  - The connectors can reach hostnames that resolve only to IPv6 addresses, and brokers that advertise IPv6 addresses.
+  - The new `socket_opts.ip_family` option selects the IP address family. With the default `auto`, a hostname is tried over IPv4 first and then over IPv6. Set it to `ipv6` to connect over IPv6 only, or to `ipv4` to connect over IPv4 only.
+
+  The upgraded Kafka client library also fixes a sync produce timeout. It could happen when SASL re-authentication ran while requests were still pending.
+
 #### Deployment
 
 - [#17593](https://github.com/emqx/emqx/pull/17593) Added `--force` flag to `emqx ctl relup upgrade`. By default, the upgrade now refuses to proceed if `data/patches/` contains any `*.beam` hot-patch files (which would shadow modules from the upgrade target). Pass `--force` to keep the patches and proceed anyway.
@@ -78,6 +86,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17857](https://github.com/emqx/emqx/pull/17857) Improved redaction of sensitive data in logs and traces, including authentication and authorization backend query traces, JWT signing key material, sensitive HTTP connector request headers, and Redis Sentinel passwords.
 
+- [#18835](https://github.com/emqx/emqx/pull/18835) Stopped including the result of a successful configuration change in the cluster configuration sync debug logs.
+
+  The result could carry compiled runtime state, such as the HTTP authenticator header templates, which held secrets that log redaction did not cover.
+
 - [#18336](https://github.com/emqx/emqx/pull/18336) Read-only REST endpoints no longer return secrets in cleartext:
 
   - `GET /listeners` and `GET /listeners/{id}` now render the listener `ssl_options.password` as `******`.
@@ -103,6 +115,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18200](https://github.com/emqx/emqx/pull/18200) Fixed API key updates failing when the key was created without explicit scopes. API key create and update requests now treat `unset` or a scope list matching the role default as no explicit scopes, allowing read results to be resubmitted and preserving forward-compatible implicit scopes.
 
   The default administrator now also uses implicit role-default scopes (`unset`) instead of a frozen explicit list. Existing default administrator records with an explicit role-default scope list are converted to `unset` at startup.
+
+- [#18997](https://github.com/emqx/emqx/pull/18997) Fixed an error when saving a Dashboard user whose scopes match the default set of its role.
+
+  Such a user could not be edited at all, and switching its role between administrator and viewer failed with `Privilege scopes cannot be combined with other scopes` or `Non-administrator users cannot hold admin-only scopes`. The user API now reads a scope list that matches the role default, and the value `unset`, as "no explicit scopes". A user saved this way follows its role default as that default changes, instead of keeping a fixed list.
+
+- [#18963](https://github.com/emqx/emqx/pull/18963) Fixed `POST /api/v5/api_key` returning HTTP 500 when the optional `desc` or `enable` field is omitted from the request body. The key is now created with an empty note and enabled by default. Request body fields that are not part of the API key schema (for example `description` instead of `desc`) are still ignored by request validation.
 
 #### Data Integration
 
@@ -146,6 +164,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18251](https://github.com/emqx/emqx/pull/18251) Fixed GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
 
+- [#18920](https://github.com/emqx/emqx/pull/18920) Fixed GreptimeDB connectors that switched between connected and disconnected under heavy write load. The health check no longer waits behind pending writes, so it fails only when GreptimeDB does not respond.
+
 - [#18301](https://github.com/emqx/emqx/pull/18301) Elasticsearch action `index` and `id` values are now URL-encoded when composing the request path, so characters such as `#` or `/` in a templated value are treated as literal text within a single path segment instead of altering the request target. The JSON request body is not affected.
 
 - [#18317](https://github.com/emqx/emqx/pull/18317) Fixed GCP PubSub Producer and Consumer Connector API responses returning the `service_account_json` value without redaction. The value is now returned as `******` when a Connector is created or retrieved.
@@ -159,6 +179,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   This is a compatibility-breaking change. Existing templates that contain comments or use unsupported SQL syntax must be updated before they can be used with the new parsers. Supported syntax includes constants, strings and string interpolation, arithmetic, functions, conditions, and conditional operators. MySQL also supports `ON DUPLICATE KEY UPDATE`; ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`; and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
 
   The MySQL bridge now disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` for all connections. The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator`.
+
+- [#18846](https://github.com/emqx/emqx/pull/18846) Fixed SQL template rendering in data integrations. Doris batch inserts now use Doris-compatible syntax and escaping for text and binary values. MySQL templates now handle escaped dollar signs correctly.
 
 - [#18762](https://github.com/emqx/emqx/pull/18762) Fixed an error reported by the TDengine action. When the action could not be found, the error named the connector's ID instead of the action's ID, which made the error read as if a valid connector ID was invalid.
 
@@ -200,6 +222,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18825](https://github.com/emqx/emqx/pull/18825) Fixed CoAP Observe notifications not being retransmitted after a missing ACK, which could leave subsequent notifications blocked in the pending queue.
 
+- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN now publishes configured Will messages when sleeping clients exceed their sleep duration and no longer publishes Will messages when clients disconnect normally.
+
 #### Clustering
 
 - [#17770](https://github.com/emqx/emqx/pull/17770) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted with an unexpected reason, for example `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
@@ -209,6 +233,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, if cluster membership was established before the peer's license was replicated to the joining node, the node would refuse to start with a `SINGLE_NODE_LICENSE` error and, under an automatic-restart supervisor, keep crash-looping. The node now waits a bounded grace period for the clustering license to sync before it starts. A cluster in which no node ever obtains a clustering license is still rejected after the grace period elapses.
 
 - [#18013](https://github.com/emqx/emqx/pull/18013) Fixed an issue that could terminate a node while it joined a cluster whose persisted `mqtt.max_packet_size` differed from its local configuration. EMQX now skips listener refresh side effects before listener startup and creates the listeners from the synchronized configuration when the EMQX application starts.
+
+- [#18861](https://github.com/emqx/emqx/pull/18861) Added validation for the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
+
+  Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
 
 #### Observability
 

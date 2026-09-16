@@ -32,6 +32,14 @@
 
 - [#17472](https://github.com/emqx/emqx/pull/17472) 使用有界版本查询替代每次健康检查时列出所有数据库，降低了 IoTDB REST API 连接器健康检查的开销。
 
+- [#18917](https://github.com/emqx/emqx/pull/18917) 为 Kafka、Confluent 和 Azure Event Hubs 连接器新增 IPv6 支持。
+
+  - `bootstrap_hosts` 支持使用方括号括起的 IPv6 地址，例如 `[::1]:9092` 或 `[fd00::5]:9092,host2:9093`。
+  - 连接器现在可以访问仅解析为 IPv6 地址的主机名，以及公布 IPv6 地址的 Broker。
+  - 新增 `socket_opts.ip_family` 选项，用于选择 IP 地址族。使用默认值 `auto` 时，连接器会先尝试通过 IPv4 连接主机名，再尝试 IPv6。将其设置为 `ipv6` 可仅通过 IPv6 连接，设置为 `ipv4` 可仅通过 IPv4 连接。
+
+  升级后的 Kafka 客户端库还修复了同步生产超时问题。当仍有请求待处理时执行 SASL 重新认证，可能会触发该问题。
+
 #### 部署
 
 - [#17593](https://github.com/emqx/emqx/pull/17593) 为 `emqx ctl relup upgrade` 新增 `--force` 参数。默认情况下，如果 `data/patches/` 中包含会覆盖升级目标模块的 `*.beam` 热补丁文件，升级将拒绝继续。使用 `--force` 可保留这些补丁并继续升级。
@@ -78,6 +86,10 @@
 
 - [#17857](https://github.com/emqx/emqx/pull/17857) 改进了日志和追踪中的敏感数据脱敏，包括认证和授权后端查询追踪、JWT 签名密钥材料、HTTP 连接器中的敏感请求头以及 Redis Sentinel 密码。
 
+- [#18835](https://github.com/emqx/emqx/pull/18835) 集群配置同步的调试日志不再包含成功配置变更的结果。
+
+  该结果可能包含已编译的运行时状态，例如 HTTP 认证器请求头模板，其中可能含有日志脱敏未覆盖的敏感信息。
+
 - [#18336](https://github.com/emqx/emqx/pull/18336) 只读 REST 端点不再以明文返回敏感信息：
 
   - `GET /listeners` 和 `GET /listeners/{id}` 现在会将监听器的 `ssl_options.password` 显示为 `******`。
@@ -103,6 +115,12 @@
 - [#18200](https://github.com/emqx/emqx/pull/18200) 修复了更新创建时未设置显式 scope 的 API 密钥会失败的问题。现在，创建和更新 API 密钥的请求会将 `unset` 或与角色默认值相同的 scope 列表视为未设置显式 scope，从而允许重新提交读取操作返回的结果，并保留可向前兼容的隐式 scope。
 
   默认管理员现在也使用角色默认的隐式 scope（`unset`），而不再使用固定的显式列表。启动时，具有显式角色默认 scope 列表的现有默认管理员记录会被转换为 `unset`。
+
+- [#18997](https://github.com/emqx/emqx/pull/18997) 修复了保存 scope 与其角色默认 scope 集合相同的 Dashboard 用户时发生的错误。
+
+  此类用户此前完全无法编辑，在管理员和查看者之间切换角色也会失败，并返回 `Privilege scopes cannot be combined with other scopes` 或 `Non-administrator users cannot hold admin-only scopes`。用户 API 现在会将与角色默认值匹配的 scope 列表以及 `unset` 视为“未设置显式 scope”。以这种方式保存的用户会随角色默认 scope 的变化而变化，而不是保留固定列表。
+
+- [#18963](https://github.com/emqx/emqx/pull/18963) 修复了请求体中省略可选字段 `desc` 或 `enable` 时，`POST /api/v5/api_key` 返回 HTTP 500 的问题。现在创建 API 密钥时，备注默认为空，并且默认启用。请求验证仍会忽略不属于 API 密钥 Schema 的请求体字段，例如使用 `description` 而不是 `desc`。
 
 #### 数据集成
 
@@ -146,6 +164,8 @@
 
 - [#18251](https://github.com/emqx/emqx/pull/18251) 修复了工作进程被强制停止后遗留陈旧 gRPC 通道时，GreptimeDB 连接器可能无法重启的问题。
 
+- [#18920](https://github.com/emqx/emqx/pull/18920) 修复了 GreptimeDB 连接器在高写入负载下于 `connected` 和 `disconnected` 状态之间反复切换的问题。健康检查不再因待处理写入而等待，因此仅在 GreptimeDB 无响应时失败。
+
 - [#18301](https://github.com/emqx/emqx/pull/18301) Elasticsearch 动作的 `index` 和 `id` 值现在会在组成请求路径时进行 URL 编码，因此模板值中的 `#` 或 `/` 等字符会被视为单个路径段中的字面文本，而不会改变请求目标。JSON 请求体不受影响。
 
 - [#18317](https://github.com/emqx/emqx/pull/18317) 修复了 GCP PubSub 生产者和消费者连接器 API 响应未对 `service_account_json` 值进行脱敏的问题。创建或读取连接器时，该值现在返回为 `******`。
@@ -159,6 +179,8 @@
   这是一项破坏兼容性的变更。包含注释或使用不受支持 SQL 语法的现有模板必须更新后才能用于新的解析器。支持的语法包括常量、字符串和字符串插值、算术运算、函数、条件和条件运算符。MySQL 还支持 `ON DUPLICATE KEY UPDATE`；ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`；TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
 
   MySQL Bridge 现在会对所有连接禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES`。ClickHouse Bridge 现在会根据 SQL 模板推断批量值分隔符，并忽略配置的 `batch_value_separator`。
+
+- [#18846](https://github.com/emqx/emqx/pull/18846) 修复了数据集成中的 SQL 模板渲染问题。Doris 批量插入现在会对文本和二进制值使用兼容 Doris 的语法和转义方式。MySQL 模板现在可以正确处理转义的美元符号。
 
 - [#18762](https://github.com/emqx/emqx/pull/18762) 修复了 TDengine 动作返回错误时使用错误 ID 的问题。此前，找不到动作时，错误信息显示连接器 ID 而不是动作 ID，使有效的连接器 ID 看起来无效。
 
@@ -200,6 +222,8 @@
 
 - [#18825](https://github.com/emqx/emqx/pull/18825) 修复了 CoAP Observe 通知在未收到 ACK 后不重传的问题，该问题可能导致后续通知阻塞在待处理队列中。
 
+- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN 现在会在休眠客户端超过其休眠时长时发布已配置的遗嘱消息，并且在客户端正常断开连接时不再发布遗嘱消息。
+
 #### 集群
 
 - [#17770](https://github.com/emqx/emqx/pull/17770) 修复了底层集群 RPC 层因意外原因中止时，配置更新命令（REST API 和 CLI）因 `function_clause` 而崩溃的问题。例如，节点启动或恢复期间集群 RPC 表尚不可用时，可能出现 `{no_exists, cluster_rpc_mfa}`。此类故障现在会作为结构化错误返回给调用方。
@@ -209,6 +233,10 @@
   此前，如果在对端节点的许可证同步至新加入节点前已建立集群成员关系，该节点会因 `SINGLE_NODE_LICENSE` 错误拒绝启动；在自动重启监控进程下，节点会不断崩溃并重启。现在，节点会在启动前等待一段有限的宽限时间，以便同步集群许可证。如果宽限时间结束后集群中仍没有任何节点获得集群许可证，加入操作仍会被拒绝。
 
 - [#18013](https://github.com/emqx/emqx/pull/18013) 修复了节点加入集群时，集群中持久化的 `mqtt.max_packet_size` 与节点本地配置不同时可能导致节点终止的问题。EMQX 现在会在监听器启动前跳过配置更新触发的监听器刷新操作，并在 EMQX 应用启动时使用同步后的配置创建监听器。
+
+- [#18861](https://github.com/emqx/emqx/pull/18861) 新增对传给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项的验证。
+
+  此前，无效的 `chunk` 或 `sleep_ms` 值会被静默接受并禁用扫描限速，导致扫描在运维人员以为已限速的情况下仍全速运行。现在，工具会抛出错误并指出无效选项。未知选项键（例如拼写错误的 `chunks`）也会被拒绝。
 
 #### 可观测性
 
