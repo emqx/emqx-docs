@@ -39,25 +39,29 @@ EMQX Dashboard 通过管理 REST API 查询数据并执行管理操作。通过 
 
 ### 获取 Dashboard Token
 
-当 `dashboard.password_login` 设置为 `both` 时，可以通过基于密码的 `/login` 端点获取 Token。由于响应中不包含用户名，需要在对完整 JSON 载荷进行编码前手动添加用户名。以下命令会请求 Token、添加用户名，并对结果进行 Base64 编码：
+当 `dashboard.password_login` 设置为 `both` 时，可以通过基于密码的 `/login` 端点获取 Token。由于响应中不包含用户名，需要在对完整 JSON 载荷进行编码前手动添加用户名。以下命令会请求 Token、添加用户名、将紧凑格式的 JSON 编码为不换行的 Base64 字符串，并对结果进行百分号编码，以便在 URL 中使用：
 
 ```bash
 curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+  -d '{"username": "admin","password": "public"}' \
+  | jq -c '.username = "admin"' \
+  | base64 \
+  | tr -d '\n' \
+  | jq -sRr @uri
 ```
 
-如果 `dashboard.password_login` 设置为 `scram_only`，请[通过 SCRAM-SHA-256 获取 Token](./api.md#通过-scram-sha-256-获取-bearer-token)。将用户名添加到 SCRAM 响应中，并对生成的 JSON 对象进行 Base64 编码，然后再构造登录 URL。
+如果 `dashboard.password_login` 设置为 `scram_only`，请[通过 SCRAM-SHA-256 获取 Token](./api.md#通过-scram-sha-256-获取-bearer-token)。将用户名添加到 SCRAM 响应中，将生成的 JSON 对象编码为不换行的 Base64 字符串并进行百分号编码，然后再构造登录 URL。
 
 ### 构造登录 URL
 
-将经过 Base64 编码的登录信息嵌入到 `login_meta` 查询参数中。
+将经过百分号编码的 Base64 值嵌入到 `login_meta` 查询参数中。
 
 对于 **EMQX 5.6.0 之前的版本**：
 
 ```bash
-http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+http://localhost:18083?login_meta=URL_ENCODED_BASE64_STRING
 ```
 
 该方式会跳转至默认的集群概览页面。
@@ -65,7 +69,7 @@ http://localhost:18083?login_meta=BASE64_ENCODED_STRING
 对于 **EMQX 5.6.0 及以上版本**：
 
 ```bash
-http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+http://localhost:18083/#/dashboard/overview?login_meta=URL_ENCODED_BASE64_STRING
 ```
 
 该方式支持在登录后跳转到指定页面。

@@ -84,7 +84,7 @@ In this method, you use API keys and secret keys as the username and password to
 
 ::: tip Note
 
-For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication.
+Starting from EMQX 5.0.0, Dashboard usernames and passwords cannot be used directly as Basic authentication credentials for REST API requests. To authenticate with local Dashboard user credentials, use a Dashboard login flow to obtain a short-lived bearer token. For long-running programmatic access, use API keys.
 
 :::
 
@@ -251,7 +251,7 @@ To obtain a bearer token through SCRAM without sending the password in an HTTP r
 1. Generate a random client nonce containing 20 to 128 unpadded Base64URL characters.
 2. Send the username and client nonce to `POST /api/v5/login/challenge`.
 3. Append the returned server nonce to the client nonce to form the combined nonce.
-4. Construct the RFC 7677 SCRAM-SHA-256 messages from the fields in the challenge response:
+4. Construct the RFC 7677 SCRAM-SHA-256 messages using the `username` and `client_nonce` retained from the challenge request, and the `server_nonce`, `salt`, and `iterations` returned in the challenge response:
 
    ```text
    client-first-message-bare = n=<escaped_username>,r=<client_nonce>
@@ -276,7 +276,7 @@ To obtain a bearer token through SCRAM without sending the password in an HTTP r
    Base64-encode `client-proof` and send it in the `client_proof` field of the `POST /api/v5/login/verify` request together with the challenge ID and combined nonce. Include `mfa_token` when multi-factor authentication is enabled for the user.
 6. Base64-decode the `server_signature` in the response and compare it with `expected-server-signature` before using the bearer token in the `token` field.
 
-Each challenge is time-limited and can be used for only one verification attempt. `POST /api/v5/login/verify` consumes the challenge even if authentication fails. If verification fails, including with `BAD_MFA_TOKEN`, request a new challenge and recalculate the client proof.
+Each challenge is time-limited. A well-formed request to `POST /api/v5/login/verify` consumes the challenge whether authentication succeeds or fails, including when the request returns `BAD_MFA_TOKEN`. Requests rejected during preliminary validation, such as an invalid Base64 encoding or decoded length for `client_proof`, or an invalid `combined_nonce` format, do not consume the challenge and can be retried. After a consumed challenge fails, request a new challenge and recalculate the client proof.
 
 For the request and response schemas, open the `dashboard` section of the [API specification](#access-api-specification-endpoints).
 
@@ -286,10 +286,10 @@ Browser-based SCRAM login requires HTTPS or another secure browser context.
 
 The compatibility endpoint `POST /api/v5/login` accepts a username and password only when `dashboard.password_login` is set to `both`, which is the default. If `dashboard.password_login` is set to `scram_only`, the endpoint returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`. Use the SCRAM flow described above or an API key instead.
 
-When password login is enabled, make an HTTP `POST` request to the following endpoint:
+When password login is enabled, use the following endpoint for local access:
 
 ```bash
-POST http://your-emqx-address:18083/api/v5/login
+POST http://localhost:18083/api/v5/login
 ```
 
 **Headers:**
@@ -305,8 +305,9 @@ POST http://your-emqx-address:18083/api/v5/login
 }
 ```
 
-- Replace `your-emqx-address` with the address or IP of your EMQX node.
 - Replace `"admin"` and `"yourpassword"` with your EMQX Dashboard credentials.
+
+This example uses HTTP on localhost. For remote access, configure an HTTPS listener and send the request over HTTPS.
 
 The response will include the bearer token, which you can use to authenticate API requests.
 

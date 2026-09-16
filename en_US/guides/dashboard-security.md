@@ -39,25 +39,29 @@ EMQX Dashboard uses the management REST API to retrieve data and perform adminis
 
 ### Obtain a Dashboard Token
 
-When `dashboard.password_login` is set to `both`, you can obtain a token from the password-based `/login` endpoint. Because the response does not include the username, add it manually before encoding the full JSON payload. The following command requests the token, adds the username, and Base64-encodes the result:
+When `dashboard.password_login` is set to `both`, you can obtain a token from the password-based `/login` endpoint. Because the response does not include the username, add it manually before encoding the full JSON payload. The following command requests the token, adds the username, encodes the compact JSON as Base64 without line breaks, and percent-encodes the result for use in a URL:
 
 ```bash
 curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+  -d '{"username": "admin","password": "public"}' \
+  | jq -c '.username = "admin"' \
+  | base64 \
+  | tr -d '\n' \
+  | jq -sRr @uri
 ```
 
-If `dashboard.password_login` is set to `scram_only`, [obtain the token with SCRAM-SHA-256](./api.md#obtain-a-bearer-token-with-scram-sha-256). Add the username to the SCRAM response and Base64-encode the resulting JSON object before constructing the login URL.
+If `dashboard.password_login` is set to `scram_only`, [obtain the token with SCRAM-SHA-256](./api.md#obtain-a-bearer-token-with-scram-sha-256). Add the username to the SCRAM response, encode the resulting JSON object as Base64 without line breaks, and percent-encode it before constructing the login URL.
 
 ### Construct the Login URL
 
-Embed the Base64-encoded login information in the `login_meta` query parameter.
+Embed the percent-encoded Base64 value in the `login_meta` query parameter.
 
 For EMQX versions **before 5.6.0**:
 
 ```bash
-http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+http://localhost:18083?login_meta=URL_ENCODED_BASE64_STRING
 ```
 
 This redirects to the default cluster overview page.
@@ -65,7 +69,7 @@ This redirects to the default cluster overview page.
 For EMQX **5.6.0 and later**:
 
 ```bash
-http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+http://localhost:18083/#/dashboard/overview?login_meta=URL_ENCODED_BASE64_STRING
 ```
 
 This allows specifying the target page after login.

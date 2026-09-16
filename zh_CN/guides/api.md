@@ -83,7 +83,7 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 在这种方法中，您通过使用 API 密钥和密钥作为用户名和密码来对 API 请求进行身份验证。EMQX 的 REST API 基于 HTTP 基本认证框架，要求提供这些凭据。使用 EMQX REST API 之前，您需要先创建一个 API 密钥，详见 [API 密钥管理](#api-密钥管理)。
 
 ::: tip 注意
-出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。
+从 EMQX 5.0.0 开始，Dashboard 用户名和密码不能直接作为 REST API 请求的 Basic 认证凭据。如需使用本地 Dashboard 用户凭据进行认证，请通过 Dashboard 登录流程获取短期 Bearer Token。长期运行的程序化访问应使用 API 密钥。
 :::
 
 #### 使用 API 密钥认证
@@ -247,7 +247,7 @@ axios
 1. 生成由 20 到 128 个无填充 Base64URL 字符组成的随机客户端 Nonce。
 2. 将用户名和客户端 Nonce 发送到 `POST /api/v5/login/challenge`。
 3. 将服务端返回的 Nonce 拼接到客户端 Nonce 之后，生成组合 Nonce。
-4. 使用挑战响应中的字段构造 RFC 7677 SCRAM-SHA-256 消息：
+4. 使用挑战请求中保留的 `username` 和 `client_nonce`，以及挑战响应返回的 `server_nonce`、`salt` 和 `iterations`，构造 RFC 7677 SCRAM-SHA-256 消息：
 
    ```text
    client-first-message-bare = n=<escaped_username>,r=<client_nonce>
@@ -272,7 +272,7 @@ axios
    对 `client-proof` 进行 Base64 编码，并将结果写入 `POST /api/v5/login/verify` 请求的 `client_proof` 字段，同时提供挑战 ID 和组合 Nonce。如果用户启用了多因素认证，还需提供 `mfa_token`。
 6. 对响应中的 `server_signature` 进行 Base64 解码，并与 `expected-server-signature` 比对。确认一致后，再使用 `token` 字段中的 Bearer Token。
 
-每个挑战都有有效期，且只能用于一次验证。即使认证失败，`POST /api/v5/login/verify` 也会消耗该挑战。如果验证失败，包括返回 `BAD_MFA_TOKEN`，请重新请求挑战并计算客户端证明。
+每个挑战都有有效期。对于格式正确的 `POST /api/v5/login/verify` 请求，无论认证成功还是失败，均会消耗该挑战，包括返回 `BAD_MFA_TOKEN` 的情况。在初步校验阶段被拒绝的请求不会消耗挑战，可以使用同一挑战重试，例如 `client_proof` 的 Base64 编码或解码后长度无效，或 `combined_nonce` 格式无效。挑战被消耗后，如果认证失败，请重新请求挑战并计算客户端证明。
 
 请求和响应 Schema 参见 [API 规范](#访问-api-规范端点)中的 `dashboard` 部分。
 
@@ -282,10 +282,10 @@ axios
 
 兼容端点 `POST /api/v5/login` 仅在 `dashboard.password_login` 设置为 `both` 时接受用户名和密码。`both` 为默认值。如果将 `dashboard.password_login` 设置为 `scram_only`，该端点将返回 HTTP `403` 和错误码 `PASSWORD_LOGIN_DISABLED`。此时请改用上述 SCRAM 流程或 API 密钥。
 
-启用密码登录后，向以下端点发送 HTTP `POST` 请求：
+启用密码登录后，本地访问可使用以下端点：
 
 ```bash
-POST http://your-emqx-address:18083/api/v5/login
+POST http://localhost:18083/api/v5/login
 ```
 
 **请求头:**
@@ -301,8 +301,9 @@ POST http://your-emqx-address:18083/api/v5/login
 }
 ```
 
-- 将 `your-emqx-address` 替换为您的 EMQX 节点的地址或 IP。
 - 将 `"admin"` 和 `"yourpassword"` 替换为您的 EMQX Dashboard 凭证。
+
+此示例通过 HTTP 访问 localhost。远程访问时，请配置 HTTPS 监听器并通过 HTTPS 发送请求。
 
 响应中将包含 Bearer Token，您可以使用该 Token 对 API 请求进行身份验证。
 

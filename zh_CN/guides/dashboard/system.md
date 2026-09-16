@@ -9,7 +9,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 要添加新用户，只需点击页面右上角的**创建**按钮。一个弹出的对话框将提示您输入必要的用户详细信息。输入完毕后，点击**创建**按钮即可生成用户帐户。对于进一步的用户管理，如编辑用户信息、更新密码或删除用户，您可以通过**操作**列轻松访问这些选项。
 
 > EMQX 开源版本不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户。
-> 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
+> 从 EMQX 5.0.0 开始，Dashboard 用户名和密码不能直接作为 REST API 请求的 Basic 认证凭据。如需以 Dashboard 用户身份访问 REST API，请通过 [Dashboard 登录流程](../api.md#使用-bearer-token-认证)获取 Bearer Token。
 
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 

@@ -8,7 +8,7 @@ The **Users** page provides an overview of all active Dashboard users, including
 
 To add new users, click the **+ Create** button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
 
-> For security reasons, starting with EMQX 5.0.0, Dashboard users cannot be used for REST API authentication.
+> Starting from EMQX 5.0.0, Dashboard usernames and passwords cannot be used directly as Basic authentication credentials for REST API requests. To use a Dashboard user's identity for REST API access, obtain a bearer token through the [Dashboard login flow](../api.md#bearer-token-authentication).
 
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
