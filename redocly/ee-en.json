@@ -286,7 +286,7 @@
         }
       },
       "public.position": {
-        "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+        "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
         "example": "none",
         "in": "query",
         "name": "position",
@@ -3506,7 +3506,7 @@
             "type": "string"
           },
           "sql": {
-            "description": "SQL for inserting data.  Supports placeholder variables like `${clientid}`.<br/><br/>Note: QuasarDB ODBC driver does not support prepared statements.  Therefore, any values that are known to resolve to `STRING` or `BLOB` types must be manually quoted (`'`) in your SQL query.",
+            "description": "SQL for inserting data. Supports placeholder variables such as `${clientid}`.<br/>The action validates the `INSERT INTO ... VALUES (...)` structure before it renders placeholders.<br/>It quotes and escapes values according to their SQL context.<br/>Use unquoted placeholders for numbers, `NULL`, and timestamp values.<br/>Text values are quoted automatically. Use single quotes to force a placeholder to remain text.<br/>This quoted form also combines a placeholder with static string content.<br/>Timestamp values must use a documented QuasarDB timestamp form.<br/>Values containing `NUL` are not supported by the QuasarDB query API.",
             "format": "sql",
             "type": "string"
           }
@@ -5785,13 +5785,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
+                  "bigtable"
                 ],
                 "type": "string"
               },
@@ -5803,19 +5797,187 @@
               },
               {
                 "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -5833,133 +5995,7 @@
               },
               {
                 "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_grid"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
+                  "emqx_tables"
                 ],
                 "type": "string"
               },
@@ -5971,85 +6007,19 @@
               },
               {
                 "enum": [
-                  "cassandra"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "azure_event_grid"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigtable"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "matrix"
                 ],
                 "type": "string"
               },
@@ -6061,7 +6031,37 @@
               },
               {
                 "enum": [
-                  "timescale"
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               }
@@ -7280,6 +7280,13 @@
               "delete"
             ],
             "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "query_string": {
+            "example": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -12944,12 +12951,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -24685,7 +24692,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -26066,7 +26073,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -34593,6 +34600,15 @@
             "example": "1h",
             "type": "string"
           },
+          "password_login": {
+            "default": "both",
+            "description": "Select whether Dashboard local-user login accepts the legacy password request or SCRAM challenge-response.",
+            "enum": [
+              "both",
+              "scram_only"
+            ],
+            "type": "string"
+          },
           "sso": {
             "$ref": "#/components/schemas/dashboard.sso"
           },
@@ -34655,7 +34671,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -34702,7 +34718,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -35726,7 +35742,7 @@
         "properties": {
           "active_n": {
             "default": 10,
-            "description": "Specify the {active, N} option for this Socket.<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2",
+            "description": "Specify the {active, N} option for this Socket.<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2<br/><br/>With the `socket` TCP backend, this value only sets the message delivery batch size and the number of sent packets between memory checks.<br/><br/>Values outside the 1-1000 range are not rejected; the effective value is silently clamped to that range for compatibility with existing configurations.",
             "minimum": 0,
             "type": "integer"
           },
@@ -37471,7 +37487,7 @@
         "properties": {
           "active_n": {
             "default": 10,
-            "description": "Specify the {active, N} option for this Socket.<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2",
+            "description": "Specify the {active, N} option for this Socket.<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2<br/><br/>With the `socket` TCP backend, this value only sets the message delivery batch size and the number of sent packets between memory checks.<br/><br/>Values outside the 1-1000 range are not rejected; the effective value is silently clamped to that range for compatibility with existing configurations.",
             "minimum": 0,
             "type": "integer"
           },
@@ -37483,7 +37499,7 @@
           },
           "buffer": {
             "default": "4KB",
-            "description": "The size of the user-space buffer used by the driver.",
+            "description": "The size of the user-space buffer used by the driver.<br/><br/>Values below 5 bytes (the largest MQTT fixed header) are not rejected; the effective buffer size is silently raised to 5 bytes for compatibility with existing configurations.",
             "example": "4KB",
             "type": "string"
           },
@@ -41974,7 +41990,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "484BDAFB8F8BBA59",
+            "example": "79D9714EA17F9284",
             "type": "string"
           },
           "status": {
@@ -43810,12 +43826,14 @@
       "emqx_telemetry_api.status": {
         "properties": {
           "enable": {
-            "default": true,
             "description": "Enable telemetry",
             "example": false,
             "type": "boolean"
           }
         },
+        "required": [
+          "enable"
+        ],
         "type": "object"
       },
       "emqx_telemetry_api.telemetry": {
@@ -52220,10 +52238,12 @@
           "NOT_MATCH",
           "NO_DEFAULT_VALUE",
           "PARAM_ERROR",
+          "PASSWORD_LOGIN_DISABLED",
           "REDIRECT",
           "RESET_FAILED",
           "RESOURCE_NOT_FOUND",
           "RULE_NOT_FOUND",
+          "SCRAM_CHALLENGE_INVALID",
           "SERVICE_UNAVAILABLE",
           "STALE_CURSOR",
           "TEST_FAILED",
@@ -54308,7 +54328,7 @@
       "public.continuation_meta": {
         "properties": {
           "position": {
-            "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+            "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
             "example": "none",
             "oneOf": [
               {
@@ -56574,10 +56594,6 @@
             "description": "The name of the connector.",
             "type": "string"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "node_status": {
             "description": "Node status.",
             "items": {
@@ -56595,6 +56611,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -56746,10 +56766,6 @@
             "description": "The name of the connector.",
             "type": "string"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -56760,6 +56776,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -56879,10 +56899,6 @@
             "description": "Enable (true) or disable (false) this connector.",
             "type": "boolean"
           },
-          "namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
-            "type": "string"
-          },
           "pool_size": {
             "default": 8,
             "description": "Size of the connection pool towards the bridge target service.",
@@ -56893,6 +56909,10 @@
             "$ref": "#/components/schemas/rocketmq.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "rocketmq_namespace": {
+            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "type": "string"
           },
           "secret_key": {
             "default": "",
@@ -61630,7 +61650,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.3.0"
+    "version": "6.3.1-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62246,106 +62266,106 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "timescale",
-                      "opents",
-                      "mongodb",
-                      "gcp_pubsub_producer",
-                      "oracle",
-                      "pulsar",
-                      "tdengine",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "snowflake_streaming",
-                      "emqx_tables",
-                      "quasardb",
-                      "elasticsearch",
-                      "influxdb",
-                      "pgsql",
-                      "cassandra",
-                      "cockroachdb",
-                      "kinesis",
-                      "s3tables",
-                      "iotdb",
-                      "mysql",
-                      "rabbitmq",
-                      "greptimedb",
-                      "confluent_producer",
-                      "syskeeper_forwarder",
-                      "disk_log",
-                      "azure_event_grid",
-                      "datalayers",
-                      "sqlserver",
-                      "http",
                       "kafka_producer",
-                      "redis",
-                      "redshift",
+                      "cassandra",
+                      "s3tables",
+                      "mongodb",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "opents",
                       "matrix",
-                      "clickhouse",
-                      "mqtt",
-                      "tablestore",
-                      "alloydb",
-                      "aws_timestream",
+                      "azure_event_grid",
+                      "confluent_producer",
+                      "cockroachdb",
+                      "emqx_tables",
                       "bigquery",
                       "snowflake",
-                      "rocketmq",
-                      "s3",
+                      "elasticsearch",
+                      "oracle",
+                      "azure_event_hub_producer",
+                      "azure_blob_storage",
+                      "quasardb",
+                      "redshift",
+                      "sqlserver",
+                      "greptimedb",
+                      "pgsql",
+                      "iotdb",
                       "doris",
-                      "couchbase",
+                      "tablestore",
+                      "gcp_pubsub_producer",
+                      "disk_log",
+                      "datalayers",
+                      "snowflake_streaming",
+                      "http",
+                      "kinesis",
+                      "redis",
+                      "clickhouse",
+                      "aws_timestream",
+                      "rocketmq",
+                      "timescale",
+                      "mqtt",
+                      "alloydb",
+                      "pulsar",
+                      "mysql",
+                      "influxdb",
+                      "tdengine",
                       "dynamo",
-                      "azure_event_hub_producer"
+                      "s3",
+                      "couchbase",
+                      "bigtable"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "timescale",
-                      "opents",
-                      "mongodb",
-                      "gcp_pubsub_producer",
-                      "oracle",
-                      "pulsar",
-                      "tdengine",
-                      "bigtable",
-                      "azure_blob_storage",
-                      "snowflake_streaming",
-                      "emqx_tables",
-                      "quasardb",
-                      "elasticsearch",
-                      "influxdb",
-                      "pgsql",
-                      "cassandra",
-                      "cockroachdb",
-                      "kinesis",
-                      "s3tables",
-                      "iotdb",
-                      "mysql",
-                      "rabbitmq",
-                      "greptimedb",
-                      "confluent_producer",
-                      "syskeeper_forwarder",
-                      "disk_log",
-                      "azure_event_grid",
-                      "datalayers",
-                      "sqlserver",
-                      "http",
                       "kafka_producer",
-                      "redis",
-                      "redshift",
+                      "cassandra",
+                      "s3tables",
+                      "mongodb",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "opents",
                       "matrix",
-                      "clickhouse",
-                      "mqtt",
-                      "tablestore",
-                      "alloydb",
-                      "aws_timestream",
+                      "azure_event_grid",
+                      "confluent_producer",
+                      "cockroachdb",
+                      "emqx_tables",
                       "bigquery",
                       "snowflake",
-                      "rocketmq",
-                      "s3",
+                      "elasticsearch",
+                      "oracle",
+                      "azure_event_hub_producer",
+                      "azure_blob_storage",
+                      "quasardb",
+                      "redshift",
+                      "sqlserver",
+                      "greptimedb",
+                      "pgsql",
+                      "iotdb",
                       "doris",
-                      "couchbase",
+                      "tablestore",
+                      "gcp_pubsub_producer",
+                      "disk_log",
+                      "datalayers",
+                      "snowflake_streaming",
+                      "http",
+                      "kinesis",
+                      "redis",
+                      "clickhouse",
+                      "aws_timestream",
+                      "rocketmq",
+                      "timescale",
+                      "mqtt",
+                      "alloydb",
+                      "pulsar",
+                      "mysql",
+                      "influxdb",
+                      "tdengine",
                       "dynamo",
-                      "azure_event_hub_producer"
+                      "s3",
+                      "couchbase",
+                      "bigtable"
                     ],
                     "type": "string"
                   },
@@ -76313,26 +76333,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -76343,26 +76363,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -77385,9 +77405,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0,
                         "total": 0
                       },
@@ -77398,9 +77418,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -77411,9 +77431,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -77428,9 +77448,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -78258,26 +78278,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -78288,26 +78308,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -81080,9 +81100,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -81091,9 +81111,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -81104,9 +81124,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -81121,9 +81141,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -82934,8 +82954,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826"
                   }
                 },
                 "schema": {
@@ -83088,8 +83108,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826_10"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826_10"
                   }
                 },
                 "schema": {
@@ -88738,7 +88758,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90414,7 +90434,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -92322,7 +92342,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -93622,7 +93642,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95287,7 +95307,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -96940,7 +96960,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -97894,7 +97914,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "484BDAFB8F8BBA59",
+            "example": "79D9714EA17F9284",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97957,7 +97977,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "484BDAFB8F8BBA59",
+            "example": "79D9714EA17F9284",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98371,7 +98391,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "484BDAFB8F8BBA59",
+            "example": "79D9714EA17F9284",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98457,7 +98477,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "484BDAFB8F8BBA59",
+            "example": "79D9714EA17F9284",
             "in": "path",
             "name": "site",
             "required": true,
@@ -109548,6 +109568,317 @@
                     },
                     "message": {
                       "description": "Login failed. Bad/missing MFA token, or bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PASSWORD_LOGIN_DISABLED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "Get Dashboard Auth Token",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/login/challenge": {
+      "post": {
+        "description": "Get Dashboard Auth Token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "client_nonce": {
+                    "description": "SCRAM client nonce. Use 20 to 128 unpadded Base64URL characters: letters, digits, `_`, or `-`.",
+                    "example": "clientNonce1234567890",
+                    "maxLength": 128,
+                    "type": "string"
+                  },
+                  "username": {
+                    "description": "Dashboard Username",
+                    "example": "admin",
+                    "maxLength": 100,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "client_nonce"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "challenge_id": {
+                      "example": "0123456789abcdefghijklmnopqrstuv",
+                      "maxLength": 128,
+                      "type": "string"
+                    },
+                    "iterations": {
+                      "example": 600000,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "mechanism": {
+                      "example": "SCRAM-SHA-256",
+                      "type": "string"
+                    },
+                    "salt": {
+                      "example": "base64-salt",
+                      "type": "string"
+                    },
+                    "server_nonce": {
+                      "example": "server-nonce",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "challenge_id"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "Get Dashboard Auth Token",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/login/verify": {
+      "post": {
+        "description": "Get Dashboard Auth Token.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "challenge_id": {
+                    "example": "0123456789abcdefghijklmnopqrstuv",
+                    "maxLength": 128,
+                    "type": "string"
+                  },
+                  "client_proof": {
+                    "example": "base64-proof",
+                    "type": "string"
+                  },
+                  "combined_nonce": {
+                    "description": "The client nonce followed by the server nonce returned by the challenge endpoint.",
+                    "example": "clientNonce1234567890serverNonce1234567890",
+                    "maxLength": 160,
+                    "type": "string"
+                  },
+                  "mfa_token": {
+                    "description": "Multifactor authentication token.",
+                    "example": "023123",
+                    "maxLength": 9,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "challenge_id",
+                  "client_proof",
+                  "combined_nonce"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "license": {
+                      "properties": {
+                        "edition": {
+                          "description": "EMQX License. opensource or enterprise",
+                          "enum": [
+                            "opensource",
+                            "enterprise"
+                          ],
+                          "example": "opensource",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "password_expire_in_seconds": {
+                      "description": "Time in seconds until the password expires.",
+                      "example": 3600,
+                      "type": "integer"
+                    },
+                    "role": {
+                      "default": "administrator",
+                      "description": "User role. A namespaced role is written as `ns:<namespace>::<role>`. Namespace names listed in `multi_tenancy.deny_namespaces` (default: `global`, `undefined`, `null`, `none`) cannot be used.",
+                      "example": "administrator",
+                      "type": "string"
+                    },
+                    "server_signature": {
+                      "example": "base64-signature",
+                      "type": "string"
+                    },
+                    "token": {
+                      "description": "Dashboard Auth Token",
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "EMQX Version",
+                      "example": "5.0.0",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_USERNAME_OR_PWD",
+                        "BAD_MFA_TOKEN",
+                        "LOGIN_LOCKED",
+                        "SCRAM_CHALLENGE_INVALID"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad/missing MFA token, or bad username or password",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Login failed. Bad username or password",
                       "type": "string"
                     }
                   },
