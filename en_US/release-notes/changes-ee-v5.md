@@ -38,7 +38,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - The connectors can reach hostnames that resolve only to IPv6 addresses, and brokers that advertise IPv6 addresses.
   - The new `socket_opts.ip_family` option selects the IP address family. With the default `auto`, a hostname is tried over IPv4 first and then over IPv6. Set it to `ipv6` to connect over IPv6 only, or to `ipv4` to connect over IPv4 only.
 
-  The upgraded Kafka client library also fixes a sync produce timeout. It could happen when SASL re-authentication ran while requests were still pending.
+  The Kafka client library upgrade also fixes synchronous produce requests timing out when SASL re-authentication runs while requests are pending.
 
 #### Deployment
 
@@ -118,9 +118,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18997](https://github.com/emqx/emqx/pull/18997) Fixed an error when saving a Dashboard user whose scopes match the default set of its role.
 
-  Such a user could not be edited at all, and switching its role between administrator and viewer failed with `Privilege scopes cannot be combined with other scopes` or `Non-administrator users cannot hold admin-only scopes`. The user API now reads a scope list that matches the role default, and the value `unset`, as "no explicit scopes". A user saved this way follows its role default as that default changes, instead of keeping a fixed list.
+  Previously, submitting the scope list returned by the API could prevent changes to other user fields from being saved. Switching the user's role between administrator and viewer could also fail with `Privilege scopes cannot be combined with other scopes` or `Non-administrator users cannot hold admin-only scopes`. The user API now treats `unset` or a scope list matching the requested role's default as no explicit scopes. The user then follows future changes to the role default instead of retaining a fixed list.
 
-- [#18963](https://github.com/emqx/emqx/pull/18963) Fixed `POST /api/v5/api_key` returning HTTP 500 when the optional `desc` or `enable` field is omitted from the request body. The key is now created with an empty note and enabled by default. Request body fields that are not part of the API key schema (for example `description` instead of `desc`) are still ignored by request validation.
+- [#18963](https://github.com/emqx/emqx/pull/18963) Fixed `POST /api/v5/api_key` returning HTTP 500 when the optional `desc` or `enable` field is omitted from the request body. The key is now created with an empty note and enabled by default. Unknown request fields remain ignored; for example, `description` is not treated as an alias for `desc`.
 
 #### Data Integration
 
@@ -222,7 +222,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18825](https://github.com/emqx/emqx/pull/18825) Fixed CoAP Observe notifications not being retransmitted after a missing ACK, which could leave subsequent notifications blocked in the pending queue.
 
-- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN now publishes configured Will messages when sleeping clients exceed their sleep duration and no longer publishes Will messages when clients disconnect normally.
+- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN now publishes configured Will messages when a sleeping client's sleep period expires and no longer publishes Will messages when clients disconnect normally.
 
 #### Clustering
 
@@ -236,7 +236,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18861](https://github.com/emqx/emqx/pull/18861) Added validation for the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
-  Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
+  Previously, invalid `chunk` or `sleep_ms` values could silently disable scan throttling or trigger low-level runtime errors. The tool now rejects invalid values and unknown option keys, such as a misspelled `chunks`, and raises an error that identifies the offending option.
 
 #### Observability
 

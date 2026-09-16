@@ -38,7 +38,7 @@
   - 连接器现在可以访问仅解析为 IPv6 地址的主机名，以及公布 IPv6 地址的 Broker。
   - 新增 `socket_opts.ip_family` 选项，用于选择 IP 地址族。使用默认值 `auto` 时，连接器会先尝试通过 IPv4 连接主机名，再尝试 IPv6。将其设置为 `ipv6` 可仅通过 IPv6 连接，设置为 `ipv4` 可仅通过 IPv4 连接。
 
-  升级后的 Kafka 客户端库还修复了同步生产超时问题。当仍有请求待处理时执行 SASL 重新认证，可能会触发该问题。
+  升级 Kafka 客户端库还修复了在仍有请求待处理时执行 SASL 重新认证可能导致同步生产请求超时的问题。
 
 #### 部署
 
@@ -118,9 +118,9 @@
 
 - [#18997](https://github.com/emqx/emqx/pull/18997) 修复了保存 scope 与其角色默认 scope 集合相同的 Dashboard 用户时发生的错误。
 
-  此类用户此前完全无法编辑，在管理员和查看者之间切换角色也会失败，并返回 `Privilege scopes cannot be combined with other scopes` 或 `Non-administrator users cannot hold admin-only scopes`。用户 API 现在会将与角色默认值匹配的 scope 列表以及 `unset` 视为“未设置显式 scope”。以这种方式保存的用户会随角色默认 scope 的变化而变化，而不是保留固定列表。
+  此前，将 API 返回的 scope 列表原样提交时，可能无法保存对用户其他字段的修改。在管理员和查看者之间切换用户角色时，也可能返回 `Privilege scopes cannot be combined with other scopes` 或 `Non-administrator users cannot hold admin-only scopes` 而失败。用户 API 现在会将 `unset` 或与请求中指定角色的默认值匹配的 scope 列表视为未设置显式 scope。此后，该用户会继承角色默认 scope 的后续变化，而不会保留固定列表。
 
-- [#18963](https://github.com/emqx/emqx/pull/18963) 修复了请求体中省略可选字段 `desc` 或 `enable` 时，`POST /api/v5/api_key` 返回 HTTP 500 的问题。现在创建 API 密钥时，备注默认为空，并且默认启用。请求验证仍会忽略不属于 API 密钥 Schema 的请求体字段，例如使用 `description` 而不是 `desc`。
+- [#18963](https://github.com/emqx/emqx/pull/18963) 修复了请求体中省略可选字段 `desc` 或 `enable` 时，`POST /api/v5/api_key` 返回 HTTP 500 的问题。现在创建 API 密钥时，备注默认为空，并且默认启用。未知的请求字段仍会被忽略；例如，`description` 不会被视为 `desc` 的别名。
 
 #### 数据集成
 
@@ -222,7 +222,7 @@
 
 - [#18825](https://github.com/emqx/emqx/pull/18825) 修复了 CoAP Observe 通知在未收到 ACK 后不重传的问题，该问题可能导致后续通知阻塞在待处理队列中。
 
-- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN 现在会在休眠客户端超过其休眠时长时发布已配置的遗嘱消息，并且在客户端正常断开连接时不再发布遗嘱消息。
+- [#18652](https://github.com/emqx/emqx/pull/18652) MQTT-SN 现在会在休眠客户端的休眠期限到期时发布已配置的遗嘱消息，并且在客户端正常断开连接时不再发布遗嘱消息。
 
 #### 集群
 
@@ -236,7 +236,7 @@
 
 - [#18861](https://github.com/emqx/emqx/pull/18861) 新增对传给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项的验证。
 
-  此前，无效的 `chunk` 或 `sleep_ms` 值会被静默接受并禁用扫描限速，导致扫描在运维人员以为已限速的情况下仍全速运行。现在，工具会抛出错误并指出无效选项。未知选项键（例如拼写错误的 `chunks`）也会被拒绝。
+  此前，无效的 `chunk` 或 `sleep_ms` 值可能会静默禁用扫描限速，也可能触发底层运行时错误。现在，工具会拒绝无效值和未知选项键（例如拼写错误的 `chunks`），并通过错误信息指出有问题的选项。
 
 #### 可观测性
 
