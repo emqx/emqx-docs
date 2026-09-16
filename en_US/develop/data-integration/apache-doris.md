@@ -143,11 +143,21 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. Select the `my_mysql` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. Select the `my_doris` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 8. Configure the **SQL Template** based on the feature to use:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   When batch mode is disabled, EMQX uses a prepared statement to write to Apache Doris. Do not enclose placeholders in quotation marks or end the statement with a semicolon.
+
+   ::: warning Important Notice
+
+   Starting from EMQX 5.10.5, when batch mode is enabled, EMQX uses a restricted Doris SQL parser to render the template with context-aware escaping. If the template contains unsupported syntax, EMQX logs a parsing error, and batch requests using the template fail at runtime.
+
+   The template must be a single Doris `INSERT INTO ... VALUES` statement with one configured row. Placeholders can be used as complete values or inside ordinary and raw string literals. SQL comments, additional statements, multiple configured rows, dynamic identifiers, `INSERT SELECT`, row aliases, `ON DUPLICATE KEY UPDATE`, MySQL hex literals, and character-set introducers are not supported. `DEFAULT` is valid only as a direct row item, and identifiers that start with a digit must be enclosed in backticks.
+
+   EMQX also disables the Doris `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` SQL modes on every connection it creates. Before upgrading, revise templates that use unsupported syntax or depend on either SQL mode.
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -186,7 +196,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Apache Doris table `emqx_client_events` via a configured Sink.
 
-The rule creation steps are similar to those in [Creating a rule with Apache Doris Sink for Message Storage](#create-a-rules-with-apache-doris-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+The rule creation steps are similar to those in [Create a Rule with Apache Doris Sink for Message Storage](#create-a-rule-with-apache-doris-sink-for-message-storage) except for the SQL rule syntax and SQL template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 
@@ -197,7 +207,7 @@ FROM
   "$events/client/connected", "$events/client/disconnected"
 ```
 
-To insert the client events data to the data table, you can use the following SQL template:
+Use the following SQL template to insert client event data into the table. The SQL template requirements described in the message storage section also apply. When batch mode is disabled, do not enclose placeholders in quotation marks. Do not end the statement with a semicolon.
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
