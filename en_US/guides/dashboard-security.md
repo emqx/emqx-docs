@@ -1,6 +1,6 @@
 # Dashboard Security
 
-This page covers security-related features for the EMQX Dashboard, including login authentication, password management, account lockout, HTTPS access, and role-based access control.
+This page is intended for administrators and operators who configure and secure access to EMQX Dashboard. It covers first login, local-user authentication methods, token-based login, password management, account lockout, HTTPS, and role-based access control.
 
 ## First Login
 
@@ -8,65 +8,73 @@ For a fresh EMQX installation, open the Dashboard at <http://localhost:18083/> a
 
 After the first login, the system detects that you are using the default credentials and forces a password change before you can proceed. The new password must differ from the original, and using `public` again is not recommended.
 
-## Configure Dashboard Login Authentication
+## Configure Authentication Methods for Local Dashboard Users
 
-Starting from EMQX 6.3.1, EMQX provides SCRAM-SHA-256 challenge-response endpoints for local Dashboard users. SCRAM allows a client to prove that it knows the password without sending the password in an HTTP request body.
+Starting from EMQX 6.3.1, EMQX provides SCRAM-SHA-256 challenge-response endpoints for local Dashboard users. SCRAM and password-based login authenticate the same local user credentials and issue Dashboard bearer tokens. With SCRAM, a client proves that it knows the password without sending the password in an HTTP request body.
 
-Set `dashboard.password_login` to select the accepted login protocols:
+### Choose an Authentication Mode
+
+Set `dashboard.password_login` to select the accepted authentication methods:
 
 - `both`: Accept SCRAM-SHA-256 and the password-based `POST /api/v5/login` request. This is the default value.
 - `scram_only`: Accept only SCRAM-SHA-256. The password-based endpoint returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`.
 
-Keep `both` during a rolling upgrade. Set `scram_only` only after all EMQX nodes and clients that sign in with local Dashboard user credentials support SCRAM. Scripts and third-party clients must migrate to `POST /api/v5/login/challenge` and `POST /api/v5/login/verify`, or use API keys.
+### Prepare for SCRAM-Only Mode
 
-If EMQX reports in the server logs that a local user's password must be migrated, reset that user's password before enabling `scram_only`:
+Keep `both` during a rolling upgrade. Set `scram_only` only after all EMQX nodes and clients that sign in with local Dashboard user credentials support SCRAM. Scripts and third-party clients that obtain bearer tokens with local Dashboard user credentials must migrate to `POST /api/v5/login/challenge` and `POST /api/v5/login/verify`. Programs that only call the EMQX management REST API can use API keys instead.
 
-```bash
-./bin/emqx ctl admins passwd <Username> <Password>
-```
+If EMQX reports in the server logs that a local user's password must be migrated, [reset the user's password](#reset-password) before enabling `scram_only`.
 
-The embedded API Spec Explorer login page uses SCRAM by default. Browser-based SCRAM login requires HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS.
+The embedded API Spec Explorer login page uses SCRAM by default. For its secure-context requirements, see [Browser Access](./api.md#browser-access). For the complete SCRAM flow, see [Obtain a Bearer Token with SCRAM-SHA-256](./api.md#obtain-a-bearer-token-with-scram-sha-256).
 
-For configuration details, see [Dashboard Configuration](./configuration/dashboard.md). For the SCRAM login flow, see [Bearer Token Authentication](./api.md#bearer-token-authentication).
+For configuration details, see [Dashboard Configuration](./configuration/dashboard.md).
 
 ## Token-Based Login via URL
 
 Starting from EMQX 5.6.0, the Dashboard supports token-based login by embedding authentication information in the URL. This is useful for seamless redirection and integration scenarios where a user should be logged in automatically without manually entering credentials.
 
-The password-based token request in the following procedure requires `dashboard.password_login = both`. If `dashboard.password_login` is set to `scram_only`, obtain the token through SCRAM challenge-response authentication instead.
+Token-based login uses an existing Dashboard bearer token; it is not a separate credential type.
 
-### How to Use
+EMQX Dashboard uses the management REST API to retrieve data and perform administrative operations. After token-based login, Dashboard uses the bearer token to authenticate these API requests.
 
-1. Obtain an authentication token using the `/login` endpoint. Because the response does not include the username, add it manually before encoding the full JSON payload. The following command handles all steps in one pass: requesting the token, injecting the username, and Base64-encoding the result:
+### Obtain a Dashboard Token
 
-   ```bash
-   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
-   ```
+When `dashboard.password_login` is set to `both`, you can obtain a token from the password-based `/login` endpoint. Because the response does not include the username, add it manually before encoding the full JSON payload. The following command requests the token, adds the username, and Base64-encodes the result:
 
-2. Construct the login URL by embedding the encoded string in the `login_meta` query parameter:
+```bash
+curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+```
 
-   For EMQX versions **before 5.6.0**:
+If `dashboard.password_login` is set to `scram_only`, [obtain the token with SCRAM-SHA-256](./api.md#obtain-a-bearer-token-with-scram-sha-256). Add the username to the SCRAM response and Base64-encode the resulting JSON object before constructing the login URL.
 
-   ```bash
-   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
-   ```
+### Construct the Login URL
 
-   This redirects to the default cluster overview page.
+Embed the Base64-encoded login information in the `login_meta` query parameter.
 
-   For EMQX **5.6.0 and later**:
+For EMQX versions **before 5.6.0**:
 
-   ```bash
-   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
-   ```
+```bash
+http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+```
 
-   This allows specifying the target page after login.
+This redirects to the default cluster overview page.
+
+For EMQX **5.6.0 and later**:
+
+```bash
+http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+```
+
+This allows specifying the target page after login.
 
 Handle the token securely and set appropriate expiration and scope limits.
 
-## Reset Password
+## Manage Passwords
+
+### Reset Password
 
 You can reset a Dashboard user's password with the `admins` CLI command. For details, see [CLI - admins](./cli.md#admins).
 
@@ -74,7 +82,7 @@ You can reset a Dashboard user's password with the `admins` CLI command. For det
 ./bin/emqx ctl admins passwd <Username> <Password>
 ```
 
-## Password Expiration
+### Password Expiration
 
 When a Dashboard login password has been in use longer than the configured `password_expired_time`, the user is prompted to set a new password at the next login. Users with the **Administrator** role can also update this setting via the [REST API](../guides/api.md).
 
@@ -144,7 +152,7 @@ Starting from EMQX 5.3, Dashboard users are assigned one of two predefined roles
 | **Viewer** | Read-only access to all data and configurations, corresponding to all `GET` requests in the REST API. Cannot create, modify, or delete any data. |
 
 ::: tip
-For security reasons, Dashboard users cannot be used for REST API authentication (since EMQX 5.0.0). Use [API Keys](./api-keys.md) for programmatic access instead.
+Dashboard usernames and passwords cannot be used directly as Basic authentication credentials for REST API requests. For programmatic access, use [API keys](./api-keys.md) or obtain a short-lived bearer token through a Dashboard login flow. Use API keys for long-running services and unattended automation.
 :::
 
 For details on managing users, see [System > Users](./dashboard/system.md#users).

@@ -2,6 +2,8 @@
 
 EMQX 提供遵循 OpenAPI 3.0 规范的管理 REST API。
 
+本页面面向通过 REST API 集成或自动化管理 EMQX 的开发者和运维人员。
+
 EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，以下 API 规范端点可用：
 
 | 端点 | 格式 | 描述 |
@@ -14,7 +16,7 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 以上所有端点均需要 Dashboard 配置中的 `swagger_support` 设置为 `true`（默认值）。将其设置为 `false` 可禁用所有 API 文档端点。更多信息请参阅 [Dashboard 配置](configuration/dashboard.md)。
 
-从 EMQX 6.3.0 开始，EMQX 不再内置 Swagger UI。为保持向后兼容，访问 `/api-docs` 或 `/api-docs/index.html` 时，EMQX 将返回 HTTP 308 并重定向到 `/api-spec.html`。除 `/api-docs/index.html` 和 `/api-docs/swagger.json` 外，此前用于提供 Swagger UI 资源的其他 `/api-docs/*` 子路径将返回 HTTP 404。
+从 EMQX 6.3.0 开始，EMQX 不再内置 Swagger UI。为保持向后兼容，访问 `/api-docs` 或 `/api-docs/index.html` 时，EMQX 将返回 HTTP 308 并重定向到 `/api-spec.html`。重定向端点本身不要求认证，但重定向后的 `/api-spec.html` 要求认证。除 `/api-docs/index.html` 和 `/api-docs/swagger.json` 外，此前用于提供 Swagger UI 资源的其他 `/api-docs/*` 子路径将返回 HTTP 404。
 
 本节将指导您快速开始使用 EMQX REST API。
 
@@ -26,15 +28,27 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 从 EMQX 6.3.0 开始，必须通过认证才能从上述端点获取 API 规范内容。
 
+### 程序化访问
+
 程序化请求可以使用 API Key 和 Secret Key 进行基本认证，也可以使用 Bearer Token 认证。操作说明参见[认证](#认证)。
 
 访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。
 
-如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，并包含一个最小化的 API 规范。该规范说明支持的认证方式，并列出公开的引导端点：用于 SCRAM 登录的 `POST /api/v5/login/challenge` 和 `POST /api/v5/login/verify`、兼容端点 `POST /api/v5/login`，以及用于检查 Broker 状态的 `GET /api/v5/status`。仅当 `dashboard.password_login` 设置为 `both` 时，兼容端点才接受密码登录。该最小化响应不包含所请求的 API 规范内容。
+如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。
 
-在浏览器中访问时，EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证访问 `/api-spec.html` 时，EMQX 返回 HTTP `401`，并显示登录页面，而不是完整的 API Spec Explorer。该响应仅声明支持 Bearer Token 认证，以避免浏览器打开原生的基本认证对话框。从 EMQX 6.3.1 开始，此页面默认使用 SCRAM-SHA-256。请通过 HTTPS 或其他安全浏览器上下文打开该页面。TLS 可以在反向代理或负载均衡器终止，EMQX Dashboard 监听器本身无需启用 HTTPS。使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
+响应体采用请求的格式，但仅包含最小化的 API 规范，不包含所请求的 API 规范内容。该最小化规范说明支持的认证方式，并列出以下公开的认证和状态端点：
 
-访问 `/api-docs` 和 `/api-docs/index.html` 无需认证，因为这两个端点只会重定向到 `/api-spec.html`。重定向后，必须通过认证才能访问完整的 API Spec Explorer。
+- 用于 SCRAM 登录的 `POST /api/v5/login/challenge` 和 `POST /api/v5/login/verify`。
+- 用于兼容原有密码登录流程的 `POST /api/v5/login`。仅当 `dashboard.password_login` 设置为 `both` 时，该端点才接受密码登录。
+- 用于检查 Broker 是否正在运行的 `GET /api/v5/status`。
+
+### 浏览器访问
+
+在浏览器中访问时，请打开 `/api-spec.html`。EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证请求将返回 HTTP `401`，并显示 EMQX 登录页面，而不是完整的 API Spec Explorer 或浏览器原生的基本认证对话框。
+
+从 EMQX 6.3.1 开始，登录页面默认使用 SCRAM-SHA-256。请通过 HTTPS 或其他安全浏览器上下文打开该页面。TLS 可以在反向代理或负载均衡器终止，EMQX Dashboard 监听器本身无需启用 HTTPS。
+
+使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
 
 ## 基本路径
 
@@ -225,6 +239,8 @@ axios
 
 - 长期运行的服务和无人值守的自动化任务应使用 API 密钥，因为 Dashboard 登录 Token 会过期。
 - 从 EMQX 6.3.1 开始，如需使用本地 Dashboard 用户凭据获取短期 Bearer Token，请使用 SCRAM-SHA-256 挑战-响应认证。
+
+#### 通过 SCRAM-SHA-256 获取 Bearer Token
 
 通过 SCRAM 获取 Bearer Token 时，无需在 HTTP 请求体中发送密码。操作步骤如下：
 

@@ -145,7 +145,9 @@ You can also manage authorization rules through the REST API. The API endpoints 
 
 #### Step 1: Obtain Authentication Token
 
-The following example obtains a Dashboard bearer token for API access. Its password-based request requires `dashboard.password_login = both`, which is the default. If `dashboard.password_login` is set to `scram_only`, obtain the token through [SCRAM challenge-response authentication](../../api.md#bearer-token-authentication).
+The following example calls the management REST API to create a built-in database authorization source and its rules. It first obtains a bearer token using local Dashboard administrator credentials. This token authenticates the REST API caller, not the MQTT clients to which the authorization rules apply.
+
+The password-based token request requires `dashboard.password_login = both`, which is the default. If `dashboard.password_login` is set to `scram_only`, obtain the token through [SCRAM challenge-response authentication](../../api.md#bearer-token-authentication).
 
 ```bash
 export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \

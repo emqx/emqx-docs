@@ -2,6 +2,8 @@
 
 EMQX exposes an HTTP management API that follows the OpenAPI 3.0 specification.
 
+This page is intended for developers and operators who integrate with or automate EMQX through its REST API.
+
 EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
 | Endpoint | Format | Description |
@@ -14,7 +16,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](configuration/dashboard.md).
 
-Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
+Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. The redirect endpoints do not require authentication, but `/api-spec.html` requires authentication after the redirect. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
 
 This section introduces how to work with the EMQX REST API.
 
@@ -26,15 +28,27 @@ Starting from EMQX 6.3.0, [feature gates](../get-started/deploy/feature-gates.md
 
 Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above.
 
+### Programmatic Access
+
 Authenticate programmatic requests with either Basic authentication using an API key and secret key or a bearer token. For instructions, see [Authentication](#authentication).
 
 Access to the API specification is read-only and does not depend on the API key's role or scopes.
 
-For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body matches the requested format and contains a minimal API specification. It describes the supported authentication schemes and lists the public bootstrap endpoints: `POST /api/v5/login/challenge` and `POST /api/v5/login/verify` for SCRAM login, the compatibility endpoint `POST /api/v5/login`, and `GET /api/v5/status` for checking broker status. The compatibility endpoint accepts password login only when `dashboard.password_login` is set to `both`. The minimal response does not include the requested API specification content.
+For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`.
 
-For browser access, EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. Starting from EMQX 6.3.1, this page uses SCRAM-SHA-256 by default. Open the page through HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
+The response body uses the requested format but contains a minimal API specification instead of the requested API specification content. The minimal specification describes the supported authentication schemes and lists the following public authentication and status endpoints:
 
-Requests to `/api-docs` and `/api-docs/index.html` do not require authentication because these endpoints only redirect to `/api-spec.html`. Authentication is required after the redirect to access the full explorer.
+- `POST /api/v5/login/challenge` and `POST /api/v5/login/verify` for SCRAM login.
+- `POST /api/v5/login` for legacy password login. This endpoint accepts password login only when `dashboard.password_login` is set to `both`.
+- `GET /api/v5/status` for checking whether the broker is running.
+
+### Browser Access
+
+For browser access, open `/api-spec.html`. EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request returns HTTP `401` and displays the EMQX sign-in page instead of the full API Spec Explorer or the browser's native Basic authentication dialog.
+
+Starting from EMQX 6.3.1, the sign-in page uses SCRAM-SHA-256 by default. Open the page through HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS.
+
+After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
 
 ## Basic Path
 
@@ -229,6 +243,8 @@ Choose the authentication method according to how the client accesses EMQX:
 
 - For long-running services and unattended automation, use API keys because Dashboard login tokens expire.
 - Starting in EMQX 6.3.1, use SCRAM-SHA-256 challenge-response authentication to obtain a short-lived bearer token with local Dashboard user credentials.
+
+#### Obtain a Bearer Token with SCRAM-SHA-256
 
 To obtain a bearer token through SCRAM without sending the password in an HTTP request body:
 

@@ -144,7 +144,9 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 #### 步骤 1：获取认证 Token
 
-以下示例先获取 Dashboard Bearer Token，用于访问 API。示例中的密码登录请求要求将 `dashboard.password_login` 设置为默认值 `both`。如果将其设置为 `scram_only`，请通过 [SCRAM 挑战-响应认证](../../api.md#使用-bearer-token-认证)获取 Token。
+以下示例通过管理 REST API 创建内置数据库授权源及其规则，因此首先使用本地 Dashboard 管理员凭据获取 Bearer Token。该 Token 用于认证 REST API 调用者，而不是应用这些授权规则的 MQTT 客户端。
+
+以下通过密码登录获取 Token 的请求要求将 `dashboard.password_login` 设置为默认值 `both`。如果将其设置为 `scram_only`，请通过 [SCRAM 挑战-响应认证](../../api.md#使用-bearer-token-认证)获取 Token。
 
 ```bash
 export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \
