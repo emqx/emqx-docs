@@ -14,6 +14,12 @@
 
 该插件将 MQTT 消息持久化到 MySQL 或 Redis，使订阅者重新上线后可以获取在离线期间到达的消息，覆盖标准 MQTT 会话持久化能力之外的场景。
 
+## 消息传输
+
+[同步请求](./plugin-catalog/emqx-sync-request.md)
+
+该插件允许 HTTP 调用方通过 EMQX REST API 发布一条 MQTT 请求，并同步等待第一条匹配的 MQTT 响应。
+
 ## 运维
 
 [备份同步（Backup Sync）](./plugin-catalog/emqx-backup-sync.md)

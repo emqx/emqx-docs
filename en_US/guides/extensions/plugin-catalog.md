@@ -14,6 +14,12 @@ The plugins listed on this page are maintained as part of the [`emqx.git` monore
 
 This plugin persists MQTT messages to MySQL or Redis so that subscribers can retrieve them after they reconnect, beyond what standard MQTT session persistence provides.
 
+## Message Delivery
+
+[Sync Request](./plugin-catalog/emqx-sync-request.md)
+
+This plugin lets an HTTP caller publish an MQTT request through the EMQX REST API and synchronously wait for the first matching MQTT response.
+
 ## Operations
 
 [Backup Sync](./plugin-catalog/emqx-backup-sync.md)
