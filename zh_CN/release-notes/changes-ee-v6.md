@@ -127,7 +127,7 @@
   - `FULL`：默认值，使用所有可用功能启动 EMQX。
   - `ESSENTIAL`：使用最小功能集启动 EMQX，包括核心 MQTT Broker、认证和授权。
 
-  可用功能如下：
+  可在自定义 `EMQX_FEATURES` 列表中选择以下功能：
 
   - `dashboard`：Dashboard UI（包括 SSO 和 RBAC）、REST API。
   - `data_integration`：连接器、动作、Source 和规则引擎。
@@ -141,12 +141,22 @@
   - `metrics`：导出 Prometheus 指标。
   - `mqtt_extensions`：MQTT 扩展，包括延迟发布、主题重写、自动订阅、慢订阅、消息队列和消息流。
   - `plugins`：用于安装和管理第三方插件的插件框架。
-
-  以下功能不能单独启用，仅在使用完整预设时启用：
-
   - `file_transfer`：MQTT 文件传输扩展。
   - `exhook`：外部 gRPC Hook。
   - `opentelemetry`：OpenTelemetry Exporter。
+
+  以下依赖功能会自动启用：
+
+  | 功能 | 自动启用的依赖功能 |
+  | --- | --- |
+  | `data_integration` | `schema_registry` |
+  | `message_transformation` | `schema_registry` |
+  | `schema_validation` | `schema_registry` |
+  | `ai` | `schema_registry` |
+  | `metrics` | `dashboard` |
+  | `opentelemetry` | `dashboard` |
+
+  其余列出的功能不依赖其他功能。
 
 - [#17768](https://github.com/emqx/emqx/pull/17768) 支持通过 `file://` URL 从文件读取 `node.cookie`。
 
