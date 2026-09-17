@@ -2,6 +2,8 @@
 
 ## 6.3.1
 
+*Release Date: 2026-09-17*
+
 Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
 ### Enhancements
