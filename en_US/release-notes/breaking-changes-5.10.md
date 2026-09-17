@@ -2,6 +2,8 @@
 
 ## 5.10.5
 
+- [#17864](https://github.com/emqx/emqx/pull/17864) The Dashboard user and API-key endpoints now reject scope lists that mix privilege scopes (`system`, `user_management`, `api_key_management`, `sso_management`) with other scopes. Each of the four privilege scopes is administrator-equivalent in effect, so combining them with a restricted scope list cannot meaningfully restrict the account. Use either a privilege-only scope list or a non-privilege-only scope list, depending on whether the account should have administrator-equivalent capability. Pre-existing records with a mixed scope set continue to function until the next update; the next update must split the list to succeed.
+
 - [#18465](https://github.com/emqx/emqx/pull/18465) EMQX now uses restricted SQL parsers to validate and safely render templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled. Existing templates that contain comments or use unsupported SQL syntax must be updated before they can be used with the new parsers.
 
   ClickHouse, TDengine, and SQL Server reject invalid templates when the action is created. MySQL logs a parsing error but may still create the action; batch requests using an unsupported template fail at runtime.
@@ -16,6 +18,12 @@
 
   - The MySQL bridge now disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` for all connections.
   - The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator`.
+
+- [#17593](https://github.com/emqx/emqx/pull/17593) Added `--force` flag to `emqx ctl relup upgrade`. By default, the upgrade now refuses to proceed if `data/patches/` contains any `*.beam` hot-patch files (which would shadow modules from the upgrade target). Pass `--force` to keep the patches and proceed anyway.
+
+- [#18823](https://github.com/emqx/emqx/pull/18823) Fixed a misspelled field name in the `emqx ctl listeners` output.
+
+  The command printed the listener's enabled flag as `enbale`. It now prints `enable`. Scripts that parse this output must be updated to match the corrected name.
 
 ## 5.10.4
 

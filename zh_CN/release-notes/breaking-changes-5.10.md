@@ -2,6 +2,8 @@
 
 ## 5.10.5
 
+- [#17864](https://github.com/emqx/emqx/pull/17864) Dashboard 用户和 API 密钥端点现在会拒绝将权限型 scope（`system`、`user_management`、`api_key_management`、`sso_management`）与其他 scope 混合使用的 scope 列表。这 4 个权限型 scope 实际上都等同于管理员权限，因此将其与受限 scope 列表组合并不能有效限制账户权限。请根据账户是否需要管理员级权限，选择仅包含权限型 scope 或仅包含非权限型 scope 的列表。已有的混合 scope 记录在下次更新前仍可继续使用；下次更新时必须拆分该列表才能成功。
+
 - [#18465](https://github.com/emqx/emqx/pull/18465) EMQX 现在使用受限的 SQL 解析器验证并安全渲染 ClickHouse、TDengine 和 SQL Server 动作中的模板化 `INSERT` 语句，以及启用批量插入时 MySQL 动作中的模板化 `INSERT` 语句。包含注释或使用不受支持 SQL 语法的现有模板必须更新后才能用于新的解析器。
 
   ClickHouse、TDengine 和 SQL Server 会在创建动作时拒绝无效模板。MySQL 会记录解析错误，但仍可能创建动作；使用不受支持模板的批量请求会在运行时失败。
@@ -16,6 +18,12 @@
 
   - MySQL Bridge 现在会对所有连接禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES`。
   - ClickHouse Bridge 现在会根据 SQL 模板推断批量值分隔符，并忽略配置的 `batch_value_separator`。
+
+- [#17593](https://github.com/emqx/emqx/pull/17593) 为 `emqx ctl relup upgrade` 新增 `--force` 参数。默认情况下，如果 `data/patches/` 中包含会覆盖升级目标模块的 `*.beam` 热补丁文件，升级将拒绝继续。使用 `--force` 可保留这些补丁并继续升级。
+
+- [#18823](https://github.com/emqx/emqx/pull/18823) 修复了 `emqx ctl listeners` 输出中的字段名拼写错误。
+
+  此前，该命令将监听器的启用标志输出为 `enbale`。现在会正确输出为 `enable`。解析此输出的脚本必须进行更新，以匹配修正后的字段名。
 
 ## 5.10.4
 
