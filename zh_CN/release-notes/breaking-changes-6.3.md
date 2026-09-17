@@ -1,5 +1,27 @@
 # EMQX 6.3 中的不兼容变更
 
+## 6.3.1
+
+- [#18465](https://github.com/emqx/emqx/pull/18465) 修复启用批量插入时 ClickHouse、TDengine、SQL Server 和 MySQL Bridge 对模板化 INSERT SQL 语句的处理。
+
+  此前，由于手动输入的模板本身存在语法错误以及插值问题，渲染 SQL 模板经常会生成格式错误的 SQL。
+
+  现在，EMQX 会在创建动作时完整解析 SQL 语句并拒绝无效 SQL，在渲染时强制执行正确的转义。为提供一致且可预测的行为，EMQX 限制了可使用的 SQL 功能，尤其是不允许在 SQL 语句中使用注释。不过，仍支持大量语法功能，包括常量值、字符串和字符串插值、算术运算、函数、条件及条件运算符。
+
+  此外，MySQL 支持 `ON DUPLICATE KEY UPDATE`，ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`，TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
+
+  为确保 MySQL 模板的渲染行为一致，MySQL Bridge 会无条件为所有连接禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES` 模式，并按禁用后的规则处理语句。
+
+  ClickHouse Bridge 现在会根据 SQL 模板推断批量值分隔符，并忽略已配置的 `batch_value_separator` 值。
+
+- [#18630](https://github.com/emqx/emqx/pull/18630) 现在无法再创建、更新或通过引导文件创建包含命名空间角色无权持有的 scope（例如 `gateways` 或 `audit`）的命名空间管理员 API 密钥，与现有 Dashboard 用户规则保持一致。
+
+  已授予这些 scope 的现有命名空间 API 密钥在轮换前仍可继续使用，因此请轮换这些密钥。
+
+- [#18824](https://github.com/emqx/emqx/pull/18824) 修复 `emqx ctl listeners` 输出中的字段名称拼写错误。
+
+  此前，该命令将监听器的启用标志输出为 `enbale`，现在已更正为 `enable`。解析该输出的脚本必须同步更新，以匹配更正后的名称。
+
 ## 6.3.0
 
 - [#17185](https://github.com/emqx/emqx/pull/17185) MQTT 解析器现在默认以严格模式运行。如需恢复此前的宽松行为，请在全局或 Zone 级别设置 `mqtt.strict_mode = false`。
