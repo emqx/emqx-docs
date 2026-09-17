@@ -147,7 +147,15 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
 
 8. Configure the **SQL Template** based on the feature to use:
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   When batch mode is disabled, Apache Doris uses a prepared statement. Do not enclose placeholders in quotation marks or end the statement with a semicolon.
+
+   ::: warning Important Notice
+
+   Starting from EMQX 6.3.1, when batch mode is enabled, EMQX parses the SQL template when creating the Sink, escapes text and binary placeholder values with Doris-compatible syntax, and rejects unsupported templates. The template must be a single Apache Doris `INSERT INTO ... VALUES` statement with one configured row. Placeholders are supported as complete values and inside ordinary or raw string literals. SQL comments, dynamic identifiers, multiple configured rows, `INSERT SELECT`, row aliases, and `ON DUPLICATE KEY UPDATE` are not supported.
+
+   This validation can reject templates that earlier versions accepted. Revise any incompatible templates before upgrading.
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -187,6 +195,8 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Apache Doris table `emqx_client_events` via a configured Sink.
 
 The rule creation steps are similar to those in [Creating a rule with Apache Doris Sink for Message Storage](#create-a-rules-with-apache-doris-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+
+When batch mode is enabled, the SQL template restrictions described in that section also apply to this template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 
