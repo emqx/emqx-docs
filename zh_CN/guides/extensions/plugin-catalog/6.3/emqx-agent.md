@@ -44,27 +44,35 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 - 请求主题为 `$cap/message__publish/alerts/request/req-42`
 - 响应主题为 `$cap/message__publish/alerts/response/req-42`
 
-调用方将以下请求负载发布到请求主题：
+假设 `alerts` 实例配置了主题前缀 `factory/line-1/alerts/`，且其负载 Schema 接受以下对象。调用方将以下请求负载发布到请求主题：
 
-```json
+```jsonc
 // PUBLISH $cap/message__publish/alerts/request/req-42
 {
   "args": {
-    "topic": "factory/line-1/alerts",
+    "topic": "temperature",
     "payload": {"severity": "warning", "reason": "temperature_high"}
   },
   "iid": "pipeline-instance-id",
+  "sid": "session-id",
   "trace_id": "trace-id"
 }
 ```
 
 发布该 MQTT 消息后，工具会将以下响应负载发布到响应主题：
 
-```json
+```jsonc
 // PUBLISH $cap/message__publish/alerts/response/req-42
 {
-  "status": "ok",
-  "result": {"published": true}
+  "req_id": "req-42",
+  "trace_id": "trace-id",
+  "iid": "pipeline-instance-id",
+  "sid": "session-id",
+  "tool": {"type": "message__publish", "id": "alerts"},
+  "response": {
+    "status": "ok",
+    "result": {"topic": "factory/line-1/alerts/temperature"}
+  }
 }
 ```
 
@@ -114,7 +122,7 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 - `autodiscover_images`：扫描响应负载，查找 `data:image/...;base64,...` 形式的值。
 - `images`：使用如 `.image_url` 或 `.`（表示根值）这样的路径显式指定图像位置。
 
-当响应的内容类型为图像媒体类型（例如 `image/png`）时，也可以提取二进制图像响应。
+当 HTTP 工具使用 `payload_type: "binary"`，且响应的内容类型为图像媒体类型（例如 `image/png`）时，也可以提取二进制图像响应。
 
 #### 自动发现示例
 
@@ -128,15 +136,19 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 }
 ```
 
-启用 `autodiscover_images` 后，工具响应中会包含脱敏后的结果以及提取出的附件：
+启用 `autodiscover_images` 后，工具回复的 `response` 对象中会包含脱敏后的结果以及提取出的附件：
 
 ```json
 {
   "status": "ok",
   "result": {
-    "inspection_status": "accepted",
-    "image_url": "Image .image_url",
-    "comment": "front camera frame"
+    "body": {
+      "inspection_status": "accepted",
+      "image_url": "Image .image_url",
+      "comment": "front camera frame"
+    },
+    "status_code": 200,
+    "headers": {"content-type": "application/json"}
   },
   "attachments": [
     {
@@ -149,7 +161,7 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 }
 ```
 
-`result` 字段会进一步作为工具响应传递给 LLM，`attachments` 则作为额外的多模态数据传递。
+移除 `attachments` 后的响应会作为工具响应传递给 LLM，`attachments` 则作为额外的多模态数据传递。
 
 #### 显式路径示例
 
@@ -173,16 +185,20 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 }
 ```
 
-只有 `.inspection.photo` 会被提取；`thumbnail` 保持为普通的负载数据。完整的工具响应如下：
+只有 `.inspection.photo` 会被提取；`thumbnail` 保持为普通的负载数据。完整的 `response` 对象如下：
 
 ```json
 {
   "status": "ok",
   "result": {
-    "inspection": {
-      "photo": "Image .inspection.photo",
-      "thumbnail": "data:image/jpeg;base64,/9j/2wBD..."
-    }
+    "body": {
+      "inspection": {
+        "photo": "Image .inspection.photo",
+        "thumbnail": "data:image/jpeg;base64,/9j/2wBD..."
+      }
+    },
+    "status_code": 200,
+    "headers": {"content-type": "application/json"}
   },
   "attachments": [
     {
@@ -197,7 +213,7 @@ MQTT Agent 使用 MQTT 主题来提供功能。Agent 相关主题使用 `$` 前�
 
 #### 二进制响应示例
 
-如果一个 HTTP 端点以 `Content-Type: image/png` 返回原始 PNG 字节，该二进制数据会被视为根 “value”：
+如果配置了 `payload_type: "binary"` 的 HTTP 工具收到以 `Content-Type: image/png` 返回的原始 PNG 字节，该二进制数据会被视为根 “value”：
 
 ```text
 Content-Type: image/png
@@ -210,7 +226,11 @@ Content-Type: image/png
 ```json
 {
   "status": "ok",
-  "result": "Image .",
+  "result": {
+    "body": "Image .",
+    "status_code": 200,
+    "headers": {"content-type": "image/png"}
+  },
   "attachments": [
     {
       "id": ".",
@@ -249,7 +269,7 @@ Content-Type: image/png
 - `$sess/in/<sid>` —— 发往会话的入站帧。
 - `$sess/out/<sid>` —— 来自会话的出站帧。
 
-每个会话由一个集群内唯一的 `sid`（会话 ID）标识。
+每个会话由 `sid`（会话 ID）标识。持久会话的 ID 由步骤的键表达式派生；非持久会话的 ID 由流水线实例和步骤派生。
 
 `$sess/in/<sid>` 上的入站帧：
 
@@ -269,7 +289,7 @@ Content-Type: image/png
 | `final` | 结束当前这一轮 LLM 对话，返回结果及用量计数。 |
 | `error` | 报告会话侧的失败，例如 provider 不可用或历史压缩出错。 |
 
-每个出站帧都包含 `sid`、`iid`、`trace_id` 以及累计的 `usage`。目前模型的推理/思考数据块保留在会话内部；只有已发布的流式数据块会以 `intermediate` 帧的形式出现。
+每个出站帧都包含 `sid`、`iid`、`trace_id` 以及累计的 `usage`。模型的推理/思考数据块不会被发布或保留；内容数据块会以 `intermediate` 帧的形式发布。
 
 启用持久化后，会话不会在 `final` 发布后终止，而是继续存在，可以接收后续请求，形成多轮对话。
 
@@ -390,7 +410,7 @@ python3 plugins/emqx_agent/demo_builder_init.py
 /api/v5/plugin_api/emqx_agent/builder/ui
 ```
 
-两个脚本在预置资源前，都可能重新创建各自的演示资源，并删除已存在的 Agent 演示资源。如需显式移除演示资源，运行：
+Apple Box 初始化脚本会重新创建其具名演示资源。Pipeline Builder 初始化脚本和清理脚本会删除所有已配置的 Agent 流水线、工具和连接，包括与演示无关的资源。运行清理脚本：
 
 ```bash
 python3 plugins/emqx_agent/demo_teardown.py
@@ -407,10 +427,16 @@ make plugin-emqx_agent
 运行该插件的 Common Test 测试套件：
 
 ```bash
-make plugins/emqx_agent-ct
+./scripts/ct/run.sh --app plugins/emqx_agent
 ```
 
-依赖 LLM 的演示测试套件需要一个具备相应能力的 LLM，因此只有在设置了 `OPENAI_API_KEY` 时才会运行，否则会被跳过。
+上述命令不会将宿主机上的 API Key 环境变量传入容器，因此依赖 LLM 的演示测试套件会被跳过。要使用默认 provider 运行这些测试，请将 `OPENAI_API_KEY` 传入容器命令：
+
+```bash
+./scripts/ct/run.sh --app plugins/emqx_agent -- env OPENAI_API_KEY="$OPENAI_API_KEY" make plugins/emqx_agent-ct
+```
+
+使用其他 provider 时，还需传入 `EMQX_AGENT_TEST_LLM_PROVIDER` 及对应的 API Key。
 
 ## 开发
 
