@@ -2,6 +2,8 @@
 
 EMQX exposes an HTTP management API that follows the OpenAPI 3.0 specification.
 
+This page is intended for developers and operators who integrate with or automate EMQX through its REST API.
+
 EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
 | Endpoint | Format | Description |
@@ -14,7 +16,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](configuration/dashboard.md).
 
-Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
+Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. The redirect endpoints do not require authentication, but `/api-spec.html` requires authentication after the redirect. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
 
 This section introduces how to work with the EMQX REST API.
 
@@ -26,15 +28,27 @@ Starting from EMQX 6.3.0, [feature gates](../get-started/deploy/feature-gates.md
 
 Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above.
 
+### Programmatic Access
+
 Authenticate programmatic requests with either Basic authentication using an API key and secret key or a bearer token. For instructions, see [Authentication](#authentication).
 
 Access to the API specification is read-only and does not depend on the API key's role or scopes.
 
-For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body matches the requested format and contains a minimal API specification. It describes the supported authentication schemes and lists two public endpoints: `POST /api/v5/login` for obtaining a bearer token and `GET /api/v5/status` for checking broker status. The minimal response does not include the requested API specification content.
+For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`.
 
-For browser access, EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
+The response body uses the requested format but contains a minimal API specification instead of the requested API specification content. The minimal specification describes the supported authentication schemes and lists the following public authentication and status endpoints:
 
-Requests to `/api-docs` and `/api-docs/index.html` do not require authentication because these endpoints only redirect to `/api-spec.html`. Authentication is required after the redirect to access the full explorer.
+- `POST /api/v5/login/challenge` and `POST /api/v5/login/verify` for SCRAM login.
+- `POST /api/v5/login` for legacy password login. This endpoint accepts password login only when `dashboard.password_login` is set to `both`.
+- `GET /api/v5/status` for checking whether the broker is running.
+
+### Browser Access
+
+For browser access, open `/api-spec.html`. EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request returns HTTP `401` and displays the EMQX sign-in page instead of the full API Spec Explorer or the browser's native Basic authentication dialog.
+
+Starting from EMQX 6.3.1, the sign-in page uses SCRAM-SHA-256 by default. Open the page through HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS.
+
+After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
 
 ## Basic Path
 
@@ -70,7 +84,7 @@ In this method, you use API keys and secret keys as the username and password to
 
 ::: tip Note
 
-For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication.
+Starting from EMQX 5.0.0, Dashboard usernames and passwords cannot be used directly as Basic authentication credentials for REST API requests. To authenticate with local Dashboard user credentials, use a Dashboard login flow to obtain a short-lived bearer token. For long-running programmatic access, use API keys.
 
 :::
 
@@ -225,14 +239,57 @@ axios
 
 ### Bearer Token Authentication
 
-As an alternative to API key-based authentication, you can use bearer tokens for secure and programmatic access to the EMQX REST API. To obtain a bearer token, send a request to the login API endpoint as described below.
+Choose the authentication method according to how the client accesses EMQX:
 
-#### Obtain a Bearer Token
+- For long-running services and unattended automation, use API keys because Dashboard login tokens expire.
+- Starting in EMQX 6.3.1, use SCRAM-SHA-256 challenge-response authentication to obtain a short-lived bearer token with local Dashboard user credentials.
 
-To request a bearer token, make an HTTP `POST` request to the following login API endpoint:
+#### Obtain a Bearer Token with SCRAM-SHA-256
+
+To obtain a bearer token through SCRAM without sending the password in an HTTP request body:
+
+1. Generate a random client nonce containing 20 to 128 unpadded Base64URL characters.
+2. Send the username and client nonce to `POST /api/v5/login/challenge`.
+3. Append the returned server nonce to the client nonce to form the combined nonce.
+4. Construct the RFC 7677 SCRAM-SHA-256 messages using the `username` and `client_nonce` retained from the challenge request, and the `server_nonce`, `salt`, and `iterations` returned in the challenge response:
+
+   ```text
+   client-first-message-bare = n=<escaped_username>,r=<client_nonce>
+   server-first-message = r=<combined_nonce>,s=<salt>,i=<iterations>
+   client-final-message-without-proof = c=biws,r=<combined_nonce>
+   auth-message = <client-first-message-bare>,<server-first-message>,<client-final-message-without-proof>
+   ```
+
+   Escape the username according to RFC 5802 by first replacing `=` with `=3D` and then replacing `,` with `=2C`. Use the Base64-encoded `salt` value returned by the challenge endpoint in `server-first-message`.
+5. Calculate the client proof and expected server signature as follows. `HMAC-SHA-256(key, message)` indicates the key and message arguments in that order. `UTF8(value)` encodes a string as UTF-8 bytes, `Base64Decode(value)` decodes a Base64 string, and `XOR` applies a byte-wise exclusive OR.
+
+   ```text
+   salted-password = PBKDF2-HMAC-SHA-256(UTF8(password), Base64Decode(salt), iterations, 32 bytes)
+   client-key = HMAC-SHA-256(salted-password, "Client Key")
+   stored-key = SHA-256(client-key)
+   client-signature = HMAC-SHA-256(stored-key, UTF8(auth-message))
+   client-proof = client-key XOR client-signature
+   server-key = HMAC-SHA-256(salted-password, "Server Key")
+   expected-server-signature = HMAC-SHA-256(server-key, UTF8(auth-message))
+   ```
+
+   Base64-encode `client-proof` and send it in the `client_proof` field of the `POST /api/v5/login/verify` request together with the challenge ID and combined nonce. Include `mfa_token` when multi-factor authentication is enabled for the user.
+6. Base64-decode the `server_signature` in the response and compare it with `expected-server-signature` before using the bearer token in the `token` field.
+
+Each challenge is time-limited. A well-formed request to `POST /api/v5/login/verify` consumes the challenge whether authentication succeeds or fails, including when the request returns `BAD_MFA_TOKEN`. Requests rejected during preliminary validation, such as an invalid Base64 encoding or decoded length for `client_proof`, or an invalid `combined_nonce` format, do not consume the challenge and can be retried. After a consumed challenge fails, request a new challenge and recalculate the client proof.
+
+For the request and response schemas, open the `dashboard` section of the [API specification](#access-api-specification-endpoints).
+
+Browser-based SCRAM login requires HTTPS or another secure browser context.
+
+#### Obtain a Bearer Token with Password Login
+
+The compatibility endpoint `POST /api/v5/login` accepts a username and password only when `dashboard.password_login` is set to `both`, which is the default. If `dashboard.password_login` is set to `scram_only`, the endpoint returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`. Use the SCRAM flow described above or an API key instead.
+
+When password login is enabled, use the following endpoint for local access:
 
 ```bash
-POST http://your-emqx-address:8483/api/v5/login
+POST http://localhost:18083/api/v5/login
 ```
 
 **Headers:**
@@ -248,8 +305,9 @@ POST http://your-emqx-address:8483/api/v5/login
 }
 ```
 
-- Replace `your-emqx-address` with the address or IP of your EMQX node.
 - Replace `"admin"` and `"yourpassword"` with your EMQX Dashboard credentials.
+
+This example uses HTTP on localhost. For remote access, configure an HTTPS listener and send the request over HTTPS.
 
 The response will include the bearer token, which you can use to authenticate API requests.
 
