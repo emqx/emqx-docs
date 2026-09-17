@@ -43,6 +43,7 @@ AKS = "AKS"
 aks = "aks"
 TKE = "TKE"
 Sur = "Sur"
+enbale = "enbale" # Historical CLI output corrected in EMQX 5.10.5
 
 [default.extend-identifiers]
 iif = "iif"
