@@ -22,7 +22,7 @@
 
 - [#18806](https://github.com/emqx/emqx/pull/18806) 降低 MQTT 连接的内存用量。
 
-  此前，即使未配置速率限制，每个连接也会在建立时分配限速器状态。现在，该状态会在客户端首次发布或订阅时分配，因此仅保持连接的每个客户端可减少约 2 KB 内存用量。已配置的速率限制行为保持不变。
+  此前，即使未配置速率限制，每个连接也会在建立时分配限速器状态。现在，仅在客户端首次发布或订阅时分配该状态，因此对于仅保持连接而不发布或订阅的客户端，每个连接可减少约 2 KB 内存用量。已配置的速率限制行为保持不变。
 
 - [#18807](https://github.com/emqx/emqx/pull/18807) 降低 MQTT 会话的内存用量。
 
@@ -30,7 +30,7 @@
 
 - [#18808](https://github.com/emqx/emqx/pull/18808) 降低进行发布或订阅的 MQTT 连接的内存用量。
 
-  现在，仅为实际配置的速率限制分配每连接限速器状态。在默认设置下（未配置速率限制），每个活跃连接可减少约 1.6 KB 内存用量。已配置的速率限制行为保持不变，包括运行时新增的限制。
+  现在，仅为每个连接实际配置的速率限制分配限速器状态。在默认设置下（未配置速率限制），每个活跃连接可减少约 1.6 KB 内存用量。已配置的速率限制行为保持不变，包括运行时新增的限制。
 
 - [#18809](https://github.com/emqx/emqx/pull/18809) 降低配置速率限制时 MQTT 连接的内存用量。
 
@@ -38,7 +38,7 @@
 
 - [#18875](https://github.com/emqx/emqx/pull/18875) 降低属于多租户命名空间的 MQTT 连接的内存用量。
 
-  与普通连接一致，命名空间客户端的限速器状态现在会在客户端首次发布、订阅或接收消息时分配，且仅为实际配置的限制分配。已配置的租户和客户端速率限制行为保持不变，包括删除命名空间的限速器配置后拒绝请求的行为。
+  与普通连接一致，命名空间客户端的限速器状态现在会在客户端首次发布、订阅或接收消息时分配，且仅为实际配置的限制分配。已配置的租户和客户端速率限制行为保持不变。删除命名空间的限速器配置后，针对其客户端的后续限速检查仍会拒绝相应操作。
 
 ### 修复
 
@@ -66,9 +66,9 @@
 
   此外，模板可用的客户端信息中新增 `${peername}`，其渲染结果为客户端地址和端口，例如 `192.168.0.1:51544`。
 
-- [#18852](https://github.com/emqx/emqx/pull/18852) 修复滚动升级到 6.3 期间，仍运行旧版本的节点拒绝引导 API 密钥的问题。
+- [#18852](https://github.com/emqx/emqx/pull/18852) 修复滚动升级到 6.3 期间，仍运行 6.2 的节点拒绝引导 API 密钥的问题。
 
-  6.3 节点启动时，会使用旧版本节点无法验证的 Secret 哈希重写集群共享的 API 密钥记录，导致旧版本节点拒绝该密钥。现在，如果引导文件仍包含相同 Secret，引导文件加载器会保留已存储的哈希，仅刷新角色和 scope 等密钥元数据。
+  6.3 节点启动时，会使用 6.2 节点无法验证的 Secret 哈希重写集群共享的 API 密钥记录，导致这些节点拒绝该密钥。现在，如果引导文件仍包含相同 Secret，引导文件加载器会保留已存储的哈希，仅刷新角色和 scope 等密钥元数据。
 
   更改引导文件中的 Secret 仍会替换哈希。仅在整个集群都运行 6.3 后轮换引导 Secret。
 
@@ -82,7 +82,7 @@
 
 #### 数据集成
 
-- [#18763](https://github.com/emqx/emqx/pull/18763) 修复 TDengine 动作报告的错误。找不到动作时，错误中显示的是连接器 ID，而不是动作 ID，使错误看起来像是有效的连接器 ID 无效。
+- [#18763](https://github.com/emqx/emqx/pull/18763) 修复了 TDengine 动作返回错误时使用错误 ID 的问题。此前，找不到动作时，错误信息显示连接器 ID 而不是动作 ID，使有效的连接器 ID 看起来无效。
 
 - [#18775](https://github.com/emqx/emqx/pull/18775) 将 RocketMQ 连接器的 `namespace` 配置字段重命名为 `rocketmq_namespace`。
 
@@ -90,7 +90,7 @@
 
   API 响应和 Dashboard 现在均将该值显示为 `rocketmq_namespace`。
 
-- [#18846](https://github.com/emqx/emqx/pull/18846) 修复数据集成中的 SQL 模板渲染。Doris 批量插入现在对文本和二进制值使用兼容 Doris 的语法和转义方式。MySQL 模板现在可正确处理已转义的美元符号。
+- [#18846](https://github.com/emqx/emqx/pull/18846) 修复了数据集成中的 SQL 模板渲染问题。Doris 批量插入现在会对文本和二进制值使用兼容 Doris 的语法和转义方式。MySQL 模板现在可以正确处理转义的美元符号。
 
 - [#18925](https://github.com/emqx/emqx/pull/18925) 修复 QuasarDB 动作，使其校验 SQL 模板，并根据插值所在的 SQL 上下文对值进行转义。
 
@@ -102,11 +102,11 @@
 
   在滚动升级期间导入备份时，尚未升级的节点可能以不同方式解释用于应用备份的调用。现在，导入操作会在开始前停止，并列出仍需升级的节点，因此集群保持原状。
 
-- [#18862](https://github.com/emqx/emqx/pull/18862) 校验传递给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项。
+- [#18862](https://github.com/emqx/emqx/pull/18862) 新增对传给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项的验证。
 
-  此前，无效的 `chunk` 或 `sleep_ms` 值会被静默接受并禁用扫描节流，导致扫描以全速运行，而运维人员误以为扫描已被限速。现在，该工具会抛出错误并指出无效选项。拼写错误的 `chunks` 等未知选项键也会被拒绝。
+  此前，无效的 `chunk` 或 `sleep_ms` 值可能会静默禁用扫描限速，也可能触发底层运行时错误。现在，工具会拒绝无效值和未知选项键（例如拼写错误的 `chunks`），并通过错误信息指出有问题的选项。
 
-- [#18899](https://github.com/emqx/emqx/pull/18899) 修复从早期版本滚动升级期间，`GET /api/v5/listeners` 和 `GET /api/v5/listeners_status` 在混合版本集群中可能返回 `500 INTERNAL_ERROR` 的回归问题。
+- [#18899](https://github.com/emqx/emqx/pull/18899) 修复滚动升级期间，当混合版本集群中仍有节点运行 6.3.0 之前的版本时，`GET /api/v5/listeners` 和 `GET /api/v5/listeners_status` 可能返回 `500 INTERNAL_ERROR` 的回归问题。
 
 #### 持久化存储
 
@@ -120,7 +120,7 @@
 
   NATS 网关认证设置现在会拒绝重复的认证方式和凭据条目，包括重复的 NKey 和 JWT 账户条目，以避免认证行为不明确。
 
-- [#18776](https://github.com/emqx/emqx/pull/18776) MQTT-SN 现在会在休眠客户端超过休眠时长时发布已配置的遗嘱消息，并且在客户端正常断开连接时不再发布遗嘱消息。
+- [#18776](https://github.com/emqx/emqx/pull/18776) MQTT-SN 现在会在休眠客户端的休眠期限到期时发布已配置的遗嘱消息，并且在客户端正常断开连接时不再发布遗嘱消息。
 
 - [#18842](https://github.com/emqx/emqx/pull/18842) 网关协议不支持认证后端返回的 `clientid_override` 值，因此网关连接现在会忽略该值，并记录警告日志。
 
@@ -168,9 +168,9 @@
 
   此前，响应仅显示普通主题，例如 `a/1`，因此无法区分持久共享订阅与使用相同主题的普通持久订阅。
 
-- [#18817](https://github.com/emqx/emqx/pull/18817) 修复 `PUT /api/v5/telemetry/status` 请求正文省略 `enable` 字段时返回带有 Erlang 堆栈跟踪的 `500 INTERNAL_ERROR` 的问题。
+- [#18817](https://github.com/emqx/emqx/pull/18817) 修复了请求体缺少 `enable` 字段时，`PUT /api/v5/telemetry/status` 返回带有 Erlang 堆栈追踪的 `500 INTERNAL_ERROR` 的问题。
 
-  该端点现在会返回带有校验消息的 `400 BAD_REQUEST`。API 文档已将 `enable` 标记为必填字段，并且不再显示其默认值，因为该端点从未应用此默认值。
+  该端点现在会返回 `400 BAD_REQUEST` 和验证消息。API 文档已将 `enable` 标记为必填字段，并且不再显示默认值，因为该端点从未应用过该默认值。
 
 - [#18859](https://github.com/emqx/emqx/pull/18859) 修复更新配置时仅更改敏感 HTTP 请求头名称的字母大小写，可能会移除其已存储值的问题。
 
@@ -180,9 +180,9 @@
 
 #### 部署与安全
 
-- [#18836](https://github.com/emqx/emqx/pull/18836) 集群配置同步调试日志不再包含成功配置变更的结果。
+- [#18836](https://github.com/emqx/emqx/pull/18836) 集群配置同步的调试日志不再包含成功配置变更的结果。
 
-  该结果可能包含编译后的运行时状态，例如 HTTP 认证器请求头模板，其中可能保存日志脱敏未覆盖的 Secret。
+  该结果可能包含已编译的运行时状态，例如 HTTP 认证器请求头模板，其中可能含有日志脱敏未覆盖的敏感信息。
 
 ## 6.3.0
 

@@ -2,7 +2,7 @@
 
 ## 6.3.1
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) 修复启用批量插入时 ClickHouse、TDengine、SQL Server 和 MySQL Bridge 对模板化 INSERT SQL 语句的处理。
+- [#18465](https://github.com/emqx/emqx/pull/18465) 改进了 ClickHouse、TDengine 和 SQL Server 动作，以及启用批量插入的 MySQL 动作中模板化 `INSERT` 语句的校验与安全渲染。
 
   此前，由于手动输入的模板本身存在语法错误以及插值问题，渲染 SQL 模板经常会生成格式错误的 SQL。
 
@@ -18,9 +18,9 @@
 
   已授予这些 scope 的现有命名空间 API 密钥在轮换前仍可继续使用，因此请轮换这些密钥。
 
-- [#18824](https://github.com/emqx/emqx/pull/18824) 修复 `emqx ctl listeners` 输出中的字段名称拼写错误。
+- [#18824](https://github.com/emqx/emqx/pull/18824) 修复了 `emqx ctl listeners` 输出中的字段名拼写错误。
 
-  此前，该命令将监听器的启用标志输出为 `enbale`，现在已更正为 `enable`。解析该输出的脚本必须同步更新，以匹配更正后的名称。
+  此前，该命令将监听器的启用标志输出为 `enbale`。现在会正确输出为 `enable`。解析此输出的脚本必须进行更新，以匹配修正后的字段名。
 
 ## 6.3.0
 

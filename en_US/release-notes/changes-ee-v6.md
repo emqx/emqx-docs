@@ -38,7 +38,7 @@ Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
 - [#18875](https://github.com/emqx/emqx/pull/18875) Reduced memory usage of MQTT connections that belong to a multi-tenant namespace.
 
-  Rate-limiter state for namespace clients is now allocated when a client first publishes, subscribes or receives a message, and only for limits that are actually configured, matching the behavior of ordinary connections. Configured tenant and client rate limits behave the same as before, including denial after a namespace's limiter configuration is removed.
+  Rate-limiter state for namespace clients is now allocated when a client first publishes, subscribes or receives a message, and only for limits that are actually configured, matching the behavior of ordinary connections. Configured tenant and client rate limits behave the same as before. If a namespace's limiter configuration is removed, subsequent limiter checks for its clients continue to deny the operation.
 
 ### Bug Fixes
 
@@ -66,9 +66,9 @@ Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
   Also added `${peername}` to the client information available in these templates. It renders as the client's address and port, for example `192.168.0.1:51544`.
 
-- [#18852](https://github.com/emqx/emqx/pull/18852) Fixed bootstrap API keys being rejected by the nodes still running the older version during a rolling upgrade to 6.3.
+- [#18852](https://github.com/emqx/emqx/pull/18852) Fixed bootstrap API keys being rejected by nodes still running 6.2 during a rolling upgrade to 6.3.
 
-  When a 6.3 node started, it rewrote the cluster-shared API key record with a secret hash that older nodes cannot verify, so those nodes rejected the key. The bootstrap file loader now keeps the stored hash when the file still holds the same secret, and refreshes only the key metadata such as role and scopes.
+  When a 6.3 node started, it rewrote the cluster-shared API key record with a secret hash that 6.2 nodes cannot verify, so those nodes rejected the key. The bootstrap file loader now keeps the stored hash when the file still holds the same secret, and refreshes only the key metadata such as role and scopes.
 
   Changing the secret in the bootstrap file still replaces the hash. Rotate a bootstrap secret only after the whole cluster runs 6.3.
 
@@ -102,11 +102,11 @@ Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
   Importing during a rolling upgrade could apply the backup through calls that the not-yet-upgraded nodes interpret differently. The import now stops before it begins and names the nodes still to be upgraded, so the cluster is left as it was.
 
-- [#18862](https://github.com/emqx/emqx/pull/18862) Validate the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
+- [#18862](https://github.com/emqx/emqx/pull/18862) Added validation for the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
-  Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
+  Previously, invalid `chunk` or `sleep_ms` values could silently disable scan throttling or trigger low-level runtime errors. The tool now rejects invalid values and unknown option keys, such as a misspelled `chunks`, and raises an error that identifies the offending option.
 
-- [#18899](https://github.com/emqx/emqx/pull/18899) Fixed a regression where `GET /api/v5/listeners` and `GET /api/v5/listeners_status` could return `500 INTERNAL_ERROR` in a mixed-version cluster during a rolling upgrade from an earlier release.
+- [#18899](https://github.com/emqx/emqx/pull/18899) Fixed a regression where `GET /api/v5/listeners` and `GET /api/v5/listeners_status` could return `500 INTERNAL_ERROR` in a mixed-version cluster while some nodes still ran a version earlier than 6.3.0 during a rolling upgrade.
 
 #### Durable Storage
 
@@ -120,9 +120,9 @@ Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
   NATS Gateway authentication settings now reject duplicate authentication methods and credential entries, including duplicate NKeys and JWT account entries, to prevent ambiguous authentication behavior.
 
-- [#18776](https://github.com/emqx/emqx/pull/18776) MQTT-SN now publishes configured Will messages when sleeping clients exceed their sleep duration and no longer publishes Will messages when clients disconnect normally.
+- [#18776](https://github.com/emqx/emqx/pull/18776) MQTT-SN now publishes configured Will messages when a sleeping client's sleep period expires and no longer publishes Will messages when clients disconnect normally.
 
-- [#18842](https://github.com/emqx/emqx/pull/18842) Gateway connections now ignore `clientid_override` values returned by authentication backends, which is not supported by Gateway protocols. A warning is logged when this occurs.
+- [#18842](https://github.com/emqx/emqx/pull/18842) Gateway protocols do not support client ID overrides. Gateway connections now ignore `clientid_override` values returned by authentication backends and log a warning.
 
   Mountpoint templates for Gateway connections are now evaluated in the shared Gateway authentication flow after authentication results are merged.
 
@@ -146,7 +146,7 @@ Make sure to check the breaking changes before upgrading to EMQX 6.3.1.
 
 - [#18686](https://github.com/emqx/emqx/pull/18686) Audit records for authorization, authentication, connector, bridge, rule-engine and trace requests now identify the namespace a request targeted. Previously, these audit records looked identical across namespaces, so it was not possible to tell which namespace's resources a request affected. The audit log now also records any query parameters a request carried.
 
-- [#18754](https://github.com/emqx/emqx/pull/18754) Stop creating audit log records for CLI commands that only print help.
+- [#18754](https://github.com/emqx/emqx/pull/18754) Stopped creating audit log records for CLI commands that only print help.
 
   Running a command such as `emqx ctl api_keys` without a subcommand prints the usage text. Previously this also wrote an audit log record with an empty argument list, which looked like an operation had been performed. Commands that do work are still audited, including read-only ones.
 

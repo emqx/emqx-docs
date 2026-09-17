@@ -2,11 +2,11 @@
 
 ## 6.3.1
 
-- [#18465](https://github.com/emqx/emqx/pull/18465) Fixed handling of templated INSERT SQL statements in the ClickHouse, TDengine, SQL Server, and MySQL bridges (when batch insert is enabled).
+- [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled.
 
   Previously, rendering SQL templates could often produce malformed SQL due to syntax errors in the manually entered template itself and due to interpolation issues.
 
-  Now, SQL statements are fully parsed when an action is created, and invalid SQL is rejected. During rendering, correct escaping is enforced. To provide consistent and predictable behavior, we limit the SQL features that can be used. Most notably, we reject comments in SQL statements. However, we support a large subset of syntax features: constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
+  Now, EMQX fully parses SQL statements when an action is created and rejects invalid SQL. During rendering, EMQX enforces correct escaping. To provide consistent and predictable behavior, EMQX limits the SQL features that templates can use. In particular, SQL comments are not supported. Supported syntax includes constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
 
   MySQL also supports `ON DUPLICATE KEY UPDATE`, ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`, and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
 
