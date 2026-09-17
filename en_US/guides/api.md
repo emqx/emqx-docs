@@ -383,7 +383,7 @@ You can specify the namespace in either of these ways:
 - Provide a bare role, such as `administrator`, together with the `namespace` field.
 - Encode the namespace in the role as `ns:<namespace>::<role>`, such as `ns:team-a::administrator`.
 
-Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. An API key's namespace cannot be changed after the key is created.
+Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. After an API key is created, its namespace cannot be changed through the REST API.
 
 Starting from EMQX 6.3.0, neither form can use a namespace listed in `multi_tenancy.deny_namespaces`. For configuration details, see [Denied Namespace Names](multi-tenancy/namespace-global-settings.md#denied-namespace-names).
 

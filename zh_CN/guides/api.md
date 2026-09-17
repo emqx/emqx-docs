@@ -379,7 +379,7 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
 - 使用 `administrator` 等不含命名空间的角色，并同时提供 `namespace` 字段。
 - 将命名空间编码到角色中，格式为 `ns:<namespace>::<role>`，例如 `ns:team-a::administrator`。
 
-以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后不能更改所属命名空间。
+以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后，不能通过 REST API 更改其所属命名空间。
 
 从 EMQX 6.3.0 开始，以上两种方式均不能使用 `multi_tenancy.deny_namespaces` 列表中的命名空间名称。配置方法请参见[禁止使用的命名空间名称](multi-tenancy/namespace-global-settings.md#禁止使用的命名空间名称)。
 
