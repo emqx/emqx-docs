@@ -176,7 +176,11 @@ Before adding a Confluent Sink action, you need to create a Confluent producer c
 2. Click **Create** in the top right corner of the page, select **Confluent Producer** on the connector selection page, and click **Next**.
 3. Enter a name and description, such as `my-confluent`. The name is used to associate the Confluent Sink with the connector and must be unique within the cluster.
 4. Configure the parameters required to connect to Confluent Cloud:
-   - **Bootstrap Hosts**: Corresponds to the Endpoints information on the Confluent cluster settings page.
+   - **Bootstrap Hosts**: Enter the endpoint from the Confluent cluster settings page. Starting from EMQX 5.10.5, you can specify an IPv6 address in brackets, for example, `[::1]:9092`.
+   - **IP Family**: Starting from EMQX 5.10.5, select the IP address family that EMQX uses to connect to Confluent brokers:
+     - **Auto** (`auto`): Default. For an IP address, EMQX uses its address family. For a hostname, EMQX tries IPv4 first, then IPv6 if the IPv4 connection fails.
+     - **IPv4** (`ipv4`): Connect over IPv4 only.
+     - **IPv6** (`ipv6`): Connect over IPv6 only.
    - **Username** and **Password**: Enter the API key and Secret you created earlier with the Confluent Cloud CLI.
    - Starting from EMQX 5.10.5, you can enable **TLS Verify** to verify the Confluent server certificate. Configure **CA Cert** with a trusted CA certificate. For more information, see [TLS for External Resource Access](../../guides/network/overview.md#tls-for-external-resource-access).
    - Leave other options as default or configure them according to your business needs.

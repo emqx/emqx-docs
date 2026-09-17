@@ -176,7 +176,11 @@ confluent kafka topic consume -b testtopic-in
 2. 点击页面右上角的**创建**，在连接器选择页面，选择 **Confluent 生产者**，点击下一步。
 3. 输入名称与描述，例如 `my-confluent`，名称用于 Confluent Sink 关联选择连接器，要求在集群中唯一。
 4. 配置连接到 Confluent Cloud 所需的参数：
-   - 主机列表：对应 Confluent 集群设置页面中的 Endpoints 信息。
+   - **主机列表**：输入 Confluent 集群设置页面中的 Endpoint。从 EMQX 5.10.5 开始，可以使用方括号指定 IPv6 地址，例如 `[::1]:9092`。
+   - **IP 地址族**：从 EMQX 5.10.5 开始，选择 EMQX 连接 Confluent broker 时使用的 IP 地址族：
+     - **自动**（`auto`）：默认值。对于 IP 地址，EMQX 使用该地址对应的地址族；对于主机名，EMQX 先尝试 IPv4，如果 IPv4 连接失败，再尝试 IPv6。
+     - **IPv4**（`ipv4`）：仅使用 IPv4 连接。
+     - **IPv6**（`ipv6`）：仅使用 IPv6 连接。
    - 用户名与密码：填入您之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret。
    - 从 EMQX 5.10.5 开始，您可以启用**验证服务器证书**来验证 Confluent 服务器证书，并在 **CA 证书**中配置可信 CA 证书。更多信息请参见[启用 TLS 加密访问外部资源](../../guides/network/overview.md#启用-tls-加密访问外部资源)。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
