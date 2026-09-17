@@ -939,14 +939,14 @@
                             },
                             {
                               "default": "\"x-forwarded-for\"",
-                              "doc": "HTTP 头，用于传递有关客户端 IP 地址的信息。\n当 EMQX 集群部署在负载平衡器后面时，这一点非常重要。",
+                              "doc": "携带原始客户端 IP 地址的 HTTP 请求头，EMQX 会取该请求头中最左侧的 IP 作为原始客户端 IP。\n\n此选项通常在 EMQX 部署在 WebSocket 代理后面时使用。\n\n设置为空字符串（<code>\"\"</code>）可禁用请求头查找，此时始终使用 TCP 连接的源 IP 地址。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-websocket-S-ws_opts-proxy_address_header",
                               "text": "proxy_address_header",
                               "type": "String"
                             },
                             {
                               "default": "\"x-forwarded-port\"",
-                              "doc": "HTTP 头，用于传递有关客户端端口的信息。当 EMQX 集群部署在负载平衡器后面时，这一点非常重要。",
+                              "doc": "携带原始客户端源端口的 HTTP 请求头，EMQX 会取该请求头中最左侧的端口作为原始客户端的源端口。\n\n此选项通常在 EMQX 部署在 WebSocket 代理后面时使用。\n\n设置为空字符串（<code>\"\"</code>）可禁用请求头查找，此时始终使用 TCP 连接的源端口。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-websocket-S-ws_opts-proxy_port_header",
                               "text": "proxy_port_header",
                               "type": "String"
@@ -1472,14 +1472,14 @@
                             },
                             {
                               "default": "\"x-forwarded-for\"",
-                              "doc": "HTTP 头，用于传递有关客户端 IP 地址的信息。\n当 EMQX 集群部署在负载平衡器后面时，这一点非常重要。",
+                              "doc": "携带原始客户端 IP 地址的 HTTP 请求头，EMQX 会取该请求头中最左侧的 IP 作为原始客户端 IP。\n\n此选项通常在 EMQX 部署在 WebSocket 代理后面时使用。\n\n设置为空字符串（<code>\"\"</code>）可禁用请求头查找，此时始终使用 TCP 连接的源 IP 地址。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-websocket-S-ws_opts-proxy_address_header",
                               "text": "proxy_address_header",
                               "type": "String"
                             },
                             {
                               "default": "\"x-forwarded-port\"",
-                              "doc": "HTTP 头，用于传递有关客户端端口的信息。当 EMQX 集群部署在负载平衡器后面时，这一点非常重要。",
+                              "doc": "携带原始客户端源端口的 HTTP 请求头，EMQX 会取该请求头中最左侧的端口作为原始客户端的源端口。\n\n此选项通常在 EMQX 部署在 WebSocket 代理后面时使用。\n\n设置为空字符串（<code>\"\"</code>）可禁用请求头查找，此时始终使用 TCP 连接的源端口。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-websocket-S-ws_opts-proxy_port_header",
                               "text": "proxy_port_header",
                               "type": "String"
@@ -6755,7 +6755,7 @@
               "type": "String(\"kerberos\")"
             },
             {
-              "doc": "服务器的 Kerberos 主体。\n例如： <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>。\n注意：所使用的领域需要在 EMQX 节点的 /etc/krb5.conf 文件中配置。",
+              "doc": "服务器的 Kerberos 主体。\n例如： <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>。\n注意：所使用的领域需要在 EMQX 节点的默认配置文件 krb5.conf（通常位于 `/etc`）中配置。",
               "hash": "V-authentication-S-kerberos-principal",
               "text": "principal",
               "type": "String"
@@ -11813,7 +11813,7 @@
                             },
                             {
                               "default": "auto",
-                              "doc": "The IP address family used to connect to Kafka brokers.\n- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.\n- <code>ipv4</code>: Connect over IPv4 only.\n- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+                              "doc": "连接 Kafka broker 时使用的 IP 地址族。\n- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。\n- <code>ipv4</code>：仅通过 IPv4 连接。\n- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
                               "hash": "V-connectors-S-connectors-confluent_producer-S-config_connector-socket_opts-S-socket_opts-ip_family",
                               "text": "ip_family",
                               "type": "Enum(auto,ipv4,ipv6)"
@@ -13778,13 +13778,13 @@
                       "type": "String"
                     },
                     {
-                      "doc": "DynamoDB 的访问 ID。",
+                      "doc": "用于连接 DynamoDB 的 AWS Access Key ID。\n如果同时省略 Access Key ID 和 Secret Access Key，将从运行时环境中获取凭证\n（例如 EC2 实例元数据或 ECS 任务角色）。",
                       "hash": "V-connectors-S-connectors-dynamo-S-config_connector-aws_access_key_id",
                       "text": "aws_access_key_id",
                       "type": "String"
                     },
                     {
-                      "doc": "DynamoDB 的访问密钥。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
+                      "doc": "用于连接 DynamoDB 的 AWS Secret Access Key。\n如果同时省略 Access Key ID 和 Secret Access Key，将从运行时环境中获取凭证\n（例如 EC2 实例元数据或 ECS 任务角色）。<br/>包含一些敏感信息的字符串，例如密码。当密钥以 <code>file://</code> 开头时，字符串的其余部分将被解释为包含密钥本身的文件路径：文件的整个内容（除了任何尾随的空白字符）都被视为密钥值。注意：在集群中，所有 EMQX 节点在使用 <code>file://</code> 密钥之前应该具有相同的文件。",
                       "hash": "V-connectors-S-connectors-dynamo-S-config_connector-aws_secret_access_key",
                       "text": "aws_secret_access_key",
                       "type": "Secret"
@@ -13935,7 +13935,7 @@
                           "doc": "使用 GSSAPI/Kerberos 认证。",
                           "fields": [
                             {
-                              "doc": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM/code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的 /etc/krb5.conf 中。",
+                              "doc": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM</code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的默认配置文件 krb5.conf 中（通常位于 `/etc`）。",
                               "hash": "V-connectors-S-connectors-kafka_consumer-S-config_connector-authentication-S-auth_gssapi_kerberos-kerberos_principal",
                               "text": "kerberos_principal",
                               "type": "String"
@@ -13991,7 +13991,7 @@
                             },
                             {
                               "default": "auto",
-                              "doc": "The IP address family used to connect to Kafka brokers.\n- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.\n- <code>ipv4</code>: Connect over IPv4 only.\n- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+                              "doc": "连接 Kafka broker 时使用的 IP 地址族。\n- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。\n- <code>ipv4</code>：仅通过 IPv4 连接。\n- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
                               "hash": "V-connectors-S-connectors-kafka_consumer-S-config_connector-socket_opts-S-socket_opts-ip_family",
                               "text": "ip_family",
                               "type": "Enum(auto,ipv4,ipv6)"
@@ -14708,7 +14708,7 @@
                             },
                             {
                               "default": "auto",
-                              "doc": "The IP address family used to connect to Kafka brokers.\n- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.\n- <code>ipv4</code>: Connect over IPv4 only.\n- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+                              "doc": "连接 Kafka broker 时使用的 IP 地址族。\n- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。\n- <code>ipv4</code>：仅通过 IPv4 连接。\n- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
                               "hash": "V-connectors-S-connectors-azure_event_hub_producer-S-config_connector-socket_opts-S-socket_opts-ip_family",
                               "text": "ip_family",
                               "type": "Enum(auto,ipv4,ipv6)"
@@ -18859,7 +18859,7 @@
                           "doc": "使用 GSSAPI/Kerberos 认证。",
                           "fields": [
                             {
-                              "doc": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM/code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的 /etc/krb5.conf 中。",
+                              "doc": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM</code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的默认配置文件 krb5.conf 中（通常位于 `/etc`）。",
                               "hash": "V-connectors-S-connectors-kafka_producer-S-config_connector-authentication-S-auth_gssapi_kerberos-kerberos_principal",
                               "text": "kerberos_principal",
                               "type": "String"
@@ -18915,7 +18915,7 @@
                             },
                             {
                               "default": "auto",
-                              "doc": "The IP address family used to connect to Kafka brokers.\n- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.\n- <code>ipv4</code>: Connect over IPv4 only.\n- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+                              "doc": "连接 Kafka broker 时使用的 IP 地址族。\n- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。\n- <code>ipv4</code>：仅通过 IPv4 连接。\n- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
                               "hash": "V-connectors-S-connectors-kafka_producer-S-config_connector-socket_opts-S-socket_opts-ip_family",
                               "text": "ip_family",
                               "type": "Enum(auto,ipv4,ipv6)"
@@ -21774,14 +21774,14 @@
                             },
                             {
                               "default": "\"0ms\"",
-                              "doc": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。\n默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
+                              "doc": "每个分区生产者为了将更多消息累积成更大批次而等待的最长时间。\n默认值 `0` 表示不等待（消息到达后立即发送）。\n一旦累积的数据达到一个完整批次，等待就会提前结束，因此繁忙的生产者不会被额外延迟。\n当缓冲到磁盘时，等待发生在写入缓冲区之前；此时建议配置至少 `5ms` 以减少磁盘 IOPS。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
                               "hash": "V-actions-S-actions-confluent_producer-S-actions-parameters-S-producer_kafka_opts-max_linger_time",
                               "text": "max_linger_time",
                               "type": "Duration"
                             },
                             {
                               "default": "\"10MB\"",
-                              "doc": "每个分区生产者在发送数据前，为了收集批量消息进行缓冲，最多可以等待的消息字节数。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "每个分区生产者在等待期间最多累积的字节数，达到该值后将停止等待并发送该批次。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-actions-S-actions-confluent_producer-S-actions-parameters-S-producer_kafka_opts-max_linger_bytes",
                               "text": "max_linger_bytes",
                               "type": "Bytesize"
@@ -22167,7 +22167,7 @@
                           "fields": [
                             {
                               "default": "\"INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})\"",
-                              "doc": "可以使用 ${field} 占位符来引用消息与客户端上下文中的变量，请确保对应字段存在且数据格式符合预期。此处不支持 [SQL 预处理](https://docs.emqx.com/zh/enterprise/v5.0/data-integration/data-bridges.html#sql-预处理)。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 ClickHouse `INSERT` 模板。支持 `VALUES`、`FORMAT Values` 和 `JSONCompactEachRow` 格式。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句和动态标识符。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-clickhouse-S-clickhouse_action-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -22181,7 +22181,7 @@
                             },
                             {
                               "default": "\", \"",
-                              "doc": "默认为逗号 ','，适用于 VALUE 格式。您也可以使用其他分隔符， 请参考 [INSERT INTO 语句](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)。",
+                              "doc": "此参数已被忽略，仅为兼容性而保留。动作会根据 SQL 格式确定批量分隔符。",
                               "hash": "V-actions-S-actions-clickhouse-S-clickhouse_action-parameters-S-action_parameters-batch_value_separator",
                               "text": "batch_value_separator",
                               "type": "String"
@@ -24937,7 +24937,7 @@
                           "fields": [
                             {
                               "default": "\"insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )\"",
-                              "doc": "SQL 模板<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 SQL Server INSERT INTO VALUES 模板。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句、多个配置行和动态标识符。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-sqlserver-S-sqlserver_action-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -25288,14 +25288,14 @@
                             },
                             {
                               "default": "\"0ms\"",
-                              "doc": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。\n默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
+                              "doc": "每个分区生产者为了将更多消息累积成更大批次而等待的最长时间。\n默认值 `0` 表示不等待（消息到达后立即发送）。\n一旦累积的数据达到一个完整批次，等待就会提前结束，因此繁忙的生产者不会被额外延迟。\n当缓冲到磁盘时，等待发生在写入缓冲区之前；此时建议配置至少 `5ms` 以减少磁盘 IOPS。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
                               "hash": "V-actions-S-actions-azure_event_hub_producer-S-actions-parameters-S-producer_kafka_opts-max_linger_time",
                               "text": "max_linger_time",
                               "type": "Duration"
                             },
                             {
                               "default": "\"10MB\"",
-                              "doc": "每个分区生产者在发送数据前，为了收集批量消息进行缓冲，最多可以等待的消息字节数。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "每个分区生产者在等待期间最多累积的字节数，达到该值后将停止等待并发送该批次。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-actions-S-actions-azure_event_hub_producer-S-actions-parameters-S-producer_kafka_opts-max_linger_bytes",
                               "text": "max_linger_bytes",
                               "type": "Bytesize"
@@ -31537,7 +31537,7 @@
                             },
                             {
                               "default": "\"insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})\"",
-                              "doc": "SQL 模板<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 TDengine INSERT 模板。支持多表 VALUES 插入和 USING 超级表 TAGS 子句。目标表名可以是裸名称或用反引号括起的名称，并可包含占位符，例如 `test_${clientid}`。EMQX 会将完整的目标表名渲染为一个带引号的标识符。不允许使用注释、FILE 输入和额外语句。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-tdengine-S-action_config-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -32063,14 +32063,14 @@
                             },
                             {
                               "default": "\"0ms\"",
-                              "doc": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。\n默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
+                              "doc": "每个分区生产者为了将更多消息累积成更大批次而等待的最长时间。\n默认值 `0` 表示不等待（消息到达后立即发送）。\n一旦累积的数据达到一个完整批次，等待就会提前结束，因此繁忙的生产者不会被额外延迟。\n当缓冲到磁盘时，等待发生在写入缓冲区之前；此时建议配置至少 `5ms` 以减少磁盘 IOPS。<br/>表示时间持续的字符串，例如：<code>10s</code>、<code>2.5m</code>、<code>1h30m</code>、<code>1W2D</code> 或 <code>2345ms</code>，其中 <code>ms</code> 是最小单位。每个配置项都有其自己的最小精度。设置值中超过精度的部分将被忽略。\n\n例如，如果一个类型为 <code>Duration(s)</code> 的配置项被设置为 <code>1200ms</code>，则最终有效值将是 <code>1s</code> 而不是 <code>1.2s</code>。\n\nDuration 等同于 Duration(ms)。单位部分不区分大小写。",
                               "hash": "V-actions-S-actions-kafka_producer-S-kafka_producer_action-parameters-S-producer_kafka_opts-max_linger_time",
                               "text": "max_linger_time",
                               "type": "Duration"
                             },
                             {
                               "default": "\"10MB\"",
-                              "doc": "每个分区生产者在发送数据前，为了收集批量消息进行缓冲，最多可以等待的消息字节数。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "每个分区生产者在等待期间最多累积的字节数，达到该值后将停止等待并发送该批次。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-actions-S-actions-kafka_producer-S-kafka_producer_action-parameters-S-producer_kafka_opts-max_linger_bytes",
                               "text": "max_linger_bytes",
                               "type": "Bytesize"
@@ -36374,7 +36374,7 @@
                             },
                             {
                               "default": "[openid]",
-                              "doc": "范围，默认值是 `[\"openid\"]`.",
+                              "doc": "作用域，默认值是 `[\"openid\"]`.",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-scopes",
                               "text": "scopes",
                               "type": "Array(String)"
