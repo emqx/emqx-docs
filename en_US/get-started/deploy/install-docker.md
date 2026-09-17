@@ -32,6 +32,14 @@ For more information about EMQX directories, see [EMQX Files and Directories](./
 
 If EMQX needs to access a service running on the host, do not use `localhost` or `127.0.0.1` as the service address. These addresses refer to the container's own network interface. Use the host IP address or [host networking](https://docs.docker.com/network/host/). On Docker Desktop for Mac or Windows, you can also use `host.docker.internal`.
 
+### Understand the Runtime Image
+
+Starting from EMQX Enterprise 6.3.1, official Docker release images use Docker Hardened Debian 13 (Trixie). The runtime image does not include package managers such as `apt` or `dpkg`, so you cannot use these tools to install packages in a running EMQX container.
+
+If your deployment requires additional tools or runtime dependencies, include and validate them in a custom image before deployment. Do not rely on installing packages in a running official container.
+
+The release images also include build provenance and software bill of materials (SBOM) attestations. Docker Scout can use these attestations to apply Docker's vulnerability assessments (VEX statements) for the hardened base image.
+
 ## Use Docker to Run A Single EMQX Node
 
 Follow these steps to run a single EMQX node. For more information about the official EMQX Docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise).
