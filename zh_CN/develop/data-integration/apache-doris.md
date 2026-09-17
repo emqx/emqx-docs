@@ -88,6 +88,7 @@ mysql -uroot -P9030 -h127.0.0.1
       event varchar,
       created_at datetime)
     properties (replication_num = 1);
+  ```
 
 ## 创建连接器
 
@@ -98,7 +99,7 @@ mysql -uroot -P9030 -h127.0.0.1
 3. 在 **配置** 步骤，配置以下信息：
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_doris`。
-   - **服务器地址**：填写 `127.0.0.1:3306`。
+   - **服务器地址**：填写 `127.0.0.1:9030`。
    - **数据库名字**：填写 `mqtt`。
    - **用户名**：填写 `root`。
    - **密码**：填写 `public`。
@@ -137,7 +138,17 @@ mysql -uroot -P9030 -h127.0.0.1
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_doris`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 （`;`）:
+8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入。未启用批量模式时，EMQX 使用[预处理 SQL](./data-bridges.md#sql-预处理)写入 Apache Doris，占位符不应包含在引号内，SQL 末尾不要带分号 `;`：
+
+   ::: warning 重要提示
+
+   从 EMQX 5.10.5 开始，启用批量模式时，EMQX 使用受限的 Doris SQL 解析器，根据 SQL 上下文转义占位符值并渲染模板。如果模板包含不支持的语法，EMQX 会记录解析错误，使用该模板的批量请求将在运行时失败。
+
+   模板必须是单条 Doris `INSERT INTO ... VALUES` 语句，且只能配置一行值。占位符既可作为完整值，也可用于普通字符串和原始字符串字面量中。不支持 SQL 注释、附加语句、多行值、动态标识符、`INSERT SELECT`、行别名、`ON DUPLICATE KEY UPDATE`、MySQL 十六进制字面量或字符集引入符。`DEFAULT` 只能作为 `VALUES` 列表中的独立项，以数字开头的标识符必须使用反引号括起。
+
+   EMQX 还会在其创建的每个 Doris 连接中禁用 `ANSI_QUOTES` 和 `NO_BACKSLASH_ESCAPES` SQL 模式。升级前，请修改使用不支持语法或依赖这两种 SQL 模式的模板。
+
+   :::
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -183,7 +194,7 @@ FROM
   "$events/client/connected", "$events/client/disconnected"
 ```
 
-您可以使用以下 SQL 模板创建实现设备上下线记录的 Sink，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
+您可以使用以下 SQL 模板创建记录设备上下线事件的 Sink。消息存储章节中介绍的 SQL 模板要求也适用于此模板。未启用批量模式时，占位符不应包含在引号内。SQL 末尾不要带分号 `;`：
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
