@@ -199,7 +199,7 @@ emqx ctl listeners
 
 `bind` 保留配置中的值，包含端口。`resolved_address` 和 `resolved_address_from` 为只读信息；如需更改地址，应修改 `bind` 或 `node.default_listener_address`，而不是编辑这两个响应字段。
 
-以上查询适用于 MQTT 监听器。对于网关监听器，请使用[网关监听器查询接口](../../develop/gateway/gateway.md#监听器)。
+以上查询适用于 MQTT 监听器。对于网关监听器，请使用[网关监听器查询接口](../../develop/gateway/gateway.md#网关监听器)。
 
 ## WebSocket 监听器的转发客户端地址
 
