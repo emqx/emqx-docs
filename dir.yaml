@@ -569,6 +569,10 @@
     title_cn: Microsoft SQL Server
     title_ja: Microsoft SQL Server
     path: develop/data-integration/data-bridge-sqlserver
+  - title_en: Dameng
+    title_cn: 达梦
+    title_ja: 達夢
+    path: develop/data-integration/data-bridge-dameng
   - title_en: MongoDB
     title_cn: MongoDB
     title_ja: MongoDB

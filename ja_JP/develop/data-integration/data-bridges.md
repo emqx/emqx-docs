@@ -100,6 +100,7 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 
 - [Cassandra](./data-bridge-cassa.md)
 - [Microsoft SQL Server](./data-bridge-sqlserver.md)
+- [Dameng](./data-bridge-dameng.md)
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)

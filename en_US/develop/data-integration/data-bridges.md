@@ -101,6 +101,7 @@ EMQX supports data integrations with the following types of data systems:
 
 - [Cassandra](./data-bridge-cassa.md)
 - [Microsoft SQL Server](./data-bridge-sqlserver.md)
+- [Dameng](./data-bridge-dameng.md)
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
