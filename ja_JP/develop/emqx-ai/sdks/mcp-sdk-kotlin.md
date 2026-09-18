@@ -1,19 +1,19 @@
 # Kotlin SDK
 
-このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。  
-リポジトリはこちらです: https://github.com/terry-xiaoyu/kotlin-sdk
+このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を示します：  
+https://github.com/terry-xiaoyu/kotlin-sdk
 
-## 環境構築
+## 環境セットアップ
 
 ### Kotlin ツールチェーンのインストール
 
 以下のツールがインストールされていることを確認してください：
 
-- JDK 21以上
-- Kotlin 2.2以上
-- Gradle 9.2以上
+- JDK 21+
+- Kotlin 2.2+
+- Gradle 9.2+
 
-[SDKMAN](https://sdkman.io/) を使う方法が推奨されています。ツールのインストールと管理が簡単に行えます。
+[SDKMAN](https://sdkman.io/) を使用する方法が、これらのツールをインストールおよび管理する推奨方法です：
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -26,9 +26,9 @@ sdk install gradle 9.2.1
 
 ### EMQX のインストールと起動
 
-[Getting Started](../../../get-started/getting-started.md) ガイドに従い、EMQX ブローカーをインストールして起動してください。
+[Getting Started](../../../get-started/getting-started.md) ガイドに従って、EMQX ブローカーをインストールし起動してください。
 
-## MCP サーバーのサンプルをダウンロードして実行する
+## MCP サーバーのサンプルをダウンロードして実行
 
 サンプルプロジェクトをクローンします：
 
@@ -40,13 +40,13 @@ cd kotlin-mcp-server-demo
 このサンプルでは、以下の2つの MCP ツールを登録しています：
 
 - **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
-- **Light control tool**：ライトのオン／オフ状態と明るさを制御します。
+- **Light control tool**：ライトのオン/オフ状態と明るさを制御します。
 
 ツール登録のコードはこちらで確認できます：  
 https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
 
 ```bash
-// Calculator tool を追加
+// 計算ツールを追加
 server.addTool(
     name = "calculator",
     description = "このツールは基本的な数学演算（加算、減算、乗算、除算）を実行できます。",
@@ -88,15 +88,15 @@ server.addTool(
     )
 }
 
-// Light control tool を追加
+// ライト制御ツールを追加
 server.addTool(
     name = "set_light_brightness",
-    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定してください。明るさを 'last_value' に設定すると、前回の明るさに戻せます。ライトが消えている状態から再度点灯させたい場合に便利です。",
+    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定してください。明るさを 'last_value' に設定すると、前回の明るさを復元します。これはライトが消えている状態から再度点灯させたい場合に便利です。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
                 put("type", JsonArray(listOf(JsonPrimitive("number"), JsonPrimitive("string"))))
-                put("description", JsonPrimitive("0から100の明るさの値、または前回の明るさに戻すための 'last_value'"))
+                put("description", JsonPrimitive("0から100の明るさの値、または前回の明るさを復元する 'last_value'"))
             }
         },
         required = listOf("value")
@@ -105,7 +105,7 @@ server.addTool(
     val value = request.params.arguments?.get("value")?.jsonPrimitive?.content
     // リクエストを処理し、ライトの明るさを制御
     CallToolResult(
-        content = listOf(TextContent("ライトの明るさを設定しました: ${value}%")),
+        content = listOf(TextContent("ライトの明るさを ${value}% に設定しました")),
     )
 }
 ```
@@ -118,15 +118,14 @@ server.addTool(
 
 パラメーターの説明：
 
-- **MQTT クライアント ID**：`kt001`
+- **MQTT クライアントID**：`kt001`
 - **MCP サーバー名**：`demo/kotlin-mcp-server`
 
 ## MCP クライアントでのテスト
 
-現時点で Kotlin SDK には MCP クライアントの実装は含まれていません。  
-テスト用として、Python SDK を使ってシンプルな MCP クライアントを作成できます。
+Kotlin SDK には現時点で MCP クライアントの実装がありません。テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
 
-Python 環境のセットアップ：
+Python 環境をセットアップします：
 
 ```bash
 uv init light_controller
@@ -199,6 +198,6 @@ if __name__ == "__main__":
 
 ```bash
 INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) を呼び出しました。結果: meta=None
-                             content=[TextContent(type='text', text='ライトの明るさを設定しました: 50%',
+                             content=[TextContent(type='text', text='ライトの明るさを 50% に設定しました',
                              annotations=None)] isError=False
 ```

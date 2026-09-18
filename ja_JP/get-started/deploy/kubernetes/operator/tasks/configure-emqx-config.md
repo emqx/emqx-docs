@@ -8,7 +8,7 @@ EMQXカスタムリソースの`config.data`によってEMQXの設定を変更�
 
 EMQXのメイン設定ファイルは`/etc/emqx.conf`です。バージョン5.0以降、EMQXは設定ファイル形式として[HOCON](https://www.emqx.io/docs/en/v5.1/configuration/configuration.html#hocon-configuration-format)を採用しています。
 
-`apps.emqx.io/v2beta1 EMQX`は`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。`config.data`による設定については、以下のドキュメントを参照してください：[設定マニュアル](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual)。
+`apps.emqx.io/v2beta1 EMQX`は`.spec.config.data`フィールドを通じてEMQXクラスターの設定をサポートしています。`config.data`の設定については、以下のドキュメントをご参照ください：[Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual)。
 
 + 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -37,9 +37,9 @@ EMQXのメイン設定ファイルは`/etc/emqx.conf`です。バージョン5.0
             type: LoadBalancer
    ```
 
-   > `.spec.config.data`フィールドでは、EMQXクラスター用のTCPリスナーを設定しています。リスナー名は`test`で、リッスンポートは`1884`です。
+   > `.spec.config.data`フィールドでは、EMQXクラスターのTCPリスナーを設定しています。このリスナーの名前は`test`で、リッスンポートは1884です。
 
-+ EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
++ EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターのステータスを確認し、`STATUS`が`Running`になっていることを確認してください。完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -49,7 +49,7 @@ EMQXのメイン設定ファイルは`/etc/emqx.conf`です。バージョン5.0
 
 + EMQXクラスターのダッシュボード外部IPを取得し、EMQXコンソールにアクセスします。
 
-  EMQXオペレーターは2つのEMQX Serviceリソースを作成します。1つは`emqx-dashboard`、もう1つは`emqx-listeners`で、それぞれEMQXコンソールとEMQXのリスニングポートに対応しています。
+  EMQX Operatorは2つのEMQX Serviceリソースを作成します。1つはemqx-dashboard、もう1つはemqx-listenersで、それぞれEMQXコンソールとEMQXのリスニングポートに対応しています。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -61,13 +61,13 @@ EMQXのメイン設定ファイルは`/etc/emqx.conf`です。バージョン5.0
 
 ## 設定の確認
 
-+ EMQXクラスターのリスナー情報を表示します。
++ EMQXクラスターのリスナー情報を確認します。
 
    ```bash
    $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
    ```
 
-   以下のような出力が得られます。これは、設定した`test`という名前のリスナーが有効になっていることを示しています。
+   以下のような出力が得られれば、設定した`test`という名前のリスナーが有効になっていることを示します。
 
    ```bash
    tcp:default

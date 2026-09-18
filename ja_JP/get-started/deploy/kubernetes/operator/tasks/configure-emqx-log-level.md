@@ -10,7 +10,7 @@ EMQXクラスターのログレベルを変更します。
 
 `apps.emqx.io/v2beta1 EMQX`では、`.spec.config.data`を通じてEMQXクラスターのログレベルを設定できます。`config.data`の設定方法は[Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual)を参照してください。
 
-> このフィールドはEMQXクラスター作成時のみ設定可能であり、更新はサポートしていません。作成後にクラスターのログレベルを変更する場合は、EMQXダッシュボードから変更してください。
+> このフィールドはEMQXクラスター作成時のみ設定可能で、更新はサポートされていません。作成後にクラスターのログレベルを変更する場合は、EMQXダッシュボードから変更してください。
 
 + 以下の内容をYAMLファイルとして保存し、kubectl applyコマンドでデプロイします。
 
@@ -37,7 +37,7 @@ EMQXクラスターのログレベルを変更します。
 
   > `.spec.config.data`フィールドでEMQXクラスターのログレベルを`debug`に設定しています。
 
-+ EMQXクラスターが準備完了になるまで待ちます。kubectl getコマンドでEMQXクラスターの状態を確認し、`STATUS`がRunningであることを確認してください。準備完了までに時間がかかる場合があります。
++ EMQXクラスターの準備が整うまで待ちます。kubectl getコマンドでEMQXクラスターの状態を確認し、`STATUS`がRunningであることを確認してください。準備には時間がかかる場合があります。
 
   ```bash
   $ kubectl get emqx emqx
@@ -59,7 +59,7 @@ EMQXクラスターのログレベルを変更します。
 
 [MQTTX CLI](https://mqttx.app/cli)はオープンソースのMQTT 5.0コマンドラインクライアントツールで、開発者がMQTTサーバーやアプリケーションの開発・デバッグをより迅速に行うために設計されています。
 
-+ EMQXクラスターのExternal IPを取得します。
++ EMQXクラスターの外部IPを取得します。
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
@@ -80,7 +80,7 @@ EMQXクラスターのログレベルを変更します。
   $ kubectl logs emqx-core-0 -c emqx
   ```
 
-  以下のようなログが取得できれば、クライアントからCONNECTメッセージを受信し、CONNACKメッセージを返したことを意味します。
+  以下のようなログが出力されれば、EMQXがクライアントからのCONNECTメッセージを受信し、CONNACKメッセージをクライアントに返信したことを意味します。
 
   ```bash
   2023-04-17T09:11:35.993031+00:00 [debug] msg: mqtt_packet_received, mfa: emqx_channel:handle_in/2, line: 360, peername: 218.190.230.144:59457, clientid: mqttx_322680d9, packet: CONNECT(Q0, R0, D0, ClientId=mqttx_322680d9, ProtoName=MQTT, ProtoVsn=5, CleanStart=true, KeepAlive=30, Username=undefined, Password=), tag: MQTT

@@ -1,6 +1,6 @@
-# Blue-GreenデプロイメントによるEMQXクラスターのエレガントなアップグレード
+# EMQXクラスターをブルーグリーンデプロイメントで優雅にアップグレードする方法
 
-本ページでは、Blue-Greenデプロイメントを用いてEMQXクラスターをグレースフルにアップグレードする方法を説明します。
+このページでは、ブルーグリーンデプロイメントを通じてEMQXクラスターを優雅にアップグレードする方法を説明します。
 
 :::tip
 
@@ -10,11 +10,11 @@
 
 ## 背景
 
-1. 従来のEMQXクラスターのデプロイメントでは、StatefulSetのデフォルトのローリングアップグレード戦略を用いてEMQX Podを更新することが一般的です。しかし、この方法には以下の2つの問題があります。
+1. 従来のEMQXクラスターのデプロイメントでは、StatefulSetのデフォルトのローリングアップグレード戦略が通常EMQX Podの更新に使用されます。しかし、この方法には以下の2つの問題があります。
 
-   1. ローリングアップデート中は、新旧両方のPodが対応するServiceに選択されるため、MQTTクライアントが誤ったPodに接続し、頻繁な切断と再接続が発生する可能性があります。
+   1. ローリングアップデート中、新旧のPodが対応するServiceによって選択されるため、MQTTクライアントが誤ったPodに接続し、頻繁な切断と再接続が発生する可能性があります。
 
-   2. ローリングアップデートの過程で、新しいPodが起動して準備完了になるまでに時間がかかるため、N - 1のPodしかサービスを提供できず、サービスの可用性が低下する恐れがあります。
+   2. ローリングアップデートの過程では、新しいPodが起動して準備完了になるまで時間がかかるため、N - 1のPodのみがサービスを提供でき、サービスの可用性が低下する恐れがあります。
 
 ```mermaid
 timeline
@@ -43,19 +43,19 @@ timeline
 
 ## 解決策
 
-前述のローリングアップデートの問題に対して、EMQX OperatorはBlue-Greenデプロイメントによるアップグレードソリューションを提供しています。EMQXカスタムリソースを用いてクラスターをアップグレードする際、EMQX Operatorは新しいEMQXクラスターを作成し、新クラスターが準備完了後にKubernetes Serviceを新クラスターに切り替えます。その後、古いEMQXクラスターのPodを段階的に削除してEMQXクラスターの更新を実現します。
+前述のローリングアップデートの問題に対して、EMQX Operatorはブルーグリーンデプロイメントによるアップグレードソリューションを提供します。EMQXカスタムリソースを用いてEMQXクラスターをアップグレードする際、EMQX Operatorは新しいEMQXクラスターを作成し、新クラスターが準備完了となった後にKubernetes Serviceを新クラスターにリダイレクトします。その後、旧EMQXクラスターのPodを段階的に削除して、EMQXクラスターの更新を実現します。
 
-古いEMQXクラスターのPodを削除する際、EMQX OperatorはEMQXのノード避難機能を活用して、MQTT接続を希望するレートで新クラスターに移行させることができ、大量の接続が一時的に集中する問題を回避します。
+旧EMQXクラスターのPodを削除する際、EMQX OperatorはEMQXのノード避難機能を活用し、MQTT接続を希望のレートで新クラスターに移行させることが可能です。これにより、一時的に大量の接続が集中する問題を回避できます。
 
-アップグレードの全体的な流れは以下のステップに大別されます。
+アップグレード全体の流れは以下のように大まかに分けられます。
 
 1. 同一仕様のクラスターを作成する。
 
-2. 新クラスターが準備完了後、Serviceを新クラスターに切り替え、古いクラスターをServiceから外す。この時点で新クラスターがトラフィックを受け始め、古いクラスターの既存接続は影響を受けません。
+2. 新クラスターが準備完了後、Serviceを新クラスターにリダイレクトし、旧クラスターをServiceから外す。この時点で新クラスターがトラフィックを受け始め、旧クラスターの既存接続は影響を受けません。
 
-3. （EMQX Enterprise Editionのみ対応）EMQXのノード避難機能を使い、各ノードの接続を順次避難させる。
+3. （EMQX Enterprise Editionのみ対応）EMQXノード避難機能を用いて、各ノードの接続を順次避難させる。
 
-4. 古いクラスターを段階的にスケールダウンし、ノード数を0にする。
+4. 旧クラスターを段階的にスケールダウンし、ノード数を0にする。
 
 5. アップグレード完了。
 
@@ -124,13 +124,13 @@ spec:
     type: Recreate
 ```
 
-`initialDelaySeconds`：全ノードが準備完了後、アップデート開始までの待機時間（単位：秒）。
+`initialDelaySeconds`：すべてのノードが準備完了してからアップデート開始までの待機時間（単位：秒）。
 
-`waitTakeover`：Pod削除時の間隔時間（単位：秒）。
+`waitTakeover`：Pod削除時のインターバル時間（単位：秒）。
 
-`connEvictRate`：MQTTクライアントの避難レート。EMQX Enterprise Editionのみサポート（単位：件数/秒）。
+`connEvictRate`：MQTTクライアントの避難レート。EMQX Enterprise Editionのみサポート（単位：件/秒）。
 
-`sessEvictRate`：MQTTセッションの避難レート。EMQX Enterprise Editionのみサポート（単位：件数/秒）。
+`sessEvictRate`：MQTTセッションの避難レート。EMQX Enterprise Editionのみサポート（単位：件/秒）。
 
 上記内容を `emqx-update.yaml` として保存し、以下のコマンドでEMQXをデプロイします。
 
@@ -140,7 +140,7 @@ $ kubectl apply -f emqx-update.yaml
 emqx.apps.emqx.io/emqx-ee created
 ```
 
-EMQXクラスターの状態を確認し、`STATUS` が `Ready` であることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
+EMQXクラスターの状態を確認し、`STATUS` が `Ready` であることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
 
 ```bash
 $ kubectl get emqx
@@ -174,13 +174,13 @@ spec:
           version: 4.4.30
 ```
 
-`initialDelaySeconds`：全ノードが準備完了後、ノード避難開始までの待機時間（単位：秒）。
+`initialDelaySeconds`：すべてのノードが準備完了してからノード避難を開始するまでの待機時間（単位：秒）。
 
-`waitTakeover`：全接続が切断された後、クライアントが再接続してセッションを引き継ぐまでの待機時間（単位：秒）。
+`waitTakeover`：すべての接続が切断された後、クライアントが再接続してセッションを引き継ぐまでの待機時間（単位：秒）。
 
-`connEvictRate`：MQTTクライアントの避難レート（単位：件数/秒）。
+`connEvictRate`：MQTTクライアントの避難レート（単位：件/秒）。
 
-`sessEvictRate`：MQTTセッションの避難レート（単位：件数/秒）。
+`sessEvictRate`：MQTTセッションの避難レート（単位：件/秒）。
 
 上記内容を `emqx-update.yaml` として保存し、以下のコマンドでEMQX Enterprise Editionクラスターをデプロイします。
 
@@ -190,7 +190,7 @@ $ kubectl apply -f emqx-update.yaml
 emqxenterprise.apps.emqx.io/emqx-ee created
 ```
 
-EMQXクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
+EMQXクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
 
 ```bash
 $ kubectl get emqxenterprises
@@ -202,9 +202,9 @@ emqx-ee   Running  8m33s
 :::
 ::::
 
-## MQTTX CLIを使ったEMQXクラスターへの接続
+## MQTTX CLIでEMQXクラスターに接続する
 
-MQTT X CLIは自動再接続をサポートするオープンソースのMQTT 5.0 CLIクライアントです。純粋なコマンドラインモードのMQTT Xであり、グラフィカルインターフェースを使わずにMQTTサービスやアプリケーションの開発・デバッグを迅速に行うことを目的としています。MQTT X CLIのドキュメントは以下をご参照ください：[MQTTX CLI](https://mqttx.app/cli)。
+MQTT X CLIは、自動再接続をサポートするオープンソースのMQTT 5.0 CLIクライアントです。純粋なコマンドラインモードのMQTT Xであり、グラフィカルインターフェースを使わずにMQTTサービスやアプリケーションの開発・デバッグを迅速に行うことを目的としています。MQTT X CLIのドキュメントは以下を参照してください：[MQTTX CLI](https://mqttx.app/cli)。
 
 以下のコマンドを実行してEMQXクラスターに接続します。
 
@@ -232,7 +232,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   emqx.apps.emqx.io/emqx-ee patched
   ```
 
-- ステータスの確認。
+- ステータスを確認します。
 
   ```bash
   $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
@@ -260,19 +260,19 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   ]
   ```
 
-  `connection_eviction_rate`：ノードの避難レート（単位：件数/秒）。
+  `connection_eviction_rate`：ノードの避難レート（単位：件/秒）。
 
   `node`：現在避難中のノード。
 
-  `session_eviction_rate`：ノードのセッション避難レート（単位：件数/秒）。
+  `session_eviction_rate`：ノードのセッション避難レート（単位：件/秒）。
 
   `session_recipients`：セッション避難の受け取り先リスト。
 
   `state`：ノード避難のフェーズ。
 
-  `stats`：避難中ノードの統計情報。現在の接続数（current_connected）、現在のセッション数（current_sessions）、開始時の接続数（initial_connected）、開始時のセッション数（initial_sessions）を含みます。
+  `stats`：避難中ノードの統計指標。現在の接続数（current_connected）、現在のセッション数（current_sessions）、開始時の接続数（initial_connected）、開始時のセッション数（initial_sessions）を含みます。
 
-- アップグレード完了を待ちます。
+- アップグレード完了まで待機します。
 
   ```bash
   $ kubectl get emqx
@@ -281,9 +281,9 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   emqx-ee   Ready    8m33s
   ```
 
-  `STATUS` が `Running` であることを確認してください。EMQXクラスターのアップグレード完了までには時間がかかる場合があります。
+  `STATUS` が `Running` であることを必ず確認してください。EMQXクラスターのアップグレード完了までに時間がかかる場合があります。
 
-  アップグレード完了後は、`$ kubectl get pods` コマンドで古いEMQXノードが削除されていることを確認できます。
+  アップグレード完了後、コマンド `$ kubectl get pods` を使用して旧EMQXノードが削除されていることを確認できます。
 
 ## Grafanaによるモニタリング
 
@@ -293,8 +293,8 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
 
 Total：接続数の合計で、グラフの最上部の線で表されています。
 
-emqx-ee-86f864f975：アップグレード前の3つのEMQXノードを表すプレフィックス。
+emqx-ee-86f864f975：アップグレード前の3つのEMQXノードを示すプレフィックス。
 
-emqx-ee-648c45c747：アップグレード後の3つのEMQXノードを表すプレフィックス。
+emqx-ee-648c45c747：アップグレード後の3つのEMQXノードを示すプレフィックス。
 
-上図のように、EMQX Kubernetes OperatorのBlue-GreenデプロイメントによりKubernetes上でグレースフルなアップグレードを実現しています。このソリューションにより、アップグレード中の接続数の大きな変動（移行速度、サーバー受け入れ速度、クライアントの再接続ポリシーなどに依存）が抑えられ、アップグレードのスムーズさが大幅に向上します。これによりサーバーの過負荷を防ぎ、業務への影響を低減し、サービスの安定性を高めることが可能です。
+上図のように、EMQX Kubernetes Operatorのブルーグリーンデプロイメントを通じてKubernetes上で優雅なアップグレードを実現しています。このソリューションにより、アップグレード中の接続数の大きな変動は（移行レート、サーバーの受け入れ速度、クライアントの再接続ポリシーなどに依存しますが）ほとんど発生せず、アップグレードのスムーズさが大幅に向上します。これによりサーバーの過負荷を効果的に防止し、業務への影響を軽減し、サービスの安定性を向上させることが可能です。

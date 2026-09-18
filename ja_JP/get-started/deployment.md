@@ -2,27 +2,27 @@
 
 ## EMQXのデプロイに推奨されるオペレーティングシステムは何ですか？
 
-EMQXはさまざまなオペレーティングシステムおよびハードウェアプラットフォームでの実行をサポートしています。エンタープライズレベルの安定性と信頼性を考慮すると、一般的にCentOS、Ubuntu、DebianなどのLinuxディストリビューションでのデプロイを推奨しています。
+EMQXはさまざまなオペレーティングシステムおよびハードウェアプラットフォームでの実行をサポートしています。エンタープライズレベルの安定性と信頼性を考慮すると、一般的にCentOS、Ubuntu、DebianなどのLinuxディストリビューションでのデプロイを推奨します。
 
 ## EMQXの推奨デプロイメントプランは何ですか？
 
-EMQXはクラスターでのデプロイを推奨しており、クラスターのフロントエンドにロードバランサー（Nginx、HAProxyなど）を配置して、クライアント接続を各ノードに均等に分散させる構成が望ましいです。
+EMQXはクラスターでのデプロイを推奨しており、クラスターのフロントエンドにロードバランサー（Nginx、HAProxyなど）を配置して、接続を各ノードに均等に分散させる構成が推奨されます。
 
-通信のセキュリティ要件が高いユーザーには、クライアント側でTLS接続を有効にし、ロードバランサー側でTLS接続を終了させることを推奨します。つまり、クライアントとロードバランサー間はTLS暗号化通信を使用し、ロードバランサーとEMQXノード間はTCP通信を使用します。
+通信のセキュリティ要件が高いユーザーには、クライアント側のTLS接続を有効にし、ロードバランサー側でTLSを終端することを推奨します。つまり、クライアントとロードバランサー間はTLS暗号化通信を使用し、ロードバランサーとEMQXノード間はTCP通信を使用します。
 
 EMQXノードはポートをパブリックネットワークに公開しないため、全体のセキュリティは低下しませんが、TLSのオフロードによりEMQXのリソース消費を効果的に節約できます。
 
-## デバイス数やメッセージスループットが少ない場合でもクラスターをデプロイする必要がありますか？
+## デバイス数やメッセージスループットが多くない場合でもクラスターをデプロイする必要がありますか？
 
-デバイス数やメッセージスループットが少なくても、本番環境ではクラスターをデプロイすることに意味があります。
+デバイス数が少なくメッセージスループットが低い場合でも、本番環境ではクラスターのデプロイは有効です。
 
-クラスターはシステムの可用性を向上させ、単一障害点の発生を減らします。たとえノードがダウンしても、クラスター内の他の正常なノードがサービスを継続提供できるため、業務に影響を与えません。
+クラスターはシステムの可用性を向上させ、単一障害点の発生を減らします。ノードがダウンしても、クラスター内の他の正常なノードがサービスを継続提供できるため、業務に影響を与えません。
 
 ## EMQXが起動しない場合のトラブルシューティング方法は？
 
-EMQXが起動しない場合は、[ログディレクトリ](./deploy/install.md#files-and-directories)内の`emqx.log.N`または`erlang.log.N`を確認して詳細なエラー情報を取得してください。
+EMQXが起動しない場合は、[ログディレクトリ](./deploy/install.md#files-and-directories)内の`emqx.log.N`または`erlang.log.N`を確認し、詳細なエラー情報を取得してください。
 
-または、`emqx console`コマンドでコンソールからEMQXを起動すると、エラーログが直接コンソールに出力されます。ログ内容に基づいて本ページの対応策を参照するか、[GitHub](https://github.com/emqx/emqx/issues)でサポートを依頼してください。
+または、`emqx console`コマンドでコンソールからEMQXを起動すると、エラーログが直接コンソールに出力されます。ログ内容に基づき本ページの対応策を参照するか、[GitHub](https://github.com/emqx/emqx/issues)でサポートを依頼してください。
 
 ## EMQXが「logger: command not found」というログメッセージで起動に失敗する場合
 
@@ -42,7 +42,7 @@ $ apt-get install bsdutils
 
 ## EMQXが「...{on_load_function_failed,crypto}...」というログメッセージで起動に失敗する場合
 
-セキュリティ強化のため、EMQXはバージョン4.3以降でopenssl-1.1上で動作します。これにより、一部の古いLinuxディストリビューションで問題が発生することがあります。
+セキュリティ向上のため、バージョン4.3以降のEMQXはopenssl-1.1上で動作します。これにより、一部の古いLinuxディストリビューションで問題が発生することがあります。
 
 EMQXバージョン4.3.10未満およびEMQX Enterpriseバージョンe4.3.5未満では、以下のようなエラーメッセージが表示されることがあります。
 
@@ -57,15 +57,15 @@ FATAL: Unable to start Erlang.
 Please make sure openssl-1.1.1 (libcrypto) and libncurses are installed.
 ```
 
-これは、EMQXが依存するErlang/OTPの"crypto"アプリケーションが、必要なopensslの動的ライブラリ（.soファイル）を見つけられず起動に失敗したことを示しています。対処法は以下の通りです。
+これは、EMQXが依存するErlang/OTPの「crypto」アプリケーションが、必要なopensslの動的ライブラリ（.so）が見つからず起動に失敗したことを示しています。対処方法は以下の通りです。
 
 ::: warning 重要なお知らせ
 
 以下の解決策はあくまで例示です。
 
-記載されているソースバージョンは現時点の知見に基づいており、古くなっていたり脆弱性が含まれている可能性があります。
+記載のソースバージョンは現時点の知見に基づいて選択していますが、古くなっている可能性や脆弱性が含まれている場合があります。
 
-最新のセキュリティアップデートを得るためには、OSのパッケージマネージャーから`libcrypto`を直接インストールすることを推奨します。
+最新のセキュリティアップデートを得るためには、OSのパッケージマネージャーから直接`libcrypto`をインストールすることを推奨します。
 
 :::
 
@@ -73,17 +73,17 @@ Please make sure openssl-1.1.1 (libcrypto) and libncurses are installed.
 
 ::: tab CentOS
 
-Extra Packages for Enterprise Linux（EPEL）はFedoraの特別興味グループで、Enterprise Linux向けの高品質な追加パッケージを作成・管理しています。CentOS 7を例に説明します。
+Extra Packages for Enterprise Linux（EPEL）は、Enterprise Linux向けの高品質な追加パッケージセットを作成・管理するFedoraのSpecial Interest Groupです。CentOS 7を例に説明します。
 
-1. RPMリポジトリをインストールするには、`yum install epel-release`を実行します。
-2. インストールに失敗した場合は、https://docs.fedoraproject.org/en-US/epel/#_el7 の手順に従いyumリポジトリが追加されているか確認し、再度ステップ1を実行してください。
+1. RPMリポジトリをインストールするために、`yum install epel-release`を実行します。
+2. インストールに失敗した場合は、こちらの手順（https://docs.fedoraproject.org/en-US/epel/#_el7）に従い、yumリポジトリが追加されていることを確認し、再度ステップ1を試してください。
 3. `yum install openssl11`を実行してopenssl-1.1をインストールします。
 
 :::
 
 ::: tab Linux
 
-EMQXのインストールディレクトリに移動します（パッケージ管理ツールでインストールした場合は、EMQXの`lib`と同じ階層のディレクトリに入ります）。
+EMQXのインストールディレクトリに移動します（パッケージ管理ツールでインストールした場合は、EMQXの`lib`と同階層のディレクトリに移動してください）。
 
 ```bash
   ## パッケージインストールの場合
@@ -108,7 +108,7 @@ lib/crypto-4.6/priv/lib/crypto.so: /lib64/libcrypto.so.10: version `OPENSSL_1.1.
 
 ```
 
-ここで`OPENSSL_1.1.1' not found`は指定されたOPENSSLバージョンの.soライブラリが正しくインストールされていないことを示します。
+`OPENSSL_1.1.1' not found`は指定されたOPENSSLバージョンの`.so`ライブラリが正しくインストールされていないことを示します。
 
 ソースコードからOPENSSL 1.1.1をコンパイル・インストールし、システムが認識するパスに.soファイルを配置してください。
 
@@ -123,15 +123,15 @@ $ scp openssl-1.1.1c.tar.gz ct-test-ha:~/
 $ tar zxf   openssl-1.1.1c.tar.gz
 $ cd openssl-1.1.1c
 $ ./config
-$ make test   		# テストを実行し、PASSが出れば続行
+$ make test   		# テスト実行。PASSが出たら続行
 $ make install
 
-## ライブラリ参照の確認
+## ライブラリ参照を確実にするためのシンボリックリンク作成
 $ ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/libssl.so.1.1
 $ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 ```
 
-完了後、EMQXのlib階層ディレクトリで`ldd lib/crypto-*/priv/lib/crypto.so`を実行し、`.so`ライブラリが`not found`になっていなければ正常に認識されています。これでEMQXを起動可能です。
+完了後、EMQXのlib階層ディレクトリで`ldd lib/crypto-*/priv/lib/crypto.so`を実行し、`.so`ライブラリが`not found`なしに正しく認識されているか確認してください。問題なければEMQXを通常通り起動できます。
 
 :::
 
@@ -143,7 +143,7 @@ EMQXのインストールディレクトリに移動します。
   ## パッケージインストールの場合
 $ cd emqx
 
-  ## brewでインストールした場合
+  ## brewインストールの場合
 $ cd /usr/local/Cellar/emqx/<version>/
 ```
 
@@ -157,14 +157,14 @@ lib/crypto-4.4.2.1/priv/lib/crypto.so:
   /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1252.200.5)
 ```
 
-`otool`の出力によりOPENSSLが指定ディレクトリに正常にインストールされていることがわかります。
+`otool`の出力に基づき、指定されたディレクトリにOPENSSLが正常にインストールされているか確認します。
 
 ```bash
 $ ls /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib
 ls: /usr/local/opt/openssl@1.1/lib/libcrypto.1.1.dylib: No such file or directory
 ```
 
-ファイルが存在しない場合は、`otool`で表示されたバージョンに対応するOPENSSLをインストールしてください。ここでは`openssl@1.1`が例です。
+ファイルが存在しない場合は、`otool`で表示されたバージョンのOPENSSLをインストールしてください。ここでは`openssl@1.1`が例です。
 
 ```bash
 $ brew install openssl@1.1
@@ -174,7 +174,7 @@ $ brew install openssl@1.1
 
 ## EMQXが「libatomic.so.1: cannot open shared object file: No such file or directory」というログメッセージで起動に失敗する場合
 
-このエラーはシステムにlibatomic依存関係が不足しているため発生します。以下のコマンドでlibatomicをインストールしてください。
+このエラーは、システムに依存関係のlibatomicが不足しているために発生します。以下のコマンドでlibatomicをインストールしてください。
 
 ```
 # Rocky Linux, CentOSなど
@@ -183,7 +183,7 @@ yum install -y libatomic
 apt install -y libatomic
 ```
 
-RPMまたはDEBパッケージを手動でインストールする際に以下のような依存関係エラーが発生することがあります。
+RPMまたはDEBパッケージを手動でインストールする場合、以下のような依存関係エラーが発生することがあります。
 
 ```
 $ rpm -ivh emqx-5.7.0-el8-amd64.rpm
@@ -191,7 +191,7 @@ error: Failed dependencies:
 libatomic is needed by emqx-5.7.0-el8-amd64.rpm
 ```
 
-この場合もまずlibatomicを手動でインストールしてください。
+この場合も、まずlibatomicを手動でインストールしてください。
 
 もちろん、最も推奨されるインストール方法はパッケージマネージャー（yum、aptなど）を使用することで、必要な依存関係が自動的にインストールされます。
 
@@ -199,25 +199,25 @@ libatomic is needed by emqx-5.7.0-el8-amd64.rpm
 
 ::::
 
-## DockerでEMQXを起動した際に「Permission denied」とログに表示され起動に失敗する場合の対処法
+## DockerでEMQXを起動した際に「Permission denied」というログが表示され起動に失敗する場合
 
-EMQXのデータを永続化するためにディレクトリをマウントして起動する場合：
+EMQXのデータを永続化するために以下のようにディレクトリをマウントして起動する場合、
 
 ```
 sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v /emqx/data:/opt/emqx/data -v /emqx/log:/opt/emqx/log emqx:latest
 ```
 
-以下のようなエラーでコンテナ起動に失敗することがあります。
+以下のエラーでコンテナの起動に失敗することがあります。
 
 ```
 mkdir: cannot create directory '/opt/emqx/data/configs': Permission denied
 ```
 
-これはコンテナ内のEMQXがLinuxユーザー`emqx`で動作しているのに対し、ホスト側のディレクトリが`root`ユーザーで作成されているため、EMQXがディレクトリやファイルを作成できないためです。
+これは、EMQXがコンテナ内でLinuxユーザー`emqx`として動作している一方、ホスト側のディレクトリが`root`ユーザーで作成されているため、EMQXがこれらのディレクトリ内にファイルやディレクトリを作成できないことが原因です。
 
-解決策としては、ホスト側に`emqx`ユーザーを作成し、そのユーザーでマウントするディレクトリを作成するか、作成済みのデータ・ログディレクトリの権限を777に変更してください。
+解決策として、ホスト側に`emqx`ユーザーを作成し、そのユーザーでマウント対象のディレクトリを作成するか、作成済みのデータ・ログディレクトリのパーミッションを777に変更してください。
 
-なお、最も推奨されるEMQXデータ永続化の方法は名前付きデータボリュームを使用することで、権限問題を気にせずに済みます。
+なお、最も推奨されるEMQXデータ永続化の方法は名前付きデータボリュームを使用することで、パーミッションの問題を気にせずに済みます。
 
 ```
 sudo docker volume create --name emqx-data
@@ -225,21 +225,21 @@ sudo docker volume create --name emqx-log
 sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 -v emqx-data:/opt/emqx/data -v emqx-log:/opt/emqx/log emqx:latest
 ```
 
-## EMQX起動時に「ポートが使用中（eaddrinuse）」と表示された場合はどうすればよいですか？
+## EMQX起動時に「ポートが使用中（eaddrinuse）」と表示された場合の対処は？
 
 EMQXは起動時にデフォルトで7つのポートを使用します。
 
 1. ポート1883：TCPによるMQTTリスナー。設定で変更可能。
 2. ポート8883：SSL/TLSによるMQTTリスナー。設定で変更可能。
 3. ポート8083：WebSocketによるMQTTリスナー。設定で変更可能。
-4. ポート8084：SSL対応WebSocket（WSS）によるMQTTリスナー。設定で変更可能。
+4. ポート8084：WSS（SSL上のWebSocket）によるMQTTリスナー。設定で変更可能。
 5. ポート18083：HTTP APIサービスのデフォルトリスニングポート。ダッシュボードもこのポートを使用。設定で変更可能。
-6. ポート4370：EMQX分散クラスターのリモート関数呼び出しおよびMnesiaデータ同期に使用。クラスター未形成でもデフォルトで占有。リスニングポートは`BasePort (4370) + Offset`で決定。4370は固定で変更不可。Offsetはノード名の数値サフィックス（`Name@Host`）で決まる。数値サフィックスがない場合は0。例：`emqx@127.0.0.1`のOffsetは0、`emqx1@127.0.0.1`のOffsetは1。
-7. ポート5370：クラスターRPCポートでロードシェアリングに使用。主にノード間のMQTTメッセージ転送に利用。ポート4370同様、クラスター未形成でもデフォルトで占有。リスニングポートは`BasePort (5370) + Offset`で決定。5370は固定で変更不可。Offsetはノード名のName部分の数値サフィックスで決まる。数値サフィックスがない場合は0。
+6. ポート4370：EMQX分散クラスターのリモート関数呼び出しおよびMnesiaデータ同期に使用。クラスター未形成でもデフォルトで使用中。リスニングポートは`BasePort (4370) + Offset`で決定され、4370は固定で変更不可。Offsetはノード名の数値サフィックス（`Name@Host`）で決まり、数値サフィックスがなければ0。例：`emqx@127.0.0.1`のOffsetは0、`emqx1@127.0.0.1`のOffsetは1。
+7. ポート5370：クラスターRPCポートで負荷分散に使用。主にノード間のMQTTメッセージ転送に利用。ポート4370と同様にクラスター未形成でもデフォルトで使用中。実際のリスニングポートは`BasePort (5370) + Offset`で決定され、5370は固定で変更不可。Offsetはノード名のName部分の数値サフィックスで決まり、なければ0。
 
-## EMQX起動時に「WARNING: Default (insecure) Erlang cookie is in use.」とログに表示される理由は？
+## EMQX起動時に「WARNING: Default (insecure) Erlang cookie is in use.」というログが出る理由は？
 
-完全なWARNINGログは以下の通りです。
+警告ログ全文は以下の通りです。
 
 ```
 WARNING: Default (insecure) Erlang cookie is in use.
@@ -247,25 +247,25 @@ WARNING: Configure node.cookie in /usr/lib/emqx/etc/emqx.conf or override from e
 WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 ```
 
-同じcookieを使用するEMQXノードのみがクラスターを形成できます。cookieはクラスター通信を保護するものではありませんが、意図しないクラスターへの接続を防止します。デフォルトではEMQXノードは`emqxsecretcookie`というcookie値を統一して使用していますが、クラスター構築時にはセキュリティ強化のためcookie値の変更を推奨します。
+同じcookieを使用するEMQXノードのみがクラスターを形成できます。cookie自体はクラスター通信のセキュリティを保証しませんが、意図しないクラスターへのノード接続を防止します。デフォルトではEMQXノードは`emqxsecretcookie`というcookie値を使用していますが、クラスター構築時にはセキュリティ強化のためcookie値の変更を推奨します。
 
-2つ目の警告はcookieの変更方法を示しており、`emqx.conf`の`node.cookie`設定を編集するか、環境変数`EMQX_NODE__COOKIE`を設定する方法があります。
+2つ目の警告はcookieの変更方法を示しており、`emqx.conf`の`node.cookie`を編集するか、環境変数`EMQX_NODE__COOKIE`を設定する方法があります。
 
-## EMQX Dockerコンテナを再起動すると、設定したルールやリソースなどのデータが消えるのはなぜですか？
+## EMQX Dockerコンテナを再起動すると、設定したルールやリソースなどのデータが消失するのはなぜですか？
 
-EMQXのランタイムデータは`/opt/emqx/data`ディレクトリに保存されており、設定ルール、リソース、保持メッセージなどが含まれます。コンテナ再起動時にデータを永続化するには、`/opt/emqx/data`ディレクトリをホストのローカルディレクトリまたはデータボリュームにマウントする必要があります。
+EMQXのランタイムデータは`/opt/emqx/data`ディレクトリに保存されており、設定ルール、リソース、保持メッセージなどが含まれます。コンテナ再起動時にデータを保持するには、`/opt/emqx/data`ディレクトリをホストのローカルディレクトリやデータボリュームにマウントする必要があります。
 
 しかし、`/opt/emqx/data`を正しくマウントしていても、コンテナ再起動後にデータが消失することがあります。これはEMQXのランタイムデータが`/opt/emqx/data/mnesia/${Node Name}`ディレクトリに保存されており、コンテナ再起動時にEMQXのノード名が変わるため、新しい保存ディレクトリが作成されるためです。
 
-EMQXのノード名はNameとHostで構成され、HostはデフォルトでコンテナのIPアドレスから取得されます。デフォルトネットワーク設定では、コンテナのIPが再起動時に変わる可能性があるため、コンテナに固定IPを割り当てる必要があります。
+EMQXのノード名はNameとHostで構成され、HostはデフォルトでコンテナのIPアドレスから取得されます。デフォルトのネットワーク設定ではコンテナのIPが再起動時に変わるため、固定IPを維持する必要があります。
 
-この問題に対処するため、EMQXは環境変数`EMQX_HOST`を提供しており、ノード名のHost部分を設定できます。ただし、このHost値は他のノードから到達可能である必要があるため、ネットワークエイリアスと併用してください。以下は`EMQX_HOST`環境変数とネットワークエイリアスを指定してEMQX Dockerコンテナを起動する例です。
+この問題に対処するため、EMQXは環境変数`EMQX_HOST`を提供しており、ノード名のHost部分を設定可能です。ただし、このHost値は他のノードから到達可能である必要があるため、ネットワークエイリアスと併用してください。以下は`EMQX_HOST`環境変数とネットワークエイリアスを指定したEMQX Dockerコンテナ起動例です。
 
 ```
 docker run -d --name emqx -p 18083:18083 -p 1883:1883 -e EMQX_HOST=alias-for-emqx --network example --network-alias alias-for-emqx --mount type=bind,source=/tmp/emqx,target=/opt/emqx/data emqx:5.8.3
 ```
 
-## docker-composeで起動すると正常に起動しダッシュボードにアクセスできるが、コンテナのステータスがunhealthyになる理由は？
+## `docker-compose`で起動したコンテナが正常に起動しダッシュボードにアクセスできるのに、ステータスがunhealthyになるのはなぜですか？
 
 ```bash
 docker-compose ps
@@ -283,16 +283,16 @@ healthcheck:
       retries: 3
 ```
 
-手動で`./bin/emqx_ctl status`を実行すると以下のようなエラーが出ることがあります。
+手動で`./bin/emqx_ctl status`を実行すると、
 
 ```
 emqx@docker:/opt/emqx$ emqx_ctl status
 Node emqx@docker not responding to pings.
 ```
 
-このエラーはコマンドがノードに接続できないことを示しています。主な原因は、コンテナ起動時にネットワークがエイリアスを使用せず、FQDN形式でないためノードが正しく特定できないことです。
+と表示され、ノードに接続できないことを示しています。この問題は、コンテナ起動時にネットワークがエイリアスを使用せず、FQDN形式でないためにノードが正しく特定できないことが原因です。
 
-対策は以下の通りです。
+解決策は以下の通りです。
 
 1. Dockerのホスト名をEMQXノード名に合わせる。
 2. `docker-compose.yml`にホスト名設定を追加する。
@@ -304,6 +304,6 @@ hostname: docker.emqx.com
       - EMQX_HOST=docker.emqx.com
 ```
 
-EMQXはデータを`data/mnesia/<node name>`ディレクトリに保存するため、ノード名がIPアドレスで変わるとデータ消失のリスクがあります。ホスト名やFQDNなど固定可能な識別子をノード名に使用してください。
+EMQXは`data/mnesia/<node name>`ディレクトリにデータを保存するため、IPアドレスではなくホスト名やFQDNのような固定識別子をノード名に使用することが重要です。ノード名が変わるとデータ消失のリスクがあります。
 
-より簡単に設定するには、[EMQX Docker Compose Generator](https://docker.emqx.dev/)を利用して本番環境向けの`docker-compose.yml`ファイルを作成することをおすすめします。
+この設定を簡単に行うには、[EMQX Docker Compose Generator](https://docker.emqx.dev/)を利用して、本番環境向けの`docker-compose.yml`ファイルを作成することをおすすめします。

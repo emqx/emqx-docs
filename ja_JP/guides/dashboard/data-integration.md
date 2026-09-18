@@ -1,11 +1,11 @@
-# Data Integration
+# データ統合
 
-The Integration section on the Dashboard provides functions for creating rules, data integration with different data systems, schema validation, and message transformation. You can also perform the management operations such as editing the settings and viewing statistics for the functions. The sub-sections include the following:
+ダッシュボードのデータ統合セクションでは、ルールの作成、さまざまなデータシステムとのデータ統合、スキーマ検証、メッセージ変換の機能を提供しています。また、設定の編集や機能の統計表示などの管理操作も行えます。サブセクションは以下の通りです。
 
-- **Webhook**: For users who want to integrate with HTTP services but don't need to use rules for data processing, this page offers a simpler and more user-friendly creation and configuration experience. For detailed step-by-step guide, see [Webhook](../../develop/data-integration/webhook.md).
-- **Flow Designer (EMQX Enterprise feature)**: A powerful tool for visually viewing and managing the data processing and integration. For detailed introduction, see [Flow Designer](../../develop/flow-designer/introduction.md).
-- [**Rules**](./rules.md): Provides all the functions about creating rules, testing rules, adding actions to the rules, and viewing rule execution statistics.
-- **Connector**: As an indispensable component of the data integration, connectors are used to connect with external data systems. For how to create and manage connectors, see [Connector](../../develop/data-integration/connector.md).
-- **Schema Validation (EMQX Enterprise feature)**: Use validation rule to ensure that data to be published to specific topics must conform to predefined data formats. For how to create validation rules, see [Configure Schema Validation in Dashboard](../../develop/data-integration/schema-validation.md#configure-schema-validation-in-dashboard).
-- **Schema (EMQX Enterprise feature)**: You can create a schema to be used in the schema validation or SQL rules. For how to create a schema on Dashboard, see [Schema Registry Example - Avro](../../develop/data-integration/schema-registry-example-avro.md) or [Schema Registry Example - Protobuf](../../develop/data-integration/schema-registry-example-protobuf.md).
-- **Message Transform (EMQX Enterprise feature)**: Define transformation expressions to adapt data as it flows through the system. For how to create transformations, see [Configure Message Transformation in Dashboard](../../develop/data-integration/message-transformation.md#configure-message-transformation-in-dashboard).
+- **Webhook**: HTTPサービスと統合したいが、データ処理にルールを使う必要がないユーザー向けに、より簡単で使いやすい作成および設定体験を提供します。詳細なステップバイステップガイドは[Webhook](../../develop/data-integration/webhook.md)をご覧ください。
+- **Flowデザイナー（EMQX Enterprise機能）**: データ処理と統合を視覚的に確認・管理できる強力なツールです。詳細な紹介は[Flow Designer](../../develop/flow-designer/introduction.md)をご覧ください。
+- [**ルール**](./rules.md): ルールの作成、ルールのテスト、ルールへのアクション追加、ルール実行の統計表示に関するすべての機能を提供します。
+- **コネクター**: データ統合に欠かせないコンポーネントで、外部データシステムとの接続に使用します。コネクターの作成と管理方法は[Connector](../../develop/data-integration/connector.md)をご覧ください。
+- **スキーマ検証（EMQX Enterprise機能）**: 特定のトピックにパブリッシュされるデータが事前定義されたデータ形式に準拠していることを検証するためのルールを使用します。検証ルールの作成方法は[ダッシュボードでのスキーマ検証の設定](../../develop/data-integration/schema-validation.md#configure-schema-validation-in-dashboard)をご覧ください。
+- **スキーマ（EMQX Enterprise機能）**: スキーマ検証やSQLルールで使用するスキーマを作成できます。ダッシュボード上でのスキーマ作成方法は[スキーマレジストリの例 - Avro](../../develop/data-integration/schema-registry-example-avro.md)または[スキーマレジストリの例 - Protobuf](../../develop/data-integration/schema-registry-example-protobuf.md)をご覧ください。
+- **メッセージ変換（EMQX Enterprise機能）**: システムを流れるデータに適応させるための変換式を定義します。変換の作成方法は[ダッシュボードでのメッセージ変換の設定](../../develop/data-integration/message-transformation.md#configure-message-transformation-in-dashboard)をご覧ください。

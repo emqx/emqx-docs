@@ -1,14 +1,14 @@
 # EMQX 4.4 と EMQX 5.1 間のゲートウェイ互換性
 
-本ページでは、EMQX 4.4 と EMQX 5.1 間のゲートウェイ設定の互換性情報を紹介します。
+本ページでは、EMQX 4.4 と EMQX 5.1 間のゲートウェイ設定に関する互換性情報を紹介します。
 
-## 共通の互換性変更点
+## 一般的な互換性の変更点
 
 ### 設定
 
-EMQX 4.x では、ゲートウェイは `etc/plugins/emqx_stomp.conf` のような設定ファイルや、ダッシュボード上のモジュール（`POST http://127.0.0.1:18084/api/v4/modules` インターフェース）を通じて設定できます。
+EMQX 4.x では、ゲートウェイは `etc/plugins/emqx_stomp.conf` のような設定ファイルや、ダッシュボード上のモジュール（例：`POST http://127.0.0.1:18084/api/v4/modules` インターフェース）を通じて設定できます。
 
-EMQX 5.1 では、すべてのゲートウェイ設定は `etc/emqx.conf` または `PUT http://127.0.0.1:18083/api/v5/gateways/coap` で行います。
+EMQX 5.1 では、すべてのゲートウェイは `etc/emqx.conf` または `PUT http://127.0.0.1:18083/api/v5/gateways/coap` で設定します。
 
 例えば、EMQX 4.x では：
 
@@ -42,17 +42,17 @@ gateway.stomp {
 }
 ```
 
-### HTTP API やダッシュボードによる管理
+### HTTP API またはダッシュボードによる管理
 
-EMQX 4.x では、管理用の専用 HTTP API やウェブページはありません。例えば、MQTT-SN のデバイス一覧を取得するには `GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn` を使用し、MQTT デバイス（および他のプロトコル、例：CoAP、LwM2M など）とのクエリインターフェースが統合されています。
+EMQX 4.x では、管理用の専用 HTTP API やウェブページはありません。例えば、MQTT-SN のデバイスリストを取得する場合は、`GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn` を使用します。これは MQTT デバイス（および他のプロトコル、例：CoAP、LwM2M など）向けのクエリインターフェースと統合されています。
 
-EMQX 5.x では、これらの機能を実現するために専用のインターフェースを多数提供しています。例えば、`GET /api/v5/gateways/mqttsn/clients` や以下の新規 HTTP API があります：
+EMQX 5.x では、これらの機能を実現するためにより専用のインターフェースを提供しています。例えば、`GET /api/v5/gateways/mqttsn/clients` のほか、以下の新しい HTTP API があります：
 
 - [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways)
 - [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
 - [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients)
 
-また、クライアント管理、ゲートウェイ設定、リスナー管理などの専用ダッシュボードページも提供しています。
+また、クライアント管理、ゲートウェイ設定、リスナー管理など専用のダッシュボードページも提供しています。
 
 ### リスナー
 
@@ -75,7 +75,7 @@ lwm2m.bind.udp.1 = 0.0.0.0:5683
 lwm2m.bind.dtls.1 = 0.0.0.0:5684
 ```
 
-EMQX 5.x では、すべてのプロトコルゲートウェイで同じフォーマットを使用します。Exproto ゲートウェイの例：
+EMQX 5.x では、すべてのプロトコルゲートウェイでリスナー設定のフォーマットは共通です。Exproto ゲートウェイの例：
 
 ```
 ## etc/emqx.conf または base.hocon (EMQX 5.9 以降)
@@ -98,7 +98,7 @@ gateway.exproto {
 
 EMQX 4.x では、各ゲートウェイは MQTT 用のハイブリッド認証で設定されていました。
 
-EMQX 5.0 以降は、ゲートウェイごとに別々の認証機構を設定する必要があります。例：
+EMQX 5.0 では、各ゲートウェイごとに別々の認証機構を設定する必要があります。例：
 
 ```
 gateway.coap {
@@ -113,7 +113,7 @@ gateway.coap {
 }
 ```
 
-## プロトコル機能および設定項目の非互換性
+## プロトコル機能および設定項目の互換性問題
 
 ### Stomp
 
@@ -122,7 +122,7 @@ gateway.coap {
 ### MQTT-SN
 
 - DTLS タイプのリスナーは EMQX 5.1 でサポートされていますが、EMQX 4.x では未対応です。
-- `mqtt.sn.username`、`mqtt.sn.password`、`mqtt.sn.subs_resume` は削除されていません。
+- `mqtt.sn.username`、`mqtt.sn.password`、および `mqtt.sn.subs_resume` は削除されていません。
 - `mqtt.sn.advertise_duration` は `gateway.mqttsn.broadcast` に名称変更されました。
 
 ### ExProto
@@ -148,7 +148,7 @@ gateway.exproto {
 }
 ```
 
-以前の ConnectionHandler 設定はリスナー上にありました：
+以前の ConnectionHandler 設定（リスナー上）：
 
 ```
 exproto.listener.protoname.connection_handler_url = http://127.0.0.1:9001
@@ -168,7 +168,7 @@ gateway.exproto {
 }
 ```
 
-つまり、5.0 以降はリスニングポートごとに異なる ConnectionHandler サービスアドレスを指定できません。
+これは、バージョン 5.0 以降では各リスニングポートごとに異なる ConnectionHandler サービスアドレスを指定できないことを意味します。
 
 ### CoAP
 
