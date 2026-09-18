@@ -11,7 +11,7 @@ MQTT Agentにより、EMQXはクライアントイベントに反応するイベ
 
 このプラグインは、MQTTトピックを介して利用可能な3つの合成可能な基本要素を中心に構成されています。
 
-- **ツール**: MQTTパブリッシュ、MQTTリクエスト／リプライ、HTTPコール、データベースクエリなどの再利用可能でスキーマ検証済みの機能。  
+- **ツール**: MQTTパブリッシュ、MQTTリクエスト／リプライ、HTTPコール、データベースクエリなどの再利用可能でスキーマ検証済みの機能。
 - **セッション**: MQTTトピック上でルーティングされるアドレス指定可能なLLM会話。セッションはコンテキスト管理者であり、会話履歴、保留中イベント、キューイングされたリクエスト、ツール呼び出し状態、使用カウンターを所有します。  
 - **パイプライン**: MQTTイベントを処理するためにツールとセッション呼び出しをオーケストレーションするイベントトリガー型のワークフローインスタンス。
 
@@ -45,27 +45,35 @@ MQTT AgentはMQTTトピックを使って機能を提供します。エージェ
 - リクエストトピックは `$cap/message__publish/alerts/request/req-42`  
 - レスポンストピックは `$cap/message__publish/alerts/response/req-42`
 
-呼び出し元は以下のリクエストペイロードをリクエストトピックにパブリッシュします。
+`alerts`インスタンスにトピックプレフィックス`factory/line-1/alerts/`が設定され、以下のオブジェクトを受け入れるペイロードスキーマが設定されているとします。呼び出し元は以下のリクエストペイロードをリクエストトピックにパブリッシュします。
 
-```json
+```jsonc
 // PUBLISH $cap/message__publish/alerts/request/req-42
 {
   "args": {
-    "topic": "factory/line-1/alerts",
+    "topic": "temperature",
     "payload": {"severity": "warning", "reason": "temperature_high"}
   },
   "iid": "pipeline-instance-id",
+  "sid": "session-id",
   "trace_id": "trace-id"
 }
 ```
 
 MQTTメッセージをパブリッシュした後、ツールは以下のレスポンスペイロードをレスポンストピックにパブリッシュします。
 
-```json
+```jsonc
 // PUBLISH $cap/message__publish/alerts/response/req-42
 {
-  "status": "ok",
-  "result": {"published": true}
+  "req_id": "req-42",
+  "trace_id": "trace-id",
+  "iid": "pipeline-instance-id",
+  "sid": "session-id",
+  "tool": {"type": "message__publish", "id": "alerts"},
+  "response": {
+    "status": "ok",
+    "result": {"topic": "factory/line-1/alerts/temperature"}
+  }
 }
 ```
 
@@ -115,7 +123,7 @@ MQTTメッセージをパブリッシュした後、ツールは以下のレス�
 - `autodiscover_images`: レスポンスペイロード内の`data:image/...;base64,...`値をスキャンします。  
 - `images`: `.image_url`や`.`（ルート値）などのパスで明示的に画像位置を指定します。
 
-レスポンスのコンテンツタイプが`image/png`などの画像メディアタイプの場合、バイナリ画像レスポンスも抽出可能です。
+HTTPツールが`payload_type: "binary"`を使用し、レスポンスのコンテンツタイプが`image/png`などの画像メディアタイプの場合、バイナリ画像レスポンスも抽出可能です。
 
 #### 自動検出の例
 
@@ -129,15 +137,19 @@ HTTPツールがインラインのデータURIを含むJSONを返すと仮定し
 }
 ```
 
-`autodiscover_images`が有効な場合、ツールレスポンスはサニタイズされた結果と抽出された添付ファイルを含みます。
+`autodiscover_images`が有効な場合、ツール応答の`response`オブジェクトには、サニタイズされた結果と抽出された添付ファイルが含まれます。
 
 ```json
 {
   "status": "ok",
   "result": {
-    "inspection_status": "accepted",
-    "image_url": "Image .image_url",
-    "comment": "front camera frame"
+    "body": {
+      "inspection_status": "accepted",
+      "image_url": "Image .image_url",
+      "comment": "front camera frame"
+    },
+    "status_code": 200,
+    "headers": {"content-type": "application/json"}
   },
   "attachments": [
     {
@@ -150,7 +162,7 @@ HTTPツールがインラインのデータURIを含むJSONを返すと仮定し
 }
 ```
 
-`result`フィールドはツールレスポンスとしてLLMに渡され、`attachments`は追加のマルチモーダルデータとして渡されます。
+`attachments`を除いたレスポンスはツールレスポンスとしてLLMに渡され、`attachments`は追加のマルチモーダルデータとして渡されます。
 
 #### 明示的パスの例
 
@@ -174,16 +186,20 @@ HTTPツールがインラインのデータURIを含むJSONを返すと仮定し
 }
 ```
 
-`.inspection.photo`のみが抽出され、`thumbnail`は通常のペイロードデータのままです。完全なツールレスポンスは以下のようになります。
+`.inspection.photo`のみが抽出され、`thumbnail`は通常のペイロードデータのままです。完全な`response`オブジェクトは以下のようになります。
 
 ```json
 {
   "status": "ok",
   "result": {
-    "inspection": {
-      "photo": "Image .inspection.photo",
-      "thumbnail": "data:image/jpeg;base64,/9j/2wBD..."
-    }
+    "body": {
+      "inspection": {
+        "photo": "Image .inspection.photo",
+        "thumbnail": "data:image/jpeg;base64,/9j/2wBD..."
+      }
+    },
+    "status_code": 200,
+    "headers": {"content-type": "application/json"}
   },
   "attachments": [
     {
@@ -198,7 +214,7 @@ HTTPツールがインラインのデータURIを含むJSONを返すと仮定し
 
 #### バイナリレスポンスの例
 
-HTTPエンドポイントが`Content-Type: image/png`で生のPNGバイトを返す場合、バイナリはルートの「値」として扱われます。
+`payload_type: "binary"`が設定されたHTTPツールが`Content-Type: image/png`の生のPNGバイトを受信した場合、バイナリはルートの「値」として扱われます。
 
 ```text
 Content-Type: image/png
@@ -211,7 +227,11 @@ Content-Type: image/png
 ```json
 {
   "status": "ok",
-  "result": "Image .",
+  "result": {
+    "body": "Image .",
+    "status_code": 200,
+    "headers": {"content-type": "image/png"}
+  },
   "attachments": [
     {
       "id": ".",
@@ -250,7 +270,7 @@ Content-Type: image/png
 - `$sess/in/<sid>` -- セッションへのインバウンドフレーム。  
 - `$sess/out/<sid>` -- セッションからのアウトバウンドフレーム。
 
-各セッションはクラスター内で一意な`s id`（セッションID）で識別されます。
+各セッションは`sid`（セッションID）で識別されます。永続セッションIDはステップのキー式から導出され、非永続セッションIDはパイプラインインスタンスとステップから導出されます。
 
 `$sess/in/<sid>`のインバウンドフレーム：
 
@@ -270,7 +290,7 @@ Content-Type: image/png
 | `final` | 現在のLLMターンを終了し、結果と使用カウンターを返す。 |
 | `error` | 利用不可プロバイダーや履歴圧縮エラーなど、セッション側の障害を報告。 |
 
-すべてのアウトバウンドフレームには`sid`、`iid`、`trace_id`、累積された`usage`が含まれます。モデルの推論／思考チャンクは現在セッション内に保持され、公開されるストリームチャンクのみが`intermediate`フレームとして現れます。
+すべてのアウトバウンドフレームには`sid`、`iid`、`trace_id`、累積された`usage`が含まれます。モデルの推論／思考チャンクはパブリッシュも保持もされません。コンテンツチャンクは`intermediate`フレームとしてパブリッシュされます。
 
 パーシステンスが有効な場合、`final`公開後もセッションは停止せず存続し、さらにリクエストを受けてマルチターン会話を形成できます。
 
@@ -391,7 +411,7 @@ python3 plugins/emqx_agent/demo_builder_init.py
 /api/v5/plugin_api/emqx_agent/builder/ui
 ```
 
-両スクリプトはデモ資産を再作成し、プロビジョニング前に既存のAgentデモリソースを削除することがあります。デモリソースを明示的に削除するには以下を実行してください。
+Apple Box初期化スクリプトは、その名前付きデモ資産を再作成します。Pipeline Builder初期化スクリプトとクリーンアップスクリプトは、デモと無関係なリソースを含む、設定済みのすべてのAgentパイプライン、ツール、接続を削除します。クリーンアップスクリプトを実行するには以下を使用します。
 
 ```bash
 python3 plugins/emqx_agent/demo_teardown.py
@@ -408,10 +428,16 @@ make plugin-emqx_agent
 このプラグインのCommon Testスイートを実行します。
 
 ```bash
-make plugins/emqx_agent-ct
+./scripts/ct/run.sh --app plugins/emqx_agent
 ```
 
-LLM対応のデモスイートは有能なLLMが必要なため、`OPENAI_API_KEY`が設定されている場合のみ実行され、そうでなければスキップされます。
+上記のコマンドはホストのAPIキー環境変数をコンテナに渡さないため、LLM対応のデモスイートはスキップされます。デフォルトプロバイダーで実行するには、`OPENAI_API_KEY`をコンテナコマンドに渡します。
+
+```bash
+./scripts/ct/run.sh --app plugins/emqx_agent -- env OPENAI_API_KEY="$OPENAI_API_KEY" make plugins/emqx_agent-ct
+```
+
+別のプロバイダーを使用する場合は、`EMQX_AGENT_TEST_LLM_PROVIDER`と対応するAPIキーも渡します。
 
 ## 開発
 
