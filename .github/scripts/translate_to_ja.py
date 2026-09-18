@@ -156,6 +156,9 @@ def log(msg):
 
 
 def collect_paths(items):
+    if isinstance(items, dict):
+        items = [item for group in items.values() for item in group]
+
     paths = []
     for item in items:
         if item.get('path'):
