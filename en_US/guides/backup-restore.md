@@ -52,6 +52,7 @@ Data can be exported from any running cluster node.
 
 To import data, the EMQX node must be running, and some conditions need to be met for the import operation to be successful:
 
+- When importing data through the Dashboard or `POST /api/v5/data/import`, all running nodes in the cluster must use the same major and minor version. Patch versions can differ. If the node versions do not meet this requirement, or a node version is unavailable, EMQX rejects the request before the import starts and returns an HTTP `400` response with the `BAD_REQUEST` error code. The error message lists each node and its `major.minor` version. If the version is unavailable, it displays `unknown`. Before retrying, ensure that EMQX can retrieve the version of every running node and that all nodes use the same major and minor version.
 - If the [core node + replica node](../develop/cluster/mria-introduction.md) mode is enabled, data import can only be performed on the core node. This will not affect the actual import behavior, as data will be replicated to all cluster nodes, including core and replica nodes. Operating on the core node ensures correct data import.
 - The data file cannot be renamed.
 
