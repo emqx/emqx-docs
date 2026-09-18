@@ -1,6 +1,6 @@
 # Erlang SDK
 
-このドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーおよびクライアントを作成する方法を示します。
+このドキュメントでは、[MCP over MQTT Erlang SDK](https://github.com/emqx/mcp-mqtt-erl) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を示します。
 
 ## Example
 
@@ -30,7 +30,7 @@ client_capabilities() -> #{}.
 
 %% MCP 以外のメッセージ受信時のコールバック
 received_non_mcp_message(MqttClient, Msg, State) ->
-    io:format("~p MCP 以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
+    io:format("~p MCP以外のメッセージを受信しました: ~p~n", [MqttClient, Msg]),
     State.
 
 %% MCP over MQTT クライアントの起動
@@ -48,7 +48,7 @@ start_link() ->
         }).
 ```
 
-ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターへのサブスクライブに使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
+ここで、`server_name_filter` は MCP サーバーの MQTT トピックフィルターにサブスクライブするために使用され、`mqtt_options` は基盤となる MQTT クライアントに渡されるオプションです。
 
 ### シンプルな MCP サーバーの作成
 
@@ -142,7 +142,7 @@ call_tool(ToolName, Args, LoopData) ->
     io:format("call_tool --- tool_name: ~p, args: ~p~n", [ToolName, Args]),
     Result = #{
         type => text,
-        text => <<"これはツール呼び出しの結果です">>
+        text => <<"This is the result of the tool call">>
     },
     {ok, Result, LoopData}.
 
@@ -152,34 +152,34 @@ list_tools(LoopData) ->
     Tools = [
         #{
             name => <<"tool1">>,
-            description => <<"これはツール1です">>,
+            description => <<"これは tool 1 です">>,
             inputSchema => #{
                 type => <<"object">>,
                 properties => #{
                     arg1 => #{
                         type => <<"string">>,
-                        description => <<"引数1">>
+                        description => <<"引数 1">>
                     },
                     arg2 => #{
                         type => <<"integer">>,
-                        description => <<"引数2">>
+                        description => <<"引数 2">>
                     }
                 }
             }
         },
         #{
             name => <<"tool2">>,
-            description => <<"これはツール2です">>,
+            description => <<"これは tool 2 です">>,
             inputSchema => #{
                 type => <<"object">>,
                 properties => #{
                     arg1 => #{
                         type => <<"string">>,
-                        description => <<"引数1">>
+                        description => <<"引数 1">>
                     },
                     arg2 => #{
                         type => <<"boolean">>,
-                        description => <<"引数2">>
+                        description => <<"引数 2">>
                     }
                 }
             }

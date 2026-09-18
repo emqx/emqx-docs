@@ -1,160 +1,160 @@
-# EMQX Version Lifecycle and End-of-Life (EOL) Dates
+# EMQX バージョンライフサイクルとサポート終了（EOL）日
 
-EMQX serves a wide range of users, from fast-moving SaaS platforms to large enterprise deployments. To meet these diverse needs, EMQX has adopted a multi-tiered release and support policy that balances innovation, stability, and long-term maintenance.
+EMQX は、迅速に進化する SaaS プラットフォームから大規模なエンタープライズ展開まで、幅広いユーザーに対応しています。これら多様なニーズに応えるため、EMQX はイノベーション、安定性、長期保守のバランスを取った多層的なリリースおよびサポートポリシーを採用しています。
 
-This lifecycle policy is designed to:
+本ライフサイクルポリシーは以下を目的としています：
 
-- **Support rapid innovation** in [EMQX Cloud](../get-started/concept.md#which-products-do-we-offer) through frequent internal updates.
-- **Deliver new features** to on-premise users on a predictable, quarterly schedule.
-- **Provide long-term stability** to enterprise customers through designated **Long-Term Support (LTS)** versions.
-- **Ensure clear and predictable timelines** for version support and **End-of-Life (EOL)**.
+- [EMQX Cloud](../get-started/concept.md#which-products-do-we-offer) における迅速なイノベーションを頻繁な内部アップデートで支援すること。
+- オンプレミスユーザーに対して予測可能な四半期スケジュールで新機能を提供すること。
+- エンタープライズ顧客に対して指定された **Long-Term Support (LTS)** バージョンを通じて長期的な安定性を提供すること。
+- バージョンのサポート期間および **End-of-Life (EOL)** の明確かつ予測可能なタイムラインを確保すること。
 
-By offering three distinct release tiers (Internal, Feature, and LTS), EMQX empowers users to choose the version cadence that best fits their operational needs, whether they value rapid access to the latest capabilities or require long-term platform stability.
+3つの異なるリリース層（Internal、Feature、LTS）を提供することで、EMQX はユーザーが最新機能への迅速なアクセスを重視するか、長期的なプラットフォームの安定性を重視するかに応じて最適なバージョンのリリース頻度を選択できるようにしています。
 
-## Release Tiers and Cadence
+## リリース層とリリース頻度
 
-To balance rapid innovation with enterprise-grade stability, EMQX follows a three-tier release model:
+迅速なイノベーションとエンタープライズ品質の安定性のバランスを取るため、EMQX は3層のリリースモデルを採用しています。
 
 ### Internal Releases
 
-*   **Frequency:** Monthly.
-*   **Audience:** Internal EMQX teams, EMQX Cloud, and prospects.
-*   **Purpose:** Quickly deliver and validate new features in EMQX-controlled environments (e.g., EMQX Cloud, internal testing, and limited public staging). Internal Releases also provide early access to selected customers and serve as a foundation for future public Feature Releases.
-*   **Quality Assurance:** Although not publicly downloadable, Internal Releases power EMQX Cloud and undergo full QA to ensure they are production-ready. They are **not** experimental or unstable.
-*   **Support:** Maintained directly by the EMQX team for the Cloud environment. Not for direct on-premise customer consumption.
+*   **頻度:** 月次。
+*   **対象:** EMQX 内部チーム、EMQX Cloud、および見込み顧客。
+*   **目的:** EMQX が管理する環境（例：EMQX Cloud、内部テスト、限定的な公開ステージング）で新機能を迅速に提供・検証すること。Internal Releases は選定された顧客への早期アクセスも提供し、将来の公開 Feature Releases の基盤となります。
+*   **品質保証:** 一般公開はされませんが、EMQX Cloud を支えるために完全なQAを経ており、実運用に耐えうる品質です。実験的または不安定なものではありません。
+*   **サポート:** Cloud 環境向けに EMQX チームが直接保守します。オンプレミスの直接利用は想定していません。
 
-### Feature Releases (Public)
+### Feature Releases（公開）
 
-*   **Frequency:** Quarterly (typically in March, June, September, December).
-*   **Audience:** On-premise users seeking timely access to the latest stable features.
-*   **Purpose:** Package and deliver validated features from recent Internal Releases for general on-premise use.
-*   **Support Duration:** 18 months from the initial release date.
+*   **頻度:** 四半期ごと（通常は3月、6月、9月、12月）。
+*   **対象:** 最新の安定機能をタイムリーに利用したいオンプレミスユーザー。
+*   **目的:** 最近の Internal Releases で検証された機能をパッケージ化し、一般のオンプレミス利用者に提供すること。
+*   **サポート期間:** 初回リリース日から18ヶ月間。
 
-### Long-Term Support (LTS) Releases (Public)
+### Long-Term Support (LTS) Releases（公開）
 
-*   **Frequency:** Annually (typically the June Feature Release is designated as LTS).
-*   **Audience:** Enterprise users with mission-critical deployments requiring maximum stability and long-term planning.
-*   **Purpose:** Provide a highly stable, extensively validated version with an extended support lifecycle.
-*   **Support Duration:** 3 years from the initial release (with 4.4.x as a special case supported for 5 years).
+*   **頻度:** 年次（通常は6月の Feature Release が LTS に指定されます）。
+*   **対象:** 最大限の安定性と長期的な計画が必要なミッションクリティカルなエンタープライズユーザー。
+*   **目的:** 非常に安定し、徹底的に検証されたバージョンを長期にわたりサポートすること。
+*   **サポート期間:** 初回リリースから3年間（例外的に 4.4.x は5年間サポート）。
 
-This tiered release model allows features to mature through internal validation before public release, ensuring greater stability and quality for on-premise deployments.
+この多層リリースモデルにより、機能は内部検証を経て成熟し、オンプレミス展開においてより高い安定性と品質を確保しています。
 
-## Current LTS Versions
+## 現行の LTS バージョン
 
-*   **4.4.x** (Initial release date: Dec 21, 2021, EOL date: Dec 20, 2026)
-*   **5.8.x** (Initial release date: Aug 28, 2024, EOL Date: Aug 27, 2027)
+*   **4.4.x**（初回リリース日：2021年12月21日、EOL日：2026年12月20日）
+*   **5.8.x**（初回リリース日：2024年8月28日、EOL日：2027年8月27日）
 
-## Version Numbering and Naming Conventions
+## バージョン番号付けと命名規則
 
-EMQX uses Semantic Versioning (`MAJOR.MINOR.PATCH`, e.g., `5.8.1`) as the foundation, with specific conventions for different release tiers.
+EMQX は Semantic Versioning（`MAJOR.MINOR.PATCH`、例：`5.8.1`）を基盤とし、リリース層ごとに特定の命名規則を設けています。
 
-### Major Releases (e.g., `4.0.0`, `5.0.0`, `6.0.0`)
+### Major Releases（例：`4.0.0`、`5.0.0`、`6.0.0`）
 
-*   Introduce significant updates, potentially including non-backward-compatible changes.
-*   Direct in-place upgrades between major versions are generally not supported. Migration typically involves setting up a new deployment and manually replicating configurations/data. Refer to specific major version migration guides.
+*   後方互換性のない変更を含む可能性がある大幅な更新を導入します。
+*   メジャーバージョン間の直接インプレースアップグレードは基本的にサポートされません。通常は新規デプロイを構築し、設定やデータを手動で移行します。詳細は各メジャーバージョンの移行ガイドを参照してください。
 
-### Internal Releases (e.g., `5.9.0-M3.202506`)
+### Internal Releases（例：`5.9.0-M3.202506`）
 
-*   **Format:** `X.Y.Z-M[1-3].YYYYMM` (e.g., `5.9.0-M2.202505`, `5.9.1-M3.202506`).
-*   `X.Y` often aligns with the upcoming or current public Feature Release minor version being developed.
-*   `Z` can increment with internal iterations. Ad-hoc fixes may apply.
+*   **形式:** `X.Y.Z-M[1-3].YYYYMM`（例：`5.9.0-M2.202505`、`5.9.1-M3.202506`）。
+*   `X.Y` は開発中の次期または現行の公開 Feature Release のマイナーバージョンに対応することが多いです。
+*   `Z` は内部反復ごとに増加することがあります。臨時修正も含まれます。
 
-### Feature Releases (e.g., `5.7.0`, `5.9.0`, `5.10.0`)
+### Feature Releases（例：`5.7.0`、`5.9.0`、`5.10.0`）
 
-*   Public minor releases that deliver new features, improvements, and bug fixes quarterly.
-*   Backward-compatible (API and functionality) with previous minor releases within the same major version (e.g., `5.x`) and support rolling cluster upgrades.
-*   **Format:** `X.Y.0`.
-*   `Y` (minor version) increments with each quarterly release.
-*   **Naming:** EMQX Enterprise X.Y.0.
+*   新機能、改善、バグ修正を四半期ごとに提供する公開マイナリリースです。
+*   同一メジャーバージョン内（例：`5.x`）の過去マイナリリースとの後方互換性（API・機能）を維持し、ローリングクラスターアップグレードをサポートします。
+*   **形式:** `X.Y.0`
+*   `Y`（マイナーバージョン）は四半期ごとに増加します。
+*   **命名:** `EMQX Enterprise X.Y.0`
 
-### LTS Releases (e.g., `5.8.0`)
+### LTS Releases（例：`5.8.0`）
 
-*   A designated annual Feature Release promoted to Long-Term-Support status. The initial LTS release (`X.Y.0`) includes the latest stable and fully validated feature set available at the time of its release.
-*   **Format:** `X.Y.0`.
-*   **Naming:** `EMQX Enterprise X.Y.0`.
-*   LTS status is clearly indicated in documentation and on the official download page.
+*   年次の Feature Release のうち、Long-Term Support として指定されたものです。初回 LTS リリース（`X.Y.0`）はリリース時点での最新かつ安定した完全検証済み機能セットを含みます。
+*   **形式:** `X.Y.0`
+*   **命名:** `EMQX Enterprise X.Y.0`
+*   LTS ステータスはドキュメントおよび公式ダウンロードページで明示されます。
 
-### Patch Releases (e.g., `5.8.1`, `5.9.2`)
+### Patch Releases（例：`5.8.1`、`5.9.2`）
 
-*   Contains only critical bug fixes and security patches.
-*   No new features or breaking changes are introduced.
-*   Issued for:
-    *   **Feature Releases:** Each Feature Minor Release line that is within its 18-month support lifecycle (starting from the initial release of the corresponding minor version, i.e., X.Y.0) will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line.**
-    *   **LTS Releases:** Each active LTS Release line will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line** throughout its 3-year support period.
+*   重要なバグ修正およびセキュリティパッチのみを含みます。
+*   新機能や破壊的変更は含みません。
+*   発行対象：
+    *   **Feature Releases:** 初回リリース（`X.Y.0`）から18ヶ月のサポート期間内にある各 Feature マイナリリースライン（例：`5.9.x`）は、そのリリースラインに該当する重要なバグ修正やセキュリティ脆弱性対応のパッチを受け取ります。
+    *   **LTS Releases:** アクティブな LTS リリースラインは、3年間のサポート期間中に同様に重要なバグ修正およびセキュリティパッチを受け取ります。
 
-## Maintenance Policies
+## メンテナンスポリシー
 
-EMQX releases receive different maintenance based on their type and lifecycle stage:
+EMQX のリリースはタイプとライフサイクル段階に応じて異なるメンテナンスが行われます。
 
 *   **Internal Release:**
-    *   **Maintenance:** Handled by the EMQX team. Bugs found are typically addressed in subsequent internal iterations or via hotfixes within the Cloud environment. These fixes are merged into the dev branch for inclusion in future public releases.
-*   **Feature Releases (Public):**
-    *   **Support Scope:** New features and improvements are introduced with each new quarterly Feature Minor Release (e.g., 5.9.0, then 5.10.0). During their 18-month lifecycle, each Feature Release line (e.g., all 5.9.x versions) will receive **critical bug fixes and security patches** via its own patch releases (e.g., 5.9.1, 5.9.2) for issues applicable to that line.
-    *   **Target Users:** Users and customers who want rapid access to new features and are comfortable with a shorter support cycle.
-*   **Long-Term Support (LTS) Releases (Public):**
-    *   **Initial LTS Release (e.g., 5.8.0):** Released with the latest stable feature set.
-    *   **Subsequent LTS Patch Releases (e.g., 5.8.1, 5.8.2):** Throughout their 3-year lifecycle, LTS versions will receive the following updates via Patch releases:
-        *   **Critical Bug Fixes**
-        *   **Security Vulnerability Patches**
-        *   **Important Note:** To ensure maximum stability, patch releases (X.Y.Z) for an LTS version will **not introduce any new features.**
-    *   **Target Users:** Enterprise customers with stringent requirements for system stability, predictability, and long-term support, as well as scenarios where minimizing changes post-deployment is critical.
+    *   EMQX チームが対応。発見されたバグは通常、次の内部リリースや Cloud 環境のホットフィックスで修正されます。これらの修正は dev ブランチに統合され、将来の公開リリースに反映されます。
+*   **Feature Releases（公開）:**
+    *   新機能や改善は四半期ごとの Feature マイナリリース（例：5.9.0、5.10.0）で提供されます。18ヶ月のライフサイクル中、各 Feature リリースライン（例：5.9.x）は、そのラインに該当する重要なバグ修正やセキュリティパッチをパッチリリース（例：5.9.1、5.9.2）で受け取ります。
+    *   対象ユーザーは新機能を迅速に利用したい方で、比較的短いサポート期間を許容できるユーザーです。
+*   **Long-Term Support (LTS) Releases（公開）:**
+    *   **初回 LTS リリース（例：5.8.0）:** 最新の安定機能セットを含みリリースされます。
+    *   **以降の LTS パッチリリース（例：5.8.1、5.8.2）:** 3年間のサポート期間中、以下の更新が提供されます：
+        *   重要なバグ修正
+        *   セキュリティ脆弱性パッチ
+        *   **重要:** LTS のパッチリリース（X.Y.Z）は新機能を導入しません。最大限の安定性を確保するためです。
+    *   対象ユーザーはシステムの安定性、予測可能性、長期サポートを重視し、デプロイ後の変更を最小限に抑えたいエンタープライズ顧客です。
 *   **Patch Release:**
-    *   Such as 5.10.1, 5.10.2, contain only bug fixes and security patches. No new features are introduced.
-    *   In rare cases, to support migration to newer versions, the maintenance team may, at its discretion, consider adding minimal, essential non-disruptive changes to versions in maintenance mode.
+    *   例：5.10.1、5.10.2 はバグ修正とセキュリティパッチのみを含み、新機能は含みません。
+    *   まれに、メンテナンスモードのバージョンでの移行支援のため、最小限かつ影響の少ない変更を追加する場合があります。
 
-## Business Source License (BSL) and Version Support
+## Business Source License (BSL) とバージョンサポート
 
-::: tip Note
+::: tip 注意
 
-EMQX versions beginning with 5.9.0 are licensed under the Business Source License (BSL) 1.1. For more details, see the [official announcement](https://www.emqx.com/en/news/emqx-adopts-business-source-license).
+EMQX 5.9.0 以降のバージョンは Business Source License (BSL) 1.1 の下でライセンスされています。詳細は[公式発表](https://www.emqx.com/en/news/emqx-adopts-business-source-license)をご覧ください。
 
 :::
 
-### Community Users
+### コミュニティユーザー
 
-- Community users can use all EMQX versions, including those from LTS branches, under the BSL terms.
-- The software is provided without any guarantees. You use it at your own risk, and EMQX assumes no responsibility for any issues or damages that may result from its use.
-- Under BSL, EMQX source code will transition to a fully open-source license (e.g., Apache 2.0) after a specified Change Date. This ensures that the community eventually gains access to a fully open version that includes the results of long-term maintenance.
-- Before the Change Date, community users may still receive patch releases (including bug fixes and security updates) that apply to the relevant BSL versions.
+- コミュニティユーザーは、LTS ブランチを含むすべての EMQX バージョンを BSL 条件下で利用可能です。
+- ソフトウェアは無保証で提供されており、利用は自己責任です。EMQX は利用に起因する問題や損害について責任を負いません。
+- BSL では、指定された変更日（Change Date）後にソースコードが完全なオープンソースライセンス（例：Apache 2.0）に移行します。これにより、コミュニティは長期保守の成果を含む完全なオープンバージョンにアクセスできるようになります。
+- 変更日前でも、コミュニティユーザーは該当する BSL バージョンに適用されるパッチリリース（バグ修正やセキュリティ更新）を受け取ることがあります。
 
-### Enterprise Customers
+### エンタープライズ顧客
 
-- Customers with a commercial license and subscription receive access to premium features and official support, including service-level guarantees as defined in their agreements.
-- A 5-year support commitment is provided for LTS versions as part of the Enterprise offering. This ensures continued maintenance and support for mission-critical deployments, even if the code branch later transitions to an open-source license under BSL terms.
+- 商用ライセンスおよびサブスクリプション契約を持つ顧客は、プレミアム機能および公式サポート（契約に定められたサービスレベル保証を含む）を受けられます。
+- LTS バージョンにはエンタープライズ向けに5年間のサポートコミットメントが提供されます。これにより、コードブランチが後に BSL 条件でオープンソースに移行しても、ミッションクリティカルな展開に対する継続的な保守とサポートが保証されます。
 
-## Maintenance Schedule for Public Releases
+## 公開リリースのメンテナンススケジュール
 
-This section provides the maintenance and End-of-Life (EOL) timelines for public Feature and LTS releases. Internal releases are maintained separately and are not listed here.
+以下は公開されている Feature および LTS リリースのメンテナンスおよび End-of-Life (EOL) のタイムラインです。Internal Releases は別途管理されており、ここには記載していません。
 
-The following table outlines release dates, support types, lifecycles, and estimated EOL dates for major EMQX versions. It is updated periodically to reflect the latest status.
+主要な EMQX バージョンのリリース日、サポート種別、ライフサイクル、推定 EOL 日をまとめた表です。最新状況に応じて定期的に更新されます。
 
-| Version | Release Date | Support Type | Support Duration | EOL Date | Notes |
+| バージョン | リリース日 | サポート種別 | サポート期間 | EOL 日 | 備考 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **3.4.x** | 2019-12-02 | Feature Release | 18 months | 2021-06-30 | EOLed |
-| **4.0.x** | 2020-01-18 | Feature Release | 18 months | 2021-07-17 | EOLed |
-| **4.1.x** | 2020-07-18 | Feature Release | 18 months | 2022-01-17 | EOLed |
-| **4.2.x** | 2020-10-13 | Feature Release | 18 months | 2022-04-12 | EOLed |
-| **4.3.x** | 2021-05-19 | Feature Release | 18 months | 2022-11-18 | EOLed |
-| **4.4.x LTS** | **2021-12-21** | **LTS** | **3 years** For 4.4.x LTS, as a special case during the transition period, the EOL Date is set to five years after the release date. | **2026-12-21** | **Current Active LTS Version** |
-| **5.0.x** | 2023-02-03 | Feature Release | 18 months | 2024-08-02 | |
-| **5.1.x** | 2023-06-21 | Feature Release | 18 months | 2024-12-20 | |
-| **5.2.x** | 2023-09-07 | Feature Release | 18 months | 2025-03-06 | |
-| **5.3.x** | 2023-09-29 | Feature Release | 18 months | 2025-03-28 | |
-| **5.4.x** | 2023-12-23 | Feature Release | 18 months | 2025-06-22 | |
-| **5.5.x** | 2024-02-01 | Feature Release | 18 months | 2025-07-31 | |
-| **5.6.x** | 2024-03-28 | Feature Release | 18 months | 2025-09-27 | |
-| **5.7.x** | 2024-05-27 | Feature Release | 18 months | 2025-11-26 | |
-| **5.8.x LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Latest Active LTS Version** |
-| **5.9.x** | 2025-05-02 | Feature Release | 18 months | 2026-11-01 | Latest Feature Release |
-| **5.10.x** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 | Next Feature Release |
-| **6.0.0** | 2025-TBD | Major Release | 18 months | TBD | Next Major Release |
+| **3.4.x** | 2019-12-02 | Feature Release | 18ヶ月 | 2021-06-30 | サポート終了済み |
+| **4.0.x** | 2020-01-18 | Feature Release | 18ヶ月 | 2021-07-17 | サポート終了済み |
+| **4.1.x** | 2020-07-18 | Feature Release | 18ヶ月 | 2022-01-17 | サポート終了済み |
+| **4.2.x** | 2020-10-13 | Feature Release | 18ヶ月 | 2022-04-12 | サポート終了済み |
+| **4.3.x** | 2021-05-19 | Feature Release | 18ヶ月 | 2022-11-18 | サポート終了済み |
+| **4.4.x LTS** | **2021-12-21** | **LTS** | **3年** ただし移行期間中の特例として EOL はリリースから5年後に設定 | **2026-12-21** | **現行アクティブ LTS バージョン** |
+| **5.0.x** | 2023-02-03 | Feature Release | 18ヶ月 | 2024-08-02 |  |
+| **5.1.x** | 2023-06-21 | Feature Release | 18ヶ月 | 2024-12-20 |  |
+| **5.2.x** | 2023-09-07 | Feature Release | 18ヶ月 | 2025-03-06 |  |
+| **5.3.x** | 2023-09-29 | Feature Release | 18ヶ月 | 2025-03-28 |  |
+| **5.4.x** | 2023-12-23 | Feature Release | 18ヶ月 | 2025-06-22 |  |
+| **5.5.x** | 2024-02-01 | Feature Release | 18ヶ月 | 2025-07-31 |  |
+| **5.6.x** | 2024-03-28 | Feature Release | 18ヶ月 | 2025-09-27 |  |
+| **5.7.x** | 2024-05-27 | Feature Release | 18ヶ月 | 2025-11-26 |  |
+| **5.8.x LTS** | **2024-08-28** | **LTS** | **3年** | **2027-08-27** | **最新アクティブ LTS バージョン** |
+| **5.9.x** | 2025-05-02 | Feature Release | 18ヶ月 | 2026-11-01 | 最新 Feature Release |
+| **5.10.x** | 2025-06-09 | Feature Release | 18ヶ月 | 2026-12-08 | 次期 Feature Release |
+| **6.0.0** | 2025-未定 | Major Release | 18ヶ月 | 未定 | 次期メジャーリリース |
 
-## Upgrade Path Recommendations
+## アップグレードパスの推奨
 
-To ensure access to the latest features, performance improvements, and security updates, we recommend users follow a regular upgrade strategy based on their deployment type:
+最新機能、パフォーマンス改善、セキュリティ更新を確実に利用するため、展開形態に応じた定期的なアップグレード戦略を推奨します。
 
-*   **EMQX Cloud:** Fully managed by the EMQX team; users benefit from monthly updates seamlessly.
-*   **On-Premise Feature Releases:** Users can upgrade from one quarterly Feature Release to the next to access new features. It is recommended to stay on a Feature Release that is actively supported (within its 18-month lifecycle).
-*   **On-Premise LTS Releases:** Enterprise users can plan migrations from their current LTS version to the next, with sufficient overlap to ensure uninterrupted long-term support. Upgrades from a Feature Release to an LTS Release are also supported.
+*   **EMQX Cloud:** EMQX チームが完全に管理しており、ユーザーは月次アップデートをシームレスに享受できます。
+*   **オンプレミス Feature Releases:** ユーザーは四半期ごとの Feature Release 間でアップグレードし、新機能を利用できます。サポート期間内（18ヶ月以内）の Feature Release を利用し続けることが推奨されます。
+*   **オンプレミス LTS Releases:** エンタープライズユーザーは現在の LTS バージョンから次の LTS バージョンへの移行を計画し、長期サポートを途切れさせないよう十分な重複期間を確保できます。Feature Release から LTS Release へのアップグレードもサポートされています。
 
-Each release includes detailed upgrade guides and compatibility notes to assist with planning and execution.
+各リリースには詳細なアップグレードガイドと互換性情報が含まれており、計画と実行を支援します。

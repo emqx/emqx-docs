@@ -1,4 +1,4 @@
-# LoadBalancerを介したEMQXクラスターへのアクセス
+# LoadBalancer経由でEMQXクラスターにアクセスする
 
 ## タスク対象
 
@@ -6,9 +6,9 @@ LoadBalancerタイプのServiceを介してEMQXクラスターにアクセスし
 
 ## EMQXクラスターの設定
 
-以下はEMQXカスタムリソースの関連設定例です。デプロイしたいEMQXのバージョンに応じて対応するAPIVersionを選択してください。具体的な対応関係は[EMQX Operator Compatibility](../operator.md)を参照してください。
+以下はEMQXカスタムリソースの関連設定例です。デプロイしたいEMQXのバージョンに応じて対応するAPIVersionを選択してください。具体的な互換性については[EMQX Operator Compatibility](../operator.md)を参照してください。
 
-Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュボードServiceを、`.spec.listenersServiceTemplate`でEMQXクラスターのリスナーServiceを設定可能です。詳細は[Service](../api-reference.md#emqxspec)を参照してください。
+Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュボードServiceを、`.spec.listenersServiceTemplate`でEMQXクラスターのリスナーServiceを設定可能であり、詳細は[Service](../api-reference.md#emqxspec)をご覧ください。
 
 + 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
@@ -32,11 +32,11 @@ Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュ
         type: LoadBalancer
   ```
 
-  > デフォルトで、EMQXはポート1883に対応するMQTT TCPリスナー `tcp-default` と、ポート18083に対応するダッシュボードリスナー `dashboard-listeners-http-bind` を開きます。
+  > デフォルトでEMQXは、ポート1883に対応するMQTT TCPリスナー `tcp-default` と、ポート18083に対応するダッシュボードリスナー `dashboard-listeners-http-bind` を開きます。
 
-  > ユーザーは`.spec.config.data`フィールドまたはEMQXダッシュボードを通じて新しいリスナーを追加できます。EMQX OperatorはService作成時にデフォルトのリスナー情報を自動的にServiceに注入しますが、ユーザーが設定したServiceとEMQXが設定したリスナーに名前やポートの重複がある場合は、ユーザーの設定が優先されます。
+  > ユーザーは`.spec.config.data`フィールドやEMQXダッシュボードを通じて新しいリスナーを追加可能です。EMQX OperatorはService作成時にデフォルトリスナー情報を自動注入しますが、ユーザーが設定したServiceとEMQXのリスナー設定で名前やポートが重複する場合は、ユーザー設定が優先されます。
 
-+ EMQXクラスターが準備完了になるまで待機します。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
++ EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
 
   ```bash
   $ kubectl get emqx emqx
@@ -45,7 +45,7 @@ Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュ
   ```
 + EMQXクラスターのダッシュボード外部IPを取得し、EMQXコンソールにアクセスします。
 
-  EMQX OperatorはEMQXコンソール用の`emqx-dashboard`と、EMQXリスニングポート用の`emqx-listeners`の2つのEMQX Serviceリソースを作成します。
+  EMQX OperatorはEMQXコンソール用の`emqx-dashboard`と、EMQXリスニングポート用の`emqx-listeners`という2つのServiceリソースを作成します。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -53,9 +53,9 @@ Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュ
   192.168.1.200
   ```
 
-  ブラウザで `http://192.168.1.200:18083` にアクセスし、デフォルトのユーザー名とパスワード `admin/public` でEMQXコンソールにログインします。
+  ブラウザで `http://192.168.1.200:18083` にアクセスし、デフォルトのユーザー名とパスワード `admin/public` でEMQXコンソールにログインしてください。
 
-## MQTTX CLIによるEMQXクラスターへの接続
+## MQTTX CLIでEMQXクラスターに接続する
 
 + EMQXクラスターの外部IPを取得します。
 
@@ -72,23 +72,23 @@ Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュ
   [4/17/2023] [5:17:31 PM] › ✔ Connected
   ```
 
-## EMQXダッシュボードを通じた新規リスナーの追加
+## EMQXダッシュボードから新しいリスナーを追加する
 
-+ 新しいリスナーの追加
++ 新しいリスナーを追加する
 
-  ブラウザでEMQXダッシュボードにログインし、メニューの「Configuration」→「Listeners」をクリックしてリスナーページに入ります。まず「Add Listener」ボタンをクリックし、名前を`test`、ポートを1884に設定したリスナーを追加します。以下の図のように操作してください。
+  ブラウザでEMQXダッシュボードにログインし、「Configuration」→「Listeners」をクリックしてリスナーページに移動します。まず「Add Listener」ボタンをクリックし、名前を`test`、ポートを1884に設定したリスナーを追加します。以下の図のように設定してください。
 
   <div style="text-align:center">
-  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" alt="EMQXでのリスナー追加画面" />
+  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" />
   </div>
 
-  次に「Add」ボタンをクリックしてリスナーを作成します。以下の図のように表示されます。
+  その後、「Add」ボタンをクリックしてリスナーを作成します。以下の図のように表示されます。
 
-  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" alt="EMQXで追加されたリスナーの一覧" />
+  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" />
 
   図からわかるように、作成した`test`リスナーが有効になっています。
 
-+ 新規追加したリスナーがServiceに注入されているか確認します。
++ 新しく追加したリスナーがServiceに注入されているか確認する
 
   ```bash
   kubectl get svc
@@ -98,4 +98,4 @@ Operatorは`.spec.dashboardServiceTemplate`でEMQXクラスターのダッシュ
   emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
   ```
 
-  出力結果から、新たに追加したポート1884のリスナーが`emqx-listeners` Serviceに注入されていることが確認できます。
+  出力結果から、新しく追加した1884ポートのリスナーが`emqx-listeners` Serviceに注入されていることが確認できます。

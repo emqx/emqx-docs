@@ -1,34 +1,34 @@
-# Clients
+# クライアント
 
-You can use [MQTTX](https://mqttx.app) as a client to connect to EMQX for publishing and subscribing. Alternatively, you can quickly implement client connections to EMQX using [client libraries provided in various languages](../../develop/connect-emqx/introduction.md). On the **Clients** page, you can view details and metric statistics of clients currently connected to the server or sessions that have not expired.
+EMQXに接続してパブリッシュおよびサブスクライブするクライアントとして、[MQTTX](https://mqttx.app) を使用できます。あるいは、[各種言語で提供されているクライアントライブラリ](../../develop/connect-emqx/introduction.md) を利用して、EMQXへのクライアント接続を迅速に実装することも可能です。**クライアント**ページでは、現在サーバーに接続中のクライアントや有効期限が切れていないセッションの詳細およびメトリクス統計を確認できます。
 
-## Client List
+## クライアント一覧
 
-In the client list, users can view basic information about currently connected clients, including:
+クライアント一覧では、現在接続中のクライアントに関する基本情報を以下のように確認できます。
 
-- Client ID and username set when connecting to EMQX
-- Current connection status
-- Client's IP address
-- Heartbeat duration set for the connection and maximum idle time
-- Information about connection sessions, including whether the session is cleared and the session expiration interval
-- The time when the client connected to EMQX
+- EMQXに接続する際に設定されたクライアントIDおよびユーザー名
+- 現在の接続状態
+- クライアントのIPアドレス
+- 接続に設定されたハートビート時間および最大アイドル時間
+- セッションがクリアされているかどうか、セッションの有効期限間隔などの接続セッション情報
+- クライアントがEMQXに接続した時間
 
-The client's IP address data is concatenated from the client's IP address and the port used by the client when connecting to EMQX.
+クライアントのIPアドレスは、クライアントのIPアドレスとEMQXに接続する際に使用されたポート番号を連結したものです。
 
-The top filter condition fields by default display only client ID, username, and IP address. You can use client ID and username for fuzzy searching to filter the connection list. Clicking the right arrow button next to the search bar displays all available filter condition fields. You can also select the connection status, or connection time range to filter the list or enter the client's IP to filter by target IP address.
+上部のフィルター条件欄には、デフォルトでクライアントID、ユーザー名、IPアドレスのみが表示されます。クライアントIDやユーザー名であいまい検索を行い、接続リストを絞り込むことが可能です。検索バー横の右矢印ボタンをクリックすると、利用可能なすべてのフィルター条件欄が表示されます。接続状態や接続時間範囲を選択してリストを絞り込んだり、クライアントのIPアドレスを入力して対象IPで絞り込むこともできます。
 
-At the top of the list, the **Select Column** button allows you to choose which columns to display. Clicking the **Refresh** button resets all filter conditions and reloads the connection list. You can also select a client and click **Kick Out** to manually disconnect that client.
+リスト上部の**列選択**ボタンでは、表示する列を選択できます。**更新**ボタンをクリックすると、すべてのフィルター条件がリセットされ、接続リストが再読み込みされます。クライアントを選択して**キックアウト**をクリックすると、そのクライアントを手動で切断できます。
 
-<img src="./assets/connections.png" alt="Connection Management List" style="zoom:50%;" />
+<img src="./assets/connections.png" alt="接続管理リスト" style="zoom:50%;" />
 
-## Client Details
+## クライアント詳細
 
-Selecting a connection from the client list and clicking on the client ID takes you to the details page of that client connection, where you can view connection metric statistics. At the top of the page, you can manually refresh the connection information and manually clear the session.
+クライアント一覧から接続を選択し、クライアントIDをクリックすると、そのクライアント接続の詳細ページに移動し、接続メトリクス統計を確認できます。ページ上部では、接続情報の手動更新やセッションの手動クリアが可能です。
 
-In addition to the connection's basic information already displayed on the list page, this page provides more detailed information for users to view, such as the protocol version used by the connection, whether sessions are cleared after ending the connection, and for disconnected connections, the time of the last disconnection. On the right side of the **Connection Information**, it displays **Session Information** for the connection, including session expiration interval, session creation time, process stack, number of subscriptions, message queue length, flight window length, and QoS2 message receive queue length.
+一覧ページで表示されている接続の基本情報に加え、このページでは接続に使用されているプロトコルバージョン、接続終了後にセッションがクリアされるかどうか、切断済みの接続については最後に切断された時間など、より詳細な情報を確認できます。**接続情報**の右側には、接続の**セッション情報**が表示され、セッション有効期限間隔、セッション作成時間、プロセススタック、サブスクリプション数、メッセージキュー長、フライトウィンドウ長、QoS2メッセージ受信キュー長などが含まれます。
 
-Below the connection information, statistics metrics for current connections are displayed based on traffic transmission, messages, and packet counts, which users can view as needed.
+接続情報の下には、トラフィック送受信、メッセージ数、パケット数に基づく現在の接続の統計メトリクスが表示され、必要に応じて確認できます。
 
-At the bottom of the page, it shows the topics currently subscribed by the connection. Users can click the **Add Subscription** button for simple subscription operations or click **Unsubscribe** in the subscription list to cancel the subscription to a specific topic.
+ページ下部には、接続が現在サブスクライブしているトピックが表示されます。**サブスクリプション追加**ボタンをクリックして簡単にサブスクライブ操作を行ったり、サブスクリプション一覧の**サブスクライブ解除**をクリックして特定のトピックのサブスクライブを解除することも可能です。
 
-<img src="./assets/connection-details.png" alt="connection-details" style="zoom:50%;" />
+<img src="./assets/connection-details.png" alt="接続詳細" style="zoom:50%;" />

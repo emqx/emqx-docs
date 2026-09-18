@@ -1,17 +1,15 @@
 # Architecture and Design
 
-This section introduces the design principles of some key EMQX features, including:
+このセクションでは、以下の主要なEMQX機能の設計原則について紹介します。
 
-- [EMQX Clustering](./cluster/introduction.md)
+- [EMQXクラスター](./cluster/introduction.md)
 
-  EMQX has demonstrated impressive performance on a single node, as evidenced by our benchmark tests, which achieved millions of connections. However, to ensure reliability and availability, EMQX must scale out by forming a cluster. This chapter discusses the complexities of MQTT broker clustering and how EMQX is designed to address these challenges.
+  EMQXは、ベンチマークテストにより数百万の接続を達成するなど、単一ノードで優れたパフォーマンスを発揮することが証明されています。しかし、信頼性と可用性を確保するためには、EMQXをクラスター化してスケールアウトする必要があります。本章では、MQTTブローカーのクラスタリングにおける複雑さと、それに対処するためのEMQXの設計について説明します。
 
-- [MQTT Durable Sessions](../guides/durability/management.md) (EMQX Enterprise feature) introduces the architecture behind persistent MQTT sessions in EMQX, explaining how session state and messages are durably stored to survive node restarts and network disruptions.
+- [インフライトウィンドウとメッセージキュー](./design/inflight-window-and-message-queue.md)
 
-- [Inflight Window and Message Queue](./design/inflight-window-and-message-queue.md)
+  メッセージのスループットを向上させ、ネットワークの変動の影響を軽減するために、EMQXは複数の未アックのQoS 1およびQoS 2パケットを同時にネットワークリンク上に存在させることを可能にしています。送信済みで未確認のこれらのパケットは、アックが完了するまでインフライトウィンドウに格納されます。インフライトウィンドウの長さ制限に達した場合、これらのパケットはメッセージキューに格納されます。本節では、設計原則と関連する設定項目について紹介します。
 
-  To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until an acknowledgment is complete. When the length limit of the Inflight Window is reached, these packets will be stored in the Message Queue. This section will introduce the design principles and the relevant configuration items.
+- [メッセージ再送](./design/retransmission.md)
 
-- [Message Retransmission](./design/retransmission.md)
-
-  Message Retransmission is part of the MQTT protocol specification. This section will introduce the basic configuration, protocol specification, and design.
+  メッセージ再送はMQTTプロトコル仕様の一部です。本節では、基本的な設定、プロトコル仕様、および設計について説明します。

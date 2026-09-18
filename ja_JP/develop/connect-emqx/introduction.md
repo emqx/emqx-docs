@@ -1,114 +1,67 @@
----
-{
-  'title': 'MQTT クライアント SDK',
-  'categoryList':
-    [
-      {
-        'title': 'SDK サンプル',
-        'moreText': 'さらに多くのサンプル',
-        'linkForMoreDemos': 'https://github.com/emqx/MQTT-Client-Examples',
-        'menus':
-          [
-            {
-              'imgName': 'c',
-              'name': 'C',
-              'description': 'MQTT C SDK サンプル',
-              'link': './c.html',
-            },
-            {
-              'imgName': 'java',
-              'name': 'Java',
-              'description': 'MQTT Java SDK サンプル',
-              'link': './java.html',
-            },
-            {
-              'imgName': 'go',
-              'name': 'Golang',
-              'description': 'MQTT Go SDK サンプル',
-              'link': './go.html',
-            },
-            {
-              'imgName': 'python',
-              'name': 'Python',
-              'description': 'MQTT Python SDK サンプル',
-              'link': './python.html',
-            },
-            {
-              'imgName': 'js',
-              'name': 'JavaScript',
-              'description': 'MQTT JavaScript SDK サンプル',
-              'link': './javascript.html',
-            }
-          ],
-      },
-      {
-        'title': 'サードパーティ SDK 推奨',
-        'menus':
-          [
-            {
-              'imgName': 'python',
-              'name': 'Python',
-              'description': 'Eclipse Paho Python SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/python/index.php',
-            },
-            {
-              'imgName': 'go',
-              'name': 'Golang',
-              'description': 'Eclipse Paho Golang SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/golang/index.php',
-            },
-            {
-              'imgName': 'java',
-              'name': 'Java',
-              'description': 'Eclipse Paho Java SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/java/index.php',
-            },
-            {
-              'imgName': 'js',
-              'name': 'JavaScript',
-              'description': 'MQTT.js',
-              'link': 'https://github.com/mqttjs/MQTT.js',
-            },
-            {
-              'imgName': 'node',
-              'name': 'Node.js',
-              'description': 'MQTT.js',
-              'link': 'https://github.com/mqttjs/MQTT.js',
-            },
-            {
-              'imgName': 'c',
-              'name': 'C',
-              'description': 'Eclipse Paho C SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/c/index.php',
-            },
-            {
-              'imgName': 'c-sharp',
-              'name': 'C#',
-              'description': 'Eclipse Paho C# SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/dotnet/index.php',
-            },
-            {
-              'imgName': 'php',
-              'name': 'PHP',
-              'description': 'Mosquitto-PHP',
-              'link': 'https://github.com/mgdm/Mosquitto-PHP',
-            },
-            {
-              'imgName': 'ios',
-              'name': 'iOS',
-              'description': 'MQTT-Client-Framework',
-              'link': 'https://github.com/novastone-media/MQTT-Client-Framework',
-            },
-            {
-              'imgName': 'android',
-              'name': 'Android',
-              'description': 'Eclipse Paho Android SDK',
-              'link': 'https://www.eclipse.org/paho/index.php?page=clients/android/index.php',
-            },
-          ],
-      },
-    ],
-}
----
+# MQTT クライアント SDK
 
-<CloudConnectionOverview />
+## SDKの例
+
+### C
+MQTT C SDKの例  
+[詳細はこちら](./c.html)
+
+### Java
+MQTT Java SDKの例  
+[詳細はこちら](./java.html)
+
+### Golang
+MQTT Go SDKの例  
+[詳細はこちら](./go.html)
+
+### Python
+MQTT Python SDKの例  
+[詳細はこちら](./python.html)
+
+### JavaScript
+MQTT JavaScript SDKの例  
+[詳細はこちら](./javascript.html)
+
+[さらに多くの例はこちら](https://github.com/emqx/MQTT-Client-Examples)
+
+## サードパーティSDKの推奨
+
+### Python
+Eclipse Paho Python SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/python/index.php)
+
+### Golang
+Eclipse Paho Golang SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/golang/index.php)
+
+### Java
+Eclipse Paho Java SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/java/index.php)
+
+### JavaScript
+MQTT.js  
+[詳細はこちら](https://github.com/mqttjs/MQTT.js)
+
+### Node.js
+MQTT.js  
+[詳細はこちら](https://github.com/mqttjs/MQTT.js)
+
+### C
+Eclipse Paho C SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/c/index.php)
+
+### C#
+Eclipse Paho C# SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/dotnet/index.php)
+
+### PHP
+Mosquitto-PHP  
+[詳細はこちら](https://github.com/mgdm/Mosquitto-PHP)
+
+### iOS
+MQTT-Client-Framework  
+[詳細はこちら](https://github.com/novastone-media/MQTT-Client-Framework)
+
+### Android
+Eclipse Paho Android SDK  
+[詳細はこちら](https://www.eclipse.org/paho/index.php?page=clients/android/index.php)

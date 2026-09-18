@@ -7,11 +7,11 @@
 
 ## ライセンスの設定
 
-EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請できます：[EMQX Enterprise ライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
+EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請可能です：[EMQX Enterprise ライセンス申請](https://www.emqx.com/en/apply-licenses/emqx)。
 
 ## EMQX クラスターの設定
 
-`apps.emqx.io/v2beta1 EMQX` では、`.spec.config.data` を通じて EMQX クラスターのライセンスを設定できます。`config.data` の設定方法については、以下のドキュメントを参照してください：[設定マニュアル](../../../../../guides/configuration/configuration.md)。このフィールドは EMQX クラスター作成時のみ設定可能で、更新はサポートされていません。
+`apps.emqx.io/v2beta1 EMQX` では、`.spec.config.data` を通じて EMQX クラスターのライセンス設定が可能です。`config.data` の設定方法については、以下のドキュメントを参照してください：[設定マニュアル](../../../../../guides/configuration/configuration.md)。このフィールドは EMQX クラスター作成時のみ設定可能で、更新はサポートしていません。
 
 > EMQX クラスター作成後にライセンスを更新する必要がある場合は、EMQX ダッシュボードから更新してください。
 
@@ -34,7 +34,7 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
         type: LoadBalancer
   ```
 
-  > `config.data` フィールド内の `license.key` はライセンスの内容を表します。本例ではライセンス内容を省略していますので、ユーザーが適宜入力してください。
+  > `config.data` フィールド内の `license.key` はライセンスの内容を示します。この例ではライセンス内容は省略していますので、ユーザーが適切に入力してください。
 
 + EMQX クラスターの準備が整うまで待機します。`kubectl get` コマンドでクラスターの状態を確認し、`STATUS` が `Running` であることを確認してください。準備には時間がかかる場合があります。
 
@@ -59,14 +59,12 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
 ## ライセンスの更新
 
 + ライセンス情報の確認
-
   ```bash
   $ pod_name="$(kubectl get pods -l 'apps.emqx.io/instance=emqx,apps.emqx.io/db-role=core' -o json | jq --raw-output '.items[0].metadata.name')"
   $ kubectl exec -it ${pod_name} -c emqx -- emqx_ctl license info
   ```
 
   以下のような出力が得られます。出力から、申請したライセンスの基本情報（申請者情報、ライセンスでサポートされる最大接続数、ライセンスの有効期限など）を確認できます。
-
   ```bash
   customer        : Evaluation
   email           : contact@emqx.io
@@ -80,7 +78,6 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
   ```
 
 + EMQX カスタムリソースを編集してライセンスを更新します。
-
   ```bash
   $ kubectl edit emqx emqx
   ...
@@ -94,15 +91,13 @@ EMQX Enterprise ライセンスは、EMQ公式サイトから無料で申請で�
   ...
   ```
 
-+ EMQX クラスターのライセンスが更新されたか確認します。
-
+  + EMQX クラスターのライセンスが更新されたか確認します。
   ```bash
   $ pod_name="$(kubectl get pods -l 'apps.emqx.io/instance=emqx,apps.emqx.io/db-role=core' -o json | jq --raw-output '.items[0].metadata.name')"
   $ kubectl exec -it ${pod_name} -c emqx -- emqx_ctl license info
   ```
 
-  `max_connections` フィールドの値が変わっていれば、ライセンスの内容が更新されていることを示し、EMQX Enterprise エディションのライセンス更新が成功したことを意味します。証明書情報がすぐに更新されない場合は、ライセンス更新に遅延がある可能性があるため、しばらく待ってから再度確認してください。
-
+  `max_connections` フィールドの値が変わっていれば、ライセンス内容が更新されていることを示し、EMQX Enterprise Edition ライセンスの更新は成功です。証明書情報がすぐに反映されない場合は、更新に遅延がある可能性があるため、しばらく待ってから再度確認してください。
   ```bash
   customer        : Evaluation
   email           : contact@emqx.io

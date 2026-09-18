@@ -1,10 +1,10 @@
 # Redisとの連携
 
-このオーソライザーは、Redisデータベースに格納されたルールリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装しています。
+このオーソライザーは、Redisデータベースに保存されたルールリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装しています。
 
 ::: tip 前提条件
 
-[EMQX認可の基本概念](./authz.md)の知識が必要です。
+[EMQX認可の基本概念](./authz.md)の知識
 
 :::
 
@@ -13,7 +13,7 @@
 ユーザーは以下のデータを返すクエリテンプレートを提供する必要があります。
 
 - `topic`：ルールが適用されるトピックを指定します。トピックフィルターや[トピックプレースホルダー](./authz.md#topic-placeholders)を使用可能です。
-- `action`：ルールが適用されるアクションを指定します。利用可能な値は `publish`、`subscribe`、`all` です。
+- `action`：ルールが適用されるアクションを指定します。利用可能な値は `publish`、`subscribe`、および `all` です。
 - `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
 - `retain`（オプション）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトは保持メッセージを許可します。
 
@@ -25,15 +25,15 @@
 HSET mqtt_acl:emqx_u t/1 subscribe
 ```
 
-Redisの構造上の制限により、`qos` と `retain` フィールドを使用する場合、トピック以外のフィールドはJSON文字列として格納する必要があります。例えば：
+Redisの構造上の制約により、`qos` と `retain` フィールドを使用する場合、トピック以外のフィールドはJSON文字列で格納する必要があります。例：
 
-- ユーザー `emqx_u` にトピック `t/2` のQoS 1およびQoS 2でのサブスクライブ権限を追加する例：
+- ユーザー `emqx_u` にトピック `t/2` のQoS 1およびQoS 2でのサブスクライブ権限を追加する場合：
 
 ```bash
 HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
 ```
 
-- ユーザー `emqx_u` にトピック `t/3` への保持メッセージのパブリッシュを拒否する権限を追加する例：
+- ユーザー `emqx_u` にトピック `t/3` への保持メッセージのパブリッシュを拒否する権限を追加する場合：
 
 ```bash
 HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
@@ -45,39 +45,38 @@ HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 cmd = "HGETALL mqtt_acl:${username}"
 ```
 
-取得したルールは許可ルールとして扱われます。つまり、トピックフィルターとアクションが一致すればリクエストは許可されます。
+取得したルールは許可ルールとして扱われ、トピックフィルターとアクションが一致すればリクエストは許可されます。
 
 :::tip
-Redisオーソライザーに追加されるすべてのルールは**許可ルール**です。したがって、Redisオーソライザーはホワイトリストモードで使用する必要があります。
+Redisオーソライザーに追加されるすべてのルールは**許可ルール**であるため、Redisオーソライザーはホワイトリストモードで使用する必要があります。
 :::
 
 ## ダッシュボードでの設定
 
-EMQXダッシュボードを使用して、Redisをユーザー認可に利用する設定が可能です。
+EMQXダッシュボードを使って、Redisをユーザー認可に利用する設定が可能です。
 
-1. EMQXダッシュボードの左ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
+1. EMQXダッシュボードの左側ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
 
 2. 右上の **作成** をクリックし、**バックエンド** に **Redis** を選択してから **次へ** をクリックします。以下のように **設定** タブが表示されます。
 
    <img src="./assets/authz-redis.png" alt="authz-Redis_ee" style="zoom:67%;" />
 
-3. 以下の指示に従い設定を行います。
+3. 以下の指示に従って設定を行います。
 
-   - **Redisモード**：Redisのデプロイ形態を選択します。`Single`、`Sentinel`、`Cluster` があります。
+   - **Redisモード**：Redisのデプロイ方法を選択します。`Single`、`Sentinel`、`Cluster` のいずれかです。
    - **サーバー**：EMQXが接続するRedisサーバーのアドレスを指定します（`host:port`）。
-   - **データベース**：Redisのデータベース番号を指定します。
-   - **ユーザー名**：Redisの認証に[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（Redis 6.0以降で導入）を使用している場合、接続するRedisユーザー名を指定します。Redisサーバーがデフォルトユーザー（ACL無効または未適用）を使用している場合は空欄にできます。
+   - **データベース**：Redisのデータベース名を指定します。
+   - **ユーザー名**：Redisの認証に[Redis ACL](https://redis.io/docs/latest/guides/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（Redis 6.0以降で導入）を使用している場合に指定します。Redisサーバーがデフォルトユーザー（ACL無効または未適用）を使用している場合は空欄のままで構いません。
 
      ::: tip
 
-     `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを利用する場合はこのバージョン以降のデプロイを使用してください。
+     `username` フィールドはEMQX 5.2.0以降でサポートされています。Redis ACLを利用する場合はこのバージョン以降でのデプロイを確認してください。
 
      :::
-
    - **パスワード**：Redisユーザーのパスワードを指定します。認証が有効なRedisインスタンスに接続する場合は必須です。
 
-     - ユーザー名を入力した場合、このパスワードはRedis ACL設定の認証情報と一致している必要があります。
-     - ユーザー名が指定されていない場合、このパスワードは`default`ユーザーとして認証に使用されます（有効な場合）。
+     - ユーザー名を入力した場合は、Redis ACL設定の認証情報と一致する必要があります。
+     - ユーザー名がない場合は、`default` ユーザー（有効な場合）として認証されます。
 
    - **TLSを有効化**：TLSを有効にする場合はトグルスイッチをオンにします。
 
@@ -90,9 +89,9 @@ EMQXダッシュボードを使用して、Redisをユーザー認可に利用�
 
 ## 設定項目による設定
 
-EMQXの設定項目を用いてRedisオーソライザーを設定できます。
+EMQXの設定項目を使ってRedisオーソライザーを設定できます。
 
-Redisオーソライザーはタイプ `redis` で識別されます。オーソライザーはRedisの3つのデプロイモードに対応しています。<!--詳細な設定情報は以下を参照してください：[redis_single](../../configuration/configuration-manual.html#authz:redis_single)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel)、[authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
+Redisオーソライザーはタイプ `redis` で識別されます。オーソライザーはRedisの3種類のデプロイモードに対応しています。 <!--詳細な設定情報は以下を参照してください：[redis_single](../../configuration/configuration-manual.html#authz:redis_single)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel)、および[authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
 
 設定例：
 
