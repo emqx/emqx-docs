@@ -1,66 +1,66 @@
 ---
 next:
-  text: 'User Guides'
+  text: 'ユーザーガイド'
   link: '../guides/user-guide'
 ---
 
 # LLMs.txt
 
-EMQX documentation provides `llms.txt` files, which are structured documentation indexes designed for large language models (LLMs). These files help AI tools and agents quickly discover and reference EMQX documentation content, so you get more accurate and relevant results when building agents or using AI coding assistants.
+EMQXドキュメントは、`llms.txt`ファイルを提供しています。これは大規模言語モデル（LLM）向けに構造化されたドキュメントのインデックスであり、AIツールやエージェントがEMQXのドキュメント内容を迅速に検索・参照できるように設計されています。これにより、エージェント構築やAIコーディングアシスタント利用時に、より正確で関連性の高い結果を得られます。
 
-## What Is llms.txt?
+## llms.txtとは？
 
-`llms.txt` is a plain-text file placed at a standard URL path that lists the key documentation pages for a product. It follows the [llms.txt specification](https://llmstxt.org/), which is an open standard for making documentation AI-friendly.
+`llms.txt`は、製品の主要なドキュメントページを一覧化したプレーンテキストファイルで、標準的なURLパスに配置されます。これはドキュメントをAIに優しい形で提供するためのオープン標準である[llms.txt仕様](https://llmstxt.org/)に準拠しています。
 
-When an AI tool supports `llms.txt`, you can point it at this file to give it structured, up-to-date access to EMQX documentation without needing to paste content manually.
+AIツールが`llms.txt`をサポートしている場合、このファイルを指定するだけで、内容を手動で貼り付けることなく、EMQXドキュメントの構造化された最新情報にアクセスできます。
 
 ::: tip
 
-The `llms.txt` file is automatically generated at each documentation build, so it always reflects the latest documentation structure and content.
+`llms.txt`ファイルはドキュメントのビルド時に自動生成されるため、常に最新のドキュメント構造と内容を反映しています。
 
 :::
 
-## Available Files
+## 利用可能なファイル
 
-The top-level index file lists all available `llms.txt` files across EMQX products and versions:
+トップレベルのインデックスファイルには、EMQX製品およびバージョンごとに利用可能なすべての`llms.txt`ファイルが一覧化されています：
 
 ```
 https://docs.emqx.com/llms.txt
 ```
 
-EMQX documentation is organized by product and version. Each product version has its own `llms.txt`, for example:
+EMQXドキュメントは製品とバージョンごとに整理されており、各製品バージョンに専用の`llms.txt`があります。例：
 
 ```
 https://docs.emqx.com/en/emqx/latest/llms.txt
 https://docs.emqx.com/en/emqx/v5.8/llms.txt
 ```
 
-Point your AI tool at the top-level index, and it can discover the full list and navigate to the right version on its own.
+AIツールにトップレベルのインデックスを指定すれば、全リストを自動で検出し、適切なバージョンにナビゲートできます。
 
-## Usage with AI Tools
+## AIツールでの利用方法
 
-Point your AI tool or coding assistant at the top-level `llms.txt` URL:
+AIツールやコーディングアシスタントにトップレベルの`llms.txt`のURLを指定してください：
 
 ```
 https://docs.emqx.com/llms.txt
 ```
 
-How you add it depends on the tool. Some tools let you register a documentation source directly in their settings; others accept a URL pasted into the prompt. If you are not sure, ask your AI tool directly. For example:
+設定方法はツールによって異なります。設定画面でドキュメントソースを直接登録できるものもあれば、プロンプトにURLを貼り付けるだけのものもあります。不明な場合は、AIツールに直接問い合わせてください。例えば：
 
 ```
-How do I add https://docs.emqx.com/llms.txt as a documentation source?
+https://docs.emqx.com/llms.txt をドキュメントソースとして追加するにはどうすればよいですか？
 ```
 
-The AI will know the current steps for its own interface.
+AIが自身のインターフェースに応じた最新の手順を案内します。
 
-## Access Documentation as Markdown
+## Markdown形式でドキュメントにアクセス
 
-Any EMQX documentation page can be retrieved as raw Markdown by replacing `.html` with `.md` in the URL. This is useful for feeding specific pages directly into an AI tool or script:
+任意のEMQXドキュメントページは、URLの`.html`を`.md`に置き換えることで、生のMarkdown形式で取得できます。これは特定ページをAIツールやスクリプトに直接渡す際に便利です：
 
 ```
-# HTML page
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html
+# HTMLページ
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.html
 
-# Same page as Markdown
-https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.md
+# 同じページのMarkdown形式
+https://docs.emqx.com/en/emqx/latest/guides/access-control/authn/jwt.md
 ```
