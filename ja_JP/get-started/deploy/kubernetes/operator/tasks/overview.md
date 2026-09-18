@@ -1,6 +1,6 @@
 # EMQXクラスターの管理
 
-本章では、Kubernetesクラスター上でEMQXを操作・管理するための一般的なタスクや手順をステップバイステップで説明します。
+本章では、Kubernetesクラスター上でEMQXを操作する際の一般的なタスクや手順について、ステップバイステップで説明します。
 
 ## 設定とセットアップ
 
@@ -12,7 +12,7 @@
   - [コア・レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
   - [パーシステンスの有効化](./configure-emqx-persistence.md)
   - [ロードバランサー経由でのEMQXクラスターアクセス](./configure-emqx-service.md)
-  - [クラスター負荷のリバランス](./configure-emqx-rebalance.md)
+  - [クラスターの負荷再分散](./configure-emqx-rebalance.md)
 
 ## アップグレードとメンテナンス
 
@@ -24,4 +24,4 @@
 
 ## 監視とパフォーマンス
 
-- [Prometheusを使用したEMQXクラスターの監視](./configure-emqx-prometheus.md)
+- [PrometheusによるEMQXクラスターの監視](./configure-emqx-prometheus.md)
