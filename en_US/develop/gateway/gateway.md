@@ -102,7 +102,7 @@ When an authenticator is configured, the gateway uses the `ClientInfo` to verify
 Starting from EMQX 6.3.1, EMQX applies gateway authentication results as follows:
 
 - Gateway protocols always use the Client ID determined by the protocol. This prevents authentication results from changing the client's identity and keeps the identity consistent throughout the connection lifecycle. If an authenticator returns `clientid_override`, EMQX ignores the field and logs a warning with `gateway_authn_clientid_override_not_supported`.
-- After authentication succeeds, EMQX evaluates gateway- and listener-level mountpoint templates using the combined client information and authentication result. A mountpoint template can therefore reference client attributes returned by the authenticator, for example, `${client_attrs.tenant}/`. This allows you to generate tenant-specific topic prefixes dynamically and separate tenant topic spaces without configuring a listener for each tenant.
+- After authentication succeeds, EMQX evaluates gateway- and listener-level mountpoint templates using the combined client information and authentication result. A mountpoint template can therefore reference client attributes returned by the authenticator, for example, `${client_attrs.tenant}/`.
 
 ::: tip Client ID and Session Behavior
 
