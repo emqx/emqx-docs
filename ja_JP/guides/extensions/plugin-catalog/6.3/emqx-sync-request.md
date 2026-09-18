@@ -193,5 +193,6 @@ sync_request.pending_responses: 0
 | EMQX バージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.3.0 | 0.1.1 | [emqx_sync_request-0.1.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_sync_request-0.1.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_sync_request-0.1.1.sha256)) |
+| 6.3.1 | 0.1.2 | [emqx_sync_request-0.1.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_sync_request-0.1.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_sync_request-0.1.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

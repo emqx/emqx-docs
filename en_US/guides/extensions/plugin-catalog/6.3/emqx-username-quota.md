@@ -216,5 +216,6 @@ Tarballs for each EMQX release:
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
 | 6.3.0 | 1.2.3 | [emqx_username_quota-1.2.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_username_quota-1.2.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_username_quota-1.2.3.sha256)) |
+| 6.3.1 | 1.2.3 | [emqx_username_quota-1.2.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_username_quota-1.2.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_username_quota-1.2.3.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
