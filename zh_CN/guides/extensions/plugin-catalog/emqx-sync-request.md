@@ -193,3 +193,15 @@ sync_request.pending_responses: 0
 | `sync_request.requests.internal_error` | counter | 因非预期内部错误失败的请求数。 |
 | `sync_request.inflight_requests` | gauge | 当前正在等待 MQTT 响应的 HTTP 请求数。 |
 | `sync_request.pending_responses` | gauge | 请求投递后创建的待响应注册数量。 |
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 5.10.5 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

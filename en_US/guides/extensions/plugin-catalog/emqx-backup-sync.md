@@ -136,3 +136,15 @@ emqx ctl backup_sync status
 The command queries the selected core node and displays the overall status, health, whether synchronization is enabled, synchronization task state, selected core node, time until the next synchronization, primary API base URL, interval, root keys, and table sets. API credentials are not displayed.
 
 If an import succeeds but backup cleanup fails, the synchronization is reported as failed. Use the health output and EMQX logs to identify whether the failure occurred during export, download, upload, import, cleanup, or worker cancellation.
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## Download
+
+Tarballs for each EMQX release:
+
+| EMQX Version | Plugin Version | Package |
+|---|---|---|
+| 5.10.5 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_backup_sync-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_backup_sync-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

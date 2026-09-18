@@ -136,3 +136,15 @@ emqx ctl backup_sync status
 该命令会查询选定的核心节点，并显示整体状态、健康状态、是否已启用同步、同步任务状态、选定的核心节点、距离下次同步的时间、主集群 API 基础 URL、同步间隔、配置根和表集合。命令不会显示 API 凭据。
 
 如果导入成功但备份清理失败，该次同步仍会报告为失败。可通过健康状态输出和 EMQX 日志判断失败发生在导出、下载、上传、导入、清理还是 worker 取消阶段。
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## 下载
+
+各 EMQX 版本对应的插件安装包：
+
+| EMQX 版本 | 插件版本 | 安装包 |
+|---|---|---|
+| 5.10.5 | 0.1.0 | [emqx_backup_sync-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_backup_sync-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_backup_sync-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->
