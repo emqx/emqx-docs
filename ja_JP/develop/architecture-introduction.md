@@ -1,17 +1,19 @@
-# Architecture and Design
+# アーキテクチャと設計
 
-This section introduces the design principles of some key EMQX features, including:
+本セクションでは、EMQXの主要な機能の設計原則について紹介します。内容は以下の通りです。
 
-- [EMQX Clustering](./cluster/introduction.md)
+- [EMQXクラスター](./cluster/introduction.md)
 
-  EMQX has demonstrated impressive performance on a single node, as evidenced by our benchmark tests, which achieved millions of connections. However, to ensure reliability and availability, EMQX must scale out by forming a cluster. This chapter discusses the complexities of MQTT broker clustering and how EMQX is designed to address these challenges.
+  EMQXは単一ノードでの優れたパフォーマンスを実証しており、ベンチマークテストでは数百万の接続を達成しています。しかし、信頼性と可用性を確保するためには、EMQXはクラスターを形成してスケールアウトする必要があります。本章では、MQTTブローカーのクラスタリングにおける複雑さと、EMQXがこれらの課題にどのように対応しているかを解説します。
 
-- [Durable Storage](./design/durable-storage.md) introduces the storage hierarchy and backend design that EMQX uses to persist MQTT messages.
+- [永続化ストレージ](./design/durable-storage.md)
 
-- [Inflight Window and Message Queue](./design/inflight-window-and-message-queue.md)
+  EMQXがMQTTメッセージを永続化するために使用するストレージ階層とバックエンド設計について紹介します。
 
-  To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until an acknowledgment is complete. When the length limit of the Inflight Window is reached, these packets will be stored in the Message Queue. This section will introduce the design principles and the relevant configuration items.
+- [インフライトウィンドウとメッセージキュー](./design/inflight-window-and-message-queue.md)
 
-- [Message Retransmission](./design/retransmission.md)
+  メッセージのスループットを向上させ、ネットワークの変動による影響を軽減するために、EMQXは複数の未アックのQoS 1およびQoS 2パケットを同時にネットワークリンク上に存在させることを許可しています。送信済みで未確認のパケットは、アック完了までインフライトウィンドウに格納されます。インフライトウィンドウの長さ制限に達すると、これらのパケットはメッセージキューに格納されます。本節では設計原則と関連する設定項目について説明します。
 
-  Message Retransmission is part of the MQTT protocol specification. This section will introduce the basic configuration, protocol specification, and design.
+- [メッセージ再送](./design/retransmission.md)
+
+  メッセージ再送はMQTTプロトコル仕様の一部です。本節では基本的な設定、プロトコル仕様、および設計について紹介します。

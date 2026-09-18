@@ -2,16 +2,16 @@
 
 ここでは、k8sクラスターがインターネットにアクセスできず、ユーザーが`ClusterRole`の作成および使用権限を持っていないことを想定しています。
 
-+ `emqx-operator`と`emqx`は同じネームスペースにインストールされている
-+ Cert managerはクラスター全体または`emqx-operator`と同じネームスペースに存在する可能性がある
-+ `emqx-operator`はプライベートなDockerレジストリを使用するように設定されており、`emqx`はカスタムの`securityContext`を使用するように設定されている
++ `emqx-operator`と`emqx`は同じネームスペースにインストールされます
++ Cert managerはクラスター全体または`emqx-operator`と同じネームスペースに存在する場合があります
++ `emqx-operator`はプライベートなDockerレジストリを使用するように設定され、`emqx`はカスタムの`securityContext`を使用するように設定されます
 
-## タスクの目的
+## タスクの目標
 
 - 必要なイメージをプライベートDockerレジストリにプッシュする
-- `cert-manager`のデフォルトパラメータをオーバーライドしてプライベートレジストリを使用する
+- `cert-manager`のデフォルトパラメータを上書きしてプライベートレジストリを使用する
 - EMQX OperatorのCRDを手動でインストールする
-- `emqx-operator`のデフォルトパラメータをオーバーライドしてプライベートレジストリ、単一ネームスペース、カスタム`securityContext`、およびWebhook無効化を設定する
+- `emqx-operator`のデフォルトパラメータを上書きしてプライベートレジストリ、単一ネームスペース、カスタム`securityContext`、およびWebhook無効化を設定する
 - EMQXにカスタム`securityContext`を使用する
 
 ## 必要なDockerイメージをプライベートDockerレジストリにプッシュする
@@ -81,9 +81,9 @@ kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download
 
 ### Emqx-Operatorのデプロイ
 
-cert-managerがクラスター全体にすでにインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
+cert-managerがすでにクラスター全体にインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
 
-この例では`podSecurityContext`と`containerSecurityContext`はデフォルト値を含んでいます。必要に応じてオーバーライドしてください。
+この例では`podSecurityContext`と`containerSecurityContext`にデフォルト値が含まれています。必要に応じて上書きしてください。
 
 ```bash
 helm repo add emqx https://repos.emqx.io/charts
@@ -100,7 +100,7 @@ helm upgrade --install emqx-operator emqx/emqx-operator \
   --set image.tag=$EMQX_OPERATOR_VERSION
 ```
 
-emqx-operatorが起動して稼働していることを確認してください：
+emqx-operatorが起動していることを確認してください：
 
 ```bash
 kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-manager"
@@ -125,7 +125,7 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
          }
    ```
 
-2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認できます。`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
+2. EMQXクラスターが起動するまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`になっていることを確認してください。起動には時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx

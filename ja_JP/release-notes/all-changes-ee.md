@@ -4,12 +4,13 @@ prev:
   link: '../develop/mqtt-reference'
 ---
 
-# Release Notes for EMQX Enterprise
+# EMQX Enterprise リリースノート
 
-The release notes page for EMQX Enterprise provides a comprehensive, detailed record of updates, enhancements, and fixes included in each version.
+EMQX Enterprise のリリースノートページでは、各バージョンに含まれる更新内容、機能強化、および修正点を詳細に記録しています。
 
 ## v6.3
 
+- [6.3.1](./changes-ee-v6.md#_6-3-1): 2026-09-17
 - [6.3.0](./changes-ee-v6.md#_6-3-0): 2026-09-03
 
 ## v6.2
@@ -175,9 +176,6 @@ The release notes page for EMQX Enterprise provides a comprehensive, detailed re
 
 ## v4.2
 
-- [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
-- [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
-- [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26
 - [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
 - [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
 - [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26
