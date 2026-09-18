@@ -193,3 +193,15 @@ Only requests that reach the plugin handler are counted. Management API authenti
 | `sync_request.requests.internal_error` | counter | Requests that failed with an unexpected internal error. |
 | `sync_request.inflight_requests` | gauge | HTTP requests currently waiting for MQTT responses. |
 | `sync_request.pending_responses` | gauge | Pending response registrations created after request delivery. |
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## Download
+
+Tarballs for each EMQX release:
+
+| EMQX Version | Plugin Version | Package |
+|---|---|---|
+| 5.10.5 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

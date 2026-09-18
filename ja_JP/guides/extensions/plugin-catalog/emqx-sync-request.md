@@ -181,15 +181,27 @@ sync_request.pending_responses: 0
 
 | メトリクス | 種類 | 説明 |
 | --- | --- | --- |
-| `sync_request.requests.total` | カウンター | 処理したHTTP同期リクエストの試行回数。 |
-| `sync_request.requests.succeeded` | カウンター | HTTP `200`を返したリクエスト数。 |
-| `sync_request.requests.failed` | カウンター | HTTP `200`以外のステータスを返したリクエスト数。 |
-| `sync_request.requests.bad_request` | カウンター | `400 BAD_REQUEST`で拒否されたリクエスト数。 |
-| `sync_request.requests.no_subscribers` | カウンター | 正確かつ非共有のサブスクライバーがオンラインにいないため拒否されたリクエスト数。 |
-| `sync_request.requests.conflict` | カウンター | リクエストトピックが複数または共有サブスクライバーにマッチしたため拒否されたリクエスト数。 |
-| `sync_request.requests.too_many_requests` | カウンター | `max_inflight_requests`に達したため拒否されたリクエスト数。 |
-| `sync_request.requests.dispatch_failed` | カウンター | サブスクライバーノードへのディスパッチに失敗したリクエスト数。 |
-| `sync_request.requests.timeout` | カウンター | マッチするMQTTレスポンスの待機でタイムアウトしたリクエスト数。 |
-| `sync_request.requests.internal_error` | カウンター | 予期しない内部エラーで失敗したリクエスト数。 |
-| `sync_request.inflight_requests` | ゲージ | 現在MQTTレスポンス待ちのHTTPリクエスト数。 |
-| `sync_request.pending_responses` | ゲージ | リクエスト配信後に作成された保留中レスポンス登録数。 |
+| `sync_request.requests.total` | counter | HTTP sync request attempts handled. |
+| `sync_request.requests.succeeded` | counter | Requests that returned HTTP `200`. |
+| `sync_request.requests.failed` | counter | Requests that returned a non-`200` HTTP status. |
+| `sync_request.requests.bad_request` | counter | Requests rejected with `400 BAD_REQUEST`. |
+| `sync_request.requests.no_subscribers` | counter | Requests rejected because no exact, non-shared subscriber was online. |
+| `sync_request.requests.conflict` | counter | Requests rejected because the request topic matched multiple or shared subscribers. |
+| `sync_request.requests.too_many_requests` | counter | Requests rejected because `max_inflight_requests` was reached. |
+| `sync_request.requests.dispatch_failed` | counter | Requests that could not be dispatched to the subscriber node. |
+| `sync_request.requests.timeout` | counter | Requests that timed out waiting for a matching MQTT response. |
+| `sync_request.requests.internal_error` | counter | Requests that failed with an unexpected internal error. |
+| `sync_request.inflight_requests` | gauge | HTTP requests currently waiting for MQTT responses. |
+| `sync_request.pending_responses` | gauge | Pending response registrations created after request delivery. |
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## ダウンロード
+
+各 EMQX リリースに対応するプラグインパッケージ:
+
+| EMQX バージョン | プラグインバージョン | パッケージ |
+|---|---|---|
+| 5.10.5 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/e5.10.5/emqx_sync_request-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->
