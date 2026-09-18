@@ -286,7 +286,7 @@
         }
       },
       "public.position": {
-        "description": "一个不透明的 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。",
+        "description": "在 `meta.position` 中返回的不透明 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。<br/>如果 `meta.position` 为 `end_of_data`，表示没有更多结果。不要在后续请求中发送 `end_of_data`。",
         "example": "none",
         "in": "query",
         "name": "position",
@@ -3506,7 +3506,7 @@
             "type": "string"
           },
           "sql": {
-            "description": "用于插入数据的 SQL。支持 `${clientid}` 等占位符变量。<br/><br/>注意：QuasarDB ODBC 驱动不支持预处理语句。因此，任何已知解析为 `STRING` 或 `BLOB` 类型的值，必须在 SQL 查询中手动加引号（`'`）。",
+            "description": "用于插入数据的 SQL。支持 `${clientid}` 等占位符变量。<br/>动作会在渲染占位符之前校验 `INSERT INTO ... VALUES (...)` 结构。<br/>动作会根据值所在的 SQL 上下文对值进行加引号和转义。<br/>对于数字、`NULL` 和时间戳值，请使用不加引号的占位符。<br/>文本值会自动加引号。使用单引号可强制占位符保持为文本。<br/>这种加引号的形式也可将占位符与静态字符串内容组合在一起。<br/>时间戳值必须使用 QuasarDB 文档中说明的时间戳格式。<br/>QuasarDB 查询 API 不支持包含 `NUL` 的值。",
             "format": "sql",
             "type": "string"
           }
@@ -5797,13 +5797,13 @@
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "s3"
                 ],
                 "type": "string"
               },
@@ -5839,12 +5839,6 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "mqtt"
                 ],
                 "type": "string"
@@ -5875,12 +5869,6 @@
               },
               {
                 "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redis"
                 ],
                 "type": "string"
@@ -5893,19 +5881,13 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5923,7 +5905,7 @@
               },
               {
                 "enum": [
-                  "tablestore"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -5947,13 +5929,13 @@
               },
               {
                 "enum": [
-                  "s3tables"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -5966,6 +5948,18 @@
               {
                 "enum": [
                   "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -5989,19 +5983,7 @@
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
                 ],
                 "type": "string"
               },
@@ -6013,7 +5995,13 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -6055,6 +6043,12 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mongodb"
                 ],
                 "type": "string"
@@ -6062,6 +6056,12 @@
               {
                 "enum": [
                   "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               }
@@ -7127,7 +7127,7 @@
       "api_key.scope_info": {
         "properties": {
           "desc": {
-            "description": "该 scope 覆盖范围的可读描述。",
+            "description": "该作用域覆盖范围的可读描述。",
             "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
             "type": "string"
           },
@@ -12951,12 +12951,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "默认为逗号 ','，适用于 VALUE 格式。您也可以使用其他分隔符， 请参考 [INSERT INTO 语句](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)。",
+            "description": "此参数已被忽略，仅为兼容性而保留。动作会根据 SQL 格式确定批量分隔符。",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "可以使用 ${field} 占位符来引用消息与客户端上下文中的变量，请确保对应字段存在且数据格式符合预期。此处不支持 [SQL 预处理](https://docs.emqx.com/zh/enterprise/v5.0/data-integration/data-bridges.html#sql-预处理)。",
+            "description": "受限的 ClickHouse `INSERT` 模板。支持 `VALUES`、`FORMAT Values` 和 `JSONCompactEachRow` 格式。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句和动态标识符。",
             "format": "sql",
             "type": "string"
           },
@@ -24692,7 +24692,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL 模板",
+            "description": "受限的 SQL Server INSERT INTO VALUES 模板。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句、多个配置行和动态标识符。",
             "format": "sql",
             "type": "string"
           },
@@ -26073,7 +26073,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL 模板",
+            "description": "受限的 TDengine INSERT 模板。支持多表 VALUES 插入和 USING 超级表 TAGS 子句。目标表名可以是裸名称或用反引号括起的名称，并可包含占位符，例如 `test_${clientid}`。EMQX 会将完整的目标表名渲染为一个带引号的标识符。不允许使用注释、FILE 输入和额外语句。",
             "format": "sql",
             "type": "string"
           },
@@ -34602,7 +34602,7 @@
           },
           "password_login": {
             "default": "both",
-            "description": "Select whether Dashboard local-user login accepts the legacy password request or SCRAM challenge-response.",
+            "description": "选择控制台本地用户登录接受旧版密码请求，还是 SCRAM 挑战-响应。",
             "enum": [
               "both",
               "scram_only"
@@ -35742,7 +35742,7 @@
         "properties": {
           "active_n": {
             "default": 10,
-            "description": "为此套接字指定{active，N}选项<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2",
+            "description": "为此套接字指定{active，N}选项<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2<br/><br/>使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。<br/><br/>超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
             "minimum": 0,
             "type": "integer"
           },
@@ -36828,7 +36828,7 @@
           },
           "max_clientid_len": {
             "default": 65535,
-            "description": "允许的最大 MQTT Client ID 长度。",
+            "description": "允许的最大 MQTT Client ID 长度。<br/>此限制适用于所有 MQTT 版本（3.1、3.1.1 和 5.0）。EMQX 不会单独执行 MQTT 3.1 协议规定的 23 字节限制；如需执行该限制，请将此值设置为 23。`strict_mode` 设置不会改变 Client ID 长度检查。",
             "maximum": 65535,
             "minimum": 23,
             "type": "integer"
@@ -36959,7 +36959,7 @@
           },
           "mqueue_store_qos0": {
             "default": true,
-            "description": "指定在连接断开但会话保持期间，是否需要在消息队列中存储 QoS 0 消息。",
+            "description": "控制在客户端断开连接或连接拥塞期间，是否将 QoS 0 消息缓存到会话的消息队列中。<br/>- 启用时，当飞行窗口已满，QoS 0 消息也可能排在 QoS 1 和 QoS 2 消息之后入队，以保持投递顺序。<br/>- 禁用时，不存储 QoS 0 消息。<br/>队列限制和消息过期仍然适用。<br/>此设置仅适用于非持久会话。",
             "type": "boolean"
           },
           "namespace_as_mountpoint": {
@@ -37073,7 +37073,7 @@
           },
           "strict_mode": {
             "default": true,
-            "description": "是否以严格模式解析 MQTT 消息。<br/>严格模式下，客户端 ID、主题名等中的无效 UTF-8 字符串、保留位以及其他格式错误的报文结构会导致客户端断开连接。<br/>自 6.3 版本起默认值为 `true`——若需兼容不符合规范的客户端，请设置为 `false` 以恢复旧的宽松行为。",
+            "description": "是否以严格模式解析 MQTT 消息。<br/>严格模式下，客户端 ID、主题名等中的无效 UTF-8 字符串、保留位以及其他格式错误的报文结构会导致客户端断开连接。<br/>自 6.3 版本起默认值为 `true`——若需兼容不符合规范的客户端，请设置为 `false` 以恢复旧的宽松行为。<br/>严格模式仅检查报文格式是否正确，不执行特定协议版本的语义限制，例如 MQTT 3.1 的 Client ID 长度；Client ID 长度由 `max_clientid_len` 控制。",
             "type": "boolean"
           },
           "subscription_message_filter": {
@@ -37487,7 +37487,7 @@
         "properties": {
           "active_n": {
             "default": 10,
-            "description": "为此套接字指定{active，N}选项<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2",
+            "description": "为此套接字指定{active，N}选项<br/><br/>See: https://erlang.org/doc/man/inet.html#setopts-2<br/><br/>使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。<br/><br/>超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
             "minimum": 0,
             "type": "integer"
           },
@@ -37499,7 +37499,7 @@
           },
           "buffer": {
             "default": "4KB",
-            "description": "驱动程序使用的用户空间缓冲区的大小。",
+            "description": "驱动程序使用的用户空间缓冲区的大小。<br/><br/>小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。",
             "example": "4KB",
             "type": "string"
           },
@@ -41990,7 +41990,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "2CB5698E0A248CBA",
+            "example": "10144B54D89A0D4A",
             "type": "string"
           },
           "status": {
@@ -54328,7 +54328,7 @@
       "public.continuation_meta": {
         "properties": {
           "position": {
-            "description": "一个不透明的 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。",
+            "description": "在 `meta.position` 中返回的不透明 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。<br/>如果 `meta.position` 为 `end_of_data`，表示没有更多结果。不要在后续请求中发送 `end_of_data`。",
             "example": "none",
             "oneOf": [
               {
@@ -56613,7 +56613,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -56778,7 +56778,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -56911,7 +56911,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -59866,7 +59866,7 @@
             "default": [
               "openid"
             ],
-            "description": "范围，默认值是 `[\"openid\"]`.",
+            "description": "作用域，默认值是 `[\"openid\"]`.",
             "items": {
               "type": "string"
             },
@@ -61650,7 +61650,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.3.1-rc.3"
+    "version": "6.3.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62266,51 +62266,51 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
+                      "tablestore",
                       "cassandra",
                       "mongodb",
+                      "sqlserver",
                       "opents",
                       "matrix",
                       "azure_event_grid",
                       "confluent_producer",
                       "cockroachdb",
                       "emqx_tables",
-                      "gcp_pubsub_producer",
-                      "snowflake",
-                      "s3",
-                      "elasticsearch",
+                      "snowflake_streaming",
                       "bigquery",
+                      "snowflake",
+                      "elasticsearch",
                       "oracle",
                       "azure_event_hub_producer",
                       "azure_blob_storage",
+                      "s3tables",
+                      "kinesis",
                       "quasardb",
                       "redshift",
+                      "gcp_pubsub_producer",
                       "greptimedb",
-                      "s3tables",
                       "pgsql",
                       "iotdb",
                       "doris",
-                      "tablestore",
+                      "rabbitmq",
                       "disk_log",
                       "syskeeper_forwarder",
-                      "kinesis",
+                      "kafka_producer",
                       "datalayers",
-                      "snowflake_streaming",
                       "http",
                       "redis",
-                      "sqlserver",
                       "clickhouse",
                       "aws_timestream",
                       "rocketmq",
                       "timescale",
                       "mqtt",
-                      "rabbitmq",
                       "alloydb",
                       "pulsar",
                       "mysql",
                       "influxdb",
                       "tdengine",
+                      "s3",
                       "dynamo",
-                      "kafka_producer",
                       "couchbase",
                       "bigtable"
                     ]
@@ -62319,51 +62319,51 @@
                 "schema": {
                   "items": {
                     "enum": [
+                      "tablestore",
                       "cassandra",
                       "mongodb",
+                      "sqlserver",
                       "opents",
                       "matrix",
                       "azure_event_grid",
                       "confluent_producer",
                       "cockroachdb",
                       "emqx_tables",
-                      "gcp_pubsub_producer",
-                      "snowflake",
-                      "s3",
-                      "elasticsearch",
+                      "snowflake_streaming",
                       "bigquery",
+                      "snowflake",
+                      "elasticsearch",
                       "oracle",
                       "azure_event_hub_producer",
                       "azure_blob_storage",
+                      "s3tables",
+                      "kinesis",
                       "quasardb",
                       "redshift",
+                      "gcp_pubsub_producer",
                       "greptimedb",
-                      "s3tables",
                       "pgsql",
                       "iotdb",
                       "doris",
-                      "tablestore",
+                      "rabbitmq",
                       "disk_log",
                       "syskeeper_forwarder",
-                      "kinesis",
+                      "kafka_producer",
                       "datalayers",
-                      "snowflake_streaming",
                       "http",
                       "redis",
-                      "sqlserver",
                       "clickhouse",
                       "aws_timestream",
                       "rocketmq",
                       "timescale",
                       "mqtt",
-                      "rabbitmq",
                       "alloydb",
                       "pulsar",
                       "mysql",
                       "influxdb",
                       "tdengine",
+                      "s3",
                       "dynamo",
-                      "kafka_producer",
                       "couchbase",
                       "bigtable"
                     ],
@@ -88758,7 +88758,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90434,7 +90434,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -92342,7 +92342,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -93642,7 +93642,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95307,7 +95307,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -96960,7 +96960,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -97914,7 +97914,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "2CB5698E0A248CBA",
+            "example": "10144B54D89A0D4A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97977,7 +97977,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "2CB5698E0A248CBA",
+            "example": "10144B54D89A0D4A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98391,7 +98391,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "2CB5698E0A248CBA",
+            "example": "10144B54D89A0D4A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98477,7 +98477,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "2CB5698E0A248CBA",
+            "example": "10144B54D89A0D4A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -103959,6 +103959,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -104059,73 +104126,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -109617,7 +109617,7 @@
               "schema": {
                 "properties": {
                   "client_nonce": {
-                    "description": "SCRAM client nonce. Use 20 to 128 unpadded Base64URL characters: letters, digits, `_`, or `-`.",
+                    "description": "SCRAM 客户端 nonce。使用 20 到 128 个不带填充的 Base64URL 字符：字母、数字、`_` 或 `-`。",
                     "example": "clientNonce1234567890",
                     "maxLength": 128,
                     "type": "string"
@@ -109746,7 +109746,7 @@
                     "type": "string"
                   },
                   "combined_nonce": {
-                    "description": "The client nonce followed by the server nonce returned by the challenge endpoint.",
+                    "description": "客户端 nonce 后接挑战端点返回的服务端 nonce。",
                     "example": "clientNonce1234567890serverNonce1234567890",
                     "maxLength": 160,
                     "type": "string"

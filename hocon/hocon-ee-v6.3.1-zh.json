@@ -179,7 +179,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-listeners-S-listeners-tcp-S-mqtt_tcp_listener-tcp_options-S-tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -219,7 +219,7 @@
                             },
                             {
                               "default": "\"4KB\"",
-                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-tcp-S-mqtt_tcp_listener-tcp_options-S-tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
@@ -439,7 +439,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-tcp_options-S-tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -479,7 +479,7 @@
                             },
                             {
                               "default": "\"4KB\"",
-                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-ssl-S-mqtt_ssl_listener-tcp_options-S-tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
@@ -967,7 +967,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-tcp_options-S-tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -1007,7 +1007,7 @@
                             },
                             {
                               "default": "\"4KB\"",
-                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-ws-S-mqtt_ws_listener-tcp_options-S-tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
@@ -1387,7 +1387,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-tcp_options-S-tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -1427,7 +1427,7 @@
                             },
                             {
                               "default": "\"4KB\"",
-                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                               "hash": "V-listeners-S-listeners-wss-S-mqtt_wss_listener-tcp_options-S-tcp_opts-buffer",
                               "text": "buffer",
                               "type": "Bytesize"
@@ -2152,7 +2152,7 @@
             },
             {
               "default": "65535",
-              "doc": "允许的最大 MQTT Client ID 长度。",
+              "doc": "允许的最大 MQTT Client ID 长度。\n此限制适用于所有 MQTT 版本（3.1、3.1.1 和 5.0）。EMQX 不会单独执行 MQTT 3.1 协议规定的 23 字节限制；如需执行该限制，请将此值设置为 23。`strict_mode` 设置不会改变 Client ID 长度检查。",
               "hash": "V-mqtt-S-mqtt-max_clientid_len",
               "text": "max_clientid_len",
               "type": "Integer(23..65535)"
@@ -2229,7 +2229,7 @@
             },
             {
               "default": "true",
-              "doc": "是否以严格模式解析 MQTT 消息。\n严格模式下，客户端 ID、主题名等中的无效 UTF-8 字符串、保留位以及其他格式错误的报文结构会导致客户端断开连接。\n自 6.3 版本起默认值为 `true`——若需兼容不符合规范的客户端，请设置为 `false` 以恢复旧的宽松行为。",
+              "doc": "是否以严格模式解析 MQTT 消息。\n严格模式下，客户端 ID、主题名等中的无效 UTF-8 字符串、保留位以及其他格式错误的报文结构会导致客户端断开连接。\n自 6.3 版本起默认值为 `true`——若需兼容不符合规范的客户端，请设置为 `false` 以恢复旧的宽松行为。\n严格模式仅检查报文格式是否正确，不执行特定协议版本的语义限制，例如 MQTT 3.1 的 Client ID 长度；Client ID 长度由 `max_clientid_len` 控制。",
               "hash": "V-mqtt-S-mqtt-strict_mode",
               "text": "strict_mode",
               "type": "Boolean"
@@ -2383,7 +2383,7 @@
             },
             {
               "default": "true",
-              "doc": "指定在连接断开但会话保持期间，是否需要在消息队列中存储 QoS 0 消息。",
+              "doc": "控制在客户端断开连接或连接拥塞期间，是否将 QoS 0 消息缓存到会话的消息队列中。\n- 启用时，当飞行窗口已满，QoS 0 消息也可能排在 QoS 1 和 QoS 2 消息之后入队，以保持投递顺序。\n- 禁用时，不存储 QoS 0 消息。\n队列限制和消息过期仍然适用。\n此设置仅适用于非持久会话。",
               "hash": "V-mqtt-S-mqtt-mqueue_store_qos0",
               "text": "mqueue_store_qos0",
               "type": "Boolean"
@@ -12064,7 +12064,7 @@
             },
             {
               "default": "auto",
-              "doc": "Translated to the `+SDio` flag of the Erlang VM, sets the number of dirty\nI/O scheduler threads to create.\n\nWhen set to `auto` (the default), EMQX derives this from `node.schedulers`:\n8 (the historical fixed default) when `node.schedulers` resolves to more\nthan 2, and 4 otherwise. Dirty I/O scheduler threads run blocking I/O jobs\n(file operations and some NIFs), so a small node still keeps enough of them\nto overlap blocking calls, while not paying the thread memory overhead of\nthe full default.\n\nSet this to a positive integer to override the derived value.",
+              "doc": "转换为 Erlang VM 的 `+SDio` 标志，设置要创建的脏 I/O 调度器线程数。\n\n当设置为 `auto`（默认）时，EMQX 根据 `node.schedulers` 推导此值：\n当 `node.schedulers` 解析为大于 2 的值时为 8（历史上的固定默认值），否则为 4。\n脏 I/O 调度器线程运行阻塞式 I/O 任务（文件操作和部分 NIF），因此小型节点仍保留足够的线程来并行处理阻塞调用，同时无需承担完整默认值带来的线程内存开销。\n\n设置为正整数可覆盖推导出的值。",
               "hash": "V-node-S-node-dirty_io_schedulers",
               "text": "dirty_io_schedulers",
               "type": "OneOf(String(\"auto\"),Integer(1..+inf))"
@@ -12747,7 +12747,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-cluster-S-cluster-links-S-link-tcp_opts-S-client_tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -18712,7 +18712,7 @@
                       "aliases": [
                         "namespace"
                       ],
-                      "doc": "The namespace field MUST be set if you are using the RocketMQ service in\naliyun cloud and also the namespace is enabled,\nor if you have configured a namespace in your RocketMQ server.\nFor RocketMQ in aliyun cloud, the namespace is the instance ID.",
+                      "doc": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
                       "hash": "V-connectors-S-connectors-rocketmq-S-config_connector-rocketmq_namespace",
                       "text": "rocketmq_namespace",
                       "type": "String"
@@ -27018,7 +27018,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-connectors-S-connectors-mqtt-S-config_connector-tcp_opts-S-client_tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -28320,7 +28320,7 @@
                           "fields": [
                             {
                               "default": "10",
-                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                               "hash": "V-connectors-S-connectors-azure_event_grid-S-config_connector-tcp_opts-S-client_tcp_opts-active_n",
                               "text": "active_n",
                               "type": "Integer(0..+inf)"
@@ -32424,7 +32424,7 @@
                           "doc": "动作的参数集合。",
                           "fields": [
                             {
-                              "doc": "用于插入数据的 SQL。支持 `${clientid}` 等占位符变量。\n\n注意：QuasarDB ODBC 驱动不支持预处理语句。因此，任何已知解析为 `STRING` 或 `BLOB` 类型的值，必须在 SQL 查询中手动加引号（`'`）。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "用于插入数据的 SQL。支持 `${clientid}` 等占位符变量。\n动作会在渲染占位符之前校验 `INSERT INTO ... VALUES (...)` 结构。\n动作会根据值所在的 SQL 上下文对值进行加引号和转义。\n对于数字、`NULL` 和时间戳值，请使用不加引号的占位符。\n文本值会自动加引号。使用单引号可强制占位符保持为文本。\n这种加引号的形式也可将占位符与静态字符串内容组合在一起。\n时间戳值必须使用 QuasarDB 文档中说明的时间戳格式。\nQuasarDB 查询 API 不支持包含 `NUL` 的值。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-quasardb-S-quasardb-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -36460,7 +36460,7 @@
                             },
                             {
                               "default": "\"insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})\"",
-                              "doc": "SQL 模板<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 TDengine INSERT 模板。支持多表 VALUES 插入和 USING 超级表 TAGS 子句。目标表名可以是裸名称或用反引号括起的名称，并可包含占位符，例如 `test_${clientid}`。EMQX 会将完整的目标表名渲染为一个带引号的标识符。不允许使用注释、FILE 输入和额外语句。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-tdengine-S-action_config-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -36774,7 +36774,7 @@
                           "fields": [
                             {
                               "default": "\"INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})\"",
-                              "doc": "可以使用 ${field} 占位符来引用消息与客户端上下文中的变量，请确保对应字段存在且数据格式符合预期。此处不支持 [SQL 预处理](https://docs.emqx.com/zh/enterprise/v5.0/data-integration/data-bridges.html#sql-预处理)。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 ClickHouse `INSERT` 模板。支持 `VALUES`、`FORMAT Values` 和 `JSONCompactEachRow` 格式。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句和动态标识符。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-clickhouse-S-clickhouse_action-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -36788,7 +36788,7 @@
                             },
                             {
                               "default": "\", \"",
-                              "doc": "默认为逗号 ','，适用于 VALUE 格式。您也可以使用其他分隔符， 请参考 [INSERT INTO 语句](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)。",
+                              "doc": "此参数已被忽略，仅为兼容性而保留。动作会根据 SQL 格式确定批量分隔符。",
                               "hash": "V-actions-S-actions-clickhouse-S-clickhouse_action-parameters-S-action_parameters-batch_value_separator",
                               "text": "batch_value_separator",
                               "type": "String"
@@ -38082,7 +38082,7 @@
                           "fields": [
                             {
                               "default": "\"insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )\"",
-                              "doc": "SQL 模板<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
+                              "doc": "受限的 SQL Server INSERT INTO VALUES 模板。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句、多个配置行和动态标识符。<br/>用于`${.path.to.var}`样式值插值的字符串，其中开头的点是可选的。语法`${.}`表示取值整个对象（包含所有字段）。",
                               "hash": "V-actions-S-actions-sqlserver-S-sqlserver_action-parameters-S-action_parameters-sql",
                               "text": "sql",
                               "type": "String"
@@ -48318,7 +48318,7 @@
             },
             {
               "default": "both",
-              "doc": "Select whether Dashboard local-user login accepts the legacy password request or SCRAM challenge-response.",
+              "doc": "选择控制台本地用户登录接受旧版密码请求，还是 SCRAM 挑战-响应。",
               "hash": "V-dashboard-S-dashboard-password_login",
               "text": "password_login",
               "type": "Enum(both,scram_only)"
@@ -48658,7 +48658,7 @@
                             },
                             {
                               "default": "[openid]",
-                              "doc": "范围，默认值是 `[\"openid\"]`.",
+                              "doc": "作用域，默认值是 `[\"openid\"]`.",
                               "hash": "V-dashboard-S-dashboard-sso-S-sso-oidc-S-oidc-scopes",
                               "text": "scopes",
                               "type": "Array(String)"
@@ -49807,7 +49807,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -49847,7 +49847,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -49980,7 +49980,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -50020,7 +50020,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-gbt32960-S-gbt32960-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -50660,7 +50660,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -50700,7 +50700,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -50833,7 +50833,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -50873,7 +50873,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-jt808-S-jt808-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -53006,7 +53006,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -53046,7 +53046,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -53339,7 +53339,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -53379,7 +53379,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-ocpp-S-ocpp-listeners-S-ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -54004,7 +54004,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -54044,7 +54044,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -54177,7 +54177,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -54217,7 +54217,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-stomp-S-stomp-listeners-S-tcp_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -55035,7 +55035,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -55075,7 +55075,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ws-S-ws_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -55368,7 +55368,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -55408,7 +55408,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-wss-S-wss_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -55756,7 +55756,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -55796,7 +55796,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-tcp-S-tcp_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
@@ -55929,7 +55929,7 @@
                                           "fields": [
                                             {
                                               "default": "10",
-                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2",
+                                              "doc": "为此套接字指定{active，N}选项<br/>\nSee: https://erlang.org/doc/man/inet.html#setopts-2\n\n使用 `socket` TCP 后端时，此值仅设置消息投递的批量大小，以及两次内存检查之间发送的报文数。\n\n超出 1-1000 范围的值不会被拒绝；为兼容现有配置，实际生效值会被静默限制在该范围内。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-active_n",
                                               "text": "active_n",
                                               "type": "Integer(0..+inf)"
@@ -55969,7 +55969,7 @@
                                             },
                                             {
                                               "default": "\"4KB\"",
-                                              "doc": "驱动程序使用的用户空间缓冲区的大小。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
+                                              "doc": "驱动程序使用的用户空间缓冲区的大小。\n\n小于 5 字节（MQTT 固定报头的最大长度）的值不会被拒绝；为兼容现有配置，实际生效的缓冲区大小会被静默提升到 5 字节。<br/>表示字节数量的字符串，例如：<code>10B</code>、<code>640kb</code>、<code>4MB</code>、<code>1GB</code>。单位采用二进制标准，即 1MB 等于 1024KB。单位不区分大小写，例如 1kb 等于 1KB。",
                                               "hash": "V-gateway-S-gateway-nats-S-nats-listeners-S-tcp_ws_listeners-ssl-S-ssl_listener-tcp_options-S-tcp_opts-buffer",
                                               "text": "buffer",
                                               "type": "Bytesize"
