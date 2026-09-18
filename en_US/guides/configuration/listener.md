@@ -21,6 +21,16 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+## Listener Name Requirements
+
+Starting from EMQX 6.3.1, the name of a newly created MQTT listener must meet the following requirements:
+
+- The name is 1 to 64 bytes long.
+- The name starts with an ASCII letter or digit.
+- The name contains only ASCII letters, digits, hyphens (`-`), and underscores (`_`).
+
+EMQX rejects a listener creation request if the name does not meet these requirements. For MQTT listeners that existed before the upgrade and have names longer than 64 bytes, you can still update their configurations or remove them, but you cannot rename them.
+
 ## How EMQX Determines the Listener Address
 
 A listener address determines the local network interfaces and port on which EMQX receives client connections.

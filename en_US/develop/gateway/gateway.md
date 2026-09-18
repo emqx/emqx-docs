@@ -51,6 +51,8 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
 
+Starting from EMQX 6.3.1, the name of a newly created gateway listener must be 1 to 64 bytes long, start with an ASCII letter or digit, and contain only ASCII letters, digits, hyphens (`-`), and underscores (`_`). If the name does not meet these requirements, the REST API returns an HTTP `400` response with the `BAD_REQUEST` error code. For gateway listeners that existed before the upgrade and have names longer than 64 bytes, you can still update their configurations or remove them, but you cannot rename them.
+
 ### Bind Address
 
 A gateway listener's `bind` setting specifies the local address and port used to receive client traffic. It accepts an explicit IP address and port, or a port alone.
