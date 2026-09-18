@@ -45,7 +45,7 @@ Once the Operator is running, you can proceed to deploy EMQX.
            key: "evaluation"
    ```
 
-   This manifest deploys a single-node EMQX cluster, which is supported by the default Community License. Before configuring multiple nodes or scaling an existing cluster beyond one node, configure a license that supports clustering. This example sets `license.key` to `"evaluation"` for evaluation.
+   This manifest deploys a single-node EMQX cluster, which is supported by the default Community License. Before configuring multiple nodes or scaling an existing cluster beyond one node, configure a license that supports clustering. For this example, `license.key` is set to `"evaluation"`.
 
    For more details about the EMQX CRD, check out the [reference documentation](./reference/v3beta1-reference.md).
 

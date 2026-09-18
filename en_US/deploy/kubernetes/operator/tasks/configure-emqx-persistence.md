@@ -101,4 +101,4 @@ Verify that Kubernetes reattaches the same PVC when a Core Pod is replaced. Do n
    test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
    ```
 
-   Matching UIDs confirm that the replacement Pod reused the same PVC.
+   Matching UIDs confirm that Kubernetes preserved the original PVC, so the replacement Pod continues to use the same persistent volume.

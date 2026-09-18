@@ -45,7 +45,7 @@ Operator 开始运行后，即可部署 EMQX。
            key: "evaluation"
    ```
 
-   此清单将部署一个单节点 EMQX 集群，默认的社区版 License 可支持该部署。配置多节点集群或将现有集群扩容到多个节点前，请配置支持集群功能的 License。本示例将 `license.key` 设置为 `"evaluation"`，用于评估环境。
+   此清单将部署一个单节点 EMQX 集群，默认的社区版 License 可支持该部署。配置多节点集群或将现有集群扩容到多个节点前，请配置支持集群功能的 License。本示例将 `license.key` 设置为 `"evaluation"`。
 
    有关 EMQX CRD 的详情，请参见 [API 参考](./reference/v3beta1-reference.md)。
 

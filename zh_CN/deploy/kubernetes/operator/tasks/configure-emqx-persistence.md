@@ -101,4 +101,4 @@ EMQX Operator 会配置 Kubernetes，使其在不再需要 Core 节点 PVC 时�
    test "${pvc_uid_before}" = "${pvc_uid_after}" && echo "The Core Pod reused the same PVC."
    ```
 
-   UID 相同即表示替换后的 Pod 复用了同一个 PVC。
+   UID 相同即表示 Kubernetes 保留了原 PVC，因此替换后的 Pod 会继续使用同一个持久卷。

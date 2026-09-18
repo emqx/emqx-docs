@@ -13,17 +13,15 @@ Use EMQX Operator 3.0 to perform a graceful rolling update of an EMQX cluster.
 
 ## How Rolling Updates Work
 
-EMQX Operator performs a rolling update when a change to an EMQX custom resource modifies a Pod template, such as the image, image pull policy, resource requests, or Core and Replicant templates.
+EMQX Operator performs a rolling update when a change to an EMQX custom resource modifies a Pod template, such as the image, image pull policy, resource requests, or Core and Replicant templates. The rollout proceeds in the following stages:
 
-Node evacuation is enabled by default to drain MQTT connections and sessions before Pods are removed. To disable node evacuation, set `.spec.updateStrategy.evacuationStrategy.type` to `Disabled`.
+1. **Update Core nodes:** The Operator updates one Core Pod at a time in the same StatefulSet. It recreates each Pod with the desired template and waits until the Pod is ready before continuing. The Replicant rollout can start after at least one updated Core node is ready.
+2. **Update Replicant nodes:** The Operator uses a Deployment-style rollout, creating updated Replicant Pods up to `maxSurge` and evacuating outdated Replicant Pods up to `maxUnavailable`. These limits control rollout speed and availability. The Operator keeps at least one Core node from the previous revision until the Replicant Pods from that revision have migrated, so each revision has a Core node available during the transition.
+3. **Complete the rollout:** After the Replicant migration, the Operator finishes updating the Core nodes. The rollout completes when all desired Pods are ready and no outdated Replicant Pods remain.
 
-For Core nodes, the Operator updates Pods one at a time within the same StatefulSet. The Operator drains the selected Core Pod if node evacuation is enabled, recreates the Pod with the desired template, and waits until it is ready before updating the next Core Pod.
+By default, the Operator evacuates MQTT connections and sessions at configured rates before removing a Pod. To disable node evacuation, set `.spec.updateStrategy.evacuationStrategy.type` to `Disabled`.
 
-For Replicant nodes, the Operator uses a Deployment-style rollout. It creates updated Replicant Pods up to the `maxSurge` limit and drains outdated Replicant Pods up to the `maxUnavailable` limit. These settings control how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
-
-In Core-Replicant clusters, at least one updated Core node must be ready before the Replicant rollout starts, and at least one old Core node is kept until Replicant Pods have migrated away from the old revision.
-
-The following procedure changes annotations in the Core and Replicant Pod templates to demonstrate the rolling update mechanism without changing the EMQX version. To upgrade EMQX, update `.spec.image` to a supported target version. The Operator uses the same rolling update mechanism for the image change.
+The following procedure changes Pod template annotations to demonstrate this mechanism without upgrading EMQX. To upgrade EMQX, update `.spec.image`; the same rolling update mechanism applies.
 
 ## Configure the Update Strategy
 
@@ -63,7 +61,11 @@ The following procedure changes annotations in the Core and Replicant Pod templa
         type: LoadBalancer
   ```
 
+  ::: warning
+
   `maxUnavailable` and `maxSurge` cannot both be `0`. If `maxUnavailable` is `100%`, `maxSurge` must be greater than `0`. For field definitions, defaults, and validation rules, see [ReplicantsUpdateStrategy](../reference/v3beta1-reference.md#replicantsupdatestrategy).
+
+  :::
 
 2. Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
 
@@ -82,9 +84,9 @@ The following procedure changes annotations in the Core and Replicant Pod templa
   emqx      Ready    8m33s
   ```
 
-## Generate Test Connections
+## Establish Test Connections
 
-Use MQTTX CLI to generate MQTT connections for observing connection evacuation during the rolling update. MQTTX CLI supports automatic reconnection.
+Use MQTTX CLI to establish MQTT connections for observing connection evacuation during the rolling update. MQTTX CLI supports automatic reconnection.
 
 Get the external address of the `emqx-listeners` Service. The command supports load balancers that publish either an IP address or a hostname.
 

@@ -4,19 +4,17 @@
 
 Perform a graceful rolling update of the EMQX cluster.
 
-## Background
+## How Rolling Updates Work
 
-EMQX Operator performs rolling updates when fields in the EMQX Pod template change, such as the image, image pull policy, resource requests, or node templates.
+EMQX Operator performs a rolling update when a change to an EMQX custom resource modifies a Pod template, such as the image, image pull policy, resource requests, or Core and Replicant templates. The rollout proceeds in the following stages:
 
-During a rolling update, Core nodes are updated in place through a single StatefulSet, one Pod at a time. Replicant nodes use a Deployment-style rollout controlled by `maxUnavailable` and `maxSurge`. Node evacuation is used by default to drain MQTT connections and sessions before Pods are removed. It can be disabled with `.spec.updateStrategy.evacuationStrategy.type: Disabled`.
+1. **Update Core nodes:** The Operator updates one Core Pod at a time in the same StatefulSet. It recreates each Pod with the desired template and waits until the Pod is ready before continuing. The Replicant rollout can start after at least one updated Core node is ready.
+2. **Update Replicant nodes:** The Operator uses a Deployment-style rollout, creating updated Replicant Pods up to `maxSurge` and evacuating outdated Replicant Pods up to `maxUnavailable`. These limits control rollout speed and availability. The Operator keeps at least one Core node from the previous revision until the Replicant Pods from that revision have migrated, so each revision has a Core node available during the transition.
+3. **Complete the rollout:** After the Replicant migration, the Operator finishes updating the Core nodes. The rollout completes when all desired Pods are ready and no outdated Replicant Pods remain.
 
-## Solution
+By default, the Operator evacuates MQTT connections and sessions at configured rates before removing a Pod. To disable node evacuation, set `.spec.updateStrategy.evacuationStrategy.type` to `Disabled`.
 
-When a change to an EMQX CR modifies a Pod template, EMQX Operator compares the desired template with the running workloads and rolls the cluster forward until every managed Pod matches the new template.
-
-For Core nodes, the Operator updates the StatefulSet template, drains the selected Core Pod if evacuation is enabled, recreates that Pod with the new template, and waits until it is ready before moving to the next Core Pod. For Replicant nodes, the Operator creates updated Replicant Pods up to the `maxSurge` limit and drains old Replicant Pods up to the `maxUnavailable` limit. These settings control how quickly the update proceeds while keeping the number of serving nodes within the configured bounds.
-
-In Core-Replicant clusters, at least one updated Core node must be ready before the Replicant rollout starts, and at least one old Core node is kept until Replicant Pods have migrated away from the old revision.
+The following procedure changes Pod template annotations to demonstrate this mechanism without upgrading EMQX. To upgrade EMQX, update `.spec.image`; the same rolling update mechanism applies.
 
 ## Procedure
 
@@ -58,6 +56,12 @@ In Core-Replicant clusters, at least one updated Core node must be ready before 
         type: LoadBalancer
   ```
 
+  ::: warning
+
+  `maxUnavailable` and `maxSurge` cannot both be `0`. If `maxUnavailable` is `100%`, `maxSurge` must be greater than `0`. For field definitions, defaults, and validation rules, see [ReplicantsUpdateStrategy](../reference/v3beta1-reference.md#replicantsupdatestrategy).
+
+  :::
+
 2. Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
 
   ```bash
@@ -75,7 +79,7 @@ In Core-Replicant clusters, at least one updated Core node must be ready before 
   emqx      Ready    8m33s
   ```
 
-### Connect to EMQX Cluster
+### Establish Test Connections
 
 [MQTTX CLI](https://mqttx.app/cli) is an open-source, MQTT 5.0-compatible command-line client for developing and debugging MQTT services and applications. It supports automatic reconnection.
 

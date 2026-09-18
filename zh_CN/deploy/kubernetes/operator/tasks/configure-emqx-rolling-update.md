@@ -8,22 +8,20 @@
 - 确保 Kubernetes 环境可以为 `LoadBalancer` Service 分配外部地址。
 - 准备可支持至少 3,000 个并发连接的有效 EMQX Enterprise 许可证，并将本示例中的许可证占位符替换为许可证密钥。详情请参见[管理许可证](./configure-emqx-license.md)。
 - 安装 `jq`，用于查看节点疏散状态。
-- 安装 [MQTTX CLI](https://mqttx.app/cli)，用于生成测试连接。
+- 安装 [MQTTX CLI](https://mqttx.app/cli)，用于建立测试连接。
 - 对于 Core-Replicant 集群，请至少配置两个 Core 副本。EMQX Operator 不接受 Core 副本数少于两个的 Core-Replicant 配置。
 
 ## 滚动更新的工作原理
 
-如果对 EMQX 自定义资源的修改会改变 Pod 模板，例如修改镜像、镜像拉取策略、资源请求、Core 模板或 Replicant 模板，EMQX Operator 会执行滚动更新。
+如果对 EMQX 自定义资源的修改会改变 Pod 模板，例如修改镜像、镜像拉取策略、资源请求、Core 模板或 Replicant 模板，EMQX Operator 会按照以下阶段执行滚动更新：
 
-默认情况下，Operator 会先疏散 MQTT 连接和会话，再删除 Pod。如需禁用节点疏散，请将 `.spec.updateStrategy.evacuationStrategy.type` 设置为 `Disabled`。
+1. **更新 Core 节点：** Operator 会在同一个 StatefulSet 中逐个更新 Core Pod。Operator 使用目标模板重新创建每个 Pod，并等待该 Pod 就绪后再继续更新。至少有一个更新后的 Core 节点就绪后，才能开始更新 Replicant 节点。
+2. **更新 Replicant 节点：** Operator 采用类似 Deployment 的滚动更新方式，最多按照 `maxSurge` 指定的数量创建更新后的 Replicant Pod，同时最多按照 `maxUnavailable` 指定的数量疏散上一修订版本的 Replicant Pod。这两个参数用于控制滚动更新速度和可用性。在该修订版本的 Replicant Pod 迁移完成之前，Operator 会保留上一修订版本的至少一个 Core 节点，确保迁移期间每个修订版本都有可用的 Core 节点。
+3. **完成滚动更新：** Replicant Pod 迁移完成后，Operator 会继续更新其余 Core 节点。当所有目标 Pod 均已就绪，且不再存在上一修订版本的 Replicant Pod 时，滚动更新完成。
 
-对于 Core 节点，Operator 会在同一个 StatefulSet 中逐个更新 Pod。如果已启用节点疏散，Operator 会先疏散选定的 Core Pod，再使用目标模板重新创建该 Pod，并等待其就绪后再更新下一个 Core Pod。
+默认情况下，Operator 会在移除 Pod 前按照配置的速率疏散 MQTT 连接和会话。如需禁用节点疏散，请将 `.spec.updateStrategy.evacuationStrategy.type` 设置为 `Disabled`。
 
-对于 Replicant 节点，Operator 采用类似 Deployment 的滚动更新方式。Operator 最多按照 `maxSurge` 指定的数量创建更新后的 Replicant Pod，同时最多按照 `maxUnavailable` 指定的数量疏散原修订版本的 Replicant Pod。这些设置用于控制更新速度，并使提供服务的节点数保持在配置的范围内。
-
-在 Core-Replicant 集群中，必须至少有一个更新后的 Core 节点就绪，才能开始更新 Replicant 节点；在 Replicant Pod 全部迁移到新修订版本之前，还会保留至少一个旧修订版本的 Core 节点。
-
-以下步骤通过修改 Core 和 Replicant Pod 模板中的注解来演示滚动更新机制，不会升级 EMQX 版本。如需升级 EMQX，请将 `.spec.image` 更新为受支持的目标版本。Operator 会使用相同的滚动更新机制处理镜像变更。
+以下步骤通过修改 Pod 模板中的注解来演示此机制，不会升级 EMQX。如需升级 EMQX，请更新 `.spec.image`；Operator 会使用相同的滚动更新机制。
 
 ## 配置更新策略
 
@@ -63,7 +61,11 @@
         type: LoadBalancer
   ```
 
+  ::: warning
+
   `maxUnavailable` 和 `maxSurge` 不能同时为 `0`。如果 `maxUnavailable` 为 `100%`，则 `maxSurge` 必须大于 `0`。有关字段定义、默认值和校验规则，参见 [ReplicantsUpdateStrategy](../reference/v3beta1-reference.md#replicantsupdatestrategy)。
+
+  :::
 
 2. 将以上内容保存为 `emqx-update.yaml`，并使用 `kubectl apply` 部署：
 
@@ -82,9 +84,9 @@
   emqx      Ready    8m33s
   ```
 
-## 生成测试连接
+## 建立测试连接
 
-使用 MQTTX CLI 生成 MQTT 连接，以便在滚动更新期间观察连接疏散过程。MQTTX CLI 支持自动重连。
+使用 MQTTX CLI 建立 MQTT 连接，以便在滚动更新期间观察连接疏散过程。MQTTX CLI 支持自动重连。
 
 获取 `emqx-listeners` Service 的外部地址。以下命令同时适用于发布 IP 地址或主机名的负载均衡器。
 
