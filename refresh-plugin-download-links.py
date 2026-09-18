@@ -113,7 +113,7 @@ LOCALES: dict[str, dict[str, str]] = {
     },
 }
 
-CATALOG_BASE = Path("extensions/plugin-catalog")
+CATALOG_BASE = Path("guides/extensions/plugin-catalog")
 
 
 def catalog_subpath(series: tuple[int, int]) -> Path:

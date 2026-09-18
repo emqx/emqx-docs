@@ -246,5 +246,6 @@ Tarballs for each EMQX release:
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
 | 6.3.0 | 0.1.4 | [emqx_unsgov-0.1.4.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_unsgov-0.1.4.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_unsgov-0.1.4.sha256)) |
+| 6.3.1 | 0.1.4 | [emqx_unsgov-0.1.4.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_unsgov-0.1.4.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_unsgov-0.1.4.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
