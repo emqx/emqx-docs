@@ -184,7 +184,7 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
 
      - **Is Superuser Attribute**: Identifies the attribute that indicates whether a user is a superuser, applicable when `Local Password Comparison` is selected as the authentication method.  The value of this attribute should be in boolean, if absent is equal to `false`.
 
-     - **Client ID Override Attribute**: Specifies the name of the LDAP attribute whose value will be used to override the client-provided Client ID during connection. This allows assigning unique Client IDs based on authentication data, helping prevent session conflicts in scenarios such as multi-tenancy.
+     - **Client ID Override Attribute**: Specifies the name of the LDAP attribute whose value overrides the Client ID for an MQTT client connection. This allows assigning unique Client IDs based on authentication data, helping prevent session conflicts in scenarios such as multi-tenancy.
 
       - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this LDAP authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
 
@@ -381,8 +381,6 @@ To enable ACL rule retrieval and caching, you need to **explicitly** configure t
   acl_ttl_attribute = "mqttAclTtl"
 }
 ```
-
-
 
 
 

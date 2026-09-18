@@ -203,7 +203,7 @@ To check a listener through the REST API, use `GET /api/v5/listeners/:id`, for e
 
 The `bind` field keeps the configured value, including the port. `resolved_address` and `resolved_address_from` are read-only information; change `bind` or `node.default_listener_address` to change the address, rather than editing these response fields.
 
-These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../../develop/gateway/gateway.md#listener).
+These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../../develop/gateway/gateway.md#gateway-listeners).
 
 ## Forwarded Client Address (WebSocket Listeners)
 

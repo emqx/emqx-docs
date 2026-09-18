@@ -36,9 +36,7 @@ Here's a brief overview of each component:
 
 - **Authentication**: Each gateway can be configured with authenticators to use the client information for login authorization.
 
-## Key Features
-
-### Listener
+## Gateway Listeners
 
 Each gateway can have multiple listeners enabled, and different protocol gateways support the following listener types:
 
@@ -53,7 +51,7 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
 
-#### Bind Address
+### Bind Address
 
 A gateway listener's `bind` setting specifies the local address and port used to receive client traffic. It accepts an explicit IP address and port, or a port alone.
 
@@ -61,13 +59,13 @@ Starting from EMQX 6.3.0, gateway listeners whose `bind` specifies only a port u
 
 To change the address used by gateway listeners with port-only binds, configure this setting in each node's `emqx.conf` or through `EMQX_NODE__DEFAULT_LISTENER_ADDRESS`, and restart the node after changing it. It also affects port-only binds for MQTT listeners and the Dashboard HTTP listener. See [Default Listener Address](../../guides/access-control/security-profile.md#default-listener-address) for supported values and the official Docker image's default.
 
-#### View Listener Address Information
+### View Listener Address Information
 
 To check gateway listener addresses, use `GET /api/v5/gateways/:name/listeners`, replacing `:name` with the gateway name, such as `stomp`. Starting from EMQX 6.3.0, each listener's `node_status[].status` includes `resolved_address` and `resolved_address_from`. Each `node_status` entry reports the values for its corresponding node; the cluster-wide `status` does not include these node-local fields.
 
 In each `node_status` entry, check `status.running` together with `status.resolved_address` to determine whether the listener is running on that node. For help interpreting an empty `resolved_address` value, see [View Listener Address Information](../../guides/configuration/listener.md#view-listener-address-information). Use this gateway list endpoint rather than the MQTT `emqx ctl listeners` command or the gateway's single-listener configuration endpoint.
 
-### Message Format
+## Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
 
@@ -78,7 +76,7 @@ For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](.
 - **CoAP**: The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) standard. For details, see [Message Publish](./coap.md#message-publish), [Topic Subscribe](./coap.md#topic-subscribe), [Topic Unsubscribe](./coap.md#topic-unsubscribe).
 - **LwM2M**: The messaging model of LwM2M protocol is based on the [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
 
-### Authentications
+## Authentications
 
 Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization. 
 
@@ -95,20 +93,20 @@ Different gateways may support different types of authenticators, but all gatewa
 | JT/T 808   | N/A         | N/A               | N/A   | N/A     | N/A        | N/A   | N/A  |      |
 | NATS       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 
-Note: Any client can log in if no authenticator is configured. 
+### How Authentication Works on the Gateway
 
-#### How Authentication Works on the Gateway
+The EMQX Multi-Protocol Gateway creates a `ClientInfo` for each connection to authenticate clients. The `ClientInfo` includes generic fields such as `Username` and `Password`, which are commonly used for authentication. Each gateway can also add protocol-specific fields, such as `Endpoint Name` for LwM2M, for use during authentication.
 
-The EMQX Multi-Protocol Gateway is responsible for authenticating clients that connect to it. This is accomplished through the creation of a `ClientInfo` for each connection.
+When an authenticator is configured, the gateway uses the `ClientInfo` to verify the client according to the configured authentication mechanism and backend. For database-backed password authentication, the authenticator compares the client's `Username` and `Password` with the credentials stored in its database. If the credentials match, the client is authenticated and granted access to the gateway. If no authenticator is configured, any client can log in.
 
-The `ClientInfo` includes generic fields such as `Username` and `Password`, which are commonly used for authentication purposes. Additionally, each gateway has its own specific client information fields, such as `Endpoint Name` for LwM2M, which may also be used for authentication.
+Starting from EMQX 6.3.1, EMQX applies gateway authentication results as follows:
 
-When an authenticator is configured, the gateway compares the client's Username and Password fields with those stored in its database. If they match, the client is authenticated and granted access to the gateway.
+- Gateway protocols always use the Client ID determined by the protocol. This prevents authentication results from changing the client's identity and keeps the identity consistent throughout the connection lifecycle. If an authenticator returns `clientid_override`, EMQX ignores the field and logs a warning with `gateway_authn_clientid_override_not_supported`.
+- After authentication succeeds, EMQX evaluates gateway- and listener-level mountpoint templates using the combined client information and authentication result. A mountpoint template can therefore reference client attributes returned by the authenticator, for example, `${client_attrs.tenant}/`.
 
+::: tip Client ID and Session Behavior
 
-::: tip
-
-Client ID for different gateways can be duplicated, but when a duplicated Client ID logs in to a gateway, it will terminate the existing session associated with that Client ID.
+Client IDs can be duplicated across different gateways. Within the same gateway, a client that connects with a duplicate Client ID terminates the existing session associated with that Client ID.
 
 :::
 
