@@ -2,6 +2,12 @@
 
 This page provides a step-by-step guide to quickly get started with the File Transfer over MQTT feature in EMQX. It covers two scenarios: using a local disk and using S3 buckets for file storage. Follow the instructions below to set up the necessary configurations, upload files, and access them using the provided APIs.
 
+::: warning Important Notice
+
+Starting from EMQX 6.0.4, namespaced Dashboard users and API keys cannot use File Transfer endpoints to list files or download locally stored files, regardless of role or scope. Authenticate as a global Dashboard user or with a global API key. For S3 storage, EMQX authentication is required only to list files; S3 controls access through the returned presigned URL.
+
+:::
+
 ## Upload a File and Store It on Local Disk
 
 1. Start EMQX with the file transfer feature enabled by setting the following configuration in the EMQX configuration file:

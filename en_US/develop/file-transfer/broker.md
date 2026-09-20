@@ -215,6 +215,12 @@ You can manage exported files, such as listing files to browse detailed informat
 
 EMQX provides REST APIs for managing exported files, and you can use the [MQTT File Transfer Management API](https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html#tag/File-Transfer) for management, enabling file browsing and downloading.
 
+::: warning Important Notice
+
+Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced Dashboard users and API keys cannot use File Transfer endpoints to list files or download locally stored files, regardless of role or scope. Authenticate as a global Dashboard user or with a global API key. The `/file_transfer` configuration endpoint is not affected.
+
+:::
+
 ### Manually Manage Disk Exported Files
 
 If you need to manage exported files directly on the disk, such as moving files, or using your FTP or HTTP service for download, you can refer to the following instructions for file storage locations.

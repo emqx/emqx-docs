@@ -166,6 +166,12 @@ ns:<NAMESPACE>::<ROLE>
   - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
   - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
+- **仅限全局用户访问的文件传输内容端点**：从 EMQX 6.0.4 开始，文件传输使用全局存储，且不支持命名空间隔离。为防止访问由其他命名空间中的客户端上传的文件，以下端点对任何角色的命名空间 Dashboard 用户和 API 密钥均不可用：
+  - 列出文件：`GET /file_transfer/files`
+  - 列出指定传输的文件：`GET /file_transfer/files/:clientid/:fileid`
+  - 下载文件：`GET /file_transfer/file`
+
+  全局 Dashboard 用户和 API 密钥仍可根据其角色和权限范围访问这些端点。`/file_transfer` 配置端点不受影响。
 - **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
 - **API 密钥管理**：命名空间管理员可以创建、查询、查看、更新和删除自己命名空间中的 API 密钥。命名空间管理员不能创建全局 API 密钥或其他命名空间中的密钥，所属命名空间之外的密钥不会显示。REST API 的详细行为参见[命名空间管理员管理 API 密钥](../api.md#命名空间管理员管理-api-密钥)。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。

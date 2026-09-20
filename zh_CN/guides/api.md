@@ -423,6 +423,14 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
 
+从 EMQX 6.0.4 开始，文件传输使用全局存储，且不支持命名空间隔离。任何角色的命名空间调用方均无法访问以下文件传输内容端点，授予权限范围不能绕过此限制：
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+全局调用方仍可根据其角色和权限范围访问这些端点。`/file_transfer` 配置端点不受影响。
+
 对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
 
 - `PUT /trace/:name/stop`

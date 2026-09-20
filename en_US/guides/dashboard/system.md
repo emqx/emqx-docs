@@ -165,6 +165,12 @@ For example:
   - Inflight messages: `GET /clients/:clientid/inflight_messages`
   - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
   - Delayed messages: `GET /mqtt/delayed/messages`, `GET /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:topic`
+- **Global-only File Transfer content endpoints**: Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. To prevent access to files uploaded by clients outside the caller's namespace, the following endpoints are unavailable to namespaced Dashboard users and API keys of any role:
+  - List files: `GET /file_transfer/files`
+  - List files for a transfer: `GET /file_transfer/files/:clientid/:fileid`
+  - Download a file: `GET /file_transfer/file`
+
+  Global Dashboard users and API keys retain access according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
 - **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
 - **API key management**: Namespaced administrators can create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. Keys outside their namespace are hidden. For detailed REST API behavior, see [Manage API Keys as a Namespaced Administrator](../api.md#manage-api-keys-as-a-namespaced-administrator).
 - **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.

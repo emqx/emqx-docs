@@ -427,6 +427,14 @@ Even when a namespaced caller has the `connections` or `monitoring` scope, the c
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
 
+Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+Global callers retain access to these endpoints according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
+
 For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
 
 - `PUT /trace/:name/stop`
