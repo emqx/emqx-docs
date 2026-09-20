@@ -1,0 +1,322 @@
+# データ統合
+
+EMQXは、MQTTプロトコルを通じてIoTデバイスを接続し、リアルタイムでメッセージを送信するMQTTメッセージングプラットフォームです。これを基盤として、EMQXのデータ統合は外部データシステムとの接続を導入し、デバイスと他の業務システムのシームレスな統合を可能にします。
+
+データ統合では、SinkおよびSourceコンポーネントを使用して外部データシステムと接続します。SinkはMySQL、Kafka、HTTPサービスなどの外部データシステムへメッセージを送信するために使用され、SourceはMQTT、Kafka、GCP PubSubなどの外部データシステムからメッセージを受信するために使用されます。
+
+この仕組みにより、EMQXは単なるIoTデバイス間のメッセージ送信を超えて、デバイスから生成されたデータを業務全体のエコシステムに有機的に統合します。これにより、IoTアプリケーションの適用シナリオが広がり、デバイスと業務システム間のやり取りが豊かで多様になります。
+
+::: tip 注意
+
+- EMQX v5.4.0以降、従来のデータブリッジはデータフローの方向に応じて分離され、SinkおよびSourceに名称変更されました。
+
+- 現時点でEMQXがSourceとしてサポートする外部データシステムは以下の通りです：
+
+  - MQTTサービス
+  - Kafka
+  - GCP PubSub
+
+:::
+
+本ページでは、SinkとSourceの動作原理、対応する外部データシステム、主要機能、管理方法について包括的に解説します。
+
+## 動作原理
+
+EMQXのデータ統合は標準機能として提供されています。MQTTメッセージングプラットフォームとして、EMQXはMQTTプロトコルを介してIoTデバイスからデータを受信します。組み込みのルールエンジンの助けを借りて、受信したデータはルールエンジンに設定されたルールで処理されます。ルールは処理済みデータを設定されたSink/Sourceを通じて外部データシステムに転送するアクションをトリガーします。ダッシュボードの[ルール](./rule-get-started.md)や[Flowデザイナー](../flow-designer/introduction.md)を使えば、コーディング不要でルールの作成、アクションの紐付け、Sink/Sourceの作成が簡単に行えます。
+
+### 組み込みルールエンジン
+
+さまざまなIoTデバイスやシステムからのデータソースは多種多様なデータ型やフォーマットを持ちます。EMQXはSQLルールに基づく強力な組み込みルールエンジンを備えており、データの処理と配信の中核コンポーネントです。ルールエンジンは条件判定、文字列操作、データ型変換、圧縮/解凍など多彩な機能を持ち、複雑なデータの柔軟な処理を可能にします。
+
+クライアントが特定のイベントをトリガーしたり、メッセージがEMQXに到達すると、ルールエンジンは事前定義されたルールに従ってリアルタイムにデータを処理します。データ抽出、フィルタリング、付加情報の付与、フォーマット変換などを行い、処理済みデータを指定されたSinkに転送します。
+
+ルールエンジンの詳細な動作については[ルールエンジン](./rules.md)章をご参照ください。
+
+### Sink
+
+Sinkはルールの[アクション](./rules.md)に追加されるデータ出力コンポーネントです。デバイスがイベントをトリガーしたりメッセージがEMQXに到着すると、システムは該当するルールをマッチングして実行し、データをフィルタリング・処理します。ルールエンジンで処理されたデータは指定されたSinkに転送されます。Sink内では`${var}`や`${.var}`構文を用いてデータから変数を抽出し、SQL文やデータテンプレートを動的に生成するなどの処理を設定できます。その後、対応する[コネクター](./connector.md)を通じて外部データシステムにデータが送信され、メッセージの保存、データ更新、イベント通知などの操作が可能となります。
+
+```mermaid
+graph LR
+  A[クライアント] -->|メッセージをパブリッシュ| B[ルール]
+  A1[クライアント] --> |メッセージをパブリッシュ| B
+
+  subgraph ルールエンジン
+    B -->  |アクションを実行| C[Kafka Sink] --> D[Kafka コネクター]
+  end
+
+D -->|メッセージ保存| E[Kafka]
+```
+
+Sinkでサポートされる変数抽出構文は以下の通りです：
+
+- `${var}`：ルールの出力結果から変数を抽出する構文です。例：`${topic}`。ネストした変数を抽出する場合はドット`.`を使い、`${payload.temp}`のように記述します。抽出対象の変数が出力結果に含まれていない場合は`undefined`という文字列が返されます。
+- `${.}`, `${.var}`：`${.}`はルールの全出力結果を含むJSON文字列を抽出し、`${.var}`は`${var}`と同義です。
+
+### Source
+
+Sourceはデータ入力コンポーネントであり、ルールの[データソース](./rule-sql-events-and-fields.md)として機能し、ルールSQLで選択されます。
+
+SourceはMQTTやKafkaなどの外部データシステムからメッセージをサブスクライブまたはコンシュームします。コネクター経由で新しいメッセージが到着すると、ルールエンジンは該当するルールをマッチングして実行し、データをフィルタリング・処理します。処理済みデータは指定されたEMQXトピックにパブリッシュされ、クラウドコマンド配信などの操作が可能になります。
+
+```mermaid
+graph LR
+  A[Kafka] --> B[Kafka コネクター]
+  subgraph ルールエンジン
+    B --> C[Kafka Source]
+    C -->  |トリガー| D[ルール]
+    D -->  |アクションを実行| D1[メッセージ再パブリッシュ]
+  end
+
+D1 -->|メッセージをパブリッシュ| E[クライアント]
+```
+
+## 対応する統合システム
+
+EMQXは以下の種類のデータシステムとのデータ統合をサポートしています：
+
+**デフォルト**
+
+- [MQTT](./data-bridge-mqtt.md)
+- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
+
+**クラウド**
+
+- [Amazon Kinesis](./data-bridge-kinesis.md)
+- [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [Azure Event Grid](./azure-event-grid.md)
+- [GCP PubSub](./data-bridge-gcp-pubsub.md)
+
+**TSDB**
+
+- [Apache IoTDB](./data-bridge-iotdb.md)
+- [InfluxDB](./data-bridge-influxdb.md)
+- [OpenTSDB](./data-bridge-opents.md)
+- [TimescaleDB](./data-bridge-timescale.md)
+- [Datalayers](./data-bridge-datalayers.md)
+- [Timestream for InfluxDB](./timestream-for-influxdb.md)
+
+**SQL**
+
+- [Cassandra](./data-bridge-cassa.md)
+- [Microsoft SQL Server](./data-bridge-sqlserver.md)
+- [MySQL](./data-bridge-mysql.md)
+- [Oracle](./data-bridge-oracle.md)
+- [PostgreSQL](./data-bridge-pgsql.md)
+- [Lindorm](./lindorm.md)
+- [Doris](./apache-doris.md)
+- [AlloyDB](./alloydb.md)
+- [CockroachDB](./cockroachdb.md)
+- [Redshift](./redshift.md)
+- [QuasarDB](./quasardb.md)
+
+**NoSQL**
+
+- [ClickHouse](./data-bridge-clickhouse.md)
+- [Couchbase](./data-bridge-couchbase.md)
+- [DynamoDB](./data-bridge-dynamo.md)
+- [Greptime](./data-bridge-greptimedb.md)
+- [MongoDB](./data-bridge-mongodb.md)
+- [Redis](./data-bridge-redis.md)
+- [TDengine](./data-bridge-tdengine.md)
+- [Elasticsearch](./elasticsearch.md)
+- [EMQX Tables](./emqx-tables.md)
+- [Bigtable](./bigtable.md)
+
+**メッセージキュー**
+
+- [Apache Kafka/Confluent](./data-bridge-kafka.md)
+- [Pulsar](./data-bridge-pulsar.md)
+- [RabbitMQ](./data-bridge-rabbitmq.md)
+- [RocketMQ](./data-bridge-rocketmq.md)
+
+**その他**
+
+- [SysKeeper](./syskeeper.md)
+- [Amazon S3](./s3.md)
+- [Amazon S3 Tables](./s3-tables.md)
+- [Azure Blob Storage](./azure-blob-storage.md)
+- [Snowflake](./snowflake.md)
+- [Disk Log](./disk-log.md)
+- [BigQuery](./bigquery.md)
+- [Databricks](./databricks.md)
+
+## Sinkの特徴
+
+Sinkは以下の機能により利便性を高め、データ統合のパフォーマンスと信頼性を向上させます。すべてのSinkがこれらの機能を完全に実装しているわけではありません。対応状況は各Sinkのドキュメントをご参照ください。
+
+### 非同期リクエストモード
+
+非同期リクエストモードは、メッセージのパブリッシュ・サブスクライブ処理がSinkの実行速度に影響されるのを防ぐための設計です。ただし、非同期リクエストモードを有効にすると、サブスクライバーがメッセージを受信しているにもかかわらず、外部データシステムへの書き込みがまだ完了していない場合があります。
+
+データ処理効率を高めるため、EMQXでは非同期リクエストモードをデフォルトで有効にしています。メッセージの配信タイミングに厳密な要件がある場合は、非同期リクエストモードを無効にしてください。
+
+`max_inflight`パラメータも非同期リクエストにおけるメッセージ順序に影響します。一部のSinkにこのパラメータがあり、非同期モード時に同一MQTTクライアントからのメッセージを厳密に順序通り処理する必要がある場合は、この値を1に設定する必要があります。
+
+### バッチモード
+
+バッチモードは複数のデータエントリをまとめて外部データ統合システムに書き込む機能です。バッチモードが有効な場合、EMQXは各リクエストのデータ（単一エントリ）を一時的に蓄積し、一定時間経過または一定数のデータが蓄積されると（いずれも設定可能）、蓄積されたデータをまとめて対象データシステムに書き込みます。
+
+**利点：**
+
+- 書き込み効率の向上：単一メッセージ書き込みと比較し、バッチモードではデータベースシステムがメッセージをキャッシュや事前処理できるため、書き込み効率が向上します。
+- ネットワークレイテンシの削減：バッチ書き込みによりネットワーク送信回数が減少し、レイテンシが低減します。
+
+**課題：**
+
+書き込み遅延：設定された時間やエントリ数に達するまでデータの書き込みが遅延します。これらの設定はパラメータで調整可能です。
+
+### バッファキュー
+
+バッファキューはSinkに一定のフォールトトレランスを提供し、データ安全性向上のために有効化が推奨されます。
+
+各リソース接続（MQTT接続ではありません）にはバッファキュー長（容量サイズ）があり、この長さを超えたデータはFIFO原則に従い破棄されます。
+
+#### バッファファイルの場所
+
+Kafka Sinkの場合、ディスクキャッシュファイルは`data/kafka`に保存されます。その他のSinkでは`data/bufs`に保存されます。
+
+実際の運用では、`data`ディレクトリを高性能ディスクにマウントすることでスループットを向上させることが可能です。
+
+### プリペアドステートメント
+
+MySQLやPostgreSQLなどのSQLデータベースでは、SQLテンプレートはフィールド変数を明示的に指定せずに事前処理実行されます。
+
+直接SQLを実行する場合、トピックとペイロードは文字列型、QoSは整数型としてシングルクォートで明示的に指定する必要があります：
+
+```sql
+INSERT INTO msg(topic, qos, payload) VALUES('${topic}', ${qos}, '${payload}');
+```
+
+しかし、プリペアドステートメントをサポートするSinkでは、SQLテンプレートは**クォートなし**で記述する必要があります：
+
+```sql
+INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
+```
+
+プリペアドステートメント技術はフィールド型を自動推論するほか、SQLインジェクションを防止しセキュリティを強化します。
+
+### フォールバックアクション
+
+EMQX 5.9.0以降、任意のアクションに対してフォールバックアクションのセットを定義できます。プライマリアクションがメッセージ処理に失敗した場合、これらのフォールバックアクションがトリガーされます。この仕組みにより、メッセージを別のSinkや再パブリッシュアクションにリダイレクトしてデータの信頼性と可観測性を向上させられます。
+
+フォールバックアクションの用途例：
+
+- 失敗したメッセージをバックアップデータシステム（別のSinkなど）に転送
+- 失敗したメッセージを監視トピックに再パブリッシュしてトラブルシューティングやアラートに活用
+- プライマリアクションの一時的な問題によるデータ損失を最小化
+
+#### 主な特徴
+
+- フォールバックアクションはプライマリアクションがメッセージ処理に失敗した場合のみトリガーされます。失敗には配信エラー、バッファオーバーフロー、リクエストTTL切れが含まれます。
+- フォールバックアクションは自身の設定に関わらず常に非同期リクエストモードで動作します。
+- 定義されたすべてのフォールバックアクションは同時にトリガーされます。EMQXは順次試行したり最初の成功で停止したりしません。
+- フォールバックアクションは通常のアクションと同じバッファリング機構を共有し、メッセージはリクエストTTLまたはバッファオーバーフローまでリトライされます。
+- フォールバックアクションはさらに別のフォールバックアクションをトリガーしません。フォールバックアクション自身が失敗しても、その設定されたフォールバックアクションはトリガーされません。
+- フォールバックアクションによるメッセージ処理は、プライマリアクションやそれをトリガーした元のルールのメトリクスに影響を与えません。
+
+#### フォールバックアクションの定義例
+
+HTTPアクション`my_http`に対してフォールバックアクションを定義し、既存のMQTTアクション`fallback`を利用する例です。
+
+```hcl
+actions {
+  http {
+    my_http {
+      fallback_actions = [
+        {kind = reference, type = mqtt, name = fallback},
+        {
+          kind = republish,
+          args = {
+            topic = "fallback/republish/topic"
+            qos = 1
+            payload = "${payload}"
+          }
+        }
+      ]
+      # その他の設定は省略
+    }
+  }
+  mqtt {
+    fallback {
+      fallback_actions = [
+        {kind = reference, type = mqtt, name = another_fallback}
+      ]
+      # その他の設定は省略
+    }
+  }
+}
+```
+
+この例では：
+
+- HTTPアクション`my_http`が失敗した場合、メッセージは
+  - MQTTアクション`fallback`に転送され
+  - トピック`fallback/republish/topic`に再パブリッシュされます
+- `fallback`が失敗しても、その下に定義されたフォールバックアクション`another_fallback`は**トリガーされません**。フォールバックアクションは再帰的なチェーンをサポートしません。
+- もし`fallback`が別のルールのプライマリアクションとしてトリガーされ失敗した場合、その時は自身のフォールバック`another_fallback`が適用されます。
+
+## Sinkの状態と統計情報
+
+ダッシュボードでSinkの稼働状況や統計情報を確認し、正常に動作しているか把握できます。
+
+### 稼働状態
+
+Sinkは以下の状態を持ちます：
+
+- `connecting`：ヘルスチェックが行われる前の初期状態で、まだ外部データシステムへの接続を試みている段階です。
+- `connected`：Sinkが正常に接続され、正常に動作しています。ヘルスチェックが失敗した場合、状態は失敗の程度に応じて`connecting`または`disconnected`に遷移することがあります。
+- `disconnected`：ヘルスチェックに失敗し、非正常状態です。設定に応じて自動的に再接続を試みる場合があります。
+- `stopped`：Sinkが手動で無効化されています。
+- `inconsistent`：クラスターのノード間でSinkの状態に不整合があります。
+
+### 稼働統計
+
+EMQXはデータ統合の稼働統計を以下のカテゴリで提供します：
+
+- Matched（カウンター）
+- Sent Successfully（カウンター）
+- Sent Failed（カウンター）
+- Dropped（カウンター）
+- Late Reply（カウンター）
+- Inflight（ゲージ）
+- Queuing（ゲージ）
+
+<img src="./assets/data-bridge-metrics.png" alt="データブリッジのメトリクス"  />
+
+#### Matched
+
+`matched`はSinkにルーティングされたリクエスト／メッセージの数をカウントします。状態に関わらずカウントされます。各メッセージは最終的に他のメトリクスで計上されるため、`matched = success + failed + inflight + queuing + late_reply + dropped`となります。
+
+#### Sent Successfully
+
+`success`は外部データシステムに正常に受信されたメッセージ数をカウントします。`retried.success`は`success`のサブカウントで、少なくとも1回リトライされたメッセージ数を追跡します。したがって、`retried.success <= success`です。
+
+#### Sent Failed
+
+`failed`は外部データシステムへの受信に失敗したメッセージ数をカウントします。`retried.failed`は`failed`のサブカウントで、少なくとも1回リトライされたメッセージ数を追跡します。したがって、`retried.failed <= failed`です。
+
+#### Dropped
+
+`dropped`は配信試行なしに破棄されたメッセージ数をカウントします。複数の具体的なカテゴリが含まれ、それぞれ破棄理由を示します。計算式は`dropped = dropped.expired + dropped.queue_full + dropped.resource_stopped + dropped.resource_not_found`です。
+
+- `expired`：キューイング中にメッセージのTTLが切れたため破棄
+- `queue_full`：最大キューサイズに達し、メモリオーバーフロー防止のため破棄
+- `resource_stopped`：Sinkが停止中に配信を試みたメッセージ
+- `resource_not_found`：Sinkが存在しない状態で配信を試みたメッセージ。稀に発生し、Sink削除時の競合状態が原因
+
+#### Late Reply
+
+`late_reply`はメッセージ送信を試みたが、基盤ドライバーからの応答がメッセージTTL切れ後に届いた場合にインクリメントされます。
+
+::: tip
+`late_reply`はメッセージが成功したか失敗したかを示すものではありません。外部データシステムへの挿入に成功した可能性もあれば、失敗や接続タイムアウトの可能性もあります。
+:::
+
+#### Inflight
+
+`inflight`はバッファリング層で現在送信待ちのメッセージ数を示すゲージです。
+
+#### Queuing
+
+`queuing`はバッファリング層で受信済みだがまだ外部データシステムに送信されていないメッセージ数を示すゲージです。

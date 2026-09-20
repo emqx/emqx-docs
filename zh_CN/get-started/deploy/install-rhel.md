@@ -1,0 +1,57 @@
+# 在 CentOS/RHEL 上安装 EMQX
+
+本页将指导您如何在 CentOS/RHEL 系统中下载安装并启动 EMQX。
+
+支持的 CentOS/RHEL 版本：
+
+- Amazon Linux 2023
+- Rocky Linux 10 (RHEL 10)
+- Rocky Linux 9 (RHEL 9)
+- Rocky Linux 8 (RHEL 8)
+
+下文将介绍如何从官方下载页面下载最新版 EMQX。如希望在其他系统中进行安装或希望安装其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取详细安装信息。
+
+::: tip
+从 EMQX 6.3.0 开始，通过 RPM 包安装的 EMQX 可使用与 Docker 镜像相同的 `/opt/emqx/...` 路径。路径映射参见[文件和目录](./install.md#文件和目录)。
+:::
+
+## 通过 rpm 安装
+
+1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=RHEL)。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据目标 RHEL 兼容发行版版本和 CPU 架构选择对应的 `rpm` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
+
+### 启动 EMQX
+
+启动为一个 systemd 服务：
+
+```bash
+sudo systemctl start emqx
+```
+
+::: tip
+从 EMQX 6.3.0 开始，可在 `/etc/emqx/emqx.env` 中设置启动期环境变量，例如 `EMQX_SECURITY_PROFILE`。`emqx` 命令每次执行时都会加载该文件，包括以服务方式启动、前台启动以及运行 `emqx ctl` 时。软件包升级会保留对该文件的修改。修改启动期环境变量后，重启 EMQX 节点以使更改生效。参见[启动期环境变量](../../guides/configuration/configuration.md#启动期环境变量)。
+:::
+
+### 卸载 EMQX
+
+安装完成后，可通过如下命令卸载 EMQX：
+
+```shell
+sudo yum remove emqx
+```
+
+## 通过 tar.gz 安装
+
+
+1. 前往官方下载页面，选择 [CentOS/RHEL 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=RHEL)。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中根据目标 RHEL 兼容发行版版本和 CPU 架构选择对应的 `tar.gz` 安装包。
+3. 点击下方的下载链接。您也可以参照命令行指导步骤进行下载与安装。
+
+### 启动 EMQX
+
+安装完成后，可通过如下命令启动 EMQX。
+
+```
+./emqx/bin/emqx foreground
+```
