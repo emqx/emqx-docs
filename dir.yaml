@@ -370,6 +370,7 @@
   - develop/connect-emqx/go
   - develop/connect-emqx/python
   - develop/connect-emqx/javascript
+  - develop/connect-emqx/wechat-miniprogram
 - develop/connect-emqx/curl
 - develop/connect-emqx/node-red
 - title_en: Tutorials
