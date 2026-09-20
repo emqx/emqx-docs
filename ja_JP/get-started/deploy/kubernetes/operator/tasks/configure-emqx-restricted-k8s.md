@@ -1,17 +1,17 @@
-# k8sでアクセス制限付きEMQXクラスターをデプロイする
+# k8s上でアクセス制限付きEMQXクラスターをデプロイする
 
 ここでは、k8sクラスターがインターネットにアクセスできず、ユーザーが`ClusterRole`の作成および使用権限を持っていないことを想定しています。
 
 + `emqx-operator`と`emqx`は同じネームスペースにインストールされている
 + Cert managerはクラスター全体または`emqx-operator`と同じネームスペースに存在する可能性がある
-+ `emqx-operator`はプライベートなDockerレジストリを使用するように設定されており、`emqx`はカスタムの`securityContext`を使用するように設定されている
++ `emqx-operator`はプライベートなDockerレジストリを使用するように設定されており、`emqx`はカスタムの`securityContext`を使用するよう設定されている
 
 ## タスクの目的
 
 - 必要なイメージをプライベートDockerレジストリにプッシュする
-- `cert-manager`のデフォルトパラメータをオーバーライドしてプライベートレジストリを使用する
+- `cert-manager`のデフォルトパラメータを上書きしプライベートレジストリを使用する
 - EMQX OperatorのCRDを手動でインストールする
-- `emqx-operator`のデフォルトパラメータをオーバーライドしてプライベートレジストリ、単一ネームスペース、カスタム`securityContext`、およびWebhook無効化を設定する
+- `emqx-operator`のデフォルトパラメータを上書きし、プライベートレジストリ、単一ネームスペース、カスタム`securityContext`、およびWebhook無効化を設定する
 - EMQXにカスタム`securityContext`を使用する
 
 ## 必要なDockerイメージをプライベートDockerレジストリにプッシュする
@@ -81,9 +81,9 @@ kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download
 
 ### Emqx-Operatorのデプロイ
 
-cert-managerがクラスター全体にすでにインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
+cert-managerがすでにクラスター全体にインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
 
-この例では`podSecurityContext`と`containerSecurityContext`はデフォルト値を含んでいます。必要に応じてオーバーライドしてください。
+この例では`podSecurityContext`と`containerSecurityContext`にデフォルト値が含まれています。必要に応じて上書きしてください。
 
 ```bash
 helm repo add emqx https://repos.emqx.io/charts

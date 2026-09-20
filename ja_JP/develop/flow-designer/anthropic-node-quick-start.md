@@ -4,15 +4,15 @@
 
 ## シナリオの説明
 
-多くの産業用またはスマートビルディングのシナリオでは、IoTデバイスが単一のMQTTメッセージで複数のメトリクスを報告します。例えば、電力監視デバイスは、複数の回路にわたる電力消費を1つのペイロードで送信することがあります。
+多くの産業やスマートビルディングのシナリオでは、IoTデバイスが単一のMQTTメッセージで複数のメトリクスを報告します。例えば、電力監視デバイスは複数の回路にわたる電力消費量を1つのペイロードで送信することがあります。
 
 各メッセージはトピック `devices/power_report` にパブリッシュされ、以下を含みます：
 
 - `device_id`：デバイスの識別子
-- `circuit_1`、`circuit_2`、`circuit_3` などの複数の数値メトリクス
-- `status` や `timestamp` のような数値以外の追加フィールド
+- `circuit_1`、`circuit_2`、`circuit_3`などの複数の数値メトリクス
+- `status` や `timestamp` のような数値以外のフィールド
 
-このメッセージ内のすべての数値の合計（すなわち回路全体の総電力消費量）をLLM（Claude 3 Sonnet）で計算し、数値の合計のみを下流処理や課金のために再パブリッシュすることが目的です。
+このメッセージ内のすべての数値を合計（つまり回路全体の総電力消費量）し、LLM（Claude 3 Sonnet）を使って計算し、その数値結果のみを下流処理や課金用に再パブリッシュすることが目標です。
 
 ## サンプルメッセージ
 
@@ -33,7 +33,7 @@
 322.4
 ```
 
-この値は、すべての数値回路読み取り値の合計です。
+この値はすべての数値回路読み取り値の合計です。
 
 ## Flowの作成
 
@@ -59,7 +59,7 @@
      - **System Message**：以下のような動的プロンプトを入力できます。  
        
        ```
-       あなたは電力消費計算機です。様々なキーを持つ入力JSONオブジェクトが与えられた場合、すべての数値（例：回路の読み取り値）を合計し、合計値のみを返してください。
+       You are a power consumption calculator. Given an input JSON object with various keys, sum all numeric values (e.g., circuit readings) and return only the total.
        ```
      - **Model**：`claude-3-sonnet-20240620`を選択します。
      - **Max Tokens**：`50`を入力します。
@@ -80,7 +80,7 @@
 
    ![anthropic_node_flow](./assets/anthropic_node_flow.png)
 
-6. Flowとフォームルールは相互運用可能です。ルールページでSQLや関連ルール設定も確認できます。
+6. Flowとフォームルールは相互運用可能です。RuleページでSQLや関連するルール設定も確認できます。
 
    ![anthropic_node_rule_page](./assets/anthropic_node_rule_page.png)
 
@@ -88,17 +88,15 @@
 
 1. MQTTクライアントをEMQXに接続します。
 
-   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** -> **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。または、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントを使用することも可能です：
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** -> **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントを使用しても構いません：
 
    - EMQXサーバーに接続します。
    - トピック`devices/power_total`をサブスクライブします。
 
 2. テストを開始します。
 
-   - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
-
-   - **Edit**をクリックし、続けて**Start Test**をクリックして画面下部にテストパネルを開きます。
-
+   - Flowデザイナーで任意のノードをクリックして編集パネルを開きます。
+   - **Edit**をクリックし、次に**Start Test**をクリックして画面下部にテストパネルを開きます。
    - **Input Simulated Data**をクリックし、以下のメッセージをトピック`devices/power_report`にパブリッシュするために**Submit Test**をクリックします：
 
      ```json
@@ -114,18 +112,16 @@
 
 3. 結果とノードの処理メトリクスを確認します。
 
-   - Flowの正常な実行結果を確認できます。
+   - Flowの正常な実行結果が表示されます。
 
      ![anthropic_node_test_result](./assets/anthropic_node_test_result.png)
 
-   - **WebSocket Client**ページに戻ると、AIが生成した要約（例：  
+   - **WebSocket Client**ページに戻ると、AIが生成した要約結果が受信できます：
+   
+     > 322.4
      
-     > 322.4  
-     
-     ）を受信できます。
-
    - テスト結果が失敗した場合は、エラーメッセージが表示されます。
-
-   - **Anthropic**ノードの稼働状況やメトリクスを確認するには、編集ページを終了し、ノードをクリックして編集パネルを開き、**Overview**タブをクリックしてください。
-
+   
+   - **Anthropic**ノードの実行統計やメトリクスを確認するには、編集ページを閉じてノードをクリックし、編集パネルの**Overview**タブをクリックしてください。
+   
      ![anthropic_node_statis](./assets/anthropic_node_statistics.png)

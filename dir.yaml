@@ -13,14 +13,14 @@
   - guides/cluster/security
   - title_en: Configure Load Balancer
     title_cn: 集群负载均衡
-    title_ja: クラスターのロードバランサー設定
+    title_ja: ロードバランサーの設定
     path: guides/cluster/lb
     children:
     - guides/cluster/lb-nginx
     - guides/cluster/lb-haproxy
   - title_en: Node Evacuation and Cluster Load Rebalancing
     title_cn: 节点疏散与集群负载重平衡
-    title_ja: ノードの退避とクラスター負荷再分散
+    title_ja: ノードの退避とクラスター負荷の再分散
     path: guides/cluster/rebalancing
   - title_en: Performance and Tuning
     title_cn: 性能与调优
@@ -127,7 +127,7 @@
     path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
   - title_en: EMQX 企业版 API 文档
     title_cn: EMQX 企业版 API 文档
-    title_ja: EMQX 企业版 API 文档
+    title_ja: EMQX エンタープライズ版 API ドキュメント
     lang: cn
     path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
   - title_en: EMQX Enterprise API Docs
@@ -719,7 +719,7 @@
       path: develop/file-transfer/quick-start
     - title_en: Server-Side Settings
       title_cn: 服务端配置
-      title_ja: サーバー側設定の構成
+      title_ja: サーバー側設定
       path: develop/file-transfer/broker
     - title_en: Client Development
       title_cn: 客户端开发
@@ -748,7 +748,7 @@
       children:
       - title_en: Data Exchange Format
         title_cn: 数据交换格式
-        title_ja: JT/T 808 データ交換
+        title_ja: JT/T 808 データ交換フォーマット
         path: develop/gateway/jt808_data_exchange
     - develop/gateway/nats
     - title_en: GB/T 32960 Gateway
@@ -807,13 +807,13 @@
       path: develop/emqx-ai/mcp-bridge/quick-start
   - title_en: Realtime Audio & Video AI
     title_cn: 实时音视频 AI
-    title_ja: リアルタイム音声＆ビデオAI
+    title_ja: リアルタイム音声＆ビデオ AI
     collapsed: true
     children:
     - develop/emqx-ai/rtc-services/volcengine-rtc/quick-start
     - title_en: RTC Services
       title_cn: RTC 服务
-      title_ja: RTCサービス
+      title_ja: RTC サービス
       collapsed: true
       children:
       - title_en: Volcengine RTC

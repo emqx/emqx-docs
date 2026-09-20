@@ -1,34 +1,34 @@
-# OCPP ゲートウェイ
+# OCPPゲートウェイ
 
-[OCPP](https://www.openchargealliance.org/)（Open Charge Point Protocol）は、充電ステーションと中央管理システムを接続するためのオープンな通信プロトコルであり、電気自動車充電インフラ向けの統一通信標準の提供を目的としています。OCPP ゲートウェイはプロトコル変換器として機能し、OCPP と MQTT プロトコル間の橋渡しを行うことで、これらのプロトコルを使用するクライアント同士の通信を可能にします。
+[OCPP](https://www.openchargealliance.org/)（Open Charge Point Protocol）は、充電ステーションと中央管理システムを接続するオープンな通信プロトコルであり、電気自動車充電インフラ向けの統一された通信標準を提供することを目的としています。OCPPゲートウェイはプロトコル変換器として機能し、OCPPとMQTTプロトコル間の橋渡しを行うことで、これらのプロトコルを使用するクライアント同士の通信を可能にします。
 
-EMQX は [OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6) に対応したプロトコルゲートウェイを追加しており、OCPP 仕様に準拠した様々なブランドの充電設備と接続可能です。ルールエンジン、データ統合、REST API などを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
+EMQXは[OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6)に対応したプロトコルゲートウェイを追加しており、OCPP仕様に準拠した様々なブランドの充電ステーション機器と接続可能です。ルールエンジン、データ統合、REST APIなどを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
 
-本ページでは、EMQX における OCPP ゲートウェイの設定および利用方法を紹介します。
+本ページでは、EMQXにおけるOCPPゲートウェイの設定および使用方法を紹介します。
 
-## OCPP ゲートウェイの有効化
+## OCPPゲートウェイの有効化
 
-EMQX の OCPP ゲートウェイは、ダッシュボード、REST API、設定ファイル `base.hocon` を通じて設定および有効化が可能です。本節ではダッシュボードを用いた設定例を示し、操作手順を解説します。
+EMQXのOCPPゲートウェイは、ダッシュボード、REST API、設定ファイル`base.hocon`を通じて設定および有効化が可能です。本節ではダッシュボードによる設定例を用いて操作手順を説明します。
 
-EMQX ダッシュボードの左側ナビゲーションメニューから **Management** → **Gateways** をクリックします。**Gateways** ページにはサポートされているすべてのゲートウェイが一覧表示されます。**OCPP** を探し、**Actions** 列の **Setup** をクリックすると、**Initialize OCPP** ページに遷移します。
+EMQXダッシュボードの左側ナビゲーションメニューから **Management** -> **Gateways** をクリックします。**Gateways**ページにはサポートされているすべてのゲートウェイが一覧表示されます。**OCPP**を探し、**Actions**列の**Setup**をクリックすると、**Initialize OCPP**ページに遷移します。
 
 ::: tip
 
-EMQX をクラスターで稼働させている場合、ダッシュボードや REST API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../guides/configuration/configuration.md) にて設定してください。
+EMQXをクラスターで運用している場合、ダッシュボードやREST APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../../guides/configuration/configuration.md)で設定してください。
 
 :::
 
-設定を簡略化するために、EMQX は **Gateways** ページのすべての必須項目にデフォルト値を用意しています。大幅なカスタマイズが不要な場合、以下の3クリックで OCPP ゲートウェイを有効化できます。
+設定を簡略化するため、EMQXは**Gateways**ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合、以下の3クリックでOCPPゲートウェイを有効化できます。
 
-1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。
-2. 次に表示される **Listeners** タブでは、EMQX がポート `33033` で Websocket リスナーを事前設定しています。再度 **Next** をクリックして設定を確定します。
-3. 最後に **Enable** ボタンをクリックして OCPP ゲートウェイを有効化します。
+1. **Basic Configuration**タブで**Next**をクリックし、すべてのデフォルト設定を受け入れます。
+2. 次に**Listeners**タブに遷移し、EMQXがポート`33033`でWebsocketリスナーを事前設定しています。再度**Next**をクリックして設定を確認します。
+3. 最後に**Enable**ボタンをクリックしてOCPPゲートウェイを有効化します。
 
-ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、OCPP ゲートウェイのステータスが **Enabled** と表示されます。
+ゲートウェイの有効化が完了すると、**Gateways**ページに戻り、OCPPゲートウェイのステータスが**Enabled**と表示されます。
 
-<img src="./assets/ocpp-enabled.png" alt="OCPP ゲートウェイ有効化" style="zoom:50%;" />
+<img src="./assets/ocpp-enabled.png" alt="OCPPゲートウェイ有効化" style="zoom:50%;" />
 
-上記の設定は REST API でも行えます。
+上記の設定はREST APIでも行えます。
 
 **例:**
 
@@ -53,19 +53,19 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 }'
 ```
 
-## OCPP クライアントとの連携
+## OCPPクライアントとの連携
 
-OCPP ゲートウェイが稼働したら、OCPP クライアントツールを使って接続テストや設定の動作確認ができます。
+OCPPゲートウェイが稼働したら、OCPPクライアントツールを使って接続テストや設定の動作確認が可能です。
 
-ここでは [ocpp-go](https://github.com/lorenzodonini/ocpp-go) を例に、EMQX の OCPP ゲートウェイへの接続方法を紹介します。
+ここでは[ocpp-go](https://github.com/lorenzodonini/ocpp-go)を例に、EMQXのOCPPゲートウェイへの接続方法を紹介します。
 
-1. まず、OCPP ゲートウェイとインターフェースする MQTT クライアントを用意します。例えば [MQTTX](https://mqttx.app/downloads) を使い、EMQX に接続してトピック `ocpp/#` をサブスクライブするよう設定します。
+1. まず、OCPPゲートウェイと連携するMQTTクライアントを準備します。例えば[MQTTX](https://mqttx.app/downloads)を用い、EMQXに接続してトピック`ocpp/#`をサブスクライブするよう設定します。
 
-   <img src="./assets/ocpp-mqttx-create-conn.png" alt="MQTT 接続作成" style="zoom:67%;" />
+   <img src="./assets/ocpp-mqttx-create-conn.png" alt="MQTT接続作成" style="zoom:67%;" />
 
-2. ocpp-go クライアントを起動し、OCPP ゲートウェイに接続します。
+2. ocpp-goクライアントを実行し、OCPPゲートウェイに接続します。
 
-   **注意**: 以下のコマンド内の `<host>` は EMQX サーバーのアドレスに置き換えてください。
+   **注意**：以下のコマンド内の`<host>`はEMQXサーバーのアドレスに置き換えてください。
 
    ```shell
    docker run -e CLIENT_ID=chargePointSim -e CENTRAL_SYSTEM_URL=ws://<host>:33033/ocpp -it --rm --name charge-point ldonini/ocpp1.6-charge-point:latest
@@ -80,7 +80,7 @@ OCPP ゲートウェイが稼働したら、OCPP クライアントツールを�
    INFO[2023-12-01T03:08:39Z] dispatched request 1200012677 to server logger=ocppj
    ```
 
-3. MQTTX で以下のようなメッセージを受信することを確認します。
+3. MQTTXで以下のようなメッセージが受信されることを確認します。
 
    ```json
    Topic: ocpp/cp/chargePointSim
@@ -94,11 +94,11 @@ OCPP ゲートウェイが稼働したら、OCPP クライアントツールを�
    }
    ```
 
-   これは ocpp-go クライアントが OCPP ゲートウェイに接続し、`BootNotification` リクエストを送信したことを示しています。
+   このメッセージはocpp-goクライアントがOCPPゲートウェイに接続し、`BootNotification`リクエストを送信したことを示します。
 
-4. MQTTX でトピック `ocpp/cs/chargePointSim` に対して以下の内容のメッセージを作成し送信します。
+4. MQTTXでトピック`ocpp/cs/chargePointSim`に対して以下の内容のメッセージを作成し送信します。
 
-   **注意**: `UniqueId` は前のメッセージで受信したものに置き換えてください。
+   **注意**：`UniqueId`は前のメッセージで受信した値に置き換えてください。
 
    ```json
    {
@@ -113,7 +113,7 @@ OCPP ゲートウェイが稼働したら、OCPP クライアントツールを�
    }
    ```
 
-5. その後、MQTTX は `StatusNotification` ステータスレポートを受信します。これは OCPP クライアントが OCPP ゲートウェイとの接続に成功したことを示しています。
+5. その後、MQTTXで`StatusNotification`のステータスレポートを受信します。これはOCPPクライアントがOCPPゲートウェイとの接続を正常に確立したことを示しています。
 
    ```json
    Topic: ocpp/cp/chargePointSim
@@ -130,105 +130,106 @@ OCPP ゲートウェイが稼働したら、OCPP クライアントツールを�
    }
    ```
 
-## OCPP ゲートウェイのカスタマイズ
+## OCPPゲートウェイのカスタマイズ
 
-デフォルト設定に加え、EMQX は多様な設定オプションを提供しており、特定のビジネス要件に合わせて調整可能です。本節では **Gateways** ページで利用できる各種項目を詳しく解説します。
+デフォルト設定に加え、EMQXは多様な設定オプションを提供しており、特定のビジネス要件に合わせた調整が可能です。本節では**Gateways**ページで利用可能な各フィールドを詳しく解説します。
 
 ### 基本設定
 
-Gateways ページの OCPP ゲートウェイの **Actions** 列にある **Settings** ボタンをクリックすると、**Basic Configuration** タブで以下の項目を設定できます。
+GatewaysページでOCPPゲートウェイの**Actions**列にある**Settings**ボタンをクリックすると、**Basic Configuration**タブで以下の項目を設定できます。
 
 ![ocpp-basic-conf](./assets/ocpp-basic-conf.png)
 
-- **MountPoint**: パブリッシュやサブスクライブ時にすべてのトピックの先頭に付加される文字列を設定します。異なるプロトコル間でのメッセージルーティングの分離を実現できます。例：`ocpp/`
-- **Default Heartbeat Interval**: デフォルトのハートビート間隔（秒）、初期値は `60s`
-- **Heartbeat Checking Times Backoff**: ハートビートチェックのバックオフ回数、初期値は `1`
-- **Message Format Checking**: メッセージフォーマットの妥当性チェックを有効にするかどうか。EMQX はアップロードおよびダウンロードストリームのメッセージを json-schema で定義された形式と照合し、チェック失敗時には対応する応答メッセージを返します。設定値は以下のいずれかです。
+- **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックの先頭に付加される文字列を設定します。異なるプロトコル間でメッセージルーティングの分離を実現する手段として利用可能です。例：`ocpp/`。
+- **Default Heartbeat Interval**：デフォルトのハートビート間隔（秒）、初期値は`60s`。
+- **Heartbeat Checking Times Backoff**：ハートビートチェックのバックオフ回数、初期値は`1`。
+- **Message Format Checking**：メッセージフォーマットの妥当性チェックを有効にするかどうか。EMQXはアップロードおよびダウンロードのストリームメッセージをjson-schemaで定義されたフォーマットに対して検証し、チェックに失敗した場合は対応する応答メッセージを返します。設定可能な値は以下の通りです。
 
-    - `disable`: メッセージチェックを行わない（デフォルト）
-    - `upstream_only`: アップロードストリームのみチェック
-    - `dnstream_only`: ダウンロードストリームのみチェック
-    - `all`: すべてのメッセージをチェック
-- **JSON Schema Directory**: OCPP メッセージ定義の JSON スキーマディレクトリ、デフォルトは `${application}/priv/schemas`
-- **JSON Schema ID Prefix**: OCPP メッセージスキーマの ID プレフィックス、デフォルトは `urn:OCPP:1.6:2019:12:`
-- **Idle Timeout**: 非アクティブ状態が続いた場合に接続を切断するまでの最大待機時間（秒）
-- **Upstream**: アップロードストリームの設定グループ
-    - **Topic**: アップロードストリームの Call Request メッセージ用トピック、デフォルトは `cp/${cid}`
-    - **Reply Topic**: アップロードストリームの Reply メッセージ用トピック、デフォルトは `cp/${cid}/Reply`
-    - **Error Topic**: アップロードストリームの Error メッセージ用トピック、デフォルトは `cp/${cid}/Reply`
-    - **Topic Override Mapping**: メッセージ名によるアップロードストリームのトピック上書きマッピング
-- **Downstream**: ダウンロードストリームの設定グループ
-    - **Topic**: EMQX からのリクエストや制御メッセージを受信するダウンロードストリームのトピック。これはすべての接続されたチャージポイントがサブスクライブするワイルドカードトピック名です。デフォルトは `cs/${cid}`
-    - **Max Message Queue Length**: ダウンロードストリームのメッセージ配信における最大キュー長、デフォルトは `100`
+    - `disable`：メッセージのチェックを行わない（デフォルト）。
+    - `upstream_only`：アップロードストリームメッセージのみチェック。
+    - `dnstream_only`：ダウンロードストリームメッセージのみチェック。
+    - `all`：すべてのメッセージをチェック。
+
+- **JSON Schema Directory**：OCPPメッセージ定義のJSON Schemaディレクトリ、デフォルトは`${application}/priv/schemas`。
+- **JSON Schema ID Prefix**：OCPPメッセージスキーマのIDプレフィックス、デフォルトは`urn:OCPP:1.6:2019:12:`。
+- **Idle Timeout**：非アクティブ状態が続いた場合に接続を切断するまでの最大待機時間（秒）。
+- **Upstream**：アップロードストリームの設定グループ。
+    - **Topic**：アップロードストリームのCall Requestメッセージ用トピック、デフォルトは`cp/${cid}`。
+    - **Reply Topic**：アップロードストリームのReplyメッセージ用トピック、デフォルトは`cp/${cid}/Reply`。
+    - **Error Topic**：アップロードストリームのErrorメッセージ用トピック、デフォルトは`cp/${cid}/Reply`。
+    - **Topic Override Mapping**：メッセージ名によるアップロードストリームのトピック上書きマッピング。
+- **Downstream**：ダウンロードストリームの設定グループ。
+    - **Topic**：EMQXからのリクエスト／制御メッセージを受信するダウンロードストリームのトピック。これはすべての接続されたチャージポイントがサブスクライブするワイルドカードトピック名です。デフォルトは`cs/${cid}`。
+    - **Max Message Queue Length**：ダウンロードストリームのメッセージ配信における最大キュー長、デフォルトは`100`。
 
 ### リスナーの追加
 
-ポート `33033` に名前が **default** の Websocket リスナーがすでに設定されており、最大16個のアセプターをプールし、最大1,024,000の同時接続をサポートします。より詳細な設定は **Settings** をクリックし、リスナーの削除は **Delete**、新規リスナーの追加は **+ Add Listener** をクリックしてください。
+ポート`33033`で名前が**default**のWebsocketリスナーが既に設定されており、プール内のアセプター数は最大16、同時接続数は最大1,024,000まで対応可能です。リスナーの**Settings**で詳細設定を行ったり、**Delete**でリスナーを削除、または**+ Add Listener**で新規リスナーを追加できます。
 
 ::: tip
 
-OCPP ゲートウェイは Websocket および TLS 上の Websocket タイプのリスナーのみをサポートしています。
+OCPPゲートウェイはWebsocketおよびTLS上のWebsocketタイプのリスナーのみをサポートしています。
 
 :::
 
-**Add Listener** ページでは以下の設定が可能です。
+**Add Listener**をクリックすると**Add Listener**ページが開き、以下の設定を行えます。
 
 **基本設定**
 
-- **Name**: リスナーの一意識別子を設定
-- **Type**: プロトコルタイプを選択。OCPP では `ws` または `wss` を指定可能
-- **Bind**: リスナーが接続を受け付けるポート番号を設定
-- **MountPoint**: パブリッシュやサブスクライブ時にトピックの先頭に付加される文字列。異なるプロトコル間のメッセージルーティング分離に利用可能
+- **Name**：リスナーの一意識別子を設定します。
+- **Type**：プロトコルタイプを選択します。OCPPの場合は`ws`または`wss`を選択可能です。
+- **Bind**：リスナーが接続を受け付けるポート番号を設定します。
+- **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックの先頭に付加される文字列を設定し、異なるプロトコル間でのメッセージルーティング分離を実現します。
 
 **リスナー設定**
 
-- **Path**: 接続アドレスのパスプレフィックスを設定。クライアントはこの完全なアドレスを用いて接続する必要があります。デフォルトは `/ocpp`
-- **Acceptor**: アセプタープールのサイズを設定、デフォルトは `16`
-- **Max Connections**: リスナーが処理可能な最大同時接続数、デフォルトは `1024000`
-- **Max Connection Rate**: リスナーが1秒あたりに受け入れ可能な新規接続の最大レート、デフォルトは `1000`
-- **Proxy Protocol**: EMQX が [ロードバランサー](../../guides/cluster/lb.md) 配下にある場合にプロトコル V1/V2 を有効化
-- **Proxy Protocol Timeout**: プロキシプロトコルパッケージ受信待機の最大秒数。非アクティブ時に接続を切断するまでの時間、デフォルトは `3s`
+- **Path**：接続アドレスのパスプレフィックスを設定します。クライアントは接続時にこのパス全体を指定する必要があります。デフォルトは`/ocpp`です。
+- **Acceptor**：アセプタープールのサイズを設定します。デフォルトは`16`。
+- **Max Connections**：リスナーが処理可能な最大同時接続数を設定します。デフォルトは`1024000`。
+- **Max Connection Rate**：リスナーが1秒あたりに受け入れ可能な新規接続の最大レートを設定します。デフォルトは`1000`。
+- **Proxy Protocol**：EMQXが[ロードバランサー](../../guides/cluster/lb.md)の背後にある場合に、プロトコルV1/V2を有効化します。
+- **Proxy Protocol Timeout**：非アクティブ状態でプロキシプロトコルパッケージを待機する最大時間（秒）、デフォルトは`3s`。
 
-**TCP 設定**
+**TCP設定**
 
-- **ActiveN**: ソケットの `{active, N}` オプションを設定。ソケットが積極的に処理可能な受信パケット数。詳細は [Erlang ドキュメント - setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2) を参照
-- **Buffer**: 受信および送信パケットを格納するバッファサイズ（KB単位）
-- **TCP_NODELAY**: `TCP_NODELAY` フラグを有効にするかどうか。前のデータのアックを待たずに追加データを送信するか。デフォルトは `false`、選択肢は `true` または `false`
-- **SO_REUSEADDR**: ポート番号のローカル再利用を許可するかどうか
-- **Send Timeout**: プロキシプロトコルパッケージ受信待機の最大秒数。非アクティブ時に接続を切断するまでの時間、デフォルトは `15s`
-- **Send Timeout Close**: 送信タイムアウト時に接続を切断するかどうか
+- **ActiveN**：ソケットの`{active, N}`オプションを設定します。これはソケットが積極的に処理可能な受信パケット数です。詳細は[Erlangドキュメント - setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2)を参照してください。
+- **Buffer**：受信および送信パケットを格納するバッファのサイズ（KB単位）を設定します。
+- **TCP_NODELAY**：クライアントが前のデータのアックを待たずに追加データを送信できるかどうかを設定します。デフォルトは`false`。設定値は`true`または`false`。
+- **SO_REUSEADDR**：ポート番号のローカル再利用を許可するかどうかを設定します。
+- **Send Timeout**：非アクティブ状態で送信タイムアウトを待機する最大時間（秒）、デフォルトは`15s`。
+- **Send Timeout Close**：送信タイムアウト時に接続を切断するかどうかを設定します。
 
-**SSL 設定**（wss リスナーのみ）
+**SSL設定**（wssリスナーのみ）
 
-TLS 検証の有効化はトグルスイッチで設定可能です。ただし事前に関連する **TLS Cert**、**TLS Key**、**CA Cert** の情報を、ファイル内容の直接入力または **Select File** ボタンによるアップロードで設定しておく必要があります。詳細は [SSL/TLS 接続の有効化](../../guides/network/emqx-mqtt-tls.md) を参照してください。
+TLS検証の有効化はトグルスイッチで設定可能です。ただし事前に**TLS Cert**、**TLS Key**、**CA Cert**の情報をファイル内容入力または**Select File**ボタンでアップロードして設定する必要があります。詳細は[SSL/TLS接続の有効化](../../guides/network/emqx-mqtt-tls.md)を参照してください。
 
 続いて以下の設定が可能です。
 
-- **SSL Versions**: サポートする SSL バージョンを設定。デフォルトは `tlsv1.3`、`tlsv1.2`、`tlsv1.1`、`tlsv1`
-- **Fail If No Peer Cert**: クライアントが空の証明書を送信した場合に接続を拒否するかどうか。デフォルトは `false`、選択肢は `true` または `false`
-- **Intermediate Certificate Depth**: ピア証明書に続く有効な認証パスに含まれる自己発行でない中間証明書の最大数。デフォルトは `10`
-- **Key Password**: プライベートキーがパスワード保護されている場合のユーザーパスワード
+- **SSL Versions**：サポートするSSLバージョンを設定します。デフォルトは`tlsv1.3`、`tlsv1.2`、`tlsv1.1`、`tlsv1`。
+- **Fail If No Peer Cert**：クライアントが空の証明書を送信した場合に接続を拒否するかどうか。デフォルトは`false`。設定値は`true`または`false`。
+- **Intermediate Certificate Depth**：ピア証明書に続く有効な認証パスに含まれる自己発行でない中間証明書の最大数。デフォルトは`10`。
+- **Key Password**：プライベートキーがパスワード保護されている場合に使用するユーザーパスワード。
 
 ## 認証の設定
 
-OCPP プロトコルの接続メッセージにはユーザー名とパスワードの概念が既に定義されているため、OCPP は以下のような多様な認証方式をサポートしています。
+OCPPプロトコルの接続メッセージにはすでにユーザー名とパスワードの概念が定義されているため、OCPPは以下のような多様な認証方式をサポートしています。
 
 - [組み込みデータベース認証](../../guides/access-control/authn/mnesia.md)
-- [MySQL 認証](../../guides/access-control/authn/mysql.md)
-- [MongoDB 認証](../../guides/access-control/authn/mongodb.md)
-- [PostgreSQL 認証](../../guides/access-control/authn/postgresql.md)
-- [Redis 認証](../../guides/access-control/authn/redis.md)
-- [HTTP サーバー認証](../../guides/access-control/authn/http.md)
-- [JWT 認証](../../guides/access-control/authn/jwt.md)
-- [LDAP 認証](../../guides/access-control/authn/ldap.md)
+- [MySQL認証](../../guides/access-control/authn/mysql.md)
+- [MongoDB認証](../../guides/access-control/authn/mongodb.md)
+- [PostgreSQL認証](../../guides/access-control/authn/postgresql.md)
+- [Redis認証](../../guides/access-control/authn/redis.md)
+- [HTTPサーバ認証](../../guides/access-control/authn/http.md)
+- [JWT認証](../../guides/access-control/authn/jwt.md)
+- [LDAP認証](../../guides/access-control/authn/ldap.md)
 
-OCPP ゲートウェイは Websocket ハンドシェイクメッセージの Basic Authentication 情報を用いてクライアントの認証フィールドを生成します。
+OCPPゲートウェイはWebsocketハンドシェイクメッセージのBasic Authentication情報を用いてクライアントの認証フィールドを生成します。
 
-- クライアント ID: 固定パスプレフィックス以降の接続アドレス部分の値
-- ユーザー名: Basic Authentication の Username の値
-- パスワード: Basic Authentication の Password の値
+- クライアントID：固定パスプレフィックス以降の接続アドレス部分の値。
+- ユーザー名：Basic AuthenticationのUsernameの値。
+- パスワード：Basic AuthenticationのPasswordの値。
 
-REST API を使って OCPP ゲートウェイ用の組み込みデータベース認証を作成することも可能です。
+REST APIを使ってOCPPゲートウェイ用の組み込みデータベース認証を作成することも可能です。
 
 **例:**
 
@@ -251,8 +252,8 @@ curl -X 'POST' \
 
 ::: tip
 
-MQTT プロトコルとは異なり、**ゲートウェイは認証器の作成のみをサポートし、認証器の一覧（または認証チェーン）の作成はサポートしていません**。
+MQTTプロトコルとは異なり、**ゲートウェイは認証器の作成のみをサポートし、認証器一覧（または認証チェーン）の作成はサポートしていません**。
 
-認証器が有効化されていない場合、すべての OCPP クライアントはログインを許可されます。
+認証器が有効化されていない場合、すべてのOCPPクライアントのログインが許可されます。
 
 :::

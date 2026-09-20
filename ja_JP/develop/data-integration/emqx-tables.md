@@ -1,89 +1,88 @@
-# EMQX TablesへのMQTTデータ取り込み
+# EMQX Tables に MQTT データを取り込む
 
-EMQX Tablesは、[EMQX Cloud](https://docs.emqx.com/en/cloud/latest/)に組み込まれたネイティブでフルマネージドの時系列データストレージサービスです。高スループットかつ低レイテンシでのMQTTデータの取り込みと分析に最適化されており、IoTユースケースに理想的です。
+EMQX Tables は、[EMQX Cloud](https://docs.emqx.com/en/cloud/latest/) に組み込まれたネイティブでフルマネージドの時系列データストレージサービスです。高スループットかつ低レイテンシでの MQTT データの取り込みと分析に最適化されており、IoT（モノのインターネット）ユースケースに理想的です。
 
-GreptimeDBを基盤とするEMQX Tablesは、EMQXブローカーとシームレスに統合され、InfluxDB Line Protocolをサポートしているため、テレメトリーデータの効率的な保存、クエリ、および可視化が可能です。詳細は[EMQX Tablesの概要](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_overview.html)をご覧ください。
+GreptimeDB を基盤とする EMQX Tables は、EMQX ブローカーとシームレスに統合され、InfluxDB Line Protocol をサポートすることで、テレメトリデータの効率的な保存、クエリ、および可視化を可能にします。詳細は [EMQX Tables 概要](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_overview.html) をご覧ください。
 
-EMQX Enterprise 6.1以降では、EMQX TablesコネクターとSinkが提供されており、オンプレミスのEMQX Enterprise環境からEMQX Cloud上のEMQX TablesへMQTTデータを安全に書き込み、集中クエリおよび処理を行うことができます。
+EMQX Enterprise 6.1 以降では、EMQX Tables コネクターと Sink が提供されており、オンプレミスの EMQX Enterprise 環境から EMQX Cloud 上の EMQX Tables へ MQTT データを安全に書き込み、集中クエリおよび処理を行うことが可能です。
 
 ![enterprise_tables_integration](./assets/enterprise_tables_integration.png)
 
-本ページでは、EMQX EnterpriseからEMQX CloudのEMQX TablesへMQTTデータを取り込む手順を以下の流れで説明します。
+本ページでは、EMQX Enterprise から EMQX Cloud の EMQX Tables へ MQTT データを取り込む手順を以下の流れで説明します。
 
-- EMQX EnterpriseとEMQX Tables間のネットワーク接続の確立
-- EMQX Tablesコネクターの作成
-- EMQX Tablesアクションを含むルールの作成
+- EMQX Enterprise と EMQX Tables 間のネットワーク接続の確立
+- EMQX Tables コネクターの作成
+- EMQX Tables アクションを含むルールの作成
 - データ取り込みとクエリ結果のテスト
 
 ## 前提条件
 
-開始前に以下の条件を満たしていることを確認してください。
+開始前に、以下の条件を満たしていることを確認してください。
 
-- EMQX Enterpriseバージョン6.1以降がオンプレミスまたはプライベート環境にデプロイされていること。
+- EMQX Enterprise バージョン 6.1 以降がオンプレミスまたはプライベート環境にデプロイされていること。
 
-- [EMQX Cloudコンソール](https://accounts.emqx.com/signin?continue=https://cloud-intl.emqx.com/console/)でEMQX Tablesのデプロイメントが作成され稼働していること。
+- EMQX Tables のデプロイメントが [EMQX Cloud コンソール](https://accounts.emqx.com/signin?continue=https://cloud-intl.emqx.com/console/) 上で作成され、稼働していること。
 
-  - EMQX Tablesの作成方法は[EMQX Tablesデプロイメントの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_create_deployment.html)を参照してください。
-  - **Deployment Overview**ページで接続情報を取得してください。
+  - EMQX Tables の作成手順は [EMQX Tables デプロイメントの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_create_deployment.html) を参照してください。
+  - **Deployment Overview** ページで接続情報を取得してください。
 
   ![emqx_tables_connection_info](./assets/emqx_tables_connection_info.png)
 
-- EMQX EnterpriseのデプロイメントからEMQX Tablesのエンドポイントへネットワーク経由で到達可能であること（パブリックエンドポイントまたはプライベート接続環境により異なります）。
+- EMQX Enterprise のデプロイメントから EMQX Tables のエンドポイントへネットワーク経由で到達可能であること（パブリックエンドポイントまたはプライベート接続、環境に応じて）。
 
-- 以下の内容に習熟していること：
-  - [EMQXルール](./rules.md)
+- 以下に関する基本知識があること：
+  - [EMQX ルール](./rules.md)
   - [データ統合](./data-bridges.md)
   - [InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)
 
-## EMQX Tablesコネクターの作成
+## EMQX Tables コネクターの作成
 
-データを書き込む前に、EMQX Enterprise側でEMQX Tablesへのコネクターを作成します。
+データを書き込む前に、EMQX Enterprise 環境で EMQX Tables へのコネクターを作成します。
 
-1. EMQX Enterpriseダッシュボードで、**データ統合** -> **コネクター**に移動します。
+1. EMQX Enterprise ダッシュボードで、**データ統合** -> **コネクター** に移動します。
 
-2. **+ 新規コネクター**をクリックし、**EMQX Tables**を選択します。
+2. **+ 新しいコネクター** をクリックし、**EMQX Tables** を選択します。
 
-3. **コネクター作成**ページで以下の設定を行います。
-
-   - **コネクター名**：コネクターの一意な名前を入力します。
+3. **コネクター作成** ページで以下の設定を行います。
+   - **コネクター名**：コネクターの一意の名前を入力します。
    
    - **説明**（任意）：識別用の簡単な説明を追加します。
    
-   - **サーバーホスト**：`<host>:<port>`形式でEMQX Tablesサービスのアドレスを入力します。例：`tables.example.emqx.com:4001`
+   - **サーバーホスト**：EMQX Tables サービスのアドレスを `<host>:<port>` 形式で入力します。例：`tables.example.emqx.com:4001`
    
-   - **データベース**：EMQX Tables内の対象データベース名を指定します。例：`public`
+   - **データベース**：EMQX Tables 上の対象データベース名を指定します。例：`public`
    
      ::: tip
      
-     EMQX Tablesデプロイメント作成時にデフォルトで`public`データベースが作成されます。カスタムデータベースを作成したい場合は[カスタムデータベースの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_quick_start.html#create-a-custom-database)を参照してください。
+     EMQX Tables デプロイメント作成時にデフォルトで `public` データベースが作成されます。カスタムデータベースを作成する場合は [カスタムデータベースの作成](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_quick_start.html#create-a-custom-database) を参照してください。
    
      :::
    
-   - **ユーザー名**：EMQX Tablesデプロイメントで提供されたユーザー名を入力します。
+   - **ユーザー名**：EMQX Tables デプロイメントで提供されたユーザー名を入力します。
    
    - **パスワード**：対応するパスワードを入力します。
    
-   - **TLSを有効化**：EMQX Tablesへの接続時にTLS暗号化を使用する場合は有効にします。本番環境ではTLSの使用を推奨します。
+   - **TLS を有効化**：EMQX Tables への接続時に TLS 暗号化を使用する場合はこのオプションを有効にします。プロダクション環境では TLS の使用を推奨します。
    
-   - **詳細設定**（任意）：接続プールサイズ、タイムアウト、リトライ動作などの詳細オプションを必要に応じて設定します。
+   - **詳細設定**（任意）：接続プールサイズ、タイムアウト、リトライ動作などの高度なオプションを必要に応じて設定します。
    
-4. **接続テスト**をクリックし、接続可能か検証します。EMQX Tablesサービスに接続できれば成功メッセージが表示されます。
+4. **接続テスト** をクリックし、接続可能かを検証します。EMQX Tables サービスに接続できれば成功メッセージが表示されます。
 
-5. **作成**をクリックしてコネクターを作成完了します。
+5. **作成** をクリックしてコネクターの作成を完了します。
 
 このコネクターはルールやアクション定義時に利用可能です。
 
-## EMQX Tablesへのデータ取り込み用ルールの作成
+## EMQX Tables へのデータ取り込み用ルールの作成
 
-次に、どのMQTTメッセージをEMQX Tablesに書き込むか、またどのように保存するかを指定するルールを作成します。
+次に、どの MQTT メッセージをどのように EMQX Tables に書き込むかを指定するルールを作成します。
 
-### SQLルールの定義
+### SQL ルールの定義
 
-1. **データ統合** -> **ルール**に移動します。
+1. **データ統合** -> **ルール** に移動します。
 
-2. **+ 作成**をクリックします。
+2. **+ 作成** をクリックします。
 
-3. **SQLエディター**でルールロジックを定義します。例として、クライアントが`temp_hum/emqx`トピックに温度と湿度データをパブリッシュした際にトリガーされるルールは以下の通りです。
+3. **SQL エディター**でルールロジックを定義します。例として、クライアントが `temp_hum/emqx` トピックに温度と湿度データをパブリッシュした際にトリガーされるルールは以下の通りです。
 
    ```sql
    SELECT
@@ -96,33 +95,33 @@ EMQX Enterprise 6.1以降では、EMQX TablesコネクターとSinkが提供さ�
 
    ::: tip
 
-   EMQXルールが初めての場合は、**Try It Out**をクリックしてSQLルールをインタラクティブに学習・テストできます。
+   EMQX ルールが初めての場合は、**Try It Out** をクリックしてインタラクティブに SQL ルールを学習・テストできます。
 
    :::
 
-4. **+ アクション追加**をクリックしてルールにアクションを追加します。
+4. **+ アクションを追加** をクリックしてルールにアクションを追加します。
 
-### EMQX Tablesアクションの追加
+### EMQX Tables アクションの追加
 
-SQLルールを定義した後、ルールがトリガーされた際に選択されたデータをEMQX Tablesに書き込むアクションを追加します。
+SQL ルールを定義した後、ルールがトリガーされた際に選択されたデータを EMQX Tables に書き込むアクションを追加します。
 
-1. **アクションタイプ**で**EMQX Tables**を選択します。
+1. **アクションの種類** で **EMQX Tables** を選択します。
 
-2. **アクション**は**アクションを作成**のままにします。
+2. **アクション** は **アクションを作成** のままにします。
 
 3. 以下の項目を設定します。
 
    - **名前**：アクションの名前を入力します。
 
-   - **コネクター**：先ほど作成したEMQX Tablesコネクターを選択します。
+   - **コネクター**：先ほど作成した EMQX Tables コネクターを選択します。
 
    - **説明**（任意）：このアクションの説明を追加します。
 
-   - **書き込み構文**：EMQX Tablesにデータを書き込むためのInfluxDB Line Protocol形式を定義します。
+   - **書き込み構文**：EMQX Tables にデータを書き込むための InfluxDB Line Protocol 形式を定義します。
 
-     書き込み構文内のプレースホルダー（例：`${location}`, `${temp}`）はSQLルールで選択したフィールド名に対応している必要があります。ルールがトリガーされると、EMQXはこれらのプレースホルダーをSQLクエリの結果で置換します。
+     書き込み構文内のプレースホルダー（例：`${location}`, `${temp}`）は SQL ルールで選択したフィールドに対応している必要があります。ルールがトリガーされると、EMQX はこれらのプレースホルダーを SQL クエリの結果値に置き換えます。
 
-     行プロトコルの先頭にあるmeasurementがテーブル名となります。データが初めて正常に書き込まれると自動的にテーブルが作成されます。
+     行プロトコルの先頭にある measurement がテーブル名となります。データが初めて正常に書き込まれた際にテーブルが自動作成されます。
 
      例：
 
@@ -132,41 +131,41 @@ SQLルールを定義した後、ルールがトリガーされた際に選択�
 
      この例では：
 
-     - `temp_hum`がmeasurementでテーブル名として使用されます。
-     - `location`はタグとして書き込まれます。
-     - `temp`と`hum`はフィールドとして書き込まれます。
-     - `${timestamp}`はルールエンジンによって生成されたタイムスタンプを提供します。
+     - `temp_hum` が measurement であり、テーブル名として使用されます。
+     - `location` はタグとして書き込まれます。
+     - `temp` と `hum` はフィールドとして書き込まれます。
+     - `${timestamp}` はルールエンジンが生成したタイムスタンプを提供します。
 
      > 注意：
      >
-     > - 符号付き整数値を書き込む場合は、プレースホルダーの後に`i`を付けます（例：`${payload.int}i`）。
-     > - 符号なし整数値の場合は`u`を付けます（例：`${payload.int}u`）。
+     > - 符号付き整数値を書き込む場合は、プレースホルダーの後に `i` を付けます。例：`${payload.int}i`
+     > - 符号なし整数値の場合は `u` を付けます。例：`${payload.int}u`
      > - サフィックスを付けない場合、整数値はデフォルトで符号付き整数として解釈され、小数点を含む値は浮動小数点数として解釈されます。
-     > - 値が負の可能性がある場合や符号付き整数として保存する必要がある場合は`i`を使用し、非負の値で符号なし整数として保存したい場合は`u`を使用してください（例：カウンター、ID、単調増加メトリクスなど）。
+     > - 値が負の可能性があるか符号付き整数として保存する必要がある場合は `i` を使用し、非負の値で符号なし整数として保存したい場合（カウンター、ID、単調増加メトリクスなど）は `u` を使用してください。
 
-   - **時間精度**：タイムスタンプの時間精度を選択します。デフォルトは`millisecond`です。
+   - **時間精度**：タイムスタンプの時間精度を選択します。デフォルトは `millisecond` です。
 
-   - **フォールバックアクション**（任意）：このアクションが失敗した場合に実行するフォールバックアクションを設定できます。デフォルトでは設定されていません。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
+   - **フォールバックアクション**（任意）：このアクションが失敗した場合に実行されるフォールバックアクションを設定できます。デフォルトではフォールバックアクションは設定されていません。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
    - **詳細設定**（任意）：バッチ処理やリトライポリシーなどの高度な動作を必要に応じて設定します。
 
    ![emqx_tables_action](./assets/emqx_tables_action.png)
 
-4. **作成**をクリックしてアクションを保存します。
+4. **作成** をクリックしてアクションを保存します。
 
-5. **ルール作成**ページで**保存**をクリックし、ルールを保存します。
+5. **ルール作成** ページで **保存** をクリックしてルールを保存します。
 
 ## ルールのテストとデータのクエリ
 
-[MQTTX](https://mqttx.app/)などのクライアントツールを使って温度・湿度データの送信をシミュレートすることを推奨します。簡単なデモとしては、ダッシュボード内の組み込み診断ツールを利用することも可能です。
+温度と湿度のデータ報告をシミュレートするために、[MQTTX](https://mqttx.app/) などのクライアントツールの使用を推奨します。簡単なデモにはダッシュボード内の組み込み診断ツールも利用可能です。
 
-### Websocketクライアントでテストデータをパブリッシュ
+### Websocket クライアントを使ったテストデータのパブリッシュ
 
-1. EMQX Enterpriseダッシュボードの左メニューから**診断ツール** -> **Websocketクライアント**をクリックします。
+1. EMQX Enterprise ダッシュボードで、左メニューから **診断ツール** -> **Websocket クライアント** をクリックします。
 
-2. ユーザー名/パスワード認証または自動生成認証でシミュレートクライアントとして接続します。
+2. ユーザー名／パスワード認証または自動生成された認証情報を使ってシミュレートクライアントとして接続します。
 
-3. **パブリッシュ**セクションで以下の設定でメッセージをパブリッシュします。
+3. **パブリッシュ** セクションで以下の設定でメッセージをパブリッシュします。
 
    - **トピック**：`temp_hum/emqx`
    
@@ -183,23 +182,23 @@ SQLルールを定義した後、ルールがトリガーされた際に選択�
 
 ![emqx_tables_publish](./assets/emqx_tables_publish.png)
 
-このメッセージによりルールがトリガーされ、EMQX Tablesに書き込まれます。
+このメッセージによりルールがトリガーされ、EMQX Tables に書き込まれます。
 
-### EMQX Tablesでデータをクエリ
+### EMQX Tables でのデータクエリ
 
-1. EMQX Cloudコンソールにログインします。
+1. EMQX Cloud コンソールにログインします。
 
-2. EMQX Tablesのデプロイメントに移動します。
+2. EMQX Tables のデプロイメントに移動します。
 
-3. **データエクスプローラー**をクリックします。
+3. **データエクスプローラー** をクリックします。
 
-4. 以下のSQLクエリを実行します。
+4. 以下の SQL クエリを実行します。
 
    ```sql
    SELECT * FROM "temp_hum"
    ```
 
-クエリ結果に新しく取り込まれたレコードが表示されるはずです。
+クエリ結果に新たに取り込まれたレコードが表示されるはずです。
 
 ![emqx_tables_query](./assets/emqx_tables_query.png)
 
@@ -207,10 +206,10 @@ SQLルールを定義した後、ルールがトリガーされた際に選択�
 
 実行時の動作やパフォーマンスを確認するには：
 
-1. EMQX Enterpriseダッシュボードに戻ります。
-2. **データ統合** -> **ルール**に移動します。
-3. 作成したルールIDをクリックします。
+1. EMQX Enterprise ダッシュボードに戻ります。
+2. **データ統合** -> **ルール** に移動します。
+3. 作成したルールの ID をクリックします。
 
-ルールおよび関連するEMQX Tablesアクションの成功・失敗回数などの実行統計を確認できます。
+ルールおよび関連する EMQX Tables アクションの実行統計（成功数、失敗数など）を確認できます。
 
 ![emqx_tables_statistics](./assets/emqx_tables_statistics.png)

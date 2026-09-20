@@ -1,88 +1,87 @@
-# Incompatible Changes in EMQX 5.8
+# EMQX 5.8 における互換性のない変更点
 
 ## e5.8.9
 
-- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where the RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
+- [#16062](https://github.com/emqx/emqx/pull/16062) RocketMQアクションが指定されたペイロードテンプレートを無視し、ルール出力全体をレンダリングしてしまう問題を修正しました。
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura).
+- [#16491](https://github.com/emqx/emqx/pull/16491) macOS 13（Ventura）向けパッケージのリリースを停止しました。
 
 ## e5.8.6
 
-- [#14802](https://github.com/emqx/emqx/pull/14802) Starting from this version, plugin installation via the REST API or Dashboard requires explicit permission. Users must obtain this permission using the following CLI command before installing.
+- [#14802](https://github.com/emqx/emqx/pull/14802) このバージョン以降、REST APIまたはダッシュボード経由でのプラグインインストールには明示的な権限が必要になりました。インストール前に以下のCLIコマンドで権限を取得する必要があります。
 
   ```bash
   emqx ctl plugins allow NAME-VSN
   ```
 
-  This change enhances security by preventing unauthorized plugin installations. Users managing plugins via the API or Dashboard must adjust their workflows accordingly.
+  この変更により、不正なプラグインインストールを防止しセキュリティが強化されます。APIやダッシュボード経由でプラグインを管理しているユーザーはワークフローの調整が必要です。
 
 ## e5.8.5
 
-- [#14703](https://github.com/emqx/emqx/pull/14703) Introduced a change to the maximum allowed value for `force_shutdown.max_heap_size`, which is now set to `128GB`. If the `max_heap_size` was previously set to a value exceeding 128GB, this could lead to issues after upgrading, such as during configuration reloading or updates.
+- [#14703](https://github.com/emqx/emqx/pull/14703) `force_shutdown.max_heap_size` の最大許容値を `128GB` に変更しました。以前に128GBを超える値に設定していた場合、アップグレード後の設定リロードや更新時に問題が発生する可能性があります。
 
 ## e5.8.4
 
-- [#14360](https://github.com/emqx/emqx/pull/14360) When requesting Prometheus metrics in JSON format, the `client` top-level key will now always be an array of JSON objects, rather than a single JSON object. This change may affect how your monitoring tools process the data.
+- [#14360](https://github.com/emqx/emqx/pull/14360) PrometheusメトリクスのJSON形式リクエスト時に、トップレベルの `client` キーが単一のJSONオブジェクトではなく常にJSONオブジェクトの配列となります。この変更により監視ツールのデータ処理に影響が出る可能性があります。
 
-- [#14370](https://github.com/emqx/emqx/pull/14370) IoTDB data integration configuration changes:
-  
-  - The self-describing template has been removed. EMQX now only processes messages using the configured data templates and no longer attempts to extract the template from the message payload.
-  
-  - Each MQTT message can now only carry a single `payload`. Arrays of payloads are no longer supported. As a result, an MQTT message is processed as a single atomic insert operation (either a single or batch insert) into IoTDB. Generating multiple IoTDB operations from a single MQTT message is no longer possible.
-  
-  - The `data type` is now treated as a plain value rather than a template value.
-  
-  - The REST API driver now only supports IoTDB 1.3.x and later versions.
-  
-  - The Thrift driver now supports "batch" mode. 
-  
-    **Important**: To prevent overlapping timestamps in batch mode, it’s recommended to use the MQTT message timestamp (`${timestamp}`) or include a time field in the payload (e.g., `${payload.time}`).
+- [#14370](https://github.com/emqx/emqx/pull/14370) IoTDBデータ統合の設定変更：
+
+  - セルフディスクリビングテンプレートが廃止されました。EMQXは設定されたデータテンプレートのみを使用し、メッセージペイロードからテンプレートを抽出しなくなりました。
+
+  - 各MQTTメッセージは単一のペイロードのみを持つことが可能で、ペイロードの配列はサポートされません。これにより、MQTTメッセージは単一またはバッチ挿入の単一原子操作としてIoTDBに処理されます。1つのMQTTメッセージから複数のIoTDB操作を生成することはできなくなりました。
+
+  - `data type` はテンプレート値ではなく単純な値として扱われます。
+
+  - REST APIドライバーはIoTDB 1.3.x以降のみをサポートします。
+
+  - Thriftドライバーは「バッチ」モードをサポートするようになりました。
+
+    **重要**：バッチモードでタイムスタンプの重複を防ぐため、MQTTメッセージのタイムスタンプ（`${timestamp}`）を使用するか、ペイロード内に時間フィールド（例：`${payload.time}`）を含めることを推奨します。
 
 ## e5.8.3
 
-- [#14305](https://github.com/emqx/emqx/pull/14305) Removed support of hashing algorithms `MD4`, `MD5`, and `RIPEMD-160` from authentication as they are not compliant with [NIST Secure Hash Standard](https://www.nist.gov/publications/secure-hash-standard).
+- [#14305](https://github.com/emqx/emqx/pull/14305) 認証におけるハッシュアルゴリズム `MD4`、`MD5`、`RIPEMD-160` のサポートを廃止しました。これらは[NIST Secure Hash Standard](https://www.nist.gov/publications/secure-hash-standard)に準拠していません。
 
 ## e5.8.2
 
-- [#14004](https://github.com/emqx/emqx/pull/14004) Fixed an issue in Cluster Linking where overlapping topic filters in the `topics` configuration caused inconsistent and incomplete cross-cluster message routing. Each topic filter is now handled individually. Therefore, redundant topic filters (e.g. `t/1` and `t/+`) in the `topics` configuration are now considered invalid. The link will fail to start if such a configuration is detected.
-  
-- [#14015](https://github.com/emqx/emqx/pull/14015) Kafka/Confluent/Azure Event Hub Producers with a dynamic topic (i.e., a topic that contains placeholders) no longer support disk buffering. Only memory and hybrid modes are now supported.
+- [#14004](https://github.com/emqx/emqx/pull/14004) クラスターリンクにおいて、`topics` 設定内の重複するトピックフィルターが原因でクロスクラスターのメッセージルーティングが不整合かつ不完全になる問題を修正しました。各トピックフィルターは個別に処理されるため、`topics` 設定内で冗長なトピックフィルター（例：`t/1` と `t/+`）は無効とみなされます。そのような設定が検出された場合、リンクは起動に失敗します。
 
-- [#14106](https://github.com/emqx/emqx/pull/14106) Added a validation that forbids a single Kafka Consumer connector from containing sources with repeated Kafka topics. If you want to repeat topics, create a new connector and source(s).
+- [#14015](https://github.com/emqx/emqx/pull/14015) 動的トピック（プレースホルダーを含むトピック）を持つKafka/Confluent/Azure Event Hubのパブリッシャーはディスクバッファリングをサポートしなくなりました。現在はメモリモードとハイブリッドモードのみがサポートされています。
 
+- [#14106](https://github.com/emqx/emqx/pull/14106) 単一のKafkaコンシューマーコネクター内で同じKafkaトピックを持つソースの重複を禁止するバリデーションを追加しました。トピックを重複させたい場合は、新しいコネクターとソースを作成してください。
 
 ## e5.8.1
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) The default expiration time for a banned item that is created without an `until` value is now `infinity` (previously capped at 1 year limit).
+- [#13792](https://github.com/emqx/emqx/pull/13792) `until` 値なしで作成された禁止アイテムのデフォルト有効期限を無期限（以前は最大1年）に変更しました。
 
-- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for a topic starting with `$` when it subscribed to topic `#` or `+`.
+- [#13742](https://github.com/emqx/emqx/pull/13742) クライアントが `#` または `+` トピックをサブスクライブした際に、`$` で始まるトピックの保持メッセージを受信してしまう問題を修正しました。
 
-  This fix satisfies the requirement of [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246).
+  この修正は [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246) の要件を満たしています。
 
 ## e5.8.0
 
-- [#13080](https://github.com/emqx/emqx/pull/13080) Updated the default value of the `mqtt.retry_interval` configuration from 30 seconds to `infinity`.
+- [#13080](https://github.com/emqx/emqx/pull/13080) `mqtt.retry_interval` 設定のデフォルト値を30秒から無限大（`infinity`）に変更しました。
 
-  Previously, EMQX would automatically retry message deliveries every 30 seconds by default. With the new default set to `infinity`, EMQX will no longer retry message deliveries automatically. This change aligns with MQTT specification standards, which generally do not recommend in-session message delivery retries.
+  以前はEMQXがメッセージ配信を30秒ごとに自動的に再試行していましたが、新しいデフォルトでは自動再試行を行いません。この変更はMQTT仕様に準拠したもので、セッション内でのメッセージ再試行は一般的に推奨されていません。
 
-  We understand that some users rely on the retry feature, so the ability to configure a specific retry interval is still available for backward compatibility.
+  再試行機能を利用しているユーザーのために、特定の再試行間隔を設定するオプションは引き続き利用可能です。
 
-- [#13190](https://github.com/emqx/emqx/pull/13190) Discontinued support for releases on CentOS 7 and Ubuntu 18. EMQX will no longer provide builds for these operating systems due to their end-of-life status.
+- [#13190](https://github.com/emqx/emqx/pull/13190) CentOS 7およびUbuntu 18向けリリースのサポートを終了しました。これらのOSはサポート終了のため、EMQXはビルドを提供しません。
 
-- [#13248](https://github.com/emqx/emqx/pull/13248) Replaced the `builtin` durable storage backend with two new backends to provide better flexibility and scalability:
+- [#13248](https://github.com/emqx/emqx/pull/13248) `builtin` 永続化ストレージバックエンドを廃止し、柔軟性とスケーラビリティを向上させるために2つの新しいバックエンドに置き換えました：
 
-  - **`builtin_local`**: A durable storage backend that does not support replication, making it suitable for single-node deployments. This backend is available in both the open-source and enterprise editions of EMQX but is not compatible with multi-node clusters.
-  - **`builtin_raft`**: A durable storage backend utilizing the Raft consensus algorithm for data replication across multiple nodes. This backend is exclusively available in the enterprise edition of EMQX, providing enhanced data durability and fault tolerance.
+  - **`builtin_local`**：レプリケーションをサポートしない永続化ストレージバックエンドで、シングルノード展開に適しています。オープンソース版およびエンタープライズ版で利用可能ですが、マルチノードクラスターには対応していません。
+  - **`builtin_raft`**：Raftコンセンサスアルゴリズムを利用し、複数ノード間でデータレプリケーションを行う永続化ストレージバックエンドです。エンタープライズ版専用で、データの耐久性とフォールトトレランスが向上します。
 
-  Additionally, several Prometheus metrics have been renamed to better reflect their functions:
+  さらに、以下のPrometheusメトリクス名が機能をより正確に反映するように変更されました：
 
-  - `emqx_ds_egress_batches` has been renamed to `emqx_ds_buffer_batches`
-  - `emqx_ds_egress_batches_retry` has been renamed to `emqx_ds_buffer_batches_retry`
-  - `emqx_ds_egress_batches_failed` has been renamed to `emqx_ds_buffer_batches_failed`
-  - `emqx_ds_egress_messages` has been renamed to `emqx_ds_buffer_messages`
-  - `emqx_ds_egress_bytes` has been renamed to `emqx_ds_buffer_bytes`
-  - `emqx_ds_egress_flush_time` has been renamed to `emqx_ds_buffer_flush_time`
+  - `emqx_ds_egress_batches` → `emqx_ds_buffer_batches`
+  - `emqx_ds_egress_batches_retry` → `emqx_ds_buffer_batches_retry`
+  - `emqx_ds_egress_batches_failed` → `emqx_ds_buffer_batches_failed`
+  - `emqx_ds_egress_messages` → `emqx_ds_buffer_messages`
+  - `emqx_ds_egress_bytes` → `emqx_ds_buffer_bytes`
+  - `emqx_ds_egress_flush_time` → `emqx_ds_buffer_flush_time`
 
-- [#13526](https://github.com/emqx/emqx/pull/13526) Removed the Core-replicant feature from the Open-Source Edition. Starting from release 5.8, all nodes running the Open-Source Edition will operate in the Core role. This change does not impact Enterprise Edition users, who will continue to have access to the Core-replicant functionality. Additionally, the obsolete `cluster.core_nodes` configuration parameter has been removed as it is no longer needed.
+- [#13526](https://github.com/emqx/emqx/pull/13526) オープンソース版からCore-replicant機能を削除しました。5.8以降、オープンソース版の全ノードはCoreロールで動作します。この変更はエンタープライズ版には影響ありません。不要となった `cluster.core_nodes` 設定パラメータも削除されました。
 
-- [#13372](https://github.com/emqx/emqx/pull/13372) Now the number of connections accepted by gateways is governed by the licensing terms, ensuring compliance with the allowed connection limits.
+- [#13372](https://github.com/emqx/emqx/pull/13372) ゲートウェイが受け入れる接続数はライセンス条件により制御されるようになり、許可された接続数の制限を順守します。

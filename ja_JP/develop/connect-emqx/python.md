@@ -1,6 +1,6 @@
-# Python SDKで接続する
+# Python SDKによる接続
 
-[Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) は、Eclipse PahoプロジェクトのPython言語クライアントライブラリであり、MQTTブローカーに接続してメッセージをパブリッシュし、トピックをサブスクライブし、パブリッシュされたメッセージを受信することができます。
+[Eclipse Paho Python](https://github.com/eclipse/paho.mqtt.python) は、Eclipse PahoプロジェクトのPython言語用クライアントライブラリであり、MQTTブローカーに接続してメッセージをパブリッシュしたり、トピックをサブスクライブしてパブリッシュされたメッセージを受信したりすることができます。
 
 PyPiパッケージ管理ツールを使ってインストールします：
 
@@ -10,7 +10,7 @@ pip install paho-mqtt
 
 ## Paho Python 使用例
 
-以下の例は、EMQXに接続し、メッセージを送受信するPaho Pythonの完全なコードです：
+以下の例は、EMQXに接続し、メッセージの送受信を行うPaho Pythonの完全なコードです：
 
 ```python
 import paho.mqtt.client as mqtt
@@ -40,4 +40,4 @@ client.loop_forever()
 
 ## Paho Python MQTT 5.0対応状況
 
-現在、Paho PythonはまだMQTT 5.0に対応中であり、完全なサポートはされていません。
+現時点では、Paho PythonはまだMQTT 5.0に対応中であり、完全なサポートはされていません。

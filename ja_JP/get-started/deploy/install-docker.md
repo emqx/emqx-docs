@@ -1,9 +1,9 @@
 ---
-description: このページでは、公式Dockerイメージを使ってEMQXをインストールおよび起動する方法と、Docker Composeを使ってEMQXクラスターを構築する方法を紹介します。
+description: このページでは、公式Dockerイメージを使用してEMQXをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 ---
 
 # Dockerを使ったEMQXのインストール
-このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使ってEMQXクラスターを構築する方法を紹介します。
+このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使用してEMQXクラスターを構築する方法を紹介します。
 
 ## はじめに
 
@@ -11,45 +11,45 @@ DockerでEMQXを起動する前に、以下のデプロイメントに関する�
 
 ### 安定したノード名を選択する
 
-EMQXはノードデータを `data/mnesia/<node_name>` ディレクトリに保存します。後からノード名を変更するとデータが失われる可能性があるため、コンテナ起動前に安定したノード名を選択してください。
+EMQXはノードデータを `data/mnesia/<node_name>` ディレクトリに保存します。後からノード名が変更されることによるデータ損失を避けるため、コンテナ起動前に安定したノード名を選択してください。
 
-単一ノードのデプロイメントの場合、`EMQX_NODE_NAME` 環境変数を `emqx@<host>` 形式で設定します。コンテナのホスト名も同じ `<host>` に設定してください。
+単一ノードのデプロイメントの場合、`EMQX_NODE_NAME` 環境変数を `emqx@<host>` 形式で設定します。コンテナのホスト名も同じ `<host>` の値に設定してください。
 
-**注意:** `<host>` 部分はIPアドレスまたは完全修飾ドメイン名（FQDN）、例えば `node1.emqx.com` にする必要があります。EMQXはErlangノードをロングネームモードで動作させるため、ドットなしの短いホスト名（例: `node1`）は使用できません。
+**注意:** `<host>` 部分はIPアドレスまたは完全修飾ドメイン名（FQDN）、例えば `node1.emqx.com` でなければなりません。EMQXはErlangノードをロングネームモードで実行するため、ドットのない短いホスト名（例：`node1`）は使用できません。
 
 ### 永続ストレージの準備
 
-コンテナ削除後もEMQXのデータを保持するために、以下のコンテナディレクトリをホストにマウントしてください。
+コンテナ削除後もEMQXのデータを保持するには、以下のコンテナ内ディレクトリをホストにマウントしてください。
 
 - `/opt/emqx/data`: EMQXのデータを保存します。
-- `/opt/emqx/log`: ファイルログとクラッシュダンプを保存します。
+- `/opt/emqx/log`: ファイルログおよびクラッシュダンプを保存します。
 
-EMQXコンテナはデフォルトでコンソールログを使用しますが、Erlang VMはノードが異常終了した際にクラッシュダンプを `/opt/emqx/log` に書き込みます。マウントしていない場合、コンテナ削除時にダンプが失われます。ホストのログディレクトリはコンテナ内の `emqx` ユーザー（UID 1000）が書き込み可能である必要があります。詳細は[Dockerにおけるクラッシュダンプ](../../guides/configuration/logs.md#crash-dumps-in-docker)を参照してください。
+EMQXコンテナはデフォルトでコンソールログを使用しますが、Erlang VMはノードが異常終了した場合にクラッシュダンプを `/opt/emqx/log` に書き込みます。マウントしていない場合、コンテナ削除時にダンプが失われます。ホストのログディレクトリはコンテナ内の `emqx` ユーザー（UID 1000）が書き込み可能である必要があります。詳細は [Dockerにおけるクラッシュダンプ](../../guides/configuration/logs.md#crash-dumps-in-docker) を参照してください。
 
-EMQXのディレクトリについての詳細は[EMQXのファイルとディレクトリ](./install.md#files-and-directories)を参照してください。
+EMQXのディレクトリ構成については、[EMQXのファイルとディレクトリ](./install.md#files-and-directories) をご覧ください。
 
 ### ホスト上のサービスへのアクセス
 
-EMQXからホスト上で動作するサービスにアクセスする場合、サービスアドレスに `localhost` や `127.0.0.1` を使用しないでください。これらはコンテナ自身のネットワークインターフェースを指します。ホストのIPアドレスまたは[ホストネットワーキング](https://docs.docker.com/network/host/)を使用してください。Docker Desktop for MacやWindowsでは `host.docker.internal` も利用可能です。
+EMQXがホスト上で実行されているサービスにアクセスする必要がある場合、サービスアドレスに `localhost` や `127.0.0.1` を使用しないでください。これらはコンテナ自身のネットワークインターフェースを指します。ホストのIPアドレスまたは [host networking](https://docs.docker.com/network/host/) を使用してください。MacやWindowsのDocker Desktopでは `host.docker.internal` も使用可能です。
 
-## Dockerを使って単一EMQXノードを起動する
+## Dockerを使って単一のEMQXノードを起動する
 
-単一のEMQXノードを起動する手順は以下の通りです。公式EMQX Dockerイメージの詳細は[Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)を参照してください。
+以下の手順で単一のEMQXノードを起動します。公式EMQX Dockerイメージの詳細は [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) を参照してください。
 
-1. Dockerイメージをプルします。
+1. Dockerイメージをプルします：
 
    ```bash
    docker pull emqx/emqx-enterprise:@EE_VERSION@
    ```
 
-2. ホスト上にディレクトリを作成し、ログディレクトリをコンテナ内の `emqx` ユーザーが書き込み可能にします。
+2. ホスト上にディレクトリを作成し、ログディレクトリの権限をコンテナ内の `emqx` ユーザーが書き込み可能にします：
 
    ```bash
    mkdir -p $PWD/data $PWD/log
    sudo chown 1000:1000 $PWD/log
    ```
 
-3. 安定したノード名とマウントしたディレクトリを指定してコンテナを起動します。
+3. 安定したノード名とマウントしたディレクトリを指定してコンテナを起動します：
 
    ```bash
    docker run -d --name emqx-enterprise \
@@ -65,21 +65,21 @@ EMQXからホスト上で動作するサービスにアクセスする場合、�
 
 ## Docker Composeを使ってEMQXクラスターを構築する
 
-Docker Composeは複数コンテナのDockerアプリケーションを定義・実行するツールです。このセクションではDocker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
+Docker Composeは複数コンテナのDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使用して静的なEMQXクラスターを作成する方法を紹介します。
 
-このセクションのDocker Composeの例はローカルテスト用であり、ボリュームマウントはコメントアウトされています。データやクラッシュダンプを保持するには、[はじめに](#はじめに)で説明したホストディレクトリを準備し、`volumes` の記述をコメント解除してください。本番環境でのクラスター構築については[クラスタリング](../../develop/cluster/introduction.md)を参照してください。
+このセクションのDocker Compose例はローカルテスト用であり、ボリュームマウントはコメントアウトされています。データやクラッシュダンプを保持するには、[はじめに](#はじめに) のホストディレクトリを準備し、`volumes` のコメントアウトを解除してください。本番環境でのクラスター構築については [クラスター](../../develop/cluster/introduction.md) を参照してください。
 
 :::tip
 
-Docker ComposeはDocker Desktopに標準で含まれています。もしDocker Composeが未インストールの場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/)を参照してインストールしてください。
+Docker ComposeはDocker Desktopに既に含まれています。もしDocker Composeが未インストールの場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/) を参照してください。
 
 :::
 
-1. 任意のディレクトリに `docker-compose.yml` ファイルを作成し、以下の内容を記述します。
+1. 任意のディレクトリに以下の内容で `docker-compose.yml` ファイルを作成します：
 
    ```yml
    version: '3'
-   
+
    services:
      emqx1:
        image: emqx/emqx-enterprise:@EE_VERSION@
@@ -132,13 +132,13 @@ Docker ComposeはDocker Desktopに標準で含まれています。もしDocker 
        driver: bridge
    ```
 
-2. コマンドラインで `docker-compose.yml` を保存したディレクトリに移動し、以下のコマンドでEMQXクラスターを起動します。
+2. コマンドラインツールで `docker-compose.yml` があるディレクトリに移動し、以下のコマンドでEMQXクラスターを起動します：
 
    ```bash
    docker-compose up -d
    ```
 
-3. クラスターの状態を確認するには、以下のコマンドを実行します。
+3. クラスターの状態を確認するには、以下を実行します：
 
    ```bash
    $ docker exec -it emqx1 sh -c "emqx ctl cluster status"
@@ -148,8 +148,8 @@ Docker ComposeはDocker Desktopに標準で含まれています。もしDocker 
 
 ## 次のステップ
 
-MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)を参照してください。
+MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行ってください。詳細は [パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md) を参照してください。
 
-- EMQXのパラメータ設定やその他の機能については[設定](../../guides/configuration/configuration.md)を参照してください。
+- EMQXのパラメータ設定やその他の機能については、[設定](../../guides/configuration/configuration.md) をご覧ください。
 
-- 複数ノードによるEMQXクラスターの構築方法は[クラスタリング](../../develop/cluster/introduction.md)を参照してください。
+- 複数ノードによるEMQXクラスターの構築方法については、[クラスター](../../develop/cluster/introduction.md) を参照してください。

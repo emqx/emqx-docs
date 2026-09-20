@@ -1,26 +1,25 @@
-# Incompatible Changes in EMQX 5.9
+# EMQX 5.9 における互換性のない変更点
 
 ## 5.9.2
 
-- [#15753](https://github.com/emqx/emqx/pull/15753) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the behavior before 5.9.0.
+- [#15753](https://github.com/emqx/emqx/pull/15753) リスナーの接続レート制限（`max_conn_rate` および `max_conn_burst`）は、アクセプター単位ではなくリスナー単位で適用されるようになり、5.9.0以前の動作に戻りました。
 
-  As a result, configurations from versions 5.9.0 and 5.9.1 are incompatible: the specified rate values must be scaled up by the number of acceptors configured for each listener to preserve the same effective limits.
+  その結果、5.9.0および5.9.1の設定は互換性がなくなりました。指定されたレート値は、各リスナーに設定されたアクセプターの数でスケールアップする必要があり、同じ実効制限を維持するために調整が必要です。
 
-- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ actions ignored the configured payload template and sent the entire rule output instead.
+- [#16062](https://github.com/emqx/emqx/pull/16062) RocketMQアクションが設定されたペイロードテンプレートを無視し、ルール出力全体を送信してしまう問題を修正しました。
 
-  If you relied on the previous (incorrect) behavior, you may need to update your payload templates to ensure messages are formatted as expected.
+  以前の（誤った）動作に依存していた場合は、メッセージが期待通りにフォーマットされるようにペイロードテンプレートの更新が必要になる可能性があります。
 
-- [#16284](https://github.com/emqx/emqx/pull/16284) Stopped releasing packages for macOS 13 and CentOS 7.
-
+- [#16284](https://github.com/emqx/emqx/pull/16284) macOS 13およびCentOS 7向けのパッケージのリリースを停止しました。
 
 ## 5.9.1
 
-- [#15156](https://github.com/emqx/emqx/pull/15156) Added strict schema validation for the `dashboard.sso.oidc.issuer` field. This field must now contain a valid URL. Previously, invalid configurations could be accepted by the API without errors but would cause EMQX to fail to restart, potentially resulting in a crash (`erl_crash.dump`).
+- [#15156](https://github.com/emqx/emqx/pull/15156) `dashboard.sso.oidc.issuer` フィールドに対する厳格なスキーマ検証を追加しました。このフィールドには有効なURLを指定する必要があります。以前は無効な設定でもAPIがエラーを返さず受け入れてしまい、EMQXの再起動に失敗し、クラッシュ（`erl_crash.dump`）を引き起こす可能性がありました。
 
 ## 5.9.0
 
-- [#14865](https://github.com/emqx/emqx/pull/14865) Dropped old LDAP authentication config layout (deprecated since v5.4).
-  Move `password_attribute` and `is_superuser_attribute` under the `method` block:
+- [#14865](https://github.com/emqx/emqx/pull/14865) 古いLDAP認証設定レイアウト（v5.4から非推奨）を廃止しました。  
+  `password_attribute` と `is_superuser_attribute` は `method` ブロック内に移動してください：
     ```hcl
     method {
       type = hash
@@ -29,19 +28,21 @@
     }
     ```
 
-- [#14765](https://github.com/emqx/emqx/pull/14765) Added extra validation for using Named Instances in SQL Server Connector.  Previously, we could not infer when the user furnished an explicit port for SQL Server, and always added the default port if not explicitly defined.
+- [#14765](https://github.com/emqx/emqx/pull/14765) SQL ServerコネクターにおけるNamed Instances使用時の追加検証を実装しました。  
+  以前はユーザーが明示的にポートを指定したかどうかを判別できず、明示されていない場合は常にデフォルトポートを追加していました。
 
-  For Named Instances, we need to explicitly define a port to connect to when connecting with the ODBC driver. And the driver happily connects to whatever instance is running on that port, completely ignoring the given Instance Name, if any.
+  Named Instancesの場合、ODBCドライバーで接続する際に明示的にポートを指定する必要があります。ドライバーは指定されたインスタンス名を無視し、そのポートで稼働しているインスタンスに接続します。
 
-  Now, we impose that the port is to be explicitly defined when an instance name is given, and we also attempt to infer differences between desired and connected instance names during health checks.
+  今後はインスタンス名が指定された場合、ポートの明示的な定義を必須とし、ヘルスチェック時に希望するインスタンス名と接続されたインスタンス名の差異を推測する試みも行います。
 
-- [#14773](https://github.com/emqx/emqx/pull/14773) Rate limiting configuration options have been changed.
-  - This change is incompatible with versions prior to 5.1.0
-  - This change is also incompatible with manually modified limiter configurations that use structures from versions prior to 5.1.0
-  - The undocumented endpoint `/configs/limiter` has been removed
-  
-- [#14703](https://github.com/emqx/emqx/pull/14703) Changed the maximum allowed value for `force_shutdown.max_heap_size` to `128GB`.
+- [#14773](https://github.com/emqx/emqx/pull/14773) レート制限の設定オプションが変更されました。  
+  - この変更は5.1.0以前のバージョンとは互換性がありません。  
+  - 5.1.0以前のバージョンの構造を用いた手動変更済みのリミッター設定とも互換性がありません。  
+  - 非公開エンドポイント `/configs/limiter` は削除されました。
 
-- [#14957](https://github.com/emqx/emqx/pull/14957) The way plugin configurations are updated has changed. The system now respects the result of the `on_config_changed` callback when updating a plugin's configuration. This change only affects new configuration updates made through the Dashboard. The result of the `on_config_changed` callback is still ignored for configurations that have already been stored in the cluster.
+- [#14703](https://github.com/emqx/emqx/pull/14703) `force_shutdown.max_heap_size` の最大許容値を `128GB` に変更しました。
 
-  Additionally, plugin apps are now loaded during plugin installation to ensure the `on_config_changed` callback is called even for stopped plugins.
+- [#14957](https://github.com/emqx/emqx/pull/14957) プラグイン設定の更新方法を変更しました。  
+  システムはプラグイン設定更新時に `on_config_changed` コールバックの結果を尊重するようになりました。この変更はダッシュボード経由で行われる新規設定更新にのみ影響し、既にクラスターに保存されている設定に対しては引き続きコールバック結果を無視します。
+
+  さらに、プラグインのインストール時にプラグインアプリをロードし、停止中のプラグインに対しても `on_config_changed` コールバックが呼ばれるようにしました。

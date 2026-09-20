@@ -1,6 +1,6 @@
 # 遅延パブリッシュ
 
-遅延パブリッシュは、EMQXがサポートする拡張されたMQTT機能です。クライアントがトピックプレフィックス `$delayed/{DelayInterval}` を付けてEMQXにメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされます。メッセージはユーザーが事前に定義した時間経過後にパブリッシュされます。
+遅延パブリッシュは、EMQXがサポートする拡張MQTT機能です。クライアントがトピックプレフィックスに `$delayed/{DelayInterval}` を付けてEMQXにメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされます。メッセージはユーザーが事前に定義した時間経過後にパブリッシュされます。
 
 遅延パブリッシュのトピックの具体的な形式は以下の通りです。
 
@@ -8,19 +8,19 @@
 $delayed/{DelayInterval}/{TopicName}
 ```
 
-- `$delayed`：`$delayed`で始まるメッセージは遅延が必要なメッセージとして扱われます。遅延時間は次のトピックレベルの内容で決定されます。
-- `{DelayTime}`：このMQTTメッセージのパブリッシュを遅延させる時間間隔またはタイムスタンプを秒単位で指定します。間隔の場合、最大許容間隔は42949669秒（約497日）です。タイムスタンプの場合、現在のシステム時刻から42949669秒より前または後であってはなりません。`{DelayTime}`が整数として解析できないか、有効範囲外の場合、メッセージは破棄されます。
-- `{TopicName}`：MQTTメッセージのトピック名。
+- `$delayed`：`$delayed`で始まるメッセージは遅延が必要なメッセージとして扱われます。遅延時間は次のトピックレベルの内容で決まります。
+- `{DelayTime}`：このMQTTメッセージのパブリッシュを遅延させる時間間隔またはタイムスタンプを秒単位で指定します。間隔の場合、最大許容間隔は42949669秒（約497日）です。タイムスタンプの場合、現在のシステム時間から42949669秒より前または後であってはなりません。`{DelayTime}`が整数として解析できないか、有効範囲外の場合、メッセージは破棄されます。
+- `{TopicName}`：MQTTメッセージのトピック名です。
 
 例：
 
 - `$delayed/15/x/y`：15秒後にトピック `x/y` にMQTTメッセージをパブリッシュする
 - `$delayed/60/a/b`：1分後にトピック `a/b` にMQTTメッセージをパブリッシュする
-- `$delayed/1743490800/chat/id`：2025年4月1日9:00（ストックホルムタイムゾーン）にトピック `chat/id` にメッセージをパブリッシュする
+- `$delayed/1743490800/chat/id`：2025年4月1日9:00（ストックホルム時間）にトピック `chat/id` にメッセージをパブリッシュする
 - `$delayed/3600/$SYS/topic`：1時間後にトピック `$SYS/topic` にMQTTメッセージをパブリッシュする
 
 ::: warning Listener Mountpointとの非互換性
-遅延パブリッシュは、[マウントポイント](../../guides/configuration/listener.md#mountpoint)が設定されたリスナー経由で接続されたクライアントでは動作しません。EMQXはマウントポイントを `$delayed/` プレフィックスのマッチング前に適用するため、メッセージは即座に通常のメッセージとしてマウントされたリテラルトピック（例：`mp/$delayed/10/t`）にルーティングされます。クライアントにはエラーは報告されません。
+遅延パブリッシュは、[マウントポイント](../../guides/configuration/listener.md#mountpoint)が設定されたリスナー経由で接続されたクライアントでは動作しません。EMQXはマウントポイントを `$delayed/` プレフィックスのマッチング前に適用するため、メッセージは即座に通常のメッセージとしてマウントされたリテラルトピック（例：`mp/$delayed/10/t`）にルーティングされます。クライアントにはエラーは通知されません。
 :::
 
 ## ダッシュボードで遅延パブリッシュを設定する
@@ -29,11 +29,10 @@ $delayed/{DelayInterval}/{TopicName}
 
 2. **Delayed Publish** ページで以下の設定が可能です：
 
-   - **Enable**：遅延パブリッシュの有効化・無効化。デフォルトで有効です。
+   - **Enable**：遅延パブリッシュの有効化または無効化。デフォルトでは有効です。
    - **Max Delayed Messages**：遅延メッセージの最大数を指定できます。
-   
 
-<img src="./assets/configure-delayed-publish-dashboard.png" alt="遅延パブリッシュのダッシュボード設定" style="zoom:45%;" />
+<img src="./assets/configure-delayed-publish-dashboard.png" alt="遅延パブリッシュ設定ダッシュボード" style="zoom:45%;" />
 
 ## MQTTX Desktopで遅延パブリッシュを試す
 
@@ -46,8 +45,8 @@ $delayed/{DelayInterval}/{TopicName}
 1. EMQXとMQTTX Desktopを起動します。**New Connection** をクリックしてパブリッシャーとしてクライアント接続を作成します。
 
    - **Name** フィールドに `Demo` と入力します。
-   - **Host** にローカルホストの `127.0.0.1` を入力します（本デモの例として）。
-   - 他の設定はデフォルトのままにして **Connect** をクリックします。
+   - **Host** にローカルホストの `127.0.0.1` を入力します（このデモの例として使用）。
+   - その他の設定はデフォルトのままにして、**Connect** をクリックします。
 
    ::: tip
 
@@ -55,23 +54,23 @@ $delayed/{DelayInterval}/{TopicName}
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="新規接続の一般設定" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新規接続設定" style="zoom:35%;" />
 
 2. もう一つMQTT接続を作成し、サブスクライバーとして設定します。
 
-3. **Connections** ペインで `Demo` という名前の接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
+3. **Connections** ペインで `Demo` 接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
 
    - `$delayed`：遅延メッセージであることを示します。
    - `10`：遅延時間が10秒であることを示します。
    - `x/y`：メッセージのトピック名を示します。
 
-4. **Connections** ペインで `Subscriber` という名前の接続を選択します。**New Subscription** ボタンをクリックしてサブスクリプションを作成します。**Topic** テキストボックスに `x/y` と入力してこのトピックをサブスクライブし、**Confirm** をクリックします。
+4. **Connections** ペインで `Subscriber` 接続を選択します。**New Subscription** ボタンをクリックしてサブスクリプションを作成します。**Topic** テキストボックスに `x/y` と入力してこのトピックをサブスクライブし、**Confirm** をクリックします。
 
    <img src="./assets/subscribe-delayed-message.png" alt="遅延メッセージのサブスクライブ" style="zoom:35%;" />
 
-5. **Connections** ペインで `Demo` の接続を選択し、送信ボタンをクリックしてトピック `$delayed/10/x/y` で `Delayed Message` を送信します。
+5. **Connections** ペインで `Demo` 接続を選択し、送信ボタンをクリックしてトピック `$delayed/10/x/y` に `Delayed Message` を送信します。
 
-6. 10秒待ちます。`Subscriber` という名前の接続が10秒後に遅延メッセージを受信するのが確認できます。
+6. 10秒待ちます。`Subscriber` 接続が10秒後に遅延メッセージを受信するのが確認できます。
 
    <img src="./assets/receive-delayed-message.png" alt="遅延メッセージの受信" style="zoom:35%;" />
 
@@ -83,7 +82,7 @@ $delayed/{DelayInterval}/{TopicName}
 
 :::
 
-1. サブスクライバーとして新しい接続を作成し、トピック `t/1` をサブスクライブします。
+1. 新しい接続をサブスクライバーとして作成し、トピック `t/1` をサブスクライブします。
 
    ```bash
    mqttx sub -t t/1 -v
