@@ -1,12 +1,12 @@
 # AWS IoT Core から EMQX への移行
 
-このページでは、IoT デバイスを AWS IoT Core から EMQX に移行するための包括的な手順を説明します。デバイスおよび EMQX ブローカーの再設定方法を示し、デバイス群全体のシームレスな移行を実現します。
+このページでは、AWS IoT Core から EMQX へ IoTデバイスを移行するための包括的な手順を説明します。デバイスおよび EMQX ブローカーの再設定方法を示し、デバイス群全体のシームレスな移行を実現するためのプロセスを解説します。
 
-本ガイドは、両プラットフォームでサポートされている最も一般的かつ堅牢な認証方式である X.509 クライアント証明書（mTLS）認証に焦点を当てています。AWS IoT Core に登録された独自のカスタム認証局（CA）を使用してデバイス証明書に署名していることを前提としています。AWS 発行の（「ワンクリック」）証明書を使用している場合は、それらの証明書を再利用できません。AWS はこれらの証明書に署名した中間 CA を公開していないため、EMQX のような MQTT ブローカーから信頼できません。この場合は、独自の CA を作成し、デバイス証明書を再発行する必要があります。
+本ガイドは、両プラットフォームでサポートされている最も一般的かつ堅牢な認証方式である X.509 クライアント証明書（mTLS）認証に焦点を当てています。AWS IoT Core に登録された独自のカスタム認証局（CA）を使用してデバイス証明書に署名していることを前提としています。AWS 発行の（「ワンクリック」）証明書を使用している場合は、それらの証明書を再利用できません。AWS はこれらの証明書に署名した中間 CA を公開していないため、EMQX のような MQTT ブローカーで信頼できないためです。この場合は、独自の CA を作成し、デバイス証明書を再発行する必要があります。
 
 ## 移行の概要：標準フロー
 
-AWS IoT Core で独自の CA によって署名された X.509 クライアント証明書（mTLS）を使用しているデバイスの場合、EMQX への移行は簡単です。公式の AWS IoT Device SDK を含む標準準拠クライアントは、クライアント側のコード変更を最小限に抑え、エンドポイントとサーバー CA 証明書の更新のみで EMQX に接続可能です。既存のデバイス証明書と秘密鍵は引き続き有効です。
+AWS IoT Core で独自 CA によって署名された X.509 クライアント証明書（mTLS）を使用しているデバイスの場合、EMQX への移行は簡単です。公式の AWS IoT Device SDK を含む標準準拠クライアントは、クライアント側コードの変更を最小限に抑え、エンドポイントとサーバー CA 証明書の更新のみで EMQX に接続可能です。既存のデバイス証明書と秘密鍵はそのまま有効です。
 
 移行プロセスは以下の3つのフェーズで構成されます。
 
@@ -14,27 +14,27 @@ AWS IoT Core で独自の CA によって署名された X.509 クライアン�
    AWS IoT Core に登録され、現在デバイス証明書の署名に使用しているカスタム CA 証明書を特定します。
 
 2. **EMQX の mTLS 設定**  
-   EMQX ブローカーに SSL/TLS リスナーを設定し、ピア認証を必須にして CA を信頼するようリスナーを構成します。
+   EMQX ブローカー上で SSL/TLS リスナーを設定し、ピア認証を必須化、かつ CA を信頼するようリスナーを構成します。
 
 3. **デバイスクライアントの更新**  
-   デバイスクライアントコードを新しい EMQX エンドポイントアドレスとサーバー CA 証明書で更新します。
+   デバイスクライアントコードのエンドポイントアドレスと EMQX サーバーの CA 証明書を更新します。
 
-以下の表は、主なパラメータの変更点をまとめたものです。
+以下の表は、主要なパラメータの変更点をまとめたものです。
 
 | **パラメータ** | **AWS IoT Core（例）** | **EMQX（例）** | **備考** |
 | -------------- | ---------------------- | -------------- | -------- |
-| **エンドポイントホスト名** | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com` | `mqtt.example.com` | デバイスクライアントコード／ファームウェアの更新が必要 |
-| **エンドポイントポート** | `8883`（MQTT/TLS）、`443`（MQTT/TLS または WebSocket/TLS） | `8883`（MQTT/TLS）、`8084`（WebSocket/TLS） | ポート `8883` を使用するデバイスは変更不要。WebSocket（`443`）接続の場合は EMQX の `8084` に変更が必要。 |
+| **エンドポイントホスト名** | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com` | `mqtt.example.com` | デバイスクライアントコード／ファームウェアを更新 |
+| **エンドポイントポート** | `8883`（MQTT/TLS）、`443`（MQTT/TLS または WebSocket/TLS） | `8883`（MQTT/TLS）、`8084`（WebSocket/TLS） | ポート `8883` を使用するデバイスは変更不要。WebSocket（`443`）接続の場合は、EMQX の `8084` ポートに更新が必要。 |
 | **デバイス証明書** | `device-001.cert.pem` | `device-001.cert.pem` | 変更なし。既存の CA 署名済み証明書を継続使用。 |
 | **デバイス秘密鍵** | `device-001.key.pem` | `device-001.key.pem` | 変更なし。既存の秘密鍵を継続使用。 |
-| **サーバー認証**（デバイスがサーバーを信頼） | クライアントは `AmazonRootCA1.pem` を使用 | クライアントは `emqx-server-ca.pem` に更新が必要 | クライアントは EMQX サーバー証明書を発行した CA を信頼する必要あり。 |
-| **クライアント認証**（サーバーがデバイスを信頼） | AWS IoT Core は登録済み CA を信頼 | EMQX リスナーの `cacertfile` に `your-ca.pem` を設定し、`verify` を `verify_peer` に設定 | AWS IoT Core に登録したのと同じ CA を EMQX に信頼させる設定。 |
+| **サーバー検証**（デバイスがサーバーを信頼） | クライアントは `AmazonRootCA1.pem` を使用 | クライアントは `emqx-server-ca.pem` に更新 | EMQX サーバー証明書を発行した CA をクライアントが信頼する必要あり。 |
+| **クライアント検証**（サーバーがデバイスを信頼） | AWS IoT Core は登録済み CA を信頼 | EMQX リスナーの `cacertfile` に `your-ca.pem` を設定し、`verify` を `verify_peer` に設定 | AWS IoT Core に登録したのと同じ CA を EMQX に信頼させる設定。 |
 
 ## フェーズ 1：CA 証明書の準備
 
-本ガイドは、AWS IoT Core の「Bring Your Own CA」（BYOCA）機能を使って登録した独自のカスタム認証局（CA）を使用していることを前提としています。デバイス証明書は AWS 独自の中間 CA ではなく、この CA によって署名されています。
+本ガイドは、AWS IoT Core の「Bring Your Own CA（BYOCA）」機能を使って登録した独自のカスタム CA を使用していることを前提としています。デバイス証明書は AWS 独自の中間 CA ではなく、このカスタム CA によって署名されています。
 
-**操作**：CA 証明書ファイル（例：`my-company-ca.pem`）を特定してください。これは AWS IoT Core に登録し、デバイス証明書の署名に使用した CA 証明書と同じものです。
+**操作**：CA 証明書ファイル（例：`my-company-ca.pem`）を特定します。これは AWS IoT Core に登録し、デバイス証明書の署名に使用した CA 証明書と同じものです。
 
 どの CA がデバイス証明書に署名しているかは、以下のコマンドで確認できます。
 
@@ -42,21 +42,21 @@ AWS IoT Core で独自の CA によって署名された X.509 クライアン�
 openssl x509 -in device-001.cert.pem -text -noout | grep "Issuer"
 ```
 
-Issuer（発行者）が AWS の中間 CA ではなく、自組織の CA であることを確認してください。
+Issuer（発行者）が自組織の CA であり、AWS の中間 CA ではないことを確認してください。
 
 ::: tip
-**AWS 発行証明書を使用している場合**、AWS IoT Core の「ワンクリック」証明書生成は顧客がアクセスできない独自の中間 CA を使用しています。AWS 発行証明書を使っている場合は、独自の CA を作成し、デバイス証明書を再発行してから EMQX へ移行する必要があります。本ガイドの範囲外ですが、OpenSSL や PKI ソリューションを用いて CA を作成し、デバイス証明書を発行してください。
+**AWS 発行の証明書を使用している場合**、AWS IoT Core の「ワンクリック」証明書生成は、顧客がアクセスできない独自の中間 CA を使用しています。AWS 発行証明書を使っている場合は、独自の CA を作成し、デバイス証明書を再発行してから EMQX へ移行する必要があります。本ガイドの範囲外ですが、OpenSSL や PKI ソリューションを使って CA を作成し、デバイス証明書を発行してください。
 :::
 
 ## フェーズ 2：EMQX の mTLS 認証設定
 
-CA 証明書を特定したら、次は EMQX ブローカーを設定し、CA によって署名された証明書を持つデバイスを受け入れ認証できるようにします。
+CA 証明書を特定したら、次は EMQX ブローカーを設定し、CA 署名済み証明書を使うデバイスの認証を受け入れるようにします。
 
 ### mTLS リスナーの有効化と設定
 
 移行の核心は、EMQX リスナーで双方向 SSL/TLS 認証（mTLS）を有効にすることです。この設定により、EMQX は接続してくるクライアントから証明書の提示を要求し、その証明書の正当性を CA に照らして検証します。
 
-SSL/TLS 設定の詳細は[Enable SSL/TLS Connections](../../guides/network/emqx-mqtt-tls.md)、証明書管理については[TLS Certificates](../../guides/network/tls-certificate.md)をご参照ください。
+SSL/TLS 設定の詳細は、[Enable SSL/TLS Connections](../../guides/network/emqx-mqtt-tls.md) を参照してください。証明書管理については [TLS Certificates](../../guides/network/tls-certificate.md) をご覧ください。
 
 **操作**：EMQX の設定ファイル（例：`emqx.conf`）を開き、SSL/TLS リスナーを設定するか、ダッシュボードの **Management** -> **Listeners** から設定します。
 
@@ -71,45 +71,45 @@ listeners.ssl.default {
     # EMQX サーバー秘密鍵
     keyfile = "etc/certs/server-key.pem"
 
-    # --- デバイス認証のための mTLS 設定 ---
+    # --- デバイス認証用 mTLS 設定 ---
 
-    # フェーズ 1 で用意したあなたの CA 証明書
+    # フェーズ1で用意したあなたの CA 証明書
     # AWS IoT Core に登録したのと同じ CA
     cacertfile = "etc/certs/my-company-ca.pem"
 
-    # クライアント証明書の検証を有効化
+    # クライアント証明書検証を有効化
     verify = verify_peer
 
-    # クライアント証明書がない場合は接続拒否
+    # クライアント証明書がない接続を拒否
     fail_if_no_peer_cert = true
   }
 }
 ```
 
 ::: tip
-AWS IoT Core と EMQX はどちらも MQTT の TLS/SSL 通信にデフォルトでポート `8883` を使用しているため、デバイスクライアントのポート変更は不要です。
+AWS IoT Core と EMQX はどちらも MQTT over TLS/SSL のデフォルトポートとして `8883` を使用しているため、デバイスクライアント側のポート変更は不要です。
 :::
 
 **主な設定パラメータ**：
 
-* `cacertfile`：AWS IoT Core に登録した CA 証明書ファイルのパス。EMQX はこれを使って接続デバイス証明書の正当性を検証します。
+* `cacertfile`：AWS IoT Core に登録した CA 証明書ファイルのパス。EMQX はこれを使い、接続デバイス証明書の正当性を検証します。
 * `verify`：`verify_peer` に設定し、mTLS を有効化します。
-* `fail_if_no_peer_cert`：`true` に設定し、クライアント証明書なしの接続を拒否して mTLS を強制します。
-* `certfile` と `keyfile`：EMQX サーバー自身の証明書と秘密鍵。クライアントはこれを検証して正しいブローカーに接続していることを確認します。
+* `fail_if_no_peer_cert`：`true` に設定し、クライアント証明書なしの接続を拒否します。
+* `certfile` と `keyfile`：EMQX サーバー自身の証明書と秘密鍵。クライアントはこの証明書を検証し、正しいブローカーに接続していることを確認します。
 
-設定ファイルを更新したら、以下のコマンドで設定をリロードしてください。
+設定ファイルを更新したら、設定をリロードします。
 
 ```bash
 emqx ctl conf reload
 ```
 
-ダッシュボードで変更した場合は **Update** をクリックすると適用されます。リスナーは自動的に再起動され、新設定が反映されます。
+ダッシュボード経由で変更した場合は、**Update** をクリックして適用してください。リスナーは自動的に再起動し、新設定が反映されます。
 
 ### （任意）証明書の CN を ClientID または Username にマッピング
 
-多くの AWS IoT Core の実装では、認可ポリシーが証明書の情報を元に変数を埋め込みます。例えば証明書の Common Name（CN）を `iot:ClientId` として利用するケースです。EMQX はこれをシームレスに再現でき、認可ルールの移行を容易にします。
+多くの AWS IoT Core の実装では、認可ポリシーが証明書の情報（例：Common Name（CN））を利用して `iot:ClientId` を設定しています。EMQX でも同様の挙動を再現可能で、認可ルールの移行が容易になります。
 
-**操作**：デバイス証明書から MQTT の ClientID または Username を自動的に設定するには、`emqx.conf` に以下を追加します。
+**操作**：デバイス証明書の情報から MQTT ClientID または Username を自動設定するには、`emqx.conf` に以下を追加します。
 
 ```hocon
 # 証明書の Common Name (CN) を ClientID として使用
@@ -119,38 +119,38 @@ mqtt.peer_cert_as_clientid = cn
 mqtt.peer_cert_as_username = cn
 ```
 
-この設定により、TLS ハンドシェイク時にピア証明書から CN（または Distinguished Name の場合は `dn`）を抽出し、MQTT セッションの ClientID または Username に設定します。これにより、`${clientid}` や `${username}` を使った既存の ACL や認可ロジックが移行後もそのまま機能します。
+この設定により、TLS ハンドシェイク時にピア証明書から CN（または Distinguished Name の場合は `dn`）を抽出し、MQTT セッションの ClientID または Username に設定します。これにより、`${clientid}` や `${username}` に基づく既存の ACL ルールが移行後も機能します。
 
-例えば、デバイス証明書の CN が `device-001` であれば、`mqtt.peer_cert_as_clientid = cn` を有効にすると接続時の ClientID が自動的に `device-001` になります。
+例えば、デバイス証明書の CN が `device-001` の場合、`mqtt.peer_cert_as_clientid = cn` を有効にすると、接続時に自動的に ClientID が `device-001` に設定されます。
 
-## フェーズ 3：デバイスクライアントの更新と移行確認
+## フェーズ 3：デバイスクライアントの更新と移行検証
 
-最後のフェーズは、デバイスクライアントコードを新しい EMQX ブローカーのエンドポイントに更新することです。ここでは公式の [AWS IoT Device SDK for Python v2](https://github.com/aws/aws-iot-device-sdk-python-v2) を例に説明します。
+最後のフェーズは、デバイスクライアントコードを更新し、新しい EMQX ブローカーのエンドポイントを指定することです。ここでは公式の [AWS IoT Device SDK for Python v2](https://github.com/aws/aws-iot-device-sdk-python-v2) を例に示します。
 
-AWS IoT SDK は AWS プラットフォームにロックインされておらず、標準準拠の MQTT-over-TLS クライアントとして動作します。したがって、既存のアプリケーションコードはそのままに、接続先エンドポイントとサーバー CA 証明書のパラメータだけ変更すれば移行可能です。
+AWS IoT SDK は AWS プラットフォームに縛られず、標準準拠の MQTT over TLS クライアントとして動作します。したがって、既存のアプリケーションコードはほぼそのまま使え、接続先エンドポイントとサーバー CA 証明書のパラメータだけを変更すれば移行可能です。
 
-### クライアント側コードの変更例（Python）
+### クライアント側コード修正例（Python）
 
-`aws-iot-device-sdk-python-v2` の `mqtt5_client_builder` モジュールを用いた場合、AWS IoT Core から EMQX への移行にあたり接続パラメータを以下のように変更します。
+`aws-iot-device-sdk-python-v2` の `mqtt5_client_builder` モジュールを使った接続設定を、AWS IoT Core から EMQX へ移行するために以下のように変更します。
 
 1. **エンドポイントの更新**  
    * AWS: `endpoint="agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com"`  
-   * EMQX: `endpoint="mqtt.example.com"` （EMQX ブローカーのホスト名/FQDN）
+   * EMQX: `endpoint="mqtt.example.com"`（EMQX ブローカーのホスト名/FQDN）
 
 2. **サーバー CA 証明書の更新** (`ca_filepath`)  
-   * EMQX サーバーの正当性検証に使用  
-   * AWS: 省略（システムの信頼ストアを利用）または `ca_filepath="AmazonRootCA1.pem"`  
-   * EMQX: `ca_filepath="emqx-server-ca.pem"` （EMQX サーバー証明書を発行した CA）
+   * デバイスが EMQX サーバーの正当性を検証するための CA 証明書  
+   * AWS: 省略されることが多い（システムの信頼ストアを使用）か、`ca_filepath="AmazonRootCA1.pem"`  
+   * EMQX: `ca_filepath="emqx-server-ca.pem"`（EMQX サーバー証明書を発行した CA）
 
 3. **デバイス証明書は変更なし**  
    * `cert_filepath`（デバイス証明書）: 変更不要。既存の CA 署名済み証明書を継続使用。  
-   * `pri_key_filepath`（秘密鍵）: 変更不要。既存の秘密鍵を継続使用。
+   * `pri_key_filepath`（デバイス秘密鍵）: 変更不要。既存の秘密鍵を継続使用。
 
-### 完全な例：AWS SDK から EMQX への接続
+### フル例：AWS SDK から EMQX への接続
 
-以下は AWS IoT Device SDK for Python v2 を使い、最小限の変更で EMQX に接続する例です。`samples/mqtt/mqtt5_x509.py` サンプルスクリプトをほぼそのまま利用できます。
+以下は、AWS IoT Device SDK for Python v2 を使って EMQX に接続する例です。`samples/mqtt/mqtt5_x509.py` サンプルスクリプトを最小限の修正で利用できます。
 
-**AWS IoT Core 接続例（移行前）**：
+**AWS IoT Core 版（移行前）**:
 
 ```bash
 python3 mqtt5_x509.py \
@@ -162,7 +162,7 @@ python3 mqtt5_x509.py \
   --count 10
 ```
 
-**EMQX 接続例（移行後）**：
+**EMQX 版（移行後）**:
 
 ```bash
 python3 mqtt5_x509.py \
@@ -174,12 +174,13 @@ python3 mqtt5_x509.py \
   --count 10
 ```
 
-証明書と秘密鍵のパラメータは変更せず、エンドポイントのみ変更しています。
+証明書と鍵のパラメータは変更せず、エンドポイントのみ変更しています。
 
-システムの信頼ストアを使わず明示的にサーバー CA 証明書を指定する場合は、SDK のサンプルコードの `mqtt5_client_builder.mtls_from_path()` 呼び出しに `ca_filepath` パラメータを追加します。
+システムの信頼ストアを使わず、明示的にサーバー CA 証明書を指定する場合は、SDK のサンプルコードで `ca_filepath` パラメータを追加してください。
 
 ```python
-# mqtt5_x509.py 内の mqtt5_client_builder.mtls_from_path() 呼び出し部分に以下を追加：
+# mqtt5_x509.py 内の mqtt5_client_builder.mtls_from_path() 呼び出し箇所に
+# ca_filepath パラメータを追加：
 
 client = mqtt5_client_builder.mtls_from_path(
     endpoint=args.input_endpoint,
@@ -196,25 +197,25 @@ client = mqtt5_client_builder.mtls_from_path(
 )
 ```
 
-**変更点まとめ**：
-- **エンドポイント**：AWS IoT Core のエンドポイントから EMQX ブローカーのホスト名に変更  
-- **サーバー CA**：必要に応じて EMQX サーバー証明書を発行した CA を指定  
-- **デバイス証明書**：変更なし。既存の証明書と秘密鍵を継続使用  
-- **アプリケーションロジック**：変更不要。パブリッシュ、サブスクライブ、メッセージ処理は同じまま
+**主な変更点まとめ**：
+- **エンドポイント**：AWS IoT Core のエンドポイントから EMQX ブローカーのホスト名に変更。
+- **サーバー CA**：必要に応じて EMQX サーバー証明書を発行した CA を指定。
+- **デバイス証明書**：変更なし。既存の証明書と秘密鍵を継続使用。
+- **アプリケーションロジック**：変更不要。パブリッシュ、サブスクライブ、メッセージ処理はそのまま。
 
-この更新後のコマンドを実行すれば、接続、サブスクライブ、パブリッシュが成功し、デバイス移行が完了したことを確認できます。
+この更新後のコマンドを実行すると、接続、サブスクライブ、パブリッシュが正常に動作し、デバイス移行が完了したことを確認できます。
 
 ## 高度な移行シナリオ
 
-同様の移行手法は、より高度な接続シナリオにも適用可能です。
+同様の移行手順は、より高度な接続シナリオにも適用可能です。
 
-### PKCS11（HSM）を使うデバイスの移行
+### PKCS11（HSM）を使用するデバイスの移行
 
-秘密鍵をハードウェアセキュリティモジュール（HSM）に格納しているデバイスの場合も移行は簡単です。秘密鍵は HSM 内に保持され、デバイス証明書は独自 CA による署名のまま有効です。
+秘密鍵をハードウェアセキュリティモジュール（HSM）に格納しているデバイスの場合も、移行はシンプルです。秘密鍵は HSM 内に保持され、デバイス証明書は独自 CA によって署名されていれば有効です。
 
-**クライアント側コードの変更例**：
+**クライアント側コード修正例**：
 
-EMQX サーバー側設定（フェーズ 2）は同じです。クライアント側では `mtls_with_pkcs11` ビルダーを使い、エンドポイントを更新します。
+EMQX サーバー側設定（フェーズ 2）は変更不要です。クライアント側では、`mtls_with_pkcs11` ビルダーを使い、エンドポイントを更新します。
 
 ```python
 client = mqtt5_client_builder.mtls_with_pkcs11(
@@ -242,13 +243,13 @@ client = mqtt5_client_builder.mtls_with_pkcs11(
 
 ### HTTP プロキシ経由で接続するデバイスの移行
 
-制限されたネットワーク環境で HTTP プロキシ経由で接続するデバイスも、標準フローと同様に移行可能です。mTLS 接続は HTTP CONNECT リクエストでトンネリングされます。
+制限されたネットワーク環境で HTTP プロキシ経由で接続するデバイスも、標準の移行パスと同様です。mTLS 接続は HTTP CONNECT リクエストを通じてトンネルされます。
 
-EMQX サーバー側設定（フェーズ 2）は**同じ**です。プロキシは EMQX リスナーに対して透過的であり、mTLS 接続のみが見えます。
+EMQX サーバー側設定（フェーズ 2）は **同じ** です。プロキシは EMQX リスナーに対して透過的であり、mTLS 接続のみを受け取ります。
 
-クライアント SDK 側でプロキシ設定を追加し、エンドポイントを更新してください。
+クライアント SDK の設定では、更新したエンドポイントに加え、プロキシ設定を追加します。
 
-**クライアント側コード例（Python）**：
+**クライアント側コード修正例（Python）**：
 
 ```python
 from awscrt import http
@@ -259,7 +260,7 @@ http_proxy_options = http.HttpProxyOptions(
     port=8888
 )
 
-# 2. プロキシオプション付きでクライアント作成
+# 2. プロキシオプションを指定してクライアント作成
 client = mqtt5_client_builder.mtls_from_path(
     # 変更：EMQX ブローカーのホスト名
     endpoint="mqtt.example.com",
@@ -282,15 +283,15 @@ client = mqtt5_client_builder.mtls_from_path(
 
 ## まとめ
 
-独自のカスタム認証局を使用している mTLS ベースのデバイスを AWS IoT Core から EMQX に移行するのは簡単です。主に設定変更で済み、再プロビジョニングの手間はほとんどありません。
+独自のカスタム認証局を使用している mTLS ベースのデバイスを AWS IoT Core から EMQX へ移行するのは簡単です。主に設定変更で済み、再プロビジョニングの手間はほとんどありません。
 
-本ガイドの3つのフェーズに従って：
-1. 独自 CA 証明書の特定  
-2. EMQX ブローカーの mTLS 認証設定（CA 信頼設定）  
+本ガイドの3フェーズに従うことで、  
+1. カスタム CA 証明書の特定  
+2. EMQX ブローカーの mTLS 認証設定  
 3. デバイスクライアントのエンドポイント更新  
 
-を行うことで、デバイス群を安全かつ確実に EMQX に移行できます。既存のデバイス証明書、秘密鍵、AWS IoT Device SDK のアプリケーションロジックはそのまま利用可能で、接続パラメータの更新のみで移行が完了します。組織は最小限の中断で IoT インフラを EMQX に移行し、セキュリティのベストプラクティスを維持できます。
+を実施し、堅牢な mTLS 認証を維持しつつデバイス群を EMQX に移行できます。既存のデバイス証明書、秘密鍵、AWS IoT Device SDK のアプリケーションロジックはそのまま活用でき、接続パラメータの最小限の更新だけで済みます。これにより、IoT インフラを安全かつ効率的に EMQX へ移行可能です。
 
 ::: tip
-現在 AWS 発行の証明書（ワンクリック方式）を使用している場合は、独自の CA インフラを構築し、デバイス証明書を再プロビジョニングした上で移行する必要があります。これは AWS 独自の証明書チェーンから脱却するための前提条件です。
+現在 AWS 発行の証明書（ワンクリック方式）を使用している場合は、独自の CA インフラを構築し、デバイス証明書を再プロビジョニングしてから移行する必要があります。これは AWS 独自の証明書チェーンから脱却するための前提条件です。
 :::

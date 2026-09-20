@@ -1,17 +1,17 @@
 # Prometheusとの統合
 
-EMQXは、SoundCloudが開発したオープンソースの監視ソリューションである[Prometheus](https://prometheus.io/)などのサードパーティ監視システムとの統合をサポートしています。Prometheusは、多次元データモデル、柔軟なクエリ言語（PromQL）、強力なアラート機能を提供します。
+EMQXは、SoundCloudが開発したオープンソースの監視ソリューションである[Prometheus](https://prometheus.io/)などのサードパーティ監視システムとの統合をサポートしています。Prometheusは多次元データモデル、柔軟なクエリ言語（PromQL）、強力なアラート機能を提供します。
 
 サードパーティ監視システムを利用することで、以下のような利点があります。
 
-- EMQXの監視データを他のシステムのデータと統合した完全な監視システムを構築可能です。例えば、サーバーホストの監視情報も取得できます。
-- [Grafanaダッシュボード](#use-grafana-to-visualize-EMQX-metrics)を使ってEMQXのメトリクスを可視化するなど、より直感的な監視レポート（図表）を作成できます。
-- Prometheus Alertmanagerを利用したアラームルールや通知方法の設定など、多様なアラーム通知オプションを利用できます。
+- EMQXの監視データが他のシステムの監視データと統合される完全な監視システムを構築可能。例えば、サーバーホストの監視情報も取得できます。
+- [Grafanaダッシュボード](#use-grafana-to-visualize-EMQX-metrics)を使ってEMQXのメトリクスを可視化するなど、より直感的な監視レポート（図表）を作成可能。
+- Prometheus Alertmanagerを利用したアラームルールや通知方法の設定など、多様なアラーム通知オプション。
 
 EMQXはPrometheusメトリクス監視の統合に対して、以下の2つの方法をサポートしています。
 
-- **プルモード**：PrometheusがEMQXのREST APIを通じて直接メトリクスを収集します。
-- **プッシュモード**：EMQXがPushgatewayサービスにメトリクスをプッシュし、Prometheusがそこからメトリクスを収集します。
+- **Pullモード**：PrometheusがEMQXのREST APIを通じて直接メトリクスを収集する方法。
+- **Pushモード**：EMQXがメトリクスをPushgatewayサービスにプッシュし、Prometheusがそこからメトリクスを収集する方法。
 
 Prometheus統合の設定手順は以下の通りです。
 
@@ -19,23 +19,23 @@ Prometheus統合の設定手順は以下の通りです。
 2. **Integration** タブに切り替えます。
 3. 監視プラットフォームとして **Prometheus** を選択します。
 
-選択したモードに応じて、一部の設定オプションはプルモードにのみ適用され、その他は両モードに影響します。詳細な設定手順はダッシュボードの **Help** ボタンをクリックしてご確認ください。
+選択したモードにより、一部の設定オプションはPullモードのみ適用されるものや、両モードに影響するものがあります。詳細な設定手順はダッシュボードの **Help** ボタンから確認できます。
 
-以下のエンドポイントで公開されるメトリクスシリーズ（アラートに適したものを含む）のリファレンスは、[Broker Health Indicators](./broker-health-indicators.md)をご参照ください。
+以下のエンドポイントで公開されるメトリクスシリーズ（アラート設定に適したものを含む）の厳選リファレンスは、[Broker Health Indicators](./broker-health-indicators.md)をご覧ください。
 
-<img src="./assets/enable-push-gateway.png" alt="Pushgatewayを有効化" style="zoom:40%;" />
+<img src="./assets/enable-push-gateway.png" alt="Pushgatewayの有効化" style="zoom:40%;" />
 
 ## Prometheus設定オプション
 
 このセクションでは、ダッシュボードで **Prometheus** を選択した際に利用可能なすべての設定オプションについて説明します。
 
-### 一般オプション（プルモード・プッシュモード両方に影響）
+### 一般オプション（Pullモード・Pushモード両方に影響）
 
 #### レイテンシーバケット
 
-レイテンシー関連メトリクスのヒストグラムバケットの境界値を指定します。
+レイテンシー関連メトリクスのヒストグラムバケット境界を指定します。
 
-**フォーマット**
+**形式**
 
 カンマ区切りの期間値リスト：
 
@@ -45,61 +45,61 @@ Prometheus統合の設定手順は以下の通りです。
 
 **説明**
 
-これらの値は、Prometheusでレイテンシーメトリクスをヒストグラムバケットに分類する際の境界を定義します。小さいバケット間隔はより細かい粒度を提供しますが、メトリクスのカーディナリティやストレージ使用量が増加する可能性があります。
+これらの値は、Prometheusでレイテンシーメトリクスをどのようにヒストグラムバケットに分類するかを定義します。小さいバケット間隔は詳細な粒度を提供しますが、メトリクスのカーディナリティやストレージ使用量が増加する可能性があります。
 
 この設定はレイテンシーヒストグラムメトリクスの内部生成に影響し、以下に適用されます。
 
-- プルモードメトリクス
-- プッシュモードメトリクス（Pushgateway経由）
+- Pullモードのメトリクス
+- Pushモードのメトリクス（Pushgateway経由）
 
-### プルモード設定
+### Pullモード設定
 
-以下のオプションは、PrometheusがREST API経由でEMQXメトリクスをスクレイプするプルモード時にのみ適用されます。
+以下のオプションは、PrometheusがREST API経由でEMQXメトリクスをスクレイピングする場合のみ適用されます。
 
-#### Basic Authを有効化
+#### Basic Authの有効化
 
-PrometheusのスクレイプAPIに対するHTTP Basic認証を有効または無効にします。
+PrometheusスクレイプAPIに対するHTTP Basic認証を有効または無効にします。
 
-デフォルトでは、PrometheusプルモードAPIは認証不要です。このオプションを有効にすると：
+デフォルトでは、PrometheusのPullモードAPIは認証不要です。このオプションを有効にすると：
 
-- Prometheusは以下のAPIにアクセスする際にHTTP Basic認証を使用する必要があります：
+- Prometheusは以下のAPIアクセスにHTTP Basic認証を使用する必要があります：
   - `/api/v5/prometheus/stats`
   - `/api/v5/prometheus/auth`
   - `/api/v5/prometheus/data_integration`
 - EMQXで[APIキー](../api.md#authentication)を作成する必要があります。
 - `prometheus.yaml`の`basic_auth`セクションを設定します。
 
-このオプションはプルモードにのみ適用され、Pushgateway統合には影響しません。詳細は[プルモード統合の設定](#configure-pull-mode-integration)をご参照ください。
+このオプションはPullモードのみに適用され、Pushgateway統合には影響しません。詳細は[Pullモード統合の設定](#configure-pull-mode-integration)をご参照ください。
 
 #### ネームスペースデータスクレイピングのレート制限
 
-ネームスペース関連メトリクスのスクレイプリクエストの最大レートを制限します。
+ネームスペース関連メトリクスのスクレイピングリクエストの最大レートを制限します。
 
 ネームスペースレベルのメトリクスはマルチテナント環境でサポートされ、ネームスペース単位で公開または集約可能です。詳細は[Prometheusメトリクスの分離](../multi-tenancy/namespace-overview.md#multi-tenancy-capability-support)をご覧ください。
 
-**フォーマット**：`<リクエスト数>/<期間>`
+**形式**：`<リクエスト数>/<期間>`
 
-**例**：`1/5s` は5秒あたり最大1リクエストを許可し、それを超えるリクエストは拒否されます。
+**例**：`1/5s` は5秒あたり最大1リクエストを許可し、それ以上は拒否されます。
 
-**挙動**：
+**動作**：
 
-- ネームスペースレベルのメトリクススクレイプリクエストにのみ適用されます。
-- 特定のネームスペースを対象としたリクエストは制限されません。
-- プルモードにのみ適用されます。
+- ネームスペースレベルのメトリクススクレイピングリクエストにのみ適用。
+- 特定ネームスペースを対象としたリクエストは制限されません。
+- Pullモードのみ適用。
 
 大規模またはマルチネームスペース環境での過負荷防止に役立ちます。
 
-### プッシュモード設定
+### Pushモード設定
 
-プッシュモードでは、EMQXがPushgatewayインスタンスにメトリクスを送信します。デフォルトではプッシュモードは無効です。
+PushモードはEMQXがメトリクスをPushgatewayに送信する方式です。デフォルトではPushモードは無効です。
 
-#### Pushgatewayを有効化
+#### Pushgatewayの有効化
 
-Pushgatewayへのメトリクスプッシュを有効または無効にします。有効にした場合、以下の項目を設定してください。
+Pushgatewayへのメトリクスプッシュを有効または無効にします。有効にした場合、以下の項目を設定します。
 
 #### プッシュ間隔
 
-EMQXがPushgatewayにメトリクスをプッシュする間隔を指定します。デフォルトは`15`秒です。
+EMQXがPushgatewayにメトリクスを送信する間隔を秒単位で指定します。デフォルトは`15`秒です。
 
 #### Pushgatewayサーバー
 
@@ -107,35 +107,35 @@ PushgatewayサーバーのURLを指定します。デフォルトは`http://127.
 
 #### ジョブ名
 
-Pushgatewayにメトリクスをプッシュする際に使用するジョブラベルを指定します。
+Pushgatewayにメトリクスを送信する際に使用するジョブラベルを指定します。
 
-EMQXのノード名やホスト名から派生した変数を使ってジョブラベルを構築可能です。デフォルト値は`${name}/instance/${name}~${host}`です。
+EMQXノード名やホスト名から派生した変数を使ってジョブラベルを構成可能です。デフォルト値は`${name}/instance/${name}~${host}`です。
 
 **変数**：
 
 - `${name}`：EMQXノード名（例：`emqx`）
 - `${host}`：ホストIPアドレス（例：`127.0.0.1`）
 
-例えば、ノード名が`emqx@127.0.0.1`の場合：
+例）ノード名が`emqx@127.0.0.1`の場合：
 
 - `${name}` = `emqx`
 - `${host}` = `127.0.0.1`
 
 #### ヘッダー
 
-Pushgatewayにメトリクスをプッシュする際に送信する任意のHTTPヘッダーです。
+Pushgatewayにメトリクスを送信する際に付与する任意のHTTPヘッダー。
 
-値の型は文字列で、以下のようにキーと値のペアで設定できます。
+値の型は文字列で、以下のようにキーと値のペアで設定可能です。
 
 ```
 Authorization = "some-auth-token"
 ```
 
-追加のヘッダーは **Add** ボタンで挿入可能です。
+追加ヘッダーは **Add** ボタンで挿入できます。
 
-## プルモード統合の設定
+## Pullモード統合の設定
 
-プルモードでは、PrometheusがREST APIを通じてEMQXからメトリクスをスクレイプします。
+Pullモードでは、PrometheusがREST APIを通じてEMQXからメトリクスをスクレイピングします。
 
 EMQXは以下のエンドポイントを提供しています。
 
@@ -145,7 +145,7 @@ EMQXは以下のエンドポイントを提供しています。
 
 ### メトリクス収集モード
 
-上記APIを呼び出す際にURLクエリパラメータ`mode`を指定することで、異なるタイプのメトリクスデータを取得できます。各パラメータの意味は以下の通りです。
+上記APIを呼び出す際に、URLクエリパラメータ`mode`を指定することで異なる種類のメトリクスデータを取得できます。各パラメータの意味は以下の通りです。
 
 :::: tabs type: card
 
@@ -155,7 +155,7 @@ EMQXは以下のエンドポイントを提供しています。
 mode=node
 ```
 
-デフォルトモードで、リクエストを受けた現在のノードのメトリクスを返します。特に指定しない場合、このモードが適用されます。
+デフォルトモードで、リクエストされたノードのメトリクスを返します。特に指定がない場合、このモードが適用されます。
 
 :::
 
@@ -167,8 +167,8 @@ mode=all_nodes_aggregated
 
 クラスター内のすべての稼働ノードのメトリクスを集約し、算術和または論理和を返します。
 
-- 「オン状態」や「稼働状態」などのメトリクスは論理和で返されます。すべてのノードがオンまたは稼働中なら1、それ以外は0を返します。
-- CPUやメモリ使用率のようにノードごとに独立したメトリクスは集約値を返さず、ノード名をラベルに付与して区別します。例：
+- 「オン状態」や「稼働状態」などのメトリクスは論理和で返され、すべてのノードがオンまたは稼働中なら1、それ以外は0を返します。
+- CPUやメモリ使用率などノードごとに独立したメトリクスは集約値を返さず、ノード名をラベルとして付与して区別します。例：
 
   ```bash
   emqx_vm_cpu_use{node="emqx@172.17.0.2"} 7.6669163995887715
@@ -178,7 +178,7 @@ mode=all_nodes_aggregated
   emqx_vm_cpu_idle{node="emqx@172.17.0.3"} 92.32399223332003
   ```
 
-- クラスター内のどのノードでも値が一貫しているメトリクスは、APIリクエストを受けたノードの値を直接返します。これらは集約されず、ノード名ラベルも付きません。例：
+- クラスター内のどのノードでも値が一貫しているメトリクスは、APIリクエストを受けたノードの値を直接返し、集約やノード名ラベルはありません。例：
 
   ```bash
   emqx_topics_count 3
@@ -186,7 +186,7 @@ mode=all_nodes_aggregated
   emqx_cert_expiry_at{listener_type="wss",listener_name="default"} 1904285225
   ```
 
-- その他のメトリクスは算術和を返します。すなわち、すべてのノードのメトリクスの合計値です。
+- その他のメトリクスは算術和を返します。
 
 :::
 
@@ -198,13 +198,13 @@ mode=all_nodes_unaggregated
 
 クラスター内のすべての稼働ノードの個別メトリクスを返します。
 
-- ノード名をラベルに付与して、異なるノードのメトリクスを区別します。例：
+- ノード名をラベルとして付与し、ノードごとのメトリクスを区別します。例：
 
   ```bash
   emqx_connections_count{node="emqx@127.0.0.1"} 0
   ```
 
-- クラスター内のどのノードでも値が一貫しているメトリクス（例：ブラックリスト数、保持メッセージ数など）は、APIリクエストを受けたノードの値を直接返し、ノード名ラベルは付きません。例：
+- 「ブラックリスト数」や「保持メッセージ数」など、どのノードでも値が一貫しているメトリクスはAPIリクエストを受けたノードの値を直接返し、ノード名ラベルは付与しません。例：
 
   ```bash
   emqx_retained_count 3
@@ -214,18 +214,18 @@ mode=all_nodes_unaggregated
 
 ::::
 
-Prometheusプルエンドポイントの詳細は、[EMQX Enterprise APIドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)をご参照ください。
+PrometheusのPullエンドポイントの詳細は、[EMQX Enterprise APIドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)をご参照ください。
 
 ### 認証（任意）
 
-デフォルトでは、PrometheusプルモードAPIは認証不要です。
+デフォルトでは、PrometheusのPullモードAPIは認証不要です。
 
-EMQXダッシュボードで **Basic Authを有効化** をオンにした場合、PrometheusはHTTP Basic認証で認証する必要があります。
+EMQXダッシュボードで **Basic Authの有効化** をオンにした場合、PrometheusはHTTP Basic認証を使用して認証する必要があります。
 
-この場合の手順は以下の通りです。
+その場合の手順は以下の通りです。
 
 1. EMQXで[APIキー](../api.md#authentication)を作成します。
-2. Prometheus設定で作成したAPIキーとシークレットキーを使用します。
+2. Prometheus設定にて、生成されたAPIキーとシークレットキーを使用します。
 
 Prometheus設定例：
 
@@ -238,11 +238,11 @@ basic_auth:
 - `username` はAPIキー
 - `password` は対応するシークレットキー
 
-Prometheusはこれらの認証情報を使用してEMQXメトリクスをスクレイプします。
+Prometheusはこれらの認証情報を用いてEMQXメトリクスをスクレイピングします。
 
 ### Prometheusサーバー設定例
 
-PrometheusがEMQXメトリクスをスクレイプできるように、Prometheusサーバーの設定ファイルに以下を追加し、サービスを再起動してください。
+PrometheusがEMQXメトリクスをスクレイピングできるように、Prometheusサーバーの設定ファイルに以下を追加し、Prometheusサービスを再起動してください。
 
 ```yaml
 # prometheus.yaml
@@ -281,13 +281,13 @@ scrape_configs:
       password: ''
 ```
 
-## プッシュモード統合の設定
+## Pushモード統合の設定
 
-プッシュモードでは、EMQXからPushgatewayへメトリクスを送信します。
+PushモードはEMQXからPushgatewayへメトリクスを送信します。
 
-ダッシュボードで **Pushgatewayを有効化** をオンにし、必要な項目を設定したら、**Save Changes** をクリックしてください。
+ダッシュボードで **Enable Pushgateway** を有効にし、必要な項目を設定後、**Save Changes** をクリックしてください。
 
-プッシュモードは現時点で、`/api/v5/prometheus/stats` エンドポイントの基本メトリクスとカウンターのみを含みます。包括的な監視には通常、プルモードの利用が推奨されます。
+Pushモードは現在、`/api/v5/prometheus/stats` エンドポイントのEMQX基本メトリクスとカウンターのみを含みます。包括的な監視にはPullモードの利用が一般的に推奨されます。
 
 ### 設定ファイル例
 
@@ -302,12 +302,12 @@ prometheus {
 }
 ```
 
-## Grafanaを使ってEMQXメトリクスを可視化する
+## GrafanaでEMQXメトリクスを可視化する
 
-GrafanaとPrometheusを組み合わせてEMQXメトリクスを可視化することも可能です。GrafanaにEMQXのテンプレートファイルをインポートすることで実現できます。テンプレートのダウンロードは、[EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) をクリックするか、**Monitoring** ページの **Integration** タブ下部の **Help** ボタンをクリックしてください。
+GrafanaとPrometheusを組み合わせてEMQXメトリクスを可視化することもできます。これはEMQXのテンプレートファイルをGrafanaにインポートすることで実現可能です。テンプレートのダウンロードは[EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/)から行うか、**Monitoring** ページの **Integration** タブ下部の **Help** ボタンをクリックしてください。
 
 ::: tip
 
-詳細な操作手順は、[Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana) をご参照ください。
+詳細な操作手順は[Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana)をご参照ください。
 
 :::

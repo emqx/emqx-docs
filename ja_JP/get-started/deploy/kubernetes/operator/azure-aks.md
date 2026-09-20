@@ -1,25 +1,25 @@
-# Azure Kubernetes Service 上での EMQX デプロイ
+# Azure Kubernetes Service 上への EMQX デプロイ
 
-EMQX Operator は Azure Kubernetes Service（AKS）上での EMQX デプロイをサポートしています。AKS は、運用の負荷を Azure に委ねることで、Azure 上でマネージド Kubernetes クラスターのデプロイを簡素化します。ホスト型 Kubernetes サービスとして、Azure はヘルスモニタリングやメンテナンスなどの重要なタスクを管理します。AKS クラスターが作成されると、Azure は Kubernetes コントロールプレーンを自動的にプロビジョニングおよび管理し、追加コストは発生しません。
+EMQX Operator は Azure Kubernetes Service（AKS）上への EMQX デプロイをサポートしています。AKS は、Azure におけるマネージド Kubernetes クラスターのデプロイを簡素化し、運用の負担を Azure に委ねます。ホスト型 Kubernetes サービスとして、Azure はヘルスモニタリングやメンテナンスなどの重要なタスクを担当します。AKS クラスターを作成すると、Azure は Kubernetes コントロールプレーンを自動的にプロビジョニングおよび管理し、追加費用は発生しません。
 
 ## はじめに
 
 AKS 上に EMQX をデプロイする前に、以下の前提条件を満たしていることを確認してください。
 
-- Azure サブスクリプション内に AKS クラスターが存在すること  
-  * AKS クラスターの作成および設定に関しては、[Azure Kubernetes Service ドキュメント](https://learn.microsoft.com/en-us/azure/aks/)を参照してください。
+- Azure サブスクリプション内に AKS クラスターが存在すること
+  * AKS クラスターの作成および設定については、[Azure Kubernetes Service ドキュメント](https://learn.microsoft.com/en-us/azure/aks/)を参照してください。
 
-- AKS クラスターに接続するための動作中の `kubectl` 設定  
-  - ローカルにインストールされた `kubectl` を使用して接続する場合は、[AKS クラスターへの接続](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli)の手順に従ってください。  
+- AKS クラスターに接続するための動作中の `kubectl` 設定
+  - ローカルにインストールされた `kubectl` を使用して接続する場合は、[AKS クラスターへの接続](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli)の手順に従ってください。
   - Azure Cloud Shell を使用して接続する場合は、[Azure CloudShell での AKS クラスター管理](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli)を参照してください。
 
-- クラスターに EMQX Operator がインストールされていること  
-  - インストール方法は、[EMQX Operator のインストール](./getting-started.md)を参照してください。
+- クラスターに EMQX Operator がインストールされていること
+  - インストールの詳細については、[EMQX Operator のインストール](./getting-started.md)を参照してください。
   
 
 ## EMQX クラスターの迅速なデプロイ
 
-以下の例は、EMQX カスタムリソース（CR）の基本的な設定例です。
+以下の例は、EMQX カスタムリソース（CR）の基本的な構成を示しています。
 
 1. YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
@@ -38,7 +38,7 @@ AKS 上に EMQX をデプロイする前に、以下の前提条件を満たし�
      coreTemplate:
        spec:
          volumeClaimTemplates:
-           ## ストレージクラスの詳細: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
+           ## ストレージクラスの詳細：https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
            storageClassName: default
            resources:
              requests:
@@ -47,17 +47,17 @@ AKS 上に EMQX をデプロイする前に、以下の前提条件を満たし�
            - ReadWriteOnce
      dashboardServiceTemplate:
        spec:
-         ## ロードバランサーの詳細: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## ロードバランサーの詳細：https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
          type: LoadBalancer
      listenersServiceTemplate:
        spec:
-         ## ロードバランサーの詳細: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         ## ロードバランサーの詳細：https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
          type: LoadBalancer
    ```
 
-2. EMQX クラスターが Ready 状態になるまで待ちます。
+2. EMQX クラスターが準備完了になるまで待ちます。
 
-   `kubectl get` コマンドでクラスターのステータスを確認し、`STATUS` が `Ready` であることを確認してください。起動にはしばらく時間がかかる場合があります。
+   `kubectl get` コマンドでクラスターのステータスを確認し、`STATUS` が `Ready` であることを確認してください。起動には時間がかかる場合があります。
 
    ```shell
    $ kubectl get emqx
@@ -67,14 +67,14 @@ AKS 上に EMQX をデプロイする前に、以下の前提条件を満たし�
 
 3. EMQX ダッシュボードの外部 IP を取得し、アクセスします。
 
-   EMQX Operator は `dashboardServiceTemplate` の設定に基づき、自動的に Service を作成します。
+   EMQX Operator は `dashboardServiceTemplate` の設定に基づいて自動的に Service を作成します。
 
    ```shell
    $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
    20.245.230.91
    ```
 
-4. ダッシュボードを `http://20.245.230.91:18083` で開きます。
+4. ダッシュボードに `http://20.245.230.91:18083` でアクセスします。
 
     デフォルトの認証情報でログインしてください：
 
@@ -83,11 +83,11 @@ AKS 上に EMQX をデプロイする前に、以下の前提条件を満たし�
 
 ## MQTTX を使ったサブスクライブとパブリッシュ
 
-この手順では、開発者が MQTT サービスやアプリケーションを迅速にテストできるオープンソースの MQTT 5.0 コマンドラインクライアントツールである [MQTTX CLI](https://mqttx.app/cli) を使用します。
+このハンズオンでは、オープンソースの MQTT 5.0 コマンドラインクライアントツールである [MQTTX CLI](https://mqttx.app/cli) を使用し、開発者が MQTT サービスやアプリケーションを迅速にテストできるようにします。
 
 1. EMQX TCP リスナーの外部 IP を取得します。
 
-   EMQX Operator は、設定された各リスナーに対して Service リソースを自動的に作成します。
+   EMQX Operator は、設定された各リスナーに対して自動的に Service リソースを作成します。
 
    ```shell
    external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
@@ -121,4 +121,4 @@ AKS 上に EMQX をデプロイする前に、以下の前提条件を満たし�
 
 ## LoadBalancer による TLS オフロードについての注意点
 
-L3/L4 ロードバランサーとしての Azure LoadBalancer は TLS 終端をサポートしていません。可能な回避策については、こちらの[ディスカッション](https://github.com/emqx/emqx-operator/discussions/312)を参照してください。
+L3/L4 ロードバランサーである Azure LoadBalancer は TLS 終端をサポートしていません。可能な回避策については、こちらの[ディスカッション](https://github.com/emqx/emqx-operator/discussions/312)を参照してください。

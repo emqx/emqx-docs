@@ -3,10 +3,10 @@
 ここでは、k8sクラスターがインターネットにアクセスできず、ユーザーが`ClusterRole`の作成および使用権限を持っていないことを想定しています。
 
 + `emqx-operator`と`emqx`は同じネームスペースにインストールされている
-+ Cert managerはクラスター全体または`emqx-operator`と同じネームスペースに存在する可能性がある
++ Cert managerはクラスター全体、または`emqx-operator`と同じネームスペースに存在する可能性がある
 + `emqx-operator`はプライベートなDockerレジストリを使用するように設定されており、`emqx`はカスタムの`securityContext`を使用するように設定されている
 
-## タスクの目的
+## タスク対象
 
 - 必要なイメージをプライベートDockerレジストリにプッシュする
 - `cert-manager`のデフォルトパラメータをオーバーライドしてプライベートレジストリを使用する
@@ -46,9 +46,9 @@ pull_retag_push "emqx/emqx-enterprise:$EMQX_VERSION" "$REGISTRY/emqx/emqx-enterp
 pull_retag_push "emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION" "$REGISTRY/emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION"
 ```
 
-## Cert-Managerのデプロイ
+## Cert-Managerをデプロイする
 
-cert-managerがクラスターにインストールされている場合はこのステップをスキップしてください。
+クラスターにcert-managerがすでにインストールされている場合はこのステップをスキップしてください。
 
 必要に応じてネームスペース名を更新してください。
 
@@ -71,7 +71,7 @@ helm upgrade --install cert-manager jetstack/cert-manager \
    --set startupapicheck.image.tag=$CERT_MANAGER_VERSION
 ```
 
-## EMQX Operatorのデプロイ
+## EMQX Operatorをデプロイする
 
 ### リリースアセットからCRDを手動でデプロイ
 
@@ -79,9 +79,9 @@ helm upgrade --install cert-manager jetstack/cert-manager \
 kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download/$EMQX_OPERATOR_VERSION/crds.yaml
 ```
 
-### Emqx-Operatorのデプロイ
+### Emqx-Operatorをデプロイ
 
-cert-managerがクラスター全体にすでにインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
+cert-managerがすでにクラスター全体にインストールされている場合は、`--set cert-manager.enable=false`を追加してください。
 
 この例では`podSecurityContext`と`containerSecurityContext`はデフォルト値を含んでいます。必要に応じてオーバーライドしてください。
 
@@ -100,15 +100,15 @@ helm upgrade --install emqx-operator emqx/emqx-operator \
   --set image.tag=$EMQX_OPERATOR_VERSION
 ```
 
-emqx-operatorが起動して稼働していることを確認してください：
+`emqx-operator`が起動して正常に動作していることを確認します。
 
 ```bash
 kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-manager"
 ```
 
-## EMQXクラスターの設定
+## EMQXクラスターを設定する
 
-1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします：
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`コマンドでデプロイします。
 
    ```bash
    apiVersion: apps.emqx.io/v2beta1
@@ -125,7 +125,7 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
          }
    ```
 
-2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認できます。`STATUS`が`Running`であることを確認してください。完了までに時間がかかる場合があります。
+2. EMQXクラスターが準備完了になるまで待ちます。`kubectl get`コマンドでEMQXクラスターの状態を確認し、`STATUS`が`Running`であることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx

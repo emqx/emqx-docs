@@ -1,22 +1,22 @@
-# MongoDBとの連携
+# MongoDBとの統合
 
-このオーソライザーは、MongoDBデータベースに保存されたルールリストとパブリッシュ／サブスクライブ要求を照合することで認可チェックを実装します。
+このオーソライザーは、MongoDBデータベースに保存されたルールのリストとパブリッシュ／サブスクライブ要求を照合することで認可チェックを実装します。
 
 ::: tip 前提条件
 
-[EMQX認可の基本概念](./authz.md)についての知識
+[EMQX認可の基本概念](./authz.md)の知識
 
 :::
 
 ## データスキーマとクエリ文
 
-MongoDBオーソライザーは、認可ルールをMongoDBドキュメントとして保存することをサポートしています。ユーザーは、結果に以下のフィールドが含まれることを保証するためにクエリテンプレートを提供する必要があります。
+MongoDBオーソライザーは、認可ルールをMongoDBドキュメントとして保存することをサポートしています。ユーザーは、結果に以下のフィールドが含まれることを保証するクエリテンプレートを提供する必要があります。
 
-* `permission`：ルールがマッチした場合に適用されるアクションを指定します。利用可能な値は `deny` または `allow` です。
+* `permission`：ルールが一致した場合に適用されるアクションを指定します。利用可能な値は `deny` または `allow` です。
 * `action`：ルールが関連するリクエストを指定します。可能な値は `publish`、`subscribe`、または `all` です。
-* `topic` / `topics`：ルールが適用されるトピックまたはトピックのリストを指定します。トピックフィルターおよび[トピックプレースホルダー](./authz.md#topic-placeholders)をサポートします。
-* `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値の選択肢は `0`、`1`、`2` です。複数のQoSレベルを指定する場合は数値の配列も可能です。デフォルトはすべてのQoSレベルです。
-* `retain`（オプション）：ルールがリテインドメッセージのパブリッシュを許可するかどうかを示します。値の選択肢は `0`、`1`、または `true`、`false` です。デフォルトではリテインドメッセージは許可されています。
+* `topic` / `topics`：ルールが適用される単一または複数のトピックを指定します。トピックフィルターおよび[トピックプレースホルダー](./authz.md#topic-placeholders)をサポートします。
+* `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
+* `retain`（オプション）：ルールが保持メッセージのパブリッシュを許可するかどうかを示します。値は `0`、`1`、または `true`、`false` です。デフォルトでは保持メッセージは許可されます。
 
 ユーザー名 `emqx_u` のクライアントがトピック `t/1` にQoS 1でパブリッシュすることを拒否する例：
 
@@ -54,44 +54,44 @@ filter { username = "${username}" }
 
 EMQXダッシュボードを使用して、MongoDBをユーザー認可に利用する方法を設定できます。
 
-1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左側ナビゲーションツリーで **Access Control** -> **Authorization** をクリックし、**Authorization** ページに入ります。
+1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左側ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
 
-2. 右上の **Create** をクリックし、次に **Backend** として **MongoDB** を選択します。**Next** をクリックすると、**Configuration** タブが表示されます。
+2. 右上の **作成** をクリックし、続いて **バックエンド** で **MongoDB** を選択します。次に **次へ** をクリックします。以下のように **設定** タブが表示されます。
 
    <img src="./assets/authz-MongoDB_ee.png" alt="authz-MongoDB_ee" style="zoom:67%;" />
 
 3. 以下の指示に従って設定を行います。
 
-   **Connect**：MongoDBへの接続に必要な情報を入力します。
+   **接続**：MongoDBに接続するために必要な情報を入力します。
 
-   - **MongoDB Mode**：MongoDBのデプロイ形態を選択します。`Single`、`Replica Set`、`Sharding` があります。
-   - **Server**：EMQXが接続するサーバーアドレスを指定します（`host:port`）。
-   - **Database**：MongoDBのデータベース名。
-   - **Collection**：認可ルールが保存されているMongoDBコレクション名。データ型は文字列です。
-   - **Username**：MongoDBのユーザー名を指定します。
-   - **Password**：MongoDBのユーザーパスワードを指定します。
+   - **MongoDBモード**：MongoDBのデプロイ方法を選択します。`Single`、`Replica Set`、`Sharding` があります。
+   - **サーバー**：EMQXが接続するサーバーアドレスを指定します（`host:port`）。
+   - **データベース**：MongoDBのデータベース名。
+   - **コレクション**：認可ルールが保存されているMongoDBコレクション名。データ型は文字列です。
+   - **ユーザー名**：MongoDBのユーザー名を指定します。
+   - **パスワード**：MongoDBのユーザーパスワードを指定します。
 
-   **TLS Configuration**：TLSを有効にする場合はトグルスイッチをオンにします。
+   **TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。
 
-   **Filter**：クレデンシャル検索のためのMongoDBセレクターとして解釈されるマップです。[プレースホルダー](./authz.md#authorization-placeholders)がサポートされています。
+   **Filter**：資格情報検索のためのMongoDBセレクターとして解釈されるマップです。[プレースホルダー](./authz.md#authorization-placeholders)をサポートします。
 
-   **Advanced Settings**：
+   **詳細設定**：
 
-   - **Auth Source**：MongoDB接続時に使用する認証ソースを指定します。特定のデータベースやユーザー認証を管理するMongoDB認証データベースを指定可能です。
-   - **Use Legacy Protocol**：MongoDBとの通信にレガシープロトコルを使用するかどうかを選択します。`auto`、`true`、`false` の選択肢があり、デフォルトは `auto` で、新しいプロトコルがサポートされているか自動判別します。
-   - **Record Limit**：MongoDBから取得する認可レコードの最大数を制限します。
-   - **Skip**：認可レコードのリスト取得時にスキップするレコード数を設定します。
+   - **認証ソース**：MongoDBに接続する際に使用する認証ソースを指定します。特定のデータベースやユーザー資格情報を管理するMongoDB認証データベースを指定できます。
+   - **レガシープロトコルを使用**：MongoDBとの通信にレガシープロトコルを使用するかどうかを選択します。`auto`、`true`、`false` の選択肢があり、デフォルトは `auto` で、新しいプロトコルがサポートされているか自動判定します。
+   - **レコード制限**：MongoDBから取得する認可レコードの最大数を制限します。
+   - **スキップ**：レコードリスト取得時にスキップする認可レコードの数を設定します。
 
-   - **Pool size**（オプション）：EMQXノードからMongoDBへの同時接続数を整数で指定します。デフォルトは `8` です。
-   - **Connect Timeout**（オプション）：EMQXが接続タイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
+   - **プールサイズ**（オプション）：EMQXノードからMongoDBへの同時接続数を整数で指定します。デフォルトは `8` です。
+   - **接続タイムアウト**（オプション）：EMQXが接続タイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
 
 4. **作成** をクリックして設定を完了します。
 
-## 設定項目による構成
+## 設定項目による設定
 
-EMQXの設定項目を使ってMongoDBオーソライザーを設定することも可能です。
+EMQXの設定項目を使ってMongoDBオーソライザーを設定できます。
 
-MongoDBオーソライザーはタイプ `mongodb` で識別されます。オーソライザーは3種類のMongoDBデプロイモードに対応しています。 <!---詳細な設定情報は以下を参照してください：[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded)、[authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
+MongoDBオーソライザーはタイプ `mongodb` で識別されます。オーソライザーは3種類のデプロイモードで稼働するMongoDBへの接続をサポートしています。 <!---詳細な設定情報は以下を参照してください：[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded)、[authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
 
 設定例：
 

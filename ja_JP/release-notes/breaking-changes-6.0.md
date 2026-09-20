@@ -1,11 +1,11 @@
-# Incompatible Changes in EMQX 6.0
+# EMQX 6.0 の非互換変更
 
 ## 6.0.3
 
-- [#17157](https://github.com/emqx/emqx/pull/17157) Added a Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, which defaults to `true`. When enabled, rules that belong to a namespace are triggered only by messages and client-related events from clients in that same namespace.
+- [#17157](https://github.com/emqx/emqx/pull/17157) ルールエンジンの設定 `rule_engine.limit_selects_in_namespace` を追加しました。デフォルトは `true` です。有効にすると、ネームスペースに属するルールは、同じネームスペース内のクライアントからのメッセージおよびクライアント関連イベントによってのみトリガーされます。
 
 ## 6.0.1
 
-- [#16061](https://github.com/emqx/emqx/pull/16061) Fixed an issue where RocketMQ actions ignored the configured payload template and sent the entire rule output instead.
+- [#16061](https://github.com/emqx/emqx/pull/16061) RocketMQ アクションが設定されたペイロードテンプレートを無視し、ルール出力全体を送信してしまう問題を修正しました。
 
-  If you relied on the previous (incorrect) behavior, you may need to update your payload templates to ensure messages are formatted as expected.
+  以前の（誤った）動作に依存していた場合は、メッセージが期待通りにフォーマットされるようにペイロードテンプレートを更新する必要があります。

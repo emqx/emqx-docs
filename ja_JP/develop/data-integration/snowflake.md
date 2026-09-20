@@ -1,70 +1,70 @@
 # SnowflakeへのMQTTデータ取り込み
 
-[Snowflake](https://www.snowflake.com/en/) は、クラウドベースのデータプラットフォームであり、高いスケーラビリティと柔軟性を備えたデータウェアハウジング、分析、セキュアなデータ共有のソリューションを提供します。構造化データおよび半構造化データの処理に優れており、大量のデータを格納しつつ高速なクエリ性能と多様なツールやサービスとのシームレスな統合を実現しています。
+[Snowflake](https://www.snowflake.com/en/) は、クラウドベースのデータプラットフォームであり、高いスケーラビリティと柔軟性を備えたデータウェアハウジング、分析、セキュアなデータ共有のソリューションを提供します。構造化データおよび半構造化データの処理に優れ、大量のデータを高速なクエリ性能で保存し、さまざまなツールやサービスとのシームレスな統合を実現します。
 
-本ページでは、EMQXとSnowflake間のデータ統合について詳しく紹介し、ルールとSinkの作成方法について実践的なガイダンスを提供します。
+本ページでは、EMQXとSnowflake間のデータ統合について詳細に解説し、ルールとSinkの作成方法について実践的なガイダンスを提供します。
 
 ## 動作概要
 
-EMQXにおけるSnowflakeデータ統合はすぐに使える機能であり、複雑なIoTビジネスワークフローを簡単にサポートするよう設定可能です。典型的なIoTアプリケーションでは、EMQXがデバイス接続とメッセージ送受信を担当するIoTプラットフォームとして機能し、Snowflakeはメッセージデータの取り込み、格納、分析を行うデータストレージおよび処理プラットフォームとして機能します。
+EMQXにおけるSnowflakeデータ統合は、すぐに利用可能な機能であり、複雑なIoTビジネスワークフローを簡単にサポートできるように構成可能です。典型的なIoTアプリケーションでは、EMQXがデバイス接続とメッセージ送信を担うIoTプラットフォームとして機能し、Snowflakeはメッセージデータの取り込み、保存、分析を行うデータストレージおよび処理プラットフォームとして役割を果たします。
 
 ![snowflake-architecture](./assets/snowflake-architecture.png)
 
-EMQXはルールエンジンとSinkを利用してデバイスのイベントやデータをSnowflakeに転送します。エンドユーザーやアプリケーションはSnowflakeのテーブル内のデータにアクセス可能です。具体的なワークフローは以下の通りです：
+EMQXはルールエンジンとSinkを利用して、デバイスイベントやデータをSnowflakeへ転送します。エンドユーザーやアプリケーションはSnowflakeのテーブル内のデータにアクセスできます。具体的なワークフローは以下の通りです。
 
-1. **デバイスのEMQX接続**：IoTデバイスはMQTTプロトコルで正常に接続されるとオンラインイベントをトリガーします。このイベントにはデバイスID、送信元IPアドレスなどの識別情報が含まれます。
+1. **デバイスのEMQXへの接続**：IoTデバイスはMQTTプロトコルで正常に接続されるとオンラインイベントをトリガーします。このイベントにはデバイスID、送信元IPアドレス、その他識別情報が含まれます。
 
-2. **デバイスからのメッセージパブリッシュと受信**：デバイスは特定のトピックを通じてテレメトリやステータスデータをパブリッシュします。EMQXはこれらのメッセージを受信し、ルールエンジン内で比較処理を行います。
+2. **デバイスメッセージのパブリッシュと受信**：デバイスは特定のトピックを通じてテレメトリや状態データをパブリッシュします。EMQXはこれらのメッセージを受信し、ルールエンジン内で比較処理を行います。
 
-3. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンはトピックマッチングに基づき特定のソースからのメッセージやイベントを処理します。対応するルールにマッチしたメッセージやイベントに対し、データフォーマット変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
+3. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づいて特定のソースからのメッセージやイベントを処理します。対応するルールにマッチしたメッセージやイベントに対し、データフォーマット変換、特定情報のフィルタリング、コンテキスト情報の付加などを実施します。
 
-4. **Snowflakeへの書き込み**：ルールがトリガーされると、メッセージデータをSnowflakeに書き込みます。書き込み方法は、メッセージをファイルにバッチングしてStageとPipe経由でロードする（集約モード）、またはSnowpipe Streaming APIを使って直接ストリーミングする（ストリーミングモード）方法があります。
+4. **Snowflakeへの書き込み**：ルールはメッセージデータをSnowflakeに書き込むアクションをトリガーします。メッセージをファイルにバッチングしてStageとPipe経由でロードする（集約モード）か、Snowpipe Streaming APIを使って直接ストリーミングする（ストリーミングモード）方法があります。
 
-イベントやメッセージデータがSnowflakeに書き込まれた後は、以下のような多様なビジネス・技術用途に活用できます：
+イベントやメッセージデータがSnowflakeに書き込まれた後は、以下のようなビジネスおよび技術的な目的で活用可能です。
 
 - **データアーカイブ**：IoTデータをSnowflakeに安全に長期保存し、コンプライアンスや履歴データの利用を保証します。
-- **データ分析**：Snowflakeのデータウェアハウジングと分析機能を活用し、リアルタイムまたはバッチ分析を行い、予知保全、運用インサイト、デバイス性能評価を実現します。
+- **データ分析**：Snowflakeのデータウェアハウジングおよび分析機能を活用し、リアルタイムまたはバッチ分析を行い、予知保全、運用インサイト、デバイス性能評価を実現します。
 
-## 特長と利点
+## 特徴と利点
 
-EMQXのSnowflakeデータ統合を利用することで、以下の特長と利点をビジネスにもたらします：
+EMQXのSnowflakeデータ統合を利用することで、以下の特徴と利点が得られます。
 
-- **メッセージ変換**：メッセージはEMQXのルール内で多様な処理や変換を経てからSnowflakeに書き込まれるため、後続の保存や利用が容易になります。
-- **柔軟なデータ操作**：Snowflake Sinkは書き込むフィールドを選択可能であり、ビジネスニーズに応じた効率的かつ動的なストレージ構成が可能です。
+- **メッセージ変換**：Snowflakeへの書き込み前に、EMQXルールでメッセージの高度な処理や変換が可能であり、その後の保存や利用を容易にします。
+- **柔軟なデータ操作**：Snowflake Sinkは、書き込むフィールドを選択可能で、ビジネスニーズに応じた効率的かつ動的なストレージ構成を実現します。
 - **統合されたビジネスプロセス**：Snowflake Sinkにより、デバイスデータをSnowflakeの豊富なエコシステムアプリケーションと組み合わせ、データ分析やアーカイブなど多様なビジネスシナリオを実現します。
-- **低コストの長期保存**：Snowflakeのスケーラブルなストレージ基盤は従来のデータベースに比べ低コストで長期データ保持に最適であり、大量のIoTデータ保存に適しています。
+- **低コストの長期保存**：Snowflakeのスケーラブルなストレージ基盤は、従来のデータベースに比べて低コストで長期データ保持に最適なソリューションを提供し、大量のIoTデータ保存に適しています。
 
-これらの特長により、効率的で信頼性が高くスケーラブルなIoTアプリケーションを構築し、ビジネス上の意思決定や最適化に役立てることが可能です。
+これらの特徴により、効率的で信頼性が高くスケーラブルなIoTアプリケーションの構築と、ビジネス意思決定や最適化に貢献します。
 
 ## はじめる前に
 
-このセクションでは、EMQXでSnowflake Sinkを作成する前に必要な準備について説明します。
+このセクションでは、EMQXでSnowflake Sinkを作成する前の準備について説明します。
 
 ### 前提条件
 
-- EMQXの[ルール](./rules.md)および[データ統合](./data-bridges.md)の基本概念の理解
-- 管理者権限を持つSnowflakeアカウントの用意
+- EMQXの[ルール](./rules.md)および[データ統合](./data-bridges.md)の概念理解
+- 管理者権限を持つ稼働中のSnowflakeアカウント
 
 ### アップロードモードの選択
 
 ::: tip
 
-最初にモードを選択してください。これによりEMQXおよびSnowflake環境の設定方法が決まります。
+モードの選択は、EMQXとSnowflake環境の両方の設定方法に影響するため、最初に決定してください。
 
 :::
 
-EMQXはSnowflakeへのデータ送信に以下の2つのモードをサポートしています：
+EMQXはSnowflakeへのデータ送信に以下の2つのモードをサポートしています。
 
 | モード       | 説明                                                         | ODBC必要性    |
-| ------------ | ------------------------------------------------------------ | ------------ |
-| 集約モード   | EMQXはMQTTメッセージをローカルファイルにバッファリングし、SnowflakeのStageにアップロードします。`COPY INTO`文で設定されたPipeが自動的にステージファイルをターゲットテーブルにロードします。詳細は[Snowflake Snowpipeドキュメント](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)を参照してください。 | 必要         |
-| ストリーミングモード | Snowpipe Streaming APIを介してリアルタイムにデータを送信し、行を直接Snowflakeテーブルに書き込みます。 | 必要         |
+| ---------- | ------------------------------------------------------------ | ------------ |
+| 集約（Aggregated） | EMQXはMQTTメッセージをローカルファイルにバッファリングし、SnowflakeのStageにアップロードします。`COPY INTO`文で設定されたPipeが自動的にファイルをターゲットテーブルにロードします。詳細は[Snowflake Snowpipeドキュメント](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)を参照してください。 | 必須          |
+| ストリーミング（Streaming） | Snowpipe Streaming APIを介してリアルタイムにデータを送信し、行単位でSnowflakeテーブルに直接書き込みます。 | 必須          |
 
 ### Snowflake ODBCドライバーの初期化
 
-EMQXがSnowflakeと通信し効率的にデータ転送を行うためには、SnowflakeのODBCドライバーをインストールおよび設定する必要があります。このドライバーはEMQXがSnowflakeのStageにデータを書き込むための通信ブリッジとして機能し、データの適切なフォーマット、認証、転送を保証します。
+EMQXがSnowflakeと通信し効率的にデータ転送を行うためには、SnowflakeのODBCドライバーをインストールおよび設定する必要があります。このドライバーはEMQXがSnowflakeのStageへデータを書き込むための通信ブリッジとして機能し、データの適切なフォーマット、認証、転送を保証します。
 
-詳細は公式の[ODBCドライバー](https://docs.snowflake.com/en/developer-guide/odbc/odbc)ページおよび[ライセンス契約](https://sfc-repo.snowflakecomputing.com/odbc/Snowflake_ODBC_Driver_License_Agreement.pdf)を参照してください。
+詳細は公式の[ODBC Driver](https://docs.snowflake.com/en/developer-guide/odbc/odbc)ページおよび[ライセンス契約](https://sfc-repo.snowflakecomputing.com/odbc/Snowflake_ODBC_Driver_License_Agreement.pdf)を参照してください。
 
 #### LinuxでのSnowflake ODBCドライバー初期化
 
@@ -72,27 +72,27 @@ EMQXはDebian系（Ubuntuなど）向けにSnowflake ODBCドライバーの迅�
 
 ::: tip 注意
 
-このスクリプトはテスト用であり、本番環境でのODBCドライバー設定方法として推奨するものではありません。公式の[Linux向けインストール手順](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux)を参照してください。
+このスクリプトはテスト用であり、本番環境でのODBCドライバー設定方法の推奨ではありません。公式の[Linux向けインストール手順](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux)を参照してください。
 
 :::
 
 **インストールスクリプトの実行**
 
-`scripts/install-snowflake-driver.sh`をローカルにコピーし、`chmod a+x`で実行可能にしてから`sudo`で実行します：
+`scripts/install-snowflake-driver.sh`をローカルマシンにコピーし、`chmod a+x`で実行権限を付与してから`sudo`で実行します。
 
 ```bash
 chmod a+x scripts/install-snowflake-driver.sh
 sudo ./scripts/install-snowflake-driver.sh
 ```
 
-スクリプトはSnowflake ODBCの`.deb`インストールパッケージ（例：`snowflake-odbc-3.4.1.x86_64.deb`）をカレントディレクトリにダウンロードし、ドライバーをインストール後、以下のシステム設定ファイルを更新します：
+スクリプトはSnowflake ODBCの`.deb`インストールパッケージ（例：`snowflake-odbc-3.4.1.x86_64.deb`）をカレントディレクトリにダウンロードし、ドライバーをインストール後、以下のシステム設定ファイルを更新します。
 
 - `/etc/odbc.ini`：Snowflakeデータソース設定を追加
 - `/etc/odbcinst.ini`：Snowflakeドライバーパスを登録
 
 **設定例**
 
-`/etc/odbc.ini`の内容確認：
+`/etc/odbc.ini`の内容確認コマンド：
 
 ```
 emqx@emqx-0:~$ cat /etc/odbc.ini
@@ -108,7 +108,7 @@ SSL=on
 snowflake = SnowflakeDSIIDriver
 ```
 
-`/etc/odbcinst.ini`の内容確認：
+`/etc/odbcinst.ini`の内容確認コマンド：
 
 ```
 emqx@emqx-0:~$ cat /etc/odbcinst.ini
@@ -135,7 +135,7 @@ UsageCount=1
 
 #### macOSでのSnowflake ODBCドライバー初期化
 
-macOSでSnowflake ODBCドライバーをインストール・設定する手順は以下の通りです：
+macOSでSnowflake ODBCドライバーをインストールおよび設定する手順は以下の通りです。
 
 1. unixODBCをインストール（例）：
 
@@ -149,7 +149,7 @@ macOSでSnowflake ODBCドライバーをインストール・設定する手順�
 
 4. 詳細なインストール・設定手順は[macOS向けODBCドライバーのインストールと設定](https://docs.snowflake.com/en/developer-guide/odbc/odbc-mac)を参照
 
-5. インストール後、以下の設定ファイルを更新：
+5. インストール後、以下の設定ファイルを更新
 
    - Snowflake ODBCドライバーの権限と設定を更新：
 
@@ -177,48 +177,48 @@ macOSでSnowflake ODBCドライバーをインストール・設定する手順�
      EOF
      ```
 
-### ユーザーアカウント作成とSnowflakeリソース設定
+### ユーザーアカウント作成およびSnowflakeリソース設定
 
-アップロードモードに関わらず、Snowflake環境においてユーザーアカウント、データベース、関連リソースの設定が必要です。以下の認証情報は後にEMQXのコネクターおよびSink設定で使用します：
+アップロードモードに関わらず、Snowflake環境にユーザーアカウント、データベース、関連リソースを設定し、データ取り込み用の準備を行う必要があります。以下の認証情報は後にEMQXのコネクターおよびSink設定で使用します。
 
-| 項目名                  | 値                                                    | 説明                                                         |
-| ----------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
-| Data Source Name (DSN)  | `snowflake`（集約モードのみ）                         | `/etc/odbc.ini`に設定したODBC DSN。集約アップロードで使用。 |
-| ユーザー名              | `snowpipeuser`                                        | Snowflake接続認証に使用するユーザー。適切な権限が必要。     |
-| パスワード              | `Snowpipeuser99`                                      | キーペア認証を使う場合は省略可能。                           |
-| データベース名          | `testdatabase`                                        | 対象テーブルが存在するSnowflakeデータベース。               |
-| スキーマ                | `public`                                              | データベース内のスキーマ。テーブルやパイプが存在する場所。  |
-| ステージ（集約モード）  | `emqx`                                                | データ取り込み前にファイルを保持するSnowflakeステージ。     |
-| パイプ（集約モード）    | `emqx`                                                | ステージからテーブルへデータをロードするパイプ。             |
-| パイプ（ストリーミング）| `emqxstreaming`                                       | Snowpipe Streaming APIでデータ取り込み用に作成したパイプ。  |
-| プライベートキー        | `file://<path to snowflake_rsa_key.private.pem>`     | API認証用JWTの署名に使うRSAプライベートキーのパス。          |
+| 項目名                   | 値                                               | 説明                                                         |
+| ------------------------ | ------------------------------------------------ | ------------------------------------------------------------ |
+| データソース名（DSN）    | `snowflake`（集約モードのみ）                    | `/etc/odbc.ini`に設定したODBC DSN。集約アップロードで使用。 |
+| ユーザー名               | `snowpipeuser`                                   | Snowflake接続認証に使用するユーザー。適切な権限が必要。     |
+| パスワード               | `Snowpipeuser99`                                 | キーペア認証利用時は省略可能。                               |
+| データベース名           | `testdatabase`                                   | 対象テーブルが存在するSnowflakeデータベース。               |
+| スキーマ                 | `public`                                         | データベース内のスキーマ。テーブルやパイプが存在する場所。   |
+| ステージ（集約モード）   | `emqx`                                           | ファイルを一時保管するSnowflakeステージ。                   |
+| パイプ（集約モード）     | `emqx`                                           | ステージからテーブルへデータをロードするパイプ。             |
+| パイプ（ストリーミング） | `emqxstreaming`                                  | Snowpipe Streaming API経由でデータを取り込むためのパイプ。  |
+| プライベートキー         | `file://<path to snowflake_rsa_key.private.pem>` | API認証用JWT署名に使うRSA秘密鍵のパス。                      |
 
 #### RSAキーペアの生成（集約モードは任意）
 
-Snowflakeは複数の認証方式をサポートしています。EMQXでの認証方式はアップロードモードや接続設定に依存します：
+Snowflakeは複数の認証方式をサポートしており、EMQXでの利用はアップロードモードと接続設定に依存します。
 
-| アップロードモード      | 認証オプション                                              | キーペア必須か  |
-| ----------------------- | ----------------------------------------------------------- | -------------- |
-| ストリーミング（HTTPS） | RSAキーペア＋JWT（唯一のサポート方式）                      | 必須           |
-| 集約（ODBC）            | ユーザー名/パスワード（DSNまたはEMQX経由）<br />RSAキーペア＋JWT（任意、EMQX設定のみ） | 任意           |
+| アップロードモード      | 認証方式                                                     | キーペア必須 |
+| ----------------------- | ------------------------------------------------------------ | ------------ |
+| ストリーミング（HTTPS） | RSAキーペア＋JWT（唯一サポートされる方式）                   | 必須         |
+| 集約（ODBC）            | ユーザー名/パスワード（DSNまたはEMQX経由）<br />RSAキーペア＋JWT（任意、EMQX設定のみ） | 任意         |
 
-キーペア認証はストリーミングモードでのみ必須であり、EMQXはJWTに署名してSnowflake Streaming APIに安全に認証します。
+キーペア認証はストリーミングモードで必須であり、EMQXがJWTを署名してSnowflake Streaming APIに安全に認証します。
 
-集約モードではユーザー名/パスワードまたはRSAキーペアのいずれかで認証可能です。認証情報は以下のいずれかで指定します：
+集約モードではユーザー名/パスワードまたはRSAキーペアのいずれかを利用可能です。認証情報の提供方法は以下の通りです。
 
-- ダッシュボードのEMQXコネクター設定にユーザー名とパスワードを直接入力
-- キーペア認証を使う場合はプライベートRSAキーのパスを指定
-- EMQXにいずれも設定しない場合は、システムのODBC DSN（Linuxなら`/etc/odbc.ini`、macOSなら`~/.odbc.ini`）に正しく設定されていることを確認
+- ダッシュボードのEMQXコネクター設定でユーザー名とパスワードを直接入力
+- キーペア認証の場合は秘密鍵のパスを指定
+- いずれも指定しない場合は、システムのODBC DSN設定（Linuxの`/etc/odbc.ini`やmacOSの`~/.odbc.ini`）に正しく設定されていることを確認
 
 ::: tip
 
-認証にはパスワードかプライベートキーのいずれかを使用し、両方を同時に使わないでください。
+認証にはパスワードかプライベートキーのいずれかを使用し、両方同時には使用しないでください。
 
-EMQXにどちらも設定されていない場合、コネクターは`/etc/odbc.ini`の認証情報を使用します。
+EMQXにいずれも設定されていない場合は、`/etc/odbc.ini`の認証情報を使用します。
 
 :::
 
-**例：ユーザー名/パスワードを使った`/etc/odbc.ini`**
+**例：ユーザー名/パスワードを設定した`/etc/odbc.ini`**
 
 ```ini
 [snowflake]
@@ -232,11 +232,11 @@ Warehouse=compute_wh
 Role=snowpipe
 ```
 
-> この方法により、EMQXは設定内で認証情報を直接含めずに`DSN`（`snowflake`）を参照できます。
+> この方法により、EMQXは設定で直接認証情報を含めずに`DSN`（`snowflake`）を参照できます。
 
-**キーペア認証を使う場合**
+**キーペア認証を使用する場合**
 
-RSAキーペア認証を使う（例：ストリーミングモード）場合は、以下のコマンドで鍵を生成し設定します：
+RSAキーペア認証を使用または必須とする（例：ストリーミングモード）場合、以下のコマンドで鍵を生成し設定します。
 
 ```bash
 # 秘密鍵の生成
@@ -246,25 +246,25 @@ openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_rsa_key.pr
 openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.public.pem
 ```
 
-EMQXがキーペア認証を使う場合（集約・ストリーミング両モード対応）：
+EMQXがキーペア認証を利用する場合（集約・ストリーミング両モード対応）：
 
-- EMQXは秘密鍵でJWTに署名し、安全で検証可能なIDトークンとして利用
-- Snowflakeは公開鍵でトークンの署名を検証
+- EMQXは秘密鍵でJWTに署名し、安全かつ検証可能なIDトークンとして使用
+- Snowflakeは公開鍵で署名を検証
 
 詳細は[キーペア認証とキーペアローテーション](https://docs.snowflake.com/en/user-guide/key-pair-auth)を参照してください。
 
-#### SQLでSnowflakeリソースをセットアップ
+#### SQLでSnowflakeリソースを設定
 
-RSAキーペア生成後、`aggregated`または`streaming`取り込み用のSnowflakeオブジェクトをSQLで作成します。
+RSAキーペア生成後、`aggregated`または`streaming`取り込み用に必要なSnowflakeオブジェクトをSQLで作成します。
 
-対象は以下を含みます：
+対象は以下を含みます。
 
 - データベースとテーブルの作成
 - ステージとパイプの作成（集約モード）
 - ストリーミングパイプの作成（ストリーミングモード）
 - ユーザーとロールの作成および権限付与
 
-1. SnowflakeコンソールのSQLワークシートで以下SQLを実行し、データベース、テーブル、ステージ、パイプを作成：
+1. SnowflakeコンソールでSQLワークシートを開き、以下のSQLを実行してデータベース、テーブル、ステージ、パイプを作成します。
 
    ```sql
    USE ROLE accountadmin;
@@ -285,13 +285,13 @@ RSAキーペア生成後、`aggregated`または`streaming`取り込み用のSno
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
 
-   -- ステージからのロード用パイプ作成（集約モード）
+   -- ステージからロードする集約モード用パイプ作成
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
 
-   -- ストリーミング用パイプ作成（直接取り込み）
+   -- ストリーミングモード用パイプ作成（直接取り込み）
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
    COPY INTO testdatabase.public.emqx (
        clientid,
@@ -310,10 +310,10 @@ RSAキーペア生成後、`aggregated`または`streaming`取り込み用のSno
 
    ```
 
-   - パイプ内の`COPY INTO`により、Snowflakeはステージまたはストリーミングされたデータを自動的にテーブルにロードします。
+   - パイプ内の`COPY INTO`により、Snowflakeはステージまたはストリーミングで取り込まれたデータを自動的にテーブルにロードします。
    - ストリーミングパイプの`$1:field`構文は、EMQX経由で取り込まれたJSONペイロードからフィールドを抽出します。
 
-2. EMQX認証用の専用ユーザー（例：`snowpipeuser`）を作成し、RSA公開鍵をバインド：
+2. EMQXが認証に使用する専用ユーザー（例：`snowpipeuser`）を作成し、RSA公開鍵をユーザーにバインドします。
 
    ```sql
    -- ユーザーアカウント作成
@@ -332,57 +332,57 @@ RSAキーペア生成後、`aggregated`または`streaming`取り込み用のSno
 
    ::: tip
 
-   PEMファイルの`-----BEGIN PUBLIC KEY-----`と`-----END PUBLIC KEY-----`の行は削除し、残りの内容を改行を保持して記載してください。
+   PEMファイルの`-----BEGIN PUBLIC KEY-----`および`-----END PUBLIC KEY-----`の行は削除し、残りの内容を改行を保持して記述してください。
 
    :::
 
-   この鍵はSnowflakeユーザーにアップロードされ、Snowflake内に保存されます。
+   この鍵はSnowflakeユーザーにアップロードされ、Snowflake内部に保存されます。
 
-3. ユーザーに必要なロールを作成し、権限を付与：
+3. ユーザーに必要なロールを作成し、Snowflakeリソースの管理権限を付与します。
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
 
-   -- データベースとスキーマの使用権限
+   -- データベースとスキーマの使用権限付与
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
 
-   -- 集約モード用にステージとパイプへのアクセス権限
+   -- 集約モード用にステージとパイプの権限付与
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
 
-   -- ストリーミングモード用にストリーミングパイプへの権限
+   -- ストリーミングモード用にストリーミングパイプの権限付与
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
 
-   -- ユーザーにロールを割り当て、デフォルトに設定
+   -- ロールをユーザーに割り当て、デフォルトロールに設定
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
    ```
 
 ## 集約モード用Snowflakeコネクターの作成
 
-Snowflake Sinkで集約アップロードモードを使う場合、Snowflake環境との接続を確立するためにODBC（DSN経由）を使ったSnowflakeコネクターを作成します。
+Snowflake Sinkで集約アップロードモードを使用する場合、Snowflake環境との接続を確立するためにODBC（DSN経由）を利用するSnowflakeコネクターを作成する必要があります。
 
-1. ダッシュボードの **Integration** -> **Connector** ページに移動。
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
 
-2. 右上の **Create** ボタンをクリック。
+2. 右上の **Create** ボタンをクリックします。
 
-3. コネクタータイプで **Snowflake** を選択し、次へ。
+3. コネクタータイプで **Snowflake** を選択し、次へ進みます。
 
-4. コネクター名を英数字の組み合わせで入力。ここでは `my-snowflake` とします。
+4. コネクター名を入力します。英数字の組み合わせで、ここでは `my-snowflake` と入力します。
 
-5. 接続情報を入力。
+5. 接続情報を入力します。
 
-   - **Server Host**：SnowflakeのエンドポイントURL。通常は `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com` の形式。`<Your Snowflake Organization ID>-<Your Snowflake Account Name>` 部分はご自身のSnowflakeインスタンス固有のサブドメインに置き換えます。
+   - **Server Host**：SnowflakeのエンドポイントURL。通常は `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com` の形式です。`<Your Snowflake Organization ID>-<Your Snowflake Account Name>` はSnowflakeインスタンス固有のサブドメインに置き換えてください。
 
-   - **Account**：Snowflake組織IDとアカウント名をハイフン（`-`）で区切って入力。SnowflakeコンソールのURLから確認可能。
+   - **Account**：Snowflakeの組織IDとアカウント名をハイフン（`-`）で区切って入力します。SnowflakeコンソールのURLの一部として確認可能です。
 
-   - **Data Source Name (DSN)**：ODBCドライバー設定時に`.odbc.ini`で設定した`snowflake`を入力。
+   - **Data Source Name (DSN)**：ODBCドライバー設定時に`.odbc.ini`で設定した`snowflake`を入力します。
 
-   - **Username**：前述の設定で作成した`snowpipeuser`を入力。
+   - **Username**：前述のセットアップで作成した`snowpipeuser`を入力します。
 
-   - **Password**：ODBC経由でユーザー名/パスワード認証する場合のパスワード。任意入力：
+   - **Password**：ODBC経由でユーザー名/パスワード認証を行う場合のパスワード。任意入力です。
 
      - ここにパスワード（例：`Snowpipeuser99`）を入力するか、
 
@@ -392,81 +392,81 @@ Snowflake Sinkで集約アップロードモードを使う場合、Snowflake環
 
        ::: tip
 
-       認証にはパスワードかプライベートキーのいずれかを使用し、両方を同時に使わないでください。ここに設定がない場合は`/etc/odbc.ini`の認証情報を使用します。
+       認証にはパスワードかプライベートキーのいずれかを使用し、両方同時には使用しないでください。ここに設定がない場合は`/etc/odbc.ini`の認証情報を使用します。
 
        :::
 
-   - **Private Key Path**：ODBC経由でSnowflake認証に使うRSA秘密鍵の絶対パス。クラスター内の全ノードで同一パスかつEMQXアプリケーションユーザーがアクセス可能である必要があります。例：`/etc/emqx/certs/snowflake_rsa_key.private.pem`
+   - **Private Key Path**：ODBC経由でSnowflake認証に使うRSA秘密鍵の絶対パス。クラスター内の全ノードで同一パスである必要があります。例：`/etc/emqx/certs/snowflake_rsa_key.private.pem`
 
-   - **Private Key Password**：秘密鍵ファイルが暗号化されている場合の復号パスワード。暗号化していない場合は空欄。
+   - **Private Key Password**：秘密鍵ファイルが暗号化されている場合の復号パスワード。OpenSSLの`-nocrypt`オプションで生成した場合は空欄。
 
-   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使う場合は`Enable Proxy`を選択し、以下を入力：
+   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使用する場合は`Enable Proxy`を選択し、以下を入力：
 
      - **Proxy Host**：プロキシサーバーのホスト名またはIPアドレス
 
      - **Proxy Port**：プロキシサーバーのポート番号
 
-6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../guides/network/overview.md#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
+6. 暗号化接続を有効にする場合は、**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../guides/network/overview.md#tls-for-external-resource-access)を参照してください。ストリーミングモードではHTTPS通信のためTLS必須です。
 
-7. 詳細設定（任意）：[詳細設定](#advanced-settings)を参照。
+7. 高度な設定（任意）：[Advanced Settings](#advanced-settings)を参照してください。
 
 8. **Create**をクリックする前に、**Test Connectivity**でSnowflakeへの接続テストが可能です。
 
-9. **Create**ボタンをクリックし、コネクター作成を完了。
+9. **Create**ボタンをクリックしてコネクター作成を完了します。
 
 これでコネクター作成が完了し、ルールとSinkを作成してSnowflakeへの書き込みを指定できます。
 
 ## Snowflakeストリーミングコネクターの作成
 
-Snowflake Sinkでストリーミングアップロードモードを使う場合、HTTPSとSnowpipe Streaming REST APIを使うSnowflakeストリーミングコネクターを作成します。
+Snowflake Sinkでストリーミングアップロードモードを使用する場合、HTTPSおよびSnowpipe Streaming REST APIを利用するSnowflakeストリーミングコネクターを作成します。
 
-1. ダッシュボードの **Integration** -> **Connector** ページに移動。
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
 
-2. 右上の **Create** ボタンをクリック。
+2. 右上の **Create** ボタンをクリックします。
 
-3. コネクタータイプで **Snowflake Streaming** を選択し、次へ。
+3. コネクタータイプで **Snowflake Streaming** を選択し、次へ進みます。
 
-4. コネクター名を英数字の組み合わせで入力。ここでは `my-snowflake-streaming` とします。
+4. コネクター名を入力します。英数字の組み合わせで、ここでは `my-snowflake-streaming` と入力します。
 
-5. 接続情報を入力。
+5. 接続情報を入力します。
 
-   - **Server Host**：SnowflakeのエンドポイントURL。通常は `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com` の形式。`<Your Snowflake Organization ID>-<Your Snowflake Account Name>` 部分はご自身のSnowflakeインスタンス固有のサブドメインに置き換えます。
+   - **Server Host**：SnowflakeのエンドポイントURL。通常は `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com` の形式です。`<Your Snowflake Organization ID>-<Your Snowflake Account Name>` はSnowflakeインスタンス固有のサブドメインに置き換えてください。
 
-   - **Account**：Snowflake組織IDとアカウント名をハイフン（`-`）で区切って入力。SnowflakeコンソールのURLから確認可能。
+   - **Account**：Snowflakeの組織IDとアカウント名をハイフン（`-`）で区切って入力します。SnowflakeコンソールのURLの一部として確認可能です。
 
-   - **Pipe User**：対象パイプを操作する権限を持つSnowflakeユーザー名。例：`snowpipeuser`。`OPERATE`および`MONITOR`権限が必要。
+   - **Pipe User**：対象パイプを操作できるロールを持つSnowflakeユーザー名。例：`snowpipeuser`。`OPERATE`および`MONITOR`権限が必要です。
 
-   - **Private Key Path**：EMQXがJWT署名に使うRSA秘密鍵。PEM形式の秘密鍵全文を文字列として貼り付けるか、`file://`で始まる秘密鍵ファイルのパスを指定可能。例：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`
+   - **Private Key Path**：EMQXがJWT署名に使うRSA秘密鍵。PEM形式の秘密鍵全文を文字列として貼り付けるか、`file://`で始まる秘密鍵ファイルのパスを指定。例：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`
 
-   - **Private Key Password**：秘密鍵ファイルが暗号化されている場合の復号パスワード。暗号化していない場合は空欄。
+   - **Private Key Password**：秘密鍵ファイルが暗号化されている場合の復号パスワード。OpenSSLの`-nocrypt`オプションで生成した場合は空欄。
 
-   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使う場合は`Enable Proxy`を選択し、以下を入力：
+   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使用する場合は`Enable Proxy`を選択し、以下を入力：
 
      - **Proxy Host**：プロキシサーバーのホスト名またはIPアドレス
 
      - **Proxy Port**：プロキシサーバーのポート番号
 
-6. 暗号化接続を行う場合は **Enable TLS** トグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../guides/network/overview.md#tls-for-external-resource-access)を参照。ストリーミングモードではHTTPS通信のためTLS必須です。
+6. 暗号化接続を有効にする場合は、**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../../guides/network/overview.md#tls-for-external-resource-access)を参照してください。ストリーミングモードではHTTPS通信のためTLS必須です。
 
-7. 詳細設定（任意）：[詳細設定](#advanced-settings)を参照。
+7. 高度な設定（任意）：[Advanced Settings](#advanced-settings)を参照してください。
 
 8. **Create**をクリックする前に、**Test Connectivity**でSnowflakeへの接続テストが可能です。
 
-9. **Create**ボタンをクリックし、コネクター作成を完了。
+9. **Create**ボタンをクリックしてコネクター作成を完了します。
 
 これでコネクター作成が完了し、ルールとSinkを作成してSnowflakeへの書き込みを指定できます。
 
 ## Snowflake Sinkを使ったルールの作成
 
-このセクションでは、EMQXでルールを作成し、メッセージ（例：ソースMQTTトピック`t/#`）を処理して、処理結果を設定済みのSnowflake Sink経由で書き込む方法を示します。
+このセクションでは、EMQXでルールを作成し、メッセージ（例：ソースMQTTトピック`t/#`）を処理して、処理結果を設定済みのSnowflake Sink経由でSnowflakeに書き込む方法を示します。
 
-### SQLを指定したルールの作成
+### SQLを定義したルールの作成
 
-1. ダッシュボードの **Integration** -> **Rules** ページに移動。
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
-2. 右上の **Create** ボタンをクリック。
+2. 右上の **Create** ボタンをクリックします。
 
-3. ルールIDに `my_rule` を入力し、SQLエディターに以下のルールSQLを入力：
+3. ルールIDに `my_rule` と入力し、SQLエディターに以下のルールSQLを入力します。
 
    ```sql
    SELECT
@@ -480,113 +480,116 @@ Snowflake Sinkでストリーミングアップロードモードを使う場合
 
    ::: tip
 
-   SQLに不慣れな場合は、**SQL Examples**や**Enable Debug**をクリックしてルールSQLの結果を学習・テストできます。
+   SQLに不慣れな場合は、**SQL Examples**や**Enable Debug**をクリックしてルールSQLの学習やテストが可能です。
 
    :::
    ::: tip
 
-   Snowflake連携では、選択するフィールドがSnowflakeのテーブルのカラム数と名前に厳密に一致する必要があるため、余分なフィールド追加や`*`選択は避けてください。
+   Snowflake統合では、選択するフィールドがSnowflakeのテーブルのカラム数と名前に完全一致することが重要です。余分なフィールドを追加したり`*`で選択したりしないでください。
 
    :::
 
 4. ルールにアクションを追加し、Sinkを設定します。
-   - 集約アップロードモードでSnowflakeに書き込む場合は、[集約アップロードモードでSnowflake Sinkを追加](#add-snowflake-sink-with-aggregated-upload-mode)を参照。
-   - ストリーミングアップロードモードでSnowflakeに書き込む場合は、[ストリーミングアップロードモードでSnowflake Sinkを追加](#add-snowflake-sink-with-streaming-upload-mode)を参照。
-5. アクション追加後、**Action Outputs**セクションに新規Sinkが表示されます。**Create Rule**ページの**Save**ボタンをクリックし、ルール作成を完了。
 
-これでルール作成が完了し、**Rules**ページで新規ルールを確認でき、**Actions (Sink)**タブに新規Snowflake Sinkが表示されます。
+   - 集約アップロードモードでSnowflakeに書き込む場合は、[集約アップロードモードでSnowflake Sinkを追加](#add-snowflake-sink-with-aggregated-upload-mode)を参照してください。
 
-また、**Integration** -> **Flow Designer**でトポロジーを確認できます。トポロジーはトピック`t/#`のメッセージがルール`my_rule`で解析され、Snowflakeに書き込まれる流れを視覚的に示します。
+   - ストリーミングアップロードモードでSnowflakeに書き込む場合は、[ストリーミングアップロードモードでSnowflake Sinkを追加](#add-snowflake-sink-with-streaming-upload-mode)を参照してください。
+
+5. アクション追加後、**Action Outputs**セクションに新しいSinkが表示されます。**Create Rule**ページの**Save**ボタンをクリックしてルール作成を完了します。
+
+これでルール作成が完了し、**Rules**ページで新規ルールを確認でき、**Actions (Sink)**タブに新しいSnowflake Sinkが表示されます。
+
+また、**Integration** -> **Flow Designer**でトポロジーを視覚的に確認できます。トポロジーはトピック`t/#`のメッセージがルール`my_rule`で解析され、Snowflakeに書き込まれる流れを示します。
 
 ### 集約アップロードモードでSnowflake Sinkを追加
 
-このセクションでは、ルールにSinkを追加し、集約アップロードモードで処理結果をSnowflakeに書き込む方法を示します。このモードは複数のルールトリガー結果を単一ファイル（例：CSV）にまとめてアップロードし、ファイル数を減らし書き込み効率を向上させます。
+このセクションでは、ルールにSinkを追加し、処理結果を集約アップロードモードでSnowflakeに書き込む方法を示します。このモードは複数のルールトリガー結果を1つのファイル（例：CSV）にまとめてSnowflakeにアップロードし、ファイル数を減らして書き込み効率を向上させます。
 
-1. **Create Rule**ページの**Action Outputs**セクションで**Add Action**をクリックし、ルールにアクションを追加。
+1. **Create Rule**ページの**Action Outputs**セクションで**Add Action**をクリックし、ルールにアクションを追加します。
 
-2. **Action Type**ドロップダウンから`Snowflake`を選択し、**Action**はデフォルトの`Create Action`のままか、既存のSnowflakeアクションを選択。ここでは新規Sinkを作成しルールに追加。
+2. **Action Type**ドロップダウンから`Snowflake`を選択し、**Action**ドロップダウンはデフォルトの`Create Action`のままにするか、既存のSnowflakeアクションを選択します。ここでは新規Sinkを作成してルールに追加します。
 
-3. Sink名（例：`snowflake_sink`）と簡単な説明を入力。
+3. Sinkの名前（例：`snowflake_sink`）と簡単な説明を入力します。
 
-4. **Connectors**ドロップダウンから先に作成した`my-snowflake`コネクターを選択。隣の作成ボタンで新規コネクターをポップアップで素早く作成可能。必要な設定は[集約モード用Snowflakeコネクターの作成](#create-a-snowflake-connector-for-aggregated-mode)を参照。
+4. 先に作成した`my-snowflake`コネクターを**Connectors**ドロップダウンから選択します。ドロップダウン横の作成ボタンをクリックしてポップアップで新規コネクターを素早く作成することも可能です。必要な設定パラメーターは[集約モード用Snowflakeコネクターの作成](#create-a-snowflake-connector-for-aggregated-mode)を参照してください。
 
-5. 集約アップロードモードの設定を行う。
+5. 集約アップロードモードの設定を行います。
 
-   - **Database Name**：`testdatabase`。EMQXデータ保存用に作成したSnowflakeデータベース名。
+   - **Database Name**：`testdatabase`を入力。EMQXデータ保存用に作成したSnowflakeデータベースです。
 
-   - **Schema**：`public`。`testdatabase`内のデータテーブルが存在するスキーマ。
+   - **Schema**：`public`を入力。`testdatabase`内のデータテーブルがあるスキーマです。
 
-   - **Stage**：`emqx`。Snowflakeでデータロード前にファイルを保持するステージ名。
+   - **Stage**：`emqx`を入力。Snowflake内でデータを一時保管するステージです。
 
-   - **Pipe**：`emqx`。ステージからテーブルへのロードを自動化するパイプ名。
+   - **Pipe**：`emqx`を入力。ステージからテーブルへのロードを自動化するパイプです。
 
-   - **Pipe User**：`snowpipeuser`。パイプ管理権限を持つSnowflakeユーザー名。
+   - **Pipe User**：`snowpipeuser`を入力。パイプ管理権限を持つSnowflakeユーザーです。
 
    - **Private Key**：パイプユーザーがSnowflakeパイプに安全にアクセスするためのRSA秘密鍵。以下いずれかの形式で指定可能：
 
      - **プレーンテキスト**：PEM形式の秘密鍵全文を文字列として直接貼り付け。
 
-     - **ファイルパス**：`file://`で始まる秘密鍵ファイルのパス。クラスター内の全ノードで同一パスかつEMQXアプリケーションユーザーがアクセス可能である必要あり。例：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`
+     - **ファイルパス**：`file://`で始まる秘密鍵ファイルのパスを指定。クラスター内全ノードで同一パスかつEMQXアプリケーションユーザーがアクセス可能である必要があります。例：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`
 
-   - **Private Key Password**：秘密鍵ファイルが暗号化されている場合の復号パスワード。暗号化していない場合は空欄。
+   - **Private Key Password**：秘密鍵が暗号化されている場合の復号パスワード。OpenSSLの`-nocrypt`オプションで生成した場合は空欄。
 
-   - **Aggregation Upload Format**：現在は`csv`のみサポート。データはカンマ区切りCSV形式でSnowflakeにステージングされます。
+   - **Aggregation Upload Format**：現在は`csv`のみサポート。データはカンマ区切りCSV形式でSnowflakeにステージされます。
 
-   - **Column Order**：ドロップダウンから列の順序を選択。生成されるCSVファイルは選択列を先に並べ、未選択列はアルファベット順に並びます。
+   - **Column Order**：ドロップダウンから列の順序を選択。生成されるCSVファイルは選択列を優先して並べ、未選択列はアルファベット順に並びます。
 
-   - **Max Records**：集約をトリガーする最大レコード数。例：`1000`に設定すると1000件集まった時点でアップロードし、時間間隔をリセット。
+   - **Max Records**：集約トリガーとなる最大レコード数。例：`1000`に設定すると1000レコード収集後にアップロードされ、時間間隔がリセットされます。
 
-   - **Time Interval**：集約を行う時間間隔（秒）。例：`60`に設定すると最大レコード数に達しなくても60秒ごとにアップロードし、最大レコード数をリセット。
+   - **Time Interval**：集約を行う時間間隔（秒）。例：`60`に設定すると最大レコード数に達していなくても60秒ごとにアップロードされ、最大レコード数がリセットされます。
 
-   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使う場合は`Enable Proxy`を選択し、以下を入力：
+   - **Proxy**：HTTPプロキシ経由でSnowflakeに接続する設定。HTTPSプロキシは非対応。デフォルトはプロキシなし。プロキシを使用する場合は`Enable Proxy`を選択し、以下を入力：
 
      - **Proxy Host**：プロキシサーバーのホスト名またはIPアドレス
 
      - **Proxy Port**：プロキシサーバーのポート番号
 
-6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照。
+6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-7. **詳細設定**を展開し、必要に応じて高度な設定を行う（任意）。詳細は[詳細設定](#advanced-settings)を参照。
+7. **Advanced Settings**を展開し、必要に応じて高度な設定を行います（任意）。詳細は[Advanced Settings](#advanced-settings)を参照してください。
 
-8. **Create**をクリックする前に、**Test Connectivity**でSnowflakeサーバーへの接続テストが可能。
+8. **Create**をクリックする前に、**Test Connectivity**でSinkがSnowflakeサーバーに接続可能かテストできます。
 
-9. **Create**ボタンをクリックし、Sink作成を完了。作成成功後はルール作成画面に戻り、新規Sinkがルールアクションに追加されます。
+9. **Create**ボタンをクリックしてSink作成を完了します。作成成功後、ルール作成画面に戻り、新規Sinkがルールアクションに追加されます。
 
 ### ストリーミングアップロードモードでSnowflake Sinkを追加
 
-このセクションでは、ルールにSinkを追加し、ストリーミングアップロードモードで処理結果をSnowflakeに書き込む方法を示します。このモードはSnowpipe Streaming APIを使ったリアルタイム取り込みを可能にします。
+このセクションでは、ルールにSinkを追加し、処理結果をストリーミングアップロードモードでSnowflakeに書き込む方法を示します。このモードはSnowpipe Streaming APIを利用してリアルタイム取り込みを実現します。
 
-1. **Create Rule**ページの**Action Outputs**セクションで**Add Action**をクリックし、ルールにアクションを追加。
+1. **Create Rule**ページの**Action Outputs**セクションで**Add Action**をクリックし、ルールにアクションを追加します。
 
-2. **Action Type**ドロップダウンから`Snowflake Streaming`を選択し、**Action**はデフォルトの`Create Action`のままか、既存のSnowflakeアクションを選択。ここでは新規Sinkを作成しルールに追加。
+2. **Action Type**ドロップダウンから`Snowflake Streaming`を選択し、**Action**ドロップダウンはデフォルトの`Create Action`のままにするか、既存のSnowflakeアクションを選択します。ここでは新規Sinkを作成してルールに追加します。
 
-3. Sink名（例：`snowflake_sink_streaming`）と簡単な説明を入力。
+3. Sinkの名前（例：`snowflake_sink_streaming`）と簡単な説明を入力します。
 
-4. コネクタードロップダウンから先に作成した`my-snowflake-streaming`コネクターを選択。隣の作成ボタンで新規コネクターをポップアップで素早く作成可能。必要な設定は[ストリーミングコネクターの作成](#create-a-snowflake-streaming-connector)を参照。
+4. 先に作成した`my-snowflake-streaming`コネクターをコネクタードロップダウンから選択します。ドロップダウン横の作成ボタンをクリックしてポップアップで新規コネクターを素早く作成することも可能です。必要な設定パラメーターは[ストリーミングコネクターの作成](#create-a-snowflake-streaming-connector)を参照してください。
 
-5. ストリーミングアップロードモードの設定を行う。
+5. ストリーミングアップロードモードの設定を行います。
 
-   - **Database Name**：`testdatabase`。EMQXデータ保存用に作成したSnowflakeデータベース名。
+   - **Database Name**：`testdatabase`を入力。EMQXデータ保存用に作成したSnowflakeデータベースです。
 
-   - **Schema**：`public`。`testdatabase`内のデータテーブルが存在するスキーマ。
+   - **Schema**：`public`を入力。`testdatabase`内のデータテーブルがあるスキーマです。
 
-   - **Pipe**：`emqxstreaming`。SQL文で作成したSnowflakeストリーミングパイプ名。Snowflakeで定義した名前と完全一致させる必要あり。
+   - **Pipe**：`emqxstreaming`を入力。SQLで作成したSnowflakeストリーミングパイプの名前。Snowflakeで定義した名前と完全一致させる必要があります。
 
    - **HTTP Pipelining**：レスポンスを待たずに送信可能な最大HTTPリクエスト数。デフォルト：`100`
 
-   - **Connect Timeout**：Snowflakeへの接続確立のタイムアウト秒数。デフォルト：`15`
+   - **Connect Timeout**：Snowflakeへの接続確立タイムアウト秒数。デフォルト：`15`
 
    - **Connection Pool Size**：EMQXがこのSink用にSnowflakeへ維持可能な最大同時接続数。デフォルト：`8`
 
    - **Max Inactive**：アイドル状態の接続を閉じるまでの最大待機時間（秒）。デフォルト：`10`
 
-6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照。
+6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-7. **詳細設定**を展開し、必要に応じて高度な設定を行う（任意）。詳細は[詳細設定](#advanced-settings)を参照。
+7. **Advanced Settings**を展開し、必要に応じて高度な設定を行います（任意）。詳細は[Advanced Settings](#advanced-settings)を参照してください。
 
-8. **Create**をクリックする前に、**Test Connectivity**でSnowflakeサーバーへの接続テストが可能。
+8. **Create**をクリックする前に、**Test Connectivity**でSinkがSnowflakeサーバーに接続可能かテストできます。
 
-9. **Create**ボタンをクリックし、Sink作成を完了。作成成功後はルール作成画面に戻り、新規Sinkがルールアクションに追加されます。
+9. **Create**ボタンをクリックしてSink作成を完了します。作成成功後、ルール作成画面に戻り、新規Sinkがルールアクションに追加されます。
 
 ## ルールのテスト
 
@@ -594,42 +597,42 @@ Snowflake Sinkでストリーミングアップロードモードを使う場合
 
 ### テストメッセージのパブリッシュ
 
-MQTTクライアントMQTTXを使い、トピック`t/1`にメッセージをパブリッシュします：
+MQTTXを使ってトピック`t/1`にメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Snowflake" }'
 ```
 
-複数回繰り返し、複数のテストメッセージを生成してください。
+複数回繰り返して複数のテストメッセージを生成してください。
 
 ### Snowflake内のデータ確認
 
-テストメッセージ送信後、Snowflakeに正常にデータが書き込まれているかをSnowflakeインスタンスにアクセスし、対象テーブルをクエリして確認します。
+テストメッセージ送信後、Snowflakeにデータが正常に書き込まれたかをSnowflakeインスタンスにアクセスして確認します。
 
-1. SnowflakeのWebインターフェースを開き、認証情報でログイン。
+1. SnowflakeのWebインターフェースを開き、認証情報でSnowflakeコンソールにログインします。
 
-2. Snowflakeコンソールで以下SQLを実行し、ルールで書き込まれた`emqx`テーブルのデータを表示：
+2. Snowflakeコンソールで以下のSQLを実行し、ルールで書き込まれた`emqx`テーブルのデータを確認します。
 
    ```
    SELECT * FROM testdatabase.public.emqx;
    ```
 
-   これにより、`clientid`、`topic`、`payload`、`publish_received_at`フィールドを含む全レコードが表示されます。
+   これにより、`emqx`テーブルにアップロードされたすべてのレコード（`clientid`、`topic`、`payload`、`publish_received_at`フィールドを含む）が表示されます。
 
-3. 送信したテストメッセージ（例：`{ "msg": "Hello Snowflake" }`）やトピック、タイムスタンプなどのメタデータが確認できるはずです。
+3. 送信したテストメッセージ（例：`{ "msg": "Hello Snowflake" }`）や、トピック、タイムスタンプなどのメタデータが確認できます。
 
-## 詳細設定
+## 高度な設定
 
-このセクションでは、Snowflake Sinkの詳細設定オプションについて説明します。ダッシュボードでSink設定時に**Advanced Settings**を展開し、用途に応じて以下のパラメーターを調整可能です。
+このセクションでは、Snowflake Sinkの高度な設定オプションについて説明します。ダッシュボードでSinkを設定する際に**Advanced Settings**を展開し、以下のパラメーターをニーズに応じて調整可能です。
 
-| 項目名                         | 説明                                                         | デフォルト値    |
-| ------------------------------ | ------------------------------------------------------------ | -------------- |
-| **Buffer Pool Size**            | EMQXとSnowflake間のデータフローを管理するバッファワーカー数を指定します。これらのワーカーはデータを一時的に保持・処理し、送信前のパフォーマンス最適化とスムーズなデータ転送を支えます。 | `16`           |
-| **Request TTL**                 | バッファに入ったリクエストが有効とみなされる最大時間（秒）です。TTLを超えるか、送信後にSnowflakeから応答やアックが得られない場合、リクエストは期限切れと判定されます。 | `45`           |
-| **Health Check Interval**       | Snowflakeとの接続状態を自動チェックする間隔（秒）を指定します。 | `15`           |
-| **Health Check Interval Jitter**| 複数ノードが同時にヘルスチェックを開始しないように、基本間隔に加える一様ランダム遅延（ミリ秒）です。複数のActionやSourceが同じConnectorを共有する場合に有効です。 | `0`            |
-| **Health Check Timeout**        | Snowflake接続の自動ヘルスチェックのタイムアウト時間（秒）を指定します。 | `60`           |
-| **Max Buffer Queue Size**       | Snowflake Sinkの各バッファワーカーが保持可能な最大バイト数です。ワーカーはデータを一時的に保持し、効率的なデータストリーム処理を行います。システム性能やデータ転送要件に応じて調整してください。 | `256` MB       |
-| **Query Mode**                  | 同期（`synchronous`）または非同期（`asynchronous`）のリクエストモードを選択可能です。非同期モードではSnowflakeへの書き込みがMQTTメッセージパブリッシュをブロックしませんが、クライアントがSnowflake到達前にメッセージを受け取る可能性があります。 | `Asynchronous` |
-| **Batch Size**                  | EMQXからSnowflakeへ一度に送信するデータバッチの最大サイズです。サイズ調整により転送効率と性能を最適化可能です。<br />`1`に設定するとバッチングせず個別送信となります。 | `100`          |
-| **Inflight Window**             | 送信済みだが応答やアックをまだ受け取っていない「インフライト」キューリクエストの最大数を制御します。<br/>`Request Mode`が`asynchronous`の場合、同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は`1`に設定してください。 | `100`          |
+| 項目名                         | 説明                                                         | デフォルト値     |
+| ------------------------------ | ------------------------------------------------------------ | --------------- |
+| **Buffer Pool Size**            | EMQXとSnowflake間のデータフローを管理するバッファワーカーの数を指定します。これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへの送信を最適化しスムーズなデータ転送を保証します。 | `16`            |
+| **Request TTL**                 | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストがこのTTLを超えてバッファ内にあるか、送信後にSnowflakeからの応答やアックが得られない場合、リクエストは期限切れとみなされます。 | `45`            |
+| **Health Check Interval**       | SinkがSnowflakeとの接続状態を自動的にヘルスチェックする間隔（秒）を指定します。 | `15`            |
+| **Health Check Interval Jitter**| 複数ノードが同時にヘルスチェックを開始するのを防ぐため、基本間隔に加える一様ランダム遅延です。複数のアクションやソースが同一コネクターを共有する場合に有効です。 | `0` ミリ秒      |
+| **Health Check Timeout**        | Snowflakeとの接続ヘルスチェックのタイムアウト時間（秒）を指定します。 | `60`            |
+| **Max Buffer Queue Size**       | Snowflake Sinkの各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保存し、効率的にデータストリームを処理します。システム性能やデータ転送要件に応じて調整してください。 | `256` MB        |
+| **Query Mode**                  | `synchronous`または`asynchronous`のリクエストモードを選択し、メッセージ送信を最適化します。非同期モードではSnowflakeへの書き込みがMQTTメッセージパブリッシュをブロックしませんが、クライアントがSnowflake到達前にメッセージを受信する可能性があります。 | `Asynchronous`  |
+| **Batch Size**                  | EMQXからSnowflakeへ一度に送信するデータバッチの最大サイズを指定します。サイズ調整によりデータ転送の効率と性能を最適化可能です。<br />`Batch Size`を`1`に設定すると、データはバッチ化せず個別に送信されます。 | `100`           |
+| **Inflight Window**             | 送信済みだが応答やアックをまだ受け取っていない「インフライト」キューリクエストの最大数を指定します。<br />`Request Mode`が`asynchronous`の場合、このパラメーターは特に重要です。同一MQTTクライアントからのメッセージを厳密に順序処理したい場合は`1`に設定してください。 | `100`           |
