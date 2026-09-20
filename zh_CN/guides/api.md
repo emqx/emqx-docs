@@ -305,8 +305,8 @@ api_key {
 
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
-- **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时，密钥使用所属角色的默认权限。登录专属权限范围（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些权限范围，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些权限范围。
+- **Role（可选）**：指定密钥的[角色](#角色与权限)。命名空间密钥使用 `ns:<namespace>::<role>` 格式，例如 `ns:team-a::administrator`。
+- **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时，密钥使用所属角色的默认权限。校验行为参见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
 
 例如：
 
@@ -316,9 +316,18 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 ```
 
-在可分配给 API 密钥的权限范围中，只有 `system` 会授予等同管理员的权限。从 EMQX 6.0.4 开始，如果 bootstrap 条目将等同管理员权限的范围与不授予等同管理员权限的范围组合，EMQX 会移除所有等同管理员权限的范围、保留其余范围、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合权限范围列表并返回 HTTP 400，且不会应用任何权限范围变更。
+##### 校验 Bootstrap 权限范围
+
+如果 bootstrap 条目违反以下任一权限范围规则，EMQX 会删除相关范围并记录警告，然后继续创建或更新密钥：
+
+- **登录专属权限范围**：`user_management`、`mfa_management`、`sso_management` 和 `api_key_management` 不适用于 API 密钥。EMQX 会删除这些范围，并使用其余范围创建或更新密钥。
+- **等同管理员权限的范围**：在可分配给 API 密钥的权限范围中，只有 `system` 会授予等同管理员的权限。从 EMQX 6.0.4 开始，如果条目将等同管理员权限的范围与不授予等同管理员权限的范围组合，EMQX 会删除所有等同管理员权限的范围并保留其余范围。
+- **命名空间权限范围**：从 EMQX 6.0.4 开始，如果命名空间条目显式列出了该命名空间角色不能持有的权限范围，EMQX 会删除不允许的范围并保留其余范围。如果没有剩余范围，该密钥将无法访问受权限范围保护的业务 API。允许使用的范围参见[命名空间调用方限制](#命名空间调用方限制)。
+
+##### 重新加载 Bootstrap API 密钥
 
 通过此方式创建的 API 密钥有效期为永久有效。
 
@@ -336,6 +345,8 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 | 更改 API 密钥的命名空间 | 不能将密钥移动到其他命名空间，更新请求返回 HTTP 400。 |
 
 全局 Dashboard 管理员仍可跨命名空间管理 API 密钥。
+
+## API 密钥权限
 
 ### 角色与权限
 
@@ -404,37 +415,6 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
 | `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
-#### 命名空间调用方限制
-
-命名空间调用方（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。授予权限范围不能绕过这些限制。
-
-命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。即使密钥的权限范围列表包含 `publish`，此限制仍然生效；授予权限范围不能覆盖命名空间级限制。
-
-即使命名空间调用方已获得 `connections` 或 `monitoring` 权限范围，仍无法访问读取或操作集群级原始 MQTT 消息内容的端点，包括保留消息和延迟消息存储。以下消息相关端点返回 `403 Forbidden`：
-
-- `GET /clients/:clientid/mqueue_messages`
-- `GET /clients/:clientid/inflight_messages`
-- `GET /mqtt/retainer/messages`
-- `GET /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/messages`
-- `GET /mqtt/delayed/messages`
-- `GET /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:topic`
-
-对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
-
-- `PUT /trace/:name/stop`
-- `GET /trace/:name/download`
-- `GET /trace/:name/log`
-- `GET /trace/:name/log_detail`
-- `DELETE /trace/:name`
-
-此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
-
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
-
 #### 权限范围的默认行为
 
 从 EMQX 6.0.4 开始，API 密钥的 `scopes` 字段遵循以下规则：
@@ -477,6 +457,55 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 - **Dashboard**：在**系统设置** -> **API 密钥**创建或编辑密钥时，选择**权限模式**。仅在选择**自定义受限权限**时单独选择权限范围。
 - **REST API**：在创建 / 更新 API 密钥时，请求体加入 `"scopes": ["monitoring", "cluster_operations"]`。
 - **Bootstrap 文件**：在每一行的第四段以逗号分隔范围名，例如 `my-app:my-secret:administrator:monitoring,cluster_operations`。
+
+## 命名空间调用方限制
+
+命名空间调用方（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。授予权限范围不能绕过这些限制。
+
+### 命名空间 API 密钥的权限范围限制
+
+从 EMQX 6.0.4 开始，使用角色默认权限的命名空间管理员 API 密钥具有 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围。默认权限不包含 `publish`、`gateways` 和 `audit`。
+
+创建命名空间 API 密钥或修改现有密钥的显式权限范围列表时，只能分配该命名空间角色允许持有的权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
+
+### 包含不允许权限范围的现有密钥
+
+如果密钥已存储的权限范围列表包含不允许的范围，EMQX 不会自动修改该密钥。为兼容读取后原样写回的客户端，如果更新请求在保持角色和命名空间不变的情况下原样提交已存储的列表，EMQX 会接受该列表。但有一种例外：如果命名空间密钥已存储的权限范围列表仅包含 `publish`，即使原样提交，更新请求也会返回 HTTP 400，因为该密钥无法访问任何 API。请删除该密钥，并在不指定命名空间的情况下重新创建。实际修改角色或权限范围时，EMQX 会重新校验，新设置必须符合允许范围。
+
+如果命名空间 API 密钥包含不允许的权限范围，请更新或轮换该密钥。在轮换之前，该密钥此前生效的权限仍然可用，但仍受下文所述命名空间端点限制。EMQX 重新处理 bootstrap 条目时，会删除不允许的范围、记录警告并保留其余范围。详见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
+
+### 消息发布限制
+
+命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。即使已存储密钥的权限范围列表包含 `publish`，此限制仍然生效；授予权限范围不能覆盖命名空间级限制。
+
+### 消息内容限制
+
+即使命名空间调用方已获得 `connections` 或 `monitoring` 权限范围，仍无法访问读取或操作集群级原始 MQTT 消息内容的端点，包括保留消息和延迟消息存储。以下消息相关端点返回 `403 Forbidden`：
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+
+### 追踪操作限制
+
+对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
 ## 分页
 
