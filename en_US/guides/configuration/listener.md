@@ -21,6 +21,16 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+## Listener Name Requirements
+
+Starting from EMQX 6.0.4, the name of a newly created MQTT listener must meet the following requirements:
+
+- The name is 1 to 64 bytes long.
+- The name starts with an ASCII letter or digit.
+- The name contains only ASCII letters, digits, hyphens (`-`), and underscores (`_`).
+
+EMQX rejects a listener creation request if the name does not meet these requirements. For MQTT listeners that existed before the upgrade and have names longer than 64 bytes, you can still update their configurations or remove them, but you cannot rename them.
+
 ## Configure TCP Listener
 
 TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks.

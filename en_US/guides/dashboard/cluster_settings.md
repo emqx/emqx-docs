@@ -151,6 +151,8 @@ Typically, you can use these default listeners by specifying the corresponding p
 
 In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
 
+Starting from EMQX 6.0.4, the name of a newly created listener must be 1 to 64 bytes long, start with an ASCII letter or digit, and contain only ASCII letters, digits, hyphens (`-`), and underscores (`_`). EMQX rejects the listener creation request if the name does not meet these requirements. For more information, see [Listener Name Requirements](../configuration/listener.md#listener-name-requirements).
+
 ![image](./assets/config-listener-add.png)
 
 #### Rate Limiting
