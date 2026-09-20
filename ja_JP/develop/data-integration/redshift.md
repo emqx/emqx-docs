@@ -1,59 +1,59 @@
 # Redshift に MQTT データを取り込む
 
-[Amazon Redshift](https://aws.amazon.com/redshift/?nc1=h_ls) は、ペタバイト規模のクラウドデータウェアハウスであり、高性能な分析向けに設計されたフルマネージドサービスです。PostgreSQL をベースにし、オンライン分析処理（OLAP）に最適化されており、複雑なクエリや大規模なデータ分析を高速に実行できます。EMQX は Amazon Redshift と直接統合し、IoT デバイスからの MQTT テレメトリをほぼリアルタイムで取り込み、保存します。
+[Amazon Redshift](https://aws.amazon.com/redshift/?nc1=h_ls) は、ペタバイト規模のクラウドデータウェアハウスであり、高性能な分析を目的としたフルマネージドサービスです。PostgreSQL をベースにし、オンライン分析処理（OLAP）に最適化されており、複雑なクエリや大規模なデータ分析を高速に実行できます。EMQX は Amazon Redshift と直接統合し、IoT デバイスからの MQTT テレメトリをほぼリアルタイムで取り込み、保存することが可能です。
 
-本ページでは、EMQX と Redshift 間のデータ統合について包括的に紹介し、実際の作成および検証手順を説明します。
+本ページでは、EMQX と Redshift 間のデータ統合について包括的に解説し、データ統合の作成および検証手順を実践的に説明します。
 
-## 動作の仕組み
+## 動作概要
 
-EMQX の Redshift データ統合は組み込み機能であり、MQTT ベースの IoT データストリームを Amazon Redshift の分散型 PostgreSQL 互換データウェアハウスに直接取り込みます。EMQX の組み込み[ルールエンジン](./rules.md)を使用することで、複雑なカスタムコードを書くことなく、IoT データを Redshift にストリーミングし、大規模な分析処理が可能です。
+EMQX の Redshift データ統合は組み込み機能であり、MQTT ベースの IoT データストリームを Amazon Redshift の分散型 PostgreSQL 互換データウェアハウスに直接取り込みます。EMQX の組み込み[ルールエンジン](./rules.md)を利用することで、複雑なカスタムコードを記述せずに、IoT データを大規模な分析処理のために Redshift にストリーミングできます。
 
-以下の図は、EMQX と Redshift 間の典型的なデータ統合アーキテクチャを示しています。
+以下の図は、EMQX と Redshift 間のデータ統合の典型的なアーキテクチャを示しています。
 
 ![EMQX Integration Redshift](./assets/redshift_architecture.png)
 
 Redshift への MQTT データ取り込みは以下のように動作します：
 
-1. **IoT デバイスが EMQX に接続**：IoT デバイスが MQTT プロトコルを通じて正常に接続されると、オンラインイベントがトリガーされます。イベントにはデバイス ID、送信元 IP アドレス、その他の属性情報が含まれます。
-2. **メッセージのパブリッシュと受信**：デバイスは特定のトピックにテレメトリやステータスデータをパブリッシュします。EMQX がこれらのメッセージを受信すると、ルールエンジン内でマッチング処理が開始されます。
-3. **ルールエンジンによるメッセージ処理**：EMQX のルールエンジンは、トピックやメッセージ内容に基づいて定義されたルールにマッチングし、イベントやメッセージを処理します。処理内容には、データ変換（例：JSON から SQL 用フォーマットへの変換）、フィルタリング、データの文脈情報による付加などが含まれ、データベース挿入前に行われます。
-4. **Redshift への書き込み**：マッチしたルールは SQL ベースの取り込みをトリガーします。SQL テンプレートを用いて、EMQX は処理済みデータフィールドを Redshift のテーブルやカラムにマッピングします。高スループットの取り込みには、Amazon S3 からの COPY コマンドや Redshift ストリーミング取り込みを活用し、カラムナストアに効率的にロードします。Redshift のクエリオプティマイザと MPP（Massively Parallel Processing）実行エンジンにより、データは即座に分析クエリに利用可能となります。
+1. **IoT デバイスが EMQX に接続**：IoT デバイスが MQTT プロトコルを通じて正常に接続されると、オンラインイベントがトリガーされます。イベントにはデバイス ID、送信元 IP アドレス、その他属性情報が含まれます。
+2. **メッセージのパブリッシュと受信**：デバイスは特定のトピックにテレメトリやステータスデータをパブリッシュします。EMQX はこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+3. **ルールエンジンによるメッセージ処理**：EMQX のルールエンジンは、トピックやメッセージ内容に基づいて定義されたルールにマッチさせてイベントやメッセージを処理します。処理には、データ変換（例：JSON から SQL 用フォーマットへの変換）、フィルタリング、コンテキスト情報によるデータ強化などが含まれ、データベース挿入前に行われます。
+4. **Redshift への書き込み**：マッチしたルールは SQL ベースの取り込みを Redshift に対してトリガーします。SQL テンプレートを用いて、EMQX は処理済みデータのフィールドを Redshift のテーブルやカラムにマッピングします。高スループットの取り込みには、Amazon S3 からの COPY コマンドや Redshift ストリーミング取り込みを活用し、カラムナストアへ効率的にロードします。Redshift のクエリオプティマイザーと MPP（Massively Parallel Processing）実行エンジンにより、データは即座に分析クエリに利用可能となります。
 
-イベントおよびメッセージデータが Redshift に書き込まれた後は、以下が可能です：
+イベントおよびメッセージデータが Redshift に書き込まれた後、以下のことが可能です：
 
-- Amazon QuickSight、Grafana、Tableau などのツールと Redshift を接続し、IoT メトリクスやトレンドを追跡するダッシュボードを構築
-- Redshift データを AWS の分析や AI/ML サービス（例：Amazon SageMaker）と連携し、異常検知やデバイス挙動の予測を実施
-- Redshift の並列クエリ実行により、大規模な IoT データセットに対する集計、結合、時系列分析を高速に実行し、履歴およびほぼリアルタイムのインサイトを提供
+- Redshift を Amazon QuickSight、Grafana、Tableau などのツールに接続し、IoT メトリクスやトレンドを追跡するダッシュボードを構築。
+- Redshift データを AWS の分析および AI/ML サービス（例：Amazon SageMaker）と統合し、異常検知やデバイス挙動の予測を実施。
+- Redshift の並列クエリ実行により、大規模な IoT データセットに対して集計、結合、時系列分析を実行し、過去データとほぼリアルタイムのインサイトを両立。
 
-## 特長と利点
+## 特長とメリット
 
-Redshift とのデータ統合により、以下の特長とメリットが得られます：
+Redshift とのデータ統合により、以下の特長と利点をビジネスにもたらします：
 
-- **柔軟なイベント処理**：EMQX のルールエンジンを活用し、Redshift はデバイスのライフサイクルイベント（接続、切断、ステータス変更）を低レイテンシで保存・処理可能です。Redshift の MPP クエリエンジンと組み合わせることで、障害検知や異常検知、長期的な利用傾向分析を迅速に実施できます。
-- **メッセージ変換**：メッセージは EMQX ルールで広範な処理・変換を経て Redshift に書き込まれるため、保存データは分析に最適化された状態になります。これによりクエリの複雑さが軽減され、下流処理が効率化されます。
-- **SQL テンプレートによる柔軟なデータ操作**：EMQX の SQL テンプレートマッピングにより、構造化された IoT データを Redshift のテーブルやカラムに挿入可能です。Redshift は PostgreSQL 互換の SQL、JSON 用の SUPER 型などの半構造化データ型、高度なインデックス機能をサポートし、クエリ最適化を実現します。カラムナストレージ、データ圧縮、ゾーンマップにより、大規模データのスキャン時間を短縮します。
-- **ビジネスプロセスの統合**：Redshift は AWS エコシステムとシームレスに統合されており、IoT データを Amazon QuickSight などの BI ツール、AWS Glue や AWS Data Pipeline などの分析サービス、Amazon SageMaker などの AI/ML サービスに接続可能です。
-- **高度な地理空間機能**：Redshift は GEOMETRY および GEOGRAPHY 型を通じて地理空間データ型と関数をサポートし、ジオフェンシング、位置情報分析、ルート最適化を実現します。EMQX のリアルタイム取り込みと組み合わせることで、資産追跡、車両管理、位置ベースのイベントトリガーをほぼリアルタイムで行えます。
+- **柔軟なイベント処理**：EMQX のルールエンジンを活用し、Redshift はデバイスのライフサイクルイベント（接続、切断、ステータス変更）を低レイテンシで保存・処理可能です。Redshift の MPP クエリエンジンと組み合わせることで、障害検知、異常検知、長期利用傾向の分析を迅速に実施できます。
+- **メッセージ変換**：メッセージは EMQX のルールで広範な処理・変換を経て Redshift に書き込まれるため、保存データは初めから分析に適した形となります。この前処理によりクエリの複雑さを軽減し、下流処理の効率化を図れます。
+- **SQL テンプレートによる柔軟なデータ操作**：EMQX の SQL テンプレートマッピングを通じて、構造化された IoT データを Redshift のテーブルやカラムに挿入可能です。Redshift は PostgreSQL 互換 SQL、JSON 用の SUPER 型などの半構造化データ型、クエリ最適化のための高度なインデックスをサポートしています。カラムナストレージ、データ圧縮、ゾーンマップにより、大規模データのスキャン時間を短縮しクエリを高速化します。
+- **ビジネスプロセスとの統合**：Redshift は AWS エコシステムとシームレスに統合されており、IoT データを Amazon QuickSight などの BI ツール、AWS Glue や AWS Data Pipeline の分析サービス、Amazon SageMaker の AI/ML サービスに接続可能です。
+- **高度な地理空間機能**：Redshift は GEOMETRY、GEOGRAPHY 型を通じて地理空間データ型と関数をサポートし、ジオフェンシング、位置情報分析、ルート最適化を実現します。EMQX のリアルタイム取り込みと組み合わせることで、資産追跡、車両監視、位置情報ベースのイベントトリガーをほぼリアルタイムで行えます。
 - **組み込みのメトリクスと監視**：EMQX は各 Redshift シンクのランタイムメトリクスを提供し、Redshift は Amazon CloudWatch と連携してクラスターのパフォーマンス、クエリ実行メトリクス、ストレージ使用状況を監視可能です。これにより、取り込みから分析までのエンドツーエンドの可観測性を確保します。
 
 ## はじめる前に
 
-このセクションでは、Redshift 統合の作成を開始する前に必要な準備について説明します。Redshift クラスターの作成やデータベース・テーブルの準備方法を含みます。
+このセクションでは、Redshift 統合を作成する前に必要な準備、Redshift クラスターの作成、データベースおよびデータテーブルの作成方法について説明します。
 
 ### 前提条件
 
 - EMQX データ統合の[ルール](./rules.md)に関する知識
 - [データ統合](./data-bridges.md)に関する知識
 
-### Amazon Redshift でのデータベースとテーブルの作成
+### Amazon Redshift でのデータベースおよびテーブル作成
 
-EMQX で Redshift コネクターを設定する前に、Amazon Redshift クラスター（または Serverless ワークグループ）が稼働していること、および IoT データを格納するスキーマが準備されていることを確認してください。
+EMQX で Redshift コネクターを設定する前に、Amazon Redshift クラスター（または Serverless ワークグループ）が稼働中であり、IoT データを格納するスキーマが準備されていることを確認してください。
 
-1. Redshift クラスターまたはワークグループをデプロイします。環境構築には[Amazon Redshift クラスター作成ガイド](https://docs.aws.amazon.com/redshift/latest/mgmt/create-cluster.html)を参照してください。
+1. Redshift クラスターまたはワークグループをデプロイします。[Amazon Redshift クラスター作成ガイド](https://docs.aws.amazon.com/redshift/latest/mgmt/create-cluster.html)に従い環境を起動してください。
 
 2. データベースユーザーの認証情報を設定します。初期クラスター作成時に、プライマリユーザー（通常は `adminuser`）の管理者認証情報を指定します。
 
-   あるいは、Redshift SQL を使って EMQX 用の専用ユーザーを作成します。このユーザーは接続、テーブル作成、読み書き権限を持つ必要があります。例：
+   または、Redshift SQL を使って EMQX 用の専用ユーザーを作成します。このユーザーは接続、テーブル作成、読み書き権限を持つ必要があります。例：
 
    ```sql
    CREATE USER emqx_user PASSWORD 'YourStrongPassword1';
@@ -63,7 +63,7 @@ EMQX で Redshift コネクターを設定する前に、Amazon Redshift クラ�
 
    後で EMQX のコネクター設定に使用するため、ユーザー名（`emqx_user`）とパスワードを控えておいてください。
 
-3. `psql`、SQL Workbench/J、DBeaver などの PostgreSQL 互換クライアントを使用し、ホスト名、ポート、既存のデータベース名（例：デフォルトの `dev`）、ユーザー名、パスワードで[Redshift エンドポイントに接続](https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-syntax.html)します。
+3. `psql`、SQL Workbench/J、DBeaver などの PostgreSQL 互換クライアントを使い、ホスト名、ポート、既存のデータベース名（例：デフォルトの `dev`）、ユーザー名、パスワードで[Redshift エンドポイントに接続](https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-syntax.html)します。
 
 4. 接続後、EMQX からの IoT データ受け入れ先となるターゲットデータベース `emqx_data` を作成します。
 
@@ -71,9 +71,9 @@ EMQX で Redshift コネクターを設定する前に、Amazon Redshift クラ�
    CREATE DATABASE emqx_data;
    ```
 
-5. `emqx_data` データベースに接続し、MQTT メッセージおよびクライアントイベントデータを格納するための2つのテーブルを作成します。
+5. `emqx_data` データベースに接続し、MQTT メッセージおよびクライアントイベントデータを保存するための2つのテーブルを作成します。
 
-   - クライアント ID、トピック、ペイロード、作成日時を保存するメッセージ用データテーブル `t_mqtt_msg` を以下の SQL で作成します：
+   - クライアント ID、トピック、ペイロード、作成日時を保存するデータテーブル `t_mqtt_msg` の作成例：
 
      ```sql
      CREATE TABLE t_mqtt_msg (
@@ -83,13 +83,13 @@ EMQX で Redshift コネクターを設定する前に、Amazon Redshift クラ�
        topic  VARCHAR(255),
        qos    INTEGER,
        retain INTEGER,
-       -- ペイロードが JSON の場合は SUPER 型を検討、それ以外は大きな VARCHAR を使用
+       -- ペイロードが JSON の場合は SUPER、そうでなければ大きな VARCHAR を検討
        payload SUPER,
        arrived TIMESTAMPTZ
      );
      ```
 
-   - クライアントのオンライン／オフラインイベントをタイムスタンプ付きで保存する `emqx_client_events` テーブルを以下の SQL で作成します：
+   - クライアントのオンライン／オフラインイベントをタイムスタンプ付きで保存する `emqx_client_events` テーブルの作成例：
 
      ```sql
      CREATE TABLE emqx_client_events (
@@ -106,11 +106,11 @@ Redshift シンクを追加する前に、EMQX で Redshift コネクターを�
 
 ::: tip 注意
 
-Amazon Redshift Serverless を使用している場合、コネクターが作成されて接続が確立されると、データが書き込まれていなくても料金が発生する可能性があります。未使用のコネクターは削除するか、リソースを一時停止して予期せぬコストを回避してください。
+Amazon Redshift Serverless を使用している場合、コネクターが作成され接続が確立されると、データが書き込まれていなくても課金が発生する可能性があります。不要なコネクターは削除するか、リソースを一時停止して予期せぬコストを回避してください。
 
 :::
 
-1. EMQX ダッシュボードで、**Integration** -> **Connector** に移動します。
+1. EMQX ダッシュボードで **Integration** -> **Connector** に移動します。
 2. 画面右上の **Create** をクリックします。
 3. **Create Connector** ページで **Redshift** を選択し、**Next** をクリックします。
 4. コネクター名を入力します。名前は英数字で始まり、英数字、ハイフン、アンダースコアを含めることができます。例：`my_redshift`
@@ -122,12 +122,14 @@ Amazon Redshift Serverless を使用している場合、コネクターが作�
    - **Password**：`emqx_user` のパスワード
    - **Enable TLS**：Redshift 接続に SSL/TLS 暗号化が必要な場合はオンにします（クラウドサービス接続では推奨）。詳細は[外部リソースアクセスの TLS](../../guides/network/overview.md/#tls-for-external-resource-access)を参照してください。
 6. 詳細設定（任意）：接続プールサイズ、アイドルタイムアウト、リクエストタイムアウトなどの追加接続プロパティを設定可能です。詳細は[シンクの機能](./data-bridges.md#features-of-sink)を参照してください。
-7. **Test Connectivity** をクリックし、EMQX が指定設定で Redshift クラスターに正常に接続できるか確認します。
+7. **Test Connectivity** をクリックし、EMQX が指定した設定で Redshift クラスターに正常に接続できるか確認します。
+
 8. **Create** をクリックしてコネクターを保存します。
+
 9. 作成後、以下のいずれかを選択できます：
 
-   - **Back to Connector List** をクリックしてコネクター一覧を表示
-   - **Create Rule** をクリックして、このコネクターを使ったルールを即座に作成し、Redshift へのデータ転送を設定
+   - **Back to Connector List** をクリックしてすべてのコネクターを表示
+   - **Create Rule** をクリックして、このコネクターを使ったデータ転送ルールをすぐに作成
 
    詳細な例は以下を参照してください：
 
@@ -136,13 +138,13 @@ Amazon Redshift Serverless を使用している場合、コネクターが作�
 
 ## メッセージ保存用 Redshift シンクのルール作成
 
-このセクションでは、ダッシュボードでソース MQTT トピック `t/#` からのメッセージを処理し、処理済みデータを設定済みのシンクを通じて Redshift のテーブル `t_mqtt_msg` に保存するルールの作成方法を示します。
+このセクションでは、ダッシュボードでソース MQTT トピック `t/#` からのメッセージを処理し、処理済みデータを設定済みの Redshift シンク経由で `t_mqtt_msg` テーブルに保存するルールの作成方法を示します。
 
 1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
 2. 画面右上の **Create** をクリックします。
 
-3. ルール ID に `my_rule` を入力し、SQL エディターにルールを記述します。ここでは `t/#` トピックの MQTT メッセージを Redshift に保存するため、ルールの SELECT 節で SQL テンプレート内で使用する変数をすべて含めるようにします。ルール SQL は以下の通りです：
+3. ルール ID に `my_rule` を入力し、SQL エディターにルールを記述します。ここでは `t/#` トピックの MQTT メッセージを Redshift に保存するため、ルールの SELECT 部分で SQL テンプレートで使用するすべての変数を含むフィールドを選択してください。ルール SQL は以下の通りです：
 
    ```sql
    SELECT
@@ -153,21 +155,21 @@ Amazon Redshift Serverless を使用している場合、コネクターが作�
 
    ::: tip
 
-   初心者の方は **SQL Examples** をクリックし、**Enable Test** を有効にして SQL ルールの学習とテストを行えます。
+   初心者の方は **SQL Examples** をクリックし、**Enable Test** を有効にして SQL ルールの学習とテストを行うことができます。
 
    :::
 
-4. + **Add Action** ボタンをクリックし、ルールによってトリガーされるアクションを定義します。このアクションにより、EMQX はルールで処理されたデータを Redshift に送信します。
+4. + **Add Action** ボタンをクリックし、ルールでトリガーされるアクションを定義します。このアクションにより、EMQX はルールで処理したデータを Redshift に送信します。
 
-5. **Type of Action** ドロップダウンから Redshift を選択し、**Action** ドロップダウンはデフォルトの `Create Action` のままにするか、既存の Redshift アクションを選択します。本例では新規シンクを作成し、ルールに追加します。
+5. **Type of Action** ドロップダウンから Redshift を選択し、**Action** ドロップダウンはデフォルトの `Create Action` のままにするか、既存の Redshift アクションを選択します。この例では新規シンクを作成してルールに追加します。
 
 6. シンクの名前と説明を入力します。
 
-7. **Connector** ドロップダウンから先に作成した `my_redshift` を選択します。新規コネクターはドロップダウン横のボタンから作成可能です。設定パラメータは[Redshift コネクターの作成](#create-a-redshift-connector)を参照してください。
+7. **Connector** ドロップダウンから先ほど作成した `my_redshift` を選択します。新しいコネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメーターの詳細は[Redshift コネクターの作成](#create-a-redshift-connector)を参照してください。
 
-8. **SQL Template** を設定します。以下の SQL 文を使用してデータを挿入します。
+8. **SQL Template** を設定します。以下の SQL 文を使ってデータを挿入します。
 
-   注意：これは[プリプロセス済み SQL](./data-bridges.md#prepared-statement)のため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
+   注意：これは[プリペアドステートメント形式の SQL](./data-bridges.md#prepared-statement)のため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
    ```sql
    INSERT INTO t_mqtt_msg (
@@ -186,25 +188,25 @@ Amazon Redshift Serverless を使用している場合、コネクターが作�
    )
    ```
 
-9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリシンクがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
 10. **詳細設定（任意）**：詳細は[シンクの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-11. **Create** をクリックする前に、**Test Connectivity** をクリックし、シンクが Redshift サーバーに接続可能かテストできます。
+11. **Create** をクリックする前に、**Test Connectivity** をクリックしてシンクが Redshift サーバーに接続可能かテストできます。
 
 12. **Create** ボタンをクリックしてシンク設定を完了します。新しいシンクが **Action Outputs** に追加されます。
 
 13. **Create Rule** ページで設定内容を確認し、**Save** をクリックしてルールを生成します。
 
-ルール作成が完了すると、**Integration** -> **Rules** ページで新規ルールを確認でき、**Action (Sink)** タブで新規 Redshift シンクも確認できます。
+ルールが正常に作成されたら、**Integration** -> **Rules** ページで新規ルールを確認でき、**Action (Sink)** タブで新規の Redshift シンクも確認できます。
 
-また、**Integration** -> **Flow Designer** でトポロジーを可視化でき、`t/#` トピックのメッセージがルール `my_rule` によって解析され、Redshift に書き込まれている様子を確認できます。
+また、**Integration** -> **Flow Designer** でトポロジーを確認でき、トピック `t/#` のメッセージがルール `my_rule` によって解析され、Redshift に書き込まれていることを可視化できます。
 
 ## イベント記録用 Redshift シンクのルール作成
 
-このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みシンクを通じて Redshift のテーブル `emqx_client_events` に保存するルールの作成方法を示します。
+このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みの Redshift シンク経由で `emqx_client_events` テーブルに保存するルールの作成方法を示します。
 
-手順は[メッセージ保存用 Redshift シンクのルール作成](#create-a-rule-with-redshift-sink-for-message-storage)とほぼ同様ですが、SQL テンプレートと SQL ルール文が異なります。
+手順は[メッセージ保存用 Redshift シンクのルール作成](#create-a-rule-with-redshift-sink-for-message-storage)とほぼ同様ですが、SQL テンプレートと SQL ルールが異なります。
 
 オンライン／オフライン状態記録用の SQL ルール文は以下の通りです：
 
@@ -215,9 +217,9 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-イベント記録用の SQL テンプレートは以下の通りです。
+イベント記録用の SQL テンプレートは以下の通りです：
 
-注意：これは[プリプロセス済み SQL](./data-bridges.md#prepared-statement)のため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
+注意：これは[プリペアドステートメント形式の SQL](./data-bridges.md#prepared-statement)のため、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -229,13 +231,13 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 
 ## ルールのテスト
 
-MQTT クライアント MQTTX を使い、トピック `t/1` にメッセージを送信してオンライン／オフラインイベントをトリガーします。
+MQTTX を使い、トピック `t/1` にメッセージを送信してオンライン／オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Redshift" }'
 ```
 
-2つのシンクの稼働状況を確認します。メッセージ保存用シンクでは新規の受信メッセージと送信メッセージがそれぞれ1件ずつあるはずです。イベント記録用シンクでは2件のイベントレコードが確認できます。
+2つのシンクの稼働状況を確認します。メッセージ保存シンクでは新規の受信メッセージと送信メッセージがそれぞれ1件ずつあるはずです。イベント記録シンクでは2件のイベントレコードがあります。
 
 `t_mqtt_msg` データテーブルにデータが書き込まれているか確認します。
 

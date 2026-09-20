@@ -1,8 +1,8 @@
-# Go SDKによる接続
+# Go SDKで接続する
 
-[Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) は、Eclipse PahoプロジェクトのGo言語向けクライアントライブラリであり、MQTTブローカーに接続してメッセージをパブリッシュ、トピックをサブスクライブし、パブリッシュされたメッセージを受信できます。完全な非同期動作モードをサポートしています。
+[Eclipse Paho MQTT Go Client](https://github.com/eclipse/paho.mqtt.golang) は、Eclipse PahoプロジェクトのGo言語用クライアントライブラリであり、MQTTブローカーに接続してメッセージをパブリッシュし、トピックをサブスクライブしてパブリッシュされたメッセージを受信できます。完全な非同期動作モードをサポートしています。
 
-このクライアントはGoogleのソフトウェアパッケージである[proxy](https://godoc.org/golang.org/x/net/proxy)と[websockets](https://godoc.org/github.com/gorilla/websocket)に依存しており、以下のコマンドでインストール可能です。
+このクライアントはGoogleのソフトウェアパッケージである[proxy](https://godoc.org/golang.org/x/net/proxy)と[websockets](https://godoc.org/github.com/gorilla/websocket)に依存しており、以下のコマンドでインストールできます。
 
 ```bash
 go get github.com/eclipse/paho.mqtt.golang
@@ -10,7 +10,7 @@ go get github.com/eclipse/paho.mqtt.golang
 
 ## MQTT Go 使用例
 
-以下の例は、Go言語でPaho MQTTを使ってEMQXに接続し、メッセージの送受信を行う完全なコードです。
+以下の例は、Go言語でPaho MQTTを使ってEMQXに接続し、メッセージを送受信する完全なコードです。
 
 ```go
 package main
@@ -70,4 +70,4 @@ func main() {
 
 ## Paho Golang MQTT 5.0対応状況
 
-現時点でPaho GolangはMQTT 5.0に対応中であり、まだ完全なサポートは実装されていません。
+現時点で、Paho GolangはまだMQTT 5.0に対応中であり、完全なサポートはされていません。

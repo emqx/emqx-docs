@@ -1,19 +1,19 @@
 # Python SDK
 
-このガイドでは、[MCP over MQTT Python SDK](https://github.com/emqx/mcp-python-sdk) を使用して、シンプルな MCP over MQTT サーバーとクライアントを作成する方法を説明します。
+このガイドでは、[MCP over MQTT Python SDK](https://github.com/emqx/mcp-python-sdk) を使用して、シンプルなMCP over MQTTサーバーとクライアントを作成する方法を説明します。
 
 ## デモプロジェクトの作成
 
-[uv](https://docs.astral.sh/uv/) を使ってデモプロジェクトを作成しましょう。
+[uv](https://docs.astral.sh/uv/) を使ってデモプロジェクトを作成しましょう：
 
 ```bash
 uv init mcp_over_mqtt_demo
 cd mcp_over_mqtt_demo
 ```
 
-## シンプルな MCP サーバーの作成
+## シンプルなMCPサーバーの作成
 
-`mcp_over_mqtt_demo` プロジェクト内で、計算ツールといくつかのリソースを公開するシンプルな MCP サーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください。
+`mcp_over_mqtt_demo` プロジェクト内で、計算機ツールといくつかのリソースを公開するシンプルなMCPサーバーを作成します。`demo_mcp_server.py` というファイルを作成し、以下のコードを追加してください：
 
 ```python
 # demo_mcp_server.py
@@ -23,7 +23,7 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP(
     "demo_mcp_server/calculator",
     log_level="DEBUG",
-    mqtt_server_description="A simple FastMCP server that exposes a calculator tool",
+    mqtt_server_description="計算機ツールを公開するシンプルなFastMCPサーバー",
     mqtt_options={
         "host": "broker.emqx.io",
     },
@@ -42,9 +42,9 @@ def get_greeting(name: str) -> str:
     return f"Hello, {name}!"
 ```
 
-## シンプルな MCP クライアントの作成
+## シンプルなMCPクライアントの作成
 
-同じプロジェクト内で、サーバーに接続し利用可能なツールやリソースを一覧表示するシンプルな MCP クライアントを作成します。`demo_mcp_client.py` というファイルを作成し、以下のコードを追加してください。
+同じプロジェクト内で、サーバーに接続し利用可能なツールやリソースを一覧表示するシンプルなMCPクライアントを作成します。`demo_mcp_client.py` というファイルを作成し、以下のコードを追加してください：
 
 ```python
 # demo_mcp_client.py
@@ -57,7 +57,7 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-    logger.info(f"{server_name} を発見しました。接続中・・・")
+    logger.info(f"{server_name} を検出しました。接続中・・・")
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
@@ -81,7 +81,7 @@ async def on_mcp_connect(client, server_name, connect_result):
         logger.info(f"{server_name} のツール: {tools}")
         if tools[0].name == "add":
             result = await client.call_tool(server_name, name=tools[0].name, arguments={"a": 1, "b": 2})
-            logger.info(f"ツール add(a=1, b=2) を呼び出し、結果: {result}")
+            logger.info(f"add(a=1, b=2) ツールを呼び出し、結果: {result}")
 
 async def on_mcp_disconnect(client, server_name):
     logger.info(f"{server_name} から切断されました")
@@ -99,7 +99,7 @@ async def main():
     ) as client:
         client.start()
         while True:
-            ## MQTTトランスポートクライアントがバックグラウンドで動作している間に他の処理をシミュレートします...
+            ## MQTTトランスポートクライアントがバックグラウンドで動作している間に他の処理をシミュレート
             await anyio.sleep(20)
 
 if __name__ == "__main__":
@@ -108,23 +108,23 @@ if __name__ == "__main__":
 
 ## デモの実行
 
-1. 必要な依存関係をインストールします。
+1. 必要な依存関係をインストールします：
 
 ```bash
 uv add git+https://github.com/emqx/mcp-python-sdk --branch main
 uv add "mcp[cli]"
 ```
 
-2. クライアントを実行します。
+2. クライアントを実行します：
 
 ```bash
 uv run demo_mcp_client.py
 ```
 
-3. 新しいターミナルを開き、サーバーを実行します。
+3. 新しいターミナルを開いてサーバーを実行します：
 
 ```bash
 uv run mcp run --transport mqtt ./demo_mcp_server.py
 ```
 
-クライアントがサーバーより先に起動しても、サーバーを検出して接続します。クライアントは利用可能なツールやリソースを一覧表示し、`add` ツールをパラメータ `a=1`、`b=2` で呼び出します。
+クライアントがサーバーより先に起動しても、サーバーを検出して接続します。クライアントは利用可能なツールやリソースを一覧表示し、`add` ツールをパラメータ `a=1` と `b=2` で呼び出します。

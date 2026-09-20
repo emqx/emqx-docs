@@ -4,21 +4,21 @@ prev:
   link: '../get-started/llms-txt'
 ---
 
-# User Guides
+# ユーザーガイド
 
-Instructions on performing various EMQX operations.
+EMQXのさまざまな操作方法についての説明です。
 
-These guides help administrators and operators manage, configure, secure, monitor, and maintain EMQX deployments. The main contents in this chapter include:
+これらのガイドは、管理者や運用者がEMQXのデプロイメントを管理、設定、セキュリティ確保、監視、および保守するのに役立ちます。本章の主な内容は以下の通りです。
 
-- [Cluster Management](./cluster/create-cluster.md) covers how to create and manage an EMQX cluster, including cluster architecture, cluster security, load balancer configuration, node evacuation, cluster load rebalancing, and performance tuning.
-- [Configure EMQX](./configuration/configuration.md) provides basic information about the configuration file, configuration options, and references for detailed configurations.
-- [Namespace](./multi-tenancy/namespace-overview.md) explains how to logically group MQTT clients and manage tenant-level isolation, quotas, and rate limits within a shared EMQX cluster.
-- [REST API](./api.md) guides you on getting started with the HTTP management API exposed by EMQX for managing clients, topics, subscriptions, and more.
-- [Command Line Interface](./cli.md) introduces various startup and management commands supported by EMQX.
-- [Security Guide](./security-guide.md) covers network and TLS configuration, authentication, authorization, banned clients, flapping detection, identity governance, audit logs, rate limits, and backup and restore.
-- [MQTT Durable Sessions](./durability/durability_introduction.md) guides you to configure the Durable Sessions feature and set parameters for data replicas for high availability.
-- [EMQX Dashboard](./dashboard/introduction.md) provides a comprehensive introduction to the built-in management console in EMQX. You will learn how to manage and monitor EMQX clusters, configure various features, and use the required functionalities.
-- [Logs and Observability](./observability/overview.md) introduces metric observation and monitoring features in EMQX, facilitating system monitoring and debugging.
-- [Extensions](./extensions/introduction.md) helps you extend EMQX through extension mechanisms such as hooks and gRPC hooks.
-- [Plugins](./extensions/plugins.md) helps you develop, customize, manage, and use EMQX plugins.
-- [Telemetry](./telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product.
+- [クラスター管理](./cluster/create-cluster.md) では、EMQXクラスターの作成と管理方法について説明します。クラスターアーキテクチャ、クラスターセキュリティ、ロードバランサーの設定、ノードの退避、クラスターの負荷再分散、パフォーマンスチューニングなどを含みます。
+- [EMQXの設定](./configuration/configuration.md) では、設定ファイルの基本情報、設定オプション、および詳細設定のリファレンスを提供します。
+- [ネームスペース](./multi-tenancy/namespace-overview.md) では、MQTTクライアントを論理的にグループ化し、共有されたEMQXクラスター内でテナントレベルの分離、クォータ、レート制限を管理する方法を説明します。
+- [REST API](./api.md) では、クライアント、トピック、サブスクリプションなどの管理に利用できるEMQXが公開するHTTP管理APIの使い方を案内します。
+- [コマンドラインインターフェース](./cli.md) では、EMQXがサポートするさまざまな起動および管理コマンドを紹介します。
+- [セキュリティガイド](./security-guide.md) では、ネットワークおよびTLS設定、認証、認可、禁止クライアント、フラッピング検出、アイデンティティガバナンス、監査ログ、レート制限、バックアップおよびリストアについて解説します。
+- [MQTT耐久セッション](./durability/durability_introduction.md) では、耐久セッション機能の設定方法と高可用性のためのデータレプリカのパラメータ設定について案内します。
+- [EMQXダッシュボード](./dashboard/introduction.md) では、EMQXに組み込まれた管理コンソールの包括的な紹介を行います。EMQXクラスターの管理と監視、各種機能の設定、必要な機能の利用方法を学べます。
+- [ログと可観測性](./observability/overview.md) では、EMQXのメトリクス観測および監視機能を紹介し、システムの監視とデバッグを支援します。
+- [拡張機能](./extensions/introduction.md) では、フックやgRPCフックなどの拡張メカニズムを通じてEMQXを拡張する方法を説明します。
+- [プラグイン](./extensions/plugins.md) では、EMQXプラグインの開発、カスタマイズ、管理、および利用方法を案内します。
+- [テレメトリ](./telemetry/telemetry.md) では、製品改善のために使用情報を共有するテレメトリの有効化方法を説明します。
