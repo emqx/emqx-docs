@@ -1,19 +1,19 @@
 # Kotlin SDK
 
-このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCP サーバーを作成する方法を説明します。
+このガイドでは、Kotlin SDK を使用して MCP over MQTT 対応のシンプルな MCPサーバーを作成する方法を説明します。  
 リポジトリ：https://github.com/terry-xiaoyu/kotlin-sdk
 
 ## 環境構築
 
 ### Kotlin ツールチェーンのインストール
 
-以下のツールがインストールされていることを確認してください。
+以下のツールがインストールされていることを確認してください：
 
 - JDK 21以上
 - Kotlin 2.2以上
 - Gradle 9.2以上
 
-[SDKMAN](https://sdkman.io/) を使用すると、これらのツールを簡単にインストールおよび管理できます。
+これらのツールのインストールおよび管理には、[SDKMAN](https://sdkman.io/) の使用を推奨します：
 
 ```bash
 curl -s "https://get.sdkman.io" | bash
@@ -26,27 +26,27 @@ sdk install gradle 9.2.1
 
 ### EMQX のインストールと起動
 
-EMQX ブローカーのインストールおよび起動については、[Getting Started](../../../get-started/getting-started.md) ガイドに従ってください。
+[Getting Started](../../../get-started/getting-started.md) ガイドに従い、EMQX ブローカーをインストールして起動してください。
 
-## MCP サーバーのサンプルをダウンロードして実行する
+## MCPサーバーのサンプルをダウンロードして実行
 
-サンプルプロジェクトをクローンします。
+サンプルプロジェクトをクローンします：
 
 ```bash
 git clone https://github.com/terry-xiaoyu/kotlin-mcp-server-demo.git
 cd kotlin-mcp-server-demo
 ```
 
-このサンプルでは、以下の2つの MCP ツールを登録しています。
+このサンプルでは、以下の2つの MCPツールを登録しています：
 
 - **Calculator tool**：基本的な算術演算（加算、減算、乗算、除算）を提供します。
-- **Light control tool**：ライトのオン/オフ状態と明るさを制御します。
+- **Light control tool**：ライトのオン／オフ状態と明るさを制御します。
 
-ツール登録のコードはこちらで確認できます。
+ツール登録のコードはこちらで確認できます：  
 https://github.com/terry-xiaoyu/kotlin-mcp-server-demo/blob/e83d5166c5eefb3a45758623e3ee69f92cecb911/src/main/kotlin/io/modelcontextprotocol/sample/server/server.kt#L93
 
 ```bash
-// Calculator tool を追加
+// 電卓ツールを追加
 server.addTool(
     name = "calculator",
     description = "このツールは基本的な数学演算（加算、減算、乗算、除算）を実行できます。",
@@ -88,10 +88,10 @@ server.addTool(
     )
 }
 
-// Light control tool を追加
+// ライト制御ツールを追加
 server.addTool(
     name = "set_light_brightness",
-    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定します。明るさを 'last_value' に設定すると、前回の明るさに戻せます。これはライトがオフのときに再度オンにする場合に便利です。",
+    description = "パネル上のライトを制御します。明るさを変更できます。ライトを消すには明るさを0に設定してください。明るさを 'last_value' に設定すると、前回の明るさに戻せます。これはライトが消灯中に再度点灯させたい場合に便利です。",
     inputSchema = ToolSchema(
         properties = buildJsonObject {
             putJsonObject("value") {
@@ -110,7 +110,7 @@ server.addTool(
 }
 ```
 
-以下のコマンドで MCP サーバーのサンプルを起動します。
+以下のコマンドで MCPサーバーのサンプルを起動します：
 
 ```bash
 ./gradlew run --args="--mqtt kt001 demo/kotlin-mcp-server"
@@ -118,12 +118,12 @@ server.addTool(
 
 パラメーターの説明：
 
-- **MQTT クライアント ID**：`kt001`
-- **MCP サーバー名**：`demo/kotlin-mcp-server`
+- **MQTT クライアントID**：`kt001`
+- **MCPサーバー名**：`demo/kotlin-mcp-server`
 
-## MCP クライアントでテストする
+## MCPクライアントでのテスト
 
-現在、Kotlin SDK には MCP クライアントの実装がありません。テスト用に Python SDK を使ってシンプルな MCP クライアントを作成できます。
+現在、Kotlin SDK には MCPクライアントの実装は含まれていません。テスト用に Python SDK を使ってシンプルな MCPクライアントを作成できます。
 
 Python 環境のセットアップ：
 
@@ -135,7 +135,7 @@ uv add "mcp[cli]"
 source .venv/bin/activate
 ```
 
-`light_controller.py` というファイルを作成し、以下の内容を記述します。
+`light_controller.py` というファイルを作成し、以下の内容を記述してください：
 
 ```bash
 # light_controller.py
@@ -148,7 +148,7 @@ configure_logging(level="INFO")
 logger = logging.getLogger(__name__)
 
 async def on_mcp_server_discovered(client, server_name):
-    logger.info(f"{server_name} を検出しました。接続しています...")
+    logger.info(f"{server_name} を検出しました。接続中・・・")
     await client.initialize_mcp_server(server_name)
 
 async def on_mcp_connect(client, server_name, connect_result):
@@ -171,7 +171,7 @@ async def on_mcp_connect(client, server_name, connect_result):
                     arguments={"value": 50}
                 )
                 logger.info(
-                    f"set_light_brightness(value=50) ツールを呼び出しました。結果: {result}"
+                    f"set_light_brightness(value=50) を呼び出しました。結果: {result}"
                 )
 
 async def main():
@@ -187,17 +187,17 @@ async def main():
     ) as client:
         await client.start()
         while True:
-            # MQTT クライアントがバックグラウンドで動作している間、他の処理をシミュレート
+            # MQTTクライアントがバックグラウンドで動作している間に他の処理をシミュレート
             await anyio.sleep(20)
 
 if __name__ == "__main__":
     anyio.run(main)
 ```
 
-この Python クライアントは、`demo/kotlin-mcp-server` という MCP サーバーを自動検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します。
+この Pythonクライアントは、自動的に `demo/kotlin-mcp-server` という名前の MCPサーバーを検出し、`set_light_brightness` ツールを呼び出してライトの明るさを50に設定します：
 
 ```bash
-INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) ツールを呼び出しました。結果: meta=None
+INFO 2025-12-19 13:07:44,445 - set_light_brightness(value=50) を呼び出しました。結果: meta=None
                              content=[TextContent(type='text', text='ライトの明るさを 50% に設定しました',
                              annotations=None)] isError=False
 ```

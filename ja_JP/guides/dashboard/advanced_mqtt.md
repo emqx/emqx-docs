@@ -1,17 +1,17 @@
 # Advanced MQTT
 
-## Topic Rewrite
+## トピック書き換え
 
-Topic Rewrite機能は、デバイスの業務用トピックを変更することを可能にします。EMQXでルールを設定することで、サブスクライブまたはパブリッシュ時に元のトピックを新しいターゲットトピックに書き換えることができます。このページでは、設定ファイルを変更せずにダッシュボードからトピック書き換えルールを追加できます。詳細なトピック書き換えルールについては、[Topic Rewrite](../../get-started/messaging/mqtt-topic-rewrite.md)を参照してください。
+トピック書き換え機能は、デバイスの業務用トピックを変更することを可能にします。EMQXでルールを設定することで、サブスクライブ時やパブリッシュ時に元のトピックを新しいターゲットトピックに書き換えることができます。このページでは、設定ファイルを変更せずにダッシュボードからトピック書き換えルールを追加できます。詳細なトピック書き換えルールについては、[トピック書き換え](../../get-started/messaging/mqtt-topic-rewrite.md)を参照してください。
 
-## Auto-Subscription
+## 自動サブスクライブ
 
-Auto-subscriptionはEMQXがサポートするMQTT拡張機能です。デバイスが正常に接続した後、事前定義されたルールに基づき、追加のサブスクライブ要求なしにEMQXが自動的に指定されたトピックをサブスクライブします。このページでは、ダッシュボードからAuto-subscription機能を設定できます。詳細な設定方法については、[Auto-Subscription](../../get-started/messaging/mqtt-auto-subscription.md)を参照してください。
+自動サブスクライブは、EMQXがサポートするMQTT拡張機能です。デバイスが正常に接続した後に、追加のサブスクライブ要求を必要とせずに、あらかじめ定義されたルールに基づいて指定されたトピックに自動的にサブスクライブします。このページでは、ダッシュボードから自動サブスクライブ機能の設定が可能です。詳細な設定方法については、[自動サブスクライブ](../../get-started/messaging/mqtt-auto-subscription.md)を参照してください。
 
-## Delayed Publish
+## 遅延パブリッシュ
 
-Delayed publishはEMQXがサポートするMQTT拡張機能です。クライアントが特殊なトピックプレフィックス `$delayed/{DelayInterval}` を使用してメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされ、ユーザーが設定した遅延時間後にメッセージがパブリッシュされます。このページでは、ダッシュボードから遅延パブリッシュ機能を設定できます。詳細な設定方法については、[Configure Delayed Publish via Dashboard](../../get-started/messaging/mqtt-delayed-publish.md#configure-delayed-publish-via-dashboard)を参照してください。
+遅延パブリッシュは、EMQXがサポートするMQTT拡張機能です。クライアントが特殊なトピックプレフィックス `$delayed/{DelayInterval}` を使用してメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされ、ユーザー設定の遅延時間後にメッセージがパブリッシュされます。このページでは、ダッシュボードから遅延パブリッシュ機能の設定が可能です。詳細な設定方法については、[ダッシュボードからの遅延パブリッシュ設定](../../get-started/messaging/mqtt-delayed-publish.md#configure-delayed-publish-via-dashboard)を参照してください。
 
-## File Transfer
+## ファイル転送
 
-MQTTベースのファイル転送はEMQX Enterpriseの高度な機能です。EMQXはMQTTプロトコルを拡張し、クライアントデバイスがセンサーのデータや制御指示などのリアルタイム構造化データに加え、音声、映像、画像、診断ログなどのオフラインファイルデータを転送、管理、保存できるようにします。この機能はファイル転送ページで設定できます。詳細な設定方法については、[Enabling and Configuring File Transfer via Dashboard](../../develop/file-transfer/broker.md#enable-and-configure-file-transfer-via-dashboard)を参照してください。
+MQTTベースのファイル転送は、EMQX Enterpriseの高度な機能です。EMQXはMQTTプロトコルを拡張し、クライアントデバイスがセンサーのデータや制御指示などのリアルタイム構造化データに加えて、音声、動画、画像、診断ログなどのオフラインファイルデータを転送、管理、保存できるようにします。この機能はファイル転送ページで設定可能です。詳細な設定方法については、[ダッシュボードからのファイル転送有効化と設定](../../develop/file-transfer/broker.md#enable-and-configure-file-transfer-via-dashboard)を参照してください。

@@ -1,14 +1,15 @@
 # OperatorのインストールとEMQXのデプロイ
 
-本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを使用したEMQXのデプロイ手順について説明します。以下の手順に従うことで、Operatorを使って効率的かつ安定的にEMQXをインストールおよび管理できます。
+本セクションでは、EMQX Operatorの環境準備、Operatorのインストール、およびOperatorを使用したEMQXのデプロイ方法について説明します。以下の手順に従うことで、Operatorを用いて効率的かつ安定的にEMQXをインストールおよび管理できます。
 
 ## 環境の準備
 
 EMQX Operatorをデプロイする前に、以下のコンポーネントが準備されていることを確認してください。
 
-- Kubernetesバージョン1.24以上が稼働している[Kubernetes](https://kubernetes.io/docs/concepts/overview/)環境。
+- Kubernetesバージョン1.24以上が稼働している[Kubernetes](https://kubernetes.io/docs/concepts/overview/)環境
 
-- Kubernetesクラスターにアクセス可能な[kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)ツール。`kubectl cluster-info`コマンドでKubernetesクラスターの状態を確認できます。
+- Kubernetesクラスターにアクセス可能な[kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)ツール  
+  `kubectl cluster-info`コマンドでKubernetesクラスターの状態を確認できます。
 
 ## EMQX Operatorのインストール
 
@@ -18,7 +19,7 @@ EMQX Operatorをデプロイする前に、以下のコンポーネントが準�
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   このコマンドは最新の2.3.xリリースをダウンロードし、クラスター全体のEMQX CRDをインストールし、`emqx-operator-system`という別のネームスペースにコントローラーサービスをデプロイします。
+   このコマンドは最新の2.3.xリリースをダウンロードし、クラスター全体に適用されるEMQX CRDをインストールし、`emqx-operator-system`という別のネームスペースにコントローラーサービスをデプロイします。
 
 2. EMQX Operatorが準備完了になるまで待ちます。
 
@@ -57,7 +58,7 @@ Operatorが稼働したら、EMQXのデプロイに進めます。
    emqx      Ready     2m55s
    ```
 
-   `STATUS`が`Ready`になっていることを確認してください。EMQXクラスターが準備完了になるまでに時間がかかる場合があります。
+   `STATUS`が`Ready`であることを確認してください。EMQXクラスターが準備完了になるまでには時間がかかる場合があります。
 
 ## トラブルシューティング
 
@@ -67,7 +68,7 @@ EMQX OperatorはKubernetes APIに対して限定的なイベントのみを公�
 kubectl get events --sort-by=.lastTimestamp
 ```
 
-また、EMQXリソースが`Ready`ステータス条件に達しない場合は、詳細を確認するためにコントローラーマネージャーのログを参照してください。
+または、EMQXリソースが`Ready`状態にならない場合は、コントローラーマネージャーのログを確認してください。
 
 ```sh
 kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-operator-system
@@ -75,7 +76,7 @@ kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-op
 
 ## パブリッククラウドへのデプロイ
 
-EMQX Operatorを使用してマネージドKubernetesサービス上にEMQXをデプロイするためのガイドは以下をご参照ください。
+EMQX Operatorを使用してマネージドKubernetesサービス上にEMQXをデプロイする場合は、以下のガイドをご利用ください。
 
 - [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
 - [Google Cloud GKE](./gcp-gke.md)
