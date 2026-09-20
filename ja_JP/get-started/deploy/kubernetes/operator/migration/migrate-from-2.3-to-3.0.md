@@ -18,7 +18,7 @@ export OLD_EMQX=my-emqx
 export NEW_EMQX=my-emqx-v3
 ```
 
-## 1. Prepare for the migration
+## Prepare for the migration
 
 Before starting:
 
@@ -37,7 +37,7 @@ kubectl get emqx.apps.emqx.io --all-namespaces
 
 All listed resources must be included in the same maintenance event. Do not remove the CRD while another Operator 2.3 cluster still depends on it.
 
-## 2. Back up the existing cluster
+## Back up the existing cluster
 
 Save the existing custom resource and a list of its workloads. Keep these files outside the Kubernetes cluster so that you can use them for rollback:
 
@@ -82,7 +82,7 @@ Alternatively, create and download a global backup from **System** -> **Backup &
 
 The backup contains supported configuration, files from the EMQX data directory, and built-in database data such as authentication records, API keys, and retained messages. It does not contain the live MQTT state listed in the warning above. A good idea is to verify the archive by restoring it in a test environment before continuing.
 
-## 3. Convert the EMQX manifest
+## Convert the EMQX manifest
 
 Create a new manifest named `emqx-v3.yaml`. Use a different `metadata.name`, such as the value of `$NEW_EMQX`, so that Operator 3.0 does not mistake the orphaned Operator 2.3 workloads for its own resources.
 
@@ -142,7 +142,7 @@ kubectl get secret "$OLD_EMQX-bootstrap-api-key" \
 
 The global backup contains the Operator controller API-key record. Reusing the bootstrap Secret keeps that credential consistent when the record is restored. Do not copy the old node-cookie Secret or configure `node.cookie`. Operator 3.0 creates a new cookie for the independent cluster used by this walkthrough.
 
-## 4. Stop Operator 2.3 and preserve its workloads
+## Stop Operator 2.3 and preserve its workloads
 
 Scale the Operator 2.3 controller to zero. Adjust the namespace and Deployment name if you used a custom installation:
 
@@ -175,7 +175,7 @@ kubectl delete --ignore-not-found crd \
 
 Install Operator 3.0 by following [Install Operator and Deploy EMQX](../getting-started.md), but do not deploy the example EMQX resource from that page.
 
-## 5. Deploy and restore the new cluster
+## Deploy and restore the new cluster
 
 Validate and apply the converted manifest:
 
@@ -216,13 +216,13 @@ kubectl exec -n "$EMQX_NAMESPACE" "$NEW_EMQX_CORE_POD" -c emqx -- \
 
 Keep the converted `.spec.config.roots` as the source of truth for configuration. Run the readiness checks above again and verify that the import completed successfully before switching client traffic.
 
-## 6. Switch client traffic
+## Switch client traffic
 
 Run representative connection, authentication, publish, subscribe, retained message, rule, and integration tests against the new listener Service. Then update your load balancer, ingress, or DNS record to send new client connections to `<new-emqx-name>-listeners`.
 
 Treat this cutover as the session boundary. Clients might disconnect and must reconnect to the new cluster. Verify client reconnect behavior and monitor authentication failures, reconnect loops, and message flow before continuing.
 
-## 7. Complete the migration
+## Complete the migration
 
 After the acceptance period:
 

@@ -18,7 +18,7 @@ export OLD_EMQX=my-emqx
 export NEW_EMQX=my-emqx-v3
 ```
 
-## 1. 准备迁移
+## 准备迁移
 
 开始前，请完成以下准备工作：
 
@@ -37,7 +37,7 @@ kubectl get emqx.apps.emqx.io --all-namespaces
 
 列出的所有资源都必须纳入同一次维护操作。如果还有其他 Operator 2.3 集群依赖此 CRD，请勿删除该 CRD。
 
-## 2. 备份现有集群
+## 备份现有集群
 
 保存现有自定义资源及其工作负载列表。请将这些文件存放在 Kubernetes 集群外，以便用于回滚：
 
@@ -82,7 +82,7 @@ tar -tzf "./$EMQX_BACKUP_FILE" >/dev/null
 
 备份包含受支持的配置、EMQX 数据目录中的文件，以及认证记录、API 密钥和保留消息等内置数据库数据，但不包含上述警告中列出的实时 MQTT 状态。建议先在测试环境中恢复归档文件以验证备份，再继续迁移。
 
-## 3. 转换 EMQX 清单
+## 转换 EMQX 清单
 
 创建名为 `emqx-v3.yaml` 的新清单。为其设置不同的 `metadata.name`，例如 `$NEW_EMQX` 的值，以免 Operator 3.0 将已成为孤立资源的 Operator 2.3 工作负载误认为由自己管理的资源。
 
@@ -142,7 +142,7 @@ kubectl get secret "$OLD_EMQX-bootstrap-api-key" \
 
 全局备份包含 Operator 控制器的 API 密钥记录。复用引导 Secret 可以确保恢复该记录时凭据保持一致。请勿复制旧的 node-cookie Secret，也不要配置 `node.cookie`。Operator 3.0 会为本操作指南使用的独立集群创建新的 cookie。
 
-## 4. 停止 Operator 2.3 并保留其工作负载
+## 停止 Operator 2.3 并保留其工作负载
 
 将 Operator 2.3 控制器的副本数缩减为零。如果使用了自定义安装，请相应调整命名空间和 Deployment 名称：
 
@@ -175,7 +175,7 @@ kubectl delete --ignore-not-found crd \
 
 按照[安装 Operator 并部署 EMQX](../getting-started.md)中的步骤安装 Operator 3.0，但不要部署该页面中的 EMQX 示例资源。
 
-## 5. 部署并恢复新集群
+## 部署并恢复新集群
 
 验证并应用转换后的清单：
 
@@ -216,13 +216,13 @@ kubectl exec -n "$EMQX_NAMESPACE" "$NEW_EMQX_CORE_POD" -c emqx -- \
 
 继续将转换后的 `.spec.config.roots` 作为配置的权威来源。切换客户端流量前，请再次执行上述就绪检查，并确认导入已成功完成。
 
-## 6. 切换客户端流量
+## 切换客户端流量
 
 针对新的监听器 Service 执行具有代表性的连接、认证、发布、订阅、保留消息、规则和集成测试。然后更新负载均衡器、Ingress 或 DNS 记录，将新的客户端连接发送到 `<new-emqx-name>-listeners`。
 
 将此次流量切换视为新旧会话的分界点。客户端可能会断开连接，并且必须重新连接到新集群。继续操作前，请验证客户端重连行为，并监控认证失败、重复重连和消息流。
 
-## 7. 完成迁移
+## 完成迁移
 
 验收期结束后：
 
