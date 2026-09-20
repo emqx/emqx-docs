@@ -1,27 +1,26 @@
----
 # MQTT クライアント SDK
 
 ## SDKの例
 ### その他の例
 [More Examples](https://github.com/emqx/MQTT-Client-Examples)
 
-- ![c](./c.html) **C**  
+- **C**<br>
   MQTT C SDKの例  
   [詳細](./c.html)
 
-- ![java](./java.html) **Java**  
+- **Java**<br>
   MQTT Java SDKの例  
   [詳細](./java.html)
 
-- ![go](./go.html) **Golang**  
+- **Golang**<br>
   MQTT Go SDKの例  
   [詳細](./go.html)
 
-- ![python](./python.html) **Python**  
+- **Python**<br>
   MQTT Python SDKの例  
   [詳細](./python.html)
 
-- ![js](./javascript.html) **JavaScript**  
+- **JavaScript**<br>
   MQTT JavaScript SDKの例  
   [詳細](./javascript.html)
 
@@ -66,7 +65,5 @@
 - ![android](https://www.eclipse.org/paho/index.php?page=clients/android/index.php) **Android**  
   Eclipse Paho Android SDK  
   [詳細](https://www.eclipse.org/paho/index.php?page=clients/android/index.php)
-
----
 
 <CloudConnectionOverview />
