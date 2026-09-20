@@ -1,37 +1,39 @@
-# Security Guide
+# セキュリティガイド
 
-Security is a critical aspect of any MQTT-based application, and this guide is designed to help you understand and implement robust security measures in your EMQX deployments. This chapter explores various security-related topics, focusing on access control, authorization and network security using Transport Layer Security (TLS).
+セキュリティはMQTTベースのアプリケーションにおいて非常に重要な要素であり、本ガイドはEMQXのデプロイにおいて堅牢なセキュリティ対策を理解し実装するための支援を目的としています。本章では、アクセス制御、認可、そしてTransport Layer Security（TLS）を用いたネットワークセキュリティに焦点を当て、さまざまなセキュリティ関連のトピックを解説します。
 
-- [Security Checklist](./access-control/security-checklist.md)
+- [セキュリティチェックリスト](./access-control/security-checklist.md)
 
-  Use this production-oriented checklist to review listener exposure, TLS, authentication, authorization, secret handling, and monitoring before a rollout.
+  本番環境向けのチェックリストを用いて、リスナーの公開範囲、TLS、認証、認可、シークレット管理、および監視についてローンチ前に確認できます。
 
-- [Networking and TLS](./network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
+- [ネットワークとTLS](./network/overview.md)
 
-- [Load Secrets from a File](./configuration/secret-from-file.md)
+  EMQXがエンドツーエンドの暗号化通信をどのようにサポートしているか、SSL/TLS接続の有効化やSSL/TLS証明書の取得方法について説明します。
 
-  Use the `file://` prefix on any secret-typed configuration field to have EMQX read the value from a file at startup and on every reload, rather than embedding it directly in `emqx.conf` or an API request.
+- [ファイルからシークレットを読み込む](./configuration/secret-from-file.md)
 
-- [Authentication](./access-control/authn/authn.md)
+  `file://` プレフィックスをシークレット型の設定フィールドに付けることで、`emqx.conf`やAPIリクエストに直接埋め込む代わりに、EMQXが起動時およびリロード時にファイルから値を読み込みます。
 
-  Authentication is the process of verifying the identity of a client. It is essential to most applications and can help protect our services from illegal client connections. EMQX supports several authentication mechanisms to better protect our clients, including:
+- [認証](./access-control/authn/authn.md)
 
-  - X.509 certificate authentication
-  - Username/password authentication
-  - JWT authentication
-  - Enhanced authentication of MQTT 5.0
-  - PSK authentication
+  認証はクライアントの身元を検証するプロセスであり、多くのアプリケーションに不可欠で、不正なクライアント接続からサービスを保護します。EMQXは以下の複数の認証機構をサポートし、クライアントの保護を強化しています。
 
-  This section introduces how these authentication mechanisms work and how to configure them in EMQX.
+  - X.509証明書認証
+  - ユーザー名／パスワード認証
+  - JWT認証
+  - MQTT 5.0の拡張認証
+  - PSK認証
 
-- [Authorization](./access-control/authz/authz.md)
+  本節では、これらの認証機構の仕組みとEMQXでの設定方法を紹介します。
 
-  In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. This chapter will introduce how to use the built-in database, ACL file, or how to integrate with MySQL, PostgreSQL, MongoDB, or Redis to configure the authorization rules.
+- [認可](./access-control/authz/authz.md)
 
-- [Banned Clients](./access-control/blacklist.md)
+  EMQXにおける認可は、MQTTクライアントのパブリッシュ／サブスクライブ操作に対する権限管理を指します。本章では、組み込みデータベースやACLファイルの利用方法、さらにMySQL、PostgreSQL、MongoDB、Redisとの連携による認可ルールの設定方法を解説します。
 
-  EMQX provides a blacklisting/banning functionality. System admins can block certain clients from accessing EMQX via Dashboard or HTTP API with their client ID, user name, or IP address.
+- [禁止クライアント](./access-control/blacklist.md)
 
-- [Flapping Detect](./access-control/flapping-detect.md)
+  EMQXはブラックリスト／バン機能を提供しています。システム管理者はダッシュボードやHTTP APIを通じて、クライアントID、ユーザー名、またはIPアドレスを指定し、特定のクライアントのアクセスをブロックできます。
 
-  EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients.
+- [フラッピング検知](./access-control/flapping-detect.md)
+
+  EMQXは頻繁にログインを繰り返すクライアントを自動的にバンし、他のクライアントに影響を与える可能性のあるサーバーリソースの消費を防止します。

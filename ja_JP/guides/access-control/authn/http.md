@@ -1,6 +1,6 @@
 # HTTPサービスの利用
 
-EMQXは、パスワード認証に外部HTTPサービスを利用することをサポートしています。有効化すると、クライアントが接続リクエストを開始した際に、EMQXは受け取った情報をもとにHTTPリクエストを構築し、クエリ結果に基づいてリクエストの受け入れ可否を判断することで、複雑な認証ロジックを実現します。
+EMQXは、パスワード認証に外部HTTPサービスを利用することをサポートしています。有効化すると、クライアントが接続要求を開始した際に、EMQXは受け取った情報を使ってHTTPリクエストを構築し、クエリ結果に基づいて要求を受け入れるかどうかを判断し、複雑な認証ロジックを実現します。
 
 ::: tip 前提条件
 
@@ -15,10 +15,10 @@ EMQXは、パスワード認証に外部HTTPサービスを利用することを
 - レスポンスのエンコード形式 `content-type` は `application/json` である必要があります。
 - 認証結果はボディ内の `result` で示し、値は `allow`、`deny`、`ignore` のいずれかです。
 - スーパーユーザーはボディ内の `is_superuser` で示し、値は `true` または `false` です。
-- EMQX v5.7.0以降、オプションの `client_attrs` フィールドを使って[クライアント属性](../../../develop/client-attributes/client-attributes.md)を設定できます。キーと値はどちらも文字列である必要があります。
+- EMQX v5.7.0以降、オプションの `client_attrs` フィールドで[クライアント属性](../../../develop/client-attributes/client-attributes.md)を設定可能です。キーと値は両方とも文字列である必要があります。
 - EMQX v5.8.0以降、レスポンスボディにオプションの `acl` フィールドを設定してクライアントの権限を指定できます。詳細は[アクセスコントロールリスト（ACL）](./acl.md)を参照してください。
-- EMQX v5.8.0以降、レスポンスボディにオプションの `expire_at` フィールドを設定してクライアントの認証有効期限を指定できます。これによりクライアントは切断され、再接続時に再認証が必要になります。値は秒単位のUnixタイムスタンプです。
-- HTTPレスポンスのステータスコードは `200` または `204` が望ましく、`4xx/5xx` のステータスコードが返された場合はボディを無視し、結果を `ignore` として認証チェーンを継続します。
+- EMQX v5.8.0以降、レスポンスボディにオプションの `expire_at` フィールドを設定してクライアント認証の有効期限を指定できます。これによりクライアントは切断され、再接続時に再認証が強制されます。値は秒単位のUnixタイムスタンプです。
+- HTTPレスポンスのステータスコードは `200` または `204` であるべきです。`4xx/5xx` のステータスコードが返された場合はボディを無視し、結果は `ignore` と判断して認証チェーンを継続します。
 
 レスポンス例:
 
@@ -55,13 +55,13 @@ Body:
 ::: tip EMQX 4.x互換性について
 
 EMQX 4.xではHTTPステータスコードのみが使用され、ボディは破棄されます。例えば、`200` は `allow`、`403` は `deny` を意味します。
-表現力が不足しているため、HTTPボディを利用する形に再設計されており、EMQX 5.0とは互換性がありません。
+表現力の不足から、HTTPボディを利用する形に再設計されており、EMQX 5.0とは互換性がありません。
 
 :::
 
-## ダッシュボードでの設定
+## ダッシュボードによる設定
 
-EMQXダッシュボードを使って関連設定を行えます。
+EMQXダッシュボードを使って関連設定を行うことができます。
 
 1. EMQXダッシュボードの左ナビゲーションメニューから **Access Control** -> **Authentication** をクリックします。
 
@@ -71,46 +71,46 @@ EMQXダッシュボードを使って関連設定を行えます。
 
    <img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
-4. 以下の指示に従い認証バックエンドを設定します：
+4. 以下の指示に従って認証バックエンドを設定します：
 
-   - **Method**: HTTPリクエストメソッドを選択します。選択肢は `get`、`post` です。
+   - **Method**：HTTPリクエストメソッドを選択します。選択肢は `get`、`post` です。
 
      :::tip
 
-     `POST` メソッドを推奨します。`GET` メソッドを使用すると、平文パスワードなどの機密情報がHTTPサーバーログに露出する可能性があります。また、信頼できない環境ではHTTPSを使用してください。
+     `POST` メソッドの使用を推奨します。`GET` メソッドを使用すると、平文パスワードなどの機密情報がHTTPサーバーログに露出する可能性があります。また、信頼できない環境ではHTTPSを使用してください。
 
      :::
 
-   - **URL**: HTTPサービスのURLアドレスを入力します。
-   - **Precondition**: [Variform式](../../configuration/configuration.md#variform-expressions)で、このHTTPサーバー認証器をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証器が呼び出されます。詳細は[認証器の前提条件](./authn.md#authenticator-preconditions)を参照してください。
-   - **Headers**（オプション）: HTTPリクエストヘッダーです。複数のヘッダーを追加可能で、キーと値に[プレースホルダー](./authn.md#authentication-placeholders)を使用できます。
-   - **OAuth2 Client Credentials**: トグルスイッチをオンにすると、EMQXがアクセストークンを取得し、外部HTTP認証サービスへのリクエストにトークンを追加します。詳細は[OAuth2クライアント認証情報の設定](#configure-oauth2-client-credentials)を参照してください。
-   - **Enable TLS**: トグルスイッチをオンにすると、外部HTTP認証サービスへの接続にTLSを有効化します。この設定はOAuth2トークンエンドポイントのTLS設定とは独立しています。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
-   - **Body**: リクエストテンプレートです。`POST` リクエストの場合はJSONとしてリクエストボディに送信され、`GET` リクエストの場合はURLのクエリ文字列としてエンコードされます。マッピングのキーと値には[プレースホルダー](./authn.md#authentication-placeholders)を使用できます。
-   - **Advanced Settings**:
-     - **Pool size**（オプション）: EMQXノードからHTTPサーバーへの同時接続数を整数で指定します。デフォルトは `8` です。
-     - **Connect Timeout**（オプション）: EMQXが接続タイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
-     - **HTTP Pipelining**（オプション）: 応答を待たずに送信可能なHTTPリクエストの最大数を正の整数で指定します。デフォルトは `100` です。
-     - **Request Timeout**（オプション）: EMQXがリクエストタイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
+   - **URL**：HTTPサービスのURLアドレスを入力します。
+   - **Precondition**：このHTTPサーバー認証器をクライアント接続に適用するか制御するための[Variform式](../../configuration/configuration.md#variform-expressions)です。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価されます。式の評価結果が文字列 `"true"` の場合のみ認証器が呼び出され、それ以外はスキップされます。詳細は[認証器の前提条件](./authn.md#authenticator-preconditions)を参照してください。
+   - **Headers**（オプション）：HTTPリクエストヘッダー。複数追加可能です。キーと値は[プレースホルダー](./authn.md#authentication-placeholders)を使用できます。
+   - **OAuth2 Client Credentials**：トグルをオンにすると、EMQXがアクセストークンを取得し、外部HTTP認証サービスへのリクエストに追加します。詳細は[OAuth2クライアント認証情報の設定](#configure-oauth2-client-credentials)を参照してください。
+   - **Enable TLS**：トグルをオンにすると、外部HTTP認証サービスへの接続にTLSを有効化します。この設定はOAuth2トークンエンドポイントのTLS設定とは独立しています。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
+   - **Body**：リクエストテンプレート。`POST` リクエストの場合はJSON形式でリクエストボディに送信され、`GET` リクエストの場合はURLのクエリ文字列にエンコードされます。マッピングのキーと値は[プレースホルダー](./authn.md#authentication-placeholders)を使用可能です。
+   - **詳細設定**：
+     - **Pool size**（オプション）：EMQXノードからHTTPサーバーへの同時接続数を整数で指定します。デフォルトは `8` です。
+     - **Connect Timeout**（オプション）：EMQXが接続タイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
+     - **HTTP Pipelining**（オプション）：レスポンスを待たずに送信できる最大HTTPリクエスト数を正の整数で指定します。デフォルトは `100` です。
+     - **Request Timeout**（オプション）：EMQXがリクエストタイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。
 
 5. 設定が完了したら **Create** をクリックします。
 
 ### OAuth2クライアント認証情報の設定
 
-EMQX 6.0.4以降、HTTP認証器はOAuth 2.0のクライアントクレデンシャルズグラントをサポートしています。OAuth2を有効にすると、EMQXは設定されたトークンエンドポイントからアクセストークンを取得・キャッシュ・自動更新します。外部HTTP認証サービス呼び出し時には、`Authorization: Bearer <access_token>` ヘッダーにトークンを付与し、外部サービスはこれによりEMQXを認証できます。
+EMQX 6.0.4以降、HTTP認証器はOAuth 2.0のクライアントクレデンシャルズグラントをサポートしています。OAuth2を有効にすると、EMQXは設定されたトークンエンドポイントからアクセストークンを取得・キャッシュ・自動更新します。外部HTTP認証サービス呼び出し時には、`Authorization: Bearer <access_token>` ヘッダーにトークンを付与し、外部サービス側でEMQXを認証可能にします。
 
 **OAuth2 Client Credentials** をオンにし、以下の設定を行います：
 
-| ダッシュボード設定 | 説明 |
+| ダッシュボード設定項目 | 説明 |
 | --- | --- |
-| **Token Endpoint** | 必須。アクセストークンを要求するOAuth2認可サーバーのエンドポイント。URLはHTTPまたはHTTPSで、ユーザー情報を含まない必要があります。 |
-| **Client ID** | 必須。アクセストークンを要求するOAuth2クライアントID。 |
-| **Client Secret** | 必須。アクセストークンを要求するOAuth2クライアントシークレット。 |
+| **Token Endpoint** | 必須。アクセストークンを要求するOAuth2認可サーバーのエンドポイント。URLはHTTPまたはHTTPSで、ユーザー情報を含んではいけません。 |
+| **Client ID** | 必須。アクセストークン取得に使用するOAuth2クライアントID。 |
+| **Client Secret** | 必須。アクセストークン取得に使用するOAuth2クライアントシークレット。 |
 | **Scope** | オプション。アクセストークンに要求するOAuth2スコープ。 |
 | **Token Request Timeout** | トークンエンドポイントへのHTTPリクエストのタイムアウト。デフォルトは `5` 秒です。 |
-| **Enable TLS** | トグルスイッチをオンにするとトークンエンドポイントへのTLSを有効化します。この設定は外部HTTP認証サービスのTLS設定とは独立しています。 |
+| **Enable TLS** | トグルをオンにするとトークンエンドポイントへのTLSを有効化します。この設定は外部HTTP認証サービスのTLS設定とは独立しています。 |
 
-EMQXは `application/x-www-form-urlencoded` コンテンツタイプで `POST` リクエストをトークンエンドポイントに送信します。リクエストボディには `grant_type`、`client_id`、`client_secret`、およびオプションの `scope` が含まれます。トークンエンドポイントは `200` レスポンスでJSONボディに `access_token` を返す必要があります。`token_type` と `expires_in` も返すことができ、存在する場合は `token_type` は `Bearer`、`expires_in` は正の整数である必要があります。例：
+EMQXは `application/x-www-form-urlencoded` のコンテンツタイプで `POST` リクエストをトークンエンドポイントに送信します。リクエストボディには `grant_type`、`client_id`、`client_secret`、およびオプションの `scope` が含まれます。トークンエンドポイントは `200` レスポンスでJSONボディに `access_token` を返す必要があります。`token_type` と `expires_in` も返すことができます。存在する場合、`token_type` は `Bearer`、`expires_in` は正の整数でなければなりません。例：
 
 ```json
 {
@@ -122,16 +122,16 @@ EMQXは `application/x-www-form-urlencoded` コンテンツタイプで `POST` �
 
 ::: warning 重要なお知らせ
 
-- OAuth2を有効にしている場合、HTTP認証器の設定で `Authorization` ヘッダーを設定しないでください。EMQXは自動生成されるBearer認証ヘッダーと競合するため設定を拒否します。
+- OAuth2を有効にした場合、HTTP認証器の設定で `Authorization` ヘッダーを設定しないでください。EMQXは自動生成されるBearer認証ヘッダーと競合するため設定を拒否します。
 - トークンエンドポイントはクライアントIDとクライアントシークレットをリクエストボディのフォームフィールドとして受け入れる必要があります。HTTP Basic認証ヘッダーによる認証はサポートされていません。
 
 :::
 
-## 設定項目による設定
+## 設定ファイルによる設定
 
-EMQXの設定項目を使ってHTTP認証器を設定できます。 <!--詳細は[authn-http:post](../../configuration/configuration-manual.html#authn-http:post)および[authn-http:get](../../configuration/configuration-manual.html#authn-http:get)を参照してください。-->
+EMQXの設定ファイルでHTTP認証器を設定できます。<!--詳細は[authn-http:post](../../configuration/configuration-manual.html#authn-http:post)および[authn-http:get](../../configuration/configuration-manual.html#authn-http:get)を参照してください。-->
 
-以下はHTTPの `POST` と `GET` リクエストの例です：
+以下はHTTPの `POST` および `GET` リクエストの例です：
 
 :::: tabs type:card
 
@@ -184,7 +184,7 @@ EMQXの設定項目を使ってHTTP認証器を設定できます。 <!--詳細�
 
 ### OAuth2クライアント認証情報の設定
 
-EMQX 6.0.4以降、HTTP認証器の設定に `oauth2` ブロックを追加してOAuth2クライアント認証情報を有効にできます。`method`、`url`、`body`、`headers` と同じ階層に配置します：
+EMQX 6.0.4以降、HTTP認証器設定に `oauth2` ブロックを追加してOAuth2クライアント認証情報を有効化できます。`method`、`url`、`body`、`headers` と同じ階層に配置してください：
 
 ```hocon
 oauth2 {
@@ -201,4 +201,4 @@ oauth2 {
 }
 ```
 
-認可サーバーがスコープを要求しない場合は `scope` を省略してください。リクエスト形式や制約については[OAuth2クライアント認証情報の設定](#configure-oauth2-client-credentials)を参照してください。
+認可サーバーがスコープを要求しない場合は `scope` を省略してください。リクエスト形式や制限事項は[OAuth2クライアント認証情報の設定](#configure-oauth2-client-credentials)を参照してください。

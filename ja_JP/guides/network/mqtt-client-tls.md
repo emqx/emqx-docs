@@ -1,6 +1,6 @@
 # クライアントTLS接続コード例
 
-EMQXは、[MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples) Gitリポジトリを通じて、サンプルのMQTTクライアントコードおよびプロジェクト例を提供しており、TLSの使用方法も例に含まれています。
+EMQXは、[MQTT-Client-Examples](https://github.com/emqx/MQTT-Client-Examples) Gitリポジトリを通じて、サンプルのMQTTクライアントコードおよびプロジェクト例を提供しており、TLSの使用ガイドも例内に含まれています。
 
 - [Android](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Android)
 - [Csharp-MqttNet](https://github.com/emqx/MQTT-Client-Examples/tree/master/mqtt-client-Csharp-MqttNet)

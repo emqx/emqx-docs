@@ -1,99 +1,101 @@
-# EMQX Clustering
+# EMQX クラスタリング
 
-EMQX Clustering refers to the deployment of multiple EMQX nodes working together as a unified system. These nodes automatically share client sessions, topic subscriptions, and routing information, enabling seamless message delivery and horizontal scalability.
+EMQX クラスタリングとは、複数の EMQX ノードが連携して統一されたシステムとして動作するデプロイメントを指します。これらのノードはクライアントのセッション、トピックのサブスクリプション、およびルーティング情報を自動的に共有し、シームレスなメッセージ配信と水平スケーラビリティを実現します。
 
-::: tip Note
+::: tip 注意
 
-The clustering feature is available during the trial period. After the trial ends, a Commercial License is required; otherwise, the feature will be disabled.
+クラスタリング機能はトライアル期間中に利用可能です。トライアル終了後は商用ライセンスが必要であり、ライセンスがない場合は機能が無効化されます。
 
 :::
 
-本章では、[クラスタリングの利点](#why-use-emqx-clustering)、新しい[Mria と RLOG](./mria-introduction.md) アーキテクチャ、[クラスタの手動・自動作成方法](../../guides/cluster/create-cluster.md)、[ロードバランシングの実装方法](../../guides/cluster/lb.md)、およびクラスタ内の[通信セキュリティの確保方法](../../guides/cluster/security.md)について紹介します。
+本章では、[クラスタリングの利点](#why-use-emqx-clustering)、新しい[Mria と RLOG](./mria-introduction.md) アーキテクチャ、[クラスタの手動および自動作成方法](../../guides/cluster/create-cluster.md)、[ロードバランシングの実装方法](../../guides/cluster/lb.md)、およびクラスタ内の[通信セキュリティの確保方法](../../guides/cluster/security.md)について紹介します。
 
-This architecture is ideal for large-scale, mission-critical IoT and messaging platforms built on MQTT.
+このアーキテクチャは、MQTT を基盤とした大規模かつミッションクリティカルな IoT およびメッセージングプラットフォームに最適です。
 
-## Chapter Preview
+## 章のプレビュー
 
-This chapter provides a comprehensive overview of EMQX clustering and how to apply it in real-world deployments. You'll learn about:
+本章では、EMQX クラスタリングの包括的な概要と実際のデプロイメントへの適用方法を解説します。以下の内容を学べます：
 
 - [クラスタリングの利点](#why-use-emqx-clustering)
 - [EMQX クラスタリングの動作原理](#how-clustering-in-emqx-works)
 - [Mria と RLOG アーキテクチャ](./mria-introduction.md)
-- [クラスタの手動・自動作成方法](../../guides/cluster/create-cluster.md)
-- [ノード間通信のセキュリティ確保](../../guides/cluster/security.md)
+- [クラスタの手動および自動作成方法](../../guides/cluster/create-cluster.md)
+- [ノード間通信のセキュリティ確保方法](../../guides/cluster/security.md)
 - [ロードバランシングの実装方法](../../guides/cluster/lb.md)
-- [クラスタ負荷のリバランスとノードの退避](../../guides/cluster/rebalancing.md)
-- [システムチューニングとパフォーマンステスト](../../guides/performance/overview.md)
+- [クラスタの負荷再分散とノードの退避方法](../../guides/cluster/rebalancing.md)
+- [システムチューニングとパフォーマンステストの実施方法](../../guides/performance/overview.md)
 
-Whether you're building a highly available MQTT platform or preparing for production scale, this guide will help you get started with confidence.
+高可用性の MQTT プラットフォーム構築や本番規模の準備に役立つガイドです。
 
-## Why Use EMQX Clustering
+## なぜ EMQX クラスタリングを使うのか
 
-EMQX clustering is designed for large-scale and mission-critical applications that demand reliability, scalability, and performance. It offers the following key benefits:
+EMQX クラスタリングは、信頼性、スケーラビリティ、およびパフォーマンスを求められる大規模かつミッションクリティカルなアプリケーション向けに設計されています。主な利点は以下の通りです：
 
-- **Scalability**: Easily scale your deployment by adding more nodes, allowing EMQX to handle growing numbers of MQTT clients and messages without service disruption.
-- **High Availability**: The distributed architecture ensures no single point of failure. If one or more nodes go offline, the system continues operating seamlessly.
-- **Load Balancing**: MQTT traffic and client sessions can be distributed across nodes, helping to prevent bottlenecks and maximize hardware utilization.
-- **Centralized Management**: All nodes can be managed and monitored from a single Dashboard or API endpoint, simplifying operations and maintenance.
-- **Data Consistency and Security**: Session and routing states are automatically replicated across nodes, ensuring consistency and preserving secure communication across the cluster.
+- **スケーラビリティ**：ノードを追加することで容易にデプロイメントを拡張でき、EMQX は増加する MQTT クライアントとメッセージをサービス停止なしに処理可能です。
+- **高可用性**：分散アーキテクチャにより単一障害点がなく、1つ以上のノードがオフラインになってもシステムは継続して動作します。
+- **ロードバランシング**：MQTT トラフィックやクライアントセッションをノード間で分散し、ボトルネックを防ぎハードウェアの利用効率を最大化します。
+- **集中管理**：すべてのノードは単一のダッシュボードまたは API エンドポイントから管理・監視でき、運用と保守を簡素化します。
+- **データの一貫性とセキュリティ**：セッションおよびルーティング状態はノード間で自動的に複製され、一貫性を保ちつつクラスタ全体で安全な通信を維持します。
 
-## How Clustering in EMQX Works
+## EMQX クラスタリングの動作原理
 
-An EMQX cluster consists of multiple nodes, each running an instance of EMQX. These nodes work together to route messages, manage MQTT sessions, and ensure high availability and scalability. Each node communicates with others to share client subscriptions and routing information, ensuring that messages reach all relevant subscribers regardless of which node they are connected to.
+EMQX クラスターは複数のノードで構成され、各ノードは EMQX のインスタンスを実行しています。これらのノードは連携してメッセージのルーティング、MQTT セッションの管理、高可用性とスケーラビリティの確保を行います。各ノードは他のノードと通信し、クライアントのサブスクリプションやルーティング情報を共有することで、どのノードに接続されているクライアントにもメッセージが届くようにします。
 
-This distributed design allows EMQX to support mission-critical messaging systems with minimal downtime and flexible expansion.
+この分散設計により、EMQX は最小限のダウンタイムでミッションクリティカルなメッセージングシステムをサポートし、柔軟な拡張が可能です。
 
-### Cluster Architecture Evolution
+### クラスタアーキテクチャの進化
 
-#### Before EMQX 5.0: Mnesia-Based Clustering
+#### EMQX 5.0 以前：Mnesia ベースのクラスタリング
 
-Early versions of EMQX relied on Erlang/OTP's built-in Mnesia database and a full-mesh topology. Each node maintained direct TCP connections to all other nodes using the Erlang distribution protocol (default port: 4370), forming a tightly coupled system.
+初期の EMQX バージョンは Erlang/OTP の組み込みデータベースである Mnesia とフルメッシュトポロジーを利用していました。各ノードは Erlang 分散プロトコル（デフォルトポート：4370）を用いて他のすべてのノードと直接 TCP 接続を維持し、密結合のシステムを形成していました。
 
 <img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 40%;" />
 
-However, this model had the following limitations:
+しかし、このモデルには以下の制約がありました：
 
-- High synchronization overhead as the cluster size increased
-- Risk of instability in clusters larger than 5 nodes
-- Limited scalability, typically addressed via vertical scaling
+- クラスタサイズの増加に伴う高い同期オーバーヘッド
+- 5 ノードを超えるクラスタでの不安定性リスク
+- 垂直スケーリングによる対応が主でスケーラビリティに限界があった
 
-> EMQX 4.3 achieved 10 million concurrent connections in benchmark tests; however, this required extensive tuning and high-performance hardware. See the [performance report](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report) for details.
+> EMQX 4.3 はベンチマークテストで 1,000 万同時接続を達成しましたが、これは大規模なチューニングと高性能ハードウェアを必要としました。詳細は[パフォーマンスレポート](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)をご覧ください。
 
-#### EMQX 5.0 and Later: Mria + RLOG
+#### EMQX 5.0 以降：Mria + RLOG
 
-バージョン 5.0 からは、新しい[Mria クラスタアーキテクチャ](./mria-introduction.md)を導入し、より大規模で安定したクラスタをサポートしています。
+バージョン 5.0 からは、新しい[Mria クラスタアーキテクチャ](./mria-introduction.md)が導入され、より大規模かつ安定したクラスタをサポートしています。
 
+主な変更点は以下の通りです：
 
+- **Core ノードと Replicant ノードの役割分担**：Core ノードは書き込みと完全なデータ複製を担当し、Replicant ノードは読み取り専用でクライアントセッションを処理します。
+- **レプリケーションログ（RLOG）**：Core から Replicant への非同期かつ高スループットなデータ複製を可能にします。
+- **スケーラビリティ**：1 クラスタあたり最大 1 億 MQTT 接続をサポートします。
 
 <img src="./assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:40%;" />
 
+::: tip 注意
 
-
-::: tip Note
-
-While there is no strict upper limit, it is advisable to limit the cluster size to three nodes in the open-source edition of EMQX. Using only core-type nodes, a smaller cluster size typically ensures greater stability.
+厳密な上限はありませんが、EMQX オープンソース版ではクラスタサイズを 3 ノードに制限することを推奨します。Core タイプのノードのみを使用した小規模クラスタの方が安定性が高い傾向にあります。
 
 :::
 
-To support this architecture, EMQX relies on Erlang/OTP and a set of internal data structures for routing and delivery. The sections [Erlang/OTP Foundation](#erlang/otp-foundation) and [Cluster Data Structures](#cluster-data-structures) explain the runtime foundation and how these structures operate in the cluster.
+このアーキテクチャを支えるために、EMQX は Erlang/OTP とルーティング・配信のための内部データ構造群を利用しています。[Erlang/OTP の基礎](#erlangotp-foundation) と [クラスタデータ構造](#cluster-data-structures) の節で、ランタイムの基盤とこれらの構造がクラスタ内でどのように機能するかを説明します。
 
-### Erlang/OTP Foundation
+### Erlang/OTP の基礎
 
-EMQX is built on [Erlang/OTP](https://www.erlang.org/), a runtime and framework originally designed for building distributed telecom systems. In Erlang, each runtime instance is called a **node**, identified by a name in the format `<name>@<host>`, such as: `emqx1@192.168.0.10`.
+EMQX は分散型通信システム構築向けに設計されたランタイムおよびフレームワークである [Erlang/OTP](https://www.erlang.org/) 上に構築されています。Erlang では各ランタイムインスタンスを **ノード** と呼び、`<name>@<host>` 形式の名前で識別します。例：`emqx1@192.168.0.10`。
 
-Erlang nodes connect via TCP and use lightweight message passing to communicate. This forms the basis for EMQX clustering. Each node must use the same cookie for authentication. Once a connection is established and authenticated, a node can join the EMQX cluster automatically. In EMQX 5.x and later, the node's role (Core or Replicant) determines how it participates in data replication and routing.
+Erlang ノードは TCP 経由で接続し、軽量なメッセージパッシングで通信します。これが EMQX クラスタリングの基盤となります。各ノードは認証のために同じ cookie を使用しなければなりません。接続と認証が完了すると、ノードは自動的に EMQX クラスタに参加できます。EMQX 5.x 以降では、ノードの役割（Core または Replicant）がデータ複製やルーティングへの参加方法を決定します。
 
-### Cluster Data Structures
+### クラスタデータ構造
 
-To efficiently route messages in a distributed cluster, EMQX uses three key internal data structures: the subscription table, routing table, and topic tree. These structures work together to ensure that messages are correctly matched to subscribers, even when clients are distributed across many nodes.
+分散クラスタ内で効率的にメッセージをルーティングするために、EMQX はサブスクリプションテーブル、ルーティングテーブル、トピックツリーという3つの主要な内部データ構造を使用します。これらは連携して、クライアントが多数のノードに分散していてもメッセージが正しくサブスクライバーにマッチングされることを保証します。
 
-#### Subscription Table (partitioned)
+#### サブスクリプションテーブル（パーティション化）
 
- Each EMQX node maintains a local subscription table that maps MQTT topics to clients directly connected to that node. The data is partitioned because each node only stores subscriptions for its own clients, reducing overhead and improving scalability.
+各 EMQX ノードはローカルのサブスクリプションテーブルを保持し、MQTT トピックとそのノードに直接接続されたクライアントをマッピングしています。データはパーティション化されており、各ノードは自身のクライアントのサブスクリプションのみを保持するため、オーバーヘッドが減りスケーラビリティが向上します。
 
-When a message is routed to a node, that node uses its subscription table to determine which of its local clients should receive the message.
+メッセージがノードにルーティングされると、そのノードはサブスクリプションテーブルを参照してローカルクライアントへの配信先を決定します。
 
-Example structure:
+例：
 
 ```
 node1:
@@ -104,15 +106,15 @@ node2:
     topic1 -> client4
 ```
 
-This example shows how the same topic (`topic1`) can have subscribers on multiple nodes, while each node manages its own local mappings independently.
+この例は、同じトピック (`topic1`) に複数ノードでサブスクライバーが存在しつつ、各ノードが独自にローカルマッピングを管理していることを示しています。
 
-#### Routing Table (replicated from Core)
+#### ルーティングテーブル（Core から複製）
 
-The routing table tracks which topics are subscribed to on which nodes. In EMQX 5.x, this table is maintained and replicated only by Core nodes. Replicant nodes receive read-only copies via the RLOG mechanism.
+ルーティングテーブルはどのトピックがどのノードでサブスクライブされているかを追跡します。EMQX 5.x ではこのテーブルは Core ノードのみが管理・複製し、Replicant ノードは RLOG 機構を通じて読み取り専用のコピーを受け取ります。
 
-When a client subscribes to a topic on any node (usually a replicant), the subscription event is forwarded to a Core node, which updates the cluster-wide routing table and replicates it to all nodes.
+クライアントが任意のノード（通常は Replicant）でトピックをサブスクライブすると、そのイベントは Core ノードに転送され、クラスタ全体のルーティングテーブルが更新・複製されます。
 
-Example structure:
+例：
 
 ```
 topic1 -> node1, node2
@@ -120,109 +122,109 @@ topic2 -> node3
 topic3 -> node2, node4
 ```
 
-#### Topic Tree (replicated from Core)
+#### トピックツリー（Core から複製）
 
-トピックツリーは階層構造で、パブリッシュされたトピックとサブスクリプションパターン（[MQTT ワイルドカード](../../get-started/mqtt-basics.md#mqtt-topics-and-wildcards)の `+` と `#` を含む）をマッチングします。これにより複雑なトピックフィルターを高速に解決可能です。
+トピックツリーは階層構造で、パブリッシュされたトピックとサブスクリプションパターン（[MQTT ワイルドカード](../../get-started/mqtt-basics.md#mqtt-topics-and-wildcards) の `+` と `#` を含む）をマッチングするために使われます。これにより EMQX は複雑なトピックフィルターを高速に解決できます。
 
-Like the routing table, the topic tree is replicated by Core nodes and shared with Replicant nodes. When a new subscription arrives (e.g., `client1` subscribes to `t/+/x`), the topic tree is updated on all nodes to include this pattern. When a client subscribes to a new pattern (e.g., `t/+/x`), the update is handled by a Core node and then replicated.
+ルーティングテーブル同様、トピックツリーも Core ノードが複製し Replicant ノードと共有します。新しいサブスクリプション（例：`client1` が `t/+/x` をサブスクライブ）を受けると、トピックツリーは全ノードで更新されます。更新は Core ノードで処理され複製されます。
 
-Example topic–subscription mapping:
+トピック・サブスクリプションの例：
 
-| Client  | Node  | Subscribed topic |
-| ------- | ----- | ---------------- |
-| client1 | node1 | t/+/x, t/+/y     |
-| client2 | node2 | t/#              |
-| client3 | node3 | t/+/x, t/a       |
+| クライアント | ノード  | サブスクライブトピック |
+| ------------ | ------- | ----------------------- |
+| client1      | node1   | t/+/x, t/+/y            |
+| client2      | node2   | t/#                     |
+| client3      | node3   | t/+/x, t/a              |
 
-After these subscriptions are in place, EMQX constructs the following topic tree and routing table:
+これらのサブスクリプションに基づき、EMQX は以下のトピックツリーとルーティングテーブルを構築します：
 
 <img src="./assets/cluster_2.png" alt="image" style="zoom:67%;" />
 
-#### Message Delivery Flow
+#### メッセージ配信フロー
 
-When an MQTT client publishes a message, the node (Core or a Replicant) it is connected to uses the topic tree to match the message topic against all subscription patterns. It then consults the routing table to determine which nodes have matching subscribers and forwards the message accordingly (possibly to multiple nodes). Each receiving node then looks up its local subscription table and delivers the message to the appropriate subscribers.
+MQTT クライアントがメッセージをパブリッシュすると、接続先ノード（Core または Replicant）はトピックツリーを使ってメッセージトピックとすべてのサブスクリプションパターンを照合します。続いてルーティングテーブルを参照し、マッチするサブスクライバーが存在するノードにメッセージを転送します（複数ノードに転送される場合もあります）。各受信ノードはローカルのサブスクリプションテーブルを参照し、該当するサブスクライバーにメッセージを配信します。
 
-For example, when **Client 1** publishes a message to the topic `t/a`, the routing and delivery process across nodes is as follows:
+例として、**Client 1** がトピック `t/a` にメッセージをパブリッシュした場合のノード間のルーティングと配信は以下の通りです：
 
-1. **Client 1** connects to **Node 1** and publishes a message with topic `t/a`.
+1. **Client 1** は **Node 1** に接続し、トピック `t/a` のメッセージをパブリッシュします。
 
-2. **Node 1** checks the topic tree and finds that `t/a` matches the existing subscription patterns `t/a` and `t/#`.
+2. **Node 1** はトピックツリーを参照し、`t/a` が既存のサブスクリプションパターン `t/a` と `t/#` にマッチすることを確認します。
 
-3. **Node 1** looks up the routing table and determines:
+3. **Node 1** はルーティングテーブルを参照し、以下を判断します：
 
-   - **Node 2** has clients subscribed to `t/#`,
-   - **Node 3** has clients subscribed to `t/a`,
+   - **Node 2** に `t/#` をサブスクライブするクライアントがいる
+   - **Node 3** に `t/a` をサブスクライブするクライアントがいる
 
-   So it forwards the message to both **Node 2** and **Node 3**.
+   そのため、メッセージを **Node 2** と **Node 3** の両方に転送します。
 
-4. **Node 2** receives the message, checks its local subscription table, and delivers the message to the client subscribed to `t/#`.
+4. **Node 2** はメッセージを受信し、ローカルのサブスクリプションテーブルを参照して `t/#` をサブスクライブするクライアントに配信します。
 
-5. **Node 3** receives the message, checks its local subscription table, and delivers the message to the client subscribed to `t/a`.
+5. **Node 3** はメッセージを受信し、ローカルのサブスクリプションテーブルを参照して `t/a` をサブスクライブするクライアントに配信します。
 
-6. The message delivery process is complete.
+6. メッセージ配信処理は完了します。
 
-EMQX クラスタリングの動作をより深く理解するには、[EMQX クラスタリングの設計](../design/clustering.md)を参照してください。
+EMQX クラスタリングの動作をより深く理解するには、[EMQX クラスタリングの設計](../design/clustering.md) をご覧ください。
 
-## Clustering Features Overview
+## クラスタリング機能の概要
 
-EMQX provides a set of advanced clustering capabilities powered by its [Ekka](https://github.com/emqx/ekka) library, which extends the native distributed Erlang system. This abstraction enables key features such as automatic node discovery, dynamic cluster formation, network partition handling, and node cleanup.
+EMQX は、ネイティブの Erlang 分散システムを拡張した [Ekka](https://github.com/emqx/ekka) ライブラリにより、高度なクラスタリング機能を提供します。この抽象化により、自動ノード検出、動的クラスタ形成、ネットワークパーティションの処理、ノードのクリーンアップなどの主要機能が実現されています。
 
-### Node Discovery and Auto Clustering
+### ノード検出と自動クラスタリング
 
-EMQX supports multiple node discovery mechanisms, allowing clusters to form automatically in diverse deployment environments:
+EMQX は複数のノード検出メカニズムをサポートし、多様なデプロイ環境でクラスタを自動形成できます：
 
-| Strategy | Description                             |
-| -------- | --------------------------------------- |
-| `manual` | Manually create a cluster with commands |
-| `static` | Autocluster through static node list    |
-| `DNS`    | Autocluster through DNS A and SRV records        |
-| `etcd`   | Autocluster through etcd                |
-| `k8s`    | Autocluster provided by Kubernetes      |
+| 戦略       | 説明                                  |
+| ---------- | ------------------------------------- |
+| `manual`   | コマンドによる手動クラスタ作成         |
+| `static`   | 静的ノードリストによる自動クラスタリング |
+| `DNS`      | DNS の A レコードおよび SRV レコードによる自動クラスタリング |
+| `etcd`     | etcd を利用した自動クラスタリング      |
+| `k8s`      | Kubernetes による自動クラスタリング    |
 
-詳細は[クラスタの作成と管理](../../guides/cluster/create-cluster.md)を参照してください。
+詳細は [クラスタの作成と管理](../../guides/cluster/create-cluster.md) を参照してください。
 
-### Network Partition Autoheal
+### ネットワークパーティションの自動復旧
 
-Network partition autoheal is a feature of EMQX that allows the broker to recover automatically from network partitions without requiring any manual intervention, valuable for mission-critical applications where downtime is not acceptable.
+ネットワークパーティション自動復旧は、EMQX がネットワーク分断から手動操作なしに自動回復する機能であり、ダウンタイムが許容できないミッションクリティカルな用途に有用です。
 
-The feature is controlled by the `cluster.autoheal` setting and is enabled by default.
+この機能は `cluster.autoheal` 設定で制御され、デフォルトで有効です。
 
 ```bash
 cluster.autoheal = true
 ```
 
-With this feature enabled, EMQX continuously monitors the connectivity between nodes in the cluster. If a network partition is detected, EMQX isolates the affected nodes and continues to operate with the remaining nodes. Once the network partition is resolved, the broker automatically re-integrates the isolated nodes into the cluster.
+有効時、EMQX はクラスタ内のノード間接続を継続的に監視します。ネットワークパーティションを検知すると、影響を受けたノードを分離し、残りのノードで動作を継続します。パーティションが解消されると、分離されたノードを自動的にクラスタに再統合します。
 
-### Cluster Node Autoclean
+### クラスタノードの自動クリーンアップ
 
-The cluster node autoclean feature automatically removes the disconnected nodes from the cluster after the configured time interval. This feature ensures that the cluster is running efficiently and prevents performance degradation over time.
+クラスタノード自動クリーンアップ機能は、切断されたノードを設定された時間経過後に自動的にクラスタから削除します。この機能によりクラスタの効率的な運用が維持され、時間経過によるパフォーマンス低下を防ぎます。
 
-This feature is enabled by default and controlled by the `cluster.autoclean` setting (default: `24h`).
+デフォルトで有効で、`cluster.autoclean` 設定で制御されます（デフォルト値：`24h`）。
 
 ```bash
 cluster.autoclean = 24h
 ```
 
-### Session Across Nodes
+### ノード間セッション
 
-EMQX supports cross-node session persistence, ensuring that client sessions and subscriptions are preserved even when clients temporarily disconnect.
+EMQX はノード間のセッション永続化をサポートし、クライアントが一時的に切断されてもセッションとサブスクリプションを保持します。
 
-To enable this feature:
+この機能を有効にするには：
 
-- **MQTT 3.x clients**: set `clean_start = false`
-- **MQTT 5.0 clients**: set `clean_start = false` and `session_expiry_interval > 0`
+- **MQTT 3.x クライアント**：`clean_start = false` に設定
+- **MQTT 5.0 クライアント**：`clean_start = false` かつ `session_expiry_interval > 0` に設定
 
-With these settings, EMQX keeps the previous session data associated with the Client ID when the client disconnects. Upon reconnection, EMQX resumes the previous sessions, delivers any messages queued during the client's disconnection, and maintains the client's subscriptions.
+これにより、クライアントが切断した際にクライアント ID に紐づく以前のセッションデータが保持されます。再接続時に EMQX は前回のセッションを再開し、切断中にキューイングされたメッセージを配信し、クライアントのサブスクリプションを維持します。
 
-## Network Requirements
+## ネットワーク要件
 
-To ensure optimal performance, the network latency for operating EMQX clusters should be less than 10 milliseconds. The cluster will not be available if the latency is higher than 100 ms.
+EMQX クラスタの最適なパフォーマンスを確保するには、ネットワークレイテンシが 10 ミリ秒未満であることが望ましいです。レイテンシが 100 ms を超える場合、クラスタは利用できなくなります。
 
-The Core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
+Core ノードは同一のプライベートネットワーク内に配置する必要があります。Mria+RLOG モードでは、Replicant ノードも同じプライベートネットワークに配置することが推奨されます。
 
-## Next Step: Create an EMQX Cluster
+## 次のステップ：EMQX クラスタの作成
 
-You can continue with the following sections to learn how to create an EMQX cluster:
+以下のセクションに進み、EMQX クラスタの作成方法を学習してください：
 
 - [クラスタアーキテクチャ](./mria-introduction.md)
 - [クラスタの作成](../../guides/cluster/create-cluster.md)

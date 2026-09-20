@@ -1,6 +1,6 @@
 # EMQXクラスターの管理
 
-本章では、Kubernetesクラスター上でEMQXを操作・管理するための一般的なタスクや手順をステップバイステップで説明します。
+本章では、Kubernetesクラスター上でEMQXを操作する際の一般的なタスクや手順について、ステップバイステップで説明します。
 
 ## 設定とセットアップ
 
@@ -24,4 +24,4 @@
 
 ## 監視とパフォーマンス
 
-- [Prometheusを使用したEMQXクラスターの監視](./configure-emqx-prometheus.md)
+- [Prometheusを用いたEMQXクラスターの監視](./configure-emqx-prometheus.md)

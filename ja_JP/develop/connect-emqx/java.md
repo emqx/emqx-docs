@@ -1,24 +1,24 @@
-# Java SDKによる接続
+# Java SDKで接続する
 
 [Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) は、Javaで書かれたMQTTクライアントライブラリ（MQTT Javaクライアント）であり、JVMやAndroidなどのJava互換プラットフォームで使用できます。
 
-Eclipse Paho Java Clientは、非同期および同期のAPIであるMqttAsyncClientとMqttClientを提供しています。
+Eclipse Paho Java Clientは、非同期および同期APIとしてMqttAsyncClientとMqttClientを提供しています。
 
-## MavenによるPaho Javaのインストール
+## MavenでPaho Javaをインストールする
 
-Paho Javaクライアントライブラリは、パッケージ管理ツールのMavenを使って簡単にインストールできます。最新バージョンは以下のようにインストールします。
+Paho Javaクライアントライブラリは、パッケージ管理ツールMavenを使って簡単にインストールできます。現時点での最新バージョンは以下の通りです。
 
 ```xml
 <dependency>
   <groupId>org.eclipse.paho</groupId>
-	<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-       <version>1.2.5</version>
+  <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+  <version>1.2.5</version>
 </dependency>
 ```
 
 ## Paho Java使用例
 
-Java環境では、Paho Javaは比較的安定しており広く使われているMQTTクライアントライブラリです。以下の例は、Java言語でEMQXに接続し、メッセージの送受信を行うPaho Javaの完全なコードです。
+Java環境において、Paho Javaは比較的安定して広く使われているMQTTクライアントライブラリです。以下の例は、Java言語でEMQXに接続し、メッセージの送受信を行うPaho Javaの完全なコードです。
 
 **App.java**
 
@@ -60,7 +60,7 @@ public class App {
             client.connect(connOpts);
 
             System.out.println("接続完了");
-            System.out.println("メッセージをパブリッシュ中: " + content);
+            System.out.println("メッセージをパブリッシュ: " + content);
 
             // サブスクライブ
             client.subscribe(subTopic);
@@ -99,12 +99,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class OnMessageCallback implements MqttCallback {
     public void connectionLost(Throwable cause) {
-        // 接続が切断された後、通常ここで再接続を行います
+        // 接続が切断された後、通常ここで再接続を行う
         System.out.println("切断されました。再接続できます。");
     }
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        // サブスクライブ後に受信したメッセージはここで処理されます
+        // サブスクライブ後に受信したメッセージはここで処理される
         System.out.println("受信したメッセージのトピック:" + topic);
         System.out.println("受信したメッセージのQoS:" + message.getQos());
         System.out.println("受信したメッセージの内容:" + new String(message.getPayload()));
@@ -116,6 +116,6 @@ public class OnMessageCallback implements MqttCallback {
 }
 ```
 
-## Paho JavaのMQTT 5.0対応
+## Paho Java MQTT 5.0のサポート
 
-現時点で、Paho JavaはMQTT 5.0に対応中であり、まだ完全にはサポートされていません。
+現時点では、Paho JavaはまだMQTT 5.0に対応中であり、完全なサポートはされていません。

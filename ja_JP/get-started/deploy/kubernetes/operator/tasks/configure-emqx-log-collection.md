@@ -8,13 +8,13 @@ ELKを使用してEMQXクラスターのログを収集します。
 
 **ELK**はElasticsearch、Logstash、Kibana（Elastic Stackとも呼ばれます）を指します：
 
-- [**Elasticsearch**](https://www.elastic.co/elasticsearch/)：Luceneに基づく分散型のほぼリアルタイム検索および分析エンジンで、データ操作のためのREST APIを提供します。
+- [**Elasticsearch**](https://www.elastic.co/elasticsearch/)：Luceneに基づく分散型のほぼリアルタイム検索・分析エンジンで、REST APIを通じてデータ操作が可能です。
 - [**Logstash**](https://www.elastic.co/logstash/)：さまざまなソースからログを収集、変換、転送するための主要なデータフローエンジンです。
 - [**Kibana**](https://www.elastic.co/kibana/)：Elasticsearchのデータをリアルタイムで可視化・分析するためのWebインターフェースです。
 
 ### シングルノードElasticsearchのデプロイ
 
-シングルノードのElasticsearchクラスターのデプロイは比較的簡単です。以下のYAML構成ファイルを使用して、迅速にElasticsearchクラスターをデプロイできます。
+シングルノードのElasticsearchクラスターのデプロイは比較的簡単です。以下のYAML設定ファイルを使用して、迅速にElasticsearchクラスターをデプロイできます。
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
@@ -134,8 +134,8 @@ ELKを使用してEMQXクラスターのログを収集します。
              value: "single-node"
            - name: ES_JAVA_OPTS
              value: "-Xms512m -Xmx2g"
-         # Elasticsearchはvm.max_map_countを最低262144に設定する必要があります。
-         # OSで既により高い値に設定されている場合は、このinitコンテナを削除しても問題ありません。
+         # Elasticsearchはvm.max_map_countを少なくとも262144に設定する必要があります。
+         # OSがすでにこれ以上の値に設定している場合は、このinitコンテナは削除して構いません。
          initContainers:
          - name: elasticsearch-logging-init
            image: alpine:3.6
@@ -171,11 +171,11 @@ ELKを使用してEMQXクラスターのログを収集します。
 
    :::tip
 
-   `storageClassName`フィールドを使用して適切な[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を選択してください。`kubectl get storageclass`コマンドでKubernetesクラスター内に存在するStorageClassを一覧表示できます。または、ニーズに応じてStorageClassを作成してください。
+   `storageClassName`フィールドを使用して適切な[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)を選択してください。`kubectl get storageclass`コマンドで既存のStorageClassを一覧表示でき、必要に応じてStorageClassを作成してください。
 
    :::
 
-2. Elasticsearchの準備が完了するまで待ちます。
+2. Elasticsearchが準備完了になるまで待ちます。
 
    `kubectl get`コマンドでElasticsearchのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
@@ -187,7 +187,7 @@ ELKを使用してEMQXクラスターのログを収集します。
 
 ### Kibanaのデプロイ
 
-この手順では、収集したログを可視化するために`Deployment`でKibanaをデプロイし、`NodePort`タイプの`Service`でKibanaを外部に公開します。
+この手順では、収集したログを可視化するために`Deployment`でKibanaをデプロイし、`NodePort`タイプの`Service`でKibanaを外部公開します。
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
@@ -240,7 +240,7 @@ ELKを使用してEMQXクラスターのログを収集します。
              requests:
                cpu: 100m
            env:
-             # Elasticsearchのアクセス先
+             # Elasticsearchのアクセス先アドレス
              - name: ELASTICSEARCH_HOSTS
                value: http://elasticsearch-logging:9200
            ports:
@@ -249,7 +249,7 @@ ELKを使用してEMQXクラスターのログを収集します。
              protocol: TCP
    ```
 
-2. Kibanaの準備が完了するまで待ちます。
+2. Kibanaが準備完了になるまで待ちます。
 
    `kubectl get`コマンドでKibanaのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
@@ -263,7 +263,7 @@ ELKを使用してEMQXクラスターのログを収集します。
 
 ### Filebeatのデプロイ
 
-[Filebeat](https://www.elastic.co/beats/filebeat)はElastic Stackの軽量ログ収集コンポーネントで、Logstash、Elasticsearch、Kibanaとシームレスに連携します。
+[Filebeat](https://www.elastic.co/beats/filebeat)はElastic Stackの軽量なログ収集コンポーネントで、Logstash、Elasticsearch、Kibanaとシームレスに連携します。
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
@@ -412,7 +412,7 @@ ELKを使用してEMQXクラスターのログを収集します。
              path: /etc/localtime
    ```
 
-2. Filebeatの準備が完了するまで待ちます。
+2. Filebeatが準備完了になるまで待ちます。
 
    `kubectl get`コマンドでFilebeatのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
@@ -427,7 +427,7 @@ ELKを使用してEMQXクラスターのログを収集します。
 
 Logstashはログの処理とクレンジングに使用します。
 
-この手順では、Logstashの[Beats Inputプラグイン](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats)を使用してログを収集し、[Rubyフィルタープラグイン](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby)でログをフィルタリングします。Logstashは他にも多くの入力およびフィルタリングプラグインを提供しており、ビジネスニーズに応じて設定可能です。
+この手順では、Logstashの[Beats Inputプラグイン](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats)を使用してログを収集し、[Rubyフィルタープラグイン](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby)でログをフィルタリングします。Logstashは他にも多数の入力・フィルタープラグインを提供しており、ビジネスニーズに応じて設定可能です。
 
 1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
@@ -571,7 +571,7 @@ Logstashはログの処理とクレンジングに使用します。
        xpack.monitoring.elasticsearch.hosts: http://elasticsearch-logging:9200
    ```
 
-2. Logstashの準備が完了するまで待ちます。
+2. Logstashが準備完了になるまで待ちます。
 
    `kubectl get`コマンドでLogstashのPodの状態を確認し、`STATUS`が`Running`であることを確認してください。
 
@@ -584,15 +584,15 @@ Logstashはログの処理とクレンジングに使用します。
 
 ## EMQXクラスターのデプロイ
 
-EMQXクラスターのデプロイについては、ドキュメント[Deploy EMQX](../getting-started.md)を参照してください。
+EMQXクラスターのデプロイについては、ドキュメント[Deploy EMQX](../getting-started.md)をご参照ください。
 
-## ログ収集の検証
+## ログ収集の確認
 
-1. Kibanaインターフェースにログインし、メニューのスタック管理モジュールを開いて、_Index Management_をクリックします。ログのインデックスがすでに収集されていることが確認できます。
+1. Kibanaインターフェースにログインし、メニューのスタック管理モジュールを開いて「Index Management」をクリックします。ログのインデックスがすでに収集されていることが確認できます。
 
    ![](./assets/configure-log-collection/index-manage.png)
 
-2. Kibanaでログを検索・閲覧するには、インデックスパターンを作成する必要があります。インデックスパターンを選択し、_Create_をクリックします。
+2. Kibanaでログを検索・閲覧するには、インデックスパターンを作成する必要があります。インデックスパターンを選択し、「Create」をクリックします。
 
    ![](./assets/configure-log-collection/create-index-0.png)
 

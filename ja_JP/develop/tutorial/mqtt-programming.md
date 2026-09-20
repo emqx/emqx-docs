@@ -1,8 +1,8 @@
 # MQTTプログラミング
 
-このページでは、クライアントとMQTTブローカー間のシームレスな通信を実現するためのさまざまなシナリオにおけるMQTTの使い方を解説します。サーバーサイド開発、フロントエンド開発、モバイル開発、組み込みハードウェア開発のいずれに携わっていても、ブローカーへの接続、トピックのサブスクライブ、メッセージの送受信など、MQTTアプリケーションを実装するための主要な機能をこのページで見つけることができます。
+このページでは、クライアントとMQTTブローカー間のシームレスな通信を実現するために、さまざまなシナリオでMQTTを使用する方法を解説します。サーバーサイド開発、フロントエンド開発、モバイル開発、組み込みハードウェア開発のいずれに携わっていても、ブローカーへの接続、トピックのサブスクライブ、メッセージの送受信など、MQTTアプリケーションを実装するための主要な機能をこのページで見つけることができます。
 
-本ページに掲載されているリファレンス例は、さまざまなMQTTプログラミングのシナリオに対して詳細なステップバイステップの手順とコード解説を提供しています。これにより、MQTTアプリケーションの実装を支援するとともに、各アプリケーションシナリオに適したライブラリ、フレームワーク、ツールを紹介し、統合プロセスを簡素化し、良好な開発体験を保証します。
+このページに掲載されているリファレンス例は、さまざまなMQTTプログラミングシナリオにおける詳細なステップバイステップの手順とコード解説を提供しています。MQTTアプリケーションの実装を支援し、各アプリケーションシナリオに適したライブラリ、フレームワーク、ツールを紹介することで、統合プロセスを簡素化し、良好な開発体験を保証します。
 
 **サーバーサイド開発**
 
@@ -27,7 +27,7 @@
 
 **モバイル開発**
 
-- [FlutterプロジェクトでのMQTTの利用](https://www.emqx.com/en/blog/using-mqtt-in-flutter)
+- [FlutterプロジェクトでのMQTTの使用](https://www.emqx.com/en/blog/using-mqtt-in-flutter)
 - [CocoaMQTT v2.0：iOS向け初のMQTT 5.0クライアント](https://www.emqx.com/en/blog/ios-mqtt5-client)
 - [React NativeプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-react-native)
 - [AndroidでKotlinを使ってMQTTに接続する方法](https://www.emqx.com/en/blog/android-connects-mqtt-using-kotlin)
@@ -35,9 +35,9 @@
 
 **組み込みハードウェア開発**
 
-- [Raspberry PiでのMQTTの利用](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
-- [Raspberry Piを使ったMicroPythonによるMQTTチュートリアル](https://www.emqx.com/en/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi)
-- [ESP32が無料パブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp32-connects-to-the-free-public-mqtt-broker)
-- [ESP8266が無料パブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
+- [Raspberry PiでのMQTTの使用](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
+- [Raspberry Pi上のMicroPythonによるMQTTチュートリアル](https://www.emqx.com/en/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi)
+- [ESP32が無料のパブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp32-connects-to-the-free-public-mqtt-broker)
+- [ESP8266が無料のパブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
 - [ESP8266 + MQTT：LEDライトのリモート制御](https://www.emqx.com/en/blog/esp8266_mqtt_led)
 - [NodeMCU（ESP8266）経由でセンサーデータをMQTTクラウドサービスにアップロード](https://www.emqx.com/en/blog/upload-sensor-data-to-mqtt-cloud-service-via-nodemcu-esp8266)

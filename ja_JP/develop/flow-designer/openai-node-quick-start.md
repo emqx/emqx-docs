@@ -1,16 +1,16 @@
 # クイックスタート：OpenAIノードを使ったFlowの作成
 
-このセクションでは、実用的なユースケースを通じて、FlowデザイナーでLLMベースのFlowを素早く作成しテストする方法を説明します。
+このセクションでは、FlowデザイナーでLLMベースのFlowを実際のユースケースを通じて素早く作成・テストする方法を説明します。
 
-このデモでは、MQTTトピックからセンサーデータを受信し、LLM（例：OpenAI GPT）を使ってデータを解釈し、その意味を自然言語で要約するワークフローの構築方法を示します。生成された要約は新しいトピック `ai/summary` に再パブリッシュされ、下流で利用されます。
+このデモでは、MQTTトピックからセンサーデータを受信し、LLM（例：OpenAI GPT）を使ってデータを解釈し、その意味を自然言語で要約するワークフローを構築します。生成された要約は、新しいトピック `ai/summary` にパブリッシュされ、下流で利用されます。
 
-## シナリオ説明
+## シナリオの説明
 
-デバイスがMQTTトピック `sensors/temp_humid` に温度と湿度の読み取り値を報告すると仮定します。各メッセージはJSON形式の生センサーデータを含みます。EMQX Flowは以下のステップを実行します：
+あるデバイスが温度と湿度の読み取り値をMQTTトピック `sensors/temp_humid` に報告するとします。各メッセージはJSON形式の生センサーデータを含みます。EMQX Flowは以下のステップを実行します：
 
 - **データ処理**：デバイスIDとセンサー値を抽出します。
 - **LLMベースの処理**：OpenAIモデルを使ってセンサー読み取り値を要約します。
-- **メッセージ再パブリッシュ**：AI生成の要約を新しいトピック `ai/summary` にパブリッシュします。
+- **メッセージの再パブリッシュ**：AI生成の要約を新しいトピック `ai/summary` にパブリッシュします。
 
 **サンプルメッセージ：**
 
@@ -43,7 +43,7 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
    - ソースパネルから**Messages**ノードをドラッグします。
    - トピックを`sensors/temp_humid`に設定します。
-   - **保存**をクリックします。
+   - **Save**をクリックします。
 
 3. **Data Processing**ノードを追加します。
 
@@ -52,7 +52,7 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
      - `payload.device_id` → エイリアス `device_id`
      - `payload.temperature` → エイリアス `temperature`
      - `payload.humidity` → エイリアス `humidity`
-   - **保存**をクリックします。
+   - **Save**をクリックします。
 
 4. **OpenAI**ノードを追加します。
 
@@ -67,26 +67,26 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
        
        ::: tip
        
-       このフィールドにプロバイダーのAPIベースURLとAPIキーを入力することで、OpenAI互換の他サービスに接続可能です。
+       このフィールドに他のOpenAI互換サービスのAPIベースURLとAPIキーを入力して接続することも可能です。
        
        :::
-     
+       
      - **Output Result Alias**：`summary`と入力します。
      
-   - **保存**をクリックします。
+   - **Save**をクリックします。
 
 5. **Republish**ノードを追加します。
 
    - **Sink**セクションから**Republish**ノードをドラッグし、OpenAIノードに接続します。
    - トピックを`ai/summary`に設定します。
    - ペイロードを`${summary}`に設定します。
-   - **保存**をクリックします。
+   - **Save**をクリックします。
 
-6. すべてのノードを接続し、右上の**保存**をクリックしてFlowを保存します。
+6. すべてのノードを接続し、右上の**Save**をクリックしてFlowを保存します。
 
    ![openai_node_flow](./assets/openai_node_flow.png)
 
-   Flowとフォームルールは相互運用可能です。SQLおよび関連ルール設定はRuleページで確認できます。
+   Flowとフォームルールは相互運用可能です。SQLや関連するルール設定はRuleページで確認できます。
 
    ![openai_node_rule_page](./assets/openai_node_rule_page.png)
 
@@ -94,7 +94,7 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
 1. MQTTクライアントをEMQXに接続します。
 
-   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントも利用可能です：
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)ツールや実際のMQTTクライアントを使用しても構いません：
 
    - EMQXサーバーに接続します。
    - トピック`ai/summary`をサブスクライブします。
@@ -102,8 +102,8 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 2. テストを開始します。
 
    - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
-   - **編集**をクリックし、続けて**テスト開始**をクリックして画面下部にテストパネルを表示します。
-   - **シミュレートデータ入力**をクリックし、以下のメッセージをトピック`sensors/temp_humid`にパブリッシュするため**テスト送信**をクリックします：
+   - **Edit**をクリックし、続けて**Start Test**をクリックして画面下部にテストパネルを表示します。
+   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`sensors/temp_humid`にパブリッシュするために**Submit Test**をクリックします：
 
      ```json
      {
@@ -125,6 +125,6 @@ Device device123 reported a temperature of 38.2°C and 75% humidity.
 
    - テストが失敗した場合は、エラーメッセージが表示されます。
    
-   - **OpenAI**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じてノードをクリックし、編集パネルの**概要**タブを開いてください。
+   - **OpenAI**ノードの稼働状況やメトリクスを確認するには、編集ページを閉じ、ノードをクリックして編集パネルを開き、**Overview**タブをクリックしてください。
    
      ![openai_node_statistics](./assets/openai_node_statistics.png)

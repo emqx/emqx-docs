@@ -6,28 +6,28 @@ prev:
 
 # Developer Guides
 
-The Developer Guides help developers connect clients to EMQX, process MQTT data, integrate with external systems, and use advanced EMQX features. The main contents in this chapter include:
+Developer Guidesは、クライアントをEMQXに接続し、MQTTデータを処理し、外部システムと統合し、高度なEMQX機能を利用するためのガイドです。本章の主な内容は以下の通りです。
 
-- [Client SDK](./connect-emqx/introduction.md) provides SDK examples for connecting to EMQX with C, Java, Go, Python, and JavaScript MQTT clients.
+- [Client SDK](./connect-emqx/introduction.md) は、C、Java、Go、Python、JavaScriptのMQTTクライアントを使ってEMQXに接続するためのSDK例を提供します。
 
-- [Use curl with EMQX](./connect-emqx/curl.md) shows how to publish and subscribe to MQTT topics from the command line.
+- [Use curl with EMQX](./connect-emqx/curl.md) は、コマンドラインからMQTTトピックのパブリッシュおよびサブスクライブを行う方法を示します。
 
-- [Use Node-RED with EMQX](./connect-emqx/node-red.md) shows how to connect Node-RED to EMQX and build MQTT message flows.
+- [Use Node-RED with EMQX](./connect-emqx/node-red.md) は、Node-REDをEMQXに接続し、MQTTメッセージのフローを構築する方法を説明します。
 
-- [Tutorials](./tutorial/tutorial.md) provides practical guides for MQTT programming and common EMQX development scenarios.
+- [Tutorials](./tutorial/tutorial.md) は、MQTTプログラミングや一般的なEMQX開発シナリオの実践的なガイドを提供します。
 
-- [Rule Engine](./data-integration/rules.md) introduces the built-in data processing engine that lets you extract, filter, enrich, and transform IoT data in real time, working in conjunction with Data Integration.
+- [Rule Engine](./data-integration/rules.md) は、IoTデータをリアルタイムで抽出、フィルタリング、強化、変換できる組み込みのデータ処理エンジンを紹介し、データ統合と連携して動作します。
 
-- [Smart Data Hub](./data-integration/smart-data-hub.md) provides an all-in-one solution for managing schemas, validating data, and transforming MQTT messages in real time.
+- [Smart Data Hub](./data-integration/smart-data-hub.md) は、スキーマ管理、データ検証、MQTTメッセージのリアルタイム変換を一括で行うソリューションを提供します。
 
-- [Data Integration](./data-integration/data-bridges.md) explains how to connect EMQX with external data systems, including databases, message queues, and cloud services, using Sink and Source components.
+- [Data Integration](./data-integration/data-bridges.md) は、SinkおよびSourceコンポーネントを使って、EMQXとデータベース、メッセージキュー、クラウドサービスなどの外部データシステムを接続する方法を説明します。
 
-- [Flow Designer](./flow-designer/introduction.md) (EMQX Enterprise feature) is a visual, no-code tool for building data processing pipelines by connecting rules, actions, and integrations in a graphical interface.
+- [Flow Designer](./flow-designer/introduction.md)（EMQX Enterprise機能）は、ルール、アクション、統合をグラフィカルなインターフェースで接続し、コード不要でデータ処理パイプラインを構築するビジュアルツールです。
 
-- [Advanced Features](./advanced-features.md) introduces advanced capabilities such as Message Queue, MQTT over WebSocket, MQTT over QUIC, Cluster Linking, File Transfer over MQTT, Multi-Protocol Gateway, and client attributes.
+- [Advanced Features](./advanced-features.md) は、メッセージキュー、MQTT over WebSocket、MQTT over QUIC、クラスターリンク、MQTTによるファイル転送、マルチプロトコルゲートウェイ、クライアント属性などの高度な機能を紹介します。
 
-- [EMQX AI](./emqx-ai/overview.md) introduces AI-related capabilities, including MCP over MQTT, MCP Bridge, SDKs, and real-time audio and video AI services.
+- [EMQX AI](./emqx-ai/overview.md) は、MQTT上のMCP、MCPブリッジ、SDK、リアルタイム音声・映像AIサービスなど、AI関連の機能を紹介します。
 
-- [Architecture](./architecture-introduction.md) covers EMQX clustering, durable storage, the inflight window and message queue, and message retransmission.
+- [Architecture](./architecture-introduction.md) は、EMQXのクラスター構成、耐久ストレージ、インフライトウィンドウとメッセージキュー、メッセージ再送機能について解説します。
 
-- [MQTT Reference](./mqtt-reference.md) provides reference information for MQTT protocol versions, terminology, features, and reason codes.
+- [MQTT Reference](./mqtt-reference.md) は、MQTTプロトコルのバージョン、用語、機能、リースンコードのリファレンス情報を提供します。

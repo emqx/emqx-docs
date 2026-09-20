@@ -4,21 +4,21 @@
 
 ## 移行の概要
 
-移行は以下の3段階に分けられます。
+移行は以下の3つのフェーズに分けられます。
 
 1. **HiveMQ 資産のインベントリ**：TLS キーストア、`config.xml`、ESE ファイル、およびリスナー、認証、クラスタリング、データパイプラインを定義する拡張プロパティを収集します。
-2. **EMQX の設定**：HiveMQ の設定を EMQX の HOCON に変換し、キーストアを PEM に変換し、リスナーとクラスタ設定を再作成し、認証チェーンとルールエンジンを構成します。
+2. **EMQX の設定**：HiveMQ の設定を EMQX の HOCON に変換し、キーストアを PEM 形式に変換し、リスナーとクラスタ設定を再作成し、認証チェーンとルールエンジンをセットアップします。
 3. **デバイスと統合の更新**：デバイスを EMQX エンドポイントにリダイレクトし、EMQX サーバー CA 証明書を配布し、クライアントの識別を検証し、Kafka や Prometheus などの下流統合を移行します。
 
 以下の表は、HiveMQ と EMQX 間の主要なアーティファクトの対応をまとめたものです。
 
 | **パラメーター／アーティファクト** | **HiveMQ（例）** | **EMQX（例）** | **備考** |
 | --- | --- | --- | --- |
-| エンドポイントホスト名 | `mqtt.internal.example.com`（ロードバランサー／Control Center で設定） | `mqtt.example.com`（EMQX ロードバランサー／VIP） | デバイスのファームウェアやデプロイメントマニフェストを更新してください。 |
-| TLS 資産 | `conf/hivemq.jks` | `/etc/emqx/certs/server-cert.pem`、`/etc/emqx/certs/server-key.pem` | `keytool` と `openssl` で JKS/PKCS12 を PEM に変換します。 |
+| エンドポイントホスト名 | `mqtt.internal.example.com`（ロードバランサー／Control Center 設定） | `mqtt.example.com`（EMQX ロードバランサー／VIP） | デバイスのファームウェアやデプロイマニフェストを更新してください。 |
+| TLS 資産 | `conf/hivemq.jks` | `/etc/emqx/certs/server-cert.pem`、`/etc/emqx/certs/server-key.pem` | `keytool` と `openssl` を使って JKS/PKCS12 から PEM に変換します。 |
 | クライアント認証 | ESE ファイルレルム（`credentials.xml`） | `authentication = [{mechanism = password_based, backend = built_in_database}]` | REST API またはダッシュボード経由でユーザーリストをインポートします。 |
-| クライアント証明書 | デバイスフリートに PEM 形式で保存、mTLS 有効時に HiveMQ が検証 | 同じデバイス証明書、EMQX リスナーの `ssl_options.cacertfile = "device-ca.pem"` | 同じ CA を使用する場合、再プロビジョニングは不要です。 |
-| クラスター検出 | DNS または `extensions/*-discovery*/*.properties` | `cluster.discovery_strategy = dns`（または `static`, `etcd`, `k8s`） | 拡張ベースの検出を EMQX ネイティブ戦略に置き換えます。 |
+| クライアント証明書 | デバイスフリートに PEM 形式で保存、mTLS 有効時に HiveMQ が検証 | 同じデバイス証明書、EMQX リスナーの `ssl_options.cacertfile = "device-ca.pem"` | 同一 CA を使用する場合は再プロビジョニング不要です。 |
+| クラスター検出 | DNS または `extensions/*-discovery*/*.properties` | `cluster.discovery_strategy = dns`（または `static`、`etcd`、`k8s`） | 拡張ベースの検出を EMQX ネイティブの戦略に置き換えます。 |
 | Kafka 統合 | `extensions/hivemq-kafka-extension/kafka-configuration.xml` | EMQX コネクター＋ルール＋アクション（`SELECT ... FROM "device/+/data"`） | Java ベースの拡張の代わりに EMQX データ統合を使用します。 |
 | レート制限／制約 | `<restrictions>` ブロック＋過負荷保護 | `listeners.*.max_connections`、`messages_rate`、`bytes_rate`、`limiter.*` | リスナーごとのクォータとグローバルリミッターを設定します。 |
 
@@ -26,8 +26,8 @@
 
 ### TLS キーストアの収集と変換
 
-1. `<tls-tcp-listener>` で参照されているキーストア（例：`/opt/hivemq/conf/hivemq.jks`）を特定します。
-2. サーバー証明書とキーをエクスポートします。
+1. `<tls-tcp-listener>` で参照されているキーストアを特定します（例：`/opt/hivemq/conf/hivemq.jks`）。
+2. サーバー証明書と秘密鍵をエクスポートします。
 
 ```
 keytool -importkeystore \
@@ -43,7 +43,7 @@ openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nocerts -out /tmp/server-key.pem
 
 ### HiveMQ 設定ファイルのエクスポート
 
-以下のアーティファクトをバージョン管理に保存し、トレーサビリティを確保します。環境変数プレースホルダー（例：`${ENV:HIVEMQ_PORT}`）は、EMQX のダブルアンダースコア環境変数オーバーライド構文（`EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`）にマッピングできるようにハイライトしてください。
+以下のアーティファクトをバージョン管理に保存し、トレーサビリティを確保します。環境変数プレースホルダー（例：`${ENV:HIVEMQ_PORT}`）は EMQX のダブルアンダースコア環境変数オーバーライド構文（`EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`）にマッピングできるように強調してください。
 
 - `conf/config.xml`：リスナー、制約、クラスタリング、パーシステンス、Control Center ユーザー
 - `conf/logback.xml`：ログ出力先（EMQX の `log` セクションに翻訳）
@@ -53,19 +53,19 @@ openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nocerts -out /tmp/server-key.pem
 
 ### 認証モードの分類
 
-使用している認証方式を判別します。
+利用している認証方式を判別します。
 
 - ファイルレルムまたは SQL レルムによる **ユーザー名／パスワード**
 - CN = クライアント ID の **X.509 クライアント証明書**（mTLS）
-- **ハイブリッド**（例：TLS + SASL プラグイン）
+- ハイブリッド（例：TLS + SASL プラグイン）
 
-それぞれのパスは特定の EMQX 認証チェーンにマッピングされます。
+それぞれのパスは EMQX の特定の認証チェーンにマッピングされます。
 
-## フェーズ 2：EMQX に HiveMQ ベースラインを再現
+## フェーズ 2：HiveMQ のベースラインを再現するための EMQX 設定
 
 ### MQTT リスナーの再作成
 
-各 `<tcp-listener>`、`<tls-tcp-listener>`、`<websocket-listener>`、`<tls-websocket-listener>` 要素を HOCON に変換します。
+各 `<tcp-listener>`, `<tls-tcp-listener>`, `<websocket-listener>`, `<tls-websocket-listener>` 要素を HOCON に変換します。
 
 HiveMQ 設定例：
 
@@ -144,7 +144,7 @@ listeners.wss.default {
 
 ### MQTT 設定オプションのマッピング
 
-HiveMQ のキューサイズ、QoS、保持メッセージの動作などは、EMQX の `mqtt` セクションに直接マッピングされます。
+HiveMQ のキューサイズ、QoS、保持メッセージの動作などの設定は、EMQX の `mqtt` セクションに直接マッピングされます。
 
 HiveMQ 設定例：
 
@@ -217,7 +217,7 @@ mqtt {
 
 ### `<restrictions>` ブロックのマッピング
 
-HiveMQ はグローバル制限を `<restrictions>` にまとめています。EMQX はこれらの値をグローバルな `mqtt` セクションと各リスナーに分割して設定します。
+HiveMQ はグローバル制限を `<restrictions>` にまとめていますが、EMQX はこれらの値をグローバルな `mqtt` セクションと各リスナーに分割しています。
 
 HiveMQ 設定例：
 
@@ -290,34 +290,34 @@ cluster {
 }
 ```
 
-EMQX は同一マシン上で複数ノードが動作する場合、自動的に Erlang 分散ポートを割り当てるため、`bind-port` を手動で選択する必要はありません。
+EMQX は同一マシン上で複数ノードが稼働する場合、自動的に Erlang 分散ポートを割り当てるため、`bind-port` を手動で指定する必要はありません。
 
 その他の検出方法（etcd、Kubernetes、静的ファイルなど）については、[クラスターの作成と管理](../../guides/cluster/create-cluster.md)を参照してください。
 
 ### 認証と認可の翻訳
 
-HiveMQ は Enterprise Security Extension（ESE）で **レルム**（データソース）と **パイプライン**（ロジック）を管理し、またはレガシープラグインを使用します。EMQX は **認証チェーン**（順序付けられたバックエンド）と **認可ソース**（ACL）を使用します。
+HiveMQ は Enterprise Security Extension（ESE）を通じて、**レルム**（データソース）と**パイプライン**（ロジック）を管理します。一方、EMQX は**認証チェーン**（順序付けられたバックエンド）と**認可ソース**（ACL）を使用します。
 
 | HiveMQ ESE コンポーネント | EMQX 対応 | 移行戦略 |
 | :--- | :--- | :--- |
-| **ファイルレルム**（`credentials.xml`） | [**組み込みデータベース**](../../guides/access-control/authn/mnesia.md) | HiveMQ のユーザーをエクスポートし、EMQX REST API でインポートします。 |
-| **SQL レルム**（JDBC） | [**MySQL**](../../guides/access-control/authn/mysql.md) / [**PostgreSQL**](../../guides/access-control/authn/postgresql.md) | `mysql` または `postgresql` バックエンドを使ったパスワード認証を設定し、既存のユーザーテーブルを再利用します。 |
-| **LDAP レルム** / AD | [**LDAP**](../../guides/access-control/authn/ldap.md) | LDAP バックエンドを使ったパスワード認証を設定し、HiveMQ の DN パターンを EMQX のフィルターテンプレートにマッピングします。 |
-| **OAuth / JWT** | [**JWT**](../../guides/access-control/authn/jwt.md) | JWT 認証メカニズムを設定し、公開鍵または JWKS エンドポイントを設定します。 |
-| **HTTP / Webhooks** | [**HTTP サーバー**](../../guides/access-control/authn/http.md) | HTTP バックエンドを使ったパスワード認証を設定し、外部認証サービスに認証情報を委譲します。 |
-| **X.509 証明書** | [**X.509**](../../guides/access-control/authn/x509.md) / [**mTLS**](../../guides/network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | `TLS` リスナーと相互（双方向）認証を使用し、既存の CA とクライアント証明書を再利用します。 |
+| **ファイルレルム**（`credentials.xml`） | [**組み込みデータベース**](../../guides/access-control/authn/mnesia.md) | HiveMQ ユーザーをエクスポートし、EMQX REST API でインポート。 |
+| **SQL レルム**（JDBC） | [**MySQL**](../../guides/access-control/authn/mysql.md) / [**PostgreSQL**](../../guides/access-control/authn/postgresql.md) | パスワード認証を `mysql` または `postgresql` バックエンドで設定。既存のユーザーテーブルを再利用。 |
+| **LDAP レルム** / AD | [**LDAP**](../../guides/access-control/authn/ldap.md) | LDAP バックエンドでパスワード認証を設定。HiveMQ の DN パターンを EMQX のフィルターテンプレートにマッピング。 |
+| **OAuth / JWT** | [**JWT**](../../guides/access-control/authn/jwt.md) | JWT 認証機構を設定。公開鍵または JWKS エンドポイントを設定。 |
+| **HTTP / Webhooks** | [**HTTP サーバー**](../../guides/access-control/authn/http.md) | HTTP バックエンドでパスワード認証を設定し、外部認証サービスに委譲。 |
+| **X.509 証明書** | [**X.509**](../../guides/access-control/authn/x509.md) / [**mTLS**](../../guides/network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | `TLS` リスナーと相互（双方向）認証を使用し、既存の CA とクライアント証明書を再利用。 |
 
 #### ファイルレルムユーザーの移行
 
-**ソース：** HiveMQ の `conf/credentials.xml`（暗号化／ハッシュ済み）
+**ソース：** HiveMQ `conf/credentials.xml`（暗号化／ハッシュ済み）
 
 **宛先：** EMQX 組み込みデータベース
 
-1. **エクスポート：** HiveMQ のファイルレルム（`credentials.xml`）からユーザーを抽出します。このファイルには通常、ハッシュ化されたパスワードとソルトが含まれています。XML を解析して、EMQX 用の JSON または CSV インポートファイルを生成する必要があります。
-2. **インポート：** EMQX REST API を使用してユーザーを作成します。EMQX は bcrypt や pbkdf2 などのパスワードハッシュの一括インポートをサポートしています。詳細は [ユーザーのインポート](../../guides/access-control/authn/user_management.md#importing-users) を参照してください。
+1. **エクスポート：** HiveMQ のファイルレルム（`credentials.xml`）からユーザーを抽出します。このファイルは通常、ハッシュ化されたパスワードとソルトを含みます。XML を解析して EMQX 用の JSON または CSV インポートファイルを生成する必要があります。
+2. **インポート：** EMQX REST API を使用してユーザーを作成します。EMQX は bcrypt や pbkdf2 などのパスワードハッシュのバルクインポートをサポートしています。ファイル形式の詳細は[ユーザーのインポート](../../guides/access-control/authn/user_management.md#importing-users)を参照してください。
 
 ```bash
-# 例：平文パスワードでユーザーをインポート
+# 例：プレーンパスワードでユーザーをインポート
 curl -u admin:public -X POST \
   http://emqx-node:18083/api/v5/authentication/password_based:built_in_database/users \
   -d '{"user_id":"device-001","password":"StrongPass!"}'
@@ -325,13 +325,13 @@ curl -u admin:public -X POST \
 
 #### 外部統合（SQL、LDAP、HTTP）の移行
 
-`enterprise-security-extension.xml` のパイプラインを EMQX の HOCON `authentication` ブロックに翻訳します。
+`enterprise-security-extension.xml` のパイプラインを EMQX の HOCON `authentication` ブロックに変換します。
 
-**例：SQL レルムから EMQX MySQL へ**
+**例：SQL レルムから EMQX MySQL**
 
-HiveMQ は SQL レルムに固定のデータベーススキーマを使用しますが、EMQX は独自のスキーマとクエリを定義可能です。**既存の MySQL や PostgreSQL データベースを変更する必要はありません。**
+HiveMQ は SQL レルムに [固定スキーマ](https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/ese.html#table_users) を使用しますが、EMQX は [独自のスキーマとクエリを定義可能](../../guides/access-control/authn/mysql.md)です。**既存の MySQL や PostgreSQL データベースを変更する必要はありません。**
 
-以下の EMQX 設定例は、標準的な HiveMQ `users` テーブル構造に合わせて調整されたクエリ（`SELECT password_hash, salt ...`）を使用しています。
+以下の EMQX 設定例は、HiveMQ 標準の `users` テーブル構造に特化したクエリ（`SELECT password_hash, salt ...`）を使用しています。
 
 ```hocon
 authentication = [
@@ -376,7 +376,7 @@ authentication = [
 
 #### 認可（ACL）の移行
 
-HiveMQ は `enterprise-security-extension.xml`（ファイルレルム）や外部データベースでアクセスポリシーを定義します。EMQX は複数のバックエンド（ファイル、Redis、MySQL、PostgreSQL、MongoDB、HTTP など）を同時にサポートする柔軟な **認可チェーン** を使用します。
+HiveMQ は `enterprise-security-extension.xml`（ファイルレルム）や外部データベースでアクセスポリシーを定義します。EMQX は複数のバックエンドを同時にサポートする柔軟な**認可チェーン**を備えています（ファイル、Redis、MySQL、PostgreSQL、MongoDB、HTTP など）。
 
 **HiveMQ XML ポリシー例：**
 
@@ -390,15 +390,15 @@ HiveMQ は `enterprise-security-extension.xml`（ファイルレルム）や外�
 **EMQX 対応例：**
 
 - [**ファイル（`acl.conf`）**](../../guides/access-control/authz/file.md)：`{allow, all, subscribe, ["device/${clientid}/#"]}.`
-- [**組み込みデータベース**](../../guides/access-control/authz/mnesia.md)：クライアント ID、ユーザー名、トピックに基づきダッシュボードや API でルールを設定
-- [**MySQL**](../../guides/access-control/authz/mysql.md)：`SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`
-- [**PostgreSQL**](../../guides/access-control/authz/postgresql.md)：`SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`
+- [**組み込みデータベース**](../../guides/access-control/authz/mnesia.md)：ダッシュボードまたは API でクライアント ID、ユーザー名、トピックに基づくルールを設定。
+- [**MySQL**](../../guides/access-control/authz/mysql.md)：`SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`。
+- [**PostgreSQL**](../../guides/access-control/authz/postgresql.md)：`SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`。
 
-詳細は [認可](../../guides/access-control/authz/authz.md) ドキュメントを参照してください。
+詳細は[認可](../../guides/access-control/authz/authz.md)ドキュメントを参照してください。
 
 ### データ統合の設定
 
-HiveMQ は Kafka 拡張など個別の拡張に依存していますが、EMQX はすべてのデータ統合を標準で内蔵し、すぐに有効化できます。
+HiveMQ は Kafka 拡張など個別の拡張に依存していますが、EMQX ではすべてのデータ統合が組み込みで有効化されています。
 
 特定の統合を設定する前に、以下のコアコンセプトを理解してください。
 
@@ -522,11 +522,11 @@ sources {
 
 #### Prometheus
 
-HiveMQ は「Prometheus Monitoring HiveMQ Extension」を使用しています。EMQX はネイティブで Prometheus をサポートしています。
+HiveMQ は「Prometheus Monitoring HiveMQ Extension」を使用しますが、EMQX はネイティブで Prometheus をサポートしています。
 
 Prometheus がメトリクスをスクレイプするエンドポイントはデフォルトで有効です：`http://emqx-node:18083/api/v5/prometheus/stats`
 
-Pushgateway を使用する場合は、以下のように設定できます。
+Pushgateway を使用する場合は以下のように設定します。
 
 ```hocon
 prometheus {
@@ -537,11 +537,11 @@ prometheus {
 }
 ```
 
-詳細は [Prometheus との統合](../../guides/observability/prometheus.md#integrate-with-prometheus) を参照してください。
+詳細は[Prometheus との統合](../../guides/observability/prometheus.md#integrate-with-prometheus)ガイドを参照してください。
 
 #### ロギング
 
-HiveMQ は Java 標準の `logback.xml` を使用しています。EMQX は HOCON で設定可能な組み込みロギング機能を使用します。
+HiveMQ は `logback.xml`（Java 標準）を使用しますが、EMQX は HOCON で設定可能な組み込みのロギング機能を持っています。
 
 HiveMQ (`logback.xml`) 設定例：
 
@@ -580,7 +580,6 @@ log {
       path = "/var/log/emqx/emqx.log"
       rotation_count = 30
       rotation_size = "50MB"
-
     }
   }
   console {
@@ -590,26 +589,26 @@ log {
 }
 ```
 
-ログレベル、ローテーション、フォーマッター（テキスト／JSON）の設定は [ログ](../../guides/observability/log.md) を参照してください。
+ログレベル、ローテーション、フォーマッター（テキスト／JSON）の設定は[ログ](../../guides/observability/log.md)を参照してください。
 
 #### ログトレース
 
-HiveMQ の「Trace Recordings」は特定クライアントセッションのデバッグに使われます。EMQX は組み込みの **ログトレース** 機能（ダッシュボードまたは CLI）を提供し、特定のクライアント ID、トピック、IP に対するログをリアルタイムでフィルタリング可能です。
+HiveMQ の「Trace Recordings」は特定クライアントセッションのデバッグに使われます。EMQX は組み込みの**ログトレース**機能（ダッシュボードまたは CLI）を提供し、特定のクライアント ID、トピック、IP に対するログをリアルタイムでフィルタリング可能です。
 
-特定クライアントのトレースを開始するには、以下のコマンドを使用します。
+特定クライアントのトレース開始コマンド例：
 
 ```bash
 emqx ctl trace start client device-001 trace.log
 ```
 
-詳細は [ログトレース](../../guides/observability/tracer.md) を参照してください。
+詳細は[ログトレース](../../guides/observability/tracer.md)を参照してください。
 
 ## フェーズ 3：デバイスと統合の更新
 
-### EMQX サーバー CA のデバイスへの配布
+### EMQX サーバー CA のデバイス配布
 
-- EMQX が内部 CA を使用する場合は、各デバイスに `device-ca.pem` をインストールしてください（システムトラストストアまたはアプリケーションバンドル）。
-- EMQX が Let’s Encrypt などの公開 CA を使用する場合、デバイス側の対応は不要です。
+- EMQX が内部 CA を使用する場合は、各デバイスに `device-ca.pem` をインストールします（システムの信頼ストアまたはアプリケーションバンドル）。
+- EMQX が Let’s Encrypt などの公開 CA を使用する場合は、デバイス側の対応は不要です。
 
 ### デバイス接続パラメーターの更新
 
@@ -627,9 +626,9 @@ mqtt pub -h mqtt.example.com -p 8883 \
   --cafile device-ca.pem --topic device/001/data --message test
 ```
 
-**例（Python paho-mqtt で mTLS 使用時）**
+**例（Python paho-mqtt で mTLS）**
 
-```hocon
+```python
 client.tls_set(
     ca_certs="certs/device-ca.pem",
     certfile="certs/device-001.cert.pem",
@@ -639,13 +638,13 @@ client.tls_set(
 client.connect("mqtt.example.com", 8883)
 ```
 
-エンドポイントホスト名とサーバー CA ファイルのみが変更されます。デバイス証明書と秘密鍵は、EMQX の `ssl_options.cacertfile` で参照される同じ CA によって署名されていれば引き続き有効です。
+変更点はエンドポイントホスト名とサーバー CA ファイルのみです。デバイス証明書と秘密鍵は、EMQX の `ssl_options.cacertfile` で参照される同一 CA によって署名されていれば引き続き有効です。
 
 ### 統合の検証
 
-- Kafka トピックがメッセージを受信していることを EMQX ルールメトリクス（`emqx ctl rule show`）で確認します。
-- 監視ダッシュボードを更新して EMQX メトリクスをスクレイプします。
-- Splunk、ELK などのアラートシステムを EMQX ログフォーマットに合わせて再設定します。
+- Kafka トピックがメッセージを受信していることを EMQX ルールメトリクス（`emqx ctl rule show`）で確認。
+- 監視ダッシュボードを更新して EMQX メトリクスをスクレイプ。
+- アラートシステム（Splunk、ELK）を EMQX ログ形式に合わせて再設定。
 
 ## 高度な移行シナリオ
 
@@ -654,16 +653,16 @@ client.connect("mqtt.example.com", 8883)
 HiveMQ のパーシステンスファイルは直接インポートできません。移行スクリプトを使用してください。
 
 1. HiveMQ を一時的に稼働させ続けます。
-2. HiveMQ 上で `#` をサブスクライブし、保持メッセージを EMQX に再パブリッシュするブリッジクライアントを実行します。
-3. QoS 1/2 のキューイングされたメッセージは、DNS 切り替え前にインフライトトランザクションを完了させます。
+2. HiveMQ で `#` をサブスクライブし、保持メッセージを EMQX に再パブリッシュするブリッジクライアントを実行。
+3. QoS 1/2 のキューイングメッセージは、DNS 切り替え前にインフライトトランザクションを完了させます。
 
 ### 共有サブスクリプション
 
-HiveMQ の `$share/group/topic` 構文は EMQX で完全にサポートされています。以前 `$queue/topic` を使用していた場合は、`$share/queue/topic` にマッピングしてください。`broker.shared_subscription_strategy`（例：`round_robin`、`hash_clientid`）を調整して、コンシューマーのロードバランス動作を模倣します。
+HiveMQ の `$share/group/topic` 構文は EMQX で完全サポートされています。以前 `$queue/topic` を使用していた場合は `$share/queue/topic` にマッピングしてください。`broker.shared_subscription_strategy`（例：`round_robin`、`hash_clientid`）を調整し、コンシューマーの負荷分散動作を模倣します。
 
-### HTTP/API ベースの設定
+### HTTP/API 駆動の設定
 
-HiveMQ は静的 XML と拡張固有のリロードセマンティクスに依存していますが、EMQX は動的設定 API を提供します。
+HiveMQ は静的 XML と拡張固有のリロードセマンティクスに依存しますが、EMQX は動的設定 API を提供します。
 
 ```bash
 curl -s -H "Authorization: Bearer $TOKEN" \
@@ -672,24 +671,24 @@ curl -s -H "Authorization: Bearer $TOKEN" \
   -d '{"type": "ssl", "bind": "0.0.0.0:8883", "id": "ssl:default", "max_connections": 200000}'
 ```
 
-これは `data/configs/cluster.hocon` に書き込まれます。設定を不変（`emqx.conf` のみ）にするか、環境ごとのオーバーライドを許容する EMQX の二層モデルを採用するかは検討してください。
+これは `data/configs/cluster.hocon` に書き込みます。設定を不変（`emqx.conf` のみ）にするか、環境ごとのオーバーライドを許容する EMQX の二層モデルを採用するか検討してください。
 
 ## 検証チェックリスト
 
 本番トラフィック切り替え前に以下を確認してください。
 
 - すべての EMQX リスナーが `running` 状態であること（`emqx ctl listeners list`）。
-- TLS ハンドシェイクが成功し、クライアント証明書未提示時に失敗すること（mTLS デバイスの場合）。
-- EMQX セッションのデバイス ID が元の HiveMQ クライアント ID と一致していること。
-- ACL が HiveMQ で設定したトピックアクセス制御を適切に適用していること。
+- TLS ハンドシェイクが成功し、クライアント証明書なしでは失敗すること（mTLS デバイスの場合）。
+- EMQX セッションのデバイス ID が元の HiveMQ クライアント ID と一致すること。
+- ACL が HiveMQ で適用していたトピックアクセス制御を適切に強制していること。
 - クラスターのノードがネットワーク分断後に自動回復すること。
-- Kafka 統合が変換なしにデータを受信していること。
+- Kafka 統合が変換の問題なくデータを受信していること。
 - Prometheus でメトリクスが可視化されていること。
 
 ## まとめ
 
-HiveMQ から EMQX への移行は主に設定の翻訳作業です。Java 中心のアーティファクト（XML、JKS、拡張）を EMQX の HOCON 設定、柔軟な認証チェーン、およびデータ統合フレームワークに変換します。
+HiveMQ から EMQX への移行は主に設定の翻訳作業です。Java 中心のアーティファクト（XML、JKS、拡張）を EMQX の HOCON 設定、柔軟な認証チェーン、データ統合フレームワークに変換します。
 
-インベントリ、設定、更新の3段階を踏むことで、デバイス認証情報、トピック構造、統合フローを維持しつつ、EMQX の高並行性な Erlang ランタイムと動的設定機能を活用できます。
+インベントリ、設定、更新の3フェーズを踏むことで、デバイス認証情報、トピック構造、統合フローを維持しつつ、EMQX の高並行性な Erlang ランタイムと動的設定機能を活用できます。
 
-移行計画を慎重に立て、各リスナーと統合を検証し、自信を持ってカットオーバーを実施してください。
+計画的に移行を進め、各リスナーと統合を検証し、自信を持ってカットオーバーを実施してください。
