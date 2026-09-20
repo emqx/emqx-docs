@@ -26,7 +26,7 @@ sdk install gradle 9.2.1
 
 ### EMQX のインストールと起動
 
-[Getting Started](../../../get-started/get-started.md) ガイドに従い、EMQX ブローカーをインストールして起動してください。
+[Getting Started](../../../get-started/getting-started.md) ガイドに従い、EMQX ブローカーをインストールして起動してください。
 
 ## MCPサーバーのサンプルをダウンロードして実行
 

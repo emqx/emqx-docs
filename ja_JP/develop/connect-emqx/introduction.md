@@ -5,24 +5,19 @@
 ### その他の例
 [More Examples](https://github.com/emqx/MQTT-Client-Examples)
 
-- ![C](./c.html)  
-  **C**  
+- [**C**](./c.md)<br>
   MQTT C SDK の例
 
-- ![Java](./java.html)  
-  **Java**  
+- [**Java**](./java.md)<br>
   MQTT Java SDK の例
 
-- ![Golang](./go.html)  
-  **Golang**  
+- [**Golang**](./go.md)<br>
   MQTT Go SDK の例
 
-- ![Python](./python.html)  
-  **Python**  
+- [**Python**](./python.md)<br>
   MQTT Python SDK の例
 
-- ![JavaScript](./javascript.html)  
-  **JavaScript**  
+- [**JavaScript**](./javascript.md)<br>
   MQTT JavaScript SDK の例
 
 ## サードパーティ製 SDK の推奨
