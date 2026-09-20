@@ -1,13 +1,13 @@
 # JavaScript SDKによる接続
 
-[MQTT.js](https://github.com/mqttjs/MQTT.js)は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールであり、ブラウザおよびNode.js環境で利用できます。
+[MQTT.js](https://github.com/mqttjs/MQTT.js)は、JavaScriptで実装されたMQTTプロトコルのクライアント機能を持つモジュールであり、ブラウザおよびNode.js環境で使用できます。
 
-JavaScriptのシングルスレッド特性により、MQTT.jsは完全に非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各種動作環境でのサポート状況は以下の通りです。
+JavaScriptのシングルスレッド特性により、MQTT.jsは完全に非同期のMQTTクライアントです。MQTT.jsはMQTTおよび[MQTT over WebSocket](./mqtt-over-websocket.md)をサポートしています。各動作環境でのサポート状況は以下の通りです。
 
 - ブラウザ環境：MQTT over WebSocket（WeChatアプレット、Alipayアプレットなどのカスタマイズされたブラウザ環境を含む）
 - Node.js環境：MQTT、MQTT over WebSocket
 
-接続パラメータの一部は環境によって異なりますが、それ以外のAPIは共通です。
+一部の接続パラメーターは環境によって異なりますが、それ以外のAPIは共通です。
 
 npmによるインストール：
 
@@ -25,16 +25,16 @@ CDNによるインストール（ブラウザ）：
 </script>
 ```
 
-Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに利用可能です。
+Node.jsがインストールされている環境では、`npm i mqtt -g`コマンドでMQTT.jsをグローバルに使用できます。
 
 ```bash
 npm i mqtt -g
 
 mqtt help
 
-> MQTT.jsコマンドラインインターフェース。利用可能なコマンドは以下の通りです：
+> MQTT.jsコマンドラインインターフェース、利用可能なコマンドは以下の通りです：
 
-  * publish     ブローカーにメッセージをパブリッシュする
+  * publish     ブローカーへメッセージをパブリッシュする
   * subscribe   ブローカーからの更新をサブスクライブする
   * version     現在のMQTT.jsのバージョン
   * help        コマンドのヘルプ
@@ -44,7 +44,7 @@ mqtt help
 
 ## MQTT.js 使用例
 
-以下はJavaScriptでMQTT.jsを用いてEMQXに接続し、メッセージの送受信を行う完全なコード例です。
+以下はJavaScriptでMQTT.jsを使い、EMQXに接続してメッセージの送受信を行う完全なコード例です。
 
 ```javascript
 // const mqtt = require('mqtt')
@@ -60,7 +60,7 @@ const options = {
       password: 'emqx_test',
 }
 
-// 接続URL。プロトコルで接続方式を指定
+// 接続文字列、プロトコルで接続方式を指定
 // ws 暗号化されていないWebSocket接続
 // wss 暗号化されたWebSocket接続
 // mqtt 暗号化されていないTCP接続
@@ -83,6 +83,6 @@ client.on('message', (topic, message) => {
 })
 ```
 
-## MQTT.jsのMQTT 5.0サポート
+## MQTT.jsのMQTT 5.0対応状況
 
 現在、MQTT.jsはMQTT 5.0を完全にサポートしています。

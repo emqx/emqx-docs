@@ -1,23 +1,23 @@
 ---
 title: EMQX テクニカルサポート
-description: EMQX Enterprise 向けの専門的なテクニカルサポートをご提供し、堅牢なソリューションとプロフェッショナルな支援で IoT ミドルウェアプラットフォームの最適化を支援します。
+description: EMQX Enterprise向けの専門的なテクニカルサポートをご提供し、堅牢なソリューションとプロフェッショナルな支援でIoTミドルウェアプラットフォームの最適化を支援します。
 ---
 
 # EMQX テクニカルサポート
 
-EMQ は、世界をリードするオープンソース IoT データインフラストラクチャのソフトウェアプロバイダーです。エッジからクラウド、マルチクラウドまでのリアルタイム IoT データの接続、移動、処理、分析を一元的に行うクラウドネイティブ製品を通じて、将来にわたって持続可能な IoT アプリケーションの実現を支援しています。
+EMQは、世界をリードするオープンソースIoTデータインフラストラクチャのソフトウェアプロバイダーです。エッジからクラウド、マルチクラウドに至るまで、リアルタイムIoTデータの接続、移動、処理、分析を一元的に実現するクラウドネイティブ製品を通じて、将来にわたって通用するIoTアプリケーションの実現を支援しています。
 
-当社のコア製品である EMQX は、世界で最もスケーラブルかつ信頼性の高いオープンソース MQTT メッセージングプラットフォームであり、1 クラスターあたり 1 億台の同時 IoT デバイス接続をサポートし、毎秒 100 万メッセージのスループットとサブミリ秒のレイテンシを維持します。2 万以上の企業ユーザー、1 億台以上の IoT デバイスに接続されており、HPE、VMware、Verifone、SAIC Volkswagen、Ericsson などの著名ブランドを含む 400 社以上のミッションクリティカルな IoT シナリオで信頼されています。
+当社のコア製品であるEMQXは、世界で最もスケーラブルかつ信頼性の高いオープンソースのMQTTメッセージングプラットフォームであり、1クラスターあたり1億の同時IoTデバイス接続をサポートし、毎秒100万メッセージのスループットとサブミリ秒のレイテンシを維持します。2万社以上の企業ユーザーが利用し、1億台以上のIoTデバイスを接続、HPE、VMware、Verifone、上汽フォルクスワーゲン、エリクソンなどの著名ブランドを含む400社以上のミッションクリティカルなIoTシナリオで信頼されています。
 
-EMQ のグローバル R&D センターはストックホルムにあり、アメリカ大陸、ヨーロッパ、アジア太平洋地域に 10 以上のオフィスを展開しています。
+EMQのグローバルR&Dセンターはストックホルムにあり、アメリカ大陸、ヨーロッパ、アジア太平洋地域に10以上のオフィスを展開しています。
 
-EMQX 製品や当社の IoT ソリューションに関するご質問がございましたら、以下までお気軽にお問い合わせください。
+EMQX製品や当社のIoTソリューションに関するご質問がございましたら、以下までお気軽にお問い合わせください。
 
 **EMQ**
 
 **メール:** [contact@emqx.io](mailto:contact@emqx.io)
 
-**製品フィードバック:** [EMQX サポートポータル](https://www.emqx.com/en/support)
+**製品フィードバック:** [EMQX Support Portal](https://www.emqx.com/en/support)
 
 **営業:** [sales@emqx.io](mailto:sales@emqx.io)
 
@@ -27,34 +27,34 @@ EMQX 製品や当社の IoT ソリューションに関するご質問がござ�
 
 **所在地:** 
 
-- 本社： 中国 浙江省 杭州市 餘杭区 龍源路 88 号 3 号棟 A301
-- グローバル R&D センター： Klarabergsgatan 60, 111 21 Stockholm, Sweden
-- ヨーロッパオフィス： Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
-- 米国オフィス： 1300 El Camino Real, Suite 100, Menlo Park, CA 94025
+- 本社: 中国 浙江省 杭州市 余杭区 龍源路88号 3号棟 A301
+- グローバルR&Dセンター: Klarabergsgatan 60, 111 21 Stockholm, Sweden
+- ヨーロッパオフィス: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
+- 米国オフィス: 1300 El Camino Real, Suite 100, Menlo Park, CA 94025
 
-EMQX サービスチームは、専門的なサポートを提供いたします。
+EMQXサービスチームは、専門的なサポートを提供いたします。
 
-- IoT ソリューションの設計、デプロイ、カスタマイズに関する専門的なサポートは、[EMQX サービスチーム](https://www.emqx.com/en/contact?product=emqx)までご連絡ください。
-- [EMQX サポートポータル](https://www.emqx.com/en/support)では、当社が提供する商用サポート内容をご確認いただけます。
+- IoTソリューションの設計、デプロイ、カスタマイズに関する専門的なサポートは、[EMQXサービスチーム](https://www.emqx.com/en/contact?product=emqx)までご連絡ください。
+- 当社が提供する商用サポートの詳細は、[EMQX Support Portal](https://www.emqx.com/en/support)をご覧ください。
 
 **商用サポートレベル**
 
-| 機能                       | スタンダード                                               | プロフェッショナル                                         |
-| -------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| サポート時間               | 5*8                                                        | 7*24                                                       |
-| メールサポート             | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 機能                     | スタンダード                                               | プロフェッショナル                                         |
+| ------------------------ | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| サポート時間             | 5*8                                                        | 7*24                                                       |
+| メールサポート           | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | オンラインチャットサポート | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| 電話ホットラインサポート   | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| 応答時間                   | 8 時間                                                     | 2 時間                                                     |
-| ホットバグ修正             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 電話ホットラインサポート | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 応答時間                 | 8時間                                                      | 2時間                                                      |
+| 緊急バグ修正             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | サードパーティプラグインサポート | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 
-EMQX の開発者およびユーザーの皆様は、EMQX フォーラムや Slack チャンネル、GitHub ページに参加して、質問や回答の共有、アイデアやベストプラクティスの交換を行えます。
+EMQXの開発者およびユーザーの皆様は、EMQXフォーラムやSlackチャンネル、GitHubページに参加して、質問、回答、アイデアやベストプラクティスの共有を行うことができます。
 
-- [Slack](https://slack-invite.emqx.io/): 世界中の EMQX 開発者およびユーザーとつながれます。
-- [GitHub](https://github.com/emqx/emqx): EMQX のソースコードにアクセスし、問題報告や機能リクエストが可能です。
+- [Slack](https://slack-invite.emqx.io/): 世界中のEMQX開発者およびユーザーとつながることができます。
+- [GitHub](https://github.com/emqx/emqx): EMQXのソースコードの閲覧、問題報告、新機能リクエストが可能です。
 
-また、以下のプラットフォームでもご連絡いただけます。
+また、以下のSNSでもご連絡いただけます。
 
 - [X](https://x.com/EMQTech)
 - [YouTube](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q)

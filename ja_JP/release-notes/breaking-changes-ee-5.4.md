@@ -1,18 +1,18 @@
-# Incompatible Changes in EMQX 5.4 
+# EMQX 5.4 における非互換変更
 
-## e5.4.0
+## 5.4.0
 
-- [#11998](https://github.com/emqx/emqx/pull/11998) Stopped releasing packages for MacOS 11 (Big Sur).
+- [#11998](https://github.com/emqx/emqx/pull/11998) MacOS 11（Big Sur）向けパッケージのリリースを終了しました。
 
-- [#12112](https://github.com/emqx/emqx/pull/12112) Stopped supporting UDP multicast based clustering strategy.
+- [#12112](https://github.com/emqx/emqx/pull/12112) UDPマルチキャストに基づくクラスタリング戦略のサポートを終了しました。
 
-- [#10976](https://github.com/emqx/emqx/pull/10976) Fixed topic-filter overlapping handling in shared subscription.
-  * Hook callback `session.subscribed` and `client.subscribe` will now receive shared subscription in its full representation, e.g. `$share/group1/topic1/#`, and the `share` property is deleted from `subopts`.
-  * Hook callback `session.unsubscribed` and `client.unsubscribe` will now receive shared subscription in its full representation, e.g. `$share/group1/topic1/#` instead of just `topic1/#`.
-  * ExHook Proto changed. The `share` field in message `SubOpts` was deprecated.
-    ExHook Server will now receive shared subscription in its full representation, e.g. `$share/group1/topic1/#`, and the `share` property is deleted from message `SubOpts`.
-  * `session.subscribed` and `session.unsubscribed` rule-engine events will have shared subscriptions in their full representation for `topic`, e.g. `$share/group1/topic1/#` instead of just `topic1/#`.
+- [#10976](https://github.com/emqx/emqx/pull/10976) 共有サブスクライブにおけるトピックフィルターの重複処理を修正しました。
+  * フックコールバック `session.subscribed` および `client.subscribe` は、共有サブスクライブを完全な表現（例：`$share/group1/topic1/#`）で受け取り、`subopts` から `share` プロパティが削除されます。
+  * フックコールバック `session.unsubscribed` および `client.unsubscribe` は、共有サブスクライブを完全な表現（例：`$share/group1/topic1/#`）で受け取り、単に `topic1/#` ではなくなります。
+  * ExHook Proto が変更されました。メッセージ `SubOpts` の `share` フィールドは非推奨となりました。
+    ExHook サーバーは、共有サブスクライブを完全な表現（例：`$share/group1/topic1/#`）で受け取り、メッセージ `SubOpts` から `share` プロパティが削除されます。
+  * ルールエンジンのイベント `session.subscribed` および `session.unsubscribed` は、`topic` に共有サブスクライブを完全な表現（例：`$share/group1/topic1/#`）で含み、単に `topic1/#` ではなくなります。
 
-- [#12129](https://github.com/emqx/emqx/pull/12129) The default license capacity has been adjusted from 100 concurrent connections to 25 concurrent connections.
+- [#12129](https://github.com/emqx/emqx/pull/12129) デフォルトのライセンス容量を、同時接続100から同時接続25に調整しました。
 
-- [#12114](https://github.com/emqx/emqx/pull/12114) ExHook Proto changed. The `qos` field in message `TopicFilter` was deprecated. ExHook Server will now receive full subscription options: `qos`, `rh`, `rap`, `nl` in message `SubOpts`.
+- [#12114](https://github.com/emqx/emqx/pull/12114) ExHook Proto が変更されました。メッセージ `TopicFilter` の `qos` フィールドは非推奨となりました。ExHook サーバーは、メッセージ `SubOpts` にて完全なサブスクライブオプション（`qos`、`rh`、`rap`、`nl`）を受け取るようになります。

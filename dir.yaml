@@ -13,14 +13,14 @@
   - guides/cluster/security
   - title_en: Configure Load Balancer
     title_cn: 集群负载均衡
-    title_ja: クラスターのロードバランサー設定
+    title_ja: ロードバランサーの設定
     path: guides/cluster/lb
     children:
     - guides/cluster/lb-nginx
     - guides/cluster/lb-haproxy
   - title_en: Node Evacuation and Cluster Load Rebalancing
     title_cn: 节点疏散与集群负载重平衡
-    title_ja: ノードの退避とクラスター負荷再分散
+    title_ja: ノードの退避とクラスター負荷の再バランス
     path: guides/cluster/rebalancing
   - title_en: Performance and Tuning
     title_cn: 性能与调优
@@ -126,7 +126,7 @@
     path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
   - title_en: EMQX 企业版 API 文档
     title_cn: EMQX 企业版 API 文档
-    title_ja: EMQX 企业版 API 文档
+    title_ja: EMQX エンタープライズ API ドキュメント
     lang: cn
     path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
   - title_en: EMQX Enterprise API Docs

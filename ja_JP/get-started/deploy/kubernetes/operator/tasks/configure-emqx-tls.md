@@ -2,11 +2,11 @@
 
 ## 目的
 
-`extraVolumes` および `extraVolumeMounts` フィールドを使用してTLS証明書をカスタマイズします。
+`extraVolumes` と `extraVolumeMounts` フィールドを使用してTLS証明書をカスタマイズします。
 
 ## TLS証明書に基づくSecretの作成
 
-Secretは、パスワード、トークン、キーなどの少量の機密情報を格納するオブジェクトです。本デモではTLS証明書情報を保存するためにSecretを使用するため、EMQXクラスターを作成する前にSecretを作成する必要があります。
+Secretは、パスワードやトークン、キーなどの少量の機密情報を格納するオブジェクトです。本デモではTLS証明書情報をSecretに格納するため、EMQXクラスターを作成する前にSecretを作成する必要があります。
 
 詳細は[Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets)のドキュメントをご参照ください。
 
@@ -50,9 +50,9 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
 
 本デモではこれらのフィールドを使用してTLS証明書をEMQXクラスターに提供します。
 
-ボリュームには多くの種類があります。ボリュームの詳細については[Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret)のドキュメントをご参照ください。ここでは `secret` ボリュームタイプを使用します。
+ボリュームには多くの種類があります。ボリュームの詳細は[Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret)のドキュメントをご参照ください。ここでは`secret`ボリュームタイプを使用しています。
 
-1. 以下をYAMLファイルとして保存し、`kubectl apply` でデプロイします。
+1. 以下をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -62,7 +62,7 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       # `emqx-tls` ボリュームからマウントされたTLSリスナー証明書を設定：
+       # `emqx-tls`ボリュームからマウントしたTLSリスナー証明書を設定:
        data: |
          listeners.ssl.default {
            bind = "0.0.0.0:8883"
@@ -89,13 +89,13 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
      replicantTemplate:
        spec:
          extraVolumes:
-           # `secret` ボリュームタイプで `emqx-tls` を作成：
+           # `secret`ボリュームタイプの`emqx-tls`を作成:
            - name: emqx-tls
              secret:
                secretName: emqx-tls
          extraVolumeMounts:
            - name: emqx-tls
-             # TLS証明書をEMQXノードにマウントするディレクトリ：
+             # TLS証明書をEMQXノードにマウントするディレクトリ:
              mountPath: /mounted/cert
      dashboardServiceTemplate:
        spec:
@@ -105,9 +105,9 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
          type: LoadBalancer
    ```
 
-2. EMQXクラスターがReady状態になるまで待ちます。
+2. EMQXクラスターが準備完了になるまで待ちます。
 
-   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS` が `Ready` であることを確認してください。完了までに時間がかかる場合があります。
+   `kubectl get` コマンドでEMQXクラスターの状態を確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx
@@ -137,7 +137,7 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
    [10:00:25] › ✔ Subscribed to hello
    ```
 
-3. 別のターミナルでメッセージをパブリッシュします。
+3. 別のターミナルウィンドウでメッセージをパブリッシュします。
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -147,7 +147,7 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
    [10:00:58] › ✔ Message published
    ```
 
-4. サブスクライバー側でメッセージ受信を確認します。
+4. サブスクライバークライアントがメッセージを受信することを確認します。
 
    ```bash
    mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -157,4 +157,4 @@ EMQX CRD `apps.emqx.io/v2beta1` は、EMQXクラスターに追加のボリュ�
    [10:00:58] › ✔ Message published
    ```
 
-   これにより、パブリッシャーおよびサブスクライバーの両クライアントがTLS接続を介してブローカーと正常に通信できていることが確認できます。
+   これにより、パブリッシャーとサブスクライバーの両クライアントがTLS接続を介して正常にブローカーと通信できていることが示されます。

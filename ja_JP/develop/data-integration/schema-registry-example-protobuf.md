@@ -4,9 +4,9 @@
 
 ## デコードシナリオ
 
-デバイスがProtobufでエンコードされたバイナリメッセージをパブリッシュし、ルールエンジンがそれをマッチングして、`name`フィールドに関連付けられたトピックに再パブリッシュする必要があります。トピックの形式は `person/${name}` です。
+デバイスがProtobufでエンコードされたバイナリメッセージをパブリッシュし、そのメッセージをルールエンジンでマッチさせて、`name` フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は `person/${name}` です。
 
-例えば、`name`フィールドが「Shawn」のメッセージをトピック `person/Shawn` に再パブリッシュします。
+例えば、`name` フィールドが "Shawn" のメッセージをトピック `person/Shawn` に再パブリッシュします。
 
 ### スキーマの作成
 
@@ -20,7 +20,7 @@
 
 4. スキーマの **Type** を選択します。`Protobuf` を選択してください。
 
-5. **Creation Method** を選択します。選択肢は2つあります：
+5. **Creation Method** を選択します。以下の2つのオプションがあります：
 
    ::: tip
 
@@ -58,7 +58,7 @@
 
 2. **Rules** ページの右上にある **Create** をクリックします。
 
-3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を記述します：
+3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を書きます：
 
    ```sql
    SELECT
@@ -71,23 +71,23 @@
 
    ここでのポイントは `schema_decode('protobuf_person', payload, 'Person')` です：
 
-   - `schema_decode` 関数は、`protobuf_person` スキーマに基づいてペイロードの内容をデコードします。
+   - `schema_decode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をデコードします。
    - `as person` はデコードした値を変数 `person` に格納します。
-   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを示します。
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
 
 4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. **Topic** フィールドに、宛先トピックとして `person/${person.name}` を入力します。
+5. **Topic** フィールドに宛先トピックとして `person/${person.name}` と入力します。
 
-6. **Payload** フィールドに、メッセージコンテンツのテンプレートとして `${person}` を入力します。
+6. **Payload** フィールドにメッセージコンテンツのテンプレートとして `${person}` と入力します。
 
 このアクションにより、デコードされた "person" メッセージがJSON形式でトピック `person/${person.name}` に送信されます。`${person.name}` は変数プレースホルダーで、実行時にデコードされたメッセージの `name` フィールドの値に置き換えられます。
 
 ### デバイス側コードの準備
 
-ルールが作成されたら、テスト用のデータをシミュレートできます。
+ルールが作成されたら、テスト用にデータをシミュレートできます。
 
-以下のコードはPython言語を使用し、ユーザーメッセージを作成してバイナリデータにエンコードし、`t/1` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c)を参照してください。
+以下のコードはPython言語を使用してユーザーメッセージを作成し、バイナリデータとしてエンコードしてからトピック `t/1` に送信します。詳細は[フルコード](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c)を参照してください。
 
 ```python
 def publish_msg(client):
@@ -103,19 +103,17 @@ def publish_msg(client):
 
 ### ルール実行結果の確認
 
-1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
-
    - EMQXをローカルで実行している場合はデフォルト値を使用できます。
-
-   - 認証設定などEMQXのデフォルト構成を変更している場合は、ユーザー名やパスワードの入力が必要になることがあります。
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名とパスワードの入力が必要になることがあります。
 
 3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
 
 4. **Subscription** エリアの **Topic** フィールドに `person/#` と入力し、**Subscribe** をクリックします。
 
-5. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
+5. Pythonの依存関係をインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install protobuf paho-mqtt
@@ -138,7 +136,7 @@ def publish_msg(client):
 
 ### スキーマの作成
 
-[デコードシナリオ](#デコードシナリオ)で説明したのと同じスキーマを使用します。
+[デコードシナリオ](#デコードシナリオ)で説明したスキーマを使用します。
 
 ### ルールの作成
 
@@ -146,7 +144,7 @@ def publish_msg(client):
 
 2. **Rules** ページの右上にある **Create** をクリックします。
 
-3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を記述します：
+3. 先ほど作成したスキーマを使って、以下のようにルールのSQL文を書きます：
 
    ```sql
    SELECT
@@ -157,24 +155,24 @@ def publish_msg(client):
 
    ここでのポイントは `schema_encode('protobuf_person', json_decode(payload), 'Person')` です：
 
-   - `schema_encode` 関数は、`protobuf_person` スキーマに基づいてペイロードの内容をエンコードします。
+   - `schema_encode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をエンコードします。
    - `as protobuf_person` はエンコードした値を変数 `protobuf_person` に格納します。
-   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを示します。
-   - `json_decode(payload)` は、ペイロードが一般的にJSONエンコードされたバイナリであるため、`schema_encode` の入力としてMap型が必要なために使用します。
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
+   - `json_decode(payload)` は、ペイロードが一般的にJSONエンコードされたバイナリであるため、`schema_encode` がMapを入力として必要とするために使用します。
 
 4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. **Topic** フィールドに、宛先トピックとして `protobuf_out` を入力します。
+5. **Topic** フィールドに宛先トピックとして `protobuf_out` と入力します。
 
-6. **Payload** フィールドに、メッセージコンテンツのテンプレートとして `${protobuf_person}` を入力します。
+6. **Payload** フィールドにメッセージコンテンツのテンプレートとして `${protobuf_person}` と入力します。
 
 このアクションにより、Protobufでエンコードされたユーザーメッセージがトピック `protobuf_out` に送信されます。`${protobuf_person}` は変数プレースホルダーで、実行時に `schema_encode` の結果（バイナリ値）に置き換えられます。
 
 ### デバイス側コードの準備
 
-ルールが作成されたら、テスト用のデータをシミュレートできます。
+ルールが作成されたら、テスト用にデータをシミュレートできます。
 
-以下のコードはPython言語を使用し、ユーザーメッセージを作成してバイナリデータをデコードし、受信したメッセージを表示します。詳細は[フルコード](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa)を参照してください。
+以下のコードはPython言語を使用してユーザーメッセージを作成し、バイナリデータとしてエンコードしてからトピック `protobuf_in` に送信します。詳細は[フルコード](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa)を参照してください。
 
 ```python
 def on_message(client, userdata, msg):
@@ -186,13 +184,11 @@ def on_message(client, userdata, msg):
 
 ### ルール実行結果の確認
 
-1) ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
 
 2) 現在のEMQXインスタンスの接続情報を入力します。
-
    - EMQXをローカルで実行している場合はデフォルト値を使用できます。
-
-   - 認証設定などEMQXのデフォルト構成を変更している場合は、ユーザー名やパスワードの入力が必要になることがあります。
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名とパスワードの入力が必要になることがあります。
 
 3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
 
@@ -204,7 +200,7 @@ def on_message(client, userdata, msg):
 
 5. **Publish** をクリックします。
 
-6. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
+6. Pythonの依存関係をインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install protobuf paho-mqtt

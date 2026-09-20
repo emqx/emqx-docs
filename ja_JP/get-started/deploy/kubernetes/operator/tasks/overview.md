@@ -1,12 +1,12 @@
 # EMQXクラスターの管理
 
-本章では、Kubernetesクラスター上でEMQXを操作・管理するための一般的なタスクや手順をステップバイステップで説明します。
+本章では、Kubernetesクラスター上のEMQXでよく行われるタスクや操作をステップバイステップで説明します。
 
 ## 設定とセットアップ
 
 - ライセンスとセキュリティ
   - [ライセンスの管理](./configure-emqx-license.md)
-  - [EMQXリスナーのTLS有効化](./configure-emqx-tls.md)
+  - [EMQXリスナーでのTLS有効化](./configure-emqx-tls.md)
 - クラスター設定
   - [EMQX設定の変更](./configure-emqx-config.md)
   - [コア・レプリカントデプロイメントの有効化](./configure-emqx-core-replicant.md)
@@ -24,4 +24,4 @@
 
 ## 監視とパフォーマンス
 
-- [Prometheusを使用したEMQXクラスターの監視](./configure-emqx-prometheus.md)
+- [PrometheusによるEMQXクラスターの監視](./configure-emqx-prometheus.md)

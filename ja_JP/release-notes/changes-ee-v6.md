@@ -2,63 +2,63 @@
 
 ## 6.0.3
 
-*Release Date: 2026-06-17*
+*リリース日: 2026-06-17*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.3.
+EMQX 6.0.3 へのアップグレード前に、破壊的変更点および既知の問題を必ずご確認ください。
 
-### Enhancements
+### 強化点
 
-#### Security Hardening
+#### セキュリティ強化
 
-- [#17040](https://github.com/emqx/emqx/pull/17040) Restricted API key access to Dashboard user-account management endpoints.
+- [#17040](https://github.com/emqx/emqx/pull/17040) Dashboard のユーザーアカウント管理エンドポイントへの API キーアクセスを制限しました。
 
-  Previously, an API key with the `administrator` role could call the Dashboard user management endpoints `POST/DELETE /users/:username/mfa` and `POST /users/:username/change_pwd` via HTTP Basic authentication. This meant an API key could reset or disable another Dashboard user's MFA, or change another Dashboard user's password, bypassing the intended separation between human Dashboard sessions and machine API keys.
+  以前は、`administrator` ロールを持つ API キーが HTTP Basic 認証を用いて Dashboard のユーザー管理エンドポイント `POST/DELETE /users/:username/mfa` および `POST /users/:username/change_pwd` を呼び出せました。これにより、API キーが他の Dashboard ユーザーの MFA をリセットまたは無効化したり、パスワードを変更したりできてしまい、本来の人間の Dashboard セッションと機械の API キーの分離が回避されていました。
 
-  These endpoints now return `401 API_KEY_NOT_ALLOW` when accessed via an API key, consistent with the existing policy that blocks API key access to `/users`, `/users/:username`, `/logout`, and `/api_key`. Dashboard users can still manage their own MFA and password from the Dashboard UI using bearer-token (JWT) sessions.
+  これらのエンドポイントは API キー経由でアクセスすると `401 API_KEY_NOT_ALLOW` を返すようになり、既存の `/users`、`/users/:username`、`/logout`、`/api_key` への API キーアクセス制限ポリシーと整合しています。Dashboard ユーザーは引き続き Dashboard UI からベアラートークン（JWT）セッションを使って自身の MFA とパスワードを管理できます。
 
-- [#17065](https://github.com/emqx/emqx/pull/17065) Added SSRF protection for rule-engine-reachable connector and bridge configurations.
+- [#17065](https://github.com/emqx/emqx/pull/17065) ルールエンジンから到達可能なコネクターおよびブリッジ設定に対する SSRF 保護を追加しました。
 
-  When `rule_engine.ssrf.enable` is set to `true`, EMQX applies an outbound SSRF policy to connector, bridge, and action configurations. The policy evaluates each target as follows: exact matches in `rule_engine.ssrf.deny_hosts` are rejected immediately; resolved target IPs are then checked against `rule_engine.ssrf.allow_cidrs` before `rule_engine.ssrf.deny_cidrs`. The default denied ranges cover loopback, link-local (including cloud instance-metadata endpoints), RFC 1918, ULA, unspecified, and multicast ranges. The check runs at config-update time and covers HTTP `url` fields as well as `server`, `servers`, and `bootstrap_hosts` fields across all connector families.
+  `rule_engine.ssrf.enable` を `true` に設定すると、EMQX はコネクター、ブリッジ、アクションの設定に対してアウトバウンド SSRF ポリシーを適用します。ポリシーはターゲットを評価し、`rule_engine.ssrf.deny_hosts` の完全一致は即座に拒否され、解決されたターゲット IP は `rule_engine.ssrf.allow_cidrs` と `rule_engine.ssrf.deny_cidrs` に照らしてチェックされます。デフォルトの拒否範囲にはループバック、リンクローカル（クラウドのインスタンスメタデータエンドポイント含む）、RFC 1918、ULA、未指定、マルチキャスト範囲が含まれます。チェックは設定更新時に実行され、HTTP の `url` フィールドだけでなく、すべてのコネクター系の `server`、`servers`、`bootstrap_hosts` フィールドにも適用されます。
 
-  The feature is disabled by default to preserve compatibility with deployments whose connectors legitimately point at internal services. Operators in multi-tenant or externally-exposed setups are encouraged to enable it together with a network-layer egress firewall.
+  この機能はデフォルトで無効化されており、内部サービスを正当に指すコネクターとの互換性を保ちます。マルチテナントや外部公開環境の運用者は、ネットワーク層のイグレスファイアウォールと併せて有効化を推奨します。
 
-- [#17173](https://github.com/emqx/emqx/pull/17173) Restricted API keys from exporting or importing Dashboard accounts and API keys via the data backup endpoints.
+- [#17173](https://github.com/emqx/emqx/pull/17173) API キーによる Dashboard アカウントおよび API キーのデータバックアップエンドポイント経由のエクスポート・インポートを制限しました。
 
-  `POST /data/export` called with an API key now silently omits the `dashboard_users` and `api_keys` mnesia table sets from the resulting archive. `POST /data/import` called with an API key now returns `403 FORBIDDEN` when the uploaded backup contains either of those table sets.
+  API キーで呼び出された `POST /data/export` は、生成されるアーカイブから `dashboard_users` と `api_keys` の mnesia テーブルセットを静かに省略します。API キーで呼び出された `POST /data/import` は、アップロードされたバックアップにこれらのテーブルセットが含まれている場合 `403 FORBIDDEN` を返します。
 
-  Dashboard bearer-token (login) callers are unaffected and continue to be able to back up and restore the full database, including Dashboard users and API keys.
+  Dashboard のベアラートークン（ログイン）呼び出しは影響を受けず、Dashboard ユーザーおよび API キーを含む完全なデータベースのバックアップと復元が可能です。
 
-  This closes a privilege-escalation gap. The existing `/users` and `/api_key` endpoints already deny API keys access to Dashboard login credentials and API key records, but an API key holder could bypass those restrictions by going through the data backup endpoints instead.
+  これは権限昇格のギャップを解消します。既存の `/users` および `/api_key` エンドポイントは API キーによる Dashboard ログイン資格情報および API キー記録へのアクセスを拒否していますが、API キー保持者はデータバックアップエンドポイント経由でこれらの制限を回避できていました。
 
-- [#17187](https://github.com/emqx/emqx/pull/17187) Removed the EMQX release version (`rel_vsn`) from the unauthenticated `GET /status?format=json` response to avoid disclosing the broker version to unauthenticated callers. The version remains available via the authenticated node-info APIs.
+- [#17187](https://github.com/emqx/emqx/pull/17187) 未認証の `GET /status?format=json` レスポンスから EMQX リリースバージョン (`rel_vsn`) を削除し、ブローカーのバージョン情報が未認証者に漏れないようにしました。バージョン情報は認証済みのノード情報 API で引き続き取得可能です。
 
-- [#17201](https://github.com/emqx/emqx/pull/17201) Hardened the plugin install endpoint against path traversal in uploaded tarballs and tightened the install allowlist.
+- [#17201](https://github.com/emqx/emqx/pull/17201) プラグインインストールエンドポイントのアップロードされた tarball に対するパストラバーサル攻撃を防ぎ、インストール許可リストを厳格化しました。
 
-  - The install path now refuses to extract any tarball whose entries would resolve outside the plugin install directory.
-  - `emqx ctl plugins allow <name-vsn>` entries now expire 5 minutes after they are issued, and can be pinned to a SHA-256 hash of the package via `emqx ctl plugins allow <name-vsn> sha256:<HEX>`. Uploads whose contents do not match the pinned hash are rejected with `403 Forbidden`. When the optional `sha256:` argument is omitted, the previous behavior of accepting any payload named `<name-vsn>.tar.gz` is preserved.
-  - A successful install via the HTTP plugin install endpoint (and the Dashboard upload that wraps it) immediately revokes the allow entry cluster-wide, preventing the same grant from being reused for a different tarball.
+  - インストールパスは、プラグインインストールディレクトリ外に展開される tarball の抽出を拒否します。
+  - `emqx ctl plugins allow <name-vsn>` エントリは発行から 5 分後に期限切れとなり、`emqx ctl plugins allow <name-vsn> sha256:<HEX>` でパッケージの SHA-256 ハッシュに固定できます。固定ハッシュと一致しないアップロードは `403 Forbidden` で拒否されます。`sha256:` 引数を省略した場合は従来通り `<name-vsn>.tar.gz` という名前のペイロードを受け入れます。
+  - HTTP プラグインインストールエンドポイント（およびそれをラップする Dashboard のアップロード）での成功したインストールは、クラスタ全体で即座に許可エントリを取り消し、同じ許可を異なる tarball で再利用できなくします。
 
-- [#17309](https://github.com/emqx/emqx/pull/17309) Sanitized PROXY-Protocol v2 SSL Common Name and Subject fields to prevent control characters from being smuggled into client identity.
+- [#17309](https://github.com/emqx/emqx/pull/17309) PROXY-Protocol v2 の SSL Common Name および Subject フィールドに含まれる制御文字を除去し、クライアント識別情報への不正な文字混入を防止しました。
 
-  When a listener is configured with `proxy_protocol = true`, the broker now rejects connections whose PROXY-Protocol SSL TLV bytes contain ASCII control characters (the same byte class already rejected for MQTT-ingested `clientid`, `username`, and `password`). This blocks attacker-controlled bytes from reaching outbound HTTP authentication, authorization, or rule-engine header values via `${cert_common_name}` and `${cert_subject}` templates.
+  `proxy_protocol = true` に設定されたリスナーでは、PROXY-Protocol SSL TLV バイト列に ASCII 制御文字が含まれる接続を拒否します（MQTT で受信する `clientid`、`username`、`password` と同様のバイトクラス）。これにより、攻撃者制御のバイトが `${cert_common_name}` および `${cert_subject}` テンプレートを介して HTTP 認証・認可やルールエンジンのヘッダー値に混入するのを防ぎます。
 
-  The HTTP authentication and authorization clients also now refuse to send a request when a rendered header name or value contains a CR, LF, or NUL byte.
+  HTTP 認証・認可クライアントも、レンダリングされたヘッダー名または値に CR、LF、NUL バイトが含まれる場合はリクエストを送信しなくなりました。
 
-- [#17315](https://github.com/emqx/emqx/pull/17315) Extended the byte-class check applied to MQTT clientid / username / password to other fields that feed `ClientInfo` and HTTP request templating:
+- [#17315](https://github.com/emqx/emqx/pull/17315) MQTT の `clientid`、`username`、`password` に適用されているバイトクラスチェックを、`ClientInfo` および HTTP リクエストテンプレートに使用される他のフィールドにも拡張しました。
 
-  - `peersni` (TLS Server Name Indication; also accepted from the PROXY-Protocol v2 `authority` TLV) is now validated at the connection ingestion boundary. Control characters cause the connection to be rejected and a warning logged.
-  - Client attribute values produced by `mqtt.client_attrs_init` Variform expressions are dropped (with a warning) when they contain control characters, so templates such as `${client_attrs.tns}` cannot carry injected bytes downstream.
-  - HTTP action / bridge connector header rendering now drops any header whose rendered name or value contains NUL, CR, or LF.
+  - `peersni`（TLS Server Name Indication、PROXY-Protocol v2 の `authority` TLV からも受け入れ）は接続受け入れ境界で検証され、制御文字があれば接続拒否と警告ログ出力を行います。
+  - `mqtt.client_attrs_init` の Variform 式で生成されるクライアント属性値は、制御文字を含む場合は警告付きで破棄され、`${client_attrs.tns}` のようなテンプレートに制御文字が注入されるのを防ぎます。
+  - HTTP アクションおよびブリッジコネクターのヘッダー生成は、レンダリングされた名前または値に NUL、CR、LF が含まれるヘッダーを破棄します。
 
-- [#17330](https://github.com/emqx/emqx/pull/17330) Hardened the PROXY Protocol v2 TLV parser on TCP and SSL listeners with `proxy_protocol` enabled. Previously, a TLV whose declared length overran the buffer caused the parser to silently truncate the TLV stream, dropping any trailing fields. The parser is now strict: malformed TLV streams cause the connection to be rejected with a warning log entry instead of being accepted with a partially parsed PROXY header.
+- [#17330](https://github.com/emqx/emqx/pull/17330) `proxy_protocol` 有効な TCP および SSL リスナーの PROXY Protocol v2 TLV パーサーを強化しました。以前は、宣言長がバッファを超える TLV があるとパーサーが静かに TLV ストリームを切り詰め、後続フィールドを破棄していました。現在は厳格に処理し、不正な TLV ストリームは接続拒否と警告ログ出力を行います。
 
-- [#17440](https://github.com/emqx/emqx/pull/17440) Restricted `GET /api/v5/data/files/<filename>` (backup file download) to the global Dashboard administrator. Backup archives can contain Dashboard accounts (including password hashes and MFA/TOTP state) and API key records, so API key callers, Dashboard viewers, and namespaced administrators are no longer permitted to download them. Listing the backup directory (`GET /api/v5/data/files`) remains available to all roles that previously had access.
+- [#17440](https://github.com/emqx/emqx/pull/17440) `GET /api/v5/data/files/<filename>`（バックアップファイルダウンロード）をグローバル Dashboard 管理者に制限しました。バックアップアーカイブには Dashboard アカウント（パスワードハッシュや MFA/TOTP 状態含む）や API キー記録が含まれるため、API キー呼び出し、Dashboard ビューアー、名前空間管理者はダウンロードできなくなりました。バックアップディレクトリの一覧取得（`GET /api/v5/data/files`）は従来通りアクセス可能です。
 
-- [#17491](https://github.com/emqx/emqx/pull/17491) Fixed passwords and secrets being exposed in gateway authentication APIs, error paths, and debug logs. Gateway authentication API responses now redact secrets while preserving the raw configuration structure. The following log paths no longer print raw passwords or secrets: gateway authentication failures, listener start errors, ExProto authentication logs, CoAP token-required logs, and LwM2M invalid-register logs.
+- [#17491](https://github.com/emqx/emqx/pull/17491) ゲートウェイ認証 API、エラーパス、デバッグログでパスワードやシークレットが露出する問題を修正しました。ゲートウェイ認証 API レスポンスはシークレットをマスクしつつ元の設定構造を保持します。以下のログパスは生パスワードやシークレットを出力しなくなりました：ゲートウェイ認証失敗、リスナー起動エラー、ExProto 認証ログ、CoAP トークン必須ログ、LwM2M 無効登録ログ。
 
-- [#17501](https://github.com/emqx/emqx/pull/17501) Blocked namespaced Dashboard users from reading MQTT message content across namespace boundaries.
+- [#17501](https://github.com/emqx/emqx/pull/17501) 名前空間管理者の Dashboard ユーザーによる名前空間境界を越えた MQTT メッセージ内容の読み取りを禁止しました。
 
-  - The following endpoints now return `403 FORBIDDEN` for any non-global caller, because they can expose MQTT payloads outside the caller's namespace. Previously, a namespaced user could read or delete messages produced by other namespaces.
+  - 以下のエンドポイントは非グローバル呼び出し元に対し `403 FORBIDDEN` を返します。これらは呼び出し元の名前空間外の MQTT ペイロードを露出する可能性があるためです。以前は名前空間ユーザーが他の名前空間のメッセージを読み取り・削除できました。
 
     - `GET /clients/:clientid/mqueue_messages`
     - `GET /clients/:clientid/inflight_messages`
@@ -68,136 +68,136 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     - `GET|DELETE /mqtt/delayed/messages/:node/:msgid`
     - `DELETE /mqtt/delayed/messages/:topic`
 
-  - Trace APIs are now namespace-scoped: `GET /trace` lists only traces created by the caller's namespace. The per-trace endpoints (`/trace/:name`, `/trace/:name/download`, `/trace/:name/log`, `/trace/:name/log_detail`, `/trace/:name/stop`) return `404` when the trace belongs to a different namespace, preventing callers from discovering that other-namespace traces exist. The bulk `DELETE /trace` is reserved for the global administrator; namespaced callers receive `403`. Namespaced administrators retain full access to their own traces, including creating, listing, downloading, streaming, stopping, and deleting them.
+  - トレース API は名前空間スコープ化されました：`GET /trace` は呼び出し元の名前空間で作成されたトレースのみを一覧表示します。個別トレースエンドポイント（`/trace/:name`、`/trace/:name/download`、`/trace/:name/log`、`/trace/:name/log_detail`、`/trace/:name/stop`）は他の名前空間のトレースに対して `404` を返し、存在を隠します。一括 `DELETE /trace` はグローバル管理者専用で、名前空間呼び出し元は `403` となります。名前空間管理者は自身のトレースの作成、一覧、ダウンロード、ストリーム、停止、削除を引き続き行えます。
 
-#### Clustering
+#### クラスタリング
 
-- [#17076](https://github.com/emqx/emqx/pull/17076) Introduced a new routing table synchronization mechanism. The routing table schema version has been stepped to `v3`, with backward compatibility for `v2` provided.
+- [#17076](https://github.com/emqx/emqx/pull/17076) 新しいルーティングテーブル同期機構を導入しました。ルーティングテーブルのスキーマバージョンは `v3` に上がり、`v2` との後方互換性も保持しています。
 
-  With schema v3, each node (core or replicant) takes full ownership of the routing table entries pointing towards it, giving peer nodes only read-only access to these entries. This improves partition tolerance of the EMQX cluster, as peer nodes in a partitioned cluster cannot change the routing table on behalf of other nodes. It also improves `SUBACK` latency on replicant nodes.
+  スキーマ v3 では、各ノード（コアまたはレプリカント）が自身に向けられたルーティングテーブルエントリを完全に所有し、ピアノードはこれらのエントリに読み取り専用アクセスのみを持ちます。これにより、パーティション耐性が向上し、パーティション化されたクラスタでピアノードが他ノードの代理でルーティングテーブルを変更できなくなります。また、レプリカントノードの `SUBACK` レイテンシも改善されます。
 
-  **Backward compatibility:** When a node supporting v3 joins a cluster of nodes that only support v2, it keeps using v2 for compatibility. To switch the cluster to v3, perform a full cluster restart after upgrade. To prevent the automatic switch, set `broker.routing.storage_schema` to `v2`.
+  **後方互換性:** v3 対応ノードが v2 のみ対応クラスタに参加すると、互換性のため v2 を使い続けます。クラスタを v3 に切り替えるにはアップグレード後にクラスタ全体を再起動してください。自動切り替えを防ぐには `broker.routing.storage_schema` を `v2` に設定します。
 
-  **Downgrade note:** After the cluster switches to v3, rolling downgrade is not possible.
+  **ダウングレード注意:** クラスタが v3 に切り替わるとローリングダウングレードは不可能です。
 
-  To check the current routing schema version on a node:
+  ノードの現在のルーティングスキーマバージョンを確認するには：
 
   ```
   emqx eval 'emqx_router:get_schema_vsn()'
   ```
 
-- [#17152](https://github.com/emqx/emqx/pull/17152), [#17181](https://github.com/emqx/emqx/pull/17181) Added support for configuring Erlang inet port options (both connect and listen) for the distribution port, with a default `buffer` size of 1 MB.
+- [#17152](https://github.com/emqx/emqx/pull/17152), [#17181](https://github.com/emqx/emqx/pull/17181) Erlang inet ポートオプション（接続・リッスン両方）を分散ポートに設定可能にし、デフォルトのバッファサイズを 1 MB にしました。
 
-  Previously, the Erlang distribution port used an extremely small default port buffer (1460 bytes, or ~9 KB on some platforms), which caused performance bottlenecks even when the distribution port buffer (`+zdbbl`) was configured to a much larger value (e.g., 32 MB). This affected cluster communication reliability and could manifest as `erpc timeout` errors, Mnesia transaction congestion, and degraded multi-core node support.
+  以前は Erlang 分散ポートのデフォルトバッファが非常に小さく（1460 バイト、プラットフォームによっては約 9 KB）、分散ポートバッファ（`+zdbbl`）を 32 MB など大きく設定しても性能ボトルネックとなり、クラスタ通信の信頼性低下や `erpc timeout` エラー、Mnesia トランザクション渋滞、多コアノードの性能劣化を引き起こしていました。
 
-- [#17221](https://github.com/emqx/emqx/pull/17221) Improved Cluster Linking diagnostics for MQTT message forwarding.
+- [#17221](https://github.com/emqx/emqx/pull/17221) MQTT メッセージ転送のクラスタリンク診断を改善しました。
 
-  When message forwarding connections experience connectivity issues, the link resource status and respective alarms now include the disconnect reason, making configuration problems easier to identify.
+  メッセージ転送接続に問題がある場合、リンクリソースの状態およびアラームに切断理由が含まれるようになり、設定問題の特定が容易になります。
 
-- [#17530](https://github.com/emqx/emqx/pull/17530) Cluster linking now requires a non-community license. Under the default community license, configured links stay inactive (no message forwarding or route replication) and the REST API rejects attempts to enable a link with a clear hint to load a non-community license. Disabling and deleting links remain available so that legacy configuration can be tidied up. After upgrading the license, links can be enabled from the Dashboard or REST API without restarting the node.
+- [#17530](https://github.com/emqx/emqx/pull/17530) クラスタリンクは非コミュニティライセンスが必要になりました。デフォルトのコミュニティライセンスでは設定されたリンクは非アクティブのままで（メッセージ転送やルート複製なし）、REST API はリンク有効化の試みを拒否し、非コミュニティライセンスのロードを促す明確なヒントを返します。リンクの無効化および削除は引き続き可能で、レガシー設定の整理に利用できます。ライセンスアップグレード後は Dashboard または REST API からノード再起動なしでリンクを有効化できます。
 
-#### Observability
+#### 可観測性
 
-- [#16656](https://github.com/emqx/emqx/pull/16656) Made system monitor reports such as `busy_port` and `long_schedule` more informative by including process labels for easier troubleshooting.
+- [#16656](https://github.com/emqx/emqx/pull/16656) `busy_port` や `long_schedule` などのシステムモニター報告にプロセスラベルを含め、トラブルシューティングを容易にしました。
 
-- [#16744](https://github.com/emqx/emqx/pull/16744) Added support for end-to-end tracing of messages published via the HTTP API.
+- [#16744](https://github.com/emqx/emqx/pull/16744) HTTP API 経由でパブリッシュされたメッセージのエンドツーエンドトレーシングをサポートしました。
 
-- [#16757](https://github.com/emqx/emqx/pull/16757) Set `os_mon` to collect only system-wide memory statistics by default, reducing per-process memory scanning overhead.
+- [#16757](https://github.com/emqx/emqx/pull/16757) `os_mon` のデフォルト設定をシステム全体のメモリ統計収集のみに変更し、プロセス毎のメモリスキャンオーバーヘッドを削減しました。
 
-- [#16911](https://github.com/emqx/emqx/pull/16911) Reduced the overhead of Prometheus metrics collection by avoiding accidental repeated queries of Mria statistics.
+- [#16911](https://github.com/emqx/emqx/pull/16911) Prometheus メトリクス収集のオーバーヘッドを削減し、Mria 統計の誤った重複クエリを回避しました。
 
-- [#17018](https://github.com/emqx/emqx/pull/17018) Reduced the number of calls to other nodes performed when calling the Prometheus scraping API endpoint. This makes the API call return faster and reduces the chance of it timing out when the cluster is under strain.
+- [#17018](https://github.com/emqx/emqx/pull/17018) Prometheus スクレイピング API 呼び出し時の他ノードへの呼び出し回数を削減し、API 呼び出しの応答速度を向上させ、クラスタ負荷時のタイムアウト発生を減らしました。
 
-  Specifically, `emqx_mria_lag` metric that is of interest to replicant nodes is now refreshed periodically (every 10 seconds by default) instead of refreshed on demand for each API call.
+  特に、レプリカントノードが関心を持つ `emqx_mria_lag` メトリクスは、API 呼び出し毎に更新するのではなく、デフォルトで 10 秒毎に定期更新されます。
 
-- [#17031](https://github.com/emqx/emqx/pull/17031) Added session high-watermark history for license usage auditing.
+- [#17031](https://github.com/emqx/emqx/pull/17031) ライセンス使用監査用にセッションのハイウォーターマーク履歴を追加しました。
 
-  EMQX now records the daily peak session count and retains at least 24 months of history. Operators can query this data via `emqx ctl license history` with optional `--period daily|monthly` and `--json` flags. A new `license.high_watermark_timezone` config controls the day boundary for bucketing.
+  EMQX は日次ピークセッション数を記録し、少なくとも 24 か月分の履歴を保持します。運用者は `emqx ctl license history` で `--period daily|monthly` および `--json` オプション付きでクエリ可能です。新しい `license.high_watermark_timezone` 設定で日付境界を制御できます。
 
-- [#17162](https://github.com/emqx/emqx/pull/17162) Exposed per-node license info via Prometheus gauges (`emqx_license_max_sessions`, `emqx_license_expiry_at`, `emqx_license_issued_at`) so cluster-wide license consistency can be alerted on without per-node CLI checks.
+- [#17162](https://github.com/emqx/emqx/pull/17162) ノード毎のライセンス情報を Prometheus ゲージ（`emqx_license_max_sessions`、`emqx_license_expiry_at`、`emqx_license_issued_at`）で公開し、クラスタ全体のライセンス整合性をノード毎の CLI チェックなしで監視可能にしました。
 
-  Operators can now alert on license inconsistencies across cluster nodes by comparing these gauges. The implementation fetches all three values from a single `emqx_license_checker:dump/0` gen_server call, eliminating a redundant round-trip on every Prometheus scrape.
+  これらのゲージを比較することで、クラスタノード間のライセンス不整合をアラートできます。実装は単一の `emqx_license_checker:dump/0` gen_server 呼び出しで 3 つの値を取得し、Prometheus スクレイプ毎の冗長な往復を排除しています。
 
-- [#17176](https://github.com/emqx/emqx/pull/17176) Added `emqx_routes_count` and `emqx_routes_max` Prometheus metrics to export the number of route table entries per node.
+- [#17176](https://github.com/emqx/emqx/pull/17176) ノード毎のルートテーブルエントリ数をエクスポートする Prometheus メトリクス `emqx_routes_count` と `emqx_routes_max` を追加しました。
 
-- [#17329](https://github.com/emqx/emqx/pull/17329) Added two node-wide gauge metrics to the `/api/v5/prometheus/stats` endpoint:
+- [#17329](https://github.com/emqx/emqx/pull/17329) `/api/v5/prometheus/stats` エンドポイントにノード全体のゲージメトリクスを 2 つ追加しました：
 
-  - `emqx_vm_uptime_ms` reports the EMQX node uptime in milliseconds.
-  - `emqx_vm_max_fds` reports the maximum number of file descriptors available to the node.
+  - `emqx_vm_uptime_ms`: EMQX ノードのアップタイム（ミリ秒）
+  - `emqx_vm_max_fds`: ノードが利用可能な最大ファイルディスクリプタ数
 
-- [#17558](https://github.com/emqx/emqx/pull/17558) Added two new metrics and corresponding rates to the `GET /monitor_current` HTTP API: `rules_matched` and `actions_executed`. They track the number of rules matched and the action execution rate (success + failure), respectively.
+- [#17558](https://github.com/emqx/emqx/pull/17558) `GET /monitor_current` HTTP API に新たに 2 つのメトリクスと対応するレートを追加しました：`rules_matched` と `actions_executed`。それぞれルールマッチ数とアクション実行率（成功＋失敗）を追跡します。
 
-  Also fixed `actions.executed` undercounting action invocations in non-batch mode (`batch_size = 1`): the counter is now incremented once per action callback invocation, independently of the buffer-worker telemetry flush window.
+  また、非バッチモード（`batch_size = 1`）でのアクション呼び出しの過小カウントを修正し、アクションコールバック呼び出し毎にカウンターをインクリメントするようにしました。
 
-#### Access Control
+#### アクセス制御
 
-- [#16741](https://github.com/emqx/emqx/pull/16741) Added configuration options `idp_signs_envelopes` and `idp_signs_assertions` to SAML SSO backend to control signature verification behavior.
+- [#16741](https://github.com/emqx/emqx/pull/16741) SAML SSO バックエンドの署名検証挙動を制御する設定オプション `idp_signs_envelopes` と `idp_signs_assertions` を追加しました。
 
-  Previously, SAML signature verification was not working correctly because the IdP certificate fingerprint was not being extracted from metadata and passed to esaml for verification.
+  以前は IdP 証明書フィンガープリントがメタデータから抽出されず `esaml` への検証に渡されなかったため、SAML 署名検証が正しく機能していませんでした。
 
-  Both options default to `false` for backward compatibility with existing configurations. Users who want to enable signature verification should explicitly set these to `true` when their IdP is configured to sign SAML responses.
+  どちらも既存設定との後方互換性のためデフォルトは `false` です。署名検証を有効にしたい場合は、IdP が SAML レスポンスに署名する設定の場合に明示的に `true` にしてください。
 
-- [#16942](https://github.com/emqx/emqx/pull/16942), [#17235](https://github.com/emqx/emqx/pull/17235) Introduced fine-grained scope-based access control for both API keys and Dashboard login users.
+- [#16942](https://github.com/emqx/emqx/pull/16942), [#17235](https://github.com/emqx/emqx/pull/17235) API キーおよび Dashboard ログインユーザーの細粒度スコープベースアクセス制御を導入しました。
 
-  API keys now support an optional `scopes` field. When set, requests are authorized against a fixed catalog of management scopes in addition to the role check. The `publisher` API key role is constrained to the `publish` scope only.
+  API キーはオプションの `scopes` フィールドをサポートし、設定時はロールチェックに加え管理スコープカタログに基づく認可を行います。`publisher` ロールは `publish` スコープのみに制限されます。
 
-  Dashboard login users also support `scopes`, layered on top of role-based checks. Four login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) cover Dashboard-only endpoints. `user_management`, `sso_management`, and `api_key_management` are administrator-only; `mfa_management` may be held by any role for self-exemption from forced MFA. API keys cannot use these login-only scopes.
+  Dashboard ログインユーザーもロールベースチェックに加えて `scopes` をサポートします。4 つのログイン専用スコープ（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）は Dashboard 専用エンドポイントをカバーします。`user_management`、`sso_management`、`api_key_management` は管理者専用、`mfa_management` は強制 MFA 免除のため任意のロールが保持可能です。API キーはこれらログイン専用スコープを使用できません。
 
-  New catalog endpoints `GET /api_key_scopes` and `GET /user_scopes` expose the scope vocabulary to bearer-authenticated callers. `GET /users`, `POST /users`, and `PUT /users/:username` now include `scopes` in their responses; when not explicitly set, the response shows the role-default scopes.
+  新しいカタログエンドポイント `GET /api_key_scopes` と `GET /user_scopes` はベアラー認証呼び出し元にスコープ語彙を公開します。`GET /users`、`POST /users`、`PUT /users/:username` はレスポンスに `scopes` を含み、明示的に設定されていない場合はロールデフォルトスコープを表示します。
 
-  Behavior changes that follow from the new scope model:
+  新スコープモデルに伴う挙動変更：
 
-  - The `dashboard.default_username` user is now a protected break-glass account. It cannot be deleted, demoted from administrator, or assigned scopes; only its `description` may be changed. The existing last-administrator check still applies to other administrators.
-  - Self-service updates now respect scopes, except for the dedicated change-password and MFA self endpoints. For example, a viewer without `user_management` can still change their own password and manage their own MFA, but cannot edit other profile fields.
-  - `PUT /users/:username` and `PUT /api_key/:name` validate role changes against persisted scopes when the request omits `scopes`; incompatible demotions or role changes are rejected.
-  - API key bootstrap files accept an optional scopes column (`key:secret:role:scopes`). Unknown or role-incompatible scopes are dropped with a warning, so existing three-column files remain loadable.
-  - The SAML SP metadata endpoint (`GET /sso/saml/metadata`) is now reachable without authentication, matching `/sso/saml/acs`.
+  - `dashboard.default_username` ユーザーは保護されたブレークグラスアカウントとなり、削除、管理者降格、スコープ割当は不可で、`description` のみ変更可能です。既存の最後の管理者チェックは他の管理者に適用され続けます。
+  - 自己サービス更新は専用のパスワード変更および MFA 自己エンドポイントを除きスコープを尊重します。例えば、`user_management` を持たないビューアは自身のパスワード変更と MFA 管理は可能ですが、他のプロフィール編集はできません。
+  - `PUT /users/:username` と `PUT /api_key/:name` はリクエストに `scopes` がない場合、永続化されたスコープに基づきロール変更を検証し、不整合な降格や変更は拒否します。
+  - API キーブートストラップファイルはオプションのスコープ列（`key:secret:role:scopes`）を受け入れます。不明またはロール非互換のスコープは警告付きで破棄され、既存の 3 列ファイルは読み込み可能です。
+  - SAML SP メタデータエンドポイント（`GET /sso/saml/metadata`）は認証不要でアクセス可能になり、`/sso/saml/acs` と整合します。
 
-- [#16943](https://github.com/emqx/emqx/pull/16943), [#17361](https://github.com/emqx/emqx/pull/17361) Added per-backend `force_mfa` enforcement for SSO (LDAP, OIDC, and SAML).
+- [#16943](https://github.com/emqx/emqx/pull/16943), [#17361](https://github.com/emqx/emqx/pull/17361) SSO（LDAP、OIDC、SAML）用のバックエンド単位 `force_mfa` 強制を追加しました。
 
-  When enabled, SSO users must complete TOTP MFA setup or verification before receiving a Dashboard token, regardless of IDP-side MFA settings. New API endpoints `POST /sso/mfa/setup` and `POST /sso/mfa/verify` handle the MFA flow.
+  有効時、SSO ユーザーは IDP 側 MFA 設定に関わらず Dashboard トークン取得前に TOTP MFA 設定または検証を完了する必要があります。新 API エンドポイント `POST /sso/mfa/setup` と `POST /sso/mfa/verify` が MFA フローを処理します。
 
-  Administrators can exempt or require existing users individually via `POST` / `DELETE` on `/users/:username/mfa`, and that decision overrides the live backend policy until the administrator changes it. SSO users on a `force_mfa = true` backend who disable their own MFA must set it up again on the next login; only an administrator-initiated disable exempts a user from the live policy.
+  管理者は `/users/:username/mfa` の `POST` / `DELETE` で既存ユーザーを個別に免除または強制でき、これがライブバックエンドポリシーを上書きします。`force_mfa = true` バックエンドの SSO ユーザーが自身で MFA を無効化した場合、次回ログイン時に再設定が必要です。管理者による無効化のみがライブポリシーからの免除となります。
 
-- [#17178](https://github.com/emqx/emqx/pull/17178) The `emqx ctl api_keys add` CLI command now accepts a `--scopes <scope1,scope2,...>` option, matching the scope-based permission control already supported by the REST API.
+- [#17178](https://github.com/emqx/emqx/pull/17178) `emqx ctl api_keys add` CLI コマンドが REST API で既にサポートされているスコープベースの権限制御に対応し、`--scopes <scope1,scope2,...>` オプションを受け入れるようになりました。
 
-#### Gateway
+#### ゲートウェイ
 
-- [#16736](https://github.com/emqx/emqx/pull/16736) Improved the JT/T 808 gateway with protocol updates, encoding support, and message handling fixes.
+- [#16736](https://github.com/emqx/emqx/pull/16736) JT/T 808 ゲートウェイをプロトコル更新、エンコーディング対応、メッセージ処理修正で改善しました。
 
-  - Added JT/T 808 protocol 2019 support.
-  - Added the `jt808.frame.parse_unknown_message` option to transparently forward unknown messages.
-  - Added GBK string encoding support through the new `frame.string_encoding` option. The default `utf8` mode keeps the existing pass-through behavior, while `gbk` converts GBK-encoded strings from devices to UTF-8 for MQTT and converts UTF-8 strings from MQTT to GBK for devices. This applies to fields such as license plates, driver names, text messages, area names, and client parameters. MQTT payloads always use UTF-8 regardless of this setting.
-  - Added support for custom `msg_sn` values in downlink messages. When a downlink MQTT payload contains `msg_sn` in the header, the gateway uses it instead of the auto-generated channel sequence number.
-  - Fixed JT/T 808 gateway parameter setting (0x8103) and query response (0x0104) message handling for CAN bus ID parameters (0x0110~0x01FF), which should use BYTE[8] data type with base64 encoding in JSON instead of string type.
-  - Fixed JT/T 808 0x0702 driver identity report message parsing.
+  - JT/T 808 プロトコル 2019 を追加。
+  - 不明メッセージを透過的に転送する `jt808.frame.parse_unknown_message` オプションを追加。
+  - 新しい `frame.string_encoding` オプションで GBK 文字エンコーディングをサポート。デフォルトの `utf8` モードは既存のパススルー動作を維持し、`gbk` はデバイスからの GBK エンコード文字列を MQTT 用 UTF-8 に変換し、MQTT からデバイスへは UTF-8 を GBK に変換します。ナンバープレート、運転手名、テキストメッセージ、エリア名、クライアントパラメータなどに適用。MQTT ペイロードは常に UTF-8 です。
+  - ダウンリンクメッセージでカスタム `msg_sn` 値をサポート。MQTT ペイロードのヘッダーに `msg_sn` がある場合、ゲートウェイは自動生成のチャネルシーケンス番号の代わりに使用します。
+  - CAN バス ID パラメータ（0x0110～0x01FF）向けのパラメータ設定（0x8103）およびクエリ応答（0x0104）メッセージ処理を修正。JSON では文字列型ではなく base64 エンコードの BYTE[8] 型を使用すべきです。
+  - JT/T 808 0x0702 運転手識別報告メッセージの解析を修正。
 
-- [#17013](https://github.com/emqx/emqx/pull/17013) Added GBT32960-2025 protocol support to the GBT32960 gateway.
+- [#17013](https://github.com/emqx/emqx/pull/17013) GBT32960 ゲートウェイに GBT32960-2025 プロトコルサポートを追加しました。
 
-  The gateway now automatically detects the protocol version by frame header (`##` for 2016, `$$` for 2025) and handles version-specific parsing and serialization, including:
+  ゲートウェイはフレームヘッダー（2016 は `##`、2025 は `$$`）でプロトコルバージョンを自動検出し、バージョン固有の解析・シリアライズを処理します：
 
-  - New 2025 info types: Vehicle, DriveMotor, FuelCell, Engine, Location, Alarm, PowerBatteryVoltage/Temp, FuelCellStack, SuperCapacitor, SuperCapacitorExtreme, and Digital Signature.
-  - New command: Activation (0x09/0x0A).
-  - Version-aware parameter sizes for parameter query/setting (0x02/0x03: BYTE in 2025 vs WORD in 2016).
-  - 2025 vehicle login with BMS battery pack encoding fields.
+  - 新しい 2025 情報タイプ：車両、駆動モーター、燃料電池、エンジン、位置情報、アラーム、電池電圧・温度、燃料電池スタック、スーパーキャパシタ、スーパーキャパシタ極限、デジタル署名。
+  - 新コマンド：アクティベーション（0x09/0x0A）。
+  - パラメータクエリ・設定（0x02/0x03）のパラメータサイズがバージョン依存（2025 は BYTE、2016 は WORD）。
+  - BMS バッテリーパックエンコードフィールドを用いた 2025 車両ログイン。
 
-#### Data Integration
+#### データ統合
 
-- [#16511](https://github.com/emqx/emqx/pull/16511) Added support for the IoTDB Table Model in data integration.
+- [#16511](https://github.com/emqx/emqx/pull/16511) データ統合で IoTDB テーブルモデルをサポートしました。
 
-- [#16962](https://github.com/emqx/emqx/pull/16962) Improved Kafka source polling behavior by ensuring fetch requests wait briefly for data instead of returning empty batches immediately when no records are available. This reduces unnecessary polling delays and helps Kafka consumers receive new records more consistently.
+- [#16962](https://github.com/emqx/emqx/pull/16962) Kafka ソースのポーリング挙動を改善し、レコードがない場合に空バッチを即返すのではなく、わずかに待機してデータを待つようにしました。これにより不要なポーリング遅延が減り、Kafka コンシューマーが新規レコードをより安定的に受信できます。
 
-- [#17025](https://github.com/emqx/emqx/pull/17025) The way the InfluxDB database performs health checks and credential verification has been changed.
+- [#17025](https://github.com/emqx/emqx/pull/17025) InfluxDB データベースのヘルスチェックと認証検証方法を変更しました。
 
-  It no longer performs checks by executing `SHOW DATABASES`, which could be falsely flagged as a system penetration by some auditing systems.
+  もはや `SHOW DATABASES` を実行してチェックしません。これは一部の監査システムで誤ってシステム侵入と判定される恐れがありました。
 
-  See also [emqx/influxdb-client-erl#54](https://github.com/emqx/influxdb-client-erl/pull/54).
+  詳細は [emqx/influxdb-client-erl#54](https://github.com/emqx/influxdb-client-erl/pull/54) を参照してください。
 
-- [#17089](https://github.com/emqx/emqx/pull/17089) MQTT ingress bridges now support consuming from remote message queues exposed as `$queue/{name}/{bind-filter}` when the remote broker supports MQTT 5 Subscription Identifiers. Queue subscriptions are rejected when Subscription Identifiers are unavailable, and regular topic subscriptions automatically retry without Subscription Identifiers if the remote broker does not accept them.
+- [#17089](https://github.com/emqx/emqx/pull/17089) MQTT イングレスブリッジが、リモートブローカーが MQTT 5 サブスクリプション識別子をサポートする場合に、`$queue/{name}/{bind-filter}` として公開されたリモートメッセージキューからの消費をサポートしました。サブスクリプション識別子が利用できない場合はキューサブスクリプションを拒否し、通常のトピックサブスクリプションはリモートブローカーが受け入れない場合に識別子なしで自動リトライします。
 
-- [#17104](https://github.com/emqx/emqx/pull/17104) Added date-part placeholders to blob name templates in aggregated upload actions (Azure Blob Storage, Amazon S3, GCS, Snowflake, S3 Tables). Placeholders are rendered against the aggregation start time and default to UTC. This enables Hive-partitioned object layouts (e.g. `year=2025/month=04/day=22/hour=07/...`) directly consumable by Spark, Databricks, and Synapse.
+- [#17104](https://github.com/emqx/emqx/pull/17104) 集約アップロードアクション（Azure Blob Storage、Amazon S3、GCS、Snowflake、S3 Tables）で、blob 名テンプレートに日付パーツプレースホルダーを追加しました。プレースホルダーは集約開始時刻に対してレンダリングされ、デフォルトは UTC です。これにより Spark、Databricks、Synapse で直接利用可能な Hive パーティション形式のオブジェクトレイアウト（例：`year=2025/month=04/day=22/hour=07/...`）が可能になります。
 
-  Supported placeholders:
+  対応プレースホルダー：
 
   - `${datetime.YYYY}`
   - `${datetime.MM}`
@@ -205,672 +205,686 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - `${datetime.hh}`
   - `${datetime.mm}`
   - `${datetime.ss}`
-  - `${datetime.DOY}` (day of year)
+  - `${datetime.DOY}`（年内通算日）
 
-  Each placeholder can be prefixed with an explicit timezone:
+  各プレースホルダーは明示的なタイムゾーン接頭辞を付けられます：
 
-  - `utc` (default): e.g. `${datetime.utc.YYYY}`
-  - `local` (EMQX node's system timezone): e.g. `${datetime.local.YYYY}`
+  - `utc`（デフォルト）：例 `${datetime.utc.YYYY}`
+  - `local`（EMQX ノードのシステムタイムゾーン）：例 `${datetime.local.YYYY}`
 
-- [#17136](https://github.com/emqx/emqx/pull/17136) Added the `ping_with_auth` option for InfluxDB connectors. When enabled, health checks include the configured credentials for InfluxDB-compatible services that require authenticated health check requests. Also fixed the InfluxDB connector/action to preserve Unicode text when writing values from `write_syntax` literals or MQTT payloads.
+- [#17136](https://github.com/emqx/emqx/pull/17136) InfluxDB コネクターに `ping_with_auth` オプションを追加しました。有効時は認証が必要な InfluxDB 互換サービスのヘルスチェックに設定済み認証情報を含めます。また、InfluxDB コネクター／アクションで `write_syntax` リテラルや MQTT ペイロードから書き込む際に Unicode テキストを保持するよう修正しました。
 
-- [#17165](https://github.com/emqx/emqx/pull/17165) Added the `resource_opts.dispatch_strategy` option for actions.
+- [#17165](https://github.com/emqx/emqx/pull/17165) アクションに `resource_opts.dispatch_strategy` オプションを追加しました。
 
-  The new option defaults to `per_clientid`, preserving the previous buffer worker dispatch behavior. Setting it to `random` makes queries without an explicit `pick_key` use a random dispatch key, which helps spread traffic across multiple buffer workers when a small number of clients publish a large amount of messages.
+  新オプションのデフォルトは `per_clientid` で、従来のバッファワーカーディスパッチ動作を維持します。`random` に設定すると、明示的な `pick_key` がないクエリはランダムなディスパッチキーを使い、少数クライアントが大量メッセージをパブリッシュする場合に複数バッファワーカーへのトラフィック分散を助けます。
 
-- [#17170](https://github.com/emqx/emqx/pull/17170) [#17282](https://github.com/emqx/emqx/pull/17282) [#17297](https://github.com/emqx/emqx/pull/17297) Added `tcp_opts` (`nodelay`, `sndbuf`, `recbuf`, `buffer`, `keepalive`, `delay_send`, `active_n`) to the MQTT bridge connector and Cluster Link configurations, so the outbound MQTT client TCP socket can be tuned per connection. Unset fields keep the operating system / `gen_tcp` defaults. `delay_send` (off by default) coalesces small writes for better throughput at the cost of a small latency increase.
+- [#17170](https://github.com/emqx/emqx/pull/17170)、[#17282](https://github.com/emqx/emqx/pull/17282)、[#17297](https://github.com/emqx/emqx/pull/17297) MQTT ブリッジコネクターおよびクラスタリンク設定に TCP ソケットチューニング用の `tcp_opts`（`nodelay`、`sndbuf`、`recbuf`、`buffer`、`keepalive`、`delay_send`、`active_n`）を追加しました。未設定項目は OS / `gen_tcp` のデフォルトを維持します。`delay_send`（デフォルトオフ）は小さな書き込みをまとめてスループットを向上させる代わりにレイテンシをわずかに増加させます。
 
-- [#17474](https://github.com/emqx/emqx/pull/17474) Reduced the overhead of IoTDB REST API connector health checks by using a bounded version query instead of listing all databases on each check.
+- [#17474](https://github.com/emqx/emqx/pull/17474) IoTDB REST API コネクターのヘルスチェックオーバーヘッドを、すべてのデータベース一覧取得からバージョンクエリに変更して削減しました。
 
-- [#17481](https://github.com/emqx/emqx/pull/17481) Added a `retain_as_published` option to MQTT bridge ingress (source) subscriptions. When the bridge connects to the remote broker using MQTT 5.0 and `retain_as_published = true`, the original `retain` flag on forwarded messages is preserved instead of being cleared, allowing the bridge to faithfully republish retained messages from upstream. The option is enabled by default and has no effect when `proto_ver` is `v3` or `v4`.
+- [#17481](https://github.com/emqx/emqx/pull/17481) MQTT ブリッジのイングレス（ソース）サブスクリプションに `retain_as_published` オプションを追加しました。リモートブローカーが MQTT 5.0 で接続し、`retain_as_published = true` の場合、転送メッセージの元の `retain` フラグを保持し、上流の保持メッセージを忠実に再パブリッシュできます。デフォルトで有効で、`proto_ver` が `v3` または `v4` の場合は無効です。
 
-  Also, the connector now emits a warning log when `bridge_mode = true` is configured together with `proto_ver = v5`, since the legacy bridge-mode flag has no effect under MQTT 5.0; set `retain_as_published` on individual subscriptions instead.
+  また、`bridge_mode = true` と `proto_ver = v5` の併用時に警告ログを出すようにしました。MQTT 5.0 では従来のブリッジモードフラグは無効で、個別サブスクリプションで `retain_as_published` を設定してください。
 
-- [#17508](https://github.com/emqx/emqx/pull/17508) Set the PostgreSQL `application_name` startup parameter to `emqx` for PostgreSQL and TimescaleDB connector connections.
+- [#17508](https://github.com/emqx/emqx/pull/17508) PostgreSQL および TimescaleDB コネクター接続で `application_name` スタートアップパラメータを `emqx` に設定しました。
 
-  This makes EMQX database sessions easier to identify in PostgreSQL logs and views such as `pg_stat_activity`.
+  これにより PostgreSQL ログや `pg_stat_activity` などのビューで EMQX データベースセッションの識別が容易になります。
 
-- [#17594](https://github.com/emqx/emqx/pull/17594) Added support for configuring Google Cloud Pub/Sub and BigQuery connector `service_account_json` values with `file://` secret files, so service account credentials can be injected from external files.
+- [#17594](https://github.com/emqx/emqx/pull/17594) Google Cloud Pub/Sub および BigQuery コネクターの `service_account_json` 設定に `file://` 形式のシークレットファイルを指定可能にし、外部ファイルからサービスアカウント認証情報を注入できるようにしました。
 
-#### Plugins
+#### プラグイン
 
-- [#16735](https://github.com/emqx/emqx/pull/16735) EMQX now supports plugin-defined HTTP API callbacks under `/api/v5/plugin_api/{plugin}/...`.
+- [#16735](https://github.com/emqx/emqx/pull/16735) EMQX は `/api/v5/plugin_api/{plugin}/...` 配下でプラグイン定義の HTTP API コールバックをサポートしました。
 
-  This allows plugin authors to expose plugin-specific API endpoints through the Dashboard API service, with consistent authentication and HTTP error handling.
+  これによりプラグイン開発者は Dashboard API サービス経由でプラグイン固有の API エンドポイントを一貫した認証・HTTP エラー処理付きで公開できます。
 
-- [#16849](https://github.com/emqx/emqx/pull/16849) Added cookie-based authentication fallback for plugin API endpoints.
+- [#16849](https://github.com/emqx/emqx/pull/16849) プラグイン API エンドポイントのクッキー認証フォールバックを追加しました。
 
-  Plugin UI iframes served by the Dashboard can now authenticate via the `emqx_auth` cookie when no `Authorization` header is present. This only applies to `/api/v5/plugin_api/...` paths.
+  Dashboard が提供するプラグイン UI iframe は、`Authorization` ヘッダーがない場合に `emqx_auth` クッキーで認証可能です。これは `/api/v5/plugin_api/...` パスにのみ適用されます。
 
-- [#17549](https://github.com/emqx/emqx/pull/17549) Added the EMQX Backup Sync plugin to periodically synchronize selected configuration from a primary cluster to a secondary cluster using the Data Backup APIs. The plugin supports configurable TLS options for HTTPS calls to the primary cluster.
+- [#17549](https://github.com/emqx/emqx/pull/17549) EMQX Backup Sync プラグインを追加しました。データバックアップ API を使い、プライマリクラスタからセカンダリクラスタへ選択した設定を定期的に同期します。HTTPS 通信の TLS オプションは設定可能です。
 
 #### REST API
 
-- [#16718](https://github.com/emqx/emqx/pull/16718) Improved the REST API Swagger specification.
+- [#16718](https://github.com/emqx/emqx/pull/16718) REST API Swagger 仕様を改善しました。
 
-  Previously, summaries and descriptions of specification fields were mixed together. Now, summaries are brief, simple, and punctuation-free, while descriptions provide the details.
+  以前は要約と説明が混在していましたが、要約は簡潔で句読点なし、説明は詳細を提供するように分離しました。
 
-- [#16958](https://github.com/emqx/emqx/pull/16958) Added focused `/api-spec` endpoints and a Dashboard API spec explorer page for easier browsing of EMQX HTTP API documentation.
+- [#16958](https://github.com/emqx/emqx/pull/16958) EMQX HTTP API ドキュメントの閲覧を容易にするため、専用の `/api-spec` エンドポイントと Dashboard API 仕様エクスプローラーを追加しました。
 
-  The Dashboard now serves tag-scoped and drill-down OpenAPI slices, and these endpoints are disabled together with Swagger when `dashboard.swagger_support` is set to `false`. Added `emqx ctl api_keys` CLI commands to list, show, add, delete, enable, and disable API keys from the command line.
+  Dashboard はタグスコープおよびドリルダウン可能な OpenAPI スライスを提供し、`dashboard.swagger_support` を `false` にするとこれらのエンドポイントは Swagger と共に無効化されます。CLI にも `emqx ctl api_keys` コマンドを追加し、API キーの一覧表示、詳細表示、追加、削除、有効化、無効化をコマンドラインから行えます。
 
-#### Deployment
+#### デプロイメント
 
-- [#17079](https://github.com/emqx/emqx/pull/17079) Added `service.wsEnabled` option to the Helm chart to suppress the ws/wss Service port entries when MQTT WebSocket listeners are disabled. Defaults to `true` to preserve existing behavior.
+- [#17079](https://github.com/emqx/emqx/pull/17079) Helm チャートに `service.wsEnabled` オプションを追加し、MQTT WebSocket リスナーが無効な場合に ws/wss サービスポートエントリの出力を抑制可能にしました。既存動作維持のためデフォルトは `true` です。
 
-### Bug Fixes
+### バグ修正
 
-#### Core MQTT Functionalities
+#### コア MQTT 機能
 
-- [#16651](https://github.com/emqx/emqx/pull/16651) Fixed a rare connection process crash during shutdown caused by operating on an already closed socket, typically under high system stress. Prior to this fix, this race condition typically resulted in an `error` level log saying `{badmatch,{ok,{sock_error,closed}...`.
+- [#16651](https://github.com/emqx/emqx/pull/16651) 高負荷時に既に閉じられたソケットを操作して接続プロセスクラッシュが稀に発生する問題を修正しました。修正前は `{badmatch,{ok,{sock_error,closed}...` のエラーログが典型的でした。
 
-- [#16675](https://github.com/emqx/emqx/pull/16675) Fixed timestamp ordering issue where `disconnected_at` could be later than `connected_at` during session takeover or discard scenarios.
+- [#16675](https://github.com/emqx/emqx/pull/16675) セッションテイクオーバーや破棄時に `disconnected_at` が `connected_at` より後になるタイムスタンプ順序の問題を修正しました。
 
-  Previously, `disconnected_at` was recorded too late (in `ensure_disconnected`), after the new session's `connected_at` was already set. This caused a race condition where `disconnected_at > connected_at`, making it difficult to track client presence state externally.
+  以前は `disconnected_at` が遅れて記録され、新セッションの `connected_at` 設定後だったため、`disconnected_at > connected_at` の競合状態が発生し、外部のクライアントプレゼンス状態追跡が困難でした。
 
-  The fix records `disconnected_at` immediately when takeover begins or when discard is received, ensuring it's always earlier than the new session's `connected_at`. This ensures correct timestamp ordering for external presence state tracking systems.
+  修正後はテイクオーバー開始時または破棄受信時に即座に `disconnected_at` を記録し、常に新セッションの `connected_at` より前となるようにしました。
 
-- [#16684](https://github.com/emqx/emqx/pull/16684) Enabled `mqtt.client_attrs_init` expressions to use the password, for example by passing it to `jwt_value`, when initializing client attributes.
+- [#16684](https://github.com/emqx/emqx/pull/16684) `mqtt.client_attrs_init` 式でパスワードを使用可能にしました。例えば `jwt_value` にパスワードを渡せます。
 
-  Previously, `client_attrs_init` ran before password was added to the rendering context, so expressions depending on password could not be resolved.
+  以前はパスワードがレンダリングコンテキストに追加される前に `client_attrs_init` が実行されていたため、パスワード依存の式が解決できませんでした。
 
-- [#16715](https://github.com/emqx/emqx/pull/16715) Fixed an issue where retained `$SYS` messages (for example, broker/node identity topics) were stored without expiry, which could leave stale node identifiers visible in Dashboard views after StatefulSet rotation.
+- [#16715](https://github.com/emqx/emqx/pull/16715) 保持された `$SYS` メッセージ（例：ブローカー／ノード識別トピック）が有効期限なしで保存され、StatefulSet ローテーション後に Dashboard に古いノード識別子が残る問題を修正しました。
 
-  Now, newly published retained `$SYS` messages include `Message-Expiry-Interval = 3600` (1 hour).
+  新規パブリッシュされた保持 `$SYS` メッセージには `Message-Expiry-Interval = 3600`（1 時間）が含まれます。
 
-  For already existing stale retained `$SYS` entries created before this change, you can manually clear them by publishing an empty retained message to the stale topic:
+  既存の古い保持 `$SYS` エントリは、空の保持メッセージを該当トピックにパブリッシュして手動でクリア可能です：
 
   ```
   emqx eval 'emqx:publish(emqx_message:set_flag(retain, true, emqx_message:make(emqx_sys, <<"$SYS/brokers/emqx@127.0.0.1/sysdescr">>, <<>>))).'
   ```
 
-  Replace the topic in the command with the stale `$SYS/...` topic you want to remove.
+  コマンド内のトピックは削除したい古い `$SYS/...` トピックに置き換えてください。
 
-- [#16731](https://github.com/emqx/emqx/pull/16731) Fixed a crash in `emqx ctl subscriptions list` that could happen when shared subscriptions were present.
+- [#16731](https://github.com/emqx/emqx/pull/16731) 共有サブスクリプションが存在する場合に `emqx ctl subscriptions list` がクラッシュする問題を修正しました。
 
-  Before this fix, listing subscriptions could fail for some clients and return no output.
+  修正前は一部クライアントでサブスクリプション一覧取得が失敗し、出力が返らないことがありました。
 
-  After this fix, `emqx ctl subscriptions list` works reliably with both regular and shared subscriptions.
+  修正後は通常サブスクリプションと共有サブスクリプションの両方で安定して動作します。
 
-- [#16779](https://github.com/emqx/emqx/pull/16779) Improved handling of malformed first packets by classifying them as invalid CONNECT packets and adding better protocol hints in logs.
+- [#16779](https://github.com/emqx/emqx/pull/16779) 不正な最初のパケットを無効な CONNECT パケットとして分類し、ログにより良いプロトコルヒントを追加しました。
 
-- [#16781](https://github.com/emqx/emqx/pull/16781) Fixed CONNECT validation when retained messages are unavailable.
+- [#16781](https://github.com/emqx/emqx/pull/16781) 保持メッセージが利用できない場合の CONNECT 検証を修正しました。
 
-  When `mqtt.retain_available` is set to `false`, CONNECT packets with Will Retain set are now correctly rejected with CONNACK reason `Retain not supported (0x9A)`.
+  `mqtt.retain_available` が `false` の場合、Will Retain がセットされた CONNECT パケットは正しく CONNACK 理由コード `Retain not supported (0x9A)` で拒否されます。
 
-- [#16782](https://github.com/emqx/emqx/pull/16782) Fixed MQTT v5 protocol handling for invalid PUBLISH properties.
+- [#16782](https://github.com/emqx/emqx/pull/16782) MQTT v5 の無効な PUBLISH プロパティ処理を修正しました。
 
-  If a client sends a PUBLISH packet containing `Subscription-Identifier`, EMQX now treats it as a protocol error and disconnects the client.
+  クライアントが `Subscription-Identifier` を含む PUBLISH パケットを送信した場合、EMQX はプロトコルエラーとして扱い切断します。
 
-- [#16783](https://github.com/emqx/emqx/pull/16783) Fixed MQTT v5 SUBSCRIBE validation for `Subscription-Identifier` upper bound.
+- [#16783](https://github.com/emqx/emqx/pull/16783) MQTT v5 SUBSCRIBE の `Subscription-Identifier` 上限検証を修正しました。
 
-  EMQX now accepts `268435455` (0x0FFFFFFF), which is the maximum valid Subscription Identifier value defined by the MQTT spec.
+  MQTT 仕様で定義された最大有効値 `268435455`（0x0FFFFFFF）を受け入れます。
 
-- [#16956](https://github.com/emqx/emqx/pull/16956) Log client connection termination at warning level instead of info when the reason is `emsgsize` (received packet exceeds `mqtt.max_packet_size`).
+- [#16956](https://github.com/emqx/emqx/pull/16956) 受信パケットが `mqtt.max_packet_size` を超えた場合（理由 `emsgsize`）、クライアント接続終了ログを情報レベルから警告レベルに変更しました。
 
-- [#17139](https://github.com/emqx/emqx/pull/17139) Restored `retainer.enable` as a real runtime switch for the retainer subsystem.
+- [#17139](https://github.com/emqx/emqx/pull/17139) 保持サブシステムの `retainer.enable` を実際のランタイムスイッチとして復活させました。
 
-  This allows deployments to keep MQTT retained-message protocol support enabled while disabling retained-message storage, instead of relying on `mqtt.retain_available`, which can reject retained publishes at the protocol layer.
+  これにより、保持メッセージのストレージを無効化しつつ MQTT 保持メッセージプロトコルサポートは有効にでき、`mqtt.retain_available` に頼る必要がなくなります。
 
-- [#17172](https://github.com/emqx/emqx/pull/17172) Fixed an issue where MQTT packets (such as PUBACK) sent by a client right before disconnecting could be lost when the connection process had pending outbound messages in its mailbox. Now the connection process correctly drains its mailbox before shutting down, ensuring that inbound packets are processed even after the socket is closed.
+- [#17172](https://github.com/emqx/emqx/pull/17172) クライアントが切断直前に送信した MQTT パケット（例：PUBACK）が、接続プロセスのメールボックスに未処理で残っている場合に失われる問題を修正しました。接続プロセスはシャットダウン前にメールボックスを正しく処理し、ソケットクローズ後もパケットを処理します。
 
-- [#17353](https://github.com/emqx/emqx/pull/17353) Fixed an issue in the `socket` TCP backend where outbound MQTT packets could be sent in the wrong order when a client connection experienced repeated send congestion. This scenario was practically very unlikely to occur.
+- [#17353](https://github.com/emqx/emqx/pull/17353) `socket` TCP バックエンドで、クライアント接続が繰り返し送信輻輳した場合に MQTT パケットが誤った順序で送信される可能性がある問題を修正しました。このシナリオは実際には非常に稀です。
 
-- [#17383](https://github.com/emqx/emqx/pull/17383) After a session takeover, the channel info reflected by the Dashboard and REST API (`mqueue_len`, `inflight_cnt`) now updates immediately after the takeover replay completes, rather than waiting for the next 15-second stats refresh tick.
+- [#17383](https://github.com/emqx/emqx/pull/17383) セッションテイクオーバー後、Dashboard および REST API のチャネル情報（`mqueue_len`、`inflight_cnt`）がテイクオーバー再生完了直後に即時更新されるようにし、15 秒ごとの統計更新まで待たないようにしました。
 
-- [#17515](https://github.com/emqx/emqx/pull/17515) Fixed an issue where Message Queue subscriptions using QoS 0 could stop receiving messages after the queue subscriber's local inflight window became full.
+- [#17515](https://github.com/emqx/emqx/pull/17515) QoS 0 のメッセージキューサブスクリプションで、キューサブスクライバーのローカルインフライトウィンドウが満杯になるとメッセージ受信が停止する問題を修正しました。
 
-- [#17569](https://github.com/emqx/emqx/pull/17569) Reduced MQTT v5 user-property parsing cost from quadratic to linear.
+- [#17569](https://github.com/emqx/emqx/pull/17569) MQTT v5 のユーザープロパティ解析コストを二次関数的から線形に削減しました。
 
-  Previously a CONNECT, PUBLISH or SUBSCRIBE packet carrying many user-properties caused super-linear scheduler time on the owning connection process, because each parsed property was appended to the end of the accumulated list. Parsing now scales linearly with the number of entries while preserving their wire order.
+  以前は多くのユーザープロパティを含む CONNECT、PUBLISH、SUBSCRIBE パケットが、各プロパティをリスト末尾に追加するため接続プロセスのスケジューラ時間が超線形に増加していました。解析はエントリ数に線形スケールしつつ、ワイヤー順序は保持されます。
 
-#### Rule Engine
+#### ルールエンジン
 
-- [#16699](https://github.com/emqx/emqx/pull/16699) Previously, under certain race conditions, long and cryptic logs like the following could be printed:
+- [#16699](https://github.com/emqx/emqx/pull/16699) 競合条件下で以下のような長く難解なログが出力される問題を修正しました：
 
   ```
   2026-02-03T13:53:54.576326+00:00 [error] Generic server <0.11323236.0> terminating. Reason: {{badkey,'actions.success'},[{erlang,map_get,['actions.success',#{}],[{error_info,#{module => erl_erts_errors}}]},{emqx_metrics_worker,idx_metric,4,[{file,"emqx_metrics_worker.erl"},{line,683}]},{emqx_metrics_worker,inc,4,[{file,"emqx_metrics_worker.erl"},{line,322}]},{emqx_rule_runtime,do_eval_action_reply_t...
   ```
 
-  Now, EMQX prints more meaningful information to help debug the issue.
+  現在は問題のデバッグに役立つより意味のある情報を出力します。
 
-- [#16847](https://github.com/emqx/emqx/pull/16847) Fixed a crash when non-ASCII unicode string is used in message transformation expression.
+- [#16847](https://github.com/emqx/emqx/pull/16847) メッセージ変換式で非 ASCII の Unicode 文字列を使用した場合のクラッシュを修正しました。
 
-- [#17211](https://github.com/emqx/emqx/pull/17211) Added the `connected_at` field to the `$events/client/connack` Rule Event, which was stated in the documentation but missing from the actual data.
+- [#17211](https://github.com/emqx/emqx/pull/17211) ドキュメントに記載されていたが実際のデータに欠落していた `$events/client/connack` ルールイベントの `connected_at` フィールドを追加しました。
 
-#### Data Integration
+#### データ統合
 
-- [#16622](https://github.com/emqx/emqx/pull/16622) Fixed an issue where, if an Action used async query mode and its Connector became disconnected after multiple health checks, its Fallback Actions could be triggered twice.
+- [#16622](https://github.com/emqx/emqx/pull/16622) アクションが非同期クエリモードを使い、複数回のヘルスチェック後にコネクターが切断された場合にフォールバックアクションが二重にトリガーされる問題を修正しました。
 
-- [#16659](https://github.com/emqx/emqx/pull/16659) When using an older MQTT Connector configuration with static clientids (from 5.10.0 and earlier) on later EMQX versions, the username and password at the root of the configuration were ignored. This could cause issues when upgrading while keeping the same configuration, as the MQTT clients would stop using the credentials.
+- [#16659](https://github.com/emqx/emqx/pull/16659) 5.10.0 以前の静的 clientid を持つ古い MQTT コネクター設定を新しい EMQX バージョンで使う際、設定ルートの username および password が無視される問題を修正しました。
 
-  Now, if there are username and/or password fields in the root Connector, those credentials are merged with any specific ones specified per clientid, the latter taking precedence.
+  現在はルートの資格情報が clientid ごとのものとマージされ、後者が優先されます。
 
-- [#16685](https://github.com/emqx/emqx/pull/16685) Fixed an issue where the Sparkplug B metrics alias mapping feature could fail after an EMQX node was upgraded from 5.10.x to 6.0.y.
+- [#16685](https://github.com/emqx/emqx/pull/16685) 5.10.x から 6.0.y へのアップグレード後に Sparkplug B メトリクスエイリアスマッピングが失敗する問題を修正しました。
 
-  Due to differences in how Protobuf code was generated before 6.0.0, if an EMQX node had started on an older version (< 6.0.0) with the same OTP version as the newer version, the cached Protobuf code was kept but no longer matched the newer code's expectations. This caused Sparkplug B alias mapping to fail after upgrading from 5.10.x to 6.0.y.
+  6.0.0 未満で生成された Protobuf コードのキャッシュが新しいコードの期待と合わず、Sparkplug B のエイリアスマッピングが動作しませんでした。
 
-- [#16723](https://github.com/emqx/emqx/pull/16723) Fixed an issue with RabbitMQ Connector/Action/Source where, if some connection or channel processes died unexpectedly, the Connector/Action/Source would be reported as disconnected and would not recover without being restarted.
+- [#16723](https://github.com/emqx/emqx/pull/16723) RabbitMQ コネクター／アクション／ソースで、接続やチャネルプロセスが異常終了した場合に再接続せず切断状態のままになる問題を修正しました。
 
-- [#16742](https://github.com/emqx/emqx/pull/16742) Fixed GreptimeDB TLS connection failures.
+- [#16742](https://github.com/emqx/emqx/pull/16742) GreptimeDB の TLS 接続失敗問題を修正しました。
 
-- [#16796](https://github.com/emqx/emqx/pull/16796) Fixed handling of multiline SQL statements in connector actions.
+- [#16796](https://github.com/emqx/emqx/pull/16796) コネクターアクションで複数行 SQL 文の処理を修正しました。
 
-- [#16863](https://github.com/emqx/emqx/pull/16863) Added a warning log when an async reply is received for an already-expired request.
+- [#16863](https://github.com/emqx/emqx/pull/16863) 既に期限切れのリクエストに対する非同期応答を受け取った際に警告ログを出すようにしました。
 
-- [#16890](https://github.com/emqx/emqx/pull/16890) Fixed an ExHook issue where successful reconnect reloads could duplicate the same server name in the running list and trigger repeated callback dispatches.
+- [#16890](https://github.com/emqx/emqx/pull/16890) ExHook で再接続リロード成功時に同じサーバー名が重複登録され、コールバックが繰り返し発行される問題を修正しました。
 
-- [#16936](https://github.com/emqx/emqx/pull/16936) Fixed an issue where the health check of an Azure Blob Storage Action in aggregate mode could timeout if the container contained too many blobs.
+- [#16936](https://github.com/emqx/emqx/pull/16936) Azure Blob Storage アクションの集約モードで、コンテナ内の blob 数が多いとヘルスチェックがタイムアウトする問題を修正しました。
 
-- [#16955](https://github.com/emqx/emqx/pull/16955) Eliminated Kafka producer action false health check warning logs.
+- [#16955](https://github.com/emqx/emqx/pull/16955) Kafka プロデューサーアクションの誤ったヘルスチェック警告ログを排除しました。
 
-  Previously if Kafka producer is idling for too long, Kafka may close the connection (typically default is 10 minutes), if Kafka producer action health-checks happen to be performed around the same moment, there could be a false warning message with message "not_all_kafka_partitions_connected".
+  Kafka プロデューサーが長時間アイドルすると Kafka が接続を切断し、同時期にヘルスチェックが走ると「not_all_kafka_partitions_connected」警告が誤って出ていました。
 
-- [#16972](https://github.com/emqx/emqx/pull/16972) HTTP and GCP PubSub Actions were patched to treat transient connection errors with reason `closing` as recoverable errors, reducing log noise.
+- [#16972](https://github.com/emqx/emqx/pull/16972) HTTP および GCP PubSub アクションで、理由 `closing` の一時的接続エラーを回復可能エラーとして扱い、ログノイズを減らしました。
 
-- [#17084](https://github.com/emqx/emqx/pull/17084) Fixed an issue with MQTT Sources in which, if its Connector used `clean_start = false` and reconnected to a broker with a session containing messages, those messages would not trigger rule actions.
+- [#17084](https://github.com/emqx/emqx/pull/17084) MQTT ソースで、`clean_start = false` のコネクターがセッションメッセージを持つブローカーに再接続した際にルールアクションがトリガーされない問題を修正しました。
 
-- [#17111](https://github.com/emqx/emqx/pull/17111) Fixed query execution for PostgreSQL connectors in disable prepared statements mode. Previously, concurrent queries could interleave and produce errors.
+- [#17111](https://github.com/emqx/emqx/pull/17111) PostgreSQL コネクターのプリペアドステートメント無効モードでのクエリ実行を修正しました。以前は同時クエリが干渉してエラーとなっていました。
 
-- [#17113](https://github.com/emqx/emqx/pull/17113) Fixed RocketMQ connector isolation: a misconfigured or unreachable RocketMQ connector no longer destabilizes other RocketMQ connectors on the same node. Previously, one connector with an unreachable broker could stall the shared client supervisor for up to 60 seconds, causing sibling connectors to flap with `resource_health_check_timed_out` and for Dashboard operations on them to hang.
+- [#17113](https://github.com/emqx/emqx/pull/17113) RocketMQ コネクターの分離を修正しました。誤設定や到達不能な RocketMQ コネクターが同一ノードの他の RocketMQ コネクターを不安定化させなくなりました。
 
-  The default TCP/TLS connect timeout is also lowered from 60 seconds to 10 seconds so a misconfigured server surfaces as failed quickly instead of appearing stuck.
+  以前は到達不能なブローカーのコネクターが共有クライアントスーパーバイザーを最大 60 秒停止させ、兄弟コネクターが `resource_health_check_timed_out` でフラップし、Dashboard 操作がハングしていました。
 
-- [#17180](https://github.com/emqx/emqx/pull/17180) Fixed an issue where, under heavy load, a timed out call to a MongoDB process would be interpreted as an unrecoverable error and wouldn't be retried. Now, the message will be retried on such events.
+  TCP/TLS 接続タイムアウトのデフォルトも 60 秒から 10 秒に短縮され、誤設定サーバーが早期に失敗として検出されます。
 
-- [#17216](https://github.com/emqx/emqx/pull/17216) Fixed Timescale/PostgreSQL actions to report a structured bad parameter error instead of crashing the database connection process when a quoted JSON numeric string is mapped to a `FLOAT` column.
+- [#17180](https://github.com/emqx/emqx/pull/17180) 高負荷時に MongoDB プロセスへのタイムアウト呼び出しが回復不能エラーと誤認され再試行されない問題を修正しました。現在は再試行されます。
 
-- [#17250](https://github.com/emqx/emqx/pull/17250) Fixed Redis Sentinel connectors to support separate authentication settings for Redis data nodes and Sentinel nodes.
+- [#17216](https://github.com/emqx/emqx/pull/17216) Timescale/PostgreSQL アクションで、引用符付き JSON 数値文字列が `FLOAT` カラムにマッピングされた際にデータベース接続プロセスがクラッシュする代わりに構造化されたパラメータエラーを報告するように修正しました。
 
-- [#17293](https://github.com/emqx/emqx/pull/17293) Fixed an issue where, when writing a Parquet file with an object containing a required key but with an `undefined`/`null` value, a corrupt file would be written instead of raising an error.
+- [#17250](https://github.com/emqx/emqx/pull/17250) Redis Sentinel コネクターで Redis データノードと Sentinel ノードの認証設定を分離してサポートしました。
 
-- [#17303](https://github.com/emqx/emqx/pull/17303) Upgraded Kafka client libraries: `brod` from 4.5.2 to 4.5.4 and `wolff` from 4.1.9 to 4.1.10.
+- [#17293](https://github.com/emqx/emqx/pull/17293) Parquet ファイルに必須キーを持つオブジェクトを `undefined`/`null` 値で書き込む際に破損ファイルが生成される問題を修正し、エラーを発生させるようにしました。
 
-  Notable fixes picked up from upstream:
+- [#17303](https://github.com/emqx/emqx/pull/17303) Kafka クライアントライブラリをアップグレードしました：`brod` を 4.5.2 から 4.5.4、`wolff` を 4.1.9 から 4.1.10 に。
 
-  - `brod`: fix a race condition during Kafka connection re-authentication (via `kafka_protocol` 4.3.4).
-  - `wolff`: under high-memory load control (`drop_if_highmem`), keep a minimum buffer reserve so the producer is not starved of in-flight data; only bytes exceeding the reserve are dropped.
+  主な修正点：
 
-- [#17347](https://github.com/emqx/emqx/pull/17347) Upgraded the RocketMQ client dependency to `v0.7.2` to fix memory growth in async producer requests.
+  - `brod`: Kafka 接続再認証時の競合状態修正（`kafka_protocol` 4.3.4）
+  - `wolff`: 高メモリ負荷制御下で最小バッファリザーブを維持し、プロデューサーのインフライトデータ枯渇を防止。リザーブ超過分のみドロップ。
 
-- [#17439](https://github.com/emqx/emqx/pull/17439) Fixed an issue where the health check of an Azure Blob Storage Connector could timeout, or generate large bandwidth costs, if the storage account contained too many containers. Companion fix to #16935.
+- [#17347](https://github.com/emqx/emqx/pull/17347) RocketMQ クライアント依存を `v0.7.2` にアップグレードし、非同期プロデューサーリクエストのメモリ増加問題を修正しました。
 
-- [#17450](https://github.com/emqx/emqx/pull/17450) Fixed an issue where the `/prometheus/data_integration` Prometheus endpoint could respond with a 500 status when using `mode=node`. This issue would only arise when the configuration for Actions and Connectors was manually edited and inconsistent, having an Action whose Connector does not exist.
+- [#17439](https://github.com/emqx/emqx/pull/17439) Azure Blob Storage コネクターのヘルスチェックがストレージアカウント内のコンテナ数が多い場合にタイムアウトや大きな帯域コストを発生させる問題を修正しました。#16935 の修正の補完です。
 
-- [#17568](https://github.com/emqx/emqx/pull/17568) Upgraded the Kafka client library `brod` to 4.5.5.
+- [#17450](https://github.com/emqx/emqx/pull/17450) `/prometheus/data_integration` Prometheus エンドポイントが `mode=node` で 500 エラーを返す問題を修正しました。これは手動編集でアクションのコネクターが存在しない不整合設定がある場合に発生しました。
 
-  Consumer group: respect the broker-assigned member ID when the join response carries the `member_id_required` error code (returned by older Kafka brokers, e.g. 2.2.0, that do not support static member instance IDs). Previously the member ID was discarded on error, preventing the retry from succeeding.
+- [#17568](https://github.com/emqx/emqx/pull/17568) Kafka クライアントライブラリ `brod` を 4.5.5 にアップグレードしました。
 
-- [#17579](https://github.com/emqx/emqx/pull/17579) Fixed Redis Sentinel connectors to use isolated Sentinel managers per resource and clean them up when resources stop, avoiding shared Sentinel state across connectors.
+  コンシューマグループ：古い Kafka ブローカー（例：2.2.0）が返す `member_id_required` エラーコード付きのジョイン応答でブローカー割当のメンバー ID を尊重するようにしました。以前はエラー時にメンバー ID が破棄され、リトライが成功しませんでした。
 
-- [#17584](https://github.com/emqx/emqx/pull/17584) Limited the amount of data returned during Connector health checks of Snowflake Aggregated Connectors. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+- [#17579](https://github.com/emqx/emqx/pull/17579) Redis Sentinel コネクターでリソース毎に分離された Sentinel マネージャーを使用し、リソース停止時にクリーンアップするように修正しました。これによりコネクター間で Sentinel 状態が共有される問題を回避します。
 
-- [#17588](https://github.com/emqx/emqx/pull/17588) Limited the amount of data returned during Connector and Action health checks of Kinesis integrations. This only has observable effects if the list of existing schemas was very large, in which case the health check will take far less time to execute.
+- [#17584](https://github.com/emqx/emqx/pull/17584) Snowflake 集約コネクターのヘルスチェックで返されるデータ量を制限しました。既存スキーマ数が非常に多い場合にヘルスチェック実行時間が大幅に短縮されます。
 
-- [#17595](https://github.com/emqx/emqx/pull/17595) Limited the amount of data returned during Connector health checks of S3 and S3 Tables integrations. This only has observable effects if the list of existing buckets was very large, in which case the health check will take far less time to execute.
+- [#17588](https://github.com/emqx/emqx/pull/17588) Kinesis 統合のコネクターおよびアクションのヘルスチェックで返されるデータ量を制限しました。既存スキーマ数が非常に多い場合にヘルスチェック実行時間が大幅に短縮されます。
 
-#### Clustering
+- [#17595](https://github.com/emqx/emqx/pull/17595) S3 および S3 Tables 統合のコネクターのヘルスチェックで返されるデータ量を制限しました。既存バケット数が非常に多い場合にヘルスチェック実行時間が大幅に短縮されます。
 
-- [#16393](https://github.com/emqx/emqx/pull/16393) Improved the stability of the Cluster Link route replication under unstable network conditions.
+#### クラスタリング
 
-- [#16739](https://github.com/emqx/emqx/pull/16739) Improved cluster recovery time after a simultaneous restart of all nodes.
+- [#16393](https://github.com/emqx/emqx/pull/16393) 不安定なネットワーク条件下でのクラスタリンクのルート複製安定性を改善しました。
 
-  The built-in Mria database management system no longer waits for the full synchronization of an internal table used to generate transaction synchronization events.
+- [#16739](https://github.com/emqx/emqx/pull/16739) 全ノード同時再起動後のクラスタ回復時間を改善しました。
 
-- [#17132](https://github.com/emqx/emqx/pull/17132) Fixed an issue where adding or removing topic metrics could fail on a replicant node when its raw config or runtime state had drifted, raising a `cluster_rpc_apply_failed` alarm and stalling cluster RPC replication. Duplicate-add and missing-remove are now rejected on the initiator only, while replicants apply the change idempotently.
+  組み込み Mria データベース管理システムはトランザクション同期イベント生成に使う内部テーブルの完全同期を待たなくなりました。
 
-- [#17182](https://github.com/emqx/emqx/pull/17182) Bumped emqx-OTP to 27.3.4.2-8 for mria.
+- [#17132](https://github.com/emqx/emqx/pull/17132) レプリカントノードで生設定やランタイム状態が乖離している場合にトピックメトリクスの追加・削除が失敗し、`cluster_rpc_apply_failed` アラームが発生しクラスタ RPC 複製が停滞する問題を修正しました。重複追加や欠落削除はイニシエーター側のみ拒否し、レプリカントは冪等的に適用します。
 
-  Without this change, during EMQX startup, Mria app boot may get stuck if it's not connected to the cluster.
+- [#17182](https://github.com/emqx/emqx/pull/17182) mria 用 emqx-OTP を 27.3.4.2-8 に更新しました。
 
-- [#17214](https://github.com/emqx/emqx/pull/17214) Removed cryptic error-level logging of disconnect events from Cluster Link message forwarding MQTT clients, in favor of more user-friendly messages with enough context for troubleshooting. Events similar to this one should no longer appear in the error logs:
+  この変更がないと、EMQX 起動時にクラスタ接続されていない場合に Mria アプリの起動がハングすることがあります。
+
+- [#17214](https://github.com/emqx/emqx/pull/17214) クラスタリンクのメッセージ転送 MQTT クライアントの切断イベントに関する難解なエラーログを削除し、トラブルシューティングに十分な文脈を持つユーザーフレンドリーなメッセージに置き換えました。
+
+  以下のようなエラーは今後エラーログに現れません：
 
   ```
   2026-05-06T03:00:48.738654+00:00 [error] [PoolWorker] unexpected info: {disconnected,141,#{}}
   ```
 
-- [#17218](https://github.com/emqx/emqx/pull/17218) Avoid `bin/emqx` and `bin/emqx_ctl` invocations from triggering `nodeup`/`nodedown` events on the running broker, which previously surfaced as misleading `cm_registry_node_down` warnings in the broker log. The temporary helper nodes started by these scripts now register as hidden Erlang nodes, as intended.
+- [#17218](https://github.com/emqx/emqx/pull/17218) `bin/emqx` および `bin/emqx_ctl` の実行が稼働中ブローカーで `nodeup`/`nodedown` イベントをトリガーし、誤解を招く `cm_registry_node_down` 警告をログに出す問題を修正しました。これらスクリプトが起動する一時ヘルパーノードは隠し Erlang ノードとして登録されます。
 
-- [#17269](https://github.com/emqx/emqx/pull/17269) Improved cluster recovery after a network partition.
+- [#17269](https://github.com/emqx/emqx/pull/17269) ネットワークパーティション後のクラスタ回復を改善しました。
 
-  - Previously, part of the clients connected to the replicant nodes could be lost from the global registry. This could lead to inconsistent behavior during takeover and incorrect information displayed in the Dashboard.
+  - 以前はレプリカントノードに接続されたクライアントの一部がグローバルレジストリから失われ、テイクオーバー時の不整合や Dashboard 表示誤りを引き起こしていました。
 
-    This fix adds a background process that re-registers the existing clients when network partition is healed. It also adds a new alarm: "Broker is recovering after a network partition", which is raised while the global registry is being rebuilt.
+    この修正でネットワークパーティション回復時に既存クライアントを再登録するバックグラウンドプロセスを追加し、「Broker is recovering after a network partition」という新しいアラームを追加しました。
 
-  - Introduced a new cluster auto-heal algorithm that can automatically recover overlapping network partitions.
+  - 重複ネットワークパーティションを自動回復する新しいクラスタ自動修復アルゴリズムを導入しました。
 
-- [#17343](https://github.com/emqx/emqx/pull/17343) Fixed a clustered-config replication bug where importing a data backup (or loading a HOCON config via `emqx ctl conf load` / `PUT /api/v5/configs`) that contained a `file`-type authorization source could leave peer nodes lagging with a `cluster_rpc_apply_failed` / `failed_to_read_acl_file` error.
+- [#17343](https://github.com/emqx/emqx/pull/17343) クラスタ設定複製バグを修正しました。データバックアップのインポートや `emqx ctl conf load` / `PUT /api/v5/configs` で `file` タイプの認可ソースを含む設定を読み込むと、ピアノードが `cluster_rpc_apply_failed` / `failed_to_read_acl_file` エラーで遅延することがありました。
 
-  The importer used to write the ACL file locally and replace inline `rules` with a `path`, then ship the path-form config across the cluster. Peer nodes have no such file on disk and so could not apply the change. The config sent to the cluster now keeps `rules` inline, so each peer writes its own copy of the ACL file from the replicated content.
+  インポーターは ACL ファイルをローカルに書き込み、インラインの `rules` を `path` に置き換えてクラスタに送信していましたが、ピアノードは該当ファイルを持たず適用できませんでした。現在はインラインの `rules` を保持し、各ピアノードが複製された内容から自身の ACL ファイルを作成します。
 
-- [#17348](https://github.com/emqx/emqx/pull/17348) Fixed noisy and misleading `emqx ctl conf cluster_sync status` diagnostics when clustered nodes have the same effective checked configuration but different raw configuration representations.
+- [#17348](https://github.com/emqx/emqx/pull/17348) クラスタノード間で実効設定は同じだが生設定表現が異なる場合に `emqx ctl conf cluster_sync status` の誤解を招くノイズを削減しました。
 
-  The command now suppresses raw-only representation differences that do not correspond to checked configuration changes, while still warning when checked configuration is inconsistent. It also avoids crashing when a raw configuration key exists on one node but is missing from another node.
+  生設定の差異で実効設定に対応しないものは抑制し、実効設定が不整合な場合のみ警告を出します。生設定キーが片方にしかない場合のクラッシュも回避します。
 
-  It also ignores timestamp-only metadata differences in `created_at` and `last_modified_at` for actions, sources, bridges, and rule metadata. Data import or boot-time configuration loading can refresh these generated timestamps on only some nodes even when the effective runtime configuration is otherwise identical.
+  また、アクション、ソース、ブリッジ、ルールメタデータの `created_at` と `last_modified_at` のタイムスタンプのみの差異は無視します。データインポートや起動時設定読み込みで生成されるタイムスタンプは一部ノードだけ更新されることがあります。
 
-- [#17349](https://github.com/emqx/emqx/pull/17349) Improved responsiveness of a Cluster Link in situations when route replication was stuck connecting to an unresponsive target cluster. Now, deleting such Cluster Link should finish slightly sooner.
+- [#17349](https://github.com/emqx/emqx/pull/17349) 応答しないターゲットクラスタへの接続でルート複製が停滞したクラスタリンクの応答性を改善し、そのようなクラスタリンクの削除がわずかに早く完了するようにしました。
 
-- [#17382](https://github.com/emqx/emqx/pull/17382) Fixed corruption of global channel registry that may occur when cluster experiences a network partition.
+- [#17382](https://github.com/emqx/emqx/pull/17382) ネットワークパーティション時に発生する可能性があるグローバルチャネルレジストリの破損を修正しました。
 
-- [#17424](https://github.com/emqx/emqx/pull/17424) Fixed a global session registry leak that could leave duplicate or stale entries for the same client ID after a network partition followed by Mnesia autoheal.
+- [#17424](https://github.com/emqx/emqx/pull/17424) ネットワークパーティション後の Mnesia 自動修復で同一クライアント ID の重複または古いグローバルセッションレジストリエントリが残るリークを修正しました。
 
-  Discard and takeover-kick RPC handlers now also remove the registry row when the target process is no longer alive, and the registration throttle on the connect path now recognizes tombstone rows (no local channel state) and reaps them instead of blocking new connections for the same client ID indefinitely.
+  破棄およびテイクオーバーキック RPC ハンドラーは対象プロセスが生存しない場合にレジストリ行を削除し、接続パスの登録スロットルはトゥームストーン行（ローカルチャネル状態なし）を認識して再利用可能にしました。
 
-- [#17432](https://github.com/emqx/emqx/pull/17432) Fixed an issue where concurrent Cluster Link API requests could return generic error responses, instead of returning either success or not found.
+- [#17432](https://github.com/emqx/emqx/pull/17432) クラスタリンク API の同時リクエストが成功または未検出のいずれかを返さず、汎用エラー応答を返す問題を修正しました。
 
-- [#17469](https://github.com/emqx/emqx/pull/17469) Fixed the issue where warnings similar to those below are emitted when enabling or disabling an active Cluster Link.
+- [#17469](https://github.com/emqx/emqx/pull/17469) アクティブなクラスタリンクの有効化・無効化時に以下のような警告が出る問題を修正しました。
 
   ```
   [warning] tag: RESOURCE, msg: handle_resource_metrics_failed, reason: {badkey, matched}, event: matched, ...
   ```
 
-- [#17586](https://github.com/emqx/emqx/pull/17586) Periodically purge stale entries from the global session registry. Previously, when a session's owner process died without a clean unregister (for example, after a brief network split that prevented the unregister from replicating, or when one core's consensus check timed out during the down-event cleanup), the registry row could remain forever if the same client ID never reconnected. A new throttled background sweep on each core node now removes such rows. The sweep is bounded to at most 500 registry rows per second per node and runs no more often than once every 10 minutes, so it does not measurably affect broker throughput even on registries holding millions of sessions.
+- [#17586](https://github.com/emqx/emqx/pull/17586) グローバルセッションレジストリの古いエントリを定期的に削除するようにしました。以前はセッション所有プロセスが正常に登録解除されず、同一クライアント ID が再接続しない場合にレジストリ行が永続的に残ることがありました。新しい制限付きバックグラウンドスイープが各コアノードで 1 秒あたり最大 500 行、10 分に 1 回以下の頻度で実行され、数百万セッション保持時でもスループットに影響しません。
 
-#### Access Control
+#### アクセス制御
 
-- [#16692](https://github.com/emqx/emqx/pull/16692) Fixed a CRL cache regression where `emqx_crl_cache:evict/1` did not fully clear internal URL state. After eviction, the same CRL URL now re-registers correctly on next use, restores its refresh timer, and avoids repeated HTTP fetches per connection.
+- [#16692](https://github.com/emqx/emqx/pull/16692) `emqx_crl_cache:evict/1` が内部 URL 状態を完全にクリアしない CRL キャッシュ回帰を修正しました。削除後は同じ CRL URL が次回使用時に正しく再登録され、リフレッシュタイマーが復元され、接続毎の HTTP フェッチ繰り返しを回避します。
 
-- [#16780](https://github.com/emqx/emqx/pull/16780) Fixed an issue in authorization source validation where requests missing the `type` field could trigger an internal error.
+- [#16780](https://github.com/emqx/emqx/pull/16780) 認可ソース検証で `type` フィールドが欠落したリクエストが内部エラーを引き起こす問題を修正しました。
 
-  Now EMQX returns a clear `BAD_REQUEST` validation error for this case.
+  現在は明確な `BAD_REQUEST` 検証エラーを返します。
 
-- [#16805](https://github.com/emqx/emqx/pull/16805) Added support for authz hook results to opt out of authorization cache storage for dynamic ACL decisions.
+- [#16805](https://github.com/emqx/emqx/pull/16805) 動的 ACL 判定のため認可キャッシュ保存をオプトアウト可能にする認可フック結果をサポートしました。
 
-- [#16865](https://github.com/emqx/emqx/pull/16865) Added `cert_common_name` and `cert_subject` aliases for `mqtt.client_attrs_init` expressions, alongside the existing `cn` and `dn` variables.
+- [#16865](https://github.com/emqx/emqx/pull/16865) `mqtt.client_attrs_init` 式で既存の `cn` と `dn` 変数に加え、`cert_common_name` と `cert_subject` のエイリアスを追加しました。
 
-- [#16868](https://github.com/emqx/emqx/pull/16868) Improved REST API authentication error messages to guide programmatic clients toward using API keys (Basic auth) instead of repeatedly logging in for bearer tokens. Error responses now mention the `api_key.bootstrap_file` configuration option and the `POST /api_key` endpoint for creating persistent API keys.
+- [#16868](https://github.com/emqx/emqx/pull/16868) REST API 認証エラーメッセージを改善し、プログラムクライアントがベアラートークンのログインを繰り返すのではなく API キー（Basic 認証）を使うよう誘導する文言を追加しました。エラー応答に `api_key.bootstrap_file` 設定オプションと永続 API キー作成用の `POST /api_key` エンドポイントを明記しています。
 
-- [#16939](https://github.com/emqx/emqx/pull/16939) Fixed the built-in database authenticator so it no longer logs a warning when the default bootstrap file path is configured but the file does not exist.
+- [#16939](https://github.com/emqx/emqx/pull/16939) 組み込みデータベース認証器が、デフォルトのブートストラップファイルパスが設定されていてもファイルが存在しない場合に警告ログを出さないように修正しました。
 
-- [#17045](https://github.com/emqx/emqx/pull/17045) Fixed password-based authentication backends to let the auth chain continue when the CONNECT packet has no password, instead of rejecting the connection immediately.
+- [#17045](https://github.com/emqx/emqx/pull/17045) パスワードなしの CONNECT パケットでパスワードベース認証バックエンドが接続を即拒否せず、認証チェーンを継続するように修正しました。
 
-  Previously, if a client connected without a password, the first password-based authenticator (built-in database, MySQL, PostgreSQL, MongoDB, Redis, or LDAP) in the chain would return an error, blocking any subsequent authenticators from being tried.
+  以前はパスワードなし接続で最初のパスワードベース認証器（組み込みデータベース、MySQL、PostgreSQL、MongoDB、Redis、LDAP）がエラーを返し、後続認証器が試されませんでした。
 
-- [#17100](https://github.com/emqx/emqx/pull/17100) Fixed OIDC SSO login failing with `provider_not_ready` when the identity provider returns a JWKS response whose `Content-Type` uses the `+json` structured syntax suffix (e.g. `application/jwk-set+json; charset=utf-8`). Such responses are now accepted as valid JWKS content.
+- [#17100](https://github.com/emqx/emqx/pull/17100) OIDC SSO ログインで、ID プロバイダーが `+json` 構造化構文サフィックスを持つ `Content-Type`（例：`application/jwk-set+json; charset=utf-8`）の JWKS レスポンスを返すと `provider_not_ready` で失敗する問題を修正しました。これらのレスポンスは有効な JWKS コンテンツとして受け入れられます。
 
-- [#17122](https://github.com/emqx/emqx/pull/17122) Fixed Dashboard RBAC checks for SSO users with URL-encoded usernames such as email addresses, so viewer self-service MFA disable requests work correctly when `force_mfa` is disabled.
+- [#17122](https://github.com/emqx/emqx/pull/17122) URL エンコードされたユーザー名（例：メールアドレス）を持つ SSO ユーザーの Dashboard RBAC チェックを修正し、`force_mfa` 無効時にビューアの自己サービス MFA 無効化リクエストが正しく動作するようにしました。
 
-- [#17140](https://github.com/emqx/emqx/pull/17140) Fixed a silent failure when EMQX fetched a Certificate Revocation List (CRL) over HTTP from a server that returns a DER-encoded body (`Content-Type: application/pkix-crl`, the format mandated by RFC 5280 §5).
+- [#17140](https://github.com/emqx/emqx/pull/17140) HTTP 経由で取得した証明書失効リスト（CRL）が DER エンコードされた場合に無音で失敗する問題を修正しました。
 
-  Previously, EMQX only decoded PEM-encoded CRL bodies; a DER body was silently treated as zero CRLs and cached as an empty list, causing every TLS handshake on `enable_crl_check = true` listeners to fail with `bad_crls, no_relevant_crls` and no log line indicating what went wrong.
+  以前は PEM エンコードのみをデコードし、DER ボディは空リストとしてキャッシュされ、`enable_crl_check = true` リスナーの TLS ハンドシェイクが `bad_crls, no_relevant_crls` で失敗し、原因を示すログが出ませんでした。
 
-  EMQX now decodes both PEM and DER CRL bodies. When a fetched body is neither, a warning is logged with the URL so the misconfiguration is visible.
+  現在は PEM と DER の両方をデコードし、どちらでもない場合は URL を含む警告ログを出します。
 
-- [#17171](https://github.com/emqx/emqx/pull/17171) Fixed an RBAC issue that prevented namespaced Dashboard administrators from enabling or disabling MFA for their own account.
+- [#17171](https://github.com/emqx/emqx/pull/17171) 名前空間管理者が自身の MFA を有効・無効化できない RBAC 問題を修正しました。
 
-  Namespaced administrators remain restricted from managing MFA settings for other Dashboard users.
+  名前空間管理者は引き続き他の Dashboard ユーザーの MFA 管理は制限されます。
 
-- [#17177](https://github.com/emqx/emqx/pull/17177) Dashboard-created REST API keys are now generated randomly instead of being derived from the API key name.
+- [#17177](https://github.com/emqx/emqx/pull/17177) Dashboard で作成される REST API キーは、API キー名由来ではなくランダムに生成されるようになりました。
 
-- [#17223](https://github.com/emqx/emqx/pull/17223) Fixed missing client certificate when a TCP-passthrough proxy (e.g. GCP TCP Proxy NLB, AWS NLB) is placed in front of an SSL listener with `proxy_protocol = true`. The TLS handshake at the listener was completing successfully and the client certificate was present, but it was not exposed to authentication or rule events. Functions, ACL rules, and authentication backends that depend on the client certificate (CN, subject, full PEM) now work correctly in this deployment shape.
+- [#17223](https://github.com/emqx/emqx/pull/17223) TCP パススループロキシ（例：GCP TCP Proxy NLB、AWS NLB）を SSL リスナーの前に置いた場合にクライアント証明書が欠落する問題を修正しました。TLS ハンドシェイクは成功し証明書は存在していましたが、認証やルールイベントに渡されていませんでした。CN、Subject、PEM 全体に依存する関数、ACL ルール、認証バックエンドはこの配置でも正しく動作します。
 
-- [#17428](https://github.com/emqx/emqx/pull/17428) Fixed a Dashboard OIDC SSO crash that prevented EMQX from completing the OpenID provider discovery when the provider's `.well-known/openid-configuration` response included a `Cache-Control` header such as `max-age=0` (observed with Kanidm). The crash caused the OIDC supervisor to exhaust its restart budget after a single failure, leaving SSO unable to recover without a config re-save. The cache-control parser is now tolerant of these values, the worker no longer hard-crashes on a bad expiry, and the OIDC supervisor allows several restarts within a minute so transient failures retry cleanly.
+- [#17428](https://github.com/emqx/emqx/pull/17428) Kanidm で観測された `.well-known/openid-configuration` レスポンスに `Cache-Control: max-age=0` などが含まれる場合に OIDC SSO がクラッシュし、OpenID プロバイダー検出が完了しない問題を修正しました。クラッシュにより OIDC スーパーバイザーが再起動予算を使い果たし、設定再保存なしに回復不能でした。キャッシュ制御パーサーを寛容にし、ワーカーが致命的クラッシュしなくなり、スーパーバイザーは 1 分以内に複数回の再起動を許可し、一時的失敗をクリーンにリトライします。
 
-#### Gateway
+#### ゲートウェイ
 
-- [#16603](https://github.com/emqx/emqx/pull/16603) Fixed the CoAP Gateway when running in DTLS connection mode.
-- [#16670](https://github.com/emqx/emqx/pull/16670) NATS gateway now enforces the max publish payload, honors the `echo` option (no local delivery), and improves publish/subscribe subject handling and related error messages.
-- [#17141](https://github.com/emqx/emqx/pull/17141) Fixed CoAP connection-mode token takeover so reconnecting UDP/DTLS clients can resume with a valid token while invalid token/clientid combinations are rejected. Also ensured required connection info fields are present before running CoAP takeover connected hooks.
+- [#16603](https://github.com/emqx/emqx/pull/16603) DTLS 接続モードでの CoAP ゲートウェイを修正しました。
+- [#16670](https://github.com/emqx/emqx/pull/16670) NATS ゲートウェイが最大パブリッシュペイロードを強制し、`echo` オプション（ローカル配信なし）を尊重し、パブリッシュ／サブスクライブのサブジェクト処理と関連エラーメッセージを改善しました。
+- [#17141](https://github.com/emqx/emqx/pull/17141) CoAP 接続モードのトークンテイクオーバーを修正し、再接続する UDP/DTLS クライアントが有効なトークンで再開できるようにし、不正なトークン／クライアント ID 組み合わせは拒否します。CoAP テイクオーバー接続フック実行前に必要な接続情報フィールドが存在することを保証しました。
 
-- [#17258](https://github.com/emqx/emqx/pull/17258) Fixed an issue in the MQTT-SN gateway where a connected client sending a second CONNECT packet on the same session would crash its connection process. The gateway now responds with a DISCONNECT and closes the session gracefully.
+- [#17258](https://github.com/emqx/emqx/pull/17258) MQTT-SN ゲートウェイで、同一セッションに対し 2 回目の CONNECT パケットを送信したクライアントの接続プロセスがクラッシュする問題を修正しました。ゲートウェイは DISCONNECT で応答し、セッションを正常に閉じます。
 
-- [#17287](https://github.com/emqx/emqx/pull/17287) Fixed MQTT-SN clients crash caused by packets received in unexpected connection or Will states, including `DISCONNECT` during connection setup, `REGISTER` before the Will handshake completes, and `WILLMSGUPD` before a Will topic exists.
+- [#17287](https://github.com/emqx/emqx/pull/17287) MQTT-SN クライアントが接続または Will 状態外のパケット（接続セットアップ中の `DISCONNECT`、Will ハンドシェイク完了前の `REGISTER`、Will トピック未設定時の `WILLMSGUPD`）を受信してクラッシュする問題を修正しました。
 
-- [#17581](https://github.com/emqx/emqx/pull/17581) Fixed the JT/T 808 gateway to use the phone number accepted during authentication as the connection identity, rejecting mismatched registration-code authentication attempts and subsequent uplink frames with a different phone number.
+- [#17581](https://github.com/emqx/emqx/pull/17581) JT/T 808 ゲートウェイで認証時に受け入れた電話番号を接続識別子として使用し、認証コード不一致の認証試行や異なる電話番号を持つアップリンクフレームを拒否するように修正しました。
 
-#### Multi-tenancy
+#### マルチテナンシー
 
-- [#17118](https://github.com/emqx/emqx/pull/17118) Improved pagination on multi-tenancy list endpoints (`/mt/ns_list`, `/mt/ns_list_details`, `/mt/managed_ns_list`, `/mt/managed_ns_list_details`, `/mt/ns/{ns}/client_list`):
+- [#17118](https://github.com/emqx/emqx/pull/17118) マルチテナンシーのリストエンドポイント（`/mt/ns_list`、`/mt/ns_list_details`、`/mt/managed_ns_list`、`/mt/managed_ns_list_details`、`/mt/ns/{ns}/client_list`）のページネーションを改善しました。
 
-  - Added an RFC 8288 `Link: <?...>; rel="next"` response header. When more pages are available the header carries the query-only URI-reference of the next page; when absent, the current response is the last page. This removes the prior ambiguity where a full page (`len(results) == limit`) could not be distinguished from the exact-boundary "no more data" case without an extra request.
-  - Added inclusive keyset cursor query parameters (`first_ns`, `first_clientid`) alongside the existing exclusive cursors (`last_ns`, `last_clientid`). The inclusive form supports exact-match lookup (e.g. `?first_ns=foo&limit=1`) and is preserved across paginated Link headers when the caller opts in. The two forms are mutually exclusive on a single request; supplying both returns HTTP 400.
+  - RFC 8288 準拠の `Link: <?...>; rel="next"` レスポンスヘッダーを追加。次ページが存在する場合はクエリのみの URI 参照を含み、存在しない場合はヘッダーが省略されます。これにより、完全ページ（`len(results) == limit`）と「データなし」の境界が明確になります。
+  - 既存の排他的カーソル（`last_ns`、`last_clientid`）に加え、包括的キーセットカーソル（`first_ns`、`first_clientid`）を追加。包括的カーソルは完全一致検索（例：`?first_ns=foo&limit=1`）をサポートし、ページネーションの Link ヘッダーで維持されます。両者は同時に指定できず、両方指定時は HTTP 400 を返します。
 
-- [#17406](https://github.com/emqx/emqx/pull/17406) Now, events captured by a trace initiated by a namespaced admin are limited to the namespace of such admin, for traces of types topic, IP address, and clientid. Traces of type rule ID already had such behavior.
+- [#17406](https://github.com/emqx/emqx/pull/17406) 名前空間管理者が開始したトレースでキャプチャされるイベントを、その管理者の名前空間に限定しました。トレースタイプがトピック、IP アドレス、クライアント ID の場合に適用されます。ルール ID タイプのトレースは既にこの動作でした。
 
-#### Plugins
+#### プラグイン
 
-- [#16784](https://github.com/emqx/emqx/pull/16784) Reduced noisy plugin startup warnings in single-node deployments.
+- [#16784](https://github.com/emqx/emqx/pull/16784) シングルノード展開時のプラグイン起動時のノイズを削減しました。
 
-  EMQX no longer tries to fetch plugin config from the local node during cluster config sync, avoiding repeated `config_not_found_on_node` warnings at startup.
+  クラスタ設定同期中にローカルノードからプラグイン設定を取得しようとするのをやめ、起動時の `config_not_found_on_node` 警告を回避します。
 
-- [#16823](https://github.com/emqx/emqx/pull/16823) Fixed a Dashboard plugin management issue for preinstalled plugins.
+- [#16823](https://github.com/emqx/emqx/pull/16823) 事前インストール済みプラグインの Dashboard 管理問題を修正しました。
 
-  When a plugin package is unpacked into `plugins/` before node startup, starting it from the Dashboard no longer causes `Plugin Config Not Found` on the plugin config page.
+  ノード起動前に `plugins/` にプラグインパッケージを展開している場合、Dashboard から起動してもプラグイン設定ページで `Plugin Config Not Found` が表示されなくなりました。
 
-- [#16842](https://github.com/emqx/emqx/pull/16842) Reduced noisy plugin config warning logs when no peer node has the plugin config yet.
+- [#16842](https://github.com/emqx/emqx/pull/16842) ピアノードにプラグイン設定がまだない場合のノイズの多い警告ログを削減しました。
 
-  Previously, when a node tried to fetch plugin config from peer nodes during startup, it would log a warning even when all peers simply didn't have the config (e.g., first node to load the plugin). Now this benign case is logged at debug level, and only genuine errors (RPC failures, timeouts) remain as warnings.
+  以前は起動時にピアノードからプラグイン設定取得を試み、全ピアが設定を持たない場合でも警告を出していました。現在はこの無害なケースをデバッグレベルでログ出力し、本当のエラー（RPC 失敗、タイムアウト）のみ警告とします。
 
-- [#16843](https://github.com/emqx/emqx/pull/16843) Fixed an issue where HTTP headers and query string parameters were not passed through to plugin API handlers, causing plugins to receive empty headers and missing query parameters.
+- [#16843](https://github.com/emqx/emqx/pull/16843) HTTP ヘッダーおよびクエリ文字列パラメータがプラグイン API ハンドラーに渡らず、空のヘッダーやパラメータになる問題を修正しました。
 
-- [#16904](https://github.com/emqx/emqx/pull/16904) Prevent enabling or starting multiple versions of the same plugin at once. When a newer version is enabled, older configured versions of that plugin are automatically disabled, and management API actions now return a clear error instead of reporting success while another version is still active.
+- [#16904](https://github.com/emqx/emqx/pull/16904) 同時に複数バージョンの同一プラグインを有効化・起動できないようにしました。新しいバージョンを有効化すると古いバージョンは自動的に無効化され、管理 API 操作は別バージョンがアクティブな場合に明確なエラーを返します。
 
-- [#17247](https://github.com/emqx/emqx/pull/17247) When a plugin's REST API callback crashes or runs over its timeout budget, the broker now logs the failing API method and path together with the configured timeout, so the offending call is identifiable in mixed-traffic logs. A timeout is logged as a warning (not an error) and includes a hint pointing at `plugins.api_endpoint.timeout`, the config key to raise when a plugin callback legitimately needs more time.
+- [#17247](https://github.com/emqx/emqx/pull/17247) プラグインの REST API コールバックがクラッシュまたはタイムアウトした際に、失敗した API メソッドとパス、設定されたタイムアウトをログに出力するようにしました。タイムアウトは警告レベルでログ出力され、正当な長時間処理が必要な場合は `plugins.api_endpoint.timeout` 設定を参照するヒントを含みます。
 
-- [#17473](https://github.com/emqx/emqx/pull/17473) Lowered the log level of `unabled_to_stop_plugin_apps` from warning to info when the plugin's Erlang applications cannot be stopped because other running applications still depend on them. This is an expected, non-actionable condition during plugin unload and no longer raises a warning.
+- [#17473](https://github.com/emqx/emqx/pull/17473) プラグインの Erlang アプリケーションが他の実行中アプリケーションに依存しているため停止できない場合のログレベルを警告から情報に下げました。プラグインアンロード時の期待される非アクション状態であり、警告を出さなくなりました。
 
-- [#17575](https://github.com/emqx/emqx/pull/17575) Fixed a race condition in the emqx_username_quota plugin that could cause the per-username session counter to become inconsistent with the actual number of tracked client records. The counter could be decremented past zero and then be deleted while a concurrent session registration incremented it, losing the increment permanently.
+- [#17575](https://github.com/emqx/emqx/pull/17575) `emqx_username_quota` プラグインの競合状態を修正しました。ユーザー名毎のセッションカウンターが実際のクライアントレコード数と不整合になることがあり、カウンターがゼロ以下に減算され削除された後に同時登録でインクリメントされると増分が失われていました。
 
 #### REST API
 
-- [#17002](https://github.com/emqx/emqx/pull/17002) Updated `minirest` library to version 1.4.12. This version fixes a bug that caused EMQX API to produce malformed API responses with `204 No Content` status line, emitting invalid `content-length` header.
+- [#17002](https://github.com/emqx/emqx/pull/17002) `minirest` ライブラリを 1.4.12 に更新しました。このバージョンは EMQX API が `204 No Content` ステータスで不正な `content-length` ヘッダーを出力するバグを修正しています。
 
-- [#17054](https://github.com/emqx/emqx/pull/17054) Fixed `GET /api/v5/configs?key=...` returning incomplete data when `Accept: application/json` was set.
+- [#17054](https://github.com/emqx/emqx/pull/17054) `GET /api/v5/configs?key=...` が `Accept: application/json` 設定時に不完全なデータを返す問題を修正しました。
 
-  Previously, the JSON response ignored the `key` query parameter and always returned a fixed subset of root configurations, which excluded keys like `multi_tenancy`. The endpoint now honors the `key` parameter in JSON responses consistently with the hocon (text/plain) response.
+  以前は JSON レスポンスが `key` クエリパラメータを無視し、`multi_tenancy` などのキーを含まない固定サブセットを返していました。現在は JSON レスポンスも hocon（text/plain）レスポンスと同様に `key` パラメータを尊重します。
 
-- [#17319](https://github.com/emqx/emqx/pull/17319) `GET /api/v5/schemas/{hotconf,actions,connectors}` now returns the response with `Content-Type: application/json`. Previously the response body was valid JSON but the header was `text/plain; charset=utf-8`, which broke clients that dispatch on the response content type.
+- [#17319](https://github.com/emqx/emqx/pull/17319) `GET /api/v5/schemas/{hotconf,actions,connectors}` が `Content-Type: application/json` でレスポンスを返すように修正しました。以前はレスポンスボディは有効な JSON でしたがヘッダーが `text/plain; charset=utf-8` で、コンテンツタイプで振り分けるクライアントが動作しませんでした。
 
-#### Observability
+#### 可観測性
 
-- [#16661](https://github.com/emqx/emqx/pull/16661) Improved `topic_metrics` and `cluster_rpc` logging when an invalid topic is requested.
-- [#16674](https://github.com/emqx/emqx/pull/16674) Ensured that the Erlang PID is printed as a log data field.
-- [#16876](https://github.com/emqx/emqx/pull/16876) Changed log message `msg_publish_not_allowed` to `msg_not_routed_to_subscribers`.
+- [#16661](https://github.com/emqx/emqx/pull/16661) 無効なトピック要求時の `topic_metrics` と `cluster_rpc` ロギングを改善しました。
+- [#16674](https://github.com/emqx/emqx/pull/16674) Erlang PID をログデータフィールドとして確実に出力するようにしました。
+- [#16876](https://github.com/emqx/emqx/pull/16876) ログメッセージ `msg_publish_not_allowed` を `msg_not_routed_to_subscribers` に変更しました。
 
-- [#16879](https://github.com/emqx/emqx/pull/16879) Added `log.audit.cache_size` as the primary config key for the audit log DB cache size, while keeping `log.audit.max_filter_size` for backward compatibility.
+- [#16879](https://github.com/emqx/emqx/pull/16879) 監査ログ DB キャッシュサイズの主要設定キーを `log.audit.cache_size` に変更し、互換性のため `log.audit.max_filter_size` も残しました。
 
-- [#17513](https://github.com/emqx/emqx/pull/17513) Fixed Prometheus matched authorization allow/deny metrics so they reflect real matched authorization decisions.
+- [#17513](https://github.com/emqx/emqx/pull/17513) Prometheus のマッチした認可の許可・拒否メトリクスを実際の認可判定を反映するよう修正しました。
 
-#### Deployment
+#### デプロイメント
 
-- [#16545](https://github.com/emqx/emqx/pull/16545) Fixed `node.cookie` handling of `#` character. Previously, if the cookie contained `#`, only the prefix before `#` would take effect. For example, if `abc#d` was configured, only `abc` was used as the cookie.
+- [#16545](https://github.com/emqx/emqx/pull/16545) `node.cookie` の `#` 文字処理を修正しました。以前は `abc#d` のような場合、`#` 以降は無視され `abc` のみがクッキーとして使われていました。
 
-  Added validation to reject problematic characters: backslash, single quote, double quote, and space.
+  バックスラッシュ、シングルクォート、ダブルクォート、スペースを含むクッキーは拒否するバリデーションを追加しました。
 
-- [#16620](https://github.com/emqx/emqx/pull/16620) Fixed a CRC32C dynamic library loading issue on aarch64.
+- [#16620](https://github.com/emqx/emqx/pull/16620) aarch64 での CRC32C 動的ライブラリ読み込み問題を修正しました。
 
-- [#16657](https://github.com/emqx/emqx/pull/16657) Fixed an issue where, when importing configuration from an older node version into a newer one, values would not be upgraded according to newer code, leading to strange behavior.
+- [#16657](https://github.com/emqx/emqx/pull/16657) 古いノードバージョンから新しいノードバージョンに設定をインポートした際に、値が新しいコードに合わせてアップグレードされず不整合が起きる問題を修正しました。
 
-  One such example is importing an MQTT Connector with static clientids from 5.10.0 into 6.0.0. In 5.10.0, usernames and passwords could not be associated with particular static clientids, and this was represented internally in a certain way. Later versions added the capability to create those associations with a different internal representation. This subtle internal representation conversion was missing when importing such configurations in previous EMQX versions.
+  例として、5.10.0 以前の静的 clientid を持つ MQTT コネクター設定のユーザー名・パスワードが特定 clientid に紐付けられず、内部表現が異なるため変換が欠落していました。
 
-- [#17024](https://github.com/emqx/emqx/pull/17024) Dashboard HTTP listener now automatically uses IPv6 when the bind address is an IPv6 address, removing the need to explicitly set `inet6 = true`.
+- [#17024](https://github.com/emqx/emqx/pull/17024) Dashboard HTTP リスナーがバインドアドレスが IPv6 の場合に自動的に IPv6 を使うようにし、`inet6 = true` の明示設定を不要にしました。
 
-- [#17227](https://github.com/emqx/emqx/pull/17227) Cluster config file save errors now name the file and the underlying reason.
+- [#17227](https://github.com/emqx/emqx/pull/17227) クラスタ設定ファイル保存エラーでファイル名と原因をログおよび HTTP 400 レスポンスに含めるようにしました。
 
-  When `cluster.hocon` (or its directory) is read-only, immutable, or otherwise unwritable (e.g. mounted read-only into a container), changing config via the Dashboard or REST API previously returned an opaque HTTP 400 with body `{config_update_crashed,{badmatch,{error,ebusy}}}` and only logged a badmatch crash that did not name the file.
+  `cluster.hocon`（またはディレクトリ）が読み取り専用や不変、書き込み不可の場合、Dashboard や REST API での設定変更はこれまで不透明な HTTP 400 とファイル名なしの `badmatch` クラッシュログを返していました。
 
-  The error now:
+  現在は：
 
-  - Logs `failed_to_save_conf_file` with the actual file path and reason (`eacces`, `eperm`, `ebusy`, ...) plus a hint listing common operator-side causes.
-  - Returns a structured HTTP 400 body that names both the file and the reason, so the cause is visible in the Dashboard without digging through node logs.
+  - 実際のファイルパスと理由（`eacces`、`eperm`、`ebusy` 等）および運用者側の一般的な原因ヒントを含む `failed_to_save_conf_file` ログを出力。
+  - ファイル名と理由を含む構造化 HTTP 400 ボディを返し、Dashboard で原因が分かりやすくなりました。
 
-  Previously, when only the temporary file write failed (e.g. read-only directory), the API silently returned HTTP 200 even though the change was not persisted to disk. The API now correctly reports failure in this case as well.
+  一時ファイル書き込み失敗時（例：読み取り専用ディレクトリ）も正しく失敗を報告します。以前は HTTP 200 を返していました。
 
-- [#17246](https://github.com/emqx/emqx/pull/17246) Upgraded `jose` library from 1.11.10 to 1.11.12, picking up EC and EdDSA key fixes for newer OTP releases.
+- [#17246](https://github.com/emqx/emqx/pull/17246) `jose` ライブラリを 1.11.10 から 1.11.12 にアップグレードし、OTP 新バージョン向けの EC および EdDSA キー修正を取り込みました。
 
-- [#17252](https://github.com/emqx/emqx/pull/17252) Published `.sha256` checksum sidecars alongside plugin packages on the official download site, allowing users to verify the integrity of downloaded plugin archives.
+- [#17252](https://github.com/emqx/emqx/pull/17252) 公式ダウンロードサイトのプラグインパッケージに `.sha256` チェックサムサイドカーを公開し、ダウンロードしたプラグインアーカイブの整合性検証を可能にしました。
 
-- [#17254](https://github.com/emqx/emqx/pull/17254) Improved memory-usage reporting inside containers. The broker now picks the most constraining memory reading among cgroup v2, cgroup v1, and the host's `/proc/meminfo` (smallest non-zero total wins, larger usage ratio breaks ties). Previously the reading could be misleading in two ways: on containers with a tight cgroup limit, the host view could indicate >70% while the cgroup limit was <10% (or the reverse); and on hosts where a cgroup is mounted with no memory limit set, the cgroup reading could collapse the reported usage ratio to ~0%. Overload-protection thresholds and the `Memory used` metric now reflect the limit that actually constrains the process.
+- [#17254](https://github.com/emqx/emqx/pull/17254) コンテナ内のメモリ使用報告を改善しました。ブローカーは cgroup v2、cgroup v1、ホストの `/proc/meminfo` のうち最も制約の厳しいメモリ値を選択します（非ゼロ最小値が勝ち、使用率が大きい方が同率の場合はそちらを選択）。以前は制約の厳しい cgroup 制限があるコンテナでホストビューが誤って高い値を示したり、その逆が起きたり、制限なし cgroup では使用率がほぼ 0% と報告されることがありました。過負荷保護閾値と `Memory used` メトリクスは実際に制約している制限を反映します。
 
-- [#17271](https://github.com/emqx/emqx/pull/17271) Hardened the official EMQX Docker image to clear image-scanner findings:
+- [#17271](https://github.com/emqx/emqx/pull/17271) 公式 EMQX Docker イメージのセキュリティスキャナー指摘を解消しました。
 
-  - Applied Debian security upgrades during the runtime image build, so the image picks up the latest patched `libssl3t64`.
-  - Removed the unused `libgnutls30t64` package. EMQX talks TLS via OpenSSL through Erlang/OTP and never links GnuTLS, so it was only present as a transitive dependency of `curl` and showed up in scanner reports.
-  - Replaced the Debian `curl` package with a statically-linked `curl` binary from [stunnel/static-curl](https://github.com/stunnel/static-curl) (OpenSSL, HTTP/2, HTTP/3; no RTMP, no GnuTLS). The Debian package would have transitively re-introduced `libgnutls30t64` via `librtmp1`; the static binary avoids this while keeping container health checks that call `curl` working unchanged.
+  - ランタイムイメージビルド時に Debian セキュリティアップグレードを適用し、最新のパッチ済み `libssl3t64` を取得。
+  - 未使用の `libgnutls30t64` パッケージを削除。EMQX は Erlang/OTP 経由で OpenSSL を使い、GnuTLS はリンクしません。`curl` の依存として存在していました。
+  - Debian の `curl` パッケージを [stunnel/static-curl](https://github.com/stunnel/static-curl) のスタティックリンクバイナリ（OpenSSL、HTTP/2、HTTP/3 対応、RTMP・GnuTLS 非対応）に置き換え。Debian パッケージは `librtmp1` 経由で `libgnutls30t64` を再導入していましたが、スタティックバイナリはこれを回避しつつ `curl` を使ったコンテナヘルスチェックを維持します。
 
-- [#17311](https://github.com/emqx/emqx/pull/17311) Fixed Docker startup when the container hostname cannot be resolved. The entrypoint now falls back to the interface IP address before auto-generating the node name, and fails with a clear error if no node host can be determined.
-- [#17342](https://github.com/emqx/emqx/pull/17342) Fixed cluster configuration import failing with a "required_field: node.cookie" schema check error when the exported `cluster.hocon` contained a partial `node` section. Read-only roots (`node`, `rpc`) are not part of the data import anyway, so they are now dropped from the imported config before the pre-flight schema check, letting the running node's own values be used for the validation.
+- [#17311](https://github.com/emqx/emqx/pull/17311) コンテナホスト名が解決できない場合の Docker 起動問題を修正しました。エントリポイントはノード名自動生成前にインターフェイス IP アドレスにフォールバックし、ノードホストが判明しない場合は明確なエラーで失敗します。
 
-- [#17369](https://github.com/emqx/emqx/pull/17369) Moved the Dashboard listener defaults (`http.bind` and the placeholder HTTPS `ssl_options`) from the user-editable `etc/emqx.conf` into the shipped `etc/base.hocon`. Previously, the hardcoded `emqx.conf` block silently reverted runtime updates to the default self-signed certificate on restart. Runtime updates made through the Dashboard, the REST API, or the `emqx_acme` plugin's automatic HTTPS configuration are now correctly preserved across restarts.
+- [#17342](https://github.com/emqx/emqx/pull/17342) エクスポートされた `cluster.hocon` に部分的な `node` セクションが含まれている場合に、`node.cookie` のスキーマチェックエラーでクラスタ設定インポートが失敗する問題を修正しました。読み取り専用ルート（`node`、`rpc`）はデータインポート対象外なので、インポート前に削除して実行中ノードの値を使うようにしました。
 
-- [#17536](https://github.com/emqx/emqx/pull/17536) Documented the `file://` option in Dashboard tooltips for the SSL listener `password` and other secret-typed configuration fields (MQTT bridge password, cluster link password, Dashboard OIDC client secret, S3 secret access key, AI completion API key, Pulsar/RocketMQ credentials, etc.). The generic secret type description already mentioned this convention, but field-specific descriptions shadowed it in the Dashboard, causing users to assume the field accepted only literal values.
+- [#17369](https://github.com/emqx/emqx/pull/17369) Dashboard リスナーのデフォルト設定（`http.bind` とプレースホルダーの HTTPS `ssl_options`）をユーザー編集可能な `etc/emqx.conf` から配布済みの `etc/base.hocon` に移動しました。
 
-- [#17540](https://github.com/emqx/emqx/pull/17540) Fixed a bug where setting `password = "file://..."` on an SSL listener caused config validation to fail with `bad_password_or_invalid_keyfile` when the keyfile was encrypted. The `file://` reference is now resolved during validation, not only at runtime.
+  以前はハードコードされた `emqx.conf` ブロックが再起動時にデフォルトの自己署名証明書へのランタイム更新を静かに上書きしていました。Dashboard、REST API、`emqx_acme` プラグインの自動 HTTPS 設定によるランタイム更新は再起動後も正しく保持されます。
+
+- [#17536](https://github.com/emqx/emqx/pull/17536) Dashboard の SSL リスナー `password` や MQTT ブリッジパスワード、クラスタリンクパスワード、Dashboard OIDC クライアントシークレット、S3 シークレットアクセスキー、AI 補完 API キー、Pulsar/RocketMQ 資格情報などのシークレット型設定フィールドのツールチップに `file://` オプションをドキュメント化しました。
+
+  汎用シークレット型説明には既に記載されていましたが、フィールド固有の説明が上書きしていたため、ユーザーがリテラル値のみ受け入れると誤解していました。
+
+- [#17540](https://github.com/emqx/emqx/pull/17540) SSL リスナーで `password = "file://..."` を設定し、キーファイルが暗号化されている場合に設定検証が `bad_password_or_invalid_keyfile` で失敗するバグを修正しました。`file://` 参照はランタイムだけでなく検証時にも解決されます。
 
 ## 6.0.2
 
-*Release Date: 2026-01-16*
+*リリース日: 2026-01-16*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.2.
+EMQX 6.0.2 へのアップグレード前に、破壊的変更点および既知の問題を必ずご確認ください。
 
-### Enhancements
+### 強化点
 
-#### Security
+#### セキュリティ
 
-- [#16461](https://github.com/emqx/emqx/pull/16461) EMQX now supports TLS 1.3 session resumption using stateless session tickets, allowing clients to resume TLS connections without requiring server-side session state.
+- [#16461](https://github.com/emqx/emqx/pull/16461) EMQX は TLS 1.3 のステートレスセッションチケットを使ったセッション再開をサポートし、サーバー側セッション状態なしでクライアントが TLS 接続を再開可能になりました。
 
-  **Configuration**
+  **設定**
 
-  - **Node-level**: `node.tls_stateless_tickets_seed`
+  - **ノードレベル**: `node.tls_stateless_tickets_seed`
 
-    Secret key seed used to generate TLS 1.3 stateless session tickets.
+    TLS 1.3 ステートレスセッションチケット生成用の秘密鍵シード。
 
-  - **Listener-level**: `listeners.ssl.<name>.ssl_options.session_tickets`
+  - **リスナーレベル**: `listeners.ssl.<name>.ssl_options.session_tickets`
 
-    Enables TLS 1.3 session resumption. Supported values:
+    TLS 1.3 セッション再開を有効化。サポート値：
 
-    - `disabled` (default)
+    - `disabled`（デフォルト）
     - `stateless`
-    - `stateless_with_cert` (includes certificate information in the ticket)
+    - `stateless_with_cert`（チケットに証明書情報を含む）
 
-  **Notes**
+  **注意**
 
-  - Session tickets are generated only when `node.tls_stateless_tickets_seed` is configured (non-empty), and `session_tickets` is enabled in listener SSL options.
-  - If `session_tickets` is enabled but `node.tls_stateless_tickets_seed` is empty, session tickets will not be generated and an error log will be emitted when starting the listener.
+  - セッションチケットは `node.tls_stateless_tickets_seed` が設定（空でない）され、リスナー SSL オプションで `session_tickets` が有効な場合にのみ生成されます。
+  - `session_tickets` が有効でも `node.tls_stateless_tickets_seed` が空の場合、セッションチケットは生成されず、リスナー起動時にエラーログが出ます。
 
-  This PR also included a fix for the TLS 1.2 session resumption configuration. Previously, the `reuse_sessions` option for SSL listener did not take effect, i.e. EMQX always tried to enable TLS 1.2 session resumption. It is now possible to turn it off. Please note that TLS 1.2 session resumption will be disabled by default starting version 6.2.0.
+  この PR には TLS 1.2 セッション再開設定の修正も含まれています。以前は SSL リスナーの `reuse_sessions` オプションが無効で、EMQX は常に TLS 1.2 セッション再開を有効化しようとしていました。現在は無効化可能です。TLS 1.2 セッション再開は 6.2.0 以降デフォルトで無効になります。
 
-#### Rule Engine
+#### ルールエンジン
 
-- [#16524](https://github.com/emqx/emqx/pull/16524) Enhanced base64 encoding and decoding functions in rule engine SQL with support for padding and URL-safe options.
+- [#16524](https://github.com/emqx/emqx/pull/16524) ルールエンジン SQL の base64 エンコード・デコード関数を強化し、パディングなしおよび URL セーフオプションをサポートしました。
 
-  The `base64_encode` and `base64_decode` functions now support optional parameters to control encoding behavior:
+  `base64_encode` と `base64_decode` はオプション引数で以下を制御可能：
 
-  - **`no_padding`**: Encode or decode without padding characters (`=`). Useful when you need to remove padding from encoded strings or decode strings that do not have padding.
-  - **`urlsafe`**: Use URL-safe base64 encoding/decoding. Replaces `+` with `-` and `/` with `_`, making the encoded string safe to use in URLs without encoding.
+  - **`no_padding`**：パディング文字（`=`）なしでエンコード・デコード。パディングを除去したい場合やパディングなし文字列をデコードする際に有用。
+  - **`urlsafe`**：URL セーフな base64 エンコード・デコード。`+` を `-`、`/` を `_` に置換し、URL でエンコード不要な文字列にします。
 
-  These options can be used individually or combined in any order.
+  これらは個別または任意の順序で組み合わせて使用可能です。
 
-  **Examples in rule SQL:**
+  **ルール SQL の例：**
 
-  Encode without padding:
+  パディングなしでエンコード：
+
   ```sql
   SELECT base64_encode(payload, 'no_padding') as encoded FROM "t/#"
   ```
 
-  Encode with URL-safe characters:
+  URL セーフ文字でエンコード：
+
   ```sql
   SELECT base64_encode(payload, 'urlsafe') as encoded FROM "t/#"
   ```
 
-  Encode with both options (no padding and URL-safe):
+  両方のオプションでエンコード：
+
   ```sql
   SELECT base64_encode(payload, 'no_padding', 'urlsafe') as encoded FROM "t/#"
   ```
 
-  Decode URL-safe base64:
+  URL セーフ base64 をデコード：
+
   ```sql
   SELECT base64_decode(payload, 'urlsafe') as decoded FROM "t/#"
   ```
 
-  Decode unpadded URL-safe base64:
+  パディングなし URL セーフ base64 をデコード：
+
   ```sql
   SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
   ```
 
-- [#16533](https://github.com/emqx/emqx/pull/16533) Added two new variadic expression helper functions, `json_value` and `jwt_value`, for extracting values from JSON data and JWT tokens using dot-separated key paths.
+- [#16533](https://github.com/emqx/emqx/pull/16533) JSON データおよび JWT トークンからドット区切りキーで値を抽出する可変長式ヘルパー関数 `json_value` と `jwt_value` を追加しました。
 
-  - `json_value` extracts values from JSON binary strings by navigating nested objects with a dot-separated key path.
-  - `jwt_value` decodes the payload of a JWT and extracts claim values using the same dot-separated path syntax.
+  - `json_value` は JSON バイナリ文字列からネストしたオブジェクトをドット区切りキーで辿って値を取得します。
+  - `jwt_value` は JWT のペイロードをデコードし、同様のドット区切りパスでクレーム値を抽出します。
 
-  **Examples**:
+  **例：**
 
-  - If `username` contains a JSON object, you can access a nested field with `json_value(username, 'shop.floor')`.
-  - If `password` contains a JWT with a customized claim, you can access a nested value with `jwt_value(password, 'client_attrs.unitid')`.
+  - `username` に JSON オブジェクトが含まれる場合、`json_value(username, 'shop.floor')` でネストフィールドにアクセス可能。
+  - `password` にカスタムクレームを含む JWT がある場合、`jwt_value(password, 'client_attrs.unitid')` でネスト値にアクセス可能。
 
-- [#16539](https://github.com/emqx/emqx/pull/16539) Added support for tracking Sparkplug B metric aliases when using the `spb_decode` Rule Engine function.
+- [#16539](https://github.com/emqx/emqx/pull/16539) ルールエンジン関数 `spb_decode` 使用時の Sparkplug B メトリクスエイリアス追跡をサポートしました。
 
-  After a device or Edge of Network (EoN) node publishes its `NBIRTH` or `DBIRTH` messages, EMQX records the alias-to-name mappings defined in those messages. When `spb_decode` is later applied to `NDATA` or `DDATA` messages from the same session, the original metric names are automatically restored and included in the decoded output.
+  デバイスやエッジノードが `NBIRTH` または `DBIRTH` メッセージをパブリッシュすると、EMQX はメッセージ内で定義されたエイリアスと名前のマッピングを記録します。後で同セッションの `NDATA` または `DDATA` メッセージに `spb_decode` を適用すると、元のメトリクス名が自動復元されデコード出力に含まれます。
 
-  Note: when executing fallback actions, the mapping is not available in the environment where they run. This means that, if a fallback action republishes the undecoded `DDATA`/`NDATA` payload to a Sparkplug B `DDATA`/`NDATA` topic, the metric `name` fields will not be populated by the alias mapping.
+  注意：フォールバックアクション実行時はマッピングが利用できません。フォールバックアクションが未デコードの `DDATA`/`NDATA` ペイロードを Sparkplug B トピックに再パブリッシュすると、メトリクスの `name` フィールドはエイリアスマッピングされません。
 
-#### Durable Storage
+#### 耐久ストレージ
 
-- [#16136](https://github.com/emqx/emqx/pull/16136) Improved resource management and performance for durable storage.
+- [#16136](https://github.com/emqx/emqx/pull/16136) 耐久ストレージのリソース管理と性能を改善しました。
 
-  Introduced a concept of a durable storage database group. Certain resources (such as memtable size and disk usage quota) can be shared between the group members.
+  耐久ストレージデータベースグループの概念を導入し、メンバー間でメモリテーブルサイズやディスク使用量クォータなどのリソースを共有可能にしました。
 
-  Added the following new metrics (per DB group):
+  新しいメトリクス（DB グループ毎）：
 
-  - `emqx_ds_disk_usage`: Total size of SST files
-  - `emqx_ds_write_buffer_memory_usage`: RocksDB memtable size
-  - `emqx_ds_total_trash_size`: Disk usage by trash SST files
+  - `emqx_ds_disk_usage`: SST ファイルの合計サイズ
+  - `emqx_ds_write_buffer_memory_usage`: RocksDB メモリテーブルサイズ
+  - `emqx_ds_total_trash_size`: ゴミ SST ファイルのディスク使用量
 
-  Added the following group configurations:
+  新しいグループ設定：
 
-  - `durable_storage.db_groups.<group>.storage_quota`: Soft quota for the SST files size
-  - `durable_storage.db_groups.<group>.write_buffer_size`: Maximum memtable size
-  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` and `durable_storage.db_groups.<group>.rocksdb_nthreads_low`: Size of RocksDB thread pools.
+  - `durable_storage.db_groups.<group>.storage_quota`: SST ファイルサイズのソフトクォータ
+  - `durable_storage.db_groups.<group>.write_buffer_size`: 最大メモリテーブルサイズ
+  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` と `durable_storage.db_groups.<group>.rocksdb_nthreads_low`: RocksDB スレッドプールサイズ
 
-  Added a new alarm that is raised when the quota is exceeded: `db_storage_quota_exceeded:<DB>`. Please refer to the "Storage Quota" section of the documentation for more details.
+  クォータ超過時に発生する新しいアラーム：`db_storage_quota_exceeded:<DB>` があります。詳細はドキュメントの「ストレージクォータ」セクションを参照してください。
 
-  Default session checkpoint interval has been changed to 15s.
+  セッションチェックポイント間隔のデフォルトは 15 秒に変更されました。
 
-- [#16286](https://github.com/emqx/emqx/pull/16286) Optimized the default durable storage settings to reduce CPU load. This PR disables subscriptions for DBs that don't use them.
+- [#16286](https://github.com/emqx/emqx/pull/16286) デフォルトの耐久ストレージ設定を最適化し、不要な DB サブスクリプションを無効化して CPU 負荷を削減しました。
 
-#### Performance
+#### パフォーマンス
 
-- [#16413](https://github.com/emqx/emqx/pull/16413) Improved subscription handling performance by reducing redundant monitoring of MQTT session processes.
+- [#16413](https://github.com/emqx/emqx/pull/16413) MQTT セッションプロセスの冗長な監視を減らし、サブスクリプション処理性能を改善しました。
 
-### Bug Fixes
+### バグ修正
 
-#### Core MQTT Functionalities
+#### コア MQTT 機能
 
-- [#16354](https://github.com/emqx/emqx/pull/16354) Fixed a crash in MQTT v5 connections caused by a type mismatch when processing the request-response-information property.
+- [#16354](https://github.com/emqx/emqx/pull/16354) MQTT v5 接続でリクエストレスポンス情報プロパティ処理時の型不一致によるクラッシュを修正しました。
 
-- [#16515](https://github.com/emqx/emqx/pull/16515) Fixed an issue where WebSocket connections could crash when the broker sent messages exceeding the client-advertised `Maximum-Packet-Size`.
+- [#16515](https://github.com/emqx/emqx/pull/16515) ブローカーがクライアントが通知した `Maximum-Packet-Size` を超えるメッセージを送信すると WebSocket 接続がクラッシュする問題を修正しました。
 
-- [#16569](https://github.com/emqx/emqx/pull/16569) Fixed a rare race condition that could cause the supporting `emqx_flapping` process for flapping detection to crash under high system load.
+- [#16569](https://github.com/emqx/emqx/pull/16569) 高負荷時にフラッピング検出用の `emqx_flapping` プロセスがクラッシュする稀な競合状態を修正しました。
 
-#### Data Integration
+#### データ統合
 
-- [#16265](https://github.com/emqx/emqx/pull/16265) The health check now verifies leader connectivity only for the partitions assigned to the current EMQX node, preventing unnecessary idle connections and false alarms.
+- [#16265](https://github.com/emqx/emqx/pull/16265) Kafka ソースコネクターのヘルスチェックで、現在の EMQX ノードに割り当てられたパーティションのみリーダー接続を検証するようにし、不要なアイドル接続や誤警報を防止しました。
 
-  Previously, the Kafka source connector checked leader connectivity for all partitions. In clustered deployments, each node owns only a subset of partitions, leaving connections to unassigned partition leaders idle. Because Kafka closes idle connections after a timeout (10 minutes by default), this could result in false connectivity alarms.
+  以前はすべてのパーティションのリーダー接続を検証しており、クラスタ展開時にノードが割り当てられていないパーティションのリーダー接続がアイドル状態となり、Kafka がタイムアウトで切断し誤警報が発生していました。
 
-- [#16542](https://github.com/emqx/emqx/pull/16542) Fixed an issue where Kafka producer connections could disconnect prematurely when Kafka was overloaded, leading to excessive produce request retries.
+- [#16542](https://github.com/emqx/emqx/pull/16542) Kafka プロデューサー接続が Kafka 過負荷時に早期切断され、過剰なリトライを引き起こす問題を修正しました。
 
-  The produce request timeout is now automatically set to at least twice the metadata request timeout, with a minimum of 30 seconds. This reduces unnecessary reconnections and retries when metadata requests take longer than expected, especially when the metadata request timeout is configured to a small value.
+  プロデュースリクエストのタイムアウトはメタデータリクエストタイムアウトの少なくとも 2 倍、最小 30 秒に自動設定され、メタデータリクエストが短時間設定でも不要な再接続・リトライを減らします。
 
-- [#16352](https://github.com/emqx/emqx/pull/16352) Upgraded Apache Pulsar client to 2.1.2. When Pulsar producer action's `batch_size` is configured to `1`, the producer will now encode single messages instead of single-element batch. This should allow consumers to share load using Key Share strategy.
+- [#16352](https://github.com/emqx/emqx/pull/16352) Apache Pulsar クライアントを 2.1.2 にアップグレードしました。Pulsar プロデューサーアクションの `batch_size` が `1` の場合、単一メッセージを単一要素バッチではなくエンコードし、Key Share 戦略でコンシューマーが負荷分散可能にしました。
 
-- [#16383](https://github.com/emqx/emqx/pull/16383) Improved the IoTDB Connector health check when using the REST API driver.
+- [#16383](https://github.com/emqx/emqx/pull/16383) IoTDB コネクターの REST API ドライバー使用時のヘルスチェックを改善しました。
 
-  Previously, client credentials were not validated during health checks. The health check now sends a lightweight no-op query, allowing misconfigured credentials to be detected early.
+  以前はヘルスチェックでクライアント認証情報を検証していませんでしたが、軽量な no-op クエリを送信し、誤設定認証情報を早期検出可能にしました。
 
-- [#16507](https://github.com/emqx/emqx/pull/16507) Fixed an issue where an MQTT Source would stop receiving messages after its Connector reconnected.
+- [#16507](https://github.com/emqx/emqx/pull/16507) MQTT ソースがコネクター再接続後にメッセージ受信を停止する問題を修正しました。
 
-  Previously, when an MQTT Source’s Connector recovered from a connection loss, its topics were not re-subscribed, causing the Source to stop working until the Connector was restarted. The Source now automatically re-subscribes upon reconnect.
+  以前は MQTT ソースのコネクターが接続喪失から復旧してもトピック再サブスクライブが行われず、コネクター再起動まで動作停止していました。現在は再接続時に自動的に再サブスクライブします。
 
+#### クラスタリング
 
-#### Clustering
+- [#16269](https://github.com/emqx/emqx/pull/16269) クラスタリンクのルート複製プロトコル回復シーケンスで、リモート側が再ブートストラップを必要としているのにスキップされる問題を修正しました。
 
-- [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Linking route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
+- [#16317](https://github.com/emqx/emqx/pull/16317) 複数独立クラスタリンクが存在し、一部リンクが長期間ダウンしている場合に、内部ルーティングテーブルからアクティブルートが誤って削除されるクラスタリンクのガベージコレクションロジック問題を修正しました。
 
-- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Linking garbage-collection logic that could incorrectly remove active routes from the internal routing table while cleaning up stale route replication state.
+- [#16465](https://github.com/emqx/emqx/pull/16465) `gen_rpc` を 3.5.1 にアップグレードしました。
 
-  This issue could occur only in setups with multiple independent Cluster Links, where some links remained down for extended periods.
+  これ以前はピアノードが到達不能な場合に接続タイムアウトの長いクラッシュログが続きましたが、新バージョンは長いクラッシュログをなくし、読みやすいエラーログに変えています。頻発する `"failed_to_connect_server"` ログもスロットリングされます。
 
-- [#16465](https://github.com/emqx/emqx/pull/16465) Upgraded `gen_rpc` to `3.5.1`.
+- [#16544](https://github.com/emqx/emqx/pull/16544) クラスタ自動クリーン手順の堅牢性を改善しました。以前はノード起動時に自動クリーン機能が無効化されていると、その後の設定変更で有効化されませんでした。
 
-  Before the `gen_rpc` upgrade, EMQX may experience a long tail of crash logs due to a connect timeout if a peer node is unreachable. The new version of gen_rpc no longer has the long tail and has converted crash logs to more readable error logs. Additionally, the frequent log `"failed_to_connect_server"` is also throttled to avoid spamming.
+#### アップグレード
 
-- [#16544](https://github.com/emqx/emqx/pull/16544) Improved the robustness of the cluster autoclean procedure. Previously, if the autoclean feature was disabled during the initial startup of a node, it would not be activated after subsequent configuration changes.
+- [#16308](https://github.com/emqx/emqx/pull/16308) EMQX 5.3.0 未満からのアップグレード後に多要素認証（MFA）が有効化できない問題を修正しました。ログインユーザーデータベースレコードの非互換が原因でした。
 
-#### Upgrade
+#### 設定管理
 
-- [#16308](https://github.com/emqx/emqx/pull/16308) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
+- [#16397](https://github.com/emqx/emqx/pull/16397) リスナー起動前に TLS 証明書と鍵ファイルの検証を追加しました。
 
-#### Configuration Management
+  EMQX は SSL リスナー設定の解析時に基本検証を行い、不正な PEM ファイルが検出されるとエラーレベルログ（例：`invalid_pem_file_ignored`、`bad_keyfile_ignored`）を出力します。これにより TLS ハンドシェイク失敗のトラブルシューティングが容易になります。
 
-- [#16397](https://github.com/emqx/emqx/pull/16397) Added TLS certificate and key file validation before listener startup.
+#### アクセス制御
 
-  EMQX now performs basic validation when parsing SSL listener configuration and emits error-level logs if invalid PEM files are detected (for example, `invalid_pem_file_ignored` and `bad_keyfile_ignored`). This makes troubleshooting easier as administrators can observe errors when starting/reconfiguring, instead of troubleshooting TLS handshake failures.
+- [#16423](https://github.com/emqx/emqx/pull/16423) 認証時に JWT の `aud`（オーディエンス）クレーム検証をサポートしました。
 
-#### Access Control
+  `verify_claims` に `aud` が設定されている場合、JWT は有効な `aud` 値を含む必要があります。文字列と配列形式の両方をサポート：
 
-- [#16423](https://github.com/emqx/emqx/pull/16423) Added support for verifying the JWT `aud` (audience) claim during authentication.
+  - `aud` が文字列の場合、設定値と完全一致する必要があります。
+  - `aud` が配列の場合、少なくとも 1 要素が設定値と一致する必要があります。
+  - 空文字列または空配列は検証失敗。
+  - `verify_claims` に `aud` が設定されているのに JWT に `aud` がない場合も検証失敗。
 
-  When the `aud` claim is configured in `verify_claims`, the JWT must include a valid `aud` value. Both string and array formats are supported:
+- [#16459](https://github.com/emqx/emqx/pull/16459) SCRAM 認証 HTTP API のユーザー作成 API で誤ったユーザー ID を返す問題を修正しました。
 
-  - If `aud` is a string, it must exactly match the configured value.
-  - If `aud` is an array, at least one element must match the configured value.
-  - An empty string or empty array fails verification.
-  - The verification also fails if the `aud` claim is missing when it is configured in `verify_claims`.
+#### 可観測性
 
-- [#16459](https://github.com/emqx/emqx/pull/16459) Fixed the issue in SCRAM authentication HTTP API. Previously, incorrect user ID was returned for the created user in the user creation API call.
+- [#16417](https://github.com/emqx/emqx/pull/16417) `resource_exception` イベントのログ量を削減しました。リソース例外発生時のログはスロットリングされ、大きなタームはマスクされます。
 
-#### Observability
+- [#16537](https://github.com/emqx/emqx/pull/16537) `gen_rpc` の特定エラーメッセージで発生するフォーマッタークラッシュを修正しました。
 
-- [#16417](https://github.com/emqx/emqx/pull/16417) Reduced log volume for `resource_exception` events. Logs generated when a resource exception occurs are now throttled, and potentially large terms are redacted to prevent excessive log output.
-
-- [#16537](https://github.com/emqx/emqx/pull/16537) Fixed a formatter crash triggered by certain `gen_rpc` error messages.
-
-  Previously, EMQX could crash with a “FORMATTER CRASH” error when `gen_rpc` logged specific errors (such as transmission timeouts). The formatter now safely handles these messages without crashing.
+  以前は `gen_rpc` が特定のエラー（送信タイムアウトなど）をログ出力すると EMQX が「FORMATTER CRASH」エラーでクラッシュしていました。現在は安全に処理します。
 
 ## 6.0.1
 
-*Release Date: 2025-11-11*
+*リリース日: 2025-11-11*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.1.
+EMQX 6.0.1 へのアップグレード前に、破壊的変更点および既知の問題を必ずご確認ください。
 
-### Enhancements
+### 強化点
 
-#### Message Queue
+#### メッセージキュー
 
-- [#16080](https://github.com/emqx/emqx/pull/16080) Added a configuration option to disable the Message Queues feature. Disabling Message Queues can slightly reduce the resource usage in the cluster. When Durable Sessions are also disabled, EMQX avoids maintaining Durable Storage, further reducing administrative overhead and improving performance.
-- [#16096](https://github.com/emqx/emqx/pull/16096) Added support for automatic creation of message queues when clients subscribe to non-existent `$q/` topics. Now configuration options are available to enable auto-creation for both regular and last-value semantics queues.
-- [#16097](https://github.com/emqx/emqx/pull/16097) Optimized message writing to regular message queues by replacing transactional appends with dirty append functions. For QoS 0 messages, asynchronous append operations are now used. These changes significantly improve the performance of message insertion into regular queues.
-- [#16098](https://github.com/emqx/emqx/pull/16098) Added a maximum queue count configuration option to limit the total number of message queues in the system.
-- [#16152](https://github.com/emqx/emqx/pull/16152) Introduced per-queue limits for maximum message count and total message size. Also added new metrics to monitor message append latency and help diagnose performance or queue-limiting issues.
+- [#16080](https://github.com/emqx/emqx/pull/16080) メッセージキュー機能を無効化する設定オプションを追加しました。メッセージキューを無効化するとクラスタのリソース使用量がわずかに減少します。耐久セッションも無効化すると、耐久ストレージの維持を回避し、管理オーバーヘッドを減らし性能を向上させます。
 
-#### Data Integration
+- [#16096](https://github.com/emqx/emqx/pull/16096) クライアントが存在しない `$q/` トピックにサブスクライブした際にメッセージキューを自動作成するサポートを追加しました。通常キューとラストバリューセマンティクスキューの両方で自動作成を有効化する設定オプションがあります。
 
-- [#16121](https://github.com/emqx/emqx/pull/16121) Upgraded the GreptimeDB ingester client to [v0.2.3](https://github.com/GreptimeTeam/greptimedb-ingester-erl/releases/tag/v0.2.3), which fixes several bugs and introduces support for row-based gRPC protocol (the column-based protocol is now deprecated).
+- [#16097](https://github.com/emqx/emqx/pull/16097) 通常メッセージキューへのメッセージ書き込みを最適化し、トランザクション付き追加からダーティ追加関数に置き換えました。QoS 0 メッセージは非同期追加を使います。これにより通常キューへのメッセージ挿入性能が大幅に向上します。
 
-  Additionally, updated the CI image to the latest stable version of GreptimeDB.
+- [#16098](https://github.com/emqx/emqx/pull/16098) システム内のメッセージキュー総数を制限する最大キュー数設定オプションを追加しました。
 
-- [#16127](https://github.com/emqx/emqx/pull/16127) Fixed an invalid string value issue in the GreptimeDB connector, following the changes introduced in [#16121](https://github.com/emqx/emqx/pull/16121).
+- [#16152](https://github.com/emqx/emqx/pull/16152) キュー毎の最大メッセージ数および合計メッセージサイズの制限を導入しました。メッセージ追加レイテンシを監視する新しいメトリクスも追加し、性能やキュー制限問題の診断に役立ちます。
 
-#### Performance
+#### データ統合
 
-- [#15949](https://github.com/emqx/emqx/pull/15949) Changed the default value of the `parse_unit` option in listener configuration from `chunk` to `frame`. This change can significantly reduce CPU usage when the payload size exceeds the socket buffer (default is 4 KB).
+- [#16121](https://github.com/emqx/emqx/pull/16121) GreptimeDB インジェスタークライアントを [v0.2.3](https://github.com/GreptimeTeam/greptimedb-ingester-erl/releases/tag/v0.2.3) にアップグレードしました。複数のバグ修正と行ベース gRPC プロトコルサポートを追加しました（列ベースプロトコルは非推奨）。
 
-  **Note**: With `parse_unit = frame`, if a `PUBLISH` packet exceeds the maximum allowed size, EMQX will close the connection instead of sending a `DISCONNECT` packet.
+  さらに CI イメージを最新の安定版 GreptimeDB に更新しました。
 
-- [#16165](https://github.com/emqx/emqx/pull/16165) Optimized the performance of the `GET /clients_v2` API. Previously, when the cluster had around 50,000 clients or more, API calls to retrieve the client list could be extremely slow or even time out.
+- [#16127](https://github.com/emqx/emqx/pull/16127) [#16121](https://github.com/emqx/emqx/pull/16121) の変更に伴い、GreptimeDB コネクターの無効な文字列値問題を修正しました。
 
-### Bug Fixes
+#### パフォーマンス
 
-#### Core MQTT Functionalities
+- [#15949](https://github.com/emqx/emqx/pull/15949) リスナー設定の `parse_unit` のデフォルト値を `chunk` から `frame` に変更しました。ペイロードサイズがソケットバッファ（デフォルト 4 KB）を超える場合の CPU 使用率を大幅に削減します。
 
-- [#15884](https://github.com/emqx/emqx/pull/15884) Resolve an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long left the cluster.
-- [#15518](https://github.com/emqx/emqx/pull/15518) Resolved a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
+  **注意**：`parse_unit = frame` の場合、`PUBLISH` パケットが最大許容サイズを超えると、EMQX は `DISCONNECT` パケットを送信せず接続を切断します。
 
-#### Upgrade
+- [#16165](https://github.com/emqx/emqx/pull/16165) `GET /clients_v2` API の性能を最適化しました。クラスタに約 5 万クライアント以上存在する場合、クライアント一覧取得 API 呼び出しが非常に遅くなるかタイムアウトすることがありました。
 
-- [#16047](https://github.com/emqx/emqx/pull/16047) Added support to perform rolling upgrade from EMQX Enterprise base version 5.8.0 and newer to 6.0. During the upgrade, legacy configurations are automatically migrated to the new format supported in 6.0. Specifically, the deprecated `bridges` configuration root is converted into the new `connectors`, `sources`, and `actions` roots.
+### バグ修正
 
-  However, the GCP PubSub Consumer and Kafka Consumer sources will still require manual changes. If any source configuration still includes the deprecated `topic_mapping` field, it must be removed. Then, for each entry previously defined in `topic_mapping`, a separate "Source + Rule" pair must be created manually.
+#### コア MQTT 機能
 
+- [#15884](https://github.com/emqx/emqx/pull/15884) 稀にグローバルルーティングテーブルがクラスタを離脱したノードの情報を無期限に保持する問題を修正しました。
 
-#### Security
+- [#15518](https://github.com/emqx/emqx/pull/15518) 多数の共有サブスクライバーが同時切断した際にクラスタのルーティングテーブルや共有サブスクリプション状態に不整合が蓄積される競合状態を修正しました。
 
-- [#16156](https://github.com/emqx/emqx/pull/16156) Fixed an issue where some dependencies were missing default configurations compared to EMQX 5.10, potentially causing RSA signature verification failures. The missing defaults could lead to errors, such as the following log message:
+#### アップグレード
+
+- [#16047](https://github.com/emqx/emqx/pull/16047) EMQX Enterprise ベースバージョン 5.8.0 以降から 6.0 へのローリングアップグレードをサポートしました。アップグレード中にレガシー設定は自動的に 6.0 でサポートされる新形式にマイグレーションされます。特に廃止された `bridges` 設定ルートは新しい `connectors`、`sources`、`actions` ルートに変換されます。
+
+  ただし、GCP PubSub コンシューマーと Kafka コンシューマーソースは手動変更が必要です。古い設定に `topic_mapping` フィールドが含まれる場合は削除し、以前の `topic_mapping` の各エントリに対して個別の「ソース＋ルール」ペアを手動作成してください。
+
+#### セキュリティ
+
+- [#16156](https://github.com/emqx/emqx/pull/16156) EMQX 5.10 と比較して一部依存関係でデフォルト設定が欠落し、RSA 署名検証失敗を引き起こす問題を修正しました。欠落したデフォルトにより以下のようなエラーログが発生していました：
 
   ```
   {sign_unsupported,[[{rsa_padding,rsa_pkcs1_padding}]]}, [{jose_jwa_unsupported,verify,5,[{file,"src/jwa/jose_jwa_unsupported.erl"},{line,55}]}
   ```
 
-- [#16175](https://github.com/emqx/emqx/pull/16175) Fixed an issue with periodic TLS certificate garbage collection. Previously, the garbage collection process incorrectly deleted certificate files that were actively used by configurations in managed namespaces.
+- [#16175](https://github.com/emqx/emqx/pull/16175) TLS 証明書の定期的なガベージコレクションで、管理された名前空間の設定で使用中の証明書ファイルが誤って削除される問題を修正しました。
 
-#### Access Control
+#### アクセス制御
 
-- [#16081](https://github.com/emqx/emqx/pull/16081) Fixed an issue where clients using extended authentication and memory-based sessions could crash with a `session_stepdown_request_exception` caused by a `calling_self` error.
+- [#16081](https://github.com/emqx/emqx/pull/16081) 拡張認証とメモリベースセッションを使うクライアントが `session_stepdown_request_exception`（`calling_self` エラー）でクラッシュする問題を修正しました。
 
-  <details> <summary>Example error log</summary>
-
+  <details> <summary>エラーログ例</summary>
 
   ```
   2025-09-24T07:13:08.973954+08:00 [error] clientid: someclientid, msg: session_stepdown_request_exception, peername: 127.0.0.1:41782, username: admin, error: exit, reason: calling_self, stacktrace: [{gen_server,call,3,[{file,"gen_server.erl"},{line,1222}]},{emqx_cm,request_stepdown,4,[{file,"emqx_cm.erl"},{line,427}]},{emqx_cm,do_takeover_begin,2,[{file,"emqx_cm.erl"},{line,398}]},{emqx_cm,takeover_session,2,[{file,"emqx_cm.erl"},{line,384}]},{emqx_cm,takeover_session_begin,2,[{file,"emqx_cm.erl"},{line,305}]},{emqx_session_mem,open,4,[{file,"emqx_session_mem.erl"},{line,210}]},{emqx_session,open,3,[{file,"emqx_session.erl"},{line,263}]},{emqx_cm,'-open_session/4-fun-1-',4,[{file,"emqx_cm.erl"},{line,290}]},{emqx_cm_locker,trans,2,[{file,"emqx_cm_locker.erl"},{line,32}]},{emqx_channel,post_process_connect,2,[{file,"emqx_channel.erl"},{line,575}]},{emqx_connection,with_channel,3,[{file,"emqx_connection.erl"},{line,852}]},{emqx_connection,process_msg,2,[{file,"emqx_connection.erl"},{line,470}]},{emqx_connection,process_msgs,2,[{file,"emqx_connection.erl"},{line,462}]},{emqx_connection,handle_recv,3,[{file,"emqx_connection.erl"},{line,406}]},{proc_lib,wake_up,3,[{file,"proc_lib.erl"},{line,340}]}], action: {takeover,'begin'}, ...
@@ -878,153 +892,155 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   </details>
 
-#### Clustering
+#### クラスタリング
 
-- [#16123](https://github.com/emqx/emqx/pull/16123) Fix a bug in the component managing Mria replication that could cause cluster joins to hang or remain incomplete in core-replicant clusters.
+- [#16123](https://github.com/emqx/emqx/pull/16123) Mria レプリケーション管理コンポーネントのバグを修正し、コア・レプリカントクラスタでクラスタ参加がハングまたは不完全になる問題を解決しました。
 
-  During cluster changes involving adding new core nodes, those new core nodes could sometimes fail to start replication-related processes required by replicants. As a result, upgraded or newly added replicants could hang during startup.
+  新規コアノード追加時にレプリカントが必要とするレプリケーション関連プロセスが起動しないことがあり、アップグレードまたは新規追加されたレプリカントが起動時にハングしました。
 
-  In Kubernetes deployments, this often caused readiness probes to fail, leading the controller to repeatedly restart the affected replicant pods.
+  Kubernetes 展開ではこれによりレディネスプローブが失敗し、コントローラーが対象レプリカント Pod を繰り返し再起動していました。
 
-  This issue typically affected upgrade rollouts involving the addition of new core and replicant nodes. For example, adding two cores and two replicants (running a newer EMQX version) to an existing cluster with 2 cores and 2 replicants.
+  この問題は新旧バージョンのコアおよびレプリカントノードを追加するローリングアップグレードでよく発生しました。
 
-#### Rule Engine
+#### ルールエンジン
 
-- [#16028](https://github.com/emqx/emqx/pull/16028) Fixed rule engine `jq` function memory leak.
+- [#16028](https://github.com/emqx/emqx/pull/16028) ルールエンジンの `jq` 関数のメモリリークを修正しました。
 
-  Previously if `jq` built-in function `index` is used (e.g. `.key | index("name")`), it would result in memory leak.
+  例：`jq` の組み込み関数 `index`（例：`.key | index("name")`）使用時にメモリリークが発生していました。
 
-#### Data Integration
+#### データ統合
 
-- [#16010](https://github.com/emqx/emqx/pull/16010) Fixed an issue where a Republish Fallback Action could fail with a `function_clause` error if the originating rule's SQL did not include the `metadata` field from the rule environment.
+- [#16010](https://github.com/emqx/emqx/pull/16010) フォールバックアクションが非同期クエリモードで、元ルールの SQL にルール環境の `metadata` フィールドが含まれない場合に `function_clause` エラーで失敗する問題を修正しました。
 
-  Example error log:
+  例エラーログ：
 
   ```
   [error] tag: RESOURCE, msg: failed_to_trigger_fallback_action, reason: {error,function_clause}, fallback_kind: republish, primary_action_resource_id: <<"action:type:name:connector:type:name">>, republish_topic: <<"republish/topic">>
   ```
 
-- [#16046](https://github.com/emqx/emqx/pull/16046) Fixed a potential out-of-memory (OOM) crash when loading or restarting a configuration containing a Connector with several hundred Actions.
+- [#16046](https://github.com/emqx/emqx/pull/16046) 数百のアクションを持つコネクター設定の読み込みや再起動時に発生する可能性のあるメモリ不足（OOM）クラッシュを修正しました。
 
-- [#16140](https://github.com/emqx/emqx/pull/16140) Fix a Redis cluster failover issue that could cause the Connector to remain stuck in a "connecting" state.
+- [#16140](https://github.com/emqx/emqx/pull/16140) Redis クラスタフェイルオーバー時にコネクターが「接続中」状態に固まる問題を修正しました。
 
-  Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (such as `GET`) failed. However, failures in periodic `PING` commands did not trigger a refresh. As a result, after a failover, the connector could continue using the outdated cluster topology if no other commands were issued, preventing recovery.
+  以前は EMQX の Redis クラスタクライアントが通常クエリ（`GET` など）失敗時のみクラスタトポロジを更新し、定期的な `PING` 失敗では更新しませんでした。そのためフェイルオーバー後に他のコマンドが発行されないと古いトポロジを使い続け、復旧できませんでした。
 
-  With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that the connector can detect failovers and recover promptly.
+  修正後は失敗した `PING` 応答もトポロジ更新をトリガーし、迅速に復旧します。
 
-#### MQTT Durable Sessions
+#### MQTT 耐久セッション
 
-- [#16105](https://github.com/emqx/emqx/pull/16105) Durable storage performance optimization. In particular, this fix reduces the latency of `CONNACK` for clients using a durable session.
-- [#16129](https://github.com/emqx/emqx/pull/16129) Durable storage transaction configuration can be changed in the runtime. Previously changing this configuration required a node restart.
+- [#16105](https://github.com/emqx/emqx/pull/16105) 耐久ストレージの性能最適化。特に耐久セッションを使うクライアントの `CONNACK` レイテンシを削減しました。
 
-#### Observability
+- [#16129](https://github.com/emqx/emqx/pull/16129) 耐久ストレージのトランザクション設定をランタイムで変更可能にしました。以前は設定変更にノード再起動が必要でした。
 
-- [#15963](https://github.com/emqx/emqx/pull/15963) Reduced excessive audit log entries generated during looped evaluations in the remote shell (`remsh`).
+#### 可観測性
 
-- [#15967](https://github.com/emqx/emqx/pull/15967) Fixed an issue where Mnesia transaction blocking during the cleanup of large volumes of audit logs could lead to rapid memory growth.
+- [#15963](https://github.com/emqx/emqx/pull/15963) リモートシェル（`remsh`）でのループ評価中に発生する過剰な監査ログエントリを削減しました。
 
-- [#16060](https://github.com/emqx/emqx/pull/16060) Fixed a logger formatter crash that could occur for some debug-level log messages containing deeply nested terms with non-ASCII characters.
+- [#15967](https://github.com/emqx/emqx/pull/15967) 大量監査ログのクリーンアップ中に Mnesia トランザクションがブロックされ、急激なメモリ増加を引き起こす問題を修正しました。
 
-  <details> <summary>Example error log</summary>
+- [#16060](https://github.com/emqx/emqx/pull/16060) 非 ASCII 文字を含む深くネストしたデバッグレベルログのフォーマッタークラッシュを修正しました。
 
+  <details> <summary>エラーログ例</summary>
 
   ```
   2025-09-29T06:55:34.120640+00:00 debug: FORMATTER CRASH: {report,#{request => #{messages => [#{role => <<"user">>,content => <<"{\"msg\": \"hello\"}">>}],system => <<"将输入的 JSON 数据中，值为数字的 value 相加起来，并输出，只需返回输出结果。"/utf8>>,model => <<"claude-3-haiku-20240307">>,max_tokens => 100},msg => emqx_ai_completion_request}}
-  2025-09-29T06:55:34.120780+00:00 [debug] formatter_crashed: emqx_logger_textfmt, config: #{time_offset => [],chars_limit => unlimited,depth => 100,single_line => true,template => ["[",level,"] ",msg,"\n"],with_mfa => false,timestamp_format => auto,payload_encode => text}, log_event: #{meta => #{line => 44,pid => <0.281254.0>,time => 1759128934120640,file => "emqx_ai_completion_anthropic.erl",gl => <0.4317.0>,mfa => {emqx_ai_completion_anthropic,call_completion,3},report_cb => fun logger:format_otp_report/1,matched => <<"t/1">>,namespace => global,clientid => <<"c_emqx">>,trigger => <<"t/1">>,rule_id => <<"r1sczoo0">>,rule_trigger_ts => [1759128934120]},msg => {report,#{request => #{messages => [#{role => <<"user">>,content => <<"{\"msg\": \"hello\"}">>}],system => <<"将输入的 JSON 数据中，值为数字的 value 相加起来，并输出，只需返回输出结果。"/utf8>>,model => <<"claude-3-haiku-20240307">>,max_tokens => 100},msg => emqx_ai_completion_request}},level => debug}, reason: {error,badarg,[{erlang,iolist_to_binary,[["[",[["messages",": ",[[91,[[35,123,[["role"," => ",[60,60,"\"user\"",62,62]],44,["content"," => ",[60,60,"\"{\\\"msg\\\": \\\"hello\\\"}\"",62,62]]],125]],93]]],", ",["system",": ","将输入的 JSON 数据中，值为数字的 value 相加起来，并输出，只需返回输出结果。"],", ",["model",": ","claude-3-haiku-20240307"],", ",["max_tokens",": ","100"]],"]"]],[{error_info,#{module => erl_erts_errors}}]},{emqx_trace_formatter,format_term,2,[{file,"emqx_trace_formatter.erl"},{line,126}]},{emqx_logger_textfmt,format_term,2,[{file,"emqx_logger_textfmt.erl"},{line,230}]},{emqx_logger_textfmt,try_encode_meta,4,[{file,"emqx_logger_textfmt.erl"},{line,206}]},{lists,foldl_1,3,[{file,"lists.erl"},{line,2151}]},{emqx_logger_textfmt,enrich_report,3,[{file,"emqx_logger_textfmt.erl"},{line,102}]},{emqx_logger_textfmt,format,2,[{file,"emqx_logger_textfmt.erl"},{line,24}]}]}
+  2025-09-29T06:55:34.120780+00:00 [debug] formatter_crashed: emqx_logger_textfmt, config: #{time_offset => [],chars_limit => unlimited,depth => 100,single_line => true,template => ["[",level,"] ",msg,"\n"],with_mfa => false,timestamp_format => auto,payload_encode => text}, log_event: #{meta => #{line => 44,pid => <0.281254.0>,time => 1759128934120640,file => "emqx_ai_completion_anthropic.erl",gl => <0.4317.0>,mfa => {emqx_ai_completion_anthropic,call_completion,3},report_cb => fun logger:format_otp_report/1,matched => <<"t/1">>,namespace => global,clientid => <<"c_emqx">>,trigger => <<"t/1">>,rule_id => <<"r1sczoo0">>,rule_trigger_ts => [1759128934120]},msg => {report,#{request => #{messages => [#{role => <<"user">>,content => <<"{\"msg\": \"hello\"}">>}],system => <<"将输入的 JSON 数据中，值为数字的 value 相加起来，并输出，只需返回输出结果。"/utf8>>,model => <<"claude-3-haiku-20240307">>,max_tokens => 100},msg => emqx_ai_completion_request}},level => debug}, reason: {error,badarg,[{erlang,iolist_to_binary,[["[",[["messages",": ",[[91,[[#...
   ```
 
   </details>
 
-- [#16134](https://github.com/emqx/emqx/pull/16134) Fixed a backward compatibility issue that could prevent new Log Traces from being created in some cases.
+- [#16134](https://github.com/emqx/emqx/pull/16134) 新規ログトレース作成が一部ケースでできなくなる後方互換性問題を修正しました。
 
-#### Rate Limit
+#### レートリミット
 
-- [#16160](https://github.com/emqx/emqx/pull/16160) Improved the rate limiting algorithm for individual client connections. Previously, clients could temporarily exceed their publish rate limits, particularly just after connecting or after periods of inactivity.
+- [#16160](https://github.com/emqx/emqx/pull/16160) 個別クライアント接続のレートリミットアルゴリズムを改善しました。以前は接続直後や非アクティブ期間後にパブリッシュレート制限を一時的に超過することがありました。
 
-  This update makes the limiter behavior more predictable and consistent, ensuring rate limits are correctly enforced from the start of a connection.
+  この更新によりリミッターの挙動がより予測可能かつ一貫し、接続開始時からレート制限が正しく適用されます。
 
 ## 6.0.0
 
-*Release Date: 2025-09-30*
+*リリース日: 2025-09-30*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.0.
+EMQX 6.0.0 へのアップグレード前に、破壊的変更点および既知の問題を必ずご確認ください。
 
-### Feature Highlights
+### 機能ハイライト
 
-EMQX Enterprise 6.0.0 is the first release of the EMQX Enterprise version 6 series, bringing significant architectural improvements and new capabilities.
+EMQX Enterprise 6.0.0 は EMQX Enterprise バージョン 6 シリーズの最初のリリースであり、大幅なアーキテクチャ改善と新機能をもたらします。
 
-#### Message Queue
+#### メッセージキュー
 
-The native Message Queue feature unifies real-time MQTT publish/subscribe with persistent asynchronous queuing. The server buffers messages that match a topic filter, retaining them even when subscribers are offline. Clients can consume these messages through the special `$q/{topic}` topic, ensuring reliable message delivery.
+ネイティブのメッセージキュー機能は、リアルタイム MQTT パブリッシュ／サブスクライブと永続的非同期キューイングを統合します。サーバーはトピックフィルターにマッチするメッセージをバッファし、サブスクライバーがオフラインでも保持します。クライアントは特別なトピック `$q/{topic}` を通じてこれらのメッセージを消費でき、信頼性の高いメッセージ配信を実現します。
 
-Message Queues support offline message storage, last-value retention, and flexible dispatch strategies, enhancing MQTT with both real-time and durable messaging capabilities.
+メッセージキューはオフラインメッセージストレージ、ラストバリュー保持、柔軟なディスパッチ戦略をサポートし、MQTT にリアルタイムと耐久メッセージングの両方を強化します。
 
-#### Namespace
+#### ネームスペース
 
-The Namespace feature improves multi-tenancy and observability with namespace-level roles in the Dashboard. Users are restricted to their own resources (e.g., Rules, Actions, and Connectors) with fine-grained permissions such as Administrator or Viewer, and roles can be managed via the Dashboard, API, or CLI, simplifying multi-tenant operations.
+ネームスペース機能は Dashboard のネームスペースレベルロールでマルチテナンシーと可観測性を改善します。ユーザーは自身のリソース（ルール、アクション、コネクターなど）に制限され、管理者やビューアなどの細粒度権限を持ちます。ロールは Dashboard、API、CLI で管理可能で、マルチテナント運用を簡素化します。
 
-Session count tracking has also been optimized: counts refresh on demand when there are fewer than 1,000 connections, and every 5 seconds otherwise. During rolling upgrades from older versions, counts may temporarily appear inconsistent, but will stabilize once all nodes are updated.
+セッション数追跡も最適化され、1000 接続未満はオンデマンド更新、1000 以上は 5 秒毎に更新されます。旧バージョンからのローリングアップグレード中は一時的に不整合が見られますが、全ノード更新後に安定します。
 
-#### MQTT Durable Sessions
+#### MQTT 耐久セッション
 
-Durable storage has been optimized by separating session data from the broker’s other metadata, significantly reducing RAM usage and improving storage efficiency.
+耐久ストレージはセッションデータをブローカーの他のメタデータから分離し、RAM 使用量を大幅に削減し、ストレージ効率を向上させました。
 
-New configuration options provide finer control over RocksDB memory usage and performance. In addition, the default serialization schema for stored messages has been updated to ASN.1, further enhancing efficiency.
+新しい設定オプションで RocksDB のメモリ使用量と性能を細かく制御可能です。さらに、保存メッセージのデフォルトシリアライズスキーマを ASN.1 に更新し、効率を高めています。
 
-#### New Data Integrations
+#### 新しいデータ統合
 
 - Google BigQuery
 - AWS AlloyDB
 - CockroachDB
 - AWS Redshift
 
-#### Enhanced Integration
+#### 統合強化
 
 - **AWS**:
-  - Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
-  - Parquet format support for S3 Tables Action.
+  - S3 または S3Tables データ統合で EC2 インスタンスのインスタンスメタデータサービス v2 API をサポート。手動の AWS 資格情報設定なしに S3 バケットにシームレスにアクセス可能で、IAM ロールを活用しセキュリティを向上。
+  - S3 Tables アクションで Parquet フォーマットをサポート。
 
-- **RabbitMQ**: Define custom Headers and Properties Templates in RabbitMQ Sink to enhance message routing and compatibility within RabbitMQ.
-- **Snowflake**: Snowpipe Streaming upload mode for Snowflake Action (preview feature).
-- **RocketMQ**: New `key` and `tag` template fields in Action, along with a `key_dispatch` option for the Produce Strategy, allowing greater customization of message metadata.
+- **RabbitMQ**: RabbitMQ シンクでメッセージルーティングと互換性を強化するカスタムヘッダーおよびプロパティテンプレートを定義可能に。
 
-#### Elixir Support
+- **Snowflake**: Snowflake アクションで Snowpipe ストリーミングアップロードモード（プレビュー機能）を追加。
 
-All packages now ship with Elixir support through the Mix build system, opening EMQX to the Elixir community and enabling better tooling with IEx console.
+- **RocketMQ**: アクションに新しい `key` と `tag` テンプレートフィールドを追加し、Produce Strategy の `key_dispatch` オプションを導入。メッセージメタデータのカスタマイズが可能。
 
-#### Enhanced LDAP Support
+#### Elixir サポート
 
-LDAP authorization now supports extended ACL rules in JSON format, and LDAP authentication can fetch ACL rules directly from LDAP with client-side caching.
+すべてのパッケージが Elixir の Mix ビルドシステムを通じて Elixir サポートを含むようになり、Elixir コミュニティに開放され、IEx コンソールによる優れたツール利用が可能になりました。
 
-#### Improved Tracing
+#### LDAP サポート強化
 
-Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`).
-After `max_file_size` is reached, the trace log will rotate to a new file instead of halting.
+LDAP 認可は JSON 形式の拡張 ACL ルールをサポートし、LDAP 認証は LDAP から直接 ACL ルールを取得し、クライアントメタデータでキャッシュして追加 LDAP クエリなしに認可を実施可能になりました。
 
-#### Cluster Management
+#### トレーシング改善
 
-New `cluster.description` configuration option allows users to set and display custom cluster descriptions in the EMQX Dashboard.
+最大トレース数（`trace.max_traces`）およびトレースファイルサイズ（`trace.max_file_size`）の設定可能な制限を導入しました。`max_file_size` に達するとトレースログは停止せず新しいファイルにローテーションします。
 
-### Enhancements
+#### クラスタ管理
 
-#### Message Queue
+新設定 `cluster.description` により EMQX Dashboard にカスタムクラスタ説明を設定・表示可能になりました。
 
-- [#15789](https://github.com/emqx/emqx/pull/15789) Implemented Message Queues, which are collections of messages identified by `topic_filter`. Each queue has an explicit lifecycle and is automatically replenished with published messages matched with the queue's topic filter during the queue's lifetime. Clients can cooperatively consume messages from a queue by subscribing to a special topic in the format: `$q/{topic}`.
+### 強化点
 
-#### Core MQTT Functionalities
+#### メッセージキュー
 
-- [#15805](https://github.com/emqx/emqx/pull/15805) Introduced a dedicated worker pool for handling sharded fanout message delivery.
-  Previously, the broker pool handled both subscription management and message dispatch, which could lead to scheduling contention. This change separates the fanout dispatch workload into its own pool to ensure more balanced and efficient handling of pub/sub operations.
+- [#15789](https://github.com/emqx/emqx/pull/15789) メッセージキューを実装しました。これは `topic_filter` で識別されるメッセージの集合で、明示的なライフサイクルを持ち、キューの寿命中にキューのトピックフィルターにマッチするパブリッシュメッセージで自動的に補充されます。クライアントは `$q/{topic}` 形式の特別なトピックにサブスクライブして協調的にキューからメッセージを消費できます。
 
-#### Access Control
+#### コア MQTT 機能
 
-- [#15349](https://github.com/emqx/emqx/pull/15349) Optimize external resource management for authentication and authorization. Previously, EMQX could remain connected to a resource configured for a disabled authenticator or authorizer.
+- [#15805](https://github.com/emqx/emqx/pull/15805) シャーディングされたファンアウトメッセージ配信を処理する専用ワーカープールを導入しました。
 
-- [#15294](https://github.com/emqx/emqx/pull/15294) Enhanced LDAP authentication and authorization. LDAP authorization now supports extended ACL rules in JSON format. LDAP authentication can now fetch ACL rules from LDAP. These rules are cached in the client's metadata, so authorization is performed without additional LDAP queries.
+  以前はブローカープールがサブスクリプション管理とメッセージ配信の両方を処理し、スケジューリング競合が発生していました。ファンアウト配信負荷を分離し、pub/sub 操作をより効率的に処理します。
 
-- [#15730](https://github.com/emqx/emqx/pull/15730) Added support for overriding the client ID based on authentication results. If an authentication backend returns a `clientid_override` attribute upon successful authentication, it will replace the client’s original client ID.
+#### アクセス制御
 
-  The following backends now support `clientid_override`:
+- [#15349](https://github.com/emqx/emqx/pull/15349) 認証・認可用外部リソース管理を最適化しました。無効化された認証器や認可器に設定されたリソースへの接続が維持される問題を解決しました。
+
+- [#15294](https://github.com/emqx/emqx/pull/15294) LDAP 認証と認可を強化しました。LDAP 認可は JSON 形式の拡張 ACL ルールをサポートし、LDAP 認証は LDAP から ACL ルールを取得してクライアントメタデータにキャッシュし、追加 LDAP クエリなしに認可を実施可能です。
+
+- [#15730](https://github.com/emqx/emqx/pull/15730) 認証結果に基づくクライアント ID 上書きをサポートしました。認証バックエンドが成功時に `clientid_override` 属性を返すと、元のクライアント ID を置き換えます。
+
+  対応バックエンド：
 
   - HTTP
   - JWT
@@ -1034,236 +1050,133 @@ New `cluster.description` configuration option allows users to set and display c
   - Postgres
   - Redis
 
-- [#15820](https://github.com/emqx/emqx/pull/15820) Changed default value of config `authorization.no_match` from `allow` to `deny` for better security defaults.
+- [#15820](https://github.com/emqx/emqx/pull/15820) 設定 `authorization.no_match` のデフォルト値を `allow` から `deny` に変更し、より安全なデフォルトにしました。
 
-#### Clustering
+#### クラスタリング
 
-- [#15600](https://github.com/emqx/emqx/pull/15600) Introduced a new configuration option `cluster.description` that allows you to add a descriptive label to the EMQX cluster.  This description can be updated via `PUT /cluster`, and retrieved with the `GET /cluster` API.
+- [#15600](https://github.com/emqx/emqx/pull/15600) クラスタに説明ラベルを追加する新設定 `cluster.description` を導入しました。`PUT /cluster` で更新可能で、`GET /cluster` API で取得できます。
 
-#### LLM-Based MQTT Data Processing
+#### LLM ベース MQTT データ処理
 
-- [#15467](https://github.com/emqx/emqx/pull/15467) Exposed transport configuration options for AI Completion Providers. Users can now configure connection timeouts and the maximum number of connections to AI Completion Providers. This helps prevent `checkout_timeout` errors when message throughput is high and the provider is under load.
-- Flow designer supports integrating with the [Google Gemini model](https://docs.mqttce.com/en/emqx/v6.0/flow-designer/gemini-node-quick-start.html).
+- [#15467](https://github.com/emqx/emqx/pull/15467) AI 補完プロバイダーのトランスポート設定オプションを公開しました。接続タイムアウトや最大接続数を設定可能で、高スループット時の `checkout_timeout` エラーを防ぎます。
 
-- [#15631](https://github.com/emqx/emqx/pull/15631) Added a new API endpoint to list all models available for an AI provider.
-- [#15467](https://github.com/emqx/emqx/pull/15467) Exposed transport options for AI Completion Providers. These options allow configuring connection timeouts and maximum connections to an AI Completion Provider.
-- [#15724](https://github.com/emqx/emqx/pull/15724) Introduced `openai_response` type for AI Completion Providers and completion profiles to use OpenAI's `response` API.
+- Flow デザイナーは [Google Gemini モデル](https://docs.mqttce.com/en/emqx/v6.0/flow-designer/gemini-node-quick-start.html) と統合をサポートします。
 
-#### Data Integration
+- [#15631](https://github.com/emqx/emqx/pull/15631) AI プロバイダーで利用可能なモデル一覧を取得する新 API エンドポイントを追加しました。
 
-- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX supports data integration with BigQuery.
+- [#15724](https://github.com/emqx/emqx/pull/15724) OpenAI の `response` API を使う AI 補完プロバイダーと補完プロファイルのために `openai_response` タイプを導入しました。
 
-- [#15401](https://github.com/emqx/emqx/pull/15401) Added support for the Snowpipe Streaming upload mode in the Snowflake Action.
-  *Note: Snowpipe Streaming is currently a* [*preview feature*](https://docs.snowflake.com/en/release-notes/preview-features) *and is only available for Snowflake accounts hosted on AWS.*
+#### データ統合
 
-- [#15387](https://github.com/emqx/emqx/pull/15387) Added rate limiting to Kinesis Producer Connector and Action health checks to comply with AWS API quotas and improve cluster behavior.
+- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX は BigQuery とデータ統合をサポートします。
 
-  - Health check calls to `ListStreams` and `DescribeStream` are now limited to 5/s and 10/s per Connector, respectively, matching AWS rate limits.
-  - A distributed limiter is coordinated by a core node in the cluster to enforce these limits consistently.
-  - If a health check is throttled or times out, the Connector or Action will now retain its previous status instead of being marked as disconnected.
+- [#15401](https://github.com/emqx/emqx/pull/15401) Snowflake アクションに Snowpipe ストリーミングアップロードモードを追加しました。
 
-  Also introduced a new `resource_opts.health_check_interval_jitter`, which adds a uniform random delay to `resource_opts.health_check_interval` to reduce the chance of multiple Actions under the same Connector running health checks at the same time.
+  *注：Snowpipe ストリーミングは現在 [プレビュー機能](https://docs.snowflake.com/en/release-notes/preview-features) であり、AWS ホストの Snowflake アカウントでのみ利用可能です。*
 
-- [#15176](https://github.com/emqx/emqx/pull/15176) Upgraded the GreptimeDB Connector client and supported an optional new parameter `ttl` to set the default time-to-live for automatically created tables.
+- [#15387](https://github.com/emqx/emqx/pull/15387) Kinesis プロデューサーコネクターとアクションのヘルスチェックにレート制限を追加し、AWS API クォータに準拠しクラスタ挙動を改善しました。
 
-- [#15649](https://github.com/emqx/emqx/pull/15649) EMQX supports data integration with AWS AlloyDB, CockroachDB, and AWS Redshift.
+  - `ListStreams` と `DescribeStream` へのヘルスチェック呼び出しはコネクター毎にそれぞれ 5/s と 10/s に制限されます。
+  - クラスタ内のコアノードが分散リミッターを調整し、一貫した制限を実施します。
+  - ヘルスチェックがスロットルまたはタイムアウトした場合、コネクターやアクションは切断状態にせず前回の状態を保持します。
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) Added new `key` and `tag` template fields in the RocketMQ Action, allowing customization of the message's key and tag. Also, introduced a new `key_dispatch` option for the `Produce Strategy` field.
+  また新設定 `resource_opts.health_check_interval_jitter` を導入し、`resource_opts.health_check_interval` に一様ランダム遅延を加え、同一コネクター下の複数アクションのヘルスチェック同時実行を減らします。
 
-- [#15621](https://github.com/emqx/emqx/pull/15621) Now, `access_key_id` and `secret_access_key` are optional fields for the S3 Tables Connector.  If omitted, they'll be obtained from the Instance Metadata Service v2 APIs from the EC2 instance where EMQX is deployed.
+- [#15176](https://github.com/emqx/emqx/pull/15176) GreptimeDB コネクタークライアントをアップグレードし、自動作成テーブルのデフォルト TTL 設定用の新パラメータ `ttl` をサポートしました。
 
-- [#15628](https://github.com/emqx/emqx/pull/15628) Removed HStreamDB data integration.
+- [#15649](https://github.com/emqx/emqx/pull/15649) EMQX は AWS AlloyDB、CockroachDB、AWS Redshift とデータ統合をサポートします。
 
-- [#15544](https://github.com/emqx/emqx/pull/15544) Added Arrow Flight SQL NIF driver support for Datalayers Integration.
+- [#15635](https://github.com/emqx/emqx/pull/15635) RocketMQ アクションに新しい `key` と `tag` テンプレートフィールドを追加し、`Produce Strategy` フィールドに `key_dispatch` オプションを導入しました。
 
-- [#15637](https://github.com/emqx/emqx/pull/15637) Added support for templating message headers and properties for the RabbitMQ Action.
+- [#15621](https://github.com/emqx/emqx/pull/15621) S3 Tables コネクターで `access_key_id` と `secret_access_key` をオプションにしました。省略時は EMQX がデプロイされた EC2 インスタンスのインスタンスメタデータサービス v2 API から取得します。
 
-- [#15864](https://github.com/emqx/emqx/pull/15864) Removed the deprecated "Bridges V1" APIs and configuration schemas. All endpoints under `/bridges/*` and configuration entries under the `bridges` root key are no longer available, as data integrations have fully migrated to the "Connectors/Actions/Sources" model.
+- [#15628](https://github.com/emqx/emqx/pull/15628) HStreamDB データ統合を削除しました。
 
-- [#15583](https://github.com/emqx/emqx/pull/15583) Updated the `brod` client to version 4.4.4, expanding support for a wider range of Kafka APIs. This update addresses the deprecation of `JoinGroups` API versions `v0` - `v1`.
+- [#15544](https://github.com/emqx/emqx/pull/15544) Datalayers 統合のため Arrow Flight SQL NIF ドライバーサポートを追加しました。
 
-#### Smart Data Hub
+- [#15637](https://github.com/emqx/emqx/pull/15637) RabbitMQ アクションでメッセージヘッダーとプロパティのテンプレート化をサポートしました。
 
-- [#15525](https://github.com/emqx/emqx/pull/15525) Prevented deletion of internal schemas that are still in use. If a schema is referenced by a Schema Validation or Message Transformation, it can no longer be removed to avoid runtime errors and configuration inconsistencies.
+- [#15864](https://github.com/emqx/emqx/pull/15864) 廃止された「Bridges V1」API と設定スキーマを削除しました。`/bridges/*` 以下のすべてのエンドポイントと `bridges` ルートキーの設定は利用できなくなりました。データ統合は完全に「Connectors/Actions/Sources」モデルに移行しています。
 
-#### Durable Storage
+- [#15583](https://github.com/emqx/emqx/pull/15583) `brod` クライアントを 4.4.4 にアップグレードし、Kafka API のサポート範囲を拡大しました。`JoinGroups` API バージョン `v0` ～ `v1` の非推奨対応です。
 
-- [#15463](https://github.com/emqx/emqx/pull/15463) Improved durable storage RAM usage and storage efficiency.
-  - Introduced the following configuration parameters for the durable storage to improve control over RocksDB memory usage and storage performance:
-    - `durable_storage.messages.rocksdb.write_buffer_size`: RocksDB memtable size per shard.
-    - `durable_storage.messages.rocksdb.cache_size`: RocksDB block size per shard.
-    - `durable_storage.messages.rocksdb.max_open_files`: Limits the number of file descriptors used by RocksDB per shard.
-    - `durable_storage.messages.layout.wildcard_thresholds`: Allows to tune wildcard thresholds for the `wildcard_optimized_v2` storage layout.
-  - Additionally, the default `serialization_schema` for stored messages has been changed to `asn1`.
+#### スマートデータハブ
 
-- [#16044](https://github.com/emqx/emqx/pull/16044) Some of config fields for durable sessions have been removed or renamed, and old values are marked as deprecated:
+- [#15525](https://github.com/emqx/emqx/pull/15525) まだ使用中の内部スキーマの削除を防止しました。スキーマがスキーマ検証やメッセージ変換で参照されている場合、削除できず、ランタイムエラーや設定不整合を回避します。
 
-    - `durable_sessions.heartbeat_interval` has been renamed to `durable_sessions.checkpoint_interval`.
-    - `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` have been removed, as sessions are now fully event-driven.
-    - `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` have been removed as obsolete.
+#### 耐久ストレージ
+
+- [#15463](https://github.com/emqx/emqx/pull/15463) 耐久ストレージの RAM 使用量とストレージ効率を改善しました。
+
+  - RocksDB メモリ使用量とストレージ性能を制御する以下の設定を導入：
+    - `durable_storage.messages.rocksdb.write_buffer_size`: シャード毎の RocksDB メモリテーブルサイズ
+    - `durable_storage.messages.rocksdb.cache_size`: シャード毎の RocksDB ブロックキャッシュサイズ
+    - `durable_storage.messages.rocksdb.max_open_files`: シャード毎の RocksDB ファイルディスクリプタ上限
+    - `durable_storage.messages.layout.wildcard_thresholds`: `wildcard_optimized_v2` ストレージレイアウトのワイルドカード閾値調整
+
+  - 保存メッセージのデフォルト `serialization_schema` を `asn1` に変更。
+
+- [#16044](https://github.com/emqx/emqx/pull/16044) 耐久セッションの設定フィールドの一部を削除または名称変更し、旧値は非推奨にしました：
+
+  - `durable_sessions.heartbeat_interval` は `durable_sessions.checkpoint_interval` に名称変更。
+  - `durable_sessions.idle_poll_interval` と `durable_sessions.renew_streams_interval` は削除。セッションは完全にイベント駆動になりました。
+  - `durable_sessions.session_gc_interval` と `durable_sessions.session_gc_batch_size` は廃止。
 
 #### CLI
 
-- [#15399](https://github.com/emqx/emqx/pull/15399) The `node_dump` tool now exports the current system configuration in HOCON format, with sensitive information (such as passwords and secrets) automatically redacted for security.
+- [#15399](https://github.com/emqx/emqx/pull/15399) `node_dump` ツールが現在のシステム設定を HOCON 形式でエクスポートし、パスワードやシークレットなどの機密情報を自動的にマスクするようになりました。
 
-#### Namespace
+#### ネームスペース
 
-- [#15841](https://github.com/emqx/emqx/pull/15841) Improved the refresh rate of the session count for namespaced sessions.
+- [#15841](https://github.com/emqx/emqx/pull/15841) 名前空間セッションのセッション数更新頻度を改善しました。
 
-  - If a namespace has fewer than 1000 connections, its session count is now updated on demand.
-  - For namespaces with 1000 or more connections, the count is updated every 5 seconds.
+  - 名前空間の接続数が 1000 未満の場合、セッション数はオンデマンドで更新されます。
+  - 1000 以上の場合は 5 秒毎に更新されます。
 
-  During a rolling upgrade from versions prior to 6.0, session counts may appear inconsistent due to changes in the internal tracking tables. This is expected: as clients reconnect to upgraded nodes, the session counts will gradually stabilize and become accurate once all nodes are running version 6.0 or later.
+  6.0 未満からのローリングアップグレード中は内部追跡テーブルの変更により一時的にセッション数が不整合に見えることがありますが、クライアントがアップグレード済みノードに再接続するにつれて安定し、すべてのノードが 6.0 以降になると正確になります。
 
-#### Observability
+#### 可観測性
 
-- [#15594](https://github.com/emqx/emqx/pull/15594) Introduced a new configuration option `trace.max_traces` to control the maximum number of active cluster-wide traces. This limit does not apply to node-local traces managed using `emqx ctl trace`.
+- [#15594](https://github.com/emqx/emqx/pull/15594) クラスタ全体でアクティブなトレースの最大数を制御する新設定 `trace.max_traces` を導入しました。この制限は `emqx ctl trace` で管理するノードローカルトレースには適用されません。
 
-  This update also optimized tracing implementation to eliminate potential atom leaks per created trace.
+  実装も最適化し、作成されたトレース毎のアトムリークを排除しました。
 
-- [#15556](https://github.com/emqx/emqx/pull/15556) Introduced a new configuration option `trace.max_file_size` to limit the maximum file size for each individual trace.
+- [#15556](https://github.com/emqx/emqx/pull/15556) 個別トレースの最大ファイルサイズを制限する新設定 `trace.max_file_size` を導入しました。
 
-- [#15650](https://github.com/emqx/emqx/pull/15650) Implemented automatic trace log rotation.
+- [#15650](https://github.com/emqx/emqx/pull/15650) トレースログの自動ローテーションを実装しました。
 
-  When a trace file size exceeds `trace.max_file_size`, EMQX no longer discards all subsequent events and emits an incomprehensible warning to `stderr`. Instead, portions of the oldest events are discarded while the most recent ones are retained.
+  トレースファイルサイズが `trace.max_file_size` を超えると、EMQX は以降のイベントを破棄して不明瞭な警告を `stderr` に出す代わりに、古いイベントの一部を破棄し最新を保持します。
 
-  As such, this also implies that:
+  これにより：
 
-  * EMQX now maintains multiple trace log files per active trace. The layout of the trace directory has changed accordingly.
-  * Trace API has been updated to reflect this behavior. The Log Stream API may return new errors, such as when a stream becomes stale due to a slow consumer.
+  - EMQX はアクティブなトレース毎に複数のトレースログファイルを保持します。トレースディレクトリのレイアウトが変更されました。
+  - トレース API もこれに対応し、ログストリーム API はストリームが遅延した場合などに新しいエラーを返す可能性があります。
 
+- [#15904](https://github.com/emqx/emqx/pull/15904) トレース設定の表示・更新をトレース API 経由でサポートしました。
 
-- [#15904](https://github.com/emqx/emqx/pull/15904) Support viewing and updating of tracing configuration through Trace API.
+#### パフォーマンス
 
-#### Performance
+- [#15451](https://github.com/emqx/emqx/pull/15451) TCP リスナー向けに実験的な `socket` バックエンドを導入しました。メッセージ処理レイテンシの改善と計算リソース使用量の削減を目指します。`tcp_backend` リスナーオプションで有効化可能です。
 
-- [#15451](https://github.com/emqx/emqx/pull/15451) Introduced an experimental `socket` backend for TCP listeners, aimed at improving message processing latency and reducing compute resource usage. The feature can be enabled with the new `tcp_backend` listener option.
+#### ビルドとツーリング
 
-#### Build and Tooling
+- [#15484](https://github.com/emqx/emqx/pull/15484) ビルドシステムを Elixir の Mix に切り替え、すべてのパッケージでネイティブな Elixir サポートを含むようにしました。これにより開発者ツールが向上し、必要に応じて Elixir 依存関係と統合可能で、より強力な EMQX コンソールとして [IEx](https://hexdocs.pm/iex/IEx.html) シェルを利用可能にします。
 
-- [#15484](https://github.com/emqx/emqx/pull/15484) Switched the build system to [Elixir](https://elixir-lang.org/)'s [Mix](https://hexdocs.pm/elixir/introduction-to-mix.html), enabling all packages to include native Elixir support. This change improves developer tooling, allows integration with Elixir dependencies when needed, and enables use of the [IEx](https://hexdocs.pm/iex/IEx.html) shell as a more powerful EMQX console.
+#### ライセンス
 
-#### License
+- [#15921](https://github.com/emqx/emqx/pull/15921) クラスタ全体の最大トランザクション毎秒（TPS）に対するライセンスアラームを導入しました。
 
-- [#15921](https://github.com/emqx/emqx/pull/15921) Introduced a license alarm for cluster-wide maximum transactions per second (TPS).
-  - Each node calculates TPS as the average number of MQTT messages sent and received over the past 10 seconds.
-  - The total cluster TPS is aggregated every 5 seconds.
-  - If the observed TPS exceeds the licensed limit, an alarm is triggered.
-  - The alarm remains active until a license with a higher TPS allowance is applied.
-
-#### MQTT over QUIC
-
-- [#15997](https://github.com/emqx/emqx/pull/15997) Added support for disabling QUIC stack loading by setting the environment variable `QUICER_SKIP_NIF_LOAD=1.`
-
-### Bug Fixes
-
-#### Core MQTT Functionalities
-
-- [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
-
-- [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
-
-- [#15783](https://github.com/emqx/emqx/pull/15783) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
-
-#### Access Control
-
-- [#15489](https://github.com/emqx/emqx/pull/15489) Fixed OIDC issuer URL validation in Single Sign-On (SSO) settings. Previously, issuer URLs containing a port number (for example,
-  `https://xxxxxxxx:8443/webman/sso/.well-known/openid-configuration`) were rejected with a `bad_port_number` error. These URLs are now supported.
-
-#### Rule Engine
-
-- [#15569](https://github.com/emqx/emqx/pull/15569) Fixed an issue where a Republish Rule Action could fail if the `direct_dispatch` template was empty or resolved to a non-boolean value. In these cases, the default value `false` is now used.
-
-#### Data Integration
-
-- [#15522](https://github.com/emqx/emqx/pull/15522) Fixed an issue where Snowflake Connector would fail to start correctly if `username` was not provided.
-- [#15476](https://github.com/emqx/emqx/pull/15476) Fixed a missing callback in `emqx_connector_aggreg_delivery` that caused a crash when formatting delivery process status for aggregated-mode Actions (e.g., Azure Blob Storage, Snowflake, S3 Tables).
-  This occurred during failures or when inspecting delivery processes with `gen_server:format_status/1`. The issue is now resolved, and more detailed delivery status information will be logged.
-- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
-- [#15647](https://github.com/emqx/emqx/pull/15647) Fixed an issue where a MongoDB Connector was marked as `Disconnected` if the MongoDB account specified in the connector configuration lacked privileges to perform `find` queries on the `foo` collection.
-- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
-- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in MQTT bridge. When a bridge failed to start, the topic index table was not properly cleaned up.
-- [#15786](https://github.com/emqx/emqx/pull/15786) Fixed a potential atom leak when probing RocketMQ Connectors.
-- [#15806](https://github.com/emqx/emqx/pull/15806) Improved validation for Oracle Actions during creation. Previously, in rare cases, an Action containing an invalid SQL statement could be added successfully.
-- [#15848](https://github.com/emqx/emqx/pull/15848) Improved error reporting for the Oracle Connector. When the connector becomes disconnected, its status now includes a more specific reason, making diagnostics easier.
-- [#15693](https://github.com/emqx/emqx/pull/15693) Fixed a resource leak in Postgres-based bridges. Under certain race conditions during pool initialization, deleting a Connector could leave its connection pool behind. This has been corrected to ensure connection pools are properly cleaned up.
-- [#15543](https://github.com/emqx/emqx/pull/15543) Fixed an issue in HTTP Server data integration when sending large payloads. If the payload size was 10 MB or more, the HTTP request could fail.
-
-#### Smart Data Hub
-
-- [#15839](https://github.com/emqx/emqx/pull/15839) Fixed an encoding issue with Protobuf schemas that use `map<_, _>` fields.
-  Previously, schemas containing `map<string, string>` fields could fail to encode valid payloads, resulting in cryptic runtime errors.
-
-  Example schema:
-
-  ```protobuf
-  syntax = "proto3";
-
-  message test {
-  map<string, string> args = 1;
-  }
-  ```
-
-  Example rule:
-
-  ```sql
-  SELECT
-  schema_encode('xxx', json_decode(payload), 'test') as protobuf_test
-  FROM
-  "t/#"
-  ```
-
-  Example payload failed to be encoded:
-
-  ```json
-  {
-  "args": {
-  "env": "stag"
-  }
-  }
-  ```
-
-  Previous error similar to:
-
-  ```
-  2025-06-17T06:59:22.725785+00:00 [warning] tag: RULE_SQL_EXEC, clientid: c_emqx, msg: SELECT_clause_exception, reason: {error,{gpb_type_error,{bad_unicode_string,[{value,env},{path,"test.args.key"}]}},[{'$schema_parser_xxx',mk_type_error,3,[{file,"$schema_parser_xxx.erl"},{line,437}]},{'$schema_parser_xxx','-v_map<string,string>/3-lc$^0/1-0-',3,[{file,"$schema_parser_xxx.erl"},{line,429}]},{'$schema_parser_xxx','v_map<string,string>',3,[{file,"$schema_parser_xxx.erl"},{line,429}]},{'$schema_parser_xxx',v_msg_test,3,[{file,"$schema_parser_xxx.erl"},{line,404}]},{'$schema_parser_xxx',encode_msg,3,[{file,"$schema_parser_xxx.erl"},{line,73}]},{emqx_schema_registry_serde,with_serde,2,[{file,"emqx_schema_registry_serde.erl"},{line,212}]}...
-  ```
-
-#### Observability
-
-- [#15931](https://github.com/emqx/emqx/pull/15931) Resolved a bug where spurious but harmless error logs could appear during node startup:
-    ```
-    [error] Generic event handler emqx_alarm_handler crashed ...
-    Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
-    ```
-
-- [#15973](https://github.com/emqx/emqx/pull/15973) Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
+  - 各ノードは過去 10 秒間の MQTT メッセージ送受信平均数を TPS として計算します。
+  - クラスタ全体の TPS は 5 秒毎に集計されます。
+  - 観測された TPS がライセンス上限を超えるとアラームが発生します。
+  - より高い TPS 許容量を持つライセンスが適用されるまでアラームは継続します。
 
 #### MQTT over QUIC
 
-- [#15614](https://github.com/emqx/emqx/pull/15614) QUIC Listener: When TLS key logging (`SSLKEYLOGFILE`) is enabled, EMQX now dumps TLS keys even if the handshake fails.
+- [#15997](https://github.com/emqx/emqx/pull/15997) 環境変数 `QUICER_SKIP_NIF_LOAD=1` を設定することで QUIC スタックの NIF ロードを無効化可能にしました。
 
-#### Clustering
+### バグ修正
 
-- [#16021](https://github.com/emqx/emqx/pull/16021) Fixed issues that occasionally prevented the DS Raft backend from functioning correctly when an existing node joined a new cluster and subsequently became member of DS replica sets.
+#### コア MQTT 機能
 
-#### Cluster Linking
-
-- [#15894](https://github.com/emqx/emqx/pull/15894) Previously, when listing all cluster links via `GET /cluster/links`, disabled links would be returned having an `inconsistent` status. Now they are returned as `disconnected`.
-
-#### Performance
-
-- [#15696](https://github.com/emqx/emqx/pull/15696) Added connection rate limiting support for WebSocket (WS) and WebSocket Secure (WSS) listeners.
-  The `max_conn_rate` and `max_conn_burst` configuration options are now enforced: incoming connections exceeding the defined rate are immediately closed upon acceptance, consistent with existing TCP listener behavior.
-
-  Additionally, the behavior of `max_connections` has been updated. When the connection limit is exceeded, WS/WSS listeners now close connections immediately before any HTTP handshake, resulting in an abrupt socket close instead of returning an HTTP 429 response.
-
-- [#15854](https://github.com/emqx/emqx/pull/15854) Reduced the default `active_n` value from `100` to `10` to improve MQTT client responsiveness, especially under high message rates with small payloads.
-
-  The lower `active_n` introduces more backpressure at the TCP layer, stricter than the default `Receive-Maximum` of `32`, which helps in the following scenarios:
-
-  - The client process is blocked by external authorization checks
-  - Data integration operations are delaying message handling
-  - The system is under heavy load or nearing resource limits
-
-- [#15981](https://github.com/emqx/emqx/pull/15981) Prevented excessive memory growth caused by Mnesia transaction blocking during cleanup of large volumes of audit logs. This improves system stability and memory efficiency during heavy audit log maintenance operations.
+- [#15396](https://github.com/emqx/emqx/pull/15396) 切断されたクライアントの共有サブスクリプションに対

@@ -1,36 +1,36 @@
-# API Keys
+# APIキー
 
-On the **API Keys** page in the EMQX Dashboard, you can generate API keys and secret keys for authenticating [HTTP API](../guides/api.md) requests.
+EMQXダッシュボードの**APIキー**ページでは、[HTTP API](../guides/api.md)リクエストの認証に使用するAPIキーとシークレットキーを生成できます。
 
-## Create an API Key
+## APIキーの作成
 
-1. Navigate to **System** -> **API Key** in the Dashboard.
+1. ダッシュボードで **System** -> **API Key** に移動します。
 
-2. Click the **+ Create** button in the top-right corner to open the Create API Key dialog.
+2. 右上の **+ Create** ボタンをクリックして、APIキー作成ダイアログを開きます。
 
-3. Configure the API key details:
+3. APIキーの詳細を設定します：
 
-   - Leave the **Expire At** field empty if you want the key to never expire.
-   - Optionally select a role for the API key (EMQX Enterprise only). For details on available roles, see [Roles and Permissions](../guides/api.md#roles-and-permissions).
+   - **Expire At** フィールドは、キーを無期限にしたい場合は空欄のままにします。
+   - （オプション）APIキーのロールを選択します（EMQX Enterpriseのみ）。利用可能なロールの詳細は、[Roles and Permissions](../guides/api.md#roles-and-permissions)を参照してください。
 
-4. Click **Confirm**. The API key and secret key are displayed in the **Created Successfully** dialog.
+4. **Confirm** をクリックします。APIキーとシークレットキーが **Created Successfully** ダイアログに表示されます。
 
-   ::: warning Important Notice
+   ::: warning 重要なお知らせ
 
-   Save the API Key and Secret Key in a safe place immediately. The Secret Key will not be shown again after you close this dialog.
+   APIキーとシークレットキーはすぐに安全な場所に保存してください。このダイアログを閉じるとシークレットキーは再表示されません。
 
    :::
 
-5. Click **Close** to dismiss the dialog.
+5. **Close** をクリックしてダイアログを閉じます。
 
-<img src="./dashboard/assets/api-key.png" alt="image" style="zoom:67%;" />
+<img src="./dashboard/assets/api-key.png" alt="APIキー作成画面" style="zoom:67%;" />
 
-## Manage API Keys
+## APIキーの管理
 
-After creating an API key, you can manage it from the API Keys page:
+APIキーを作成した後は、APIキー一覧ページで管理できます：
 
-- **View details**: Click the key name in the **Name** column.
-- **Edit**: Click the **Edit** button in the **Actions** column to reset the expiration time, change the enabled status, or update the note.
-- **Delete**: Click the **Delete** button in the **Actions** column to remove an API key that is no longer needed.
+- **詳細表示**：**Name** 列のキー名をクリックします。
+- **編集**：**Actions** 列の **Edit** ボタンをクリックして、有効期限のリセット、有効/無効の切り替え、メモの更新ができます。
+- **削除**：不要になったAPIキーは、**Actions** 列の **Delete** ボタンで削除できます。
 
-<img src="./dashboard/assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+<img src="./dashboard/assets/api-key-detail.png" alt="APIキー詳細画面" style="zoom:50%;" />
