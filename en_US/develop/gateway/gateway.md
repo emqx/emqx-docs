@@ -50,6 +50,9 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
+
+Starting from EMQX 6.0.4, the name of a newly created gateway listener must be 1 to 64 bytes long, start with an ASCII letter or digit, and contain only ASCII letters, digits, hyphens (`-`), and underscores (`_`). If the name does not meet these requirements, the REST API returns an HTTP `400` response with the `BAD_REQUEST` error code. For gateway listeners that existed before the upgrade and have names longer than 64 bytes, you can still update their configurations or remove them, but you cannot rename them.
+
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
@@ -122,4 +125,3 @@ However, due to the differences in semantics among various gateways, only a subs
 Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
 
 For a detailed explanation of hooks, see [Hooks](../../guides/extensions/hooks.md).
-
