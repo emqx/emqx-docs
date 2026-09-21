@@ -167,6 +167,7 @@ ns:<NAMESPACE>::<ROLE>
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
   - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
 - **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+- **审计日志访问限制**：从 EMQX 6.0.4 开始，命名空间用户无法查看集群级审计日志。只有全局管理员和全局查看者可以查看审计日志记录。详见[审计日志访问权限](./audit-log.md#审计日志访问权限)。
 - **API 密钥管理**：命名空间管理员可以创建、查询、查看、更新和删除自己命名空间中的 API 密钥。命名空间管理员不能创建全局 API 密钥或其他命名空间中的密钥，所属命名空间之外的密钥不会显示。REST API 的详细行为参见[命名空间管理员管理 API 密钥](../api.md#命名空间管理员管理-api-密钥)。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
@@ -178,7 +179,7 @@ ns:<NAMESPACE>::<ROLE>
 
 ## 审计日志
 
-**审计日志**页面允许管理员配置审计日志功能，以实时监控 EMQX 集群中的关键操作变更。
+**审计日志**页面允许全局管理员配置审计日志功能，以实时监控 EMQX 集群中的关键操作变更。从 EMQX 6.0.4 开始，全局管理员和全局查看者可以查看审计日志记录，命名空间用户无法查看。
 
 有关审计日志功能的详细说明，请参见[审计日志](./audit-log.md)。
 

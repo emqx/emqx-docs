@@ -383,6 +383,12 @@ EMQX 提供 10 个 API 密钥权限范围：
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
 
+::: tip 提示
+
+从 EMQX 6.0.4 开始，`audit` 权限范围不能使命名空间调用方获得审计日志访问权限。只有全局管理员和全局查看者可以调用 `GET /api/v5/audit`。详见[审计日志访问权限](./dashboard/audit-log.md#审计日志访问权限)。
+
+:::
+
 ::: warning 不得混合等同管理员权限的范围与受限权限范围
 
 EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management` 归为等同管理员权限的范围，校验错误消息中称为 `privilege scopes`。此类范围会授予等同管理员的权限，与受限权限范围组合并不能缩小账号的实际权限。在这 4 个范围中，只有 `system` 可以分配给 API 密钥；其余 3 个是下文介绍的[登录专属权限范围](#登录专属权限范围)。

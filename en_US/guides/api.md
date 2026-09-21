@@ -387,6 +387,12 @@ EMQX provides 10 scopes for API keys:
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
 
+::: tip Note
+
+Starting from EMQX 6.0.4, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+
+:::
+
 ::: warning Do Not Mix Administrator-Equivalent and Restricted Scopes
 
 EMQX classifies `system`, `user_management`, `api_key_management`, and `sso_management` as administrator-equivalent scopes, referred to as `privilege scopes` in validation messages. Combining these scopes with restricted scopes would not reduce the account's effective permissions. Of the four scopes, only `system` can be assigned to API keys; the other three are described under [Login-Only Scopes](#login-only-scopes).

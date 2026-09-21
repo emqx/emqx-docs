@@ -6,6 +6,10 @@ EMQX Audit Log supports recording change-related operations from the [Dashboard]
 
 EMQX offers a Dashboard view and integration with log systems to help enterprises manage audit logs. Through these methods, EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
 
+## Audit Log Access
+
+Starting from EMQX 6.0.4, only global administrators and global viewers can view the cluster-wide audit log in the Dashboard or read it through `GET /api/v5/audit`. The audit log contains operations from every namespace and is not filtered by the caller's namespace. Requests from namespaced Dashboard users and namespaced API keys return HTTP `403` with the `UNAUTHORIZED_ROLE` error code, regardless of their role or assigned scopes. The [`audit` scope](../api.md#built-in-api-key-scopes) does not override this restriction.
+
 ## Enable Audit Log
 
 You can enable the Audit Log feature and adjust the configuration parameters through both the Dashboard and the configuration file.
@@ -43,7 +47,7 @@ log.audit {
 
 ## View Audit Log on Dashboard
 
-Once the Audit Log is enabled, you can view the content of the audit logs on the Dashboard under **System** -> **Audit Log**.
+Once the Audit Log is enabled, you can view its entries in the Dashboard under **System** -> **Audit Log**.
 
 ![image-20231214143911786](../assets/image-20231214143911786.png)
 
