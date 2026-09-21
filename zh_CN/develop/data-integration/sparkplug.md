@@ -70,13 +70,19 @@ Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为
 
 为了解决这一问题，EMQX 自 6.0.2 起对 `spb_decode` 进行了增强，支持 Sparkplug B alias 映射，使解码结果更易于下游系统使用。
 
+::: warning 重要提示
+
+从 EMQX 6.0.4 开始，EMQX 仅为 MQTT 客户端直接发布的消息维护 alias 映射。通过 MQTT 桥接或其他内部路径进入的消息不会创建或使用 alias 映射。因此，`spb_decode` 无法为通过这些路径接收的、仅包含 alias 的 NDATA 或 DDATA 消息还原 metric 名称。
+
+:::
+
 ### Sparkplug B Alias 映射工作机制
 
 当启用 alias 映射后，EMQX 按以下流程处理 Sparkplug B 消息：
 
 1. **解析 NBIRTH / DBIRTH**
 
-   当客户端发布 NBIRTH 或 DBIRTH 消息时，EMQX 会解析其中的 metrics，并记录同时包含 `name` 和 `alias` 的 metric 映射关系。
+   当 MQTT 客户端直接发布 NBIRTH 或 DBIRTH 消息时，EMQX 会解析其中的 metrics，并记录同时包含 `name` 和 `alias` 的 metric 映射关系。
 
 2. **按会话维护映射**
 
@@ -87,7 +93,9 @@ Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为
 
 3. **增强 spb_decode**
 
-   当规则引擎对 NDATA / DDATA 消息调用 `spb_decode` 时，如果 metric 中仅包含 `alias` 而不包含 `name`，EMQX 会根据已记录的映射自动补充对应的 `name` 字段。解码后的数据始终包含清晰的 metric 名称，便于规则处理和数据转发。
+   当规则引擎对 NDATA / DDATA 消息调用 `spb_decode` 时，如果 metric 中仅包含 `alias` 而不包含 `name`，EMQX 会使用当前 MQTT 客户端会话中记录的映射补充对应的 `name` 字段。
+
+   如果当前会话中没有匹配的映射，`spb_decode` 会解码消息，但不会添加 metric 名称。
 
 4. **会话结束即清理**
 
@@ -107,7 +115,7 @@ schema_registry {
 
 > **注意**：
 >
-> - 只有在 alias mapping 启用期间接收到的 NBIRTH / DBIRTH 消息，才会用于创建 alias 映射。
+> - 只有在 alias mapping 启用期间由 MQTT 客户端直接发布的 NBIRTH / DBIRTH 消息，才会用于创建 alias 映射。
 > - 如果客户端已经发送过 birth 消息，则需要先重新连接，并再次发布 NBIRTH / DBIRTH 消息，alias mapping 才会生效。
 
 ### Alias 映射使用示例
@@ -123,6 +131,7 @@ schema_registry {
 #### 前置条件
 
 - EMQX 版本为 6.0.2 及以上并且已启用 Sparkplug B alias 映射：`enable_alias_mapping = true`
+- 使用同一个直接 MQTT 客户端连接发布 DBIRTH 和 DDATA 消息
 - [MQTTX](https://mqttx.app/zh)
 
 #### Step 1：在 EMQX Dashboard 创建规则
