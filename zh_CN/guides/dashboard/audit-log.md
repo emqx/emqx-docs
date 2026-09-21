@@ -108,7 +108,7 @@ log.audit {
 | node             | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
 | operation_id     | 字符 | 请求的 REST API 路径，请参考 [REST API](../api.md)。         |
 | http_request     | 对象 | HTTP 请求的详细信息。                                        |
-| http_request.method | 字符 | HTTP 请求方法，可选值为 `post`、`put` 和 `delete`。          |
+| http_request.method | 字符 | HTTP 请求方法。                                              |
 | http_request.bindings | 对象 | 路径参数值，对应 `operation_id` 中的占位符。                 |
 | http_request.headers | 对象 | HTTP 请求头。EMQX 会对名称被识别为敏感信息的字段值进行脱敏。 |
 | http_request.body | 对象 | HTTP 请求体。EMQX 会对名称被识别为敏感信息的字段值进行脱敏。 |

@@ -108,7 +108,7 @@ The following table describes the fields that can appear in audit log entries ge
 | node             | String  | Node name, indicating the node or server where the operation was executed. |
 | operation_id     | String  | The REST API path of the request, please refer to [REST API](../api.md). |
 | http_request     | Object  | Details of the HTTP request.                                 |
-| http_request.method | String | HTTP request method. Possible values are `post`, `put`, and `delete`. |
+| http_request.method | String | HTTP request method.                                         |
 | http_request.bindings | Object | Path parameter values corresponding to the placeholders in `operation_id`. |
 | http_request.headers | Object | HTTP request headers. Values under keys recognized as sensitive are redacted. |
 | http_request.body | Object | HTTP request body. Values under keys recognized as sensitive are redacted. |
