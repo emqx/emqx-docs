@@ -62,6 +62,8 @@
 
 ## 在 EMQX 中启用 OpenTelemetry 日志处理进程
 
+`opentelemetry.exporter.endpoint` 仅接受一个 URL。URL 必须使用 `http` 或 `https` 协议，并显式包含端口。例如，`http://localhost:4317` 是有效值；`localhost:4317` 和 `http://localhost` 均为无效值。
+
 1. 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 
    ```bash
