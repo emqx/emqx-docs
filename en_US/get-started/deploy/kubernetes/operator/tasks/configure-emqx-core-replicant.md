@@ -86,7 +86,7 @@ EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX clus
 You can view information about all nodes in the cluster by checking the `.status` field of the EMQX CR.
 
 ```bash
-$ kubectl get emqx emqx -o json | jq .status.coreNodes
+$ kubectl get emqx emqx -o json | jq .status.clusterNodes
 [
   {
     "name": "emqx@emqx-core-0.emqx-headless.default.svc.cluster.local",
@@ -107,14 +107,7 @@ $ kubectl get emqx emqx -o json | jq .status.coreNodes
     "version": "@EE_VERSION@",
     "sessions": 0,
     "connections": 0
-  }
-]
-```
-
-
-```bash
-$ kubectl get emqx emqx -o json | jq .status.replicantNodes
-[
+  },
   {
     "name": "emqx@10.244.4.56",
     "podName": "emqx-replicant-adcdef012-0",
