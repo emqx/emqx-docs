@@ -64,11 +64,11 @@ from t
 
 ## Sparkplug B Alias 映射
 
-Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为每个指标分配一个数字形式的 `alias`，并在后续数据上报（发送 NDATA / DDATA 消息）时仅发送 `alias` 而不再发送完整的指标名称（`name`），以减少带宽占用。这种机制要求接收方能够维护 Sparkplug B 的会话状态，以便将 alias 还原为对应的 metric 名称。
+`alias` 是 Sparkplug B metric 的数字标识符。设备上线时，通过 NBIRTH 或 DBIRTH 消息声明每个 metric 的 `name` 和 `alias`。在后续 NDATA 或 DDATA 消息中，设备可以只发送 `alias`，不再发送完整的 metric 名称，从而减小消息大小和网络开销。
 
-在实际使用中，EMQX 经常被用作 Sparkplug B 数据的转换与分发中心，并通过规则引擎将数据转发给非 Sparkplug B 客户端（普通 MQTT 客户端、数据平台等）。这些下游系统通常不具备 Sparkplug B 客户端的状态管理能力，因此仅包含 alias 的数据消息难以直接使用。
+由于 alias 仅在其 Sparkplug B 会话中有意义，接收方需要维护 alias-to-name 映射，才能解释仅包含 alias 的数据。该映射将每个 alias 与对应 NBIRTH 或 DBIRTH 消息中声明的 metric 名称关联起来。
 
-为了解决这一问题，EMQX 自 6.0.2 起对 `spb_decode` 进行了增强，支持 Sparkplug B alias 映射，使解码结果更易于下游系统使用。
+EMQX 可以解码 Sparkplug B 数据以供规则处理，并将结果转发给普通 MQTT 客户端、数据平台等非 Sparkplug B 客户端。这些下游系统通常不维护 Sparkplug B 会话状态，因此无法自行解析仅包含 alias 的 metric。从 EMQX 6.0.2 开始，EMQX 支持 alias 映射。当前 MQTT 客户端会话中存在匹配映射时，`spb_decode` 会在解码期间为仅包含 alias 的 metric 补充缺失的 metric 名称。
 
 ::: warning 重要提示
 
