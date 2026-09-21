@@ -87,10 +87,10 @@ log.audit {
 记录来自 Dashboard 或 REST API 操作的审计日志包含操作用户、操作对象和操作结果等信息。日志消息格式示例如下：
 
 ```bash
-{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","query_string":{},"from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
+{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
 ```
 
-下面的表格中列出并解释了在以上日志示例中包含的字段：
+下表列出并说明 Dashboard 或 REST API 操作生成的审计日志中可能包含的字段：
 
 | 字段名称         | 类型 | 描述                                                         |
 | ---------------- | ---- | ------------------------------------------------------------ |
@@ -99,20 +99,40 @@ log.audit {
 | source_ip        | 字符 | 操作来源 IP 地址。                                           |
 | operation_type   | 字符 | 操作的功能模块，与 REST API 中的 Tag 对应。                  |
 | operation_result | 字符 | 操作结果，"success", "failure" 分别表示操作成功或失败。      |
-| http_status_code | 字符 | HTTP 响应状态码                                              |
+| http_status_code | 整数 | HTTP 响应状态码                                              |
 | http_method      | 字符 | HTTP 请求方法                                                |
 | duration_ms      | 整数 | 操作执行时间，以毫秒为单位。                                 |
 | auth_type        | 字符 | 认证类型，表示用于身份验证的方法或机制，固定为 `jwt_token`(Dashboard) 或 `api_key`(REST API)。 |
-| query_string     | 对象 | HTTP 请求中的 URL 查询参数。                                 |
 | from             | 字符 | 请求来源，`dashboard`、`rest_api` 分别表示来自 Dashboard、REST API。当值为 `cli`, `erlang_console` 时表示来自 CLI 以及 Erlang Shell 的操作，不适用此日志结构。 |
 | source           | 字符 | 执行操作的 Dashboard 用户名或 API 密钥名称。                 |
 | node             | 字符 | 节点名称，表示执行操作的节点或服务器。                       |
-| method           | 字符 | HTTP 请求方法，`post`, `put`, `delete` 对应创建、更新、删除操作。 |
-| operate_id       | 字符 | 请求的 REST API 路径，请参考 [REST API](../api.md)。   |
-| bindings         | 对象 | 具体的请求对象信息，对应 `operate_id` 中的占位符。           |
-| code             | 整数 | HTTP 响应码，表示操作的结果状态。                            |
-| headers          | 对象 | HTTP 请求头信息，包括客户端标识、请求来源等。                |
-| body             | 对象 | HTTP 请求体，包含操作的详细信息。                            |
+| operation_id     | 字符 | 请求的 REST API 路径，请参考 [REST API](../api.md)。         |
+| http_request     | 对象 | HTTP 请求的详细信息。                                        |
+| http_request.method | 字符 | HTTP 请求方法，可选值为 `post`、`put` 和 `delete`。          |
+| http_request.bindings | 对象 | 路径参数值，对应 `operation_id` 中的占位符。                 |
+| http_request.headers | 对象 | HTTP 请求头。EMQX 会对名称被识别为敏感信息的字段值进行脱敏。 |
+| http_request.body | 对象 | HTTP 请求体。EMQX 会对名称被识别为敏感信息的字段值进行脱敏。 |
+| http_request.query_string | 对象 | 可选。解析后的 URL 查询参数。请求不包含查询参数时省略该字段。EMQX 会对名称被识别为敏感信息的字段值进行脱敏。 |
+| http_request.namespace | 字符 | 可选。操作最终解析出的目标命名空间。全局命名空间的值为 `global`。 |
+
+#### 命名空间和查询参数
+
+从 EMQX 6.0.4 开始，审计日志通过 `http_request.query_string` 记录 Dashboard 和 REST API 审计请求中非空的查询参数。对于数据备份操作，`http_request.namespace` 会记录最终解析出的目标命名空间，无论请求中是否包含 `namespace` 查询参数。以下示例展示全局管理员将备份导入 `ns2` 时的记录：
+
+```json
+{
+  "http_request": {
+    "method": "post",
+    "body": {"filename": "emqx-export.zip"},
+    "query_string": {"namespace": "ns2"},
+    "namespace": "ns2"
+  }
+}
+```
+
+命名空间管理员在所属命名空间中执行数据备份操作且未传递查询参数时，记录会省略 `http_request.query_string`，但仍会在 `http_request.namespace` 中记录最终解析出的目标命名空间。
+
+导出、导入、上传或删除备份文件的数据备份操作会记录最终解析出的目标命名空间。不解析目标命名空间的其他端点会省略 `http_request.namespace`。
 
 ### 命令行或 Erlang Console 操作记录
 
