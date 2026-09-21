@@ -1,6 +1,6 @@
 # 在 Azure Kubernetes Service 中部署 EMQX
 
-EMQX Operator 支持在 Azure Kubernetes Service (AKS) 上部署 EMQX。AKS 通过将运维开销转移到 Azure 来简化在 Azure 中部署托管 Kubernetes 集群的过程。作为托管的 Kubernetes 服务，Azure 处理关键任务，如健康监控和维护。创建 AKS 集群时，Azure 会自动配置和管理 Kubernetes 控制平面，无需额外费用。
+EMQX Operator 支持在 Azure Kubernetes Service（AKS）上部署 EMQX。使用 AKS，可以将 Kubernetes 集群的运维工作交由 Azure 管理，从而简化托管集群的部署。作为托管的 Kubernetes 服务，Azure 负责运行状况监控和维护等关键任务。创建 AKS 集群时，Azure 会自动配置和管理 Kubernetes 控制平面，无需额外费用。
 
 ## 前提条件
 
@@ -19,25 +19,24 @@ EMQX Operator 支持在 Azure Kubernetes Service (AKS) 上部署 EMQX。AKS 通�
 
 ## 快速部署 EMQX 集群
 
-以下示例显示了 EMQX 自定义资源 (CR) 的基本配置。
+以下示例显示了 EMQX 自定义资源（CR）的基本配置。
 
 1. 将其保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            ## 有关存储类的更多信息：https://learn.microsoft.com/zh-cn/azure/aks/concepts-storage#storage-classes
            storageClassName: default
            resources:
@@ -121,4 +120,4 @@ EMQX Operator 支持在 Azure Kubernetes Service (AKS) 上部署 EMQX。AKS 通�
 
 ## 关于使用 LoadBalancer 进行 TLS 卸载的说明
 
-作为 L3/L4 负载均衡器，Azure LoadBalancer 不支持 TLS 终止。请参阅此[讨论](https://github.com/emqx/emqx-operator/discussions/312)以了解可能的解决方案。
+Azure LoadBalancer 是 L3/L4 负载均衡器，不支持 TLS 终止。有关可能的解决方法，请参阅[相关讨论](https://github.com/emqx/emqx-operator/discussions/312)。

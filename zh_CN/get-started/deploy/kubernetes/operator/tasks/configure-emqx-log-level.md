@@ -6,24 +6,25 @@
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 配置 EMQX 集群的日志等级。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
+`apps.emqx.io/v3beta1` EMQX CRD 支持通过 `.spec.config.roots.log` 配置日志等级。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.2.0/hocon/)。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       # 启用 debug 日志记录：
-       data: |
-         log.console.level = debug
-         license {
-           key = "..."
-         }
+       # 启用 debug 日志：
+       roots:
+         log:
+           console:
+             level: debug
+         license:
+           key: "..."
      dashboardServiceTemplate:
        spec:
          type: LoadBalancer
@@ -32,7 +33,9 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 配置 EMQX 集群�
          type: LoadBalancer
    ```
 
-2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+2. 等待 EMQX 集群就绪。
+
+   使用 `kubectl get` 检查 EMQX 集群状态，并确保 `STATUS` 为 `Ready`。此过程可能需要一些时间。
 
    ```bash
    $ kubectl get emqx
@@ -42,7 +45,7 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 配置 EMQX 集群�
 
 ## 验证日志等级
 
-1. 获取 EMQX 集群的外部 IP。
+1. 获取 EMQX 集群的外部 IP 地址。
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
@@ -50,9 +53,9 @@ EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 配置 EMQX 集群�
 
 2. 使用 MQTTX CLI 连接到 EMQX 集群。
 
-    [MQTTX CLI](https://mqttx.app/zh/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发者更快地开始使用 MQTT 服务和应用。
+   [MQTTX CLI](https://mqttx.app/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，可帮助开发者快速使用 MQTT 服务和应用。
 
-   ```bash
+   ```
    $ mqttx conn -h ${external_ip} -p 1883
    [4/17/2023] [5:17:31 PM] › … Connecting...
    [4/17/2023] [5:17:31 PM] › ✔ Connected
