@@ -945,6 +945,10 @@
     title_ja: 既知の問題
     collapsed: true
     children:
+    - title_en: EMQX 6.3
+      title_cn: EMQX 6.3
+      title_ja: EMQX 6.3
+      path: release-notes/known-issues-6.3
     - title_en: EMQX 6.1
       title_cn: EMQX 6.1
       title_ja: EMQX 6.1
