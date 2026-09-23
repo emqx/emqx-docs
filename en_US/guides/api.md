@@ -309,8 +309,8 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
-- **Role (optional)**: Specify the key's [role](#roles-and-permissions).
-- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives the defaults for its role. Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
+- **Role (optional)**: Specify the key's [role](#roles-and-permissions). For a namespaced key, use `ns:<namespace>::<role>`, for example, `ns:team-a::administrator`.
+- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access as a comma-separated list. When omitted, the key receives the defaults for its role. For validation behavior, see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
 
 For example:
 
@@ -320,9 +320,18 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 ```
 
-Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if a bootstrap entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes, keeps the remaining scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400 and does not apply any scope changes.
+##### Validate Bootstrap Scopes
+
+When a bootstrap entry violates one of the following scope rules, EMQX removes the affected scopes, logs a warning, and continues to create or update the key:
+
+- **Login-only scopes**: `user_management`, `mfa_management`, `sso_management`, and `api_key_management` are not valid for API keys. EMQX removes these scopes and creates or updates the key with the remaining scopes.
+- **Administrator-equivalent scopes**: Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if an entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes and keeps the remaining scopes.
+- **Namespaced scopes**: Starting from EMQX 6.0.4, if a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
+
+##### Reload Bootstrap API Keys
 
 API keys created this way are valid indefinitely.
 
@@ -340,6 +349,8 @@ Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API ke
 | Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
 
 A global Dashboard administrator can continue to manage API keys across all namespaces.
+
+## API Key Permissions
 
 ### Roles and Permissions
 
@@ -387,6 +398,12 @@ EMQX provides 10 scopes for API keys:
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
 
+::: tip Note
+
+Starting from EMQX 6.0.4, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+
+:::
+
 ::: warning Do Not Mix Administrator-Equivalent and Restricted Scopes
 
 EMQX classifies `system`, `user_management`, `api_key_management`, and `sso_management` as administrator-equivalent scopes, referred to as `privilege scopes` in validation messages. Combining these scopes with restricted scopes would not reduce the account's effective permissions. Of the four scopes, only `system` can be assigned to API keys; the other three are described under [Login-Only Scopes](#login-only-scopes).
@@ -407,45 +424,6 @@ In addition to these API-key scopes, Dashboard login users have 4 login-only sco
 | `sso_management` | Administrator | Manage SSO backends and SSO user records. |
 | `api_key_management` | Administrator | Manage API keys. |
 | `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
-
-#### Restrictions for Namespaced Callers
-
-Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions.
-
-Namespaced API keys cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if the key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
-
-Even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
-
-- `GET /clients/:clientid/mqueue_messages`
-- `GET /clients/:clientid/inflight_messages`
-- `GET /mqtt/retainer/messages`
-- `GET /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/messages`
-- `GET /mqtt/delayed/messages`
-- `GET /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:topic`
-
-Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
-
-- `GET /file_transfer/files`
-- `GET /file_transfer/files/:clientid/:fileid`
-- `GET /file_transfer/file`
-
-Global callers retain access to these endpoints according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
-
-For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
-
-- `PUT /trace/:name/stop`
-- `GET /trace/:name/download`
-- `GET /trace/:name/log`
-- `GET /trace/:name/log_detail`
-- `DELETE /trace/:name`
-
-This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
-
-Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 #### Default Behavior of `scopes`
 
@@ -489,6 +467,65 @@ Scopes can be set from any of the following entry points:
 - **Dashboard**: When creating or editing a key under **System** -> **API Keys**, select a **Permission Mode**. Select individual scopes only for **Custom Restricted Permissions**.
 - **REST API**: Include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
 - **Bootstrap file**: Provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
+
+## Restrictions for Namespaced Callers
+
+Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions.
+
+### Scope Restrictions for Namespaced API Keys
+
+Starting from EMQX 6.0.4, a namespaced administrator API key that uses the role-default scopes receives `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. The defaults do not include `publish`, `gateways`, or `audit`.
+
+When creating a namespaced API key or changing an existing key's explicit scope list, only the namespaced role's allowed scopes can be assigned. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
+
+### Existing Keys with Disallowed Scopes
+
+A key whose stored scope list contains disallowed scopes is not changed automatically. For compatibility with read-modify-write clients, EMQX accepts the stored list when an update resubmits it unchanged and keeps the same role and namespace. The exception is a namespaced key whose stored scope list contains only `publish`: even an unchanged update returns HTTP 400 because the key cannot access any API. Delete the key and re-create it without a namespace. Any actual role or scope change is revalidated and must comply with the allowlist.
+
+Update or rotate a namespaced API key that contains disallowed scopes because its previously effective permissions remain available until the key is rotated, subject to the namespace endpoint restrictions described below. When EMQX reprocesses a bootstrap entry, it drops disallowed scopes, logs a warning, and keeps the remaining scopes. For details, see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
+
+### Message Publishing Restrictions
+
+A namespaced API key cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if a previously stored key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
+
+### Message Content Restrictions
+
+Even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+
+### File Transfer Restrictions
+
+Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+Global callers retain access to these endpoints according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
+
+### Trace Restrictions
+
+For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
+
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ## Pagination
 

@@ -49,6 +49,8 @@ scrape_configs:
 
 本节指导您如何在 EMQX 中启用 OpenTelemetry 指标。你也可以在 Dashboard **管理** -> **监控**页面下的**监控集成**选项卡中配置 OpenTelemetry 指标集成。
 
+`opentelemetry.exporter.endpoint` 仅接受一个 URL。URL 必须使用 `http` 或 `https` 协议，并显式包含端口。例如，`http://localhost:4317` 是有效值；`localhost:4317` 和 `http://localhost` 均为无效值。
+
 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 
    ```bash
