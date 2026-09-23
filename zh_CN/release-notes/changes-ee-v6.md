@@ -151,7 +151,7 @@
 
   配置 Schema 中标记为敏感的值（例如 `dashboard.default_password` 和 `license.key`）现在会写为 `******`。此前，脚本仅对固定的键名列表进行脱敏，因此这些值会以明文写入。
 
-- [#18708](https://github.com/emqx/emqx/pull/18708) 启用调试模式时，防止在 shell 跟踪输出中打印 Erlang cookie 和许可证密钥。
+- [#18708](https://github.com/emqx/emqx/pull/18708) 修复了启用调试模式时 shell 跟踪输出会包含 Erlang cookie 和许可证密钥的问题。
 
   使用 `DEBUG=1` 或 `DEBUG=2` 运行 `bin/emqx` 命令不再在 shell 跟踪输出中打印 Erlang cookie 或许可证密钥。
 
@@ -163,9 +163,9 @@
 
   SSO MFA 请求体现在仅在审计记录中保留 `username` 和 `backend`；临时 Token、TOTP Code 和未知凭据字段在写入审计文件或审计数据库前会进行脱敏。
 
-- [#18855](https://github.com/emqx/emqx/pull/18855) 修复了使用经过验证的客户端证书进行身份验证的 DTLS 客户端的 MQTT-SN 会话唤醒授权。仅当证书绑定会话提供相同的对等证书时，才能从新关联恢复该会话。没有客户端证书或使用不同或重新颁发的证书的唤醒将被拒绝。
+- [#18855](https://github.com/emqx/emqx/pull/18855) 修复了使用经验证客户端证书进行认证的 DTLS 客户端的 MQTT-SN 会话唤醒授权。只有新关联提供相同的对等证书时，才能恢复与证书绑定的会话。未提供客户端证书，或使用不同或重新颁发的证书时，唤醒会被拒绝。
 
-  没有证书的纯文本 UDP 和 DTLS 客户端保留旧版仅 ClientId PINGREQ 唤醒行为。
+  未使用证书的明文 UDP 和 DTLS 客户端仍沿用仅根据 ClientId 处理 PINGREQ 唤醒的旧行为。
 
 - [#18959](https://github.com/emqx/emqx/pull/18959) 现在，MQTT 监听器在读取数据包正文之前，只要第一个数据包不是 CONNECT，就会关闭连接。
 
@@ -181,7 +181,7 @@
 
   另外改进了连接日志的可读性：当未提供密码时（以前与空密码无法区分），CONNECT 数据包跟踪现在会打印 `Password=undefined`，并且日志中的 `peername` 字段现在始终呈现为纯字符串，例如 `10.0.0.1:54123`。
 
-- [#18181](https://github.com/emqx/emqx/pull/18181) 修复了配置突发值 `0` 的速率限制器仍可能允许额外突发流量的问题。这使得 MQTT 传递消息速率限制等限制不如配置的严格。
+- [#18181](https://github.com/emqx/emqx/pull/18181) 修复了配置突发值 `0` 的速率限制器仍可能允许额外突发流量的问题。这会导致 MQTT 消息投递速率限制等实际限制比配置值更宽松。
 
 - [#18236](https://github.com/emqx/emqx/pull/18236) 修复了使用 socket 后端的 TCP 监听器在高负载下可能导致客户端意外断开连接的问题。原因是就绪信号偶尔会到达尚未就绪的 socket。
 
@@ -189,7 +189,7 @@
   [error] crasher: initial call: emqx_socket_connection:init/4, ..., error: {{case_clause,{select,{select_info,recv,#Ref<...>}}},[{emqx_socket_connection,handle_msg,2,[{file,"emqx_socket_connection.erl"},{line,827}]}, ...
   ```
 
-- [#18357](https://github.com/emqx/emqx/pull/18357) [#18375](https://github.com/emqx/emqx/pull/18375) 现在，在节点启动完成之前，MQTT 连接将被拒绝，因此监听器在身份验证、授权和插件挂钩处于活动状态之前不再提供流量。
+- [#18357](https://github.com/emqx/emqx/pull/18357) [#18375](https://github.com/emqx/emqx/pull/18375) 节点启动完成前，EMQX 现在会拒绝 MQTT 连接，避免监听器在身份认证、授权和插件钩子生效前处理流量。
 
   `GET /status` API 现在返回 HTTP 503，直到启动完成，因此负载均衡器可以将新连接路由到集群中的其他节点。
 
@@ -201,7 +201,7 @@
 
   节点开始关闭后，`GET /status` 也会立即报告该节点未运行，使负载均衡器停止向其路由新连接。
 
-- [#18585](https://github.com/emqx/emqx/pull/18585) 按照 MQTT 规范要求，当使用相同客户端 ID 的新连接接管旧连接时，会结束生命周期不超过旧连接的会话。这包括 Session Expiry Interval 为 0 的 MQTT 5.0 客户端连接，以及 Clean Session 为 1 的 MQTT 3.1.1 客户端连接。
+- [#18585](https://github.com/emqx/emqx/pull/18585) 按照 MQTT 规范要求，当新连接使用相同客户端 ID 接管旧连接时，如果旧会话不会在其连接结束后继续存在，EMQX 会结束该会话。这包括 Session Expiry Interval 为 0 的 MQTT 5.0 客户端连接，以及 Clean Session 为 1 的 MQTT 3.1.1 客户端连接。
 
   修复前，新连接可能会继承旧会话的订阅和排队消息，Will Delay Interval 大于 0 的遗嘱消息也会被静默丢弃。现在，新连接会启动新会话（CONNACK Session Present 0）；旧连接会收到原因码为 0x8E（Session taken over）的 DISCONNECT，其遗嘱消息（如有）会在连接被接管时发布。
 
@@ -300,15 +300,15 @@
 
 - [#18299](https://github.com/emqx/emqx/pull/18299) 修复了 Snowflake 连接器配置的 TLS（`ssl`）设置未应用于出站 HTTPS 连接的问题，流式传输和聚合模式均受影响。此前，`verify`、`cacertfile`、客户端证书和 `server_name_indication` 等设置虽然能够配置并正常显示，但不会影响实际连接。现在，连接会使用配置的值。未自定义 `ssl` 设置的连接器会保留原有连接行为。
 
-- [#18392](https://github.com/emqx/emqx/pull/18392) 修复了具有相同名称但位于不同命名空间中的聚合动作（S3、S3Tables、Azure Blob 存储、Snowflake 聚合）将共享其临时文件的相同工作目录的问题。
+- [#18392](https://github.com/emqx/emqx/pull/18392) 修复了不同命名空间中同名的聚合动作（S3、S3Tables、Azure Blob Storage 和 Snowflake Aggregated）共用同一个临时文件工作目录的问题。
 
 - [#18449](https://github.com/emqx/emqx/pull/18449) 修复了一个罕见的竞态条件：PostgreSQL 动作写入数据时可能收到 `sock_closed` 错误，并将其视为不可恢复错误。现在该错误会被视为可恢复错误。
 
 - [#18465](https://github.com/emqx/emqx/pull/18465) 修复了 ClickHouse、TDengine、SQL Server 和 MySQL 桥中模板化 INSERT SQL 语句的处理（启用批量插入时）。
 
-  以前，由于手动输入模板本身的语法错误以及插值问题，渲染 SQL 模板通常会产生格式错误的 SQL。
+  此前，由于手动输入的模板存在语法错误或插值问题，渲染 SQL 模板时经常会生成无效 SQL。
 
-  现在，创建操作时会完全解析 SQL 语句，并拒绝无效的 SQL。在渲染期间，强制执行正确的转义。为了提供一致且可预测的行为，EMQX 限制了可以使用的 SQL 功能。最值得注意的是，EMQX 拒绝 SQL 语句中的注释。但是，EMQX 支持大量语法功能：常量值、字符串和字符串插值、算术、函数、条件和条件运算符。
+  现在，创建动作时会完整解析 SQL 语句并拒绝无效 SQL；渲染时会确保正确转义。为保证行为一致且可预测，EMQX 限制了可用的 SQL 语法，其中明确不支持 SQL 注释。不过，EMQX 仍支持大部分 SQL 语法，包括常量值、字符串和字符串插值、算术运算、函数、条件及条件运算符。
 
   MySQL 还支持 `ON DUPLICATE KEY UPDATE`，ClickHouse 支持 `FORMAT Values` 和 `FORMAT JSONCompactEachRow`，TDengine 支持 `INSERT ... USING ... TAGS` 和表标识符插值。
 
@@ -316,9 +316,9 @@
 
   ClickHouse 桥现在从 SQL 模板推断批次值分隔符并忽略配置的 `batch_value_separator` 值。
 
-- [#18763](https://github.com/emqx/emqx/pull/18763) 修复了 TDengine 动作的错误信息。找不到动作时，错误信息会显示连接器 ID，而不是动作 ID，导致错误看起来像是有效的连接器 ID 无效。
+- [#18763](https://github.com/emqx/emqx/pull/18763) 修复了 TDengine 动作的错误信息。找不到动作时，错误信息会显示连接器 ID，而不是动作 ID，因此会将有效的连接器 ID 误报为无效。
 
-- [#18846](https://github.com/emqx/emqx/pull/18846) 修复了数据集成中的 SQL 模板呈现。 Doris 批量插入现在使用 Doris 兼容的语法以及文本和二进制值的转义。 MySQL 模板现在可以正确处理转义的美元符号。
+- [#18846](https://github.com/emqx/emqx/pull/18846) 修复了数据集成中的 SQL 模板渲染。Doris 批量插入现采用兼容 Doris 的语法，并正确转义文本和二进制值。MySQL 模板现可正确处理已转义的美元符号。
 
 - [#18859](https://github.com/emqx/emqx/pull/18859) 修复了更新配置时仅更改敏感 HTTP 标头名称的字母大小写可能会删除其存储值的问题。
 
@@ -363,7 +363,7 @@
 
 - [#18347](https://github.com/emqx/emqx/pull/18347) 修复了 Mnesia RocksDB 后端中的一个问题，该问题在核心节点离线时删除密钥时会导致核心节点上的表不一致。这可能会延迟 Dashboard 登录锁的释放并浪费 EMQX Schema Registry 中的磁盘空间，因为可能会错过旧架构的删除。
 
-- [#18537](https://github.com/emqx/emqx/pull/18537) 修复了集群链接，将临时消息转发连接错误分类为可恢复。受暂时网络中断影响的消息现在会被缓冲并重试，而不是被视为失败。
+- [#18537](https://github.com/emqx/emqx/pull/18537) 修复了集群链接对暂时性消息转发连接错误的分类。此类错误现在归类为可恢复错误；受暂时性网络中断影响的消息会被缓冲并重试，而不是被视为失败。
 
 #### 配置管理
 
@@ -371,13 +371,13 @@
 
 - [#18277](https://github.com/emqx/emqx/pull/18277) 提高了将配置变更持久化到 `cluster.hocon` 的可靠性：更新内容现在会先写入并同步到磁盘，再原子替换文件；无法读取原文件进行备份时，也不再阻止保存新配置。
 
-- [#18383](https://github.com/emqx/emqx/pull/18383) 修复了通过 `PUT /configs` 提交包含无效 Unicode 转义序列的配置返回内部错误的问题。此类请求现在返回一个验证错误，该错误指定了无效转义。
+- [#18383](https://github.com/emqx/emqx/pull/18383) 修复了通过 `PUT /configs` 提交包含无效 Unicode 转义序列的配置返回内部错误的问题。此类请求现在会返回校验错误，并指出无效的转义序列。
 
 - [#18444](https://github.com/emqx/emqx/pull/18444) 修复了配置文件中的字节大小单位 `b` 和 `B` 必须使用引号的问题。
 
   此前，`max_packet_size = 1MB` 可以正常解析，但 `max_packet_size = 1B` 解析失败，必须写为 `"1B"`。现在所有字节大小单位均可不加引号。
 
-- [#18464](https://github.com/emqx/emqx/pull/18464) 修复了当 ExHook 服务器在配置更新期间变得不健康时 ExHook 管理器中罕见的崩溃。现在，管理器会保留已配置的服务器顺序，并在服务器重新连接时继续提供配置更改。
+- [#18464](https://github.com/emqx/emqx/pull/18464) 修复了配置更新期间 ExHook 服务器变为不健康状态时，ExHook 管理器可能崩溃的问题。现在，管理器会保留已配置的服务器顺序，并在服务器重新连接期间继续处理配置变更。
 
 #### 访问控制
 
@@ -397,21 +397,21 @@
 
   默认管理员现在遵循其角色的隐式默认范围（显示为 `unset`），因此它会自动获得未来版本中引入的范围，而不是固定到冻结列表。带有显式列表的现有默认管理员记录将在启动时更新为隐式形式。
 
-- [#18222](https://github.com/emqx/emqx/pull/18222) 命名空间管理员 API 键现在获得与命名空间 Dashboard 用户相同的默认范围列表。特别是，默认值不再包括 `publish` 范围，这是误导性的：发布的 API 仅限全局，不能由命名空间的 API 密钥使用。使用包含 `publish` 的显式范围列表创建新的命名空间 API 密钥，或者在更改现有命名空间 API 密钥的范围列表时包括 `publish`，现在会返回验证错误。现有的 API 密钥不受影响：以前存储的范围列表（包括包含 `publish` 的列表）保持原样，并继续像以前一样工作。
+- [#18222](https://github.com/emqx/emqx/pull/18222) 命名空间管理员 API 密钥现在使用与命名空间 Dashboard 用户相同的默认 scope 列表。具体而言，默认列表不再包含 `publish` scope；此前包含该 scope 容易造成误解，因为发布 API 仅供全局调用，命名空间 API 密钥无法使用。现在，创建命名空间 API 密钥时显式提交包含 `publish` 的 scope 列表，或更新现有命名空间 API 密钥时在 scope 列表中加入 `publish`，都会返回校验错误。现有 API 密钥不受影响：此前存储的 scope 列表（包括含 `publish` 的列表）保持不变，行为也与之前完全一致。
 
 - [#18225](https://github.com/emqx/emqx/pull/18225) 改进了当 API 密钥引导文件条目包含加载期间删除的范围时记录的警告。现在，警告按删除的原因对删除的范围名称进行分组 - 未知的范围名称、发布者角色不允许的范围或无法与其他范围组合的特权范围 - 而不是将每个删除的范围报告为未知的范围名称。
 
-- [#18315](https://github.com/emqx/emqx/pull/18315) MQTT 文件传输文件列表和下载 REST 端点现在仅适用于全局（非命名空间）Dashboard 用户和 API 密钥。命名空间用户和 API 密钥无法再读取客户端在其命名空间之外上传的文件。
+- [#18315](https://github.com/emqx/emqx/pull/18315) MQTT 文件传输的文件列表和下载 REST 端点现在仅适用于全局（非命名空间）Dashboard 用户和 API 密钥。命名空间用户和 API 密钥无法再读取客户端在其命名空间之外上传的文件。
 
 - [#18576](https://github.com/emqx/emqx/pull/18576) 现在，当未配置客户端 JWKS 时，OIDC SSO 配置 API (`GET /api/v5/sso/oidc`) 将 `client_jwks` 返回为 `none`，与 CLI 输出匹配。以前，即使未进行任何配置，该值也会被屏蔽为 `******`。配置的客户端 JWKS 保持屏蔽状态。
 
-- [#18630](https://github.com/emqx/emqx/pull/18630) 命名空间管理员 API 密钥无法再使用命名空间角色不允许持有的范围（例如 `gateways` 或 `audit`）来创建、更新或引导，以匹配现有的 Dashboard 用户规则。
+- [#18630](https://github.com/emqx/emqx/pull/18630) 现在，创建或更新命名空间管理员 API 密钥，或通过 bootstrap 文件加载此类密钥时，不能再为其配置命名空间角色无权持有的 scope（如 `gateways` 或 `audit`）。这与现有 Dashboard 用户规则保持一致。
 
-  轮换被授予此类范围的任何现有命名空间 API 密钥，因为已经使用它们创建的密钥在轮换之前一直有效。
+  请轮换已授予此类 scope 的现有命名空间 API 密钥，因为已经签发的密钥在轮换前仍可继续使用这些 scope。
 
 - [#18681](https://github.com/emqx/emqx/pull/18681) 修复了 REST API 认证错误信息，使其与目标端点接受的认证方式一致。对于拒绝 API 密钥的端点（例如 `POST /api/v5/logout`），当 Bearer Token 被拒绝或缺少 Authorization 请求头时，错误信息不再建议使用 API 密钥，也不再提及 `api_key.bootstrap_file` 配置项。
 
-- [#18724](https://github.com/emqx/emqx/pull/18724) Dashboard SSO OIDC 现在会在配置时拒绝发行人的 URL 方案和 TLS 选项不一致的配置（禁用 TLS 的 `https` 或启用 TLS 的 `http`），而不是在运行时因不清楚的 TLS 错误而反复失败或默默地失败忽略 TLS 选项。
+- [#18724](https://github.com/emqx/emqx/pull/18724) Dashboard SSO OIDC 现在会在配置时拒绝发行者 URL 方案与 TLS 选项不一致的配置（禁用 TLS 时使用 `https`，或启用 TLS 时使用 `http`），而不是在运行时因含义不明的 TLS 错误反复失败，或静默忽略 TLS 选项。
 
 - [#18737](https://github.com/emqx/emqx/pull/18737) 修复了 `${peerport}` 在身份验证和授权请求模板中呈现为空字符串的问题。
 
@@ -423,11 +423,11 @@
 
   现在，后端将继续跟踪其资源 ID，以便在启动超时后对其进行清理。
 
-- [#18963](https://github.com/emqx/emqx/pull/18963) 修复了当请求正文中省略可选 `desc` 或 `enable` 字段时 `POST /api/v5/api_key` 返回 HTTP 500 的问题。该密钥现在使用空注释创建并默认启用。请求验证仍会忽略不属于 API 密钥架构的请求正文字段（例如 `description` 而不是 `desc`）。
+- [#18963](https://github.com/emqx/emqx/pull/18963) 修复了当请求正文中省略可选 `desc` 或 `enable` 字段时 `POST /api/v5/api_key` 返回 HTTP 500 的问题。该密钥现在会以空备注创建，并默认启用。请求校验仍会忽略不属于 API 密钥架构的请求正文字段（例如使用 `description` 而不是 `desc`）。
 
 - [#18964](https://github.com/emqx/emqx/pull/18964) 修复了 SCRAM HTTP 身份验证后端拒绝 Dashboard 为其提交的 OAuth2 配置的问题。现在可以成功创建启用 OAuth2 的 `SCRAM` + `HTTP Server` 身份验证器，并且访问令牌将作为用户查找请求上的 `Bearer` 授权标头发送。
 
-- [#19003](https://github.com/emqx/emqx/pull/19003) 强化 `PUT /api/v5/api_key/:name`，以便它仅更新请求正文中存在的字段。以前，部分更新还可能重写未提及的字段，因此没有密切关注每个字段的管理员可能会无意中更改请求中指定的 API 密钥的权限。调用此端点已经需要管理员权限。
+- [#19003](https://github.com/emqx/emqx/pull/19003) 改进了 `PUT /api/v5/api_key/:name`，使其只更新请求正文中包含的字段。此前，部分更新还可能重写请求中未包含的字段，导致管理员无意中更改指定 API 密钥的权限。调用该端点原本就需要管理员权限。
 
 #### 数据备份
 
@@ -449,15 +449,15 @@
 
 - [#18423](https://github.com/emqx/emqx/pull/18423) 由命名空间管理员执行的数据备份导入现在仅应用该命名空间的配置。在命名空间配置中找到的集群范围设置（例如身份验证、授权、ExHook 或监听器）将被跳过并发出警告，而不是写入全局配置。
 
-- [#18466](https://github.com/emqx/emqx/pull/18466) 修复了名称包含特殊字符的命名空间的备份文件列表。
+- [#18466](https://github.com/emqx/emqx/pull/18466) 修复了无法为名称含特殊字符的命名空间列出备份文件的问题。
 
-  以前，对于名称包含 `*`、`?`、`{`、`}`、`[` 或 `]` 等字符的命名空间，即使备份文件存在于磁盘上，备份文件列表也为空。现在，该清单将命名空间名称视为文字目录名称。
+  此前，对于名称包含 `*`、`?`、`{`、`}`、`[` 或 `]` 等字符的命名空间，即使备份文件存在于磁盘上，备份文件列表也为空。现在，列出文件时会将命名空间名称按字面量目录名处理。
 
 - [#18677](https://github.com/emqx/emqx/pull/18677) 数据备份请求的审计记录现在可以识别请求所针对的命名空间。以前，导出、导入、上传或删除不同命名空间中的备份会产生看起来相同的审计记录，因此无法判断哪个命名空间的备份受到影响。审计日志现在还记录请求携带的任何查询参数。
 
-- [#18826](https://github.com/emqx/emqx/pull/18826) 现在，备份导入可确认集群中的每个节点在启动前都运行相同的版本。
+- [#18826](https://github.com/emqx/emqx/pull/18826) 备份导入现在会在开始前确认集群中的所有节点运行相同版本。
 
-  在滚动升级期间导入可以通过尚未升级的节点以不同方式解释的调用来应用备份。现在，导入在开始之前停止，并命名仍待升级的节点，因此集群保持原样。
+  在滚动升级期间导入备份时，尚未升级的节点可能会以不同方式解释导入调用。现在，如果仍有节点待升级，导入会在实际开始前停止并列出这些节点，使集群保持原状。
 
 #### 多租户
 
@@ -525,7 +525,7 @@
 
 - [#18540](https://github.com/emqx/emqx/pull/18540) 在 `emqx_relup` 插件包中提供默认配置文件（`priv/config.hocon`）。安装插件不再记录重复的 `failed_to_copy_plugin_default_hocon_config` 警告。
 
-- [#18891](https://github.com/emqx/emqx/pull/18891) 修复了在 EMQX 6.x 上安装和启动同步请求插件失败并出现 `missing_i18n_ref` 错误的问题。该插件现在已成功启动，并且其 API 端点可用。
+- [#18891](https://github.com/emqx/emqx/pull/18891) 修复了在 EMQX 6.x 上安装和启动同步请求插件失败并出现 `missing_i18n_ref` 错误的问题。该插件现可正常启动，且其 API 端点可用。
 
 - [#18957](https://github.com/emqx/emqx/pull/18957) 修复了以下问题：插件包的 tarball 已存在于插件安装目录但尚未解压时，从 Dashboard 上传该插件包会返回 `ALREADY_INSTALLED` 并拒绝安装。现在，上传操作会先检查安装允许列表；插件包未获授权时，会返回 `403 FORBIDDEN`，并提示使用 `emqx ctl plugins allow` 命令。中断或失败安装留下的残留内容也不再被误认为已完成安装，例如缺少可读 `release.json` 的目录，或清单声明的应用尚未解压。此类残留内容会被清理，上传的插件包会解压到干净目录中。应用仍处于加载状态的安装不会被清理：此类上传会因 `plugin_is_in_use` 被拒绝，必须先停止插件。被拒绝或失败的插件安装不再删除其替换的插件包文件，因此上传被拒绝后，已安装插件包的本地副本仍会保留，可继续用于修复安装。如果无法读取待替换的插件包文件，上传会被拒绝。插件已完整安装的节点会保留与其文件匹配的插件包。
 
@@ -551,21 +551,21 @@
 
 - [#18558](https://github.com/emqx/emqx/pull/18558) 修复了 `fields` 查询参数被 `GET /clients_v2` 忽略的问题。
 
-- [#18600](https://github.com/emqx/emqx/pull/18600) 修复了启用持久会话时的客户端列表 API 过滤。
+- [#18600](https://github.com/emqx/emqx/pull/18600) 修复了启用持久会话时客户端列表 API 的筛选功能。
 
-  `GET /api/v5/clients` 将所有断开连接的持久会话附加到结果中，忽略查询字符串过滤器，例如 `conn_state`、`username` 和 `clientid`。例如，`conn_state=connected` 还返回断开连接的持久会话。现在，过滤器也适用于断开连接的持久会话。
+  此前，`GET /api/v5/clients` 会将所有已断开连接的持久会话追加到结果中，并忽略 `conn_state`、`username` 和 `clientid` 等查询字符串筛选条件。例如，使用 `conn_state=connected` 筛选时也会返回已断开连接的持久会话。现在，这些筛选条件同样适用于已断开连接的持久会话。
 
   应用过滤条件且存在已断开连接的持久会话时，响应会省略 `meta.count` 字段，而不会返回错误的数量。使用 `conn_state=connected` 过滤的查询仍会返回准确的 `meta.count`。
 
-- [#18619](https://github.com/emqx/emqx/pull/18619) 修复了当目标节点在 API 的活动检查和获取其信息的 RPC 之间无法访问时（例如，当节点同时离开集群时），`GET /nodes/{node}` 返回 500 内部服务器错误而不是 400 错误请求。
+- [#18619](https://github.com/emqx/emqx/pull/18619) 修复了目标节点在 API 完成存活检查后、通过 RPC 获取节点信息前变得不可访问时，`GET /nodes/{node}` 返回 500 内部服务器错误而不是 400 错误请求的问题。例如，节点可能恰在此期间离开集群。
 
 - [#18817](https://github.com/emqx/emqx/pull/18817) 修复了当请求正文省略 `enable` 字段时，`PUT /api/v5/telemetry/status` 返回带有 Erlang 堆栈跟踪的 `500 INTERNAL_ERROR` 的问题。
 
-  端点现在返回 `400 BAD_REQUEST` 和验证消息。 API 文档将 `enable` 标记为必需，并且不再显示其默认值，因为端点从未应用该默认值。
+  端点现在返回 `400 BAD_REQUEST` 和校验消息。API 文档将 `enable` 标记为必填字段，并且不再显示其默认值，因为端点从未应用该默认值。
 
-- [#18860](https://github.com/emqx/emqx/pull/18860) 修复了客户端消息分页返回最后一页上的延续位置的问题。
+- [#18860](https://github.com/emqx/emqx/pull/18860) 修复了客户端消息分页在最后一页仍返回续传位置的问题。
 
-  当没有更多消息可用时，`GET /clients/{clientid}/mqueue_messages` 和 `GET /clients/{clientid}/inflight_messages` 现在将 `meta.position` 返回为 `end_of_data`。 API 客户端可以停止而不请求额外的空页。
+  没有更多消息时，`GET /clients/{clientid}/mqueue_messages` 和 `GET /clients/{clientid}/inflight_messages` 现在会将 `meta.position` 返回为 `end_of_data`。API 客户端无需再请求额外的空页面即可停止分页。
 
 - [#19116](https://github.com/emqx/emqx/pull/19116) 改进了当 REST API 请求包含非文本字节（例如需要 PEM 文件的 DER 证书）时返回的错误。响应现在报告原因和值大小，而不是将整个输入引用为字节值列表并错误地报告二进制值不是二进制。
 
@@ -585,7 +585,7 @@
 
 - [#18684](https://github.com/emqx/emqx/pull/18684) 修复了启用 OpenTelemetry 追踪时，MQTT 5 客户端的 CONNECT 报文在 Will 属性中携带 User Property 条目会导致连接过程崩溃的问题。
 
-- [#18697](https://github.com/emqx/emqx/pull/18697) 修复了查询审计日志可能会为经过 SSO 身份验证的用户创建的记录返回错误的问题。
+- [#18697](https://github.com/emqx/emqx/pull/18697) 修复了查询审计日志时，包含由 SSO 认证用户创建的记录可能导致查询报错的问题。
 
 - [#18879](https://github.com/emqx/emqx/pull/18879) 基于角色的访问控制拒绝的请求的审计记录现在包括经过身份验证的 Dashboard 用户或 API 密钥以及请求的路径参数。
 
@@ -595,11 +595,11 @@
 
 - [#18590](https://github.com/emqx/emqx/pull/18590) 修复了节点未运行时 `emqx stop` 的输出。
 
-  该命令报告 `Node <name> not responding to pings.` 两次，然后失败并显示 `Graceful shutdown failed PID=[]`。现在，它会报告一次无法访问的节点，并且不会打印找不到的节点的关闭故障。退出代码不变。
+  该命令此前会报告两次 `Node <name> not responding to pings.`，然后失败并显示 `Graceful shutdown failed PID=[]`。现在，该命令只报告一次无法访问的节点；如果找不到节点，则不再输出关闭失败信息。退出代码不变。
 
 - [#18824](https://github.com/emqx/emqx/pull/18824) 修复了 `emqx ctl listeners` 输出中拼写错误的字段名称。
 
-  该命令将监听器的启用标志打印为 `enbale`。现在它打印 `enable`。必须更新解析此输出的脚本以匹配更正的名称。
+  该命令此前将监听器的启用标志输出为 `enbale`，现已更正为 `enable`。解析该输出的脚本必须更新，以匹配更正后的字段名。
 
 - [#18862](https://github.com/emqx/emqx/pull/18862) 增加了对传递给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项的验证。
 
