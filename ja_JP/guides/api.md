@@ -309,8 +309,8 @@ api_key {
 
 - **API Key**：キー識別子として任意の文字列
 - **Secret Key**：ランダム文字列をシークレットキーとして使用
-- **Role（任意）**：キーの[ロール](#roles-and-permissions)
-- **Scopes（任意）**：キーがアクセス可能な[APIスコープ](#api-scopes)をカンマ区切りで指定。省略時はロールのデフォルトが適用されます。ログイン専用スコープ（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）はAPIキーに無効です。ブートストラップファイルに含まれている場合、起動時にEMQXが削除し警告ログを出力します。キーはスコープなしで作成されます。
+- **Role（任意）**：キーの[ロール](#roles-and-permissions)。ネームスペース付きキーは `ns:<namespace>::<role>` 形式（例：`ns:team-a::administrator`）。
+- **Scopes（任意）**：キーがアクセス可能な[APIスコープ](#api-scopes)をカンマ区切りで指定。省略時はロールのデフォルトが適用されます。検証動作は[ブートストラップスコープの検証](#validate-bootstrap-scopes)を参照してください。
 
 例：
 
@@ -320,9 +320,18 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 ```
 
-APIキーに割り当て可能なスコープの中で、`system`のみが管理者相当の権限を付与します。EMQX 6.0.4以降、管理者相当スコープと管理者相当でないスコープを混在させたブートストラップエントリは、管理者相当スコープをすべて削除し、残りのスコープを保持して警告ログを出力し、キーの作成・更新を続行します。一方、REST APIはこのような混在スコープリストをHTTP 400で拒否し、スコープ変更を適用しません。
+##### ブートストラップスコープの検証
+
+以下のスコープルールに違反するエントリは、EMQXが該当スコープを削除し警告ログを出力した上でキーを作成・更新します：
+
+- **ログイン専用スコープ**：`user_management`、`mfa_management`、`sso_management`、`api_key_management` はAPIキーに無効です。EMQXはこれらを削除し、残りのスコープでキーを作成・更新します。
+- **管理者相当スコープ**：APIキーに割り当て可能なスコープの中で、`system` のみが管理者相当権限を付与します。EMQX 6.0.4以降、管理者相当スコープと管理者相当でないスコープが混在する場合、管理者相当スコープをすべて削除し、残りのスコープを保持します。
+- **ネームスペース付きスコープ**：EMQX 6.0.4以降、ネームスペース付きエントリがネームスペースロールで許可されていないスコープを明示的に指定した場合、許可されないスコープを削除し、残りを保持します。残るスコープがない場合、スコープ保護されたビジネスAPIにアクセスできません。許可スコープは[ネームスペース付き呼び出し元の制限](#restrictions-for-namespaced-callers)を参照してください。
+
+##### ブートストラップAPIキーのリロード
 
 この方法で作成されたAPIキーは無期限で有効です。
 
@@ -340,6 +349,8 @@ EMQX 6.0.4以降、ネームスペース管理者は自分のネームスペー�
 | APIキーのネームスペース変更 | 他ネームスペースへの移動は不可。更新はHTTP 400を返す。 |
 
 グローバルダッシュボード管理者は引き続き全ネームスペースのAPIキーを管理可能です。
+
+## APIキーの権限
 
 ### ロールと権限
 
@@ -414,37 +425,6 @@ APIキー用スコープに加え、ダッシュボードログインユーザ�
 | `api_key_management` | Administrator | APIキー管理 |
 | `mfa_management` | 任意 | 自アカウントのMFA管理。管理者は他ユーザーのMFAも管理可能。 |
 
-#### ネームスペース管理者の制限
-
-ネームスペース管理者（ロールが特定ネームスペースに制限されたユーザーやAPIキー）は、スコープチェックに加えエンドポイントレベルの追加制限を受けます。スコープ付与はこれらの制限を上書きしません。
-
-ネームスペースAPIキーは`POST /api/v5/publish`を含むメッセージパブリッシュAPIを呼び出せません。スコープリストに`publish`が含まれていてもこの制限は解除されません。
-
-また、ネームスペース管理者が`connections`や`monitoring`スコープを持っていても、リテインドメッセージや遅延メッセージストアなどの生のMQTTメッセージ内容を読み書きするクラスター全体のエンドポイントにはアクセスできません。以下のメッセージ関連エンドポイントは`403 Forbidden`を返します：
-
-- `GET /clients/:clientid/mqueue_messages`
-- `GET /clients/:clientid/inflight_messages`
-- `GET /mqtt/retainer/messages`
-- `GET /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/messages`
-- `GET /mqtt/delayed/messages`
-- `GET /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:topic`
-
-トレース操作では、`GET /trace`は呼び出し元のネームスペース内のトレースのみを一覧表示します。以下のトレース単位操作は他ネームスペースのトレースの場合`404 Not Found`を返します：
-
-- `PUT /trace/:name/stop`
-- `GET /trace/:name/download`
-- `GET /trace/:name/log`
-- `GET /trace/:name/log_detail`
-- `DELETE /trace/:name`
-
-この動作により他ネームスペースのトレース情報の漏洩を防止します。トレースの一括削除操作（`DELETE /trace`）はネームスペース管理者に対して`403 Forbidden`を返し、グローバル管理者のみが全トレースをクリア可能です。
-
-ダッシュボードログイン、SSOコールバック、APIキー自己管理エンドポイント（例：`/api_key`）は、キーの`scopes`設定に関わらずAPIキー認証を受け付けません。これはスコープモデルとは無関係なダッシュボードのセキュリティ境界です。
-
 #### `scopes`のデフォルト動作
 
 EMQX 6.0.4以降、APIキーの`scopes`フィールドは以下のルールに従います：
@@ -487,6 +467,55 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 - **ダッシュボード**：**System** -> **API Keys**でキー作成・編集時に**Permission Mode**を選択。**Custom Restricted Permissions**の場合に個別スコープを選択。
 - **REST API**：作成・更新リクエストボディに`"scopes": ["monitoring", "cluster_operations"]`を含める。
 - **ブートストラップファイル**：各行の4番目のセグメントにカンマ区切りでスコープリストを指定（例：`my-app:my-secret:administrator:monitoring,cluster_operations`）。
+
+## ネームスペース付き呼び出し元の制限
+
+ネームスペース付き呼び出し元（ロールが特定ネームスペースに制限されたユーザーやAPIキー）は、スコープチェックに加えてエンドポイントレベルの追加制限を受けます。スコープ付与はこれらの制限を上書きしません。
+
+### ネームスペース付きAPIキーのスコープ制限
+
+EMQX 6.0.4以降、ネームスペース付き管理者APIキーのロールデフォルトスコープは `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` です。`publish`、`gateways`、`audit` は含まれません。
+
+ネームスペース付きAPIキー作成時や既存キーの明示的スコープリスト変更時は、ネームスペースロールで許可されたスコープのみ割り当て可能です。`publish`、`gateways`、`audit`、その他許可されていないスコープを指定するとHTTP 400が返され、変更は適用されません。`system` と制限付きスコープの混在禁止も明示的スコープリストに適用されます。
+
+### 許可されていないスコープを含む既存キー
+
+保存済みスコープリストに許可されていないスコープが含まれるキーは自動的に変更されません。読み取り-修正-書き込みクライアントとの互換性のため、更新時に同じスコープリストを再送信し、ロールとネームスペースが同じなら許容されます。ただし、スコープリストが `publish` のみのネームスペース付きキーはAPIアクセス不可のため、変更なし更新でもHTTP 400が返されます。この場合はキーを削除し、ネームスペースなしで再作成してください。実際のロールやスコープ変更は再検証され、許可リストに準拠する必要があります。
+
+ネームスペース付きAPIキーの更新やローテーションは、以前の権限がキーのローテーションまで有効であるため、ネームスペースエンドポイント制限の対象となります。ブートストラップエントリ再処理時は許可されないスコープを削除し警告ログを出し、残りのスコープを保持します。詳細は[ブートストラップスコープの検証](#validate-bootstrap-scopes)を参照してください。
+
+### メッセージパブリッシュの制限
+
+ネームスペース付きAPIキーはメッセージパブリッシュAPI（`POST /api/v5/publish` など）を呼び出せません。以前のスコープリストに `publish` が含まれていても、スコープ割り当てはネームスペースレベルの制限を上書きしません。
+
+### メッセージ内容の制限
+
+ネームスペース付き呼び出し元が `connections` または `monitoring` スコープを持っていても、クラスター全体のMQTTメッセージ内容（保持メッセージや遅延メッセージストア）を読み書きするエンドポイントにはアクセスできません。以下のメッセージ関連エンドポイントは `403 Forbidden` を返します：
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+
+### トレースの制限
+
+トレース操作では、`GET /trace` は呼び出し元のネームスペース内のトレースのみを一覧表示します。以下のトレース単位操作は、異なるネームスペースのトレースに対して `404 Not Found` を返します：
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+この動作により他ネームスペースのトレースの存在が漏れません。バルク削除操作（`DELETE /trace`）はネームスペース付き呼び出し元に対して `403 Forbidden` を返し、全トレースのクリアはグローバル管理者のみ可能です。
+
+ダッシュボードログイン、SSOコールバック、APIキーの自己管理エンドポイント（例：`/api_key`）は、キーの `scopes` 設定に関わらずAPIキー認証を受け付けません。これはスコープモデルとは無関係のダッシュボードのセキュリティ境界です。
 
 ## ページネーション
 

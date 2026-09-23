@@ -91,28 +91,52 @@ Audit Logに含まれるフィールドは、操作記録のソースによっ�
 ダッシュボードまたはREST API操作を記録するAudit Logには、操作ユーザー、操作対象、操作結果の情報が含まれます。ログメッセージのフォーマット例は以下の通りです。
 
 ```bash
-{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","query_string":{},"from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
+{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
 ```
 
-以下の表は上記ログメッセージサンプルに含まれるフィールドを示しています。
+以下の表は、ダッシュボードまたはREST API操作によって生成されるAudit Logエントリに含まれるフィールドを説明しています。
 
-| フィールド名         | 型       | 説明                                                        |
-| -------------------- | -------- | ----------------------------------------------------------- |
-| time                 | 整数     | ログ記録の時間をマイクロ秒単位で表したタイムスタンプ。       |
-| level                | 文字列   | ログレベル。                                                |
-| source_ip            | 文字列   | 操作のソースIPアドレス。                                    |
-| operation_type       | 文字列   | 操作の機能モジュール。REST APIのタグに対応。                 |
-| operation_result     | 文字列   | 操作結果。`success`は成功、`failure`は失敗を示す。          |
-| http_status_code     | 文字列   | HTTPレスポンスステータスコード。                            |
-| http_method          | 文字列   | HTTPリクエストメソッド。                                    |
-| duration_ms          | 整数     | 操作実行時間（ミリ秒単位）。                                |
-| auth_type            | 文字列   | 認証タイプ。認証に使用された方法や仕組みを示し、`jwt_token`（ダッシュボード）または`api_key`（REST API）に固定。 |
-| query_string         | オブジェクト | HTTPリクエストのURLクエリパラメータ。                      |
-| from                 | 文字列   | リクエストの発信元。`dashboard`、`rest_api`はそれぞれダッシュボード、REST APIを示す。`cli`、`erlang_console`の場合はCLIまたはErlang Shellからの操作であり、このログ構造は該当しない。 |
-| source               | 文字列   | 操作を行ったダッシュボードユーザー名またはAPIキー名。       |
-| node                 | 文字列   | 操作が実行されたノード名またはサーバー名。                  |
-| method               | 文字列   | HTTPリクエストメソッド。`post`、`put`、`delete`はそれぞれ作成、更新、削除操作に対応。 |
-| operate_id           | 文字列   | リクエストのREST APIパス。詳細は[REST API](../api.md)を参照。 |
+| フィールド名            | 型       | 説明                                                                                   |
+| ----------------------- | -------- | -------------------------------------------------------------------------------------- |
+| time                    | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                                            |
+| level                   | String   | ログレベル                                                                             |
+| source_ip               | String   | 操作のソースIPアドレス                                                                |
+| operation_type          | String   | 操作の機能モジュール。REST APIのTagに対応                                             |
+| operation_result        | String   | 操作結果。`success`は成功、`failure`は失敗を示す                                      |
+| http_status_code        | Integer  | HTTPレスポンスステータスコード                                                         |
+| http_method             | String   | HTTPリクエストメソッド                                                                 |
+| duration_ms             | Integer  | 操作実行時間（ミリ秒単位）                                                             |
+| auth_type               | String   | 認証タイプ。認証に使用された方法や仕組みを示し、`jwt_token`（Dashboard）または`api_key`（REST API）で固定 |
+| from                    | String   | リクエストの発信元。`dashboard`、`rest_api`はそれぞれダッシュボード、REST APIを示す。`cli`、`erlang_console`はCLIまたはErlang Shellからの操作を示し、このログ構造は適用されません。 |
+| source                  | String   | 操作を実行したダッシュボードのユーザー名またはAPIキー名                               |
+| node                    | String   | 操作が実行されたノード名                                                               |
+| operation_id            | String   | リクエストのREST APIパス。詳細は[REST API](../api.md)を参照                            |
+| http_request            | Object   | HTTPリクエストの詳細                                                                   |
+| http_request.method     | String   | HTTPリクエストメソッド                                                                 |
+| http_request.bindings   | Object   | `operation_id`内のプレースホルダーに対応するパスパラメータの値                         |
+| http_request.headers    | Object   | HTTPリクエストヘッダー。機密情報と認識されたキーの値はマスクされます                   |
+| http_request.body       | Object   | HTTPリクエストボディ。機密情報と認識されたキーの値はマスクされます                     |
+| http_request.query_string | Object | 任意。解析済みのURLクエリパラメータ。クエリパラメータがない場合は省略。機密情報と認識されたキーの値はマスクされます |
+| http_request.namespace  | String   | 任意。操作対象の解決済みネームスペース。グローバルネームスペースの場合は`global`となる |
+
+#### ネームスペースとクエリパラメータ
+
+EMQX 6.0.4以降、Audit Logには監査対象のダッシュボードおよびREST APIリクエストの空でないクエリパラメータが`http_request.query_string`に含まれます。データバックアップ操作では、リクエストに`namespace`クエリパラメータが含まれているかに関わらず、`http_request.namespace`に解決済みの対象ネームスペースが記録されます。以下はグローバル管理者が`ns2`にバックアップをインポートする例です。
+
+```json
+{
+  "http_request": {
+    "method": "post",
+    "body": {"filename": "emqx-export.zip"},
+    "query_string": {"namespace": "ns2"},
+    "namespace": "ns2"
+  }
+}
+```
+
+ネームスペース管理者が自身のネームスペースでクエリパラメータなしにデータバックアップ操作を行う場合、`http_request.query_string`は省略されますが、解決済みネームスペースは`http_request.namespace`に含まれます。
+
+解決済みの対象ネームスペースは、バックアップファイルのエクスポート、インポート、アップロード、削除を行うデータバックアップ操作で記録されます。対象ネームスペースを解決しない他のエンドポイントでは`http_request.namespace`は省略されます。
 
 ### CLIまたはErlang Consoleからの操作記録
 
