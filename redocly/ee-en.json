@@ -275,7 +275,7 @@
         }
       },
       "public.position": {
-        "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+        "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
         "example": "none",
         "in": "query",
         "name": "position",
@@ -646,7 +646,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1086,7 +1086,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1603,7 +1603,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2635,7 +2635,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3021,7 +3021,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3494,7 +3494,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3854,7 +3854,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3896,181 +3896,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -4082,13 +3908,61 @@
               },
               {
                 "enum": [
-                  "datalayers"
+                  "pgsql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -4100,25 +3974,7 @@
               },
               {
                 "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "redshift"
                 ],
                 "type": "string"
               },
@@ -4130,7 +3986,97 @@
               },
               {
                 "enum": [
-                  "mqtt"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -4142,7 +4088,61 @@
               },
               {
                 "enum": [
-                  "snowflake"
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
                 ],
                 "type": "string"
               }
@@ -5162,14 +5162,18 @@
             "example": "EMQX-API-KEY-1",
             "type": "string"
           },
+          "namespace": {
+            "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+            "example": "ns1",
+            "type": "string"
+          },
           "role": {
-            "default": "administrator",
             "description": "Role for this API",
             "example": "administrator",
             "type": "string"
           },
           "scopes": {
-            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+            "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
             "example": [
               "connections",
               "monitoring"
@@ -5200,7 +5204,7 @@
             "type": "string"
           },
           "name": {
-            "description": "Scope name — a stable identifier for a functional category of API endpoints.",
+            "description": "Scope name, used as a stable identifier for a functional category of API endpoints.",
             "example": "connections",
             "type": "string"
           }
@@ -5348,6 +5352,13 @@
               "delete"
             ],
             "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "query_string": {
+            "example": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -5845,6 +5856,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -5958,6 +5980,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -6252,7 +6285,7 @@
             "type": "string"
           },
           "principal": {
-            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "Server Kerberos principal.<br/>For example <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>.<br/>NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -7680,6 +7713,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -7808,6 +7852,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -8120,6 +8175,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -8223,6 +8289,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -9315,6 +9392,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -9503,6 +9586,12 @@
             "description": "The name of the connector.",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -9568,6 +9657,22 @@
             "description": "Provide a placeholder for message headers<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Azure Event Hubs.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "Maximum bytes to collect in an Azure Event Hubs message batch.",
@@ -9582,15 +9687,31 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive); it is optimized for messaging latency.<br/>If a small delay is acceptable, configuring one is encouraged to help lower the number of requests per second towards Azure Event Hubs.<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Azure Event Hubs responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Azure Event Hubs explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.kafka_message",
@@ -9634,6 +9755,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Azure Event Hubs after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -9760,6 +9887,12 @@
           "min_metadata_refresh_interval": {
             "default": "3s",
             "description": "Minimum time interval the client has to wait before refreshing Azure Event Hubs Kafka broker and topic metadata. Setting too small value may add extra load on Azure Event Hubs.",
+            "example": "32s",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
             "example": "32s",
             "type": "string"
           },
@@ -10463,12 +10596,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -11712,11 +11845,11 @@
             "type": "boolean"
           },
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to DynamoDB.",
+            "description": "AWS Access Key ID for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to DynamoDB.",
+            "description": "AWS Secret Access Key for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -11792,8 +11925,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "name",
           "region",
           "type",
@@ -11877,11 +12008,11 @@
             "type": "boolean"
           },
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to DynamoDB.",
+            "description": "AWS Access Key ID for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to DynamoDB.",
+            "description": "AWS Secret Access Key for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -11935,8 +12066,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "name",
           "region",
           "type",
@@ -12007,11 +12136,11 @@
             "type": "boolean"
           },
           "aws_access_key_id": {
-            "description": "Access Key ID for connecting to DynamoDB.",
+            "description": "AWS Access Key ID for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "type": "string"
           },
           "aws_secret_access_key": {
-            "description": "AWS Secret Access Key for connecting to DynamoDB.",
+            "description": "AWS Secret Access Key for connecting to DynamoDB.<br/>If both the access key ID and secret access key are omitted, credentials<br/>will be obtained from the runtime environment<br/>(e.g., EC2 instance metadata or ECS task role).",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -12054,8 +12183,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "region",
           "url"
         ],
@@ -12212,7 +12339,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13129,7 +13256,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13333,6 +13460,17 @@
               "$ref": "#/components/schemas/actions_and_sources.node_status"
             },
             "type": "array"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -13570,6 +13708,17 @@
             "description": "Action name, used as a human-readable identifier.",
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -13730,6 +13879,17 @@
             "description": "Maximum amount of time without any activity that the HTTP driver will wait before attempting to reconnect.",
             "example": "32s",
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -14565,7 +14725,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -14827,7 +14987,7 @@
             "type": "string"
           },
           "kerberos_principal": {
-            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+            "description": "SASL GSSAPI authentication Kerberos principal. For example <code>kafka/node1.example.com@EXAMPLE.COM</code>, NOTE: The realm in use has to be configured in the default config file krb5.conf, usually located in `/etc`, on EMQX nodes.",
             "type": "string"
           }
         },
@@ -15081,6 +15241,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15288,6 +15454,12 @@
             "description": "The name of the connector.",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15407,6 +15579,22 @@
             "description": "Provide a placeholder for message headers.<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>.",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Kafka.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "Maximum bytes to collect in a Kafka message batch. Most of the Kafka brokers default to a limit of 1 MB batch size. EMQX's default value is less than 1 MB in order to compensate Kafka message encoding overheads (especially when each individual message is very small). When a single message is over the limit, it is still sent (as a single element batch).",
@@ -15421,15 +15609,31 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive); it is optimized for messaging latency.<br/>If a small delay is acceptable, configuring one is encouraged to help lower the number of requests per second towards Kafka.<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Kafka responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Kafka explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/bridge_kafka.kafka_message",
@@ -15473,6 +15677,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Kafka after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -15622,6 +15832,12 @@
             "example": "32s",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15676,6 +15892,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "The IP address family used to connect to Kafka brokers.<br/>- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.<br/>- <code>ipv4</code>: Connect over IPv4 only.<br/>- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "When set to 'true', TCP buffer is sent as soon as possible. Otherwise, the OS kernel may buffer small TCP packets for a while (40 ms by default).",
@@ -15940,7 +16166,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -16978,7 +17204,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -17695,7 +17921,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -19875,7 +20101,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -21086,7 +21312,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -21114,7 +21340,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -21886,6 +22112,10 @@
             "description": "The pool size.",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -22054,6 +22284,10 @@
             "description": "The pool size.",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -22190,6 +22424,10 @@
             "description": "The pool size.",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -22287,7 +22525,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -23067,7 +23305,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -23586,6 +23824,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -23774,6 +24018,12 @@
             "description": "The name of the connector.",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -23849,6 +24099,22 @@
             "description": "Provide a placeholder for message headers<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Confluent.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "Maximum bytes to collect in a Confluent message batch. Most of the Kafka brokers default to a limit of 1 MB batch size. EMQX's default value is less than 1 MB in order to compensate Kafka message encoding overheads (especially when each individual message is very small). When a single message is over the limit, it is still sent (as a single element batch).",
@@ -23863,15 +24129,31 @@
           },
           "max_linger_bytes": {
             "default": "10MB",
-            "description": "Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer.",
+            "description": "Maximum number of bytes a per-partition producer accumulates while waiting before it stops waiting and sends the batch.",
             "example": "32MB",
             "type": "string"
           },
           "max_linger_time": {
             "default": "0ms",
-            "description": "Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer.<br/>The default value `0` means no wait. For non-memory buffer mode, it's advised to configure at least `5ms` for less IOPS.",
+            "description": "Maximum duration a per-partition producer waits to accumulate more messages into a larger batch.<br/>The default value `0` means no wait (messages are sent as soon as they arrive); it is optimized for messaging latency.<br/>If a small delay is acceptable, configuring one is encouraged to help lower the number of requests per second towards Confluent.<br/>The wait ends early as soon as a full batch's worth of data has accumulated, so a busy producer is never delayed.<br/>When buffering to disk, the wait happens before writing to the buffer; configuring at least `5ms` is advised there to reduce disk IOPS.",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Confluent responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Confluent explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/confluent.kafka_message",
@@ -23915,6 +24197,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Confluent after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -24045,6 +24333,12 @@
             "example": "32s",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -24103,6 +24397,14 @@
             "description": "Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.<br/>So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/><br/>if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/><br/>if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.",
             "minimum": 0,
             "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable TLS.",
+            "enum": [
+              true
+            ],
+            "type": "string"
           },
           "hibernate_after": {
             "default": "5s",
@@ -24183,6 +24485,15 @@
                 "type": "string"
               }
             ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
           },
           "verify_peer_ext_key_usage": {
             "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
@@ -24876,6 +25187,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -24970,6 +25288,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -25044,6 +25369,13 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -26887,6 +27219,67 @@
         "required": [
           "clientid"
         ],
+        "type": "object"
+      },
+      "connector_oauth2.client_credentials": {
+        "properties": {
+          "client_id": {
+            "description": "The OAuth2 client ID used to request an access token.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "The OAuth2 client secret used to request an access token.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "enable": {
+            "description": "Enable OAuth2 (Client Credentials) authentication.",
+            "enum": [
+              true
+            ],
+            "type": "string"
+          },
+          "scope": {
+            "description": "The OAuth2 scope requested for the access token (optional).",
+            "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": false
+            },
+            "description": "TLS options for HTTPS connections to the OAuth2 token endpoint."
+          },
+          "timeout": {
+            "default": "5s",
+            "description": "Timeout for the token endpoint HTTP request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "token_endpoint": {
+            "description": "The token endpoint URL of the OAuth2 authorization server.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_secret",
+          "enable",
+          "token_endpoint"
+        ],
+        "type": "object"
+      },
+      "connector_oauth2.oauth2_disabled": {
+        "properties": {
+          "enable": {
+            "description": "Enable OAuth2 (Client Credentials) authentication.",
+            "enum": [
+              false
+            ],
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_postgres.get_connector": {
@@ -28826,7 +29219,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -28873,7 +29266,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -28962,7 +29355,7 @@
           },
           "force_mfa": {
             "default": false,
-            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a Dashboard token.",
             "type": "boolean"
           },
           "idp_metadata_url": {
@@ -29192,7 +29585,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+            "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support Dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
             "example": [
               "user_management",
               "mfa_management"
@@ -29239,7 +29632,7 @@
           },
           "force_mfa": {
             "default": false,
-            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a Dashboard token.",
             "type": "boolean"
           },
           "last_error": {
@@ -30886,6 +31279,28 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "Maximum size of a CONNECT packet. Maximum: 256 MB.<br/>EMQX closes the connection when a CONNECT packet is larger than this.<br/>This limit applies in addition to `max_packet_size`, and the smaller of the two applies to CONNECT.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "Maximum number of 'User-Property' pairs accepted in a CONNECT packet.<br/>The limit applies separately to the CONNECT properties and to the will properties.<br/>EMQX closes the connection when a CONNECT carries more pairs than this.<br/>Set to `infinity` to accept any number.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "Maximum number of QoS 1 and QoS 2 messages that are allowed to be delivered simultaneously before completing the acknowledgment.",
@@ -31069,7 +31484,7 @@
           },
           "session_expiry_interval": {
             "default": "2h",
-            "description": "Specifies how long the session will expire after the connection is disconnected, only for non-MQTT 5.0 connections.",
+            "description": "Specifies how long EMQX keeps a session after the client disconnects.<br/>It applies to MQTT 3.1 and 3.1.1 clients connecting with `Clean Session = false`.<br/>MQTT 5.0 clients set their own value with the `Session-Expiry-Interval` CONNECT property.<br/><br/>With the default in-memory session store, a disconnected session stays in memory for the whole<br/>interval. Allocate memory for this, or use durable sessions, which store session state on disk.",
             "example": "12m",
             "type": "string"
           },
@@ -31091,7 +31506,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.  <br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
+            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.<br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized.<br/><br/>- `random`: Randomly select a subscriber for dispatch.<br/>- `round_robin`: Deliver messages to subscribers in turn within each shared subscription group. The round-robin progress is maintained per publishing client, so messages from different publishers may be delivered to the same subscriber consecutively.<br/>- `round_robin_per_group`: Similar to `round_robin`, but the round-robin progress is tracked independently on each node. This means messages published from different nodes in a cluster may be delivered to the same subscriber.<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster.<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial subscriber is chosen based on `mqtt_shared_subscription_initial_sticky_pick`.<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber.<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
             "enum": [
               "random",
               "round_robin",
@@ -31645,12 +32060,12 @@
           },
           "proxy_address_header": {
             "default": "x-forwarded-for",
-            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's IP address, EMQX will take the leftmost IP in the header as the original client's IP.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source IP address of the WebSocket connection is always used.",
             "type": "string"
           },
           "proxy_port_header": {
             "default": "x-forwarded-port",
-            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.",
+            "description": "The HTTP request header that carries the original client's source port, EMQX will take the leftmost port in the header as the original client's source port.<br/><br/>This option is typically used when EMQX is deployed behind a WebSocket proxy.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source port of the WebSocket connection is always used.",
             "type": "string"
           },
           "supported_subprotocols": {
@@ -36886,7 +37301,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "04D3F628E98FC50A",
+            "example": "583C434EED8992F2",
             "type": "string"
           },
           "status": {
@@ -38603,12 +39018,14 @@
       "emqx_telemetry_api.status": {
         "properties": {
           "enable": {
-            "default": true,
             "description": "Enable telemetry",
             "example": false,
             "type": "boolean"
           }
         },
+        "required": [
+          "enable"
+        ],
         "type": "object"
       },
       "emqx_telemetry_api.telemetry": {
@@ -39581,6 +39998,7 @@
           },
           "password": {
             "description": "Template for overriding password.",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -40226,12 +40644,12 @@
           },
           "proxy_address_header": {
             "default": "x-forwarded-for",
-            "description": "HTTP header used to pass information about the client IP address.<br/>Relevant when the EMQX cluster is deployed behind a load-balancer.",
+            "description": "HTTP header used to pass information about the client IP address.<br/>Relevant when the EMQX cluster is deployed behind a load-balancer.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source IP address of the WebSocket connection is always used.",
             "type": "string"
           },
           "proxy_port_header": {
             "default": "x-forwarded-port",
-            "description": "HTTP header used to pass information about the client port. Relevant when the EMQX cluster is deployed behind a load-balancer.",
+            "description": "HTTP header used to pass information about the client port. Relevant when the EMQX cluster is deployed behind a load-balancer.<br/><br/>Set to an empty string (<code>\"\"</code>) to disable it, so the source port of the WebSocket connection is always used.",
             "type": "string"
           },
           "supported_subprotocols": {
@@ -40415,6 +40833,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -40590,6 +41015,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -40724,6 +41156,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -40778,6 +41217,12 @@
       },
       "gcp_pubsub_consumer.source_parameters": {
         "properties": {
+          "ack_deadline": {
+            "default": "60s",
+            "description": "The approximate amount of time (on a best-effort basis) Pub/Sub waits for the subscriber to acknowledge receipt before resending the message.  See the [official GCP docs](https://docs.cloud.google.com/pubsub/docs/reference/rest/v1/projects.subscriptions/create) for more info.",
+            "example": "1h",
+            "type": "string"
+          },
           "pull_max_messages": {
             "default": 100,
             "description": "The maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.",
@@ -40785,7 +41230,7 @@
             "type": "integer"
           },
           "topic": {
-            "description": "The GCP PubSub topic to publish messages to.",
+            "description": "The GCP PubSub topic.  Either a topic name, which is resolved in the project of the configured service account, or a fully-qualified topic path in the form `projects/<project-id>/topics/<topic-name>`, which may reference a topic in a different GCP project than the service account's.  In the latter case, the service account must be granted the appropriate Pub/Sub permissions on that topic.",
             "type": "string"
           }
         },
@@ -40826,7 +41271,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -40864,7 +41309,7 @@
             "type": "string"
           },
           "pubsub_topic": {
-            "description": "The GCP PubSub topic to publish messages to.",
+            "description": "The GCP PubSub topic.  Either a topic name, which is resolved in the project of the configured service account, or a fully-qualified topic path in the form `projects/<project-id>/topics/<topic-name>`, which may reference a topic in a different GCP project than the service account's.  In the latter case, the service account must be granted the appropriate Pub/Sub permissions on that topic.",
             "type": "string"
           }
         },
@@ -41081,6 +41526,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "status": {
             "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
             "enum": [
@@ -41249,6 +41701,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
+          },
           "tags": {
             "description": "Tags to annotate this config entry.",
             "items": {
@@ -41384,6 +41843,13 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "SSL connection settings."
           },
           "tags": {
             "description": "Tags to annotate this config entry.",
@@ -42332,6 +42798,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -42522,6 +42994,12 @@
             "description": "The name of the connector.",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -42668,6 +43146,12 @@
           "min_metadata_refresh_interval": {
             "default": "3s",
             "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
+            "example": "32s",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
             "example": "32s",
             "type": "string"
           },
@@ -43154,6 +43638,11 @@
             "minimum": 1,
             "type": "integer"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 14567,
             "description": "IP address and port for the listening socket.",
@@ -43275,6 +43764,11 @@
             "description": "The size of the listener's receiving pool.",
             "minimum": 1,
             "type": "integer"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 14567,
@@ -43408,6 +43902,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -43550,6 +44049,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -43735,6 +44239,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 1883,
             "description": "IP address and port for the listening socket.",
@@ -43883,6 +44392,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 1883,
             "description": "IP address and port for the listening socket.",
@@ -44022,6 +44536,11 @@
             "minimum": 1,
             "type": "integer"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 14567,
             "description": "IP address and port for the listening socket.",
@@ -44154,6 +44673,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -44297,6 +44821,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 1883,
@@ -44447,6 +44976,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 8083,
             "description": "IP address and port for the listening socket.",
@@ -44580,6 +45114,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -44718,6 +45257,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 8083,
             "description": "IP address and port for the listening socket.",
@@ -44850,6 +45394,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8083,
@@ -44984,6 +45533,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -45120,6 +45674,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -46094,6 +46653,7 @@
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
           "UNAUTHORIZED",
+          "UNAUTHORIZED_ROLE",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -47135,8 +47695,7 @@
         "properties": {
           "endpoint": {
             "default": "http://localhost:4317",
-            "description": "The target URL to which the exporter is going to send Open Telemetry signal data.",
-            "example": "http://127.0.0.1",
+            "description": "The target URL to which the exporter is going to send Open Telemetry signal data.  Must explicitly define the port.",
             "type": "string"
           },
           "headers": {
@@ -47144,6 +47703,14 @@
             "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
             "example": {},
             "type": "object"
+          },
+          "protocol": {
+            "default": "grpc",
+            "description": "The transport protocol of the OpenTelemetry exporter.<br/>Only `grpc` is supported. The exporter cannot send to an OTLP/HTTP endpoint.",
+            "enum": [
+              "grpc"
+            ],
+            "type": "string"
           },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -47935,7 +48502,7 @@
       "public.continuation_meta": {
         "properties": {
           "position": {
-            "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+            "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
             "example": "none",
             "oneOf": [
               {
@@ -48145,7 +48712,7 @@
           "request_ttl": {
             "default": "45s",
             "deprecated": true,
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -48732,7 +49299,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "The default port for servers without an explicit `:Port` (default 5672).",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48742,9 +49309,9 @@
             "default": {},
             "description": "Resource options."
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -48834,7 +49401,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "The default port for servers without an explicit `:Port` (default 5672).",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48844,9 +49411,9 @@
             "default": {},
             "description": "Resource options."
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -48926,7 +49493,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "The default port for servers without an explicit `:Port` (default 5672).",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48936,9 +49503,9 @@
             "default": {},
             "description": "Resource options."
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "The RabbitMQ server address that you want to connect to (for example, localhost).",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -49051,7 +49618,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -53102,7 +53669,7 @@
           },
           "force_mfa": {
             "default": false,
-            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a Dashboard token.",
             "type": "boolean"
           },
           "password": {
@@ -53218,7 +53785,7 @@
           },
           "force_mfa": {
             "default": false,
-            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a dashboard token.",
+            "description": "Whether to force MFA (TOTP) for SSO users. When enabled, SSO users must complete MFA setup or verification before receiving a Dashboard token.",
             "type": "boolean"
           },
           "issuer": {
@@ -53395,7 +53962,7 @@
           },
           "request_ttl": {
             "default": "infinity",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -54466,7 +55033,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.3"
+    "version": "6.0.4-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -54483,46 +55050,46 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "cassandra",
-                      "rabbitmq",
                       "rocketmq",
-                      "mongodb",
-                      "alloydb",
-                      "sqlserver",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "kafka_producer",
+                      "rabbitmq",
+                      "cassandra",
                       "influxdb",
-                      "gcp_pubsub_producer",
-                      "syskeeper_forwarder",
                       "pulsar",
+                      "azure_event_hub_producer",
                       "greptimedb",
+                      "mongodb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "confluent_producer",
+                      "alloydb",
+                      "kafka_producer",
+                      "cockroachdb",
                       "iotdb",
-                      "redis",
-                      "datalayers",
-                      "kinesis",
-                      "s3",
+                      "syskeeper_forwarder",
                       "doris",
+                      "datalayers",
+                      "redis",
                       "opents",
                       "s3tables",
+                      "s3",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "snowflake",
-                      "timescale",
+                      "oracle",
                       "clickhouse",
                       "tdengine",
-                      "tablestore",
                       "azure_blob_storage",
-                      "oracle",
+                      "tablestore",
+                      "timescale",
+                      "snowflake",
                       "couchbase",
                       "snowflake_streaming",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ]
                   }
@@ -54531,46 +55098,46 @@
                   "items": {
                     "enum": [
                       "http",
-                      "cassandra",
-                      "rabbitmq",
                       "rocketmq",
-                      "mongodb",
-                      "alloydb",
-                      "sqlserver",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "kafka_producer",
+                      "rabbitmq",
+                      "cassandra",
                       "influxdb",
-                      "gcp_pubsub_producer",
-                      "syskeeper_forwarder",
                       "pulsar",
+                      "azure_event_hub_producer",
                       "greptimedb",
+                      "mongodb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "confluent_producer",
+                      "alloydb",
+                      "kafka_producer",
+                      "cockroachdb",
                       "iotdb",
-                      "redis",
-                      "datalayers",
-                      "kinesis",
-                      "s3",
+                      "syskeeper_forwarder",
                       "doris",
+                      "datalayers",
+                      "redis",
                       "opents",
                       "s3tables",
+                      "s3",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "snowflake",
-                      "timescale",
+                      "oracle",
                       "clickhouse",
                       "tdengine",
-                      "tablestore",
                       "azure_blob_storage",
-                      "oracle",
+                      "tablestore",
+                      "timescale",
+                      "snowflake",
                       "couchbase",
                       "snowflake_streaming",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -65792,14 +66359,18 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -65889,6 +66460,11 @@
                     "example": "EMQX-API-KEY-1",
                     "type": "string"
                   },
+                  "namespace": {
+                    "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                    "example": "ns1",
+                    "type": "string"
+                  },
                   "role": {
                     "default": "administrator",
                     "description": "Role for this API",
@@ -65896,15 +66472,25 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. The literal string `unset`, or a list equal to the role default, means \"no explicit scope policy\": the key is stored without a scope list and follows the role default (this lets a client re-submit the value a read returned without modification). Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -65936,6 +66522,28 @@
                     },
                     "message": {
                       "description": "Invalid request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "FORBIDDEN"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
                       "type": "string"
                     }
                   },
@@ -66083,14 +66691,18 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -66178,7 +66790,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -66204,22 +66815,36 @@
                       }
                     ]
                   },
+                  "namespace": {
+                    "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                    "example": "ns1",
+                    "type": "string"
+                  },
                   "role": {
-                    "default": "administrator",
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default — administrator/viewer get all management scopes, publisher gets `publish` only. Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
+                    "description": "List of scope names to grant this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). When omitted on creation, the server materializes the role default: administrator/viewer get all management scopes, publisher gets `publish` only. The literal string `unset`, or a list equal to the role default, means \"no explicit scope policy\": the key is stored without a scope list and follows the role default (this lets a client re-submit the value a read returned without modification). Send an explicit empty list `[]` to create a deny-all key (only anonymous endpoints such as `/status` remain reachable).",
                     "example": [
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -66298,14 +66923,18 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
+                      "description": "List of scope names granted to this API key. Each scope is a stable functional category (e.g., connections, publish, monitoring). The literal string `unset` is a sentinel surfaced for records that hold no explicit scope list (created or updated with unset-equivalent scopes, or records that survived an upgrade from a release where the scopes feature did not exist); the runtime falls back to role default for such records, and a client should treat them as \"no explicit scope policy\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).",
                       "example": [
                         "connections",
                         "monitoring"
@@ -66324,6 +66953,28 @@
                           "type": "string"
                         }
                       ]
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid request.",
+                      "type": "string"
                     }
                   },
                   "type": "object"
@@ -67287,26 +67938,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -67317,26 +67968,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -68310,9 +68961,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0,
                         "total": 0
                       },
@@ -68323,9 +68974,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68336,9 +68987,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68353,9 +69004,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -69131,26 +69782,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -69161,26 +69812,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -71432,9 +72083,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -71443,9 +72094,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71456,9 +72107,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71473,9 +72124,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -72496,7 +73147,7 @@
             }
           },
           {
-            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. Messages beyond the limit will be silently omitted in the response. The only exception to this rule is when the first message payload is already larger than the limit, in this case, the first message will be returned in the response.",
+            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. When the limit is reached, the response may contain fewer messages than `limit`; `meta.position` points to the last returned message, so the omitted messages can be fetched by requesting the next page from that position. The only exception to this rule is when the first message payload is already larger than the limit, in this case, only the first message will be returned in the response.",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -72529,8 +73180,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826"
                   }
                 },
                 "schema": {
@@ -72649,7 +73300,7 @@
             }
           },
           {
-            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. Messages beyond the limit will be silently omitted in the response. The only exception to this rule is when the first message payload is already larger than the limit, in this case, the first message will be returned in the response.",
+            "description": "Client's inflight/mqueue messages payload limit. The total payload size of all messages in the response will not exceed this value. When the limit is reached, the response may contain fewer messages than `limit`; `meta.position` points to the last returned message, so the omitted messages can be fetched by requesting the next page from that position. The only exception to this rule is when the first message payload is already larger than the limit, in this case, only the first message will be returned in the response.",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -72683,8 +73334,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826_10"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826_10"
                   }
                 },
                 "schema": {
@@ -76153,8 +76804,7 @@
                     ],
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -77730,8 +78380,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -77902,7 +78551,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -79196,8 +79845,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -79414,7 +80062,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -80924,8 +81572,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -81142,7 +81789,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82150,8 +82797,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -82308,7 +82954,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -83591,8 +84237,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -83809,7 +84454,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85131,8 +85776,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -85303,7 +85947,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -85720,6 +86364,15 @@
           },
           {
             "$ref": "#/components/parameters/public.limit"
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -85772,7 +86425,17 @@
       },
       "post": {
         "description": "Upload a data backup file.",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -85850,6 +86513,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -85899,6 +86571,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -85930,6 +86624,15 @@
             "description": "Node name.",
             "in": "query",
             "name": "node",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
             "required": false,
             "schema": {
               "type": "string"
@@ -85993,6 +86696,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -86012,7 +86737,17 @@
     "/data/import": {
       "post": {
         "description": "Import a data backup file.",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -86043,6 +86778,28 @@
                     },
                     "message": {
                       "description": "Backup file import failed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Possible error reason codes for invalid requests.",
                       "type": "string"
                     }
                   },
@@ -86128,7 +86885,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "04D3F628E98FC50A",
+            "example": "583C434EED8992F2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86948,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "04D3F628E98FC50A",
+            "example": "583C434EED8992F2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +87362,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "04D3F628E98FC50A",
+            "example": "583C434EED8992F2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +87448,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "04D3F628E98FC50A",
+            "example": "583C434EED8992F2",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92195,73 +92952,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -92362,6 +93052,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -99773,11 +100530,12 @@
         "description": "EMQX metrics",
         "parameters": [
           {
-            "description": "Whether to aggregate all nodes Metrics. Default value is 'true'.",
+            "description": "Whether to aggregate all nodes Metrics. Default value is 'false'.",
             "in": "query",
             "name": "aggregate",
             "required": false,
             "schema": {
+              "default": false,
               "type": "boolean"
             }
           },
@@ -104550,6 +105308,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal Error.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -105055,6 +105835,28 @@
               }
             },
             "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Plugin Not Found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -105160,7 +105962,8 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "PARAM_ERROR"
+                        "PARAM_ERROR",
+                        "BAD_CONFIG"
                       ],
                       "type": "string"
                     },
@@ -105188,6 +105991,28 @@
                     },
                     "message": {
                       "description": "Plugin Not Found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal Error.",
                       "type": "string"
                     }
                   },
@@ -112256,6 +113081,28 @@
               }
             },
             "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED_ROLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Only the global administrator may update the tracing configuration.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -112294,7 +113141,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List dashboard user scopes",
+        "summary": "List Dashboard user scopes",
         "tags": [
           "Dashboard"
         ]
@@ -112330,7 +113177,7 @@
         ]
       },
       "post": {
-        "description": "Create dashboard user",
+        "description": "Create Dashboard user",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -112355,15 +113202,25 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>If this field is omitted when a user is created, the server applies the default scopes for the role. An administrator receives all management scopes plus the four login-only scopes. A viewer receives all management scopes. A publisher, where applicable, receives only the `publish` scope. To create a deny-all user, send an explicit empty list `[]`; only anonymous endpoints such as `/status` remain reachable.<br/><br/>On write (create or update) this field also accepts the literal string `unset`, and a scope list that matches the role's implicit default set is treated the same way: both are stored as \\\"no explicit scopes\\\", so the user keeps the forward-compatible role default instead of a frozen list. This lets a read-modify-write (for example editing only the description) round-trip the `unset` value or the expanded scope list returned by a `GET` without error.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                     "example": [
                       "user_management",
                       "mfa_management"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   },
                   "username": {
                     "description": "Dashboard Username",
@@ -112410,7 +113267,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support Dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                       "example": [
                         "user_management",
                         "mfa_management"
@@ -112449,7 +113306,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create dashboard user",
+        "summary": "Create Dashboard user",
         "tags": [
           "Dashboard"
         ]
@@ -112457,7 +113314,7 @@
     },
     "/users/{username}": {
       "delete": {
-        "description": "Delete dashboard user",
+        "description": "Delete Dashboard user",
         "parameters": [
           {
             "description": "SSO backend name from query string.",
@@ -112544,13 +113401,13 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete dashboard user",
+        "summary": "Delete Dashboard user",
         "tags": [
           "Dashboard"
         ]
       },
       "put": {
-        "description": "Update dashboard user description",
+        "description": "Update Dashboard user description",
         "parameters": [
           {
             "description": "SSO backend name from query string.",
@@ -112596,15 +113453,25 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>When omitted on creation, the server materializes the role default — administrator gets all management scopes plus the four login-only scopes; viewer gets all management scopes; publisher (where applicable) gets the `publish` scope only. Send an explicit empty list `[]` to create a deny-all user (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                    "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>If this field is omitted when a user is created, the server applies the default scopes for the role. An administrator receives all management scopes plus the four login-only scopes. A viewer receives all management scopes. A publisher, where applicable, receives only the `publish` scope. To create a deny-all user, send an explicit empty list `[]`; only anonymous endpoints such as `/status` remain reachable.<br/><br/>On write (create or update) this field also accepts the literal string `unset`, and a scope list that matches the role's implicit default set is treated the same way: both are stored as \\\"no explicit scopes\\\", so the user keeps the forward-compatible role default instead of a frozen list. This lets a read-modify-write (for example editing only the description) round-trip the `unset` value or the expanded scope list returned by a `GET` without error.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                     "example": [
                       "user_management",
                       "mfa_management"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -112645,7 +113512,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "Dashboard user scopes — a fine-grained access list applied on top of role.<br/><br/>The literal string `unset` is a legacy-only sentinel surfaced for records that survived an upgrade from a release where the dashboard-user scopes feature did not exist; the runtime falls back to role default for such records and a client should treat them as \"no explicit scope policy yet\". An empty list `[]` means deny-all (only anonymous endpoints such as `/status` remain reachable).<br/><br/>Login users may hold any of the API key catalog scopes plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, `api_key_management`. Of these four, three are administrator-only (`user_management`, `sso_management`, `api_key_management`); `mfa_management` may also be assigned to non-administrator users — for non-admin holders it acts as a self-exemption key allowing the user to bypass force_mfa and admin_required locks on their own MFA only.",
+                      "description": "Dashboard user scopes: a fine-grained access list applied in addition to the user's role.<br/><br/>The literal string `unset` is a legacy-only sentinel for records upgraded from a release that did not support Dashboard user scopes. At runtime, such records fall back to the default scopes for the role. Clients should treat `unset` as \\\"no explicit scope policy has been set yet\\\". An empty list `[]` means deny-all; only anonymous endpoints such as `/status` remain reachable.<br/><br/>Login users may be assigned any API key catalog scope plus the four login-only scopes: `user_management`, `mfa_management`, `sso_management`, and `api_key_management`. Among these four scopes, `user_management`, `sso_management`, and `api_key_management` are administrator-only. `mfa_management` may also be assigned to non-administrator users. For non-administrator users, it acts only as a self-exemption key that allows the user to bypass `force_mfa` and `admin_required` locks for their own MFA.",
                       "example": [
                         "user_management",
                         "mfa_management"
@@ -112732,7 +113599,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update dashboard user description",
+        "summary": "Update Dashboard user description",
         "tags": [
           "Dashboard"
         ]
@@ -112740,7 +113607,7 @@
     },
     "/users/{username}/change_pwd": {
       "post": {
-        "description": "Change dashboard user password",
+        "description": "Change Dashboard user password",
         "parameters": [
           {
             "description": "Dashboard Username",
@@ -112830,7 +113697,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Change dashboard user password",
+        "summary": "Change Dashboard user password",
         "tags": [
           "Dashboard"
         ]
@@ -112838,7 +113705,7 @@
     },
     "/users/{username}/mfa": {
       "delete": {
-        "description": "Disable MFA for a dashboard user. To reset or re-key TOTP, call the `POST` method.",
+        "description": "Disable MFA for a Dashboard user. To reset or re-key TOTP, call the `POST` method.",
         "parameters": [
           {
             "description": "SSO backend name from query string.",
@@ -112908,7 +113775,7 @@
         ]
       },
       "post": {
-        "description": "Set up or reset MFA for a dashboard user. Calling this endpoint generates a fresh TOTP secret.",
+        "description": "Set up or reset MFA for a Dashboard user. Calling this endpoint generates a fresh TOTP secret.",
         "parameters": [
           {
             "description": "SSO backend name from query string.",

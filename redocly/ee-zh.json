@@ -3896,43 +3896,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -3944,31 +3908,19 @@
               },
               {
                 "enum": [
-                  "opents"
+                  "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "pgsql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
+                  "disk_log"
                 ],
                 "type": "string"
               },
@@ -3980,73 +3932,13 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
+                  "couchbase"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -4058,73 +3950,19 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "snowflake"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -4136,13 +3974,175 @@
               },
               {
                 "enum": [
-                  "snowflake"
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
                 ],
                 "type": "string"
               }
@@ -5162,8 +5162,12 @@
             "example": "EMQX-API-KEY-1",
             "type": "string"
           },
+          "namespace": {
+            "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+            "example": "ns1",
+            "type": "string"
+          },
           "role": {
-            "default": "administrator",
             "description": "用于此 API 的角色",
             "example": "administrator",
             "type": "string"
@@ -5348,6 +5352,13 @@
               "delete"
             ],
             "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "query_string": {
+            "example": {},
+            "type": "object"
           }
         },
         "type": "object"
@@ -5845,6 +5856,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -5958,6 +5980,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -7680,6 +7713,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -7808,6 +7852,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -8120,6 +8175,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -8223,6 +8289,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -9315,6 +9392,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -9503,6 +9586,12 @@
             "description": "连接器的名称",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -9568,6 +9657,22 @@
             "description": "为Azure Event Hubs头部提供一个占位符。例如：<code>${pub_props}</code>。<br/><br/>注意，占位符的值必须是一个对象：<br/><code>{\"foo\": \"bar\"}</code><br/>或者是一组键值对：<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Azure Event Hubs.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "在 Azure Event Hubs 消息批次中收集的最大字节数。",
@@ -9591,6 +9696,22 @@
             "description": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。<br/>默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Azure Event Hubs responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Azure Event Hubs explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.kafka_message",
@@ -9634,6 +9755,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Azure Event Hubs after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -9760,6 +9887,12 @@
           "min_metadata_refresh_interval": {
             "default": "3s",
             "description": "客户端在刷新 Azure Event Hubs Kafka 代理和主题元数据之前必须等待的最小时间间隔。设置太小的值可能会给 Azure Event Hubs 增加额外的负载。",
+            "example": "32s",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Azure Event Hubs for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Azure Event Hubs may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
             "example": "32s",
             "type": "string"
           },
@@ -11792,8 +11925,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "name",
           "region",
           "type",
@@ -11935,8 +12066,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "name",
           "region",
           "type",
@@ -12054,8 +12183,6 @@
           }
         },
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key",
           "region",
           "url"
         ],
@@ -13334,6 +13461,17 @@
             },
             "type": "array"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -13570,6 +13708,17 @@
             "description": "动作名称，用作动作的可读描述。",
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -13730,6 +13879,17 @@
             "description": "HTTP 驱动程序在没有任何活动的情况下等待重新连接的最长时间。",
             "example": "32s",
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -15081,6 +15241,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15288,6 +15454,12 @@
             "description": "连接器的名称",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15407,6 +15579,22 @@
             "description": "请提供要用作 Kafka 头部的占位符<br/><br/>例如：<code>${pub_props}</code><br/><br/>请注意，占位符的值必须是对象形式的：<code>{\"foo\": \"bar\"}</code><br/>或者是键值对的数组形式：<code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>。",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Kafka.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "最大消息批量字节数。大多数 Kafka 环境的默认最低值是 1 MB，EMQX 的默认值比 1 MB 更小是因为需要补偿 Kafka 消息编码所需要的额外字节（尤其是当每条消息都很小的情况下）。当单个消息的大小超过该限制时，它仍然会被发送，（相当于该批量中只有单个消息）。",
@@ -15430,6 +15618,22 @@
             "description": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。<br/>默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Kafka responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Kafka explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/bridge_kafka.kafka_message",
@@ -15473,6 +15677,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Kafka after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -15622,6 +15832,12 @@
             "example": "32s",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -15676,6 +15892,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "The IP address family used to connect to Kafka brokers.<br/>- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.<br/>- <code>ipv4</code>: Connect over IPv4 only.<br/>- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "设置‘true’让系统内核立即发送。否则当需要发送的内容很少时，可能会有一定延迟（默认 40 毫秒）。",
@@ -21886,6 +22112,10 @@
             "description": "连接池大小。",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -22054,6 +22284,10 @@
             "description": "连接池大小。",
             "type": "integer"
           },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
             "default": {},
@@ -22189,6 +22423,10 @@
             "default": 8,
             "description": "连接池大小。",
             "type": "integer"
+          },
+          "probe_table_name": {
+            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_tablestore.connector_resource_opts",
@@ -23586,6 +23824,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -23774,6 +24018,12 @@
             "description": "连接器的名称",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -23849,6 +24099,22 @@
             "description": "提供用作 Confluent 头部的占位符<br/><br/>例如<code>${pub_props}</code><br/><br/>注意，占位符的值必须是对象：<br/><code>{\"foo\": \"bar\"}</code><br/>或键值对数组：<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
             "type": "string"
           },
+          "max_batch_age": {
+            "default": "infinity",
+            "description": "Maximum duration a message may stay in the producer buffer before it is dropped instead of being sent to Confluent.<br/>A message batch is dropped only when all of its messages have stayed in the buffer longer than this duration; this applies both to messages still queued (including while the connection is down) and to messages awaiting acknowledgement when the connection is lost.<br/>Each dropped message counts towards the <code>dropped.expired</code> metric.<br/>When set to <code>infinity</code>, messages never expire (they are retained until sent, or until the buffer overflows).",
+            "oneOf": [
+              {
+                "example": "32s",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_batch_bytes": {
             "default": "896KB",
             "description": "最大 Confluent 消息批量字节数。大多数 Kafka 环境的默认最低值是 1 MB，EMQX 的默认值比 1 MB 更小是因为需要补偿 Kafka 消息编码所需要的额外字节（尤其是当每条消息都很小的情况下）。当单个消息的大小超过该限制时，它仍然会被发送，（相当于该批量中只有单个消息）。",
@@ -23872,6 +24138,22 @@
             "description": "每个分区生产者为了收集批量消息进行缓冲的最长等待时间。<br/>默认值为 0，表示不等待。 对于非内存缓冲模式，建议配置至少 5ms 以减少 IOPS（每秒输入输出操作次数）。",
             "example": "32s",
             "type": "string"
+          },
+          "max_retries": {
+            "default": "infinity",
+            "description": "Maximum number of times to retry sending a message batch after Confluent responds with a retryable error (for example, when the partition leader has changed).<br/>After the initial attempt and this many retries have all failed, the batch is dropped and each of its messages counts towards the <code>failed</code> metric.<br/>The retry counter is incremented only when Confluent explicitly responds with an error code; resends triggered by a connection loss do not increment it (those are bounded by <code>max_batch_age</code>).<br/>When set to <code>infinity</code>, retries are unlimited.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "message": {
             "$ref": "#/components/schemas/confluent.kafka_message",
@@ -23915,6 +24197,12 @@
               "async",
               "sync"
             ],
+            "type": "string"
+          },
+          "reconnect_delay": {
+            "default": "2s",
+            "description": "Delay before the producer attempts to reconnect to Confluent after a connection loss.<br/>While disconnected, messages continue to accumulate in the buffer, subject to the buffer limits and <code>max_batch_age</code>.",
+            "example": "32s",
             "type": "string"
           },
           "required_acks": {
@@ -24045,6 +24333,12 @@
             "example": "32s",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Confluent for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Confluent may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -24103,6 +24397,14 @@
             "description": "在有效的证书路径中，可以跟随对等证书的非自颁发中间证书的最大数量。<br/>因此，如果深度为 0，则对等方必须由受信任的根 CA 直接签名；<br/><br/>如果是 1，路径可以是 PEER、中间 CA、ROOT-CA；<br/><br/>如果是 2，则路径可以是 PEER、中间 CA1、中间 CA2、ROOT-CA。",
             "minimum": 0,
             "type": "integer"
+          },
+          "enable": {
+            "default": true,
+            "description": "启用 TLS。",
+            "enum": [
+              true
+            ],
+            "type": "string"
           },
           "hibernate_after": {
             "default": "5s",
@@ -24183,6 +24485,15 @@
                 "type": "string"
               }
             ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "启用或禁用对等验证。",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
           },
           "verify_peer_ext_key_usage": {
             "description": "验证对等证书中的扩展密钥用法<br/>为了额外的对等证书验证，这里定义的值必须出现在对等证书的 '扩展密钥用法' 中，<br/>如 [rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12) 中定义。<br/><br/>允许的值有<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- 原始 OID，例如：\"OID:1.3.6.1.5.5.7.3.2\" 表示 `id-pk 2`，相当于 `clientAuth`<br/><br/>也支持用逗号分隔的字符串来验证多个密钥用法。<br/><br/>例如，`\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
@@ -24876,6 +25187,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
             "enum": [
@@ -24970,6 +25288,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -25044,6 +25369,13 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -26887,6 +27219,67 @@
         "required": [
           "clientid"
         ],
+        "type": "object"
+      },
+      "connector_oauth2.client_credentials": {
+        "properties": {
+          "client_id": {
+            "description": "The OAuth2 client ID used to request an access token.",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "The OAuth2 client secret used to request an access token.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "enable": {
+            "description": "Enable OAuth2 (Client Credentials) authentication.",
+            "enum": [
+              true
+            ],
+            "type": "string"
+          },
+          "scope": {
+            "description": "The OAuth2 scope requested for the access token (optional).",
+            "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": false
+            },
+            "description": "TLS options for HTTPS connections to the OAuth2 token endpoint."
+          },
+          "timeout": {
+            "default": "5s",
+            "description": "Timeout for the token endpoint HTTP request.",
+            "example": "32s",
+            "type": "string"
+          },
+          "token_endpoint": {
+            "description": "The token endpoint URL of the OAuth2 authorization server.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_secret",
+          "enable",
+          "token_endpoint"
+        ],
+        "type": "object"
+      },
+      "connector_oauth2.oauth2_disabled": {
+        "properties": {
+          "enable": {
+            "description": "Enable OAuth2 (Client Credentials) authentication.",
+            "enum": [
+              false
+            ],
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "connector_postgres.get_connector": {
@@ -28826,7 +29219,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -28873,7 +29266,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 20,
+            "default": 4,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -30885,6 +31278,28 @@
             "maximum": 65535,
             "minimum": 23,
             "type": "integer"
+          },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "Maximum size of a CONNECT packet. Maximum: 256 MB.<br/>EMQX closes the connection when a CONNECT packet is larger than this.<br/>This limit applies in addition to `max_packet_size`, and the smaller of the two applies to CONNECT.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "Maximum number of 'User-Property' pairs accepted in a CONNECT packet.<br/>The limit applies separately to the CONNECT properties and to the will properties.<br/>EMQX closes the connection when a CONNECT carries more pairs than this.<br/>Set to `infinity` to accept any number.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
           },
           "max_inflight": {
             "default": 32,
@@ -36886,7 +37301,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "BC5B23883E328309",
+            "example": "1DEAC4AFF4FA00E7",
             "type": "string"
           },
           "status": {
@@ -38603,12 +39018,14 @@
       "emqx_telemetry_api.status": {
         "properties": {
           "enable": {
-            "default": true,
             "description": "启用遥测",
             "example": false,
             "type": "boolean"
           }
         },
+        "required": [
+          "enable"
+        ],
         "type": "object"
       },
       "emqx_telemetry_api.telemetry": {
@@ -39581,6 +39998,7 @@
           },
           "password": {
             "description": "password 重写模板",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -40415,6 +40833,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
             "enum": [
@@ -40590,6 +41015,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -40724,6 +41156,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -40778,6 +41217,12 @@
       },
       "gcp_pubsub_consumer.source_parameters": {
         "properties": {
+          "ack_deadline": {
+            "default": "60s",
+            "description": "The approximate amount of time (on a best-effort basis) Pub/Sub waits for the subscriber to acknowledge receipt before resending the message.  See the [official GCP docs](https://docs.cloud.google.com/pubsub/docs/reference/rest/v1/projects.subscriptions/create) for more info.",
+            "example": "1h",
+            "type": "string"
+          },
           "pull_max_messages": {
             "default": 100,
             "description": "从 GCP PubSub 中在一个拉取请求里检索的最大消息数。 实际数量可能小于指定的值。",
@@ -41081,6 +41526,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "status": {
             "description": "连接器的状态<br/><br/>- <code>正在连接</code>: 在进行任何健康检查之前的初始状态。<br/><br/>- <code>已连接</code>: 当连接器通过健康检查时的状态。<br/><br/>- <code>已断开</code>: 当连接器无法通过健康检查时的状态。<br/><br/>- <code>不一致</code>: 集群节点之间的连接器状态不一致。",
             "enum": [
@@ -41249,6 +41701,13 @@
             "format": "password",
             "type": "string"
           },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
+          },
           "tags": {
             "description": "连接器的标签",
             "items": {
@@ -41384,6 +41843,13 @@
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": true
+            },
+            "description": "启用 SSL 连接。"
           },
           "tags": {
             "description": "连接器的标签",
@@ -42332,6 +42798,12 @@
             },
             "type": "array"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -42522,6 +42994,12 @@
             "description": "连接器的名称",
             "type": "string"
           },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
+            "example": "32s",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_kafka.connector_resource_opts",
             "default": {},
@@ -42668,6 +43146,12 @@
           "min_metadata_refresh_interval": {
             "default": "3s",
             "description": "刷新 Kafka broker 和 Kafka 主题元数据段最短时间间隔。设置太小可能会增加 Kafka 压力。",
+            "example": "32s",
+            "type": "string"
+          },
+          "request_timeout": {
+            "default": "30s",
+            "description": "Maximum duration to wait for a reply from Kafka for a pending request.<br/>When exceeded, the connection is considered stale and is re-established.<br/>Note: if set too small, Kafka may have ingested a produce request while the acknowledgement is delayed; EMQX then resends the already-accepted batch after reconnecting, which can result in duplicates and an overwhelming data volume for downstream consumers.",
             "example": "32s",
             "type": "string"
           },
@@ -43154,6 +43638,11 @@
             "minimum": 1,
             "type": "integer"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 14567,
             "description": "监听套接字的 IP 地址和端口。",
@@ -43275,6 +43764,11 @@
             "description": "监听器接收池的大小。",
             "minimum": 1,
             "type": "integer"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 14567,
@@ -43408,6 +43902,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -43550,6 +44049,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -43735,6 +44239,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 1883,
             "description": "监听套接字的 IP 地址和端口。",
@@ -43883,6 +44392,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 1883,
             "description": "监听套接字的 IP 地址和端口。",
@@ -44022,6 +44536,11 @@
             "minimum": 1,
             "type": "integer"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 14567,
             "description": "监听套接字的 IP 地址和端口。",
@@ -44154,6 +44673,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8883,
@@ -44297,6 +44821,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 1883,
@@ -44447,6 +44976,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 8083,
             "description": "监听套接字的 IP 地址和端口。",
@@ -44580,6 +45114,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -44718,6 +45257,11 @@
             },
             "type": "array"
           },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
+          },
           "bind": {
             "default": 8083,
             "description": "监听套接字的 IP 地址和端口。",
@@ -44850,6 +45394,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8083,
@@ -44984,6 +45533,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -45120,6 +45674,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "allow_log_packet_data_from": {
+            "default": "",
+            "description": "A comma-separated allowlist of client IP addresses and CIDR ranges for logging raw MQTT packet data.<br/>Packet data from other addresses is redacted. This option may expose credentials and other sensitive data in logs and should only be enabled temporarily for trusted client addresses.<br/><br/>For example:<br/><br/>```<br/>listeners.tcp.default.allow_log_packet_data_from = \"127.0.0.1, 192.168.1.0/24, 2001:db8::/32\"<br/>```",
+            "type": "string"
           },
           "bind": {
             "default": 8084,
@@ -46094,6 +46653,7 @@
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
           "UNAUTHORIZED",
+          "UNAUTHORIZED_ROLE",
           "UNEXPECTED_ERROR",
           "UPDATE_FAILED",
           "USER_NOT_FOUND"
@@ -47136,7 +47696,6 @@
           "endpoint": {
             "default": "http://localhost:4317",
             "description": "导出器将要发送 Open Telemetry 信号数据的目标 URL。",
-            "example": "http://127.0.0.1",
             "type": "string"
           },
           "headers": {
@@ -47144,6 +47703,14 @@
             "description": "与 OpenTelemetry 信号数据一起发送的 HTTP 头。<br/>头是一个以头名称为键的映射。",
             "example": {},
             "type": "object"
+          },
+          "protocol": {
+            "default": "grpc",
+            "description": "Open Telemetry 导出器的传输协议",
+            "enum": [
+              "grpc"
+            ],
+            "type": "string"
           },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -48732,7 +49299,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "RabbitMQ 服务器监听的端口号（默认为 5672）。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48742,9 +49309,9 @@
             "default": {},
             "description": "资源相关的选项。"
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -48834,7 +49401,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "RabbitMQ 服务器监听的端口号（默认为 5672）。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48844,9 +49411,9 @@
             "default": {},
             "description": "资源相关的选项。"
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -48926,7 +49493,7 @@
           },
           "port": {
             "default": 5672,
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "RabbitMQ 服务器监听的端口号（默认为 5672）。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -48936,9 +49503,9 @@
             "default": {},
             "description": "资源相关的选项。"
           },
-          "server": {
+          "servers": {
             "default": "localhost",
-            "description": "您想要连接的 RabbitMQ 服务器地址（例如，localhost）。",
+            "description": "Comma-separated RabbitMQ nodes for connect failover, form `Host[:Port][,Host2:Port]`.<br/><br/>The `server` field is accepted as an alias.<br/><br/>The `port` value (default 5672) is used when `[:Port]` is omitted.",
             "type": "string"
           },
           "ssl": {
@@ -54466,7 +55033,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.3"
+    "version": "6.0.4-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -54483,46 +55050,46 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rabbitmq",
-                      "cassandra",
                       "rocketmq",
-                      "kafka_producer",
-                      "mongodb",
-                      "alloydb",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
+                      "cassandra",
+                      "rabbitmq",
                       "influxdb",
-                      "syskeeper_forwarder",
                       "pulsar",
+                      "azure_event_hub_producer",
+                      "kafka_producer",
                       "greptimedb",
+                      "mongodb",
+                      "confluent_producer",
+                      "alloydb",
+                      "cockroachdb",
                       "iotdb",
-                      "redis",
-                      "datalayers",
-                      "kinesis",
-                      "s3",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
+                      "sqlserver",
                       "doris",
-                      "opents",
+                      "s3",
+                      "datalayers",
                       "s3tables",
+                      "redis",
+                      "kinesis",
+                      "opents",
                       "mqtt",
                       "redshift",
-                      "snowflake",
-                      "timescale",
+                      "oracle",
                       "clickhouse",
                       "tdengine",
-                      "tablestore",
                       "azure_blob_storage",
-                      "oracle",
+                      "tablestore",
+                      "timescale",
+                      "snowflake",
                       "couchbase",
                       "snowflake_streaming",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ]
                   }
@@ -54531,46 +55098,46 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rabbitmq",
-                      "cassandra",
                       "rocketmq",
-                      "kafka_producer",
-                      "mongodb",
-                      "alloydb",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
+                      "cassandra",
+                      "rabbitmq",
                       "influxdb",
-                      "syskeeper_forwarder",
                       "pulsar",
+                      "azure_event_hub_producer",
+                      "kafka_producer",
                       "greptimedb",
+                      "mongodb",
+                      "confluent_producer",
+                      "alloydb",
+                      "cockroachdb",
                       "iotdb",
-                      "redis",
-                      "datalayers",
-                      "kinesis",
-                      "s3",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
+                      "sqlserver",
                       "doris",
-                      "opents",
+                      "s3",
+                      "datalayers",
                       "s3tables",
+                      "redis",
+                      "kinesis",
+                      "opents",
                       "mqtt",
                       "redshift",
-                      "snowflake",
-                      "timescale",
+                      "oracle",
                       "clickhouse",
                       "tdengine",
-                      "tablestore",
                       "azure_blob_storage",
-                      "oracle",
+                      "tablestore",
+                      "timescale",
+                      "snowflake",
                       "couchbase",
                       "snowflake_streaming",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -65792,8 +66359,12 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
@@ -65889,6 +66460,11 @@
                     "example": "EMQX-API-KEY-1",
                     "type": "string"
                   },
+                  "namespace": {
+                    "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                    "example": "ns1",
+                    "type": "string"
+                  },
                   "role": {
                     "default": "administrator",
                     "description": "用于此 API 的角色",
@@ -65901,10 +66477,20 @@
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -65936,6 +66522,28 @@
                     },
                     "message": {
                       "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "FORBIDDEN"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -66083,8 +66691,12 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
@@ -66178,7 +66790,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "过期时间。可以是 ISO 8601 时间戳 / epoch second，或对永不过期的 key 使用 `infinity`。",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -66204,8 +66815,12 @@
                       }
                     ]
                   },
+                  "namespace": {
+                    "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                    "example": "ns1",
+                    "type": "string"
+                  },
                   "role": {
-                    "default": "administrator",
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
@@ -66216,10 +66831,20 @@
                       "clients",
                       "rules"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
@@ -66298,8 +66923,12 @@
                       "example": "EMQX-API-KEY-1",
                       "type": "string"
                     },
+                    "namespace": {
+                      "description": "Namespace to scope this API key to. This is an alternative to encoding the namespace inside the `role` string (`ns:<namespace>::<role>`). When both forms are supplied they must agree, otherwise the request is rejected. Omit for a global (non-namespaced) API key.",
+                      "example": "ns1",
+                      "type": "string"
+                    },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
@@ -66324,6 +66953,28 @@
                           "type": "string"
                         }
                       ]
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
                     }
                   },
                   "type": "object"
@@ -67287,26 +67938,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -67317,26 +67968,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -68310,9 +68961,9 @@
                       "metrics": {
                         "failed": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0,
                         "total": 0
                       },
@@ -68323,9 +68974,9 @@
                             "failed": 0,
                             "matched": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68336,9 +68987,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -68353,9 +69004,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -69131,26 +69782,26 @@
                   "metrics": {
                     "hits": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "inserts": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 0
                     },
                     "memory": 1704,
                     "misses": {
                       "rate": {
-                        "current": 0,
-                        "last5m": 0,
-                        "max": 0
+                        "current": 0.0,
+                        "last5m": 0.0,
+                        "max": 0.0
                       },
                       "value": 1
                     },
@@ -69161,26 +69812,26 @@
                       "metrics": {
                         "hits": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "inserts": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 0
                         },
                         "memory": 1704,
                         "misses": {
                           "rate": {
-                            "current": 0,
-                            "last5m": 0,
-                            "max": 0
+                            "current": 0.0,
+                            "last5m": 0.0,
+                            "max": 0.0
                           },
                           "value": 1
                         },
@@ -71432,9 +72083,9 @@
                         "allow": 0,
                         "deny": 0,
                         "nomatch": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "total": 0
                       },
                       "node_metrics": [
@@ -71443,9 +72094,9 @@
                             "allow": 0,
                             "deny": 0,
                             "nomatch": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "total": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71456,9 +72107,9 @@
                           "metrics": {
                             "failed": 0,
                             "matched": 0,
-                            "rate": 0,
-                            "rate_last5m": 0,
-                            "rate_max": 0,
+                            "rate": 0.0,
+                            "rate_last5m": 0.0,
+                            "rate_max": 0.0,
                             "success": 0
                           },
                           "node": "emqx@127.0.0.1"
@@ -71473,9 +72124,9 @@
                       "resource_metrics": {
                         "failed": 0,
                         "matched": 0,
-                        "rate": 0,
-                        "rate_last5m": 0,
-                        "rate_max": 0,
+                        "rate": 0.0,
+                        "rate_last5m": 0.0,
+                        "rate_max": 0.0,
                         "success": 0
                       },
                       "status": "connected"
@@ -72529,8 +73180,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826"
                   }
                 },
                 "schema": {
@@ -72683,8 +73334,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826_10"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826_10"
                   }
                 },
                 "schema": {
@@ -76153,8 +76804,7 @@
                     ],
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -77730,8 +78380,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -77902,7 +78551,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -79196,8 +79845,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -79414,7 +80062,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -80924,8 +81572,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -81142,7 +81789,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82150,8 +82797,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -82308,7 +82954,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -83591,8 +84237,7 @@
                       ],
                       "password": "******",
                       "pool_size": 8,
-                      "port": 5672,
-                      "server": "127.0.0.1",
+                      "servers": "127.0.0.1:5672",
                       "ssl": {
                         "enable": false
                       },
@@ -83809,7 +84454,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85131,8 +85776,7 @@
                     "name": "rabbitmq_connector",
                     "password": "******",
                     "pool_size": 8,
-                    "port": 5672,
-                    "server": "127.0.0.1",
+                    "servers": "127.0.0.1:5672",
                     "ssl": {
                       "enable": false
                     },
@@ -85303,7 +85947,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -85720,6 +86364,15 @@
           },
           {
             "$ref": "#/components/parameters/public.limit"
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -85772,7 +86425,17 @@
       },
       "post": {
         "description": "上传数据备份文件。",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -85850,6 +86513,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -85899,6 +86571,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求的可能错误原因代码。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -85930,6 +86624,15 @@
             "description": "节点名称。",
             "in": "query",
             "name": "node",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
             "required": false,
             "schema": {
               "type": "string"
@@ -85993,6 +86696,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求的可能错误原因代码。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -86012,7 +86737,17 @@
     "/data/import": {
       "post": {
         "description": "导入数据备份文件。",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Namespace whose backups to operate on. Only honored for global administrators; namespaced administrators are always confined to their own namespace. When omitted, a global administrator operates on the global (non-namespaced) backups.",
+            "in": "query",
+            "name": "namespace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -86043,6 +86778,28 @@
                     },
                     "message": {
                       "description": "备份文件导入失败。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -86128,7 +86885,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BC5B23883E328309",
+            "example": "1DEAC4AFF4FA00E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86191,7 +86948,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "BC5B23883E328309",
+            "example": "1DEAC4AFF4FA00E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86605,7 +87362,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BC5B23883E328309",
+            "example": "1DEAC4AFF4FA00E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86691,7 +87448,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "BC5B23883E328309",
+            "example": "1DEAC4AFF4FA00E7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92195,6 +92952,73 @@
                   },
                   {
                     "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
+                  },
+                  {
+                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -92295,73 +93119,6 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
-                  },
-                  {
-                    "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -99778,6 +100535,7 @@
             "name": "aggregate",
             "required": false,
             "schema": {
+              "default": false,
               "type": "boolean"
             }
           },
@@ -104550,6 +105308,28 @@
               }
             },
             "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "内部错误。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -105055,6 +105835,28 @@
               }
             },
             "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -105160,7 +105962,8 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "PARAM_ERROR"
+                        "PARAM_ERROR",
+                        "BAD_CONFIG"
                       ],
                       "type": "string"
                     },
@@ -105188,6 +105991,28 @@
                     },
                     "message": {
                       "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "内部错误。",
                       "type": "string"
                     }
                   },
@@ -112256,6 +113081,28 @@
               }
             },
             "description": ""
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "UNAUTHORIZED_ROLE"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Only the global administrator may update the tracing configuration.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -112360,10 +113207,20 @@
                       "user_management",
                       "mfa_management"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   },
                   "username": {
                     "description": "Dashboard 用户名",
@@ -112601,10 +113458,20 @@
                       "user_management",
                       "mfa_management"
                     ],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
+                    "oneOf": [
+                      {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "enum": [
+                          "unset"
+                        ],
+                        "type": "string"
+                      }
+                    ]
                   }
                 },
                 "type": "object"
