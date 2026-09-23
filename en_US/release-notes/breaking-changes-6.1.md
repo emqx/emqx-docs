@@ -4,9 +4,9 @@
 
 - [#18974](https://github.com/emqx/emqx/pull/18974) Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
 
-- [#18515](https://github.com/emqx/emqx/pull/18515) Azure Blob Storage Action's `blob` template field now has the same schema validation as Aggregated S3's `key`, which verifies the allowed bindings are followed.
+- [#18515](https://github.com/emqx/emqx/pull/18515) The Azure Blob Storage action's `blob` template field now uses the same schema validation as the Aggregated S3 action's `key` field, ensuring that only allowed bindings are used.
 
-- [#18528](https://github.com/emqx/emqx/pull/18528) Now, the exporter endpoint of an Opentelemetry integration is validated to be an URL with scheme and port. Supported schemes are `http` and `https`, and the port must be explicitly set.
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry integration exporter endpoints must now be valid URLs that include a scheme and an explicit port. Supported schemes are `http` and `https`.
 
 ## 6.1.2
 

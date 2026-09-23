@@ -22,11 +22,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18353](https://github.com/emqx/emqx/pull/18353) Added a new plugin `emqx_maptabs` providing named mapping tables for rule SQL.
 
-  Tables are seeded from JSON files and held in memory for fast lookups from the rule engine hot path. The new `maptab_lookup(Table, Key)`, `maptab_lookup(Table, Key, Field)`, and `maptab_lookup(Table, Key, Field, Default)` rule SQL functions turn long `CASE ... WHEN ... THEN` ladders into a single table lookup; the looked-up fields can drive the builtin `subbits` function directly to decode binary payloads.
+  Tables are seeded from JSON files and held in memory for fast lookups from the rule engine hot path. The new `maptab_lookup(Table, Key)`, `maptab_lookup(Table, Key, Field)`, and `maptab_lookup(Table, Key, Field, Default)` rule SQL functions turn long `CASE ... WHEN ... THEN` ladders into a single table lookup; the looked-up fields can drive the built-in `subbits` function directly to decode binary payloads.
 
   Tables are managed with the `emqx ctl maptabs` CLI: loading or deleting a table on one node replicates the change to every node in the cluster, and a node that was down during an update catches up automatically when it rejoins.
 
-  The plugin configuration provides safety limits: `max_tables` (default 100), `max_rows_per_table` (default 10000), and `max_table_file_bytes` (default 10000000).
+  The plugin configuration provides safety limits: `max_tables` (default 100), `max_rows_per_table` (default 10,000), and `max_table_file_bytes` (default 10,000,000).
 
 #### Performance
 
@@ -50,7 +50,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   A cluster join request toward a node that has not finished starting is now refused with a message that asks to retry later.
 
-- [#18585](https://github.com/emqx/emqx/pull/18585) End a session that does not outlive its connection when a new connection takes over the same client ID, as the MQTT specification requires. This covers MQTT 5.0 clients connecting with Session Expiry Interval 0 and MQTT 3.1.1 clients connecting with Clean Session 1.
+- [#18585](https://github.com/emqx/emqx/pull/18585) Ended a session that does not outlive its connection when a new connection takes over the same client ID, as the MQTT specification requires. This covers MQTT 5.0 clients connecting with Session Expiry Interval 0 and MQTT 3.1.1 clients connecting with Clean Session 1.
 
   Before this fix, the new connection could inherit the old session's subscriptions and queued messages, and a will message with a Will Delay Interval greater than zero was silently dropped. Now the new connection starts a fresh session (CONNACK Session Present 0), the old connection receives DISCONNECT with reason code 0x8E (Session taken over), and its will message, if any, is published at the takeover.
 
@@ -72,23 +72,23 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, such a configuration failed with an internal error and a noisy log, because the connector attempted a plain TCP connection to a TLS port and could not interpret the server's reply. Connection attempts that receive non-MQTT data from the server (for example, when the port expects TLS) now also produce a clear explanation instead of an internal error.
 
-- [#18242](https://github.com/emqx/emqx/pull/18242) Fix Datalayers connectors failing with `function_clause` when database or credentials are left blank. A clear configuration error is reported instead.
+- [#18242](https://github.com/emqx/emqx/pull/18242) Fixed an issue where Datalayers connectors failed with `function_clause` when the database or credentials were left blank. A clear configuration error is now reported instead.
 
-- [#18270](https://github.com/emqx/emqx/pull/18270) Fix GreptimeDB connectors that could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
+- [#18270](https://github.com/emqx/emqx/pull/18270) Fixed an issue where GreptimeDB connectors could fail to restart when a stale gRPC channel remained after a worker was force-stopped.
 
-- [#18274](https://github.com/emqx/emqx/pull/18274) Fixed the Tablestore connector health check listing all timeseries tables on every check. Health checks now use a `DescribeTimeseriesTable` probe against the configured `probe_table_name`, falling back to listing all timeseries tables when it is unset.
+- [#18274](https://github.com/emqx/emqx/pull/18274) Fixed an issue where Tablestore connector health checks listed all timeseries tables on every check. Health checks now use a `DescribeTimeseriesTable` probe against the configured `probe_table_name`, falling back to listing all timeseries tables when it is unset.
 
 - [#18299](https://github.com/emqx/emqx/pull/18299) Fixed an issue where the Snowflake connector's configured TLS (`ssl`) settings were not applied to its outbound HTTPS connections (both Streaming and Aggregated modes). Settings such as `verify`, `cacertfile`, client certificates, and `server_name_indication` were accepted and displayed but had no effect on the actual connections. The configured values are now honoured. Connectors that never customized the `ssl` settings keep the previous connection behavior.
 
 - [#18302](https://github.com/emqx/emqx/pull/18302) Elasticsearch action `index` and `id` values are now URL-encoded when composing the request path, so characters such as `#` or `/` in a templated value are treated as literal text within a single path segment instead of altering the request target. The JSON request body is not affected.
 
-- [#18449](https://github.com/emqx/emqx/pull/18449) On rare race conditions, the Postgres Action could get a `sock_closed` error while writing data, and would treat that as an unrecoverable error.  Now, it's treated as a recoverable error.
+- [#18449](https://github.com/emqx/emqx/pull/18449) Fixed a rare race condition in which the PostgreSQL action could receive a `sock_closed` error while writing data and treat it as unrecoverable. The error is now treated as recoverable.
 
 - [#18465](https://github.com/emqx/emqx/pull/18465) Fixed handling of templated INSERT SQL statements in the ClickHouse, TDengine, SQL Server, and MySQL bridges (when batch insert is enabled).
 
   Previously, rendering SQL templates could often produce malformed SQL due to syntax errors in the manually entered template itself and due to interpolation issues.
 
-  Now, SQL statements are fully parsed when an action is created, and invalid SQL is rejected. During rendering, correct escaping is enforced. To provide consistent and predictable behavior, we limit the SQL features that can be used. Most notably, we reject comments in SQL statements. However, we support a large subset of syntax features: constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
+  Now, SQL statements are fully parsed when an action is created, and invalid SQL is rejected. During rendering, correct escaping is enforced. To provide consistent and predictable behavior, EMQX limits the SQL features that can be used. Most notably, EMQX rejects comments in SQL statements. However, EMQX supports a large subset of syntax features: constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
 
   MySQL also supports `ON DUPLICATE KEY UPDATE`, ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`, and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
 
@@ -100,7 +100,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18767](https://github.com/emqx/emqx/pull/18767) Fixed the RocketMQ connector being reported as belonging to a namespace it does not belong to.
 
-  The RocketMQ connector has its own `namespace` configuration field, holding the RocketMQ instance namespace. Connector API responses returned that value under the same JSON key used for the EMQX namespace, so the Dashboard treated the connector as owned by a namespace of that name. It showed "Only the administrator of namespace <name> can perform operations on the connector", and opening the connector failed with "Managed namespace not found".
+  The RocketMQ connector has its own `namespace` configuration field, holding the RocketMQ instance namespace. Connector API responses returned that value under the same JSON key used for the EMQX namespace, so the Dashboard treated the connector as owned by a namespace of that name. It showed `Only the administrator of namespace <name> can perform operations on the connector`, and opening the connector failed with "Managed namespace not found".
 
   The `namespace` field in connector API responses now always holds the EMQX namespace.
 
@@ -124,20 +124,20 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Also fixed the connector alarm that was raised and cleared every two minutes while no producer was running: the name server closes an idle connection after 120 seconds, and the client now reconnects right away instead of reporting `connecting` for one health check.
 
-- [#18987](https://github.com/emqx/emqx/pull/18987) Despite having the `resource_opts.health_check_timeout`, some Connectors/Actions/Sources did not actually use that value for timing out health checks.  This has been fixed.
+- [#18987](https://github.com/emqx/emqx/pull/18987) Fixed an issue where some connectors, actions, and sources did not use `resource_opts.health_check_timeout` to time out health checks.
 
   The affected integrations were:
 
   - Cassandra Connector
   - DynamoDB Connector
-  - GCP PubSub Consumer Source
+  - GCP Pub/Sub Consumer Source
   - IoTDB Connector (Thrift driver)
   - Snowflake Aggregated Connector
-  - SQLServer Connector
-  - TDEngine Connector
+  - SQL Server Connector
+  - TDengine Connector
   - MySQL Connector
   - Doris Connector
-  - Postgres Connector
+  - PostgreSQL Connector
 
 #### Message Queue and Streams
 
@@ -153,9 +153,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18277](https://github.com/emqx/emqx/pull/18277) Improved reliability of persisting configuration changes to `cluster.hocon`: the update is now written and synced to disk before atomically replacing the file, and a failure to read the previous file for backup no longer prevents the new configuration from being saved.
 
-- [#18347](https://github.com/emqx/emqx/pull/18347) Fix a problem with Mnesia RocksDB backend that caused table inconsistency on core nodes when keys were deleted while core node is down.
+- [#18347](https://github.com/emqx/emqx/pull/18347) Fixed a problem with the Mnesia RocksDB backend that caused table inconsistencies on core nodes when keys were deleted while a core node was down.
 
-  From the EMQX point of view, this problem could lead to delayed release of dashboard login locks, as well as wasted disk space by the EMQX schema registry, since deletion of old schemas could be missed.
+  In EMQX, this problem could delay the release of Dashboard login locks and waste disk space in Schema Registry because deletions of old schemas could be missed.
 
 - [#18826](https://github.com/emqx/emqx/pull/18826) Backup import now confirms that every node in the cluster runs the same version before it starts.
 
@@ -167,18 +167,15 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### MQTT over QUIC
 
-- [#18293](https://github.com/emqx/emqx/pull/18293) Upgrade QUIC stack to quicer-0.4.8 (msquic 2.5.7).
-
-  Contains a security update for CVE-2026-32179
+- [#18293](https://github.com/emqx/emqx/pull/18293) Upgraded the QUIC stack to quicer-0.4.8 (msquic 2.5.7), which includes a security update for CVE-2026-32179.
 
 #### Access Control
 
-- [#18225](https://github.com/emqx/emqx/pull/18225) Improved the warning logged when an API key bootstrap file entry contains scopes that are dropped during loading. The warning now groups the dropped scope names by the reason they were dropped -- an unknown scope name, a scope not allowed for the publisher role, or a privilege scope that cannot be combined with other scopes -- instead of reporting every dropped scope as an unknown scope name.
+- [#18225](https://github.com/emqx/emqx/pull/18225) Improved the warning logged when an API key bootstrap file entry contains scopes that are dropped during loading. The warning now groups the dropped scope names by the reason they were dropped: an unknown scope name, a scope not allowed for the publisher role, or a privilege scope that cannot be combined with other scopes. Previously, every dropped scope was reported as an unknown scope name.
 
 - [#18391](https://github.com/emqx/emqx/pull/18391) Fixed an authentication cache key collision. Two different credentials whose fields concatenate to the same bytes could share a cache entry, letting one client receive another client's cached authentication result within the cache TTL.
 
-- [#18458](https://github.com/emqx/emqx/pull/18458) Upgrade `oidcc` to `3.2.3`.
-  Fixes dashboard SSO (OIDC) login timeouts (`INTERNAL_ERROR: exit,{timeout,{gen_server,call,[...]}}`) while the provider configuration worker is busy refreshing its cached configuration.
+- [#18458](https://github.com/emqx/emqx/pull/18458) Upgraded `oidcc` to `3.2.3`, fixing Dashboard SSO (OIDC) login timeouts (`INTERNAL_ERROR: exit,{timeout,{gen_server,call,[...]}}`) while the provider configuration worker is busy refreshing its cached configuration.
 
 - [#18576](https://github.com/emqx/emqx/pull/18576) The OIDC SSO configuration API (`GET /api/v5/sso/oidc`) now returns `client_jwks` as `none` when no client JWKS is configured, matching the CLI output. Previously the value was masked as `******` even when nothing was configured. A configured client JWKS remains masked.
 
@@ -192,7 +189,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The backend now remains tracked with its resource ID so that it can be cleaned up after the start timeout.
 
-- [#18964](https://github.com/emqx/emqx/pull/18964) Fixed the SCRAM HTTP authentication backend rejecting the OAuth2 configuration that the Dashboard submits for it. Creating an `SCRAM` + `HTTP Server` authenticator with OAuth2 enabled now succeeds, and the access token is sent as a `Bearer` authorization header on the user lookup request.
+- [#18964](https://github.com/emqx/emqx/pull/18964) Fixed the SCRAM HTTP authentication backend rejecting the OAuth2 configuration that the Dashboard submits for it. Creating a `SCRAM` + `HTTP Server` authenticator with OAuth2 enabled now succeeds, and the access token is sent as a `Bearer` authorization header on the user lookup request.
 
 #### Multi-tenancy
 
@@ -202,9 +199,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18339](https://github.com/emqx/emqx/pull/18339) Fixed a data backup import isolation issue where an uploaded archive could delete or write backup files that belong to other namespaces. Import now extracts and cleans up within the caller's own namespace directory. Backup archives that contain symlink or hardlink members are now rejected.
 
-- [#18372](https://github.com/emqx/emqx/pull/18372) Make sure that backup file operations for a namespace always stay within that namespace's own backup directory. Backup operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, or a name containing a path separator.
+- [#18372](https://github.com/emqx/emqx/pull/18372) Ensured that backup file operations for a namespace always remain within that namespace's own backup directory. Backup operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, or a name containing a path separator.
 
-- [#18378](https://github.com/emqx/emqx/pull/18378) Make sure that managed certificate bundle operations for a namespace always stay within that namespace's own directory. Certificate operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, or an empty name.
+- [#18378](https://github.com/emqx/emqx/pull/18378) Ensured that managed certificate bundle operations for a namespace always remain within that namespace's own directory. Certificate operations are not available for a namespace whose name cannot be used as a directory name, such as `.`, `..`, or an empty name.
 
 - [#18392](https://github.com/emqx/emqx/pull/18392) Fixed an issue where aggregated Actions (S3, S3Tables, Azure Blob Storage, Snowflake Aggregated) with the same name but in different namespaces would share the same working directory for their temporary files.
 
@@ -214,7 +211,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, the backup file list was empty for a namespace whose name contained characters such as `*`, `?`, `{`, `}`, `[` or `]`, even though the backup files existed on disk. The listing now treats the namespace name as a literal directory name.
 
-- [#18539](https://github.com/emqx/emqx/pull/18539) Fixed the multi-tenancy client list not following a persistent session that reconnects under a different namespace.
+- [#18539](https://github.com/emqx/emqx/pull/18539) Fixed the multi-tenancy client list continuing to associate a persistent session with its previous namespace after the session reconnected under a different namespace.
 
   Previously, when a client resumed an existing session (`clean_start=false`) after its namespace changed, `GET /api/v5/mt/ns/{ns}/client_list` kept listing the client under the old namespace, and the new namespace's list did not include it. The client list and the per-namespace client count now always reflect the namespace the client connected with. This also fixes the client disappearing from the list after resuming a durable session.
 
@@ -232,7 +229,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18177](https://github.com/emqx/emqx/pull/18177) Fixed an issue where `frame_parse_error` logs could expose packet data in `received_prefix` when the client was not allowed by `allow_log_packet_data_from`.
 
-- [#18314](https://github.com/emqx/emqx/pull/18314) When reading GCP Connectors (GCP PubSub Producer/Consumer, Bigquery) that use JSON Service Account authentication via the HTTP API, now the values are redacted.
+- [#18314](https://github.com/emqx/emqx/pull/18314) The HTTP API now redacts service account JSON values when reading configurations for GCP Pub/Sub Producer, GCP Pub/Sub Consumer, and BigQuery connectors that use JSON service account authentication.
 
 - [#18330](https://github.com/emqx/emqx/pull/18330) Read-only REST endpoints no longer return secrets in cleartext:
 
@@ -244,11 +241,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18344](https://github.com/emqx/emqx/pull/18344) Upgraded HOCON to 0.46.3. This release renders sensitive values inside array-typed config fields as `******` and no longer prints sensitive field values in config validation error logs.
 
-- [#18580](https://github.com/emqx/emqx/pull/18580) Redact sensitive configuration values in the `conf.hocon` file produced by the `bin/node_dump` script.
+- [#18580](https://github.com/emqx/emqx/pull/18580) Redacted sensitive configuration values in the `conf.hocon` file produced by the `bin/node_dump` script.
 
   Values marked as sensitive in the configuration schema, such as `dashboard.default_password` and `license.key`, are now written as `******`. Before this fix, the script redacted only a fixed list of key names, so these values were written in plain text.
 
-- [#18708](https://github.com/emqx/emqx/pull/18708) Avoid logging sensitive information in debug mode.
+- [#18708](https://github.com/emqx/emqx/pull/18708) Prevented the Erlang cookie and license key from being printed in shell trace output when debug mode is enabled.
 
   Running `bin/emqx` commands with `DEBUG=1` or `DEBUG=2` no longer prints the Erlang cookie or the license key in the shell trace output.
 
@@ -270,7 +267,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18776](https://github.com/emqx/emqx/pull/18776) MQTT-SN now publishes configured Will messages when sleeping clients exceed their sleep duration and no longer publishes Will messages when clients disconnect normally.
 
-- [#18842](https://github.com/emqx/emqx/pull/18842) Gateway connections now ignore `clientid_override` values returned by authentication backends, which is not supported by Gateway protocols. A warning is logged when this occurs.
+- [#18842](https://github.com/emqx/emqx/pull/18842) Gateway connections now ignore `clientid_override` values returned by authentication backends because Gateway protocols do not support them. A warning is logged when this occurs.
 
   Mountpoint templates for Gateway connections are now evaluated in the shared Gateway authentication flow after authentication results are merged.
 
@@ -290,15 +287,15 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   When a plugin fails to start with a timeout, the error log now lists the declared dependency applications that were not running at that moment.
 
-- [#18337](https://github.com/emqx/emqx/pull/18337) Start plugins after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
+- [#18337](https://github.com/emqx/emqx/pull/18337) Started plugins after all EMQX applications have started. A plugin may now declare any EMQX application in its `applications` list. Previously, a plugin that declared an application which starts late in the boot sequence (for example `emqx_management`) failed to start after a node restart.
 
 - [#18468](https://github.com/emqx/emqx/pull/18468) The hot-upgrade (relup) plugin now validates the target version string and checks upgrade-path compatibility before it modifies any files. An incompatible or malformed upgrade package is rejected without deleting or overwriting the installed release.
 
-- [#18540](https://github.com/emqx/emqx/pull/18540) Ship the default configuration file (`priv/config.hocon`) in the `emqx_relup` plugin package. Installing the plugin no longer logs a repeated `failed_to_copy_plugin_default_hocon_config` warning.
+- [#18540](https://github.com/emqx/emqx/pull/18540) Shipped the default configuration file (`priv/config.hocon`) in the `emqx_relup` plugin package. Installing the plugin no longer logs a repeated `failed_to_copy_plugin_default_hocon_config` warning.
 
 - [#18891](https://github.com/emqx/emqx/pull/18891) Fixed an issue where installing and starting the Sync Request plugin on EMQX 6.x failed with a `missing_i18n_ref` error. The plugin now starts successfully and its API endpoint is available.
 
-- [#18957](https://github.com/emqx/emqx/pull/18957) Fixed a bug where uploading a plugin package from the Dashboard replied `ALREADY_INSTALLED` and refused to install it when the package tarball was already present in the plugin install directory but had not been unpacked. The upload now goes through the installation allow-list first, replying `403 FORBIDDEN` with the `emqx ctl plugins allow` instruction when the package is not authorized. Leftovers of an interrupted or failed installation (a directory without a readable `release.json`, or a manifest whose declared applications have not been unpacked) are no longer mistaken for an installation either: they are purged and the uploaded package is unpacked into a clean directory. An installation whose applications are still loaded is never purged: such an upload is refused with `plugin_is_in_use` and the plugin must be stopped first. A plugin installation attempt which is refused or which fails no longer deletes the package file it replaced, so the local copy of the installed package survives a refused upload and can still be used to repair the installation. An upload is refused when the package file it would replace can not be read, and a node where the plugin is already completely installed keeps the package which matches its files.
+- [#18957](https://github.com/emqx/emqx/pull/18957) Fixed a bug where uploading a plugin package from the Dashboard replied `ALREADY_INSTALLED` and refused to install it when the package tarball was already present in the plugin install directory but had not been unpacked. The upload now goes through the installation allow-list first, replying `403 FORBIDDEN` with the `emqx ctl plugins allow` instruction when the package is not authorized. Leftovers of an interrupted or failed installation (a directory without a readable `release.json`, or a manifest whose declared applications have not been unpacked) are no longer mistaken for an installation either: they are purged and the uploaded package is unpacked into a clean directory. An installation whose applications are still loaded is never purged: such an upload is refused with `plugin_is_in_use` and the plugin must be stopped first. A plugin installation attempt which is refused or which fails no longer deletes the package file it replaced, so the local copy of the installed package survives a refused upload and can still be used to repair the installation. An upload is refused when the package file it would replace cannot be read, and a node where the plugin is already completely installed keeps the package which matches its files.
 
 #### Observability
 
@@ -306,13 +303,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18292](https://github.com/emqx/emqx/pull/18292) Fixed an issue where the `/prometheus/namespaced_stats` endpoint reported zero-valued metrics for a namespace that does not exist. When the requested namespace is not known, its metrics are now omitted from the output, consistent with the collection of metrics for all namespaces.
 
-- [#18521](https://github.com/emqx/emqx/pull/18521) Identify the client in the connection shutdown report emitted when a connection exceeds a force-shutdown limit (`force_shutdown.max_mailbox_size` or `force_shutdown.max_heap_size`).
+- [#18521](https://github.com/emqx/emqx/pull/18521) Identified the client in the connection shutdown report emitted when a connection exceeds a force-shutdown limit (`force_shutdown.max_mailbox_size` or `force_shutdown.max_heap_size`).
 
   The shutdown reason now includes a `label` field. For an established connection, it holds the client ID. For a connection shut down before CONNECT completes, it holds the listener name and peer address. Previously the report contained only the limit and the measured value, so the operator could not tell which client was shut down.
 
 - [#18677](https://github.com/emqx/emqx/pull/18677) Audit records for data-backup requests now identify the namespace a request targeted. Previously, exporting, importing, uploading, or deleting a backup in different namespaces produced audit records that looked identical, so it was not possible to tell which namespace's backup was affected. The audit log now also records any query parameters a request carried.
 
-- [#18684](https://github.com/emqx/emqx/pull/18684) Fixed a crash on connect when OpenTelemetry tracing was enabled and an MQTT 5 client's CONNECT packet carried will User-Property entries.
+- [#18684](https://github.com/emqx/emqx/pull/18684) Fixed a crash on connect when OpenTelemetry tracing was enabled and an MQTT 5 client's CONNECT packet included User Property entries in the Will Properties field.
 
 - [#18686](https://github.com/emqx/emqx/pull/18686) Audit records for authorization, authentication, connector, bridge, rule-engine and trace requests now identify the namespace a request targeted. Previously, these audit records looked identical across namespaces, so it was not possible to tell which namespace's resources a request affected. The audit log now also records any query parameters a request carried.
 
@@ -334,9 +331,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   These APIs limit the total payload size of one response page by the `max_payload_bytes` parameter (default 1MB). When this limit cut a page short, the returned `meta.position` pointed past the messages that were left out, so requesting the next page from that position skipped them. This could look like lost messages, for example a `mqueue_len` count higher than the number of messages the API returns. Now `meta.position` points at the last returned message, and the next page continues with the first message that was left out.
 
-- [#18544](https://github.com/emqx/emqx/pull/18544) Previously, when using `GET /clients_v2` HTTP API to fetch all the clients using memory sessions, a cursor could be replied, which in turn would return then an empty page.  Now, such cursor is no longer returned.
+- [#18544](https://github.com/emqx/emqx/pull/18544) Fixed `GET /clients_v2` returning a cursor after all clients using memory sessions had already been returned. Following that cursor returned an empty page. The API no longer returns a cursor when no more results are available.
 
-- [#18558](https://github.com/emqx/emqx/pull/18558) Previously, the `fields` query parameter of the `GET /clients_v2` would not be honored.
+- [#18558](https://github.com/emqx/emqx/pull/18558) Fixed `GET /clients_v2` ignoring the `fields` query parameter.
 
 - [#18600](https://github.com/emqx/emqx/pull/18600) Fixed client list API filtering when durable sessions are enabled.
 
@@ -366,7 +363,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Deployment
 
-- [#18523](https://github.com/emqx/emqx/pull/18523) Stop MQTT listeners before stopping applications during node shutdown.
+- [#18523](https://github.com/emqx/emqx/pull/18523) Stopped MQTT listeners before stopping applications during node shutdown.
 
   Previously, listeners kept accepting and processing client traffic while the applications behind the publish path were already stopped. Publishing clients could then trigger a burst of `hook_callback_exception` errors in the log, for example from the rule engine, until the listeners stopped a few seconds later. Listeners now stop first, so no client traffic is processed during application shutdown.
 
@@ -380,11 +377,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#19049](https://github.com/emqx/emqx/pull/19049) Published the offline Docker image tarballs for each platform in the release download directory. The files are named `emqx-enterprise-<version>-docker-amd64.tar.gz` and `emqx-enterprise-<version>-docker-arm64.tar.gz`.
 
-  Stopped publishing the Snowflake ODBC Docker images (tags with the `-sf` suffix). Existing `-sf` tags on Docker Hub stay available, but new releases do not get one.
+  Stopped publishing the Snowflake ODBC Docker images (tags with the `-sf` suffix). Existing `-sf` tags on Docker Hub stay available, but new releases no longer include `-sf` images.
 
 #### Miscellaneous
 
-- [#18444](https://github.com/emqx/emqx/pull/18444) Fixed the byte-size units `b` and `B` requiring quotes in configuration files.
+- [#18444](https://github.com/emqx/emqx/pull/18444) Fixed an issue where the byte-size units `b` and `B` required quotes in configuration files.
 
   `max_packet_size = 1MB` was accepted, but `max_packet_size = 1B` failed to parse and had to be written as `"1B"`. All byte-size units are now accepted without quotes.
 
@@ -394,7 +391,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The command printed the listener's enabled flag as `enbale`. It now prints `enable`. Scripts that parse this output must be updated to match the corrected name.
 
-- [#18862](https://github.com/emqx/emqx/pull/18862) Validate the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
+- [#18862](https://github.com/emqx/emqx/pull/18862) Validated the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
   Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
 
@@ -406,12 +403,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Data Integration
 
-- [#18515](https://github.com/emqx/emqx/pull/18515) Azure Blob Storage Action's `blob` template field now has the same schema validation as Aggregated S3's `key`, which verifies the allowed bindings are followed.
+- [#18515](https://github.com/emqx/emqx/pull/18515) The Azure Blob Storage action's `blob` template field now uses the same schema validation as the Aggregated S3 action's `key` field, ensuring that only allowed bindings are used.
 
 #### Observability
 
-- [#18528](https://github.com/emqx/emqx/pull/18528) Now, the exporter endpoint of an Opentelemetry integration is validated to be an URL with scheme and port.  Supported schemes are `http` and `https`, and the port must be explicitly set.
-
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry integration exporter endpoints must now be valid URLs that include a scheme and an explicit port. Supported schemes are `http` and `https`.
 
 ## 6.1.4
 
