@@ -8,6 +8,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
+#### Core MQTT Functionalities
+
+- [#18974](https://github.com/emqx/emqx/pull/18974) Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
+
 #### Data Integration
 
 - [#18926](https://github.com/emqx/emqx/pull/18926) Added IPv6 support to the Kafka, Confluent and Azure Event Hubs connectors.
@@ -18,6 +22,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   The upgraded Kafka client library also fixes a sync produce timeout. It could happen when SASL re-authentication ran while requests were still pending.
 
+- [#18515](https://github.com/emqx/emqx/pull/18515) The Azure Blob Storage action's `blob` template field now uses the same schema validation as the Aggregated S3 action's `key` field, ensuring that only allowed bindings are used.
+
 #### Plugins
 
 - [#18353](https://github.com/emqx/emqx/pull/18353) Added a new plugin `emqx_maptabs` providing named mapping tables for rule SQL.
@@ -27,6 +33,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Tables are managed with the `emqx ctl maptabs` CLI: loading or deleting a table on one node replicates the change to every node in the cluster, and a node that was down during an update catches up automatically when it rejoins.
 
   The plugin configuration provides safety limits: `max_tables` (default 100), `max_rows_per_table` (default 10,000), and `max_table_file_bytes` (default 10,000,000).
+
+#### Observability
+
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry integration exporter endpoints must now be valid URLs that include a scheme and an explicit port. Supported schemes are `http` and `https`.
 
 #### Performance
 
@@ -394,20 +404,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18862](https://github.com/emqx/emqx/pull/18862) Validated the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
   Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
-
-### Breaking Changes
-
-#### Core MQTT Functionalities
-
-- [#18974](https://github.com/emqx/emqx/pull/18974) Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
-
-#### Data Integration
-
-- [#18515](https://github.com/emqx/emqx/pull/18515) The Azure Blob Storage action's `blob` template field now uses the same schema validation as the Aggregated S3 action's `key` field, ensuring that only allowed bindings are used.
-
-#### Observability
-
-- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry integration exporter endpoints must now be valid URLs that include a scheme and an explicit port. Supported schemes are `http` and `https`.
 
 ## 6.1.4
 
