@@ -60,6 +60,12 @@ If any of the above conditions are not met, the import process will be aborted, 
 
 During the data import operation, data will be inserted (if it does not exist in the target EMQX cluster) or updated (if there are conflicts) into EMQX. The import process will not delete any existing data from the EMQX cluster.
 
+#### Namespace-Scoped Import Behavior
+
+Starting from EMQX 6.0.4, when you import a backup into a specific Namespace, EMQX applies only the configuration roots supported in that Namespace. If the Namespace configuration in the backup contains cluster-wide roots, such as authentication, authorization, ExHook, or listeners, EMQX skips those roots instead of writing them to the global configuration. A global import continues to apply cluster-wide configuration.
+
+EMQX logs a `data_import_skipped_global_roots` warning that lists the skipped roots and continues importing the supported roots from the same backup. Skipping these cluster-wide roots does not cause the entire import to fail. When you import through the CLI, the command output also lists the skipped roots. For imports through the Dashboard or REST API, check the EMQX logs for the warning.
+
 ::: tip Special Note
 
 In rare cases, existing data may be incompatible with the imported data. For example, an EMQX cluster uses built-in database authentication and sets the salt position to "suffix," while the imported data sets the same configuration to "prefix." After the import, the new configuration will take effect, and previously created old user credentials will no longer work.
