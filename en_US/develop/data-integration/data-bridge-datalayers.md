@@ -154,9 +154,9 @@ The steps below assume that both EMQX and Datalayers are running locally. If you
      - Default: `127.0.0.1:8361`
      - If using the `Arrow Flight` driver, communication occurs via gRPC on port `8360`.
 
-   - **Database Name**: The name of the target database in Datalayers, e.g., `mqtt`.
+   - **Database Name**: Required. Enter the name of the target database in Datalayers, for example, `mqtt`.
 
-   - **Username / Password**: Provide the credentials for Datalayers access. In this example: `admin` / `public`.
+   - **Username / Password** (Optional): Enter the credentials for accessing Datalayers, for example, `admin` / `public`. Leave these fields blank only if the Datalayers server accepts connections without credentials.
 
    - **Enable TLS** (Optional): Toggle to enable encrypted connections. When enabled, you can configure certificate paths and validation options. For more details, see [Enable TLS for External Resources](../../guides/network/overview.md#tls-for-external-resource-access).
 
