@@ -203,6 +203,10 @@ EMQX 授权支持的数据查询占位符如下：
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。
 - `${zone}`：在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于授权模板中。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
 
+::: tip
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符，但请勿在新模板中使用。
+:::
+
 LDAP 授权检查器不支持 `${peerport}` 和 `${peername}` 占位符。
 
 <!-- TODO

@@ -274,6 +274,10 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
   {allow, all, all, ["${zone}/${username}/#"]}
   ```
 
+::: tip
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符，但请勿在新模板中使用。
+:::
+
 ## 认证配置方式
 
 EMQX 提供了三种使用认证的配置方式，分别为：Dashboard、配置文件和 HTTP API。

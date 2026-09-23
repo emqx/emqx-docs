@@ -34,6 +34,10 @@ The request can use JSON format, with the following placeholders in the URL and 
 - `${retain}`: Whether the message to be published in the current request is a retained message.
 - `${zone}`: The client's Zone at runtime. The Zone is a logical classification of the client, such as region or environment, that can be dynamically applied based on the client's configuration.
 
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+:::
+
 ### Response
 
 After checking, the authorization service needs to return a response in the following format:

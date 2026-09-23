@@ -286,6 +286,10 @@ EMQX currently supports the following placeholders:
   {allow, all, all, ["${zone}/${username}/#"]}
   ```
 
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+:::
+
 ## Configure Authentication
 
 EMQX provides three ways to configure the authentication: Dashboard, Configuration file and HTTP API.

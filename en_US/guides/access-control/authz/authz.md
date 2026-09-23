@@ -204,6 +204,10 @@ The following placeholders are supported in query statements:
 * `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md).
 * `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authorization templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
 
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+:::
+
 The LDAP authorizer does not support the `${peerport}` or `${peername}` placeholders.
 
 ### Topic Placeholders
