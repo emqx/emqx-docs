@@ -217,7 +217,7 @@ EMQX provides REST APIs for managing exported files, and you can use the [MQTT F
 
 ::: warning Important Notice
 
-Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced Dashboard users and API keys cannot use File Transfer endpoints to list files or download locally stored files, regardless of role or scope. Authenticate as a global Dashboard user or with a global API key. The `/file_transfer` configuration endpoint is not affected.
+The File Transfer store is global and is not namespace-aware. Namespaced Dashboard users and API keys cannot use File Transfer endpoints to list files or download locally stored files, regardless of role or scope. Authenticate as a global Dashboard user or with a global API key. The `/file_transfer` configuration endpoint is not affected.
 
 :::
 

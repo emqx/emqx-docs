@@ -505,7 +505,7 @@ Even when a namespaced caller has the `connections` or `monitoring` scope, the c
 
 ### File Transfer Restrictions
 
-Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
+The File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
 
 - `GET /file_transfer/files`
 - `GET /file_transfer/files/:clientid/:fileid`

@@ -501,7 +501,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 文件传输限制
 
-从 EMQX 6.0.4 开始，文件传输使用全局存储，且不支持命名空间隔离。任何角色的命名空间调用方均无法访问以下文件传输内容端点，授予权限范围不能绕过此限制：
+文件传输使用全局存储，且不支持命名空间隔离。任何角色的命名空间调用方均无法访问以下文件传输内容端点，授予权限范围不能绕过此限制：
 
 - `GET /file_transfer/files`
 - `GET /file_transfer/files/:clientid/:fileid`

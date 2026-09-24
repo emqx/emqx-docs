@@ -165,7 +165,7 @@ For example:
   - Inflight messages: `GET /clients/:clientid/inflight_messages`
   - Retained messages: `GET /mqtt/retainer/messages`, `GET /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/message/:topic`, `DELETE /mqtt/retainer/messages`
   - Delayed messages: `GET /mqtt/delayed/messages`, `GET /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:node/:msgid`, `DELETE /mqtt/delayed/messages/:topic`
-- **Global-only File Transfer content endpoints**: Starting from EMQX 6.0.4, the File Transfer store is global and is not namespace-aware. To prevent access to files uploaded by clients outside the caller's namespace, the following endpoints are unavailable to namespaced Dashboard users and API keys of any role:
+- **Global-only File Transfer content endpoints**: The File Transfer store is global and is not namespace-aware. To prevent access to files uploaded by clients outside the caller's namespace, the following endpoints are unavailable to namespaced Dashboard users and API keys of any role:
   - List files: `GET /file_transfer/files`
   - List files for a transfer: `GET /file_transfer/files/:clientid/:fileid`
   - Download a file: `GET /file_transfer/file`

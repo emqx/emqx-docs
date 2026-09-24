@@ -166,7 +166,7 @@ ns:<NAMESPACE>::<ROLE>
   - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
   - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
-- **仅限全局用户访问的文件传输内容端点**：从 EMQX 6.0.4 开始，文件传输使用全局存储，且不支持命名空间隔离。为防止访问由其他命名空间中的客户端上传的文件，以下端点对任何角色的命名空间 Dashboard 用户和 API 密钥均不可用：
+- **仅限全局用户访问的文件传输内容端点**：文件传输使用全局存储，且不支持命名空间隔离。为防止访问由其他命名空间中的客户端上传的文件，以下端点对任何角色的命名空间 Dashboard 用户和 API 密钥均不可用：
   - 列出文件：`GET /file_transfer/files`
   - 列出指定传输的文件：`GET /file_transfer/files/:clientid/:fileid`
   - 下载文件：`GET /file_transfer/file`
