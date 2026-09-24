@@ -92,10 +92,10 @@ Mapping table 只能由管理员通过 CLI 管理。这些表在租户命名空�
 如果不同租户需要使用不同的行，请将租户信息编码到表数据中。例如，在查询 Key 中包含租户：
 
 ```sql
-maptab_lookup('signals', concat(concat(client_attrs.tns, ':'), item_id))
+maptab_lookup('signals', concat([client_attrs.tns, ':', item_id]))
 ```
 
-`concat` 函数仅接受 2 个参数，因此示例使用嵌套调用。
+`concat` 的列表形式会按顺序拼接所有元素，并将非字符串元素转换为对应的字符串表示。
 
 也可以为每个租户使用一张表，并在规则中组合表名。请对表中的每个 Key 和每个查询位置使用一致的约定。
 

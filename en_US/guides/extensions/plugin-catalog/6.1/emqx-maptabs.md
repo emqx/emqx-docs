@@ -92,10 +92,10 @@ Mapping tables are managed only by administrators through the CLI. The tables ar
 If rows must differ by tenant, encode the tenant in the table data. For example, include the tenant in the lookup key:
 
 ```sql
-maptab_lookup('signals', concat(concat(client_attrs.tns, ':'), item_id))
+maptab_lookup('signals', concat([client_attrs.tns, ':', item_id]))
 ```
 
-The `concat` function accepts two arguments, so the example uses nested calls.
+The list form of `concat` joins all elements in order and converts non-string elements to their string representations.
 
 You can also use one table per tenant and compose the table name in the rule. Apply the same convention to every key in the table and every lookup site.
 
