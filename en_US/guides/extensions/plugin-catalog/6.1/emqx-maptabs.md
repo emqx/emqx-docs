@@ -67,6 +67,8 @@ All command output is JSON, except that `emqx ctl maptabs get <name>` prints the
 
 Configure the plugin through the standard plugin configuration API `PUT /api/v5/plugins/<name-vsn>/config` or the plugin configuration file.
 
+All three configuration values must be positive integers. EMQX rejects a configuration update if a value is zero, negative, or not an integer.
+
 | Configuration | Default | Description |
 | --- | --- | --- |
 | `max_tables` | `100` | Maximum number of mapping tables. Loading a new table beyond this limit is rejected. Replacing an existing table is allowed. |
@@ -90,8 +92,10 @@ Mapping tables are managed only by administrators through the CLI. The tables ar
 If rows must differ by tenant, encode the tenant in the table data. For example, include the tenant in the lookup key:
 
 ```sql
-maptab_lookup('signals', concat(client_attrs.tns, ':', item_id))
+maptab_lookup('signals', concat([client_attrs.tns, ':', item_id]))
 ```
+
+The list form of `concat` joins all elements in order and converts non-string elements to their string representations.
 
 You can also use one table per tenant and compose the table name in the rule. Apply the same convention to every key in the table and every lookup site.
 
