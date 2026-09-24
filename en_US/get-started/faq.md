@@ -91,6 +91,7 @@ Here are some common disconnection reasons:
 - `keepalive_timeout`: The client heartbeat timed out and the connection was closed by EMQX.
 - `tcp_closed`: The client directly closed the TCP connection without sending a DISCONNECT packet.
 - `frame_too_large`: The size of the packet sent by the client exceeds the maximum limit and the connection was closed by EMQX.
+- `connect_packet_too_large`: The client sent a CONNECT packet that exceeded `mqtt.max_connect_packet_size`, so EMQX closed the connection.
 - `protocol_error`: EMQX closed the connection due to non-compliant behavior, e.g., the client sent multiple CONNECT packets within the same connection.
 - `idle_timeout`: EMQX closed the connection because it did not receive a CONNECT packet from the client within 15 seconds of the TCP connection being established.
 
