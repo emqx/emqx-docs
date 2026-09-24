@@ -287,7 +287,7 @@ EMQX currently supports the following placeholders:
   ```
 
 ::: tip
-The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
 :::
 
 ## Configure Authentication

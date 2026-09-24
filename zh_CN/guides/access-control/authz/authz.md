@@ -204,7 +204,7 @@ EMQX 授权支持的数据查询占位符如下：
 - `${zone}`：在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于授权模板中。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
 
 ::: tip
-`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符，但请勿在新模板中使用。
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符。对于新模板，请在支持的场景中改用 `${peername}`。
 :::
 
 LDAP 授权检查器不支持 `${peerport}` 和 `${peername}` 占位符。

@@ -275,7 +275,7 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
   ```
 
 ::: tip
-`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符，但请勿在新模板中使用。
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符。对于新模板，请在支持的场景中改用 `${peername}`。
 :::
 
 ## 认证配置方式

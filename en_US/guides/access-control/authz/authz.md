@@ -205,7 +205,7 @@ The following placeholders are supported in query statements:
 * `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authorization templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
 
 ::: tip
-The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
 :::
 
 The LDAP authorizer does not support the `${peerport}` or `${peername}` placeholders.

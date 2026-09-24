@@ -35,7 +35,7 @@ The request can use JSON format, with the following placeholders in the URL and 
 - `${zone}`: The client's Zone at runtime. The Zone is a logical classification of the client, such as region or environment, that can be dynamically applied based on the client's configuration.
 
 ::: tip
-The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility, but avoid using them in new templates.
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
 :::
 
 ### Response

@@ -96,7 +96,7 @@ EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlen
 - `${zone}`: 客户端在运行时的 Zone。Zone 是对客户端的一种逻辑分类，例如区域或环境，可以根据客户端的配置动态应用。
 
 ::: tip
-`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符，但请勿在新模板中使用。
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符。对于新模板，请在支持的场景中改用 `${peername}`。
 :::
 
 ### 响应格式
