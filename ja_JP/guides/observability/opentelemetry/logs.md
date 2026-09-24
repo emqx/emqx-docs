@@ -1,14 +1,14 @@
-# OpenTelemetryを統合したログ管理
+# OpenTelemetry を統合したログ管理
 
-ファイルログと同様に、OpenTelemetryログは重要なイベント、ステータス情報、エラーメッセージを記録し、開発者や運用チームがアプリケーションの動作を理解しトラブルシューティングを行うのに役立ちます。ただし、OpenTelemetryログは標準化されたログフォーマットを採用しているため、ログの解析や分析、処理が容易です。さらに、OpenTelemetryログはTrace ID、タグ、属性などの豊富なコンテキスト情報をレコードに追加することをサポートしています。
+ファイルログと同様に、OpenTelemetry ログは重要なイベント、ステータス情報、エラーメッセージを記録し、開発者や運用チームがアプリケーションの動作を理解しトラブルシューティングを行うのに役立ちます。ただし、OpenTelemetry ログは標準化されたログフォーマットを採用しているため、ログの解析や分析、処理が容易です。さらに、OpenTelemetry ログは Trace ID、タグ、属性などの豊富なコンテキスト情報をレコードに追加することをサポートしています。
 
-本ページでは、EMQXにOpenTelemetryログハンドラーを統合して高度なログ管理を実現するための包括的なガイドを提供します。OpenTelemetry Collectorのセットアップ、EMQXでのOpenTelemetryログハンドラーの設定およびログのエクスポート、ログ過負荷の管理について説明します。この統合により、EMQXのログイベントを[OpenTelemetryログデータモデル](https://opentelemetry.io/docs/specs/otel/logs/data-model/)に準拠した形式でフォーマットし、設定済みのOpenTelemetry Collectorやバックエンドシステムにエクスポートできるようになり、監視やデバッグ機能が向上します。
+本ページでは、EMQX と OpenTelemetry ログハンドラーを統合して高度なログ管理を実現するための包括的なガイドを提供します。OpenTelemetry Collector のセットアップ、EMQX における OpenTelemetry ログハンドラーの設定とログのエクスポート、ログの過負荷管理について説明します。この統合により、EMQX のログイベントを [OpenTelemetry ログデータモデル](https://opentelemetry.io/docs/specs/otel/logs/data-model/) に準拠した形式でフォーマットし、設定済みの OpenTelemetry Collector またはバックエンドシステムにエクスポートできるため、監視やデバッグ機能が向上します。
 
-## OpenTelemetry Collectorのセットアップ
+## OpenTelemetry Collector のセットアップ
 
-EMQXのOpenTelemetryログを有効にする前に、OpenTelemetry CollectorおよびOpenTelemetry対応のログ収集システムをデプロイし設定する必要があります。本ガイドでは、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)のデプロイ方法と、debugエクスポーターを使ってログを`stdout`にリダイレクトする設定方法を説明します。
+EMQX の OpenTelemetry ログを有効にする前に、OpenTelemetry Collector と OpenTelemetry 互換のログ収集システムをデプロイおよび設定する必要があります。本ガイドでは、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started) のデプロイ方法と、デバッグエクスポーターを使用してログを `stdout` に転送する設定方法を説明します。
 
-1. `otel-logs-collector-config.yaml`という名前でOpenTelemetry Collectorの設定ファイルを作成します。
+1. `otel-logs-collector-config.yaml` という名前で OpenTelemetry Collector の設定ファイルを作成します。
 
    ```yaml
    receivers:
@@ -35,7 +35,7 @@ EMQXのOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
          exporters: [logging]
    ```
 
-2. 同じディレクトリにDocker Composeファイル`docker-compose-otel-logs.yaml`を作成します。
+2. 同じディレクトリに `docker-compose-otel-logs.yaml` という Docker Compose ファイルを作成します。
 
    ```yaml
    version: '3.9'
@@ -53,20 +53,20 @@ EMQXのOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
          - "4317:4317"   # OTLP gRPC receiver
    ```
 
-3. Docker Composeを使ってCollectorを起動します。
+3. Docker Compose を使って Collector を起動します。
 
    ```bash
    docker compose -f docker-compose-otel-logs.yaml up
    ```
 
-4. 起動後、OpenTelemetry Collectorは[http://localhost:4317](http://localhost:4317/)でアクセス可能になります。
+4. 起動後、OpenTelemetry Collector は [http://localhost:4317](http://localhost:4317/) でアクセス可能になります。
 
 
-## EMQXでOpenTelemetryログハンドラーを有効化
+## EMQX で OpenTelemetry ログハンドラーを有効化
 
-`opentelemetry.exporter.endpoint`には1つのURLを指定します。URLは`http`または`https`スキームを使用し、明示的なポート番号を含める必要があります。例として`http://localhost:4317`は有効ですが、`localhost:4317`や`http://localhost`は無効です。
+`opentelemetry.exporter.endpoint` は 1 つの URL を受け入れます。URL は `http` または `https` スキームを使用し、明示的なポート番号を含める必要があります。例えば `http://localhost:4317` は有効ですが、`localhost:4317` や `http://localhost` は無効です。
 
-1. EMQXがローカルで動作している前提で、`cluster.hocon`ファイルに以下の設定を追加します。
+1. EMQX がローカルで動作していることを想定し、`cluster.hocon` ファイルに以下の設定を追加します。
 
    ```bash
    opentelemetry {
@@ -80,27 +80,29 @@ EMQXのOpenTelemetryログを有効にする前に、OpenTelemetry Collectorお�
    }
    ```
 
-   また、ダッシュボードの **Management** -> **Monitoring** にある **Integration** タブからOpenTelemetryログ統合を設定することも可能です。
+   また、ダッシュボードの **Management** -> **Monitoring** にある **Integration** タブから OpenTelemetry ログ統合の設定も可能です。
 
-   ::: tip 補足
+   ::: tip 注意事項
 
-   `opentelemetry.logs.level`の設定は、[EMQXログハンドラー](../log.md)で設定されたデフォルトのログレベルにより上書きされます。例えば、OpenTelemetryのログレベルが`info`でも、EMQXのコンソールログレベルが`error`の場合、`error`以上のレベルのイベントのみがエクスポートされます。
+   `opentelemetry.logs.level` の設定は、[EMQX ログハンドラー](../log.md) で設定されたデフォルトのログレベルによって上書きされます。例えば、OpenTelemetry のログレベルが `info` でも、EMQX のコンソールログレベルが `error` に設定されている場合は、`error` レベル以上のイベントのみがエクスポートされます。
 
    :::
 
-2. EMQXノードを起動します。
+2. EMQX ノードを起動します。
 
-3. ダッシュボードを使ってアクセスできないHTTPサービスへのブリッジを作成するなど、EMQXのログイベントを発生させます。
+3. ダッシュボードからアクセスできない HTTP サービスへのブリッジ作成など、EMQX のログイベントを発生させます。
 
    <img src="./assets/otel-logs-bridge-example-en.png" alt="Otel-logs-HTTP-bridge-example" style="zoom:67%;" />
 
-4. しばらくすると（デフォルトで約1秒後）、Otel CollectorにHTTPブリッジ接続失敗を示すようなEMQXログイベントが表示されます。
+4. 数秒以内（デフォルトは約1秒）に、Otel Collector が HTTP ブリッジ接続失敗を示す EMQX ログイベントを受信していることを確認できます。
 
    ![Otel-collector-logs-debug-output](./assets/otel-collector-logs-debug-output.png)
 
-## ログ過負荷の管理
+## ログの過負荷管理
 
-EMQXはログイベントを蓄積し、定期的にバッチでエクスポートします。エクスポートの頻度は`opentelemetry.logs.scheduled_delay`パラメーターで制御され、デフォルトは1秒です。バッチ処理ログハンドラーには過負荷保護機能があり、蓄積可能なイベント数の上限が設定されています。デフォルトは2048件です。この上限は以下の設定で変更可能です。
+EMQX はログイベントを蓄積し、定期的にバッチでエクスポートします。
+このエクスポート頻度は `opentelemetry.logs.scheduled_delay` パラメータで制御され、デフォルトは 1 秒です。
+バッチングログハンドラーは過負荷保護機能を備えており、蓄積可能なイベント数の上限を持ち、デフォルトは 2048 です。以下の設定でこの上限を変更できます。
 
 ```bash
 opentelemetry {
@@ -108,10 +110,11 @@ opentelemetry {
 }
 ```
 
-`max_queue_size`の上限に達すると、新しいログイベントは現在のキューがエクスポートされるまで破棄されます。
+`max_queue_size` の上限に達すると、新しいログイベントは現在のキューがエクスポートされるまで破棄されます。
 
-::: tip 補足
+::: tip 注意事項
 
-OpenTelemetryログの過負荷保護は、デフォルトの[EMQXログハンドラー](../log.md)の過負荷保護とは独立して動作します。そのため、設定によっては同じログイベントがOpenTelemetryハンドラーで破棄される一方、デフォルトのEMQXログハンドラーでは記録される場合や、その逆もあり得ます。
+OpenTelemetry ログの過負荷保護は、デフォルトの [EMQX ログハンドラー](../log.md) の過負荷保護とは独立して動作します。
+そのため、設定によっては同じログイベントが OpenTelemetry ハンドラーで破棄され、デフォルトの EMQX ログハンドラーでは記録される場合や、その逆もあり得ます。
 
 :::
