@@ -365,6 +365,8 @@
 
 - [#18537](https://github.com/emqx/emqx/pull/18537) 修复了集群链接对暂时性消息转发连接错误的分类。此类错误现在归类为可恢复错误；受暂时性网络中断影响的消息会被缓冲并重试，而不是被视为失败。
 
+- [#19136](https://github.com/emqx/emqx/pull/19136) 修复了集群链接在与对端集群的连接中断时可能丢失在途消息的问题。现在，表明连接已断开或从未建立的错误（例如连接超时、DNS 解析失败或传输错误）会被视为可恢复错误。因此，受影响的消息会持续重试，直到请求过期，而不是被确认并计为失败。
+
 #### 配置管理
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) 修复了当底层集群 RPC 层因意外原因中止时（例如，当集群 RPC 表在节点启动或恢复期间尚不可用时 `{no_exists, cluster_rpc_mfa}`）时，配置更新命令（API 和 CLI）崩溃并显示 `function_clause` 崩溃报告。现在，此类失败将作为结构化错误返回给调用者。
@@ -428,6 +430,12 @@
 - [#18964](https://github.com/emqx/emqx/pull/18964) 修复了 SCRAM HTTP 身份验证后端拒绝 Dashboard 为其提交的 OAuth2 配置的问题。现在可以成功创建启用 OAuth2 的 `SCRAM` + `HTTP Server` 身份验证器，并且访问令牌将作为用户查找请求上的 `Bearer` 授权标头发送。
 
 - [#19003](https://github.com/emqx/emqx/pull/19003) 改进了 `PUT /api/v5/api_key/:name`，使其只更新请求正文中包含的字段。此前，部分更新还可能重写请求中未包含的字段，导致管理员无意中更改指定 API 密钥的权限。调用该端点原本就需要管理员权限。
+
+- [#19125](https://github.com/emqx/emqx/pull/19125) 修复了命名空间 Dashboard 用户和 API 密钥的默认 scope 不一致的问题。
+
+  - 未显式设置 scope 列表的命名空间管理员此前会获得全局管理员的 scope。创建或更新用户时提交 `"scopes": "unset"`，或更新时原样提交默认 scope 列表，都会触发该问题。现在，该用户会获得命名空间管理员的默认 scope。
+  - 创建时未指定 `scopes` 的命名空间查看者此前获得的 scope 比命名空间管理员更多，包括 `gateways`、`publish` 和 `audit`。现在，命名空间查看者和具有查看者角色的命名空间 API 密钥默认获得与命名空间管理员相同的管理 scope，但不包括仅供登录用户使用的 scope。命名空间查看者也不能再被授予 `gateways`、`publish`、`audit` 或 `mfa_management`。
+  - EMQX 启动时会从现有命名空间查看者存储的 scope 列表中删除 `gateways`、`publish`、`audit` 和 `mfa_management`。此类查看者将失去对网关端点的读取权限。命名空间用户原本就无法访问 `publish` 和 `audit` 端点。现有 API 密钥中存储的 scope 列表不会改变。
 
 #### 数据备份
 
@@ -529,6 +537,8 @@
 
 - [#18957](https://github.com/emqx/emqx/pull/18957) 修复了以下问题：插件包的 tarball 已存在于插件安装目录但尚未解压时，从 Dashboard 上传该插件包会返回 `ALREADY_INSTALLED` 并拒绝安装。现在，上传操作会先检查安装允许列表；插件包未获授权时，会返回 `403 FORBIDDEN`，并提示使用 `emqx ctl plugins allow` 命令。中断或失败安装留下的残留内容也不再被误认为已完成安装，例如缺少可读 `release.json` 的目录，或清单声明的应用尚未解压。此类残留内容会被清理，上传的插件包会解压到干净目录中。应用仍处于加载状态的安装不会被清理：此类上传会因 `plugin_is_in_use` 被拒绝，必须先停止插件。被拒绝或失败的插件安装不再删除其替换的插件包文件，因此上传被拒绝后，已安装插件包的本地副本仍会保留，可继续用于修复安装。如果无法读取待替换的插件包文件，上传会被拒绝。插件已完整安装的节点会保留与其文件匹配的插件包。
 
+- [#19195](https://github.com/emqx/emqx/pull/19195) 加强了插件包名称校验。
+
 #### REST API
 
 - [#18069](https://github.com/emqx/emqx/pull/18069) 修复了列出名称包含非 ASCII 字符（例如中文字符）的文件时，文件传输文件 API (`GET /api/v5/file_transfer/files`) 失败并出现 500 错误的问题。
@@ -604,6 +614,8 @@
 - [#18862](https://github.com/emqx/emqx/pull/18862) 增加了对传递给 `emqx_router_tool:scan_missing_routes/1` 和 `emqx_router_tool:reconcile_missing_routes/1` 的选项的验证。
 
   此前，无效的 `chunk` 或 `sleep_ms` 值会被静默接受并禁用扫描限速，导致扫描全速运行，而运维人员误以为扫描已限速。现在，该工具会抛出错误并指出有问题的选项。未知的选项键（例如拼写错误的 `chunks`）也会被拒绝。
+
+- [#19166](https://github.com/emqx/emqx/pull/19166) 修复了运行 `emqx ctl clients stats` 命令期间，如果有客户端连接或断开，命令会报错终止并留下不完整的 CSV 文件的问题。
 
 #### 部署
 

@@ -365,6 +365,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18537](https://github.com/emqx/emqx/pull/18537) Fixed Cluster Linking to classify temporary message-forwarding connection errors as recoverable. Messages affected by transient network outages are now buffered and retried instead of being counted as failed.
 
+- [#19136](https://github.com/emqx/emqx/pull/19136) Fixed an issue where a cluster link could drop the messages in flight when the connection to the peer cluster was lost. Connection failures that indicate that the connection was lost or never established (for example a connect timeout, a DNS resolution failure, or a transport error) are now treated as recoverable, so the affected messages are retried until the request expires instead of being acknowledged and counted as failed.
+
 #### Configuration Management
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) Fixed configuration update commands (REST API and CLI) crashing with a `function_clause` crash report when the underlying cluster RPC layer aborted with an unexpected reason, for example `{no_exists, cluster_rpc_mfa}` when the cluster RPC tables were not yet available during node startup or recovery. Such failures are now returned to the caller as a structured error instead.
@@ -428,6 +430,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18964](https://github.com/emqx/emqx/pull/18964) Fixed the SCRAM HTTP authentication backend rejecting the OAuth2 configuration that the Dashboard submits for it. Creating an `SCRAM` + `HTTP Server` authenticator with OAuth2 enabled now succeeds, and the access token is sent as a `Bearer` authorization header on the user lookup request.
 
 - [#19003](https://github.com/emqx/emqx/pull/19003) Hardened `PUT /api/v5/api_key/:name` so that it only updates the fields present in the request body. Previously a partial update could also rewrite fields it did not mention, so an administrator who was not paying close attention to every field could unintentionally change the permissions of the API key named in the request. Calling this endpoint already requires administrator privileges.
+
+- [#19125](https://github.com/emqx/emqx/pull/19125) Fixed inconsistent default scopes for namespaced Dashboard users and API keys.
+
+  - A namespaced administrator with no explicit scope list got the scopes of a global administrator. This happened when the user was created or updated with `"scopes": "unset"`, or when an update sent back the default scope list unchanged. The user now gets the namespaced administrator defaults.
+  - A namespaced viewer, created without `scopes`, got more scopes than a namespaced administrator: `gateways`, `publish`, and `audit`. A namespaced viewer and an API key with the namespaced viewer role now default to the same management scopes as a namespaced administrator, without the login-only scopes. A namespaced viewer can no longer be given `gateways`, `publish`, `audit`, or `mfa_management`.
+  - At startup, EMQX removes `gateways`, `publish`, `audit`, and `mfa_management` from the stored scope lists of existing namespaced viewers. Such a viewer loses read access to the gateway endpoints. The `publish` and `audit` endpoints were already denied to namespaced users. Stored scope lists of existing API keys are not changed.
 
 #### Data Backup
 
@@ -529,6 +537,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18957](https://github.com/emqx/emqx/pull/18957) Fixed a bug where uploading a plugin package from the Dashboard replied `ALREADY_INSTALLED` and refused to install it when the package tarball was already present in the plugin install directory but had not been unpacked. The upload now goes through the installation allow-list first, replying `403 FORBIDDEN` with the `emqx ctl plugins allow` instruction when the package is not authorized. Leftovers of an interrupted or failed installation (a directory without a readable `release.json`, or a manifest whose declared applications have not been unpacked) are no longer mistaken for an installation either: they are purged and the uploaded package is unpacked into a clean directory. An installation whose applications are still loaded is never purged: such an upload is refused with `plugin_is_in_use` and the plugin must be stopped first. A plugin installation attempt which is refused or which fails no longer deletes the package file it replaced, so the local copy of the installed package survives a refused upload and can still be used to repair the installation. An upload is refused when the package file it would replace cannot be read. A node where the plugin is already completely installed keeps the package that matches its files.
 
+- [#19195](https://github.com/emqx/emqx/pull/19195) Hardened plugin package name validation.
+
 #### REST API
 
 - [#18069](https://github.com/emqx/emqx/pull/18069) Fixed the file transfer files API (`GET /api/v5/file_transfer/files`) failing with a 500 error when listing files whose names contain non-ASCII characters, for example Chinese characters.
@@ -604,6 +614,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18862](https://github.com/emqx/emqx/pull/18862) Validated the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
   Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
+
+- [#19166](https://github.com/emqx/emqx/pull/19166) Fixed an issue where the `emqx ctl clients stats` command stopped with an error and left a partial CSV file when clients connected or disconnected while the command was running.
 
 #### Deployment
 
