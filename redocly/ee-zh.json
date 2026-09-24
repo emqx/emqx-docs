@@ -285,7 +285,7 @@
         }
       },
       "public.position": {
-        "description": "一个不透明的 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。",
+        "description": "在 `meta.position` 中返回的不透明 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。<br/>如果 `meta.position` 为 `end_of_data`，表示没有更多结果。不要在后续请求中发送 `end_of_data`。",
         "example": "none",
         "in": "query",
         "name": "position",
@@ -890,7 +890,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -1333,7 +1333,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -1850,7 +1850,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -2195,7 +2195,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -2519,7 +2519,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -2827,7 +2827,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -3386,7 +3386,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -3772,7 +3772,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -4245,7 +4245,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -4605,7 +4605,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -4647,217 +4647,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
                 ],
                 "type": "string"
               },
@@ -4869,31 +4659,25 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "influxdb"
+                  "alloydb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -4905,7 +4689,223 @@
               },
               {
                 "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
                 ],
                 "type": "string"
               }
@@ -5939,13 +5939,12 @@
             "type": "string"
           },
           "role": {
-            "default": "administrator",
             "description": "用于此 API 的角色",
             "example": "administrator",
             "type": "string"
           },
           "scopes": {
-            "description": "授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式范围列表的记录呈现的哨兵值（包括使用等价于 unset 的范围创建或更新的记录，以及从不支持范围功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式范围策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
+            "description": "授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式作用域列表的记录呈现的哨兵值（包括使用等价于 unset 的作用域创建或更新的记录，以及从不支持作用域功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
             "example": [
               "connections",
               "monitoring"
@@ -5971,12 +5970,12 @@
       "api_key.scope_info": {
         "properties": {
           "desc": {
-            "description": "范围覆盖内容的可读描述。",
+            "description": "该作用域覆盖内容的可读描述。",
             "example": "Client connections, subscriptions, topics, banning, retained messages, file transfer, and delayed messages",
             "type": "string"
           },
           "name": {
-            "description": "范围名称，用作 API 端点功能类别的稳定标识符。",
+            "description": "作用域名称，用作 API 端点功能类别的稳定标识符。",
             "example": "connections",
             "type": "string"
           }
@@ -5986,7 +5985,7 @@
       "api_key.scopes_response": {
         "properties": {
           "scopes": {
-            "description": "所有可用范围及其名称与描述。",
+            "description": "所有可用作用域及其名称与描述。",
             "items": {
               "$ref": "#/components/schemas/api_key.scope_info"
             },
@@ -7057,7 +7056,7 @@
             "type": "string"
           },
           "principal": {
-            "description": "服务器的 Kerberos 主体。<br/>例如： <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>。<br/>注意：所使用的领域需要在 EMQX 节点的 /etc/krb5.conf 文件中配置。",
+            "description": "服务器的 Kerberos 主体。<br/>例如： <code>mqtt/emqx-cluster-1.example.com@MY_REALM.EXAMPLE.COM</code>。<br/>注意：所使用的领域需要在 EMQX 节点的默认配置文件 krb5.conf（通常位于 `/etc`）中配置。",
             "type": "string"
           }
         },
@@ -8485,6 +8484,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 客户端凭证（Client Credentials）认证。启用后，EMQX 会使用 `client_credentials`<br/>授权方式从配置的令牌端点获取 OAuth2 访问令牌，并在每个出站请求上以<br/>`Authorization: Bearer <token>` 形式注入。令牌会被缓存并在过期前刷新。",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "连接池大小。",
@@ -8613,6 +8623,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 客户端凭证（Client Credentials）认证。启用后，EMQX 会使用 `client_credentials`<br/>授权方式从配置的令牌端点获取 OAuth2 访问令牌，并在每个出站请求上以<br/>`Authorization: Bearer <token>` 形式注入。令牌会被缓存并在过期前刷新。",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -10940,7 +10961,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -11478,12 +11499,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "默认为逗号 ','，适用于 VALUE 格式。您也可以使用其他分隔符， 请参考 [INSERT INTO 语句](https://clickhouse.com/docs/en/sql-reference/statements/insert-into)。",
+            "description": "此参数已被忽略，仅为兼容性而保留。动作会根据 SQL 格式确定批量分隔符。",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "可以使用 ${field} 占位符来引用消息与客户端上下文中的变量，请确保对应字段存在且数据格式符合预期。此处不支持 [SQL 预处理](https://docs.emqx.com/zh/enterprise/v5.0/data-integration/data-bridges.html#sql-预处理)。",
+            "description": "受限的 ClickHouse `INSERT` 模板。支持 `VALUES`、`FORMAT Values` 和 `JSONCompactEachRow` 格式。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句和动态标识符。",
             "format": "sql",
             "type": "string"
           },
@@ -11569,7 +11590,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -12212,7 +12233,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -12851,7 +12872,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -13515,7 +13536,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -13946,7 +13967,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -14530,7 +14551,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -15318,7 +15339,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -16106,7 +16127,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -16368,7 +16389,7 @@
             "type": "string"
           },
           "kerberos_principal": {
-            "description": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM/code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的 /etc/krb5.conf 中。",
+            "description": "SASL GSSAPI 认证方法的 Kerberos 主体，例如 <code>kafka/node1.example.com@EXAMPLE.COM</code>，注意：这里使用的 realm 需要配置在 EMQX 服务器的默认配置文件 krb5.conf 中（通常位于 `/etc`）。",
             "type": "string"
           }
         },
@@ -17333,6 +17354,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "连接 Kafka broker 时使用的 IP 地址族。<br/>- <code>auto</code>：按 IP 地址自身的地址族连接。对于主机名，先尝试 IPv4，IPv4 失败后再尝试 IPv6。<br/>- <code>ipv4</code>：仅通过 IPv4 连接。<br/>- <code>ipv6</code>：仅通过 IPv6 连接。当 broker 只能通过 IPv6 访问时使用此选项。",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "设置‘true’让系统内核立即发送。否则当需要发送的内容很少时，可能会有一定延迟（默认 40 毫秒）。",
@@ -17601,7 +17632,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -18639,7 +18670,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -19356,7 +19387,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -19908,7 +19939,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -20576,7 +20607,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -20895,7 +20926,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -21532,7 +21563,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -21928,7 +21959,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -22543,7 +22574,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "S3 端点的主机。",
+            "description": "S3 端点的主机。<br/><br/>注意：即使使用虚拟主机（`vhost`）访问方式，也**不要**指定包含存储桶名称的端点。存储桶名称在每个动作中单独指定，并会自动添加到端点前面。",
             "type": "string"
           },
           "name": {
@@ -22715,7 +22746,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "S3 端点的主机。",
+            "description": "S3 端点的主机。<br/><br/>注意：即使使用虚拟主机（`vhost`）访问方式，也**不要**指定包含存储桶名称的端点。存储桶名称在每个动作中单独指定，并会自动添加到端点前面。",
             "type": "string"
           },
           "name": {
@@ -22852,7 +22883,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "S3 端点的主机。",
+            "description": "S3 端点的主机。<br/><br/>注意：即使使用虚拟主机（`vhost`）访问方式，也**不要**指定包含存储桶名称的端点。存储桶名称在每个动作中单独指定，并会自动添加到端点前面。",
             "type": "string"
           },
           "port": {
@@ -23142,7 +23173,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -23170,7 +23201,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL 模板",
+            "description": "受限的 SQL Server INSERT INTO VALUES 模板。占位符只能出现在值的位置和字符串值中。不允许使用注释、额外语句或动态标识符，也不允许在模板中配置多个数据行。",
             "format": "sql",
             "type": "string"
           },
@@ -23256,7 +23287,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -23929,7 +23960,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -24139,7 +24170,7 @@
             "type": "integer"
           },
           "probe_table_name": {
-            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "description": "用于健康检查探测连通性的现有时序表名称。未设置时，健康检查将回退为列出所有时序表。",
             "type": "string"
           },
           "resource_opts": {
@@ -24311,7 +24342,7 @@
             "type": "integer"
           },
           "probe_table_name": {
-            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "description": "用于健康检查探测连通性的现有时序表名称。未设置时，健康检查将回退为列出所有时序表。",
             "type": "string"
           },
           "resource_opts": {
@@ -24451,7 +24482,7 @@
             "type": "integer"
           },
           "probe_table_name": {
-            "description": "Name of an existing timeseries table used to probe connectivity for health checks. When unset, the health check falls back to listing all timeseries tables.",
+            "description": "用于健康检查探测连通性的现有时序表名称。未设置时，健康检查将回退为列出所有时序表。",
             "type": "string"
           },
           "resource_opts": {
@@ -24551,7 +24582,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL 模板",
+            "description": "受限的 TDengine INSERT 模板。支持多表 VALUES 插入和 USING 超级表 TAGS 子句。目标表名可以是裸名称或用反引号括起的名称，并可包含占位符，例如 `test_${clientid}`。EMQX 会将完整的目标表名渲染为一个带引号的标识符。不允许使用注释、FILE 输入和额外语句。",
             "format": "sql",
             "type": "string"
           },
@@ -24640,7 +24671,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -25429,7 +25460,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -32425,7 +32456,7 @@
             "type": "string"
           },
           "scopes": {
-            "description": "控制台用户范围：在用户角色之外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持控制台用户范围的版本升级；运行时会对其回退到角色默认范围。客户端应将 `unset` 视为“尚未设置显式范围策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意范围以及四个仅登录范围：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个范围中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，它仅作为自我豁免键，使用户能够对其自身的 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
+            "description": "Dashboard 用户作用域：与用户角色共同生效的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持 Dashboard 用户作用域的版本升级；运行时会对其回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个作用域中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，该作用域仅用于对自身进行豁免，使用户能够为自己的 MFA 绕过 `force_mfa` 和 `admin_required` 限制。",
             "example": [
               "user_management",
               "mfa_management"
@@ -34197,6 +34228,28 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "CONNECT 报文的最大长度。最大值：256 MB。<br/>当 CONNECT 报文超过此长度时，EMQX 会关闭连接。<br/>此限制在 `max_packet_size` 之外额外生效，两者中较小的值适用于 CONNECT 报文。",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "CONNECT 报文中允许的用户属性键值对的最大数量。<br/>该限制分别作用于 CONNECT 属性和遗嘱属性。<br/>当 CONNECT 报文携带的键值对数量超过此值时，EMQX 会关闭连接。<br/>设置为 `infinity` 表示不限制数量。",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "允许在完成应答前同时投递的 QoS 1 和 QoS 2 消息的最大数量。",
@@ -34385,7 +34438,7 @@
           },
           "session_expiry_interval": {
             "default": "2h",
-            "description": "指定会话将在连接断开后多久过期，仅适用于非 MQTT 5.0 的连接。",
+            "description": "指定客户端断开连接后，EMQX 保留会话的时长。<br/>适用于以 `Clean Session = false` 连接的 MQTT 3.1 和 3.1.1 客户端。<br/>MQTT 5.0 客户端通过 CONNECT 报文的 `Session-Expiry-Interval` 属性自行设置该值。<br/><br/>使用默认的内存会话存储时，断开的会话会在整个时长内驻留在内存中。请为此预留内存，或使用将会话状态存储到磁盘的持久会话。",
             "example": "12m",
             "type": "string"
           },
@@ -39761,7 +39814,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "99BA1B162E14C86A",
+            "example": "615BB7B4DD27EFC6",
             "type": "string"
           },
           "status": {
@@ -42365,7 +42418,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "S3 端点的主机。",
+            "description": "S3 端点的主机。<br/><br/>注意：即使使用虚拟主机（`vhost`）访问方式，也**不要**指定包含存储桶名称的端点。存储桶名称在每个动作中单独指定，并会自动添加到端点前面。",
             "type": "string"
           },
           "max_part_size": {
@@ -42482,6 +42535,7 @@
           },
           "password": {
             "description": "password 重写模板",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -43842,7 +43896,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -43963,7 +44017,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -50703,7 +50757,7 @@
         "properties": {
           "endpoint": {
             "default": "http://localhost:4317",
-            "description": "导出器将要发送 Open Telemetry 信号数据的目标 URL。",
+            "description": "导出器将要发送 OpenTelemetry 信号数据的目标 URL。必须显式指定端口。",
             "type": "string"
           },
           "headers": {
@@ -50714,7 +50768,7 @@
           },
           "protocol": {
             "default": "grpc",
-            "description": "Open Telemetry 导出器的传输协议",
+            "description": "OpenTelemetry 导出器的传输协议。<br/>仅支持 `grpc`。该导出器无法发送到 OTLP/HTTP 端点。",
             "enum": [
               "grpc"
             ],
@@ -51524,7 +51578,7 @@
       "public.continuation_meta": {
         "properties": {
           "position": {
-            "description": "一个不透明的 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。",
+            "description": "在 `meta.position` 中返回的不透明 token，可用于后续请求以获取下一批结果：`?position={prev_response.meta.position}`。<br/>用于替代 `page` 参数以遍历高度动态的数据。可以省略或设置为 `none` 以获取第一批数据。<br/>如果 `meta.position` 为 `end_of_data`，表示没有更多结果。不要在后续请求中发送 `end_of_data`。",
             "example": "none",
             "oneOf": [
               {
@@ -51734,7 +51788,7 @@
           "request_ttl": {
             "default": "45s",
             "deprecated": true,
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -52640,7 +52694,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -53608,7 +53662,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -53809,7 +53863,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -53974,7 +54028,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -54107,7 +54161,7 @@
             "description": "资源相关的选项。"
           },
           "rocketmq_namespace": {
-            "description": "The namespace field MUST be set if you are using the RocketMQ service in<br/>aliyun cloud and also the namespace is enabled,<br/>or if you have configured a namespace in your RocketMQ server.<br/>For RocketMQ in aliyun cloud, the namespace is the instance ID.",
+            "description": "如果你正在使用阿里云的 RocketMQ 服务并且启用了命名空间，或者您在自己的 RocketMQ 服务器中配置了命名空间，则必须配置命名空间字段。对于阿里云中的 RocketMQ 服务，命名空间就是实例 ID。",
             "type": "string"
           },
           "secret_key": {
@@ -57027,7 +57081,7 @@
             "default": [
               "openid"
             ],
-            "description": "范围，默认值是 `[\"openid\"]`.",
+            "description": "作用域，默认值是 `[\"openid\"]`。",
             "items": {
               "type": "string"
             },
@@ -57656,7 +57710,7 @@
           },
           "request_ttl": {
             "default": "infinity",
-            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。",
+            "description": "从请求进入缓冲区的时刻开始，如果请求在指定的时间内仍然停留在缓冲区中，或者已经发送但没有及时收到响应或确认，该请求将被视为过期。<br/><br/>注意，如果该参数小于 `health_check_timeout` 与连接重建所需时间之和，那么在连接器断开期间排队的消息会因过期而被丢弃，因为断开期间不会尝试发送消息。建议将该参数设置为大于健康检查超时时间，并为连接建立预留余量。",
             "oneOf": [
               {
                 "enum": [
@@ -58727,7 +58781,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.5-rc.1"
+    "version": "6.1.5-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58743,100 +58797,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "cassandra",
-                      "mongodb",
-                      "oracle",
                       "pgsql",
-                      "influxdb",
-                      "couchbase",
-                      "bigquery",
-                      "snowflake_streaming",
-                      "alloydb",
-                      "emqx_tables",
-                      "cockroachdb",
-                      "timescale",
-                      "pulsar",
-                      "rabbitmq",
-                      "datalayers",
-                      "redshift",
-                      "dynamo",
-                      "tdengine",
-                      "redis",
-                      "clickhouse",
-                      "s3tables",
-                      "matrix",
-                      "tablestore",
-                      "kinesis",
-                      "disk_log",
-                      "azure_event_hub_producer",
-                      "rocketmq",
-                      "opents",
-                      "snowflake",
-                      "http",
-                      "syskeeper_forwarder",
-                      "s3",
-                      "mqtt",
-                      "iotdb",
-                      "elasticsearch",
-                      "azure_blob_storage",
-                      "doris",
-                      "sqlserver",
                       "gcp_pubsub_producer",
-                      "confluent_producer",
-                      "greptimedb",
+                      "iotdb",
                       "mysql",
+                      "elasticsearch",
+                      "s3",
+                      "bigquery",
                       "aws_timestream",
-                      "kafka_producer"
+                      "snowflake",
+                      "cassandra",
+                      "tdengine",
+                      "oracle",
+                      "dynamo",
+                      "emqx_tables",
+                      "opents",
+                      "kinesis",
+                      "clickhouse",
+                      "timescale",
+                      "disk_log",
+                      "doris",
+                      "couchbase",
+                      "datalayers",
+                      "influxdb",
+                      "http",
+                      "tablestore",
+                      "sqlserver",
+                      "matrix",
+                      "cockroachdb",
+                      "rocketmq",
+                      "greptimedb",
+                      "pulsar",
+                      "mqtt",
+                      "kafka_producer",
+                      "redis",
+                      "redshift",
+                      "confluent_producer",
+                      "s3tables",
+                      "mongodb",
+                      "rabbitmq",
+                      "alloydb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "snowflake_streaming",
+                      "azure_blob_storage"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "cassandra",
-                      "mongodb",
-                      "oracle",
                       "pgsql",
-                      "influxdb",
-                      "couchbase",
-                      "bigquery",
-                      "snowflake_streaming",
-                      "alloydb",
-                      "emqx_tables",
-                      "cockroachdb",
-                      "timescale",
-                      "pulsar",
-                      "rabbitmq",
-                      "datalayers",
-                      "redshift",
-                      "dynamo",
-                      "tdengine",
-                      "redis",
-                      "clickhouse",
-                      "s3tables",
-                      "matrix",
-                      "tablestore",
-                      "kinesis",
-                      "disk_log",
-                      "azure_event_hub_producer",
-                      "rocketmq",
-                      "opents",
-                      "snowflake",
-                      "http",
-                      "syskeeper_forwarder",
-                      "s3",
-                      "mqtt",
-                      "iotdb",
-                      "elasticsearch",
-                      "azure_blob_storage",
-                      "doris",
-                      "sqlserver",
                       "gcp_pubsub_producer",
-                      "confluent_producer",
-                      "greptimedb",
+                      "iotdb",
                       "mysql",
+                      "elasticsearch",
+                      "s3",
+                      "bigquery",
                       "aws_timestream",
-                      "kafka_producer"
+                      "snowflake",
+                      "cassandra",
+                      "tdengine",
+                      "oracle",
+                      "dynamo",
+                      "emqx_tables",
+                      "opents",
+                      "kinesis",
+                      "clickhouse",
+                      "timescale",
+                      "disk_log",
+                      "doris",
+                      "couchbase",
+                      "datalayers",
+                      "influxdb",
+                      "http",
+                      "tablestore",
+                      "sqlserver",
+                      "matrix",
+                      "cockroachdb",
+                      "rocketmq",
+                      "greptimedb",
+                      "pulsar",
+                      "mqtt",
+                      "kafka_producer",
+                      "redis",
+                      "redshift",
+                      "confluent_producer",
+                      "s3tables",
+                      "mongodb",
+                      "rabbitmq",
+                      "alloydb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "snowflake_streaming",
+                      "azure_blob_storage"
                     ],
                     "type": "string"
                   },
@@ -70567,13 +70621,12 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式范围列表的记录呈现的哨兵值（包括使用等价于 unset 的范围创建或更新的记录，以及从不支持范围功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式范围策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
+                      "description": "授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式作用域列表的记录呈现的哨兵值（包括使用等价于 unset 的作用域创建或更新的记录，以及从不支持作用域功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
                       "example": [
                         "connections",
                         "monitoring"
@@ -70675,7 +70728,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "要授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。创建时若省略，服务器会物化角色默认值——administrator/viewer 获取所有管理范围，publisher 仅获取 `publish`。字面字符串 `unset` 或与角色默认值相同的列表表示“无显式范围策略”：该 key 将不存储范围列表，并跟随角色默认值（这使得客户端可以不加修改地重新提交读取返回的值）。发送显式空列表 `[]` 可创建拒绝所有的 key（仅 `/status` 等匿名端点仍可访问）。",
+                    "description": "要授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。创建时若省略，服务器会物化角色默认值——administrator/viewer 获取所有管理作用域，publisher 仅获取 `publish`。字面字符串 `unset` 或与角色默认值相同的列表表示“无显式作用域策略”：该 key 将不存储作用域列表，并跟随角色默认值（这使得客户端可以不加修改地重新提交读取返回的值）。发送显式空列表 `[]` 可创建拒绝所有的 key（仅 `/status` 等匿名端点仍可访问）。",
                     "example": [
                       "clients",
                       "rules"
@@ -70900,13 +70953,12 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式范围列表的记录呈现的哨兵值（包括使用等价于 unset 的范围创建或更新的记录，以及从不支持范围功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式范围策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
+                      "description": "授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式作用域列表的记录呈现的哨兵值（包括使用等价于 unset 的作用域创建或更新的记录，以及从不支持作用域功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
                       "example": [
                         "connections",
                         "monitoring"
@@ -70994,7 +71046,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "过期时间。可以是 ISO 8601 时间戳/纪元秒，或对永不过期的 key 使用 `infinity`。",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -71026,13 +71077,12 @@
                     "type": "string"
                   },
                   "role": {
-                    "default": "administrator",
                     "description": "用于此 API 的角色",
                     "example": "administrator",
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "要授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。创建时若省略，服务器会物化角色默认值——administrator/viewer 获取所有管理范围，publisher 仅获取 `publish`。字面字符串 `unset` 或与角色默认值相同的列表表示“无显式范围策略”：该 key 将不存储范围列表，并跟随角色默认值（这使得客户端可以不加修改地重新提交读取返回的值）。发送显式空列表 `[]` 可创建拒绝所有的 key（仅 `/status` 等匿名端点仍可访问）。",
+                    "description": "要授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。创建时若省略，服务器会物化角色默认值——administrator/viewer 获取所有管理作用域，publisher 仅获取 `publish`。字面字符串 `unset` 或与角色默认值相同的列表表示“无显式作用域策略”：该 key 将不存储作用域列表，并跟随角色默认值（这使得客户端可以不加修改地重新提交读取返回的值）。发送显式空列表 `[]` 可创建拒绝所有的 key（仅 `/status` 等匿名端点仍可访问）。",
                     "example": [
                       "clients",
                       "rules"
@@ -71135,13 +71185,12 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "用于此 API 的角色",
                       "example": "administrator",
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "授予此 API key 的范围名称列表。每个范围是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式范围列表的记录呈现的哨兵值（包括使用等价于 unset 的范围创建或更新的记录，以及从不支持范围功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式范围策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
+                      "description": "授予此 API key 的作用域名称列表。每个作用域是稳定的功能类别（例如 connections、publish、monitoring）。字面字符串 `unset` 是为不含显式作用域列表的记录呈现的哨兵值（包括使用等价于 unset 的作用域创建或更新的记录，以及从不支持作用域功能的版本升级而来的记录）；运行时会对这类记录回退到角色默认值，客户端应将其视为“无显式作用域策略”。空列表 `[]` 表示拒绝所有（仅 `/status` 等匿名端点仍可访问）。",
                       "example": [
                         "connections",
                         "monitoring"
@@ -71229,7 +71278,7 @@
     },
     "/api_key_scopes": {
       "get": {
-        "description": "列出所有可用的 API key 范围。此 API 只能使用 bearer token 请求。",
+        "description": "列出所有可用的 API key 作用域。此 API 只能使用 bearer token 请求。",
         "parameters": [],
         "responses": {
           "200": {
@@ -71248,7 +71297,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "列出 API key 范围",
+        "summary": "列出 API key 作用域",
         "tags": [
           "API Keys"
         ]
@@ -78602,7 +78651,7 @@
             }
           },
           {
-            "description": "客户端的未确认消息（inflight）/ 消息队列（mqueue）消息 payload 限制。<br/>返回的所有消息总负载大小不会超过此值。<br/>超出限制的消息将在响应中被静默省略。<br/>唯一的例外是当第一条消息的负载已超过限制时，在这种情况下，该消息仍会被返回。",
+            "description": "客户端的未确认消息（inflight）/ 消息队列（mqueue）消息 payload 限制。<br/>返回的所有消息总负载大小不会超过此值。<br/>达到该限制时，响应中包含的消息数量可能少于 `limit`；`meta.position` 指向最后一条返回的消息，因此可以从该位置请求下一页来获取被省略的消息。<br/>唯一的例外是当第一条消息的负载已超过限制时，在这种情况下，响应中仅返回该第一条消息。",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -78635,8 +78684,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826"
                   }
                 },
                 "schema": {
@@ -78755,7 +78804,7 @@
             }
           },
           {
-            "description": "客户端的未确认消息（inflight）/ 消息队列（mqueue）消息 payload 限制。<br/>返回的所有消息总负载大小不会超过此值。<br/>超出限制的消息将在响应中被静默省略。<br/>唯一的例外是当第一条消息的负载已超过限制时，在这种情况下，该消息仍会被返回。",
+            "description": "客户端的未确认消息（inflight）/ 消息队列（mqueue）消息 payload 限制。<br/>返回的所有消息总负载大小不会超过此值。<br/>达到该限制时，响应中包含的消息数量可能少于 `limit`；`meta.position` 指向最后一条返回的消息，因此可以从该位置请求下一页来获取被省略的消息。<br/>唯一的例外是当第一条消息的负载已超过限制时，在这种情况下，响应中仅返回该第一条消息。",
             "in": "query",
             "name": "max_payload_bytes",
             "schema": {
@@ -78789,8 +78838,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826_10"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826_10"
                   }
                 },
                 "schema": {
@@ -84156,7 +84205,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -85741,7 +85790,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -87558,7 +87607,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -88788,7 +88837,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90362,7 +90411,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -91939,7 +91988,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -92883,7 +92932,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "99BA1B162E14C86A",
+            "example": "615BB7B4DD27EFC6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92946,7 +92995,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "99BA1B162E14C86A",
+            "example": "615BB7B4DD27EFC6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93360,7 +93409,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "99BA1B162E14C86A",
+            "example": "615BB7B4DD27EFC6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93446,7 +93495,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "99BA1B162E14C86A",
+            "example": "615BB7B4DD27EFC6",
             "in": "path",
             "name": "site",
             "required": true,
@@ -105900,7 +105949,7 @@
         "description": "EMQX 监控指标信息",
         "parameters": [
           {
-            "description": "是否聚合所有节点的指标。默认值为 'true'。",
+            "description": "是否聚合所有节点的指标。默认值为 'false'。",
             "in": "query",
             "name": "aggregate",
             "required": false,
@@ -120157,7 +120206,7 @@
     },
     "/user_scopes": {
       "get": {
-        "description": "列出控制台登录用户可能拥有的所有范围名称及其描述，并包含 `admin_only` 标志用于指示该范围是否仅限管理员角色。<br/>返回给任何已认证的登录用户——该端点用于填充控制台 UI 的范围选择器，本身不需要特定范围。",
+        "description": "列出 Dashboard 登录用户可能拥有的所有作用域名称及其描述，并包含 `admin_only` 标志用于指示该作用域是否仅限管理员角色。<br/>返回给任何已认证的登录用户——该端点用于填充 Dashboard UI 的作用域选择器，本身不需要特定作用域。",
         "parameters": [],
         "responses": {
           "200": {
@@ -120169,7 +120218,7 @@
                 }
               }
             },
-            "description": "列出控制台登录用户可能拥有的所有范围名称及其描述，并包含 `admin_only` 标志用于指示该范围是否仅限管理员角色。<br/>返回给任何已认证的登录用户——该端点用于填充控制台 UI 的范围选择器，本身不需要特定范围。"
+            "description": "列出 Dashboard 登录用户可能拥有的所有作用域名称及其描述，并包含 `admin_only` 标志用于指示该作用域是否仅限管理员角色。<br/>返回给任何已认证的登录用户——该端点用于填充 Dashboard UI 的作用域选择器，本身不需要特定作用域。"
           }
         },
         "security": [
@@ -120177,7 +120226,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "列出控制台用户范围",
+        "summary": "列出 Dashboard 用户作用域",
         "tags": [
           "Dashboard"
         ]
@@ -120238,7 +120287,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "控制台用户范围：在用户角色之外应用的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会应用角色的默认范围。administrator 获取所有管理范围以及四个仅登录范围。viewer 获取所有管理范围。publisher（如适用）仅获取 `publish` 范围。要创建拒绝所有的用户，请发送显式空列表 `[]`；仅 `/status` 等匿名端点仍可访问。<br/><br/>在写入（创建或更新）时，该字段还接受字面字符串 `unset`；与角色隐式默认集合相同的范围列表也会被同样处理：两者都存储为“无显式范围”，因此用户会保留可向前兼容的角色默认值，而不是固定的范围列表。这使得读取-修改-写入（例如仅编辑描述）可以原样回传 `GET` 返回的 `unset` 值或展开后的范围列表而不会出错。<br/><br/>登录用户可被分配 API key 目录中的任意范围以及四个仅登录范围：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个范围中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，它仅作为自我豁免键，使用户能够对其自身的 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
+                    "description": "Dashboard 用户作用域：与用户角色共同生效的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会应用角色的默认作用域。administrator 获取所有管理作用域以及四个仅登录作用域。viewer 获取所有管理作用域。publisher（如适用）仅获取 `publish` 作用域。要创建拒绝所有的用户，请发送显式空列表 `[]`；仅 `/status` 等匿名端点仍可访问。<br/><br/>在写入（创建或更新）时，该字段还接受字面字符串 `unset`；与角色隐式默认集合相同的作用域列表也会被同样处理：两者都存储为“无显式作用域”，因此用户会保留可向前兼容的角色默认值，而不是固定的作用域列表。这使得读取-修改-写入（例如仅编辑描述）可以原样回传 `GET` 返回的 `unset` 值或展开后的作用域列表而不会出错。<br/><br/>登录用户可被分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个作用域中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，该作用域仅用于对自身进行豁免，使用户能够为自己的 MFA 绕过 `force_mfa` 和 `admin_required` 限制。",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -120303,7 +120352,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "控制台用户范围：在用户角色之外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持控制台用户范围的版本升级；运行时会对其回退到角色默认范围。客户端应将 `unset` 视为“尚未设置显式范围策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意范围以及四个仅登录范围：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个范围中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，它仅作为自我豁免键，使用户能够对其自身的 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
+                      "description": "Dashboard 用户作用域：与用户角色共同生效的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持 Dashboard 用户作用域的版本升级；运行时会对其回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个作用域中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，该作用域仅用于对自身进行豁免，使用户能够为自己的 MFA 绕过 `force_mfa` 和 `admin_required` 限制。",
                       "example": [
                         "user_management",
                         "mfa_management"
@@ -120489,7 +120538,7 @@
                     "type": "string"
                   },
                   "scopes": {
-                    "description": "控制台用户范围：在用户角色之外应用的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会应用角色的默认范围。administrator 获取所有管理范围以及四个仅登录范围。viewer 获取所有管理范围。publisher（如适用）仅获取 `publish` 范围。要创建拒绝所有的用户，请发送显式空列表 `[]`；仅 `/status` 等匿名端点仍可访问。<br/><br/>在写入（创建或更新）时，该字段还接受字面字符串 `unset`；与角色隐式默认集合相同的范围列表也会被同样处理：两者都存储为“无显式范围”，因此用户会保留可向前兼容的角色默认值，而不是固定的范围列表。这使得读取-修改-写入（例如仅编辑描述）可以原样回传 `GET` 返回的 `unset` 值或展开后的范围列表而不会出错。<br/><br/>登录用户可被分配 API key 目录中的任意范围以及四个仅登录范围：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个范围中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，它仅作为自我豁免键，使用户能够对其自身的 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
+                    "description": "Dashboard 用户作用域：与用户角色共同生效的细粒度访问列表。<br/><br/>如果创建用户时省略该字段，服务器会应用角色的默认作用域。administrator 获取所有管理作用域以及四个仅登录作用域。viewer 获取所有管理作用域。publisher（如适用）仅获取 `publish` 作用域。要创建拒绝所有的用户，请发送显式空列表 `[]`；仅 `/status` 等匿名端点仍可访问。<br/><br/>在写入（创建或更新）时，该字段还接受字面字符串 `unset`；与角色隐式默认集合相同的作用域列表也会被同样处理：两者都存储为“无显式作用域”，因此用户会保留可向前兼容的角色默认值，而不是固定的作用域列表。这使得读取-修改-写入（例如仅编辑描述）可以原样回传 `GET` 返回的 `unset` 值或展开后的作用域列表而不会出错。<br/><br/>登录用户可被分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个作用域中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，该作用域仅用于对自身进行豁免，使用户能够为自己的 MFA 绕过 `force_mfa` 和 `admin_required` 限制。",
                     "example": [
                       "user_management",
                       "mfa_management"
@@ -120548,7 +120597,7 @@
                       "type": "string"
                     },
                     "scopes": {
-                      "description": "控制台用户范围：在用户角色之外应用的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持控制台用户范围的版本升级；运行时会对其回退到角色默认范围。客户端应将 `unset` 视为“尚未设置显式范围策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意范围以及四个仅登录范围：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个范围中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，它仅作为自我豁免键，使用户能够对其自身的 MFA 绕过 `force_mfa` 和 `admin_required` 锁。",
+                      "description": "Dashboard 用户作用域：与用户角色共同生效的细粒度访问列表。<br/><br/>字面字符串 `unset` 是仅用于遗留记录的哨兵值，这些记录来自未支持 Dashboard 用户作用域的版本升级；运行时会对其回退到角色默认作用域。客户端应将 `unset` 视为“尚未设置显式作用域策略”。空列表 `[]` 表示拒绝所有；仅 `/status` 等匿名端点仍可访问。<br/><br/>登录用户可被分配 API key 目录中的任意作用域以及四个仅登录作用域：`user_management`、`mfa_management`、`sso_management`、`api_key_management`。在这四个作用域中，`user_management`、`sso_management`、`api_key_management` 仅限管理员。`mfa_management` 也可分配给非管理员用户。对非管理员用户而言，该作用域仅用于对自身进行豁免，使用户能够为自己的 MFA 绕过 `force_mfa` 和 `admin_required` 限制。",
                       "example": [
                         "user_management",
                         "mfa_management"
