@@ -285,7 +285,7 @@
         }
       },
       "public.position": {
-        "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+        "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
         "example": "none",
         "in": "query",
         "name": "position",
@@ -890,7 +890,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1333,7 +1333,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -1850,7 +1850,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2195,7 +2195,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2519,7 +2519,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -2827,7 +2827,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3386,7 +3386,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -3772,7 +3772,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -4245,7 +4245,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -4605,7 +4605,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -4647,103 +4647,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4755,25 +4659,19 @@
               },
               {
                 "enum": [
-                  "disk_log"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "alloydb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "mongodb"
                 ],
                 "type": "string"
               },
@@ -4785,7 +4683,121 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -4803,55 +4815,19 @@
               },
               {
                 "enum": [
-                  "redis"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -4863,25 +4839,7 @@
               },
               {
                 "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
+                  "dynamo"
                 ],
                 "type": "string"
               },
@@ -4893,19 +4851,61 @@
               },
               {
                 "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
+                  "tdengine"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               }
@@ -5939,7 +5939,6 @@
             "type": "string"
           },
           "role": {
-            "default": "administrator",
             "description": "Role for this API",
             "example": "administrator",
             "type": "string"
@@ -8485,6 +8484,17 @@
             ],
             "type": "string"
           },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
+          },
           "pool_size": {
             "default": 8,
             "description": "The pool size.",
@@ -8613,6 +8623,17 @@
               "post"
             ],
             "type": "string"
+          },
+          "oauth2": {
+            "description": "OAuth2 Client Credentials authentication. When enabled, EMQX obtains an OAuth2<br/>access token from the configured token endpoint using the `client_credentials`<br/>grant and injects it as `Authorization: Bearer <token>` on every outgoing<br/>request. The token is cached and refreshed before it expires.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_oauth2.client_credentials"
+              },
+              {
+                "$ref": "#/components/schemas/connector_oauth2.oauth2_disabled"
+              }
+            ]
           },
           "pool_size": {
             "default": 8,
@@ -10940,7 +10961,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -11478,12 +11499,12 @@
         "properties": {
           "batch_value_separator": {
             "default": ", ",
-            "description": "The default value ',' works for the VALUES format. You can also use other separator if other format is specified. See [INSERT INTO Statement](https://clickhouse.com/docs/en/sql-reference/statements/insert-into).",
+            "description": "This argument is ignored and retained for compatibility. The action derives the batch separator from the SQL format.",
             "type": "string"
           },
           "sql": {
             "default": "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})",
-            "description": "The template string can contain ${field} placeholders for message metadata and payload field. Make sure that the inserted values are formatted and escaped correctly. [Prepared Statement](https://docs.emqx.com/en/enterprise/v5.0/data-integration/data-bridges.html#Prepared-Statement) is not supported.",
+            "description": "A restricted ClickHouse `INSERT` template. It supports `VALUES`, `FORMAT Values`, and `JSONCompactEachRow`. Placeholders are allowed only in value positions and string values. Comments, extra statements, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -11569,7 +11590,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -12212,7 +12233,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -12851,7 +12872,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13515,7 +13536,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -13946,7 +13967,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -14530,7 +14551,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -15318,7 +15339,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -16106,7 +16127,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -17333,6 +17354,16 @@
       },
       "bridge_kafka.socket_opts": {
         "properties": {
+          "ip_family": {
+            "default": "auto",
+            "description": "The IP address family used to connect to Kafka brokers.<br/>- <code>auto</code>: Connect to an IP address with its own family. For a hostname, try IPv4 first, then IPv6 if IPv4 fails.<br/>- <code>ipv4</code>: Connect over IPv4 only.<br/>- <code>ipv6</code>: Connect over IPv6 only. Use this when the brokers are reachable only over IPv6.",
+            "enum": [
+              "auto",
+              "ipv4",
+              "ipv6"
+            ],
+            "type": "string"
+          },
           "nodelay": {
             "default": true,
             "description": "When set to 'true', TCP buffer is sent as soon as possible. Otherwise, the OS kernel may buffer small TCP packets for a while (40 ms by default).",
@@ -17601,7 +17632,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -18639,7 +18670,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -19356,7 +19387,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -19908,7 +19939,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -20576,7 +20607,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -20895,7 +20926,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -21532,7 +21563,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -21928,7 +21959,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -22543,7 +22574,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "name": {
@@ -22715,7 +22746,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "name": {
@@ -22852,7 +22883,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "port": {
@@ -23142,7 +23173,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -23170,7 +23201,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )",
-            "description": "SQL Template",
+            "description": "A restricted SQL Server INSERT INTO VALUES template. Placeholders are allowed only in value positions and string values. Comments, extra statements, multiple configured rows, and dynamic identifiers are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -23256,7 +23287,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -23929,7 +23960,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -24551,7 +24582,7 @@
           },
           "sql": {
             "default": "insert into t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})",
-            "description": "SQL Template",
+            "description": "A restricted TDengine INSERT template. It supports multi-table VALUES inserts and USING stable TAGS clauses. A bare or backtick-quoted target table may contain placeholders, for example, `test_${clientid}`. EMQX renders the complete target as one quoted identifier. Comments, FILE input, and extra statements are not allowed.",
             "format": "sql",
             "type": "string"
           },
@@ -24640,7 +24671,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -25429,7 +25460,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -34197,6 +34228,28 @@
             "minimum": 23,
             "type": "integer"
           },
+          "max_connect_packet_size": {
+            "default": "1MB",
+            "description": "Maximum size of a CONNECT packet. Maximum: 256 MB.<br/>EMQX closes the connection when a CONNECT packet is larger than this.<br/>This limit applies in addition to `max_packet_size`, and the smaller of the two applies to CONNECT.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "max_connect_user_properties": {
+            "default": 100,
+            "description": "Maximum number of 'User-Property' pairs accepted in a CONNECT packet.<br/>The limit applies separately to the CONNECT properties and to the will properties.<br/>EMQX closes the connection when a CONNECT carries more pairs than this.<br/>Set to `infinity` to accept any number.",
+            "oneOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
           "max_inflight": {
             "default": 32,
             "description": "Maximum number of QoS 1 and QoS 2 messages that are allowed to be delivered simultaneously before completing the acknowledgment.",
@@ -39761,7 +39814,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "E7C5A1755C22DFF5",
+            "example": "582C70209AEF4764",
             "type": "string"
           },
           "status": {
@@ -42365,7 +42418,7 @@
             "type": "boolean"
           },
           "host": {
-            "description": "The host of the S3 endpoint.",
+            "description": "The host of the S3 endpoint.<br/><br/>Note: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
             "type": "string"
           },
           "max_part_size": {
@@ -42482,6 +42535,7 @@
           },
           "password": {
             "description": "Template for overriding password.",
+            "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
@@ -43842,7 +43896,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -43963,7 +44017,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -51524,7 +51578,7 @@
       "public.continuation_meta": {
         "properties": {
           "position": {
-            "description": "An opaque token that can then be in subsequent requests to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of `page` parameter to traverse highly volatile data. Can be omitted or set to `none` to get the first chunk of data.",
+            "description": "An opaque token returned in `meta.position` that can be used in a subsequent request to get the next chunk of results: `?position={prev_response.meta.position}`.<br/>It is used instead of the `page` parameter to traverse highly volatile data. It can be omitted or set to `none` to get the first chunk of data.<br/>If `meta.position` is `end_of_data`, there are no more results. Do not send `end_of_data` in a subsequent request.",
             "example": "none",
             "oneOf": [
               {
@@ -51734,7 +51788,7 @@
           "request_ttl": {
             "default": "45s",
             "deprecated": true,
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -52640,7 +52694,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -53608,7 +53662,7 @@
           },
           "request_ttl": {
             "default": "45s",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -57656,7 +57710,7 @@
           },
           "request_ttl": {
             "default": "infinity",
-            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.",
+            "description": "Starting from the moment when the request enters the buffer, if the request remains in the buffer for the specified time or is sent but does not receive a response or acknowledgement in time, the request is considered expired.<br/><br/>Note that this parameter is shorter than `health_check_timeout` plus the time for the connection to be reestablished, then messages queued as the connector becomes disconnected will be dropped as expired, since the messages are not attempted to be sent when disconnected.  It's recommended to set this parameter so that it is larger than the health check timeout plus a margin for connection establishment.",
             "oneOf": [
               {
                 "enum": [
@@ -58727,7 +58781,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.5-rc.1"
+    "version": "6.1.5-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58743,100 +58797,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "cassandra",
                       "snowflake_streaming",
-                      "mongodb",
-                      "oracle",
+                      "kinesis",
                       "pgsql",
-                      "influxdb",
-                      "couchbase",
-                      "alloydb",
-                      "emqx_tables",
-                      "cockroachdb",
-                      "timescale",
-                      "pulsar",
-                      "datalayers",
-                      "redshift",
-                      "gcp_pubsub_producer",
-                      "dynamo",
+                      "iotdb",
+                      "mysql",
+                      "elasticsearch",
+                      "aws_timestream",
+                      "snowflake",
+                      "cassandra",
                       "tdengine",
-                      "redis",
+                      "oracle",
+                      "dynamo",
+                      "emqx_tables",
+                      "sqlserver",
+                      "opents",
+                      "rabbitmq",
                       "kafka_producer",
                       "clickhouse",
-                      "rabbitmq",
-                      "s3tables",
-                      "matrix",
-                      "tablestore",
-                      "kinesis",
+                      "timescale",
                       "disk_log",
-                      "azure_event_hub_producer",
-                      "syskeeper_forwarder",
-                      "rocketmq",
-                      "opents",
-                      "snowflake",
-                      "http",
-                      "s3",
-                      "mqtt",
-                      "iotdb",
-                      "elasticsearch",
-                      "azure_blob_storage",
+                      "bigquery",
                       "doris",
-                      "sqlserver",
-                      "confluent_producer",
+                      "couchbase",
+                      "datalayers",
+                      "influxdb",
+                      "http",
+                      "tablestore",
+                      "matrix",
+                      "cockroachdb",
+                      "rocketmq",
                       "greptimedb",
-                      "mysql",
-                      "aws_timestream",
-                      "bigquery"
+                      "s3",
+                      "pulsar",
+                      "mqtt",
+                      "gcp_pubsub_producer",
+                      "redis",
+                      "redshift",
+                      "confluent_producer",
+                      "s3tables",
+                      "mongodb",
+                      "alloydb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "azure_blob_storage"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "cassandra",
                       "snowflake_streaming",
-                      "mongodb",
-                      "oracle",
+                      "kinesis",
                       "pgsql",
-                      "influxdb",
-                      "couchbase",
-                      "alloydb",
-                      "emqx_tables",
-                      "cockroachdb",
-                      "timescale",
-                      "pulsar",
-                      "datalayers",
-                      "redshift",
-                      "gcp_pubsub_producer",
-                      "dynamo",
+                      "iotdb",
+                      "mysql",
+                      "elasticsearch",
+                      "aws_timestream",
+                      "snowflake",
+                      "cassandra",
                       "tdengine",
-                      "redis",
+                      "oracle",
+                      "dynamo",
+                      "emqx_tables",
+                      "sqlserver",
+                      "opents",
+                      "rabbitmq",
                       "kafka_producer",
                       "clickhouse",
-                      "rabbitmq",
-                      "s3tables",
-                      "matrix",
-                      "tablestore",
-                      "kinesis",
+                      "timescale",
                       "disk_log",
-                      "azure_event_hub_producer",
-                      "syskeeper_forwarder",
-                      "rocketmq",
-                      "opents",
-                      "snowflake",
-                      "http",
-                      "s3",
-                      "mqtt",
-                      "iotdb",
-                      "elasticsearch",
-                      "azure_blob_storage",
+                      "bigquery",
                       "doris",
-                      "sqlserver",
-                      "confluent_producer",
+                      "couchbase",
+                      "datalayers",
+                      "influxdb",
+                      "http",
+                      "tablestore",
+                      "matrix",
+                      "cockroachdb",
+                      "rocketmq",
                       "greptimedb",
-                      "mysql",
-                      "aws_timestream",
-                      "bigquery"
+                      "s3",
+                      "pulsar",
+                      "mqtt",
+                      "gcp_pubsub_producer",
+                      "redis",
+                      "redshift",
+                      "confluent_producer",
+                      "s3tables",
+                      "mongodb",
+                      "alloydb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "azure_blob_storage"
                     ],
                     "type": "string"
                   },
@@ -70567,7 +70621,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -70900,7 +70953,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -70994,7 +71046,6 @@
                     "type": "boolean"
                   },
                   "expired_at": {
-                    "default": "infinity",
                     "description": "Expiration time. Either an ISO 8601 timestamp / epoch second, or `infinity` for keys that never expire.",
                     "example": "2021-12-05T02:01:34.186Z",
                     "oneOf": [
@@ -71026,7 +71077,6 @@
                     "type": "string"
                   },
                   "role": {
-                    "default": "administrator",
                     "description": "Role for this API",
                     "example": "administrator",
                     "type": "string"
@@ -71135,7 +71185,6 @@
                       "type": "string"
                     },
                     "role": {
-                      "default": "administrator",
                       "description": "Role for this API",
                       "example": "administrator",
                       "type": "string"
@@ -78635,8 +78684,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826"
                   }
                 },
                 "schema": {
@@ -78789,8 +78838,8 @@
                     }
                   ],
                   "meta": {
-                    "count": 100,
-                    "last": "1710785444656449826_10"
+                    "position": "end_of_data",
+                    "start": "1710785444656449826_10"
                   }
                 },
                 "schema": {
@@ -92883,7 +92932,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "E7C5A1755C22DFF5",
+            "example": "582C70209AEF4764",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92946,7 +92995,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "E7C5A1755C22DFF5",
+            "example": "582C70209AEF4764",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93360,7 +93409,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "E7C5A1755C22DFF5",
+            "example": "582C70209AEF4764",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93446,7 +93495,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "E7C5A1755C22DFF5",
+            "example": "582C70209AEF4764",
             "in": "path",
             "name": "site",
             "required": true,
