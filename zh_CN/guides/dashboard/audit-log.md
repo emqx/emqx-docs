@@ -136,7 +136,7 @@ log.audit {
 
 命名空间管理员在所属命名空间中执行数据备份操作且未传递查询参数时，记录会省略 `http_request.query_string`，但仍会在 `http_request.namespace` 中记录最终解析出的目标命名空间。
 
-导出、导入、上传或删除备份文件的数据备份操作会记录最终解析出的目标命名空间。不解析目标命名空间的其他端点会省略 `http_request.namespace`。
+从 EMQX 6.1.5 开始，涉及认证、授权、连接器、Bridge、规则和追踪的命名空间操作也会记录最终解析出的目标命名空间。不解析目标命名空间的其他端点会省略 `http_request.namespace`。
 
 ### 命令行或 Erlang Console 操作记录
 

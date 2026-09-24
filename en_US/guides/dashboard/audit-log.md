@@ -136,7 +136,7 @@ Starting from EMQX 6.0.4, audit records include the non-empty query parameters o
 
 When a namespaced administrator performs a data-backup operation in their own namespace without a query parameter, the record omits `http_request.query_string` but still includes the resolved namespace in `http_request.namespace`.
 
-Resolved target namespaces are recorded for data-backup operations that export, import, upload, or delete backup files. Other endpoints that do not resolve a target namespace omit `http_request.namespace`.
+Starting from EMQX 6.1.5, resolved target namespaces are also recorded for namespaced operations involving authentication, authorization, connectors, bridges, rules, and traces. Other endpoints that do not resolve a target namespace omit `http_request.namespace`.
 
 ### Operation Records from CLI or Erlang Console
 
