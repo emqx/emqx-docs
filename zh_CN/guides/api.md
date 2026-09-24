@@ -419,7 +419,7 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 | `user_management` | 管理员 | 管理 Dashboard 用户。 |
 | `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
+| `mfa_management` | 全局管理员或全局查看者 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
 #### 权限范围的默认行为
 
@@ -429,11 +429,11 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 | --- | --- |
 | 创建请求中**未设置** | 使用所选角色的默认权限。 |
 | 更新请求中**未设置** | 保留密钥当前的权限范围设置。 |
-| 角色默认标记 `"unset"` | 移除显式权限范围设置并使用所选角色的默认权限。角色默认权限发生变化时，新权限会自动生效。 |
+| 未设置标记 `"unset"` | 移除显式权限范围设置。为保持向后兼容，EMQX 不对该密钥应用权限范围允许列表；角色、命名空间和 API 密钥专属的路径限制仍然生效。 |
 | **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
 | 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
 
-如果显式列表与角色默认权限包含相同的权限范围，其效果等同于 `"unset"`。该密钥会继续跟随角色默认权限的变化。比较时不考虑列表顺序。
+如果显式列表与角色默认权限包含相同的权限范围，EMQX 会将其规范化为 `"unset"`，并应用相同的行为。比较时不考虑列表顺序。
 
 Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用指定角色的默认权限。
 
@@ -470,9 +470,9 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 命名空间 API 密钥的权限范围限制
 
-从 EMQX 6.0.4 开始，使用角色默认权限的命名空间管理员 API 密钥具有 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围。默认权限不包含 `publish`、`gateways` 和 `audit`。
+从 EMQX 6.0.4 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围创建。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
 
-创建命名空间 API 密钥或修改现有密钥的显式权限范围列表时，只能分配该命名空间角色允许持有的权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
+创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，请求中只能包含上述 7 个权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
 
 ### 包含不允许权限范围的现有密钥
 
