@@ -1067,10 +1067,6 @@
     title_cn: 功能对比
     title_ja: 機能比較
     path: get-started/feature-comparison
-  - title_en: Get Started
-    title_cn: 快速开始
-    title_ja: はじめに
-    path: get-started/getting-started
   - title_en: Operating Limitations
     title_cn: 使用限制
     title_ja: 運用制限
