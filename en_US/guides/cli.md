@@ -936,6 +936,7 @@ Below is a list of common shutdown reasons that may appear in this field.
 | `takenover`                   | A new client with the same `clientid` and `clean_start = false` connected while the previous session was still active. |
 | `einval`                      | An invalid argument or socket error occurred, often caused by attempting to write to a socket that has already been closed (a race condition between socket state change notification and data write). |
 | `frame_too_large`             | The MQTT packet exceeds the maximum allowed frame size.      |
+| `connect_packet_too_large`    | The CONNECT packet exceeds `mqtt.max_connect_packet_size`.    |
 | `idle_timeout`                | No `CONNECT` packet was received within the allowed time after the TCP/SSL connection was established. |
 | `invalid_proto_name`          | The protocol name in the `CONNECT` packet is invalid or not `"MQTT"`. |
 | `invalid_topic`               | The client used an invalid topic (e.g., containing illegal characters or forbidden by the broker). |
