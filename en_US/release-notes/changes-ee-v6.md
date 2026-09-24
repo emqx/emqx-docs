@@ -12,6 +12,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18974](https://github.com/emqx/emqx/pull/18974) Added `mqtt.max_connect_user_properties`, which limits the number of MQTT v5 User Property pairs accepted separately in CONNECT properties and Will properties. The default is 100; set it to `infinity` to disable the limit.
 
+- [#19096](https://github.com/emqx/emqx/pull/19096) Added the `mqtt.max_connect_packet_size` setting. It limits the size of a CONNECT packet, in addition to `mqtt.max_packet_size`. EMQX closes a client's connection when its CONNECT packet exceeds this limit and increments the listener shutdown counter `connect_packet_too_large`. The default is `1MB`, the same as the default `mqtt.max_packet_size`, so nothing changes until the setting is lowered.
+
 #### Data Integration
 
 - [#18926](https://github.com/emqx/emqx/pull/18926) Added IPv6 support to the Kafka, Confluent and Azure Event Hubs connectors.
@@ -33,6 +35,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Tables are managed with the `emqx ctl maptabs` CLI: loading or deleting a table on one node replicates the change to every node in the cluster, and a node that was down during an update catches up automatically when it rejoins.
 
   The plugin configuration provides safety limits: `max_tables` (default 100), `max_rows_per_table` (default 10,000), and `max_table_file_bytes` (default 10,000,000).
+
+- [#19126](https://github.com/emqx/emqx/pull/19126) Added support for publish hooks to report successful message persistence. The HTTP publish API returns HTTP 200 with the message ID when a plugin reports persistence, even when no subscription matches.
 
 #### Observability
 
@@ -67,6 +71,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18789](https://github.com/emqx/emqx/pull/18789) MQTT and Gateway listener creation now rejects listener names longer than 64 bytes or not matching the restricted-name format with a clear `BAD_REQUEST` response. Existing listeners with longer names remain editable.
 
 - [#18959](https://github.com/emqx/emqx/pull/18959) MQTT listeners now close a connection as soon as its first packet is not a CONNECT, before reading the packet body.
+
+- [#19144](https://github.com/emqx/emqx/pull/19144) Fixed an issue where the session registry cleanup process stopped when a client disconnected while cleanup was in progress. The process now skips the disconnected client and continues removing stale registrations.
 
 #### Rule Engine
 
@@ -149,6 +155,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Doris Connector
   - PostgreSQL Connector
 
+- [#19108](https://github.com/emqx/emqx/pull/19108) Under heavy load, the GCP Pub/Sub Producer and HTTP actions could rarely report `{error,closed}` as unrecoverable when the remote server closed a connection. These errors are now treated as recoverable.
+
 #### Message Queue and Streams
 
 - [#19008](https://github.com/emqx/emqx/pull/19008) Fixed an issue where Message Queue garbage collection could continuously create durable-storage generations when shard metadata reads failed, causing excessive ETS table and memory usage.
@@ -158,6 +166,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Cluster Linking
 
 - [#18537](https://github.com/emqx/emqx/pull/18537) Fixed Cluster Linking to classify temporary message-forwarding connection errors as recoverable. Messages affected by transient network outages are now buffered and retried instead of being counted as failed.
+
+- [#19136](https://github.com/emqx/emqx/pull/19136) Fixed an issue where a cluster link could drop the messages in flight when the connection to the peer cluster was lost. Connection failures that indicate that the connection was lost or never established (for example a connect timeout, a DNS resolution failure, or a transport error) are now treated as recoverable, so the affected messages are retried until the request expires instead of being acknowledged and counted as failed.
 
 #### Clustering
 
@@ -174,6 +184,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18836](https://github.com/emqx/emqx/pull/18836) Stopped including the result of a successful configuration change in the cluster configuration sync debug logs.
 
   The result could carry compiled runtime state, such as the HTTP authenticator header templates, which held secrets that log redaction did not cover.
+
+- [#19160](https://github.com/emqx/emqx/pull/19160) Fixed the following `mria` application crash that could occur when a core node joined or left the cluster:
+
+  ```text
+  Reason: {badarg,[{ets,select,[gproc,[{{{{n,l,{mria_rlog_replica,route_shard_m,'$1'}},n},'$2','_'},[],[{{'$1','$2'}}]}]],[{error_info,#{cause => id...
+  ```
+
+  The fix removes `gproc`, a dependency of `mria`, from the list of applications restarted when cluster membership changes.
 
 #### MQTT over QUIC
 
@@ -233,6 +251,16 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#18883](https://github.com/emqx/emqx/pull/18883) Restricted the audit log to global users. The audit log records operations from every namespace, so only global administrators and global viewers can read it through `GET /api/v5/audit`. Dashboard users and API keys that belong to a namespace can no longer read it.
 
+- [#19099](https://github.com/emqx/emqx/pull/19099) Improved some SQL functions in the rule engine so that each rule can only access the data written by rules in the same namespace. Rules in the global namespace keep sharing the global data space.
+
+- [#19125](https://github.com/emqx/emqx/pull/19125) Fixed inconsistent default scopes for namespaced Dashboard users and API keys.
+
+  - A namespaced administrator with no explicit scope list got the scopes of a global administrator. This happened when the user was created or updated with `"scopes": "unset"`, or when an update sent back the default scope list unchanged. The user now gets the namespaced administrator defaults.
+  - A namespaced viewer, created without `scopes`, got more scopes than a namespaced administrator: `gateways`, `publish`, and `audit`. A namespaced viewer and an API key with the namespaced viewer role now default to the same management scopes as a namespaced administrator, without the login-only scopes. A namespaced viewer can no longer be given `gateways`, `publish`, `audit`, or `mfa_management`.
+  - At startup, EMQX removes `gateways`, `publish`, `audit`, and `mfa_management` from the stored scope lists of existing namespaced viewers. Such a viewer loses read access to the gateway endpoints. The `publish` and `audit` endpoints were already denied to namespaced users. Stored scope lists of existing API keys are not changed.
+
+- [#19163](https://github.com/emqx/emqx/pull/19163) Fixed `emqx ctl conf load --namespace <ns> --merge` so that the loaded configuration is now merged over the namespace's stored configuration. Previously, it was merged over the global configuration, so a namespaced merge could copy global values into the namespace.
+
 #### Security Hardening
 
 - [#16389](https://github.com/emqx/emqx/pull/16389) Fixed an issue where the OAuth2 `client_secret` was returned in plaintext by the configuration read APIs for authentication, authorization, gateways and HTTP connectors. It is now masked in API responses, and re-submitting the masked value keeps the stored secret unchanged.
@@ -266,6 +294,24 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18859](https://github.com/emqx/emqx/pull/18859) Fixed an issue where changing only the letter casing of a sensitive HTTP header name while updating a configuration could remove its stored value.
 
 - [#19036](https://github.com/emqx/emqx/pull/19036) Fixed a credential leak in gateway logs. When a gateway connection terminated during startup, for example after a failed DTLS handshake, the supervisor offender report included the full connection arguments, exposing `clientinfo_override.password` and the gateway authentication configuration. These values are no longer logged.
+
+- [#19037](https://github.com/emqx/emqx/pull/19037) Gateway debug logs no longer contain raw datagrams. The `received_data`, `received_udp_proxy_data`, and `send_data` events now log only the byte size because an encoded packet may carry credentials. Parsed packets are still logged with protocol-level redaction.
+
+  The CoAP Gateway additionally redacts the session token issued by `POST /mqtt/connection` and credentials sent with the short query aliases (`t`, `p`), both in parsed-packet logs and in logs for rejected requests.
+
+- [#19098](https://github.com/emqx/emqx/pull/19098) Hardened the configuration responses of `GET /api/v5/schema_registry`, `GET /api/v5/schema_registry/:name` and `GET /api/v5/opentelemetry` by masking credential-bearing values in the returned configuration. The corresponding create and update endpoints accept the masked values back without overwriting the stored ones.
+
+- [#19115](https://github.com/emqx/emqx/pull/19115) Restricted the plugin configuration read endpoints (`GET /api/v5/plugins/:name/config` and `GET /api/v5/plugins/:name/config/download`) to global administrators.
+
+- [#19142](https://github.com/emqx/emqx/pull/19142) Fixed an issue where the Gateway lookup CLI command exposed authentication credentials and `clientinfo_override.password` values. Sensitive Gateway configuration values are now redacted from the command output.
+
+- [#19175](https://github.com/emqx/emqx/pull/19175) Removed the insecure RPC authentication fallback.
+
+  Cluster nodes now always authenticate backplane (RPC) connections with a challenge-response handshake. The old fallback, which sent the Erlang cookie to the peer when the handshake failed, has been removed.
+
+  The `rpc.insecure_fallback` configuration key no longer has any effect. It was used for clustering with EMQX releases older than 5.3.0, which do not support the challenge-response handshake. A configuration file that still sets the key continues to load, but the value is ignored.
+
+- [#19195](https://github.com/emqx/emqx/pull/19195) Hardened plugin package name validation.
 
 #### Gateway
 
@@ -329,6 +375,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Before this change, a request that passed authentication but was denied by role-based access control was recorded with an empty `source` and without `http_request.bindings`, so `GET /api/v5/audit` could not show who made the request or what it targeted. Records for unauthenticated requests are unchanged.
 
+- [#19148](https://github.com/emqx/emqx/pull/19148) The `license_expiry` alarm now includes a message that states whether the license is about to expire or has already expired, together with the expiry date. Previously, it reported only the alarm name, which appeared to indicate an expired license even when the alarm was the 30-day advance warning. The alarm details now include a `days_left` field, and both the details and message are kept up to date while the alarm remains active.
+
 #### REST API
 
 - [#18287](https://github.com/emqx/emqx/pull/18287) Improved REST API resilience when a cluster node becomes unreachable or fails while serving a request. A number of endpoints previously returned an opaque 500 error (or, in a few cases, reported success while part of the work had failed) when an RPC to a peer node did not complete; they now return a descriptive error response, and cluster-wide reads degrade gracefully to the results from the reachable nodes.
@@ -367,6 +415,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#19003](https://github.com/emqx/emqx/pull/19003) Hardened `PUT /api/v5/api_key/:name` so that it only updates the fields present in the request body. Previously a partial update could also rewrite fields it did not mention, so an administrator who was not paying close attention to every field could unintentionally change the permissions of the API key named in the request. Calling this endpoint already requires administrator privileges.
 
+- [#19116](https://github.com/emqx/emqx/pull/19116) Improved the error returned when a REST API request contains non-text bytes, such as a DER certificate where a PEM file is expected. The response now reports the reason and value size instead of quoting the entire input as a list of byte values and incorrectly reporting that a binary value is not a binary.
+
+  Free-form configuration values no longer retain a conversion error in place of the invalid input.
+
 #### File Transfer
 
 - [#18315](https://github.com/emqx/emqx/pull/18315) MQTT File Transfer file listing and download REST endpoints are now available only to global (non-namespaced) Dashboard users and API keys. Namespaced users and API keys can no longer read files uploaded by clients outside their namespace.
@@ -382,6 +434,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18590](https://github.com/emqx/emqx/pull/18590) Fixed the output of `emqx stop` when the node is not running.
 
   The command reported `Node <name> not responding to pings.` twice and then failed with `Graceful shutdown failed PID=[]`. It now reports the unreachable node once and does not print a shutdown failure for a node it could not find. The exit code is unchanged.
+
+- [#18886](https://github.com/emqx/emqx/pull/18886) Invalid Backup Sync interval and timeout values are now rejected, and false-positive TLS certificate path errors are suppressed for successful HTTP synchronizations.
 
 #### Packaging
 
@@ -404,6 +458,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#18862](https://github.com/emqx/emqx/pull/18862) Validated the options passed to `emqx_router_tool:scan_missing_routes/1` and `emqx_router_tool:reconcile_missing_routes/1`.
 
   Invalid `chunk` or `sleep_ms` values were accepted silently and disabled the scan throttling, so the scan ran at full speed while the operator believed it was throttled. The tool now raises an error naming the offending option instead. Unknown option keys, such as a misspelled `chunks`, are rejected as well.
+
+- [#19120](https://github.com/emqx/emqx/pull/19120) Fixed `emqx ctl conf load --merge` and `PUT /api/v5/configs?mode=merge` so that they no longer reset omitted fields to their defaults. Previously, loading one field of a configuration structure reset every other field in that structure. For example, loading only `listeners.tcp.default.tcp_options.active_n` reset the listener's `parse_unit`, `bind`, `acceptors`, and `max_connections`, while loading only `mqtt.max_packet_size` reset `mqtt.idle_timeout` and `mqtt.max_inflight`. Merge mode now preserves the stored values of omitted fields. A merge no longer needs to repeat required fields that are already present in the stored configuration, such as a connector's `bootstrap_hosts` or a Schema Registry entry's `type`. Merge mode also preserves stored authorization sources when the loaded file does not contain `authorization.sources`. Replace mode is unchanged.
+
+- [#19166](https://github.com/emqx/emqx/pull/19166) Fixed an issue where the `emqx ctl clients stats` command stopped with an error and left a partial CSV file when clients connected or disconnected while the command was running.
 
 ## 6.1.4
 
