@@ -64,13 +64,17 @@ In the example above, `payload` refers to the data that you wish to encode into 
 
 ## Sparkplug B Alias Mapping
 
-The Sparkplug B specification allows devices to assign a numeric `alias` to each metric when they come online (by sending NBIRTH / DBIRTH messages). For subsequent data updates (sent as NDATA / DDATA messages), devices may publish only the `alias` instead of the full metric name (`name`) to reduce message size and network overhead.
+An `alias` is a numeric identifier for a Sparkplug B metric. When a device comes online, it declares each metric's `name` and `alias` in an NBIRTH or DBIRTH message. In subsequent NDATA or DDATA messages, the device can send only the `alias` instead of the full metric name, reducing message size and network overhead.
 
-To interpret these alias-only updates correctly, the receiver must keep track of Sparkplug B session state so that each alias can be resolved back to its original metric name.
+Because an alias has meaning only within its Sparkplug B session, a receiver needs an alias-to-name mapping to interpret alias-only data. The mapping associates each alias with the metric name declared in the corresponding NBIRTH or DBIRTH message.
 
-In practice, EMQX acts as a central processing and distribution hub for Sparkplug B data. Using the Rule Engine, EMQX forwards decoded data to non-Sparkplug B clients, including standard MQTT clients and data platforms. These downstream systems typically do not implement Sparkplug B state management, which makes alias-only data difficult to consume.
+EMQX can decode Sparkplug B data for rule processing and forward the result to non-Sparkplug B clients, such as standard MQTT clients and data platforms. These downstream systems typically do not maintain Sparkplug B session state and therefore cannot resolve alias-only metrics on their own. Starting with EMQX 6.0.2, EMQX supports alias mapping. When the current MQTT client session has a matching mapping, `spb_decode` adds the missing metric name to an alias-only metric during decoding.
 
-Starting with EMQX 6.0.2, the `spb_decode` function has been enhanced to support Sparkplug B alias mapping. This enhancement allows EMQX to automatically restore metric names during decoding, making the resulting data easier for downstream systems to consume.
+::: warning Important Notice
+
+Starting with EMQX 6.0.4, EMQX maintains alias mappings only for messages published directly by MQTT clients. Messages ingested through an MQTT bridge or another internal path do not create or use alias mappings. Therefore, `spb_decode` does not restore metric names for alias-only NDATA or DDATA messages received through those paths.
+
+:::
 
 ### How Sparkplug B Alias Mapping Works
 
@@ -78,7 +82,7 @@ When alias mapping is enabled, EMQX processes Sparkplug B messages as follows:
 
 1. **Process NBIRTH / DBIRTH messages**
 
-   When a client publishes NBIRTH or DBIRTH messages, EMQX examines the metrics in the payload and records alias-to-name mappings for metrics that define both fields.
+   When an MQTT client directly publishes NBIRTH or DBIRTH messages, EMQX examines the metrics in the payload and records alias-to-name mappings for metrics that define both fields.
 
 2. **Maintain mappings per session**
 
@@ -89,9 +93,9 @@ When alias mapping is enabled, EMQX processes Sparkplug B messages as follows:
 
 3. **Enhance `spb_decode` output**
 
-   When the Rule Engine invokes `spb_decode` on NDATA or DDATA messages, and a metric contains an `alias` but no `name`, EMQX automatically restores the corresponding metric name using the previously recorded mapping.
+   When the Rule Engine invokes `spb_decode` on NDATA or DDATA messages, and a metric contains an `alias` but no `name`, EMQX uses the mapping recorded for the current MQTT client session to restore the corresponding metric name.
 
-   As a result, decoded messages always include clear and readable metric names, making them suitable for rule processing, transformation, and forwarding.
+   If the current session has no matching mapping, `spb_decode` decodes the message without adding the metric name.
 
 4. **Clean up on session end**
 
@@ -111,7 +115,7 @@ schema_registry {
 
 > **Note**:
 >
-> - Alias mappings are created only from NBIRTH / DBIRTH messages received while alias mapping is enabled.
+> - Alias mappings are created only from NBIRTH / DBIRTH messages published directly by MQTT clients while alias mapping is enabled.
 > - If a client has already sent its birth messages, it must reconnect and publish NBIRTH / DBIRTH again for alias mapping to apply.
 
 ### Alias Mapping Example
@@ -127,6 +131,7 @@ This example demonstrates how to use EMQX Dashboard and MQTTX to convert alias-o
 #### Prerequisites
 
 - EMQX 6.0.2 or later, with Sparkplug B alias mapping enabled (`enable_alias_mapping = true`)
+- The same direct MQTT client connection for publishing the DBIRTH and DDATA messages
 - [MQTTX](https://mqttx.app/)
 
 #### Step 1: Create a Rule in EMQX Dashboard

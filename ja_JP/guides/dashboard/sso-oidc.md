@@ -59,6 +59,8 @@ EMQXダッシュボードは、OIDCプロトコルをサポートするIDサー�
 
      <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
+   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はこのトグルをオンにし、`http`の場合はオフにします。EMQX 6.0.4以降、Issuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成または更新を拒否します。
+
 2. **Update**をクリックして設定を完了します。
 
 ## Oktaとの連携によるSSOの設定
@@ -98,6 +100,7 @@ EMQXダッシュボードは、OIDCプロトコルをサポートするIDサー�
    - **Client ID**：**ステップ2**で作成したアプリケーションからコピーします。
    - **Client Secret**：**ステップ2**で作成したアプリケーションからコピーします。
    - **Dashboard Address**：ユーザーがダッシュボードにアクセスするベースURLを入力します。例：`http://localhost:18083`。このアドレスはIdP側の設定用に**SSO Address**および**Metadata Address**の生成に自動で組み合わされます。
+   - **Enable TLS**：**Issuer URL**が`https`スキームの場合はこのトグルをオンにし、`http`の場合はオフにします。EMQX 6.0.4以降、Issuer URLのスキームとTLS設定が一致しない場合、OIDC設定の作成または更新を拒否します。
 2. **Update**をクリックして設定を完了します。
 
 ## 詳細設定

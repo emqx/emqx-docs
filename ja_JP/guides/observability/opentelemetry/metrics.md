@@ -1,14 +1,14 @@
 # OpenTelemetryを統合してメトリクスを表示する
-EMQXは、gRPC OTELプロトコルを介してメトリクスを直接OpenTelemetry Collectorにプッシュする機能を内蔵しています。Collectorはその後、データを任意のバックエンドにルーティング、フィルタリング、変換し、保存および可視化を行えます。
+EMQXは、gRPC OTELプロトコルを介してメトリクスをOpenTelemetry Collectorに直接プッシュする機能を標準でサポートしています。Collectorは、その後データを任意のバックエンドにルーティング、フィルタリング、変換し、保存および可視化を行えます。
 
-本ページでは、EMQXとOpenTelemetryをダッシュボード経由で統合し、[Prometheus](../prometheus.md)を通じてEMQXのメトリクスを表示する方法を紹介します。
+このページでは、EMQXとOpenTelemetryをダッシュボードを通じて統合し、[Prometheus](../prometheus.md)でEMQXのメトリクスを表示する方法を紹介します。
 
 ## 前提条件
 
-OpenTelemetryとPrometheusをデプロイおよび設定しておく必要があります。
+OpenTelemetryとPrometheusを統合する前に、OpenTelemetryとPrometheusをデプロイおよび設定する必要があります。
 
-- [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)をデプロイしてください。
-- CollectorのgRPC受信ポート（デフォルト4317）およびPrometheusメトリクスのエクスポートポート（8889）を設定してください。
+- [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)をデプロイします。
+- CollectorのgRPC受信ポート（デフォルトは4317）とPrometheusメトリクスエクスポートポート（8889）を設定します。
 
 ```yaml
 # otel-collector-config.yaml
@@ -32,8 +32,8 @@ service:
       exporters: [prometheus]
 ```
 
-- [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)をデプロイしてください。
-- PrometheusがCollectorで収集されたメトリクスをスクレイプするよう設定してください。
+- [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)をデプロイします。
+- PrometheusがCollectorで収集されたメトリクスをスクレイプするよう設定します。
 
 ```yaml
 # prometheus.yaml
@@ -47,9 +47,11 @@ scrape_configs:
 
 ## EMQXでOpenTelemetryメトリクスを有効化する
 
-EMQXのOpenTelemetryメトリクス機能との統合は、EMQXダッシュボードまたは設定ファイルで行えます。EMQXダッシュボードの左側ナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブでメトリクスの設定を行います。
+EMQXのOpenTelemetryメトリクス機能との統合は、EMQXダッシュボードまたは設定ファイルで行えます。EMQXダッシュボードでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブを開いてメトリクスの設定を行います。
 
-EMQXがローカルで動作している場合は、以下の設定をEMQXの `cluster.hocon` ファイルに追加してください。
+`opentelemetry.exporter.endpoint` は1つのURLを受け入れます。URLは `http` または `https` スキームを使用し、明示的なポート番号を含める必要があります。例えば、`http://localhost:4317` は有効ですが、`localhost:4317` や `http://localhost` は無効です。
+
+以下の設定をEMQXの `cluster.hocon` ファイルに追加してください（EMQXがローカルで動作している場合）：
 
 ```bash
 opentelemetry {
@@ -67,5 +69,5 @@ opentelemetry {
 
 ## PrometheusでEMQXメトリクスを可視化する
 
-EMQXのメトリクスはPrometheusのウェブコンソール（http://otel-collector:9090）で確認できます。  
+EMQXのメトリクスはPrometheusのウェブコンソール（http://otel-collector:9090）で確認できます：
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)

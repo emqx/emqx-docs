@@ -21,6 +21,7 @@ This is because if the configuration is set in emqx.conf, any changes made throu
 ```bash
 mqtt {
   max_packet_size = 1MB
+  max_connect_packet_size = 1MB
   max_clientid_len = 65535
   max_topic_levels = 128
   max_qos_allowed = 2
@@ -34,6 +35,7 @@ Where,
 | **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optional Values** |
 | ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------- |
 | `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                     |
+| `max_connect_packet_size` | Max CONNECT Packet Size | Sets the maximum size of a CONNECT packet. A CONNECT packet must stay within the limits set by both `max_connect_packet_size` and `max_packet_size`. EMQX closes the connection if either limit is exceeded. | `1MB` | |
 | `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`      |
 | `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` - `35`          |
 | `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |

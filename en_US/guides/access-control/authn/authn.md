@@ -266,9 +266,11 @@ EMQX currently supports the following placeholders:
 
 - `${password}`: It will be replaced with the password at runtime. The password comes from the `Password` field in the `CONNECT` packet.
 
-- `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
+- `${peerhost}`: It is replaced with the client's source IP address at runtime. When [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) is enabled, this placeholder uses the source IP address reported by the proxy.
 
-- `${peername}`:  It will be replaced with the client's IP address and port at runtime, and the format is `IP: PORT`.
+- `${peerport}`: Starting from EMQX 6.0.4, it is replaced with the client's source port at runtime, for example, `51544`. When Proxy Protocol is enabled, this placeholder uses the source port reported by the proxy.
+
+- `${peername}`: Starting from EMQX 6.0.4, it is replaced with the client's source IP address and port at runtime. For an IPv4 address, the value uses the `IP:port` format, for example, `192.168.0.1:51544`. For an IPv6 address, the address is not enclosed in square brackets, for example, `2001:db8::1:51544`. When Proxy Protocol is enabled, this placeholder uses the source IP address and port reported by the proxy.
 
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 
@@ -283,6 +285,10 @@ EMQX currently supports the following placeholders:
   ```
   {allow, all, all, ["${zone}/${username}/#"]}
   ```
+
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
+:::
 
 ## Configure Authentication
 
