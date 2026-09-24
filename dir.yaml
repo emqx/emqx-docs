@@ -379,6 +379,7 @@
   - develop/connect-emqx/javascript
   - title_en: MQTT Wechat miniprogram example
     title_cn: MQTT 微信小程序示例
+    title_ja: MQTT Wechat ミニプログラムの例
     lang: cn
     path: develop/connect-emqx/wechat-miniprogram
 - develop/connect-emqx/curl

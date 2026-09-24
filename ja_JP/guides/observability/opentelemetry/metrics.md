@@ -1,11 +1,11 @@
 # OpenTelemetryを統合してメトリクスを表示する
-EMQXは、gRPC OTELプロトコルを介してメトリクスをOpenTelemetry Collectorに直接プッシュする機能を標準でサポートしています。Collectorは、その後データを任意のバックエンドにルーティング、フィルタリング、変換し、保存および可視化を行えます。
+EMQXは、gRPC OTELプロトコルを介してメトリクスをOpenTelemetry Collectorに直接プッシュする機能を標準でサポートしています。Collectorはデータを任意のバックエンドにルーティング、フィルタリング、変換し、保存や可視化に利用できます。
 
-このページでは、EMQXとOpenTelemetryをダッシュボードを通じて統合し、[Prometheus](../prometheus.md)でEMQXのメトリクスを表示する方法を紹介します。
+このページでは、Dashboardを通じてOpenTelemetryとEMQXを統合し、[Prometheus](../prometheus.md)でEMQXのメトリクスを表示する方法を紹介します。
 
 ## 前提条件
 
-OpenTelemetryとPrometheusを統合する前に、OpenTelemetryとPrometheusをデプロイおよび設定する必要があります。
+OpenTelemetryとPrometheusをデプロイおよび設定しておく必要があります。
 
 - [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)をデプロイします。
 - CollectorのgRPC受信ポート（デフォルトは4317）とPrometheusメトリクスエクスポートポート（8889）を設定します。
@@ -33,7 +33,7 @@ service:
 ```
 
 - [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)をデプロイします。
-- PrometheusがCollectorで収集されたメトリクスをスクレイプするよう設定します。
+- Prometheusを設定し、Collectorが収集したメトリクスをスクレイプします。
 
 ```yaml
 # prometheus.yaml
@@ -47,11 +47,11 @@ scrape_configs:
 
 ## EMQXでOpenTelemetryメトリクスを有効化する
 
-EMQXのOpenTelemetryメトリクス機能との統合は、EMQXダッシュボードまたは設定ファイルで行えます。EMQXダッシュボードでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブを開いてメトリクスの設定を行います。
+EMQX Dashboardまたは設定ファイルを使用して、OpenTelemetryメトリクス機能との統合を設定できます。EMQX Dashboardでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブでメトリクスの設定を行います。
 
-`opentelemetry.exporter.endpoint` は1つのURLを受け入れます。URLは `http` または `https` スキームを使用し、明示的なポート番号を含める必要があります。例えば、`http://localhost:4317` は有効ですが、`localhost:4317` や `http://localhost` は無効です。
+`opentelemetry.exporter.endpoint` は1つのURLを受け付けます。URLは `http` または `https` スキームを使用し、明示的なポート番号を含む必要があります。例えば、`http://localhost:4317` は有効ですが、`localhost:4317` や `http://localhost` は無効です。
 
-以下の設定をEMQXの `cluster.hocon` ファイルに追加してください（EMQXがローカルで動作している場合）：
+以下の設定をEMQXの `cluster.hocon` ファイルに追加します（EMQXがローカルで動作している場合）：
 
 ```bash
 opentelemetry {
@@ -69,5 +69,5 @@ opentelemetry {
 
 ## PrometheusでEMQXメトリクスを可視化する
 
-EMQXのメトリクスはPrometheusのウェブコンソール（http://otel-collector:9090）で確認できます：
+EMQXのメトリクスはPrometheusのWebコンソール（http://otel-collector:9090）で確認できます：
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
