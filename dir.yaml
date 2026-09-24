@@ -377,6 +377,10 @@
   - develop/connect-emqx/go
   - develop/connect-emqx/python
   - develop/connect-emqx/javascript
+  - title_en: MQTT Wechat miniprogram example
+    title_cn: MQTT 微信小程序示例
+    lang: cn
+    path: develop/connect-emqx/wechat-miniprogram
 - develop/connect-emqx/curl
 - develop/connect-emqx/node-red
 - title_en: Tutorials

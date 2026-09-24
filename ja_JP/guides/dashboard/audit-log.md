@@ -1,30 +1,34 @@
 # Audit Log
 
-Audit Log機能は、EMQXクラスターにおける重要な運用変更をリアルタイムで追跡することを可能にします。Audit Logを通じて、エンタープライズユーザーは誰がどのような重要な操作をいつ実行したのかを簡単に確認できます。これは、エンタープライズユーザーが規制要件を遵守し、運用中のデータセキュリティ監査を確実に行うための重要なツールです。
+Audit Log機能は、EMQXクラスターにおける重要な運用変更をリアルタイムで追跡することを可能にします。Audit Logを通じて、エンタープライズユーザーは誰がどの重要な操作をどのように、いつ行ったかを簡単に確認できます。これは、エンタープライズユーザーが規制要件に準拠し、運用中のデータセキュリティ監査を確実に行うための重要なツールです。
 
-EMQX Audit Logは、[ダッシュボード](./introduction.md)、[REST API](../api.md)、および[CLI](../cli.md)からの変更に関する操作を記録することをサポートしています。例えば、ダッシュボードのユーザーログインやクライアント、アクセス制御、データ統合の変更などです。ただし、メトリクス取得やクライアントリストの照会などの読み取り専用操作は記録されません。
+EMQX Audit Logは、[ダッシュボード](./introduction.md)、[REST API](../api.md)、および[CLI](../cli.md)からの変更関連操作を記録することをサポートしています。例えば、ダッシュボードのユーザーログインやクライアント、アクセス制御、データ統合の変更などです。ただし、メトリクス取得やクライアントリストの照会などの読み取り専用操作は記録されません。
 
-EMQXは、エンタープライズがAudit Logを管理しやすいように、ダッシュボードビューとログシステムとの統合を提供しています。これらの方法により、EMQXはAudit Logに対して柔軟かつ包括的なサポートを提供し、エンタープライズユーザーがニーズに応じて最適な管理・閲覧方法を選択できるようにしています。
+EMQXは、ダッシュボードビューとログシステムとの統合を提供し、エンタープライズがAudit Logを管理しやすくしています。これらの方法を通じて、EMQXはAudit Logに対して柔軟かつ包括的なサポートを提供し、エンタープライズユーザーがニーズに応じて最適な管理・閲覧方法を選択できるようにしています。
+
+## Audit Logへのアクセス
+
+EMQX 6.0.4以降、ダッシュボードでクラスター全体のAudit Logを閲覧できるのはグローバル管理者とグローバルビューアのみです。また、`GET /api/v5/audit`を通じて読み取ることも可能です。Audit Logにはすべてのネームスペースの操作が含まれ、呼び出し元のネームスペースによるフィルタリングは行われません。ネームスペース付きのダッシュボードユーザーおよびネームスペース付きAPIキーからのリクエストは、役割や割り当てられたスコープに関わらずHTTP `403`で`UNAUTHORIZED_ROLE`エラーコードが返されます。[`audit`スコープ](../api.md#built-in-api-key-scopes)はこの制限を上書きしません。
 
 ## Audit Logの有効化
 
-Audit Log機能は、ダッシュボードおよび設定ファイルの両方から有効化および設定パラメータの調整が可能です。
+Audit Log機能は、ダッシュボードと設定ファイルの両方から有効化および設定パラメータの調整が可能です。
 
 ### ダッシュボードからAudit Logを有効化
 
-ダッシュボードでAudit Logを有効化し、設定パラメータを変更するには、**Management** -> **Logging** -> **Audit Log**、または**System** -> **Audit Log**に移動します。
+ダッシュボードでAudit Logを有効化し、設定パラメータを変更するには、**管理** -> **ログ** -> **Audit Log**、または**システム** -> **Audit Log**に移動します。
 
 <img src="../assets/audit_log_config.png" alt="Audit Logの設定" style="zoom:50%;" />
 
-Audit Logには以下のオプションを設定できます：
+Audit Logに対して以下のオプションを設定できます。
 
-- **Enable Log Handler**：Audit Log処理プロセスの有効化・無効化。デフォルトで有効です。
-- **Audit Log File Name**：Audit Logファイルのパスおよびファイル名を指定します。デフォルト値は`${EMQX_LOG_DIR}/audit.log`で、`${EMQX_LOG_DIR}`は変数でありデフォルトは`./log`です。つまり最終的には`./log/audit.log.1`に保存されます。
-- **Maximum Log Files Number**：ローテーションされるログファイルの最大数。デフォルトは`10`です。
-- **Rotation Size**：ログファイルのサイズを設定し、指定サイズに達するとログファイルがローテーションされます。無効にするとログファイルは無制限に成長します。テキストボックスに希望の値を入力し、ドロップダウンリストから`MB`、`GB`、`KB`などの単位を選択できます。デフォルトは`50MB`です。
-- **Max Dashboard Record Size**：データベースに保存される最大レコード数を決定します。ダッシュボードおよび`/audit` APIからアクセス・取得可能です。デフォルトは`5000`です。
-- **Ignore High Frequency Request**：高頻度リクエストを無視するかどうかを制御します。これにより、パブリッシュ／サブスクライブやクライアントのキックアウトなどのリクエストによるAudit Logの洪水を防ぎます。デフォルトで有効です。
-- **Time Offset**：ログのタイムスタンプのフォーマットを定義します。例として"-02:00"や"+00:00"があります。デフォルトは`system`です。
+- **ログハンドラーを有効化**: Audit Logの処理プロセスを有効または無効にします。デフォルトで有効です。
+- **Audit Logファイル名**: Audit Logファイルのパスと名前を指定します。デフォルト値は`${EMQX_LOG_DIR}/audit.log`で、`${EMQX_LOG_DIR}`は変数でありデフォルトは`./log`です。つまり最終的に`./log/audit.log.1`に保存されます。
+- **最大ログファイル数**: ローテーションされるログファイルの最大数です。デフォルト値は`10`です。
+- **ローテーションサイズ**: ログファイルのサイズを設定し、指定サイズに達するとログファイルがローテーションされます。無効にするとログファイルは無制限に増加します。テキストボックスに値を入力し、ドロップダウンリストから`MB`、`GB`、`KB`などの単位を選択できます。デフォルト値は`50MB`です。
+- **最大ダッシュボード記録サイズ**: データベースに保存される最大レコード数を決定し、ダッシュボードおよび`/audit` APIからアクセス・取得可能です。デフォルト値は`5000`です。
+- **高頻度リクエストを無視**: パブリッシュ／サブスクライブやクライアントの強制切断などの高頻度リクエストを無視し、Audit Logの過剰な記録を防ぐかどうかを制御します。デフォルトで有効です。
+- **タイムオフセット**: ログのタイムスタンプの形式を定義します。例として"-02:00"や"+00:00"があります。デフォルトは`system`に設定されています。
 
 ### 設定ファイルからAudit Logを有効化
 
@@ -43,40 +47,40 @@ log.audit {
 
 ## ダッシュボードでAudit Logを閲覧
 
-Audit Logが有効化されると、ダッシュボードの**System** -> **Audit Log**でAudit Logの内容を閲覧できます。
+Audit Logを有効化すると、ダッシュボードの**システム** -> **Audit Log**でログエントリを閲覧できます。
 
 ![image-20231214143911786](./assets/audit_log_list.png)
 
 ### 検索フィルター
 
-以下の検索キーワードでログ操作をフィルタリング・検索できます：
+ログ操作をフィルターおよび検索できます。サポートされている検索キーワードは以下の通りです。
 
-- **開始時間** - **終了時間**：操作が発生した時間範囲。
-- **ソースタイプ**：操作が行われた方法。`Dashboard`、`REST API`、`CLI`、`Erlang Console`が選択肢です。ここで`Erlang Console`はEMQが提供するオンサイト技術サポート時に使用されるErlang Shellコンソールを指します。
-- **オペレーター**：ダッシュボードのユーザー名またはREST API呼び出しに使用されたキー名です。操作方法がダッシュボードまたはREST APIの場合のみ有効です。
-- **IP**：ダッシュボードユーザーまたはREST APIを呼び出したクライアントの送信元IPです。操作方法がダッシュボードまたはREST APIの場合のみ表示されます。
-- **操作名**：Audit Logでサポートされている操作名のドロップダウンリストから選択します。
-- **操作結果**：`Success`または`Failure`のドロップダウンリストから選択します。
+- **開始時間** - **終了時間**: 操作が発生した時間範囲。
+- **ソースタイプ**: 操作が行われた方法。`Dashboard`、`REST API`、`CLI`、`Erlang Console`から選択可能です。ここで`Erlang Console`はEMQによるオンサイト技術サポート時に使用されるErlang Shellコンソールを指します。
+- **オペレーター**: ダッシュボードのユーザー名またはREST API呼び出しに使用されたキー名です。操作方法がダッシュボードまたはREST APIの場合のみ有効です。
+- **IP**: ダッシュボードユーザーまたはREST APIを呼び出したクライアントのソースIPです。操作方法がダッシュボードまたはREST APIの場合のみ表示されます。
+- **操作名**: Audit Logでサポートされている操作名のドロップダウンリストから選択します。
+- **操作結果**: `成功`または`失敗`から選択します。
 
 ### リストの説明
 
-表示されるAudit Logリストの各列についての説明は以下の通りです：
+表示されるAudit Logリストの各列の説明は以下の通りです。
 
-- **操作時間**：操作が行われた時間。
-- **情報**：
+- **操作時間**: 操作が行われた時間。
+- **情報**:
   - ダッシュボードまたはREST APIの場合、この列は操作名を表示します。
   - CLIおよびコンソールの場合、この列は実行されたコマンドを記録します。
-- **オペレーター**：操作方法および対応するオペレーターを含みます。CLIおよびコンソールの操作では、コマンドが実行されたEMQXノードの名前がオペレーターとなります。
-- **IP**：ダッシュボードユーザーまたはREST APIを呼び出したクライアントの送信元IPです。操作方法がダッシュボードまたはREST APIの場合のみ表示されます。
-- **操作結果**：`Success`または`Failure`。失敗にはフォーム検証失敗やリソース削除不可などのケースが含まれます。ダッシュボードまたはREST APIの場合のみ表示され、CLIおよびコンソールでは操作結果は記録されません。
+- **オペレーター**: 操作方法と対応するオペレーターを含みます。CLIおよびコンソール操作の場合、オペレーターはコマンドが実行されたEMQXノードの名前です。
+- **IP**: ダッシュボードユーザーまたはREST APIを呼び出したクライアントのソースIPです。操作方法がダッシュボードまたはREST APIの場合のみ表示されます。
+- **操作結果**: `成功`または`失敗`。失敗にはフォーム検証エラーやリソース削除不能などのシナリオが含まれます。ダッシュボードまたはREST API操作のみ表示され、CLIおよびコンソールは操作結果を記録できません。
 
 ## ログファイルでAudit Logを閲覧
 
-EMQXでAudit Logが有効化されると、変更に関する操作は`./log/audit.log.1`ファイルにログ形式で保存されます。エンタープライズユーザーはAudit Logの詳細な分析を行いやすく、既存のログ管理システムに統合してコンプライアンスやデータセキュリティ要件を満たすことが可能です。
+Audit LogがEMQXで有効化されると、変更関連操作は`./log/audit.log.1`ファイルにログ形式で保存されます。エンタープライズユーザーはAudit Logの詳細分析を容易に行え、既存のログ管理システムに統合してコンプライアンスやデータセキュリティ要件を満たせます。
 
 ::: warning 注意
 
-コマンドライン操作のAudit Logには機密情報が含まれる場合があるため、ログコレクターに送信する際は注意してください。ログ内容のフィルタリングや暗号化通信の利用など、不正な情報漏洩を防ぐ対策を推奨します。
+コマンドライン操作のAudit Logには機密情報が含まれる可能性があるため、ログコレクターに送信する際は注意が必要です。ログ内容のフィルタリングや暗号化伝送の利用を推奨し、不正な情報漏洩を防いでください。
 
 :::
 
@@ -84,49 +88,73 @@ Audit Logに含まれるフィールドは、操作記録のソースによっ�
 
 ### ダッシュボードまたはREST APIからの操作記録
 
-ダッシュボードまたはREST APIの操作を記録するAudit Logは、操作ユーザー、操作対象、操作結果に関する情報を含みます。ログメッセージのフォーマット例は以下の通りです。
+ダッシュボードまたはREST API操作を記録するAudit Logには、操作ユーザー、操作対象、操作結果の情報が含まれます。ログメッセージのフォーマット例は以下の通りです。
 
 ```bash
-{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","query_string":{},"from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
+{"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
 ```
 
-以下の表は上記ログメッセージ例に含まれるフィールドの説明です。
+以下の表は、ダッシュボードまたはREST API操作によって生成されるAudit Logエントリに含まれるフィールドを説明しています。
 
-| フィールド名         | 型       | 説明                                                         |
-| -------------------- | -------- | ------------------------------------------------------------ |
-| time                 | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                   |
-| level                | String   | ログレベル                                                   |
-| source_ip            | String   | 操作の送信元IPアドレス                                       |
-| operation_type       | String   | 操作の機能モジュール。REST APIのTagに対応                    |
-| operation_result     | String   | 操作結果。`success`は成功、`failure`は失敗を示す             |
-| http_status_code     | String   | HTTPレスポンスステータスコード                                |
-| http_method          | String   | HTTPリクエストメソッド                                       |
-| duration_ms          | Integer  | 操作実行時間（ミリ秒単位）                                   |
-| auth_type            | String   | 認証タイプ。認証に使用された方法や仕組みを示し、`jwt_token`（ダッシュボード）または`api_key`（REST API）で固定 |
-| query_string         | Object   | HTTPリクエストのURLクエリパラメータ                           |
-| from                 | String   | リクエストの発生元。`dashboard`、`rest_api`はそれぞれダッシュボード、REST APIを示す。`cli`、`erlang_console`の場合はCLIまたはErlang Shellからの操作であり、このログ構造は該当しない |
-| source               | String   | 操作を実行したダッシュボードのユーザー名またはAPIキー名      |
-| node                 | String   | 操作が実行されたノード名（ノードまたはサーバー）              |
-| method               | String   | HTTPリクエストメソッド。`post`、`put`、`delete`はそれぞれ作成、更新、削除操作に対応 |
-| operate_id           | String   | リクエストのREST APIパス。詳細は[REST API](../api.md)を参照   |
+| フィールド名            | 型       | 説明                                                                                   |
+| ----------------------- | -------- | -------------------------------------------------------------------------------------- |
+| time                    | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                                            |
+| level                   | String   | ログレベル                                                                             |
+| source_ip               | String   | 操作のソースIPアドレス                                                                |
+| operation_type          | String   | 操作の機能モジュール。REST APIのTagに対応                                             |
+| operation_result        | String   | 操作結果。`success`は成功、`failure`は失敗を示す                                      |
+| http_status_code        | Integer  | HTTPレスポンスステータスコード                                                         |
+| http_method             | String   | HTTPリクエストメソッド                                                                 |
+| duration_ms             | Integer  | 操作実行時間（ミリ秒単位）                                                             |
+| auth_type               | String   | 認証タイプ。認証に使用された方法や仕組みを示し、`jwt_token`（Dashboard）または`api_key`（REST API）で固定 |
+| from                    | String   | リクエストの発信元。`dashboard`、`rest_api`はそれぞれダッシュボード、REST APIを示す。`cli`、`erlang_console`はCLIまたはErlang Shellからの操作を示し、このログ構造は適用されません。 |
+| source                  | String   | 操作を実行したダッシュボードのユーザー名またはAPIキー名                               |
+| node                    | String   | 操作が実行されたノード名                                                               |
+| operation_id            | String   | リクエストのREST APIパス。詳細は[REST API](../api.md)を参照                            |
+| http_request            | Object   | HTTPリクエストの詳細                                                                   |
+| http_request.method     | String   | HTTPリクエストメソッド                                                                 |
+| http_request.bindings   | Object   | `operation_id`内のプレースホルダーに対応するパスパラメータの値                         |
+| http_request.headers    | Object   | HTTPリクエストヘッダー。機密情報と認識されたキーの値はマスクされます                   |
+| http_request.body       | Object   | HTTPリクエストボディ。機密情報と認識されたキーの値はマスクされます                     |
+| http_request.query_string | Object | 任意。解析済みのURLクエリパラメータ。クエリパラメータがない場合は省略。機密情報と認識されたキーの値はマスクされます |
+| http_request.namespace  | String   | 任意。操作対象の解決済みネームスペース。グローバルネームスペースの場合は`global`となる |
+
+#### ネームスペースとクエリパラメータ
+
+EMQX 6.0.4以降、Audit Logには監査対象のダッシュボードおよびREST APIリクエストの空でないクエリパラメータが`http_request.query_string`に含まれます。データバックアップ操作では、リクエストに`namespace`クエリパラメータが含まれているかに関わらず、`http_request.namespace`に解決済みの対象ネームスペースが記録されます。以下はグローバル管理者が`ns2`にバックアップをインポートする例です。
+
+```json
+{
+  "http_request": {
+    "method": "post",
+    "body": {"filename": "emqx-export.zip"},
+    "query_string": {"namespace": "ns2"},
+    "namespace": "ns2"
+  }
+}
+```
+
+ネームスペース管理者が自身のネームスペースでクエリパラメータなしにデータバックアップ操作を行う場合、`http_request.query_string`は省略されますが、解決済みネームスペースは`http_request.namespace`に含まれます。
+
+解決済みの対象ネームスペースは、バックアップファイルのエクスポート、インポート、アップロード、削除を行うデータバックアップ操作で記録されます。対象ネームスペースを解決しない他のエンドポイントでは`http_request.namespace`は省略されます。
 
 ### CLIまたはErlang Consoleからの操作記録
 
-CLIまたはErlang Consoleからの操作を記録するAudit Logは、実行されたコマンド、呼び出しパラメータなどの情報を含みます。ログメッセージのフォーマット例は以下の通りです。
+CLIまたはErlang Console操作を記録するAudit Logには、実行されたコマンド、呼び出しパラメータなどの情報が含まれます。ログメッセージのフォーマット例は以下の通りです。
 
 ```bash
 {"time":1695866030977555,"level":"info","msg":"from_cli","from": "cli","node":"emqx@127.0.0.1","duration_ms":0,"cmd":"retainer","args":["clean", "t/1"]}
 ```
 
-以下の表は上記ログメッセージ例に含まれるフィールドの説明です。
+以下の表は上記ログメッセージサンプルに含まれるフィールドを示しています。
 
-| フィールド名  | 型       | 説明                                                         |
-| ------------ | -------- | ------------------------------------------------------------ |
-| time         | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                   |
-| level        | String   | ログレベル                                                   |
-| msg          | String   | 操作の説明                                                   |
-| from         | String   | リクエストの発生元。`cli`、`erlang_console`はそれぞれCLI、Erlang Shellを示す。`dashboard`、`rest_api`の場合はダッシュボードまたはREST APIからの操作であり、このログ構造は該当しない |
-| node         | String   | 操作が実行されたノード名（ノードまたはサーバー）              |
-| duration_ms  | Integer  | 操作の実行時間（ミリ秒単位）                                 |
-| cmd          | String   | 実行された具体的なコマンド操作。対応コマンドは[CLI](../cli.md)を参照 |
-| args         | Array    | コマンドに付随する追加パラメータ。複数パラメータは配列で区切られる |
+| フィールド名  | 型       | 説明                                                        |
+| ------------ | -------- | ----------------------------------------------------------- |
+| time         | 整数     | ログ記録の時間をマイクロ秒単位で表したタイムスタンプ。       |
+| level        | 文字列   | ログレベル。                                                |
+| msg          | 文字列   | 操作の説明。                                               |
+| from         | 文字列   | リクエストの発信元。`cli`、`erlang_console`はそれぞれCLI、Erlang Shellを示す。`dashboard`、`rest_api`の場合はダッシュボードまたはREST APIからの操作であり、このログ構造は該当しない。 |
+| node         | 文字列   | 操作が実行されたノード名またはサーバー名。                  |
+| duration_ms  | 整数     | 操作の実行時間（ミリ秒単位）。                              |
+| cmd          | 文字列   | 実行された具体的なコマンド操作。対応コマンドは[CLI](../cli.md)を参照。 |
+| args         | 配列     | コマンドに付随する追加パラメータ。複数パラメータは配列で区切られる。 |

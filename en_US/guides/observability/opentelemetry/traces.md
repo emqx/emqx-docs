@@ -87,6 +87,8 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
 
 This section guides you through enabling OpenTelemetry tracing in EMQX, demonstrating the distributed tracing capabilities in a multi-node setup.
 
+`opentelemetry.exporter.endpoint` accepts one URL. The URL must use the `http` or `https` scheme and include an explicit port. For example, `http://localhost:4317` is valid. Values such as `localhost:4317` and `http://localhost` are invalid.
+
 1. Add the following configuration to the EMQX `cluster.hocon` file (assuming EMQX is running locally):
 
    ```bash
