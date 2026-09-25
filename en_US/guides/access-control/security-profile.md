@@ -47,7 +47,7 @@ The `hardened` profile changes the following behaviors compared to `legacy`.
 
 ### Listener Exposure
 
-The `hardened` profile uses the following default bind addresses unless you override them with `node.default_listener_address`, a node-level setting for listeners without an explicit bind address:
+The `hardened` profile uses the following default bind addresses unless you override them with `node.default_listener_address`, a node-level setting for listeners without an explicit bind address. The official Docker image is an exception: its entrypoint sets `EMQX_NODE__DEFAULT_LISTENER_ADDRESS=all` unless the variable is explicitly set, so port-only listeners bind to all container interfaces under both profiles.
 
 - **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, secure WebSocket and QUIC listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
 - **The Dashboard HTTP listener binds to loopback by default.** The Dashboard HTTP listener with an omitted or port-only `bind` listens on the loopback interface only. Configure an explicit bind address to accept external connections.
