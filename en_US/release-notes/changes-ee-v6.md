@@ -601,6 +601,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Before this change, a request that passed authentication but was denied by role-based access control was recorded with an empty `source` and without `http_request.bindings`, so `GET /api/v5/audit` could not show who made the request or what it targeted. Records for unauthenticated requests are unchanged.
 
+- [#19148](https://github.com/emqx/emqx/pull/19148) The `license_expiry` alarm now includes a message that states whether the license is about to expire or has already expired, together with the expiry date. Previously, it reported only the alarm name, which appeared to indicate an expired license even when fewer than 30 days remained before expiry. The alarm details now include a `days_left` field, and both the details and message are kept up to date while the alarm remains active.
+
 #### CLI
 
 - [#18590](https://github.com/emqx/emqx/pull/18590) Fixed the output of `emqx stop` when the node is not running.

@@ -601,6 +601,8 @@
 
   在此更改之前，通过身份验证但被基于角色的访问控制拒绝的请求会记录为空 `source`，并且没有 `http_request.bindings`，因此 `GET /api/v5/audit` 无法显示谁发出了请求或请求的目标是什么。未经身份验证的请求的记录不会更改。
 
+- [#19148](https://github.com/emqx/emqx/pull/19148) `license_expiry` 告警现在会在消息中说明 License 即将过期还是已经过期，并提供到期日期。此前，该告警仅报告告警名称，即使 License 距离到期不足 30 天，看起来也像已经过期。告警详情新增 `days_left` 字段；告警保持激活期间，详情和消息都会持续更新。
+
 #### CLI
 
 - [#18590](https://github.com/emqx/emqx/pull/18590) 修复了节点未运行时 `emqx stop` 的输出。
