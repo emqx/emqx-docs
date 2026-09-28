@@ -69,7 +69,7 @@ POST /api/v5/plugin_api/emqx_sync_request/request
 
 该 API 使用与其他 EMQX 管理 API 相同的认证方式，支持通过 Dashboard 登录获取的 Bearer Token，以及通过 HTTP Basic 认证发送的 API 密钥。
 
-由于该端点使用 `POST`，Dashboard 用户或 API 密钥必须具有管理员角色。从 EMQX 6.0.4 开始，调用方还必须具备 `plugin_api` 或 `system` 权限范围。除非调用方还需要等同管理员权限的 `system` 权限范围，否则请使用受限的 `plugin_api` 权限范围。
+由于该端点使用 `POST`，Dashboard 用户或 API 密钥必须具有管理员角色。该端点由 Sync Request 插件单独注册，不通过通用插件 API 路由，并显式要求 `publish` 权限范围。`plugin_api` 和 `system` 权限范围不能授予对此端点的访问权限。
 
 ### 请求体
 

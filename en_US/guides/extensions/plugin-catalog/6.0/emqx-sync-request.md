@@ -69,7 +69,7 @@ POST /api/v5/plugin_api/emqx_sync_request/request
 
 Use the same authentication methods as other EMQX management APIs. Bearer tokens obtained from Dashboard login and API keys sent with HTTP Basic authentication are accepted.
 
-Because this endpoint uses `POST`, the Dashboard user or API key must have the Administrator role. Starting from EMQX 6.0.4, the caller must also have the `plugin_api` or `system` scope. Use the restricted `plugin_api` scope unless the caller also needs the administrator-equivalent `system` scope.
+Because this endpoint uses `POST`, the Dashboard user or API key must have the Administrator role. The endpoint is registered directly by the Sync Request plugin rather than through the generic plugin API route, and explicitly requires the `publish` scope. The `plugin_api` and `system` scopes do not grant access to this endpoint.
 
 ### Request Body
 
