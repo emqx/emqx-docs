@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. Starting from EMQX 6.0.4, Dashboard users can use the [11 API-key scopes](../api.md#built-in-api-key-scopes) and 4 additional scopes that apply only to browser sessions:
+You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. Starting from EMQX 6.0.5, Dashboard users can use the [11 API-key scopes](../api.md#built-in-api-key-scopes) and 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |

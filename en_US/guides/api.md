@@ -383,7 +383,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-Starting from EMQX 6.0.4, EMQX provides 11 scopes for API keys:
+Starting from EMQX 6.0.5, EMQX provides 11 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -479,9 +479,9 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.0.4, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`. These defaults do not include `publish`, `gateways`, or `audit`.
+Starting from EMQX 6.0.4, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. Starting from EMQX 6.0.5, the defaults also include `plugin_api`. These defaults do not include `publish`, `gateways`, or `audit`.
 
-When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these eight scopes. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
+When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these seven scopes in EMQX 6.0.4, with `plugin_api` added as the eighth scope starting from EMQX 6.0.5. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
 
 ### Existing Keys with Disallowed Scopes
 

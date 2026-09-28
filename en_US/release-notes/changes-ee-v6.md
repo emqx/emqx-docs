@@ -24,8 +24,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#17855](https://github.com/emqx/emqx/pull/17855) Namespace-scoped dashboard administrators can now create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace, and API keys outside their namespace are hidden from them.
 
-- [#18843](https://github.com/emqx/emqx/pull/18843) Added the restricted `plugin_api` scope, which grants access to endpoints published by plugins under `/api/v5/plugin_api/...` without granting administrator-equivalent `system` access. The scope can be assigned to API keys and Dashboard users. Plugin installation, start, stop, and configuration remain in the `system` scope. API keys and Dashboard users that already hold `system` retain access to plugin-extended API endpoints.
-
 #### Data Integration
 
 - [#17933](https://github.com/emqx/emqx/pull/17933) The RabbitMQ connector now supports a multi-node `servers` list (e.g. `rmq1:5672,rmq2:5672`) with connect-time failover and rotated pool start offsets. Existing `server` and `port` configurations remain supported when `servers` is unset.

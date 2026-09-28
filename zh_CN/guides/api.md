@@ -379,7 +379,7 @@ team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 
 #### 内置 API 密钥权限范围
 
-从 EMQX 6.0.4 开始，EMQX 提供 11 个 API 密钥权限范围：
+从 EMQX 6.0.5 开始，EMQX 提供 11 个 API 密钥权限范围：
 
 | 权限范围 | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -475,9 +475,9 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 命名空间 API 密钥的权限范围限制
 
-从 EMQX 6.0.4 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` 和 `plugin_api` 权限范围创建。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
+从 EMQX 6.0.4 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围创建。从 EMQX 6.0.5 开始，默认权限还包含 `plugin_api`。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
 
-创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，请求中只能包含上述 8 个权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
+创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，EMQX 6.0.4 的请求中只能包含上述 7 个权限范围；从 EMQX 6.0.5 开始，`plugin_api` 成为第 8 个可用权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
 
 ### 包含不允许权限范围的现有密钥
 

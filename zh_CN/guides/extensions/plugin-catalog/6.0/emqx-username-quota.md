@@ -30,7 +30,7 @@
 
 基础路径：`/api/v5/plugin_api/emqx_username_quota`
 
-从 EMQX 6.0.4 开始，调用这些端点的 Dashboard 用户或 API 密钥必须具备 `plugin_api` 或 `system` 权限范围。调用方的角色和命名空间权限还必须允许所请求的 HTTP 方法。除非调用方还需要等同管理员权限的 `system` 权限范围，否则请使用受限的 `plugin_api` 权限范围。
+从 EMQX 6.0.5 开始，调用这些端点的 Dashboard 用户或 API 密钥必须具备 `plugin_api` 或 `system` 权限范围。调用方的角色和命名空间权限还必须允许所请求的 HTTP 方法。除非调用方还需要等同管理员权限的 `system` 权限范围，否则请使用受限的 `plugin_api` 权限范围。
 
 ### 会话查询
 

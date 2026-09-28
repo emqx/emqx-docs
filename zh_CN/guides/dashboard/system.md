@@ -28,7 +28,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 ### 登录用户权限范围
 
-您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。Dashboard 中显示为**权限范围**，对应 REST API 的 `scopes` 字段。从 EMQX 6.0.4 开始，Dashboard 用户可以使用 [11 个 API 密钥权限范围](../api.md#内置-api-密钥权限范围)和 4 个仅适用于浏览器会话的专属权限范围：
+您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。Dashboard 中显示为**权限范围**，对应 REST API 的 `scopes` 字段。从 EMQX 6.0.5 开始，Dashboard 用户可以使用 [11 个 API 密钥权限范围](../api.md#内置-api-密钥权限范围)和 4 个仅适用于浏览器会话的专属权限范围：
 
 | 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
