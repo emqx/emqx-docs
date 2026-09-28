@@ -116,7 +116,7 @@ EMQX 6.1.5 にアップグレードする前に、破壊的変更点と既知の
 
 - [#18767](https://github.com/emqx/emqx/pull/18767) RocketMQ コネクターが属さないネームスペースに属していると誤認される問題を修正しました。
 
-  RocketMQ コネクターは RocketMQ インスタンスのネームスペースを保持する独自の `namespace` 設定フィールドを持っています。コネクター API のレスポンスは EMQX ネームスペースと同じ JSON キーでこの値を返していたため、ダッシュボードはコネクターをその名前のネームスペースに属すると扱っていました。結果として「ネームスペース <name> の管理者のみがコネクター操作を行えます」と表示され、コネクターの開封は「管理ネームスペースが見つかりません」で失敗していました。
+  RocketMQ コネクターは RocketMQ インスタンスのネームスペースを保持する独自の `namespace` 設定フィールドを持っています。コネクター API のレスポンスは EMQX ネームスペースと同じ JSON キーでこの値を返していたため、ダッシュボードはコネクターをその名前のネームスペースに属すると扱っていました。その結果、`Only the administrator of namespace <name> can perform operations on the connector` と表示され、コネクターを開くと「Managed namespace not found」というエラーで失敗していました。
 
   コネクター API のレスポンスの `namespace` フィールドは常に EMQX ネームスペースを保持するようになりました。
 
