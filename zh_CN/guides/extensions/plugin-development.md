@@ -439,6 +439,16 @@ tar 包中包含：
 /api/v5/plugin_api/{plugin_name}/...
 ```
 
+从 EMQX 6.0.4 开始，插件 API 网关的权限范围校验接受受限的 `plugin_api` 权限范围或等同管理员权限的 `system` 权限范围。调用方的角色和命名空间权限还必须允许所请求的操作。
+
+如果调用方只需访问插件发布的端点，而无需安装、启动、停止或配置插件，请使用 `plugin_api`。插件管理操作仍属于 `system` 权限范围。为保证向后兼容，插件 API 网关继续接受 `system`。
+
+::: warning 重要提示
+
+`plugin_api` 权限范围允许访问通过该网关发布的所有端点，但不限制单个插件端点可以执行的操作。因此，请评估插件所暴露的每个端点的安全影响。
+
+:::
+
 要处理这些请求，需在插件应用模块中实现 `on_handle_api_call/4`，并按方法和路径进行分发。参考实现请见 `plugins/emqx_username_quota/src/emqx_username_quota_app.erl` 和 `emqx_username_quota_api.erl`。
 
 #### 回调函数签名

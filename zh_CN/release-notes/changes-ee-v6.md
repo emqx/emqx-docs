@@ -24,6 +24,8 @@
 
 - [#17855](https://github.com/emqx/emqx/pull/17855) 命名空间级 Dashboard 管理员现在可以在自己的命名空间内创建、列出、读取、更新和删除 API 密钥。他们无法创建全局 API 密钥或其他命名空间中的 API 密钥，也无法查看自己命名空间之外的 API 密钥。
 
+- [#18843](https://github.com/emqx/emqx/pull/18843) 新增受限的 `plugin_api` 权限范围。该权限范围允许访问插件在 `/api/v5/plugin_api/...` 下发布的端点，而不会授予等同管理员权限的 `system` 访问权限。`plugin_api` 可分配给 API 密钥和 Dashboard 用户。插件安装、启动、停止和配置操作仍属于 `system` 权限范围。已持有 `system` 的 API 密钥和 Dashboard 用户仍可访问插件扩展 API 端点。
+
 #### 数据集成
 
 - [#17933](https://github.com/emqx/emqx/pull/17933) RabbitMQ 连接器新增对多节点 `servers` 列表（例如 `rmq1:5672,rmq2:5672`）的支持，可在连接时进行故障转移，并轮换连接池的起始节点。当未设置 `servers` 时，现有的 `server` 和 `port` 配置仍然受支持。

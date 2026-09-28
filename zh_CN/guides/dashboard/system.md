@@ -28,7 +28,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 ### 登录用户权限范围
 
-您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。Dashboard 中显示为**权限范围**，对应 REST API 的 `scopes` 字段。除 [10 个 API 密钥权限范围](../api.md#内置-api-密钥权限范围) 外，Dashboard 用户还拥有 4 个仅适用于浏览器会话的专属权限范围：
+您可以为 Dashboard 登录用户分配权限范围（Scope），在角色基础上进一步限制用户可访问的 API 区域。Dashboard 中显示为**权限范围**，对应 REST API 的 `scopes` 字段。从 EMQX 6.0.4 开始，Dashboard 用户可以使用 [11 个 API 密钥权限范围](../api.md#内置-api-密钥权限范围)和 4 个仅适用于浏览器会话的专属权限范围：
 
 | 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
@@ -43,7 +43,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 - **角色默认权限**：使用所选角色的默认权限。角色默认权限发生变化时，新权限会自动生效。
 - **管理权限范围**：从 `system`、`user_management`、`api_key_management` 和 `sso_management` 中选择。这些权限范围可提供等同管理员的能力。
-- **自定义受限权限**：从角色可用且不属于等同管理员权限组的权限范围中选择，例如 `connections`、`publish`、`data_integration`、`monitoring` 和 `mfa_management`。如果将权限范围列表留空，用户不能访问受权限范围保护的 API。
+- **自定义受限权限**：从角色可用且不属于等同管理员权限组的权限范围中选择，例如 `connections`、`publish`、`data_integration`、`monitoring`、`plugin_api` 和 `mfa_management`。如果将权限范围列表留空，用户不能访问受权限范围保护的 API。
 
 <img src="./assets/user_scopes.png" alt="创建全局 Dashboard 用户并选择权限模式" style="zoom:67%;" />
 
@@ -51,10 +51,10 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 | 用户类型 | 默认权限 |
 | --- | --- |
-| 全局管理员 | 全部 14 个权限范围，包括 10 个 API 密钥权限范围和 4 个登录专属权限范围。 |
-| 全局查看者 | 10 个 API 密钥权限范围。`mfa_management` 仅在显式分配时授予。 |
-| 命名空间管理员 | 连接、监控、数据集成、访问控制、系统设置、集群管理、License、用户管理和 API 密钥管理。 |
-| 命名空间查看者 | 连接、监控、数据集成、访问控制、系统设置、集群管理和 License，不包含登录专属权限范围。 |
+| 全局管理员 | 全部 15 个权限范围，包括 11 个 API 密钥权限范围和 4 个登录专属权限范围。 |
+| 全局查看者 | 11 个 API 密钥权限范围。`mfa_management` 仅在显式分配时授予。 |
+| 命名空间管理员 | 连接、监控、数据集成、访问控制、系统设置、集群管理、License、插件扩展 API、用户管理和 API 密钥管理。 |
+| 命名空间查看者 | 连接、监控、数据集成、访问控制、系统设置、集群管理、License 和插件扩展 API，不包含登录专属权限范围。 |
 
 ::: warning 等同管理员权限的范围必须单独使用
 
@@ -79,7 +79,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 在 Dashboard 中配置用户并变更所选角色或命名空间时，表单会移除该角色或命名空间不支持的权限范围，并显示警告。通过 REST API 变更用户角色时，EMQX 会检查用户的权限范围是否与新角色兼容。不兼容的请求返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
 
-例如，如果将全局管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个权限范围需要管理员角色。请在同一请求中提供一个仅包含与查看者兼容的权限范围列表以完成变更。`mfa_management` 仍可分配给全局查看者。对于命名空间查看者，REST API 仅接受 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license`；请求包含其他权限范围时返回 HTTP 400。
+例如，如果将全局管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个权限范围需要管理员角色。请在同一请求中提供一个仅包含与查看者兼容的权限范围列表以完成变更。`mfa_management` 仍可分配给全局查看者。对于命名空间查看者，REST API 仅接受 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` 和 `plugin_api`；请求包含其他权限范围时返回 HTTP 400。
 
 ### 默认管理员保护
 

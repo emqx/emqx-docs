@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. In addition to the [10 API-key scopes](../api.md#built-in-api-key-scopes), Dashboard users have 4 additional scopes that apply only to browser sessions:
+You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. Starting from EMQX 6.0.4, Dashboard users can use the [11 API-key scopes](../api.md#built-in-api-key-scopes) and 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -44,7 +44,7 @@ When you create a global user in the Dashboard, the **Namespace** option is off 
 
 - **Role Default Scopes**: Use the defaults for the selected role. Changes to the role defaults take effect automatically.
 - **Privilege Scopes**: Select from `system`, `user_management`, `api_key_management`, and `sso_management`. These scopes provide administrator-equivalent capabilities.
-- **Custom Restricted Permissions**: Select from the scopes available to the role that are outside the administrator-equivalent group, such as `connections`, `publish`, `data_integration`, `monitoring`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
+- **Custom Restricted Permissions**: Select from the scopes available to the role that are outside the administrator-equivalent group, such as `connections`, `publish`, `data_integration`, `monitoring`, `plugin_api`, and `mfa_management`. If you leave the scope list empty, the user cannot access scope-protected APIs.
 
 <img src="./assets/user_scopes.png" alt="Create a global Dashboard user and select a permission mode" style="zoom:67%;" />
 
@@ -52,10 +52,10 @@ Namespaced users use a separate scope-assignment flow, and the available scopes 
 
 | User Type | Default Permissions |
 | --- | --- |
-| Global Administrator | All 14 scopes: the 10 API-key scopes and the 4 login-only scopes. |
-| Global Viewer | The 10 API-key scopes. `mfa_management` is granted only when explicitly assigned. |
-| Namespace Administrator | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, User Management, and API Key Management. |
-| Namespace Viewer | Connections, Monitoring, Data Integration, Access Control, System, Cluster, and License. No login-only scopes are included. |
+| Global Administrator | All 15 scopes: the 11 API-key scopes and the 4 login-only scopes. |
+| Global Viewer | The 11 API-key scopes. `mfa_management` is granted only when explicitly assigned. |
+| Namespace Administrator | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, Plugin-Extended API, User Management, and API Key Management. |
+| Namespace Viewer | Connections, Monitoring, Data Integration, Access Control, System, Cluster, License, and Plugin-Extended API. No login-only scopes are included. |
 
 ::: warning Administrator-Equivalent Scopes Must Stand Alone
 
@@ -80,7 +80,7 @@ This mutual-exclusion rule does not apply to namespaced Dashboard users. These u
 
 When you change the selected role or namespace while configuring a user in the Dashboard, the form removes scopes that are not supported by that role or namespace and displays a warning. When you use the REST API, EMQX checks whether the user's scopes are compatible with the new role. An incompatible request is rejected with HTTP 400. To resolve the error, include a `scopes` list in the same request that is valid for the new role.
 
-For example, if you demote a global Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. The `mfa_management` scope remains compatible with a global Viewer. For a namespaced Viewer, the REST API accepts only `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`; a request containing any other scope returns HTTP 400.
+For example, if you demote a global Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. The `mfa_management` scope remains compatible with a global Viewer. For a namespaced Viewer, the REST API accepts only `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`; a request containing any other scope returns HTTP 400.
 
 ### Default Administrator Protection
 

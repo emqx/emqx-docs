@@ -67,7 +67,9 @@ Call the following endpoint to send an MQTT request and wait for its response:
 POST /api/v5/plugin_api/emqx_sync_request/request
 ```
 
-Use the same authentication methods as other EMQX management APIs. Bearer tokens obtained from Dashboard login are accepted. API keys must be sent with HTTP Basic authentication and require the `publish` scope.
+Use the same authentication methods as other EMQX management APIs. Bearer tokens obtained from Dashboard login and API keys sent with HTTP Basic authentication are accepted.
+
+Because this endpoint uses `POST`, the Dashboard user or API key must have the Administrator role. Starting from EMQX 6.0.4, the caller must also have the `plugin_api` or `system` scope. Use the restricted `plugin_api` scope unless the caller also needs the administrator-equivalent `system` scope.
 
 ### Request Body
 
