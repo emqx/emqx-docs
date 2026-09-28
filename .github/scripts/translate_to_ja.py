@@ -18,6 +18,7 @@ OPENAI_API_URL = os.getenv('OPENAI_API_URL')
 CONCURRENCY = int(os.getenv('TRANSLATION_CONCURRENCY', '10'))
 MAX_RETRIES = 3
 REQUEST_TIMEOUT = 600
+MAX_CHUNK_CHARS = int(os.getenv('TRANSLATION_MAX_CHUNK_CHARS', '40000'))
 
 SYSTEM_PROMPT = '''
 # 1. Role & Objective
@@ -164,6 +165,98 @@ def collect_paths(items):
     return paths
 
 
+def split_markdown(markdown_text, max_chars):
+    """Split large Markdown at blank lines without breaking fenced code blocks."""
+    if len(markdown_text) <= max_chars:
+        return [markdown_text]
+
+    blocks = []
+    block = []
+    fence_marker = None
+
+    for line in markdown_text.splitlines(keepends=True):
+        block.append(line)
+        stripped = line.lstrip()
+
+        if stripped.startswith(('```', '~~~')):
+            marker = stripped[:3]
+            if fence_marker is None:
+                fence_marker = marker
+            elif fence_marker == marker:
+                fence_marker = None
+
+        if fence_marker is None and not line.strip():
+            blocks.append(''.join(block))
+            block = []
+
+    if block:
+        blocks.append(''.join(block))
+
+    chunks = []
+    chunk = []
+    chunk_size = 0
+
+    for markdown_block in blocks:
+        block_size = len(markdown_block)
+        if chunk and chunk_size + block_size > max_chars:
+            chunks.append(''.join(chunk).strip('\r\n'))
+            chunk = []
+            chunk_size = 0
+
+        chunk.append(markdown_block)
+        chunk_size += block_size
+
+    if chunk:
+        chunks.append(''.join(chunk).strip('\r\n'))
+
+    return chunks
+
+
+def translate_text(markdown_text, input_file_path, chunk_number=1, chunk_count=1):
+    request_body = {
+        'model': OPENAI_MODEL,
+        'messages': [
+            {'role': 'system', 'content': SYSTEM_PROMPT},
+            {'role': 'user', 'content': markdown_text},
+        ],
+        'stream': False,
+        'temperature': 0.3,
+    }
+    headers = {'api-key': OPENAI_API_KEY}
+    chunk_label = f' chunk={chunk_number}/{chunk_count}' if chunk_count > 1 else ''
+
+    last_error = 'unknown'
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            response = requests.post(OPENAI_API_URL, json=request_body, headers=headers, timeout=REQUEST_TIMEOUT)
+        except requests.RequestException as e:
+            last_error = f'network error: {e}'
+            if attempt < MAX_RETRIES:
+                wait = 2 ** attempt
+                log(f'  RETRY {input_file_path}{chunk_label} attempt={attempt + 1}/{MAX_RETRIES} wait={wait}s ({last_error})')
+                time.sleep(wait)
+                continue
+            break
+
+        if response.status_code == 200:
+            data = response.json()
+            return {
+                'status': 'ok',
+                'translated': data['choices'][0]['message']['content'].strip(),
+                'usage': data.get('usage', {}),
+            }
+
+        last_error = f'HTTP {response.status_code}'
+        if (response.status_code == 429 or response.status_code >= 500) and attempt < MAX_RETRIES:
+            wait = 2 ** attempt
+            log(f'  RETRY {input_file_path}{chunk_label} attempt={attempt + 1}/{MAX_RETRIES} wait={wait}s ({last_error})')
+            time.sleep(wait)
+            continue
+        break
+
+    return {'status': 'failed', 'error': last_error}
+
+
 def translate_one(input_file_path, copy_set):
     is_dir_yaml = input_file_path.endswith('dir.yaml')
     if not is_dir_yaml:
@@ -186,42 +279,26 @@ def translate_one(input_file_path, copy_set):
     if is_dir_yaml:
         markdown_text = DIR_YAML_INSTRUCTION + markdown_text
 
-    request_body = {
-        'model': OPENAI_MODEL,
-        'messages': [
-            {'role': 'system', 'content': SYSTEM_PROMPT},
-            {'role': 'user', 'content': markdown_text},
-        ],
-        'stream': False,
-        'temperature': 0.3,
-    }
-    headers = {'api-key': OPENAI_API_KEY}
+    chunks = [markdown_text] if is_dir_yaml else split_markdown(markdown_text, MAX_CHUNK_CHARS)
+    if len(chunks) > 1:
+        log(f'  CHUNK {input_file_path} parts={len(chunks)} max_chars={MAX_CHUNK_CHARS}')
 
-    last_error = 'unknown'
-    for attempt in range(MAX_RETRIES + 1):
-        try:
-            response = requests.post(OPENAI_API_URL, json=request_body, headers=headers, timeout=REQUEST_TIMEOUT)
-        except Exception as e:
-            last_error = f'network error: {e}'
-            break
+    translated_chunks = []
+    total_usage = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}
 
-        if response.status_code == 200:
-            data = response.json()
-            translated = data['choices'][0]['message']['content']
-            with open(output_file_path, 'w', encoding='utf-8') as f:
-                f.write(translated.strip() + '\n')
-            return {'path': input_file_path, 'status': 'ok', 'usage': data.get('usage', {})}
+    for chunk_number, chunk in enumerate(chunks, 1):
+        result = translate_text(chunk, input_file_path, chunk_number, len(chunks))
+        if result['status'] == 'failed':
+            return {'path': input_file_path, 'status': 'failed', 'error': result['error']}
 
-        if response.status_code == 429 and attempt < MAX_RETRIES:
-            wait = 2 ** attempt
-            log(f'  RETRY {input_file_path} attempt={attempt + 1}/{MAX_RETRIES} wait={wait}s (HTTP 429)')
-            time.sleep(wait)
-            continue
+        translated_chunks.append(result['translated'])
+        for key in total_usage:
+            total_usage[key] += result.get('usage', {}).get(key, 0)
 
-        last_error = f'HTTP {response.status_code}'
-        break
+    with open(output_file_path, 'w', encoding='utf-8') as f:
+        f.write('\n\n'.join(translated_chunks) + '\n')
 
-    return {'path': input_file_path, 'status': 'failed', 'error': last_error}
+    return {'path': input_file_path, 'status': 'ok', 'usage': total_usage}
 
 
 def main():
