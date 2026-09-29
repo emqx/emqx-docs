@@ -2,7 +2,7 @@
 
 ## 6.1.5
 
-*Release Date: 2026-09-24*
+*Release Date: 2026-09-30*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.1.5.
 
@@ -45,6 +45,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Performance
 
 - [#18229](https://github.com/emqx/emqx/pull/18229) Reduced CPU overhead on the data-integration send path. The broker no longer builds a formatted error string for every message routed through a resource that is not an action or source (for example, cluster-link message forwarding), which could previously trigger long-scheduler warnings under high message volume.
+
+- [#19240](https://github.com/emqx/emqx/pull/19240) Reduced temporary memory allocation when processing MQTT PUBLISH packets without changing packet validation behavior.
 
 ### Bug Fixes
 
