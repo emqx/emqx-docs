@@ -159,6 +159,14 @@
 
 - [#19108](https://github.com/emqx/emqx/pull/19108) 在高负载下，远程服务器关闭连接时，GCP Pub/Sub Producer 和 HTTP 动作极少数情况下会将 `{error,closed}` 报告为不可恢复错误。现在，此类错误会被视为可恢复错误。
 
+- [#19313](https://github.com/emqx/emqx/pull/19313) 改进了 HTTP 类连接器对无响应连接的检测，包括 HTTP Server、GCP Pub/Sub Producer、Couchbase 和 Snowflake。
+
+  此前，当连接中有请求正在等待响应时，只有经过完整请求超时时间（`resource_opts.request_ttl`）再加上 `max_inactive` 后，EMQX 才会重新连接。较大的 `request_ttl` 会延迟重新连接；设置 `request_ttl = infinity` 时，EMQX 不会重新连接。
+
+  现在，当连接中有请求正在等待响应，且连续 60 秒未通过该连接发送请求时，EMQX 会重新连接；如果 `max_inactive` 大于 60 秒，则以 `max_inactive` 为准。默认设置（`request_ttl` 为 45 秒，`max_inactive` 为 10 秒）不受影响。
+
+  此变更会影响 `request_ttl` 高于约 50 秒的连接器。如果响应时间超过 60 秒，重新连接可能会中断响应。如果远程服务可能需要超过 60 秒才能响应，请将 `max_inactive` 设置为不小于最长预期响应时间。
+
 #### 消息队列和消息流
 
 - [#19008](https://github.com/emqx/emqx/pull/19008) 修复了以下问题：当分片元数据读取失败时，Message Queue 垃圾收集可能会持续创建持久存储代，从而导致 ETS 表和内存使用过多。
