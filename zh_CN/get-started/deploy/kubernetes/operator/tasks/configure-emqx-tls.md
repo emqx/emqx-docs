@@ -1,4 +1,4 @@
-# 在 EMQX 中开启 TLS
+# 在 EMQX 中启用 TLS
 
 ## 目标
 
@@ -34,7 +34,7 @@ stringData:
 ```
 
 :::tip
-在此示例中，上述三个字段的内容被省略。请用您自己的证书内容填充。
+在此示例中，上述三个字段的内容被省略。请填入实际的证书内容。
 * `ca.crt` 应包含 CA 证书。
 * `tls.crt` 应包含服务器证书。
 * `tls.key` 应包含服务器的私钥。
@@ -42,20 +42,20 @@ stringData:
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2` 提供以下字段来为 EMQX 集群配置额外的卷和挂载点：
-* `.spec.coreTemplate.extraVolumes`
-* `.spec.coreTemplate.extraVolumeMounts`
-* `.spec.replicantTemplate.extraVolumes`
-* `.spec.replicantTemplate.extraVolumeMounts`
+EMQX CRD `apps.emqx.io/v3beta1` 提供以下字段来为 EMQX 集群配置额外的卷和挂载点：
+* `.spec.coreTemplate.spec.extraVolumes`
+* `.spec.coreTemplate.spec.extraVolumeMounts`
+* `.spec.replicantTemplate.spec.extraVolumes`
+* `.spec.replicantTemplate.spec.extraVolumeMounts`
 
 在本演示中，我们将使用这些字段为 EMQX 集群提供 TLS 证书。
 
-Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/#secret) 文档。这里我们使用的是 `secret` 卷类型。
+Kubernetes 支持多种卷类型。有关详情，请参阅 [Volumes](https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/#secret) 文档。本示例使用 `secret` 类型的卷。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2
+   ```yaml
+  apiVersion: apps.emqx.io/v3beta1
   kind: EMQX
   metadata:
     name: emqx
@@ -63,20 +63,19 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
     image: emqx/emqx:@EE_VERSION@
     config:
       # 配置从 `emqx-tls` 卷挂载的 TLS 监听器证书：
-      data: |
-        listeners.ssl.default {
-          bind = "0.0.0.0:8883"
-          ssl_options {
-            cacertfile = "/mounted/cert/ca.crt"
-            certfile = "/mounted/cert/tls.crt"
-            keyfile = "/mounted/cert/tls.key"
-            gc_after_handshake = true
-            handshake_timeout = 5s
-          }
-        }
-        license {
-          key = "..."
-        }
+      roots:
+        listeners:
+          ssl:
+            default:
+              bind: "0.0.0.0:8883"
+              ssl_options:
+                cacertfile: "/mounted/cert/ca.crt"
+                certfile: "/mounted/cert/tls.crt"
+                keyfile: "/mounted/cert/tls.key"
+                gc_after_handshake: true
+                handshake_timeout: "5s"
+        license:
+          key: "..."
     coreTemplate:
       spec:
         extraVolumes:
@@ -103,17 +102,17 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
     listenersServiceTemplate:
       spec:
         type: LoadBalancer
-  ```
+   ```
 
 2. 等待 EMQX 集群就绪。
 
-  使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+   使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
 
-  ```bash
+   ```bash
   $ kubectl get emqx
   NAME   STATUS   AGE
   emqx   Ready    10m
-  ```
+   ```
 
 ## 使用 MQTTX 验证 TLS 连接
 
@@ -151,4 +150,4 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
    [10:00:58] › payload: hello world
    ```
 
-   这表明发布者和订阅者客户端都通过 TLS 连接成功与代理通信。
+   这表明发布客户端和订阅客户端均已通过 TLS 成功与 EMQX 通信。

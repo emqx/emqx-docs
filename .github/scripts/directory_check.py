@@ -33,7 +33,7 @@ def check_md_content(md_file):
         ref_md_path = os.path.join(f'{"/".join(md_file.split("/")[:-1])}/', f'{url_path}.md')
 
         if not os.path.exists(ref_md_path):
-            print(f'In {md_file}：', end='')
+            print(f'In {md_file}:', end='')
             print(f'{url[2]} not found or not in {directory_file}')
             success = False
 
@@ -45,7 +45,7 @@ def check_md_content(md_file):
         image_path = os.path.join(f'{"/".join(md_file.split("/")[:-1])}/', image[2])
 
         if not os.path.exists(image_path):
-            print(f'In {md_file}：', end='')
+            print(f'In {md_file}:', end='')
             print(image[2], 'does not exist')
             success = False
 

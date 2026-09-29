@@ -34,21 +34,20 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    provisioner: ebs.csi.aws.com
    volumeBindingMode: WaitForFirstConsumer
    ---
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
          ## EMQX custom resources do not support updating this field at runtime
-         volumeClaimTemplates:
+         persistentVolumeClaimSpec:
            storageClassName: ebs-sc
            resources:
              requests:
