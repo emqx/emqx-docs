@@ -52,6 +52,10 @@ The `hardened` profile uses the following default bind addresses unless you over
 - **MQTT listeners bind to loopback by default.** MQTT TCP, SSL, WebSocket, secure WebSocket and QUIC listeners with an omitted or port-only `bind` listen on the loopback interface only. Configure an explicit bind address, for example `bind = "0.0.0.0:1883"`, to accept external connections.
 - **The Dashboard HTTP listener binds to loopback by default.** The Dashboard HTTP listener with an omitted or port-only `bind` listens on the loopback interface only. Configure an explicit bind address to accept external connections.
 
+::: tip Docker Image Default
+The official Docker image overrides these profile defaults. If `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` is unset or empty, the image entrypoint sets it to `all`. As a result, listeners with an omitted or port-only `bind` bind to all interfaces inside the container under both the `legacy` and `hardened` profiles. This setting allows Docker-published ports to reach these listeners. Whether the listeners are reachable from outside the container still depends on the container network and published-port configuration.
+:::
+
 This setting also applies to gateway listeners, whose default bind address is not changed by the security profile. See [Default Listener Address](#default-listener-address) for supported values and configuration details.
 
 ### Authentication
