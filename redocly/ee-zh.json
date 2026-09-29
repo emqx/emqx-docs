@@ -3908,6 +3908,12 @@
               },
               {
                 "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "disk_log"
                 ],
                 "type": "string"
@@ -3932,7 +3938,13 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -3944,7 +3956,7 @@
               },
               {
                 "enum": [
-                  "s3"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -3956,7 +3968,19 @@
               },
               {
                 "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -3974,13 +3998,19 @@
               },
               {
                 "enum": [
-                  "bigquery"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -3993,6 +4023,12 @@
               {
                 "enum": [
                   "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
@@ -4028,12 +4064,6 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "cassandra"
                 ],
                 "type": "string"
@@ -4047,12 +4077,6 @@
               {
                 "enum": [
                   "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4094,19 +4118,7 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4131,18 +4143,6 @@
               {
                 "enum": [
                   "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               }
@@ -37301,7 +37301,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "C77F7D2AC5A9458D",
+            "example": "34FD76B4154FA976",
             "type": "string"
           },
           "status": {
@@ -55053,25 +55053,25 @@
                       "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
                       "confluent_producer",
-                      "syskeeper_forwarder",
                       "influxdb",
                       "pulsar",
                       "cockroachdb",
-                      "kafka_producer",
                       "greptimedb",
                       "mongodb",
+                      "kafka_producer",
+                      "gcp_pubsub_producer",
                       "azure_event_hub_producer",
+                      "sqlserver",
                       "iotdb",
+                      "syskeeper_forwarder",
                       "alloydb",
                       "redis",
                       "opents",
                       "datalayers",
                       "s3tables",
-                      "s3",
                       "kinesis",
+                      "s3",
                       "doris",
                       "mqtt",
                       "redshift",
@@ -55101,25 +55101,25 @@
                       "rocketmq",
                       "cassandra",
                       "rabbitmq",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
                       "confluent_producer",
-                      "syskeeper_forwarder",
                       "influxdb",
                       "pulsar",
                       "cockroachdb",
-                      "kafka_producer",
                       "greptimedb",
                       "mongodb",
+                      "kafka_producer",
+                      "gcp_pubsub_producer",
                       "azure_event_hub_producer",
+                      "sqlserver",
                       "iotdb",
+                      "syskeeper_forwarder",
                       "alloydb",
                       "redis",
                       "opents",
                       "datalayers",
                       "s3tables",
-                      "s3",
                       "kinesis",
+                      "s3",
                       "doris",
                       "mqtt",
                       "redshift",
@@ -78551,7 +78551,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -80062,7 +80062,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -81789,7 +81789,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82954,7 +82954,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -84454,7 +84454,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85947,7 +85947,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -86885,7 +86885,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "C77F7D2AC5A9458D",
+            "example": "34FD76B4154FA976",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86948,7 +86948,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "C77F7D2AC5A9458D",
+            "example": "34FD76B4154FA976",
             "in": "path",
             "name": "site",
             "required": true,
@@ -87362,7 +87362,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "C77F7D2AC5A9458D",
+            "example": "34FD76B4154FA976",
             "in": "path",
             "name": "site",
             "required": true,
@@ -87448,7 +87448,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "C77F7D2AC5A9458D",
+            "example": "34FD76B4154FA976",
             "in": "path",
             "name": "site",
             "required": true,
