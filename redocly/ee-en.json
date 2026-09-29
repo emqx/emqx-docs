@@ -3896,25 +3896,13 @@
             "oneOf": [
               {
                 "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -3926,25 +3914,25 @@
               },
               {
                 "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "s3tables"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tablestore"
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
+                  "cockroachdb"
                 ],
                 "type": "string"
               },
@@ -3962,31 +3950,13 @@
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
+                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -3998,31 +3968,25 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "oracle"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cassandra"
+                  "timescale"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -4034,13 +3998,7 @@
               },
               {
                 "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -4052,7 +4010,43 @@
               },
               {
                 "enum": [
-                  "redis"
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -4065,6 +4059,18 @@
               {
                 "enum": [
                   "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -4088,7 +4094,13 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4100,25 +4112,25 @@
               },
               {
                 "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "rocketmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
                 ],
                 "type": "string"
               },
@@ -4131,18 +4143,6 @@
               {
                 "enum": [
                   "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
                 ],
                 "type": "string"
               }
@@ -37301,7 +37301,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "1CAB7B8312510A2D",
+            "example": "F86A0743AA0EED9F",
             "type": "string"
           },
           "status": {
@@ -55033,7 +55033,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.4-rc.2"
+    "version": "6.0.4"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -55055,34 +55055,34 @@
                       "rabbitmq",
                       "influxdb",
                       "pulsar",
-                      "sqlserver",
+                      "kafka_producer",
                       "greptimedb",
                       "mongodb",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
-                      "kafka_producer",
-                      "iotdb",
+                      "gcp_pubsub_producer",
                       "alloydb",
-                      "datalayers",
-                      "kinesis",
+                      "azure_event_hub_producer",
+                      "iotdb",
+                      "cockroachdb",
+                      "sqlserver",
+                      "confluent_producer",
                       "redis",
-                      "opents",
-                      "s3",
-                      "s3tables",
+                      "datalayers",
                       "doris",
+                      "s3",
+                      "opents",
+                      "kinesis",
+                      "s3tables",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "clickhouse",
-                      "tdengine",
-                      "oracle",
-                      "timescale",
                       "couchbase",
+                      "clickhouse",
+                      "snowflake",
+                      "tdengine",
                       "tablestore",
+                      "timescale",
+                      "oracle",
+                      "azure_blob_storage",
                       "disk_log",
                       "snowflake_streaming",
                       "matrix",
@@ -55103,34 +55103,34 @@
                       "rabbitmq",
                       "influxdb",
                       "pulsar",
-                      "sqlserver",
+                      "kafka_producer",
                       "greptimedb",
                       "mongodb",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "cockroachdb",
-                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
-                      "kafka_producer",
-                      "iotdb",
+                      "gcp_pubsub_producer",
                       "alloydb",
-                      "datalayers",
-                      "kinesis",
+                      "azure_event_hub_producer",
+                      "iotdb",
+                      "cockroachdb",
+                      "sqlserver",
+                      "confluent_producer",
                       "redis",
-                      "opents",
-                      "s3",
-                      "s3tables",
+                      "datalayers",
                       "doris",
+                      "s3",
+                      "opents",
+                      "kinesis",
+                      "s3tables",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "clickhouse",
-                      "tdengine",
-                      "oracle",
-                      "timescale",
                       "couchbase",
+                      "clickhouse",
+                      "snowflake",
+                      "tdengine",
                       "tablestore",
+                      "timescale",
+                      "oracle",
+                      "azure_blob_storage",
                       "disk_log",
                       "snowflake_streaming",
                       "matrix",
@@ -86885,7 +86885,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "1CAB7B8312510A2D",
+            "example": "F86A0743AA0EED9F",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86948,7 +86948,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "1CAB7B8312510A2D",
+            "example": "F86A0743AA0EED9F",
             "in": "path",
             "name": "site",
             "required": true,
@@ -87362,7 +87362,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "1CAB7B8312510A2D",
+            "example": "F86A0743AA0EED9F",
             "in": "path",
             "name": "site",
             "required": true,
@@ -87448,7 +87448,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "1CAB7B8312510A2D",
+            "example": "F86A0743AA0EED9F",
             "in": "path",
             "name": "site",
             "required": true,
