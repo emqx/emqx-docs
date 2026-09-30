@@ -19567,7 +19567,7 @@
                       "type": "Secret"
                     },
                     {
-                      "doc": "The host of the S3 endpoint.",
+                      "doc": "The host of the S3 endpoint.\n\nNote: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
                       "hash": "V-connectors-S-connectors-s3-S-config_connector-host",
                       "text": "host",
                       "type": "String"
@@ -52623,7 +52623,7 @@
                                               "type": "Secret"
                                             },
                                             {
-                                              "doc": "The host of the S3 endpoint.",
+                                              "doc": "The host of the S3 endpoint.\n\nNote: even when using the Virtual Host (`vhost`) access method, do **NOT** specify an endpoint containing the bucket name.  The bucket name is specified in each Action, and prepended to the endpoint automatically.",
                                               "hash": "V-file_transfer-S-file_transfer-storage-S-storage_backend-local-S-local_storage-exporter-S-local_storage_exporter_backend-s3-S-s3_exporter-host",
                                               "text": "host",
                                               "type": "String"
