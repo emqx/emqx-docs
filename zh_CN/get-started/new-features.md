@@ -116,5 +116,4 @@ LDAP 授权现支持 JSON 格式的扩展 ACL 规则，LDAP 认证还可直接�
 
 ## EMQX 5.x 系列
 
-有关 EMQX 5.x 的全新功能，请参阅 EMQX 企业版 v5 版本的[全新功能](https://docs.emqx.com/zh/emqx/v5.10/getting-started/new-features.html)。
-
+有关 EMQX 5.x 的全新功能，请参阅 EMQX 企业版 v5 版本的[全新功能](https://docs.emqx.com/zh/emqx/v5.10/get-started/new-features.html)。
