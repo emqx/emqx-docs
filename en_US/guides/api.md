@@ -423,7 +423,7 @@ In addition to these API-key scopes, Dashboard login users have 4 login-only sco
 | `user_management` | Administrator | Manage Dashboard users. |
 | `sso_management` | Administrator | Manage SSO backends and SSO user records. |
 | `api_key_management` | Administrator | Manage API keys. |
-| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
+| `mfa_management` | Global Administrator or Global Viewer | Manage MFA for own account; administrators can manage other users' MFA. |
 
 #### Default Behavior of `scopes`
 
@@ -433,11 +433,11 @@ Starting from EMQX 6.0.4, the `scopes` field on an API key follows these rules:
 | --- | --- |
 | **Absent in a create request** | Use the defaults for the selected role. |
 | **Absent in an update request** | Preserve the key's current scope setting. |
-| **Role-default sentinel** `"unset"` | Remove the explicit scope setting and use the defaults for the selected role. Changes to the role defaults take effect automatically. |
+| **Unset sentinel** `"unset"` | Remove the explicit scope setting. For backward compatibility, EMQX does not apply a scope allowlist to the key. Role, namespace, and API-key-specific path restrictions still apply. |
 | **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
 | **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
 
-An explicit list that contains the same set of scopes as the role defaults has the same effect as `"unset"`. The key continues to follow changes to the role defaults. The comparison is order-independent.
+An explicit list that contains the same set of scopes as the role defaults is normalized to `"unset"` and follows the same behavior. The comparison is order-independent.
 
 When a bootstrap file entry omits the scopes segment, EMQX applies the defaults for the specified role when processing the file.
 
@@ -474,9 +474,9 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.0.4, a namespaced administrator API key that uses the role-default scopes receives `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. The defaults do not include `publish`, `gateways`, or `audit`.
+Starting from EMQX 6.0.4, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. These defaults do not include `publish`, `gateways`, or `audit`.
 
-When creating a namespaced API key or changing an existing key's explicit scope list, only the namespaced role's allowed scopes can be assigned. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
+When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these seven scopes. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
 
 ### Existing Keys with Disallowed Scopes
 
