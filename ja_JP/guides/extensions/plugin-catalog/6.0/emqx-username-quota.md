@@ -216,5 +216,6 @@ APIクライアントへのガイダンス：
 | EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.sha256)) |
+| 6.0.4 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_username_quota-1.2.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_username_quota-1.2.1.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
