@@ -327,10 +327,10 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `connEvictRate` _integer_ | Client disconnect rate (number per second).<br />Same as `conn-evict-rate` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation). | 1000 | Minimum: 1 <br /> |
-| `sessEvictRate` _integer_ | Session evacuation rate (number per second).<br />Same as `sess-evict-rate` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation). | 1000 | Minimum: 1 <br /> |
-| `waitTakeover` _integer_ | Amount of time (in seconds) to wait before starting session evacuation.<br />Same as `wait-takeover` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation). | 10 | Minimum: 0 <br /> |
-| `waitHealthCheck` _integer_ | Duration (in seconds) during which the node waits for the Load Balancer to remove it from the active backend node list.<br />Same as `wait-health-check` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation). | 60 | Minimum: 0 <br /> |
+| `connEvictRate` _integer_ | Client disconnect rate (number per second).<br />Same as `conn-evict-rate` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation). | 1000 | Minimum: 1 <br /> |
+| `sessEvictRate` _integer_ | Session evacuation rate (number per second).<br />Same as `sess-evict-rate` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation). | 1000 | Minimum: 1 <br /> |
+| `waitTakeover` _integer_ | Amount of time (in seconds) to wait before starting session evacuation.<br />Same as `wait-takeover` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation). | 10 | Minimum: 0 <br /> |
+| `waitHealthCheck` _integer_ | Duration (in seconds) during which the node waits for the Load Balancer to remove it from the active backend node list.<br />Same as `wait-health-check` in [EMQX Node Evacuation](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation). | 60 | Minimum: 0 <br /> |
 
 
 #### KeyRef
@@ -423,4 +423,3 @@ _Appears in:_
 | `type` _string_ | Determines how cluster upgrade is performed.<br />* `Recreate`: Perform blue-green upgrade. | Recreate | Enum: [Recreate] <br /> |
 | `initialDelaySeconds` _integer_ | Number of seconds before connection evacuation starts. | 10 | Minimum: 0 <br /> |
 | `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Evacuation strategy settings. |  |  |
-
