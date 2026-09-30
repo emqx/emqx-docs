@@ -2,7 +2,7 @@
 
 ## 6.1.5
 
-*Release Date: 2026-09-24*
+*Release Date: 2026-09-30*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.1.5.
 
@@ -45,6 +45,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Performance
 
 - [#18229](https://github.com/emqx/emqx/pull/18229) Reduced CPU overhead on the data-integration send path. The broker no longer builds a formatted error string for every message routed through a resource that is not an action or source (for example, cluster-link message forwarding), which could previously trigger long-scheduler warnings under high message volume.
+
+- [#19240](https://github.com/emqx/emqx/pull/19240) Reduced temporary memory allocation when processing MQTT PUBLISH packets without changing packet validation behavior.
 
 ### Bug Fixes
 
@@ -156,6 +158,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - PostgreSQL Connector
 
 - [#19108](https://github.com/emqx/emqx/pull/19108) Under heavy load, the GCP Pub/Sub Producer and HTTP actions could rarely report `{error,closed}` as unrecoverable when the remote server closed a connection. These errors are now treated as recoverable.
+
+- [#19313](https://github.com/emqx/emqx/pull/19313) Improved the detection of unresponsive connections in HTTP-based connectors, including HTTP Server, GCP Pub/Sub Producer, Couchbase, and Snowflake.
+
+  Previously, a connection with requests waiting for responses was reconnected only after the full request timeout (`resource_opts.request_ttl`) plus `max_inactive`. A large `request_ttl` delayed reconnection, while `request_ttl = infinity` prevented reconnection.
+
+  A connection is now reconnected when requests are waiting for responses and no request has been sent through the connection for 60 seconds, or for `max_inactive` if it is longer. The default settings (`request_ttl` of 45 seconds and `max_inactive` of 10 seconds) are unaffected.
+
+  This change affects connectors configured with a `request_ttl` above approximately 50 seconds. A reconnect can interrupt a response that takes longer than 60 seconds. If the remote service may take longer than 60 seconds to respond, set `max_inactive` to at least the longest expected response time.
 
 #### Message Queue and Streams
 
