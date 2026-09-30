@@ -2,7 +2,7 @@
 
 ## 6.0.4
 
-*发布日期: 2026-09-24*
+*发布日期: 2026-09-30*
 
 在升级到 EMQX 6.0.4 之前，请务必查阅不兼容变更和已知问题。
 
@@ -80,6 +80,8 @@
 - [#18185](https://github.com/emqx/emqx/pull/18185) 通过在每个目标节点上累积内存中订阅行，改进订阅 HTTP API 中的深度分页查询，避免每个分页批次使用一个 RPC。
 
 - [#18229](https://github.com/emqx/emqx/pull/18229) 减少了数据集成发送路径上的 CPU 开销。Broker 不再为通过非动作或 Source 的资源（例如集群链接消息转发）路由的每条消息构建格式化的错误字符串，这以前可能会在高消息量下触发 long scheduler 警告。
+
+- [#19240](https://github.com/emqx/emqx/pull/19240) 减少了接收 MQTT PUBLISH 消息时的临时内存分配，报文校验行为保持不变。
 
 #### 部署
 
@@ -173,7 +175,17 @@
 
 - [#19036](https://github.com/emqx/emqx/pull/19036) 修复了网关日志泄露凭据的问题。当网关连接在启动期间终止时（例如 DTLS 握手失败后），Supervisor offender 报告会包含完整的连接参数，从而泄露 `clientinfo_override.password` 和网关认证配置。现在不再记录这些值。
 
+- [#19037](https://github.com/emqx/emqx/pull/19037) 修复了网关调试日志可能通过原始数据报泄露凭据的问题。`received_data`、`received_udp_proxy_data` 和 `send_data` 事件现在仅记录字节数。解析后的报文仍会按协议级脱敏规则记录。
+
+  CoAP 网关现在还会对通过 `POST /mqtt/connection` 签发的会话令牌，以及通过简写查询参数 `t` 和 `p` 传递的凭据进行脱敏。该脱敏适用于解析后的报文日志和拒绝请求日志。
+
 - [#19098](https://github.com/emqx/emqx/pull/19098) 强化了 `GET /api/v5/schema_registry`、`GET /api/v5/schema_registry/:name` 和 `GET /api/v5/opentelemetry` 的配置响应，对返回配置中包含凭据的值进行脱敏。相应的创建和更新端点可以接受返回的脱敏值，而不会覆盖已存储的值。
+
+- [#19142](https://github.com/emqx/emqx/pull/19142) 修复了 Gateway 查询 CLI 命令会泄露认证凭据和客户端信息覆盖密码的问题。查询输出现在会对 Gateway 配置中的敏感值进行脱敏。
+
+- [#19175](https://github.com/emqx/emqx/pull/19175) 移除了 RPC 认证的不安全回退机制。集群节点现在始终使用质询-响应握手对后端 RPC 连接进行认证。此前，当握手失败时，该回退机制会将 Erlang cookie 发送给对端节点。
+
+  `rpc.insecure_fallback` 配置项不再生效。该配置项原用于与早于 EMQX 5.3.0、尚不支持质询-响应握手的版本组成集群。仍设置此配置项的配置文件可以继续加载，但其值会被忽略。
 
 #### MQTT 核心功能
 
@@ -351,6 +363,14 @@
 
 - [#19108](https://github.com/emqx/emqx/pull/19108) 在高负载下，远程服务器关闭连接时，GCP Pub/Sub Producer 和 HTTP 动作极少数情况下会将 `{error,closed}` 报告为不可恢复错误。现在，此类错误会被视为可恢复错误。
 
+- [#19313](https://github.com/emqx/emqx/pull/19313) 改进了 HTTP 类连接器对无响应连接的检测，包括 HTTP Server、GCP Pub/Sub Producer、Couchbase 和 Snowflake。
+
+  此前，当连接中有请求正在等待响应时，只有经过完整请求超时时间（`resource_opts.request_ttl`）再加上 `max_inactive` 后，EMQX 才会重新连接。较大的 `request_ttl` 会延迟重新连接；设置 `request_ttl = infinity` 时，EMQX 不会重新连接。
+
+  现在，当连接中有请求正在等待响应，且连续 60 秒未通过该连接发送请求时，EMQX 会重新连接；如果 `max_inactive` 大于 60 秒，则以 `max_inactive` 为准。默认设置（`request_ttl` 为 45 秒，`max_inactive` 为 10 秒）不受影响。
+
+  此变更会影响 `request_ttl` 高于约 50 秒的连接器。如果响应时间超过 60 秒，重新连接可能会中断响应。如果远程服务可能需要超过 60 秒才能响应，请将 `max_inactive` 设置为不小于最长预期响应时间。
+
 #### 集群
 
 - [#17995](https://github.com/emqx/emqx/pull/17995) 修复了节点加入集群时可能终止的问题。触发条件是集群中持久化的 `mqtt.max_packet_size` 与该节点的本地配置不同。EMQX 现在会在监听器启动前跳过刷新监听器产生的副作用，并在 EMQX 应用程序启动时根据同步后的配置创建监听器。
@@ -367,6 +387,10 @@
 
 - [#19136](https://github.com/emqx/emqx/pull/19136) 修复了集群链接在与对端集群的连接中断时可能丢失在途消息的问题。现在，表明连接已断开或从未建立的错误（例如连接超时、DNS 解析失败或传输错误）会被视为可恢复错误。因此，受影响的消息会持续重试，直到请求过期，而不是被确认并计为失败。
 
+- [#19144](https://github.com/emqx/emqx/pull/19144) 修复了清理过程中有客户端断开连接时，会话注册表清理进程可能停止的问题。现在，清理进程遇到已断开的客户端后仍会继续移除过期注册信息。
+
+- [#19160](https://github.com/emqx/emqx/pull/19160) 修复了核心节点加入或离开集群时可能发生的 `mria` 崩溃。
+
 #### 配置管理
 
 - [#17773](https://github.com/emqx/emqx/pull/17773) 修复了当底层集群 RPC 层因意外原因中止时（例如，当集群 RPC 表在节点启动或恢复期间尚不可用时 `{no_exists, cluster_rpc_mfa}`）时，配置更新命令（API 和 CLI）崩溃并显示 `function_clause` 崩溃报告。现在，此类失败将作为结构化错误返回给调用者。
@@ -380,6 +404,10 @@
   此前，`max_packet_size = 1MB` 可以正常解析，但 `max_packet_size = 1B` 解析失败，必须写为 `"1B"`。现在所有字节大小单位均可不加引号。
 
 - [#18464](https://github.com/emqx/emqx/pull/18464) 修复了配置更新期间 ExHook 服务器变为不健康状态时，ExHook 管理器可能崩溃的问题。现在，管理器会保留已配置的服务器顺序，并在服务器重新连接期间继续处理配置变更。
+
+- [#19120](https://github.com/emqx/emqx/pull/19120) 修复了 `emqx ctl conf load --merge` 和 `PUT /api/v5/configs?mode=merge`，使合并模式保留已存储配置中未在加载配置中提供的字段值，而不再将其重置为默认值。执行合并时，不再要求重复提供已存储配置中的必填字段；如果未提供 `authorization.sources`，还会保留已存储的授权数据源。替换模式不受影响。
+
+- [#19163](https://github.com/emqx/emqx/pull/19163) 修复了 `emqx ctl conf load --namespace <ns> --merge`，使加载的配置与该命名空间中已存储的配置合并。此前，该配置会与全局配置合并，可能导致全局值被复制到命名空间中。
 
 #### 访问控制
 
@@ -431,6 +459,8 @@
 
 - [#19003](https://github.com/emqx/emqx/pull/19003) 改进了 `PUT /api/v5/api_key/:name`，使其只更新请求正文中包含的字段。此前，部分更新还可能重写请求中未包含的字段，导致管理员无意中更改指定 API 密钥的权限。调用该端点原本就需要管理员权限。
 
+- [#19115](https://github.com/emqx/emqx/pull/19115) 将插件配置读取端点（`GET /api/v5/plugins/:name/config` 和 `GET /api/v5/plugins/:name/config/download`）限制为仅全局管理员可访问。
+
 - [#19125](https://github.com/emqx/emqx/pull/19125) 修复了命名空间 Dashboard 用户和 API 密钥的默认 scope 不一致的问题。
 
   - 未显式设置 scope 列表的命名空间管理员此前会获得全局管理员的 scope。创建或更新用户时提交 `"scopes": "unset"`，或更新时原样提交默认 scope 列表，都会触发该问题。现在，该用户会获得命名空间管理员的默认 scope。
@@ -466,6 +496,8 @@
 - [#18826](https://github.com/emqx/emqx/pull/18826) 备份导入现在会在开始前确认集群中的所有节点运行相同版本。
 
   在滚动升级期间导入备份时，尚未升级的节点可能会以不同方式解释导入调用。现在，如果仍有节点待升级，导入会在实际开始前停止并列出这些节点，使集群保持原状。
+
+- [#18886](https://github.com/emqx/emqx/pull/18886) 增加了对 EMQX Backup Sync 间隔和超时值的校验，并在 HTTP 同步成功时避免误报 TLS 证书路径错误。
 
 #### 多租户
 
