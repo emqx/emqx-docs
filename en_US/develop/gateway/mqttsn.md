@@ -149,6 +149,42 @@ Then you can continue to set:
 - **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default: **10**.
 - **Key Password**: Set the user's password, used only when the private key is password-protected. 
 
+### Sleeping Clients and Session Resume
+
+An MQTT-SN client enters the `asleep` state by sending `DISCONNECT` with a non-zero Duration. It
+later wakes up by sending `PINGREQ` with its Client ID, and the gateway resumes the existing session
+and delivers any messages buffered while the client slept. The source IP address and port may change
+between sleeping and waking, because MQTT-SN devices commonly sit behind NAT.
+
+MQTT-SN `PINGREQ` carries no password or token, so on listeners where the session has no transport
+identity the Client ID is the only thing the gateway can match on. This has a security consequence
+you need to account for:
+
+::: warning Unauthenticated Session Resume Without a Client Certificate
+On a plaintext UDP listener, and on a DTLS listener where the client presented no certificate, a
+`PINGREQ` carrying a known Client ID resumes that client's sleeping session without
+authentication. Anyone who can reach the listener and knows or guesses a Client ID can receive the
+messages buffered for that device. Use these listeners only where that risk is acceptable.
+:::
+
+To bind session resume to a verified identity, use a DTLS listener and set both:
+
+- **TLS Verify** (`verify`) to `verify_peer`, so clients must present a certificate. The default is
+  `verify_none`.
+- **Fail If No Peer Cert** (`fail_if_no_peer_cert`) to `true`, so a client that presents an empty
+  certificate is rejected.
+
+With both set, the gateway binds each session to the client certificate presented at connection
+time. A `PINGREQ` from a new association resumes such a session only when it presents the same
+certificate; a wake-up with no certificate, a different certificate, or a reissued certificate is
+rejected. Changes to the source IP address and port do not affect this check, so NAT rebinding keeps
+working. After certificate rotation, the client must reconnect with `CONNECT` and complete the normal
+authentication and session takeover flow.
+
+Setting **TLS Verify** alone is not enough. With **Fail If No Peer Cert** left at `false`, a client
+may connect without presenting a certificate, and that client's session falls back to Client-ID-only
+resume.
+
 ### Configure Authentication
 
 Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../../guides/access-control/authn/http.md).
