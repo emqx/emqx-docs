@@ -11,11 +11,11 @@ Messages may enter the Message Queue when:
 - QoS 1 and QoS 2 messages are waiting for inflight capacity or delivery quota.
 - A connection is congested.
 
-If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages during disconnection or congestion, or to preserve delivery order. Set it to `false` to exclude QoS 0 messages from offline storage.
+If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages during disconnection or congestion, or to preserve delivery order. Set it to `false` to exclude QoS 0 messages from buffering while offline.
 
 ## Message Queue Delivery Behavior
 
-Starting from EMQX 6.3.2, a full Inflight Window is no longer treated as connection congestion:
+EMQX handles Message Queue delivery differently depending on whether the connection is congested:
 
 - On an uncongested connection, EMQX pauses additional QoS 1 and QoS 2 delivery when the Inflight Window reaches the `max_inflight` limit. Delivery resumes when an inflight slot becomes available. Because QoS 0 messages do not enter the Inflight Window, EMQX can continue delivering queued QoS 0 messages, even when an earlier QoS 1 or QoS 2 message is waiting for a slot.
 - On a congested connection, the available inflight slots limit the number of messages that EMQX can dequeue in response to client acknowledgments, regardless of QoS. EMQX resumes queued delivery when the congestion clears or more inflight slots become available.
