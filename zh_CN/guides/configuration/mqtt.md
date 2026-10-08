@@ -210,12 +210,12 @@ EMQX 支持通过 `$SETOPTS/` 系统主题对每个客户端动态调整 keepali
 
 **示例代码：**
 
-```bash
+```hocon
 mqtt {
     max_subscriptions = infinity
     upgrade_qos = false
     max_inflight = 32
-    retry_interval = 30s
+    retry_interval = infinity
     max_awaiting_rel = 100
     await_rel_timeout = 300s
     session_expiry_interval = 2h
@@ -241,16 +241,16 @@ mqtt {
 | --------------------------------- | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------- |
 | `max_subscriptions`               | 最大订阅数量         | 此设置允许客户端拥有的最大订阅数。                           | `infinity`                                                   | `1` - `infinity`                    |
 | `upgrade_qos`                     | 升级 QoS             | 此设置是否允许客户端在消息发布后升级消息的 QoS (服务质量) 等级。 | `false` (禁用)                                               | `true`, `false`                     |
-| `max_inflight`                    | 最大飞行窗口         | 此设置允许同时在途（即已发送但尚未确认）的 QoS 1 和 QoS 2 消息的最大数量。 | `32`                                                         | `1` - `65535`                       |
-| `retry_interval`                  | 消息重试间隔         | 此设置客户端应该以多久的间隔重试发送 QoS 1 或 QoS 2 消息。   | `30s`<br />单位: 秒                                          | --                                  |
+| `max_inflight`                    | 最大飞行窗口         | 限制 EMQX 可同时投递且尚未确认的 QoS 1 和 QoS 2 消息数量。对于 MQTT 5.0 客户端，以该值和客户端 `Receive Maximum` 中较小的值为准。详情参见[消息队列的投递行为](../../develop/design/inflight-window-and-message-queue.md#消息队列的投递行为)。 | `32`                                                         | `1` - `65535`                       |
+| `retry_interval`                  | 消息重试间隔         | 客户端保持连接期间，EMQX 重传未确认 QoS 1 和 QoS 2 消息的间隔。详情参见[消息重传](../../develop/design/retransmission.md#基础配置)。 | `infinity`                                                   | 时长<br />或<br />`infinity`        |
 | `max_awaiting_rel`                | 最大待发 PUBREL 数量 | 此设置每个会话中挂起的 QoS 2 消息数量，直到收到 `PUBREL` 或超时。达到此限制后，新的 QoS 2 `PUBLISH` 请求将被拒绝，并返回错误码 `147(0x93)`。<br />在 MQTT 中，`PUBREL` 是 QoS 2 消息流中用于确保消息交付的控制包。 | `100`                                                        | `1` - `infinity`                    |
 | `await_rel_timeout`               | 最大 PUBREL 等待时长 | 此设置等待接收到 QoS 2 消息的 `PUBREL` 的时间。达到此限制后，EMQX 将释放包 ID 并生成警告级别日志。<br />注意：无论是否收到 `PUBREL`，EMQX 都会转发收到的 QoS 2 消息。 | `300s`<br />单位: 秒                                         | --                                  |
 | `session_expiry_interval`         | 会话过期间隔         | 此设置客户端断开连接后 EMQX 保留会话的时长。适用于以 `Clean Session = false` 连接的 MQTT 3.1 和 3.1.1 客户端。MQTT 5.0 客户端通过 CONNECT 报文的 `Session-Expiry-Interval` 属性自行指定该值，参见 `max_session_expiry_interval`。<br />使用默认的内存会话存储时，已断开连接的会话会在整个过期间隔内驻留在内存中。参见表格后的警告。 | `2h`                                                         | --                                  |
 | `max_session_expiry_interval`     | 最大会话过期间隔     | 此设置限制 MQTT 5.0 客户端通过 CONNECT 和 DISCONNECT 报文的 `Session-Expiry-Interval` 属性所能请求的最大会话过期间隔。当客户端在连接时请求的值超过此限制时，EMQX 会将其截断为该限制值，并在 CONNACK 的 `Session-Expiry-Interval` 属性中返回截断后的值（MQTT 5.0 规范 3.2.2.3.2 节）。DISCONNECT 报文中超过此限制的值同样会被截断为该限制值。对 MQTT 3.1 和 3.1.1 客户端无效，其会话过期间隔由 `session_expiry_interval` 决定。<br />自 EMQX 6.3.0 起提供。 | `infinity`（不限制）                                         | 时长<br />或<br />`infinity`        |
-| `max_mqueue_len`                  | 最大消息队列长度     | 设置内存会话使用的消息队列长度限制。当客户端离线但会话仍保留、飞行窗口已满或连接的发送队列拥塞时，消息会进入该队列。当某个主题优先级的消息队列达到此限制时，EMQX 会优先淘汰该优先级中最早入队的 QoS 0 消息。 | `1000`                                                       | `0` - `infinity`                    |
+| `max_mqueue_len`                  | 最大消息队列长度     | 内存会话消息队列中的最大消息数量。详情参见[消息队列的投递行为](../../develop/design/inflight-window-and-message-queue.md#消息队列的投递行为)。 | `1000`                                                       | `0` - `infinity`                    |
 | `mqueue_priorities`               | 主题优先级           | 此设置主题优先级，此处的配置将覆盖 `mqueue_default_priority` 定义的优先级。 | `disabled` <br />会话使用 `mqueue_default_priority` 设置的优先级。 | `disabled`<br />或<br />`1` - `255` |
 | `mqueue_default_priority`         | 默认主题优先级       | 此设置默认主题优先级。                                       | `lowest`                                                     | `highest`， `lowest`                |
-| `mqueue_store_qos0`               | 存储 QoS 0 消息      | 设置客户端离线但会话仍保留、内存会话连接的发送队列拥塞或飞行窗口已满时，EMQX 是否将 QoS 0 消息存入会话消息队列。如果禁用该配置项，EMQX 会丢弃客户端离线或发送队列拥塞时到达的 QoS 0 消息。如果仅飞行窗口已满，EMQX 仍会立即投递 QoS 0 消息。 | `true`                                                       | `true`, `false`                     |
+| `mqueue_store_qos0`               | 存储 QoS 0 消息      | 控制 EMQX 是否在客户端断开连接或连接拥塞时，将 QoS 0 消息存入内存会话的消息队列。详情参见[消息队列的投递行为](../../develop/design/inflight-window-and-message-queue.md#消息队列的投递行为)。 | `true`                                                       | `true`, `false`                     |
 | `force_shutdown`                  | 强制关闭             | 此设置是否启用强制关闭功能，当邮箱队列长度（`max_mailbox_size`）或堆内存（`max_heap_size`）超过设定值时强制关闭客户端进程。 | `true`                                                       | `true`, `false`                     |
 | `force_shutdown.max_mailbox_size` | 最大邮箱大小         | 此设置触发强制关闭的最大邮箱队列长度。                       | `1000`                                                       | `1` - `infinity`                    |
 | `force_shutdown.max_heap_size`    | 最大堆内存           | 此设置触发强制关闭的最大堆大小。                             | `32 MB`                                                      | --                                  |
