@@ -479,7 +479,7 @@ team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 
 #### 内置 API 密钥权限范围
 
-EMQX 提供 10 个 API 密钥权限范围：
+从 EMQX 6.3.2 开始，EMQX 提供 11 个 API 密钥权限范围：
 
 | 权限范围 | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -493,10 +493,15 @@ EMQX 提供 10 个 API 密钥权限范围：
 | `system`（系统配置） | `/configs*`、`/listeners*`、`/plugins*`、`/ds/*`、`/data/*`、`/status`、`/relup`、`/opentelemetry*`、`/prometheus` 等 |
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
+| `plugin_api`（插件扩展 API） | `/plugin_api/{plugin}/...` |
+
+`plugin_api` 权限范围允许调用插件通过插件 API 网关发布的端点，但不允许访问 `/plugins*` 下的插件安装、启动、停止或配置端点。这些插件管理操作仍属于 `system` 权限范围。插件 API 网关也继续接受 `system`，因此已持有 `system` 的 API 密钥仍可访问插件扩展 API。
+
+`plugin_api` 权限范围只控制对插件 API 网关的访问，不限制插件端点自身实现的操作。分配此权限范围前，请评估插件发布的每个端点的安全影响。
 
 ::: tip 提示
 
-从 EMQX 6.0.4 开始，`audit` 权限范围不能使命名空间调用方获得审计日志访问权限。只有全局管理员和全局查看者可以调用 `GET /api/v5/audit`。详见[审计日志访问权限](./dashboard/audit-log.md#审计日志访问权限)。
+从 EMQX 6.3.2 开始，`audit` 权限范围不能使命名空间调用方获得审计日志访问权限。只有全局管理员和全局查看者可以调用 `GET /api/v5/audit`。详见[审计日志访问权限](./dashboard/audit-log.md#审计日志访问权限)。
 
 :::
 
@@ -512,7 +517,7 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 
 #### 登录专属权限范围
 
-除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
+除上述 11 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
 
 | 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
@@ -543,7 +548,7 @@ Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用�
 
 EMQX 提供两个端点用于查询可用的权限范围列表：
 
-- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 10 个业务领域权限范围）。使用 API 密钥认证。
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 11 个业务领域权限范围）。使用 API 密钥认证。
 - `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部权限范围，包含 4 个登录专属权限范围。使用 Bearer Token 认证。
 
 可用于前端渲染权限范围选择 UI 或运维脚本校验配置：
@@ -570,9 +575,9 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 命名空间 API 密钥的权限范围限制
 
-从 EMQX 6.0.4 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围创建。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
+从 EMQX 6.3.2 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` 和 `plugin_api` 权限范围创建。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
 
-创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，请求中只能包含上述 7 个权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
+创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，请求中只能包含上述 8 个权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
 
 ### 包含不允许权限范围的现有密钥
 

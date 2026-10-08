@@ -483,7 +483,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-EMQX provides 10 scopes for API keys:
+Starting from EMQX 6.3.2, EMQX provides 11 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -497,10 +497,15 @@ EMQX provides 10 scopes for API keys:
 | `system` | System configuration | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
+| `plugin_api` | Plugin-extended APIs | `/plugin_api/{plugin}/...` |
+
+The `plugin_api` scope grants access to endpoints published by plugins through the plugin API gateway. It does not grant access to plugin installation, start, stop, or configuration endpoints under `/plugins*`, which remain in the `system` scope. The gateway also continues to accept `system`, so API keys that already hold `system` keep their access.
+
+The `plugin_api` scope controls access to the gateway, not the operations implemented by a plugin. Review the security impact of every endpoint published by a plugin before assigning this scope.
 
 ::: tip Note
 
-Starting from EMQX 6.0.4, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+Starting from EMQX 6.3.2, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
 
 :::
 
@@ -516,7 +521,7 @@ Existing mixed scope lists continue to work, with `system` remaining effective. 
 
 #### Login-Only Scopes
 
-In addition to these API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
+In addition to these 11 API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -547,7 +552,7 @@ Scopes determine which API areas a key can access. They do not override the key'
 
 EMQX exposes two endpoints to query the available scope catalogues:
 
-- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
+- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 11 business-domain scopes listed above). Authenticate with an API key.
 - `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the 4 login-only scopes. Authenticate with a bearer token.
 
 Use these endpoints to populate a scope-picker UI or validate automation scripts:
@@ -574,9 +579,9 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.0.4, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. These defaults do not include `publish`, `gateways`, or `audit`.
+Starting from EMQX 6.3.2, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`. These defaults do not include `publish`, `gateways`, or `audit`.
 
-When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these seven scopes. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
+When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these eight scopes. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
 
 ### Existing Keys with Disallowed Scopes
 
