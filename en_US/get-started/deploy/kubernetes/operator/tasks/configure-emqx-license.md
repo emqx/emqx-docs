@@ -11,21 +11,20 @@ You can apply for an EMQX Enterprise license for free on the EMQX official websi
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster license through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for a complete configuration reference.
+The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the EMQX cluster license through `.spec.config.roots.license`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      image: emqx/emqx:@EE_VERSION@
      dashboardServiceTemplate:
        spec:
@@ -34,7 +33,7 @@ EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster license through
 
    ::: tip
 
-   The `license.key` in the `.spec.config.data` field represents the license content. In this example, the license content is omitted. Please fill it in with your own license key.
+   The `.spec.config.roots.license.key` field contains the license key. Replace the placeholder in this example with your license key.
 
    :::
 
@@ -75,10 +74,9 @@ EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster license through
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "${new_license_key}"
-         }
+       roots:
+         license:
+           key: "${new_license_key}"
    ...
    ```
 
@@ -98,4 +96,3 @@ EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster license through
    ```
 
    The updated `max_connections` field clearly indicates that the EMQX Enterprise license has been updated successfully. Keep in mind that the license update may take time, so you may need to retry the command.
-

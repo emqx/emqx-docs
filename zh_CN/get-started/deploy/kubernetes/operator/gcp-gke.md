@@ -1,13 +1,13 @@
 # 在 Google Kubernetes Engine 中部署 EMQX
 
-EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简化了在 GCP 中部署托管 Kubernetes 集群的过程。使用 GKE，您可以将运维开销转移到 GCP。通过在 GKE 上部署 EMQX，您可以利用 Kubernetes 的可扩展性和灵活性，同时受益于托管服务的简单性和便利性。使用 GKE 上的 EMQX Operator，您可以轻松地在云中部署和管理 MQTT 代理，并专注于您的业务目标。
+EMQX Operator 支持在 Google Kubernetes Engine（GKE）上部署 EMQX，从而简化在 GCP 中部署托管 Kubernetes 集群的过程。使用 GKE，可以将 Kubernetes 集群的运维工作交由 GCP 管理。在 GKE 上部署 EMQX，既可以利用 Kubernetes 的可扩展性和灵活性，也能获得托管服务带来的便捷体验。使用 GKE 上的 EMQX Operator，可以轻松地在云端部署和管理 MQTT Broker，并专注于业务目标。
 
 ## 前提条件
 
 在 GKE 上部署 EMQX 之前，请确保满足以下先决条件：
 
 - Google Cloud Platform 上的 GKE 集群
-  - 您必须在项目中启用 GKE API。有关设置说明，请参阅 [Google Kubernetes Engine 文档](https://cloud.google.com/kubernetes-engine/)。
+  - 必须在项目中启用 GKE API。有关设置说明，请参阅 [Google Kubernetes Engine 文档](https://cloud.google.com/kubernetes-engine/)。
 
 - 用于连接到 GKE 集群的有效 `kubectl` 配置
   - 要使用本地 `kubectl` 安装连接，请参阅 [连接到 GKE 集群](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)。
@@ -19,7 +19,7 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
 
 ## 快速部署 EMQX 集群
 
-以下示例显示了基本的 EMQX 自定义资源 (CR) 配置。
+以下示例显示了基本的 EMQX 自定义资源（CR）配置。
 
 1. 将以下文档保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
@@ -30,21 +30,20 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
     :::
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      coreTemplate:
        spec:
-         volumeClaimTemplates:
-         ## 有关存储类的更多信息：https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
+         persistentVolumeClaimSpec:
+          ## 有关存储类的更多信息：https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
            storageClassName: standard
            resources:
              requests:
@@ -128,4 +127,4 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
 
 ## 关于使用 LoadBalancer 进行 TLS 卸载的说明
 
-在撰写本文时，Google LoadBalancer 不支持 TLS 到纯 TCP 流量的终止。请参阅此[讨论](https://github.com/emqx/emqx-operator/discussions/312)以了解可能的解决方案。
+在撰写本文时，Google LoadBalancer 不支持终止 TLS 并将其转换为纯 TCP 流量。有关可能的解决方法，请参阅[相关讨论](https://github.com/emqx/emqx-operator/discussions/312)。
