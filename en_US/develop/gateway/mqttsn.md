@@ -120,7 +120,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 **Basic settings**
 
 - **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for MQTT-SN, this can be either **udp** or **dtls**.
+- **Type**: Select either **udp** or **dtls**. The **dtls** listener uses Datagram Transport Layer Security (DTLS).
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols
 
@@ -148,6 +148,25 @@ Then you can continue to set:
 - **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**. 
 - **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default: **10**.
 - **Key Password**: Set the user's password, used only when the private key is password-protected. 
+
+### Secure Session Resume for Sleeping Clients
+
+An MQTT-SN client enters the `asleep` state by sending `DISCONNECT` with a non-zero `Duration`. To wake up, it sends `PINGREQ` with its Client ID. The gateway resumes the session and delivers messages buffered during sleep. The source IP address and port may change between sleep and wake-up because MQTT-SN devices commonly operate behind NAT.
+
+`PINGREQ` contains no password or token. If the session is not bound to a client certificate, the gateway can identify it only by Client ID, creating the following security risk:
+
+::: warning Unauthenticated Session Resume Without a Client Certificate
+On a plaintext UDP listener, or for a DTLS session without a client certificate, anyone who can reach the listener and knows or guesses a Client ID can send `PINGREQ` to resume that client's sleeping session and receive its buffered messages. Use these listener configurations only where this risk is acceptable.
+:::
+
+To bind session resume to a verified client certificate, configure a DTLS listener with:
+
+- **TLS Verify** (`verify`): `verify_peer` to verify a presented client certificate. Default: `verify_none`.
+- **Fail If No Peer Cert** (`fail_if_no_peer_cert`): `true` to reject clients without a certificate.
+
+With both options set, the gateway binds the session to the client certificate used at connection time. A new DTLS association can resume the session only with the same certificate. The gateway rejects wake-up attempts that use no certificate or a different or reissued certificate. Certificate comparison ignores source IP address and port changes, so NAT rebinding remains supported. After certificate rotation, the client must reconnect with `CONNECT` and complete normal authentication and session takeover.
+
+`verify_peer` alone is insufficient. If `fail_if_no_peer_cert` is `false`, a client can connect without a certificate, and its session remains resumable by Client ID alone.
 
 ### Configure Authentication
 

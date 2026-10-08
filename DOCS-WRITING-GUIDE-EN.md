@@ -109,8 +109,9 @@ Use Title Case for:
 - Table column headings
 - Procedure headings
 - Tab titles and grouped content titles
+- Warning titles
 
-Use sentence-style capitalization for normal paragraph text, list items, table cell content, notes, warnings, and descriptions unless the text contains a product name, UI label, API name, configuration name, or other proper noun.
+Use sentence-style capitalization for normal paragraph text, list items, table cell content, note and warning body text, and descriptions unless the text contains a product name, UI label, API name, configuration name, or other proper noun.
 
 Do not change existing heading capitalization as part of an unrelated edit. Keep headings consistent across the page.
 
@@ -485,12 +486,14 @@ Rules:
 
 Use VitePress custom containers for information that needs special attention.
 
+Always give a `warning` container an explicit title. Prefer a descriptive Title Case title that identifies the specific risk or limitation. If a descriptive title is not needed, use `Important Notice`.
+
 ```markdown
 ::: tip
 Use tips for helpful information that is not required to complete the task.
 :::
 
-::: warning
+::: warning Important Notice
 Use warnings for risks, limitations, compatibility issues, or actions that can cause unexpected behavior.
 :::
 
