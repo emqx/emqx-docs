@@ -120,7 +120,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 **Basic settings**
 
 - **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for MQTT-SN, this can be either **udp** or **dtls**.
+- **Type**: Select either **udp** or **dtls**. The **dtls** listener uses Datagram Transport Layer Security (DTLS).
 - **Bind**: Set the port number on which the listener accepts incoming connections.
 - **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols
 
@@ -149,41 +149,24 @@ Then you can continue to set:
 - **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default: **10**.
 - **Key Password**: Set the user's password, used only when the private key is password-protected. 
 
-### Sleeping Clients and Session Resume
+### Secure Session Resume for Sleeping Clients
 
-An MQTT-SN client enters the `asleep` state by sending `DISCONNECT` with a non-zero Duration. It
-later wakes up by sending `PINGREQ` with its Client ID, and the gateway resumes the existing session
-and delivers any messages buffered while the client slept. The source IP address and port may change
-between sleeping and waking, because MQTT-SN devices commonly sit behind NAT.
+An MQTT-SN client enters the `asleep` state by sending `DISCONNECT` with a non-zero `Duration`. To wake up, it sends `PINGREQ` with its Client ID. The gateway resumes the session and delivers messages buffered during sleep. The source IP address and port may change between sleep and wake-up because MQTT-SN devices commonly operate behind NAT.
 
-MQTT-SN `PINGREQ` carries no password or token, so on listeners where the session has no transport
-identity the Client ID is the only thing the gateway can match on. This has a security consequence
-you need to account for:
+`PINGREQ` contains no password or token. If the session is not bound to a client certificate, the gateway can identify it only by Client ID, creating the following security risk:
 
 ::: warning Unauthenticated Session Resume Without a Client Certificate
-On a plaintext UDP listener, and on a DTLS listener where the client presented no certificate, a
-`PINGREQ` carrying a known Client ID resumes that client's sleeping session without
-authentication. Anyone who can reach the listener and knows or guesses a Client ID can receive the
-messages buffered for that device. Use these listeners only where that risk is acceptable.
+On a plaintext UDP listener, or for a DTLS session without a client certificate, anyone who can reach the listener and knows or guesses a Client ID can send `PINGREQ` to resume that client's sleeping session and receive its buffered messages. Use these listener configurations only where this risk is acceptable.
 :::
 
-To bind session resume to a verified identity, use a DTLS listener and set both:
+To bind session resume to a verified client certificate, configure a DTLS listener with:
 
-- **TLS Verify** (`verify`) to `verify_peer`, so clients must present a certificate. The default is
-  `verify_none`.
-- **Fail If No Peer Cert** (`fail_if_no_peer_cert`) to `true`, so a client that presents an empty
-  certificate is rejected.
+- **TLS Verify** (`verify`): `verify_peer` to verify a presented client certificate. Default: `verify_none`.
+- **Fail If No Peer Cert** (`fail_if_no_peer_cert`): `true` to reject clients without a certificate.
 
-With both set, the gateway binds each session to the client certificate presented at connection
-time. A `PINGREQ` from a new association resumes such a session only when it presents the same
-certificate; a wake-up with no certificate, a different certificate, or a reissued certificate is
-rejected. Changes to the source IP address and port do not affect this check, so NAT rebinding keeps
-working. After certificate rotation, the client must reconnect with `CONNECT` and complete the normal
-authentication and session takeover flow.
+With both options set, the gateway binds the session to the client certificate used at connection time. A new DTLS association can resume the session only with the same certificate. The gateway rejects wake-up attempts that use no certificate or a different or reissued certificate. Certificate comparison ignores source IP address and port changes, so NAT rebinding remains supported. After certificate rotation, the client must reconnect with `CONNECT` and complete normal authentication and session takeover.
 
-Setting **TLS Verify** alone is not enough. With **Fail If No Peer Cert** left at `false`, a client
-may connect without presenting a certificate, and that client's session falls back to Client-ID-only
-resume.
+`verify_peer` alone is insufficient. If `fail_if_no_peer_cert` is `false`, a client can connect without a certificate, and its session remains resumable by Client ID alone.
 
 ### Configure Authentication
 
