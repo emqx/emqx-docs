@@ -193,5 +193,6 @@ Tarballs for each EMQX release:
 | EMQX Version | Plugin Version | Package |
 |---|---|---|
 | 6.1.4 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.4/emqx_sync_request-0.1.0.sha256)) |
+| 6.1.5 | 0.1.1 | [emqx_sync_request-0.1.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.1.5/emqx_sync_request-0.1.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.1.5/emqx_sync_request-0.1.1.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
