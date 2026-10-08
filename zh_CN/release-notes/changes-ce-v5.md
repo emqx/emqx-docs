@@ -466,7 +466,7 @@
 
 - [#14283](https://github.com/emqx/emqx/pull/14283) 改进了 QUIC 传输，升级 `quicer` 到 0.1.9。
   - 在异常场景下，提前释放远程流资源。
-  - 添加了更多故障排除 API。详情请见： https://github.com/emqx/quic/compare/0.1.6...0.1.9。
+  - 添加了更多故障排除 API。详情请见：[emqx/quic@0.1.6...0.1.9](https://github.com/emqx/quic/compare/0.1.6...0.1.9)。
 
 ### 修复
 
@@ -2171,7 +2171,7 @@
 
 - [#11326](https://github.com/emqx/emqx/pull/11326) 修复了在 Oracle 桥接中返回错误检查的问题。
 
-### [已知问题](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.1.md)
+### [已知问题](./known-issues-5.1.md#e511)
 
 ## 5.1.0
 
@@ -2302,7 +2302,7 @@
     相关的 mria pull request: [https://github.com/emqx/mria/pull/143](https://github.com/emqx/mria/pull/143)
 -   [#11092](https://github.com/emqx/emqx/pull/11092) 修复复制节点因超时无法连接到核心节点的问题。
 
-### [已知问题](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
+### [已知问题](./known-issues-5.1.md#e510)
 
 ## 5.0.26
 
