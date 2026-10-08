@@ -1,7 +1,7 @@
 # OpenTelemetryを統合してメトリクスを表示する
-EMQXは、gRPC OTELプロトコルを介してメトリクスを直接OpenTelemetry Collectorにプッシュする機能を標準でサポートしています。Collectorはデータを任意のバックエンドにルーティング、フィルタリング、変換し、保存および可視化を行えます。
+EMQXは、gRPC OTELプロトコルを介してメトリクスを直接OpenTelemetry Collectorにプッシュする機能を内蔵しています。Collectorはデータを任意のバックエンドにルーティング、フィルタリング、変換して保存および可視化できます。
 
-このページでは、EMQXをDashboard経由でOpenTelemetryと統合し、[Prometheus](../prometheus.md)を通じてEMQXのメトリクスを表示する方法を紹介します。
+このページでは、Dashboardを通じてOpenTelemetryとEMQXを統合し、[Prometheus](../prometheus.md)でEMQXのメトリクスを表示する方法を紹介します。
 
 ## 前提条件
 
@@ -33,7 +33,7 @@ service:
 ```
 
 - [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)をデプロイします。
-- Prometheusを設定し、Collectorが収集したメトリクスをスクレイプします。
+- Prometheusを設定してCollectorが収集したメトリクスをスクレイプします。
 
 ```yaml
 # prometheus.yaml
@@ -47,9 +47,11 @@ scrape_configs:
 
 ## EMQXでOpenTelemetryメトリクスを有効化する
 
-EMQX Dashboardまたは設定ファイルを使って、OpenTelemetryメトリクス機能との統合を設定できます。EMQX Dashboardでは、左のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブを選択してメトリクスの設定を行います。
+EMQX Dashboardまたは設定ファイルを使用して、OpenTelemetryメトリクス機能との統合を設定できます。EMQX Dashboardでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブでメトリクスの設定を行います。
 
-EMQXがローカルで動作している場合は、以下の設定をEMQXの `cluster.hocon` ファイルに追加してください。
+`opentelemetry.exporter.endpoint` は1つのURLを受け入れます。URLは `http` または `https` スキームを使用し、明示的なポートを含める必要があります。例えば、`http://localhost:4317` は有効ですが、`localhost:4317` や `http://localhost` は無効です。
+
+以下の設定をEMQXの `cluster.hocon` ファイルに追加します（EMQXがローカルで動作している場合）：
 
 ```bash
 opentelemetry {
@@ -67,5 +69,5 @@ opentelemetry {
 
 ## PrometheusでEMQXメトリクスを可視化する
 
-EMQXのメトリクスは、PrometheusのWebコンソール（http://otel-collector:9090）で確認できます。  
+EMQXのメトリクスはPrometheusのWebコンソール（http://otel-collector:9090）で確認できます：
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)
