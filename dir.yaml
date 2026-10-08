@@ -378,6 +378,10 @@
   - develop/connect-emqx/go
   - develop/connect-emqx/python
   - develop/connect-emqx/javascript
+  - title_en: MQTT Wechat miniprogram example
+    title_cn: MQTT 微信小程序示例
+    lang: cn
+    path: develop/connect-emqx/wechat-miniprogram
 - develop/connect-emqx/curl
 - develop/connect-emqx/node-red
 - title_en: Tutorials
@@ -1049,10 +1053,6 @@
     title_cn: 功能对比
     title_ja: 機能比較
     path: get-started/feature-comparison
-  - title_en: Get Started
-    title_cn: 快速开始
-    title_ja: はじめに
-    path: get-started/getting-started
   - title_en: Operating Limitations
     title_cn: 使用限制
     title_ja: 運用制限

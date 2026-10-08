@@ -63,6 +63,8 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
 
 ## Enable OpenTelemetry Log Handler in EMQX
 
+`opentelemetry.exporter.endpoint` accepts one URL. The URL must use the `http` or `https` scheme and include an explicit port. For example, `http://localhost:4317` is valid. Values such as `localhost:4317` and `http://localhost` are invalid.
+
 1. Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
 
    ```bash

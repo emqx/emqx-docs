@@ -57,6 +57,8 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
    - **Dashboard 地址**：输入用户可以访问 Dashboard 的基础 URL，例如 `http://localhost:18083`。此地址会被自动组合以生成用于在 IdP 侧配置的 **SSO 地址**和**元数据地址**。
 
+   - **启用 TLS**：当**签发者 URL** 使用 `https` 协议时打开此开关，使用 `http` 时关闭。从 EMQX 6.0.4 开始，如果签发者 URL 的协议与 TLS 设置不匹配，EMQX 会在创建或更新 OIDC 配置时拒绝该配置。
+
 <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
 2. 点击**更新**以完成配置。
@@ -92,6 +94,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
    - **Client ID**：从**步骤 2** 创建的应用程序中复制。
    - **Client Secret**：从**步骤 2** 创建的应用程序中复制。
    - **Dashboard 地址**：输入用户可以访问 Dashboard 的基本 URL，例如 `http://localhost:18083`。该地址将自动组合生成 **SSO Address** 和 **Metadata Address**，用于 IdP 端的配置。
+   - **启用 TLS**：当**签发者 URL** 使用 `https` 协议时打开此开关，使用 `http` 时关闭。从 EMQX 6.0.4 开始，如果签发者 URL 的协议与 TLS 设置不匹配，EMQX 会在创建或更新 OIDC 配置时拒绝该配置。
 2. 点击**更新**完成配置。
 
 ## 高级设置

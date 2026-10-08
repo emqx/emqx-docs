@@ -49,6 +49,8 @@ scrape_configs:
 
 You can use EMQX Dashboard or a configuration file to configure EMQX's integration with the OpenTelemetry metrics feature. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration for Metrics.
 
+`opentelemetry.exporter.endpoint` accepts one URL. The URL must use the `http` or `https` scheme and include an explicit port. For example, `http://localhost:4317` is valid. Values such as `localhost:4317` and `http://localhost` are invalid.
+
 Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
 
    ```bash
