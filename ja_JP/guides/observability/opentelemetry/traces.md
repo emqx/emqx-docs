@@ -1,26 +1,26 @@
 # OpenTelemetryトレーシングの統合
 
-[OpenTelemetryトレーシング](https://opentelemetry.io/docs/concepts/signals/traces/)は、分散システム内のリクエストの流れをトレースするための仕様であり、リクエストが分散システムをどのように流れるかを追跡し、リクエストのパフォーマンスや挙動を可視化・分析することが可能です。MQTTのシナリオでは、この概念をMQTTメッセージの送受信に関わる異なる参加者（パブリッシャー - MQTTサーバー - サブスクライバー）間のリクエストをトレースするために利用できます。
+[OpenTelemetryトレーシング](https://opentelemetry.io/docs/concepts/signals/traces/)は、分散システムにおけるリクエストの流れをトレースするための仕様であり、リクエストが分散システム内でどのように流れるかを追跡し、リクエストのパフォーマンスや挙動を可視化・分析することを可能にします。MQTTのシナリオにおいては、この概念を用いてMQTTメッセージの送受信に関わる異なる参加者（パブリッシャー - MQTTサーバー - サブスクライバー）間のリクエストをトレースできます。
 
-「トレースコンテキスト」は、分散トレーシングで複数のシステムやサービスにまたがるリクエストやトランザクションを追跡・識別するための仕組みです。[W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/)ドキュメントでは、この概念がMQTTプロトコルに適用されており、MQTTメッセージ送受信の異なる参加者間でリクエストを追跡できるようにしています。これにより、システム管理者や開発者はメッセージがシステム内をどのように流れているかを理解できます。
+「トレースコンテキスト」は、複数のシステムやサービスにまたがるリクエストやトランザクションを追跡・識別するために分散トレーシングで用いられる仕組みです。[W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/)ドキュメントでは、この概念がMQTTプロトコルに適用されており、MQTTメッセージ送受信の異なる参加者間でリクエストを追跡可能にしています。これにより、システム管理者や開発者はメッセージがシステム内でどのように流れているかを理解できます。
 
-EMQXはトレースコンテキストを伝播する機能を標準で備えており、分散トレーシングシステムにシームレスに参加可能です。この伝播は、メッセージのパブリッシャーからサブスクライバーへ`traceparent`および`tracestate`のユーザープロパティを単純に転送することで実現されます。EMQXがアプリケーションメッセージをクライアントに転送する際、トレースコンテキストの整合性を保ち、変更せずに送信します。この方法は[MQTT仕様3.3.2.3.7](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901116)に完全準拠しており、トレースデータの送信における一貫性と信頼性を保証します。
+EMQXはトレースコンテキストを伝搬する機能を持っており、分散トレーシングシステムにシームレスに参加できます。この伝搬は、メッセージのパブリッシャーからサブスクライバーへ`traceparent`および`tracestate`のユーザープロパティを単純に転送することで実現されます。EMQXがアプリケーションメッセージをクライアントに転送する際、トレースコンテキストの整合性を保持し、変更せずに伝達します。この方法は[MQTT仕様3.3.2.3.7](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901116)に完全準拠しており、トレースデータの伝送における一貫性と信頼性を保証します。
 
 ::: tip 注意
 
-User-PropertyはMQTT 5.0で導入されたため、EMQXはMQTT 5.0を使用している場合にのみトレースコンテキストを抽出・伝播できます。
+User-PropertyはMQTT 5.0で導入されたため、EMQXはMQTT 5.0使用時のみトレースコンテキストを抽出・伝搬できます。
 
-MQTT 5.0以外のクライアントの場合は、EMQXの**Traces All Messages**オプションを有効にする必要があります。EMQXは内部の分散トレーシング用にメッセージに自動的にトレースIDを付加します。
+MQTT 5.0以外のクライアントの場合、EMQXの**Traces All Messages**オプションを有効にする必要があります。EMQXは内部の分散トレーシング用にメッセージに自動的にトレースIDを付与します。
 
 :::
 
-OpenTelemetry分散トレーシングにより、EMQXのシステム管理者や開発者はIoTアプリケーションのパフォーマンスや挙動をリアルタイムで監視・分析できます。問題発生時の迅速な検出と解決が可能です。
+OpenTelemetry分散トレーシングにより、EMQXのシステム管理者や開発者はIoTアプリケーションのパフォーマンスや挙動をリアルタイムで監視・分析できます。問題発生時の迅速な検知と解決が可能です。
 
-本ページでは、OpenTelemetryトレーシングをEMQXに統合する方法を紹介し、OpenTelemetry Collectorのセットアップ、EMQXでのOpenTelemetryトレース統合の有効化・設定、およびトレーシングスパンの過負荷管理について説明します。
+本ページでは、OpenTelemetryトレーシングとEMQXの統合方法について、OpenTelemetry Collectorのセットアップ、EMQXでのOpenTelemetryトレース統合の有効化・設定、トレーシングスパンの過負荷管理について解説します。
 
 ## OpenTelemetry Collectorのセットアップ
 
-EMQXとOpenTelemetryトレースを統合する前に、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)および可能であればOpenTelemetry対応のオブザーバビリティプラットフォーム（例：[Jaeger](https://www.jaegertracing.io/docs/latest/deployment/)）をデプロイ・設定する必要があります。以下にデプロイと設定の手順を示します。
+EMQXとOpenTelemetryトレースを統合する前に、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)および可能であればOpenTelemetry対応のオブザーバビリティプラットフォーム（例：[Jaeger](https://www.jaegertracing.io/docs/latest/deployment/)）をデプロイ・設定する必要があります。以下にデプロイと設定手順を示します。
 
 1. OpenTelemetry Collectorの設定ファイル`otel-trace-collector-config.yaml`を作成します。
 
@@ -69,25 +69,27 @@ EMQXとOpenTelemetryトレースを統合する前に、[OpenTelemetry Collector
        volumes:
          - ./otel-trace-collector-config.yaml:/etc/otel-collector-config.yaml
        ports:
-         - "13133:13133" # ヘルスチェック拡張
-         - "4317:4317"   # OTLP gRPC受信
+         - "13133:13133" # ヘルスチェック拡張用
+         - "4317:4317"   # OTLP gRPCレシーバー
        depends_on:
          - jaeger
    ```
 
-3. Docker Composeを使ってサービスを起動します。
+3. Docker Composeでサービスを起動します。
 
    ```bash
    docker compose -f docker-compose-otel-trace.yaml up
    ```
 
-4. 起動後、OpenTelemetry CollectorはホストのデフォルトgRPCポート（4317）で待機し、JaegerのWEB UIは http://localhost:16686 でアクセス可能です。
+4. 起動後、OpenTelemetry CollectorはホストのデフォルトgRPCポート（4317）で待ち受け、JaegerのWEB UIは http://localhost:16686 でアクセス可能です。
 
-## EMQXでOpenTelemetryトレーシングを有効化
+## EMQXでのOpenTelemetryトレーシングの有効化
 
-このセクションでは、EMQXでOpenTelemetryトレーシングを有効にし、マルチノード構成での分散トレーシング機能を実演します。
+このセクションでは、EMQXでOpenTelemetryトレーシングを有効化し、マルチノード環境での分散トレーシング機能を確認する手順を説明します。
 
-1. EMQXの`cluster.hocon`ファイルに以下の設定を追加します（EMQXがローカルで動作している前提）。
+`opentelemetry.exporter.endpoint`は1つのURLを受け付けます。URLは`http`または`https`スキームを使用し、明示的なポート番号を含む必要があります。例えば`http://localhost:4317`は有効ですが、`localhost:4317`や`http://localhost`は無効です。
+
+1. EMQXの`cluster.hocon`ファイルに以下の設定を追加します（EMQXがローカルで動作している想定）。
 
    ```bash
    opentelemetry {
@@ -95,57 +97,57 @@ EMQXとOpenTelemetryトレースを統合する前に、[OpenTelemetry Collector
      traces {
       enable = true
       # 全メッセージをトレースするかどうか
-      # メッセージからトレースIDが抽出できない場合は新しいトレースIDが生成されます。
+      # メッセージからトレースIDが抽出できない場合は新たに生成されます。
       # filter.trace_all = true
     }
    }
    ```
 
-   または、ダッシュボードの**Management** -> **Monitoring**にある**Integration**タブからOpenTelemetryトレース統合を設定可能です。
+   または、ダッシュボードの**管理** -> **モニタリング**の**統合**タブからOpenTelemetryトレース統合を設定できます。
 
-2. EMQXノードを起動します。例として、ノード名`emqx@127.0.0.1`と`emqx1@127.0.0.1`の2ノードクラスターを構築し、分散トレーシング機能を確認します。
+2. EMQXノードを起動します。例として、ノード名`emqx@127.0.0.1`と`emqx1@127.0.0.1`の2ノードクラスターで分散トレーシング機能を確認します。
 
 3. 異なるノード・ポートで[MQTTX CLI](https://mqttx.app/cli)クライアントを使い、同じトピックにサブスクライブします。
 
-   - `emqx@127.0.0.1`ノード（デフォルトMQTTリスナー：ポート1883）:
+   - `emqx@127.0.0.1`ノード（デフォルトMQTTリスナー1883ポート）:
 
      ```bash
      mqttx sub -t t/trace/test -h localhost -p 1883
      ```
 
-   - `emqx1@127.0.0.1`ノード（リスナー：ポート1884）:
+   - `emqx1@127.0.0.1`ノード（1884ポートリスナー）:
 
      ```bash
      mqttx sub -t t/trace/test -h localhost -p 1884
      ```
 
-4. 有効な`traceparent`ユーザープロパティを含むメッセージをトピックにパブリッシュして、トレースコンテキスト付きメッセージを送信します。
+4. 有効な`traceparent`ユーザープロパティを含むメッセージをトピックにパブリッシュしてトレースコンテキストを送信します。
 
    ```bash
    mqttx pub -t t/trace/test -h localhost -p 1883 -up "traceparent: 00-cce3a024ca134a7cb4b41e048e8d98de-cef47eaa4ebc3fae-01"
    ```
 
-5. 約5秒後（EMQXのトレースデータエクスポートのデフォルト間隔）、JaegerのWEB UI（[http://localhost:16686](http://localhost:16686/)）にアクセスしてトレースデータを確認します。
+5. 約5秒後（EMQXのトレースデータエクスポートのデフォルト間隔）、Jaeger WEB UI（[http://localhost:16686](http://localhost:16686/)）にアクセスし、トレースデータを確認します。
 
-   - `emqx`サービスを選択し、**Find Traces**をクリックします。`emqx`サービスがすぐに表示されない場合は、数秒後にページを更新してください。メッセージのトレースが表示されます。
+   - `emqx`サービスを選択し、**Find Traces**をクリックします。`emqx`サービスがすぐに表示されない場合は数秒後にページを更新してください。メッセージのトレースが表示されます。
 
      ![Jaeger-WEB-UI-find-traces](./assets/jaeger-find-traces-en.png)
 
-   - トレースをクリックすると、詳細なスパン情報とトレースタイムラインが表示されます。
+   - トレースをクリックすると、詳細なスパン情報とトレースタイムラインを閲覧できます。
 
      ![Jaeger-WEB-UI-trace-details](./assets/jaeger-trace-details-en.png)
 
 この例では、EMQXは2種類のスパンをトレースしています。
 
- - `process_message`スパンは、EMQXノードがPUBLISHパケットを受信・解析した時点で開始し、メッセージがローカルのサブスクライバーに配信されるか、アクティブなサブスクライバーがいる他ノードに転送されるまで続きます。各スパンは1つのトレースされたパブリッシュメッセージに対応します。
+ - `process_message`スパンは、EMQXノードがPUBLISHパケットを受信・解析した時点で開始し、メッセージがローカルのサブスクライバーに配信されるか、アクティブなサブスクライバーを持つ他ノードに転送されるまで続きます。各スパンは1つのトレースされたパブリッシュメッセージに対応します。
 
- - `send_published_message`スパンは、トレースされたメッセージがサブスクライバーの接続制御プロセスに到達した時点で開始し、送信パケットがシリアライズされ接続ソケットに送られるまで続きます。各アクティブサブスクライバーごとに1つの`send_published_message`スパンが生成されます。
+ - `send_published_message`スパンは、トレースされたメッセージがサブスクライバーの接続制御プロセスに届いた時点で開始し、送信パケットがシリアライズされ接続ソケットに送られるまで続きます。アクティブなサブスクライバーごとに1つの`send_published_message`スパンが生成されます。
 
 ## トレーシングスパンの過負荷管理
 
 EMQXはトレーシングスパンを蓄積し、定期的にバッチでエクスポートします。エクスポート間隔は`opentelemetry.trace.scheduled_delay`パラメータで制御され、デフォルトは5秒です。
 
-バッチ処理のトレーススパンプロセッサは過負荷保護機構を備えており、蓄積可能なスパン数の上限（デフォルト2048スパン）を設定できます。以下の設定で上限を変更可能です。
+バッチ処理のトレーススパンプロセッサには過負荷保護機構が組み込まれており、蓄積できるスパン数の上限（デフォルト2048スパン）を超えないように制御します。この上限は以下の設定で変更可能です。
 
 ```bash
 opentelemetry {
@@ -153,7 +155,7 @@ opentelemetry {
 }
 ```
 
-`max_queue_size`の上限に達すると、新しいトレーシングスパンは現在のキューがエクスポートされるまで破棄されます。
+`max_queue_size`の上限に達すると、新たなトレーシングスパンは現在のキューがエクスポートされるまで破棄されます。
 
 ::: tip 注意
 
