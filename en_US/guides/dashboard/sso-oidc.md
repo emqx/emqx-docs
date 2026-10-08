@@ -59,6 +59,8 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 
      <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
+   - **Enable TLS**: Turn on this toggle when the **Issuer URL** uses the `https` scheme, and leave it off when the URL uses `http`. Starting from EMQX 6.0.4, EMQX rejects an OIDC configuration at creation or update if its Issuer URL scheme and TLS setting do not match.
+
 2. Click **Update** to finish the configuration.
 
 ## Configure SSO by Integrating with Okta
@@ -98,6 +100,7 @@ For more detailed instructions, refer to the [Okta documentation](https://help.o
    - **Client ID**: Copy it from the application created in **Step 2**.
    - **Client Secret**: Copy it from the application created in **Step 2**.
    - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate the **SSO Address** and **Metadata Address** for configuration on the IdP side.
+   - **Enable TLS**: Turn on this toggle when the **Issuer URL** uses the `https` scheme, and leave it off when the URL uses `http`. Starting from EMQX 6.0.4, EMQX rejects an OIDC configuration at creation or update if its Issuer URL scheme and TLS setting do not match.
 2. Click **Update** to finish the configuration.
 
 ## Advanced Settings
