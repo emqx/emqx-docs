@@ -938,6 +938,7 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | `takenover`                   | 新客户端使用相同的 `clientid` 且设置了 `clean_start = false`，在旧会话仍然活跃的情况下连接，导致旧会话被接管。 |
 | `einval`                      | 出现无效参数或 socket 错误，通常是因为尝试向已被系统关闭的 socket 写入数据（可能是 socket 状态变更通知与数据写入之间的竞争条件所致）。 |
 | `frame_too_large`             | 收到的 MQTT 报文超过了允许的最大帧大小。                     |
+| `connect_packet_too_large`    | CONNECT 报文超过 `mqtt.max_connect_packet_size` 的限制。      |
 | `idle_timeout`                | TCP/SSL 连接建立后，在配置的超时时间内未收到 `CONNECT` 报文。 |
 | `invalid_proto_name`          | `CONNECT` 报文中的协议名称无效或不是 `"MQTT"`。              |
 | `invalid_topic`               | 客户端使用了无效或被禁止的主题（如包含非法字符或被 Broker 限制）。 |

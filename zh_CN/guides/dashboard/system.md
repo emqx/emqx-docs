@@ -35,9 +35,9 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 | `user_management` | 管理员 | 管理 Dashboard 用户（创建 / 修改 / 删除）。 |
 | `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
+| `mfa_management` | 全局管理员或全局查看者 | 管理自己的 MFA；管理员可管理其他用户的 MFA。 |
 
-其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。`mfa_management` 是例外：可以授予查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此权限范围非常有用。
+其中 `user_management`、`sso_management` 和 `api_key_management` 需要管理员角色，不能分配给查看者。对于全局用户，`mfa_management` 是例外：可以授予全局查看者，但仅允许其管理自己账号的 MFA，不授予对其他用户 MFA 设置的访问权限。当您希望全局查看者账号能够自助重新绑定或恢复认证设备而不获得其他额外权限时，此权限范围非常有用。命名空间用户不能持有 `mfa_management`。
 
 在 Dashboard 中创建全局用户时，**命名空间**选项默认关闭，**权限模式**默认选择**角色默认权限**。可选择以下模式：
 
@@ -54,7 +54,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 | 全局管理员 | 全部 14 个权限范围，包括 10 个 API 密钥权限范围和 4 个登录专属权限范围。 |
 | 全局查看者 | 10 个 API 密钥权限范围。`mfa_management` 仅在显式分配时授予。 |
 | 命名空间管理员 | 连接、监控、数据集成、访问控制、系统设置、集群管理、License、用户管理和 API 密钥管理。 |
-| 命名空间查看者 | 与全局查看者相同的 10 个 API 密钥权限范围。`mfa_management` 仅在显式分配时授予。 |
+| 命名空间查看者 | 连接、监控、数据集成、访问控制、系统设置、集群管理和 License，不包含登录专属权限范围。 |
 
 ::: warning 等同管理员权限的范围必须单独使用
 
@@ -71,7 +71,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 在 EMQX 6.0.4 之前创建且使用混合权限范围列表的用户可以继续工作，其中等同管理员权限的范围仍然有效。在 Dashboard 中编辑此类全局用户时，表单会显示兼容性警告，并要求在保存前选择**管理权限范围**、**自定义受限权限**或**角色默认权限**。显式权限范围列表必须仅包含等同管理员权限的范围，或仅包含该组之外的权限范围。使用角色默认权限或不授予任何权限范围时，不受此限制。
 
-此互斥规则不适用于命名空间 Dashboard 管理员。命名空间管理员可以使用允许的权限范围组合，但仍只能访问所属命名空间内允许的操作和资源。
+此互斥规则不适用于命名空间 Dashboard 用户。此类用户可以组合其命名空间角色允许持有的权限范围，但仍只能访问所属命名空间内允许的操作和资源。
 
 :::
 
@@ -79,7 +79,7 @@ EMQX Dashboard 中的**系统设置**菜单提供一系列管理功能入口，�
 
 在 Dashboard 中配置用户并变更所选角色或命名空间时，表单会移除该角色或命名空间不支持的权限范围，并显示警告。通过 REST API 变更用户角色时，EMQX 会检查用户的权限范围是否与新角色兼容。不兼容的请求返回 HTTP 400。要解决此问题，请在同一请求中提供一个对新角色有效的 `scopes` 列表。
 
-例如，如果您将一个管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个权限范围需要管理员角色。请在同一请求中提供一个仅包含与查看者兼容的权限范围列表以完成变更。（`mfa_management` 不仅限于管理员，不会导致此拒绝。）
+例如，如果将全局管理员降级为查看者，而该用户持有 `user_management`、`sso_management` 或 `api_key_management`，请求将被拒绝，因为这三个权限范围需要管理员角色。请在同一请求中提供一个仅包含与查看者兼容的权限范围列表以完成变更。`mfa_management` 仍可分配给全局查看者。对于命名空间查看者，REST API 仅接受 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license`；请求包含其他权限范围时返回 HTTP 400。
 
 ### 默认管理员保护
 
@@ -166,7 +166,14 @@ ns:<NAMESPACE>::<ROLE>
   - 飞行窗口消息：`GET /clients/:clientid/inflight_messages`
   - 保留消息：`GET /mqtt/retainer/messages`、`GET /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/message/:topic`、`DELETE /mqtt/retainer/messages`
   - 延迟消息：`GET /mqtt/delayed/messages`、`GET /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:node/:msgid`、`DELETE /mqtt/delayed/messages/:topic`
+- **仅限全局用户访问的文件传输内容端点**：文件传输使用全局存储，且不支持命名空间隔离。为防止访问由其他命名空间中的客户端上传的文件，以下端点对任何角色的命名空间 Dashboard 用户和 API 密钥均不可用：
+  - 列出文件：`GET /file_transfer/files`
+  - 列出指定传输的文件：`GET /file_transfer/files/:clientid/:fileid`
+  - 下载文件：`GET /file_transfer/file`
+
+  全局 Dashboard 用户和 API 密钥仍可根据其角色和权限范围访问这些端点。`/file_transfer` 配置端点不受影响。
 - **日志追踪隔离**：命名空间用户访问追踪端点时，仅能看到属于其命名空间的追踪记录。对不同命名空间的追踪执行停止、下载、流式读取日志或删除操作（`PUT /trace/:name/stop`、`GET /trace/:name/download`、`GET /trace/:name/log`、`GET /trace/:name/log_detail`、`DELETE /trace/:name`）将返回 `404 Not Found`，不会泄露其他命名空间的追踪是否存在。批量删除端点（`DELETE /trace`）对命名空间用户返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+- **审计日志访问限制**：从 EMQX 6.0.4 开始，命名空间用户无法查看集群级审计日志。只有全局管理员和全局查看者可以查看审计日志记录。详见[审计日志访问权限](./audit-log.md#审计日志访问权限)。
 - **API 密钥管理**：命名空间管理员可以创建、查询、查看、更新和删除自己命名空间中的 API 密钥。命名空间管理员不能创建全局 API 密钥或其他命名空间中的密钥，所属命名空间之外的密钥不会显示。REST API 的详细行为参见[命名空间管理员管理 API 密钥](../api.md#命名空间管理员管理-api-密钥)。
 - **默认登录首页**：命名空间用户登录 Dashboard 后默认进入**概览**页面，菜单项与普通用户一致，但资源数据将自动过滤，仅显示其命名空间内的数据。
 - **License 管理限制**：命名空间用户不显示 License 相关提示，License 相关操作仅由系统管理员负责。
@@ -178,7 +185,7 @@ ns:<NAMESPACE>::<ROLE>
 
 ## 审计日志
 
-**审计日志**页面允许管理员配置审计日志功能，以实时监控 EMQX 集群中的关键操作变更。
+**审计日志**页面允许全局管理员配置审计日志功能，以实时监控 EMQX 集群中的关键操作变更。从 EMQX 6.0.4 开始，全局管理员和全局查看者可以查看审计日志记录，命名空间用户无法查看。
 
 有关审计日志功能的详细说明，请参见[审计日志](./audit-log.md)。
 

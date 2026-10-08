@@ -37,7 +37,7 @@
 
    - **功能选择**：选择 `Traces`。
 
-   - **服务地址**：设置追踪数据导出地址，默认为 `http://localhost:4317`。
+   - **服务地址**：输入一个追踪数据导出 URL。URL 必须使用 `http` 或 `https` 协议，并显式包含端口。默认值为 `http://localhost:4317`。`localhost:4317` 和 `http://localhost` 均为无效值。
 
    - **请求头**：为追踪数据的导出请求添加自定义 HTTP 请求头。当 OpenTelemetry Collector 需要身份认证或特定请求头（如 API 密钥或令牌）时，可使用此功能。每个请求头应以键值对的形式配置。
 
@@ -76,6 +76,8 @@
 ### 通过配置文件启用和配置端对端追踪
 
 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）。
+
+`opentelemetry.exporter.endpoint` 仅接受一个 URL。URL 必须使用 `http` 或 `https` 协议，并显式包含端口。例如，`http://localhost:4317` 是有效值；`localhost:4317` 和 `http://localhost` 均为无效值。
 
 对于更多配置项含义及说明，您可以参考 [EMQX Dashboard 监控集成](http://localhost:18083/#/monitoring/integration)的 OpenTelemetry 子选项卡。
 
