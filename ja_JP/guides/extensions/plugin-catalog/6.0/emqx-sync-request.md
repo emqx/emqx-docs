@@ -193,3 +193,15 @@ sync_request.pending_responses: 0
 | `sync_request.requests.internal_error` | カウンター | 予期しない内部エラーで失敗したリクエスト数。 |
 | `sync_request.inflight_requests` | ゲージ | 現在 MQTT レスポンス待ちの HTTP リクエスト数。 |
 | `sync_request.pending_responses` | ゲージ | リクエスト配信後に作成された保留中レスポンス登録数。 |
+
+<!-- PLUGIN-DOWNLOADS:BEGIN (auto-generated, do not edit) -->
+
+## ダウンロード
+
+各 EMQX リリースに対応するプラグインパッケージ:
+
+| EMQX バージョン | プラグインバージョン | パッケージ |
+|---|---|---|
+| 6.0.4 | 0.1.0 | [emqx_sync_request-0.1.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_sync_request-0.1.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_sync_request-0.1.0.sha256)) |
+
+<!-- PLUGIN-DOWNLOADS:END -->

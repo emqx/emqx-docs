@@ -110,5 +110,6 @@ emqx ctl relup logs-clear     # このノードのログ行をすべて削除
 | EMQXバージョン | プラグインバージョン | パッケージ |
 |---|---|---|
 | 6.0.3 | 1.0.0 | [emqx_relup-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.sha256)) |
+| 6.0.4 | 1.0.2 | [emqx_relup-1.0.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
