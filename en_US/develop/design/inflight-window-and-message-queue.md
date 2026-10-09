@@ -2,7 +2,7 @@
 
 EMQX uses an Inflight Window and a Message Queue to improve message throughput and reduce the impact of network fluctuations. EMQX maintains these structures separately for each client connection.
 
-- **Inflight Window**: Holds sent but unacknowledged QoS 1 and QoS 2 messages until EMQX receives the corresponding acknowledgments. EMQX can keep multiple messages in flight at the same time, and `max_inflight` limits their number.
+- **Inflight Window**: Holds sent but unacknowledged QoS 1 and QoS 2 messages until EMQX receives the corresponding acknowledgments. EMQX can keep multiple messages in flight at the same time, and `max_inflight` limits their number. For MQTT 5.0 clients, EMQX limits the number of concurrently unacknowledged QoS 1 and QoS 2 messages to the smaller of `max_inflight` and the `Receive Maximum` reported by the client.
 - **Message Queue**: Buffers messages that cannot be delivered immediately for an in-memory session. An in-memory session stores its state in an EMQX node's memory.
 
 Messages may enter the Message Queue when:
@@ -11,7 +11,7 @@ Messages may enter the Message Queue when:
 - QoS 1 and QoS 2 messages are waiting for inflight capacity or delivery quota.
 - A connection is congested.
 
-If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages during disconnection or congestion, or to preserve delivery order. Set it to `false` to exclude QoS 0 messages from buffering while offline.
+If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages while the client is offline or the connection is congested, or to preserve delivery order. Set it to `false` to exclude QoS 0 messages from buffering while offline.
 
 ## Message Queue Delivery Behavior
 
@@ -22,7 +22,7 @@ EMQX handles Message Queue delivery differently depending on whether the connect
 
 EMQX preserves delivery order for messages with the same topic and QoS level, but does not guarantee strict FIFO order across different QoS levels. When topic priorities are enabled, EMQX schedules queued messages by topic priority. If the current priority queue has no deliverable QoS 0 messages, the current dequeue operation stops even if a lower-priority queue still contains QoS 0 messages.
 
-When the Message Queue for a topic priority reaches `max_mqueue_len`, EMQX evicts the oldest QoS 0 message at that priority. If no QoS 0 message is available at that priority, EMQX evicts the oldest remaining message. When topic priorities are disabled, all messages share the same priority. When many QoS 0 messages enter the queue in a short period, this policy helps maintain delivery progress for QoS 1 and QoS 2 messages.
+When the Message Queue reaches `max_mqueue_len`, EMQX evicts the oldest QoS 0 message. If no QoS 0 message is available, EMQX evicts the oldest remaining message. When topic priorities are enabled, this limit and eviction policy apply independently to each priority queue. When many QoS 0 messages enter the queue in a short period, this policy helps maintain delivery progress for QoS 1 and QoS 2 messages.
 
 ## Inflight Window and Receive Maximum
 

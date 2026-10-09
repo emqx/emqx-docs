@@ -24,8 +24,8 @@ stack layer, you must remember:
 
 EMQX retransmits unacknowledged QoS 1 and QoS 2 messages in the following scenarios:
 
-1. While the client is connected, EMQX periodically retransmits unacknowledged messages according to `mqtt.retry_interval`.
-2. When a client reconnects and resumes its session, EMQX replays unacknowledged messages to continue the QoS delivery flow.
+1. When a client reconnects and resumes its session, EMQX replays unacknowledged messages to continue the QoS delivery flow.
+2. While the client is connected, EMQX periodically retransmits unacknowledged messages if `mqtt.retry_interval` is set to a positive duration.
 
 Configure the retransmission interval in the configuration file:
 
