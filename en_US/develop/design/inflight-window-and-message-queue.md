@@ -11,7 +11,7 @@ Messages may enter the Message Queue when:
 - QoS 1 and QoS 2 messages are waiting for inflight capacity or delivery quota.
 - A connection is congested.
 
-If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages while the client is offline or the connection is congested, or to preserve delivery order. Set it to `false` to exclude QoS 0 messages from buffering while offline.
+If `mqueue_store_qos0` is enabled, EMQX may also queue QoS 0 messages while the client is offline, while the connection is congested, or when necessary to preserve delivery order. Set it to `false` to exclude QoS 0 messages from buffering while offline.
 
 ## Message Queue Delivery Behavior
 
