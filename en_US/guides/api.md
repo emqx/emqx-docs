@@ -376,7 +376,7 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
   }'
 ```
 
-Setting `scopes` to `"unset"` explicitly applies the role-default scopes. Omitting `scopes` from a create request has the same effect.
+Setting `scopes` to `"unset"` explicitly removes the scope allowlist for backward compatibility. Role, namespace, and API-key-specific path restrictions still apply. Omitting `scopes` from a create request applies the role-default scopes.
 
 You can specify the namespace in either of these ways:
 
@@ -483,7 +483,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-EMQX provides 10 scopes for API keys:
+Starting from EMQX 6.3.2, EMQX provides 11 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -497,6 +497,17 @@ EMQX provides 10 scopes for API keys:
 | `system` | System configuration | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
+| `plugin_api` | Plugin-extended APIs | `/plugin_api/{plugin}/...` |
+
+The `plugin_api` scope grants access to endpoints published by plugins through the plugin API gateway. It does not grant access to plugin installation, start, stop, or configuration endpoints under `/plugins*`, which remain in the `system` scope. The gateway also continues to accept `system`, so API keys that already hold `system` keep their access.
+
+The `plugin_api` scope controls access to the gateway, not the operations implemented by a plugin. Review the security impact of every endpoint published by a plugin before assigning this scope.
+
+::: tip Note
+
+Starting from EMQX 6.3.2, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+
+:::
 
 ::: warning Do Not Mix Administrator-Equivalent and Restricted Scopes
 
@@ -510,14 +521,14 @@ Existing mixed scope lists continue to work, with `system` remaining effective. 
 
 #### Login-Only Scopes
 
-In addition to these API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
+In addition to these 11 API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
 | `user_management` | Administrator | Manage Dashboard users. |
 | `sso_management` | Administrator | Manage SSO backends and SSO user records. |
 | `api_key_management` | Administrator | Manage API keys. |
-| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
+| `mfa_management` | Global Administrator or Global Viewer | Manage MFA for own account; administrators can manage other users' MFA. |
 
 #### Default Behavior of `scopes`
 
@@ -527,11 +538,11 @@ Starting from EMQX 6.0.4, the `scopes` field on an API key follows these rules:
 | --- | --- |
 | **Absent in a create request** | Use the defaults for the selected role. |
 | **Absent in an update request** | Preserve the key's current scope setting. |
-| **Role-default sentinel** `"unset"` | Remove the explicit scope setting and use the defaults for the selected role. Changes to the role defaults take effect automatically. |
+| **Unset sentinel** `"unset"` | Remove the explicit scope setting. For backward compatibility, EMQX does not apply a scope allowlist to the key. Role, namespace, and API-key-specific path restrictions still apply. |
 | **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
 | **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
 
-An explicit list that contains the same set of scopes as the role defaults has the same effect as `"unset"`. The key continues to follow changes to the role defaults. The comparison is order-independent.
+An explicit list that contains the same set of scopes as the role defaults is normalized to `"unset"` and follows the same behavior. The comparison is order-independent.
 
 When a bootstrap file entry omits the scopes segment, EMQX applies the defaults for the specified role when processing the file.
 
@@ -541,7 +552,7 @@ Scopes determine which API areas a key can access. They do not override the key'
 
 EMQX exposes two endpoints to query the available scope catalogues:
 
-- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
+- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 11 business-domain scopes listed above). Authenticate with an API key.
 - `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the 4 login-only scopes. Authenticate with a bearer token.
 
 Use these endpoints to populate a scope-picker UI or validate automation scripts:
@@ -568,15 +579,20 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.3.1, when creating a namespaced API key or changing an existing key's explicit scope list, only the `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license` scopes are allowed. If such a create or update request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to a namespaced role, EMQX returns HTTP 400 and does not apply the change. The restriction against combining `system` with restricted scopes also applies.
+Starting from EMQX 6.3.1, the scope allowlist for namespaced API keys contains `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. Starting from EMQX 6.3.2, the namespaced allowlist also includes `plugin_api`.
+
+- **Default scopes**: Starting from EMQX 6.3.2, if a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role receives every scope in the namespaced allowlist for the running EMQX version. The namespaced allowlist does not include `publish`, `gateways`, or `audit`.
+- **Explicit scopes**: When creating or updating a namespaced API key, an explicit scope list must stay within the namespaced allowlist for the running EMQX version. Otherwise, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. An explicit list also cannot combine `system` with restricted scopes.
 
 ### Existing Keys with Disallowed Scopes
 
-An existing key whose stored scope list contains disallowed scopes continues to work. For backward compatibility with read-modify-write clients, EMQX accepts the stored list when an update resubmits it unchanged and keeps the same role and namespace. Any actual role or scope change is revalidated and must comply with the allowlist. If an existing namespaced API key contains disallowed scopes, update or rotate the key and assign only scopes available to its namespaced role. When EMQX reprocesses the bootstrap file, it drops disallowed scopes, logs a warning, and keeps the rest; see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
+A key whose stored scope list contains disallowed scopes is not changed automatically. For compatibility with read-modify-write clients, EMQX accepts the stored list when an update resubmits it unchanged and keeps the same role and namespace. The exception is a namespaced key whose stored scope list contains only `publish`: even an unchanged update returns HTTP 400 because the key cannot access any API. Delete the key and re-create it without a namespace. Any actual role or scope change is revalidated and must comply with the allowlist.
+
+Update or rotate a namespaced API key that contains disallowed scopes because its previously effective permissions remain available until the key is rotated, subject to the namespace endpoint restrictions described below. When EMQX reprocesses a bootstrap entry, it drops disallowed scopes, logs a warning, and keeps the remaining scopes. For details, see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
 
 ### Message Publishing Restrictions
 
-A legacy namespaced API key that still contains the `publish` scope cannot call message publishing APIs, including `POST /api/v5/publish`. Assigning a scope does not override namespace-level restrictions.
+A namespaced API key cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if a previously stored key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
 
 ### Message Content Restrictions
 
@@ -593,6 +609,16 @@ Even when a namespaced caller has the `connections` or `monitoring` scope, the c
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
 
+### File Transfer Restrictions
+
+The File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+Global callers retain access to these endpoints according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
+
 ### Trace Restrictions
 
 For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
@@ -604,6 +630,8 @@ For trace operations, `GET /trace` lists only traces within the caller's namespa
 - `DELETE /trace/:name`
 
 This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
+
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ## Pagination
 

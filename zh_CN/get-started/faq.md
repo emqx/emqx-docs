@@ -93,6 +93,7 @@ tcp:default
 - `keepalive_timeout`：客户端心跳超时而被 EMQX 关闭连接。
 - `tcp_closed`：客户端在未发送 DISCONNECT 报文的情况下直接关闭了 TCP 连接。
 - `frame_too_large`: 客户端发送的报文大小超过了最大报文限制而被 EMQX 关闭连接。
+- `connect_packet_too_large`：客户端发送的 CONNECT 报文超过 `mqtt.max_connect_packet_size` 的限制，因此 EMQX 关闭了连接。
 - `protocol_error`：客户端的行为不符合协议规范而被 EMQX 关闭连接，例如客户端在同一个连接内发送了多个 CONNECT 报文。
 - `idle_timeout`： TCP 连接建立的 15 秒内，EMQX 未收到客户端发送的 CONNECT 报文，因此关闭了连接。
 

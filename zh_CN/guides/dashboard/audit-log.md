@@ -6,6 +6,10 @@ EMQX 审计日志支持记录来自 [Dashboard](./introduction.md) 、[REST API]
 
 EMQX 提供了 Dashboard 查看以及日志系统集成的方式帮助企业管理审计日志。通过审计日志，企业用户可以方便地查看谁通过何种方式，在何时执行了哪些关键操作，以实现运营过程中的合规性和安全性审计。
 
+## 审计日志访问权限
+
+从 EMQX 6.3.2 开始，只有全局管理员和全局查看者可以在 Dashboard 中查看集群级审计日志，或通过 `GET /api/v5/audit` 读取审计日志。审计日志包含所有命名空间中的操作，且不会按调用方所属命名空间过滤。无论命名空间 Dashboard 用户和命名空间 API 密钥具有何种角色或权限范围，请求均会返回 HTTP `403`，错误码为 `UNAUTHORIZED_ROLE`。[`audit` 权限范围](../api.md#内置-api-密钥权限范围)不能绕过此限制。
+
 ## 启用审计日志
 
 您可以通过 Dashboard 和配置文件启用审计日志并设置审计日志的配置参数。
@@ -60,7 +64,7 @@ log.audit {
 
 ## 查看审计日志
 
-审计日志启用后，您可以在 Dashboard **系统设置** -> **审计日志** 页面中查看审计日志的内容。
+审计日志启用后，可以在 Dashboard **系统设置** -> **审计日志**页面中查看审计日志记录。
 
 ![EMQX 审计日志列表](./assets/audit_log_list.png)
 
@@ -134,7 +138,9 @@ log.audit {
 
 #### 命名空间和查询参数
 
-从 EMQX 6.3.1 开始，审计日志通过 `http_request.query_string` 记录 Dashboard 和 REST API 审计请求中非空的查询参数。对于需要解析目标命名空间的操作，`http_request.namespace` 会记录最终解析出的命名空间，无论请求中是否包含 `ns` 或 `namespace` 查询参数。以下示例展示全局管理员显式指定目标命名空间 `ns2` 时的记录：
+从 EMQX 6.3.0 开始，审计日志通过 `http_request.query_string` 记录数据备份请求中非空的查询参数。对于数据备份操作，`http_request.namespace` 会记录最终解析出的目标命名空间，无论请求中是否包含 `namespace` 查询参数。
+
+从 EMQX 6.3.1 开始，查询参数记录范围扩展到所有经过审计的 Dashboard 和 REST API 请求。对于需要解析目标命名空间的操作，`http_request.namespace` 会记录最终解析出的命名空间，无论请求中是否包含 `ns` 或 `namespace` 查询参数。以下示例展示全局管理员显式指定目标命名空间 `ns2` 时的记录：
 
 ```json
 {

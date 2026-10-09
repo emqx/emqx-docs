@@ -39,7 +39,12 @@ Make sure you know the following:
 
 Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example:
 
-- **MQTT Service Address**: The address and port of the target MQTT service; in this example, it is `broker.emqx.io:1883`. Supported formats are `host:port`, `[IPv6]:port`, `mqtt://host:port`, `mqtt://[IPv6]:port`, `mqtts://host:port`, and `mqtts://[IPv6]:port`. If the port is omitted, EMQX uses the default MQTT port `1883`. Other URI schemes are not supported. The `mqtt` and `mqtts` schemes are used only for address parsing. Configure TLS separately in the connector settings when connecting to a TLS-enabled MQTT listener.
+- **MQTT Service Address**: The address and port of the target MQTT service; in this example, it is `broker.emqx.io:1883`.
+  - Supported formats are `host:port`, `[IPv6]:port`, `mqtt://host:port`, `mqtt://[IPv6]:port`, `mqtts://host:port`, and `mqtts://[IPv6]:port`. If the port is omitted, EMQX uses the default MQTT port `1883`. Other URI schemes are not supported.
+  - Configure TLS separately in the connector settings. The address scheme and TLS setting interact as follows:
+    - If the address explicitly uses `mqtts://`, you must enable TLS. Otherwise, **Test Connectivity** fails and the connector cannot start.
+    - If the address uses `mqtt://` while TLS is enabled, the TLS setting takes precedence. EMQX connects using TLS and logs a warning.
+    - For an address without a scheme, the TLS setting determines whether TLS is used.
 - **Username**: The username required for the connection. If the target service does not require authentication, this can be left blank.
 - **Password**: The password required for the connection. If the target service does not require authentication, this can also be left blank.
 - **Protocol Type**: It is important to determine whether the target service has enabled TLS and whether it is using MQTT over TCP/TLS protocol. Note that the EMQX MQTT bridge currently does not support protocols like MQTT over WebSocket and MQTT over QUIC.
@@ -66,7 +71,9 @@ This section guides you on how to configure a connection with a remote MQTT serv
 4. Enter a **name** for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_mqtt_bridge`.
 
 5. Configure the connection information:
-   - **MQTT Broker**: Only supports MQTT over TCP/TLS. Enter the MQTT service address, for example, `broker.emqx.io:1883`, `[::1]:1883`, or `mqtt://broker.emqx.io:1883`. For TLS-enabled MQTT listeners, configure TLS separately in the connector settings.
+   - **MQTT Broker**: The MQTT connector supports only MQTT over TCP/TLS. Enter the MQTT service address, for example, `broker.emqx.io:1883`, `[::1]:1883`, or `mqtt://broker.emqx.io:1883`.
+
+   - **Enable TLS**: Enable this option when connecting to a TLS-enabled MQTT listener. If the MQTT service address explicitly uses `mqtts://`, you must enable this option. For an address without a scheme, this option determines whether EMQX uses TLS.
    
    - **ClientID Prefix**: This can be left blank. In actual use, specifying a client ID prefix can facilitate client management. EMQX will automatically generate client IDs based on the client ID prefix and the size of the connection pool. For more information, see [Connection Pool and Client ID Generation Rules](#connection-pool-and-client-id-generation-rules).
    

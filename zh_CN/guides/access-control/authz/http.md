@@ -96,7 +96,7 @@ EMQX 支持基于 HTTP 应用进行授权。此时，用户需在外部自行搭
 
 ### 配置 OAuth2 客户端凭证认证
 
-从 EMQX 6.0.4 开始，HTTP 授权器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 授权服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
+从 EMQX 6.3.0 开始，HTTP 授权器支持 OAuth 2.0 客户端凭证模式（Client Credentials Grant）。启用 OAuth2 后，EMQX 从配置的 Token 端点（Token Endpoint）获取、缓存并自动刷新 Access Token。EMQX 调用外部 HTTP 授权服务时，会通过 `Authorization: Bearer <access_token>` 请求头携带该 Token，由外部服务验证 EMQX 的身份。
 
 开启 **OAuth2 客户端凭证**，然后配置以下设置：
 
@@ -129,7 +129,9 @@ EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlen
 - `${clientid}`: 客户端的 ID。
 - `${username}`: 客户端登录时用的用户名。
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。
-- `${peerhost}`: 客户端的源 IP 地址。
+- `${peerhost}`：客户端的源 IP 地址。启用 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) 时，该占位符使用代理报告的源 IP 地址。
+- `${peerport}`：从 EMQX 6.3.0 开始，表示客户端的源端口，例如 `51544`。启用 Proxy Protocol 时，该占位符使用代理报告的源端口。
+- `${peername}`：从 EMQX 6.3.0 开始，表示客户端的源 IP 地址和端口。对于 IPv4 地址，其格式为 `IP:port`，例如 `192.168.0.1:51544`。对于 IPv6 地址，地址部分不使用方括号，例如 `2001:db8::1:51544`。启用 Proxy Protocol 时，该占位符使用代理报告的源 IP 地址和端口。
 - `${proto_name}`: 客户端使用的协议名称。例如 `MQTT`，`CoAP` 等。
 - `${mountpoint}`: 网关监听器的挂载点（主题前缀）。
 - `${action}`: 当前执行的动作请求，例如 `publish`， `subscribe`。
@@ -138,6 +140,9 @@ EMQX 使用 `POST` 方法向 Token Endpoint 发送 `application/x-www-form-urlen
 - `${retain}`: 当前请求想要发布的消息是否为保留消息。
 - `${zone}`: 客户端在运行时的 Zone。Zone 是对客户端的一种逻辑分类，例如区域或环境，可以根据客户端的配置动态应用。
 
+::: tip
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符。对于新模板，请在支持的场景中改用 `${peername}`。
+:::
 
 ### 响应格式
 
@@ -224,7 +229,7 @@ HTTP 授权必需使用 `type=http`的配置。
 
 ### OAuth2 客户端凭证配置
 
-从 EMQX 6.0.4 开始，可以在 HTTP 授权器配置对象中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证。该配置块与 `method`、`url`、`body` 和 `headers` 同级：
+从 EMQX 6.3.0 开始，可以在 HTTP 授权器配置对象中添加 `oauth2` 配置块以启用 OAuth2 客户端凭证认证。该配置块与 `method`、`url`、`body` 和 `headers` 同级：
 
 ```hocon
 oauth2 {
