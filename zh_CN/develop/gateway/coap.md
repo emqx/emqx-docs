@@ -409,7 +409,7 @@ coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?client
 
 因此，后续资源变化仍可能通过保留的 Observe 关系发送通知。保留关系不保证失败的通知会再次投递。这两类失败本身不会取消 Observe 关系；正常的客户端会话清理仍然适用。
 
-EMQX 6.x 为兼容性保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 拒绝或最后一次重传超时后移除观察者。EMQX 7.0 中符合 RFC 的行为及相关可观测性改进正在 [issue #19127](https://github.com/emqx/emqx/issues/19127) 中讨论，设计尚未确定。
+EMQX 6.x 为兼容性保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 拒绝或最后一次重传超时后移除观察者。
 
 CoAP Observe 不提供持久化的业务级交付保证。CoAP 确认不代表应用已处理命令。需要可靠命令交付的应用应使用业务层确认、唯一命令 ID、幂等处理，以及设备端对账或主动拉取机制。
 

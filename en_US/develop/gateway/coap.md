@@ -429,7 +429,7 @@ When a confirmable (`CON`) Observe notification is rejected by the client with R
 
 Later resource changes may therefore continue to be delivered through the retained relationship. Retaining the relationship does not guarantee that the failed notification will be delivered again. These failures do not themselves cancel the relationship; normal client session cleanup still applies.
 
-This behavior is retained in EMQX 6.x for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after Reset rejection or final retransmission timeout. RFC-aligned behavior and related observability improvements for EMQX 7.0 are under discussion in [issue #19127](https://github.com/emqx/emqx/issues/19127); the design has not been finalized.
+This behavior is retained in EMQX 6.x for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after Reset rejection or final retransmission timeout.
 
 CoAP Observe does not provide durable business-level delivery. A CoAP acknowledgement does not confirm that the application has processed a command. Applications that require reliable command delivery should use application acknowledgements, unique command IDs, idempotent processing, and device-side reconciliation or pull.
 
