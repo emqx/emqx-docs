@@ -397,7 +397,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### EMQX 6.x 的 Observe 通知失败行为
+### 协议规范实现差异
 
 以下失败清理行为适用于 EMQX 6.1 系列的 6.1.2 及后续版本、6.2 系列的 6.2.1 及后续版本，以及 6.3 系列。
 

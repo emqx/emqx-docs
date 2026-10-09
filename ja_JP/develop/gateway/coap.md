@@ -415,7 +415,7 @@ Observe 関係を明示的に解除するには、同じリソースに `Observe
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### EMQX 6.x における Observe 通知の失敗
+### プロトコル仕様との差異
 
 以下の失敗時のクリーンアップ動作は、EMQX 6.1 系列の 6.1.2 以降、6.2 系列の 6.2.1 以降、および 6.3 系列に適用されます。
 

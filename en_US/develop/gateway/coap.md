@@ -417,7 +417,7 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### Observe Notification Failures in EMQX 6.x
+### Differences from the Protocol Specification
 
 The failure cleanup behavior described below applies to EMQX 6.1.2 and later 6.1 releases, EMQX 6.2.1 and later 6.2 releases, and EMQX 6.3 releases.
 
