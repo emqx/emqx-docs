@@ -72,7 +72,7 @@ EMQX 可以解码 Sparkplug B 数据以供规则处理，并将结果转发给�
 
 ::: warning 重要提示
 
-从 EMQX 6.0.4 开始，EMQX 仅为 MQTT 客户端直接发布的消息维护 alias 映射。通过 MQTT 桥接或其他内部路径进入的消息不会创建或使用 alias 映射。因此，`spb_decode` 无法为通过这些路径接收的、仅包含 alias 的 NDATA 或 DDATA 消息还原 metric 名称。
+从 EMQX 6.3.0 开始，EMQX 仅为 MQTT 客户端直接发布的消息维护 alias 映射。通过 MQTT 桥接或其他内部路径进入的消息不会创建或使用 alias 映射。因此，`spb_decode` 无法为通过这些路径接收的、仅包含 alias 的 NDATA 或 DDATA 消息还原 metric 名称。
 
 :::
 

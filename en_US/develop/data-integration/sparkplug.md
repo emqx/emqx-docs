@@ -72,7 +72,7 @@ EMQX can decode Sparkplug B data for rule processing and forward the result to n
 
 ::: warning Important Notice
 
-Starting with EMQX 6.0.4, EMQX maintains alias mappings only for messages published directly by MQTT clients. Messages ingested through an MQTT bridge or another internal path do not create or use alias mappings. Therefore, `spb_decode` does not restore metric names for alias-only NDATA or DDATA messages received through those paths.
+Starting with EMQX 6.3.0, EMQX maintains alias mappings only for messages published directly by MQTT clients. Messages ingested through an MQTT bridge or another internal path do not create or use alias mappings. Therefore, `spb_decode` does not restore metric names for alias-only NDATA or DDATA messages received through those paths.
 
 :::
 

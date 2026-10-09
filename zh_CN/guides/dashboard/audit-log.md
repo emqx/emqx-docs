@@ -138,7 +138,7 @@ log.audit {
 
 #### 命名空间和查询参数
 
-从 EMQX 6.0.4 开始，审计日志通过 `http_request.query_string` 记录数据备份请求中非空的查询参数。对于数据备份操作，`http_request.namespace` 会记录最终解析出的目标命名空间，无论请求中是否包含 `namespace` 查询参数。
+从 EMQX 6.3.0 开始，审计日志通过 `http_request.query_string` 记录数据备份请求中非空的查询参数。对于数据备份操作，`http_request.namespace` 会记录最终解析出的目标命名空间，无论请求中是否包含 `namespace` 查询参数。
 
 从 EMQX 6.3.1 开始，查询参数记录范围扩展到所有经过审计的 Dashboard 和 REST API 请求。对于需要解析目标命名空间的操作，`http_request.namespace` 会记录最终解析出的命名空间，无论请求中是否包含 `ns` 或 `namespace` 查询参数。以下示例展示全局管理员显式指定目标命名空间 `ns2` 时的记录：
 

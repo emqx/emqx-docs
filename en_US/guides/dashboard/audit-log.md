@@ -138,7 +138,7 @@ The following table describes the fields that can appear in audit log entries ge
 
 #### Namespace and Query Parameters
 
-Starting from EMQX 6.0.4, audit records include the non-empty query parameters of data-backup requests in `http_request.query_string`. For data-backup operations, `http_request.namespace` records the resolved target namespace independently of whether the request includes a `namespace` query parameter.
+Starting from EMQX 6.3.0, audit records include the non-empty query parameters of data-backup requests in `http_request.query_string`. For data-backup operations, `http_request.namespace` records the resolved target namespace independently of whether the request includes a `namespace` query parameter.
 
 Starting from EMQX 6.3.1, query-parameter recording applies to all audited Dashboard and REST API requests. Operations that resolve a target namespace record it in `http_request.namespace`, independently of whether the request includes an `ns` or `namespace` query parameter. The following example shows a global administrator explicitly targeting `ns2`:
 
