@@ -417,11 +417,9 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### Differences from the Protocol Specification
+### Observe Relationship Retention After Notification Failure
 
-The failure cleanup behavior described below applies to EMQX 6.1.2 and later 6.1 releases, EMQX 6.2.1 and later 6.2 releases, and EMQX 6.3 releases.
-
-When a confirmable (`CON`) Observe notification is rejected by the client with Reset or exhausts all retransmissions without receiving an acknowledgement, EMQX 6.x:
+In EMQX 6.1.2 and later 6.1 releases, when a confirmable (`CON`) Observe notification is rejected by the client with a Reset message or exhausts all retransmission attempts without receiving an acknowledgement, EMQX:
 
 - Discards the failed notification.
 - Cleans up the transport and Block2 state associated with that notification.
@@ -429,7 +427,7 @@ When a confirmable (`CON`) Observe notification is rejected by the client with R
 
 Later resource changes may therefore continue to be delivered through the retained relationship. Retaining the relationship does not guarantee that the failed notification will be delivered again. These failures do not themselves cancel the relationship; normal client session cleanup still applies.
 
-This behavior is retained in EMQX 6.x for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after Reset rejection or final retransmission timeout.
+This behavior is retained for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after receiving a Reset message or after the final retransmission times out.
 
 ### Short Parameter Names
 

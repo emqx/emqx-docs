@@ -397,11 +397,9 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### 协议规范实现差异
+### 通知失败后的 Observe 关系保留行为
 
-以下失败清理行为适用于 EMQX 6.1 系列的 6.1.2 及后续版本、6.2 系列的 6.2.1 及后续版本，以及 6.3 系列。
-
-当客户端使用 Reset 拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 6.x 会：
+在 EMQX 6.1.2 及后续 6.1 版本中，当客户端发送 Reset 消息拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 会：
 
 - 丢弃失败的通知。
 - 清理该通知对应的传输状态和 Block2 状态。
@@ -409,7 +407,7 @@ coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?client
 
 因此，后续资源变化仍可能通过保留的 Observe 关系发送通知。保留关系不保证失败的通知会再次投递。这两类失败本身不会取消 Observe 关系；正常的客户端会话清理仍然适用。
 
-EMQX 6.x 为兼容性保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 拒绝或最后一次重传超时后移除观察者。
+为保持兼容性，EMQX 保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 消息或最后一次重传超时后移除观察者。
 
 ### 短参数名称
 
