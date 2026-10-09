@@ -330,7 +330,8 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 **请求参数表：**
 
 - 方法（Method）：`GET`
-- 选项值（Options）：需设置 `observer` 为 0
+- 选项值（Options）：需设置 `Observe` 为 `0`。
+- CoAP Token：使用非空 Token 标识 Observe 关系。
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
   -  `{+topic}` 为需要订阅主题，例如订阅 `coap/test` 主题，则请求路径为 `ps/coap/test`
   - `{?QueryString*}`为请求参数
@@ -363,14 +364,18 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 ```
 
 
+通过 `-T "obstoken"` 设置的 CoAP Token 用于标识 Observe 关系。它与 URI 查询参数 `token` 不同，后者用于在 `连接模式` 下验证请求身份。
+
 ### 取消订阅
 
-该接口用于 CoAP 客户端取消订阅指定主题。
+该接口用于 CoAP 客户端取消订阅指定主题。要显式取消 Observe 关系，请向原资源发送 GET 请求，设置 `Observe: 1`，并使用建立该关系时的 Observe Token。
 目前，取消订阅操作仅在 `连接模式` 下可用。
 
 **请求参数表：**
 
 - 方法（Method）：`GET`
+- 选项值（Options）：需设置 `Observe` 为 `1`。
+- CoAP Token：使用原 Observe 请求中的 Token。
 - 请求路径（URI）：`ps/{+topic}{?QueryString*}`，其中：
   -  `{+topic}` 为需要取消订阅主题，例如取消订阅 `coap/test` 主题，则请求路径为 `ps/coap/test`
   - `{?QueryString*}`为请求参数
@@ -389,8 +394,24 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 例如，`连接模式` 下取消订阅主题 `coap/test` ：
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### EMQX 6.x 的 Observe 通知失败行为
+
+以下失败清理行为适用于 EMQX 6.1 系列的 6.1.2 及后续版本、6.2 系列的 6.2.1 及后续版本，以及 6.3 系列。
+
+当客户端使用 Reset 拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 6.x 会：
+
+- 丢弃失败的通知。
+- 清理该通知对应的传输状态和 Block2 状态。
+- 保留 Observe 关系及其对应的 Broker 订阅。
+
+因此，后续资源变化仍可能通过保留的 Observe 关系发送通知。保留关系不保证失败的通知会再次投递。这两类失败本身不会取消 Observe 关系；正常的客户端会话清理仍然适用。
+
+EMQX 6.x 为兼容性保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 拒绝或最后一次重传超时后移除观察者。EMQX 7.0 中符合 RFC 的行为及相关可观测性改进正在 [issue #19127](https://github.com/emqx/emqx/issues/19127) 中讨论，设计尚未确定。
+
+CoAP Observe 不提供持久化的业务级交付保证。CoAP 确认不代表应用已处理命令。需要可靠命令交付的应用应使用业务层确认、唯一命令 ID、幂等处理，以及设备端对账或主动拉取机制。
 
 ### 短参数名称
 

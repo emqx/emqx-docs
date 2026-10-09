@@ -346,7 +346,8 @@ Additional identity information needs to be carried if the `Connection Mode` ena
 
 **Request Parameters:**
 - Method: `GET`
-- Options: Set `observer` to `0`
+- Options: Set `Observe` to `0`.
+- CoAP Token: Use a non-empty token to identify the Observe relationship.
 - URI: `ps/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic to subscribe, i.e. the URI is `ps/coap/test` if to subscribe `coap/test`.
   - `{?QueryString}` is request parameters:
@@ -379,15 +380,21 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 ```
 
 
+The CoAP Token set by `-T "obstoken"` identifies the Observe relationship. It is separate from the URI query parameter `token`, which authenticates requests in `Connection Mode`.
+
 ### Topic Unsubscribe
 
 This interface is used by the CoAP client to unsubscribe from a topic.
+
+To explicitly cancel an Observe relationship, send a GET request to the same resource with `Observe: 1` and the original Observe Token.
 
 In the current implementation, the unsubscribing operation is only available in `Connection Mode`.
 
 **Request Parameters:**
 
 - Method: `GET`
+- Options: Set `Observe` to `1`.
+- CoAP Token: Use the token from the original Observe request.
 - URI: `ps/{+topic}{?QueryString*}`
   -  `{+topic}` is the topic to unsubscribe, i.e. the URI is `ps/coap/test` if subscribe to `coap/test`.
   - `{?QueryString}` is request parameters:
@@ -407,8 +414,24 @@ In the current implementation, the unsubscribing operation is only available in 
 For example, unsubscribe to `coap/test` in `Connection Mode`:
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### Observe Notification Failures in EMQX 6.x
+
+The failure cleanup behavior described below applies to EMQX 6.1.2 and later 6.1 releases, EMQX 6.2.1 and later 6.2 releases, and EMQX 6.3 releases.
+
+When a confirmable (`CON`) Observe notification is rejected by the client with Reset or exhausts all retransmissions without receiving an acknowledgement, EMQX 6.x:
+
+- Discards the failed notification.
+- Cleans up the transport and Block2 state associated with that notification.
+- Retains the Observe relationship and its broker subscription.
+
+Later resource changes may therefore continue to be delivered through the retained relationship. Retaining the relationship does not guarantee that the failed notification will be delivered again. These failures do not themselves cancel the relationship; normal client session cleanup still applies.
+
+This behavior is retained in EMQX 6.x for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after Reset rejection or final retransmission timeout. RFC-aligned behavior and related observability improvements for EMQX 7.0 are under discussion in [issue #19127](https://github.com/emqx/emqx/issues/19127); the design has not been finalized.
+
+CoAP Observe does not provide durable business-level delivery. A CoAP acknowledgement does not confirm that the application has processed a command. Applications that require reliable command delivery should use application acknowledgements, unique command IDs, idempotent processing, and device-side reconciliation or pull.
 
 ### Short Parameter Names
 
