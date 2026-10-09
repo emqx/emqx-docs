@@ -388,6 +388,7 @@
   - title_en: MQTT Wechat miniprogram example
     title_cn: MQTT 微信小程序示例
     lang: cn
+    title_ja: MQTT Wechat ミニプログラムの例
     path: develop/connect-emqx/wechat-miniprogram
 - develop/connect-emqx/curl
 - develop/connect-emqx/node-red
