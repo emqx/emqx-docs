@@ -1,5 +1,13 @@
 # EMQX 6.1 中的不兼容变更
 
+## 6.1.5
+
+- [#18974](https://github.com/emqx/emqx/pull/18974) 新增配置项 `mqtt.max_connect_user_properties`，分别限制 CONNECT 属性和 Will 属性中允许的 MQTT v5 User Property 对数量。默认值为 100；设置为 `infinity` 可禁用此限制。
+
+- [#18515](https://github.com/emqx/emqx/pull/18515) Azure Blob Storage 动作的 `blob` 模板字段现在使用与 Aggregated S3 动作的 `key` 字段相同的 Schema 验证，以确保仅使用允许的绑定。
+
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry 集成的导出器端点现在必须是包含协议方案和明确指定端口的有效 URL。支持的协议方案为 `http` 和 `https`。
+
 ## 6.1.2
 
 - [#17157](https://github.com/emqx/emqx/pull/17157) 新增规则引擎配置项 `rule_engine.limit_selects_in_namespace`，默认值为 `true`。启用后，规则仅对与规则自身处于同一命名空间的客户端所发布的消息触发。
