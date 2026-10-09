@@ -2340,7 +2340,7 @@
 
 - [#14283](https://github.com/emqx/emqx/pull/14283) 改进了 QUIC 传输，升级 `quicer` 到 0.1.9。
   - 在异常场景下，提前释放远程流资源。
-  - 添加了更多故障排除 API。详情请见： https://github.com/emqx/quic/compare/0.1.6...0.1.9。
+  - 添加了更多故障排除 API。详情请见：[emqx/quic@0.1.6...0.1.9](https://github.com/emqx/quic/compare/0.1.6...0.1.9)。
 
 ### 修复
 
@@ -4458,7 +4458,7 @@ Dashboard 上也增加了持久消息的数量。
 
 - [#11326](https://github.com/emqx/emqx/pull/11326) 修复了在 Oracle 桥接中返回错误检查的问题。
 
-### [已知问题](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.1.md)
+### [已知问题](./known-issues-5.1.md#e511)
 
 ## 5.1.0
 
@@ -4589,7 +4589,7 @@ Dashboard 上也增加了持久消息的数量。
     相关的 mria pull request: [https://github.com/emqx/mria/pull/143](https://github.com/emqx/mria/pull/143)
 -   [#11092](https://github.com/emqx/emqx/pull/11092) 修复复制节点因超时无法连接到核心节点的问题。
 
-### [已知问题](https://github.com/emqx/emqx-docs/blob/release-5.1/en_US/changes/known-issues-5.1.0.md)
+### [已知问题](./known-issues-5.1.md#e510)
 
 ## 5.0.4
 
@@ -4621,7 +4621,7 @@ Dashboard 上也增加了持久消息的数量。
 
 - [#10713](https://github.com/emqx/emqx/pull/10713) 为减少歧义与配置复杂度，隐藏 WebHook `resource_option.request_timeout` 配置项，并使用 `http` `request_timeout` 来设置该值。
 
-- [#10075](https://github.com/emqx/emqx/pull/10075) 新增节点再平衡/节点疏散功能，功能设计与使用请参考 [EIP 文档](https://github.com/emqx/eip/blob/main/active/0020-node-rebalance.md)。
+- [#10075](https://github.com/emqx/emqx/pull/10075) 新增节点再平衡/节点疏散功能，功能设计与使用请参考 [EIP 文档](https://github.com/emqx/eip/blob/main/implemented/0020-node-rebalance.md)。
 
 - [#10378](https://github.com/emqx/emqx/pull/10378) 新增 Pulsar 数据桥接，目前仅支持单向数据集成即 Pulsar 生产者角色。
 
