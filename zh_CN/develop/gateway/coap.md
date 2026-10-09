@@ -411,8 +411,6 @@ coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?client
 
 EMQX 6.x 为兼容性保留此行为。它与 [RFC 7641 第 4.5 节](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) 的要求不同：RFC 要求服务器在收到 Reset 拒绝或最后一次重传超时后移除观察者。
 
-CoAP Observe 不提供持久化的业务级交付保证。CoAP 确认不代表应用已处理命令。需要可靠命令交付的应用应使用业务层确认、唯一命令 ID、幂等处理，以及设备端对账或主动拉取机制。
-
 ### 短参数名称
 
 为节省报文大小，CoAP 网关支持短参数名称。例如，参数 `clientid=barx` 可以写作 `c=bar`。所有支持的短

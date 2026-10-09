@@ -431,8 +431,6 @@ Later resource changes may therefore continue to be delivered through the retain
 
 This behavior is retained in EMQX 6.x for compatibility. It differs from [RFC 7641 section 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5), which requires the server to remove the observer after Reset rejection or final retransmission timeout.
 
-CoAP Observe does not provide durable business-level delivery. A CoAP acknowledgement does not confirm that the application has processed a command. Applications that require reliable command delivery should use application acknowledgements, unique command IDs, idempotent processing, and device-side reconciliation or pull.
-
 ### Short Parameter Names
 
 To reduce message size, the CoAP gateway supports short parameter names.
