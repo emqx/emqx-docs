@@ -423,7 +423,7 @@ When a bootstrap entry violates one of the following scope rules, EMQX removes t
 
 - **Login-only scopes**: `user_management`, `mfa_management`, `sso_management`, and `api_key_management` are not valid for API keys. EMQX removes these scopes and creates or updates the key with the remaining scopes.
 - **Administrator-equivalent scopes**: Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if an entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes and keeps the remaining scopes.
-- **Namespaced scopes**: Starting from EMQX 6.0.4, if a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
+- **Namespaced scopes**: Starting from EMQX 6.3.1, if a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
 
 ##### Reload Bootstrap API Keys
 
@@ -579,9 +579,10 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.3.2, when a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role is created with `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`. These defaults do not include `publish`, `gateways`, or `audit`.
+Starting from EMQX 6.3.1, the scope allowlist for namespaced API keys contains `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. Starting from EMQX 6.3.2, the namespaced allowlist also includes `plugin_api`.
 
-When creating a namespaced API key with the Administrator or Viewer role, or changing an existing key's explicit scope list, the request can contain only these eight scopes. If the request specifies `publish`, `gateways`, `audit`, or any other scope unavailable to the namespaced role, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. The restriction against combining `system` with restricted scopes also applies to explicit scope lists.
+- **Default scopes**: Starting from EMQX 6.3.2, if a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role receives every scope in the namespaced allowlist for the running EMQX version. The namespaced allowlist does not include `publish`, `gateways`, or `audit`.
+- **Explicit scopes**: When creating or updating a namespaced API key, an explicit scope list must stay within the namespaced allowlist for the running EMQX version. Otherwise, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. An explicit list also cannot combine `system` with restricted scopes.
 
 ### Existing Keys with Disallowed Scopes
 

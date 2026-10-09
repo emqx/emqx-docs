@@ -419,7 +419,7 @@ team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 
 - **登录专属权限范围**：`user_management`、`mfa_management`、`sso_management` 和 `api_key_management` 不适用于 API 密钥。EMQX 会删除这些范围，并使用其余范围创建或更新密钥。
 - **等同管理员权限的范围**：在可分配给 API 密钥的权限范围中，只有 `system` 会授予等同管理员的权限。从 EMQX 6.0.4 开始，如果条目将等同管理员权限的范围与不授予等同管理员权限的范围组合，EMQX 会删除所有等同管理员权限的范围并保留其余范围。
-- **命名空间权限范围**：从 EMQX 6.0.4 开始，如果命名空间条目显式列出了该命名空间角色不能持有的权限范围，EMQX 会删除不允许的范围并保留其余范围。如果没有剩余范围，该密钥将无法访问受权限范围保护的业务 API。允许使用的范围参见[命名空间调用方限制](#命名空间调用方限制)。
+- **命名空间权限范围**：从 EMQX 6.3.1 开始，如果命名空间条目显式列出了该命名空间角色不能持有的权限范围，EMQX 会删除不允许的范围并保留其余范围。如果没有剩余范围，该密钥将无法访问受权限范围保护的业务 API。允许使用的范围参见[命名空间调用方限制](#命名空间调用方限制)。
 
 ##### 重新加载 Bootstrap API 密钥
 
@@ -575,9 +575,10 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 命名空间 API 密钥的权限范围限制
 
-从 EMQX 6.3.2 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会以 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` 和 `plugin_api` 权限范围创建。这些默认权限不包含 `publish`、`gateways` 和 `audit`。
+从 EMQX 6.3.1 开始，命名空间 API 密钥允许列表包含 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license`。从 EMQX 6.3.2 开始，该允许列表还包含 `plugin_api`。
 
-创建管理员或查看者角色的命名空间 API 密钥，或者修改现有密钥的显式权限范围列表时，请求中只能包含上述 8 个权限范围。如果请求指定 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式权限范围列表仍需遵循 `system` 不能与受限权限范围组合的规则。
+- **默认权限范围**：从 EMQX 6.3.2 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会获得当前 EMQX 版本的命名空间 API 密钥允许列表中的所有权限范围。该允许列表不包含 `publish`、`gateways` 和 `audit`。
+- **显式权限范围**：创建或更新命名空间 API 密钥时，显式权限范围列表不能超出当前 EMQX 版本的命名空间 API 密钥允许列表。否则，EMQX 返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式列表也不能将 `system` 与受限权限范围组合。
 
 ### 包含不允许权限范围的现有密钥
 

@@ -27,7 +27,7 @@ EMQX 提供内置的监控和告警功能，用于监视内部状态变化，如
 | high_cpu_usage            | 警告 | CPU 使用率过高                                     | ~p% CPU 使用率                     | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
 | too_many_processes        | 警告 | 进程过多                                           | ~p% 进程使用率                     | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
 | license_quota             | 警告 | License 超过配额                                   | License：连接数超过 %              | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
-| license_expiry            | 严重 | License 即将过期或已过期                           | `The license expires on YYYY-MM-DD.`、`The license expires today, YYYY-MM-DD.` 或 `The license expired on YYYY-MM-DD.` | 距离到期不足 30 天，或 License 已过期                        |
+| license_expiry            | 严重 | License 即将过期或已过期                           | 从 EMQX 6.3.2 开始，告警消息为 `The license expires on YYYY-MM-DD.`、`The license expires today, YYYY-MM-DD.` 或 `The license expired on YYYY-MM-DD.` | 距离到期不足 30 天，或 License 已过期                        |
 | License_tps               | 警告 | TPS 使用量超过 License 限制                        | License: TPS 限制（例如 10）已超出 | -                                                            |
 | partition                 | 严重 | 节点发生分区                                       | 节点发生分区 ~s                    | -                                                            |
 | resource                  | 严重 | 资源断开连接                                       | 资源 ~s（~s）已断开连接            | -                                                            |
