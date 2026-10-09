@@ -397,7 +397,7 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### 通知失败后的 Observe 关系保留行为
+### 协议规范实现差异
 
 在 EMQX 6.1.2 及后续 6.1 版本中，当客户端发送 Reset 消息拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 会：
 

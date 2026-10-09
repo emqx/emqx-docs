@@ -417,7 +417,7 @@ For example, unsubscribe to `coap/test` in `Connection Mode`:
 coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
-### Observe Relationship Retention After Notification Failure
+### Differences from the Protocol Specification
 
 In EMQX 6.1.2 and later 6.1 releases, when a confirmable (`CON`) Observe notification is rejected by the client with a Reset message or exhausts all retransmission attempts without receiving an acknowledgement, EMQX:
 
