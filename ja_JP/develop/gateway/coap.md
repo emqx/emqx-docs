@@ -345,7 +345,8 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 **リクエストパラメータ:**
 
 - メソッド: `GET`
-- オプション: `observer` を `0` に設定
+- オプション: `Observe` を `0` に設定。
+- CoAP Token: Observe 関係を識別するために空でないトークンを使用します。
 - URI: `ps/{+topic}{?QueryString*}`
   - `{+topic}` はサブスクライブするトピックです。例えば `coap/test` をサブスクライブする場合、URI は `ps/coap/test` となります。
   - `{?QueryString}` はリクエストパラメータで以下を含みます。
@@ -377,15 +378,21 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
+`-T "obstoken"` で設定する CoAP Token は Observe 関係を識別します。これは `Connection Mode` でリクエストを認証する URI クエリパラメータ `token` とは別のものです。
+
 ### トピックサブスクライブ解除
 
 このインターフェースは CoAP クライアントがトピックのサブスクライブを解除するために使用します。
+
+Observe 関係を明示的に解除するには、同じリソースに `Observe: 1` と元の Observe Token を指定した GET リクエストを送信します。
 
 現状の実装では、サブスクライブ解除操作は `Connection Mode` のみで利用可能です。
 
 **リクエストパラメータ:**
 
 - メソッド: `GET`
+- オプション: `Observe` を `1` に設定。
+- CoAP Token: 元の Observe リクエストのトークンを使用します。
 - URI: `ps/{+topic}{?QueryString*}`
   - `{+topic}` はサブスクライブ解除するトピックです。例えば `coap/test` のサブスクライブを解除する場合、URI は `ps/coap/test` となります。
   - `{?QueryString}` はリクエストパラメータで以下を含みます。
@@ -405,8 +412,20 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 例えば、接続モードで `coap/test` のサブスクライブを解除する場合:
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### プロトコル仕様との差異
+
+EMQX 6.1.2 以降の 6.1 リリースでは、確認可能な（`CON`）Observe 通知がクライアントによって Reset メッセージで拒否された場合、またはすべての再送を行っても確認応答を受信できなかった場合、EMQX は以下の処理を行います。
+
+- 失敗した通知を破棄します。
+- その通知に関連するトランスポートおよび Block2 の状態を削除します。
+- Observe 関係と対応するブローカーのサブスクリプションを保持します。
+
+そのため、後続のリソース変更は保持された Observe 関係を通じて通知される場合があります。関係の保持は、失敗した通知の再配信を保証しません。これらの失敗自体では Observe 関係は解除されません。通常のクライアントセッションのクリーンアップは引き続き適用されます。
+
+この動作は互換性維持のために保持されています。この動作は [RFC 7641 セクション 4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5) の要件とは異なります。RFC では、Reset メッセージを受信した後、または最後の再送がタイムアウトした後に、サーバーがオブザーバーを削除することを要求しています。
 
 ### 短縮パラメータ名
 
