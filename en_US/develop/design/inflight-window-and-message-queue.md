@@ -2,7 +2,7 @@
 
 EMQX uses an Inflight Window and a Message Queue to improve message throughput and reduce the impact of network fluctuations. EMQX maintains these structures separately for each client connection.
 
-- **Inflight Window**: Holds sent but unacknowledged QoS 1 and QoS 2 messages until EMQX receives the corresponding acknowledgments. EMQX can keep multiple messages in flight at the same time, and `max_inflight` limits their number. For MQTT 5.0 clients, EMQX limits the number of concurrently unacknowledged QoS 1 and QoS 2 messages to the smaller of `max_inflight` and the `Receive Maximum` reported by the client.
+- **Inflight Window**: Holds sent but unacknowledged QoS 1 and QoS 2 messages until EMQX receives the corresponding acknowledgments. EMQX can keep multiple messages in flight at the same time, and `max_inflight` limits their number. For MQTT 5.0 clients, EMQX limits the number of concurrently unacknowledged QoS 1 and QoS 2 messages to the smaller of `max_inflight` and the `Receive Maximum` advertised by the client.
 - **Message Queue**: Buffers messages that cannot be delivered immediately for an in-memory session. An in-memory session stores its state in an EMQX node's memory.
 
 Messages may enter the Message Queue when:
