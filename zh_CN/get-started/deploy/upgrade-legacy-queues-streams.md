@@ -23,8 +23,8 @@
 
 ## 前提条件
 
-- 运行 EMQX 6.1.1 或更高版本。本页中的命令使用 EMQX 6.1.1 引入的 REST API。如果您运行的是 EMQX 6.1.0，请先升级到最新的 6.1 补丁版本。升级会保留现有的队列和消息流。
-- 创建一个具有管理员角色的 API 密钥。参见[创建 API 密钥](../../guides/api.md#创建-api-密钥)。本页示例使用 `key:secret` 作为 API 密钥和密钥值，使用 `localhost:18083` 作为 Dashboard 监听地址。请替换为您自己的值。
+- 运行 EMQX 6.1.1 或更高版本。本页中的命令使用 EMQX 6.1.1 引入的 REST API。如果您运行的是 EMQX 6.1.0，请先升级到 EMQX 6.1.1 或更高的 6.1 补丁版本。升级会保留现有的队列和消息流。
+- 创建一个具有管理员角色的 API 密钥。参见[创建 API 密钥](../../guides/api.md#创建-api-密钥)。本页示例使用 `key:secret` 作为 API Key 和 Secret Key，使用 `localhost:18083` 作为 Dashboard 监听地址。请替换为您自己的值。
 - 安装 [jq](https://jqlang.org/)。示例使用 jq 过滤 API 响应，并对名称进行 URL 编码。
 
 ## 查找旧版队列和消息流
@@ -36,15 +36,19 @@ EMQX 6.1.1 及更高版本会根据主题过滤器为每条旧版记录生成名
 列出旧版队列：
 
 ```bash
-curl -s -u key:secret "http://localhost:18083/api/v5/queues?limit=1000" \
+queues_response=$(curl -fsS -u key:secret "http://localhost:18083/api/v5/queues?limit=1000")
+printf '%s\n' "$queues_response" \
   | jq -r '.data[] | select(.name | startswith("/")) | [.name, .topic_filter, .is_lastvalue] | @tsv'
+printf '%s\n' "$queues_response" | jq '.meta'
 ```
 
 列出旧版消息流：
 
 ```bash
-curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
+streams_response=$(curl -fsS -u key:secret "http://localhost:18083/api/v5/streams?limit=1000")
+printf '%s\n' "$streams_response" \
   | jq -r '.data[] | select(.name | startswith("/")) | [.name, .topic_filter, .is_lastvalue] | @tsv'
+printf '%s\n' "$streams_response" | jq '.meta'
 ```
 
 每行输出依次为名称、主题过滤器，以及该记录是否使用最后值语义。例如：
@@ -53,11 +57,11 @@ curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
 /sensor/+/temp	sensor/+/temp	false
 ```
 
-如果命令没有输出，则说明不存在该类型的旧版记录。
+每个命令还会输出响应中的 `meta` 对象。如果所有页面都没有输出旧版记录，且最后一页的 `meta.hasnext` 为 `false`，则说明不存在该类型的旧版记录。
 
 ::: tip
 
-当记录数量超过 `limit` 时，响应字段 `meta.hasnext` 为 `true`。此时请重复请求，并将 `meta` 中的 `cursor` 值作为查询参数，例如 `?limit=1000&cursor=<cursor>`。
+当还有下一页记录时，响应字段 `meta.hasnext` 为 `true`。此时请重复相应的请求，并将 `meta` 中的 `cursor` 值作为查询参数，例如 `?limit=1000&cursor=<cursor>`。请继续请求，直到 `meta.hasnext` 为 `false`，并检查每一页是否存在旧版记录。
 
 :::
 
@@ -67,25 +71,37 @@ curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
 
 对于每条旧版记录，请确定是否需要保留其中存储的消息。
 
-### 保留数据
+### 保留已存储的消息
 
-新建的队列或消息流只接收创建之后发布的消息。EMQX 不会从旧版记录中复制已存储的消息。如需保留数据，请在删除旧版记录之前，让客户端消费完其中剩余的消息：
+新建的队列或消息流只接收创建之后发布的消息。EMQX 不会从旧版记录中复制已存储的消息。如需保留这些消息，请在删除旧版记录之前，让客户端消费完其中剩余的消息：
 
-1. 创建一个具有相同主题过滤器和设置的命名队列或消息流。例如，对于旧版队列 `/sensor/+/temp`：
+1. 创建一个与旧版记录具有相同主题过滤器和设置的命名队列或消息流。以下命令会获取旧版记录的完整配置，仅修改其名称，然后使用修改后的配置创建命名记录。
 
-   ```bash
-   curl -s -u key:secret -X POST -H "Content-Type: application/json" \
-     http://localhost:18083/api/v5/queues \
-     -d '{"name": "sensor_temp", "topic_filter": "sensor/+/temp", "is_lastvalue": false}'
-   ```
-
-   对于旧版消息流 `/factory/#`：
+   对于旧版队列 `/sensor/+/temp`，创建名为 `sensor_temp` 的队列：
 
    ```bash
-   curl -s -u key:secret -X POST -H "Content-Type: application/json" \
-     http://localhost:18083/api/v5/streams \
-     -d '{"name": "factory", "topic_filter": "factory/#", "is_lastvalue": false}'
+   curl -fsS -u key:secret \
+     http://localhost:18083/api/v5/queue/%2Fsensor%2F%2B%2Ftemp \
+     | jq '.name = "sensor_temp"' \
+     | curl -fsS -u key:secret -X POST \
+       -H "Content-Type: application/json" \
+       http://localhost:18083/api/v5/queues \
+       -d @-
    ```
+
+   对于旧版消息流 `/factory/#`，创建名为 `factory` 的消息流：
+
+   ```bash
+   curl -fsS -u key:secret \
+     http://localhost:18083/api/v5/stream/%2Ffactory%2F%23 \
+     | jq '.name = "factory"' \
+     | curl -fsS -u key:secret -X POST \
+       -H "Content-Type: application/json" \
+       http://localhost:18083/api/v5/streams \
+       -d @-
+   ```
+
+   这些命令会保留数据保留期、容量限制、键表达式以及队列派发策略等设置。
 
    此后，每条新的匹配消息会同时进入旧版记录和命名记录。
 
@@ -95,7 +111,7 @@ curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
 
 4. 按照[删除旧版队列和消息流](#删除旧版队列和消息流)中的步骤删除旧版记录。
 
-### 丢弃数据
+### 丢弃已存储的消息
 
 如果不需要已存储的消息，请直接删除旧版记录。删除队列或消息流会同时删除其中存储的所有消息，且无法撤销。
 
@@ -105,7 +121,7 @@ curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
 
 ### 对名称进行 URL 编码
 
-旧版名称包含 `/`，还可能包含 `+` 和 `#`。将名称放入请求路径之前，必须先进行 URL 编码。不编码时，EMQX 返回 `404 Not Found`；并且在大多数 HTTP 客户端中，`#` 会截断 URL 路径。
+旧版名称包含 `/`，还可能包含 `+` 和 `#`。将名称放入请求路径之前，必须先进行 URL 编码。不编码时，EMQX 会返回 `404 Not Found`。此外，未经编码的 `#` 表示 URL 片段的开始，该片段不会发送到服务器。
 
 使用 jq 对名称编码：
 
@@ -120,14 +136,14 @@ jq -rn --arg name '/sensor/+/temp' '$name | @uri'
 删除旧版队列 `/sensor/+/temp`：
 
 ```bash
-curl -s -u key:secret -X DELETE \
+curl -fsS -u key:secret -X DELETE \
   http://localhost:18083/api/v5/queue/%2Fsensor%2F%2B%2Ftemp
 ```
 
 删除旧版消息流 `/factory/#`：
 
 ```bash
-curl -s -u key:secret -X DELETE \
+curl -fsS -u key:secret -X DELETE \
   http://localhost:18083/api/v5/stream/%2Ffactory%2F%23
 ```
 
@@ -138,22 +154,26 @@ curl -s -u key:secret -X DELETE \
 删除所有旧版队列：
 
 ```bash
-for name in $(curl -s -u key:secret "http://localhost:18083/api/v5/queues?limit=1000" \
+queues_response=$(curl -fsS -u key:secret "http://localhost:18083/api/v5/queues?limit=1000")
+printf '%s\n' "$queues_response" | jq '.meta'
+for name in $(printf '%s\n' "$queues_response" \
   | jq -r '.data[] | select(.name | startswith("/")) | .name | @uri'); do
-  curl -s -u key:secret -X DELETE "http://localhost:18083/api/v5/queue/$name" -w "$name %{http_code}\n"
+  curl -fsS -u key:secret -X DELETE "http://localhost:18083/api/v5/queue/$name" -w "$name %{http_code}\n"
 done
 ```
 
 删除所有旧版消息流：
 
 ```bash
-for name in $(curl -s -u key:secret "http://localhost:18083/api/v5/streams?limit=1000" \
+streams_response=$(curl -fsS -u key:secret "http://localhost:18083/api/v5/streams?limit=1000")
+printf '%s\n' "$streams_response" | jq '.meta'
+for name in $(printf '%s\n' "$streams_response" \
   | jq -r '.data[] | select(.name | startswith("/")) | .name | @uri'); do
-  curl -s -u key:secret -X DELETE "http://localhost:18083/api/v5/stream/$name" -w "$name %{http_code}\n"
+  curl -fsS -u key:secret -X DELETE "http://localhost:18083/api/v5/stream/$name" -w "$name %{http_code}\n"
 done
 ```
 
-每行输出为编码后的名称和 HTTP 状态码。请确认所有状态码均为 `204`。
+每个代码块会删除一个 API 分页中返回的旧版记录，并输出该页的 `meta` 对象。如果 `meta.hasnext` 为 `true`，请保存其中的 `cursor` 值，在请求 URL 中添加 `&cursor=<cursor>` 后重复运行该代码块，直到 `meta.hasnext` 为 `false`。每条删除操作的输出为编码后的名称和 HTTP 状态码。请确认所有状态码均为 `204`。
 
 ### 通过 Dashboard 删除
 
@@ -163,4 +183,4 @@ done
 
 ### 验证
 
-再次运行[查找旧版队列和消息流](#查找旧版队列和消息流)中的命令。如果命令没有输出，说明集群中已没有旧版记录，可以继续升级到 EMQX 7.0。
+再次运行[查找旧版队列和消息流](#查找旧版队列和消息流)中的命令，并检查所有分页。只有当所有页面都没有输出旧版记录，且队列和消息流最后一页响应中的 `meta.hasnext` 均为 `false` 时，才能确认集群中已没有旧版记录。此时可以继续升级到 EMQX 7.0。

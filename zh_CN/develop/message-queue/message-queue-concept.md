@@ -251,7 +251,7 @@ EMQX 针对完整的队列订阅主题过滤器执行授权，包括 `$queue/` �
 
 > 该派生名称可保持与现有 `$q/<topic_filter>` 订阅方式的向后兼容性。
 
-EMQX 7.0 移除了 `$q/` 前缀，升级后客户端无法再订阅旧版队列。请在升级前迁移或删除旧版队列。详见[升级到 EMQX 7.0 前删除旧版队列和消息流](../../get-started/deploy/upgrade-legacy-queues-streams.md)。
+EMQX 7.0 移除了 `$q/` 前缀，升级后客户端无法再订阅旧版队列。请在升级前删除旧版队列。有关如何保留或丢弃其中已存储的消息，详见[升级到 EMQX 7.0 前删除旧版队列和消息流](../../get-started/deploy/upgrade-legacy-queues-streams.md)。
 
 ### 已弃用前缀
 
