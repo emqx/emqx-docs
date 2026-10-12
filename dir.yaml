@@ -947,6 +947,10 @@
     title_ja: 製品ライフサイクル終了日
     path: release-notes/eol-ee
 /:
+- title_en: Documentation Overview
+  title_cn: 文档概览
+  title_ja: ドキュメント概要
+  path: get-started/documentation-overview
 - title_en: EMQX Overview
   title_cn: EMQX 概览
   title_ja: EMQX 概要
