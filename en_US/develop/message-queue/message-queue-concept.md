@@ -129,41 +129,6 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
 - **Queue Management**
    Full queue lifecycle operations (create, update, delete, query) are available via REST APIs.
 
-## Security Considerations
-
-Read this before granting clients access to `$queue/` topics.
-
-**Authorization is checked on the whole subscription topic filter.** EMQX authorizes a queue
-subscription against the complete filter, including the `$queue/` prefix and the queue name.
-The queue's own topic filter — the one that decides which messages the queue captures — is not
-authorized separately. A client that is denied `#` can therefore still subscribe to
-`$queue/orders/#` and receive every message that queue holds.
-
-**A scoped prefix is not a sandbox.** Granting a per-client prefix such as
-`$queue/${clientid}/#` looks like it confines a client to its own queues, and it does confine
-which queue *names* it can use. It does not confine what those queues capture, because nothing
-authorizes the capture filter. A client allowed only `$queue/${clientid}/#` can create a queue
-under its own name whose filter is `#`, and then read messages from topics it cannot subscribe
-to directly.
-
-**Auto-creation lets the client choose the capture filter.** When queue auto-creation is
-enabled, the subscribing client determines the new queue's topic filter. The queue then stores
-messages published to all non-`$` topics that match it, so the client may receive messages from
-topics it is not authorized to subscribe to directly.
-
-On deployments that accept untrusted clients:
-
-- Disable queue auto-creation, and pre-create the queues you intend clients to use.
-- Allow subscriptions only to those specific queues, and deny everything else matching
-  `$queue/#` and `$q/#`.
-- Do not rely on a placeholder-scoped grant such as `$queue/${clientid}/#` to isolate clients
-  from each other's data.
-
-**Topic isolation between namespaces is separate.** A namespace does not partition the topic
-space on its own; that requires a mountpoint. Without one, clients in different namespaces
-share a single topic space, and a queue created in one namespace captures messages published in
-another. See [Namespace Overview](../../guides/multi-tenancy/namespace-overview.md).
-
 ## Use Cases
 
 Message Queue enables reliable, asynchronous messaging patterns that are critical in many IoT and event-driven application scenarios, especially where devices or consumers may not always be online.
@@ -181,6 +146,31 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 - [Retained Messages](../../get-started/messaging/mqtt-retained-message.md): Stores the last known message for a topic, but only delivers one retained message per topic to new subscribers.
 - [MQTT Durable Sessions](../../guides/durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
 - [Rule Engine](../data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
+
+## Security Considerations
+
+When a client subscribes to a queue, EMQX authorizes the complete subscription topic filter, including the `$q/` prefix. Write authorization rules for that complete filter. EMQX can also deliver messages that the queue stored before the client's subscription was created.
+
+### Queue Subscriptions Need Their Own Rules
+
+Rules written for a plain topic space do not cover the corresponding queue subscriptions:
+
+- A rule for `t/#` does not apply to `$q/t/#`. EMQX treats the two as different topics.
+- An authorization topic filter that starts with `#` or `+` does not match a subscription topic filter that starts with `$`. A rule that denies `#` does not deny `$q/#`.
+
+A client that is denied `#` can therefore still subscribe to `$q/#` and receive messages from all non-`$` topics. Add explicit authorization rules for subscriptions that use the `$q/` prefix, and keep them at least as strict as the rules for the ordinary topics covered by the queue's topic filter.
+
+### Auto-Creation Allows Client-Specified Topic Filters
+
+When queue auto-creation is enabled, the subscribing client determines the new queue's topic filter. EMQX uses `<topic_filter>` from `$q/<topic_filter>` to create the queue. It does not separately check whether the client is authorized to subscribe to `<topic_filter>` directly.
+
+For example, a client allowed to subscribe to `$q/#` can create a queue with `#` as its topic filter. The queue then stores messages published to all non-`$` topics. The client might therefore receive messages from topics that it is not authorized to subscribe to directly.
+
+Auto-creation is enabled by default for last-value queues and disabled for regular queues. On deployments that accept untrusted clients, disable auto-creation, pre-create the queues that clients may use, allow subscriptions only to those specific queues, and deny all other subscriptions that match `$q/#`. For configuration details, see [Configure Message Queue Settings](./message-queue-task.md#configure-message-queue-settings).
+
+### Namespace Topic Isolation Is Separate
+
+A namespace does not partition the topic space on its own. Topic isolation requires a mountpoint. Without one, clients in different namespaces share a single topic space, and a queue created in one namespace captures messages published in another. For more information, see [Namespace Overview](../../guides/multi-tenancy/namespace-overview.md).
 
 ## Next Steps
 
