@@ -1,18 +1,46 @@
-# 安装部署和迁移
+# 安装指南
 
-本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。本章还介绍了 EMQX 企业版 License 的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
-
-## 下载
-
-EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可以点击以下链接下载：
-
-EMQX 企业版：<https://www.emqx.com/zh/downloads-and-install/enterprise>
+EMQX 的每个版本都会提供 Docker 镜像，以及适用于不同操作系统和平台的安装包。您可以从 [EMQX 官网](https://www.emqx.com/zh/try?product=enterprise)下载 EMQX 企业版。
 
 此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
 
-:::tip
-除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
+本指南介绍如何选择安装方式，并提供支持的操作系统、安装环境、端口占用以及文件和目录位置等信息。有关迁移说明，参见[迁移指南](../migration/overview.md)。
+
+::: tip
+
+除了私有部署外，您还可以使用全托管的 MQTT 服务 [EMQX Cloud](https://cloud.emqx.com/)。注册账户后即可开始使用 MQTT 服务并连接物联网设备，无需维护底层基础设施。
+
 :::
+
+## 选择安装方式
+
+**[通过 Docker 运行](./install-docker.md)**
+
+使用官方 Docker 镜像快速安装和运行 EMQX 企业版，并使用 Docker Compose 搭建集群。
+
+**[在 Debian 上安装](./install-debian.md)**
+
+在 Debian 系统中使用 deb 或 tar.gz 软件包安装 EMQX 企业版。
+
+**[在 Ubuntu 上安装](./install-ubuntu.md)**
+
+在 Ubuntu 系统中使用 deb 或 tar.gz 软件包安装 EMQX 企业版。
+
+**[在 CentOS/RHEL 上安装](./install-rhel.md)**
+
+在 CentOS/RHEL 系统中使用 rpm 或 tar.gz 软件包安装 EMQX 企业版。
+
+**[在 macOS 上安装](./install-macOS.md)**
+
+在 macOS 系统中使用 zip 软件包安装 EMQX 企业版。
+
+**[在 Kubernetes 上部署](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
+
+使用 EMQX Operator 部署 EMQX 企业版。
+
+**[配置 License](./license.md)**
+
+申请、更新和配置 EMQX 企业版 License。
 
 ## 支持的操作系统与平台
 
