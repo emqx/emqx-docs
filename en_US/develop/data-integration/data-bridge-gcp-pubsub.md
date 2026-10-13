@@ -316,7 +316,7 @@ GCP Pub/Sub Producer and Consumer connectors use the same advanced settings.
 | **HTTP Pipelining** | Maximum number of HTTP requests that can be sent without waiting for each response. Set to `1` to wait for a response before sending the next request. | `100` |
 | **Connection Pool Size** | Number of connections maintained in the connection pool. | `8` |
 | **Connect Timeout** | Maximum time to wait for an HTTP connection to be established. | `15` seconds |
-| **Max Inactive** | Maximum time without activity before the HTTP client attempts to reconnect. | `10` seconds |
+| **Max Inactive** | Maximum time without activity before the HTTP client attempts to reconnect. Starting from EMQX 6.0.4, EMQX reconnects a connection when requests are awaiting responses and no request has been sent through it for 60 seconds. A **Max Inactive** value longer than 60 seconds takes precedence. If responses may take longer than 60 seconds, set **Max Inactive** to at least the longest expected response time. | `10` seconds |
 | **Max Retries** | Maximum number of retries after an error occurs while sending a request. | `2` |
 | **Start Timeout** | Maximum time to wait for the connector to become healthy after it is created. | `5` seconds |
 | **Health Check Interval** | Interval between connector health checks. | `15` seconds |

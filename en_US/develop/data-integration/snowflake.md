@@ -539,7 +539,7 @@ This section demonstrates how to add a Sink to the rule to write the processed r
    - **HTTP Pipelining**: The maximum number of HTTP requests that can be sent without waiting for responses. Default: `100`.
    - **Connect Timeout**: The time limit for establishing a connection to Snowflake before the attempt is aborted. Default: `15` seconds.
    - **Connection Pool Size**: The maximum number of concurrent connections EMQX can maintain to Snowflake for this Sink. Default: `8`.
-   - **Max Inactive**: The maximum amount of time an idle connection can remain open before being closed. Default: `10` seconds.
+   - **Max Inactive**: The maximum time without activity before the HTTP client attempts to reconnect. Starting from EMQX 6.0.4, EMQX reconnects a connection when requests are awaiting responses and no request has been sent through it for 60 seconds. A **Max Inactive** value longer than 60 seconds takes precedence. If responses may take longer than 60 seconds, set **Max Inactive** to at least the longest expected response time. Default: `10` seconds.
 6. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 7. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 8. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Snowflake server.
