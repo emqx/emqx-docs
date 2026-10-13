@@ -129,6 +129,41 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
 - **Queue Management**
    Full queue lifecycle operations (create, update, delete, query) are available via REST APIs.
 
+## Security Considerations
+
+Read this before granting clients access to `$queue/` topics.
+
+**Authorization is checked on the whole subscription topic filter.** EMQX authorizes a queue
+subscription against the complete filter, including the `$queue/` prefix and the queue name.
+The queue's own topic filter — the one that decides which messages the queue captures — is not
+authorized separately. A client that is denied `#` can therefore still subscribe to
+`$queue/orders/#` and receive every message that queue holds.
+
+**A scoped prefix is not a sandbox.** Granting a per-client prefix such as
+`$queue/${clientid}/#` looks like it confines a client to its own queues, and it does confine
+which queue *names* it can use. It does not confine what those queues capture, because nothing
+authorizes the capture filter. A client allowed only `$queue/${clientid}/#` can create a queue
+under its own name whose filter is `#`, and then read messages from topics it cannot subscribe
+to directly.
+
+**Auto-creation lets the client choose the capture filter.** When queue auto-creation is
+enabled, the subscribing client determines the new queue's topic filter. The queue then stores
+messages published to all non-`$` topics that match it, so the client may receive messages from
+topics it is not authorized to subscribe to directly.
+
+On deployments that accept untrusted clients:
+
+- Disable queue auto-creation, and pre-create the queues you intend clients to use.
+- Allow subscriptions only to those specific queues, and deny everything else matching
+  `$queue/#` and `$q/#`.
+- Do not rely on a placeholder-scoped grant such as `$queue/${clientid}/#` to isolate clients
+  from each other's data.
+
+**Topic isolation between namespaces is separate.** A namespace does not partition the topic
+space on its own; that requires a mountpoint. Without one, clients in different namespaces
+share a single topic space, and a queue created in one namespace captures messages published in
+another. See [Namespace Overview](../../guides/multi-tenancy/namespace-overview.md).
+
 ## Use Cases
 
 Message Queue enables reliable, asynchronous messaging patterns that are critical in many IoT and event-driven application scenarios, especially where devices or consumers may not always be online.
