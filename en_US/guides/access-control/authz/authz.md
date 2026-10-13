@@ -12,23 +12,7 @@ A single permission data of a client has the following components:
 Starting from EMQX 5.1.1, the support for checking QoS and retained messages in operation details is introduced.
 :::
 
-The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
-
-::: warning When a Rule Change Takes Effect
-A rule change applies to authorization checks made after it. It does not revoke a
-subscription that was already established:
-
-- A connected client keeps receiving messages on a topic it had been allowed to subscribe to,
-  for the lifetime of its connection. `deny_action` does not apply, because message delivery
-  makes no publish or subscribe attempt.
-- A client reconnecting a persistent session (`clean_start = false`) has its stored
-  subscriptions restored by the broker without sending `SUBSCRIBE`, and receives the messages
-  that were queued while it was offline.
-
-To revoke read access from a client that is already subscribed, change the rule **and**
-disconnect the client, for example with `DELETE /api/v5/clients/{clientid}`.
-:::
-
+The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. For information about when updated rules apply, see [When Authorization Rule Changes Take Effect](#when-authorization-rule-changes-take-effect).
 
 A file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
 
@@ -90,6 +74,15 @@ To avoid problems with the authorization, you need to remember to disable or rem
 
 For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage Authorizers](#manage-authorizers).
 
+## When Authorization Rule Changes Take Effect
+
+A rule change takes effect the next time EMQX evaluates the updated rule. If a matching result exists in the client authorization cache, EMQX continues to use the cached result until it expires or is cleared. A rule change does not revoke a subscription that was already established:
+
+- A connected client keeps receiving messages on a topic it had been allowed to subscribe to for the lifetime of its connection. `deny_action` does not apply because message delivery makes no publish or subscribe attempt.
+- A client reconnecting a persistent session (`clean_start = false`) has its stored subscriptions restored by the broker without sending `SUBSCRIBE` and receives the messages that were queued while it was offline.
+
+To revoke read access from a client that is already subscribed, change the rule and delete the client's session. For example, use `DELETE /api/v5/clients/{clientid}` to disconnect the client and delete its session state.
+
 ## Client Authorization Cache
 
 EMQX provides a session-based authorization data cache mechanism. This cache stores authorization results in the client’s session state and reduces the need for repeated authorization rule evaluation during the same connection. The client authorization cache mechanism improves the efficiency of permission checks for client publish/subscribe operations and helps reduce the access load on the authorization data backend caused by a large number of client requests.
@@ -105,7 +98,7 @@ When a client connects and performs publish/subscribe operations:
 
 ::: tip
 
-The cache is client-session specific and is cleared when the client disconnects or reconnects. Clearing the cache does not re-evaluate the rules for subscriptions that are already established; see the note above on when a rule change takes effect.
+The cache is client-session specific and is cleared when the client disconnects or reconnects. Clearing the cache does not re-evaluate the rules for subscriptions that are already established. For more information, see [When Authorization Rule Changes Take Effect](#when-authorization-rule-changes-take-effect).
 
 :::
 
