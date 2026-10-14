@@ -147,6 +147,31 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 - [MQTT Durable Sessions](../../guides/durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
 - [Rule Engine](../data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
 
+## Security Considerations
+
+When a client subscribes to a queue, EMQX authorizes the complete subscription topic filter, including the `$q/` prefix. Write authorization rules for that complete filter. EMQX can also deliver messages that the queue stored before the client's subscription was created.
+
+### Queue Subscriptions Need Their Own Rules
+
+Rules written for a plain topic space do not cover the corresponding queue subscriptions:
+
+- A rule for `t/#` does not apply to `$q/t/#`. EMQX treats the two as different topics.
+- An authorization topic filter that starts with `#` or `+` does not match a subscription topic filter that starts with `$`. A rule that denies `#` does not deny `$q/#`.
+
+A client that is denied `#` can therefore still subscribe to `$q/#` and receive messages from all non-`$` topics. Add explicit authorization rules for subscriptions that use the `$q/` prefix, and keep them at least as strict as the rules for the ordinary topics covered by the queue's topic filter.
+
+### Auto-Creation Allows Client-Specified Topic Filters
+
+When queue auto-creation is enabled, the subscribing client determines the new queue's topic filter. EMQX uses `<topic_filter>` from `$q/<topic_filter>` to create the queue. It does not separately check whether the client is authorized to subscribe to `<topic_filter>` directly.
+
+For example, a client allowed to subscribe to `$q/#` can create a queue with `#` as its topic filter. The queue then stores messages published to all non-`$` topics. The client might therefore receive messages from topics that it is not authorized to subscribe to directly.
+
+Auto-creation is enabled by default for last-value queues and disabled for regular queues. On deployments that accept untrusted clients, disable auto-creation, pre-create the queues that clients may use, allow subscriptions only to those specific queues, and deny all other subscriptions that match `$q/#`. For configuration details, see [Configure Message Queue Settings](./message-queue-task.md#configure-message-queue-settings).
+
+### Namespace Topic Isolation Is Separate
+
+A namespace does not partition the topic space on its own. Topic isolation requires a mountpoint. Without one, clients in different namespaces share a single topic space, and a queue created in one namespace captures messages published in another. For more information, see [Namespace Overview](../../guides/multi-tenancy/namespace-overview.md).
+
 ## Next Steps
 
 Now that you understand the Message Queue fundamentals, explore how to put them into practice:
