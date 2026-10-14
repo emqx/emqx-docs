@@ -33,6 +33,16 @@ exclude = [
   # mqttx web client
   "^https://mqttx.app/web-client",
 
+  # Sites that reject automated link-checking requests
+  "^https://(www|dev)\\.mysql\\.com/",
+  "^https://console\\.cloud\\.google\\.com/marketplace/",
+  "^https://marketplace\\.microsoft\\.com/",
+  "^https://slack-invite\\.emqx\\.io/",
+  "^https://x\\.com/",
+  "^https://(www|space)\\.bilibili\\.com/",
+  "^https://baike\\.baidu\\.com/",
+  "^https://medium\\.com/",
+
   # these just fail
   "^https://couchbase.com/",
   "^https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html",
@@ -52,8 +62,9 @@ exclude_path = [
   # Configuration manual (auto-generated, may have stale links)
   "cfg-manual-docgen",
   "hocon",
-  "^[a-z][a-z]_[A-Z][A-Z]/changes",
-  "^[a-z][a-z]_[A-Z][A-Z]/extensions/lang-lua.md"
+  # Historical release notes whose external links are no longer maintained
+  "(^|/)[a-z]{2}_[A-Z]{2}/release-notes/changes-(ce-v3|ce-v4|ee-v4)\\.md$",
+  "(^|/)[a-z]{2}_[A-Z]{2}/extensions/lang-lua\\.md$"
 ]
 
 # Accept these HTTP status codes as valid
@@ -82,7 +93,10 @@ user_agent = "Mozilla/5.0 (compatible; lychee-link-checker; +https://github.com/
 # Cache results to speed up subsequent runs
 cache = true
 
-# Maximum cache age in seconds (1 day)
+# Recheck transient server errors instead of retaining them in the cache
+cache_exclude_status = "500.."
+
+# Maximum cache age
 max_cache_age = "7d"
 
 # Don't require HTTPS (some legitimate sites still use HTTP)
