@@ -920,6 +920,157 @@ EMQX 5.10.1へのアップグレード前に、破壊的変更および既知の
 
 - [#15683](https://github.com/emqx/emqx/pull/15683) ExHookのTLSオプションを修正し、gRPCクライアントがTLSハンドシェイク時にサーバーホスト名を正しく検証できるようにしました。
 
+## 5.10.0
+
+*リリース日: 2025-06-10*
+
+EMQX 5.10.0 へのアップグレード前に、破壊的変更および既知の問題を必ずご確認ください。
+
+### 強化点
+
+#### コア MQTT 機能
+
+- [#15118](https://github.com/emqx/emqx/pull/15118) クライアントサブスクリプションごとに許可される最大 QoS レベルを制御する新設定 `mqtt.subscription_max_qos_rules` を追加しました。これにより、特定トピックにマッチするルールに基づき SUBSCRIBE パケットの QoS 要求を制限可能です。現在はトピックに基づく限定的なマッチングルール（述語）のみサポートしています。
+- [#15246](https://github.com/emqx/emqx/pull/15246) WebSocket 接続のパフォーマンスとリソース消費を改善しました。
+    * 合成ベンチマークで 1対1 MQTT メッセージング性能を測定し、CPU 使用率を約 20% 削減、メモリ消費も若干低減。
+    * リスナー全体の接続制限が有効な場合の接続セットアップ効率を改善し、多数接続を管理するノードで効果的。
+
+#### デプロイメント
+
+- [#14791](https://github.com/emqx/emqx/pull/14791) Helm チャートの EMQX StatefulSet にカスタムアノテーションをサポートし、ConfigMap や Secret 変更時の自動 Pod 再起動を可能にしました。これにより Kubernetes 上の EMQX 管理の自動化と信頼性が向上します。
+
+#### アクセス制御
+
+- [#15250](https://github.com/emqx/emqx/pull/15250) LDAP バインド認証で LDAP エントリの `is_superuser` フラグを正しく抽出するよう改善しました。
+  以前は LDAP エントリに有効な `isSuperuser` 属性があっても常に `false` に設定されていました。
+- [#15249](https://github.com/emqx/emqx/pull/15249) LDAP 認証・認可を改善しました。
+
+  * LDAP の `filter`/`base_dn` 設定に対するバリデーションを追加。
+  * 変数展開の問題を修正。
+
+#### ルールエンジン
+
+- [#15001](https://github.com/emqx/emqx/pull/15001) ルールエンジン SQL に AI サービスを使う `ai_completion` 関数を追加しました。
+
+- [#15201](https://github.com/emqx/emqx/pull/15201) AI 補完プロバイダー設定に `base_url` オプションを追加しました。
+
+- [#15188](https://github.com/emqx/emqx/pull/15188) ルールイベントトピックにネームスペースを追加しました。
+
+  | 旧イベントトピック                      | 新イベントトピック                       |
+  | :-------------------------------------- | :-------------------------------------- |
+  | `$events/client_connected`              | `$events/client/connected`              |
+  | `$events/client_disconnected`           | `$events/client/disconnected`           |
+  | `$events/client_connack`                | `$events/client/connack`                |
+  | `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+  | `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+  | `$events/session_subscribed`            | `$events/session/subscribed`            |
+  | `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+  | `$events/message_delivered`             | `$events/message/delivered`             |
+  | `$events/message_acked`                 | `$events/message/acked`                 |
+  | `$events/message_dropped`               | `$events/message/dropped`               |
+  | `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+  | `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+  | `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+  旧イベントトピックは後方互換のため残されています。
+
+- [#15175](https://github.com/emqx/emqx/pull/15175) ルールエンジンでワイルドカードを使ったイベントトピックマッチングをサポートしました。これにより `$events/#`、`$events/sys/+` など複数イベントの一括マッチが可能です。
+
+#### スマートデータハブ
+
+- [#15174](https://github.com/emqx/emqx/pull/15174) スキーマレジストリ用の Protobuf ソースファイルバンドルアップロードをサポートしました。
+
+  例として、Protobuf ソースファイルバンドルが `/tmp/bundle.tar.gz` にあり、以下のファイル構成で `a.proto` がルートスキーマファイルの場合：
+
+  ```
+  .
+  ├── a.proto
+  ├── c.proto
+  └── nested
+      └── b.proto
+  ```
+
+  HTTP API でこのバンドルを使い新規スキーマを作成する例：
+
+  ```sh
+  curl -v http://127.0.0.1:18083/api/v5/schema_registry_protobuf/bundle \
+    -XPOST \
+    -H "Authorization: Bearer xxxx" \
+    -F bundle=@/tmp/bundle.tar.gz \
+    -F name=my_cool_schema \
+    -F root_proto_file=a.proto
+  ```
+
+#### データ統合
+
+- [#15248](https://github.com/emqx/emqx/pull/15248) EMQX は [Doris](https://doris.apache.org/) とのデータ統合をサポートし、SQL 文によるデータ書き込みを可能にしました。
+
+- [#15218](https://github.com/emqx/emqx/pull/15218) Amazon MSK（Managed Streaming for Apache Kafka）接続時の Kafka Producer および Consumer コネクターで IAM 認証をサポートしました。EMQX が AWS EC2 上で動作する場合、AWS SDK を使って Kafka クライアント用の OAuth ベアラートークンを生成します。
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Snowflake コネクターでパスワードの代わりに秘密鍵ファイルパスを指定するサポートを追加しました。
+
+  ユーザーはパスワード、秘密鍵、または両方なし（`/etc/odbc.ini` で設定）を選択できます。
+
+- [#14983](https://github.com/emqx/emqx/pull/14983) EMQX は S3Tables とのデータ統合をサポートしました。
+
+  **現在の制限**：
+  - [S3Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) カタログのみ対応（テーブルデータとメタデータは S3 に存在する必要あり）。
+  - [Iceberg テーブルフォーマットバージョン 2](https://iceberg.apache.org/spec/#version-2-row-level-deletes) のみ対応。
+  - サポートされるパーティション変換関数は以下のみ：
+    - `identity`
+    - `void`
+    - `bucket[N]`
+  - データファイルは [Avro](https://avro.apache.org/docs/1.12.0/specification/) 形式のみ。
+
+- [#15331](https://github.com/emqx/emqx/pull/15331) InfluxDB アクションで、`WriteSyntax` の `timestamp` が空白かつルールにタイムスタンプフィールドがない場合にラインプロトコル変換が失敗する問題を修正しました。現在はシステムの現在ミリ秒値を使い、ミリ秒精度を強制します。
+
+- [#15348](https://github.com/emqx/emqx/pull/15348) SSL クライアントの `middlebox_comp_mode` を設定可能にしました。以前は TLS 1.3 接続で常に有効（`true`）でしたが、デフォルトは互換性維持のため `true` のままです。
+
+  TLS 失敗時に `unexpected_message, TLS client: In state hello_retry_middlebox_assert ...` のようなエラーが出る稀なケースでは、`middlebox_comp_mode` を `false` に設定してください。
+
+#### マルチテナンシー
+
+- [#15253](https://github.com/emqx/emqx/pull/15253) 2つの新しいマルチテナンシー API を追加しました：`GET /mt/ns_list_details` と `GET /mt/ns_list_managed_details`。既存の対応 API と同様に動作しますが、名前空間名に加え関連メタデータも返します。
+
+- [#15160](https://github.com/emqx/emqx/pull/15160) マルチテナンシー管理用に名前空間を一括削除する `DELETE /mt/bulk_delete_ns` API を追加しました。
+
+#### CLI
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) 既存設定から指定したキー経路 `x.y.z` を削除する新しい CLI コマンド `emqx ctl conf remove x.y.z` を追加しました。
+
+#### ゲートウェイ
+
+- [#15138](https://github.com/emqx/emqx/pull/15138) TCP/TLS、WS/WSS トランスポートプロトコルで NATS クライアント接続を受け入れる NATS ゲートウェイを導入しました。
+
+  例えば、NATS メッセージを以下のように MQTT メッセージに変換し、トピック `sub/t`、ペイロード `hello` として EMQX のルールエンジンやデータ統合など既存機能とシームレスに統合可能です：
+
+  ```
+  PUB sub.t 5
+  hello
+  ```
+
+#### Durable Storage
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) DS Raft バックエンドに基本的なメトリクスを計測するインストルメンテーションを追加し、クラスター状態、データベース概要、シャードレプリケーション、レプリカ遷移の可視化を可能にしました。
+
+### バグ修正
+
+#### アクセス制御
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) ブラックリスト作成失敗時のエラーメッセージ書式を修正しました。
+
+#### クラスター
+
+- [#15304](https://github.com/emqx/emqx/pull/15304) `static` 発見戦略使用時にレプリカントノードがコアノードを正しく発見できない問題を修正しました。
+
+  以前は `static_seeds` リストに明示的に含まれないコアノードをレプリカントが無視していました。これによりクラスターのビュー不整合や負荷不均衡が発生していました。
+
+- [#15180](https://github.com/emqx/emqx/pull/15180) `ekka_locker` の RPC (`badrpc`) エラー処理を修正し、誤検知によるロック成功を防止しました。これによりクラスター展開でのロック状態不整合やデッドロックのリスクを低減します。
+
+#### セキュリティ
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) CRL 配布ポイント（CDP） URL の連続失敗時にリフレッシュを停止し、エラーログの過剰出力を防止するように改善しました。
+
 ## 5.9.1
 
 *リリース日: 2025-07-02*
