@@ -383,7 +383,7 @@ REST API はロールベースアクセス制御を実装しています。API �
 
 #### 組み込みの API キースコープ
 
-EMQX 6.0.5以降、EMQXはAPIキー用に以下の11個のスコープを提供しています。
+EMQX 6.1.6以降、EMQXはAPIキー用に以下の11個のスコープを提供しています。
 
 | スコープ | 名称 | 代表的な API 領域 |
 | -------- | ---- | ----------------- |
@@ -479,9 +479,9 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### ネームスペース付き API キーのスコープ制限
 
-EMQX 6.0.4以降、作成リクエストで`scopes`を省略した場合、ネームスペース付きのAdministratorまたはViewerロールのAPIキーには、`connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license`が割り当てられます。EMQX 6.0.5以降は、デフォルトに`plugin_api`も追加されます。これらのデフォルトには`publish`、`gateways`、`audit`は含まれません。
+EMQX 6.0.4以降、作成リクエストで`scopes`を省略した場合、ネームスペース付きのAdministratorまたはViewerロールのAPIキーには、`connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license`が割り当てられます。EMQX 6.1.6以降は、デフォルトに`plugin_api`も追加されます。これらのデフォルトには`publish`、`gateways`、`audit`は含まれません。
 
-ネームスペース付きのAdministratorまたはViewerロールのAPIキーを作成する場合、または既存キーの明示的なスコープリストを変更する場合、リクエストにはEMQX 6.0.4では上記7個、EMQX 6.0.5以降では`plugin_api`を加えた8個のスコープのみを指定できます。`publish`、`gateways`、`audit`など、ネームスペース付きロールで使用できないスコープを指定するとHTTP 400が返され、禁止されたスコープが示されて変更は適用されません。`system`と制限付きスコープを混在できない制限も、明示的なスコープリストに適用されます。
+ネームスペース付きのAdministratorまたはViewerロールのAPIキーを作成する場合、または既存キーの明示的なスコープリストを変更する場合、リクエストにはEMQX 6.0.4では上記7個、EMQX 6.1.6以降では`plugin_api`を加えた8個のスコープのみを指定できます。`publish`、`gateways`、`audit`など、ネームスペース付きロールで使用できないスコープを指定するとHTTP 400が返され、禁止されたスコープが示されて変更は適用されません。`system`と制限付きスコープを混在できない制限も、明示的なスコープリストに適用されます。
 
 ### 禁止スコープを含む既存キー
 
