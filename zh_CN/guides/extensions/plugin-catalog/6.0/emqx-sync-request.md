@@ -67,7 +67,9 @@ PUT /api/v5/plugins/<name-vsn>/config
 POST /api/v5/plugin_api/emqx_sync_request/request
 ```
 
-该 API 使用与其他 EMQX 管理 API 相同的认证方式。通过 Dashboard 登录获取的 Bearer Token 可以访问该 API。API 密钥必须通过 HTTP Basic 认证发送，并且需要具备 `publish` 权限范围。
+该 API 使用与其他 EMQX 管理 API 相同的认证方式，支持通过 Dashboard 登录获取的 Bearer Token，以及通过 HTTP Basic 认证发送的 API 密钥。
+
+由于该端点使用 `POST`，Dashboard 用户或 API 密钥必须具有管理员角色。该端点由 Sync Request 插件单独注册，不通过通用插件 API 路由，并显式要求 `publish` 权限范围。`plugin_api` 和 `system` 权限范围不能授予对此端点的访问权限。
 
 ### 请求体
 
