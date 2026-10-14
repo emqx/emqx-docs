@@ -235,6 +235,10 @@ For example, a client allowed to subscribe to `$queue/+/#` can subscribe to `$qu
 
 Auto-creation is enabled by default for last-value queues and disabled for regular queues, but it takes effect only while the Message Queue feature is active. With the default `mq.enable = auto`, EMQX activates Message Queue only after at least one queue exists, so a subscription cannot create the first queue. On deployments that accept untrusted clients, allow access only to specific pre-created queues, such as `$queue/orders`, and deny all other subscriptions that match `$queue/#` or `$q/#`. Alternatively, disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
 
+### Namespace Topic Isolation Is Separate
+
+A namespace does not partition the topic space on its own. Topic isolation requires a mountpoint. Without one, clients in different namespaces share a single topic space, and a queue created in one namespace captures messages published in another. For more information, see [Namespace Overview](../../guides/multi-tenancy/namespace-overview.md).
+
 ## Compatibility Notes
 
 This section summarizes compatibility considerations introduced in EMQX 6.1.1.

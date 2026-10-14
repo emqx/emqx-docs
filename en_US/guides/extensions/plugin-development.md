@@ -445,6 +445,16 @@ The plugin API gateway routes requests to your plugin under the path:
 /api/v5/plugin_api/{plugin_name}/...
 ```
 
+Starting from EMQX 6.0.5, the plugin API gateway's scope check accepts either the restricted `plugin_api` scope or the administrator-equivalent `system` scope. The caller's role and namespace permissions must also allow the requested operation.
+
+Use `plugin_api` when the caller needs endpoints published by plugins but does not need to install, start, stop, or configure plugins. Those plugin management operations remain in the `system` scope. The gateway continues to accept `system` for backward compatibility.
+
+::: warning Important Notice
+
+The `plugin_api` scope grants access to every endpoint published through this gateway. It does not restrict what an individual plugin endpoint can do, so review the security impact of each endpoint that your plugin exposes.
+
+:::
+
 To handle these requests, implement `on_handle_api_call/4` in the plugin app module and dispatch by method and path. See `plugins/emqx_username_quota/src/emqx_username_quota_app.erl` and `emqx_username_quota_api.erl` for reference implementations.
 
 #### Callback Contract

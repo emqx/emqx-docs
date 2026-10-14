@@ -23,7 +23,7 @@ EMQX Enterprise は複数のコンポーネントで構成され、強力かつ�
 
 ### デバイス接続
 
-EMQX Enterprise は MQTT 5.0 および 3.x 仕様に100％準拠し、卓越したスケーラビリティにより膨大な数の MQTT デバイスクライアント接続を容易に処理します。[接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections)の同時数も対応可能です。同時に HTTP、QUIC、LwM2M/CoAP といった他のオープン標準プロトコルもサポートし、多様な IoT デバイスやシナリオの接続を実現します。さらにファイル転送や遅延パブリッシュなどの機能も拡張し、利用ケースを豊かにしています。
+EMQX Enterprise は MQTT 5.0 および 3.x 仕様に100％準拠し、卓越したスケーラビリティにより膨大な数の MQTT デバイスクライアント接続を容易に処理します。[接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)の同時数も対応可能です。同時に HTTP、QUIC、LwM2M/CoAP といった他のオープン標準プロトコルもサポートし、多様な IoT デバイスやシナリオの接続を実現します。さらにファイル転送や遅延パブリッシュなどの機能も拡張し、利用ケースを豊かにしています。
 
 #### MQTT over QUIC
 
