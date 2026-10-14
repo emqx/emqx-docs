@@ -193,12 +193,9 @@ listeners.tcp.demo {
 The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
 
 ::: warning Authorization Is Checked Before the Mountpoint Is Added
-Authorization rules are evaluated against the topic exactly as the client sent it, before the
-mountpoint prefix is added. This applies to `PUBLISH`, `SUBSCRIBE` and Will messages.
+EMQX evaluates authorization rules against the topic without the listener's mountpoint. It adds the mountpoint after the authorization check. This applies to publish and subscribe operations and Will messages.
 
-Write the rules for a listener with a mountpoint against the topic the client uses, not the
-mounted topic. A rule written for the mounted topic, such as a deny on `department-a/secret/#`,
-does not match a client that publishes or subscribes to `secret/#` through that listener.
+For a listener with a mountpoint, write authorization rules against the unmounted topic, not the mounted topic. A rule written for the mounted topic, such as a deny on `department-a/secret/#`, does not match a client that publishes or subscribes to `secret/#` through that listener.
 :::
 
 
