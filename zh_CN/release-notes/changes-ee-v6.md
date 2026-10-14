@@ -1,5 +1,111 @@
 # EMQX 企业版 v6 版本
 
+## 6.3.2
+
+*发布日期: 2026-10-15*
+
+### 增强
+
+#### 核心 MQTT 功能
+
+- [#19438](https://github.com/emqx/emqx/pull/19438) 对于未拥塞的连接，即使队列中较早的 QoS 1/2 消息仍需等待确认，内存会话现在也会继续从队列中取出并投递 QoS 0 消息。连接解除拥塞或恢复已有会话后也会执行此操作。启用主题优先级时，从队列中取出并投递 QoS 0 消息的过程仍可能提前停止。
+
+#### 性能
+
+此版本降低了 MQTT 连接、会话和节点本地客户端数据的内存用量，同时降低了多个 Broker 处理路径的 CPU 开销，并提升了订阅查询和启动性能。
+
+- **连接和会话内存。**
+  - 连接现在会在无流量持续时间达到 `mqtt.hibernate_after` 的配置值后进入休眠。该配置项默认为 5 秒。休眠会将进程堆缩减到仅保留仍在使用的数据，每个连接可释放约 5 KB 内存。此前，TCP 和 TLS 连接仅在 `mqtt.idle_timeout` 指定的时长后休眠，该配置默认值为 15 秒；WebSocket 连接收到第一个报文后会一直保持唤醒。设置 `mqtt.hibernate_after = infinity` 可使连接始终保持唤醒。如果客户端发送数据的间隔接近该配置值，建议增大该值，因为每次休眠都会触发一次垃圾回收，连接唤醒后进程堆还会再次增长（[#19092](https://github.com/emqx/emqx/pull/19092)）。
+  - 如果连接所属的 Zone 和监听器均未配置消息、字节或订阅速率限制，连接将不再分配限速器状态。连接建立后新增的速率限制仍会对该连接生效（[#19181](https://github.com/emqx/emqx/pull/19181)）。
+  - 没有排队消息的会话可节省 48 字节内存，例如仅发布消息的客户端，或消息投递速度能够跟上发布速度的订阅客户端（[#19262](https://github.com/emqx/emqx/pull/19262)）。
+
+- **节点本地客户端数据。**
+  - channel-info 表不再存储客户端的遗嘱消息、CONNECT 属性或订阅列表。表中条目的大小不再随 CONNECT 报文或订阅数量增长，从而减少内存占用，并降低每次 SUBACK 和 UNSUBACK 后重写该表的开销（[#19306](https://github.com/emqx/emqx/pull/19306)）。
+  - 该表还移除了 `sockinfo` map，以及 `conninfo` 中已有的 `peerhost`、`peerport`、`peername` 和 `sockport` 值，每个连接可节省约 100 字节内存（[#19263](https://github.com/emqx/emqx/pull/19263)）。
+  - 该表不再存储值为 0 的客户端级统计数据，每个空闲客户端可节省约 145 字节内存（[#19303](https://github.com/emqx/emqx/pull/19303)）。
+  - 通过 TCP、TLS 或 WebSocket 订阅的客户端不再占用订阅者 ID 表中的一行，每个客户端可节省约 110 字节内存，一百万个客户端可节省约 110 MB（[#19245](https://github.com/emqx/emqx/pull/19245)）。
+
+  REST API 响应、CLI 输出和传递给 Hook 回调的参数保持不变。如果插件通过 `emqx_cm:get_chan_info/1,2`、`emqx_cm:lookup_client/1`、`emqx_mgmt:lookup_client/2`、`emqx_channel:info/1` 或 `emqx_connection:info/1` 直接读取客户端信息表，将无法再从返回的 map 中获取 `will_msg`、`conninfo.conn_props` 或 `session.subscriptions`。如需获取客户端的订阅，请使用 `emqx_broker:subscriptions/1`；如需获取 CONNECT 属性，请使用 `client.connected` Hook；如需读取单个 Channel 属性，请使用 `emqx_channel:info/2`。
+
+- **CPU 和延迟。**
+  - 消息处理和客户端生命周期操作现在会按名称直接调用 Hook（[#19527](https://github.com/emqx/emqx/pull/19527)）。
+  - 更新和读取指标时所需的查找次数减少（[#19536](https://github.com/emqx/emqx/pull/19536)）。
+  - 对于配置了 `tcp_backend = socket` 的 TCP 监听器，每个传入报文所需的接收系统调用次数平均有所减少。对于不超过 1 KB 的报文，Broker 每接收一条 QoS 0 PUBLISH 报文的 CPU 用量降低约 7%；对于更大的报文，CPU 用量保持不变或更低（[#19528](https://github.com/emqx/emqx/pull/19528)）。
+  - 每次 SUBACK 和 UNSUBACK 后，Broker 现在只需一次写入即可更新客户端表条目，而不再需要两次写入。在大量新连接执行订阅的场景下，此优化可降低 SUBSCRIBE 延迟（[#19532](https://github.com/emqx/emqx/pull/19532)）。
+
+- **订阅查询和启动。**
+  - `emqx ctl subscriptions show <ClientId>` 命令不再通过扫描节点上的所有订阅来查找单个客户端的订阅（[#19245](https://github.com/emqx/emqx/pull/19245)）。
+  - 发布包中包含的 `nodetool` 辅助工具现在已预编译（[#19183](https://github.com/emqx/emqx/pull/19183)）。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#19489](https://github.com/emqx/emqx/pull/19489) 将 MQTT TCP 监听器的默认 `tcp_backend` 改回 `gen_tcp`。
+
+  6.3.0 将 Unix 和 Linux 上的默认后端改为 `socket`。由于 `socket` 后端的单连接内存占用较高，默认后端在此问题解决前恢复为 `gen_tcp`。目前仅在无消息流量的连接测试中测量过该内存开销，尚无针对有消息流量场景的测试数据。`socket` 计划在 v7 中再次成为默认后端。
+
+  `socket` 后端本身没有变化，在 Unix 和 Linux 上仍可通过 `tcp_backend = socket` 启用。显式设置了 `tcp_backend` 的监听器不受影响。依赖默认值的监听器会切换回 `gen_tcp`，升级时将重启监听器并关闭其活跃连接。
+
+- [#19298](https://github.com/emqx/emqx/pull/19298) 修复 EMQX 6.3.0 中的一项性能回归：使用 `socket` 后端的 TCP 监听器在处理大量突发 QoS 1 消息时，会出现 CPU 用量过高和消息投递缓慢的问题。此外，通过批量发送消息提高了突发消息吞吐量。
+
+- [#19326](https://github.com/emqx/emqx/pull/19326) 调整消息投递逻辑，不再将飞行窗口已满视为连接拥塞信号。飞行窗口已满时，现在仍可投递 QoS 0 消息，从而减少不必要的消息排队和丢弃，同时保证每个主题和 QoS 级别内的消息顺序。
+
+  此外，还修复了投递速率限制下 QoS 1 和 QoS 2 消息乱序的问题，并避免已排队但尚未发送的消息提前消耗投递配额。
+
+- [#19351](https://github.com/emqx/emqx/pull/19351) 将 `esockd` 从 5.17.4 升级到 5.17.8，修复了多个监听器问题：
+
+  - 修复使用 `socket` 后端且 `tcp_options.recbuf` 值较小时，高 MTU 链路上的 TCP 吞吐量严重降低的问题。
+  - 修复代理信息长度为 0 的 PROXY Protocol v2 报头会错误消耗后续 MQTT 数据的问题，并能够拒绝被截断的 IPv4/IPv6 地址信息，而不会导致崩溃。
+  - 使用 `socket` 后端的连接现在会拒绝不完整的 PROXY Protocol v1 报头。
+  - 修正监听器选项合并和套接字调优，并避免更新未初始化的计数器时 Acceptor 崩溃。
+
+- [#19144](https://github.com/emqx/emqx/pull/19144) 修复了客户端在会话注册表清理期间断开连接会导致清理进程停止的问题。清理进程现在会跳过已断开的客户端，并继续删除过期的注册信息。
+
+- [#19316](https://github.com/emqx/emqx/pull/19316) 修复限速器注册表重启或节点关闭时未执行注册表清理，导致 `persistent_term` 中的限速器 Bucket 条目泄漏的问题。
+
+#### 网关
+
+- [#19422](https://github.com/emqx/emqx/pull/19422) 修复混合版本集群中的 MQTT-SN 会话接管失败问题，例如从早期版本滚动升级到 EMQX 6.3.0、6.3.1 或 6.3.2 时。客户端在运行不同版本的节点上重新连接或唤醒时，重连或唤醒可能失败，也可能导致客户端 Channel 崩溃，从而无法恢复会话和投递待处理消息。
+
+- [#19459](https://github.com/emqx/emqx/pull/19459) 修复 MQTT-SN 网关在出站 PUBLISH 报文中遗漏 `DUP` 和 `RETAIN` 标志的问题。客户端现在可以识别重传消息，以及订阅时收到的保留消息。
+
+- [#19393](https://github.com/emqx/emqx/pull/19393) 修复每次向已恢复会话的网关客户端投递 QoS 1 或 QoS 2 消息时都会记录错误日志的问题。
+
+  使用消息队列或 Stream 时，投递此类消息会在 Hook 回调中引发异常。EMQX 会捕获该异常，并以 `error` 级别记录 `hook_callback_exception`。消息投递本身不受影响。恢复会话的网关 Channel（例如从休眠状态唤醒的 MQTT-SN 客户端）不会触发会话生命周期 Hook，因此未设置该回调所需的 Channel 元数据。
+
+#### 访问控制
+
+- [#19282](https://github.com/emqx/emqx/pull/19282) 修复了以下问题：当 `hostname_resolution = dynamic` 时，如果响应中的 `Content-Type` 请求头名称不是全小写形式，HTTP 认证会拒绝该响应，例如 `Content-Type: application/json`。HTTP 认证现在可以正常接受此类响应。此前，认证后端会报告 `unsupported_content_type`，导致客户端无法连接。
+
+#### 数据集成
+
+- [#19313](https://github.com/emqx/emqx/pull/19313) 改进 HTTP 类连接器对无响应连接的检测，例如 HTTP Server、GCP PubSub Producer、Couchbase 和 Snowflake 连接器。
+
+  修复前，如果连接中有请求正在等待响应，只有经过完整请求超时时间（`resource_opts.request_ttl`）再加上 `max_inactive` 后，才会重新连接。`request_ttl` 较大时，重新连接会等待很长时间；设置 `request_ttl = infinity` 时，连接不会重新建立。
+
+  现在，如果连接上仍有请求等待响应，但连续 60 秒未发送任何请求，EMQX 会重新连接；如果 `max_inactive` 大于 60 秒，则以 `max_inactive` 为准。默认设置（`request_ttl` 为 45 秒、`max_inactive` 为 10 秒）不受影响。
+
+  此变更会影响 `request_ttl` 高于约 50 秒的连接器。响应时间超过 60 秒时，重新连接可能会中断响应。如果远程服务的响应时间预计超过 60 秒，请将 `max_inactive` 至少设置为最长预期响应时间。
+
+#### 节点与集群
+
+- [#19444](https://github.com/emqx/emqx/pull/19444) 修复 EMQX 在 CPU 配额下运行时 Erlang 调度器数量不正确的问题，例如使用 `docker run --cpus` 或 Kubernetes CPU 限制时。
+
+  从 6.3.0 开始，即使容器只能使用少数 CPU，EMQX 也会为宿主机的每个 CPU 核心启动一个调度器。调度器会竞争 CPU 配额，导致 Broker 在相同消息速率下的 CPU 用量增加约 30%。EMQX 现在会根据 CPU 配额启动相应数量的调度器。如需显式设置调度器数量，请使用 `node.schedulers`。
+
+- [#19160](https://github.com/emqx/emqx/pull/19160) 修复核心节点加入或离开集群时 `mria` 应用可能发生的以下崩溃：
+
+  ```
+  Reason: {badarg,[{ets,select,[gproc,[{{{{n,l,{mria_rlog_replica,route_shard_m,'$1'}},n},'$2','_'},[],[{{'$1','$2'}}]]],[{error_info,#{cause => id...
+  ```
+
+  此修复从节点加入或离开集群时需要重启的业务应用列表中移除了 `mria` 的依赖项 `gproc`。
+
+#### 部署
+
+- [#19141](https://github.com/emqx/emqx/pull/19141) 恢复 Docker 镜像 `/etc/passwd` 文件中的 `root` 条目，使 `docker run --user root` 再次可用。6.3.1 切换到加固基础镜像时删除了该条目，导致只有数字形式的 `--user 0:0` 可用。
+
 ## 6.3.1
 
 *发布日期: 2026-09-17*
