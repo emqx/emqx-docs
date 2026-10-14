@@ -76,7 +76,7 @@
 
 #### 访问控制
 
-- [#19282](https://github.com/emqx/emqx/pull/19282) 修复了以下问题：当 `hostname_resolution = dynamic` 时，如果响应中的 `Content-Type` 请求头名称不是全小写形式，HTTP 认证会拒绝该响应，例如 `Content-Type: application/json`。HTTP 认证现在可以正常接受此类响应。此前，认证后端会报告 `unsupported_content_type`，导致客户端无法连接。
+- [#19282](https://github.com/emqx/emqx/pull/19282) 修复了以下问题：当 `hostname_resolution = dynamic` 时，如果响应头名称不是全小写形式，例如 `Content-Type: application/json` 中的 `Content-Type`，HTTP 认证会拒绝该响应。HTTP 认证现在可以正常接受此类响应。此前，认证后端会报告 `unsupported_content_type`，导致客户端无法连接。
 
 #### 数据集成
 
