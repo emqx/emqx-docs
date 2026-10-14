@@ -9,20 +9,20 @@ EMQX公式プラグインは通常、EMQXモノレポ内で開発されます。
 開始する前に、以下を準備してください。
 
 - EMQXの[フック](./hooks.md)の知識
-- `make`を含むビルド環境（例：`build_essential`）
+- `make`を含む動作するビルド環境（例：`build_essential`）
 - [rebar3](https://www.rebar3.org/)
-- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを示す[`.tool-versions`](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions)ファイルを参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得可能です。
+- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを示す`.tool-versions`ファイル（例：https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得できます。
 
 ## スタンドアロンプラグイン開発
 
 スタンドアロンプラグイン開発には以下の2つのスタイルがあります。
 
 - **rebar3テンプレート**： [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)を使ってプラグインプロジェクトを生成します。このスタイルは`rebar3`のみを使用します。
-- **Gitサブモジュールスタイル**： EMQX 6.0以降で、プラグインを独立したリポジトリに保持し、EMQXをGitサブモジュールとして追加してモノレポのツールでビルドします。
+- **Gitサブモジュールスタイル**： EMQX 6.0以降で、プラグインを独立したリポジトリに保持し、EMQXをGitサブモジュールとして追加し、モノレポのツールでビルドします。
 
 ### Gitサブモジュールスタイル
 
-プラグインを別リポジトリに保持し、ソースコードがプライベートであってもEMQXモノレポのツールでビルドしたい場合はこちらを使います。
+プラグインを別リポジトリに保持し続けたい場合（例：ソースコードが非公開だがEMQXモノレポのツールでビルドしたい場合）にこのスタイルを使います。
 
 1. EMQXをサブモジュールとして追加します。
 
@@ -30,7 +30,7 @@ EMQX公式プラグインは通常、EMQXモノレポ内で開発されます。
    git submodule add --depth 1 git@github.com:emqx/emqx.git emqx
    ```
 
-2. 対象バージョンに対応するEMQXブランチをチェックアウトします。例：EMQX 6.0なら`release-60`。
+2. 対象バージョンに合ったEMQXブランチをチェックアウトします。例：EMQX 6.0なら`release-60`。
 
 3. プラグインリポジトリをサブモジュールの`plugins/`ディレクトリにシンボリックリンクします。
 
@@ -45,13 +45,13 @@ EMQX公式プラグインは通常、EMQXモノレポ内で開発されます。
    make plugin-{plugin_name}
    ```
 
-`.tar.gz`アーティファクトは`emqx/_build/plugins/`以下に生成されます。
+`.tar.gz`成果物は`emqx/_build/plugins/`以下に生成されます。
 
 `rebar3`テンプレートスタイルの場合は以下の手順に進んでください。
 
 ### プラグインテンプレートのインストール
 
-EMQXはカスタムプラグイン作成を簡単にするために[emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)を提供しています。新規プラグイン作成には`rebar3`テンプレートとして`emqx-plugin-template`をインストールしてください。
+EMQXはカスタムプラグイン作成を簡単にするために[emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)を提供しています。新しいプラグインを作成するには、`rebar3`テンプレートとして`emqx-plugin-template`をインストールしてください。
 
 Linux環境では以下のコマンドで`emqx-plugin-template`をダウンロードします。
 
@@ -64,7 +64,7 @@ $ popd
 
 ::: tip
 
-`REBAR_CACHE_DIR`環境変数が設定されている場合、テンプレートディレクトリは`$REBAR_CACHE_DIR/.config/rebar3/templates`になります。関連Issueは[こちら](https://github.com/erlang/rebar3/issues/2762)です。
+`REBAR_CACHE_DIR`環境変数が設定されている場合、テンプレートディレクトリは`$REBAR_CACHE_DIR/.config/rebar3/templates`になります。関連issueは[こちら](https://github.com/erlang/rebar3/issues/2762)です。
 
 :::
 
@@ -78,17 +78,17 @@ $ rebar3 new help
 
 ### プラグインスケルトンの生成
 
-インストール済みテンプレートを使って新規プラグインプロジェクトを生成します。
+インストール済みテンプレートを使って新しいプラグインプロジェクトを生成します。
 
 ```shell
 $ rebar3 new emqx-plugin my_emqx_plugin
 ```
 
-`my_emqx_plugin`ディレクトリに動作するスケルトンが作成されます。
+これにより`my_emqx_plugin`ディレクトリにプラグインの動作するスケルトンが作成されます。
 
 ### ディレクトリ構成
 
-`rebar3 new emqx-plugin`コマンドは`emqx`を依存に含む標準的なErlangアプリケーションを以下の構成で作成します。
+`rebar3 new emqx-plugin`コマンドは、`emqx`を依存関係に含む標準的なErlangアプリケーションを以下の構成で作成します。
 
 ```shell
 my_emqx_plugin
@@ -113,38 +113,38 @@ my_emqx_plugin
     └── my_emqx_plugin_sup.erl
 ```
 
-- `src`：プラグインのOTPアプリケーションのコード
-- `priv`：プラグインの設定ファイルやスキーマ（例ファイル含む）
-- `rebar.config`：アプリケーションのビルドとリリースパッケージ化に使う`rebar3`設定ファイル
-- `Makefile`：プラグインビルドのエントリポイント
-- `scripts`：`Makefile`用の補助スクリプト。テンプレートは`emqx`に依存するため、カスタム`rebar3`が必要で、付属の`./scripts/ensure-rebar3.sh`でインストール可能です。
-- `README.md`：ドキュメント用プレースホルダー
-- `LICENSE`：プラグイン用サンプルライセンスファイル
+- `src`：プラグインのOTPアプリケーションのコードを含みます。
+- `priv`：プラグインの設定ファイルやスキーマ（サンプルファイル付き）を格納します。
+- `rebar.config`：アプリケーションのビルドやリリースパッケージ化に使う`rebar3`設定ファイルです。
+- `Makefile`：プラグインビルドのエントリポイントです。
+- `scripts`：`Makefile`の補助スクリプトです。**注意**：テンプレートは`emqx`に依存しており、カスタム版の`rebar3`が必要です。付属の`./scripts/ensure-rebar3.sh`でインストールできます。
+- `README.md`：ドキュメントのプレースホルダーです。
+- `LICENSE`：プラグインのサンプルライセンスファイルです。
 
 #### 設定ファイル `rebar.config` の理解
 
-`rebar.config`はプラグインのビルドとリリースパッケージ化に使います。内容を確認し、必要に応じてプラグイン要件に合わせて調整してください。
+`rebar.config`はプラグインのビルドとリリースパッケージ化に使います。内容を確認し、プラグインの要件に合わせて調整してください。
 
 主なセクションは以下です。
 
 - 依存関係（`deps`）セクション
-- リリース（`relx`）セクション
-- プラグイン説明（`emqx_plugin`）セクション
+- リリースセクション（`relx`）
+- プラグイン記述（`emqx_plugin`）セクション
 
-`deps`セクションにはプラグインが依存する他のOTPアプリケーションを追加できます。
+`deps`セクションではプラグインが依存する他のOTPアプリケーションを追加できます。
 
 ```
 {deps,
     [
         ...
-        %% これはプラグインの依存関係
+        %% これは私のプラグインの依存関係です
         {map_sets, "1.1.0"}
     ]}.
 ```
 
-テンプレートでは`map_sets`のみ依存関係として追加しています。不要なら削除可能です。依存関係の詳細は[`rebar3`依存関係ドキュメント](https://www.rebar3.org/docs/configuration/dependencies/)を参照してください。
+テンプレートは`map_sets`を単一の依存関係として追加しています。不要なら削除可能です。依存関係の詳細は[`rebar3`の依存関係ドキュメント](https://www.rebar3.org/docs/configuration/dependencies/)を参照してください。
 
-`relx`セクションではリリース名とバージョン、リリースに含めるアプリケーション一覧を指定します。
+`relx`セクションではリリース名とバージョン、リリースに含めるアプリケーションのリストを指定します。
 
 ```
 {relx, [ {release, {my_emqx_plugin, "1.0.0"},
@@ -155,11 +155,11 @@ my_emqx_plugin
        ]}.
 ```
 
-通常は`deps`のランタイム依存アプリケーションをリリースに追加します。
+通常は`deps`セクションのランタイム依存アプリケーションをリリースに追加します。
 
-リリース名とバージョンは、プラグインがEMQXにインストールされた際の識別子として重要です。APIやCLIでの識別子は`my_emqx_plugin-1.0.0`のようになります。
+リリース名とバージョンは、プラグインがEMQXにインストールされた際の識別子として重要です。APIやCLIでプラグインを指定する際の単一識別子（例：`my_emqx_plugin-1.0.0`）になります。
 
-プラグイン説明セクションでは追加情報を指定します。
+プラグイン記述セクションではプラグインの追加情報を指定します。
 
 ```
 {emqx_plugrel,
@@ -187,31 +187,31 @@ my_emqx_plugin
 
 標準的なErlangアプリケーション記述ファイルで、リリース時に`my_emqx_plugin.app`にコンパイルされます。
 
-- アプリケーションのバージョンはリリースバージョンと異なっても構いません。
-- `applications`セクションにはプラグインが依存する他のアプリケーションを必ず記載してください。プラグインはOTPアプリケーションとしてビルドされるため、プラグインの起動・停止・再起動はこのOTPアプリケーションの操作と同じです。
+- アプリケーションのバージョンはリリースバージョンと一致する必要はなく、別のバージョニング方式も可能です。
+- `applications`セクションに注意してください。プラグインはOTPアプリケーションとしてビルドされるため、プラグインの起動・停止・再起動はこのOTPアプリケーションの操作と同じです。プラグインが他のアプリケーションに依存する場合は、必ずこの`applications`セクションに記載してください。
 
 ##### `my_emqx_plugin_app.erl`
 
-プラグインのアプリケーション挙動（`start/2`と`stop/1`関数）を実装するメインモジュールです。プラグインのアプリケーションと監督ツリーを起動・停止します。
+プラグインのアプリケーションを起動・停止するための[`application`ビヘイビア](https://www.erlang.org/doc/man/application.html)（`start/2`と`stop/1`関数）を実装するメインモジュールです。
 
-`start/2`関数でよく行う処理は以下です。
+`start/2`関数で一般的に行う処理は以下です。
 
-- EMQXのフックポイントへの登録
+- EMQXのフックポイントにフックを登録
 - CLIコマンドの登録
 - 監督ツリーの起動
 
-オプションで`on_config_changed/2`と`on_health_check/1`のコールバック関数を実装可能です。
+オプションで、`_app.erl`モジュールは`on_config_changed/2`と`on_health_check/1`のコールバック関数も実装できます。
 
-- `on_config_changed/2`はDashboard、API、CLI経由でプラグイン設定が変更されたときに呼び出されます。
-- `on_health_check/1`はプラグインの状態が問い合わせられたときに呼ばれ、プラグインの状態を返せます。
+- `on_config_changed/2`はDashboard、API、CLI経由でプラグイン設定が変更された際に呼ばれます。
+- `on_health_check/1`はプラグインの状態が要求された際に呼ばれ、プラグインの状態を報告できます。
 
 #### その他のファイル
 
-`my_emqx_plugin_cli.erl`はプラグインのCLIコマンドを実装します。登録すると`emqx ctl`コマンド経由で呼び出されます。
+`my_emqx_plugin_cli.erl`モジュールはプラグインのCLIコマンドを実装します。登録されると`emqx ctl`コマンド経由で呼び出されます。
 
-`my_emqx_plugin_sup.erl`はプラグイン用の典型的なスーパーバイザーを実装します。
+`my_emqx_plugin_sup.erl`はプラグインの典型的なスーパーバイザーを実装します。
 
-`my_emqx_plugin.erl`はプラグインのメインモジュールで、プラグインのロジックを実装します。スケルトンでは簡単なログ出力を伴うデモ用フックを実装しています。必要に応じて他のモジュールも追加可能です。
+`my_emqx_plugin.erl`はプラグインのメインモジュールで、プラグインのロジックを実装します。スケルトンでは簡単なログ出力を行うデモ用フックをいくつか実装しています。必要に応じて他のモジュールを追加可能です。
 
 ::: tip 注意
 
@@ -223,7 +223,7 @@ my_emqx_plugin
 
 #### `priv`ディレクトリの概要
 
-`priv`ディレクトリにはプラグインの設定ファイルやスキーマが含まれます。
+`priv`ディレクトリにはプラグインの設定ファイルやスキーマが格納されます。
 
 ##### `config.hocon`
 
@@ -231,13 +231,13 @@ my_emqx_plugin
 
 ##### `config_schema.avsc`
 
-プラグイン設定のスキーマを[Avro形式](https://avro.apache.org/docs/1.11.1/specification/)で定義したファイルです。存在する場合、EMQXは設定更新時にこのスキーマに対して検証を行います。`config.hocon`がスキーマに準拠しない場合、リリースビルドは失敗します。
+プラグイン設定のスキーマを[Avro形式](https://avro.apache.org/docs/1.11.1/specification/)で定義したファイルです。存在する場合、EMQXは設定更新時にこのスキーマに基づいて検証します。`config.hocon`がスキーマに準拠しない場合、リリースビルドは失敗します。
 
-さらにUIヒントを含めることで、EMQXダッシュボード上での対話的な設定が可能になります。参考として`config_schema.avsc.enterprise.example`を参照してください。
+さらに、このファイルにはUIヒントを含めることができ、EMQXダッシュボードでの対話的な設定が可能になります。参考に`config_schema.avsc.enterprise.example`を参照してください。
 
 ##### `config_i18n.json`
 
-プラグイン設定UIの翻訳をJSON形式で記述したファイルです。例：
+プラグイン設定UIの翻訳をJSON形式で含むファイルです。例：
 
 ```
 {
@@ -249,7 +249,7 @@ my_emqx_plugin
 }
 ```
 
-翻訳は`config_schema.avsc`のUIヒントで参照されます。詳細は`config_i18n.json.example`と`config_schema.avsc.enterprise.example`を参照してください。
+翻訳は`config_schema.avsc`のUIヒントで参照されます。詳細は`config_i18n.json.example`や`config_schema.avsc.enterprise.example`を参照してください。
 
 ### プラグインの実装
 
@@ -261,19 +261,19 @@ my_emqx_plugin
 
 ### フックとCLIコマンドの実装
 
-EMQXは様々なイベントに対するフックポイントを定義しています。任意のアプリケーション（プラグインを含む）はこれらのフックポイントにコールバックを登録し、イベントに反応したりデフォルト動作を変更できます。
+EMQXは様々なイベントに対するフックポイントを定義しています。任意のアプリケーション（プラグイン含む）はこれらのフックポイントにコールバックを登録し、イベントに反応したりデフォルト動作を変更できます。
 
-よく使われるフックポイントはスケルトンファイルに用意されています。フックポイントの一覧、引数、期待される戻り値は[EMQXコード](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl)で確認可能です。
+最もよく使われるフックポイントはスケルトンファイルに含まれています。フックポイントの一覧、引数、期待される戻り値は[EMQXコード](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl)で確認可能です。
 
-フックポイントにコールバックを登録するには`emqx_hooks:add/3`関数を使います。以下のパラメータを指定してください。
+フックポイントにコールバックを登録するには`emqx_hooks:add/3`関数を使います。以下のパラメータを指定します。
 
 - フックポイント名
-- コールバックモジュールと関数、必要に応じてEMQXが渡す追加引数
-- コールバックの優先度（通常は最優先の`?HP_HIGHEST`）
+- コールバックモジュールと関数、およびEMQXが渡す追加引数（任意）
+- コールバックの優先度（通常は`?HP_HIGHEST`で最優先）
 
-コールバックを解除するには`emqx_hooks:del/2`関数を使い、フックポイント名とコールバックモジュール/関数を指定します。
+登録解除は`emqx_hooks:del/2`関数でフックポイント名とコールバックモジュール/関数を指定します。
 
-例として、`client.authenticate`と`client.authorize`のフックポイントに対する登録・解除は以下のようになります。
+例として、`client.authenticate`と`client.authorize`フックポイントの登録/解除は以下のようにします。
 
 ```
 -module(my_emqx_plugin).
@@ -287,7 +287,7 @@ unhook() ->
   emqx_hooks:del('client.authorize', {?MODULE, on_client_authorize}).
 ```
 
-通常、フックはプラグインの起動・停止と連動して有効化・無効化するため、プラグインのアプリケーションの`start/2`と`stop/1`関数内で`hook/unhook`を呼びます。
+通常、フックはプラグインの起動・停止と連動させるため、プラグインアプリケーションの`start/2`と`stop/1`関数内で`hook/unhook`を呼びます。
 
 ```
 start(_StartType, _StartArgs) ->
@@ -323,7 +323,7 @@ stop(_State) ->
 コールバック関数の実装例：
 
 ```erlang
-%% クライアントIDがA-Z、a-z、0-9、アンダースコアのいずれかの文字のみで構成されている接続のみ許可
+%% クライアントIDがA-Z, a-z, 0-9, アンダースコアのいずれかの文字のみで構成されている場合のみ接続を許可
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
@@ -338,40 +338,40 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Res
 on_client_authorize(_ClientInfo, _Pub, _Topic, Result) -> {ok, Result}.
 ```
 
-スケルトンアプリでは`my_emqx_plugin:load/1`でフック登録、`my_emqx_plugin:unload/0`で解除しています。
+スケルトンアプリでは`my_emqx_plugin:load/1`でフック登録、`my_emqx_plugin:unload/0`で登録解除を行っています。
 
 ### 設定更新の処理
 
-ユーザーがプラグイン設定を更新すると、プラグインアプリケーションの`on_config_changed/2`コールバックが呼ばれます。
+ユーザーがプラグイン設定を更新すると、プラグインアプリケーションの`on_config_changed/2`コールバック関数が呼ばれます。
 
-このコールバック内で通常行う処理は以下です。
+このコールバック内で一般的に行うことは以下です。
 
 - 新しい設定の検証
-- プラグインが起動中なら変更に対応する処理
+- プラグインが稼働中なら変更に対応
 
-設定検証時はアプリケーションがまだ起動していない可能性があるため、ステートレスなチェックを行い、ノード間で不整合が起きる可能性のある環境依存チェックは避けてください。
+設定検証時はアプリケーションがまだ起動していない可能性があるため、ステートレスなチェックに留め、ノード間で不整合を起こす環境依存チェックは避けてください。
 
-プラグインが起動中の場合は設定変更を適用できます。一般的なパターンは以下です。
+プラグインが稼働中なら設定変更を適用します。一般的なパターンは以下です。
 
-- アプリケーション起動時に設定を扱う`gen_server`（例：`my_emqx_plugin_config_server`）を起動
-- サーバーが現在の設定を読み込み状態を初期化
-- `on_config_changed/2`コールバックで設定を検証し、新設定を`my_emqx_plugin_config_server`に送信
-- サーバーが起動中なら状態を新設定で更新、起動していなければ何もしない
+- アプリケーション起動時に設定を扱う`gen_server`を起動
+- そのサーバー（例：`my_emqx_plugin_config_server`）が現在の設定を読み込み状態を初期化
+- `on_config_changed/2`コールバックが設定を検証し、新設定を`my_emqx_plugin_config_server`に送信
+- サーバーが稼働中なら状態を更新し、稼働していなければ何もしない
 
 ### ヘルスチェックの処理
 
-`on_health_check/1`コールバックはEMQXがプラグインの状態を問い合わせる際に呼ばれます。プラグインは以下のように状態を返せます。
+`on_health_check/1`コールバックはEMQXがプラグインの状態を要求した際に呼ばれます。プラグインは以下のように状態を報告できます。
 
-- プラグインが正常なら`ok`
-- 問題がある場合はバイナリの理由を含む`{error, Reason}`
+- プラグインが正常なら`ok`を返す
+- 問題があればバイナリの理由を含む`{error, Reason}`を返す
 
-外部リソースに依存し、利用不可になる可能性があるプラグインではこのコールバックが重要です。
+外部リソースに依存し、それが利用不可になる可能性があるプラグインではこのコールバックが重要です。
 
 詳細はスケルトンアプリの`my_emqx_plugin_app:on_health_check/1`を参照してください。
 
 ::: tip
 
-この関数はプラグイン起動中に呼ばれますが、起動や停止時の並行処理により呼ばれる場合もあります。
+この関数は稼働中のプラグインに対して呼ばれますが、起動や停止中の並行処理の影響で呼ばれることもあります。
 
 :::
 
@@ -386,11 +386,11 @@ $ cd my_emqx_plugin
 $ make rel
 ```
 
-`_build/default/emqx_plugin/my_emqx_plugin-1.0.0.tar.gz`にプラグインリリースが作成されます。このパッケージはプラグインのプロビジョニング／インストールに使用可能です。
+これによりプラグインリリース`_build/default/emqx_plugin/my_emqx_plugin-1.0.0.tar.gz`が作成されます。このパッケージはプラグインのプロビジョニングやインストールに使用可能です。
 
 ### パッケージ構成
 
-プラグインをリリース化すると、パッケージ構成は以下のようになります。
+プラグインがリリースとしてビルドされると、パッケージ構成は以下のようになります。
 
 ```
 └── my_emqx_plugin-1.1.0.tar.gz
@@ -444,7 +444,17 @@ tarballにはコンパイル済みアプリケーション（`rebar.config`の`r
 /api/v5/plugin_api/{plugin_name}/...
 ```
 
-これらのリクエストを処理するには、プラグインアプリケーションモジュールで`on_handle_api_call/4`を実装し、HTTPメソッドやパスでディスパッチします。参考実装は`plugins/emqx_username_quota/src/emqx_username_quota_app.erl`と`emqx_username_quota_api.erl`を参照してください。
+EMQX 6.0.5以降、プラグインAPIゲートウェイのスコープチェックは制限付きの`plugin_api`スコープまたは管理者相当の`system`スコープを受け入れます。呼び出し元のロールとネームスペースの権限も要求操作を許可している必要があります。
+
+プラグインが公開するエンドポイントにアクセスするだけで、プラグインのインストール・起動・停止・設定は不要な場合は`plugin_api`スコープを使います。プラグイン管理操作は引き続き`system`スコープに残ります。ゲートウェイは後方互換のため`system`も受け入れ続けます。
+
+::: warning 重要
+
+`plugin_api`スコープはこのゲートウェイ経由で公開されるすべてのエンドポイントへのアクセスを許可します。個々のプラグインエンドポイントの権限を制限しないため、プラグインが公開する各エンドポイントのセキュリティ影響を十分に検討してください。
+
+:::
+
+これらのリクエストを処理するには、プラグインアプリモジュールで`on_handle_api_call/4`を実装し、HTTPメソッドとパスでディスパッチします。参考実装は`plugins/emqx_username_quota/src/emqx_username_quota_app.erl`や`emqx_username_quota_api.erl`を参照してください。
 
 #### コールバック仕様
 
@@ -455,11 +465,11 @@ on_handle_api_call(Method, PathRemainder, Request, Context) -> Result
 | パラメータ       | 説明                                                                 |
 | --------------- | ------------------------------------------------------------------- |
 | `Method`        | `get \| post \| put \| patch \| delete`                            |
-| `PathRemainder` | `{plugin_name}`以降のパスのバイナリセグメントリスト（パーセントデコード済み） |
-| `Request`       | `query_string`、`headers`、`body`（非GET/DELETEの場合はJSON）を含むマップ |
-| `Context`       | 認証メタデータやネームスペース情報を含むマップ                      |
+| `PathRemainder` | `{plugin_name}`以降のパスセグメントのバイナリリスト（パーセントデコード済み） |
+| `Request`       | `query_string`、`headers`、`body`（非GET/DELETEはJSON）を含むマップ  |
+| `Context`       | 認証メタデータとネームスペース情報を含むマップ                     |
 
-受け入れ可能な戻り値：
+許容される戻り値：
 
 - `{ok, StatusCode, Headers, Body}`
 - `{error, StatusCode, Headers, Body}`
@@ -467,12 +477,12 @@ on_handle_api_call(Method, PathRemainder, Request, Context) -> Result
 
 ### ダッシュボードのプラグインネイティブUI
 
-`emqx_plugin`メタデータに`index`フィールドが含まれる場合、EMQXダッシュボードはiframe内にプラグインのネイティブUIを表示します。ダッシュボードはプラグインAPIのベースパスを先頭に付加します。
+`emqx_plugin`メタデータに`index`フィールドが含まれる場合、EMQXダッシュボードはiframe内にプラグインのネイティブUIを表示します。ダッシュボードはプラグインAPIのベースパスを付加します。
 
 ```
 /api/v5/plugin_api/{plugin_name}{index}
 ```
 
-例えば`index: "/ui"`なら`/api/v5/plugin_api/{plugin_name}/ui`になります。
+例：`index: "/ui"`なら`/api/v5/plugin_api/{plugin_name}/ui`に解決されます。
 
-ネイティブUIを無効にするには`index`フィールドを省略するか空文字にしてください。
+ネイティブUIを無効にするには、`index`フィールドを省略するか空文字列に設定してください。
