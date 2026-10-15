@@ -196,4 +196,4 @@ EMQX 6.3で導入された破壊的変更については[EMQX 6.3の非互換変
 
 ## EMQX 5.x シリーズ
 
-EMQX 5.xの機能と更新の完全な一覧については、[EMQX 5.10 ドキュメント – 新機能](https://docs.emqx.com/en/emqx/v5.10/getting-started/new-features.html)をご覧ください。
+EMQX 5.xの機能と更新の完全な一覧については、[EMQX 5.10 ドキュメント – 新機能](https://docs.emqx.com/en/emqx/v5.10/get-started/new-features.html)をご覧ください。
