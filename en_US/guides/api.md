@@ -423,13 +423,13 @@ When a bootstrap entry violates one of the following scope rules, EMQX removes t
 
 - **Login-only scopes**: `user_management`, `mfa_management`, `sso_management`, and `api_key_management` are not valid for API keys. EMQX removes these scopes and creates or updates the key with the remaining scopes.
 - **Administrator-equivalent scopes**: Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if an entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes and keeps the remaining scopes.
-- **Namespaced scopes**: Starting from EMQX 6.3.1, if a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
+- **Namespaced scopes**: If a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
 
 ##### Reload Bootstrap API Keys
 
 API keys created from the bootstrap file are valid indefinitely. EMQX processes the file each time it starts. If an API key already exists, EMQX updates its role, namespace, and scopes.
 
-Starting from EMQX 6.3.1, if the Secret Key in the file is unchanged, EMQX preserves the stored secret hash. If the Secret Key has changed, EMQX generates a new hash, and the previous Secret Key stops working.
+If the Secret Key in the file is unchanged, EMQX preserves the stored secret hash. If the Secret Key has changed, EMQX generates a new hash, and the previous Secret Key stops working.
 
 ::: warning Important Notice
 
@@ -483,7 +483,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-Starting from EMQX 6.3.2, EMQX provides 11 scopes for API keys:
+EMQX provides 11 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -505,7 +505,7 @@ The `plugin_api` scope controls access to the gateway, not the operations implem
 
 ::: tip Note
 
-Starting from EMQX 6.3.2, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+The `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
 
 :::
 
@@ -579,9 +579,9 @@ Namespaced callers (users or API keys whose role is restricted to a specific nam
 
 ### Scope Restrictions for Namespaced API Keys
 
-Starting from EMQX 6.3.1, the scope allowlist for namespaced API keys contains `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. Starting from EMQX 6.3.2, the namespaced allowlist also includes `plugin_api`.
+The scope allowlist for namespaced API keys contains `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`.
 
-- **Default scopes**: Starting from EMQX 6.3.2, if a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role receives every scope in the namespaced allowlist for the running EMQX version. The namespaced allowlist does not include `publish`, `gateways`, or `audit`.
+- **Default scopes**: If a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role receives every scope in the namespaced allowlist for the running EMQX version. The namespaced allowlist does not include `publish`, `gateways`, or `audit`.
 - **Explicit scopes**: When creating or updating a namespaced API key, an explicit scope list must stay within the namespaced allowlist for the running EMQX version. Otherwise, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. An explicit list also cannot combine `system` with restricted scopes.
 
 ### Existing Keys with Disallowed Scopes

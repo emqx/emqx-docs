@@ -8,7 +8,7 @@ EMQX offers a Dashboard view and integration with log systems to help enterprise
 
 ## Audit Log Access
 
-Starting from EMQX 6.3.2, only global administrators and global viewers can view the cluster-wide audit log in the Dashboard or read it through `GET /api/v5/audit`. The audit log contains operations from every namespace and is not filtered by the caller's namespace. Requests from namespaced Dashboard users and namespaced API keys return HTTP `403` with the `UNAUTHORIZED_ROLE` error code, regardless of their role or assigned scopes. The [`audit` scope](../api.md#built-in-api-key-scopes) does not override this restriction.
+Only global administrators and global viewers can view the cluster-wide audit log in the Dashboard or read it through `GET /api/v5/audit`. The audit log contains operations from every namespace and is not filtered by the caller's namespace. Requests from namespaced Dashboard users and namespaced API keys return HTTP `403` with the `UNAUTHORIZED_ROLE` error code, regardless of their role or assigned scopes. The [`audit` scope](../api.md#built-in-api-key-scopes) does not override this restriction.
 
 ## Enable Audit Log
 
@@ -140,7 +140,7 @@ The following table describes the fields that can appear in audit log entries ge
 
 Starting from EMQX 6.3.0, audit records include the non-empty query parameters of data-backup requests in `http_request.query_string`. For data-backup operations, `http_request.namespace` records the resolved target namespace independently of whether the request includes a `namespace` query parameter.
 
-Starting from EMQX 6.3.1, query-parameter recording applies to all audited Dashboard and REST API requests. Operations that resolve a target namespace record it in `http_request.namespace`, independently of whether the request includes an `ns` or `namespace` query parameter. The following example shows a global administrator explicitly targeting `ns2`:
+Query-parameter recording applies to all audited Dashboard and REST API requests. Operations that resolve a target namespace record it in `http_request.namespace`, independently of whether the request includes an `ns` or `namespace` query parameter. The following example shows a global administrator explicitly targeting `ns2`:
 
 ```json
 {

@@ -29,7 +29,7 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 ### Login User Scopes
 
-You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. Starting from EMQX 6.3.2, Dashboard users can use the [11 API-key scopes](../api.md#built-in-api-key-scopes) and 4 additional scopes that apply only to browser sessions:
+You can assign scopes to Dashboard login users to further restrict which parts of the API they can access within their role. Dashboard users can use the [11 API-key scopes](../api.md#built-in-api-key-scopes) and 4 additional scopes that apply only to browser sessions:
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
@@ -80,7 +80,7 @@ This mutual-exclusion rule does not apply to namespaced Dashboard users. These u
 
 When you change the selected role or namespace while configuring a user in the Dashboard, the form removes scopes that are not supported by that role or namespace and displays a warning. When you use the REST API, EMQX checks whether the user's scopes are compatible with the new role. An incompatible request is rejected with HTTP 400. To resolve the error, include a `scopes` list in the same request that is valid for the new role.
 
-For example, if you demote a global Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. The `mfa_management` scope remains compatible with a global Viewer. Starting from EMQX 6.3.2, the REST API accepts only `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api` for a namespaced Viewer; a request containing any other scope returns HTTP 400.
+For example, if you demote a global Administrator to Viewer and that user holds `user_management`, `sso_management`, or `api_key_management`, the request will be rejected because those scopes require the Administrator role. Include a `scopes` list containing only Viewer-compatible scopes to complete the change. The `mfa_management` scope remains compatible with a global Viewer. For a namespaced Viewer, the REST API accepts only `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, `license`, and `plugin_api`; a request containing any other scope returns HTTP 400.
 
 ### Default Administrator Protection
 
@@ -174,7 +174,7 @@ Starting from EMQX 6.3.0, the namespace in a namespaced role must not be listed 
 
   Global Dashboard users and API keys retain access according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
 - **Trace scoping**: When accessing trace endpoints, namespaced users see only traces that belong to their namespace. Attempts to stop, download, stream logs, or delete a trace from a different namespace (`PUT /trace/:name/stop`, `GET /trace/:name/download`, `GET /trace/:name/log`, `GET /trace/:name/log_detail`, `DELETE /trace/:name`) return `404 Not Found`, so the existence of cross-namespace traces is not leaked. The bulk-delete endpoint (`DELETE /trace`) returns `403 Forbidden` for namespaced users; only global administrators can clear all traces.
-- **Audit log access**: Starting from EMQX 6.3.2, namespaced users cannot view the cluster-wide audit log. Only global administrators and global viewers can view audit log entries. For details, see [Audit Log Access](./audit-log.md#audit-log-access).
+- **Audit log access**: Namespaced users cannot view the cluster-wide audit log. Only global administrators and global viewers can view audit log entries. For details, see [Audit Log Access](./audit-log.md#audit-log-access).
 - **API key management**: Namespaced administrators can create, list, read, update, and delete API keys within their own namespace. They cannot create global API keys or keys in another namespace. Keys outside their namespace are hidden. For detailed REST API behavior, see [Manage API Keys as a Namespaced Administrator](../api.md#manage-api-keys-as-a-namespaced-administrator).
 - **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
 - **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
@@ -186,7 +186,7 @@ Starting from EMQX 6.3.0, the namespace in a namespaced role must not be listed 
 
 ## Audit Logs
 
-The **Audit Logs** page allows global administrators to configure audit logging for monitoring critical operational changes within the EMQX cluster in real time. Starting from EMQX 6.3.2, global administrators and global viewers can view audit log entries, while namespaced users cannot.
+The **Audit Logs** page allows global administrators to configure audit logging for monitoring critical operational changes within the EMQX cluster in real time. Global administrators and global viewers can view audit log entries, while namespaced users cannot.
 
 For a detailed overview of the Audit Log feature, see [Audit Log](./audit-log.md).
 

@@ -36,7 +36,7 @@ mqtt {
 | **設定項目**                 | ダッシュボード表示名           | **説明**                                                                 | **デフォルト値** | **選択可能な値**       |
 | ---------------------------- | ------------------------------ | ------------------------------------------------------------------------ | ---------------- | ---------------------- |
 | `max_packet_size`            | Max Packet Size                | MQTT クライアントと EMQX 間でメッセージ送信に使用される MQTT パケットの最大サイズを設定します。 | `1MB`            |                        |
-| `max_connect_packet_size`    | Max CONNECT Packet Size        | CONNECT パケットの最大サイズを設定します。CONNECT パケットは `max_connect_packet_size` と `max_packet_size` の両方の制限内である必要があります。制限を超えると EMQX は接続を切断します。EMQX 6.3.2 以降で利用可能。 | `1MB`            |                        |
+| `max_connect_packet_size`    | Max CONNECT Packet Size        | CONNECT パケットの最大サイズを設定します。CONNECT パケットは `max_connect_packet_size` と `max_packet_size` の両方の制限内である必要があります。制限を超えると EMQX は接続を切断します。 | `1MB`            |                        |
 | `max_clientid_len`           | Max Client ID Length           | MQTT クライアントIDの最大長を設定します。過度に長いクライアントIDの使用を防止できます。 | `65535`          | `23` - `65535`          |
 | `max_topic_levels`           | Max Topic Levels               | MQTT トピックの階層レベルの最大数を設定します。                         | `128`            | `1` - `35`              |
 | `max_qos_allowed`            | Max QoS                       | MQTT メッセージに許可される最大の QoS（サービス品質）レベルを設定します。 |                  |                        |
