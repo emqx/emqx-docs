@@ -32,6 +32,7 @@ This release reduces memory use for MQTT connections, sessions, and node-local c
   - Metric updates and reads now need fewer lookups ([#19536](https://github.com/emqx/emqx/pull/19536)).
   - On TCP listeners with `tcp_backend = socket`, a connection makes fewer receive system calls per incoming packet on average. For packets up to 1 KB, broker CPU per received QoS 0 PUBLISH packet dropped by about 7%; for larger packets, it is the same or lower ([#19528](https://github.com/emqx/emqx/pull/19528)).
   - After each SUBACK and UNSUBACK, the broker updates the client's table entry in one write instead of two, which lowers SUBSCRIBE latency under a high rate of new subscribing connections ([#19532](https://github.com/emqx/emqx/pull/19532)).
+  - When the retainer is enabled, SUBSCRIBE handling uses less CPU. When a client subscribes to a topic filter without wildcards, the broker checks for a retained message before preparing retained-message delivery. If no retained message matches the topic, the broker performs no further retained-message processing for that subscription ([#19545](https://github.com/emqx/emqx/pull/19545)).
 
 - **Subscription lookup and startup.**
   - The `emqx ctl subscriptions show <ClientId>` command no longer scans all subscriptions on the node to find those of one client ([#19245](https://github.com/emqx/emqx/pull/19245)).

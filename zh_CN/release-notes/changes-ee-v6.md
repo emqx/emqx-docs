@@ -32,6 +32,7 @@
   - 更新和读取指标时所需的查找次数减少（[#19536](https://github.com/emqx/emqx/pull/19536)）。
   - 对于配置了 `tcp_backend = socket` 的 TCP 监听器，每个传入报文所需的接收系统调用次数平均有所减少。对于不超过 1 KB 的报文，Broker 每接收一条 QoS 0 PUBLISH 报文的 CPU 用量降低约 7%；对于更大的报文，CPU 用量保持不变或更低（[#19528](https://github.com/emqx/emqx/pull/19528)）。
   - 每次 SUBACK 和 UNSUBACK 后，Broker 现在只需一次写入即可更新客户端表条目，而不再需要两次写入。在大量新连接执行订阅的场景下，此优化可降低 SUBSCRIBE 延迟（[#19532](https://github.com/emqx/emqx/pull/19532)）。
+  - 启用保留消息功能时，SUBSCRIBE 处理的 CPU 开销降低。客户端订阅不含通配符的主题过滤器时，Broker 会先检查是否存在匹配的保留消息，再准备保留消息投递。如果没有匹配的保留消息，Broker 不再为该订阅执行后续保留消息处理（[#19545](https://github.com/emqx/emqx/pull/19545)）。
 
 - **订阅查询和启动。**
   - `emqx ctl subscriptions show <ClientId>` 命令不再通过扫描节点上的所有订阅来查找单个客户端的订阅（[#19245](https://github.com/emqx/emqx/pull/19245)）。
