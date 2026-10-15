@@ -418,7 +418,7 @@ coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?client
 
 ### Differences from the Protocol Specification
 
-In EMQX 6.3 releases, when a confirmable (`CON`) Observe notification is rejected by the client with a Reset message or exhausts all retransmission attempts without receiving an acknowledgement, EMQX:
+When a confirmable (`CON`) Observe notification is rejected by the client with a Reset message or exhausts all retransmission attempts without receiving an acknowledgement, EMQX:
 
 - Discards the failed notification.
 - Cleans up the transport and Block2 state associated with that notification.
