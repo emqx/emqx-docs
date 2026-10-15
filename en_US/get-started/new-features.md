@@ -196,4 +196,4 @@ For breaking changes introduced in EMQX 6.3, see [Incompatible Changes in EMQX 6
 
 ## EMQX 5.x Series
 
-For a complete list of features and updates in EMQX 5.x, please refer to: [EMQX 5.10 Documentation – What's New](https://docs.emqx.com/en/emqx/v5.10/getting-started/new-features.html).
+For a complete list of features and updates in EMQX 5.x, please refer to: [EMQX 5.10 Documentation – What's New](https://docs.emqx.com/en/emqx/v5.10/get-started/new-features.html).

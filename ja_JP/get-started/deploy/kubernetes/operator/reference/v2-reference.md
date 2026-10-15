@@ -326,10 +326,10 @@ _登場箇所:_
 
 | フィールド | 説明 | デフォルト | バリデーション |
 | --- | --- | --- | --- |
-| `connEvictRate` _integer_ | クライアント切断率（秒あたりの数）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation)の`conn-evict-rate`と同じ。 | 1000 | 最小: 1 <br /> |
-| `sessEvictRate` _integer_ | セッション避難率（秒あたりの数）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation)の`sess-evict-rate`と同じ。 | 1000 | 最小: 1 <br /> |
-| `waitTakeover` _integer_ | セッション避難開始までの待機時間（秒）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation)の`wait-takeover`と同じ。 | 10 | 最小: 0 <br /> |
-| `waitHealthCheck` _integer_ | ノードがロードバランサーからアクティブなバックエンドノードリストから除外されるのを待つ時間（秒）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/deploy/cluster/rebalancing.html#node-evacuation)の`wait-health-check`と同じ。 | 60 | 最小: 0 <br /> |
+| `connEvictRate` _integer_ | クライアント切断率（秒あたりの数）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation)の`conn-evict-rate`と同じ。 | 1000 | 最小: 1 <br /> |
+| `sessEvictRate` _integer_ | セッション避難率（秒あたりの数）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation)の`sess-evict-rate`と同じ。 | 1000 | 最小: 1 <br /> |
+| `waitTakeover` _integer_ | セッション避難開始までの待機時間（秒）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation)の`wait-takeover`と同じ。 | 10 | 最小: 0 <br /> |
+| `waitHealthCheck` _integer_ | ノードがロードバランサーからアクティブなバックエンドノードリストから除外されるのを待つ時間（秒）。<br />[EMQXノード避難](https://docs.emqx.com/en/emqx/v5.10/guides/cluster/rebalancing.html#node-evacuation)の`wait-health-check`と同じ。 | 60 | 最小: 0 <br /> |
 
 
 #### KeyRef
