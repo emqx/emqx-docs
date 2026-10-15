@@ -233,9 +233,9 @@
     title_cn: 备份与恢复
     title_ja: バックアップとリストア
     path: guides/backup-restore
-- title_en: MQTT Durable Sessions
-  title_cn: MQTT 会话持久化
-  title_ja: MQTT セッション永続化
+- title_en: Durable Sessions
+  title_cn: 会话持久化
+  title_ja: セッション永続化
   path: guides/durability/durability_introduction
   collapsed: true
   children:
@@ -285,9 +285,9 @@
     - guides/dashboard/extensions
   - guides/dashboard/diagnose
   - guides/dashboard/system
-- title_en: Logs and Observability
-  title_cn: 日志及可观测性
-  title_ja: ログと可観測性
+- title_en: Observability and Logs
+  title_cn: 可观测性与日志
+  title_ja: オブザーバビリティとログ
   path: guides/observability/overview
   collapsed: true
   children:
@@ -947,10 +947,14 @@
     title_ja: 製品ライフサイクル終了日
     path: release-notes/eol-ee
 /:
+- title_en: Documentation Overview
+  title_cn: 文档概览
+  title_ja: ドキュメント概要
+  path: ./
 - title_en: EMQX Overview
   title_cn: EMQX 概览
   title_ja: EMQX 概要
-  path: ./
+  path: get-started/emqx-overview
   collapsed: true
   children:
   - title_en: What's New
@@ -994,177 +998,171 @@
   title_cn: 快速开始
   title_ja: クイックスタート
   path: get-started/getting-started
-- title_en: Installation and Deployment
-  title_cn: 安装部署
-  title_ja: インストールとデプロイメント
+- title_en: Installation Guide
+  title_cn: 安装指南
+  title_ja: インストールガイド
   path: get-started/deploy/install
   collapsed: true
   children:
-  - title_en: Installation Guide
-    title_cn: 安装指南
-    title_ja: インストールガイド
-    path: get-started/deploy/install-enterprise
+  - title_en: Docker
+    title_cn: Docker
+    title_ja: Docker
+    path: get-started/deploy/install-docker
+  - title_en: Debian
+    title_cn: Debian
+    title_ja: Debian
+    path: get-started/deploy/install-debian
+  - title_en: Ubuntu
+    title_cn: Ubuntu
+    title_ja: Ubuntu
+    path: get-started/deploy/install-ubuntu
+  - title_en: CentOS/RHEL
+    title_cn: CentOS/RHEL
+    title_ja: CentOS/RHEL
+    path: get-started/deploy/install-rhel
+  - title_en: macOS
+    title_cn: macOS
+    title_ja: macOS
+    path: get-started/deploy/install-macOS
+  - title_en: Kubernetes
+    title_cn: Kubernetes
+    title_ja: Kubernetes
+    path: get-started/deploy/kubernetes/kubernetes
     collapsed: true
     children:
-    - title_en: Docker
-      title_cn: Docker
-      title_ja: Docker
-      path: get-started/deploy/install-docker
-    - title_en: Debian
-      title_cn: Debian
-      title_ja: Debian
-      path: get-started/deploy/install-debian
-    - title_en: Ubuntu
-      title_cn: Ubuntu
-      title_ja: Ubuntu
-      path: get-started/deploy/install-ubuntu
-    - title_en: CentOS/RHEL
-      title_cn: CentOS/RHEL
-      title_ja: CentOS/RHEL
-      path: get-started/deploy/install-rhel
-    - title_en: macOS
-      title_cn: macOS
-      title_ja: macOS
-      path: get-started/deploy/install-macOS
-    - title_en: Kubernetes
-      title_cn: Kubernetes
-      title_ja: Kubernetes
-      path: get-started/deploy/kubernetes/kubernetes
+    - title_en: EMQX Operator
+      title_cn: EMQX Operator
+      title_ja: EMQX Operator
+      path: get-started/deploy/kubernetes/operator/operator
       collapsed: true
       children:
-      - title_en: EMQX Operator
-        title_cn: EMQX Operator
-        title_ja: EMQX Operator
-        path: get-started/deploy/kubernetes/operator/operator
+      - get-started/deploy/kubernetes/operator/getting-started
+      - title_en: 在阿里云中部署 EMQX
+        title_cn: 在阿里云中部署 EMQX
+        title_ja: Alibaba Cloud 上での EMQX デプロイ
+        lang: cn
+        path: get-started/deploy/kubernetes/operator/alibaba-cloud
+      - title_en: 在华为云中部署 EMQX
+        title_cn: 在华为云中部署 EMQX
+        title_ja: Huawei Cloud 上での EMQX デプロイ
+        lang: cn
+        path: get-started/deploy/kubernetes/operator/huawei-cloud
+      - title_en: 在腾讯云中部署 EMQX
+        title_cn: 在腾讯云中部署 EMQX
+        title_ja: Tencent Cloud 上での EMQX デプロイ
+        lang: cn
+        path: get-started/deploy/kubernetes/operator/tencent-cloud
+      - title_en: Deploy EMQX on AWS
+        title_cn: 在 AWS 中部署 EMQX
+        title_ja: AWS 上での EMQX デプロイ
+        path: get-started/deploy/kubernetes/operator/aws-eks
+      - title_en: Deploy EMQX on Google cloud
+        title_cn: 在 GCP 中部署 EMQX
+        title_ja: Google Cloud 上での EMQX デプロイ
+        path: get-started/deploy/kubernetes/operator/gcp-gke
+      - title_en: Deploy EMQX on Azure
+        title_cn: 在 Azure 中部署 EMQX
+        title_ja: Azure 上での EMQX デプロイ
+        path: get-started/deploy/kubernetes/operator/azure-aks
+      - title_en: Manage EMQX Cluster
+        title_cn: 管理 EMQX 集群
+        title_ja: EMQX クラスターの管理
+        path: get-started/deploy/kubernetes/operator/tasks/overview
         collapsed: true
         children:
-        - get-started/deploy/kubernetes/operator/getting-started
-        - title_en: 在阿里云中部署 EMQX
-          title_cn: 在阿里云中部署 EMQX
-          title_ja: Alibaba Cloud 上での EMQX デプロイ
-          lang: cn
-          path: get-started/deploy/kubernetes/operator/alibaba-cloud
-        - title_en: 在华为云中部署 EMQX
-          title_cn: 在华为云中部署 EMQX
-          title_ja: Huawei Cloud 上での EMQX デプロイ
-          lang: cn
-          path: get-started/deploy/kubernetes/operator/huawei-cloud
-        - title_en: 在腾讯云中部署 EMQX
-          title_cn: 在腾讯云中部署 EMQX
-          title_ja: Tencent Cloud 上での EMQX デプロイ
-          lang: cn
-          path: get-started/deploy/kubernetes/operator/tencent-cloud
-        - title_en: Deploy EMQX on AWS
-          title_cn: 在 AWS 中部署 EMQX
-          title_ja: AWS 上での EMQX デプロイ
-          path: get-started/deploy/kubernetes/operator/aws-eks
-        - title_en: Deploy EMQX on Google cloud
-          title_cn: 在 GCP 中部署 EMQX
-          title_ja: Google Cloud 上での EMQX デプロイ
-          path: get-started/deploy/kubernetes/operator/gcp-gke
-        - title_en: Deploy EMQX on Azure
-          title_cn: 在 Azure 中部署 EMQX
-          title_ja: Azure 上での EMQX デプロイ
-          path: get-started/deploy/kubernetes/operator/azure-aks
-        - title_en: Manage EMQX Cluster
-          title_cn: 管理 EMQX 集群
-          title_ja: EMQX クラスターの管理
-          path: get-started/deploy/kubernetes/operator/tasks/overview
-          collapsed: true
-          children:
-          - title_en: Manage License
-            title_cn: 管理 License
-            title_ja: ライセンス管理
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-license
-          - title_en: Enable TLS for Listeners
-            title_cn: 为监听器启用 TLS
-            title_ja: リスナーの TLS 有効化
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-tls
-          - title_en: Change EMQX Configuration
-            title_cn: 修改 EMQX 配置
-            title_ja: EMQX 設定の変更
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-config
-          - title_en: Enable Core-Replicant Deployment
-            title_cn: 配置 Core-Replicant 集群
-            title_ja: Core-Replicant デプロイの有効化
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
-          - title_en: Enable Persistence
-            title_cn: 开启持久化
-            title_ja: パーシステンスの有効化
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-persistence
-          - title_en: Access EMQX Cluster through LoadBalancer
-            title_cn: 通过 LoadBalancer 访问 EMQX 集群
-            title_ja: ロードバランサー経由で EMQX クラスターにアクセス
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-service
-          - title_en: Perform Blue-Green Upgrade
-            title_cn: 配置蓝绿发布
-            title_ja: ブルーグリーンアップグレードの実施
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
-          - title_en: Collect EMQX Logs
-            title_cn: 采集 EMQX 日志
-            title_ja: EMQX ログの収集
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-collection
-          - title_en: Change EMQX Log Level
-            title_cn: 修改 EMQX 日志等级
-            title_ja: EMQX ログレベルの変更
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-level
-          - title_en: Monitor EMQX Cluster
-            title_cn: 监控 EMQX 集群
-            title_ja: EMQX クラスターの監視
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-prometheus
-          - title_en: Rebalance Cluster Load
-            title_cn: 重新平衡集群负载
-            title_ja: クラスター負荷の再バランス
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-rebalance
-          - title_en: Deploy EMQX Cluster in k8s with Restricted Access
-            title_ja: 制限付き k8s 環境での EMQX クラスターのデプロイ
-            title_cn: 在受限的 k8s 环境中部署 EMQX 集群
-            path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
-        - title_en: API Reference
-          title_cn: API Reference
-          title_ja: API リファレンス
-          path: get-started/deploy/kubernetes/operator/reference/overview
-          collapsed: true
-          children:
-          - get-started/deploy/kubernetes/operator/reference/v2-reference
-          - get-started/deploy/kubernetes/operator/reference/v2beta1-reference
-      - title_en: EMQX Helm Chart
-        title_cn: EMQX Helm Chart
-        title_ja: EMQX Helm Chart
-        path: get-started/deploy/kubernetes/chart
-    - title_en: Work with License
-      title_cn: 配置 License
-      title_ja: ライセンスの設定
-      path: get-started/deploy/license
-  - title_en: Upgrade Guide
-    title_cn: 升级指南
-    title_ja: アップグレードガイド
-    collapsed: true
-    children:
-    - title_en: Rolling Upgrade
-      title_cn: 滚动升级
-      title_ja: ローリングアップグレード
-      path: get-started/deploy/rolling-upgrades
-    - get-started/deploy/upgrade-cluster
-    - title_en: Upgrade EMQX on Kubernetes
-      title_cn: Upgrade EMQX on Kubernetes
-      title_ja: Kubernetes での EMQX アップグレード
-      lang: en
-      path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
-    - title_en: Upgrade EMQX on Kubernetes
-      title_cn: Upgrade EMQX on Kubernetes
-      title_ja: Kubernetes での EMQX アップグレード
-      lang: ja
-      path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
-    - title_en: 在 Kubernetes 中升级 EMQX
-      title_cn: 在 Kubernetes 中升级 EMQX
-      title_ja: Kubernetes での EMQX アップグレード
-      lang: cn
-      path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
-    - title_en: Hot Upgrade
-      title_cn: 版本热升级
-      title_ja: ホットアップグレード
-      path: get-started/deploy/hot-upgrades
+        - title_en: Manage License
+          title_cn: 管理 License
+          title_ja: ライセンス管理
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-license
+        - title_en: Enable TLS for Listeners
+          title_cn: 为监听器启用 TLS
+          title_ja: リスナーの TLS 有効化
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-tls
+        - title_en: Change EMQX Configuration
+          title_cn: 修改 EMQX 配置
+          title_ja: EMQX 設定の変更
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-config
+        - title_en: Enable Core-Replicant Deployment
+          title_cn: 配置 Core-Replicant 集群
+          title_ja: Core-Replicant デプロイの有効化
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+        - title_en: Enable Persistence
+          title_cn: 开启持久化
+          title_ja: パーシステンスの有効化
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-persistence
+        - title_en: Access EMQX Cluster through LoadBalancer
+          title_cn: 通过 LoadBalancer 访问 EMQX 集群
+          title_ja: ロードバランサー経由で EMQX クラスターにアクセス
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-service
+        - title_en: Perform Blue-Green Upgrade
+          title_cn: 配置蓝绿发布
+          title_ja: ブルーグリーンアップグレードの実施
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
+        - title_en: Collect EMQX Logs
+          title_cn: 采集 EMQX 日志
+          title_ja: EMQX ログの収集
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-collection
+        - title_en: Change EMQX Log Level
+          title_cn: 修改 EMQX 日志等级
+          title_ja: EMQX ログレベルの変更
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-level
+        - title_en: Monitor EMQX Cluster
+          title_cn: 监控 EMQX 集群
+          title_ja: EMQX クラスターの監視
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-prometheus
+        - title_en: Rebalance Cluster Load
+          title_cn: 重新平衡集群负载
+          title_ja: クラスター負荷の再バランス
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+        - title_en: Deploy EMQX Cluster in k8s with Restricted Access
+          title_ja: 制限付き k8s 環境での EMQX クラスターのデプロイ
+          title_cn: 在受限的 k8s 环境中部署 EMQX 集群
+          path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
+      - title_en: API Reference
+        title_cn: API Reference
+        title_ja: API リファレンス
+        path: get-started/deploy/kubernetes/operator/reference/overview
+        collapsed: true
+        children:
+        - get-started/deploy/kubernetes/operator/reference/v2-reference
+        - get-started/deploy/kubernetes/operator/reference/v2beta1-reference
+    - title_en: EMQX Helm Chart
+      title_cn: EMQX Helm Chart
+      title_ja: EMQX Helm Chart
+      path: get-started/deploy/kubernetes/chart
+  - title_en: Work with License
+    title_cn: 配置 License
+    title_ja: ライセンスの設定
+    path: get-started/deploy/license
+- title_en: Upgrade Guide
+  title_cn: 升级指南
+  title_ja: アップグレードガイド
+  collapsed: true
+  children:
+  - title_en: Rolling Upgrade
+    title_cn: 滚动升级
+    title_ja: ローリングアップグレード
+    path: get-started/deploy/rolling-upgrades
+  - get-started/deploy/upgrade-cluster
+  - title_en: Upgrade EMQX on Kubernetes
+    title_cn: Upgrade EMQX on Kubernetes
+    title_ja: Kubernetes での EMQX アップグレード
+    lang: en
+    path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
+  - title_en: Upgrade EMQX on Kubernetes
+    title_cn: Upgrade EMQX on Kubernetes
+    title_ja: Kubernetes での EMQX アップグレード
+    lang: ja
+    path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
+  - title_en: 在 Kubernetes 中升级 EMQX
+    title_cn: 在 Kubernetes 中升级 EMQX
+    title_ja: Kubernetes での EMQX アップグレード
+    lang: cn
+    path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
+  - title_en: Hot Upgrade
+    title_cn: 版本热升级
+    title_ja: ホットアップグレード
+    path: get-started/deploy/hot-upgrades
 - title_en: Publish/Subscribe
   title_cn: 发布订阅
   title_ja: パブリッシュ/サブスクライブ
