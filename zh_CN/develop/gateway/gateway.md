@@ -17,9 +17,9 @@
 
 ![gateway_struct](./assets/gateway_struct.png)
 
-### 监听器
+## 网关监听器
 
-#### 绑定地址
+### 绑定地址
 
 网关监听器的 `bind` 配置用于指定接收客户端流量的本地地址和端口，可以显式指定 IP 地址和端口，也可以仅指定端口。
 
@@ -27,19 +27,20 @@
 
 如需更改仅指定端口的网关监听器所使用的地址，可在各节点的 `emqx.conf` 中或通过环境变量 `EMQX_NODE__DEFAULT_LISTENER_ADDRESS` 设置该配置项，并在修改后重启节点。该配置也影响仅指定端口的 MQTT 监听器和 Dashboard HTTP 监听器。支持的取值及官方 Docker 镜像的默认值参见[默认监听地址](../../guides/access-control/security-profile.md#默认监听地址)。
 
-#### 查看监听地址信息
+### 查看监听地址信息
 
 如需检查网关监听地址，使用 `GET /api/v5/gateways/:name/listeners`，将 `:name` 替换为网关名称，例如 `stomp`。从 EMQX 6.3.0 开始，每个监听器的 `node_status[].status` 包含 `resolved_address` 和 `resolved_address_from`。每个 `node_status` 条目返回对应节点的值；集群级 `status` 不包含这些节点本地字段。
 
 在每个 `node_status` 条目中，应结合 `status.running` 和 `status.resolved_address`，判断监听器是否正在对应节点上运行。`resolved_address` 为空时的含义参见[查看监听地址信息](../../guides/configuration/listener.md#查看监听地址信息)。请使用此网关列表接口，而不是 MQTT 的 `emqx ctl listeners` 命令或网关的单个监听器配置接口。
 
-### 接入认证
+## 接入认证
+
+### 网关认证工作原理
 
 网关会给每个连接构建客户端信息，它要求：
 
 - 无论哪种网关，其客户端信息都包含通用字段例如 Client ID，Username，Password 等（即使该协议无该字段的定义，网关会为其设置合适的默认值）
 - 同时，不同的网关也有其特定的客户端属性，例如 LwM2M 有 Endpoint Name 和 Life Time 等属性。
-- 不同网关下的 Client ID 允许重复，但同一网关下重复的 Client ID 登录会踢出旧的连接。
 
 5.0 中，网关可配置认证器、并使用上述的客户端信息进行登录授权：
 
@@ -48,7 +49,18 @@
 - 由于不同的网关的客户端信息格式不同，导致所支持的认证器类型是存在差别，但每个网关都支持基于 HTTP 的认证。
 
 :::tip
-在配置文件中，还支持配置监听器级别的认证器；这表示允许一个网关下不同的监听端口可以配置为不同的认证方式和数据来源.
+在配置文件中，还支持配置监听器级别的认证器；这表示允许一个网关下不同的监听端口可以配置为不同的认证方式和数据来源。
+:::
+
+从 EMQX 6.3.1 开始，EMQX 按以下方式应用网关认证结果：
+
+- 网关协议始终使用协议确定的客户端 ID，避免认证结果改变客户端身份，确保客户端在整个连接生命周期内使用一致的身份标识。如果认证器返回 `clientid_override`，EMQX 会忽略该字段，并记录包含 `gateway_authn_clientid_override_not_supported` 的警告日志。
+- 认证成功后，EMQX 会基于合并后的客户端信息和认证结果，对网关级和监听器级挂载点模板求值。因此，挂载点模板可以引用认证器返回的客户端属性，例如 `${client_attrs.tenant}/`。
+
+::: tip 客户端 ID 和会话行为
+
+不同网关下的 Client ID 允许重复，但同一网关下重复的 Client ID 登录会踢出旧的连接。
+
 :::
 
 ### 发布订阅和权限控制
@@ -90,6 +102,8 @@ ExProto 网关自 EMQX 6.2.0 起已弃用，并已在 EMQX 6.3.0 中移除。
 ### 配置和管理
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
+
+从 EMQX 6.3.1 开始，新建网关监听器的名称长度必须为 1 至 64 字节，以 ASCII 字母或数字开头，并且只能包含 ASCII 字母、数字、连字符（`-`）和下划线（`_`）。如果名称不符合上述要求，REST API 将返回 HTTP `400` 响应，错误码为 `BAD_REQUEST`。升级前已存在且名称超过 64 字节的网关监听器仍可更新配置或删除，但不能重命名。
 
 也使用 REST API 或 base.hocon 进行管理，例如：
 

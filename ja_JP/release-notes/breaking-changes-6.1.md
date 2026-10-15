@@ -1,24 +1,32 @@
-# Incompatible Changes in EMQX 6.1
+# EMQX 6.1 の非互換変更点
+
+## 6.1.5
+
+- [#18974](https://github.com/emqx/emqx/pull/18974) `mqtt.max_connect_user_properties` を追加しました。これは、CONNECT プロパティおよび Will プロパティで受け入れられる MQTT v5 のユーザープロパティペアの数を個別に制限します。デフォルトは 100 で、制限を無効にするには `infinity` に設定してください。
+
+- [#18515](https://github.com/emqx/emqx/pull/18515) Azure Blob Storage アクションの `blob` テンプレートフィールドは、Aggregated S3 アクションの `key` フィールドと同じスキーマ検証を使用するようになり、許可されたバインディングのみが使用されることを保証します。
+
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry 統合のエクスポーターエンドポイントは、有効な URL でスキームと明示的なポートを含む必要があります。サポートされるスキームは `http` と `https` です。
 
 ## 6.1.2
 
-- [#17157](https://github.com/emqx/emqx/pull/17157) Introduced a new Rule Engine configuration, `rule_engine.limit_selects_in_namespace`, whose default value is `true`. When enabled, rules will only trigger on messages published by clients on the same namespace as the rule itself.
+- [#17157](https://github.com/emqx/emqx/pull/17157) 新しいルールエンジン設定 `rule_engine.limit_selects_in_namespace` を導入しました。デフォルト値は `true` です。有効にすると、ルールは同じネームスペース内のクライアントからパブリッシュされたメッセージにのみトリガーされます。
 
-- [#17325](https://github.com/emqx/emqx/pull/17325) Removed the hot-upgrade REST API endpoints (`/api/v5/relup/*`). Hot-upgrade is now operated exclusively through the `emqx ctl relup` CLI on each node, with no Dashboard surface.
+- [#17325](https://github.com/emqx/emqx/pull/17325) ホットアップグレードの REST API エンドポイント（`/api/v5/relup/*`）を削除しました。ホットアップグレードは現在、各ノードでの `emqx ctl relup` CLI のみで操作され、ダッシュボードからは操作できません。
 
-  Place the target release tarball and its `.sha256` sidecar (same base name, same directory) anywhere readable by the EMQX process. Run `emqx ctl relup upgrade <TarballPath>` on each node to apply the upgrade; the target version is read from `releases/emqx_vars` (`REL_VSN`) inside the tarball.
+  対象のリリース tarball とその `.sha256` サイドカー（同じベース名、同じディレクトリ）を EMQX プロセスが読み取れる場所に配置してください。各ノードで `emqx ctl relup upgrade <TarballPath>` を実行してアップグレードを適用します。対象バージョンは tarball 内の `releases/emqx_vars`（`REL_VSN`）から読み取られます。
 
 ## 6.1.0
 
-- [#16368](https://github.com/emqx/emqx/pull/16368) The internal regular expression engine has been upgraded to PCRE2, providing improved matching performance and stricter syntax enforcement.
+- [#16368](https://github.com/emqx/emqx/pull/16368) 内部の正規表現エンジンを PCRE2 にアップグレードしました。これにより、マッチング性能の向上とより厳密な構文チェックが提供されます。
 
-  If you use the `regex_match`, `regex_replace`, or `regex_extract` functions in Rule Engine SQL, some existing regular expressions that relied on lenient or undefined behavior may no longer compile or match as expected.
+  ルールエンジン SQL で `regex_match`、`regex_replace`、`regex_extract` 関数を使用している場合、これまで寛容または未定義の動作に依存していた一部の正規表現がコンパイルできなくなったり、期待通りにマッチしなくなる可能性があります。
 
-  **Key changes to be aware of include**:
+  **主な変更点は以下の通りです：**
 
-  - **Stricter escaping rules**: Invalid or unnecessary escape sequences that were previously ignored are now treated as errors.
-    - **Broken**: `[\w-\.]`, escaping `.` inside a character class is unnecessary and no longer accepted; only metacharacters require escaping.
-    - **Broken**: `\x` without valid hexadecimal digits (for example, `\xGG`) now causes a compilation error instead of being interpreted as a literal `x`.
-  - **Stricter group name validation**: Regular expressions with duplicate or empty named capture groups are no longer permitted.
+  - **より厳密なエスケープルール**：以前は無視されていた無効または不要なエスケープシーケンスがエラーとして扱われます。
+    - **破損例**：`[\w-\.]` は文字クラス内での `.` のエスケープが不要であり、現在は許可されません。メタ文字のみエスケープが必要です。
+    - **破損例**：有効な16進数がない `\x`（例：`\xGG`）は、リテラルの `x` と解釈されず、コンパイルエラーになります。
+  - **グループ名の検証強化**：重複または空の名前付きキャプチャグループを含む正規表現は許可されなくなりました。
 
-  **Action required:** Review and validate all Rule Engine SQL definitions that use regular expressions. For complex patterns, verify compatibility with a PCRE2-compliant tester (most online regex tools support PCRE2) or test thoroughly in a staging environment before upgrading.
+  **対応が必要です：** 正規表現を使用しているルールエンジン SQL 定義をすべて見直し、検証してください。複雑なパターンについては、PCRE2 対応のテスター（多くのオンライン正規表現ツールが対応）で互換性を確認するか、アップグレード前にステージング環境で十分にテストしてください。

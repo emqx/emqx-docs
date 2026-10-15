@@ -62,7 +62,26 @@ gateway.mqttsn {
 注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 REST API 管理则会在整个集群中生效。
 :::
 
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
+MQTT-SN 网关支持 UDP 和数据报传输层安全协议（DTLS）两种类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
+
+## 保护休眠客户端的会话恢复
+
+MQTT-SN 客户端发送 `Duration` 值非零的 `DISCONNECT` 报文后进入 `asleep` 状态。唤醒时，客户端发送携带自身 Client ID 的 `PINGREQ` 报文。网关随后恢复原有会话，并投递休眠期间缓存的消息。由于 MQTT-SN 设备通常位于 NAT 之后，休眠前后的源 IP 地址和端口可能发生变化。
+
+MQTT-SN 的 `PINGREQ` 报文不包含密码或令牌。如果会话未绑定客户端证书，网关只能根据 Client ID 匹配会话。这会带来一个需要注意的安全影响：
+
+::: warning 没有客户端证书时会话恢复不经过认证
+在明文 UDP 监听器或客户端未提供证书的 DTLS 监听器上，携带已知或猜测得到的 Client ID 的 `PINGREQ` 报文可以在未经认证的情况下恢复该客户端的休眠会话。任何能够访问该监听器的人随后都可以接收为该设备缓存的消息。请仅在可以接受该风险的场景中使用这类监听器。
+:::
+
+如需将会话恢复绑定到已验证的客户端证书，请使用 DTLS 监听器并同时设置：
+
+- **TLS Verify**（`verify`）：设置为 `verify_peer`，用于验证客户端提供的证书。默认值为 `verify_none`。
+- **Fail If No Peer Cert**（`fail_if_no_peer_cert`）：设置为 `true`，拒绝未提供证书的客户端。
+
+两项同时设置后，网关会将每个会话绑定到连接时客户端提供的证书。来自新 DTLS 连接的 `PINGREQ` 只有在该连接使用相同客户端证书时才能恢复会话。如果客户端未在该连接中提供证书，或提供了不同或重新签发的证书，网关将拒绝唤醒请求。源 IP 地址和端口的变化不影响该证书比较，因此 NAT 重新绑定不会影响会话恢复。证书轮换后，客户端必须通过 `CONNECT` 重新连接，并完成正常的认证与会话接管流程。
+
+仅设置 **TLS Verify** 无法确保每个会话都绑定到客户端证书。如果 **Fail If No Peer Cert** 保持为 `false`，客户端可以不提供证书就建立连接，其会话仍将仅根据 Client ID 恢复。
 
 ## 认证
 

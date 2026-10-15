@@ -209,7 +209,7 @@ rate(emqx_topic_metric_messages_in_count[5m])
      password: '<SECRET_KEY>'
    ```
 
-EMQX 也接受通过 `POST /api/v5/login` 获取的 Bearer Token。Dashboard 登录 Token 会过期，因此持续运行的 Prometheus 抓取程序应使用 API 密钥。
+Prometheus 也可以使用 Dashboard Bearer Token 对抓取请求进行认证。当 `dashboard.password_login` 设置为 `both` 时，可以通过 `POST /api/v5/login` 获取 Token。在 `scram_only` 模式下，请通过 [SCRAM 挑战-响应认证](../api.md#使用-bearer-token-认证)获取 Token。Dashboard 登录 Token 会过期，因此持续运行的 Prometheus 抓取程序应使用 API 密钥。
 
 ### 在 Prometheus 中添加 EMQX 抓取任务
 

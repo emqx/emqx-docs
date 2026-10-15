@@ -1,5 +1,27 @@
 # Incompatible Changes in EMQX 6.3
 
+## 6.3.1
+
+- [#18465](https://github.com/emqx/emqx/pull/18465) Improved validation and safe rendering of templated `INSERT` statements in ClickHouse, TDengine, and SQL Server actions, and in MySQL actions when batch insert is enabled.
+
+  Previously, rendering SQL templates could often produce malformed SQL due to syntax errors in the manually entered template itself and due to interpolation issues.
+
+  Now, EMQX fully parses SQL statements when an action is created and rejects invalid SQL. During rendering, EMQX enforces correct escaping. To provide consistent and predictable behavior, EMQX limits the SQL features that templates can use. In particular, SQL comments are not supported. Supported syntax includes constant values, strings and string interpolation, arithmetic, functions, conditions, and conditional operators.
+
+  MySQL also supports `ON DUPLICATE KEY UPDATE`, ClickHouse supports `FORMAT Values` and `FORMAT JSONCompactEachRow`, and TDengine supports `INSERT ... USING ... TAGS` and table identifier interpolation.
+
+  To provide consistent rendering for MySQL templates, the MySQL bridge unconditionally disables `ANSI_QUOTES` and `NO_BACKSLASH_ESCAPES` modes for all connections, and treats the statements accordingly.
+
+  The ClickHouse bridge now infers the batch value separator from the SQL template and ignores the configured `batch_value_separator` value.
+
+- [#18630](https://github.com/emqx/emqx/pull/18630) Namespaced administrator API keys can no longer be created, updated, or bootstrapped with scopes the namespaced role is not allowed to hold (such as `gateways` or `audit`), matching the existing dashboard user rule.
+
+  Rotate any existing namespaced API key that was granted such scopes, since keys already minted with them keep working until rotated.
+
+- [#18824](https://github.com/emqx/emqx/pull/18824) Fixed a misspelled field name in the `emqx ctl listeners` output.
+
+  The command printed the listener's enabled flag as `enbale`. It now prints `enable`. Scripts that parse this output must be updated to match the corrected name.
+
 ## 6.3.0
 
 - [#17185](https://github.com/emqx/emqx/pull/17185) The MQTT parser now runs in strict mode by default. To restore the previous lenient behavior, set `mqtt.strict_mode = false` (globally or per-zone).

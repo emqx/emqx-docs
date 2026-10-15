@@ -155,6 +155,8 @@ Typically, you can use these default listeners by specifying the corresponding p
 
 In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
 
+Starting from EMQX 6.3.1, the name of a newly created listener must be 1 to 64 bytes long, start with an ASCII letter or digit, and contain only ASCII letters, digits, hyphens (`-`), and underscores (`_`). EMQX rejects the listener creation request if the name does not meet these requirements. For more information, see [Listener Name Requirements](../configuration/listener.md#listener-name-requirements).
+
 Starting from EMQX 6.3.0, the address used by a port-only bind depends on node configuration and the security profile, so the listener may not accept connections from other hosts. The Dashboard displays the configured bind value, not the address resolved on each node. For the address selection rules, see [How EMQX Determines the Listener Address](../configuration/listener.md#how-emqx-determines-the-listener-address).
 
 #### Rate Limiting

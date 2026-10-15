@@ -30,6 +30,8 @@
 
 基础路径：`/api/v5/plugin_api/emqx_username_quota`
 
+从 EMQX 6.3.2 开始，调用这些端点的 Dashboard 用户或 API 密钥必须具有 `plugin_api` 或 `system` 权限范围。调用方的角色和命名空间权限也必须允许所请求的 HTTP 方法。除非调用方还需要等同管理员权限的 `system` 权限范围，否则请使用受限的 `plugin_api` 权限范围。
+
 ### 会话查询
 
 - `GET /quota/usernames`：列出所有有活跃会话的用户名。
@@ -217,5 +219,6 @@ API 客户端指南：
 | EMQX 版本 | 插件版本 | 安装包 |
 |---|---|---|
 | 6.3.0 | 1.2.3 | [emqx_username_quota-1.2.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_username_quota-1.2.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.0/emqx_username_quota-1.2.3.sha256)) |
+| 6.3.1 | 1.2.3 | [emqx_username_quota-1.2.3.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_username_quota-1.2.3.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.3.1/emqx_username_quota-1.2.3.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

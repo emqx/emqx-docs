@@ -22,16 +22,16 @@ stack layer, you must remember:
 
 ## Basic Configuration
 
-There are two scenarios that will cause the message to be resent:
+EMQX retransmits unacknowledged QoS 1 and QoS 2 messages in the following scenarios:
 
-1. After the PUBLISH packet is sent to the peer, and no response is received within the specified time, the packet is resent.
-2. While maintaining the session, after the client reconnects, EMQX will automatically resend the *unanswered message* to ensure the correct QoS process.
+1. When a client reconnects and resumes its session, EMQX replays unacknowledged messages to continue the QoS delivery flow.
+2. While the client is connected, EMQX periodically retransmits unacknowledged messages if `mqtt.retry_interval` is set to a positive duration.
 
-It can be configured in config file:
+Configure the retransmission interval in the configuration file:
 
-| Configuration Item | Type   | Optional Value | Default Value | Description |
-| -------------- | --------- | ------ | ------- | -------------- |
-| retry_interval | duration  | -      | 30s     | Wait for a timeout interval and retransmit the message if no response is received |
+| Configuration Item | Type | Optional Value | Default Value | Description |
+| ------------------ | ---- | -------------- | ------------- | ----------- |
+| `retry_interval` | duration | duration or `infinity` | `infinity` | Interval between retransmissions of unacknowledged QoS 1 and QoS 2 messages while the client is connected. Set it to `0` or `infinity` to disable periodic retransmissions. Unacknowledged messages are still replayed when the session resumes. |
 
 Generally speaking, you only need to care about the above content.
 
@@ -143,10 +143,10 @@ In addition, if the user expects that QoS 1 and QoS 2 messages under all topics 
 
 This section lists all the configurations used in the above mechanism. They are all included in config files:
 
-| Configuration | Type  | Optional Value | Default Value | Description                                          |
-| ----------------- | -------- | --------------- | ------ | ------------------------------------------------------- |
-| mqueue_store_qos0 | bool     | `true`, `false` | true   | Whether to store QoS 0 messages in the message queue |
-| max_mqueue_len    | integer  | >= 0            | 1000   | Message queue length                        |
-| max_inflight      | integer  | >= 0            | 0      | Inflight window size; default `0` means no limit |
-| max_awaiting_rel  | integer  | >= 0            | 0      | Maximum reception; default `0` means no limit |
-| await_rel_timeout | duration | >  0            | 300s   | The maximum value of timeout in `Max Receive` to wait for release; if they are exceeded, the messages are discarded directly |
+| Configuration | Type | Optional Value | Default Value | Description |
+| ------------- | ---- | -------------- | ------------- | ----------- |
+| `mqueue_store_qos0` | boolean | `true`, `false` | `true` | Whether to store QoS 0 messages in the message queue. |
+| `max_mqueue_len` | integer | `0` - `infinity` | `1000` | Maximum message queue length. |
+| `max_inflight` | integer | `1` - `65535` | `32` | Maximum number of unacknowledged QoS 1 and QoS 2 messages that EMQX can deliver simultaneously. |
+| `max_awaiting_rel` | integer | `0` - `infinity` | `100` | Maximum number of QoS 2 messages awaiting `PUBREL` in each session. |
+| `await_rel_timeout` | duration | > `0` | `300s` | Maximum time to wait for `PUBREL`. When the timeout expires, EMQX releases the packet ID and logs a warning. The QoS 2 message is delivered before EMQX starts waiting for `PUBREL`. |

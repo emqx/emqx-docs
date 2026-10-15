@@ -4,12 +4,13 @@ prev:
   link: '../develop/mqtt-reference'
 ---
 
-# Release Notes for EMQX Enterprise
+# EMQX Enterprise リリースノート
 
-The release notes page for EMQX Enterprise provides a comprehensive, detailed record of updates, enhancements, and fixes included in each version.
+EMQX Enterprise のリリースノートページでは、各バージョンに含まれる更新内容、機能強化、および修正の詳細な記録を提供しています。
 
 ## v6.3
 
+- [6.3.1](./changes-ee-v6.md#_6-3-1): 2026-09-17
 - [6.3.0](./changes-ee-v6.md#_6-3-0): 2026-09-03
 
 ## v6.2
@@ -21,6 +22,7 @@ The release notes page for EMQX Enterprise provides a comprehensive, detailed re
 
 ## v6.1
 
+- [6.1.5](./changes-ee-v6.md#_6-1-5): 2026-09-30
 - [6.1.4](./changes-ee-v6.md#_6-1-4): 2026-08-03
 - [6.1.3](./changes-ee-v6.md#_6-1-3): 2026-07-01
 - [6.1.2](./changes-ee-v6.md#_6-1-2): 2026-06-09
@@ -29,6 +31,7 @@ The release notes page for EMQX Enterprise provides a comprehensive, detailed re
 
 ## v6.0
 
+- [6.0.4](./changes-ee-v6.md#_6-0-4): 2026-09-30
 - [6.0.3](./changes-ee-v6.md#_6-0-3): 2026-06-17
 - [6.0.2](./changes-ee-v6.md#_6-0-2): 2026-01-16
 - [6.0.1](./changes-ee-v6.md#_6-0-1): 2025-11-11
@@ -175,9 +178,6 @@ The release notes page for EMQX Enterprise provides a comprehensive, detailed re
 
 ## v4.2
 
-- [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
-- [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
-- [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26
 - [4.2.13](./changes-ee-v4.md#_4-2-13): 2022-08-10
 - [4.2.12](./changes-ee-v4.md#_4-2-12): 2022-07-11
 - [4.2.11](./changes-ee-v4.md#_4-2-11): 2022-04-26

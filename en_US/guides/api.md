@@ -2,6 +2,8 @@
 
 EMQX exposes an HTTP management API that follows the OpenAPI 3.0 specification.
 
+This page is intended for developers and operators who integrate with or automate EMQX through its REST API.
+
 EMQX provides multiple ways to explore and interact with the REST API. After EMQX is started, the following API specification endpoints are available:
 
 | Endpoint | Format | Description |
@@ -14,7 +16,7 @@ EMQX provides multiple ways to explore and interact with the REST API. After EMQ
 
 All of the above endpoints require `swagger_support` to be set to `true` (the default) in the Dashboard configuration. Set it to `false` to disable all API documentation endpoints. For more information, see [Dashboard configuration](configuration/dashboard.md).
 
-Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
+Starting from EMQX 6.3.0, EMQX no longer bundles Swagger UI. For backward compatibility, requests to `/api-docs` or `/api-docs/index.html` return HTTP 308 and redirect to `/api-spec.html`. The redirect endpoints do not require authentication, but `/api-spec.html` requires authentication after the redirect. Except for `/api-docs/index.html` and `/api-docs/swagger.json`, other `/api-docs/*` subpaths that previously served Swagger UI assets return HTTP 404.
 
 This section introduces how to work with the EMQX REST API.
 
@@ -26,15 +28,27 @@ Starting from EMQX 6.3.0, [feature gates](../get-started/deploy/feature-gates.md
 
 Starting from EMQX 6.3.0, you must authenticate to retrieve API specification content from the endpoints listed above.
 
+### Programmatic Access
+
 Authenticate programmatic requests with either Basic authentication using an API key and secret key or a bearer token. For instructions, see [Authentication](#authentication).
 
 Access to the API specification is read-only and does not depend on the API key's role or scopes.
 
-For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`. The `WWW-Authenticate` response header advertises Basic and Bearer authentication. The response body matches the requested format and contains a minimal API specification. It describes the supported authentication schemes and lists two public endpoints: `POST /api/v5/login` for obtaining a bearer token and `GET /api/v5/status` for checking broker status. The minimal response does not include the requested API specification content.
+For `/api-spec.md`, `/api-spec.json`, `/api-spec/:tag[/:name]`, and `/api-docs/swagger.json`, a request with missing or invalid credentials returns HTTP `401`.
 
-For browser access, EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request to `/api-spec.html` returns HTTP `401` and displays a sign-in page instead of the full API Spec Explorer. This response advertises only Bearer authentication to prevent the browser from opening its native Basic authentication dialog. After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
+The response body uses the requested format but contains a minimal API specification instead of the requested API specification content. The minimal specification describes the supported authentication schemes and lists the following public authentication and status endpoints:
 
-Requests to `/api-docs` and `/api-docs/index.html` do not require authentication because these endpoints only redirect to `/api-spec.html`. Authentication is required after the redirect to access the full explorer.
+- `POST /api/v5/login/challenge` and `POST /api/v5/login/verify` for SCRAM login.
+- `POST /api/v5/login` for legacy password login. This endpoint accepts password login only when `dashboard.password_login` is set to `both`.
+- `GET /api/v5/status` for checking whether the broker is running.
+
+### Browser Access
+
+For browser access, open `/api-spec.html`. EMQX accepts a valid `emqx_auth` session cookie. An unauthenticated request returns HTTP `401` and displays the EMQX sign-in page instead of the full API Spec Explorer or the browser's native Basic authentication dialog.
+
+Starting from EMQX 6.3.1, the sign-in page uses SCRAM-SHA-256 by default. Open the page through HTTPS or another secure browser context. TLS can terminate at a reverse proxy or load balancer; the EMQX Dashboard listener itself does not have to use HTTPS.
+
+After you sign in with your Dashboard username and password, EMQX creates the `emqx_auth` session cookie and loads the full explorer. Signing out clears the session cookie.
 
 ## Basic Path
 
@@ -70,9 +84,11 @@ In this method, you use API keys and secret keys as the username and password to
 
 ::: tip Note
 
-For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication.
+Starting from EMQX 5.0.0, Dashboard usernames and passwords cannot be used directly as Basic authentication credentials for REST API requests. To authenticate with local Dashboard user credentials, use a Dashboard login flow to obtain a short-lived bearer token. For long-running programmatic access, use API keys.
 
 :::
+
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 #### Authenticate with API Keys
 
@@ -225,14 +241,57 @@ axios
 
 ### Bearer Token Authentication
 
-As an alternative to API key-based authentication, you can use bearer tokens for secure and programmatic access to the EMQX REST API. To obtain a bearer token, send a request to the login API endpoint as described below.
+Choose the authentication method according to how the client accesses EMQX:
 
-#### Obtain a Bearer Token
+- For long-running services and unattended automation, use API keys because Dashboard login tokens expire.
+- Starting in EMQX 6.3.1, use SCRAM-SHA-256 challenge-response authentication to obtain a short-lived bearer token with local Dashboard user credentials.
 
-To request a bearer token, make an HTTP `POST` request to the following login API endpoint:
+#### Obtain a Bearer Token with SCRAM-SHA-256
+
+To obtain a bearer token through SCRAM without sending the password in an HTTP request body:
+
+1. Generate a random client nonce containing 20 to 128 unpadded Base64URL characters.
+2. Send the username and client nonce to `POST /api/v5/login/challenge`.
+3. Append the returned server nonce to the client nonce to form the combined nonce.
+4. Construct the RFC 7677 SCRAM-SHA-256 messages using the `username` and `client_nonce` retained from the challenge request, and the `server_nonce`, `salt`, and `iterations` returned in the challenge response:
+
+   ```text
+   client-first-message-bare = n=<escaped_username>,r=<client_nonce>
+   server-first-message = r=<combined_nonce>,s=<salt>,i=<iterations>
+   client-final-message-without-proof = c=biws,r=<combined_nonce>
+   auth-message = <client-first-message-bare>,<server-first-message>,<client-final-message-without-proof>
+   ```
+
+   Escape the username according to RFC 5802 by first replacing `=` with `=3D` and then replacing `,` with `=2C`. Use the Base64-encoded `salt` value returned by the challenge endpoint in `server-first-message`.
+5. Calculate the client proof and expected server signature as follows. `HMAC-SHA-256(key, message)` indicates the key and message arguments in that order. `UTF8(value)` encodes a string as UTF-8 bytes, `Base64Decode(value)` decodes a Base64 string, and `XOR` applies a byte-wise exclusive OR.
+
+   ```text
+   salted-password = PBKDF2-HMAC-SHA-256(UTF8(password), Base64Decode(salt), iterations, 32 bytes)
+   client-key = HMAC-SHA-256(salted-password, "Client Key")
+   stored-key = SHA-256(client-key)
+   client-signature = HMAC-SHA-256(stored-key, UTF8(auth-message))
+   client-proof = client-key XOR client-signature
+   server-key = HMAC-SHA-256(salted-password, "Server Key")
+   expected-server-signature = HMAC-SHA-256(server-key, UTF8(auth-message))
+   ```
+
+   Base64-encode `client-proof` and send it in the `client_proof` field of the `POST /api/v5/login/verify` request together with the challenge ID and combined nonce. Include `mfa_token` when multi-factor authentication is enabled for the user.
+6. Base64-decode the `server_signature` in the response and compare it with `expected-server-signature` before using the bearer token in the `token` field.
+
+Each challenge is time-limited. A well-formed request to `POST /api/v5/login/verify` consumes the challenge whether authentication succeeds or fails, including when the request returns `BAD_MFA_TOKEN`. Requests rejected during preliminary validation, such as an invalid Base64 encoding or decoded length for `client_proof`, or an invalid `combined_nonce` format, do not consume the challenge and can be retried. After a consumed challenge fails, request a new challenge and recalculate the client proof.
+
+For the request and response schemas, open the `dashboard` section of the [API specification](#access-api-specification-endpoints).
+
+Browser-based SCRAM login requires HTTPS or another secure browser context.
+
+#### Obtain a Bearer Token with Password Login
+
+The compatibility endpoint `POST /api/v5/login` accepts a username and password only when `dashboard.password_login` is set to `both`, which is the default. If `dashboard.password_login` is set to `scram_only`, the endpoint returns HTTP `403` with the error code `PASSWORD_LOGIN_DISABLED`. Use the SCRAM flow described above or an API key instead.
+
+When password login is enabled, use the following endpoint for local access:
 
 ```bash
-POST http://your-emqx-address:8483/api/v5/login
+POST http://localhost:18083/api/v5/login
 ```
 
 **Headers:**
@@ -248,8 +307,9 @@ POST http://your-emqx-address:8483/api/v5/login
 }
 ```
 
-- Replace `your-emqx-address` with the address or IP of your EMQX node.
 - Replace `"admin"` and `"yourpassword"` with your EMQX Dashboard credentials.
+
+This example uses HTTP on localhost. For remote access, configure an HTTPS listener and send the request over HTTPS.
 
 The response will include the bearer token, which you can use to authenticate API requests.
 
@@ -316,14 +376,14 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
   }'
 ```
 
-Setting `scopes` to `"unset"` explicitly applies the role-default scopes. Omitting `scopes` from a create request has the same effect.
+Setting `scopes` to `"unset"` explicitly removes the scope allowlist for backward compatibility. Role, namespace, and API-key-specific path restrictions still apply. Omitting `scopes` from a create request applies the role-default scopes.
 
 You can specify the namespace in either of these ways:
 
 - Provide a bare role, such as `administrator`, together with the `namespace` field.
 - Encode the namespace in the role as `ns:<namespace>::<role>`, such as `ns:team-a::administrator`.
 
-Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. An API key's namespace cannot be changed after the key is created.
+Both forms remain supported. If a request contains both forms, the namespaces must match. EMQX returns HTTP 400 if they differ or if `namespace` is empty. After an API key is created, its namespace cannot be changed through the REST API.
 
 Starting from EMQX 6.3.0, neither form can use a namespace listed in `multi_tenancy.deny_namespaces`. For configuration details, see [Denied Namespace Names](multi-tenancy/namespace-global-settings.md#denied-namespace-names).
 
@@ -343,8 +403,8 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
-- **Role (optional)**: Specify the key's [role](#roles-and-permissions).
-- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access, as a comma-separated list. When omitted, the key receives the defaults for its role. Login-only scopes (`user_management`, `mfa_management`, `sso_management`, `api_key_management`) are not valid for API keys. If any of these appear in a bootstrap file entry, EMQX removes them on startup and logs a warning. The key is still created, but without those scopes.
+- **Role (optional)**: Specify the key's [role](#roles-and-permissions). For a namespaced key, use `ns:<namespace>::<role>`, for example, `ns:team-a::administrator`.
+- **Scopes (optional)**: Specify the [API Scopes](#api-scopes) the key is allowed to access as a comma-separated list. When omitted, the key receives the defaults for its role. For validation behavior, see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
 
 For example:
 
@@ -354,13 +414,28 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 ```
 
-Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if a bootstrap entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes, keeps the remaining scopes, logs a warning, and continues to create or update the key. In contrast, the REST API rejects such a mixed scope list with HTTP 400 and does not apply any scope changes.
+##### Validate Bootstrap Scopes
 
-API keys created this way are valid indefinitely.
+When a bootstrap entry violates one of the following scope rules, EMQX removes the affected scopes, logs a warning, and continues to create or update the key:
 
-Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key, Role, and Scopes will be updated.
+- **Login-only scopes**: `user_management`, `mfa_management`, `sso_management`, and `api_key_management` are not valid for API keys. EMQX removes these scopes and creates or updates the key with the remaining scopes.
+- **Administrator-equivalent scopes**: Among the scopes that can be assigned to API keys, `system` is the only one that grants administrator-equivalent permissions. Starting from EMQX 6.0.4, if an entry combines an administrator-equivalent scope with scopes that do not grant administrator-equivalent permissions, EMQX removes all administrator-equivalent scopes and keeps the remaining scopes.
+- **Namespaced scopes**: Starting from EMQX 6.3.1, if a namespaced entry explicitly lists scopes that the namespaced role cannot hold, EMQX removes the disallowed scopes and keeps the remaining scopes. If no scopes remain, the key cannot access scope-protected business APIs. For the allowed scopes, see [Restrictions for Namespaced Callers](#restrictions-for-namespaced-callers).
+
+##### Reload Bootstrap API Keys
+
+API keys created from the bootstrap file are valid indefinitely. EMQX processes the file each time it starts. If an API key already exists, EMQX updates its role, namespace, and scopes.
+
+Starting from EMQX 6.3.1, if the Secret Key in the file is unchanged, EMQX preserves the stored secret hash. If the Secret Key has changed, EMQX generates a new hash, and the previous Secret Key stops working.
+
+::: warning Important Notice
+
+During a rolling upgrade from EMQX 6.2 to 6.3.1, do not change a bootstrap API key's Secret Key until every node runs EMQX 6.3. A changed Secret Key is stored using the 6.3 hash format, which nodes still running 6.2 cannot verify.
+
+:::
 
 ### Manage API Keys as a Namespaced Administrator
 
@@ -374,6 +449,8 @@ Starting from EMQX 6.0.4, a namespaced Dashboard administrator can manage API ke
 | Change an API key's namespace | Cannot move a key to another namespace. The update returns HTTP 400. |
 
 A global Dashboard administrator can continue to manage API keys across all namespaces.
+
+## API Key Permissions
 
 ### Roles and Permissions
 
@@ -406,7 +483,7 @@ Scope names are stable identifiers that do not change across EMQX upgrades. Even
 
 #### Built-in API Key Scopes
 
-EMQX provides 10 scopes for API keys:
+Starting from EMQX 6.3.2, EMQX provides 11 scopes for API keys:
 
 | Scope | Name | Typical API areas |
 | --- | --- | --- |
@@ -420,6 +497,17 @@ EMQX provides 10 scopes for API keys:
 | `system` | System configuration | `/configs*`, `/listeners*`, `/plugins*`, `/ds/*`, `/data/*`, `/status`, `/relup`, `/opentelemetry*`, `/prometheus`, ... |
 | `audit` | Audit log | `/audit` |
 | `license` | License | `/license*` |
+| `plugin_api` | Plugin-extended APIs | `/plugin_api/{plugin}/...` |
+
+The `plugin_api` scope grants access to endpoints published by plugins through the plugin API gateway. It does not grant access to plugin installation, start, stop, or configuration endpoints under `/plugins*`, which remain in the `system` scope. The gateway also continues to accept `system`, so API keys that already hold `system` keep their access.
+
+The `plugin_api` scope controls access to the gateway, not the operations implemented by a plugin. Review the security impact of every endpoint published by a plugin before assigning this scope.
+
+::: tip Note
+
+Starting from EMQX 6.3.2, the `audit` scope does not grant audit-log access to namespaced callers. Only global administrators and global viewers can call `GET /api/v5/audit`. For details, see [Audit Log Access](./dashboard/audit-log.md#audit-log-access).
+
+:::
 
 ::: warning Do Not Mix Administrator-Equivalent and Restricted Scopes
 
@@ -433,45 +521,14 @@ Existing mixed scope lists continue to work, with `system` remaining effective. 
 
 #### Login-Only Scopes
 
-In addition to these API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
+In addition to these 11 API-key scopes, Dashboard login users have 4 login-only scopes that apply exclusively to browser sessions and cannot be assigned to API keys. For details on how these scopes are assigned and enforced for login users, see [Login User Scopes](dashboard/system.md#login-user-scopes).
 
 | Scope | Required role | Purpose |
 | --- | --- | --- |
 | `user_management` | Administrator | Manage Dashboard users. |
 | `sso_management` | Administrator | Manage SSO backends and SSO user records. |
 | `api_key_management` | Administrator | Manage API keys. |
-| `mfa_management` | Any | Manage MFA for own account; administrators can manage other users' MFA. |
-
-#### Restrictions for Namespaced Callers
-
-Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions.
-
-Namespaced API keys cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if the key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
-
-Even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
-
-- `GET /clients/:clientid/mqueue_messages`
-- `GET /clients/:clientid/inflight_messages`
-- `GET /mqtt/retainer/messages`
-- `GET /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/messages`
-- `GET /mqtt/delayed/messages`
-- `GET /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:topic`
-
-For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
-
-- `PUT /trace/:name/stop`
-- `GET /trace/:name/download`
-- `GET /trace/:name/log`
-- `GET /trace/:name/log_detail`
-- `DELETE /trace/:name`
-
-This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
-
-Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
+| `mfa_management` | Global Administrator or Global Viewer | Manage MFA for own account; administrators can manage other users' MFA. |
 
 #### Default Behavior of `scopes`
 
@@ -481,11 +538,11 @@ Starting from EMQX 6.0.4, the `scopes` field on an API key follows these rules:
 | --- | --- |
 | **Absent in a create request** | Use the defaults for the selected role. |
 | **Absent in an update request** | Preserve the key's current scope setting. |
-| **Role-default sentinel** `"unset"` | Remove the explicit scope setting and use the defaults for the selected role. Changes to the role defaults take effect automatically. |
+| **Unset sentinel** `"unset"` | Remove the explicit scope setting. For backward compatibility, EMQX does not apply a scope allowlist to the key. Role, namespace, and API-key-specific path restrictions still apply. |
 | **Empty list** `[]` | Every business endpoint is denied. Useful as a soft disable without removing the key. |
 | **Explicit list** (e.g. `["monitoring", "cluster_operations"]`) | Only requests under those scopes are allowed. |
 
-An explicit list that contains the same set of scopes as the role defaults has the same effect as `"unset"`. The key continues to follow changes to the role defaults. The comparison is order-independent.
+An explicit list that contains the same set of scopes as the role defaults is normalized to `"unset"` and follows the same behavior. The comparison is order-independent.
 
 When a bootstrap file entry omits the scopes segment, EMQX applies the defaults for the specified role when processing the file.
 
@@ -495,7 +552,7 @@ Scopes determine which API areas a key can access. They do not override the key'
 
 EMQX exposes two endpoints to query the available scope catalogues:
 
-- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 10 business-domain scopes listed above). Authenticate with an API key.
+- `GET /api/v5/api_key_scopes`: returns the scopes that can be assigned to API keys (the 11 business-domain scopes listed above). Authenticate with an API key.
 - `GET /api/v5/user_scopes`: returns all scopes available to Dashboard login users, including the 4 login-only scopes. Authenticate with a bearer token.
 
 Use these endpoints to populate a scope-picker UI or validate automation scripts:
@@ -515,6 +572,66 @@ Scopes can be set from any of the following entry points:
 - **Dashboard**: When creating or editing a key under **System** -> **API Keys**, select a **Permission Mode**. Select individual scopes only for **Custom Restricted Permissions**.
 - **REST API**: Include `"scopes": ["monitoring", "cluster_operations"]` in the create/update request body.
 - **Bootstrap file**: Provide a comma-separated scope list as the 4th segment of each line, e.g. `my-app:my-secret:administrator:monitoring,cluster_operations`.
+
+## Restrictions for Namespaced Callers
+
+Namespaced callers (users or API keys whose role is restricted to a specific namespace) are subject to additional endpoint-level restrictions beyond scope checks. Scope grants do not override these restrictions.
+
+### Scope Restrictions for Namespaced API Keys
+
+Starting from EMQX 6.3.1, the scope allowlist for namespaced API keys contains `connections`, `monitoring`, `data_integration`, `access_control`, `system`, `cluster_operations`, and `license`. Starting from EMQX 6.3.2, the namespaced allowlist also includes `plugin_api`.
+
+- **Default scopes**: Starting from EMQX 6.3.2, if a create request omits `scopes`, a namespaced API key with the Administrator or Viewer role receives every scope in the namespaced allowlist for the running EMQX version. The namespaced allowlist does not include `publish`, `gateways`, or `audit`.
+- **Explicit scopes**: When creating or updating a namespaced API key, an explicit scope list must stay within the namespaced allowlist for the running EMQX version. Otherwise, EMQX returns HTTP 400, identifies the disallowed scopes, and does not apply the change. An explicit list also cannot combine `system` with restricted scopes.
+
+### Existing Keys with Disallowed Scopes
+
+A key whose stored scope list contains disallowed scopes is not changed automatically. For compatibility with read-modify-write clients, EMQX accepts the stored list when an update resubmits it unchanged and keeps the same role and namespace. The exception is a namespaced key whose stored scope list contains only `publish`: even an unchanged update returns HTTP 400 because the key cannot access any API. Delete the key and re-create it without a namespace. Any actual role or scope change is revalidated and must comply with the allowlist.
+
+Update or rotate a namespaced API key that contains disallowed scopes because its previously effective permissions remain available until the key is rotated, subject to the namespace endpoint restrictions described below. When EMQX reprocesses a bootstrap entry, it drops disallowed scopes, logs a warning, and keeps the remaining scopes. For details, see [Validate Bootstrap Scopes](#validate-bootstrap-scopes).
+
+### Message Publishing Restrictions
+
+A namespaced API key cannot call message publishing APIs, including `POST /api/v5/publish`. This restriction applies even if a previously stored key's scope list contains `publish`; assigning a scope does not override namespace-level restrictions.
+
+### Message Content Restrictions
+
+Even when a namespaced caller has the `connections` or `monitoring` scope, the caller cannot access cluster-wide endpoints that read or manipulate raw MQTT message content, including retained and delayed message stores. The following message-related endpoints return `403 Forbidden`:
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+
+### File Transfer Restrictions
+
+The File Transfer store is global and is not namespace-aware. Namespaced callers of any role cannot access the following File Transfer content endpoints, and scope grants do not override this restriction:
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+Global callers retain access to these endpoints according to their roles and scopes. The `/file_transfer` configuration endpoint is not affected.
+
+### Trace Restrictions
+
+For trace operations, `GET /trace` lists only traces within the caller's namespace. The following per-trace operations return `404 Not Found` when the trace belongs to a different namespace:
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+This behavior prevents the disclosure of traces in other namespaces. The bulk-delete operation (`DELETE /trace`) returns `403 Forbidden` for namespaced callers; only global administrators can clear all traces.
+
+Dashboard login, SSO callbacks, and API key self-management endpoints (for example, `/api_key`) do not accept API-key authentication, regardless of the key's `scopes` configuration. This is a built-in Dashboard security boundary, unrelated to the scope model.
 
 ## Pagination
 

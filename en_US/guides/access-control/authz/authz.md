@@ -12,7 +12,7 @@ A single permission data of a client has the following components:
 Starting from EMQX 5.1.1, the support for checking QoS and retained messages in operation details is introduced.
 :::
 
-The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
+The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. For information about when updated rules apply, see [When Authorization Rule Changes Take Effect](#when-authorization-rule-changes-take-effect).
 
 A file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
 
@@ -125,6 +125,15 @@ In this example:
 - `iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)`: The expression evaluates to `true` when the client attribute `client_attrs.biz` is `orders` and the current authorization action is `publish`.
 - `topic_match(topic, topic_join(['devices', clientid, '#']))`: The expression evaluates to `true` when the topic in the current authorization request matches the `devices/${clientid}/#` topic filter.
 
+## When Authorization Rule Changes Take Effect
+
+A rule change takes effect the next time EMQX evaluates the updated rule. If a matching result exists in the client authorization cache, EMQX continues to use the cached result until it expires or is cleared. A rule change does not revoke a subscription that was already established:
+
+- A connected client keeps receiving messages on a topic it had been allowed to subscribe to for the lifetime of its connection. `deny_action` does not apply because message delivery makes no publish or subscribe attempt.
+- A client reconnecting a persistent session (`clean_start = false`) has its stored subscriptions restored by the broker without sending `SUBSCRIBE` and receives the messages that were queued while it was offline.
+
+To revoke read access from a client that is already subscribed, change the rule and delete the client's session. For example, use `DELETE /api/v5/clients/{clientid}` to disconnect the client and delete its session state.
+
 ## Client Authorization Cache
 
 EMQX provides a session-based authorization data cache mechanism. This cache stores authorization results in the client’s session state and reduces the need for repeated authorization rule evaluation during the same connection. The client authorization cache mechanism improves the efficiency of permission checks for client publish/subscribe operations and helps reduce the access load on the authorization data backend caused by a large number of client requests.
@@ -140,7 +149,7 @@ When a client connects and performs publish/subscribe operations:
 
 ::: tip
 
-The cache is client-session specific and is cleared when the client disconnects or reconnects.
+The cache is client-session specific and is cleared when the client disconnects or reconnects. Clearing the cache does not re-evaluate the rules for subscriptions that are already established. For more information, see [When Authorization Rule Changes Take Effect](#when-authorization-rule-changes-take-effect).
 
 :::
 
@@ -247,12 +256,19 @@ The following placeholders are supported in query statements:
 
 * `${username}`:  It is replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it is overridden by the fields or the content of the certificate.
 * `${clientid}`:  It is replaced by the client ID at runtime. The client ID is normally explicitly specified by the client in the `CONNECT` packet. If `use_username_as_clientid` or `peer_cert_as_clientid` is enabled, this field is overridden by the username, fields in the certificate, or the content of the certificate.
-* `${peerhost}`: It is replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
-- `${peername}`:  It will be replaced with the client's IP address and port at runtime, and the format is `IP: PORT`.
+* `${peerhost}`: It is replaced with the client's source IP address at runtime. When [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) is enabled, this placeholder uses the source IP address reported by the proxy.
+* `${peerport}`: Starting from EMQX 6.3.0, it is replaced with the client's source port at runtime, for example, `51544`. When Proxy Protocol is enabled, this placeholder uses the source port reported by the proxy.
+* `${peername}`: Starting from EMQX 6.3.0, it is replaced with the client's source IP address and port at runtime. For an IPv4 address, the value uses the `IP:port` format, for example, `192.168.0.1:51544`. For an IPv6 address, the address is not enclosed in square brackets, for example, `2001:db8::1:51544`. When Proxy Protocol is enabled, this placeholder uses the source IP address and port reported by the proxy.
 * `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 * `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 * `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md).
 * `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authorization templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
+
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
+:::
+
+The LDAP authorizer does not support the `${peerport}` or `${peername}` placeholders.
 
 ### Topic Placeholders
 

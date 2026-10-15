@@ -1,4 +1,4 @@
-キー表現は、以下のメッセージ構造に対して評価されます：
+キー表現は以下のメッセージ構造に対して評価されます：
 
 <details>
 <summary><strong>JSONの例</strong></summary>

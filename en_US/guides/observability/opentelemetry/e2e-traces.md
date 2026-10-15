@@ -31,7 +31,7 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 
    - **Feature Selection**: Select `Traces`.
 
-   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`.
+   - **Endpoint**: Enter one trace data export URL. The URL must use the `http` or `https` scheme and include an explicit port. The default is `http://localhost:4317`. Values such as `localhost:4317` and `http://localhost` are invalid.
 
    - **Headers**: Add custom HTTP headers to the trace export request. This is useful when the OpenTelemetry collector requires authentication or other custom headers, such as API keys or tokens. Each header should be provided as a key-value pair.
 
@@ -70,6 +70,8 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 ### Configure End-to-End Tracing via Configuration File
 
 Add the following configuration to the EMQX `cluster.hocon` file (assuming EMQX is running locally).
+
+`opentelemetry.exporter.endpoint` accepts one URL. The URL must use the `http` or `https` scheme and include an explicit port. For example, `http://localhost:4317` is valid. Values such as `localhost:4317` and `http://localhost` are invalid.
 
 For more details on configuration options, refer to the OpenTelemetry subsection of [EMQX Dashboard Monitoring Integration](http://localhost:18083/#/monitoring/integration).
 

@@ -1,37 +1,59 @@
-# Incompatible Changes in EMQX 6.3
+# EMQX 6.3 の互換性のない変更点
+
+## 6.3.1
+
+- [#18465](https://github.com/emqx/emqx/pull/18465) ClickHouse、TDengine、SQL Server アクションのテンプレート化された `INSERT` ステートメントおよびバッチ挿入が有効な MySQL アクションにおける検証と安全なレンダリングを改善しました。
+
+  以前は、手動で入力されたテンプレート自体の構文エラーや補間の問題により、SQL テンプレートのレンダリングが不正な SQL を生成することが頻繁にありました。
+
+  現在、EMQX はアクション作成時に SQL ステートメントを完全に解析し、不正な SQL を拒否します。レンダリング時には正しいエスケープを強制します。安定かつ予測可能な動作を提供するために、EMQX はテンプレートで使用できる SQL 機能を制限しています。特に、SQL コメントはサポートされていません。サポートされる構文は定数値、文字列と文字列補間、算術、関数、条件式、および条件演算子です。
+
+  MySQL は `ON DUPLICATE KEY UPDATE` をサポートし、ClickHouse は `FORMAT Values` と `FORMAT JSONCompactEachRow` をサポートし、TDengine は `INSERT ... USING ... TAGS` とテーブル識別子の補間をサポートします。
+
+  MySQL テンプレートの一貫したレンダリングを提供するために、MySQL ブリッジはすべての接続で `ANSI_QUOTES` と `NO_BACKSLASH_ESCAPES` モードを無条件に無効化し、それに応じてステートメントを処理します。
+
+  ClickHouse ブリッジは SQL テンプレートからバッチ値の区切り文字を推測し、設定された `batch_value_separator` の値を無視するようになりました。
+
+- [#18630](https://github.com/emqx/emqx/pull/18630) ネームスペース付き管理者 API キーは、ネームスペース付きロールが保持できないスコープ（例：`gateways` や `audit`）で作成、更新、またはブートストラップできなくなりました。これは既存のダッシュボードユーザールールと一致します。
+
+  既にそのようなスコープが付与されたネームスペース付き API キーは、ローテーションされるまで有効なため、速やかにローテーションしてください。
+
+- [#18824](https://github.com/emqx/emqx/pull/18824) `emqx ctl listeners` の出力におけるフィールド名の誤字を修正しました。
+
+  コマンドはリスナーの有効フラグを `enbale` と表示していましたが、現在は `enable` と表示します。この出力を解析するスクリプトは修正が必要です。
 
 ## 6.3.0
 
-- [#17185](https://github.com/emqx/emqx/pull/17185) The MQTT parser now runs in strict mode by default. To restore the previous lenient behavior, set `mqtt.strict_mode = false` (globally or per-zone).
+- [#17185](https://github.com/emqx/emqx/pull/17185) MQTT パーサーがデフォルトで厳格モードで動作するようになりました。以前の寛容な動作を復元するには、`mqtt.strict_mode = false`（グローバルまたはゾーン単位）を設定してください。
 
-  In strict mode, the broker validates incoming MQTT packets against the protocol specification and disconnects clients that send malformed packets. The validations enforced only in strict mode are:
+  厳格モードでは、ブローカーは受信した MQTT パケットをプロトコル仕様に照らして検証し、不正なパケットを送信したクライアントを切断します。厳格モードでのみ適用される検証は以下の通りです：
 
-  - **Fixed-header flags.** Reserved DUP/QoS/RETAIN bits must be zero for non-PUBLISH packets, and PUBREL/SUBSCRIBE/UNSUBSCRIBE must use QoS=1 (`bad_frame_header`).
-  - **CONNECT reserved bit** must be zero (`reserved_connect_flag`).
-  - **CONNECT Will flag consistency**: Will Flag=0 requires Will QoS=0 and Will Retain=0; Will Flag=1 requires Will QoS in {0,1,2} (`invalid_will_qos`, `invalid_will_retain`).
-  - **CONNECT Password/Username flags (MQTT 3.1.1 only).** If Username Flag=0, Password Flag must also be 0, per `[MQTT-3.1.2-22]` (`invalid_password_flag`). MQTT 5.0 lifts this constraint and is unaffected.
-  - **UTF-8 strings** (proto name, client ID, topic, username, password, will topic, MQTT 5 string properties) must be valid UTF-8 and must not contain control characters U+0000–U+001F or U+007F–U+009F (`utf8_string_invalid`).
-  - **Packet identifiers** must be non-zero where required (PUBLISH QoS>0, PUBACK/REC/REL/COMP, SUBSCRIBE/SUBACK, UNSUBSCRIBE/UNSUBACK) (`bad_packet_id`).
+  - **固定ヘッダーフラグ**：非 PUBLISH パケットでは予約された DUP/QoS/RETAIN ビットはゼロでなければならず、PUBREL/SUBSCRIBE/UNSUBSCRIBE は QoS=1 を使用する必要があります（`bad_frame_header`）。
+  - **CONNECT の予約ビット** はゼロでなければなりません（`reserved_connect_flag`）。
+  - **CONNECT の Will フラグ整合性**：Will Flag=0 の場合は Will QoS=0 かつ Will Retain=0、Will Flag=1 の場合は Will QoS が {0,1,2} のいずれかである必要があります（`invalid_will_qos`, `invalid_will_retain`）。
+  - **CONNECT のパスワード/ユーザ名フラグ（MQTT 3.1.1 のみ）**：Username Flag=0 の場合は Password Flag も 0 でなければなりません（`invalid_password_flag`）。MQTT 5.0 ではこの制約は解除されています。
+  - **UTF-8 文字列**（プロトコル名、クライアント ID、トピック、ユーザ名、パスワード、Will トピック、MQTT 5 の文字列プロパティ）は有効な UTF-8 であり、制御文字 U+0000–U+001F および U+007F–U+009F を含んではいけません（`utf8_string_invalid`）。
+  - **パケット識別子** は必要な箇所でゼロ以外でなければなりません（PUBLISH QoS>0、PUBACK/REC/REL/COMP、SUBSCRIBE/SUBACK、UNSUBSCRIBE/UNSUBACK）（`bad_packet_id`）。
 
-  When a client violates one of these checks, the broker logs an `info`-level entry with `msg=frame_parse_error` and a structured `reason` (for example, `cause=invalid_password_flag`, `proto_ver`, or `received_prefix`) for troubleshooting. For MQTT 5.0 connections, the broker also responds with CONNACK/DISCONNECT carrying reason code `0x81 Malformed Packet` before closing; for MQTT 3.1/3.1.1, the connection is silently closed (no CONNACK reason code is defined for malformed packets in those versions).
+  これらの検証に違反した場合、ブローカーは `msg=frame_parse_error` の `info` レベルログを出力し、トラブルシューティング用に構造化された `reason`（例：`cause=invalid_password_flag`、`proto_ver`、`received_prefix`）を付与します。MQTT 5.0 接続では、切断前に CONNACK/DISCONNECT で理由コード `0x81 Malformed Packet` を返します。MQTT 3.1/3.1.1 では理由コードなしで静かに切断されます（これらのバージョンには不正パケット用の CONNACK 理由コードが定義されていません）。
 
-- [#17215](https://github.com/emqx/emqx/pull/17215) Removed the bundled Swagger UI assets from the EMQX release package, reducing tarball size by approximately 11 MB.
+- [#17215](https://github.com/emqx/emqx/pull/17215) EMQX リリースパッケージからバンドルされた Swagger UI アセットを削除し、tarball サイズを約 11 MB 削減しました。
 
-  `/api-docs/swagger.json` continues to serve the full OpenAPI 3 JSON spec, so external Swagger UI deployments that load it by URL keep working. The legacy `/api-docs` URL responds with an HTTP 308 redirect to `/api-spec.html`, the in-tree spec explorer introduced in 6.3.0. Other `/api-docs/*` subpaths (the embedded Swagger UI assets) are no longer served and return 404.
+  `/api-docs/swagger.json` は引き続き完全な OpenAPI 3 JSON 仕様を提供するため、URL で読み込む外部 Swagger UI は動作を維持します。レガシーの `/api-docs` URL は HTTP 308 リダイレクトで 6.3.0 で導入されたインツリーの仕様エクスプローラー `/api-spec.html` に転送します。その他の `/api-docs/*` サブパス（埋め込み Swagger UI アセット）は提供されず 404 を返します。
 
-- [#17267](https://github.com/emqx/emqx/pull/17267) The `node.max_ports` config now defaults to `auto`, which scales the Erlang VM port limit (`+Q`) with the number of logical CPU cores: 65536 ports per core for up to 8 cores, and 1048576 (the historical fixed default) above that. Explicit integer values are still accepted.
+- [#17267](https://github.com/emqx/emqx/pull/17267) `node.max_ports` 設定のデフォルトが `auto` に変更されました。これは Erlang VM のポート制限（`+Q`）を論理 CPU コア数に応じてスケールさせます：8 コアまではコアあたり 65536 ポート、それ以上は従来の固定値 1048576 ポートです。明示的な整数値は引き続き受け付けます。
 
-  This is a behavior change for nodes upgraded from earlier versions where `max_ports` defaulted to a fixed 1048576: hosts with 8 or fewer CPU cores will now boot with a smaller port table. Setups that rely on accepting more than `cores * 65536` connections must set `node.max_ports` explicitly (and restart the node) before upgrading.
+  これは以前のバージョンからアップグレードしたノードに対する動作変更です。8 コア以下のホストはより小さいポートテーブルで起動します。`cores * 65536` を超える接続を受け入れるセットアップは、アップグレード前に `node.max_ports` を明示的に設定し（ノード再起動が必要）、対応してください。
 
-  The hidden `node.process_limit` setting is reinstated as an override: when set to a value larger than the derived limit (`2 * max_ports`), it is respected; smaller values are ignored so the process table never under-sizes the port table.
+  非公開の `node.process_limit` 設定はオーバーライドとして復活しました：派生制限（`2 * max_ports`）より大きい値を設定すると尊重され、小さい値は無視されてプロセステーブルがポートテーブルより小さくなることはありません。
 
-  A new `node.schedulers` setting (default `auto`) controls the Erlang scheduler count (`+S`). With `auto`, the count is capped at the number of logical processors actually available to the VM (`sched_getaffinity` on Linux), so containers limited via `--cpuset-cpus` or Kubernetes CPU requests no longer spawn scheduler OS threads they cannot run in parallel. Set it to a positive integer to override the auto-detected value.
+  新しい `node.schedulers` 設定（デフォルト `auto`）は Erlang スケジューラ数（`+S`）を制御します。`auto` では VM が実際に利用可能な論理プロセッサ数（Linux の `sched_getaffinity`）で上限を設定し、`--cpuset-cpus` や Kubernetes の CPU リクエストで制限されたコンテナが並列実行できないスケジューラ OS スレッドを生成しなくなります。正の整数を設定すると自動検出値を上書きします。
 
-- [#17437](https://github.com/emqx/emqx/pull/17437) Prometheus scrape endpoints (`/api/v5/prometheus/*`) now require authentication by default. Set `prometheus.enable_basic_auth = false` explicitly to restore the previous unauthenticated behavior. Deployments that scrape these endpoints without credentials will need to either configure credentials on the scraper or set the config field. The recommended setup is a dedicated API key with the `monitoring` scope, used with Bearer auth in the scraper.
+- [#17437](https://github.com/emqx/emqx/pull/17437) Prometheus スクレイプエンドポイント（`/api/v5/prometheus/*`）はデフォルトで認証が必要になりました。以前の認証なしの動作を復元するには `prometheus.enable_basic_auth = false` を明示的に設定してください。認証情報なしでこれらのエンドポイントをスクレイプするデプロイメントは、スクレイパー側で認証情報を設定するか、設定フィールドを変更する必要があります。推奨される設定は、`monitoring` スコープを持つ専用 API キーを作成し、スクレイパーで Bearer 認証を使用することです。
 
-- [#17582](https://github.com/emqx/emqx/pull/17582) Prometheus VM and Mnesia collector metric names now use the `prometheus.erl` 6.x promtool-compliant names.
+- [#17582](https://github.com/emqx/emqx/pull/17582) Prometheus VM および Mnesia コレクタのメトリック名が `prometheus.erl` 6.x の promtool 準拠名に変更されました。
 
-  Affected metric renames:
+  変更されたメトリック名：
 
   - `erlang_mnesia_failed_transactions` -> `erlang_mnesia_failed_transactions_total`
   - `erlang_mnesia_committed_transactions` -> `erlang_mnesia_committed_transactions_total`
@@ -51,7 +73,7 @@
   - `erlang_vm_process_count` -> `erlang_vm_processes`
   - `erlang_vm_atom_count` -> `erlang_vm_atoms`
 
-- [#17596](https://github.com/emqx/emqx/pull/17596) Added authorization options that forbid interpolation of `/`, `+`, and `#` symbols into topic filter templates in authorization rules. The new options are:
+- [#17596](https://github.com/emqx/emqx/pull/17596) 認可ルールにおけるトピックフィルターテンプレートへの `/`、`+`、`#` シンボルの補間を禁止する認可オプションを追加しました。新しいオプションは以下の通りです：
 
   ```hocon
   authorization.topic_template_allow {
@@ -61,52 +83,52 @@
   }
   ```
 
-  With `false`, the corresponding symbol cannot be used in a value interpolated into a topic template. For example, if `plus = false`, then username `bad+user` is forbidden in a rule such as `{allow, all, publish, ["userspace/${username}"]}`. The outcome depends on the active security profile: with the legacy profile the rule will not match, and with the hardened profile the action will be denied.
+  `false` に設定すると、対応するシンボルをトピックテンプレートに補間された値に使用できなくなります。例えば、`plus = false` の場合、ユーザ名 `bad+user` は `{allow, all, publish, ["userspace/${username}"]}` のようなルールで禁止されます。結果はアクティブなセキュリティプロファイルによって異なり、レガシープロファイルではルールがマッチせず、ハードニングプロファイルではアクションが拒否されます。
 
-- [#17677](https://github.com/emqx/emqx/pull/17677) Dropped support for the JSON output format in the Prometheus REST API.
+- [#17677](https://github.com/emqx/emqx/pull/17677) Prometheus REST API の JSON 出力フォーマットのサポートを廃止しました。
 
-  The endpoints under `/api/v5/prometheus` (`stats`, `auth`, `data_integration`, `schema_validation`, `message_transformation`) now only produce the Prometheus text format. Requests sending `Accept: application/json` are rejected with `400 Bad Request` ("only prometheus format is supported"); previously they returned a JSON representation of the metrics.
+  `/api/v5/prometheus` 以下のエンドポイント（`stats`、`auth`、`data_integration`、`schema_validation`、`message_transformation`）は Prometheus テキストフォーマットのみを出力します。`Accept: application/json` を送信したリクエストは `400 Bad Request`（「only prometheus format is supported」）で拒否されます。以前はメトリックの JSON 表現を返していました。
 
-- [#17626](https://github.com/emqx/emqx/pull/17626) [#18123](https://github.com/emqx/emqx/pull/18123) Added a new configuration `multi_tenancy.deny_namespaces` holding namespace names that cannot be used as a namespace identifier, either as an admin namespace (dashboard roles, API keys, multi-tenancy management API) or as a per-client `client_attrs.tns`; a client whose `client_attrs.tns` resolves to a denied name is rejected.
+- [#17626](https://github.com/emqx/emqx/pull/17626) [#18123](https://github.com/emqx/emqx/pull/18123) 新しい設定 `multi_tenancy.deny_namespaces` を追加しました。これは管理者ネームスペース（ダッシュボードロール、API キー、多重テナント管理 API）やクライアント単位の `client_attrs.tns` として使用できないネームスペース名を保持します。`client_attrs.tns` が拒否された名前に解決されるクライアントは拒否されます。
 
-  This is a breaking change: the default value `["global", "undefined", "null", "none"]` denies names that were previously accepted. These names collide with internal sentinels and would produce ambiguous log lines and dashboard output. Existing namespaces with these names are not migrated; rename them before upgrading, or set `multi_tenancy.deny_namespaces` to an empty list to lift the restriction.
+  これは破壊的変更です。デフォルト値 `["global", "undefined", "null", "none"]` は以前は許可されていた名前を拒否します。これらの名前は内部のセントネルと衝突し、ログやダッシュボード出力で曖昧さを生じます。既存のこれらの名前のネームスペースは移行されません。アップグレード前に名前を変更するか、制限を解除するには `multi_tenancy.deny_namespaces` を空リストに設定してください。
 
-  Additionally, when `multi_tenancy.post_auth_tns_expression` is configured and evaluates to an empty value or fails to evaluate, a client whose pre-authentication `client_attrs.tns` is a denied namespace name is now also rejected, consistent with the handling when the expression evaluates to a non-empty value.
+  さらに、`multi_tenancy.post_auth_tns_expression` が設定され、空値または評価失敗した場合、事前認証の `client_attrs.tns` が拒否された名前の場合も拒否されるようになり、式が非空値の場合の処理と一貫性が保たれます。
 
-- [#18228](https://github.com/emqx/emqx/pull/18228) The default authorization rules file (`acl.conf`) no longer grants clients connecting from `127.0.0.1` blanket publish/subscribe access to all topics (including `$SYS/#` and `#`).
+- [#18228](https://github.com/emqx/emqx/pull/18228) デフォルトの認可ルールファイル（`acl.conf`）は、`127.0.0.1` から接続するクライアントに対してすべてのトピック（`$SYS/#` や `#` を含む）への無条件のパブリッシュ／サブスクライブアクセスを付与しなくなりました。
 
-  Clients connecting from localhost are now authorized by the same rules as any other client, and ultimately by the `authorization.no_match` setting. In particular, subscriptions to `$SYS/#` and the wildcard filters `#` and `+/#` are now denied for localhost clients by the default rules, regardless of the security profile.
+  localhost からのクライアントは他のクライアントと同じルールで認可され、最終的には `authorization.no_match` 設定によって制御されます。特に、デフォルトルールでは localhost クライアントの `$SYS/#` およびワイルドカードフィルター `#` と `+/#` へのサブスクライブは拒否されます。セキュリティプロファイルに関わらず適用されます。
 
-  Deployments that relied on the built-in localhost allowance must add an explicit rule to `acl.conf`. The previous rule is retained in the file as a comment for easy re-enabling:
+  組み込みの localhost 許可に依存していたデプロイメントは、`acl.conf` に明示的なルールを追加する必要があります。以前のルールはコメントとしてファイルに残されており、再有効化が容易です：
 
   ```erlang
   %% {allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
   ```
 
-  Note: this applies to new installations and deployments that have not customized `acl.conf`; existing customized `acl.conf` files are not modified by upgrades.
+  注意：これは新規インストールおよびカスタマイズしていない `acl.conf` に適用されます。既存のカスタマイズ済み `acl.conf` はアップグレードで変更されません。
 
-- [#18244](https://github.com/emqx/emqx/pull/18244) The ExProto gateway has been removed.
+- [#18244](https://github.com/emqx/emqx/pull/18244) ExProto ゲートウェイを削除しました。
 
-- [#18271](https://github.com/emqx/emqx/pull/18271) [#18329](https://github.com/emqx/emqx/pull/18329) MQTT and gateway WebSocket listeners no longer read the client address and port from forwarded headers by default: the default value of `proxy_address_header` and `proxy_port_header` changed from `x-forwarded-for` / `x-forwarded-port` to empty, meaning the socket source address and port are always used. Deployments behind load balancers or reverse proxies that rely on forwarded headers must now configure the header names explicitly (for example, set `proxy_address_header` to `x-forwarded-for`). Setting an empty header name disables the forwarded-header lookup.
+- [#18271](https://github.com/emqx/emqx/pull/18271) [#18329](https://github.com/emqx/emqx/pull/18329) MQTT およびゲートウェイの WebSocket リスナーは、デフォルトで転送ヘッダーからクライアントのアドレスとポートを読み取らなくなりました。`proxy_address_header` と `proxy_port_header` のデフォルト値は `x-forwarded-for` / `x-forwarded-port` から空文字に変更され、常にソケットの送信元アドレスとポートを使用します。ロードバランサーやリバースプロキシの背後にあるデプロイメントで転送ヘッダーに依存している場合は、ヘッダー名を明示的に設定してください（例：`proxy_address_header` を `x-forwarded-for` に設定）。空文字のヘッダー名を設定すると転送ヘッダーの参照が無効になります。
 
-  This change also fixes the forwarded-header lookup for gateway WebSocket listeners. Previously, a configured header name was never matched against the request headers, so the socket source address and port were used even when the forwarded headers were present.
+  この変更はゲートウェイ WebSocket リスナーの転送ヘッダー参照の不具合も修正しています。以前は設定されたヘッダー名がリクエストヘッダーと一致しなかったため、転送ヘッダーが存在してもソケットの送信元アドレスとポートが使用されていました。
 
-- [#18377](https://github.com/emqx/emqx/pull/18377) Managed namespace names are now validated when created. A name may contain only ASCII letters, digits, and the characters `.`, `-`, and `_`, with a length of 1 to 255 bytes; the names `.` and `..` are not accepted. Namespaces that already exist are not affected.
+- [#18377](https://github.com/emqx/emqx/pull/18377) 管理対象ネームスペース名は作成時に検証されるようになりました。名前は ASCII の英数字と `.`, `-`, `_` のみを含み、長さは 1～255 バイトでなければなりません。`.` と `..` は許可されません。既存のネームスペースには影響しません。
 
-- [#18390](https://github.com/emqx/emqx/pull/18390) The `mqtt.clientid_override` expression no longer falls back to the client-supplied Client ID when it fails.
+- [#18390](https://github.com/emqx/emqx/pull/18390) `mqtt.clientid_override` 式は失敗した場合にクライアントから提供された Client ID にフォールバックしなくなりました。
 
-  When `mqtt.clientid_override` is configured and the expression raises an error (for example, it references an attribute the client did not provide) or renders an empty string, EMQX now refuses the connection with CONNACK reason code 0x85 (Client Identifier not valid; return code 2 for MQTT 3.1 and 3.1.1 clients). Previously such clients stayed connected under their original Client ID, so the override silently did not apply to them.
+  `mqtt.clientid_override` が設定され、式がエラーを発生させる（例：クライアントが提供していない属性を参照する）か空文字列を返す場合、EMQX は CONNACK 理由コード 0x85（Client Identifier not valid、MQTT 3.1/3.1.1 クライアントはリターンコード 2）で接続を拒否します。以前はそのようなクライアントは元の Client ID で接続を維持し、オーバーライドは黙って適用されませんでした。
 
-  Before upgrading, verify that every connecting client can render the configured expression to a non-empty string. Clients that could not render the expression connected with their original Client ID before the upgrade; after the upgrade they are refused until the expression or the client data is fixed.
+  アップグレード前に、接続するすべてのクライアントが設定された式を空でない文字列にレンダリングできることを確認してください。アップグレード前は式をレンダリングできなかったクライアントは元の Client ID で接続していましたが、アップグレード後は式またはクライアントデータが修正されるまで拒否されます。
 
-- [#18419](https://github.com/emqx/emqx/pull/18419) Removed the Google Cloud IoT Core migration compatibility feature, including the GCP Device authenticator and device management APIs.
+- [#18419](https://github.com/emqx/emqx/pull/18419) Google Cloud IoT Core の移行互換機能（GCP デバイス認証機能およびデバイス管理 API）を削除しました。
 
-- [#18515](https://github.com/emqx/emqx/pull/18515) Updated the Azure Blob Storage Action's `blob` template field to use the same schema validation as the Aggregated S3 Action's `key` field. The validation rejects unsupported template bindings.
+- [#18515](https://github.com/emqx/emqx/pull/18515) Azure Blob Storage アクションの `blob` テンプレートフィールドを、Aggregated S3 アクションの `key` フィールドと同じスキーマ検証に更新しました。サポートされていないテンプレートバインディングは拒否されます。
 
-- [#18528](https://github.com/emqx/emqx/pull/18528) Added validation that requires the exporter endpoint of an OpenTelemetry integration to be a URL with an explicit scheme and port. Supported schemes are `http` and `https`.
+- [#18528](https://github.com/emqx/emqx/pull/18528) OpenTelemetry 統合のエクスポーターエンドポイントが、明示的なスキームとポートを持つ URL であることを要求する検証を追加しました。サポートされるスキームは `http` と `https` です。
 
-- [#18627](https://github.com/emqx/emqx/pull/18627) Dashboard SAML SSO now verifies IdP signatures by default in all security profiles.
+- [#18627](https://github.com/emqx/emqx/pull/18627) ダッシュボードの SAML SSO はすべてのセキュリティプロファイルでデフォルトで IdP 署名を検証するようになりました。
 
-  Previously the default followed the security profile: the hardened profile verified signatures, but the legacy profile (the default until v7.0) did not, so it accepted an unsigned, forged SAMLResponse and issued a Dashboard session.
+  以前はセキュリティプロファイルに従っており、ハードニングプロファイルは署名を検証しましたが、レガシープロファイル（v7.0 までのデフォルト）は検証せず、署名されていない偽造の SAMLResponse を受け入れてダッシュボードセッションを発行していました。
 
-  If you intentionally run an unsigned IdP, set `sso.saml.idp_signs_envelopes = false` and `sso.saml.idp_signs_assertions = false` explicitly. If the IdP does sign but its metadata carries no certificate, the SAML backend now fails to start with `missing_idp_certificate`.
+  署名なしの IdP を意図的に運用する場合は、`sso.saml.idp_signs_envelopes = false` および `sso.saml.idp_signs_assertions = false` を明示的に設定してください。IdP が署名するがメタデータに証明書がない場合、SAML バックエンドは `missing_idp_certificate` エラーで起動に失敗します。
