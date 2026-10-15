@@ -1191,6 +1191,10 @@
       title_ja: ローリングアップグレード
       path: get-started/deploy/rolling-upgrades
     - get-started/deploy/upgrade-cluster
+    - title_en: Remove Legacy Queues and Streams for EMQX 7.0
+      title_cn: EMQX 7.0 升级前删除旧版队列和消息流
+      title_ja: EMQX 7.0 へのアップグレード前に旧形式のキューとストリームを削除
+      path: get-started/deploy/upgrade-legacy-queues-streams
     - title_en: Upgrade EMQX on Kubernetes
       title_cn: Upgrade EMQX on Kubernetes
       title_ja: Kubernetes での EMQX アップグレード
