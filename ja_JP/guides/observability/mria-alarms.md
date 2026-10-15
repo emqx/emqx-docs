@@ -1,12 +1,12 @@
 # Mria ログとアラーム
 
-本ドキュメントでは、Mria データベース管理システムによって報告されるログメッセージとアラームについて説明します。現在はネットワークパーティションイベントを対象としており、将来的に追加のエラータイプが追加される可能性があります。
+本書は Mria データベース管理システムによって報告されるログメッセージとアラームについて説明します。現在はネットワークパーティションイベントを対象としており、今後の改訂で追加のエラータイプが含まれる可能性があります。
 
 ## ネットワークパーティション
 
 ### パーティション検出
 
-ネットワークパーティションが検出されると、すべてのノード（Core または Replicant）で以下のログメッセージが表示されます：
+ネットワークパーティションが検出されると、すべてのノード（Core または Replicant）で以下のログメッセージが表示されます。
 
 ```text
 [error] ** Node 'emqx@remote.host' not responding **, ** Removing (timedout) connection **
@@ -16,7 +16,7 @@
 
 ### パーティション回復
 
-パーティションが回復すると、EMQX が以前に切断されたピアの再接続を検出した際に、すべての Core ノードで以下のログが表示されます：
+パーティションが回復すると、EMQX が以前に切断されたピアの再接続を検知し、すべての Core ノードで以下のログが表示されます。
 
 ```text
 [error] Mnesia('emqx@local.host'): ** ERROR ** mnesia_event got {inconsistent_database, running_partitioned_network, 'emqx@remote.host'}
@@ -24,7 +24,7 @@
 [critical] msg: Core cluster partition, context: running_partitioned_network, from: 'emqx@remote.host'
 ```
 
-また、`partition` アラームが発生します：
+また、`partition` アラームが発生します。
 
 ```text
 [warning] msg: alarm_is_activated, message: <<"Partition occurs at node emqx@remote.host">>, name: partition
@@ -32,7 +32,7 @@
 
 ### Core ノードのリカバリー
 
-マイノリティパーティションにある Core ノードでは、以下のログが表示されます：
+マイノリティパーティションにある Core ノードでは、以下のログが表示されます。
 
 ```text
 [notice] msg: Mria is restarting to join the cluster, seed: 'emqx@remote.node'
@@ -40,7 +40,7 @@
 [notice] msg: stopping_emqx_apps, ...
 ```
 
-マイノリティノードの再起動が完了すると、再起動した Core ノードは標準の EMQX 起動メッセージを出力します：
+マイノリティの再起動が完了すると、再起動した Core ノードは標準の EMQX の起動メッセージを出力します。
 
 ```text
 ...
@@ -52,7 +52,7 @@ Listener wss:default on 0.0.0.0:8084 started。
 
 ### Replicant ノードのリカバリー
 
-Replicant ノードでは、レプリケーションが完全に再開されたことを示す以下のログが表示されます：
+Replicant ノードでは、レプリケーションが完全に再開されたことを示す以下のログが表示されます。
 
 ```text
 [notice] msg: Shard fully up, node: 'emqx@remote.host', shard: ...
@@ -60,13 +60,13 @@ Replicant ノードでは、レプリケーションが完全に再開された�
 
 ### ブローカー回復アラーム
 
-パーティション回復のもう一つの指標として、すべてのノードで `broker_heal` アラームが発生します：
+パーティション回復のもう一つの指標として、すべてのノードで `broker_heal` アラームが発生します。
 
 ```text
 [warning] msg: broker_heal_initiated, pid: <0.8705.0>, results: ...
 ```
 
-このアラームは自動的にクリアされます：
+このアラームは自動的に解除されます。
 
 ```text
 [warning] msg: alarm_is_deactivated, pid: <0.4506.0>, name: broker_heal
