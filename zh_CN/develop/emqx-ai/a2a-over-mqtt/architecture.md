@@ -106,7 +106,7 @@ Agent Card 最小示例：
 }
 ```
 
-完整的 Agent Card Schema（包括 `capabilities`、`securitySchemes`、`supportedInterfaces` 及扩展参数），请参阅 [A2A 规范](https://google.github.io/A2A/)。
+完整的 Agent Card Schema（包括 `capabilities`、`securitySchemes`、`supportedInterfaces` 及扩展参数），请参阅 [A2A 规范](https://a2a-protocol.org/latest/specification/)。
 
 ## Agent 在线状态
 
