@@ -1,4 +1,4 @@
-# ライセンス設定
+# ライセンスの設定
 
 `emqx ctl license update` コマンドを使用してライセンスを更新できます。このコマンドはライセンスファイルを更新し、ライセンスをリロードします。
 
@@ -20,7 +20,7 @@ emqx ctl license update 'file://<license_file_path>'
 
 `'file://<license_file_path>'` 表記でライセンスを設定した場合、EMQXは2分ごとに自動的にライセンスをリロードします。
 
-さらに、設定ファイルでライセンス接続クォータ使用状況の設定を以下のように行うことができます。
+さらに、設定ファイルでライセンス接続クォータ使用量の設定を以下のように構成できます。
 
 ```bash
 license {
@@ -34,20 +34,20 @@ license {
 ここで、
 
 - `key` はbase64形式でエンコードされたライセンスキーを含むフィールドです。
-- `connection_low_watermark` はライセンス接続クォータ使用率のアラームが解除される閾値を設定します。デフォルトは `"75%"` です。
-- `connection_high_watermark` はライセンス接続クォータ使用率のアラームが発動する閾値を設定します。デフォルトは `"80%"` です。
-- `high_watermark_timezone` は日次セッションのハイウォーターマーク履歴を記録する際のローカル日の境界を決定するためのタイムゾーンです。 `"system"` を指定するとノードホストのローカルタイムゾーンに従い、明示的なUTCオフセット（例：`"+08:00"`）を指定することも可能です。デフォルトは `"system"` です。
+- `connection_low_watermark` はライセンス接続クォータ使用量のアラームを解除する閾値を設定します。デフォルトは `"75%"` です。
+- `connection_high_watermark` はライセンス接続クォータ使用量のアラームを発動する閾値を設定します。デフォルトは `"80%"` です。
+- `high_watermark_timezone` は日次セッションの高水準履歴を記録する際のローカルの日付境界を決定するためのタイムゾーンです。`"system"` を指定するとノードホストのローカルタイムゾーンに従い、明示的なUTCオフセット（例：`"+08:00"`）を指定することも可能です。デフォルトは `"system"` です。
 
 実行後、`emqx ctl license info` を実行して新しいライセンスファイルが反映されていることを確認できます。
 
 ::: tip
 
-EMQXダッシュボードからもライセンスファイルを設定できます。ダッシュボードでのライセンス設定方法については、[Work with License](../../get-started/deploy/license.md) をご参照ください。ダッシュボードで設定した内容は、設定ファイル内の同じ設定項目を上書きします。
+ライセンスファイルはEMQXダッシュボードからも設定可能です。ダッシュボードでのライセンス設定方法については、[Work with License](../../get-started/deploy/license.md) を参照してください。ダッシュボードで設定した内容は、設定ファイルの同じ項目を上書きします。
 
 :::
 
 ::: tip
 
-EMQXはカスタマイズニーズに対応するため、さらに多くの設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
+EMQXはよりカスタマイズされたニーズに対応するため、さらに多くの設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
 
 :::

@@ -160,7 +160,9 @@ When `multi_tenancy.post_auth_tns_expression` is configured but evaluates to an 
 
 Client ID isolation prevents conflicts when clients in different namespaces use the same Client ID.
 
-EMQX identifies sessions globally by the effective Client ID, not by a combination of namespace and Client ID. Client ID isolation therefore makes the effective Client ID globally unique, typically by adding the namespace as a prefix. Clients continue to send their original Client IDs, while EMQX uses the overridden IDs internally as the effective Client IDs.
+EMQX does not use the namespace and original Client ID as two separate fields to identify a session. Instead, it identifies each session globally by a single effective Client ID. To prevent conflicts when clients in different namespaces use the same original Client ID, Client ID isolation generates a globally unique effective Client ID, typically by prefixing the original Client ID with the namespace. Clients continue to send their original Client IDs, while EMQX uses the overridden IDs internally to identify sessions.
+
+These Client ID override mechanisms apply only to MQTT client connections. Starting from EMQX 6.3.1, gateway protocols preserve their protocol-defined Client IDs and ignore `clientid_override` returned by an authentication backend.
 
 ### Choose a Client ID Override Mechanism
 

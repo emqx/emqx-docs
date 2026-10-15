@@ -2,6 +2,8 @@
 
 EMQX 提供遵循 OpenAPI 3.0 规范的管理 REST API。
 
+本页面面向通过 REST API 集成或自动化管理 EMQX 的开发者和运维人员。
+
 EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，以下 API 规范端点可用：
 
 | 端点 | 格式 | 描述 |
@@ -14,7 +16,7 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 以上所有端点均需要 Dashboard 配置中的 `swagger_support` 设置为 `true`（默认值）。将其设置为 `false` 可禁用所有 API 文档端点。更多信息请参阅 [Dashboard 配置](configuration/dashboard.md)。
 
-从 EMQX 6.3.0 开始，EMQX 不再内置 Swagger UI。为保持向后兼容，访问 `/api-docs` 或 `/api-docs/index.html` 时，EMQX 将返回 HTTP 308 并重定向到 `/api-spec.html`。除 `/api-docs/index.html` 和 `/api-docs/swagger.json` 外，此前用于提供 Swagger UI 资源的其他 `/api-docs/*` 子路径将返回 HTTP 404。
+从 EMQX 6.3.0 开始，EMQX 不再内置 Swagger UI。为保持向后兼容，访问 `/api-docs` 或 `/api-docs/index.html` 时，EMQX 将返回 HTTP 308 并重定向到 `/api-spec.html`。重定向端点本身不要求认证，但重定向后的 `/api-spec.html` 要求认证。除 `/api-docs/index.html` 和 `/api-docs/swagger.json` 外，此前用于提供 Swagger UI 资源的其他 `/api-docs/*` 子路径将返回 HTTP 404。
 
 本节将指导您快速开始使用 EMQX REST API。
 
@@ -26,15 +28,27 @@ EMQX 提供了多种方式来浏览和使用 REST API。EMQX 服务启动后，�
 
 从 EMQX 6.3.0 开始，必须通过认证才能从上述端点获取 API 规范内容。
 
+### 程序化访问
+
 程序化请求可以使用 API Key 和 Secret Key 进行基本认证，也可以使用 Bearer Token 认证。操作说明参见[认证](#认证)。
 
 访问 API 规范属于只读操作，不受 API 密钥的角色或权限范围限制。
 
-如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。`WWW-Authenticate` 响应头会声明支持基本认证和 Bearer Token 认证。响应体采用请求的格式，并包含一个最小化的 API 规范。该规范说明支持的认证方式，并列出两个公开端点：用于获取 Bearer Token 的 `POST /api/v5/login`，以及用于检查 Broker 状态的 `GET /api/v5/status`。该最小化响应不包含所请求的 API 规范内容。
+如果请求 `/api-spec.md`、`/api-spec.json`、`/api-spec/:tag[/:name]` 或 `/api-docs/swagger.json` 时未提供有效凭据，EMQX 将返回 HTTP `401`。
 
-在浏览器中访问时，EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证访问 `/api-spec.html` 时，EMQX 返回 HTTP `401`，并显示登录页面，而不是完整的 API Spec Explorer。该响应仅声明支持 Bearer Token 认证，以避免浏览器打开原生的基本认证对话框。使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
+响应体采用请求的格式，但仅包含最小化的 API 规范，不包含所请求的 API 规范内容。该最小化规范说明支持的认证方式，并列出以下公开的认证和状态端点：
 
-访问 `/api-docs` 和 `/api-docs/index.html` 无需认证，因为这两个端点只会重定向到 `/api-spec.html`。重定向后，必须通过认证才能访问完整的 API Spec Explorer。
+- 用于 SCRAM 登录的 `POST /api/v5/login/challenge` 和 `POST /api/v5/login/verify`。
+- 用于兼容原有密码登录流程的 `POST /api/v5/login`。仅当 `dashboard.password_login` 设置为 `both` 时，该端点才接受密码登录。
+- 用于检查 Broker 是否正在运行的 `GET /api/v5/status`。
+
+### 浏览器访问
+
+在浏览器中访问时，请打开 `/api-spec.html`。EMQX 接受有效的 `emqx_auth` 会话 Cookie。未认证请求将返回 HTTP `401`，并显示 EMQX 登录页面，而不是完整的 API Spec Explorer 或浏览器原生的基本认证对话框。
+
+从 EMQX 6.3.1 开始，登录页面默认使用 SCRAM-SHA-256。请通过 HTTPS 或其他安全浏览器上下文打开该页面。TLS 可以在反向代理或负载均衡器终止，EMQX Dashboard 监听器本身无需启用 HTTPS。
+
+使用 Dashboard 用户名和密码登录后，EMQX 会创建 `emqx_auth` 会话 Cookie 并加载完整的 API Spec Explorer。退出登录会清除该会话 Cookie。
 
 ## 基本路径
 
@@ -69,8 +83,10 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 在这种方法中，您通过使用 API 密钥和密钥作为用户名和密码来对 API 请求进行身份验证。EMQX 的 REST API 基于 HTTP 基本认证框架，要求提供这些凭据。使用 EMQX REST API 之前，您需要先创建一个 API 密钥，详见 [API 密钥管理](#api-密钥管理)。
 
 ::: tip 注意
-出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。
+从 EMQX 5.0.0 开始，Dashboard 用户名和密码不能直接作为 REST API 请求的 Basic 认证凭据。如需使用本地 Dashboard 用户凭据进行认证，请通过 Dashboard 登录流程获取短期 Bearer Token。长期运行的程序化访问应使用 API 密钥。
 :::
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
 #### 使用 API 密钥认证
 
@@ -221,14 +237,57 @@ axios
 
 ### 使用 Bearer Token 认证
 
-除了基于 API 密钥的身份验证外，您还可以使用 Bearer Token 来实现对 EMQX REST API 的安全和程序化访问。要获取 Bearer Token，请按照以下说明向登录 API 端点发送请求。
+请根据客户端访问 EMQX 的方式选择认证方法：
 
-#### 获取 Bearer Token
+- 长期运行的服务和无人值守的自动化任务应使用 API 密钥，因为 Dashboard 登录 Token 会过期。
+- 从 EMQX 6.3.1 开始，如需使用本地 Dashboard 用户凭据获取短期 Bearer Token，请使用 SCRAM-SHA-256 挑战-响应认证。
 
-要请求 Bearer Token，请向以下登录 API 端点发送 HTTP `POST ` 请求：
+#### 通过 SCRAM-SHA-256 获取 Bearer Token
+
+通过 SCRAM 获取 Bearer Token 时，无需在 HTTP 请求体中发送密码。操作步骤如下：
+
+1. 生成由 20 到 128 个无填充 Base64URL 字符组成的随机客户端 Nonce。
+2. 将用户名和客户端 Nonce 发送到 `POST /api/v5/login/challenge`。
+3. 将服务端返回的 Nonce 拼接到客户端 Nonce 之后，生成组合 Nonce。
+4. 使用挑战请求中保留的 `username` 和 `client_nonce`，以及挑战响应返回的 `server_nonce`、`salt` 和 `iterations`，构造 RFC 7677 SCRAM-SHA-256 消息：
+
+   ```text
+   client-first-message-bare = n=<escaped_username>,r=<client_nonce>
+   server-first-message = r=<combined_nonce>,s=<salt>,i=<iterations>
+   client-final-message-without-proof = c=biws,r=<combined_nonce>
+   auth-message = <client-first-message-bare>,<server-first-message>,<client-final-message-without-proof>
+   ```
+
+   按照 RFC 5802 转义用户名：先将 `=` 替换为 `=3D`，再将 `,` 替换为 `=2C`。在 `server-first-message` 中直接使用挑战端点返回的 Base64 编码 `salt` 值。
+5. 按照以下方式计算客户端证明和预期的服务端签名。`HMAC-SHA-256(key, message)` 中的参数依次为密钥和消息。`UTF8(value)` 将字符串编码为 UTF-8 字节，`Base64Decode(value)` 对 Base64 字符串进行解码，`XOR` 表示逐字节异或运算。
+
+   ```text
+   salted-password = PBKDF2-HMAC-SHA-256(UTF8(password), Base64Decode(salt), iterations, 32 bytes)
+   client-key = HMAC-SHA-256(salted-password, "Client Key")
+   stored-key = SHA-256(client-key)
+   client-signature = HMAC-SHA-256(stored-key, UTF8(auth-message))
+   client-proof = client-key XOR client-signature
+   server-key = HMAC-SHA-256(salted-password, "Server Key")
+   expected-server-signature = HMAC-SHA-256(server-key, UTF8(auth-message))
+   ```
+
+   对 `client-proof` 进行 Base64 编码，并将结果写入 `POST /api/v5/login/verify` 请求的 `client_proof` 字段，同时提供挑战 ID 和组合 Nonce。如果用户启用了多因素认证，还需提供 `mfa_token`。
+6. 对响应中的 `server_signature` 进行 Base64 解码，并与 `expected-server-signature` 比对。确认一致后，再使用 `token` 字段中的 Bearer Token。
+
+每个挑战都有有效期。对于格式正确的 `POST /api/v5/login/verify` 请求，无论认证成功还是失败，均会消耗该挑战，包括返回 `BAD_MFA_TOKEN` 的情况。在初步校验阶段被拒绝的请求不会消耗挑战，可以使用同一挑战重试，例如 `client_proof` 的 Base64 编码或解码后长度无效，或 `combined_nonce` 格式无效。挑战被消耗后，如果认证失败，请重新请求挑战并计算客户端证明。
+
+请求和响应 Schema 参见 [API 规范](#访问-api-规范端点)中的 `dashboard` 部分。
+
+浏览器中的 SCRAM 登录需要 HTTPS 或其他安全浏览器上下文。
+
+#### 通过密码登录获取 Bearer Token
+
+兼容端点 `POST /api/v5/login` 仅在 `dashboard.password_login` 设置为 `both` 时接受用户名和密码。`both` 为默认值。如果将 `dashboard.password_login` 设置为 `scram_only`，该端点将返回 HTTP `403` 和错误码 `PASSWORD_LOGIN_DISABLED`。此时请改用上述 SCRAM 流程或 API 密钥。
+
+启用密码登录后，本地访问可使用以下端点：
 
 ```bash
-POST http://your-emqx-address:8483/api/v5/login
+POST http://localhost:18083/api/v5/login
 ```
 
 **请求头:**
@@ -244,8 +303,9 @@ POST http://your-emqx-address:8483/api/v5/login
 }
 ```
 
-- 将 `your-emqx-address` 替换为您的 EMQX 节点的地址或 IP。
 - 将 `"admin"` 和 `"yourpassword"` 替换为您的 EMQX Dashboard 凭证。
+
+此示例通过 HTTP 访问 localhost。远程访问时，请配置 HTTPS 监听器并通过 HTTPS 发送请求。
 
 响应中将包含 Bearer Token，您可以使用该 Token 对 API 请求进行身份验证。
 
@@ -312,14 +372,14 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
   }'
 ```
 
-将 `scopes` 设置为 `"unset"` 会显式应用角色默认权限范围。创建请求省略 `scopes` 时，效果相同。
+将 `scopes` 设置为 `"unset"` 会显式移除权限范围允许列表，以保持向后兼容；角色、命名空间和 API 密钥专属的路径限制仍然生效。创建请求省略 `scopes` 时，将应用角色默认权限范围。
 
 可以通过以下任一方式指定命名空间：
 
 - 使用 `administrator` 等不含命名空间的角色，并同时提供 `namespace` 字段。
 - 将命名空间编码到角色中，格式为 `ns:<namespace>::<role>`，例如 `ns:team-a::administrator`。
 
-以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后不能更改所属命名空间。
+以上两种方式均受支持。如果请求同时使用两种方式，二者指定的命名空间必须一致。如果命名空间不一致或 `namespace` 为空，EMQX 返回 HTTP 400。API 密钥创建后，不能通过 REST API 更改其所属命名空间。
 
 从 EMQX 6.3.0 开始，以上两种方式均不能使用 `multi_tenancy.deny_namespaces` 列表中的命名空间名称。配置方法请参见[禁止使用的命名空间名称](multi-tenancy/namespace-global-settings.md#禁止使用的命名空间名称)。
 
@@ -339,8 +399,8 @@ api_key = {
 
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
-- **Role（可选）**：指定密钥的[角色](#角色与权限)。
-- **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时，密钥使用所属角色的默认权限。登录专属权限范围（`user_management`、`mfa_management`、`sso_management`、`api_key_management`）不适用于 API 密钥。如果 bootstrap 文件条目中包含这些权限范围，EMQX 在启动时会将其移除并记录警告日志。密钥仍会被创建，但不含这些权限范围。
+- **Role（可选）**：指定密钥的[角色](#角色与权限)。命名空间密钥使用 `ns:<namespace>::<role>` 格式，例如 `ns:team-a::administrator`。
+- **权限范围（可选）**：指定密钥可访问的 [API 权限范围](#api-权限范围)，多个范围用英文逗号分隔。省略时，密钥使用所属角色的默认权限。校验行为参见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
 
 例如：
 
@@ -350,13 +410,28 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 integration-svc:6f1a9f2d09c84e6b:viewer:monitoring,cluster_operations
 rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
+team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 ```
 
-在可分配给 API 密钥的权限范围中，只有 `system` 会授予等同管理员的权限。从 EMQX 6.0.4 开始，如果 bootstrap 条目将等同管理员权限的范围与不授予等同管理员权限的范围组合，EMQX 会移除所有等同管理员权限的范围、保留其余范围、记录警告，并继续创建或更新密钥。相比之下，REST API 会拒绝此类混合权限范围列表并返回 HTTP 400，且不会应用任何权限范围变更。
+##### 校验 Bootstrap 权限范围
 
-通过此方式创建的 API 密钥有效期为永久有效。
+如果 bootstrap 条目违反以下任一权限范围规则，EMQX 会删除相关范围并记录警告，然后继续创建或更新密钥：
 
-每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key、Role 与权限范围。
+- **登录专属权限范围**：`user_management`、`mfa_management`、`sso_management` 和 `api_key_management` 不适用于 API 密钥。EMQX 会删除这些范围，并使用其余范围创建或更新密钥。
+- **等同管理员权限的范围**：在可分配给 API 密钥的权限范围中，只有 `system` 会授予等同管理员的权限。从 EMQX 6.0.4 开始，如果条目将等同管理员权限的范围与不授予等同管理员权限的范围组合，EMQX 会删除所有等同管理员权限的范围并保留其余范围。
+- **命名空间权限范围**：如果命名空间条目显式列出了该命名空间角色不能持有的权限范围，EMQX 会删除不允许的范围并保留其余范围。如果没有剩余范围，该密钥将无法访问受权限范围保护的业务 API。允许使用的范围参见[命名空间调用方限制](#命名空间调用方限制)。
+
+##### 重新加载 Bootstrap API 密钥
+
+通过 bootstrap 文件创建的 API 密钥永久有效。EMQX 每次启动时都会处理该文件。如果 API Key 已存在，EMQX 会更新其角色、命名空间和权限范围。
+
+如果文件中的 Secret Key 未发生变化，EMQX 会保留已存储的 Secret Key 哈希；如果 Secret Key 已发生变化，EMQX 会生成新哈希，原 Secret Key 随即失效。
+
+::: warning 重要提示
+
+从 EMQX 6.2 滚动升级到 6.3.1 期间，在所有节点均升级到 EMQX 6.3 之前，请勿修改 bootstrap API 密钥的 Secret Key。修改后的 Secret Key 使用 6.3 哈希格式存储，仍运行 6.2 的节点无法验证该格式。
+
+:::
 
 ### 命名空间管理员管理 API 密钥
 
@@ -370,6 +445,8 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 | 更改 API 密钥的命名空间 | 不能将密钥移动到其他命名空间，更新请求返回 HTTP 400。 |
 
 全局 Dashboard 管理员仍可跨命名空间管理 API 密钥。
+
+## API 密钥权限
 
 ### 角色与权限
 
@@ -402,7 +479,7 @@ rules-mgr:2b8e4a1c9d7e4f3b:administrator:data_integration,access_control
 
 #### 内置 API 密钥权限范围
 
-EMQX 提供 10 个 API 密钥权限范围：
+EMQX 提供 11 个 API 密钥权限范围：
 
 | 权限范围 | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -416,6 +493,17 @@ EMQX 提供 10 个 API 密钥权限范围：
 | `system`（系统配置） | `/configs*`、`/listeners*`、`/plugins*`、`/ds/*`、`/data/*`、`/status`、`/relup`、`/opentelemetry*`、`/prometheus` 等 |
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
+| `plugin_api`（插件扩展 API） | `/plugin_api/{plugin}/...` |
+
+`plugin_api` 权限范围允许调用插件通过插件 API 网关发布的端点，但不允许访问 `/plugins*` 下的插件安装、启动、停止或配置端点。这些插件管理操作仍属于 `system` 权限范围。插件 API 网关也继续接受 `system`，因此已持有 `system` 的 API 密钥仍可访问插件扩展 API。
+
+`plugin_api` 权限范围只控制对插件 API 网关的访问，不限制插件端点自身实现的操作。分配此权限范围前，请评估插件发布的每个端点的安全影响。
+
+::: tip 提示
+
+`audit` 权限范围不能使命名空间调用方获得审计日志访问权限。只有全局管理员和全局查看者可以调用 `GET /api/v5/audit`。详见[审计日志访问权限](./dashboard/audit-log.md#审计日志访问权限)。
+
+:::
 
 ::: warning 不得混合等同管理员权限的范围与受限权限范围
 
@@ -429,45 +517,14 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 
 #### 登录专属权限范围
 
-除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
+除上述 11 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
 
 | 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
 | `user_management` | 管理员 | 管理 Dashboard 用户。 |
 | `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
-
-#### 命名空间调用方限制
-
-命名空间调用方（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。授予权限范围不能绕过这些限制。
-
-命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。即使密钥的权限范围列表包含 `publish`，此限制仍然生效；授予权限范围不能覆盖命名空间级限制。
-
-即使命名空间调用方已获得 `connections` 或 `monitoring` 权限范围，仍无法访问读取或操作集群级原始 MQTT 消息内容的端点，包括保留消息和延迟消息存储。以下消息相关端点返回 `403 Forbidden`：
-
-- `GET /clients/:clientid/mqueue_messages`
-- `GET /clients/:clientid/inflight_messages`
-- `GET /mqtt/retainer/messages`
-- `GET /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/message/:topic`
-- `DELETE /mqtt/retainer/messages`
-- `GET /mqtt/delayed/messages`
-- `GET /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:node/:msgid`
-- `DELETE /mqtt/delayed/messages/:topic`
-
-对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
-
-- `PUT /trace/:name/stop`
-- `GET /trace/:name/download`
-- `GET /trace/:name/log`
-- `GET /trace/:name/log_detail`
-- `DELETE /trace/:name`
-
-此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
-
-Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
+| `mfa_management` | 全局管理员或全局查看者 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
 #### 权限范围的默认行为
 
@@ -477,11 +534,11 @@ Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（�
 | --- | --- |
 | 创建请求中**未设置** | 使用所选角色的默认权限。 |
 | 更新请求中**未设置** | 保留密钥当前的权限范围设置。 |
-| 角色默认标记 `"unset"` | 移除显式权限范围设置并使用所选角色的默认权限。角色默认权限发生变化时，新权限会自动生效。 |
+| 未设置标记 `"unset"` | 移除显式权限范围设置。为保持向后兼容，EMQX 不对该密钥应用权限范围允许列表；角色、命名空间和 API 密钥专属的路径限制仍然生效。 |
 | **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
 | 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
 
-如果显式列表与角色默认权限包含相同的权限范围，其效果等同于 `"unset"`。该密钥会继续跟随角色默认权限的变化。比较时不考虑列表顺序。
+如果显式列表与角色默认权限包含相同的权限范围，EMQX 会将其规范化为 `"unset"`，并应用相同的行为。比较时不考虑列表顺序。
 
 Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用指定角色的默认权限。
 
@@ -491,7 +548,7 @@ Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用�
 
 EMQX 提供两个端点用于查询可用的权限范围列表：
 
-- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 10 个业务领域权限范围）。使用 API 密钥认证。
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 11 个业务领域权限范围）。使用 API 密钥认证。
 - `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部权限范围，包含 4 个登录专属权限范围。使用 Bearer Token 认证。
 
 可用于前端渲染权限范围选择 UI 或运维脚本校验配置：
@@ -511,6 +568,66 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 - **Dashboard**：在**系统设置** -> **API 密钥**创建或编辑密钥时，选择**权限模式**。仅在选择**自定义受限权限**时单独选择权限范围。
 - **REST API**：在创建 / 更新 API 密钥时，请求体加入 `"scopes": ["monitoring", "cluster_operations"]`。
 - **Bootstrap 文件**：在每一行的第四段以逗号分隔范围名，例如 `my-app:my-secret:administrator:monitoring,cluster_operations`。
+
+## 命名空间调用方限制
+
+命名空间调用方（角色被限定在特定命名空间的用户或 API 密钥）在权限范围检查之外还受到额外的端点级限制。授予权限范围不能绕过这些限制。
+
+### 命名空间 API 密钥的权限范围限制
+
+命名空间 API 密钥允许列表包含 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations`、`license` 和 `plugin_api`。
+
+- **默认权限范围**：如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会获得当前 EMQX 版本的命名空间 API 密钥允许列表中的所有权限范围。该允许列表不包含 `publish`、`gateways` 和 `audit`。
+- **显式权限范围**：创建或更新命名空间 API 密钥时，显式权限范围列表不能超出当前 EMQX 版本的命名空间 API 密钥允许列表。否则，EMQX 返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式列表也不能将 `system` 与受限权限范围组合。
+
+### 包含不允许权限范围的现有密钥
+
+如果密钥已存储的权限范围列表包含不允许的范围，EMQX 不会自动修改该密钥。为兼容读取后原样写回的客户端，如果更新请求在保持角色和命名空间不变的情况下原样提交已存储的列表，EMQX 会接受该列表。但有一种例外：如果命名空间密钥已存储的权限范围列表仅包含 `publish`，即使原样提交，更新请求也会返回 HTTP 400，因为该密钥无法访问任何 API。请删除该密钥，并在不指定命名空间的情况下重新创建。实际修改角色或权限范围时，EMQX 会重新校验，新设置必须符合允许范围。
+
+如果命名空间 API 密钥包含不允许的权限范围，请更新或轮换该密钥。在轮换之前，该密钥此前生效的权限仍然可用，但仍受下文所述命名空间端点限制。EMQX 重新处理 bootstrap 条目时，会删除不允许的范围、记录警告并保留其余范围。详见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
+
+### 消息发布限制
+
+命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。即使已存储密钥的权限范围列表包含 `publish`，此限制仍然生效；授予权限范围不能覆盖命名空间级限制。
+
+### 消息内容限制
+
+即使命名空间调用方已获得 `connections` 或 `monitoring` 权限范围，仍无法访问读取或操作集群级原始 MQTT 消息内容的端点，包括保留消息和延迟消息存储。以下消息相关端点返回 `403 Forbidden`：
+
+- `GET /clients/:clientid/mqueue_messages`
+- `GET /clients/:clientid/inflight_messages`
+- `GET /mqtt/retainer/messages`
+- `GET /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/message/:topic`
+- `DELETE /mqtt/retainer/messages`
+- `GET /mqtt/delayed/messages`
+- `GET /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:node/:msgid`
+- `DELETE /mqtt/delayed/messages/:topic`
+
+### 文件传输限制
+
+文件传输使用全局存储，且不支持命名空间隔离。任何角色的命名空间调用方均无法访问以下文件传输内容端点，授予权限范围不能绕过此限制：
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+全局调用方仍可根据其角色和权限范围访问这些端点。`/file_transfer` 配置端点不受影响。
+
+### 追踪操作限制
+
+对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
+
+- `PUT /trace/:name/stop`
+- `GET /trace/:name/download`
+- `GET /trace/:name/log`
+- `GET /trace/:name/log_detail`
+- `DELETE /trace/:name`
+
+此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
 ## 分页
 

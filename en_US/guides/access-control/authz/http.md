@@ -23,7 +23,9 @@ The request can use JSON format, with the following placeholders in the URL and 
 - `${clientid}`: The client ID.
 - `${username}`: The username used by the client on login.
 - `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md).
-- `${peerhost}`: The source IP address of the client.
+- `${peerhost}`: The source IP address of the client. When [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) is enabled, this placeholder uses the source IP address reported by the proxy.
+- `${peerport}`: Starting from EMQX 6.3.0, the source port of the client, for example, `51544`. When Proxy Protocol is enabled, this placeholder uses the source port reported by the proxy.
+- `${peername}`: Starting from EMQX 6.3.0, the source IP address and port of the client. For an IPv4 address, the value uses the `IP:port` format, for example, `192.168.0.1:51544`. For an IPv6 address, the address is not enclosed in square brackets, for example, `2001:db8::1:51544`. When Proxy Protocol is enabled, this placeholder uses the source IP address and port reported by the proxy.
 - `${proto_name}`: The protocol name used by the client, e.g. `MQTT`, `CoAP`.
 - `${mountpoint}`: The mountpoint of the gateway listener (topic prefix).
 - `${action}`: The action being requested, e.g. `publish`, `subscribe`.
@@ -31,6 +33,10 @@ The request can use JSON format, with the following placeholders in the URL and 
 - `${qos}`: The QoS of the message to be published or subscribed in the current request.
 - `${retain}`: Whether the message to be published in the current request is a retained message.
 - `${zone}`: The client's Zone at runtime. The Zone is a logical classification of the client, such as region or environment, that can be dynamically applied based on the client's configuration.
+
+::: tip
+The `${peerhost}` and `${peerport}` placeholders are deprecated. They remain supported for backward compatibility. For new templates, use `${peername}` where supported.
+:::
 
 ### Response
 
@@ -140,7 +146,7 @@ When configuring dynamic hostname resolution, note the following:
 
 ### Configure OAuth2 Client Credentials
 
-Starting from EMQX 6.0.4, an HTTP authorizer supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the external HTTP authorization service, it sends the token in the `Authorization: Bearer <access_token>` request header so that the external service can authenticate EMQX.
+Starting from EMQX 6.3.0, an HTTP authorizer supports the OAuth 2.0 Client Credentials Grant. When OAuth2 is enabled, EMQX obtains, caches, and automatically refreshes an access token from the configured token endpoint. When EMQX calls the external HTTP authorization service, it sends the token in the `Authorization: Bearer <access_token>` request header so that the external service can authenticate EMQX.
 
 Turn on **OAuth2 Client Credentials**, and then configure the following settings:
 
@@ -210,7 +216,7 @@ Example of an HTTP authorizer configured with `GET` request:
 ```
 ### OAuth2 Client Credentials Configuration
 
-Starting from EMQX 6.0.4, you can enable OAuth2 Client Credentials by adding an `oauth2` block to the HTTP authorizer configuration. Place the block at the same level as `method`, `url`, `body`, and `headers`:
+Starting from EMQX 6.3.0, you can enable OAuth2 Client Credentials by adding an `oauth2` block to the HTTP authorizer configuration. Place the block at the same level as `method`, `url`, `body`, and `headers`:
 
 ```hocon
 oauth2 {

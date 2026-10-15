@@ -1,23 +1,23 @@
 # HAProxyによるEMQXクラスターのロードバランス
 
-HAProxyは、クライアントのネットワーク接続要求を複数のバックエンドサーバーに分散する、無料で高速かつ信頼性の高いロードバランスソフトウェアです。EMQXは複数のMQTTサーバーで構成される分散クラスターアーキテクチャをネイティブにサポートしています。HAProxyを用いてEMQXクラスターをデプロイすることで、IoTデバイスからのMQTT接続をロードバランスし、多数のデバイス接続をクラスター内の異なるEMQXノードに分散できます。
+HAProxyは、クライアントのネットワーク接続要求を複数のバックエンドサーバーに分散する、無料で高速かつ信頼性の高いロードバランスソフトウェアです。EMQXは複数のMQTTサーバーで構成される分散クラスターアーキテクチャをネイティブにサポートしています。HAProxyを用いてEMQXクラスターを構築することで、IoTデバイスからのMQTT接続をロードバランスし、多数のデバイス接続をクラスター内の異なるEMQXノードに分散できます。
 
-本ページでは、主にHAProxyのインストールと設定方法を解説し、EMQXクラスター内でMQTTサーバーのロードバランスを構築する手順を説明します。
+本ページでは、HAProxyのインストールおよび設定方法を中心に、EMQXクラスター内でMQTTサーバーのロードバランスを行う手順を解説します。
 
-## 特徴と利点
+## 特長と利点
 
-EMQXのMQTTロードバランスにHAProxyを利用することで、以下のような特徴と利点があります。
+EMQX MQTTロードバランスにHAProxyを利用すると、以下のような特長と利点があります。
 
-- HAProxyによるEMQXクラスターのデプロイは、リバースプロキシの背後にバックエンドノード情報を隠蔽し、外部に統一されたアクセスアドレスを提供するため、システムの保守性とスケーラビリティを向上させます。
-- MQTT over TLS接続の終端をサポートし、EMQXのSSL暗号化計算負荷を軽減、証明書の展開と管理を簡素化します。
-- MQTTプロトコルをネイティブにサポートし、MQTTメッセージの解析によりセッションのスティッキー性やインテリジェントなロードバランス機構を実現、不正接続の検知によるセキュリティ強化も可能です。
-- プライマリ・スタンバイサーバーによる高可用性機構を備え、バックエンドのヘルスチェックと組み合わせてミリ秒単位のフェイルオーバーを実現し、サービスの継続稼働を保証します。
+- HAProxyを用いたEMQXクラスターのデプロイにより、バックエンドノード情報をリバースプロキシの背後に隠し、外部には統一されたアクセスアドレスを提供。システムの保守性とスケーラビリティが向上します。
+- MQTT over TLS接続の終端をサポートし、EMQXのSSL暗号化処理負荷を軽減。証明書の展開・管理も簡素化されます。
+- MQTTプロトコルをネイティブに解析可能で、セッションのスティッキー性やインテリジェントなロードバランス機構を実装。違法接続の検知によるセキュリティ強化も実現します。
+- プライマリ・スタンバイ構成の高可用性機構とバックエンドのヘルスチェックを備え、ミリ秒単位のフェイルオーバーを実現し、サービスの継続性を確保します。
 
 ![EMQX LB HAProxy](./assets/emqx-lb-haproxy.png)
 
 ## クイックスタート
 
-以下は実用的な例を含むDocker Compose構成で、簡単にセットアップを試し検証できます。手順は次の通りです。
+以下は、実用的な例を含むDocker Compose構成で、簡単にセットアップを試行・検証できます。手順は以下の通りです。
 
 1. サンプルリポジトリをクローンし、`mqtt-lb-haproxy`ディレクトリに移動します。
 
@@ -32,19 +32,19 @@ cd emqx-usage-example/mqtt-lb-haproxy
 docker compose up -d
 ```
 
-3. [MQTTX](https://mqttx.app/) CLIを使い、10個のTCP接続を確立してMQTTクライアント接続をシミュレートします。
+3. [MQTTX](https://mqttx.app/) CLIを用いて10件のTCP接続を確立し、MQTTクライアント接続をシミュレートします。
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-4. HAProxyの接続監視とEMQXクライアント接続の分布状況を確認できます。
+4. HAProxyの接続モニタリングおよびEMQXクライアント接続の分布状況を確認できます。
 
-   - HAProxyのステータス監視ページ http://localhost:8888/stats でクライアント接続状況を確認：
+   - HAProxyのステータス監視ページ http://localhost:8888/stats でクライアント接続状況を確認します。
 
    ![HAProxy stats MQTT](./assets/haproxy-stats-mqtt.png)
 
-   ここでは現在のアクティブ接続数やサーバーのリクエスト処理統計が表示されます。
+   ここでは、現在のアクティブ接続数やサーバーのリクエスト処理統計が表示されます。
 
    - 各EMQXノードのクライアント接続状況は以下のコマンドで確認可能です。
 
@@ -54,7 +54,7 @@ mqttx bench conn -c 10
    docker exec -it emqx3 emqx ctl broker stats | grep connections.count
    ```
 
-   各ノードの接続数およびアクティブ接続数が表示され、10接続がクラスター内のノードに均等に分散されていることが確認できます。
+   それぞれのノードの接続数およびアクティブ接続数が表示され、10接続がクラスター内のノードに均等に分散されていることがわかります。
 
    ```bash
    connections.count             : 4
@@ -65,15 +65,15 @@ mqttx bench conn -c 10
    live_connections.count        : 3
    ```
 
-これらの手順により、HAProxyのロードバランス機能を検証し、EMQXクラスター内のクライアント接続分布を観察できます。`emqx-usage-example/mqtt-lb-haproxy/haproxy.conf`ファイルを編集して設定をカスタマイズし、検証することも可能です。
+これらの手順により、HAProxyのロードバランス機能を検証し、EMQXクラスター内のクライアント接続分布を確認できます。`emqx-usage-example/mqtt-lb-haproxy/haproxy.conf`ファイルを編集して設定をカスタマイズし、検証することも可能です。
 
-## HAProxyのインストールと利用
+## HAProxyのインストールと使用方法
 
-このセクションでは、HAProxyのインストールおよび利用方法を詳しく紹介します。
+このセクションでは、HAProxyのインストールおよび使用方法を詳しく紹介します。
 
 ### 前提条件
 
-開始前に、以下の3つのEMQXノードで構成されるクラスターを作成している必要があります。EMQXクラスターの作成方法は[クラスターの作成](./create-cluster.md)を参照してください。
+開始前に、以下の3つのEMQXノードで構成されたクラスターを作成していることを確認してください。EMQXクラスターの作成方法は、[クラスターの作成](./create-cluster.md)を参照してください。
 
 | ノードアドレス           | MQTT TCPポート | MQTT WebSocketポート |
 | ------------------------ | -------------- | -------------------- |
@@ -81,11 +81,11 @@ mqttx bench conn -c 10
 | emqx2-cluster.emqx.io    | 1883           | 8083                 |
 | emqx3-cluster.emqx.io    | 1883           | 8083                 |
 
-本ページの例では、単一のHAProxyサーバーをロードバランサーとして設定し、これら3つのEMQXノードで構成されるクラスターにリクエストを分散します。
+本ページの例では、単一のHAProxyサーバーをロードバランサーとして設定し、これら3つのEMQXノードからなるクラスターにリクエストを分散します。
 
 ### HAProxyのインストール
 
-Ubuntu 22.04 LTS環境にHAProxyをインストールする手順は以下の通りです。
+Ubuntu 22.04 LTS環境でのHAProxyインストール手順は以下の通りです。
 
 ```bash
 # パッケージインデックスの更新
@@ -100,7 +100,7 @@ haproxy -v
 
 ### はじめに
 
-HAProxyの設定ファイルはデフォルトで `/etc/haproxy/haproxy.cfg` にあります。本ページの例を参考に、ファイル末尾に設定を追記してください。HAProxyは稼働中に `/var/log/haproxy.log` に継続的にログを出力するため、デバッグ時に確認可能です。
+HAProxyの設定ファイルはデフォルトで `/etc/haproxy/haproxy.cfg` にあります。本ページの例を参考に、ファイル末尾に設定を追記してください。稼働中はHAProxyが `/var/log/haproxy.log` に継続的にログを出力するため、デバッグ時に確認可能です。
 
 HAProxyの基本的な操作コマンドは以下の通りです。
 
@@ -116,7 +116,7 @@ HAProxyの起動：
 sudo systemctl start haproxy
 ```
 
-設定変更を反映するためのリロード。事前に設定チェックを推奨：
+設定変更を反映するためのリロード（事前に設定チェック推奨）：
 
 ```bash
 sudo systemctl reload haproxy
@@ -136,11 +136,11 @@ sudo systemctl status haproxy
 
 ## HAProxyのリバースプロキシおよびロードバランス設定
 
-ここでは、HAProxyを用いた各種ロードバランス要件に対応する設定方法を説明します。
+ここでは、HAProxyをさまざまなロードバランス要件に対応させる設定方法を解説します。
 
 ### 基本設定
 
-HAProxyサーバーを起動するために必要な基本設定例です。`haproxy.cfg`に以下の2つの設定項目が含まれていることを確認してください。
+HAProxyサーバーを起動するための参考設定です。`haproxy.cfg`に以下の2つの設定項目が含まれていることを確認してください。
 
 ```bash
 global  
@@ -162,7 +162,7 @@ defaults
 
 ### MQTTのリバースプロキシ設定
 
-以下の設定をHAProxyの設定ファイルに追加すると、MQTT接続をリバースプロキシし、クライアントの要求をバックエンドMQTTサーバーにルーティングできます。
+以下の設定をHAProxyの設定ファイルに追加することで、MQTT接続をリバースプロキシし、クライアント要求をバックエンドMQTTサーバーにルーティングできます。
 
 ```bash
 backend mqtt_backend
@@ -170,7 +170,7 @@ backend mqtt_backend
   stick-table type string len 32 size 100k expire 30m
   stick on req.payload(0,0), mqtt_field_value(connect, client_identifier)
 
-  # send-proxyを追加すると実IPをEMQXに渡せます。対応するバックエンドリスナーはproxy_protocolを有効にする必要があります
+  # send-proxyを追加すると実クライアントIPがEMQXに渡される。対応するバックエンドリスナーはproxy_protocolを有効にする必要あり
   # server emqx1 emqx1-cluster.emqx.io:1883 check send-proxy-v2-ssl-cn
   server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
@@ -179,7 +179,7 @@ backend mqtt_backend
 frontend mqtt_servers
   bind *:1883
   mode tcp
-  # MQTTメッセージ解析のためバッファが溜まるのを待つ
+  # MQTTメッセージ解析のためバッファが溜まるまで待機
   tcp-request inspect-delay 10s
   # MQTT以外の接続を拒否
   tcp-request content reject unless { req.payload(0,0), mqtt_is_valid }
@@ -190,10 +190,10 @@ frontend mqtt_servers
 
 以下の設定により、HAProxyがMQTTのTLS接続を終端し、クライアントからの暗号化されたMQTT要求をバックエンドMQTTサーバーに転送して通信の安全性を確保できます。
 
-基本のTCP設定にSSLおよび証明書関連パラメータを追加するだけです。
+基本のTCP設定にSSLおよび証明書関連パラメータを追加してください。
 
 :::tip Tip
-HAProxyの証明書ファイルは証明書と秘密鍵を含む必要があり、`cat`コマンドで1つのファイルに結合できます。
+HAProxyの証明書ファイルは証明書と秘密鍵の両方を含む必要があります。`cat`コマンドで1つのファイルに結合可能です。
 
 ```bash
 cat server.crt server.key > server.pem
@@ -206,7 +206,7 @@ backend mqtt_backend
   mode tcp
   balance roundrobin
  
-  # send-proxyを追加すると実IPをEMQXに渡せます。対応するバックエンドリスナーはproxy_protocolを有効にする必要があります
+  # send-proxyを追加すると実クライアントIPがEMQXに渡される。対応するバックエンドリスナーはproxy_protocolを有効にする必要あり
   server emqx1 emqx1-cluster.emqx.io:1883 check-send-proxy send-proxy-v2-ssl-cn
   server emqx2 emqx2-cluster.emqx.io:1883 check-send-proxy send-proxy-v2-ssl-cn
   server emqx3 emqx3-cluster.emqx.io:1883 check-send-proxy send-proxy-v2-ssl-cn
@@ -221,7 +221,7 @@ frontend mqtt_tls_frontend
 
 ### MQTT WebSocketのリバースプロキシ設定
 
-以下の設定により、HAProxyがMQTT WebSocket接続をリバースプロキシし、クライアント要求をバックエンドMQTTサーバーに転送できます。`server_name`でHTTPのドメイン名やIPアドレスを指定します。
+以下の設定により、HAProxyがMQTT WebSocket接続をリバースプロキシし、クライアント要求をバックエンドMQTTサーバーに転送します。`server_name`でHTTPのドメイン名やIPアドレスを指定可能です。
 
 ```bash
 backend mqtt_ws_backend
@@ -239,12 +239,12 @@ frontend mqtt_ws_frontend
 
 ### MQTT WebSocket SSLのリバースプロキシ設定
 
-以下の設定により、HAProxyがMQTT WebSocket接続のTLSを終端し、クライアントからの暗号化されたMQTT要求をバックエンドMQTTサーバーに転送して通信の安全性を確保できます。`server_name`でHTTPのドメイン名やIPアドレスを指定します。
+以下の設定により、HAProxyがMQTT WebSocket接続のTLSを終端し、クライアントからの暗号化されたMQTT要求をバックエンドMQTTサーバーに転送して通信の安全性を確保します。`server_name`でHTTPのドメイン名やIPアドレスを指定可能です。
 
-基本のWebSocket設定にSSLおよび証明書関連パラメータを追加するだけです。
+基本のWebSocket設定にSSLおよび証明書関連パラメータを追加してください。
 
 :::tip
-HAProxyの証明書ファイルは証明書と秘密鍵を含む必要があり、`cat`コマンドで1つのファイルに結合できます。
+HAProxyの証明書ファイルは証明書と秘密鍵の両方を含む必要があります。`cat`コマンドで1つのファイルに結合可能です。
 
 ```bash
 cat server.crt server.key > server.pem
@@ -268,13 +268,13 @@ frontend mqtt_ws_tls_frontend
 
 ### ロードバランス戦略の設定
 
-HAProxyは接続の分散方法を制御する様々なロードバランス戦略を提供しています。実際の運用では、サーバー性能やトラフィック要件などに応じて適切な戦略を選択することが重要です。
+HAProxyは接続の分配方法を制御するさまざまなロードバランス戦略を提供しています。実際の運用では、サーバー性能やトラフィック要件などに応じて適切な戦略を選択することが重要です。
 
-以下はHAProxyがサポートするロードバランス戦略と設定例です。
+以下にHAProxyがサポートするロードバランス戦略と設定例を示します。
 
 #### ラウンドロビン
 
-デフォルトのロードバランス戦略で、リクエストを順番に各バックエンドサーバーに振り分けます。負荷を均等に分散し、バックエンドサーバーの性能がほぼ同等の場合に適しています。
+デフォルトのロードバランス戦略で、リクエストを順番に各バックエンドサーバーに分配します。負荷が均等に分散され、バックエンドサーバーの性能がほぼ同等の場合に適しています。
 
 ```bash
 backend mqtt_backend
@@ -287,7 +287,7 @@ backend mqtt_backend
 
 #### 重み付きラウンドロビン
 
-ラウンドロビンをベースに、各EMQXノードに異なる重みを割り当ててリクエスト分布に影響を与えます。重みが高いサーバーほど多くのリクエストを受け取ります。
+ラウンドロビンを基に、各EMQXノードに異なる重みを割り当ててリクエスト分配に影響を与えます。重みの高いサーバーほど多くのリクエストを受け取ります。
 
 ```bash
 backend mqtt_backend
@@ -300,7 +300,7 @@ backend mqtt_backend
 
 #### IPハッシュ
 
-クライアントのIPアドレスを元にハッシュを計算し、リクエストを固定のバックエンドサーバーに割り当てます。同一クライアントからのリクエストが常に同じサーバーに向かうことを保証します。
+クライアントのIPアドレスに基づくハッシュ値を計算し、リクエストを固定のバックエンドサーバーに割り当てます。同じクライアントからのリクエストは常に同じサーバーに送られます。
 
 ```bash
 backend mqtt_backend
@@ -326,11 +326,11 @@ backend mqtt_backend
 
 ### MQTTスティッキーセッションロードバランスの設定
 
-MQTTのスティッキーセッションロードバランスはHAProxy 2.4で導入されました。
+MQTTスティッキーセッションロードバランスはHAProxy 2.4で導入されました。
 
-「スティッキー」とは、クライアントが再接続時に同じサーバーへルーティングされる機能で、MQTTのセッション乗っ取りを回避します。特に複数クライアントが頻繁に再接続したり、問題のあるクライアントが頻繁に切断・再接続する場合に効果的です。
+「スティッキー」とは、クライアントが再接続した際に同じサーバーにルーティングし、MQTTのセッション乗っ取りを避ける機能を指します。複数クライアントが頻繁に再接続する場合や問題のあるクライアントが頻繁に切断・再接続するケースで効果的です。
 
-スティッキーセッションを実装するには、サーバーが接続要求内のクライアント識別子（通常はクライアントID）を特定する必要があり、ロードバランサーはMQTTパケットをインスペクトします。クライアント識別子を取得後、静的クラスターではハッシュでサーバーIDに変換するか、ロードバランサーがクライアント識別子とターゲットノードIDのマッピングテーブルを保持して柔軟にルーティングします。
+スティッキーセッションを実現するには、サーバーが接続要求内のクライアント識別子（通常はクライアントID）を特定する必要があります。これはロードバランサーがMQTTパケットを解析することを意味します。クライアント識別子を取得後、静的クラスターではハッシュでサーバーIDに変換したり、ロードバランサーがクライアント識別子とターゲットノードIDのマッピングテーブルを保持して柔軟にルーティングできます。
 
 ```bash
 backend mqtt_backend
@@ -338,8 +338,8 @@ backend mqtt_backend
   # スティッキーセッション用テーブルを作成
   stick-table type string len 32 size 100k expire 30m
 
-  # クライアントIDをキーに使用
-  stick on req.payload(0,0), mqtt_field_value(connect, client_identifier)
+  # クライアントIDをキーとして使用
+  stick on req.payload(0，0)，mqtt_field_value(connect，client_identifier)
  
   server emqx1 emqx1-cluster.emqx.io:1883
   server emqx2 emqx2-cluster.emqx.io:1883
@@ -348,7 +348,7 @@ backend mqtt_backend
 
 ## HAProxyのステータス監視
 
-HAProxyは専用のフロントエンドを設定することでステータス監視を有効化できます。これにより、各バックエンドおよびフロントエンドの接続状況やグローバルな接続統計を閲覧可能です。詳細は[Exploring the HAProxy Stats Page](https://www.haproxy.com/blog/exploring-the-haproxy-stats-page)を参照してください。
+HAProxyは特別なフロントエンドを設定することでステータス監視を有効化できます。これにより、各バックエンドやフロントエンドの接続状況やグローバルな接続統計を閲覧可能です。詳細は[Exploring the HAProxy Stats Page](https://www.haproxy.com/blog/exploring-the-haproxy-stats-page)を参照してください。
 
 ```bash
 frontend stats
@@ -359,15 +359,15 @@ frontend stats
   stats refresh 10s
 ```
 
-ブラウザで http://localhost:8888/stats を開くとステータスデータを確認できます。
+http://localhost:8888/stats を開くとステータスデータが表示されます。
 
 ![HAProxy stats Page](./assets/haproxy-stats-all.png)
 
 ### HAProxy高可用性ソリューションの紹介
 
-HAProxyとKeepalivedは、高可用性とロードバランスを実現する一般的な組み合わせです。KeepalivedはLinux向けの軽量高可用性ソリューションで、複数サーバー間で仮想IPアドレス（VIP）を管理し、サーバー障害時にVIPを別サーバーへ移動させて高可用性を提供します。また、HAProxyプロセスの監視と必要に応じた再起動も行い、ロードバランスサービスの可用性を確保します。
+HAProxyとKeepalivedは、高可用性とロードバランスを実現する一般的な組み合わせです。KeepalivedはLinux向けの軽量高可用性ソリューションで、複数サーバー間で仮想IPアドレス（VIP）を管理し、サーバー障害時にVIPを別サーバーに移動させて高可用性を提供します。さらに、HAProxyプロセスの監視と必要に応じた再起動も行い、ロードバランスサービスの可用性を確保します。
 
-Keepalivedを利用することでHAProxyの高可用性を実現可能です。プライマリHAProxyサーバーが障害を起こした場合、Keepalivedが自動的にVIPをバックアップサーバーに移動し、サービスの継続性を保証します。実装方法は[HAProxyドキュメント](https://www.haproxy.com/documentation/hapee/latest/high-availability/active-standby/)を参照してください。
+Keepalivedを利用することで、HAProxyの高可用性を実現可能です。プライマリHAProxyサーバーが障害を起こした場合、Keepalivedが自動的にVIPをバックアップサーバーに移動し、サービスの継続性を保証します。このソリューションの実装方法は[HAProxyドキュメント](https://www.haproxy.com/documentation/hapee/latest/high-availability/active-standby/)を参照してください。
 
 ## さらに詳しく
 
@@ -375,5 +375,5 @@ EMQXはHAProxyに関する豊富なリソースを提供しています。以下
 
 **ブログ：**
 
-- [HAProxyベースのEMQXクラスター構築](https://www.emqx.com/en/blog/emqx-haproxy)
+- [HAProxyをベースにしたEMQXクラスターの構築](https://www.emqx.com/en/blog/emqx-haproxy)
 - [スティッキーセッションロードバランス - MQTTブローカークラスタリングパート2](https://www.emqx.com/en/blog/mqtt-broker-clustering-part-2-sticky-session-load-balancing)

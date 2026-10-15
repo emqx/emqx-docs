@@ -21,6 +21,16 @@ EMQX offers more configuration items to better serve customized needs. For detai
 
 :::
 
+## Listener Name Requirements
+
+The name of a newly created MQTT listener must meet the following requirements:
+
+- The name is 1 to 64 bytes long.
+- The name starts with an ASCII letter or digit.
+- The name contains only ASCII letters, digits, hyphens (`-`), and underscores (`_`).
+
+EMQX rejects a listener creation request if the name does not meet these requirements. For MQTT listeners that existed before the upgrade and have names longer than 64 bytes, you can still update their configurations or remove them, but you cannot rename them.
+
 ## How EMQX Determines the Listener Address
 
 A listener address determines the local network interfaces and port on which EMQX receives client connections.
@@ -203,7 +213,7 @@ To check a listener through the REST API, use `GET /api/v5/listeners/:id`, for e
 
 The `bind` field keeps the configured value, including the port. `resolved_address` and `resolved_address_from` are read-only information; change `bind` or `node.default_listener_address` to change the address, rather than editing these response fields.
 
-These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../../develop/gateway/gateway.md#listener).
+These queries cover MQTT listeners. For gateway listeners, use the [gateway listener query](../../develop/gateway/gateway.md#gateway-listeners).
 
 ## Forwarded Client Address (WebSocket Listeners)
 
@@ -251,6 +261,12 @@ listeners.tcp.demo {
 ```
 
 The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
+
+::: warning Authorization Is Checked Before the Mountpoint Is Added
+EMQX evaluates authorization rules against the topic without the listener's mountpoint. It adds the mountpoint after the authorization check. This applies to publish and subscribe operations and Will messages.
+
+For a listener with a mountpoint, write authorization rules against the unmounted topic, not the mounted topic. A rule written for the mounted topic, such as a deny on `department-a/secret/#`, does not match a client that publishes or subscribes to `secret/#` through that listener.
+:::
 
 ### Incompatibility with Topic-Prefix Extension Features
 

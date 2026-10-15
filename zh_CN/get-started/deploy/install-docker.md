@@ -29,6 +29,14 @@ EMQX 容器默认使用控制台日志，但节点异常终止时，Erlang 虚�
 
 如果 EMQX 需要访问宿主机上运行的服务，请勿使用 `localhost` 或 `127.0.0.1` 作为服务地址。这些地址指向容器自身的网络接口。请使用宿主机 IP 地址或 [host 网络模式](https://docs.docker.com/network/host/)。在 Docker Desktop for Mac 或 Windows 中，也可以使用 `host.docker.internal`。
 
+### 了解运行时镜像
+
+从 EMQX Enterprise 6.3.1 开始，官方 Docker 发布镜像使用 Docker Hardened Debian 13（Trixie）。运行时镜像不包含 `apt`、`dpkg` 等软件包管理工具，因此无法在运行中的 EMQX 容器内使用这些工具安装软件包。
+
+如果部署需要额外工具或运行时依赖，请在部署前将其加入自定义镜像并完成验证。不要依赖在运行中的官方容器内安装软件包。
+
+发布镜像还包含构建来源信息（provenance）和软件物料清单（SBOM）的证明材料（attestations）。Docker Scout 可利用这些证明材料，应用 Docker 针对加固基础镜像提供的漏洞评估（VEX 声明）。
+
 ## 通过 Docker 运行单个 EMQX 节点
 
 按照以下步骤运行单个 EMQX 节点。有关 EMQX 官方 Docker 镜像的更多信息，参见 [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)。
