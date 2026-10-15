@@ -345,7 +345,8 @@ coap-client -m post -e "Hi, this is libcoap" "coap://127.0.0.1/ps/coap/test?clie
 **リクエストパラメータ:**
 
 - メソッド: `GET`
-- オプション: `observer` を `0` に設定
+- オプション: `Observe` を `0` に設定
+- CoAPトークン: Observe関係を識別するため、空でないトークンを使用
 - URI: `ps/{+topic}{?QueryString*}`
   - `{+topic}` はサブスクライブするトピック。例えば `coap/test` をサブスクライブする場合は URI は `ps/coap/test`。
   - `{?QueryString}` はリクエストパラメータ:
@@ -377,15 +378,21 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
 
+`-T "obstoken"`で設定するCoAPトークンはObserve関係を識別します。これは、`Connection Mode`でリクエストを認証するURIクエリパラメータの`token`とは別のものです。
+
 ### Topic Unsubscribe
 
 このインターフェースは CoAP クライアントがトピックのサブスクライブを解除するために使用します。
+
+Observe関係を明示的に解除するには、同じリソースに`Observe: 1`と元のObserveトークンを指定したGETリクエストを送信します。
 
 現在の実装では、サブスクライブ解除操作は `Connection Mode` のみで利用可能です。
 
 **リクエストパラメータ:**
 
 - メソッド: `GET`
+- オプション: `Observe` を `1` に設定
+- CoAPトークン: 元のObserveリクエストで使用したトークンを使用
 - URI: `ps/{+topic}{?QueryString*}`
   - `{+topic}` はサブスクライブ解除するトピック。例えば `coap/test` の場合は URI は `ps/coap/test`。
   - `{?QueryString}` はリクエストパラメータ:
@@ -405,8 +412,20 @@ coap-client -m get -s 60 -O 6,0x00 -o - -T "obstoken" "coap://127.0.0.1/ps/coap/
 例：`Connection Mode` で `coap/test` のサブスクライブを解除する場合：
 
 ```bash
-coap-client -m get -O 6,0x01 "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
+coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?clientid=123&token=3404490787"
 ```
+
+### プロトコル仕様との違い
+
+EMQX 6.1.2以降の6.1リリースでは、確認可能（`CON`）なObserve通知がクライアントからResetメッセージで拒否された場合、またはすべての再送を試行しても確認応答を受信できなかった場合、EMQXは次の処理を行います。
+
+- 失敗した通知を破棄します。
+- その通知に関連するトランスポートおよびBlock2の状態をクリーンアップします。
+- Observe関係とそのブローカーサブスクリプションを保持します。
+
+そのため、以降のリソース変更は、保持された関係を通じて引き続き配信される可能性があります。関係が保持されても、失敗した通知が再配信されるとは限りません。これらの失敗によって関係自体がキャンセルされることはなく、通常のクライアントセッションのクリーンアップが適用されます。
+
+この動作は互換性のために維持されていますが、[RFC 7641セクション4.5](https://www.rfc-editor.org/rfc/rfc7641.html#section-4.5)とは異なります。RFCでは、Resetメッセージを受信した後、または最後の再送がタイムアウトした後に、サーバーがオブザーバーを削除する必要があります。
 
 ### 短縮パラメータ名
 

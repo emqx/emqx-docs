@@ -182,6 +182,13 @@ listeners.tcp.demo {
 
 The mountpoint supports the placeholders `${clientid}`, `${username}`, `${zone}`, and `${client_attrs.NAME}`. For example, with `mountpoint = "${username}/"`, when a client with username `u1` subscribes to `sensors/#`, the subscription is internally created as `u1/sensors/#`.
 
+::: warning Authorization Is Checked Before the Mountpoint Is Added
+EMQX evaluates authorization rules against the topic without the listener's mountpoint. It adds the mountpoint after the authorization check. This applies to publish and subscribe operations and Will messages.
+
+For a listener with a mountpoint, write authorization rules against the unmounted topic, not the mounted topic. A rule written for the mounted topic, such as a deny on `department-a/secret/#`, does not match a client that publishes or subscribes to `secret/#` through that listener.
+:::
+
+
 ### Incompatibility with Topic-Prefix Extension Features
 
 Several EMQX features are triggered by publishing or subscribing to topics that start with a special `$` prefix. EMQX adds the mountpoint prefix before it matches these prefixes. For example, if a client connects through a listener with mountpoint `mp/` and publishes to `$delayed/10/t`, the broker receives the topic as `mp/$delayed/10/t`, which no longer starts with `$delayed/`. The feature is silently bypassed: EMQX routes the message as an ordinary message to the mounted literal topic, and no error is reported to the client.

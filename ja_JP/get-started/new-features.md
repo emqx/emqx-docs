@@ -156,4 +156,4 @@ LDAP認可はJSON形式の拡張ACLルールをサポートし、LDAP認証はLD
 
 ## EMQX 5.x シリーズ
 
-EMQX 5.xの機能と更新の完全な一覧については、[EMQX 5.10 ドキュメント – 新機能](https://docs.emqx.com/en/emqx/v5.10/getting-started/new-features.html)をご参照ください。
+EMQX 5.xの機能と更新の完全な一覧については、[EMQX 5.10 ドキュメント – 新機能](https://docs.emqx.com/en/emqx/v5.10/get-started/new-features.html)をご参照ください。

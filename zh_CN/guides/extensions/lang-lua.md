@@ -57,9 +57,9 @@ end
 
 ## 回调函数
 
-支持的回调函数，及参数类型参考：[emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
+支持的回调函数，及参数类型参考：[emqx-lua-hook - README.md](https://github.com/emqxarchive/emqx-lua-hook/tree/master#hook-api)
 
-示例参考：[examples.lua](https://github.com/emqx/emqx-lua-hook/blob/develop/examples.lua)
+示例参考：[examples.lua](https://github.com/emqxarchive/emqx-lua-hook/blob/master/examples.lua)
 
 ## 命令
 
