@@ -30,7 +30,7 @@ RBACにより、組織内の役割に基づいてユーザーに権限を割り�
 
 ### ログインユーザースコープ
 
-ダッシュボードのログインユーザーには、ロール内でアクセス可能なAPIの範囲をさらに制限するためにスコープを割り当てられます。[10のAPIキー用スコープ](../api.md#built-in-api-key-scopes)に加え、ダッシュボードユーザーにはブラウザセッション専用の4つの追加スコープがあります。
+ダッシュボードのログインユーザーには、ロール内でアクセス可能なAPIの範囲をさらに制限するためにスコープを割り当てられます。EMQX 6.2.4以降、ダッシュボードユーザーは[11のAPIキー用スコープ](../api.md#built-in-api-key-scopes)と、ブラウザセッション専用の4つの追加スコープを利用できます。
 
 | スコープ | 必須ロール | 用途 |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ RBACにより、組織内の役割に基づいてユーザーに権限を割り�
 
 - **Role Default Scopes**：選択したロールのデフォルトスコープを使用。ロールのデフォルト変更は自動的に反映されます。
 - **Privilege Scopes**：`system`、`user_management`、`api_key_management`、`sso_management`から選択。これらは管理者相当の権限を提供します。
-- **Custom Restricted Permissions**：管理者相当グループ外のロールに許可されたスコープ（例：`connections`、`publish`、`data_integration`、`monitoring`、`mfa_management`）から選択。空欄の場合、スコープ保護されたAPIにアクセスできません。
+- **Custom Restricted Permissions**：管理者相当グループ外のロールに許可されたスコープ（例：`connections`、`publish`、`data_integration`、`monitoring`、`plugin_api`、`mfa_management`）から選択。空欄の場合、スコープ保護されたAPIにアクセスできません。
 
 <img src="./assets/user_scopes.png" alt="グローバルダッシュボードユーザーの作成と権限モードの選択" style="zoom:67%;" />
 
@@ -53,10 +53,10 @@ RBACにより、組織内の役割に基づいてユーザーに権限を割り�
 
 | ユーザータイプ | デフォルト権限 |
 | --- | --- |
-| グローバルAdministrator | 14スコープすべて：10のAPIキー用スコープと4つのログイン専用スコープ。 |
-| グローバルViewer | 10のAPIキー用スコープ。`mfa_management`は明示的に割り当てられた場合のみ付与。 |
-| ネームスペースAdministrator | Connections、Monitoring、Data Integration、Access Control、System、Cluster、License、User Management、API Key Management。 |
-| ネームスペースViewer | Connections、Monitoring、Data Integration、Access Control、System、Cluster、License。ログイン専用スコープは含まれません。 |
+| グローバルAdministrator | 15スコープすべて：11のAPIキー用スコープと4つのログイン専用スコープ。 |
+| グローバルViewer | 11のAPIキー用スコープ。`mfa_management`は明示的に割り当てられた場合のみ付与。 |
+| ネームスペースAdministrator | Connections、Monitoring、Data Integration、Access Control、System、Cluster、License、Plugin-Extended API、User Management、API Key Management。 |
+| ネームスペースViewer | Connections、Monitoring、Data Integration、Access Control、System、Cluster、License、Plugin-Extended API。ログイン専用スコープは含まれません。 |
 
 ::: warning 管理者相当スコープは単独で割り当てる必要があります
 

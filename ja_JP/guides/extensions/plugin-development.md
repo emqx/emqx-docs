@@ -11,7 +11,7 @@ EMQX公式プラグインは通常、EMQXモノレポ内で開発されます。
 - EMQXの[フック](./hooks.md)の知識
 - `make`を含む動作するビルド環境（例：`build_essential`）
 - [rebar3](https://www.rebar3.org/)
-- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンの`.tool-versions`ファイル（例：https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得できます。
+- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンの`.tool-versions`ファイル（例：[e5.9.0-beta.4/.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions)）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)でemqx-builderイメージを取得できます。
 
 ## スタンドアロンプラグイン開発
 
@@ -443,6 +443,16 @@ tarballにはコンパイル済みアプリケーション（`rebar.config`の`r
 ```
 /api/v5/plugin_api/{plugin_name}/...
 ```
+
+EMQX 6.2.4以降、プラグインAPIゲートウェイのスコープチェックでは、制限付きの`plugin_api`スコープまたは管理者相当の`system`スコープのいずれかが許可されます。呼び出し元のロールとネームスペース権限でも、要求された操作が許可されている必要があります。
+
+呼び出し元がプラグインの公開エンドポイントのみを必要とし、プラグインのインストール、起動、停止、設定を行う必要がない場合は、`plugin_api`を使用します。これらのプラグイン管理操作は引き続き`system`スコープに含まれます。後方互換性のため、ゲートウェイは`system`も引き続き受け付けます。
+
+::: warning 重要
+
+`plugin_api`スコープは、このゲートウェイを通じて公開されるすべてのエンドポイントへのアクセス権を付与します。個々のプラグインエンドポイントに対する権限を制限するものではありません。プラグインが公開する各エンドポイントのセキュリティ上の影響を慎重に確認してください。
+
+:::
 
 これらのリクエストを処理するには、プラグインアプリモジュールで`on_handle_api_call/4`を実装し、HTTPメソッドやパスでディスパッチします。参考実装は`plugins/emqx_username_quota/src/emqx_username_quota_app.erl`や`emqx_username_quota_api.erl`を参照してください。
 

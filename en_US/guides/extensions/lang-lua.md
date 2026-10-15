@@ -53,9 +53,9 @@ After completion, you can start two MQTT clients, one to subscribe to any topic,
 
 ## Callback Function
 
-Supported callback functions and parameter type: [emqx-lua-hook - README.md](https://github.com/emqx/emqx-lua-hook/tree/develop#hook-api)
+Supported callback functions and parameter type: [emqx-lua-hook - README.md](https://github.com/emqxarchive/emqx-lua-hook/tree/master#hook-api)
 
-Example: [examples.lua](https://github.com/emqx/emqx-lua-hook/blob/develop/examples.lua)
+Example: [examples.lua](https://github.com/emqxarchive/emqx-lua-hook/blob/master/examples.lua)
 
 ## Command
 
