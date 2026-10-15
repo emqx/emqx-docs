@@ -1,41 +1,41 @@
 # EMQX 4.4 から EMQX 5.1 への互換性のない変更点
 
-EMQX 5.0 系列のバージョンでは、旧バージョンの EMQX との互換性に影響を与える可能性のあるいくつかの変更が導入されています。これらの破壊的変更は EMQX 5.1 のリリースノートにも記載されています。
+EMQX 5.0 系列のバージョンでは、旧バージョンの EMQX との互換性に影響を与える可能性のあるいくつかの変更が導入されています。これらの破壊的変更は、EMQX 5.1 のリリースノートにも記載されています。
 
-本ドキュメントは、EMQX 4.x から EMQX 5.1 へのアップグレードを計画しているユーザーが、遭遇する可能性のある問題を理解するためのものです。
+本ドキュメントは、EMQX 4.x から EMQX 5.1 へアップグレードを計画している EMQX ユーザーが、遭遇する可能性のある問題を理解するためのものです。
 
 ::: tip
 
-1. 5.1 へのアップグレードを行う前に、4.4 の最新バージョンへのアップグレードを推奨します。
-2. 5.0 系列のより高いバージョンにアップグレードする場合は、本ドキュメントに従ってまず 5.1 へのアップグレードを完了してください。その後、さらに高いバージョンへのアップグレードを継続できます。
+1. バージョン 5.1 へのアップグレードを行う前に、4.4 の最新バージョンにアップグレードすることを推奨します。  
+2. 5.0 系列のより高いバージョンにアップグレードする場合は、本ドキュメントに従ってまずバージョン 5.1 へのアップグレードを完了し、その後にさらに高いバージョンへアップグレードしてください。
 
 :::
 
 ## 概要
 
-EMQX 4.4 と比較して、EMQX 5.1 へのアップグレードでは、特にさまざまな概念や仕組みに関して大幅な変更があり、EMQX 2.x から 3.x、3.x から 4.x へのアップグレード時の変更を上回るレベルとなっています。
+EMQX 4.4 と比較して、EMQX 5.1 へのアップグレードでは、特にさまざまな概念や仕組みにおいて大幅な変更が導入されており、EMQX 2.x から 3.x、3.x から 4.x へのアップグレード時の変更を上回るレベルの変更となっています。
 
 まとめると、以下の点に注意が必要です。
 
-1. **設定ファイルと HTTP API** に大幅な変更があります。既存の設定やこれらのインターフェースに依存したコードは移行が必要です。
-2. **MQTT プロトコルのコア機能**（Pub/Sub、リテイナー、共有サブスクリプションなど）はクライアントプログラムとの完全な互換性を維持していますが、管理インターフェースには若干の変更がある可能性があります。
-3. 認証、認可、データ統合、プロトコルアクセスに関連するその他の機能は、それぞれの機能に応じて移行が必要です。
-4. 一部の概念が変更されています。例えば、**プラグイン**の新バージョンが導入されており、旧バージョンとは大きく異なります。旧バージョンの**モジュール**の概念は完全に廃止されました。
-5. クラスター探索のための `mcast` や、データ統合のリソースタイプとしての `EMQX ブリッジ` など、一部の機能が削除されている点に注意してください。
+1. **設定ファイルおよび HTTP API** に大幅な変更があります。既存の設定やこれらのインターフェースに依存したコードは移行が必要です。  
+2. **MQTT プロトコルのコア機能**（Pub/Sub、Retainer、Shared Subscription を含む）はクライアントプログラムとの完全互換性を維持していますが、管理インターフェースには若干の変更があります。  
+3. 認証、認可、データ統合、プロトコルアクセスに関連するその他の機能は、それぞれの機能に応じて移行が必要です。  
+4. 一部の概念が変更されています。例えば、新しいバージョンの **プラグイン** が導入されており、旧バージョンとは大きく異なります。旧バージョンの **モジュール** の概念は完全に廃止されました。  
+5. `mcast` によるクラスター探索やデータ統合のリソースタイプとしての `EMQX ブリッジ` など、いくつかの機能が削除されている点に注意してください。
 
 ## HTTP API
 
-以前はダッシュボードの**Applications**で API アクセス認証情報を管理していましたが、現在は**[API Key](../guides/dashboard/system.md#api-key)** を使用して認証情報を作成します。認証情報は API Key と Secret Key で構成され、HTTP Basic 認証のユーザー名とパスワードとしてそれぞれ使用できます。Secret Key は作成時に一度だけ表示され、その後は再取得できません。
+以前はダッシュボードの **Applications** で API アクセス認証情報を管理していましたが、現在は **[API Key](../guides/dashboard/system.md#api-key)** を使用して認証情報を作成します。認証情報は API Key と Secret Key からなり、それぞれ HTTP ベーシック認証のユーザー名とパスワードとして使用できます。Secret Key は認証情報作成時に一度だけ表示され、その後は再取得できません。
 
-- ポート 8081 は閉鎖され、すべての API リクエストはポート 18083 を使用します。
-- HTTP API へのアクセスにはユーザー名/パスワードは使用できず、API Key **必須**です。
-- API のベースパスは `/api/v4` から `/api/v5` に変更されました。ポート 18083 とパス `/api/v5` を使用して API を呼び出してください。
-- 時刻関連のフィールドはタイムゾーン付きの [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) 形式を使用します。
+- ポート 8081 は閉じられ、すべての API リクエストはポート 18083 を使用します。  
+- HTTP API へのアクセスにはユーザー名/パスワードは使用できず、API Key **必須** です。  
+- API の基本パスは `/api/v4` から `/api/v5` に変更されました。ポート 18083 とパス `/api/v5` を使用して API を呼び出してください。  
+- 時間関連のフィールドは [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) 形式（タイムゾーン付き）を使用します。
 
 ### データフォーマットの変更
 
-レスポンスが成功した場合、ビジネスステータスコード `code` はデータと共に返されなくなり、エラーが発生した場合は対応する 4xx/5xx の HTTP ステータスコードとエラーメッセージが返されます。  
-すべての可能なエラーコードは `GET /error_codes` で取得可能です。
+レスポンスが成功した場合、ビジネスステータスコードの `code` はデータに含まれなくなり、エラー発生時は対応する 4xx/5xx の HTTP ステータスコードとエラーメッセージが返されます。  
+ユーザーは `GET /error_codes` で全ての可能なエラーコードを取得できます。
 
 ::: details レスポンスフォーマットの比較例
 
@@ -75,35 +75,35 @@ API は大幅に変更され、一部の API は互換性を持たせていま�
 
 ::: tip 互換性の注意点
 
-- 互換あり: 旧 API パスとパラメータを使用するか、旧 API を維持。
-- 部分的互換: API パスは変わらないが、一部のフィールドが変更。
-- 非互換: API パスおよびフィールドが変更。
+- 互換：旧 API パスとパラメータを使用、または旧 API を維持  
+- 部分互換：API パスは変更なしだが、一部フィールドが変更  
+- 非互換：API パスおよびフィールドが変更
 
 :::
 
 ::: details API 互換性表
 
-| 4.x                              | 5.x                                         | 互換性               | 備考                         |
+| 4.x                              | 5.x                                         | 互換性               | 備考                          |
 | -------------------------------- | ------------------------------------------- | -------------------- | ---------------------------- |
-| **パブリッシュ/サブスクライブ** |                                             |                      |                              |
-| `POST /mqtt/publish`             | `POST /publish`                             | 互換あり             |                              |
-| `POST /mqtt/publish_batch`       | `POST /publish/bulk`                        | 互換あり             |                              |
-| `POST /mqtt/subscribe`           | `POST /clients/{clientid}/subscribe`        | 互換あり             |                              |
-| `POST /mqtt/subscribe_batch`     | `POST /clients/{clientid}/subscribe/bulk`   | 互換あり             |                              |
-| `POST /mqtt/unsubscribe`         | `POST /clients/{clientid}/unsubscribe`      | 互換あり             |                              |
-| `POST /mqtt/unsubscribe_batch`   | `POST /clients/{clientid}/unsubscribe/bulk` | 互換あり             |                              |
-| **クライアント/トピック/サブスクリプション** |                                             |                      |                              |
-| `GET /clients`                   | `GET /clients`                              | 部分的互換           |                              |
-| `GET /routes{/topic}`            | `GET /topics{/topic}`                       | 非互換               | `routes` が `topics` に名称変更 |
-| `GET /subscriptions`             | `GET /subscriptions`                        | 部分的互換           |                              |
+| **パブリッシュ／サブスクライブ** |                                             |                      |                              |
+| `POST /mqtt/publish`             | `POST /publish`                             | 互換                 |                              |
+| `POST /mqtt/publish_batch`       | `POST /publish/bulk`                        | 互換                 |                              |
+| `POST /mqtt/subscribe`           | `POST /clients/{clientid}/subscribe`        | 互換                 |                              |
+| `POST /mqtt/subscribe_batch`     | `POST /clients/{clientid}/subscribe/bulk`   | 互換                 |                              |
+| `POST /mqtt/unsubscribe`         | `POST /clients/{clientid}/unsubscribe`      | 互換                 |                              |
+| `POST /mqtt/unsubscribe_batch`   | `POST /clients/{clientid}/unsubscribe/bulk` | 互換                 |                              |
+| **クライアント／トピック／サブスクリプション** |                                             |                      |                              |
+| `GET /clients`                   | `GET /clients`                              | 部分互換             |                              |
+| `GET /routes{/topic}`            | `GET /topics{/topic}`                       | 非互換               | `routes` が `topics` に改名  |
+| `GET /subscriptions`             | `GET /subscriptions`                        | 部分互換             |                              |
 | `GET /subscriptions/{clientid}`  | `GET /clients/{clientid}/subscriptions`     | 非互換               |                              |
-| **ノード/統計/メトリクス**       |                                             |                      |                              |
-| `GET /nodes`                     | `GET /nodes`                                | 部分的互換           |                              |
+| **ノード／統計／メトリクス**     |                                             |                      |                              |
+| `GET /nodes`                     | `GET /nodes`                                | 部分互換             |                              |
 | `GET /brokers`                   | -                                           | 非互換               | `GET /nodes` に統合          |
-| `GET /stats`                     | `GET /stats`                                | 部分的互換           |                              |
-| `GET /metrics`                   | `GET /metrics`                              | 部分的互換           |                              |
-| **ユーザー/アラーム**             |                                             |                      |                              |
-| `GET /users`                     | `GET /users`                                | 部分的互換           |                              |
+| `GET /stats`                     | `GET /stats`                                | 部分互換             |                              |
+| `GET /metrics`                   | `GET /metrics`                              | 部分互換             |                              |
+| **ユーザー／アラーム**           |                                             |                      |                              |
+| `GET /users`                     | `GET /users`                                | 部分互換             |                              |
 | `GET /alarms{/activated}`        | `GET /alarms?activated={true,false}`        | 非互換               |                              |
 | `GET /alarms{/deactivated}`      | `GET /alarms?activated={true,false}`        | 非互換               |                              |
 
@@ -111,109 +111,109 @@ API は大幅に変更され、一部の API は互換性を持たせていま�
 
 ## 設定ファイル
 
-- フォーマット:
+- フォーマット：
 
-  - EMQX 4.x: `path.to.key = value` のフラット形式。
-  - EMQX 5.1: ネスト形式をサポートし、`path{to{ key = value }}` のように記述可能。
+  - EMQX 4.x：`path.to.key = value` のフラット形式  
+  - EMQX 5.1：ネスト形式の `path{to{ key = value }}` をサポート  
 
-- ソース:
+- ソース：
 
-  - EMQX 4.x:
-    - `emqx.conf`、`listeners.conf`、`zones.conf` など複数ファイル。
-    - 動的更新は Mnesia に保存。動的更新を有効にするとファイルでの設定変更はできなくなる。
-  - EMQX 5.1:
-    - 静的設定は `emqx.conf`。
-    - 動的更新は `cluster.hocon`。
+  - EMQX 4.x：  
+    - `emqx.conf`、`listeners.conf`、`zones.conf` など複数ファイル  
+    - 動的更新は Mnesia に保存。動的更新を有効にするとファイルによる設定変更は不可  
+  - EMQX 5.1：  
+    - 静的設定は `emqx.conf`  
+    - 動的更新は `cluster.hocon`
 
 ## デフォルトリスナーの変更
 
-| 名称             | 説明                                | v4.4 ポート | 対応する v5.x ポート             |
-| ---------------- | ----------------------------------- | ----------- | ------------------------------- |
-| MQTT-TCP         | 内部（バックプレーン）MQTT リスナー | 11883       | -（削除）                      |
-| Management-HTTP  | REST API                           | 8081        | 18083（ダッシュボードポートと統合） |
+| 名称             | 説明                              | v4.4 ポート | 対応する v5.x ポート               |
+| ---------------- | --------------------------------- | ----------- | --------------------------------- |
+| MQTT-TCP         | 内部（バックプレーン）MQTT リスナー | 11883       | -（削除）                        |
+| Management-HTTP  | REST API                         | 8081        | 18083（ダッシュボードポートと統合） |
 
 ## プラグイン
 
-旧公式プラグインは EMQX の組み込み機能に移行されました。4.x で開発されたカスタムプラグインは、EMQX 5.x で使用するために適応が必要です。
+以前の公式プラグインは EMQX の組み込み機能に移行されました。バージョン 4.x 用に開発されたカスタムプラグインは、EMQX 5.x で使用する前に適応が必要です。
 
 ::: details 公式プラグインと組み込み機能の比較表
 
 | 4.x              | 5.x                                                       |
 | ---------------- | --------------------------------------------------------- |
-| emqx_auth_http   | 認証/認可 - HTTP データソース                            |
-| emqx_auth_jwt    | 認証/認可 - JWT                                         |
-| emqx_auth_mnesia | 認証/認可 - 組み込みデータベース                           |
-| emqx_auth_mongo  | 認証/認可 - MongoDB データソース                         |
-| emqx_auth_mysql  | 認証/認可 - MySQL データソース                           |
-| emqx_auth_pgsql  | 認証/認可 - PostgreSQL データソース                      |
-| emqx_auth_redis  | 認証/認可 - Redis データソース                           |
-| emqx_sasl        | 認証/認可 - MQTT 5 拡張認証                              |
+| emqx_auth_http   | 認証／認可 - HTTP データソース                            |
+| emqx_auth_jwt    | 認証／認可 - JWT                                         |
+| emqx_auth_mnesia | 認証／認可 - 組み込みデータベース                         |
+| emqx_auth_mongo  | 認証／認可 - MongoDB データソース                         |
+| emqx_auth_mysql  | 認証／認可 - MySQL データソース                           |
+| emqx_auth_pgsql  | 認証／認可 - PostgreSQL データソース                      |
+| emqx_auth_redis  | 認証／認可 - Redis データソース                           |
+| emqx_sasl        | 認証／認可 - MQTT 5 強化認証                              |
 | emqx_auth_ldap   | -                                                         |
-| emqx_rule_engine | データ統合                                               |
-| emqx_bridge_mqtt | データブリッジ - MQTT ブリッジ                           |
-| emqx_web_hook    | データブリッジ - HTTP サーバー                           |
+| emqx_rule_engine | データ統合                                                |
+| emqx_bridge_mqtt | データブリッジ - MQTT ブリッジ                            |
+| emqx_web_hook    | データブリッジ - HTTP サーバー                            |
 | emqx_coap        | CoAP ゲートウェイ                                        |
-| emqx_dashboard   | ダッシュボード                                           |
+| emqx_dashboard   | ダッシュボード                                            |
 | emqx_exhook      | ExHook                                                    |
 | emqx_exproto     | ExProto ゲートウェイ                                     |
-| emqx_lwm2m       | LwM2M ゲートウェイ                                      |
-| emqx_sn          | MQTT-SN ゲートウェイ                                    |
-| emqx_stomp       | STOMP ゲートウェイ                                      |
+| emqx_lwm2m       | LwM2M ゲートウェイ                                       |
+| emqx_sn          | MQTT-SN ゲートウェイ                                     |
+| emqx_stomp       | STOMP ゲートウェイ                                       |
 | emqx_lua_hook    | -                                                         |
-| emqx_management  | ダッシュボード                                           |
-| emqx_prometheus  | Prometheus                                              |
+| emqx_management  | ダッシュボード                                            |
+| emqx_prometheus  | Prometheus                                               |
 | emqx_psk_file    | 認証 - PSK (`psk_authentication.enable = true`)          |
 | emqx_recon       | 旧機能は CLI の `emqx ctl observer` で利用可能          |
-| emqx_retainer    | リテイン                                                |
+| emqx_retainer    | Retain                                                   |
 | <!--             | emqx_telemetry                                            |
 
 :::
 
 ## ディストリビューションとクラスター
 
-- クラスター作成のための `mcast` 探索戦略は非推奨となり、削除予定です。
-- サービス探索の設定が変更され、`cluster.discovery` は **cluster.discovery_strategy** に変更されました。
-- 新機能として [cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery) が追加されました。
-- 内部 DB にオプションの [最終的整合性](../develop/design/clustering.md#data-consistency) が追加されました。
+- クラスター作成のための `mcast` 探索戦略は非推奨となり、削除予定です。  
+- サービス探索の設定が変更され、`cluster.discovery` は **cluster.discovery_strategy** に変更されました。  
+- 新機能：[cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery) が追加されました。  
+- 内部データベースにオプションの [最終的整合性](../develop/design/clustering.md#data-consistency) が追加されました。
 
 ## MQTT
 
-- EMQX 5.0 では、MQTT クライアントは EMQX クラスターを単一のブラックボックスとして認識できなくなりました（最終的整合性のため）。サブスクリプション確定後に、他のクライアントからのパブリッシュメッセージを受信するかどうかは保証されません。
-- EMQX 5.0 では、キープアライブ（PING 受信）に対し、数バイトではなく完全な MQTT コントロールパケットが必要です。
-- EMQX 5.0 の TLS リスナーは `partial_chain` と `verify_peer_ext_key_usage` をサポートしません。
-- リトライ間隔は 5.0 で 30 秒ですが、4.4 では無効（0）です。4.4 のデフォルト設定ファイルはリトライ間隔 30 秒となっています。
+- EMQX 5.0 では、MQTT クライアントは EMQX クラスターを単一のブラックボックスとして見られなくなりました（最終的整合性のため）。サブスクライブ確定後に他のクライアントからパブリッシュされたメッセージを受信するかどうかは保証されません。  
+- EMQX 5.0 では、キープアライブ（PING 受信）に対して数バイトではなく完全な MQTT 制御パケットが必要です。  
+- EMQX 5.0 の TLS リスナーは `partial_chain` と `verify_peer_ext_key_usage` をサポートしません。  
+- リトライ間隔はバージョン 5.0 で 30 秒ですが、バージョン 4.4 では無効（0）です。バージョン 4.4 のデフォルト設定ファイルには 30 秒のリトライ間隔があります。
 
 ## MQTT over QUIC
 
-MQTT over QUIC は 5.0 の新機能ですがデフォルトで無効です。OS によっては `libatomic` への動的リンクが必要になる場合があります。
+MQTT over QUIC は 5.0 の新機能ですが、デフォルトでは無効です。OS によっては `libatomic` への動的リンクが必要になる場合があります。
 
-## 認証 / 認可
+## 認証／認可
 
 完全な互換性レポートは [Authentication / Authorization v4.4 to v5.1 Compatibility](./auth-4.4-to-5.1-compatibility.md) を参照してください。
 
-すべての認証／認可プロバイダーは、旧フォーマットの代わりにプレースホルダーを使用するようになりました。EMQX 5.x では `${clientid}` のようなプレースホルダーを使用し、4.x では `%c` が使用されていました。使用可能なプレースホルダーのセットも変更されています。
+すべての認証／認可プロバイダーは、旧フォーマットの代わりにプレースホルダーを使用するようになりました。EMQX 5.x では `${clientid}` のようなプレースホルダーを使用し、EMQX 4.x では `%c` が使われていました。利用可能なプレースホルダーのセットも変更されています。
 
 ### **概念の変更**
 
-認証は **Authentication**、ACL は **Authorization** と呼ばれます。
+Auth は **認証（Authentication）** と呼ばれ、ACL は **認可（Authorization）** と呼ばれます。
 
 ### **データ移行**
 
-4.x の認証方式と対応データソースはほぼ維持されており、使用方法に一部変更があるのみです。ほとんどの認証器／認可器は、5.x へのアップグレード時に既存の 4.x データベースをそのまま利用可能で、データ移行は不要です。
+バージョン 4.x の認証方式および対応するデータソースは維持されており、使用方法に若干の変更があるのみです。ほとんどの認証者／認可者は、4.x のデータベースをそのまま 5.x にアップグレードしても移行不要で利用可能です。
 
 ### 実行順序の固定化
 
-複数の認証器や認可チェッカーが同時に有効な場合、起動順ではなく設定ファイルやダッシュボードで指定した固定の順序でチェックが実行されます。実行順序は設定で調整可能です。
+複数の認証者や認可チェッカーが同時に有効な場合、起動順ではなく固定の設定順に従ってチェックが実行されます。実行順は設定ファイルやダッシュボードで調整可能です。
 
 ### 変数展開構文
 
-旧バージョンの認証プラグインは `%u` などの構文で変数プレースホルダーを構築し、SQL 文や Redis クエリ、HTTP リクエストにクライアント情報を動的に埋め込んでいました。  
-現在の EMQX では新構文 `${}` を使用し、`${username}`、`${clientid}` のように記述します。これはルール SQL とも統一されています。
+以前は Auth プラグインで `%u` などの構文を使い、クライアント情報を SQL 文や Redis クエリ、HTTP リクエストに動的に展開していました。  
+現在は `${}` 構文（例：`${username}`, `${clientid}`）を使用し、Rule SQL と統一されています。
 
-対応プレースホルダーの詳細は以下を参照してください。
+対応プレースホルダーは以下を参照してください。
 
-- [認証プレースホルダー](../guides/access-control/authn/authn.md#authentication-placeholders)
-- [認可プレースホルダー](../guides/access-control/authz/authz.md#placeholders-in-data-queries)
+- [認証プレースホルダー](../guides/access-control/authn/authn.md#authentication-placeholders)  
+- [認可プレースホルダー](../guides/access-control/authz/authz.md#placeholders-in-data-queries)  
 
 ::: details 使用例
 
@@ -238,44 +238,36 @@ authentication = [
 
 ### 認証の非互換点
 
-- スーパーユーザークエリは削除されました。ハッシュ化された認証情報と `is_superuser` フラグを返す単一のクエリが必要です。
-- HTTP 認証
-  - EMQX 4.x では HTTP ステータスコードのみを使用し、ボディは破棄されていました（例：`200` は許可、`403` は拒否）。
-  - EMQX 5.x では HTTP 認証が再設計され、HTTP ボディを活用します。詳細は [HTTP サービス認証](../guides/access-control/authn/http.md#http-request-and-response) を参照してください。
-- SCRAM 認証
-  - 4.4 で唯一利用可能だった SHA1 ハッシュモードは廃止され、SHA256/SHA512 ハッシュが使用されます。
-- 組み込みデータベース
-  - 認証情報を設定ファイルに直接記述できません。
-  - 認証情報テーブルはユーザー名またはクライアントIDのいずれか一方のタイプのみ保持します。
-- Redis
-  - `HMGET` と `HGET` コマンドのみサポート。
-  - `query_timeout` は廃止。
-- PostgreSQL
-  - `query_timeout` は廃止。
+- スーパーユーザークエリは廃止されました。ハッシュ化された認証情報と `is_superuser` フラグを返す単一のクエリが必要です。  
+- HTTP 認証  
+  - EMQX 4.x では HTTP ステータスコードのみが使用され、ボディは破棄されていました（例：許可は `200`、拒否は `403`）。  
+  - EMQX 5.x では HTTP 認証が再設計され、HTTP ボディを利用します。詳細は [HTTP サービス認証](../guides/access-control/authn/http.md#http-request-and-response) を参照してください。  
+- SCRAM 認証  
+  - SHA1 ハッシュモード（4.4 のみ利用可能）は廃止され、SHA256/SHA512 ハッシュが使用されます。  
+- 組み込みデータベース  
+  - 設定ファイルで直接認証情報を指定できません。  
+  - 認証情報テーブルはユーザー名またはクライアント ID のいずれか一方のみを保持します。  
+- Redis  
+  - `HMGET` と `HGET` コマンドのみサポート。  
+  - `query_timeout` は廃止。  
+- PostgreSQL  
+  - `query_timeout` は廃止。  
   - `encoding` は廃止。
 
 ### 認可
 
-- ファイルベース
-
-  - ACL ルール `{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"\]}` は EMQX 5.1 では動作しません。詳細は issue [#10735](https://github.com/emqx/emqx/issues/10735) を参照してください。
-
-- HTTP
-
-  - EMQX 4.x では HTTP ステータスコードのみを使用し、ボディは破棄されていました（"ignore" ケースを除く）。例：`200` は許可、`403` は拒否。
-  - EMQX 5.0 では HTTP 認可が再設計され、HTTP ボディを活用します。詳細は [HTTP リクエストとレスポンス](../guides/access-control/authz/http.md#http-request-and-response) を参照してください。
-
-- MySQL、PostgreSQL
-
-  - ストレージスキーマが変更されました。
-  - EMQX 4.4 では、クエリは `[Allow, IpAddr, Username, ClientId, Access, Topic]` の順で列を取得する必要がありました（名前は任意）。
-  - EMQX 5.1 では、クエリは `permission, action, topic` の列を任意の順序で取得し、名前は厳密にこれらである必要があります。`IpAddr, Username, ClientId` の「誰が」部分はクエリの一部に含めることが推奨されます。
-
-- MongoDB
-
-  - ストレージスキーマが変更されました。
-
-  - EMQX 4.4 では、結果ドキュメントは Redis や JWT と同様にアクションキーごとにトピックリストを含んでいました。
+- ファイルベース  
+  - ACL ルール `{allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"\]}` は EMQX 5.1 では動作しません。詳細は issue [#10735](https://github.com/emqx/emqx/issues/10735) を参照してください。  
+- HTTP  
+  - EMQX 4.x では HTTP ステータスコードのみが使用され、ボディは破棄されていました（「ignore」ケースを除く）。例：許可は `200`、拒否は `403`。  
+  - EMQX 5.0 では HTTP 認可が再設計され、HTTP ボディを利用します。詳細は [HTTP リクエストとレスポンス](../guides/access-control/authz/http.md#http-request-and-response) を参照してください。  
+- MySQL、PostgreSQL  
+  - ストレージスキーマが変更されました。  
+  - EMQX 4.4 では、クエリは `[Allow, IpAddr, Username, ClientId, Access, Topic]` の順で任意の名前のカラムを取得する必要がありました。  
+  - EMQX 5.1 では、クエリは `permission, action, topic` の名前で任意の順序のカラムを取得する必要があります。`IpAddr, Username, ClientId` はクエリの一部として含めることが推奨されます。  
+- MongoDB  
+  - ストレージスキーマが変更されました。  
+  - EMQX 4.4 では、結果ドキュメントは Redis や JWT と同様にアクションキーごとにトピックリストを含む形式でした。
 
     ```
     {
@@ -289,77 +281,81 @@ authentication = [
 
 ## ルールエンジン
 
-ルール SQL は EMQX 4.x の構文と完全互換ですが、ルール下のアクションは組み込みアクション（再パブリッシュ、コンソール）とデータブリッジ（HTTP サーバー、MQTT ブリッジ）に分割されました。
+ルール SQL は EMQX 4.x の構文と完全互換ですが、ルールの下のアクションは組み込みアクション（republish、console）とデータブリッジ（HTTP サーバー、MQTT ブリッジ）に分割されました。
 
 ## データ統合
 
-EMQX 5.1 ではデータ統合に概念的な改善が行われています。
+EMQX 5.1 ではデータ統合に関して以下の概念的な改善が行われています。
 
-- ルールと SQL テンプレートの完全互換性を保証。
-- リソースやブリッジの設定項目名やフォーマットの多くが変更。
-- 旧来の **ルール** -> **アクション** -> **リソース** の流れは **ルール** -> **ブリッジ** に変更。
-- **モジュール／メッセージパブリッシュ** の機能はブリッジに統合。
-- [オフラインメッセージ保存](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html)、[サブスクリプション取得](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html)、および EMQX ブリッジ機能は削除。
-- Tablestore、DolphinDB、Lindorm、SAP Event Mesh のデータブリッジは未対応。
-- MQTT ブリッジプラグイン (`emqx_bridge_mqtt`) は削除されました。代わりにデータ統合の組み込み MQTT データブリッジを使用してください。
+- ルールと SQL テンプレートの完全互換性を保証。  
+- リソースおよびブリッジの設定項目名やフォーマットの多くが変更。  
+- 旧来の **Rule** -> **Action** -> **Resources** の流れが **Rule** -> **Bridges** に変更。  
+- **Modules/Message Publish** の機能はブリッジに統合。  
+- [オフラインメッセージ保存](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html)、[サブスクリプション取得](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html)、および EMQX ブリッジ機能は削除。  
+- Tablestore、DolphinDB、Lindorm、SAP Event Mesh のデータブリッジは未対応。  
+- MQTT ブリッジプラグイン（`emqx_bridge_mqtt`）は削除。代わりにデータ統合の組み込み MQTT データブリッジを使用。
 
-完全な互換性レポートは [EMQX 5.1 と EMQX 4.4 のデータ統合の非互換](./data-integration-4.4-to-5.1-incompatibility.md) を参照してください。
+完全な互換性レポートは [EMQX 5.1 と EMQX 4.4 のデータ統合非互換性](./data-integration-4.4-to-5.1-incompatibility.md) を参照してください。
 
 ## HTTP サーバー
 
-WebHook プラグイン (`emqx_web_hook`) はネイティブ機能に変換され、「HTTP サーバー」ブリッジとして呼ばれます。
+WebHook プラグイン（`emqx_web_hook`）はネイティブ機能に移行され、現在は「HTTP サーバー」ブリッジと呼ばれています。
 
 ## オフラインメッセージ
 
-EMQX Enterprise 4.x で提供されていた [オフラインメッセージ](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) は外部データベースに基づいています。EMQX は将来的に組み込みデータベースを利用したネイティブなオフラインメッセージ機能を提供予定であり、5.x では外部データベースベースのオフラインメッセージはサポートされません。
+EMQX Enterprise 4.x で提供されていた [オフラインメッセージ](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) は外部データベースに基づいています。  
+EMQX は将来的に組み込みデータベースに基づくネイティブなオフラインメッセージ機能を提供予定であり、外部データベースによるオフラインメッセージは 5.x でサポートされなくなりました。
 
-今後のネイティブオフラインメッセージ機能はパフォーマンス向上と運用コスト削減を実現します。続報にご期待ください。
+今後のネイティブオフラインメッセージ機能は性能向上と運用コスト削減を実現します。続報にご期待ください。
 
 ## 自動サブスクリプション（サーバーサイドサブスクリプション）
 
-EMQX Enterprise 5.0.0 以降、外部データベースに基づく [自動サブスクリプション](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) は提供されません。
+EMQX Enterprise 5.0.0 以降、外部データベースに基づく [自動サブスクリプション](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html)（サーバーサイドサブスクリプション）は提供されなくなりました。
 
 ## データパーシステンス
 
-[MQTT メッセージのパーシステンス](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) は EMQX 5.0 および 5.1 では未実装であり、将来のバージョンでの対応が予定されています。
+[MQTT メッセージのパーシステンス](https://docs.emqx.com/en/enterprise/v4.4/backend/backend.html#mqtt-message-persistence) は EMQX 5.0 および 5.1 では実装されていません。今後のバージョンでの対応が予定されています。
 
 ## ゲートウェイ
 
-EMQX 4.x では各種プロトコルを対応プラグインやモジュールで設定していましたが、EMQX 5.0 では新たにゲートウェイの概念を導入しました。
+EMQX 4.x では、各種プロトコルは対応するプラグインやモジュールで設定可能でした。  
+EMQX 5.0 では新たに「ゲートウェイ」という概念を導入しています。
 
-MQTT 以外のプロトコルクライアント（LwM2M、CoAP、STOMP、MQTT-SN）はダッシュボードの**接続**ページや `GET /clients` API に MQTT クライアントとして表示されません。代わりに **管理** -> **ゲートウェイ** または `GET /gateway/{name}/clients` API で確認できます。
+MQTT 以外のプロトコル（LwM2M、CoAP、STOMP、MQTT-SN）のクライアントは、ダッシュボードの **接続** ページや `GET /clients` API に MQTT クライアントとして表示されません。  
+代わりに **管理** -> **ゲートウェイ** で確認するか、`GET /gateway/{name}/clients` API で一覧取得できます。
 
-- 設定および管理方法は **完全に非互換** です。EMQX 5.0 は新しい設定フォーマットと管理方法を採用しています。
-  - 新しい設定フォーマット。
-  - ゲートウェイおよびゲートウェイクライアント管理用の新 HTTP API を追加。
-  - 各ゲートウェイは独立した認証方式を持ちます。
-- JT/T 808、GB/T 32960、TCP、OCPP は EMQX 5.1 ではサポートされていません。
-- STOMP、MQTT-SN、ExProto プロトコルは 4.x と完全互換で、機能も強化されています。
-- CoAP と LwM2M のゲートウェイは 5.1.0 で実装されていますが、設計・実装が未完成のため本番環境での使用は推奨されません。
+- 設定および管理方法は **完全に非互換** です。EMQX 5.0 では新しい設定フォーマットと管理方法を採用しています。  
+  - 新しい設定フォーマット。  
+  - ゲートウェイおよびゲートウェイクライアント管理用の新しい HTTP API 追加。  
+  - 各ゲートウェイは独立した認証方式を持ちます。  
+- JT/T 808、GB/T 32960、TCP、OCPP は EMQX 5.1 ではサポートされていません。  
+- Stomp、MQTT-SN、ExProto プロトコルは 4.x と完全互換で、機能も強化されています。  
+- CoAP と LwM2M のゲートウェイは 5.1.0 で実装されていますが、設計・実装が未完成のため本番環境での利用は推奨されません。
 
-完全な互換性レポートは [ゲートウェイの EMQX 4.4 と 5.1 の非互換](./gateway-4.4-to-5.1-incompatibility.md) を参照してください。
+完全な互換性レポートは [ゲートウェイの EMQX 4.4 と 5.1 の非互換性](./gateway-4.4-to-5.1-incompatibility.md) を参照してください。
 
 ## ログファイルフォーマット
 
-EMQX 5.1 のログファイルは、EMQX 4.4 と同様のフラットログ形式か、インデクサーに優しい構造化 JSON 形式のいずれかです。
+EMQX 5.1 のログファイルは、EMQX 4.4 と同様のフラットなログファイル形式か、よりインデクサーに適した構造化 JSON 形式のいずれかです。
 
 また、多くのログフィールドは単語区切りにアンダースコアを使用し、検索しやすくなっています。例：
 
 `2022-06-29T16:58:53.235042+02:00 [info] foo: bar, msg: msg_for_human_to_read_but_also_easy_to_index`
 
-詳細は [ログ](../guides/observability/log.md) をご覧ください。
+詳細は [ログ](../guides/observability/log.md) を参照してください。
 
 ## Prometheus
 
-プラグイン `emqx_statsd` は削除されました。旧プラグイン `emqx_prometheus` は 5.x でネイティブ機能に変換され、Prometheus スクレイピングエンドポイントはデフォルトで有効化されており、認証なしでメトリクスを取得可能です。
+プラグイン `emqx_statsd` は削除されました。旧プラグイン `emqx_prometheus` はバージョン 5.x でネイティブ機能に移行しています。  
+Prometheus のスクレイピングエンドポイントはデフォルトで有効で、認証なしでメトリクスを取得可能です。
 
-以下のように `curl` コマンドでメトリクスを確認できます。
+`curl` コマンドでメトリクスを確認できます。
 
 ```bash
 curl -f "http://127.0.0.1:18083/api/v5/prometheus/stats"
 ```
 
-プッシュゲートウェイを有効にする場合は [Prometheus との統合](../guides/observability/prometheus.md) を参照してください。
+プッシュゲートウェイを有効にしたい場合は、[Prometheus との統合](../guides/observability/prometheus.md) を参照してください。
 
 ::: details Prometheus メトリクスの変更点
 
