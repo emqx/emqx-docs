@@ -398,7 +398,7 @@ coap-client -m get -O 6,0x01 -T "obstoken" "coap://127.0.0.1/ps/coap/test?client
 
 ### 协议规范实现差异
 
-在 EMQX 6.3.2 及后续 6.3 版本中，当客户端发送 Reset 消息拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 会：
+在 EMQX 6.3 系列版本中，当客户端发送 Reset 消息拒绝可确认（`CON`）Observe 通知，或通知重传耗尽仍未收到确认时，EMQX 会：
 
 - 丢弃失败的通知。
 - 清理该通知对应的传输状态和 Block2 状态。
