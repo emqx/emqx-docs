@@ -5803,6 +5803,12 @@
               },
               {
                 "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "couchbase"
                 ],
                 "type": "string"
@@ -5833,19 +5839,7 @@
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
                 ],
                 "type": "string"
               },
@@ -5857,13 +5851,37 @@
               },
               {
                 "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
                 ],
                 "type": "string"
               },
@@ -5887,6 +5905,12 @@
               },
               {
                 "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "dynamo"
                 ],
                 "type": "string"
@@ -5905,18 +5929,6 @@
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "pulsar"
                 ],
                 "type": "string"
@@ -5924,6 +5936,12 @@
               {
                 "enum": [
                   "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -5947,12 +5965,6 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "greptimedb"
                 ],
                 "type": "string"
@@ -5965,7 +5977,7 @@
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -5990,12 +6002,6 @@
               {
                 "enum": [
                   "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
@@ -6037,19 +6043,13 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3"
+                  "bigquery"
                 ],
                 "type": "string"
               },
@@ -42022,7 +42022,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "94E5780E754904DE",
+            "example": "5488BF79D2016366",
             "type": "string"
           },
           "status": {
@@ -61682,7 +61682,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.3.2-rc.5"
+    "version": "6.3.2-rc.6"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62300,48 +62300,48 @@
                     "value": [
                       "opents",
                       "elasticsearch",
-                      "s3",
+                      "bigquery",
                       "datalayers",
-                      "rabbitmq",
                       "rocketmq",
                       "redis",
                       "quasardb",
                       "mongodb",
                       "alloydb",
                       "redshift",
-                      "gcp_pubsub_producer",
                       "iotdb",
                       "doris",
                       "cassandra",
                       "azure_blob_storage",
-                      "sqlserver",
+                      "kafka_producer",
                       "tdengine",
                       "greptimedb",
-                      "syskeeper_forwarder",
                       "matrix",
                       "tablestore",
                       "aws_timestream",
+                      "kinesis",
                       "s3tables",
                       "pulsar",
-                      "kafka_producer",
-                      "kinesis",
                       "influxdb",
                       "clickhouse",
                       "dynamo",
+                      "s3",
                       "oracle",
                       "timescale",
                       "disk_log",
+                      "sqlserver",
                       "azure_event_hub_producer",
+                      "gcp_pubsub_producer",
                       "http",
-                      "snowflake_streaming",
+                      "syskeeper_forwarder",
                       "mysql",
+                      "snowflake_streaming",
                       "confluent_producer",
-                      "bigquery",
                       "cockroachdb",
                       "mqtt",
                       "emqx_tables",
                       "azure_event_grid",
                       "couchbase",
+                      "rabbitmq",
                       "snowflake",
                       "pgsql",
                       "bigtable"
@@ -62353,48 +62353,48 @@
                     "enum": [
                       "opents",
                       "elasticsearch",
-                      "s3",
+                      "bigquery",
                       "datalayers",
-                      "rabbitmq",
                       "rocketmq",
                       "redis",
                       "quasardb",
                       "mongodb",
                       "alloydb",
                       "redshift",
-                      "gcp_pubsub_producer",
                       "iotdb",
                       "doris",
                       "cassandra",
                       "azure_blob_storage",
-                      "sqlserver",
+                      "kafka_producer",
                       "tdengine",
                       "greptimedb",
-                      "syskeeper_forwarder",
                       "matrix",
                       "tablestore",
                       "aws_timestream",
+                      "kinesis",
                       "s3tables",
                       "pulsar",
-                      "kafka_producer",
-                      "kinesis",
                       "influxdb",
                       "clickhouse",
                       "dynamo",
+                      "s3",
                       "oracle",
                       "timescale",
                       "disk_log",
+                      "sqlserver",
                       "azure_event_hub_producer",
+                      "gcp_pubsub_producer",
                       "http",
-                      "snowflake_streaming",
+                      "syskeeper_forwarder",
                       "mysql",
+                      "snowflake_streaming",
                       "confluent_producer",
-                      "bigquery",
                       "cockroachdb",
                       "mqtt",
                       "emqx_tables",
                       "azure_event_grid",
                       "couchbase",
+                      "rabbitmq",
                       "snowflake",
                       "pgsql",
                       "bigtable"
@@ -97946,7 +97946,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "94E5780E754904DE",
+            "example": "5488BF79D2016366",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98009,7 +98009,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "94E5780E754904DE",
+            "example": "5488BF79D2016366",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98423,7 +98423,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "94E5780E754904DE",
+            "example": "5488BF79D2016366",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98509,7 +98509,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "94E5780E754904DE",
+            "example": "5488BF79D2016366",
             "in": "path",
             "name": "site",
             "required": true,
