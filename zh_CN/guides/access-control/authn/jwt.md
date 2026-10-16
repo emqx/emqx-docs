@@ -34,7 +34,7 @@
 
 ## 客户端属性
 
-可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../../develop/client-attributes/client-attributes.md)。属性名称必须以字母或数字开头，并且只能包含字母、数字、连字符和下划线。属性值可以是字符串、数字或布尔值；EMQX 会将数字和布尔值转换为字符串。对于名称无效或值为数组、对象、`null` 等不支持类型的属性，EMQX 会将其丢弃并记录警告日志。
+可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../../develop/client-attributes/client-attributes.md)。属性名称必须以字母或数字开头，并且只能包含字母、数字、连字符和下划线。属性值支持字符串。从 EMQX 7.0 开始，还支持数字和布尔值，EMQX 会将其转换为字符串；对于名称无效或值为数组、对象、`null` 等不支持类型的属性，EMQX 会将其丢弃并记录警告日志。
 
 示例：
 

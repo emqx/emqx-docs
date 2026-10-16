@@ -15,7 +15,7 @@ EMQX MongoDB authenticator supports storing authentication data as MongoDB docum
 - `password_hash`: required; password (in plain text or hashed) stored in the database; this field supports renaming;
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming;
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming.
-- `client_attrs`: optional; a field whose value is a nested object. After successful authentication, each field with a valid name and supported value type is set as a client attribute.
+- `client_attrs`: Starting from EMQX 7.0, you can use this optional field to return a nested object. After successful authentication, each field with a valid name and supported value type is set as a client attribute.
 
 For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, suffixed salt `salt_foo123`, and password hash `sha256`, the query statement should be:
 

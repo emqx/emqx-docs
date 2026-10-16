@@ -146,7 +146,7 @@ directory       /usr/local/etc/openldap/data
 
 ## Map LDAP Entry Attributes to Client Attributes
 
-The LDAP authenticator can map attributes from the authenticated user's LDAP entry to [MQTT client attributes](../../../develop/client-attributes/client-attributes.md). The mapping is available for both **LDAP Bind Authentication** and **Local Password Comparison** because it does not depend on how EMQX verifies the password.
+Starting from EMQX 7.0, the LDAP authenticator can map attributes from the authenticated user's LDAP entry to [MQTT client attributes](../../../develop/client-attributes/client-attributes.md). The mapping is available for both **LDAP Bind Authentication** and **Local Password Comparison** because it does not depend on how EMQX verifies the password.
 
 For each `client_attrs` entry, EMQX reads the LDAP attribute specified by `attribute`, uses `select` to choose one of its values, applies `extract` to obtain the client attribute value, and sets the result under the name specified by `set_as_attr`. Each mapping entry sets at most one client attribute.
 

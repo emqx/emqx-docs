@@ -38,7 +38,7 @@ See [Access Control List (ACL)](./acl.md) for more information.
 
 ## Client Attributes
 
-You can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../../develop/client-attributes/client-attributes.md). Attribute names must start with a letter or digit and can contain only letters, digits, hyphens, and underscores. Attribute values can be strings, numbers, or booleans; EMQX converts numbers and booleans to strings. EMQX drops attributes with invalid names or unsupported value types, including arrays, objects, and `null`, and records a warning log.
+You can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../../develop/client-attributes/client-attributes.md). Attribute names must start with a letter or digit and can contain only letters, digits, hyphens, and underscores. String values are supported. Starting from EMQX 7.0, numbers and booleans are also supported and converted to strings; EMQX drops attributes with invalid names or unsupported value types, including arrays, objects, and `null`, and records a warning log.
 
 Example:
 

@@ -211,7 +211,7 @@ You can check if a user is a superuser with the  `is_superuser` field in a datab
 
 An authenticator can return client attributes as part of a successful authentication result. EMQX merges these attributes into the client's `client_attrs` field, where authorization rules, topic templates, and other supported features can use them.
 
-JWT, HTTP, MySQL, PostgreSQL, Redis, MongoDB, and LDAP authenticators can set client attributes. The result format depends on the backend. For the supported formats, value handling, and merge order, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
+JWT and HTTP authenticators can set client attributes. Starting from EMQX 7.0, MySQL, PostgreSQL, Redis, MongoDB, and LDAP authenticators can also set them. The result format depends on the backend. For the supported formats, value handling, and merge order, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
 
 ## Override Client IDs from Authentication Results
 

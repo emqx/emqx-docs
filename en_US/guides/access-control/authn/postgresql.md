@@ -17,7 +17,7 @@ Users need to provide a query statement template and ensure the following fields
 - `password_hash`: required; password (in plain text or hashed) stored in the database; 
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
-- `client_attrs.<name>`: optional; a query result column that sets the client attribute identified by `<name>`.
+- `client_attrs.<name>`: Starting from EMQX 7.0, you can use an optional query result column with this name to set the client attribute identified by `<name>`.
 
 Example table structure for storing credentials:
 

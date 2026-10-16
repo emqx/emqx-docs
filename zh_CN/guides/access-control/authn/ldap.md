@@ -143,7 +143,7 @@ directory       /usr/local/etc/openldap/data
 
 ## 将 LDAP 条目属性映射为客户端属性
 
-LDAP 认证器可以将通过认证的用户条目中的 LDAP 属性映射为 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。由于该映射不依赖 EMQX 验证密码的方式，因此 **LDAP 绑定验证**和**本地密码比对**均支持此功能。
+从 EMQX 7.0 开始，LDAP 认证器可以将通过认证的用户条目中的 LDAP 属性映射为 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。由于该映射不依赖 EMQX 验证密码的方式，因此 **LDAP 绑定验证**和**本地密码比对**均支持此功能。
 
 对于每个 `client_attrs` 条目，EMQX 读取 `attribute` 指定的 LDAP 属性，使用 `select` 从该属性的值中选择一个匹配值，按照 `extract` 获取客户端属性值，并以 `set_as_attr` 指定的名称设置该属性。每个映射条目最多设置一个客户端属性。
 

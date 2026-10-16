@@ -14,7 +14,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/latest/develop/
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
-- `client_attrs.<name>`：可选，使用 Hash 字段设置 `<name>` 指定的客户端属性
+- `client_attrs.<name>`：从 EMQX 7.0 开始，可以使用此名称的可选 Hash 字段设置 `<name>` 指定的客户端属性
 
 例如，您希望添加一位名用户名为 `emqx_u`、密码为 `public`、盐值为 `salt_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
 

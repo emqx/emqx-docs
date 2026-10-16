@@ -110,16 +110,16 @@ mqtt {
 - [JWT 认证](../../guides/access-control/authn/jwt.md)：签发 Token 时，在 Payload 中通过 `client_attrs` 字段设置客户端属性。
 - [HTTP 认证](../../guides/access-control/authn/http.md)：在认证成功的 HTTP 响应中，通过 `client_attrs` 字段设置客户端属性。
 
-以下数据库认证器和 LDAP 认证器也可以设置客户端属性：
+从 EMQX 7.0 开始，以下数据库认证器和 LDAP 认证器也可以设置客户端属性：
 
 - [MySQL 认证](../../guides/access-control/authn/mysql.md)和 [PostgreSQL 认证](../../guides/access-control/authn/postgresql.md)：将查询结果列的别名设置为 `client_attrs.<name>`。
 - [Redis 认证](../../guides/access-control/authn/redis.md)：将属性存储在名为 `client_attrs.<name>` 的 Redis Hash 字段中，并在查询命令中包含这些字段。
 - [MongoDB 认证](../../guides/access-control/authn/mongodb.md)：将属性存储在认证文档中 `client_attrs` 字段对应的嵌套对象中。
 - [LDAP 认证](../../guides/access-control/authn/ldap.md)：将通过认证的用户条目中的 LDAP 属性映射为客户端属性。
 
-属性名称必须以字母或数字开头，并且只能包含字母、数字、连字符和下划线。属性值可以是字符串、数字或布尔值。EMQX 会将数字和布尔值转换为字符串。对于名称无效或值无法转换的属性，EMQX 会将其丢弃并记录警告日志。无法转换的值包括数组、嵌套对象以及数据库中的 `NULL` 值。
+属性名称必须以字母或数字开头，并且只能包含字母、数字、连字符和下划线。属性值支持字符串。从 EMQX 7.0 开始，还支持数字和布尔值，EMQX 会将其转换为字符串；对于名称无效或值为数组、嵌套对象、数据库 `NULL` 等不支持类型的属性，EMQX 会将其丢弃并记录警告日志。
 
-根据认证后端的不同，认证结果可以通过 `client_attrs` Map 或独立的 `client_attrs.<name>` 字段提供属性。如果两种形式包含同名属性，`client_attrs.<name>` 字段的值优先。
+认证结果可以通过 `client_attrs` Map 提供属性。从 EMQX 7.0 开始，支持的认证后端还可以通过独立的 `client_attrs.<name>` 字段提供属性。如果两种形式包含同名属性，`client_attrs.<name>` 字段的值优先。
 
 ### 合并认证数据
 

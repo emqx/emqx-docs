@@ -15,7 +15,7 @@ Redis authentication works with credentials stored as [Redis hashes](https://red
 - `password_hash`: required; password (in plain text or hashed) stored in the database;
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added;
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
-- `client_attrs.<name>`: optional; a hash field that sets the client attribute identified by `<name>`.
+- `client_attrs.<name>`: Starting from EMQX 7.0, you can use an optional hash field with this name to set the client attribute identified by `<name>`.
 
 For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, prefixed salt `salt`, and password hash `sha256`, the query statement should be:
 

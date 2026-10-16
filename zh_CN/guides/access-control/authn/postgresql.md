@@ -14,7 +14,7 @@ PostgreSQL 认证器可以支持任何表结构，甚至是多个表联合查询
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
-- `client_attrs.<name>`：可选，使用查询结果列设置 `<name>` 指定的客户端属性
+- `client_attrs.<name>`：从 EMQX 7.0 开始，可以使用此名称的可选查询结果列设置 `<name>` 指定的客户端属性
 
 示例表结构：
 

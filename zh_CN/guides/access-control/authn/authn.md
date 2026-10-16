@@ -200,7 +200,7 @@ EMQX 允许在认证阶段为客户端设置**超级用户**角色以及预设**
 
 认证器可以在认证成功结果中返回客户端属性。EMQX 将这些属性合并到客户端的 `client_attrs` 字段中，授权规则、主题模板以及其他支持客户端属性的功能可以使用这些属性。
 
-JWT、HTTP、MySQL、PostgreSQL、Redis、MongoDB 和 LDAP 认证器可以设置客户端属性。不同认证后端使用不同的结果格式。有关支持的格式、属性值处理方式和合并顺序，参见[客户端属性](../../../develop/client-attributes/client-attributes.md#在客户端认证过程中设置)。
+JWT 和 HTTP 认证器可以设置客户端属性。从 EMQX 7.0 开始，MySQL、PostgreSQL、Redis、MongoDB 和 LDAP 认证器也可以设置客户端属性。不同认证后端使用不同的结果格式。有关支持的格式、属性值处理方式和合并顺序，参见[客户端属性](../../../develop/client-attributes/client-attributes.md#在客户端认证过程中设置)。
 
 ## 通过认证结果覆盖客户端 ID
 
