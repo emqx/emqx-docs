@@ -4,7 +4,7 @@ This page walks you through the practical usage of the Message Queue feature in 
 
 ## Manually Create Queues via Dashboard
 
-Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queues via Dashboard](#automatically-create-message-queues-via-dashboard).
+Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Queues via Dashboard](#automatically-create-queues-via-dashboard).
 
 1. Navigate to **Queues** in the left menu.
 
@@ -135,14 +135,56 @@ When a client connects and subscribes to the queue, all the messages will be del
 | 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
 | 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
 
+## Publish Directly to a Queue
+
+Starting from EMQX 7.0, an MQTT client can publish directly to one named queue. The Message Queue feature must be active.
+
+::: tip
+
+With the default `mq.enable = auto` setting, Message Queue becomes active only after at least one queue exists. Direct publishing therefore cannot create the first queue. Create the first queue through the Dashboard or REST API, or explicitly enable Message Queue.
+
+:::
+
+| Publish topic | Behavior |
+| --- | --- |
+| `$queue/<name>` | Writes to an existing queue. The publish fails if the queue does not exist. |
+| `$queue/<name>/<topic>` | Writes to an existing queue when `<topic>` exactly matches its configured topic filter. If the queue does not exist and auto-creation is enabled, EMQX creates it with `<topic>` as its topic filter. |
+
+`<topic>` must be a valid MQTT Topic Name and cannot contain wildcard characters. The stored message retains the complete publish topic, including the `$queue/` prefix.
+
+For example, publish a QoS 1 message to an existing queue named `my_queue`:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$queue/my_queue' -m '{"msg":"Hello"}'
+```
+
+To allow EMQX to create `my_queue` with `demo/topic` as its topic filter when the queue does not exist, publish to:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$queue/my_queue/demo/topic' -m '{"msg":"Hello"}'
+```
+
+Direct publishing bypasses normal broker routing. EMQX stores the message only in `my_queue`; regular subscribers, other queues, and streams do not receive it.
+
+For MQTT 5 QoS 1 and QoS 2 publications, EMQX returns the following PUBACK or PUBREC reason codes:
+
+| Reason code | Meaning |
+| --- | --- |
+| `0x00` Success | The message was stored successfully. |
+| `0x83` Implementation specific error | The queue does not exist, queue creation failed, or message storage failed. |
+| `0x90` Topic Name invalid | The queue name is invalid, the topic suffix is empty, or it does not match the existing queue's topic filter. |
+
+QoS 0 publications do not receive an acknowledgment. MQTT 3 acknowledgments cannot carry these error reason codes; use MQTT 5 with QoS 1 or 2 when the publisher needs a definitive result.
+
 ## Automatically Create Queues via Dashboard
 
-Message queues can be automatically created when clients subscribe to a `$queue/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
+Message queues can be automatically created when clients subscribe or publish directly to a `$queue/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
 
 When auto-creation is enabled:
 
 - Subscribing to `$queue/<name>` works only if the queue already exists.
 - Subscribing to `$queue/<name>/<topic_filter>` allows EMQX to automatically create the queue using the provided `<topic_filter>` if it does not already exist.
+- Publishing to `$queue/<name>/<topic>` provides the topic filter when direct publishing triggers auto-creation.
 
 Queues may be auto-created either as regular queues or last-value semantics queues.
 
@@ -196,7 +238,7 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 2. In the **Queues** panel, the following configuration options are available:
    - **Enable Queues**: Enable the Message Queue feature.
 
-     >  You cannot disable Queues via the Dashboard. To disable it, you must modify the configuration file directly.
+     > You can disable Queues only when no queues exist. Delete all queues before turning this option off.
 
    - **Max Queue Count**: Sets the maximum number of queues that can be created.
 
@@ -206,15 +248,15 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
    - **Find Queue Retry Interval**: When a client subscribes to `$queue/<name>` and the corresponding queue is not found, this setting controls how frequently the subscriber retries to locate the queue. Default is `10` seconds.
 
-   - **Enable Auto Create Queue**: Enables automatic creation of queues when clients subscribe to queue topics and no matching queue exists.
+   - **Enable Auto Create Queue**: Enables automatic creation of queues when clients subscribe or publish directly to queue topics and no matching queue exists.
 
    - **Auto Create Queue Type**: Specifies the type of queues to create automatically:
 
-     - **Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$queue/<name>/<topic_filter>` topic and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled.
+     - **Last Value Semantics Queue** (enabled by default): When a client subscribes to `$queue/<name>/<topic_filter>` or publishes directly to `$queue/<name>/<topic>` and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled.
 
        For details of the settings, see [Auto Create Last Value Semantics Queues](#auto-create-last-value-semantics-queues).
 
-     - **Regular Queue**: When enabled, EMQX automatically creates regular (non-overwriting) queues for `$queue/<name>/<topic_filter>` subscriptions.
+     - **Regular Queue**: When enabled, EMQX automatically creates regular (non-overwriting) queues for `$queue/<name>/<topic_filter>` subscriptions or `$queue/<name>/<topic>` direct publications.
 
        For details of the settings, see [Auto Create Regular Queues](#auto-create-regular-queues).
 

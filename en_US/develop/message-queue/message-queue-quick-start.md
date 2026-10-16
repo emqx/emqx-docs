@@ -74,6 +74,20 @@ You should now receive all previously published messages in the queue.
 
 <img src="./assets/consume_message.png" alt="consume_message" style="zoom:67%;" />
 
+### Optional: Publish Directly to the Queue
+
+Starting from EMQX 7.0, you can publish directly to the existing `my_queue` queue:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$queue/my_queue' -m '{"msg":"Direct publish"}'
+```
+
+Direct publishing bypasses normal broker routing and writes the message only to `my_queue`. You can also perform this operation in the Dashboard by navigating to **Diagnostics Tools** -> **WebSocket Client** and publishing the same topic, payload, and QoS.
+
+Keep `worker-a` connected and verify that it receives the new payload with `$queue/my_queue` as the message topic.
+
+For the supported topic formats, auto-creation behavior, and MQTT 5 reason codes, see [Publish Directly to a Queue](./message-queue-task.md#publish-directly-to-a-queue).
+
 ## Simulate Multiple Subscribers with Dispatch Strategies
 
 In this section, you will simulate multiple subscribers connected to the same Message Queue and explore how different dispatch strategies influence message distribution behavior.

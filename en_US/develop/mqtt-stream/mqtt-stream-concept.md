@@ -78,6 +78,17 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
 
   Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
 
+- **Direct Stream Publishing**
+
+  Starting from EMQX 7.0, a publisher can write a message directly to one named stream by using either of the following topic formats:
+
+  ```text
+  PUBLISH $stream/<name>
+  PUBLISH $stream/<name>/<topic>
+  ```
+
+  The first format requires the stream to exist. The second format can automatically create a missing stream when auto-creation is enabled; for an existing stream, `<topic>` must exactly match its configured topic filter. Direct publishing bypasses normal broker routing, so the message is stored only in the named stream. Regular subscribers, queues, and other streams do not receive the message. The stored message retains the complete `$stream/...` publish topic.
+
 - **Stream Offset (Replay Starting Point)**
 
   The replay starting point is provided using the MQTT 5 User Subscription Property `stream-offset`, rather than being specified in the topic path.
@@ -118,10 +129,20 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 ### Publishing Flow
 
-1. A client publishes a message to an MQTT topic.
-2. An MQTT Streams hook is triggered to process the publication.
-3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic.
-4. For each matching stream, the message is written to the stream and persisted in Durable Storage.
+Messages can enter a stream through either of the following paths:
+
+1. **Topic-filter routing**:
+
+   1. A client publishes a message to an MQTT topic.
+   2. An MQTT Streams hook is triggered to process the publication.
+   3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic.
+   4. For each matching stream, the message is written to the stream and persisted in Durable Storage.
+
+2. **Direct publishing**:
+
+   1. A client publishes to `$stream/<name>` or `$stream/<name>/<topic>`.
+   2. MQTT Streams must be enabled globally. EMQX writes the message only to the named stream and skips normal broker routing.
+   3. If the stream does not exist, the publish topic must include `<topic>`, and stream auto-creation must be enabled.
 
 ### Subscribing and Consuming Flow
 
@@ -165,11 +186,15 @@ MQTT Streams provide a set of core capabilities that define how messages are sto
 
   Stream messages are delivered using standard MQTT mechanisms. Publishers do not need to change their behavior. Message delivery to subscribers is integrated through External Subscription.
 
+- **Direct Publishing**
+
+  Publishers can target one named stream directly without routing the message to regular subscribers, queues, or other streams.
+
 ## Security Considerations
 
-EMQX authorizes a stream subscription against the complete subscription topic filter, including the `$stream/` prefix and the stream name. Authorizing a stream subscription can also allow the client to replay messages that the stream stored before the subscription was created.
+EMQX authorizes stream subscriptions and direct stream publications against the complete topic, including the `$stream/` prefix and the stream name. Write explicit authorization rules for these complete topics. Authorizing a stream subscription can also allow the client to replay messages that the stream stored before the subscription was created.
 
-### Stream Subscriptions Need Their Own Rules
+### Stream Subscriptions and Direct Publishing Need Their Own Rules
 
 Rules written for a plain topic space do not cover the corresponding stream subscriptions:
 
@@ -182,9 +207,23 @@ A client that is denied `#` can therefore still subscribe to `$stream/events/#` 
 %% Allow one consumer to replay the pre-created "events" stream without granting auto-creation.
 {allow, {username, "event_reader"}, subscribe, ["$stream/events"]}.
 
+%% Allow one publisher to write directly to the pre-created "events" stream without granting auto-creation.
+{allow, {username, "event_writer"}, publish, ["$stream/events"]}.
+
 %% Deny all other stream subscriptions, including the deprecated prefix.
 {deny, all, subscribe, ["$stream/#", "$s/#"]}.
+
+%% Deny all other direct stream publications.
+{deny, all, publish, ["$stream/#"]}.
 ```
+
+To also allow the publisher to use `$stream/events/<topic>`, replace the publisher's allow rule with:
+
+```erlang
+{allow, {username, "event_writer"}, publish, ["$stream/events", "$stream/events/#"]}.
+```
+
+The `$stream/events/#` permission also allows the client to recreate `events` if the stream is missing and auto-creation is enabled. Grant this permission only when that behavior is intended.
 
 Keep the deprecated `$s/` prefix in the rules while any client still uses it. See [Deprecated Prefix](#deprecated-prefix).
 
@@ -192,11 +231,11 @@ This behavior differs from [shared subscriptions](../../get-started/messaging/mq
 
 ### Auto-Creation Allows Client-Specified Topic Filters
 
-When stream auto-creation is enabled, the subscribing client determines the new stream's topic filter. EMQX uses `<topic_filter>` from `$stream/<name>/<topic_filter>` to create the stream. It does not separately check whether the client is authorized to subscribe to `<topic_filter>` directly.
+When stream auto-creation is enabled, a subscribing or directly publishing client can provide the new stream's topic filter. In a subscription, `<topic_filter>` is an MQTT Topic Filter and can contain wildcard characters. In a direct publication, `<topic>` must be an MQTT Topic Name and cannot contain wildcard characters; EMQX stores this value as the stream's topic filter. In both cases, EMQX authorizes the complete `$stream/...` topic but does not separately authorize the supplied suffix against the ordinary topic space.
 
 For example, a client allowed to subscribe to `$stream/+/#` can subscribe to `$stream/events/#`. If the `events` stream does not exist, EMQX creates it with `#` as its topic filter. The stream then stores messages published to all non-`$` topics. The client might therefore replay messages from topics that it is not authorized to subscribe to directly.
 
-Auto-creation is enabled by default for last-value streams and disabled for regular streams, but it takes effect only while MQTT Streams is enabled. MQTT Streams is disabled by default (`streams.enable = false`). On deployments that accept untrusted clients, allow access only to specific pre-created streams, such as `$stream/events`, and deny all other subscriptions that match `$stream/#` or `$s/#`. Alternatively, disable auto-creation and create streams from the Dashboard or the REST API. See [Automatically Create Streams via Dashboard](./mqtt-stream-task.md#automatically-create-streams-via-dashboard).
+Auto-creation is enabled by default for last-value streams and disabled for regular streams, but it takes effect only while MQTT Streams is enabled. MQTT Streams is disabled by default (`streams.enable = false`). On deployments that accept untrusted clients, allow access only to specific pre-created streams, such as `$stream/events`. Deny all other subscriptions that match `$stream/#` or `$s/#` and all other publications that match `$stream/#`. Alternatively, disable auto-creation and create streams from the Dashboard or the REST API. See [Automatically Create Streams via Dashboard](./mqtt-stream-task.md#automatically-create-streams-via-dashboard).
 
 ## Compatibility Notes
 

@@ -41,9 +41,7 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
 
    > This prevents the stream from being auto-created as a Last-Value Stream, which would retain only the most recent message per key.
 
-4. If you make any changes, click **Save Changes** to apply them.
-
-   <img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
+5. If you make any changes, click **Save Changes** to apply them.
 
 ### Step 1: Create a Named Stream
 
@@ -55,13 +53,10 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
    - **Name**: `my_stream`
    - **Topic Filter**: `demo/stream`
    - **Last-Value Semantics**: Disabled
-   - **Stream Key Expression**: `message.from`
 
    Leave all other options at their default value.
 
 4. Click **Create**.
-
-   ![create_message_stream](./assets/create_message_stream.png)
 
 ### Step 2: Publish Messages
 
@@ -131,6 +126,20 @@ This confirms that:
 - The stream is a regular stream.
 - The `stream-offset` subscription property works correctly.
 - No messages were compacted or overwritten.
+
+### Optional: Publish Directly to the Stream
+
+Starting from EMQX 7.0, you can publish directly to the existing `my_stream` stream. Keep the subscriber from Step 3 connected and run the following command in another terminal:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$stream/my_stream' -m '{"source":"direct-publish"}'
+```
+
+Direct publishing bypasses normal broker routing and writes the message only to `my_stream`. You can also perform this operation in the Dashboard by navigating to **Diagnostics Tools** -> **WebSocket Client** and publishing the same topic, payload, and QoS.
+
+Verify that the subscriber receives the new payload with `$stream/my_stream` as the message topic.
+
+For the supported topic formats, auto-creation behavior, and MQTT 5 reason codes, see [Publish Directly to a Stream](./mqtt-stream-task.md#publish-directly-to-a-stream).
 
 ## Replay Messages from Different Positions
 
