@@ -153,8 +153,18 @@ The diagram below shows the data flow between major Message Queue components:
 
 Messages can enter a queue through either of the following paths:
 
-1. **Topic-filter routing**: A client publishes to a regular topic, such as `some/topic`. EMQX checks the Message Queue Registry and writes the message to every queue whose topic filter matches the published topic.
-2. **Direct publishing**: A client publishes to `$queue/<name>` or `$queue/<name>/<topic>`. EMQX writes the message only to the named queue and skips normal broker routing. This path is available only while the Message Queue feature is active. If the queue does not exist, the publish topic must include `<topic>`, and queue auto-creation must be enabled.
+1. **Topic-filter routing**:
+
+   1. A client publishes a message to a regular topic, such as `some/topic`.
+   2. An internal MQ hook is triggered to process the message.
+   3. The hook checks the Message Queue Registry for queues whose topic filters match the published topic.
+   4. The message is written to each matching queue's message database.
+
+2. **Direct publishing**:
+
+   1. A client publishes to `$queue/<name>` or `$queue/<name>/<topic>`.
+   2. The Message Queue feature must be active. EMQX writes the message only to the named queue and skips normal broker routing.
+   3. If the queue does not exist, the publish topic must include `<topic>`, and queue auto-creation must be enabled.
 
 ### Subscribing and Consuming Workflow
 

@@ -131,8 +131,18 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 Messages can enter a stream through either of the following paths:
 
-1. **Topic-filter routing**: A client publishes to a regular MQTT topic. EMQX queries the Streams Registry and writes the message to every stream whose topic filter matches the message topic.
-2. **Direct publishing**: A client publishes to `$stream/<name>` or `$stream/<name>/<topic>`. EMQX writes the message only to the named stream and skips normal broker routing. If the stream does not exist, the publish topic must include `<topic>`, stream auto-creation must be enabled, and MQTT Streams must be enabled globally.
+1. **Topic-filter routing**:
+
+   1. A client publishes a message to an MQTT topic.
+   2. An MQTT Streams hook is triggered to process the publication.
+   3. The hook queries the Streams Registry to identify streams whose topic filters match the message topic.
+   4. For each matching stream, the message is written to the stream and persisted in Durable Storage.
+
+2. **Direct publishing**:
+
+   1. A client publishes to `$stream/<name>` or `$stream/<name>/<topic>`.
+   2. MQTT Streams must be enabled globally. EMQX writes the message only to the named stream and skips normal broker routing.
+   3. If the stream does not exist, the publish topic must include `<topic>`, and stream auto-creation must be enabled.
 
 ### Subscribing and Consuming Flow
 
