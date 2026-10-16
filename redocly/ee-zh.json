@@ -4647,91 +4647,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
+                  "s3tables"
                 ],
                 "type": "string"
               },
@@ -4743,109 +4659,7 @@
               },
               {
                 "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "mysql"
                 ],
                 "type": "string"
               },
@@ -4857,7 +4671,61 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -4869,31 +4737,61 @@
               },
               {
                 "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "bigquery"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "doris"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "iotdb"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "alloydb"
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
                 ],
                 "type": "string"
               },
@@ -4905,7 +4803,109 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
                 ],
                 "type": "string"
               }
@@ -22593,6 +22593,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
             "default": {},
@@ -22758,6 +22762,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
             "default": {},
@@ -22890,6 +22898,10 @@
             "description": "S3 端点的端口。",
             "minimum": 1,
             "type": "integer"
+          },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_s3.s3_connector_resource_opts",
@@ -32491,8 +32503,8 @@
             "description": "后端类型。",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -37079,6 +37091,9 @@
               "stomp"
             ],
             "type": "string"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/gateway.stomp_transaction"
           }
         },
         "type": "object"
@@ -39814,7 +39829,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "5A5292429D800639",
+            "example": "12BB47101866715B",
             "type": "string"
           },
           "status": {
@@ -42438,6 +42453,10 @@
             "minimum": 1,
             "type": "integer"
           },
+          "region": {
+            "description": "The region used to sign requests to the S3 endpoint, for example `us-west-2`.<br/><br/>When this field is set, its value takes precedence over the region inferred from the endpoint host.<br/>Otherwise, the region is inferred from the endpoint host, and `us-east-1` is used if no region can be inferred.<br/><br/>Set this field when the endpoint host does not contain the region, for example a custom domain name.",
+            "type": "string"
+          },
           "secret_access_key": {
             "description": "S3 桶的 Secret Access Key。<br/><br/>如需从文件加载密钥而非内嵌，请使用 <code>file://&lt;path-to-file&gt;</code> 形式；随后将使用该文件内容（去除末尾空白）作为密钥。集群模式下，该文件必须存在于所有 EMQX 节点。",
             "example": "R4ND0M/S∃CЯ∃T",
@@ -42945,6 +42964,12 @@
       },
       "gateway.protocol": {
         "properties": {
+          "max_control_line": {
+            "default": 4096,
+            "description": "Maximum length of a NATS protocol control line, excluding the CRLF delimiter. The default is 4096 bytes and the minimum is 1024 bytes.",
+            "minimum": 0,
+            "type": "integer"
+          },
           "max_payload_size": {
             "default": 1048576,
             "description": "每个 NATS PUB/HPUB 消息允许的最大 Payload 字节数。",
@@ -43134,6 +43159,35 @@
             "description": "允许的 Header 字符串的最大长度",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "gateway.stomp_transaction": {
+        "properties": {
+          "max_actions_per_transaction": {
+            "default": 1000,
+            "description": "Maximum number of frames that can be buffered in a single transaction",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_retained_bytes": {
+            "default": 16777216,
+            "description": "Maximum number of bytes retained by all open transactions on a connection",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_transactions": {
+            "default": 100,
+            "description": "Maximum number of transactions that can be open at the same time on a connection",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "timeout": {
+            "default": "60s",
+            "description": "How long a transaction may stay open without being committed or aborted. Must be greater than zero.",
+            "example": "32s",
+            "type": "string"
           }
         },
         "type": "object"
@@ -49622,6 +49676,7 @@
           "NOT_MATCH",
           "NO_DEFAULT_VALUE",
           "PARAM_ERROR",
+          "PLUGIN_PINNED",
           "REDIRECT",
           "RESET_FAILED",
           "RESOURCE_NOT_FOUND",
@@ -51225,6 +51280,11 @@
             "example": "emqx_plugin_template-5.0-rc.1",
             "type": "string"
           },
+          "pinned": {
+            "description": "True when every node that reports the plugin lists it in node.pinned_plugins.<br/>Such a plugin is not managed through the cluster.",
+            "example": false,
+            "type": "boolean"
+          },
           "readme": {
             "description": "仅在 `GET /plugins/{name}` 时返回。",
             "example": "This is an demo plugin.",
@@ -51299,6 +51359,11 @@
             "description": "节点名称。",
             "example": "emqx@127.0.0.1",
             "type": "string"
+          },
+          "pinned": {
+            "description": "True when this node lists the plugin in node.pinned_plugins.<br/>The node runs the plugin independently of the cluster plugin config.",
+            "example": false,
+            "type": "boolean"
           },
           "status": {
             "description": "运行时安装插件的状态。<br/>  - 运行中：插件正在运行。<br/>  - 停止：插件已停止。",
@@ -51814,7 +51879,7 @@
             "type": "string"
           },
           "health_check_timeout": {
-            "default": "60s",
+            "default": "10s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
             "oneOf": [
               {
@@ -58781,7 +58846,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.5"
+    "version": "6.1.6-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -58797,100 +58862,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "rabbitmq",
-                      "emqx_tables",
-                      "alloydb",
-                      "iotdb",
-                      "mysql",
-                      "doris",
-                      "bigquery",
-                      "tdengine",
-                      "kinesis",
-                      "elasticsearch",
-                      "sqlserver",
-                      "s3tables",
-                      "oracle",
-                      "timescale",
-                      "azure_blob_storage",
-                      "clickhouse",
-                      "disk_log",
-                      "tablestore",
-                      "snowflake",
-                      "syskeeper_forwarder",
-                      "datalayers",
-                      "pgsql",
-                      "kafka_producer",
-                      "influxdb",
-                      "http",
                       "redis",
-                      "opents",
-                      "confluent_producer",
-                      "rocketmq",
-                      "snowflake_streaming",
-                      "s3",
-                      "dynamo",
-                      "cassandra",
-                      "greptimedb",
-                      "pulsar",
-                      "mqtt",
-                      "couchbase",
-                      "mongodb",
-                      "cockroachdb",
-                      "matrix",
-                      "gcp_pubsub_producer",
                       "aws_timestream",
+                      "cockroachdb",
+                      "opents",
+                      "clickhouse",
+                      "datalayers",
+                      "doris",
+                      "pulsar",
+                      "azure_blob_storage",
+                      "pgsql",
+                      "snowflake",
+                      "iotdb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
+                      "matrix",
+                      "alloydb",
+                      "kinesis",
+                      "emqx_tables",
+                      "cassandra",
+                      "disk_log",
                       "redshift",
-                      "azure_event_hub_producer"
+                      "confluent_producer",
+                      "kafka_producer",
+                      "s3",
+                      "azure_event_hub_producer",
+                      "http",
+                      "bigquery",
+                      "mongodb",
+                      "tdengine",
+                      "tablestore",
+                      "mqtt",
+                      "dynamo",
+                      "couchbase",
+                      "greptimedb",
+                      "oracle",
+                      "influxdb",
+                      "timescale",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "elasticsearch",
+                      "mysql",
+                      "rocketmq",
+                      "s3tables"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "rabbitmq",
-                      "emqx_tables",
-                      "alloydb",
-                      "iotdb",
-                      "mysql",
-                      "doris",
-                      "bigquery",
-                      "tdengine",
-                      "kinesis",
-                      "elasticsearch",
-                      "sqlserver",
-                      "s3tables",
-                      "oracle",
-                      "timescale",
-                      "azure_blob_storage",
-                      "clickhouse",
-                      "disk_log",
-                      "tablestore",
-                      "snowflake",
-                      "syskeeper_forwarder",
-                      "datalayers",
-                      "pgsql",
-                      "kafka_producer",
-                      "influxdb",
-                      "http",
                       "redis",
-                      "opents",
-                      "confluent_producer",
-                      "rocketmq",
-                      "snowflake_streaming",
-                      "s3",
-                      "dynamo",
-                      "cassandra",
-                      "greptimedb",
-                      "pulsar",
-                      "mqtt",
-                      "couchbase",
-                      "mongodb",
-                      "cockroachdb",
-                      "matrix",
-                      "gcp_pubsub_producer",
                       "aws_timestream",
+                      "cockroachdb",
+                      "opents",
+                      "clickhouse",
+                      "datalayers",
+                      "doris",
+                      "pulsar",
+                      "azure_blob_storage",
+                      "pgsql",
+                      "snowflake",
+                      "iotdb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
+                      "syskeeper_forwarder",
+                      "matrix",
+                      "alloydb",
+                      "kinesis",
+                      "emqx_tables",
+                      "cassandra",
+                      "disk_log",
                       "redshift",
-                      "azure_event_hub_producer"
+                      "confluent_producer",
+                      "kafka_producer",
+                      "s3",
+                      "azure_event_hub_producer",
+                      "http",
+                      "bigquery",
+                      "mongodb",
+                      "tdengine",
+                      "tablestore",
+                      "mqtt",
+                      "dynamo",
+                      "couchbase",
+                      "greptimedb",
+                      "oracle",
+                      "influxdb",
+                      "timescale",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "elasticsearch",
+                      "mysql",
+                      "rocketmq",
+                      "s3tables"
                     ],
                     "type": "string"
                   },
@@ -92932,7 +92997,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "5A5292429D800639",
+            "example": "12BB47101866715B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -92995,7 +93060,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "5A5292429D800639",
+            "example": "12BB47101866715B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93409,7 +93474,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "5A5292429D800639",
+            "example": "12BB47101866715B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93495,7 +93560,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "5A5292429D800639",
+            "example": "12BB47101866715B",
             "in": "path",
             "name": "site",
             "required": true,
@@ -104948,8 +105013,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -110710,6 +110775,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -110771,6 +110858,28 @@
                     },
                     "message": {
                       "description": "无效请求的可能错误原因代码。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
                       "type": "string"
                     }
                   },
@@ -110842,6 +110951,28 @@
                     },
                     "message": {
                       "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
                       "type": "string"
                     }
                   },
@@ -111239,6 +111370,7 @@
                     "code": {
                       "enum": [
                         "BAD_CONFIG",
+                        "BAD_FORM_DATA",
                         "UNEXPECTED_ERROR"
                       ],
                       "type": "string"
@@ -111399,6 +111531,28 @@
               }
             },
             "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -111533,6 +111687,28 @@
                     },
                     "message": {
                       "description": "未找到插件。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "PLUGIN_PINNED"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "The plugin is listed in node.pinned_plugins, so the operation is not allowed.",
                       "type": "string"
                     }
                   },
@@ -113813,12 +113989,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema 已存在。",
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -113861,6 +114038,28 @@
         "responses": {
           "204": {
             "description": "Schema 已删除。"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           },
           "404": {
             "content": {
@@ -114064,6 +114263,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -114228,12 +114449,13 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "ALREADY_EXISTS"
+                        "ALREADY_EXISTS",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
                     "message": {
-                      "description": "Schema 已存在。",
+                      "description": "无效请求的可能错误原因代码。",
                       "type": "string"
                     }
                   },
@@ -114276,6 +114498,28 @@
         "responses": {
           "204": {
             "description": "已删除。"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
           }
         },
         "security": [
@@ -114440,6 +114684,28 @@
             },
             "description": ""
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "无效请求。",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
           "404": {
             "content": {
               "application/json": {
@@ -114549,7 +114815,8 @@
                     "code": {
                       "enum": [
                         "ALREADY_EXISTS",
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -114647,7 +114914,8 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_FORM_DATA"
+                        "BAD_FORM_DATA",
+                        "BAD_REQUEST"
                       ],
                       "type": "string"
                     },
@@ -117502,8 +117770,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -117515,10 +117783,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -117958,8 +118226,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -118213,8 +118481,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -118272,8 +118540,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -118286,10 +118554,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -118348,8 +118616,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -118361,10 +118629,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -118381,10 +118649,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -120411,8 +120679,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120504,8 +120772,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120802,8 +121070,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120872,8 +121140,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
