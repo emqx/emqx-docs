@@ -130,6 +130,8 @@ spec:
 
 For configuration details, see [Configure EMQX](../tasks/configure-emqx-config.md).
 
+Review custom init containers: those that require root must explicitly set `securityContext.runAsNonRoot` to `false` and `securityContext.runAsUser` to `0` in their `initContainers` entries.
+
 Before deploying the new cluster, copy the old Operator bootstrap API-key Secret to the name expected by the new EMQX resource:
 
 ```bash
@@ -221,15 +223,22 @@ Keep the converted `.spec.config.roots` as the source of truth for configuration
 
 Run representative connection, authentication, publish, subscribe, retained message, rule, and integration tests against the new listener Service. Then update your load balancer, ingress, or DNS record to send new client connections to `<new-emqx-name>-listeners`.
 
+If clients connect through fixed NodePorts, release those ports from the old Services, then assign them to the new Operator-managed Services through `.spec.listenersServiceTemplate` and `.spec.dashboardServiceTemplate`. This handoff can briefly interrupt traffic.
+
+Switching traffic affects new connections. Existing connections can remain on the old cluster.
+
 Treat this cutover as the session boundary. Clients might disconnect and must reconnect to the new cluster. Verify client reconnect behavior and monitor authentication failures, reconnect loops, and message flow before continuing.
 
 ## Complete the migration
 
 After the acceptance period:
 
-1. List the orphaned Operator 2.3 StatefulSets and ReplicaSets, then scale each one to zero.
-2. Take a new EMQX data backup from the Operator 3.0 cluster.
-3. Remove the orphaned Operator 2.3 workloads only after the rollback window has closed.
+1. Disconnect old clients at a controlled rate to avoid a reconnect surge, and verify that they reconnect successfully to the new cluster.
+2. List the orphaned Operator 2.3 StatefulSets and ReplicaSets, then scale each one to zero.
+3. Take a new EMQX data backup from the Operator 3.0 cluster.
+4. Remove the orphaned Operator 2.3 workloads only after the rollback window has closed.
+
+Optionally, add an owner reference to the new EMQX resource on the copied bootstrap API-key Secret.
 
 Do not delete the old PVCs or node-cookie Secret until you have verified the new cluster and stored both backups outside Kubernetes. Deleting these resources is irreversible.
 

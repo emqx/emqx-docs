@@ -130,6 +130,8 @@ spec:
 
 有关配置详情，请参见[配置 EMQX](../tasks/configure-emqx-config.md)。
 
+请检查自定义 init 容器：对于需要 root 权限的容器，必须在其 `initContainers` 条目中显式将 `securityContext.runAsNonRoot` 设置为 `false`，并将 `securityContext.runAsUser` 设置为 `0`。
+
 部署新集群前，复制旧 Operator 的引导 API 密钥 Secret，并将其命名为新 EMQX 资源所需的名称：
 
 ```bash
@@ -221,15 +223,22 @@ kubectl exec -n "$EMQX_NAMESPACE" "$NEW_EMQX_CORE_POD" -c emqx -- \
 
 针对新的监听器 Service 执行具有代表性的连接、认证、发布、订阅、保留消息、规则和集成测试。然后更新负载均衡器、Ingress 或 DNS 记录，将新的客户端连接发送到 `<new-emqx-name>-listeners`。
 
+如果客户端通过固定 NodePort 连接，请先从旧 Service 释放这些端口，再通过 `.spec.listenersServiceTemplate` 和 `.spec.dashboardServiceTemplate` 将端口分配给新的 Operator 托管 Service。此交接过程可能会短暂中断流量。
+
+流量切换影响的是新连接。现有连接可能仍保留在旧集群上。
+
 将此次流量切换视为新旧会话的分界点。客户端可能会断开连接，并且必须重新连接到新集群。继续操作前，请验证客户端重连行为，并监控认证失败、重复重连和消息流。
 
 ## 完成迁移
 
 验收期结束后：
 
-1. 列出已成为孤立资源的 Operator 2.3 StatefulSet 和 ReplicaSet，然后将每个工作负载的副本数缩减为零。
-2. 从 Operator 3.0 集群创建新的 EMQX 数据备份。
-3. 仅在回滚窗口结束后，删除已成为孤立资源的 Operator 2.3 工作负载。
+1. 以受控速率断开旧客户端连接，避免集中重连，并验证客户端能否成功重连到新集群。
+2. 列出已成为孤立资源的 Operator 2.3 StatefulSet 和 ReplicaSet，然后将每个工作负载的副本数缩减为零。
+3. 从 Operator 3.0 集群创建新的 EMQX 数据备份。
+4. 仅在回滚窗口结束后，删除已成为孤立资源的 Operator 2.3 工作负载。
+
+可选地，为复制的引导 API 密钥 Secret 添加指向新 EMQX 资源的属主引用。
 
 在验证新集群并将两个备份都存放到 Kubernetes 外部之前，请勿删除旧 PVC 或 node-cookie Secret。删除这些资源后无法恢复。
 
