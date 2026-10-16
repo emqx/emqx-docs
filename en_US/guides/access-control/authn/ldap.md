@@ -144,6 +144,76 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
+## Map LDAP Entry Attributes to Client Attributes
+
+The LDAP authenticator can map attributes from the authenticated user's LDAP entry to [MQTT client attributes](../../../develop/client-attributes/client-attributes.md). The mapping is available for both **LDAP Bind Authentication** and **Local Password Comparison** because it does not depend on how EMQX verifies the password.
+
+For each `client_attrs` entry, EMQX reads the LDAP attribute specified by `attribute`, uses `select` to choose one of its values, applies `extract` to obtain the client attribute value, and sets the result under the name specified by `set_as_attr`. Each mapping entry sets at most one client attribute.
+
+Configure one `client_attrs` entry for each client attribute that EMQX should set:
+
+| Field | Description |
+| --- | --- |
+| `attribute` | LDAP attribute to read, such as `memberOf`. Attribute lookup is case-insensitive. |
+| `set_as_attr` | Name of the client attribute to set. The name must start with a letter or digit and can contain letters, digits, hyphens, and underscores. |
+| `select` | Ordered list of Perl-compatible regular expressions used to select one LDAP attribute value. At least one valid expression is required. |
+| `extract` | Value to set: `value` uses the complete selected value, `cn` extracts the `CN` from the first Relative Distinguished Name (RDN), and `literal` uses the configured `literal` value. Default: `value`. |
+| `literal` | Non-empty fixed value used when `extract` is `literal`. Do not set this field for the other extraction modes. |
+
+EMQX tries the `select` expressions in their configured order. For each expression, it checks the LDAP attribute values in the order returned by the directory. The first matching value is selected.
+
+Each expression is evaluated against the complete attribute value but can match a substring unless boundaries are specified. For an Active Directory `memberOf` value, use an expression such as `^CN=GROUP-X,` to avoid also matching `CN=GROUP-X-ADMIN,...`. Matching is case-sensitive; prefix the expression with `(?i)` for case-insensitive matching.
+
+The following example maps direct LDAP group memberships to separate client attributes. Assume the authenticated user's LDAP entry contains these values:
+
+```ldif
+memberOf: CN=GROUP-X,OU=Groups,DC=example,DC=com
+memberOf: CN=team-123-456,OU=Groups,DC=example,DC=com
+```
+
+Configure `client_attrs` and `require_client_attrs` at the authenticator level, next to fields such as `base_dn` and `filter`, not inside the `method` block:
+
+```hocon
+client_attrs = [
+  {
+    attribute = "memberOf"
+    set_as_attr = "grp_x"
+    select = ["^CN=GROUP-X,"]
+    extract = cn
+  }
+  {
+    attribute = "memberOf"
+    set_as_attr = "team"
+    select = ["^CN=team-123-"]
+    extract = literal
+    literal = "t123"
+  }
+]
+require_client_attrs = false
+```
+
+With this configuration, EMQX sets the following client attributes:
+
+```hocon
+client_attrs = {
+  grp_x = "GROUP-X"
+  team = "t123"
+}
+```
+
+The first mapping uses `extract = cn` to extract `GROUP-X` from the selected group DN. The second mapping uses the regular expression only to select a matching group and then sets the configured literal value `t123`.
+
+You can configure multiple mapping entries to set attributes for the same client. If an entry finds no matching value, EMQX skips it and continues authentication. By default (`require_client_attrs = false`), authentication also continues when no entry sets an attribute. Set `require_client_attrs` to `true` to reject such clients with `not_authorized`. This option cannot be enabled when `client_attrs` is empty.
+
+EMQX compiles the `select` expressions when the authenticator is created or updated. An invalid expression rejects the configuration. If an update is rejected, the existing authenticator configuration remains active.
+
+::: warning LDAP Group Membership Limitations
+
+- EMQX does not resolve nested groups. In Active Directory, `memberOf` contains direct memberships only.
+- EMQX reads group memberships only from attributes in the user's entry, such as `memberOf`; it does not search group entries. Directories that store membership only in group-entry attributes such as `member` or `uniqueMember` are not supported.
+
+:::
+
 ## Configure LDAP Authentication via Dashboard
 
 You can configure how to use LDAP for password authentication in the EMQX Dashboard.
@@ -153,6 +223,8 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
 2. On the **Authentication** page, click **Create** in the top right corner.
 
 3. Click to select **Password-Based** as **Mechanism**, and **LDAP** as **Backend** to go to the **Configuration** tab, as shown below.
+
+   <!-- TODO: Replace ./assets/authn-ldap.png with an EMQX 7.0 screenshot that shows Client Attributes and Require Client Attributes. -->
 
    <img src="./assets/authn-ldap.png" alt="authn-ldap"  />
 
@@ -185,6 +257,10 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
      - **Is Superuser Attribute**: Identifies the attribute that indicates whether a user is a superuser, applicable when `Local Password Comparison` is selected as the authentication method.  The value of this attribute should be in boolean, if absent is equal to `false`.
 
      - **Client ID Override Attribute**: Specifies the name of the LDAP attribute whose value overrides the Client ID for an MQTT client connection. This allows assigning unique Client IDs based on authentication data, helping prevent session conflicts in scenarios such as multi-tenancy.
+
+     - **Client Attributes**: Add one or more mappings from LDAP entry attributes to client attributes. Configure **Directory Attribute**, **Client Attribute Name**, **Select Patterns**, and **Extract** for each mapping. When **Extract** is `literal`, also configure **Literal Value**. For selection and extraction behavior, see [Map LDAP Entry Attributes to Client Attributes](#map-ldap-entry-attributes-to-client-attributes).
+
+     - **Require Client Attributes**: Deny authentication when none of the configured mappings sets a client attribute. Default: disabled.
 
       - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this LDAP authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
 

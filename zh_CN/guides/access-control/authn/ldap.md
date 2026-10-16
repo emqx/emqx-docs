@@ -141,6 +141,76 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
+## 将 LDAP 条目属性映射为客户端属性
+
+LDAP 认证器可以将通过认证的用户条目中的 LDAP 属性映射为 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。由于该映射不依赖 EMQX 验证密码的方式，因此 **LDAP 绑定验证**和**本地密码比对**均支持此功能。
+
+对于每个 `client_attrs` 条目，EMQX 读取 `attribute` 指定的 LDAP 属性，使用 `select` 从该属性的值中选择一个匹配值，按照 `extract` 获取客户端属性值，并以 `set_as_attr` 指定的名称设置该属性。每个映射条目最多设置一个客户端属性。
+
+为需要设置的每个客户端属性配置一个 `client_attrs` 条目：
+
+| 字段 | 说明 |
+| --- | --- |
+| `attribute` | 要读取的 LDAP 属性，例如 `memberOf`。属性名称匹配不区分大小写。 |
+| `set_as_attr` | 要设置的客户端属性名称。名称必须以字母或数字开头，可以包含字母、数字、连字符和下划线。 |
+| `select` | 用于选择 LDAP 属性值的有序 Perl 兼容正则表达式列表。必须至少包含一个有效表达式。 |
+| `extract` | 要设置的值：`value` 使用选中的完整值；`cn` 提取第一个相对可分辨名称（Relative Distinguished Name，RDN）中的 `CN`；`literal` 使用配置的 `literal` 值。默认值：`value`。 |
+| `literal` | 当 `extract` 为 `literal` 时使用的非空固定值。使用其他提取方式时不要设置此字段。 |
+
+EMQX 按配置顺序尝试 `select` 中的表达式。对于每个表达式，EMQX 按目录返回 LDAP 属性值的顺序逐一匹配，并选择第一个匹配值。
+
+表达式针对完整的 LDAP 属性值执行，但如果未限定边界，仍可能匹配其中的子串。对于 Active Directory 的 `memberOf` 值，可使用 `^CN=GROUP-X,`，避免同时匹配 `CN=GROUP-X-ADMIN,...`。匹配默认区分大小写；如需忽略大小写，请在表达式前添加 `(?i)`。
+
+以下示例将 LDAP 直接组成员关系映射为不同的客户端属性。假设通过认证的用户条目包含以下属性值：
+
+```ldif
+memberOf: CN=GROUP-X,OU=Groups,DC=example,DC=com
+memberOf: CN=team-123-456,OU=Groups,DC=example,DC=com
+```
+
+`client_attrs` 和 `require_client_attrs` 是认证器级别的字段，应与 `base_dn`、`filter` 等字段并列配置，不要放在 `method` 块中：
+
+```hocon
+client_attrs = [
+  {
+    attribute = "memberOf"
+    set_as_attr = "grp_x"
+    select = ["^CN=GROUP-X,"]
+    extract = cn
+  }
+  {
+    attribute = "memberOf"
+    set_as_attr = "team"
+    select = ["^CN=team-123-"]
+    extract = literal
+    literal = "t123"
+  }
+]
+require_client_attrs = false
+```
+
+使用此配置后，EMQX 将设置以下客户端属性：
+
+```hocon
+client_attrs = {
+  grp_x = "GROUP-X"
+  team = "t123"
+}
+```
+
+第一个映射通过 `extract = cn` 从选中的组 DN 中提取 `GROUP-X`。第二个映射仅使用正则表达式选择匹配的组，然后将配置的固定值 `t123` 设置为客户端属性值。
+
+可以配置多个映射条目，为同一客户端设置属性。如果某个条目未找到匹配值，EMQX 会跳过该条目并继续认证。默认情况下（`require_client_attrs = false`），即使所有条目均未设置属性，认证也会继续。将 `require_client_attrs` 设置为 `true` 后，EMQX 会以 `not_authorized` 拒绝此类客户端。`client_attrs` 为空时不能启用此选项。
+
+EMQX 在创建或更新认证器时编译 `select` 表达式。无效表达式会导致配置被拒绝。如果更新被拒绝，现有认证器配置将继续生效。
+
+::: warning LDAP 组成员关系限制
+
+- EMQX 不解析嵌套组。在 Active Directory 中，`memberOf` 仅包含直接组成员关系。
+- 组成员关系必须存在于用户条目的属性中，例如 `memberOf`。如果目录仅在组条目的 `member` 或 `uniqueMember` 等属性中记录成员关系，则不支持此功能。
+
+:::
+
 ## 通过 Dashboard 配置 LDAP 认证
 
 您可以使用 EMQX Dashboard 配置如何使用 LDAP 进行密码认证。
@@ -150,6 +220,8 @@ directory       /usr/local/etc/openldap/data
 2. 在**客户端认证**页面，点击**创建**。
 
 3. 依次选择**认证方式**为 `Password-Based`，**数据源**为 `LDAP`，点击**下一步**进入**配置参数**页签：
+
+   <!-- TODO: 使用包含 Client Attributes 和 Require Client Attributes 字段的 EMQX 7.0 截图替换 ./assets/authn-ldap.png。 -->
 
    <img src="./assets/authn-ldap.png" alt="authn-ldap" style="zoom:67%;" />
 
@@ -182,6 +254,10 @@ directory       /usr/local/etc/openldap/data
      - **超级用户属性名**：当选择 `本地密码比对` 作为认证方法时，用来标识用户是否为超级用户的 LDAP 属性名称。此属性的值应为布尔值，如果缺失则等于 `false`。
      
      - **Client ID 覆盖属性**：指定一个 LDAP 属性名，其值用于覆盖 MQTT 客户端连接的 Client ID。通过该功能，可根据认证数据动态生成唯一的 Client ID，有助于在多租户场景中避免多个客户端使用相同 ID 导致的会话冲突问题。
+
+     - **Client Attributes**：添加一个或多个从 LDAP 条目属性到客户端属性的映射。为每个映射配置 **Directory Attribute**、**Client Attribute Name**、**Select Patterns** 和 **Extract**。当 **Extract** 为 `literal` 时，还需配置 **Literal Value**。有关选择和提取规则，参见[将 LDAP 条目属性映射为客户端属性](#将-ldap-条目属性映射为客户端属性)。
+
+     - **Require Client Attributes**：如果所有已配置映射均未设置客户端属性，则拒绝认证。默认关闭。
      
      - **调用条件**：一个 Variform 表达式，用于控制是否将此 LDAP 认证器应用于客户端连接。该表达式会根据客户端的属性（例如 `username`、`clientid`、`listener` 等）进行评估。如果表达式的结果为字符串 `"true"`，则会触发认证器。否则，认证器将被跳过。有关调用条件的更多信息，请参见[认证器调用条件](./authn.md#认证器调用条件)。
 

@@ -22,7 +22,7 @@ Other functionalities of EMQX allow the use of the `${client_attrs.NAME}` placeh
 
 ## Set Client Attributes
 
-When a client successfully connects to EMQX, EMQX triggers connection and authentication events and sets client attributes based on predefined configurations. Currently, the following 2 methods are supported:
+When a client successfully connects to EMQX, EMQX triggers connection and authentication events and sets client attributes based on predefined configurations. The following methods are supported:
 
 - Extracting from client metadata
 - Setting during the client authentication process
@@ -122,11 +122,20 @@ During the client authentication process, client attributes can be set based on 
 - [JWT Authentication](../../guides/access-control/authn/jwt.md): Set client attributes in the `client_attrs` field in the Token payload when issuing a Token.
 - [HTTP Authentication](../../guides/access-control/authn/http.md): Set client attributes in the `client_attrs` field in the successful HTTP response.
 
-The key and value of the attributes must be string. This method allows for dynamic setting of attributes based on the results of authentication, adding flexibility in use.
+The following database and LDAP authenticators can also set client attributes:
+
+- [MySQL Authentication](../../guides/access-control/authn/mysql.md) and [PostgreSQL Authentication](../../guides/access-control/authn/postgresql.md): Alias a query result column to `client_attrs.<name>`.
+- [Redis Authentication](../../guides/access-control/authn/redis.md): Store attributes in Redis hash fields named `client_attrs.<name>` and include the fields in the query command.
+- [MongoDB Authentication](../../guides/access-control/authn/mongodb.md): Store attributes in the nested object assigned to the `client_attrs` field in the authentication document.
+- [LDAP Authentication](../../guides/access-control/authn/ldap.md): Map attributes from the authenticated user's LDAP entry to client attributes.
+
+Attribute names must start with a letter or digit and can contain only letters, digits, hyphens, and underscores. Attribute values can be strings, numbers, or booleans. EMQX converts numbers and booleans to strings. EMQX drops attributes whose names are invalid or whose values cannot be converted and records a warning log. Values that cannot be converted include arrays, nested objects, and database `NULL` values.
+
+Authentication results can provide a `client_attrs` map or individual `client_attrs.<name>` fields, depending on the backend. If both forms provide the same attribute name, the `client_attrs.<name>` field takes precedence.
 
 ### Merge Authentication Data
 
-When setting client attributes through both methods or using multiple authenticators, EMQX merges the attributes based on the attribute names and the order of settings:
+When setting client attributes through multiple sources or using multiple authenticators, EMQX merges the attributes based on the attribute names and the order of settings:
 
 - Attributes extracted from client metadata are overwritten by attributes set by the authenticators.
 - When multiple authenticators set attributes in the authentication chain, later set attributes overwrite earlier ones.

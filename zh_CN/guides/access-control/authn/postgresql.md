@@ -14,6 +14,7 @@ PostgreSQL 认证器可以支持任何表结构，甚至是多个表联合查询
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
+- `client_attrs.<name>`：可选，使用查询结果列设置 `<name>` 指定的客户端属性
 
 示例表结构：
 
@@ -50,6 +51,17 @@ INSERT 0 1
 ```sql
 SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1
 ```
+
+将查询结果列或表达式的别名设置为 `client_attrs.<name>`，即可设置客户端属性。由于别名包含点号，需要将其作为 PostgreSQL 标识符引用。例如，以下查询将 `client_attrs.department` 设置为 `engineering`：
+
+```sql
+SELECT password_hash, salt, is_superuser, 'engineering' AS "client_attrs.department"
+FROM mqtt_user
+WHERE username = ${username}
+LIMIT 1
+```
+
+如需返回多个客户端属性，请添加多个使用该格式的别名列。有关支持的属性值类型和合并规则，参见[客户端属性](../../../develop/client-attributes/client-attributes.md#在客户端认证过程中设置)。
 
 ## 通过 Dashboard 配置
 

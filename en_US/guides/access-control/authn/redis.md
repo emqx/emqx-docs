@@ -14,14 +14,15 @@ Redis authentication works with credentials stored as [Redis hashes](https://red
 
 - `password_hash`: required; password (in plain text or hashed) stored in the database;
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added;
--  `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `client_attrs.<name>`: optional; a hash field that sets the client attribute identified by `<name>`.
 
 For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, prefixed salt `salt`, and password hash `sha256`, the query statement should be:
 
 ```bash
 >redis-cli
-127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf
-(integer) 3
+127.0.0.1:6379> HSET mqtt:user123 is_superuser 1 salt salt password_hash ac63a624e7074776d677dd61a003b8c803eb11db004d0ec6ae032a5d7c9c5caf client_attrs.department engineering
+(integer) 4
 ```
 
 The corresponding config params are:
@@ -32,8 +33,10 @@ password_hash_algorithm {
     salt_position = prefix
 }
 
-cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
+cmd = "HMGET mqtt:${username} password_hash salt is_superuser client_attrs.department"
 ```
+
+The query command can include `client_attrs.<name>` fields. Include every field that EMQX should set. For supported attribute value types and merge behavior, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
 
 ::: tip
 The name `password_hash` conveys our preference for storing hashed passwords. But given that Redis doesn't have a MySQL-like `as` syntax, EMQX 5.0 has kept the `password` field (in EMQX 4.x) compatible.
