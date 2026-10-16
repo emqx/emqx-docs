@@ -18,7 +18,7 @@ Developed and maintained by the EMQX team, the Operator is purpose-built to help
 ### Key Advantages
 
 - **Automated Operations:** The Operator automates complex tasks such as cluster scaling, upgrades, and failure recovery, reducing manual effort and potential for error.
-- **Advanced Lifecycle Management:** It supports sophisticated deployment strategies like blue-green updates, ensuring zero-downtime upgrades and graceful connection migration.
+- **Advanced Lifecycle Management:** It supports advanced deployment strategies, ensuring zero-downtime upgrades and graceful connection migration.
 - **Simplified Configuration:** Manages EMQX through a high-level CRD, making configuration more declarative and easier to manage than extensive Helm values.
 - **Encapsulated Expertise:** The Operator encapsulates the operational knowledge of running a stateful application like EMQX, ensuring best practices are followed.
 

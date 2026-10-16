@@ -6,26 +6,25 @@ Access the EMQX cluster through a Service of type LoadBalancer.
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2` supports:
+EMQX CRD `apps.emqx.io/v3beta1` supports:
 * Configuring the EMQX Dashboard Service through `.spec.dashboardServiceTemplate`.
 * Configuring the EMQX cluster listener Service through `.spec.listenersServiceTemplate`.
 
-Refer to the [respective documentation](../reference/v2-reference.md#emqxspec) for more details.
+Refer to the [respective documentation](../reference/v3beta1-reference.md#emqx) for more details.
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2
+   apiVersion: apps.emqx.io/v3beta1
    kind: EMQX
    metadata:
      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       data: |
-         license {
-           key = "..."
-         }
+       roots:
+         license:
+           key: "..."
      listenersServiceTemplate:
        spec:
          type: LoadBalancer
@@ -38,7 +37,7 @@ Refer to the [respective documentation](../reference/v2-reference.md#emqxspec) f
 
    By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
 
-   Users can configure new or existing listeners through `.spec.config.data`, or manage them through the EMQX Dashboard.
+   You can configure new or existing listeners through `.spec.config.roots.listeners`, or manage them through the EMQX Dashboard.
 
    EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
 
