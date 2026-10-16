@@ -372,7 +372,7 @@ curl -X POST "http://localhost:18083/api/v5/api_key" \
   }'
 ```
 
-将 `scopes` 设置为 `"unset"` 会显式应用角色默认权限范围。创建请求省略 `scopes` 时，效果相同。
+将 `scopes` 设置为 `"unset"` 会显式移除权限范围允许列表，以保持向后兼容；角色、命名空间和 API 密钥专属的路径限制仍然生效。创建请求省略 `scopes` 时，将应用角色默认权限范围。
 
 可以通过以下任一方式指定命名空间：
 
@@ -479,7 +479,7 @@ team-a-ops:8d4f2a7c1e6b9035:ns:team-a::administrator:connections,monitoring
 
 #### 内置 API 密钥权限范围
 
-EMQX 提供 10 个 API 密钥权限范围：
+从 EMQX 6.3.2 开始，EMQX 提供 11 个 API 密钥权限范围：
 
 | 权限范围 | 涵盖的典型 API 领域 |
 | --- | --- |
@@ -493,6 +493,17 @@ EMQX 提供 10 个 API 密钥权限范围：
 | `system`（系统配置） | `/configs*`、`/listeners*`、`/plugins*`、`/ds/*`、`/data/*`、`/status`、`/relup`、`/opentelemetry*`、`/prometheus` 等 |
 | `audit`（审计日志） | `/audit` |
 | `license`（许可证） | `/license*` |
+| `plugin_api`（插件扩展 API） | `/plugin_api/{plugin}/...` |
+
+`plugin_api` 权限范围允许调用插件通过插件 API 网关发布的端点，但不允许访问 `/plugins*` 下的插件安装、启动、停止或配置端点。这些插件管理操作仍属于 `system` 权限范围。插件 API 网关也继续接受 `system`，因此已持有 `system` 的 API 密钥仍可访问插件扩展 API。
+
+`plugin_api` 权限范围只控制对插件 API 网关的访问，不限制插件端点自身实现的操作。分配此权限范围前，请评估插件发布的每个端点的安全影响。
+
+::: tip 提示
+
+从 EMQX 6.3.2 开始，`audit` 权限范围不能使命名空间调用方获得审计日志访问权限。只有全局管理员和全局查看者可以调用 `GET /api/v5/audit`。详见[审计日志访问权限](./dashboard/audit-log.md#审计日志访问权限)。
+
+:::
 
 ::: warning 不得混合等同管理员权限的范围与受限权限范围
 
@@ -506,14 +517,14 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 
 #### 登录专属权限范围
 
-除上述 10 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
+除上述 11 个 API 密钥权限范围外，Dashboard 登录用户还拥有 4 个仅适用于浏览器会话的登录专属权限范围，这些权限范围不能分配给 API 密钥。有关这些权限范围在登录用户中的分配和生效方式，请参见[登录用户权限范围](./dashboard/system.md#登录用户权限范围)。
 
 | 权限范围 | 所需角色 | 用途 |
 | --- | --- | --- |
 | `user_management` | 管理员 | 管理 Dashboard 用户。 |
 | `sso_management` | 管理员 | 管理 SSO 后端与 SSO 用户记录。 |
 | `api_key_management` | 管理员 | 管理 API 密钥。 |
-| `mfa_management` | 任意 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
+| `mfa_management` | 全局管理员或全局查看者 | 管理自己账号的 MFA；管理员可管理其他用户的 MFA。 |
 
 #### 权限范围的默认行为
 
@@ -523,11 +534,11 @@ EMQX 将 `system`、`user_management`、`api_key_management` 和 `sso_management
 | --- | --- |
 | 创建请求中**未设置** | 使用所选角色的默认权限。 |
 | 更新请求中**未设置** | 保留密钥当前的权限范围设置。 |
-| 角色默认标记 `"unset"` | 移除显式权限范围设置并使用所选角色的默认权限。角色默认权限发生变化时，新权限会自动生效。 |
+| 未设置标记 `"unset"` | 移除显式权限范围设置。为保持向后兼容，EMQX 不对该密钥应用权限范围允许列表；角色、命名空间和 API 密钥专属的路径限制仍然生效。 |
 | **空列表** `[]` | 拒绝所有业务端点。常用于临时禁用密钥而不删除它。 |
 | 显式列出的范围（如 `["monitoring", "cluster_operations"]`） | 只允许请求这些范围下的端点。 |
 
-如果显式列表与角色默认权限包含相同的权限范围，其效果等同于 `"unset"`。该密钥会继续跟随角色默认权限的变化。比较时不考虑列表顺序。
+如果显式列表与角色默认权限包含相同的权限范围，EMQX 会将其规范化为 `"unset"`，并应用相同的行为。比较时不考虑列表顺序。
 
 Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用指定角色的默认权限。
 
@@ -537,7 +548,7 @@ Bootstrap 文件条目省略权限范围时，EMQX 在处理该文件时应用�
 
 EMQX 提供两个端点用于查询可用的权限范围列表：
 
-- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 10 个业务领域权限范围）。使用 API 密钥认证。
+- `GET /api/v5/api_key_scopes`：返回可分配给 API 密钥的权限范围（即上述 11 个业务领域权限范围）。使用 API 密钥认证。
 - `GET /api/v5/user_scopes`：返回 Dashboard 登录用户可用的全部权限范围，包含 4 个登录专属权限范围。使用 Bearer Token 认证。
 
 可用于前端渲染权限范围选择 UI 或运维脚本校验配置：
@@ -564,15 +575,20 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 
 ### 命名空间 API 密钥的权限范围限制
 
-从 EMQX 6.3.1 开始，创建命名空间 API 密钥或修改现有密钥的显式权限范围列表时，只能使用 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license` 权限范围。如果此类创建或更新请求指定了 `publish`、`gateways`、`audit` 或该命名空间角色不能持有的其他范围，EMQX 会返回 HTTP 400，且不会应用变更。`system` 不能与受限权限范围组合的规则仍然适用。
+从 EMQX 6.3.1 开始，命名空间 API 密钥允许列表包含 `connections`、`monitoring`、`data_integration`、`access_control`、`system`、`cluster_operations` 和 `license`。从 EMQX 6.3.2 开始，该允许列表还包含 `plugin_api`。
+
+- **默认权限范围**：从 EMQX 6.3.2 开始，如果创建请求省略 `scopes`，管理员或查看者角色的命名空间 API 密钥会获得当前 EMQX 版本的命名空间 API 密钥允许列表中的所有权限范围。该允许列表不包含 `publish`、`gateways` 和 `audit`。
+- **显式权限范围**：创建或更新命名空间 API 密钥时，显式权限范围列表不能超出当前 EMQX 版本的命名空间 API 密钥允许列表。否则，EMQX 返回 HTTP 400，在响应中指出不允许的范围，且不会应用变更。显式列表也不能将 `system` 与受限权限范围组合。
 
 ### 包含不允许权限范围的现有密钥
 
-如果现有密钥已存储的权限范围列表包含不允许的范围，该密钥仍可继续使用。为兼容读取后原样写回的客户端，如果更新请求在保持角色和命名空间不变的情况下原样提交已存储的列表，EMQX 会接受该列表。实际修改角色或权限范围时，EMQX 会重新校验，新设置必须符合允许范围。如果现有命名空间 API 密钥包含不允许的权限范围，请更新或轮换该密钥，并仅分配其命名空间角色允许的权限范围。Bootstrap 文件重新处理密钥时会删除不允许的权限范围、记录警告并保留其余范围，详见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
+如果密钥已存储的权限范围列表包含不允许的范围，EMQX 不会自动修改该密钥。为兼容读取后原样写回的客户端，如果更新请求在保持角色和命名空间不变的情况下原样提交已存储的列表，EMQX 会接受该列表。但有一种例外：如果命名空间密钥已存储的权限范围列表仅包含 `publish`，即使原样提交，更新请求也会返回 HTTP 400，因为该密钥无法访问任何 API。请删除该密钥，并在不指定命名空间的情况下重新创建。实际修改角色或权限范围时，EMQX 会重新校验，新设置必须符合允许范围。
+
+如果命名空间 API 密钥包含不允许的权限范围，请更新或轮换该密钥。在轮换之前，该密钥此前生效的权限仍然可用，但仍受下文所述命名空间端点限制。EMQX 重新处理 bootstrap 条目时，会删除不允许的范围、记录警告并保留其余范围。详见[校验 Bootstrap 权限范围](#校验-bootstrap-权限范围)。
 
 ### 消息发布限制
 
-仍包含 `publish` 权限范围的旧版命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。授予权限范围不能覆盖命名空间级限制。
+命名空间 API 密钥不能调用消息发布 API，包括 `POST /api/v5/publish`。即使已存储密钥的权限范围列表包含 `publish`，此限制仍然生效；授予权限范围不能覆盖命名空间级限制。
 
 ### 消息内容限制
 
@@ -589,6 +605,16 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 - `DELETE /mqtt/delayed/messages/:node/:msgid`
 - `DELETE /mqtt/delayed/messages/:topic`
 
+### 文件传输限制
+
+文件传输使用全局存储，且不支持命名空间隔离。任何角色的命名空间调用方均无法访问以下文件传输内容端点，授予权限范围不能绕过此限制：
+
+- `GET /file_transfer/files`
+- `GET /file_transfer/files/:clientid/:fileid`
+- `GET /file_transfer/file`
+
+全局调用方仍可根据其角色和权限范围访问这些端点。`/file_transfer` 配置端点不受影响。
+
 ### 追踪操作限制
 
 对于追踪操作，`GET /trace` 仅列出调用方命名空间内的追踪记录。追踪记录属于其他命名空间时，以下单条追踪操作返回 `404 Not Found`：
@@ -600,6 +626,8 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:18083/api/v5/user_scopes
 - `DELETE /trace/:name`
 
 此行为可避免泄露其他命名空间中的追踪记录。批量删除操作（`DELETE /trace`）对命名空间调用方返回 `403 Forbidden`，仅全局管理员可清空所有追踪记录。
+
+Dashboard 自身的登录、SSO 回调以及 API 密钥自身的管理接口（例如 `/api_key`）不接受 API 密钥认证，与密钥的 `scopes` 配置无关。这属于 Dashboard 的内置安全边界，与权限范围模型无关。
 
 ## 分页
 

@@ -216,6 +216,12 @@ file_transfer {
 
 EMQX 提供了 REST API 用于管理导出的文件，您可以使用 [MQTT 文件传输管理 API](https://docs.emqx.com/zh/enterprise/v5.3/admin/api-docs.html#tag/File-Transfer) 进行管理，实现文件的浏览与下载。
 
+::: warning 重要提示
+
+文件传输使用全局存储，且不支持命名空间隔离。命名空间 Dashboard 用户和 API 密钥无法使用文件传输端点列出文件或下载本地存储的文件，无论其角色或权限范围如何。请使用全局 Dashboard 用户身份或全局 API 密钥进行认证。`/file_transfer` 配置端点不受影响。
+
+:::
+
 ### 手动管理磁盘导出文件
 
 如果您需要直接在磁盘上管理导出的文件，例如进行移动、使用自建的 FTP 或 HTTP 服务下载，可以参考以下说明获取文件存储位置。

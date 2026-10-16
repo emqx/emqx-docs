@@ -108,7 +108,8 @@ The plugin validates every `priv/relup/*.relup` at app start and logs a warning 
 Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
-|---|---|---|
-| 6.0.3 | 1.0.0 | [emqx_relup-1.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_relup-1.0.0.tar.gz) |
+| --- | --- | --- |
+| 6.0.3 | 1.0.0 | [emqx_relup-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.sha256)) |
+| 6.0.4 | 1.0.2 | [emqx_relup-1.0.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

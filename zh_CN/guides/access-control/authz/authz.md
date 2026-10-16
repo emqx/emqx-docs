@@ -12,7 +12,7 @@
 EMQX 5.1.1 版本开始引入了操作详情支持检查 QoS 和保留消息。
 :::
 
-客户端权限列表需要提前存储到特定数据源（数据库、文件）中，更新对应的数据即可实现权限的运行时动态更新。
+客户端权限列表需要提前存储到特定数据源（数据库、文件）中，更新对应的数据即可实现权限的运行时动态更新。有关更新后的规则何时生效，参见[授权规则变更的生效范围](#授权规则变更的生效范围)。
 
 EMQX 已经默认配置一个基于文件的授权检查器，将基于 ACL 文件中存储的规则进行授权检查。您可直接使用。
 
@@ -124,6 +124,15 @@ authorization {
 - `iif(str_eq(client_attrs.biz, 'orders'), str_eq(action, 'publish'), false)`：当客户端属性 `client_attrs.biz` 等于 `orders`，且当前授权动作为 `publish` 时，表达式结果为 `true`。
 - `topic_match(topic, topic_join(['devices', clientid, '#']))`：当当前授权请求的主题匹配 `devices/${clientid}/#` 主题过滤器时，表达式结果为 `true`。
 
+## 授权规则变更的生效范围
+
+规则变更会在 EMQX 下次评估更新后的规则时生效。如果客户端授权缓存中存在匹配结果，EMQX 会继续使用该结果，直到缓存过期或被清除。规则变更不会撤销已经建立的订阅：
+
+- 已连接的客户端在其连接存续期间，仍会继续收到此前被允许订阅的主题的消息。`deny_action` 在该路径上不会触发，因为消息投递不构成发布或订阅请求。
+- 以持久会话（`clean_start = false`）重连的客户端，其已存储的订阅会由 Broker 直接恢复，无需发送 `SUBSCRIBE` 报文，并会收到其离线期间被缓存的消息。
+
+如需撤销已订阅客户端的读取权限，请变更规则并删除该客户端的会话。例如，调用 `DELETE /api/v5/clients/{clientid}` 断开客户端连接并删除其会话状态。
+
 ## 客户端授权缓存
 
 EMQX 提供了基于会话的授权数据缓存机制。该缓存会将授权结果存储在客户端的会话状态中，在同一连接期间避免重复执行权限规则判断。客户端授权缓存机制能够提升客户端发布/订阅操作的权限检查效率，同时能够缓解由于大量客户端的订阅和发布请求对授权数据后端造成的访问压力。
@@ -139,7 +148,7 @@ EMQX 提供了基于会话的授权数据缓存机制。该缓存会将授权结
 
 ::: tip
 
-此缓存是客户端会话级别的，在客户端断开连接或重新连接时会被清除。
+此缓存是客户端会话级别的，在客户端断开连接或重新连接时会被清除。清除缓存不会重新评估已经建立的订阅所使用的规则。有关详细信息，参见[授权规则变更的生效范围](#授权规则变更的生效范围)。
 
 :::
 
@@ -246,12 +255,19 @@ EMQX 授权支持的数据查询占位符如下：
 
 - `${username}`：将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
 - `${clientid}`：将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
-- `${peerhost}`：将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
-- `${peername}`：将在运行时被替换为客户端的 IP 地址和端口，格式为 `IP: PORT`。
+- `${peerhost}`：将在运行时被替换为客户端的源 IP 地址。启用 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt) 时，该占位符使用代理报告的源 IP 地址。
+- `${peerport}`：从 EMQX 6.3.0 开始，将在运行时被替换为客户端的源端口，例如 `51544`。启用 Proxy Protocol 时，该占位符使用代理报告的源端口。
+- `${peername}`：从 EMQX 6.3.0 开始，将在运行时被替换为客户端的源 IP 地址和端口。对于 IPv4 地址，其格式为 `IP:port`，例如 `192.168.0.1:51544`。对于 IPv6 地址，地址部分不使用方括号，例如 `2001:db8::1:51544`。启用 Proxy Protocol 时，该占位符使用代理报告的源 IP 地址和端口。
 - `${cert_common_name}`：将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 - `${cert_subject}`：将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../../develop/client-attributes/client-attributes.md)。
 - `${zone}`：在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于授权模板中。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
+
+::: tip
+`${peerhost}` 和 `${peerport}` 占位符已弃用。为兼容现有模板，EMQX 仍支持这些占位符。对于新模板，请在支持的场景中改用 `${peername}`。
+:::
+
+LDAP 授权检查器不支持 `${peerport}` 和 `${peername}` 占位符。
 
 <!-- TODO
 确认 HTTP AuthZ 为什么会多出几个

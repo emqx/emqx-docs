@@ -30,6 +30,8 @@ The plugin exposes runtime APIs through plugin API gateway.
 
 Base path: `/api/v5/plugin_api/emqx_username_quota`
 
+Starting from EMQX 6.0.5, the Dashboard user or API key calling these endpoints must have the `plugin_api` or `system` scope. The caller's role and namespace permissions must also allow the requested HTTP method. Use the restricted `plugin_api` scope unless the caller also needs the administrator-equivalent `system` scope.
+
 ### Session Queries
 
 - `GET /quota/usernames`: List all usernames with active sessions.
@@ -214,7 +216,8 @@ API Client Guidance:
 Tarballs for each EMQX release:
 
 | EMQX Version | Plugin Version | Package |
-|---|---|---|
-| 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) |
+| --- | --- | --- |
+| 6.0.3 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_username_quota-1.2.1.sha256)) |
+| 6.0.4 | 1.2.1 | [emqx_username_quota-1.2.1.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_username_quota-1.2.1.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_username_quota-1.2.1.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->
