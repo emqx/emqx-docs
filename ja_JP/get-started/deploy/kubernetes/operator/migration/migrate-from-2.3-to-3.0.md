@@ -93,7 +93,8 @@ Apply these changes to the manifest:
 | `apiVersion: apps.emqx.io/v2` | Replaced by `apps.emqx.io/v3beta1` | Change `apiVersion` in the manifest. |
 | `.spec.config.data` | Replaced by `.spec.config.roots` | Convert literal HOCON to structured YAML. |
 | `.spec.coreTemplate.spec.volumeClaimTemplates` | Renamed to `.spec.coreTemplate.spec.persistentVolumeClaimSpec` | Rename the field and preserve its storage settings. |
-| `.spec.coreTemplate.spec.replicas`<br/>`.spec.replicantTemplate.spec.replicas` | Default changed from `2` to `1` | Set the intended counts explicitly. When Replicants are enabled, configure at least two Core replicas. |
+| `.spec.coreTemplate.spec.replicas` | Default changed from `2` to `1` | Set the intended count explicitly. When Replicants are enabled, configure at least two Core replicas. |
+| `.spec.replicantTemplate.spec.replicas` | Default changed from `2` to `0` | Set the intended count explicitly. |
 | `.spec.bootstrapAPIKeys` | Removed | Restore existing API keys from the global backup, then manage them through EMQX. |
 | `.spec.updateStrategy.initialDelaySeconds` | Removed; no direct replacement | Remove the field and review rollout timing. Do not map it to `minReadySeconds`, which has different semantics. |
 | `.spec.updateStrategy.evacuationStrategy.connEvictRate` | Renamed to `.spec.updateStrategy.evacuationStrategy.connectionEvictionRate` | Rename the field and preserve the value. |

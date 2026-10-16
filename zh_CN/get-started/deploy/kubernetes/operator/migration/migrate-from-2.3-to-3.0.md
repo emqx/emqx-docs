@@ -93,7 +93,8 @@ tar -tzf "./$EMQX_BACKUP_FILE" >/dev/null
 | `apiVersion: apps.emqx.io/v2` | 已由 `apps.emqx.io/v3beta1` 取代 | 更改清单中的 `apiVersion`。 |
 | `.spec.config.data` | 已由 `.spec.config.roots` 取代 | 将 HOCON 文本转换为结构化 YAML。 |
 | `.spec.coreTemplate.spec.volumeClaimTemplates` | 已重命名为 `.spec.coreTemplate.spec.persistentVolumeClaimSpec` | 重命名该字段，并保留其存储设置。 |
-| `.spec.coreTemplate.spec.replicas`<br/>`.spec.replicantTemplate.spec.replicas` | 默认值从 `2` 更改为 `1` | 明确设置所需的副本数。启用 Replicant 时，至少配置两个 Core 副本。 |
+| `.spec.coreTemplate.spec.replicas` | 默认值从 `2` 更改为 `1` | 明确设置所需的副本数。启用 Replicant 时，至少配置两个 Core 副本。 |
+| `.spec.replicantTemplate.spec.replicas` | 默认值从 `2` 更改为 `0` | 明确设置所需的副本数。 |
 | `.spec.bootstrapAPIKeys` | 已删除 | 从全局备份恢复现有 API 密钥，之后通过 EMQX 管理这些密钥。 |
 | `.spec.updateStrategy.initialDelaySeconds` | 已删除，且没有直接替代字段 | 删除该字段，并重新评估滚动更新的时间安排。请勿将其映射到语义不同的 `minReadySeconds`。 |
 | `.spec.updateStrategy.evacuationStrategy.connEvictRate` | 已重命名为 `.spec.updateStrategy.evacuationStrategy.connectionEvictionRate` | 重命名该字段并保留原值。 |
