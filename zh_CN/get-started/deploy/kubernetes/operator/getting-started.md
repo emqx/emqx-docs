@@ -19,6 +19,19 @@
 
    此命令将下载最新的 EMQX Operator 版本、安装集群级 EMQX CRD，并在 `emqx-operator-system` 命名空间中部署控制器。
 
+   也可以通过 EMQX Operator Helm Chart 安装 Operator：
+
+   ```bash
+   helm repo add emqx https://repos.emqx.io/charts
+   helm repo update
+   helm install emqx-operator emqx/emqx-operator \
+     --version 3.0.0 \
+     --namespace emqx-operator-system \
+     --create-namespace
+   ```
+
+   此 Chart 会安装 EMQX CRD 和控制器。请选择清单或 Helm 中的一种安装方式，然后继续执行下面的就绪检查。
+
 2. 等待 EMQX Operator 就绪：
 
    ```bash

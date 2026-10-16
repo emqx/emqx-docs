@@ -19,6 +19,19 @@ Before deploying EMQX Operator, ensure that the following components are ready:
 
    This command downloads the latest EMQX Operator release, installs cluster-wide EMQX CRDs, and deploys the controller in the `emqx-operator-system` namespace.
 
+   Alternatively, install the Operator with the EMQX Operator Helm chart:
+
+   ```bash
+   helm repo add emqx https://repos.emqx.io/charts
+   helm repo update
+   helm install emqx-operator emqx/emqx-operator \
+     --version 3.0.0 \
+     --namespace emqx-operator-system \
+     --create-namespace
+   ```
+
+   The chart installs the EMQX CRDs and controller. Choose either the manifest or Helm installation method, then continue with the readiness check below.
+
 2. Wait till EMQX Operator is ready:
 
    ```bash
