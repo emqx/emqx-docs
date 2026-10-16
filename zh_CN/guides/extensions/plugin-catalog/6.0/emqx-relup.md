@@ -108,7 +108,8 @@ emqx ctl relup logs-clear     # 清除本节点上的所有日志
 各 EMQX 版本对应的插件安装包：
 
 | EMQX 版本 | 插件版本 | 安装包 |
-|---|---|---|
-| 6.0.3 | 1.0.0 | [emqx_relup-1.0.0.tar.gz](https://packages.emqx.io/emqx-plugins/6.0.3/emqx_relup-1.0.0.tar.gz) |
+| --- | --- | --- |
+| 6.0.3 | 1.0.0 | [emqx_relup-1.0.0.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.3/emqx_relup-1.0.0.sha256)) |
+| 6.0.4 | 1.0.2 | [emqx_relup-1.0.2.tar.gz](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.tar.gz) ([sha256](https://www.emqx.com/downloads/emqx-plugins/6.0.4/emqx_relup-1.0.2.sha256)) |
 
 <!-- PLUGIN-DOWNLOADS:END -->

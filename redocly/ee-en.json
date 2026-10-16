@@ -5785,241 +5785,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "azure_event_grid"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "quasardb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -6031,7 +5797,7 @@
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "bigtable"
                 ],
                 "type": "string"
               },
@@ -6043,25 +5809,259 @@
               },
               {
                 "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_grid"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "opents"
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigtable"
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "quasardb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
                 ],
                 "type": "string"
               }
@@ -42022,7 +42022,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "280ABC8FCD7CE263",
+            "example": "4407A5FD2903B30C",
             "type": "string"
           },
           "status": {
@@ -61682,7 +61682,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.3.2-rc.3"
+    "version": "6.3.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -62298,106 +62298,106 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "aws_timestream",
-                      "bigtable",
                       "opents",
-                      "kafka_producer",
-                      "bigquery",
-                      "greptimedb",
-                      "s3tables",
-                      "syskeeper_forwarder",
-                      "azure_blob_storage",
-                      "quasardb",
-                      "dynamo",
-                      "snowflake",
-                      "iotdb",
-                      "matrix",
-                      "rocketmq",
-                      "mongodb",
-                      "doris",
-                      "alloydb",
-                      "oracle",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "emqx_tables",
-                      "redis",
-                      "cockroachdb",
-                      "disk_log",
-                      "influxdb",
-                      "rabbitmq",
-                      "clickhouse",
-                      "redshift",
-                      "http",
-                      "timescale",
-                      "snowflake_streaming",
-                      "pulsar",
-                      "tdengine",
-                      "couchbase",
-                      "s3",
-                      "cassandra",
-                      "mqtt",
-                      "pgsql",
-                      "kinesis",
-                      "mysql",
                       "elasticsearch",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "tablestore",
                       "datalayers",
-                      "azure_event_grid"
+                      "rocketmq",
+                      "redis",
+                      "quasardb",
+                      "mongodb",
+                      "alloydb",
+                      "redshift",
+                      "gcp_pubsub_producer",
+                      "iotdb",
+                      "doris",
+                      "cassandra",
+                      "azure_blob_storage",
+                      "tdengine",
+                      "greptimedb",
+                      "matrix",
+                      "tablestore",
+                      "aws_timestream",
+                      "sqlserver",
+                      "pulsar",
+                      "influxdb",
+                      "clickhouse",
+                      "dynamo",
+                      "kafka_producer",
+                      "oracle",
+                      "timescale",
+                      "disk_log",
+                      "azure_event_hub_producer",
+                      "kinesis",
+                      "http",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "mysql",
+                      "confluent_producer",
+                      "cockroachdb",
+                      "mqtt",
+                      "emqx_tables",
+                      "azure_event_grid",
+                      "couchbase",
+                      "snowflake",
+                      "pgsql",
+                      "bigquery",
+                      "bigtable",
+                      "s3tables",
+                      "s3"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "aws_timestream",
-                      "bigtable",
                       "opents",
-                      "kafka_producer",
-                      "bigquery",
-                      "greptimedb",
-                      "s3tables",
-                      "syskeeper_forwarder",
-                      "azure_blob_storage",
-                      "quasardb",
-                      "dynamo",
-                      "snowflake",
-                      "iotdb",
-                      "matrix",
-                      "rocketmq",
-                      "mongodb",
-                      "doris",
-                      "alloydb",
-                      "oracle",
-                      "confluent_producer",
-                      "azure_event_hub_producer",
-                      "emqx_tables",
-                      "redis",
-                      "cockroachdb",
-                      "disk_log",
-                      "influxdb",
-                      "rabbitmq",
-                      "clickhouse",
-                      "redshift",
-                      "http",
-                      "timescale",
-                      "snowflake_streaming",
-                      "pulsar",
-                      "tdengine",
-                      "couchbase",
-                      "s3",
-                      "cassandra",
-                      "mqtt",
-                      "pgsql",
-                      "kinesis",
-                      "mysql",
                       "elasticsearch",
-                      "sqlserver",
-                      "gcp_pubsub_producer",
-                      "tablestore",
                       "datalayers",
-                      "azure_event_grid"
+                      "rocketmq",
+                      "redis",
+                      "quasardb",
+                      "mongodb",
+                      "alloydb",
+                      "redshift",
+                      "gcp_pubsub_producer",
+                      "iotdb",
+                      "doris",
+                      "cassandra",
+                      "azure_blob_storage",
+                      "tdengine",
+                      "greptimedb",
+                      "matrix",
+                      "tablestore",
+                      "aws_timestream",
+                      "sqlserver",
+                      "pulsar",
+                      "influxdb",
+                      "clickhouse",
+                      "dynamo",
+                      "kafka_producer",
+                      "oracle",
+                      "timescale",
+                      "disk_log",
+                      "azure_event_hub_producer",
+                      "kinesis",
+                      "http",
+                      "snowflake_streaming",
+                      "rabbitmq",
+                      "syskeeper_forwarder",
+                      "mysql",
+                      "confluent_producer",
+                      "cockroachdb",
+                      "mqtt",
+                      "emqx_tables",
+                      "azure_event_grid",
+                      "couchbase",
+                      "snowflake",
+                      "pgsql",
+                      "bigquery",
+                      "bigtable",
+                      "s3tables",
+                      "s3"
                     ],
                     "type": "string"
                   },
@@ -88790,7 +88790,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -90466,7 +90466,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -92374,7 +92374,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -93674,7 +93674,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -95339,7 +95339,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -96992,7 +96992,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -97946,7 +97946,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "280ABC8FCD7CE263",
+            "example": "4407A5FD2903B30C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98009,7 +98009,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "280ABC8FCD7CE263",
+            "example": "4407A5FD2903B30C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98423,7 +98423,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "280ABC8FCD7CE263",
+            "example": "4407A5FD2903B30C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -98509,7 +98509,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "280ABC8FCD7CE263",
+            "example": "4407A5FD2903B30C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -103991,73 +103991,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -104158,6 +104091,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
