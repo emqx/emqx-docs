@@ -42,8 +42,6 @@
 
 5. 如有修改，点击**保存更改**使配置生效。
 
-<img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
-
 ### 步骤 1：创建命名消息流
 
 1. 在左侧导航栏中点击**流**。
@@ -53,10 +51,7 @@
    - **主题过滤器**：`demo/stream`
    - **数据保留时间**：`7` 天
    - **最后值语义**：关闭
-   - **流键表达式**：`message.from`
 4. 点击**创建**。
-
-![create_message_stream](./assets/create_message_stream.png)
 
 ### 步骤 2：发布消息
 
@@ -124,6 +119,20 @@ topic: demo/stream, qos: 0, size: 10B, userProperties: [
 - 当前消息流为常规消息流。
 - 基于`stream-offset` 订阅属性的消息回放工作正常。
 - 消息未发生覆盖或压缩。
+
+### 可选：直接发布到消息流
+
+从 EMQX 7.0 开始，可以直接向已存在的 `my_stream` 消息流发布消息。保持步骤 3 中的订阅端处于连接状态，并在另一个终端中执行以下命令：
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$stream/my_stream' -m '{"source":"direct-publish"}'
+```
+
+直接发布会绕过常规 Broker 路由，仅将消息写入 `my_stream`。也可以在 Dashboard 中进入**诊断工具** -> **WebSocket 客户端**，使用相同的主题、消息内容和 QoS 完成此操作。
+
+确认订阅端收到新消息，且消息主题为 `$stream/my_stream`。
+
+有关支持的主题格式、自动创建行为和 MQTT 5 原因码，请参见[直接发布到消息流](./mqtt-stream-task.md#直接发布到消息流)。
 
 ## 从不同位置回放消息
 

@@ -71,6 +71,20 @@ QoS: 1
 
 <img src="./assets/consume_message.png" alt="consume_message" style="zoom:67%;" />
 
+### 可选：直接发布到队列
+
+从 EMQX 7.0 开始，可以使用以下命令直接向已存在的 `my_queue` 队列发布消息：
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$queue/my_queue' -m '{"msg":"Direct publish"}'
+```
+
+直接发布会绕过常规 Broker 路由，仅将消息写入 `my_queue`。也可以在 Dashboard 中进入**诊断工具** -> **WebSocket 客户端**，使用相同的主题、消息内容和 QoS 完成此操作。
+
+保持 `worker-a` 处于连接状态，并确认它收到新消息，且消息主题为 `$queue/my_queue`。
+
+有关支持的主题格式、自动创建行为和 MQTT 5 原因码，请参见[直接发布到队列](./message-queue-task.md#直接发布到队列)。
+
 ## 模拟多订阅者与派发策略
 
 本节中，您将模拟多个订阅者连接到同一个消息队列，并观察不同派发策略对消息派发行为的影响。

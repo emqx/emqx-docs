@@ -91,6 +91,17 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
    Queue subscriptions operate independently of regular MQTT subscriptions and are handled by the Message Queue consumer mechanism.
 
+- **Direct Queue Publishing**
+
+   Starting from EMQX 7.0, a publisher can write a message directly to one named queue by using either of the following topic formats:
+
+   ```text
+   PUBLISH $queue/<name>
+   PUBLISH $queue/<name>/<topic>
+   ```
+
+   The Message Queue feature must be active for direct publishing. The first format requires the queue to exist. The second format can automatically create a missing queue when auto-creation is enabled; for an existing queue, `<topic>` must exactly match its configured topic filter. Direct publishing bypasses normal broker routing, so the message is stored only in the named queue. Regular subscribers, other queues, and streams do not receive the message. The stored message retains the complete `$queue/...` publish topic.
+
 - **Last-Value Semantics**
 
    An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the `queue key` from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
@@ -140,10 +151,10 @@ The diagram below shows the data flow between major Message Queue components:
 
 ### Publishing Workflow
 
-1. A client publishes a message to a regular topic, such as `some/topic`.
-2. An internal MQ hook is triggered to process the message.
-3. The hook checks the Message Queue Registry for any queues whose topic filter matches the published topic.
-4. If a matching queue is found, the message is written to the queue’s message database.
+Messages can enter a queue through either of the following paths:
+
+1. **Topic-filter routing**: A client publishes to a regular topic, such as `some/topic`. EMQX checks the Message Queue Registry and writes the message to every queue whose topic filter matches the published topic.
+2. **Direct publishing**: A client publishes to `$queue/<name>` or `$queue/<name>/<topic>`. EMQX writes the message only to the named queue and skips normal broker routing. This path is available only while the Message Queue feature is active. If the queue does not exist, the publish topic must include `<topic>`, and queue auto-creation must be enabled.
 
 ### Subscribing and Consuming Workflow
 
@@ -161,7 +172,7 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
 
 - **Enqueueing Messages**
 
-  Messages published to topics matching a queue's configured topic filter are automatically enqueued.
+  Messages published to topics matching a queue's configured topic filter are automatically enqueued. A publisher can also target one named queue directly by publishing to `$queue/<name>` or `$queue/<name>/<topic>`.
 
   If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
 
@@ -204,9 +215,9 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 
 ## Security Considerations
 
-EMQX authorizes a queue subscription against the complete subscription topic filter, including the `$queue/` prefix and the queue name. Write authorization rules for that complete filter. A queue subscription also delivers messages that the queue stored before the subscription was created.
+EMQX authorizes queue subscriptions and direct queue publications against the complete topic, including the `$queue/` prefix and the queue name. Write explicit authorization rules for these complete topics. A queue subscription also delivers messages that the queue stored before the subscription was created.
 
-### Queue Subscriptions Need Their Own Rules
+### Queue Subscriptions and Direct Publishing Need Their Own Rules
 
 Rules written for a plain topic space do not cover the corresponding queue subscriptions:
 
@@ -219,9 +230,23 @@ A client that is denied `#` can therefore still subscribe to `$queue/orders/#` a
 %% Allow one consumer to read the pre-created "orders" queue without granting auto-creation.
 {allow, {username, "order_worker"}, subscribe, ["$queue/orders"]}.
 
+%% Allow one publisher to write directly to the pre-created "orders" queue without granting auto-creation.
+{allow, {username, "order_writer"}, publish, ["$queue/orders"]}.
+
 %% Deny all other queue subscriptions, including the deprecated prefix.
 {deny, all, subscribe, ["$queue/#", "$q/#"]}.
+
+%% Deny all other direct queue publications.
+{deny, all, publish, ["$queue/#"]}.
 ```
+
+To also allow the publisher to use `$queue/orders/<topic>`, replace the publisher's allow rule with:
+
+```erlang
+{allow, {username, "order_writer"}, publish, ["$queue/orders", "$queue/orders/#"]}.
+```
+
+The `$queue/orders/#` permission also allows the client to recreate `orders` if the queue is missing and auto-creation is enabled. Grant this permission only when that behavior is intended.
 
 Keep the deprecated `$q/` prefix in the rules while any client still uses it. See [Deprecated Prefix](#deprecated-prefix).
 
@@ -229,11 +254,11 @@ This behavior differs from [shared subscriptions](../../get-started/messaging/mq
 
 ### Auto-Creation Allows Client-Specified Topic Filters
 
-When queue auto-creation is enabled, the subscribing client determines the new queue's topic filter. EMQX uses `<topic_filter>` from `$queue/<name>/<topic_filter>` to create the queue. It does not separately check whether the client is authorized to subscribe to `<topic_filter>` directly.
+When queue auto-creation is enabled, a subscribing or directly publishing client can provide the new queue's topic filter. In a subscription, `<topic_filter>` is an MQTT Topic Filter and can contain wildcard characters. In a direct publication, `<topic>` must be an MQTT Topic Name and cannot contain wildcard characters; EMQX stores this value as the queue's topic filter. In both cases, EMQX authorizes the complete `$queue/...` topic but does not separately authorize the supplied suffix against the ordinary topic space.
 
 For example, a client allowed to subscribe to `$queue/+/#` can subscribe to `$queue/orders/#`. If the `orders` queue does not exist, EMQX creates it with `#` as its topic filter. The queue then stores messages published to all non-`$` topics. The client might therefore receive messages from topics that it is not authorized to subscribe to directly.
 
-Auto-creation is enabled by default for last-value queues and disabled for regular queues, but it takes effect only while the Message Queue feature is active. With the default `mq.enable = auto`, EMQX activates Message Queue only after at least one queue exists, so a subscription cannot create the first queue. On deployments that accept untrusted clients, allow access only to specific pre-created queues, such as `$queue/orders`, and deny all other subscriptions that match `$queue/#` or `$q/#`. Alternatively, disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
+Auto-creation is enabled by default for last-value queues and disabled for regular queues, but it takes effect only while the Message Queue feature is active. With the default `mq.enable = auto`, EMQX activates Message Queue only after at least one queue exists, so a subscription cannot create the first queue. On deployments that accept untrusted clients, allow access only to specific pre-created queues, such as `$queue/orders`. Deny all other subscriptions that match `$queue/#` or `$q/#` and all other publications that match `$queue/#`. Alternatively, disable auto-creation and create queues from the Dashboard or the REST API. See [Automatically Create Queues via Dashboard](./message-queue-task.md#automatically-create-queues-via-dashboard).
 
 ### Namespace Topic Isolation Is Separate
 

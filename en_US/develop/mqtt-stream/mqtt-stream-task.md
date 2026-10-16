@@ -52,7 +52,7 @@ MQTT streams must be explicitly created before they can store or replay messages
 
    - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
 
-   - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../../guides/configuration/configuration.md#variform-expressions).
+   - **Stream Key Expression**: Displayed when **Last-Value Semantics** is enabled. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../../guides/configuration/configuration.md#variform-expressions).
 
       ::: tip
 
@@ -60,16 +60,7 @@ MQTT streams must be explicitly created before they can store or replay messages
 
       :::
 
-      The extracted key serves different purposes depending on the stream type:
-        - For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained. See [Stream Key Expression](#stream-key-expression) for more details and examples.
-
-        - For **regular** streams, the key is used as the sharding key to determine which storage shard a message is written to.
-
-          ::: tip
-
-          For regular streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
-
-          :::
+      For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained. See [Stream Key Expression](#stream-key-expression) for more details and examples.
 
    - **Limiter**: Configure limits for each shard of the stream to control storage usage:
 
@@ -161,9 +152,44 @@ When a client connects and subscribes to the stream, all the messages will be de
 | 3 | `client1` | `t/1` | `keyB` | `keyB-t/1` |
 | 4 | `client1` | `t/2` | `keyA` | `keyA-t/2` |
 
+## Publish Directly to a Stream
+
+Starting from EMQX 7.0, an MQTT client can publish directly to one named stream. MQTT Streams must be enabled globally.
+
+| Publish topic | Behavior |
+| --- | --- |
+| `$stream/<name>` | Writes to an existing stream. The publish fails if the stream does not exist. |
+| `$stream/<name>/<topic>` | Writes to an existing stream when `<topic>` exactly matches its configured topic filter. If the stream does not exist and auto-creation is enabled, EMQX creates it with `<topic>` as its topic filter. |
+
+`<topic>` must be a valid MQTT Topic Name and cannot contain wildcard characters. The stored message retains the complete publish topic, including the `$stream/` prefix.
+
+For example, publish a QoS 1 message to an existing stream named `my_stream`:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$stream/my_stream' -m '{"msg":"Hello"}'
+```
+
+To allow EMQX to create `my_stream` with `demo/topic` as its topic filter when the stream does not exist, publish to:
+
+```bash
+mqttx pub -h localhost -p 1883 -q 1 -t '$stream/my_stream/demo/topic' -m '{"msg":"Hello"}'
+```
+
+Direct publishing bypasses normal broker routing. EMQX stores the message only in `my_stream`; regular subscribers, queues, and other streams do not receive it.
+
+For MQTT 5 QoS 1 and QoS 2 publications, EMQX returns the following PUBACK or PUBREC reason codes:
+
+| Reason code | Meaning |
+| --- | --- |
+| `0x00` Success | The message was stored successfully. |
+| `0x83` Implementation specific error | The stream does not exist, stream creation failed, or message storage failed. |
+| `0x90` Topic Name invalid | The stream name is invalid, the topic suffix is empty, or it does not match the existing stream's topic filter. |
+
+QoS 0 publications do not receive an acknowledgment. MQTT 3 acknowledgments cannot carry these error reason codes; use MQTT 5 with QoS 1 or 2 when the publisher needs a definitive result.
+
 ## Automatically Create Streams via Dashboard
 
-MQTT streams can be automatically created when clients subscribe to a `$stream/<name>`-prefixed topic. The `<name>` in the subscription becomes the stream name.
+MQTT streams can be automatically created when clients subscribe or publish directly to a `$stream/<name>`-prefixed topic. The `<name>` becomes the stream name.
 
 ::: tip Note
 
@@ -183,9 +209,9 @@ To ensure proper stream behavior, you can enable auto create either regular stre
 
 This option is turned on by default in the **Streams** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
-1. Navigate to **Management** -> **MQTT Settings** -> **Messages** tab.
+1. Navigate to **Management** -> **MQTT Settings** -> **Streams** tab.
 
-2. By default, **Enable Auto Create Stream** is enabled and **Last Value Stream** type is selected.
+2. By default, **Enable Auto Create Streams** is enabled and **Last Value Stream** type is selected.
 
    Configure the following:
 
@@ -201,7 +227,7 @@ This option can be enabled manually if you prefer regular streams where messages
 
 1. Go to **Management** -> **MQTT Settings** -> **Streams** tab.
 
-2. By default, **Enable Auto Create Message Stream** is enabled. Select **Regular Message Stream** type.
+2. By default, **Enable Auto Create Streams** is enabled. Select **Regular Stream** type.
 
 3. Configure the following:
 
@@ -227,13 +253,15 @@ You can update MQTT Streams settings directly from the EMQX Dashboard without re
 
    - **Enable Streams**: Enables or disables the MQTT Stream feature globally. When disabled, no streams can be created or used.
 
+     > You can disable Streams only when no streams exist. Delete all streams before turning this option off.
+
    - **Max Stream Count**: Sets the maximum number of streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
 
    - **GC Interval**: Specifies how often expired stream messages are cleaned up. The default value is `1` hour.
 
    - **Regular Stream Retention Period**: Defines the default retention period for regular (non–Last-Value) streams. Messages older than this duration are automatically removed. The default is `7` days.
 
-   - **Enable Auto Create Message Stream**: Enables automatic creation of streams when clients subscribe to stream topics and no matching stream exists.
+   - **Enable Auto Create Streams**: Enables automatic creation of streams when clients subscribe or publish directly to stream topics and no matching stream exists.
 
    - **Auto Create Stream Type**: Specifies the type of streams to create automatically:
 
