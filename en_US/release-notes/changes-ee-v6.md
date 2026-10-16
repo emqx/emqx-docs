@@ -2,7 +2,7 @@
 
 ## 6.3.2
 
-*Release Date: 2026-10-15*
+*Release Date: 2026-10-16*
 
 ### Enhancements
 
@@ -15,28 +15,30 @@
 This release reduces memory use for MQTT connections, sessions, and node-local client data. It also lowers CPU overhead in several broker paths and improves subscription lookup and startup performance.
 
 - **Connection and session memory.**
-  - A connection now hibernates after `mqtt.hibernate_after`, which defaults to 5 seconds without traffic. Hibernation shrinks the process heap to the data still in use and releases about 5 KB per connection. Before, TCP and TLS connections hibernated only after `mqtt.idle_timeout` (15 seconds by default) and WebSocket connections stayed awake after their first packet. Set `mqtt.hibernate_after = infinity` to keep connections awake, and raise the value when clients send at intervals close to it, because each hibernation costs one garbage collection and the heap grows again on wake-up ([#19092](https://github.com/emqx/emqx/pull/19092)).
-  - A connection whose zone and listener configure no message, byte or subscribe rate limit no longer allocates rate-limiter state. A limit configured later still applies to established connections ([#19181](https://github.com/emqx/emqx/pull/19181)).
-  - A session with no queued messages, such as a publish-only client or a subscriber that keeps up with delivery, saves 48 bytes ([#19262](https://github.com/emqx/emqx/pull/19262)).
+  - [#19092](https://github.com/emqx/emqx/pull/19092) A connection now hibernates after `mqtt.hibernate_after`, which defaults to 5 seconds without traffic. Hibernation shrinks the process heap to the data still in use and releases about 5 KB per connection. Before, TCP and TLS connections hibernated only after `mqtt.idle_timeout` (15 seconds by default) and WebSocket connections stayed awake after their first packet. Set `mqtt.hibernate_after = infinity` to keep connections awake, and raise the value when clients send at intervals close to it, because each hibernation costs one garbage collection and the heap grows again on wake-up.
+  - [#19181](https://github.com/emqx/emqx/pull/19181) A connection whose zone and listener configure no message, byte or subscribe rate limit no longer allocates rate-limiter state. A limit configured later still applies to established connections.
+  - [#19262](https://github.com/emqx/emqx/pull/19262) A session with no queued messages, such as a publish-only client or a subscriber that keeps up with delivery, saves 48 bytes.
+  - [#19563](https://github.com/emqx/emqx/pull/19563) Erlang/OTP was upgraded to 28.4.1-7 and `emqx-builder` was upgraded to 6.2-3. Each TLS connection uses less memory because shared socket options no longer require a per-connection ETS table, and idle TLS 1.3 connections release their cipher state. A TLS handshake also no longer makes two calls to the Erlang file server to resolve an absolute `cacertfile` path, preventing a file-server backlog during bursts of TLS connections.
 
 - **Node-local client data.**
-  - The channel-info table no longer stores a client's will message, CONNECT properties, or subscription list. Its entries no longer grow with the CONNECT packet or number of subscriptions, reducing memory use and the cost of rewriting the table after each SUBACK and UNSUBACK ([#19306](https://github.com/emqx/emqx/pull/19306)).
-  - The table also drops the `sockinfo` map and the `peerhost`, `peerport`, `peername` and `sockport` values that `conninfo` already carries, saving about 100 bytes per connection ([#19263](https://github.com/emqx/emqx/pull/19263)).
-  - The table no longer stores per-client statistics whose value is 0, saving about 145 bytes per idle client ([#19303](https://github.com/emqx/emqx/pull/19303)).
-  - Clients that subscribe over TCP, TLS or WebSocket no longer get a row in the subscriber-id table, saving about 110 bytes per client and about 110 MB for one million clients ([#19245](https://github.com/emqx/emqx/pull/19245)).
+  - [#19306](https://github.com/emqx/emqx/pull/19306) The channel-info table no longer stores a client's will message, CONNECT properties, or subscription list. Its entries no longer grow with the CONNECT packet or number of subscriptions, reducing memory use and the cost of rewriting the table after each SUBACK and UNSUBACK.
+  - [#19263](https://github.com/emqx/emqx/pull/19263) The table also drops the `sockinfo` map and the `peerhost`, `peerport`, `peername` and `sockport` values that `conninfo` already carries, saving about 100 bytes per connection.
+  - [#19303](https://github.com/emqx/emqx/pull/19303) The table no longer stores per-client statistics whose value is 0, saving about 145 bytes per idle client.
+  - [#19245](https://github.com/emqx/emqx/pull/19245) Clients that subscribe over TCP, TLS or WebSocket no longer get a row in the subscriber-id table, saving about 110 bytes per client and about 110 MB for one million clients.
 
   REST API responses, CLI output and the arguments passed to hook callbacks are unchanged. Plugins that read the client information table directly, through `emqx_cm:get_chan_info/1,2`, `emqx_cm:lookup_client/1`, `emqx_mgmt:lookup_client/2`, `emqx_channel:info/1` or `emqx_connection:info/1`, no longer see `will_msg`, `conninfo.conn_props` or `session.subscriptions` in the returned map. Use `emqx_broker:subscriptions/1` for a client's subscriptions, the `client.connected` hook for its CONNECT properties, or `emqx_channel:info/2` to read a single attribute.
 
 - **CPU and latency.**
-  - Hooks are now invoked directly by name during message processing and client lifecycle operations ([#19527](https://github.com/emqx/emqx/pull/19527)).
-  - Metric updates and reads now need fewer lookups ([#19536](https://github.com/emqx/emqx/pull/19536)).
-  - On TCP listeners with `tcp_backend = socket`, a connection makes fewer receive system calls per incoming packet on average. For packets up to 1 KB, broker CPU per received QoS 0 PUBLISH packet dropped by about 7%; for larger packets, it is the same or lower ([#19528](https://github.com/emqx/emqx/pull/19528)).
-  - After each SUBACK and UNSUBACK, the broker updates the client's table entry in one write instead of two, which lowers SUBSCRIBE latency under a high rate of new subscribing connections ([#19532](https://github.com/emqx/emqx/pull/19532)).
-  - When the retainer is enabled, SUBSCRIBE handling uses less CPU. When a client subscribes to a topic filter without wildcards, the broker checks for a retained message before preparing retained-message delivery. If no retained message matches the topic, the broker performs no further retained-message processing for that subscription ([#19545](https://github.com/emqx/emqx/pull/19545)).
+  - [#19527](https://github.com/emqx/emqx/pull/19527) Hooks are now invoked directly by name during message processing and client lifecycle operations.
+  - [#19516](https://github.com/emqx/emqx/pull/19516) [#19536](https://github.com/emqx/emqx/pull/19536) Metric updates and reads now need fewer lookups. Updates to received and sent MQTT packet metrics reuse counter references for all counters in each namespace update group.
+  - [#19528](https://github.com/emqx/emqx/pull/19528) On TCP listeners with `tcp_backend = socket`, a connection makes fewer receive system calls per incoming packet on average. For packets up to 1 KB, broker CPU per received QoS 0 PUBLISH packet dropped by about 7%; for larger packets, it is the same or lower.
+  - [#19532](https://github.com/emqx/emqx/pull/19532) After each SUBACK and UNSUBACK, the broker updates the client's table entry in one write instead of two, which lowers SUBSCRIBE latency under a high rate of new subscribing connections.
+  - [#19555](https://github.com/emqx/emqx/pull/19555) `mria` was upgraded to 1.0.2. A write to a cluster table now runs in a helper process only when the calling process has at least 100 queued messages, instead of 10. This reduces SUBSCRIBE latency under a high rate of new subscriptions by avoiding frequent waits for the helper process.
+  - [#19545](https://github.com/emqx/emqx/pull/19545) When the retainer is enabled, SUBSCRIBE handling uses less CPU. When a client subscribes to a topic filter without wildcards, the broker checks for a retained message before preparing retained-message delivery. If no retained message matches the topic, the broker performs no further retained-message processing for that subscription.
 
 - **Subscription lookup and startup.**
-  - The `emqx ctl subscriptions show <ClientId>` command no longer scans all subscriptions on the node to find those of one client ([#19245](https://github.com/emqx/emqx/pull/19245)).
-  - The `nodetool` helper included in release packages is precompiled ([#19183](https://github.com/emqx/emqx/pull/19183)).
+  - [#19245](https://github.com/emqx/emqx/pull/19245) The `emqx ctl subscriptions show <ClientId>` command no longer scans all subscriptions on the node to find those of one client.
+  - [#19183](https://github.com/emqx/emqx/pull/19183) The `nodetool` helper included in release packages is precompiled.
 
 ### Bug Fixes
 
@@ -89,6 +91,10 @@ This release reduces memory use for MQTT connections, sessions, and node-local c
 
   This changes the behavior of connectors configured with a `request_ttl` above about 50 seconds. A response that takes longer than 60 seconds can now be interrupted by a reconnect. If the remote service is expected to take longer than 60 seconds to respond, set `max_inactive` to at least the slowest expected response time.
 
+#### Observability
+
+- [#19561](https://github.com/emqx/emqx/pull/19561) Fixed a log formatter crash when a log handler sets `payload_encode = hidden`. Previously, a debug log event that carried a term field, such as the `data` field of the Cluster Linking `recv_data` event, was replaced by a `FORMATTER CRASH` report. The field is now redacted as `Encoded(hidden)=******`, and the log entry is written normally.
+
 #### Node and Cluster
 
 - [#19444](https://github.com/emqx/emqx/pull/19444) Fixed the number of Erlang schedulers when EMQX runs under a CPU quota, such as `docker run --cpus` or a Kubernetes CPU limit.
@@ -102,6 +108,15 @@ This release reduces memory use for MQTT connections, sessions, and node-local c
   ```
 
   This fix removes `gproc` dependency of `mria` application from the list of business-level applications that reboot when the node changes the cluster.
+
+- [#19578](https://github.com/emqx/emqx/pull/19578) Fixed a crash when importing evacuated sessions during rolling upgrades. The crash occurred if the session came from a node running an earlier EMQX version and lacked listener metadata.
+
+- [#19580](https://github.com/emqx/emqx/pull/19580) Fixed an issue that could prevent node evacuation from completing during rolling upgrades.
+
+  - **Source node versions:** EMQX 5.8 to 5.10, 6.0.0 to 6.0.3, 6.1.0 to 6.1.4, 6.2.0 to 6.2.3, or 6.3.0.
+  - **Destination node versions:** EMQX 6.0.4, 6.1.5, or 6.3.1.
+  - **Impact:** The destination node did not answer the session-eviction call. The source node retained the client sessions and retried the call indefinitely.
+  - **Resolution:** EMQX nodes now answer the call again, allowing node evacuation to complete.
 
 #### Packaging
 

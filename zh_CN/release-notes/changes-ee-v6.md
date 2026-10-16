@@ -2,7 +2,7 @@
 
 ## 6.3.2
 
-*发布日期: 2026-10-15*
+*发布日期: 2026-10-16*
 
 ### 增强
 
@@ -15,28 +15,30 @@
 此版本降低了 MQTT 连接、会话和节点本地客户端数据的内存用量，同时降低了多个 Broker 处理路径的 CPU 开销，并提升了订阅查询和启动性能。
 
 - **连接和会话内存。**
-  - 连接现在会在无流量持续时间达到 `mqtt.hibernate_after` 的配置值后进入休眠。该配置项默认为 5 秒。休眠会将进程堆缩减到仅保留仍在使用的数据，每个连接可释放约 5 KB 内存。此前，TCP 和 TLS 连接仅在 `mqtt.idle_timeout` 指定的时长后休眠，该配置默认值为 15 秒；WebSocket 连接收到第一个报文后会一直保持唤醒。设置 `mqtt.hibernate_after = infinity` 可使连接始终保持唤醒。如果客户端发送数据的间隔接近该配置值，建议增大该值，因为每次休眠都会触发一次垃圾回收，连接唤醒后进程堆还会再次增长（[#19092](https://github.com/emqx/emqx/pull/19092)）。
-  - 如果连接所属的 Zone 和监听器均未配置消息、字节或订阅速率限制，连接将不再分配限速器状态。连接建立后新增的速率限制仍会对该连接生效（[#19181](https://github.com/emqx/emqx/pull/19181)）。
-  - 没有排队消息的会话可节省 48 字节内存，例如仅发布消息的客户端，或消息投递速度能够跟上发布速度的订阅客户端（[#19262](https://github.com/emqx/emqx/pull/19262)）。
+  - [#19092](https://github.com/emqx/emqx/pull/19092) 连接现在会在无流量持续时间达到 `mqtt.hibernate_after` 的配置值后进入休眠。该配置项默认为 5 秒。休眠会将进程堆缩减到仅保留仍在使用的数据，每个连接可释放约 5 KB 内存。此前，TCP 和 TLS 连接仅在 `mqtt.idle_timeout` 指定的时长后休眠，该配置默认值为 15 秒；WebSocket 连接收到第一个报文后会一直保持唤醒。设置 `mqtt.hibernate_after = infinity` 可使连接始终保持唤醒。如果客户端发送数据的间隔接近该配置值，建议增大该值，因为每次休眠都会触发一次垃圾回收，连接唤醒后进程堆还会再次增长。
+  - [#19181](https://github.com/emqx/emqx/pull/19181) 如果连接所属的 Zone 和监听器均未配置消息、字节或订阅速率限制，连接将不再分配限速器状态。连接建立后新增的速率限制仍会对该连接生效。
+  - [#19262](https://github.com/emqx/emqx/pull/19262) 没有排队消息的会话可节省 48 字节内存，例如仅发布消息的客户端，或消息投递速度能够跟上发布速度的订阅客户端。
+  - [#19563](https://github.com/emqx/emqx/pull/19563) Erlang/OTP 已升级到 28.4.1-7，`emqx-builder` 已升级到 6.2-3。共享套接字选项不再为每个 TLS 连接使用单独的 ETS 表，空闲的 TLS 1.3 连接也会释放其密码状态，从而降低每个 TLS 连接的内存用量。TLS 握手也不再为解析 `cacertfile` 的绝对路径而两次调用 Erlang 文件服务器，避免 TLS 连接突增时文件服务器出现积压。
 
 - **节点本地客户端数据。**
-  - channel-info 表不再存储客户端的遗嘱消息、CONNECT 属性或订阅列表。表中条目的大小不再随 CONNECT 报文或订阅数量增长，从而减少内存占用，并降低每次 SUBACK 和 UNSUBACK 后重写该表的开销（[#19306](https://github.com/emqx/emqx/pull/19306)）。
-  - 该表还移除了 `sockinfo` map，以及 `conninfo` 中已有的 `peerhost`、`peerport`、`peername` 和 `sockport` 值，每个连接可节省约 100 字节内存（[#19263](https://github.com/emqx/emqx/pull/19263)）。
-  - 该表不再存储值为 0 的客户端级统计数据，每个空闲客户端可节省约 145 字节内存（[#19303](https://github.com/emqx/emqx/pull/19303)）。
-  - 通过 TCP、TLS 或 WebSocket 订阅的客户端不再占用订阅者 ID 表中的一行，每个客户端可节省约 110 字节内存，一百万个客户端可节省约 110 MB（[#19245](https://github.com/emqx/emqx/pull/19245)）。
+  - [#19306](https://github.com/emqx/emqx/pull/19306) channel-info 表不再存储客户端的遗嘱消息、CONNECT 属性或订阅列表。表中条目的大小不再随 CONNECT 报文或订阅数量增长，从而减少内存占用，并降低每次 SUBACK 和 UNSUBACK 后重写该表的开销。
+  - [#19263](https://github.com/emqx/emqx/pull/19263) 该表还移除了 `sockinfo` map，以及 `conninfo` 中已有的 `peerhost`、`peerport`、`peername` 和 `sockport` 值，每个连接可节省约 100 字节内存。
+  - [#19303](https://github.com/emqx/emqx/pull/19303) 该表不再存储值为 0 的客户端级统计数据，每个空闲客户端可节省约 145 字节内存。
+  - [#19245](https://github.com/emqx/emqx/pull/19245) 通过 TCP、TLS 或 WebSocket 订阅的客户端不再占用订阅者 ID 表中的一行，每个客户端可节省约 110 字节内存，一百万个客户端可节省约 110 MB。
 
   REST API 响应、CLI 输出和传递给 Hook 回调的参数保持不变。如果插件通过 `emqx_cm:get_chan_info/1,2`、`emqx_cm:lookup_client/1`、`emqx_mgmt:lookup_client/2`、`emqx_channel:info/1` 或 `emqx_connection:info/1` 直接读取客户端信息表，将无法再从返回的 map 中获取 `will_msg`、`conninfo.conn_props` 或 `session.subscriptions`。如需获取客户端的订阅，请使用 `emqx_broker:subscriptions/1`；如需获取 CONNECT 属性，请使用 `client.connected` Hook；如需读取单个 Channel 属性，请使用 `emqx_channel:info/2`。
 
 - **CPU 和延迟。**
-  - 消息处理和客户端生命周期操作现在会按名称直接调用 Hook（[#19527](https://github.com/emqx/emqx/pull/19527)）。
-  - 更新和读取指标时所需的查找次数减少（[#19536](https://github.com/emqx/emqx/pull/19536)）。
-  - 对于配置了 `tcp_backend = socket` 的 TCP 监听器，每个传入报文所需的接收系统调用次数平均有所减少。对于不超过 1 KB 的报文，Broker 每接收一条 QoS 0 PUBLISH 报文的 CPU 用量降低约 7%；对于更大的报文，CPU 用量保持不变或更低（[#19528](https://github.com/emqx/emqx/pull/19528)）。
-  - 每次 SUBACK 和 UNSUBACK 后，Broker 现在只需一次写入即可更新客户端表条目，而不再需要两次写入。在大量新连接执行订阅的场景下，此优化可降低 SUBSCRIBE 延迟（[#19532](https://github.com/emqx/emqx/pull/19532)）。
-  - 启用保留消息功能时，SUBSCRIBE 处理的 CPU 开销降低。客户端订阅不含通配符的主题过滤器时，Broker 会先检查是否存在匹配的保留消息，再准备保留消息投递。如果没有匹配的保留消息，Broker 不再为该订阅执行后续保留消息处理（[#19545](https://github.com/emqx/emqx/pull/19545)）。
+  - [#19527](https://github.com/emqx/emqx/pull/19527) 消息处理和客户端生命周期操作现在会按名称直接调用 Hook。
+  - [#19516](https://github.com/emqx/emqx/pull/19516) [#19536](https://github.com/emqx/emqx/pull/19536) 更新和读取指标时所需的查找次数减少。更新接收和发送的 MQTT 报文指标时，同一个命名空间更新组中的所有计数器会复用计数器引用。
+  - [#19528](https://github.com/emqx/emqx/pull/19528) 对于配置了 `tcp_backend = socket` 的 TCP 监听器，每个传入报文所需的接收系统调用次数平均有所减少。对于不超过 1 KB 的报文，Broker 每接收一条 QoS 0 PUBLISH 报文的 CPU 用量降低约 7%；对于更大的报文，CPU 用量保持不变或更低。
+  - [#19532](https://github.com/emqx/emqx/pull/19532) 每次 SUBACK 和 UNSUBACK 后，Broker 现在只需一次写入即可更新客户端表条目，而不再需要两次写入。在大量新连接执行订阅的场景下，此优化可降低 SUBSCRIBE 延迟。
+  - [#19555](https://github.com/emqx/emqx/pull/19555) `mria` 已升级到 1.0.2。现在，仅当调用进程中至少有 100 条消息排队时，集群表写入才会在辅助进程中运行，此前的阈值为 10 条。在大量新订阅请求的场景下，此变更可避免频繁等待辅助进程，从而降低 SUBSCRIBE 延迟。
+  - [#19545](https://github.com/emqx/emqx/pull/19545) 启用保留消息功能时，SUBSCRIBE 处理的 CPU 开销降低。客户端订阅不含通配符的主题过滤器时，Broker 会先检查是否存在匹配的保留消息，再准备保留消息投递。如果没有匹配的保留消息，Broker 不再为该订阅执行后续保留消息处理。
 
 - **订阅查询和启动。**
-  - `emqx ctl subscriptions show <ClientId>` 命令不再通过扫描节点上的所有订阅来查找单个客户端的订阅（[#19245](https://github.com/emqx/emqx/pull/19245)）。
-  - 发布包中包含的 `nodetool` 辅助工具现在已预编译（[#19183](https://github.com/emqx/emqx/pull/19183)）。
+  - [#19245](https://github.com/emqx/emqx/pull/19245) `emqx ctl subscriptions show <ClientId>` 命令不再通过扫描节点上的所有订阅来查找单个客户端的订阅。
+  - [#19183](https://github.com/emqx/emqx/pull/19183) 发布包中包含的 `nodetool` 辅助工具现在已预编译。
 
 ### 修复
 
@@ -89,6 +91,10 @@
 
   此变更会影响 `request_ttl` 高于约 50 秒的连接器。响应时间超过 60 秒时，重新连接可能会中断响应。如果远程服务的响应时间预计超过 60 秒，请将 `max_inactive` 至少设置为最长预期响应时间。
 
+#### 可观测性
+
+- [#19561](https://github.com/emqx/emqx/pull/19561) 修复日志处理器设置 `payload_encode = hidden` 时日志格式化器崩溃的问题。此前，如果调试日志事件包含 Erlang term 类型字段，例如集群链接 `recv_data` 事件的 `data` 字段，该日志事件会被替换为 `FORMATTER CRASH` 报告。现在，该字段会被脱敏为 `Encoded(hidden)=******`，日志条目可正常写入。
+
 #### 节点与集群
 
 - [#19444](https://github.com/emqx/emqx/pull/19444) 修复 EMQX 在 CPU 配额下运行时 Erlang 调度器数量不正确的问题，例如使用 `docker run --cpus` 或 Kubernetes CPU 限制时。
@@ -102,6 +108,15 @@
   ```
 
   此修复从节点加入或离开集群时需要重启的业务应用列表中移除了 `mria` 的依赖项 `gproc`。
+
+- [#19578](https://github.com/emqx/emqx/pull/19578) 修复滚动升级期间迁移会话时发生崩溃的问题。该问题会影响之前已从较早版本 EMQX 节点疏散、但缺少监听器元数据的会话。
+
+- [#19580](https://github.com/emqx/emqx/pull/19580) 修复滚动升级期间节点疏散可能无法完成的问题。
+
+  - **源节点版本：** EMQX 5.8 至 5.10、6.0.0 至 6.0.3、6.1.0 至 6.1.4、6.2.0 至 6.2.3 或 6.3.0。
+  - **目标节点版本：** EMQX 6.0.4、6.1.5 或 6.3.1。
+  - **影响：** 目标节点不响应会话疏散调用，导致源节点保留客户端会话并持续重试该调用。
+  - **修复：** EMQX 节点现在会重新响应此调用，使节点疏散能够完成。
 
 #### 部署
 
