@@ -4,7 +4,7 @@
 
 Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时控制系统和设备的 MQTT 命名空间。它通过封装结构化数据格式，包括指标、过程变量和设备状态信息，确保了标准化的数据传输，使其呈现为简洁易处理的格式。通过使用Sparkplug B，组织可以提高运营效率，避免数据孤岛，并在 MQTT 网络中实现设备间的无缝通信。
 
-本页面将为您介绍 Sparkplug B 在 EMQX 中的实现，包括数据格式、功能和实用示例。
+本页面介绍 EMQX 对 Sparkplug B 的支持，包括数据格式、编解码函数、Alias 映射、Sparkplug 感知能力和实用示例。
 
 ## Sparkplug B 数据格式
 
@@ -250,6 +250,39 @@ schema_registry {
   - `"Device/Temperature"`
   - `"Device/Pressure"`
 - 下游订阅者不需要维护 Sparkplug B 状态，也不需要解析 `alias`。
+
+## Sparkplug 感知能力
+
+从 EMQX 企业版 7.0.0 开始，EMQX 可以将最近收到的 NBIRTH 和 DBIRTH 消息作为保留消息，提供给订阅 [Sparkplug 3.0 规范](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf)定义的 `$sparkplug/certificates/` 主题的客户端。即使边缘节点或设备已经发布过 Birth 消息，新订阅者也无需等待下一条 Birth 消息即可获取该消息。此能力属于 Schema Registry，默认关闭。
+
+Sparkplug 感知能力与 [Sparkplug B Alias 映射](#sparkplug-b-alias-映射)相互独立。Alias 映射帮助 `spb_decode` 在 MQTT 客户端会话内还原 metric 名称；Sparkplug 感知能力则为后续订阅者提供 Birth 消息。除 MQTT 客户端直接发布的消息外，它还会处理通过 MQTT Source、回退动作等内部路径发布的 Birth 消息。
+
+### 启用 Sparkplug 感知能力
+
+先启用[保留消息功能](../../guides/dashboard/retained.md#设置保留消息)，再在 `etc/base.hocon` 中添加以下配置：
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_sparkplug_awareness = true
+  }
+}
+```
+
+`schema_registry.sparkplugb.enable_sparkplug_awareness` 的默认值为 `false`。只有启用保留消息存储后，EMQX 才能在证书主题下保存 Birth 消息。
+
+### 从证书主题获取 Birth 消息
+
+EMQX 收到 Sparkplug 主题上的 NBIRTH 或 DBIRTH 消息后，会将原始 Payload 复制到对应的证书主题，并以 QoS 2、Retain 标志为 `true` 发布。原始 Birth 消息仍会在其原始主题上正常投递。例如：
+
+| 原始 Birth 主题 | 证书主题 |
+| --- | --- |
+| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
+| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
+
+订阅 `$sparkplug/certificates/#` 即可获取已保存的 Birth 消息。同一证书主题收到新的 Birth 消息时，其保留消息会被更新。如果监听器配置了挂载点，EMQX 也会对证书主题应用相同的挂载点，因此其他挂载点下的订阅者不会收到该消息。证书消息还会保留原始消息中的客户端属性，供按命名空间隔离的规则处理。
+
+保留的 Birth Payload 是边缘节点或设备发布的原始 Payload，其中的 metric 值可能不包含后续 NDATA 或 DDATA 消息中的更新。此能力不会替换 NDEATH 消息中的时间戳。
 
 ## 实用示例
 
