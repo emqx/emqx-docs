@@ -14,20 +14,23 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/latest/develop/
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`
+- `client_attrs.<name>`：从 EMQX 7.0 开始，可以使用此名称的可选 Hash 字段设置 `<name>` 指定的客户端属性
 
 例如，您希望添加一位名用户名为 `emqx_u`、密码为 `public`、盐值为 `salt_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户：
 
 ```bash
 >redis-cli
-127.0.0.1:6379> HSET mqtt_user:emqx_u is_superuser 1 salt slat_foo123 password_hash 44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5
-(integer) 0
+127.0.0.1:6379> HSET mqtt_user:emqx_u is_superuser 1 salt slat_foo123 password_hash 44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5 client_attrs.department engineering
+(integer) 4
 ```
 
 对应的配置参数为：
 
 - 密码加密方式：`sha256`
 - 加盐方式：`suffix`
-- 命令：`HMGET mqtt_user:${username} password_hash salt is_superuser`
+- 命令：`HMGET mqtt_user:${username} password_hash salt is_superuser client_attrs.department`
+
+查询命令可以包含 `client_attrs.<name>` 字段。请包含需要由 EMQX 设置的每个字段。有关支持的属性值类型和合并规则，参见[客户端属性](../../../develop/client-attributes/client-attributes.md#在客户端认证过程中设置)。
 
 ::: tip
 `password_hash` 这一字段名称直观表明用户应当在数据库中存储散列密码。但鉴于 Redis 没有类似 MySQL 的 `as` 语法，我们保留了 4.x 对 `password` 的兼容。

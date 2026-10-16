@@ -15,6 +15,7 @@ EMQX MongoDB authenticator supports storing authentication data as MongoDB docum
 - `password_hash`: required; password (in plain text or hashed) stored in the database; this field supports renaming;
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming;
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming.
+- `client_attrs`: Starting from EMQX 7.0, you can use this optional field to return a nested object. After successful authentication, each field with a valid name and supported value type is set as a client attribute.
 
 For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, suffixed salt `salt_foo123`, and password hash `sha256`, the query statement should be:
 
@@ -24,6 +25,9 @@ For example, if we want to add a document for a superuser (`is_superuser`: `true
       "username": "emqx_u",
       "salt": "slat_foo123",
       "is_superuser": true,
+      "client_attrs": {
+        "department": "engineering"
+      },
       "password_hash": "44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5"
   }
 );
@@ -32,6 +36,8 @@ For example, if we want to add a document for a superuser (`is_superuser`: `true
   "insertedId" : ObjectId("631989e20a33e26b05b15abe")
 }
 ```
+
+In this example, EMQX sets the `department` client attribute to `engineering` after successful authentication. Features that support client attributes can use this value through `${client_attrs.department}`. For supported attribute value types and merge behavior, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
 
 :::tip 
 

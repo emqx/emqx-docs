@@ -17,6 +17,7 @@ Users need to provide a query statement template and ensure the following fields
 - `password_hash`: required; password (in plain text or hashed) stored in the database; 
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
 - `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `client_attrs.<name>`: Starting from EMQX 7.0, you can use an optional query result column with this name to set the client attribute identified by `<name>`.
 
 Example table structure for storing credentials:
 
@@ -55,6 +56,17 @@ SQL:
 ```sql
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
+
+You can set a client attribute by aliasing a query result column or expression to `client_attrs.<name>`. Because the alias contains a dot, quote it as a PostgreSQL identifier. For example, the following query sets `client_attrs.department` to `engineering`:
+
+```sql
+SELECT password_hash, salt, is_superuser, 'engineering' AS "client_attrs.department"
+FROM mqtt_user
+WHERE username = ${username}
+LIMIT 1
+```
+
+You can return multiple client attributes by adding more aliased columns. For supported attribute value types and merge behavior, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
 
 ## Configure with Dashboard
 

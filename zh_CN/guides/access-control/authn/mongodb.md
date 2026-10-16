@@ -14,6 +14,7 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 - `password_hash`: 必需，数据库中的明文或散列密码字段，可以设置为其他字段名
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`），可以设置为其他字段名
 - `is_superuser`: 可选，标记当前客户端是否为超级用户，默认为 `false`，可以设置为其他字段名
+- `client_attrs`：从 EMQX 7.0 开始，可以使用此可选字段返回嵌套对象。认证成功后，嵌套对象中名称有效且值类型受支持的字段都会设置为客户端属性
 
 添加用户名为 `emqx_u`、密码为 `public`、盐值为 `salt_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户示例：
 
@@ -23,6 +24,9 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
       "username": "emqx_u",
       "salt": "slat_foo123",
       "is_superuser": true,
+      "client_attrs": {
+        "department": "engineering"
+      },
       "password_hash": "44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5"
   }
 );
@@ -31,6 +35,8 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
   "insertedId" : ObjectId("631989e20a33e26b05b15abe")
 }
 ```
+
+在此示例中，认证成功后，EMQX 会将 `department` 客户端属性设置为 `engineering`。其他支持客户端属性的功能可以通过 `${client_attrs.department}` 使用该值。有关支持的属性值类型和合并规则，参见[客户端属性](../../../develop/client-attributes/client-attributes.md#在客户端认证过程中设置)。
 
 :::tip
 当系统中有大量用户时，请确保查询使用的集合已优化并使用有效的索引，以提升大量连接时的数据查找速度并降低 EMQX 负载。

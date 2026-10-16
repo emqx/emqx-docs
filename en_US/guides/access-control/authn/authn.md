@@ -207,6 +207,12 @@ Permission preset is supported in JWT and HTTP authentication. An [Access Contro
 
 You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
 
+## Set Client Attributes from Authentication Results
+
+An authenticator can return client attributes as part of a successful authentication result. EMQX merges these attributes into the client's `client_attrs` field, where authorization rules, topic templates, and other supported features can use them.
+
+JWT and HTTP authenticators can set client attributes. Starting from EMQX 7.0, MySQL, PostgreSQL, Redis, MongoDB, and LDAP authenticators can also set them. The result format depends on the backend. For the supported formats, value handling, and merge order, see [MQTT Client Attributes](../../../develop/client-attributes/client-attributes.md#set-during-the-client-authentication-process).
+
 ## Override Client IDs from Authentication Results
 
 For an MQTT client, an authentication backend can return `clientid_override` in a successful authentication result. The value must be a non-empty string containing the complete replacement Client ID. EMQX applies it after authentication and before opening the client session. If the field is absent or empty, EMQX keeps the previously determined Client ID.
