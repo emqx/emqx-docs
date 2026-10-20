@@ -21,6 +21,65 @@ EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 
 
 ::::
 
+## Sparkplug 感知能力
+
+NBIRTH 消息描述边缘节点，DBIRTH 消息描述该边缘节点连接的设备；两者都包含相应的 metric 定义。按照 Sparkplug 规范，这两类消息发布到原始主题时不设置 Retain 标志。因此，主机应用（Host Application）如果在消息发布后才连接或重启，就必须等待或请求新的 Birth 消息，才能重建节点和设备模型。
+
+从 EMQX 7.0.0 开始，启用 Sparkplug 感知能力后，EMQX 会将最近收到的 NBIRTH 和 DBIRTH 消息以保留消息的形式存储在 `$sparkplug/certificates/` 主题树中。之后订阅该主题树的客户端可以立即获取节点、设备及其 metric 定义。[Sparkplug 3.0 规范](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf)将这些主题称为 Birth Certificate 主题。
+
+### Sparkplug 感知能力工作机制
+
+启用 Sparkplug 感知能力后，EMQX 按以下流程处理 Birth 消息：
+
+1. 边缘节点为自身发布 NBIRTH 消息，或为其设备发布 DBIRTH 消息。
+2. EMQX 仍在原始主题上正常投递 Birth 消息。同时，EMQX 使用相同的 payload 向对应的 Birth Certificate 主题发布一条 QoS 2 的保留消息。无论 Birth 消息由 MQTT 客户端直接发布，还是通过 MQTT Source、回退动作等内部路径发布，EMQX 都按此方式处理。
+3. 主机应用或其他消费者订阅 `$sparkplug/certificates/#` 后，可以立即收到保留的 Birth 消息。当 EMQX 再次收到映射到同一 Birth Certificate 主题的 Birth 消息时，会替换该主题中已有的保留消息。
+
+下表展示 EMQX 如何将原始 Birth 主题映射到 Birth Certificate 主题：
+
+| 原始 Birth 主题 | Birth Certificate 主题 |
+| --- | --- |
+| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
+| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
+
+如果监听器配置了挂载点，EMQX 会为 Birth Certificate 主题添加相同的挂载点，因此其他挂载点下的订阅者无法收到该消息。保留消息还会保留原始消息中的客户端属性，以便规则引擎按命名空间处理消息。
+
+保留的 Birth 消息使用边缘节点或设备发布的原始 payload。该 payload 不会随之后的 NDATA 或 DDATA 消息更新，因此其中的 metric 值可能不是当前值。Sparkplug 感知能力不会替换 NDEATH 消息中的时间戳。
+
+### 启用 Sparkplug 感知能力
+
+Sparkplug 感知能力由 Schema Registry 提供。先启用[保留消息功能](../../guides/dashboard/retained.md#设置保留消息)，再通过 `etc/base.hocon` 或 REST API 启用 Sparkplug 感知能力。Dashboard 不提供此配置项的开关。
+
+#### 配置文件
+
+在 `etc/base.hocon` 中添加以下配置：
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_sparkplug_awareness = true
+  }
+}
+```
+
+#### REST API
+
+向 `/api/v5/configs?mode=merge` 发送 `PUT` 请求，请求正文使用 HOCON 格式。请使用具有 [`system` 权限范围](../../guides/api.md#内置-api-密钥权限范围)的全局 API 密钥进行认证，并将 `<your-application-key>` 和 `<your-security-key>` 替换为您的 [API 密钥凭证](../../guides/api.md#认证)：
+
+```bash
+curl -X 'PUT' \
+  'http://127.0.0.1:18083/api/v5/configs?mode=merge' \
+  -u '<your-application-key>:<your-security-key>' \
+  -H 'Content-Type: text/plain' \
+  --data-binary 'schema_registry {
+    sparkplugb {
+      enable_sparkplug_awareness = true
+    }
+  }'
+```
+
+`schema_registry.sparkplugb.enable_sparkplug_awareness` 的默认值为 `false`。要在 Birth Certificate 主题中保存 Birth 消息，必须启用保留消息功能。
+
 ## Sparkplug B 函数
 
 EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数据：`spb_encode` 和 `spb_decode`。[实用示例](#实用示例)部分将帮助您了解如何在不同场景中使用这些函数。
@@ -250,39 +309,6 @@ schema_registry {
   - `"Device/Temperature"`
   - `"Device/Pressure"`
 - 下游订阅者不需要维护 Sparkplug B 状态，也不需要解析 `alias`。
-
-## Sparkplug 感知能力
-
-从 EMQX 企业版 7.0.0 开始，EMQX 可以将最近收到的 NBIRTH 和 DBIRTH 消息作为保留消息，提供给订阅 [Sparkplug 3.0 规范](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf)定义的 `$sparkplug/certificates/` 主题的客户端。即使边缘节点或设备已经发布过 Birth 消息，新订阅者也无需等待下一条 Birth 消息即可获取该消息。此能力属于 Schema Registry，默认关闭。
-
-Sparkplug 感知能力与 [Sparkplug B Alias 映射](#sparkplug-b-alias-映射)相互独立。Alias 映射帮助 `spb_decode` 在 MQTT 客户端会话内还原 metric 名称；Sparkplug 感知能力则为后续订阅者提供 Birth 消息。除 MQTT 客户端直接发布的消息外，它还会处理通过 MQTT Source、回退动作等内部路径发布的 Birth 消息。
-
-### 启用 Sparkplug 感知能力
-
-先启用[保留消息功能](../../guides/dashboard/retained.md#设置保留消息)，再在 `etc/base.hocon` 中添加以下配置：
-
-```hocon
-schema_registry {
-  sparkplugb {
-    enable_sparkplug_awareness = true
-  }
-}
-```
-
-`schema_registry.sparkplugb.enable_sparkplug_awareness` 的默认值为 `false`。只有启用保留消息存储后，EMQX 才能在证书主题下保存 Birth 消息。
-
-### 从证书主题获取 Birth 消息
-
-EMQX 收到 Sparkplug 主题上的 NBIRTH 或 DBIRTH 消息后，会将原始 Payload 复制到对应的证书主题，并以 QoS 2、Retain 标志为 `true` 发布。原始 Birth 消息仍会在其原始主题上正常投递。例如：
-
-| 原始 Birth 主题 | 证书主题 |
-| --- | --- |
-| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
-| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
-
-订阅 `$sparkplug/certificates/#` 即可获取已保存的 Birth 消息。同一证书主题收到新的 Birth 消息时，其保留消息会被更新。如果监听器配置了挂载点，EMQX 也会对证书主题应用相同的挂载点，因此其他挂载点下的订阅者不会收到该消息。证书消息还会保留原始消息中的客户端属性，供按命名空间隔离的规则处理。
-
-保留的 Birth Payload 是边缘节点或设备发布的原始 Payload，其中的 metric 值可能不包含后续 NDATA 或 DDATA 消息中的更新。此能力不会替换 NDEATH 消息中的时间戳。
 
 ## 实用示例
 

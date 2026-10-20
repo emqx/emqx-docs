@@ -21,6 +21,65 @@ Please use the updated `spb_encode` and `spb_decode` functions instead.
 
 ::::
 
+## Sparkplug Awareness
+
+NBIRTH and DBIRTH messages describe an Edge Node and a connected device, respectively, including their metric definitions. Because these messages are not retained on their original Sparkplug topics, a Host Application that connects or restarts later must wait for or request another Birth message before it can reconstruct the node and device models.
+
+Starting from EMQX 7.0.0, Sparkplug Awareness stores the most recently received NBIRTH and DBIRTH messages as retained messages on the `$sparkplug/certificates/` topic tree. Later subscribers can retrieve the node, device, and metric definitions immediately. The [Sparkplug 3.0 specification](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf) calls these topics Birth Certificate topics.
+
+### How Sparkplug Awareness Works
+
+When Sparkplug Awareness is enabled, EMQX processes Birth messages as follows:
+
+1. An Edge Node publishes an NBIRTH message for itself or a DBIRTH message for one of its devices.
+2. EMQX delivers the original Birth message on its original topic. EMQX also publishes a copy with the original payload to the corresponding Birth Certificate topic with QoS 2 and the retain flag set. EMQX applies this behavior to Birth messages published directly by MQTT clients and through internal paths, such as MQTT sources and fallback actions.
+3. A Host Application or another consumer subscribes to `$sparkplug/certificates/#` and immediately receives the retained Birth messages. A new Birth message for the same Birth Certificate topic replaces the retained message for that topic.
+
+The following examples show how EMQX maps the original Birth topics to Birth Certificate topics:
+
+| Original Birth Topic | Birth Certificate Topic |
+| --- | --- |
+| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
+| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
+
+When a listener uses a mountpoint, EMQX applies the same mountpoint to the Birth Certificate topic, so subscribers in other mountpoints do not receive the message. The retained message also preserves any client attributes from the original message for namespace-aware rule processing.
+
+The retained Birth payload is the original payload published by the Edge Node or device. Its metric values might not reflect subsequent NDATA or DDATA updates. Sparkplug Awareness does not replace timestamps in NDEATH messages.
+
+### Enable Sparkplug Awareness
+
+Sparkplug Awareness is a Schema Registry capability. Enable [retained messages](../../guides/dashboard/retained.md#retainer-settings) first. Then enable Sparkplug Awareness in `etc/base.hocon` or through the REST API. Dashboard does not provide a switch for this setting.
+
+#### Configuration File
+
+Add the following configuration to `etc/base.hocon`:
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_sparkplug_awareness = true
+  }
+}
+```
+
+#### REST API
+
+Send a `PUT` request to `/api/v5/configs?mode=merge` with the configuration in HOCON format. Use a global API key with the [`system` scope](../../guides/api.md#built-in-api-key-scopes), and replace `<your-application-key>` and `<your-security-key>` with your [API key credentials](../../guides/api.md#authentication):
+
+```bash
+curl -X 'PUT' \
+  'http://127.0.0.1:18083/api/v5/configs?mode=merge' \
+  -u '<your-application-key>:<your-security-key>' \
+  -H 'Content-Type: text/plain' \
+  --data-binary 'schema_registry {
+    sparkplugb {
+      enable_sparkplug_awareness = true
+    }
+  }'
+```
+
+The `schema_registry.sparkplugb.enable_sparkplug_awareness` setting defaults to `false`. Retained-message storage must be enabled for EMQX to keep the Birth messages on the Birth Certificate topics.
+
 ## Sparkplug B Functions
 
 EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `spb_encode` and `spb_decode`.  The [practical examples](#examples-for-using-spb_decode-and-spb_encode) helps you to understand how to use these functions in different scenarios.
@@ -249,39 +308,6 @@ You can observe that:
   - `"Device/Temperature"`
   - `"Device/Pressure"`
 - Downstream subscribers do not need to maintain Sparkplug B state or interpret aliases.
-
-## Sparkplug Awareness
-
-Starting from EMQX Enterprise 7.0.0, EMQX can keep the most recently received NBIRTH and DBIRTH messages available as retained messages on the `$sparkplug/certificates/` topic tree defined by the [Sparkplug 3.0 specification](https://sparkplug.eclipse.org/specification/version/3.0/documents/sparkplug-specification-3.0.0.pdf). Clients that subscribe after an edge node or device has published its Birth message can retrieve that message without waiting for another Birth message. This capability is part of Schema Registry and is disabled by default.
-
-Sparkplug Awareness is separate from [Sparkplug B alias mapping](#sparkplug-b-alias-mapping). Alias mapping helps `spb_decode` restore metric names within an MQTT client session; Sparkplug Awareness makes Birth messages available to later subscribers. It also handles Birth messages published through internal paths, such as MQTT sources and fallback actions, rather than only those published directly by MQTT clients.
-
-### Enable Sparkplug Awareness
-
-Enable [retained messages](../../guides/dashboard/retained.md#retainer-settings), then add the following configuration to `etc/base.hocon`:
-
-```hocon
-schema_registry {
-  sparkplugb {
-    enable_sparkplug_awareness = true
-  }
-}
-```
-
-The `schema_registry.sparkplugb.enable_sparkplug_awareness` setting defaults to `false`. Retained-message storage must be enabled for EMQX to keep the Birth messages on the certificate topics.
-
-### Read Birth Messages from Certificate Topics
-
-When EMQX receives an NBIRTH or DBIRTH message on a Sparkplug topic, it publishes a copy with the original payload to the corresponding certificate topic with QoS 2 and the retain flag set. The original Birth message is still delivered on its original topic. For example:
-
-| Original Birth Topic | Certificate Topic |
-| --- | --- |
-| `spBv1.0/group1/NBIRTH/eon1` | `$sparkplug/certificates/spBv1.0/group1/NBIRTH/eon1` |
-| `spBv1.0/group1/DBIRTH/eon1/device1` | `$sparkplug/certificates/spBv1.0/group1/DBIRTH/eon1/device1` |
-
-Subscribe to `$sparkplug/certificates/#` to receive the stored Birth messages. A new Birth message for the same certificate topic replaces the retained message for that topic. When a listener uses a mountpoint, EMQX applies the same mountpoint to the certificate topic, so subscribers in other mountpoints do not receive it. The certificate message also retains any client attributes from the original message for namespace-aware rule processing.
-
-The retained Birth payload is the payload published by the edge node or device. Its metric values might not reflect subsequent NDATA or DDATA updates. EMQX does not replace timestamps in NDEATH messages as part of this capability.
 
 ## Examples for Using `spb_decode` and `spb_encode`
 
