@@ -288,9 +288,9 @@ Starting from EMQX 6.1.6, you can pin a pre-deployed plugin to an individual nod
    ```dockerfile
    COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
 
-   RUN mkdir -p /opt/emqx/plugins && \
+   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
        tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
-       -C /opt/emqx/plugins
+       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
    ```
 
 2. Add the plugin name and version to the read-only `node.pinned_plugins` setting. For a container image, set the corresponding environment variable:

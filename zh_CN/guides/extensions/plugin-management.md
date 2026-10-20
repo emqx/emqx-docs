@@ -288,9 +288,9 @@ EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
    ```dockerfile
    COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /tmp/my_emqx_plugin-1.0.0.tar.gz
 
-   RUN mkdir -p /opt/emqx/plugins && \
+   RUN mkdir -p /opt/emqx/plugins/my_emqx_plugin-1.0.0 && \
        tar zxf /tmp/my_emqx_plugin-1.0.0.tar.gz \
-       -C /opt/emqx/plugins
+       -C /opt/emqx/plugins/my_emqx_plugin-1.0.0
    ```
 
 2. 将插件名称和版本添加到只读配置项 `node.pinned_plugins`。对于容器镜像，请设置对应的环境变量：
