@@ -63,6 +63,8 @@ This release reduces memory use for MQTT connections, sessions, and node-local c
   - Incomplete PROXY Protocol v1 headers are now rejected by the `socket` backend connections.
   - Corrected listener option merging and socket tuning, and prevented acceptor crashes when updating uninitialized counters.
 
+- [#19630](https://github.com/emqx/emqx/pull/19630) Fixed a delay in QoS 0 delivery to a subscriber that stopped reading for a short time on a listener with the `gen_tcp` backend. After the subscriber resumed reading, delivery could remain stalled for up to the configured `mqtt.idle_timeout` (15 seconds by default). A client with a small TCP receive buffer could receive only a fraction of the QoS 0 messages sent to it for as long as it stayed connected. A congested connection now checks its send queue on a timer, allowing delivery to resume promptly after the subscriber resumes reading.
+
 - [#19144](https://github.com/emqx/emqx/pull/19144) Fixed an issue where the session registry cleanup process stopped when a client disconnected while the cleanup was running. The cleanup now continues past the disconnected client and keeps removing stale registrations.
 
 - [#19316](https://github.com/emqx/emqx/pull/19316) Fixed a leak of rate-limiter bucket entries in `persistent_term` when the limiter registry was restarted or the node was shut down without running the registry's cleanup.
