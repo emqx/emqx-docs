@@ -1,17 +1,17 @@
-# Monitor EMQX with Prometheus and Grafana
+# Prometheus と Grafana で EMQX を監視する
 
-## Objective
+## 目的
 
-Configure Prometheus to scrape an EMQX cluster and visualize its metrics in Grafana.
+Prometheus を設定して EMQX クラスターをスクレイプし、そのメトリクスを Grafana で可視化します。
 
-## Deploy Prometheus and Grafana
+## Prometheus と Grafana のデプロイ
 
-* To learn more about Prometheus deployment, refer to the [Prometheus](https://github.com/prometheus-operator/prometheus-operator) documentation.
-* To learn more about Grafana deployment, refer to [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) documentation.
+* Prometheus のデプロイ方法については、[Prometheus](https://github.com/prometheus-operator/prometheus-operator) のドキュメントをご参照ください。
+* Grafana のデプロイ方法については、[Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) のドキュメントをご参照ください。
 
-## Deploy EMQX Cluster
+## EMQX クラスターのデプロイ
 
-EMQX exposes various metrics through the [Prometheus-compatible HTTP API](../../../../../guides/observability/prometheus.md).
+EMQX は [Prometheus 互換の HTTP API](../../../../../guides/observability/prometheus.md) を通じてさまざまなメトリクスを公開します。
 
 ```yaml
 apiVersion: apps.emqx.io/v3beta1
@@ -26,14 +26,14 @@ spec:
         key: "..."
 ```
 
-Save the above content as `emqx.yaml` and execute the following command to deploy the EMQX cluster:
+上記の内容を `emqx.yaml` として保存し、以下のコマンドを実行して EMQX クラスターをデプロイします。
 
 ```bash
 $ kubectl apply -f emqx.yaml
 emqx.apps.emqx.io/emqx created
 ```
 
-Check the status of the EMQX cluster and make sure that `STATUS` is `Ready`. This may take some time.
+EMQX クラスターのステータスを確認し、`STATUS` が `Ready` になっていることを確認してください。準備完了までに時間がかかる場合があります。
 
 ```bash
 $ kubectl get emqx emqx
@@ -41,19 +41,19 @@ NAME   STATUS   AGE
 emqx   Ready    10m
 ```
 
-## Create API Keys
+## API キーの作成
 
-Sign in to the Dashboard and [create dedicated API key](../../../../../guides/dashboard/system.md#api-keys). For Prometheus, create an API key with the Viewer role and only the `monitoring` scope. The `PodMonitor` uses this key to scrape `/api/v5/prometheus/stats`.
+ダッシュボードにサインインし、[専用の API キーを作成](../../../../../guides/dashboard/system.md#api-keys)します。Prometheus 用には、Viewer ロールかつ `monitoring` スコープのみの API キーを作成してください。`PodMonitor` はこのキーを使用して `/api/v5/prometheus/stats` をスクレイプします。
 
-Save the API key and secret key. EMQX displays each secret key only once.
+API キーとシークレットキーを保存してください。EMQX はシークレットキーを一度だけ表示します。
 
-## Configure Prometheus Monitor
+## Prometheus モニターの設定
 
-Prometheus Operator uses the [PodMonitor](https://prometheus-operator.dev/docs/developer/getting-started/#using-podmonitors) CRD to select Pods and define scrape endpoints. EMQX exposes Prometheus metrics through its Dashboard listener, whose container port is named `dashboard` by default.
+Prometheus Operator は [PodMonitor](https://prometheus-operator.dev/docs/developer/getting-started/#using-podmonitors) CRD を使用して Pod を選択し、スクレイプエンドポイントを定義します。EMQX はダッシュボードリスナーを通じて Prometheus メトリクスを公開し、そのコンテナポートはデフォルトで `dashboard` と名付けられています。
 
-The following PodMonitor scrapes the basic EMQX metrics endpoint from every Pod in the `emqx` cluster:
+以下の PodMonitor は、`emqx` クラスター内のすべての Pod から基本的な EMQX メトリクスエンドポイントをスクレイプします。
 
-Starting from EMQX 6.3.0, Prometheus scrape APIs require authentication by default. Create a Kubernetes Secret in the same namespace as the `PodMonitor` to store the API key and secret key created for Prometheus:
+EMQX 6.3.0 以降、Prometheus のスクレイプ API はデフォルトで認証を必要とします。Prometheus 用に作成した API キーとシークレットキーを格納する Kubernetes Secret を `PodMonitor` と同じネームスペースに作成してください。
 
 ```bash
 kubectl create secret generic emqx-prometheus-basic-auth \
@@ -79,54 +79,54 @@ spec:
         password:
           name: emqx-prometheus-basic-auth
           key: password
-      # Name of the EMQX Dashboard container port.
+      # EMQX ダッシュボードコンテナポートの名前。
       port: dashboard
       relabelings:
         - action: replace
-          # Use a unique value for each EMQX cluster.
+          # 各 EMQX クラスターで一意の値を使用してください。
           replacement: emqx5
           targetLabel: cluster
         - action: replace
-          # Keep this value unchanged.
+          # この値は変更しないでください。
           replacement: emqx
           targetLabel: from
         - action: replace
-          # Use the Pod name as the Prometheus instance label.
+          # Pod 名を Prometheus のインスタンスラベルとして使用します。
           sourceLabels: [pod]
           targetLabel: instance
   selector:
     matchLabels:
-      # Match Pods managed for the EMQX resource named `emqx`.
+      # `emqx` リソースで管理されている Pod にマッチします。
       apps.emqx.io/instance: emqx
       apps.emqx.io/managed-by: emqx-operator
   namespaceSelector:
     matchNames:
-      # Change this value if the EMQX cluster is in another namespace.
+      # EMQX クラスターが別のネームスペースにある場合はこの値を変更してください。
       - default
 ```
 
-`path` specifies the metrics collection API path. For EMQX 5.0 and later, use `/api/v5/prometheus/stats`. The `basicAuth` section reads the API key and secret key from the Kubernetes Secret. The selector matches Pods managed for the `emqx` resource. The `cluster` target label must be unique for each EMQX cluster monitored by the same Prometheus server.
+`path` はメトリクス収集 API のパスを指定します。EMQX 5.0 以降は `/api/v5/prometheus/stats` を使用してください。`basicAuth` セクションは Kubernetes Secret から API キーとシークレットキーを読み込みます。セレクターは `emqx` リソースで管理されている Pod に一致します。`cluster` ターゲットラベルは、同じ Prometheus サーバーで監視する各 EMQX クラスターごとに一意である必要があります。
 
-If you explicitly disable authentication by setting `prometheus.enable_basic_auth = false`, you can omit `basicAuth` from `podMetricsEndpoints`. For all available endpoints and authentication options, see [Integrate with Prometheus](../../../../../guides/observability/prometheus.md#configure-pull-mode-integration).
+`prometheus.enable_basic_auth = false` に設定して認証を明示的に無効にした場合は、`podMetricsEndpoints` から `basicAuth` を省略できます。利用可能なエンドポイントと認証オプションの詳細は、[Prometheus との統合](../../../../../guides/observability/prometheus.md#configure-pull-mode-integration)をご参照ください。
 
-Save the above content as `monitor.yaml` and execute the following command:
+上記の内容を `monitor.yaml` として保存し、以下のコマンドを実行してください。
 
 ```bash
 $ kubectl apply -f monitor.yaml
 ```
 
-## View EMQX Metrics in Prometheus
+## Prometheus で EMQX メトリクスを確認する
 
-Open the Prometheus expression browser and enter `emqx` to view EMQX metrics, as shown in the following figure:
+Prometheus の式ブラウザを開き、`emqx` を入力すると EMQX のメトリクスを確認できます。以下の図のように表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-metrics.png)
 
-Open **Status** -> **Targets** to view all monitored EMQX Pods in the cluster:
+**Status** -> **Targets** を開くと、クラスター内のすべての監視対象 EMQX Pod が表示されます。
 
 ![](./assets/configure-emqx-prometheus/emqx-prometheus-target.png)
 
-## Import a Grafana Dashboard
+## Grafana ダッシュボードのインポート
 
-Import the [EMQX Grafana dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) and select the Prometheus data source that scrapes the EMQX Pods.
+[EMQX Grafana ダッシュボード](https://grafana.com/grafana/dashboards/17446-emqx/) をインポートし、EMQX Pod をスクレイプする Prometheus データソースを選択してください。
 
 ![](./assets/configure-emqx-prometheus/emqx-grafana-dashboard.png)

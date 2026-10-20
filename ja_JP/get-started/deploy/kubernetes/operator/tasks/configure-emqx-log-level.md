@@ -1,14 +1,14 @@
-# Change EMQX Log Level
+# EMQXのログレベル変更
 
-## Objective
+## 目的
 
-Modify the log level in the EMQX cluster.
+EMQXクラスターのログレベルを変更します。
 
-## Configure EMQX Cluster
+## EMQXクラスターの設定
 
-The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `.spec.config.roots.log`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) for a complete configuration reference.
+`apps.emqx.io/v3beta1` EMQX CRDは、`.spec.config.roots.log`を通じてログレベルの設定をサポートしています。詳細な設定リファレンスは[設定マニュアル](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/)をご参照ください。
 
-1. Save the following content as a YAML file and deploy it using `kubectl apply`:
+1. 以下の内容をYAMLファイルとして保存し、`kubectl apply`でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -18,7 +18,7 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
-       # Enable debug logging:
+       # デバッグログを有効化:
        roots:
          log:
            console:
@@ -33,9 +33,9 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `
          type: LoadBalancer
    ```
 
-2. Wait for the EMQX cluster to become ready.
+2. EMQXクラスターが準備完了になるまで待ちます。
 
-   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
+   `kubectl get`でEMQXクラスターの状態を確認し、`STATUS`が`Ready`になっていることを確認してください。完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx
@@ -43,17 +43,17 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `
    emqx   Ready    10m
    ```
 
-## Verify Log Level
+## ログレベルの確認
 
-1. Obtain the External IP of the EMQX cluster.
+1. EMQXクラスターのExternal IPを取得します。
 
    ```bash
    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
    ```
 
-2. Use MQTTX CLI to connect to the EMQX cluster.
+2. MQTTX CLIを使ってEMQXクラスターに接続します。
 
-   [MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers start using MQTT services and applications more quickly.
+   [MQTTX CLI](https://mqttx.app/cli)は、開発者がMQTTサービスやアプリケーションを迅速に利用開始できるよう設計されたオープンソースのMQTT 5.0コマンドラインクライアントツールです。
 
    ```
    $ mqttx conn -h ${external_ip} -p 1883
@@ -61,7 +61,7 @@ The `apps.emqx.io/v3beta1` EMQX CRD supports configuring the log level through `
    [4/17/2023] [5:17:31 PM] › ✔ Connected
    ```
 
-3. View EMQX container logs.
+3. EMQXコンテナのログを確認します。
 
    ```bash
    $ kubectl logs emqx-core-0 -c emqx
