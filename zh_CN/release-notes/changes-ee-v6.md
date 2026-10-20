@@ -537,7 +537,7 @@
 
 - [#18688](https://github.com/emqx/emqx/pull/18688) 现在可通过 `node.dirty_io_schedulers` 配置 Dirty I/O 调度器线程数（`+SDio`）。当 `node.schedulers` 的解析结果大于 2 时，默认值 `auto` 保持原有固定值 8；在较小的节点上（例如 2 vCPU 的容器或 cgroup），该值为 4。这样既可降低小型节点启动时的内存占用，又能保留足够的线程来并发执行阻塞 I/O 操作。
 
-### 缺陷修复
+### 修复
 
 #### 核心 MQTT 功能
 
