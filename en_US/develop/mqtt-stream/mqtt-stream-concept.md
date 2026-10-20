@@ -213,6 +213,8 @@ Previously created unnamed streams are automatically assigned names derived from
 
 The derived name is `/<topic_filter>`.
 
+EMQX 7.0 removes the `$s/` prefix, so clients cannot subscribe to legacy streams after the upgrade. Delete legacy streams before you upgrade. See [Remove Legacy Queues and Streams Before Upgrading to EMQX 7.0](../../get-started/deploy/upgrade-legacy-queues-streams.md) for how to preserve or discard their stored messages.
+
 ### Deprecated Prefix
 
 The `$s` prefix for subscribing to streams is still supported for backward compatibility, but is deprecated.
