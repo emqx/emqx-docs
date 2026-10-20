@@ -426,11 +426,24 @@ ok
 
 ## plugins
 
-查看和管理插件。
+使用 `plugins` 命令查看和管理插件。
+
+::: tip 节点固定插件
+
+从 EMQX 6.1.6 开始，对于在 `node.pinned_plugins` 中配置的插件，`plugins` 命令的行为如下：
+
+- `plugins start`、`plugins stop` 和 `plugins restart` 命令仅管理当前节点上固定的插件版本。
+- 对固定插件执行 `plugins allow`、`plugins install`、`plugins uninstall`、`plugins enable` 或 `plugins disable` 命令时，会返回 `plugin_pinned` 错误。
+- 如果 `node.pinned_plugins` 中配置了某个插件版本，则针对该插件其他版本执行的生命周期命令也会被拒绝。
+- 通过 CLI 停止节点固定插件后，该插件会保持停止状态，直至节点再次启动所有插件，例如节点重启或加入集群时。
+
+更多信息请参见[在节点上独立运行插件](./extensions/plugin-management.md#在节点上独立运行插件)。
+
+:::
 
 ### plugins list
 
-列出所有已安装的插件。
+列出当前节点上可用的插件，包括节点固定插件。
 
 ```bash
 emqx ctl plugins list
@@ -439,7 +452,7 @@ emqx ctl plugins list
 
 ### plugins describe \<Name-Vsn\>
 
-描述已安装插件的详细信息。
+查看当前节点上可用插件的详细信息。
 
 ```bash
 emqx ctl plugins describe emqx_auth_mnesia-3.0.1
