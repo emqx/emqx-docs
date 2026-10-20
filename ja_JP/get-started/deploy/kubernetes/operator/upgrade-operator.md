@@ -1,14 +1,13 @@
-# Upgrade EMQX Operator
+# EMQX Operator のアップグレード
 
-EMQX Operator 3.0 introduces the `apps.emqx.io/v3beta1` API and cannot convert EMQX custom resources created with earlier API versions. Moving from Operator 2.3 to 3.0 therefore requires a migration rather than an in-place upgrade.
+EMQX Operator 3.0 では `apps.emqx.io/v3beta1` API が導入されており、以前の API バージョンで作成された EMQX カスタムリソースを変換できません。そのため、Operator 2.3 から 3.0 への移行はインプレースアップグレードではなく、マイグレーションが必要です。
 
-Support for a live migration workflow is planned for EMQX Operator 3.1.
+ライブマイグレーションのワークフローは EMQX Operator 3.1 でサポート予定です。
 
-## Migrate from Operator 2.3 to 3.0
+## Operator 2.3 から 3.0 へのマイグレーション
 
-Follow [Migrate from EMQX Operator 2.3 to 3.0](./migration/migrate-from-2.3-to-3.0.md) to back up the existing cluster, convert its manifest, deploy a new cluster under Operator 3.0, and switch client traffic.
+既存クラスターのバックアップ、マニフェストの変換、Operator 3.0 下での新しいクラスターのデプロイ、クライアントトラフィックの切り替えについては、[Migrate from EMQX Operator 2.3 to 3.0](./migration/migrate-from-2.3-to-3.0.md) を参照してください。
 
-## Upgrade from Operator 2.2 to 2.3
+## Operator 2.2 から 2.3 へのアップグレード
 
-If you must stay on the 2.3 release line, use the EMQX Operator 2.3 documentation. Operator 3.0 does not support EMQX API versions earlier than
-`v3beta1`.
+2.3 リリースラインにとどまる必要がある場合は、EMQX Operator 2.3 のドキュメントを使用してください。Operator 3.0 は `v3beta1` より前の EMQX API バージョンをサポートしていません。

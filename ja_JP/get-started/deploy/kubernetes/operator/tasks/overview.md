@@ -1,28 +1,28 @@
-# Manage EMQX Clusters
+# EMQXクラスターの管理
 
-This chapter provides step-by-step instructions for performing common tasks and operations with EMQX in a Kubernetes cluster.
+この章では、Kubernetesクラスター上でEMQXを操作する際の一般的なタスクや手順について、ステップバイステップで説明します。
 
-## Configuration and Setup
+## 設定とセットアップ
 
-- License and Security
-  - [Manage License](./configure-emqx-license.md)
-  - [Enable TLS for EMQX listeners](./configure-emqx-tls.md)
-- Cluster Configuration
-  - [Change EMQX Configuration](./configure-emqx-config.md)
-  - [Enable Core-Replicant Deployment](./configure-emqx-core-replicant.md)
-  - [Enable Persistence](./configure-emqx-persistence.md)
-  - [Configure Pod Disruption Budgets](./configure-disruption-budgets.md)
-  - [Access EMQX Cluster through LoadBalancer](./configure-emqx-service.md)
-  - [Autoscale Replicant Nodes with HPA](./configure-emqx-hpa.md)
+- ライセンスとセキュリティ
+  - [ライセンスの管理](./configure-emqx-license.md)
+  - [EMQXリスナーのTLS有効化](./configure-emqx-tls.md)
+- クラスター設定
+  - [EMQX設定の変更](./configure-emqx-config.md)
+  - [Core-Replicantデプロイメントの有効化](./configure-emqx-core-replicant.md)
+  - [パーシステンスの有効化](./configure-emqx-persistence.md)
+  - [Pod Disruption Budgetの設定](./configure-disruption-budgets.md)
+  - [ロードバランサー経由でのEMQXクラスターアクセス](./configure-emqx-service.md)
+  - [HPAによるReplicantノードのオートスケール](./configure-emqx-hpa.md)
 
-## Upgrades and Maintenance
+## アップグレードとメンテナンス
 
-- Upgrade
-  - [Configure Rolling Update](./configure-emqx-rolling-update.md)
-- Log Management
-  - [Collect EMQX Logs](./configure-emqx-log-collection.md)
-  - [Change EMQX Log Level](./configure-emqx-log-level.md)
+- アップグレード
+  - [ローリングアップデートの設定](./configure-emqx-rolling-update.md)
+- ログ管理
+  - [EMQXログの収集](./configure-emqx-log-collection.md)
+  - [EMQXログレベルの変更](./configure-emqx-log-level.md)
 
-## Monitoring and Performance
+## 監視とパフォーマンス
 
-- [Monitor EMQX Cluster using Prometheus](./configure-emqx-prometheus.md)
+- [Prometheusを使ったEMQXクラスターの監視](./configure-emqx-prometheus.md)

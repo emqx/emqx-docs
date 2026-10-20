@@ -1,18 +1,18 @@
-# Change EMQX Configuration
+# EMQX 設定の変更
 
-## Objective
+## 目的
 
-Change EMQX configuration through `.spec.config.roots` in the EMQX Custom Resource.
+EMQX カスタムリソースの `.spec.config.roots` を通じて EMQX の設定を変更します。
 
-## Configure EMQX Cluster
+## EMQX クラスターの設定
 
-The `apps.emqx.io/v3beta1` EMQX CRD accepts top-level EMQX configuration roots as JSON-compatible values in `.spec.config.roots`. In a YAML manifest, express each root as a structured YAML object, array, or scalar that corresponds to the [EMQX configuration schema](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/).
+`apps.emqx.io/v3beta1` の EMQX CRD は、トップレベルの EMQX 設定ルートを `.spec.config.roots` に JSON 互換の値として受け入れます。YAML マニフェストでは、各ルートを [EMQX 設定スキーマ](https://docs.emqx.com/en/enterprise/v6.2.0/hocon/) に対応する構造化された YAML オブジェクト、配列、またはスカラーとして表現します。
 
-The field does not accept HOCON-only constructs such as includes or substitutions.
+このフィールドは、include や substitution などの HOCON 固有の構文は受け付けません。
 
-Removing a root from `.spec.config.roots` means that EMQX Operator stops managing that root. It does not remove values that EMQX has persisted or restore the root to its schema defaults. To reset a root to known values, declare those values explicitly.
+`.spec.config.roots` からルートを削除すると、EMQX Operator はそのルートの管理を停止します。ただし、EMQX が永続化した値を削除したり、ルートをスキーマのデフォルトに戻したりはしません。既知の値にリセットするには、それらの値を明示的に宣言してください。
 
-1. Save the following as a YAML file and deploy it using `kubectl apply`:
+1. 以下を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -24,7 +24,7 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
      imagePullPolicy: IfNotPresent
      config:
        roots:
-         # Configure a TCP listener named `test` on port 1884:
+         # ポート1884で `test` という名前の TCP リスナーを設定:
          listeners:
            tcp:
              test:
@@ -41,14 +41,14 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
    ```
 
    ::: tip
-   Do not configure `node.cookie`, because EMQX Operator manages this setting.
+   `node.cookie` は EMQX Operator が管理しているため、設定しないでください。
    :::
 
    ::: tip
-   EMQX Operator writes most settings, such as listener settings, to [`base.hocon`](../../../../../guides/configuration/configuration.md#base-configuration-file) and applies changes at runtime through the EMQX Configs API without restarting Pods. It writes settings that take effect only when EMQX starts, such as Dashboard listeners and node settings, to [`emqx.conf`](../../../../../guides/configuration/configuration.md#immutable-configuration-file). Changing such settings triggers a controlled rolling update.
+   EMQX Operator は、リスナー設定などのほとんどの設定を [`base.hocon`](../../../../../guides/configuration/configuration.md#base-configuration-file) に書き込み、EMQX Configs API を通じて Pod の再起動なしにランタイムで変更を適用します。Dashboard リスナーやノード設定など、EMQX 起動時にのみ反映される設定は [`emqx.conf`](../../../../../guides/configuration/configuration.md#immutable-configuration-file) に書き込み、これらの変更は制御されたローリングアップデートをトリガーします。
    :::
 
-2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
+2. EMQX クラスターが準備完了になるまで待ちます。`kubectl get` で EMQX クラスターの状態を確認し、`STATUS` が `Ready` であることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -56,16 +56,16 @@ Removing a root from `.spec.config.roots` means that EMQX Operator stops managin
    emqx   Ready    10m
    ```
 
-3. Check the `ConfigApplied` condition to confirm that the desired configuration is active:
+3. `ConfigApplied` 条件を確認し、目的の設定が有効になっていることを確認します。
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
    True    Applied    Desired configuration is active
    ```
 
-## Verify Configuration
+## 設定の検証
 
-View the EMQX listeners' status.
+EMQX のリスナーの状態を確認します。
 
 ```bash
 $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
@@ -85,34 +85,34 @@ tcp:test
    max_conns : 1024000
 ```
 
-Here we can see that the new listener on port 1884 is running.
+ここで、新しいポート1884のリスナーが稼働していることが確認できます。
 
-## Change Configuration That Requires a Restart
+## 再起動が必要な設定の変更
 
-Some configuration changes update the Pod template and trigger a rolling update. The following example changes the Dashboard HTTP listener, which takes effect when EMQX starts.
+一部の設定変更は Pod テンプレートを更新し、ローリングアップデートをトリガーします。以下の例は、EMQX 起動時に反映される Dashboard HTTP リスナーの変更です。
 
-1. Patch the EMQX resource:
+1. EMQX リソースをパッチします。
 
    ```bash
    kubectl patch emqx emqx --type=merge -p '{"spec":{"config":{"roots":{"dashboard":{"listeners":{"http":{"bind":"0.0.0.0:18084"}}}}}}}'
    ```
 
-2. Check the `ConfigApplied` condition after EMQX Operator detects the change:
+2. EMQX Operator が変更を検知した後、`ConfigApplied` 条件を確認します。
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'
    False    StartupConfigPending    Configuration roots require rolling restart: [dashboard]
    ```
 
-   `False` with reason `StartupConfigPending` means that at least one ready Pod still uses the previous configuration and the rolling update is in progress.
+   `False` かつ理由が `StartupConfigPending` の場合、少なくとも1つの準備完了 Pod が以前の設定を使用しており、ローリングアップデートが進行中であることを意味します。
 
-3. Wait until the rolling update completes:
+3. ローリングアップデートが完了するまで待ちます。
 
    ```bash
    kubectl wait --for=condition=ConfigApplied emqx/emqx --timeout=10m
    ```
 
-4. Check the `ConfigApplied` condition to confirm that the new configuration is active:
+4. 新しい設定が有効になっていることを `ConfigApplied` 条件で確認します。
 
    ```bash
    $ kubectl get emqx emqx -o jsonpath='{range .status.conditions[?(@.type=="ConfigApplied")]}{.status}{"\t"}{.reason}{"\t"}{.message}{"\n"}{end}'

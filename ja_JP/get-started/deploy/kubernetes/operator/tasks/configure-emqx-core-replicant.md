@@ -1,41 +1,41 @@
-# Enable Core + Replicant Cluster
+# Core + Replicant クラスターの有効化
 
-## Objective
+## 目的
 
-- Configure EMQX cluster Core nodes through the `coreTemplate` field.
-- Configure EMQX cluster Replicant nodes through the `replicantTemplate` field.
+- `coreTemplate` フィールドを通じて EMQX クラスターの Core ノードを構成します。
+- `replicantTemplate` フィールドを通じて EMQX クラスターの Replicant ノードを構成します。
 
-## Core and Replicant Nodes
+## Core ノードと Replicant ノード
 
-Nodes in the EMQX cluster can have one of two roles: Core node and Replicant node.
+EMQX クラスター内のノードは、Core ノードまたは Replicant ノードのいずれかの役割を持ちます。
 
-* Core nodes are responsible for data persistence in the cluster.
+* Core ノードはクラスター内のデータ永続化を担当します。
 
-    They serve as the authoritative source for shared cluster state such as routing tables, MQTT client channels, retained messages, cluster configuration, alarms, Dashboard user credentials, etc.
+  ルーティングテーブル、MQTT クライアントチャネル、保持メッセージ、クラスター設定、アラーム、ダッシュボードのユーザー認証情報など、共有クラスター状態の権威あるソースとして機能します。
 
-* Replicant nodes are designed to be stateless and do not participate in database operations.
+* Replicant ノードはステートレスとして設計されており、データベース操作には参加しません。
 
-    Adding or deleting Replicant nodes will not affect the redundancy of the cluster data.
+  Replicant ノードの追加や削除はクラスターのデータ冗長性に影響を与えません。
 
-Communication between Core and Replicant nodes in a typical EMQX cluster is illustrated in the following diagram:
+典型的な EMQX クラスターにおける Core ノードと Replicant ノード間の通信は、以下の図のように示されます。
 
   <div style="text-align:center">
   <img src="./assets/configure-core-replicant/mria-core-replicant.png" style="zoom:30%;" />
   </div>
 
-For more information about the EMQX Core-Replicant architecture, refer to the [Cluster Architecture](../../../../../develop/cluster/mria-introduction.md) documentation.
+EMQX の Core-Replicant アーキテクチャの詳細については、[クラスターアーキテクチャ](../../../../../develop/cluster/mria-introduction.md) のドキュメントを参照してください。
 
 :::tip
-* There must be at least one Core node in the EMQX cluster.
-* When Replicant nodes are enabled, EMQX Operator 3.0 requires at least two Core nodes for rolling updates.
-* For high availability, running at least three Core nodes is recommended.
+* EMQX クラスターには少なくとも 1 つの Core ノードが必要です。
+* Replicant ノードを有効にする場合、EMQX Operator 3.0 ではローリングアップデートのために少なくとも 2 つの Core ノードが必要です。
+* 高可用性を確保するためには、少なくとも 3 つの Core ノードの稼働を推奨します。
 :::
 
-## Configure EMQX Cluster
+## EMQX クラスターの構成
 
-EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX cluster through the `.spec.coreTemplate` field, and configuring Replicant nodes of the EMQX cluster through the `.spec.replicantTemplate` field.
+EMQX CRD `apps.emqx.io/v3beta1` は、`.spec.coreTemplate` フィールドを通じて EMQX クラスターの Core ノードを、`.spec.replicantTemplate` フィールドを通じて Replicant ノードを構成することをサポートしています。
 
-1. Save the following content as a YAML file and deploy using `kubectl apply`.
+1. 以下の内容を YAML ファイルとして保存し、`kubectl apply` でデプロイします。
 
    ```yaml
    apiVersion: apps.emqx.io/v3beta1
@@ -67,13 +67,13 @@ EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX clus
          type: LoadBalancer
    ```
 
-   In the example above, the EMQX CR defines an EMQX cluster consisting of two Core nodes and three Replicant nodes.
+   上記の例では、EMQX CR は 2 つの Core ノードと 3 つの Replicant ノードからなる EMQX クラスターを定義しています。
 
-   Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
+   Core ノードは最低 512Mi のメモリを必要とし、Replicant ノードは最低 1Gi のメモリを必要とします。これらの制約は実際の業務負荷に応じて調整可能です。一般的に、Replicant ノードはすべてのクライアントリクエストを受け入れるため、多数の同時接続に対応するために Replicant ノードのリソースは高めに設定される場合があります。
 
-   EMQX Operator exposes the Replicant replica count through the Kubernetes `scale` subresource, which allows HorizontalPodAutoscaler to manage scaling of Replicant set in Core-Replicant mode.
+   EMQX Operator は Kubernetes の `scale` サブリソースを通じて Replicant レプリカ数を公開しており、これにより HorizontalPodAutoscaler は Core-Replicant モードの Replicant セットのスケーリングを管理できます。
 
-2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
+2. EMQX クラスターが準備完了になるまで待ちます。`kubectl get` で EMQX クラスターの状態を確認し、`STATUS` が `Ready` になることを確認してください。準備完了までに時間がかかる場合があります。
 
    ```bash
    $ kubectl get emqx emqx
@@ -81,9 +81,9 @@ EMQX CRD `apps.emqx.io/v3beta1` supports configuring Core nodes of the EMQX clus
    emqx   Ready    10m
    ```
 
-## Verify EMQX Cluster
+## EMQX クラスターの確認
 
-You can view information about all nodes in the cluster by checking the `.status` field of the EMQX CR.
+EMQX CR の `.status` フィールドを確認することで、クラスター内のすべてのノード情報を閲覧できます。
 
 ```bash
 $ kubectl get emqx emqx -o json | jq .status.clusterNodes

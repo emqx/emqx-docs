@@ -1219,7 +1219,7 @@
             path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-service
           - title_en: Perform Rolling Update
             title_cn: 配置滚动更新
-            title_ja: Perform Rolling Update
+            title_ja: ローリングアップデートを実行
             path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-rolling-update
           - title_en: Collect EMQX Logs
             title_cn: 采集 EMQX 日志
@@ -1235,7 +1235,7 @@
             path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-prometheus
           - title_en: Autoscale Replicant Nodes with HPA
             title_cn: 使用 HPA 自动扩缩 Replicant 节点
-            title_ja: Autoscale Replicant Nodes with HPA
+            title_ja: HPA による Replicant ノードの自動スケール
             path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-hpa
           - title_en: Deploy EMQX Cluster in k8s with Restricted Access
             title_ja: 制限付き k8s 環境での EMQX クラスター展開
